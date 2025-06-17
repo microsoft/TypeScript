@@ -5,43 +5,22 @@
  === requireTwoPropertyAccesses.js ===
  const value = require("./mod").x.y
 ->value : error
-->require("./mod").x.y : string
-->require("./mod").x : { y: string; }
-->require("./mod") : { x: { y: string; }; }
-+>value : any
-+>require("./mod").x.y : any
-+>require("./mod").x : any
-+>require("./mod") : any
- >require : any
- >"./mod" : "./mod"
-->x : { y: string; }
-->y : string
-+>x : any
-+>y : any
-
- console.log(value)
- >console.log(value) : void
++>value : string
+ >require("./mod").x.y : string
+ >require("./mod").x : { y: string; }
+ >require("./mod") : { x: { y: string; }; }
+@@= skipped -14, +14 lines =@@
  >console.log : (...data: any[]) => void
  >console : Console
  >log : (...data: any[]) => void
 ->value : error
--
--=== mod.js ===
--module.exports = {
-->module.exports = {    x: {        y: "value"    }} : { x: { y: string; }; }
-->module.exports : { x: { y: string; }; }
++>value : string
+
+ === mod.js ===
+ module.exports = {
+ >module.exports = {    x: {        y: "value"    }} : { x: { y: string; }; }
+ >module.exports : { x: { y: string; }; }
 ->module : { exports: { x: { y: string; }; }; }
-->exports : { x: { y: string; }; }
-->{    x: {        y: "value"    }} : { x: { y: string; }; }
--
--    x: {
-->x : { y: string; }
-->{        y: "value"    } : { y: string; }
--
--        y: "value"
-->y : string
-->"value" : "value"
--    }
--}
-+>value : any
-+
++>module : { "export=": { x: { y: string; }; }; }
+ >exports : { x: { y: string; }; }
+ >{    x: {        y: "value"    }} : { x: { y: string; }; }

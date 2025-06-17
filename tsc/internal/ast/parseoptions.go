@@ -104,11 +104,17 @@ func getExternalModuleIndicator(file *SourceFile, opts ExternalModuleIndicatorOp
 
 func isFileProbablyExternalModule(sourceFile *SourceFile) *Node {
 	for _, statement := range sourceFile.Statements.Nodes {
-		if IsExternalModuleIndicator(statement) {
+		if isAnExternalModuleIndicatorNode(statement) {
 			return statement
 		}
 	}
 	return getImportMetaIfNecessary(sourceFile)
+}
+
+func isAnExternalModuleIndicatorNode(node *Node) bool {
+	return HasSyntacticModifier(node, ModifierFlagsExport) ||
+		IsImportEqualsDeclaration(node) && IsExternalModuleReference(node.AsImportEqualsDeclaration().ModuleReference) ||
+		IsImportDeclaration(node) || IsExportAssignment(node) || IsExportDeclaration(node)
 }
 
 func getImportMetaIfNecessary(sourceFile *SourceFile) *Node {

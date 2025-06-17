@@ -1,13 +1,16 @@
-use.js(2,19): error TS7016: Could not find a declaration file for module './mod'. 'mod.js' implicitly has an 'any' type.
+use.js(3,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+use.js(4,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
 
 
-==== use.js (1 errors) ====
+==== use.js (2 errors) ====
     /// <reference path='./types.d.ts'/>
     var mod = require('./mod');
-                      ~~~~~~~
-!!! error TS7016: Could not find a declaration file for module './mod'. 'mod.js' implicitly has an 'any' type.
     var a = new mod.A()
+            ~~~~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
     var b = new mod.B()
+            ~~~~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
     a.m('nope')
     b.m('not really')
     

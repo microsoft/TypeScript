@@ -14,3 +14,12 @@ function n() {
 util.existy // no error
 >util : Symbol(util, Decl(use.js, 0, 5))
 
+=== mod.js ===
+const util = exports = module.exports = {}
+>util : Symbol(util, Decl(mod.js, 0, 5))
+
+if (!!false) {
+    util.existy = function () { }
+>util : Symbol(util, Decl(mod.js, 0, 5))
+}
+

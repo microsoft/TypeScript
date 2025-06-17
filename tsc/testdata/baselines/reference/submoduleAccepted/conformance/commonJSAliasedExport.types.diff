@@ -5,12 +5,10 @@
  === bug43713.js ===
  const { funky } = require('./commonJSAliasedExport');
 ->funky : (declaration: any) => boolean
-->require('./commonJSAliasedExport') : (ast: any) => any
 +>funky : any
-+>require('./commonJSAliasedExport') : any
+ >require('./commonJSAliasedExport') : (ast: any) => any
  >require : any
  >'./commonJSAliasedExport' : "./commonJSAliasedExport"
-
 @@= skipped -11, +11 lines =@@
 
  var diddy = funky(1)
@@ -21,33 +19,31 @@
 +>funky : any
  >1 : 1
 
--
--=== commonJSAliasedExport.js ===
--const donkey = (ast) =>  ast;
-->donkey : (ast: any) => any
-->(ast) =>  ast : (ast: any) => any
-->ast : any
-->ast : any
--
--function funky(declaration) {
-->funky : (declaration: any) => boolean
-->declaration : any
--
--    return false;
-->false : false
--}
--module.exports = donkey;
+
+@@= skipped -20, +20 lines =@@
+ >false : false
+ }
+ module.exports = donkey;
 ->module.exports = donkey : { (ast: any): any; funky: (declaration: any) => boolean; }
 ->module.exports : { (ast: any): any; funky: (declaration: any) => boolean; }
 ->module : { exports: { (ast: any): any; funky: (declaration: any) => boolean; }; }
 ->exports : { (ast: any): any; funky: (declaration: any) => boolean; }
-->donkey : (ast: any) => any
--
--module.exports.funky = funky;
-->module.exports.funky = funky : (declaration: any) => boolean
++>module.exports = donkey : (ast: any) => any
++>module.exports : (ast: any) => any
++>module : { readonly donkey: (ast: any) => any; }
++>exports : (ast: any) => any
+ >donkey : (ast: any) => any
+
+ module.exports.funky = funky;
+ >module.exports.funky = funky : (declaration: any) => boolean
 ->module.exports.funky : (declaration: any) => boolean
 ->module.exports : { (ast: any): any; funky: (declaration: any) => boolean; }
 ->module : { exports: { (ast: any): any; funky: (declaration: any) => boolean; }; }
 ->exports : { (ast: any): any; funky: (declaration: any) => boolean; }
 ->funky : (declaration: any) => boolean
-->funky : (declaration: any) => boolean
++>module.exports.funky : any
++>module.exports : (ast: any) => any
++>module : { readonly donkey: (ast: any) => any; }
++>exports : (ast: any) => any
++>funky : any
+ >funky : (declaration: any) => boolean

@@ -1,47 +1,38 @@
 --- old.jsDeclarationsCommonjsRelativePath.types
 +++ new.jsDeclarationsCommonjsRelativePath.types
-@@= skipped -4, +4 lines =@@
- >'use strict' : "use strict"
-
+@@= skipped -6, +6 lines =@@
  const Thing = require('./thing').Thing
-->Thing : typeof Thing
-->require('./thing').Thing : typeof Thing
+ >Thing : typeof Thing
+ >require('./thing').Thing : typeof Thing
 ->require('./thing') : typeof import("thing")
-+>Thing : any
-+>require('./thing').Thing : any
-+>require('./thing') : any
++>require('./thing') : { Thing: typeof Thing; }
  >require : any
  >'./thing' : "./thing"
-->Thing : typeof Thing
--
--module.exports = { Thing }
+ >Thing : typeof Thing
+
+ module.exports = { Thing }
 ->module.exports = { Thing } : typeof module.exports
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-->{ Thing } : { Thing: typeof Thing; }
-->Thing : typeof Thing
--
--=== thing.js ===
--'use strict';
-->'use strict' : "use strict"
--
--class Thing {}
-->Thing : Thing
--
--module.exports = { Thing }
++>module.exports = { Thing } : { Thing: typeof Thing; }
++>module.exports : { Thing: typeof Thing; }
++>module : { "export=": { Thing: typeof Thing; }; }
++>exports : { Thing: typeof Thing; }
+ >{ Thing } : { Thing: typeof Thing; }
+ >Thing : typeof Thing
+
+@@= skipped -21, +21 lines =@@
+ >Thing : Thing
+
+ module.exports = { Thing }
 ->module.exports = { Thing } : typeof module.exports
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-->{ Thing } : { Thing: typeof Thing; }
-->Thing : typeof Thing
-+>Thing : any
-+
-+module.exports = { Thing }
-+>module.exports = { Thing } : { Thing: any; }
-+>module.exports : { Thing: any; }
-+>module : { "export=": { Thing: any; }; }
-+>exports : { Thing: any; }
-+>{ Thing } : { Thing: any; }
-+>Thing : any
++>module.exports = { Thing } : { Thing: typeof Thing; }
++>module.exports : { Thing: typeof Thing; }
++>module : { "export=": { Thing: typeof Thing; }; }
++>exports : { Thing: typeof Thing; }
+ >{ Thing } : { Thing: typeof Thing; }
+ >Thing : typeof Thing

@@ -25,8 +25,8 @@ json1.b; // No error (OK since that's the type annotation)
 >b : number
 
 const js0 = require("./js.js");
->js0 : any
->require("./js.js") : any
+>js0 : { a: number; }
+>require("./js.js") : { a: number; }
 >require : any
 >"./js.js" : "./js.js"
 
@@ -38,7 +38,7 @@ json0.b; // Error (good)
 /** @type {{ b: number }} */
 const js1 = require("./js.js"); // Error (good)
 >js1 : { b: number; }
->require("./js.js") : any
+>require("./js.js") : { a: number; }
 >require : any
 >"./js.js" : "./js.js"
 
@@ -51,5 +51,15 @@ js1.b;
 { "a": 0 }
 >{ "a": 0 } : { a: number; }
 >"a" : number
+>0 : 0
+
+=== /js.js ===
+module.exports = { a: 0 };
+>module.exports = { a: 0 } : { a: number; }
+>module.exports : { a: number; }
+>module : { "export=": { a: number; }; }
+>exports : { a: number; }
+>{ a: 0 } : { a: number; }
+>a : number
 >0 : 0
 

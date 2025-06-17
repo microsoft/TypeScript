@@ -9,9 +9,9 @@ declare module "./missingFunctionImplementation2_b" {
 //// [missingFunctionImplementation2_b.ts]
 export function f(a?, b?);
 
-//// [missingFunctionImplementation2_b.js]
+//// [missingFunctionImplementation2_a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-//// [missingFunctionImplementation2_a.js]
+//// [missingFunctionImplementation2_b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

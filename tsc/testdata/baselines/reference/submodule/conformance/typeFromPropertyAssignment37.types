@@ -20,3 +20,27 @@ util.existy // no error
 >util : any
 >existy : any
 
+=== mod.js ===
+const util = exports = module.exports = {}
+>util : {}
+>exports = module.exports = {} : {}
+>exports : any
+>module.exports = {} : {}
+>module.exports : any
+>module : any
+>exports : any
+>{} : {}
+
+if (!!false) {
+>!!false : boolean
+>!false : true
+>false : false
+
+    util.existy = function () { }
+>util.existy = function () { } : () => void
+>util.existy : any
+>util : {}
+>existy : any
+>function () { } : () => void
+}
+

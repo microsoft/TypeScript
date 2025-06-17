@@ -4,6 +4,7 @@
 const _item = require("./namespacer");
 >_item : Symbol(_item, Decl(index.js, 0, 5))
 >require : Symbol(require)
+>"./namespacer" : Symbol("namespacer", Decl(namespacer.js, 0, 0))
 
 module.exports = 12;
 >module.exports : Symbol(export=, Decl(index.js, 0, 38))
@@ -15,4 +16,44 @@ Object.defineProperty(module, "exports", { value: "oh no" });
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(index.js, 2, 42))
+
+=== namespacey.js ===
+const A = {}
+>A : Symbol(A, Decl(namespacey.js, 0, 5))
+
+A.bar = class Q {}
+>A.bar : Symbol(bar, Decl(namespacey.js, 0, 12))
+>A : Symbol(A, Decl(namespacey.js, 0, 5))
+>bar : Symbol(bar, Decl(namespacey.js, 0, 12))
+>Q : Symbol(Q, Decl(namespacey.js, 1, 7))
+
+module.exports = A;
+>module.exports : Symbol(A, Decl(namespacey.js, 0, 5))
+>module : Symbol(module.exports)
+>exports : Symbol(A, Decl(namespacey.js, 0, 5))
+>A : Symbol(A, Decl(namespacey.js, 0, 5))
+
+=== namespacer.js ===
+const B = {}
+>B : Symbol(B, Decl(namespacer.js, 0, 5))
+
+B.NS = require("./namespacey");
+>B.NS : Symbol(NS, Decl(namespacer.js, 0, 12))
+>B : Symbol(B, Decl(namespacer.js, 0, 5))
+>NS : Symbol(NS, Decl(namespacer.js, 0, 12))
+>require : Symbol(require)
+
+Object.defineProperty(B, "NS", { value: "why though", writable: true });
+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>B : Symbol(B, Decl(namespacer.js, 0, 5))
+>value : Symbol(value, Decl(namespacer.js, 2, 32))
+>writable : Symbol(writable, Decl(namespacer.js, 2, 53))
+
+module.exports = B;
+>module.exports : Symbol(B, Decl(namespacer.js, 0, 5))
+>module : Symbol(module.exports)
+>exports : Symbol(B, Decl(namespacer.js, 0, 5))
+>B : Symbol(B, Decl(namespacer.js, 0, 5))
 

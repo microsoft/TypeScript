@@ -2,8 +2,8 @@
 
 === index.js ===
 const Obj = require("./obj");
->Obj : any
->require("./obj") : any
+>Obj : typeof Obj
+>require("./obj") : typeof Obj
 >require : any
 >"./obj" : "./obj"
 
@@ -12,12 +12,12 @@ class Container {
 
     constructor() {
         this.usage = new Obj();
->this.usage = new Obj() : any
->this.usage : any
+>this.usage = new Obj() : Obj
+>this.usage : Obj
 >this : this
->usage : any
->new Obj() : any
->Obj : any
+>usage : Obj
+>new Obj() : Obj
+>Obj : typeof Obj
     }
 }
 
@@ -28,3 +28,21 @@ module.exports = Container;
 >exports : typeof Container
 >Container : typeof Container
 
+=== obj.js ===
+module.exports = class Obj {
+>module.exports = class Obj {    constructor() {        this.x = 12;    }} : typeof import("./obj")
+>module.exports : typeof import("./obj")
+>module : { Obj: typeof import("./obj"); }
+>exports : typeof import("./obj")
+>class Obj {    constructor() {        this.x = 12;    }} : typeof import("./obj")
+>Obj : typeof import("./obj")
+
+    constructor() {
+        this.x = 12;
+>this.x = 12 : 12
+>this.x : number
+>this : this
+>x : number
+>12 : 12
+    }
+}

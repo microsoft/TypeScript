@@ -3,19 +3,47 @@
 === utils/index.js ===
 // issue arises here on compilation
 const errors = require("./errors");
->errors : any
->require("./errors") : any
+>errors : { FancyError: typeof FancyError; }
+>require("./errors") : { FancyError: typeof FancyError; }
 >require : any
 >"./errors" : "./errors"
 
 module.exports = {
->module.exports = {    errors} : { errors: any; }
->module.exports : { errors: any; }
->module : { "export=": { errors: any; }; }
->exports : { errors: any; }
->{    errors} : { errors: any; }
+>module.exports = {    errors} : { errors: { FancyError: typeof FancyError; }; }
+>module.exports : { errors: { FancyError: typeof FancyError; }; }
+>module : { "export=": { errors: { FancyError: typeof FancyError; }; }; }
+>exports : { errors: { FancyError: typeof FancyError; }; }
+>{    errors} : { errors: { FancyError: typeof FancyError; }; }
 
     errors
->errors : any
+>errors : { FancyError: typeof FancyError; }
 
 };
+=== utils/errors.js ===
+class FancyError extends Error {
+>FancyError : FancyError
+>Error : Error
+
+    constructor(status) {
+>status : any
+
+        super(`error with status ${status}`);
+>super(`error with status ${status}`) : void
+>super : ErrorConstructor
+>`error with status ${status}` : string
+>status : any
+    }
+}
+
+module.exports = {
+>module.exports = {    FancyError} : { FancyError: typeof FancyError; }
+>module.exports : { FancyError: typeof FancyError; }
+>module : { "export=": { FancyError: typeof FancyError; }; }
+>exports : { FancyError: typeof FancyError; }
+>{    FancyError} : { FancyError: typeof FancyError; }
+
+    FancyError
+>FancyError : typeof FancyError
+
+};
+

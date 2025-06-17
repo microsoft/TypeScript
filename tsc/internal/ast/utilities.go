@@ -1615,9 +1615,8 @@ func isCommonJSContainingModuleKind(kind core.ModuleKind) bool {
 }
 
 func IsExternalModuleIndicator(node *Statement) bool {
-	return HasSyntacticModifier(node, ModifierFlagsExport) ||
-		IsImportEqualsDeclaration(node) && IsExternalModuleReference(node.AsImportEqualsDeclaration().ModuleReference) ||
-		IsImportDeclaration(node) || IsExportAssignment(node) || IsExportDeclaration(node)
+	// Exported top-level member indicates moduleness
+	return IsAnyImportOrReExport(node) || IsExportAssignment(node) || HasSyntacticModifier(node, ModifierFlagsExport)
 }
 
 func IsExportNamespaceAsDefaultDeclaration(node *Node) bool {

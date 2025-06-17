@@ -1,15 +1,16 @@
-usage.js(1,19): error TS7016: Could not find a declaration file for module './lateBoundAssignmentDeclarationSupport4.js'. 'lateBoundAssignmentDeclarationSupport4.js' implicitly has an 'any' type.
+lateBoundAssignmentDeclarationSupport4.js(9,15): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+usage.js(2,15): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
 
 
 ==== usage.js (1 errors) ====
     const x = require("./lateBoundAssignmentDeclarationSupport4.js");
-                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS7016: Could not find a declaration file for module './lateBoundAssignmentDeclarationSupport4.js'. 'lateBoundAssignmentDeclarationSupport4.js' implicitly has an 'any' type.
     const inst =  new x.F();
+                  ~~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
     const y = inst["my-fake-sym"];
     const z = inst[x.S];
     
-==== lateBoundAssignmentDeclarationSupport4.js (0 errors) ====
+==== lateBoundAssignmentDeclarationSupport4.js (1 errors) ====
     // currently unsupported
     const _sym = Symbol();
     const _str = "my-fake-sym";
@@ -19,6 +20,8 @@ usage.js(1,19): error TS7016: Could not find a declaration file for module './la
     F.prototype[_sym] = "ok";
     F.prototype[_str] = "ok";
     const inst =  new F();
+                  ~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
     const _y = inst[_str];
     const _z = inst[_sym];
     module.exports.F = F;

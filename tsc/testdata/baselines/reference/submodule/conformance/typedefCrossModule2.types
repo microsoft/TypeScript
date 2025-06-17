@@ -2,8 +2,8 @@
 
 === use.js ===
 var mod = require('./mod1.js');
->mod : any
->require('./mod1.js') : any
+>mod : { Baz: typeof Baz; }
+>require('./mod1.js') : { Baz: typeof Baz; }
 >require : any
 >'./mod1.js' : "./mod1.js"
 
@@ -13,12 +13,68 @@ var b;
 
 /** @type {mod.Baz} */
 var bb;
->bb : error
+>bb : mod.Baz
 
 var bbb = new mod.Baz();
->bbb : any
->new mod.Baz() : any
->mod.Baz : any
->mod : any
->Baz : any
+>bbb : Baz
+>new mod.Baz() : Baz
+>mod.Baz : typeof Baz
+>mod : { Baz: typeof Baz; }
+>Baz : typeof Baz
+
+=== mod1.js ===
+// error
+
+/** @typedef {number} Foo */
+class Foo { } // should error
+>Foo : Foo
+
+/** @typedef {number} Bar */
+exports.Bar = class { }
+>exports.Bar = class { } : typeof Bar
+>exports.Bar : any
+>exports : typeof import("./mod1")
+>Bar : any
+>class { } : typeof Bar
+
+/** @typedef {number} Baz */
+module.exports = {
+>module.exports = {    Baz: class { }} : { Baz: typeof Baz; }
+>module.exports : { Baz: typeof Baz; }
+>module : { "export=": { Baz: typeof Baz; }; }
+>exports : { Baz: typeof Baz; }
+>{    Baz: class { }} : { Baz: typeof Baz; }
+
+    Baz: class { }
+>Baz : typeof Baz
+>class { } : typeof Baz
+}
+
+// ok
+
+/** @typedef {number} Qux */
+var Qux = 2;
+>Qux : number
+>2 : 2
+
+/** @typedef {number} Quid */
+exports.Quid = 2;
+>exports.Quid = 2 : 2
+>exports.Quid : any
+>exports : typeof import("./mod1")
+>Quid : any
+>2 : 2
+
+/** @typedef {number} Quack */
+module.exports = {
+>module.exports = {    Quack: 2} : { Quack: number; }
+>module.exports : { Baz: typeof Baz; }
+>module : { "export=": { Baz: typeof Baz; }; }
+>exports : { Baz: typeof Baz; }
+>{    Quack: 2} : { Quack: number; }
+
+    Quack: 2
+>Quack : number
+>2 : 2
+}
 

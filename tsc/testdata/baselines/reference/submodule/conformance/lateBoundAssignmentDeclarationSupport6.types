@@ -2,17 +2,17 @@
 
 === usage.js ===
 const x = require("./lateBoundAssignmentDeclarationSupport6.js");
->x : any
->require("./lateBoundAssignmentDeclarationSupport6.js") : any
+>x : typeof x
+>require("./lateBoundAssignmentDeclarationSupport6.js") : typeof x
 >require : any
 >"./lateBoundAssignmentDeclarationSupport6.js" : "./lateBoundAssignmentDeclarationSupport6.js"
 
 const inst =  new x.F();
 >inst : any
 >new x.F() : any
->x.F : any
->x : any
->F : any
+>x.F : () => void
+>x : typeof x
+>F : () => void
 
 const y = inst["my-fake-sym"];
 >y : any
@@ -24,7 +24,91 @@ const z = inst[x.S];
 >z : any
 >inst[x.S] : any
 >inst : any
->x.S : any
->x : any
->S : any
+>x.S : unique symbol
+>x : typeof x
+>S : unique symbol
+
+=== lateBoundAssignmentDeclarationSupport6.js ===
+// currently unsupported
+const _sym = Symbol();
+>_sym : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+const _str = "my-fake-sym";
+>_str : "my-fake-sym"
+>"my-fake-sym" : "my-fake-sym"
+
+function F() {
+>F : () => void
+}
+F.prototype.defsAClass = true;
+>F.prototype.defsAClass = true : true
+>F.prototype.defsAClass : any
+>F.prototype : any
+>F : () => void
+>prototype : any
+>defsAClass : any
+>true : true
+
+Object.defineProperty(F.prototype, _str, {value: "ok"});
+>Object.defineProperty(F.prototype, _str, {value: "ok"}) : any
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>Object : ObjectConstructor
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>F.prototype : any
+>F : () => void
+>prototype : any
+>_str : "my-fake-sym"
+>{value: "ok"} : { value: string; }
+>value : string
+>"ok" : "ok"
+
+Object.defineProperty(F.prototype, _sym, {value: "ok"});
+>Object.defineProperty(F.prototype, _sym, {value: "ok"}) : any
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>Object : ObjectConstructor
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>F.prototype : any
+>F : () => void
+>prototype : any
+>_sym : unique symbol
+>{value: "ok"} : { value: string; }
+>value : string
+>"ok" : "ok"
+
+const inst =  new F();
+>inst : any
+>new F() : any
+>F : () => void
+
+const _y = inst[_str];
+>_y : any
+>inst[_str] : any
+>inst : any
+>_str : "my-fake-sym"
+
+const _z = inst[_sym];
+>_z : any
+>inst[_sym] : any
+>inst : any
+>_sym : unique symbol
+
+module.exports.F = F;
+>module.exports.F = F : () => void
+>module.exports.F : () => void
+>module.exports : typeof import("./lateBoundAssignmentDeclarationSupport6")
+>module : { "\"lateBoundAssignmentDeclarationSupport6\"": typeof import("./lateBoundAssignmentDeclarationSupport6"); }
+>exports : typeof import("./lateBoundAssignmentDeclarationSupport6")
+>F : () => void
+>F : () => void
+
+module.exports.S = _sym;
+>module.exports.S = _sym : unique symbol
+>module.exports.S : unique symbol
+>module.exports : typeof import("./lateBoundAssignmentDeclarationSupport6")
+>module : { "\"lateBoundAssignmentDeclarationSupport6\"": typeof import("./lateBoundAssignmentDeclarationSupport6"); }
+>exports : typeof import("./lateBoundAssignmentDeclarationSupport6")
+>S : unique symbol
+>_sym : unique symbol
 

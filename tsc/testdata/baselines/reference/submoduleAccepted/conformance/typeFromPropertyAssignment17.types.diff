@@ -6,23 +6,21 @@
  var mini = require('./minimatch')
 ->mini : typeof mini
 ->require('./minimatch') : typeof mini
-+>mini : any
-+>require('./minimatch') : any
++>mini : { (): void; M: { (): void; defaults: (def: any) => any; }; filter: () => void; }
++>require('./minimatch') : { (): void; M: { (): void; defaults: (def: any) => any; }; filter: () => void; }
  >require : any
  >'./minimatch' : "./minimatch"
 
  mini.M.defaults()
  >mini.M.defaults() : any
-->mini.M.defaults : (def: any) => any
+ >mini.M.defaults : (def: any) => any
 ->mini.M : typeof M
 ->mini : typeof mini
 ->M : typeof M
-->defaults : (def: any) => any
-+>mini.M.defaults : any
-+>mini.M : any
-+>mini : any
-+>M : any
-+>defaults : any
++>mini.M : { (): void; defaults: (def: any) => any; }
++>mini : { (): void; M: { (): void; defaults: (def: any) => any; }; filter: () => void; }
++>M : { (): void; defaults: (def: any) => any; }
+ >defaults : (def: any) => any
 
  var m = new mini.M()
 ->m : M
@@ -32,9 +30,9 @@
 ->M : typeof M
 +>m : any
 +>new mini.M() : any
-+>mini.M : any
-+>mini : any
-+>M : any
++>mini.M : { (): void; defaults: (def: any) => any; }
++>mini : { (): void; M: { (): void; defaults: (def: any) => any; }; filter: () => void; }
++>M : { (): void; defaults: (def: any) => any; }
 
  m.m()
 ->m.m() : void
@@ -47,75 +45,78 @@
 +>m : any
 
  mini.filter()
-->mini.filter() : void
-->mini.filter : () => void
+ >mini.filter() : void
+ >mini.filter : () => void
 ->mini : typeof mini
-->filter : () => void
-+>mini.filter() : any
-+>mini.filter : any
-+>mini : any
-+>filter : any
++>mini : { (): void; M: { (): void; defaults: (def: any) => any; }; filter: () => void; }
+ >filter : () => void
 
  === types.d.ts ===
- declare var require: any;
-@@= skipped -38, +38 lines =@@
-
- declare var module: any;
- >module : any
--
--=== minimatch.js ===
--/// <reference path='./types.d.ts'/>
--module.exports = minimatch
+@@= skipped -42, +42 lines =@@
+ === minimatch.js ===
+ /// <reference path='./types.d.ts'/>
+ module.exports = minimatch
 ->module.exports = minimatch : typeof minimatch
 ->module.exports : typeof minimatch
 ->module : { exports: typeof minimatch; }
 ->exports : typeof minimatch
 ->minimatch : typeof minimatch
--
--minimatch.M = M
++>module.exports = minimatch : { (): void; M: { (): void; defaults: (def: any) => any; }; filter: () => void; }
++>module.exports : { (): void; M: { (): void; defaults: (def: any) => any; }; filter: () => void; }
++>module : { minimatch: { (): void; M: { (): void; defaults: (def: any) => any; }; filter: () => void; }; }
++>exports : { (): void; M: { (): void; defaults: (def: any) => any; }; filter: () => void; }
++>minimatch : { (): void; M: { (): void; defaults: (def: any) => any; }; filter: () => void; }
+
+ minimatch.M = M
 ->minimatch.M = M : typeof M
 ->minimatch.M : typeof M
 ->minimatch : typeof minimatch
 ->M : typeof M
 ->M : typeof M
--
--minimatch.filter = filter
-->minimatch.filter = filter : () => void
-->minimatch.filter : () => void
++>minimatch.M = M : { (): void; defaults: (def: any) => any; }
++>minimatch.M : { (): void; defaults: (def: any) => any; }
++>minimatch : { (): void; M: { (): void; defaults: (def: any) => any; }; filter: () => void; }
++>M : { (): void; defaults: (def: any) => any; }
++>M : { (): void; defaults: (def: any) => any; }
+
+ minimatch.filter = filter
+ >minimatch.filter = filter : () => void
+ >minimatch.filter : () => void
 ->minimatch : typeof minimatch
-->filter : () => void
-->filter : () => void
--
--function filter() {
-->filter : () => void
--
--    return minimatch()
-->minimatch() : void
++>minimatch : { (): void; M: { (): void; defaults: (def: any) => any; }; filter: () => void; }
+ >filter : () => void
+ >filter : () => void
+
+@@= skipped -25, +25 lines =@@
+
+     return minimatch()
+ >minimatch() : void
 ->minimatch : typeof minimatch
--}
--function minimatch() {
++>minimatch : { (): void; M: { (): void; defaults: (def: any) => any; }; filter: () => void; }
+ }
+ function minimatch() {
 ->minimatch : typeof minimatch
--}
--M.defaults = function (def) {
-->M.defaults = function (def) {    return def} : (def: any) => any
-->M.defaults : (def: any) => any
++>minimatch : { (): void; M: { (): void; defaults: (def: any) => any; }; filter: () => void; }
+ }
+ M.defaults = function (def) {
+ >M.defaults = function (def) {    return def} : (def: any) => any
+ >M.defaults : (def: any) => any
 ->M : typeof M
-->defaults : (def: any) => any
-->function (def) {    return def} : (def: any) => any
-->def : any
--
--    return def
-->def : any
--}
--M.prototype.m = function () {
-->M.prototype.m = function () {} : () => void
-->M.prototype.m : any
-->M.prototype : any
++>M : { (): void; defaults: (def: any) => any; }
+ >defaults : (def: any) => any
+ >function (def) {    return def} : (def: any) => any
+ >def : any
+@@= skipped -20, +20 lines =@@
+ >M.prototype.m = function () {} : () => void
+ >M.prototype.m : any
+ >M.prototype : any
 ->M : typeof M
-->prototype : any
-->m : any
-->function () {} : () => void
--}
--function M() {
++>M : { (): void; defaults: (def: any) => any; }
+ >prototype : any
+ >m : any
+ >function () {} : () => void
+ }
+ function M() {
 ->M : typeof M
--}
++>M : { (): void; defaults: (def: any) => any; }
+ }

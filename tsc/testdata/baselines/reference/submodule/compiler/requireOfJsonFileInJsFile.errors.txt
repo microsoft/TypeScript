@@ -1,11 +1,10 @@
 /user.js(2,7): error TS2339: Property 'b' does not exist on type '{ a: number; }'.
 /user.js(5,7): error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type '{ b: number; }'.
-/user.js(8,21): error TS7016: Could not find a declaration file for module './js.js'. '/js.js' implicitly has an 'any' type.
 /user.js(9,7): error TS2339: Property 'b' does not exist on type '{ a: number; }'.
-/user.js(12,21): error TS7016: Could not find a declaration file for module './js.js'. '/js.js' implicitly has an 'any' type.
+/user.js(12,7): error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type '{ b: number; }'.
 
 
-==== /user.js (5 errors) ====
+==== /user.js (4 errors) ====
     const json0 = require("./json.json");
     json0.b; // Error (good)
           ~
@@ -19,16 +18,15 @@
     json1.b; // No error (OK since that's the type annotation)
     
     const js0 = require("./js.js");
-                        ~~~~~~~~~
-!!! error TS7016: Could not find a declaration file for module './js.js'. '/js.js' implicitly has an 'any' type.
     json0.b; // Error (good)
           ~
 !!! error TS2339: Property 'b' does not exist on type '{ a: number; }'.
     
     /** @type {{ b: number }} */
     const js1 = require("./js.js"); // Error (good)
-                        ~~~~~~~~~
-!!! error TS7016: Could not find a declaration file for module './js.js'. '/js.js' implicitly has an 'any' type.
+          ~~~
+!!! error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type '{ b: number; }'.
+!!! related TS2728 /user.js:11:14: 'b' is declared here.
     js1.b;
 ==== /json.json (0 errors) ====
     { "a": 0 }

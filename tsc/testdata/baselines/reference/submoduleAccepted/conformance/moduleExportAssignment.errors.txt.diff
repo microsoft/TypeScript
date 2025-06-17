@@ -1,0 +1,48 @@
+--- old.moduleExportAssignment.errors.txt
++++ new.moduleExportAssignment.errors.txt
+@@= skipped -0, +0 lines =@@
+-<no content>
++npmlog.js(5,14): error TS2741: Property 'y' is missing in type 'EE' but required in type 'typeof import("npmlog")'.
++npmlog.js(8,16): error TS2339: Property 'on' does not exist on type 'typeof import("npmlog")'.
++npmlog.js(10,8): error TS2339: Property 'x' does not exist on type 'EE'.
++npmlog.js(12,8): error TS2339: Property 'y' does not exist on type 'EE'.
++npmlog.js(13,16): error TS2339: Property 'x' does not exist on type 'typeof import("npmlog")'.
++use.js(2,8): error TS2339: Property 'x' does not exist on type 'typeof import("npmlog")'.
++use.js(3,8): error TS2339: Property 'on' does not exist on type 'typeof import("npmlog")'.
++
++
++==== use.js (2 errors) ====
++    var npmlog = require('./npmlog')
++    npmlog.x
++           ~
++!!! error TS2339: Property 'x' does not exist on type 'typeof import("npmlog")'.
++    npmlog.on
++           ~~
++!!! error TS2339: Property 'on' does not exist on type 'typeof import("npmlog")'.
++    
++==== npmlog.js (5 errors) ====
++    class EE {
++        /** @param {string} s */
++        on(s) { }
++    }
++    var npmlog = module.exports = new EE()
++                 ~~~~~~~~~~~~~~
++!!! error TS2741: Property 'y' is missing in type 'EE' but required in type 'typeof import("npmlog")'.
++!!! related TS2728 npmlog.js:11:1: 'y' is declared here.
++    
++    npmlog.on('hi') // both references should see EE.on
++    module.exports.on('hi') // here too
++                   ~~
++!!! error TS2339: Property 'on' does not exist on type 'typeof import("npmlog")'.
++    
++    npmlog.x = 1
++           ~
++!!! error TS2339: Property 'x' does not exist on type 'EE'.
++    module.exports.y = 2
++    npmlog.y
++           ~
++!!! error TS2339: Property 'y' does not exist on type 'EE'.
++    module.exports.x
++                   ~
++!!! error TS2339: Property 'x' does not exist on type 'typeof import("npmlog")'.
++    

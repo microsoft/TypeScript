@@ -50,6 +50,13 @@ import "./x";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 exports.a = 1;
+//// [x.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var N1;
+(function (N1) {
+    N1.x = 1;
+})(N1 || (N1 = {}));
 //// [observable.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -60,13 +67,6 @@ exports.x = 1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
 exports.b = 1;
-//// [x.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var N1;
-(function (N1) {
-    N1.x = 1;
-})(N1 || (N1 = {}));
 //// [main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

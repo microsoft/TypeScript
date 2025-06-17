@@ -1,5 +1,17 @@
-validator.ts(3,21): error TS7016: Could not find a declaration file for module './mod1'. 'mod1.js' implicitly has an 'any' type.
-validator.ts(23,21): error TS7016: Could not find a declaration file for module './mod2'. 'mod2.js' implicitly has an 'any' type.
+index.js(4,19): error TS2306: File 'mod1.js' is not a module.
+index.js(9,19): error TS2306: File 'mod2.js' is not a module.
+mod1.js(1,23): error TS2304: Cannot find name 'exports'.
+mod1.js(2,23): error TS2304: Cannot find name 'exports'.
+mod1.js(3,23): error TS2304: Cannot find name 'exports'.
+mod1.js(4,23): error TS2304: Cannot find name 'exports'.
+mod1.js(5,23): error TS2304: Cannot find name 'exports'.
+mod2.js(1,23): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+mod2.js(2,23): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+mod2.js(3,23): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+mod2.js(4,23): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+mod2.js(5,23): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+validator.ts(3,21): error TS2306: File 'mod1.js' is not a module.
+validator.ts(23,21): error TS2306: File 'mod2.js' is not a module.
 
 
 ==== validator.ts (2 errors) ====
@@ -7,7 +19,7 @@ validator.ts(23,21): error TS7016: Could not find a declaration file for module 
     
     import m1 = require("./mod1");
                         ~~~~~~~~
-!!! error TS7016: Could not find a declaration file for module './mod1'. 'mod1.js' implicitly has an 'any' type.
+!!! error TS2306: File 'mod1.js' is not a module.
     
     m1.thing;
     m1.readonlyProp;
@@ -29,7 +41,7 @@ validator.ts(23,21): error TS7016: Could not find a declaration file for module 
     
     import m2 = require("./mod2");
                         ~~~~~~~~
-!!! error TS7016: Could not find a declaration file for module './mod2'. 'mod2.js' implicitly has an 'any' type.
+!!! error TS2306: File 'mod2.js' is not a module.
     
     m2.thing;
     m2.readonlyProp;
@@ -49,38 +61,62 @@ validator.ts(23,21): error TS7016: Could not find a declaration file for module 
     m2.rwAccessors = "no";
     m2.setonlyAccessor = 0;
     
-==== mod1.js (0 errors) ====
+==== mod1.js (5 errors) ====
     Object.defineProperty(exports, "thing", { value: 42, writable: true });
+                          ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
     Object.defineProperty(exports, "readonlyProp", { value: "Smith", writable: false });
+                          ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
     Object.defineProperty(exports, "rwAccessors", { get() { return 98122 }, set(_) { /*ignore*/ } });
+                          ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
     Object.defineProperty(exports, "readonlyAccessor", { get() { return 21.75 } });
+                          ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
     Object.defineProperty(exports, "setonlyAccessor", {
+                          ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
         /** @param {string} str */
         set(str) {
             this.rwAccessors = Number(str) 
         }
     });
     
-==== mod2.js (0 errors) ====
+==== mod2.js (5 errors) ====
     Object.defineProperty(module.exports, "thing", { value: "yes", writable: true });
+                          ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
     Object.defineProperty(module.exports, "readonlyProp", { value: "Smith", writable: false });
+                          ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
     Object.defineProperty(module.exports, "rwAccessors", { get() { return 98122 }, set(_) { /*ignore*/ } });
+                          ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
     Object.defineProperty(module.exports, "readonlyAccessor", { get() { return 21.75 } });
+                          ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
     Object.defineProperty(module.exports, "setonlyAccessor", {
+                          ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
         /** @param {string} str */
         set(str) {
             this.rwAccessors = Number(str) 
         }
     });
     
-==== index.js (0 errors) ====
+==== index.js (2 errors) ====
     /**
      * @type {number}
      */
     const q = require("./mod1").thing;
+                      ~~~~~~~~
+!!! error TS2306: File 'mod1.js' is not a module.
     
     /**
      * @type {string}
      */
     const u = require("./mod2").thing;
+                      ~~~~~~~~
+!!! error TS2306: File 'mod2.js' is not a module.
     

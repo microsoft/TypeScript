@@ -6,43 +6,53 @@
  const { apply } = require('./moduleExportAliasDuplicateAlias')
 ->apply : () => void
 ->require('./moduleExportAliasDuplicateAlias') : typeof import("moduleExportAliasDuplicateAlias")
-+>apply : any
-+>require('./moduleExportAliasDuplicateAlias') : any
++>apply : undefined
++>require('./moduleExportAliasDuplicateAlias') : typeof import("./moduleExportAliasDuplicateAlias")
  >require : any
  >'./moduleExportAliasDuplicateAlias' : "./moduleExportAliasDuplicateAlias"
 
  apply()
 ->apply() : void
 ->apply : () => void
--
--=== moduleExportAliasDuplicateAlias.js ===
--exports.apply = undefined;
-->exports.apply = undefined : undefined
++>apply() : any
++>apply : undefined
+
+ === moduleExportAliasDuplicateAlias.js ===
+ exports.apply = undefined;
+ >exports.apply = undefined : undefined
 ->exports.apply : any
 ->exports : typeof import("moduleExportAliasDuplicateAlias")
 ->apply : any
-->undefined : undefined
--
--function a() { }
-->a : () => void
--
--exports.apply()
-->exports.apply() : any
-->exports.apply : undefined
++>exports.apply : undefined
++>exports : typeof import("./moduleExportAliasDuplicateAlias")
++>apply : undefined
+ >undefined : undefined
+
+ function a() { }
+@@= skipped -23, +23 lines =@@
+ exports.apply()
+ >exports.apply() : any
+ >exports.apply : undefined
 ->exports : typeof import("moduleExportAliasDuplicateAlias")
-->apply : undefined
--
--exports.apply = a;
-->exports.apply = a : () => void
++>exports : typeof import("./moduleExportAliasDuplicateAlias")
+ >apply : undefined
+
+ exports.apply = a;
+ >exports.apply = a : () => void
 ->exports.apply : any
 ->exports : typeof import("moduleExportAliasDuplicateAlias")
 ->apply : any
-->a : () => void
--
--exports.apply()
++>exports.apply : undefined
++>exports : typeof import("./moduleExportAliasDuplicateAlias")
++>apply : undefined
+ >a : () => void
+
+ exports.apply()
 ->exports.apply() : void
 ->exports.apply : () => void
 ->exports : typeof import("moduleExportAliasDuplicateAlias")
 ->apply : () => void
-+>apply() : any
-+>apply : any
++>exports.apply() : any
++>exports.apply : undefined
++>exports : typeof import("./moduleExportAliasDuplicateAlias")
++>apply : undefined

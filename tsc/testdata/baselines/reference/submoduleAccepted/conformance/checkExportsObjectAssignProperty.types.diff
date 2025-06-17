@@ -1,0 +1,431 @@
+--- old.checkExportsObjectAssignProperty.types
++++ new.checkExportsObjectAssignProperty.types
+@@= skipped -3, +3 lines =@@
+ import "./";
+
+ import m1 = require("./mod1");
+->m1 : typeof m1
++>m1 : any
+
+ m1.thing;
+->m1.thing : number
+->m1 : typeof m1
+->thing : number
++>m1.thing : any
++>m1 : any
++>thing : any
+
+ m1.readonlyProp;
+->m1.readonlyProp : string
+->m1 : typeof m1
+->readonlyProp : string
++>m1.readonlyProp : any
++>m1 : any
++>readonlyProp : any
+
+ m1.rwAccessors;
+->m1.rwAccessors : number
+->m1 : typeof m1
+->rwAccessors : number
++>m1.rwAccessors : any
++>m1 : any
++>rwAccessors : any
+
+ m1.readonlyAccessor;
+->m1.readonlyAccessor : number
+->m1 : typeof m1
+->readonlyAccessor : number
++>m1.readonlyAccessor : any
++>m1 : any
++>readonlyAccessor : any
+
+ m1.setonlyAccessor;
+->m1.setonlyAccessor : string
+->m1 : typeof m1
+->setonlyAccessor : string
++>m1.setonlyAccessor : any
++>m1 : any
++>setonlyAccessor : any
+
+ // allowed assignments
+ m1.thing = 10;
+ >m1.thing = 10 : 10
+->m1.thing : number
+->m1 : typeof m1
+->thing : number
++>m1.thing : any
++>m1 : any
++>thing : any
+ >10 : 10
+
+ m1.rwAccessors = 11;
+ >m1.rwAccessors = 11 : 11
+->m1.rwAccessors : number
+->m1 : typeof m1
+->rwAccessors : number
++>m1.rwAccessors : any
++>m1 : any
++>rwAccessors : any
+ >11 : 11
+
+ m1.setonlyAccessor = "yes";
+ >m1.setonlyAccessor = "yes" : "yes"
+->m1.setonlyAccessor : string
+->m1 : typeof m1
+->setonlyAccessor : string
++>m1.setonlyAccessor : any
++>m1 : any
++>setonlyAccessor : any
+ >"yes" : "yes"
+
+ // disallowed assignments
+ m1.readonlyProp = "name";
+ >m1.readonlyProp = "name" : "name"
+ >m1.readonlyProp : any
+->m1 : typeof m1
++>m1 : any
+ >readonlyProp : any
+ >"name" : "name"
+
+ m1.readonlyAccessor = 12;
+ >m1.readonlyAccessor = 12 : 12
+ >m1.readonlyAccessor : any
+->m1 : typeof m1
++>m1 : any
+ >readonlyAccessor : any
+ >12 : 12
+
+ m1.thing = "no";
+ >m1.thing = "no" : "no"
+->m1.thing : number
+->m1 : typeof m1
+->thing : number
++>m1.thing : any
++>m1 : any
++>thing : any
+ >"no" : "no"
+
+ m1.rwAccessors = "no";
+ >m1.rwAccessors = "no" : "no"
+->m1.rwAccessors : number
+->m1 : typeof m1
+->rwAccessors : number
++>m1.rwAccessors : any
++>m1 : any
++>rwAccessors : any
+ >"no" : "no"
+
+ m1.setonlyAccessor = 0;
+ >m1.setonlyAccessor = 0 : 0
+->m1.setonlyAccessor : string
+->m1 : typeof m1
+->setonlyAccessor : string
++>m1.setonlyAccessor : any
++>m1 : any
++>setonlyAccessor : any
+ >0 : 0
+
+ import m2 = require("./mod2");
+->m2 : typeof m2
++>m2 : any
+
+ m2.thing;
+->m2.thing : string
+->m2 : typeof m2
+->thing : string
++>m2.thing : any
++>m2 : any
++>thing : any
+
+ m2.readonlyProp;
+->m2.readonlyProp : string
+->m2 : typeof m2
+->readonlyProp : string
++>m2.readonlyProp : any
++>m2 : any
++>readonlyProp : any
+
+ m2.rwAccessors;
+->m2.rwAccessors : number
+->m2 : typeof m2
+->rwAccessors : number
++>m2.rwAccessors : any
++>m2 : any
++>rwAccessors : any
+
+ m2.readonlyAccessor;
+->m2.readonlyAccessor : number
+->m2 : typeof m2
+->readonlyAccessor : number
++>m2.readonlyAccessor : any
++>m2 : any
++>readonlyAccessor : any
+
+ m2.setonlyAccessor;
+->m2.setonlyAccessor : string
+->m2 : typeof m2
+->setonlyAccessor : string
++>m2.setonlyAccessor : any
++>m2 : any
++>setonlyAccessor : any
+
+ // allowed assignments
+ m2.thing = "ok";
+ >m2.thing = "ok" : "ok"
+->m2.thing : string
+->m2 : typeof m2
+->thing : string
++>m2.thing : any
++>m2 : any
++>thing : any
+ >"ok" : "ok"
+
+ m2.rwAccessors = 11;
+ >m2.rwAccessors = 11 : 11
+->m2.rwAccessors : number
+->m2 : typeof m2
+->rwAccessors : number
++>m2.rwAccessors : any
++>m2 : any
++>rwAccessors : any
+ >11 : 11
+
+ m2.setonlyAccessor = "yes";
+ >m2.setonlyAccessor = "yes" : "yes"
+->m2.setonlyAccessor : string
+->m2 : typeof m2
+->setonlyAccessor : string
++>m2.setonlyAccessor : any
++>m2 : any
++>setonlyAccessor : any
+ >"yes" : "yes"
+
+ // disallowed assignments
+ m2.readonlyProp = "name";
+ >m2.readonlyProp = "name" : "name"
+ >m2.readonlyProp : any
+->m2 : typeof m2
++>m2 : any
+ >readonlyProp : any
+ >"name" : "name"
+
+ m2.readonlyAccessor = 12;
+ >m2.readonlyAccessor = 12 : 12
+ >m2.readonlyAccessor : any
+->m2 : typeof m2
++>m2 : any
+ >readonlyAccessor : any
+ >12 : 12
+
+ m2.thing = 0;
+ >m2.thing = 0 : 0
+->m2.thing : string
+->m2 : typeof m2
+->thing : string
++>m2.thing : any
++>m2 : any
++>thing : any
+ >0 : 0
+
+ m2.rwAccessors = "no";
+ >m2.rwAccessors = "no" : "no"
+->m2.rwAccessors : number
+->m2 : typeof m2
+->rwAccessors : number
++>m2.rwAccessors : any
++>m2 : any
++>rwAccessors : any
+ >"no" : "no"
+
+ m2.setonlyAccessor = 0;
+ >m2.setonlyAccessor = 0 : 0
+->m2.setonlyAccessor : string
+->m2 : typeof m2
+->setonlyAccessor : string
++>m2.setonlyAccessor : any
++>m2 : any
++>setonlyAccessor : any
+ >0 : 0
+
+ === mod1.js ===
+ Object.defineProperty(exports, "thing", { value: 42, writable: true });
+->Object.defineProperty(exports, "thing", { value: 42, writable: true }) : typeof import("mod1")
++>Object.defineProperty(exports, "thing", { value: 42, writable: true }) : any
+ >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+ >Object : ObjectConstructor
+ >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+->exports : typeof import("mod1")
++>exports : any
+ >"thing" : "thing"
+ >{ value: 42, writable: true } : { value: number; writable: true; }
+ >value : number
+@@= skipped -186, +186 lines =@@
+ >true : true
+
+ Object.defineProperty(exports, "readonlyProp", { value: "Smith", writable: false });
+->Object.defineProperty(exports, "readonlyProp", { value: "Smith", writable: false }) : typeof import("mod1")
++>Object.defineProperty(exports, "readonlyProp", { value: "Smith", writable: false }) : any
+ >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+ >Object : ObjectConstructor
+ >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+->exports : typeof import("mod1")
++>exports : any
+ >"readonlyProp" : "readonlyProp"
+ >{ value: "Smith", writable: false } : { value: string; writable: false; }
+ >value : string
+@@= skipped -13, +13 lines =@@
+ >false : false
+
+ Object.defineProperty(exports, "rwAccessors", { get() { return 98122 }, set(_) { /*ignore*/ } });
+->Object.defineProperty(exports, "rwAccessors", { get() { return 98122 }, set(_) { /*ignore*/ } }) : typeof import("mod1")
++>Object.defineProperty(exports, "rwAccessors", { get() { return 98122 }, set(_) { /*ignore*/ } }) : any
+ >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+ >Object : ObjectConstructor
+ >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+->exports : typeof import("mod1")
++>exports : any
+ >"rwAccessors" : "rwAccessors"
+ >{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get(): number; set(_: any): void; }
+ >get : () => number
+@@= skipped -13, +13 lines =@@
+ >_ : any
+
+ Object.defineProperty(exports, "readonlyAccessor", { get() { return 21.75 } });
+->Object.defineProperty(exports, "readonlyAccessor", { get() { return 21.75 } }) : typeof import("mod1")
++>Object.defineProperty(exports, "readonlyAccessor", { get() { return 21.75 } }) : any
+ >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+ >Object : ObjectConstructor
+ >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+->exports : typeof import("mod1")
++>exports : any
+ >"readonlyAccessor" : "readonlyAccessor"
+ >{ get() { return 21.75 } } : { get(): number; }
+ >get : () => number
+ >21.75 : 21.75
+
+ Object.defineProperty(exports, "setonlyAccessor", {
+->Object.defineProperty(exports, "setonlyAccessor", {    /** @param {string} str */    set(str) {        this.rwAccessors = Number(str)     }}) : typeof import("mod1")
++>Object.defineProperty(exports, "setonlyAccessor", {    /** @param {string} str */    set(str) {        this.rwAccessors = Number(str)     }}) : any
+ >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+ >Object : ObjectConstructor
+ >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+->exports : typeof import("mod1")
++>exports : any
+ >"setonlyAccessor" : "setonlyAccessor"
+ >{    /** @param {string} str */    set(str) {        this.rwAccessors = Number(str)     }} : { set(str: string): void; }
+
+@@= skipped -37, +37 lines =@@
+
+ === mod2.js ===
+ Object.defineProperty(module.exports, "thing", { value: "yes", writable: true });
+->Object.defineProperty(module.exports, "thing", { value: "yes", writable: true }) : typeof module.exports
++>Object.defineProperty(module.exports, "thing", { value: "yes", writable: true }) : any
+ >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+ >Object : ObjectConstructor
+ >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
++>module.exports : any
++>module : any
++>exports : any
+ >"thing" : "thing"
+ >{ value: "yes", writable: true } : { value: string; writable: true; }
+ >value : string
+@@= skipped -15, +15 lines =@@
+ >true : true
+
+ Object.defineProperty(module.exports, "readonlyProp", { value: "Smith", writable: false });
+->Object.defineProperty(module.exports, "readonlyProp", { value: "Smith", writable: false }) : typeof module.exports
++>Object.defineProperty(module.exports, "readonlyProp", { value: "Smith", writable: false }) : any
+ >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+ >Object : ObjectConstructor
+ >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
++>module.exports : any
++>module : any
++>exports : any
+ >"readonlyProp" : "readonlyProp"
+ >{ value: "Smith", writable: false } : { value: string; writable: false; }
+ >value : string
+@@= skipped -15, +15 lines =@@
+ >false : false
+
+ Object.defineProperty(module.exports, "rwAccessors", { get() { return 98122 }, set(_) { /*ignore*/ } });
+->Object.defineProperty(module.exports, "rwAccessors", { get() { return 98122 }, set(_) { /*ignore*/ } }) : typeof module.exports
++>Object.defineProperty(module.exports, "rwAccessors", { get() { return 98122 }, set(_) { /*ignore*/ } }) : any
+ >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+ >Object : ObjectConstructor
+ >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
++>module.exports : any
++>module : any
++>exports : any
+ >"rwAccessors" : "rwAccessors"
+ >{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get(): number; set(_: any): void; }
+ >get : () => number
+@@= skipped -15, +15 lines =@@
+ >_ : any
+
+ Object.defineProperty(module.exports, "readonlyAccessor", { get() { return 21.75 } });
+->Object.defineProperty(module.exports, "readonlyAccessor", { get() { return 21.75 } }) : typeof module.exports
++>Object.defineProperty(module.exports, "readonlyAccessor", { get() { return 21.75 } }) : any
+ >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+ >Object : ObjectConstructor
+ >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
++>module.exports : any
++>module : any
++>exports : any
+ >"readonlyAccessor" : "readonlyAccessor"
+ >{ get() { return 21.75 } } : { get(): number; }
+ >get : () => number
+ >21.75 : 21.75
+
+ Object.defineProperty(module.exports, "setonlyAccessor", {
+->Object.defineProperty(module.exports, "setonlyAccessor", {    /** @param {string} str */    set(str) {        this.rwAccessors = Number(str)     }}) : typeof module.exports
++>Object.defineProperty(module.exports, "setonlyAccessor", {    /** @param {string} str */    set(str) {        this.rwAccessors = Number(str)     }}) : any
+ >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+ >Object : ObjectConstructor
+ >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
++>module.exports : any
++>module : any
++>exports : any
+ >"setonlyAccessor" : "setonlyAccessor"
+ >{    /** @param {string} str */    set(str) {        this.rwAccessors = Number(str)     }} : { set(str: string): void; }
+
+@@= skipped -45, +45 lines =@@
+  */
+ const q = require("./mod1").thing;
+ >q : number
+->require("./mod1").thing : number
+->require("./mod1") : typeof import("mod1")
++>require("./mod1").thing : any
++>require("./mod1") : any
+ >require : any
+ >"./mod1" : "./mod1"
+->thing : number
++>thing : any
+
+ /**
+  * @type {string}
+  */
+ const u = require("./mod2").thing;
+ >u : string
+->require("./mod2").thing : string
+->require("./mod2") : typeof import("mod2")
++>require("./mod2").thing : any
++>require("./mod2") : any
+ >require : any
+ >"./mod2" : "./mod2"
+->thing : string
++>thing : any

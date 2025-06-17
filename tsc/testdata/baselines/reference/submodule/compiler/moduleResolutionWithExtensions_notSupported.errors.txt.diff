@@ -6,14 +6,14 @@
 -
 -
 -==== /a.ts (2 errors) ====
-+/a.ts(1,17): error TS2306: File '/tsx.tsx' is not a module.
++/a.ts(1,17): error TS2307: Cannot find module './tsx' or its corresponding type declarations.
 +
 +
 +==== /a.ts (1 errors) ====
      import tsx from "./tsx"; // Not allowed.
                      ~~~~~~~
 -!!! error TS6142: Module './tsx' was resolved to '/tsx.tsx', but '--jsx' is not set.
-+!!! error TS2306: File '/tsx.tsx' is not a module.
++!!! error TS2307: Cannot find module './tsx' or its corresponding type declarations.
      import jsx from "./jsx"; // Not allowed.
 -                    ~~~~~~~
 -!!! error TS6142: Module './jsx' was resolved to '/jsx.jsx', but '--jsx' is not set.

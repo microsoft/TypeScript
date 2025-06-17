@@ -2,18 +2,80 @@
 
 === use.js ===
 var npmlog = require('./npmlog')
->npmlog : any
->require('./npmlog') : any
+>npmlog : typeof npmlog
+>require('./npmlog') : typeof npmlog
 >require : any
 >'./npmlog' : "./npmlog"
 
 npmlog.x
 >npmlog.x : any
->npmlog : any
+>npmlog : typeof npmlog
 >x : any
 
 npmlog.on
 >npmlog.on : any
->npmlog : any
+>npmlog : typeof npmlog
 >on : any
+
+=== npmlog.js ===
+class EE {
+>EE : EE
+
+    /** @param {string} s */
+    on(s) { }
+>on : (s: string) => void
+>s : string
+}
+var npmlog = module.exports = new EE()
+>npmlog : EE
+>module.exports = new EE() : EE
+>module.exports : typeof import("./npmlog")
+>module : { "\"npmlog\"": typeof import("./npmlog"); }
+>exports : typeof import("./npmlog")
+>new EE() : EE
+>EE : typeof EE
+
+npmlog.on('hi') // both references should see EE.on
+>npmlog.on('hi') : void
+>npmlog.on : (s: string) => void
+>npmlog : EE
+>on : (s: string) => void
+>'hi' : "hi"
+
+module.exports.on('hi') // here too
+>module.exports.on('hi') : any
+>module.exports.on : any
+>module.exports : typeof import("./npmlog")
+>module : { "\"npmlog\"": typeof import("./npmlog"); }
+>exports : typeof import("./npmlog")
+>on : any
+>'hi' : "hi"
+
+npmlog.x = 1
+>npmlog.x = 1 : 1
+>npmlog.x : any
+>npmlog : EE
+>x : any
+>1 : 1
+
+module.exports.y = 2
+>module.exports.y = 2 : 2
+>module.exports.y : 2
+>module.exports : typeof import("./npmlog")
+>module : { "\"npmlog\"": typeof import("./npmlog"); }
+>exports : typeof import("./npmlog")
+>y : 2
+>2 : 2
+
+npmlog.y
+>npmlog.y : any
+>npmlog : EE
+>y : any
+
+module.exports.x
+>module.exports.x : any
+>module.exports : typeof import("./npmlog")
+>module : { "\"npmlog\"": typeof import("./npmlog"); }
+>exports : typeof import("./npmlog")
+>x : any
 

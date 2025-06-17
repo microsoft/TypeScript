@@ -3,6 +3,7 @@
 @@= skipped -0, +0 lines =@@
 -<no content>
 +MC.js(5,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
++MW.js(12,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 +
 +
 +==== MC.js (1 errors) ====
@@ -22,7 +23,7 @@
 +    ~
 +!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
 +    
-+==== MW.js (0 errors) ====
++==== MW.js (1 errors) ====
 +    /** @typedef {import("./MC")} MC */
 +    
 +    class MW {
@@ -35,4 +36,6 @@
 +    }
 +    
 +    module.exports = MW;
++    ~~~~~~~~~~~~~~~~~~~
++!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
 +    

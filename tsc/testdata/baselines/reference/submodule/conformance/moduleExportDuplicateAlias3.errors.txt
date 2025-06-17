@@ -1,19 +1,49 @@
-test.js(1,27): error TS7016: Could not find a declaration file for module './moduleExportAliasDuplicateAlias'. 'moduleExportAliasDuplicateAlias.js' implicitly has an 'any' type.
+moduleExportAliasDuplicateAlias.js(1,1): error TS2323: Cannot redeclare exported variable 'apply'.
+moduleExportAliasDuplicateAlias.js(2,1): error TS2323: Cannot redeclare exported variable 'apply'.
+moduleExportAliasDuplicateAlias.js(4,1): error TS2322: Type '() => void' is not assignable to type 'undefined'.
+moduleExportAliasDuplicateAlias.js(4,1): error TS2323: Cannot redeclare exported variable 'apply'.
+moduleExportAliasDuplicateAlias.js(5,1): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+moduleExportAliasDuplicateAlias.js(6,1): error TS2322: Type '"ok"' is not assignable to type 'undefined'.
+moduleExportAliasDuplicateAlias.js(6,1): error TS2323: Cannot redeclare exported variable 'apply'.
+moduleExportAliasDuplicateAlias.js(7,10): error TS18048: 'exports.apply' is possibly 'undefined'.
+moduleExportAliasDuplicateAlias.js(8,1): error TS2322: Type '1' is not assignable to type 'undefined'.
+moduleExportAliasDuplicateAlias.js(8,1): error TS2323: Cannot redeclare exported variable 'apply'.
+test.js(2,16): error TS18048: 'apply' is possibly 'undefined'.
 
 
 ==== test.js (1 errors) ====
     const { apply } = require('./moduleExportAliasDuplicateAlias')
-                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS7016: Could not find a declaration file for module './moduleExportAliasDuplicateAlias'. 'moduleExportAliasDuplicateAlias.js' implicitly has an 'any' type.
     const result = apply.toFixed()
+                   ~~~~~
+!!! error TS18048: 'apply' is possibly 'undefined'.
     
-==== moduleExportAliasDuplicateAlias.js (0 errors) ====
+==== moduleExportAliasDuplicateAlias.js (10 errors) ====
     exports.apply = undefined;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2323: Cannot redeclare exported variable 'apply'.
     exports.apply = undefined;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2323: Cannot redeclare exported variable 'apply'.
     function a() { }
     exports.apply = a;
+    ~~~~~~~~~~~~~
+!!! error TS2322: Type '() => void' is not assignable to type 'undefined'.
+    ~~~~~~~~~~~~~~~~~
+!!! error TS2323: Cannot redeclare exported variable 'apply'.
     exports.apply()
+    ~~~~~~~~~~~~~
+!!! error TS2722: Cannot invoke an object which is possibly 'undefined'.
     exports.apply = 'ok'
+    ~~~~~~~~~~~~~
+!!! error TS2322: Type '"ok"' is not assignable to type 'undefined'.
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2323: Cannot redeclare exported variable 'apply'.
     var OK = exports.apply.toUpperCase()
+             ~~~~~~~~~~~~~
+!!! error TS18048: 'exports.apply' is possibly 'undefined'.
     exports.apply = 1
+    ~~~~~~~~~~~~~
+!!! error TS2322: Type '1' is not assignable to type 'undefined'.
+    ~~~~~~~~~~~~~~~~~
+!!! error TS2323: Cannot redeclare exported variable 'apply'.
     

@@ -2,21 +2,21 @@
 
 === test.js ===
 const {Render} = require("./index");
->Render : any
->require("./index") : any
+>Render : typeof Render
+>require("./index") : { Render: typeof Render; }
 >require : any
 >"./index" : "./index"
 
 let render = new Render();
->render : any
->new Render() : any
->Render : any
+>render : Render
+>new Render() : Render
+>Render : typeof Render
 
 render.addRectangle();
->render.addRectangle() : any
->render.addRectangle : any
->render : any
->addRectangle : any
+>render.addRectangle() : Rectangle
+>render.addRectangle : () => Rectangle
+>render : Render
+>addRectangle : () => Rectangle
 
 console.log("Objects", render.objects);
 >console.log("Objects", render.objects) : void
@@ -24,7 +24,86 @@ console.log("Objects", render.objects);
 >console : Console
 >log : (...data: any[]) => void
 >"Objects" : "Objects"
->render.objects : any
->render : any
->objects : any
+>render.objects : Rectangle[]
+>render : Render
+>objects : Rectangle[]
+
+=== rectangle.js ===
+class Rectangle {
+>Rectangle : Rectangle
+
+    constructor() {
+        console.log("I'm a rectangle!");
+>console.log("I'm a rectangle!") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"I'm a rectangle!" : "I'm a rectangle!"
+    }
+}
+
+module.exports = { Rectangle };
+>module.exports = { Rectangle } : { Rectangle: typeof Rectangle; }
+>module.exports : { Rectangle: typeof Rectangle; }
+>module : { "export=": { Rectangle: typeof Rectangle; }; }
+>exports : { Rectangle: typeof Rectangle; }
+>{ Rectangle } : { Rectangle: typeof Rectangle; }
+>Rectangle : typeof Rectangle
+
+=== index.js ===
+const {Rectangle} = require('./rectangle');
+>Rectangle : typeof Rectangle
+>require('./rectangle') : { Rectangle: typeof Rectangle; }
+>require : any
+>'./rectangle' : "./rectangle"
+
+class Render {
+>Render : Render
+
+    constructor() {
+        /**
+         * Object list
+         * @type {Rectangle[]}
+         */
+        this.objects = [];
+>this.objects = [] : undefined[]
+>this.objects : Rectangle[]
+>this : this
+>objects : Rectangle[]
+>[] : undefined[]
+    }
+    /**
+     * Adds a rectangle
+     * 
+     * @returns {Rectangle} the rect
+     */
+    addRectangle() {
+>addRectangle : () => Rectangle
+
+        const obj = new Rectangle();
+>obj : Rectangle
+>new Rectangle() : Rectangle
+>Rectangle : typeof Rectangle
+
+        this.objects.push(obj);
+>this.objects.push(obj) : number
+>this.objects.push : (...items: Rectangle[]) => number
+>this.objects : Rectangle[]
+>this : this
+>objects : Rectangle[]
+>push : (...items: Rectangle[]) => number
+>obj : Rectangle
+
+        return obj;
+>obj : Rectangle
+    }
+}
+
+module.exports = { Render };
+>module.exports = { Render } : { Render: typeof Render; }
+>module.exports : { Render: typeof Render; }
+>module : { "export=": { Render: typeof Render; }; }
+>exports : { Render: typeof Render; }
+>{ Render } : { Render: typeof Render; }
+>Render : typeof Render
 

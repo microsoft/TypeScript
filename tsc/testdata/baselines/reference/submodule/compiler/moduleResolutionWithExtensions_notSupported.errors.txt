@@ -1,10 +1,10 @@
-/a.ts(1,17): error TS2306: File '/tsx.tsx' is not a module.
+/a.ts(1,17): error TS2307: Cannot find module './tsx' or its corresponding type declarations.
 
 
 ==== /a.ts (1 errors) ====
     import tsx from "./tsx"; // Not allowed.
                     ~~~~~~~
-!!! error TS2306: File '/tsx.tsx' is not a module.
+!!! error TS2307: Cannot find module './tsx' or its corresponding type declarations.
     import jsx from "./jsx"; // Not allowed.
     import js from "./js"; // OK because it's an untyped module.
     

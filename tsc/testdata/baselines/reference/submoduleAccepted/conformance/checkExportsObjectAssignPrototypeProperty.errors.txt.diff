@@ -1,0 +1,61 @@
+--- old.checkExportsObjectAssignPrototypeProperty.errors.txt
++++ new.checkExportsObjectAssignPrototypeProperty.errors.txt
+@@= skipped -0, +0 lines =@@
+-validator.ts(19,4): error TS2540: Cannot assign to 'readonlyProp' because it is a read-only property.
+-validator.ts(20,4): error TS2540: Cannot assign to 'readonlyAccessor' because it is a read-only property.
+-validator.ts(21,1): error TS2322: Type 'string' is not assignable to type 'number'.
+-validator.ts(22,1): error TS2322: Type 'string' is not assignable to type 'number'.
+-validator.ts(23,1): error TS2322: Type 'number' is not assignable to type 'string'.
+-
+-
+-==== validator.ts (5 errors) ====
++mod1.js(6,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++validator.ts(5,12): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
++
++
++==== validator.ts (1 errors) ====
+     import "./";
+     
+     import Person = require("./mod1");
+     
+     const m1 = new Person("Name")
++               ~~~~~~~~~~~~~~~~~~
++!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+     
+     m1.thing;
+     m1.readonlyProp;
+@@= skipped -24, +23 lines =@@
+     
+     // disallowed assignments
+     m1.readonlyProp = "name";
+-       ~~~~~~~~~~~~
+-!!! error TS2540: Cannot assign to 'readonlyProp' because it is a read-only property.
+     m1.readonlyAccessor = 12;
+-       ~~~~~~~~~~~~~~~~
+-!!! error TS2540: Cannot assign to 'readonlyAccessor' because it is a read-only property.
+     m1.thing = "no";
+-    ~~~~~~~~
+-!!! error TS2322: Type 'string' is not assignable to type 'number'.
+     m1.rwAccessors = "no";
+-    ~~~~~~~~~~~~~~
+-!!! error TS2322: Type 'string' is not assignable to type 'number'.
+     m1.setonlyAccessor = 0;
+-    ~~~~~~~~~~~~~~~~~~
+-!!! error TS2322: Type 'number' is not assignable to type 'string'.
+-    
+-    
+-==== mod1.js (0 errors) ====
++    
++    
++==== mod1.js (1 errors) ====
+     /**
+      * @constructor
+      * @param {string} name
+      */
+     function Person(name) {
+         this.name = name;
++        ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+     }
+     Person.prototype.describe = function () {
+         return "Person called " + this.name;

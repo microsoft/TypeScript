@@ -1,14 +1,10 @@
-eslint.config.js(1,29): error TS7016: Could not find a declaration file for module './eslint-plugin-react.js'. 'eslint-plugin-react.js' implicitly has an 'any' type.
-eslint.config.js(2,26): error TS7016: Could not find a declaration file for module './typescript-eslint.js'. 'typescript-eslint.js' implicitly has an 'any' type.
+typescript-eslint.js(12,17): error TS7019: Rest parameter 'configs' implicitly has an 'any[]' type.
+typescript-eslint.js(14,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 
 
-==== eslint.config.js (2 errors) ====
+==== eslint.config.js (0 errors) ====
     const eslintReact = require('./eslint-plugin-react.js');
-                                ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS7016: Could not find a declaration file for module './eslint-plugin-react.js'. 'eslint-plugin-react.js' implicitly has an 'any' type.
     const tseslint = require('./typescript-eslint.js');
-                             ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS7016: Could not find a declaration file for module './typescript-eslint.js'. 'typescript-eslint.js' implicitly has an 'any' type.
     
     tseslint.config(eslintReact)
     
@@ -30,7 +26,7 @@ eslint.config.js(2,26): error TS7016: Could not find a declaration file for modu
       },
     };
     
-==== typescript-eslint.js (0 errors) ====
+==== typescript-eslint.js (2 errors) ====
     /**
      * @typedef {{ rules: Record<string, boolean> }} Plugin
      */
@@ -43,6 +39,10 @@ eslint.config.js(2,26): error TS7016: Could not find a declaration file for modu
      * @type {(...configs: Config[]) => void}
      */
     function config(...configs) { }
+                    ~~~~~~~~~~
+!!! error TS7019: Rest parameter 'configs' implicitly has an 'any[]' type.
     
     module.exports = { config };
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
     

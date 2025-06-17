@@ -12,7 +12,6 @@ import jsx from "./jsx"; // Not allowed.
 import js from "./js"; // OK because it's an untyped module.
 
 
-//// [tsx.js]
 //// [a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

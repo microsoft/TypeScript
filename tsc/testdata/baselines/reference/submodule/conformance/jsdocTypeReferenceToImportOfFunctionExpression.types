@@ -2,8 +2,8 @@
 
 === MC.js ===
 const MW = require("./MW");
->MW : any
->require("./MW") : any
+>MW : typeof MW
+>require("./MW") : typeof MW
 >require : any
 >"./MW" : "./MW"
 
@@ -11,12 +11,12 @@ const MW = require("./MW");
 
 /** @class */
 module.exports = function MC() {
->module.exports = function MC() {    /** @type {any} */    var x = {}    return new MW(x);} : () => any
->module.exports : () => any
->module : { "export=": () => any; }
->exports : () => any
->function MC() {    /** @type {any} */    var x = {}    return new MW(x);} : () => any
->MC : () => any
+>module.exports = function MC() {    /** @type {any} */    var x = {}    return new MW(x);} : () => MW
+>module.exports : () => MW
+>module : { "export=": () => MW; }
+>exports : () => MW
+>function MC() {    /** @type {any} */    var x = {}    return new MW(x);} : () => MW
+>MC : () => MW
 
     /** @type {any} */
     var x = {}
@@ -24,9 +24,37 @@ module.exports = function MC() {
 >{} : {}
 
     return new MW(x);
->new MW(x) : any
->MW : any
+>new MW(x) : MW
+>MW : typeof MW
 >x : any
 
 };
+
+=== MW.js ===
+/** @typedef {import("./MC")} MC */
+
+class MW {
+>MW : MW
+
+  /**
+   * @param {MC} compiler the compiler
+   */
+  constructor(compiler) {
+>compiler : any
+
+    this.compiler = compiler;
+>this.compiler = compiler : any
+>this.compiler : any
+>this : this
+>compiler : any
+>compiler : any
+  }
+}
+
+module.exports = MW;
+>module.exports = MW : typeof MW
+>module.exports : typeof MW
+>module : { MW: typeof MW; }
+>exports : typeof MW
+>MW : typeof MW
 

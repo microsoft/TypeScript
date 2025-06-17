@@ -2,17 +2,17 @@
 
 === usage.js ===
 const x = require("./lateBoundAssignmentDeclarationSupport5.js");
->x : any
->require("./lateBoundAssignmentDeclarationSupport5.js") : any
+>x : typeof x
+>require("./lateBoundAssignmentDeclarationSupport5.js") : typeof x
 >require : any
 >"./lateBoundAssignmentDeclarationSupport5.js" : "./lateBoundAssignmentDeclarationSupport5.js"
 
 const inst =  new x.F();
 >inst : any
 >new x.F() : any
->x.F : any
->x : any
->F : any
+>x.F : { (): void; prototype: { [_sym]: string; "my-fake-sym": string; }; }
+>x : typeof x
+>F : { (): void; prototype: { [_sym]: string; "my-fake-sym": string; }; }
 
 const y = inst["my-fake-sym"];
 >y : any
@@ -24,7 +24,73 @@ const z = inst[x.S];
 >z : any
 >inst[x.S] : any
 >inst : any
->x.S : any
->x : any
->S : any
+>x.S : unique symbol
+>x : typeof x
+>S : unique symbol
+
+=== lateBoundAssignmentDeclarationSupport5.js ===
+// currently unsupported
+const _sym = Symbol();
+>_sym : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+const _str = "my-fake-sym";
+>_str : "my-fake-sym"
+>"my-fake-sym" : "my-fake-sym"
+
+function F() {
+>F : { (): void; prototype: { [_sym]: string; "my-fake-sym": string; }; }
+}
+F.prototype = {
+>F.prototype = {    [_sym]: "ok",    [_str]: "ok"} : { [_sym]: string; "my-fake-sym": string; }
+>F.prototype : { [_sym]: string; "my-fake-sym": string; }
+>F : { (): void; prototype: { [_sym]: string; "my-fake-sym": string; }; }
+>prototype : { [_sym]: string; "my-fake-sym": string; }
+>{    [_sym]: "ok",    [_str]: "ok"} : { [_sym]: string; "my-fake-sym": string; }
+
+    [_sym]: "ok",
+>[_sym] : string
+>_sym : unique symbol
+>"ok" : "ok"
+
+    [_str]: "ok"
+>[_str] : string
+>_str : "my-fake-sym"
+>"ok" : "ok"
+}
+const inst =  new F();
+>inst : any
+>new F() : any
+>F : { (): void; prototype: { [_sym]: string; "my-fake-sym": string; }; }
+
+const _y = inst[_str];
+>_y : any
+>inst[_str] : any
+>inst : any
+>_str : "my-fake-sym"
+
+const _z = inst[_sym];
+>_z : any
+>inst[_sym] : any
+>inst : any
+>_sym : unique symbol
+
+module.exports.F = F;
+>module.exports.F = F : { (): void; prototype: { [_sym]: string; "my-fake-sym": string; }; }
+>module.exports.F : { (): void; prototype: { [_sym]: string; "my-fake-sym": string; }; }
+>module.exports : typeof import("./lateBoundAssignmentDeclarationSupport5")
+>module : { "\"lateBoundAssignmentDeclarationSupport5\"": typeof import("./lateBoundAssignmentDeclarationSupport5"); }
+>exports : typeof import("./lateBoundAssignmentDeclarationSupport5")
+>F : { (): void; prototype: { [_sym]: string; "my-fake-sym": string; }; }
+>F : { (): void; prototype: { [_sym]: string; "my-fake-sym": string; }; }
+
+module.exports.S = _sym;
+>module.exports.S = _sym : unique symbol
+>module.exports.S : unique symbol
+>module.exports : typeof import("./lateBoundAssignmentDeclarationSupport5")
+>module : { "\"lateBoundAssignmentDeclarationSupport5\"": typeof import("./lateBoundAssignmentDeclarationSupport5"); }
+>exports : typeof import("./lateBoundAssignmentDeclarationSupport5")
+>S : unique symbol
+>_sym : unique symbol
 

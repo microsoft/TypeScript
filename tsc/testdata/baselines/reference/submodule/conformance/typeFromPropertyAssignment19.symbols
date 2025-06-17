@@ -17,3 +17,21 @@ declare var require: any;
 declare var module: any;
 >module : Symbol(module, Decl(types.d.ts, 1, 11))
 
+=== semver.js ===
+/// <reference path='./types.d.ts'/>
+exports = module.exports = C
+>module : Symbol(module, Decl(types.d.ts, 1, 11))
+>C : Symbol(C, Decl(semver.js, 2, 16))
+
+C.f = n => n + 1
+>C.f : Symbol(f, Decl(semver.js, 1, 28))
+>C : Symbol(C, Decl(semver.js, 2, 16))
+>f : Symbol(f, Decl(semver.js, 1, 28))
+>n : Symbol(n, Decl(semver.js, 2, 5))
+>n : Symbol(n, Decl(semver.js, 2, 5))
+
+function C() {
+>C : Symbol(C, Decl(semver.js, 2, 16))
+
+    this.p = 1
+}

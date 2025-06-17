@@ -5,18 +5,33 @@
 >'use strict' : "use strict"
 
 const Thing = require('./thing').Thing
->Thing : any
->require('./thing').Thing : any
->require('./thing') : any
+>Thing : typeof Thing
+>require('./thing').Thing : typeof Thing
+>require('./thing') : { Thing: typeof Thing; }
 >require : any
 >'./thing' : "./thing"
->Thing : any
+>Thing : typeof Thing
 
 module.exports = { Thing }
->module.exports = { Thing } : { Thing: any; }
->module.exports : { Thing: any; }
->module : { "export=": { Thing: any; }; }
->exports : { Thing: any; }
->{ Thing } : { Thing: any; }
->Thing : any
+>module.exports = { Thing } : { Thing: typeof Thing; }
+>module.exports : { Thing: typeof Thing; }
+>module : { "export=": { Thing: typeof Thing; }; }
+>exports : { Thing: typeof Thing; }
+>{ Thing } : { Thing: typeof Thing; }
+>Thing : typeof Thing
+
+=== thing.js ===
+'use strict';
+>'use strict' : "use strict"
+
+class Thing {}
+>Thing : Thing
+
+module.exports = { Thing }
+>module.exports = { Thing } : { Thing: typeof Thing; }
+>module.exports : { Thing: typeof Thing; }
+>module : { "export=": { Thing: typeof Thing; }; }
+>exports : { Thing: typeof Thing; }
+>{ Thing } : { Thing: typeof Thing; }
+>Thing : typeof Thing
 

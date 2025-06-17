@@ -46,16 +46,6 @@ type Program struct {
 
 	processedFiles
 
-	// The below settings are to track if a .js file should be add to the program if loaded via searching under node_modules.
-	// This works as imported modules are discovered recursively in a depth first manner, specifically:
-	// - For each root file, findSourceFile is called.
-	// - This calls processImportedModules for each module imported in the source file.
-	// - This calls resolveModuleNames, and then calls findSourceFile for each resolved module.
-	// As all these operations happen - and are nested - within the createProgram call, they close over the below variables.
-	// The current resolution depth is tracked by incrementing/decrementing as the depth first search progresses.
-	// maxNodeModuleJsDepth      int
-	currentNodeModulesDepth int
-
 	usesUriStyleNodeCoreModules core.Tristate
 
 	commonSourceDirectory     string
@@ -194,12 +184,6 @@ func NewProgram(opts ProgramOptions) *Program {
 	}
 	p.initCheckerPool()
 
-	// p.maxNodeModuleJsDepth = p.options.MaxNodeModuleJsDepth
-
-	// TODO(ercornel): !!! tracing?
-	// tracing?.push(tracing.Phase.Program, "createProgram", { configFilePath: options.configFilePath, rootDir: options.rootDir }, /*separateBeginAndEnd*/ true);
-	// performance.mark("beforeProgram");
-
 	var libs []string
 
 	if compilerOptions.NoLib != core.TSTrue {
@@ -235,7 +219,6 @@ func (p *Program) UpdateProgram(changedFilePath tspath.Path) (*Program, bool) {
 		nodeModules:                 p.nodeModules,
 		comparePathsOptions:         p.comparePathsOptions,
 		processedFiles:              p.processedFiles,
-		currentNodeModulesDepth:     p.currentNodeModulesDepth,
 		usesUriStyleNodeCoreModules: p.usesUriStyleNodeCoreModules,
 	}
 	result.initCheckerPool()

@@ -1,0 +1,30 @@
+index.js(4,13): error TS2351: This expression is not constructable.
+  Type 'typeof import("semver")' has no construct signatures.
+semver.js(2,1): error TS2631: Cannot assign to '"semver"' because it is a namespace.
+semver.js(2,11): error TS2322: Type '() => void' is not assignable to type 'typeof import("semver")'.
+
+
+==== index.js (1 errors) ====
+    /// <reference path='node.d.ts' />
+    const C = require("./semver")
+    var two = C.f(1)
+    var c = new C
+                ~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type 'typeof import("semver")' has no construct signatures.
+    
+==== node.d.ts (0 errors) ====
+    declare function require(name: string): any;
+    declare var exports: any;
+    declare var module: { exports: any };
+==== semver.js (2 errors) ====
+    /// <reference path='node.d.ts' />
+    exports = module.exports = C
+    ~~~~~~~
+!!! error TS2631: Cannot assign to '"semver"' because it is a namespace.
+              ~~~~~~~~~~~~~~
+!!! error TS2322: Type '() => void' is not assignable to type 'typeof import("semver")'.
+    exports.f = n => n + 1
+    function C() {
+        this.p = 1
+    }

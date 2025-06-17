@@ -1,33 +1,18 @@
 --- old.moduleExportAssignment3.types
 +++ new.moduleExportAssignment3.types
-@@= skipped -1, +1 lines =@@
-
- === npm.js ===
- var mod = require('./mod')
-->mod : () => void
-->require('./mod') : () => void
-+>mod : any
-+>require('./mod') : any
- >require : any
- >'./mod' : "./mod"
-
- mod() // should be callable from here too
-->mod() : void
-->mod : () => void
--
--=== mod.js ===
--module.exports = function x() { }
-->module.exports = function x() { } : () => void
-->module.exports : () => void
+@@= skipped -14, +14 lines =@@
+ module.exports = function x() { }
+ >module.exports = function x() { } : () => void
+ >module.exports : () => void
 ->module : { exports: () => void; }
-->exports : () => void
-->function x() { } : () => void
-->x : () => void
--
--module.exports() // should be callable
-->module.exports() : void
-->module.exports : () => void
++>module : { "export=": () => void; }
+ >exports : () => void
+ >function x() { } : () => void
+ >x : () => void
+@@= skipped -8, +8 lines =@@
+ module.exports() // should be callable
+ >module.exports() : void
+ >module.exports : () => void
 ->module : { exports: () => void; }
-->exports : () => void
-+>mod() : any
-+>mod : any
++>module : { "export=": () => void; }
+ >exports : () => void

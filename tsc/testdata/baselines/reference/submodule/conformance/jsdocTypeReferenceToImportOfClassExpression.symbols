@@ -4,6 +4,7 @@
 const MW = require("./MW");
 >MW : Symbol(MW, Decl(MC.js, 0, 5))
 >require : Symbol(require)
+>"./MW" : Symbol("MW", Decl(MW.js, 0, 0))
 
 /** @typedef {number} Cictema */
 
@@ -21,4 +22,30 @@ module.exports = class MC {
 >this : Symbol(MC, Decl(MC.js, 4, 16))
   }
 };
+
+=== MW.js ===
+/** @typedef {import("./MC")} MC */
+
+class MW {
+>MW : Symbol(MW, Decl(MW.js, 0, 0))
+
+  /**
+   * @param {MC} compiler the compiler
+   */
+  constructor(compiler) {
+>compiler : Symbol(compiler, Decl(MW.js, 6, 14))
+
+    this.compiler = compiler;
+>this.compiler : Symbol(compiler, Decl(MW.js, 6, 25))
+>this : Symbol(MW, Decl(MW.js, 0, 0))
+>compiler : Symbol(compiler, Decl(MW.js, 6, 25))
+>compiler : Symbol(compiler, Decl(MW.js, 6, 14))
+  }
+}
+
+module.exports = MW;
+>module.exports : Symbol(MW, Decl(MW.js, 0, 0))
+>module : Symbol(module.exports)
+>exports : Symbol(MW, Decl(MW.js, 0, 0))
+>MW : Symbol(MW, Decl(MW.js, 0, 0))
 

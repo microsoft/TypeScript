@@ -8,48 +8,84 @@
 -
 -
 -==== use.js (0 errors) ====
--    var mod = require('./mod1.js');
--    /** @type {import("./mod1.js").Baz} */
--    var b;
--    /** @type {mod.Baz} */
--    var bb;
--    var bbb = new mod.Baz();
--    
++mod1.js(3,23): error TS2395: Individual declarations in merged declaration 'Foo' must be all exported or all local.
++mod1.js(4,7): error TS2395: Individual declarations in merged declaration 'Foo' must be all exported or all local.
++mod1.js(7,9): error TS2339: Property 'Bar' does not exist on type 'typeof import("mod1")'.
++mod1.js(10,1): error TS2300: Duplicate identifier 'export='.
++mod1.js(10,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
++mod1.js(20,9): error TS2339: Property 'Quid' does not exist on type 'typeof import("mod1")'.
++mod1.js(23,1): error TS2300: Duplicate identifier 'export='.
++mod1.js(24,5): error TS2353: Object literal may only specify known properties, and 'Quack' does not exist in type '{ Baz: typeof Baz; }'.
++use.js(2,32): error TS2694: Namespace '"mod1".export=' has no exported member 'Baz'.
++use.js(4,12): error TS2503: Cannot find namespace 'mod'.
++
++
++==== use.js (2 errors) ====
+     var mod = require('./mod1.js');
+     /** @type {import("./mod1.js").Baz} */
++                                   ~~~
++!!! error TS2694: Namespace '"mod1".export=' has no exported member 'Baz'.
+     var b;
+     /** @type {mod.Baz} */
++               ~~~
++!!! error TS2503: Cannot find namespace 'mod'.
+     var bb;
+     var bbb = new mod.Baz();
+     
 -==== mod1.js (4 errors) ====
--    // error
--    
--    /** @typedef {number} Foo */
--                          ~~~
++==== mod1.js (8 errors) ====
+     // error
+     
+     /** @typedef {number} Foo */
+                           ~~~
 -!!! error TS2300: Duplicate identifier 'Foo'.
--    class Foo { } // should error
--          ~~~
++!!! error TS2395: Individual declarations in merged declaration 'Foo' must be all exported or all local.
+     class Foo { } // should error
+           ~~~
 -!!! error TS2300: Duplicate identifier 'Foo'.
--    
--    /** @typedef {number} Bar */
--    exports.Bar = class { }
--    
--    /** @typedef {number} Baz */
++!!! error TS2395: Individual declarations in merged declaration 'Foo' must be all exported or all local.
+     
+     /** @typedef {number} Bar */
+     exports.Bar = class { }
++            ~~~
++!!! error TS2339: Property 'Bar' does not exist on type 'typeof import("mod1")'.
+     
+     /** @typedef {number} Baz */
 -                          ~~~
 -!!! error TS2300: Duplicate identifier 'Baz'.
 -!!! related TS6203 mod1.js:11:5: 'Baz' was also declared here.
--    module.exports = {
--        Baz: class { }
+     module.exports = {
++    ~~~~~~~~~~~~~~~~~~
++    ~~~~~~~~~~~~~~~~~~
+         Baz: class { }
 -        ~~~
 -!!! error TS2300: Duplicate identifier 'Baz'.
 -!!! related TS6203 mod1.js:9:23: 'Baz' was also declared here.
--    }
--    
--    // ok
--    
--    /** @typedef {number} Qux */
--    var Qux = 2;
--    
--    /** @typedef {number} Quid */
--    exports.Quid = 2;
--    
--    /** @typedef {number} Quack */
--    module.exports = {
--        Quack: 2
--    }
--    
-+<no content>
++    ~~~~~~~~~~~~~~~~~~
++    ~~~~~~~~~~~~~~~~~~
+     }
++    ~
++!!! error TS2300: Duplicate identifier 'export='.
++    ~
++!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
+     
+     // ok
+     
+@@= skipped -42, +56 lines =@@
+     
+     /** @typedef {number} Quid */
+     exports.Quid = 2;
++            ~~~~
++!!! error TS2339: Property 'Quid' does not exist on type 'typeof import("mod1")'.
+     
+     /** @typedef {number} Quack */
+     module.exports = {
++    ~~~~~~~~~~~~~~~~~~
+         Quack: 2
++    ~~~~~~~~~~~~
++        ~~~~~
++!!! error TS2353: Object literal may only specify known properties, and 'Quack' does not exist in type '{ Baz: typeof Baz; }'.
+     }
++    ~
++!!! error TS2300: Duplicate identifier 'export='.
+     

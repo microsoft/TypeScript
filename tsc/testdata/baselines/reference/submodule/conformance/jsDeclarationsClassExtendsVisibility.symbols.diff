@@ -1,14 +1,6 @@
 --- old.jsDeclarationsClassExtendsVisibility.symbols
 +++ new.jsDeclarationsClassExtendsVisibility.symbols
-@@= skipped -3, +3 lines =@@
- const Bar = require("./bar");
- >Bar : Symbol(Bar, Decl(cls.js, 0, 5))
- >require : Symbol(require)
-->"./bar" : Symbol("bar", Decl(bar.js, 0, 0))
-
- const Strings = {
- >Strings : Symbol(Strings, Decl(cls.js, 1, 5))
-@@= skipped -17, +16 lines =@@
+@@= skipped -20, +20 lines =@@
  >Bar : Symbol(Bar, Decl(cls.js, 0, 5))
 
  module.exports = Foo;
@@ -30,13 +22,16 @@
 +>module : Symbol(module.exports)
 +>exports : Symbol(Foo, Decl(cls.js, 4, 2))
  >Strings : Symbol(Strings, Decl(cls.js, 1, 5))
--
--=== bar.js ===
--class Bar {}
-->Bar : Symbol(Bar, Decl(bar.js, 0, 0))
--
--module.exports = Bar;
+
+ === bar.js ===
+@@= skipped -18, +16 lines =@@
+ >Bar : Symbol(Bar, Decl(bar.js, 0, 0))
+
+ module.exports = Bar;
 ->module.exports : Symbol(module.exports, Decl(bar.js, 0, 0))
 ->module : Symbol(export=, Decl(bar.js, 0, 12))
 ->exports : Symbol(export=, Decl(bar.js, 0, 12))
-->Bar : Symbol(Bar, Decl(bar.js, 0, 0))
++>module.exports : Symbol(Bar, Decl(bar.js, 0, 0))
++>module : Symbol(module.exports)
++>exports : Symbol(Bar, Decl(bar.js, 0, 0))
+ >Bar : Symbol(Bar, Decl(bar.js, 0, 0))
