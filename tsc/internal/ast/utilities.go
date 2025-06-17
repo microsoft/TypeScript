@@ -3106,7 +3106,7 @@ func IsPartOfExclusivelyTypeOnlyImportOrExportDeclaration(node *Node) bool {
 func IsEmittableImport(node *Node) bool {
 	switch node.Kind {
 	case KindImportDeclaration:
-		return node.AsImportDeclaration().ImportClause == nil || !node.AsImportDeclaration().ImportClause.IsTypeOnly()
+		return node.AsImportDeclaration().ImportClause != nil && !node.AsImportDeclaration().ImportClause.IsTypeOnly()
 	case KindExportDeclaration:
 		return !node.AsExportDeclaration().IsTypeOnly
 	case KindImportEqualsDeclaration:
