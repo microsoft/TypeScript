@@ -3,6 +3,7 @@ package project
 import (
 	"context"
 	"fmt"
+	"maps"
 	"slices"
 	"sync"
 
@@ -14,7 +15,7 @@ import (
 )
 
 type ConfigFileEntry struct {
-	mu             sync.Mutex
+	mu             sync.RWMutex
 	commandLine    *tsoptions.ParsedCommandLine
 	projects       collections.Set[*Project]
 	infos          collections.Set[*ScriptInfo]
@@ -114,6 +115,8 @@ func (c *ConfigFileRegistry) acquireConfig(fileName string, path tspath.Path, pr
 func (c *ConfigFileRegistry) getConfig(path tspath.Path) *tsoptions.ParsedCommandLine {
 	entry, ok := c.ConfigFiles.Load(path)
 	if ok {
+		entry.mu.RLock()
+		defer entry.mu.RUnlock()
 		return entry.commandLine
 	}
 	return nil
@@ -199,48 +202,58 @@ func (c *ConfigFileRegistry) onConfigChange(path tspath.Path, changeKind lsproto
 		return false
 	}
 	entry.mu.Lock()
-	defer entry.mu.Unlock()
-	if entry.SetPendingReload(PendingReloadFull) {
-		for info := range entry.infos.Keys() {
-			delete(c.defaultProjectFinder.configFileForOpenFiles, info.Path())
-			delete(c.defaultProjectFinder.configFilesAncestorForOpenFiles, info.Path())
-		}
-		for project := range entry.projects.Keys() {
-			if project.configFilePath == path {
-				switch changeKind {
-				case lsproto.FileChangeTypeCreated:
-					fallthrough
-				case lsproto.FileChangeTypeChanged:
-					project.deferredClose = false
-					project.SetPendingReload(PendingReloadFull)
-				case lsproto.FileChangeTypeDeleted:
-					project.deferredClose = true
-				}
-			} else {
-				project.markAsDirty()
-			}
-		}
-		return true
+	hasSet := entry.SetPendingReload(PendingReloadFull)
+	var infos map[*ScriptInfo]struct{}
+	var projects map[*Project]struct{}
+	if hasSet {
+		infos = maps.Clone(entry.infos.Keys())
+		projects = maps.Clone(entry.projects.Keys())
 	}
-	return false
+	entry.mu.Unlock()
+	if !hasSet {
+		return false
+	}
+	for info := range infos {
+		delete(c.defaultProjectFinder.configFileForOpenFiles, info.Path())
+		delete(c.defaultProjectFinder.configFilesAncestorForOpenFiles, info.Path())
+	}
+	for project := range projects {
+		if project.configFilePath == path {
+			switch changeKind {
+			case lsproto.FileChangeTypeCreated:
+				fallthrough
+			case lsproto.FileChangeTypeChanged:
+				project.deferredClose = false
+				project.SetPendingReload(PendingReloadFull)
+			case lsproto.FileChangeTypeDeleted:
+				project.deferredClose = true
+			}
+		} else {
+			project.markAsDirty()
+		}
+	}
+	return true
 }
 
 func (c *ConfigFileRegistry) tryInvokeWildCardDirectories(fileName string, path tspath.Path) {
 	configFiles := c.ConfigFiles.ToMap()
 	for configPath, entry := range configFiles {
 		entry.mu.Lock()
-		if entry.commandLine != nil && entry.commandLine.MatchesFileName(fileName) {
-			if entry.SetPendingReload(PendingReloadFileNames) {
-				for project := range entry.projects.Keys() {
-					if project.configFilePath == configPath {
-						project.SetPendingReload(PendingReloadFileNames)
-					} else {
-						project.markAsDirty()
-					}
+		hasSet := entry.commandLine != nil && entry.commandLine.MatchesFileName(fileName) && entry.SetPendingReload(PendingReloadFileNames)
+		var projects map[*Project]struct{}
+		if hasSet {
+			projects = maps.Clone(entry.projects.Keys())
+		}
+		entry.mu.Unlock()
+		if hasSet {
+			for project := range projects {
+				if project.configFilePath == configPath {
+					project.SetPendingReload(PendingReloadFileNames)
+				} else {
+					project.markAsDirty()
 				}
 			}
 		}
-		entry.mu.Unlock()
 	}
 }
 
