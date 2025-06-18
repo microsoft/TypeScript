@@ -290,5 +290,3 @@ When fixing bugs or implementing features, follow this workflow:
 4. **Run all other tests to ensure you didn't break anything**
    - Some collateral baseline changes are normal
    - Put these diffs in another commit
-
-All fixes should use one of these two test formats. Do not use unit tests as they are almost never the correct test format for our repo.
