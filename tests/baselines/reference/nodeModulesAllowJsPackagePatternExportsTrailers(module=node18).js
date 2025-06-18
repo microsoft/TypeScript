@@ -52,7 +52,7 @@ export { type };
 {
     "name": "package",
     "private": true,
-    "type": "module",
+    "type": "module"
 }
 //// [package.json]
 {
@@ -64,6 +64,7 @@ export { type };
         "./js/*.js": "./*.js"
     }
 }
+
 
 //// [index.js]
 // esm format file

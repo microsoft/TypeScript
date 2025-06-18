@@ -9,7 +9,7 @@
 ////     "#only-for-node": {
 ////       "node": "./something.js"
 ////     },
-////     "#for-everywhere": "./other.js",
+////     "#for-everywhere": "./other.js"
 ////   }
 //// }
 

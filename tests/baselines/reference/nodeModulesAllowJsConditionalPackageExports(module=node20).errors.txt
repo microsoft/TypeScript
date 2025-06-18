@@ -120,7 +120,7 @@ node_modules/inner/index.d.ts(2,13): error TS2303: Circular definition of import
             "./types": {
                 "types": {
                     "import": "./index.d.mts",
-                    "require": "./index.d.cts",
+                    "require": "./index.d.cts"
                 },
                 "node": {
                     "import": "./index.mjs",
@@ -129,3 +129,4 @@ node_modules/inner/index.d.ts(2,13): error TS2303: Circular definition of import
             }
         }
     }
+    
