@@ -1,5 +1,9 @@
 /// <reference path="fourslash.ts" />
 
+// Test for issue #61894: Symbol auto-import bug with existing type-only imports
+// Verifies that symbols used in element access expressions are imported as values,
+// not added to existing type-only imports, when completing inside thing[...]
+
 // @noLib: true
 
 // @Filename: /globals.d.ts
@@ -32,7 +36,7 @@ verify.completions({
     },
 });
 
-// This should demonstrate the bug - the symbol should be imported as a value, not as a type
+// Verify the fix - the symbol should be imported as a value, not as a type
 verify.applyCodeActionFromCompletion("", {
     name: "SYM_FOO_BAR",
     source: "/exportsSymbol",

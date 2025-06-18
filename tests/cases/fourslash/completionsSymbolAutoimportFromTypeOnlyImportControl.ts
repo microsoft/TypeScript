@@ -1,5 +1,8 @@
 /// <reference path="fourslash.ts" />
 
+// Control test for issue #61894: Symbol auto-import without existing type-only imports
+// Verifies that symbols are correctly imported as values when there are no existing imports
+
 // @noLib: true
 
 // @Filename: /globals.d.ts
