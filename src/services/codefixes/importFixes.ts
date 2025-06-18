@@ -1112,6 +1112,10 @@ function tryAddToExistingImport(existingImports: readonly FixAddToExistingImport
             // of import statements to/from type-only.
             return fix;
         }
+        // Don't add to existing type-only imports if the symbol should be imported as a value
+        if (fix.addAsTypeOnly === AddAsTypeOnly.NotAllowed && isTypeOnly) {
+            continue; // Skip this import, don't even consider it as a fallback
+        }
         best ??= fix;
     }
     return best;

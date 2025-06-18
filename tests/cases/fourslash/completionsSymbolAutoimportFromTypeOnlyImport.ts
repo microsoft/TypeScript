@@ -24,7 +24,7 @@
 verify.completions({
     marker: "",
     includes: [
-        { name: "SYM_FOO_BAR", source: "/exportsSymbol", insertText: "[SYM_FOO_BAR]", hasAction: true },
+        { name: "SYM_FOO_BAR", source: "/exportsSymbol", insertText: "[SYM_FOO_BAR]", replacementSpan: test.ranges()[0], hasAction: true },
     ],
     preferences: {
         includeInsertTextCompletions: true,
