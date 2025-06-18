@@ -1,6 +1,6 @@
  * Read the contents of CONTRIBUTING.md, it has instructions on how to run a single test, handling baselines, etc
  * Run `hereby lint` and `hereby format` before you're done
- * Only add testcases in `test/cases/compiler` or `tests/cases/fourslash`. Do not write direct unit tests.
+ * Only add testcases in `tests/cases/compiler` or `tests/cases/fourslash`. Do not write direct unit tests.
  * Running a set of tests may take up to 4 minutes
  * A full test run may take up to 15 minutes
  * Maintainer comments in the issue should generally take priority over OP's comments
