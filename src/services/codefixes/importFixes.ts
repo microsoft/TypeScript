@@ -1105,27 +1105,19 @@ function tryAddToExistingImport(existingImports: readonly FixAddToExistingImport
         if (!fix) continue;
         const isTypeOnly = isTypeOnlyImportDeclaration(fix.importClauseOrBindingPattern);
         
-        // Perfect match: prefer imports that match the exact type-only requirement
+        // Fixed: Don't allow value imports (NotAllowed) to go to type-only imports
+        if (fix.addAsTypeOnly === AddAsTypeOnly.NotAllowed && isTypeOnly) {
+            continue; // Skip this incompatible combination
+        }
+        
         if (
-            fix.addAsTypeOnly === AddAsTypeOnly.Required && isTypeOnly ||
+            fix.addAsTypeOnly !== AddAsTypeOnly.NotAllowed && isTypeOnly ||
             fix.addAsTypeOnly === AddAsTypeOnly.NotAllowed && !isTypeOnly
         ) {
+            // Give preference to putting types in existing type-only imports and avoiding conversions
+            // of import statements to/from type-only.
             return fix;
         }
-        
-        // Don't use incompatible imports even as fallback
-        if (fix.addAsTypeOnly === AddAsTypeOnly.NotAllowed && isTypeOnly) {
-            // Value imports should not go to type-only imports
-            continue;
-        }
-        
-        // For "Allowed" imports, prefer value imports over type-only imports
-        // This handles the case where isValidTypeOnlyUseSite is false (value context)
-        // but addAsTypeOnly is Allowed instead of NotAllowed
-        if (fix.addAsTypeOnly === AddAsTypeOnly.Allowed && isTypeOnly && !isValidTypeOnlyUseSite) {
-            continue;
-        }
-        
         best ??= fix;
     }
     return best;
