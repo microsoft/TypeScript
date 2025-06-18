@@ -133,3 +133,12 @@ func (c *Checker) GetExpandedParameters(signature *Signature, skipUnionExpanding
 func (c *Checker) GetResolvedSignature(node *ast.Node) *Signature {
 	return c.getResolvedSignature(node, nil, CheckModeNormal)
 }
+
+// Return the type of the given property in the given type, or nil if no such property exists
+func (c *Checker) GetTypeOfPropertyOfType(t *Type, name string) *Type {
+	return c.getTypeOfPropertyOfType(t, name)
+}
+
+func (c *Checker) GetContextualTypeForArgumentAtIndex(node *ast.Node, argIndex int) *Type {
+	return c.getContextualTypeForArgumentAtIndex(node, argIndex)
+}

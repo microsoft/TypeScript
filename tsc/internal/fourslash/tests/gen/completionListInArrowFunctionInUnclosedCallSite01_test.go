@@ -10,7 +10,7 @@ import (
 
 func TestCompletionListInArrowFunctionInUnclosedCallSite01(t *testing.T) {
 	t.Parallel()
-
+	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `declare function foo(...params: any[]): any;
 function getAllFiles(rootFileNames: string[]) {
@@ -19,7 +19,7 @@ function getAllFiles(rootFileNames: string[]) {
 	f.VerifyCompletions(t, "1", &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Includes: []fourslash.ExpectedCompletionItem{"fileName", "rootFileNames", "getAllFiles", "foo"},

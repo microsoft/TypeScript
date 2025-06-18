@@ -24,7 +24,7 @@ f("/*2*/`
 	f.VerifyCompletions(t, "1", &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Exact: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{Label: "A"}, &lsproto.CompletionItem{Label: "B"}, &lsproto.CompletionItem{Label: "C"}},
@@ -33,7 +33,7 @@ f("/*2*/`
 	f.VerifyCompletions(t, "2", &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Exact: []fourslash.ExpectedCompletionItem{"A", "B", "C"},

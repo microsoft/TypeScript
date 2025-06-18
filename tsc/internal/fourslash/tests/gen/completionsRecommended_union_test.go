@@ -21,7 +21,7 @@ const e2: E | E2 = /*b*/`
 	f.VerifyCompletions(t, "a", &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Includes: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{Preselect: ptrTo(true), Label: "E"}},
@@ -30,7 +30,7 @@ const e2: E | E2 = /*b*/`
 	f.VerifyCompletions(t, "b", &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Includes: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{Preselect: ptrTo(true), Label: "E"}, &lsproto.CompletionItem{Label: "E2"}},

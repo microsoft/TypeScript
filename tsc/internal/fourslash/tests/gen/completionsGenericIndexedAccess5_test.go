@@ -11,7 +11,7 @@ import (
 
 func TestCompletionsGenericIndexedAccess5(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface CustomElements {
   'component-one': {
@@ -40,7 +40,7 @@ f("component-one", {
 			CommitCharacters: &defaultCommitCharacters,
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
-			Exact: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "foo"}},
+			Exact: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "foo?", InsertText: ptrTo("foo"), FilterText: ptrTo("foo")}},
 		},
 	})
 }

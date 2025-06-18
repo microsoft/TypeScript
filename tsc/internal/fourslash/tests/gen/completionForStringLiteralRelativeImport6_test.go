@@ -29,7 +29,7 @@ var foo3 = require("./dir//*require2*/
 	f.VerifyCompletions(t, []string{"import_as1", "import_equals1", "require1"}, &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Exact: []fourslash.ExpectedCompletionItem{"f1", "f2"},
@@ -38,7 +38,7 @@ var foo3 = require("./dir//*require2*/
 	f.VerifyCompletions(t, []string{"import_as2", "import_equals2", "require2"}, &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Exact: []fourslash.ExpectedCompletionItem{"f1", "f2"},

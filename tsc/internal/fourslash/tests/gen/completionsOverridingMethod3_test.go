@@ -26,7 +26,7 @@ declare class Poltergeist implements Ghost {
 	f.VerifyCompletions(t, "b", &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Includes: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextLocationPriority)), Label: "boo", InsertText: ptrTo("boo(): string;"), FilterText: ptrTo("boo")}},

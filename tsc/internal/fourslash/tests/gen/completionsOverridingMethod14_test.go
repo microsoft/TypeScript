@@ -26,7 +26,7 @@ class Foo implements IFoo {
 	f.VerifyCompletions(t, "", &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Includes: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextLocationPriority)), Label: "foo", InsertText: ptrTo("foo(arg: string): number {\n}"), FilterText: ptrTo("foo")}},

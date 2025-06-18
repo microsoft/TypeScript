@@ -26,7 +26,7 @@ class SubComponent extends Component<{}> {
 	f.VerifyCompletions(t, "$", &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Includes: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextLocationPriority)), Label: "setState", InsertText: ptrTo("setState(stateHandler: (oldState: {}, newState: {}) => void): void {\n}"), FilterText: ptrTo("setState")}},

@@ -10,7 +10,7 @@ import (
 
 func TestCompletionForStringLiteralNonrelativeImport10(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @moduleResolution: classic
 // @Filename: dir1/dir2/dir3/dir4/test0.ts
@@ -32,7 +32,7 @@ var foo9 = require("fake-module/*require1*/
 	f.VerifyCompletions(t, f.Markers(), &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Exact: []fourslash.ExpectedCompletionItem{},

@@ -22,7 +22,7 @@ import { Test } from ".//**/"`
 	f.VerifyCompletions(t, "", &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Includes: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{Label: "test.jsx"}},
@@ -31,7 +31,7 @@ import { Test } from ".//**/"`
 	f.VerifyCompletions(t, "", &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Includes: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{Label: "test"}},

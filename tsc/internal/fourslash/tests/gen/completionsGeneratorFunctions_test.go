@@ -31,7 +31,7 @@ const o: I = {
 	f.VerifyCompletions(t, []string{"c", "d"}, &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Exact: []fourslash.ExpectedCompletionItem{"baseMethod"},

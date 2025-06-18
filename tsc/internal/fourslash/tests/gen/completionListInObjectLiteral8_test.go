@@ -11,7 +11,7 @@ import (
 
 func TestCompletionListInObjectLiteral8(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `declare function test<
   Variants extends Partial<Record<'hover' | 'pressed', string>>,
@@ -28,7 +28,7 @@ test({
 			CommitCharacters: &defaultCommitCharacters,
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
-			Exact: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "pressed"}},
+			Exact: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "pressed?", InsertText: ptrTo("pressed"), FilterText: ptrTo("pressed")}},
 		},
 	})
 }

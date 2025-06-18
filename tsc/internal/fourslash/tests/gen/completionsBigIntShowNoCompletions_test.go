@@ -10,7 +10,7 @@ import (
 
 func TestCompletionsBigIntShowNoCompletions(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `declare const SSL_OP_SSLEAY_080_CLIENT_DH_BUG: number
 const foo = 0n/*1*/;`

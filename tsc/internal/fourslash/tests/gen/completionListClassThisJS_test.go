@@ -11,7 +11,7 @@ import (
 
 func TestCompletionListClassThisJS(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: completionListClassThisJS.js
 // @allowJs: true

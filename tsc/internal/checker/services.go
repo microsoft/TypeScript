@@ -5,6 +5,7 @@ import (
 	"slices"
 
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/printer"
 )
@@ -168,7 +169,7 @@ func (c *Checker) GetAllPossiblePropertiesOfTypes(types []*Type) []*ast.Symbol {
 		return c.getAugmentedPropertiesOfType(unionType)
 	}
 
-	props := createSymbolTable(nil)
+	props := make(ast.SymbolTable)
 	for _, memberType := range types {
 		augmentedProps := c.getAugmentedPropertiesOfType(memberType)
 		for _, p := range augmentedProps {
@@ -231,6 +232,9 @@ func (c *Checker) getAugmentedPropertiesOfType(t *Type) []*ast.Symbol {
 		functionType = c.globalNewableFunctionType
 	}
 
+	if propsByName == nil {
+		propsByName = make(ast.SymbolTable)
+	}
 	if functionType != nil {
 		for _, p := range c.getPropertiesOfType(functionType) {
 			if _, ok := propsByName[p.Name]; !ok {
@@ -578,4 +582,40 @@ func (c *Checker) getResolvedSignatureWorker(node *ast.Node, checkMode CheckMode
 	}
 	c.apparentArgumentCount = nil
 	return res, *candidatesOutArray
+}
+
+func (c *Checker) GetCandidateSignaturesForStringLiteralCompletions(call *ast.CallLikeExpression, editingArgument *ast.Node) []*Signature {
+	candidatesSet := collections.Set[*Signature]{}
+
+	// first, get candidates when inference is blocked from the source node.
+	candidates := runWithInferenceBlockedFromSourceNode(c, editingArgument, func() []*Signature {
+		_, blockedInferenceCandidates := c.getResolvedSignatureWorker(call, CheckModeNormal, 0)
+		return blockedInferenceCandidates
+	})
+	for _, candidate := range candidates {
+		candidatesSet.Add(candidate)
+	}
+
+	// next, get candidates where the source node is considered for inference.
+	candidates = runWithoutResolvedSignatureCaching(c, editingArgument, func() []*Signature {
+		_, inferenceCandidates := c.getResolvedSignatureWorker(call, CheckModeNormal, 0)
+		return inferenceCandidates
+	})
+
+	for _, candidate := range candidates {
+		candidatesSet.Add(candidate)
+	}
+
+	return slices.Collect(maps.Keys(candidatesSet.Keys()))
+}
+
+func (c *Checker) GetTypeParameterAtPosition(s *Signature, pos int) *Type {
+	t := c.getTypeAtPosition(s, pos)
+	if t.IsIndex() && isThisTypeParameter(t.AsIndexType().target) {
+		constraint := c.getBaseConstraintOfType(t.AsIndexType().target)
+		if constraint != nil {
+			return c.getIndexType(constraint)
+		}
+	}
+	return t
 }

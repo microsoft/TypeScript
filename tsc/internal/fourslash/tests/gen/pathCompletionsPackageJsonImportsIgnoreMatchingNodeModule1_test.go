@@ -10,7 +10,7 @@ import (
 
 func TestPathCompletionsPackageJsonImportsIgnoreMatchingNodeModule1(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @module: node18
 // @Filename: /src/node_modules/#internal/package.json
@@ -27,7 +27,7 @@ import {} from "#internal//*1*/";`
 	f.VerifyCompletions(t, []string{"1"}, &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Exact: []fourslash.ExpectedCompletionItem{},

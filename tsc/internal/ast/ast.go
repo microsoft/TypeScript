@@ -1768,6 +1768,7 @@ type (
 	JsxOpeningLikeElement       = Node // JsxOpeningElement | JsxSelfClosingElement
 	NamedImportsOrExports       = Node // NamedImports | NamedExports
 	BreakOrContinueStatement    = Node // BreakStatement | ContinueStatement
+	CallLikeExpression          = Node // CallExpression | NewExpression | TaggedTemplateExpression | Decorator | JsxCallLike | InstanceofExpression
 )
 
 // Aliases for node singletons

@@ -337,6 +337,9 @@ function parseExpectedCompletionItem(expr: ts.Expression): string | undefined {
                         return undefined;
                     }
                     item += `SortText: ptrTo(string(${result})), `;
+                    if (result === "ls.SortTextOptionalMember") {
+                        isOptional = true;
+                    }
                     break;
                 case "insertText":
                     if (ts.isStringLiteral(init)) {
@@ -534,7 +537,7 @@ interface GoToMarkerCmd {
 
 type Cmd = VerifyCompletionsCmd | GoToMarkerCmd;
 
-function generateVerifyCompletions({ marker, args }: VerifyCompletionsCmd): string {
+function generateVerifyCompletions({ marker, args, isNewIdentifierLocation }: VerifyCompletionsCmd): string {
     let expectedList = "nil";
     if (args) {
         const expected = [];
@@ -543,10 +546,11 @@ function generateVerifyCompletions({ marker, args }: VerifyCompletionsCmd): stri
         if (args.exact) expected.push(`Exact: ${args.exact},`);
         // !!! isIncomplete
         // !!! itemDefaults/commitCharacters from `isNewIdentifierLocation`
+        const commitCharacters = isNewIdentifierLocation ? "[]string{}" : "defaultCommitCharacters";
         expectedList = `&fourslash.VerifyCompletionsExpectedList{
     IsIncomplete: false,
     ItemDefaults: &lsproto.CompletionItemDefaults{
-        CommitCharacters: &defaultCommitCharacters,
+        CommitCharacters: &${commitCharacters},
     },
     Items: &fourslash.VerifyCompletionsExpectedItems{
         ${expected.join("\n")}

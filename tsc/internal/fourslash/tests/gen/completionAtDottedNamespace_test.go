@@ -10,14 +10,14 @@ import (
 
 func TestCompletionAtDottedNamespace(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `namespace wwer./**/w`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	f.VerifyCompletions(t, "", &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Exact: []fourslash.ExpectedCompletionItem{},

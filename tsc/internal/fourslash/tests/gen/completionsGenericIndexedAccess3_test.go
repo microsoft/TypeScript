@@ -11,7 +11,7 @@ import (
 
 func TestCompletionsGenericIndexedAccess3(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface CustomElements {
   'component-one': {
@@ -37,7 +37,7 @@ create('component-two', { props: { /*2*/ } });`
 			CommitCharacters: &defaultCommitCharacters,
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
-			Exact: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "foo"}},
+			Exact: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "foo?", InsertText: ptrTo("foo"), FilterText: ptrTo("foo")}},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.VerifyCompletionsExpectedList{
@@ -46,7 +46,7 @@ create('component-two', { props: { /*2*/ } });`
 			CommitCharacters: &defaultCommitCharacters,
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
-			Exact: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "bar"}},
+			Exact: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "bar?", InsertText: ptrTo("bar"), FilterText: ptrTo("bar")}},
 		},
 	})
 }

@@ -25,7 +25,7 @@ func TestTripleSlashRefPathCompletionHiddenFile(t *testing.T) {
 	f.VerifyCompletions(t, []string{"0", "2", "3"}, &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Exact: []fourslash.ExpectedCompletionItem{"f.ts"},
@@ -34,7 +34,7 @@ func TestTripleSlashRefPathCompletionHiddenFile(t *testing.T) {
 	f.VerifyCompletions(t, "1", &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Exact: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{Label: "f.ts"}},

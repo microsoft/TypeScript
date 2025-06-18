@@ -30,7 +30,7 @@ const a = <div {...{}} /*1*/></div>;`
 			CommitCharacters: &defaultCommitCharacters,
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
-			Exact: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "aria-whatever"}},
+			Exact: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "aria-whatever?", InsertText: ptrTo("aria-whatever"), FilterText: ptrTo("aria-whatever")}},
 		},
 	})
 }

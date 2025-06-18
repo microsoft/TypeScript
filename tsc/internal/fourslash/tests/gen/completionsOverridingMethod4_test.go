@@ -41,7 +41,7 @@ class Gossip extends Secret {
 	f.VerifyCompletions(t, "a", &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Includes: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextLocationPriority)), Label: "hint", InsertText: ptrTo("protected hint(): string {\n}"), FilterText: ptrTo("hint")}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextLocationPriority)), Label: "refuse", InsertText: ptrTo("public refuse(): string {\n}"), FilterText: ptrTo("refuse")}},

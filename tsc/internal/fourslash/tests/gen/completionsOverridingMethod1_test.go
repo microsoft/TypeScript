@@ -27,7 +27,7 @@ class HSub extends HBase {
 	f.VerifyCompletions(t, "h", &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Includes: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextLocationPriority)), Label: "foo", InsertText: ptrTo("override foo(a: string): void {\n}"), FilterText: ptrTo("foo")}},

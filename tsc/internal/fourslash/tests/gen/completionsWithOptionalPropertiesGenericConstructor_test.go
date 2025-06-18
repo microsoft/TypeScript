@@ -11,7 +11,7 @@ import (
 
 func TestCompletionsWithOptionalPropertiesGenericConstructor(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @strict: true
 interface Options {
@@ -31,7 +31,7 @@ new Clazz({ /*1*/ })`
 			CommitCharacters: &defaultCommitCharacters,
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
-			Includes: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "someFunction"}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "anotherFunction"}},
+			Includes: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "someFunction?", InsertText: ptrTo("someFunction"), FilterText: ptrTo("someFunction")}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "anotherFunction?", InsertText: ptrTo("anotherFunction"), FilterText: ptrTo("anotherFunction")}},
 		},
 	})
 }

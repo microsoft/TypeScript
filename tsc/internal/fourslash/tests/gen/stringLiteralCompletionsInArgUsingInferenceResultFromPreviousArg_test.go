@@ -10,7 +10,7 @@ import (
 
 func TestStringLiteralCompletionsInArgUsingInferenceResultFromPreviousArg(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @strict: true
 // https://github.com/microsoft/TypeScript/issues/55545

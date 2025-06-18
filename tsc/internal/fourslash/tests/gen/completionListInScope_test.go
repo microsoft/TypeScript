@@ -74,7 +74,7 @@ class TestClass {
 	f.VerifyCompletions(t, "valueReference", &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Includes: []fourslash.ExpectedCompletionItem{"localVariable", "exportedVariable", "localFunction", "exportedFunction", "localClass", "exportedClass", "localModule", "exportedModule", "exportedVariable2", "exportedFunction2", "exportedClass2", "exportedModule2"},

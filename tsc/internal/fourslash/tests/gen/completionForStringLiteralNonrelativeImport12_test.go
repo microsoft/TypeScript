@@ -27,7 +27,7 @@ var foo3 = require("m/*require0*/
 	f.VerifyCompletions(t, f.Markers(), &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Exact: []fourslash.ExpectedCompletionItem{"module", "dev-module", "peer-module", "optional-module"},

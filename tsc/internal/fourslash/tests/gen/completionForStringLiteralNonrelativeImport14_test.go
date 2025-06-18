@@ -34,7 +34,7 @@ export var y = 10;`
 	f.VerifyCompletions(t, []string{"import_as0"}, &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Exact: []fourslash.ExpectedCompletionItem{"lib", "lib.decorators", "lib.decorators.legacy", "tests", &lsproto.CompletionItem{Label: "/module1"}, &lsproto.CompletionItem{Label: "/module2"}},
@@ -43,7 +43,7 @@ export var y = 10;`
 	f.VerifyCompletions(t, []string{"import_equals0"}, &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Exact: []fourslash.ExpectedCompletionItem{"lib", "lib.decorators", "lib.decorators.legacy", "tests", &lsproto.CompletionItem{Label: "/module1"}, &lsproto.CompletionItem{Label: "/module2"}},
@@ -52,7 +52,7 @@ export var y = 10;`
 	f.VerifyCompletions(t, []string{"require0"}, &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Exact: []fourslash.ExpectedCompletionItem{"lib", "lib.decorators", "lib.decorators.legacy", "tests", &lsproto.CompletionItem{Label: "/module1"}, &lsproto.CompletionItem{Label: "/module2"}},

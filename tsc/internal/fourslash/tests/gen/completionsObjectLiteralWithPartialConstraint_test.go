@@ -11,7 +11,7 @@ import (
 
 func TestCompletionsObjectLiteralWithPartialConstraint(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface MyOptions {
     hello?: boolean;
@@ -73,7 +73,7 @@ f4({
 			CommitCharacters: &defaultCommitCharacters,
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
-			Exact: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "world"}},
+			Exact: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "world?", InsertText: ptrTo("world"), FilterText: ptrTo("world")}},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.VerifyCompletionsExpectedList{
@@ -82,7 +82,7 @@ f4({
 			CommitCharacters: &defaultCommitCharacters,
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
-			Exact: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "autoIncrement"}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "keyPath"}},
+			Exact: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "autoIncrement?", InsertText: ptrTo("autoIncrement"), FilterText: ptrTo("autoIncrement")}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "keyPath?", InsertText: ptrTo("keyPath"), FilterText: ptrTo("keyPath")}},
 		},
 	})
 	f.VerifyCompletions(t, "3", &fourslash.VerifyCompletionsExpectedList{
@@ -100,7 +100,7 @@ f4({
 			CommitCharacters: &defaultCommitCharacters,
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
-			Exact: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "a"}},
+			Exact: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "a?", InsertText: ptrTo("a"), FilterText: ptrTo("a")}},
 		},
 	})
 	f.VerifyCompletions(t, "5", &fourslash.VerifyCompletionsExpectedList{
@@ -109,7 +109,7 @@ f4({
 			CommitCharacters: &defaultCommitCharacters,
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
-			Exact: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "x"}},
+			Exact: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "x?", InsertText: ptrTo("x"), FilterText: ptrTo("x")}},
 		},
 	})
 	f.VerifyCompletions(t, "6", &fourslash.VerifyCompletionsExpectedList{

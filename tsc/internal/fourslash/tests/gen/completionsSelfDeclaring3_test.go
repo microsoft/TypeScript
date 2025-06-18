@@ -10,7 +10,7 @@ import (
 
 func TestCompletionsSelfDeclaring3(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function f<T extends { x: number }>(p: T & (T extends { hello: string } ? { goodbye: number } : {})) {}
 f({ x/*x*/: 0, hello/*hello*/: "", goodbye/*goodbye*/: 0, abc/*abc*/: "" })`

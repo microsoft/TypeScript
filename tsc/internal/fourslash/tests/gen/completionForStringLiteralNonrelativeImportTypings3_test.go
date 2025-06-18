@@ -29,7 +29,7 @@ export var y = 9;
 	f.VerifyCompletions(t, []string{"types_ref0", "import_as0", "import_equals0", "require0"}, &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Exact: []fourslash.ExpectedCompletionItem{"module-x", "module-y"},

@@ -11,7 +11,7 @@ import (
 
 func TestCompletionsWithOptionalPropertiesGenericPartial2(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @strict: true
 interface Foo {
@@ -26,7 +26,7 @@ partialFoo({ a: true, b: true }, { /*1*/ });`
 			CommitCharacters: &defaultCommitCharacters,
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
-			Includes: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "a"}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "b"}},
+			Includes: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "a?", InsertText: ptrTo("a"), FilterText: ptrTo("a")}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "b?", InsertText: ptrTo("b"), FilterText: ptrTo("b")}},
 		},
 	})
 }

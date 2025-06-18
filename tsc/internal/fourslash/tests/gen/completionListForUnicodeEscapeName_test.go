@@ -29,7 +29,7 @@ class \u0041 { /*2*/ }
 	f.VerifyCompletions(t, "2", &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Excludes: []string{"C", "A"},

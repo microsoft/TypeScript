@@ -697,8 +697,8 @@ func getImmediatelyContainingArgumentInfo(node *ast.Node, position int, sourceFi
 		// i.e
 		//      export function MainButton(props: ButtonProps, context: any): JSX.Element { ... }
 		//      <MainButton /*signatureHelp*/
-		attributeSpanStart := parent.AsJsxOpeningElement().Attributes.Loc.Pos()
-		attributeSpanEnd := scanner.SkipTrivia(sourceFile.Text(), parent.AsJsxOpeningElement().Attributes.End())
+		attributeSpanStart := parent.Attributes().Loc.Pos()
+		attributeSpanEnd := scanner.SkipTrivia(sourceFile.Text(), parent.Attributes().End())
 		return &argumentListInfo{
 			isTypeParameterList: false,
 			invocation:          &invocation{callInvocation: &callInvocation{node: parent}},

@@ -22,7 +22,7 @@ func TestTripleSlashRefPathCompletionContext(t *testing.T) {
 	f.VerifyCompletions(t, []string{"8", "9"}, &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Exact: []fourslash.ExpectedCompletionItem{"f.ts"},

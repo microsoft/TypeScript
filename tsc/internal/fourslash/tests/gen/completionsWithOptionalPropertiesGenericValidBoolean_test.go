@@ -11,7 +11,7 @@ import (
 
 func TestCompletionsWithOptionalPropertiesGenericValidBoolean(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @strict: true
 interface MyOptions {
@@ -27,7 +27,7 @@ bar({ hello: true, /*1*/ });`
 			CommitCharacters: &defaultCommitCharacters,
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
-			Includes: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "world"}},
+			Includes: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "world?", InsertText: ptrTo("world"), FilterText: ptrTo("world")}},
 		},
 	})
 }

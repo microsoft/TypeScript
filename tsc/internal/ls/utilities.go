@@ -197,7 +197,6 @@ func findChildOfKind(containingNode *ast.Node, kind ast.Kind, sourceFile *ast.So
 	return nil
 }
 
-// !!! signature help
 type PossibleTypeArgumentInfo struct {
 	called         *ast.IdentifierNode
 	nTypeArguments int

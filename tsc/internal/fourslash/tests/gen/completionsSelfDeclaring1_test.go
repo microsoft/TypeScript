@@ -33,7 +33,7 @@ test({
 			CommitCharacters: &defaultCommitCharacters,
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
-			Exact: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "autoIncrement"}},
+			Exact: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "autoIncrement?", InsertText: ptrTo("autoIncrement"), FilterText: ptrTo("autoIncrement")}},
 		},
 	})
 }

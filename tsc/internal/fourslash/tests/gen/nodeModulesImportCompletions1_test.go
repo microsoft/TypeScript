@@ -48,7 +48,7 @@ const m = import("./src//*9*/");`
 	f.VerifyCompletions(t, []string{"1", "3", "6", "9"}, &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Exact: []fourslash.ExpectedCompletionItem{"decl.cjs", "decl.mjs", "decl.js", "js.cjs", "js.js", "js.mjs", "module.cjs", "module.js", "module.mjs"},
@@ -57,7 +57,7 @@ const m = import("./src//*9*/");`
 	f.VerifyCompletions(t, []string{"2", "4", "5", "7", "8"}, &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Exact: []fourslash.ExpectedCompletionItem{"decl.cjs", "decl.mjs", "decl", "js.cjs", "js", "js.mjs", "module.cjs", "module", "module.mjs"},

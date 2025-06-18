@@ -32,7 +32,7 @@ var foo7 = require("f/*require0*/
 	f.VerifyCompletions(t, f.Markers(), &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Exact: []fourslash.ExpectedCompletionItem{"fake-module3", "fake-module2", "fake-module"},

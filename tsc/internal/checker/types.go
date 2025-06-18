@@ -734,6 +734,10 @@ func (t *Type) IsTypeParameter() bool {
 	return t.flags&TypeFlagsTypeParameter != 0
 }
 
+func (t *Type) IsIndex() bool {
+	return t.flags&TypeFlagsIndex != 0
+}
+
 // TypeData
 
 type TypeData interface {
@@ -1179,6 +1183,14 @@ func (s *Signature) Target() *Signature {
 
 func (s *Signature) ThisParameter() *ast.Symbol {
 	return s.thisParameter
+}
+
+func (s *Signature) Parameters() []*ast.Symbol {
+	return s.parameters
+}
+
+func (s *Signature) HasRestParameter() bool {
+	return s.flags&SignatureFlagsHasRestParameter != 0
 }
 
 type CompositeSignature struct {

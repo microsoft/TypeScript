@@ -11,7 +11,7 @@ import (
 
 func TestCompletionListInObjectLiteral6(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `const foo = {
     a: "a",
@@ -32,7 +32,7 @@ fn({ a: "a", b: "b" }, {
 			CommitCharacters: &defaultCommitCharacters,
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
-			Exact: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "on_a"}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "on_b"}},
+			Exact: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "on_a?", InsertText: ptrTo("on_a"), FilterText: ptrTo("on_a")}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "on_b?", InsertText: ptrTo("on_b"), FilterText: ptrTo("on_b")}},
 		},
 	})
 }

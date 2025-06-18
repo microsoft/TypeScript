@@ -1425,7 +1425,7 @@ func getCompletionData(program *compiler.Program, typeChecker *checker.Checker, 
 
 	// exclude literal suggestions after <input type="text" [||] /> microsoft/TypeScript#51667) and after closing quote (microsoft/TypeScript#52675)
 	// for strings getStringLiteralCompletions handles completions
-	isLiteralExpected := !ast.IsStringLiteralLike(previousToken) && !isJsxIdentifierExpected
+	isLiteralExpected := !(previousToken != nil && ast.IsStringLiteralLike(previousToken)) && !isJsxIdentifierExpected
 	var literals []literalValue
 	if isLiteralExpected {
 		var types []*checker.Type
@@ -2601,11 +2601,9 @@ func getContextualType(previousToken *ast.Node, position int, file *ast.SourceFi
 		}
 		return nil
 	default:
-		// argInfo := getArgumentInfoForCompletions(previousToken, position, file, typeChecker) // !!! signature help
-		var argInfo *struct{} // !!! signature help
+		argInfo := getArgumentInfoForCompletions(previousToken, position, file, typeChecker)
 		if argInfo != nil {
-			// !!! signature help
-			return nil
+			return typeChecker.GetContextualTypeForArgumentAtIndex(argInfo.invocation, argInfo.argumentIndex)
 		} else if isEqualityOperatorKind(previousToken.Kind) && ast.IsBinaryExpression(parent) && isEqualityOperatorKind(parent.AsBinaryExpression().OperatorToken.Kind) {
 			// completion at `x ===/**/`
 			return typeChecker.GetTypeAtLocation(parent.AsBinaryExpression().Left)
@@ -4226,7 +4224,7 @@ func isInStringOrRegularExpressionOrTemplateLiteral(contextToken *ast.Node, posi
 	return (ast.IsRegularExpressionLiteral(contextToken) || ast.IsStringTextContainingNode(contextToken)) &&
 		(contextToken.Loc.ContainsExclusive(position)) ||
 		position == contextToken.End() &&
-			(ast.IsUnterminatedNode(contextToken) || ast.IsRegularExpressionLiteral(contextToken))
+			(ast.IsUnterminatedLiteral(contextToken) || ast.IsRegularExpressionLiteral(contextToken))
 }
 
 // true if we are certain that the currently edited location must define a new location; false otherwise.
@@ -4453,4 +4451,22 @@ func clientSupportsDefaultCommitCharacters(clientOptions *lsproto.CompletionClie
 		return false
 	}
 	return slices.Contains(*clientOptions.CompletionList.ItemDefaults, "commitCharacters")
+}
+
+type argumentInfoForCompletions struct {
+	invocation    *ast.CallLikeExpression
+	argumentIndex int
+	argumentCount int
+}
+
+func getArgumentInfoForCompletions(node *ast.Node, position int, file *ast.SourceFile, typeChecker *checker.Checker) *argumentInfoForCompletions {
+	info := getImmediatelyContainingArgumentInfo(node, position, file, typeChecker)
+	if info == nil || info.isTypeParameterList || info.invocation.callInvocation == nil {
+		return nil
+	}
+	return &argumentInfoForCompletions{
+		invocation:    info.invocation.callInvocation.node,
+		argumentIndex: *info.argumentIndex,
+		argumentCount: info.argumentCount,
+	}
 }

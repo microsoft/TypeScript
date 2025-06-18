@@ -2738,10 +2738,6 @@ func IsRequireCall(node *Node, requireStringLiteralLikeArgument bool) bool {
 	return !requireStringLiteralLikeArgument || IsStringLiteralLike(call.Arguments.Nodes[0])
 }
 
-func IsUnterminatedLiteral(node *Node) bool {
-	return node.LiteralLikeData().TokenFlags&TokenFlagsUnterminated != 0
-}
-
 func GetJSXImplicitImportBase(compilerOptions *core.CompilerOptions, file *SourceFile) string {
 	jsxImportSourcePragma := GetPragmaFromSourceFile(file, "jsximportsource")
 	jsxRuntimePragma := GetPragmaFromSourceFile(file, "jsxruntime")
@@ -3587,8 +3583,9 @@ func compareNodePositions(n1, n2 *Node) int {
 	return n1.Pos() - n2.Pos()
 }
 
-func IsUnterminatedNode(node *Node) bool {
-	return IsLiteralKind(node.Kind) && IsUnterminatedLiteral(node)
+func IsUnterminatedLiteral(node *Node) bool {
+	return IsLiteralKind(node.Kind) && node.LiteralLikeData().TokenFlags&TokenFlagsUnterminated != 0 ||
+		IsTemplateLiteralKind(node.Kind) && node.TemplateLiteralLikeData().TemplateFlags&TokenFlagsUnterminated != 0
 }
 
 // Gets a value indicating whether a class element is either a static or an instance property declaration with an initializer.

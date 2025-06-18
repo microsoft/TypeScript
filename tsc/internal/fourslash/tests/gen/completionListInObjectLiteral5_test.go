@@ -10,7 +10,7 @@ import (
 
 func TestCompletionListInObjectLiteral5(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `const o = 'something' 
 const obj = {
@@ -64,7 +64,7 @@ const obj = {
 	f.VerifyCompletions(t, []string{"4"}, &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Includes: []fourslash.ExpectedCompletionItem{"o"},

@@ -571,7 +571,10 @@ func (p *Project) updateProgram() bool {
 		}
 		var typingsLocation string
 		if typeAcquisition := p.getTypeAcquisition(); typeAcquisition != nil && typeAcquisition.Enable.IsTrue() {
-			typingsLocation = p.host.TypingsInstaller().TypingsLocation
+			typingsInstaller := p.host.TypingsInstaller()
+			if typingsInstaller != nil {
+				typingsLocation = typingsInstaller.TypingsLocation
+			}
 		}
 		p.program = compiler.NewProgram(compiler.ProgramOptions{
 			Config:                      p.programConfig,

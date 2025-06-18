@@ -11,7 +11,7 @@ import (
 
 func TestExtendsKeywordCompletion2(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function f1<T /*1*/>() {}
 function f2<T ext/*2*/>() {}`

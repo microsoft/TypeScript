@@ -36,7 +36,7 @@ func TestTripleSlashRefPathCompletionAbsolutePaths(t *testing.T) {
 	f.VerifyCompletions(t, []string{"0", "1"}, &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Exact: []fourslash.ExpectedCompletionItem{"fourslash"},
@@ -45,7 +45,7 @@ func TestTripleSlashRefPathCompletionAbsolutePaths(t *testing.T) {
 	f.VerifyCompletions(t, "2", &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Exact: []fourslash.ExpectedCompletionItem{"e1.ts", "f1.ts", "f2.tsx", "folder", "tests"},

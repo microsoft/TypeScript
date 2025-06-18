@@ -11,7 +11,7 @@ import (
 
 func TestCompletionsWithOptionalPropertiesGenericDeep(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @strict: true
 interface DeepOptions {
@@ -31,7 +31,7 @@ bar({ deep: {/*1*/} });`
 			CommitCharacters: &defaultCommitCharacters,
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
-			Includes: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "another"}},
+			Includes: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "another?", InsertText: ptrTo("another"), FilterText: ptrTo("another")}},
 		},
 	})
 }

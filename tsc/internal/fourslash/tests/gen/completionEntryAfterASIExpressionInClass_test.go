@@ -10,7 +10,7 @@ import (
 
 func TestCompletionEntryAfterASIExpressionInClass(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class Parent {
   protected shouldWork() {
@@ -33,7 +33,7 @@ class ChildTwo extends Parent {
 	f.VerifyCompletions(t, []string{"insideid", "root"}, &fourslash.VerifyCompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &lsproto.CompletionItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
 			Includes: []fourslash.ExpectedCompletionItem{"shouldWork"},

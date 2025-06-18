@@ -11,7 +11,7 @@ import (
 
 func TestCompletionsWithOptionalPropertiesGenericPartial(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @strict: true
 interface Foo {
@@ -29,7 +29,7 @@ partialFoo({ /*1*/ });`
 			CommitCharacters: &defaultCommitCharacters,
 		},
 		Items: &fourslash.VerifyCompletionsExpectedItems{
-			Includes: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "a_a"}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "a_b"}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "a_c"}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "b_a"}},
+			Includes: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "a_a?", InsertText: ptrTo("a_a"), FilterText: ptrTo("a_a")}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "a_b?", InsertText: ptrTo("a_b"), FilterText: ptrTo("a_b")}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "a_c?", InsertText: ptrTo("a_c"), FilterText: ptrTo("a_c")}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "b_a?", InsertText: ptrTo("b_a"), FilterText: ptrTo("b_a")}},
 		},
 	})
 }
