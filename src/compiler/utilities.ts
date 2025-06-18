@@ -3695,7 +3695,8 @@ export function isInExpressionContext(node: Node): boolean {
         case SyntaxKind.SatisfiesExpression:
             return node === (parent as SatisfiesExpression).expression;
         case SyntaxKind.ElementAccessExpression:
-            return node === (parent as ElementAccessExpression).argumentExpression;
+            const elementAccess = parent as ElementAccessExpression;
+            return node === elementAccess.expression || node === elementAccess.argumentExpression;
         default:
             return isExpressionNode(parent);
     }
@@ -10511,7 +10512,7 @@ export function isValidTypeOnlyAliasUseSite(useSite: Node): boolean {
         || isPartOfTypeQuery(useSite)
         || isIdentifierInNonEmittingHeritageClause(useSite)
         || isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(useSite)
-        || !(isExpressionNode(useSite) || isShorthandPropertyNameUseSite(useSite));
+        || !(isExpressionNode(useSite) || isShorthandPropertyNameUseSite(useSite) || isInExpressionContext(useSite));
 }
 
 function isShorthandPropertyNameUseSite(useSite: Node) {
