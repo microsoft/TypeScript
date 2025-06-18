@@ -7,7 +7,7 @@
  * Maintainers might give you hints on where to start. They are not always right, but a good place to start
 
 Your workflow should be:
- * Make a testcase that demonstrates the behavior. Run it (by itself) and review the baselines it generates to ensure it demonstrates the bug. Add the test its baselines in one commit
+ * Make a testcase that demonstrates the behavior. Run it (by itself) and review the baselines it generates to ensure it demonstrates the bug. Add the test and its baselines in one commit
  * Fix the bug by changing code as appropriate. Put this fix in another commit
  * Run the test you wrote again and ensure the baselines change in a way that demonstrates that the bug is fixed. Put this baseline diff in its own commit
  * Run all other tests to ensure you didn't break anything. Some collateral baseline changes are normal, put these diffs in another commit
