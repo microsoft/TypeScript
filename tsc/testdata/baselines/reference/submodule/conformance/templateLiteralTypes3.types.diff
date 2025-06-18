@@ -112,17 +112,17 @@
 
      let x: keyof T & string | `-${keyof T & string}`;
 ->x : (keyof T & string) | `-${keyof T & string}`
-+>x : keyof T & string | `-${keyof T & string}`
++>x : `-${keyof T & string}` | keyof T & string
 
      x = "id";
  >x = "id" : "id"
 ->x : (keyof T & string) | `-${keyof T & string}`
-+>x : keyof T & string | `-${keyof T & string}`
++>x : `-${keyof T & string}` | keyof T & string
  >"id" : "id"
 
      x = "-id";
  >x = "-id" : "-id"
 ->x : (keyof T & string) | `-${keyof T & string}`
-+>x : keyof T & string | `-${keyof T & string}`
++>x : `-${keyof T & string}` | keyof T & string
  >"-id" : "-id"
  }

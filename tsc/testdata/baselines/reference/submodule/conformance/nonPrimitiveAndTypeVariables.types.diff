@@ -1,0 +1,10 @@
+--- old.nonPrimitiveAndTypeVariables.types
++++ new.nonPrimitiveAndTypeVariables.types
+@@= skipped -31, +31 lines =@@
+ >x : T
+
+     let b: U | object = x;  // Error
+->b : U | object
++>b : object | U
+ >x : T
+ }

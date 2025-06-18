@@ -42,11 +42,20 @@
 
  function canPickStepContinue<T extends QuickPickStep>(
 ->canPickStepContinue : <T extends QuickPickStep>(_step: T, _state: PartialStepState, _selection: StepItemType<T> | Directive) => _selection is StepItemType<T>
-+>canPickStepContinue : <T extends QuickPickStep<QuickPickItem>>(_step: T, _state: PartialStepState<unknown>, _selection: Directive | StepItemType<T>) => _selection is StepItemType<T>
++>canPickStepContinue : <T extends QuickPickStep<QuickPickItem>>(_step: T, _state: PartialStepState<unknown>, _selection: StepItemType<T> | Directive) => _selection is StepItemType<T>
 
    _step: T,
  >_step : T
-@@= skipped -28, +28 lines =@@
+@@= skipped -9, +9 lines =@@
+ >_state : PartialStepState<unknown>
+
+   _selection: StepItemType<T> | Directive
+->_selection : Directive | StepItemType<T>
++>_selection : StepItemType<T> | Directive
+
+ ): _selection is StepItemType<T> {
+   return false;
+@@= skipped -19, +19 lines =@@
  }
 
  function* showStep<
@@ -60,7 +69,7 @@
  >canPickStepContinue(step, state, selection)    ? selection[0]    : StepResult.Break : unique symbol | QuickPickItem
  >canPickStepContinue(step, state, selection) : boolean
 ->canPickStepContinue : <T extends QuickPickStep>(_step: T, _state: PartialStepState, _selection: StepItemType<T> | Directive) => _selection is StepItemType<T>
-+>canPickStepContinue : <T extends QuickPickStep<QuickPickItem>>(_step: T, _state: PartialStepState<unknown>, _selection: Directive | StepItemType<T>) => _selection is StepItemType<T>
++>canPickStepContinue : <T extends QuickPickStep<QuickPickItem>>(_step: T, _state: PartialStepState<unknown>, _selection: StepItemType<T> | Directive) => _selection is StepItemType<T>
  >step : QuickPickStep<QuickPickItem>
  >state : State
  >selection : QuickPickItem[] | Directive

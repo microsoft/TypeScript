@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/objectSubtypeReduction.ts] ////
+
+=== objectSubtypeReduction.ts ===
+// https://github.com/microsoft/typescript-go/issues/1164
+
+function foo(x?: object) {
+>foo : (x?: object | undefined) => [string, any][]
+>x : object | undefined
+
+    return Object.entries(x || {})
+>Object.entries(x || {})        .sort(([k1, v1], [k2, v2]) => v1.name.localeCompare(v2.name)) : [string, any][]
+>Object.entries(x || {})        .sort : (compareFn?: ((a: [string, any], b: [string, any]) => number) | undefined) => [string, any][]
+>Object.entries(x || {}) : [string, any][]
+>Object.entries : { <T>(o: ArrayLike<T> | { [s: string]: T; }): [string, T][]; (o: {}): [string, any][]; }
+>Object : ObjectConstructor
+>entries : { <T>(o: ArrayLike<T> | { [s: string]: T; }): [string, T][]; (o: {}): [string, any][]; }
+>x || {} : object
+>x : object | undefined
+>{} : {}
+
+        .sort(([k1, v1], [k2, v2]) => v1.name.localeCompare(v2.name));
+>sort : (compareFn?: ((a: [string, any], b: [string, any]) => number) | undefined) => [string, any][]
+>([k1, v1], [k2, v2]) => v1.name.localeCompare(v2.name) : ([k1, v1]: [string, any], [k2, v2]: [string, any]) => any
+>k1 : string
+>v1 : any
+>k2 : string
+>v2 : any
+>v1.name.localeCompare(v2.name) : any
+>v1.name.localeCompare : any
+>v1.name : any
+>v1 : any
+>name : any
+>localeCompare : any
+>v2.name : any
+>v2 : any
+>name : any
+}
+

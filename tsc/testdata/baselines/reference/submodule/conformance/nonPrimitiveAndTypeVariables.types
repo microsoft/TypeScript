@@ -32,7 +32,7 @@ function foo<T, U>(x: T) {
 >x : T
 
     let b: U | object = x;  // Error
->b : U | object
+>b : object | U
 >x : T
 }
 

@@ -9,25 +9,16 @@
  >predicate : (v: T) => boolean
  >v : T
 
-@@= skipped -28, +28 lines =@@
- // Repro from #22899
+@@= skipped -29, +29 lines =@@
 
  declare function toString1(value: object | Function): string ;
-->toString1 : (value: object | Function) => string
-+>toString1 : (value: Function | object) => string
- >value : Function | object
+ >toString1 : (value: object | Function) => string
+->value : Function | object
++>value : object | Function
 
  declare function toString2(value: Function): string ;
-@@= skipped -18, +18 lines =@@
-
-         toString1(value);
- >toString1(value) : string
-->toString1 : (value: object | Function) => string
-+>toString1 : (value: Function | object) => string
- >value : Extract<T, Function>
-
-         toString2(value);
-@@= skipped -156, +156 lines =@@
+ >toString2 : (value: Function) => string
+@@= skipped -173, +173 lines =@@
  // Repro from #33568
 
  declare function save(_response: IRootResponse<string>): void;

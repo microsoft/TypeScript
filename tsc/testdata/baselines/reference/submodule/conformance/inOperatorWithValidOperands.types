@@ -100,14 +100,14 @@ function unionCase<T, U>(t: T | U) {
 }
 
 function unionCase2<T>(t: T | object) {
->unionCase2 : <T>(t: T | object) => void
->t : T | object
+>unionCase2 : <T>(t: object | T) => void
+>t : object | T
 
     var rb5 = x in t;
 >rb5 : boolean
 >x in t : boolean
 >x : any
->t : T | object
+>t : object | T
 }
 
 interface X { x: number }

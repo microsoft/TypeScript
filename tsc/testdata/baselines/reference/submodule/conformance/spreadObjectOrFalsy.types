@@ -29,12 +29,12 @@ function f3<T extends undefined>(a: T) {
 }
 
 function f4<T extends undefined>(a: object | T) {
->f4 : <T extends undefined>(a: T | object) => {}
->a : T | object
+>f4 : <T extends undefined>(a: object | T) => {}
+>a : object | T
 
     return { ...a };
 >{ ...a } : {}
->a : T | object
+>a : object | T
 }
 
 function f5<S, T extends undefined>(a: S | T) {

@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/objectSubtypeReduction.ts] ////
+
+=== objectSubtypeReduction.ts ===
+// https://github.com/microsoft/typescript-go/issues/1164
+
+function foo(x?: object) {
+>foo : Symbol(foo, Decl(objectSubtypeReduction.ts, 0, 0))
+>x : Symbol(x, Decl(objectSubtypeReduction.ts, 2, 13))
+
+    return Object.entries(x || {})
+>Object.entries(x || {})        .sort : Symbol(sort, Decl(lib.es5.d.ts, --, --))
+>Object.entries : Symbol(entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>entries : Symbol(entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>x : Symbol(x, Decl(objectSubtypeReduction.ts, 2, 13))
+
+        .sort(([k1, v1], [k2, v2]) => v1.name.localeCompare(v2.name));
+>sort : Symbol(sort, Decl(lib.es5.d.ts, --, --))
+>k1 : Symbol(k1, Decl(objectSubtypeReduction.ts, 4, 16))
+>v1 : Symbol(v1, Decl(objectSubtypeReduction.ts, 4, 19))
+>k2 : Symbol(k2, Decl(objectSubtypeReduction.ts, 4, 26))
+>v2 : Symbol(v2, Decl(objectSubtypeReduction.ts, 4, 29))
+>v1 : Symbol(v1, Decl(objectSubtypeReduction.ts, 4, 19))
+>v2 : Symbol(v2, Decl(objectSubtypeReduction.ts, 4, 29))
+}
+

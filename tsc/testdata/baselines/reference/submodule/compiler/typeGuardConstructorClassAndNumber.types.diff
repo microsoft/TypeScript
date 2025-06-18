@@ -1,0 +1,19 @@
+--- old.typeGuardConstructorClassAndNumber.types
++++ new.typeGuardConstructorClassAndNumber.types
+@@= skipped -320, +320 lines =@@
+ // Repro from #37660
+
+ function foo(instance: Function | object) {
+->foo : (instance: Function | object) => number
+->instance : Function | object
++>foo : (instance: object | Function) => number
++>instance : object | Function
+
+     if (typeof instance === 'function') {
+ >typeof instance === 'function' : boolean
+ >typeof instance : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+->instance : Function | object
++>instance : object | Function
+ >'function' : "function"
+
+         if (instance.prototype == null || instance.prototype.constructor == null) {
