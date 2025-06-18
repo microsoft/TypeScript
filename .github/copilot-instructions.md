@@ -22,6 +22,7 @@ hereby runtests --runner=compiler # Run only compiler tests
 hereby runtests --tests=<testPath> # Run specific test
 hereby baseline-accept   # Accept new test baselines
 hereby lint              # Run eslint
+hereby format            # Run code formatting
 ```
 
 ## Fourslash Test Syntax Guide
@@ -256,4 +257,38 @@ hereby runtests --tests=tests/cases/compiler/abstractClassUnionInstantiation.ts
 hereby runtests --tests=tests/cases/fourslash/completion*.ts
 ```
 
-This guide focuses on the most common and idiomatic patterns for writing TypeScript tests. For complex scenarios, refer to existing tests in the codebase for additional patterns and techniques.
+## Important Guidelines
+
+### Test Locations
+- Only add testcases in `tests/cases/compiler` or `tests/cases/fourslash`
+- Do not write direct unit tests as they are almost never the correct test format for our repo
+
+### Performance Expectations
+- Running a set of tests may take up to 4 minutes
+- A full test run may take up to 15 minutes
+- Always run `hereby lint` and `hereby format` before you're done
+
+### Working with Issues
+- Maintainer comments in the issue should generally take priority over OP's comments
+- Maintainers might give you hints on where to start. They are not always right, but a good place to start
+
+## Recommended Workflow
+
+When fixing bugs or implementing features, follow this workflow:
+
+1. **Make a testcase that demonstrates the behavior**
+   - Run it (by itself) and review the baselines it generates to ensure it demonstrates the bug
+   - Add the test and its baselines in one commit
+
+2. **Fix the bug by changing code as appropriate**
+   - Put this fix in another commit
+
+3. **Run the test you wrote again**
+   - Ensure the baselines change in a way that demonstrates that the bug is fixed
+   - Put this baseline diff in its own commit
+
+4. **Run all other tests to ensure you didn't break anything**
+   - Some collateral baseline changes are normal
+   - Put these diffs in another commit
+
+All fixes should use one of these two test formats. Do not use unit tests as they are almost never the correct test format for our repo.
