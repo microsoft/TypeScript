@@ -12355,10 +12355,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function widenTypeForVariableLikeDeclaration(type: Type | undefined, declaration: any, reportErrors?: boolean) {
         if (type) {
-            // TODO: If back compat with pre-3.0/4.0 libs isn't required, remove the following SymbolConstructor special case transforming `symbol` into `unique symbol`
-            if (type.flags & TypeFlags.ESSymbol && isGlobalSymbolConstructor(declaration.parent)) {
-                type = getESSymbolLikeTypeForNode(declaration);
-            }
             if (reportErrors) {
                 reportErrorsFromWidening(declaration, type);
             }
