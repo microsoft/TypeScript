@@ -9,11 +9,11 @@
 // @Filename: /imports.ts
 ////import type { SomeType } from "./exports";
 ////function main() {
-////    /**/;
+////    /*completion*/;
 ////}
 
 verify.completions({
-    marker: "",
+    marker: "completion",
     includes: [
         { name: "VALUE", source: "/exports", hasAction: true, sortText: "16" },
     ],
@@ -22,7 +22,7 @@ verify.completions({
     },
 });
 
-verify.applyCodeActionFromCompletion("", {
+verify.applyCodeActionFromCompletion("completion", {
     name: "VALUE",
     source: "/exports",
     description: `Update import from "./exports"`,
