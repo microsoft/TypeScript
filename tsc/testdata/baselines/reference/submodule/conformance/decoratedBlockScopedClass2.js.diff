@@ -11,29 +11,27 @@
 -    return c > 3 && r && Object.defineProperty(target, key, r), r;
 -};
  function decorator() {
--    return function (target) { };
-+    return (target) => { };
+     return (target) => { };
  }
  try {
--    var Foo_1 = /** @class */ (function () {
--        function Foo() {
+-    let Foo = (() => {
+-        var Foo_1;
+-        let Foo = Foo_1 = class Foo {
+-            static func() {
+-                return new Foo_1();
+-            }
+-        };
+-        Foo = Foo_1 = __decorate([
+-            decorator()
+-        ], Foo);
+-        return Foo;
+-    })();
 +    @decorator()
 +    class Foo {
 +        static func() {
 +            return new Foo();
-         }
--        Foo_2 = Foo;
--        Foo.func = function () {
--            return new Foo_2();
--        };
--        var Foo_2;
--        Foo = Foo_2 = __decorate([
--            decorator()
--        ], Foo);
--        return Foo;
--    }());
--    Foo_1.func();
++        }
 +    }
-+    Foo.func();
+     Foo.func();
  }
  catch (e) { }

@@ -1,15 +1,6 @@
 --- old.widenedTypes.js
 +++ new.widenedTypes.js
-@@= skipped -25, +25 lines =@@
- var obj: { [x: string]: string; } = { x: 3, y: null }; // assignable because null is widened, and therefore BCT is any
-
- //// [widenedTypes.js]
--null instanceof (function () { });
-+null instanceof (() => { });
- ({}) instanceof null; // Ok because null is a subtype of function
- null in {};
- "" in null;
-@@= skipped -26, +26 lines =@@
+@@= skipped -51, +51 lines =@@
  declare var ob: {
      x: typeof undefined;
  };

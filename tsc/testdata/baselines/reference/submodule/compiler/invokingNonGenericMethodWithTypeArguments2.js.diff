@@ -1,16 +1,10 @@
 --- old.invokingNonGenericMethodWithTypeArguments2.js
 +++ new.invokingNonGenericMethodWithTypeArguments2.js
-@@= skipped -10, +10 lines =@@
-
+@@= skipped -11, +11 lines =@@
 
  //// [invokingNonGenericMethodWithTypeArguments2.js]
--var Foo = /** @class */ (function () {
--    function Foo() {
-+class Foo {
+ class Foo {
 +    foo;
-+    constructor() {
+     constructor() {
          this.foo();
      }
--    return Foo;
--}());
-+}

@@ -15,7 +15,6 @@
 -    };
 -    return __assign.apply(this, arguments);
 -};
--var i;
+ let i;
 -i = __assign({ a: "a" });
-+let i;
 +i = { ...{ a: "a" } };

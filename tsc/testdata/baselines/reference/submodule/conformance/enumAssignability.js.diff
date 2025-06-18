@@ -1,17 +1,10 @@
 --- old.enumAssignability.js
 +++ new.enumAssignability.js
-@@= skipped -76, +76 lines =@@
- var Others;
+@@= skipped -77, +77 lines =@@
  (function (Others) {
      var a = e; // ok
--    var C = /** @class */ (function () {
--        function C() {
--        }
--        return C;
--    }());
-+    class C {
+     class C {
 +        foo;
-+    }
+     }
      var ac;
      var ai;
-     var b = e; // ok

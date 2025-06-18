@@ -1,19 +1,10 @@
 --- old.genericPrototypeProperty.js
 +++ new.genericPrototypeProperty.js
-@@= skipped -11, +11 lines =@@
- var r3 = r.foo(null);
+@@= skipped -12, +12 lines =@@
 
  //// [genericPrototypeProperty.js]
--var C = /** @class */ (function () {
--    function C() {
--    }
--    C.prototype.foo = function (x) { return null; };
--    return C;
--}());
-+class C {
+ class C {
 +    x;
-+    foo(x) { return null; }
-+}
+     foo(x) { return null; }
+ }
  var r = C.prototype;
- // should be any
- var r2 = r.x;

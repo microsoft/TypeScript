@@ -1,113 +1,39 @@
 --- old.quickinfoTypeAtReturnPositionsInaccurate.js
 +++ new.quickinfoTypeAtReturnPositionsInaccurate.js
-@@= skipped -107, +107 lines =@@
- "use strict";
+@@= skipped -108, +108 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.listFiles = listFiles;
--var NumClass = /** @class */ (function () {
--    function NumClass() {
--    }
--    NumClass.prototype.get = function () {
--        return this.value;
--    };
--    NumClass.prototype.numExclusive = function () { };
--    return NumClass;
--}());
--var StrClass = /** @class */ (function () {
--    function StrClass() {
--    }
--    StrClass.prototype.get = function () {
--        return this.value;
--    };
--    StrClass.prototype.strExclusive = function () { };
--    return StrClass;
--}());
--var isNumClass = function (item) {
-+class NumClass {
+ class NumClass {
 +    value;
-+    get() {
-+        return this.value;
-+    }
-+    numExclusive() { }
-+}
-+class StrClass {
+     get() {
+         return this.value;
+     }
+     numExclusive() { }
+ }
+ class StrClass {
 +    value;
-+    get() {
-+        return this.value;
-+    }
-+    strExclusive() { }
-+}
-+const isNumClass = (item) => {
-     return (item instanceof NumClass);
- };
- /**
-  * An example with one dimensional dictionary. Everything worked ok here, even in prior
+     get() {
+         return this.value;
+     }
+@@= skipped -19, +21 lines =@@
   * versions.
   */
--var SimpleStore = /** @class */ (function () {
--    function SimpleStore() {
+ class SimpleStore {
+-    constructor() {
 -        this.entries = {};
 -    }
--    SimpleStore.prototype.get = function (entryId) {
--        var entry = this.entries[entryId];
-+class SimpleStore {
 +    entries = {};
-+    get(entryId) {
-+        let entry = this.entries[entryId];
+     get(entryId) {
+         let entry = this.entries[entryId];
          entry.numExclusive(); // error - expected.
-         if (isNumClass(entry)) {
-             entry.numExclusive(); // works
-             return entry;
-         }
-         return entry; // type is Entries[EntryId] - all fine
--    };
--    return SimpleStore;
--}());
-+    }
-+}
- /**
-  * A an example with 2-dimensional dictionary.
-  *
-@@= skipped -47, +40 lines =@@
-  * In v4.2 or later, `isNumClass` type guard leaks outside its
+@@= skipped -21, +19 lines =@@
   * scope.
   */
--var ComplexStore = /** @class */ (function () {
--    function ComplexStore() {
+ class ComplexStore {
+-    constructor() {
 -        this.slices = {};
 -    }
--    ComplexStore.prototype.get = function (sliceId, sliceKey) {
--        var item = this.slices[sliceId][sliceKey];
-+class ComplexStore {
 +    slices = {};
-+    get(sliceId, sliceKey) {
-+        let item = this.slices[sliceId][sliceKey];
+     get(sliceId, sliceKey) {
+         let item = this.slices[sliceId][sliceKey];
          if (isNumClass(item)) {
-             item.numExclusive(); // works only since version 4.2
-         }
-@@= skipped -13, +11 lines =@@
-         // unfortunately, doesn't work completely.
-         // it seems like item's predicated type leaks outside the bracket...
-         return item; // type is Extract ...
--    };
--    ComplexStore.prototype.get2 = function (sliceId, sliceKey) {
--        var item = this.slices[sliceId][sliceKey];
-+    }
-+    get2(sliceId, sliceKey) {
-+        let item = this.slices[sliceId][sliceKey];
-         if (isNumClass(item)) {
-             return item;
-         }
-@@= skipped -10, +10 lines =@@
-         // truthy
-         item.get();
-         return item; // type is never
--    };
--    return ComplexStore;
--}());
-+    }
-+}
- function listFiles(program) {
--    var x = isBuilderProgram(program) ? program.getProgram() : program;
-+    const x = isBuilderProgram(program) ? program.getProgram() : program;
- }

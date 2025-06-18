@@ -1,11 +1,6 @@
 --- old.isolatedModulesGlobalNamespacesAndEnums.js
 +++ new.isolatedModulesGlobalNamespacesAndEnums.js
-@@= skipped -52, +52 lines =@@
-     Enum[Enum["B"] = 1] = "B";
-     Enum[Enum["C"] = 2] = "C";
- })(Enum || (Enum = {}));
--var d = 'd';
-+const d = 'd';
+@@= skipped -56, +56 lines =@@
  //// [enum2.js]
  var Enum;
  (function (Enum) {

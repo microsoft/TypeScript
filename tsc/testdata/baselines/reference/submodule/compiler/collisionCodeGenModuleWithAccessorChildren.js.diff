@@ -1,102 +1,48 @@
 --- old.collisionCodeGenModuleWithAccessorChildren.js
 +++ new.collisionCodeGenModuleWithAccessorChildren.js
-@@= skipped -50, +50 lines =@@
- var M;
+@@= skipped -51, +51 lines =@@
  (function (M_1) {
      M_1.x = 3;
--    var c = /** @class */ (function () {
--        function c() {
-+    class c {
+     class c {
 +        y;
-+        set Z(M) {
-+            this.y = M_1.x;
+         set Z(M) {
+             this.y = M_1.x;
          }
--        Object.defineProperty(c.prototype, "Z", {
--            set: function (M) {
--                this.y = M_1.x;
--            },
--            enumerable: false,
--            configurable: true
--        });
--        return c;
--    }());
-+    }
+@@= skipped -7, +8 lines =@@
  })(M || (M = {}));
  (function (M_2) {
--    var d = /** @class */ (function () {
--        function d() {
-+    class d {
+     class d {
 +        y;
-+        set Z(p) {
-+            var M = 10;
+         set Z(p) {
+             var M = 10;
+-            this.y = M_2.x;
 +            this.y = x;
          }
--        Object.defineProperty(d.prototype, "Z", {
--            set: function (p) {
--                var M = 10;
--                this.y = M_2.x;
--            },
--            enumerable: false,
--            configurable: true
--        });
--        return d;
--    }());
-+    }
+     }
  })(M || (M = {}));
  (function (M) {
--    var e = /** @class */ (function () {
--        function e() {
-+    class e {
+     class e {
 +        y;
-+        set M(p) {
+         set M(p) {
+-            this.y = M.x;
 +            this.y = x;
          }
--        Object.defineProperty(e.prototype, "M", {
--            set: function (p) {
--                this.y = M.x;
--            },
--            enumerable: false,
--            configurable: true
--        });
--        return e;
--    }());
-+    }
+     }
  })(M || (M = {}));
- (function (M_3) {
--    var f = /** @class */ (function () {
--        function f() {
-+    class f {
-+        get Z() {
-+            var M = 10;
+@@= skipped -17, +19 lines =@@
+     class f {
+         get Z() {
+             var M = 10;
+-            return M_3.x;
 +            return x;
          }
--        Object.defineProperty(f.prototype, "Z", {
--            get: function () {
--                var M = 10;
--                return M_3.x;
--            },
--            enumerable: false,
--            configurable: true
--        });
--        return f;
--    }());
-+    }
+     }
  })(M || (M = {}));
  (function (M) {
--    var e = /** @class */ (function () {
--        function e() {
-+    class e {
-+        get M() {
+     class e {
+         get M() {
+-            return M.x;
 +            return x;
          }
--        Object.defineProperty(e.prototype, "M", {
--            get: function () {
--                return M.x;
--            },
--            enumerable: false,
--            configurable: true
--        });
--        return e;
--    }());
-+    }
+     }
  })(M || (M = {}));

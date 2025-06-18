@@ -9,11 +9,3 @@
  // newlines are <CR>
  `
  \
-@@= skipped -7, +9 lines =@@
-
- //// [templateStringMultiline3.js]
- // newlines are <CR>
--"\n";
-+`
-+\
-+`;

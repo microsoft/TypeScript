@@ -1,27 +1,6 @@
 --- old.declarationEmitComputedNameWithQuestionToken.js
 +++ new.declarationEmitComputedNameWithQuestionToken.js
-@@= skipped -15, +15 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.a = exports.WithData = exports.dataSomething = void 0;
--exports.dataSomething = "data-".concat(something);
--var WithData = /** @class */ (function () {
--    function WithData() {
--    }
--    WithData.prototype[exports.dataSomething] = function () {
-+exports.dataSomething = `data-${something}`;
-+class WithData {
-+    [exports.dataSomething]() {
-         return "something";
--    };
--    return WithData;
--}());
-+    }
-+}
- exports.WithData = WithData;
- exports.a = (new WithData())["ahahahaahah"]();
-
-@@= skipped -16, +13 lines =@@
+@@= skipped -28, +28 lines =@@
  //// [declarationEmitComputedNameWithQuestionToken.d.ts]
  export declare const dataSomething: `data-${string}`;
  export declare class WithData {

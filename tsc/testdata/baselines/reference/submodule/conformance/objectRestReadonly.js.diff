@@ -15,12 +15,11 @@
 -        }
 -    return t;
 -};
--var obj = {
-+const obj = {
+ const obj = {
      foo: 'bar',
      baz: 'qux',
      quux: 'quuz',
  };
--var foo = obj.foo, rest = __rest(obj, ["foo"]);
+-const { foo } = obj, rest = __rest(obj, ["foo"]);
 +const { foo, ...rest } = obj;
  delete rest.baz;

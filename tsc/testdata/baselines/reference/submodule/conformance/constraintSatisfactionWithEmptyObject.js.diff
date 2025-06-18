@@ -1,35 +1,18 @@
 --- old.constraintSatisfactionWithEmptyObject.js
 +++ new.constraintSatisfactionWithEmptyObject.js
-@@= skipped -45, +45 lines =@@
- var r = foo({});
+@@= skipped -46, +46 lines =@@
  var a = {};
  var r = foo({});
--var C = /** @class */ (function () {
--    function C(x) {
-+class C {
+ class C {
 +    x;
-+    constructor(x) {
+     constructor(x) {
          this.x = x;
      }
--    return C;
--}());
-+}
- var r2 = new C({});
- var i;
- // {} constraint
-@@= skipped -13, +13 lines =@@
- var r = foo2({});
+@@= skipped -12, +13 lines =@@
  var a = {};
  var r = foo2({});
--var C2 = /** @class */ (function () {
--    function C2(x) {
-+class C2 {
+ class C2 {
 +    x;
-+    constructor(x) {
+     constructor(x) {
          this.x = x;
      }
--    return C2;
--}());
-+}
- var r2 = new C2({});
- var i2;

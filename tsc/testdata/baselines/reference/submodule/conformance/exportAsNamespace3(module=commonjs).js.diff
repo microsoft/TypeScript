@@ -1,15 +1,6 @@
 --- old.exportAsNamespace3(module=commonjs).js
 +++ new.exportAsNamespace3(module=commonjs).js
-@@= skipped -63, +63 lines =@@
- exports.ns = __importStar(require("./0"));
- ns.a;
- ns.b;
--var ns = { a: 1, b: 2 };
-+let ns = { a: 1, b: 2 };
- ns.a;
- ns.b;
- //// [2.js]
-@@= skipped -39, +39 lines =@@
+@@= skipped -102, +102 lines =@@
      };
  })();
  Object.defineProperty(exports, "__esModule", { value: true });

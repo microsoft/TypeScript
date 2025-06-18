@@ -5,13 +5,8 @@
 
  //// [strictBooleanMemberAssignability.js]
 -"use strict";
--var Abc = /** @class */ (function () {
--    function Abc() {
-+class Abc {
+ class Abc {
 +    def;
-+    constructor() {
+     constructor() {
          this.def = true;
      }
--    return Abc;
--}());
-+}

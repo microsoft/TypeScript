@@ -1,17 +1,10 @@
 --- old.moduleAugmentationEnumClassMergeOfReexportIsError.js
 +++ new.moduleAugmentationEnumClassMergeOfReexportIsError.js
-@@= skipped -21, +21 lines =@@
- "use strict";
+@@= skipped -22, +22 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.Foo = void 0;
--var Foo = /** @class */ (function () {
--    function Foo() {
--    }
--    return Foo;
--}());
-+class Foo {
+ class Foo {
 +    member;
-+}
+ }
  exports.Foo = Foo;
  //// [reexport.js]
- "use strict";

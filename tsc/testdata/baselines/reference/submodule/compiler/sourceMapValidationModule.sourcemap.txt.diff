@@ -120,8 +120,7 @@
  3 >Emitted(7, 14) Source(5, 10) + SourceIndex(0)
 +4 >Emitted(7, 16) Source(5, 11) + SourceIndex(0)
  ---
-->>>    var m4;
-+>>>    let m4;
+ >>>    let m4;
  1 >^^^^
  2 >    ^^^^
  3 >        ^^

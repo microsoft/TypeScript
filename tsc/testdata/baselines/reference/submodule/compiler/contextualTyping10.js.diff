@@ -1,15 +1,11 @@
 --- old.contextualTyping10.js
 +++ new.contextualTyping10.js
-@@= skipped -3, +3 lines =@@
- class foo { public bar:{id:number;}[] = [{id:1}, {id:2}]; }
+@@= skipped -4, +4 lines =@@
 
  //// [contextualTyping10.js]
--var foo = /** @class */ (function () {
--    function foo() {
+ class foo {
+-    constructor() {
 -        this.bar = [{ id: 1 }, { id: 2 }];
 -    }
--    return foo;
--}());
-+class foo {
 +    bar = [{ id: 1 }, { id: 2 }];
-+}
+ }

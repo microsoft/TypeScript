@@ -1,23 +1,12 @@
 --- old.controlFlowForCompoundAssignmentToThisMember.js
 +++ new.controlFlowForCompoundAssignmentToThisMember.js
-@@= skipped -20, +20 lines =@@
- }
+@@= skipped -21, +21 lines =@@
 
  //// [controlFlowForCompoundAssignmentToThisMember.js]
--var DatasourceCommandWidgetElement = /** @class */ (function () {
--    function DatasourceCommandWidgetElement(target) {
-+class DatasourceCommandWidgetElement {
+ class DatasourceCommandWidgetElement {
 +    _commandBased;
 +    _commandElement;
 +    commandElement;
-+    constructor(target) {
+     constructor(target) {
          if (target instanceof DatasourceCommandWidgetElement) {
              this._commandBased = true;
-             this._commandElement = target.commandElement;
-@@= skipped -13, +16 lines =@@
-             this._commandElement = target.commandElement;
-         }
-     }
--    return DatasourceCommandWidgetElement;
--}());
-+}

@@ -1,18 +1,11 @@
 --- old.privateStaticNotAccessibleInClodule.js
 +++ new.privateStaticNotAccessibleInClodule.js
-@@= skipped -13, +13 lines =@@
-
+@@= skipped -14, +14 lines =@@
  //// [privateStaticNotAccessibleInClodule.js]
  // Any attempt to access a private property member outside the class body that contains its declaration results in a compile-time error.
--var C = /** @class */ (function () {
--    function C() {
--    }
--    return C;
--}());
-+class C {
+ class C {
 +    foo;
 +    static bar;
-+}
+ }
  (function (C) {
      C.y = C.bar; // error
- })(C || (C = {}));

@@ -1,12 +1,6 @@
 --- old.moduleAugmentationDeclarationEmit1.js
 +++ new.moduleAugmentationDeclarationEmit1.js
-@@= skipped -36, +36 lines =@@
- exports.Observable = void 0;
- var Observable;
- (function (Observable) {
--    var someValue;
-+    let someValue;
- })(Observable || (exports.Observable = Observable = {}));
+@@= skipped -41, +41 lines =@@
  //// [map.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
@@ -15,12 +9,3 @@
  observable_1.Observable.prototype.map = function () { };
  //// [main.js]
  "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- require("./map");
--var x;
--var y = x.map(function (x) { return x + 1; });
-+let x;
-+let y = x.map(x => x + 1);
-
-
- //// [observable.d.ts]

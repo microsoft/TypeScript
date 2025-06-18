@@ -24,18 +24,7 @@
          (function (plop_1) {
              function gunk() { }
              function buz() { }
--            var fudge = /** @class */ (function () {
--                function fudge() {
--                }
--                return fudge;
--            }());
-+            class fudge {
-+            }
-             plop_1.fudge = fudge;
--            var plop;
-+            let plop;
-             (function (plop) {
-             })(plop = plop_1.plop || (plop_1.plop = {}));
+@@= skipped -15, +15 lines =@@
              // Emit these references as follows
              var v1 = gunk; // gunk
              var v2 = buz; // buz

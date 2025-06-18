@@ -1,22 +1,9 @@
 --- old.constraintsThatReferenceOtherContstraints1.js
 +++ new.constraintsThatReferenceOtherContstraints1.js
-@@= skipped -11, +11 lines =@@
-
-
- //// [constraintsThatReferenceOtherContstraints1.js]
--var Foo = /** @class */ (function () {
--    function Foo() {
--    }
--    return Foo;
--}());
--var Bar = /** @class */ (function () {
--    function Bar() {
--    }
--    return Bar;
--}());
-+class Foo {
-+}
-+class Bar {
+@@= skipped -14, +14 lines =@@
+ class Foo {
+ }
+ class Bar {
 +    data; // Error 1 Type 'Object' does not satisfy the constraint 'T' for type parameter 'U extends T'.
-+}
+ }
  var x; // Error 2 Type '{ a: string; b: number; }' does not satisfy the constraint 'T' for type 

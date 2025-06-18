@@ -1,8 +1,0 @@
---- old.umd7.js
-+++ new.umd7.js
-@@= skipped -11, +11 lines =@@
-
- //// [a.js]
- /// <reference path="foo.d.ts" />
--var y = Foo();
-+let y = Foo();

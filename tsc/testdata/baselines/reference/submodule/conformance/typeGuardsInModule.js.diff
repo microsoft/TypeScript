@@ -1,15 +1,6 @@
 --- old.typeGuardsInModule.js
 +++ new.typeGuardsInModule.js
-@@= skipped -119, +119 lines =@@
- var m2;
- (function (m2) {
-     var var2;
--    var m3;
-+    let m3;
-     (function (m3) {
-         // global vars in function declaration
-         num = typeof var1 === "string" && var1.length; // string
-@@= skipped -27, +27 lines =@@
+@@= skipped -146, +146 lines =@@
  // Dotted module
  var m3;
  (function (m3) {

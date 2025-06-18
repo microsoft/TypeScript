@@ -1,50 +1,17 @@
 --- old.typeGuardFunctionErrors.js
 +++ new.typeGuardFunctionErrors.js
-@@= skipped -169, +169 lines =@@
-
+@@= skipped -170, +170 lines =@@
 
  //// [typeGuardFunctionErrors.js]
--var __extends = (this && this.__extends) || (function () {
--    var extendStatics = function (d, b) {
--        extendStatics = Object.setPrototypeOf ||
--            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
--            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
--        return extendStatics(d, b);
--    };
--    return function (d, b) {
--        if (typeof b !== "function" && b !== null)
--            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
--        extendStatics(d, b);
--        function __() { this.constructor = d; }
--        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
--    };
--})();
--var A = /** @class */ (function () {
--    function A() {
--    }
--    return A;
--}());
--var B = /** @class */ (function () {
--    function B() {
--    }
--    return B;
--}());
--var C = /** @class */ (function (_super) {
--    __extends(C, _super);
--    function C() {
--        return _super !== null && _super.apply(this, arguments) || this;
--    }
--    return C;
--}(A));
-+class A {
+ class A {
 +    propA;
-+}
-+class B {
+ }
+ class B {
 +    propB;
-+}
-+class C extends A {
+ }
+ class C extends A {
 +    propC;
-+}
+ }
  function hasANonBooleanReturnStatement(x) {
      return '';
  }
@@ -52,18 +19,7 @@
  is;
  A;
  {
-@@= skipped -59, +37 lines =@@
- function hasNonMathcingGenericType(a) {
-     return true;
- }
--var a;
--var b;
-+let a;
-+let b;
- // Passed argument is not the same as the one being guarded.
- if (isB(b)) {
-     a.propB;
-@@= skipped -34, +34 lines =@@
+@@= skipped -66, +70 lines =@@
  var b1, is, A;
  function b2(a, is, A) { }
  ;
@@ -71,70 +27,19 @@
  is;
  A;
  {
-@@= skipped -7, +8 lines =@@
- }
+@@= skipped -8, +9 lines =@@
  ;
  // Non-compatiable type predicate positions for signature declarations
--var D = /** @class */ (function () {
--    function D(p1) {
--        return true;
--    }
--    Object.defineProperty(D.prototype, "m1", {
--        get: function (p1) {
--            return true;
--        },
--        enumerable: false,
--        configurable: true
--    });
--    Object.defineProperty(D.prototype, "m2", {
--        set: function (p1) {
--            return true;
--        },
--        enumerable: false,
--        configurable: true
--    });
--    return D;
--}());
-+class D {
+ class D {
+-    constructor(p1): p1 is C {
 +    constructor(p1) {
-+        return true;
-+    }
-+    get m1(p1) {
-+        return true;
-+    }
+         return true;
+     }
+     get m1(p1) {
+         return true;
+     }
+-    set m2(p1): p1 is C {
 +    set m2(p1) {
-+        return true;
-+    }
-+}
- is;
- C;
- // Reference to rest parameter
--function b4() {
--    var a = [];
--    for (var _i = 0; _i < arguments.length; _i++) {
--        a[_i] = arguments[_i];
--    }
-+function b4(...a) {
-     return true;
+         return true;
+     }
  }
- // Reference to binding pattern
--function b5(_a, p2, p3) {
--    var a = _a.a, b = _a.b, p1 = _a.p1;
--    return true;
--}
--function b6(_a, p2, p3) {
--    var a = _a[0], b = _a[1], p1 = _a[2];
--    return true;
--}
--function b7(_a, p2, p3) {
--    var a = _a.a, b = _a.b, p1 = _a.c.p1;
-+function b5({ a, b, p1 }, p2, p3) {
-+    return true;
-+}
-+function b6([a, b, p1], p2, p3) {
-+    return true;
-+}
-+function b7({ a, b, c: { p1 } }, p2, p3) {
-     return true;
- }
- // Should not crash the compiler

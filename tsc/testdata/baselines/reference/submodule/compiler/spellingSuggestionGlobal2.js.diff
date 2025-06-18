@@ -1,9 +1,0 @@
---- old.spellingSuggestionGlobal2.js
-+++ new.spellingSuggestionGlobal2.js
-@@= skipped -9, +9 lines =@@
- //// [spellingSuggestionGlobal2.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--var globals = { x: true };
-+const globals = { x: true };
- global.x; // should suggest `globals` (GH#42209)

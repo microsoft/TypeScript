@@ -1,15 +1,11 @@
 --- old.illegalModifiersOnClassElements.js
 +++ new.illegalModifiersOnClassElements.js
-@@= skipped -6, +6 lines =@@
- }
+@@= skipped -7, +7 lines =@@
 
  //// [illegalModifiersOnClassElements.js]
--var C = /** @class */ (function () {
--    function C() {
+ class C {
+-    constructor() {
 -        this.bar = 1;
 -    }
--    return C;
--}());
-+class C {
 +    export bar = 1;
-+}
+ }

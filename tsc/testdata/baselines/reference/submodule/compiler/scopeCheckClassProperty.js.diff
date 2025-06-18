@@ -1,26 +1,17 @@
 --- old.scopeCheckClassProperty.js
 +++ new.scopeCheckClassProperty.js
-@@= skipped -12, +12 lines =@@
-
-
+@@= skipped -14, +14 lines =@@
  //// [scopeCheckClassProperty.js]
--var C = /** @class */ (function () {
--    function C() {
+ class C {
+     constructor() {
 -        this.x = new A().p; // should also be ok
-+class C {
-+    constructor() {
          new A().p; // ok
      }
--    return C;
--}());
--var A = /** @class */ (function () {
--    function A() {
++    x = new A().p; // should also be ok
+ }
+ class A {
+-    constructor() {
 -        this.p = '';
 -    }
--    return A;
--}());
-+    x = new A().p; // should also be ok
-+}
-+class A {
 +    p = '';
-+}
+ }

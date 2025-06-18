@@ -6,22 +6,16 @@
  exports.Test = void 0;
 -var translation_1 = require("./translation");
 -var TranslationKeyEnum = translation_1.Translation.TranslationKeyEnum;
--var Test = /** @class */ (function () {
--    function Test() {
++const translation_1 = require("./translation");
+ class Test {
+-    constructor() {
 -        this.TranslationKeyEnum = TranslationKeyEnum;
 -    }
--    Test.prototype.print = function () {
-+const translation_1 = require("./translation");
-+class Test {
 +    TranslationKeyEnum = TranslationKeyEnum;
-+    print() {
+     print() {
          console.log(TranslationKeyEnum.Translation1);
--    };
--    return Test;
--}());
-+    }
-+}
- exports.Test = Test;
+     }
+@@= skipped -14, +11 lines =@@
  //// [index.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });

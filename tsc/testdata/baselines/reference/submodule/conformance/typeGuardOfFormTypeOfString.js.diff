@@ -1,41 +1,10 @@
 --- old.typeGuardOfFormTypeOfString.js
 +++ new.typeGuardOfFormTypeOfString.js
-@@= skipped -87, +87 lines =@@
-
+@@= skipped -88, +88 lines =@@
 
  //// [typeGuardOfFormTypeOfString.js]
--var C = /** @class */ (function () {
--    function C() {
--    }
--    return C;
--}());
-+class C {
+ class C {
 +    p;
-+}
+ }
  ;
  var str;
- var bool;
-@@= skipped -46, +44 lines =@@
-     c = strOrC; // C
- }
- if (typeof numOrBool === "string") {
--    var x1 = numOrBool; // {}
-+    let x1 = numOrBool; // {}
- }
- else {
--    var x2 = numOrBool; // number | boolean
-+    let x2 = numOrBool; // number | boolean
- }
- // A type guard of the form typeof x !== s, where s is a string literal,
- //  - when true, narrows the type of x by typeof x === s when false, or
-@@= skipped -33, +33 lines =@@
-     str = strOrC; // string
- }
- if (typeof numOrBool !== "string") {
--    var x1 = numOrBool; // number | boolean
-+    let x1 = numOrBool; // number | boolean
- }
- else {
--    var x2 = numOrBool; // {}
-+    let x2 = numOrBool; // {}
- }

@@ -1,33 +1,6 @@
 --- old.stringLiteralTypesAsTags03.js
 +++ new.stringLiteralTypesAsTags03.js
-@@= skipped -49, +49 lines =@@
- function hasKind(entity, kind) {
-     return entity.kind === kind;
- }
--var x = {
-+let x = {
-     kind: "A",
-     a: 100,
- };
- if (hasKind(x, "A")) {
--    var a = x;
-+    let a = x;
- }
- else {
--    var b = x;
-+    let b = x;
- }
- if (!hasKind(x, "B")) {
--    var c = x;
-+    let c = x;
- }
- else {
--    var d = x;
-+    let d = x;
- }
-
-
-@@= skipped -31, +31 lines =@@
+@@= skipped -80, +80 lines =@@
      kind: "B";
      b: string;
  }

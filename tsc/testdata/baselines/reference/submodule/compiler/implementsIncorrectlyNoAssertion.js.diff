@@ -1,15 +1,9 @@
 --- old.implementsIncorrectlyNoAssertion.js
 +++ new.implementsIncorrectlyNoAssertion.js
-@@= skipped -14, +14 lines =@@
-
+@@= skipped -15, +15 lines =@@
 
  //// [implementsIncorrectlyNoAssertion.js]
--var Baz = /** @class */ (function () {
--    function Baz() {
--    }
--    return Baz;
--}());
-+class Baz {
+ class Baz {
 +    x;
 +    y;
-+}
+ }

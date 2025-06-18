@@ -1,19 +1,6 @@
 --- old.typeArgumentsWithStringLiteralTypes01.js
 +++ new.typeArgumentsWithStringLiteralTypes01.js
-@@= skipped -119, +119 lines =@@
- function fun2(x, y) {
-     return randBool() ? x : y;
- }
--function fun3() {
--    var args = [];
--    for (var _i = 0; _i < arguments.length; _i++) {
--        args[_i] = arguments[_i];
--    }
-+function fun3(...args) {
-     return args[+randBool()];
- }
- var n1;
-@@= skipped -103, +99 lines =@@
+@@= skipped -218, +218 lines =@@
  declare function fun2<T, U>(x: T, y: U): T | U;
  declare function fun3<T>(...args: T[]): T;
  declare namespace n1 {

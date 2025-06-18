@@ -1,33 +1,13 @@
 --- old.noUnusedLocals_destructuringAssignment.js
 +++ new.noUnusedLocals_destructuringAssignment.js
-@@= skipped -18, +18 lines =@@
-
+@@= skipped -19, +19 lines =@@
 
  //// [noUnusedLocals_destructuringAssignment.js]
--var C = /** @class */ (function () {
--    function C() {
+ class C {
+-    constructor() {
 -        this.x = 0;
 -    }
--    C.prototype.m = function () {
--        var x;
--        (x = this.x);
-+class C {
 +    x = 0;
-+    m() {
-+        let x;
-+        ({ x } = this);
-         return x;
--    };
--    C.prototype.f = function () {
--        var f;
--        (f = this.f);
-+    }
-+    f() {
-+        let f;
-+        ({ f } = this);
-         return f;
--    };
--    return C;
--}());
-+    }
-+}
+     m() {
+         let x;
+         ({ x } = this);

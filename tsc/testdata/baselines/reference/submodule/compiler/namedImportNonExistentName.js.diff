@@ -1,12 +1,6 @@
 --- old.namedImportNonExistentName.js
 +++ new.namedImportNonExistentName.js
-@@= skipped -19, +19 lines =@@
-
- //// [foo2.js]
- "use strict";
--var x;
-+let x;
- module.exports = x;
+@@= skipped -24, +24 lines =@@
  //// [bar.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });

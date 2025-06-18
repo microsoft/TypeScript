@@ -1,19 +1,10 @@
 --- old.deleteOperatorWithBooleanType.js
 +++ new.deleteOperatorWithBooleanType.js
-@@= skipped -43, +43 lines =@@
- // delete  operator on boolean type
+@@= skipped -44, +44 lines =@@
  var BOOLEAN;
  function foo() { return true; }
--var A = /** @class */ (function () {
--    function A() {
--    }
--    A.foo = function () { return false; };
--    return A;
--}());
-+class A {
+ class A {
 +    a;
-+    static foo() { return false; }
-+}
+     static foo() { return false; }
+ }
  var M;
- (function (M) {
- })(M || (M = {}));

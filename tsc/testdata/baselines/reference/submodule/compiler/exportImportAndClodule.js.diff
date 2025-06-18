@@ -1,19 +1,10 @@
 --- old.exportImportAndClodule.js
 +++ new.exportImportAndClodule.js
-@@= skipped -23, +23 lines =@@
- //// [exportImportAndClodule.js]
+@@= skipped -24, +24 lines =@@
  var K;
  (function (K) {
--    var L = /** @class */ (function () {
--        function L(name) {
-+    class L {
+     class L {
 +        name;
-+        constructor(name) {
+         constructor(name) {
              this.name = name;
          }
--        return L;
--    }());
-+    }
-     K.L = L;
-     (function (L) {
-         L.y = 12;

@@ -10,19 +10,3 @@
  function md5(string) {
      function FF(a, b, c, d, x, s, ac) {
          return 0;
-@@= skipped -106, +106 lines =@@
-     return {};
- }
- ;
--(function () {
--    var id = 'a';
-+(() => {
-+    let id = 'a';
-     while (1) {
--        var data = getObject(id);
--        var message = data.message;
-+        const data = getObject(id);
-+        const message = data.message;
-         id = message.id;
-     }
- })();

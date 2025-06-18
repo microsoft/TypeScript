@@ -1,8 +1,0 @@
---- old.functionExpressionContextualTyping3.js
-+++ new.functionExpressionContextualTyping3.js
-@@= skipped -6, +6 lines =@@
-
-
- //// [functionExpressionContextualTyping3.js]
--f(function (a) { return ""; });
-+f((a) => "");

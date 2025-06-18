@@ -1,11 +1,10 @@
 --- old.typeOfThisInFunctionExpression.js
 +++ new.typeOfThisInFunctionExpression.js
-@@= skipped -60, +60 lines =@@
-     var x = this;
+@@= skipped -61, +61 lines =@@
      var x;
  };
--var C = /** @class */ (function () {
--    function C() {
+ class C {
+-    constructor() {
 -        this.x = function () {
 -            var q;
 -            var q = this;
@@ -15,9 +14,6 @@
 -            var q = this;
 -        };
 -    }
--    return C;
--}());
-+class C {
 +    x = function () {
 +        var q;
 +        var q = this;
@@ -26,7 +22,6 @@
 +        var q;
 +        var q = this;
 +    };
-+}
+ }
  var M;
  (function (M) {
-     function fn() {

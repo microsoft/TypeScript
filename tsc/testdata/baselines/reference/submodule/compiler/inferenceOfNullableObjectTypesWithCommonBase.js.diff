@@ -6,8 +6,5 @@
  //// [inferenceOfNullableObjectTypesWithCommonBase.js]
 -"use strict";
  function equal(a, b) { }
--var v = null;
-+let v = null;
- equal(v, v);
- equal(v, v);
+ let v = null;
  equal(v, v);

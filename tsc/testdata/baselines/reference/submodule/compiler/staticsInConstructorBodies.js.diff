@@ -4,15 +4,17 @@
  }
 
  //// [staticsInConstructorBodies.js]
--var C = /** @class */ (function () {
--    function C() {
+-let C = (() => {
+-    class C {
+-        constructor() {
+-        }
+-        static m1() { } // ERROR
 +class C {
 +    constructor() {
      }
--    C.m1 = function () { }; // ERROR
 -    C.p1 = 0; // ERROR
 -    return C;
--}());
+-})();
 +    static p1 = 0; // ERROR
 +    static m1() { } // ERROR
 +}

@@ -1,17 +1,10 @@
 --- old.generics3.js
 +++ new.generics3.js
-@@= skipped -9, +9 lines =@@
- a = b; // Ok - should be identical
+@@= skipped -10, +10 lines =@@
 
  //// [generics3.js]
--var C = /** @class */ (function () {
--    function C() {
--    }
--    return C;
--}());
-+class C {
+ class C {
 +    x;
-+}
+ }
  var a;
  var b;
- a = b; // Ok - should be identical

@@ -4,5 +4,5 @@
 
 
  //// [commentOnArrayElement13.js]
--var array = [ /* comment */];
+-const array = [ /* comment */];
 +const array = [ /* comment */ /* comment */];

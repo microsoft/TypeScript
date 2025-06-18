@@ -1,17 +1,10 @@
 --- old.invalidAssignmentsToVoid.js
 +++ new.invalidAssignmentsToVoid.js
-@@= skipped -29, +29 lines =@@
- x = true;
+@@= skipped -30, +30 lines =@@
  x = '';
  x = {};
--var C = /** @class */ (function () {
--    function C() {
--    }
--    return C;
--}());
-+class C {
+ class C {
 +    foo;
-+}
+ }
  var c;
  x = C;
- x = c;

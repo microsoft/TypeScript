@@ -1,20 +1,15 @@
 --- old.classStaticBlock24(module=commonjs).js
 +++ new.classStaticBlock24(module=commonjs).js
-@@= skipped -12, +12 lines =@@
- "use strict";
+@@= skipped -13, +13 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.C = void 0;
--var C = /** @class */ (function () {
--    function C() {
-+class C {
+ class C {
 +    static x;
 +    static {
 +        C.x = 1;
-     }
--    return C;
--}());
-+}
++    }
+ }
  exports.C = C;
--(function () {
+-(() => {
 -    C.x = 1;
 -})();

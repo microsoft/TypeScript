@@ -1,14 +1,10 @@
 --- old.asyncConstructor_es5.js
 +++ new.asyncConstructor_es5.js
-@@= skipped -6, +6 lines =@@
- }
+@@= skipped -7, +7 lines =@@
 
  //// [asyncConstructor_es5.js]
--var C = /** @class */ (function () {
--    function C() {
-+class C {
+ class C {
+-    constructor() {
 +    async constructor() {
      }
--    return C;
--}());
-+}
+ }

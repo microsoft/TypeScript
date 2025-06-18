@@ -1,47 +1,20 @@
 --- old.typeOfThisInStaticMembers.js
 +++ new.typeOfThisInStaticMembers.js
-@@= skipped -36, +36 lines =@@
-
-
+@@= skipped -38, +38 lines =@@
  //// [typeOfThisInStaticMembers.js]
--var C = /** @class */ (function () {
--    function C(x) {
--    }
--    C.bar = function () {
-+class C {
-+    constructor(x) { }
+ class C {
+     constructor(x) { }
 +    static foo;
-+    static bar() {
+     static bar() {
          // type of this is the constructor function type
          var t = this;
-         return this;
--    };
--    return C;
--}());
-+    }
-+}
- var t = C.bar();
- // all ok
- var r2 = t.foo + 1;
+@@= skipped -12, +13 lines =@@
  var r3 = t.bar();
  var r4 = new t(1);
--var C2 = /** @class */ (function () {
--    function C2(x) {
--    }
--    C2.bar = function () {
-+class C2 {
+ class C2 {
 +    static test;
-+    constructor(x) { }
+     constructor(x) { }
 +    static foo;
-+    static bar() {
+     static bar() {
          // type of this is the constructor function type
          var t = this;
-         return this;
--    };
--    return C2;
--}());
-+    }
-+}
- var t2 = C2.bar();
- // all ok
- var r5 = t2.foo + 1;

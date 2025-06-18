@@ -9,12 +9,6 @@
      (function (B) {
      })(B = A.B || (A.B = {}));
  })(A || (A = {}));
- (function (A) {
--    var B;
-+    let B;
-     (function (B) {
-     })(B || (B = {}));
- })(A || (A = {}));
 @@= skipped -14, +14 lines =@@
  var x = A.B.x;
  var X;
@@ -25,33 +19,16 @@
 -        var Z;
 +        let Z;
          (function (Z) {
--            var Line = /** @class */ (function () {
--                function Line() {
--                }
--                return Line;
--            }());
-+            class Line {
+             class Line {
 +                length;
-+            }
+             }
              Z.Line = Line;
          })(Z = Y.Z || (Y.Z = {}));
-     })(Y = X.Y || (X.Y = {}));
- })(X || (X = {}));
- (function (X) {
--    var Y;
-+    let Y;
-     (function (Y) {
--        var Z;
-+        let Z;
+@@= skipped -16, +17 lines =@@
+         let Z;
          (function (Z) {
--            var Line = /** @class */ (function () {
--                function Line() {
--                }
--                return Line;
--            }());
-+            class Line {
+             class Line {
 +                name;
-+            }
+             }
              Z.Line = Line;
          })(Z || (Z = {}));
-     })(Y = X.Y || (X.Y = {}));

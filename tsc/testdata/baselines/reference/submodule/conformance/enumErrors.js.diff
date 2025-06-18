@@ -28,7 +28,7 @@
 -    E11[E11["B"] = new Date()] = "B";
 -    E11[E11["C"] = window] = "C";
 -    E11[E11["D"] = {}] = "D";
--    E11[E11["E"] = (function () { return 'foo'; })()] = "E";
+-    E11[E11["E"] = (() => 'foo')()] = "E";
 +    E11["A"] = true;
 +    if (typeof E11.A !== "string") E11[E11.A] = "A";
 +    E11["B"] = new Date();
@@ -54,7 +54,7 @@
 +    E12["D"] = {};
 +    if (typeof E12.D !== "string") E12[E12.D] = "D";
      E12[E12["E"] = 2] = "E";
--    E12[E12["F"] = (function () { return 'foo'; })()] = "F";
+-    E12[E12["F"] = (() => 'foo')()] = "F";
 +    E12["F"] = (() => 'foo')();
 +    if (typeof E12.F !== "string") E12[E12.F] = "F";
  })(E12 || (E12 = {}));

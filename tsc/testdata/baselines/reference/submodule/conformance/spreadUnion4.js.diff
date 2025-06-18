@@ -15,5 +15,5 @@
 -    };
 -    return __assign.apply(this, arguments);
 -};
--var c = __assign(__assign({}, a), b);
+-const c = __assign(__assign({}, a), b);
 +const c = { ...a, ...b };

@@ -1,28 +1,10 @@
 --- old.typeGuardsOnClassProperty.js
 +++ new.typeGuardsOnClassProperty.js
-@@= skipped -34, +34 lines =@@
- // have no effect on members of objects such as properties. 
+@@= skipped -35, +35 lines =@@
  // Note that the class's property must be copied to a local variable for
  // the type guard to have an effect
--var D = /** @class */ (function () {
--    function D() {
--    }
--    D.prototype.getData = function () {
-+class D {
+ class D {
 +    data;
-+    getData() {
+     getData() {
          var data = this.data;
          return typeof data === "string" ? data : data.join(" ");
--    };
--    D.prototype.getData1 = function () {
-+    }
-+    getData1() {
-         return typeof this.data === "string" ? this.data : this.data.join(" ");
--    };
--    return D;
--}());
-+    }
-+}
- var o = {
-     prop1: "string",
-     prop2: true

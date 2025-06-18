@@ -1,16 +1,10 @@
 --- old.generics4NoError.js
 +++ new.generics4NoError.js
-@@= skipped -8, +8 lines =@@
-
+@@= skipped -9, +9 lines =@@
 
  //// [generics4NoError.js]
--var C = /** @class */ (function () {
--    function C() {
--    }
--    return C;
--}());
-+class C {
+ class C {
 +    x;
-+}
+ }
  var a;
  var b;

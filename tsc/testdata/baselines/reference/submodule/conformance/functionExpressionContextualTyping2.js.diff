@@ -1,8 +1,0 @@
---- old.functionExpressionContextualTyping2.js
-+++ new.functionExpressionContextualTyping2.js
-@@= skipped -22, +22 lines =@@
- //      Otherwise, no contextual signature can be extracted from T and S is undefined.
- var a0;
- var a1;
--a1 = function (foo, bar) { return true; }; // Error
-+a1 = (foo, bar) => { return true; }; // Error

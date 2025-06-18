@@ -1,19 +1,10 @@
 --- old.additionOperatorWithInvalidOperands.js
 +++ new.additionOperatorWithInvalidOperands.js
-@@= skipped -43, +43 lines =@@
-
+@@= skipped -44, +44 lines =@@
  //// [additionOperatorWithInvalidOperands.js]
  function foo() { }
--var C = /** @class */ (function () {
--    function C() {
--    }
--    C.foo = function () { };
--    return C;
--}());
-+class C {
+ class C {
 +    a;
-+    static foo() { }
-+}
+     static foo() { }
+ }
  var E;
- (function (E) {
-     E[E["a"] = 0] = "a";

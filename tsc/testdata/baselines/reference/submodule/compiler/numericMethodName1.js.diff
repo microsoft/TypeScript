@@ -1,15 +1,11 @@
 --- old.numericMethodName1.js
 +++ new.numericMethodName1.js
-@@= skipped -6, +6 lines =@@
-
+@@= skipped -7, +7 lines =@@
 
  //// [numericMethodName1.js]
--var C = /** @class */ (function () {
--    function C() {
+ class C {
+-    constructor() {
 -        this[1] = 2;
 -    }
--    return C;
--}());
-+class C {
 +    1 = 2;
-+}
+ }

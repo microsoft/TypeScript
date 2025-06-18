@@ -1,34 +1,22 @@
 --- old.privacyTopLevelAmbientExternalModuleImportWithExport.js
 +++ new.privacyTopLevelAmbientExternalModuleImportWithExport.js
-@@= skipped -54, +54 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
+@@= skipped -55, +55 lines =@@
  exports.c_public = void 0;
  // Public elements
--var c_public = /** @class */ (function () {
--    function c_public() {
--    }
--    return c_public;
--}());
-+class c_public {
+ class c_public {
 +    foo;
-+}
+ }
  exports.c_public = c_public;
  //// [privacyTopLevelAmbientExternalModuleImportWithExport_require1.js]
- "use strict";
+@@= skipped -7, +8 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.c_public = void 0;
--var c_public = /** @class */ (function () {
--    function c_public() {
--    }
--    return c_public;
--}());
-+class c_public {
+ class c_public {
 +    bar;
-+}
+ }
  exports.c_public = c_public;
  //// [privacyTopLevelAmbientExternalModuleImportWithExport_core.js]
- "use strict";
-@@= skipped -39, +35 lines =@@
+@@= skipped -25, +26 lines =@@
 
 
  //// [privacyTopLevelAmbientExternalModuleImportWithExport_require2.d.ts]

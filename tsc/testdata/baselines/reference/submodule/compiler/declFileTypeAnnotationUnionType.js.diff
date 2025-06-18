@@ -1,57 +1,28 @@
 --- old.declFileTypeAnnotationUnionType.js
 +++ new.declFileTypeAnnotationUnionType.js
-@@= skipped -23, +23 lines =@@
- var y = new g<string>() || new m.g<number>() || (() => new c());
+@@= skipped -24, +24 lines =@@
 
  //// [declFileTypeAnnotationUnionType.js]
--var c = /** @class */ (function () {
--    function c() {
--    }
--    return c;
--}());
-+class c {
+ class c {
 +    p;
-+}
+ }
  var m;
  (function (m) {
--    var c = /** @class */ (function () {
--        function c() {
--        }
--        return c;
--    }());
-+    class c {
+     class c {
 +        q;
-+    }
+     }
      m.c = c;
--    var g = /** @class */ (function () {
--        function g() {
--        }
--        return g;
--    }());
-+    class g {
+     class g {
 +        r;
-+    }
+     }
      m.g = g;
  })(m || (m = {}));
--var g = /** @class */ (function () {
--    function g() {
--    }
--    return g;
--}());
-+class g {
+ class g {
 +    s;
-+}
+ }
  // Just the name
  var k = new c() || new m.c();
- var l = new c() || new m.c();
--var x = new g() || new m.g() || (function () { return new c(); });
--var y = new g() || new m.g() || (function () { return new c(); });
-+var x = new g() || new m.g() || (() => new c());
-+var y = new g() || new m.g() || (() => new c());
-
-
- //// [declFileTypeAnnotationUnionType.d.ts]
-@@= skipped -47, +39 lines =@@
+@@= skipped -34, +38 lines =@@
  declare class g<T> {
      private s;
  }

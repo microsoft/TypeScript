@@ -1,16 +1,9 @@
 --- old.declarationFileOverwriteError.js
 +++ new.declarationFileOverwriteError.js
-@@= skipped -8, +8 lines =@@
- }
-
+@@= skipped -10, +10 lines =@@
  //// [a.js]
--var d = /** @class */ (function () {
--    function d() {
--    }
--    return d;
--}());
-+class d {
-+}
+ class d {
+ }
 +
 +
 +//// [a.d.ts]

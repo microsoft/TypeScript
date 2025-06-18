@@ -1,38 +1,12 @@
 --- old.clinterfaces.js
 +++ new.clinterfaces.js
-@@= skipped -30, +30 lines =@@
- "use strict";
- var M;
- (function (M) {
--    var C = /** @class */ (function () {
--        function C() {
--        }
--        return C;
--    }());
--    var D = /** @class */ (function () {
--        function D() {
--        }
--        return D;
--    }());
-+    class C {
-+    }
-+    class D {
-+    }
+@@= skipped -36, +36 lines =@@
+     }
  })(M || (M = {}));
--var Foo = /** @class */ (function () {
--    function Foo() {
--    }
--    return Foo;
--}());
--var Bar = /** @class */ (function () {
--    function Bar() {
--    }
--    return Bar;
--}());
-+class Foo {
+ class Foo {
 +    b;
-+}
-+class Bar {
+ }
+ class Bar {
 +    b;
-+}
+ }
  module.exports = Foo;

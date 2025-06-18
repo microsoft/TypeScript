@@ -1,66 +1,38 @@
 --- old.importDecl.js
 +++ new.importDecl.js
-@@= skipped -85, +85 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
+@@= skipped -86, +86 lines =@@
  exports.x = exports.d = void 0;
  exports.foo = foo;
--var d = /** @class */ (function () {
--    function d() {
--    }
--    return d;
--}());
-+class d {
+ class d {
 +    foo;
-+}
+ }
  exports.d = d;
  function foo() { return null; }
- //// [importDecl_require1.js]
-@@= skipped -12, +10 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
+@@= skipped -9, +10 lines =@@
  exports.d = void 0;
  exports.foo = foo;
--var d = /** @class */ (function () {
--    function d() {
--    }
--    return d;
--}());
-+class d {
+ class d {
 +    bar;
-+}
+ }
  exports.d = d;
  var x;
- function foo() { return null; }
-@@= skipped -13, +11 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
+@@= skipped -10, +11 lines =@@
  exports.x = exports.d = void 0;
  exports.foo = foo;
--var d = /** @class */ (function () {
--    function d() {
--    }
--    return d;
--}());
-+class d {
+ class d {
 +    baz;
-+}
+ }
  exports.d = d;
  function foo() { return null; }
- //// [importDecl_require3.js]
-@@= skipped -12, +10 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
+@@= skipped -9, +10 lines =@@
  exports.x = exports.d = void 0;
  exports.foo = foo;
--var d = /** @class */ (function () {
--    function d() {
--    }
--    return d;
--}());
-+class d {
+ class d {
 +    bing;
-+}
+ }
  exports.d = d;
  function foo() { return null; }
- //// [importDecl_require4.js]
-@@= skipped -21, +19 lines =@@
+@@= skipped -17, +18 lines =@@
  ///<reference path='importDecl_require2.ts'/>
  ///<reference path='importDecl_require3.ts'/>
  ///<reference path='importDecl_require4.ts'/>

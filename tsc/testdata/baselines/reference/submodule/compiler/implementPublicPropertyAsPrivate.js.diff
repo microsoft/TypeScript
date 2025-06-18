@@ -1,15 +1,11 @@
 --- old.implementPublicPropertyAsPrivate.js
 +++ new.implementPublicPropertyAsPrivate.js
-@@= skipped -8, +8 lines =@@
- }
+@@= skipped -9, +9 lines =@@
 
  //// [implementPublicPropertyAsPrivate.js]
--var C = /** @class */ (function () {
--    function C() {
+ class C {
+-    constructor() {
 -        this.x = 0; // should raise error at class decl
 -    }
--    return C;
--}());
-+class C {
 +    x = 0; // should raise error at class decl
-+}
+ }

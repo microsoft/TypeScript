@@ -15,5 +15,5 @@
 -        }
 -    return t;
 -};
--var b = __rest({}, []);
+-const b = __rest({}, []);
 +const { ...a: b } = {};

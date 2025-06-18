@@ -4,17 +4,20 @@
 
 
  //// [typeOfThisInStaticMembers5.js]
--var C = /** @class */ (function () {
--    function C(foo) {
+-let C = (() => {
+-    var _a;
+-    class C {
+-        constructor(foo) {
+-            this.foo = foo;
+-        }
 +class C {
 +    foo;
 +    static create = () => new this("yep");
 +    constructor(foo) {
-         this.foo = foo;
++        this.foo = foo;
      }
--    var _a;
 -    _a = C;
--    C.create = function () { return new _a("yep"); };
+-    C.create = () => new _a("yep");
 -    return C;
--}());
+-})();
 +}

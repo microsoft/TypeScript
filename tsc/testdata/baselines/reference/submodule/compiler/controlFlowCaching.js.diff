@@ -1,9 +1,0 @@
---- old.controlFlowCaching.js
-+++ new.controlFlowCaching.js
-@@= skipped -116, +116 lines =@@
-             labelOffset.y -= size;
-             break;
-     }
--    var _ = rotation;
-+    let _ = rotation;
- }

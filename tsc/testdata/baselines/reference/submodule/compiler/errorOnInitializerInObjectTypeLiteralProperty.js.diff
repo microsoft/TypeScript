@@ -1,8 +1,0 @@
---- old.errorOnInitializerInObjectTypeLiteralProperty.js
-+++ new.errorOnInitializerInObjectTypeLiteralProperty.js
-@@= skipped -11, +11 lines =@@
-
- //// [errorOnInitializerInObjectTypeLiteralProperty.js]
- var Foo;
--var Bar;
-+let Bar;

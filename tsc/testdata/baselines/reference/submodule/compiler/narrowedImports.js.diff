@@ -7,11 +7,9 @@
 -var a_1 = require("./a");
 -var b0 = require("./b");
 -var b1 = require("./b");
--var x;
 +const a_1 = require("./a");
 +const b0 = require("./b");
 +const b1 = require("./b");
-+let x;
+ let x;
  if (a_1.default)
      x = a_1.default;
- if (a_1.a1)

@@ -1,41 +1,10 @@
 --- old.typeGuardOfFormTypeOfOther.js
 +++ new.typeGuardOfFormTypeOfOther.js
-@@= skipped -83, +83 lines =@@
-
+@@= skipped -84, +84 lines =@@
 
  //// [typeGuardOfFormTypeOfOther.js]
--var C = /** @class */ (function () {
--    function C() {
--    }
--    return C;
--}());
-+class C {
+ class C {
 +    p;
-+}
+ }
  ;
  var str;
- var bool;
-@@= skipped -47, +45 lines =@@
-     var r5 = strOrC; // error: no narrowing to string
- }
- if (typeof strOrNumOrBool === "Object") {
--    var q1 = strOrNumOrBool; // {}
-+    let q1 = strOrNumOrBool; // {}
- }
- else {
--    var q2 = strOrNumOrBool; // string | number | boolean
-+    let q2 = strOrNumOrBool; // string | number | boolean
- }
- // A type guard of the form typeof x !== s, where s is a string literal,
- //  - when true, narrows the type of x by typeof x === s when false, or
-@@= skipped -27, +27 lines =@@
-     c = boolOrC; // C
- }
- if (typeof strOrNumOrBool !== "Object") {
--    var q1 = strOrNumOrBool; // string | number | boolean
-+    let q1 = strOrNumOrBool; // string | number | boolean
- }
- else {
--    var q2 = strOrNumOrBool; // {}
-+    let q2 = strOrNumOrBool; // {}
- }

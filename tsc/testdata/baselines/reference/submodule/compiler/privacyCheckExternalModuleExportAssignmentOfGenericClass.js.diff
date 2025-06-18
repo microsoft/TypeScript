@@ -1,19 +1,10 @@
 --- old.privacyCheckExternalModuleExportAssignmentOfGenericClass.js
 +++ new.privacyCheckExternalModuleExportAssignmentOfGenericClass.js
-@@= skipped -14, +14 lines =@@
-
+@@= skipped -15, +15 lines =@@
  //// [privacyCheckExternalModuleExportAssignmentOfGenericClass_0.js]
  "use strict";
--var Foo = /** @class */ (function () {
--    function Foo(a) {
-+class Foo {
+ class Foo {
 +    a;
-+    constructor(a) {
+     constructor(a) {
          this.a = a;
      }
--    return Foo;
--}());
-+}
- module.exports = Foo;
- //// [privacyCheckExternalModuleExportAssignmentOfGenericClass_1.js]
- "use strict";

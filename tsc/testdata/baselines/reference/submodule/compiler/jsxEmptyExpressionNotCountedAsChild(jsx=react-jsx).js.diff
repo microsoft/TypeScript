@@ -10,5 +10,5 @@
 -    return (0, jsx_runtime_1.jsx)("div", { children: props.children });
 +    return jsx_runtime_1.jsx("div", { children: props.children });
  }
--var element = ((0, jsx_runtime_1.jsx)(Wrapper, { children: (0, jsx_runtime_1.jsx)("div", { children: "Hello" }) }));
+-const element = ((0, jsx_runtime_1.jsx)(Wrapper, { children: (0, jsx_runtime_1.jsx)("div", { children: "Hello" }) }));
 +const element = (jsx_runtime_1.jsx(Wrapper, { children: jsx_runtime_1.jsx("div", { children: "Hello" }) }));

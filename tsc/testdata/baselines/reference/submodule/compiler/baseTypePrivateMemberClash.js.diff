@@ -1,22 +1,11 @@
 --- old.baseTypePrivateMemberClash.js
 +++ new.baseTypePrivateMemberClash.js
-@@= skipped -10, +10 lines =@@
- interface Z extends X, Y { }
+@@= skipped -11, +11 lines =@@
 
  //// [baseTypePrivateMemberClash.js]
--var X = /** @class */ (function () {
--    function X() {
--    }
--    return X;
--}());
--var Y = /** @class */ (function () {
--    function Y() {
--    }
--    return Y;
--}());
-+class X {
+ class X {
 +    m;
-+}
-+class Y {
+ }
+ class Y {
 +    m;
-+}
+ }

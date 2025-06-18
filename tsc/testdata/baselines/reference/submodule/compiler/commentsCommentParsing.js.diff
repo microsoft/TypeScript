@@ -1,16 +1,6 @@
 --- old.commentsCommentParsing.js
 +++ new.commentsCommentParsing.js
-@@= skipped -284, +284 lines =@@
-     return a + b + c + d;
- }
- /**/
--var NoQuickInfoClass = /** @class */ (function () {
--    function NoQuickInfoClass() {
--    }
--    return NoQuickInfoClass;
--}());
-+class NoQuickInfoClass {
-+}
+@@= skipped -289, +289 lines =@@
 
 
  //// [commentsCommentParsing.d.ts]
@@ -22,7 +12,7 @@
  declare function multiLine(): void;
  /** this is eg of single line jsdoc style comment */
  declare function jsDocSingleLine(): void;
-@@= skipped -22, +23 lines =@@
+@@= skipped -14, +18 lines =@@
  /** Shoul mege this line as well
  * and this too*/ /** Another this one too*/
  declare function jsDocMultiLineMerge(): void;

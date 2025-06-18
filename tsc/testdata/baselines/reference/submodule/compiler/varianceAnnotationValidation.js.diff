@@ -7,23 +7,9 @@
 -"use strict";
 -// Repro from #49607
  ;
--var Dog = /** @class */ (function () {
--    function Dog() {
--    }
--    Dog.prototype.run = function () { };
--    ;
--    Dog.prototype.bark = function () { };
--    ;
--    return Dog;
--}());
-+class Dog {
-+    run() { }
-+    ;
-+    bark() { }
-+    ;
-+}
- ca = cd; // Ok
- cd = ca; // Error
+ class Dog {
+     run() { }
+@@= skipped -14, +12 lines =@@
 
 
  //// [varianceAnnotationValidation.d.ts]

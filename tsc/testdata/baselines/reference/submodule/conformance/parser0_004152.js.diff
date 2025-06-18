@@ -1,14 +1,12 @@
 --- old.parser0_004152.js
 +++ new.parser0_004152.js
-@@= skipped -9, +9 lines =@@
- "use strict";
+@@= skipped -10, +10 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.Game = void 0;
--var Game = /** @class */ (function () {
--    function Game() {
+ class Game {
+-    constructor() {
 -        this.position = new DisplayPosition([]);
 -    }
-+class Game {
 +    position = new DisplayPosition([]);
 +    3;
 +    3;
@@ -26,8 +24,6 @@
 +    NoMove;
 +    0;
      ;
--    return Game;
--}());
 +    prevConfig;
-+}
+ }
  exports.Game = Game;

@@ -1,18 +1,11 @@
 --- old.invalidInstantiatedModule.js
 +++ new.invalidInstantiatedModule.js
-@@= skipped -19, +19 lines =@@
- //// [invalidInstantiatedModule.js]
+@@= skipped -20, +20 lines =@@
  var M;
  (function (M) {
--    var Point = /** @class */ (function () {
--        function Point() {
--        }
--        return Point;
--    }());
-+    class Point {
+     class Point {
 +        x;
 +        y;
-+    }
+     }
      M.Point = Point;
      M.Point = 1; // Error
- })(M || (M = {}));

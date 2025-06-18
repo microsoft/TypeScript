@@ -1,44 +1,6 @@
 --- old.declarationEmitDetachedComment1.js
 +++ new.declarationEmitDetachedComment1.js
-@@= skipped -35, +35 lines =@@
- /**
-  * Hello class
-  */
--var Hello = /** @class */ (function () {
--    function Hello() {
--    }
--    return Hello;
--}());
-+class Hello {
-+}
- //// [test2.js]
- /* A comment at the top of the file. */
- /**
-  * Hi class
-  */
--var Hi = /** @class */ (function () {
--    function Hi() {
--    }
--    return Hi;
--}());
-+class Hi {
-+}
- //// [test3.js]
- // A one-line comment at the top of the file.
- /**
-  * Hola class
-  */
--var Hola = /** @class */ (function () {
--    function Hola() {
--    }
--    return Hola;
--}());
-+class Hola {
-+}
-
-
- //// [test1.d.ts]
-@@= skipped -35, +26 lines =@@
+@@= skipped -61, +61 lines =@@
  declare class Hello {
  }
  //// [test2.d.ts]

@@ -6,11 +6,8 @@
  //// [sourceMapValidationExportAssignment.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";
--    var a = /** @class */ (function () {
--        function a() {
--        }
--        return a;
--    }());
+-    class a {
+-    }
 -    return a;
 -});
 +"use strict";

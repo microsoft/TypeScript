@@ -9,9 +9,3 @@
  exports.x = React.createElement("span", tslib_1.__assign({}, o));
  //// [script.js]
  var __assign = (this && this.__assign) || function () {
-@@= skipped -14, +14 lines =@@
-     };
-     return __assign.apply(this, arguments);
- };
--var x = React.createElement("span", __assign({}, o));
-+const x = React.createElement("span", __assign({}, o));

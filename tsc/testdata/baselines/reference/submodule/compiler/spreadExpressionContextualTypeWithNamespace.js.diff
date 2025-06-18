@@ -11,17 +11,9 @@
  exports.exportedDirectly = exportedDirectly;
 +// Repro from #44179 with some modification
  function func() { }
--var klass = /** @class */ (function () {
--    function klass() {
--    }
--    return klass;
--}());
-+class klass {
-+}
- exports.klass = klass;
--var obj = { x: true };
-+const obj = { x: true };
- exports.obj = obj;
+ class klass {
+ }
+@@= skipped -14, +14 lines =@@
  function exportedDirectly() { }
  //// [spreadExpressionContextualTypeWithNamespace_1.js]
  "use strict";
@@ -44,7 +36,7 @@
  stuff.obj;
  stuff.exportedDirectly;
  function getStuff() {
--    var thing = __assign({}, stuff);
+-    const thing = __assign({}, stuff);
 +    const thing = { ...stuff };
      thing.func;
      thing.klass;

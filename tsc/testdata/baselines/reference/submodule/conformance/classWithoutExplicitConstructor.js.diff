@@ -1,32 +1,25 @@
 --- old.classWithoutExplicitConstructor.js
 +++ new.classWithoutExplicitConstructor.js
-@@= skipped -17, +17 lines =@@
- var d2 = new D(null); // error
+@@= skipped -18, +18 lines =@@
 
  //// [classWithoutExplicitConstructor.js]
--var C = /** @class */ (function () {
--    function C() {
+ class C {
+-    constructor() {
 -        this.x = 1;
 -        this.y = 'hello';
 -    }
--    return C;
--}());
-+class C {
 +    x = 1;
 +    y = 'hello';
-+}
+ }
  var c = new C();
  var c2 = new C(null); // error
--var D = /** @class */ (function () {
--    function D() {
+ class D {
+-    constructor() {
 -        this.x = 2;
 -        this.y = null;
 -    }
--    return D;
--}());
-+class D {
 +    x = 2;
 +    y = null;
-+}
+ }
  var d = new D();
  var d2 = new D(null); // error

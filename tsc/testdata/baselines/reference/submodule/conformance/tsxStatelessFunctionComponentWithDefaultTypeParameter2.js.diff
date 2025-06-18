@@ -11,7 +11,7 @@
 -        return <div>attr.values</div>;
 -    }
 -    // Error
--    var i1 = <MyComponent1 values={5}/>;
+-    let i1 = <MyComponent1 values={5}/>;
 -});
 +"use strict";
 +Object.defineProperty(exports, "__esModule", { value: true });

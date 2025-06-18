@@ -1,18 +1,11 @@
 --- old.objectTypeWithNumericProperty.js
 +++ new.objectTypeWithNumericProperty.js
-@@= skipped -46, +46 lines =@@
-
+@@= skipped -47, +47 lines =@@
  //// [objectTypeWithNumericProperty.js]
  // no errors here
--var C = /** @class */ (function () {
--    function C() {
--    }
--    return C;
--}());
-+class C {
+ class C {
 +    1;
 +    1.1;
-+}
+ }
  var c;
  var r1 = c[1];
- var r2 = c[1.1];

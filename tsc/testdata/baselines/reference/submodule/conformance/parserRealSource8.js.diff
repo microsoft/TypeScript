@@ -1,62 +1,27 @@
 --- old.parserRealSource8.js
 +++ new.parserRealSource8.js
-@@= skipped -473, +473 lines =@@
- ///<reference path='typescript.ts' />
+@@= skipped -474, +474 lines =@@
  var TypeScript;
  (function (TypeScript) {
--    var AssignScopeContext = /** @class */ (function () {
--        function AssignScopeContext(scopeChain, typeFlow, modDeclChain) {
-+    class AssignScopeContext {
+     class AssignScopeContext {
 +        scopeChain;
 +        typeFlow;
 +        modDeclChain;
-+        constructor(scopeChain, typeFlow, modDeclChain) {
+         constructor(scopeChain, typeFlow, modDeclChain) {
              this.scopeChain = scopeChain;
              this.typeFlow = typeFlow;
-             this.modDeclChain = modDeclChain;
-         }
--        return AssignScopeContext;
--    }());
-+    }
-     TypeScript.AssignScopeContext = AssignScopeContext;
-     function pushAssignScope(scope, context, type, classType, fnc) {
-         var chain = new ScopeChain(null, context.scopeChain, scope);
-@@= skipped -34, +36 lines =@@
-         return s.isInstanceProperty();
+@@= skipped -33, +36 lines =@@
      }
      TypeScript.instanceFilterStop = instanceFilterStop;
--    var ScopeSearchFilter = /** @class */ (function () {
--        function ScopeSearchFilter(select, stop) {
-+    class ScopeSearchFilter {
+     class ScopeSearchFilter {
 +        select;
 +        stop;
-+        constructor(select, stop) {
+         constructor(select, stop) {
              this.select = select;
              this.stop = stop;
 -            this.result = null;
--        }
--        ScopeSearchFilter.prototype.reset = function () {
--            this.result = null;
--        };
--        ScopeSearchFilter.prototype.update = function (b) {
-+        }
+         }
 +        result = null;
-+        reset() {
-+            this.result = null;
-+        }
-+        update(b) {
-             this.result = this.select(this.result, b);
-             if (this.result) {
-                 return this.stop(this.result);
-@@= skipped -17, +19 lines =@@
-             else {
-                 return false;
-             }
--        };
--        return ScopeSearchFilter;
--    }());
-+        }
-+    }
-     TypeScript.ScopeSearchFilter = ScopeSearchFilter;
-     TypeScript.instanceFilter = new ScopeSearchFilter(instanceCompare, instanceFilterStop);
-     function preAssignModuleScopes(ast, context) {
+         reset() {
+             this.result = null;
+         }

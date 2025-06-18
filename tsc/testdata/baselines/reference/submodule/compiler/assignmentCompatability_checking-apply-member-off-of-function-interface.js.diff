@@ -8,9 +8,3 @@
  var x;
  // Should fail
  x = '';
-@@= skipped -18, +17 lines =@@
- fn(4);
- fn({});
- // Should work
--fn(function (a) { });
-+fn(a => { });

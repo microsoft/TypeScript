@@ -6,17 +6,10 @@
  //// [nonNullableTypes1.js]
 -"use strict";
  function f1(x) {
--    var y = x || "hello"; // NonNullable<T> | string
-+    let y = x || "hello"; // NonNullable<T> | string
+     let y = x || "hello"; // NonNullable<T> | string
  }
- function error() {
-     throw new Error();
-@@= skipped -11, +10 lines =@@
-     return x || error();
- }
- function f3(x) {
--    var y = x; // {}
-+    let y = x; // {}
+@@= skipped -14, +13 lines =@@
+     let y = x; // {}
  }
  function f4(obj) {
 -    if ((obj === null || obj === void 0 ? void 0 : obj.x) === "hello") {
@@ -26,18 +19,6 @@
 -        obj; // NonNullable<T>
 -    }
 -    if (typeof (obj === null || obj === void 0 ? void 0 : obj.x) === "string") {
--        obj; // NonNullable<T>
--    }
--}
--var A = /** @class */ (function () {
--    function A() {
--        this.x = "hello";
--    }
--    A.prototype.foo = function () {
--        var zz = this === null || this === void 0 ? void 0 : this.x; // string
--    };
--    return A;
--}());
 +    if (obj?.x === "hello") {
 +        obj; // NonNullable<T>
 +    }
@@ -45,15 +26,16 @@
 +        obj; // NonNullable<T>
 +    }
 +    if (typeof obj?.x === "string") {
-+        obj; // NonNullable<T>
-+    }
-+}
-+class A {
+         obj; // NonNullable<T>
+     }
+ }
+ class A {
+-    constructor() {
+-        this.x = "hello";
+-    }
 +    x = "hello";
-+    foo() {
+     foo() {
+-        let zz = this === null || this === void 0 ? void 0 : this.x; // string
 +        let zz = this?.x; // string
-+    }
-+}
-
-
- //// [nonNullableTypes1.d.ts]
+     }
+ }

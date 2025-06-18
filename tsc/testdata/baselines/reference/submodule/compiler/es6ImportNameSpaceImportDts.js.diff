@@ -1,19 +1,6 @@
 --- old.es6ImportNameSpaceImportDts.js
 +++ new.es6ImportNameSpaceImportDts.js
-@@= skipped -11, +11 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.c = void 0;
--var c = /** @class */ (function () {
--    function c() {
--    }
--    return c;
--}());
-+class c {
-+}
- exports.c = c;
- ;
- //// [client.js]
+@@= skipped -19, +19 lines =@@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.x = void 0;

@@ -4,11 +4,11 @@
 
 
  //// [classStaticBlock9.js]
--var A = /** @class */ (function () {
--    function A() {
+-let A = (() => {
+-    class A {
 -    }
 -    A.bar = A.foo + 1;
--    (function () {
+-    (() => {
 +class A {
 +    static bar = A.foo + 1;
 +    static {
@@ -16,7 +16,7 @@
 -    })();
 -    A.foo = 1;
 -    return A;
--}());
+-})();
 +    }
 +    static foo = 1;
 +}

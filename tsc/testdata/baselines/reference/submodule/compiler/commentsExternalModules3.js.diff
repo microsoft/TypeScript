@@ -1,42 +1,6 @@
 --- old.commentsExternalModules3.js
 +++ new.commentsExternalModules3.js
-@@= skipped -71, +71 lines =@@
-         return m1.b;
-     }
-     /** m2 comments*/
--    var m2;
-+    let m2;
-     (function (m2) {
-         /** class comment;*/
--        var c = /** @class */ (function () {
--            function c() {
--            }
--            return c;
--        }());
-+        class c {
-+        }
-         m2.c = c;
-         ;
-         /** i*/
-@@= skipped -31, +28 lines =@@
-     }
-     /** m2 comments
-     */
--    var m2;
-+    let m2;
-     (function (m2) {
-         /** class comment; */
--        var c = /** @class */ (function () {
--            function c() {
--            }
--            return c;
--        }());
-+        class c {
-+        }
-         m2.c = c;
-         ;
-         /** i */
-@@= skipped -26, +23 lines =@@
+@@= skipped -122, +122 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.newVar2 = exports.newVar = void 0;
  /**This is on import declaration*/

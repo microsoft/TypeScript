@@ -1,48 +1,26 @@
 --- old.callSignatureWithoutReturnTypeAnnotationInference.js
 +++ new.callSignatureWithoutReturnTypeAnnotationInference.js
-@@= skipped -174, +174 lines =@@
-     return i;
+@@= skipped -175, +175 lines =@@
  }
  var r9 = foo9(1);
--var C = /** @class */ (function () {
--    function C() {
--    }
--    return C;
--}());
-+class C {
+ class C {
 +    foo;
-+}
+ }
  function foo10(x) {
      var c;
-     return c;
-@@= skipped -13, +11 lines =@@
- var M;
+@@= skipped -10, +11 lines =@@
  (function (M) {
      M.x = 1;
--    var C = /** @class */ (function () {
--        function C() {
--        }
--        return C;
--    }());
-+    class C {
+     class C {
 +        foo;
-+    }
+     }
      M.C = C;
  })(M || (M = {}));
- function foo11() {
-@@= skipped -24, +22 lines =@@
-     return m1;
+@@= skipped -21, +22 lines =@@
  }
  var r13 = foo13();
--var c1 = /** @class */ (function () {
--    function c1(x) {
--    }
--    return c1;
--}());
-+class c1 {
+ class c1 {
 +    foo;
-+    constructor(x) { }
-+}
+     constructor(x) { }
+ }
  (function (c1) {
-     c1.x = 1;
- })(c1 || (c1 = {}));

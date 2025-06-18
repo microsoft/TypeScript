@@ -1,39 +1,12 @@
 --- old.tsxEmit3.js
 +++ new.tsxEmit3.js
-@@= skipped -44, +44 lines =@@
- //// [file.jsx]
- var M;
- (function (M) {
--    var Foo = /** @class */ (function () {
--        function Foo() {
--        }
--        return Foo;
--    }());
-+    class Foo {
-+        constructor() { }
-+    }
-     M.Foo = Foo;
--    var S;
-+    let S;
-     (function (S) {
--        var Bar = /** @class */ (function () {
--            function Bar() {
--            }
--            return Bar;
--        }());
-+        class Bar {
-+        }
-         S.Bar = Bar;
-         // Emit Foo
-         // Foo, <Foo />;
-@@= skipped -20, +15 lines =@@
+@@= skipped -59, +59 lines =@@
  })(M || (M = {}));
  (function (M) {
      // Emit M.Foo
 -    M.Foo, <M.Foo />;
--    var S;
 +    Foo, <Foo />;
-+    let S;
+     let S;
      (function (S) {
          // Emit M.Foo
 -        M.Foo, <M.Foo />;

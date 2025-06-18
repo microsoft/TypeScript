@@ -8,7 +8,7 @@
 -    "use strict";
 -    var _a;
 -    Object.defineProperty(exports, "__esModule", { value: true });
--    exports._b = _a = [];
+-    _a = [];
 -});
 +"use strict";
 +Object.defineProperty(exports, "__esModule", { value: true });

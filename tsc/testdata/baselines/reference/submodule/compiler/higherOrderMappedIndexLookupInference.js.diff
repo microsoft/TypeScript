@@ -1,8 +1,0 @@
---- old.higherOrderMappedIndexLookupInference.js
-+++ new.higherOrderMappedIndexLookupInference.js
-@@= skipped -41, +41 lines =@@
-     a = b;
-     b = a;
- }
--var h = f;
-+const h = f;

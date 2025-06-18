@@ -1,20 +1,11 @@
 --- old.ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.js
 +++ new.ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.js
-@@= skipped -17, +17 lines =@@
-
+@@= skipped -18, +18 lines =@@
 
  //// [ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.js]
--var clodule = /** @class */ (function () {
--    function clodule() {
--    }
--    clodule.fn = function (id) { };
--    return clodule;
--}());
-+class clodule {
+ class clodule {
 +    id;
 +    value;
-+    static fn(id) { }
-+}
+     static fn(id) { }
+ }
  (function (clodule) {
-     // error: duplicate identifier expected
-     function fn(x, y) {

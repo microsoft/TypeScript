@@ -25,7 +25,7 @@
  }
  var whatevs = 1001;
  var ques = 'what';
--var g = function (n, m) { return n + m; };
+-var g = (n, m) => n + m;
 +var g;
 +(number, number);
 +number = (n, m) => n + m;

@@ -19,13 +19,11 @@
  function f0(obj) {
      obj.b;
  }
-@@= skipped -30, +18 lines =@@
-     obj.a;
+@@= skipped -31, +19 lines =@@
      obj.c;
  }
--var modifier = function (targetProps) {
--    var bar = targetProps.bar, rest = __rest(targetProps, ["bar"]);
-+const modifier = (targetProps) => {
+ const modifier = (targetProps) => {
+-    let { bar } = targetProps, rest = __rest(targetProps, ["bar"]);
 +    let { bar, ...rest } = targetProps;
      rest.foo;
  };

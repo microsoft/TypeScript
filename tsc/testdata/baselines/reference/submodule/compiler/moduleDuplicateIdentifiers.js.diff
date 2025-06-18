@@ -1,28 +1,20 @@
 --- old.moduleDuplicateIdentifiers.js
 +++ new.moduleDuplicateIdentifiers.js
-@@= skipped -54, +54 lines =@@
- (function (FooBar) {
+@@= skipped -55, +55 lines =@@
      FooBar.member2 = 42;
  })(FooBar || (exports.FooBar = FooBar = {}));
--var Kettle = /** @class */ (function () {
--    function Kettle() {
+ class Kettle {
+-    constructor() {
 -        this.member1 = 2;
 -    }
--    return Kettle;
--}());
-+class Kettle {
 +    member1 = 2;
-+}
+ }
  exports.Kettle = Kettle;
--var Kettle = /** @class */ (function () {
--    function Kettle() {
+ class Kettle {
+-    constructor() {
 -        this.member2 = 42;
 -    }
--    return Kettle;
--}());
-+class Kettle {
 +    member2 = 42;
-+}
+ }
  exports.Kettle = Kettle;
  exports.Pot = 2;
- exports.Pot = 42; // Shouldn't error

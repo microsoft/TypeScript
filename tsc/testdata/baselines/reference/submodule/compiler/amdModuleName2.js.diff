@@ -8,14 +8,10 @@
 -    "use strict";
 -    ///<amd-module name='FirstModuleName'/>
 -    ///<amd-module name='SecondModuleName'/>
--    var Foo = /** @class */ (function () {
--        function Foo() {
+-    class Foo {
+-        constructor() {
 -            this.x = 5;
 -        }
--        return Foo;
--    }());
--    return Foo;
--});
 +"use strict";
 +///<amd-module name='FirstModuleName'/>
 +///<amd-module name='SecondModuleName'/>
@@ -23,6 +19,8 @@
 +    x;
 +    constructor() {
 +        this.x = 5;
-+    }
+     }
+-    return Foo;
+-});
 +}
 +module.exports = Foo;

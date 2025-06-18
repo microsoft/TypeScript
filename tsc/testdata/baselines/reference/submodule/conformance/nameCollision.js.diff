@@ -1,39 +1,19 @@
 --- old.nameCollision.js
 +++ new.nameCollision.js
-@@= skipped -62, +62 lines =@@
- (function (B_1) {
+@@= skipped -63, +63 lines =@@
      // re-opened module with colliding name
      // this should add an underscore.
--    var B = /** @class */ (function () {
--        function B() {
--        }
--        return B;
--    }());
-+    class B {
+     class B {
 +        name;
-+    }
+     }
  })(B || (B = {}));
  var X;
- (function (X_1) {
-     var X = 13;
--    var Y;
-+    let Y;
-     (function (Y_1) {
-         var Y = 13;
--        var Z;
-+        let Z;
-         (function (Z_1) {
-             var X = 12;
-             var Y = 12;
-@@= skipped -22, +20 lines =@@
+@@= skipped -18, +19 lines =@@
  })(X || (X = {}));
  var Y;
  (function (Y_2) {
 -    var Y;
 +    let Y;
      (function (Y_3) {
--        var Y;
-+        let Y;
+         let Y;
          (function (Y) {
-             Y[Y["Red"] = 0] = "Red";
-             Y[Y["Blue"] = 1] = "Blue";

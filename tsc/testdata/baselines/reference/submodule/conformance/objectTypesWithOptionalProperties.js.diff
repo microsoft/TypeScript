@@ -1,25 +1,13 @@
 --- old.objectTypesWithOptionalProperties.js
 +++ new.objectTypesWithOptionalProperties.js
-@@= skipped -29, +29 lines =@@
- //// [objectTypesWithOptionalProperties.js]
+@@= skipped -30, +30 lines =@@
  // Basic uses of optional properties
  var a;
--var C = /** @class */ (function () {
--    function C() {
--    }
--    return C;
--}());
--var C2 = /** @class */ (function () {
--    function C2() {
--    }
--    return C2;
--}());
-+class C {
+ class C {
 +    x; // ok
-+}
-+class C2 {
+ }
+ class C2 {
 +    x; // ok
-+}
+ }
  var b = {
      x: 1 // error
- };

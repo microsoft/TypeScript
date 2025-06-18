@@ -1,17 +1,10 @@
 --- old.switchComparableCompatForBrands.js
 +++ new.switchComparableCompatForBrands.js
-@@= skipped -16, +16 lines =@@
-
+@@= skipped -17, +17 lines =@@
 
  //// [switchComparableCompatForBrands.js]
--var MyBrand = /** @class */ (function () {
--    function MyBrand() {
--    }
--    return MyBrand;
--}());
-+class MyBrand {
+ class MyBrand {
 +    _a;
-+}
+ }
  function test(strInput) {
      switch (strInput) {
-         case "a":

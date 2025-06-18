@@ -1,26 +1,15 @@
 --- old.exportNonVisibleType.js
 +++ new.exportNonVisibleType.js
-@@= skipped -40, +40 lines =@@
- module.exports = x;
+@@= skipped -41, +41 lines =@@
  //// [foo2.js]
  "use strict";
--var C1 = /** @class */ (function () {
--    function C1() {
--    }
--    return C1;
--}());
-+class C1 {
+ class C1 {
 +    m1;
-+}
+ }
  module.exports = C1;
  //// [foo3.js]
  "use strict";
--var C1 = /** @class */ (function () {
--    function C1() {
--    }
--    return C1;
--}());
-+class C1 {
+ class C1 {
 +    m1;
-+}
+ }
  module.exports = C1;

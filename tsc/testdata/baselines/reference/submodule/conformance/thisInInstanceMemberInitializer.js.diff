@@ -1,25 +1,18 @@
 --- old.thisInInstanceMemberInitializer.js
 +++ new.thisInInstanceMemberInitializer.js
-@@= skipped -10, +10 lines =@@
- }
+@@= skipped -11, +11 lines =@@
 
  //// [thisInInstanceMemberInitializer.js]
--var C = /** @class */ (function () {
--    function C() {
+ class C {
+-    constructor() {
 -        this.x = this;
 -    }
--    return C;
--}());
--var D = /** @class */ (function () {
--    function D() {
--        this.x = this;
--    }
--    return D;
--}());
-+class C {
 +    x = this;
-+}
-+class D {
+ }
+ class D {
+-    constructor() {
+-        this.x = this;
+-    }
 +    x = this;
 +    y;
-+}
+ }

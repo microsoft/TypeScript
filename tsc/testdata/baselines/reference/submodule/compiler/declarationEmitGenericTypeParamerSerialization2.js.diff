@@ -1,15 +1,6 @@
 --- old.declarationEmitGenericTypeParamerSerialization2.js
 +++ new.declarationEmitGenericTypeParamerSerialization2.js
-@@= skipped -41, +41 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.v = exports.x = void 0;
--exports.x = (function () { return null; })();
-+exports.x = (() => null)();
- function makeV() {
-     return null;
- }
-@@= skipped -24, +24 lines =@@
+@@= skipped -65, +65 lines =@@
      fnField: (p: number) => number;
      writeOnlyProperty: number;
      property: number;

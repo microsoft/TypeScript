@@ -1,18 +1,6 @@
 --- old.es6ImportDefaultBindingDts.js
 +++ new.es6ImportDefaultBindingDts.js
-@@= skipped -12, +12 lines =@@
- //// [server.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--var c = /** @class */ (function () {
--    function c() {
--    }
--    return c;
--}());
-+class c {
-+}
- exports.default = c;
- //// [client.js]
+@@= skipped -19, +19 lines =@@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.x = void 0;

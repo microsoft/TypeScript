@@ -1,16 +1,10 @@
 --- old.interfaceInReopenedModule.js
 +++ new.interfaceInReopenedModule.js
-@@= skipped -16, +16 lines =@@
- // In second instance of same module, exported interface is not visible
+@@= skipped -17, +17 lines =@@
  var m;
  (function (m) {
--    var n = /** @class */ (function () {
--        function n() {
--        }
--        return n;
--    }());
-+    class n {
+     class n {
 +        n;
-+    }
+     }
      m.n = n;
  })(m || (m = {}));

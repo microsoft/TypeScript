@@ -1,20 +1,9 @@
 --- old.parserMemberAccessorDeclaration8.js
 +++ new.parserMemberAccessorDeclaration8.js
-@@= skipped -5, +5 lines =@@
- }
+@@= skipped -6, +6 lines =@@
 
  //// [parserMemberAccessorDeclaration8.js]
--var C = /** @class */ (function () {
--    function C() {
--    }
--    Object.defineProperty(C.prototype, "Foo", {
--        get: function () { },
--        enumerable: false,
--        configurable: true
--    });
--    return C;
--}());
-+class C {
+ class C {
 +    static static;
-+    get Foo() { }
-+}
+     get Foo() { }
+ }

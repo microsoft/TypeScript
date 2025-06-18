@@ -1,56 +1,35 @@
 --- old.constructorParameterProperties2.js
 +++ new.constructorParameterProperties2.js
-@@= skipped -34, +34 lines =@@
-
+@@= skipped -35, +35 lines =@@
 
  //// [constructorParameterProperties2.js]
--var C = /** @class */ (function () {
--    function C(y) {
--    } // ok
--    return C;
--}());
-+class C {
+ class C {
 +    y;
-+    constructor(y) { } // ok
-+}
+     constructor(y) { } // ok
+ }
  var c;
  var r = c.y;
--var D = /** @class */ (function () {
--    function D(y) {
-+class D {
+ class D {
 +    y;
 +    y;
-+    constructor(y) {
+     constructor(y) {
          this.y = y;
      } // error
--    return D;
--}());
-+}
+@@= skipped -12, +15 lines =@@
  var d;
  var r2 = d.y;
--var E = /** @class */ (function () {
--    function E(y) {
-+class E {
+ class E {
 +    y;
 +    y;
-+    constructor(y) {
+     constructor(y) {
          this.y = y;
      } // error
--    return E;
--}());
-+}
+@@= skipped -7, +9 lines =@@
  var e;
  var r3 = e.y; // error
--var F = /** @class */ (function () {
--    function F(y) {
-+class F {
+ class F {
 +    y;
 +    y;
-+    constructor(y) {
+     constructor(y) {
          this.y = y;
      } // error
--    return F;
--}());
-+}
- var f;
- var r4 = f.y; // error

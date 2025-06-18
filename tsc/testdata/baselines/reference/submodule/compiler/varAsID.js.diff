@@ -1,28 +1,21 @@
 --- old.varAsID.js
 +++ new.varAsID.js
-@@= skipped -20, +20 lines =@@
-
+@@= skipped -21, +21 lines =@@
 
  //// [varAsID.js]
--var Foo = /** @class */ (function () {
--    function Foo() {
+ class Foo {
+-    constructor() {
 -        this.x = 1;
 -    }
--    return Foo;
--}());
-+class Foo {
 +    var; // ok
 +    x = 1;
-+}
+ }
  var f = new Foo();
--var Foo2 = /** @class */ (function () {
--    function Foo2() {
+ class Foo2 {
+-    constructor() {
 -        this.x = 1;
 -    }
--    return Foo2;
--}());
-+class Foo2 {
 +    var; // not an error, because of ASI.
 +    x = 1;
-+}
+ }
  var f2 = new Foo2();

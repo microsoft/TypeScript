@@ -7,26 +7,5 @@
 -    var tools;
 +    let tools;
      (function (tools) {
--        var Test = /** @class */ (function () {
--            function Test() {
--            }
--            Test.prototype.doX = function () {
--                var f = 2;
-+        class Test {
-+            doX() {
-+                let f = 2;
-                 switch (f) {
-                     case 1:
-                         break;
-@@= skipped -18, +16 lines =@@
-                         //a comment
-                         break;
-                 }
--            };
--            return Test;
--        }());
-+            }
-+        }
-         tools.Test = Test;
-     })(tools = sas.tools || (sas.tools = {}));
- })(sas || (sas = {}));
+         class Test {
+             doX() {

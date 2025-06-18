@@ -1,18 +1,13 @@
 --- old.objectLitArrayDeclNoNew.js
 +++ new.objectLitArrayDeclNoNew.js
-@@= skipped -32, +32 lines =@@
- "use strict";
+@@= skipped -33, +33 lines =@@
  var Test;
  (function (Test) {
--    var Gar = /** @class */ (function () {
--        function Gar() {
+     class Gar {
+-        constructor() {
 -            this.moo = 0;
 -        }
--        return Gar;
--    }());
-+    class Gar {
 +        moo = 0;
-+    }
+     }
      Test.Gar = Gar;
      function bug() {
-         var state = null;

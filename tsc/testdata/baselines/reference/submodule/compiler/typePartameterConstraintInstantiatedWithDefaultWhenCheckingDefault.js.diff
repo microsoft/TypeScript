@@ -1,29 +1,10 @@
 --- old.typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.js
 +++ new.typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.js
-@@= skipped -28, +28 lines =@@
-
+@@= skipped -29, +29 lines =@@
  //// [typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.js]
  // implement
--var Identity = /** @class */ (function () {
--    function Identity(value) {
-+class Identity {
+ class Identity {
 +    item;
-+    constructor(value) {
+     constructor(value) {
          this.item = value;
      }
--    Identity.prototype.set = function (value) {
-+    set(value) {
-         return new Identity(value);
--    };
--    return Identity;
--}());
--;
--var test1;
--;
--var test2;
-+    }
-+}
-+;
-+let test1;
-+;
-+let test2;

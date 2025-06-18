@@ -1,15 +1,6 @@
 --- old.isolatedModulesExportDeclarationType.js
 +++ new.isolatedModulesExportDeclarationType.js
-@@= skipped -28, +28 lines =@@
- //// [test1.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--var T = 0; // Error as of #56354
-+const T = 0; // Error as of #56354
- exports.default = T; // Ok
- //// [test2.js]
- "use strict";
-@@= skipped -12, +12 lines =@@
+@@= skipped -40, +40 lines =@@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
  // @ts-expect-error

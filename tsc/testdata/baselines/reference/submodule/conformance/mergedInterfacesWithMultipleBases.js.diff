@@ -1,66 +1,35 @@
 --- old.mergedInterfacesWithMultipleBases.js
 +++ new.mergedInterfacesWithMultipleBases.js
-@@= skipped -58, +58 lines =@@
- //// [mergedInterfacesWithMultipleBases.js]
+@@= skipped -59, +59 lines =@@
  // merged interfaces behave as if all extends clauses from each declaration are merged together
  // no errors expected
--var C = /** @class */ (function () {
--    function C() {
--    }
--    return C;
--}());
--var C2 = /** @class */ (function () {
--    function C2() {
--    }
--    return C2;
--}());
--var D = /** @class */ (function () {
--    function D() {
--    }
--    return D;
--}());
-+class C {
+ class C {
 +    a;
-+}
-+class C2 {
+ }
+ class C2 {
 +    b;
-+}
-+class D {
+ }
+ class D {
 +    a;
 +    b;
 +    y;
 +    z;
-+}
+ }
  var a;
  var r = a.a;
- // generic interfaces in a module
+@@= skipped -11, +17 lines =@@
  var M;
  (function (M) {
--    var C = /** @class */ (function () {
--        function C() {
--        }
--        return C;
--    }());
--    var C2 = /** @class */ (function () {
--        function C2() {
--        }
--        return C2;
--    }());
--    var D = /** @class */ (function () {
--        function D() {
--        }
--        return D;
--    }());
-+    class C {
+     class C {
 +        a;
-+    }
-+    class C2 {
+     }
+     class C2 {
 +        b;
-+    }
-+    class D {
+     }
+     class D {
 +        a;
 +        b;
 +        y;
 +        z;
-+    }
+     }
  })(M || (M = {}));

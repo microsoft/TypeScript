@@ -4,29 +4,26 @@
 
  //// [classMemberInitializerScoping.js]
  var aaa = 1;
--var CCC = /** @class */ (function () {
--    function CCC(aaa) {
--        this.y = aaa;
+-let CCC = (() => {
+-    class CCC {
+-        constructor(aaa) {
+-            this.y = aaa;
+-            this.y = ''; // was: error, cannot assign string to number
+-        }
 +class CCC {
 +    y = aaa;
 +    static staticY = aaa; // This shouldnt be error
 +    constructor(aaa) {
-         this.y = ''; // was: error, cannot assign string to number
++        this.y = ''; // was: error, cannot assign string to number
      }
 -    CCC.staticY = aaa; // This shouldnt be error
 -    return CCC;
--}());
+-})();
 +}
  // above is equivalent to this:
  var aaaa = 1;
--var CCCC = /** @class */ (function () {
--    function CCCC(aaaa) {
-+class CCCC {
+ class CCCC {
 +    y;
-+    constructor(aaaa) {
+     constructor(aaaa) {
          this.y = aaaa;
          this.y = '';
-     }
--    return CCCC;
--}());
-+}

@@ -1,25 +1,10 @@
 --- old.arrayconcat.js
 +++ new.arrayconcat.js
-@@= skipped -30, +30 lines =@@
- }
+@@= skipped -31, +31 lines =@@
 
  //// [arrayconcat.js]
--var parser = /** @class */ (function () {
--    function parser() {
--    }
--    parser.prototype.m = function () {
-+class parser {
+ class parser {
 +    options;
-+    m() {
+     m() {
          this.options = this.options.sort(function (a, b) {
              var aName = a.name.toLowerCase();
-             var bName = b.name.toLowerCase();
-@@= skipped -17, +16 lines =@@
-                 return 0;
-             }
-         });
--    };
--    return parser;
--}());
-+    }
-+}

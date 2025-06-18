@@ -13,12 +13,8 @@
  };
  Object.defineProperty(exports, "__esModule", { value: true });
 -var React = require("react");
--var classes = "";
--var rest = {};
--var children = [];
 +/// <reference path="react16.d.ts" />
 +const React = require("react");
-+const classes = "";
-+const rest = {};
-+const children = [];
- React.createElement(Tag, __assign({ className: classes }, rest), children);
+ const classes = "";
+ const rest = {};
+ const children = [];

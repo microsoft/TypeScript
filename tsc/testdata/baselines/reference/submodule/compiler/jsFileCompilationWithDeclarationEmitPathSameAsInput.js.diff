@@ -1,16 +1,9 @@
 --- old.jsFileCompilationWithDeclarationEmitPathSameAsInput.js
 +++ new.jsFileCompilationWithDeclarationEmitPathSameAsInput.js
-@@= skipped -7, +7 lines =@@
- declare function isC(): boolean;
-
+@@= skipped -9, +9 lines =@@
  //// [a.js]
--var c = /** @class */ (function () {
--    function c() {
--    }
--    return c;
--}());
-+class c {
-+}
+ class c {
+ }
 +
 +
 +//// [a.d.ts]

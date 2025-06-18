@@ -1,20 +1,6 @@
 --- old.declarationsForInferredTypeFromOtherFile.js
 +++ new.declarationsForInferredTypeFromOtherFile.js
-@@= skipped -16, +16 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.Foo = void 0;
--var Foo = /** @class */ (function () {
--    function Foo() {
--    }
--    return Foo;
--}());
-+class Foo {
-+}
- exports.Foo = Foo;
- //// [file2.js]
- "use strict";
-@@= skipped -17, +14 lines =@@
+@@= skipped -30, +30 lines =@@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.bar = bar;

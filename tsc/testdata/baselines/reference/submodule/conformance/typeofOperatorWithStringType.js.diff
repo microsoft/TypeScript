@@ -1,28 +1,10 @@
 --- old.typeofOperatorWithStringType.js
 +++ new.typeofOperatorWithStringType.js
-@@= skipped -63, +63 lines =@@
- var STRING;
+@@= skipped -64, +64 lines =@@
  var STRING1 = ["", "abc"];
  function foo() { return "abc"; }
--var A = /** @class */ (function () {
--    function A() {
--    }
--    A.foo = function () { return ""; };
--    return A;
--}());
-+class A {
+ class A {
 +    a;
-+    static foo() { return ""; }
-+}
+     static foo() { return ""; }
+ }
  var M;
- (function (M) {
- })(M || (M = {}));
-@@= skipped -16, +14 lines =@@
- // string type literal
- var ResultIsString3 = typeof "";
- var ResultIsString4 = typeof { x: "", y: "" };
--var ResultIsString5 = typeof { x: "", y: function (s) { return s; } };
-+var ResultIsString5 = typeof { x: "", y: (s) => { return s; } };
- // string type expressions
- var ResultIsString6 = typeof objA.a;
- var ResultIsString7 = typeof M.n;

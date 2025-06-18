@@ -1,14 +1,6 @@
 --- old.declarationEmitShadowingInferNotRenamed.js
 +++ new.declarationEmitShadowingInferNotRenamed.js
-@@= skipped -26, +26 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.createClient = void 0;
--var createClient = function (clientDef) {
-+const createClient = (clientDef) => {
-     return null;
- };
- exports.createClient = createClient;
+@@= skipped -33, +33 lines =@@
 
 
  //// [declarationEmitShadowingInferNotRenamed.d.ts]

@@ -1,15 +1,9 @@
 --- old.propertyNamesOfReservedWords.js
 +++ new.propertyNamesOfReservedWords.js
-@@= skipped -278, +278 lines =@@
- var r8 = E.as;
+@@= skipped -279, +279 lines =@@
 
  //// [propertyNamesOfReservedWords.js]
--var C = /** @class */ (function () {
--    function C() {
--    }
--    return C;
--}());
-+class C {
+ class C {
 +    abstract;
 +    as;
 +    boolean;
@@ -73,7 +67,6 @@
 +    volatile;
 +    while;
 +    with;
-+}
+ }
  var c;
  var r1 = c.abstract;
- var r2 = c.as;

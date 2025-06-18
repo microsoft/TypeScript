@@ -1,30 +1,14 @@
 --- old.parserRealSource7.js
 +++ new.parserRealSource7.js
-@@= skipped -840, +840 lines =@@
- ///<reference path='typescript.ts' />
+@@= skipped -841, +841 lines =@@
  var TypeScript;
  (function (TypeScript) {
--    var Continuation = /** @class */ (function () {
--        function Continuation(normalBlock) {
-+    class Continuation {
+     class Continuation {
 +        normalBlock;
 +        exceptionBlock = -1;
-+        constructor(normalBlock) {
+         constructor(normalBlock) {
              this.normalBlock = normalBlock;
 -            this.exceptionBlock = -1;
          }
--        return Continuation;
--    }());
-+    }
+     }
      TypeScript.Continuation = Continuation;
-     function getBaseTypeLinks(bases, baseTypeLinks) {
-         if (bases) {
-@@= skipped -80, +80 lines =@@
-             case NodeType.Name:
-                 var name = alias.text;
-                 var isDynamic = isQuoted(name);
--                var findSym = function (id) {
-+                var findSym = (id) => {
-                     if (context.members) {
-                         return context.members.lookup(name);
-                     }

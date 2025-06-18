@@ -16,25 +16,9 @@
 -        console.log(0 /* EnumB.Value */);
 +        console.log(EnumB.Value);
      }
--    var EnumA;
-+    let EnumA;
+     let EnumA;
      (function (EnumA) {
-         EnumA[EnumA["Value"] = 0] = "Value";
-     })(EnumA || (EnumA = {}));
--    var EnumB;
-+    let EnumB;
-     (function (EnumB) {
-         EnumB[EnumB["Value"] = 0] = "Value";
-     })(EnumB || (EnumB = {}));
-@@= skipped -26, +25 lines =@@
-     function aFunc() {
-         console.log(EnumA.Value);
-     }
--    var EnumA;
-+    let EnumA;
-     (function (EnumA) {
-         EnumA[EnumA["Value"] = 0] = "Value";
-     })(EnumA || (EnumA = {}));
+@@= skipped -33, +32 lines =@@
  }
  function func3() {
      aFunc();
@@ -45,49 +29,32 @@
 -        console.log(0 /* EnumB.Value */);
 +        console.log(EnumB.Value);
      }
--    var EnumB;
-+    let EnumB;
+     let EnumB;
      (function (EnumB) {
-         EnumB[EnumB["Value"] = 0] = "Value";
-     })(EnumB || (EnumB = {}));
-@@= skipped -24, +24 lines =@@
+@@= skipped -17, +17 lines =@@
      function aFunc() {
          console.log(ClassA.Value);
      }
--    var ClassA = /** @class */ (function () {
--        function ClassA() {
+-    let ClassA = (() => {
+-        class ClassA {
 -        }
 -        ClassA.Value = 1234;
 -        return ClassA;
--    }());
+-    })();
 +    class ClassA {
 +        static Value = 1234;
 +    }
  }
  function func5() {
      aFunc();
-@@= skipped -20, +17 lines =@@
-         console.log(new Foo());
-         console.log(Baz.value);
-     }
--    var blah = { prop: 1234 };
--    var Bar;
-+    const blah = { prop: 1234 };
-+    let Bar;
-     (function (Bar) {
+@@= skipped -26, +23 lines =@@
          Bar[Bar["A"] = 0] = "A";
      })(Bar || (Bar = {}));
--    var Foo = /** @class */ (function () {
--        function Foo() {
+     class Foo {
+-        constructor() {
 -            this.x = 1234;
 -        }
--        return Foo;
--    }());
--    var Baz;
-+    class Foo {
 +        x = 1234;
-+    }
-+    let Baz;
+     }
+     let Baz;
      (function (Baz) {
-         Baz.value = 1234;
-     })(Baz || (Baz = {}));

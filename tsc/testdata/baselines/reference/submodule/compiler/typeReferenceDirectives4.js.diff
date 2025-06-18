@@ -1,13 +1,6 @@
 --- old.typeReferenceDirectives4.js
 +++ new.typeReferenceDirectives4.js
-@@= skipped -16, +16 lines =@@
- //// [app.js]
- /// <reference path="./ref.d.ts"/>
- /// <reference types="lib" preserve="true" />
--var x;
--var y = function () { return x; };
-+let x;
-+let y = () => x;
+@@= skipped -21, +21 lines =@@
 
 
  //// [app.d.ts]
@@ -15,7 +8,7 @@
  declare let x: $;
  declare let y: () => $;
 
-@@= skipped -13, +12 lines =@@
+@@= skipped -8, +7 lines =@@
  //// [DtsFileErrors]
 
 

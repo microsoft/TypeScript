@@ -5,15 +5,12 @@
 
  //// [assignmentToInstantiationExpression.js]
 -"use strict";
--var obj = {};
--(obj.fn) = function () { return 1234; };
--var getValue;
--(getValue) = function () { return 1234; };
--var getValue2;
--(getValue2) = function () { return 1234; };
-+let obj = {};
+ let obj = {};
+-(obj.fn) = () => 1234;
 +obj.fn = () => 1234;
-+let getValue;
+ let getValue;
+-(getValue) = () => 1234;
 +getValue = () => 1234;
-+let getValue2;
+ let getValue2;
+-(getValue2) = () => 1234;
 +getValue2 = () => 1234;

@@ -1,29 +1,18 @@
 --- old.differentTypesWithSameName.js
 +++ new.differentTypesWithSameName.js
-@@= skipped -20, +20 lines =@@
- //// [differentTypesWithSameName.js]
+@@= skipped -21, +21 lines =@@
  var m;
  (function (m) {
--    var variable = /** @class */ (function () {
--        function variable() {
--        }
--        return variable;
--    }());
-+    class variable {
+     class variable {
 +        s;
-+    }
+     }
      m.variable = variable;
      function doSomething(v) {
-     }
+@@= skipped -7, +8 lines =@@
      m.doSomething = doSomething;
  })(m || (m = {}));
--var variable = /** @class */ (function () {
--    function variable() {
--    }
--    return variable;
--}());
-+class variable {
+ class variable {
 +    t;
-+}
+ }
  var v = new variable();
  m.doSomething(v);

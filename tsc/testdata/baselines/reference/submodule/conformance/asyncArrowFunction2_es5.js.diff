@@ -1,9 +1,0 @@
---- old.asyncArrowFunction2_es5.js
-+++ new.asyncArrowFunction2_es5.js
-@@= skipped -4, +4 lines =@@
- }
-
- //// [asyncArrowFunction2_es5.js]
--var f = function (await) {
-+var f = (await) => {
- };

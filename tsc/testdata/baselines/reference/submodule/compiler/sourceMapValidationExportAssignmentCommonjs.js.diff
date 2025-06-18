@@ -1,16 +1,10 @@
 --- old.sourceMapValidationExportAssignmentCommonjs.js
 +++ new.sourceMapValidationExportAssignmentCommonjs.js
-@@= skipped -7, +7 lines =@@
-
+@@= skipped -8, +8 lines =@@
  //// [sourceMapValidationExportAssignmentCommonjs.js]
  "use strict";
--var a = /** @class */ (function () {
--    function a() {
--    }
--    return a;
--}());
-+class a {
+ class a {
 +    c;
-+}
+ }
  module.exports = a;
  //# sourceMappingURL=sourceMapValidationExportAssignmentCommonjs.js.map

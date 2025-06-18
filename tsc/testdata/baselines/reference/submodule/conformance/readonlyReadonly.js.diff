@@ -1,17 +1,11 @@
 --- old.readonlyReadonly.js
 +++ new.readonlyReadonly.js
-@@= skipped -6, +6 lines =@@
- }
+@@= skipped -7, +7 lines =@@
 
  //// [readonlyReadonly.js]
--var C = /** @class */ (function () {
--    function C(y) {
-+class C {
+ class C {
 +    y;
 +    x;
-+    constructor(y) {
+     constructor(y) {
          this.y = y;
      }
--    return C;
--}());
-+}

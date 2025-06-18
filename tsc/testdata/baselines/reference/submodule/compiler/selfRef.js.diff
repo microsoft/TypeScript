@@ -1,11 +1,10 @@
 --- old.selfRef.js
 +++ new.selfRef.js
-@@= skipped -22, +22 lines =@@
- //// [selfRef.js]
+@@= skipped -23, +23 lines =@@
  var M;
  (function (M) {
--    var Test = /** @class */ (function () {
--        function Test() {
+     class Test {
+-        constructor() {
 -            this.name = "hello";
 -            this.setName = function (value) {
 -                (function () {
@@ -16,9 +15,6 @@
 -                return name;
 -            };
 -        }
--        return Test;
--    }());
-+    class Test {
 +        name = "hello";
 +        setName = function (value) {
 +            (function () {
@@ -28,6 +24,6 @@
 +        getName = function () {
 +            return name;
 +        };
-+    }
+     }
      M.Test = Test;
  })(M || (M = {}));

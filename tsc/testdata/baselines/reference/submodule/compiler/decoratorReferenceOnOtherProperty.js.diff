@@ -1,16 +1,6 @@
 --- old.decoratorReferenceOnOtherProperty.js
 +++ new.decoratorReferenceOnOtherProperty.js
-@@= skipped -26, +26 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.Yoha = void 0;
--var Yoha = /** @class */ (function () {
--    function Yoha() {
--    }
--    return Yoha;
--}());
-+class Yoha {
-+}
+@@= skipped -31, +31 lines =@@
  exports.Yoha = Yoha;
  //// [index.js]
  "use strict";
@@ -28,19 +18,11 @@
 -};
  Object.defineProperty(exports, "__esModule", { value: true });
 -var yoha_1 = require("./yoha");
--function foo() {
--    var args = [];
--    for (var _i = 0; _i < arguments.length; _i++) {
--        args[_i] = arguments[_i];
+ function foo(...args) { }
+-let Bar = (() => {
+-    class Bar {
+-        yoha(yoha, bar) { }
 -    }
-+function foo(...args) { }
-+class Bar {
-+    yoha(yoha, bar) { }
- }
--var Bar = /** @class */ (function () {
--    function Bar() {
--    }
--    Bar.prototype.yoha = function (yoha, bar) { };
 -    __decorate([
 -        __param(0, foo),
 -        __metadata("design:type", Function),
@@ -48,7 +30,10 @@
 -        __metadata("design:returntype", void 0)
 -    ], Bar.prototype, "yoha", null);
 -    return Bar;
--}());
+-})();
++class Bar {
++    yoha(yoha, bar) { }
++}
  //// [index2.js]
  "use strict";
 -var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -65,24 +50,11 @@
 -};
  Object.defineProperty(exports, "__esModule", { value: true });
 -var yoha_1 = require("./yoha");
--function foo() {
--    var args = [];
--    for (var _i = 0; _i < arguments.length; _i++) {
--        args[_i] = arguments[_i];
+ function foo(...args) { }
+-let Bar = (() => {
+-    class Bar {
+-        yoha(yoha, ...bar) { }
 -    }
-+function foo(...args) { }
-+class Bar {
-+    yoha(yoha, ...bar) { }
- }
--var Bar = /** @class */ (function () {
--    function Bar() {
--    }
--    Bar.prototype.yoha = function (yoha) {
--        var bar = [];
--        for (var _i = 1; _i < arguments.length; _i++) {
--            bar[_i - 1] = arguments[_i];
--        }
--    };
 -    __decorate([
 -        __param(0, foo),
 -        __metadata("design:type", Function),
@@ -90,4 +62,7 @@
 -        __metadata("design:returntype", void 0)
 -    ], Bar.prototype, "yoha", null);
 -    return Bar;
--}());
+-})();
++class Bar {
++    yoha(yoha, ...bar) { }
++}

@@ -1,21 +1,10 @@
 --- old.incrementOnTypeParameter.js
 +++ new.incrementOnTypeParameter.js
-@@= skipped -11, +11 lines =@@
-
+@@= skipped -12, +12 lines =@@
 
  //// [incrementOnTypeParameter.js]
--var C = /** @class */ (function () {
--    function C() {
--    }
--    C.prototype.foo = function () {
-+class C {
+ class C {
 +    a;
-+    foo() {
+     foo() {
          this.a++;
          for (var i, j = 0; j < 10; i++) {
-         }
--    };
--    return C;
--}());
-+    }
-+}

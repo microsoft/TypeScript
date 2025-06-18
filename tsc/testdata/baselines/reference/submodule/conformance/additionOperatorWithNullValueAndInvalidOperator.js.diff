@@ -1,8 +1,0 @@
---- old.additionOperatorWithNullValueAndInvalidOperator.js
-+++ new.additionOperatorWithNullValueAndInvalidOperator.js
-@@= skipped -43, +43 lines =@@
- var r8 = null + true;
- var r9 = null + { a: '' };
- var r10 = null + foo();
--var r11 = null + (function () { });
-+var r11 = null + (() => { });

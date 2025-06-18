@@ -1,28 +1,10 @@
 --- old.bitwiseNotOperatorWithNumberType.js
 +++ new.bitwiseNotOperatorWithNumberType.js
-@@= skipped -50, +50 lines =@@
- var NUMBER;
+@@= skipped -51, +51 lines =@@
  var NUMBER1 = [1, 2];
  function foo() { return 1; }
--var A = /** @class */ (function () {
--    function A() {
--    }
--    A.foo = function () { return 1; };
--    return A;
--}());
-+class A {
+ class A {
 +    a;
-+    static foo() { return 1; }
-+}
+     static foo() { return 1; }
+ }
  var M;
- (function (M) {
- })(M || (M = {}));
-@@= skipped -16, +14 lines =@@
- // number type literal
- var ResultIsNumber3 = ~1;
- var ResultIsNumber4 = ~{ x: 1, y: 2 };
--var ResultIsNumber5 = ~{ x: 1, y: function (n) { return n; } };
-+var ResultIsNumber5 = ~{ x: 1, y: (n) => { return n; } };
- // number type expressions
- var ResultIsNumber6 = ~objA.a;
- var ResultIsNumber7 = ~M.n;

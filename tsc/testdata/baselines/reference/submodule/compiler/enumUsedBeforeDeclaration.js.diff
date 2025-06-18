@@ -1,12 +1,10 @@
 --- old.enumUsedBeforeDeclaration.js
 +++ new.enumUsedBeforeDeclaration.js
-@@= skipped -8, +8 lines =@@
-
+@@= skipped -9, +9 lines =@@
 
  //// [enumUsedBeforeDeclaration.js]
--var v = Color.Green;
--var v2 = 1 /* ConstColor.Green */;
-+const v = Color.Green;
+ const v = Color.Green;
+-const v2 = 1 /* ConstColor.Green */;
 +const v2 = ConstColor.Green;
  var Color;
  (function (Color) {

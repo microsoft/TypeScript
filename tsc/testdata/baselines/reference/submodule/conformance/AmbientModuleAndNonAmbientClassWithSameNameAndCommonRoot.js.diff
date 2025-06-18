@@ -1,21 +1,11 @@
 --- old.AmbientModuleAndNonAmbientClassWithSameNameAndCommonRoot.js
 +++ new.AmbientModuleAndNonAmbientClassWithSameNameAndCommonRoot.js
-@@= skipped -24, +24 lines =@@
- //// [classPoint.js]
+@@= skipped -25, +25 lines =@@
  var A;
  (function (A) {
--    var Point = /** @class */ (function () {
--        function Point(x, y) {
-+    class Point {
+     class Point {
 +        x;
 +        y;
-+        constructor(x, y) {
+         constructor(x, y) {
              this.x = x;
              this.y = y;
-         }
--        return Point;
--    }());
-+    }
-     A.Point = Point;
- })(A || (A = {}));
- //// [test.js]

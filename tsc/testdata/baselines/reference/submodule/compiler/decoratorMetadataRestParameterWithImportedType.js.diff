@@ -1,43 +1,27 @@
 --- old.decoratorMetadataRestParameterWithImportedType.js
 +++ new.decoratorMetadataRestParameterWithImportedType.js
-@@= skipped -42, +42 lines =@@
- "use strict";
+@@= skipped -43, +43 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.SomeClass = void 0;
--var SomeClass = /** @class */ (function () {
--    function SomeClass() {
--    }
--    return SomeClass;
--}());
-+class SomeClass {
+ class SomeClass {
 +    field;
-+}
+ }
  exports.SomeClass = SomeClass;
  //// [aux1.js]
- "use strict";
+@@= skipped -7, +8 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.SomeClass1 = void 0;
--var SomeClass1 = /** @class */ (function () {
--    function SomeClass1() {
--    }
--    return SomeClass1;
--}());
-+class SomeClass1 {
+ class SomeClass1 {
 +    field;
-+}
+ }
  exports.SomeClass1 = SomeClass1;
  //// [aux2.js]
- "use strict";
+@@= skipped -7, +8 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.SomeClass2 = void 0;
--var SomeClass2 = /** @class */ (function () {
--    function SomeClass2() {
--    }
--    return SomeClass2;
--}());
-+class SomeClass2 {
+ class SomeClass2 {
 +    field;
-+}
+ }
  exports.SomeClass2 = SomeClass2;
  //// [main.js]
  "use strict";
@@ -55,29 +39,17 @@
 -var aux_1 = require("./aux");
 -var aux1_1 = require("./aux1");
  function annotation() {
--    return function (target) { };
-+    return (target) => { };
+     return (target) => { };
  }
  function annotation1() {
--    return function (target) { };
-+    return (target) => { };
+     return (target) => { };
  }
--var ClassA = /** @class */ (function () {
--    function ClassA() {
--        var init = [];
--        for (var _i = 0; _i < arguments.length; _i++) {
--            init[_i] = arguments[_i];
+-let ClassA = (() => {
+-    let ClassA = class ClassA {
+-        constructor(...init) {
+-            this.array = init;
 -        }
-+@annotation()
-+class ClassA {
-+    array;
-+    constructor(...init) {
-         this.array = init;
-     }
--    ClassA.prototype.foo = function () {
--        var args = [];
--        for (var _i = 0; _i < arguments.length; _i++) {
--            args[_i] = arguments[_i];
+-        foo(...args) {
 -        }
 -    };
 -    __decorate([
@@ -91,7 +63,13 @@
 -        __metadata("design:paramtypes", [aux_1.SomeClass])
 -    ], ClassA);
 -    return ClassA;
--}());
+-})();
++@annotation()
++class ClassA {
++    array;
++    constructor(...init) {
++        this.array = init;
++    }
 +    @annotation1()
 +    foo(...args) {
 +    }

@@ -1,18 +1,13 @@
 --- old.defaultIndexProps2.js
 +++ new.defaultIndexProps2.js
-@@= skipped -17, +17 lines =@@
-
+@@= skipped -18, +18 lines =@@
 
  //// [defaultIndexProps2.js]
--var Foo = /** @class */ (function () {
--    function Foo() {
+ class Foo {
+-    constructor() {
 -        this.v = "Yo";
 -    }
--    return Foo;
--}());
-+class Foo {
 +    v = "Yo";
-+}
+ }
  var f = new Foo();
  // WScript.Echo(f[0]);
- var o = { v: "Yo2" };

@@ -1,36 +1,6 @@
 --- old.isDeclarationVisibleNodeKinds.js
 +++ new.isDeclarationVisibleNodeKinds.js
-@@= skipped -128, +128 lines =@@
-     schema_8.createValidator8 = createValidator8;
- })(schema || (schema = {}));
- (function (schema) {
--    var T = /** @class */ (function () {
--        function T() {
--        }
--        Object.defineProperty(T.prototype, "createValidator9", {
--            get: function () {
--                return undefined;
--            },
--            enumerable: false,
--            configurable: true
--        });
--        Object.defineProperty(T.prototype, "createValidator10", {
--            set: function (v) {
--            },
--            enumerable: false,
--            configurable: true
--        });
--        return T;
--    }());
-+    class T {
-+        get createValidator9() {
-+            return undefined;
-+        }
-+        set createValidator10(v) {
-+        }
-+    }
-     schema.T = T;
- })(schema || (schema = {}));
+@@= skipped -140, +140 lines =@@
 
 
  //// [isDeclarationVisibleNodeKinds.d.ts]

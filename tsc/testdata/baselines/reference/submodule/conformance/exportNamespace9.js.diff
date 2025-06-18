@@ -1,12 +1,6 @@
 --- old.exportNamespace9.js
 +++ new.exportNamespace9.js
-@@= skipped -38, +38 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.A = void 0;
--var A = 1;
-+const A = 1;
- exports.A = A;
+@@= skipped -43, +43 lines =@@
  //// [d.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
@@ -15,7 +9,7 @@
  c_1.A; // Ok
  //// [e.js]
  "use strict";
-@@= skipped -33, +33 lines =@@
+@@= skipped -28, +28 lines =@@
  //// [g.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });

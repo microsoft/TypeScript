@@ -1,11 +1,6 @@
 --- old.genericArray1.js
 +++ new.genericArray1.js
-@@= skipped -27, +27 lines =@@
-     length: number;
- }
- */
--var lengths = ["a", "b", "c"].map(function (x) { return x.length; });
-+var lengths = ["a", "b", "c"].map(x => x.length);
+@@= skipped -31, +31 lines =@@
 
 
  //// [genericArray1.d.ts]

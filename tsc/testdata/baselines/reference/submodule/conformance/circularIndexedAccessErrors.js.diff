@@ -1,32 +1,19 @@
 --- old.circularIndexedAccessErrors.js
 +++ new.circularIndexedAccessErrors.js
-@@= skipped -41, +41 lines =@@
-
-
+@@= skipped -43, +43 lines =@@
  //// [circularIndexedAccessErrors.js]
--var x2x = x2.x;
--var C1 = /** @class */ (function () {
--    function C1() {
--    }
--    return C1;
--}());
--var C2 = /** @class */ (function () {
--    function C2() {
--    }
--    return C2;
--}());
-+let x2x = x2.x;
-+class C1 {
+ let x2x = x2.x;
+ class C1 {
 +    x; // Error
-+}
-+class C2 {
+ }
+ class C2 {
 +    x;
 +    y;
 +    z;
-+}
+ }
  function foo() {
  }
-
+@@= skipped -9, +13 lines =@@
 
  //// [circularIndexedAccessErrors.d.ts]
  type T1 = {
@@ -39,7 +26,7 @@
      y: number;
  };
  declare let x2: T2<"x">;
-@@= skipped -29, +27 lines =@@
+@@= skipped -12, +12 lines =@@
      x: T["x"];
  }
  interface T4<T extends T4<T>> {

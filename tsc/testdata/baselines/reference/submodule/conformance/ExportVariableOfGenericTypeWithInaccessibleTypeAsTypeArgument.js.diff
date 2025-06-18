@@ -1,16 +1,10 @@
 --- old.ExportVariableOfGenericTypeWithInaccessibleTypeAsTypeArgument.js
 +++ new.ExportVariableOfGenericTypeWithInaccessibleTypeAsTypeArgument.js
-@@= skipped -12, +12 lines =@@
- //// [ExportVariableOfGenericTypeWithInaccessibleTypeAsTypeArgument.js]
+@@= skipped -13, +13 lines =@@
  var A;
  (function (A) {
--    var B = /** @class */ (function () {
--        function B() {
--        }
--        return B;
--    }());
-+    class B {
+     class B {
 +        id;
-+    }
+     }
      A.beez2 = new Array();
  })(A || (A = {}));

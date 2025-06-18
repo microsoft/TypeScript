@@ -1,13 +1,6 @@
 --- old.requiredMappedTypeModifierTrumpsVariance.js
 +++ new.requiredMappedTypeModifierTrumpsVariance.js
-@@= skipped -27, +27 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.BB = exports.AA = exports.B = exports.A = void 0;
--var a = { a: 1, x: 1 };
--var b = { b: 1, x: 1 };
-+const a = { a: 1, x: 1 };
-+const b = { b: 1, x: 1 };
+@@= skipped -32, +32 lines =@@
  exports.A = a;
  exports.B = b;
  exports.A = b; // Should Error
@@ -16,10 +9,8 @@
 +B = a; // Should Error
  a.b; // Property 'b' does not exist on type 'Required<{ a?: 1; x: 1; }>'.
  b.a; // Property 'a' does not exist on type 'Required<{ b?: 1; x: 1; }>'.
--var aa = { a: { a: 1, x: 1 } };
--var bb = { a: { b: 1, x: 1 } };
-+const aa = { a: { a: 1, x: 1 } };
-+const bb = { a: { b: 1, x: 1 } };
+ const aa = { a: { a: 1, x: 1 } };
+@@= skipped -8, +9 lines =@@
  exports.AA = aa;
  exports.BB = bb;
  exports.AA = bb; // Should Error

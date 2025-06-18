@@ -1,22 +1,6 @@
 --- old.unusedImports8.js
 +++ new.unusedImports8.js
-@@= skipped -25, +25 lines =@@
- exports.Calculator = void 0;
- exports.test = test;
- exports.test2 = test2;
--var Calculator = /** @class */ (function () {
--    function Calculator() {
--    }
--    Calculator.prototype.handleChar = function () { };
--    return Calculator;
--}());
-+class Calculator {
-+    handleChar() { }
-+}
- exports.Calculator = Calculator;
- function test() {
- }
-@@= skipped -14, +11 lines =@@
+@@= skipped -36, +36 lines =@@
  //// [file2.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });

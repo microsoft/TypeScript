@@ -6,11 +6,6 @@
  //// [privatePropertyInUnion.js]
 -"use strict";
 -// Repro from #38236
--var SyncableObject = /** @class */ (function () {
--    function SyncableObject() {
--    }
--    return SyncableObject;
--}());
-+class SyncableObject {
+ class SyncableObject {
 +    foo;
-+}
+ }

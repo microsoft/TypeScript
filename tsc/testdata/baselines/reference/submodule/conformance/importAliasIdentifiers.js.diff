@@ -1,38 +1,25 @@
 --- old.importAliasIdentifiers.js
 +++ new.importAliasIdentifiers.js
-@@= skipped -50, +50 lines =@@
- //// [importAliasIdentifiers.js]
+@@= skipped -51, +51 lines =@@
  var moduleA;
  (function (moduleA) {
--    var Point = /** @class */ (function () {
--        function Point(x, y) {
-+    class Point {
+     class Point {
 +        x;
 +        y;
-+        constructor(x, y) {
+         constructor(x, y) {
              this.x = x;
              this.y = y;
-         }
--        return Point;
--    }());
-+    }
+@@= skipped -7, +9 lines =@@
+     }
      moduleA.Point = Point;
  })(moduleA || (moduleA = {}));
 -var alias = moduleA;
--var p;
--var p;
--var p;
--var clodule = /** @class */ (function () {
--    function clodule() {
--    }
--    return clodule;
--}());
-+var p;
-+var p;
-+var p;
-+class clodule {
+ var p;
+ var p;
+ var p;
+ class clodule {
 +    name;
-+}
+ }
  (function (clodule) {
      var Point = { x: 0, y: 0 };
  })(clodule || (clodule = {}));
@@ -40,7 +27,7 @@
  var p;
  var p;
  var p;
-@@= skipped -31, +28 lines =@@
+@@= skipped -19, +18 lines =@@
  (function (fundule) {
      var Point = { x: 0, y: 0 };
  })(fundule || (fundule = {}));

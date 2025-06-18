@@ -1,17 +1,10 @@
 --- old.typeGuardOfFormExpr1AndExpr2.js
 +++ new.typeGuardOfFormExpr1AndExpr2.js
-@@= skipped -54, +54 lines =@@
- var strOrNum;
+@@= skipped -55, +55 lines =@@
  var strOrNumOrBool;
  var numOrBool;
--var C = /** @class */ (function () {
--    function C() {
--    }
--    return C;
--}());
-+class C {
+ class C {
 +    p;
-+}
+ }
  var c;
  var cOrBool;
- var strOrNumOrBoolOrC;

@@ -1,35 +1,16 @@
 --- old.classWithDuplicateIdentifier.js
 +++ new.classWithDuplicateIdentifier.js
-@@= skipped -15, +15 lines =@@
-
-
+@@= skipped -17, +17 lines =@@
  //// [classWithDuplicateIdentifier.js]
--var C = /** @class */ (function () {
--    function C() {
--    }
--    C.prototype.a = function () { return 0; }; // error: duplicate identifier
--    return C;
--}());
--var K = /** @class */ (function () {
--    function K() {
--    }
--    K.prototype.b = function () { return 0; };
--    return K;
--}());
--var D = /** @class */ (function () {
--    function D() {
--    }
--    return D;
--}());
-+class C {
-+    a() { return 0; } // error: duplicate identifier
+ class C {
+     a() { return 0; } // error: duplicate identifier
 +    a;
-+}
-+class K {
+ }
+ class K {
 +    b; // error: duplicate identifier
-+    b() { return 0; }
-+}
-+class D {
+     b() { return 0; }
+ }
+ class D {
 +    c;
 +    c;
-+}
+ }

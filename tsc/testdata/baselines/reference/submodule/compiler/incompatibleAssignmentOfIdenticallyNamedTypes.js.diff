@@ -1,19 +1,10 @@
 --- old.incompatibleAssignmentOfIdenticallyNamedTypes.js
 +++ new.incompatibleAssignmentOfIdenticallyNamedTypes.js
-@@= skipped -11, +11 lines =@@
-
+@@= skipped -12, +12 lines =@@
 
  //// [incompatibleAssignmentOfIdenticallyNamedTypes.js]
--var Foo = /** @class */ (function () {
--    function Foo() {
--    }
--    Foo.prototype.fn = function () {
-+class Foo {
+ class Foo {
 +    x;
-+    fn() {
+     fn() {
          this.x = a;
--    };
--    return Foo;
--}());
-+    }
-+}
+     }

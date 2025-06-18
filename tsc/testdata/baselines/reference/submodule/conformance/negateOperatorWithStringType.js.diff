@@ -1,28 +1,10 @@
 --- old.negateOperatorWithStringType.js
 +++ new.negateOperatorWithStringType.js
-@@= skipped -46, +46 lines =@@
- var STRING;
+@@= skipped -47, +47 lines =@@
  var STRING1 = ["", "abc"];
  function foo() { return "abc"; }
--var A = /** @class */ (function () {
--    function A() {
--    }
--    A.foo = function () { return ""; };
--    return A;
--}());
-+class A {
+ class A {
 +    a;
-+    static foo() { return ""; }
-+}
+     static foo() { return ""; }
+ }
  var M;
- (function (M) {
- })(M || (M = {}));
-@@= skipped -16, +14 lines =@@
- // string type literal
- var ResultIsNumber3 = -"";
- var ResultIsNumber4 = -{ x: "", y: "" };
--var ResultIsNumber5 = -{ x: "", y: function (s) { return s; } };
-+var ResultIsNumber5 = -{ x: "", y: (s) => { return s; } };
- // string type expressions
- var ResultIsNumber6 = -objA.a;
- var ResultIsNumber7 = -M.n;

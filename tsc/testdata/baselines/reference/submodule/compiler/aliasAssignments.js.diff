@@ -1,17 +1,11 @@
 --- old.aliasAssignments.js
 +++ new.aliasAssignments.js
-@@= skipped -16, +16 lines =@@
- "use strict";
+@@= skipped -17, +17 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.someClass = void 0;
--var someClass = /** @class */ (function () {
--    function someClass() {
--    }
--    return someClass;
--}());
-+class someClass {
+ class someClass {
 +    someData;
-+}
+ }
  exports.someClass = someClass;
  //// [aliasAssignments_1.js]
  "use strict";

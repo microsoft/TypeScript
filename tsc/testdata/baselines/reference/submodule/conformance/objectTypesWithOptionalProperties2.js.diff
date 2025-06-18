@@ -1,31 +1,14 @@
 --- old.objectTypesWithOptionalProperties2.js
 +++ new.objectTypesWithOptionalProperties2.js
-@@= skipped -30, +30 lines =@@
- //// [objectTypesWithOptionalProperties2.js]
- // Illegal attempts to define optional methods
+@@= skipped -32, +32 lines =@@
  var a;
--var C = /** @class */ (function () {
--    function C() {
--    }
--    C.prototype.x = function () { };
--    return C;
--}());
--var C2 = /** @class */ (function () {
--    function C2() {
--    }
--    C2.prototype.x = function () { };
--    return C2;
--}());
-+class C {
-+    x() { }
+ class C {
+     x() { }
 +    number; // error
-+}
-+class C2 {
-+    x() { }
+ }
+ class C2 {
+     x() { }
 +    T; // error
-+}
+ }
  var b = {
--    x: function () { },
--    1:  // error
-+    x() { }, 1:  // error
- };
+     x() { }, 1:  // error

@@ -1,15 +1,6 @@
 --- old.reexportMissingDefault8.js
 +++ new.reexportMissingDefault8.js
-@@= skipped -8, +8 lines =@@
-
- //// [b.js]
- "use strict";
--var b = null;
-+const b = null;
- module.exports = b;
- //// [a.js]
- "use strict";
-@@= skipped -9, +9 lines =@@
+@@= skipped -17, +17 lines =@@
  };
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.default = void 0;

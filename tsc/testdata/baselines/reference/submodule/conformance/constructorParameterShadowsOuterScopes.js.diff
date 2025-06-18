@@ -1,29 +1,20 @@
 --- old.constructorParameterShadowsOuterScopes.js
 +++ new.constructorParameterShadowsOuterScopes.js
-@@= skipped -27, +27 lines =@@
- // This effectively means that entities from outer scopes by the same name as a constructor parameter or 
+@@= skipped -28, +28 lines =@@
  // local variable are inaccessible in initializer expressions for instance member variables
  var x = 1;
--var C = /** @class */ (function () {
--    function C(x) {
--        this.b = x; // error, evaluated in scope of constructor, cannot reference x
-+class C {
+ class C {
 +    b = x; // error, evaluated in scope of constructor, cannot reference x
-+    constructor(x) {
+     constructor(x) {
+-        this.b = x; // error, evaluated in scope of constructor, cannot reference x
          x = 2; // error, x is string
      }
--    return C;
--}());
-+}
+ }
  var y = 1;
--var D = /** @class */ (function () {
--    function D(x) {
--        this.b = y; // error, evaluated in scope of constructor, cannot reference y
-+class D {
+ class D {
 +    b = y; // error, evaluated in scope of constructor, cannot reference y
-+    constructor(x) {
+     constructor(x) {
+-        this.b = y; // error, evaluated in scope of constructor, cannot reference y
          var y = "";
      }
--    return D;
--}());
-+}
+ }

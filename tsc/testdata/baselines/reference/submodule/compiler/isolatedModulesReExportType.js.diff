@@ -1,20 +1,6 @@
 --- old.isolatedModulesReExportType.js
 +++ new.isolatedModulesReExportType.js
-@@= skipped -61, +61 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.C = void 0;
--var C = /** @class */ (function () {
--    function C() {
--    }
--    return C;
--}());
-+class C {
-+}
- exports.C = C;
- //// [reExportValueAsTypeOnly.js]
- "use strict";
-@@= skipped -14, +11 lines =@@
+@@= skipped -72, +72 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.NS = exports.C = void 0;
  // OK, has a value side

@@ -1,29 +1,6 @@
 --- old.mappedTypeRelationships.js
 +++ new.mappedTypeRelationships.js
-@@= skipped -282, +282 lines =@@
-     y = x; // Error
- }
- function f50(obj, key) {
--    var item = obj[key];
-+    let item = obj[key];
-     return obj[key].name;
- }
- function f51(obj, key) {
--    var item = obj[key];
-+    let item = obj[key];
-     return obj[key].name;
- }
- function f60(x, y) {
-@@= skipped -57, +57 lines =@@
-     return t[k1][k2];
- }
- function f90() {
--    var n = { x: 1 };
-+    const n = { x: 1 };
- }
- function f() {
-     return undefined;
-@@= skipped -88, +88 lines =@@
+@@= skipped -427, +427 lines =@@
  declare function f80<T>(t: T): Partial<T>;
  declare function f81<T, K extends keyof T>(t: T, k: K): Partial<T[K]>;
  declare function f82<T, K1 extends keyof T, K2 extends keyof T[K1]>(t: T, k1: K1, k2: K2): Partial<T[K1][K2]>;

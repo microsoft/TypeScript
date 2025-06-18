@@ -7,5 +7,4 @@
 -var blah_1 = require("blah");
 +const blah_1 = require("blah");
  function Foo() { }
--blah_1.default.bar = function () { };
-+blah_1.default.bar = () => { };
+ blah_1.default.bar = () => { };

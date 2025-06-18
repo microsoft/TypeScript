@@ -1,45 +1,10 @@
 --- old.typeParameterUsedAsTypeParameterConstraint4.js
 +++ new.typeParameterUsedAsTypeParameterConstraint4.js
-@@= skipped -57, +57 lines =@@
- //// [typeParameterUsedAsTypeParameterConstraint4.js]
+@@= skipped -58, +58 lines =@@
  // Type parameters are in scope in their own and other type parameter lists
  // Some negative cases
--var C = /** @class */ (function () {
--    function C() {
--    }
--    C.prototype.foo = function (x) {
-+class C {
+ class C {
 +    z; // error
-+    foo(x) {
+     foo(x) {
          var r;
          return x;
--    };
--    return C;
--}());
-+    }
-+}
- function foo(x, y) {
-     function bar() {
-         function baz(a, b) {
-@@= skipped -25, +23 lines =@@
-         }
-     }
- }
--var f3 = function (x, y) {
-+var f3 = (x, y) => {
-     function bar(r, s) {
--        var g = function (a, b) {
-+        var g = (a, b) => {
-             x = y;
-             return y;
-         };
-     }
- };
--var f4 = function (x, y) {
-+var f4 = (x, y) => {
-     function bar() {
--        var g = function (a, b) {
-+        var g = (a, b) => {
-             x = y;
-             return y;
-         };

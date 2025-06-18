@@ -1,22 +1,18 @@
 --- old.matchReturnTypeInAllBranches.js
 +++ new.matchReturnTypeInAllBranches.js
-@@= skipped -38, +38 lines =@@
-
+@@= skipped -39, +39 lines =@@
  //// [matchReturnTypeInAllBranches.js]
  // Represents a monster who enjoys ice cream
--var IceCreamMonster = /** @class */ (function () {
--    function IceCreamMonster(iceCreamFlavor, wantsSprinkles, soundsWhenEating, name) {
-+class IceCreamMonster {
+ class IceCreamMonster {
 +    iceCreamFlavor;
 +    iceCreamRemaining;
 +    wantsSprinkles;
 +    soundsWhenEating;
 +    name;
-+    constructor(iceCreamFlavor, wantsSprinkles, soundsWhenEating, name) {
+     constructor(iceCreamFlavor, wantsSprinkles, soundsWhenEating, name) {
          this.iceCreamFlavor = iceCreamFlavor;
          this.iceCreamRemaining = 100;
-         this.wantsSprinkles = wantsSprinkles;
-@@= skipped -9, +14 lines =@@
+@@= skipped -8, +13 lines =@@
          this.name = name;
      }
      /**
@@ -25,24 +21,11 @@
 -* @param {number} amount The amount of ice cream to e    at.
 -* @return {boolean} True if ice cream remains, false if there is no more ice cream le    ft.
 -*/
--    IceCreamMonster.prototype.eatIceCream = function (amount) {
 +    * Tells the IceCreamMonster to eat their ice cre    am!
 +    *
 +    * @param {number} amount The amount of ice cream to e    at.
 +    * @return {boolean} True if ice cream remains, false if there is no more ice cream le    ft.
 +    */
-+    eatIceCream(amount) {
+     eatIceCream(amount) {
          this.iceCreamRemaining -= amount;
          if (this.iceCreamRemaining <= 0) {
-             this.iceCreamRemaining = 0;
-@@= skipped -14, +14 lines =@@
-         else {
-             return 12345;
-         }
--    };
--    return IceCreamMonster;
--}());
-+    }
-+}
- var cookieMonster;
- cookieMonster = new IceCreamMonster("Chocolate Chip", false, "COOOOOKIE", "Cookie Monster");

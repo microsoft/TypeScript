@@ -1,18 +1,11 @@
 --- old.typeofClass.js
 +++ new.typeofClass.js
-@@= skipped -13, +13 lines =@@
- k2.bar;
+@@= skipped -14, +14 lines =@@
 
  //// [typeofClass.js]
--var K = /** @class */ (function () {
--    function K() {
--    }
--    return K;
--}());
-+class K {
+ class K {
 +    foo;
 +    static bar;
-+}
+ }
  var k1;
  k1.foo;
- k1.bar;

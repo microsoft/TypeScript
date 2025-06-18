@@ -9,15 +9,12 @@
  exports.Bet = exports.a = void 0;
 +// @ts-nocheck additional comments
  exports.a = 1 + {}; // This is an error, ofc, `Operator '+' cannot be applied to types '1' and '{}'`, which will be suppressed by the `nocheck` comment
--var Bet = /** @class */ (function () {
--    function Bet() {
+ class Bet {
+-    constructor() {
 -        this.q = 'lol'; // And so will this implements error
 -    }
--    return Bet;
--}());
-+class Bet {
 +    q = 'lol'; // And so will this implements error
-+}
+ }
  exports.Bet = Bet;
 
 

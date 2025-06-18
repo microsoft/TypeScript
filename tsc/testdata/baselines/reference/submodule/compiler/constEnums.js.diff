@@ -56,14 +56,8 @@
 +})(Comments || (Comments = {}));
  var A2;
  (function (A2) {
--    var B;
-+    let B;
-     (function (B) {
-         // module C will be classified as value
--        var C;
-+        let C;
-         (function (C) {
-             var x = 1;
+     let B;
+@@= skipped -11, +61 lines =@@
          })(C = B.C || (B.C = {}));
      })(B = A2.B || (A2.B = {}));
  })(A2 || (A2 = {}));

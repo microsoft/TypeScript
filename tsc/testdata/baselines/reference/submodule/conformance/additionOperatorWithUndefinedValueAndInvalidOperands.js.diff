@@ -1,8 +1,0 @@
---- old.additionOperatorWithUndefinedValueAndInvalidOperands.js
-+++ new.additionOperatorWithUndefinedValueAndInvalidOperands.js
-@@= skipped -43, +43 lines =@@
- var r8 = undefined + true;
- var r9 = undefined + { a: '' };
- var r10 = undefined + foo();
--var r11 = undefined + (function () { });
-+var r11 = undefined + (() => { });

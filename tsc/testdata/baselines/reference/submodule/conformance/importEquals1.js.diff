@@ -1,20 +1,6 @@
 --- old.importEquals1.js
 +++ new.importEquals1.js
-@@= skipped -31, +31 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.A = void 0;
--var A = /** @class */ (function () {
--    function A() {
--    }
--    return A;
--}());
-+class A {
-+}
- exports.A = A;
- //// [b.js]
- "use strict";
-@@= skipped -44, +41 lines =@@
+@@= skipped -72, +72 lines =@@
          return result;
      };
  })();

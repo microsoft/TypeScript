@@ -8,74 +8,7 @@
  function f1(a, b) {
      a = b;
      b = a; // Error
-@@= skipped -25, +24 lines =@@
- }
- function f10(x) {
-     if (isFunction(x)) {
--        var f = x;
--        var t = x;
-+        const f = x;
-+        const t = x;
-     }
- }
- function f11(x) {
-@@= skipped -10, +10 lines =@@
-     }
- }
- function f12(x) {
--    var f = getFunction(x); // () => string
-+    const f = getFunction(x); // () => string
-     f();
- }
- function f20(x, y, z) {
-@@= skipped -14, +14 lines =@@
-     fooBat(z); // Error
- }
- // Repros from #22860
--var Opt = /** @class */ (function () {
--    function Opt() {
--    }
--    Opt.prototype.toVector = function () {
--        return undefined;
--    };
--    return Opt;
--}());
--var Vector = /** @class */ (function () {
--    function Vector() {
--    }
--    Vector.prototype.tail = function () {
--        return undefined;
--    };
--    Vector.prototype.partition2 = function (predicate) {
--        return undefined;
--    };
--    return Vector;
--}());
-+class Opt {
-+    toVector() {
-+        return undefined;
-+    }
-+}
-+class Vector {
-+    tail() {
-+        return undefined;
-+    }
-+    partition2(predicate) {
-+        return undefined;
-+    }
-+}
- function foo(value) {
-     if (isFunction(value)) {
-         toString1(value);
-         toString2(value);
-     }
- }
--var w = { a: 4 };
-+const w = { a: 4 };
- exportCommand(save);
- gg(ff);
-
-@@= skipped -43, +37 lines =@@
+@@= skipped -86, +85 lines =@@
  declare function f1<A, B extends A>(a: Covariant<A>, b: Covariant<B>): void;
  declare function f2<A, B extends A>(a: Contravariant<A>, b: Contravariant<B>): void;
  declare function f3<A, B extends A>(a: Invariant<A>, b: Invariant<B>): void;

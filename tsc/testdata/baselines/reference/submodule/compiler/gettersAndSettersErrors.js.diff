@@ -1,51 +1,18 @@
 --- old.gettersAndSettersErrors.js
 +++ new.gettersAndSettersErrors.js
-@@= skipped -18, +18 lines =@@
-
+@@= skipped -19, +19 lines =@@
 
  //// [gettersAndSettersErrors.js]
--var C = /** @class */ (function () {
--    function C() {
+ class C {
+-    constructor() {
 -        this.Foo = 0; // error - duplicate identifier Foo - confirmed
 -    }
--    Object.defineProperty(C.prototype, "Foo", {
--        get: function () { return "foo"; } // ok
--        ,
--        set: function (foo) { } // ok
--        ,
--        enumerable: false,
--        configurable: true
--    });
--    Object.defineProperty(C.prototype, "Goo", {
--        get: function (v) { return null; } // error - getters must not have a parameter
--        ,
--        set: function (v) { } // error - setters must not specify a return type
--        ,
--        enumerable: false,
--        configurable: true
--    });
--    return C;
--}());
--var E = /** @class */ (function () {
--    function E() {
--    }
--    Object.defineProperty(E.prototype, "Baz", {
--        get: function () { return 0; },
--        set: function (n) { } // error - accessors do not agree in visibility
--        ,
--        enumerable: false,
--        configurable: true
--    });
--    return E;
--}());
-+class C {
-+    get Foo() { return "foo"; } // ok
-+    set Foo(foo) { } // ok
+     get Foo() { return "foo"; } // ok
+     set Foo(foo) { } // ok
 +    Foo = 0; // error - duplicate identifier Foo - confirmed
-+    get Goo(v) { return null; } // error - getters must not have a parameter
+     get Goo(v) { return null; } // error - getters must not have a parameter
+-    set Goo(v): string { } // error - setters must not specify a return type
 +    set Goo(v) { } // error - setters must not specify a return type
-+}
-+class E {
-+    get Baz() { return 0; }
-+    set Baz(n) { } // error - accessors do not agree in visibility
-+}
+ }
+ class E {
+     get Baz() { return 0; }

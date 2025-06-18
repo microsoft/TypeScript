@@ -1,8 +1,0 @@
---- old.templateStringTermination2.js
-+++ new.templateStringTermination2.js
-@@= skipped -3, +3 lines =@@
- `\\`
-
- //// [templateStringTermination2.js]
--"\\";
-+`\\`;

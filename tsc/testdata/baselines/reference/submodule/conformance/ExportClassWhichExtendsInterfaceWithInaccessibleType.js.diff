@@ -1,25 +1,11 @@
 --- old.ExportClassWhichExtendsInterfaceWithInaccessibleType.js
 +++ new.ExportClassWhichExtendsInterfaceWithInaccessibleType.js
-@@= skipped -23, +23 lines =@@
- //// [ExportClassWhichExtendsInterfaceWithInaccessibleType.js]
+@@= skipped -24, +24 lines =@@
  var A;
  (function (A) {
--    var Point2d = /** @class */ (function () {
--        function Point2d(x, y) {
-+    class Point2d {
+     class Point2d {
 +        x;
 +        y;
-+        constructor(x, y) {
+         constructor(x, y) {
              this.x = x;
              this.y = y;
-         }
--        Point2d.prototype.fromOrigin = function (p) {
-+        fromOrigin(p) {
-             return 1;
--        };
--        return Point2d;
--    }());
-+        }
-+    }
-     A.Point2d = Point2d;
- })(A || (A = {}));

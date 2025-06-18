@@ -1,42 +1,16 @@
 --- old.declarationFiles.js
 +++ new.declarationFiles.js
-@@= skipped -49, +49 lines =@@
-
+@@= skipped -50, +50 lines =@@
 
  //// [declarationFiles.js]
--var C1 = /** @class */ (function () {
--    function C1(x) {
--    }
--    C1.prototype.f = function (x) { return undefined; };
--    return C1;
--}());
--var C2 = /** @class */ (function () {
--    function C2() {
--    }
--    return C2;
--}());
--var C3 = /** @class */ (function () {
--    function C3() {
--    }
--    return C3;
--}());
--var C4 = /** @class */ (function () {
--    function C4() {
--        var _this = this;
--        this.x1 = { a: this };
--        this.x2 = [this];
--        this.x3 = [{ a: this }];
--        this.x4 = function () { return _this; };
--    }
--    C4.prototype.f1 = function () {
-+class C1 {
+ class C1 {
 +    x;
-+    f(x) { return undefined; }
-+    constructor(x) { }
-+}
-+class C2 {
-+}
-+class C3 {
+     f(x) { return undefined; }
+     constructor(x) { }
+ }
+ class C2 {
+ }
+ class C3 {
 +    a;
 +    b;
 +    c;
@@ -47,35 +21,25 @@
 +    h;
 +    i;
 +    j;
-+}
-+class C4 {
+ }
+ class C4 {
+-    constructor() {
+-        this.x1 = { a: this };
+-        this.x2 = [this];
+-        this.x3 = [{ a: this }];
+-        this.x4 = () => this;
+-    }
 +    x1 = { a: this };
 +    x2 = [this];
 +    x3 = [{ a: this }];
 +    x4 = () => this;
-+    f1() {
+     f1() {
          return { a: this };
--    };
--    C4.prototype.f2 = function () {
-+    }
-+    f2() {
-         return [this];
--    };
--    C4.prototype.f3 = function () {
-+    }
-+    f3() {
-         return [{ a: this }];
--    };
--    C4.prototype.f4 = function () {
--        var _this = this;
--        return function () { return _this; };
--    };
--    return C4;
--}());
-+    }
-+    f4() {
-+        return () => this;
-+    }
+     }
+@@= skipped -26, +35 lines =@@
+     f4() {
+         return () => this;
+     }
 +}
 +
 +
@@ -113,4 +77,4 @@
 +    f2(): this[];
 +    f3(): any;
 +    f4(): () => this;
-+}
+ }

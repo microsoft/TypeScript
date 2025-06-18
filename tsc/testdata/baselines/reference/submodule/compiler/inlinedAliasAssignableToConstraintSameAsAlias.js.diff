@@ -1,21 +1,12 @@
 --- old.inlinedAliasAssignableToConstraintSameAsAlias.js
 +++ new.inlinedAliasAssignableToConstraintSameAsAlias.js
-@@= skipped -27, +27 lines =@@
-
+@@= skipped -28, +28 lines =@@
 
  //// [inlinedAliasAssignableToConstraintSameAsAlias.js]
--var A = /** @class */ (function () {
--    function A() {
--    }
--    A.prototype.whereRelated = function () {
-+class A {
+ class A {
 +    x;
 +    y;
 +    z;
-+    whereRelated() {
+     whereRelated() {
          return 1;
--    };
--    return A;
--}());
-+    }
-+}
+     }

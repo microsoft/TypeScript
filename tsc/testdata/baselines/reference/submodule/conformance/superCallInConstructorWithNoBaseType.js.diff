@@ -1,29 +1,13 @@
 --- old.superCallInConstructorWithNoBaseType.js
 +++ new.superCallInConstructorWithNoBaseType.js
-@@= skipped -13, +13 lines =@@
+@@= skipped -19, +19 lines =@@
+     }
  }
-
- //// [superCallInConstructorWithNoBaseType.js]
--var C = /** @class */ (function () {
--    function C() {
--        return _super.call(this) || this; // error
-+class C {
-+    constructor() {
-+        super(); // error
-     }
--    return C;
--}());
--var D = /** @class */ (function () {
--    function D(x) {
--        var _this = _super.call(this) || this; // error
-+}
-+class D {
+ class D {
 +    x;
-+    constructor(x) {
+     constructor(x) {
+-        super(); // error
          this.x = x;
--        return _this;
 +        super(); // error
      }
--    return D;
--}());
-+}
+ }

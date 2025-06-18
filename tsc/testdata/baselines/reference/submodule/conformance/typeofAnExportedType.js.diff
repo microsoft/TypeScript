@@ -9,45 +9,28 @@
  exports.foo = foo;
  exports.x = 1;
  exports.y = { foo: '' };
--var C = /** @class */ (function () {
--    function C() {
--    }
--    return C;
--}());
-+class C {
+ class C {
 +    foo;
-+}
+ }
  exports.C = C;
  var c2;
- var i2;
- var M;
+@@= skipped -13, +14 lines =@@
  (function (M) {
      M.foo = '';
--    var C = /** @class */ (function () {
--        function C() {
--        }
--        return C;
--    }());
-+    class C {
+     class C {
 +        foo;
-+    }
+     }
      M.C = C;
  })(M || (exports.M = M = {}));
 -exports.Z = M;
  var E;
  (function (E) {
      E[E["A"] = 0] = "A";
-@@= skipped -30, +25 lines =@@
- function foo() { }
+@@= skipped -12, +12 lines =@@
  (function (foo) {
      foo.y = 1;
--    var C = /** @class */ (function () {
--        function C() {
--        }
--        return C;
--    }());
-+    class C {
+     class C {
 +        foo;
-+    }
+     }
      foo.C = C;
  })(foo || (exports.foo = foo = {}));

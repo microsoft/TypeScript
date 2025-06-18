@@ -1,15 +1,9 @@
 --- old.fillInMissingTypeArgsOnConstructCalls.js
 +++ new.fillInMissingTypeArgsOnConstructCalls.js
-@@= skipped -7, +7 lines =@@
-
+@@= skipped -8, +8 lines =@@
 
  //// [fillInMissingTypeArgsOnConstructCalls.js]
--var A = /** @class */ (function () {
--    function A() {
--    }
--    return A;
--}());
-+class A {
+ class A {
 +    list;
-+}
+ }
  var a = new A();

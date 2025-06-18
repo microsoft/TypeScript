@@ -1,50 +1,18 @@
 --- old.exportCodeGen.js
 +++ new.exportCodeGen.js
-@@= skipped -90, +90 lines =@@
- // validate all exportable statements
- var E;
- (function (E) {
--    var Color;
-+    let Color;
-     (function (Color) {
-         Color[Color["Red"] = 0] = "Red";
-     })(Color = E.Color || (E.Color = {}));
+@@= skipped -97, +97 lines =@@
      function fn() { }
      E.fn = fn;
--    var C = /** @class */ (function () {
--        function C() {
--        }
--        return C;
--    }());
-+    class C {
+     class C {
 +        name;
-+    }
+     }
      E.C = C;
--    var M;
-+    let M;
-     (function (M) {
-         M.x = 42;
-     })(M = E.M || (E.M = {}));
-@@= skipped -21, +19 lines =@@
- // which are not exported
- var F;
- (function (F) {
--    var Color;
-+    let Color;
-     (function (Color) {
-         Color[Color["Red"] = 0] = "Red";
+     let M;
+@@= skipped -17, +18 lines =@@
      })(Color || (Color = {}));
      function fn() { }
--    var C = /** @class */ (function () {
--        function C() {
--        }
--        return C;
--    }());
--    var M;
-+    class C {
+     class C {
 +        name;
-+    }
-+    let M;
+     }
+     let M;
      (function (M) {
-         var x = 42;
-     })(M || (M = {}));

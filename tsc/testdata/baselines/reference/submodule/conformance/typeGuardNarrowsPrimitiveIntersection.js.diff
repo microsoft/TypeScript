@@ -1,14 +1,6 @@
 --- old.typeGuardNarrowsPrimitiveIntersection.js
 +++ new.typeGuardNarrowsPrimitiveIntersection.js
-@@= skipped -24, +24 lines =@@
-
-
- //// [typeGuardNarrowsPrimitiveIntersection.js]
--var value;
-+let value;
- if (isNonBlank(value)) {
-     doThis(value);
- }
+@@= skipped -31, +31 lines =@@
  else {
      doThat(value);
  }

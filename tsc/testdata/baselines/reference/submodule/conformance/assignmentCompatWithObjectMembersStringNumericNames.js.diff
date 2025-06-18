@@ -1,48 +1,24 @@
 --- old.assignmentCompatWithObjectMembersStringNumericNames.js
 +++ new.assignmentCompatWithObjectMembersStringNumericNames.js
-@@= skipped -91, +91 lines =@@
- // string named numeric properties work correctly, errors below unless otherwise noted
+@@= skipped -92, +92 lines =@@
  var JustStrings;
  (function (JustStrings) {
--    var S = /** @class */ (function () {
--        function S() {
--        }
--        return S;
--    }());
--    var T = /** @class */ (function () {
--        function T() {
--        }
--        return T;
--    }());
-+    class S {
+     class S {
 +        '1';
-+    }
-+    class T {
+     }
+     class T {
 +        '1.';
-+    }
+     }
      var s;
      var t;
-     var s2;
-@@= skipped -40, +36 lines =@@
- })(JustStrings || (JustStrings = {}));
+@@= skipped -34, +36 lines =@@
  var NumbersAndStrings;
  (function (NumbersAndStrings) {
--    var S = /** @class */ (function () {
--        function S() {
--        }
--        return S;
--    }());
--    var T = /** @class */ (function () {
--        function T() {
--        }
--        return T;
--    }());
-+    class S {
+     class S {
 +        '1';
-+    }
-+    class T {
+     }
+     class T {
 +        1;
-+    }
+     }
      var s;
      var t;
-     var s2;

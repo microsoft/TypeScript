@@ -1,19 +1,6 @@
 --- old.declFileImportChainInExportAssignment.js
 +++ new.declFileImportChainInExportAssignment.js
-@@= skipped -14, +14 lines =@@
- "use strict";
- var m;
- (function (m) {
--    var c;
-+    let c;
-     (function (c_1) {
--        var c = /** @class */ (function () {
--            function c() {
--            }
--            return c;
--        }());
-+        class c {
-+        }
+@@= skipped -21, +21 lines =@@
          c_1.c = c;
      })(c = m.c || (m.c = {}));
  })(m || (m = {}));

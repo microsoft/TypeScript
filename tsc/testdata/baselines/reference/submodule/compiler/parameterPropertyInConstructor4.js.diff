@@ -1,23 +1,14 @@
 --- old.parameterPropertyInConstructor4.js
 +++ new.parameterPropertyInConstructor4.js
-@@= skipped -10, +10 lines =@@
- "use strict";
+@@= skipped -11, +11 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.C = void 0;
--var C = /** @class */ (function () {
--    function C(a, b) {
--        if (a === void 0) { a = []; }
-+class C {
+ class C {
 +    a;
-+    constructor(a = [], b) {
+     constructor(a = [], b) {
          this.a = a;
      }
--    return C;
--}());
-+}
- exports.C = C;
-
-
+@@= skipped -10, +11 lines =@@
  //// [parameterPropertyInConstructor4.d.ts]
  export declare class C {
      a: number[];

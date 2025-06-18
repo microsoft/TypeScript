@@ -1,17 +1,6 @@
 --- old.declarationEmitOfTypeofAliasedExport.js
 +++ new.declarationEmitOfTypeofAliasedExport.js
-@@= skipped -12, +12 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.D = void 0;
--var C = /** @class */ (function () {
--    function C() {
--    }
--    return C;
--}());
-+class C {
-+}
- exports.D = C;
+@@= skipped -18, +18 lines =@@
  //// [b.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });

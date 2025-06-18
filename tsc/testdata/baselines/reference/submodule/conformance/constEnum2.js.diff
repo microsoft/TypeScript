@@ -1,11 +1,9 @@
 --- old.constEnum2.js
 +++ new.constEnum2.js
-@@= skipped -19, +19 lines =@@
- // In a constant enum declaration, all members must have constant values and
+@@= skipped -20, +20 lines =@@
  // it is an error for a member declaration to specify an expression that isn't classified as a constant enum expression.
  // Error : not a constant enum expression
--var CONST = 9000 % 2;
-+const CONST = 9000 % 2;
+ const CONST = 9000 % 2;
 +var D;
 +(function (D) {
 +    D[D["d"] = 10] = "d";

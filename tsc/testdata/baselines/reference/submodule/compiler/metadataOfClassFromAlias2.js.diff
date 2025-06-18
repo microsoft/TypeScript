@@ -1,17 +1,11 @@
 --- old.metadataOfClassFromAlias2.js
 +++ new.metadataOfClassFromAlias2.js
-@@= skipped -17, +17 lines =@@
- "use strict";
+@@= skipped -18, +18 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.SomeClass = void 0;
--var SomeClass = /** @class */ (function () {
--    function SomeClass() {
--    }
--    return SomeClass;
--}());
-+class SomeClass {
+ class SomeClass {
 +    field;
-+}
+ }
  exports.SomeClass = SomeClass;
  //// [test.js]
  "use strict";
@@ -27,19 +21,17 @@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.ClassA = void 0;
  function annotation() {
--    return function (target) { };
--}
--var ClassA = /** @class */ (function () {
--    function ClassA() {
+     return (target) => { };
+ }
+-let ClassA = (() => {
+-    class ClassA {
 -    }
 -    __decorate([
 -        annotation(),
 -        __metadata("design:type", Object)
 -    ], ClassA.prototype, "array", void 0);
 -    return ClassA;
--}());
-+    return (target) => { };
-+}
+-})();
 +class ClassA {
 +    @annotation()
 +    array;

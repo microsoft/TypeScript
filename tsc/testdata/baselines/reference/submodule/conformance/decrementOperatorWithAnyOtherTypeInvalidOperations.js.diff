@@ -1,29 +1,10 @@
 --- old.decrementOperatorWithAnyOtherTypeInvalidOperations.js
 +++ new.decrementOperatorWithAnyOtherTypeInvalidOperations.js
-@@= skipped -78, +78 lines =@@
- var ANY1;
- var ANY2 = ["", ""];
- var obj;
--var obj1 = { x: "", y: function () { } };
-+var obj1 = { x: "", y: () => { } };
- function foo() {
-     var a;
+@@= skipped -84, +84 lines =@@
      return a;
  }
--var A = /** @class */ (function () {
--    function A() {
--    }
--    A.foo = function () {
-+class A {
+ class A {
 +    a;
-+    static foo() {
+     static foo() {
          var a;
          return a;
--    };
--    return A;
--}());
-+    }
-+}
- var M;
- (function (M) {
- })(M || (M = {}));

@@ -1,19 +1,6 @@
 --- old.exportSpecifiers.js
 +++ new.exportSpecifiers.js
-@@= skipped -20, +20 lines =@@
-
-
- //// [exports.js]
--var type = 0;
--var as = 0;
--var something = 0;
-+const type = 0;
-+const as = 0;
-+const something = 0;
- export { type };
- //// [imports.js]
- import { type } from "./exports.js";
-@@= skipped -22, +22 lines =@@
+@@= skipped -42, +42 lines =@@
  export { type something };
  export { type type as foo };
  export { type as as bar };

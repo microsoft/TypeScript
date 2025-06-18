@@ -1,17 +1,10 @@
 --- old.testContainerList.js
 +++ new.testContainerList.js
-@@= skipped -12, +12 lines =@@
- // Regression test for #325
+@@= skipped -13, +13 lines =@@
  var A;
  (function (A) {
--    var C = /** @class */ (function () {
--        function C(d) {
-+    class C {
+     class C {
 +        d;
-+        constructor(d) {
+         constructor(d) {
              this.d = d;
          }
--        return C;
--    }());
-+    }
- })(A || (A = {}));

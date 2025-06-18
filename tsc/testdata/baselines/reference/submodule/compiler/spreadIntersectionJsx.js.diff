@@ -1,28 +1,13 @@
 --- old.spreadIntersectionJsx.js
 +++ new.spreadIntersectionJsx.js
-@@= skipped -19, +19 lines =@@
-     };
-     return __assign.apply(this, arguments);
+@@= skipped -21, +21 lines =@@
  };
--var React = null;
--var A = /** @class */ (function () {
--    function A() {
--    }
--    return A;
--}());
--var C = /** @class */ (function () {
--    function C() {
--    }
--    return C;
--}());
--var intersected;
--var element = React.createElement("div", __assign({}, intersected));
-+const React = null;
-+class A {
+ const React = null;
+ class A {
 +    a;
-+}
-+class C {
+ }
+ class C {
 +    c;
-+}
-+let intersected;
-+let element = React.createElement("div", __assign({}, intersected));
+ }
+ let intersected;
+ let element = React.createElement("div", __assign({}, intersected));

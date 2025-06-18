@@ -10,22 +10,9 @@
 -        var Model;
 +        let Model;
          (function (Model) {
--            var _Person = /** @class */ (function () {
--                function _Person() {
--                }
--                _Person.prototype.populate = function (raw) {
-+            class _Person {
-+                populate(raw) {
-                     var res = Model.KnockoutExtentions;
--                };
--                return _Person;
--            }());
-+                }
-+            }
-             Model._Person = _Person;
-         })(Model = PeopleAtWork.Model || (PeopleAtWork.Model = {}));
-     })(PeopleAtWork = Microsoft.PeopleAtWork || (Microsoft.PeopleAtWork = {}));
-@@= skipped -24, +21 lines =@@
+             class _Person {
+                 populate(raw) {
+@@= skipped -21, +21 lines =@@
  /// <reference path="emitMemberAccessExpression_file1.ts" />
  var Microsoft;
  (function (Microsoft) {
@@ -35,13 +22,5 @@
 -        var Model;
 +        let Model;
          (function (Model) {
--            var KnockoutExtentions = /** @class */ (function () {
--                function KnockoutExtentions() {
--                }
--                return KnockoutExtentions;
--            }());
-+            class KnockoutExtentions {
-+            }
-             Model.KnockoutExtentions = KnockoutExtentions;
-         })(Model = PeopleAtWork.Model || (PeopleAtWork.Model = {}));
-     })(PeopleAtWork = Microsoft.PeopleAtWork || (Microsoft.PeopleAtWork = {}));
+             class KnockoutExtentions {
+             }

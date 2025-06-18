@@ -8,74 +8,7 @@
  function f1(x) {
      if (!!true) {
          switch (x) {
-@@= skipped -14, +13 lines =@@
-     }
- }
- function f2(x) {
--    var z;
-+    let z;
-     switch (x) {
-         case 1:
-             z = 10;
-@@= skipped -41, +41 lines =@@
-         }
- }
- function area(s) {
--    var area;
-+    let area;
-     switch (s.kind) {
-         case "square":
-             area = s.size * s.size;
-@@= skipped -18, +18 lines =@@
-     return area;
- }
- function areaWrapped(s) {
--    var area;
--    area = (function () {
-+    let area;
-+    area = (() => {
-         switch (s.kind) {
-             case "square": return s.size * s.size;
-             case "rectangle": return s.width * s.height;
-@@= skipped -18, +18 lines =@@
-     MyEnum[MyEnum["B"] = 1] = "B";
- })(MyEnum || (MyEnum = {}));
- function thisGivesError(e) {
--    var s;
-+    let s;
-     switch (e) {
-         case MyEnum.A:
-             s = "it was A";
-@@= skipped -12, +12 lines =@@
-     return s;
- }
- function good1(e) {
--    var s;
-+    let s;
-     switch (e) {
-         case MyEnum.A:
-             s = "it was A";
-@@= skipped -26, +26 lines =@@
-     Level[Level["One"] = 0] = "One";
-     Level[Level["Two"] = 1] = "Two";
- })(Level || (Level = {}));
--var doSomethingWithLevel = function (level) {
--    var next;
-+const doSomethingWithLevel = (level) => {
-+    let next;
-     switch (level) {
-         case Level.One:
-             next = Level.Two;
-@@= skipped -42, +42 lines =@@
- }
- // Repro from #20823
- function test4(value) {
--    var x;
-+    let x;
-     switch (value) {
-         case 1:
-             x = "one";
-@@= skipped -18, +18 lines =@@
+@@= skipped -189, +188 lines =@@
      Animal[Animal["CAT"] = 1] = "CAT";
  })(Animal || (Animal = {}));
  function expression() {
@@ -85,17 +18,6 @@
          case Animal.DOG: return Animal.DOG;
          case Animal.CAT: return Animal.CAT;
      }
- }
- // Repro from #34840
- function foo() {
--    var foo = 0;
-+    const foo = 0;
-     while (true) {
--        var stats = foo;
-+        const stats = foo;
-         switch (stats) {
-             case 1: break;
-             case 2: break;
 @@= skipped -39, +38 lines =@@
  declare function f1(x: 1 | 2): string;
  declare function f2(x: 1 | 2): void;

@@ -1,15 +1,6 @@
 --- old.truthinessCallExpressionCoercion2.js
 +++ new.truthinessCallExpressionCoercion2.js
-@@= skipped -217, +217 lines =@@
-     // ok
-     required1 && required2 && required1() && required2();
-     // ok
--    [].forEach(function (f) { return f && f.apply(parent, []); });
-+    [].forEach((f) => f && f.apply(parent, []));
-     // error
-     required1 && required2 && required1() && console.log('foo');
-     // error
-@@= skipped -13, +13 lines =@@
+@@= skipped -230, +230 lines =@@
      if (required1 || required2) {
      }
      // error
@@ -54,34 +45,10 @@
  }
  function checksPropertyAccess() {
 -    var _a, _b;
--    var x = {
-+    const x = {
+     const x = {
          foo: {
--            bar: function () { return true; }
-+            bar() { return true; }
-         }
-     };
-     // error
-@@= skipped -15, +14 lines =@@
-     // ok
-     x.foo.bar && 1 && x.foo.bar();
-     // ok
--    var y = A.from && A.from !== B.from ? true : false;
-+    const y = A.from && A.from !== B.from ? true : false;
-     y;
--    var x1 = {
--        a: { b: { c: function () { } } }
-+    const x1 = {
-+        a: { b: { c: () => { } } }
-     };
--    var x2 = {
--        a: { b: { c: function () { } } }
-+    const x2 = {
-+        a: { b: { c: () => { } } }
-     };
-     // error
-     x1.a.b.c && x2.a.b.c();
-@@= skipped -20, +20 lines =@@
+             bar() { return true; }
+@@= skipped -35, +34 lines =@@
      if ((x1.a.b.c || x2.a.b.c) && 1) {
      }
      // error
@@ -93,27 +60,8 @@
 +    if ((x1.a.b.c ?? x2.a.b.c) && 1) {
      }
  }
--var Foo = /** @class */ (function () {
--    function Foo() {
--    }
--    Foo.prototype.required = function () {
-+class Foo {
+ class Foo {
 +    optional;
-+    required() {
+     required() {
          return true;
--    };
--    Foo.prototype.test = function () {
-+    }
-+    test() {
-         // error
-         this.required && console.log('required');
-         // error
-@@= skipped -23, +22 lines =@@
-         this.required && 1 && this.required();
-         // ok
-         1 && this.optional && console.log('optional');
--    };
--    return Foo;
--}());
-+    }
-+}
+     }

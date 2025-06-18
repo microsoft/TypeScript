@@ -1,22 +1,11 @@
 --- old.indexSignatureMustHaveTypeAnnotation.js
 +++ new.indexSignatureMustHaveTypeAnnotation.js
-@@= skipped -17, +17 lines =@@
- }
+@@= skipped -18, +18 lines =@@
 
  //// [indexSignatureMustHaveTypeAnnotation.js]
--var C = /** @class */ (function () {
--    function C() {
--    }
--    return C;
--}());
--var C2 = /** @class */ (function () {
--    function C2() {
--    }
--    return C2;
--}());
-+class C {
+ class C {
 +    // Used to be indexer, now it is a computed property
 +    [x];
-+}
-+class C2 {
-+}
+ }
+ class C2 {
+ }

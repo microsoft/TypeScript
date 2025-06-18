@@ -1,13 +1,6 @@
 --- old.declarationEmitScopeConsistency.js
 +++ new.declarationEmitScopeConsistency.js
-@@= skipped -13, +13 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.f = void 0;
--var f = function (x) { return x; };
-+const f = (x) => x;
- exports.f = f;
- //// [b.js]
+@@= skipped -19, +19 lines =@@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.g = void 0;

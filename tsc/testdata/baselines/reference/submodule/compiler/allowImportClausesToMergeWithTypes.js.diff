@@ -7,19 +7,16 @@
 -var b_1 = require("./b");
 +const b_1 = require("./b");
  exports.default = b_1.default;
--var x = { x: "" };
-+const x = { x: "" };
+ const x = { x: "" };
  b_1.default;
  //// [index.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
 -var a_1 = require("./a");
--var x = { x: "" };
 +const a_1 = require("./a");
-+const x = { x: "" };
+ const x = { x: "" };
  a_1.default;
 -var b_1 = require("./b");
 +const b_1 = require("./b");
  b_1.default;
--var y = x;
-+const y = x;
+ const y = x;

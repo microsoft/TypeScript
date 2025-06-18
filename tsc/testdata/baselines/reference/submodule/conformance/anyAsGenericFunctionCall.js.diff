@@ -1,16 +1,10 @@
 --- old.anyAsGenericFunctionCall.js
 +++ new.anyAsGenericFunctionCall.js
-@@= skipped -17, +17 lines =@@
- var x;
+@@= skipped -18, +18 lines =@@
  var a = x();
  var b = x('hello');
--var C = /** @class */ (function () {
--    function C() {
--    }
--    return C;
--}());
-+class C {
+ class C {
 +    foo;
-+}
+ }
  var c = x(x);
  var d = x(x);

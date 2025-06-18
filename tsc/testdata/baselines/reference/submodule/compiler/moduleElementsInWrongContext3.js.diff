@@ -4,15 +4,10 @@
          export { foo };
          export { baz as b } from "ambient";
          export default v;
--        var C = /** @class */ (function () {
--            function C() {
--            }
--            return C;
--        }());
--        export default C;
--        export function bee() { }
+-        export default class C {
 +        class C {
-+        }
+         }
+-        export function bee() { }
 +        P.C = C;
 +        function bee() { }
 +        P.bee = bee;

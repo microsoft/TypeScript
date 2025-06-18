@@ -1,14 +1,7 @@
 --- old.enumBasics3.js
 +++ new.enumBasics3.js
-@@= skipped -22, +22 lines =@@
- //// [enumBasics3.js]
- var M;
- (function (M) {
--    var N;
-+    let N;
-     (function (N) {
--        var E1;
-+        let E1;
+@@= skipped -27, +27 lines =@@
+         let E1;
          (function (E1) {
              E1[E1["a"] = 1] = "a";
 -            E1[E1["b"] = E1.a.a] = "b";
@@ -17,12 +10,9 @@
          })(E1 = N.E1 || (N.E1 = {}));
      })(N = M.N || (M.N = {}));
  })(M || (M = {}));
- (function (M) {
--    var N;
-+    let N;
+@@= skipped -9, +10 lines =@@
      (function (N) {
--        var E2;
-+        let E2;
+         let E2;
          (function (E2) {
 -            E2[E2["b"] = 1] = "b";
 -            E2[E2["c"] = M.N.E1.a.a] = "c";

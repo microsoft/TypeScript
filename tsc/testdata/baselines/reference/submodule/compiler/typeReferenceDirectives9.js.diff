@@ -1,17 +1,11 @@
 --- old.typeReferenceDirectives9.js
 +++ new.typeReferenceDirectives9.js
-@@= skipped -34, +34 lines =@@
- "use strict";
+@@= skipped -35, +35 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.Cls = void 0;
--var Cls = /** @class */ (function () {
--    function Cls() {
--    }
--    return Cls;
--}());
-+class Cls {
+ class Cls {
 +    x;
-+}
+ }
  exports.Cls = Cls;
  //// [mod1.js]
  "use strict";

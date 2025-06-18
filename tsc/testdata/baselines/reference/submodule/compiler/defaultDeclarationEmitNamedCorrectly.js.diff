@@ -4,12 +4,12 @@
  function make(x) {
      return null;
  }
--var MyComponent = /** @class */ (function () {
--    function MyComponent() {
+-let MyComponent = (() => {
+-    class MyComponent {
 -    }
 -    MyComponent.create = make(MyComponent);
 -    return MyComponent;
--}());
+-})();
 +class MyComponent {
 +    props;
 +    static create = make(MyComponent);

@@ -7,11 +7,8 @@
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";
 -    Object.defineProperty(exports, "__esModule", { value: true });
--    var a = /** @class */ (function () {
--        function a() {
--        }
--        return a;
--    }());
+-    class a {
+-    }
 -    exports.default = a;
 -});
 +"use strict";
@@ -34,7 +31,7 @@
 
 
  //// [server.d.ts]
-@@= skipped -24, +18 lines =@@
+@@= skipped -21, +18 lines =@@
  }
  export default a;
  //// [client.d.ts]

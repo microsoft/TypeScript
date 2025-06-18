@@ -1,30 +1,14 @@
 --- old.scopeResolutionIdentifiers.js
 +++ new.scopeResolutionIdentifiers.js
-@@= skipped -58, +58 lines =@@
-     var n = s;
+@@= skipped -59, +59 lines =@@
      var n;
  }
--var C = /** @class */ (function () {
--    function C() {
+ class C {
+-    constructor() {
 -        this.n = this.s;
 -    }
--    C.prototype.x = function () {
-+class C {
 +    s;
 +    n = this.s;
-+    x() {
+     x() {
          var p = this.n;
          var p;
--    };
--    return C;
--}());
-+    }
-+}
- var M3;
- (function (M3) {
-     var s;
--    var M4;
-+    let M4;
-     (function (M4) {
-         var n = s;
-         var n;

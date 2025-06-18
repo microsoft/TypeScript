@@ -1,22 +1,11 @@
 --- old.indexedAccessPrivateMemberOfGenericConstraint.js
 +++ new.indexedAccessPrivateMemberOfGenericConstraint.js
-@@= skipped -14, +14 lines =@@
-
+@@= skipped -15, +15 lines =@@
 
  //// [indexedAccessPrivateMemberOfGenericConstraint.js]
--var A = /** @class */ (function () {
--    function A() {
--    }
--    return A;
--}());
--var B = /** @class */ (function () {
--    function B() {
--    }
--    return B;
--}());
-+class A {
+ class A {
 +    a;
-+}
-+class B {
+ }
+ class B {
 +    a;
-+}
+ }

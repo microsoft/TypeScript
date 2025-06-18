@@ -1,40 +1,10 @@
 --- old.functionArgShadowing.js
 +++ new.functionArgShadowing.js
-@@= skipped -16, +16 lines =@@
- }
-
- //// [functionArgShadowing.js]
--var A = /** @class */ (function () {
--    function A() {
--    }
--    A.prototype.foo = function () { };
--    return A;
--}());
--var B = /** @class */ (function () {
--    function B() {
--    }
--    B.prototype.bar = function () { };
--    return B;
--}());
-+class A {
-+    foo() { }
-+}
-+class B {
-+    bar() { }
-+}
- function foo(x) {
-     var x = new B();
+@@= skipped -27, +27 lines =@@
      x.bar(); // the property bar does not exist on a value of type A
  }
--var C = /** @class */ (function () {
--    function C(p) {
-+class C {
+ class C {
 +    p;
-+    constructor(p) {
+     constructor(p) {
          this.p = p;
          var p;
-         var n = p;
-     }
--    return C;
--}());
-+}

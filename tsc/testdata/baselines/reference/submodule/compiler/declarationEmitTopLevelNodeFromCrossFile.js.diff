@@ -1,12 +1,6 @@
 --- old.declarationEmitTopLevelNodeFromCrossFile.js
 +++ new.declarationEmitTopLevelNodeFromCrossFile.js
-@@= skipped -19, +19 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.fn = void 0;
--exports.fn = { o: function (a) { } };
-+exports.fn = { o: (a) => { } };
- //// [b.js]
+@@= skipped -24, +24 lines =@@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.x = exports.m = void 0;
@@ -15,7 +9,7 @@
  exports.m = {
      /**
      * leading doc for prop
-@@= skipped -18, +18 lines =@@
+@@= skipped -13, +13 lines =@@
  //// [a.d.ts]
  export type X = string;
  export declare const fn: {

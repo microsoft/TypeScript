@@ -1,46 +1,6 @@
 --- old.declFileTypeAnnotationTypeQuery.js
 +++ new.declFileTypeAnnotationTypeQuery.js
-@@= skipped -44, +44 lines =@@
- }
-
- //// [declFileTypeAnnotationTypeQuery.js]
--var c = /** @class */ (function () {
--    function c() {
--    }
--    return c;
--}());
-+class c {
-+}
- var m;
- (function (m) {
--    var c = /** @class */ (function () {
--        function c() {
--        }
--        return c;
--    }());
-+    class c {
-+    }
-     m.c = c;
--    var g = /** @class */ (function () {
--        function g() {
--        }
--        return g;
--    }());
-+    class g {
-+    }
-     m.g = g;
- })(m || (m = {}));
--var g = /** @class */ (function () {
--    function g() {
--    }
--    return g;
--}());
-+class g {
-+}
- // Just the name
- function foo() {
-     return c;
-@@= skipped -66, +54 lines =@@
+@@= skipped -98, +98 lines =@@
  }
  declare class g<T> {
  }

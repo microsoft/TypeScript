@@ -1,16 +1,6 @@
 --- old.decoratorMetadataWithTypeOnlyImport.js
 +++ new.decoratorMetadataWithTypeOnlyImport.js
-@@= skipped -21, +21 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.Service = void 0;
--var Service = /** @class */ (function () {
--    function Service() {
--    }
--    return Service;
--}());
-+class Service {
-+}
+@@= skipped -26, +26 lines =@@
  exports.Service = Service;
  //// [component.js]
  "use strict";
@@ -24,15 +14,13 @@
 -    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 -};
  Object.defineProperty(exports, "__esModule", { value: true });
--var MyComponent = /** @class */ (function () {
--    function MyComponent(Service) {
-+@decorator
-+class MyComponent {
-+    Service;
-+    constructor(Service) {
-         this.Service = Service;
-     }
--    MyComponent.prototype.method = function (x) {
+-let MyComponent = (() => {
+-    let MyComponent = class MyComponent {
+-        constructor(Service) {
+-            this.Service = Service;
+-        }
+-        method(x) {
+-        }
 -    };
 -    __decorate([
 -        decorator,
@@ -45,7 +33,13 @@
 -        __metadata("design:paramtypes", [Function])
 -    ], MyComponent);
 -    return MyComponent;
--}());
+-})();
++@decorator
++class MyComponent {
++    Service;
++    constructor(Service) {
++        this.Service = Service;
++    }
 +    @decorator
 +    method(x) {
 +    }

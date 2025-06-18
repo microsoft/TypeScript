@@ -1,21 +1,14 @@
 --- old.declarationEmitParameterProperty.js
 +++ new.declarationEmitParameterProperty.js
-@@= skipped -10, +10 lines =@@
- "use strict";
+@@= skipped -11, +11 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.Foo = void 0;
--var Foo = /** @class */ (function () {
--    function Foo(bar) {
-+class Foo {
+ class Foo {
 +    bar;
-+    constructor(bar) {
+     constructor(bar) {
          this.bar = bar;
      }
--    return Foo;
--}());
-+}
- exports.Foo = Foo;
-
+@@= skipped -9, +10 lines =@@
 
  //// [declarationEmitParameterProperty.d.ts]
  export declare class Foo {

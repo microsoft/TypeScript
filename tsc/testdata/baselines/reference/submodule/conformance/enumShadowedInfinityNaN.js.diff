@@ -1,26 +1,19 @@
 --- old.enumShadowedInfinityNaN.js
 +++ new.enumShadowedInfinityNaN.js
-@@= skipped -20, +20 lines =@@
- //// [enumShadowedInfinityNaN.js]
- // https://github.com/microsoft/TypeScript/issues/54981
- {
--    var Infinity_1 = {};
--    var En = void 0;
-+    let Infinity = {};
-+    let En;
+@@= skipped -23, +23 lines =@@
+     let Infinity = {};
+     let En;
      (function (En) {
--        En[En["X"] = Infinity_1] = "X";
+-        En[En["X"] = Infinity] = "X";
 +        En["X"] = Infinity;
 +        if (typeof En.X !== "string") En[En.X] = "X";
      })(En || (En = {}));
  }
  {
--    var NaN_1 = {};
--    var En = void 0;
-+    let NaN = {};
-+    let En;
+     let NaN = {};
+     let En;
      (function (En) {
--        En[En["X"] = NaN_1] = "X";
+-        En[En["X"] = NaN] = "X";
 +        En["X"] = NaN;
 +        if (typeof En.X !== "string") En[En.X] = "X";
      })(En || (En = {}));

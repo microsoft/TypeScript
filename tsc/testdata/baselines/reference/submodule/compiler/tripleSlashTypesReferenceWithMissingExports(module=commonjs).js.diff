@@ -1,8 +1,0 @@
---- old.tripleSlashTypesReferenceWithMissingExports(module=commonjs).js
-+++ new.tripleSlashTypesReferenceWithMissingExports(module=commonjs).js
-@@= skipped -14, +14 lines =@@
-
- //// [usage.js]
- /// <reference types="pkg" />
--var a = { a: 0 };
-+const a = { a: 0 };

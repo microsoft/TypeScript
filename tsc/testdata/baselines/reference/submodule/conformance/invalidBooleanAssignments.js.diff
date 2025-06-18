@@ -1,17 +1,10 @@
 --- old.invalidBooleanAssignments.js
 +++ new.invalidBooleanAssignments.js
-@@= skipped -38, +38 lines =@@
-     E[E["A"] = 0] = "A";
+@@= skipped -39, +39 lines =@@
  })(E || (E = {}));
  var e = x;
--var C = /** @class */ (function () {
--    function C() {
--    }
--    return C;
--}());
-+class C {
+ class C {
 +    foo;
-+}
+ }
  var f = x;
  var g = x;
- var h = x;

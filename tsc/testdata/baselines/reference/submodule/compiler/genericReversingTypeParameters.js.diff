@@ -1,21 +1,10 @@
 --- old.genericReversingTypeParameters.js
 +++ new.genericReversingTypeParameters.js
-@@= skipped -12, +12 lines =@@
- var r2b = i.get(1); 
+@@= skipped -13, +13 lines =@@
 
  //// [genericReversingTypeParameters.js]
--var BiMap = /** @class */ (function () {
--    function BiMap() {
--    }
--    BiMap.prototype.get = function (key) { return null; };
--    BiMap.prototype.inverse = function () { return null; };
--    return BiMap;
--}());
-+class BiMap {
+ class BiMap {
 +    inverseBiMap;
-+    get(key) { return null; }
-+    inverse() { return null; }
-+}
- var b = new BiMap();
- var r1 = b.get('');
- var i = b.inverse(); // used to get the type wrong here.
+     get(key) { return null; }
+     inverse() { return null; }
+ }

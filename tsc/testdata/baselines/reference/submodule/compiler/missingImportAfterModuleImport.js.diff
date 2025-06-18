@@ -1,23 +1,15 @@
 --- old.missingImportAfterModuleImport.js
 +++ new.missingImportAfterModuleImport.js
-@@= skipped -24, +24 lines =@@
- //// [missingImportAfterModuleImport_0.js]
+@@= skipped -25, +25 lines =@@
  //// [missingImportAfterModuleImport_1.js]
  "use strict";
--var MainModule = /** @class */ (function () {
--    function MainModule() {
--    }
--    return MainModule;
--}());
-+class MainModule {
+ class MainModule {
 +    // public static SubModule: SubModule;
 +    SubModule;
-+    constructor() { }
-+}
+     constructor() { }
+ }
  module.exports = MainModule;
-
-
-@@= skipped -18, +18 lines =@@
+@@= skipped -15, +17 lines =@@
      export = SubModule;
  }
  //// [missingImportAfterModuleImport_1.d.ts]

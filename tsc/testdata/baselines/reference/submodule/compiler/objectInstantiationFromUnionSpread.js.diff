@@ -17,10 +17,10 @@
 -    return __assign.apply(this, arguments);
 -};
  function f1(a) {
--    a.map(function (item) { return (__assign({}, item)); }).filter(function (value) { });
+-    a.map(item => (__assign({}, item))).filter(value => { });
 +    a.map(item => ({ ...item })).filter(value => { });
  }
  function f2(a) {
--    a.map(function (item) { return (__assign({}, item)); }).filter(function (value) { });
+-    a.map(item => (__assign({}, item))).filter(value => { });
 +    a.map(item => ({ ...item })).filter(value => { });
  }

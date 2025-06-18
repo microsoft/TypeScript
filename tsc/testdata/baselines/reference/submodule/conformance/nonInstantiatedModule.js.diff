@@ -1,25 +1,10 @@
 --- old.nonInstantiatedModule.js
 +++ new.nonInstantiatedModule.js
-@@= skipped -60, +60 lines =@@
- var a2 = m.a;
- var M2;
- (function (M2) {
--    var Point;
-+    let Point;
-     (function (Point) {
-         function Origin() {
-             return { x: 0, y: 0 };
-@@= skipped -14, +14 lines =@@
- var p2;
+@@= skipped -75, +75 lines =@@
  var M3;
  (function (M3) {
--    var Utils = /** @class */ (function () {
--        function Utils() {
--        }
--        return Utils;
--    }());
-+    class Utils {
+     class Utils {
 +        name;
-+    }
+     }
      M3.Utils = Utils;
  })(M3 || (M3 = {}));

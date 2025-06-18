@@ -1,8 +1,0 @@
---- old.logicalOrExpressionIsNotContextuallyTyped.js
-+++ new.logicalOrExpressionIsNotContextuallyTyped.js
-@@= skipped -18, +18 lines =@@
- // operand types.
- var a;
- // bug 786110
--var r = a || (function (a) { return a.toLowerCase(); });
-+var r = a || ((a) => a.toLowerCase());

@@ -1,41 +1,19 @@
 --- old.unionTypePropertyAccessibility.js
 +++ new.unionTypePropertyAccessibility.js
-@@= skipped -50, +50 lines =@@
-
+@@= skipped -51, +51 lines =@@
 
  //// [unionTypePropertyAccessibility.js]
--var Default = /** @class */ (function () {
--    function Default() {
--    }
--    return Default;
--}());
--var Public = /** @class */ (function () {
--    function Public() {
--    }
--    return Public;
--}());
--var Protected = /** @class */ (function () {
--    function Protected() {
--    }
--    return Protected;
--}());
--var Private = /** @class */ (function () {
--    function Private() {
--    }
--    return Private;
--}());
-+class Default {
+ class Default {
 +    member;
-+}
-+class Public {
+ }
+ class Public {
 +    member;
-+}
-+class Protected {
+ }
+ class Protected {
 +    member;
-+}
-+class Private {
+ }
+ class Private {
 +    member;
-+}
+ }
  var v1;
  var v2;
- var v3;

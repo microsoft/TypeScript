@@ -1,12 +1,6 @@
 --- old.declarationEmitMappedTypePropertyFromNumericStringKey.js
 +++ new.declarationEmitMappedTypePropertyFromNumericStringKey.js
-@@= skipped -6, +6 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.f = void 0;
--exports.f = (function (arg) { return arg; })({ '0': 0 }); // Original prop uses string syntax
-+exports.f = ((arg) => arg)({ '0': 0 }); // Original prop uses string syntax
-
+@@= skipped -11, +11 lines =@@
 
  //// [declarationEmitMappedTypePropertyFromNumericStringKey.d.ts]
  export declare const f: {

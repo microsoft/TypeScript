@@ -1,24 +1,15 @@
 --- old.importInTypePosition.js
 +++ new.importInTypePosition.js
-@@= skipped -25, +25 lines =@@
- //// [importInTypePosition.js]
+@@= skipped -26, +26 lines =@@
  var A;
  (function (A) {
--    var Point = /** @class */ (function () {
--        function Point(x, y) {
-+    class Point {
+     class Point {
 +        x;
 +        y;
-+        constructor(x, y) {
+         constructor(x, y) {
              this.x = x;
              this.y = y;
-         }
--        return Point;
--    }());
-+    }
-     A.Point = Point;
-     A.Origin = new Point(0, 0);
- })(A || (A = {}));
+@@= skipped -11, +13 lines =@@
  // no code gen expected
  var C;
  (function (C) {

@@ -1,16 +1,12 @@
 --- old.ClassDeclarationWithInvalidConstOnPropertyDeclaration2.js
 +++ new.ClassDeclarationWithInvalidConstOnPropertyDeclaration2.js
-@@= skipped -6, +6 lines =@@
- }
+@@= skipped -7, +7 lines =@@
 
  //// [ClassDeclarationWithInvalidConstOnPropertyDeclaration2.js]
--var C = /** @class */ (function () {
--    function C() {
+ class C {
+-    constructor() {
 -        this.x = 10;
 -    }
--    return C;
--}());
-+class C {
 +    const;
 +    x = 10;
-+}
+ }

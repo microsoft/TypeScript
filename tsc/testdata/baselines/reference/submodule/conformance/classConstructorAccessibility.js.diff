@@ -1,90 +1,46 @@
 --- old.classConstructorAccessibility.js
 +++ new.classConstructorAccessibility.js
-@@= skipped -36, +36 lines =@@
-
+@@= skipped -37, +37 lines =@@
 
  //// [classConstructorAccessibility.js]
--var C = /** @class */ (function () {
--    function C(x) {
--        this.x = x;
--    }
--    return C;
--}());
--var D = /** @class */ (function () {
--    function D(x) {
--        this.x = x;
--    }
--    return D;
--}());
--var E = /** @class */ (function () {
--    function E(x) {
--        this.x = x;
--    }
--    return E;
--}());
-+class C {
+ class C {
 +    x;
-+    constructor(x) {
-+        this.x = x;
-+    }
-+}
-+class D {
+     constructor(x) {
+         this.x = x;
+     }
+ }
+ class D {
 +    x;
-+    constructor(x) {
-+        this.x = x;
-+    }
-+}
-+class E {
+     constructor(x) {
+         this.x = x;
+     }
+ }
+ class E {
 +    x;
-+    constructor(x) {
-+        this.x = x;
-+    }
-+}
- var c = new C(1);
- var d = new D(1); // error
- var e = new E(1); // error
+     constructor(x) {
+         this.x = x;
+     }
+@@= skipped -20, +23 lines =@@
  var Generic;
  (function (Generic) {
--    var C = /** @class */ (function () {
--        function C(x) {
--            this.x = x;
--        }
--        return C;
--    }());
--    var D = /** @class */ (function () {
--        function D(x) {
--            this.x = x;
--        }
--        return D;
--    }());
--    var E = /** @class */ (function () {
--        function E(x) {
--            this.x = x;
--        }
--        return E;
--    }());
-+    class C {
+     class C {
 +        x;
-+        constructor(x) {
-+            this.x = x;
-+        }
-+    }
-+    class D {
+         constructor(x) {
+             this.x = x;
+         }
+     }
+     class D {
 +        x;
-+        constructor(x) {
-+            this.x = x;
-+        }
-+    }
-+    class E {
+         constructor(x) {
+             this.x = x;
+         }
+     }
+     class E {
 +        x;
-+        constructor(x) {
-+            this.x = x;
-+        }
-+    }
-     var c = new C(1);
-     var d = new D(1); // error
-     var e = new E(1); // error
-@@= skipped -61, +61 lines =@@
+         constructor(x) {
+             this.x = x;
+         }
+@@= skipped -34, +37 lines =@@
      protected constructor(x: number);
  }
  declare var c: C;

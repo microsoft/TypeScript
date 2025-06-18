@@ -1,21 +1,10 @@
 --- old.parser509668.js
 +++ new.parser509668.js
-@@= skipped -6, +6 lines =@@
- }
+@@= skipped -7, +7 lines =@@
 
  //// [parser509668.js]
--var Foo3 = /** @class */ (function () {
-+class Foo3 {
+ class Foo3 {
 +    args;
      // Doesn't work, but should
--    function Foo3() {
--        var args = [];
--        for (var _i = 0; _i < arguments.length; _i++) {
--            args[_i] = arguments[_i];
--        }
-+    constructor(...args) {
+     constructor(...args) {
          this.args = args;
-     }
--    return Foo3;
--}());
-+}

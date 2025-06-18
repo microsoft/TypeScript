@@ -1,15 +1,9 @@
 --- old.indexWithoutParamType2.js
 +++ new.indexWithoutParamType2.js
-@@= skipped -6, +6 lines =@@
- }
+@@= skipped -7, +7 lines =@@
 
  //// [indexWithoutParamType2.js]
--var C = /** @class */ (function () {
--    function C() {
--    }
--    return C;
--}());
-+class C {
+ class C {
 +    // Used to be indexer, now it is a computed property
 +    [x];
-+}
+ }

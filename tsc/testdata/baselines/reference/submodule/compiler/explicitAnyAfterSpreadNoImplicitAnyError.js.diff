@@ -16,6 +16,5 @@
 -    return __assign.apply(this, arguments);
 -};
 -(__assign({ a: [] }, null));
--var x;
 +({ a: [], ...null });
-+let x;
+ let x;

@@ -1,15 +1,6 @@
 --- old.moduleDeclarationExportStarShadowingGlobalIsNameable.js
 +++ new.moduleDeclarationExportStarShadowingGlobalIsNameable.js
-@@= skipped -49, +49 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.func = void 0;
--var func = function (account, acc2) { };
-+const func = (account, acc2) => { };
- exports.func = func;
-
-
-@@= skipped -15, +15 lines =@@
+@@= skipped -64, +64 lines =@@
  //// [index.d.ts]
  export * from "./account";
  //// [index.d.ts]

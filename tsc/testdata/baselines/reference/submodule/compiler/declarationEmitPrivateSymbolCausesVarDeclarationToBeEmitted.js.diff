@@ -1,18 +1,10 @@
 --- old.declarationEmitPrivateSymbolCausesVarDeclarationToBeEmitted.js
 +++ new.declarationEmitPrivateSymbolCausesVarDeclarationToBeEmitted.js
-@@= skipped -11, +11 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
+@@= skipped -13, +13 lines =@@
  exports.User = void 0;
--var _data = Symbol('data');
--var User = /** @class */ (function () {
--    function User() {
--    }
--    return User;
--}());
-+const _data = Symbol('data');
-+class User {
+ const _data = Symbol('data');
+ class User {
 +    [_data];
-+}
+ }
  exports.User = User;
  ;

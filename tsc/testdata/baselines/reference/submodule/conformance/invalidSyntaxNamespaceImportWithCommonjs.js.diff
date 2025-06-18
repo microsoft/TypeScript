@@ -1,17 +1,6 @@
 --- old.invalidSyntaxNamespaceImportWithCommonjs.js
 +++ new.invalidSyntaxNamespaceImportWithCommonjs.js
-@@= skipped -9, +9 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.C = void 0;
--var C = /** @class */ (function () {
--    function C() {
--    }
--    return C;
--}());
-+class C {
-+}
- exports.C = C;
+@@= skipped -15, +15 lines =@@
  //// [1.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });

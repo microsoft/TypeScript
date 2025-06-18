@@ -11,10 +11,8 @@
 -    return {
 -        setters: [],
 -        execute: function () {
--            Component = /** @class */ (function () {
--                function Component() {
--                }
--                Component.prototype.render = function () {
+-            Component = class Component {
+-                render() {
 -                    return <div>
 -            {/* missing */}
 +"use strict";
@@ -39,9 +37,8 @@
 +            
 +            
          </div>;
--                };
--                return Component;
--            }());
+-                }
+-            };
 -        }
 -    };
 -});

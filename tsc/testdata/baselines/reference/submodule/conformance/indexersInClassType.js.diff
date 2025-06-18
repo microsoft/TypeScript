@@ -1,23 +1,11 @@
 --- old.indexersInClassType.js
 +++ new.indexersInClassType.js
-@@= skipped -19, +19 lines =@@
-
+@@= skipped -20, +20 lines =@@
 
  //// [indexersInClassType.js]
--var C = /** @class */ (function () {
--    function C() {
--    }
--    C.prototype.fn = function () {
-+class C {
+ class C {
 +    1;
 +    'a';
-+    fn() {
+     fn() {
          return this;
--    };
--    return C;
--}());
-+    }
-+}
- var c = new C();
- var r = c.fn();
- var r2 = r[1];
+     }

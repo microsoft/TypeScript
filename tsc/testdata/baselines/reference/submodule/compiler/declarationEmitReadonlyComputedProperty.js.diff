@@ -1,16 +1,6 @@
 --- old.declarationEmitReadonlyComputedProperty.js
 +++ new.declarationEmitReadonlyComputedProperty.js
-@@= skipped -26, +26 lines =@@
- exports.createInstance = createInstance;
- exports.SYMBOL = Symbol();
- function createInstance() {
--    var _a;
--    return _a = {},
--        _a[exports.SYMBOL] = '',
--        _a;
-+    return {
-+        [exports.SYMBOL]: ''
-+    };
+@@= skipped -32, +32 lines =@@
  }
  //// [index.js]
  "use strict";

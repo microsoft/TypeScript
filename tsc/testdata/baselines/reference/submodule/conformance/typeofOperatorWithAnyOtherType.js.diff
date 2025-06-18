@@ -1,29 +1,10 @@
 --- old.typeofOperatorWithAnyOtherType.js
 +++ new.typeofOperatorWithAnyOtherType.js
-@@= skipped -81, +81 lines =@@
- var ANY1;
- var ANY2 = ["", ""];
- var obj;
--var obj1 = { x: "a", y: function () { } };
-+var obj1 = { x: "a", y: () => { } };
- function foo() {
-     var a;
+@@= skipped -87, +87 lines =@@
      return a;
  }
--var A = /** @class */ (function () {
--    function A() {
--    }
--    A.foo = function () {
-+class A {
+ class A {
 +    a;
-+    static foo() {
+     static foo() {
          var a;
          return a;
--    };
--    return A;
--}());
-+    }
-+}
- var M;
- (function (M) {
- })(M || (M = {}));

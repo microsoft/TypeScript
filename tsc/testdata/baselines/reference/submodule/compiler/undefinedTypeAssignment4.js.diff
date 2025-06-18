@@ -1,17 +1,10 @@
 --- old.undefinedTypeAssignment4.js
 +++ new.undefinedTypeAssignment4.js
-@@= skipped -14, +14 lines =@@
-
+@@= skipped -15, +15 lines =@@
 
  //// [undefinedTypeAssignment4.js]
--var undefined = /** @class */ (function () {
--    function undefined() {
--    }
--    return undefined;
--}());
-+class undefined {
+ class undefined {
 +    foo;
-+}
+ }
  (function (undefined) {
      undefined.x = 42;
- })(undefined || (undefined = {}));

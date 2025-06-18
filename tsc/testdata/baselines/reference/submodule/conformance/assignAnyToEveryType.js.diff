@@ -1,17 +1,10 @@
 --- old.assignAnyToEveryType.js
 +++ new.assignAnyToEveryType.js
-@@= skipped -64, +64 lines =@@
- var g = x;
+@@= skipped -65, +65 lines =@@
  var g2 = E.A;
  g2 = x;
--var C = /** @class */ (function () {
--    function C() {
--    }
--    return C;
--}());
-+class C {
+ class C {
 +    foo;
-+}
+ }
  var h = x;
  var i = x;
- var j = x;

@@ -1,48 +1,24 @@
 --- old.assignmentCompatWithObjectMembers.js
 +++ new.assignmentCompatWithObjectMembers.js
-@@= skipped -91, +91 lines =@@
- // no errors expected
+@@= skipped -92, +92 lines =@@
  var SimpleTypes;
  (function (SimpleTypes) {
--    var S = /** @class */ (function () {
--        function S() {
--        }
--        return S;
--    }());
--    var T = /** @class */ (function () {
--        function T() {
--        }
--        return T;
--    }());
-+    class S {
+     class S {
 +        foo;
-+    }
-+    class T {
+     }
+     class T {
 +        foo;
-+    }
+     }
      var s;
      var t;
-     var s2;
-@@= skipped -40, +36 lines =@@
- })(SimpleTypes || (SimpleTypes = {}));
+@@= skipped -34, +36 lines =@@
  var ObjectTypes;
  (function (ObjectTypes) {
--    var S = /** @class */ (function () {
--        function S() {
--        }
--        return S;
--    }());
--    var T = /** @class */ (function () {
--        function T() {
--        }
--        return T;
--    }());
-+    class S {
+     class S {
 +        foo;
-+    }
-+    class T {
+     }
+     class T {
 +        foo;
-+    }
+     }
      var s;
      var t;
-     var s2;

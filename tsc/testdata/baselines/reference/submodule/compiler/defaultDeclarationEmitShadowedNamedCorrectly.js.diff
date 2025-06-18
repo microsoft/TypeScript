@@ -9,23 +9,12 @@
  function make(x) {
      return null;
  }
--var MyComponent = /** @class */ (function () {
--    function MyComponent() {
--    }
--    return MyComponent;
--}());
-+class MyComponent {
+ class MyComponent {
 +    props;
-+}
+ }
  exports.default = MyComponent;
  var Something;
- (function (Something) {
--    var MyComponent = 2; // Shadow declaration, so symbol is only usable via the self-import
-+    let MyComponent = 2; // Shadow declaration, so symbol is only usable via the self-import
-     Something.create = make(me.default);
- })(Something || (exports.Something = Something = {}));
-
-@@= skipped -24, +22 lines =@@
+@@= skipped -21, +22 lines =@@
      t: T;
  }
  export declare function make<P, CTor>(x: {

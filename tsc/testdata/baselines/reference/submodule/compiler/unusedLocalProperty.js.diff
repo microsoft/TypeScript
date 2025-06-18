@@ -1,23 +1,10 @@
 --- old.unusedLocalProperty.js
 +++ new.unusedLocalProperty.js
-@@= skipped -14, +14 lines =@@
-
+@@= skipped -15, +15 lines =@@
 
  //// [unusedLocalProperty.js]
--var Animal = /** @class */ (function () {
--    function Animal(species) {
-+class Animal {
+ class Animal {
 +    species;
-+    constructor(species) {
+     constructor(species) {
          this.species = species;
      }
--    Animal.prototype.printSpecies = function () {
--        var species = this.species;
-+    printSpecies() {
-+        let { species } = this;
-         console.log(species);
--    };
--    return Animal;
--}());
-+    }
-+}

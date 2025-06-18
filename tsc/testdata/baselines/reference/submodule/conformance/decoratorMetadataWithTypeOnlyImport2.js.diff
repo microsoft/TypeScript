@@ -1,17 +1,6 @@
 --- old.decoratorMetadataWithTypeOnlyImport2.js
 +++ new.decoratorMetadataWithTypeOnlyImport2.js
-@@= skipped -20, +20 lines =@@
- exports.Services = void 0;
- var Services;
- (function (Services) {
--    var Service = /** @class */ (function () {
--        function Service() {
--        }
--        return Service;
--    }());
-+    class Service {
-+    }
-     Services.Service = Service;
+@@= skipped -26, +26 lines =@@
  })(Services || (exports.Services = Services = {}));
  //// [index.js]
  "use strict";
@@ -26,15 +15,15 @@
 -};
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.Main = void 0;
--var Main = /** @class */ (function () {
--    function Main() {
+-let Main = (() => {
+-    class Main {
 -    }
 -    __decorate([
 -        decorator(),
 -        __metadata("design:type", Function)
 -    ], Main.prototype, "field", void 0);
 -    return Main;
--}());
+-})();
 +class Main {
 +    @decorator()
 +    field;

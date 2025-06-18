@@ -1,27 +1,10 @@
 --- old.interfaceContextualType.js
 +++ new.interfaceContextualType.js
-@@= skipped -25, +25 lines =@@
- //// [interfaceContextualType.js]
+@@= skipped -26, +26 lines =@@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
--var Bug = /** @class */ (function () {
--    function Bug() {
--    }
--    Bug.prototype.ok = function () {
-+class Bug {
+ class Bug {
 +    values;
-+    ok() {
+     ok() {
          this.values = {};
          this.values['comments'] = { italic: true };
--    };
--    Bug.prototype.shouldBeOK = function () {
-+    }
-+    shouldBeOK() {
-         this.values = {
-             comments: { italic: true }
-         };
--    };
--    return Bug;
--}());
-+    }
-+}

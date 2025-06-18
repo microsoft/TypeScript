@@ -12,14 +12,14 @@
 -};
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.C = void 0;
--var C = /** @class */ (function () {
--    function C() {
--    }
+-let C = (() => {
+-    let C = class C {
+-    };
 -    C = __decorate([
 -        dec
 -    ], C);
 -    return C;
--}());
+-})();
 +@dec
 +class C {
 +}

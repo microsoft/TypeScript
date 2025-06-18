@@ -13,8 +13,8 @@
 -var __metadata = (this && this.__metadata) || function (k, v) {
 -    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 -};
--var X = /** @class */ (function () {
--    function X() {
+-let X = (() => {
+-    class X {
 -    }
 -    __decorate([
 -        decorator(),
@@ -29,7 +29,7 @@
 -        __metadata("design:type", Object)
 -    ], X.prototype, "c", void 0);
 -    return X;
--}());
+-})();
 +class X {
 +    @decorator()
 +    a;

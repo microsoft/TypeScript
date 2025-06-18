@@ -1,17 +1,10 @@
 --- old.interfaceExtendingClassWithProtecteds.js
 +++ new.interfaceExtendingClassWithProtecteds.js
-@@= skipped -17, +17 lines =@@
- var r2 = i.x; // error
+@@= skipped -18, +18 lines =@@
 
  //// [interfaceExtendingClassWithProtecteds.js]
--var Foo = /** @class */ (function () {
--    function Foo() {
--    }
--    return Foo;
--}());
-+class Foo {
+ class Foo {
 +    x;
-+}
+ }
  var i;
  var r = i.y;
- var r2 = i.x; // error

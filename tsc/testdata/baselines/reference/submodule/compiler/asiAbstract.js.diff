@@ -1,33 +1,13 @@
 --- old.asiAbstract.js
 +++ new.asiAbstract.js
-@@= skipped -18, +18 lines =@@
-
- //// [asiAbstract.js]
- abstract;
--var NonAbstractClass = /** @class */ (function () {
--    function NonAbstractClass() {
--    }
--    return NonAbstractClass;
--}());
--var C2 = /** @class */ (function () {
--    function C2() {
--    }
--    C2.prototype.nonAbstractFunction = function () {
--    };
--    return C2;
--}());
--var C3 = /** @class */ (function () {
--    function C3() {
--    }
--    return C3;
--}());
-+class NonAbstractClass {
-+}
-+class C2 {
+@@= skipped -21, +21 lines =@@
+ class NonAbstractClass {
+ }
+ class C2 {
 +    abstract;
-+    nonAbstractFunction() {
-+    }
-+}
-+class C3 {
+     nonAbstractFunction() {
+     }
+ }
+ class C3 {
 +    abstract;
-+}
+ }

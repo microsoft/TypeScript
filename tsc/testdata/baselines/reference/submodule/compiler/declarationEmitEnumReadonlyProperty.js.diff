@@ -1,24 +1,17 @@
 --- old.declarationEmitEnumReadonlyProperty.js
 +++ new.declarationEmitEnumReadonlyProperty.js
-@@= skipped -17, +17 lines =@@
-     E["A"] = "a";
+@@= skipped -18, +18 lines =@@
      E["B"] = "b";
  })(E || (E = {}));
--var C = /** @class */ (function () {
--    function C() {
+ class C {
+-    constructor() {
 -        this.type = E.A;
 -    }
--    return C;
--}());
--var x = new C().type;
-+class C {
 +    type = E.A;
-+}
-+let x = new C().type;
+ }
+ let x = new C().type;
 
-
- //// [declarationEmitEnumReadonlyProperty.d.ts]
-@@= skipped -15, +12 lines =@@
+@@= skipped -13, +11 lines =@@
      B = "b"
  }
  declare class C {

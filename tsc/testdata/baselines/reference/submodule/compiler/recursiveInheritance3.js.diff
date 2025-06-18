@@ -1,17 +1,12 @@
 --- old.recursiveInheritance3.js
 +++ new.recursiveInheritance3.js
-@@= skipped -10, +10 lines =@@
- }
+@@= skipped -11, +11 lines =@@
 
  //// [recursiveInheritance3.js]
--var C = /** @class */ (function () {
--    function C() {
+ class C {
+-    constructor() {
 -        this.x = 1;
 -    }
--    C.prototype.foo = function (x) { return x; };
--    return C;
--}());
-+class C {
-+    foo(x) { return x; }
+     foo(x) { return x; }
 +    x = 1;
-+}
+ }

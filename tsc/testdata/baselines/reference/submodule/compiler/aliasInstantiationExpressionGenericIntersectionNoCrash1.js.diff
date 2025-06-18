@@ -5,12 +5,7 @@
 
  //// [aliasInstantiationExpressionGenericIntersectionNoCrash1.js]
 -"use strict";
--var ErrImpl = /** @class */ (function () {
--    function ErrImpl() {
--    }
--    return ErrImpl;
--}());
-+class ErrImpl {
+ class ErrImpl {
 +    e;
-+}
+ }
  e;

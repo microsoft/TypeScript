@@ -6,11 +6,9 @@
  //// [typePredicatesOptionalChaining1.js]
 -"use strict";
 -var _a;
--var x = {
-+const x = {
+ const x = {
      y: {},
  };
- // type guard
 @@= skipped -13, +11 lines =@@
  function title(str) {
      return str.length > 0 ? "Dear " + str : "Dear nobody";

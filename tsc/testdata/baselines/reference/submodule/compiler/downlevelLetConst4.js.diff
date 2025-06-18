@@ -1,8 +1,0 @@
---- old.downlevelLetConst4.js
-+++ new.downlevelLetConst4.js
-@@= skipped -3, +3 lines =@@
- const a: number
-
- //// [downlevelLetConst4.js]
--var a;
-+const a;

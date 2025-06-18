@@ -1,41 +1,22 @@
 --- old.enumAssignabilityInInheritance.js
 +++ new.enumAssignabilityInInheritance.js
-@@= skipped -126, +126 lines =@@
- var r4 = foo6(E.A);
+@@= skipped -127, +127 lines =@@
  var r4 = foo7(E.A);
  var r4 = foo8(E.A);
--var A = /** @class */ (function () {
--    function A() {
--    }
--    return A;
--}());
-+class A {
+ class A {
 +    foo;
-+}
+ }
  var r4 = foo9(E.A);
--var A2 = /** @class */ (function () {
--    function A2() {
--    }
--    return A2;
--}());
-+class A2 {
+ class A2 {
 +    foo;
-+}
+ }
  var r4 = foo10(E.A);
  var r4 = foo11(E.A);
- var r4 = foo12(E.A);
-@@= skipped -24, +20 lines =@@
-     f.bar = 1;
+@@= skipped -18, +20 lines =@@
  })(f || (f = {}));
  var r4 = foo14(E.A);
--var CC = /** @class */ (function () {
--    function CC() {
--    }
--    return CC;
--}());
-+class CC {
+ class CC {
 +    baz;
-+}
+ }
  (function (CC) {
      CC.bar = 1;
- })(CC || (CC = {}));

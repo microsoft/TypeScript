@@ -1,15 +1,6 @@
 --- old.importTypeAmbientMissing.js
 +++ new.importTypeAmbientMissing.js
-@@= skipped -12, +12 lines =@@
-
-
- //// [importTypeAmbientMissing.js]
--var x = { x: 0, y: 0 }; // typo, error
-+const x = { x: 0, y: 0 }; // typo, error
-
-
- //// [importTypeAmbientMissing.d.ts]
-@@= skipped -11, +11 lines =@@
+@@= skipped -23, +23 lines =@@
      }
      export = Point;
  }

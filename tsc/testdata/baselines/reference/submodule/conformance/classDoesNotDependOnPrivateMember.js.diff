@@ -1,16 +1,10 @@
 --- old.classDoesNotDependOnPrivateMember.js
 +++ new.classDoesNotDependOnPrivateMember.js
-@@= skipped -10, +10 lines =@@
- //// [classDoesNotDependOnPrivateMember.js]
+@@= skipped -11, +11 lines =@@
  var M;
  (function (M) {
--    var C = /** @class */ (function () {
--        function C() {
--        }
--        return C;
--    }());
-+    class C {
+     class C {
 +        x;
-+    }
+     }
      M.C = C;
  })(M || (M = {}));

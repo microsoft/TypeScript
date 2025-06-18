@@ -8,10 +8,3 @@
  // Repros from #43130
  function f1(x) {
      if (x) {
-@@= skipped -35, +34 lines =@@
-     }
- }
- function f5(x) {
--    var t1 = x === "hello"; // Should be an error
-+    const t1 = x === "hello"; // Should be an error
- }

@@ -1,17 +1,11 @@
 --- old.declarationEmitPreservesHasNoDefaultLibDirective.js
 +++ new.declarationEmitPreservesHasNoDefaultLibDirective.js
-@@= skipped -16, +16 lines =@@
-
+@@= skipped -17, +17 lines =@@
  //// [declarationEmitPreservesHasNoDefaultLibDirective.js]
  /// <reference no-default-lib="true"/>
--var Foo = /** @class */ (function () {
--    function Foo() {
--    }
--    return Foo;
--}());
-+class Foo {
+ class Foo {
 +    public;
-+}
+ }
 
 
  //// [declarationEmitPreservesHasNoDefaultLibDirective.d.ts]

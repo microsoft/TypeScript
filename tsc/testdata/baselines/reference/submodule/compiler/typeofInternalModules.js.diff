@@ -1,19 +1,6 @@
 --- old.typeofInternalModules.js
 +++ new.typeofInternalModules.js
-@@= skipped -28, +28 lines =@@
- //// [typeofInternalModules.js]
- var Outer;
- (function (Outer) {
--    var instantiated;
-+    let instantiated;
-     (function (instantiated) {
--        var C = /** @class */ (function () {
--            function C() {
--            }
--            return C;
--        }());
-+        class C {
-+        }
+@@= skipped -35, +35 lines =@@
          instantiated.C = C;
      })(instantiated = Outer.instantiated || (Outer.instantiated = {}));
  })(Outer || (Outer = {}));

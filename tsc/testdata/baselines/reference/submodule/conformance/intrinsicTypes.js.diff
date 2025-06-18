@@ -8,16 +8,7 @@
  function foo1(s, x, y) {
      s = x;
      s = y;
-@@= skipped -10, +9 lines =@@
-     y = x; // Error
- }
- function foo2(x) {
--    var s = x;
-+    let s = x;
- }
- function foo4(x) {
-     return foo3(x);
-@@= skipped -8, +8 lines =@@
+@@= skipped -18, +17 lines =@@
 
 
  //// [intrinsicTypes.d.ts]

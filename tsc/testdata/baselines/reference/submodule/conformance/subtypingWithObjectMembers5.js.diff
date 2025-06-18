@@ -1,59 +1,28 @@
 --- old.subtypingWithObjectMembers5.js
 +++ new.subtypingWithObjectMembers5.js
-@@= skipped -69, +69 lines =@@
- // foo properties are valid, bar properties cause errors in the derived class declarations
+@@= skipped -70, +70 lines =@@
  var NotOptional;
  (function (NotOptional) {
--    var B = /** @class */ (function () {
--        function B() {
--        }
--        return B;
--    }());
--    var B2 = /** @class */ (function () {
--        function B2() {
--        }
--        return B2;
--    }());
--    var B3 = /** @class */ (function () {
--        function B3() {
--        }
--        return B3;
--    }());
-+    class B {
+     class B {
 +        fooo; // error
-+    }
-+    class B2 {
+     }
+     class B2 {
 +        2; // error
-+    }
-+    class B3 {
+     }
+     class B3 {
 +        '1.0'; // error
-+    }
+     }
  })(NotOptional || (NotOptional = {}));
  // same cases as above but with optional
  var Optional;
  (function (Optional) {
--    var B = /** @class */ (function () {
--        function B() {
--        }
--        return B;
--    }());
--    var B2 = /** @class */ (function () {
--        function B2() {
--        }
--        return B2;
--    }());
--    var B3 = /** @class */ (function () {
--        function B3() {
--        }
--        return B3;
--    }());
-+    class B {
+     class B {
 +        fooo; // weak type error
-+    }
-+    class B2 {
+     }
+     class B2 {
 +        2; // weak type error
-+    }
-+    class B3 {
+     }
+     class B3 {
 +        '1.0'; // weak type error
-+    }
+     }
  })(Optional || (Optional = {}));

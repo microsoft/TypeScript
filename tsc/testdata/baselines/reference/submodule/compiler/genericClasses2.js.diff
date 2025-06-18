@@ -1,23 +1,16 @@
 --- old.genericClasses2.js
 +++ new.genericClasses2.js
-@@= skipped -17, +17 lines =@@
- var z = v1.z.a; // should be 'number'
+@@= skipped -18, +18 lines =@@
 
  //// [genericClasses2.js]
--var C = /** @class */ (function () {
--    function C() {
--    }
--    return C;
--}());
-+class C {
+ class C {
 +    x;
 +    y;
 +    z;
-+}
+ }
  var v1;
  var y = v1.x; // should be 'string'
- var w = v1.y.a; // should be 'string'
-@@= skipped -21, +21 lines =@@
+@@= skipped -17, +20 lines =@@
      z: Foo<number>;
  }
  declare var v1: C<string>;

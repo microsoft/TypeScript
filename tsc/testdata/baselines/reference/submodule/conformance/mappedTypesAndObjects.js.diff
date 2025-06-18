@@ -1,36 +1,17 @@
 --- old.mappedTypesAndObjects.js
 +++ new.mappedTypesAndObjects.js
-@@= skipped -46, +46 lines =@@
-
- //// [mappedTypesAndObjects.js]
- function f1(x, y) {
--    var obj;
-+    let obj;
-     obj = x;
-     obj = y;
- }
- function f2(x, y) {
--    var obj;
-+    let obj;
-     obj = x;
-     obj = y;
- }
-@@= skipped -14, +14 lines =@@
- }
+@@= skipped -61, +61 lines =@@
  ;
  // Repro from #13747
--var Form = /** @class */ (function () {
--    function Form() {
+ class Form {
+-    constructor() {
 -        this.values = {};
 -    }
--    return Form;
--}());
-+class Form {
 +    values = {};
-+}
+ }
 
 
- //// [mappedTypesAndObjects.d.ts]
+@@= skipped -10, +8 lines =@@
  declare function f1<T>(x: Partial<T>, y: Readonly<T>): void;
  declare function f2<T>(x: Partial<T>, y: Readonly<T>): void;
  declare function f3<T>(x: Partial<T>): void;
@@ -38,7 +19,7 @@
  interface Base {
      foo: {
          [key: string]: any;
-@@= skipped -27, +25 lines =@@
+@@= skipped -15, +16 lines =@@
      value: string;
  }
  interface E2 extends Base {

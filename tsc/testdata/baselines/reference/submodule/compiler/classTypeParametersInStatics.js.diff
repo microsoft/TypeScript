@@ -1,58 +1,13 @@
 --- old.classTypeParametersInStatics.js
 +++ new.classTypeParametersInStatics.js
-@@= skipped -37, +37 lines =@@
- //// [classTypeParametersInStatics.js]
+@@= skipped -38, +38 lines =@@
  var Editor;
  (function (Editor) {
--    var List = /** @class */ (function () {
--        function List(isHead, data) {
-+    class List {
+     class List {
 +        isHead;
 +        data;
 +        next;
 +        prev;
-+        constructor(isHead, data) {
+         constructor(isHead, data) {
              this.isHead = isHead;
              this.data = data;
-         }
--        List.MakeHead = function () {
--            var entry = new List(true, null);
--            entry.prev = entry;
--            entry.next = entry;
--            return entry;
--        };
--        List.MakeHead2 = function () {
--            var entry = new List(true, null);
--            entry.prev = entry;
--            entry.next = entry;
--            return entry;
--        };
--        List.MakeHead3 = function () {
--            var entry = new List(true, null);
--            entry.prev = entry;
--            entry.next = entry;
--            return entry;
--        };
--        return List;
--    }());
-+        static MakeHead() {
-+            var entry = new List(true, null);
-+            entry.prev = entry;
-+            entry.next = entry;
-+            return entry;
-+        }
-+        static MakeHead2() {
-+            var entry = new List(true, null);
-+            entry.prev = entry;
-+            entry.next = entry;
-+            return entry;
-+        }
-+        static MakeHead3() {
-+            var entry = new List(true, null);
-+            entry.prev = entry;
-+            entry.next = entry;
-+            return entry;
-+        }
-+    }
-     Editor.List = List;
- })(Editor || (Editor = {}));

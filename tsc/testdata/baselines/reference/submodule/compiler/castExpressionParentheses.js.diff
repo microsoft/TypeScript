@@ -17,14 +17,13 @@
 -(typeof A).x;
 -(-A).x;
 -new (A());
--(function () { })();
--(function foo() { })();
--(-A).x;
 +((new A)).foo;
 +((typeof A)).x;
 +((-A)).x;
 +new ((A()));
-+(() => { })();
+ (() => { })();
+-(function foo() { })();
+-(-A).x;
 +(function foo() { }());
 +((-A)).x;
  // nested cast, should keep one pair of parenthese

@@ -1,38 +1,23 @@
 --- old.importEqualsDeclaration.js
 +++ new.importEqualsDeclaration.js
-@@= skipped -19, +19 lines =@@
-
+@@= skipped -20, +20 lines =@@
  //// [a.js]
  "use strict";
--var A = /** @class */ (function () {
--    function A() {
--    }
--    return A;
--}());
-+class A {
+ class A {
 +    a;
-+}
+ }
  module.exports = A;
  //// [b.js]
- "use strict";
--var SomeClass = /** @class */ (function () {
--    function SomeClass() {
--    }
--    return SomeClass;
--}());
-+class SomeClass {
-+}
- module.exports = SomeClass;
+@@= skipped -10, +11 lines =@@
  //// [c.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
 -var type = require("./b"); // Ok
 +const type = require("./b"); // Ok
  A.prototype; // Error
--var a = { a: 'a' }; // Ok
-+const a = { a: 'a' }; // Ok
+ const a = { a: 'a' }; // Ok
  void type; // Ok
-
+@@= skipped -8, +8 lines =@@
 
  //// [a.d.ts]
  declare class A {
@@ -41,7 +26,7 @@
  }
  export = A;
  //// [b.d.ts]
-@@= skipped -33, +28 lines =@@
+@@= skipped -8, +8 lines =@@
  }
  export = SomeClass;
  //// [c.d.ts]

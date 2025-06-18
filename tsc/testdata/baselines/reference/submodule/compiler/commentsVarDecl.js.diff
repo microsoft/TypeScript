@@ -1,15 +1,6 @@
 --- old.commentsVarDecl.js
 +++ new.commentsVarDecl.js
-@@= skipped -70, +70 lines =@@
- /// value comment
- 20;
- /** comment2 */
--var z = /** lambda comment */ function (x, y) { return x + y; };
-+var z = /** lambda comment */ (x, y) => x + y;
- var z2;
- var x2 = z2;
- var n4;
-@@= skipped -9, +9 lines =@@
+@@= skipped -79, +79 lines =@@
 
  //// [commentsVarDecl.d.ts]
  /** Variable comments*/

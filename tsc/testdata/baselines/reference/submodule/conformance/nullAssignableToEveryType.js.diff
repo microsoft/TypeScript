@@ -1,17 +1,10 @@
 --- old.nullAssignableToEveryType.js
 +++ new.nullAssignableToEveryType.js
-@@= skipped -45, +45 lines =@@
- //}
+@@= skipped -46, +46 lines =@@
 
  //// [nullAssignableToEveryType.js]
--var C = /** @class */ (function () {
--    function C() {
--    }
--    return C;
--}());
-+class C {
+ class C {
 +    foo;
-+}
+ }
  var ac;
  var ai;
- var E;

@@ -1,27 +1,19 @@
 --- old.unionPropertyOfProtectedAndIntersectionProperty.js
 +++ new.unionPropertyOfProtectedAndIntersectionProperty.js
-@@= skipped -38, +38 lines =@@
-
+@@= skipped -39, +39 lines =@@
 
  //// [unionPropertyOfProtectedAndIntersectionProperty.js]
--var Foo = /** @class */ (function () {
--    function Foo() {
+ class Foo {
+-    constructor() {
 -        this.foo = 0;
 -    }
--    return Foo;
--}());
--var Bar = /** @class */ (function () {
--    function Bar() {
++    foo = 0;
+ }
+ class Bar {
+-    constructor() {
 -        this.foo = 0;
 -    }
--    return Bar;
--}());
-+class Foo {
 +    foo = 0;
-+}
-+class Bar {
-+    foo = 0;
-+}
+ }
  // V[P] in `Nothing<V[P]>` is the substitution type `V[P] & Foo`. When
  // checking if that's assignable to `Foo` in the constraint of `Nothing`,
- // it passes the regular assignability check but then goes into intersection

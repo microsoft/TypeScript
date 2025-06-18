@@ -1,20 +1,10 @@
 --- old.declarationEmitClassMemberNameConflict2.js
 +++ new.declarationEmitClassMemberNameConflict2.js
-@@= skipped -22, +22 lines =@@
- }
-
- //// [declarationEmitClassMemberNameConflict2.js]
--var Bar = 'bar';
-+const Bar = 'bar';
- var Hello;
- (function (Hello) {
-     Hello[Hello["World"] = 0] = "World";
-@@= skipped -9, +9 lines =@@
- (function (Hello1) {
+@@= skipped -32, +32 lines =@@
      Hello1[Hello1["World1"] = 0] = "World1";
  })(Hello1 || (Hello1 = {}));
--var Foo = /** @class */ (function () {
--    function Foo() {
+ class Foo {
+-    constructor() {
 -        // Same names + string => OK
 -        this.Bar = Bar;
 -        // Same names + enum => OK
@@ -22,20 +12,16 @@
 -        // Different names + enum => OK
 -        this.Hello2 = Hello1;
 -    }
--    return Foo;
--}());
-+class Foo {
 +    // Same names + string => OK
 +    Bar = Bar;
 +    // Same names + enum => OK
 +    Hello = Hello;
 +    // Different names + enum => OK
 +    Hello2 = Hello1;
-+}
+ }
 
 
- //// [declarationEmitClassMemberNameConflict2.d.ts]
-@@= skipped -22, +19 lines =@@
+@@= skipped -20, +18 lines =@@
      World1 = 0
  }
  declare class Foo {

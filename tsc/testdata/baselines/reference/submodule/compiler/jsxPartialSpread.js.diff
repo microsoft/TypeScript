@@ -1,15 +1,11 @@
 --- old.jsxPartialSpread.js
 +++ new.jsxPartialSpread.js
-@@= skipped -18, +18 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
+@@= skipped -19, +19 lines =@@
  exports.Repro = Repro;
  /// <reference path="react16.d.ts" />
--var Select = function (p) { return <p></p>; };
+ const Select = (p) => <p></p>;
 -var react_1 = __importDefault(require("react"));
--function Repro(_a) {
--    var _b = _a.SelectProps, SelectProps = _b === void 0 ? {} : _b;
-+const Select = (p) => <p></p>;
 +const react_1 = __importDefault(require("react"));
-+function Repro({ SelectProps = {} }) {
+ function Repro({ SelectProps = {} }) {
      return (<Select value={'test'} {...SelectProps}/>);
  }

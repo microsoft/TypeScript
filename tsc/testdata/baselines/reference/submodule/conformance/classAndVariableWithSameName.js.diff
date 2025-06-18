@@ -1,27 +1,16 @@
 --- old.classAndVariableWithSameName.js
 +++ new.classAndVariableWithSameName.js
-@@= skipped -12, +12 lines =@@
- }
+@@= skipped -13, +13 lines =@@
 
  //// [classAndVariableWithSameName.js]
--var C = /** @class */ (function () {
--    function C() {
--    }
--    return C;
--}()); // error
-+class C {
+ class C {
 +    foo;
-+} // error
+ } // error
  var C = ''; // error
  var M;
  (function (M) {
--    var D = /** @class */ (function () {
--        function D() {
--        }
--        return D;
--    }());
-+    class D {
+     class D {
 +        bar;
-+    }
+     }
      var D = 1; // error
  })(M || (M = {}));

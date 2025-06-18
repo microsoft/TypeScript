@@ -17,13 +17,10 @@
 -            (function (mod) {
 -                var name;
 -                (function (name) {
--                    var ReferredTo = /** @class */ (function () {
--                        function ReferredTo() {
+-                    class ReferredTo {
+-                        doSomething() {
 -                        }
--                        ReferredTo.prototype.doSomething = function () {
--                        };
--                        return ReferredTo;
--                    }());
+-                    }
 -                    name.ReferredTo = ReferredTo;
 -                })(name = mod.name || (mod.name = {}));
 -            })(mod = nested.mod || (nested.mod = {}));
@@ -37,14 +34,10 @@
 -    exports.ImportingModule = void 0;
 -    var ImportingModule;
 -    (function (ImportingModule) {
--        var UsesReferredType = /** @class */ (function () {
--            function UsesReferredType(referred) {
+-        class UsesReferredType {
+-            constructor(referred) {
 -                this.referred = referred;
 -            }
--            return UsesReferredType;
--        }());
--    })(ImportingModule || (exports.ImportingModule = ImportingModule = {}));
--});
 +"use strict";
 +Object.defineProperty(exports, "__esModule", { value: true });
 +exports.ImportingModule = void 0;
@@ -54,6 +47,8 @@
 +        referred;
 +        constructor(referred) {
 +            this.referred = referred;
-+        }
+         }
+-    })(ImportingModule || (exports.ImportingModule = ImportingModule = {}));
+-});
 +    }
 +})(ImportingModule || (exports.ImportingModule = ImportingModule = {}));

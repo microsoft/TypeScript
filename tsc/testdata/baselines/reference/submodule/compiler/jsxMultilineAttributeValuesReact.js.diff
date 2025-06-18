@@ -1,12 +1,10 @@
 --- old.jsxMultilineAttributeValuesReact.js
 +++ new.jsxMultilineAttributeValuesReact.js
-@@= skipped -13, +13 lines =@@
-
+@@= skipped -14, +14 lines =@@
 
  //// [jsxMultilineAttributeValuesReact.js]
--var a = React.createElement("input", { value: "\nfoo: 23\n" });
--var b = React.createElement("input", { value: '\nfoo: 23\n' });
--var c = React.createElement("input", { value: '\nfoo: 23\\n\n' });
-+const a = React.createElement("input", { value: "\nfoo: 23\n" });
+ const a = React.createElement("input", { value: "\nfoo: 23\n" });
+-const b = React.createElement("input", { value: '\nfoo: 23\n' });
+-const c = React.createElement("input", { value: '\nfoo: 23\\n\n' });
 +const b = React.createElement("input", { value: "\nfoo: 23\n" });
 +const c = React.createElement("input", { value: "\nfoo: 23\\n\n" });

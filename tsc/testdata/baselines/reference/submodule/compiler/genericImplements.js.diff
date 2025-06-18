@@ -1,59 +1,14 @@
 --- old.genericImplements.js
 +++ new.genericImplements.js
-@@= skipped -22, +22 lines =@@
- } // { f: <T>() => T } 
+@@= skipped -23, +23 lines =@@
 
  //// [genericImplements.js]
--var A = /** @class */ (function () {
--    function A() {
--    }
--    return A;
--}());
--;
--var B = /** @class */ (function () {
--    function B() {
--    }
--    return B;
--}());
--;
--// OK
--var X = /** @class */ (function () {
--    function X() {
--    }
--    X.prototype.f = function () { return undefined; };
--    return X;
--}()); // { f: () => { b; } }
--// OK
--var Y = /** @class */ (function () {
--    function Y() {
--    }
--    Y.prototype.f = function () { return undefined; };
--    return Y;
--}()); // { f: () => { a; } }
--// OK
--var Z = /** @class */ (function () {
--    function Z() {
--    }
--    Z.prototype.f = function () { return undefined; };
--    return Z;
--}()); // { f: <T>() => T } 
-+class A {
+ class A {
 +    a;
-+}
-+;
-+class B {
+ }
+ ;
+ class B {
 +    b;
-+}
-+;
-+// OK
-+class X {
-+    f() { return undefined; }
-+} // { f: () => { b; } }
-+// OK
-+class Y {
-+    f() { return undefined; }
-+} // { f: () => { a; } }
-+// OK
-+class Z {
-+    f() { return undefined; }
-+} // { f: <T>() => T } 
+ }
+ ;
+ // OK

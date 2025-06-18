@@ -1,22 +1,8 @@
 --- old.unusedTypeParameters9.js
 +++ new.unusedTypeParameters9.js
-@@= skipped -17, +17 lines =@@
-
- //// [unusedTypeParameters9.js]
- // clas + interface
--var C1 = /** @class */ (function () {
--    function C1() {
--    }
--    return C1;
--}());
-+class C1 {
-+}
+@@= skipped -21, +21 lines =@@
+ }
  // interface + class
--var C2 = /** @class */ (function () {
--    function C2() {
--    }
--    return C2;
--}());
-+class C2 {
+ class C2 {
 +    a;
-+}
+ }

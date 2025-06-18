@@ -1,19 +1,11 @@
 --- old.staticAndNonStaticPropertiesSameName.js
 +++ new.staticAndNonStaticPropertiesSameName.js
-@@= skipped -9, +9 lines =@@
- }
+@@= skipped -10, +10 lines =@@
 
  //// [staticAndNonStaticPropertiesSameName.js]
--var C = /** @class */ (function () {
--    function C() {
--    }
--    C.prototype.f = function () { };
--    C.f = function () { };
--    return C;
--}());
-+class C {
+ class C {
 +    x;
 +    static x;
-+    f() { }
-+    static f() { }
-+}
+     f() { }
+     static f() { }
+ }

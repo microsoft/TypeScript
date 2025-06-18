@@ -1,24 +1,6 @@
 --- old.declFileGenericType2.js
 +++ new.declFileGenericType2.js
-@@= skipped -43, +43 lines =@@
-
-
- //// [declFileGenericType2.js]
--var __extends = (this && this.__extends) || (function () {
--    var extendStatics = function (d, b) {
--        extendStatics = Object.setPrototypeOf ||
--            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
--            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
--        return extendStatics(d, b);
--    };
--    return function (d, b) {
--        if (typeof b !== "function" && b !== null)
--            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
--        extendStatics(d, b);
--        function __() { this.constructor = d; }
--        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
--    };
--})();
+@@= skipped -46, +46 lines =@@
  // Module
  var templa;
  (function (templa) {
@@ -28,20 +10,9 @@
 -        var mvc;
 +        let mvc;
          (function (mvc) {
--            var AbstractElementController = /** @class */ (function (_super) {
--                __extends(AbstractElementController, _super);
--                function AbstractElementController() {
--                    return _super.call(this) || this;
-+            class AbstractElementController extends templa.mvc.AbstractController {
-+                constructor() {
-+                    super();
-                 }
--                return AbstractElementController;
--            }(templa.mvc.AbstractController));
-+            }
-             mvc.AbstractElementController = AbstractElementController;
-         })(mvc = dom.mvc || (dom.mvc = {}));
-     })(dom = templa.dom || (templa.dom = {}));
+             class AbstractElementController extends templa.mvc.AbstractController {
+                 constructor() {
+@@= skipped -15, +15 lines =@@
  })(templa || (templa = {}));
  // Module
  (function (templa) {
@@ -54,25 +25,12 @@
 -            var composite;
 +            let composite;
              (function (composite) {
--                var AbstractCompositeElementController = /** @class */ (function (_super) {
--                    __extends(AbstractCompositeElementController, _super);
--                    function AbstractCompositeElementController() {
--                        var _this = _super.call(this) || this;
--                        _this._controllers = [];
--                        return _this;
-+                class AbstractCompositeElementController extends templa.dom.mvc.AbstractElementController {
+                 class AbstractCompositeElementController extends templa.dom.mvc.AbstractElementController {
 +                    _controllers;
-+                    constructor() {
-+                        super();
-+                        this._controllers = [];
-                     }
--                    return AbstractCompositeElementController;
--                }(templa.dom.mvc.AbstractElementController));
-+                }
-                 composite.AbstractCompositeElementController = AbstractCompositeElementController;
-             })(composite = mvc.composite || (mvc.composite = {}));
-         })(mvc = dom.mvc || (dom.mvc = {}));
-@@= skipped -79, +60 lines =@@
+                     constructor() {
+                         super();
+                         this._controllers = [];
+@@= skipped -41, +42 lines =@@
      interface IElementController<ModelType extends templa.mvc.IModel> extends templa.mvc.IController<ModelType> {
      }
  }

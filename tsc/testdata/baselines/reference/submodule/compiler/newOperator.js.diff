@@ -9,33 +9,11 @@
  // Can be an expression
  new String;
  new union;
-@@= skipped -8, +8 lines =@@
- new ctorUnion2("");
+@@= skipped -9, +9 lines =@@
  var M;
  (function (M) {
--    var T = /** @class */ (function () {
--        function T() {
--        }
--        return T;
--    }());
-+    class T {
+     class T {
 +        x;
-+    }
+     }
      M.T = T;
  })(M || (M = {}));
--var S = /** @class */ (function () {
--    function S() {
-+class S {
-+    get xs() {
-+        return new M.T[];
-     }
--    Object.defineProperty(S.prototype, "xs", {
--        get: function () {
--            return new M.T[];
--        },
--        enumerable: false,
--        configurable: true
--    });
--    return S;
--}());
-+}

@@ -1,17 +1,6 @@
 --- old.discriminantPropertyCheck.js
 +++ new.discriminantPropertyCheck.js
-@@= skipped -303, +303 lines =@@
-     }
- }
- // Repro from #29106
--var f = function (_a, _b) { };
--var u = {};
-+const f = (_a, _b) => { };
-+const u = {};
- u.a && u.b && f(u.a, u.b);
- u.b && u.a && f(u.a, u.b);
- function foo(obj) {
-@@= skipped -15, +15 lines =@@
+@@= skipped -318, +318 lines =@@
  function onlyPlus(arg) {
      return arg;
  }
@@ -31,28 +20,3 @@
                  break;
              default:
                  never(value.type);
-@@= skipped -14, +19 lines =@@
- }
- function WorksProperly(data) {
-     if (data.Name === "TypeA") {
--        var value1 = data.Value1;
-+        const value1 = data.Value1;
-     }
- }
- function DoesNotWork(data) {
-     if (isType(data)) {
-         if (data.Name === "TypeA") {
--            var value1 = data.Value1;
-+            const value1 = data.Value1;
-         }
-     }
- }
--var doTestingStuff = function (mapOfTests, ids) {
--    ids.forEach(function (id) {
--        var test;
-+const doTestingStuff = (mapOfTests, ids) => {
-+    ids.forEach(id => {
-+        let test;
-         test = mapOfTests[id];
-         if (test.type === 'testA') {
-             console.log(test.bananas);

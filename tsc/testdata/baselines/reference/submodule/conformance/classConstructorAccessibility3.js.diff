@@ -1,76 +1,32 @@
 --- old.classConstructorAccessibility3.js
 +++ new.classConstructorAccessibility3.js
-@@= skipped -35, +35 lines =@@
- c = Baz;
+@@= skipped -36, +36 lines =@@
 
  //// [classConstructorAccessibility3.js]
--var Foo = /** @class */ (function () {
--    function Foo(x) {
--        this.x = x;
--    }
--    return Foo;
--}());
--var Bar = /** @class */ (function () {
--    function Bar(x) {
--        this.x = x;
--    }
--    return Bar;
--}());
--var Baz = /** @class */ (function () {
--    function Baz(x) {
--        this.x = x;
--    }
--    return Baz;
--}());
--var Qux = /** @class */ (function () {
--    function Qux(x) {
--        this.x = x;
--    }
--    return Qux;
--}());
-+class Foo {
+ class Foo {
 +    x;
-+    constructor(x) {
-+        this.x = x;
-+    }
-+}
-+class Bar {
+     constructor(x) {
+         this.x = x;
+     }
+ }
+ class Bar {
 +    x;
-+    constructor(x) {
-+        this.x = x;
-+    }
-+}
-+class Baz {
+     constructor(x) {
+         this.x = x;
+     }
+ }
+ class Baz {
 +    x;
-+    constructor(x) {
-+        this.x = x;
-+    }
-+}
-+class Qux {
+     constructor(x) {
+         this.x = x;
+     }
+ }
+ class Qux {
 +    x;
-+    constructor(x) {
-+        this.x = x;
-+    }
-+}
- // b is public
--var a = Foo;
-+let a = Foo;
- a = Bar;
- a = Baz; // error Baz is protected
- a = Qux; // error Qux is private
- // b is protected
--var b = Baz;
-+let b = Baz;
- b = Foo;
- b = Bar;
- b = Qux; // error Qux is private
- // c is private
--var c = Qux;
-+let c = Qux;
- c = Foo;
- c = Bar;
- c = Baz;
-@@= skipped -58, +58 lines =@@
+     constructor(x) {
+         this.x = x;
+     }
+@@= skipped -53, +57 lines =@@
      x: number;
      private constructor();
  }

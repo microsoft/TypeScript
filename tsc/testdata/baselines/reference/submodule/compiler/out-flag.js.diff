@@ -1,27 +1,6 @@
 --- old.out-flag.js
 +++ new.out-flag.js
-@@= skipped -21, +21 lines =@@
- //// [out-flag.js]
- //// @outFile: bin\
- // my class comments
--var MyClass = /** @class */ (function () {
--    function MyClass() {
--    }
-+class MyClass {
-     // my function comments
--    MyClass.prototype.Count = function () {
-+    Count() {
-         return 42;
--    };
--    MyClass.prototype.SetCount = function (value) {
-+    }
-+    SetCount(value) {
-         //
--    };
--    return MyClass;
--}());
-+    }
-+}
+@@= skipped -33, +33 lines =@@
  //# sourceMappingURL=out-flag.js.map
 
  //// [out-flag.d.ts]

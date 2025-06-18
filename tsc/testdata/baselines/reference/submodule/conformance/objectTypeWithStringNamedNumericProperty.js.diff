@@ -1,15 +1,9 @@
 --- old.objectTypeWithStringNamedNumericProperty.js
 +++ new.objectTypeWithStringNamedNumericProperty.js
-@@= skipped -131, +131 lines =@@
- // string named numeric properties are legal and distinct when indexed by string values
+@@= skipped -132, +132 lines =@@
  // indexed numerically the value is converted to a number
  // no errors expected below
--var C = /** @class */ (function () {
--    function C() {
--    }
--    return C;
--}());
-+class C {
+ class C {
 +    "0.1";
 +    ".1";
 +    "1";
@@ -18,7 +12,6 @@
 +    "1.0";
 +    "-1.0";
 +    "-1";
-+}
+ }
  var c;
  var r1 = c['0.1'];
- var r2 = c['.1'];

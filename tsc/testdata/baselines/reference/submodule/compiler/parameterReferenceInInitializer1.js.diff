@@ -1,18 +1,10 @@
 --- old.parameterReferenceInInitializer1.js
 +++ new.parameterReferenceInInitializer1.js
-@@= skipped -17, +17 lines =@@
- function fn(y, set) {
+@@= skipped -18, +18 lines =@@
      return undefined;
  }
--var C = /** @class */ (function () {
--    function C(y, x // expected to work, but actually doesn't
-+class C {
+ class C {
 +    x;
-+    constructor(y, x = fn(y, (y, x) => y.x = x) // expected to work, but actually doesn't
+     constructor(y, x = fn(y, (y, x) => y.x = x) // expected to work, but actually doesn't
      ) {
--        if (x === void 0) { x = fn(y, function (y, x) { return y.x = x; }); }
          this.x = x;
-     }
--    return C;
--}());
-+}

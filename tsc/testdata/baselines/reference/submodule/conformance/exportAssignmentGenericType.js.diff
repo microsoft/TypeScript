@@ -1,17 +1,11 @@
 --- old.exportAssignmentGenericType.js
 +++ new.exportAssignmentGenericType.js
-@@= skipped -13, +13 lines =@@
-
+@@= skipped -14, +14 lines =@@
  //// [foo_0.js]
  "use strict";
--var Foo = /** @class */ (function () {
--    function Foo() {
--    }
--    return Foo;
--}());
-+class Foo {
+ class Foo {
 +    test;
-+}
+ }
  module.exports = Foo;
  //// [foo_1.js]
  "use strict";

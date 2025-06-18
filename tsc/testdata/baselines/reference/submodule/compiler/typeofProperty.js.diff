@@ -1,43 +1,21 @@
 --- old.typeofProperty.js
 +++ new.typeofProperty.js
-@@= skipped -49, +49 lines =@@
-
+@@= skipped -50, +50 lines =@@
 
  //// [typeofProperty.js]
--var C1 = /** @class */ (function () {
--    function C1() {
--    }
--    return C1;
--}());
--var C2 = /** @class */ (function () {
--    function C2() {
--    }
--    return C2;
--}());
--var C3 = /** @class */ (function () {
--    function C3() {
--    }
--    return C3;
--}());
--var ValidClass = /** @class */ (function () {
--    function ValidClass() {
--    }
--    return ValidClass;
--}());
-+class C1 {
+ class C1 {
 +    a;
 +    b; // Should yield error (a is not a value)
-+}
-+class C2 {
+ }
+ class C2 {
 +    c; // Should yield error (d is not a value)
 +    d;
-+}
-+class C3 {
+ }
+ class C3 {
 +    e; // Should yield error (e is not a value)
-+}
-+class ValidClass {
+ }
+ class ValidClass {
 +    x;
-+}
+ }
  var vcInstance = new ValidClass();
  var viInstance = vcInstance;
- var x1; // x1: string

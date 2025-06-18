@@ -1,26 +1,15 @@
 --- old.constructorOverloadsWithDefaultValues.js
 +++ new.constructorOverloadsWithDefaultValues.js
-@@= skipped -15, +15 lines =@@
- }
+@@= skipped -16, +16 lines =@@
 
  //// [constructorOverloadsWithDefaultValues.js]
--var C = /** @class */ (function () {
--    function C() {
--    }
--    return C;
--}());
--var D = /** @class */ (function () {
--    function D() {
--    }
--    return D;
--}());
-+class C {
+ class C {
 +    foo;
-+    constructor() {
-+    }
-+}
-+class D {
+     constructor() {
+     }
+ }
+ class D {
 +    foo;
-+    constructor() {
-+    }
-+}
+     constructor() {
+     }
+ }

@@ -1,184 +1,62 @@
 --- old.typeGuardOfFromPropNameInUnionType.js
 +++ new.typeGuardOfFromPropNameInUnionType.js
-@@= skipped -108, +108 lines =@@
-
+@@= skipped -109, +109 lines =@@
 
  //// [typeGuardOfFromPropNameInUnionType.js]
--var A = /** @class */ (function () {
--    function A() {
--    }
--    return A;
--}());
--var B = /** @class */ (function () {
--    function B() {
--    }
--    return B;
--}());
--var C = /** @class */ (function () {
--    function C() {
--    }
--    return C;
--}());
--var D = /** @class */ (function () {
--    function D() {
--    }
--    return D;
--}());
-+class A {
+ class A {
 +    a;
-+}
-+class B {
+ }
+ class B {
 +    b;
-+}
-+class C {
+ }
+ class C {
 +    b;
-+}
-+class D {
+ }
+ class D {
 +    a;
-+}
+ }
  function namedClasses(x) {
      if ("a" in x) {
-         x.a = "1";
-@@= skipped -30, +22 lines =@@
- }
- function multipleClasses(x) {
-     if ("a" in x) {
--        var y = x.a;
-+        let y = x.a;
-     }
-     else {
--        var z = x.b;
-+        let z = x.b;
+@@= skipped -32, +36 lines =@@
      }
  }
- function anonymousClasses(x) {
-     if ("a" in x) {
--        var y = x.a;
-+        let y = x.a;
-     }
-     else {
--        var z = x.b;
--    }
--}
--var AWithOptionalProp = /** @class */ (function () {
--    function AWithOptionalProp() {
--    }
--    return AWithOptionalProp;
--}());
--var BWithOptionalProp = /** @class */ (function () {
--    function BWithOptionalProp() {
--    }
--    return BWithOptionalProp;
--}());
-+        let z = x.b;
-+    }
-+}
-+class AWithOptionalProp {
+ class AWithOptionalProp {
 +    a;
-+}
-+class BWithOptionalProp {
+ }
+ class BWithOptionalProp {
 +    b;
-+}
+ }
  function positiveTestClassesWithOptionalProperties(x) {
      if ("a" in x) {
-         x.a = "1";
-     }
-     else {
--        var y = x instanceof AWithOptionalProp
-+        const y = x instanceof AWithOptionalProp
-             ? x.a
-             : x.b;
+@@= skipped -22, +24 lines =@@
      }
  }
- function inParenthesizedExpression(x) {
-     if ("a" in (x)) {
--        var y = x.a;
-+        let y = x.a;
-     }
-     else {
--        var z = x.b;
--    }
--}
--var ClassWithUnionProp = /** @class */ (function () {
--    function ClassWithUnionProp() {
--    }
--    return ClassWithUnionProp;
--}());
-+        let z = x.b;
-+    }
-+}
-+class ClassWithUnionProp {
+ class ClassWithUnionProp {
 +    prop;
-+}
+ }
  function inProperty(x) {
      if ("a" in x.prop) {
--        var y = x.prop.a;
-+        let y = x.prop.a;
-     }
-     else {
--        var z = x.prop.b;
--    }
--}
--var NestedClassWithProp = /** @class */ (function () {
--    function NestedClassWithProp() {
--    }
--    return NestedClassWithProp;
--}());
-+        let z = x.prop.b;
-+    }
-+}
-+class NestedClassWithProp {
-+    outer;
-+}
- function innestedProperty(x) {
-     if ("a" in x.outer.prop) {
--        var y = x.outer.prop.a;
-+        let y = x.outer.prop.a;
-     }
-     else {
--        var z = x.outer.prop.b;
-+        let z = x.outer.prop.b;
+@@= skipped -10, +11 lines =@@
      }
  }
--var InMemberOfClass = /** @class */ (function () {
--    function InMemberOfClass() {
--    }
--    InMemberOfClass.prototype.inThis = function () {
-+class InMemberOfClass {
+ class NestedClassWithProp {
++    outer;
+ }
+ function innestedProperty(x) {
+     if ("a" in x.outer.prop) {
+@@= skipped -10, +11 lines =@@
+     }
+ }
+ class InMemberOfClass {
 +    prop;
-+    inThis() {
+     inThis() {
          if ("a" in this.prop) {
--            var y = this.prop.a;
-+            let y = this.prop.a;
-         }
-         else {
--            var z = this.prop.b;
-+            let z = this.prop.b;
-         }
--    };
--    return InMemberOfClass;
--}());
-+    }
-+}
+             let y = this.prop.a;
+@@= skipped -11, +12 lines =@@
+ }
  // added for completeness
--var SelfAssert = /** @class */ (function () {
--    function SelfAssert() {
--    }
--    SelfAssert.prototype.inThis = function () {
-+class SelfAssert {
+ class SelfAssert {
 +    a;
-+    inThis() {
+     inThis() {
          if ("a" in this) {
--            var y = this.a;
-+            let y = this.a;
-         }
-         else {
-         }
--    };
--    return SelfAssert;
--}());
-+    }
-+}
- function f(i) {
-     if ("a" in i) {
-         return i.a;
+             let y = this.a;

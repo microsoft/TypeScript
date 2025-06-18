@@ -1,8 +1,0 @@
---- old.signatureLengthMismatchCall.js
-+++ new.signatureLengthMismatchCall.js
-@@= skipped -11, +11 lines =@@
- function takesCallback(fn) {
-     // ...
- }
--takesCallback(function (a, b) { });
-+takesCallback((a, b) => { });

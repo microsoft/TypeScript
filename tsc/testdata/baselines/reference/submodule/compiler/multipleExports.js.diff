@@ -1,11 +1,8 @@
 --- old.multipleExports.js
 +++ new.multipleExports.js
-@@= skipped -20, +20 lines =@@
- (function (M) {
-     M.v = 0;
+@@= skipped -22, +22 lines =@@
  })(M || (exports.M = M = {}));
--var x = 0;
-+const x = 0;
+ const x = 0;
  (function (M) {
 -    M.v;
 +    v;

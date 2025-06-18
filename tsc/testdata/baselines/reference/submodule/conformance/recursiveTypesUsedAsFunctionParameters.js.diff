@@ -1,27 +1,15 @@
 --- old.recursiveTypesUsedAsFunctionParameters.js
 +++ new.recursiveTypesUsedAsFunctionParameters.js
-@@= skipped -45, +45 lines =@@
- }
+@@= skipped -46, +46 lines =@@
 
  //// [recursiveTypesUsedAsFunctionParameters.js]
--var List = /** @class */ (function () {
--    function List() {
--    }
--    return List;
--}());
--var MyList = /** @class */ (function () {
--    function MyList() {
--    }
--    return MyList;
--}());
-+class List {
+ class List {
 +    data;
 +    next;
-+}
-+class MyList {
+ }
+ class MyList {
 +    data;
 +    next;
-+}
+ }
  function foo(x) {
  }
- function foo2(x) {

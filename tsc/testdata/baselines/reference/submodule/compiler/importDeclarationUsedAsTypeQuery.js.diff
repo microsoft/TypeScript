@@ -1,17 +1,10 @@
 --- old.importDeclarationUsedAsTypeQuery.js
 +++ new.importDeclarationUsedAsTypeQuery.js
-@@= skipped -14, +14 lines =@@
- "use strict";
+@@= skipped -15, +15 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.B = void 0;
--var B = /** @class */ (function () {
--    function B() {
--    }
--    return B;
--}());
-+class B {
+ class B {
 +    id;
-+}
+ }
  exports.B = B;
  //// [importDeclarationUsedAsTypeQuery_1.js]
- "use strict";

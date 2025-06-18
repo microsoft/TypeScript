@@ -1,21 +1,13 @@
 --- old.modifierOnClassDeclarationMemberInFunction.js
 +++ new.modifierOnClassDeclarationMemberInFunction.js
-@@= skipped -10, +10 lines =@@
-
+@@= skipped -11, +11 lines =@@
  //// [modifierOnClassDeclarationMemberInFunction.js]
  function f() {
--    var C = /** @class */ (function () {
--        function C() {
+     class C {
+-        constructor() {
 -            this.baz = 1;
 -        }
--        C.foo = function () { };
--        C.prototype.bar = function () { };
--        return C;
--    }());
-+    class C {
 +        baz = 1;
-+        static foo() { }
-+        bar() { }
-+    }
- }
-
+         static foo() { }
+         bar() { }
+     }

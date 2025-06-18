@@ -4,8 +4,8 @@
  }
 
  //// [commentsOnStaticMembers.js]
--var test = /** @class */ (function () {
--    function test() {
+-let test = (() => {
+-    class test {
 -    }
 +class test {
      /**
@@ -22,7 +22,7 @@
       */
 -    test.p3 = "";
 -    return test;
--}());
+-})();
 +    static p3 = "";
 +    /**
 +     * p4 comment does not appear in output

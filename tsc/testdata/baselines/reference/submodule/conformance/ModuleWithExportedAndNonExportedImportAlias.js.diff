@@ -1,22 +1,15 @@
 --- old.ModuleWithExportedAndNonExportedImportAlias.js
 +++ new.ModuleWithExportedAndNonExportedImportAlias.js
-@@= skipped -43, +43 lines =@@
- //// [ModuleWithExportedAndNonExportedImportAlias.js]
+@@= skipped -44, +44 lines =@@
  var B;
  (function (B) {
--    var Line = /** @class */ (function () {
--        function Line(start, end) {
-+    class Line {
+     class Line {
 +        start;
 +        end;
-+        constructor(start, end) {
+         constructor(start, end) {
              this.start = start;
              this.end = end;
-         }
--        return Line;
--    }());
-+    }
-     B.Line = Line;
+@@= skipped -9, +11 lines =@@
  })(B || (B = {}));
  var Geometry;
  (function (Geometry) {

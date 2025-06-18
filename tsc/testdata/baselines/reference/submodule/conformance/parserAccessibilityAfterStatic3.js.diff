@@ -4,12 +4,12 @@
 
 
  //// [parserAccessibilityAfterStatic3.js]
--var Outer = /** @class */ (function () {
--    function Outer() {
+-let Outer = (() => {
+-    class Outer {
 -    }
 -    Outer.public = 1;
 -    return Outer;
--}());
+-})();
 +class Outer {
 +    static public = 1;
 +}

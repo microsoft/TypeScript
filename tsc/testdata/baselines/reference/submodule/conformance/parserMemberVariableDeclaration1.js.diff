@@ -1,14 +1,8 @@
 --- old.parserMemberVariableDeclaration1.js
 +++ new.parserMemberVariableDeclaration1.js
-@@= skipped -5, +5 lines =@@
- }
+@@= skipped -6, +6 lines =@@
 
  //// [parserMemberVariableDeclaration1.js]
--var C = /** @class */ (function () {
--    function C() {
--    }
--    return C;
--}());
-+class C {
+ class C {
 +    Foo;
-+}
+ }

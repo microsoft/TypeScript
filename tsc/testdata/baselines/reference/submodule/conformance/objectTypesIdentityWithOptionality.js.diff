@@ -1,33 +1,16 @@
 --- old.objectTypesIdentityWithOptionality.js
 +++ new.objectTypesIdentityWithOptionality.js
-@@= skipped -59, +59 lines =@@
-
+@@= skipped -60, +60 lines =@@
  //// [objectTypesIdentityWithOptionality.js]
  // object types are identical structurally
--var A = /** @class */ (function () {
--    function A() {
--    }
--    return A;
--}());
--var B = /** @class */ (function () {
--    function B() {
--    }
--    return B;
--}());
--var C = /** @class */ (function () {
--    function C() {
--    }
--    return C;
--}());
-+class A {
+ class A {
 +    foo;
-+}
-+class B {
+ }
+ class B {
 +    foo;
-+}
-+class C {
+ }
+ class C {
 +    foo;
-+}
+ }
  var a;
  var b = { foo: '' };
- function foo2(x) { }
