@@ -3694,6 +3694,8 @@ export function isInExpressionContext(node: Node): boolean {
             return (parent as ShorthandPropertyAssignment).objectAssignmentInitializer === node;
         case SyntaxKind.SatisfiesExpression:
             return node === (parent as SatisfiesExpression).expression;
+        case SyntaxKind.ElementAccessExpression:
+            return node === (parent as ElementAccessExpression).argumentExpression;
         default:
             return isExpressionNode(parent);
     }
