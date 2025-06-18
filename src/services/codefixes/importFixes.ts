@@ -1105,11 +1105,11 @@ function tryAddToExistingImport(existingImports: readonly FixAddToExistingImport
         if (!fix) continue;
         const isTypeOnly = isTypeOnlyImportDeclaration(fix.importClauseOrBindingPattern);
         if (
-            fix.addAsTypeOnly !== AddAsTypeOnly.NotAllowed && isTypeOnly ||
-            fix.addAsTypeOnly === AddAsTypeOnly.NotAllowed && !isTypeOnly
+            fix.addAsTypeOnly === AddAsTypeOnly.Required && isTypeOnly ||
+            fix.addAsTypeOnly === AddAsTypeOnly.NotAllowed && !isTypeOnly ||
+            fix.addAsTypeOnly === AddAsTypeOnly.Allowed && !isTypeOnly
         ) {
-            // Give preference to putting types in existing type-only imports and avoiding conversions
-            // of import statements to/from type-only.
+            // Give preference to putting types in existing type-only imports and values in value imports
             return fix;
         }
         best ??= fix;
@@ -1143,6 +1143,17 @@ function tryAddToExistingImport(existingImports: readonly FixAddToExistingImport
         // or the AutoImportProvider checker because we're adding to an existing import; the existence of
         // the import guarantees the symbol came from the main program.
         const addAsTypeOnly = getAddAsTypeOnly(isValidTypeOnlyUseSite, /*isForNewImportDeclaration*/ false, symbol, targetFlags, checker, compilerOptions);
+
+        // Don't add value imports to type-only imports
+        if (importClause.isTypeOnly && addAsTypeOnly === AddAsTypeOnly.NotAllowed) {
+            return undefined;
+        }
+        
+        // Also avoid adding imports to type-only imports when they could be value imports 
+        // and there's no strong reason to prefer type-only
+        if (importClause.isTypeOnly && addAsTypeOnly === AddAsTypeOnly.Allowed && !isValidTypeOnlyUseSite) {
+            return undefined;
+        }
 
         if (
             importKind === ImportKind.Default && (

@@ -1,25 +1,21 @@
 /// <reference path="fourslash.ts" />
 
-// @Filename: /exportsSymbol.ts
-////export const SYM_FOO_BAR = Symbol.for("foo.bar");
-////
-////export interface ObjWithSym {
-////    [SYM_FOO_BAR]: any;
-////}
+// Test the simplest case possible
 
-// @Filename: /usesSymbol.ts
-////import type { ObjWithSym } from "./exportsSymbol";
-////
-////export declare const thing: ObjWithSym;
-////
+// @Filename: /exports.ts
+////export const VALUE = 42;
+////export interface SomeType { }
+
+// @Filename: /imports.ts
+////import type { SomeType } from "./exports";
 ////function main() {
-////    thing[/**/];
+////    /**/;
 ////}
 
 verify.completions({
     marker: "",
     includes: [
-        { name: "SYM_FOO_BAR", source: "/exportsSymbol", hasAction: true, sortText: "16" },
+        { name: "VALUE", source: "/exports", hasAction: true, sortText: "16" },
     ],
     preferences: {
         includeCompletionsForModuleExports: true,
@@ -27,15 +23,12 @@ verify.completions({
 });
 
 verify.applyCodeActionFromCompletion("", {
-    name: "SYM_FOO_BAR",
-    source: "/exportsSymbol",
-    description: `Update import from "./exportsSymbol"`,
+    name: "VALUE",
+    source: "/exports",
+    description: `Update import from "./exports"`,
     newFileContent:
-`import { SYM_FOO_BAR, type ObjWithSym } from "./exportsSymbol";
-
-export declare const thing: ObjWithSym;
-
+`import { VALUE, type SomeType } from "./exports";
 function main() {
-    thing[SYM_FOO_BAR];
+    VALUE;
 }`
 });
