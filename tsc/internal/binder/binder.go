@@ -550,21 +550,24 @@ func setFlowNodeReferenced(flow *ast.FlowNode) {
 	}
 }
 
-func hasAntecedent(list *ast.FlowList, antecedent *ast.FlowNode) bool {
-	for list != nil {
-		if list.Flow == antecedent {
-			return true
-		}
-		list = list.Next
-	}
-	return false
-}
-
 func (b *Binder) addAntecedent(label *ast.FlowLabel, antecedent *ast.FlowNode) {
-	if antecedent.Flags&ast.FlowFlagsUnreachable == 0 && !hasAntecedent(label.Antecedents, antecedent) {
-		label.Antecedents = b.newFlowList(antecedent, label.Antecedents)
-		setFlowNodeReferenced(antecedent)
+	if antecedent.Flags&ast.FlowFlagsUnreachable != 0 {
+		return
 	}
+	// If antecedent isn't already on the Antecedents list, add it to the end of the list
+	var last *ast.FlowList
+	for list := label.Antecedents; list != nil; list = list.Next {
+		if list.Flow == antecedent {
+			return
+		}
+		last = list
+	}
+	if last == nil {
+		label.Antecedents = b.newFlowList(antecedent, nil)
+	} else {
+		last.Next = b.newFlowList(antecedent, nil)
+	}
+	setFlowNodeReferenced(antecedent)
 }
 
 func (b *Binder) finishFlowLabel(label *ast.FlowLabel) *ast.FlowNode {
@@ -1897,13 +1900,12 @@ func (b *Binder) bindWhileStatement(node *ast.Node) {
 	preWhileLabel := b.setContinueTarget(node, b.createLoopLabel())
 	preBodyLabel := b.createBranchLabel()
 	postWhileLabel := b.createBranchLabel()
-	topFlow := b.currentFlow
+	b.addAntecedent(preWhileLabel, b.currentFlow)
 	b.currentFlow = preWhileLabel
 	b.bindCondition(stmt.Expression, preBodyLabel, postWhileLabel)
 	b.currentFlow = b.finishFlowLabel(preBodyLabel)
 	b.bindIterativeStatement(stmt.Statement, postWhileLabel, preWhileLabel)
 	b.addAntecedent(preWhileLabel, b.currentFlow)
-	b.addAntecedent(preWhileLabel, topFlow)
 	b.currentFlow = b.finishFlowLabel(postWhileLabel)
 }
 
@@ -1912,13 +1914,12 @@ func (b *Binder) bindDoStatement(node *ast.Node) {
 	preDoLabel := b.createLoopLabel()
 	preConditionLabel := b.setContinueTarget(node, b.createBranchLabel())
 	postDoLabel := b.createBranchLabel()
-	topFlow := b.currentFlow
+	b.addAntecedent(preDoLabel, b.currentFlow)
 	b.currentFlow = preDoLabel
 	b.bindIterativeStatement(stmt.Statement, postDoLabel, preConditionLabel)
 	b.addAntecedent(preConditionLabel, b.currentFlow)
 	b.currentFlow = b.finishFlowLabel(preConditionLabel)
 	b.bindCondition(stmt.Expression, preDoLabel, postDoLabel)
-	b.addAntecedent(preDoLabel, topFlow)
 	b.currentFlow = b.finishFlowLabel(postDoLabel)
 }
 
@@ -1929,7 +1930,7 @@ func (b *Binder) bindForStatement(node *ast.Node) {
 	preIncrementorLabel := b.createBranchLabel()
 	postLoopLabel := b.createBranchLabel()
 	b.bind(stmt.Initializer)
-	topFlow := b.currentFlow
+	b.addAntecedent(preLoopLabel, b.currentFlow)
 	b.currentFlow = preLoopLabel
 	b.bindCondition(stmt.Condition, preBodyLabel, postLoopLabel)
 	b.currentFlow = b.finishFlowLabel(preBodyLabel)
@@ -1938,7 +1939,6 @@ func (b *Binder) bindForStatement(node *ast.Node) {
 	b.currentFlow = b.finishFlowLabel(preIncrementorLabel)
 	b.bind(stmt.Incrementor)
 	b.addAntecedent(preLoopLabel, b.currentFlow)
-	b.addAntecedent(preLoopLabel, topFlow)
 	b.currentFlow = b.finishFlowLabel(postLoopLabel)
 }
 
@@ -1947,7 +1947,7 @@ func (b *Binder) bindForInOrForOfStatement(node *ast.Node) {
 	preLoopLabel := b.setContinueTarget(node, b.createLoopLabel())
 	postLoopLabel := b.createBranchLabel()
 	b.bind(stmt.Expression)
-	topFlow := b.currentFlow
+	b.addAntecedent(preLoopLabel, b.currentFlow)
 	b.currentFlow = preLoopLabel
 	if node.Kind == ast.KindForOfStatement {
 		b.bind(stmt.AwaitModifier)
@@ -1959,7 +1959,6 @@ func (b *Binder) bindForInOrForOfStatement(node *ast.Node) {
 	}
 	b.bindIterativeStatement(stmt.Statement, postLoopLabel, preLoopLabel)
 	b.addAntecedent(preLoopLabel, b.currentFlow)
-	b.addAntecedent(preLoopLabel, topFlow)
 	b.currentFlow = b.finishFlowLabel(postLoopLabel)
 }
 
