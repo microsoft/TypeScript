@@ -1104,6 +1104,12 @@ function tryAddToExistingImport(existingImports: readonly FixAddToExistingImport
         const fix = getAddToExistingImportFix(existingImport);
         if (!fix) continue;
         const isTypeOnly = isTypeOnlyImportDeclaration(fix.importClauseOrBindingPattern);
+        
+        // Don't add value-only symbols to type-only imports
+        if (fix.addAsTypeOnly === AddAsTypeOnly.NotAllowed && isTypeOnly) {
+            continue;
+        }
+        
         if (
             fix.addAsTypeOnly !== AddAsTypeOnly.NotAllowed && isTypeOnly ||
             fix.addAsTypeOnly === AddAsTypeOnly.NotAllowed && !isTypeOnly
