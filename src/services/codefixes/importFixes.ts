@@ -1104,14 +1104,28 @@ function tryAddToExistingImport(existingImports: readonly FixAddToExistingImport
         const fix = getAddToExistingImportFix(existingImport);
         if (!fix) continue;
         const isTypeOnly = isTypeOnlyImportDeclaration(fix.importClauseOrBindingPattern);
+        
+        // Perfect match: prefer imports that match the exact type-only requirement
         if (
             fix.addAsTypeOnly === AddAsTypeOnly.Required && isTypeOnly ||
-            fix.addAsTypeOnly === AddAsTypeOnly.NotAllowed && !isTypeOnly ||
-            fix.addAsTypeOnly === AddAsTypeOnly.Allowed && !isTypeOnly
+            fix.addAsTypeOnly === AddAsTypeOnly.NotAllowed && !isTypeOnly
         ) {
-            // Give preference to putting types in existing type-only imports and values in value imports
             return fix;
         }
+        
+        // Don't use incompatible imports even as fallback
+        if (fix.addAsTypeOnly === AddAsTypeOnly.NotAllowed && isTypeOnly) {
+            // Value imports should not go to type-only imports
+            continue;
+        }
+        
+        // For "Allowed" imports, prefer value imports over type-only imports
+        // This handles the case where isValidTypeOnlyUseSite is false (value context)
+        // but addAsTypeOnly is Allowed instead of NotAllowed
+        if (fix.addAsTypeOnly === AddAsTypeOnly.Allowed && isTypeOnly && !isValidTypeOnlyUseSite) {
+            continue;
+        }
+        
         best ??= fix;
     }
     return best;
@@ -1143,17 +1157,6 @@ function tryAddToExistingImport(existingImports: readonly FixAddToExistingImport
         // or the AutoImportProvider checker because we're adding to an existing import; the existence of
         // the import guarantees the symbol came from the main program.
         const addAsTypeOnly = getAddAsTypeOnly(isValidTypeOnlyUseSite, /*isForNewImportDeclaration*/ false, symbol, targetFlags, checker, compilerOptions);
-
-        // Don't add value imports to type-only imports
-        if (importClause.isTypeOnly && addAsTypeOnly === AddAsTypeOnly.NotAllowed) {
-            return undefined;
-        }
-        
-        // Also avoid adding imports to type-only imports when they could be value imports 
-        // and there's no strong reason to prefer type-only
-        if (importClause.isTypeOnly && addAsTypeOnly === AddAsTypeOnly.Allowed && !isValidTypeOnlyUseSite) {
-            return undefined;
-        }
 
         if (
             importKind === ImportKind.Default && (
