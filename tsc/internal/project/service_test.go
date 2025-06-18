@@ -43,7 +43,7 @@ func TestService(t *testing.T) {
 			assert.Equal(t, len(service.Projects()), 1)
 			p := service.Projects()[0]
 			assert.Equal(t, p.Kind(), project.KindConfigured)
-			xScriptInfo := service.GetScriptInfo("/home/projects/TS/p1/src/x.ts")
+			xScriptInfo := service.DocumentStore().GetScriptInfoByPath(serviceToPath(service, "/home/projects/TS/p1/src/x.ts"))
 			assert.Assert(t, xScriptInfo != nil)
 			assert.Equal(t, xScriptInfo.Text(), "export const x = 1;")
 		})
@@ -167,7 +167,7 @@ func TestService(t *testing.T) {
 			files["/home/projects/TS/p1/y.ts"] = `export const y = 2;`
 			service, _ := projecttestutil.Setup(files, nil)
 			service.OpenFile("/home/projects/TS/p1/src/index.ts", files["/home/projects/TS/p1/src/index.ts"].(string), core.ScriptKindTS, "")
-			assert.Check(t, service.GetScriptInfo("/home/projects/TS/p1/y.ts") == nil)
+			assert.Check(t, service.DocumentStore().GetScriptInfoByPath(serviceToPath(service, "/home/projects/TS/p1/y.ts")) == nil)
 			// Avoid using initial file set after this point
 			files = nil //nolint:ineffassign
 
@@ -279,22 +279,22 @@ func TestService(t *testing.T) {
 				service, host := projecttestutil.Setup(files, nil)
 				service.OpenFile("/home/projects/TS/p1/src/x.ts", files["/home/projects/TS/p1/src/x.ts"].(string), core.ScriptKindTS, "")
 				service.OpenFile("/home/projects/TS/p1/src/index.ts", files["/home/projects/TS/p1/src/index.ts"].(string), core.ScriptKindTS, "")
-				assert.Equal(t, service.SourceFileCount(), 2)
+				assert.Equal(t, service.DocumentStore().SourceFileCount(), 2)
 				// Avoid using initial file set after this point
 				files = nil //nolint:ineffassign
 
 				assert.NilError(t, host.FS().Remove("/home/projects/TS/p1/src/x.ts"))
 
 				service.CloseFile("/home/projects/TS/p1/src/x.ts")
-				assert.Check(t, service.GetScriptInfo("/home/projects/TS/p1/src/x.ts") == nil)
+				assert.Check(t, service.DocumentStore().GetScriptInfoByPath(serviceToPath(service, "/home/projects/TS/p1/src/x.ts")) == nil)
 				assert.Check(t, service.Projects()[0].GetProgram().GetSourceFile("/home/projects/TS/p1/src/x.ts") == nil)
-				assert.Equal(t, service.SourceFileCount(), 1)
+				assert.Equal(t, service.DocumentStore().SourceFileCount(), 1)
 
 				err := host.FS().WriteFile("/home/projects/TS/p1/src/x.ts", "", false)
 				assert.NilError(t, err)
 
 				service.OpenFile("/home/projects/TS/p1/src/x.ts", "", core.ScriptKindTS, "")
-				assert.Equal(t, service.GetScriptInfo("/home/projects/TS/p1/src/x.ts").Text(), "")
+				assert.Equal(t, service.DocumentStore().GetScriptInfoByPath(serviceToPath(service, "/home/projects/TS/p1/src/x.ts")).Text(), "")
 				assert.Check(t, service.Projects()[0].GetProgram().GetSourceFile("/home/projects/TS/p1/src/x.ts") != nil)
 				assert.Equal(t, service.Projects()[0].GetProgram().GetSourceFile("/home/projects/TS/p1/src/x.ts").Text(), "")
 			})
@@ -316,14 +316,14 @@ func TestService(t *testing.T) {
 				assert.NilError(t, err)
 
 				service.CloseFile("/home/projects/TS/p1/src/x.ts")
-				assert.Check(t, service.GetScriptInfo("/home/projects/TS/p1/src/x.ts") == nil)
+				assert.Check(t, service.DocumentStore().GetScriptInfoByPath(serviceToPath(service, "/home/projects/TS/p1/src/x.ts")) == nil)
 				assert.Check(t, service.Projects()[0].GetProgram().GetSourceFile("/home/projects/TS/p1/src/x.ts") == nil)
 
 				err = host.FS().WriteFile("/home/projects/TS/p1/src/x.ts", "", false)
 				assert.NilError(t, err)
 
 				service.OpenFile("/home/projects/TS/p1/src/x.ts", "", core.ScriptKindTS, "")
-				assert.Equal(t, service.GetScriptInfo("/home/projects/TS/p1/src/x.ts").Text(), "")
+				assert.Equal(t, service.DocumentStore().GetScriptInfoByPath(serviceToPath(service, "/home/projects/TS/p1/src/x.ts")).Text(), "")
 				assert.Check(t, service.Projects()[0].GetProgram().GetSourceFile("/home/projects/TS/p1/src/x.ts") != nil)
 				assert.Equal(t, service.Projects()[0].GetProgram().GetSourceFile("/home/projects/TS/p1/src/x.ts").Text(), "")
 			})

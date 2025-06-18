@@ -184,7 +184,7 @@ func (s *ScriptInfo) ensureRealpath(project *Project) {
 		realpath := project.FS().Realpath(string(s.path))
 		s.realpath = project.toPath(realpath)
 		if s.realpath != s.path {
-			project.host.OnDiscoveredSymlink(s)
+			project.host.DocumentStore().AddRealpathMapping(s)
 		}
 	}
 }

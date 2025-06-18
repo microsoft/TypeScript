@@ -382,7 +382,7 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(file *ast.SourceFile, 
 				continue
 			}
 
-			mode := getModeForUsageLocation(file.FileName(), meta, entry, module.GetCompilerOptionsWithRedirect(p.opts.Config.CompilerOptions(), redirect))
+			mode := getModeForUsageLocation(file.FileName(), meta, entry, optionsForFile)
 			resolvedModule := p.resolver.ResolveModuleName(moduleName, file.FileName(), mode, redirect)
 			resolutionsInFile[module.ModeAwareCacheKey{Name: moduleName, Mode: mode}] = resolvedModule
 
@@ -472,25 +472,6 @@ func getResolutionDiagnostic(options *core.CompilerOptions, resolvedModule *modu
 	default:
 		return needAllowArbitraryExtensions()
 	}
-}
-
-func (p *fileLoader) resolveModuleNames(entries []*ast.Node, file *ast.SourceFile, meta ast.SourceFileMetaData, redirect *tsoptions.ParsedCommandLine) []*resolution {
-	if len(entries) == 0 {
-		return nil
-	}
-
-	resolvedModules := make([]*resolution, 0, len(entries))
-
-	for _, entry := range entries {
-		moduleName := entry.Text()
-		if moduleName == "" {
-			continue
-		}
-		resolvedModule := p.resolver.ResolveModuleName(moduleName, file.FileName(), getModeForUsageLocation(file.FileName(), meta, entry, module.GetCompilerOptionsWithRedirect(p.opts.Config.CompilerOptions(), redirect)), redirect)
-		resolvedModules = append(resolvedModules, &resolution{node: entry, resolvedModule: resolvedModule})
-	}
-
-	return resolvedModules
 }
 
 func (p *fileLoader) createSyntheticImport(text string, file *ast.SourceFile) *ast.Node {

@@ -94,7 +94,7 @@ func NewService(host ServiceHost, options ServiceOptions) *Service {
 		defaultProjectFinder: service.defaultProjectFinder,
 	}
 	service.converters = ls.NewConverters(options.PositionEncoding, func(fileName string) *ls.LineMap {
-		return service.GetScriptInfo(fileName).LineMap()
+		return service.documentStore.GetScriptInfoByPath(service.toPath(fileName)).LineMap()
 	})
 
 	return service
@@ -143,9 +143,9 @@ func (s *Service) TypingsInstaller() *TypingsInstaller {
 	return s.typingsInstaller
 }
 
-// DocumentRegistry implements ProjectHost.
-func (s *Service) DocumentRegistry() *DocumentRegistry {
-	return s.documentStore.DocumentRegistry()
+// DocumentStore implements ProjectHost.
+func (s *Service) DocumentStore() *DocumentStore {
+	return s.documentStore
 }
 
 // ConfigFileRegistry implements ProjectHost.
@@ -156,11 +156,6 @@ func (s *Service) ConfigFileRegistry() *ConfigFileRegistry {
 // FS implements ProjectHost.
 func (s *Service) FS() vfs.FS {
 	return s.host.FS()
-}
-
-// GetOrCreateScriptInfoForFile implements ProjectHost.
-func (s *Service) GetOrCreateScriptInfoForFile(fileName string, path tspath.Path, scriptKind core.ScriptKind) *ScriptInfo {
-	return s.getOrCreateScriptInfoNotOpenedByClient(fileName, path, scriptKind)
 }
 
 // PositionEncoding implements ProjectHost.
@@ -209,14 +204,6 @@ func (s *Service) InferredProject(rootPath tspath.Path) *Project {
 	return nil
 }
 
-func (s *Service) GetScriptInfo(fileName string) *ScriptInfo {
-	return s.GetScriptInfoByPath(s.toPath(fileName))
-}
-
-func (s *Service) GetScriptInfoByPath(path tspath.Path) *ScriptInfo {
-	return s.documentStore.GetScriptInfoByPath(path)
-}
-
 func (s *Service) isOpenFile(info *ScriptInfo) bool {
 	_, ok := s.openFiles[info.path]
 	return ok
@@ -224,8 +211,9 @@ func (s *Service) isOpenFile(info *ScriptInfo) bool {
 
 func (s *Service) OpenFile(fileName string, fileContent string, scriptKind core.ScriptKind, projectRootPath string) {
 	path := s.toPath(fileName)
-	existing := s.GetScriptInfoByPath(path)
-	info := s.getOrCreateOpenScriptInfo(fileName, path, fileContent, scriptKind, projectRootPath)
+	existing := s.documentStore.GetScriptInfoByPath(path)
+	info := s.documentStore.getOrCreateScriptInfoWorker(fileName, path, scriptKind, true /*openedByClient*/, fileContent, true /*deferredDeleteOk*/, s.FS())
+	s.openFiles[info.path] = projectRootPath
 	if existing == nil && info != nil && !info.isDynamic {
 		// Invoke wild card directory watcher to ensure that the file presence is reflected
 		s.configFileRegistry.tryInvokeWildCardDirectories(fileName, info.path)
@@ -239,7 +227,7 @@ func (s *Service) OpenFile(fileName string, fileContent string, scriptKind core.
 func (s *Service) ChangeFile(document lsproto.VersionedTextDocumentIdentifier, changes []lsproto.TextDocumentContentChangeEvent) error {
 	fileName := ls.DocumentURIToFileName(document.Uri)
 	path := s.toPath(fileName)
-	scriptInfo := s.GetScriptInfoByPath(path)
+	scriptInfo := s.documentStore.GetScriptInfoByPath(path)
 	if scriptInfo == nil {
 		return fmt.Errorf("file %s not found", fileName)
 	}
@@ -263,8 +251,8 @@ func (s *Service) ChangeFile(document lsproto.VersionedTextDocumentIdentifier, c
 }
 
 func (s *Service) CloseFile(fileName string) {
-	if info := s.GetScriptInfoByPath(s.toPath(fileName)); info != nil {
-		fileExists := !info.isDynamic && s.host.FS().FileExists(info.fileName)
+	if info := s.documentStore.GetScriptInfoByPath(s.toPath(fileName)); info != nil {
+		fileExists := !info.isDynamic && s.FS().FileExists(info.fileName)
 		info.close(fileExists)
 		delete(s.openFiles, info.path)
 		delete(s.defaultProjectFinder.configFileForOpenFiles, info.path)
@@ -277,7 +265,7 @@ func (s *Service) CloseFile(fileName string) {
 }
 
 func (s *Service) MarkFileSaved(fileName string, text string) {
-	if info := s.GetScriptInfoByPath(s.toPath(fileName)); info != nil {
+	if info := s.documentStore.GetScriptInfoByPath(s.toPath(fileName)); info != nil {
 		info.SetTextFromDisk(text)
 	}
 }
@@ -289,13 +277,13 @@ func (s *Service) EnsureDefaultProjectForURI(url lsproto.DocumentUri) *Project {
 
 func (s *Service) EnsureDefaultProjectForFile(fileName string) (*ScriptInfo, *Project) {
 	path := s.toPath(fileName)
-	if info := s.GetScriptInfoByPath(path); info != nil && !info.isOrphan() {
+	if info := s.documentStore.GetScriptInfoByPath(path); info != nil && !info.isOrphan() {
 		if project := s.getDefaultProjectForScript(info); project != nil {
 			return info, project
 		}
 	}
 	s.ensureProjectStructureUpToDate()
-	if info := s.GetScriptInfoByPath(path); info != nil {
+	if info := s.documentStore.GetScriptInfoByPath(path); info != nil {
 		if project := s.getDefaultProjectForScript(info); project != nil {
 			return info, project
 		}
@@ -305,11 +293,6 @@ func (s *Service) EnsureDefaultProjectForFile(fileName string) (*ScriptInfo, *Pr
 
 func (s *Service) Close() {
 	s.options.Logger.Close()
-}
-
-// SourceFileCount should only be used for testing.
-func (s *Service) SourceFileCount() int {
-	return s.documentStore.SourceFileCount()
 }
 
 func (s *Service) OnWatchedFilesChanged(ctx context.Context, changes []*lsproto.FileEvent) error {
@@ -325,7 +308,7 @@ func (s *Service) OnWatchedFilesChanged(ctx context.Context, changes []*lsproto.
 		} else if _, ok := s.openFiles[path]; ok {
 			// open file
 			continue
-		} else if info := s.GetScriptInfoByPath(path); info != nil {
+		} else if info := s.documentStore.GetScriptInfoByPath(path); info != nil {
 			// closed existing file
 			if change.Type == lsproto.FileChangeTypeDeleted {
 				s.handleDeletedFile(info, true /*deferredDelete*/)
@@ -376,7 +359,7 @@ func (s *Service) ensureProjectForOpenFiles() {
 	s.printProjects()
 
 	for filePath, projectRootPath := range s.openFiles {
-		info := s.GetScriptInfoByPath(filePath)
+		info := s.documentStore.GetScriptInfoByPath(filePath)
 		if info == nil {
 			panic("scriptInfo not found for open file")
 		}
@@ -432,10 +415,6 @@ func (s *Service) deleteScriptInfoLocked(info *ScriptInfo) {
 	// !!! closeSourceMapFileWatcher
 }
 
-func (s *Service) OnDiscoveredSymlink(info *ScriptInfo) {
-	s.documentStore.AddRealpathMapping(info)
-}
-
 func (s *Service) updateProjectGraphs(projects []*Project, clearSourceMapperCache bool) {
 	for _, project := range projects {
 		if clearSourceMapperCache {
@@ -443,20 +422,6 @@ func (s *Service) updateProjectGraphs(projects []*Project, clearSourceMapperCach
 		}
 		project.markAsDirty()
 	}
-}
-
-func (s *Service) getOrCreateScriptInfoNotOpenedByClient(fileName string, path tspath.Path, scriptKind core.ScriptKind) *ScriptInfo {
-	return s.getOrCreateScriptInfoWorker(fileName, path, scriptKind, false /*openedByClient*/, "" /*fileContent*/, false /*deferredDeleteOk*/)
-}
-
-func (s *Service) getOrCreateOpenScriptInfo(fileName string, path tspath.Path, fileContent string, scriptKind core.ScriptKind, projectRootPath string) *ScriptInfo {
-	info := s.getOrCreateScriptInfoWorker(fileName, path, scriptKind, true /*openedByClient*/, fileContent, true /*deferredDeleteOk*/)
-	s.openFiles[info.path] = projectRootPath
-	return info
-}
-
-func (s *Service) getOrCreateScriptInfoWorker(fileName string, path tspath.Path, scriptKind core.ScriptKind, openedByClient bool, fileContent string, deferredDeleteOk bool) *ScriptInfo {
-	return s.documentStore.getOrCreateScriptInfoWorker(fileName, path, scriptKind, openedByClient, fileContent, deferredDeleteOk, s.host.FS())
 }
 
 func (s *Service) createConfiguredProject(configFileName string, configFilePath tspath.Path) *Project {
@@ -551,7 +516,7 @@ func (s *Service) cleanupConfiguredProjects(openInfo *ScriptInfo, retainedByOpen
 			if path == openInfo.path {
 				continue
 			}
-			info := s.GetScriptInfoByPath(path)
+			info := s.documentStore.GetScriptInfoByPath(path)
 			// We want to retain the projects for open file if they are pending updates so deferredClosed projects are ok
 			result := s.defaultProjectFinder.tryFindDefaultConfiguredProjectAndLoadAncestorsForOpenScriptInfo(
 				info,
@@ -636,7 +601,7 @@ func (s *Service) getOrCreateInferredProjectForProjectRootPath(info *ScriptInfo,
 	if projectRootDirectory != "" {
 		return s.createInferredProject(projectRootDirectory, s.toPath(projectRootDirectory))
 	}
-	return s.createInferredProject(s.host.GetCurrentDirectory(), "")
+	return s.createInferredProject(s.GetCurrentDirectory(), "")
 }
 
 func (s *Service) getInferredProjectForProjectRootPath(info *ScriptInfo, projectRootDirectory string) *Project {
@@ -764,7 +729,7 @@ func (s *Service) createInferredProject(currentDirectory string, projectRootPath
 }
 
 func (s *Service) toPath(fileName string) tspath.Path {
-	return tspath.ToPath(fileName, s.host.GetCurrentDirectory(), s.host.FS().UseCaseSensitiveFileNames())
+	return tspath.ToPath(fileName, s.GetCurrentDirectory(), s.FS().UseCaseSensitiveFileNames())
 }
 
 func (s *Service) printProjects() {
@@ -786,7 +751,7 @@ func (s *Service) printProjects() {
 
 	builder.WriteString("Open files:")
 	for path, projectRootPath := range s.openFiles {
-		info := s.GetScriptInfoByPath(path)
+		info := s.documentStore.GetScriptInfoByPath(path)
 		builder.WriteString(fmt.Sprintf("\n\tFileName: %s ProjectRootPath: %s", info.fileName, projectRootPath))
 		builder.WriteString("\n\t\tProjects: " + strings.Join(core.Map(info.ContainingProjects(), func(project *Project) string { return project.name }), ", "))
 	}

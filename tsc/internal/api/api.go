@@ -81,9 +81,9 @@ func (api *API) TypingsInstaller() *project.TypingsInstaller {
 	return nil
 }
 
-// DocumentRegistry implements ProjectHost.
-func (api *API) DocumentRegistry() *project.DocumentRegistry {
-	return api.documentStore.DocumentRegistry()
+// DocumentStore implements ProjectHost.
+func (api *API) DocumentStore() *project.DocumentStore {
+	return api.documentStore
 }
 
 // ConfigFileRegistry implements ProjectHost.
@@ -99,21 +99,6 @@ func (api *API) FS() vfs.FS {
 // GetCurrentDirectory implements ProjectHost.
 func (api *API) GetCurrentDirectory() string {
 	return api.host.GetCurrentDirectory()
-}
-
-// GetOrCreateScriptInfoForFile implements ProjectHost.
-func (api *API) GetOrCreateScriptInfoForFile(fileName string, path tspath.Path, scriptKind core.ScriptKind) *project.ScriptInfo {
-	return api.getOrCreateScriptInfo(fileName, path, scriptKind)
-}
-
-// GetScriptInfoByPath implements ProjectHost.
-func (api *API) GetScriptInfoByPath(path tspath.Path) *project.ScriptInfo {
-	return api.documentStore.GetScriptInfoByPath(path)
-}
-
-// OnDiscoveredSymlink implements ProjectHost.
-func (api *API) OnDiscoveredSymlink(info *project.ScriptInfo) {
-	api.documentStore.AddRealpathMapping(info)
 }
 
 // Log implements ProjectHost.
@@ -370,10 +355,6 @@ func (api *API) releaseHandle(handle string) error {
 		return fmt.Errorf("unhandled handle type %q", handle[0])
 	}
 	return nil
-}
-
-func (api *API) getOrCreateScriptInfo(fileName string, path tspath.Path, scriptKind core.ScriptKind) *project.ScriptInfo {
-	return api.documentStore.GetOrCreateScriptInfo(fileName, path, scriptKind, api.host.FS())
 }
 
 func (api *API) toAbsoluteFileName(fileName string) string {
