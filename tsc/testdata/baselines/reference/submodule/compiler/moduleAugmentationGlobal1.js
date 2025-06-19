@@ -39,9 +39,8 @@ export declare class A {
 //// [f2.d.ts]
 import { A } from "./f1";
 // change the shape of Array<T>
-declare namespace global {
+declare global {
     interface Array<T> {
         getA(): A;
     }
 }
-export {};

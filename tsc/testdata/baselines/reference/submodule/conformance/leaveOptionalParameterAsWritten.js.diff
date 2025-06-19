@@ -1,20 +1,10 @@
 --- old.leaveOptionalParameterAsWritten.js
 +++ new.leaveOptionalParameterAsWritten.js
-@@= skipped -23, +23 lines =@@
- }
- //// [b.d.ts]
- import * as a from "./a";
--declare global {
-+declare namespace global {
-     namespace teams {
-         namespace calling {
-             export import Foo = a.Foo;
-         }
+@@= skipped -31, +31 lines =@@
      }
  }
--//// [c.d.ts]
+ //// [c.d.ts]
 -type Foo = teams.calling.Foo;
 -export declare const bar: (p?: Foo) => void;
- export {};
-+//// [c.d.ts]
+-export {};
 +export declare const bar: (p?: import("./a").Foo | undefined) => void;

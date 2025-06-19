@@ -113,7 +113,7 @@ export declare class Foo {
      */
     bar(s: number): void;
 }
-declare namespace global {
+declare global {
     interface ExtFunc {
         /**
         * comment6
@@ -121,4 +121,3 @@ declare namespace global {
         someMethod(collection: any[]): boolean;
     }
 }
-export {};

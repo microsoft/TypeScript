@@ -12,11 +12,7 @@
  }
  //// [f2.d.ts]
  import { A } from "./f1";
--declare global {
 +// change the shape of Array<T>
-+declare namespace global {
+ declare global {
      interface Array<T> {
          getA(): A;
-     }
- }
-+export {};

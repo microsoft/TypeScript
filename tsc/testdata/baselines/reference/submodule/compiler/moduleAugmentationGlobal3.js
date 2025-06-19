@@ -42,7 +42,7 @@ let y = x.getCountAsString().toLowerCase();
 export declare class A {
 }
 //// [f2.d.ts]
-declare namespace global {
+declare global {
     interface Array<T> {
         getCountAsString(): string;
     }

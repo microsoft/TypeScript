@@ -65,7 +65,7 @@ export { Account2 as Acc };
 //// [index.d.ts]
 export * from "./account";
 //// [index.d.ts]
-declare namespace global {
+declare global {
     interface Account {
         someProp: number;
     }
@@ -75,4 +75,3 @@ declare namespace global {
 }
 import * as model from "./model";
 export declare const func: (account: model.Account, acc2: model.Acc) => void;
-export {};

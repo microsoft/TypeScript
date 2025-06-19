@@ -30,14 +30,14 @@ require("./f2");
 
 
 //// [f1.d.ts]
-declare namespace global {
+declare global {
     interface Something {
         x: any;
     }
 }
 export {};
 //// [f2.d.ts]
-declare namespace global {
+declare global {
     interface Something {
         y: any;
     }

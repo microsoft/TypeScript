@@ -8,13 +8,7 @@
      constructor(_val) {
          this._val = _val;
      }
-@@= skipped -17, +18 lines =@@
-
-
- //// [symbolProperty61.d.ts]
--declare global {
-+declare namespace global {
-     interface SymbolConstructor {
+@@= skipped -22, +23 lines =@@
          readonly obs: symbol;
      }
  }
@@ -26,4 +20,4 @@
      subscribe(next: (val: T) => void): void;
 -    [observable](): this;
  }
- export {};
+-export {};

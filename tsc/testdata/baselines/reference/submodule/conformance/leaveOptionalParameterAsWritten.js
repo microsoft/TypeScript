@@ -24,13 +24,12 @@ export interface Foo {
 }
 //// [b.d.ts]
 import * as a from "./a";
-declare namespace global {
+declare global {
     namespace teams {
         namespace calling {
             export import Foo = a.Foo;
         }
     }
 }
-export {};
 //// [c.d.ts]
 export declare const bar: (p?: import("./a").Foo | undefined) => void;

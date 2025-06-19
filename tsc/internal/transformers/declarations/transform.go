@@ -1167,7 +1167,7 @@ func (tx *DeclarationTransformer) transformModuleDeclaration(input *ast.ModuleDe
 	tx.needsDeclare = false
 	inner := input.Body
 	keyword := input.Keyword
-	if input.Name() == nil || !ast.IsStringLiteral(input.Name()) {
+	if keyword != ast.KindGlobalKeyword && (input.Name() == nil || !ast.IsStringLiteral(input.Name())) {
 		keyword = ast.KindNamespaceKeyword
 	}
 

@@ -38,13 +38,6 @@
 -* comment5
 -*/
 -someMethod: any;
--declare global {
-+declare namespace global {
+ declare global {
      interface ExtFunc {
          /**
-         * comment6
-@@= skipped -13, +8 lines =@@
-         someMethod(collection: any[]): boolean;
-     }
- }
-+export {};
