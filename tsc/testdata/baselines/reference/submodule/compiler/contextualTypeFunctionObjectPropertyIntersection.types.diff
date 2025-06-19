@@ -5,7 +5,7 @@
    };
    on?: {
 ->on : ({ [K in TEvent["type"]]?: Action<TEvent extends { type: K; } ? TEvent : never> | undefined; } & { "*"?: Action<TEvent>; }) | undefined
-+>on : { [K in TEvent["type"]]?: Action<TEvent extends { type: K; } ? TEvent : never> | undefined; } & { "*"?: Action<TEvent> | undefined; } | undefined
++>on : ({ [K in TEvent["type"]]?: Action<TEvent extends { type: K; } ? TEvent : never> | undefined; } & { "*"?: Action<TEvent> | undefined; }) | undefined
 
      [K in TEvent["type"]]?: Action<TEvent extends { type: K } ? TEvent : never>;
  >type : K
@@ -14,7 +14,7 @@
    };
    on?: {
 ->on : ({ [K in TEvent["type"] as K extends Uppercase<string> ? K : never]?: Action<TEvent extends { type: K; } ? TEvent : never> | undefined; } & { "*"?: Action<TEvent>; }) | undefined
-+>on : { [K in TEvent["type"] as K extends Uppercase<string> ? K : never]?: Action<TEvent extends { type: K; } ? TEvent : never> | undefined; } & { "*"?: Action<TEvent> | undefined; } | undefined
++>on : ({ [K in TEvent["type"] as K extends Uppercase<string> ? K : never]?: Action<TEvent extends { type: K; } ? TEvent : never> | undefined; } & { "*"?: Action<TEvent> | undefined; }) | undefined
 
      [K in TEvent["type"] as K extends Uppercase<string> ? K : never]?: Action<TEvent extends { type: K } ? TEvent : never>;
  >type : K

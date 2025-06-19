@@ -9,16 +9,7 @@
  >value : void | T | null | undefined
 
    return value !== undefined && value !== null;
-@@= skipped -9, +9 lines =@@
- >value : void | T | null | undefined
- >undefined : undefined
- >value !== null : boolean
-->value : (T & {}) | null
-+>value : T & {} | null
- }
-
- declare const foo: string | undefined;
-@@= skipped -8, +8 lines =@@
+@@= skipped -17, +17 lines =@@
 
  if (isDefined(foo)) {
  >isDefined(foo) : boolean

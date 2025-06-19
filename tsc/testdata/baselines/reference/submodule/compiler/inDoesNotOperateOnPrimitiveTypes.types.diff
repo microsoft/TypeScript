@@ -27,11 +27,3 @@
  >p : T | U
 
      // For consistency, this should probably not be an error, because useful
-@@= skipped -25, +25 lines =@@
-         "key" in p;
- >"key" in p : boolean
- >"key" : "key"
-->p : (T & object) | (U & object)
-+>p : T & object | U & object
-     }
- }

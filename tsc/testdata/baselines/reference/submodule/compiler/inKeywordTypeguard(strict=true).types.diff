@@ -1,26 +1,6 @@
 --- old.inKeywordTypeguard(strict=true).types
 +++ new.inKeywordTypeguard(strict=true).types
-@@= skipped -441, +441 lines =@@
- >window : Window & typeof globalThis
-
-         window.ontouchstart
-->window.ontouchstart : (((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)) | null | undefined
-+>window.ontouchstart : ((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any) | null | undefined
- >window : Window & typeof globalThis
-->ontouchstart : (((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)) | null | undefined
-+>ontouchstart : ((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any) | null | undefined
-
-     } else {
-         window.ontouchstart
-->window.ontouchstart : (((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)) | null | undefined
-+>window.ontouchstart : ((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any) | null | undefined
- >window : Window & typeof globalThis
-->ontouchstart : (((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)) | null | undefined
-+>ontouchstart : ((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any) | null | undefined
-     }
- }
-
-@@= skipped -505, +505 lines =@@
+@@= skipped -946, +946 lines =@@
  }
 
  function f13(x: { a?: string }) {
@@ -47,16 +27,7 @@
      }
  }
 
-@@= skipped -83, +83 lines =@@
- >value : A
- >"object" : "object"
- >value !== null : boolean
-->value : (A & null) | (A & object)
-+>value : A & null | A & object
- >"prop" in value : boolean
- >"prop" : "prop"
- >value : A & object
-@@= skipped -46, +46 lines =@@
+@@= skipped -129, +129 lines =@@
  // Repro from #51549
 
  const f = <P extends object>(a: P & {}) => {

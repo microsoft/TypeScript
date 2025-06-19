@@ -30,13 +30,10 @@
  >"number" : "number"
  >Directive[value] != null : boolean
 ->Directive[value] : (typeof Directive)[Directive | (T & number)]
-+>Directive[value] : typeof Directive[Directive | T & number]
++>Directive[value] : typeof Directive[Directive | (T & number)]
  >Directive : typeof Directive
-->value : Directive | (T & number)
-+>value : Directive | T & number
+ >value : Directive | (T & number)
    }
- }
-
 @@= skipped -122, +122 lines =@@
  };
 

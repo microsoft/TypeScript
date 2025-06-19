@@ -82,12 +82,3 @@
  >param : T
  >cb : (element: T[number]) => void
  >element : T[number]
-@@= skipped -90, +90 lines =@@
-
- 		window[action](x, y);
- >window[action](x, y) : void
-->window[action] : (((x: number, y: number) => void) & ((x: number, y: number) => void)) | (((width: number, height: number) => void) & ((width: number, height: number) => void))
-+>window[action] : ((x: number, y: number) => void) & ((x: number, y: number) => void) | ((width: number, height: number) => void) & ((width: number, height: number) => void)
- >window : Window & typeof globalThis
- >action : "resizeBy" | "resizeTo"
- >x : number

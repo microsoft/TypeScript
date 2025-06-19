@@ -232,12 +232,3 @@
  >endTag : any
 
        // perf.clearMeasures(name)
-@@= skipped -42, +42 lines =@@
-
-       typeof window !== 'undefined' &&
- >typeof window !== 'undefined' &&      window.matchMedia && // no error      window.matchMedia('(max-device-width: 680px)') : false | MediaQueryList
-->typeof window !== 'undefined' &&      window.matchMedia : false | (((query: string) => MediaQueryList) & ((query: string) => MediaQueryList))
-+>typeof window !== 'undefined' &&      window.matchMedia : false | ((query: string) => MediaQueryList) & ((query: string) => MediaQueryList)
- >typeof window !== 'undefined' : boolean
- >typeof window : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >window : Window & typeof globalThis

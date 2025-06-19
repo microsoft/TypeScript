@@ -107,22 +107,3 @@
  >u1 : `1.${Uppercase<T>}.3`
  >u2 : `1.${Uppercase<T>}.4`
  }
-@@= skipped -17, +17 lines =@@
- >id : string
-
-     let x: keyof T & string | `-${keyof T & string}`;
-->x : `-${keyof T & string}` | (keyof T & string)
-+>x : `-${keyof T & string}` | keyof T & string
-
-     x = "id";
- >x = "id" : "id"
-->x : `-${keyof T & string}` | (keyof T & string)
-+>x : `-${keyof T & string}` | keyof T & string
- >"id" : "id"
-
-     x = "-id";
- >x = "-id" : "-id"
-->x : `-${keyof T & string}` | (keyof T & string)
-+>x : `-${keyof T & string}` | keyof T & string
- >"-id" : "-id"
- }

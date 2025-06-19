@@ -5,12 +5,10 @@
 
  function f3<T extends string | number | undefined>(x: T & (number | object | undefined)) {
 ->f3 : <T extends string | number | undefined>(x: T & (number | object | undefined)) => void
-->x : (T & undefined) | (T & number)
-+>f3 : <T extends string | number | undefined>(x: T & undefined | T & number) => void
-+>x : T & undefined | T & number
++>f3 : <T extends string | number | undefined>(x: (T & undefined) | (T & number)) => void
+ >x : (T & undefined) | (T & number)
 
      const y: number | undefined = x;
- >y : number | undefined
 @@= skipped -9, +9 lines =@@
  }
 

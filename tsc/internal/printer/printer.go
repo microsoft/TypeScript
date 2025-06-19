@@ -1964,7 +1964,7 @@ func (p *Printer) emitNamedTupleMember(node *ast.NamedTupleMember) {
 }
 
 func (p *Printer) emitUnionTypeConstituent(node *ast.TypeNode) {
-	p.emitTypeNode(node, ast.TypePrecedenceIntersection)
+	p.emitTypeNode(node, ast.TypePrecedenceTypeOperator)
 }
 
 func (p *Printer) emitUnionType(node *ast.UnionTypeNode) {

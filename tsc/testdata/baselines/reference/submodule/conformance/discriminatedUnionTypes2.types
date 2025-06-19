@@ -382,15 +382,15 @@ function foo1(x: RuntimeValue & { type: 'number' }) {
 }
 
 function foo2(x: RuntimeValue & ({ type: 'number' } | { type: 'string' })) {
->foo2 : (x: { type: "number"; value: number; } & { type: "number"; } | { type: "string"; value: string; } & { type: "string"; }) => void
->x : { type: "number"; value: number; } & { type: "number"; } | { type: "string"; value: string; } & { type: "string"; }
+>foo2 : (x: ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "string"; })) => void
+>x : ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "string"; })
 >type : "number"
 >type : "string"
 
     if (x.type === 'number') {
 >x.type === 'number' : boolean
 >x.type : "number" | "string"
->x : { type: "number"; value: number; } & { type: "number"; } | { type: "string"; value: string; } & { type: "string"; }
+>x : ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "string"; })
 >type : "number" | "string"
 >'number' : "number"
 

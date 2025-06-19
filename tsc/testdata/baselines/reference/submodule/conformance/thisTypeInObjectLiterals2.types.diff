@@ -9,12 +9,3 @@
  >dx : number
  >dy : number
  >dz : number | undefined
-@@= skipped -320, +320 lines =@@
- >data : D | undefined
-
-     methods?: M & ThisType<D & M>;  // Type of 'this' in methods is D & M
-->methods : (M & ThisType<D & M>) | undefined
-+>methods : M & ThisType<D & M> | undefined
- }
-
- declare function makeObject<D, M>(desc: ObjectDescriptor<D, M>): D & M;

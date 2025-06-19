@@ -51,16 +51,7 @@
  >child : Node
 
          if (value !== undefined) {
-@@= skipped -25, +25 lines =@@
- >...toArray(value) : T
- >toArray(value) : readonly T[]
- >toArray : { <T_1>(value: T_1 | T_1[]): T_1[]; <T_1>(value: T_1 | readonly T_1[]): readonly T_1[]; }
-->value : readonly T[] | (T & ({} | null))
-+>value : readonly T[] | T & ({} | null)
-         }
-     });
-     return result;
-@@= skipped -8, +8 lines =@@
+@@= skipped -33, +33 lines =@@
  }
 
  function flatMapChildren2<T>(node: Node, cb: (child: Node) => readonly T[] | T | null): readonly T[] {
@@ -92,12 +83,3 @@
  >child : Node
 
          if (value !== null) {
-@@= skipped -24, +24 lines =@@
- >...toArray(value) : T
- >toArray(value) : readonly T[]
- >toArray : { <T_1>(value: T_1 | T_1[]): T_1[]; <T_1>(value: T_1 | readonly T_1[]): readonly T_1[]; }
-->value : readonly T[] | (T & ({} | undefined))
-+>value : readonly T[] | T & ({} | undefined)
-         }
-     });
-     return result;

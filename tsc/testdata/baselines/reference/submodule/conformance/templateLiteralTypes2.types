@@ -403,13 +403,13 @@ const interpolatedStyle = { rotate: 12 };
 >12 : 12
 
 function C2(transform: "-moz-initial" | (string & {})) { return 12; }
->C2 : (transform: "-moz-initial" | string & {}) => number
->transform : "-moz-initial" | string & {}
+>C2 : (transform: "-moz-initial" | (string & {})) => number
+>transform : "-moz-initial" | (string & {})
 >12 : 12
 
 C2(`rotate(${interpolatedStyle.rotate}dig)`);
 >C2(`rotate(${interpolatedStyle.rotate}dig)`) : number
->C2 : (transform: "-moz-initial" | string & {}) => number
+>C2 : (transform: "-moz-initial" | (string & {})) => number
 >`rotate(${interpolatedStyle.rotate}dig)` : `rotate(${number}dig)`
 >interpolatedStyle.rotate : number
 >interpolatedStyle : { rotate: number; }

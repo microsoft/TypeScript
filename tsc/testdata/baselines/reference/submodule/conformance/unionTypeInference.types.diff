@@ -7,8 +7,8 @@
 ->value : Promise<{ [containsPromises]?: true; } & {}> | {} | ({ [containsPromises]?: true; } & {}) | null | undefined
 ->Object.values(deepPromisedWithIndexer) : (Promise<{ [containsPromises]?: true; } & {}> | {} | ({ [containsPromises]?: true; } & {}) | null | undefined)[]
 ->Object.values : { <T_1>(o: { [s: string]: T_1; } | ArrayLike<T_1>): T_1[]; (o: {}): any[]; }
-+>value : Promise<{ [containsPromises]?: true | undefined; } & {}> | {} | { [containsPromises]?: true | undefined; } & {} | null | undefined
-+>Object.values(deepPromisedWithIndexer) : (Promise<{ [containsPromises]?: true | undefined; } & {}> | {} | { [containsPromises]?: true | undefined; } & {} | null | undefined)[]
++>value : Promise<{ [containsPromises]?: true | undefined; } & {}> | {} | ({ [containsPromises]?: true | undefined; } & {}) | null | undefined
++>Object.values(deepPromisedWithIndexer) : (Promise<{ [containsPromises]?: true | undefined; } & {}> | {} | ({ [containsPromises]?: true | undefined; } & {}) | null | undefined)[]
 +>Object.values : { <T_1>(o: ArrayLike<T_1> | { [s: string]: T_1; }): T_1[]; (o: {}): any[]; }
  >Object : ObjectConstructor
 ->values : { <T_1>(o: { [s: string]: T_1; } | ArrayLike<T_1>): T_1[]; (o: {}): any[]; }
@@ -19,19 +19,19 @@
 ->awaitedValue : {} | ({ [containsPromises]?: true; } & {}) | null | undefined
 ->await value : {} | ({ [containsPromises]?: true; } & {}) | null | undefined
 ->value : Promise<{ [containsPromises]?: true; } & {}> | {} | ({ [containsPromises]?: true; } & {}) | null | undefined
-+>awaitedValue : {} | { [containsPromises]?: true | undefined; } & {} | null | undefined
-+>await value : {} | { [containsPromises]?: true | undefined; } & {} | null | undefined
-+>value : Promise<{ [containsPromises]?: true | undefined; } & {}> | {} | { [containsPromises]?: true | undefined; } & {} | null | undefined
++>awaitedValue : {} | ({ [containsPromises]?: true | undefined; } & {}) | null | undefined
++>await value : {} | ({ [containsPromises]?: true | undefined; } & {}) | null | undefined
++>value : Promise<{ [containsPromises]?: true | undefined; } & {}> | {} | ({ [containsPromises]?: true | undefined; } & {}) | null | undefined
 
          if (awaitedValue)
 ->awaitedValue : {} | ({ [containsPromises]?: true; } & {}) | null | undefined
-+>awaitedValue : {} | { [containsPromises]?: true | undefined; } & {} | null | undefined
++>awaitedValue : {} | ({ [containsPromises]?: true | undefined; } & {}) | null | undefined
 
              await fun(awaitedValue);
  >await fun(awaitedValue) : void
  >fun(awaitedValue) : Promise<void>
  >fun : <T>(deepPromised: DeepPromised<T>) => Promise<void>
 ->awaitedValue : {} | ({ [containsPromises]?: true; } & {})
-+>awaitedValue : {} | { [containsPromises]?: true | undefined; } & {}
++>awaitedValue : {} | ({ [containsPromises]?: true | undefined; } & {})
      }
  }

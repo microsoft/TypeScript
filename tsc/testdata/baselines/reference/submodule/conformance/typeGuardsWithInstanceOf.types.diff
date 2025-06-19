@@ -9,28 +9,3 @@
  }
 
  class C {
-@@= skipped -30, +30 lines =@@
- >v : C
-     }
-     v // Validator & Partial<OnChanges> via subtype reduction
-->v : C | (Validator & Partial<OnChanges>)
-+>v : C | Validator & Partial<OnChanges>
-
-     // In 4.1, we introduced a change which _fixed_ a bug with CFA
-     // correctly setting this to be the right object. With 4.2,
-@@= skipped -8, +8 lines =@@
-     // before 4.1.
-     if (v.onChanges) {
- >v.onChanges : any
-->v : C | (Validator & Partial<OnChanges>)
-+>v : C | Validator & Partial<OnChanges>
- >onChanges : any
-
-         v.onChanges({});
- >v.onChanges({}) : any
- >v.onChanges : any
-->v : C | (Validator & Partial<OnChanges>)
-+>v : C | Validator & Partial<OnChanges>
- >onChanges : any
- >{} : {}
-     }

@@ -51,18 +51,7 @@
  >xy : X | Y
 
      switch (typeof xy) {
-@@= skipped -21, +21 lines =@@
-
-         case 'number': return [xy]
- >'number' : "number"
-->[xy] : [(X & number) | (Y & number)]
-->xy : (X & number) | (Y & number)
-+>[xy] : [X & number | Y & number]
-+>xy : X & number | Y & number
-     }
- }
-
-@@= skipped -306, +306 lines =@@
+@@= skipped -327, +327 lines =@@
  }
 
  function narrowingNarrows2(x: true | 3 | 'hello' | undefined) {
@@ -80,13 +69,3 @@
  >xy : X | Y
 
      switch (typeof xy) {
-@@= skipped -21, +21 lines =@@
-
-         case `number`: return [xy]
- >`number` : "number"
-->[xy] : [(X & number) | (Y & number)]
-->xy : (X & number) | (Y & number)
-+>[xy] : [X & number | Y & number]
-+>xy : X & number | Y & number
-     }
- }
