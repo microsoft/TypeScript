@@ -1,0 +1,32 @@
+--- old.jsDeclarationsExportSubAssignments.js
++++ new.jsDeclarationsExportSubAssignments.js
+@@= skipped -9, +9 lines =@@
+ module.exports.Strings = Strings;
+
+ //// [cls.js]
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
+ const Strings = {
+     a: "A",
+     b: "B"
+ };
+ class Foo {
+ }
++export = Foo;
+ module.exports = Foo;
++export var Strings = Strings;
+ module.exports.Strings = Strings;
+
+
+ //// [cls.d.ts]
+ export = Foo;
+-declare class Foo {
+-}
+-declare namespace Foo {
+-    export { Strings };
+-}
+-declare namespace Strings {
+-    let a: string;
+-    let b: string;
+-}
++export var Strings = Strings;

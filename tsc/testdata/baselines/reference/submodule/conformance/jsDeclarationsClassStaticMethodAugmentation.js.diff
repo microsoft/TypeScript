@@ -1,0 +1,16 @@
+--- old.jsDeclarationsClassStaticMethodAugmentation.js
++++ new.jsDeclarationsClassStaticMethodAugmentation.js
+@@= skipped -18, +18 lines =@@
+
+
+ //// [source.d.ts]
+-export class Clazz {
+-}
+-export namespace Clazz {
+-    function method(): void;
+-    namespace method {
+-        let prop: number;
+-    }
++export declare class Clazz {
++    static method(): void;
+ }

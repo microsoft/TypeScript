@@ -1,0 +1,48 @@
+--- old.jsDeclarationsExportAssignedClassExpressionAnonymousWithSub.js
++++ new.jsDeclarationsExportAssignedClassExpressionAnonymousWithSub.js
+@@= skipped -16, +16 lines =@@
+
+
+ //// [index.js]
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
+ module.exports = class {
+     /**
+      * @param {number} p
+@@= skipped -8, +10 lines =@@
+         this.t = 12 + p;
+     }
+ };
++export var Sub = class {
++    constructor() {
++        this.instance = new module.exports(10);
++    }
++};
+ module.exports.Sub = class {
+     constructor() {
+         this.instance = new module.exports(10);
+@@= skipped -8, +13 lines =@@
+
+
+ //// [index.d.ts]
+-export = exports;
+-declare class exports {
+-    /**
+-     * @param {number} p
+-     */
+-    constructor(p: number);
+-    t: number;
+-}
+-declare namespace exports {
+-    export { Sub };
+-}
+-declare class Sub {
+-    instance: import(".");
+-}
++declare const _default: {
++    new (p: number): import(".");
++};
++export = _default;
++export var Sub = class {
++    constructor();
++};

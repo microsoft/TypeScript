@@ -1,0 +1,11 @@
+--- old.jsDeclarationsTypeReferences2.js
++++ new.jsDeclarationsTypeReferences2.js
+@@= skipped -37, +37 lines =@@
+     m: number;
+ };
+ //// [index.d.ts]
+-export const thing: number;
++declare const _default: {
++    thing: number;
++};
++export = _default;

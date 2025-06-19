@@ -1,0 +1,40 @@
+--- old.jsDeclarationsExportAssignedConstructorFunction.js
++++ new.jsDeclarationsExportAssignedConstructorFunction.js
+@@= skipped -11, +11 lines =@@
+
+
+ //// [jsDeclarationsExportAssignedConstructorFunction.js]
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++/** @constructor */
++export var MyClass = function () {
++    this.x = 1;
++};
+ /** @constructor */
+ module.exports.MyClass = function () {
+     this.x = 1;
+@@= skipped -11, +17 lines =@@
+
+
+ //// [jsDeclarationsExportAssignedConstructorFunction.d.ts]
+-export class MyClass {
+-    a: () => void;
+-}
++/** @constructor */
++export var MyClass = function ();;
++export {};
++
++
++//// [DtsFileErrors]
++
++
++out/jsDeclarationsExportAssignedConstructorFunction.d.ts(2,33): error TS1005: '{' expected.
++
++
++==== out/jsDeclarationsExportAssignedConstructorFunction.d.ts (1 errors) ====
++    /** @constructor */
++    export var MyClass = function ();;
++                                    ~
++!!! error TS1005: '{' expected.
++    export {};
++    

@@ -11,7 +11,6 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/checker"
-	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/repo"
 	"github.com/microsoft/typescript-go/internal/testutil"
@@ -83,30 +82,20 @@ func (r *CompilerBaselineRunner) EnumerateTestFiles() []string {
 	return files
 }
 
+var deprecatedTests = []string{
+	// Test deprecated `importsNotUsedAsValue`
+	"preserveUnusedImports.ts",
+	"noCrashWithVerbatimModuleSyntaxAndImportsNotUsedAsValues.ts",
+	"verbatimModuleSyntaxCompat.ts",
+	"preserveValueImports_importsNotUsedAsValues.ts",
+	"importsNotUsedAsValues_error.ts",
+}
+
 func (r *CompilerBaselineRunner) RunTests(t *testing.T) {
 	r.cleanUpLocal(t)
 	files := r.EnumerateTestFiles()
-	skippedTests := map[string]string{
-		"mappedTypeRecursiveInference.ts":         "Skipped until we have type printer with truncation limit.",
-		"jsFileCompilationWithoutJsExtensions.ts": "Skipped until we have proper allowJS support (and errors when not enabled.)",
-		"fileReferencesWithNoExtensions.ts":       "Skipped until we support adding missing extensions in subtasks in fileloader.go",
-		"typeOnlyMerge2.ts":                       "Needs investigation",
-		"typeOnlyMerge3.ts":                       "Needs investigation",
-		"filesEmittingIntoSameOutput.ts":          "Output order nondeterministic due to collision on filename during parallel emit.",
-	}
-	deprecatedTests := []string{
-		// Test deprecated `importsNotUsedAsValue`
-		"preserveUnusedImports.ts",
-		"noCrashWithVerbatimModuleSyntaxAndImportsNotUsedAsValues.ts",
-		"verbatimModuleSyntaxCompat.ts",
-		"preserveValueImports_importsNotUsedAsValues.ts",
-		"importsNotUsedAsValues_error.ts",
-	}
+
 	for _, filename := range files {
-		if msg, ok := skippedTests[tspath.GetBaseFileName(filename)]; ok {
-			t.Run(tspath.GetBaseFileName(filename), func(t *testing.T) { t.Skip(msg) })
-			continue
-		}
 		if slices.Contains(deprecatedTests, tspath.GetBaseFileName(filename)) {
 			continue
 		}
@@ -324,19 +313,22 @@ func newCompilerTest(
 	}
 }
 
-var concurrentSkippedErrorBaselines = collections.NewSetFromItems(
-	"circular1.ts",
-	"circular3.ts",
-	"recursiveExportAssignmentAndFindAliasedType1.ts",
-	"recursiveExportAssignmentAndFindAliasedType2.ts",
-	"recursiveExportAssignmentAndFindAliasedType3.ts",
-	"superInStaticMembers1.ts target=es2015",
-)
+var concurrentSkippedErrorBaselines = map[string]string{
+	"circular1.ts": "Circular error reported in an extra position.",
+	"circular3.ts": "Circular error reported in an extra position.",
+	"recursiveExportAssignmentAndFindAliasedType1.ts": "Circular error reported in an extra position.",
+	"recursiveExportAssignmentAndFindAliasedType2.ts": "Circular error reported in an extra position.",
+	"recursiveExportAssignmentAndFindAliasedType3.ts": "Circular error reported in an extra position.",
+	"typeOnlyMerge2.ts": "Type-only merging is not detected when files are checked on different checkers.",
+	"typeOnlyMerge3.ts": "Type-only merging is not detected when files are checked on different checkers.",
+}
 
 func (c *compilerTest) verifyDiagnostics(t *testing.T, suiteName string, isSubmodule bool) {
 	t.Run("error", func(t *testing.T) {
-		if !testutil.TestProgramIsSingleThreaded() && concurrentSkippedErrorBaselines.Has(c.testName) {
-			t.Skip("Skipping error baseline in concurrent mode")
+		if !testutil.TestProgramIsSingleThreaded() {
+			if msg, ok := concurrentSkippedErrorBaselines[c.basename]; ok {
+				t.Skipf("Skipping in concurrent mode: %s", msg)
+			}
 		}
 
 		defer testutil.RecoverAndFail(t, "Panic on creating error baseline for test "+c.filename)
@@ -368,12 +360,27 @@ func (c *compilerTest) verifyDiagnostics(t *testing.T, suiteName string, isSubmo
 	})
 }
 
+var skippedEmitTests = map[string]string{
+	"filesEmittingIntoSameOutput.ts":                  "Output order nondeterministic due to collision on filename during parallel emit.",
+	"jsFileCompilationWithJsEmitPathSameAsInput.ts":   "Output order nondeterministic due to collision on filename during parallel emit.",
+	"grammarErrors.ts":                                "Output order nondeterministic due to collision on filename during parallel emit.",
+	"jsFileCompilationEmitBlockedCorrectly.ts":        "Output order nondeterministic due to collision on filename during parallel emit.",
+	"jsDeclarationsReexportAliasesEsModuleInterop.ts": "cls.d.ts is missing statements when run concurrently.",
+	"jsFileCompilationWithoutJsExtensions.ts":         "No files are emitted.",
+	"typeOnlyMerge2.ts":                               "Nondeterministic contents when run concurrently.",
+	"typeOnlyMerge3.ts":                               "Nondeterministic contents when run concurrently.",
+}
+
 func (c *compilerTest) verifyJavaScriptOutput(t *testing.T, suiteName string, isSubmodule bool) {
 	if !c.hasNonDtsFiles {
 		return
 	}
 
 	t.Run("output", func(t *testing.T) {
+		if msg, ok := skippedEmitTests[c.basename]; ok {
+			t.Skip(msg)
+		}
+
 		defer testutil.RecoverAndFail(t, "Panic on creating js output for test "+c.filename)
 		headerComponents := tspath.GetPathComponentsRelativeTo(repo.TestDataPath, c.filename, tspath.ComparePathsOptions{})
 		if isSubmodule {

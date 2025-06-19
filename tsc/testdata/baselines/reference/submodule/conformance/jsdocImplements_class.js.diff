@@ -1,0 +1,50 @@
+--- old.jsdocImplements_class.js
++++ new.jsdocImplements_class.js
+@@= skipped -72, +72 lines =@@
+ /** @implements {A} */
+ declare class B3 implements A {
+ }
+-declare namespace Ns {
+-    export { C1 };
+-    export let C5: {
++declare var Ns: {
++    /** @implements {A} */
++    C1: {
+         new (): {
+             method(): number;
+         };
+     };
+-}
++    /** @implements {A} */
++    C5: any;
++};
+ /** @implements {A} */
+ declare var C2: {
+     new (): {
+         method(): number;
+     };
+ };
+-declare namespace o {
+-    export { C3 };
+-}
++declare var o: {
++    /** @implements {A} */
++    C3: {
++        new (): {
++            method(): number;
++        };
++    };
++};
+ declare class CC {
+     /** @implements {A} */
+     C4: {
+@@= skipped -26, +33 lines =@@
+     };
+ }
+ declare var C5: any;
+-declare class C1 implements A {
+-    method(): number;
+-}
+-declare class C3 implements A {
+-    method(): number;
+-}

@@ -1,0 +1,20 @@
+--- old.jsDeclarationsExportAssignmentWithKeywordName.js
++++ new.jsDeclarationsExportAssignmentWithKeywordName.js
+@@= skipped -21, +21 lines =@@
+
+
+ //// [index.d.ts]
+-export var x: number;
+-declare let _extends: string;
+-export declare namespace more {
+-    let others: string[];
+-}
+-export { _extends as extends };
++declare const _default: {
++    extends: string;
++    more: {
++        others: string[];
++    };
++    x: number;
++};
++export = _default;

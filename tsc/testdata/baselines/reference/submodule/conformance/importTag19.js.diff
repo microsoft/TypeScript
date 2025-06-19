@@ -1,0 +1,17 @@
+--- old.importTag19.js
++++ new.importTag19.js
+@@= skipped -20, +20 lines =@@
+ export interface Foo {
+ }
+ //// [b.d.ts]
++import type { Foo } from "./a";
+ /**
+  * @import { Foo }
+  * from "./a"
+@@= skipped -7, +8 lines =@@
+ /**
+  * @param {Foo} a
+  */
+-export function foo(a: Foo): void;
+-import type { Foo } from "./a";
++export declare function foo(a: Foo): void;

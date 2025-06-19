@@ -1,0 +1,73 @@
+--- old.jsFileMethodOverloads2.js
++++ new.jsFileMethodOverloads2.js
+@@= skipped -90, +90 lines =@@
+
+
+ //// [jsFileMethodOverloads2.d.ts]
++// Also works if all @overload tags are combined in one comment.
+ /**
+  * @template T
+  */
+@@= skipped -8, +9 lines =@@
+      * @param {T} value
+      */
+     constructor(value: T);
+-    value: T;
+-    /**
+-     * @overload
+-     * @param {Example<number>} this
+-     * @returns {'number'}
+-     *
+-     * @overload
+-     * @param {Example<string>} this
+-     * @returns {'string'}
+-     *
+-     * @returns {string}
+-     */
+-    getTypeName(this: Example<number>): "number";
+-    /**
+-     * @overload
+-     * @param {Example<number>} this
+-     * @returns {'number'}
+-     *
+-     * @overload
+-     * @param {Example<string>} this
+-     * @returns {'string'}
+-     *
+-     * @returns {string}
+-     */
+-    getTypeName(this: Example<string>): "string";
++    /**
++     * @overload
++     * @param {Example<number>} this
++     * @returns {'number'}
++     *
++     * @overload
++     * @param {Example<string>} this
++     * @returns {'string'}
++     *
++     * @returns {string}
++     */
++    getTypeName(this: Example<number>): 'number';
++    /**
++     * @overload
++     * @param {Example<number>} this
++     * @returns {'number'}
++     *
++     * @overload
++     * @param {Example<string>} this
++     * @returns {'string'}
++     *
++     * @returns {string}
++     */
++    getTypeName(this: Example<string>): 'string';
+     /**
+      * @template U
+      * @overload
+@@= skipped -50, +49 lines =@@
+      * @param {(y: T) => unknown} [fn]
+      * @returns {unknown}
+      */
+-    transform<U>(): T;
++    transform(): T;
+ }

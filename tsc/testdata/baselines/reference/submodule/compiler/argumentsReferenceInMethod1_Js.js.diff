@@ -1,0 +1,11 @@
+--- old.argumentsReferenceInMethod1_Js.js
++++ new.argumentsReferenceInMethod1_Js.js
+@@= skipped -21, +21 lines =@@
+      * @param {object} [foo={}]
+      */
+     m(foo?: object): void;
+-    /**
+-     * @type object
+-     */
+-    arguments: object;
+ }

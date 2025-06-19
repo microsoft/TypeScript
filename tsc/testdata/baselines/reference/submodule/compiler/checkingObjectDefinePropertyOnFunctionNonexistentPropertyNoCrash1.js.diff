@@ -1,0 +1,11 @@
+--- old.checkingObjectDefinePropertyOnFunctionNonexistentPropertyNoCrash1.js
++++ new.checkingObjectDefinePropertyOnFunctionNonexistentPropertyNoCrash1.js
+@@= skipped -25, +25 lines =@@
+
+
+ //// [index.d.ts]
+-export function test(fn: any): {
+-    (...args: any[]): void;
+-    readonly name: string;
+-};
++export declare function test(fn: any): (...args: any[]) => void;

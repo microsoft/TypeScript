@@ -1,0 +1,19 @@
+--- old.jsDeclarationsConstsAsNamespacesWithReferences.js
++++ new.jsDeclarationsConstsAsNamespacesWithReferences.js
+@@= skipped -18, +18 lines =@@
+
+
+ //// [index.d.ts]
+-export namespace colors {
+-    let royalBlue: string;
+-}
+-export namespace brandColors {
+-    import purple = colors.royalBlue;
+-    export { purple };
+-}
++export declare const colors: {
++    royalBlue: string;
++};
++export declare const brandColors: {
++    purple: string;
++};

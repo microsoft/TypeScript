@@ -1,0 +1,25 @@
+--- old.argumentsReferenceInMethod4_Js.js
++++ new.argumentsReferenceInMethod4_Js.js
+@@= skipped -47, +47 lines =@@
+      * @param {object} [foo={}]
+      */
+     m(foo?: object): void;
+-    /**
+-     * @type object
+-     */
+-    foo: object;
+-    /**
+-     * @type object
+-     */
+-    bar: object;
+-    /**
+-     * @type object
+-     */
+-    baz: object;
+-    /**
+-     * @type object
+-     */
+-    options: object;
+     get arguments(): {
+         bar: {};
+     };

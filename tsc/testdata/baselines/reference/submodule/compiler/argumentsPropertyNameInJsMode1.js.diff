@@ -1,0 +1,13 @@
+--- old.argumentsPropertyNameInJsMode1.js
++++ new.argumentsPropertyNameInJsMode1.js
+@@= skipped -22, +22 lines =@@
+
+
+ //// [a.d.ts]
++declare const foo: {
++    f1: (params: any) => void;
++};
+ declare function f2(x: any): void;
+-declare namespace foo {
+-    function f1(params: any): void;
+-}

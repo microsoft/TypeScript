@@ -1,0 +1,37 @@
+--- old.jsDeclarationsExportAssignedClassInstance3.js
++++ new.jsDeclarationsExportAssignedClassInstance3.js
+@@= skipped -10, +10 lines =@@
+ module.exports.additional = 20;
+
+ //// [index.js]
+-let Foo = (() => {
+-    class Foo {
+-        constructor() {
+-            this.member = 10;
+-        }
+-    }
+-    Foo.stat = 10;
+-    return Foo;
+-})();
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++class Foo {
++    static stat = 10;
++    member = 10;
++}
++export = new Foo();
+ module.exports = new Foo();
++export var additional = 20;
+ module.exports.additional = 20;
+
+
+ //// [index.d.ts]
+-export let member: number;
+-export let additional: 20;
++declare class Foo {
++    static stat: number;
++    member: number;
++}
++declare const _default: Foo;
++export = _default;
++export var additional = 20;

@@ -1,0 +1,27 @@
+--- old.thisTag2.js
++++ new.thisTag2.js
+@@= skipped -11, +11 lines =@@
+
+ //// [a.d.ts]
+ /** @this {string} */
+-export function f1(this: string): void;
++export declare function f1(this: string): void;
+ /** @this */
+-export function f2(this: any): void;
++export declare function f2(this: ): void;
++
++
++//// [DtsFileErrors]
++
++
++a.d.ts(4,34): error TS1110: Type expected.
++
++
++==== a.d.ts (1 errors) ====
++    /** @this {string} */
++    export declare function f1(this: string): void;
++    /** @this */
++    export declare function f2(this: ): void;
++                                     ~
++!!! error TS1110: Type expected.
++    

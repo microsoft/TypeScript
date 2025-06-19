@@ -1,0 +1,31 @@
+--- old.jsDeclarationsTypeReassignmentFromDeclaration2.js
++++ new.jsDeclarationsTypeReassignmentFromDeclaration2.js
+@@= skipped -11, +11 lines =@@
+
+ //// [index.js]
+ const items = require("./some-mod")();
++export = items;
+ module.exports = items;
++
++
++//// [index.d.ts]
++export = items;
++
++
++//// [DtsFileErrors]
++
++
++out/index.d.ts(1,10): error TS2304: Cannot find name 'items'.
++
++
++==== out/index.d.ts (1 errors) ====
++    export = items;
++             ~~~~~
++!!! error TS2304: Cannot find name 'items'.
++    
++==== some-mod.d.ts (0 errors) ====
++    interface Item {
++        x: string;
++    }
++    declare function getItems(): Item[];
++    export = getItems;

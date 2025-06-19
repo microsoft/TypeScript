@@ -1,0 +1,26 @@
+--- old.argumentsReferenceInMethod5_Js.js
++++ new.argumentsReferenceInMethod5_Js.js
+@@= skipped -25, +25 lines =@@
+
+
+ //// [a.d.ts]
+-declare namespace bar {
+-    let arguments: {};
+-}
++declare const bar: {
++    arguments: {};
++};
+ declare class A {
+     /**
+      * @param {object} [foo={}]
+      */
+     m(foo?: object): void;
+-    /**
+-     * @type object
+-     */
+-    foo: object;
+-    /**
+-     * @type object
+-     */
+-    bar: object;
+ }

@@ -1,0 +1,83 @@
+--- old.jsDeclarationsComputedNames.js
++++ new.jsDeclarationsComputedNames.js
+@@= skipped -30, +30 lines =@@
+ //// [index.js]
+ const TopLevelSym = Symbol();
+ const InnerSym = Symbol();
++export = {
++    [TopLevelSym](x = 12) {
++        return x;
++    },
++    items: {
++        [InnerSym]: (arg = { x: 12 }) => arg.x
++    }
++};
+ module.exports = {
+     [TopLevelSym](x = 12) {
+         return x;
+@@= skipped -14, +22 lines =@@
+ exports.MyClass = void 0;
+ const TopLevelSym = Symbol();
+ const InnerSym = Symbol();
+-let MyClass = (() => {
+-    var _a, _b;
+-    class MyClass {
+-        /**
+-         * @param {typeof TopLevelSym | typeof InnerSym} _p
+-         */
+-        constructor(_p = InnerSym) {
+-            this[_b] = "ok";
+-            // switch on _p
+-        }
++class MyClass {
++    static [TopLevelSym] = 12;
++    [InnerSym] = "ok";
++    /**
++     * @param {typeof TopLevelSym | typeof InnerSym} _p
++     */
++    constructor(_p = InnerSym) {
++        // switch on _p
+     }
+-    _a = TopLevelSym, _b = InnerSym;
+-    MyClass[_a] = 12;
+-    return MyClass;
+-})();
++}
+ exports.MyClass = MyClass;
+
+
+ //// [index.d.ts]
+-declare const _exports: {
++declare const TopLevelSym: unique symbol;
++declare const InnerSym: unique symbol;
++declare const _default: {
+     [TopLevelSym](x?: number): number;
+     items: {
+         [InnerSym]: (arg?: {
+@@= skipped -27, +24 lines =@@
+         }) => number;
+     };
+ };
+-export = _exports;
+-declare const TopLevelSym: unique symbol;
+-declare const InnerSym: unique symbol;
++export = _default;
+ //// [index2.d.ts]
+-export class MyClass {
++declare const TopLevelSym: unique symbol;
++declare const InnerSym: unique symbol;
++export declare class MyClass {
+     static [TopLevelSym]: number;
+-    /**
+-     * @param {typeof TopLevelSym | typeof InnerSym} _p
+-     */
+-    constructor(_p?: typeof TopLevelSym | typeof InnerSym);
+     [InnerSym]: string;
++    /**
++     * @param {typeof TopLevelSym | typeof InnerSym} _p
++     */
++    constructor(_p?: typeof TopLevelSym | typeof InnerSym);
+ }
+-declare const InnerSym: unique symbol;
+-declare const TopLevelSym: unique symbol;
+ export {};

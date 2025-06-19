@@ -1,0 +1,97 @@
+--- old.jsDeclarationsExportDefinePropertyEmit.js
++++ new.jsDeclarationsExportDefinePropertyEmit.js
+@@= skipped -69, +69 lines =@@
+  * @param {number} b
+  * @return {string}
+  */
+-function d(a, b) { return /** @type {*} */ (null); }
++function d(a, b) { return /** @type {*} */ null; }
+ Object.defineProperty(module.exports, "d", { value: d });
+ /**
+  * @template T,U
+@@= skipped -8, +8 lines =@@
+  * @param {U} b
+  * @return {T & U}
+  */
+-function e(a, b) { return /** @type {*} */ (null); }
++function e(a, b) { return /** @type {*} */ null; }
+ Object.defineProperty(module.exports, "e", { value: e });
+ /**
+  * @template T
+@@= skipped -35, +35 lines =@@
+
+
+ //// [index.d.ts]
+-export function a(): void;
+-export function b(): void;
+-export namespace b {
+-    let cat: string;
+-}
+ /**
+  * @param {number} a
+  * @param {number} b
+  * @return {string}
+  */
+-export function d(a: number, b: number): string;
++declare function d(a: number, b: number): string;
+ /**
+  * @template T,U
+  * @param {T} a
+  * @param {U} b
+  * @return {T & U}
+  */
+-export function e<T, U>(a: T, b: U): T & U;
++declare function e<T, U>(a: T, b: U): T & U;
+ /**
+  * @template T
+  * @param {T} a
+  */
+-export function f<T>(a: T): T;
+-export namespace f {
+-    /**
+-     * @template T
+-     * @param {T} a
+-     */
+-    function self<T>(a: T): T;
+-}
+-/**
+- * @param {{x: string}} a
+- * @param {{y: typeof module.exports.b}} b
+- */
+-export function g(a: {
+-    x: string;
+-}, b: {
+-    y: () => void;
+-}): void;
+-/**
+- * @param {{x: string}} a
+- * @param {{y: typeof module.exports.b}} b
+- */
+-export function h(a: {
+-    x: string;
+-}, b: {
+-    y: () => void;
+-}): void;
+-export function i(): void;
+-export function ii(): void;
+-export function jj(): void;
+-export function j(): void;
++declare function f<T>(a: T): T;
++/**
++ * @param {{x: string}} a
++ * @param {{y: typeof module.exports.b}} b
++ */
++declare function g(a: {
++    x: string;
++}, b: {
++    y: typeof module.exports.b;
++}): any;
++/**
++ * @param {{x: string}} a
++ * @param {{y: typeof module.exports.b}} b
++ */
++declare function hh(a: {
++    x: string;
++}, b: {
++    y: typeof module.exports.b;
++}): any;

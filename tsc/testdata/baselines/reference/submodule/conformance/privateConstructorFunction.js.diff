@@ -1,0 +1,11 @@
+--- old.privateConstructorFunction.js
++++ new.privateConstructorFunction.js
+@@= skipped -25, +25 lines =@@
+
+
+ //// [privateConstructorFunction.d.ts]
+-/** @private */
+-declare function C(): void;
+-declare class C {
+-    x: number;
+-}

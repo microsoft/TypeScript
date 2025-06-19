@@ -1,0 +1,76 @@
+--- old.nodeModulesAllowJs1(module=node16).js
++++ new.nodeModulesAllowJs1(module=node16).js
+@@= skipped -672, +672 lines =@@
+
+
+ //// [index.d.ts]
+-export const x: 1;
+-//// [index.d.cts]
+-export const x: 1;
+-//// [index.d.mts]
+-export const x: 1;
+-//// [index.d.ts]
+-export const x: 1;
+-//// [index.d.cts]
+-export const x: 1;
+-//// [index.d.mts]
+-export const x: 1;
+-//// [index.d.ts]
+-export const x: 1;
+-//// [index.d.cts]
+-export const x: 1;
+-//// [index.d.mts]
+-export const x: 1;
+-//// [index.d.cts]
+-export const x: 1;
+-//// [index.d.mts]
+-export const x: 1;
+-//// [index.d.ts]
+-export const x: 1;
++// cjs format file
++declare const x = 1;
++export { x };
++//// [index.d.cts]
++// cjs format file
++declare const x = 1;
++export { x };
++//// [index.d.mts]
++// esm format file
++declare const x = 1;
++export { x };
++//// [index.d.ts]
++// cjs format file
++declare const x = 1;
++export { x };
++//// [index.d.cts]
++// cjs format file
++declare const x = 1;
++export { x };
++//// [index.d.mts]
++// esm format file
++declare const x = 1;
++export { x };
++//// [index.d.ts]
++// esm format file
++declare const x = 1;
++export { x };
++//// [index.d.cts]
++// cjs format file
++declare const x = 1;
++export { x };
++//// [index.d.mts]
++// esm format file
++declare const x = 1;
++export { x };
++//// [index.d.cts]
++// cjs format file
++declare const x = 1;
++export { x };
++//// [index.d.mts]
++// esm format file
++declare const x = 1;
++export { x };
++//// [index.d.ts]
++// esm format file
++declare const x = 1;
++export { x };

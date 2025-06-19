@@ -1,0 +1,34 @@
+--- old.callbackOnConstructor.js
++++ new.callbackOnConstructor.js
+@@= skipped -20, +20 lines =@@
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.Preferences = void 0;
+ class Preferences {
++    assignability = "no";
+     /**
+      * @callback ValueGetter_2
+      * @param {string} name
+      * @returns {boolean|number|string|undefined}
+      */
+-    constructor() {
+-        this.assignability = "no";
+-    }
++    constructor() { }
+ }
+ exports.Preferences = Preferences;
+ /** @type {ValueGetter_2} */
+@@= skipped -15, +14 lines =@@
+
+
+ //// [callbackOnConstructor.d.ts]
+-export class Preferences {
++export declare class Preferences {
+     assignability: string;
++    export type ValueGetter_2 = (name: string) => boolean | number | string | undefined;
++    /**
++     * @callback ValueGetter_2
++     * @param {string} name
++     * @returns {boolean|number|string|undefined}
++     */
++    constructor();
+ }

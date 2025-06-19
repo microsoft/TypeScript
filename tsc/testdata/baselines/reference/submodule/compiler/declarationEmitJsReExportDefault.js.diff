@@ -1,0 +1,8 @@
+--- old.declarationEmitJsReExportDefault.js
++++ new.declarationEmitJsReExportDefault.js
+@@= skipped -11, +11 lines =@@
+
+
+ //// [index.d.mts]
+-export { default as mod } from "a";
++export { default as mod } from 'a';

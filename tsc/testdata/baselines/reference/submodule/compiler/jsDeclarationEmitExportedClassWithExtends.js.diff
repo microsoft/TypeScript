@@ -1,0 +1,16 @@
+--- old.jsDeclarationEmitExportedClassWithExtends.js
++++ new.jsDeclarationEmitExportedClassWithExtends.js
+@@= skipped -49, +49 lines =@@
+
+
+ //// [index.d.ts]
+-export class ElementB extends LitElement {
+-}
+-export class ElementC extends LitElement {
+-}
+-import { LitElement } from "lit";
++import { LitElement, LitElement as LitElement2 } from "lit";
++export declare class ElementB extends LitElement {
++}
++export declare class ElementC extends LitElement2 {
++}

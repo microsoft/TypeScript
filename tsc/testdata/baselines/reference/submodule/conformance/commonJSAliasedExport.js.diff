@@ -1,0 +1,30 @@
+--- old.commonJSAliasedExport.js
++++ new.commonJSAliasedExport.js
+@@= skipped -17, +17 lines =@@
+
+
+ //// [commonJSAliasedExport.js]
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
+ const donkey = (ast) => ast;
+ function funky(declaration) {
+     return false;
+ }
++export = donkey;
+ module.exports = donkey;
++export var funky = funky;
+ module.exports.funky = funky;
+ //// [bug43713.js]
+ const { funky } = require('./commonJSAliasedExport');
+@@= skipped -15, +19 lines =@@
+
+ //// [commonJSAliasedExport.d.ts]
+ export = donkey;
+-declare function donkey(ast: any): any;
+-declare namespace donkey {
+-    export { funky };
+-}
+-declare function funky(declaration: any): boolean;
++export var funky = funky;
+ //// [bug43713.d.ts]
+ export {};

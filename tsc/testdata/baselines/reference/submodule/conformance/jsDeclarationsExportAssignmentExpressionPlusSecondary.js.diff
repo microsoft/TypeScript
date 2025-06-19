@@ -1,0 +1,49 @@
+--- old.jsDeclarationsExportAssignmentExpressionPlusSecondary.js
++++ new.jsDeclarationsExportAssignmentExpressionPlusSecondary.js
+@@= skipped -15, +15 lines =@@
+
+
+ //// [index.js]
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
+ const Strings = {
+     a: "A",
+     b: "B"
+ };
++export = {
++    thing: "ok",
++    also: "ok",
++    desc: {
++        item: "ok"
++    }
++};
+ module.exports = {
+     thing: "ok",
+     also: "ok",
+@@= skipped -11, +20 lines =@@
+         item: "ok"
+     }
+ };
++export var Strings = Strings;
+ module.exports.Strings = Strings;
+
+
+ //// [index.d.ts]
+-export namespace Strings {
+-    let a: string;
+-    let b: string;
+-}
+-export declare let thing: string;
+-export declare let also: string;
+-export declare namespace desc {
+-    let item: string;
+-}
++declare const _default: {
++    thing: string;
++    also: string;
++    desc: {
++        item: string;
++    };
++};
++export = _default;
++export var Strings = Strings;

@@ -1,0 +1,27 @@
+--- old.commonJSImportClassTypeReference.js
++++ new.commonJSImportClassTypeReference.js
+@@= skipped -17, +17 lines =@@
+
+ //// [mod1.js]
+ "use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
+ class K {
+     values() {
+         return new K();
+     }
+ }
++export var K = K;
+ exports.K = K;
+ //// [main.js]
+ "use strict";
+@@= skipped -16, +18 lines =@@
+
+
+ //// [mod1.d.ts]
+-export class K {
+-    values(): K;
+-}
++export var K = K;
++export {};
+ //// [main.d.ts]
+ export {};

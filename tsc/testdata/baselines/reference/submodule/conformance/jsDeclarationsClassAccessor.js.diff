@@ -1,0 +1,32 @@
+--- old.jsDeclarationsClassAccessor.js
++++ new.jsDeclarationsClassAccessor.js
+@@= skipped -64, +64 lines =@@
+
+
+ //// [base.d.ts]
+-export class Base {
++export declare class Base {
++    constructor();
+     toJSON(): {
+         type: any;
+         name: any;
+@@= skipped -8, +9 lines =@@
+     };
+ }
+ //// [argument.d.ts]
+-export class Argument extends Base {
++import { Base } from "./base.js";
++export declare class Argument extends Base {
+     /**
+      * @param {*} tokeniser
+      */
+     static parse(tokeniser: any): void;
+-    idlType: any;
+-    default: null;
+     get type(): string;
+     /**
+      * @param {*} defs
+      */
+     validate(defs: any): Generator<never, void, unknown>;
+ }
+-import { Base } from "./base.js";

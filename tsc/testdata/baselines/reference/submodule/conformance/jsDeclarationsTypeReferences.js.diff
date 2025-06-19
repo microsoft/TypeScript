@@ -1,0 +1,13 @@
+--- old.jsDeclarationsTypeReferences.js
++++ new.jsDeclarationsTypeReferences.js
+@@= skipped -25, +25 lines =@@
+
+
+ //// [index.d.ts]
+-export const thing: Something;
+-import Something_1 = require("fs");
+-import Something = Something_1.Something;
++declare const _default: {
++    thing: import("fs").Something;
++};
++export = _default;

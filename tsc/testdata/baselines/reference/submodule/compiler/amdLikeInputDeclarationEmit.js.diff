@@ -1,0 +1,11 @@
+--- old.amdLikeInputDeclarationEmit.js
++++ new.amdLikeInputDeclarationEmit.js
+@@= skipped -32, +32 lines =@@
+
+
+ //// [ExtendedClass.d.ts]
+-export = ExtendedClass;
+-declare const ExtendedClass: new () => {
+-    f: () => "something";
+-} & import("deps/BaseClass");
++export {};

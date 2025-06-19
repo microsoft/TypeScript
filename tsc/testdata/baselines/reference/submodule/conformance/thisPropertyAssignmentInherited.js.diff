@@ -1,0 +1,28 @@
+--- old.thisPropertyAssignmentInherited.js
++++ new.thisPropertyAssignmentInherited.js
+@@= skipped -23, +23 lines =@@
+
+
+ //// [thisPropertyAssignmentInherited.d.ts]
+-export class Element {
+-    set textContent(x: string);
++export declare class Element {
+     /**
+      * @returns {String}
+      */
+-    get textContent(): string;
++    get textContent(): String;
++    set textContent(x: String);
+     cloneNode(): this;
+ }
+-export class HTMLElement extends Element {
++export declare class HTMLElement extends Element {
+ }
+-export class TextElement extends HTMLElement {
+-    set innerHTML(html: string);
+-    get innerHTML(): string;
++export declare class TextElement extends HTMLElement {
++    get innerHTML(): String;
++    set innerHTML(html: String);
+     toString(): void;
+ }

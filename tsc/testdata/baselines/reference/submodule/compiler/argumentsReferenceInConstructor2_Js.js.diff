@@ -1,0 +1,11 @@
+--- old.argumentsReferenceInConstructor2_Js.js
++++ new.argumentsReferenceInConstructor2_Js.js
+@@= skipped -25, +25 lines =@@
+      * @param {object} [foo={}]
+      */
+     constructor(foo?: object);
+-    /**
+-     * @type object
+-     */
+-    arguments: object;
+ }

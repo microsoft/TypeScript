@@ -1,0 +1,7 @@
+--- old.jsdocCatchClauseWithTypeAnnotation.js
++++ new.jsdocCatchClauseWithTypeAnnotation.js
+@@= skipped -143, +143 lines =@@
+     try { }
+     catch ( /** @type {object} */{ x }) { } // error in the type
+ }
++export {};

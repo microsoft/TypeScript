@@ -1,0 +1,55 @@
+--- old.jsDeclarationsClassMethod.js
++++ new.jsDeclarationsClassMethod.js
+@@= skipped -128, +128 lines =@@
+
+ //// [jsDeclarationsClassMethod.d.ts]
+ declare function C1(): void;
+-declare class C1 {
+-    /**
+-     * A comment prop
+-     * @param {number} x
+-     * @param {number} y
+-     * @returns {number}
+-     */
+-    prop: (x: number, y: number) => number;
+-    /**
+-     * A comment method
+-     * @param {number} x
+-     * @param {number} y
+-     * @returns {number}
+-     */
+-    method(x: number, y: number): number;
+-}
+-declare namespace C1 {
+-    /**
+-     * A comment staticProp
+-     * @param {number} x
+-     * @param {number} y
+-     * @returns {number}
+-     */
+-    function staticProp(x: number, y: number): number;
+-}
+ declare class C2 {
+     /**
+      * A comment method1
+@@= skipped -33, +8 lines =@@
+      * @returns {number}
+      */
+     method1(x: number, y: number): number;
+-    /**
+-     * A comment method2
+-     * @param {number} x
+-     * @param {number} y
+-     * @returns {number}
+-     */
+-    method2(x: number, y: number): number;
+-}
+-declare namespace C2 {
+-    /**
+-     * A comment staticProp
+-     * @param {number} x
+-     * @param {number} y
+-     * @returns {number}
+-     */
+-    function staticProp(x: number, y: number): number;
+ }

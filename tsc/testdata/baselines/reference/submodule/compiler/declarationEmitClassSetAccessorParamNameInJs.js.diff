@@ -1,0 +1,12 @@
+--- old.declarationEmitClassSetAccessorParamNameInJs.js
++++ new.declarationEmitClassSetAccessorParamNameInJs.js
+@@= skipped -15, +15 lines =@@
+
+
+ //// [foo.d.ts]
+-export class Foo {
++// https://github.com/microsoft/TypeScript/issues/55391
++export declare class Foo {
+     /**
+      * Bar.
+      *

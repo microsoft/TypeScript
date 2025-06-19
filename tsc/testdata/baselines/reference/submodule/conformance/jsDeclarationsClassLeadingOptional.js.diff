@@ -1,0 +1,10 @@
+--- old.jsDeclarationsClassLeadingOptional.js
++++ new.jsDeclarationsClassLeadingOptional.js
+@@= skipped -19, +19 lines =@@
+
+
+ //// [bar.d.ts]
+-export class Z {
++export declare class Z {
+     f(x: number, y: any): any[];
+ }

@@ -1,0 +1,31 @@
+--- old.jsDeclarationsReusesExistingNodesMappingJSDocTypes.js
++++ new.jsDeclarationsReusesExistingNodesMappingJSDocTypes.js
+@@= skipped -49, +49 lines =@@
+
+ //// [index.d.ts]
+ /** @type {?} */
+-export const a: unknown;
++export declare const a:  | null;
+ /** @type {*} */
+-export const b: any;
++export declare const b: any;
+ /** @type {string?} */
+-export const c: string | null;
++export declare const c: string | null;
+ /** @type {string=} */
+-export const d: string | undefined;
++export declare const d: string | undefined;
+ /** @type {string!} */
+-export const e: string;
++export declare const e: string;
+ /** @type {function(string, number): object} */
+-export const f: (arg0: string, arg1: number) => object;
++export declare const f: function;
+ /** @type {function(new: object, string, number)} */
+-export const g: new (arg1: string, arg2: number) => object;
++export declare const g: function;
+ /** @type {Object.<string, number>} */
+-export const h: {
+-    [x: string]: number;
+-};
++export declare const h: Object<string, number>;

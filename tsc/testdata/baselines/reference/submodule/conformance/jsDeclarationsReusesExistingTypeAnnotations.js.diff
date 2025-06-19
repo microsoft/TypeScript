@@ -1,0 +1,59 @@
+--- old.jsDeclarationsReusesExistingTypeAnnotations.js
++++ new.jsDeclarationsReusesExistingTypeAnnotations.js
+@@= skipped -104, +104 lines =@@
+
+
+ //// [index.js]
+-"use strict";
+ class С1 {
+     /** @type {string=} */
+     p1 = undefined;
+@@= skipped -96, +95 lines =@@
+ }
+ declare class С2 {
+     /** @type {string=} */
+-    get p1(): string | undefined;
++    get p1(): undefined;
+     /** @type {string | undefined} */
+-    get p2(): string | undefined;
++    get p2(): undefined;
+     /** @type {?string} */
+-    get p3(): string | null;
++    get p3(): null;
+     /** @type {string | null} */
+-    get p4(): string | null;
++    get p4(): null;
+ }
+ declare class С3 {
+-    /** @param {string=} value */
+-    set p1(value: string | undefined);
+     /** @type {string=} */
+     get p1(): string | undefined;
++    /** @param {string=} value */
++    set p1(value?: string | undefined);
++    /** @type {string | undefined} */
++    get p2(): string | undefined;
+     /** @param {string | undefined} value */
+     set p2(value: string | undefined);
+-    /** @type {string | undefined} */
+-    get p2(): string | undefined;
++    /** @type {?string} */
++    get p3(): string | null;
+     /** @param {?string} value */
+     set p3(value: string | null);
+-    /** @type {?string} */
+-    get p3(): string | null;
++    /** @type {string | null} */
++    get p4(): string | null;
+     /** @param {string | null} value */
+     set p4(value: string | null);
+-    /** @type {string | null} */
+-    get p4(): string | null;
+ }
+ declare class С4 {
+     /** @param {string=} value */
+-    set p1(value: string | undefined);
++    set p1(value?: string | undefined);
+     /** @param {string | undefined} value */
+     set p2(value: string | undefined);
+     /** @param {?string} value */

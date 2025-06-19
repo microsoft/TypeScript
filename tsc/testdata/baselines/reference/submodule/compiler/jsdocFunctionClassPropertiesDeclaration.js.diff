@@ -1,0 +1,17 @@
+--- old.jsdocFunctionClassPropertiesDeclaration.js
++++ new.jsdocFunctionClassPropertiesDeclaration.js
+@@= skipped -35, +35 lines =@@
+  * @param {number | undefined} x
+  * @param {number | undefined} y
+  */
+-export function Foo(x: number | undefined, y: number | undefined): Foo;
+-export class Foo {
+-    /**
+-     * @param {number | undefined} x
+-     * @param {number | undefined} y
+-     */
+-    constructor(x: number | undefined, y: number | undefined);
+-    x: number | undefined;
+-    y: number | undefined;
+-}
++export declare function Foo(x: number | undefined, y: number | undefined): any;

@@ -1,0 +1,15 @@
+--- old.requireOfESWithPropertyAccess.js
++++ new.requireOfESWithPropertyAccess.js
+@@= skipped -28, +28 lines =@@
+
+
+ //// [ch.d.ts]
+-export namespace x {
+-    let grey: {};
+-}
++declare const x: {
++    grey: {};
++};
++export { x };
+ //// [main.d.ts]
+ export {};

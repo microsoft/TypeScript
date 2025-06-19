@@ -1,0 +1,18 @@
+--- old.declarationEmitClassSetAccessorParamNameInJs3.js
++++ new.declarationEmitClassSetAccessorParamNameInJs3.js
+@@= skipped -13, +13 lines =@@
+
+
+ //// [foo.d.ts]
+-export class Foo {
++export declare class Foo {
+     /**
+      * Bar.
+      *
+      * @param {{ prop: string | undefined }} baz Baz.
+      */
+     set bar({ prop }: {
+-        prop: string | undefined;
++        prop?: string;
+     });
+ }

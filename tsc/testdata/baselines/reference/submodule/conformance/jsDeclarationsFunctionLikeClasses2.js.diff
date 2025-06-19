@@ -1,0 +1,70 @@
+--- old.jsDeclarationsFunctionLikeClasses2.js
++++ new.jsDeclarationsFunctionLikeClasses2.js
+@@= skipped -106, +106 lines =@@
+     magnitude() {
+         let sum = 0;
+         for (let i = 0; i < this.storage.length; i++) {
+-            sum += (Math.pow(this.storage[i], 2));
++            sum += (this.storage[i] ** 2);
+         }
+         return Math.sqrt(sum);
+     }
+@@= skipped -42, +42 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.origin = void 0;
+-var source_1 = require("./source");
++const source_1 = require("./source");
+ exports.origin = new source_1.Point2D(0, 0);
+ // export const res = Point2D(2, 3).dot(origin); // TODO: when __proto__ works, validate this
+
+@@= skipped -9, +9 lines =@@
+ /**
+  * @param {number} len
+  */
+-export function Vec(len: number): void;
+-export class Vec {
+-    /**
+-     * @param {number} len
+-     */
+-    constructor(len: number);
+-    /**
+-     * @type {number[]}
+-     */
+-    storage: number[];
+-    /**
+-     * @param {Vec} other
+-     */
+-    dot(other: Vec): number;
+-    magnitude(): number;
+-}
++export declare function Vec(len: number): void;
+ /**
+  * @param {number} x
+  * @param {number} y
+  */
+-export function Point2D(x: number, y: number): Point2D;
+-export class Point2D {
+-    /**
+-     * @param {number} x
+-     * @param {number} y
+-     */
+-    constructor(x: number, y: number);
+-    /**
+-     * @param {number} x
+-     */
+-    set x(x: number);
+-    get x(): number;
+-    /**
+-     * @param {number} y
+-     */
+-    set y(y: number);
+-    get y(): number;
+-    __proto__: typeof Vec;
+-}
++export declare function Point2D(x: number, y: number): any;
+ //// [referencer.d.ts]
+-export const origin: Point2D;
+-import { Point2D } from "./source";
++export declare const origin: any;
++// export const res = Point2D(2, 3).dot(origin); // TODO: when __proto__ works, validate this

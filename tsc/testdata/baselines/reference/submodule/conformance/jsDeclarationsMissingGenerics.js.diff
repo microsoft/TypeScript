@@ -1,0 +1,13 @@
+--- old.jsDeclarationsMissingGenerics.js
++++ new.jsDeclarationsMissingGenerics.js
+@@= skipped -24, +24 lines =@@
+ /**
+  * @param {Array} x
+  */
+-declare function x(x: any[]): void;
++declare function x(x: Array): void;
+ /**
+  * @param {Promise} x
+  */
+-declare function y(x: Promise<any>): void;
++declare function y(x: Promise): void;

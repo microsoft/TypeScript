@@ -1,0 +1,33 @@
+--- old.jsDeclarationEmitExportAssignedFunctionWithExtraTypedefsMembers.js
++++ new.jsDeclarationEmitExportAssignedFunctionWithExtraTypedefsMembers.js
+@@= skipped -13, +13 lines =@@
+
+ //// [index.js]
+ "use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++/**
++ * @typedef Options
++ * @property {string} opt
++ */
++/**
++ * @param {Options} options
++ */
++export = function loader(options) { };
+ /**
+  * @typedef Options
+  * @property {string} opt
+@@= skipped -11, +20 lines =@@
+
+
+ //// [index.d.ts]
+-declare namespace _exports {
+-    export { Options };
+-}
+-declare function _exports(options: Options): void;
+-export = _exports;
+-type Options = {
++export type Options = {
+     opt: string;
+ };
++declare const _default: (options: any) => void;
++export = _default;

@@ -1,0 +1,16 @@
+--- old.typeFromPropertyAssignment39.js
++++ new.typeFromPropertyAssignment39.js
+@@= skipped -8, +8 lines =@@
+
+
+ //// [a.d.ts]
+-declare namespace foo {
+-    namespace baz {
+-        let blah: number;
+-    }
+-}
++declare const foo: {
++    baz: {
++        blah: number;
++    };
++};

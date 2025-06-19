@@ -1,0 +1,22 @@
+--- old.declarationEmitClassAccessorsJs1.js
++++ new.declarationEmitClassAccessorsJs1.js
+@@= skipped -21, +21 lines =@@
+
+
+ //// [index.d.ts]
+-export class VFile {
+-    /**
+-     * @param {URL | string} path
+-     */
+-    set path(path: URL | string);
++// https://github.com/microsoft/TypeScript/issues/58167
++export declare class VFile {
+     /**
+      * @returns {string}
+      */
+     get path(): string;
++    /**
++     * @param {URL | string} path
++     */
++    set path(path: URL | string);
+ }

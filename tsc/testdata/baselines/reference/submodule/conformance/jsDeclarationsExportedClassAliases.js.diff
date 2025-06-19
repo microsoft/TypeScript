@@ -1,0 +1,29 @@
+--- old.jsDeclarationsExportedClassAliases.js
++++ new.jsDeclarationsExportedClassAliases.js
+@@= skipped -36, +36 lines =@@
+
+
+ //// [errors.d.ts]
+-export class FancyError extends Error {
++declare class FancyError extends Error {
+     constructor(status: any);
+ }
++declare const _default: {
++    FancyError: typeof FancyError;
++};
++export = _default;
+ //// [index.d.ts]
+-export { errors };
+-import errors = require("./errors");
++declare const _default: {
++    errors: {
++        FancyError: {
++            new (status: any): {
++                name: string;
++                message: string;
++                stack?: string;
++            };
++        };
++    };
++};
++export = _default;

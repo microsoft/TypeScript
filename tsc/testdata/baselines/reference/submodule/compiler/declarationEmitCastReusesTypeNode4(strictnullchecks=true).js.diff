@@ -1,0 +1,81 @@
+--- old.declarationEmitCastReusesTypeNode4(strictnullchecks=true).js
++++ new.declarationEmitCastReusesTypeNode4(strictnullchecks=true).js
+@@= skipped -41, +41 lines =@@
+
+
+ //// [input.d.ts]
+-export function fn(p?: P): void;
++export type P = {} & {
++    name?: string;
++};
++export declare let vLet: {
++    name?: string | undefined;
++};
++export declare const vConst: {
++    name?: string | undefined;
++};
++export declare function fn(p?: {
++    name?: string | undefined;
++}): void;
+ /** @param {number} req */
+-export function fnWithRequiredDefaultParam(p: P | undefined, req: number): void;
++export declare function fnWithRequiredDefaultParam(p: {
++    name?: string | undefined;
++}, req: number): void;
++export declare class C {
++    field: {
++        name?: string | undefined;
++    };
++    /** @optional */ optField: {
++        name?: string | undefined;
++    }; // not a thing
++    /** @readonly */ readonly roFiled: {
++        name?: string | undefined;
++    };
++    method(p?: {
++        name?: string | undefined;
++    }): void;
++    /** @param {number} req */
++    methodWithRequiredDefault(p: {
++        name?: string | undefined;
++    }, req: number): void;
++    constructor(ctorField?: {
++        name?: string | undefined;
++    });
++    get x(): {
++        name?: string | undefined;
++    };
++    set x(v: {
++        name?: string | undefined;
++    });
++}
++declare const _default: {
++    name?: string | undefined;
++};
++export default /** @type {P} */ _default;
++// allows `undefined` on the input side, thanks to the initializer
+ /**
+  *
+  * @param {P} x
+  * @param {number} b
+  */
+-export function fnWithPartialAnnotationOnDefaultparam(x: P | undefined, b: number): void;
+-export let vLet: P;
+-export const vConst: P;
+-export class C {
+-    constructor(ctorField?: P);
+-    field: P;
+-    /** @optional */ optField: P;
+-    /** @readonly */ readonly roFiled: P;
+-    method(p?: P): void;
+-    /** @param {number} req */
+-    methodWithRequiredDefault(p: P | undefined, req: number): void;
+-    set x(v: P);
+-    get x(): P;
+-}
+-declare const _default: P;
+-export default _default;
+-export type P = {} & {
+-    name?: string;
+-};
++export declare function fnWithPartialAnnotationOnDefaultparam(x: P, b: number): void;

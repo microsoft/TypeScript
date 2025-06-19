@@ -1,0 +1,34 @@
+--- old.jsDeclarationsExportAssignedClassExpressionAnonymous.js
++++ new.jsDeclarationsExportAssignedClassExpressionAnonymous.js
+@@= skipped -21, +21 lines =@@
+
+
+ //// [index.d.ts]
+-export = exports;
+-declare class exports {
+-    /**
+-     * @param {number} p
+-     */
+-    constructor(p: number);
+-    t: number;
+-}
++declare const _default: {
++    new (p: number): import(".");
++};
++export = _default;
++
++
++//// [DtsFileErrors]
++
++
++out/index.d.ts(2,22): error TS1340: Module '.' does not refer to a type, but is used as a type here. Did you mean 'typeof import('.')'?
++
++
++==== out/index.d.ts (1 errors) ====
++    declare const _default: {
++        new (p: number): import(".");
++                         ~~~~~~~~~~~
++!!! error TS1340: Module '.' does not refer to a type, but is used as a type here. Did you mean 'typeof import('.')'?
++    };
++    export = _default;
++    

@@ -1,0 +1,18 @@
+--- old.declarationEmitClassSetAccessorParamNameInJs2.js
++++ new.declarationEmitClassSetAccessorParamNameInJs2.js
+@@= skipped -13, +13 lines =@@
+
+
+ //// [foo.d.ts]
+-export class Foo {
++export declare class Foo {
+     /**
+      * Bar.
+      *
+      * @param {{ prop: string }} baz Baz.
+      */
+-    set bar({}: {
+-        prop: string;
+-    });
++    set bar({}: {});
+ }

@@ -1,0 +1,13 @@
+--- old.argumentsReferenceInConstructor6_Js.js
++++ new.argumentsReferenceInConstructor6_Js.js
+@@= skipped -14, +14 lines =@@
+
+ //// [a.d.ts]
+ declare class A {
+-    constructor(...args: any[]);
+-    /**
+-     * @type object
+-     */
+-    foo: object;
++    constructor();
+ }

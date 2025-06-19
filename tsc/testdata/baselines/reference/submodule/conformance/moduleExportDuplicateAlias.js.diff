@@ -1,0 +1,26 @@
+--- old.moduleExportDuplicateAlias.js
++++ new.moduleExportDuplicateAlias.js
+@@= skipped -13, +13 lines =@@
+
+ //// [moduleExportAliasDuplicateAlias.js]
+ "use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++export var apply = undefined;
+ exports.apply = undefined;
+ function a() { }
+ exports.apply();
++export var apply = a;
+ exports.apply = a;
+ exports.apply();
+ //// [test.js]
+@@= skipped -12, +15 lines =@@
+
+
+ //// [moduleExportAliasDuplicateAlias.d.ts]
+-export { a as apply };
+-declare function a(): void;
++export var apply = undefined;
++export var apply = a;
++export {};
+ //// [test.d.ts]
+ export {};

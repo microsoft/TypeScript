@@ -1,0 +1,19 @@
+--- old.reExportJsFromTs.js
++++ new.reExportJsFromTs.js
+@@= skipped -9, +9 lines =@@
+ export { tsConstants };
+
+ //// [constants.js]
++export = {
++    str: 'x',
++};
+ module.exports = {
+     str: 'x',
+ };
+@@= skipped -7, +10 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.tsConstants = void 0;
+-var tsConstants = require("../lib/constants");
++const tsConstants = require("../lib/constants");
+ exports.tsConstants = tsConstants;

@@ -1,0 +1,15 @@
+--- old.nodeModulesAllowJsTopLevelAwait(module=nodenext).js
++++ new.nodeModulesAllowJsTopLevelAwait(module=nodenext).js
+@@= skipped -36, +36 lines =@@
+
+
+ //// [index.d.ts]
+-export const x: 1;
++// cjs format file
++declare const x = 1;
++export { x };
+ //// [index.d.ts]
+-export const x: 1;
++// esm format file
++declare const x = 1;
++export { x };

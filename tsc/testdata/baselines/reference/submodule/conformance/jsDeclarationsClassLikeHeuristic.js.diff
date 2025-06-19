@@ -1,0 +1,12 @@
+--- old.jsDeclarationsClassLikeHeuristic.js
++++ new.jsDeclarationsClassLikeHeuristic.js
+@@= skipped -13, +13 lines =@@
+
+
+ //// [index.d.ts]
+-declare class A {
+-    private constructor();
+-    b: {};
+-}
++// https://github.com/microsoft/TypeScript/issues/35801
++declare let A: any;

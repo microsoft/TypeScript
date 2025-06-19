@@ -1,0 +1,12 @@
+--- old.jsFileCompilationTypeParameterSyntaxOfClass.js
++++ new.jsFileCompilationTypeParameterSyntaxOfClass.js
+@@= skipped -0, +0 lines =@@
+-<no content>
++//// [tests/cases/compiler/jsFileCompilationTypeParameterSyntaxOfClass.ts] ////
++
++//// [a.js]
++class C<T> { }
++
++//// [a.js]
++class C {
++}

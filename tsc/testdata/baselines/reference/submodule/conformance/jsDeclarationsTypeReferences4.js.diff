@@ -1,0 +1,26 @@
+--- old.jsDeclarationsTypeReferences4.js
++++ new.jsDeclarationsTypeReferences4.js
+@@= skipped -32, +32 lines =@@
+     (function (B) {
+         const Something = require("fs").Something;
+         const thing = new Something();
++        // @ts-ignore
++        export { thing };
+     })(B = A.B || (A.B = {}));
+ })(A || (exports.A = A = {}));
+
+
+ //// [index.d.ts]
+-export const Something: 2;
+-export namespace A {
++export declare const Something = 2; // to show conflict that can occur
++// @ts-ignore
++export declare namespace A {
++    // @ts-ignore
+     namespace B {
++        const thing: import("fs").Something;
++        // @ts-ignore
+         export { thing };
+-        export let thing: import("fs").Something;
+     }
+ }

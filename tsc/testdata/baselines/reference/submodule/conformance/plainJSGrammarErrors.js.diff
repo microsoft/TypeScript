@@ -1,0 +1,57 @@
+--- old.plainJSGrammarErrors.js
++++ new.plainJSGrammarErrors.js
+@@= skipped -229, +229 lines =@@
+         return null;
+     }
+     // modifier mistakes
+-    constructor() { }
+-    constructor() { }
++    static constructor() { }
++    async constructor() { }
+     x = 1;
+     y() {
+         return 12;
+@@= skipped -12, +12 lines =@@
+     export cantExportProperty = 1;
+     export cantExportMethod() {
+     }
+-    // accessor mistakes
+-    get incorporeal() { }
+     get parametric(n) { return 1; }
+     set invariant() { }
+     set binary(fst, snd) { }
+@@= skipped -25, +23 lines =@@
+ export static var staticExport = 1;
+ function staticParam(static x = 1) { return x; }
+ async export function oorder(x = 1) { return x; }
+-function cantExportParam(export x = 1) { return x; }
++function cantExportParam(x = 1) { return x; }
+ function cantAsyncParam(async x = 1) { return x; }
+ async async function extremelyAsync() { }
+ async class CantAsyncClass {
+@@= skipped -8, +8 lines =@@
+ }
+ async const cantAsyncConst = 2;
+ async import 'assert';
+-export { CantAsyncClass };
++async export { CantAsyncClass };
+ export import 'fs';
+ export { C };
+ function nestedExports() {
+@@= skipped -30, +30 lines =@@
+ const { e: erp, m: erm, ...noInitialiser = true } = doom;
+ // left-over parsing
+ var ;
+-var x = 1 || 2 ?? 3;
+-var x = 2 ?? 3 || 4;
++var x = (1 || 2) ?? 3;
++var x = 2 ?? (3 || 4);
+ const arr = x => x + 1;
+ var a = [1, 2];
+ a `length`;
+ const o = {
+-    [console.log('oh no'), 2]: 'hi',
++    [(console.log('oh no'), 2)]: 'hi',
+     #noPrivate: 3,
+     cantExportProperties: 4,
+     // TODO: See what the existing JS error is like for these

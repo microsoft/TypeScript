@@ -1,0 +1,49 @@
+--- old.declarationEmitObjectLiteralAccessorsJs1.js
++++ new.declarationEmitObjectLiteralAccessorsJs1.js
+@@= skipped -54, +54 lines =@@
+
+
+ //// [index.d.ts]
+-export namespace obj1 {
+-    let x: string;
+-}
+-export const obj2: {
++// same type accessors
++export declare const obj1: {
++    /**
++     * my awesome getter (first in source order)
++     * @returns {string}
++     */
++    x: string;
++};
++// divergent accessors
++export declare const obj2: {
+     /**
+      * my awesome getter
+      * @returns {string}
+@@= skipped -15, +21 lines =@@
+      */
+     set x(a: number);
+ };
+-export namespace obj3 {
+-    const x_1: string;
+-    export { x_1 as x };
+-}
+-export namespace obj4 {
+-    let x_2: number;
+-    export { x_2 as x };
+-}
++export declare const obj3: {
++    /**
++     * my awesome getter
++     * @returns {string}
++     */
++    readonly x: string;
++};
++export declare const obj4: {
++    /**
++     * my awesome setter
++     * @param {number} a
++     */
++    x: number;
++};

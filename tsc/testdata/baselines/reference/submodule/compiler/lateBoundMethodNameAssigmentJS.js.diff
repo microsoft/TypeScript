@@ -1,0 +1,15 @@
+--- old.lateBoundMethodNameAssigmentJS.js
++++ new.lateBoundMethodNameAssigmentJS.js
+@@= skipped -12, +12 lines =@@
+
+
+ //// [lateBoundMethodNameAssigmentJS.d.ts]
+-export class MyClass {
+-    [_symbol]: any;
+-}
+ declare const _symbol: unique symbol;
++export declare class MyClass {
++    constructor();
++    [_symbol](): Promise<void>;
++}
+ export {};

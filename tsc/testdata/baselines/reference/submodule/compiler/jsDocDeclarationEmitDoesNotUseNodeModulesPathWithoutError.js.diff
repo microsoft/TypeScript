@@ -1,0 +1,22 @@
+--- old.jsDocDeclarationEmitDoesNotUseNodeModulesPathWithoutError.js
++++ new.jsDocDeclarationEmitDoesNotUseNodeModulesPathWithoutError.js
+@@= skipped -46, +46 lines =@@
+
+
+ //// [index.d.ts]
++export type LionRequestInit = import('@lion/ajax').LionRequestInit;
+ /**
+  * @typedef {import('@lion/ajax').LionRequestInit} LionRequestInit
+  */
+-export class NewAjax {
++export declare class NewAjax {
+     /**
+      * @param {LionRequestInit} [init]
+      */
+     case5_unexpectedlyResolvesPathToNodeModules(init?: LionRequestInit): void;
+-    /**
+-     * @type {(init?: LionRequestInit) => void}
+-     */
+-    case6_unexpectedlyResolvesPathToNodeModules: (init?: LionRequestInit) => void;
+ }
+-export type LionRequestInit = import("@lion/ajax").LionRequestInit;

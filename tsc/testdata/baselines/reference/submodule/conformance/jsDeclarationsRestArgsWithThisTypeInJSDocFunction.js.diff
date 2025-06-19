@@ -1,0 +1,14 @@
+--- old.jsDeclarationsRestArgsWithThisTypeInJSDocFunction.js
++++ new.jsDeclarationsRestArgsWithThisTypeInJSDocFunction.js
+@@= skipped -22, +22 lines =@@
+
+
+ //// [bug38550.d.ts]
+-export class Clazz {
++export declare class Clazz {
+     /**
+      * @param {function(this:Object, ...*):*} functionDeclaration
+      */
+-    method(functionDeclaration: (this: any, ...args: any[]) => any): void;
++    method(functionDeclaration: any): void;
+ }

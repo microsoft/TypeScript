@@ -1,0 +1,37 @@
+--- old.moduleExportDuplicateAlias3.js
++++ new.moduleExportDuplicateAlias3.js
+@@= skipped -16, +16 lines =@@
+
+ //// [moduleExportAliasDuplicateAlias.js]
+ "use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++export var apply = undefined;
+ exports.apply = undefined;
++export var apply = undefined;
+ exports.apply = undefined;
+ function a() { }
++export var apply = a;
+ exports.apply = a;
+ exports.apply();
++export var apply = 'ok';
+ exports.apply = 'ok';
+ var OK = exports.apply.toUpperCase();
++export var apply = 1;
+ exports.apply = 1;
+ //// [test.js]
+ "use strict";
+@@= skipped -15, +21 lines =@@
+
+
+ //// [moduleExportAliasDuplicateAlias.d.ts]
+-export const apply: "ok" | 1 | typeof a | undefined;
+-export { a as apply };
+-declare function a(): void;
++export var apply = undefined;
++export var apply = undefined;
++export var apply = a;
++export var apply = 'ok';
++export var apply = 1;
++export {};
+ //// [test.d.ts]
+ export {};

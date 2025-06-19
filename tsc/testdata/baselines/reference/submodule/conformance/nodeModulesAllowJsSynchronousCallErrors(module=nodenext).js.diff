@@ -1,0 +1,11 @@
+--- old.nodeModulesAllowJsSynchronousCallErrors(module=nodenext).js
++++ new.nodeModulesAllowJsSynchronousCallErrors(module=nodenext).js
+@@= skipped -62, +62 lines =@@
+
+
+ //// [index.d.ts]
+-export function h(): Promise<void>;
++export declare function h(): Promise<void>;
+ //// [index.d.ts]
+-export function f(): Promise<void>;
++export declare function f(): Promise<void>;

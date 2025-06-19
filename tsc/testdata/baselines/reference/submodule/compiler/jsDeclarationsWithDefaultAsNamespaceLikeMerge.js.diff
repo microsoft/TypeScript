@@ -1,0 +1,17 @@
+--- old.jsDeclarationsWithDefaultAsNamespaceLikeMerge.js
++++ new.jsDeclarationsWithDefaultAsNamespaceLikeMerge.js
+@@= skipped -22, +22 lines =@@
+
+
+ //// [index.d.ts]
+-declare namespace _default {
+-    namespace computed {
+-        let panels: import("./helper").Computed;
+-    }
+-}
++declare const _default: {
++    computed: {
++        panels: import("./helper").Computed;
++    };
++};
+ export default _default;

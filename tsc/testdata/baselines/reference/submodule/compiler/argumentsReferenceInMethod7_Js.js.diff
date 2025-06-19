@@ -1,0 +1,13 @@
+--- old.argumentsReferenceInMethod7_Js.js
++++ new.argumentsReferenceInMethod7_Js.js
+@@= skipped -14, +14 lines =@@
+
+ //// [a.d.ts]
+ declare class A {
+-    m(...args: any[]): void;
+-    /**
+-     * @type Function
+-     */
+-    callee: Function;
++    m(): void;
+ }

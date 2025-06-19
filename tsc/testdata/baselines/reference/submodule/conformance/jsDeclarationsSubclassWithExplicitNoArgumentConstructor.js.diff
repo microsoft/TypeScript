@@ -1,0 +1,18 @@
+--- old.jsDeclarationsSubclassWithExplicitNoArgumentConstructor.js
++++ new.jsDeclarationsSubclassWithExplicitNoArgumentConstructor.js
+@@= skipped -35, +35 lines =@@
+
+
+ //// [index.d.ts]
+-export class Super {
++export declare class Super {
+     /**
+      * @param {string} firstArg
+      * @param {string} secondArg
+      */
+     constructor(firstArg: string, secondArg: string);
+ }
+-export class Sub extends Super {
++export declare class Sub extends Super {
+     constructor();
+ }

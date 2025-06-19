@@ -1,0 +1,34 @@
+--- old.jsDeclarationsReexportedCjsAlias.js
++++ new.jsDeclarationsReexportedCjsAlias.js
+@@= skipped -53, +53 lines =@@
+ /**
+  * @param {string} a
+  */
+-export function bar(a: string): string;
+-export class SomeClass {
++declare function bar(a: string): string;
++declare class SomeClass {
+     a(): number;
+ }
++declare const _default: {
++    bar: typeof bar;
++    SomeClass: typeof SomeClass;
++};
++export = _default;
+ //// [main.d.ts]
+-import { SomeClass } from "./lib";
+-import { SomeClass as Another } from "./lib";
+-export { SomeClass, Another };
++declare const _default: {
++    SomeClass: {
++        new (): {
++            a(): number;
++        };
++    };
++    Another: {
++        new (): {
++            a(): number;
++        };
++    };
++};
++export = _default;

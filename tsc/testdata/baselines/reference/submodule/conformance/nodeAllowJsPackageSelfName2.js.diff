@@ -1,0 +1,10 @@
+--- old.nodeAllowJsPackageSelfName2.js
++++ new.nodeAllowJsPackageSelfName2.js
+@@= skipped -27, +27 lines =@@
+
+
+ //// [foo.d.ts]
+-export const foo: 1;
++export declare const foo = 1;
+ //// [foo.d.ts]
+ export {};

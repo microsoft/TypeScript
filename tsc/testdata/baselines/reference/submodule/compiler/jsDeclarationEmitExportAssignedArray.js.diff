@@ -1,0 +1,14 @@
+--- old.jsDeclarationEmitExportAssignedArray.js
++++ new.jsDeclarationEmitExportAssignedArray.js
+@@= skipped -5, +5 lines =@@
+
+
+ //// [file.d.ts]
+-declare const _exports: {
++declare const _default: {
+     name: string;
+     displayName: string;
+     defaultEnabled: boolean;
+ }[];
+-export = _exports;
++export = _default;

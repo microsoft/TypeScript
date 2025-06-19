@@ -1,0 +1,17 @@
+--- old.declarationEmitMethodDeclaration.js
++++ new.declarationEmitMethodDeclaration.js
+@@= skipped -10, +10 lines =@@
+
+
+ //// [a.d.ts]
+-declare namespace _default {
+-    namespace methods {
+-        function foo(): void;
+-    }
+-}
++declare const _default: {
++    methods: {
++        foo(): void;
++    };
++};
+ export default _default;

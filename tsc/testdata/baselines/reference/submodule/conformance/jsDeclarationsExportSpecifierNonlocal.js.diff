@@ -1,0 +1,21 @@
+--- old.jsDeclarationsExportSpecifierNonlocal.js
++++ new.jsDeclarationsExportSpecifierNonlocal.js
+@@= skipped -20, +20 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.default = exports.Thing = void 0;
+-var source_1 = require("./source");
++const source_1 = require("./source");
+ Object.defineProperty(exports, "Thing", { enumerable: true, get: function () { return source_1.Thing; } });
+ Object.defineProperty(exports, "default", { enumerable: true, get: function () { return source_1.OtherThing; } });
+
+
+ //// [source.d.ts]
+-export class Thing {
++export declare class Thing {
+ }
+-export class OtherThing {
++export declare class OtherThing {
+ }
+ //// [index.d.ts]
+ export { Thing, OtherThing as default } from "./source";

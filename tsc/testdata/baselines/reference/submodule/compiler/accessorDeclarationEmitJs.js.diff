@@ -1,0 +1,31 @@
+--- old.accessorDeclarationEmitJs.js
++++ new.accessorDeclarationEmitJs.js
+@@= skipped -24, +24 lines =@@
+
+
+ //// [a.d.ts]
+-export namespace t1 {
+-    let p: string;
+-    const getter: string;
+-}
+-export namespace t2 {
+-    let v: string;
+-    let setter: any;
+-}
+-export namespace t3 {
+-    let p_1: string;
+-    export { p_1 as p };
+-    export let value: string;
+-}
++export declare const t1: {
++    p: string;
++    readonly getter: string;
++};
++export declare const t2: {
++    v: string;
++    setter: any;
++};
++export declare const t3: {
++    p: string;
++    value: string;
++};

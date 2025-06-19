@@ -1,0 +1,8 @@
+--- old.javascriptCommonjsModule.js
++++ new.javascriptCommonjsModule.js
+@@= skipped -12, +12 lines =@@
+ }
+ class Bar extends Foo {
+ }
++export = Bar;
+ module.exports = Bar;

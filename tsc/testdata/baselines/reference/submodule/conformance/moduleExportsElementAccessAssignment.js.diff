@@ -1,0 +1,33 @@
+--- old.moduleExportsElementAccessAssignment.js
++++ new.moduleExportsElementAccessAssignment.js
+@@= skipped -19, +19 lines =@@
+
+
+ //// [mod1.d.ts]
+-export namespace a {
+-    let x: string;
+-}
+-export namespace b {
+-    let x_1: string;
+-    export { x_1 as x };
+-}
+-declare namespace _default {
+-    let x_2: string;
+-    export { x_2 as x };
+-}
+-export default _default;
+-export namespace c {
+-    let x_3: string;
+-    export { x_3 as x };
+-}
+-export namespace d {
+-    let e: number;
+-}
++export var a = { x: "x" };
++export var b = { x: "x" };
++export var default = { x: "x" };
++export var c = { x: "x" };
++export var d = {};
++export {};
+ //// [mod2.d.ts]
+ export {};

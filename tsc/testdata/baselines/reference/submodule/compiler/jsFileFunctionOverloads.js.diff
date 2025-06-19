@@ -1,0 +1,60 @@
+--- old.jsFileFunctionOverloads.js
++++ new.jsFileFunctionOverloads.js
+@@= skipped -111, +111 lines =@@
+     /** @type {unknown[]} */
+     const result = [];
+     for (let i = 0; i < array.length; i += 1) {
+-        result.push(... /** @type {unknown[]} */(iterable(array[i])));
++        result.push(... /** @type {unknown[]} */iterable(array[i]));
+     }
+     return result;
+ }
+
+
+ //// [jsFileFunctionOverloads.d.ts]
+-/**
+- * @overload
+- * @param {number} x
+- * @returns {'number'}
+- */
+-declare function getTypeName(x: number): "number";
+-/**
+- * @overload
+- * @param {string} x
+- * @returns {'string'}
+- */
+-declare function getTypeName(x: string): "string";
+-/**
+- * @overload
+- * @param {boolean} x
+- * @returns {'boolean'}
+- */
+-declare function getTypeName(x: boolean): "boolean";
+-/**
+- * @template T
+- * @template U
+- * @overload
+- * @param {T[]} array
+- * @param {(x: T) => U[]} iterable
+- * @returns {U[]}
+- */
+-declare function flatMap<T, U>(array: T[], iterable: (x: T) => U[]): U[];
+-/**
+- * @template T
+- * @overload
+- * @param {T[][]} array
+- * @returns {T[]}
+- */
+-declare function flatMap<T>(array: T[][]): T[];
++declare function getTypeName(x: number): 'number';
++declare function getTypeName(x: string): 'string';
++declare function getTypeName(x: boolean): 'boolean';
+ /**
+  * @template T
+  * @param {T} x
+  * @returns {T}
+  */
+-declare function identity<T>(x: T): T;
++declare const identity: <T>(x: T) => T;
++declare function flatMap<T, U>(array: T[], iterable: (x: T) => U[]): U[];
++declare function flatMap<T>(array: T[][]): T[];

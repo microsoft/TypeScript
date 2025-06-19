@@ -1,0 +1,28 @@
+--- old.argumentsReferenceInConstructor5_Js.js
++++ new.argumentsReferenceInConstructor5_Js.js
+@@= skipped -27, +27 lines =@@
+
+
+ //// [a.d.ts]
+-declare namespace bar {
+-    let arguments: {};
+-}
++declare const bar: {
++    arguments: {};
++};
+ declare class A {
+     /**
+      * Constructor
+@@= skipped -10, +10 lines =@@
+      * @param {object} [foo={}]
+      */
+     constructor(foo?: object);
+-    /**
+-     * @type object
+-     */
+-    foo: object;
+-    /**
+-     * @type object
+-     */
+-    bar: object;
+ }

@@ -1,0 +1,149 @@
+--- old.impliedNodeFormatEmit1(module=system).js
++++ new.impliedNodeFormatEmit1(module=system).js
+@@= skipped -34, +34 lines =@@
+
+
+ //// [a.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var _;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-            exports_1("_", _ = 0);
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports._ = void 0;
++exports._ = 0;
+ //// [b.mjs]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var _;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-            exports_1("_", _ = 0);
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports._ = void 0;
++exports._ = 0;
+ //// [c.cjs]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var _;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-            exports_1("_", _ = 0);
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports._ = void 0;
++exports._ = 0;
+ //// [d.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var _;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-            exports_1("_", _ = 0);
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports._ = void 0;
++exports._ = 0;
+ //// [e.mjs]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var _;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-            exports_1("_", _ = 0);
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports._ = void 0;
++exports._ = 0;
+ //// [f.mjs]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var _;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-            exports_1("_", _ = 0);
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports._ = void 0;
++exports._ = 0;
+ //// [g.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
+ //// [h.mjs]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
+ //// [i.cjs]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
+ //// [dummy.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });

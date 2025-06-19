@@ -1,0 +1,21 @@
+--- old.reuseTypeAnnotationImportTypeInGlobalThisTypeArgument.js
++++ new.reuseTypeAnnotationImportTypeInGlobalThisTypeArgument.js
+@@= skipped -32, +32 lines =@@
+
+
+ //// [types.d.ts]
++export {};
+ /**
+- * a Record containing
++ * @typedef {Record<Keyword, ParamValueTyped>} ParamStateRecord a Record containing
+  *   keyword pairs with descriptions of parameters under governance.
+  */
+-export type ParamStateRecord = Record<Keyword, ParamValueTyped>;
+ //// [index.d.ts]
+-export const blah: {
++export declare const blah: {
+     publicMixin: {
+-        getGovernedParams: () => globalThis.ERef<import("./types.js").ParamStateRecord>;
++        getGovernedParams: () => any;
+     };
+ };

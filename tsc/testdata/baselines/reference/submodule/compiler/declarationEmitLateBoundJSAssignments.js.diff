@@ -1,0 +1,12 @@
+--- old.declarationEmitLateBoundJSAssignments.js
++++ new.declarationEmitLateBoundJSAssignments.js
+@@= skipped -24, +24 lines =@@
+
+
+ //// [file.d.ts]
+-export function foo(): void;
+-export namespace foo {
+-    let bar: number;
+-    let strMemName: string;
+-}
++export declare function foo(): void;

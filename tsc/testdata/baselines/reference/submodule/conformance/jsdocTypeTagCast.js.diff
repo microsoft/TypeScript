@@ -1,0 +1,64 @@
+--- old.jsdocTypeTagCast.js
++++ new.jsdocTypeTagCast.js
+@@= skipped -82, +82 lines =@@
+ var W;
+ //// [b.js]
+ // @ts-check
+-var W = /** @type {string} */ ( /** @type {*} */(4));
+-var W = /** @type {string} */ (4); // Error
++var W = /** @type {string} */ 4;
++var W = /** @type {string} */ 4; // Error
+ /** @type {*} */
+ var a;
+ /** @type {string} */
+ var s;
+-var a = /** @type {*} */ ("" + 4);
+-var s = "" + /** @type {*} */ (4);
++var a = /** @type {*} */ "" + 4;
++var s = "" + /** @type {*} */ 4;
+ class SomeBase {
+     constructor() {
+         this.p = 42;
+@@= skipped -33, +33 lines =@@
+ var someDerived = new SomeDerived();
+ var someOther = new SomeOther();
+ var someFakeClass = new SomeFakeClass();
+-someBase = /** @type {SomeBase} */ (someDerived);
+-someBase = /** @type {SomeBase} */ (someBase);
+-someBase = /** @type {SomeBase} */ (someOther); // Error
+-someDerived = /** @type {SomeDerived} */ (someDerived);
+-someDerived = /** @type {SomeDerived} */ (someBase);
+-someDerived = /** @type {SomeDerived} */ (someOther); // Error
+-someOther = /** @type {SomeOther} */ (someDerived); // Error
+-someOther = /** @type {SomeOther} */ (someBase); // Error
+-someOther = /** @type {SomeOther} */ (someOther);
++someBase = /** @type {SomeBase} */ someDerived;
++someBase = /** @type {SomeBase} */ someBase;
++someBase = /** @type {SomeBase} */ someOther; // Error
++someDerived = /** @type {SomeDerived} */ someDerived;
++someDerived = /** @type {SomeDerived} */ someBase;
++someDerived = /** @type {SomeDerived} */ someOther; // Error
++someOther = /** @type {SomeOther} */ someDerived; // Error
++someOther = /** @type {SomeOther} */ someBase; // Error
++someOther = /** @type {SomeOther} */ someOther;
+ someFakeClass = someBase;
+ someFakeClass = someDerived;
+ someBase = someFakeClass; // Error
+-someBase = /** @type {SomeBase} */ (someFakeClass);
++someBase = /** @type {SomeBase} */ someFakeClass;
+ // Type assertion cannot be a type-predicate type
+ /** @type {number | string} */
+ var numOrStr;
+ /** @type {string} */
+ var str;
+-if ( /** @type {numOrStr is string} */(numOrStr === undefined)) { // Error
++if ( /** @type {numOrStr is string} */numOrStr === undefined) { // Error
+     str = numOrStr; // Error, no narrowing occurred
+ }
+-var asConst1 = /** @type {const} */ (1);
+-var asConst2 = /** @type {const} */ ({
++var asConst1 = /** @type {const} */ 1;
++var asConst2 = /** @type {const} */ {
+     x: 1
+-});
++};

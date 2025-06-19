@@ -1,0 +1,19 @@
+--- old.jsFileMethodOverloads5.js
++++ new.jsFileMethodOverloads5.js
+@@= skipped -28, +28 lines =@@
+  * @param {string} a
+  * @return {void}
+  */
+-export function foo(a: string): void;
+ /**
+  * @overload
+  * @param {number} a
+  * @param {number} [b]
+  * @return {void}
+  */
+-export function foo(a: number, b?: number): void;
++/**
++ * @param {string | number} a
++ * @param {number} [b]
++ */
++export declare const foo: (a: string | number, b?: number) => void;

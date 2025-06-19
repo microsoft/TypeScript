@@ -1,0 +1,21 @@
+--- old.jsDeclarationsUniqueSymbolUsage.js
++++ new.jsDeclarationsUniqueSymbolUsage.js
+@@= skipped -18, +18 lines =@@
+
+
+ //// [a.d.ts]
+-export const kSymbol: unique symbol;
+-export type WithSymbol = {
+-    [kSymbol]: true;
+-};
++export declare const kSymbol: unique symbol;
++/**
++ * @typedef {{[kSymbol]: true}} WithSymbol
++ */ 
+ //// [b.d.ts]
+ /**
+  * @returns {import('./a').WithSymbol}
+  * @param {import('./a').WithSymbol} value
+  */
+-export function b(value: import("./a").WithSymbol): import("./a").WithSymbol;
++export declare function b(value: import('./a').WithSymbol): import('./a').WithSymbol;

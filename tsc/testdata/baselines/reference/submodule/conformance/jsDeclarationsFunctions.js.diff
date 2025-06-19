@@ -1,0 +1,93 @@
+--- old.jsDeclarationsFunctions.js
++++ new.jsDeclarationsFunctions.js
+@@= skipped -85, +85 lines =@@
+  * @param {number} b
+  * @return {string}
+  */
+-function d(a, b) { return /** @type {*} */ (null); }
++function d(a, b) { return /** @type {*} */ null; }
+ /**
+  * @template T,U
+  * @param {T} a
+  * @param {U} b
+  * @return {T & U}
+  */
+-function e(a, b) { return /** @type {*} */ (null); }
++function e(a, b) { return /** @type {*} */ null; }
+ /**
+  * @template T
+  * @param {T} a
+@@= skipped -35, +35 lines =@@
+
+
+ //// [index.d.ts]
+-export function a(): void;
+-export function b(): void;
+-export namespace b {
+-    let cat: string;
+-}
+-export function c(): void;
+-export namespace c {
+-    export { Cls };
+-}
++export declare function a(): void;
++export declare function b(): void;
++export declare function c(): void;
+ /**
+  * @param {number} a
+  * @param {number} b
+  * @return {string}
+  */
+-export function d(a: number, b: number): string;
++export declare function d(a: number, b: number): string;
+ /**
+  * @template T,U
+  * @param {T} a
+  * @param {U} b
+  * @return {T & U}
+  */
+-export function e<T, U>(a: T, b: U): T & U;
++export declare function e<T, U>(a: T, b: U): T & U;
+ /**
+  * @template T
+  * @param {T} a
+  */
+-export function f<T>(a: T): T;
+-export namespace f {
+-    export { f as self };
+-}
+-export function i(): void;
+-export function j(): void;
+-declare class Cls {
+-}
++export declare function f<T>(a: T): T;
+ /**
+  * @param {{x: string}} a
+  * @param {{y: typeof b}} b
+  */
+-export function g(a: {
++declare function g(a: {
+     x: string;
+ }, b: {
+-    y: typeof import(".").b;
+-}): void;
++    y: typeof b;
++}): any;
++export { g };
+ /**
+  * @param {{x: string}} a
+  * @param {{y: typeof b}} b
+@@= skipped -50, +38 lines =@@
+ declare function hh(a: {
+     x: string;
+ }, b: {
+-    y: typeof import(".").b;
+-}): void;
+-export { hh as h, i as ii, j as jj };
++    y: typeof b;
++}): any;
++export { hh as h };
++export declare function i(): void;
++export { i as ii };
++export { j as jj };
++export declare function j(): void;

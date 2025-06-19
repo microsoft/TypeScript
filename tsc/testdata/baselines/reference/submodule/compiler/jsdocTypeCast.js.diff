@@ -1,0 +1,10 @@
+--- old.jsdocTypeCast.js
++++ new.jsdocTypeCast.js
+@@= skipped -30, +30 lines =@@
+     let b = (((x))); // Error
+     b;
+     /** @type {'a' | 'b'} */
+-    let c = /** @type {'a' | 'b'} */ (x); // Ok
++    let c = /** @type {'a' | 'b'} */ x; // Ok
+     c;
+ }

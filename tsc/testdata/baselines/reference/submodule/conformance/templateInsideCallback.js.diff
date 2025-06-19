@@ -1,0 +1,67 @@
+--- old.templateInsideCallback.js
++++ new.templateInsideCallback.js
+@@= skipped -58, +58 lines =@@
+
+ //// [templateInsideCallback.js]
+ "use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
+ /**
+  * @typedef Oops
+  * @template T
+@@= skipped -47, +48 lines =@@
+     /** @type {unknown[]} */
+     const result = [];
+     for (let i = 0; i < array.length; i += 1) {
+-        result.push(... /** @type {unknown[]} */(iterable(array[i])));
++        result.push(... /** @type {unknown[]} */iterable(array[i]));
+     }
+     return result;
+ }
+
+
+ //// [templateInsideCallback.d.ts]
+-/**
+- * @overload
+- * @template T
+- * @template U
+- * @param {T[]} array
+- * @param {(x: T) => U[]} iterable
+- * @returns {U[]}
+- */
+-declare function flatMap<U>(): any;
+-/**
+- * @overload
+- * @template T
+- * @param {T[][]} array
+- * @returns {T[]}
+- */
+-declare function flatMap(): any;
+-/**
+- * @typedef Oops
+- * @template T
+- * @property {T} a
+- * @property {T} b
+- */
+-/**
+- * @callback Call
+- * @template T
+- * @param {T} x
+- * @returns {T}
+- */
+-/**
+- * @template T
+- * @type {Call<T>}
+- */
+-declare const identity: Call<T>;
+-type Nested = {
++export type Call = () ;
++export type Nested = {
+     oh: {
+-        no: number;
+-        noooooo: string;
++        property: number;
++        property: string;
+     };
+ };
+-type Oops = any;
+-type Call = () => any;

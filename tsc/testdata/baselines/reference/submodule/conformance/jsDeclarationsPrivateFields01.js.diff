@@ -1,0 +1,12 @@
+--- old.jsDeclarationsPrivateFields01.js
++++ new.jsDeclarationsPrivateFields01.js
+@@= skipped -25, +25 lines =@@
+
+
+ //// [file.d.ts]
+-export class C {
+-    getWorld(): number;
++export declare class C {
+     #private;
++    getWorld(): number;
+ }

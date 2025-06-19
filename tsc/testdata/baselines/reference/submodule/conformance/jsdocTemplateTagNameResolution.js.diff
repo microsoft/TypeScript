@@ -1,0 +1,22 @@
+--- old.jsdocTemplateTagNameResolution.js
++++ new.jsdocTemplateTagNameResolution.js
+@@= skipped -12, +12 lines =@@
+ const y = "a";
+
+ //// [file.js]
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
+ /**
+  * @template T
+  * @template {keyof T} K
+@@= skipped -11, +13 lines =@@
+
+
+ //// [file.d.ts]
+-declare namespace x {
+-    let a: number;
+-}
+-/** @type {Foo<typeof x, "a">} */
+-declare const y: Foo<typeof x, "a">;
+-type Foo<T, K extends keyof T> = T[K];
++export type Foo<T, K extends keyof T> = T[K];

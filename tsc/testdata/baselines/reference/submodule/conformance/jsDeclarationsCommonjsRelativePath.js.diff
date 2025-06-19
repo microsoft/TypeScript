@@ -1,0 +1,23 @@
+--- old.jsDeclarationsCommonjsRelativePath.js
++++ new.jsDeclarationsCommonjsRelativePath.js
+@@= skipped -13, +13 lines =@@
+
+
+ //// [thing.d.ts]
+-export class Thing {
++declare class Thing {
+ }
++declare const _default: {
++    Thing: typeof Thing;
++};
++export = _default;
+ //// [reexport.d.ts]
+-export { Thing };
+-import Thing_1 = require("./thing");
+-import Thing = Thing_1.Thing;
++declare const _default: {
++    Thing: {
++        new (): {};
++    };
++};
++export = _default;

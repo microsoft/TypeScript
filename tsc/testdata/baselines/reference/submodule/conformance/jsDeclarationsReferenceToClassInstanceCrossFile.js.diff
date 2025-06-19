@@ -1,0 +1,37 @@
+--- old.jsDeclarationsReferenceToClassInstanceCrossFile.js
++++ new.jsDeclarationsReferenceToClassInstanceCrossFile.js
+@@= skipped -41, +41 lines =@@
+
+
+ //// [rectangle.d.ts]
+-export class Rectangle {
++declare class Rectangle {
++    constructor();
+ }
++declare const _default: {
++    Rectangle: typeof Rectangle;
++};
++export = _default;
+ //// [index.d.ts]
+-export class Render {
+-    /**
+-     * Object list
+-     * @type {Rectangle[]}
+-     */
+-    objects: Rectangle[];
++declare class Render {
++    constructor();
+     /**
+      * Adds a rectangle
+      *
+@@= skipped -16, +17 lines =@@
+      */
+     addRectangle(): Rectangle;
+ }
+-import { Rectangle } from "./rectangle";
++declare const _default: {
++    Render: typeof Render;
++};
++export = _default;
+ //// [test.d.ts]
+ export {};

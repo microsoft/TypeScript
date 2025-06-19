@@ -1,0 +1,15 @@
+--- old.argumentsReferenceInMethod3_Js.js
++++ new.argumentsReferenceInMethod3_Js.js
+@@= skipped -37, +37 lines =@@
+      * @param {object} [foo={}]
+      */
+     m(foo?: object): void;
+-    /**
+-     * @type object
+-     */
+-    x: object;
+-    /**
+-     * @type object
+-     */
+-    y: object;
+ }

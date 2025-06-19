@@ -1,0 +1,8 @@
+--- old.argumentsPropertyNameInJsMode2.js
++++ new.argumentsPropertyNameInJsMode2.js
+@@= skipped -15, +15 lines =@@
+
+
+ //// [a.d.ts]
+-declare function f(x: any, ...args: any[]): void;
++declare function f(x: any): void;

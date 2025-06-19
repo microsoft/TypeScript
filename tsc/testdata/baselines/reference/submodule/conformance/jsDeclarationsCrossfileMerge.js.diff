@@ -1,0 +1,31 @@
+--- old.jsDeclarationsCrossfileMerge.js
++++ new.jsDeclarationsCrossfileMerge.js
+@@= skipped -17, +17 lines =@@
+ function validate() { }
+ exports.default = validate;
+ //// [index.js]
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
+ const m = require("./exporter");
++export = m.default;
+ module.exports = m.default;
++export var memberName = "thing";
+ module.exports.memberName = "thing";
+
+
+-//// [index.d.ts]
+-declare const _exports: typeof m.default;
+-export = _exports;
+-import m = require("./exporter");
+-
+-
+-!!!! File out/exporter.d.ts missing from original emit, but present in noCheck emit
+ //// [exporter.d.ts]
+-export default validate;
+ declare function validate(): void;
++export default validate;
++//// [index.d.ts]
++declare const m: typeof m;
++declare const _default: typeof m.default;
++export = _default;
++export var memberName = "thing";
