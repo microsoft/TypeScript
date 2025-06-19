@@ -581,6 +581,9 @@ func compileFilesWithHost(
 	if config.CompilerOptions().GetEmitDeclarations() {
 		diagnostics = append(diagnostics, program.GetDeclarationDiagnostics(ctx, nil)...)
 	}
+	if harnessOptions.CaptureSuggestions {
+		diagnostics = append(diagnostics, program.GetSuggestionDiagnostics(ctx, nil)...)
+	}
 	emitResult := program.Emit(compiler.EmitOptions{})
 
 	return newCompilationResult(config.CompilerOptions(), program, emitResult, diagnostics, harnessOptions)
