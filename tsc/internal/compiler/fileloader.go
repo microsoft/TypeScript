@@ -113,10 +113,16 @@ func processAllProgramFiles(
 	var unsupportedExtensions []string
 
 	loader.parseTasks.collect(&loader, loader.rootTasks, func(task *parseTask, _ []tspath.Path) {
-		file := task.file
 		if task.isRedirected {
 			return
 		}
+
+		if task.isForAutomaticTypeDirective {
+			typeResolutionsInFile[task.path] = task.typeResolutionsInFile
+			return
+		}
+		file := task.file
+		path := task.path
 		if file == nil {
 			missingFiles = append(missingFiles, task.normalizedFilePath)
 			return
@@ -126,7 +132,6 @@ func processAllProgramFiles(
 		} else {
 			files = append(files, file)
 		}
-		path := file.Path()
 
 		filesByPath[path] = file
 		resolvedModules[path] = task.resolutionsInFile
@@ -189,14 +194,31 @@ func (p *fileLoader) addAutomaticTypeDirectiveTasks() {
 		containingDirectory = p.opts.Host.GetCurrentDirectory()
 	}
 	containingFileName := tspath.CombinePaths(containingDirectory, module.InferredTypesContainingFile)
+	p.rootTasks = append(p.rootTasks, &parseTask{normalizedFilePath: containingFileName, isLib: false, isForAutomaticTypeDirective: true})
+}
 
-	automaticTypeDirectiveNames := module.GetAutomaticTypeDirectiveNames(compilerOptions, p.opts.Host)
-	for _, name := range automaticTypeDirectiveNames {
-		resolved := p.resolver.ResolveTypeReferenceDirective(name, containingFileName, core.ModuleKindNodeNext, nil)
-		if resolved.IsResolved() {
-			p.rootTasks = append(p.rootTasks, &parseTask{normalizedFilePath: resolved.ResolvedFileName, isLib: false})
+func (p *fileLoader) resolveAutomaticTypeDirectives(containingFileName string) (
+	toParse []resolvedRef,
+	typeResolutionsInFile module.ModeAwareCache[*module.ResolvedTypeReferenceDirective],
+) {
+	automaticTypeDirectiveNames := module.GetAutomaticTypeDirectiveNames(p.opts.Config.CompilerOptions(), p.opts.Host)
+	if len(automaticTypeDirectiveNames) != 0 {
+		toParse = make([]resolvedRef, 0, len(automaticTypeDirectiveNames))
+		typeResolutionsInFile = make(module.ModeAwareCache[*module.ResolvedTypeReferenceDirective], len(automaticTypeDirectiveNames))
+		for _, name := range automaticTypeDirectiveNames {
+			resolutionMode := core.ModuleKindNodeNext
+			resolved := p.resolver.ResolveTypeReferenceDirective(name, containingFileName, resolutionMode, nil)
+			typeResolutionsInFile[module.ModeAwareCacheKey{Name: name, Mode: resolutionMode}] = resolved
+			if resolved.IsResolved() {
+				toParse = append(toParse, resolvedRef{
+					fileName:      resolved.ResolvedFileName,
+					increaseDepth: resolved.IsExternalLibraryImport,
+					elideOnDepth:  false,
+				})
+			}
 		}
 	}
+	return toParse, typeResolutionsInFile
 }
 
 func (p *fileLoader) addProjectReferenceTasks() {

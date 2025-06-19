@@ -81,6 +81,10 @@ func (r *ResolvedModule) IsResolved() bool {
 	return r != nil && r.ResolvedFileName != ""
 }
 
+func (r *ResolvedModule) GetLookupLocations() *LookupLocations {
+	return &r.LookupLocations
+}
+
 type ResolvedTypeReferenceDirective struct {
 	LookupLocations
 	Primary                 bool
@@ -92,6 +96,10 @@ type ResolvedTypeReferenceDirective struct {
 
 func (r *ResolvedTypeReferenceDirective) IsResolved() bool {
 	return r.ResolvedFileName != ""
+}
+
+func (r *ResolvedTypeReferenceDirective) GetLookupLocations() *LookupLocations {
+	return &r.LookupLocations
 }
 
 type extensions int32

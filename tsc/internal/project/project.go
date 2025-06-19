@@ -347,37 +347,47 @@ func (p *Project) GetLanguageServiceForRequest(ctx context.Context) (*ls.Languag
 	return languageService, cleanup
 }
 
-func (p *Project) getModuleResolutionWatchGlobs() (failedLookups map[tspath.Path]string, affectingLocaions map[tspath.Path]string) {
-	failedLookups = make(map[tspath.Path]string)
-	affectingLocaions = make(map[tspath.Path]string)
-	for _, resolvedModulesInFile := range p.program.GetResolvedModules() {
-		for _, resolvedModule := range resolvedModulesInFile {
-			for _, failedLookupLocation := range resolvedModule.FailedLookupLocations {
-				path := p.toPath(failedLookupLocation)
-				if _, ok := failedLookups[path]; !ok {
-					failedLookups[path] = failedLookupLocation
-				}
-			}
-			for _, affectingLocation := range resolvedModule.AffectingLocations {
-				path := p.toPath(affectingLocation)
-				if _, ok := affectingLocaions[path]; !ok {
-					affectingLocaions[path] = affectingLocation
-				}
-			}
-		}
-	}
-	return failedLookups, affectingLocaions
-}
-
-func (p *Project) updateWatchers(ctx context.Context) {
+func (p *Project) updateModuleResolutionWatches(ctx context.Context) {
 	client := p.Client()
 	if !p.host.IsWatchEnabled() || client == nil {
 		return
 	}
 
-	failedLookupGlobs, affectingLocationGlobs := p.getModuleResolutionWatchGlobs()
-	p.failedLookupsWatch.update(ctx, failedLookupGlobs)
-	p.affectingLocationsWatch.update(ctx, affectingLocationGlobs)
+	failedLookups := make(map[tspath.Path]string)
+	affectingLocations := make(map[tspath.Path]string)
+	extractLookups(p, failedLookups, affectingLocations, p.program.GetResolvedModules())
+	extractLookups(p, failedLookups, affectingLocations, p.program.GetResolvedTypeReferenceDirectives())
+
+	p.failedLookupsWatch.update(ctx, failedLookups)
+	p.affectingLocationsWatch.update(ctx, affectingLocations)
+}
+
+type ResolutionWithLookupLocations interface {
+	GetLookupLocations() *module.LookupLocations
+}
+
+func extractLookups[T ResolutionWithLookupLocations](
+	p *Project,
+	failedLookups map[tspath.Path]string,
+	affectingLocations map[tspath.Path]string,
+	cache map[tspath.Path]module.ModeAwareCache[T],
+) {
+	for _, resolvedModulesInFile := range cache {
+		for _, resolvedModule := range resolvedModulesInFile {
+			for _, failedLookupLocation := range resolvedModule.GetLookupLocations().FailedLookupLocations {
+				path := p.toPath(failedLookupLocation)
+				if _, ok := failedLookups[path]; !ok {
+					failedLookups[path] = failedLookupLocation
+				}
+			}
+			for _, affectingLocation := range resolvedModule.GetLookupLocations().AffectingLocations {
+				path := p.toPath(affectingLocation)
+				if _, ok := affectingLocations[path]; !ok {
+					affectingLocations[path] = affectingLocation
+				}
+			}
+		}
+	}
 }
 
 // onWatchEventForNilScriptInfo is fired for watch events that are not the
@@ -530,7 +540,7 @@ func (p *Project) updateGraph() (*compiler.Program, bool) {
 		p.enqueueInstallTypingsForProject(oldProgram, hasAddedOrRemovedFiles)
 		// TODO: this is currently always synchronously called by some kind of updating request,
 		// but in Strada we throttle, so at least sometimes this should be considered top-level?
-		p.updateWatchers(context.TODO())
+		p.updateModuleResolutionWatches(context.TODO())
 	}
 	p.Logf("Finishing updateGraph: Project: %s version: %d in %s", p.name, p.version, time.Since(start))
 	return p.program, true
