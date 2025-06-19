@@ -9,16 +9,7 @@
  >predicate : (v: T) => boolean
  >v : T
 
-@@= skipped -29, +29 lines =@@
-
- declare function toString1(value: object | Function): string ;
- >toString1 : (value: object | Function) => string
-->value : Function | object
-+>value : object | Function
-
- declare function toString2(value: Function): string ;
- >toString2 : (value: Function) => string
-@@= skipped -173, +173 lines =@@
+@@= skipped -202, +202 lines =@@
  // Repro from #33568
 
  declare function save(_response: IRootResponse<string>): void;

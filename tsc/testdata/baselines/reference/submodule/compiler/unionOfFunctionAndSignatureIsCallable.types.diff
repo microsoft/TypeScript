@@ -20,10 +20,8 @@
  >callable : Function | (() => object)
  }
 
- function f2(fetcherParams: object | (() => object)) {
- >f2 : (fetcherParams: object | (() => object)) => void
-->fetcherParams : (() => object) | object
-+>fetcherParams : object | (() => object)
+@@= skipped -10, +10 lines =@@
+ >fetcherParams : object | (() => object)
 
      const data = typeof fetcherParams === 'function'
 ->data : error
@@ -32,8 +30,7 @@
 +>typeof fetcherParams === 'function'        ? fetcherParams()        : fetcherParams : any
  >typeof fetcherParams === 'function' : boolean
  >typeof fetcherParams : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
-->fetcherParams : (() => object) | object
-+>fetcherParams : object | (() => object)
+ >fetcherParams : object | (() => object)
  >'function' : "function"
 
          ? fetcherParams()

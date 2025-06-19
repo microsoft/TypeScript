@@ -46,16 +46,7 @@
 
    _step: T,
  >_step : T
-@@= skipped -9, +9 lines =@@
- >_state : PartialStepState<unknown>
-
-   _selection: StepItemType<T> | Directive
-->_selection : Directive | StepItemType<T>
-+>_selection : StepItemType<T> | Directive
-
- ): _selection is StepItemType<T> {
-   return false;
-@@= skipped -19, +19 lines =@@
+@@= skipped -28, +28 lines =@@
  }
 
  function* showStep<
