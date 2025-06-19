@@ -26,5 +26,5 @@ interface SymbolConstructor {
     readonly observer: unique symbol;
 }
 declare const obj: {
-    [x: symbol]: number;
+    [Symbol.observer]: number;
 };

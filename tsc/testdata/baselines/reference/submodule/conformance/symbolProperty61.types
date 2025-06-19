@@ -6,18 +6,18 @@ declare global {
 
   interface SymbolConstructor {
     readonly obs: symbol
->obs : symbol
+>obs : unique symbol
   }
 }
 
 const observable: typeof Symbol.obs = Symbol.obs
->observable : symbol
->Symbol.obs : symbol
+>observable : unique symbol
+>Symbol.obs : unique symbol
 >Symbol : SymbolConstructor
->obs : symbol
->Symbol.obs : symbol
+>obs : unique symbol
+>Symbol.obs : unique symbol
 >Symbol : SymbolConstructor
->obs : symbol
+>obs : unique symbol
 
 export class MyObservable<T> {
 >MyObservable : MyObservable<T>
@@ -40,7 +40,7 @@ export class MyObservable<T> {
 
     [observable]() {
 >[observable] : () => this
->observable : symbol
+>observable : unique symbol
 
         return this
 >this : this
@@ -52,9 +52,9 @@ type InteropObservable<T> = {
 
     [Symbol.obs]: () => { subscribe(next: (val: T) => void): void }
 >[Symbol.obs] : () => { subscribe(next: (val: T) => void): void; }
->Symbol.obs : symbol
+>Symbol.obs : unique symbol
 >Symbol : SymbolConstructor
->obs : symbol
+>obs : unique symbol
 >subscribe : (next: (val: T) => void) => void
 >next : (val: T) => void
 >val : T
@@ -68,9 +68,9 @@ function from<T>(obs: InteropObservable<T>) {
 >obs[Symbol.obs]() : { subscribe(next: (val: T) => void): void; }
 >obs[Symbol.obs] : () => { subscribe(next: (val: T) => void): void; }
 >obs : InteropObservable<T>
->Symbol.obs : symbol
+>Symbol.obs : unique symbol
 >Symbol : SymbolConstructor
->obs : symbol
+>obs : unique symbol
 }
 
 from(new MyObservable(42))
