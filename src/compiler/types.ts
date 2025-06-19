@@ -6284,18 +6284,18 @@ export const enum TypeFlags {
     UniqueESSymbol  = 1 << 14,  // unique symbol
     EnumLiteral     = 1 << 15,  // Always combined with StringLiteral, NumberLiteral, or Union
     Enum            = 1 << 16,   // Numeric computed enum member value
-    Never           = 1 << 17,  // Never type
-    TypeParameter   = 1 << 18,  // Type parameter
-    Object          = 1 << 19,  // Object type
-    Union           = 1 << 20,  // Union (T | U)
-    Intersection    = 1 << 21,  // Intersection (T & U)
-    Index           = 1 << 22,  // keyof T
-    IndexedAccess   = 1 << 23,  // T[K]
-    Conditional     = 1 << 24,  // T extends U ? X : Y
-    Substitution    = 1 << 25,  // Type parameter substitution
-    NonPrimitive    = 1 << 26,  // intrinsic object type
-    TemplateLiteral = 1 << 27,  // Template literal type
-    StringMapping   = 1 << 28,  // Uppercase/Lowercase type
+    NonPrimitive    = 1 << 17,  // intrinsic object type
+    Never           = 1 << 18,  // Never type
+    TypeParameter   = 1 << 19,  // Type parameter
+    Object          = 1 << 20,  // Object type
+    Index           = 1 << 21,  // keyof T
+    IndexedAccess   = 1 << 22,  // T[K]
+    Conditional     = 1 << 23,  // T extends U ? X : Y
+    Substitution    = 1 << 24,  // Type parameter substitution
+    TemplateLiteral = 1 << 25,  // Template literal type
+    StringMapping   = 1 << 26,  // Uppercase/Lowercase type
+    Union           = 1 << 27,  // Union (T | U)
+    Intersection    = 1 << 28,  // Intersection (T & U)
     /** @internal */
     Reserved1       = 1 << 29,  // Used by union/intersection type construction
     /** @internal */

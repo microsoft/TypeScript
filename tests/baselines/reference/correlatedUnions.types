@@ -1332,10 +1332,10 @@ function getConfigOrDefault<T extends keyof Config>(
 >    : ^
 
   const assertedCheck = userValue ? userValue! : defaultValue;
->assertedCheck : NonNullable<Partial<Config>[T]>
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->userValue ? userValue! : defaultValue : NonNullable<Partial<Config>[T]>
->                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>assertedCheck : Config[T]
+>              : ^^^^^^^^^
+>userValue ? userValue! : defaultValue : Config[T]
+>                                      : ^^^^^^^^^
 >userValue : Partial<Config>[T]
 >          : ^^^^^^^^^^^^^^^^^^
 >userValue! : NonNullable<Partial<Config>[T]>
@@ -1346,8 +1346,8 @@ function getConfigOrDefault<T extends keyof Config>(
 >             : ^^^^^^^^^
 
   return assertedCheck;
->assertedCheck : NonNullable<Partial<Config>[T]>
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>assertedCheck : Config[T]
+>              : ^^^^^^^^^
 }
 
 // repro from #47523

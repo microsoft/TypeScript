@@ -274,7 +274,7 @@ function canPickStepContinue<T extends QuickPickStep>(
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
   _selection: StepItemType<T> | Directive
->_selection : Directive | StepItemType<T>
+>_selection : StepItemType<T> | Directive
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ): _selection is StepItemType<T> {

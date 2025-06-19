@@ -411,7 +411,7 @@ interface B1<T> extends A1<T> {
 declare function toString1(value: object | Function): string ;
 >toString1 : (value: object | Function) => string
 >          : ^     ^^                 ^^^^^      
->value : Function | object
+>value : object | Function
 >      : ^^^^^^^^^^^^^^^^^
 
 declare function toString2(value: Function): string ;
