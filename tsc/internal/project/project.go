@@ -150,6 +150,7 @@ type Project struct {
 	// rootFileNames was a map from Path to { NormalizedPath, ScriptInfo? } in the original code.
 	// But the ProjectService owns script infos, so it's not clear why there was an extra pointer.
 	rootFileNames     *collections.OrderedMap[tspath.Path, string]
+	rootJSFileCount   int
 	compilerOptions   *core.CompilerOptions
 	typeAcquisition   *core.TypeAcquisition
 	parsedCommandLine *tsoptions.ParsedCommandLine
@@ -571,6 +572,12 @@ func (p *Project) updateProgram() bool {
 			} else {
 				rootFileNames := p.GetRootFileNames()
 				compilerOptions := p.compilerOptions
+
+				if compilerOptions.MaxNodeModuleJsDepth == nil && p.rootJSFileCount > 0 {
+					compilerOptions = compilerOptions.Clone()
+					compilerOptions.MaxNodeModuleJsDepth = ptrTo(2)
+				}
+
 				p.programConfig = &tsoptions.ParsedCommandLine{
 					ParsedConfig: &core.ParsedOptions{
 						CompilerOptions: compilerOptions,
@@ -875,7 +882,7 @@ func (p *Project) RemoveFile(info *ScriptInfo, fileExists bool) {
 	p.mu.Lock()
 	defer p.mu.Unlock()
 	if p.isRoot(info) && p.kind == KindInferred {
-		p.rootFileNames.Delete(info.path)
+		p.deleteRootFileNameOfInferred(info.path)
 		p.setTypeAcquisition(nil)
 		p.programConfig = nil
 	}
@@ -898,13 +905,12 @@ func (p *Project) AddInferredProjectRoot(info *ScriptInfo) {
 	if p.isRoot(info) {
 		panic("script info is already a root")
 	}
-	p.rootFileNames.Set(info.path, info.fileName)
+	p.setRootFileNameOfInferred(info.path, info.fileName)
 	p.programConfig = nil
 	p.setTypeAcquisition(nil)
 	// !!!
 	// if p.kind == KindInferred {
 	// 	p.host.startWatchingConfigFilesForInferredProjectRoot(info.path);
-	//  // handle JS toggling
 	// }
 	info.attachToProject(p)
 	p.markAsDirtyLocked()
@@ -961,6 +967,33 @@ func (p *Project) setRootFiles(rootFileNames []string) {
 				p.rootFileNames.Delete(root)
 			}
 		}
+	}
+}
+
+func (p *Project) setRootFileNameOfInferred(path tspath.Path, fileName string) {
+	if p.kind != KindInferred {
+		panic("setRootFileNameOfInferred called on non-inferred project")
+	}
+
+	has := p.rootFileNames.Has(path)
+	p.rootFileNames.Set(path, fileName)
+	if !has && tspath.HasJSFileExtension(fileName) {
+		p.rootJSFileCount++
+	}
+}
+
+func (p *Project) deleteRootFileNameOfInferred(path tspath.Path) {
+	if p.kind != KindInferred {
+		panic("deleteRootFileNameOfInferred called on non-inferred project")
+	}
+
+	fileName, ok := p.rootFileNames.Get(path)
+	if !ok {
+		return
+	}
+	p.rootFileNames.Delete(path)
+	if tspath.HasJSFileExtension(fileName) {
+		p.rootJSFileCount--
 	}
 }
 
@@ -1080,6 +1113,7 @@ func (p *Project) Close() {
 		}
 	}
 	p.rootFileNames = nil
+	p.rootJSFileCount = 0
 	p.parsedCommandLine = nil
 	p.programConfig = nil
 	p.checkerPool = nil
