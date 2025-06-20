@@ -34,15 +34,11 @@ window.customElements.define("my-html5-element", mod.HTML5Element);
 >window : Symbol(window, Decl(lib.dom.d.ts, --, --))
 >customElements : Symbol(customElements, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 >define : Symbol(define, Decl(lib.dom.d.ts, --, --))
->mod.HTML5Element : Symbol(HTML5Element, Decl(component.d.html.ts, 7, 31))
 >mod : Symbol(mod, Decl(file.ts, 0, 6))
->HTML5Element : Symbol(HTML5Element, Decl(component.d.html.ts, 7, 31))
 
 if (document !== mod.default) {
 >document : Symbol(document, Decl(lib.dom.d.ts, --, --))
->mod.default : Symbol(doc, Decl(component.d.html.ts, 3, 26))
 >mod : Symbol(mod, Decl(file.ts, 0, 6))
->default : Symbol(doc, Decl(component.d.html.ts, 3, 26))
 
     document.body.appendChild(mod.blogPost);
 >document.body.appendChild : Symbol(appendChild, Decl(lib.dom.d.ts, --, --))
@@ -50,7 +46,5 @@ if (document !== mod.default) {
 >document : Symbol(document, Decl(lib.dom.d.ts, --, --))
 >body : Symbol(body, Decl(lib.dom.d.ts, --, --))
 >appendChild : Symbol(appendChild, Decl(lib.dom.d.ts, --, --))
->mod.blogPost : Symbol(blogPost, Decl(component.d.html.ts, 7, 12))
 >mod : Symbol(mod, Decl(file.ts, 0, 6))
->blogPost : Symbol(blogPost, Decl(component.d.html.ts, 7, 12))
 }

@@ -10,7 +10,6 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
-	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/module"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -432,7 +431,7 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 			importIndex := index - importsStart
 
 			shouldAddFile := moduleName != "" &&
-				getResolutionDiagnostic(optionsForFile, resolvedModule, file) == nil &&
+				module.GetResolutionDiagnostic(optionsForFile, resolvedModule, file) == nil &&
 				!optionsForFile.NoResolve.IsTrue() &&
 				!(isJsFile && !optionsForFile.GetAllowJS()) &&
 				(importIndex < 0 || (importIndex < len(file.Imports()) && (ast.IsInJSFile(file.Imports()[importIndex]) || file.Imports()[importIndex].Flags&ast.NodeFlagsJSDoc == 0)))
@@ -448,57 +447,6 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 		}
 
 		t.resolutionsInFile = resolutionsInFile
-	}
-}
-
-// Returns a DiagnosticMessage if we won't include a resolved module due to its extension.
-// The DiagnosticMessage's parameters are the imported module name, and the filename it resolved to.
-// This returns a diagnostic even if the module will be an untyped module.
-func getResolutionDiagnostic(options *core.CompilerOptions, resolvedModule *module.ResolvedModule, file *ast.SourceFile) *diagnostics.Message {
-	needJsx := func() *diagnostics.Message {
-		if options.Jsx != core.JsxEmitNone {
-			return nil
-		}
-		return diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set
-	}
-
-	needAllowJs := func() *diagnostics.Message {
-		if options.GetAllowJS() || !options.NoImplicitAny.DefaultIfUnknown(options.Strict).IsTrue() {
-			return nil
-		}
-		return diagnostics.Module_0_was_resolved_to_1_but_resolveJsonModule_is_not_used
-	}
-
-	needResolveJsonModule := func() *diagnostics.Message {
-		if options.GetResolveJsonModule() {
-			return nil
-		}
-		return diagnostics.Module_0_was_resolved_to_1_but_resolveJsonModule_is_not_used
-	}
-
-	needAllowArbitraryExtensions := func() *diagnostics.Message {
-		if file.IsDeclarationFile || options.AllowArbitraryExtensions.IsTrue() {
-			return nil
-		}
-		return diagnostics.Module_0_was_resolved_to_1_but_allowArbitraryExtensions_is_not_set
-	}
-
-	switch resolvedModule.Extension {
-	case tspath.ExtensionTs, tspath.ExtensionDts,
-		tspath.ExtensionMts, tspath.ExtensionDmts,
-		tspath.ExtensionCts, tspath.ExtensionDcts:
-		// These are always allowed.
-		return nil
-	case tspath.ExtensionTsx:
-		return needJsx()
-	case tspath.ExtensionJsx:
-		return core.Coalesce(needJsx(), needAllowJs())
-	case tspath.ExtensionJs, tspath.ExtensionMjs, tspath.ExtensionCjs:
-		return needAllowJs()
-	case tspath.ExtensionJson:
-		return needResolveJsonModule()
-	default:
-		return needAllowArbitraryExtensions()
 	}
 }
 

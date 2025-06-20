@@ -1,10 +1,10 @@
-main.ts(1,22): error TS2307: Cannot find module './dir/native.node' or its corresponding type declarations.
+main.ts(1,22): error TS6263: Module './dir/native.node' was resolved to 'dir/native.d.node.ts', but '--allowArbitraryExtensions' is not set.
 
 
 ==== main.ts (1 errors) ====
     import mod = require("./dir/native.node");
                          ~~~~~~~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module './dir/native.node' or its corresponding type declarations.
+!!! error TS6263: Module './dir/native.node' was resolved to 'dir/native.d.node.ts', but '--allowArbitraryExtensions' is not set.
     mod.doNativeThing("good");
     
 ==== package.json (0 errors) ====
