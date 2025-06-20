@@ -51,6 +51,16 @@ func (t *projectReferenceParseTask) isLoaded() bool {
 	return t.loaded
 }
 
+func (t *projectReferenceParseTask) isRoot() bool {
+	return true
+}
+
+func (t *projectReferenceParseTask) isFromExternalLibrary() bool {
+	return false
+}
+
+func (t *projectReferenceParseTask) markFromExternalLibrary() {}
+
 func createProjectReferenceParseTasks(projectReferences []string) []*projectReferenceParseTask {
 	return core.Map(projectReferences, func(configName string) *projectReferenceParseTask {
 		return &projectReferenceParseTask{

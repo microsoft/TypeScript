@@ -1,21 +1,6 @@
 --- old.nodePackageSelfNameScoped(module=node18).js
 +++ new.nodePackageSelfNameScoped(module=node18).js
-@@= skipped -20, +20 lines =@@
- }
-
- //// [index.js]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
- // esm format file
--import * as self from "@scope/package";
-+const self = require("@scope/package");
- self;
- //// [index.mjs]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
- // esm format file
--import * as self from "@scope/package";
-+const self = require("@scope/package");
+@@= skipped -29, +29 lines =@@
  self;
  //// [index.cjs]
  "use strict";

@@ -31,8 +31,7 @@ bar;
 export {};
 
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference types="pkg" />
 foo; // foo should resolve while bar should not, since index.js is esm
 bar;
+export {};

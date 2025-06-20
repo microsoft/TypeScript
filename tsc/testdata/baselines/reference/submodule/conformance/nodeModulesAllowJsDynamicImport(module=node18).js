@@ -32,11 +32,8 @@ async function main() {
     const { readFile } = await import("fs");
 }
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.main = main;
 // esm format file
-async function main() {
+export async function main() {
     const { readFile } = await import("fs");
 }
 

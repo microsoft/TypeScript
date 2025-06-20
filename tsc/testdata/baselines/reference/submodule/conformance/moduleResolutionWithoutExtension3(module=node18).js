@@ -18,5 +18,4 @@ function foo() {
     return "";
 }
 //// [bar.mjs]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

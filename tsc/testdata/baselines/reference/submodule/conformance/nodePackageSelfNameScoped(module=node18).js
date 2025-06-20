@@ -21,16 +21,12 @@ self;
 }
 
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // esm format file
-const self = require("@scope/package");
+import * as self from "@scope/package";
 self;
 //// [index.mjs]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // esm format file
-const self = require("@scope/package");
+import * as self from "@scope/package";
 self;
 //// [index.cjs]
 "use strict";

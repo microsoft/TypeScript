@@ -1,21 +1,6 @@
 --- old.nodeModulesImportResolutionNoCycle(module=node18).js
 +++ new.nodeModulesImportResolutionNoCycle(module=node18).js
-@@= skipped -23, +23 lines =@@
- }
-
- //// [index.js]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
- // esm format file
--import * as type from "#type";
-+const type = require("#type");
- type;
- //// [index.mjs]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
- // esm format file
--import * as type from "#type";
-+const type = require("#type");
+@@= skipped -32, +32 lines =@@
  type;
  //// [index.cjs]
  "use strict";

@@ -824,6 +824,10 @@ func (p *Program) getModeForTypeReferenceDirectiveInFile(ref *ast.FileReference,
 	return p.GetDefaultResolutionModeForFile(sourceFile)
 }
 
+func (p *Program) IsSourceFileFromExternalLibrary(file *ast.SourceFile) bool {
+	return p.sourceFilesFoundSearchingNodeModules.Has(file.Path())
+}
+
 type FileIncludeKind int
 
 const (

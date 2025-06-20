@@ -1,29 +1,6 @@
 --- old.nodeModulesTripleSlashReferenceModeDeclarationEmit7(module=node18).js
 +++ new.nodeModulesTripleSlashReferenceModeDeclarationEmit7(module=node18).js
-@@= skipped -48, +48 lines =@@
- export default [obj1, obj2.default] as const;
-
- //// [uses.js]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
- /// <reference types="pkg" preserve="true" />
--export default getInterI();
-+exports.default = getInterI();
- //// [uses.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- /// <reference types="pkg" preserve="true" />
- exports.default = getInterR();
- //// [index.js]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
- // only an esm file can `import` both kinds of files
--import obj1 from "./sub1/uses.js";
--import obj2 from "./sub2/uses.js";
--export default [obj1, obj2.default];
-+const uses_js_1 = require("./sub1/uses.js");
-+const uses_js_2 = require("./sub2/uses.js");
-+exports.default = [uses_js_1.default, uses_js_2.default.default];
+@@= skipped -63, +63 lines =@@
 
 
  //// [uses.d.ts]
@@ -35,7 +12,7 @@
  declare const _default: RequireInterface;
  export default _default;
  //// [index.d.ts]
-@@= skipped -64, +66 lines =@@
+@@= skipped -49, +47 lines =@@
          function getInterR(): RequireInterface;
      }
  ==== out/sub1/uses.d.ts (0 errors) ====

@@ -38,12 +38,10 @@ type;
 }
 
 //// [index.mjs]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // esm format file
-const cjs = require("#cjs");
-const mjs = require("#mjs");
-const type = require("#type");
+import * as cjs from "#cjs";
+import * as mjs from "#mjs";
+import * as type from "#type";
 cjs;
 mjs;
 type;
@@ -58,12 +56,10 @@ cjs;
 mjs;
 type;
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // esm format file
-const cjs = require("#cjs");
-const mjs = require("#mjs");
-const type = require("#type");
+import * as cjs from "#cjs";
+import * as mjs from "#mjs";
+import * as type from "#type";
 cjs;
 mjs;
 type;

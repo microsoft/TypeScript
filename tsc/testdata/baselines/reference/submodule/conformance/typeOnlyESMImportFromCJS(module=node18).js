@@ -13,8 +13,7 @@ type _3 = typeof import("./module.mts", { with: { "resolution-mode": "require" }
 
 
 //// [module.mjs]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [common.cjs]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

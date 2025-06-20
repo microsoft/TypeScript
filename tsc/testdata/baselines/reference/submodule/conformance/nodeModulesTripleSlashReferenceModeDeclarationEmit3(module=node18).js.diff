@@ -1,13 +1,6 @@
 --- old.nodeModulesTripleSlashReferenceModeDeclarationEmit3(module=node18).js
 +++ new.nodeModulesTripleSlashReferenceModeDeclarationEmit3(module=node18).js
-@@= skipped -28, +28 lines =@@
- export interface LocalInterface extends RequireInterface {}
-
- //// [index.js]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
- /// <reference types="pkg" resolution-mode="require" preserve="true" />
--export {};
+@@= skipped -33, +33 lines =@@
 
 
  //// [index.d.ts]

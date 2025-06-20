@@ -92,22 +92,19 @@ export const cjsNonmain = true;
 }
 
 //// [index.mjs]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.f = exports.e = exports.d = exports.c = exports.b = exports.a = void 0;
 // esm format file
-const cjs = require("package/cjs");
-const mjs = require("package/mjs");
-const type = require("package");
-exports.a = cjs;
-exports.b = mjs;
-exports.c = type;
-const cjsi = require("inner/cjs");
-const mjsi = require("inner/mjs");
-const typei = require("inner");
-exports.d = cjsi;
-exports.e = mjsi;
-exports.f = typei;
+import * as cjs from "package/cjs";
+import * as mjs from "package/mjs";
+import * as type from "package";
+export const a = cjs;
+export const b = mjs;
+export const c = type;
+import * as cjsi from "inner/cjs";
+import * as mjsi from "inner/mjs";
+import * as typei from "inner";
+export const d = cjsi;
+export const e = mjsi;
+export const f = typei;
 //// [index.cjs]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -126,22 +123,19 @@ exports.d = cjsi;
 exports.e = mjsi;
 exports.f = typei;
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.f = exports.e = exports.d = exports.c = exports.b = exports.a = void 0;
 // esm format file
-const cjs = require("package/cjs");
-const mjs = require("package/mjs");
-const type = require("package");
-exports.a = cjs;
-exports.b = mjs;
-exports.c = type;
-const cjsi = require("inner/cjs");
-const mjsi = require("inner/mjs");
-const typei = require("inner");
-exports.d = cjsi;
-exports.e = mjsi;
-exports.f = typei;
+import * as cjs from "package/cjs";
+import * as mjs from "package/mjs";
+import * as type from "package";
+export const a = cjs;
+export const b = mjs;
+export const c = type;
+import * as cjsi from "inner/cjs";
+import * as mjsi from "inner/mjs";
+import * as typei from "inner";
+export const d = cjsi;
+export const e = mjsi;
+export const f = typei;
 
 
 //// [index.d.mts]

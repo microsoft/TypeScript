@@ -1611,7 +1611,7 @@ func IsEffectiveExternalModule(node *SourceFile, compilerOptions *core.CompilerO
 }
 
 func isCommonJSContainingModuleKind(kind core.ModuleKind) bool {
-	return kind == core.ModuleKindCommonJS || kind == core.ModuleKindNode16 || kind == core.ModuleKindNodeNext
+	return kind == core.ModuleKindCommonJS || core.ModuleKindNode16 <= kind && kind <= core.ModuleKindNodeNext
 }
 
 func IsExternalModuleIndicator(node *Statement) bool {

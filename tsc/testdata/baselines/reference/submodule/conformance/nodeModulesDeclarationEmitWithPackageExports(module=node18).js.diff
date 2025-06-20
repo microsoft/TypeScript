@@ -1,37 +1,7 @@
 --- old.nodeModulesDeclarationEmitWithPackageExports(module=node18).js
 +++ new.nodeModulesDeclarationEmitWithPackageExports(module=node18).js
-@@= skipped -91, +91 lines =@@
- }
-
- //// [index.mjs]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
-+exports.f = exports.e = exports.d = exports.c = exports.b = exports.a = void 0;
- // esm format file
--import * as cjs from "package/cjs";
--import * as mjs from "package/mjs";
--import * as type from "package";
--export const a = cjs;
--export const b = mjs;
--export const c = type;
--import * as cjsi from "inner/cjs";
--import * as mjsi from "inner/mjs";
--import * as typei from "inner";
--export const d = cjsi;
--export const e = mjsi;
--export const f = typei;
-+const cjs = require("package/cjs");
-+const mjs = require("package/mjs");
-+const type = require("package");
-+exports.a = cjs;
-+exports.b = mjs;
-+exports.c = type;
-+const cjsi = require("inner/cjs");
-+const mjsi = require("inner/mjs");
-+const typei = require("inner");
-+exports.d = cjsi;
-+exports.e = mjsi;
-+exports.f = typei;
+@@= skipped -106, +106 lines =@@
+ export const f = typei;
  //// [index.cjs]
  "use strict";
 -var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -88,35 +58,7 @@
  exports.d = cjsi;
  exports.e = mjsi;
  exports.f = typei;
- //// [index.js]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
-+exports.f = exports.e = exports.d = exports.c = exports.b = exports.a = void 0;
- // esm format file
--import * as cjs from "package/cjs";
--import * as mjs from "package/mjs";
--import * as type from "package";
--export const a = cjs;
--export const b = mjs;
--export const c = type;
--import * as cjsi from "inner/cjs";
--import * as mjsi from "inner/mjs";
--import * as typei from "inner";
--export const d = cjsi;
--export const e = mjsi;
--export const f = typei;
-+const cjs = require("package/cjs");
-+const mjs = require("package/mjs");
-+const type = require("package");
-+exports.a = cjs;
-+exports.b = mjs;
-+exports.c = type;
-+const cjsi = require("inner/cjs");
-+const mjsi = require("inner/mjs");
-+const typei = require("inner");
-+exports.d = cjsi;
-+exports.e = mjsi;
-+exports.f = typei;
+@@= skipped -65, +32 lines =@@
 
 
  //// [index.d.mts]
@@ -124,7 +66,7 @@
  import * as cjs from "package/cjs";
  import * as mjs from "package/mjs";
  import * as type from "package";
-@@= skipped -93, +67 lines =@@
+@@= skipped -13, +14 lines =@@
  export declare const e: typeof mjsi;
  export declare const f: typeof typei;
  //// [index.d.cts]

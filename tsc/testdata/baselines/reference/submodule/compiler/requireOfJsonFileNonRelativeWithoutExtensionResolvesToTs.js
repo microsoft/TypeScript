@@ -14,7 +14,10 @@ let fnumber: number = f;
 export = 10;
 
 
-//// [out/file1.js]
+//// [out/node_modules/f.js]
+"use strict";
+module.exports = 10;
+//// [out/projects/file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const f = require("f"); // should work to f.ts

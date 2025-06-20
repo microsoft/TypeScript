@@ -52,16 +52,12 @@ export const futureVersionApplied = true;
 }
 
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // esm format file
-const mod = require("inner");
+import * as mod from "inner";
 mod.correctVersionApplied;
 //// [index.mjs]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // esm format file
-const mod = require("inner");
+import * as mod from "inner";
 mod.correctVersionApplied;
 //// [index.cjs]
 "use strict";

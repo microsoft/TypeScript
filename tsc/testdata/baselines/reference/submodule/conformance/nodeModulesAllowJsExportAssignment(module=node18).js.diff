@@ -10,47 +10,30 @@
 +export = a;
  module.exports = a;
  //// [index.js]
-+"use strict";
  // esm format file
- const a = {};
--export {};
-+module.exports = a;
- //// [file.js]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
-+// esm format file
-+require("fs");
-+const a = {};
-+export = a;
-+module.exports = a;
-+
-+
-+//// [index.d.ts]
-+// cjs format file
-+declare const a: {};
-+export = a;
-+//// [file.d.ts]
-+export = a;
-+//// [index.d.ts]
-+// esm format file
-+declare const a: {};
-+export = a;
-+//// [file.d.ts]
+@@= skipped -12, +12 lines =@@
  // esm format file
  import "fs";
--const a = {};
--module.exports = a;
--
--
--//// [index.d.ts]
+ const a = {};
++export = a;
+ module.exports = a;
+
+
+ //// [index.d.ts]
 -export = a;
++// cjs format file
+ declare const a: {};
++export = a;
+ //// [file.d.ts]
+ export = a;
 -declare const a: {};
--//// [file.d.ts]
+ //// [index.d.ts]
 -export = a;
--declare const a: {};
--//// [index.d.ts]
--export = a;
--declare const a: {};
--//// [file.d.ts]
++// esm format file
+ declare const a: {};
++export = a;
+ //// [file.d.ts]
 -export {};
++// esm format file
++import "fs";
 +export = a;

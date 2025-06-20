@@ -124,3 +124,7 @@ func (host *emitHost) GetEmitResolver(file *ast.SourceFile, skipDiagnostics bool
 	defer done()
 	return checker.GetEmitResolver(file, skipDiagnostics)
 }
+
+func (host *emitHost) IsSourceFileFromExternalLibrary(file *ast.SourceFile) bool {
+	return host.program.IsSourceFileFromExternalLibrary(file)
+}

@@ -983,6 +983,7 @@ func (p *Project) GetFileNames(excludeFilesFromExternalLibraries bool, excludeCo
 	result := []string{}
 	sourceFiles := p.program.GetSourceFiles()
 	for _, sourceFile := range sourceFiles {
+		// !! This is probably ready to be implemented now?
 		// if excludeFilesFromExternalLibraries && p.program.IsSourceFileFromExternalLibrary(sourceFile) {
 		//     continue;
 		// }

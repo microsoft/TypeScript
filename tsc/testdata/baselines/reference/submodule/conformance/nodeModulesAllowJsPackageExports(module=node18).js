@@ -89,18 +89,16 @@ export { type };
 }
 
 //// [index.mjs]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // esm format file
-const cjs = require("package/cjs");
-const mjs = require("package/mjs");
-const type = require("package");
+import * as cjs from "package/cjs";
+import * as mjs from "package/mjs";
+import * as type from "package";
 cjs;
 mjs;
 type;
-const cjsi = require("inner/cjs");
-const mjsi = require("inner/mjs");
-const typei = require("inner");
+import * as cjsi from "inner/cjs";
+import * as mjsi from "inner/mjs";
+import * as typei from "inner";
 cjsi;
 mjsi;
 typei;
@@ -121,18 +119,16 @@ cjsi;
 mjsi;
 typei;
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // esm format file
-const cjs = require("package/cjs");
-const mjs = require("package/mjs");
-const type = require("package");
+import * as cjs from "package/cjs";
+import * as mjs from "package/mjs";
+import * as type from "package";
 cjs;
 mjs;
 type;
-const cjsi = require("inner/cjs");
-const mjsi = require("inner/mjs");
-const typei = require("inner");
+import * as cjsi from "inner/cjs";
+import * as mjsi from "inner/mjs";
+import * as typei from "inner";
 cjsi;
 mjsi;
 typei;

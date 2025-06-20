@@ -12,7 +12,7 @@ mod.doNativeThing("good");
 
 
 //// [main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const mod = require("./dir/native.node");
+import { createRequire as _createRequire } from "module";
+const __require = _createRequire(import.meta.url);
+const mod = __require("./dir/native.node");
 mod.doNativeThing("good");

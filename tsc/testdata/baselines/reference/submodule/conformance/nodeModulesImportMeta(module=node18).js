@@ -27,12 +27,9 @@ exports.x = void 0;
 const x = import.meta.url;
 exports.x = x;
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
 // esm format file
 const x = import.meta.url;
-exports.x = x;
+export { x };
 
 
 //// [index.d.ts]

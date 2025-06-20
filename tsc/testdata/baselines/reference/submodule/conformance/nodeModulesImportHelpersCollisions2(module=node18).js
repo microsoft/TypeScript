@@ -34,13 +34,9 @@ const tslib_1 = require("tslib");
 tslib_1.__exportStar(require("fs"), exports);
 exports.fs = require("fs");
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.fs = void 0;
-const tslib_1 = require("tslib");
 // esm format file
-__exportStar(require("fs"), exports);
-exports.fs = require("fs");
+export * from "fs";
+export * as fs from "fs";
 
 
 //// [index.d.ts]

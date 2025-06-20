@@ -12,19 +12,10 @@
 -    "default": "misedirection"
 -}
  //// [index.js]
--import pkg from "./package.json" with { type: "json" };
--export const name = pkg.name;
--import * as ns from "./package.json" with { type: "json" };
--export const thing = ns;
--export const name2 = ns.default.name;
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
-+exports.name2 = exports.thing = exports.name = void 0;
-+const package_json_1 = require("./package.json");
-+exports.name = package_json_1.default.name;
-+const ns = require("./package.json");
-+exports.thing = ns;
-+exports.name2 = ns.default.name;
+ import pkg from "./package.json" with { type: "json" };
+ export const name = pkg.name;
+@@= skipped -15, +8 lines =@@
+ export const name2 = ns.default.name;
  //// [index.cjs]
  "use strict";
 -var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -73,23 +64,7 @@
  exports.thing = ns;
  exports.name2 = ns.default.name;
  //// [index.mjs]
--import pkg from "./package.json" with { type: "json" };
--export const name = pkg.name;
--import * as ns from "./package.json" with { type: "json" };
--export const thing = ns;
--export const name2 = ns.default.name;
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
-+exports.name2 = exports.thing = exports.name = void 0;
-+const package_json_1 = require("./package.json");
-+exports.name = package_json_1.default.name;
-+const ns = require("./package.json");
-+exports.thing = ns;
-+exports.name2 = ns.default.name;
-
-
- //// [index.d.ts]
-@@= skipped -78, +41 lines =@@
+@@= skipped -63, +27 lines =@@
  };
  export declare const name2: string;
  //// [index.d.cts]

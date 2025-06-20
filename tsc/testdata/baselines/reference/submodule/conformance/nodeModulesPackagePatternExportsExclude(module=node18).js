@@ -111,34 +111,30 @@ export { type };
 } 
 
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // esm format file
-const cjsi = require("inner/cjs/exclude/index");
-const mjsi = require("inner/mjs/exclude/index");
-const typei = require("inner/js/exclude/index");
+import * as cjsi from "inner/cjs/exclude/index";
+import * as mjsi from "inner/mjs/exclude/index";
+import * as typei from "inner/js/exclude/index";
 cjsi;
 mjsi;
 typei;
-const cjsi2 = require("inner/cjs/index");
-const mjsi2 = require("inner/mjs/index");
-const typei2 = require("inner/js/index");
+import * as cjsi2 from "inner/cjs/index";
+import * as mjsi2 from "inner/mjs/index";
+import * as typei2 from "inner/js/index";
 cjsi2;
 mjsi2;
 typei2;
 //// [index.mjs]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // esm format file
-const cjsi = require("inner/cjs/exclude/index");
-const mjsi = require("inner/mjs/exclude/index");
-const typei = require("inner/js/exclude/index");
+import * as cjsi from "inner/cjs/exclude/index";
+import * as mjsi from "inner/mjs/exclude/index";
+import * as typei from "inner/js/exclude/index";
 cjsi;
 mjsi;
 typei;
-const cjsi2 = require("inner/cjs/index");
-const mjsi2 = require("inner/mjs/index");
-const typei2 = require("inner/js/index");
+import * as cjsi2 from "inner/cjs/index";
+import * as mjsi2 from "inner/mjs/index";
+import * as typei2 from "inner/js/index";
 cjsi2;
 mjsi2;
 typei2;

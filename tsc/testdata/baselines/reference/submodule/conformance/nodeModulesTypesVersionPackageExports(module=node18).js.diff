@@ -1,21 +1,6 @@
 --- old.nodeModulesTypesVersionPackageExports(module=node18).js
 +++ new.nodeModulesTypesVersionPackageExports(module=node18).js
-@@= skipped -51, +51 lines =@@
- }
-
- //// [index.js]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
- // esm format file
--import * as mod from "inner";
-+const mod = require("inner");
- mod.correctVersionApplied;
- //// [index.mjs]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
- // esm format file
--import * as mod from "inner";
-+const mod = require("inner");
+@@= skipped -60, +60 lines =@@
  mod.correctVersionApplied;
  //// [index.cjs]
  "use strict";

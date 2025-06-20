@@ -38,12 +38,10 @@ fs_1.default.readFile;
 const fs = require("fs");
 fs.readFile;
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // esm format file
-const fs_1 = require("fs");
-fs_1.default.readFile;
-const fs = require("fs");
+import { default as _fs } from "fs";
+_fs.readFile;
+import * as fs from "fs";
 fs.readFile;
 
 

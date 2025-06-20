@@ -17,6 +17,9 @@ type fileLoaderWorkerTask[T any] interface {
 	getSubTasks() []T
 	shouldIncreaseDepth() bool
 	shouldElideOnDepth() bool
+	isRoot() bool
+	isFromExternalLibrary() bool
+	markFromExternalLibrary()
 }
 
 type fileLoaderWorker[K fileLoaderWorkerTask[K]] struct {
@@ -32,12 +35,13 @@ type queuedTask[K fileLoaderWorkerTask[K]] struct {
 }
 
 func (w *fileLoaderWorker[K]) runAndWait(loader *fileLoader, tasks []K) {
-	w.start(loader, tasks, 0)
+	w.start(loader, tasks, 0, false)
 	w.wg.RunAndWait()
 }
 
-func (w *fileLoaderWorker[K]) start(loader *fileLoader, tasks []K, depth int) {
+func (w *fileLoaderWorker[K]) start(loader *fileLoader, tasks []K, depth int, isFromExternalLibrary bool) {
 	for i, task := range tasks {
+		taskIsFromExternalLibrary := isFromExternalLibrary || task.isFromExternalLibrary()
 		newTask := &queuedTask[K]{task: task, lowestDepth: math.MaxInt}
 		loadedTask, loaded := w.tasksByFileName.LoadOrStore(task.FileName(), newTask)
 		task = loadedTask.task
@@ -45,29 +49,41 @@ func (w *fileLoaderWorker[K]) start(loader *fileLoader, tasks []K, depth int) {
 			tasks[i] = task
 		}
 
-		currentDepth := depth
-		if task.shouldIncreaseDepth() {
-			currentDepth++
-		}
-
-		if task.shouldElideOnDepth() && currentDepth > w.maxDepth {
-			continue
-		}
-
 		w.wg.Queue(func() {
 			loadedTask.mu.Lock()
 			defer loadedTask.mu.Unlock()
 
-			if !task.isLoaded() {
-				task.load(loader)
+			currentDepth := depth
+			if task.shouldIncreaseDepth() {
+				currentDepth++
 			}
+
+			startSubtasks := false
 
 			if currentDepth < loadedTask.lowestDepth {
 				// If we're seeing this task at a lower depth than before,
 				// reprocess its subtasks to ensure they are loaded.
 				loadedTask.lowestDepth = currentDepth
-				subTasks := task.getSubTasks()
-				w.start(loader, subTasks, currentDepth)
+				startSubtasks = true
+			}
+
+			if !task.isRoot() && taskIsFromExternalLibrary && !task.isFromExternalLibrary() {
+				// If we're seeing this task now as an external library,
+				// reprocess its subtasks to ensure they are also marked as external.
+				task.markFromExternalLibrary()
+				startSubtasks = true
+			}
+
+			if task.shouldElideOnDepth() && currentDepth > w.maxDepth {
+				return
+			}
+
+			if !task.isLoaded() {
+				task.load(loader)
+			}
+
+			if startSubtasks {
+				w.start(loader, task.getSubTasks(), loadedTask.lowestDepth, task.isFromExternalLibrary())
 			}
 		})
 	}

@@ -24,16 +24,12 @@ type;
 }
 
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // esm format file
-const type = require("#type");
+import * as type from "#type";
 type;
 //// [index.mjs]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // esm format file
-const type = require("#type");
+import * as type from "#type";
 type;
 //// [index.cjs]
 "use strict";

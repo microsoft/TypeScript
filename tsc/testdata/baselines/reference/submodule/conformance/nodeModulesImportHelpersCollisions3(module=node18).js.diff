@@ -11,24 +11,13 @@
 +const fs_1 = require("fs");
 +Object.defineProperty(exports, "default", { enumerable: true, get: function () { return fs_1.default; } });
  //// [index.js]
--// esm format file
--export { default } from "fs";
--
--
--//// [index.d.ts]
--export { default } from "fs";
--//// [index.d.ts]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
-+exports.default = void 0;
-+// esm format file
-+const fs_1 = require("fs");
-+Object.defineProperty(exports, "default", { enumerable: true, get: function () { return fs_1.default; } });
-+
-+
-+//// [index.d.ts]
+ // esm format file
+ export { default } from "fs";
+
+
+ //// [index.d.ts]
 +// cjs format file
-+export { default } from "fs";
-+//// [index.d.ts]
+ export { default } from "fs";
+ //// [index.d.ts]
 +// esm format file
  export { default } from "fs";
