@@ -25340,9 +25340,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // right is a supertype.
         const superTypeOrUnion = literalTypesWithSameBaseType(primaryTypes) ?
             getUnionType(primaryTypes) :
-            reduceLeft(primaryTypes, (s, t) => isTypeStrictSubtypeOf(s, t) ? t : s)!;
+            getSingleCommonSupertype(primaryTypes)
         // Add any nullable types that occurred in the candidates back to the result.
         return primaryTypes === types ? superTypeOrUnion : getNullableType(superTypeOrUnion, getCombinedTypeFlags(types) & TypeFlags.Nullable);
+    }
+
+    function getSingleCommonSupertype(types: Type[]) {
+        const candidate = reduceLeft(types, (s, t) => isTypeStrictSubtypeOf(s, t) ? t : s)!;
+        return every(types, t => t === candidate || isTypeStrictSubtypeOf(t, candidate)) ?
+            candidate :
+            reduceLeft(types, (s, t) => isTypeAssignableTo(s, t) ? t : s)!;
     }
 
     // Return the leftmost type for which no type to the right is a subtype.
