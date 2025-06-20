@@ -285,14 +285,13 @@ func TestAta(t *testing.T) {
 	})
 
 	t.Run("discover from node_modules", func(t *testing.T) {
-		t.Skip("Skip for now - to add back when we skip external library files to lookup typings for")
 		t.Parallel()
 		files := map[string]any{
 			"/user/username/projects/project/app.js": "",
 			"/user/username/projects/project/package.json": `{
 			    "dependencies": {
-					"jquery": "1.0.0",
-				},
+					"jquery": "1.0.0"
+				}
 			}`,
 			"/user/username/projects/project/jsconfig.json":                           `{}`,
 			"/user/username/projects/project/node_modules/commander/index.js":         "",
@@ -312,7 +311,6 @@ func TestAta(t *testing.T) {
 
 		service.OpenFile("/user/username/projects/project/app.js", files["/user/username/projects/project/app.js"].(string), core.ScriptKindJS, "")
 		_, p := service.EnsureDefaultProjectForFile("/user/username/projects/project/app.js")
-		// Order is determinate since second install will run only after completing first one
 		status := <-host.ServiceOptions.InstallStatus
 		assert.Equal(t, status, project.TypingsInstallerStatus{
 			RequestId: 1,
@@ -323,14 +321,13 @@ func TestAta(t *testing.T) {
 
 	// Explicit types prevent automatic inclusion from package.json listing
 	t.Run("discover from node_modules empty types", func(t *testing.T) {
-		t.Skip("Skip for now - to add back when we skip external library files to lookup typings for")
 		t.Parallel()
 		files := map[string]any{
 			"/user/username/projects/project/app.js": "",
 			"/user/username/projects/project/package.json": `{
 			    "dependencies": {
-					"jquery": "1.0.0",
-				},
+					"jquery": "1.0.0"
+				}
 			}`,
 			"/user/username/projects/project/jsconfig.json": `{
 				"compilerOptions": {
@@ -354,25 +351,23 @@ func TestAta(t *testing.T) {
 
 		service.OpenFile("/user/username/projects/project/app.js", files["/user/username/projects/project/app.js"].(string), core.ScriptKindJS, "")
 		_, p := service.EnsureDefaultProjectForFile("/user/username/projects/project/app.js")
-		// Order is determinate since second install will run only after completing first one
 		status := <-host.ServiceOptions.InstallStatus
 		assert.Equal(t, status, project.TypingsInstallerStatus{
 			RequestId: 1,
 			Project:   p,
-			Status:    "Success",
+			Status:    "Skipped 0 typings",
 		})
 	})
 
 	// A type reference directive will not resolve to the global typings cache
 	t.Run("discover from node_modules explicit types", func(t *testing.T) {
-		t.Skip("Skip for now - to add back when we skip external library files to lookup typings for")
 		t.Parallel()
 		files := map[string]any{
 			"/user/username/projects/project/app.js": "",
 			"/user/username/projects/project/package.json": `{
 			    "dependencies": {
-					"jquery": "1.0.0",
-				},
+					"jquery": "1.0.0"
+				}
 			}`,
 			"/user/username/projects/project/jsconfig.json": `{
 				"compilerOptions": {
@@ -396,25 +391,23 @@ func TestAta(t *testing.T) {
 
 		service.OpenFile("/user/username/projects/project/app.js", files["/user/username/projects/project/app.js"].(string), core.ScriptKindJS, "")
 		_, p := service.EnsureDefaultProjectForFile("/user/username/projects/project/app.js")
-		// Order is determinate since second install will run only after completing first one
 		status := <-host.ServiceOptions.InstallStatus
 		assert.Equal(t, status, project.TypingsInstallerStatus{
 			RequestId: 1,
 			Project:   p,
-			Status:    "Success",
+			Status:    "Skipped 0 typings",
 		})
 	})
 
 	// However, explicit types will not prevent unresolved imports from pulling in typings
 	t.Run("discover from node_modules empty types has import", func(t *testing.T) {
-		t.Skip("Skip for now - to add back when we skip external library files to lookup typings for")
 		t.Parallel()
 		files := map[string]any{
 			"/user/username/projects/project/app.js": `import "jquery";`,
 			"/user/username/projects/project/package.json": `{
 			    "dependencies": {
-					"jquery": "1.0.0",
-				},
+					"jquery": "1.0.0"
+				}
 			}`,
 			"/user/username/projects/project/jsconfig.json": `{
 				"compilerOptions": {
@@ -438,7 +431,6 @@ func TestAta(t *testing.T) {
 
 		service.OpenFile("/user/username/projects/project/app.js", files["/user/username/projects/project/app.js"].(string), core.ScriptKindJS, "")
 		_, p := service.EnsureDefaultProjectForFile("/user/username/projects/project/app.js")
-		// Order is determinate since second install will run only after completing first one
 		status := <-host.ServiceOptions.InstallStatus
 		assert.Equal(t, status, project.TypingsInstallerStatus{
 			RequestId: 1,

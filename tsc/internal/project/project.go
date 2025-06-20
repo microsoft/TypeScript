@@ -635,6 +635,15 @@ func (p *Project) getTypeAcquisition() *core.TypeAcquisition {
 	return p.typeAcquisition
 }
 
+func (p *Project) setTypeAcquisition(typeAcquisition *core.TypeAcquisition) {
+	if typeAcquisition == nil || !typeAcquisition.Enable.IsTrue() {
+		p.unresolvedImports = nil
+		p.unresolvedImportsPerFile = nil
+		p.typingFiles = nil
+	}
+	p.typeAcquisition = typeAcquisition
+}
+
 func (p *Project) enqueueInstallTypingsForProject(oldProgram *compiler.Program, forceRefresh bool) {
 	typingsInstaller := p.host.TypingsInstaller()
 	if typingsInstaller == nil {
@@ -643,10 +652,6 @@ func (p *Project) enqueueInstallTypingsForProject(oldProgram *compiler.Program, 
 
 	typeAcquisition := p.getTypeAcquisition()
 	if typeAcquisition == nil || !typeAcquisition.Enable.IsTrue() {
-		// !!! sheetal Should be probably done where we set typeAcquisition
-		p.unresolvedImports = nil
-		p.unresolvedImportsPerFile = nil
-		p.typingFiles = nil
 		return
 	}
 
@@ -871,7 +876,7 @@ func (p *Project) RemoveFile(info *ScriptInfo, fileExists bool) {
 	defer p.mu.Unlock()
 	if p.isRoot(info) && p.kind == KindInferred {
 		p.rootFileNames.Delete(info.path)
-		p.typeAcquisition = nil
+		p.setTypeAcquisition(nil)
 		p.programConfig = nil
 	}
 	p.onFileAddedOrRemoved()
@@ -895,7 +900,7 @@ func (p *Project) AddInferredProjectRoot(info *ScriptInfo) {
 	}
 	p.rootFileNames.Set(info.path, info.fileName)
 	p.programConfig = nil
-	p.typeAcquisition = nil
+	p.setTypeAcquisition(nil)
 	// !!!
 	// if p.kind == KindInferred {
 	// 	p.host.startWatchingConfigFilesForInferredProjectRoot(info.path);
@@ -924,11 +929,11 @@ func (p *Project) LoadConfig() error {
 		)
 
 		p.compilerOptions = p.parsedCommandLine.CompilerOptions()
-		p.typeAcquisition = p.parsedCommandLine.TypeAcquisition()
+		p.setTypeAcquisition(p.parsedCommandLine.TypeAcquisition())
 		p.setRootFiles(p.parsedCommandLine.FileNames())
 	} else {
 		p.compilerOptions = &core.CompilerOptions{}
-		p.typeAcquisition = nil
+		p.setTypeAcquisition(nil)
 		return fmt.Errorf("could not read file %q", p.configFileName)
 	}
 	return nil
@@ -983,10 +988,9 @@ func (p *Project) GetFileNames(excludeFilesFromExternalLibraries bool, excludeCo
 	result := []string{}
 	sourceFiles := p.program.GetSourceFiles()
 	for _, sourceFile := range sourceFiles {
-		// !! This is probably ready to be implemented now?
-		// if excludeFilesFromExternalLibraries && p.program.IsSourceFileFromExternalLibrary(sourceFile) {
-		//     continue;
-		// }
+		if excludeFilesFromExternalLibraries && p.program.IsSourceFileFromExternalLibrary(sourceFile) {
+			continue
+		}
 		result = append(result, sourceFile.FileName())
 	}
 	// if (!excludeConfigFiles) {
