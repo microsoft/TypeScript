@@ -25349,7 +25349,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const candidate = reduceLeft(types, (s, t) => isTypeStrictSubtypeOf(s, t) ? t : s)!;
         return every(types, t => t === candidate || isTypeStrictSubtypeOf(t, candidate)) ?
             candidate :
-            reduceLeft(types, (s, t) => isTypeAssignableTo(s, t) ? t : s)!;
+            reduceLeft(types, (s, t) => isTypeSubtypeOf(s, t) ? t : s)!;
     }
 
     // Return the leftmost type for which no type to the right is a subtype.
