@@ -1,4 +1,4 @@
-import { SyncRpcChannel } from "libsyncrpc";
+import { SyncRpcChannel } from "@typescript/libsyncrpc";
 import type { FileSystem } from "./fs.ts";
 
 export interface ClientOptions {
