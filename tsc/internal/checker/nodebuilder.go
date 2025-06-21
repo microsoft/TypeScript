@@ -18,6 +18,7 @@ func (b *NodeBuilder) EmitContext() *printer.EmitContext {
 }
 
 func (b *NodeBuilder) enterContext(enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) {
+	b.ctxStack = append(b.ctxStack, b.impl.ctx)
 	b.impl.ctx = &NodeBuilderContext{
 		tracker:                  tracker,
 		flags:                    flags,
@@ -36,7 +37,6 @@ func (b *NodeBuilder) enterContext(enclosingDeclaration *ast.Node, flags nodebui
 		tracker = NewSymbolTrackerImpl(b.impl.ctx, nil, b.host)
 		b.impl.ctx.tracker = tracker
 	}
-	b.ctxStack = append(b.ctxStack, b.impl.ctx)
 }
 
 func (b *NodeBuilder) popContext() {
