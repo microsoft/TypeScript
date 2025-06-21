@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/declarationEmitBigInt.ts] ////
+
+=== a.ts ===
+export const a = 0n;
+>a : Symbol(a, Decl(a.ts, 0, 12))
+
+export const b = 10n;
+>b : Symbol(b, Decl(a.ts, 1, 12))
+
+export const c = -0n;
+>c : Symbol(c, Decl(a.ts, 2, 12))
+
+export const d = -10n;
+>d : Symbol(d, Decl(a.ts, 3, 12))
+

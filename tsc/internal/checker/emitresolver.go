@@ -900,12 +900,10 @@ func (r *emitResolver) CreateLiteralConstValue(emitContext *printer.EmitContext,
 	if t.flags&TypeFlagsLiteral == 0 {
 		return nil // non-literal type
 	}
-	literalValue := t.AsLiteralType().value
-	switch literalValue.(type) {
+	switch value := t.AsLiteralType().value.(type) {
 	case string:
-		return emitContext.Factory.NewStringLiteral(literalValue.(string))
+		return emitContext.Factory.NewStringLiteral(value)
 	case jsnum.Number:
-		value := literalValue.(jsnum.Number)
 		if value.Abs() != value {
 			// negative
 			return emitContext.Factory.NewPrefixUnaryExpression(
@@ -915,20 +913,13 @@ func (r *emitResolver) CreateLiteralConstValue(emitContext *printer.EmitContext,
 		}
 		return emitContext.Factory.NewNumericLiteral(value.String())
 	case jsnum.PseudoBigInt:
-		value := literalValue.(jsnum.PseudoBigInt)
-		if value.Negative {
-			// negative
-			return emitContext.Factory.NewPrefixUnaryExpression(
-				ast.KindMinusToken,
-				emitContext.Factory.NewBigIntLiteral(value.Base10Value),
-			)
-		}
-		return emitContext.Factory.NewNumericLiteral(value.Base10Value)
+		return emitContext.Factory.NewBigIntLiteral(pseudoBigIntToString(value) + "n")
 	case bool:
-		if literalValue.(bool) {
-			return emitContext.Factory.NewKeywordExpression(ast.KindTrueKeyword)
+		kind := ast.KindFalseKeyword
+		if value {
+			kind = ast.KindTrueKeyword
 		}
-		return emitContext.Factory.NewKeywordExpression(ast.KindFalseKeyword)
+		return emitContext.Factory.NewKeywordExpression(kind)
 	}
 	panic("unhandled literal const value kind")
 }

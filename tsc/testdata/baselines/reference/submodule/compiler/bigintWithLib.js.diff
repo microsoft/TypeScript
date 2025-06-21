@@ -20,7 +20,7 @@
 -declare const y: 12n;
 -declare let z: bigint;
 +// Test emitted declarations files
-+declare const w = 12; // should emit as const w = 12n
-+declare const x = -12; // should emit as const x = -12n
++declare const w = 12n; // should emit as const w = 12n
++declare const x = -12n; // should emit as const x = -12n
 +declare const y: 12n; // should emit type 12n
 +declare let z: bigint; // should emit type bigint in declaration file
