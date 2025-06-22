@@ -7103,9 +7103,10 @@ export const enum InferencePriority {
     LiteralKeyof                 = 1 << 8,  // Inference made from a string literal to a keyof T
     NoConstraints                = 1 << 9,  // Don't infer from constraints of instantiable types
     AlwaysStrict                 = 1 << 10, // Always use strict rules for contravariant inferences
-    MaxValue                     = 1 << 11, // Seed for inference priority tracking
+    ReturnMapper                 = 1 << 11, // Inferring for return mapper
+    MaxValue                     = 1 << 12, // Seed for inference priority tracking
 
-    PriorityImpliesCombination = ReturnType | MappedTypeConstraint | LiteralKeyof, // These priorities imply that the resulting type should be a combination of all candidates
+    PriorityImpliesCombination = ReturnType | ReturnMapper | MappedTypeConstraint | LiteralKeyof, // These priorities imply that the resulting type should be a combination of all candidates
     Circularity = -1,  // Inference circularity (value less than all other priorities)
 }
 
@@ -7129,6 +7130,7 @@ export const enum InferenceFlags {
     NoDefault       = 1 << 0,  // Infer silentNeverType for no inferences (otherwise anyType or unknownType)
     AnyDefault      = 1 << 1,  // Infer anyType (in JS files) for no inferences (otherwise unknownType)
     SkippedGenericFunction = 1 << 2, // A generic function was skipped during inference
+    NoUnknownInference = 1 << 3,
 }
 
 /**

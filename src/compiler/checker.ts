@@ -26727,7 +26727,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     if (!inference.isFixed) {
                         const candidate = propagationType || source;
-                        if (candidate === blockedStringType) {
+                        // ReturnMapper inferences are used only for contextual types. We exclude `any` and `unknown` types
+                        // that might otherwise swallow other useful inferences.
+                        if (candidate === blockedStringType || candidate.flags & TypeFlags.AnyOrUnknown && priority & InferencePriority.ReturnMapper) {
                             return;
                         }
                         if (inference.priority === undefined || priority < inference.priority) {
@@ -35698,7 +35700,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // type parameters for which the inferences are being made.
                     const returnContext = createInferenceContext(signature.typeParameters!, signature, context.flags);
                     const returnSourceType = instantiateType(contextualType, outerContext && createOuterReturnMapper(outerContext));
-                    inferTypes(returnContext.inferences, returnSourceType, inferenceTargetType);
+                    inferTypes(returnContext.inferences, returnSourceType, inferenceTargetType, InferencePriority.ReturnMapper);
                     context.returnMapper = some(returnContext.inferences, hasInferenceCandidates) ? getMapperFromContext(cloneInferredPartOfContext(returnContext)) : undefined;
                 }
             }
