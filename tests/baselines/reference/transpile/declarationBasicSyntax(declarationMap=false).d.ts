@@ -56,6 +56,7 @@ export interface Foo {
     c?: string;
 }
 //// [class.d.ts] ////
+declare const i: unique symbol;
 export declare class Bar {
     #private;
     a: string;
@@ -65,19 +66,25 @@ export declare class Bar {
     protected f: string;
     private g;
     ["h"]: string;
+    [i]: string;
 }
 export declare abstract class Baz {
     abstract a: string;
     abstract method(): void;
 }
+export {};
 
 
 //// [Diagnostics reported]
-class.ts(11,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+class.ts(1,7): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+class.ts(11,6): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
 
 
-==== class.ts (1 errors) ====
+==== class.ts (2 errors) ====
     const i = Symbol();
+          ~
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 class.ts:1:7: Add a type annotation to the variable i.
     export class Bar {
         a: string;
         b?: string;
@@ -88,8 +95,10 @@ class.ts(11,5): error TS9038: Computed property names on class or object literal
         private g: string;
         ["h"]: string;
         [i]: string;
-        ~~~
-!!! error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+         ~
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+!!! related TS9029 class.ts:11:5: Add a type annotation to the property [i].
+!!! related TS9035 class.ts:11:6: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.
     }
     
     export abstract class Baz {
