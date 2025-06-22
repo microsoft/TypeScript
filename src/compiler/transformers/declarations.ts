@@ -319,7 +319,7 @@ export function transformDeclarations(context: TransformationContext): Transform
             enclosingDeclaration,
             declarationEmitNodeBuilderFlags,
             declarationEmitInternalNodeBuilderFlags,
-            symbolTracker
+            symbolTracker,
         );
         return !!typeNode && isTypeQueryNode(typeNode);
     }
