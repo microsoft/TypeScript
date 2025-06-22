@@ -6896,7 +6896,7 @@ declare namespace ts {
         AlwaysStrict = 1024,
         ReturnMapper = 2048,
         MaxValue = 4096,
-        PriorityImpliesCombination = 416,
+        PriorityImpliesCombination = 2464,
         Circularity = -1,
     }
     interface FileExtensionInfo {
