@@ -102,7 +102,6 @@ File '/home/src/workspaces/project/packages/a/index.js' exists - use it as a nam
 'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
-Resolving real path for '/home/src/workspaces/project/packages/a/index.js', result '/home/src/workspaces/project/packages/a/index.js'.
 ======== Module name 'a' was successfully resolved to '/home/src/workspaces/project/packages/a/index.js' with Package ID 'a/index.js@0.0.0'. ========
 File '/home/src/tslibs/TS/Lib/package.json' does not exist.
 File '/home/src/tslibs/TS/package.json' does not exist.
@@ -114,6 +113,7 @@ File '/package.json' does not exist.
   Default library for target 'esnext'
 packages/a/index.js
   Matched by default include pattern '**/*'
+  Imported via 'a' from file 'packages/a/test/index.js' with packageId 'a/index.js@0.0.0'
   File is ECMAScript module because 'packages/a/package.json' has field "type" with value "module"
 packages/a/test/index.js
   Matched by default include pattern '**/*'
@@ -230,7 +230,7 @@ Found 'package.json' at '/home/src/workspaces/project/packages/b/package.json'.
 Module resolution kind is not specified, using 'NodeNext'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/home/src/workspaces/project/packages/b/package.json' exists according to earlier cached lookups.
-Loading module 'a' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Loading module 'a' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/workspaces/project/packages/b/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/workspaces/project/packages/node_modules' does not exist, skipping all lookups in it.

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/promisePermutations2.ts] ////
 
 === Performance Stats ===
-Instantiation count: 2,500 -> 10,000
+Instantiation count: 2,500
 
 === promisePermutations2.ts ===
 // same as promisePermutations but without the same overloads in Promise<T>

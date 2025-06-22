@@ -1,0 +1,31 @@
+//// [tests/cases/conformance/importDefer/importDefaultBindingDefer.ts] ////
+
+=== a.ts ===
+export default function defer() {
+>defer : () => void
+>      : ^^^^^^^^^^
+
+    console.log("defer from a");
+>console.log("defer from a") : void
+>                            : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"defer from a" : "defer from a"
+>               : ^^^^^^^^^^^^^^
+}
+
+=== b.ts ===
+import defer from "a";
+>defer : () => void
+>      : ^^^^^^^^^^
+
+defer();
+>defer() : void
+>        : ^^^^
+>defer : () => void
+>      : ^^^^^^^^^^
+

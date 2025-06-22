@@ -113,7 +113,7 @@ class ScriptSnapshot implements ts.IScriptSnapshot {
 }
 
 class DefaultHostCancellationToken implements ts.HostCancellationToken {
-    public static readonly instance = new DefaultHostCancellationToken();
+    public static readonly instance: DefaultHostCancellationToken = new DefaultHostCancellationToken();
 
     public isCancellationRequested() {
         return false;
@@ -129,16 +129,16 @@ export interface LanguageServiceAdapter {
 }
 
 export abstract class LanguageServiceAdapterHost {
-    public readonly sys = new fakes.System(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: virtualFileSystemRoot }));
+    public readonly sys: fakes.System = new fakes.System(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: virtualFileSystemRoot }));
     public typesRegistry: Map<string, void> | undefined;
     private scriptInfos: collections.SortedMap<string, ScriptInfo>;
     public jsDocParsingMode: ts.JSDocParsingMode | undefined;
 
-    constructor(protected cancellationToken = DefaultHostCancellationToken.instance, protected settings = ts.getDefaultCompilerOptions()) {
+    constructor(protected cancellationToken: DefaultHostCancellationToken = DefaultHostCancellationToken.instance, protected settings: ts.CompilerOptions = ts.getDefaultCompilerOptions()) {
         this.scriptInfos = new collections.SortedMap({ comparer: this.vfs.stringComparer, sort: "insertion" });
     }
 
-    public get vfs() {
+    public get vfs(): vfs.FileSystem {
         return this.sys.vfs;
     }
 
@@ -185,7 +185,7 @@ export abstract class LanguageServiceAdapterHost {
         }
     }
 
-    public directoryExists(path: string) {
+    public directoryExists(path: string): boolean {
         return this.vfs.statSync(path).isDirectory();
     }
 
@@ -214,7 +214,7 @@ export abstract class LanguageServiceAdapterHost {
         });
     }
 
-    public editScript(fileName: string, start: number, end: number, newText: string) {
+    public editScript(fileName: string, start: number, end: number, newText: string): void {
         const script = this.getScriptInfo(fileName);
         if (script) {
             script.editContent(start, end, newText);
@@ -244,7 +244,7 @@ export abstract class LanguageServiceAdapterHost {
         return ts.computePositionOfLineAndCharacter(script.getLineMap(), lineAndCharacter.line, lineAndCharacter.character);
     }
 
-    useCaseSensitiveFileNames() {
+    useCaseSensitiveFileNames(): boolean {
         return !this.vfs.ignoreCase;
     }
 }
@@ -257,17 +257,17 @@ class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts
         return !!this.typesRegistry && this.typesRegistry.has(name);
     }
 
-    getGlobalTypingsCacheLocation() {
+    getGlobalTypingsCacheLocation(): string {
         return harnessTypingInstallerCacheLocation;
     }
 
-    installPackage = ts.notImplemented;
+    installPackage: typeof ts.notImplemented = ts.notImplemented;
 
-    getCompilationSettings() {
+    getCompilationSettings(): ts.CompilerOptions {
         return this.settings;
     }
 
-    getCancellationToken() {
+    getCancellationToken(): DefaultHostCancellationToken {
         return this.cancellationToken;
     }
 
@@ -325,14 +325,14 @@ class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts
         return 0;
     }
 
-    log = ts.noop;
-    trace = ts.noop;
-    error = ts.noop;
+    log: typeof ts.noop = ts.noop;
+    trace: typeof ts.noop = ts.noop;
+    error: typeof ts.noop = ts.noop;
 }
 
 export class NativeLanguageServiceAdapter implements LanguageServiceAdapter {
     private host: NativeLanguageServiceHost;
-    getLogger = ts.returnUndefined;
+    getLogger: typeof ts.returnUndefined = ts.returnUndefined;
     constructor(cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
         this.host = new NativeLanguageServiceHost(cancellationToken, options);
     }
@@ -367,10 +367,10 @@ class SessionClientHost extends NativeLanguageServiceHost implements ts.server.S
         return harnessSessionCurrentDirectory;
     }
 
-    onMessage = ts.noop;
-    writeMessage = ts.noop;
+    onMessage: typeof ts.noop = ts.noop;
+    writeMessage: typeof ts.noop = ts.noop;
 
-    setClient(client: ts.server.SessionClient) {
+    setClient(client: ts.server.SessionClient): void {
         this.client = client;
     }
 
@@ -379,7 +379,7 @@ class SessionClientHost extends NativeLanguageServiceHost implements ts.server.S
         this.client.openFile(fileName, content, scriptKindName);
     }
 
-    override editScript(fileName: string, start: number, end: number, newText: string) {
+    override editScript(fileName: string, start: number, end: number, newText: string): void {
         const changeArgs = this.client.createChangeFileRequestArgs(fileName, start, end, newText);
         super.editScript(fileName, start, end, newText);
         this.client.changeFile(fileName, changeArgs);
@@ -675,10 +675,10 @@ export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
         this.client = client;
         this.host = clientHost;
     }
-    getLogger() {
+    getLogger(): LoggerWithInMemoryLogs {
         return this.logger;
     }
-    getHost() {
+    getHost(): SessionClientHost {
         return this.host;
     }
     getLanguageService(): ts.LanguageService {
@@ -690,7 +690,7 @@ export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
     getPreProcessedFileInfo(): ts.PreProcessedFileInfo {
         throw new Error("getPreProcessedFileInfo is not available using the server interface.");
     }
-    assertTextConsistent(fileName: string) {
+    assertTextConsistent(fileName: string): void {
         const serverText = this.server.getText(fileName);
         const clientText = this.host.readFile(fileName);
         ts.Debug.assert(

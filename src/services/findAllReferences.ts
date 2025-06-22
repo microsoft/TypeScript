@@ -179,6 +179,7 @@ import {
     isReferencedFile,
     isReferenceFileLocation,
     isRightSideOfPropertyAccess,
+    isSatisfiesExpression,
     isShorthandPropertyAssignment,
     isSourceFile,
     isStatement,
@@ -251,7 +252,6 @@ import {
     SymbolDisplayPart,
     SymbolDisplayPartKind,
     SymbolFlags,
-    SymbolId,
     symbolName,
     SyntaxKind,
     textPart,
@@ -544,7 +544,7 @@ export function getImplementationsAtPosition(program: Program, cancellationToken
     }
     else if (entries) {
         const queue = createQueue(entries);
-        const seenNodes = new Map<number, true>();
+        const seenNodes = new Set<number>();
         while (!queue.isEmpty()) {
             const entry = queue.dequeue() as NodeEntry;
             if (!addToSeen(seenNodes, getNodeId(entry.node))) {
@@ -1051,7 +1051,7 @@ export namespace Core {
         return mergeReferences(program, moduleReferences, references, moduleReferencesOfExportTarget);
     }
 
-    export function getAdjustedNode(node: Node, options: Options) {
+    export function getAdjustedNode(node: Node, options: Options): Node {
         if (options.use === FindReferencesUse.References) {
             node = getAdjustedReferenceLocation(node);
         }
@@ -1302,7 +1302,7 @@ export namespace Core {
         const symbol = node && skipPastExportOrImportSpecifierOrUnion(originalSymbol, node, checker, /*useLocalSymbolForExportSpecifier*/ !isForRenameWithPrefixAndSuffixText(options)) || originalSymbol;
 
         // Compute the meaning from the location and the symbol it references
-        const searchMeaning = node ? getIntersectingMeaningFromDeclarations(node, symbol) : SemanticMeaning.All;
+        const searchMeaning = node && options.use !== FindReferencesUse.Rename ? getIntersectingMeaningFromDeclarations(node, symbol) : SemanticMeaning.All;
         const result: SymbolAndEntries[] = [];
         const state = new State(sourceFiles, sourceFilesSet, node ? getSpecialSearchKind(node) : SpecialSearchKind.None, checker, cancellationToken, searchMeaning, options, result);
 
@@ -2283,7 +2283,7 @@ export namespace Core {
                     addIfImplementation(body);
                 }
             }
-            else if (isAssertionExpression(typeHavingNode)) {
+            else if (isAssertionExpression(typeHavingNode) || isSatisfiesExpression(typeHavingNode)) {
                 addIfImplementation(typeHavingNode.expression);
             }
         }
@@ -2666,7 +2666,7 @@ export namespace Core {
      *                                The value of previousIterationSymbol is undefined when the function is first called.
      */
     function getPropertySymbolsFromBaseTypes<T>(symbol: Symbol, propertyName: string, checker: TypeChecker, cb: (symbol: Symbol) => T | undefined): T | undefined {
-        const seen = new Map<SymbolId, true>();
+        const seen = new Set<Symbol>();
         return recur(symbol);
 
         function recur(symbol: Symbol): T | undefined {
@@ -2674,14 +2674,15 @@ export namespace Core {
             //      interface C extends C {
             //          /*findRef*/propName: string;
             //      }
-            if (!(symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) || !addToSeen(seen, getSymbolId(symbol))) return;
+            if (!(symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) || !addToSeen(seen, symbol)) return;
 
             return firstDefined(symbol.declarations, declaration =>
                 firstDefined(getAllSuperTypeNodes(declaration), typeReference => {
                     const type = checker.getTypeAtLocation(typeReference);
-                    const propertySymbol = type && type.symbol && checker.getPropertyOfType(type, propertyName);
+                    const propertySymbol = type.symbol && checker.getPropertyOfType(type, propertyName);
                     // Visit the typeReference as well to see if it directly or indirectly uses that property
-                    return type && propertySymbol && (firstDefined(checker.getRootSymbols(propertySymbol), cb) || recur(type.symbol));
+                    // When `propertySymbol` is missing continue the recursion through parents as some parent up the chain might be an abstract class that implements interface having the property
+                    return propertySymbol && firstDefined(checker.getRootSymbols(propertySymbol), cb) || type.symbol && recur(type.symbol);
                 }));
         }
     }

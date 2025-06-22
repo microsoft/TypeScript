@@ -10,11 +10,12 @@ import {
     SyntaxKind,
     TransformationContext,
     transformECMAScriptModule,
+    Transformer,
     transformModule,
 } from "../../_namespaces/ts.js";
 
 /** @internal */
-export function transformImpliedNodeFormatDependentModule(context: TransformationContext) {
+export function transformImpliedNodeFormatDependentModule(context: TransformationContext): Transformer<SourceFile | Bundle> {
     const previousOnSubstituteNode = context.onSubstituteNode;
     const previousOnEmitNode = context.onEmitNode;
 

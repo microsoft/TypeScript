@@ -85,6 +85,15 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/a/main.ts ProjectRootPath: undefined:: Result: /user/username/projects/project/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/project/a/tsconfig.json, currentDirectory: /user/username/projects/project/a
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/a/tsconfig.json 2000 undefined Project: /user/username/projects/project/a/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /user/username/projects/project/a/tsconfig.json : {
+ "rootNames": [
+  "/user/username/projects/project/a/main.ts"
+ ],
+ "options": {
+  "allowJs": true,
+  "configFilePath": "/user/username/projects/project/a/tsconfig.json"
+ }
+}
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -95,15 +104,6 @@ Info seq  [hh:mm:ss:mss] event:
         "reason": "Creating possible configured project for /user/username/projects/project/a/main.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /user/username/projects/project/a/tsconfig.json : {
- "rootNames": [
-  "/user/username/projects/project/a/main.ts"
- ],
- "options": {
-  "allowJs": true,
-  "configFilePath": "/user/username/projects/project/a/tsconfig.json"
- }
-}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a 1 undefined Config: /user/username/projects/project/a/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a 1 undefined Config: /user/username/projects/project/a/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/project/a/tsconfig.json
@@ -323,6 +323,7 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Invoking /user/username/projects/project/a/tsconfig.json:: wildcard for open scriptInfo:: /user/username/projects/project/a/main.js
 Info seq  [hh:mm:ss:mss] Project: /user/username/projects/project/a/tsconfig.json Detected output file: /user/username/projects/project/a/main.js
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/a/main.js ProjectRootPath: undefined:: Result: /user/username/projects/project/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/a/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

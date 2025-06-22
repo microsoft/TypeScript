@@ -3,9 +3,9 @@
 === commentsOnObjectLiteral4.ts ===
 var v = {
 >v : { readonly bar: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^      ^^^
 >{ /**  * @type {number}  */ get bar(): number {  return 12; }} : { readonly bar: number; }
->                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                               : ^^^^^^^^^^^^^^^^      ^^^
 
  /**
   * @type {number}

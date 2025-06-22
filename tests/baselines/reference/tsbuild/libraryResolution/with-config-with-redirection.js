@@ -29,7 +29,8 @@ export const x = "type1";
       "es5",
       "dom"
     ],
-    "traceResolution": true
+    "traceResolution": true,
+    "libReplacement": true
   }
 }
 
@@ -50,7 +51,8 @@ export const y = 10
       "es5",
       "dom"
     ],
-    "traceResolution": true
+    "traceResolution": true,
+    "libReplacement": true
   }
 }
 
@@ -68,7 +70,8 @@ export const z = 10
       "es5",
       "dom"
     ],
-    "traceResolution": true
+    "traceResolution": true,
+    "libReplacement": true
   }
 }
 
@@ -87,7 +90,8 @@ export const z = 10
       "dom",
       "webworker"
     ],
-    "traceResolution": true
+    "traceResolution": true,
+    "libReplacement": true
   }
 }
 
@@ -863,6 +867,7 @@ Program options: {
     "lib.dom.d.ts"
   ],
   "traceResolution": true,
+  "libReplacement": true,
   "explainFiles": true,
   "tscBuild": true,
   "configFilePath": "/home/src/workspace/projects/project1/tsconfig.json"
@@ -915,6 +920,7 @@ Program options: {
     "lib.dom.d.ts"
   ],
   "traceResolution": true,
+  "libReplacement": true,
   "explainFiles": true,
   "tscBuild": true,
   "configFilePath": "/home/src/workspace/projects/project2/tsconfig.json"
@@ -949,6 +955,7 @@ Program options: {
     "lib.dom.d.ts"
   ],
   "traceResolution": true,
+  "libReplacement": true,
   "explainFiles": true,
   "tscBuild": true,
   "configFilePath": "/home/src/workspace/projects/project3/tsconfig.json"
@@ -984,6 +991,7 @@ Program options: {
     "lib.webworker.d.ts"
   ],
   "traceResolution": true,
+  "libReplacement": true,
   "explainFiles": true,
   "tscBuild": true,
   "configFilePath": "/home/src/workspace/projects/project4/tsconfig.json"

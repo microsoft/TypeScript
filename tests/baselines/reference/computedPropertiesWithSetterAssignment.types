@@ -1,0 +1,112 @@
+//// [tests/cases/compiler/computedPropertiesWithSetterAssignment.ts] ////
+
+=== /a.ts ===
+const k = Symbol();
+>k : unique symbol
+>  : ^^^^^^^^^^^^^
+>Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+
+const enum Props {
+>Props : Props
+>      : ^^^^^
+
+    k = 'k',
+>k : Props.k
+>  : ^^^^^^^
+>'k' : "k"
+>    : ^^^
+}
+
+interface Foo {
+    get k(): Set<string>;
+>k : Set<string>
+>  : ^^^^^^^^^^^
+
+    set k(v: Iterable<string>);
+>k : Set<string>
+>  : ^^^^^^^^^^^
+>v : Iterable<string>
+>  : ^^^^^^^^^^^^^^^^
+
+    get [k](): Set<string>;
+>[k] : Set<string>
+>    : ^^^^^^^^^^^
+>k : unique symbol
+>  : ^^^^^^^^^^^^^
+
+    set [k](v: Iterable<string>);
+>[k] : Set<string>
+>    : ^^^^^^^^^^^
+>k : unique symbol
+>  : ^^^^^^^^^^^^^
+>v : Iterable<string>
+>  : ^^^^^^^^^^^^^^^^
+}
+
+declare const foo: Foo;
+>foo : Foo
+>    : ^^^
+
+foo.k = ['foo'];
+>foo.k = ['foo'] : string[]
+>                : ^^^^^^^^
+>foo.k : Iterable<string>
+>      : ^^^^^^^^^^^^^^^^
+>foo : Foo
+>    : ^^^
+>k : Iterable<string>
+>  : ^^^^^^^^^^^^^^^^
+>['foo'] : string[]
+>        : ^^^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
+
+foo['k'] = ['foo'];
+>foo['k'] = ['foo'] : string[]
+>                   : ^^^^^^^^
+>foo['k'] : Iterable<string>
+>         : ^^^^^^^^^^^^^^^^
+>foo : Foo
+>    : ^^^
+>'k' : "k"
+>    : ^^^
+>['foo'] : string[]
+>        : ^^^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
+
+foo[Props.k] = ['foo'];
+>foo[Props.k] = ['foo'] : string[]
+>                       : ^^^^^^^^
+>foo[Props.k] : Iterable<string>
+>             : ^^^^^^^^^^^^^^^^
+>foo : Foo
+>    : ^^^
+>Props.k : Props
+>        : ^^^^^
+>Props : typeof Props
+>      : ^^^^^^^^^^^^
+>k : Props
+>  : ^^^^^
+>['foo'] : string[]
+>        : ^^^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
+
+foo[k] = ['foo'];
+>foo[k] = ['foo'] : string[]
+>                 : ^^^^^^^^
+>foo[k] : Iterable<string>
+>       : ^^^^^^^^^^^^^^^^
+>foo : Foo
+>    : ^^^
+>k : unique symbol
+>  : ^^^^^^^^^^^^^
+>['foo'] : string[]
+>        : ^^^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
+

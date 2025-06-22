@@ -110,16 +110,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/sample1/tests/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/sample1/tests/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/sample1/tests/tsconfig.json, currentDirectory: /user/username/projects/sample1/tests
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/tests/tsconfig.json 2000 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/user/username/projects/sample1/tests/tsconfig.json",
-        "reason": "Creating possible configured project for /user/username/projects/sample1/tests/index.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/sample1/tests/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/sample1/tests/index.ts"
@@ -142,6 +132,16 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/sample1/tests/tsconfig.
   }
  ]
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/sample1/tests/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/sample1/tests/index.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/sample1/core/tsconfig.json : {
  "rootNames": [

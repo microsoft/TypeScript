@@ -48,7 +48,6 @@ import {
     formatMessage,
     generateTSConfig,
     getBuildOrderFromAnyBuildOrder,
-    getCompilerOptionsDiffValue,
     getConfigFileParsingDiagnostics,
     getDiagnosticText,
     getErrorSummaryText,
@@ -574,7 +573,7 @@ function executeCommandLineWorker(
     }
 
     if (commandLine.options.init) {
-        writeConfigFile(sys, reportDiagnostic, commandLine.options, commandLine.fileNames);
+        writeConfigFile(sys, reportDiagnostic, commandLine.options);
         return sys.exit(ExitStatus.Success);
     }
 
@@ -729,7 +728,7 @@ function executeCommandLineWorker(
 }
 
 /** Returns true if commandline is --build and needs to be parsed useing parseBuildCommand */
-export function isBuildCommand(commandLineArgs: readonly string[]) {
+export function isBuildCommand(commandLineArgs: readonly string[]): boolean {
     if (commandLineArgs.length > 0 && commandLineArgs[0].charCodeAt(0) === CharacterCodes.minus) {
         const firstOption = commandLineArgs[0].slice(commandLineArgs[0].charCodeAt(1) === CharacterCodes.minus ? 2 : 1).toLowerCase();
         return firstOption === tscBuildOption.name || firstOption === tscBuildOption.shortName;
@@ -1277,7 +1276,6 @@ function writeConfigFile(
     sys: System,
     reportDiagnostic: DiagnosticReporter,
     options: CompilerOptions,
-    fileNames: string[],
 ) {
     const currentDirectory = sys.getCurrentDirectory();
     const file = normalizePath(combinePaths(currentDirectory, "tsconfig.json"));
@@ -1285,9 +1283,8 @@ function writeConfigFile(
         reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file));
     }
     else {
-        sys.writeFile(file, generateTSConfig(options, fileNames, sys.newLine));
-        const output: string[] = [sys.newLine, ...getHeader(sys, "Created a new tsconfig.json with:")];
-        output.push(getCompilerOptionsDiffValue(options, sys.newLine) + sys.newLine + sys.newLine);
+        sys.writeFile(file, generateTSConfig(options, sys.newLine));
+        const output: string[] = [sys.newLine, ...getHeader(sys, "Created a new tsconfig.json")];
         output.push(`You can learn more at https://aka.ms/tsconfig` + sys.newLine);
         for (const line of output) {
             sys.write(line);

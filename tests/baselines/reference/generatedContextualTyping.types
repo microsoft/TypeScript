@@ -182,7 +182,7 @@ var x11: (s: Base[]) => any = n => { var n: Base[]; return null; };
 >s : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^ ^^      ^^^^^^^^
+>                                     : ^ ^^^^^^^^^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -358,7 +358,7 @@ class x23 { member: (s: Base[]) => any = n => { var n: Base[]; return null; } }
 >s : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^ ^^      ^^^^^^^^
+>                                     : ^ ^^^^^^^^^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -536,7 +536,7 @@ class x35 { private member: (s: Base[]) => any = n => { var n: Base[]; return nu
 >s : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^ ^^      ^^^^^^^^
+>                                     : ^ ^^^^^^^^^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -714,7 +714,7 @@ class x47 { public member: (s: Base[]) => any = n => { var n: Base[]; return nul
 >s : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^ ^^      ^^^^^^^^
+>                                     : ^ ^^^^^^^^^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -892,7 +892,7 @@ class x59 { static member: (s: Base[]) => any = n => { var n: Base[]; return nul
 >s : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^ ^^      ^^^^^^^^
+>                                     : ^ ^^^^^^^^^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -1070,7 +1070,7 @@ class x71 { private static member: (s: Base[]) => any = n => { var n: Base[]; re
 >s : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^ ^^      ^^^^^^^^
+>                                     : ^ ^^^^^^^^^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -1248,7 +1248,7 @@ class x83 { public static member: (s: Base[]) => any = n => { var n: Base[]; ret
 >s : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^ ^^      ^^^^^^^^
+>                                     : ^ ^^^^^^^^^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -1426,7 +1426,7 @@ class x95 { constructor(parm: (s: Base[]) => any = n => { var n: Base[]; return 
 >s : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^ ^^      ^^^^^^^^
+>                                     : ^ ^^^^^^^^^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -1604,7 +1604,7 @@ class x107 { constructor(public parm: (s: Base[]) => any = n => { var n: Base[];
 >s : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^ ^^      ^^^^^^^^
+>                                     : ^ ^^^^^^^^^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -1782,7 +1782,7 @@ class x119 { constructor(private parm: (s: Base[]) => any = n => { var n: Base[]
 >s : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^ ^^      ^^^^^^^^
+>                                     : ^ ^^^^^^^^^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -1960,7 +1960,7 @@ function x131(parm: (s: Base[]) => any = n => { var n: Base[]; return null; }) {
 >s : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^ ^^      ^^^^^^^^
+>                                     : ^ ^^^^^^^^^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -2116,7 +2116,7 @@ function x143(): (s: Base[]) => any { return n => { var n: Base[]; return null; 
 >s : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^ ^^      ^^^^^^^^
+>                                     : ^ ^^^^^^^^^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -2350,13 +2350,13 @@ function x155(): (s: Base[]) => any { return n => { var n: Base[]; return null; 
 >s : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^ ^^      ^^^^^^^^
+>                                     : ^ ^^^^^^^^^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^ ^^      ^^^^^^^^
+>                                     : ^ ^^^^^^^^^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -2544,9 +2544,9 @@ var x167: () => (s: Base[]) => any = () => { return n => { var n: Base[]; return
 >s : Base[]
 >  : ^^^^^^
 >() => { return n => { var n: Base[]; return null; }; } : () => (n: Base[]) => any
->                                                       : ^^^^^^^ ^^      ^^^^^^^^
+>                                                       : ^^^^^^^ ^^^^^^^^^^^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^ ^^      ^^^^^^^^
+>                                     : ^ ^^^^^^^^^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -2722,9 +2722,9 @@ var x179: () => (s: Base[]) => any = function() { return n => { var n: Base[]; r
 >s : Base[]
 >  : ^^^^^^
 >function() { return n => { var n: Base[]; return null; }; } : () => (n: Base[]) => any
->                                                            : ^^^^^^^ ^^      ^^^^^^^^
+>                                                            : ^^^^^^^ ^^^^^^^^^^^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^ ^^      ^^^^^^^^
+>                                     : ^ ^^^^^^^^^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -2902,7 +2902,7 @@ module x191 { var t: (s: Base[]) => any = n => { var n: Base[]; return null; }; 
 >s : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^ ^^      ^^^^^^^^
+>                                     : ^ ^^^^^^^^^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -3080,7 +3080,7 @@ module x203 { export var t: (s: Base[]) => any = n => { var n: Base[]; return nu
 >s : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^ ^^      ^^^^^^^^
+>                                     : ^ ^^^^^^^^^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -3576,11 +3576,11 @@ var x235: (s: Base[]) => any; x235 = n => { var n: Base[]; return null; };
 >s : Base[]
 >  : ^^^^^^
 >x235 = n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                            : ^ ^^      ^^^^^^^^
+>                                            : ^ ^^^^^^^^^^^^^^^^
 >x235 : (s: Base[]) => any
 >     : ^ ^^      ^^^^^   
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^ ^^      ^^^^^^^^
+>                                     : ^ ^^^^^^^^^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -3800,11 +3800,11 @@ var x247: { n: (s: Base[]) => any; } = { n: n => { var n: Base[]; return null; }
 >s : Base[]
 >  : ^^^^^^
 >{ n: n => { var n: Base[]; return null; } } : { n: (n: Base[]) => any; }
->                                            : ^^^^^^ ^^      ^^^^^^^^^^^
+>                                            : ^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >n : (n: Base[]) => any
->  : ^ ^^      ^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^ ^^      ^^^^^^^^
+>                                     : ^ ^^^^^^^^^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -4648,17 +4648,17 @@ var x295: (s: Base[]) => any = true ? n => { var n: Base[]; return null; } : n =
 >s : Base[]
 >  : ^^^^^^
 >true ? n => { var n: Base[]; return null; } : n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                                                                   : ^ ^^      ^^^^^^^^
+>                                                                                   : ^ ^^^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^ ^^      ^^^^^^^^
+>                                     : ^ ^^^^^^^^^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^ ^^      ^^^^^^^^
+>                                     : ^ ^^^^^^^^^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -4890,13 +4890,13 @@ var x307: (s: Base[]) => any = true ? undefined : n => { var n: Base[]; return n
 >s : Base[]
 >  : ^^^^^^
 >true ? undefined : n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                                        : ^ ^^      ^^^^^^^^
+>                                                        : ^ ^^^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^ ^^      ^^^^^^^^
+>                                     : ^ ^^^^^^^^^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -5116,11 +5116,11 @@ var x319: (s: Base[]) => any = true ? n => { var n: Base[]; return null; } : und
 >s : Base[]
 >  : ^^^^^^
 >true ? n => { var n: Base[]; return null; } : undefined : (n: Base[]) => any
->                                                        : ^ ^^      ^^^^^^^^
+>                                                        : ^ ^^^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^ ^^      ^^^^^^^^
+>                                     : ^ ^^^^^^^^^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -5348,7 +5348,7 @@ function x331(n: (s: Base[]) => any) { }; x331(n => { var n: Base[]; return null
 >x331 : (n: (s: Base[]) => any) => void
 >     : ^ ^^                  ^^^^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^ ^^      ^^^^^^^^
+>                                     : ^ ^^^^^^^^^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -5618,7 +5618,7 @@ var x343 = (n: (s: Base[]) => any) => n; x343(n => { var n: Base[]; return null;
 >x343 : (n: (s: Base[]) => any) => (s: Base[]) => any
 >     : ^ ^^                  ^^^^^^ ^^      ^^^^^   
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^ ^^      ^^^^^^^^
+>                                     : ^ ^^^^^^^^^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -5870,7 +5870,7 @@ var x355 = function(n: (s: Base[]) => any) { }; x355(n => { var n: Base[]; retur
 >x355 : (n: (s: Base[]) => any) => void
 >     : ^ ^^                  ^^^^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^ ^^      ^^^^^^^^
+>                                     : ^ ^^^^^^^^^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]

@@ -21,7 +21,7 @@ function foo() {
     }
     function f12(i: number, ...arguments) { //arguments is error
 >f12 : (i: number, ...arguments: any[]) => void
->    : ^ ^^      ^^^^^         ^^     ^^^^^^^^^
+>    : ^ ^^      ^^^^^         ^^^^^^^^^^^^^^^^
 >i : number
 >  : ^^^^^^
 >arguments : any[]

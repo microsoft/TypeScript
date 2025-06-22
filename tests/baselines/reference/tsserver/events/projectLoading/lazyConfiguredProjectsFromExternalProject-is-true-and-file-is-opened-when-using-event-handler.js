@@ -89,6 +89,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
+    initialLoadPending: true
 
 Before request
 
@@ -102,6 +103,14 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/a/a.ts ProjectRootPath: undefined:: Result: /user/username/projects/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] Config: /user/username/projects/a/tsconfig.json : {
+ "rootNames": [
+  "/user/username/projects/a/a.ts"
+ ],
+ "options": {
+  "configFilePath": "/user/username/projects/a/tsconfig.json"
+ }
+}
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -112,14 +121,6 @@ Info seq  [hh:mm:ss:mss] event:
         "reason": "Creating configured project in external project: /user/username/projects/a/project.csproj"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /user/username/projects/a/tsconfig.json : {
- "rootNames": [
-  "/user/username/projects/a/a.ts"
- ],
- "options": {
-  "configFilePath": "/user/username/projects/a/tsconfig.json"
- }
-}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a 1 undefined Config: /user/username/projects/a/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a 1 undefined Config: /user/username/projects/a/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/a/tsconfig.json
@@ -240,6 +241,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
     dirty: false *changed*
+    initialLoadPending: false *changed*
     autoImportProviderHost: false *changed*
 
 ScriptInfos::

@@ -303,7 +303,7 @@ function perceivedOsRootLengthForWatching(pathComponents: Readonly<PathPathCompo
  *
  * @internal
  */
-export function canWatchDirectoryOrFile(pathComponents: Readonly<PathPathComponents>, length?: number) {
+export function canWatchDirectoryOrFile(pathComponents: Readonly<PathPathComponents>, length?: number): boolean {
     if (length === undefined) length = pathComponents.length;
     // Ignore "/", "c:/"
     // ignore "/user", "c:/users" or "c:/folderAtRoot"
@@ -313,18 +313,18 @@ export function canWatchDirectoryOrFile(pathComponents: Readonly<PathPathCompone
 }
 
 /** @internal */
-export function canWatchDirectoryOrFilePath(path: Path) {
+export function canWatchDirectoryOrFilePath(path: Path): boolean {
     return canWatchDirectoryOrFile(getPathComponents(path));
 }
 
 /** @internal */
-export function canWatchAtTypes(atTypes: Path) {
+export function canWatchAtTypes(atTypes: Path): boolean {
     // Otherwise can watch directory only if we can watch the parent directory of node_modules/@types
     return canWatchAffectedPackageJsonOrNodeModulesOfAtTypes(getDirectoryPath(atTypes));
 }
 
 function isInDirectoryPath(dirComponents: Readonly<PathPathComponents>, fileOrDirComponents: Readonly<PathPathComponents>) {
-    if (fileOrDirComponents.length < fileOrDirComponents.length) return false;
+    if (fileOrDirComponents.length < dirComponents.length) return false;
     for (let i = 0; i < dirComponents.length; i++) {
         if (fileOrDirComponents[i] !== dirComponents[i]) return false;
     }
@@ -336,7 +336,7 @@ function canWatchAffectedPackageJsonOrNodeModulesOfAtTypes(fileOrDirPath: Path) 
 }
 
 /** @internal */
-export function canWatchAffectingLocation(filePath: Path) {
+export function canWatchAffectingLocation(filePath: Path): boolean {
     return canWatchAffectedPackageJsonOrNodeModulesOfAtTypes(filePath);
 }
 
@@ -491,7 +491,7 @@ export function getDirectoryToWatchFailedLookupLocationFromTypeRoot(
 }
 
 /** @internal */
-export function getRootDirectoryOfResolutionCache(rootDirForResolution: string, getCurrentDirectory: () => string | undefined) {
+export function getRootDirectoryOfResolutionCache(rootDirForResolution: string, getCurrentDirectory: () => string | undefined): string {
     const normalized = getNormalizedAbsolutePath(rootDirForResolution, getCurrentDirectory());
     return !isDiskPathRoot(normalized) ?
         removeTrailingDirectorySeparator(normalized) :
@@ -872,7 +872,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
 
         // All the resolutions in this file are invalidated if this file wasn't resolved using same redirect
         const program = resolutionHost.getCurrentProgram();
-        const oldRedirect = program && program.getResolvedProjectReferenceToRedirect(containingFile);
+        const oldRedirect = program && program.getRedirectFromSourceFile(containingFile)?.resolvedRef;
         const unmatchedRedirects = oldRedirect ?
             !redirectedReference || redirectedReference.sourceFile.path !== oldRedirect.sourceFile.path :
             !!redirectedReference;

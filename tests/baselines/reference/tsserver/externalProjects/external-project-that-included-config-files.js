@@ -887,6 +887,14 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/pro
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/a/c/f2.ts ProjectRootPath: undefined:: Result: /home/src/projects/project/a/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/projects/project/a/c/tsconfig.json, currentDirectory: /home/src/projects/project/a/c
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/c/tsconfig.json 2000 undefined Project: /home/src/projects/project/a/c/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/a/c/tsconfig.json : {
+ "rootNames": [
+  "/home/src/projects/project/a/c/f2.ts"
+ ],
+ "options": {
+  "configFilePath": "/home/src/projects/project/a/c/tsconfig.json"
+ }
+}
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -897,14 +905,6 @@ Info seq  [hh:mm:ss:mss] event:
         "reason": "Creating possible configured project for /home/src/projects/project/a/c/f2.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/a/c/tsconfig.json : {
- "rootNames": [
-  "/home/src/projects/project/a/c/f2.ts"
- ],
- "options": {
-  "configFilePath": "/home/src/projects/project/a/c/tsconfig.json"
- }
-}
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/a/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/c/node_modules/@types 1 undefined Project: /home/src/projects/project/a/c/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/c/node_modules/@types 1 undefined Project: /home/src/projects/project/a/c/tsconfig.json WatchType: Type roots

@@ -1,6 +1,7 @@
 import * as ts from "../../_namespaces/ts.js";
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
+import { fakeTsVersion } from "../helpers/baseline.js";
 import { compilerOptionsToConfigJson } from "../helpers/contents.js";
 import {
     noChangeOnlyRuns,
@@ -100,7 +101,10 @@ describe("unittests:: tsc:: incremental::", () => {
         commandLineArgs: ["-i"],
         edits: [{
             caption: "tsbuildinfo written has error",
-            edit: sys => sys.prependFile("/home/src/workspaces/project/tsconfig.tsbuildinfo", "Some random string"),
+            edit: sys => {
+                sys.prependFile("/home/src/workspaces/project/tsconfig.tsbuildinfo", "Some random string");
+                sys.replaceFileText("/home/src/workspaces/project/tsconfig.tsbuildinfo", `"version":"${ts.version}"`, `"version":"${fakeTsVersion}"`); // build info won't parse, need to manually sterilize for baseline
+            },
         }],
     });
 
