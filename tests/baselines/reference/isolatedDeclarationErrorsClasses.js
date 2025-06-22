@@ -59,6 +59,12 @@ export interface I {
     [noAnnotationLiteralName]();
 }
 
+export const prop: unique symbol = Symbol();
+
+export class MyClass {
+    [prop] = () => Math.random();
+}
+
 //// [isolatedDeclarationErrorsClasses.js]
 export class Cls {
     field = 1 + 1;
@@ -91,4 +97,8 @@ export class C {
     get [noAnnotationStringName]() { return 0; }
     set [noParamAnnotationStringName](value) { }
     [("A" + "B")] = 1;
+}
+export const prop = Symbol();
+export class MyClass {
+    [prop] = () => Math.random();
 }
