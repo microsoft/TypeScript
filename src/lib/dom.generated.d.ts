@@ -8091,7 +8091,7 @@ interface Document extends Node, DocumentOrShadowRoot, FontFaceSource, GlobalEve
      */
     readonly scripts: HTMLCollectionOf<HTMLScriptElement>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/scrollingElement) */
-    readonly scrollingElement: Element | null;
+    readonly scrollingElement: Document['documentElement'] | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/timeline) */
     readonly timeline: DocumentTimeline;
     /**
