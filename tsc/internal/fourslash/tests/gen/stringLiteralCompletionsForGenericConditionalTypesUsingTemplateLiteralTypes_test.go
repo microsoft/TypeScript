@@ -10,7 +10,7 @@ import (
 
 func TestStringLiteralCompletionsForGenericConditionalTypesUsingTemplateLiteralTypes(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = ` type PathOf<T, K extends string, P extends string = ""> =
    K extends ` + "`" + `${infer U}.${infer V}` + "`" + `

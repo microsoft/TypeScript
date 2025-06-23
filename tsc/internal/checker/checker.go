@@ -7352,7 +7352,9 @@ func (c *Checker) checkExpressionWorker(node *ast.Node, checkMode CheckMode) *Ty
 	case ast.KindNullKeyword:
 		return c.nullWideningType
 	case ast.KindStringLiteral, ast.KindNoSubstitutionTemplateLiteral:
-		// !!! Handle blockedStringType
+		if c.isSkipDirectInferenceNode(node) {
+			return c.blockedStringType
+		}
 		return c.getFreshTypeOfLiteralType(c.getStringLiteralType(node.Text()))
 	case ast.KindNumericLiteral:
 		c.checkGrammarNumericLiteral(node.AsNumericLiteral())

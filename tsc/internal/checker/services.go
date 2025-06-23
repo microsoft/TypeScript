@@ -585,28 +585,27 @@ func (c *Checker) getResolvedSignatureWorker(node *ast.Node, checkMode CheckMode
 }
 
 func (c *Checker) GetCandidateSignaturesForStringLiteralCompletions(call *ast.CallLikeExpression, editingArgument *ast.Node) []*Signature {
-	candidatesSet := collections.Set[*Signature]{}
-
 	// first, get candidates when inference is blocked from the source node.
 	candidates := runWithInferenceBlockedFromSourceNode(c, editingArgument, func() []*Signature {
 		_, blockedInferenceCandidates := c.getResolvedSignatureWorker(call, CheckModeNormal, 0)
 		return blockedInferenceCandidates
 	})
-	for _, candidate := range candidates {
-		candidatesSet.Add(candidate)
-	}
+	candidatesSet := collections.NewSetFromItems(candidates...)
 
 	// next, get candidates where the source node is considered for inference.
-	candidates = runWithoutResolvedSignatureCaching(c, editingArgument, func() []*Signature {
+	otherCandidates := runWithoutResolvedSignatureCaching(c, editingArgument, func() []*Signature {
 		_, inferenceCandidates := c.getResolvedSignatureWorker(call, CheckModeNormal, 0)
 		return inferenceCandidates
 	})
 
-	for _, candidate := range candidates {
-		candidatesSet.Add(candidate)
+	for _, candidate := range otherCandidates {
+		if candidatesSet.Has(candidate) {
+			continue
+		}
+		candidates = append(candidates, candidate)
 	}
 
-	return slices.Collect(maps.Keys(candidatesSet.Keys()))
+	return candidates
 }
 
 func (c *Checker) GetTypeParameterAtPosition(s *Signature, pos int) *Type {

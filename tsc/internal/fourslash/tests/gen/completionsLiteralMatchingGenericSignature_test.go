@@ -10,7 +10,7 @@ import (
 
 func TestCompletionsLiteralMatchingGenericSignature(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /a.tsx
 declare function bar1<P extends "" | "bar" | "baz">(p: P): void;
