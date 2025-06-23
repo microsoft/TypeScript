@@ -2780,6 +2780,23 @@ export function getCompletionEntriesFromSymbols(
             }
         }
 
+        // Filter out function body variables from parameter defaults
+        // `function f(a = /* no function body variables here */) { var x; }`
+        if (isInParameterDefault(contextToken) && symbolDeclaration) {
+            // Find the parameter that contains this default
+            const parameterNode = findAncestor(contextToken, isParameter);
+            if (parameterNode) {
+                const functionNode = parameterNode.parent;
+                if (isFunctionLike(functionNode) && "body" in functionNode) {
+                    const functionBody = functionNode.body;
+                    // Filter out symbols declared inside the function body
+                    if (functionBody && symbolDeclaration.pos > functionBody.pos && symbolDeclaration.pos < functionBody.end) {
+                        return false;
+                    }
+                }
+            }
+        }
+
         // External modules can have global export declarations that will be
         // available as global keywords in all scopes. But if the external module
         // already has an explicit export and user only wants to user explicit
@@ -6039,6 +6056,24 @@ function isInTypeParameterDefault(contextToken: Node | undefined) {
     while (parent) {
         if (isTypeParameterDeclaration(parent)) {
             return parent.default === node || node.kind === SyntaxKind.EqualsToken;
+        }
+        node = parent;
+        parent = parent.parent;
+    }
+
+    return false;
+}
+
+function isInParameterDefault(contextToken: Node | undefined) {
+    if (!contextToken) {
+        return false;
+    }
+
+    let node = contextToken;
+    let parent = contextToken.parent;
+    while (parent) {
+        if (isParameter(parent)) {
+            return parent.initializer === node || node.kind === SyntaxKind.EqualsToken;
         }
         node = parent;
         parent = parent.parent;
