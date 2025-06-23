@@ -520,6 +520,9 @@ function getMeaningFromRightHandSideOfImportEquals(node: Node): SemanticMeaning 
 
 /** @internal */
 export function isInRightSideOfInternalImportEqualsDeclaration(node: Node): boolean {
+    if (!node.parent) {
+        return false;
+    }
     while (node.parent.kind === SyntaxKind.QualifiedName) {
         node = node.parent;
     }
