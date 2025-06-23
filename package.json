@@ -68,7 +68,7 @@
         "fast-xml-parser": "^4.5.2",
         "glob": "^10.4.5",
         "globals": "^15.15.0",
-        "hereby": "^1.10.0",
+        "hereby": "^1.11.0",
         "jsonc-parser": "^3.3.1",
         "knip": "^5.44.4",
         "minimist": "^1.2.8",

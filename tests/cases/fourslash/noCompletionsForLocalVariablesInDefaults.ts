@@ -1,13 +1,14 @@
 /// <reference path='fourslash.ts' />
 
-//// function test1(a = /*marker*/) {
+//// function test1(a: string, b = /*marker*/) {
 ////   var hoisted
-////   let mutable
+////   let mutable  
 ////   const readonly = 1
 //// }
 
-// Just check that local variables are not in completions
+// Check that parameter 'a' is included but local variables are excluded
 verify.completions({
     marker: "marker",
+    includes: ["a"],
     excludes: ["hoisted", "mutable", "readonly"],
 });

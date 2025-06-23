@@ -2810,6 +2810,19 @@ export function getCompletionEntriesFromSymbols(
             return symbolCanBeReferencedAtTypeLocation(symbol, typeChecker);
         }
 
+        // Filter out function body variables from parameter defaults
+        // `function f(a = /* no function body variables here */) { var x; }`
+        if (closestSymbolDeclaration && isParameter(closestSymbolDeclaration) && symbolDeclaration && isInParameterDefault(contextToken)) {
+            const functionNode = closestSymbolDeclaration.parent;
+            if (isFunctionLike(functionNode) && "body" in functionNode) {
+                const functionBody = functionNode.body;
+                if (functionBody && symbolDeclaration.pos > functionBody.pos && symbolDeclaration.pos < functionBody.end) {
+                    // This symbol is declared inside the function body, exclude it
+                    return false;
+                }
+            }
+        }
+
         // expressions are value space (which includes the value namespaces)
         return !!(allFlags & SymbolFlags.Value);
     }
@@ -4024,7 +4037,6 @@ function getCompletionData(
         Debug.assertEachIsDefined(symbols, "getSymbolsInScope() should all be defined");
         for (let i = 0; i < symbols.length; i++) {
             const symbol = symbols[i];
-            
             if (
                 !typeChecker.isArgumentsSymbol(symbol) &&
                 !some(symbol.declarations, d => d.getSourceFile() === sourceFile)
@@ -4056,32 +4068,6 @@ function getCompletionData(
             keywordFilters = contextToken && isAssertionExpression(contextToken.parent)
                 ? KeywordCompletionFilters.TypeAssertionKeywords
                 : KeywordCompletionFilters.TypeKeywords;
-        }
-        
-        // Filter out function body variables from parameter defaults
-        // `function f(a = /* no function body variables here */) { var x; }`
-        if (isInParameterDefault(contextToken)) {
-            const parameterNode = findAncestor(contextToken, isParameter);
-            if (parameterNode) {
-                const functionNode = parameterNode.parent;
-                if (isFunctionLike(functionNode) && "body" in functionNode) {
-                    const functionBody = functionNode.body;
-                    if (functionBody) {
-                        // Filter out symbols that are declared in the function body (not parameters)
-                        symbols = symbols.filter(symbol => {
-                            const symbolDeclaration = symbol.valueDeclaration ?? symbol.declarations?.[0];
-                            if (!symbolDeclaration) return true;
-                            
-                            // Only filter out non-parameter declarations inside the function body
-                            const isInsideFunctionBody = symbolDeclaration.pos > functionBody.pos && symbolDeclaration.pos < functionBody.end;
-                            const isParameterDeclaration = findAncestor(symbolDeclaration, node => isParameter(node));
-                            
-                            // Keep symbols that are not in the function body, or are parameters
-                            return !isInsideFunctionBody || !!isParameterDeclaration;
-                        });
-                    }
-                }
-            }
         }
     }
 
@@ -6080,13 +6066,15 @@ function isInParameterDefault(contextToken: Node | undefined) {
     }
 
     let node = contextToken;
-    let parent = contextToken.parent;
-    while (parent) {
-        if (isParameter(parent)) {
-            return parent.initializer === node || node.kind === SyntaxKind.EqualsToken;
+    while (node) {
+        if (isParameter(node.parent)) {
+            const param = node.parent;
+            // Check if we're in the initializer part after the equals sign
+            return param.initializer === node || 
+                   (param.initializer && node.pos >= param.initializer.pos && node.pos < param.initializer.end);
         }
-        node = parent;
-        parent = parent.parent;
+        node = node.parent;
+        if (!node) break;
     }
 
     return false;
