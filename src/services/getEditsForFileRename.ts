@@ -119,10 +119,11 @@ function updateTsconfigFiles(program: Program, changeTracker: textChanges.Change
                 const includes = mapDefined(property.initializer.elements, e => isStringLiteral(e) ? e.text : undefined);
                 if (includes.length === 0) return;
                 const matchers = getFileMatcherPatterns(configDir, /*excludes*/ [], includes, useCaseSensitiveFileNames, currentDirectory);
+                const includeRegexes = Debug.checkDefined(matchers.includeFilePatterns).map(pattern => getRegexFromPattern(pattern, useCaseSensitiveFileNames));
                 // If there isn't some include for this, add a new one.
                 if (
-                    getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(oldFileOrDirPath) &&
-                    !getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(newFileOrDirPath)
+                    includeRegexes.some(regex => regex.test(oldFileOrDirPath)) &&
+                    !includeRegexes.some(regex => regex.test(newFileOrDirPath))
                 ) {
                     changeTracker.insertNodeAfter(configFile, last(property.initializer.elements), factory.createStringLiteral(relativePath(newFileOrDirPath)));
                 }
