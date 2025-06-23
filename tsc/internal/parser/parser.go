@@ -352,6 +352,15 @@ func (p *Parser) finishSourceFile(result *ast.SourceFile, isDeclarationFile bool
 	result.TextCount = p.factory.TextCount()
 	result.IdentifierCount = p.identifierCount
 	result.SetJSDocCache(p.jsdocCache)
+
+	ast.SetParentInChildren(result.AsNode())
+	for parent, children := range p.jsdocCache {
+		for _, child := range children {
+			child.Parent = parent
+			ast.SetParentInChildren(child)
+		}
+	}
+
 	ast.SetExternalModuleIndicator(result, p.opts.ExternalModuleIndicatorOptions)
 }
 

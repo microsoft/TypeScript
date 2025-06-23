@@ -19,7 +19,6 @@ func ParseTypeScript(text string, jsx bool) *ast.SourceFile {
 		Path:             tspath.Path(fileName),
 		JSDocParsingMode: ast.JSDocParsingModeParseNone,
 	}, text, core.GetScriptKindFromFileName(fileName))
-	ast.SetParentInChildren(file.AsNode())
 	return file
 }
 

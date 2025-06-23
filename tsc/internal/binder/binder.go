@@ -46,7 +46,6 @@ type Binder struct {
 	unreachableFlow         *ast.FlowNode
 	reportedUnreachableFlow *ast.FlowNode
 
-	parent                 *ast.Node
 	container              *ast.Node
 	thisContainer          *ast.Node
 	blockScopeContainer    *ast.Node
@@ -211,9 +210,6 @@ func (b *Binder) declareSymbolEx(symbolTable ast.SymbolTable, parent *ast.Symbol
 			} else if !(includes&ast.SymbolFlagsVariable != 0 && symbol.Flags&ast.SymbolFlagsAssignment != 0 ||
 				includes&ast.SymbolFlagsAssignment != 0 && symbol.Flags&ast.SymbolFlagsVariable != 0) {
 				// Assignment declarations are allowed to merge with variables, no matter what other flags they have.
-				if node.Name() != nil {
-					setParent(node.Name(), node)
-				}
 				// Report errors every position with duplicate declaration
 				// Report errors on previous encountered declarations
 				var message *diagnostics.Message
@@ -584,9 +580,6 @@ func (b *Binder) bind(node *ast.Node) bool {
 	if node == nil {
 		return false
 	}
-	if node.Parent == nil || node.Parent.Flags&ast.NodeFlagsReparsed != 0 {
-		node.Parent = b.parent
-	}
 	saveInStrictMode := b.inStrictMode
 	// Even though in the AST the jsdoc @typedef node belongs to the current node,
 	// its symbol might be in the same scope with the current node's symbol. Consider:
@@ -731,9 +724,7 @@ func (b *Binder) bind(node *ast.Node) bool {
 	// children, as an optimization we don't process those.
 	thisNodeOrAnySubnodesHasError := node.Flags&ast.NodeFlagsThisNodeHasError != 0
 	if node.Kind > ast.KindLastToken {
-		saveParent := b.parent
 		saveSeenParseError := b.seenParseError
-		b.parent = node
 		b.seenParseError = false
 		containerFlags := GetContainerFlags(node)
 		if containerFlags == ContainerFlagsNone {
@@ -744,15 +735,7 @@ func (b *Binder) bind(node *ast.Node) bool {
 		if b.seenParseError {
 			thisNodeOrAnySubnodesHasError = true
 		}
-		b.parent = saveParent
 		b.seenParseError = saveSeenParseError
-	} else {
-		saveParent := b.parent
-		if node.Kind == ast.KindEndOfFile {
-			b.parent = node
-		}
-		b.setJSDocParents(node)
-		b.parent = saveParent
 	}
 	if thisNodeOrAnySubnodesHasError {
 		node.Flags |= ast.NodeFlagsThisNodeOrAnySubNodesHasError
@@ -760,16 +743,6 @@ func (b *Binder) bind(node *ast.Node) bool {
 	}
 	b.inStrictMode = saveInStrictMode
 	return false
-}
-
-func (b *Binder) setJSDocParents(node *ast.Node) {
-	for _, jsdoc := range node.JSDoc(b.file) {
-		setParent(jsdoc, node)
-		if jsdoc.Kind != ast.KindJSDocImportTag {
-			// JSDocImportTag children have parents set during parsing for module resolution purposes.
-			ast.SetParentInChildren(jsdoc)
-		}
-	}
 }
 
 func (b *Binder) bindPropertyWorker(node *ast.Node) {
@@ -868,9 +841,6 @@ func (b *Binder) bindExportDeclaration(node *ast.Node) {
 		// All export * declarations are collected in an __export symbol
 		b.declareSymbol(ast.GetExports(b.container.Symbol()), b.container.Symbol(), node, ast.SymbolFlagsExportStar, ast.SymbolFlagsNone)
 	} else if ast.IsNamespaceExport(decl.ExportClause) {
-		// declareSymbol walks up parents to find name text, parent _must_ be set
-		// but won't be set by the normal binder walk until `bindChildren` later on.
-		setParent(decl.ExportClause, node)
 		b.declareSymbol(ast.GetExports(b.container.Symbol()), b.container.Symbol(), decl.ExportClause, ast.SymbolFlagsAlias, ast.SymbolFlagsAliasExcludes)
 	}
 }
@@ -981,7 +951,6 @@ func (b *Binder) bindClassLikeDeclaration(node *ast.Node) {
 	prototypeSymbol := b.newSymbol(ast.SymbolFlagsProperty|ast.SymbolFlagsPrototype, "prototype")
 	symbolExport := ast.GetExports(symbol)[prototypeSymbol.Name]
 	if symbolExport != nil {
-		setParent(name, node)
 		b.errorOnNode(symbolExport.Declarations[0], diagnostics.Duplicate_identifier_0, ast.SymbolName(prototypeSymbol))
 	}
 	ast.GetExports(symbol)[prototypeSymbol.Name] = prototypeSymbol
@@ -1026,9 +995,6 @@ func (b *Binder) bindExpandoPropertyAssignment(node *ast.Node) {
 		symbol = b.lookupEntity(parent, b.container)
 	}
 	if symbol = getInitializerSymbol(symbol); symbol != nil {
-		// Fix up parent pointers since we're going to use these nodes before we bind into them
-		setParent(expr.Left, node)
-		setParent(expr.Right, node)
 		if ast.HasDynamicName(node) {
 			b.bindAnonymousDeclaration(node, ast.SymbolFlagsProperty|ast.SymbolFlagsAssignment, ast.InternalSymbolNameComputed)
 			addLateBoundAssignmentDeclarationToSymbol(node, symbol)
@@ -1599,7 +1565,6 @@ func (b *Binder) bindChildren(node *ast.Node) {
 	// and set it before we descend into nodes that could actually be part of an assignment pattern.
 	b.inAssignmentPattern = false
 	if b.checkUnreachable(node) {
-		b.setJSDocParents(node)
 		b.bindEachChild(node)
 		b.inAssignmentPattern = saveInAssignmentPattern
 		return
@@ -1611,7 +1576,6 @@ func (b *Binder) bindChildren(node *ast.Node) {
 			hasFlowNodeData.FlowNode = b.currentFlow
 		}
 	}
-	b.setJSDocParents(node)
 	switch node.Kind {
 	case ast.KindWhileStatement:
 		b.bindWhileStatement(node)
@@ -2798,12 +2762,6 @@ func (b *Binder) createDiagnosticForNode(node *ast.Node, message *diagnostics.Me
 
 func (b *Binder) addDiagnostic(diagnostic *ast.Diagnostic) {
 	b.file.SetBindDiagnostics(append(b.file.BindDiagnostics(), diagnostic))
-}
-
-func setParent(child *ast.Node, parent *ast.Node) {
-	if child != nil {
-		child.Parent = parent
-	}
 }
 
 func isSignedNumericLiteral(node *ast.Node) bool {

@@ -59,7 +59,6 @@ func TestFormat(t *testing.T) {
 			FileName: "/checker.ts",
 			Path:     "/checker.ts",
 		}, text, core.ScriptKindTS)
-		ast.SetParentInChildren(sourceFile.AsNode())
 		edits := format.FormatDocument(ctx, sourceFile)
 		newText := applyBulkEdits(text, edits)
 		assert.Assert(t, len(newText) > 0)
@@ -89,7 +88,6 @@ func BenchmarkFormat(b *testing.B) {
 		FileName: "/checker.ts",
 		Path:     "/checker.ts",
 	}, text, core.ScriptKindTS)
-	ast.SetParentInChildren(sourceFile.AsNode())
 
 	b.Run("format checker.ts", func(b *testing.B) {
 		for b.Loop() {

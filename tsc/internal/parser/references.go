@@ -15,7 +15,6 @@ func collectExternalModuleReferences(file *ast.SourceFile) {
 
 	if file.Flags&ast.NodeFlagsPossiblyContainsDynamicImport != 0 || ast.IsInJSFile(file.AsNode()) {
 		ast.ForEachDynamicImportOrRequireCall(file /*includeTypeSpaceImports*/, true /*requireStringLiteralLikeArgument*/, true, func(node *ast.Node, moduleSpecifier *ast.Expression) bool {
-			ast.SetParentInChildren(node) // we need parent data on imports before the program is fully bound, so we ensure it's set here
 			ast.SetImportsOfSourceFile(file, append(file.Imports(), moduleSpecifier))
 			return false
 		})
@@ -31,9 +30,6 @@ func collectModuleReferences(file *ast.SourceFile, node *ast.Statement, inAmbien
 		if moduleNameExpr != nil && ast.IsStringLiteral(moduleNameExpr) {
 			moduleName := moduleNameExpr.AsStringLiteral().Text
 			if moduleName != "" && (!inAmbientModule || !tspath.IsExternalModuleNameRelative(moduleName)) {
-				if node.Kind != ast.KindJSImportDeclaration {
-					ast.SetParentInChildren(node) // we need parent data on imports before the program is fully bound, so we ensure it's set here
-				}
 				ast.SetImportsOfSourceFile(file, append(file.Imports(), moduleNameExpr))
 				// !!! removed `&& p.currentNodeModulesDepth == 0`
 				if file.UsesUriStyleNodeCoreModules != core.TSTrue && !file.IsDeclarationFile {
@@ -50,7 +46,6 @@ func collectModuleReferences(file *ast.SourceFile, node *ast.Statement, inAmbien
 		return
 	}
 	if ast.IsModuleDeclaration(node) && ast.IsAmbientModule(node) && (inAmbientModule || ast.HasSyntacticModifier(node, ast.ModifierFlagsAmbient) || file.IsDeclarationFile) {
-		ast.SetParentInChildren(node)
 		nameText := node.AsModuleDeclaration().Name().Text()
 		// Ambient module declarations can be interpreted as augmentations for some existing external modules.
 		// This will happen in two cases:

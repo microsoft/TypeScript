@@ -82,11 +82,6 @@ func (p *Parser) parseJSDocTypeExpression(mayOmitBraces bool) *ast.Node {
 	}
 
 	result := p.factory.NewJSDocTypeExpression(t)
-	// normally parent references are set during binding. However, for clients that only need
-	// a syntax tree, and no semantic features, then the binding process is an unnecessary
-	// overhead.  This functions allows us to set all the parents, without all the expense of
-	// binding.
-	ast.SetParentInChildren(result)
 	p.finishNode(result, pos)
 	return result
 }
@@ -107,7 +102,6 @@ func (p *Parser) parseJSDocNameReference() *ast.Node {
 	}
 
 	result := p.factory.NewJSDocNameReference(entityName)
-	ast.SetParentInChildren(result)
 	p.finishNode(result, pos)
 	return result
 }
@@ -145,7 +139,6 @@ func (p *Parser) parseJSDocComment(parent *ast.Node, start int, end int, fullSta
 	p.parsingContexts = p.parsingContexts | ParsingContexts(PCJSDocComment)
 
 	comment := p.parseJSDocCommentWorker(start, end, fullStart, initialIndent)
-	comment.Parent = parent
 	// move jsdoc diagnostics to jsdocDiagnostics -- for JS files only
 	if p.contextFlags&ast.NodeFlagsJavaScriptFile != 0 {
 		p.jsdocDiagnostics = append(p.jsdocDiagnostics, p.diagnostics[saveDiagnosticsLength:]...)
@@ -457,7 +450,6 @@ func (p *Parser) parseTag(tags []*ast.Node, margin int) *ast.Node {
 		tag = p.parseSeeTag(start, tagName, margin, indentText)
 	case "import":
 		tag = p.parseImportTag(start, tagName, margin, indentText)
-		ast.SetParentInChildren(tag)
 	default:
 		tag = p.parseUnknownTag(start, tagName, margin, indentText)
 	}
