@@ -1,17 +1,17 @@
-import * as Utils from "../../_namespaces/Utils";
-import { jsonToReadableText } from "../helpers";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { getSysForMultipleErrorsForceConsistentCasingInFileNames } from "../helpers/forceConsistentCasingInFileNames.js";
 import {
     TscWatchCompileChange,
     verifyTscWatch,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
-    createWatchedSystem,
     File,
-    libFile,
     SymLink,
-} from "../helpers/virtualFileSystemWithWatch";
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsc-watch:: forceConsistentCasingInFileNames", () => {
+describe("unittests:: tscWatch:: forceConsistentCasingInFileNames::", () => {
     const loggerFile: File = {
         path: `/user/username/projects/myproject/logger.ts`,
         content: `export class logger { }`,
@@ -32,7 +32,11 @@ describe("unittests:: tsc-watch:: forceConsistentCasingInFileNames", () => {
             scenario: "forceConsistentCasingInFileNames",
             subScenario,
             commandLineArgs: ["--w", "--p", tsconfig.path],
-            sys: () => createWatchedSystem([loggerFile, anotherFile, tsconfig, libFile]),
+            sys: () =>
+                TestServerHost.createWatchedSystem(
+                    [loggerFile, anotherFile, tsconfig],
+                    { currentDirectory: "/user/username/projects/myproject" },
+                ),
             edits: changes,
         });
     }
@@ -80,7 +84,10 @@ describe("unittests:: tsc-watch:: forceConsistentCasingInFileNames", () => {
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: true } }),
             };
-            return createWatchedSystem([moduleA, moduleB, moduleC, libFile, tsconfig], { currentDirectory: "/user/username/projects/myproject" });
+            return TestServerHost.createWatchedSystem(
+                [moduleA, moduleB, moduleC, tsconfig],
+                { currentDirectory: "/user/username/projects/myproject" },
+            );
         },
         edits: [
             {
@@ -101,8 +108,7 @@ describe("unittests:: tsc-watch:: forceConsistentCasingInFileNames", () => {
         subScenario: "jsxImportSource option changed",
         commandLineArgs: ["--w", "--p", ".", "--explainFiles"],
         sys: () =>
-            createWatchedSystem([
-                libFile,
+            TestServerHost.createWatchedSystem([
                 {
                     path: `/user/username/projects/myproject/node_modules/react/Jsx-runtime/index.d.ts`,
                     content: `export namespace JSX {
@@ -140,36 +146,43 @@ export const Fragment: unique symbol;
         verifyTscWatch({
             scenario: "forceConsistentCasingInFileNames",
             subScenario,
-            commandLineArgs: ["--w", "--p", `${windowsStyleRoot}/${projectRootRelative}`, "--explainFiles"],
+            commandLineArgs: ["--w", "--p", `${windowsStyleRoot}workspaces/solution/${projectRootRelative}`, "--explainFiles"],
             sys: () => {
                 const moduleA: File = {
-                    path: `${windowsStyleRoot}/${projectRootRelative}/a.ts`,
+                    path: `${windowsStyleRoot}workspaces/solution/${projectRootRelative}/a.ts`,
                     content: `
 export const a = 1;
 export const b = 2;
 `,
                 };
                 const moduleB: File = {
-                    path: `${windowsStyleRoot}/${projectRootRelative}/b.ts`,
+                    path: `${windowsStyleRoot}workspaces/solution/${projectRootRelative}/b.ts`,
                     content: `
-import { a } from "${windowsStyleRoot.toLocaleUpperCase()}/${projectRootRelative}/a"
-import { b } from "${windowsStyleRoot.toLocaleLowerCase()}/${projectRootRelative}/a"
+import { a } from "${windowsStyleRoot.toLocaleUpperCase()}workspaces/solution/${projectRootRelative}/a"
+import { b } from "${windowsStyleRoot.toLocaleLowerCase()}workspaces/solution/${projectRootRelative}/a"
 
 a;b;
 `,
                 };
                 const tsconfig: File = {
-                    path: `${windowsStyleRoot}/${projectRootRelative}/tsconfig.json`,
+                    path: `${windowsStyleRoot}workspaces/solution/${projectRootRelative}/tsconfig.json`,
                     content: jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: true } }),
                 };
-                return createWatchedSystem([moduleA, moduleB, libFile, tsconfig], { windowsStyleRoot, useCaseSensitiveFileNames: false });
+                return TestServerHost.createWatchedSystem(
+                    [moduleA, moduleB, tsconfig],
+                    {
+                        windowsStyleRoot,
+                        useCaseSensitiveFileNames: false,
+                        currentDirectory: `${windowsStyleRoot}workspaces/solution`,
+                    },
+                );
             },
             edits: [
                 {
                     caption: "Prepend a line to moduleA",
                     edit: sys =>
                         sys.prependFile(
-                            `${windowsStyleRoot}/${projectRootRelative}/a.ts`,
+                            `${windowsStyleRoot}workspaces/solution/${projectRootRelative}/a.ts`,
                             `// some comment
                         `,
                         ),
@@ -212,7 +225,10 @@ a;b;
                     path: `/user/username/projects/myproject/tsconfig.json`,
                     content: jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: true } }),
                 };
-                return createWatchedSystem([moduleA, symlinkA, moduleB, libFile, tsconfig], { currentDirectory: "/user/username/projects/myproject" });
+                return TestServerHost.createWatchedSystem(
+                    [moduleA, symlinkA, moduleB, tsconfig],
+                    { currentDirectory: "/user/username/projects/myproject" },
+                );
             },
             edits: [
                 {
@@ -266,7 +282,10 @@ a;b;
                     // Use outFile because otherwise the real and linked files will have the same output path
                     content: jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: true, outFile: "out.js", module: "system" } }),
                 };
-                return createWatchedSystem([moduleA, symlinkA, moduleB, libFile, tsconfig], { currentDirectory: "/user/username/projects/myproject" });
+                return TestServerHost.createWatchedSystem(
+                    [moduleA, symlinkA, moduleB, tsconfig],
+                    { currentDirectory: "/user/username/projects/myproject" },
+                );
             },
             edits: [
                 {
@@ -294,7 +313,7 @@ a;b;
         subScenario: "with nodeNext resolution",
         commandLineArgs: ["--w", "--explainFiles"],
         sys: () =>
-            createWatchedSystem({
+            TestServerHost.createWatchedSystem({
                 "/Users/name/projects/web/src/bin.ts": `import { foo } from "yargs";`,
                 "/Users/name/projects/web/node_modules/@types/yargs/index.d.ts": "export function foo(): void;",
                 "/Users/name/projects/web/node_modules/@types/yargs/index.d.mts": "export function foo(): void;",
@@ -317,7 +336,6 @@ a;b;
                         traceResolution: true,
                     },
                 }),
-                [libFile.path]: libFile.content,
             }, { currentDirectory: "/Users/name/projects/web" }),
     });
 
@@ -326,7 +344,7 @@ a;b;
         subScenario: "self name package reference",
         commandLineArgs: ["-w", "--explainFiles"],
         sys: () =>
-            createWatchedSystem({
+            TestServerHost.createWatchedSystem({
                 "/Users/name/projects/web/package.json": jsonToReadableText({
                     name: "@this/package",
                     type: "module",
@@ -334,7 +352,7 @@ a;b;
                         ".": "./dist/index.js",
                     },
                 }),
-                "/Users/name/projects/web/index.ts": Utils.dedent`
+                "/Users/name/projects/web/index.ts": dedent`
                     import * as me from "@this/package";
                     me.thing();
                     export function thing(): void {}
@@ -349,7 +367,6 @@ a;b;
                         traceResolution: true,
                     },
                 }),
-                "/a/lib/lib.esnext.full.d.ts": libFile.content,
             }, { currentDirectory: "/Users/name/projects/web" }),
     });
 
@@ -358,17 +375,17 @@ a;b;
         subScenario: "package json is looked up for file",
         commandLineArgs: ["-w", "--explainFiles"],
         sys: () =>
-            createWatchedSystem({
+            TestServerHost.createWatchedSystem({
                 "/Users/name/projects/lib-boilerplate/package.json": jsonToReadableText({
                     name: "lib-boilerplate",
                     version: "0.0.2",
                     type: "module",
                     exports: "./src/index.ts",
                 }),
-                "/Users/name/projects/lib-boilerplate/src/index.ts": Utils.dedent`
+                "/Users/name/projects/lib-boilerplate/src/index.ts": dedent`
                     export function thing(): void {}
                 `,
-                "/Users/name/projects/lib-boilerplate/test/basic.spec.ts": Utils.dedent`
+                "/Users/name/projects/lib-boilerplate/test/basic.spec.ts": dedent`
                     import { thing } from 'lib-boilerplate'
                 `,
                 "/Users/name/projects/lib-boilerplate/tsconfig.json": jsonToReadableText({
@@ -379,7 +396,33 @@ a;b;
                         traceResolution: true,
                     },
                 }),
-                "/a/lib/lib.es2021.full.d.ts": libFile.content,
             }, { currentDirectory: "/Users/name/projects/lib-boilerplate" }),
+    });
+
+    verifyTscWatch({
+        scenario: "forceConsistentCasingInFileNames",
+        subScenario: "when file is included from multiple places with different casing",
+        commandLineArgs: ["-w", "--explainFiles"],
+        sys: getSysForMultipleErrorsForceConsistentCasingInFileNames,
+        edits: [
+            {
+                caption: "change to reuse imports",
+                edit: sys => sys.appendFile("/home/src/projects/project/src/struct.d.ts", "export const y = 10;"),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+            {
+                caption: "change to update imports",
+                edit: sys =>
+                    sys.writeFile(
+                        "/home/src/projects/project/src/struct.d.ts",
+                        dedent`
+                            import * as xs1 from "fp-ts/lib/Struct";
+                            import * as xs2 from "fp-ts/lib/struct";
+                            import * as xs3 from "./Struct";
+                        `,
+                    ),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+        ],
     });
 });

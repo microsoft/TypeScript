@@ -4,9 +4,9 @@
 /** @type {{ f(s: string): void } & Record<string, unknown> }} */
 let obj = /** @satisfies {{ g(s: string): void } & Record<string, unknown>} */ ({
 >obj : { f(s: string): void; } & Record<string, unknown>
->    : ^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^ ^^      ^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({    f(s) { }, // "incorrect" implicit any on 's'    g(s) { }}) : { f(s: string): void; } & Record<string, unknown>
->                                                                 : ^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                 : ^^^^ ^^      ^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    f(s) { }, // "incorrect" implicit any on 's'    g(s) { }} : { f(s: any): void; g(s: string): void; }
 >                                                               : ^^^^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 

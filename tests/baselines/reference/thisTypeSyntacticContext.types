@@ -32,11 +32,11 @@ o.test = f
 >o.test = f : (this: { n: number; }) => void
 >           : ^    ^^              ^^^^^^^^^
 >o.test : (this: { n: number; }) => void
->       : ^    ^^              ^^^^^^^^^
+>       : ^    ^^              ^^^^^    
 >o : { n: number; test?: (this: { n: number; }) => void; }
->  : ^^^^^^^^^^^^^^^^^^^^^    ^^              ^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^^^^                              ^^^
 >test : (this: { n: number; }) => void
->     : ^    ^^              ^^^^^^^^^
+>     : ^    ^^              ^^^^^    
 >f : (this: { n: number; }) => void
 >  : ^    ^^              ^^^^^^^^^
 
@@ -44,76 +44,76 @@ o.test();
 >o.test() : void
 >         : ^^^^
 >o.test : (this: { n: number; }) => void
->       : ^    ^^              ^^^^^^^^^
+>       : ^    ^^              ^^^^^    
 >o : { n: number; test?: (this: { n: number; }) => void; }
->  : ^^^^^^^^^^^^^^^^^^^^^    ^^              ^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^^^^                              ^^^
 >test : (this: { n: number; }) => void
->     : ^    ^^              ^^^^^^^^^
+>     : ^    ^^              ^^^^^    
 
 o!.test();
 >o!.test() : void
 >          : ^^^^
 >o!.test : (this: { n: number; }) => void
->        : ^    ^^              ^^^^^^^^^
+>        : ^    ^^              ^^^^^    
 >o! : { n: number; test?: (this: { n: number; }) => void; }
->   : ^^^^^^^^^^^^^^^^^^^^^    ^^              ^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^^^^^                              ^^^
 >o : { n: number; test?: (this: { n: number; }) => void; }
->  : ^^^^^^^^^^^^^^^^^^^^^    ^^              ^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^^^^                              ^^^
 >test : (this: { n: number; }) => void
->     : ^    ^^              ^^^^^^^^^
+>     : ^    ^^              ^^^^^    
 
 o.test!();
 >o.test!() : void
 >          : ^^^^
 >o.test! : (this: { n: number; }) => void
->        : ^    ^^              ^^^^^^^^^
+>        : ^    ^^              ^^^^^    
 >o.test : (this: { n: number; }) => void
->       : ^    ^^              ^^^^^^^^^
+>       : ^    ^^              ^^^^^    
 >o : { n: number; test?: (this: { n: number; }) => void; }
->  : ^^^^^^^^^^^^^^^^^^^^^    ^^              ^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^^^^                              ^^^
 >test : (this: { n: number; }) => void
->     : ^    ^^              ^^^^^^^^^
+>     : ^    ^^              ^^^^^    
 
 o.test!!!();
 >o.test!!!() : void
 >            : ^^^^
 >o.test!!! : (this: { n: number; }) => void
->          : ^    ^^              ^^^^^^^^^
+>          : ^    ^^              ^^^^^    
 >o.test!! : (this: { n: number; }) => void
->         : ^    ^^              ^^^^^^^^^
+>         : ^    ^^              ^^^^^    
 >o.test! : (this: { n: number; }) => void
->        : ^    ^^              ^^^^^^^^^
+>        : ^    ^^              ^^^^^    
 >o.test : (this: { n: number; }) => void
->       : ^    ^^              ^^^^^^^^^
+>       : ^    ^^              ^^^^^    
 >o : { n: number; test?: (this: { n: number; }) => void; }
->  : ^^^^^^^^^^^^^^^^^^^^^    ^^              ^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^^^^                              ^^^
 >test : (this: { n: number; }) => void
->     : ^    ^^              ^^^^^^^^^
+>     : ^    ^^              ^^^^^    
 
 (o.test!)();
 >(o.test!)() : void
 >            : ^^^^
 >(o.test!) : (this: { n: number; }) => void
->          : ^    ^^              ^^^^^^^^^
+>          : ^    ^^              ^^^^^    
 >o.test! : (this: { n: number; }) => void
->        : ^    ^^              ^^^^^^^^^
+>        : ^    ^^              ^^^^^    
 >o.test : (this: { n: number; }) => void
->       : ^    ^^              ^^^^^^^^^
+>       : ^    ^^              ^^^^^    
 >o : { n: number; test?: (this: { n: number; }) => void; }
->  : ^^^^^^^^^^^^^^^^^^^^^    ^^              ^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^^^^                              ^^^
 >test : (this: { n: number; }) => void
->     : ^    ^^              ^^^^^^^^^
+>     : ^    ^^              ^^^^^    
 
 (o.test)();
 >(o.test)() : void
 >           : ^^^^
 >(o.test) : (this: { n: number; }) => void
->         : ^    ^^              ^^^^^^^^^
+>         : ^    ^^              ^^^^^    
 >o.test : (this: { n: number; }) => void
->       : ^    ^^              ^^^^^^^^^
+>       : ^    ^^              ^^^^^    
 >o : { n: number; test?: (this: { n: number; }) => void; }
->  : ^^^^^^^^^^^^^^^^^^^^^    ^^              ^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^^^^                              ^^^
 >test : (this: { n: number; }) => void
->     : ^    ^^              ^^^^^^^^^
+>     : ^    ^^              ^^^^^    
 
 

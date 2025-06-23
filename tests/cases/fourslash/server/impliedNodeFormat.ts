@@ -1,18 +1,18 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 //// { "compilerOptions": { "module": "nodenext" } }
 
-// @Filename: /package.json
+// @Filename: /home/src/workspaces/project/package.json
 //// { "name": "foo", "type": "module", "exports": { ".": "./main.js" } }
 
-// @Filename: /main.ts
+// @Filename: /home/src/workspaces/project/main.ts
 //// export {};
 
-// @Filename: /index.ts
+// @Filename: /home/src/workspaces/project/index.ts
 //// import {} from "foo";
 
-goTo.file("/index.ts");
+goTo.file("/home/src/workspaces/project/index.ts");
 verify.noErrors();
 
 edit.paste(`\n"${"a".repeat(256)}";`);

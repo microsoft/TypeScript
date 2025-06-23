@@ -29,11 +29,11 @@ function f1(
 >console.log("ok") : void
 >                  : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >"ok" : "ok"
 >     : ^^^^
 }
@@ -108,7 +108,7 @@ function f3(
 
 function f4(
 >f4 : (a?: number | string | undefined, { [(a = "")]: b }?: any) => void
->   : ^ ^^^                           ^^                 ^^^   ^^^^^^^^^
+>   : ^ ^^^                           ^^                 ^^^^^^^^^^^^^^^
 
   a: number | string | undefined = 1,
 >a : string | number | undefined

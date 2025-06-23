@@ -21,6 +21,16 @@ var n;
 >n : number
 >  : ^^^^^^
 
+/** @type {BigInt} */
+var BI;
+>BI : bigint
+>   : ^^^^^^
+
+/** @type {bigint} */
+var bi;
+>bi : bigint
+>   : ^^^^^^
+
 /** @type {Boolean} */
 var B;
 >B : boolean
@@ -102,12 +112,12 @@ var Func;
 /** @type {(s: string) => number} */
 var f;
 >f : (s: string) => number
->  : ^ ^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^      
 
 /** @type {new (s: string) => { s: string }} */
 var ctor;
 >ctor : new (s: string) => { s: string; }
->     : ^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^ ^^      ^^^^^              
 
 === b.ts ===
 var S: string;
@@ -133,6 +143,14 @@ var B: boolean;
 var b: boolean;
 >b : boolean
 >  : ^^^^^^^
+
+var BI: bigint;
+>BI : bigint
+>   : ^^^^^^
+
+var bi: bigint;
+>bi : bigint
+>   : ^^^^^^
 
 var V :void;
 >V : void
@@ -190,13 +208,13 @@ var Func: Function;
 
 var f: (s: string) => number;
 >f : (s: string) => number
->  : ^ ^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^      
 >s : string
 >  : ^^^^^^
 
 var ctor: new (s: string) => { s: string };
 >ctor : new (s: string) => { s: string; }
->     : ^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^ ^^      ^^^^^              
 >s : string
 >  : ^^^^^^
 >s : string

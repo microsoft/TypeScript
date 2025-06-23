@@ -2,8 +2,8 @@
 
 === typeofInObjectLiteralType.ts ===
 var a: { b: number; c: typeof b }; // Should give error for attempting to use type query on b.
->a : { b: number; c: any; }
->  : ^^^^^      ^^^^^^^^^^^
+>a : { b: number; c: typeof b; }
+>  : ^^^^^      ^^^^^        ^^^
 >b : number
 >  : ^^^^^^
 >c : any

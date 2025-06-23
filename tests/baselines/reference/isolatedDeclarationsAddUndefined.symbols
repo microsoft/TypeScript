@@ -30,12 +30,22 @@ export function foo(p = (ip = 10, v: number): void => {}): void{
 >ip : Symbol(ip, Decl(file2.ts, 0, 25))
 >v : Symbol(v, Decl(file2.ts, 0, 33))
 }
+type T = number
+>T : Symbol(T, Decl(file2.ts, 1, 1))
+
+export function foo2(p = (ip = 10 as T, v: number): void => {}): void{}
+>foo2 : Symbol(foo2, Decl(file2.ts, 2, 15))
+>p : Symbol(p, Decl(file2.ts, 3, 21))
+>ip : Symbol(ip, Decl(file2.ts, 3, 26))
+>T : Symbol(T, Decl(file2.ts, 1, 1))
+>v : Symbol(v, Decl(file2.ts, 3, 39))
+
 export class Bar2 {
->Bar2 : Symbol(Bar2, Decl(file2.ts, 1, 1))
+>Bar2 : Symbol(Bar2, Decl(file2.ts, 3, 71))
 
     readonly r = 1;
->r : Symbol(Bar2.r, Decl(file2.ts, 2, 19))
+>r : Symbol(Bar2.r, Decl(file2.ts, 4, 19))
 
     f = 2;
->f : Symbol(Bar2.f, Decl(file2.ts, 3, 19))
+>f : Symbol(Bar2.f, Decl(file2.ts, 5, 19))
 }

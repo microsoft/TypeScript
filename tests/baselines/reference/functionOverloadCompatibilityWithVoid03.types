@@ -9,7 +9,7 @@ function f(x: string): void;
 
 function f(x: string): void {
 >f : (x: string) => void
->  : ^ ^^      ^^^^^^^^^
+>  : ^ ^^      ^^^^^    
 >x : string
 >  : ^^^^^^
 

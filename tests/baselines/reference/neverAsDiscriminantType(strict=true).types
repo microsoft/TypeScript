@@ -35,7 +35,7 @@ function f1(foo: Foo1) {
 >foo.a : number
 >      : ^^^^^^
 >foo : { kind: "a"; a: number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^   ^^^^^      ^^^
 >a : number
 >  : ^^^^^^
     }
@@ -74,8 +74,8 @@ function f2(foo: Foo2) {
         foo.a;
 >foo.a : number
 >      : ^^^^^^
->foo : { kind?: "a" | undefined; a: number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : { kind?: "a"; a: number; }
+>    : ^^^^^^^^^   ^^^^^      ^^^
 >a : number
 >  : ^^^^^^
     }
@@ -255,11 +255,11 @@ export async function adaptSession(input: GatewayPayload) {
 >assertMessage : (event: { a: 1; }) => void
 >              : ^     ^^         ^^^^^^^^^
 >input.d : { a: 1; }
->        : ^^^^^^^^^
+>        : ^^^^^ ^^^
 >input : GatewayPayloadStructure<GatewayOpcode.DISPATCH, "MESSAGE_CREATE", { a: 1; }>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^
 >d : { a: 1; }
->  : ^^^^^^^^^
+>  : ^^^^^ ^^^
     }
 }
 

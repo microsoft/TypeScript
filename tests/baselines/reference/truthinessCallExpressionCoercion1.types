@@ -14,15 +14,15 @@ function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, o
 >required ? console.log('required') : undefined : void
 >                                               : ^^^^
 >required : () => boolean
->         : ^^^^^^^^^^^^^
+>         : ^^^^^^       
 >console.log('required') : void
 >                        : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >'required' : "required"
 >           : ^^^^^^^^^^
 >undefined : undefined
@@ -33,15 +33,15 @@ function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, o
 >optional ? console.log('optional') : undefined : void
 >                                               : ^^^^
 >optional : (() => boolean) | undefined
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^       ^^^^^^^^^^^^^
 >console.log('optional') : void
 >                        : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >'optional' : "optional"
 >           : ^^^^^^^^^^
 >undefined : undefined
@@ -56,15 +56,15 @@ function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, o
 >!required : false
 >          : ^^^^^
 >required : () => boolean
->         : ^^^^^^^^^^^^^
+>         : ^^^^^^       
 >console.log('not required') : void
 >                            : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >'not required' : "not required"
 >               : ^^^^^^^^^^^^^^
 >undefined : undefined
@@ -77,15 +77,15 @@ function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, o
 >required() : boolean
 >           : ^^^^^^^
 >required : () => boolean
->         : ^^^^^^^^^^^^^
+>         : ^^^^^^       
 >console.log('required call') : void
 >                             : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >'required call' : "required call"
 >                : ^^^^^^^^^^^^^^^
 >undefined : undefined
@@ -104,11 +104,11 @@ function onlyErrorsWhenUnusedInBody() {
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >0.5 : 0.5
 >    : ^^^
 
@@ -121,11 +121,11 @@ function onlyErrorsWhenUnusedInBody() {
 >console.log('test') : void
 >                    : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >'test' : "test"
 >       : ^^^^^^
 >undefined : undefined
@@ -140,11 +140,11 @@ function onlyErrorsWhenUnusedInBody() {
 >console.log(test) : void
 >                  : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >test : () => boolean
 >     : ^^^^^^^^^^^^^
 >undefined : undefined
@@ -174,13 +174,13 @@ function onlyErrorsWhenUnusedInBody() {
 >[() => null].forEach(() => { test(); }) : void
 >                                        : ^^^^
 >[() => null].forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
->                     : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>                     : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >[() => null] : (() => null)[]
 >             : ^^^^^^^^^^^^^^
 >() => null : () => null
 >           : ^^^^^^^^^^
 >forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >() => { test(); } : () => void
 >                  : ^^^^^^^^^^
 >test() : boolean
@@ -203,13 +203,13 @@ function onlyErrorsWhenUnusedInBody() {
 >[() => null].forEach(test => { test() }) : void
 >                                         : ^^^^
 >[() => null].forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
->                     : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>                     : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >[() => null] : (() => null)[]
 >             : ^^^^^^^^^^^^^^
 >() => null : () => null
 >           : ^^^^^^^^^^
 >forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >test => { test() } : (test: () => null) => void
 >                   : ^    ^^^^^^^^^^^^^^^^^^^^^
 >test : () => null
@@ -265,11 +265,11 @@ function checksPropertyAccess() {
 >console.log('x.foo.bar') : void
 >                         : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >'x.foo.bar' : "x.foo.bar"
 >            : ^^^^^^^^^^^
 >undefined : undefined
@@ -408,11 +408,11 @@ class Foo {
 >console.log('this.isUser') : void
 >                           : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >'this.isUser' : "this.isUser"
 >              : ^^^^^^^^^^^^^
 >undefined : undefined
@@ -423,19 +423,19 @@ class Foo {
 >this.maybeIsUser ? console.log('this.maybeIsUser') : undefined : void
 >                                                               : ^^^^
 >this.maybeIsUser : (() => boolean) | undefined
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^^       ^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >maybeIsUser : (() => boolean) | undefined
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^       ^^^^^^^^^^^^^
 >console.log('this.maybeIsUser') : void
 >                                : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >'this.maybeIsUser' : "this.maybeIsUser"
 >                   : ^^^^^^^^^^^^^^^^^^
 >undefined : undefined

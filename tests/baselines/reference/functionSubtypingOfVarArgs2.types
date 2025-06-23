@@ -25,17 +25,17 @@ class EventBase {
 >this._listeners.push(listener) : number
 >                               : ^^^^^^
 >this._listeners.push : (...items: ((...args: any[]) => void)[]) => number
->                     : ^^^^     ^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^^^^     ^^^^^^^    ^^     ^^^^^    ^^^^^^^^      
 >this._listeners : ((...args: any[]) => void)[]
->                : ^^^^^    ^^     ^^^^^^^^^^^^
+>                : ^^^^^    ^^     ^^^^^    ^^^
 >this : this
 >     : ^^^^
 >_listeners : ((...args: any[]) => void)[]
->           : ^^^^^    ^^     ^^^^^^^^^^^^
+>           : ^^^^^    ^^     ^^^^^    ^^^
 >push : (...items: ((...args: any[]) => void)[]) => number
->     : ^^^^     ^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^    ^^     ^^^^^    ^^^^^^^^      
 >listener : (...args: any[]) => void
->         : ^^^^    ^^     ^^^^^^^^^
+>         : ^^^^    ^^     ^^^^^    
     }
 }
 
@@ -59,13 +59,13 @@ class StringEvent extends EventBase {
 >super.add(listener) : void
 >                    : ^^^^
 >super.add : (listener: (...args: any[]) => void) => void
->          : ^        ^^                        ^^^^^^^^^
+>          : ^        ^^                        ^^^^^    
 >super : EventBase
 >      : ^^^^^^^^^
 >add : (listener: (...args: any[]) => void) => void
->    : ^        ^^                        ^^^^^^^^^
+>    : ^        ^^                        ^^^^^    
 >listener : (items: string, moreitems: number) => void
->         : ^     ^^      ^^         ^^      ^^^^^^^^^
+>         : ^     ^^      ^^         ^^      ^^^^^    
     }
 }
 

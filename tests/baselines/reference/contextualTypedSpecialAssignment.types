@@ -292,11 +292,11 @@ module.exports = {
 >module.exports = {    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
 >                                                   : ^^^^^^^^^^      ^^^^ ^^      ^^^    ^^^
 >module.exports : { status: "done"; m(n: number): void; }
->               : ^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
+>               : ^^^^^^^^^^      ^^^^ ^^      ^^^    ^^^
 >module : { exports: { status: "done"; m(n: number): void; }; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^      ^^^^ ^^      ^^^    ^^^^^^
 >exports : { status: "done"; m(n: number): void; }
->        : ^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
+>        : ^^^^^^^^^^      ^^^^ ^^      ^^^    ^^^
 >{    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
 >                                  : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 

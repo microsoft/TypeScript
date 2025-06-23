@@ -54,7 +54,7 @@ var c: { name: string };
 
 var c = new B.a.C();
 >c : { name: string; }
->  : ^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^      ^^^
 >new B.a.C() : A.C
 >            : ^^^
 >B.a.C : typeof A.C

@@ -1,4 +1,12 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    createImportAdder,
+    createMissingMemberNodes,
+    registerCodeFix,
+    TypeConstructionContext,
+} from "../_namespaces/ts.codefix.js";
+import {
     addToSeen,
     cast,
     ClassElement,
@@ -15,15 +23,7 @@ import {
     Symbol,
     textChanges,
     UserPreferences,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    createImportAdder,
-    createMissingMemberNodes,
-    registerCodeFix,
-    TypeConstructionContext,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const errorCodes = [
     Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2.code,
@@ -44,7 +44,7 @@ registerCodeFix({
     },
     fixIds: [fixId],
     getAllCodeActions: function getAllCodeActionsToFixClassDoesntImplementInheritedAbstractMember(context) {
-        const seenClassDeclarations = new Map<number, true>();
+        const seenClassDeclarations = new Set<number>();
         return codeFixAll(context, errorCodes, (changes, diag) => {
             const classDeclaration = getClass(diag.file, diag.start);
             if (addToSeen(seenClassDeclarations, getNodeId(classDeclaration))) {

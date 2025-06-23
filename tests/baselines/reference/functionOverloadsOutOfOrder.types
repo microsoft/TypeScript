@@ -7,13 +7,13 @@ class d {
 
     private foo(n: number): string;
 >foo : { (n: number): string; (s: string): string; }
->    : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >n : number
 >  : ^^^^^^
 
     private foo(ns: any) {
 >foo : { (n: number): string; (s: string): string; }
->    : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >ns : any
 >   : ^^^
 
@@ -29,7 +29,7 @@ class d {
     }
     private foo(s: string): string;
 >foo : { (n: number): string; (s: string): string; }
->    : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >s : string
 >  : ^^^^^^
 }
@@ -40,7 +40,7 @@ class e {
 
     private foo(ns: any) {
 >foo : { (ns: any): any; (s: string): string; (n: number): string; }
->    : ^^^  ^^   ^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>    : ^^^  ^^   ^^^^^^^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >ns : any
 >   : ^^^
 
@@ -56,13 +56,13 @@ class e {
     }
     private foo(s: string): string;
 >foo : { (ns: any): any; (s: string): string; (n: number): string; }
->    : ^^^  ^^   ^^^^^^^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
+>    : ^^^  ^^   ^^^^^^^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >s : string
 >  : ^^^^^^
 
     private foo(n: number): string;
 >foo : { (ns: any): any; (s: string): string; (n: number): string; }
->    : ^^^  ^^   ^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
+>    : ^^^  ^^   ^^^^^^^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >n : number
 >  : ^^^^^^
 }

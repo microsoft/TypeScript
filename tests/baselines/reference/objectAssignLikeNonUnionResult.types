@@ -32,7 +32,7 @@ const data1 = assign(defaultValue, Date.now() > 3 ? { field: 2 } : {});
 >assign(defaultValue, Date.now() > 3 ? { field: 2 } : {}) : Interface & { field: number; }
 >                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >assign : <T, U>(target: T, source: U) => T & U
->       : ^ ^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^
+>       : ^ ^^ ^^      ^^ ^^      ^^ ^^^^^     
 >defaultValue : Interface
 >             : ^^^^^^^^^
 >Date.now() > 3 ? { field: 2 } : {} : { field: number; } | {}
@@ -42,11 +42,11 @@ const data1 = assign(defaultValue, Date.now() > 3 ? { field: 2 } : {});
 >Date.now() : number
 >           : ^^^^^^
 >Date.now : () => number
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >Date : DateConstructor
 >     : ^^^^^^^^^^^^^^^
 >now : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 >3 : 3
 >  : ^
 >{ field: 2 } : { field: number; }

@@ -3,7 +3,7 @@
 === Performance Stats ===
 Assignability cache: 2,500
 Type Count: 10,000
-Instantiation count: 100,000
+Instantiation count: 50,000
 Symbol count: 50,000
 
 === checkJsxUnionSFXContextualTypeInferredCorrectly.tsx ===
@@ -101,11 +101,11 @@ export function HereIsTheError() {
 >console.log(val) : void
 >                 : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >val : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
 
@@ -144,11 +144,11 @@ ComponentWithUnion({
 >console.log(val) : void
 >                 : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >val : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
 

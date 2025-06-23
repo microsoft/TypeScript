@@ -55,7 +55,7 @@ const _ = require("./a");
 >require("./a") : typeof _
 >               : ^^^^^^^^
 >require : (...args: any[]) => any
->        : ^^^^    ^^     ^^^^^^^^
+>        : ^^^^    ^^     ^^^^^   
 >"./a" : "./a"
 >      : ^^^^^
 

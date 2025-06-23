@@ -15,11 +15,11 @@ function testPromise1() {
 >console.log("Nope") : void
 >                    : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >"Nope" : "Nope"
 >       : ^^^^^^
 }
@@ -27,7 +27,7 @@ function testPromise1() {
 /** @type {FunctionReturningPromise} */
 async function testPromise2() {
 >testPromise2 : () => Promise<number>
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^               
 
     return "asd";
 >"asd" : "asd"
@@ -44,11 +44,11 @@ var testPromise3 = /** @type {FunctionReturningPromise} */ function() {
 >console.log("test") : void
 >                    : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >"test" : "test"
 >       : ^^^^^^
 }
@@ -64,11 +64,11 @@ var testPromise4 = function() {
 >console.log("test") : void
 >                    : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >"test" : "test"
 >       : ^^^^^^
 }
@@ -88,7 +88,7 @@ function testNever1() {
 /** @type {FunctionReturningNever} */
 async function testNever2() {
 >testNever2 : () => never
->           : ^^^^^^^^^^^
+>           : ^^^^^^     
 
     return "asd";
 >"asd" : "asd"
@@ -105,11 +105,11 @@ var testNever3 = /** @type {FunctionReturningNever} */ function() {
 >console.log("test") : void
 >                    : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >"test" : "test"
 >       : ^^^^^^
 }
@@ -125,11 +125,11 @@ var testNever4 = function() {
 >console.log("test") : void
 >                    : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >"test" : "test"
 >       : ^^^^^^
 }

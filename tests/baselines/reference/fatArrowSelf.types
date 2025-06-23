@@ -45,16 +45,16 @@ module Consumer {
             this.emitter.addListener('change', (e) => {
 >this.emitter.addListener('change', (e) => {                this.changed();            }) : void
 >                                                                                         : ^^^^
->this.emitter.addListener : (type: string, listener: ListenerCallback) => void
->                         : ^    ^^      ^^        ^^                ^^^^^^^^^
+>this.emitter.addListener : (type: string, listener: Events.ListenerCallback) => void
+>                         : ^    ^^      ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.emitter : Events.EventEmitter
 >             : ^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >emitter : Events.EventEmitter
 >        : ^^^^^^^^^^^^^^^^^^^
->addListener : (type: string, listener: ListenerCallback) => void
->            : ^    ^^      ^^        ^^                ^^^^^^^^^
+>addListener : (type: string, listener: Events.ListenerCallback) => void
+>            : ^    ^^      ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'change' : "change"
 >         : ^^^^^^^^
 >(e) => {                this.changed();            } : (e: any) => void

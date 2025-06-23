@@ -11,11 +11,11 @@
 >Object.defineProperty(obj, "accProperty", <PropertyDescriptor>({                get: function () {                    eval("public = 1;");                    return 11;                },                set: function (v) {                }            })) : {}
 >                                                                                                                                                                                                                                                              : ^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >obj : {}
 >    : ^^
 >"accProperty" : "accProperty"
@@ -36,7 +36,7 @@
                     eval("public = 1;");
 >eval("public = 1;") : any
 >eval : (x: string) => any
->     : ^ ^^      ^^^^^^^^
+>     : ^ ^^      ^^^^^   
 >"public = 1;" : "public = 1;"
 >              : ^^^^^^^^^^^^^
 

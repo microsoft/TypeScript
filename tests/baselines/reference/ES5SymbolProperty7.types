@@ -15,13 +15,14 @@ class C {
 >                  : ^^^^^^^^^^
 >Symbol.iterator : any
 >Symbol : { iterator: any; }
->       : ^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^   ^^^
 >iterator : any
 >         : ^^^
 }
 
 (new C)[Symbol.iterator]
->(new C)[Symbol.iterator] : error
+>(new C)[Symbol.iterator] : () => void
+>                         : ^^^^^^^^^^
 >(new C) : C
 >        : ^
 >new C : C
@@ -30,7 +31,7 @@ class C {
 >  : ^^^^^^^^
 >Symbol.iterator : any
 >Symbol : { iterator: any; }
->       : ^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^   ^^^
 >iterator : any
 >         : ^^^
 

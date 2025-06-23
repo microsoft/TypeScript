@@ -66,13 +66,13 @@ enum Bar {
 >(1).valueOf() : number
 >              : ^^^^^^
 >(1).valueOf : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >(1) : 1
 >    : ^
 >1 : 1
 >  : ^
 >valueOf : () => number
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
 
   b = Foo.a,           // ok
 >b : Bar.b
@@ -90,7 +90,7 @@ enum Bar {
 >Foo.a.valueOf() : number
 >                : ^^^^^^
 >Foo.a.valueOf : () => number
->              : ^^^^^^^^^^^^
+>              : ^^^^^^      
 >Foo.a : Foo.a
 >      : ^^^^^
 >Foo : typeof Foo
@@ -98,7 +98,7 @@ enum Bar {
 >a : Foo.a
 >  : ^^^^^
 >valueOf : () => number
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
 
   d = Foo.a.a,         // should error
 >d : Bar.d

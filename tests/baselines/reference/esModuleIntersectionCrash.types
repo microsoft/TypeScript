@@ -27,13 +27,13 @@ declare namespace modObj {
 === idx.ts ===
 import * as mod from "./mod";
 >mod : { default: mod.A & mod.B; a: string; b: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 
 mod.a;
 >mod.a : string
 >      : ^^^^^^
 >mod : { default: mod.A & mod.B; a: string; b: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >a : string
 >  : ^^^^^^
 
@@ -41,7 +41,7 @@ mod.b;
 >mod.b : string
 >      : ^^^^^^
 >mod : { default: mod.A & mod.B; a: string; b: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >b : string
 >  : ^^^^^^
 

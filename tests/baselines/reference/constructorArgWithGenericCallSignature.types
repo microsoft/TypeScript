@@ -34,12 +34,12 @@ var func: Test.MyFunc;
 Test.F(func); // OK
 >Test.F(func) : void
 >             : ^^^^
->Test.F : (func: MyFunc) => void
->       : ^    ^^      ^^^^^^^^^
+>Test.F : (func: Test.MyFunc) => void
+>       : ^    ^^^^^^^^^^^^^^^^^^^^^^
 >Test : typeof Test
 >     : ^^^^^^^^^^^
->F : (func: MyFunc) => void
->  : ^    ^^      ^^^^^^^^^
+>F : (func: Test.MyFunc) => void
+>  : ^    ^^^^^^^^^^^^^^^^^^^^^^
 >func : Test.MyFunc
 >     : ^^^^^^^^^^^
 

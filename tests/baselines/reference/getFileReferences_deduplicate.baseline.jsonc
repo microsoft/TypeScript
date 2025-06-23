@@ -1,8 +1,8 @@
 // === getFileReferences ===
-// fileName: /util.ts
+// fileName: /home/src/workspaces/project/util.ts
 
-// === /index.ts ===
+// === /home/src/workspaces/project/index.ts ===
 // export * from "[|./util|]";
 
-// === /test.ts ===
+// === /home/src/workspaces/project/test.ts ===
 // import "[|./util|]";

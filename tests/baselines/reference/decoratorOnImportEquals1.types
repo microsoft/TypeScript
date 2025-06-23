@@ -19,7 +19,7 @@ module M1 {
 module M2 {
     @dec
 >dec : <T>(target: T) => T
->    : ^ ^^      ^^ ^^^^^^
+>    : ^ ^^      ^^ ^^^^^ 
 
     import X = M1.X;
 >X : number

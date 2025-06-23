@@ -9,11 +9,11 @@ import {
     isIdentifier,
     isParameter,
     RefactorContext,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 import {
     isRefactorErrorInfo,
     registerRefactor,
-} from "../_namespaces/ts.refactor";
+} from "../_namespaces/ts.refactor.js";
 
 const actionName = "Generate 'get' and 'set' accessors";
 const actionDescription = getLocaleSpecificMessage(Diagnostics.Generate_get_and_set_accessors);

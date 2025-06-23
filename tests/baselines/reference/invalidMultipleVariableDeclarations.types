@@ -77,11 +77,11 @@ module M {
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 }
 
 // all of these are errors
@@ -145,13 +145,13 @@ var b = new C2();
 
 var f = F;
 >f : (x: string) => number
->  : ^ ^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^      
 >F : (x: string) => number
->  : ^ ^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^      
 
 var f = (x: number) => '';
 >f : (x: string) => number
->  : ^ ^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^      
 >(x: number) => '' : (x: number) => string
 >                  : ^ ^^      ^^^^^^^^^^^
 >x : number

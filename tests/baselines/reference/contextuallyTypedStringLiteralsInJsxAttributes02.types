@@ -31,7 +31,7 @@ export interface LinkProps extends ClickableProps {
 
 export function MainButton(buttonProps: ButtonProps): JSX.Element;
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; }
->           : ^^^           ^^           ^^^           ^^^         ^^         ^^^^^^^^^^^^^^^^^
+>           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^
 >buttonProps : ButtonProps
 >            : ^^^^^^^^^^^
 >JSX : any
@@ -39,7 +39,7 @@ export function MainButton(buttonProps: ButtonProps): JSX.Element;
 
 export function MainButton(linkProps: LinkProps): JSX.Element;
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; }
->           : ^^^           ^^           ^^^^^^^^^^^^^^^^^         ^^         ^^^           ^^^
+>           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^
 >linkProps : LinkProps
 >          : ^^^^^^^^^
 >JSX : any
@@ -47,7 +47,7 @@ export function MainButton(linkProps: LinkProps): JSX.Element;
 
 export function MainButton(props: ButtonProps | LinkProps): JSX.Element {
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; }
->           : ^^^           ^^           ^^^^^^^^^^^^^^^^^         ^^         ^^^^^^^^^^^^^^^^^
+>           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^
 >props : ButtonProps | LinkProps
 >      : ^^^^^^^^^^^^^^^^^^^^^^^
 >JSX : any
@@ -101,7 +101,7 @@ const b0 = <MainButton {...{onClick: (k) => {console.log(k)}}} extra />;  // k h
 ><MainButton {...{onClick: (k) => {console.log(k)}}} extra /> : JSX.Element
 >                                                             : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; }
->           : ^^^           ^^           ^^^^^^^^^^^^^^^^^         ^^         ^^^^^^^^^^^^^^^^^
+>           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^
 >{onClick: (k) => {console.log(k)}} : { onClick: (k: "left" | "right") => void; }
 >                                   : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >onClick : (k: "left" | "right") => void
@@ -113,11 +113,11 @@ const b0 = <MainButton {...{onClick: (k) => {console.log(k)}}} extra />;  // k h
 >console.log(k) : void
 >               : ^^^^
 >console.log : (message?: any, ...optionalParams: any[]) => void
->            : ^       ^^^   ^^^^^              ^^     ^^^^^^^^^
+>            : ^       ^^^   ^^^^^              ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (message?: any, ...optionalParams: any[]) => void
->    : ^       ^^^   ^^^^^              ^^     ^^^^^^^^^
+>    : ^       ^^^   ^^^^^              ^^     ^^^^^    
 >k : "left" | "right"
 >  : ^^^^^^^^^^^^^^^^
 >extra : true
@@ -129,7 +129,7 @@ const b2 = <MainButton onClick={(k)=>{console.log(k)}} extra />;  // k has type 
 ><MainButton onClick={(k)=>{console.log(k)}} extra /> : JSX.Element
 >                                                     : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; }
->           : ^^^           ^^           ^^^^^^^^^^^^^^^^^         ^^         ^^^^^^^^^^^^^^^^^
+>           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^
 >onClick : (k: "left" | "right") => void
 >        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(k)=>{console.log(k)} : (k: "left" | "right") => void
@@ -139,11 +139,11 @@ const b2 = <MainButton onClick={(k)=>{console.log(k)}} extra />;  // k has type 
 >console.log(k) : void
 >               : ^^^^
 >console.log : (message?: any, ...optionalParams: any[]) => void
->            : ^       ^^^   ^^^^^              ^^     ^^^^^^^^^
+>            : ^       ^^^   ^^^^^              ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (message?: any, ...optionalParams: any[]) => void
->    : ^       ^^^   ^^^^^              ^^     ^^^^^^^^^
+>    : ^       ^^^   ^^^^^              ^^     ^^^^^    
 >k : "left" | "right"
 >  : ^^^^^^^^^^^^^^^^
 >extra : true
@@ -155,7 +155,7 @@ const b3 = <MainButton {...{goTo:"home"}} extra />;  // goTo has type"home" | "c
 ><MainButton {...{goTo:"home"}} extra /> : JSX.Element
 >                                        : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; }
->           : ^^^           ^^           ^^^^^^^^^^^^^^^^^         ^^         ^^^^^^^^^^^^^^^^^
+>           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^
 >{goTo:"home"} : { goTo: "home"; }
 >              : ^^^^^^^^^^^^^^^^^
 >goTo : "home"
@@ -171,7 +171,7 @@ const b4 = <MainButton goTo="home" extra />;  // goTo has type "home" | "contact
 ><MainButton goTo="home" extra /> : JSX.Element
 >                                 : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; }
->           : ^^^           ^^           ^^^^^^^^^^^^^^^^^         ^^         ^^^^^^^^^^^^^^^^^
+>           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^
 >goTo : "home"
 >     : ^^^^^^
 >extra : true
@@ -193,7 +193,7 @@ const c1 = <NoOverload  {...{onClick: (k) => {console.log(k)}}} extra />;  // k 
 ><NoOverload  {...{onClick: (k) => {console.log(k)}}} extra /> : JSX.Element
 >                                                              : ^^^^^^^^^^^
 >NoOverload : (buttonProps: ButtonProps) => JSX.Element
->           : ^           ^^           ^^^^^^^^^^^^^^^^
+>           : ^           ^^           ^^^^^           
 >{onClick: (k) => {console.log(k)}} : { onClick: (k: "left" | "right") => void; }
 >                                   : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >onClick : (k: "left" | "right") => void
@@ -205,11 +205,11 @@ const c1 = <NoOverload  {...{onClick: (k) => {console.log(k)}}} extra />;  // k 
 >console.log(k) : void
 >               : ^^^^
 >console.log : (message?: any, ...optionalParams: any[]) => void
->            : ^       ^^^   ^^^^^              ^^     ^^^^^^^^^
+>            : ^       ^^^   ^^^^^              ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (message?: any, ...optionalParams: any[]) => void
->    : ^       ^^^   ^^^^^              ^^     ^^^^^^^^^
+>    : ^       ^^^   ^^^^^              ^^     ^^^^^    
 >k : "left" | "right"
 >  : ^^^^^^^^^^^^^^^^
 >extra : true
@@ -231,7 +231,7 @@ const d1 = <NoOverload1 {...{goTo:"home"}} extra  />;  // goTo has type "home" |
 ><NoOverload1 {...{goTo:"home"}} extra  /> : JSX.Element
 >                                          : ^^^^^^^^^^^
 >NoOverload1 : (linkProps: LinkProps) => JSX.Element
->            : ^         ^^         ^^^^^^^^^^^^^^^^
+>            : ^         ^^         ^^^^^           
 >{goTo:"home"} : { goTo: "home"; }
 >              : ^^^^^^^^^^^^^^^^^
 >goTo : "home"

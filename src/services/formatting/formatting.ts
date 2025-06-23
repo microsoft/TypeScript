@@ -1,4 +1,15 @@
 import {
+    FormattingContext,
+    FormattingRequestKind,
+    FormattingScanner,
+    getFormattingScanner,
+    Rule,
+    RuleAction,
+    RuleFlags,
+    RulesMap,
+    SmartIndenter,
+} from "../_namespaces/ts.formatting.js";
+import {
     Block,
     CallExpression,
     canHaveModifiers,
@@ -65,18 +76,7 @@ import {
     TextRange,
     TriviaSyntaxKind,
     TypeReferenceNode,
-} from "../_namespaces/ts";
-import {
-    FormattingContext,
-    FormattingRequestKind,
-    FormattingScanner,
-    getFormattingScanner,
-    Rule,
-    RuleAction,
-    RuleFlags,
-    RulesMap,
-    SmartIndenter,
-} from "../_namespaces/ts.formatting";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export interface FormatContext {
@@ -1377,7 +1377,7 @@ export function getRangeOfEnclosingComment(
     sourceFile: SourceFile,
     position: number,
     precedingToken?: Node | null, // eslint-disable-line no-restricted-syntax
-    tokenAtPosition = getTokenAtPosition(sourceFile, position),
+    tokenAtPosition: Node = getTokenAtPosition(sourceFile, position),
 ): CommentRange | undefined {
     const jsdoc = findAncestor(tokenAtPosition, isJSDoc);
     if (jsdoc) tokenAtPosition = jsdoc.parent;

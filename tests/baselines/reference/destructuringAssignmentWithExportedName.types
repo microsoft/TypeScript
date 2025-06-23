@@ -3,53 +3,74 @@
 === destructuringAssignmentWithExportedName.ts ===
 export let exportedFoo: any;
 >exportedFoo : any
+>            : ^^^
 
 let nonexportedFoo: any;
 >nonexportedFoo : any
+>               : ^^^
 
 // sanity checks
 exportedFoo = null;
 >exportedFoo = null : null
 >                   : ^^^^
 >exportedFoo : any
+>            : ^^^
 
 nonexportedFoo = null;
 >nonexportedFoo = null : null
 >                      : ^^^^
 >nonexportedFoo : any
+>               : ^^^
 
 if (null as any) {
 >null as any : any
+>            : ^^^
 
     ({ exportedFoo, nonexportedFoo } = null as any);
 >({ exportedFoo, nonexportedFoo } = null as any) : any
+>                                                : ^^^
 >{ exportedFoo, nonexportedFoo } = null as any : any
+>                                              : ^^^
 >{ exportedFoo, nonexportedFoo } : { exportedFoo: any; nonexportedFoo: any; }
 >                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exportedFoo : any
+>            : ^^^
 >nonexportedFoo : any
+>               : ^^^
 >null as any : any
+>            : ^^^
 }
 else if (null as any) {
 >null as any : any
+>            : ^^^
 
 	({ foo: exportedFoo, bar: nonexportedFoo } = null as any);
 >({ foo: exportedFoo, bar: nonexportedFoo } = null as any) : any
+>                                                          : ^^^
 >{ foo: exportedFoo, bar: nonexportedFoo } = null as any : any
+>                                                        : ^^^
 >{ foo: exportedFoo, bar: nonexportedFoo } : { foo: any; bar: any; }
 >                                          : ^^^^^^^^^^^^^^^^^^^^^^^
 >foo : any
+>    : ^^^
 >exportedFoo : any
+>            : ^^^
 >bar : any
+>    : ^^^
 >nonexportedFoo : any
+>               : ^^^
 >null as any : any
+>            : ^^^
 }
 else if (null as any) {
 >null as any : any
+>            : ^^^
 
 	({ foo: { bar: exportedFoo, baz: nonexportedFoo } } = null as any);
 >({ foo: { bar: exportedFoo, baz: nonexportedFoo } } = null as any) : any
+>                                                                   : ^^^
 >{ foo: { bar: exportedFoo, baz: nonexportedFoo } } = null as any : any
+>                                                                 : ^^^
 >{ foo: { bar: exportedFoo, baz: nonexportedFoo } } : { foo: { bar: any; baz: any; }; }
 >                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : { bar: any; baz: any; }
@@ -57,34 +78,50 @@ else if (null as any) {
 >{ bar: exportedFoo, baz: nonexportedFoo } : { bar: any; baz: any; }
 >                                          : ^^^^^^^^^^^^^^^^^^^^^^^
 >bar : any
+>    : ^^^
 >exportedFoo : any
+>            : ^^^
 >baz : any
+>    : ^^^
 >nonexportedFoo : any
+>               : ^^^
 >null as any : any
+>            : ^^^
 }
 else if (null as any) {
 >null as any : any
+>            : ^^^
 
 	([exportedFoo, nonexportedFoo] = null as any);
 >([exportedFoo, nonexportedFoo] = null as any) : any
+>                                              : ^^^
 >[exportedFoo, nonexportedFoo] = null as any : any
+>                                            : ^^^
 >[exportedFoo, nonexportedFoo] : [any, any]
 >                              : ^^^^^^^^^^
 >exportedFoo : any
+>            : ^^^
 >nonexportedFoo : any
+>               : ^^^
 >null as any : any
+>            : ^^^
 }
 else {
 	([[exportedFoo, nonexportedFoo]] = null as any);
 >([[exportedFoo, nonexportedFoo]] = null as any) : any
+>                                                : ^^^
 >[[exportedFoo, nonexportedFoo]] = null as any : any
+>                                              : ^^^
 >[[exportedFoo, nonexportedFoo]] : [[any, any]]
 >                                : ^^^^^^^^^^^^
 >[exportedFoo, nonexportedFoo] : [any, any]
 >                              : ^^^^^^^^^^
 >exportedFoo : any
+>            : ^^^
 >nonexportedFoo : any
+>               : ^^^
 >null as any : any
+>            : ^^^
 }
 
 export { nonexportedFoo };

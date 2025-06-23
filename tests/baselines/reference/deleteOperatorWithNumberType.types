@@ -160,7 +160,7 @@ var ResultIsBoolean9 = delete foo();
 >foo() : number
 >      : ^^^^^^
 >foo : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 var ResultIsBoolean10 = delete A.foo();
 >ResultIsBoolean10 : boolean
@@ -244,7 +244,7 @@ delete foo();
 >foo() : number
 >      : ^^^^^^
 >foo : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 delete objA.a;
 >delete objA.a : boolean

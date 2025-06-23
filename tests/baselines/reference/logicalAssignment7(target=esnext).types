@@ -13,7 +13,7 @@ function foo1(results: number[] | undefined, results1: number[] | undefined) {
 >(results ||= results1 ||= []).push(100) : number
 >                                        : ^^^^^^
 >(results ||= results1 ||= []).push : (...items: number[]) => number
->                                   : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>                                   : ^^^^     ^^^^^^^^^^^^^^^      
 >(results ||= results1 ||= []) : number[]
 >                              : ^^^^^^^^
 >results ||= results1 ||= [] : number[]
@@ -27,7 +27,7 @@ function foo1(results: number[] | undefined, results1: number[] | undefined) {
 >[] : never[]
 >   : ^^^^^^^
 >push : (...items: number[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^      
 >100 : 100
 >    : ^^^
 }
@@ -44,7 +44,7 @@ function foo2(results: number[] | undefined, results1: number[] | undefined) {
 >(results ??= results1 ??= []).push(100) : number
 >                                        : ^^^^^^
 >(results ??= results1 ??= []).push : (...items: number[]) => number
->                                   : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>                                   : ^^^^     ^^^^^^^^^^^^^^^      
 >(results ??= results1 ??= []) : number[]
 >                              : ^^^^^^^^
 >results ??= results1 ??= [] : number[]
@@ -58,7 +58,7 @@ function foo2(results: number[] | undefined, results1: number[] | undefined) {
 >[] : never[]
 >   : ^^^^^^^
 >push : (...items: number[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^      
 >100 : 100
 >    : ^^^
 }
@@ -75,7 +75,7 @@ function foo3(results: number[] | undefined, results1: number[] | undefined) {
 >(results &&= results1 &&= []).push(100) : number
 >                                        : ^^^^^^
 >(results &&= results1 &&= []).push : (...items: never[]) => number
->                                   : ^^^^     ^^^^^^^^^^^^^^^^^^^^
+>                                   : ^^^^     ^^^^^^^^^^^^^^      
 >(results &&= results1 &&= []) : never[] | undefined
 >                              : ^^^^^^^^^^^^^^^^^^^
 >results &&= results1 &&= [] : never[] | undefined
@@ -89,7 +89,7 @@ function foo3(results: number[] | undefined, results1: number[] | undefined) {
 >[] : never[]
 >   : ^^^^^^^
 >push : (...items: never[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^      
 >100 : 100
 >    : ^^^
 }

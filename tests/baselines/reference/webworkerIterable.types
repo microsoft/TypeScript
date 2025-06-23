@@ -6,7 +6,7 @@ importScripts("")
 >importScripts("") : void
 >                  : ^^^^
 >importScripts : (...urls: (string | URL)[]) => void
->              : ^^^^    ^^                ^^^^^^^^^
+>              : ^^^^    ^^                ^^^^^    
 >"" : ""
 >   : ^^
 
@@ -17,7 +17,7 @@ const f = new FormData()
 >new FormData() : FormData
 >               : ^^^^^^^^
 >FormData : { new (): FormData; prototype: FormData; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^        ^^^^^^^^^^^^^        ^^^
 
 for (const element of f) {
 >element : [string, FormDataEntryValue]

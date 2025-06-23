@@ -49,9 +49,9 @@ class Derived extends Base {
 
         var r5 = {
 >r5 : { foo: number; }
->   : ^^^^^^^^^^^^^^^^
+>   : ^^^^^^^      ^^^
 >{            get foo() {                super();                return 1;            },            set foo(v: number) {                super();            }        } : { foo: number; }
->                                                                                                                                                                      : ^^^^^^^^^^^^^^^^
+>                                                                                                                                                                      : ^^^^^^^      ^^^
 
             get foo() {
 >foo : number

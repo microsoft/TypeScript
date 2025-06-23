@@ -33,11 +33,11 @@ declare const enhancePrisma: <TPrismaClientCtor>(client: TPrismaClientCtor) => T
 
 const EnhancedPrisma = enhancePrisma(PrismaClient);
 >EnhancedPrisma : typeof PrismaClient & { enhanced: unknown; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^
 >enhancePrisma(PrismaClient) : typeof PrismaClient & { enhanced: unknown; }
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^
 >enhancePrisma : <TPrismaClientCtor>(client: TPrismaClientCtor) => TPrismaClientCtor & { enhanced: unknown; }
->              : ^                 ^^      ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^                 ^^      ^^                 ^^^^^                                          
 >PrismaClient : typeof PrismaClient
 >             : ^^^^^^^^^^^^^^^^^^^
 
@@ -45,5 +45,5 @@ export default new EnhancedPrisma();
 >new EnhancedPrisma() : PrismaClient<import("/node_modules/.prisma/client/index").PrismaClientOptions>
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >EnhancedPrisma : typeof PrismaClient & { enhanced: unknown; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^
 

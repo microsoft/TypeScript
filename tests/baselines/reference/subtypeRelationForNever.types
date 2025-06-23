@@ -43,13 +43,13 @@ function withFew<a, r>(values: a[], haveFew: (values: a[]) => r, haveNone: (reas
 >haveFew(values) : r
 >                : ^
 >haveFew : (values: a[]) => r
->        : ^      ^^   ^^^^^^
+>        : ^      ^^   ^^^^^ 
 >values : a[]
 >       : ^^^
 >haveNone('No values.') : r
 >                       : ^
 >haveNone : (reason: string) => r
->         : ^      ^^      ^^^^^^
+>         : ^      ^^      ^^^^^ 
 >'No values.' : "No values."
 >             : ^^^^^^^^^^^^
 }
@@ -67,7 +67,7 @@ const result = withFew([1, 2, 3], id, fail); // expected result is number[]
 >withFew([1, 2, 3], id, fail) : number[]
 >                             : ^^^^^^^^
 >withFew : <a, r>(values: a[], haveFew: (values: a[]) => r, haveNone: (reason: string) => r) => r
->        : ^ ^^ ^^      ^^   ^^       ^^                  ^^        ^^                     ^^^^^^
+>        : ^ ^^ ^^      ^^   ^^       ^^                  ^^        ^^                     ^^^^^ 
 >[1, 2, 3] : number[]
 >          : ^^^^^^^^
 >1 : 1
@@ -77,7 +77,7 @@ const result = withFew([1, 2, 3], id, fail); // expected result is number[]
 >3 : 3
 >  : ^
 >id : <a>(value: a) => a
->   : ^ ^^     ^^ ^^^^^^
+>   : ^ ^^     ^^ ^^^^^ 
 >fail : (message: string) => never
->     : ^       ^^      ^^^^^^^^^^
+>     : ^       ^^      ^^^^^     
 

@@ -61,7 +61,7 @@ class A
 >[1, 2].forEach((p) => this.foo) : void
 >                                : ^^^^
 >[1, 2].forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->               : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>               : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >[1, 2] : number[]
 >       : ^^^^^^^^
 >1 : 1
@@ -69,7 +69,7 @@ class A
 >2 : 2
 >  : ^
 >forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >(p) => this.foo : (p: number) => any
 >                : ^ ^^^^^^^^^^^^^^^^
 >p : number
@@ -85,7 +85,7 @@ class A
 >[1, 2].forEach((p) => this.bar) : void
 >                                : ^^^^
 >[1, 2].forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->               : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>               : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >[1, 2] : number[]
 >       : ^^^^^^^^
 >1 : 1
@@ -93,7 +93,7 @@ class A
 >2 : 2
 >  : ^
 >forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >(p) => this.bar : (p: number) => any
 >                : ^ ^^^^^^^^^^^^^^^^
 >p : number

@@ -1,4 +1,10 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    createCodeFixActionWithoutFixAll,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     Diagnostics,
     factory,
     FindAllReferences,
@@ -17,13 +23,7 @@ import {
     SourceFile,
     SyntaxKind,
     textChanges,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    createCodeFixActionWithoutFixAll,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const errorCodes = [
     Diagnostics._0_is_a_type_and_must_be_imported_using_a_type_only_import_when_verbatimModuleSyntax_is_enabled.code,
@@ -125,13 +125,13 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, de
             changes.replaceNodeWithNodes(sourceFile, declaration, [
                 factory.createImportDeclaration(
                     getSynthesizedDeepClones(declaration.modifiers, /*includeTrivia*/ true),
-                    factory.createImportClause(/*isTypeOnly*/ true, getSynthesizedDeepClone(importClause.name, /*includeTrivia*/ true), /*namedBindings*/ undefined),
+                    factory.createImportClause(SyntaxKind.TypeKeyword, getSynthesizedDeepClone(importClause.name, /*includeTrivia*/ true), /*namedBindings*/ undefined),
                     getSynthesizedDeepClone(declaration.moduleSpecifier, /*includeTrivia*/ true),
                     getSynthesizedDeepClone(declaration.attributes, /*includeTrivia*/ true),
                 ),
                 factory.createImportDeclaration(
                     getSynthesizedDeepClones(declaration.modifiers, /*includeTrivia*/ true),
-                    factory.createImportClause(/*isTypeOnly*/ true, /*name*/ undefined, getSynthesizedDeepClone(importClause.namedBindings, /*includeTrivia*/ true)),
+                    factory.createImportClause(SyntaxKind.TypeKeyword, /*name*/ undefined, getSynthesizedDeepClone(importClause.namedBindings, /*includeTrivia*/ true)),
                     getSynthesizedDeepClone(declaration.moduleSpecifier, /*includeTrivia*/ true),
                     getSynthesizedDeepClone(declaration.attributes, /*includeTrivia*/ true),
                 ),
@@ -144,7 +144,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, de
                     sameMap(importClause.namedBindings.elements, e => factory.updateImportSpecifier(e, /*isTypeOnly*/ false, e.propertyName, e.name)),
                 )
                 : importClause.namedBindings;
-            const importDeclaration = factory.updateImportDeclaration(declaration, declaration.modifiers, factory.updateImportClause(importClause, /*isTypeOnly*/ true, importClause.name, newNamedBindings), declaration.moduleSpecifier, declaration.attributes);
+            const importDeclaration = factory.updateImportDeclaration(declaration, declaration.modifiers, factory.updateImportClause(importClause, SyntaxKind.TypeKeyword, importClause.name, newNamedBindings), declaration.moduleSpecifier, declaration.attributes);
             changes.replaceNode(sourceFile, declaration, importDeclaration);
         }
     }

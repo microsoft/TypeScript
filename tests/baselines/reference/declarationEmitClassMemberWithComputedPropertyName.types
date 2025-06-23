@@ -134,9 +134,9 @@ class Foo {
 
 export const t1 = Foo[k1];
 >t1 : () => number
->   : ^^^^^^^^^^^^
+>   : ^^^^^^      
 >Foo[k1] : () => number
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 >k1 : unique symbol
@@ -144,9 +144,9 @@ export const t1 = Foo[k1];
 
 export const t2 = new Foo()[k1];
 >t2 : () => string
->   : ^^^^^^^^^^^^
+>   : ^^^^^^      
 >new Foo()[k1] : () => string
->              : ^^^^^^^^^^^^
+>              : ^^^^^^      
 >new Foo() : Foo
 >          : ^^^
 >Foo : typeof Foo

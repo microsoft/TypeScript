@@ -59,7 +59,7 @@ class C1 extends Constructor<T1>() { a: string }
 >Constructor<T1>() : T1
 >                  : ^^
 >Constructor : <T>() => Constructor<T>
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^              
 >a : string
 >  : ^^^^^^
 
@@ -69,7 +69,7 @@ class C2 extends Constructor<T2>() { b: string }
 >Constructor<T2>() : T2
 >                  : ^^
 >Constructor : <T>() => Constructor<T>
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^              
 >b : string
 >  : ^^^^^^
 
@@ -79,7 +79,7 @@ class C3 extends Constructor<T3>() { length: string }
 >Constructor<T3>() : number[]
 >                  : ^^^^^^^^
 >Constructor : <T>() => Constructor<T>
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^              
 >length : string
 >       : ^^^^^^
 
@@ -89,7 +89,7 @@ class C4 extends Constructor<T4>() { 0: number }
 >Constructor<T4>() : [string, number]
 >                  : ^^^^^^^^^^^^^^^^
 >Constructor : <T>() => Constructor<T>
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^              
 >0 : number
 >  : ^^^^^^
 
@@ -99,7 +99,7 @@ class C5 extends Constructor<T5>() { c: number }
 >Constructor<T5>() : T5
 >                  : ^^
 >Constructor : <T>() => Constructor<T>
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^              
 >c : number
 >  : ^^^^^^
 

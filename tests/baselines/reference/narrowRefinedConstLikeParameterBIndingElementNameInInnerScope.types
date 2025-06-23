@@ -7,7 +7,7 @@ function ff({ a, b }: { a: string | undefined, b: () => void }) {
 >a : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >b : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 >a : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >b : () => void
@@ -25,7 +25,7 @@ function ff({ a, b }: { a: string | undefined, b: () => void }) {
 >b = () => {      const x: string = a;    } : () => void
 >                                           : ^^^^^^^^^^
 >b : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 >() => {      const x: string = a;    } : () => void
 >                                       : ^^^^^^^^^^
 

@@ -1,0 +1,687 @@
+//// [tests/cases/compiler/unusedLocalsInMethod4.ts] ////
+
+=== unusedLocalsInMethod4.ts ===
+function f<T, NonNull extends {}>() {
+>f : <T, NonNull extends {}>() => void
+>  : ^ ^^       ^^^^^^^^^  ^^^^^^^^^^^
+
+    let x1: number[]; // should error
+>x1 : number[]
+>   : ^^^^^^^^
+
+    let x2: number[] | null; // should error
+>x2 : number[] | null
+>   : ^^^^^^^^^^^^^^^
+
+    let x3: number[] | undefined; // should not error
+>x3 : number[] | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^
+
+    let x4: number[] | undefined | null; // should not error
+>x4 : number[] | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    let x5!: number[]; // should not error
+>x5 : number[]
+>   : ^^^^^^^^
+
+    let x6: any; // should not error
+>x6 : any
+>   : ^^^
+
+    let x7: unknown; // should not error
+>x7 : unknown
+>   : ^^^^^^^
+
+    let x8: T; // should error
+>x8 : T
+>   : ^
+
+    let x9: NonNull; // should error
+>x9 : NonNull
+>   : ^^^^^^^
+
+    var x10: NonNull; // should not error
+>x10 : NonNull
+>    : ^^^^^^^
+
+    let x11: NonNull; // should not error
+>x11 : NonNull
+>    : ^^^^^^^
+
+    function foo() {
+>foo : () => void
+>    : ^^^^^^^^^^
+
+        console.log(x1);
+>console.log(x1) : void
+>                : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>x1 : number[]
+>   : ^^^^^^^^
+
+        console.log(x2);
+>console.log(x2) : void
+>                : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>x2 : number[] | null
+>   : ^^^^^^^^^^^^^^^
+
+        console.log(x3);
+>console.log(x3) : void
+>                : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>x3 : number[] | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^
+
+        console.log(x4);
+>console.log(x4) : void
+>                : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>x4 : number[] | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        console.log(x5);
+>console.log(x5) : void
+>                : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>x5 : number[]
+>   : ^^^^^^^^
+
+        console.log(x6);
+>console.log(x6) : void
+>                : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>x6 : any
+>   : ^^^
+
+        console.log(x7);
+>console.log(x7) : void
+>                : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>x7 : unknown
+>   : ^^^^^^^
+
+        console.log(x8);
+>console.log(x8) : void
+>                : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>x8 : T
+>   : ^
+
+        console.log(x9);
+>console.log(x9) : void
+>                : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>x9 : NonNull
+>   : ^^^^^^^
+
+        console.log(x10);
+>console.log(x10) : void
+>                 : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>x10 : NonNull
+>    : ^^^^^^^
+
+        console.log(x11);
+>console.log(x11) : void
+>                 : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>x11 : NonNull
+>    : ^^^^^^^
+    }
+    function bar() {
+>bar : () => void
+>    : ^^^^^^^^^^
+
+        x11 = {} as any;
+>x11 = {} as any : any
+>                : ^^^
+>x11 : NonNull
+>    : ^^^^^^^
+>{} as any : any
+>          : ^^^
+>{} : {}
+>   : ^^
+    }
+    foo();
+>foo() : void
+>      : ^^^^
+>foo : () => void
+>    : ^^^^^^^^^^
+}
+
+function f2<T, NonNull extends {}>() {
+>f2 : <T, NonNull extends {}>() => void
+>   : ^ ^^       ^^^^^^^^^  ^^^^^^^^^^^
+
+    let x1: number[]; // should error
+>x1 : number[]
+>   : ^^^^^^^^
+
+    let x2: number[] | null; // should error
+>x2 : number[] | null
+>   : ^^^^^^^^^^^^^^^
+
+    let x3: number[] | undefined; // should not error
+>x3 : number[] | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^
+
+    let x4: number[] | undefined | null; // should not error
+>x4 : number[] | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    let x5!: number[]; // should not error
+>x5 : number[]
+>   : ^^^^^^^^
+
+    let x6: any; // should not error
+>x6 : any
+>   : ^^^
+
+    let x7: unknown; // should not error
+>x7 : unknown
+>   : ^^^^^^^
+
+    let x8: T; // should error
+>x8 : T
+>   : ^
+
+    let x9: NonNull; // should error
+>x9 : NonNull
+>   : ^^^^^^^
+
+    console.log(x1);
+>console.log(x1) : void
+>                : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>x1 : number[]
+>   : ^^^^^^^^
+
+    console.log(x2);
+>console.log(x2) : void
+>                : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>x2 : number[] | null
+>   : ^^^^^^^^^^^^^^^
+
+    console.log(x3);
+>console.log(x3) : void
+>                : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>x3 : number[] | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^
+
+    console.log(x4);
+>console.log(x4) : void
+>                : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>x4 : number[] | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    console.log(x5);
+>console.log(x5) : void
+>                : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>x5 : number[]
+>   : ^^^^^^^^
+
+    console.log(x6);
+>console.log(x6) : void
+>                : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>x6 : any
+>   : ^^^
+
+    console.log(x7);
+>console.log(x7) : void
+>                : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>x7 : unknown
+>   : ^^^^^^^
+
+    console.log(x8);
+>console.log(x8) : void
+>                : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>x8 : T
+>   : ^
+
+    console.log(x9);
+>console.log(x9) : void
+>                : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>x9 : NonNull
+>   : ^^^^^^^
+}
+
+function f3() {
+>f3 : () => void
+>   : ^^^^^^^^^^
+
+    let x: number[];    // should error
+>x : number[]
+>  : ^^^^^^^^
+
+    function foo() {
+>foo : () => void
+>    : ^^^^^^^^^^
+
+        x.toString();
+>x.toString() : string
+>             : ^^^^^^
+>x.toString : () => string
+>           : ^^^^^^      
+>x : number[]
+>  : ^^^^^^^^
+>toString : () => string
+>         : ^^^^^^      
+    }
+    foo();
+>foo() : void
+>      : ^^^^
+>foo : () => void
+>    : ^^^^^^^^^^
+}
+
+function f4() {
+>f4 : () => { foo(): string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+    let x: number;  // should error
+>x : number
+>  : ^^^^^^
+
+    return {
+>{        foo() {            return x.toString();        }    } : { foo(): string; }
+>                                                               : ^^^^^^^^^^^^^^^^^^
+
+        foo() {
+>foo : () => string
+>    : ^^^^^^^^^^^^
+
+            return x.toString();
+>x.toString() : string
+>             : ^^^^^^
+>x.toString : (radix?: number) => string
+>           : ^     ^^^      ^^^^^      
+>x : number
+>  : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
+        }
+    };
+}
+
+declare let x: number;  // should not error
+>x : number
+>  : ^^^^^^
+
+function f5() {
+>f5 : () => void
+>   : ^^^^^^^^^^
+
+    x.toString();
+>x.toString() : string
+>             : ^^^^^^
+>x.toString : (radix?: number) => string
+>           : ^     ^^^      ^^^^^      
+>x : number
+>  : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
+}
+export default {};
+>{} : {}
+>   : ^^
+
+function f6() {
+>f6 : () => void
+>   : ^^^^^^^^^^
+
+    let key: string;    // should not error
+>key : string
+>    : ^^^^^^
+
+    for (key in {}) {
+>key : string
+>    : ^^^^^^
+>{} : {}
+>   : ^^
+
+        console.log(key);
+>console.log(key) : void
+>                 : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>key : string
+>    : ^^^^^^
+    }
+}
+
+function f7() {
+>f7 : () => void
+>   : ^^^^^^^^^^
+
+    let key: string;    // should not error
+>key : string
+>    : ^^^^^^
+
+    for (key of []) {
+>key : string
+>    : ^^^^^^
+>[] : never[]
+>   : ^^^^^^^
+
+        console.log(key);
+>console.log(key) : void
+>                 : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>key : string
+>    : ^^^^^^
+    }
+}
+
+function f8() {
+>f8 : () => void
+>   : ^^^^^^^^^^
+
+    function ff() {
+>ff : () => void
+>   : ^^^^^^^^^^
+
+        let _;
+>_ : any
+>  : ^^^
+
+        let rest: {}; // should not error
+>rest : {}
+>     : ^^
+
+        [_, ...rest] = bar();
+>[_, ...rest] = bar() : [number, ...string[]]
+>                     : ^^^^^^^^^^^^^^^^^^^^^
+>[_, ...rest] : [any, ...unknown[]]
+>             : ^^^^^^^^^^^^^^^^^^^
+>_ : any
+>  : ^^^
+>...rest : any
+>        : ^^^
+>rest : {}
+>     : ^^
+>bar() : [number, ...string[]]
+>      : ^^^^^^^^^^^^^^^^^^^^^
+>bar : () => [number, ...string[]]
+>    : ^^^^^^                     
+    }
+}
+declare function bar(): [number, ...string[]];
+>bar : () => [number, ...string[]]
+>    : ^^^^^^                     
+
+function f9() {  
+>f9 : () => void
+>   : ^^^^^^^^^^
+
+    const x: number; // should have only one error
+>x : number
+>  : ^^^^^^
+
+    function bar() {  
+>bar : () => void
+>    : ^^^^^^^^^^
+
+        let y = x;  
+>y : number
+>  : ^^^^^^
+>x : number
+>  : ^^^^^^
+    }  
+}  
+
+
+function rw() {
+>rw : () => void
+>   : ^^^^^^^^^^
+
+    let i: number;  // should error
+>i : number
+>  : ^^^^^^
+
+    function inside() {
+>inside : () => void
+>       : ^^^^^^^^^^
+
+        i++;
+>i++ : number
+>    : ^^^^^^
+>i : number
+>  : ^^^^^^
+
+        console.log(i); // NaN
+>console.log(i) : void
+>               : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>i : number
+>  : ^^^^^^
+    }
+    inside();
+>inside() : void
+>         : ^^^^
+>inside : () => void
+>       : ^^^^^^^^^^
+}
+rw();
+>rw() : void
+>     : ^^^^
+>rw : () => void
+>   : ^^^^^^^^^^
+
+function createBinder() {
+>createBinder : () => void
+>             : ^^^^^^^^^^
+
+    var file: string;   // should not error
+>file : string
+>     : ^^^^^^
+
+    function bindSourceFile(f: string) {
+>bindSourceFile : (f: string) => void
+>               : ^ ^^      ^^^^^^^^^
+>f : string
+>  : ^^^^^^
+
+        file = f;
+>file = f : string
+>         : ^^^^^^
+>file : string
+>     : ^^^^^^
+>f : string
+>  : ^^^^^^
+
+        file.toString();
+>file.toString() : string
+>                : ^^^^^^
+>file.toString : () => string
+>              : ^^^^^^      
+>file : string
+>     : ^^^^^^
+>toString : () => string
+>         : ^^^^^^      
+    }
+}
+
+function transformClassFields() {
+>transformClassFields : () => void
+>                     : ^^^^^^^^^^
+
+    enum ClassPropertySubstitutionFlags {
+>ClassPropertySubstitutionFlags : ClassPropertySubstitutionFlags
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        ClassAliases = 1 << 0,
+>ClassAliases : ClassPropertySubstitutionFlags.ClassAliases
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>1 << 0 : number
+>       : ^^^^^^
+>1 : 1
+>  : ^
+>0 : 0
+>  : ^
+
+        ClassStaticThisOrSuperReference = 1 << 1,
+>ClassStaticThisOrSuperReference : ClassPropertySubstitutionFlags.ClassStaticThisOrSuperReference
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>1 << 1 : number
+>       : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+    }
+
+    let enabledSubstitutions: ClassPropertySubstitutionFlags;   // should error
+>enabledSubstitutions : ClassPropertySubstitutionFlags
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    function enableSubstitutionForClassAliases() {
+>enableSubstitutionForClassAliases : () => void
+>                                  : ^^^^^^^^^^
+
+        enabledSubstitutions |= ClassPropertySubstitutionFlags.ClassAliases;
+>enabledSubstitutions |= ClassPropertySubstitutionFlags.ClassAliases : number
+>                                                                    : ^^^^^^
+>enabledSubstitutions : ClassPropertySubstitutionFlags
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ClassPropertySubstitutionFlags.ClassAliases : ClassPropertySubstitutionFlags.ClassAliases
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ClassPropertySubstitutionFlags : typeof ClassPropertySubstitutionFlags
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ClassAliases : ClassPropertySubstitutionFlags.ClassAliases
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        enabledSubstitutions.toString();
+>enabledSubstitutions.toString() : string
+>                                : ^^^^^^
+>enabledSubstitutions.toString : (radix?: number) => string
+>                              : ^     ^^^      ^^^^^      
+>enabledSubstitutions : ClassPropertySubstitutionFlags
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
+    }
+}

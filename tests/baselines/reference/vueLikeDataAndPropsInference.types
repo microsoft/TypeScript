@@ -57,21 +57,21 @@ type ThisTypedOptions<Data, Props> =
 
 declare function test<Data, Props>(fn: ThisTypedOptions<Data, Props>): void;
 >test : { <Data, Props>(fn: ThisTypedOptions<Data, Props>): void; (fn: Options): void; }
->     : ^^^    ^^     ^^  ^^                             ^^^    ^^^  ^^       ^^^^^^^^^^
+>     : ^^^    ^^     ^^  ^^                             ^^^    ^^^  ^^       ^^^    ^^^
 >fn : ThisTypedOptions<Data, Props>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare function test(fn: Options): void;
 >test : { <Data, Props>(fn: ThisTypedOptions<Data, Props>): void; (fn: Options): void; }
->     : ^^^    ^^     ^^  ^^                             ^^^^^^^^^^  ^^       ^^^    ^^^
+>     : ^^^    ^^     ^^  ^^                             ^^^    ^^^  ^^       ^^^    ^^^
 >fn : Options<(this: Instance) => object, {}>
->   : ^^^^^^^^^    ^^        ^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^    ^^        ^^^^^      ^^^^^
 
 test({
 >test({    props: {        foo: ''    },    data(): { bar: boolean } {        return {            bar: true        }    },    watch: {        foo(newVal: string, oldVal: string): void {            this.bar = false        }    }}) : void
 >                                                                                                                                                                                                                                     : ^^^^
 >test : { <Data, Props>(fn: ThisTypedOptions<Data, Props>): void; (fn: Options): void; }
->     : ^^^    ^^     ^^  ^^                             ^^^^^^^^^^  ^^       ^^^^^^^^^^
+>     : ^^^    ^^     ^^  ^^                             ^^^    ^^^  ^^       ^^^    ^^^
 >{    props: {        foo: ''    },    data(): { bar: boolean } {        return {            bar: true        }    },    watch: {        foo(newVal: string, oldVal: string): void {            this.bar = false        }    }} : { props: { foo: string; }; data(this: Readonly<{ foo: string; }> & Instance): { bar: boolean; }; watch: { foo(newVal: string, oldVal: string): void; }; }
 >                                                                                                                                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^^^^^^^^^^^^^^      ^^      ^^      ^^      ^^^    ^^^^^^
 

@@ -104,7 +104,7 @@ var ResultIsAny6 = void foo();
 >foo() : boolean
 >      : ^^^^^^^
 >foo : () => boolean
->    : ^^^^^^^^^^^^^
+>    : ^^^^^^       
 
 var ResultIsAny7 = void A.foo();
 >ResultIsAny7 : any
@@ -148,7 +148,7 @@ void foo();
 >foo() : boolean
 >      : ^^^^^^^
 >foo : () => boolean
->    : ^^^^^^^^^^^^^
+>    : ^^^^^^       
 
 void true, false;
 >void true, false : false

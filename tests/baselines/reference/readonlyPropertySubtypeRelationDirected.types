@@ -29,7 +29,7 @@ const one: { readonly a: string } = { a: 'one' };
 
 function doSomething(condition: boolean) {
 >doSomething : (condition: boolean) => { readonly a: string; }
->            : ^         ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^         ^^       ^^^^^^^^^^^^^^^^^^^      ^^^
 >condition : boolean
 >          : ^^^^^^^
 
@@ -37,17 +37,17 @@ function doSomething(condition: boolean) {
     // only treated as readonly (i.e. it will produce a diagnostic if you try to assign to it) based on the order of declarations of `one` and `two` above
     const three = (condition) ? one : two;
 >three : { readonly a: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^      ^^^
 >(condition) ? one : two : { readonly a: string; }
->                        : ^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^^^^^^^^^^^^^^      ^^^
 >(condition) : boolean
 >            : ^^^^^^^
 >condition : boolean
 >          : ^^^^^^^
 >one : { readonly a: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^      ^^^
 >two : { a: string; }
->    : ^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^
 
     three.a = 'foo';
 >three.a = 'foo' : "foo"
@@ -55,7 +55,7 @@ function doSomething(condition: boolean) {
 >three.a : any
 >        : ^^^
 >three : { readonly a: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^      ^^^
 >a : any
 >  : ^^^
 >'foo' : "foo"
@@ -69,7 +69,7 @@ function doSomething(condition: boolean) {
 >three.a : any
 >        : ^^^
 >three : { readonly a: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^      ^^^
 >a : any
 >  : ^^^
 >'foo2' : "foo2"
@@ -77,7 +77,7 @@ function doSomething(condition: boolean) {
 
     return three;
 >three : { readonly a: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^      ^^^
 }
 === two.ts ===
 export {};
@@ -108,7 +108,7 @@ const one: { readonly a: string } = { a: 'one' };
 
 function doSomething(condition: boolean) {
 >doSomething : (condition: boolean) => { readonly a: string; }
->            : ^         ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^         ^^       ^^^^^^^^^^^^^^^^^^^      ^^^
 >condition : boolean
 >          : ^^^^^^^
 
@@ -116,17 +116,17 @@ function doSomething(condition: boolean) {
     // based on the declaration order of `one` and `two`
     const three = (condition) ? two : one;
 >three : { readonly a: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^      ^^^
 >(condition) ? two : one : { readonly a: string; }
->                        : ^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^^^^^^^^^^^^^^      ^^^
 >(condition) : boolean
 >            : ^^^^^^^
 >condition : boolean
 >          : ^^^^^^^
 >two : { a: string; }
->    : ^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^
 >one : { readonly a: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^      ^^^
 
     three.a = 'foo';
 >three.a = 'foo' : "foo"
@@ -134,7 +134,7 @@ function doSomething(condition: boolean) {
 >three.a : any
 >        : ^^^
 >three : { readonly a: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^      ^^^
 >a : any
 >  : ^^^
 >'foo' : "foo"
@@ -148,7 +148,7 @@ function doSomething(condition: boolean) {
 >three.a : any
 >        : ^^^
 >three : { readonly a: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^      ^^^
 >a : any
 >  : ^^^
 >'foo2' : "foo2"
@@ -156,7 +156,7 @@ function doSomething(condition: boolean) {
 
     return three;
 >three : { readonly a: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^      ^^^
 }
 
 === three.ts ===
@@ -188,7 +188,7 @@ const two: { a: string } = { a: 'two' };
 
 function doSomething(condition: boolean) {
 >doSomething : (condition: boolean) => { readonly a: string; }
->            : ^         ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^         ^^       ^^^^^^^^^^^^^^^^^^^      ^^^
 >condition : boolean
 >          : ^^^^^^^
 
@@ -196,17 +196,17 @@ function doSomething(condition: boolean) {
     // only treated as readonly (i.e. it will produce a diagnostic if you try to assign to it) based on the order of declarations of `one` and `two` above
     const three = (condition) ? one : two;
 >three : { readonly a: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^      ^^^
 >(condition) ? one : two : { readonly a: string; }
->                        : ^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^^^^^^^^^^^^^^      ^^^
 >(condition) : boolean
 >            : ^^^^^^^
 >condition : boolean
 >          : ^^^^^^^
 >one : { readonly a: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^      ^^^
 >two : { a: string; }
->    : ^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^
 
     three.a = 'foo';
 >three.a = 'foo' : "foo"
@@ -214,7 +214,7 @@ function doSomething(condition: boolean) {
 >three.a : any
 >        : ^^^
 >three : { readonly a: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^      ^^^
 >a : any
 >  : ^^^
 >'foo' : "foo"
@@ -228,7 +228,7 @@ function doSomething(condition: boolean) {
 >three.a : any
 >        : ^^^
 >three : { readonly a: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^      ^^^
 >a : any
 >  : ^^^
 >'foo2' : "foo2"
@@ -236,7 +236,7 @@ function doSomething(condition: boolean) {
 
     return three;
 >three : { readonly a: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^      ^^^
 }
 
 === four.ts ===
@@ -268,7 +268,7 @@ const two: { a: string } = { a: 'two' };
 
 function doSomething(condition: boolean) {
 >doSomething : (condition: boolean) => { readonly a: string; }
->            : ^         ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^         ^^       ^^^^^^^^^^^^^^^^^^^      ^^^
 >condition : boolean
 >          : ^^^^^^^
 
@@ -276,17 +276,17 @@ function doSomething(condition: boolean) {
     // based on the declaration order of `one` and `two`
     const three = (condition) ? two : one;
 >three : { readonly a: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^      ^^^
 >(condition) ? two : one : { readonly a: string; }
->                        : ^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^^^^^^^^^^^^^^      ^^^
 >(condition) : boolean
 >            : ^^^^^^^
 >condition : boolean
 >          : ^^^^^^^
 >two : { a: string; }
->    : ^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^
 >one : { readonly a: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^      ^^^
 
     three.a = 'foo';
 >three.a = 'foo' : "foo"
@@ -294,7 +294,7 @@ function doSomething(condition: boolean) {
 >three.a : any
 >        : ^^^
 >three : { readonly a: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^      ^^^
 >a : any
 >  : ^^^
 >'foo' : "foo"
@@ -308,7 +308,7 @@ function doSomething(condition: boolean) {
 >three.a : any
 >        : ^^^
 >three : { readonly a: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^      ^^^
 >a : any
 >  : ^^^
 >'foo2' : "foo2"
@@ -316,5 +316,5 @@ function doSomething(condition: boolean) {
 
     return three;
 >three : { readonly a: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^      ^^^
 }

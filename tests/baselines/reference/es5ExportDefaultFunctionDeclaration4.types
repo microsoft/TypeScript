@@ -7,9 +7,9 @@ declare module "bar" {
 
     var before: typeof func;
 >before : () => typeof func
->       : ^^^^^^^^^^^^^^^^^
+>       : ^^^^^^           
 >func : () => typeof func
->     : ^^^^^^^^^^^^^^^^^
+>     : ^^^^^^           
 
     export default function func(): typeof func;
 >func : () => typeof func
@@ -19,7 +19,7 @@ declare module "bar" {
 
     var after: typeof func;
 >after : () => typeof func
->      : ^^^^^^^^^^^^^^^^^
+>      : ^^^^^^           
 >func : () => typeof func
->     : ^^^^^^^^^^^^^^^^^
+>     : ^^^^^^           
 }

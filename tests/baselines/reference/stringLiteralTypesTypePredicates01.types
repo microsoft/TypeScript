@@ -7,7 +7,7 @@ type Kind = "A" | "B"
 
 function kindIs(kind: Kind, is: "A"): kind is "A";
 >kindIs : { (kind: Kind, is: "A"): kind is "A"; (kind: Kind, is: "B"): kind is "B"; }
->       : ^^^    ^^    ^^  ^^   ^^^           ^^^    ^^    ^^  ^^   ^^^^^^^^^^^^^^^^^
+>       : ^^^    ^^    ^^  ^^   ^^^           ^^^    ^^    ^^  ^^   ^^^           ^^^
 >kind : Kind
 >     : ^^^^
 >is : "A"
@@ -15,7 +15,7 @@ function kindIs(kind: Kind, is: "A"): kind is "A";
 
 function kindIs(kind: Kind, is: "B"): kind is "B";
 >kindIs : { (kind: Kind, is: "A"): kind is "A"; (kind: Kind, is: "B"): kind is "B"; }
->       : ^^^    ^^    ^^  ^^   ^^^^^^^^^^^^^^^^^    ^^    ^^  ^^   ^^^           ^^^
+>       : ^^^    ^^    ^^  ^^   ^^^           ^^^    ^^    ^^  ^^   ^^^           ^^^
 >kind : Kind
 >     : ^^^^
 >is : "B"
@@ -23,7 +23,7 @@ function kindIs(kind: Kind, is: "B"): kind is "B";
 
 function kindIs(kind: Kind, is: Kind): boolean {
 >kindIs : { (kind: Kind, is: "A"): kind is "A"; (kind: Kind, is: "B"): kind is "B"; }
->       : ^^^    ^^    ^^  ^^   ^^^^^^^^^^^^^^^^^    ^^    ^^  ^^   ^^^^^^^^^^^^^^^^^
+>       : ^^^    ^^    ^^  ^^   ^^^           ^^^    ^^    ^^  ^^   ^^^           ^^^
 >kind : Kind
 >     : ^^^^
 >is : Kind
@@ -48,7 +48,7 @@ if (kindIs(x, "A")) {
 >kindIs(x, "A") : boolean
 >               : ^^^^^^^
 >kindIs : { (kind: Kind, is: "A"): kind is "A"; (kind: Kind, is: "B"): kind is "B"; }
->       : ^^^    ^^    ^^  ^^   ^^^^^^^^^^^^^^^^^    ^^    ^^  ^^   ^^^^^^^^^^^^^^^^^
+>       : ^^^    ^^    ^^  ^^   ^^^           ^^^    ^^    ^^  ^^   ^^^           ^^^
 >x : Kind
 >  : ^^^^
 >"A" : "A"
@@ -74,7 +74,7 @@ if (!kindIs(x, "B")) {
 >kindIs(x, "B") : boolean
 >               : ^^^^^^^
 >kindIs : { (kind: Kind, is: "A"): kind is "A"; (kind: Kind, is: "B"): kind is "B"; }
->       : ^^^    ^^    ^^  ^^   ^^^^^^^^^^^^^^^^^    ^^    ^^  ^^   ^^^^^^^^^^^^^^^^^
+>       : ^^^    ^^    ^^  ^^   ^^^           ^^^    ^^    ^^  ^^   ^^^           ^^^
 >x : Kind
 >  : ^^^^
 >"B" : "B"

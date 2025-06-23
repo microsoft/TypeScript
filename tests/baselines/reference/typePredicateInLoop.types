@@ -53,7 +53,7 @@ export function y(arg: Type): void {
 >guard(arg) : boolean
 >           : ^^^^^^^
 >guard : (arg: Type) => arg is TypeExt
->      : ^   ^^    ^^^^^^^^^^^^^^^^^^^
+>      : ^   ^^    ^^^^^              
 >arg : Type
 >    : ^^^^
 
@@ -71,7 +71,7 @@ export function y(arg: Type): void {
 >otherFunc(ITEM, arg) : void
 >                     : ^^^^
 >otherFunc : (arg1: Type, arg2: TypeExt) => void
->          : ^    ^^    ^^    ^^       ^^^^^^^^^
+>          : ^    ^^    ^^    ^^       ^^^^^    
 >ITEM : Type
 >     : ^^^^
 >arg : TypeExt

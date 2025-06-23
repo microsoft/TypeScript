@@ -23,7 +23,7 @@ function foo() {
 >o : any
 
         return (o == null) ? create(base) : defineProperties(Object(o), descriptors);
->(o == null) ? create(base) : defineProperties(Object(o), descriptors) : any
+>(o == null) ? create(base) : defineProperties(Object(o), descriptors) : error
 >(o == null) : boolean
 >            : ^^^^^^^
 >o == null : boolean

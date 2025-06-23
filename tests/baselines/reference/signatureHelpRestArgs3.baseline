@@ -1,0 +1,1018 @@
+// === SignatureHelp ===
+=== /tests/cases/fourslash/signatureHelpRestArgs3.ts ===
+// const layers = Object.assign({}, ...[]);
+//                                  ^
+// | ----------------------------------------------------------------------
+// | assign(target: object, **...sources: any[]**): any
+// | Copy the values of all of the enumerable own properties from one or more source objects to a
+// | target object. Returns the target object.
+// | @param target The target object to copy to.
+// | @param sources One or more source objects from which to copy properties
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpRestArgs3.ts",
+      "position": 33,
+      "name": "1"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "assign",
+              "kind": "methodName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "T",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "{",
+              "kind": "punctuation"
+            },
+            {
+              "text": "}",
+              "kind": "punctuation"
+            },
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "U",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "T",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "&",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "U",
+              "kind": "typeParameterName"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "target",
+              "documentation": [
+                {
+                  "text": "The target object to copy to.",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "target",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "T",
+                  "kind": "typeParameterName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "source",
+              "documentation": [
+                {
+                  "text": "The source object from which to copy properties.",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "source",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "U",
+                  "kind": "typeParameterName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Copy the values of all of the enumerable own properties from one or more source objects to a\ntarget object. Returns the target object.",
+              "kind": "text"
+            }
+          ],
+          "tags": [
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "target",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "The target object to copy to.",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "source",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "The source object from which to copy properties.",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "assign",
+              "kind": "methodName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "T",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "{",
+              "kind": "punctuation"
+            },
+            {
+              "text": "}",
+              "kind": "punctuation"
+            },
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "U",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "V",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "T",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "&",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "U",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "&",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "V",
+              "kind": "typeParameterName"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "target",
+              "documentation": [
+                {
+                  "text": "The target object to copy to.",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "target",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "T",
+                  "kind": "typeParameterName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "source1",
+              "documentation": [
+                {
+                  "text": "The first source object from which to copy properties.",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "source1",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "U",
+                  "kind": "typeParameterName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "source2",
+              "documentation": [
+                {
+                  "text": "The second source object from which to copy properties.",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "source2",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "V",
+                  "kind": "typeParameterName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Copy the values of all of the enumerable own properties from one or more source objects to a\ntarget object. Returns the target object.",
+              "kind": "text"
+            }
+          ],
+          "tags": [
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "target",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "The target object to copy to.",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "source1",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "The first source object from which to copy properties.",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "source2",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "The second source object from which to copy properties.",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "assign",
+              "kind": "methodName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "T",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "{",
+              "kind": "punctuation"
+            },
+            {
+              "text": "}",
+              "kind": "punctuation"
+            },
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "U",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "V",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "W",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "T",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "&",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "U",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "&",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "V",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "&",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "W",
+              "kind": "typeParameterName"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "target",
+              "documentation": [
+                {
+                  "text": "The target object to copy to.",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "target",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "T",
+                  "kind": "typeParameterName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "source1",
+              "documentation": [
+                {
+                  "text": "The first source object from which to copy properties.",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "source1",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "U",
+                  "kind": "typeParameterName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "source2",
+              "documentation": [
+                {
+                  "text": "The second source object from which to copy properties.",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "source2",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "V",
+                  "kind": "typeParameterName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "source3",
+              "documentation": [
+                {
+                  "text": "The third source object from which to copy properties.",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "source3",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "W",
+                  "kind": "typeParameterName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Copy the values of all of the enumerable own properties from one or more source objects to a\ntarget object. Returns the target object.",
+              "kind": "text"
+            }
+          ],
+          "tags": [
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "target",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "The target object to copy to.",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "source1",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "The first source object from which to copy properties.",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "source2",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "The second source object from which to copy properties.",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "source3",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "The third source object from which to copy properties.",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "isVariadic": true,
+          "prefixDisplayParts": [
+            {
+              "text": "assign",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "any",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "target",
+              "documentation": [
+                {
+                  "text": "The target object to copy to.",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "target",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "object",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "sources",
+              "documentation": [
+                {
+                  "text": "One or more source objects from which to copy properties",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "sources",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Copy the values of all of the enumerable own properties from one or more source objects to a\ntarget object. Returns the target object.",
+              "kind": "text"
+            }
+          ],
+          "tags": [
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "target",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "The target object to copy to.",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "sources",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "One or more source objects from which to copy properties",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "applicableSpan": {
+        "start": 29,
+        "length": 9
+      },
+      "selectedItemIndex": 3,
+      "argumentIndex": 1,
+      "argumentCount": 1
+    }
+  }
+]

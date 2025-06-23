@@ -32,11 +32,11 @@ class MyComponent extends React.Component<{dataSource: number[], onClick?: any},
 >div : any
 >    : ^^^
 >this.props : Readonly<{ children?: React.ReactNode; }> & Readonly<{ dataSource: number[]; onClick?: any; }>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^   ^^^^
 >this : this
 >     : ^^^^
 >props : Readonly<{ children?: React.ReactNode; }> & Readonly<{ dataSource: number[]; onClick?: any; }>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^   ^^^^
 >className : string
 >          : ^^^^^^
 >div : any

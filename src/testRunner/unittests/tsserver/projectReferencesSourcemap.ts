@@ -1,5 +1,5 @@
-import * as ts from "../../_namespaces/ts";
-import { jsonToReadableText } from "../helpers";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
@@ -7,13 +7,11 @@ import {
     openFilesForSession,
     TestSession,
     TestSessionRequest,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
-    libFile,
     TestServerHost,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: projectReferencesSourcemap:: with project references and tsbuild source map", () => {
     const dependecyLocation = `/user/username/projects/myproject/dependency`;
@@ -69,7 +67,7 @@ fn5();
     const dtsLocation = `${dependecyDeclsLocation}/FnS.d.ts`;
     const dtsMapLocation = `${dependecyDeclsLocation}/FnS.d.ts.map`;
 
-    const files = [dependencyTs, dependencyConfig, mainTs, mainConfig, libFile, randomFile, randomConfig];
+    const files = [dependencyTs, dependencyConfig, mainTs, mainConfig, randomFile, randomConfig];
 
     function changeDtsFile(session: TestSession, content?: string) {
         session.host.writeFile(
@@ -437,7 +435,7 @@ fn5();
             });
 
             it("when projects are not built", () => {
-                const host = createServerHost(files);
+                const host = TestServerHost.createServerHost(files);
                 const session = new TestSession(host);
                 openFilesForSession(options.openFiles, session);
                 runActions(session, options.action);

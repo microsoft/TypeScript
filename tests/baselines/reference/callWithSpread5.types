@@ -29,7 +29,7 @@ fn(...nnnu, x)
 >fn(...nnnu, x) : number
 >               : ^^^^^^
 >fn : (a: number, b: number, bb: number, ...c: number[]) => number
->   : ^ ^^      ^^ ^^      ^^  ^^      ^^^^^ ^^        ^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^      ^^  ^^      ^^^^^ ^^        ^^^^^      
 >...nnnu : number
 >        : ^^^^^^
 >nnnu : [number, number, number?]
@@ -41,7 +41,7 @@ fn(...nntnnnt, x)
 >fn(...nntnnnt, x) : number
 >                  : ^^^^^^
 >fn : (a: number, b: number, bb: number, ...c: number[]) => number
->   : ^ ^^      ^^ ^^      ^^  ^^      ^^^^^ ^^        ^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^      ^^  ^^      ^^^^^ ^^        ^^^^^      
 >...nntnnnt : number
 >           : ^^^^^^
 >nntnnnt : [number, number] | [number, number, number]

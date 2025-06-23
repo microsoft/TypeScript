@@ -39,15 +39,15 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >required1 && console.log('required') : void
 >                                     : ^^^^
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 >console.log('required') : void
 >                        : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >'required' : "required"
 >           : ^^^^^^^^^^
 
@@ -56,19 +56,19 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >1 && required1 && console.log('required') : void
 >                                          : ^^^^
 >1 && required1 : () => boolean
->               : ^^^^^^^^^^^^^
+>               : ^^^^^^       
 >1 : 1
 >  : ^
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 >console.log('required') : void
 >                        : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >'required' : "required"
 >           : ^^^^^^^^^^
 
@@ -77,11 +77,11 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >required1 && required1() : boolean
 >                         : ^^^^^^^
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 >required1() : boolean
 >            : ^^^^^^^
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 
     // ok
     required1 && 1 && required1();
@@ -90,28 +90,28 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >required1 && 1 : 1
 >               : ^
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 >1 : 1
 >  : ^
 >required1() : boolean
 >            : ^^^^^^^
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 
     // ok
     optional && console.log('optional');
 >optional && console.log('optional') : void | undefined
 >                                    : ^^^^^^^^^^^^^^^^
 >optional : (() => boolean) | undefined
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^       ^^^^^^^^^^^^^
 >console.log('optional') : void
 >                        : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >'optional' : "optional"
 >           : ^^^^^^^^^^
 
@@ -120,19 +120,19 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >1 && optional && console.log('optional') : void | undefined
 >                                         : ^^^^^^^^^^^^^^^^
 >1 && optional : (() => boolean) | undefined
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^^       ^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >optional : (() => boolean) | undefined
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^       ^^^^^^^^^^^^^
 >console.log('optional') : void
 >                        : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >'optional' : "optional"
 >           : ^^^^^^^^^^
 
@@ -145,15 +145,15 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >!required1 : false
 >           : ^^^^^
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 >console.log('not required') : void
 >                            : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >'not required' : "not required"
 >               : ^^^^^^^^^^^^^^
 
@@ -164,15 +164,15 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >required1() : boolean
 >            : ^^^^^^^
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 >console.log('required call') : void
 >                             : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >'required call' : "required call"
 >                : ^^^^^^^^^^^^^^^
 
@@ -183,30 +183,30 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >required1 && required2 && required1() : boolean
 >                                      : ^^^^^^^
 >required1 && required2 : () => boolean
->                       : ^^^^^^^^^^^^^
+>                       : ^^^^^^       
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 >required2 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 >required1() : boolean
 >            : ^^^^^^^
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 >required2() : boolean
 >            : ^^^^^^^
 >required2 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 
     // ok
     [].forEach((f: () => void) => f && f.apply(parent, []));
 >[].forEach((f: () => void) => f && f.apply(parent, [])) : void
 >                                                        : ^^^^
 >[].forEach : (callbackfn: (value: never, index: number, array: never[]) => void, thisArg?: any) => void
->           : ^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>           : ^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >[] : never[]
 >   : ^^^^^^^
 >forEach : (callbackfn: (value: never, index: number, array: never[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >(f: () => void) => f && f.apply(parent, []) : (f: () => void) => any
 >                                            : ^ ^^          ^^^^^^^^
 >f : () => void
@@ -214,15 +214,15 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >f && f.apply(parent, []) : any
 >                         : ^^^
 >f : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 >f.apply(parent, []) : any
 >                    : ^^^
 >f.apply : (this: Function, thisArg: any, argArray?: any) => any
->        : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^^^^
+>        : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^   
 >f : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 >apply : (this: Function, thisArg: any, argArray?: any) => any
->      : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^^^^
+>      : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^   
 >parent : Window
 >       : ^^^^^^
 >[] : never[]
@@ -235,23 +235,23 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >required1 && required2 && required1() : boolean
 >                                      : ^^^^^^^
 >required1 && required2 : () => boolean
->                       : ^^^^^^^^^^^^^
+>                       : ^^^^^^       
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 >required2 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 >required1() : boolean
 >            : ^^^^^^^
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 >console.log('foo') : void
 >                   : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >'foo' : "foo"
 >      : ^^^^^
 
@@ -260,7 +260,7 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >required1 && b : boolean
 >               : ^^^^^^^
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 >b : boolean
 >  : ^^^^^^^
     }
@@ -268,9 +268,9 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
     // error
     if (required1 || b) {
 >required1 || b : () => boolean
->               : ^^^^^^^^^^^^^
+>               : ^^^^^^       
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 >b : boolean
 >  : ^^^^^^^
     }
@@ -278,19 +278,19 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
     // error
     if (required1 || required2) {
 >required1 || required2 : () => boolean
->                       : ^^^^^^^^^^^^^
+>                       : ^^^^^^       
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 >required2 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
     }
 
     // error
     if (required1 ?? b) {
 >required1 ?? b : () => boolean
->               : ^^^^^^^^^^^^^
+>               : ^^^^^^       
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 >b : boolean
 >  : ^^^^^^^
     }
@@ -298,11 +298,11 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
     // error
     if (required1 ?? required2) {
 >required1 ?? required2 : () => boolean
->                       : ^^^^^^^^^^^^^
+>                       : ^^^^^^       
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 >required2 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
     }
 
     // error
@@ -314,7 +314,7 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >required1 && b : boolean
 >               : ^^^^^^^
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 >b : boolean
 >  : ^^^^^^^
     }
@@ -324,7 +324,7 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >required1 && b : boolean
 >               : ^^^^^^^
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 >b : boolean
 >  : ^^^^^^^
 
@@ -332,15 +332,15 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >required1() : boolean
 >            : ^^^^^^^
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
     }
 
     // ok
     if (required1 || b) {
 >required1 || b : () => boolean
->               : ^^^^^^^^^^^^^
+>               : ^^^^^^       
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 >b : boolean
 >  : ^^^^^^^
 
@@ -348,15 +348,15 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >required1() : boolean
 >            : ^^^^^^^
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
     }
 
     // ok
     if (required1 ?? b) {
 >required1 ?? b : () => boolean
->               : ^^^^^^^^^^^^^
+>               : ^^^^^^       
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 >b : boolean
 >  : ^^^^^^^
 
@@ -364,7 +364,7 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >required1() : boolean
 >            : ^^^^^^^
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
     }
 
     // ok
@@ -374,13 +374,13 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >b : boolean
 >  : ^^^^^^^
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 
         required1();
 >required1() : boolean
 >            : ^^^^^^^
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
     }
 
     // ok
@@ -392,7 +392,7 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >required1 && b : boolean
 >               : ^^^^^^^
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 >b : boolean
 >  : ^^^^^^^
 
@@ -400,31 +400,31 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >required1() : boolean
 >            : ^^^^^^^
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
     }
 
     // error, extra parens are on purpose here
     if ((required1)) {
 >(required1) : () => boolean
->            : ^^^^^^^^^^^^^
+>            : ^^^^^^       
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
     }
 
     // error
     if (b && (required1 || required2)) {
 >b && (required1 || required2) : false | (() => boolean)
->                              : ^^^^^^^^^^^^^^^^^^^^^^^
+>                              : ^^^^^^^^^^^^^^^       ^
 >b : boolean
 >  : ^^^^^^^
 >(required1 || required2) : () => boolean
->                         : ^^^^^^^^^^^^^
+>                         : ^^^^^^       
 >required1 || required2 : () => boolean
->                       : ^^^^^^^^^^^^^
+>                       : ^^^^^^       
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 >required2 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
     }
 
     // error
@@ -432,13 +432,13 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >(required1 || required2) && b : boolean
 >                              : ^^^^^^^
 >(required1 || required2) : () => boolean
->                         : ^^^^^^^^^^^^^
+>                         : ^^^^^^       
 >required1 || required2 : () => boolean
->                       : ^^^^^^^^^^^^^
+>                       : ^^^^^^       
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 >required2 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 >b : boolean
 >  : ^^^^^^^
     }
@@ -446,17 +446,17 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
     // error
     if (b && (required1 ?? required2)) {
 >b && (required1 ?? required2) : false | (() => boolean)
->                              : ^^^^^^^^^^^^^^^^^^^^^^^
+>                              : ^^^^^^^^^^^^^^^       ^
 >b : boolean
 >  : ^^^^^^^
 >(required1 ?? required2) : () => boolean
->                         : ^^^^^^^^^^^^^
+>                         : ^^^^^^       
 >required1 ?? required2 : () => boolean
->                       : ^^^^^^^^^^^^^
+>                       : ^^^^^^       
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 >required2 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
     }
 
     // error
@@ -464,13 +464,13 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >(required1 ?? required2) && b : boolean
 >                              : ^^^^^^^
 >(required1 ?? required2) : () => boolean
->                         : ^^^^^^^^^^^^^
+>                         : ^^^^^^       
 >required1 ?? required2 : () => boolean
->                       : ^^^^^^^^^^^^^
+>                       : ^^^^^^       
 >required1 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 >required2 : () => boolean
->          : ^^^^^^^^^^^^^
+>          : ^^^^^^       
 >b : boolean
 >  : ^^^^^^^
     }
@@ -521,11 +521,11 @@ function checksConsole() {
 >firebug : any
 >        : ^^^
 >(window.console.error && window.console.table) : (tabularData?: any, properties?: string[]) => void
->                                               : ^           ^^^   ^^          ^^^        ^^^^^^^^^
+>                                               : ^           ^^^   ^^          ^^^        ^^^^^    
 >window.console.error && window.console.table : (tabularData?: any, properties?: string[]) => void
->                                             : ^           ^^^   ^^          ^^^        ^^^^^^^^^
+>                                             : ^           ^^^   ^^          ^^^        ^^^^^    
 >window.console.error : (...data: any[]) => void
->                     : ^^^^    ^^     ^^^^^^^^^
+>                     : ^^^^    ^^     ^^^^^    
 >window.console : Console
 >               : ^^^^^^^
 >window : Window & typeof globalThis
@@ -533,9 +533,9 @@ function checksConsole() {
 >console : Console
 >        : ^^^^^^^
 >error : (...data: any[]) => void
->      : ^^^^    ^^     ^^^^^^^^^
+>      : ^^^^    ^^     ^^^^^    
 >window.console.table : (tabularData?: any, properties?: string[]) => void
->                     : ^           ^^^   ^^          ^^^        ^^^^^^^^^
+>                     : ^           ^^^   ^^          ^^^        ^^^^^    
 >window.console : Console
 >               : ^^^^^^^
 >window : Window & typeof globalThis
@@ -543,7 +543,7 @@ function checksConsole() {
 >console : Console
 >        : ^^^^^^^
 >table : (tabularData?: any, properties?: string[]) => void
->      : ^           ^^^   ^^          ^^^        ^^^^^^^^^
+>      : ^           ^^^   ^^          ^^^        ^^^^^    
 }
 
 function checksPropertyAccess() {
@@ -587,11 +587,11 @@ function checksPropertyAccess() {
 >console.log('x.foo.bar') : void
 >                         : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >'x.foo.bar' : "x.foo.bar"
 >            : ^^^^^^^^^^^
 
@@ -616,11 +616,11 @@ function checksPropertyAccess() {
 >console.log('x.foo.bar') : void
 >                         : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >'x.foo.bar' : "x.foo.bar"
 >            : ^^^^^^^^^^^
 
@@ -691,11 +691,11 @@ function checksPropertyAccess() {
 >A.from && (A.from as Function) !== B.from : boolean
 >                                          : ^^^^^^^
 >A.from : () => string
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >A : typeof A
 >  : ^^^^^^^^
 >from : () => string
->     : ^^^^^^^^^^^^
+>     : ^^^^^^      
 >(A.from as Function) !== B.from : boolean
 >                                : ^^^^^^^
 >(A.from as Function) : Function
@@ -703,17 +703,17 @@ function checksPropertyAccess() {
 >A.from as Function : Function
 >                   : ^^^^^^^^
 >A.from : () => string
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >A : typeof A
 >  : ^^^^^^^^
 >from : () => string
->     : ^^^^^^^^^^^^
+>     : ^^^^^^      
 >B.from : () => string
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >B : typeof B
 >  : ^^^^^^^^
 >from : () => string
->     : ^^^^^^^^^^^^
+>     : ^^^^^^      
 >true : true
 >     : ^^^^
 >false : false
@@ -1013,11 +1013,11 @@ class Foo {
 >console.log('required') : void
 >                        : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >'required' : "required"
 >           : ^^^^^^^^^^
 
@@ -1038,11 +1038,11 @@ class Foo {
 >console.log('required') : void
 >                        : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >'required' : "required"
 >           : ^^^^^^^^^^
 
@@ -1093,23 +1093,23 @@ class Foo {
 >1 && this.optional && console.log('optional') : void | undefined
 >                                              : ^^^^^^^^^^^^^^^^
 >1 && this.optional : (() => boolean) | undefined
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^^^^^^^       ^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >this.optional : (() => boolean) | undefined
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^^       ^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >optional : (() => boolean) | undefined
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^       ^^^^^^^^^^^^^
 >console.log('optional') : void
 >                        : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >'optional' : "optional"
 >           : ^^^^^^^^^^
     }

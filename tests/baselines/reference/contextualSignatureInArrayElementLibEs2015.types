@@ -21,7 +21,7 @@ test([
 >test([  (arg) => {    arg; // number  },]) : void
 >                                           : ^^^^
 >test : (arg: Record<string, (arg: string) => void> | Array<(arg: number) => void>) => void
->     : ^   ^^                                                                    ^^^^^^^^^
+>     : ^   ^^                                                                    ^^^^^    
 >[  (arg) => {    arg; // number  },] : ((arg: any) => void)[]
 >                                     : ^^   ^^^^^^^^^^^^^^^^^
 

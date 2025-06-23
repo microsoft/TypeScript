@@ -25,7 +25,7 @@ async function func(): Promise<void> {
 >before() : void
 >         : ^^^^
 >before : () => void
->       : ^^^^^^^^^^
+>       : ^^^^^^    
 
     var o: { a: boolean; };
 >o : { a: boolean; }
@@ -39,7 +39,7 @@ async function func(): Promise<void> {
 >o.a : boolean
 >    : ^^^^^^^
 >o : { a: boolean; }
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^       ^^^
 >a : boolean
 >  : ^^^^^^^
 >await p : boolean
@@ -51,5 +51,5 @@ async function func(): Promise<void> {
 >after() : void
 >        : ^^^^
 >after : () => void
->      : ^^^^^^^^^^
+>      : ^^^^^^    
 }

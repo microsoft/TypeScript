@@ -22,7 +22,7 @@ A.displayName;
 //// [a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.A = void 0;
+exports.A = A;
 function A() { }
 //// [b.js]
 "use strict";

@@ -1,0 +1,23 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsNoSubstitutionTemplateLiteralNoCrash1.ts ===
+// type Test = `[|{| isInString: true |}T|]/*FIND ALL REFS*/`;
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsNoSubstitutionTemplateLiteralNoCrash1.ts ===
+  // type Test = `[|T|]/*FIND ALL REFS*/`;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "T",
+    "displayParts": [
+     {
+      "text": "`T`",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]

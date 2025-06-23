@@ -17,9 +17,9 @@ var x = f.export();
 >f.export() : string
 >           : ^^^^^^
 >f.export : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >f : Foo
 >  : ^^^
 >export : () => string
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 

@@ -31,7 +31,7 @@ var a =  observableArray<string>();
 >observableArray<string>() : ObservableArray<string>
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^
 >observableArray : <T>() => ObservableArray<T>
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^^^^^^                  
 
 a.push('Some Value');
 >a.push('Some Value') : any

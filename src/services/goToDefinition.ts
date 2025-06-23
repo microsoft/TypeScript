@@ -1,3 +1,4 @@
+import { isContextWithStartAndEndNode } from "./_namespaces/ts.FindAllReferences.js";
 import {
     AssignmentDeclarationKind,
     AssignmentExpression,
@@ -45,6 +46,7 @@ import {
     isBindingElement,
     isCallLikeExpression,
     isCallOrNewExpressionTarget,
+    isClassDeclaration,
     isClassElement,
     isClassExpression,
     isClassLike,
@@ -58,10 +60,13 @@ import {
     isFunctionTypeNode,
     isIdentifier,
     isImportMeta,
+    isImportOrExportSpecifier,
     isJSDocOverrideTag,
     isJsxOpeningLikeElement,
     isJumpStatementTarget,
+    isModifier,
     isModuleSpecifierLike,
+    isNamedDeclaration,
     isNameOfFunctionDeclaration,
     isNewExpressionTarget,
     isObjectBindingPattern,
@@ -105,8 +110,7 @@ import {
     TypeFlags,
     TypeReference,
     unescapeLeadingUnderscores,
-} from "./_namespaces/ts";
-import { isContextWithStartAndEndNode } from "./_namespaces/ts.FindAllReferences";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number, searchOtherFilesOnly?: boolean, stopAtAlias?: boolean): readonly DefinitionInfo[] | undefined {
@@ -126,7 +130,10 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
     const typeChecker = program.getTypeChecker();
 
     if (node.kind === SyntaxKind.OverrideKeyword || (isIdentifier(node) && isJSDocOverrideTag(parent) && parent.tagName === node)) {
-        return getDefinitionFromOverriddenMember(typeChecker, node) || emptyArray;
+        const def = getDefinitionFromOverriddenMember(typeChecker, node);
+        if (def !== undefined || node.kind !== SyntaxKind.OverrideKeyword) {
+            return def || emptyArray;
+        }
     }
 
     // Labels
@@ -135,15 +142,8 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
         return label ? [createDefinitionInfoFromName(typeChecker, label, ScriptElementKind.label, node.text, /*containerName*/ undefined!)] : undefined; // TODO: GH#18217
     }
 
+    // for switch statments
     switch (node.kind) {
-        case SyntaxKind.ReturnKeyword:
-            const functionDeclaration = findAncestor(node.parent, n =>
-                isClassStaticBlockDeclaration(n)
-                    ? "quit"
-                    : isFunctionLikeDeclaration(n)) as FunctionLikeDeclaration | undefined;
-            return functionDeclaration
-                ? [createDefinitionFromSignatureDeclaration(typeChecker, functionDeclaration)]
-                : undefined;
         case SyntaxKind.DefaultKeyword:
             if (!isDefaultClause(node.parent)) {
                 break;
@@ -157,16 +157,15 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
             break;
     }
 
-    if (node.kind === SyntaxKind.AwaitKeyword) {
-        const functionDeclaration = findAncestor(node, n => isFunctionLikeDeclaration(n)) as FunctionLikeDeclaration | undefined;
-        const isAsyncFunction = functionDeclaration && some(functionDeclaration.modifiers, node => node.kind === SyntaxKind.AsyncKeyword);
-        return isAsyncFunction ? [createDefinitionFromSignatureDeclaration(typeChecker, functionDeclaration)] : undefined;
-    }
-
-    if (node.kind === SyntaxKind.YieldKeyword) {
-        const functionDeclaration = findAncestor(node, n => isFunctionLikeDeclaration(n)) as FunctionLikeDeclaration | undefined;
-        const isGeneratorFunction = functionDeclaration && functionDeclaration.asteriskToken;
-        return isGeneratorFunction ? [createDefinitionFromSignatureDeclaration(typeChecker, functionDeclaration)] : undefined;
+    // for keywords related to function or method definitions
+    let findFunctionDecl: ((n: Node) => boolean | "quit") | undefined;
+    switch (node.kind) {
+        case SyntaxKind.ReturnKeyword:
+        case SyntaxKind.AwaitKeyword:
+        case SyntaxKind.YieldKeyword:
+            findFunctionDecl = isFunctionLikeDeclaration;
+            const functionDeclaration = findAncestor(node, findFunctionDecl) as FunctionLikeDeclaration | undefined;
+            return functionDeclaration ? [createDefinitionFromSignatureDeclaration(typeChecker, functionDeclaration)] : undefined;
     }
 
     if (isStaticModifier(node) && isClassStaticBlockDeclaration(node.parent)) {
@@ -199,7 +198,7 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
     if (!symbol && isModuleSpecifierLike(fallbackNode)) {
         // We couldn't resolve the module specifier as an external module, but it could
         // be that module resolution succeeded but the target was not a module.
-        const ref = program.getResolvedModuleFromModuleSpecifier(fallbackNode)?.resolvedModule;
+        const ref = program.getResolvedModuleFromModuleSpecifier(fallbackNode, sourceFile)?.resolvedModule;
         if (ref) {
             return [{
                 name: fallbackNode.text,
@@ -215,6 +214,10 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
         }
     }
 
+    if (isModifier(node) && (isClassElement(parent) || isNamedDeclaration(parent))) {
+        symbol = parent.symbol;
+    }
+
     // Could not find a symbol e.g. node is string or number keyword,
     // or the symbol was an internal symbol and does not have a declaration e.g. undefined symbol
     if (!symbol) {
@@ -225,18 +228,22 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
 
     const calledDeclaration = tryGetSignatureDeclaration(typeChecker, node);
     // Don't go to the component constructor definition for a JSX element, just go to the component definition.
-    if (calledDeclaration && !(isJsxOpeningLikeElement(node.parent) && isConstructorLike(calledDeclaration))) {
+    if (calledDeclaration && !(isJsxOpeningLikeElement(node.parent) && isJsxConstructorLike(calledDeclaration))) {
         const sigInfo = createDefinitionFromSignatureDeclaration(typeChecker, calledDeclaration, failedAliasResolution);
+
         // For a function, if this is the original function definition, return just sigInfo.
         // If this is the original constructor definition, parent is the class.
+        // Here, we filter declarations to not duplicate returned definitions.
+        let declarationFilter: (d: Declaration) => boolean = d => d !== calledDeclaration;
         if (typeChecker.getRootSymbols(symbol).some(s => symbolMatchesSignature(s, calledDeclaration))) {
-            return [sigInfo];
+            if (!isConstructorDeclaration(calledDeclaration)) return [sigInfo];
+
+            // If we found a constructor declaration, we also look for class declarations as definitions
+            declarationFilter = (d: Declaration) => d !== calledDeclaration && (isClassDeclaration(d) || isClassExpression(d));
         }
-        else {
-            const defs = getDefinitionFromSymbol(typeChecker, symbol, node, failedAliasResolution, calledDeclaration) || emptyArray;
-            // For a 'super()' call, put the signature first, else put the variable first.
-            return node.kind === SyntaxKind.SuperKeyword ? [sigInfo, ...defs] : [...defs, sigInfo];
-        }
+        const defs = getDefinitionFromSymbol(typeChecker, symbol, node, failedAliasResolution, declarationFilter) || emptyArray;
+        // For a 'super()' call, put the signature first, else put the variable first.
+        return node.kind === SyntaxKind.SuperKeyword ? [sigInfo, ...defs] : [...defs, sigInfo];
     }
 
     // Because name in short-hand property assignment has two different meanings: property name and property value,
@@ -341,7 +348,7 @@ export function getReferenceAtPosition(sourceFile: SourceFile, position: number,
 
     const typeReferenceDirective = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
     if (typeReferenceDirective) {
-        const reference = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName, typeReferenceDirective.resolutionMode || program.getDefaultResolutionModeForFile(sourceFile))?.resolvedTypeReferenceDirective;
+        const reference = program.getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(typeReferenceDirective, sourceFile)?.resolvedTypeReferenceDirective;
         const file = reference && program.getSourceFile(reference.resolvedFileName!); // TODO:GH#18217
         return file && { reference: typeReferenceDirective, fileName: file.fileName, file, unverified: false };
     }
@@ -355,7 +362,7 @@ export function getReferenceAtPosition(sourceFile: SourceFile, position: number,
     if (sourceFile.imports.length || sourceFile.moduleAugmentations.length) {
         const node = getTouchingToken(sourceFile, position);
         let resolution: ResolvedModuleWithFailedLookupLocations | undefined;
-        if (isModuleSpecifierLike(node) && isExternalModuleNameRelative(node.text) && (resolution = program.getResolvedModuleFromModuleSpecifier(node))) {
+        if (isModuleSpecifierLike(node) && isExternalModuleNameRelative(node.text) && (resolution = program.getResolvedModuleFromModuleSpecifier(node, sourceFile))) {
             const verifiedFileName = resolution.resolvedModule?.resolvedFileName;
             const fileName = verifiedFileName || resolvePath(getDirectoryPath(sourceFile.fileName), node.text);
             return {
@@ -451,7 +458,11 @@ export function getTypeDefinitionAtPosition(typeChecker: TypeChecker, sourceFile
     if (isImportMeta(node.parent) && node.parent.name === node) {
         return definitionFromType(typeChecker.getTypeAtLocation(node.parent), typeChecker, node.parent, /*failedAliasResolution*/ false);
     }
-    const { symbol, failedAliasResolution } = getSymbol(node, typeChecker, /*stopAtAlias*/ false);
+    let { symbol, failedAliasResolution } = getSymbol(node, typeChecker, /*stopAtAlias*/ false);
+    if (isModifier(node) && (isClassElement(node.parent) || isNamedDeclaration(node.parent))) {
+        symbol = node.parent.symbol;
+        failedAliasResolution = false;
+    }
     if (!symbol) return undefined;
 
     const typeAtLocation = typeChecker.getTypeOfSymbolAtLocation(symbol, node);
@@ -539,7 +550,12 @@ function getSymbol(node: Node, checker: TypeChecker, stopAtAlias: boolean | unde
 //   (2) when the aliased symbol is originating from an import.
 //
 function shouldSkipAlias(node: Node, declaration: Node): boolean {
-    if (node.kind !== SyntaxKind.Identifier) {
+    // Note: Import aliases can be strings:
+    //
+    //   import { "an alias" as foo } from "./foo";
+    //   export { foo as "an alias" };
+    //
+    if (node.kind !== SyntaxKind.Identifier && (node.kind !== SyntaxKind.StringLiteral || !isImportOrExportSpecifier(node.parent))) {
         return false;
     }
     if (node.parent === declaration) {
@@ -578,9 +594,10 @@ function isExpandoDeclaration(node: Declaration): boolean {
     return !!containingAssignment && getAssignmentDeclarationKind(containingAssignment) === AssignmentDeclarationKind.Property;
 }
 
-function getDefinitionFromSymbol(typeChecker: TypeChecker, symbol: Symbol, node: Node, failedAliasResolution?: boolean, excludeDeclaration?: Node): DefinitionInfo[] | undefined {
-    const filteredDeclarations = filter(symbol.declarations, d => d !== excludeDeclaration);
-    const signatureDefinition = getConstructSignatureDefinition() || getCallSignatureDefinition();
+function getDefinitionFromSymbol(typeChecker: TypeChecker, symbol: Symbol, node: Node, failedAliasResolution?: boolean, declarationFilter?: (d: Declaration) => boolean): DefinitionInfo[] | undefined {
+    const filteredDeclarations = declarationFilter !== undefined ? filter(symbol.declarations, declarationFilter) : symbol.declarations;
+    // If we have a declaration filter, we are looking for specific declaration(s), so we should not return prematurely.
+    const signatureDefinition = !declarationFilter && (getConstructSignatureDefinition() || getCallSignatureDefinition());
     if (signatureDefinition) {
         return signatureDefinition;
     }
@@ -710,8 +727,7 @@ function createDefinitionFromSignatureDeclaration(typeChecker: TypeChecker, decl
     return createDefinitionInfo(decl, typeChecker, decl.symbol, decl, /*unverified*/ false, failedAliasResolution);
 }
 
-/** @internal */
-export function findReferenceInPosition(refs: readonly FileReference[], pos: number): FileReference | undefined {
+function findReferenceInPosition(refs: readonly FileReference[], pos: number): FileReference | undefined {
     return find(refs, ref => textRangeContainsPositionInclusive(ref, pos));
 }
 
@@ -741,10 +757,11 @@ function tryGetSignatureDeclaration(typeChecker: TypeChecker, node: Node): Signa
     return tryCast(signature && signature.declaration, (d): d is SignatureDeclaration => isFunctionLike(d) && !isFunctionTypeNode(d));
 }
 
-function isConstructorLike(node: Node): boolean {
+function isJsxConstructorLike(node: Node): boolean {
     switch (node.kind) {
         case SyntaxKind.Constructor:
         case SyntaxKind.ConstructorType:
+        case SyntaxKind.CallSignature:
         case SyntaxKind.ConstructSignature:
             return true;
         default:

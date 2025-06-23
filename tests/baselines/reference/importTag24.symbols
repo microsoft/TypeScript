@@ -1,0 +1,40 @@
+//// [tests/cases/conformance/jsdoc/importTag24.ts] ////
+
+=== types.d.ts ===
+export type Foo = string;
+>Foo : Symbol(Foo, Decl(types.d.ts, 0, 0))
+
+=== a.js ===
+/** @import { Foo } from './types.d.ts' */
+
+function f1() { return undefined; }
+>f1 : Symbol(f1, Decl(a.js, 0, 0))
+>undefined : Symbol(undefined)
+
+export function f2() {
+>f2 : Symbol(f2, Decl(a.js, 2, 35))
+
+    /** @type {Set<Foo>} */
+    const foo = new Set([ 'a', 'b' ]);
+>foo : Symbol(foo, Decl(a.js, 6, 9))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+
+    return foo;
+>foo : Symbol(foo, Decl(a.js, 6, 9))
+}
+
+function f3() { return undefined; }
+>f3 : Symbol(f3, Decl(a.js, 8, 1))
+>undefined : Symbol(undefined)
+
+/** @type {Set<Foo>} */
+export const foo = new Set([ 'a', 'b' ]);
+>foo : Symbol(foo, Decl(a.js, 13, 12))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+
+/**
+ * @returns {Foo}
+ */
+function f4() { return 1; }
+>f4 : Symbol(f4, Decl(a.js, 13, 41))
+

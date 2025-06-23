@@ -7,6 +7,6 @@ class Outer
 {
 static public intI<T>() {}
 >intI : <T>() => void
->     : ^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^
 }
 

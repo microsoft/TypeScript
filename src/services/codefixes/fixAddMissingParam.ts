@@ -1,4 +1,13 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    createImportAdder,
+    ImportAdder,
+    importSymbols,
+    registerCodeFix,
+    tryGetAutoImportableReferenceFromTypeNode,
+} from "../_namespaces/ts.codefix.js";
+import {
     append,
     ArrowFunction,
     CodeFixAction,
@@ -12,9 +21,12 @@ import {
     FunctionDeclaration,
     FunctionExpression,
     FunctionLikeDeclaration,
+    getEmitScriptTarget,
     getNameOfAccessExpression,
     getNameOfDeclaration,
+    getSourceFileOfNode,
     getTokenAtPosition,
+    InternalNodeBuilderFlags,
     isAccessExpression,
     isCallExpression,
     isIdentifier,
@@ -22,6 +34,7 @@ import {
     isPropertyDeclaration,
     isSourceFileFromLibrary,
     isVariableDeclaration,
+    LanguageServiceHost,
     last,
     lastOrUndefined,
     length,
@@ -32,6 +45,7 @@ import {
     ParameterDeclaration,
     Program,
     QuestionToken,
+    ScriptTarget,
     some,
     SourceFile,
     SyntaxKind,
@@ -39,12 +53,8 @@ import {
     Type,
     TypeChecker,
     TypeNode,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+    UserPreferences,
+} from "../_namespaces/ts.js";
 
 const addMissingParamFixId = "addMissingParam";
 const addOptionalParamFixId = "addOptionalParam";
@@ -65,7 +75,7 @@ registerCodeFix({
                 actions,
                 createCodeFixAction(
                     addMissingParamFixId,
-                    textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, declarations, newParameters)),
+                    textChanges.ChangeTracker.with(context, t => doChange(t, context.program, context.preferences, context.host, declarations, newParameters)),
                     [length(newParameters) > 1 ? Diagnostics.Add_missing_parameters_to_0 : Diagnostics.Add_missing_parameter_to_0, name],
                     addMissingParamFixId,
                     Diagnostics.Add_all_missing_parameters,
@@ -78,7 +88,7 @@ registerCodeFix({
                 actions,
                 createCodeFixAction(
                     addOptionalParamFixId,
-                    textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, declarations, newOptionalParameters)),
+                    textChanges.ChangeTracker.with(context, t => doChange(t, context.program, context.preferences, context.host, declarations, newOptionalParameters)),
                     [length(newOptionalParameters) > 1 ? Diagnostics.Add_optional_parameters_to_0 : Diagnostics.Add_optional_parameter_to_0, name],
                     addOptionalParamFixId,
                     Diagnostics.Add_all_optional_parameters,
@@ -94,10 +104,10 @@ registerCodeFix({
             if (info) {
                 const { declarations, newParameters, newOptionalParameters } = info;
                 if (context.fixId === addMissingParamFixId) {
-                    doChange(changes, context.sourceFile, declarations, newParameters);
+                    doChange(changes, context.program, context.preferences, context.host, declarations, newParameters);
                 }
                 if (context.fixId === addOptionalParamFixId) {
-                    doChange(changes, context.sourceFile, declarations, newOptionalParameters);
+                    doChange(changes, context.program, context.preferences, context.host, declarations, newOptionalParameters);
                 }
             }
         }),
@@ -212,23 +222,28 @@ function tryGetName(node: FunctionLikeDeclaration) {
 }
 
 function typeToTypeNode(checker: TypeChecker, type: Type, enclosingDeclaration: Node) {
-    return checker.typeToTypeNode(checker.getWidenedType(type), enclosingDeclaration, NodeBuilderFlags.NoTruncation)
+    return checker.typeToTypeNode(checker.getWidenedType(type), enclosingDeclaration, NodeBuilderFlags.NoTruncation, InternalNodeBuilderFlags.AllowUnresolvedNames)
         ?? factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword);
 }
 
 function doChange(
     changes: textChanges.ChangeTracker,
-    sourceFile: SourceFile,
+    program: Program,
+    preferences: UserPreferences,
+    host: LanguageServiceHost,
     declarations: ConvertibleSignatureDeclaration[],
     newParameters: ParameterInfo[],
 ) {
+    const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
     forEach(declarations, declaration => {
+        const sourceFile = getSourceFileOfNode(declaration);
+        const importAdder = createImportAdder(sourceFile, program, preferences, host);
         if (length(declaration.parameters)) {
             changes.replaceNodeRangeWithNodes(
                 sourceFile,
                 first(declaration.parameters),
                 last(declaration.parameters),
-                updateParameters(declaration, newParameters),
+                updateParameters(importAdder, scriptTarget, declaration, newParameters),
                 {
                     joiner: ", ",
                     indentation: 0,
@@ -238,7 +253,7 @@ function doChange(
             );
         }
         else {
-            forEach(updateParameters(declaration, newParameters), (parameter, index) => {
+            forEach(updateParameters(importAdder, scriptTarget, declaration, newParameters), (parameter, index) => {
                 if (length(declaration.parameters) === 0 && index === 0) {
                     changes.insertNodeAt(sourceFile, declaration.parameters.end, parameter);
                 }
@@ -247,6 +262,7 @@ function doChange(
                 }
             });
         }
+        importAdder.writeFixes(changes);
     });
 }
 
@@ -262,7 +278,12 @@ function isConvertibleSignatureDeclaration(node: Node): node is ConvertibleSigna
     }
 }
 
-function updateParameters(node: ConvertibleSignatureDeclaration, newParameters: readonly ParameterInfo[]) {
+function updateParameters(
+    importAdder: ImportAdder,
+    scriptTarget: ScriptTarget,
+    node: ConvertibleSignatureDeclaration,
+    newParameters: readonly ParameterInfo[],
+) {
     const parameters = map(node.parameters, p =>
         factory.createParameterDeclaration(
             p.modifiers,
@@ -283,7 +304,7 @@ function updateParameters(node: ConvertibleSignatureDeclaration, newParameters: 
                 declaration.dotDotDotToken,
                 declaration.name,
                 prev && prev.questionToken ? factory.createToken(SyntaxKind.QuestionToken) : declaration.questionToken,
-                declaration.type,
+                getParameterType(importAdder, declaration.type, scriptTarget),
                 declaration.initializer,
             ),
         );
@@ -324,4 +345,13 @@ function createParameter(name: string, type: TypeNode, questionToken: QuestionTo
 
 function isOptionalPos(declarations: ConvertibleSignatureDeclaration[], pos: number) {
     return length(declarations) && some(declarations, d => pos < length(d.parameters) && !!d.parameters[pos] && d.parameters[pos].questionToken === undefined);
+}
+
+function getParameterType(importAdder: ImportAdder, typeNode: TypeNode | undefined, scriptTarget: ScriptTarget) {
+    const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
+    if (importableReference) {
+        importSymbols(importAdder, importableReference.symbols);
+        return importableReference.typeNode;
+    }
+    return typeNode;
 }

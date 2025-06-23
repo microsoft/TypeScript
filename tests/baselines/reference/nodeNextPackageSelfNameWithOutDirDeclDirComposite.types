@@ -9,11 +9,11 @@ me.thing();
 >me.thing() : void
 >           : ^^^^
 >me.thing : () => void
->         : ^^^^^^^^^^
+>         : ^^^^^^    
 >me : typeof me
 >   : ^^^^^^^^^
 >thing : () => void
->      : ^^^^^^^^^^
+>      : ^^^^^^    
 
 export function thing(): void {}
 >thing : () => void

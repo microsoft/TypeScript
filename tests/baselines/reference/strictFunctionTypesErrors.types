@@ -30,99 +30,99 @@ declare let f4: (x: string) => string;
 
 f1 = f2;  // Ok
 >f1 = f2 : (x: Object) => string
->        : ^ ^^      ^^^^^^^^^^^
+>        : ^ ^^      ^^^^^      
 >f1 : (x: Object) => Object
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >f2 : (x: Object) => string
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 
 f1 = f3;  // Error
 >f1 = f3 : (x: string) => Object
->        : ^ ^^      ^^^^^^^^^^^
+>        : ^ ^^      ^^^^^      
 >f1 : (x: Object) => Object
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >f3 : (x: string) => Object
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 
 f1 = f4;  // Error
 >f1 = f4 : (x: string) => string
->        : ^ ^^      ^^^^^^^^^^^
+>        : ^ ^^      ^^^^^      
 >f1 : (x: Object) => Object
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >f4 : (x: string) => string
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 
 f2 = f1;  // Error
 >f2 = f1 : (x: Object) => Object
->        : ^ ^^      ^^^^^^^^^^^
+>        : ^ ^^      ^^^^^      
 >f2 : (x: Object) => string
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >f1 : (x: Object) => Object
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 
 f2 = f3;  // Error
 >f2 = f3 : (x: string) => Object
->        : ^ ^^      ^^^^^^^^^^^
+>        : ^ ^^      ^^^^^      
 >f2 : (x: Object) => string
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >f3 : (x: string) => Object
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 
 f2 = f4;  // Error
 >f2 = f4 : (x: string) => string
->        : ^ ^^      ^^^^^^^^^^^
+>        : ^ ^^      ^^^^^      
 >f2 : (x: Object) => string
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >f4 : (x: string) => string
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 
 f3 = f1;  // Ok
 >f3 = f1 : (x: Object) => Object
->        : ^ ^^      ^^^^^^^^^^^
+>        : ^ ^^      ^^^^^      
 >f3 : (x: string) => Object
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >f1 : (x: Object) => Object
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 
 f3 = f2;  // Ok
 >f3 = f2 : (x: Object) => string
->        : ^ ^^      ^^^^^^^^^^^
+>        : ^ ^^      ^^^^^      
 >f3 : (x: string) => Object
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >f2 : (x: Object) => string
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 
 f3 = f4;  // Ok
 >f3 = f4 : (x: string) => string
->        : ^ ^^      ^^^^^^^^^^^
+>        : ^ ^^      ^^^^^      
 >f3 : (x: string) => Object
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >f4 : (x: string) => string
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 
 f4 = f1;  // Error
 >f4 = f1 : (x: Object) => Object
->        : ^ ^^      ^^^^^^^^^^^
+>        : ^ ^^      ^^^^^      
 >f4 : (x: string) => string
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >f1 : (x: Object) => Object
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 
 f4 = f2;  // Ok
 >f4 = f2 : (x: Object) => string
->        : ^ ^^      ^^^^^^^^^^^
+>        : ^ ^^      ^^^^^      
 >f4 : (x: string) => string
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >f2 : (x: Object) => string
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 
 f4 = f3;  // Error
 >f4 = f3 : (x: string) => Object
->        : ^ ^^      ^^^^^^^^^^^
+>        : ^ ^^      ^^^^^      
 >f4 : (x: string) => string
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >f3 : (x: string) => Object
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 
 type Func<T, U> = (x: T) => U;
 >Func : Func<T, U>
@@ -606,19 +606,19 @@ declare let fc2: (f: (x: Dog) => Dog) => void;
 
 fc1 = fc2;  // Error
 >fc1 = fc2 : (f: (x: Dog) => Dog) => void
->          : ^ ^^               ^^^^^^^^^
+>          : ^ ^^               ^^^^^    
 >fc1 : (f: (x: Animal) => Animal) => void
->    : ^ ^^                     ^^^^^^^^^
+>    : ^ ^^                     ^^^^^    
 >fc2 : (f: (x: Dog) => Dog) => void
->    : ^ ^^               ^^^^^^^^^
+>    : ^ ^^               ^^^^^    
 
 fc2 = fc1;  // Error
 >fc2 = fc1 : (f: (x: Animal) => Animal) => void
->          : ^ ^^                     ^^^^^^^^^
+>          : ^ ^^                     ^^^^^    
 >fc2 : (f: (x: Dog) => Dog) => void
->    : ^ ^^               ^^^^^^^^^
+>    : ^ ^^               ^^^^^    
 >fc1 : (f: (x: Animal) => Animal) => void
->    : ^ ^^                     ^^^^^^^^^
+>    : ^ ^^                     ^^^^^    
 
 // Verify that callback parameters aren't loosely checked when types
 // originate in method declarations
@@ -649,43 +649,43 @@ namespace n1 {
     }
     declare let f1: (cb: typeof Foo.f1) => void;
 >f1 : (cb: (x: Animal) => Animal) => void
->   : ^  ^^^ ^^      ^^^^^^^^^^^^^^^^    
+>   : ^  ^^^ ^^      ^^^^^      ^^^^^    
 >cb : (x: Animal) => Animal
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >Foo.f1 : (x: Animal) => Animal
->       : ^ ^^      ^^^^^^^^^^^
+>       : ^ ^^      ^^^^^      
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 >f1 : (x: Animal) => Animal
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 
     declare let f2: (cb: typeof Foo.f2) => void;
 >f2 : (cb: (x: Dog) => Animal) => void
->   : ^  ^^^ ^^   ^^^^^^^^^^^^^^^^    
+>   : ^  ^^^ ^^   ^^^^^      ^^^^^    
 >cb : (x: Dog) => Animal
->   : ^ ^^   ^^^^^^^^^^^
+>   : ^ ^^   ^^^^^      
 >Foo.f2 : (x: Dog) => Animal
->       : ^ ^^   ^^^^^^^^^^^
+>       : ^ ^^   ^^^^^      
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 >f2 : (x: Dog) => Animal
->   : ^ ^^   ^^^^^^^^^^^
+>   : ^ ^^   ^^^^^      
 
     f1 = f2;
 >f1 = f2 : (cb: (x: Dog) => Animal) => void
->        : ^  ^^^ ^^   ^^^^^^^^^^^^^^^^^^^^
+>        : ^  ^^^ ^^   ^^^^^      ^^^^^    
 >f1 : (cb: (x: Animal) => Animal) => void
->   : ^  ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^
+>   : ^  ^^^ ^^      ^^^^^      ^^^^^    
 >f2 : (cb: (x: Dog) => Animal) => void
->   : ^  ^^^ ^^   ^^^^^^^^^^^^^^^^^^^^
+>   : ^  ^^^ ^^   ^^^^^      ^^^^^    
 
     f2 = f1;  // Error
 >f2 = f1 : (cb: (x: Animal) => Animal) => void
->        : ^  ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^
+>        : ^  ^^^ ^^      ^^^^^      ^^^^^    
 >f2 : (cb: (x: Dog) => Animal) => void
->   : ^  ^^^ ^^   ^^^^^^^^^^^^^^^^^^^^
+>   : ^  ^^^ ^^   ^^^^^      ^^^^^    
 >f1 : (cb: (x: Animal) => Animal) => void
->   : ^  ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^
+>   : ^  ^^^ ^^      ^^^^^      ^^^^^    
 }
 
 namespace n2 {
@@ -714,17 +714,17 @@ namespace n2 {
 
     f1 = f2;
 >f1 = f2 : (cb: (x: Dog) => Animal) => void
->        : ^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^  ^^^ ^^^^^^^^^^^^^^^^^^^^^    
 >f1 : (cb: (x: Animal) => Animal) => void
->   : ^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^    
 >f2 : (cb: (x: Dog) => Animal) => void
->   : ^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^  ^^^ ^^^^^^^^^^^^^^^^^^^^^    
 
     f2 = f1;  // Error
 >f2 = f1 : (cb: (x: Animal) => Animal) => void
->        : ^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^    
 >f2 : (cb: (x: Dog) => Animal) => void
->   : ^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^  ^^^ ^^^^^^^^^^^^^^^^^^^^^    
 >f1 : (cb: (x: Animal) => Animal) => void
->   : ^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^    
 }

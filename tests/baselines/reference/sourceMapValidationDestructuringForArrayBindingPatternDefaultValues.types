@@ -104,11 +104,11 @@ for (let [, nameA ="name"] = robotA, i = 0; i < 1; i++) {
 >console.log(nameA) : void
 >                   : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >nameA : string
 >      : ^^^^^^
 }
@@ -142,11 +142,11 @@ for (let [, nameA = "name"] = getRobot(), i = 0; i < 1; i++) {
 >console.log(nameA) : void
 >                   : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >nameA : string
 >      : ^^^^^^
 }
@@ -184,11 +184,11 @@ for (let [, nameA = "name"] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 >console.log(nameA) : void
 >                   : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >nameA : string
 >      : ^^^^^^
 }
@@ -236,11 +236,11 @@ for (let [, [
 >console.log(primarySkillA) : void
 >                           : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >primarySkillA : string
 >              : ^^^^^^
 }
@@ -290,11 +290,11 @@ for (let [, [
 >console.log(primarySkillA) : void
 >                           : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >primarySkillA : string
 >              : ^^^^^^
 }
@@ -350,11 +350,11 @@ for (let [, [
 >console.log(primarySkillA) : void
 >                           : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >primarySkillA : string
 >              : ^^^^^^
 }
@@ -387,11 +387,11 @@ for (let [numberB = -1] = robotA, i = 0; i < 1; i++) {
 >console.log(numberB) : void
 >                     : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >numberB : number
 >        : ^^^^^^
 }
@@ -425,11 +425,11 @@ for (let [numberB = -1] = getRobot(), i = 0; i < 1; i++) {
 >console.log(numberB) : void
 >                     : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >numberB : number
 >        : ^^^^^^
 }
@@ -467,11 +467,11 @@ for (let [numberB = -1] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 >console.log(numberB) : void
 >                     : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >numberB : number
 >        : ^^^^^^
 }
@@ -501,11 +501,11 @@ for (let [nameB = "name"] = multiRobotA, i = 0; i < 1; i++) {
 >console.log(nameB) : void
 >                   : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >nameB : string
 >      : ^^^^^^
 }
@@ -537,11 +537,11 @@ for (let [nameB = "name"] = getMultiRobot(), i = 0; i < 1; i++) {
 >console.log(nameB) : void
 >                   : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >nameB : string
 >      : ^^^^^^
 }
@@ -579,11 +579,11 @@ for (let [nameB = "name"] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i
 >console.log(nameB) : void
 >                   : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >nameB : string
 >      : ^^^^^^
 }
@@ -624,11 +624,11 @@ for (let [numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = robotA, i = 0; i 
 >console.log(nameA2) : void
 >                    : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >nameA2 : string
 >       : ^^^^^^
 }
@@ -670,11 +670,11 @@ for (let [numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = getRobot(), i = 0
 >console.log(nameA2) : void
 >                    : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >nameA2 : string
 >       : ^^^^^^
 }
@@ -720,11 +720,11 @@ for (let [numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = [2, "trimmer", "t
 >console.log(nameA2) : void
 >                    : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >nameA2 : string
 >       : ^^^^^^
 }
@@ -778,11 +778,11 @@ for (let
 >console.log(nameMA) : void
 >                    : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >nameMA : string
 >       : ^^^^^^
 }
@@ -837,11 +837,11 @@ for (let [nameMA = "noName",
 >console.log(nameMA) : void
 >                    : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >nameMA : string
 >       : ^^^^^^
 }
@@ -902,11 +902,11 @@ for (let [nameMA = "noName",
 >console.log(nameMA) : void
 >                    : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >nameMA : string
 >       : ^^^^^^
 }
@@ -941,11 +941,11 @@ for (let [numberA3 = -1, ...robotAInfo] = robotA, i = 0; i < 1; i++) {
 >console.log(numberA3) : void
 >                      : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >numberA3 : number
 >         : ^^^^^^
 }
@@ -981,11 +981,11 @@ for (let [numberA3 = -1, ...robotAInfo] = getRobot(), i = 0; i < 1; i++) {
 >console.log(numberA3) : void
 >                      : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >numberA3 : number
 >         : ^^^^^^
 }
@@ -1025,11 +1025,11 @@ for (let [numberA3 = -1, ...robotAInfo] = [2, "trimmer", "trimming"], i = 0; i <
 >console.log(numberA3) : void
 >                      : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >numberA3 : number
 >         : ^^^^^^
 }

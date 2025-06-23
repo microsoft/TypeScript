@@ -1,4 +1,4 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /users/username/projects/project useCaseSensitiveFileNames:: false
 Input::
 //// [/users/username/projects/project/moduleFile.ts]
 export function bar() { };
@@ -9,7 +9,7 @@ import * as T from "./moduleFile"; T.bar();
 //// [/users/username/projects/project/tsconfig.json]
 {}
 
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -21,9 +21,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -w -p /users/username/projects/project/tsconfig.json
+/home/src/tslibs/TS/Lib/tsc.js -w -p /users/username/projects/project/tsconfig.json
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -51,15 +53,11 @@ T.bar();
 PolledWatches::
 /users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/users/username/projects/package.json: *new*
-  {"pollingInterval":2000}
 /users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
-/users/username/projects/project/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /users/username/projects/project/file1.ts: *new*
   {}
@@ -83,17 +81,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /users/username/projects/project/moduleFile.ts
 /users/username/projects/project/file1.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /users/username/projects/project/moduleFile.ts
 /users/username/projects/project/file1.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /users/username/projects/project/modulefile.ts (used version)
 /users/username/projects/project/file1.ts (used version)
 
@@ -119,7 +117,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96musers/username/projects/project/file1.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS2307: [0mCannot find module './moduleFile' or its corresponding type declarations.
+[96mfile1.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS2307: [0mCannot find module './moduleFile' or its corresponding type declarations.
 
 [7m1[0m import * as T from "./moduleFile"; T.bar();
 [7m [0m [91m                   ~~~~~~~~~~~~~~[0m
@@ -141,17 +139,13 @@ function bar() { }
 PolledWatches::
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/package.json:
-  {"pollingInterval":2000}
 /users/username/projects/project/moduleFile: *new*
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/project/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
-/a/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /users/username/projects/project: *new*
   {}
@@ -186,7 +180,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /users/username/projects/project/file1.ts
 /users/username/projects/project/moduleFile1.ts
 
@@ -216,6 +210,7 @@ Before running Timeout callback:: count: 2
 7: timerToInvalidateFailedLookupResolutions
 8: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 
 Timeout callback:: count: 1
@@ -225,6 +220,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 9: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -247,19 +243,15 @@ function bar() { }
 PolledWatches::
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/package.json:
-  {"pollingInterval":2000}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/project/package.json:
-  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /users/username/projects/project/moduleFile:
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /users/username/projects/project/file1.ts:
   {}
@@ -290,7 +282,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /users/username/projects/project/moduleFile.ts
 /users/username/projects/project/file1.ts
 

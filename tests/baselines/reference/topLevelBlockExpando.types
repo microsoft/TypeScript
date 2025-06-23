@@ -21,21 +21,21 @@ interface Person {
 >Math.floor(Math.random() * 6) : number
 >                              : ^^^^^^
 >Math.floor : (x: number) => number
->           : ^ ^^      ^^^^^^^^^^^
+>           : ^ ^^      ^^^^^      
 >Math : Math
 >     : ^^^^
 >floor : (x: number) => number
->      : ^ ^^      ^^^^^^^^^^^
+>      : ^ ^^      ^^^^^      
 >Math.random() * 6 : number
 >                  : ^^^^^^
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >6 : 6
 >  : ^
 
@@ -95,21 +95,21 @@ const dice1 = () => Math.floor(Math.random() * 6);
 >Math.floor(Math.random() * 6) : number
 >                              : ^^^^^^
 >Math.floor : (x: number) => number
->           : ^ ^^      ^^^^^^^^^^^
+>           : ^ ^^      ^^^^^      
 >Math : Math
 >     : ^^^^
 >floor : (x: number) => number
->      : ^ ^^      ^^^^^^^^^^^
+>      : ^ ^^      ^^^^^      
 >Math.random() * 6 : number
 >                  : ^^^^^^
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >6 : 6
 >  : ^
 
@@ -138,21 +138,21 @@ dice1.last = 'Calrissian';
 >Math.floor(Math.random() * 6) : number
 >                              : ^^^^^^
 >Math.floor : (x: number) => number
->           : ^ ^^      ^^^^^^^^^^^
+>           : ^ ^^      ^^^^^      
 >Math : Math
 >     : ^^^^
 >floor : (x: number) => number
->      : ^ ^^      ^^^^^^^^^^^
+>      : ^ ^^      ^^^^^      
 >Math.random() * 6 : number
 >                  : ^^^^^^
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >6 : 6
 >  : ^
 

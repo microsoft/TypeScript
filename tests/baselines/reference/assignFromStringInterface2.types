@@ -58,19 +58,19 @@ interface NotString {
 
     match(regexp: string): RegExpMatchArray;
 >match : { (regexp: string): RegExpMatchArray; (regexp: RegExp): RegExpMatchArray; }
->      : ^^^      ^^      ^^^                ^^^      ^^      ^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^      ^^      ^^^                ^^^      ^^      ^^^                ^^^
 >regexp : string
 >       : ^^^^^^
 
     match(regexp: RegExp): RegExpMatchArray;
 >match : { (regexp: string): RegExpMatchArray; (regexp: RegExp): RegExpMatchArray; }
->      : ^^^      ^^      ^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^                ^^^
+>      : ^^^      ^^      ^^^                ^^^      ^^      ^^^                ^^^
 >regexp : RegExp
 >       : ^^^^^^
 
     replace(searchValue: string, replaceValue: string): string;
 >replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
->        : ^^^           ^^      ^^            ^^      ^^^      ^^^           ^^      ^^            ^^                                             ^^^^^^^^^^^^           ^^      ^^            ^^      ^^^^^^^^^^^^           ^^      ^^            ^^                                             ^^^^^^^^^^^^
+>        : ^^^           ^^      ^^            ^^      ^^^      ^^^           ^^      ^^            ^^                                             ^^^      ^^^           ^^      ^^            ^^      ^^^      ^^^           ^^      ^^            ^^                                             ^^^      ^^^
 >searchValue : string
 >            : ^^^^^^
 >replaceValue : string
@@ -78,7 +78,7 @@ interface NotString {
 
     replace(searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string;
 >replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
->        : ^^^           ^^      ^^            ^^      ^^^^^^^^^^^^           ^^      ^^            ^^                                             ^^^      ^^^           ^^      ^^            ^^      ^^^^^^^^^^^^           ^^      ^^            ^^                                             ^^^^^^^^^^^^
+>        : ^^^           ^^      ^^            ^^      ^^^      ^^^           ^^      ^^            ^^                                             ^^^      ^^^           ^^      ^^            ^^      ^^^      ^^^           ^^      ^^            ^^                                             ^^^      ^^^
 >searchValue : string
 >            : ^^^^^^
 >replaceValue : (substring: string, ...args: any[]) => string
@@ -90,7 +90,7 @@ interface NotString {
 
     replace(searchValue: RegExp, replaceValue: string): string;
 >replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
->        : ^^^           ^^      ^^            ^^      ^^^^^^^^^^^^           ^^      ^^            ^^                                             ^^^^^^^^^^^^           ^^      ^^            ^^      ^^^      ^^^           ^^      ^^            ^^                                             ^^^^^^^^^^^^
+>        : ^^^           ^^      ^^            ^^      ^^^      ^^^           ^^      ^^            ^^                                             ^^^      ^^^           ^^      ^^            ^^      ^^^      ^^^           ^^      ^^            ^^                                             ^^^      ^^^
 >searchValue : RegExp
 >            : ^^^^^^
 >replaceValue : string
@@ -98,7 +98,7 @@ interface NotString {
 
     replace(searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string;
 >replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
->        : ^^^           ^^      ^^            ^^      ^^^^^^^^^^^^           ^^      ^^            ^^                                             ^^^^^^^^^^^^           ^^      ^^            ^^      ^^^^^^^^^^^^           ^^      ^^            ^^                                             ^^^      ^^^
+>        : ^^^           ^^      ^^            ^^      ^^^      ^^^           ^^      ^^            ^^                                             ^^^      ^^^           ^^      ^^            ^^      ^^^      ^^^           ^^      ^^            ^^                                             ^^^      ^^^
 >searchValue : RegExp
 >            : ^^^^^^
 >replaceValue : (substring: string, ...args: any[]) => string
@@ -110,13 +110,13 @@ interface NotString {
 
     search(regexp: string): number;
 >search : { (regexp: string): number; (regexp: RegExp): number; }
->       : ^^^      ^^      ^^^      ^^^      ^^      ^^^^^^^^^^^^
+>       : ^^^      ^^      ^^^      ^^^      ^^      ^^^      ^^^
 >regexp : string
 >       : ^^^^^^
 
     search(regexp: RegExp): number;
 >search : { (regexp: string): number; (regexp: RegExp): number; }
->       : ^^^      ^^      ^^^^^^^^^^^^      ^^      ^^^      ^^^
+>       : ^^^      ^^      ^^^      ^^^      ^^      ^^^      ^^^
 >regexp : RegExp
 >       : ^^^^^^
 
@@ -130,7 +130,7 @@ interface NotString {
 
     split(separator: string, limit?: number): string[];
 >split : { (separator: string, limit?: number): string[]; (separator: RegExp, limit?: number): string[]; }
->      : ^^^         ^^      ^^     ^^^      ^^^        ^^^         ^^      ^^     ^^^      ^^^^^^^^^^^^^^
+>      : ^^^         ^^      ^^     ^^^      ^^^        ^^^         ^^      ^^     ^^^      ^^^        ^^^
 >separator : string
 >          : ^^^^^^
 >limit : number
@@ -138,7 +138,7 @@ interface NotString {
 
     split(separator: RegExp, limit?: number): string[];
 >split : { (separator: string, limit?: number): string[]; (separator: RegExp, limit?: number): string[]; }
->      : ^^^         ^^      ^^     ^^^      ^^^^^^^^^^^^^^         ^^      ^^     ^^^      ^^^        ^^^
+>      : ^^^         ^^      ^^     ^^^      ^^^        ^^^         ^^      ^^     ^^^      ^^^        ^^^
 >separator : RegExp
 >          : ^^^^^^
 >limit : number
