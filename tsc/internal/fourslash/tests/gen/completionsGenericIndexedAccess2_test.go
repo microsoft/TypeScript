@@ -10,7 +10,7 @@ import (
 
 func TestCompletionsGenericIndexedAccess2(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `export type GetMethodsForType<T, G extends string> = { [K in keyof T]:
   T[K] extends () => any ? { name: K, group: G, } : T[K] extends (s: infer U) => any ? { name: K, group: G, payload: U } : never }[keyof T];

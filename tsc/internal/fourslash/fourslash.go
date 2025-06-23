@@ -466,7 +466,12 @@ func verifyCompletionsAreExactly(t *testing.T, prefix string, actual []*lsproto.
 func verifyCompletionItem(t *testing.T, prefix string, actual *lsproto.CompletionItem, expected *lsproto.CompletionItem) {
 	ignoreKind := cmp.FilterPath(
 		func(p cmp.Path) bool {
-			return p.Last().String() == ".Kind"
+			switch p.Last().String() {
+			case ".Kind", ".SortText":
+				return true
+			default:
+				return false
+			}
 		},
 		cmp.Ignore(),
 	)
@@ -474,6 +479,7 @@ func verifyCompletionItem(t *testing.T, prefix string, actual *lsproto.Completio
 	if expected.Kind != nil {
 		assertDeepEqual(t, actual.Kind, expected.Kind, prefix+" Kind mismatch")
 	}
+	assertDeepEqual(t, actual.SortText, core.OrElse(expected.SortText, ptrTo(string(ls.SortTextLocationPriority))), prefix+" SortText mismatch")
 }
 
 func getExpectedLabel(t *testing.T, item ExpectedCompletionItem) string {

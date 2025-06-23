@@ -10,7 +10,7 @@ import (
 
 func TestCompletionsObjectLiteralUnionTemplateLiteralType(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `type UnionType = {
   key1: string;
