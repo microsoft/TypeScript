@@ -1,0 +1,44 @@
+importTypeTrailingComma.ts(5,17): error TS2792: Cannot find module './nonexistent'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+importTypeTrailingComma.ts(8,17): error TS2792: Cannot find module './nonexistent'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+importTypeTrailingComma.ts(11,17): error TS2792: Cannot find module './nonexistent'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+importTypeTrailingComma.ts(14,17): error TS2792: Cannot find module './nonexistent'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+importTypeTrailingComma.ts(17,24): error TS2792: Cannot find module './nonexistent'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+importTypeTrailingComma.ts(20,17): error TS2792: Cannot find module './nonexistent'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+importTypeTrailingComma.ts(20,42): error TS1464: Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.
+
+
+==== importTypeTrailingComma.ts (7 errors) ====
+    // Test that trailing commas are allowed in import type attributes
+    // This should work consistently with dynamic imports
+    
+    // Trailing comma inside with object (already worked)
+    type A = import("./nonexistent", { with: { type: "json", } })
+                    ~~~~~~~~~~~~~~~
+!!! error TS2792: Cannot find module './nonexistent'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    
+    // Trailing comma after with object (this is the fix)
+    type B = import("./nonexistent", { with: { type: "json" }, })
+                    ~~~~~~~~~~~~~~~
+!!! error TS2792: Cannot find module './nonexistent'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    
+    // No trailing comma for comparison
+    type C = import("./nonexistent", { with: { type: "json" } })
+                    ~~~~~~~~~~~~~~~
+!!! error TS2792: Cannot find module './nonexistent'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    
+    // Assert syntax with trailing comma  
+    type D = import("./nonexistent", { assert: { type: "json" }, })
+                    ~~~~~~~~~~~~~~~
+!!! error TS2792: Cannot find module './nonexistent'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    
+    // typeof with trailing comma
+    type E = typeof import("./nonexistent", { with: { type: "json" }, })
+                           ~~~~~~~~~~~~~~~
+!!! error TS2792: Cannot find module './nonexistent'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    
+    // Multiple properties in with object with trailing comma after
+    type F = import("./nonexistent", { with: { type: "json", "resolution-mode": "import" }, })
+                    ~~~~~~~~~~~~~~~
+!!! error TS2792: Cannot find module './nonexistent'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1464: Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.

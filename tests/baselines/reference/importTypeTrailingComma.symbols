@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/importTypeTrailingComma.ts] ////
+
+=== importTypeTrailingComma.ts ===
+// Test that trailing commas are allowed in import type attributes
+// This should work consistently with dynamic imports
+
+// Trailing comma inside with object (already worked)
+type A = import("./nonexistent", { with: { type: "json", } })
+>A : Symbol(A, Decl(importTypeTrailingComma.ts, 0, 0))
+
+// Trailing comma after with object (this is the fix)
+type B = import("./nonexistent", { with: { type: "json" }, })
+>B : Symbol(B, Decl(importTypeTrailingComma.ts, 4, 61))
+
+// No trailing comma for comparison
+type C = import("./nonexistent", { with: { type: "json" } })
+>C : Symbol(C, Decl(importTypeTrailingComma.ts, 7, 61))
+
+// Assert syntax with trailing comma  
+type D = import("./nonexistent", { assert: { type: "json" }, })
+>D : Symbol(D, Decl(importTypeTrailingComma.ts, 10, 60))
+
+// typeof with trailing comma
+type E = typeof import("./nonexistent", { with: { type: "json" }, })
+>E : Symbol(E, Decl(importTypeTrailingComma.ts, 13, 63))
+
+// Multiple properties in with object with trailing comma after
+type F = import("./nonexistent", { with: { type: "json", "resolution-mode": "import" }, })
+>F : Symbol(F, Decl(importTypeTrailingComma.ts, 16, 68))
+

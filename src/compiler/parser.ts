@@ -4564,6 +4564,7 @@ namespace Parser {
             }
             parseExpected(SyntaxKind.ColonToken);
             attributes = parseImportAttributes(currentToken as SyntaxKind.WithKeyword | SyntaxKind.AssertKeyword, /*skipKeyword*/ true);
+            parseOptional(SyntaxKind.CommaToken); // Allow trailing comma after import attributes
             if (!parseExpected(SyntaxKind.CloseBraceToken)) {
                 const lastError = lastOrUndefined(parseDiagnostics);
                 if (lastError && lastError.code === Diagnostics._0_expected.code) {
