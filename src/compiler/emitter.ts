@@ -3163,6 +3163,31 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         writeTrailingSemicolon();
     }
 
+    function shouldSkipCommentsForJsxText(contextNode: Node): boolean {
+        // For JSX elements containing comment-like text, skip comment emission to prevent duplication
+        if (contextNode.kind === SyntaxKind.JsxElement) {
+            const jsxElement = contextNode as JsxElement;
+            return jsxElement.children.some(child => 
+                child.kind === SyntaxKind.JsxText && 
+                child.text.includes('/*') && 
+                child.text.includes('*/')
+            );
+        }
+        // Also check for variable declarations with JSX initializers containing comment-like text
+        if (contextNode.kind === SyntaxKind.VariableDeclaration) {
+            const varDecl = contextNode as VariableDeclaration;
+            if (varDecl.initializer?.kind === SyntaxKind.JsxElement) {
+                const jsxElement = varDecl.initializer as JsxElement;
+                return jsxElement.children.some(child => 
+                    child.kind === SyntaxKind.JsxText && 
+                    child.text.includes('/*') && 
+                    child.text.includes('*/')
+                );
+            }
+        }
+        return false;
+    }
+
     function emitTokenWithComment(token: SyntaxKind, pos: number, writer: (s: string) => void, contextNode: Node, indentLeading?: boolean) {
         const node = getParseTreeNode(contextNode);
         const isSimilarNode = node && node.kind === contextNode.kind;
@@ -3170,7 +3195,11 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         if (isSimilarNode && currentSourceFile) {
             pos = skipTrivia(currentSourceFile.text, pos);
         }
-        if (isSimilarNode && contextNode.pos !== startPos) {
+        
+        // Check if we should skip comment emission to avoid duplicating JSX text content
+        const shouldSkipComments = shouldSkipCommentsForJsxText(contextNode);
+        
+        if (isSimilarNode && contextNode.pos !== startPos && !shouldSkipComments) {
             const needsIndent = indentLeading && currentSourceFile && !positionsAreOnSameLine(startPos, pos, currentSourceFile);
             if (needsIndent) {
                 increaseIndent();
@@ -3192,7 +3221,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             pos = writeTokenText(token, writer, pos);
         }
 
-        if (isSimilarNode && contextNode.end !== pos) {
+        if (isSimilarNode && contextNode.end !== pos && !shouldSkipComments) {
             const isJsxExprContext = contextNode.kind === SyntaxKind.JsxExpression;
             emitTrailingCommentsOfPosition(pos, /*prefixSpace*/ !isJsxExprContext, /*forceNoNewline*/ isJsxExprContext);
         }
