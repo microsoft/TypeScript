@@ -4067,11 +4067,17 @@ function getCompletionData(
                 if (isFunctionLike(functionNode) && "body" in functionNode) {
                     const functionBody = functionNode.body;
                     if (functionBody) {
-                        // Filter out symbols declared inside the function body
+                        // Filter out symbols that are declared in the function body (not parameters)
                         symbols = symbols.filter(symbol => {
                             const symbolDeclaration = symbol.valueDeclaration ?? symbol.declarations?.[0];
-                            return !symbolDeclaration || 
-                                   !(symbolDeclaration.pos > functionBody.pos && symbolDeclaration.pos < functionBody.end);
+                            if (!symbolDeclaration) return true;
+                            
+                            // Only filter out non-parameter declarations inside the function body
+                            const isInsideFunctionBody = symbolDeclaration.pos > functionBody.pos && symbolDeclaration.pos < functionBody.end;
+                            const isParameterDeclaration = findAncestor(symbolDeclaration, node => isParameter(node));
+                            
+                            // Keep symbols that are not in the function body, or are parameters
+                            return !isInsideFunctionBody || !!isParameterDeclaration;
                         });
                     }
                 }
