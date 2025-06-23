@@ -2780,23 +2780,6 @@ export function getCompletionEntriesFromSymbols(
             }
         }
 
-        // Filter out function body variables from parameter defaults
-        // `function f(a = /* no function body variables here */) { var x; }`
-        if (isInParameterDefault(contextToken) && symbolDeclaration) {
-            // Find the parameter that contains this default
-            const parameterNode = findAncestor(contextToken, isParameter);
-            if (parameterNode) {
-                const functionNode = parameterNode.parent;
-                if (isFunctionLike(functionNode) && "body" in functionNode) {
-                    const functionBody = functionNode.body;
-                    // Filter out symbols declared inside the function body
-                    if (functionBody && symbolDeclaration.pos > functionBody.pos && symbolDeclaration.pos < functionBody.end) {
-                        return false;
-                    }
-                }
-            }
-        }
-
         // External modules can have global export declarations that will be
         // available as global keywords in all scopes. But if the external module
         // already has an explicit export and user only wants to user explicit
@@ -4041,6 +4024,7 @@ function getCompletionData(
         Debug.assertEachIsDefined(symbols, "getSymbolsInScope() should all be defined");
         for (let i = 0; i < symbols.length; i++) {
             const symbol = symbols[i];
+            
             if (
                 !typeChecker.isArgumentsSymbol(symbol) &&
                 !some(symbol.declarations, d => d.getSourceFile() === sourceFile)
@@ -4072,6 +4056,26 @@ function getCompletionData(
             keywordFilters = contextToken && isAssertionExpression(contextToken.parent)
                 ? KeywordCompletionFilters.TypeAssertionKeywords
                 : KeywordCompletionFilters.TypeKeywords;
+        }
+        
+        // Filter out function body variables from parameter defaults
+        // `function f(a = /* no function body variables here */) { var x; }`
+        if (isInParameterDefault(contextToken)) {
+            const parameterNode = findAncestor(contextToken, isParameter);
+            if (parameterNode) {
+                const functionNode = parameterNode.parent;
+                if (isFunctionLike(functionNode) && "body" in functionNode) {
+                    const functionBody = functionNode.body;
+                    if (functionBody) {
+                        // Filter out symbols declared inside the function body
+                        symbols = symbols.filter(symbol => {
+                            const symbolDeclaration = symbol.valueDeclaration ?? symbol.declarations?.[0];
+                            return !symbolDeclaration || 
+                                   !(symbolDeclaration.pos > functionBody.pos && symbolDeclaration.pos < functionBody.end);
+                        });
+                    }
+                }
+            }
         }
     }
 
