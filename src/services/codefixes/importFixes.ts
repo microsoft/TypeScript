@@ -1105,15 +1105,21 @@ function tryAddToExistingImport(existingImports: readonly FixAddToExistingImport
         if (!fix) continue;
         const isTypeOnly = isTypeOnlyImportDeclaration(fix.importClauseOrBindingPattern);
         
-        // Perfect match cases where no conversion is needed
+        // Skip incompatible combinations: value imports going to type-only imports
+        if (fix.addAsTypeOnly === AddAsTypeOnly.NotAllowed && isTypeOnly) {
+            continue;
+        }
+        
+        // Perfect matches: return immediately
         if (
-            fix.addAsTypeOnly === AddAsTypeOnly.Required && isTypeOnly ||
+            fix.addAsTypeOnly !== AddAsTypeOnly.NotAllowed && isTypeOnly ||
             fix.addAsTypeOnly === AddAsTypeOnly.NotAllowed && !isTypeOnly
         ) {
+            // Give preference to putting types in existing type-only imports and avoiding conversions
+            // of import statements to/from type-only.
             return fix;
         }
         
-        // For allowed cases or cases requiring promotion, keep looking for better matches
         best ??= fix;
     }
     return best;
