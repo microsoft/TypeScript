@@ -1551,6 +1551,48 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         currentFlow = finishFlowLabel(postLoopLabel);
     }
 
+    function checkForUsingShadowingInForOf(node: ForInOrOfStatement): void {
+        if (node.kind !== SyntaxKind.ForOfStatement || node.initializer.kind !== SyntaxKind.VariableDeclarationList) {
+            return;
+        }
+        
+        const varDeclList = node.initializer as any; // VariableDeclarationList
+        
+        // Only check if we have using declarations that will be downleveled
+        if (!(varDeclList.flags & NodeFlags.Using) || languageVersion >= ScriptTarget.ESNext) {
+            return;
+        }
+        
+        // Collect the names of using declarations
+        const usingNames = new Set<string>();
+        for (const declaration of varDeclList.declarations) {
+            if (isIdentifier(declaration.name)) {
+                usingNames.add(unescapeLeadingUnderscores(declaration.name.escapedText));
+            }
+        }
+        
+        if (usingNames.size === 0) return;
+        
+        // Check for variable declarations with the same names in the loop body
+        function checkNode(node: Node): void {
+            if (isVariableStatement(node)) {
+                for (const declaration of node.declarationList.declarations) {
+                    if (isIdentifier(declaration.name)) {
+                        const name = unescapeLeadingUnderscores(declaration.name.escapedText);
+                        if (usingNames.has(name)) {
+                            file.bindDiagnostics.push(createDiagnosticForNode(declaration.name, Diagnostics.Duplicate_identifier_0, name));
+                        }
+                    }
+                }
+            }
+            
+            // Recursively check child nodes
+            forEachChild(node, checkNode);
+        }
+        
+        checkNode(node.statement);
+    }
+
     function bindForInOrForOfStatement(node: ForInOrOfStatement): void {
         const preLoopLabel = setContinueTarget(node, createLoopLabel());
         const postLoopLabel = createBranchLabel();
@@ -1564,6 +1606,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         bind(node.initializer);
         if (node.initializer.kind !== SyntaxKind.VariableDeclarationList) {
             bindAssignmentTargetFlow(node.initializer);
+        }
+        else {
+            // Check for using declarations that will be downleveled and shadow variables in the loop body
+            checkForUsingShadowingInForOf(node);
         }
         bindIterativeStatement(node.statement, postLoopLabel, preLoopLabel);
         addAntecedent(preLoopLabel, currentFlow);

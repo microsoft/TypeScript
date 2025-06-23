@@ -1,55 +1,55 @@
-//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/usingDeclarationsInForOfShadowing.ts] ////
+//// [tests/cases/compiler/usingDeclarationsForOfShadowing.ts] ////
 
-=== usingDeclarationsInForOfShadowing.ts ===
+=== usingDeclarationsForOfShadowing.ts ===
 class Foo {}
->Foo : Symbol(Foo, Decl(usingDeclarationsInForOfShadowing.ts, 0, 0))
+>Foo : Symbol(Foo, Decl(usingDeclarationsForOfShadowing.ts, 0, 0))
 
-// Error: using declaration shadowed by loop body declaration when downleveling
+// Error when downleveling: using declaration shadowed by loop body declaration  
 for (using foo of [{ [Symbol.dispose]() {} }]) {
->foo : Symbol(foo, Decl(usingDeclarationsInForOfShadowing.ts, 3, 10))
->[Symbol.dispose] : Symbol([Symbol.dispose], Decl(usingDeclarationsInForOfShadowing.ts, 3, 20))
+>foo : Symbol(foo, Decl(usingDeclarationsForOfShadowing.ts, 3, 10))
+>[Symbol.dispose] : Symbol([Symbol.dispose], Decl(usingDeclarationsForOfShadowing.ts, 3, 20))
 >Symbol.dispose : Symbol(SymbolConstructor.dispose, Decl(lib.esnext.disposable.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 >dispose : Symbol(SymbolConstructor.dispose, Decl(lib.esnext.disposable.d.ts, --, --))
 
   const foo = new Foo();
->foo : Symbol(foo, Decl(usingDeclarationsInForOfShadowing.ts, 4, 7))
->Foo : Symbol(Foo, Decl(usingDeclarationsInForOfShadowing.ts, 0, 0))
+>foo : Symbol(foo, Decl(usingDeclarationsForOfShadowing.ts, 4, 7))
+>Foo : Symbol(Foo, Decl(usingDeclarationsForOfShadowing.ts, 0, 0))
 }
 
 // OK: different names
 for (using bar of [{ [Symbol.dispose]() {} }]) {
->bar : Symbol(bar, Decl(usingDeclarationsInForOfShadowing.ts, 8, 10))
->[Symbol.dispose] : Symbol([Symbol.dispose], Decl(usingDeclarationsInForOfShadowing.ts, 8, 20))
+>bar : Symbol(bar, Decl(usingDeclarationsForOfShadowing.ts, 8, 10))
+>[Symbol.dispose] : Symbol([Symbol.dispose], Decl(usingDeclarationsForOfShadowing.ts, 8, 20))
 >Symbol.dispose : Symbol(SymbolConstructor.dispose, Decl(lib.esnext.disposable.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 >dispose : Symbol(SymbolConstructor.dispose, Decl(lib.esnext.disposable.d.ts, --, --))
 
   const baz = new Foo();
->baz : Symbol(baz, Decl(usingDeclarationsInForOfShadowing.ts, 9, 7))
->Foo : Symbol(Foo, Decl(usingDeclarationsInForOfShadowing.ts, 0, 0))
+>baz : Symbol(baz, Decl(usingDeclarationsForOfShadowing.ts, 9, 7))
+>Foo : Symbol(Foo, Decl(usingDeclarationsForOfShadowing.ts, 0, 0))
 }
 
-// Error: using declaration shadowed by loop body declaration when downleveling  
+// Error when downleveling: using declaration shadowed by loop body declaration  
 for (using x of [{ [Symbol.dispose]() {} }]) {
->x : Symbol(x, Decl(usingDeclarationsInForOfShadowing.ts, 13, 10))
->[Symbol.dispose] : Symbol([Symbol.dispose], Decl(usingDeclarationsInForOfShadowing.ts, 13, 18))
+>x : Symbol(x, Decl(usingDeclarationsForOfShadowing.ts, 13, 10))
+>[Symbol.dispose] : Symbol([Symbol.dispose], Decl(usingDeclarationsForOfShadowing.ts, 13, 18))
 >Symbol.dispose : Symbol(SymbolConstructor.dispose, Decl(lib.esnext.disposable.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 >dispose : Symbol(SymbolConstructor.dispose, Decl(lib.esnext.disposable.d.ts, --, --))
 
   let x = 1;
->x : Symbol(x, Decl(usingDeclarationsInForOfShadowing.ts, 14, 5))
+>x : Symbol(x, Decl(usingDeclarationsForOfShadowing.ts, 14, 5))
 }
 
-// Error: using declaration shadowed by loop body declaration when downleveling
+// Error when downleveling: using declaration shadowed by loop body declaration
 for (using y of [{ [Symbol.dispose]() {} }]) {
->y : Symbol(y, Decl(usingDeclarationsInForOfShadowing.ts, 18, 10))
->[Symbol.dispose] : Symbol([Symbol.dispose], Decl(usingDeclarationsInForOfShadowing.ts, 18, 18))
+>y : Symbol(y, Decl(usingDeclarationsForOfShadowing.ts, 18, 10))
+>[Symbol.dispose] : Symbol([Symbol.dispose], Decl(usingDeclarationsForOfShadowing.ts, 18, 18))
 >Symbol.dispose : Symbol(SymbolConstructor.dispose, Decl(lib.esnext.disposable.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 >dispose : Symbol(SymbolConstructor.dispose, Decl(lib.esnext.disposable.d.ts, --, --))
 
   var y = "test";
->y : Symbol(y, Decl(usingDeclarationsInForOfShadowing.ts, 19, 5))
+>y : Symbol(y, Decl(usingDeclarationsForOfShadowing.ts, 19, 5))
 }

@@ -1,9 +1,9 @@
-//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/usingDeclarationsInForOfShadowing.ts] ////
+//// [tests/cases/compiler/usingDeclarationsForOfShadowing.ts] ////
 
-//// [usingDeclarationsInForOfShadowing.ts]
+//// [usingDeclarationsForOfShadowing.ts]
 class Foo {}
 
-// Error: using declaration shadowed by loop body declaration when downleveling
+// Error when downleveling: using declaration shadowed by loop body declaration  
 for (using foo of [{ [Symbol.dispose]() {} }]) {
   const foo = new Foo();
 }
@@ -13,17 +13,17 @@ for (using bar of [{ [Symbol.dispose]() {} }]) {
   const baz = new Foo();
 }
 
-// Error: using declaration shadowed by loop body declaration when downleveling  
+// Error when downleveling: using declaration shadowed by loop body declaration  
 for (using x of [{ [Symbol.dispose]() {} }]) {
   let x = 1;
 }
 
-// Error: using declaration shadowed by loop body declaration when downleveling
+// Error when downleveling: using declaration shadowed by loop body declaration
 for (using y of [{ [Symbol.dispose]() {} }]) {
   var y = "test";
 }
 
-//// [usingDeclarationsInForOfShadowing.js]
+//// [usingDeclarationsForOfShadowing.js]
 var __addDisposableResource = (this && this.__addDisposableResource) || function (env, value, async) {
     if (value !== null && value !== void 0) {
         if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
@@ -78,7 +78,7 @@ var __disposeResources = (this && this.__disposeResources) || (function (Suppres
 });
 class Foo {
 }
-// Error: using declaration shadowed by loop body declaration when downleveling
+// Error when downleveling: using declaration shadowed by loop body declaration  
 for (const foo_1 of [{ [Symbol.dispose]() { } }]) {
     const env_1 = { stack: [], error: void 0, hasError: false };
     try {
@@ -108,7 +108,7 @@ for (const bar_1 of [{ [Symbol.dispose]() { } }]) {
         __disposeResources(env_2);
     }
 }
-// Error: using declaration shadowed by loop body declaration when downleveling  
+// Error when downleveling: using declaration shadowed by loop body declaration  
 for (const x_1 of [{ [Symbol.dispose]() { } }]) {
     const env_3 = { stack: [], error: void 0, hasError: false };
     try {
@@ -123,7 +123,7 @@ for (const x_1 of [{ [Symbol.dispose]() { } }]) {
         __disposeResources(env_3);
     }
 }
-// Error: using declaration shadowed by loop body declaration when downleveling
+// Error when downleveling: using declaration shadowed by loop body declaration
 for (const y_1 of [{ [Symbol.dispose]() { } }]) {
     const env_4 = { stack: [], error: void 0, hasError: false };
     try {
