@@ -1,0 +1,106 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/usingDeclarationsInForOfShadowing.ts] ////
+
+=== usingDeclarationsInForOfShadowing.ts ===
+class Foo {}
+>Foo : Foo
+>    : ^^^
+
+// Error: using declaration shadowed by loop body declaration when downleveling
+for (using foo of [{ [Symbol.dispose]() {} }]) {
+>foo : { [Symbol.dispose](): void; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[{ [Symbol.dispose]() {} }] : { [Symbol.dispose](): void; }[]
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ [Symbol.dispose]() {} } : { [Symbol.dispose](): void; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[Symbol.dispose] : () => void
+>                 : ^^^^^^^^^^
+>Symbol.dispose : unique symbol
+>               : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>dispose : unique symbol
+>        : ^^^^^^^^^^^^^
+
+  const foo = new Foo();
+>foo : Foo
+>    : ^^^
+>new Foo() : Foo
+>          : ^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+}
+
+// OK: different names
+for (using bar of [{ [Symbol.dispose]() {} }]) {
+>bar : { [Symbol.dispose](): void; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[{ [Symbol.dispose]() {} }] : { [Symbol.dispose](): void; }[]
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ [Symbol.dispose]() {} } : { [Symbol.dispose](): void; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[Symbol.dispose] : () => void
+>                 : ^^^^^^^^^^
+>Symbol.dispose : unique symbol
+>               : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>dispose : unique symbol
+>        : ^^^^^^^^^^^^^
+
+  const baz = new Foo();
+>baz : Foo
+>    : ^^^
+>new Foo() : Foo
+>          : ^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+}
+
+// Error: using declaration shadowed by loop body declaration when downleveling  
+for (using x of [{ [Symbol.dispose]() {} }]) {
+>x : { [Symbol.dispose](): void; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[{ [Symbol.dispose]() {} }] : { [Symbol.dispose](): void; }[]
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ [Symbol.dispose]() {} } : { [Symbol.dispose](): void; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[Symbol.dispose] : () => void
+>                 : ^^^^^^^^^^
+>Symbol.dispose : unique symbol
+>               : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>dispose : unique symbol
+>        : ^^^^^^^^^^^^^
+
+  let x = 1;
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+}
+
+// Error: using declaration shadowed by loop body declaration when downleveling
+for (using y of [{ [Symbol.dispose]() {} }]) {
+>y : { [Symbol.dispose](): void; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[{ [Symbol.dispose]() {} }] : { [Symbol.dispose](): void; }[]
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ [Symbol.dispose]() {} } : { [Symbol.dispose](): void; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[Symbol.dispose] : () => void
+>                 : ^^^^^^^^^^
+>Symbol.dispose : unique symbol
+>               : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>dispose : unique symbol
+>        : ^^^^^^^^^^^^^
+
+  var y = "test";
+>y : string
+>  : ^^^^^^
+>"test" : "test"
+>       : ^^^^^^
+}

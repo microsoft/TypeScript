@@ -45272,6 +45272,39 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
+    function checkForUsingShadowingInForOfStatement(node: ForOfStatement, varDeclList: VariableDeclarationList): void {
+        // Collect the names of using declarations
+        const usingNames = new Set<string>();
+        for (const declaration of varDeclList.declarations) {
+            if (isIdentifier(declaration.name)) {
+                usingNames.add(declaration.name.escapedText as string);
+            }
+            // TODO: Handle destructuring patterns if needed
+        }
+        
+        if (usingNames.size === 0) return;
+        
+        // Check for shadowing declarations in the loop body
+        function checkNode(node: Node): void {
+            if (isVariableStatement(node)) {
+                for (const declaration of node.declarationList.declarations) {
+                    if (isIdentifier(declaration.name)) {
+                        const name = declaration.name.escapedText as string;
+                        if (usingNames.has(name)) {
+                            error(declaration.name, Diagnostics.Duplicate_identifier_0, name);
+                        }
+                    }
+                    // TODO: Handle destructuring patterns if needed
+                }
+            }
+            
+            // Recursively check child nodes
+            forEachChild(node, checkNode);
+        }
+        
+        checkNode(node.statement);
+    }
+
     function checkForOfStatement(node: ForOfStatement): void {
         checkGrammarForInOrForOfStatement(node);
 
@@ -45300,6 +45333,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Then check that the RHS is assignable to it.
         if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
             checkVariableDeclarationList(node.initializer as VariableDeclarationList);
+            
+            // Check for shadowing when using declarations are downleveled
+            const varDeclList = node.initializer as VariableDeclarationList;
+            if ((varDeclList.flags & NodeFlags.Using) && languageVersion < LanguageFeatureMinimumTarget.UsingAndAwaitUsing) {
+                checkForUsingShadowingInForOfStatement(node, varDeclList);
+            }
         }
         else {
             const varExpr = node.initializer;

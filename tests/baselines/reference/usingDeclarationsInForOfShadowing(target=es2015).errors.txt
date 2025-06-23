@@ -1,0 +1,36 @@
+usingDeclarationsInForOfShadowing.ts(5,9): error TS2300: Duplicate identifier 'foo'.
+usingDeclarationsInForOfShadowing.ts(15,7): error TS2300: Duplicate identifier 'x'.
+usingDeclarationsInForOfShadowing.ts(20,7): error TS2300: Duplicate identifier 'y'.
+usingDeclarationsInForOfShadowing.ts(20,7): error TS2481: Cannot initialize outer scoped variable 'y' in the same scope as block scoped declaration 'y'.
+
+
+==== usingDeclarationsInForOfShadowing.ts (4 errors) ====
+    class Foo {}
+    
+    // Error: using declaration shadowed by loop body declaration when downleveling
+    for (using foo of [{ [Symbol.dispose]() {} }]) {
+      const foo = new Foo();
+            ~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+    }
+    
+    // OK: different names
+    for (using bar of [{ [Symbol.dispose]() {} }]) {
+      const baz = new Foo();
+    }
+    
+    // Error: using declaration shadowed by loop body declaration when downleveling  
+    for (using x of [{ [Symbol.dispose]() {} }]) {
+      let x = 1;
+          ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    
+    // Error: using declaration shadowed by loop body declaration when downleveling
+    for (using y of [{ [Symbol.dispose]() {} }]) {
+      var y = "test";
+          ~
+!!! error TS2300: Duplicate identifier 'y'.
+          ~
+!!! error TS2481: Cannot initialize outer scoped variable 'y' in the same scope as block scoped declaration 'y'.
+    }

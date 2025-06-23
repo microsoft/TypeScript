@@ -1,0 +1,18 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/usingDeclarationsInForOfShadowingESNext.ts] ////
+
+=== usingDeclarationsInForOfShadowingESNext.ts ===
+class Foo {}
+>Foo : Symbol(Foo, Decl(usingDeclarationsInForOfShadowingESNext.ts, 0, 0))
+
+// OK: using declaration shadowed by loop body declaration, but not downleveling
+for (using foo of [{ [Symbol.dispose]() {} }]) {
+>foo : Symbol(foo, Decl(usingDeclarationsInForOfShadowingESNext.ts, 3, 10))
+>[Symbol.dispose] : Symbol([Symbol.dispose], Decl(usingDeclarationsInForOfShadowingESNext.ts, 3, 20))
+>Symbol.dispose : Symbol(SymbolConstructor.dispose, Decl(lib.esnext.disposable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>dispose : Symbol(SymbolConstructor.dispose, Decl(lib.esnext.disposable.d.ts, --, --))
+
+  const foo = new Foo();
+>foo : Symbol(foo, Decl(usingDeclarationsInForOfShadowingESNext.ts, 4, 7))
+>Foo : Symbol(Foo, Decl(usingDeclarationsInForOfShadowingESNext.ts, 0, 0))
+}
