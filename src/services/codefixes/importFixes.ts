@@ -287,8 +287,12 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
         const symbol = checker.getMergedSymbol(skipAlias(exportedSymbol, checker));
         const exportInfo = getAllExportInfoForSymbol(sourceFile, symbol, symbolName, moduleSymbol, /*preferCapitalized*/ false, program, host, preferences, cancellationToken);
         if (!exportInfo) {
-            // If no exportInfo is found, this means export could not be resolved.
-            // This can happen due to autoImportFileExcludePatterns filtering or other module resolution issues.
+            // If no exportInfo is found, this can happen due to:
+            // 1. autoImportFileExcludePatterns filtering out the module
+            // 2. Complex module resolution scenarios where the symbol exists but cannot be imported
+            //    (e.g., in monorepos with multiple package installations where symbols from different
+            //    installations are not considered equivalent)
+            // In either case, we should not generate an import.
             return;
         }
         const useRequire = shouldUseRequire(sourceFile, program);
