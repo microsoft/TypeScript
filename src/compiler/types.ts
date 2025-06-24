@@ -6285,11 +6285,11 @@ export const enum TypeFlags {
     ESSymbol        = 1 << 9,  // Type of symbol primitive introduced in ES6
     StringLiteral   = 1 << 10,
     NumberLiteral   = 1 << 11,
-    BooleanLiteral  = 1 << 12,
-    BigIntLiteral   = 1 << 13,
+    BigIntLiteral   = 1 << 12,
+    BooleanLiteral  = 1 << 13,
     UniqueESSymbol  = 1 << 14,  // unique symbol
     EnumLiteral     = 1 << 15,  // Always combined with StringLiteral, NumberLiteral, or Union
-    Enum            = 1 << 16,   // Numeric computed enum member value
+    Enum            = 1 << 16,  // Numeric computed enum member value (must be right after EnumLiteral, see getSortOrderFlags)
     NonPrimitive    = 1 << 17,  // intrinsic object type
     Never           = 1 << 18,  // Never type
     TypeParameter   = 1 << 19,  // Type parameter
@@ -6306,7 +6306,8 @@ export const enum TypeFlags {
     Reserved1       = 1 << 29,  // Used by union/intersection type construction
     /** @internal */
     Reserved2       = 1 << 30,  // Used by union/intersection type construction
-
+    /** @internal */
+    Reserved3       = 1 << 31,
     /** @internal */
     AnyOrUnknown = Any | Unknown,
     /** @internal */
