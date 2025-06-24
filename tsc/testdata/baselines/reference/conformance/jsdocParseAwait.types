@@ -14,10 +14,10 @@ const a = 1;
 /** @type {T} */
 const b = {
 >b : T
->{    await: false,} : { await: boolean; }
+>{    await: false,} : { await: false; }
 
     await: false,
->await : boolean
+>await : false
 >false : false
 
 };

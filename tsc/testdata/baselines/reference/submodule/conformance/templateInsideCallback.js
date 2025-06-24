@@ -117,7 +117,7 @@ function flatMap(array, iterable = identity) {
 export type Call = () ;
 export type Nested = {
     oh: {
-        property: number;
-        property: string;
+        no: number;
+        noooooo: string;
     };
 };

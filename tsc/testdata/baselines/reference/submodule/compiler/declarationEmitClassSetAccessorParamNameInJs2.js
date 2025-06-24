@@ -20,5 +20,7 @@ export declare class Foo {
      *
      * @param {{ prop: string }} baz Baz.
      */
-    set bar({}: {});
+    set bar({}: {
+        prop: string;
+    });
 }

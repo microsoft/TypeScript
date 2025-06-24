@@ -5,24 +5,24 @@
 
          if (options.test) {
 ->options.test : typeof import("Test").default | undefined
-+>options.test : any
++>options.test : typeof import("./Test.js").default | undefined
  >options : Options
 ->test : typeof import("Test").default | undefined
-+>test : any
++>test : typeof import("./Test.js").default | undefined
 
              this.test = new options.test();
 ->this.test = new options.test() : import("Test").default
-+>this.test = new options.test() : any
++>this.test = new options.test() : import("./Test.js").default
  >this.test : any
  >this : this
  >test : any
 ->new options.test() : import("Test").default
 ->options.test : typeof import("Test").default
-+>new options.test() : any
-+>options.test : any
++>new options.test() : import("./Test.js").default
++>options.test : typeof import("./Test.js").default
  >options : Options
 ->test : typeof import("Test").default
-+>test : any
++>test : typeof import("./Test.js").default
          }
      }
  }

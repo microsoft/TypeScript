@@ -5,11 +5,11 @@
 * @param {{ cause?: string }} [options] 
 */ 
 function foo({ cause } = {}) {
->foo : ({ cause }?: {}) => any
->cause : any
+>foo : ({ cause }?: { cause?: string; }) => string
+>cause : string
 >{} : {}
 
     return cause;
->cause : any
+>cause : string
 }
 

@@ -4,7 +4,7 @@
  >prepareConfig : Symbol(prepareConfig, Decl(index.js, 0, 0))
 
      additionalFiles: {
-+>additionalFiles : Symbol(additionalFiles)
++>additionalFiles : Symbol(additionalFiles, Decl(index.js, 2, 3))
 +
          json = []
  >json : Symbol(json, Decl(index.js, 5, 22))
@@ -13,6 +13,6 @@
   */
  function f1({ a: { json = [] } = {} } = {}) { return json }
  >f1 : Symbol(f1, Decl(index.js, 29, 1))
-+>a : Symbol(a)
++>a : Symbol(a, Decl(index.js, 34, 12))
  >json : Symbol(json, Decl(index.js, 36, 18))
  >json : Symbol(json, Decl(index.js, 36, 18))

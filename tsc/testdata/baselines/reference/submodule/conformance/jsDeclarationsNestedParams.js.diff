@@ -37,28 +37,3 @@
 +    async cancel({ reason, suberr }) { }
  }
 
-
-@@= skipped -16, +14 lines =@@
-       * @returns {Promise.<*>} resolves when the event has been sent.
-       */
-     cancel({ reason, code }: {
--        reason: string | null;
--        code: string | null;
-+        code: any;
-+        reason: any;
-     }): Promise<any>;
- }
- declare class Y {
-@@= skipped -15, +15 lines =@@
-       * @returns {Promise.<*>} resolves when the event has been sent.
-       */
-     cancel({ reason, suberr }: {
--        reason: string | null;
--        suberr: {
--            reason: string | null;
--            code: string | null;
--        };
-+        reason: any;
-+        suberr: any;
-     }): Promise<any>;
- }

@@ -44,9 +44,9 @@ const t3 = /** @satisfies {T1} */ ({});
 /** @type {T2} */
 const t4 = /** @satisfies {T2} */ ({ a: "a" });
 >t4 : T2
->({ a: "a" }) : { a: string; }
->{ a: "a" } : { a: string; }
->a : string
+>({ a: "a" }) : { a: "a"; }
+>{ a: "a" } : { a: "a"; }
+>a : "a"
 >"a" : "a"
 
 /** @type {(m: string) => string} */

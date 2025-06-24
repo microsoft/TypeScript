@@ -7,9 +7,9 @@
  * @param {string} x
  */
 function good1({a, b}, x) {}
->good1 : ({ a, b }: { a: any; b: any; }, x: string) => void
->a : any
->b : any
+>good1 : ({ a, b }: { a: string; b: string; }, x: string) => void
+>a : string
+>b : string
 >x : string
 
 /**
@@ -17,11 +17,11 @@ function good1({a, b}, x) {}
  * @param {{c: number, d: number}} OBJECTION
  */
 function good2({a, b}, {c, d}) {}
->good2 : ({ a, b }: { a: any; b: any; }, { c, d }: { c: any; d: any; }) => void
->a : any
->b : any
->c : any
->d : any
+>good2 : ({ a, b }: { a: string; b: string; }, { c, d }: { c: number; d: number; }) => void
+>a : string
+>b : string
+>c : number
+>d : number
 
 /**
  * @param {number} x
@@ -29,19 +29,19 @@ function good2({a, b}, {c, d}) {}
  * @param {string} y
  */
 function good3(x, {a, b}, y) {}
->good3 : (x: number, { a, b }: { a: any; b: any; }, y: string) => void
+>good3 : (x: number, { a, b }: { a: string; b: string; }, y: string) => void
 >x : number
->a : any
->b : any
+>a : string
+>b : string
 >y : string
 
 /**
  * @param {{a: string, b: string}} obj
  */
 function good4({a, b}) {}
->good4 : ({ a, b }: { a: any; b: any; }) => void
->a : any
->b : any
+>good4 : ({ a, b }: { a: string; b: string; }) => void
+>a : string
+>b : string
 
 // nested object syntax
 /**
@@ -51,9 +51,9 @@ function good4({a, b}) {}
  * @param {string} x
  */
 function good5({a, b}, x) {}
->good5 : ({ a, b }: { a: any; b: any; }, x: string) => void
->a : any
->b : any
+>good5 : ({ a, b }: { a: string; b: string; }, x: string) => void
+>a : string
+>b : string
 >x : string
 
 /**
@@ -65,11 +65,11 @@ function good5({a, b}, x) {}
  * @param {string} OBJECTION.d - meh
  */
 function good6({a, b}, {c, d}) {}
->good6 : ({ a, b }: { a: any; b: any; }, { c, d }: { c: any; d: any; }) => void
->a : any
->b : any
->c : any
->d : any
+>good6 : ({ a, b }: { a: string; b: string; }, { c, d }: { c: string; d: string; }) => void
+>a : string
+>b : string
+>c : string
+>d : string
 
 /**
  * @param {number} x
@@ -79,10 +79,10 @@ function good6({a, b}, {c, d}) {}
  * @param {string} y
  */
 function good7(x, {a, b}, y) {}
->good7 : (x: number, { a, b }: { a: any; b: any; }, y: string) => void
+>good7 : (x: number, { a, b }: { a: string; b: string; }, y: string) => void
 >x : number
->a : any
->b : any
+>a : string
+>b : string
 >y : string
 
 /**
@@ -91,16 +91,16 @@ function good7(x, {a, b}, y) {}
  * @param {string} obj.b
  */
 function good8({a, b}) {}
->good8 : ({ a, b }: { a: any; b: any; }) => void
->a : any
->b : any
+>good8 : ({ a, b }: { a: string; b: string; }) => void
+>a : string
+>b : string
 
 /**
  * @param {{ a: string }} argument
  */
 function good9({ a }) {
->good9 : ({ a }: { a: any; }) => void
->a : any
+>good9 : ({ a }: { a: string; }) => void
+>a : string
 
     console.log(arguments, a);
 >console.log(arguments, a) : void
@@ -108,7 +108,7 @@ function good9({ a }) {
 >console : Console
 >log : (...data: any[]) => void
 >arguments : IArguments
->a : any
+>a : string
 }
 
 /**
@@ -128,8 +128,8 @@ function bad1(x, {a, b}) {}
  * @param {{a: string, b: string}} obj
  */
 function bad2(x, {a, b}) {}
->bad2 : (x: any, { a, b }: { a: any; b: any; }) => void
+>bad2 : (x: any, { a, b }: { a: string; b: string; }) => void
 >x : any
->a : any
->b : any
+>a : string
+>b : string
 

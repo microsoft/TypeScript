@@ -61,8 +61,8 @@ declare class X {
       * @returns {Promise.<*>} resolves when the event has been sent.
       */
     cancel({ reason, code }: {
-        code: any;
-        reason: any;
+        reason: string | null;
+        code: string | null;
     }): Promise<any>;
 }
 declare class Y {
@@ -76,7 +76,10 @@ declare class Y {
       * @returns {Promise.<*>} resolves when the event has been sent.
       */
     cancel({ reason, suberr }: {
-        reason: any;
-        suberr: any;
+        reason: string | null;
+        suberr: {
+            reason: string | null;
+            code: string | null;
+        };
     }): Promise<any>;
 }

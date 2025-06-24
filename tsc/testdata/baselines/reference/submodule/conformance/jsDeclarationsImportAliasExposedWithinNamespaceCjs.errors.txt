@@ -1,6 +1,7 @@
 file.js(4,11): error TS2315: Type 'Object' is not generic.
 file.js(10,51): error TS2300: Duplicate identifier 'myTypes'.
 file.js(13,13): error TS2300: Duplicate identifier 'myTypes'.
+file.js(14,15): error TS2702: 'myTypes' only refers to a type, but is being used as a namespace here.
 file.js(18,15): error TS2702: 'myTypes' only refers to a type, but is being used as a namespace here.
 file.js(18,39): error TS2300: Duplicate identifier 'myTypes'.
 file2.js(6,11): error TS2315: Type 'Object' is not generic.
@@ -46,7 +47,7 @@ file2.js(28,1): error TS2309: An export assignment cannot be used in a module wi
     module.exports = {testFn, testFnTypes};
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2309: An export assignment cannot be used in a module with other exported elements.
-==== file.js (5 errors) ====
+==== file.js (6 errors) ====
     /**
      * @namespace myTypes
      * @global
@@ -67,6 +68,8 @@ file2.js(28,1): error TS2309: An export assignment cannot be used in a module wi
                 ~~~~~~~
 !!! error TS2300: Duplicate identifier 'myTypes'.
      * @property {myTypes.typeA}    prop1 - Prop 1.
+                  ~~~~~~~
+!!! error TS2702: 'myTypes' only refers to a type, but is being used as a namespace here.
      * @property {string}           prop2 - Prop 2.
      */
     

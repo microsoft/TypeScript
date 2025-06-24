@@ -5,22 +5,17 @@
        */ 
      async cancel({reason, code}) {}
 ->cancel : ({ reason, code }: {    reason: string | null;    code: string | null;}) => Promise<any>
-->reason : string
-->code : string
-+>cancel : ({ reason, code }: { code: any; reason: any; }) => Promise<any>
-+>reason : any
-+>code : any
++>cancel : ({ reason, code }: { reason: string; code: string; }) => Promise<any>
+ >reason : string
+ >code : string
  }
-
- class Y {
 @@= skipped -18, +18 lines =@@
        * @returns {Promise.<*>} resolves when the event has been sent.
        */ 
      async cancel({reason, suberr}) {}
 ->cancel : ({ reason, suberr }: {    reason: string | null;    suberr: {        reason: string | null;        code: string | null;    };}) => Promise<any>
-->reason : string
++>cancel : ({ reason, suberr }: { reason: string; suberr: { reason: string; code: string; }; }) => Promise<any>
+ >reason : string
 ->suberr : { reason: string | null; code: string | null; }
-+>cancel : ({ reason, suberr }: { reason: any; suberr: any; }) => Promise<any>
-+>reason : any
-+>suberr : any
++>suberr : { reason: string; code: string; }
  }

@@ -1,14 +1,14 @@
 a.js(2,14): error TS1274: 'out' modifier can only appear on a type parameter of a class, interface or type alias
+a.js(4,15): error TS2304: Cannot find name 'T'.
 a.js(18,1): error TS2322: Type 'Covariant<unknown>' is not assignable to type 'Covariant<string>'.
   Type 'unknown' is not assignable to type 'string'.
 a.js(21,14): error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
-a.js(29,33): error TS7006: Parameter 'x' implicitly has an 'any' type.
-a.js(34,31): error TS7006: Parameter 'x' implicitly has an 'any' type.
+a.js(23,19): error TS2304: Cannot find name 'T'.
 a.js(36,1): error TS2322: Type 'Contravariant<string>' is not assignable to type 'Contravariant<unknown>'.
   Type 'unknown' is not assignable to type 'string'.
 a.js(40,14): error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
-a.js(48,29): error TS7006: Parameter 'x' implicitly has an 'any' type.
-a.js(53,27): error TS7006: Parameter 'x' implicitly has an 'any' type.
+a.js(42,19): error TS2304: Cannot find name 'T'.
+a.js(42,25): error TS2304: Cannot find name 'T'.
 a.js(55,1): error TS2322: Type 'Invariant<string>' is not assignable to type 'Invariant<unknown>'.
   Type 'unknown' is not assignable to type 'string'.
 a.js(56,1): error TS2322: Type 'Invariant<unknown>' is not assignable to type 'Invariant<string>'.
@@ -23,6 +23,8 @@ a.js(59,14): error TS1274: 'in' modifier can only appear on a type parameter of 
 !!! error TS1274: 'out' modifier can only appear on a type parameter of a class, interface or type alias
      * @typedef {Object} Covariant
      * @property {T} x
+                  ~
+!!! error TS2304: Cannot find name 'T'.
      */
     
     /**
@@ -47,21 +49,19 @@ a.js(59,14): error TS1274: 'in' modifier can only appear on a type parameter of 
 !!! error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
      * @typedef {Object} Contravariant
      * @property {(x: T) => void} f
+                      ~
+!!! error TS2304: Cannot find name 'T'.
      */
     
     /**
      * @type {Contravariant<unknown>}
      */
     let super_contravariant = { f: (x) => {} };
-                                    ~
-!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
     
     /**
      * @type {Contravariant<string>}
      */
     let sub_contravariant = { f: (x) => {} };
-                                  ~
-!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
     
     super_contravariant = sub_contravariant;  // Error
     ~~~~~~~~~~~~~~~~~~~
@@ -75,21 +75,21 @@ a.js(59,14): error TS1274: 'in' modifier can only appear on a type parameter of 
 !!! error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
      * @typedef {Object} Invariant
      * @property {(x: T) => T} f
+                      ~
+!!! error TS2304: Cannot find name 'T'.
+                            ~
+!!! error TS2304: Cannot find name 'T'.
      */
     
     /**
      * @type {Invariant<unknown>}
      */
     let super_invariant = { f: (x) => {} };
-                                ~
-!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
     
     /**
      * @type {Invariant<string>}
      */
     let sub_invariant = { f: (x) => { return "" } };
-                              ~
-!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
     
     super_invariant = sub_invariant;  // Error
     ~~~~~~~~~~~~~~~

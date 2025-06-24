@@ -21,6 +21,6 @@ export declare class Foo {
      * @param {{ prop: string | undefined }} baz Baz.
      */
     set bar({ prop }: {
-        prop?: string;
+        prop: string | undefined;
     });
 }

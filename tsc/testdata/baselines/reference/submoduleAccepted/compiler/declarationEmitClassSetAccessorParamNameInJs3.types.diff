@@ -5,7 +5,7 @@
       */
      set bar({ prop = 'foo' }) {}
 ->bar : { prop: string | undefined; }
-+>bar : any
++>bar : { prop: string; }
  >prop : string
  >'foo' : "foo"
  }

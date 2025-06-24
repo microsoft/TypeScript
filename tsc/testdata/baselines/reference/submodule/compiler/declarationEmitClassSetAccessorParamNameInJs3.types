@@ -10,7 +10,7 @@ export class Foo {
      * @param {{ prop: string | undefined }} baz Baz.
      */
     set bar({ prop = 'foo' }) {}
->bar : any
+>bar : { prop: string; }
 >prop : string
 >'foo' : "foo"
 }

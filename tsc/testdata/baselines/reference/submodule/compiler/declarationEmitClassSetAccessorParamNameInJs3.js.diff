@@ -9,10 +9,3 @@
      /**
       * Bar.
       *
-      * @param {{ prop: string | undefined }} baz Baz.
-      */
-     set bar({ prop }: {
--        prop: string | undefined;
-+        prop?: string;
-     });
- }

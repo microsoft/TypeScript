@@ -65,17 +65,17 @@ var sala = { name: 'uppsala', not: 0, nested: "ok" };
 >"ok" : "ok"
 
 sala.name
->sala.name : any
+>sala.name : string
 >sala : Upp
->name : any
+>name : string
 
 sala.not
->sala.not : any
+>sala.not : Object
 >sala : Upp
->not : any
+>not : Object
 
 sala.nested
->sala.nested : any
+>sala.nested : string
 >sala : Upp
->nested : any
+>nested : string
 

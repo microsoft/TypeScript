@@ -57,10 +57,8 @@
 +export type Call = () ;
 +export type Nested = {
      oh: {
--        no: number;
--        noooooo: string;
-+        property: number;
-+        property: string;
+         no: number;
+         noooooo: string;
      };
  };
 -type Oops = any;

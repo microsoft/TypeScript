@@ -16,9 +16,9 @@ function foo(opts) {
 >opts : Opts
 
     opts.x;
->opts.x : any
+>opts.x : string
 >opts : Opts
->x : any
+>x : string
 }
 
 foo({x: 'abc'});
@@ -40,9 +40,9 @@ function foo1(opts) {
 >opts : AnotherOpts
 
     opts.anotherX;
->opts.anotherX : any
+>opts.anotherX : string
 >opts : AnotherOpts
->anotherX : any
+>anotherX : string
 }
 
 foo1({anotherX: "world"});
@@ -66,9 +66,9 @@ function foo2(opts) {
 >opts : Opts1
 
     opts.x;
->opts.x : any
+>opts.x : string
 >opts : Opts1
->x : any
+>x : string
 }
 foo2({x: 'abc'});
 >foo2({x: 'abc'}) : void

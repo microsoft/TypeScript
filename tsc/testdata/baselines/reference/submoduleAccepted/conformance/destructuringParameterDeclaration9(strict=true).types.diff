@@ -5,27 +5,11 @@
   */
  export function prepareConfig({
 ->prepareConfig : ({ additionalFiles: { json } }?: {    additionalFiles?: Partial<Record<"json" | "json5" | "jsonc", string[]>> | undefined;}) => void
-+>prepareConfig : ({ additionalFiles: { json } }?: { additionalFiles?: { json?: never[] | undefined; } | undefined; }) => void
++>prepareConfig : ({ additionalFiles: { json } }?: { additionalFiles?: Partial<Record<"json" | "json5" | "jsonc", string[]>> | undefined; }) => void
 
      additionalFiles: {
  >additionalFiles : any
-
-         json = []
-->json : string[]
-+>json : never[]
- >[] : never[]
-
-     } = {}
-@@= skipped -16, +16 lines =@@
- >{} : {}
-
-     json // string[]
-->json : string[]
-+>json : never[]
- }
-
- export function prepareConfigWithoutAnnotation({
-@@= skipped -10, +10 lines =@@
+@@= skipped -26, +26 lines =@@
  >additionalFiles : any
 
          json = []
@@ -58,26 +42,16 @@
   */
  function f1({ a: { json = [] } = {} } = {}) { return json }
 ->f1 : ({ a: { json } }?: { a?: { json?: string[]; }; }) => string[]
-+>f1 : ({ a: { json } }?: { a?: { json?: never[] | undefined; } | undefined; }) => never[]
++>f1 : ({ a: { json } }?: { a?: { json?: string[] | undefined; } | undefined; }) => string[]
  >a : any
-->json : string[]
-+>json : never[]
+ >json : string[]
  >[] : never[]
- >{} : {}
- >{} : {}
-->json : string[]
-+>json : never[]
-
- /**
+@@= skipped -12, +12 lines =@@
   * @param {[[string[]?]?]} [x]
   */
  function f2([[json = []] = []] = []) { return json }
 ->f2 : ([[json]]?: [[string[]?]?]) => string[]
-->json : string[]
-+>f2 : ([[json]]?: [([(never[] | undefined)?] | undefined)?]) => never[]
-+>json : never[]
++>f2 : ([[json]]?: [([(string[] | undefined)?] | undefined)?]) => string[]
+ >json : string[]
  >[] : never[]
  >[] : []
- >[] : []
-->json : string[]
-+>json : never[]

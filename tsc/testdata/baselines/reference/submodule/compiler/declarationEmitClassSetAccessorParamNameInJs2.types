@@ -10,6 +10,6 @@ export class Foo {
      * @param {{ prop: string }} baz Baz.
      */
     set bar({}) {}
->bar : any
+>bar : { prop: string; }
 }
 

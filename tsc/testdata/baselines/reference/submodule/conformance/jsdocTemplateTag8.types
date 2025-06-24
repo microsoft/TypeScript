@@ -46,20 +46,20 @@ sub_covariant   = super_covariant; // Error
  */
 let super_contravariant = { f: (x) => {} };
 >super_contravariant : Contravariant<unknown>
->{ f: (x) => {} } : { f: (x: any) => void; }
->f : (x: any) => void
->(x) => {} : (x: any) => void
->x : any
+>{ f: (x) => {} } : { f: (x: T) => void; }
+>f : (x: T) => void
+>(x) => {} : (x: T) => void
+>x : T
 
 /**
  * @type {Contravariant<string>}
  */
 let sub_contravariant = { f: (x) => {} };
 >sub_contravariant : Contravariant<string>
->{ f: (x) => {} } : { f: (x: any) => void; }
->f : (x: any) => void
->(x) => {} : (x: any) => void
->x : any
+>{ f: (x) => {} } : { f: (x: T) => void; }
+>f : (x: T) => void
+>(x) => {} : (x: T) => void
+>x : T
 
 super_contravariant = sub_contravariant;  // Error
 >super_contravariant = sub_contravariant : Contravariant<string>
@@ -82,20 +82,20 @@ sub_contravariant = super_contravariant;
  */
 let super_invariant = { f: (x) => {} };
 >super_invariant : Invariant<unknown>
->{ f: (x) => {} } : { f: (x: any) => void; }
->f : (x: any) => void
->(x) => {} : (x: any) => void
->x : any
+>{ f: (x) => {} } : { f: (x: T) => void; }
+>f : (x: T) => void
+>(x) => {} : (x: T) => void
+>x : T
 
 /**
  * @type {Invariant<string>}
  */
 let sub_invariant = { f: (x) => { return "" } };
 >sub_invariant : Invariant<string>
->{ f: (x) => { return "" } } : { f: (x: any) => string; }
->f : (x: any) => string
->(x) => { return "" } : (x: any) => string
->x : any
+>{ f: (x) => { return "" } } : { f: (x: T) => string; }
+>f : (x: T) => string
+>(x) => { return "" } : (x: T) => string
+>x : T
 >"" : ""
 
 super_invariant = sub_invariant;  // Error
