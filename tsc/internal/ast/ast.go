@@ -53,23 +53,33 @@ type NodeFactory struct {
 	blockPool                        core.Pool[Block]
 	callExpressionPool               core.Pool[CallExpression]
 	expressionStatementPool          core.Pool[ExpressionStatement]
+	functionDeclarationPool          core.Pool[FunctionDeclaration]
+	functionTypeNodePool             core.Pool[FunctionTypeNode]
 	identifierPool                   core.Pool[Identifier]
 	ifStatementPool                  core.Pool[IfStatement]
+	interfaceDeclarationPool         core.Pool[InterfaceDeclaration]
 	jsdocPool                        core.Pool[JSDoc]
 	jsdocTextPool                    core.Pool[JSDocText]
+	keywordExpressionPool            core.Pool[KeywordExpression]
 	keywordTypeNodePool              core.Pool[KeywordTypeNode]
 	literalTypeNodePool              core.Pool[LiteralTypeNode]
+	methodSignatureDeclarationPool   core.Pool[MethodSignatureDeclaration]
 	modifierListPool                 core.Pool[ModifierList]
 	nodeListPool                     core.Pool[NodeList]
+	numericLiteralPool               core.Pool[NumericLiteral]
 	parameterDeclarationPool         core.Pool[ParameterDeclaration]
 	parenthesizedExpressionPool      core.Pool[ParenthesizedExpression]
+	parenthesizedTypeNodePool        core.Pool[ParenthesizedTypeNode]
+	prefixUnaryExpressionPool        core.Pool[PrefixUnaryExpression]
 	propertyAccessExpressionPool     core.Pool[PropertyAccessExpression]
 	propertyAssignmentPool           core.Pool[PropertyAssignment]
 	propertySignatureDeclarationPool core.Pool[PropertySignatureDeclaration]
 	returnStatementPool              core.Pool[ReturnStatement]
 	stringLiteralPool                core.Pool[StringLiteral]
 	tokenPool                        core.Pool[Token]
+	typeLiteralNodePool              core.Pool[TypeLiteralNode]
 	typeReferenceNodePool            core.Pool[TypeReferenceNode]
+	unionTypeNodePool                core.Pool[UnionTypeNode]
 	variableDeclarationListPool      core.Pool[VariableDeclarationList]
 	variableDeclarationPool          core.Pool[VariableDeclaration]
 	variableStatementPool            core.Pool[VariableStatement]
@@ -3466,7 +3476,7 @@ type FunctionDeclaration struct {
 }
 
 func (f *NodeFactory) NewFunctionDeclaration(modifiers *ModifierList, asteriskToken *TokenNode, name *IdentifierNode, typeParameters *NodeList, parameters *NodeList, returnType *TypeNode, body *BlockNode) *Node {
-	data := &FunctionDeclaration{}
+	data := f.functionDeclarationPool.New()
 	data.modifiers = modifiers
 	data.AsteriskToken = asteriskToken
 	data.name = name
@@ -3722,7 +3732,7 @@ type InterfaceDeclaration struct {
 }
 
 func (f *NodeFactory) NewInterfaceDeclaration(modifiers *ModifierList, name *IdentifierNode, typeParameters *NodeList, heritageClauses *NodeList, members *NodeList) *Node {
-	data := &InterfaceDeclaration{}
+	data := f.interfaceDeclarationPool.New()
 	data.modifiers = modifiers
 	data.name = name
 	data.TypeParameters = typeParameters
@@ -5124,7 +5134,7 @@ type MethodSignatureDeclaration struct {
 }
 
 func (f *NodeFactory) NewMethodSignatureDeclaration(modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, typeParameters *NodeList, parameters *NodeList, returnType *TypeNode) *Node {
-	data := &MethodSignatureDeclaration{}
+	data := f.methodSignatureDeclarationPool.New()
 	data.modifiers = modifiers
 	data.name = name
 	data.PostfixToken = postfixToken
@@ -5433,7 +5443,7 @@ type KeywordExpression struct {
 }
 
 func (f *NodeFactory) NewKeywordExpression(kind Kind) *Node {
-	return f.newNode(kind, &KeywordExpression{})
+	return f.newNode(kind, f.keywordExpressionPool.New())
 }
 
 func (node *KeywordExpression) Clone(f NodeFactoryCoercible) *Node {
@@ -5489,7 +5499,7 @@ type NumericLiteral struct {
 }
 
 func (f *NodeFactory) NewNumericLiteral(text string) *Node {
-	data := &NumericLiteral{}
+	data := f.numericLiteralPool.New()
 	data.Text = text
 	f.textCount++
 	return f.newNode(KindNumericLiteral, data)
@@ -5638,7 +5648,7 @@ type PrefixUnaryExpression struct {
 }
 
 func (f *NodeFactory) NewPrefixUnaryExpression(operator Kind, operand *Expression) *Node {
-	data := &PrefixUnaryExpression{}
+	data := f.prefixUnaryExpressionPool.New()
 	data.Operator = operator
 	data.Operand = operand
 	return f.newNode(KindPrefixUnaryExpression, data)
@@ -7035,7 +7045,7 @@ func (f *NodeFactory) UpdateUnionTypeNode(node *UnionTypeNode, types *TypeList) 
 }
 
 func (f *NodeFactory) NewUnionTypeNode(types *NodeList) *Node {
-	data := &UnionTypeNode{}
+	data := f.unionTypeNodePool.New()
 	data.Types = types
 	return f.newNode(KindUnionType, data)
 }
@@ -7718,7 +7728,7 @@ type TypeLiteralNode struct {
 }
 
 func (f *NodeFactory) NewTypeLiteralNode(members *NodeList) *Node {
-	data := &TypeLiteralNode{}
+	data := f.typeLiteralNodePool.New()
 	data.Members = members
 	return f.newNode(KindTypeLiteral, data)
 }
@@ -7909,7 +7919,7 @@ type ParenthesizedTypeNode struct {
 }
 
 func (f *NodeFactory) NewParenthesizedTypeNode(typeNode *TypeNode) *Node {
-	data := &ParenthesizedTypeNode{}
+	data := f.parenthesizedTypeNodePool.New()
 	data.Type = typeNode
 	return f.newNode(KindParenthesizedType, data)
 }
@@ -7957,7 +7967,7 @@ type FunctionTypeNode struct {
 }
 
 func (f *NodeFactory) NewFunctionTypeNode(typeParameters *NodeList, parameters *NodeList, returnType *TypeNode) *Node {
-	data := &FunctionTypeNode{}
+	data := f.functionTypeNodePool.New()
 	data.TypeParameters = typeParameters
 	data.Parameters = parameters
 	data.Type = returnType
