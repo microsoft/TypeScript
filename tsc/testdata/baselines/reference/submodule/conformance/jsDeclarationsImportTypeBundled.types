@@ -8,31 +8,31 @@
  * @type {Item};
  */
 const x = {x: 12};
->x : { x: number; }
+>x : Item
 >{x: 12} : { x: number; }
 >x : number
 >12 : 12
 
 module.exports = x;
->module.exports = x : { x: number; }
->module.exports : { x: number; }
->module : { readonly x: { x: number; }; }
->exports : { x: number; }
->x : { x: number; }
+>module.exports = x : Item
+>module.exports : Item
+>module : { readonly x: Item; }
+>exports : Item
+>x : Item
 
 === index.js ===
 /** @type {(typeof import("./folder/mod1"))[]} */
 const items = [{x: 12}];
->items : { x: number; }[]
+>items : import("./folder/mod1").Item[]
 >[{x: 12}] : { x: number; }[]
 >{x: 12} : { x: number; }
 >x : number
 >12 : 12
 
 module.exports = items;
->module.exports = items : { x: number; }[]
->module.exports : { x: number; }[]
->module : { readonly items: { x: number; }[]; }
->exports : { x: number; }[]
->items : { x: number; }[]
+>module.exports = items : import("./folder/mod1").Item[]
+>module.exports : import("./folder/mod1").Item[]
+>module : { readonly items: import("./folder/mod1").Item[]; }
+>exports : import("./folder/mod1").Item[]
+>items : import("./folder/mod1").Item[]
 

@@ -1,9 +1,0 @@
---- old.recursiveTypeReferences2.types
-+++ new.recursiveTypeReferences2.types
-@@= skipped -25, +25 lines =@@
-
- /** @type {XMLObject<{foo:string}>} */
- const p = {};
-->p : XMLObject<{ foo: string; }>
-+>p : { $A: { foo?: ({ $A: string; $O: string; $$?: Record<string, string>; } & string)[]; }; $O: { foo?: { $$?: Record<string, string>; } & { $: string; }; }; $$?: Record<string, string>; } & { foo?: string; }
- >{} : {}

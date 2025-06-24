@@ -19,7 +19,7 @@ const a = { value: undefined }; // error
 
 /** @type {B} */
 const b = { value: undefined }; // error
->b : { value?: number; }
+>b : B
 >{ value: undefined } : { value: undefined; }
 >value : undefined
 >undefined : undefined

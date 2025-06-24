@@ -1,29 +1,24 @@
 --- old.jsDeclarationsImportTypeBundled.types
 +++ new.jsDeclarationsImportTypeBundled.types
-@@= skipped -7, +7 lines =@@
-  * @type {Item};
-  */
- const x = {x: 12};
-->x : Item
-+>x : { x: number; }
- >{x: 12} : { x: number; }
- >x : number
+@@= skipped -13, +13 lines =@@
  >12 : 12
-@@= skipped -8, +8 lines =@@
+
  module.exports = x;
- >module.exports = x : { x: number; }
- >module.exports : { x: number; }
+->module.exports = x : { x: number; }
+->module.exports : { x: number; }
 ->module : { exports: { x: number; }; }
-+>module : { readonly x: { x: number; }; }
- >exports : { x: number; }
-->x : Item
-+>x : { x: number; }
+->exports : { x: number; }
++>module.exports = x : Item
++>module.exports : Item
++>module : { readonly x: Item; }
++>exports : Item
+ >x : Item
 
  === index.js ===
  /** @type {(typeof import("./folder/mod1"))[]} */
  const items = [{x: 12}];
 ->items : import("folder/mod1").Item[]
-+>items : { x: number; }[]
++>items : import("./folder/mod1").Item[]
  >[{x: 12}] : { x: number; }[]
  >{x: 12} : { x: number; }
  >x : number
@@ -35,8 +30,8 @@
 ->module : { exports: import("folder/mod1").Item[]; }
 ->exports : import("folder/mod1").Item[]
 ->items : import("folder/mod1").Item[]
-+>module.exports = items : { x: number; }[]
-+>module.exports : { x: number; }[]
-+>module : { readonly items: { x: number; }[]; }
-+>exports : { x: number; }[]
-+>items : { x: number; }[]
++>module.exports = items : import("./folder/mod1").Item[]
++>module.exports : import("./folder/mod1").Item[]
++>module : { readonly items: import("./folder/mod1").Item[]; }
++>exports : import("./folder/mod1").Item[]
++>items : import("./folder/mod1").Item[]

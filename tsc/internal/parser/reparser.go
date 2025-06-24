@@ -227,7 +227,7 @@ func (p *Parser) gatherTypeParameters(j *ast.Node, tagWithTypeParameters *ast.No
 			reparse := tp
 			if constraint != nil && firstTypeParameter {
 				reparse = p.factory.NewTypeParameterDeclaration(tp.Modifiers(), tp.Name(), nil, tp.AsTypeParameter().DefaultType)
-				reparse.AsTypeParameter().Constraint = setHost(constraint, host)
+				reparse.AsTypeParameter().Constraint = setHost(constraint, reparse)
 				reparse.Loc = tp.Loc
 			}
 			if tag.AsJSDocTemplateTag().Host == nil {

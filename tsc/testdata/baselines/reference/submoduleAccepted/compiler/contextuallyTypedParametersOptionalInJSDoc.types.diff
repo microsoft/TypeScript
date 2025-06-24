@@ -1,22 +1,6 @@
 --- old.contextuallyTypedParametersOptionalInJSDoc.types
 +++ new.contextuallyTypedParametersOptionalInJSDoc.types
-@@= skipped -14, +14 lines =@@
-
- /** @type {Fn} */
- const fn1 =
-->fn1 : Fn
-+>fn1 : (a: string, b: number) => void
-
-   /**
-    * @param [b]
-@@= skipped -31, +31 lines =@@
-
- /** @type {Fn} */
- const fn2 =
-->fn2 : Fn
-+>fn2 : (a: string, b: number) => void
-
-   /**
+@@= skipped -51, +51 lines =@@
     * @param {number} [b]
     */
    function self(a, b) {
@@ -27,7 +11,7 @@
  >a : string
  >b : number | undefined
 
-@@= skipped -18, +18 lines =@@
+@@= skipped -12, +12 lines =@@
 
      self("");
  >self("") : void

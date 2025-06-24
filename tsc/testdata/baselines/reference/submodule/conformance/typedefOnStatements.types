@@ -93,24 +93,24 @@ catch (e) {
  * @param {Q} q
  */
 function proof (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q) {
->proof : (a: { a: string; }, b: { b: string; }, c: { c: string; }, d: { d: string; }, e: { e: string; }, f: { f: string; }, g: { g: string; }, h: { h: string; }, i: { i: string; }, j: { j: string; }, k: { k: string; }, l: { l: string; }, m: { m: string; }, n: { n: string; }, o: { o: string; }, p: { p: string; }, q: { q: string; }) => void
->a : { a: string; }
->b : { b: string; }
->c : { c: string; }
->d : { d: string; }
->e : { e: string; }
->f : { f: string; }
->g : { g: string; }
->h : { h: string; }
->i : { i: string; }
->j : { j: string; }
->k : { k: string; }
->l : { l: string; }
->m : { m: string; }
->n : { n: string; }
->o : { o: string; }
->p : { p: string; }
->q : { q: string; }
+>proof : (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I, j: J, k: K, l: L, m: M, n: N, o: O, p: P, q: Q) => void
+>a : A
+>b : B
+>c : C
+>d : D
+>e : E
+>f : F
+>g : G
+>h : H
+>i : I
+>j : J
+>k : K
+>l : L
+>m : M
+>n : N
+>o : O
+>p : P
+>q : Q
 
     console.log(a.a, b.b, c.c, d.d, e.e, f.f, g.g, h.h, i.i, j.j, k.k, l.l, m.m, n.n, o.o, p.p, q.q)
 >console.log(a.a, b.b, c.c, d.d, e.e, f.f, g.g, h.h, i.i, j.j, k.k, l.l, m.m, n.n, o.o, p.p, q.q) : void
@@ -118,55 +118,55 @@ function proof (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q) {
 >console : Console
 >log : (...data: any[]) => void
 >a.a : string
->a : { a: string; }
+>a : A
 >a : string
 >b.b : string
->b : { b: string; }
+>b : B
 >b : string
 >c.c : string
->c : { c: string; }
+>c : C
 >c : string
 >d.d : string
->d : { d: string; }
+>d : D
 >d : string
 >e.e : string
->e : { e: string; }
+>e : E
 >e : string
 >f.f : string
->f : { f: string; }
+>f : F
 >f : string
 >g.g : string
->g : { g: string; }
+>g : G
 >g : string
 >h.h : string
->h : { h: string; }
+>h : H
 >h : string
 >i.i : string
->i : { i: string; }
+>i : I
 >i : string
 >j.j : string
->j : { j: string; }
+>j : J
 >j : string
 >k.k : string
->k : { k: string; }
+>k : K
 >k : string
 >l.l : string
->l : { l: string; }
+>l : L
 >l : string
 >m.m : string
->m : { m: string; }
+>m : M
 >m : string
 >n.n : string
->n : { n: string; }
+>n : N
 >n : string
 >o.o : string
->o : { o: string; }
+>o : O
 >o : string
 >p.p : string
->p : { p: string; }
+>p : P
 >p : string
 >q.q : string
->q : { q: string; }
+>q : Q
 >q : string
 
     /** @type {Alpha} */

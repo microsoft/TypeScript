@@ -26,6 +26,6 @@
 
 /** @type {XMLObject<{foo:string}>} */
 const p = {};
->p : { $A: { foo?: ({ $A: string; $O: string; $$?: Record<string, string>; } & string)[]; }; $O: { foo?: { $$?: Record<string, string>; } & { $: string; }; }; $$?: Record<string, string>; } & { foo?: string; }
+>p : XMLObject<{ foo: string; }>
 >{} : {}
 

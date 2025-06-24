@@ -15,7 +15,7 @@ function acceptNum(num) {}
 
 /** @type {Fn} */
 const fn1 =
->fn1 : (a: string, b: number) => void
+>fn1 : Fn
 
   /**
    * @param [b]
@@ -46,7 +46,7 @@ const fn1 =
 
 /** @type {Fn} */
 const fn2 =
->fn2 : (a: string, b: number) => void
+>fn2 : Fn
 
   /**
    * @param {number} [b]

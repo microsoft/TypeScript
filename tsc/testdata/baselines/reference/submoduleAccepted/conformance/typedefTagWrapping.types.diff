@@ -9,32 +9,7 @@
  >func : Type1
  >arg : string
  }
-@@= skipped -20, +20 lines =@@
-  * @returns {string|number} The return.
-  */
- function check(obj) {
-->check : (obj: Type2) => string | number
-->obj : Type2
-+>check : (obj: { num: number; str: string; boo: boolean; }) => string | number
-+>obj : { num: number; str: string; boo: boolean; }
-
-   return obj.boo ? obj.num : obj.str;
- >obj.boo ? obj.num : obj.str : string | number
- >obj.boo : boolean
-->obj : Type2
-+>obj : { num: number; str: string; boo: boolean; }
- >boo : boolean
- >obj.num : number
-->obj : Type2
-+>obj : { num: number; str: string; boo: boolean; }
- >num : number
- >obj.str : string
-->obj : Type2
-+>obj : { num: number; str: string; boo: boolean; }
- >str : string
- }
-
-@@= skipped -40, +40 lines =@@
+@@= skipped -60, +60 lines =@@
  >num : number
 
    return func(bool, str, num)
@@ -52,43 +27,3 @@
  >func : StringOrNumber2
  >bool : boolean
  >str : string
-@@= skipped -25, +25 lines =@@
-  * @returns {string|number} The return.
-  */
- function check5(obj) {
-->check5 : (obj: Type5) => string | number
-->obj : Type5
-+>check5 : (obj: { num: number; str: string; boo: boolean; }) => string | number
-+>obj : { num: number; str: string; boo: boolean; }
-
-   return obj.boo ? obj.num : obj.str;
- >obj.boo ? obj.num : obj.str : string | number
- >obj.boo : boolean
-->obj : Type5
-+>obj : { num: number; str: string; boo: boolean; }
- >boo : boolean
- >obj.num : number
-->obj : Type5
-+>obj : { num: number; str: string; boo: boolean; }
- >num : number
- >obj.str : string
-->obj : Type5
-+>obj : { num: number; str: string; boo: boolean; }
- >str : string
- }
-
-@@= skipped -32, +32 lines =@@
-  * @returns {*} The return.
-  */
- function check6(obj) {
-->check6 : (obj: Type6) => any
-->obj : Type6
-+>check6 : (obj: { foo: any; bar: any; }) => any
-+>obj : { foo: any; bar: any; }
-
-   return obj.foo;
- >obj.foo : any
-->obj : Type6
-+>obj : { foo: any; bar: any; }
- >foo : any
- }

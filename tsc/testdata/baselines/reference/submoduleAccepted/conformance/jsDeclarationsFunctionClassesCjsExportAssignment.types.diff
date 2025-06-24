@@ -35,19 +35,16 @@
   */
  function Hook(handle) {
 ->Hook : typeof Hook
-->handle : HookHandler
-+>Hook : (handle: (arg: any) => void) => void
-+>handle : (arg: any) => void
++>Hook : (handle: HookHandler) => void
+ >handle : HookHandler
 
      this.handle = handle;
-->this.handle = handle : HookHandler
-+>this.handle = handle : (arg: any) => void
+ >this.handle = handle : HookHandler
  >this.handle : any
 ->this : this
 +>this : any
  >handle : any
-->handle : HookHandler
-+>handle : (arg: any) => void
+ >handle : HookHandler
  }
  module.exports = Hook;
 ->module.exports = Hook : typeof Hook
@@ -55,11 +52,11 @@
 ->module : { exports: typeof Hook; }
 ->exports : typeof Hook
 ->Hook : typeof Hook
-+>module.exports = Hook : (handle: (arg: any) => void) => void
-+>module.exports : (handle: (arg: any) => void) => void
-+>module : { Hook(handle: (arg: any) => void): void; }
-+>exports : (handle: (arg: any) => void) => void
-+>Hook : (handle: (arg: any) => void) => void
++>module.exports = Hook : (handle: HookHandler) => void
++>module.exports : (handle: HookHandler) => void
++>module : { Hook(handle: HookHandler): void; }
++>exports : (handle: HookHandler) => void
++>Hook : (handle: HookHandler) => void
 
  === context.js ===
  /**

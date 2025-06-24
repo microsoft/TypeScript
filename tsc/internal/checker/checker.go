@@ -22640,9 +22640,9 @@ func (c *Checker) getAliasForTypeNode(node *ast.Node) *TypeAlias {
 }
 
 func (c *Checker) getAliasSymbolForTypeNode(node *ast.Node) *ast.Symbol {
-	host := node.Parent
+	host := ast.GetEffectiveTypeParent(node.Parent)
 	for ast.IsParenthesizedTypeNode(host) || ast.IsTypeOperatorNode(host) && host.AsTypeOperatorNode().Operator == ast.KindReadonlyKeyword {
-		host = host.Parent
+		host = ast.GetEffectiveTypeParent(host.Parent)
 	}
 	if isTypeAlias(host) {
 		return c.getSymbolOfDeclaration(host)

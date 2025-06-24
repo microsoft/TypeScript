@@ -16,9 +16,9 @@ let id = 0
  * @returns {Promise<any>}
  */
 const send = handlers => new Promise((resolve, reject) => {
->send : (handlers: { [id: string]: [Function, Function]; }) => Promise<any>
->handlers => new Promise((resolve, reject) => {  handlers[++id] = [resolve, reject]}) : (handlers: { [id: string]: [Function, Function]; }) => Promise<any>
->handlers : { [id: string]: [Function, Function]; }
+>send : (handlers: ResolveRejectMap) => Promise<any>
+>handlers => new Promise((resolve, reject) => {  handlers[++id] = [resolve, reject]}) : (handlers: ResolveRejectMap) => Promise<any>
+>handlers : ResolveRejectMap
 >new Promise((resolve, reject) => {  handlers[++id] = [resolve, reject]}) : Promise<any>
 >Promise : PromiseConstructor
 >(resolve, reject) => {  handlers[++id] = [resolve, reject]} : (resolve: (value: any) => void, reject: (reason?: any) => void) => void
@@ -28,7 +28,7 @@ const send = handlers => new Promise((resolve, reject) => {
   handlers[++id] = [resolve, reject]
 >handlers[++id] = [resolve, reject] : [(value: any) => void, (reason?: any) => void]
 >handlers[++id] : [Function, Function]
->handlers : { [id: string]: [Function, Function]; }
+>handlers : ResolveRejectMap
 >++id : number
 >id : number
 >[resolve, reject] : [(value: any) => void, (reason?: any) => void]

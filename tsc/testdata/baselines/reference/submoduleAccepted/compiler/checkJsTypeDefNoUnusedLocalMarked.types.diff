@@ -8,11 +8,10 @@
 ->module.exports : (foo: Foo) => string
 ->module : { exports: (foo: Foo) => string; }
 ->exports : (foo: Foo) => string
-->(void 0) : FooFun
-+>module.exports = /** @type {FooFun} */(void 0) : (foo: typeof import("./file")) => string
-+>module.exports : (foo: typeof import("./file")) => string
-+>module : { "export=": (foo: typeof import("./file")) => string; }
-+>exports : (foo: typeof import("./file")) => string
-+>(void 0) : (foo: typeof import("./file")) => string
++>module.exports = /** @type {FooFun} */(void 0) : FooFun
++>module.exports : FooFun
++>module : { "export=": FooFun; }
++>exports : FooFun
+ >(void 0) : FooFun
  >void 0 : undefined
  >0 : 0

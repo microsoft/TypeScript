@@ -20,7 +20,7 @@ inJs(1); // lints error. Why?
 
 /**@type {IFn}*/
 const inJsArrow = (j) => {
->inJsArrow : <T>(m: T) => T
+>inJsArrow : IFn
 >(j) => {    return j;} : <T>(j: T) => T
 >j : T
 
@@ -29,6 +29,6 @@ const inJsArrow = (j) => {
 }
 inJsArrow(2); // no error gets linted as expected
 >inJsArrow(2) : 2
->inJsArrow : <T>(m: T) => T
+>inJsArrow : IFn
 >2 : 2
 

@@ -14,15 +14,15 @@
  * @returns { asserts a is B }
  */
 const foo = (a) => {
->foo : (a: { x: number; }) => asserts a is { x: number; } & { y: number; }
->(a) => {    if (/** @type { B } */ (a).y !== 0) throw TypeError();    return undefined;} : (a: { x: number; }) => asserts a is { x: number; } & { y: number; }
->a : { x: number; }
+>foo : (a: A) => asserts a is B
+>(a) => {    if (/** @type { B } */ (a).y !== 0) throw TypeError();    return undefined;} : (a: A) => asserts a is B
+>a : A
 
     if (/** @type { B } */ (a).y !== 0) throw TypeError();
 >(a).y !== 0 : boolean
 >(a).y : number
->(a) : { x: number; } & { y: number; }
->a : { x: number; }
+>(a) : B
+>a : A
 >y : number
 >0 : 0
 >TypeError() : TypeError
@@ -39,15 +39,15 @@ export const main = () => {
 
     /** @type { A } */
     const a = { x: 1 };
->a : { x: number; }
+>a : A
 >{ x: 1 } : { x: number; }
 >x : number
 >1 : 1
 
     foo(a);
 >foo(a) : void
->foo : (a: { x: number; }) => asserts a is { x: number; } & { y: number; }
->a : { x: number; }
+>foo : (a: A) => asserts a is B
+>a : A
 
 };
 

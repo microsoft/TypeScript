@@ -8,15 +8,15 @@
 
 // property assignment
 var ns = {}
->ns : { x: { status: "done"; m(n: number): void; }; }
->{} : { x: { status: "done"; m(n: number): void; }; }
+>ns : { x: DoneStatus; }
+>{} : { x: DoneStatus; }
 
 /** @type {DoneStatus} */
 ns.x = {
 >ns.x = {    status: 'done',    m(n) { }} : { status: "done"; m(n: number): void; }
->ns.x : { status: "done"; m(n: number): void; }
->ns : { x: { status: "done"; m(n: number): void; }; }
->x : { status: "done"; m(n: number): void; }
+>ns.x : DoneStatus
+>ns : { x: DoneStatus; }
+>x : DoneStatus
 >{    status: 'done',    m(n) { }} : { status: "done"; m(n: number): void; }
 
     status: 'done',
@@ -30,9 +30,9 @@ ns.x = {
 
 ns.x = {
 >ns.x = {    status: 'done',    m(n) { }} : { status: string; m(n: any): void; }
->ns.x : { status: "done"; m(n: number): void; }
->ns : { x: { status: "done"; m(n: number): void; }; }
->x : { status: "done"; m(n: number): void; }
+>ns.x : DoneStatus
+>ns : { x: DoneStatus; }
+>x : DoneStatus
 >{    status: 'done',    m(n) { }} : { status: string; m(n: any): void; }
 
     status: 'done',
@@ -44,9 +44,9 @@ ns.x = {
 >n : any
 }
 ns.x
->ns.x : { status: "done"; m(n: number): void; }
->ns : { x: { status: "done"; m(n: number): void; }; }
->x : { status: "done"; m(n: number): void; }
+>ns.x : DoneStatus
+>ns : { x: DoneStatus; }
+>x : DoneStatus
 
 
 // this-property assignment
@@ -57,9 +57,9 @@ class Thing {
         /** @type {DoneStatus} */
         this.s = {
 >this.s = {            status: 'done',            m(n) { }        } : { status: "done"; m(n: number): void; }
->this.s : { status: "done"; m(n: number): void; }
+>this.s : DoneStatus
 >this : this
->s : { status: "done"; m(n: number): void; }
+>s : DoneStatus
 >{            status: 'done',            m(n) { }        } : { status: "done"; m(n: number): void; }
 
             status: 'done',
@@ -77,9 +77,9 @@ class Thing {
 
         this.s = {
 >this.s = {            status: 'done',            m(n) { }        } : { status: "done"; m(n: number): void; }
->this.s : { status: "done"; m(n: number): void; }
+>this.s : DoneStatus
 >this : this
->s : { status: "done"; m(n: number): void; }
+>s : DoneStatus
 >{            status: 'done',            m(n) { }        } : { status: "done"; m(n: number): void; }
 
             status: 'done',
@@ -169,14 +169,14 @@ Thing.prototype.x
 
 // prototype assignment
 function F() {
->F : { (): void; prototype: { status: "done"; m(n: number): void; }; }
+>F : { (): void; prototype: DoneStatus; }
 }
 /** @type {DoneStatus} */
 F.prototype = {
 >F.prototype = {    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
->F.prototype : { status: "done"; m(n: number): void; }
->F : { (): void; prototype: { status: "done"; m(n: number): void; }; }
->prototype : { status: "done"; m(n: number): void; }
+>F.prototype : DoneStatus
+>F : { (): void; prototype: DoneStatus; }
+>prototype : DoneStatus
 >{    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
 
     status: "done",
