@@ -36,7 +36,9 @@ declare function Foo(): {
          */
         foo(bar: string): void;
         /**
-         * comment 1
+         * @deprecated This signature is deprecated
+         *
+         * comment 2
          */
         foo(): string;
     };
