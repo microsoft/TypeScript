@@ -1,0 +1,19 @@
+usingDeclarationsInForOfShadowing.ts(12,7): error TS2481: Cannot initialize outer scoped variable 'baz' in the same scope as block scoped declaration 'baz'.
+
+
+==== usingDeclarationsInForOfShadowing.ts (1 errors) ====
+    class Foo {}
+    
+    for (using foo of []) {
+      const foo = new Foo();
+    }
+    
+    for (using bar of []) {
+      let bar = "test";
+    }
+    
+    for (using baz of []) {
+      var baz = 42;
+          ~~~
+!!! error TS2481: Cannot initialize outer scoped variable 'baz' in the same scope as block scoped declaration 'baz'.
+    }
