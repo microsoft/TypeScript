@@ -3812,7 +3812,7 @@ function getCompletionData(
         if (inCheckedFile) {
             for (const symbol of type.getApparentProperties()) {
                 if (typeChecker.isValidPropertyAccessForCompletions(propertyAccess, type, symbol)) {
-                    addPropertySymbol(symbol, /*insertAwait*/ false, insertQuestionDot, type);
+                    addPropertySymbol(symbol, /*insertAwait*/ false, insertQuestionDot);
                 }
             }
         }
@@ -3830,14 +3830,14 @@ function getCompletionData(
             if (promiseType) {
                 for (const symbol of promiseType.getApparentProperties()) {
                     if (typeChecker.isValidPropertyAccessForCompletions(propertyAccess, promiseType, symbol)) {
-                        addPropertySymbol(symbol, /*insertAwait*/ true, insertQuestionDot, promiseType);
+                        addPropertySymbol(symbol, /*insertAwait*/ true, insertQuestionDot);
                     }
                 }
             }
         }
     }
 
-    function addPropertySymbol(symbol: Symbol, insertAwait: boolean, insertQuestionDot: boolean, completionType: Type) {
+    function addPropertySymbol(symbol: Symbol, insertAwait: boolean, insertQuestionDot: boolean) {
         // For a computed property with an accessible name like `Symbol.iterator`,
         // we'll add a completion for the *name* `Symbol` instead of for the property.
         // If this is e.g. [Symbol.iterator], add a completion for `Symbol`.
@@ -3907,7 +3907,7 @@ function getCompletionData(
             if (isStaticProperty(symbol)) {
                 symbolToSortTextMap[getSymbolId(symbol)] = SortText.LocalDeclarationPriority;
             }
-            else if (isNativeFunctionMethod(symbol, typeChecker, completionType)) {
+            else if (isNativeFunctionMethod(symbol)) {
                 symbolToSortTextMap[getSymbolId(symbol)] = SortText.SortBelow(SortText.LocationPriority);
             }
         }
@@ -5843,24 +5843,19 @@ function isStaticProperty(symbol: Symbol) {
     return !!(symbol.valueDeclaration && getEffectiveModifierFlags(symbol.valueDeclaration) & ModifierFlags.Static && isClassLike(symbol.valueDeclaration.parent));
 }
 
-function isNativeFunctionMethod(symbol: Symbol, typeChecker: TypeChecker, type: Type): boolean {
-    // Check if the symbol is a method or property on Function.prototype
-    const nativeFunctionMethods = new Set([
-        "apply", "call", "bind", "toString", "prototype", "length", "arguments", "caller", "name"
-    ]);
-    
-    if (!nativeFunctionMethods.has(symbol.name)) {
+function isNativeFunctionMethod(symbol: Symbol): boolean {
+    const declaration = symbol.valueDeclaration ?? symbol.declarations?.[0];
+    if (!declaration) {
         return false;
     }
     
-    // Only deprioritize if we're completing on a function type
-    const typeFlags = type.flags;
-    if (!(typeFlags & TypeFlags.Object)) {
+    const parent = declaration.parent;
+    if (!isInterfaceDeclaration(parent)) {
         return false;
     }
     
-    const signatures = type.getCallSignatures();
-    return signatures && signatures.length > 0;
+    const interfaceName = parent.name?.text;
+    return interfaceName === "Function" || interfaceName === "CallableFunction";
 }
 
 function tryGetObjectLiteralContextualType(node: ObjectLiteralExpression, typeChecker: TypeChecker) {
