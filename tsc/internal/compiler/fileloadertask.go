@@ -29,9 +29,10 @@ type fileLoaderWorker[K fileLoaderWorkerTask[K]] struct {
 }
 
 type queuedTask[K fileLoaderWorkerTask[K]] struct {
-	task        K
-	mu          sync.Mutex
-	lowestDepth int
+	task                K
+	mu                  sync.Mutex
+	lowestDepth         int
+	fromExternalLibrary bool
 }
 
 func (w *fileLoaderWorker[K]) runAndWait(loader *fileLoader, tasks []K) {
@@ -47,19 +48,20 @@ func (w *fileLoaderWorker[K]) start(loader *fileLoader, tasks []K, depth int, is
 		task = loadedTask.task
 		if loaded {
 			tasks[i] = task
+			// Add in the loaded task's external-ness.
+			taskIsFromExternalLibrary = taskIsFromExternalLibrary || task.isFromExternalLibrary()
 		}
 
 		w.wg.Queue(func() {
 			loadedTask.mu.Lock()
 			defer loadedTask.mu.Unlock()
 
+			startSubtasks := false
+
 			currentDepth := depth
 			if task.shouldIncreaseDepth() {
 				currentDepth++
 			}
-
-			startSubtasks := false
-
 			if currentDepth < loadedTask.lowestDepth {
 				// If we're seeing this task at a lower depth than before,
 				// reprocess its subtasks to ensure they are loaded.
@@ -67,10 +69,10 @@ func (w *fileLoaderWorker[K]) start(loader *fileLoader, tasks []K, depth int, is
 				startSubtasks = true
 			}
 
-			if !task.isRoot() && taskIsFromExternalLibrary && !task.isFromExternalLibrary() {
+			if !task.isRoot() && taskIsFromExternalLibrary && !loadedTask.fromExternalLibrary {
 				// If we're seeing this task now as an external library,
 				// reprocess its subtasks to ensure they are also marked as external.
-				task.markFromExternalLibrary()
+				loadedTask.fromExternalLibrary = true
 				startSubtasks = true
 			}
 
@@ -83,13 +85,20 @@ func (w *fileLoaderWorker[K]) start(loader *fileLoader, tasks []K, depth int, is
 			}
 
 			if startSubtasks {
-				w.start(loader, task.getSubTasks(), loadedTask.lowestDepth, task.isFromExternalLibrary())
+				w.start(loader, task.getSubTasks(), loadedTask.lowestDepth, loadedTask.fromExternalLibrary)
 			}
 		})
 	}
 }
 
 func (w *fileLoaderWorker[K]) collect(loader *fileLoader, tasks []K, iterate func(K, []tspath.Path)) []tspath.Path {
+	// Mark all tasks we saw as external after the fact.
+	w.tasksByFileName.Range(func(key string, value *queuedTask[K]) bool {
+		if value.fromExternalLibrary {
+			value.task.markFromExternalLibrary()
+		}
+		return true
+	})
 	return w.collectWorker(loader, tasks, iterate, collections.Set[K]{})
 }
 
