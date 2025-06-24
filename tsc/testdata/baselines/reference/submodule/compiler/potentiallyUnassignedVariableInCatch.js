@@ -18,6 +18,6 @@ try {
         foo = 1234;
     }
 }
-catch {
+catch (_a) {
     foo;
 }

@@ -551,7 +551,7 @@ const main = () => {
         hoge = 'hoge!';
         return;
     }
-    catch {
+    catch (_a) {
         return;
     }
     finally {

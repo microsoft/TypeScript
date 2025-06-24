@@ -424,7 +424,7 @@ class BasicFeatures {
         var xx = c;
         retVal += ;
         try { }
-        catch { }
+        catch (_a) { }
         Property;
         retVal += c.Member();
         retVal += xx.Foo() ? 0 : 1;

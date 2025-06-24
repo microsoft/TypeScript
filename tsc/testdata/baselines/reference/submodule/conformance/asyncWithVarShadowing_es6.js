@@ -394,7 +394,7 @@ async function fn39(x) {
 async function fn40(x) {
     try {
     }
-    catch {
+    catch (_a) {
         var x;
     }
 }

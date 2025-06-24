@@ -31,7 +31,7 @@ try {
     var [d = 1] = [];
     var { e = 1 } = {};
 }
-catch {
+catch (_a) {
     console.error("error");
 }
 a;

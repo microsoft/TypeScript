@@ -510,7 +510,7 @@ try {
             __disposeResources(env_5);
         }
     }
-    catch {
+    catch (_a) {
         const env_6 = { stack: [], error: void 0, hasError: false };
         try {
             const d24 = __addDisposableResource(env_6, { [Symbol.dispose]() { } }, false);

@@ -8,12 +8,3 @@
  // Repro from #34797
  function f1() {
      let a = null;
-@@= skipped -220, +219 lines =@@
-         hoge = 'hoge!';
-         return;
-     }
--    catch (_a) {
-+    catch {
-         return;
-     }
-     finally {

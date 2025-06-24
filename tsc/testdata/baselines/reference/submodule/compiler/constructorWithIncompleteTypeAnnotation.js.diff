@@ -30,16 +30,7 @@
          if(retValue) { }
      }
      TypeScriptAllInOne.Program = Program;
-@@= skipped -130, +131 lines =@@
-         var xx = c;
-         retVal += ;
-         try { }
--        catch (_a) { }
-+        catch { }
-         Property;
-         retVal += c.Member();
-         retVal += xx.Foo() ? 0 : 1;
-@@= skipped -48, +48 lines =@@
+@@= skipped -178, +179 lines =@@
      }
  }
  class CLASS {

@@ -23,16 +23,16 @@ function fn() {
 //// [tryStatements.js]
 function fn() {
     try { }
-    catch { }
+    catch (_a) { }
     try { }
-    catch {
+    catch (_b) {
         try { }
-        catch {
+        catch (_c) {
             try { }
-            catch { }
+            catch (_d) { }
         }
         try { }
-        catch { }
+        catch (_e) { }
     }
     try { }
     catch (x) {
@@ -41,7 +41,7 @@ function fn() {
     try { }
     finally { }
     try { }
-    catch { }
+    catch (_f) { }
     finally { }
     try { }
     catch (z) { }

@@ -292,12 +292,8 @@
          }
          catch (e_4) {
              env_5.error = e_4;
-@@= skipped -14, +12 lines =@@
-                 await result_4;
-         }
-     }
--    catch (_a) {
-+    catch {
+@@= skipped -17, +15 lines =@@
+     catch (_a) {
          const env_6 = { stack: [], error: void 0, hasError: false };
          try {
 -            const d24 = __addDisposableResource(env_6, { [Symbol.asyncDispose]() {
@@ -307,7 +303,7 @@
          }
          catch (e_5) {
              env_6.error = e_5;
-@@= skipped -20, +18 lines =@@
+@@= skipped -17, +15 lines =@@
      finally {
          const env_7 = { stack: [], error: void 0, hasError: false };
          try {

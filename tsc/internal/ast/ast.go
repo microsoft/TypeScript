@@ -2927,8 +2927,12 @@ func (node *CatchClause) Clone(f NodeFactoryCoercible) *Node {
 }
 
 func (node *CatchClause) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.VariableDeclaration) |
+	res := propagateSubtreeFacts(node.VariableDeclaration) |
 		propagateSubtreeFacts(node.Block)
+	if node.VariableDeclaration == nil {
+		res |= SubtreeContainsES2019
+	}
+	return res
 }
 
 func (node *CatchClause) propagateSubtreeFacts() SubtreeFacts {

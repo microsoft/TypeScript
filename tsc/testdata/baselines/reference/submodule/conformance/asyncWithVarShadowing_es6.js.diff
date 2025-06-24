@@ -444,7 +444,7 @@
 +async function fn40(x) {
 +    try {
 +    }
-+    catch {
++    catch (_a) {
 +        var x;
 +    }
  }
