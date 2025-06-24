@@ -1,6 +1,6 @@
 //// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/usingDeclarationsInForOfShadowing.ts] ////
 
-//// [usingDeclarationsInForOfShadowing.ts]
+//// [main.ts]
 class Foo {}
 
 for (using foo of []) {
@@ -15,7 +15,11 @@ for (using baz of []) {
   var baz = 42;
 }
 
-//// [usingDeclarationsInForOfShadowing.js]
+//// [tslib.d.ts]
+export declare function __addDisposableResource<T>(env: any, value: T, async: boolean): T;
+export declare function __disposeResources(env: any): void;
+
+//// [main.js]
 var __addDisposableResource = (this && this.__addDisposableResource) || function (env, value, async) {
     if (value !== null && value !== void 0) {
         if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");

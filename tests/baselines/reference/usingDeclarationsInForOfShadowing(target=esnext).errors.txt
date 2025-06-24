@@ -1,7 +1,7 @@
-usingDeclarationsInForOfShadowing.ts(12,7): error TS2481: Cannot initialize outer scoped variable 'baz' in the same scope as block scoped declaration 'baz'.
+main.ts(12,7): error TS2481: Cannot initialize outer scoped variable 'baz' in the same scope as block scoped declaration 'baz'.
 
 
-==== usingDeclarationsInForOfShadowing.ts (1 errors) ====
+==== main.ts (1 errors) ====
     class Foo {}
     
     for (using foo of []) {
@@ -17,3 +17,7 @@ usingDeclarationsInForOfShadowing.ts(12,7): error TS2481: Cannot initialize oute
           ~~~
 !!! error TS2481: Cannot initialize outer scoped variable 'baz' in the same scope as block scoped declaration 'baz'.
     }
+    
+==== tslib.d.ts (0 errors) ====
+    export declare function __addDisposableResource<T>(env: any, value: T, async: boolean): T;
+    export declare function __disposeResources(env: any): void;
