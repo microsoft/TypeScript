@@ -26,3 +26,5 @@ jobs:
           cache-name: copilot-setup-steps
       - run: npm i -g @playwright/mcp@0.0.28
       - run: npm ci
+      # pull dprint caches before network access is blocked
+      - run: npx hereby check:format || true
