@@ -451,7 +451,7 @@ func getCompletionData(program *compiler.Program, typeChecker *checker.Checker, 
 					if parent.Kind == ast.KindJsxElement || parent.Kind == ast.KindJsxOpeningElement {
 						location = currentToken
 					}
-				case ast.KindSlashToken:
+				case ast.KindLessThanSlashToken:
 					if parent.Kind == ast.KindJsxSelfClosingElement {
 						location = currentToken
 					}
@@ -460,7 +460,7 @@ func getCompletionData(program *compiler.Program, typeChecker *checker.Checker, 
 
 			switch parent.Kind {
 			case ast.KindJsxClosingElement:
-				if contextToken.Kind == ast.KindSlashToken {
+				if contextToken.Kind == ast.KindLessThanSlashToken {
 					isStartingCloseTag = true
 					location = contextToken
 				}
@@ -2432,7 +2432,7 @@ func isValidTrigger(file *ast.SourceFile, triggerCharacter CompletionsTriggerCha
 		if ast.IsStringLiteralLike(contextToken) {
 			return tryGetImportFromModuleSpecifier(contextToken) != nil
 		}
-		return contextToken.Kind == ast.KindSlashToken && ast.IsJsxClosingElement(contextToken.Parent)
+		return contextToken.Kind == ast.KindLessThanSlashToken && ast.IsJsxClosingElement(contextToken.Parent)
 	case " ":
 		return contextToken != nil && contextToken.Kind == ast.KindImportKeyword && contextToken.Parent.Kind == ast.KindSourceFile
 	default:
@@ -3934,7 +3934,7 @@ func (l *LanguageService) getJsxClosingTagCompletion(
 		switch node.Kind {
 		case ast.KindJsxClosingElement:
 			return ast.FindAncestorTrue
-		case ast.KindSlashToken, ast.KindGreaterThanToken, ast.KindIdentifier, ast.KindPropertyAccessExpression:
+		case ast.KindLessThanSlashToken, ast.KindGreaterThanToken, ast.KindIdentifier, ast.KindPropertyAccessExpression:
 			return ast.FindAncestorFalse
 		default:
 			return ast.FindAncestorQuit
