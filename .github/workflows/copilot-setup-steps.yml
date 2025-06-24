@@ -19,8 +19,6 @@ jobs:
         with:
           submodules: true
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
-        with:
-          cache-name: copilot-setup-steps
       - run: npm ci
       # pull dprint caches before network access is blocked
       - run: npx hereby check:format || true
