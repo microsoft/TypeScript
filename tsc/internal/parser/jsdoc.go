@@ -256,7 +256,7 @@ loop:
 				if linkEnd == start {
 					comments = removeLeadingNewlines(comments)
 				}
-				jsdocText := p.factory.NewJSDocText(strings.Join(comments, ""))
+				jsdocText := p.factory.NewJSDocText(p.stringSlicePool.Clone(comments))
 				p.finishNodeWithEnd(jsdocText, linkEnd, commentEnd)
 				commentParts = append(commentParts, jsdocText, link)
 				comments = comments[:0]
@@ -283,9 +283,8 @@ loop:
 		commentsPos = p.scanner.TokenFullStart()
 	}
 
-	trimmedComments := trimEnd(strings.Join(comments, ""))
-	if len(trimmedComments) > 0 {
-		jsdocText := p.factory.NewJSDocText(trimmedComments)
+	if len(comments) > 0 {
+		jsdocText := p.factory.NewJSDocText(p.stringSlicePool.Clone(comments))
 		p.finishNodeWithEnd(jsdocText, linkEnd, commentsPos)
 		commentParts = append(commentParts, jsdocText)
 	}
@@ -529,7 +528,7 @@ loop:
 			linkStart := p.scanner.TokenEnd() - 1
 			link := p.parseJSDocLink(linkStart)
 			if link != nil {
-				text := p.factory.NewJSDocText(strings.Join(comments, ""))
+				text := p.factory.NewJSDocText(p.stringSlicePool.Clone(comments))
 				var commentStart int
 				if linkEnd > -1 {
 					commentStart = linkEnd
@@ -583,15 +582,14 @@ loop:
 	p.jsdocTagCommentsSpace = comments[:0]
 
 	comments = removeLeadingNewlines(comments)
-	trimmedComments := trimEnd(strings.Join(comments, ""))
-	if len(trimmedComments) > 0 {
+	if len(comments) > 0 {
 		var commentStart int
 		if linkEnd > -1 {
 			commentStart = linkEnd
 		} else {
 			commentStart = commentsPos
 		}
-		text := p.factory.NewJSDocText(trimmedComments)
+		text := p.factory.NewJSDocText(p.stringSlicePool.Clone(comments))
 		p.finishNode(text, commentStart)
 		parts = append(parts, text)
 	}
@@ -620,11 +618,11 @@ func (p *Parser) parseJSDocLink(start int) *ast.Node {
 	var create *ast.Node
 	switch linkType {
 	case "link":
-		create = p.factory.NewJSDocLink(name, strings.Join(text, ""))
+		create = p.factory.NewJSDocLink(name, text)
 	case "linkcode":
-		create = p.factory.NewJSDocLinkCode(name, strings.Join(text, ""))
+		create = p.factory.NewJSDocLinkCode(name, text)
 	default:
-		create = p.factory.NewJSDocLinkPlain(name, strings.Join(text, ""))
+		create = p.factory.NewJSDocLinkPlain(name, text)
 	}
 	p.finishNodeWithEnd(create, start, p.scanner.TokenEnd())
 	return create

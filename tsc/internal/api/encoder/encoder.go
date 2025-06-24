@@ -774,7 +774,7 @@ func recordNodeStrings(node *ast.Node, strs *stringTable) uint32 {
 	case ast.KindNoSubstitutionTemplateLiteral:
 		return strs.add(node.AsNoSubstitutionTemplateLiteral().Text, node.Kind, node.Pos(), node.End())
 	case ast.KindJSDocText:
-		return strs.add(node.AsJSDocText().Text, node.Kind, node.Pos(), node.End())
+		return strs.add(node.AsJSDocText().Text(), node.Kind, node.Pos(), node.End())
 	default:
 		panic(fmt.Sprintf("Unexpected node kind %v", node.Kind))
 	}

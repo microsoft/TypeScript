@@ -296,7 +296,7 @@ func (n *Node) Text() string {
 	case KindRegularExpressionLiteral:
 		return n.AsRegularExpressionLiteral().Text
 	case KindJSDocText:
-		return n.AsJSDocText().Text
+		return strings.Join(n.AsJSDocText().text, "")
 	}
 	panic(fmt.Sprintf("Unhandled case in Node.Text: %T", n.data))
 }
@@ -8814,7 +8814,7 @@ type JSDocTagBase struct {
 
 type JSDocCommentBase struct {
 	NodeBase
-	Text string
+	text []string
 }
 
 // JSDoc comments
@@ -8822,15 +8822,15 @@ type JSDocText struct {
 	JSDocCommentBase
 }
 
-func (f *NodeFactory) NewJSDocText(text string) *Node {
+func (f *NodeFactory) NewJSDocText(text []string) *Node {
 	data := f.jsdocTextPool.New()
-	data.Text = text
+	data.text = text
 	f.textCount++
 	return f.newNode(KindJSDocText, data)
 }
 
 func (node *JSDocText) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocText(node.Text), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocText(node.text), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 type JSDocLink struct {
@@ -8838,16 +8838,16 @@ type JSDocLink struct {
 	name *Node // optional (should only be EntityName)
 }
 
-func (f *NodeFactory) NewJSDocLink(name *Node, text string) *Node {
+func (f *NodeFactory) NewJSDocLink(name *Node, text []string) *Node {
 	data := &JSDocLink{}
 	data.name = name
-	data.Text = text
+	data.text = text
 	f.textCount++
 	return f.newNode(KindJSDocLink, data)
 }
 
-func (f *NodeFactory) UpdateJSDocLink(node *JSDocLink, name *Node, text string) *Node {
-	if name != node.name || text != node.Text {
+func (f *NodeFactory) UpdateJSDocLink(node *JSDocLink, name *Node, text []string) *Node {
+	if name != node.name || !core.Same(text, node.text) {
 		return updateNode(f.NewJSDocLink(name, text), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
@@ -8858,11 +8858,11 @@ func (node *JSDocLink) ForEachChild(v Visitor) bool {
 }
 
 func (node *JSDocLink) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocLink(node, v.visitNode(node.name), node.Text)
+	return v.Factory.UpdateJSDocLink(node, v.visitNode(node.name), node.text)
 }
 
 func (node *JSDocLink) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocLink(node.Name(), node.Text), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocLink(node.Name(), node.text), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *JSDocLink) Name() *DeclarationName {
@@ -8874,16 +8874,16 @@ type JSDocLinkPlain struct {
 	name *Node // optional (should only be EntityName)
 }
 
-func (f *NodeFactory) NewJSDocLinkPlain(name *Node, text string) *Node {
+func (f *NodeFactory) NewJSDocLinkPlain(name *Node, text []string) *Node {
 	data := &JSDocLinkPlain{}
 	data.name = name
-	data.Text = text
+	data.text = text
 	f.textCount++
 	return f.newNode(KindJSDocLinkPlain, data)
 }
 
-func (f *NodeFactory) UpdateJSDocLinkPlain(node *JSDocLinkPlain, name *Node, text string) *Node {
-	if name != node.name || text != node.Text {
+func (f *NodeFactory) UpdateJSDocLinkPlain(node *JSDocLinkPlain, name *Node, text []string) *Node {
+	if name != node.name || !core.Same(text, node.text) {
 		return updateNode(f.NewJSDocLinkPlain(name, text), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
@@ -8894,11 +8894,11 @@ func (node *JSDocLinkPlain) ForEachChild(v Visitor) bool {
 }
 
 func (node *JSDocLinkPlain) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocLinkPlain(node, v.visitNode(node.name), node.Text)
+	return v.Factory.UpdateJSDocLinkPlain(node, v.visitNode(node.name), node.text)
 }
 
 func (node *JSDocLinkPlain) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocLinkPlain(node.Name(), node.Text), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocLinkPlain(node.Name(), node.text), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *JSDocLinkPlain) Name() *DeclarationName {
@@ -8910,16 +8910,16 @@ type JSDocLinkCode struct {
 	name *Node // optional (should only be EntityName)
 }
 
-func (f *NodeFactory) NewJSDocLinkCode(name *Node, text string) *Node {
+func (f *NodeFactory) NewJSDocLinkCode(name *Node, text []string) *Node {
 	data := &JSDocLinkCode{}
 	data.name = name
-	data.Text = text
+	data.text = text
 	f.textCount++
 	return f.newNode(KindJSDocLinkCode, data)
 }
 
-func (f *NodeFactory) UpdateJSDocLinkCode(node *JSDocLinkCode, name *Node, text string) *Node {
-	if name != node.name || text != node.Text {
+func (f *NodeFactory) UpdateJSDocLinkCode(node *JSDocLinkCode, name *Node, text []string) *Node {
+	if name != node.name || !core.Same(text, node.text) {
 		return updateNode(f.NewJSDocLinkCode(name, text), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
@@ -8930,11 +8930,11 @@ func (node *JSDocLinkCode) ForEachChild(v Visitor) bool {
 }
 
 func (node *JSDocLinkCode) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocLinkCode(node, v.visitNode(node.name), node.Text)
+	return v.Factory.UpdateJSDocLinkCode(node, v.visitNode(node.name), node.text)
 }
 
 func (node *JSDocLinkCode) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocLinkCode(node.Name(), node.Text), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocLinkCode(node.Name(), node.text), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *JSDocLinkCode) Name() *DeclarationName {

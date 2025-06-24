@@ -395,10 +395,10 @@ func writeComments(b *strings.Builder, comments []*ast.Node) {
 	for _, comment := range comments {
 		switch comment.Kind {
 		case ast.KindJSDocText:
-			b.WriteString(comment.AsJSDocText().Text)
+			b.WriteString(comment.Text())
 		case ast.KindJSDocLink:
 			name := comment.Name()
-			text := comment.AsJSDocLink().Text
+			text := comment.AsJSDocLink().Text()
 			if name != nil {
 				if text == "" {
 					writeEntityName(b, name)

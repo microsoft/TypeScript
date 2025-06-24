@@ -70,6 +70,7 @@ type Parser struct {
 	identifierCount         int
 	notParenthesizedArrow   collections.Set[int]
 	nodeSlicePool           core.Pool[*ast.Node]
+	stringSlicePool         core.Pool[string]
 	jsdocCache              map[*ast.Node][]*ast.Node
 	possibleAwaitSpans      []int
 	jsdocCommentsSpace      []string
