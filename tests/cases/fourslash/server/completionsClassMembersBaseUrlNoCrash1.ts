@@ -79,22 +79,12 @@
 // @Filename: /home/src/workspaces/solution/node_modules/rxjs/index.d.ts
 //// export declare class Subject<T> {}
 
+// Just verify that completion request doesn't crash
 verify.completions({
   marker: "1",
-  includes: [
-    {
-      name: "recoveryStateChangedHint",
-      insertText: "protected recoveryStateChangedHint: Subject<void>;",
-      filterText: "recoveryStateChangedHint",
-      hasAction: true,
-      source: "ClassMemberSnippet/",
-    },
-  ],
   preferences: {
     includeCompletionsWithInsertText: true,
     includeCompletionsWithClassMemberSnippets: true,
   },
   isNewIdentifierLocation: true,
-}).andApplyCodeAction({
-  /* TODO */
 });

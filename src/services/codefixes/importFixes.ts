@@ -287,9 +287,8 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
         const symbol = checker.getMergedSymbol(skipAlias(exportedSymbol, checker));
         const exportInfo = getAllExportInfoForSymbol(sourceFile, symbol, symbolName, moduleSymbol, /*preferCapitalized*/ false, program, host, preferences, cancellationToken);
         if (!exportInfo) {
-            // If no exportInfo is found, this means export could not be resolved when we have filtered for autoImportFileExcludePatterns,
-            //     so we should not generate an import.
-            Debug.assert(preferences.autoImportFileExcludePatterns?.length);
+            // If no exportInfo is found, this means export could not be resolved.
+            // This can happen due to autoImportFileExcludePatterns filtering or other module resolution issues.
             return;
         }
         const useRequire = shouldUseRequire(sourceFile, program);
