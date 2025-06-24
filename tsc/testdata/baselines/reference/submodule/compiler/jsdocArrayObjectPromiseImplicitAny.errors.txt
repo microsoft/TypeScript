@@ -1,17 +1,9 @@
-jsdocArrayObjectPromiseImplicitAny.js(1,12): error TS2314: Generic type 'T[]' requires 1 type argument(s).
-jsdocArrayObjectPromiseImplicitAny.js(8,12): error TS2314: Generic type 'T[]' requires 1 type argument(s).
-jsdocArrayObjectPromiseImplicitAny.js(9,13): error TS2314: Generic type 'T[]' requires 1 type argument(s).
-jsdocArrayObjectPromiseImplicitAny.js(15,12): error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
-jsdocArrayObjectPromiseImplicitAny.js(22,12): error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
-jsdocArrayObjectPromiseImplicitAny.js(23,13): error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
 jsdocArrayObjectPromiseImplicitAny.js(30,18): error TS2322: Type 'number' is not assignable to type '() => Object'.
 jsdocArrayObjectPromiseImplicitAny.js(32,12): error TS2315: Type 'Object' is not generic.
 
 
-==== jsdocArrayObjectPromiseImplicitAny.js (8 errors) ====
+==== jsdocArrayObjectPromiseImplicitAny.js (2 errors) ====
     /** @type {Array} */
-               ~~~~~
-!!! error TS2314: Generic type 'T[]' requires 1 type argument(s).
     var anyArray = [5];
     
     /** @type {Array<number>} */
@@ -19,19 +11,13 @@ jsdocArrayObjectPromiseImplicitAny.js(32,12): error TS2315: Type 'Object' is not
     
     /**
      * @param {Array} arr
-               ~~~~~
-!!! error TS2314: Generic type 'T[]' requires 1 type argument(s).
      * @return {Array}
-                ~~~~~
-!!! error TS2314: Generic type 'T[]' requires 1 type argument(s).
      */
     function returnAnyArray(arr) {
       return arr;
     }
     
     /** @type {Promise} */
-               ~~~~~~~
-!!! error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
     var anyPromise = Promise.resolve(5);
     
     /** @type {Promise<number>} */
@@ -39,11 +25,7 @@ jsdocArrayObjectPromiseImplicitAny.js(32,12): error TS2315: Type 'Object' is not
     
     /**
      * @param {Promise} pr
-               ~~~~~~~
-!!! error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
      * @return {Promise}
-                ~~~~~~~
-!!! error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
      */
     function returnAnyPromise(pr) {
       return pr;

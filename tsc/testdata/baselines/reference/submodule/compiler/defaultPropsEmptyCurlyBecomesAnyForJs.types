@@ -21,7 +21,7 @@ import { Foo } from "./library";
 
 export class MyFoo extends Foo {
 >MyFoo : MyFoo
->Foo : Foo<{}, {}>
+>Foo : Foo<any, any>
 
     member;
 >member : any
@@ -50,23 +50,23 @@ export class TypedFoo extends MyFoo {
 
         this.props.x;
 >this.props.x : any
->this.props : {}
+>this.props : any
 >this : this
->props : {}
+>props : any
 >x : any
 
         this.props.y;
 >this.props.y : any
->this.props : {}
+>this.props : any
 >this : this
->props : {}
+>props : any
 >y : any
 
         this.state.value;
 >this.state.value : any
->this.state : {}
+>this.state : any
 >this : this
->state : {}
+>state : any
 >value : any
 
         this.member;

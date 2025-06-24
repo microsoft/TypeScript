@@ -52,6 +52,7 @@ export default class SubB extends BaseB<SubA> {
 
     constructor() {
         super(SubA);
+>super : Symbol(B, Decl(BaseB.js, 0, 28))
 >SubA : Symbol(SubA, Decl(SubB.js, 0, 6))
     }
 }

@@ -3,7 +3,7 @@
 === jsdocArrayObjectPromiseNoImplicitAny.js ===
 /** @type {Array} */
 var notAnyArray = [5];
->notAnyArray : any
+>notAnyArray : any[]
 >[5] : number[]
 >5 : 5
 
@@ -18,16 +18,16 @@ var numberArray = [5];
  * @return {Array}
  */
 function returnNotAnyArray(arr) {
->returnNotAnyArray : (arr: any) => any
->arr : any
+>returnNotAnyArray : (arr: any[]) => any[]
+>arr : any[]
 
   return arr;
->arr : any
+>arr : any[]
 }
 
 /** @type {Promise} */
 var notAnyPromise = Promise.resolve(5);
->notAnyPromise : any
+>notAnyPromise : Promise<any>
 >Promise.resolve(5) : Promise<number>
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
@@ -48,11 +48,11 @@ var numberPromise = Promise.resolve(5);
  * @return {Promise}
  */
 function returnNotAnyPromise(pr) {
->returnNotAnyPromise : (pr: any) => any
->pr : any
+>returnNotAnyPromise : (pr: Promise<any>) => Promise<any>
+>pr : Promise<any>
 
   return pr;
->pr : any
+>pr : Promise<any>
 }
 
 /** @type {Object} */

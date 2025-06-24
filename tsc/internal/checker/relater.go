@@ -3327,8 +3327,9 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 		}
 		params := r.c.typeAliasLinks.Get(source.alias.symbol).typeParameters
 		minParams := r.c.getMinTypeArgumentCount(params)
-		sourceTypes := r.c.fillMissingTypeArguments(source.alias.typeArguments, params, minParams)
-		targetTypes := r.c.fillMissingTypeArguments(target.alias.typeArguments, params, minParams)
+		nodeIsInJsFile := ast.IsInJSFile(source.alias.symbol.ValueDeclaration)
+		sourceTypes := r.c.fillMissingTypeArguments(source.alias.typeArguments, params, minParams, nodeIsInJsFile)
+		targetTypes := r.c.fillMissingTypeArguments(target.alias.typeArguments, params, minParams, nodeIsInJsFile)
 		varianceResult, ok := relateVariances(sourceTypes, targetTypes, variances, intersectionState)
 		if ok {
 			return varianceResult

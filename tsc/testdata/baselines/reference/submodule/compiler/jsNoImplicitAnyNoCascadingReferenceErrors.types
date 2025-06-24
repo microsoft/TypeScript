@@ -13,12 +13,12 @@ import {Foo} from "./somelib";
 
 class MyFoo extends Foo {
 >MyFoo : MyFoo
->Foo : typeof Foo
+>Foo : Foo<any>
 
     constructor() {
         super();
 >super() : void
->super : any
+>super : typeof Foo
 
         this.prop.alpha = 12;
 >this.prop.alpha = 12 : 12

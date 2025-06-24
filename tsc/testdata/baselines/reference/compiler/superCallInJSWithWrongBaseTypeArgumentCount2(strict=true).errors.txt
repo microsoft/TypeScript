@@ -1,0 +1,34 @@
+b.js(4,25): error TS8026: Expected A<T> type arguments; provide these with an '@extends' tag.
+b.js(18,25): error TS8026: Expected A<T> type arguments; provide these with an '@extends' tag.
+
+
+==== a.ts (0 errors) ====
+    export class A<T> {}
+    
+==== b.js (2 errors) ====
+    import { A } from './a.js';
+    
+    /** @extends {A} */
+    export class B1 extends A {
+                            ~
+!!! error TS8026: Expected A<T> type arguments; provide these with an '@extends' tag.
+        constructor() {
+            super();
+        }
+    }
+    
+    /** @extends {A<string>} */
+    export class B2 extends A {
+        constructor() {
+            super();
+        }
+    }
+    
+    /** @extends {A<string, string>} */
+    export class B3 extends A {
+                            ~
+!!! error TS8026: Expected A<T> type arguments; provide these with an '@extends' tag.
+        constructor() {
+            super();
+        }
+    }

@@ -63,12 +63,7 @@
 
  /** @type {null} */
  var nl;
-@@= skipped -8, +8 lines =@@
-
- /** @type {Array} */
- var A;
-->A : any[]
-+>A : any
+@@= skipped -12, +12 lines =@@
 
  /** @type {array} */
  var a;
@@ -77,8 +72,7 @@
 
  /** @type {Promise} */
  var P;
-->P : Promise<any>
-+>P : any
+@@= skipped -8, +8 lines =@@
 
  /** @type {promise} */
  var p;
@@ -87,7 +81,7 @@
 
  /** @type {?number} */
  var nullable;
-@@= skipped -20, +20 lines =@@
+@@= skipped -8, +8 lines =@@
 
  /** @type {Object} */
  var Obj;
@@ -152,18 +146,15 @@
 
  var nl: null;
  >nl : null
-
- var A: any[];
-->A : any[]
-+>A : any
+@@= skipped -45, +45 lines =@@
+ >A : any[]
 
  var a: any[];
 ->a : any[]
 +>a : array
 
  var P: Promise<any>;
-->P : Promise<any>
-+>P : any
+ >P : Promise<any>
 
  var p: Promise<any>;
 ->p : Promise<any>

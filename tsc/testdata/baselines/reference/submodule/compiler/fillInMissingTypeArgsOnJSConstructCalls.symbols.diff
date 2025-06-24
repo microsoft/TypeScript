@@ -26,6 +26,7 @@
      constructor() {
          super(SubA);
 ->super : Symbol(BaseB, Decl(BaseB.js, 0, 28))
++>super : Symbol(B, Decl(BaseB.js, 0, 28))
  >SubA : Symbol(SubA, Decl(SubB.js, 0, 6))
      }
  }

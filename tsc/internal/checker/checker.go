@@ -7466,12 +7466,14 @@ func (c *Checker) checkSuperExpression(node *ast.Node) *Type {
 	isCallExpression := ast.IsCallExpression(node.Parent) && node.Parent.Expression() == node
 	immediateContainer := getSuperContainer(node, true /*stopOnFunctions*/)
 	container := immediateContainer
+
 	// adjust the container reference in case if super is used inside arrow functions with arbitrarily deep nesting
 	if !isCallExpression {
 		for container != nil && ast.IsArrowFunction(container) {
 			container = getSuperContainer(container, true /*stopOnFunctions*/)
 		}
 	}
+
 	isLegalUsageOfSuperExpression := func() bool {
 		if isCallExpression {
 			// TS 1.0 SPEC (April 2014): 4.8.1
@@ -7492,6 +7494,7 @@ func (c *Checker) checkSuperExpression(node *ast.Node) *Type {
 		}
 		return false
 	}
+
 	if container == nil || !isLegalUsageOfSuperExpression() {
 		// issue more specific error if super is used in computed property name
 		// class A { foo() { return "1" }}
@@ -8740,7 +8743,7 @@ func (c *Checker) chooseOverload(s *CallState, relation *Relation) *Signature {
 			if inferenceContext != nil {
 				inferredTypeParameters = inferenceContext.inferredTypeParameters
 			}
-			checkCandidate = c.getSignatureInstantiation(candidate, typeArgumentTypes, inferredTypeParameters)
+			checkCandidate = c.getSignatureInstantiation(candidate, typeArgumentTypes, ast.IsInJSFile(candidate.declaration), inferredTypeParameters)
 			// If the original signature has a generic rest type, instantiation may produce a
 			// signature with different arity and we need to perform another arity check.
 			if c.getNonArrayRestType(candidate) != nil && !c.hasCorrectArity(s.node, s.args, checkCandidate, s.signatureHelpTrailingComma) {
@@ -8762,7 +8765,7 @@ func (c *Checker) chooseOverload(s *CallState, relation *Relation) *Signature {
 			s.argCheckMode = CheckModeNormal
 			if inferenceContext != nil {
 				typeArgumentTypes := c.instantiateTypes(c.inferTypeArguments(s.node, candidate, s.args, s.argCheckMode, inferenceContext), inferenceContext.mapper)
-				checkCandidate = c.getSignatureInstantiation(candidate, typeArgumentTypes, inferenceContext.inferredTypeParameters)
+				checkCandidate = c.getSignatureInstantiation(candidate, typeArgumentTypes, ast.IsInJSFile(candidate.declaration), inferenceContext.inferredTypeParameters)
 				// If the original signature has a generic rest type, instantiation may produce a
 				// signature with different arity and we need to perform another arity check.
 				if c.getNonArrayRestType(candidate) != nil && !c.hasCorrectArity(s.node, s.args, checkCandidate, s.signatureHelpTrailingComma) {
@@ -8908,8 +8911,9 @@ func (c *Checker) hasCorrectTypeArgumentArity(signature *Signature, typeArgument
 }
 
 func (c *Checker) checkTypeArguments(signature *Signature, typeArgumentNodes []*ast.Node, reportErrors bool, headMessage *diagnostics.Message) []*Type {
+	isJavaScript := ast.IsInJSFile(signature.declaration)
 	typeParameters := signature.typeParameters
-	typeArgumentTypes := c.fillMissingTypeArguments(core.Map(typeArgumentNodes, c.getTypeFromTypeNode), typeParameters, c.getMinTypeArgumentCount(typeParameters))
+	typeArgumentTypes := c.fillMissingTypeArguments(core.Map(typeArgumentNodes, c.getTypeFromTypeNode), typeParameters, c.getMinTypeArgumentCount(typeParameters), isJavaScript)
 	var mapper *TypeMapper
 	for i := range typeArgumentNodes {
 		// Debug.assert(typeParameters[i] != nil, "Should not call checkTypeArguments with too many type arguments")
@@ -10164,7 +10168,7 @@ func (c *Checker) getInstantiationExpressionType(exprType *Type, node *ast.Node)
 		return core.SameMap(applicableSignatures, func(sig *Signature) *Signature {
 			typeArgumentTypes := c.checkTypeArguments(sig, typeArguments.Nodes, true /*reportErrors*/, nil)
 			if typeArgumentTypes != nil {
-				return c.getSignatureInstantiation(sig, typeArgumentTypes, nil)
+				return c.getSignatureInstantiation(sig, typeArgumentTypes, ast.IsInJSFile(sig.declaration), nil)
 			}
 			return sig
 		})
@@ -18346,7 +18350,7 @@ func (c *Checker) getInstantiatedConstructorsForTypeArguments(t *Type, typeArgum
 	typeArguments := core.Map(typeArgumentNodes, c.getTypeFromTypeNode)
 	return core.SameMap(signatures, func(sig *Signature) *Signature {
 		if len(sig.typeParameters) != 0 {
-			return c.getSignatureInstantiation(sig, typeArguments, nil)
+			return c.getSignatureInstantiation(sig, typeArguments, ast.IsInJSFile(location), nil)
 		}
 		return sig
 	})
@@ -18354,13 +18358,14 @@ func (c *Checker) getInstantiatedConstructorsForTypeArguments(t *Type, typeArgum
 
 func (c *Checker) getConstructorsForTypeArguments(t *Type, typeArgumentNodes []*ast.Node, location *ast.Node) []*Signature {
 	typeArgCount := len(typeArgumentNodes)
+	isJavaScript := ast.IsInJSFile(location)
 	return core.Filter(c.getSignaturesOfType(t, SignatureKindConstruct), func(sig *Signature) bool {
-		return typeArgCount >= c.getMinTypeArgumentCount(sig.typeParameters) && typeArgCount <= len(sig.typeParameters)
+		return isJavaScript || typeArgCount >= c.getMinTypeArgumentCount(sig.typeParameters) && typeArgCount <= len(sig.typeParameters)
 	})
 }
 
-func (c *Checker) getSignatureInstantiation(sig *Signature, typeArguments []*Type, inferredTypeParameters []*Type) *Signature {
-	instantiatedSignature := c.getSignatureInstantiationWithoutFillingInTypeArguments(sig, c.fillMissingTypeArguments(typeArguments, sig.typeParameters, c.getMinTypeArgumentCount(sig.typeParameters)))
+func (c *Checker) getSignatureInstantiation(sig *Signature, typeArguments []*Type, isJavaScript bool, inferredTypeParameters []*Type) *Signature {
+	instantiatedSignature := c.getSignatureInstantiationWithoutFillingInTypeArguments(sig, c.fillMissingTypeArguments(typeArguments, sig.typeParameters, c.getMinTypeArgumentCount(sig.typeParameters), isJavaScript))
 	if len(inferredTypeParameters) != 0 {
 		returnSignature := c.getSingleCallOrConstructSignature(c.getReturnTypeOfSignature(instantiatedSignature))
 		if returnSignature != nil {
@@ -18498,12 +18503,13 @@ func (c *Checker) createCanonicalSignature(signature *Signature) *Signature {
 	// where different generations of the same type parameter are in scope). This leads to a lot of new type
 	// identities, and potentially a lot of work comparing those identities, so here we create an instantiation
 	// that uses the original type identities for all unconstrained type parameters.
-	return c.getSignatureInstantiation(signature, core.Map(signature.typeParameters, func(tp *Type) *Type {
+	typeArguments := core.Map(signature.typeParameters, func(tp *Type) *Type {
 		if tp.Target() != nil && c.getConstraintOfTypeParameter(tp.Target()) == nil {
 			return tp.Target()
 		}
 		return tp
-	}), nil)
+	})
+	return c.getSignatureInstantiation(signature, typeArguments, ast.IsInJSFile(signature.declaration), nil /*inferredTypeParameters*/)
 }
 
 func (c *Checker) getBaseSignature(signature *Signature) *Signature {
@@ -18563,7 +18569,7 @@ func (c *Checker) instantiateSignatureInContextOf(signature *Signature, contextu
 			c.inferTypes(context.inferences, source, target, InferencePriorityReturnType, false)
 		})
 	}
-	return c.getSignatureInstantiation(signature, c.getInferredTypes(context), nil)
+	return c.getSignatureInstantiation(signature, c.getInferredTypes(context), ast.IsInJSFile(contextualSignature.declaration), nil /*inferredTypeParameters*/)
 }
 
 func (c *Checker) resolveBaseTypesOfInterface(t *Type) {
@@ -19884,16 +19890,17 @@ func (c *Checker) getDefaultConstructSignatures(classType *Type) []*Signature {
 		return []*Signature{c.newSignature(flags, nil, classType.AsInterfaceType().LocalTypeParameters(), nil, nil, classType, nil, 0)}
 	}
 	baseTypeNode := getBaseTypeNodeOfClass(classType)
+	isJavaScript := declaration != nil && ast.IsInJSFile(declaration)
 	typeArguments := c.getTypeArgumentsFromNode(baseTypeNode)
 	typeArgCount := len(typeArguments)
 	var result []*Signature
 	for _, baseSig := range baseSignatures {
 		minTypeArgumentCount := c.getMinTypeArgumentCount(baseSig.typeParameters)
 		typeParamCount := len(baseSig.typeParameters)
-		if typeArgCount >= minTypeArgumentCount && typeArgCount <= typeParamCount {
+		if isJavaScript || typeArgCount >= minTypeArgumentCount && typeArgCount <= typeParamCount {
 			var sig *Signature
 			if typeParamCount != 0 {
-				sig = c.createSignatureInstantiation(baseSig, c.fillMissingTypeArguments(typeArguments, baseSig.typeParameters, minTypeArgumentCount))
+				sig = c.createSignatureInstantiation(baseSig, c.fillMissingTypeArguments(typeArguments, baseSig.typeParameters, minTypeArgumentCount, isJavaScript))
 			} else {
 				sig = c.cloneSignature(baseSig)
 			}
@@ -20987,7 +20994,7 @@ func (c *Checker) getTypeArguments(t *Type) []*Type {
 }
 
 func (c *Checker) getEffectiveTypeArguments(node *ast.Node, typeParameters []*Type) []*Type {
-	return c.fillMissingTypeArguments(core.Map(node.TypeArguments(), c.getTypeFromTypeNode), typeParameters, c.getMinTypeArgumentCount(typeParameters))
+	return c.fillMissingTypeArguments(core.Map(node.TypeArguments(), c.getTypeFromTypeNode), typeParameters, c.getMinTypeArgumentCount(typeParameters), ast.IsInJSFile(node))
 }
 
 // Gets the minimum number of type arguments needed to satisfy all non-optional type parameters.
@@ -21007,30 +21014,43 @@ func (c *Checker) hasTypeParameterDefault(t *Type) bool {
 	})
 }
 
-func (c *Checker) fillMissingTypeArguments(typeArguments []*Type, typeParameters []*Type, minTypeArgumentCount int) []*Type {
+func (c *Checker) fillMissingTypeArguments(typeArguments []*Type, typeParameters []*Type, minTypeArgumentCount int, isJavaScriptImplicitAny bool) []*Type {
 	numTypeParameters := len(typeParameters)
 	if numTypeParameters == 0 {
 		return nil
 	}
 	numTypeArguments := len(typeArguments)
-	if numTypeArguments >= minTypeArgumentCount && numTypeArguments < numTypeParameters {
+	if isJavaScriptImplicitAny || (numTypeArguments >= minTypeArgumentCount && numTypeArguments < numTypeParameters) {
 		result := make([]*Type, numTypeParameters)
 		copy(result, typeArguments)
 		// Map invalid forward references in default types to the error type
 		for i := numTypeArguments; i < numTypeParameters; i++ {
 			result[i] = c.errorType
 		}
+		baseDefaultType := c.getDefaultTypeArgumentType(isJavaScriptImplicitAny)
 		for i := numTypeArguments; i < numTypeParameters; i++ {
 			defaultType := c.getDefaultFromTypeParameter(typeParameters[i])
+
+			if isJavaScriptImplicitAny && defaultType != nil && (c.isTypeIdenticalTo(defaultType, c.unknownType) || c.isTypeIdenticalTo(defaultType, c.emptyObjectType)) {
+				defaultType = c.anyType
+			}
+
 			if defaultType != nil {
 				result[i] = c.instantiateType(defaultType, newTypeMapper(typeParameters, result))
 			} else {
-				result[i] = c.unknownType
+				result[i] = baseDefaultType
 			}
 		}
 		return result
 	}
 	return typeArguments
+}
+
+func (c *Checker) getDefaultTypeArgumentType(isInJavaScriptFile bool) *Type {
+	if isInJavaScriptFile {
+		return c.anyType
+	}
+	return c.unknownType
 }
 
 // Gets the default type for a type parameter. If the type parameter is the result of an instantiation,
@@ -22072,6 +22092,8 @@ func (c *Checker) getTypeReferenceType(node *ast.Node, symbol *ast.Symbol) *Type
 	if res != nil && c.checkNoTypeArguments(node, symbol) {
 		return c.getRegularTypeOfLiteralType(res)
 	}
+
+	// !!! Resolving values as types for JS
 	return c.errorType
 }
 
@@ -22085,15 +22107,29 @@ func (c *Checker) getTypeFromClassOrInterfaceReference(node *ast.Node, symbol *a
 	if len(typeParameters) != 0 {
 		numTypeArguments := len(node.TypeArguments())
 		minTypeArgumentCount := c.getMinTypeArgumentCount(typeParameters)
-		if numTypeArguments < minTypeArgumentCount || numTypeArguments > len(typeParameters) {
-			message := diagnostics.Generic_type_0_requires_1_type_argument_s
-			if minTypeArgumentCount < len(typeParameters) {
-				message = diagnostics.Generic_type_0_requires_between_1_and_2_type_arguments
+		isJs := ast.IsInJSFile(node)
+		isJsImplicitAny := !c.noImplicitAny && isJs
+		if !isJsImplicitAny && (numTypeArguments < minTypeArgumentCount || numTypeArguments > len(typeParameters)) {
+			var message *diagnostics.Message
+
+			missingAugmentsTag := isJs && ast.IsExpressionWithTypeArguments(node) && !ast.IsJSDocAugmentsTag(node.Parent)
+			if missingAugmentsTag {
+				message = diagnostics.Expected_0_type_arguments_provide_these_with_an_extends_tag
+				if minTypeArgumentCount < len(typeParameters) {
+					message = diagnostics.Expected_0_1_type_arguments_provide_these_with_an_extends_tag
+				}
+			} else {
+				message = diagnostics.Generic_type_0_requires_1_type_argument_s
+				if minTypeArgumentCount < len(typeParameters) {
+					message = diagnostics.Generic_type_0_requires_between_1_and_2_type_arguments
+				}
 			}
-			typeStr := c.TypeToString(t) // !!! /*enclosingDeclaration*/, nil, TypeFormatFlagsWriteArrayAsGenericType
+			typeStr := c.TypeToStringEx(t, nil /*enclosingDeclaration*/, TypeFormatFlagsWriteArrayAsGenericType)
 			c.error(node, message, typeStr, minTypeArgumentCount, len(typeParameters))
-			// TODO: Adopt same permissive behavior in TS as in JS to reduce follow-on editing experience failures (requires editing fillMissingTypeArguments)
-			return c.errorType
+			if !isJs {
+				// TODO: Adopt same permissive behavior in TS as in JS to reduce follow-on editing experience failures (requires editing fillMissingTypeArguments)
+				return c.errorType
+			}
 		}
 		if node.Kind == ast.KindTypeReference && c.isDeferredTypeReferenceNode(node, numTypeArguments != len(typeParameters)) {
 			return c.createDeferredTypeReference(t, node, nil /*mapper*/, nil /*alias*/)
@@ -22101,7 +22137,7 @@ func (c *Checker) getTypeFromClassOrInterfaceReference(node *ast.Node, symbol *a
 		// In a type reference, the outer type parameters of the referenced class or interface are automatically
 		// supplied as type arguments and the type reference only specifies arguments for the local type parameters
 		// of the class or interface.
-		localTypeArguments := c.fillMissingTypeArguments(c.getTypeArgumentsFromNode(node), typeParameters, minTypeArgumentCount)
+		localTypeArguments := c.fillMissingTypeArguments(c.getTypeArgumentsFromNode(node), typeParameters, minTypeArgumentCount, isJs)
 		typeArguments := append(d.OuterTypeParameters(), localTypeArguments...)
 		return c.createTypeReference(t, typeArguments)
 	}
@@ -22542,7 +22578,7 @@ func (c *Checker) getTypeAliasInstantiation(symbol *ast.Symbol, typeArguments []
 	key := getTypeAliasInstantiationKey(typeArguments, alias)
 	instantiation := links.instantiations[key]
 	if instantiation == nil {
-		mapper := newTypeMapper(typeParameters, c.fillMissingTypeArguments(typeArguments, typeParameters, c.getMinTypeArgumentCount(typeParameters)))
+		mapper := newTypeMapper(typeParameters, c.fillMissingTypeArguments(typeArguments, typeParameters, c.getMinTypeArgumentCount(typeParameters), ast.IsInJSFile(symbol.ValueDeclaration)))
 		instantiation = c.instantiateTypeWithAlias(t, mapper, alias)
 		links.instantiations[key] = instantiation
 	}

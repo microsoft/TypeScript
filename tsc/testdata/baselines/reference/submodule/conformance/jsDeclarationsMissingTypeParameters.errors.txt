@@ -1,15 +1,10 @@
-file.js(2,13): error TS2314: Generic type 'T[]' requires 1 type argument(s).
-file.js(12,14): error TS2314: Generic type 'T[]' requires 1 type argument(s).
 file.js(12,19): error TS8020: JSDoc types can only be used inside documentation comments.
 file.js(12,20): error TS1099: Type argument list cannot be empty.
-file.js(18,14): error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
 
 
-==== file.js (5 errors) ====
+==== file.js (2 errors) ====
     /**
       * @param {Array=} y desc
-                ~~~~~
-!!! error TS2314: Generic type 'T[]' requires 1 type argument(s).
       */
     function x(y) { }
     
@@ -20,8 +15,6 @@ file.js(18,14): error TS2314: Generic type 'Promise<T>' requires 1 type argument
     
     /**
      * @return {(Array.<> | null)} list of devices
-                 ~~~~~~~~
-!!! error TS2314: Generic type 'T[]' requires 1 type argument(s).
                       ~
 !!! error TS8020: JSDoc types can only be used inside documentation comments.
                        ~~
@@ -32,7 +25,5 @@ file.js(18,14): error TS2314: Generic type 'Promise<T>' requires 1 type argument
     /**
      * 
      * @return {?Promise} A promise
-                 ~~~~~~~
-!!! error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
      */
     function w() { return null; }

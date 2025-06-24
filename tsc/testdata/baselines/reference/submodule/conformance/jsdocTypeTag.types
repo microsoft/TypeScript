@@ -59,7 +59,7 @@ var nl;
 
 /** @type {Array} */
 var A;
->A : any
+>A : any[]
 
 /** @type {array} */
 var a;
@@ -67,7 +67,7 @@ var a;
 
 /** @type {Promise} */
 var P;
->P : any
+>P : Promise<any>
 
 /** @type {promise} */
 var p;
@@ -141,13 +141,13 @@ var nl: null;
 >nl : null
 
 var A: any[];
->A : any
+>A : any[]
 
 var a: any[];
 >a : array
 
 var P: Promise<any>;
->P : any
+>P : Promise<any>
 
 var p: Promise<any>;
 >p : promise

@@ -82,8 +82,9 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 			// Simply infer from source type arguments to target type arguments, with defaults applied.
 			params := c.typeAliasLinks.Get(source.alias.symbol).typeParameters
 			minParams := c.getMinTypeArgumentCount(params)
-			sourceTypes := c.fillMissingTypeArguments(source.alias.typeArguments, params, minParams)
-			targetTypes := c.fillMissingTypeArguments(target.alias.typeArguments, params, minParams)
+			nodeIsInJsFile := ast.IsInJSFile(source.alias.symbol.ValueDeclaration)
+			sourceTypes := c.fillMissingTypeArguments(source.alias.typeArguments, params, minParams, nodeIsInJsFile)
+			targetTypes := c.fillMissingTypeArguments(target.alias.typeArguments, params, minParams, nodeIsInJsFile)
 			c.inferFromTypeArguments(n, sourceTypes, targetTypes, c.getAliasVariances(source.alias.symbol))
 		}
 		// And if there weren't any type arguments, there's no reason to run inference as the types must be the same.
