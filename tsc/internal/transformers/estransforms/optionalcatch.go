@@ -11,7 +11,7 @@ type optionalCatchTransformer struct {
 }
 
 func (ch *optionalCatchTransformer) visit(node *ast.Node) *ast.Node {
-	if node.SubtreeFacts()&ast.SubtreeContainsES2019 == 0 {
+	if node.SubtreeFacts()&ast.SubtreeContainsMissingCatchClauseVariable == 0 {
 		return node
 	}
 	switch node.Kind {

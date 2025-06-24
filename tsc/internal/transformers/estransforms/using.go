@@ -33,7 +33,7 @@ const (
 )
 
 func (tx *usingDeclarationTransformer) visit(node *ast.Node) *ast.Node {
-	if node.SubtreeFacts()&ast.SubtreeContainsESNext == 0 {
+	if node.SubtreeFacts()&ast.SubtreeContainsUsing == 0 {
 		return node
 	}
 

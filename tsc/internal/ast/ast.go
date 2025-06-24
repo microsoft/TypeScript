@@ -1999,10 +1999,8 @@ func (node *Token) Clone(f NodeFactoryCoercible) *Node {
 
 func (node *Token) computeSubtreeFacts() SubtreeFacts {
 	switch node.Kind {
-	case KindAsyncKeyword:
-		return SubtreeContainsES2017 | SubtreeContainsES2018
 	case KindUsingKeyword:
-		return SubtreeContainsESNext
+		return SubtreeContainsUsing
 	case KindPublicKeyword,
 		KindPrivateKeyword,
 		KindProtectedKeyword,
@@ -2029,11 +2027,11 @@ func (node *Token) computeSubtreeFacts() SubtreeFacts {
 	case KindAccessorKeyword:
 		return SubtreeContainsClassFields
 	case KindAsteriskAsteriskToken, KindAsteriskAsteriskEqualsToken:
-		return SubtreeContainsES2016
+		return SubtreeContainsExponentiationOperator
 	case KindQuestionQuestionToken, KindQuestionDotToken:
-		return SubtreeContainsES2020
+		return SubtreeContainsOptionalChaining
 	case KindQuestionQuestionEqualsToken, KindBarBarEqualsToken, KindAmpersandAmpersandEqualsToken:
-		return SubtreeContainsES2021
+		return SubtreeContainsLogicalAssignments
 	}
 	return SubtreeFactsNone
 }
@@ -2930,7 +2928,7 @@ func (node *CatchClause) computeSubtreeFacts() SubtreeFacts {
 	res := propagateSubtreeFacts(node.VariableDeclaration) |
 		propagateSubtreeFacts(node.Block)
 	if node.VariableDeclaration == nil {
-		res |= SubtreeContainsES2019
+		res |= SubtreeContainsMissingCatchClauseVariable
 	}
 	return res
 }
@@ -3224,7 +3222,7 @@ func (node *VariableDeclarationList) Clone(f NodeFactoryCoercible) *Node {
 
 func (node *VariableDeclarationList) computeSubtreeFacts() SubtreeFacts {
 	return propagateNodeListSubtreeFacts(node.Declarations, propagateSubtreeFacts) |
-		core.IfElse(node.Flags&NodeFlagsUsing != 0, SubtreeContainsESNext, SubtreeFactsNone)
+		core.IfElse(node.Flags&NodeFlagsUsing != 0, SubtreeContainsUsing, SubtreeFactsNone)
 }
 
 func (node *VariableDeclarationList) propagateSubtreeFacts() SubtreeFacts {
@@ -3516,8 +3514,8 @@ func (node *FunctionDeclaration) computeSubtreeFacts() SubtreeFacts {
 			propagateNodeListSubtreeFacts(node.Parameters, propagateSubtreeFacts) |
 			propagateEraseableSyntaxSubtreeFacts(node.Type) |
 			propagateSubtreeFacts(node.Body) |
-			core.IfElse(isAsync && isGenerator, SubtreeContainsES2018, SubtreeFactsNone) |
-			core.IfElse(isAsync && !isGenerator, SubtreeContainsES2017, SubtreeFactsNone)
+			core.IfElse(isAsync && isGenerator, SubtreeContainsForAwaitOrAsyncGenerator, SubtreeFactsNone) |
+			core.IfElse(isAsync && !isGenerator, SubtreeContainsAnyAwait, SubtreeFactsNone)
 	}
 }
 
@@ -5219,8 +5217,8 @@ func (node *MethodDeclaration) computeSubtreeFacts() SubtreeFacts {
 			propagateNodeListSubtreeFacts(node.Parameters, propagateSubtreeFacts) |
 			propagateSubtreeFacts(node.Body) |
 			propagateEraseableSyntaxSubtreeFacts(node.Type) |
-			core.IfElse(isAsync && isGenerator, SubtreeContainsES2018, SubtreeFactsNone) |
-			core.IfElse(isAsync && !isGenerator, SubtreeContainsES2017, SubtreeFactsNone)
+			core.IfElse(isAsync && isGenerator, SubtreeContainsForAwaitOrAsyncGenerator, SubtreeFactsNone) |
+			core.IfElse(isAsync && !isGenerator, SubtreeContainsAnyAwait, SubtreeFactsNone)
 	}
 }
 
@@ -5524,7 +5522,7 @@ func (node *BigIntLiteral) Clone(f NodeFactoryCoercible) *Node {
 }
 
 func (node *BigIntLiteral) computeSubtreeFacts() SubtreeFacts {
-	return SubtreeContainsES2020
+	return SubtreeFactsNone // `bigint` is not downleveled in any way
 }
 
 func IsBigIntLiteral(node *Node) bool {
@@ -5802,7 +5800,7 @@ func (node *ArrowFunction) computeSubtreeFacts() SubtreeFacts {
 		propagateNodeListSubtreeFacts(node.Parameters, propagateSubtreeFacts) |
 		propagateEraseableSyntaxSubtreeFacts(node.Type) |
 		propagateSubtreeFacts(node.Body) |
-		core.IfElse(node.ModifierFlags()&ModifierFlagsAsync != 0, SubtreeContainsES2017, SubtreeFactsNone)
+		core.IfElse(node.ModifierFlags()&ModifierFlagsAsync != 0, SubtreeContainsAnyAwait, SubtreeFactsNone)
 }
 
 func (node *ArrowFunction) propagateSubtreeFacts() SubtreeFacts {
@@ -5872,8 +5870,8 @@ func (node *FunctionExpression) computeSubtreeFacts() SubtreeFacts {
 		propagateNodeListSubtreeFacts(node.Parameters, propagateSubtreeFacts) |
 		propagateEraseableSyntaxSubtreeFacts(node.Type) |
 		propagateSubtreeFacts(node.Body) |
-		core.IfElse(isAsync && isGenerator, SubtreeContainsES2018, SubtreeFactsNone) |
-		core.IfElse(isAsync && !isGenerator, SubtreeContainsES2017, SubtreeFactsNone)
+		core.IfElse(isAsync && isGenerator, SubtreeContainsForAwaitOrAsyncGenerator, SubtreeFactsNone) |
+		core.IfElse(isAsync && !isGenerator, SubtreeContainsAnyAwait, SubtreeFactsNone)
 }
 
 func (node *FunctionExpression) propagateSubtreeFacts() SubtreeFacts {
@@ -6283,8 +6281,7 @@ func (node *MetaProperty) Name() *DeclarationName {
 }
 
 func (node *MetaProperty) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.name) |
-		core.IfElse(node.KeywordToken == KindImportKeyword, SubtreeContainsES2020, SubtreeFactsNone)
+	return propagateSubtreeFacts(node.name) // `import.meta` is not downleveled in any way
 }
 
 func IsMetaProperty(node *Node) bool {
@@ -6943,7 +6940,7 @@ func (node *AwaitExpression) Clone(f NodeFactoryCoercible) *Node {
 }
 
 func (node *AwaitExpression) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.Expression) | SubtreeContainsES2017 | SubtreeContainsES2018 | SubtreeContainsAwait
+	return propagateSubtreeFacts(node.Expression) | SubtreeContainsAwait
 }
 
 func IsAwaitExpression(node *Node) bool {

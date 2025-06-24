@@ -8,18 +8,22 @@ type SubtreeFacts int32
 
 const (
 	// Facts
-	// - Flags used to indicate that a node or subtree contains syntax specific to a particular ECMAScript variant.
+	// - Flags used to indicate that a node or subtree contains syntax relevant to a specific transform
 
 	SubtreeContainsTypeScript SubtreeFacts = 1 << iota
 	SubtreeContainsJsx
-	SubtreeContainsESNext
-	SubtreeContainsES2022
-	SubtreeContainsES2021
-	SubtreeContainsES2020
-	SubtreeContainsES2019
-	SubtreeContainsES2018
-	SubtreeContainsES2017
-	SubtreeContainsES2016
+	SubtreeContainsESDecorators
+	SubtreeContainsUsing
+	SubtreeContainsClassStaticBlocks
+	SubtreeContainsESClassFields
+	SubtreeContainsLogicalAssignments
+	SubtreeContainsNullishCoalescing
+	SubtreeContainsOptionalChaining
+	SubtreeContainsMissingCatchClauseVariable
+	SubtreeContainsESObjectRestOrSpread
+	SubtreeContainsForAwaitOrAsyncGenerator
+	SubtreeContainsAnyAwait
+	SubtreeContainsExponentiationOperator
 
 	// Markers
 	// - Flags used to indicate that a node or subtree contains a particular kind of syntax.
@@ -36,6 +40,17 @@ const (
 
 	SubtreeFactsComputed              // NOTE: This should always be last
 	SubtreeFactsNone     SubtreeFacts = 0
+
+	// Aliases (unused, for documentation purposes only - correspond to combinations in transformers/estransforms/definitions.go)
+
+	SubtreeContainsESNext = SubtreeContainsESDecorators | SubtreeContainsUsing
+	SubtreeContainsES2022 = SubtreeContainsClassStaticBlocks | SubtreeContainsESClassFields
+	SubtreeContainsES2021 = SubtreeContainsLogicalAssignments
+	SubtreeContainsES2020 = SubtreeContainsNullishCoalescing | SubtreeContainsOptionalChaining
+	SubtreeContainsES2019 = SubtreeContainsMissingCatchClauseVariable
+	SubtreeContainsES2018 = SubtreeContainsESObjectRestOrSpread | SubtreeContainsForAwaitOrAsyncGenerator
+	SubtreeContainsES2017 = SubtreeContainsAnyAwait
+	SubtreeContainsES2016 = SubtreeContainsExponentiationOperator
 
 	// Scope Exclusions
 	// - Bitmasks that exclude flags from propagating out of a specific context
