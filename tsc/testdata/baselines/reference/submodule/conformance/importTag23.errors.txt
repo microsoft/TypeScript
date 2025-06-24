@@ -1,4 +1,3 @@
-/b.js(5,18): error TS1361: 'NS' cannot be used as a value because it was imported using 'import type'.
 /b.js(6,14): error TS2420: Class 'C' incorrectly implements interface 'I'.
   Property 'foo' is missing in type 'C' but required in type 'I'.
 
@@ -8,15 +7,12 @@
         foo(): void;
     }
     
-==== /b.js (2 errors) ====
+==== /b.js (1 errors) ====
     /**
      * @import * as NS from './a'
      */
     
     /** @implements {NS.I} */
-                     ~~
-!!! error TS1361: 'NS' cannot be used as a value because it was imported using 'import type'.
-!!! related TS1376 /b.js:2:17: 'NS' was imported here.
     export class C {}
                  ~
 !!! error TS2420: Class 'C' incorrectly implements interface 'I'.

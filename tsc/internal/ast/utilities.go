@@ -3032,7 +3032,7 @@ func IsJSDocSingleCommentNode(node *Node) bool {
 }
 
 func IsValidTypeOnlyAliasUseSite(useSite *Node) bool {
-	return useSite.Flags&NodeFlagsAmbient != 0 ||
+	return useSite.Flags&(NodeFlagsAmbient|NodeFlagsJSDoc) != 0 ||
 		IsPartOfTypeQuery(useSite) ||
 		isIdentifierInNonEmittingHeritageClause(useSite) ||
 		isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(useSite) ||
