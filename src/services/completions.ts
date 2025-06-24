@@ -5854,6 +5854,11 @@ function isNativeFunctionMethod(symbol: Symbol): boolean {
         return false;
     }
     
+    // Check that the interface is in global scope
+    if (!isSourceFile(parent.parent)) {
+        return false;
+    }
+    
     const interfaceName = parent.name?.text;
     return interfaceName === "Function" || interfaceName === "CallableFunction";
 }

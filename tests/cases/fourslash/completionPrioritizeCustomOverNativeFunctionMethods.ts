@@ -1,16 +1,14 @@
 /// <reference path='fourslash.ts'/>
 
-// Test case similar to the Bun.inspect example from the issue
-//// declare namespace Bun {
-////     interface InspectFunction {
-////         (value: any): string;
-////         custom: symbol;
-////         table: (value: any) => void;
-////     }
-////     const inspect: InspectFunction;
+// Test prioritization of custom properties over native Function methods
+//// interface CustomFunction {
+////     (value: any): string;
+////     custom: symbol;
+////     table: (value: any) => void;
 //// }
 //// 
-//// Bun.inspect./*completion*/
+//// declare const func: CustomFunction;
+//// func./*completion*/
 
 verify.completions({
     marker: "completion",
