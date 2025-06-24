@@ -53179,8 +53179,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             isPrefixUnaryExpression(node.parent) && isLiteralTypeNode(node.parent.parent);
         if (!literalType) {
             // Don't error on BigInt literals in ambient contexts
-            const inAmbientContext = !!(node.flags & NodeFlags.Ambient);
-            if (!inAmbientContext && languageVersion < ScriptTarget.ES2020) {
+            if (!(node.flags & NodeFlags.Ambient) && languageVersion < ScriptTarget.ES2020) {
                 if (grammarErrorOnNode(node, Diagnostics.BigInt_literals_are_not_available_when_targeting_lower_than_ES2020)) {
                     return true;
                 }
