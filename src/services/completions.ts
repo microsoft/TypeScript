@@ -109,6 +109,7 @@ import {
     getResolvePackageJsonExports,
     getRootDeclaration,
     getSourceFileOfModule,
+    getSourceFileOfNode,
     getSwitchedType,
     getSymbolId,
     getSynthesizedDeepClone,
@@ -5854,13 +5855,23 @@ function isNativeFunctionMethod(symbol: Symbol): boolean {
         return false;
     }
     
-    // Check that the interface is in global scope
-    if (!isSourceFile(parent.parent)) {
+    const interfaceName = parent.name?.text;
+    if (interfaceName !== "Function" && interfaceName !== "CallableFunction") {
         return false;
     }
     
-    const interfaceName = parent.name?.text;
-    return interfaceName === "Function" || interfaceName === "CallableFunction";
+    // Check if the interface declaration is from a library file
+    const sourceFile = getSourceFileOfNode(parent);
+    if (!sourceFile) {
+        return false;
+    }
+    
+    // Check if this is a lib file by looking at the file name or hasNoDefaultLib
+    const isLibFile = sourceFile.hasNoDefaultLib || 
+                     sourceFile.fileName.includes("lib.") ||
+                     sourceFile.fileName.includes("node_modules/@types/");
+    
+    return isLibFile;
 }
 
 function tryGetObjectLiteralContextualType(node: ObjectLiteralExpression, typeChecker: TypeChecker) {
