@@ -1,13 +1,6 @@
 --- old.requireOfJsonFileWithComputedPropertyName.js
 +++ new.requireOfJsonFileWithComputedPropertyName.js
-@@= skipped -12, +12 lines =@@
-     [a]: 10
- }
-
--//// [b.json]
--{
--    [a]: 10
--}
+@@= skipped -19, +19 lines =@@
  //// [file1.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });

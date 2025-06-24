@@ -1,10 +1,6 @@
 --- old.requireOfJsonFileWithNoContent.js
 +++ new.requireOfJsonFileWithNoContent.js
-@@= skipped -11, +11 lines =@@
- //// [b.json]
-
-
--//// [out/b.json]
+@@= skipped -15, +15 lines =@@
  //// [out/file1.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });

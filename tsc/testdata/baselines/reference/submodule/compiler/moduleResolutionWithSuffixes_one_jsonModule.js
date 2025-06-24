@@ -13,6 +13,10 @@
 import foo from "./foo.json";
 console.log(foo.ios);
 
+//// [/bin/foo.ios.json]
+{
+    "ios": "platform ios"
+}
 //// [/bin/index.js]
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {

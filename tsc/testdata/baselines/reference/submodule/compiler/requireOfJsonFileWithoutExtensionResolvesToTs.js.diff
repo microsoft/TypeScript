@@ -1,14 +1,6 @@
 --- old.requireOfJsonFileWithoutExtensionResolvesToTs.js
 +++ new.requireOfJsonFileWithoutExtensionResolvesToTs.js
-@@= skipped -26, +26 lines =@@
- //// [out/c.js]
- "use strict";
- module.exports = { a: true, b: "hello" };
--//// [out/c.json]
--{
--    "a": true,
--    "b": "hello"
--}
+@@= skipped -34, +34 lines =@@
  //// [out/file1.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });

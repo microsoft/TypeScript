@@ -26,6 +26,13 @@ export const name2 = ns.default.name;
     "default": "misedirection"
 }
 
+//// [package.json]
+{
+    "name": "pkg",
+    "version": "0.0.1",
+    "type": "module",
+    "default": "misedirection"
+}
 //// [index.js]
 import pkg from "./package.json" with { type: "json" };
 export const name = pkg.name;

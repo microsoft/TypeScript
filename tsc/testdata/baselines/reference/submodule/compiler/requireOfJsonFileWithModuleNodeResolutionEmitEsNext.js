@@ -9,5 +9,10 @@ import * as b  from './b.json';
     "b": "hello"
 }
 
+//// [out/b.json]
+{
+    "a": true,
+    "b": "hello"
+}
 //// [out/file1.js]
 export {};

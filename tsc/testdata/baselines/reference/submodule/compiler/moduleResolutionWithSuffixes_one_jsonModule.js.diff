@@ -1,16 +1,6 @@
 --- old.moduleResolutionWithSuffixes_one_jsonModule.js
 +++ new.moduleResolutionWithSuffixes_one_jsonModule.js
-@@= skipped -12, +12 lines =@@
- import foo from "./foo.json";
- console.log(foo.ios);
-
--//// [/bin/foo.ios.json]
--{
--    "ios": "platform ios"
--}
- //// [/bin/index.js]
- "use strict";
- var __importDefault = (this && this.__importDefault) || function (mod) {
+@@= skipped -22, +22 lines =@@
      return (mod && mod.__esModule) ? mod : { "default": mod };
  };
  Object.defineProperty(exports, "__esModule", { value: true });

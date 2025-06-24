@@ -15,6 +15,11 @@ if (x) {
     "b": "hello"
 }
 
+//// [b.json]
+{
+    "a": true,
+    "b": "hello"
+}
 //// [file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

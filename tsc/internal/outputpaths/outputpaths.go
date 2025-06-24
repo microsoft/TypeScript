@@ -123,7 +123,7 @@ func GetDeclarationEmitOutputFilePath(file string, options *core.CompilerOptions
 
 	var path string
 	if outputDir != nil {
-		path = getSourceFilePathInNewDirWorker(file, *outputDir, host.GetCurrentDirectory(), host.CommonSourceDirectory(), host.UseCaseSensitiveFileNames())
+		path = GetSourceFilePathInNewDirWorker(file, *outputDir, host.GetCurrentDirectory(), host.CommonSourceDirectory(), host.UseCaseSensitiveFileNames())
 	} else {
 		path = file
 	}
@@ -154,7 +154,7 @@ func getOutputPathWithoutChangingExtension(inputFileName string, outputDirectory
 	return inputFileName
 }
 
-func getSourceFilePathInNewDirWorker(fileName string, newDirPath string, currentDirectory string, commonSourceDirectory string, useCaseSensitiveFileNames bool) string {
+func GetSourceFilePathInNewDirWorker(fileName string, newDirPath string, currentDirectory string, commonSourceDirectory string, useCaseSensitiveFileNames bool) string {
 	sourceFilePath := tspath.GetNormalizedAbsolutePath(fileName, currentDirectory)
 	commonDir := tspath.GetCanonicalFileName(commonSourceDirectory, useCaseSensitiveFileNames)
 	canonFile := tspath.GetCanonicalFileName(sourceFilePath, useCaseSensitiveFileNames)

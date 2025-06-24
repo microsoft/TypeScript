@@ -1,14 +1,8 @@
 --- old.requireOfJsonFileWithModuleNodeResolutionEmitUmd.js
 +++ new.requireOfJsonFileWithModuleNodeResolutionEmitUmd.js
-@@= skipped -8, +8 lines =@@
+@@= skipped -14, +14 lines =@@
      "b": "hello"
  }
-
--//// [out/b.json]
--{
--    "a": true,
--    "b": "hello"
--}
  //// [out/file1.js]
 -(function (factory) {
 -    if (typeof module === "object" && typeof module.exports === "object") {

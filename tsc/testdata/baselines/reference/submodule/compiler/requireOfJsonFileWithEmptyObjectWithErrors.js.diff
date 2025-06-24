@@ -1,11 +1,6 @@
 --- old.requireOfJsonFileWithEmptyObjectWithErrors.js
 +++ new.requireOfJsonFileWithEmptyObjectWithErrors.js
-@@= skipped -12, +12 lines =@@
- {
- }
-
--//// [out/b.json]
--{}
+@@= skipped -17, +17 lines =@@
  //// [out/file1.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });

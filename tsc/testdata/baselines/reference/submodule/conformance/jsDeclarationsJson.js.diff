@@ -1,17 +1,7 @@
 --- old.jsDeclarationsJson.js
 +++ new.jsDeclarationsJson.js
-@@= skipped -11, +11 lines =@@
-     }
+@@= skipped -21, +21 lines =@@
  }
-
--//// [obj.json]
--{
--    "x": 12,
--    "y": 12,
--    "obj": {
--        "items": [{ "x": 12 }, { "x": 12, "y": 12 }, { "x": 0 }, { "x": -1, "err": true }]
--    }
--}
  //// [index.js]
  const j = require("./obj.json");
 +export = j;

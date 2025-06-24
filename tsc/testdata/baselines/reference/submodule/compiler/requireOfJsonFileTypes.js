@@ -45,6 +45,23 @@ booleanLiteral = g[0];
 //// [g.json]
 [true, false]
 
+//// [out/b.json]
+{
+    "a": true,
+    "b": "hello",
+    "c": null,
+    "d": false
+}
+//// [out/c.json]
+["a", null, "string"]
+//// [out/d.json]
+"dConfig"
+//// [out/e.json]
+-10
+//// [out/f.json]
+[-10, 30]
+//// [out/g.json]
+[true, false]
 //// [out/file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

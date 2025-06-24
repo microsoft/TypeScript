@@ -13,6 +13,8 @@ if (x) {
 {
 }
 
+//// [out/b.json]
+{}
 //// [out/file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

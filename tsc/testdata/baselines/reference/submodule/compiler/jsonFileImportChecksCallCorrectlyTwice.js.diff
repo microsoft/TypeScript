@@ -1,21 +1,6 @@
 --- old.jsonFileImportChecksCallCorrectlyTwice.js
 +++ new.jsonFileImportChecksCallCorrectlyTwice.js
-@@= skipped -20, +20 lines =@@
-     ]
- }
-
--//// [data.json]
--{
--    "foo": [
--        {
--            "bool": true,
--            "str": "123"
--        }
--    ]
--}
- //// [index.js]
- "use strict";
- var __importDefault = (this && this.__importDefault) || function (mod) {
+@@= skipped -35, +35 lines =@@
      return (mod && mod.__esModule) ? mod : { "default": mod };
  };
  Object.defineProperty(exports, "__esModule", { value: true });

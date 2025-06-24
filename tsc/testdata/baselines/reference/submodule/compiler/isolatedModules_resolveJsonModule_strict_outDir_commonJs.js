@@ -7,6 +7,8 @@ import * as j from "./j.json";
 {}
 
 
+//// [j.json]
+{}
 //// [a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

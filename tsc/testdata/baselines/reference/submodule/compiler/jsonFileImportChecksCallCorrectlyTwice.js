@@ -21,6 +21,15 @@ function fn(arg: Foo[]) { }
     ]
 }
 
+//// [data.json]
+{
+    "foo": [
+        {
+            "bool": true,
+            "str": "123"
+        }
+    ]
+}
 //// [index.js]
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {

@@ -13,6 +13,10 @@ if (x) {
     [a]: 10
 }
 
+//// [b.json]
+{
+    [a]: 10
+}
 //// [file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

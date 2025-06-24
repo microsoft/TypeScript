@@ -27,6 +27,11 @@ export = { a: true, b: "hello" };
 //// [out/c.js]
 "use strict";
 module.exports = { a: true, b: "hello" };
+//// [out/c.json]
+{
+    "a": true,
+    "b": "hello"
+}
 //// [out/file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

@@ -17,6 +17,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/transformers/jsxtransforms"
 	"github.com/microsoft/typescript-go/internal/transformers/moduletransforms"
 	"github.com/microsoft/typescript-go/internal/transformers/tstransforms"
+	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
@@ -368,14 +369,29 @@ func (e *emitter) getSourceMappingURL(mapOptions *core.CompilerOptions, sourceMa
 	return stringutil.EncodeURI(sourceMapFile)
 }
 
-func sourceFileMayBeEmitted(sourceFile *ast.SourceFile, host printer.EmitHost, forceDtsEmit bool) bool {
-	// !!! Js files are emitted only if option is enabled
+type SourceFileMayBeEmittedHost interface {
+	Options() *core.CompilerOptions
+	GetOutputAndProjectReference(path tspath.Path) *tsoptions.OutputDtsAndProjectReference
+	IsSourceFileFromExternalLibrary(file *ast.SourceFile) bool
+	GetCurrentDirectory() string
+	UseCaseSensitiveFileNames() bool
+}
+
+func sourceFileMayBeEmitted(sourceFile *ast.SourceFile, host SourceFileMayBeEmittedHost, forceDtsEmit bool) bool {
+	// TODO: move this to outputpaths?
+
+	options := host.Options()
+	// Js files are emitted only if option is enabled
+	if options.NoEmitForJsFiles.IsTrue() && ast.IsSourceFileJS(sourceFile) {
+		return false
+	}
 
 	// Declaration files are not emitted
 	if sourceFile.IsDeclarationFile {
 		return false
 	}
 
+	// Source file from node_modules are not emitted
 	if host.IsSourceFileFromExternalLibrary(sourceFile) {
 		return false
 	}
@@ -385,6 +401,7 @@ func sourceFileMayBeEmitted(sourceFile *ast.SourceFile, host printer.EmitHost, f
 		return true
 	}
 
+	// Check other conditions for file emit
 	// Source files from referenced projects are not emitted
 	if host.GetOutputAndProjectReference(sourceFile.Path()) != nil {
 		return false
@@ -395,8 +412,24 @@ func sourceFileMayBeEmitted(sourceFile *ast.SourceFile, host printer.EmitHost, f
 		return true
 	}
 
-	// !!! Should JSON input files be emitted
-	return false
+	// Json file is not emitted if outDir is not specified
+	if options.OutDir == "" {
+		return false
+	}
+
+	// Otherwise if rootDir or composite config file, we know common sourceDir and can check if file would be emitted in same location
+	if options.RootDir != "" || (options.Composite.IsTrue() && options.ConfigFilePath != "") {
+		commonDir := tspath.GetNormalizedAbsolutePath(outputpaths.GetCommonSourceDirectory(options, func() []string { return nil }, host.GetCurrentDirectory(), host.UseCaseSensitiveFileNames()), host.GetCurrentDirectory())
+		outputPath := outputpaths.GetSourceFilePathInNewDirWorker(sourceFile.FileName(), options.OutDir, host.GetCurrentDirectory(), commonDir, host.UseCaseSensitiveFileNames())
+		if tspath.ComparePaths(sourceFile.FileName(), outputPath, tspath.ComparePathsOptions{
+			UseCaseSensitiveFileNames: host.UseCaseSensitiveFileNames(),
+			CurrentDirectory:          host.GetCurrentDirectory(),
+		}) == 0 {
+			return false
+		}
+	}
+
+	return true
 }
 
 func getSourceFilesToEmit(host printer.EmitHost, targetSourceFile *ast.SourceFile, forceDtsEmit bool) []*ast.SourceFile {
