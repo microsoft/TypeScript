@@ -1,4 +1,4 @@
-package transformers
+package tstransforms_test
 
 import (
 	"testing"
@@ -7,6 +7,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/testutil/emittestutil"
 	"github.com/microsoft/typescript-go/internal/testutil/parsetestutil"
+	"github.com/microsoft/typescript-go/internal/transformers/tstransforms"
 )
 
 func TestTypeEraser(t *testing.T) {
@@ -98,7 +99,7 @@ func TestTypeEraser(t *testing.T) {
 			if rec.vms {
 				compilerOptions.VerbatimModuleSyntax = core.TSTrue
 			}
-			emittestutil.CheckEmit(t, nil, NewTypeEraserTransformer(printer.NewEmitContext(), compilerOptions).TransformSourceFile(file), rec.output)
+			emittestutil.CheckEmit(t, nil, tstransforms.NewTypeEraserTransformer(printer.NewEmitContext(), compilerOptions).TransformSourceFile(file), rec.output)
 		})
 	}
 }

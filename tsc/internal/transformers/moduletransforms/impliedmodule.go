@@ -1,22 +1,23 @@
-package transformers
+package moduletransforms
 
 import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/binder"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/printer"
+	"github.com/microsoft/typescript-go/internal/transformers"
 )
 
 type ImpliedModuleTransformer struct {
-	Transformer
+	transformers.Transformer
 	compilerOptions           *core.CompilerOptions
 	resolver                  binder.ReferenceResolver
 	getEmitModuleFormatOfFile func(file ast.HasFileName) core.ModuleKind
-	cjsTransformer            *Transformer
-	esmTransformer            *Transformer
+	cjsTransformer            *transformers.Transformer
+	esmTransformer            *transformers.Transformer
 }
 
-func NewImpliedModuleTransformer(emitContext *printer.EmitContext, compilerOptions *core.CompilerOptions, resolver binder.ReferenceResolver, getEmitModuleFormatOfFile func(file ast.HasFileName) core.ModuleKind) *Transformer {
+func NewImpliedModuleTransformer(emitContext *printer.EmitContext, compilerOptions *core.CompilerOptions, resolver binder.ReferenceResolver, getEmitModuleFormatOfFile func(file ast.HasFileName) core.ModuleKind) *transformers.Transformer {
 	if resolver == nil {
 		resolver = binder.NewReferenceResolver(compilerOptions, binder.ReferenceResolverHooks{})
 	}
@@ -39,15 +40,15 @@ func (tx *ImpliedModuleTransformer) visitSourceFile(node *ast.SourceFile) *ast.N
 
 	format := tx.getEmitModuleFormatOfFile(node)
 
-	var transformer *Transformer
+	var transformer *transformers.Transformer
 	if format >= core.ModuleKindES2015 {
 		if tx.esmTransformer == nil {
-			tx.esmTransformer = NewESModuleTransformer(tx.emitContext, tx.compilerOptions, tx.resolver, tx.getEmitModuleFormatOfFile)
+			tx.esmTransformer = NewESModuleTransformer(tx.EmitContext(), tx.compilerOptions, tx.resolver, tx.getEmitModuleFormatOfFile)
 		}
 		transformer = tx.esmTransformer
 	} else {
 		if tx.cjsTransformer == nil {
-			tx.cjsTransformer = NewCommonJSModuleTransformer(tx.emitContext, tx.compilerOptions, tx.resolver, tx.getEmitModuleFormatOfFile)
+			tx.cjsTransformer = NewCommonJSModuleTransformer(tx.EmitContext(), tx.compilerOptions, tx.resolver, tx.getEmitModuleFormatOfFile)
 		}
 		transformer = tx.cjsTransformer
 	}

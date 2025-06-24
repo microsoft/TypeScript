@@ -1,4 +1,4 @@
-package transformers
+package moduletransforms
 
 import (
 	"slices"
@@ -9,6 +9,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/stringutil"
+	"github.com/microsoft/typescript-go/internal/transformers"
 )
 
 type externalModuleInfo struct {
@@ -237,7 +238,7 @@ func (c *externalModuleInfoCollector) collectExportedVariableInfo(decl *ast.Node
 		text := decl.Name().Text()
 		if c.addUniqueExport(text) {
 			c.addExportedName(decl.Name())
-			if isLocalName(c.emitContext, decl.Name()) {
+			if transformers.IsLocalName(c.emitContext, decl.Name()) {
 				c.addExportedBinding(decl, decl.Name())
 			}
 		}

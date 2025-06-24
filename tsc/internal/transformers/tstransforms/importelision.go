@@ -1,19 +1,20 @@
-package transformers
+package tstransforms
 
 import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/printer"
+	"github.com/microsoft/typescript-go/internal/transformers"
 )
 
 type ImportElisionTransformer struct {
-	Transformer
+	transformers.Transformer
 	compilerOptions   *core.CompilerOptions
 	currentSourceFile *ast.SourceFile
 	emitResolver      printer.EmitResolver
 }
 
-func NewImportElisionTransformer(emitContext *printer.EmitContext, compilerOptions *core.CompilerOptions, resolver printer.EmitResolver) *Transformer {
+func NewImportElisionTransformer(emitContext *printer.EmitContext, compilerOptions *core.CompilerOptions, resolver printer.EmitResolver) *transformers.Transformer {
 	if compilerOptions.VerbatimModuleSyntax.IsTrue() {
 		panic("ImportElisionTransformer should not be used with VerbatimModuleSyntax")
 	}
@@ -27,30 +28,30 @@ func (tx *ImportElisionTransformer) visit(node *ast.Node) *ast.Node {
 		if !tx.isElisionBlocked(node) && !tx.shouldEmitImportEqualsDeclaration(node.AsImportEqualsDeclaration()) {
 			return nil
 		}
-		return tx.visitor.VisitEachChild(node)
+		return tx.Visitor().VisitEachChild(node)
 	case ast.KindImportDeclaration:
 		if !tx.isElisionBlocked(node) {
 			n := node.AsImportDeclaration()
 			// Do not elide a side-effect only import declaration.
 			//  import "foo";
 			if n.ImportClause != nil {
-				importClause := tx.visitor.VisitNode(n.ImportClause)
+				importClause := tx.Visitor().VisitNode(n.ImportClause)
 				if importClause == nil {
 					return nil
 				}
-				return tx.factory.UpdateImportDeclaration(n, n.Modifiers(), importClause, n.ModuleSpecifier, tx.visitor.VisitNode(n.Attributes))
+				return tx.Factory().UpdateImportDeclaration(n, n.Modifiers(), importClause, n.ModuleSpecifier, tx.Visitor().VisitNode(n.Attributes))
 			}
 		}
-		return tx.visitor.VisitEachChild(node)
+		return tx.Visitor().VisitEachChild(node)
 	case ast.KindImportClause:
 		n := node.AsImportClause()
 		name := core.IfElse(tx.shouldEmitAliasDeclaration(node), n.Name(), nil)
-		namedBindings := tx.visitor.VisitNode(n.NamedBindings)
+		namedBindings := tx.Visitor().VisitNode(n.NamedBindings)
 		if name == nil && namedBindings == nil {
 			// all import bindings were elided
 			return nil
 		}
-		return tx.factory.UpdateImportClause(n, false /*isTypeOnly*/, name, namedBindings)
+		return tx.Factory().UpdateImportClause(n, false /*isTypeOnly*/, name, namedBindings)
 	case ast.KindNamespaceImport:
 		if !tx.shouldEmitAliasDeclaration(node) {
 			// elide unused imports
@@ -59,12 +60,12 @@ func (tx *ImportElisionTransformer) visit(node *ast.Node) *ast.Node {
 		return node
 	case ast.KindNamedImports:
 		n := node.AsNamedImports()
-		elements := tx.visitor.VisitNodes(n.Elements)
+		elements := tx.Visitor().VisitNodes(n.Elements)
 		if len(elements.Nodes) == 0 {
 			// all import specifiers were elided
 			return nil
 		}
-		return tx.factory.UpdateNamedImports(n, elements)
+		return tx.Factory().UpdateNamedImports(n, elements)
 	case ast.KindImportSpecifier:
 		if !tx.shouldEmitAliasDeclaration(node) {
 			// elide type-only or unused imports
@@ -76,29 +77,29 @@ func (tx *ImportElisionTransformer) visit(node *ast.Node) *ast.Node {
 			// elide unused import
 			return nil
 		}
-		return tx.visitor.VisitEachChild(node)
+		return tx.Visitor().VisitEachChild(node)
 	case ast.KindExportDeclaration:
 		if !tx.isElisionBlocked(node) {
 			n := node.AsExportDeclaration()
 			var exportClause *ast.Node
 			if n.ExportClause != nil {
-				exportClause = tx.visitor.VisitNode(n.ExportClause)
+				exportClause = tx.Visitor().VisitNode(n.ExportClause)
 				if exportClause == nil {
 					// all export bindings were elided
 					return nil
 				}
 			}
-			return tx.factory.UpdateExportDeclaration(n, nil /*modifiers*/, false /*isTypeOnly*/, exportClause, tx.visitor.VisitNode(n.ModuleSpecifier), tx.visitor.VisitNode(n.Attributes))
+			return tx.Factory().UpdateExportDeclaration(n, nil /*modifiers*/, false /*isTypeOnly*/, exportClause, tx.Visitor().VisitNode(n.ModuleSpecifier), tx.Visitor().VisitNode(n.Attributes))
 		}
-		return tx.visitor.VisitEachChild(node)
+		return tx.Visitor().VisitEachChild(node)
 	case ast.KindNamedExports:
 		n := node.AsNamedExports()
-		elements := tx.visitor.VisitNodes(n.Elements)
+		elements := tx.Visitor().VisitNodes(n.Elements)
 		if len(elements.Nodes) == 0 {
 			// all export specifiers were elided
 			return nil
 		}
-		return tx.factory.UpdateNamedExports(n, elements)
+		return tx.Factory().UpdateNamedExports(n, elements)
 	case ast.KindExportSpecifier:
 		if !tx.isValueAliasDeclaration(node) {
 			// elide unused export
@@ -108,7 +109,7 @@ func (tx *ImportElisionTransformer) visit(node *ast.Node) *ast.Node {
 	case ast.KindSourceFile:
 		savedCurrentSourceFile := tx.currentSourceFile
 		tx.currentSourceFile = node.AsSourceFile()
-		node = tx.visitor.VisitEachChild(node)
+		node = tx.Visitor().VisitEachChild(node)
 		tx.currentSourceFile = savedCurrentSourceFile
 		return node
 	default:
@@ -134,17 +135,17 @@ func (tx *ImportElisionTransformer) shouldEmitImportEqualsDeclaration(node *ast.
 }
 
 func (tx *ImportElisionTransformer) isReferencedAliasDeclaration(node *ast.Node) bool {
-	node = tx.emitContext.ParseNode(node)
+	node = tx.EmitContext().ParseNode(node)
 	return node == nil || tx.emitResolver.IsReferencedAliasDeclaration(node)
 }
 
 func (tx *ImportElisionTransformer) isValueAliasDeclaration(node *ast.Node) bool {
-	node = tx.emitContext.ParseNode(node)
+	node = tx.EmitContext().ParseNode(node)
 	return node == nil || tx.emitResolver.IsValueAliasDeclaration(node)
 }
 
 func (tx *ImportElisionTransformer) isTopLevelValueImportEqualsWithEntityName(node *ast.Node) bool {
-	node = tx.emitContext.ParseNode(node)
+	node = tx.EmitContext().ParseNode(node)
 	return node != nil && tx.emitResolver.IsTopLevelValueImportEqualsWithEntityName(node)
 }
 
@@ -155,7 +156,7 @@ func (tx *ImportElisionTransformer) isTopLevelValueImportEqualsWithEntityName(no
 // transform, although we will continue to allow it if the statement hasn't replaced a node of a different kind and
 // as long as the local bindings for the declarations are unchanged.
 func (tx *ImportElisionTransformer) isElisionBlocked(node *ast.Node /*ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration*/) bool {
-	parsed := tx.emitContext.ParseNode(node)
+	parsed := tx.EmitContext().ParseNode(node)
 	if parsed == node || ast.IsExportAssignment(node) {
 		return false
 	}

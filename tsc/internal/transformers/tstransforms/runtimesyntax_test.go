@@ -1,4 +1,4 @@
-package transformers
+package tstransforms_test
 
 import (
 	"testing"
@@ -8,6 +8,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/testutil/emittestutil"
 	"github.com/microsoft/typescript-go/internal/testutil/parsetestutil"
+	"github.com/microsoft/typescript-go/internal/transformers/tstransforms"
 )
 
 func TestEnumTransformer(t *testing.T) {
@@ -236,7 +237,7 @@ var E;
 			binder.BindSourceFile(file)
 			emitContext := printer.NewEmitContext()
 			resolver := binder.NewReferenceResolver(options, binder.ReferenceResolverHooks{})
-			emittestutil.CheckEmit(t, emitContext, NewRuntimeSyntaxTransformer(emitContext, options, resolver).TransformSourceFile(file), rec.output)
+			emittestutil.CheckEmit(t, emitContext, tstransforms.NewRuntimeSyntaxTransformer(emitContext, options, resolver).TransformSourceFile(file), rec.output)
 		})
 	}
 }
@@ -414,7 +415,7 @@ func TestNamespaceTransformer(t *testing.T) {
 			binder.BindSourceFile(file)
 			emitContext := printer.NewEmitContext()
 			resolver := binder.NewReferenceResolver(options, binder.ReferenceResolverHooks{})
-			emittestutil.CheckEmit(t, emitContext, NewRuntimeSyntaxTransformer(emitContext, options, resolver).TransformSourceFile(file), rec.output)
+			emittestutil.CheckEmit(t, emitContext, tstransforms.NewRuntimeSyntaxTransformer(emitContext, options, resolver).TransformSourceFile(file), rec.output)
 		})
 	}
 }
@@ -450,8 +451,8 @@ func TestParameterPropertyTransformer(t *testing.T) {
 			binder.BindSourceFile(file)
 			emitContext := printer.NewEmitContext()
 			resolver := binder.NewReferenceResolver(options, binder.ReferenceResolverHooks{})
-			file = NewTypeEraserTransformer(emitContext, options).TransformSourceFile(file)
-			file = NewRuntimeSyntaxTransformer(emitContext, options, resolver).TransformSourceFile(file)
+			file = tstransforms.NewTypeEraserTransformer(emitContext, options).TransformSourceFile(file)
+			file = tstransforms.NewRuntimeSyntaxTransformer(emitContext, options, resolver).TransformSourceFile(file)
 			emittestutil.CheckEmit(t, emitContext, file, rec.output)
 		})
 	}

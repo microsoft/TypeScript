@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/binder"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/outputpaths"
@@ -12,6 +13,10 @@ import (
 	"github.com/microsoft/typescript-go/internal/stringutil"
 	"github.com/microsoft/typescript-go/internal/transformers"
 	"github.com/microsoft/typescript-go/internal/transformers/declarations"
+	"github.com/microsoft/typescript-go/internal/transformers/estransforms"
+	"github.com/microsoft/typescript-go/internal/transformers/jsxtransforms"
+	"github.com/microsoft/typescript-go/internal/transformers/moduletransforms"
+	"github.com/microsoft/typescript-go/internal/transformers/tstransforms"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
@@ -49,6 +54,73 @@ func (e *emitter) getDeclarationTransformers(emitContext *printer.EmitContext, s
 	return []*declarations.DeclarationTransformer{transform}
 }
 
+func getModuleTransformer(emitContext *printer.EmitContext, options *core.CompilerOptions, resolver binder.ReferenceResolver, getEmitModuleFormatOfFile func(file ast.HasFileName) core.ModuleKind) *transformers.Transformer {
+	switch options.GetEmitModuleKind() {
+	case core.ModuleKindPreserve:
+		// `ESModuleTransformer` contains logic for preserving CJS input syntax in `--module preserve`
+		return moduletransforms.NewESModuleTransformer(emitContext, options, resolver, getEmitModuleFormatOfFile)
+
+	case core.ModuleKindESNext,
+		core.ModuleKindES2022,
+		core.ModuleKindES2020,
+		core.ModuleKindES2015,
+		core.ModuleKindNode18,
+		core.ModuleKindNode16,
+		core.ModuleKindNodeNext,
+		core.ModuleKindCommonJS:
+		return moduletransforms.NewImpliedModuleTransformer(emitContext, options, resolver, getEmitModuleFormatOfFile)
+
+	default:
+		return moduletransforms.NewCommonJSModuleTransformer(emitContext, options, resolver, getEmitModuleFormatOfFile)
+	}
+}
+
+func getScriptTransformers(emitContext *printer.EmitContext, host printer.EmitHost, sourceFile *ast.SourceFile) []*transformers.Transformer {
+	var tx []*transformers.Transformer
+	options := host.Options()
+
+	// JS files don't use reference calculations as they don't do import elision, no need to calculate it
+	importElisionEnabled := !options.VerbatimModuleSyntax.IsTrue() && !ast.IsInJSFile(sourceFile.AsNode())
+
+	var emitResolver printer.EmitResolver
+	var referenceResolver binder.ReferenceResolver
+	if importElisionEnabled || options.GetJSXTransformEnabled() {
+		emitResolver = host.GetEmitResolver(sourceFile, false /*skipDiagnostics*/) // !!! conditionally skip diagnostics
+		emitResolver.MarkLinkedReferencesRecursively(sourceFile)
+		referenceResolver = emitResolver
+	} else {
+		referenceResolver = binder.NewReferenceResolver(options, binder.ReferenceResolverHooks{})
+	}
+
+	// transform TypeScript syntax
+	{
+		// erase types
+		tx = append(tx, tstransforms.NewTypeEraserTransformer(emitContext, options))
+
+		// elide imports
+		if importElisionEnabled {
+			tx = append(tx, tstransforms.NewImportElisionTransformer(emitContext, options, emitResolver))
+		}
+
+		// transform `enum`, `namespace`, and parameter properties
+		tx = append(tx, tstransforms.NewRuntimeSyntaxTransformer(emitContext, options, referenceResolver))
+	}
+
+	// !!! transform legacy decorator syntax
+	if options.GetJSXTransformEnabled() {
+		tx = append(tx, jsxtransforms.NewJSXTransformer(emitContext, options, emitResolver))
+	}
+
+	downleveler := estransforms.GetESTransformer(options, emitContext)
+	if downleveler != nil {
+		tx = append(tx, downleveler)
+	}
+
+	// transform module syntax
+	tx = append(tx, getModuleTransformer(emitContext, options, referenceResolver, host.GetEmitModuleFormatOfFile))
+	return tx
+}
+
 func (e *emitter) emitJSFile(sourceFile *ast.SourceFile, jsFilePath string, sourceMapFilePath string) {
 	options := e.host.Options()
 
@@ -61,7 +133,7 @@ func (e *emitter) emitJSFile(sourceFile *ast.SourceFile, jsFilePath string, sour
 	}
 
 	emitContext := printer.NewEmitContext()
-	for _, transformer := range transformers.GetScriptTransformers(emitContext, e.host, sourceFile) {
+	for _, transformer := range getScriptTransformers(emitContext, e.host, sourceFile) {
 		sourceFile = transformer.TransformSourceFile(sourceFile)
 	}
 

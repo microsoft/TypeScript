@@ -1,4 +1,4 @@
-package transformers
+package tstransforms_test
 
 import (
 	"testing"
@@ -12,6 +12,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/testutil/emittestutil"
 	"github.com/microsoft/typescript-go/internal/testutil/parsetestutil"
+	"github.com/microsoft/typescript-go/internal/transformers/tstransforms"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
@@ -240,8 +241,8 @@ func TestImportElision(t *testing.T) {
 			emitResolver.MarkLinkedReferencesRecursively(file)
 
 			emitContext := printer.NewEmitContext()
-			file = NewTypeEraserTransformer(emitContext, compilerOptions).TransformSourceFile(file)
-			file = NewImportElisionTransformer(emitContext, compilerOptions, emitResolver).TransformSourceFile(file)
+			file = tstransforms.NewTypeEraserTransformer(emitContext, compilerOptions).TransformSourceFile(file)
+			file = tstransforms.NewImportElisionTransformer(emitContext, compilerOptions, emitResolver).TransformSourceFile(file)
 			emittestutil.CheckEmit(t, nil, file, rec.output)
 		})
 	}

@@ -1,4 +1,4 @@
-package transformers
+package estransforms
 
 import (
 	"maps"
@@ -7,15 +7,21 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/printer"
+	"github.com/microsoft/typescript-go/internal/transformers"
 )
 
-type ESNextTransformer struct {
-	Transformer
+type usingDeclarationTransformer struct {
+	transformers.Transformer
 
 	exportBindings       map[string]*ast.ExportSpecifierNode
 	exportVars           []*ast.VariableDeclarationNode
 	defaultExportBinding *ast.IdentifierNode
 	exportEqualsBinding  *ast.IdentifierNode
+}
+
+func newUsingDeclarationTransformer(emitContext *printer.EmitContext) *transformers.Transformer {
+	tx := &usingDeclarationTransformer{}
+	return tx.NewTransformer(tx.visit, emitContext)
 }
 
 type usingKind uint
@@ -26,12 +32,7 @@ const (
 	usingKindAsync
 )
 
-func NewESNextTransformer(emitContext *printer.EmitContext) *Transformer {
-	tx := &ESNextTransformer{}
-	return tx.NewTransformer(tx.visit, emitContext)
-}
-
-func (tx *ESNextTransformer) visit(node *ast.Node) *ast.Node {
+func (tx *usingDeclarationTransformer) visit(node *ast.Node) *ast.Node {
 	if node.SubtreeFacts()&ast.SubtreeContainsESNext == 0 {
 		return node
 	}
@@ -48,12 +49,12 @@ func (tx *ESNextTransformer) visit(node *ast.Node) *ast.Node {
 	case ast.KindSwitchStatement:
 		node = tx.visitSwitchStatement(node.AsSwitchStatement())
 	default:
-		node = tx.visitor.VisitEachChild(node)
+		node = tx.Visitor().VisitEachChild(node)
 	}
 	return node
 }
 
-func (tx *ESNextTransformer) visitSourceFile(node *ast.SourceFile) *ast.Node {
+func (tx *usingDeclarationTransformer) visitSourceFile(node *ast.SourceFile) *ast.Node {
 	if node.IsDeclarationFile {
 		return node.AsNode()
 	}
@@ -99,14 +100,14 @@ func (tx *ESNextTransformer) visitSourceFile(node *ast.SourceFile) *ast.Node {
 		// statements in the source file into the `try` block, which is the same approach we use for System module
 		// emit. Unlike System module emit, we attempt to preserve all statements prior to the first top-level
 		// `using` to isolate the complexity of the transformed output to only where it is necessary.
-		tx.emitContext.StartVariableEnvironment()
+		tx.EmitContext().StartVariableEnvironment()
 
 		tx.exportBindings = make(map[string]*ast.ExportSpecifierNode)
 		tx.exportVars = nil
 
-		prologue, rest := tx.factory.SplitStandardPrologue(node.Statements.Nodes)
+		prologue, rest := tx.Factory().SplitStandardPrologue(node.Statements.Nodes)
 		var topLevelStatements []*ast.Statement
-		topLevelStatements = append(topLevelStatements, core.FirstResult(tx.visitor.VisitSlice(prologue))...)
+		topLevelStatements = append(topLevelStatements, core.FirstResult(tx.Visitor().VisitSlice(prologue))...)
 
 		// Collect and transform any leading statements up to the first `using` or `await using`. This preserves
 		// the original statement order much as is possible.
@@ -116,7 +117,7 @@ func (tx *ESNextTransformer) visitSourceFile(node *ast.SourceFile) *ast.Node {
 			statement := rest[pos]
 			if getUsingKind(statement) != usingKindNone {
 				if pos > 0 {
-					topLevelStatements = append(topLevelStatements, core.FirstResult(tx.visitor.VisitSlice(rest[:pos]))...)
+					topLevelStatements = append(topLevelStatements, core.FirstResult(tx.Visitor().VisitSlice(rest[:pos]))...)
 				}
 				break
 			}
@@ -135,11 +136,11 @@ func (tx *ESNextTransformer) visitSourceFile(node *ast.SourceFile) *ast.Node {
 		if len(tx.exportBindings) > 0 {
 			topLevelStatements = append(
 				topLevelStatements,
-				tx.factory.NewExportDeclaration(
+				tx.Factory().NewExportDeclaration(
 					nil,   /*modifiers*/
 					false, /*isTypeOnly*/
-					tx.factory.NewNamedExports(
-						tx.factory.NewNodeList(
+					tx.Factory().NewNamedExports(
+						tx.Factory().NewNodeList(
 							slices.Collect(maps.Values(tx.exportBindings)),
 						),
 					),
@@ -149,22 +150,22 @@ func (tx *ESNextTransformer) visitSourceFile(node *ast.SourceFile) *ast.Node {
 			)
 		}
 
-		topLevelStatements = tx.emitContext.EndAndMergeVariableEnvironment(topLevelStatements)
+		topLevelStatements = tx.EmitContext().EndAndMergeVariableEnvironment(topLevelStatements)
 		if len(tx.exportVars) > 0 {
-			topLevelStatements = append(topLevelStatements, tx.factory.NewVariableStatement(
-				tx.factory.NewModifierList([]*ast.Node{
-					tx.factory.NewModifier(ast.KindExportKeyword),
+			topLevelStatements = append(topLevelStatements, tx.Factory().NewVariableStatement(
+				tx.Factory().NewModifierList([]*ast.Node{
+					tx.Factory().NewModifier(ast.KindExportKeyword),
 				}),
-				tx.factory.NewVariableDeclarationList(
+				tx.Factory().NewVariableDeclarationList(
 					ast.NodeFlagsLet,
-					tx.factory.NewNodeList(tx.exportVars),
+					tx.Factory().NewNodeList(tx.exportVars),
 				),
 			))
 		}
 		topLevelStatements = append(topLevelStatements, tx.createDownlevelUsingStatements(bodyStatements, envBinding, usingKind == usingKindAsync)...)
 
 		if tx.exportEqualsBinding != nil {
-			topLevelStatements = append(topLevelStatements, tx.factory.NewExportAssignment(
+			topLevelStatements = append(topLevelStatements, tx.Factory().NewExportAssignment(
 				nil,  /*modifiers*/
 				true, /*isExportEquals*/
 				nil,  /*typeNode*/
@@ -172,11 +173,11 @@ func (tx *ESNextTransformer) visitSourceFile(node *ast.SourceFile) *ast.Node {
 			))
 		}
 
-		visited = tx.factory.UpdateSourceFile(node, tx.factory.NewNodeList(topLevelStatements))
+		visited = tx.Factory().UpdateSourceFile(node, tx.Factory().NewNodeList(topLevelStatements))
 	} else {
-		visited = tx.visitor.VisitEachChild(node.AsNode())
+		visited = tx.Visitor().VisitEachChild(node.AsNode())
 	}
-	tx.emitContext.AddEmitHelper(visited, tx.emitContext.ReadEmitHelpers()...)
+	tx.EmitContext().AddEmitHelper(visited, tx.EmitContext().ReadEmitHelpers()...)
 	tx.exportVars = nil
 	tx.exportBindings = nil
 	tx.defaultExportBinding = nil
@@ -184,26 +185,26 @@ func (tx *ESNextTransformer) visitSourceFile(node *ast.SourceFile) *ast.Node {
 	return visited
 }
 
-func (tx *ESNextTransformer) visitBlock(node *ast.Block) *ast.Node {
+func (tx *usingDeclarationTransformer) visitBlock(node *ast.Block) *ast.Node {
 	usingKind := getUsingKindOfStatements(node.Statements.Nodes)
 	if usingKind != usingKindNone {
-		prologue, rest := tx.factory.SplitStandardPrologue(node.Statements.Nodes)
+		prologue, rest := tx.Factory().SplitStandardPrologue(node.Statements.Nodes)
 		envBinding := tx.createEnvBinding()
 		statements := make([]*ast.Statement, 0, len(prologue)+2)
-		statements = append(statements, core.FirstResult(tx.visitor.VisitSlice(prologue))...)
+		statements = append(statements, core.FirstResult(tx.Visitor().VisitSlice(prologue))...)
 		statements = append(statements, tx.createDownlevelUsingStatements(
 			tx.transformUsingDeclarations(rest, envBinding, nil /*topLevelStatements*/),
 			envBinding,
 			usingKind == usingKindAsync,
 		)...)
-		statementList := tx.factory.NewNodeList(statements)
+		statementList := tx.Factory().NewNodeList(statements)
 		statementList.Loc = node.Statements.Loc
-		return tx.factory.UpdateBlock(node, statementList)
+		return tx.Factory().UpdateBlock(node, statementList)
 	}
-	return tx.visitor.VisitEachChild(node.AsNode())
+	return tx.Visitor().VisitEachChild(node.AsNode())
 }
 
-func (tx *ESNextTransformer) visitForStatement(node *ast.ForStatement) *ast.Node {
+func (tx *usingDeclarationTransformer) visitForStatement(node *ast.ForStatement) *ast.Node {
 	if node.Initializer != nil && isUsingVariableDeclarationList(node.Initializer) {
 		// given:
 		//
@@ -217,10 +218,10 @@ func (tx *ESNextTransformer) visitForStatement(node *ast.ForStatement) *ast.Node
 		//  }
 		//
 		// before handing the shallow transformation back to the visitor for an in-depth transformation.
-		return tx.visitor.VisitNode(
-			tx.factory.NewBlock(tx.factory.NewNodeList([]*ast.Statement{
-				tx.factory.NewVariableStatement(nil /*modifiers*/, node.Initializer),
-				tx.factory.UpdateForStatement(
+		return tx.Visitor().VisitNode(
+			tx.Factory().NewBlock(tx.Factory().NewNodeList([]*ast.Statement{
+				tx.Factory().NewVariableStatement(nil /*modifiers*/, node.Initializer),
+				tx.Factory().UpdateForStatement(
 					node,
 					nil, /*initializer*/
 					node.Condition,
@@ -230,10 +231,10 @@ func (tx *ESNextTransformer) visitForStatement(node *ast.ForStatement) *ast.Node
 			}), false /*multiLine*/),
 		)
 	}
-	return tx.visitor.VisitEachChild(node.AsNode())
+	return tx.Visitor().VisitEachChild(node.AsNode())
 }
 
-func (tx *ESNextTransformer) visitForOfStatement(node *ast.ForInOrOfStatement) *ast.Node {
+func (tx *usingDeclarationTransformer) visitForOfStatement(node *ast.ForInOrOfStatement) *ast.Node {
 	if isUsingVariableDeclarationList(node.Initializer) {
 		// given:
 		//
@@ -250,43 +251,43 @@ func (tx *ESNextTransformer) visitForOfStatement(node *ast.ForInOrOfStatement) *
 		forInitializer := node.Initializer.AsVariableDeclarationList()
 		forDecl := core.FirstOrNil(forInitializer.Declarations.Nodes)
 		if forDecl == nil {
-			forDecl = tx.factory.NewVariableDeclaration(tx.factory.NewTempVariable(), nil, nil, nil)
+			forDecl = tx.Factory().NewVariableDeclaration(tx.Factory().NewTempVariable(), nil, nil, nil)
 		}
 
 		isAwaitUsing := getUsingKindOfVariableDeclarationList(forInitializer) == usingKindAsync
-		temp := tx.factory.NewGeneratedNameForNode(forDecl.Name())
-		usingVar := tx.factory.UpdateVariableDeclaration(forDecl.AsVariableDeclaration(), forDecl.Name(), nil /*exclamationToken*/, nil /*type*/, temp)
-		usingVarList := tx.factory.NewVariableDeclarationList(
+		temp := tx.Factory().NewGeneratedNameForNode(forDecl.Name())
+		usingVar := tx.Factory().UpdateVariableDeclaration(forDecl.AsVariableDeclaration(), forDecl.Name(), nil /*exclamationToken*/, nil /*type*/, temp)
+		usingVarList := tx.Factory().NewVariableDeclarationList(
 			core.IfElse(isAwaitUsing, ast.NodeFlagsAwaitUsing, ast.NodeFlagsUsing),
-			tx.factory.NewNodeList([]*ast.Node{usingVar}),
+			tx.Factory().NewNodeList([]*ast.Node{usingVar}),
 		)
-		usingVarStatement := tx.factory.NewVariableStatement(nil /*modifiers*/, usingVarList)
+		usingVarStatement := tx.Factory().NewVariableStatement(nil /*modifiers*/, usingVarList)
 		var statement *ast.Statement
 		if ast.IsBlock(node.Statement) {
 			statements := make([]*ast.Statement, 0, len(node.Statement.AsBlock().Statements.Nodes)+1)
 			statements = append(statements, usingVarStatement)
 			statements = append(statements, node.Statement.AsBlock().Statements.Nodes...)
-			statement = tx.factory.UpdateBlock(
+			statement = tx.Factory().UpdateBlock(
 				node.Statement.AsBlock(),
-				tx.factory.NewNodeList(statements),
+				tx.Factory().NewNodeList(statements),
 			)
 		} else {
-			statement = tx.factory.NewBlock(
-				tx.factory.NewNodeList([]*ast.Statement{
+			statement = tx.Factory().NewBlock(
+				tx.Factory().NewNodeList([]*ast.Statement{
 					usingVarStatement,
 					node.Statement,
 				}),
 				true, /*multiLine*/
 			)
 		}
-		return tx.visitor.VisitNode(
-			tx.factory.UpdateForInOrOfStatement(
+		return tx.Visitor().VisitNode(
+			tx.Factory().UpdateForInOrOfStatement(
 				node,
 				node.AwaitModifier,
-				tx.factory.NewVariableDeclarationList(
+				tx.Factory().NewVariableDeclarationList(
 					ast.NodeFlagsConst,
-					tx.factory.NewNodeList([]*ast.VariableDeclarationNode{
-						tx.factory.NewVariableDeclaration(temp, nil /*exclamationToken*/, nil /*type*/, nil),
+					tx.Factory().NewNodeList([]*ast.VariableDeclarationNode{
+						tx.Factory().NewVariableDeclaration(temp, nil /*exclamationToken*/, nil /*type*/, nil),
 					}),
 				),
 				node.Expression,
@@ -294,21 +295,21 @@ func (tx *ESNextTransformer) visitForOfStatement(node *ast.ForInOrOfStatement) *
 			),
 		)
 	}
-	return tx.visitor.VisitEachChild(node.AsNode())
+	return tx.Visitor().VisitEachChild(node.AsNode())
 }
 
-func (tx *ESNextTransformer) visitCaseOrDefaultClause(node *ast.CaseOrDefaultClause, envBinding *ast.IdentifierNode) *ast.Node {
+func (tx *usingDeclarationTransformer) visitCaseOrDefaultClause(node *ast.CaseOrDefaultClause, envBinding *ast.IdentifierNode) *ast.Node {
 	if getUsingKindOfStatements(node.Statements.Nodes) != usingKindNone {
-		return tx.factory.UpdateCaseOrDefaultClause(
+		return tx.Factory().UpdateCaseOrDefaultClause(
 			node,
-			tx.visitor.VisitNode(node.Expression),
-			tx.factory.NewNodeList(tx.transformUsingDeclarations(node.Statements.Nodes, envBinding, nil /*topLevelStatements*/)),
+			tx.Visitor().VisitNode(node.Expression),
+			tx.Factory().NewNodeList(tx.transformUsingDeclarations(node.Statements.Nodes, envBinding, nil /*topLevelStatements*/)),
 		)
 	}
-	return tx.visitor.VisitEachChild(node.AsNode())
+	return tx.Visitor().VisitEachChild(node.AsNode())
 }
 
-func (tx *ESNextTransformer) visitSwitchStatement(node *ast.SwitchStatement) *ast.Node {
+func (tx *usingDeclarationTransformer) visitSwitchStatement(node *ast.SwitchStatement) *ast.Node {
 	// given:
 	//
 	//  switch (expr) {
@@ -336,14 +337,14 @@ func (tx *ESNextTransformer) visitSwitchStatement(node *ast.SwitchStatement) *as
 	usingKind := getUsingKindOfCaseOrDefaultClauses(node.CaseBlock.AsCaseBlock().Clauses.Nodes)
 	if usingKind != usingKindNone {
 		envBinding := tx.createEnvBinding()
-		return singleOrMany(tx.createDownlevelUsingStatements(
+		return transformers.SingleOrMany(tx.createDownlevelUsingStatements(
 			[]*ast.Statement{
-				tx.factory.UpdateSwitchStatement(
+				tx.Factory().UpdateSwitchStatement(
 					node,
-					tx.visitor.VisitNode(node.Expression),
-					tx.factory.UpdateCaseBlock(
+					tx.Visitor().VisitNode(node.Expression),
+					tx.Factory().UpdateCaseBlock(
 						node.CaseBlock.AsCaseBlock(),
-						tx.factory.NewNodeList(
+						tx.Factory().NewNodeList(
 							core.Map(node.CaseBlock.AsCaseBlock().Clauses.Nodes, func(clause *ast.CaseOrDefaultClauseNode) *ast.CaseOrDefaultClauseNode {
 								return tx.visitCaseOrDefaultClause(clause.AsCaseOrDefaultClause(), envBinding)
 							}),
@@ -353,13 +354,13 @@ func (tx *ESNextTransformer) visitSwitchStatement(node *ast.SwitchStatement) *as
 			},
 			envBinding,
 			usingKind == usingKindAsync,
-		), tx.factory)
+		), tx.Factory())
 	}
 
-	return tx.visitor.VisitEachChild(node.AsNode())
+	return tx.Visitor().VisitEachChild(node.AsNode())
 }
 
-func (tx *ESNextTransformer) transformUsingDeclarations(statementsIn []*ast.Statement, envBinding *ast.IdentifierNode, topLevelStatements *[]*ast.Statement) []*ast.Node {
+func (tx *usingDeclarationTransformer) transformUsingDeclarations(statementsIn []*ast.Statement, envBinding *ast.IdentifierNode, topLevelStatements *[]*ast.Statement) []*ast.Node {
 	var statements []*ast.Statement
 
 	hoist := func(node *ast.Statement) *ast.Statement {
@@ -406,20 +407,20 @@ func (tx *ESNextTransformer) transformUsingDeclarations(statementsIn []*ast.Stat
 				}
 
 				// perform a shallow transform for any named evaluation
-				if isNamedEvaluation(tx.emitContext, declaration) {
-					declaration = transformNamedEvaluation(tx.emitContext, declaration, false /*ignoreEmptyStringLiteral*/, "" /*assignedName*/)
+				if isNamedEvaluation(tx.EmitContext(), declaration) {
+					declaration = transformNamedEvaluation(tx.EmitContext(), declaration, false /*ignoreEmptyStringLiteral*/, "" /*assignedName*/)
 				}
 
-				initializer := tx.visitor.VisitNode(declaration.Initializer())
+				initializer := tx.Visitor().VisitNode(declaration.Initializer())
 				if initializer == nil {
-					initializer = tx.factory.NewVoidZeroExpression()
+					initializer = tx.Factory().NewVoidZeroExpression()
 				}
-				declarations = append(declarations, tx.factory.UpdateVariableDeclaration(
+				declarations = append(declarations, tx.Factory().UpdateVariableDeclaration(
 					declaration.AsVariableDeclaration(),
 					declaration.Name(),
 					nil, /*exclamationToken*/
 					nil, /*type*/
-					tx.factory.NewAddDisposableResourceHelper(
+					tx.Factory().NewAddDisposableResourceHelper(
 						envBinding,
 						initializer,
 						usingKind == usingKindAsync,
@@ -429,10 +430,10 @@ func (tx *ESNextTransformer) transformUsingDeclarations(statementsIn []*ast.Stat
 
 			// Only replace the statement if it was valid.
 			if len(declarations) > 0 {
-				varList := tx.factory.NewVariableDeclarationList(ast.NodeFlagsConst, tx.factory.NewNodeList(declarations))
-				tx.emitContext.SetOriginal(varList, declarationList)
+				varList := tx.Factory().NewVariableDeclarationList(ast.NodeFlagsConst, tx.Factory().NewNodeList(declarations))
+				tx.EmitContext().SetOriginal(varList, declarationList)
 				varList.Loc = declarationList.Loc
-				hoistOrAppendNode(tx.factory.UpdateVariableStatement(varStatement, nil /*modifiers*/, varList))
+				hoistOrAppendNode(tx.Factory().UpdateVariableStatement(varStatement, nil /*modifiers*/, varList))
 				continue
 			}
 		}
@@ -450,12 +451,12 @@ func (tx *ESNextTransformer) transformUsingDeclarations(statementsIn []*ast.Stat
 	return statements
 }
 
-func (tx *ESNextTransformer) hoistImportOrExportOrHoistedDeclaration(node *ast.Statement, topLevelStatements *[]*ast.Statement) {
+func (tx *usingDeclarationTransformer) hoistImportOrExportOrHoistedDeclaration(node *ast.Statement, topLevelStatements *[]*ast.Statement) {
 	// NOTE: `node` has already been visited
 	*topLevelStatements = append(*topLevelStatements, node)
 }
 
-func (tx *ESNextTransformer) hoistExportAssignment(node *ast.ExportAssignment) *ast.Statement {
+func (tx *usingDeclarationTransformer) hoistExportAssignment(node *ast.ExportAssignment) *ast.Statement {
 	if node.IsExportEquals {
 		return tx.hoistExportEquals(node)
 	} else {
@@ -463,7 +464,7 @@ func (tx *ESNextTransformer) hoistExportAssignment(node *ast.ExportAssignment) *
 	}
 }
 
-func (tx *ESNextTransformer) hoistExportDefault(node *ast.ExportAssignment) *ast.Statement {
+func (tx *usingDeclarationTransformer) hoistExportDefault(node *ast.ExportAssignment) *ast.Statement {
 	// NOTE: `node` has already been visited
 	if tx.defaultExportBinding != nil {
 		// invalid case of multiple `export default` declarations. Don't assert here, just pass it through
@@ -483,22 +484,22 @@ func (tx *ESNextTransformer) hoistExportDefault(node *ast.ExportAssignment) *ast
 	//   // body
 	//   default_1 = expr;
 
-	tx.defaultExportBinding = tx.factory.NewUniqueNameEx("_default", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsReservedInNestedScopes | printer.GeneratedIdentifierFlagsFileLevel | printer.GeneratedIdentifierFlagsOptimistic})
-	tx.hoistBindingIdentifier(tx.defaultExportBinding /*isExport*/, true, tx.factory.NewIdentifier("default"), node.AsNode())
+	tx.defaultExportBinding = tx.Factory().NewUniqueNameEx("_default", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsReservedInNestedScopes | printer.GeneratedIdentifierFlagsFileLevel | printer.GeneratedIdentifierFlagsOptimistic})
+	tx.hoistBindingIdentifier(tx.defaultExportBinding /*isExport*/, true, tx.Factory().NewIdentifier("default"), node.AsNode())
 
 	// give a class or function expression an assigned name, if needed.
 	expression := node.Expression
 	innerExpression := ast.SkipOuterExpressions(expression, ast.OEKAll)
-	if isNamedEvaluation(tx.emitContext, innerExpression) {
-		innerExpression = transformNamedEvaluation(tx.emitContext, innerExpression /*ignoreEmptyStringLiteral*/, false, "default")
-		expression = tx.factory.RestoreOuterExpressions(expression, innerExpression, ast.OEKAll)
+	if isNamedEvaluation(tx.EmitContext(), innerExpression) {
+		innerExpression = transformNamedEvaluation(tx.EmitContext(), innerExpression /*ignoreEmptyStringLiteral*/, false, "default")
+		expression = tx.Factory().RestoreOuterExpressions(expression, innerExpression, ast.OEKAll)
 	}
 
-	assignment := tx.factory.NewAssignmentExpression(tx.defaultExportBinding, expression)
-	return tx.factory.NewExpressionStatement(assignment)
+	assignment := tx.Factory().NewAssignmentExpression(tx.defaultExportBinding, expression)
+	return tx.Factory().NewExpressionStatement(assignment)
 }
 
-func (tx *ESNextTransformer) hoistExportEquals(node *ast.ExportAssignment) *ast.Statement {
+func (tx *usingDeclarationTransformer) hoistExportEquals(node *ast.ExportAssignment) *ast.Statement {
 	// NOTE: `node` has already been visited
 	if tx.exportEqualsBinding != nil {
 		// invalid case of multiple `export default` declarations. Don't assert here, just pass it through
@@ -522,15 +523,15 @@ func (tx *ESNextTransformer) hoistExportEquals(node *ast.ExportAssignment) *ast.
 	//   // top level suffix
 	//   export = default_1;
 
-	tx.exportEqualsBinding = tx.factory.NewUniqueNameEx("_default", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsReservedInNestedScopes | printer.GeneratedIdentifierFlagsFileLevel | printer.GeneratedIdentifierFlagsOptimistic})
-	tx.emitContext.AddVariableDeclaration(tx.exportEqualsBinding)
+	tx.exportEqualsBinding = tx.Factory().NewUniqueNameEx("_default", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsReservedInNestedScopes | printer.GeneratedIdentifierFlagsFileLevel | printer.GeneratedIdentifierFlagsOptimistic})
+	tx.EmitContext().AddVariableDeclaration(tx.exportEqualsBinding)
 
 	// give a class or function expression an assigned name, if needed.
-	assignment := tx.factory.NewAssignmentExpression(tx.exportEqualsBinding, node.Expression)
-	return tx.factory.NewExpressionStatement(assignment)
+	assignment := tx.Factory().NewAssignmentExpression(tx.exportEqualsBinding, node.Expression)
+	return tx.Factory().NewExpressionStatement(assignment)
 }
 
-func (tx *ESNextTransformer) hoistClassDeclaration(node *ast.ClassDeclaration) *ast.Statement {
+func (tx *usingDeclarationTransformer) hoistClassDeclaration(node *ast.ClassDeclaration) *ast.Statement {
 	// NOTE: `node` has already been visited
 	if node.Name() == nil && tx.defaultExportBinding != nil {
 		// invalid case of multiple `export default` declarations. Don't assert here, just pass it through
@@ -542,7 +543,7 @@ func (tx *ESNextTransformer) hoistClassDeclaration(node *ast.ClassDeclaration) *
 
 	// When hoisting a class declaration at the top level of a file containing a top-level `using` statement, we
 	// must first convert it to a class expression so that we can hoist the binding outside of the `try`.
-	expression := convertClassDeclarationToClassExpression(tx.emitContext, node)
+	expression := convertClassDeclarationToClassExpression(tx.EmitContext(), node)
 	if node.Name() != nil {
 		// given:
 		//
@@ -566,13 +567,13 @@ func (tx *ESNextTransformer) hoistClassDeclaration(node *ast.ClassDeclaration) *
 		//  }
 		//
 		// If the class is exported, we also produce an `export { C };`
-		tx.hoistBindingIdentifier(tx.factory.GetLocalName(node.AsNode()), isExported && !isDefault, nil /*exportAlias*/, node.AsNode())
-		expression = tx.factory.NewAssignmentExpression(tx.factory.GetDeclarationName(node.AsNode()), expression)
-		tx.emitContext.SetOriginal(expression, node.AsNode())
-		tx.emitContext.SetSourceMapRange(expression, node.Loc)
-		tx.emitContext.SetCommentRange(expression, node.Loc)
-		if isNamedEvaluation(tx.emitContext, expression) {
-			expression = transformNamedEvaluation(tx.emitContext, expression, false /*ignoreEmptyStringLiteral*/, "" /*assignedName*/)
+		tx.hoistBindingIdentifier(tx.Factory().GetLocalName(node.AsNode()), isExported && !isDefault, nil /*exportAlias*/, node.AsNode())
+		expression = tx.Factory().NewAssignmentExpression(tx.Factory().GetDeclarationName(node.AsNode()), expression)
+		tx.EmitContext().SetOriginal(expression, node.AsNode())
+		tx.EmitContext().SetSourceMapRange(expression, node.Loc)
+		tx.EmitContext().SetCommentRange(expression, node.Loc)
+		if isNamedEvaluation(tx.EmitContext(), expression) {
+			expression = transformNamedEvaluation(tx.EmitContext(), expression, false /*ignoreEmptyStringLiteral*/, "" /*assignedName*/)
 		}
 	}
 
@@ -603,19 +604,19 @@ func (tx *ESNextTransformer) hoistClassDeclaration(node *ast.ClassDeclaration) *
 		//  }
 		//
 		// Though we will never reassign `default_1`, this most closely matches the specified runtime semantics.
-		tx.defaultExportBinding = tx.factory.NewUniqueNameEx("_default", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsReservedInNestedScopes | printer.GeneratedIdentifierFlagsFileLevel | printer.GeneratedIdentifierFlagsOptimistic})
-		tx.hoistBindingIdentifier(tx.defaultExportBinding /*isExport*/, true, tx.factory.NewIdentifier("default"), node.AsNode())
-		expression = tx.factory.NewAssignmentExpression(tx.defaultExportBinding, expression)
-		tx.emitContext.SetOriginal(expression, node.AsNode())
-		if isNamedEvaluation(tx.emitContext, expression) {
-			expression = transformNamedEvaluation(tx.emitContext, expression /*ignoreEmptyStringLiteral*/, false, "default")
+		tx.defaultExportBinding = tx.Factory().NewUniqueNameEx("_default", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsReservedInNestedScopes | printer.GeneratedIdentifierFlagsFileLevel | printer.GeneratedIdentifierFlagsOptimistic})
+		tx.hoistBindingIdentifier(tx.defaultExportBinding /*isExport*/, true, tx.Factory().NewIdentifier("default"), node.AsNode())
+		expression = tx.Factory().NewAssignmentExpression(tx.defaultExportBinding, expression)
+		tx.EmitContext().SetOriginal(expression, node.AsNode())
+		if isNamedEvaluation(tx.EmitContext(), expression) {
+			expression = transformNamedEvaluation(tx.EmitContext(), expression /*ignoreEmptyStringLiteral*/, false, "default")
 		}
 	}
 
-	return tx.factory.NewExpressionStatement(expression)
+	return tx.Factory().NewExpressionStatement(expression)
 }
 
-func (tx *ESNextTransformer) hoistVariableStatement(node *ast.VariableStatement) *ast.Statement {
+func (tx *usingDeclarationTransformer) hoistVariableStatement(node *ast.VariableStatement) *ast.Statement {
 	// NOTE: `node` has already been visited
 	var expressions []*ast.Expression
 	isExported := ast.HasSyntacticModifier(node.AsNode(), ast.ModifierFlagsExport)
@@ -626,36 +627,36 @@ func (tx *ESNextTransformer) hoistVariableStatement(node *ast.VariableStatement)
 		}
 	}
 	if len(expressions) > 0 {
-		statement := tx.factory.NewExpressionStatement(tx.factory.InlineExpressions(expressions))
-		tx.emitContext.SetOriginal(statement, node.AsNode())
-		tx.emitContext.SetCommentRange(statement, node.Loc)
-		tx.emitContext.SetSourceMapRange(statement, node.Loc)
+		statement := tx.Factory().NewExpressionStatement(tx.Factory().InlineExpressions(expressions))
+		tx.EmitContext().SetOriginal(statement, node.AsNode())
+		tx.EmitContext().SetCommentRange(statement, node.Loc)
+		tx.EmitContext().SetSourceMapRange(statement, node.Loc)
 		return statement
 	}
 	return nil
 }
 
-func (tx *ESNextTransformer) hoistInitializedVariable(node *ast.VariableDeclaration) *ast.Expression {
+func (tx *usingDeclarationTransformer) hoistInitializedVariable(node *ast.VariableDeclaration) *ast.Expression {
 	// NOTE: `node` has already been visited
 	if node.Initializer == nil {
 		panic("Expected initializer")
 	}
 	var target *ast.Expression
 	if ast.IsIdentifier(node.Name()) {
-		target = node.Name().Clone(tx.factory)
-		tx.emitContext.SetEmitFlags(target, tx.emitContext.EmitFlags(target) & ^(printer.EFLocalName|printer.EFExportName|printer.EFInternalName))
+		target = node.Name().Clone(tx.Factory())
+		tx.EmitContext().SetEmitFlags(target, tx.EmitContext().EmitFlags(target) & ^(printer.EFLocalName|printer.EFExportName|printer.EFInternalName))
 	} else {
-		target = convertBindingPatternToAssignmentPattern(tx.emitContext, node.Name().AsBindingPattern())
+		target = transformers.ConvertBindingPatternToAssignmentPattern(tx.EmitContext(), node.Name().AsBindingPattern())
 	}
 
-	assignment := tx.factory.NewAssignmentExpression(target, node.Initializer)
-	tx.emitContext.SetOriginal(assignment, node.AsNode())
-	tx.emitContext.SetCommentRange(assignment, node.Loc)
-	tx.emitContext.SetSourceMapRange(assignment, node.Loc)
+	assignment := tx.Factory().NewAssignmentExpression(target, node.Initializer)
+	tx.EmitContext().SetOriginal(assignment, node.AsNode())
+	tx.EmitContext().SetCommentRange(assignment, node.Loc)
+	tx.EmitContext().SetSourceMapRange(assignment, node.Loc)
 	return assignment
 }
 
-func (tx *ESNextTransformer) hoistBindingElement(node *ast.Node /*VariableDeclaration|BindingElement*/, isExportedDeclaration bool, original *ast.Node) {
+func (tx *usingDeclarationTransformer) hoistBindingElement(node *ast.Node /*VariableDeclaration|BindingElement*/, isExportedDeclaration bool, original *ast.Node) {
 	// NOTE: `node` has already been visited
 	if ast.IsBindingPattern(node.Name()) {
 		for _, element := range node.Name().AsBindingPattern().Elements.Nodes {
@@ -668,17 +669,17 @@ func (tx *ESNextTransformer) hoistBindingElement(node *ast.Node /*VariableDeclar
 	}
 }
 
-func (tx *ESNextTransformer) hoistBindingIdentifier(node *ast.IdentifierNode, isExport bool, exportAlias *ast.IdentifierNode, original *ast.Node) {
+func (tx *usingDeclarationTransformer) hoistBindingIdentifier(node *ast.IdentifierNode, isExport bool, exportAlias *ast.IdentifierNode, original *ast.Node) {
 	// NOTE: `node` has already been visited
 	name := node
-	if !isGeneratedIdentifier(tx.emitContext, node) {
-		name = name.Clone(tx.factory)
+	if !transformers.IsGeneratedIdentifier(tx.EmitContext(), node) {
+		name = name.Clone(tx.Factory())
 	}
 	if isExport {
-		if exportAlias == nil && !isLocalName(tx.emitContext, name) {
-			varDecl := tx.factory.NewVariableDeclaration(name, nil /*exclamationToken*/, nil /*type*/, nil /*initializer*/)
+		if exportAlias == nil && !transformers.IsLocalName(tx.EmitContext(), name) {
+			varDecl := tx.Factory().NewVariableDeclaration(name, nil /*exclamationToken*/, nil /*type*/, nil /*initializer*/)
 			if original != nil {
-				tx.emitContext.SetOriginal(varDecl, original)
+				tx.EmitContext().SetOriginal(varDecl, original)
 			}
 			tx.exportVars = append(tx.exportVars, varDecl)
 			return
@@ -692,37 +693,37 @@ func (tx *ESNextTransformer) hoistBindingIdentifier(node *ast.IdentifierNode, is
 		} else {
 			exportName = name
 		}
-		specifier := tx.factory.NewExportSpecifier( /*isTypeOnly*/ false, localName, exportName)
+		specifier := tx.Factory().NewExportSpecifier( /*isTypeOnly*/ false, localName, exportName)
 		if original != nil {
-			tx.emitContext.SetOriginal(specifier, original)
+			tx.EmitContext().SetOriginal(specifier, original)
 		}
 		if tx.exportBindings == nil {
 			tx.exportBindings = make(map[string]*ast.ExportSpecifierNode)
 		}
 		tx.exportBindings[name.Text()] = specifier
 	}
-	tx.emitContext.AddVariableDeclaration(name)
+	tx.EmitContext().AddVariableDeclaration(name)
 }
 
-func (tx *ESNextTransformer) createEnvBinding() *ast.IdentifierNode {
-	return tx.factory.NewUniqueName("env")
+func (tx *usingDeclarationTransformer) createEnvBinding() *ast.IdentifierNode {
+	return tx.Factory().NewUniqueName("env")
 }
 
-func (tx *ESNextTransformer) createDownlevelUsingStatements(bodyStatements []*ast.Node, envBinding *ast.IdentifierNode, async bool) []*ast.Statement {
+func (tx *usingDeclarationTransformer) createDownlevelUsingStatements(bodyStatements []*ast.Node, envBinding *ast.IdentifierNode, async bool) []*ast.Statement {
 	statements := make([]*ast.Statement, 0, 2)
 
 	// produces:
 	//
 	//  const env_1 = { stack: [], error: void 0, hasError: false };
 	//
-	envObject := tx.factory.NewObjectLiteralExpression(tx.factory.NewNodeList([]*ast.Expression{
-		tx.factory.NewPropertyAssignment(nil /*modifiers*/, tx.factory.NewIdentifier("stack"), nil /*postfixToken*/, nil /*typeNode*/, tx.factory.NewArrayLiteralExpression(nil, false /*multiLine*/)),
-		tx.factory.NewPropertyAssignment(nil /*modifiers*/, tx.factory.NewIdentifier("error"), nil /*postfixToken*/, nil /*typeNode*/, tx.factory.NewVoidZeroExpression()),
-		tx.factory.NewPropertyAssignment(nil /*modifiers*/, tx.factory.NewIdentifier("hasError"), nil /*postfixToken*/, nil /*typeNode*/, tx.factory.NewFalseExpression()),
+	envObject := tx.Factory().NewObjectLiteralExpression(tx.Factory().NewNodeList([]*ast.Expression{
+		tx.Factory().NewPropertyAssignment(nil /*modifiers*/, tx.Factory().NewIdentifier("stack"), nil /*postfixToken*/, nil /*typeNode*/, tx.Factory().NewArrayLiteralExpression(nil, false /*multiLine*/)),
+		tx.Factory().NewPropertyAssignment(nil /*modifiers*/, tx.Factory().NewIdentifier("error"), nil /*postfixToken*/, nil /*typeNode*/, tx.Factory().NewVoidZeroExpression()),
+		tx.Factory().NewPropertyAssignment(nil /*modifiers*/, tx.Factory().NewIdentifier("hasError"), nil /*postfixToken*/, nil /*typeNode*/, tx.Factory().NewFalseExpression()),
 	}), false /*multiLine*/)
-	envVar := tx.factory.NewVariableDeclaration(envBinding, nil /*exclamationToken*/, nil /*typeNode*/, envObject)
-	envVarList := tx.factory.NewVariableDeclarationList(ast.NodeFlagsConst, tx.factory.NewNodeList([]*ast.VariableDeclarationNode{envVar}))
-	envVarStatement := tx.factory.NewVariableStatement(nil /*modifiers*/, envVarList)
+	envVar := tx.Factory().NewVariableDeclaration(envBinding, nil /*exclamationToken*/, nil /*typeNode*/, envObject)
+	envVarList := tx.Factory().NewVariableDeclarationList(ast.NodeFlagsConst, tx.Factory().NewNodeList([]*ast.VariableDeclarationNode{envVar}))
+	envVarStatement := tx.Factory().NewVariableStatement(nil /*modifiers*/, envVarList)
 	statements = append(statements, envVarStatement)
 
 	// when `async` is `false`, produces:
@@ -756,26 +757,26 @@ func (tx *ESNextTransformer) createDownlevelUsingStatements(bodyStatements []*as
 
 	// Unfortunately, it is necessary to use two properties to indicate an error because `throw undefined` is legal
 	// JavaScript.
-	tryBlock := tx.factory.NewBlock(tx.factory.NewNodeList(bodyStatements), true /*multiLine*/)
-	bodyCatchBinding := tx.factory.NewUniqueName("e")
-	catchClause := tx.factory.NewCatchClause(
-		tx.factory.NewVariableDeclaration(
+	tryBlock := tx.Factory().NewBlock(tx.Factory().NewNodeList(bodyStatements), true /*multiLine*/)
+	bodyCatchBinding := tx.Factory().NewUniqueName("e")
+	catchClause := tx.Factory().NewCatchClause(
+		tx.Factory().NewVariableDeclaration(
 			bodyCatchBinding,
 			nil, /*exclamationToken*/
 			nil, /*type*/
 			nil, /*initializer*/
 		),
-		tx.factory.NewBlock(tx.factory.NewNodeList([]*ast.Statement{
-			tx.factory.NewExpressionStatement(
-				tx.factory.NewAssignmentExpression(
-					tx.factory.NewPropertyAccessExpression(envBinding, nil, tx.factory.NewIdentifier("error"), ast.NodeFlagsNone),
+		tx.Factory().NewBlock(tx.Factory().NewNodeList([]*ast.Statement{
+			tx.Factory().NewExpressionStatement(
+				tx.Factory().NewAssignmentExpression(
+					tx.Factory().NewPropertyAccessExpression(envBinding, nil, tx.Factory().NewIdentifier("error"), ast.NodeFlagsNone),
 					bodyCatchBinding,
 				),
 			),
-			tx.factory.NewExpressionStatement(
-				tx.factory.NewAssignmentExpression(
-					tx.factory.NewPropertyAccessExpression(envBinding, nil, tx.factory.NewIdentifier("hasError"), ast.NodeFlagsNone),
-					tx.factory.NewTrueExpression(),
+			tx.Factory().NewExpressionStatement(
+				tx.Factory().NewAssignmentExpression(
+					tx.Factory().NewPropertyAccessExpression(envBinding, nil, tx.Factory().NewIdentifier("hasError"), ast.NodeFlagsNone),
+					tx.Factory().NewTrueExpression(),
 				),
 			),
 		}), true /*multiLine*/),
@@ -783,30 +784,30 @@ func (tx *ESNextTransformer) createDownlevelUsingStatements(bodyStatements []*as
 
 	var finallyBlock *ast.BlockNode
 	if async {
-		result := tx.factory.NewUniqueName("result")
-		finallyBlock = tx.factory.NewBlock(tx.factory.NewNodeList([]*ast.Statement{
-			tx.factory.NewVariableStatement(
+		result := tx.Factory().NewUniqueName("result")
+		finallyBlock = tx.Factory().NewBlock(tx.Factory().NewNodeList([]*ast.Statement{
+			tx.Factory().NewVariableStatement(
 				nil, /*modifiers*/
-				tx.factory.NewVariableDeclarationList(ast.NodeFlagsConst, tx.factory.NewNodeList([]*ast.VariableDeclarationNode{
-					tx.factory.NewVariableDeclaration(
+				tx.Factory().NewVariableDeclarationList(ast.NodeFlagsConst, tx.Factory().NewNodeList([]*ast.VariableDeclarationNode{
+					tx.Factory().NewVariableDeclaration(
 						result,
 						nil, /*exclamationToken*/
 						nil, /*type*/
-						tx.factory.NewDisposeResourcesHelper(envBinding),
+						tx.Factory().NewDisposeResourcesHelper(envBinding),
 					),
 				})),
 			),
-			tx.factory.NewIfStatement(result, tx.factory.NewExpressionStatement(tx.factory.NewAwaitExpression(result)), nil /*elseStatement*/),
+			tx.Factory().NewIfStatement(result, tx.Factory().NewExpressionStatement(tx.Factory().NewAwaitExpression(result)), nil /*elseStatement*/),
 		}), true /*multiLine*/)
 	} else {
-		finallyBlock = tx.factory.NewBlock(tx.factory.NewNodeList([]*ast.Statement{
-			tx.factory.NewExpressionStatement(
-				tx.factory.NewDisposeResourcesHelper(envBinding),
+		finallyBlock = tx.Factory().NewBlock(tx.Factory().NewNodeList([]*ast.Statement{
+			tx.Factory().NewExpressionStatement(
+				tx.Factory().NewDisposeResourcesHelper(envBinding),
 			),
 		}), true /*multiLine*/)
 	}
 
-	tryStatement := tx.factory.NewTryStatement(tryBlock, catchClause, finallyBlock)
+	tryStatement := tx.Factory().NewTryStatement(tryBlock, catchClause, finallyBlock)
 	statements = append(statements, tryStatement)
 	return statements
 }

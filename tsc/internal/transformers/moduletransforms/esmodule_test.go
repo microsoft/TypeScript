@@ -1,4 +1,4 @@
-package transformers
+package moduletransforms_test
 
 import (
 	"testing"
@@ -9,6 +9,8 @@ import (
 	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/testutil/emittestutil"
 	"github.com/microsoft/typescript-go/internal/testutil/parsetestutil"
+	"github.com/microsoft/typescript-go/internal/transformers/moduletransforms"
+	"github.com/microsoft/typescript-go/internal/transformers/tstransforms"
 )
 
 func TestESModuleTransformer(t *testing.T) {
@@ -238,8 +240,8 @@ var __rewriteRelativeImportExtension;`,
 			emitContext := printer.NewEmitContext()
 			resolver := binder.NewReferenceResolver(compilerOptions, binder.ReferenceResolverHooks{})
 
-			file = NewRuntimeSyntaxTransformer(emitContext, compilerOptions, resolver).TransformSourceFile(file)
-			file = NewESModuleTransformer(emitContext, compilerOptions, resolver, fakeGetEmitModuleFormatOfFile).TransformSourceFile(file)
+			file = tstransforms.NewRuntimeSyntaxTransformer(emitContext, compilerOptions, resolver).TransformSourceFile(file)
+			file = moduletransforms.NewESModuleTransformer(emitContext, compilerOptions, resolver, fakeGetEmitModuleFormatOfFile).TransformSourceFile(file)
 			emittestutil.CheckEmit(t, emitContext, file, rec.output)
 		})
 	}

@@ -1,4 +1,4 @@
-package transformers
+package estransforms
 
 import (
 	"github.com/microsoft/typescript-go/internal/ast"

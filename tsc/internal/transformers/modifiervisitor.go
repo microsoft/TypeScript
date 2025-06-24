@@ -18,7 +18,7 @@ func (v *modifierVisitor) visit(node *ast.Node) *ast.Node {
 	return node
 }
 
-func extractModifiers(emitContext *printer.EmitContext, modifiers *ast.ModifierList, allowed ast.ModifierFlags) *ast.ModifierList {
+func ExtractModifiers(emitContext *printer.EmitContext, modifiers *ast.ModifierList, allowed ast.ModifierFlags) *ast.ModifierList {
 	if modifiers == nil {
 		return nil
 	}
