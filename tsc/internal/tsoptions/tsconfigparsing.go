@@ -1013,9 +1013,9 @@ func parseConfig(
 									if relativeDifference == "" {
 										t := tspath.ComparePathsOptions{
 											UseCaseSensitiveFileNames: host.FS().UseCaseSensitiveFileNames(),
-											CurrentDirectory:          host.GetCurrentDirectory(),
+											CurrentDirectory:          basePath,
 										}
-										relativeDifference = tspath.ConvertToRelativePath(basePath, t)
+										relativeDifference = tspath.ConvertToRelativePath(tspath.GetDirectoryPath(extendedConfigPath), t)
 									}
 									return tspath.CombinePaths(relativeDifference, path.(string))
 								}
