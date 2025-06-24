@@ -77,11 +77,9 @@ func (t *parseTask) load(loader *fileLoader) {
 
 	if compilerOptions.NoLib != core.TSTrue {
 		for _, lib := range file.LibReferenceDirectives {
-			name, ok := tsoptions.GetLibFileName(lib.FileName)
-			if !ok {
-				continue
+			if name, ok := tsoptions.GetLibFileName(lib.FileName); ok {
+				t.addSubTask(resolvedRef{fileName: loader.pathForLibFile(name)}, true)
 			}
-			t.addSubTask(resolvedRef{fileName: tspath.CombinePaths(loader.defaultLibraryPath, name)}, true)
 		}
 	}
 

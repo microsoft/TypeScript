@@ -34,6 +34,9 @@ type fileLoader struct {
 
 	projectReferenceFileMapper *projectReferenceFileMapper
 	dtsDirectories             collections.Set[tspath.Path]
+
+	pathForLibFileCache       collections.SyncMap[string, string]
+	pathForLibFileResolutions collections.SyncMap[tspath.Path, module.ModeAwareCache[*module.ResolvedModule]]
 }
 
 type processedFiles struct {
@@ -59,7 +62,6 @@ type jsxRuntimeImportSpecifier struct {
 
 func processAllProgramFiles(
 	opts ProgramOptions,
-	libs []string,
 	singleThreaded bool,
 ) processedFiles {
 	compilerOptions := opts.Config.CompilerOptions()
@@ -83,11 +85,27 @@ func processAllProgramFiles(
 		projectReferenceParseTasks: &fileLoaderWorker[*projectReferenceParseTask]{
 			wg: core.NewWorkGroup(singleThreaded),
 		},
-		rootTasks:           make([]*parseTask, 0, len(rootFiles)+len(libs)),
+		rootTasks:           make([]*parseTask, 0, len(rootFiles)+len(compilerOptions.Lib)),
 		supportedExtensions: core.Flatten(tsoptions.GetSupportedExtensionsWithJsonIfResolveJsonModule(compilerOptions, supportedExtensions)),
 	}
 	loader.addProjectReferenceTasks()
 	loader.resolver = module.NewResolver(loader.projectReferenceFileMapper.host, compilerOptions, opts.TypingsLocation, opts.ProjectName)
+
+	var libs []string
+	if compilerOptions.NoLib.IsFalseOrUnknown() {
+		if compilerOptions.Lib == nil {
+			name := tsoptions.GetDefaultLibFileName(compilerOptions)
+			libs = append(libs, loader.pathForLibFile(name))
+		} else {
+			for _, lib := range compilerOptions.Lib {
+				if name, ok := tsoptions.GetLibFileName(lib); ok {
+					libs = append(libs, loader.pathForLibFile(name))
+				}
+				// !!! error on unknown name
+			}
+		}
+	}
+
 	loader.addRootTasks(rootFiles, false)
 	loader.addRootTasks(libs, true)
 	loader.addAutomaticTypeDirectiveTasks()
@@ -105,7 +123,7 @@ func processAllProgramFiles(
 	libFiles := make([]*ast.SourceFile, 0, totalFileCount) // totalFileCount here since we append files to it later to construct the final list
 
 	filesByPath := make(map[tspath.Path]*ast.SourceFile, totalFileCount)
-	resolvedModules := make(map[tspath.Path]module.ModeAwareCache[*module.ResolvedModule], totalFileCount)
+	resolvedModules := make(map[tspath.Path]module.ModeAwareCache[*module.ResolvedModule], totalFileCount+1)
 	typeResolutionsInFile := make(map[tspath.Path]module.ModeAwareCache[*module.ResolvedTypeReferenceDirective], totalFileCount)
 	sourceFileMetaDatas := make(map[tspath.Path]ast.SourceFileMetaData, totalFileCount)
 	var jsxRuntimeImportSpecifiers map[tspath.Path]*jsxRuntimeImportSpecifier
@@ -161,6 +179,11 @@ func processAllProgramFiles(
 	loader.sortLibs(libFiles)
 
 	allFiles := append(libFiles, files...)
+
+	loader.pathForLibFileResolutions.Range(func(key tspath.Path, value module.ModeAwareCache[*module.ResolvedModule]) bool {
+		resolvedModules[key] = value
+		return true
+	})
 
 	return processedFiles{
 		resolver:                             loader.resolver,
@@ -461,6 +484,55 @@ func (p *fileLoader) createSyntheticImport(text string, file *ast.SourceFile) *a
 	// !!! externalHelpersModuleReference.Flags &^= ast.NodeFlagsSynthesized
 	// !!! importDecl.Flags &^= ast.NodeFlagsSynthesized
 	return externalHelpersModuleReference
+}
+
+func (p *fileLoader) pathForLibFile(name string) string {
+	if cached, ok := p.pathForLibFileCache.Load(name); ok {
+		return cached
+	}
+
+	path := tspath.CombinePaths(p.defaultLibraryPath, name)
+	if p.opts.Config.CompilerOptions().LibReplacement.IsTrue() {
+		libraryName := getLibraryNameFromLibFileName(name)
+		resolveFrom := getInferredLibraryNameResolveFrom(p.opts.Config.CompilerOptions(), p.opts.Host.GetCurrentDirectory(), name)
+		resolution := p.resolver.ResolveModuleName(libraryName, resolveFrom, core.ModuleKindCommonJS, nil)
+		if resolution.IsResolved() {
+			path = resolution.ResolvedFileName
+			p.pathForLibFileResolutions.LoadOrStore(p.toPath(resolveFrom), module.ModeAwareCache[*module.ResolvedModule]{
+				module.ModeAwareCacheKey{Name: libraryName, Mode: core.ModuleKindCommonJS}: resolution,
+			})
+		}
+	}
+
+	path, _ = p.pathForLibFileCache.LoadOrStore(name, path)
+	return path
+}
+
+func getLibraryNameFromLibFileName(libFileName string) string {
+	// Support resolving to lib.dom.d.ts -> @typescript/lib-dom, and
+	//                      lib.dom.iterable.d.ts -> @typescript/lib-dom/iterable
+	//                      lib.es2015.symbol.wellknown.d.ts -> @typescript/lib-es2015/symbol-wellknown
+	components := strings.Split(libFileName, ".")
+	var path string
+	if len(components) > 1 {
+		path = components[1]
+	}
+	i := 2
+	for i < len(components) && components[i] != "" && components[i] != "d" {
+		path += core.IfElse(i == 2, "/", "-") + components[i]
+		i++
+	}
+	return "@typescript/lib-" + path
+}
+
+func getInferredLibraryNameResolveFrom(options *core.CompilerOptions, currentDirectory string, libFileName string) string {
+	var containingDirectory string
+	if options.ConfigFilePath != "" {
+		containingDirectory = tspath.GetDirectoryPath(options.ConfigFilePath)
+	} else {
+		containingDirectory = currentDirectory
+	}
+	return tspath.CombinePaths(containingDirectory, "__lib_node_modules_lookup_"+libFileName+"__.ts")
 }
 
 type resolution struct {
