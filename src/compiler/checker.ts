@@ -52827,9 +52827,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (n1 === n2) return 0;
         if (n1 === undefined) return 1;
         if (n2 === undefined) return -1;
-        const f1 = fileIndexMap.get(getSourceFileOfNode(n1))!;
-        const f2 = fileIndexMap.get(getSourceFileOfNode(n2))!;
-        if (f1 !== f2) {
+        const s1 = getSourceFileOfNode(n1);
+        const s2 = getSourceFileOfNode(n2);
+        if (s1 !== s2) {
+            const f1 = fileIndexMap.get(s1)!;
+            const f2 = fileIndexMap.get(s2)!;
             // Order by index of file in the containing program
             return f1 - f2;
         }
@@ -52839,8 +52841,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function compareTypes(t1: Type | undefined, t2: Type | undefined): number {
         if (t1 === t2) return 0;
-        if (t1 === undefined) return 1;
-        if (t2 === undefined) return -1;
+        if (t1 === undefined) return -1;
+        if (t2 === undefined) return 1;
 
         // First sort in order of increasing type flags values.
         let c = getSortOrderFlags(t1) - getSortOrderFlags(t2);
