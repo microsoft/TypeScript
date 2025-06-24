@@ -3812,7 +3812,7 @@ function getCompletionData(
         if (inCheckedFile) {
             for (const symbol of type.getApparentProperties()) {
                 if (typeChecker.isValidPropertyAccessForCompletions(propertyAccess, type, symbol)) {
-                    addPropertySymbol(symbol, /*insertAwait*/ false, insertQuestionDot);
+                    addPropertySymbol(symbol, /*insertAwait*/ false, insertQuestionDot, type);
                 }
             }
         }
@@ -3830,14 +3830,14 @@ function getCompletionData(
             if (promiseType) {
                 for (const symbol of promiseType.getApparentProperties()) {
                     if (typeChecker.isValidPropertyAccessForCompletions(propertyAccess, promiseType, symbol)) {
-                        addPropertySymbol(symbol, /*insertAwait*/ true, insertQuestionDot);
+                        addPropertySymbol(symbol, /*insertAwait*/ true, insertQuestionDot, promiseType);
                     }
                 }
             }
         }
     }
 
-    function addPropertySymbol(symbol: Symbol, insertAwait: boolean, insertQuestionDot: boolean) {
+    function addPropertySymbol(symbol: Symbol, insertAwait: boolean, insertQuestionDot: boolean, completionType: Type) {
         // For a computed property with an accessible name like `Symbol.iterator`,
         // we'll add a completion for the *name* `Symbol` instead of for the property.
         // If this is e.g. [Symbol.iterator], add a completion for `Symbol`.
@@ -3906,6 +3906,9 @@ function getCompletionData(
         function addSymbolSortInfo(symbol: Symbol) {
             if (isStaticProperty(symbol)) {
                 symbolToSortTextMap[getSymbolId(symbol)] = SortText.LocalDeclarationPriority;
+            }
+            else if (isNativeFunctionMethod(symbol, typeChecker, completionType)) {
+                symbolToSortTextMap[getSymbolId(symbol)] = SortText.SortBelow(SortText.LocationPriority);
             }
         }
 
@@ -5838,6 +5841,26 @@ function isProbablyGlobalType(type: Type, sourceFile: SourceFile, checker: TypeC
 
 function isStaticProperty(symbol: Symbol) {
     return !!(symbol.valueDeclaration && getEffectiveModifierFlags(symbol.valueDeclaration) & ModifierFlags.Static && isClassLike(symbol.valueDeclaration.parent));
+}
+
+function isNativeFunctionMethod(symbol: Symbol, typeChecker: TypeChecker, type: Type): boolean {
+    // Check if the symbol is a method or property on Function.prototype
+    const nativeFunctionMethods = new Set([
+        "apply", "call", "bind", "toString", "prototype", "length", "arguments", "caller", "name"
+    ]);
+    
+    if (!nativeFunctionMethods.has(symbol.name)) {
+        return false;
+    }
+    
+    // Only deprioritize if we're completing on a function type
+    const typeFlags = type.flags;
+    if (!(typeFlags & TypeFlags.Object)) {
+        return false;
+    }
+    
+    const signatures = type.getCallSignatures();
+    return signatures && signatures.length > 0;
 }
 
 function tryGetObjectLiteralContextualType(node: ObjectLiteralExpression, typeChecker: TypeChecker) {
