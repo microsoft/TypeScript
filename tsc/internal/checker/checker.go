@@ -30292,7 +30292,7 @@ func (c *Checker) getSymbolOfNameOrPropertyAccessExpression(name *ast.Node) *ast
 		}
 	} else if ast.IsEntityName(name) && isTypeReferenceIdentifier(name) {
 		meaning := core.IfElse(name.Parent.Kind == ast.KindTypeReference, ast.SymbolFlagsType, ast.SymbolFlagsNamespace)
-		symbol := c.resolveEntityName(name, meaning, false /*ignoreErrors*/, true /*dontResolveAlias*/, nil /*location*/)
+		symbol := c.resolveEntityName(name, meaning, true /*ignoreErrors*/, true /*dontResolveAlias*/, nil /*location*/)
 		if symbol != nil && symbol != c.unknownSymbol {
 			return symbol
 		}
@@ -30303,7 +30303,7 @@ func (c *Checker) getSymbolOfNameOrPropertyAccessExpression(name *ast.Node) *ast
 		return c.resolveEntityName(
 			name,
 			ast.SymbolFlagsFunctionScopedVariable, /*meaning*/
-			false,                                 /*ignoreErrors*/
+			true,                                  /*ignoreErrors*/
 			false,                                 /*dontResolveAlias*/
 			nil,                                   /*location*/
 		)
