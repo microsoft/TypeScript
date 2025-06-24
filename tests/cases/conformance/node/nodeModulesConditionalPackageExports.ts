@@ -113,7 +113,7 @@ export const cjsSource = true;
         "./types": {
             "types": {
                 "import": "./index.d.mts",
-                "require": "./index.d.cts",
+                "require": "./index.d.cts"
             },
             "node": {
                 "import": "./index.mjs",
