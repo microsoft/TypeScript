@@ -6,23 +6,22 @@ This document provides a concise guide for writing TypeScript fourslash tests an
 
 ### Setup
 1. Install Node.js (current or LTS)
-2. Install hereby: `npm install -g hereby`
-3. Clone the repository: `git clone --depth=1 https://github.com/microsoft/TypeScript`
-4. Install dependencies: `npm ci`
+2. Clone the repository: `git clone --depth=1 https://github.com/microsoft/TypeScript`
+3. Install dependencies: `npm ci`
 
 ### Common Build Tasks
 ```bash
-hereby local             # Build the compiler into built/local
-hereby clean             # Delete the built compiler  
-hereby tests             # Build the test infrastructure
-hereby runtests          # Run all tests
-hereby runtests-parallel # Run tests in parallel (recommended)
-hereby runtests --runner=fourslash # Run only fourslash tests
-hereby runtests --runner=compiler # Run only compiler tests
-hereby runtests --tests=<testPath> # Run specific test
-hereby baseline-accept   # Accept new test baselines
-hereby lint              # Run eslint
-hereby format            # Run code formatting
+npx hereby local             # Build the compiler into built/local
+npx hereby clean             # Delete the built compiler  
+npx hereby tests             # Build the test infrastructure
+npx hereby runtests          # Run all tests
+npx hereby runtests-parallel # Run tests in parallel (recommended)
+npx hereby runtests --runner=fourslash # Run only fourslash tests
+npx hereby runtests --runner=compiler # Run only compiler tests
+npx hereby runtests --tests=<testPath> # Run specific test
+npx hereby baseline-accept   # Accept new test baselines
+npx hereby lint              # Run eslint
+npx hereby format            # Run code formatting
 ```
 
 ## Fourslash Test Syntax Guide
@@ -248,27 +247,35 @@ const config3: Config = { optional: 42 }; // Should error - missing required
 
 ```bash
 # Run a specific fourslash test
-hereby runtests --tests=tests/cases/fourslash/completionForObjectProperty.ts
+npx hereby runtests --tests=tests/cases/fourslash/completionForObjectProperty.ts
 
 # Run a specific compiler test  
-hereby runtests --tests=tests/cases/compiler/abstractClassUnionInstantiation.ts
+npx hereby runtests --tests=tests/cases/compiler/abstractClassUnionInstantiation.ts
 
 # Run tests matching a pattern
-hereby runtests --tests=tests/cases/fourslash/completion*.ts
+npx hereby runtests --tests=tests/cases/fourslash/completion*.ts
 ```
 
 ## Important Guidelines
 
+### Keeping Things Tidy
+
+- Once you think you're done, run `npx hereby lint` and fix any issues
+- Then always run `npx hereby format` as your last step
+
 ### Test Locations
+
 - Only add testcases in `tests/cases/compiler` or `tests/cases/fourslash`
+- Filenames in `tests/cases/compiler` must always end with `.ts`, not `.d.ts`
 - Do not write direct unit tests as they are almost never the correct test format for our repo
 
 ### Performance Expectations
+
 - Running a set of tests may take up to 4 minutes
 - A full test run may take up to 15 minutes
-- Always run `hereby lint` and `hereby format` before you're done
 
 ### Working with Issues
+
 - Maintainer comments in the issue should generally take priority over OP's comments
 - Maintainers might give you hints on where to start. They are not always right, but a good place to start
 
@@ -287,6 +294,14 @@ When fixing bugs or implementing features, follow this workflow:
    - Ensure the baselines change in a way that demonstrates that the bug is fixed
    - Put this baseline diff in its own commit
 
-4. **Run all other tests to ensure you didn't break anything**
-   - Some collateral baseline changes are normal
+4. **Add more testing**
+   - Once you've got the basics figured out, enhance your test to cover edge cases and other variations
+   - Run the test again and commit the baseline diff along with the test edit
+
+5. **Run all other tests to ensure you didn't break anything**
+   - Run `npx hereby runtests-parallel` and wait for it to finish (10-15 minutes is normal!)
+   - Some collateral baseline changes are normal, but review for correctness
    - Put these diffs in another commit
+
+6. **Always format and lint**
+   - Don't forget to run `npx hereby lint` and `npx hereby format` before you're done
