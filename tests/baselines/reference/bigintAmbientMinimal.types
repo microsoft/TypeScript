@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/bigintAmbientMinimal.ts] ////
+
+=== bigintAmbientMinimal.ts ===
+// Minimal repro from issue
+declare const n = 123n;
+>n : 123n
+>  : ^^^^
+>123n : 123n
+>     : ^^^^
+
+// Non-ambient for comparison
+const regular = 456n;
+>regular : 456n
+>        : ^^^^
+>456n : 456n
+>     : ^^^^
+

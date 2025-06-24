@@ -1,0 +1,11 @@
+bigintAmbientMinimal.ts(5,17): error TS2737: BigInt literals are not available when targeting lower than ES2020.
+
+
+==== bigintAmbientMinimal.ts (1 errors) ====
+    // Minimal repro from issue
+    declare const n = 123n;
+    
+    // Non-ambient for comparison
+    const regular = 456n;
+                    ~~~~
+!!! error TS2737: BigInt literals are not available when targeting lower than ES2020.

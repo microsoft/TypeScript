@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/bigintAmbientMinimal.ts] ////
+
+=== bigintAmbientMinimal.ts ===
+// Minimal repro from issue
+declare const n = 123n;
+>n : Symbol(n, Decl(bigintAmbientMinimal.ts, 1, 13))
+
+// Non-ambient for comparison
+const regular = 456n;
+>regular : Symbol(regular, Decl(bigintAmbientMinimal.ts, 4, 5))
+
