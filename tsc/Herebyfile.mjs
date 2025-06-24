@@ -1203,7 +1203,7 @@ export const packNativePreviewExtensions = task({
 
             await fs.promises.copyFile("NOTICE.txt", path.join(thisExtensionDir, "NOTICE.txt"));
 
-            await $({ cwd: thisExtensionDir })`vsce package ${version} --pre-release --no-update-package-json --no-dependencies --out ${vsixPath} --target ${vscodeTarget}`;
+            await $({ cwd: thisExtensionDir })`vsce package ${version} --no-update-package-json --no-dependencies --out ${vsixPath} --target ${vscodeTarget}`;
 
             if (options.forRelease) {
                 await $({ cwd: thisExtensionDir })`vsce generate-manifest --packagePath ${vsixPath} --out ${vsixManifestPath}`;
