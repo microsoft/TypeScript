@@ -1,6 +1,6 @@
 --- old.nodeModulesTypesVersionPackageExports(module=node18).js
 +++ new.nodeModulesTypesVersionPackageExports(module=node18).js
-@@= skipped -60, +60 lines =@@
+@@= skipped -61, +61 lines =@@
  mod.correctVersionApplied;
  //// [index.cjs]
  "use strict";

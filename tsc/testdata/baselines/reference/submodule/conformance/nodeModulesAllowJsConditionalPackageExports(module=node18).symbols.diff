@@ -5,63 +5,83 @@
 
  cjsi.mjsSource;
 ->cjsi.mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 9, 12))
++>cjsi.mjsSource : Symbol(mjsSource, Decl(index.d.mts, 9, 12))
  >cjsi : Symbol(cjsi, Decl(index.js, 7, 6))
 ->mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 9, 12))
++>mjsSource : Symbol(mjsSource, Decl(index.d.mts, 9, 12))
 
  mjsi.mjsSource;
 ->mjsi.mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 9, 12))
++>mjsi.mjsSource : Symbol(mjsSource, Decl(index.d.mts, 9, 12))
  >mjsi : Symbol(mjsi, Decl(index.js, 8, 6))
 ->mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 9, 12))
++>mjsSource : Symbol(mjsSource, Decl(index.d.mts, 9, 12))
 
  typei.mjsSource;
 ->typei.mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 9, 12))
++>typei.mjsSource : Symbol(mjsSource, Decl(index.d.mts, 9, 12))
  >typei : Symbol(typei, Decl(index.js, 9, 6))
 ->mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 9, 12))
++>mjsSource : Symbol(mjsSource, Decl(index.d.mts, 9, 12))
 
  ts.mjsSource;
 ->ts.mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 9, 12))
++>ts.mjsSource : Symbol(mjsSource, Decl(index.d.mts, 9, 12))
  >ts : Symbol(ts, Decl(index.js, 10, 6))
 ->mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 9, 12))
++>mjsSource : Symbol(mjsSource, Decl(index.d.mts, 9, 12))
 
  === index.mjs ===
  // esm format file
-@@= skipped -52, +44 lines =@@
+@@= skipped -52, +52 lines =@@
  >ts : Symbol(ts, Decl(index.mjs, 10, 6))
 
  cjsi.mjsSource;
 ->cjsi.mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 9, 12))
++>cjsi.mjsSource : Symbol(mjsSource, Decl(index.d.mts, 9, 12))
  >cjsi : Symbol(cjsi, Decl(index.mjs, 7, 6))
 ->mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 9, 12))
++>mjsSource : Symbol(mjsSource, Decl(index.d.mts, 9, 12))
 
  mjsi.mjsSource;
 ->mjsi.mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 9, 12))
++>mjsi.mjsSource : Symbol(mjsSource, Decl(index.d.mts, 9, 12))
  >mjsi : Symbol(mjsi, Decl(index.mjs, 8, 6))
 ->mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 9, 12))
++>mjsSource : Symbol(mjsSource, Decl(index.d.mts, 9, 12))
 
  typei.mjsSource;
 ->typei.mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 9, 12))
++>typei.mjsSource : Symbol(mjsSource, Decl(index.d.mts, 9, 12))
  >typei : Symbol(typei, Decl(index.mjs, 9, 6))
 ->mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 9, 12))
++>mjsSource : Symbol(mjsSource, Decl(index.d.mts, 9, 12))
 
  ts.mjsSource;
 ->ts.mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 9, 12))
++>ts.mjsSource : Symbol(mjsSource, Decl(index.d.mts, 9, 12))
  >ts : Symbol(ts, Decl(index.mjs, 10, 6))
 ->mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 9, 12))
++>mjsSource : Symbol(mjsSource, Decl(index.d.mts, 9, 12))
 
  === index.cjs ===
  // cjs format file
-@@= skipped -52, +44 lines =@@
+@@= skipped -52, +52 lines =@@
  >ts : Symbol(ts, Decl(index.cjs, 10, 6))
 
  cjsi.cjsSource;
 ->cjsi.cjsSource : Symbol(cjsi.cjsSource, Decl(index.d.cts, 9, 12))
++>cjsi.cjsSource : Symbol(cjsSource, Decl(index.d.cts, 9, 12))
  >cjsi : Symbol(cjsi, Decl(index.cjs, 7, 6))
 ->cjsSource : Symbol(cjsi.cjsSource, Decl(index.d.cts, 9, 12))
++>cjsSource : Symbol(cjsSource, Decl(index.d.cts, 9, 12))
 
  mjsi.cjsSource;
 ->mjsi.cjsSource : Symbol(cjsi.cjsSource, Decl(index.d.cts, 9, 12))
++>mjsi.cjsSource : Symbol(cjsSource, Decl(index.d.cts, 9, 12))
  >mjsi : Symbol(mjsi, Decl(index.cjs, 8, 6))
 ->cjsSource : Symbol(cjsi.cjsSource, Decl(index.d.cts, 9, 12))
++>cjsSource : Symbol(cjsSource, Decl(index.d.cts, 9, 12))
 
  typei.implicitCjsSource;
 ->typei.implicitCjsSource : Symbol(cjsi.type.implicitCjsSource, Decl(index.d.ts, 9, 12))
@@ -72,12 +92,14 @@
 
  ts.cjsSource;
 ->ts.cjsSource : Symbol(cjsi.cjsSource, Decl(index.d.cts, 9, 12))
++>ts.cjsSource : Symbol(cjsSource, Decl(index.d.cts, 9, 12))
  >ts : Symbol(ts, Decl(index.cjs, 10, 6))
 ->cjsSource : Symbol(cjsi.cjsSource, Decl(index.d.cts, 9, 12))
++>cjsSource : Symbol(cjsSource, Decl(index.d.cts, 9, 12))
 
  === node_modules/inner/index.d.ts ===
  // cjs format file
-@@= skipped -34, +28 lines =@@
+@@= skipped -34, +34 lines =@@
  >ts : Symbol(ts, Decl(index.d.ts, 4, 6))
 
  export { cjs };

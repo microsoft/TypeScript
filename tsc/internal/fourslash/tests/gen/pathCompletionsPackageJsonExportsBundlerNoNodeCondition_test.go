@@ -20,7 +20,7 @@ func TestPathCompletionsPackageJsonExportsBundlerNoNodeCondition(t *testing.T) {
     "./only-for-node": {
       "node": "./something.js"
     },
-    "./for-everywhere": "./other.js",
+    "./for-everywhere": "./other.js"
   }
 }
 // @Filename: /node_modules/foo/something.d.ts

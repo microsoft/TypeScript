@@ -1,6 +1,6 @@
 --- old.nodeModulesConditionalPackageExports(module=node18).js
 +++ new.nodeModulesConditionalPackageExports(module=node18).js
-@@= skipped -139, +139 lines =@@
+@@= skipped -140, +140 lines =@@
  ts.mjsSource;
  //// [index.cjs]
  "use strict";

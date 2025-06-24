@@ -6,9 +6,9 @@ import * as mod from "inner";
 >mod : typeof mod
 
 mod.correctVersionApplied;
->mod.correctVersionApplied : any
+>mod.correctVersionApplied : true
 >mod : typeof mod
->correctVersionApplied : any
+>correctVersionApplied : true
 
 === index.mts ===
 // esm format file
@@ -16,9 +16,9 @@ import * as mod from "inner";
 >mod : typeof mod
 
 mod.correctVersionApplied;
->mod.correctVersionApplied : any
+>mod.correctVersionApplied : true
 >mod : typeof mod
->correctVersionApplied : any
+>correctVersionApplied : true
 
 === index.cts ===
 // cjs format file
@@ -26,9 +26,9 @@ import * as mod from "inner";
 >mod : typeof mod
 
 mod.correctVersionApplied;
->mod.correctVersionApplied : any
+>mod.correctVersionApplied : true
 >mod : typeof mod
->correctVersionApplied : any
+>correctVersionApplied : true
 
 === node_modules/inner/index.d.ts ===
 // cjs format file

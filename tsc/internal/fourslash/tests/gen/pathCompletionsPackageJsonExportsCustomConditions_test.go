@@ -20,7 +20,7 @@ func TestPathCompletionsPackageJsonExportsCustomConditions(t *testing.T) {
   "exports": {
     "./only-with-custom-conditions": {
       "custom-condition": "./something.js"
-    },
+    }
   }
 }
 // @Filename: /node_modules/foo/something.d.ts

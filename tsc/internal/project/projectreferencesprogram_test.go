@@ -283,7 +283,7 @@ func filesForSymlinkReferences(preserveSymlinks bool, scope string) (files map[s
 	files = map[string]any{
 		"/user/username/projects/myproject/packages/B/package.json": `{
 			"main": "lib/index.js",
-			"types": "lib/index.d.ts",
+			"types": "lib/index.d.ts"
 		}`,
 		aTest: fmt.Sprintf(`
 			import { foo } from '%sb';

@@ -34,7 +34,7 @@ export const futureVersionApplied = true;
 {
     "name": "package",
     "private": true,
-    "type": "module",
+    "type": "module"
 }
 //// [package.json]
 {
@@ -47,9 +47,10 @@ export const futureVersionApplied = true;
             "types": "./old-types.d.ts",
             "import": "./index.mjs",
             "node": "./index.js"
-        },
+        }
     }
 }
+
 
 //// [index.js]
 // esm format file

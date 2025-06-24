@@ -1,6 +1,6 @@
 --- old.nodeModulesAllowJsPackagePatternExportsTrailers(module=node18).js
 +++ new.nodeModulesAllowJsPackagePatternExportsTrailers(module=node18).js
-@@= skipped -82, +82 lines =@@
+@@= skipped -83, +83 lines =@@
  typei;
  //// [index.cjs]
  "use strict";

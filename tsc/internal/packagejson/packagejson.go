@@ -36,7 +36,7 @@ type Fields struct {
 func Parse(data []byte) (Fields, error) {
 	var f Fields
 	if err := json2.Unmarshal(data, &f); err != nil {
-		return f, err
+		return Fields{}, err
 	}
 	return f, nil
 }
