@@ -1731,7 +1731,13 @@ function createCompletionEntry(
     // We should only have needsConvertPropertyAccess if there's a property access to convert. But see #21790.
     // Somehow there was a global with a non-identifier name. Hopefully someone will complain about getting a "foo bar" global completion and provide a repro.
     else if ((useBraces || insertQuestionDot) && propertyAccessToConvert) {
-        insertText = useBraces ? needsConvertPropertyAccess ? `[${quotePropertyName(sourceFile, preferences, name)}]` : `[${name}]` : name;
+        if (useBraces && preferences.includeCompletionsWithSnippetText) {
+            // For symbol completions, position cursor inside brackets for better UX
+            insertText = needsConvertPropertyAccess ? `[${quotePropertyName(sourceFile, preferences, name)}$0]` : `[${name}$0]`;
+            isSnippet = true;
+        } else {
+            insertText = useBraces ? needsConvertPropertyAccess ? `[${quotePropertyName(sourceFile, preferences, name)}]` : `[${name}]` : name;
+        }
         if (insertQuestionDot || propertyAccessToConvert.questionDotToken) {
             insertText = `?.${insertText}`;
         }
@@ -3851,6 +3857,10 @@ function getCompletionData(
             if (firstAccessibleSymbolId && addToSeen(seenPropertySymbols, firstAccessibleSymbolId)) {
                 const index = symbols.length;
                 symbols.push(firstAccessibleSymbol);
+                
+                // Symbol completions should have lower priority since they represent computed property access
+                symbolToSortTextMap[getSymbolId(firstAccessibleSymbol)] = SortText.GlobalsOrKeywords;
+                
                 const moduleSymbol = firstAccessibleSymbol.parent;
                 if (
                     !moduleSymbol ||
