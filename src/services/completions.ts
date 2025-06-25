@@ -109,7 +109,6 @@ import {
     getResolvePackageJsonExports,
     getRootDeclaration,
     getSourceFileOfModule,
-    getSourceFileOfNode,
     getSwitchedType,
     getSymbolId,
     getSynthesizedDeepClone,
