@@ -347,7 +347,8 @@ func (walker *typeWriterWalker) writeTypeOrSymbol(node *ast.Node, isSymbolWalk b
 	fileChecker, done := walker.getTypeCheckerForCurrentFile()
 	defer done()
 
-	ctx := printer.NewEmitContext()
+	ctx, putCtx := printer.GetEmitContext()
+	defer putCtx()
 
 	if !isSymbolWalk {
 		// Don't try to get the type of something that's already a type.
