@@ -1,4 +1,4 @@
-# TypeScript Test Writing Guide for Copilot
+# Guide for Copilot
 
 This document provides a concise guide for writing TypeScript fourslash tests and compiler tests, along with build instructions.
 
@@ -279,6 +279,25 @@ npx hereby runtests --tests=tests/cases/fourslash/completion*.ts
 - Maintainer comments in the issue should generally take priority over OP's comments
 - Maintainers might give you hints on where to start. They are not always right, but a good place to start
 
+### Debugging Tips
+
+printf debugging is going to be very useful as you are figuring things out.
+To do this, use `console.log`, but you'll need to `ts-ignore` it.
+Write something like this:
+```ts,diff
+function checkSomething(n: Node) {
+    doSomething(n);
++   // @ts-ignore DEBUG CODE ONLY, REMOVE ME WHEN DONE
++   console.log(`Got node with pos = ${n.pos}`);
+    doSomethingElse(n);
+}
+```
+We have a lot of enums so you might want to print back their symbolic name, to do this, index back into the name of the enum
+```ts
+   // @ts-ignore DEBUG CODE ONLY, REMOVE ME WHEN DONE
+   console.log(`Got node with kind = ${SyntaxKind[n.kind]}`);
+```
+
 ## Recommended Workflow
 
 When fixing bugs or implementing features, follow this workflow:
@@ -305,3 +324,4 @@ When fixing bugs or implementing features, follow this workflow:
 
 6. **Always format and lint**
    - Don't forget to run `npx hereby lint` and `npx hereby format` before you're done
+   - Double-check your line endings. Source files in this repo typically use CRLF line endings. Fix all line endings to be consistent before you wrap up
