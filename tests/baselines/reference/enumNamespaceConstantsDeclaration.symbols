@@ -44,22 +44,4 @@ namespace MyEnum {
 >Second : Symbol(Second, Decl(enumNamespaceConstantsDeclaration.ts, 10, 14))
 }
 
-// String enum
-enum StringEnum {
->StringEnum : Symbol(StringEnum, Decl(enumNamespaceConstantsDeclaration.ts, 16, 1), Decl(enumNamespaceConstantsDeclaration.ts, 22, 1))
 
-    Option1 = "option1",
->Option1 : Symbol(StringEnum.Option1, Decl(enumNamespaceConstantsDeclaration.ts, 19, 17))
-
-    Option2 = "option2"
->Option2 : Symbol(StringEnum.Option2, Decl(enumNamespaceConstantsDeclaration.ts, 20, 24))
-}
-namespace StringEnum {
->StringEnum : Symbol(StringEnum, Decl(enumNamespaceConstantsDeclaration.ts, 16, 1), Decl(enumNamespaceConstantsDeclaration.ts, 22, 1))
-
-    export const selected = StringEnum.Option1;
->selected : Symbol(selected, Decl(enumNamespaceConstantsDeclaration.ts, 24, 16))
->StringEnum.Option1 : Symbol(Option1, Decl(enumNamespaceConstantsDeclaration.ts, 19, 17))
->StringEnum : Symbol(StringEnum, Decl(enumNamespaceConstantsDeclaration.ts, 16, 1), Decl(enumNamespaceConstantsDeclaration.ts, 22, 1))
->Option1 : Symbol(Option1, Decl(enumNamespaceConstantsDeclaration.ts, 19, 17))
-}

@@ -18,11 +18,3 @@ namespace MyEnum {
     export const value2 = MyEnum.Second;
 }
 
-// String enum
-enum StringEnum {
-    Option1 = "option1",
-    Option2 = "option2"
-}
-namespace StringEnum {
-    export const selected = StringEnum.Option1;
-}

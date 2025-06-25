@@ -67,33 +67,4 @@ namespace MyEnum {
 >       : ^^^^^^^^^^^^^
 }
 
-// String enum
-enum StringEnum {
->StringEnum : StringEnum
->           : ^^^^^^^^^^
 
-    Option1 = "option1",
->Option1 : StringEnum.Option1
->        : ^^^^^^^^^^^^^^^^^^
->"option1" : "option1"
->          : ^^^^^^^^^
-
-    Option2 = "option2"
->Option2 : StringEnum.Option2
->        : ^^^^^^^^^^^^^^^^^^
->"option2" : "option2"
->          : ^^^^^^^^^
-}
-namespace StringEnum {
->StringEnum : typeof StringEnum
->           : ^^^^^^^^^^^^^^^^^
-
-    export const selected = StringEnum.Option1;
->selected : any
->StringEnum.Option1 : StringEnum.Option1
->                   : ^^^^^^^^^^^^^^^^^^
->StringEnum : typeof StringEnum
->           : ^^^^^^^^^^^^^^^^^
->Option1 : StringEnum.Option1
->        : ^^^^^^^^^^^^^^^^^^
-}

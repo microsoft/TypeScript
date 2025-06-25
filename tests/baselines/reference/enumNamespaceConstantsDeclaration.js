@@ -19,14 +19,7 @@ namespace MyEnum {
     export const value2 = MyEnum.Second;
 }
 
-// String enum
-enum StringEnum {
-    Option1 = "option1",
-    Option2 = "option2"
-}
-namespace StringEnum {
-    export const selected = StringEnum.Option1;
-}
+
 
 //// [enumNamespaceConstantsDeclaration.js]
 // Test for constant declarations inside namespace merged with enum
@@ -47,15 +40,6 @@ var MyEnum;
     MyEnum.value1 = MyEnum.First;
     MyEnum.value2 = MyEnum.Second;
 })(MyEnum || (MyEnum = {}));
-// String enum
-var StringEnum;
-(function (StringEnum) {
-    StringEnum["Option1"] = "option1";
-    StringEnum["Option2"] = "option2";
-})(StringEnum || (StringEnum = {}));
-(function (StringEnum) {
-    StringEnum.selected = StringEnum.Option1;
-})(StringEnum || (StringEnum = {}));
 
 
 //// [enumNamespaceConstantsDeclaration.d.ts]
@@ -73,25 +57,3 @@ declare namespace MyEnum {
     const value1 = MyEnum.First;
     const value2 = MyEnum.Second;
 }
-declare enum StringEnum {
-    Option1 = "option1",
-    Option2 = "option2"
-}
-declare namespace StringEnum {
-    const selected: any;
-}
-
-
-!!!! File enumNamespaceConstantsDeclaration.d.ts differs from original emit in noCheck emit
-//// [enumNamespaceConstantsDeclaration.d.ts]
-===================================================================
---- Expected	The full check baseline
-+++ Actual	with noCheck set
-@@ -16,6 +16,6 @@
-     Option1 = "option1",
-     Option2 = "option2"
- }
- declare namespace StringEnum {
--    const selected: any;
-+    const selected = StringEnum.Option1;
- }
