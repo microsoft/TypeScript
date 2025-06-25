@@ -1452,6 +1452,9 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
             es2024: [
                 "waitAsync",
             ],
+            esnext: [
+                "pause",
+            ],
         })),
         SharedArrayBuffer: new Map(Object.entries({
             es2017: [
@@ -2648,7 +2651,13 @@ export function isSuperCall(n: Node): n is SuperCall {
 
 /** @internal */
 export function isImportCall(n: Node): n is ImportCall {
-    return n.kind === SyntaxKind.CallExpression && (n as CallExpression).expression.kind === SyntaxKind.ImportKeyword;
+    if (n.kind !== SyntaxKind.CallExpression) return false;
+    const e = (n as CallExpression).expression;
+    return e.kind === SyntaxKind.ImportKeyword || (
+        isMetaProperty(e)
+        && e.keywordToken === SyntaxKind.ImportKeyword
+        && e.name.escapedText === "defer"
+    );
 }
 
 /** @internal */
@@ -3599,8 +3608,10 @@ export function isExpressionNode(node: Node): boolean {
         case SyntaxKind.JsxFragment:
         case SyntaxKind.YieldExpression:
         case SyntaxKind.AwaitExpression:
-        case SyntaxKind.MetaProperty:
             return true;
+        case SyntaxKind.MetaProperty:
+            // `import.defer` in `import.defer(...)` is not an expression
+            return !isImportCall(node.parent) || node.parent.expression !== node;
         case SyntaxKind.ExpressionWithTypeArguments:
             return !isHeritageClause(node.parent) && !isJSDocAugmentsTag(node.parent);
         case SyntaxKind.QualifiedName:
@@ -6591,7 +6602,7 @@ export function sourceFileMayBeEmitted(sourceFile: SourceFile, host: SourceFileM
     if (host.isSourceOfProjectReferenceRedirect(sourceFile.fileName)) return false;
     // Any non json file should be emitted
     if (!isJsonSourceFile(sourceFile)) return true;
-    if (host.getResolvedProjectReferenceToRedirect(sourceFile.fileName)) return false;
+    if (host.getRedirectFromSourceFile(sourceFile.fileName)) return false;
     // Emit json file if outFile is specified
     if (options.outFile) return true;
     // Json file is not emitted if outDir is not specified
@@ -7704,9 +7715,18 @@ export function base64decode(host: { base64decode?(input: string): string; } | u
 export function readJsonOrUndefined(path: string, hostOrText: { readFile(fileName: string): string | undefined; } | string): object | undefined {
     const jsonText = isString(hostOrText) ? hostOrText : hostOrText.readFile(path);
     if (!jsonText) return undefined;
-    // gracefully handle if readFile fails or returns not JSON
-    const result = parseConfigFileTextToJson(path, jsonText);
-    return !result.error ? result.config : undefined;
+    // Try strictly parsing first, then fall back to our (slower)
+    // parser that is resilient to comments/trailing commas.
+    // package.json files should never have these, but we
+    // have no way to communicate these issues in the first place.
+    let result = tryParseJson(jsonText);
+    if (result === undefined) {
+        const looseResult = parseConfigFileTextToJson(path, jsonText);
+        if (!looseResult.error) {
+            result = looseResult.config;
+        }
+    }
+    return result;
 }
 
 /** @internal */
@@ -8953,6 +8973,7 @@ const _computedOptions = createComputedCompilerOptions({
             return target ??
                 ((compilerOptions.module === ModuleKind.Node16 && ScriptTarget.ES2022) ||
                     (compilerOptions.module === ModuleKind.Node18 && ScriptTarget.ES2022) ||
+                    (compilerOptions.module === ModuleKind.Node20 && ScriptTarget.ES2023) ||
                     (compilerOptions.module === ModuleKind.NodeNext && ScriptTarget.ESNext) ||
                     ScriptTarget.ES5);
         },
@@ -8976,6 +8997,7 @@ const _computedOptions = createComputedCompilerOptions({
                         break;
                     case ModuleKind.Node16:
                     case ModuleKind.Node18:
+                    case ModuleKind.Node20:
                         moduleResolution = ModuleResolutionKind.Node16;
                         break;
                     case ModuleKind.NodeNext:
@@ -9019,6 +9041,7 @@ const _computedOptions = createComputedCompilerOptions({
             switch (_computedOptions.module.computeValue(compilerOptions)) {
                 case ModuleKind.Node16:
                 case ModuleKind.Node18:
+                case ModuleKind.Node20:
                 case ModuleKind.NodeNext:
                 case ModuleKind.Preserve:
                     return true;
@@ -9080,6 +9103,14 @@ const _computedOptions = createComputedCompilerOptions({
         computeValue: (compilerOptions): boolean => {
             if (compilerOptions.resolveJsonModule !== undefined) {
                 return compilerOptions.resolveJsonModule;
+            }
+            switch (_computedOptions.module.computeValue(compilerOptions)) {
+                // TODO in 6.0: uncomment
+                // case ModuleKind.Node16:
+                // case ModuleKind.Node18:
+                case ModuleKind.Node20:
+                case ModuleKind.NodeNext:
+                    return true;
             }
             return _computedOptions.moduleResolution.computeValue(compilerOptions) === ModuleResolutionKind.Bundler;
         },
@@ -10936,10 +10967,11 @@ export function isTypeDeclaration(node: Node): node is TypeParameterDeclaration 
         case SyntaxKind.JSDocEnumTag:
             return true;
         case SyntaxKind.ImportClause:
-            return (node as ImportClause).isTypeOnly;
+            return (node as ImportClause).phaseModifier === SyntaxKind.TypeKeyword;
         case SyntaxKind.ImportSpecifier:
+            return (node as ImportSpecifier).parent.parent.phaseModifier === SyntaxKind.TypeKeyword;
         case SyntaxKind.ExportSpecifier:
-            return (node as ImportSpecifier | ExportSpecifier).parent.parent.isTypeOnly;
+            return (node as ExportSpecifier).parent.parent.isTypeOnly;
         default:
             return false;
     }
@@ -12111,7 +12143,7 @@ function getNodeAtPosition(sourceFile: SourceFile, position: number, includeJSDo
     };
     while (true) {
         const child = isJavaScriptFile && includeJSDoc && hasJSDocNodes(current) && forEach(current.jsDoc, getContainingChild) || forEachChild(current, getContainingChild);
-        if (!child) {
+        if (!child || isMetaProperty(child)) {
             return current;
         }
         current = child;
@@ -12138,12 +12170,12 @@ export function getLibFileNameFromLibReference(libReference: FileReference): str
 /** @internal */
 export function forEachResolvedProjectReference<T>(
     resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined,
-    cb: (resolvedProjectReference: ResolvedProjectReference, parent: ResolvedProjectReference | undefined) => T | undefined,
+    cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined,
 ): T | undefined {
     return forEachProjectReference(
         /*projectReferences*/ undefined,
         resolvedProjectReferences,
-        (resolvedRef, parent) => resolvedRef && cb(resolvedRef, parent),
+        resolvedRef => resolvedRef && cb(resolvedRef),
     );
 }
 

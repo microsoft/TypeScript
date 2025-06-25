@@ -872,7 +872,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
 
         // All the resolutions in this file are invalidated if this file wasn't resolved using same redirect
         const program = resolutionHost.getCurrentProgram();
-        const oldRedirect = program && program.getResolvedProjectReferenceToRedirect(containingFile);
+        const oldRedirect = program && program.getRedirectFromSourceFile(containingFile)?.resolvedRef;
         const unmatchedRedirects = oldRedirect ?
             !redirectedReference || redirectedReference.sourceFile.path !== oldRedirect.sourceFile.path :
             !!redirectedReference;
