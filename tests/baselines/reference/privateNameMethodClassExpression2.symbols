@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/privateNameMethodClassExpression2.ts] ////
+
+=== privateNameMethodClassExpression2.ts ===
+new (class {
+  #method() {
+>#method : Symbol((Anonymous class).#method, Decl(privateNameMethodClassExpression2.ts, 0, 12))
+
+    return 42;
+  }
+})().#method; // error
+
+new (class {
+  #field = 42;
+>#field : Symbol((Anonymous class).#field, Decl(privateNameMethodClassExpression2.ts, 6, 12))
+
+})().#field; // error
+
