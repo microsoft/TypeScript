@@ -5,46 +5,9 @@
  /loosey.cts(1,36): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
 +/loosey.cts(2,8): error TS1259: Module '"/config"' can only be default-imported using the 'allowSyntheticDefaultImports' flag
  /loosey.cts(6,9): error TS2339: Property 'default' does not exist on type '{ version: number; }'.
--/main.mts(2,22): error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'Node18'.
--/main.mts(3,19): error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'Node18'.
--/main.mts(7,21): error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'Node18'.
-+/main.mts(2,22): error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'ModuleKindNode18'.
-+/main.mts(3,19): error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'ModuleKindNode18'.
-+/main.mts(7,21): error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'ModuleKindNode18'.
- /main.mts(9,47): error TS2857: Import attributes cannot be used with type-only imports or exports.
--/main.mts(10,10): error TS1544: Named imports from a JSON file into an ECMAScript module are not allowed when 'module' is set to 'Node18'.
-+/main.mts(10,10): error TS1544: Named imports from a JSON file into an ECMAScript module are not allowed when 'module' is set to 'ModuleKindNode18'.
- /main.mts(12,9): error TS2339: Property 'version' does not exist on type '{ default: { version: number; }; }'.
-
-
-@@= skipped -45, +47 lines =@@
-     import { oops } from "not.json"; // Ok
-     import moreOops from "actually-json"; // Error in nodenext
-                          ~~~~~~~~~~~~~~~
--!!! error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'Node18'.
-+!!! error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'ModuleKindNode18'.
-     import typed from "actually-json/typed"; // Error in nodenext
-                       ~~~~~~~~~~~~~~~~~~~~~
--!!! error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'Node18'.
-+!!! error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'ModuleKindNode18'.
-     
-     import config from "./config.json" with { type: "json" }; // Ok
-     import { default as config1 } from "./config.json" with { type: "json" }; // Ok
-     import config2 from "./config.json"; // Error in nodenext, no attribute
-                         ~~~~~~~~~~~~~~~
--!!! error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'Node18'.
-+!!! error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'ModuleKindNode18'.
-     import type config2Type from "./config.json"; // Ok, type-only
-     import type config2Type2 from "./config.json" with { type: "json" }; // Error, import attributes not allowed on type-only imports
-                                                   ~~~~~~~~~~~~~~~~~~~~~
- !!! error TS2857: Import attributes cannot be used with type-only imports or exports.
-     import { version } from "./config.json" with { type: "json" }; // Error, named import
-              ~~~~~~~
--!!! error TS1544: Named imports from a JSON file into an ECMAScript module are not allowed when 'module' is set to 'Node18'.
-+!!! error TS1544: Named imports from a JSON file into an ECMAScript module are not allowed when 'module' is set to 'ModuleKindNode18'.
-     import * as config3 from "./config.json" with { type: "json" };
-     config3.version; // Error
-             ~~~~~~~
+ /main.mts(2,22): error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'Node18'.
+ /main.mts(3,19): error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'Node18'.
+@@= skipped -68, +70 lines =@@
  !!! error TS2339: Property 'version' does not exist on type '{ default: { version: number; }; }'.
      config3.default; // Ok
      
