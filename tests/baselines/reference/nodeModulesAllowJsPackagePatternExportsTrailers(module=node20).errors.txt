@@ -55,7 +55,7 @@ node_modules/inner/index.d.ts(2,13): error TS2303: Circular definition of import
     {
         "name": "package",
         "private": true,
-        "type": "module",
+        "type": "module"
     }
 ==== node_modules/inner/package.json (0 errors) ====
     {
@@ -67,3 +67,4 @@ node_modules/inner/index.d.ts(2,13): error TS2303: Circular definition of import
             "./js/*.js": "./*.js"
         }
     }
+    
