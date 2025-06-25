@@ -1462,17 +1462,34 @@ func (c *Checker) getCommonSupertype(types []*Type) *Type {
 	if c.literalTypesWithSameBaseType(primaryTypes) {
 		supertype = c.getUnionType(primaryTypes)
 	} else {
-		for _, t := range primaryTypes {
-			if supertype == nil || c.isTypeSubtypeOf(supertype, t) {
-				supertype = t
-			}
-		}
+		supertype = c.getSingleCommonSupertype(primaryTypes)
 	}
 	// Add any nullable types that occurred in the candidates back to the result.
 	if core.Same(primaryTypes, types) {
 		return supertype
 	}
 	return c.getNullableType(supertype, c.getCombinedTypeFlags(types)&TypeFlagsNullable)
+}
+
+func (c *Checker) getSingleCommonSupertype(types []*Type) *Type {
+	// First, find the leftmost type for which no type to the right is a strict supertype, and if that
+	// type is a strict supertype of all other candidates, return it. Otherwise, return the leftmost type
+	// for which no type to the right is a (regular) supertype.
+	candidate := c.findLeftmostType(types, (*Checker).isTypeStrictSubtypeOf)
+	if core.Every(types, func(t *Type) bool { return t == candidate || c.isTypeStrictSubtypeOf(t, candidate) }) {
+		return candidate
+	}
+	return c.findLeftmostType(types, (*Checker).isTypeSubtypeOf)
+}
+
+func (c *Checker) findLeftmostType(types []*Type, f func(c *Checker, s *Type, t *Type) bool) *Type {
+	var candidate *Type
+	for _, t := range types {
+		if candidate == nil || f(c, candidate, t) {
+			candidate = t
+		}
+	}
+	return candidate
 }
 
 // Return the leftmost type for which no type to the right is a subtype.
