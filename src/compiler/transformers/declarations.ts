@@ -104,6 +104,7 @@ import {
     isExportAssignment,
     isExportDeclaration,
     isExpressionWithTypeArguments,
+    isExpression,
     isExternalModule,
     isExternalModuleAugmentation,
     isExternalModuleIndicator,
@@ -130,6 +131,7 @@ import {
     isParameter,
     isPrimitiveLiteralValue,
     isPrivateIdentifier,
+    isPropertyAccessExpression,
     isSemicolonClassElement,
     isSetAccessorDeclaration,
     isSourceFile,
@@ -655,9 +657,22 @@ export function transformDeclarations(context: TransformationContext): Transform
     }
 
     function shouldPrintWithInitializer(node: Node): node is CanHaveLiteralInitializer & { initializer: Expression; } {
-        return canHaveLiteralInitializer(node)
-            && !!node.initializer
-            && resolver.isLiteralConstDeclaration(getParseTreeNode(node) as CanHaveLiteralInitializer); // TODO: Make safea
+        if (!canHaveLiteralInitializer(node) || !node.initializer || !resolver.isLiteralConstDeclaration(getParseTreeNode(node) as CanHaveLiteralInitializer)) {
+            return false;
+        }
+        
+        // Check if the initializer is a property access to an enum member (e.g., Foo.bar)
+        // In this case, don't print with initializer - let it get a type annotation instead
+        const unwrappedInitializer = unwrapParenthesizedExpression(node.initializer);
+        if (isPropertyAccessExpression(unwrappedInitializer)) {
+            const constantValue = resolver.getConstantValue(unwrappedInitializer);
+            // If it has a constant value (meaning it's an enum member reference), use type instead of initializer
+            if (constantValue !== undefined) {
+                return false;
+            }
+        }
+        
+        return true;
     }
 
     function ensureNoInitializer(node: CanHaveLiteralInitializer) {
@@ -666,6 +681,18 @@ export function transformDeclarations(context: TransformationContext): Transform
             if (!isPrimitiveLiteralValue(unwrappedInitializer)) {
                 reportInferenceFallback(node);
             }
+            
+            // Check if the initializer is a property access to an enum member (e.g., Foo.bar)
+            // In this case, don't print with initializer - let it fall back to type annotation
+            if (isPropertyAccessExpression(unwrappedInitializer)) {
+                const constantValue = resolver.getConstantValue(unwrappedInitializer);
+                // If it has a constant value (meaning it's an enum member reference), 
+                // don't use initializer and let it get a type instead
+                if (constantValue !== undefined) {
+                    return undefined;
+                }
+            }
+            
             return resolver.createLiteralConstValue(getParseTreeNode(node, canHaveLiteralInitializer)!, symbolTracker);
         }
         return undefined;
