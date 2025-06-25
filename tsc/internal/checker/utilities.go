@@ -1952,3 +1952,12 @@ func ValueToString(value any) string {
 	}
 	panic("unhandled value type in valueToString")
 }
+
+func nodeStartsNewLexicalEnvironment(node *ast.Node) bool {
+	switch node.Kind {
+	case ast.KindConstructor, ast.KindFunctionExpression, ast.KindFunctionDeclaration, ast.KindArrowFunction,
+		ast.KindMethodDeclaration, ast.KindGetAccessor, ast.KindSetAccessor, ast.KindModuleDeclaration, ast.KindSourceFile:
+		return true
+	}
+	return false
+}

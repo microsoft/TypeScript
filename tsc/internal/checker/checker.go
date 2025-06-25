@@ -727,6 +727,7 @@ type Checker struct {
 	unknownSignature                            *Signature
 	resolvingSignature                          *Signature
 	silentNeverSignature                        *Signature
+	cachedArgumentsReferenced                   map[*ast.Node]bool
 	enumNumberIndexInfo                         *IndexInfo
 	anyBaseTypeIndexInfo                        *IndexInfo
 	patternAmbientModules                       []*ast.PatternAmbientModule
@@ -1000,6 +1001,7 @@ func NewChecker(program Program) *Checker {
 	c.unknownSignature = c.newSignature(SignatureFlagsNone, nil, nil, nil, nil, c.errorType, nil, 0)
 	c.resolvingSignature = c.newSignature(SignatureFlagsNone, nil, nil, nil, nil, c.anyType, nil, 0)
 	c.silentNeverSignature = c.newSignature(SignatureFlagsNone, nil, nil, nil, nil, c.silentNeverType, nil, 0)
+	c.cachedArgumentsReferenced = make(map[*ast.Node]bool)
 	c.enumNumberIndexInfo = &IndexInfo{keyType: c.numberType, valueType: c.stringType, isReadonly: true}
 	c.anyBaseTypeIndexInfo = &IndexInfo{keyType: c.stringType, valueType: c.anyType, isReadonly: false}
 	c.emptyStringType = c.getStringLiteralType("")
@@ -2554,6 +2556,7 @@ func (c *Checker) checkSignatureDeclaration(node *ast.Node) {
 		c.checkGrammarFunctionLikeDeclaration(node)
 	}
 	c.checkTypeParameters(node.TypeParameters())
+	c.checkUnmatchedJSDocParameters(node)
 	c.checkSourceElements(node.Parameters())
 	returnTypeNode := node.Type()
 	if returnTypeNode != nil {
@@ -30518,6 +30521,43 @@ func (c *Checker) getRegularTypeOfExpression(expr *ast.Node) *Type {
 		expr = expr.Parent
 	}
 	return c.getRegularTypeOfLiteralType(c.getTypeOfExpression(expr))
+}
+
+func (c *Checker) containsArgumentsReference(node *ast.Node) bool {
+	if node.Body() == nil {
+		return false
+	}
+
+	if containsArguments, ok := c.cachedArgumentsReferenced[node]; ok {
+		return containsArguments
+	}
+
+	var visit func(node *ast.Node) bool
+	visit = func(node *ast.Node) bool {
+		if node == nil {
+			return false
+		}
+		switch node.Kind {
+		case ast.KindIdentifier:
+			return node.Text() == c.argumentsSymbol.Name && c.IsArgumentsSymbol(c.getResolvedSymbol(node))
+		case ast.KindPropertyDeclaration, ast.KindMethodDeclaration, ast.KindGetAccessor, ast.KindSetAccessor:
+			if ast.IsComputedPropertyName(node.Name()) {
+				return visit(node.Name())
+			}
+		case ast.KindPropertyAccessExpression, ast.KindElementAccessExpression:
+			return visit(node.Expression())
+		case ast.KindPropertyAssignment:
+			return visit(node.AsPropertyAssignment().Initializer)
+		}
+		if nodeStartsNewLexicalEnvironment(node) || ast.IsPartOfTypeNode(node) {
+			return false
+		}
+		return node.ForEachChild(visit)
+	}
+
+	containsArguments := visit(node.Body())
+	c.cachedArgumentsReferenced[node] = containsArguments
+	return containsArguments
 }
 
 func (c *Checker) GetTypeAtLocation(node *ast.Node) *Type {
