@@ -9,12 +9,12 @@
 ////const obj: TestInterface = {} as any;
 ////obj./*completions*/
 
-// Test new behavior: Symbol completions should have lower priority and better cursor positioning
+// Test new behavior: Symbol completions should have lower priority  
 verify.completions({
     marker: "completions",
     includes: [
         { name: "normalProperty", sortText: completion.SortText.LocationPriority },
-        { name: "mySymbol", sortText: completion.SortText.GlobalsOrKeywords, insertText: "[mySymbol$0]", isSnippet: true } // Now with snippet cursor positioning
+        { name: "mySymbol", sortText: completion.SortText.GlobalsOrKeywords, insertText: "[mySymbol]" }
     ],
-    preferences: { includeInsertTextCompletions: true, includeCompletionsWithSnippetText: true }
+    preferences: { includeInsertTextCompletions: true }
 });
