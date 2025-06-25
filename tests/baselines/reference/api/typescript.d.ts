@@ -5907,6 +5907,7 @@ declare namespace ts {
      */
     interface SourceFileLike {
         readonly text: string;
+        languageVariant?: LanguageVariant;
     }
     interface SourceFileLike {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
