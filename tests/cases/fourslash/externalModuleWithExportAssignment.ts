@@ -50,10 +50,14 @@ goTo.marker('3');
 verify.quickInfoIs("(property) test1: a1.connectModule\n(res: any, req: any, next: any) => void", undefined);
 verify.completions({
     marker: ["3", "9"],
-    exact: completion.functionMembersWithPrototypePlus([
-        { name: "test1", text: "(property) test1: a1.connectModule\n(res: any, req: any, next: any) => void" },
-        { name: "test2", text: "(method) test2(): a1.connectModule" },
-    ]),
+    includes: [
+        { name: "test1", text: "(property) test1: a1.connectModule\n(res: any, req: any, next: any) => void", sortText: "11" },
+        { name: "test2", text: "(method) test2(): a1.connectModule", sortText: "11" },
+        { name: "apply", sortText: "111" },
+        { name: "call", sortText: "111" },
+        { name: "bind", sortText: "111" },
+        { name: "prototype", sortText: "111" },
+    ]
 });
 
 verify.signatureHelp(

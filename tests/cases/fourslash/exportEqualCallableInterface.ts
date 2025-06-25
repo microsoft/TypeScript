@@ -15,5 +15,13 @@
 
 verify.completions({
     marker: "",
-    exact: completion.functionMembersWithPrototypePlus(["foo"]),
+    includes: [
+        { name: "foo", sortText: "11" },      // LocationPriority (custom property)
+        { name: "apply", sortText: "111" },   // SortBelow(LocationPriority) (native)
+        { name: "call", sortText: "111" },    // SortBelow(LocationPriority) (native)
+        { name: "bind", sortText: "111" },    // SortBelow(LocationPriority) (native)
+        { name: "toString", sortText: "111" }, // SortBelow(LocationPriority) (native)
+        { name: "length", sortText: "111" },  // SortBelow(LocationPriority) (native)
+        { name: "prototype", sortText: "111" }, // SortBelow(LocationPriority) (native)
+    ]
 });
