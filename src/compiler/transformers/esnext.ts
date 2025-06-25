@@ -292,11 +292,6 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
         return visitEachChild(node, visitor, context);
     }
 
-    /**
-     * Collects all variable declarations that shadow a given identifier name in a statement.
-     */
-
-
     function visitForOfStatement(node: ForOfStatement) {
         if (isUsingVariableDeclarationList(node.initializer)) {
             // given:
@@ -322,9 +317,17 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
             const usingVarStatement = factory.createVariableStatement(/*modifiers*/ undefined, usingVarList);
             
             // Wrap the original loop body in an additional block scope to handle shadowing
-            const wrappedStatement = isBlock(node.statement) ? 
-                node.statement : 
-                factory.createBlock([node.statement], /*multiLine*/ true);
+            // Don't create an extra block if the original statement is empty
+            const isEmptyBlock = isBlock(node.statement) && node.statement.statements.length === 0;
+            const shouldWrapInBlock = !isEmptyBlock;
+            
+            const statements: Statement[] = [usingVarStatement];
+            if (shouldWrapInBlock) {
+                const wrappedStatement = isBlock(node.statement) ? 
+                    node.statement : 
+                    factory.createBlock([node.statement], /*multiLine*/ true);
+                statements.push(wrappedStatement);
+            }
             
             return visitNode(
                 factory.updateForOfStatement(
@@ -334,10 +337,7 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
                         factory.createVariableDeclaration(temp),
                     ], NodeFlags.Const),
                     node.expression,
-                    factory.createBlock([
-                        usingVarStatement,
-                        wrappedStatement,
-                    ], /*multiLine*/ true),
+                    factory.createBlock(statements, /*multiLine*/ true),
                 ),
                 visitor,
                 isStatement,

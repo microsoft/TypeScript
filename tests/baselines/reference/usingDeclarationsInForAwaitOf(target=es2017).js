@@ -77,8 +77,6 @@ async function main() {
             const env_1 = { stack: [], error: void 0, hasError: false };
             try {
                 const d1 = __addDisposableResource(env_1, d1_1, false);
-                {
-                }
             }
             catch (e_2) {
                 env_1.error = e_2;

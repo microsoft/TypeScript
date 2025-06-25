@@ -128,8 +128,6 @@ function main() {
                 case 3:
                     _j.trys.push([3, 4, 5, 8]);
                     d1 = __addDisposableResource(env_1, d1_1, true);
-                    {
-                    }
                     return [3 /*break*/, 8];
                 case 4:
                     e_1 = _j.sent();

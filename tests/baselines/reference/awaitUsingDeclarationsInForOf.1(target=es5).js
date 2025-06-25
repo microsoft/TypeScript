@@ -117,8 +117,6 @@ function main() {
                 case 2:
                     _d.trys.push([2, 3, 4, 7]);
                     d1 = __addDisposableResource(env_1, d1_1, true);
-                    {
-                    }
                     return [3 /*break*/, 7];
                 case 3:
                     e_1 = _d.sent();
