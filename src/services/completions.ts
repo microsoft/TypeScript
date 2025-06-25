@@ -1735,7 +1735,8 @@ function createCompletionEntry(
             // For symbol completions, position cursor inside brackets for better UX
             insertText = needsConvertPropertyAccess ? `[${quotePropertyName(sourceFile, preferences, name)}$0]` : `[${name}$0]`;
             isSnippet = true;
-        } else {
+        }
+        else {
             insertText = useBraces ? needsConvertPropertyAccess ? `[${quotePropertyName(sourceFile, preferences, name)}]` : `[${name}]` : name;
         }
         if (insertQuestionDot || propertyAccessToConvert.questionDotToken) {
@@ -3857,10 +3858,10 @@ function getCompletionData(
             if (firstAccessibleSymbolId && addToSeen(seenPropertySymbols, firstAccessibleSymbolId)) {
                 const index = symbols.length;
                 symbols.push(firstAccessibleSymbol);
-                
+
                 // Symbol completions should have lower priority since they represent computed property access
                 symbolToSortTextMap[getSymbolId(firstAccessibleSymbol)] = SortText.GlobalsOrKeywords;
-                
+
                 const moduleSymbol = firstAccessibleSymbol.parent;
                 if (
                     !moduleSymbol ||
