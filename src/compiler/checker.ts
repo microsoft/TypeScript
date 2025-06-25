@@ -53039,7 +53039,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (languageVersion < ScriptTarget.ES2015 && isPrivateIdentifier(node.name)) {
                 return grammarErrorOnNode(node.name, Diagnostics.Private_identifiers_are_only_available_when_targeting_ECMAScript_2015_and_higher);
             }
-            if (languageVersion < ScriptTarget.ES2015 && isAutoAccessorPropertyDeclaration(node)) {
+            if (languageVersion < ScriptTarget.ES2015 && isAutoAccessorPropertyDeclaration(node) && !(node.flags & NodeFlags.Ambient)) {
                 return grammarErrorOnNode(node.name, Diagnostics.Properties_with_the_accessor_modifier_are_only_available_when_targeting_ECMAScript_2015_and_higher);
             }
             if (isAutoAccessorPropertyDeclaration(node) && checkGrammarForInvalidQuestionMark(node.questionToken, Diagnostics.An_accessor_property_cannot_be_declared_optional)) {
