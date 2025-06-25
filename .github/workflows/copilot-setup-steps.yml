@@ -19,4 +19,4 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
       - run: npm ci
       # pull dprint caches before network access is blocked
-      - run: npx hereby check:format || true
+      - run: npx hereby check-format || true
