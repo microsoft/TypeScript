@@ -1,0 +1,65 @@
+//// [tests/cases/compiler/enumNamespaceConstantsDeclaration.ts] ////
+
+=== enumNamespaceConstantsDeclaration.ts ===
+// Test for constant declarations inside namespace merged with enum
+enum Foo {
+>Foo : Symbol(Foo, Decl(enumNamespaceConstantsDeclaration.ts, 0, 0), Decl(enumNamespaceConstantsDeclaration.ts, 3, 1))
+
+    bar
+>bar : Symbol(Foo.bar, Decl(enumNamespaceConstantsDeclaration.ts, 1, 10))
+}
+namespace Foo {
+>Foo : Symbol(Foo, Decl(enumNamespaceConstantsDeclaration.ts, 0, 0), Decl(enumNamespaceConstantsDeclaration.ts, 3, 1))
+
+    export const baz = Foo.bar;
+>baz : Symbol(baz, Decl(enumNamespaceConstantsDeclaration.ts, 5, 16))
+>Foo.bar : Symbol(bar, Decl(enumNamespaceConstantsDeclaration.ts, 1, 10))
+>Foo : Symbol(Foo, Decl(enumNamespaceConstantsDeclaration.ts, 0, 0), Decl(enumNamespaceConstantsDeclaration.ts, 3, 1))
+>bar : Symbol(bar, Decl(enumNamespaceConstantsDeclaration.ts, 1, 10))
+}
+
+// Multiple enum members
+enum MyEnum {
+>MyEnum : Symbol(MyEnum, Decl(enumNamespaceConstantsDeclaration.ts, 6, 1), Decl(enumNamespaceConstantsDeclaration.ts, 12, 1))
+
+    First = 1,
+>First : Symbol(MyEnum.First, Decl(enumNamespaceConstantsDeclaration.ts, 9, 13))
+
+    Second = 2
+>Second : Symbol(MyEnum.Second, Decl(enumNamespaceConstantsDeclaration.ts, 10, 14))
+}
+namespace MyEnum {
+>MyEnum : Symbol(MyEnum, Decl(enumNamespaceConstantsDeclaration.ts, 6, 1), Decl(enumNamespaceConstantsDeclaration.ts, 12, 1))
+
+    export const value1 = MyEnum.First;
+>value1 : Symbol(value1, Decl(enumNamespaceConstantsDeclaration.ts, 14, 16))
+>MyEnum.First : Symbol(First, Decl(enumNamespaceConstantsDeclaration.ts, 9, 13))
+>MyEnum : Symbol(MyEnum, Decl(enumNamespaceConstantsDeclaration.ts, 6, 1), Decl(enumNamespaceConstantsDeclaration.ts, 12, 1))
+>First : Symbol(First, Decl(enumNamespaceConstantsDeclaration.ts, 9, 13))
+
+    export const value2 = MyEnum.Second;
+>value2 : Symbol(value2, Decl(enumNamespaceConstantsDeclaration.ts, 15, 16))
+>MyEnum.Second : Symbol(Second, Decl(enumNamespaceConstantsDeclaration.ts, 10, 14))
+>MyEnum : Symbol(MyEnum, Decl(enumNamespaceConstantsDeclaration.ts, 6, 1), Decl(enumNamespaceConstantsDeclaration.ts, 12, 1))
+>Second : Symbol(Second, Decl(enumNamespaceConstantsDeclaration.ts, 10, 14))
+}
+
+// String enum
+enum StringEnum {
+>StringEnum : Symbol(StringEnum, Decl(enumNamespaceConstantsDeclaration.ts, 16, 1), Decl(enumNamespaceConstantsDeclaration.ts, 22, 1))
+
+    Option1 = "option1",
+>Option1 : Symbol(StringEnum.Option1, Decl(enumNamespaceConstantsDeclaration.ts, 19, 17))
+
+    Option2 = "option2"
+>Option2 : Symbol(StringEnum.Option2, Decl(enumNamespaceConstantsDeclaration.ts, 20, 24))
+}
+namespace StringEnum {
+>StringEnum : Symbol(StringEnum, Decl(enumNamespaceConstantsDeclaration.ts, 16, 1), Decl(enumNamespaceConstantsDeclaration.ts, 22, 1))
+
+    export const selected = StringEnum.Option1;
+>selected : Symbol(selected, Decl(enumNamespaceConstantsDeclaration.ts, 24, 16))
+>StringEnum.Option1 : Symbol(Option1, Decl(enumNamespaceConstantsDeclaration.ts, 19, 17))
+>StringEnum : Symbol(StringEnum, Decl(enumNamespaceConstantsDeclaration.ts, 16, 1), Decl(enumNamespaceConstantsDeclaration.ts, 22, 1))
+>Option1 : Symbol(Option1, Decl(enumNamespaceConstantsDeclaration.ts, 19, 17))
+}
