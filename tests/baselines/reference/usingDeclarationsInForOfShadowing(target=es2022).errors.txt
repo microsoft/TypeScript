@@ -21,3 +21,4 @@ main.ts(12,7): error TS2481: Cannot initialize outer scoped variable 'baz' in th
 ==== tslib.d.ts (0 errors) ====
     export declare function __addDisposableResource<T>(env: any, value: T, async: boolean): T;
     export declare function __disposeResources(env: any): void;
+    

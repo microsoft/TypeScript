@@ -19,6 +19,7 @@ for (using baz of []) {
 export declare function __addDisposableResource<T>(env: any, value: T, async: boolean): T;
 export declare function __disposeResources(env: any): void;
 
+
 //// [main.js]
 var __addDisposableResource = (this && this.__addDisposableResource) || function (env, value, async) {
     if (value !== null && value !== void 0) {
@@ -82,7 +83,9 @@ for (var _i = 0, _a = []; _i < _a.length; _i++) {
     var env_1 = { stack: [], error: void 0, hasError: false };
     try {
         var foo = __addDisposableResource(env_1, foo_1, false);
-        var foo_2 = new Foo();
+        {
+            var foo_2 = new Foo();
+        }
     }
     catch (e_1) {
         env_1.error = e_1;
@@ -97,7 +100,9 @@ for (var _b = 0, _c = []; _b < _c.length; _b++) {
     var env_2 = { stack: [], error: void 0, hasError: false };
     try {
         var bar = __addDisposableResource(env_2, bar_1, false);
-        var bar_2 = "test";
+        {
+            var bar_2 = "test";
+        }
     }
     catch (e_2) {
         env_2.error = e_2;
@@ -112,7 +117,9 @@ for (var _d = 0, _e = []; _d < _e.length; _d++) {
     var env_3 = { stack: [], error: void 0, hasError: false };
     try {
         var baz_1 = __addDisposableResource(env_3, baz_1, false);
-        var baz_2 = 42;
+        {
+            var baz = 42;
+        }
     }
     catch (e_3) {
         env_3.error = e_3;

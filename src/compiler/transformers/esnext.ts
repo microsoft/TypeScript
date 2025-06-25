@@ -15,7 +15,6 @@ import {
     ExportSpecifier,
     Expression,
     firstOrUndefined,
-    forEachChild,
     ForOfStatement,
     ForStatement,
     GeneratedIdentifierFlags,
@@ -37,7 +36,6 @@ import {
     isPrologueDirective,
     isSourceFile,
     isStatement,
-    isVariableDeclaration,
     isVariableDeclarationList,
     isVariableStatement,
     ModifierFlags,
@@ -297,55 +295,7 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
     /**
      * Collects all variable declarations that shadow a given identifier name in a statement.
      */
-    function collectShadowingVariables(statement: Statement, shadowedName: string): VariableDeclaration[] {
-        const shadowingVars: VariableDeclaration[] = [];
-        
-        function visit(node: Node): void {
-            if (isVariableStatement(node)) {
-                for (const declaration of node.declarationList.declarations) {
-                    if (isIdentifier(declaration.name) && declaration.name.escapedText === shadowedName) {
-                        shadowingVars.push(declaration);
-                    }
-                }
-            }
-            forEachChild(node, visit);
-        }
-        
-        visit(statement);
-        return shadowingVars;
-    }
 
-    /**
-     * Creates a visitor that renames shadowing variables to avoid conflicts.
-     */
-    function createShadowingVariableRenamer(shadowedName: string): (node: Node) => VisitResult<Node> {
-        const renamingMap = new Map<string, Identifier>();
-        
-        return function renameShadowingVariables(node: Node): VisitResult<Node> {
-            if (isVariableDeclaration(node) && isIdentifier(node.name) && node.name.escapedText === shadowedName) {
-                // Create a unique name for this shadowing variable
-                const uniqueName = factory.createUniqueName(shadowedName as string, GeneratedIdentifierFlags.Optimistic);
-                renamingMap.set(node.name.escapedText as string, uniqueName);
-                
-                return factory.updateVariableDeclaration(
-                    node,
-                    uniqueName,
-                    node.exclamationToken,
-                    node.type,
-                    visitNode(node.initializer, renameShadowingVariables, isExpression)
-                );
-            }
-            
-            if (isIdentifier(node)) {
-                const renamed = renamingMap.get(node.escapedText as string);
-                if (renamed) {
-                    return renamed;
-                }
-            }
-            
-            return visitEachChild(node, renameShadowingVariables, context);
-        };
-    }
 
     function visitForOfStatement(node: ForOfStatement) {
         if (isUsingVariableDeclarationList(node.initializer)) {
@@ -356,11 +306,12 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
             // produces a shallow transformation to:
             //
             //  for (const x_1 of y) {
-            //    using x = x;
-            //    ...
+            //    using x = x_1;
+            //    { ... }
             //  }
             //
-            // before handing the shallow transformation back to the visitor for an in-depth transformation.
+            // where the original loop body is wrapped in an additional block scope
+            // to handle shadowing variables naturally through block scoping.
             const forInitializer = node.initializer;
             const forDecl = firstOrUndefined(forInitializer.declarations) || factory.createVariableDeclaration(factory.createTempVariable(/*recordTempVariable*/ undefined));
 
@@ -370,18 +321,10 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
             const usingVarList = factory.createVariableDeclarationList([usingVar], isAwaitUsing ? NodeFlags.AwaitUsing : NodeFlags.Using);
             const usingVarStatement = factory.createVariableStatement(/*modifiers*/ undefined, usingVarList);
             
-            // Check if the loop body contains shadowing variables and rename them if necessary
-            const shadowedName = isIdentifier(forDecl.name) ? forDecl.name.escapedText as string : undefined;
-            let transformedStatement = node.statement;
-            
-            if (shadowedName) {
-                const shadowingVars = collectShadowingVariables(node.statement, shadowedName);
-                if (shadowingVars.length > 0) {
-                    // Apply the renaming visitor to the loop body
-                    const renamer = createShadowingVariableRenamer(shadowedName);
-                    transformedStatement = visitNode(node.statement, renamer, isStatement);
-                }
-            }
+            // Wrap the original loop body in an additional block scope to handle shadowing
+            const wrappedStatement = isBlock(node.statement) ? 
+                node.statement : 
+                factory.createBlock([node.statement], /*multiLine*/ true);
             
             return visitNode(
                 factory.updateForOfStatement(
@@ -391,15 +334,10 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
                         factory.createVariableDeclaration(temp),
                     ], NodeFlags.Const),
                     node.expression,
-                    isBlock(transformedStatement) ?
-                        factory.updateBlock(transformedStatement, [
-                            usingVarStatement,
-                            ...transformedStatement.statements,
-                        ]) :
-                        factory.createBlock([
-                            usingVarStatement,
-                            transformedStatement,
-                        ], /*multiLine*/ true),
+                    factory.createBlock([
+                        usingVarStatement,
+                        wrappedStatement,
+                    ], /*multiLine*/ true),
                 ),
                 visitor,
                 isStatement,

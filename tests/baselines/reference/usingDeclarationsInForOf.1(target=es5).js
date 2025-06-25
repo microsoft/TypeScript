@@ -64,6 +64,8 @@ for (var _i = 0, _b = [(_a = {}, _a[Symbol.dispose] = function () { }, _a), null
     var env_1 = { stack: [], error: void 0, hasError: false };
     try {
         var d1 = __addDisposableResource(env_1, d1_1, false);
+        {
+        }
     }
     catch (e_1) {
         env_1.error = e_1;

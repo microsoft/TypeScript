@@ -19,6 +19,7 @@ for (using baz of []) {
 export declare function __addDisposableResource<T>(env: any, value: T, async: boolean): T;
 export declare function __disposeResources(env: any): void;
 
+
 //// [main.js]
 class Foo {
 }
