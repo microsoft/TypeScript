@@ -504,7 +504,7 @@ function createChildren(node: Node, sourceFile: SourceFileLike | undefined): rea
         });
         return children;
     }
-    const languageVariant = (sourceFile as SourceFile)?.languageVariant ?? LanguageVariant.Standard;
+    const languageVariant = sourceFile?.languageVariant ?? LanguageVariant.Standard;
     scanner.setText((sourceFile || node.getSourceFile()).text);
     scanner.setLanguageVariant(languageVariant);
     let pos = node.pos;
