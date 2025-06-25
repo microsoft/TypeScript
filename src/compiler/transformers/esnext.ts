@@ -317,8 +317,11 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
             const usingVarStatement = factory.createVariableStatement(/*modifiers*/ undefined, usingVarList);
             
             // Wrap the original loop body in an additional block scope to handle shadowing
-            // Don't create an extra block if the original statement is empty
-            const isEmptyBlock = isBlock(node.statement) && node.statement.statements.length === 0;
+            // Don't create an extra block if the original statement is empty or contains only empty statements
+            const isEmptyBlock = isBlock(node.statement) && (
+                node.statement.statements.length === 0 || 
+                node.statement.statements.every(stmt => stmt.kind === SyntaxKind.EmptyStatement)
+            );
             const shouldWrapInBlock = !isEmptyBlock;
             
             const statements: Statement[] = [usingVarStatement];
