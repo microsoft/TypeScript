@@ -56,3 +56,42 @@ var StringEnum;
 (function (StringEnum) {
     StringEnum.selected = StringEnum.Option1;
 })(StringEnum || (StringEnum = {}));
+
+
+//// [enumNamespaceConstantsDeclaration.d.ts]
+declare enum Foo {
+    bar = 0
+}
+declare namespace Foo {
+    const baz = Foo.bar;
+}
+declare enum MyEnum {
+    First = 1,
+    Second = 2
+}
+declare namespace MyEnum {
+    const value1 = MyEnum.First;
+    const value2 = MyEnum.Second;
+}
+declare enum StringEnum {
+    Option1 = "option1",
+    Option2 = "option2"
+}
+declare namespace StringEnum {
+    const selected: any;
+}
+
+
+!!!! File enumNamespaceConstantsDeclaration.d.ts differs from original emit in noCheck emit
+//// [enumNamespaceConstantsDeclaration.d.ts]
+===================================================================
+--- Expected	The full check baseline
++++ Actual	with noCheck set
+@@ -16,6 +16,6 @@
+     Option1 = "option1",
+     Option2 = "option2"
+ }
+ declare namespace StringEnum {
+-    const selected: any;
++    const selected = StringEnum.Option1;
+ }

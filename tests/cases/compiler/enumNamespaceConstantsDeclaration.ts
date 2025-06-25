@@ -1,3 +1,5 @@
+// @declaration: true
+
 // Test for constant declarations inside namespace merged with enum
 enum Foo {
     bar
