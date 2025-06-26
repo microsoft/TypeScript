@@ -7,7 +7,7 @@ class A {
 
     public f1() {
 >f1 : () => (X: any, Y: any) => void
->   : ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^
+>   : ^^^^^^^   ^^^^^   ^^^^^^^^^^^^
 
         return (X, Y) => {
 >(X, Y) => {            Y;        } : (X: any, Y: any) => void

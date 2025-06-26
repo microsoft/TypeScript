@@ -1,0 +1,16 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocTypeTag8.ts] ////
+
+=== index.js ===
+// https://github.com/microsoft/TypeScript/issues/57953
+
+/** 
+  * @param {Number|BigInt} n
+  */
+function isLessThanFive(n) {
+>isLessThanFive : Symbol(isLessThanFive, Decl(index.js, 0, 0))
+>n : Symbol(n, Decl(index.js, 5, 24))
+
+  return n < 5;
+>n : Symbol(n, Decl(index.js, 5, 24))
+}
+

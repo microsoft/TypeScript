@@ -1,5 +1,7 @@
-currentDirectory:: c:\ useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] currentDirectory:: c:\home\src\Vscode\Projects\bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: c:/home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: c:\home\src\Library\Caches\typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
 //// [c:/projects/myproject/tsconfig.json]
 {}
@@ -16,7 +18,7 @@ import { x } from "something"
 //// [c:/projects/myproject/node_modules/something/index.d.ts]
 export const x = 10;
 
-//// [c:/a/lib/lib.d.ts]
+//// [c:/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -28,6 +30,8 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -40,7 +44,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: c:/projects/myproject/a.ts ProjectRootPath: undefined:: Result: c:/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project c:/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: c:/projects/myproject/tsconfig.json, currentDirectory: c:/projects/myproject
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/projects/myproject/tsconfig.json 2000 undefined Project: c:/projects/myproject/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -53,16 +57,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Custom watchFile:: Added:: {"id":1,"path":"c:/projects/myproject/tsconfig.json"}
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "c:/projects/myproject/tsconfig.json",
-        "reason": "Creating possible configured project for c:/projects/myproject/a.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: c:/projects/myproject/tsconfig.json : {
  "rootNames": [
   "c:/projects/myproject/a.ts",
@@ -73,6 +67,16 @@ Info seq  [hh:mm:ss:mss] Config: c:/projects/myproject/tsconfig.json : {
   "configFilePath": "c:/projects/myproject/tsconfig.json"
  }
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "c:/projects/myproject/tsconfig.json",
+        "reason": "Creating possible configured project for c:/projects/myproject/a.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/projects/myproject 1 undefined Config: c:/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -127,7 +131,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 Custom watchDirectory:: Added:: {"id":5,"path":"c:/projects/myproject/node_modules","recursive":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -135,12 +139,60 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "createFileWatcher",
       "body": {
         "id": 6,
-        "path": "c:/a/lib/lib.d.ts"
+        "path": "c:/home/src/tslibs/TS/Lib/lib.d.ts"
       }
     }
-Custom watchFile:: Added:: {"id":6,"path":"c:/a/lib/lib.d.ts"}
+Custom watchFile:: Added:: {"id":6,"path":"c:/home/src/tslibs/TS/Lib/lib.d.ts"}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/projects/myproject/node_modules 1 undefined Project: c:/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/projects/myproject/node_modules 1 undefined Project: c:/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/projects/myproject/node_modules/something/package.json 2000 undefined Project: c:/projects/myproject/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "createFileWatcher",
+      "body": {
+        "id": 7,
+        "path": "c:/projects/myproject/node_modules/something/package.json"
+      }
+    }
+Custom watchFile:: Added:: {"id":7,"path":"c:/projects/myproject/node_modules/something/package.json"}
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/projects/myproject/node_modules/package.json 2000 undefined Project: c:/projects/myproject/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "createFileWatcher",
+      "body": {
+        "id": 8,
+        "path": "c:/projects/myproject/node_modules/package.json"
+      }
+    }
+Custom watchFile:: Added:: {"id":8,"path":"c:/projects/myproject/node_modules/package.json"}
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/projects/myproject/package.json 2000 undefined Project: c:/projects/myproject/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "createFileWatcher",
+      "body": {
+        "id": 9,
+        "path": "c:/projects/myproject/package.json"
+      }
+    }
+Custom watchFile:: Added:: {"id":9,"path":"c:/projects/myproject/package.json"}
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/projects/package.json 2000 undefined Project: c:/projects/myproject/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "createFileWatcher",
+      "body": {
+        "id": 10,
+        "path": "c:/projects/package.json"
+      }
+    }
+Custom watchFile:: Added:: {"id":10,"path":"c:/projects/package.json"}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/projects/myproject/node_modules/@types 1 undefined Project: c:/projects/myproject/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -148,13 +200,13 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createDirectoryWatcher",
       "body": {
-        "id": 7,
+        "id": 11,
         "path": "c:/projects/myproject/node_modules/@types",
         "recursive": true,
         "ignoreUpdate": true
       }
     }
-Custom watchDirectory:: Added:: {"id":7,"path":"c:/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}
+Custom watchDirectory:: Added:: {"id":11,"path":"c:/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/projects/myproject/node_modules/@types 1 undefined Project: c:/projects/myproject/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/projects/node_modules/@types 1 undefined Project: c:/projects/myproject/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] event:
@@ -163,25 +215,25 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createDirectoryWatcher",
       "body": {
-        "id": 8,
+        "id": 12,
         "path": "c:/projects/node_modules/@types",
         "recursive": true,
         "ignoreUpdate": true
       }
     }
-Custom watchDirectory:: Added:: {"id":8,"path":"c:/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}
+Custom watchDirectory:: Added:: {"id":12,"path":"c:/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/projects/node_modules/@types 1 undefined Project: c:/projects/myproject/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: c:/projects/myproject/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'c:/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
-	c:/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	c:/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	c:/projects/myproject/a.ts SVC-1-0 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
 	c:/projects/myproject/b.ts Text-1 "export class b { prop = \"hello\"; foo() { return this.prop; } }"
 	c:/projects/myproject/node_modules/something/index.d.ts Text-1 "export const x = 10;"
 	c:/projects/myproject/m.ts Text-1 "import { x } from \"something\""
 
 
-	../../a/lib/lib.d.ts
+	../../home/src/tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
 	a.ts
 	  Matched by default include pattern '**/*'
@@ -221,7 +273,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 2,
-            "dtsSize": 354,
+            "dtsSize": 433,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -275,14 +327,22 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-c:/a/lib/lib.d.ts: *new*
-  {"event":{"id":6,"path":"c:/a/lib/lib.d.ts"}}
+c:/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {"event":{"id":6,"path":"c:/home/src/tslibs/TS/Lib/lib.d.ts"}}
 c:/projects/myproject/b.ts: *new*
   {"event":{"id":3,"path":"c:/projects/myproject/b.ts"}}
 c:/projects/myproject/m.ts: *new*
   {"event":{"id":4,"path":"c:/projects/myproject/m.ts"}}
+c:/projects/myproject/node_modules/package.json: *new*
+  {"event":{"id":8,"path":"c:/projects/myproject/node_modules/package.json"}}
+c:/projects/myproject/node_modules/something/package.json: *new*
+  {"event":{"id":7,"path":"c:/projects/myproject/node_modules/something/package.json"}}
+c:/projects/myproject/package.json: *new*
+  {"event":{"id":9,"path":"c:/projects/myproject/package.json"}}
 c:/projects/myproject/tsconfig.json: *new*
   {"event":{"id":1,"path":"c:/projects/myproject/tsconfig.json"}}
+c:/projects/package.json: *new*
+  {"event":{"id":10,"path":"c:/projects/package.json"}}
 
 FsWatchesRecursive::
 c:/projects/myproject: *new*
@@ -290,17 +350,18 @@ c:/projects/myproject: *new*
 c:/projects/myproject/node_modules: *new*
   {"event":{"id":5,"path":"c:/projects/myproject/node_modules","recursive":true}}
 c:/projects/myproject/node_modules/@types: *new*
-  {"event":{"id":7,"path":"c:/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":11,"path":"c:/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 c:/projects/node_modules/@types: *new*
-  {"event":{"id":8,"path":"c:/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":12,"path":"c:/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 
 Projects::
 c:/projects/myproject/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
-c:/a/lib/lib.d.ts *new*
+c:/home/src/tslibs/TS/Lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         c:/projects/myproject/tsconfig.json
@@ -359,6 +420,7 @@ c:/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 Before running Timeout callback:: count: 2
 1: c:/projects/myproject/tsconfig.json
@@ -372,16 +434,16 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createFileWatcher",
       "body": {
-        "id": 9,
+        "id": 13,
         "path": "c:/projects/myproject/c.ts"
       }
     }
-Custom watchFile:: Added:: {"id":9,"path":"c:/projects/myproject/c.ts"}
+Custom watchFile:: Added:: {"id":13,"path":"c:/projects/myproject/c.ts"}
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: c:/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: c:/projects/myproject/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'c:/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (6)
-	c:/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	c:/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	c:/projects/myproject/a.ts SVC-1-0 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
 	c:/projects/myproject/b.ts Text-1 "export class b { prop = \"hello\"; foo() { return this.prop; } }"
 	c:/projects/myproject/node_modules/something/index.d.ts Text-1 "export const x = 10;"
@@ -389,7 +451,7 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	c:/projects/myproject/c.ts Text-1 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
 
 
-	../../a/lib/lib.d.ts
+	../../home/src/tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
 	a.ts
 	  Matched by default include pattern '**/*'
@@ -435,16 +497,24 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 PolledWatches::
-c:/a/lib/lib.d.ts:
-  {"event":{"id":6,"path":"c:/a/lib/lib.d.ts"}}
+c:/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"event":{"id":6,"path":"c:/home/src/tslibs/TS/Lib/lib.d.ts"}}
 c:/projects/myproject/b.ts:
   {"event":{"id":3,"path":"c:/projects/myproject/b.ts"}}
 c:/projects/myproject/c.ts: *new*
-  {"event":{"id":9,"path":"c:/projects/myproject/c.ts"}}
+  {"event":{"id":13,"path":"c:/projects/myproject/c.ts"}}
 c:/projects/myproject/m.ts:
   {"event":{"id":4,"path":"c:/projects/myproject/m.ts"}}
+c:/projects/myproject/node_modules/package.json:
+  {"event":{"id":8,"path":"c:/projects/myproject/node_modules/package.json"}}
+c:/projects/myproject/node_modules/something/package.json:
+  {"event":{"id":7,"path":"c:/projects/myproject/node_modules/something/package.json"}}
+c:/projects/myproject/package.json:
+  {"event":{"id":9,"path":"c:/projects/myproject/package.json"}}
 c:/projects/myproject/tsconfig.json:
   {"event":{"id":1,"path":"c:/projects/myproject/tsconfig.json"}}
+c:/projects/package.json:
+  {"event":{"id":10,"path":"c:/projects/package.json"}}
 
 FsWatchesRecursive::
 c:/projects/myproject:
@@ -452,18 +522,19 @@ c:/projects/myproject:
 c:/projects/myproject/node_modules:
   {"event":{"id":5,"path":"c:/projects/myproject/node_modules","recursive":true}}
 c:/projects/myproject/node_modules/@types:
-  {"event":{"id":7,"path":"c:/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":11,"path":"c:/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 c:/projects/node_modules/@types:
-  {"event":{"id":8,"path":"c:/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":12,"path":"c:/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 
 Projects::
 c:/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
-c:/a/lib/lib.d.ts
+c:/home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         c:/projects/myproject/tsconfig.json
@@ -528,7 +599,7 @@ c:/projects/myproject/tsconfig.json (Configured) *changed*
     dirty: true *changed*
 
 ScriptInfos::
-c:/a/lib/lib.d.ts
+c:/home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         c:/projects/myproject/tsconfig.json
@@ -563,7 +634,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: c:/projects/myproj
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: c:/projects/myproject/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'c:/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (6)
-	c:/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	c:/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	c:/projects/myproject/a.ts SVC-1-0 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
 	c:/projects/myproject/b.ts Text-2 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
 	c:/projects/myproject/node_modules/something/index.d.ts Text-1 "export const x = 10;"
@@ -609,7 +680,7 @@ c:/projects/myproject/tsconfig.json (Configured) *changed*
     dirty: false *changed*
 
 ScriptInfos::
-c:/a/lib/lib.d.ts
+c:/home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         c:/projects/myproject/tsconfig.json
@@ -678,14 +749,22 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-c:/a/lib/lib.d.ts:
-  {"event":{"id":6,"path":"c:/a/lib/lib.d.ts"}}
+c:/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"event":{"id":6,"path":"c:/home/src/tslibs/TS/Lib/lib.d.ts"}}
 c:/projects/myproject/c.ts:
-  {"event":{"id":9,"path":"c:/projects/myproject/c.ts"}}
+  {"event":{"id":13,"path":"c:/projects/myproject/c.ts"}}
 c:/projects/myproject/m.ts:
   {"event":{"id":4,"path":"c:/projects/myproject/m.ts"}}
+c:/projects/myproject/node_modules/package.json:
+  {"event":{"id":8,"path":"c:/projects/myproject/node_modules/package.json"}}
+c:/projects/myproject/node_modules/something/package.json:
+  {"event":{"id":7,"path":"c:/projects/myproject/node_modules/something/package.json"}}
+c:/projects/myproject/package.json:
+  {"event":{"id":9,"path":"c:/projects/myproject/package.json"}}
 c:/projects/myproject/tsconfig.json:
   {"event":{"id":1,"path":"c:/projects/myproject/tsconfig.json"}}
+c:/projects/package.json:
+  {"event":{"id":10,"path":"c:/projects/package.json"}}
 
 PolledWatches *deleted*::
 c:/projects/myproject/b.ts:
@@ -697,12 +776,12 @@ c:/projects/myproject:
 c:/projects/myproject/node_modules:
   {"event":{"id":5,"path":"c:/projects/myproject/node_modules","recursive":true}}
 c:/projects/myproject/node_modules/@types:
-  {"event":{"id":7,"path":"c:/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":11,"path":"c:/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 c:/projects/node_modules/@types:
-  {"event":{"id":8,"path":"c:/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":12,"path":"c:/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 
 ScriptInfos::
-c:/a/lib/lib.d.ts
+c:/home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         c:/projects/myproject/tsconfig.json
@@ -746,11 +825,11 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createFileWatcher",
       "body": {
-        "id": 10,
+        "id": 14,
         "path": "c:/projects/myproject/b.ts"
       }
     }
-Custom watchFile:: Added:: {"id":10,"path":"c:/projects/myproject/b.ts"}
+Custom watchFile:: Added:: {"id":14,"path":"c:/projects/myproject/b.ts"}
 Info seq  [hh:mm:ss:mss] Project 'c:/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (6)
 
@@ -769,16 +848,24 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-c:/a/lib/lib.d.ts:
-  {"event":{"id":6,"path":"c:/a/lib/lib.d.ts"}}
+c:/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"event":{"id":6,"path":"c:/home/src/tslibs/TS/Lib/lib.d.ts"}}
 c:/projects/myproject/b.ts: *new*
-  {"event":{"id":10,"path":"c:/projects/myproject/b.ts"}}
+  {"event":{"id":14,"path":"c:/projects/myproject/b.ts"}}
 c:/projects/myproject/c.ts:
-  {"event":{"id":9,"path":"c:/projects/myproject/c.ts"}}
+  {"event":{"id":13,"path":"c:/projects/myproject/c.ts"}}
 c:/projects/myproject/m.ts:
   {"event":{"id":4,"path":"c:/projects/myproject/m.ts"}}
+c:/projects/myproject/node_modules/package.json:
+  {"event":{"id":8,"path":"c:/projects/myproject/node_modules/package.json"}}
+c:/projects/myproject/node_modules/something/package.json:
+  {"event":{"id":7,"path":"c:/projects/myproject/node_modules/something/package.json"}}
+c:/projects/myproject/package.json:
+  {"event":{"id":9,"path":"c:/projects/myproject/package.json"}}
 c:/projects/myproject/tsconfig.json:
   {"event":{"id":1,"path":"c:/projects/myproject/tsconfig.json"}}
+c:/projects/package.json:
+  {"event":{"id":10,"path":"c:/projects/package.json"}}
 
 FsWatchesRecursive::
 c:/projects/myproject:
@@ -786,12 +873,12 @@ c:/projects/myproject:
 c:/projects/myproject/node_modules:
   {"event":{"id":5,"path":"c:/projects/myproject/node_modules","recursive":true}}
 c:/projects/myproject/node_modules/@types:
-  {"event":{"id":7,"path":"c:/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":11,"path":"c:/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 c:/projects/node_modules/@types:
-  {"event":{"id":8,"path":"c:/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":12,"path":"c:/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 
 ScriptInfos::
-c:/a/lib/lib.d.ts
+c:/home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         c:/projects/myproject/tsconfig.json
@@ -817,7 +904,7 @@ c:/projects/myproject/node_modules/something/index.d.ts
     containingProjects: 1
         c:/projects/myproject/tsconfig.json
 
-Custom watchFile:: Triggered:: {"id":9,"path":"c:/projects/myproject/c.ts"}:: c:\projects\myproject\c.ts updated
+Custom watchFile:: Triggered:: {"id":13,"path":"c:/projects/myproject/c.ts"}:: c:\projects\myproject\c.ts updated
 Custom watchDirectory:: Triggered Ignored:: {"id":2,"path":"c:/projects/myproject","recursive":true,"ignoreUpdate":true}:: c:\projects\myproject\c.ts updated
 Before running Timeout callback:: count: 0
 //// [c:/projects/myproject/c.ts]
@@ -832,7 +919,7 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "watchChange",
       "arguments": {
-        "id": 9,
+        "id": 13,
         "updated": [
           "c:\\projects\\myproject\\c.ts"
         ]
@@ -857,7 +944,7 @@ c:/projects/myproject/tsconfig.json (Configured) *changed*
     dirty: true *changed*
 
 ScriptInfos::
-c:/a/lib/lib.d.ts
+c:/home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         c:/projects/myproject/tsconfig.json
@@ -892,7 +979,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: c:/projects/myproj
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: c:/projects/myproject/tsconfig.json projectStateVersion: 4 projectProgramVersion: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'c:/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (6)
-	c:/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	c:/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	c:/projects/myproject/a.ts SVC-1-0 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
 	c:/projects/myproject/b.ts Text-2 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
 	c:/projects/myproject/node_modules/something/index.d.ts Text-1 "export const x = 10;"
@@ -938,7 +1025,7 @@ c:/projects/myproject/tsconfig.json (Configured) *changed*
     dirty: false *changed*
 
 ScriptInfos::
-c:/a/lib/lib.d.ts
+c:/home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         c:/projects/myproject/tsconfig.json
@@ -973,7 +1060,7 @@ export class a { prop = "hello"; foo() { return this.prop; } }
 
 After running Timeout callback:: count: 0
 
-Custom watchFile:: Triggered:: {"id":9,"path":"c:/projects/myproject/c.ts"}:: c:\projects\myproject\c.ts updated
+Custom watchFile:: Triggered:: {"id":13,"path":"c:/projects/myproject/c.ts"}:: c:\projects\myproject\c.ts updated
 Custom watchDirectory:: Triggered Ignored:: {"id":2,"path":"c:/projects/myproject","recursive":true,"ignoreUpdate":true}:: c:\projects\myproject\c.ts updated
 Before running Timeout callback:: count: 0
 //// [c:/projects/myproject/c.ts]
@@ -1005,7 +1092,7 @@ Info seq  [hh:mm:ss:mss] request:
           ]
         },
         {
-          "id": 9,
+          "id": 13,
           "updated": [
             "c:\\projects\\myproject\\c.ts"
           ]
@@ -1039,7 +1126,7 @@ c:/projects/myproject/tsconfig.json (Configured) *changed*
     dirty: true *changed*
 
 ScriptInfos::
-c:/a/lib/lib.d.ts
+c:/home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         c:/projects/myproject/tsconfig.json
@@ -1077,11 +1164,11 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createFileWatcher",
       "body": {
-        "id": 11,
+        "id": 15,
         "path": "c:/projects/myproject/d.ts"
       }
     }
-Custom watchFile:: Added:: {"id":11,"path":"c:/projects/myproject/d.ts"}
+Custom watchFile:: Added:: {"id":15,"path":"c:/projects/myproject/d.ts"}
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/projects/myproject/e.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -1089,16 +1176,16 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createFileWatcher",
       "body": {
-        "id": 12,
+        "id": 16,
         "path": "c:/projects/myproject/e.ts"
       }
     }
-Custom watchFile:: Added:: {"id":12,"path":"c:/projects/myproject/e.ts"}
+Custom watchFile:: Added:: {"id":16,"path":"c:/projects/myproject/e.ts"}
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: c:/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: c:/projects/myproject/tsconfig.json projectStateVersion: 5 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'c:/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (8)
-	c:/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	c:/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	c:/projects/myproject/a.ts SVC-1-0 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
 	c:/projects/myproject/b.ts Text-2 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
 	c:/projects/myproject/node_modules/something/index.d.ts Text-1 "export const x = 10;"
@@ -1108,7 +1195,7 @@ Info seq  [hh:mm:ss:mss] 	Files (8)
 	c:/projects/myproject/e.ts Text-1 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
 
 
-	../../a/lib/lib.d.ts
+	../../home/src/tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
 	a.ts
 	  Matched by default include pattern '**/*'
@@ -1158,20 +1245,28 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 PolledWatches::
-c:/a/lib/lib.d.ts:
-  {"event":{"id":6,"path":"c:/a/lib/lib.d.ts"}}
+c:/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"event":{"id":6,"path":"c:/home/src/tslibs/TS/Lib/lib.d.ts"}}
 c:/projects/myproject/b.ts:
-  {"event":{"id":10,"path":"c:/projects/myproject/b.ts"}}
+  {"event":{"id":14,"path":"c:/projects/myproject/b.ts"}}
 c:/projects/myproject/c.ts:
-  {"event":{"id":9,"path":"c:/projects/myproject/c.ts"}}
+  {"event":{"id":13,"path":"c:/projects/myproject/c.ts"}}
 c:/projects/myproject/d.ts: *new*
-  {"event":{"id":11,"path":"c:/projects/myproject/d.ts"}}
+  {"event":{"id":15,"path":"c:/projects/myproject/d.ts"}}
 c:/projects/myproject/e.ts: *new*
-  {"event":{"id":12,"path":"c:/projects/myproject/e.ts"}}
+  {"event":{"id":16,"path":"c:/projects/myproject/e.ts"}}
 c:/projects/myproject/m.ts:
   {"event":{"id":4,"path":"c:/projects/myproject/m.ts"}}
+c:/projects/myproject/node_modules/package.json:
+  {"event":{"id":8,"path":"c:/projects/myproject/node_modules/package.json"}}
+c:/projects/myproject/node_modules/something/package.json:
+  {"event":{"id":7,"path":"c:/projects/myproject/node_modules/something/package.json"}}
+c:/projects/myproject/package.json:
+  {"event":{"id":9,"path":"c:/projects/myproject/package.json"}}
 c:/projects/myproject/tsconfig.json:
   {"event":{"id":1,"path":"c:/projects/myproject/tsconfig.json"}}
+c:/projects/package.json:
+  {"event":{"id":10,"path":"c:/projects/package.json"}}
 
 FsWatchesRecursive::
 c:/projects/myproject:
@@ -1179,9 +1274,9 @@ c:/projects/myproject:
 c:/projects/myproject/node_modules:
   {"event":{"id":5,"path":"c:/projects/myproject/node_modules","recursive":true}}
 c:/projects/myproject/node_modules/@types:
-  {"event":{"id":7,"path":"c:/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":11,"path":"c:/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 c:/projects/node_modules/@types:
-  {"event":{"id":8,"path":"c:/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":12,"path":"c:/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 
 Projects::
 c:/projects/myproject/tsconfig.json (Configured) *changed*
@@ -1190,7 +1285,7 @@ c:/projects/myproject/tsconfig.json (Configured) *changed*
     dirty: false *changed*
 
 ScriptInfos::
-c:/a/lib/lib.d.ts
+c:/home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         c:/projects/myproject/tsconfig.json
@@ -1268,7 +1363,7 @@ c:/projects/myproject/tsconfig.json (Configured) *changed*
     dirty: true *changed*
 
 ScriptInfos::
-c:/a/lib/lib.d.ts
+c:/home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         c:/projects/myproject/tsconfig.json
@@ -1313,7 +1408,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: c:/projects/myproj
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: c:/projects/myproject/tsconfig.json projectStateVersion: 6 projectProgramVersion: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'c:/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (8)
-	c:/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	c:/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	c:/projects/myproject/a.ts SVC-1-0 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
 	c:/projects/myproject/b.ts Text-2 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
 	c:/projects/myproject/node_modules/something/index.d.ts Text-2 "export const x = 10;export const y = 20;"
@@ -1337,7 +1432,7 @@ c:/projects/myproject/tsconfig.json (Configured) *changed*
     dirty: false *changed*
 
 ScriptInfos::
-c:/a/lib/lib.d.ts
+c:/home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         c:/projects/myproject/tsconfig.json

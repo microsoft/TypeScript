@@ -48,7 +48,7 @@ function hof(ctor: function(new: number, string)) {
 >hof : (ctor: new (arg1: string) => number) => number
 >    : ^    ^^         ^^                 ^^^^^^^^^^^
 >ctor : new (arg1: string) => number
->     : ^^^^^^^^^^^      ^^^^^^^^^^^
+>     : ^^^^^^^^^^^      ^^^^^      
 >new : number
 >    : ^^^^^^
 
@@ -56,7 +56,7 @@ function hof(ctor: function(new: number, string)) {
 >new ctor('hi') : number
 >               : ^^^^^^
 >ctor : new (arg1: string) => number
->     : ^^^^^^^^^^^      ^^^^^^^^^^^
+>     : ^^^^^^^^^^^      ^^^^^      
 >'hi' : "hi"
 >     : ^^^^
 }

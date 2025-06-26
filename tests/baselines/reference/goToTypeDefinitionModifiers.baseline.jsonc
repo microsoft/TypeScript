@@ -1,0 +1,597 @@
+// === goToType ===
+// === /a.ts ===
+// /*GOTO TYPE*/<|export class [|A|] {
+// 
+//     private z: string;
+// 
+//     private y: A;
+// 
+//     readonly x: string;
+// 
+//     async a() {  }
+// 
+//     override b() {}
+// 
+//     public async c() { }
+// }|>
+// 
+// export function foo() { }
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "A",
+    "containerName": "\"/a\"",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToType ===
+// === /a.ts ===
+// <|export class [|A|]/*GOTO TYPE*/ {
+// 
+//     private z: string;
+// 
+//     private y: A;
+// 
+//     readonly x: string;
+// 
+//     async a() {  }
+// 
+//     override b() {}
+// 
+//     public async c() { }
+// }|>
+// 
+// export function foo() { }
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "A",
+    "containerName": "\"/a\"",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToType ===
+// === /a.ts ===
+// export class A {
+// 
+//     /*GOTO TYPE*/private z: string;
+// 
+//     private y: A;
+// 
+// --- (line: 7) skipped ---
+
+
+
+// === goToType ===
+// === /a.ts ===
+// export class A {
+// 
+//     private z/*GOTO TYPE*/: string;
+// 
+//     private y: A;
+// 
+// --- (line: 7) skipped ---
+
+
+
+// === goToType ===
+// === /a.ts ===
+// <|export class [|A|] {
+// 
+//     private z: string;
+// 
+//     /*GOTO TYPE*/private y: A;
+// 
+//     readonly x: string;
+// 
+//     async a() {  }
+// 
+//     override b() {}
+// 
+//     public async c() { }
+// }|>
+// 
+// export function foo() { }
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "A",
+    "containerName": "\"/a\"",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToType ===
+// === /a.ts ===
+// <|export class [|A|] {
+// 
+//     private z: string;
+// 
+//     private y/*GOTO TYPE*/: A;
+// 
+//     readonly x: string;
+// 
+//     async a() {  }
+// 
+//     override b() {}
+// 
+//     public async c() { }
+// }|>
+// 
+// export function foo() { }
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "A",
+    "containerName": "\"/a\"",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToType ===
+// === /a.ts ===
+// --- (line: 3) skipped ---
+// 
+//     private y: A;
+// 
+//     /*GOTO TYPE*/readonly x: string;
+// 
+//     async a() {  }
+// 
+// --- (line: 11) skipped ---
+
+
+
+// === goToType ===
+// === /a.ts ===
+// --- (line: 3) skipped ---
+// 
+//     private y: A;
+// 
+//     readonly x/*GOTO TYPE*/: string;
+// 
+//     async a() {  }
+// 
+// --- (line: 11) skipped ---
+
+
+
+// === goToType ===
+// === lib.d.ts ===
+// --- (line: --) skipped ---
+// /**
+//  * Represents the completion of an asynchronous operation
+//  */
+// <|interface [|Promise|]<T> {
+//     /**
+//      * Attaches callbacks for the resolution and/or rejection of the Promise.
+//      * @param onfulfilled The callback to execute when the Promise is resolved.
+//      * @param onrejected The callback to execute when the Promise is rejected.
+//      * @returns A Promise for the completion of which ever callback is executed.
+//      */
+//     then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+// 
+//     /**
+//      * Attaches a callback for only the rejection of the Promise.
+//      * @param onrejected The callback to execute when the Promise is rejected.
+//      * @returns A Promise for the completion of the callback.
+//      */
+//     catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+// }|>
+// 
+// /**
+//  * Recursively unwraps the "awaited type" of a type. Non-promise "thenables" should resolve to `never`. This emulates the behavior of `await`.
+// --- (line: --) skipped ---
+
+// === /a.ts ===
+// --- (line: 5) skipped ---
+// 
+//     readonly x: string;
+// 
+//     /*GOTO TYPE*/async a() {  }
+// 
+//     override b() {}
+// 
+// --- (line: 13) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "interface",
+    "name": "Promise",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToType ===
+// === lib.d.ts ===
+// --- (line: --) skipped ---
+// /**
+//  * Represents the completion of an asynchronous operation
+//  */
+// <|interface [|Promise|]<T> {
+//     /**
+//      * Attaches callbacks for the resolution and/or rejection of the Promise.
+//      * @param onfulfilled The callback to execute when the Promise is resolved.
+//      * @param onrejected The callback to execute when the Promise is rejected.
+//      * @returns A Promise for the completion of which ever callback is executed.
+//      */
+//     then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+// 
+//     /**
+//      * Attaches a callback for only the rejection of the Promise.
+//      * @param onrejected The callback to execute when the Promise is rejected.
+//      * @returns A Promise for the completion of the callback.
+//      */
+//     catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+// }|>
+// 
+// /**
+//  * Recursively unwraps the "awaited type" of a type. Non-promise "thenables" should resolve to `never`. This emulates the behavior of `await`.
+// --- (line: --) skipped ---
+
+// === /a.ts ===
+// --- (line: 5) skipped ---
+// 
+//     readonly x: string;
+// 
+//     async a/*GOTO TYPE*/() {  }
+// 
+//     override b() {}
+// 
+// --- (line: 13) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "interface",
+    "name": "Promise",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToType ===
+// === /a.ts ===
+// --- (line: 7) skipped ---
+// 
+//     async a() {  }
+// 
+//     /*GOTO TYPE*/<|override [|b|]() {}|>
+// 
+//     public async c() { }
+// }
+// 
+// export function foo() { }
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "b",
+    "containerName": "A",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToType ===
+// === /a.ts ===
+// --- (line: 7) skipped ---
+// 
+//     async a() {  }
+// 
+//     <|override [|b|]/*GOTO TYPE*/() {}|>
+// 
+//     public async c() { }
+// }
+// 
+// export function foo() { }
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "b",
+    "containerName": "A",
+    "isLocal": false,
+    "isAmbient": false
+   }
+  ]
+
+
+
+// === goToType ===
+// === lib.d.ts ===
+// --- (line: --) skipped ---
+// /**
+//  * Represents the completion of an asynchronous operation
+//  */
+// <|interface [|Promise|]<T> {
+//     /**
+//      * Attaches callbacks for the resolution and/or rejection of the Promise.
+//      * @param onfulfilled The callback to execute when the Promise is resolved.
+//      * @param onrejected The callback to execute when the Promise is rejected.
+//      * @returns A Promise for the completion of which ever callback is executed.
+//      */
+//     then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+// 
+//     /**
+//      * Attaches a callback for only the rejection of the Promise.
+//      * @param onrejected The callback to execute when the Promise is rejected.
+//      * @returns A Promise for the completion of the callback.
+//      */
+//     catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+// }|>
+// 
+// /**
+//  * Recursively unwraps the "awaited type" of a type. Non-promise "thenables" should resolve to `never`. This emulates the behavior of `await`.
+// --- (line: --) skipped ---
+
+// === /a.ts ===
+// --- (line: 9) skipped ---
+// 
+//     override b() {}
+// 
+//     /*GOTO TYPE*/public async c() { }
+// }
+// 
+// export function foo() { }
+
+  // === Details ===
+  [
+   {
+    "kind": "interface",
+    "name": "Promise",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToType ===
+// === lib.d.ts ===
+// --- (line: --) skipped ---
+// /**
+//  * Represents the completion of an asynchronous operation
+//  */
+// <|interface [|Promise|]<T> {
+//     /**
+//      * Attaches callbacks for the resolution and/or rejection of the Promise.
+//      * @param onfulfilled The callback to execute when the Promise is resolved.
+//      * @param onrejected The callback to execute when the Promise is rejected.
+//      * @returns A Promise for the completion of which ever callback is executed.
+//      */
+//     then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+// 
+//     /**
+//      * Attaches a callback for only the rejection of the Promise.
+//      * @param onrejected The callback to execute when the Promise is rejected.
+//      * @returns A Promise for the completion of the callback.
+//      */
+//     catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+// }|>
+// 
+// /**
+//  * Recursively unwraps the "awaited type" of a type. Non-promise "thenables" should resolve to `never`. This emulates the behavior of `await`.
+// --- (line: --) skipped ---
+
+// === /a.ts ===
+// --- (line: 9) skipped ---
+// 
+//     override b() {}
+// 
+//     public/*GOTO TYPE*/ async c() { }
+// }
+// 
+// export function foo() { }
+
+  // === Details ===
+  [
+   {
+    "kind": "interface",
+    "name": "Promise",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToType ===
+// === lib.d.ts ===
+// --- (line: --) skipped ---
+// /**
+//  * Represents the completion of an asynchronous operation
+//  */
+// <|interface [|Promise|]<T> {
+//     /**
+//      * Attaches callbacks for the resolution and/or rejection of the Promise.
+//      * @param onfulfilled The callback to execute when the Promise is resolved.
+//      * @param onrejected The callback to execute when the Promise is rejected.
+//      * @returns A Promise for the completion of which ever callback is executed.
+//      */
+//     then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+// 
+//     /**
+//      * Attaches a callback for only the rejection of the Promise.
+//      * @param onrejected The callback to execute when the Promise is rejected.
+//      * @returns A Promise for the completion of the callback.
+//      */
+//     catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+// }|>
+// 
+// /**
+//  * Recursively unwraps the "awaited type" of a type. Non-promise "thenables" should resolve to `never`. This emulates the behavior of `await`.
+// --- (line: --) skipped ---
+
+// === /a.ts ===
+// --- (line: 9) skipped ---
+// 
+//     override b() {}
+// 
+//     public as/*GOTO TYPE*/ync c() { }
+// }
+// 
+// export function foo() { }
+
+  // === Details ===
+  [
+   {
+    "kind": "interface",
+    "name": "Promise",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToType ===
+// === lib.d.ts ===
+// --- (line: --) skipped ---
+// /**
+//  * Represents the completion of an asynchronous operation
+//  */
+// <|interface [|Promise|]<T> {
+//     /**
+//      * Attaches callbacks for the resolution and/or rejection of the Promise.
+//      * @param onfulfilled The callback to execute when the Promise is resolved.
+//      * @param onrejected The callback to execute when the Promise is rejected.
+//      * @returns A Promise for the completion of which ever callback is executed.
+//      */
+//     then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+// 
+//     /**
+//      * Attaches a callback for only the rejection of the Promise.
+//      * @param onrejected The callback to execute when the Promise is rejected.
+//      * @returns A Promise for the completion of the callback.
+//      */
+//     catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+// }|>
+// 
+// /**
+//  * Recursively unwraps the "awaited type" of a type. Non-promise "thenables" should resolve to `never`. This emulates the behavior of `await`.
+// --- (line: --) skipped ---
+
+// === /a.ts ===
+// --- (line: 9) skipped ---
+// 
+//     override b() {}
+// 
+//     public async c/*GOTO TYPE*/() { }
+// }
+// 
+// export function foo() { }
+
+  // === Details ===
+  [
+   {
+    "kind": "interface",
+    "name": "Promise",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToType ===
+// === /a.ts ===
+// --- (line: 12) skipped ---
+//     public async c() { }
+// }
+// 
+// <|exp/*GOTO TYPE*/ort function [|foo|]() { }|>
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "foo",
+    "containerName": "\"/a\"",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToType ===
+// === /a.ts ===
+// --- (line: 12) skipped ---
+//     public async c() { }
+// }
+// 
+// <|export function [|foo|]/*GOTO TYPE*/() { }|>
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "foo",
+    "containerName": "\"/a\"",
+    "isLocal": false,
+    "isAmbient": false
+   }
+  ]

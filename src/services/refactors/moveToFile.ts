@@ -1,4 +1,3 @@
-import { getModuleSpecifier } from "../../compiler/_namespaces/ts.moduleSpecifiers.js";
 import {
     ApplicableRefactorInfo,
     arrayFrom,
@@ -27,6 +26,7 @@ import {
     emptyArray,
     EnumDeclaration,
     escapeLeadingUnderscores,
+    every,
     ExportDeclaration,
     ExportKind,
     Expression,
@@ -118,6 +118,7 @@ import {
     ModifierLike,
     ModuleDeclaration,
     ModuleKind,
+    moduleSpecifiers,
     moduleSpecifierToValidIdentifier,
     NamedImportBindings,
     Node,
@@ -157,8 +158,10 @@ import {
     VariableDeclarationList,
     VariableStatement,
 } from "../_namespaces/ts.js";
-import { addTargetFileImports } from "../_namespaces/ts.refactor.js";
-import { registerRefactor } from "../refactorProvider.js";
+import {
+    addTargetFileImports,
+    registerRefactor,
+} from "../_namespaces/ts.refactor.js";
 
 const refactorNameForMoveToFile = "Move to file";
 const description = getLocaleSpecificMessage(Diagnostics.Move_to_file);
@@ -244,7 +247,7 @@ export function getNewStatementsAndRemoveFromOldFile(
     preferences: UserPreferences,
     importAdderForNewFile: codefix.ImportAdder,
     importAdderForOldFile: codefix.ImportAdder,
-) {
+): void {
     const checker = program.getTypeChecker();
     const prologueDirectives = takeWhile(oldFile.statements, isPrologueDirective);
 
@@ -309,7 +312,7 @@ function deleteUnusedOldImports(oldFile: SourceFile, toMove: readonly Statement[
 }
 
 /** @internal */
-export function addExportsInOldFile(oldFile: SourceFile, targetFileImportsFromOldFile: Map<Symbol, boolean>, changes: textChanges.ChangeTracker, useEsModuleSyntax: boolean) {
+export function addExportsInOldFile(oldFile: SourceFile, targetFileImportsFromOldFile: Map<Symbol, boolean>, changes: textChanges.ChangeTracker, useEsModuleSyntax: boolean): void {
     const markSeenTop = nodeSeenTracker(); // Needed because multiple declarations may appear in `const x = 0, y = 1;`.
     targetFileImportsFromOldFile.forEach((_, symbol) => {
         if (!symbol.declarations) {
@@ -358,7 +361,7 @@ function updateImportsInOtherFiles(
 
                 if (getStringComparer(!program.useCaseSensitiveFileNames())(pathToTargetFileWithExtension, sourceFile.fileName) === Comparison.EqualTo) return;
 
-                const newModuleSpecifier = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.fileName, pathToTargetFileWithExtension, createModuleSpecifierResolutionHost(program, host));
+                const newModuleSpecifier = moduleSpecifiers.getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.fileName, pathToTargetFileWithExtension, createModuleSpecifierResolutionHost(program, host));
                 const newImportDeclaration = filterImport(importNode, makeStringLiteral(newModuleSpecifier, quotePreference), shouldMove);
                 if (newImportDeclaration) changes.insertNodeAfter(sourceFile, statement, newImportDeclaration);
 
@@ -420,7 +423,7 @@ function updateNamespaceLikeImportNode(node: SupportedImport, newNamespaceName: 
         case SyntaxKind.ImportDeclaration:
             return factory.createImportDeclaration(
                 /*modifiers*/ undefined,
-                factory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, factory.createNamespaceImport(newNamespaceId)),
+                factory.createImportClause(/*phaseModifier*/ undefined, /*name*/ undefined, factory.createNamespaceImport(newNamespaceId)),
                 newModuleString,
                 /*attributes*/ undefined,
             );
@@ -510,7 +513,7 @@ export function addImportsForMovedSymbols(
     targetFileName: string,
     importAdder: codefix.ImportAdder,
     program: Program,
-) {
+): void {
     for (const [symbol, isValidTypeOnlyUseSite] of symbols) {
         const symbolName = getNameForExportedSymbol(symbol, getEmitScriptTarget(program.getCompilerOptions()));
         const exportKind = symbol.name === "default" && symbol.parent ? ExportKind.Default : ExportKind.Named;
@@ -642,7 +645,7 @@ function filterImport(i: SupportedImport, moduleSpecifier: StringLiteralLike, ke
             const defaultImport = clause.name && keep(clause.name) ? clause.name : undefined;
             const namedBindings = clause.namedBindings && filterNamedBindings(clause.namedBindings, keep);
             return defaultImport || namedBindings
-                ? factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(clause.isTypeOnly, defaultImport, namedBindings), getSynthesizedDeepClone(moduleSpecifier), /*attributes*/ undefined)
+                ? factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(clause.phaseModifier, defaultImport, namedBindings), getSynthesizedDeepClone(moduleSpecifier), /*attributes*/ undefined)
                 : undefined;
         }
         case SyntaxKind.ImportEqualsDeclaration:
@@ -838,7 +841,7 @@ export function getStatementsToMove(context: RefactorContext): ToMove | undefine
 }
 
 /** @internal */
-export function containsJsx(statements: readonly Statement[] | undefined) {
+export function containsJsx(statements: readonly Statement[] | undefined): Statement | undefined {
     return find(statements, statement => !!(statement.transformFlags & TransformFlags.ContainsJsx));
 }
 
@@ -883,24 +886,23 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
     const unusedImportsFromOldFile = new Set<Symbol>();
     for (const statement of toMove) {
         forEachReference(statement, checker, enclosingRange, (symbol, isValidTypeOnlyUseSite) => {
-            if (!symbol.declarations || isGlobalType(checker, symbol)) {
+            if (!some(symbol.declarations)) {
                 return;
             }
             if (existingTargetLocals.has(skipAlias(symbol, checker))) {
                 unusedImportsFromOldFile.add(symbol);
                 return;
             }
-            for (const decl of symbol.declarations) {
-                if (isInImport(decl)) {
-                    const prevIsTypeOnly = oldImportsNeededByTargetFile.get(symbol);
-                    oldImportsNeededByTargetFile.set(symbol, [
-                        prevIsTypeOnly === undefined ? isValidTypeOnlyUseSite : prevIsTypeOnly && isValidTypeOnlyUseSite,
-                        tryCast(decl, (d): d is codefix.ImportOrRequireAliasDeclaration => isImportSpecifier(d) || isImportClause(d) || isNamespaceImport(d) || isImportEqualsDeclaration(d) || isBindingElement(d) || isVariableDeclaration(d)),
-                    ]);
-                }
-                else if (isTopLevelDeclaration(decl) && sourceFileOfTopLevelDeclaration(decl) === oldFile && !movedSymbols.has(symbol)) {
-                    targetFileImportsFromOldFile.set(symbol, isValidTypeOnlyUseSite);
-                }
+            const importedDeclaration = find(symbol.declarations, isInImport);
+            if (importedDeclaration) {
+                const prevIsTypeOnly = oldImportsNeededByTargetFile.get(symbol);
+                oldImportsNeededByTargetFile.set(symbol, [
+                    prevIsTypeOnly === undefined ? isValidTypeOnlyUseSite : prevIsTypeOnly && isValidTypeOnlyUseSite,
+                    tryCast(importedDeclaration, (d): d is codefix.ImportOrRequireAliasDeclaration => isImportSpecifier(d) || isImportClause(d) || isNamespaceImport(d) || isImportEqualsDeclaration(d) || isBindingElement(d) || isVariableDeclaration(d)),
+                ]);
+            }
+            else if (!movedSymbols.has(symbol) && every(symbol.declarations, decl => isTopLevelDeclaration(decl) && sourceFileOfTopLevelDeclaration(decl) === oldFile)) {
+                targetFileImportsFromOldFile.set(symbol, isValidTypeOnlyUseSite);
             }
         });
     }
@@ -942,10 +944,6 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
             ? jsxNamespaceSymbol
             : undefined;
     }
-}
-
-function isGlobalType(checker: TypeChecker, symbol: Symbol) {
-    return !!checker.resolveName(symbol.name, /*location*/ undefined, SymbolFlags.Type, /*excludeGlobals*/ false);
 }
 
 function makeUniqueFilename(proposedFilename: string, extension: string, inDirectory: string, host: LanguageServiceHost): string {
@@ -998,8 +996,8 @@ function forEachTopLevelDeclaration<T>(statement: Statement, cb: (node: TopLevel
         }
     }
 }
-
-function isInImport(decl: Declaration) {
+/** @internal */
+export function isInImport(decl: Declaration): boolean {
     switch (decl.kind) {
         case SyntaxKind.ImportEqualsDeclaration:
         case SyntaxKind.ImportSpecifier:
@@ -1119,7 +1117,7 @@ function getOverloadRangeToMove(sourceFile: SourceFile, statement: Statement) {
 }
 
 /** @internal */
-export function getExistingLocals(sourceFile: SourceFile, statements: readonly Statement[], checker: TypeChecker) {
+export function getExistingLocals(sourceFile: SourceFile, statements: readonly Statement[], checker: TypeChecker): Set<Symbol> {
     const existingLocals = new Set<Symbol>();
     for (const moduleSpecifier of sourceFile.imports) {
         const declaration = importFromModuleSpecifier(moduleSpecifier);

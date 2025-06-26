@@ -1,6 +1,6 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /tsconfig.base.json
+// @Filename: /home/src/workspaces/project/tsconfig.base.json
 //// {
 ////   "compilerOptions": {
 ////     "module": "commonjs",
@@ -11,10 +11,10 @@
 ////   }
 //// }
 
-// @Filename: /packages/pkg-1/package.json
+// @Filename: /home/src/workspaces/project/packages/pkg-1/package.json
 //// { "dependencies": { "pkg-2": "*" } }
 
-// @Filename: /packages/pkg-1/tsconfig.json
+// @Filename: /home/src/workspaces/project/packages/pkg-1/tsconfig.json
 //// {
 ////   "extends": "../../tsconfig.base.json",
 ////   "references": [
@@ -22,28 +22,28 @@
 ////   ]
 //// }
 
-// @Filename: /packages/pkg-1/src/index.ts
+// @Filename: /home/src/workspaces/project/packages/pkg-1/src/index.ts
 //// Pkg2/*external*/
 
-// @Filename: /packages/pkg-2/package.json
+// @Filename: /home/src/workspaces/project/packages/pkg-2/package.json
 //// { "types": "dist/index.d.ts" }
 
-// @Filename: /packages/pkg-2/tsconfig.json
+// @Filename: /home/src/workspaces/project/packages/pkg-2/tsconfig.json
 //// {
 ////   "extends": "../../tsconfig.base.json",
 ////   "compilerOptions": { "outDir": "dist", "rootDir": "src", "composite": true }
 //// }
 
-// @Filename: /packages/pkg-2/src/index.ts
+// @Filename: /home/src/workspaces/project/packages/pkg-2/src/index.ts
 //// import "./utils";
 
-// @Filename: /packages/pkg-2/src/utils.ts
+// @Filename: /home/src/workspaces/project/packages/pkg-2/src/utils.ts
 //// export const Pkg2 = {};
 
-// @Filename: /packages/pkg-2/src/blah/foo/data.ts
+// @Filename: /home/src/workspaces/project/packages/pkg-2/src/blah/foo/data.ts
 //// Pkg2/*internal*/
 
-// @link: /packages/pkg-2 -> /packages/pkg-1/node_modules/pkg-2
+// @link: /home/src/workspaces/project/packages/pkg-2 -> /home/src/workspaces/project/packages/pkg-1/node_modules/pkg-2
 
 format.setOption("newline", "\n");
 

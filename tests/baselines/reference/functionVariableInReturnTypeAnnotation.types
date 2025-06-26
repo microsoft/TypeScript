@@ -2,8 +2,8 @@
 
 === functionVariableInReturnTypeAnnotation.ts ===
 function bar(): typeof b {
->bar : () => typeof b
->    : ^^^^^^        
+>bar : () => any
+>    : ^^^^^^^^^
 >b : any
 >  : ^^^
 

@@ -20,10 +20,16 @@ interface AsyncIterable<T, TReturn = any, TNext = any> {
     [Symbol.asyncIterator](): AsyncIterator<T, TReturn, TNext>;
 }
 
+/**
+ * Describes a user-defined {@link AsyncIterator} that is also async iterable.
+ */
 interface AsyncIterableIterator<T, TReturn = any, TNext = any> extends AsyncIterator<T, TReturn, TNext> {
     [Symbol.asyncIterator](): AsyncIterableIterator<T, TReturn, TNext>;
 }
 
-interface BuiltinAsyncIterator<T, TReturn = any, TNext = any> extends AsyncIterator<T, TReturn, TNext> {
-    [Symbol.asyncIterator](): BuiltinAsyncIterator<T, TReturn, TNext>;
+/**
+ * Describes an {@link AsyncIterator} produced by the runtime that inherits from the intrinsic `AsyncIterator.prototype`.
+ */
+interface AsyncIteratorObject<T, TReturn = unknown, TNext = unknown> extends AsyncIterator<T, TReturn, TNext> {
+    [Symbol.asyncIterator](): AsyncIteratorObject<T, TReturn, TNext>;
 }

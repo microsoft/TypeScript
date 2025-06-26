@@ -21,6 +21,7 @@ import {
     BreakOrContinueStatement,
     CallChain,
     CallExpression,
+    canHaveFlowNode,
     canHaveLocals,
     canHaveSymbol,
     CaseBlock,
@@ -154,7 +155,6 @@ import {
     isEmptyObjectLiteral,
     isEntityNameExpression,
     isEnumConst,
-    isEnumDeclaration,
     isExportAssignment,
     isExportDeclaration,
     isExportsIdentifier,
@@ -510,7 +510,7 @@ export function createFlowNode(flags: FlowFlags, node: unknown, antecedent: Flow
 const binder = /* @__PURE__ */ createBinder();
 
 /** @internal */
-export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
+export function bindSourceFile(file: SourceFile, options: CompilerOptions): void {
     performance.mark("beforeBind");
     binder(file, options);
     performance.mark("afterBind");
@@ -544,6 +544,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     var preSwitchCaseFlow: FlowNode | undefined;
     var activeLabelList: ActiveLabel | undefined;
     var hasExplicitReturn: boolean;
+    var inReturnPosition: boolean;
     var hasFlowEffects: boolean;
 
     // state used for emit helpers
@@ -623,6 +624,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         currentExceptionTarget = undefined;
         activeLabelList = undefined;
         hasExplicitReturn = false;
+        inReturnPosition = false;
         hasFlowEffects = false;
         inAssignmentPattern = false;
         emitFlags = NodeFlags.None;
@@ -968,7 +970,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         const saveContainer = container;
         const saveThisParentContainer = thisParentContainer;
         const savedBlockScopeContainer = blockScopeContainer;
+        const savedInReturnPosition = inReturnPosition;
 
+        if (node.kind === SyntaxKind.ArrowFunction && node.body.kind !== SyntaxKind.Block) inReturnPosition = true;
         // Depending on what kind of node this is, we may have to adjust the current container
         // and block-container.   If the current node is a container, then it is automatically
         // considered the current block-container as well.  Also, for containers that we know
@@ -1072,6 +1076,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             bindChildren(node);
         }
 
+        inReturnPosition = savedInReturnPosition;
         container = saveContainer;
         thisParentContainer = saveThisParentContainer;
         blockScopeContainer = savedBlockScopeContainer;
@@ -1100,6 +1105,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         // and set it before we descend into nodes that could actually be part of an assignment pattern.
         inAssignmentPattern = false;
         if (checkUnreachable(node)) {
+            if (canHaveFlowNode(node) && node.flowNode) {
+                node.flowNode = undefined;
+            }
             bindEachChild(node);
             bindJSDoc(node);
             inAssignmentPattern = saveInAssignmentPattern;
@@ -1191,10 +1199,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.JSDocEnumTag:
                 bindJSDocTypeAlias(node as JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag);
                 break;
-            // In source files and blocks, bind functions first to match hoisting that occurs at runtime
             case SyntaxKind.JSDocImportTag:
                 bindJSDocImportTag(node as JSDocImportTag);
                 break;
+            // In source files and blocks, bind functions first to match hoisting that occurs at runtime
             case SyntaxKind.SourceFile: {
                 bindEachFunctionsFirst((node as SourceFile).statements);
                 bind((node as SourceFile).endOfFileToken);
@@ -1310,9 +1318,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.ExclamationEqualsToken:
             case SyntaxKind.EqualsEqualsEqualsToken:
             case SyntaxKind.ExclamationEqualsEqualsToken:
-                return isNarrowableOperand(expr.left) || isNarrowableOperand(expr.right) ||
-                    isNarrowingTypeofOperands(expr.right, expr.left) || isNarrowingTypeofOperands(expr.left, expr.right) ||
-                    (isBooleanLiteral(expr.right) && isNarrowingExpression(expr.left) || isBooleanLiteral(expr.left) && isNarrowingExpression(expr.right));
+                const left = skipParentheses(expr.left);
+                const right = skipParentheses(expr.right);
+                return isNarrowableOperand(left) || isNarrowableOperand(right) ||
+                    isNarrowingTypeofOperands(right, left) || isNarrowingTypeofOperands(left, right) ||
+                    (isBooleanLiteral(right) && isNarrowingExpression(left) || isBooleanLiteral(left) && isNarrowingExpression(right));
             case SyntaxKind.InstanceOfKeyword:
                 return isNarrowableOperand(expr.left);
             case SyntaxKind.InKeyword:
@@ -1526,13 +1536,16 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     function bindForStatement(node: ForStatement): void {
         const preLoopLabel = setContinueTarget(node, createLoopLabel());
         const preBodyLabel = createBranchLabel();
+        const preIncrementorLabel = createBranchLabel();
         const postLoopLabel = createBranchLabel();
         bind(node.initializer);
         addAntecedent(preLoopLabel, currentFlow);
         currentFlow = preLoopLabel;
         bindCondition(node.condition, preBodyLabel, postLoopLabel);
         currentFlow = finishFlowLabel(preBodyLabel);
-        bindIterativeStatement(node.statement, postLoopLabel, preLoopLabel);
+        bindIterativeStatement(node.statement, postLoopLabel, preIncrementorLabel);
+        addAntecedent(preIncrementorLabel, currentFlow);
+        currentFlow = finishFlowLabel(preIncrementorLabel);
         bind(node.incrementor);
         addAntecedent(preLoopLabel, currentFlow);
         currentFlow = finishFlowLabel(postLoopLabel);
@@ -1572,7 +1585,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function bindReturnOrThrow(node: ReturnStatement | ThrowStatement): void {
+        const savedInReturnPosition = inReturnPosition;
+        inReturnPosition = true;
         bind(node.expression);
+        inReturnPosition = savedInReturnPosition;
         if (node.kind === SyntaxKind.ReturnStatement) {
             hasExplicitReturn = true;
             if (currentReturnTarget) {
@@ -2018,10 +2034,16 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         hasFlowEffects = false;
         bindCondition(node.condition, trueLabel, falseLabel);
         currentFlow = finishFlowLabel(trueLabel);
+        if (inReturnPosition) {
+            node.flowNodeWhenTrue = currentFlow;
+        }
         bind(node.questionToken);
         bind(node.whenTrue);
         addAntecedent(postExpressionLabel, currentFlow);
         currentFlow = finishFlowLabel(falseLabel);
+        if (inReturnPosition) {
+            node.flowNodeWhenFalse = currentFlow;
+        }
         bind(node.colonToken);
         bind(node.whenFalse);
         addAntecedent(postExpressionLabel, currentFlow);
@@ -2106,7 +2128,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function bindJSDocImportTag(node: JSDocImportTag) {
+        // don't bind the importClause yet; that's delayed until bindJSDocImports
         bind(node.tagName);
+        bind(node.moduleSpecifier);
+        bind(node.attributes);
 
         if (typeof node.comment !== "string") {
             bindEach(node.comment);
@@ -3787,7 +3812,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 (isStatementButNotDeclaration(node) && node.kind !== SyntaxKind.EmptyStatement) ||
                 // report error on class declarations
                 node.kind === SyntaxKind.ClassDeclaration ||
-                // report error on instantiated modules or const-enums only modules if preserveConstEnums is set
+                // report errors on enums with preserved emit
+                isEnumDeclarationWithPreservedEmit(node, options) ||
+                // report error on instantiated modules
                 (node.kind === SyntaxKind.ModuleDeclaration && shouldReportErrorOnModuleDeclaration(node as ModuleDeclaration));
 
             if (reportError) {
@@ -3811,7 +3838,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                             node.declarationList.declarations.some(d => !!d.initializer)
                         );
 
-                    eachUnreachableRange(node, (start, end) => errorOrSuggestionOnRange(isError, start, end, Diagnostics.Unreachable_code_detected));
+                    eachUnreachableRange(node, options, (start, end) => errorOrSuggestionOnRange(isError, start, end, Diagnostics.Unreachable_code_detected));
                 }
             }
         }
@@ -3819,7 +3846,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 }
 
-function eachUnreachableRange(node: Node, cb: (start: Node, last: Node) => void): void {
+function isEnumDeclarationWithPreservedEmit(node: Node, options: CompilerOptions): boolean {
+    return node.kind === SyntaxKind.EnumDeclaration && (!isEnumConst(node as EnumDeclaration) || shouldPreserveConstEnums(options));
+}
+
+function eachUnreachableRange(node: Node, options: CompilerOptions, cb: (start: Node, last: Node) => void): void {
     if (isStatement(node) && isExecutableStatement(node) && isBlock(node.parent)) {
         const { statements } = node.parent;
         const slice = sliceAfter(statements, node);
@@ -3828,26 +3859,27 @@ function eachUnreachableRange(node: Node, cb: (start: Node, last: Node) => void)
     else {
         cb(node, node);
     }
-}
-// As opposed to a pure declaration like an `interface`
-function isExecutableStatement(s: Statement): boolean {
-    // Don't remove statements that can validly be used before they appear.
-    return !isFunctionDeclaration(s) && !isPurelyTypeDeclaration(s) && !isEnumDeclaration(s) &&
-        // `var x;` may declare a variable used above
-        !(isVariableStatement(s) && !(getCombinedNodeFlags(s) & (NodeFlags.BlockScoped)) && s.declarationList.declarations.some(d => !d.initializer));
-}
 
-function isPurelyTypeDeclaration(s: Statement): boolean {
-    switch (s.kind) {
-        case SyntaxKind.InterfaceDeclaration:
-        case SyntaxKind.TypeAliasDeclaration:
-            return true;
-        case SyntaxKind.ModuleDeclaration:
-            return getModuleInstanceState(s as ModuleDeclaration) !== ModuleInstanceState.Instantiated;
-        case SyntaxKind.EnumDeclaration:
-            return hasSyntacticModifier(s, ModifierFlags.Const);
-        default:
-            return false;
+    // As opposed to a pure declaration like an `interface`
+    function isExecutableStatement(s: Statement): boolean {
+        // Don't remove statements that can validly be used before they appear.
+        return !isFunctionDeclaration(s) && !isPurelyTypeDeclaration(s) &&
+            // `var x;` may declare a variable used above
+            !(isVariableStatement(s) && !(getCombinedNodeFlags(s) & (NodeFlags.BlockScoped)) && s.declarationList.declarations.some(d => !d.initializer));
+    }
+
+    function isPurelyTypeDeclaration(s: Statement): boolean {
+        switch (s.kind) {
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.TypeAliasDeclaration:
+                return true;
+            case SyntaxKind.ModuleDeclaration:
+                return getModuleInstanceState(s as ModuleDeclaration) !== ModuleInstanceState.Instantiated;
+            case SyntaxKind.EnumDeclaration:
+                return !isEnumDeclarationWithPreservedEmit(s, options);
+            default:
+                return false;
+        }
     }
 }
 
@@ -3919,6 +3951,10 @@ export function getContainerFlags(node: Node): ContainerFlags {
         case SyntaxKind.ConstructorType:
         case SyntaxKind.ClassStaticBlockDeclaration:
             return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike;
+
+        case SyntaxKind.JSDocImportTag:
+            // treat as a container to prevent using an enclosing effective host, ensuring import bindings are scoped correctly
+            return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals;
 
         case SyntaxKind.FunctionExpression:
         case SyntaxKind.ArrowFunction:

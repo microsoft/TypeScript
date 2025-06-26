@@ -1,6 +1,6 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 ////{
 ////  "compilerOptions": {
 ////    "module": "esnext",
@@ -16,7 +16,7 @@
 ////  }
 ////}
 
-// @Filename: /node_modules/@types/node/index.d.ts
+// @Filename: /home/src/workspaces/project/node_modules/@types/node/index.d.ts
 ////declare module 'fs' {
 ////  export function readFile(): void;
 ////}
@@ -24,10 +24,10 @@
 ////  export function promisify(): void;
 ////}
 
-// @Filename: /package.json
+// @Filename: /home/src/workspaces/project/package.json
 ////{}
 
-// @Filename: /a.js
+// @Filename: /home/src/workspaces/project/a.js
 ////
 ////readF/**/
 

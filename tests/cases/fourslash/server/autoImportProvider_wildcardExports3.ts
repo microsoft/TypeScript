@@ -1,6 +1,6 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /project/packages/ui/package.json
+// @Filename: /home/src/workspaces/project/packages/ui/package.json
 //// {
 ////   "name": "@repo/ui",
 ////   "version": "1.0.0",
@@ -9,10 +9,10 @@
 ////   }
 //// }
 
-// @Filename: /project/packages/ui/src/Card.tsx
+// @Filename: /home/src/workspaces/project/packages/ui/src/Card.tsx
 //// export const Card = () => null;
 
-// @Filename: /project/apps/web/package.json
+// @Filename: /home/src/workspaces/project/apps/web/package.json
 //// {
 ////   "name": "web",
 ////   "version": "1.0.0",
@@ -21,7 +21,7 @@
 ////   }
 //// }
 
-// @Filename: /project/apps/web/tsconfig.json
+// @Filename: /home/src/workspaces/project/apps/web/tsconfig.json
 //// {
 ////   "compilerOptions": {
 ////     "module": "esnext",
@@ -32,10 +32,10 @@
 ////  "include": ["app"]
 //// }
 
-// @Filename: /project/apps/web/app/index.tsx
+// @Filename: /home/src/workspaces/project/apps/web/app/index.tsx
 //// (<Card/**/ />);
 
-// @link: /project/packages/ui -> /project/apps/web/node_modules/@repo/ui
+// @link: /home/src/workspaces/project/packages/ui -> /home/src/workspaces/project/apps/web/node_modules/@repo/ui
 
 goTo.marker("");
 verify.completions({

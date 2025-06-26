@@ -2,14 +2,14 @@
 
 // @types package lookup
 
-// @Filename: /tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 //// {
 ////   "compilerOptions": {
 ////     "module": "nodenext"
 ////   }
 //// }
 
-// @Filename: /package.json
+// @Filename: /home/src/workspaces/project/package.json
 //// {
 ////   "type": "module",
 ////   "dependencies": {
@@ -17,7 +17,7 @@
 ////   }
 //// }
 
-// @Filename: /node_modules/dependency/package.json
+// @Filename: /home/src/workspaces/project/node_modules/dependency/package.json
 //// {
 ////   "type": "module",
 ////   "name": "dependency",
@@ -28,13 +28,13 @@
 ////   }
 //// }
 
-// @Filename: /node_modules/dependency/lib/index.js
+// @Filename: /home/src/workspaces/project/node_modules/dependency/lib/index.js
 //// export function fooFromIndex() {}
 
-// @Filename: /node_modules/dependency/lib/lol.js
+// @Filename: /home/src/workspaces/project/node_modules/dependency/lib/lol.js
 //// export function fooFromLol() {}
 
-// @Filename: /node_modules/@types/dependency/package.json
+// @Filename: /home/src/workspaces/project/node_modules/@types/dependency/package.json
 //// {
 ////   "type": "module",
 ////   "name": "@types/dependency",
@@ -45,20 +45,20 @@
 ////   }
 //// }
 
-// @Filename: /node_modules/@types/dependency/lib/index.d.ts
+// @Filename: /home/src/workspaces/project/node_modules/@types/dependency/lib/index.d.ts
 //// export declare function fooFromIndex(): void;
 
-// @Filename: /node_modules/@types/dependency/lib/lol.d.ts
+// @Filename: /home/src/workspaces/project/node_modules/@types/dependency/lib/lol.d.ts
 //// export declare function fooFromLol(): void;
 
-// @Filename: /src/foo.ts
+// @Filename: /home/src/workspaces/project/src/foo.ts
 //// fooFrom/**/
 
 goTo.marker("");
 
 verify.completions({
   marker: "",
-  exact: completion.globalsPlus([{
+  includes: [{
     name: "fooFromIndex",
     source: "dependency",
     sourceDisplay: "dependency",
@@ -70,7 +70,7 @@ verify.completions({
     sourceDisplay: "dependency/lol",
     sortText: completion.SortText.AutoImportSuggestions,
     hasAction: true,
-  }]),
+  }],
   preferences: {
     includeCompletionsForModuleExports: true,
     includeInsertTextCompletions: true,

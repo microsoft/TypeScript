@@ -2,7 +2,6 @@
 
 === Performance Stats ===
 Type Count: 2,500
-Instantiation count: 1,000
 
 === /node_modules/@types/a/index.d.ts ===
 declare var a: a.Foo;
