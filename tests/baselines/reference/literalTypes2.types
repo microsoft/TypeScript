@@ -375,9 +375,9 @@ function f3() {
 >      : ^^^^^
 
     const c3 = cond ? E.A : cond ? true : 123;
->c3 : true | E.A | 123
+>c3 : true | 123 | E.A
 >   : ^^^^^^^^^^^^^^^^
->cond ? E.A : cond ? true : 123 : true | E.A | 123
+>cond ? E.A : cond ? true : 123 : true | 123 | E.A
 >                               : ^^^^^^^^^^^^^^^^
 >cond : boolean
 >     : ^^^^^^^
@@ -473,7 +473,7 @@ function f3() {
     let x3 = c3;
 >x3 : number | boolean
 >   : ^^^^^^^^^^^^^^^^
->c3 : true | E.A | 123
+>c3 : true | 123 | E.A
 >   : ^^^^^^^^^^^^^^^^
 
     let x4 = c4;

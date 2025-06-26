@@ -21088,7 +21088,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function hasContextSensitiveReturnExpression(node: FunctionLikeDeclaration) {
-        if (getEffectiveReturnTypeNode(node) || !node.body) {
+        if (node.typeParameters || getEffectiveReturnTypeNode(node) || !node.body) {
             return false;
         }
         if (node.body.kind !== SyntaxKind.Block) {
@@ -26067,7 +26067,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         });
     }
 
-    function applyToParameterTypes(source: Signature, target: Signature, callback: (s: Type, t: Type) => void) {
+    function applyToParameterTypes(source: Signature, target: Signature, callback: (s: Type, t: Type) => void, skipUnannotatedParameters = false) {
+        const sourceDeclaredCount = source.parameters.length - (signatureHasRestParameter(source) ? 1 : 0);
         const sourceCount = getParameterCount(source);
         const targetCount = getParameterCount(target);
         const sourceRestType = getEffectiveRestType(source);
@@ -26082,6 +26083,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         for (let i = 0; i < paramCount; i++) {
+            if (skipUnannotatedParameters) {
+                const decl = i < sourceDeclaredCount ? source.parameters[i] : signatureHasRestParameter(source) ? source.parameters[sourceDeclaredCount] : undefined;
+                if (decl?.valueDeclaration && !getEffectiveTypeAnnotationNode(decl.valueDeclaration)) {
+                    continue
+                }
+            }
             callback(getTypeAtPosition(source, i), getTypeAtPosition(target, i));
         }
         if (targetRestType) {
@@ -41376,7 +41383,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             const inferences = map(context.inferences, info => createInferenceInfo(info.typeParameter));
                             applyToParameterTypes(instantiatedSignature, contextualSignature, (source, target) => {
                                 inferTypes(inferences, source, target, /*priority*/ 0, /*contravariant*/ true);
-                            });
+                            }, /*skipUnannotatedParameters*/ true);
                             if (some(inferences, hasInferenceCandidates)) {
                                 // We have inference candidates, indicating that one or more type parameters are referenced
                                 // in the parameter types of the contextual signature. Now also infer from the return type.
@@ -41389,6 +41396,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 if (!hasOverlappingInferences(context.inferences, inferences)) {
                                     mergeInferences(context.inferences, inferences);
                                     context.inferredTypeParameters = concatenate(context.inferredTypeParameters, uniqueTypeParameters);
+                                    assignContextualParameterTypes(signature, instantiateSignature(contextualSignature, context.mapper));
                                     return getOrCreateTypeFromSignature(instantiatedSignature);
                                 }
                             }
@@ -41812,7 +41820,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // or if its FunctionBody is strict code(11.1.5).
         checkGrammarModifiers(node);
 
-        checkVariableLikeDeclaration(node);
+        if (getEffectiveTypeAnnotationNode(node)) {
+            // checking annotated parameters early allows the compiler to find circularties early
+            checkVariableLikeDeclaration(node);
+        } else {
+            // defer resolving the type of unannotated parameters so that late contextual parameter types can be assigned before it
+            checkNodeDeferred(node);
+        }
         const func = getContainingFunction(node)!;
         if (hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier)) {
             if (compilerOptions.erasableSyntaxOnly) {
@@ -49157,6 +49171,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 break;
             case SyntaxKind.ClassExpression:
                 checkClassExpressionDeferred(node as ClassExpression);
+                break;
+            case SyntaxKind.Parameter:
+                checkVariableLikeDeclaration(node as ParameterDeclaration);
                 break;
             case SyntaxKind.TypeParameter:
                 checkTypeParameterDeferred(node as TypeParameterDeclaration);
