@@ -1,9 +1,0 @@
---- old.outFilerootDirModuleNamesAmd.types
-+++ new.outFilerootDirModuleNamesAmd.types
-@@= skipped -21, +21 lines =@@
-
- // https://github.com/microsoft/TypeScript/issues/37429
- import("./a");
-->import("./a") : Promise<typeof import("src/a")>
-+>import("./a") : Promise<typeof import("./a")>
- >"./a" : "./a"

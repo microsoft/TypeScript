@@ -166,6 +166,11 @@ func (r *CompilerBaselineRunner) runSingleConfigTest(t *testing.T, testName stri
 	payload := makeUnitsFromTest(test.content, test.filename)
 	compilerTest := newCompilerTest(t, testName, test.filename, &payload, config)
 
+	switch compilerTest.options.GetEmitModuleKind() {
+	case core.ModuleKindAMD, core.ModuleKindUMD, core.ModuleKindSystem:
+		t.Skipf("Skipping test %s with unsupported module kind %s", testName, compilerTest.options.GetEmitModuleKind())
+	}
+
 	compilerTest.verifyDiagnostics(t, r.testSuitName, r.isSubmodule)
 	compilerTest.verifyJavaScriptOutput(t, r.testSuitName, r.isSubmodule)
 	compilerTest.verifySourceMapOutput(t, r.testSuitName, r.isSubmodule)
@@ -336,7 +341,7 @@ func (c *compilerTest) verifyDiagnostics(t *testing.T, suiteName string, isSubmo
 		tsbaseline.DoErrorBaseline(t, c.configuredName, files, c.result.Diagnostics, c.result.Options.Pretty.IsTrue(), baseline.Options{
 			Subfolder:           suiteName,
 			IsSubmodule:         isSubmodule,
-			IsSubmoduleAccepted: c.containsUnsupportedOptions(),
+			IsSubmoduleAccepted: c.containsUnsupportedOptionsForDiagnostics(),
 			DiffFixupOld: func(old string) string {
 				var sb strings.Builder
 				sb.Grow(len(old))
@@ -506,12 +511,8 @@ func (c *compilerTest) verifyUnionOrdering(t *testing.T) {
 	})
 }
 
-func (c *compilerTest) containsUnsupportedOptions() bool {
+func (c *compilerTest) containsUnsupportedOptionsForDiagnostics() bool {
 	if len(c.result.Program.UnsupportedExtensions()) != 0 {
-		return true
-	}
-	switch c.options.GetEmitModuleKind() {
-	case core.ModuleKindAMD, core.ModuleKindUMD, core.ModuleKindSystem:
 		return true
 	}
 	if c.options.BaseUrl != "" {
