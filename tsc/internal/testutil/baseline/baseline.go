@@ -104,7 +104,7 @@ func readFileOrNoContent(fileName string) string {
 	return string(content)
 }
 
-func diffText(oldName string, newName string, expected string, actual string) string {
+func DiffText(oldName string, newName string, expected string, actual string) string {
 	lines := patience.Diff(stringutil.SplitLines(expected), stringutil.SplitLines(actual))
 	return patience.UnifiedDiffTextWithOptions(lines, patience.UnifiedDiffOptions{
 		Precontext:  3,
@@ -121,7 +121,7 @@ func getBaselineDiff(t *testing.T, actual string, expected string, fileName stri
 	if actual == expected {
 		return NoContent
 	}
-	s := diffText("old."+fileName, "new."+fileName, expected, actual)
+	s := DiffText("old."+fileName, "new."+fileName, expected, actual)
 
 	// Remove line numbers from unified diff headers; this avoids adding/deleting
 	// lines in our baselines from causing knock-on header changes later in the diff.

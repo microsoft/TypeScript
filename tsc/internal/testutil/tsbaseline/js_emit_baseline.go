@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/parser"
 	"github.com/microsoft/typescript-go/internal/testutil/baseline"
@@ -98,44 +99,40 @@ func DoJSEmitBaseline(
 		))
 	}
 
-	// !!! Enable the following once noCheck is more comprehensive
-	////if !options.NoCheck.IsTrue() && !options.NoEmit.IsTrue() {
-	////	testConfig := make(map[string]string)
-	////	testConfig["noCheck"] = "true"
-	////	withoutChecking := result.Repeat(testConfig)
-	////	compareResultFileSets := func(a collections.OrderedMap[string, *harnessutil.TestFile], b collections.OrderedMap[string, *harnessutil.TestFile]) {
-	////		for key, doc := range a.Entries() {
-	////			original := b.GetOrZero(key)
-	////			if original == nil {
-	////				jsCode.WriteString("\r\n\r\n!!!! File ")
-	////				jsCode.WriteString(removeTestPathPrefixes(doc.UnitName, false /*retainTrailingDirectorySeparator*/))
-	////				jsCode.WriteString(" missing from original emit, but present in noCheck emit\r\n")
-	////				jsCode.WriteString(fileOutput(doc, harnessSettings))
-	////			} else if original.Content != doc.Content {
-	////				jsCode.WriteString("\r\n\r\n!!!! File ")
-	////				jsCode.WriteString(removeTestPathPrefixes(doc.UnitName, false /*retainTrailingDirectorySeparator*/))
-	////				jsCode.WriteString(" differs from original emit in noCheck emit\r\n")
-	////				var fileName string
-	////				if harnessSettings.FullEmitPaths {
-	////					fileName = removeTestPathPrefixes(doc.UnitName, false /*retainTrailingDirectorySeparator*/)
-	////				} else {
-	////					fileName = tspath.GetBaseFileName(doc.UnitName)
-	////				}
-	////				jsCode.WriteString("//// [")
-	////				jsCode.WriteString(fileName)
-	////				jsCode.WriteString("]\r\n")
-	////				expected := original.Content
-	////				actual := doc.Content
-	////				err := diff.Text("Expected\tThe full check baseline", "Actual\twith noCheck set", expected, actual, &jsCode)
-	////				if err != nil {
-	////					t.Fatal(err)
-	////				}
-	////			}
-	////		}
-	////	}
-	////	compareResultFileSets(withoutChecking.DTS, result.DTS)
-	////	compareResultFileSets(withoutChecking.JS, result.JS)
-	////}
+	if !options.NoCheck.IsTrue() && !options.NoEmit.IsTrue() {
+		testConfig := make(map[string]string)
+		testConfig["noCheck"] = "true"
+		withoutChecking := result.Repeat(testConfig)
+		compareResultFileSets := func(a *collections.OrderedMap[string, *harnessutil.TestFile], b *collections.OrderedMap[string, *harnessutil.TestFile]) {
+			for key, doc := range a.Entries() {
+				original := b.GetOrZero(key)
+				if original == nil {
+					jsCode.WriteString("\r\n\r\n!!!! File ")
+					jsCode.WriteString(removeTestPathPrefixes(doc.UnitName, false /*retainTrailingDirectorySeparator*/))
+					jsCode.WriteString(" missing from original emit, but present in noCheck emit\r\n")
+					jsCode.WriteString(fileOutput(doc, harnessSettings))
+				} else if original.Content != doc.Content {
+					jsCode.WriteString("\r\n\r\n!!!! File ")
+					jsCode.WriteString(removeTestPathPrefixes(doc.UnitName, false /*retainTrailingDirectorySeparator*/))
+					jsCode.WriteString(" differs from original emit in noCheck emit\r\n")
+					var fileName string
+					if harnessSettings.FullEmitPaths {
+						fileName = removeTestPathPrefixes(doc.UnitName, false /*retainTrailingDirectorySeparator*/)
+					} else {
+						fileName = tspath.GetBaseFileName(doc.UnitName)
+					}
+					jsCode.WriteString("//// [")
+					jsCode.WriteString(fileName)
+					jsCode.WriteString("]\r\n")
+					expected := original.Content
+					actual := doc.Content
+					jsCode.WriteString(baseline.DiffText("Expected\tThe full check baseline", "Actual\twith noCheck set", expected, actual))
+				}
+			}
+		}
+		compareResultFileSets(&withoutChecking.DTS, &result.DTS)
+		compareResultFileSets(&withoutChecking.JS, &result.JS)
+	}
 
 	if tspath.FileExtensionIsOneOf(baselinePath, []string{tspath.ExtensionTs, tspath.ExtensionTsx}) {
 		baselinePath = tspath.ChangeExtension(baselinePath, tspath.ExtensionJs)

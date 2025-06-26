@@ -459,7 +459,7 @@ func (p *Program) getDeclarationDiagnosticsForFile(_ctx context.Context, sourceF
 	}
 
 	host := &emitHost{program: p}
-	diagnostics := getDeclarationDiagnostics(host, host.GetEmitResolver(sourceFile, true), sourceFile)
+	diagnostics := getDeclarationDiagnostics(host, host.GetEmitResolver(sourceFile), sourceFile)
 	diagnostics, _ = p.declarationDiagnosticCache.LoadOrStore(sourceFile, diagnostics)
 	return diagnostics
 }

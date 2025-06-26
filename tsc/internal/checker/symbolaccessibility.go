@@ -38,7 +38,7 @@ func (ch *Checker) IsAnySymbolAccessible(symbols []*ast.Symbol, enclosingDeclara
 		if len(accessibleSymbolChain) > 0 {
 			hadAccessibleChain = symbol
 			// TODO: going through emit resolver here is weird. Relayer these APIs.
-			hasAccessibleDeclarations := ch.GetEmitResolver(nil, true).hasVisibleDeclarations(accessibleSymbolChain[0], shouldComputeAliasesToMakeVisible)
+			hasAccessibleDeclarations := ch.GetEmitResolver(nil).hasVisibleDeclarations(accessibleSymbolChain[0], shouldComputeAliasesToMakeVisible)
 			if hasAccessibleDeclarations != nil {
 				return hasAccessibleDeclarations
 			}

@@ -50,7 +50,7 @@ func (e *emitter) emit() {
 }
 
 func (e *emitter) getDeclarationTransformers(emitContext *printer.EmitContext, sourceFile *ast.SourceFile, declarationFilePath string, declarationMapPath string) []*declarations.DeclarationTransformer {
-	emitResolver := e.host.GetEmitResolver(sourceFile, false /*skipDiagnostics*/) // !!! conditionally skip diagnostics
+	emitResolver := e.host.GetEmitResolver(sourceFile)
 	transform := declarations.NewDeclarationTransformer(e.host, emitResolver, emitContext, e.host.Options(), declarationFilePath, declarationMapPath)
 	return []*declarations.DeclarationTransformer{transform}
 }
@@ -86,7 +86,7 @@ func getScriptTransformers(emitContext *printer.EmitContext, host printer.EmitHo
 	var emitResolver printer.EmitResolver
 	var referenceResolver binder.ReferenceResolver
 	if importElisionEnabled || options.GetJSXTransformEnabled() {
-		emitResolver = host.GetEmitResolver(sourceFile, false /*skipDiagnostics*/) // !!! conditionally skip diagnostics
+		emitResolver = host.GetEmitResolver(sourceFile)
 		emitResolver.MarkLinkedReferencesRecursively(sourceFile)
 		referenceResolver = emitResolver
 	} else {
