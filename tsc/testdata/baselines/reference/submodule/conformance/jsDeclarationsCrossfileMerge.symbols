@@ -18,6 +18,7 @@ module.exports.memberName = "thing";
 >module.exports : Symbol(validate, Decl(exporter.js, 0, 0))
 >module : Symbol(module.exports)
 >exports : Symbol(validate, Decl(exporter.js, 0, 0))
+>memberName : Symbol(memberName, Decl(index.js, 2, 27))
 
 === exporter.js ===
 function validate() {}

@@ -30,7 +30,7 @@ module.exports.Sub = class {
 >module.exports : typeof import(".")
 >module : { "\uFFFDclass": typeof import("."); }
 >exports : typeof import(".")
->Sub : any
+>Sub : typeof Sub
 >class {    constructor() {        this.instance = new module.exports(10);    }} : typeof Sub
 
     constructor() {

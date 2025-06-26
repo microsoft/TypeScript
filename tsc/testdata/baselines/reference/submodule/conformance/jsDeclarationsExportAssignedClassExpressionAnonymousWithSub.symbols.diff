@@ -30,10 +30,10 @@
 ->module.exports : Symbol(Sub, Decl(index.js, 7, 1))
 ->module : Symbol(module, Decl(index.js, 0, 0), Decl(index.js, 10, 27))
 ->exports : Symbol(module.exports, Decl(index.js, 0, 0))
-->Sub : Symbol(Sub, Decl(index.js, 7, 1))
 +>module.exports : Symbol(exports, Decl(index.js, 0, 16))
 +>module : Symbol(module.exports)
 +>exports : Symbol(exports, Decl(index.js, 0, 16))
+ >Sub : Symbol(Sub, Decl(index.js, 7, 1))
 
      constructor() {
          this.instance = new module.exports(10);

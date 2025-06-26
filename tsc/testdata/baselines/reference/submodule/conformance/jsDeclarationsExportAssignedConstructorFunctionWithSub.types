@@ -27,7 +27,7 @@ module.exports.Sub = function() {
 >module.exports : (p: any) => void
 >module : { "export=": (p: any) => void; }
 >exports : (p: any) => void
->Sub : any
+>Sub : () => void
 >function() {    this.instance = new module.exports(10);} : () => void
 
     this.instance = new module.exports(10);

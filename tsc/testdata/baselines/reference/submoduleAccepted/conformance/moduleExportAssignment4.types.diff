@@ -5,10 +5,12 @@
  >exports.default = { m: 1, a: 1 } : { m: number; a: number; }
  >exports.default : any
 ->exports : any
+->default : any
 +>exports : typeof import("./async")
- >default : any
++>default : { m: number; a: number; }
  >{ m: 1, a: 1 } : { m: number; a: number; }
  >m : number
+ >1 : 1
 @@= skipped -9, +9 lines =@@
  >1 : 1
 

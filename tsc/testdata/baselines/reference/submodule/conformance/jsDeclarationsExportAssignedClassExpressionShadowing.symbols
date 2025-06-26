@@ -32,5 +32,6 @@ module.exports.Another = Q;
 >module.exports : Symbol(Q, Decl(index.js, 6, 16))
 >module : Symbol(module.exports)
 >exports : Symbol(Q, Decl(index.js, 6, 16))
+>Another : Symbol(Another, Decl(index.js, 10, 1))
 >Q : Symbol(Q, Decl(index.js, 2, 1))
 

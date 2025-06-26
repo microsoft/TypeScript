@@ -44,6 +44,7 @@ func (p *Parser) withJSDoc(node *ast.Node, hasJSDoc bool) []*ast.Node {
 	pos := node.Pos()
 	for _, comment := range ranges {
 		if parsed := p.parseJSDocComment(node, comment.Pos(), comment.End(), pos); parsed != nil {
+			parsed.Parent = node
 			jsdoc = append(jsdoc, parsed)
 			pos = parsed.End()
 		}
@@ -977,6 +978,9 @@ func (p *Parser) parseTypedefTag(start int, tagName *ast.IdentifierNode, indent 
 
 	typedefTag := p.factory.NewJSDocTypedefTag(tagName, typeExpression, fullName, comment)
 	p.finishNodeWithEnd(typedefTag, start, end)
+	if typeExpression != nil {
+		typeExpression.Parent = typedefTag // forcibly overwrite parent potentially set by inner type expression parse
+	}
 	return typedefTag
 }
 

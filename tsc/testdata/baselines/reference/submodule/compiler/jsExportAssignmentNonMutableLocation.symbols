@@ -18,5 +18,6 @@ module.exports = {
 
 exports.customSymbol2 = Symbol("custom");
 >exports : Symbol("file", Decl(file.js, 0, 0))
+>customSymbol2 : Symbol(customSymbol2, Decl(file.js, 5, 2))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 

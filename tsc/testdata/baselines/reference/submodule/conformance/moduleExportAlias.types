@@ -121,7 +121,7 @@ exports.func2 = function () { };
 >exports.func2 = function () { } : () => void
 >exports.func2 : any
 >exports : typeof import("./b")
->func2 : any
+>func2 : () => void
 >function () { } : () => void
 
 var moduleExportsAlias = module.exports;
@@ -143,7 +143,7 @@ module.exports.func4 = function () { };
 >module.exports : {}
 >module : { "export=": {}; }
 >exports : {}
->func4 : any
+>func4 : () => void
 >function () { } : () => void
 
 var multipleDeclarationAlias1 = exports = module.exports;
@@ -256,7 +256,7 @@ exports.func11 = function () { };
 >exports.func11 = function () { } : () => void
 >exports.func11 : any
 >exports : typeof import("./b")
->func11 : any
+>func11 : () => void
 >function () { } : () => void
 
 module.exports.func12 = function () { };
@@ -265,7 +265,7 @@ module.exports.func12 = function () { };
 >module.exports : {}
 >module : { "export=": {}; }
 >exports : {}
->func12 : any
+>func12 : () => void
 >function () { } : () => void
 
 exports = module.exports = someOtherVariable = {};
@@ -283,7 +283,7 @@ exports.func11 = function () { };
 >exports.func11 = function () { } : () => void
 >exports.func11 : any
 >exports : typeof import("./b")
->func11 : any
+>func11 : () => void
 >function () { } : () => void
 
 module.exports.func12 = function () { };
@@ -292,7 +292,7 @@ module.exports.func12 = function () { };
 >module.exports : {}
 >module : { "export=": {}; }
 >exports : {}
->func12 : any
+>func12 : () => void
 >function () { } : () => void
 
 exports = module.exports = {};
@@ -308,7 +308,7 @@ exports.func13 = function () { };
 >exports.func13 = function () { } : () => void
 >exports.func13 : any
 >exports : typeof import("./b")
->func13 : any
+>func13 : () => void
 >function () { } : () => void
 
 module.exports.func14 = function () { };
@@ -317,7 +317,7 @@ module.exports.func14 = function () { };
 >module.exports : {}
 >module : { "export=": {}; }
 >exports : {}
->func14 : any
+>func14 : () => void
 >function () { } : () => void
 
 exports = module.exports = {};
@@ -333,7 +333,7 @@ exports.func15 = function () { };
 >exports.func15 = function () { } : () => void
 >exports.func15 : any
 >exports : typeof import("./b")
->func15 : any
+>func15 : () => void
 >function () { } : () => void
 
 module.exports.func16 = function () { };
@@ -342,7 +342,7 @@ module.exports.func16 = function () { };
 >module.exports : {}
 >module : { "export=": {}; }
 >exports : {}
->func16 : any
+>func16 : () => void
 >function () { } : () => void
 
 module.exports = exports = {};
@@ -358,7 +358,7 @@ exports.func17 = function () { };
 >exports.func17 = function () { } : () => void
 >exports.func17 : any
 >exports : typeof import("./b")
->func17 : any
+>func17 : () => void
 >function () { } : () => void
 
 module.exports.func18 = function () { };
@@ -367,7 +367,7 @@ module.exports.func18 = function () { };
 >module.exports : {}
 >module : { "export=": {}; }
 >exports : {}
->func18 : any
+>func18 : () => void
 >function () { } : () => void
 
 module.exports = {};
@@ -381,7 +381,7 @@ exports.func19 = function () { };
 >exports.func19 = function () { } : () => void
 >exports.func19 : any
 >exports : typeof import("./b")
->func19 : any
+>func19 : () => void
 >function () { } : () => void
 
 module.exports.func20 = function () { };
@@ -390,7 +390,7 @@ module.exports.func20 = function () { };
 >module.exports : {}
 >module : { "export=": {}; }
 >exports : {}
->func20 : any
+>func20 : () => void
 >function () { } : () => void
 
 

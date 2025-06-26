@@ -30198,7 +30198,7 @@ func (c *Checker) getSymbolOfNameOrPropertyAccessExpression(name *ast.Node) *ast
 		return c.getSymbolOfNode(name.Parent)
 	}
 
-	if name.Parent.Kind == ast.KindExportAssignment && ast.IsEntityNameExpression(name) {
+	if (name.Parent.Kind == ast.KindExportAssignment || name.Parent.Kind == ast.KindJSExportAssignment) && ast.IsEntityNameExpression(name) {
 		// Even an entity name expression that doesn't resolve as an entityname may still typecheck as a property access expression
 		success := c.resolveEntityName(
 			name,

@@ -18,6 +18,6 @@ module.exports.default = axios
 >module.exports : {}
 >module : { axios: {}; }
 >exports : {}
->default : any
+>default : {}
 >axios : {}
 

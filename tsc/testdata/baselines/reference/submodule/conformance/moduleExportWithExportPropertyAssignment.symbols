@@ -34,5 +34,6 @@ module.exports.f = function (a) { }
 >module.exports : Symbol(export=, Decl(mod1.js, 0, 0))
 >module : Symbol(module.exports)
 >exports : Symbol(export=, Decl(mod1.js, 0, 0))
+>f : Symbol(f, Decl(mod1.js, 1, 32))
 >a : Symbol(a, Decl(mod1.js, 3, 29))
 

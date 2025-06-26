@@ -30,6 +30,7 @@ module.exports.Strings = Strings;
 >module.exports : Symbol(Foo, Decl(cls.js, 4, 2))
 >module : Symbol(module.exports)
 >exports : Symbol(Foo, Decl(cls.js, 4, 2))
+>Strings : Symbol(Strings, Decl(cls.js, 6, 21))
 >Strings : Symbol(Strings, Decl(cls.js, 1, 5))
 
 === bar.js ===

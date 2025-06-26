@@ -21,4 +21,5 @@ module.exports.additional = 20;
 >module.exports : Symbol(export=, Decl(index.js, 3, 1))
 >module : Symbol(module.exports)
 >exports : Symbol(export=, Decl(index.js, 3, 1))
+>additional : Symbol(additional, Decl(index.js, 5, 27))
 

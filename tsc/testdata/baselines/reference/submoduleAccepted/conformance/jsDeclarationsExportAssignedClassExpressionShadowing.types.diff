@@ -35,10 +35,9 @@
 ->module.exports : typeof import("index")
 ->module : { exports: typeof import("index"); }
 ->exports : typeof import("index")
-->Another : typeof Q
 +>module.exports.Another : any
 +>module.exports : typeof import(".")
 +>module : { Q: typeof import("."); }
 +>exports : typeof import(".")
-+>Another : any
+ >Another : typeof Q
  >Q : typeof Q

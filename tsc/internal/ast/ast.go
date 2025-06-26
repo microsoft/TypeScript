@@ -2,6 +2,7 @@ package ast
 
 import (
 	"fmt"
+	"iter"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -224,6 +225,7 @@ func (n *Node) AsNode() *Node                             { return n }
 func (n *Node) Pos() int                                  { return n.Loc.Pos() }
 func (n *Node) End() int                                  { return n.Loc.End() }
 func (n *Node) ForEachChild(v Visitor) bool               { return n.data.ForEachChild(v) }
+func (n *Node) IterChildren() iter.Seq[*Node]             { return n.data.IterChildren() }
 func (n *Node) Clone(f NodeFactoryCoercible) *Node        { return n.data.Clone(f) }
 func (n *Node) VisitEachChild(v *NodeVisitor) *Node       { return n.data.VisitEachChild(v) }
 func (n *Node) Name() *DeclarationName                    { return n.data.Name() }
@@ -1655,6 +1657,7 @@ func (n *Node) AsSyntaxList() *SyntaxList {
 type nodeData interface {
 	AsNode() *Node
 	ForEachChild(v Visitor) bool
+	IterChildren() iter.Seq[*Node]
 	VisitEachChild(v *NodeVisitor) *Node
 	Clone(v NodeFactoryCoercible) *Node
 	Name() *DeclarationName
@@ -1681,8 +1684,21 @@ type NodeDefault struct {
 	Node
 }
 
-func (node *NodeDefault) AsNode() *Node                                     { return &node.Node }
-func (node *NodeDefault) ForEachChild(v Visitor) bool                       { return false }
+func invert(yield func(v *Node) bool) Visitor {
+	return func(n *Node) bool {
+		return !yield(n)
+	}
+}
+
+func (node *NodeDefault) AsNode() *Node               { return &node.Node }
+func (node *NodeDefault) ForEachChild(v Visitor) bool { return false }
+func (node *NodeDefault) forEachChildIter(yield func(v *Node) bool) {
+	node.data.ForEachChild(invert(yield)) // `true` is return early for a ts visitor, `false` is return early for a go iterator yield function
+}
+
+func (node *NodeDefault) IterChildren() iter.Seq[*Node] {
+	return node.forEachChildIter
+}
 func (node *NodeDefault) VisitEachChild(v *NodeVisitor) *Node               { return node.AsNode() }
 func (node *NodeDefault) Clone(v NodeFactoryCoercible) *Node                { return nil }
 func (node *NodeDefault) Name() *DeclarationName                            { return nil }

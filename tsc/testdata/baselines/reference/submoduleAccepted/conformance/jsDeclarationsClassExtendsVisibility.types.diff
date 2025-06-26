@@ -17,11 +17,8 @@
 ->module : { exports: typeof Foo; }
 +>module : { Foo: typeof Foo; }
  >exports : typeof Foo
-->Strings : { a: string; b: string; }
-+>Strings : any
  >Strings : { a: string; b: string; }
-
- === bar.js ===
+ >Strings : { a: string; b: string; }
 @@= skipped -20, +20 lines =@@
  module.exports = Bar;
  >module.exports = Bar : typeof Bar

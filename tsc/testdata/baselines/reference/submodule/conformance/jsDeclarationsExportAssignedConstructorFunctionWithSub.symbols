@@ -17,6 +17,7 @@ module.exports.Sub = function() {
 >module.exports : Symbol(export=, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
 >module : Symbol(module.exports)
 >exports : Symbol(export=, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
+>Sub : Symbol(Sub, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 5, 1))
 
     this.instance = new module.exports(10);
 >module.exports : Symbol(export=, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))

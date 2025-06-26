@@ -14,5 +14,6 @@ module.exports.default = axios
 >module.exports : Symbol(axios, Decl(axios.js, 0, 3))
 >module : Symbol(module.exports)
 >exports : Symbol(axios, Decl(axios.js, 0, 3))
+>default : Symbol(default, Decl(axios.js, 1, 22))
 >axios : Symbol(axios, Decl(axios.js, 0, 3))
 

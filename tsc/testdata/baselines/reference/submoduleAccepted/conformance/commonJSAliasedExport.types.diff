@@ -40,10 +40,9 @@
 ->module.exports : { (ast: any): any; funky: (declaration: any) => boolean; }
 ->module : { exports: { (ast: any): any; funky: (declaration: any) => boolean; }; }
 ->exports : { (ast: any): any; funky: (declaration: any) => boolean; }
-->funky : (declaration: any) => boolean
 +>module.exports.funky : any
 +>module.exports : (ast: any) => any
 +>module : { readonly donkey: (ast: any) => any; }
 +>exports : (ast: any) => any
-+>funky : any
+ >funky : (declaration: any) => boolean
  >funky : (declaration: any) => boolean

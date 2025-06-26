@@ -39,6 +39,7 @@ module.exports.Strings = Strings
 >module.exports : Symbol(Handler, Decl(source.js, 0, 0))
 >module : Symbol(module.exports)
 >exports : Symbol(Handler, Decl(source.js, 0, 0))
+>Strings : Symbol(Strings, Decl(source.js, 14, 25))
 >Strings : Symbol(Strings, Decl(source.js, 9, 5))
 
 /**

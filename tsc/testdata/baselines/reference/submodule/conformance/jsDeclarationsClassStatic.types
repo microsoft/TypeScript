@@ -48,7 +48,7 @@ module.exports.Strings = Strings
 >module.exports : typeof Handler
 >module : { Handler: typeof Handler; }
 >exports : typeof Handler
->Strings : any
+>Strings : { a: string; b: string; }
 >Strings : { a: string; b: string; }
 
 /**

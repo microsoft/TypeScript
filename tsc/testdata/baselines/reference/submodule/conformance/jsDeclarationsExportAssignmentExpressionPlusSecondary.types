@@ -44,6 +44,6 @@ module.exports.Strings = Strings;
 >module.exports : { thing: string; also: string; desc: { item: string; }; }
 >module : { "export=": { thing: string; also: string; desc: { item: string; }; }; }
 >exports : { thing: string; also: string; desc: { item: string; }; }
->Strings : any
+>Strings : { a: string; b: string; }
 >Strings : { a: string; b: string; }
 

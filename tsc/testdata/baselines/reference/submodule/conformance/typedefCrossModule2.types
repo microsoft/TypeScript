@@ -34,7 +34,7 @@ exports.Bar = class { }
 >exports.Bar = class { } : typeof Bar
 >exports.Bar : any
 >exports : typeof import("./mod1")
->Bar : any
+>Bar : typeof Bar
 >class { } : typeof Bar
 
 /** @typedef {number} Baz */
@@ -62,7 +62,7 @@ exports.Quid = 2;
 >exports.Quid = 2 : 2
 >exports.Quid : any
 >exports : typeof import("./mod1")
->Quid : any
+>Quid : 2
 >2 : 2
 
 /** @typedef {number} Quack */

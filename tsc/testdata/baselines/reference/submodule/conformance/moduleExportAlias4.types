@@ -22,7 +22,7 @@ module.exports.D = class D { }
 >module.exports : typeof wat
 >module : { C: typeof wat; }
 >exports : typeof wat
->D : any
+>D : typeof D
 >class D { } : typeof D
 >D : typeof D
 

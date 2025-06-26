@@ -116,8 +116,8 @@
  exports.func2 = function () { };
 ->exports.func2 : Symbol(func2, Decl(b.js, 1, 37))
 ->exports : Symbol(func2, Decl(b.js, 1, 37))
-->func2 : Symbol(func2, Decl(b.js, 1, 37))
 +>exports : Symbol("b", Decl(b.js, 0, 0))
+ >func2 : Symbol(func2, Decl(b.js, 1, 37))
 
  var moduleExportsAlias = module.exports;
  >moduleExportsAlias : Symbol(moduleExportsAlias, Decl(b.js, 4, 3))
@@ -138,10 +138,10 @@
 ->module.exports : Symbol(func4, Decl(b.js, 5, 43))
 ->module : Symbol(module, Decl(b.js, 4, 24))
 ->exports : Symbol(module.exports, Decl(b.js, 0, 0))
-->func4 : Symbol(func4, Decl(b.js, 5, 43))
 +>module.exports : Symbol(export=, Decl(b.js, 41, 40))
 +>module : Symbol(module.exports)
 +>exports : Symbol(export=, Decl(b.js, 41, 40))
+ >func4 : Symbol(func4, Decl(b.js, 5, 43))
 
  var multipleDeclarationAlias1 = exports = module.exports;
  >multipleDeclarationAlias1 : Symbol(multipleDeclarationAlias1, Decl(b.js, 8, 3))
@@ -175,7 +175,7 @@
 
  var someOtherVariable;
  >someOtherVariable : Symbol(someOtherVariable, Decl(b.js, 14, 3))
-@@= skipped -60, +48 lines =@@
+@@= skipped -60, +50 lines =@@
  >exports : Symbol("b", Decl(b.js, 0, 0))
 
  multipleDeclarationAlias3.func7 = function () { };
@@ -227,74 +227,58 @@
 ->multipleDeclarationAlias6.func10 : Symbol(func10, Decl(b.js, 24, 62))
  >multipleDeclarationAlias6 : Symbol(multipleDeclarationAlias6, Decl(b.js, 24, 3))
 ->func10 : Symbol(func10, Decl(b.js, 24, 62))
--
--exports = module.exports = someOtherVariable = {};
-->exports : Symbol("b", Decl(b.js, 0, 0))
+
+ exports = module.exports = someOtherVariable = {};
+ >exports : Symbol("b", Decl(b.js, 0, 0))
 ->module.exports : Symbol(module.exports, Decl(b.js, 0, 0))
 ->module : Symbol(module, Decl(b.js, 4, 24))
 ->exports : Symbol(module.exports, Decl(b.js, 0, 0))
-->someOtherVariable : Symbol(someOtherVariable, Decl(b.js, 14, 3))
--
--exports.func11 = function () { };
++>module.exports : Symbol(export=, Decl(b.js, 41, 40))
++>module : Symbol(module.exports)
++>exports : Symbol(export=, Decl(b.js, 41, 40))
+ >someOtherVariable : Symbol(someOtherVariable, Decl(b.js, 14, 3))
+
+ exports.func11 = function () { };
 ->exports.func11 : Symbol(func11, Decl(b.js, 27, 50), Decl(b.js, 31, 50))
 ->exports : Symbol(func11, Decl(b.js, 27, 50), Decl(b.js, 31, 50))
-->func11 : Symbol(func11, Decl(b.js, 27, 50), Decl(b.js, 31, 50))
--
--module.exports.func12 = function () { };
++>exports : Symbol("b", Decl(b.js, 0, 0))
+ >func11 : Symbol(func11, Decl(b.js, 27, 50), Decl(b.js, 31, 50))
+
+ module.exports.func12 = function () { };
 ->module.exports.func12 : Symbol(func12, Decl(b.js, 28, 33), Decl(b.js, 32, 33))
 ->module.exports : Symbol(func12, Decl(b.js, 28, 33), Decl(b.js, 32, 33))
 ->module : Symbol(module, Decl(b.js, 4, 24))
 ->exports : Symbol(module.exports, Decl(b.js, 0, 0))
-->func12 : Symbol(func12, Decl(b.js, 28, 33), Decl(b.js, 32, 33))
--
--exports = module.exports = someOtherVariable = {};
-->exports : Symbol("b", Decl(b.js, 0, 0))
++>module.exports : Symbol(export=, Decl(b.js, 41, 40))
++>module : Symbol(module.exports)
++>exports : Symbol(export=, Decl(b.js, 41, 40))
+ >func12 : Symbol(func12, Decl(b.js, 28, 33), Decl(b.js, 32, 33))
+
+ exports = module.exports = someOtherVariable = {};
+ >exports : Symbol("b", Decl(b.js, 0, 0))
 ->module.exports : Symbol(module.exports, Decl(b.js, 0, 0))
 ->module : Symbol(module, Decl(b.js, 4, 24))
 ->exports : Symbol(module.exports, Decl(b.js, 0, 0))
-->someOtherVariable : Symbol(someOtherVariable, Decl(b.js, 14, 3))
--
--exports.func11 = function () { };
++>module.exports : Symbol(export=, Decl(b.js, 41, 40))
++>module : Symbol(module.exports)
++>exports : Symbol(export=, Decl(b.js, 41, 40))
+ >someOtherVariable : Symbol(someOtherVariable, Decl(b.js, 14, 3))
+
+ exports.func11 = function () { };
 ->exports.func11 : Symbol(func11, Decl(b.js, 27, 50), Decl(b.js, 31, 50))
 ->exports : Symbol(func11, Decl(b.js, 27, 50), Decl(b.js, 31, 50))
-->func11 : Symbol(func11, Decl(b.js, 27, 50), Decl(b.js, 31, 50))
--
--module.exports.func12 = function () { };
++>exports : Symbol("b", Decl(b.js, 0, 0))
+ >func11 : Symbol(func11, Decl(b.js, 27, 50), Decl(b.js, 31, 50))
+
+ module.exports.func12 = function () { };
 ->module.exports.func12 : Symbol(func12, Decl(b.js, 28, 33), Decl(b.js, 32, 33))
 ->module.exports : Symbol(func12, Decl(b.js, 28, 33), Decl(b.js, 32, 33))
 ->module : Symbol(module, Decl(b.js, 4, 24))
 ->exports : Symbol(module.exports, Decl(b.js, 0, 0))
-->func12 : Symbol(func12, Decl(b.js, 28, 33), Decl(b.js, 32, 33))
-+
-+exports = module.exports = someOtherVariable = {};
-+>exports : Symbol("b", Decl(b.js, 0, 0))
 +>module.exports : Symbol(export=, Decl(b.js, 41, 40))
 +>module : Symbol(module.exports)
 +>exports : Symbol(export=, Decl(b.js, 41, 40))
-+>someOtherVariable : Symbol(someOtherVariable, Decl(b.js, 14, 3))
-+
-+exports.func11 = function () { };
-+>exports : Symbol("b", Decl(b.js, 0, 0))
-+
-+module.exports.func12 = function () { };
-+>module.exports : Symbol(export=, Decl(b.js, 41, 40))
-+>module : Symbol(module.exports)
-+>exports : Symbol(export=, Decl(b.js, 41, 40))
-+
-+exports = module.exports = someOtherVariable = {};
-+>exports : Symbol("b", Decl(b.js, 0, 0))
-+>module.exports : Symbol(export=, Decl(b.js, 41, 40))
-+>module : Symbol(module.exports)
-+>exports : Symbol(export=, Decl(b.js, 41, 40))
-+>someOtherVariable : Symbol(someOtherVariable, Decl(b.js, 14, 3))
-+
-+exports.func11 = function () { };
-+>exports : Symbol("b", Decl(b.js, 0, 0))
-+
-+module.exports.func12 = function () { };
-+>module.exports : Symbol(export=, Decl(b.js, 41, 40))
-+>module : Symbol(module.exports)
-+>exports : Symbol(export=, Decl(b.js, 41, 40))
+ >func12 : Symbol(func12, Decl(b.js, 28, 33), Decl(b.js, 32, 33))
 
  exports = module.exports = {};
  >exports : Symbol("b", Decl(b.js, 0, 0))
@@ -308,18 +292,18 @@
  exports.func13 = function () { };
 ->exports.func13 : Symbol(func13, Decl(b.js, 35, 30))
 ->exports : Symbol(func13, Decl(b.js, 35, 30))
-->func13 : Symbol(func13, Decl(b.js, 35, 30))
 +>exports : Symbol("b", Decl(b.js, 0, 0))
+ >func13 : Symbol(func13, Decl(b.js, 35, 30))
 
  module.exports.func14 = function () { };
 ->module.exports.func14 : Symbol(func14, Decl(b.js, 36, 33))
 ->module.exports : Symbol(func14, Decl(b.js, 36, 33))
 ->module : Symbol(module, Decl(b.js, 4, 24))
 ->exports : Symbol(module.exports, Decl(b.js, 0, 0))
-->func14 : Symbol(func14, Decl(b.js, 36, 33))
 +>module.exports : Symbol(export=, Decl(b.js, 41, 40))
 +>module : Symbol(module.exports)
 +>exports : Symbol(export=, Decl(b.js, 41, 40))
+ >func14 : Symbol(func14, Decl(b.js, 36, 33))
 
  exports = module.exports = {};
  >exports : Symbol("b", Decl(b.js, 0, 0))
@@ -333,18 +317,18 @@
  exports.func15 = function () { };
 ->exports.func15 : Symbol(func15, Decl(b.js, 39, 30))
 ->exports : Symbol(func15, Decl(b.js, 39, 30))
-->func15 : Symbol(func15, Decl(b.js, 39, 30))
 +>exports : Symbol("b", Decl(b.js, 0, 0))
+ >func15 : Symbol(func15, Decl(b.js, 39, 30))
 
  module.exports.func16 = function () { };
 ->module.exports.func16 : Symbol(func16, Decl(b.js, 40, 33))
 ->module.exports : Symbol(func16, Decl(b.js, 40, 33))
 ->module : Symbol(module, Decl(b.js, 4, 24))
 ->exports : Symbol(module.exports, Decl(b.js, 0, 0))
-->func16 : Symbol(func16, Decl(b.js, 40, 33))
 +>module.exports : Symbol(export=, Decl(b.js, 41, 40))
 +>module : Symbol(module.exports)
 +>exports : Symbol(export=, Decl(b.js, 41, 40))
+ >func16 : Symbol(func16, Decl(b.js, 40, 33))
 
  module.exports = exports = {};
 ->module.exports : Symbol(module.exports, Decl(b.js, 0, 0))
@@ -358,18 +342,18 @@
  exports.func17 = function () { };
 ->exports.func17 : Symbol(func17, Decl(b.js, 43, 30))
 ->exports : Symbol(func17, Decl(b.js, 43, 30))
-->func17 : Symbol(func17, Decl(b.js, 43, 30))
 +>exports : Symbol("b", Decl(b.js, 0, 0))
+ >func17 : Symbol(func17, Decl(b.js, 43, 30))
 
  module.exports.func18 = function () { };
 ->module.exports.func18 : Symbol(func18, Decl(b.js, 44, 33))
 ->module.exports : Symbol(func18, Decl(b.js, 44, 33))
 ->module : Symbol(module, Decl(b.js, 4, 24))
 ->exports : Symbol(module.exports, Decl(b.js, 0, 0))
-->func18 : Symbol(func18, Decl(b.js, 44, 33))
 +>module.exports : Symbol(export=, Decl(b.js, 41, 40))
 +>module : Symbol(module.exports)
 +>exports : Symbol(export=, Decl(b.js, 41, 40))
+ >func18 : Symbol(func18, Decl(b.js, 44, 33))
 
  module.exports = {};
 ->module.exports : Symbol(module.exports, Decl(b.js, 0, 0))
@@ -382,16 +366,16 @@
  exports.func19 = function () { };
 ->exports.func19 : Symbol(func19, Decl(b.js, 47, 20))
 ->exports : Symbol(func19, Decl(b.js, 47, 20))
-->func19 : Symbol(func19, Decl(b.js, 47, 20))
 +>exports : Symbol("b", Decl(b.js, 0, 0))
+ >func19 : Symbol(func19, Decl(b.js, 47, 20))
 
  module.exports.func20 = function () { };
 ->module.exports.func20 : Symbol(func20, Decl(b.js, 48, 33))
 ->module.exports : Symbol(func20, Decl(b.js, 48, 33))
 ->module : Symbol(module, Decl(b.js, 4, 24))
 ->exports : Symbol(module.exports, Decl(b.js, 0, 0))
-->func20 : Symbol(func20, Decl(b.js, 48, 33))
 +>module.exports : Symbol(export=, Decl(b.js, 41, 40))
 +>module : Symbol(module.exports)
 +>exports : Symbol(export=, Decl(b.js, 41, 40))
+ >func20 : Symbol(func20, Decl(b.js, 48, 33))
 

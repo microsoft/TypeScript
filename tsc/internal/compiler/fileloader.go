@@ -561,13 +561,13 @@ func getDefaultResolutionModeForFile(fileName string, meta ast.SourceFileMetaDat
 }
 
 func getModeForUsageLocation(fileName string, meta ast.SourceFileMetaData, usage *ast.StringLiteralLike, options *core.CompilerOptions) core.ResolutionMode {
-	if ast.IsImportDeclaration(usage.Parent) || ast.IsExportDeclaration(usage.Parent) || ast.IsJSDocImportTag(usage.Parent) {
+	if ast.IsImportDeclaration(usage.Parent) || usage.Parent.Kind == ast.KindJSImportDeclaration || ast.IsExportDeclaration(usage.Parent) || ast.IsJSDocImportTag(usage.Parent) {
 		isTypeOnly := ast.IsExclusivelyTypeOnlyImportOrExport(usage.Parent)
 		if isTypeOnly {
 			var override core.ResolutionMode
 			var ok bool
 			switch usage.Parent.Kind {
-			case ast.KindImportDeclaration:
+			case ast.KindImportDeclaration, ast.KindJSImportDeclaration:
 				override, ok = usage.Parent.AsImportDeclaration().Attributes.GetResolutionModeOverride()
 			case ast.KindExportDeclaration:
 				override, ok = usage.Parent.AsExportDeclaration().Attributes.GetResolutionModeOverride()

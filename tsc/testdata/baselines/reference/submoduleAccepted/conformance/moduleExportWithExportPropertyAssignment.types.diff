@@ -57,6 +57,6 @@
 +>module.exports : () => void
 +>module : { "export=": () => void; }
 +>exports : () => void
-+>f : any
++>f : (a: any) => void
 +>function (a) { } : (a: any) => void
 +>a : any

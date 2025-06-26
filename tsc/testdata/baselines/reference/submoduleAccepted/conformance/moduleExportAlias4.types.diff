@@ -22,6 +22,6 @@
 ->D : typeof wat.D
 ->class D { } : typeof wat.D
 ->D : typeof wat.D
-+>D : any
++>D : typeof D
 +>class D { } : typeof D
 +>D : typeof D

@@ -8,12 +8,11 @@
 ->module.exports : typeof import("/y")
 ->module : { exports: typeof import("/y"); }
 ->exports : typeof import("/y")
-->x : 1
 +>module.exports.x : any
 +>module.exports : typeof import("./y.js")
 +>module : { "export=": typeof import("./y.js"); }
 +>exports : typeof import("./y.js")
-+>x : any
+ >x : 1
  >1 : 1
 
  module.exports = require("./y.js");

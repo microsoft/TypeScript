@@ -1,0 +1,20 @@
+/a.js(5,43): error TS2741: Property 'a' is missing in type '{}' but required in type 'Foo'.
+
+
+==== /a.js (1 errors) ====
+    /**
+     * @typedef {Object} Foo
+     * @property {number} a
+     */
+    export default /** @satisfies {Foo} */ ({});
+                                              ~
+!!! error TS2741: Property 'a' is missing in type '{}' but required in type 'Foo'.
+!!! related TS2728 /a.js:3:23: 'a' is declared here.
+    
+==== /b.js (0 errors) ====
+    /**
+     * @typedef {Object} Foo
+     * @property {number} a
+     */
+    
+    export default /** @satisfies {Foo} */ ({ a: 1 });

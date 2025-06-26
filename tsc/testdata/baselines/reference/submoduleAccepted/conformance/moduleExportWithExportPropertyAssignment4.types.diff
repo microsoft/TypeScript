@@ -75,7 +75,7 @@
 +>module.exports : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
 +>module : { A: { (): void; justExport: number; bothBefore: number; bothAfter: number; }; }
 +>exports : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
-+>bothBefore : number
++>bothBefore : "string"
  >'string' : "string"
 
  A.justExport = 4
@@ -141,7 +141,7 @@
 +>module.exports : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
 +>module : { A: { (): void; justExport: number; bothBefore: number; bothAfter: number; }; }
 +>exports : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
-+>bothAfter : number
++>bothAfter : "string"
  >'string' : "string"
 
  module.exports.justProperty = 'string'
@@ -150,10 +150,9 @@
 ->module.exports : typeof A
 ->module : { exports: typeof A; }
 ->exports : typeof A
-->justProperty : "string"
 +>module.exports.justProperty : any
 +>module.exports : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
 +>module : { A: { (): void; justExport: number; bothBefore: number; bothAfter: number; }; }
 +>exports : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
-+>justProperty : any
+ >justProperty : "string"
  >'string' : "string"

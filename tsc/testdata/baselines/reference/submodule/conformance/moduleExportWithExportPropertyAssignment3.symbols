@@ -47,7 +47,7 @@ module.exports.bothBefore = 'string'
 >module.exports : Symbol(export=, Decl(mod1.js, 1, 36))
 >module : Symbol(module.exports)
 >exports : Symbol(export=, Decl(mod1.js, 1, 36))
->bothBefore : Symbol(bothBefore, Decl(mod1.js, 3, 18))
+>bothBefore : Symbol(bothBefore, Decl(mod1.js, 0, 0))
 
 module.exports = {
 >module.exports : Symbol(export=, Decl(mod1.js, 1, 36))
@@ -68,10 +68,11 @@ module.exports.bothAfter = 'string'
 >module.exports : Symbol(export=, Decl(mod1.js, 1, 36))
 >module : Symbol(module.exports)
 >exports : Symbol(export=, Decl(mod1.js, 1, 36))
->bothAfter : Symbol(bothAfter, Decl(mod1.js, 4, 18))
+>bothAfter : Symbol(bothAfter, Decl(mod1.js, 6, 1))
 
 module.exports.justProperty = 'string'
 >module.exports : Symbol(export=, Decl(mod1.js, 1, 36))
 >module : Symbol(module.exports)
 >exports : Symbol(export=, Decl(mod1.js, 1, 36))
+>justProperty : Symbol(justProperty, Decl(mod1.js, 7, 35))
 

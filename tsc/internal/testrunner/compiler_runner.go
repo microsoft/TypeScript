@@ -10,6 +10,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/checker"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/repo"
@@ -179,6 +180,7 @@ func (r *CompilerBaselineRunner) runSingleConfigTest(t *testing.T, testName stri
 	// !!! Verify all baselines
 
 	compilerTest.verifyUnionOrdering(t)
+	compilerTest.verifyParentPointers(t)
 }
 
 type compilerFileBasedTest struct {
@@ -507,6 +509,44 @@ func (c *compilerTest) verifyUnionOrdering(t *testing.T) {
 					assert.Assert(t, slices.Equal(shuffled, types), "compareTypes does not sort union types consistently")
 				}
 			}
+		}
+	})
+}
+
+func (c *compilerTest) verifyParentPointers(t *testing.T) {
+	t.Run("source file parent pointers", func(t *testing.T) {
+		var parent *ast.Node
+		var verifier func(n *ast.Node) bool
+		verifier = func(n *ast.Node) bool {
+			if n == nil {
+				return false
+			}
+			assert.Assert(t, n.Parent != nil, "parent node does not exist")
+			elab := ""
+			if !ast.NodeIsSynthesized(n) {
+				elab += ast.GetSourceFileOfNode(n).Text()[n.Loc.Pos():n.Loc.End()]
+			} else {
+				elab += "!synthetic! no text available"
+			}
+			if ((n.Parent.Kind == ast.KindBinaryExpression || n.Parent.Kind == ast.KindPropertyAccessExpression || n.Parent.Kind == ast.KindElementAccessExpression) && (parent.Kind == ast.KindJSExportAssignment || parent.Kind == ast.KindCommonJSExport)) ||
+				((parent.Kind == ast.KindBinaryExpression || parent.Kind == ast.KindPropertyAccessExpression || parent.Kind == ast.KindElementAccessExpression) && (n.Parent.Kind == ast.KindJSExportAssignment || n.Parent.Kind == ast.KindCommonJSExport)) ||
+				(ast.IsFunctionLike(n.Parent) && ast.IsFunctionLike(parent)) {
+				// known current violation of parent pointer invariant, ignore (type nodes on js exports/binary expressions, names on signatures)
+			} else {
+				assert.Assert(t, n.Parent == parent, "parent node does not match traversed parent: "+n.Kind.String()+": "+elab)
+			}
+			oldParent := parent
+			parent = n
+			n.ForEachChild(verifier)
+			parent = oldParent
+			return false
+		}
+		for _, f := range c.result.Program.GetSourceFiles() {
+			if c.result.Program.IsSourceFileDefaultLibrary(f.Path()) {
+				continue
+			}
+			parent = f.AsNode()
+			f.AsNode().ForEachChild(verifier)
 		}
 	})
 }

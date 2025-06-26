@@ -23,6 +23,7 @@ module.exports.Sub = class {
 >module.exports : Symbol(exports, Decl(index.js, 0, 16))
 >module : Symbol(module.exports)
 >exports : Symbol(exports, Decl(index.js, 0, 16))
+>Sub : Symbol(Sub, Decl(index.js, 7, 1))
 
     constructor() {
         this.instance = new module.exports(10);

@@ -33,5 +33,6 @@ module.exports.Strings = Strings;
 >module.exports : Symbol(export=, Decl(index.js, 3, 2))
 >module : Symbol(module.exports)
 >exports : Symbol(export=, Decl(index.js, 3, 2))
+>Strings : Symbol(Strings, Decl(index.js, 10, 2))
 >Strings : Symbol(Strings, Decl(index.js, 0, 5))
 

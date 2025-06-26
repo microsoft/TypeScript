@@ -24,12 +24,11 @@
 ->module.exports : typeof m.default
 ->module : { exports: typeof m.default; }
 ->exports : typeof m.default
-->memberName : "thing"
 +>module.exports.memberName : any
 +>module.exports : () => void
 +>module : { validate(): void; }
 +>exports : () => void
-+>memberName : any
+ >memberName : "thing"
  >"thing" : "thing"
 
  === exporter.js ===

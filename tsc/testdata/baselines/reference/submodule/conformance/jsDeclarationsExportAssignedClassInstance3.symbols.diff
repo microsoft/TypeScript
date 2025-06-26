@@ -25,7 +25,7 @@
 ->module.exports : Symbol(additional, Decl(index.js, 5, 27))
 ->module : Symbol(module, Decl(index.js, 3, 1))
 ->exports : Symbol(module.exports, Decl(index.js, 0, 0))
-->additional : Symbol(additional, Decl(index.js, 5, 27))
 +>module.exports : Symbol(export=, Decl(index.js, 3, 1))
 +>module : Symbol(module.exports)
 +>exports : Symbol(export=, Decl(index.js, 3, 1))
+ >additional : Symbol(additional, Decl(index.js, 5, 27))

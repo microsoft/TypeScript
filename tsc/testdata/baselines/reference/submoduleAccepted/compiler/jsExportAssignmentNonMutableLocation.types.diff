@@ -27,7 +27,7 @@
 +>exports.customSymbol2 = Symbol("custom") : symbol
 +>exports.customSymbol2 : any
 +>exports : typeof import("./file")
-+>customSymbol2 : any
++>customSymbol2 : symbol
 +>Symbol("custom") : symbol
  >Symbol : SymbolConstructor
  >"custom" : "custom"

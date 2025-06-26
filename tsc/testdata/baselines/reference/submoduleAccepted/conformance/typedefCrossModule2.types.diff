@@ -36,10 +36,9 @@
  >exports.Bar = class { } : typeof Bar
 ->exports.Bar : typeof Bar
 ->exports : { Bar: typeof Bar; Baz: typeof Baz; Quid: 2; Quack?: undefined; } | { Bar: typeof Bar; Baz?: undefined; Quid: 2; Quack: number; }
-->Bar : typeof Bar
 +>exports.Bar : any
 +>exports : typeof import("./mod1")
-+>Bar : any
+ >Bar : typeof Bar
  >class { } : typeof Bar
 
  /** @typedef {number} Baz */
@@ -61,10 +60,9 @@
  >exports.Quid = 2 : 2
 ->exports.Quid : 2
 ->exports : { Bar: typeof Bar; Baz: typeof Baz; Quid: 2; Quack?: undefined; } | { Bar: typeof Bar; Baz?: undefined; Quid: 2; Quack: number; }
-->Quid : 2
 +>exports.Quid : any
 +>exports : typeof import("./mod1")
-+>Quid : any
+ >Quid : 2
  >2 : 2
 
  /** @typedef {number} Quack */

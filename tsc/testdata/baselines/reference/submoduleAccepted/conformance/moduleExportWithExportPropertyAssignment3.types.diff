@@ -75,7 +75,7 @@
 +>module.exports : { justExport: number; bothBefore: number; bothAfter: number; }
 +>module : { "export=": { justExport: number; bothBefore: number; bothAfter: number; }; }
 +>exports : { justExport: number; bothBefore: number; bothAfter: number; }
-+>bothBefore : number
++>bothBefore : "string"
  >'string' : "string"
 
  module.exports = {
@@ -103,7 +103,7 @@
 +>module.exports : { justExport: number; bothBefore: number; bothAfter: number; }
 +>module : { "export=": { justExport: number; bothBefore: number; bothAfter: number; }; }
 +>exports : { justExport: number; bothBefore: number; bothAfter: number; }
-+>bothAfter : number
++>bothAfter : "string"
  >'string' : "string"
 
  module.exports.justProperty = 'string'
@@ -112,10 +112,9 @@
 ->module.exports : { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }
 ->module : { exports: { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }; }
 ->exports : { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }
-->justProperty : "string"
 +>module.exports.justProperty : any
 +>module.exports : { justExport: number; bothBefore: number; bothAfter: number; }
 +>module : { "export=": { justExport: number; bothBefore: number; bothAfter: number; }; }
 +>exports : { justExport: number; bothBefore: number; bothAfter: number; }
-+>justProperty : any
+ >justProperty : "string"
  >'string' : "string"

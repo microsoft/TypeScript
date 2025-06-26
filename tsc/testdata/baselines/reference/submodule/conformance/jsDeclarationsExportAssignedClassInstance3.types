@@ -27,6 +27,6 @@ module.exports.additional = 20;
 >module.exports : Foo
 >module : { "export=": Foo; }
 >exports : Foo
->additional : any
+>additional : 20
 >20 : 20
 

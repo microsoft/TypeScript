@@ -40,6 +40,6 @@ module.exports.Another = Q;
 >module.exports : typeof import(".")
 >module : { Q: typeof import("."); }
 >exports : typeof import(".")
->Another : any
+>Another : typeof Q
 >Q : typeof Q
 

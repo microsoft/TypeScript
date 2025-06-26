@@ -17,5 +17,6 @@ module.exports.D = class D { }
 >module.exports : Symbol(C, Decl(bug24024.js, 2, 16))
 >module : Symbol(module.exports)
 >exports : Symbol(C, Decl(bug24024.js, 2, 16))
+>D : Symbol(D, Decl(bug24024.js, 2, 27))
 >D : Symbol(D, Decl(bug24024.js, 3, 18))
 

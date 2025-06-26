@@ -14,5 +14,5 @@
 
  exports.foo = bar;
 ->exports : Symbol(foo, Decl(bug27025.js, 0, 32))
-->foo : Symbol(foo, Decl(bug27025.js, 0, 32))
 +>exports : Symbol("bug27025", Decl(bug27025.js, 0, 0))
+ >foo : Symbol(foo, Decl(bug27025.js, 0, 32))

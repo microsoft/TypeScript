@@ -3,6 +3,7 @@
 === async.js ===
 exports.default = { m: 1, a: 1 }
 >exports : Symbol("async", Decl(async.js, 0, 0))
+>default : Symbol(default, Decl(async.js, 0, 0))
 >m : Symbol(m, Decl(async.js, 0, 19))
 >a : Symbol(a, Decl(async.js, 0, 25))
 
