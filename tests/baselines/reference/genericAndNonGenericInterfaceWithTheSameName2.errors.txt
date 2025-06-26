@@ -1,0 +1,45 @@
+genericAndNonGenericInterfaceWithTheSameName2.ts(3,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+genericAndNonGenericInterfaceWithTheSameName2.ts(9,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+genericAndNonGenericInterfaceWithTheSameName2.ts(15,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+genericAndNonGenericInterfaceWithTheSameName2.ts(16,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+genericAndNonGenericInterfaceWithTheSameName2.ts(22,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== genericAndNonGenericInterfaceWithTheSameName2.ts (5 errors) ====
+    // generic and non-generic interfaces with the same name do not merge
+    
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        interface A<T> {
+            bar: T;
+        }
+    }
+    
+    module M2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        interface A { // ok
+            foo: string;
+        }
+    }
+    
+    module N {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        module M {
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            interface A<T> {
+                bar: T;
+            }
+        }
+    
+        module M2 {
+               ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            interface A { // ok
+                foo: string;
+            }
+        }
+    }

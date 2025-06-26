@@ -19,9 +19,11 @@ declare module WinJS {
 >error : (error: any) => Promise<U>
 >      : ^     ^^   ^^^^^          
 >error : any
+>      : ^^^
 >progress : (progress: any) => void
 >         : ^        ^^   ^^^^^    
 >progress : any
+>         : ^^^
     }
 }
 declare module Data {
@@ -35,6 +37,7 @@ declare module Data {
 
         key: any;
 >key : any
+>    : ^^^
 
         data: T;
 >data : T
@@ -42,6 +45,7 @@ declare module Data {
 
         group: any;
 >group : any
+>      : ^^^
 
         isHeader: boolean;
 >isHeader : boolean
@@ -67,6 +71,7 @@ declare module Data {
 >indices : number[]
 >        : ^^^^^^^^
 >options : any
+>        : ^^^
 >WinJS : any
 >      : ^^^
     }
@@ -81,6 +86,7 @@ declare module Data {
 >indices : number[]
 >        : ^^^^^^^^
 >options : any
+>        : ^^^
 >WinJS : any
 >      : ^^^
     }

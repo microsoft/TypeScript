@@ -1,22 +1,37 @@
+innerAliases.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+innerAliases.ts(2,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+innerAliases.ts(3,23): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+innerAliases.ts(9,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+innerAliases.ts(14,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 innerAliases.ts(19,10): error TS2694: Namespace 'D' has no exported member 'inner'.
 innerAliases.ts(21,11): error TS2339: Property 'inner' does not exist on type 'typeof D'.
 
 
-==== innerAliases.ts (2 errors) ====
+==== innerAliases.ts (7 errors) ====
     module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export module B {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export module C {
+                          ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
                 export class Class1 {}
             }
         }
     }
     
     module D {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         import inner = A.B.C; 
        
         var c1 = new inner.Class1(); 
     
         export module E { 
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export class Class2 {}
         }
     }

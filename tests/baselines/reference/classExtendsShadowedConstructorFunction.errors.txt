@@ -1,10 +1,13 @@
+classExtendsShadowedConstructorFunction.ts(3,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 classExtendsShadowedConstructorFunction.ts(5,21): error TS2507: Type 'number' is not a constructor function type.
 
 
-==== classExtendsShadowedConstructorFunction.ts (1 errors) ====
+==== classExtendsShadowedConstructorFunction.ts (2 errors) ====
     class C { foo: string; }
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         var C = 1;
         class D extends C { // error, C must evaluate to constructor function
                         ~

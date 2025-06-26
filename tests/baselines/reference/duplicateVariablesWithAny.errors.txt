@@ -1,10 +1,11 @@
 duplicateVariablesWithAny.ts(3,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'any', but here has type 'number'.
 duplicateVariablesWithAny.ts(6,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'string', but here has type 'any'.
+duplicateVariablesWithAny.ts(8,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 duplicateVariablesWithAny.ts(10,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'any', but here has type 'number'.
 duplicateVariablesWithAny.ts(13,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'string', but here has type 'any'.
 
 
-==== duplicateVariablesWithAny.ts (4 errors) ====
+==== duplicateVariablesWithAny.ts (5 errors) ====
     // They should have to be the same even when one of the types is 'any'
     var x: any;
     var x = 2; //error
@@ -19,6 +20,8 @@ duplicateVariablesWithAny.ts(13,9): error TS2403: Subsequent variable declaratio
 !!! related TS6203 duplicateVariablesWithAny.ts:5:5: 'y' was also declared here.
     
     module N {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         var x: any;
         var x = 2; //error
             ~

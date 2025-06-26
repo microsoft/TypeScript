@@ -1,0 +1,29 @@
+functionMergedWithModule.ts(5,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+functionMergedWithModule.ts(5,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+functionMergedWithModule.ts(10,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+functionMergedWithModule.ts(10,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== functionMergedWithModule.ts (4 errors) ====
+    function foo(title: string) {
+        var x = 10;
+    }
+    
+    module foo.Bar {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+               ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function f() {
+        }
+    }
+    
+    module foo.Baz {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+               ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function g() {
+            Bar.f();
+        }
+    }

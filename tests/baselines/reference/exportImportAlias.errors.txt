@@ -1,0 +1,98 @@
+exportImportAlias.ts(3,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+exportImportAlias.ts(9,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+exportImportAlias.ts(16,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+exportImportAlias.ts(25,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+exportImportAlias.ts(30,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+exportImportAlias.ts(37,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+exportImportAlias.ts(46,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+exportImportAlias.ts(51,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+exportImportAlias.ts(60,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== exportImportAlias.ts (9 errors) ====
+    // expect no errors here
+    
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+        export var x = 'hello world'
+        export class Point {
+            constructor(public x: number, public y: number) { }
+        }
+        export module B {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export interface Id {
+                name: string;
+            }
+        }
+    }
+    
+    module C {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export import a = A;
+    }
+    
+    var a: string = C.a.x;
+    var b: { x: number; y: number; } = new C.a.Point(0, 0);
+    var c: { name: string };
+    var c: C.a.B.Id;
+    
+    module X {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function Y() {
+            return 42;
+        }
+    
+        export module Y {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export class Point {
+                constructor(public x: number, public y: number) { }
+            }
+        }
+    }
+    
+    module Z {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+        // 'y' should be a fundule here
+        export import y = X.Y;
+    }
+    
+    var m: number = Z.y();
+    var n: { x: number; y: number; } = new Z.y.Point(0, 0);
+    
+    module K {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class L {
+            constructor(public name: string) { }
+        }
+    
+        export module L {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export var y = 12;
+            export interface Point {
+                x: number;
+                y: number;
+            }
+        }
+    }
+    
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export import D = K.L;
+    }
+    
+    var o: { name: string };
+    var o = new M.D('Hello');
+    
+    var p: { x: number; y: number; }
+    var p: M.D.Point;

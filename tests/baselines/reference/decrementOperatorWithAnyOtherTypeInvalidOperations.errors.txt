@@ -1,3 +1,4 @@
+decrementOperatorWithAnyOtherTypeInvalidOperations.ts(18,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 decrementOperatorWithAnyOtherTypeInvalidOperations.ts(24,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 decrementOperatorWithAnyOtherTypeInvalidOperations.ts(25,25): error TS2629: Cannot assign to 'A' because it is a class.
 decrementOperatorWithAnyOtherTypeInvalidOperations.ts(26,25): error TS2631: Cannot assign to 'M' because it is a namespace.
@@ -52,7 +53,7 @@ decrementOperatorWithAnyOtherTypeInvalidOperations.ts(72,10): error TS1005: ';' 
 decrementOperatorWithAnyOtherTypeInvalidOperations.ts(72,12): error TS1109: Expression expected.
 
 
-==== decrementOperatorWithAnyOtherTypeInvalidOperations.ts (52 errors) ====
+==== decrementOperatorWithAnyOtherTypeInvalidOperations.ts (53 errors) ====
     // -- operator on any type
     var ANY1: any;
     var ANY2: any[] = ["", ""];
@@ -71,6 +72,8 @@ decrementOperatorWithAnyOtherTypeInvalidOperations.ts(72,12): error TS1109: Expr
         }
     }
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var n: any;
     }
     var objA = new A();

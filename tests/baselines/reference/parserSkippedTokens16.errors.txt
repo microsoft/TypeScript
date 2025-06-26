@@ -4,11 +4,12 @@ parserSkippedTokens16.ts(1,8): error TS1434: Unexpected keyword or identifier.
 parserSkippedTokens16.ts(1,8): error TS2304: Cannot find name 'Bar'.
 parserSkippedTokens16.ts(2,22): error TS1127: Invalid character.
 parserSkippedTokens16.ts(3,3): error TS1109: Expression expected.
+parserSkippedTokens16.ts(4,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 parserSkippedTokens16.ts(6,5): error TS1138: Parameter declaration expected.
 parserSkippedTokens16.ts(8,14): error TS1109: Expression expected.
 
 
-==== parserSkippedTokens16.ts (8 errors) ====
+==== parserSkippedTokens16.ts (9 errors) ====
     foo(): Bar { }
     ~~~
 !!! error TS2552: Cannot find name 'foo'. Did you mean 'Foo'?
@@ -26,6 +27,8 @@ parserSkippedTokens16.ts(8,14): error TS1109: Expression expected.
       ~
 !!! error TS1109: Expression expected.
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     function a(
         : T) { }
         ~

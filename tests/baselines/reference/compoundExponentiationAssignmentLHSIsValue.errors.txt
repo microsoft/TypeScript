@@ -3,6 +3,7 @@ compoundExponentiationAssignmentLHSIsValue.ts(10,9): error TS2362: The left-hand
 compoundExponentiationAssignmentLHSIsValue.ts(13,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 compoundExponentiationAssignmentLHSIsValue.ts(18,5): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
 compoundExponentiationAssignmentLHSIsValue.ts(21,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundExponentiationAssignmentLHSIsValue.ts(24,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 compoundExponentiationAssignmentLHSIsValue.ts(25,1): error TS2631: Cannot assign to 'M' because it is a namespace.
 compoundExponentiationAssignmentLHSIsValue.ts(27,1): error TS2629: Cannot assign to 'C' because it is a class.
 compoundExponentiationAssignmentLHSIsValue.ts(30,1): error TS2628: Cannot assign to 'E' because it is an enum.
@@ -39,7 +40,7 @@ compoundExponentiationAssignmentLHSIsValue.ts(84,1): error TS2362: The left-hand
 compoundExponentiationAssignmentLHSIsValue.ts(85,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 
 
-==== compoundExponentiationAssignmentLHSIsValue.ts (39 errors) ====
+==== compoundExponentiationAssignmentLHSIsValue.ts (40 errors) ====
     // expected error for all the LHS of compound assignments (arithmetic and addition)
     var value: any;
     
@@ -74,6 +75,8 @@ compoundExponentiationAssignmentLHSIsValue.ts(85,1): error TS2362: The left-hand
     
     // identifiers: module, class, enum, function
     module M { export var a; }
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     M **= value;
     ~
 !!! error TS2631: Cannot assign to 'M' because it is a namespace.

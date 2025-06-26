@@ -1,0 +1,143 @@
+collisionExportsRequireAndAmbientModule_externalmodule.ts(1,23): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndAmbientModule_externalmodule.ts(10,23): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndAmbientModule_externalmodule.ts(19,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndAmbientModule_externalmodule.ts(20,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndAmbientModule_externalmodule.ts(26,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndAmbientModule_externalmodule.ts(33,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndAmbientModule_externalmodule.ts(34,27): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndAmbientModule_externalmodule.ts(40,27): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndAmbientModule_globalFile.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndAmbientModule_globalFile.ts(7,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndAmbientModule_globalFile.ts(13,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndAmbientModule_globalFile.ts(14,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndAmbientModule_globalFile.ts(20,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndAmbientModule_globalFile.ts(27,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndAmbientModule_globalFile.ts(28,27): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndAmbientModule_globalFile.ts(34,27): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== collisionExportsRequireAndAmbientModule_externalmodule.ts (8 errors) ====
+    export declare module require {
+                          ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface I {
+        }
+        export class C {
+        }
+    }
+    export function foo(): require.I {
+        return null;
+    }
+    export declare module exports {
+                          ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface I {
+        }
+        export class C {
+        }
+    }
+    export function foo2(): exports.I {
+        return null;
+    }
+    declare module m1 {
+                   ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        module require {
+               ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export interface I {
+            }
+            export class C {
+            }
+        }
+        module exports {
+               ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export interface I {
+            }
+            export class C {
+            }
+        }
+    }
+    module m2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export declare module require {
+                              ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export interface I {
+            }
+            export class C {
+            }
+        }
+        export declare module exports {
+                              ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export interface I {
+            }
+            export class C {
+            }
+        }
+        var a = 10;
+    }
+    
+==== collisionExportsRequireAndAmbientModule_globalFile.ts (8 errors) ====
+    declare module require {
+                   ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface I {
+        }
+        export class C {
+        }
+    }
+    declare module exports {
+                   ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface I {
+        }
+        export class C {
+        }
+    }
+    declare module m3 {
+                   ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        module require {
+               ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export interface I {
+            }
+            export class C {
+            }
+        }
+        module exports {
+               ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export interface I {
+            }
+            export class C {
+            }
+        }
+    }
+    module m4 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export declare module require {
+                              ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export interface I {
+            }
+            export class C {
+            }
+        }
+        export declare module exports {
+                              ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export interface I {
+            }
+            export class C {
+            }
+        }
+    
+        var a = 10;
+    }
+    

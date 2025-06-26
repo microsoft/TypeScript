@@ -1,5 +1,6 @@
 thisInInvalidContextsExternalModule.ts(9,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 thisInInvalidContextsExternalModule.ts(17,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+thisInInvalidContextsExternalModule.ts(21,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 thisInInvalidContextsExternalModule.ts(23,13): error TS2331: 'this' cannot be referenced in a module or namespace body.
 thisInInvalidContextsExternalModule.ts(31,13): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 thisInInvalidContextsExternalModule.ts(33,25): error TS2507: Type 'undefined' is not a constructor function type.
@@ -7,7 +8,7 @@ thisInInvalidContextsExternalModule.ts(39,9): error TS2332: 'this' cannot be ref
 thisInInvalidContextsExternalModule.ts(40,9): error TS2332: 'this' cannot be referenced in current location.
 
 
-==== thisInInvalidContextsExternalModule.ts (7 errors) ====
+==== thisInInvalidContextsExternalModule.ts (8 errors) ====
     class BaseErrClass {
         constructor(t: any) { }
     }
@@ -33,6 +34,8 @@ thisInInvalidContextsExternalModule.ts(40,9): error TS2332: 'this' cannot be ref
     }
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         //'this' in module variable
         var x = this; // Error
                 ~~~~

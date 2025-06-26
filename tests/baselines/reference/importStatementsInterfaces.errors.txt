@@ -1,14 +1,24 @@
+importStatementsInterfaces.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+importStatementsInterfaces.ts(7,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+importStatementsInterfaces.ts(15,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+importStatementsInterfaces.ts(20,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 importStatementsInterfaces.ts(23,19): error TS2708: Cannot use namespace 'a' as a value.
+importStatementsInterfaces.ts(29,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+importStatementsInterfaces.ts(36,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== importStatementsInterfaces.ts (1 errors) ====
+==== importStatementsInterfaces.ts (7 errors) ====
     module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface Point {
             x: number;
             y: number;
         }
     
         export module inA {
+                      ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export interface Point3D extends Point {
                 z: number;
             }
@@ -17,11 +27,15 @@ importStatementsInterfaces.ts(23,19): error TS2708: Cannot use namespace 'a' as 
     
     // no code gen expected
     module B {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         import a = A;
     }
     
     // no code gen expected
     module C {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         import a = A;
         import b = a.inA;
         var m: typeof a;
@@ -33,6 +47,8 @@ importStatementsInterfaces.ts(23,19): error TS2708: Cannot use namespace 'a' as 
     
     // no code gen expected
     module D {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         import a = A;
     
         var p : a.Point;
@@ -40,6 +56,8 @@ importStatementsInterfaces.ts(23,19): error TS2708: Cannot use namespace 'a' as 
     
     // no code gen expected
     module E {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         import a = A.inA;
         export function xDist(x: a.Point3D) {
             return 0 - x.x;

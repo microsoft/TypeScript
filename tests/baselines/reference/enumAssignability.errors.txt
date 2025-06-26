@@ -2,6 +2,7 @@ enumAssignability.ts(9,1): error TS2322: Type 'F' is not assignable to type 'E'.
 enumAssignability.ts(10,1): error TS2322: Type 'E' is not assignable to type 'F'.
 enumAssignability.ts(11,1): error TS2322: Type '1' is not assignable to type 'E'.
 enumAssignability.ts(12,1): error TS2322: Type '1' is not assignable to type 'F'.
+enumAssignability.ts(16,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 enumAssignability.ts(29,9): error TS2322: Type 'E' is not assignable to type 'string'.
 enumAssignability.ts(30,9): error TS2322: Type 'E' is not assignable to type 'boolean'.
 enumAssignability.ts(31,9): error TS2322: Type 'E' is not assignable to type 'Date'.
@@ -27,7 +28,7 @@ enumAssignability.ts(52,13): error TS2322: Type 'E' is not assignable to type 'B
   'E' is assignable to the constraint of type 'B', but 'B' could be instantiated with a different subtype of constraint 'E'.
 
 
-==== enumAssignability.ts (22 errors) ====
+==== enumAssignability.ts (23 errors) ====
     // enums assignable to number, any, Object, errors unless otherwise noted
     
     enum E { A }
@@ -52,6 +53,8 @@ enumAssignability.ts(52,13): error TS2322: Type 'E' is not assignable to type 'B
     x = f; // ok
     
     module Others {
+           ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         var a: any = e; // ok
     
         class C {

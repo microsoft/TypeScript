@@ -1,0 +1,26 @@
+requireEmitSemicolon_0.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+requireEmitSemicolon_1.ts(4,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== requireEmitSemicolon_1.ts (1 errors) ====
+    ///<reference path='requireEmitSemicolon_0.ts'/>
+    import P = require("requireEmitSemicolon_0"); // bug was we were not emitting a ; here and causing runtime failures in node
+    
+    export module Database {
+                  ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    	export class DB {
+    	    public findPerson(id: number): P.Models.Person {
+    	        return new P.Models.Person("Rock");
+    	    }
+    	}
+    } 
+==== requireEmitSemicolon_0.ts (1 errors) ====
+    export module Models {
+                  ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    	export class Person {
+            constructor(name: string) { }
+    	}
+    }
+    

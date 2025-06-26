@@ -1,10 +1,13 @@
+genericMergedDeclarationUsingTypeParameter2.ts(2,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 genericMergedDeclarationUsingTypeParameter2.ts(3,19): error TS2304: Cannot find name 'T'.
 genericMergedDeclarationUsingTypeParameter2.ts(4,14): error TS2304: Cannot find name 'T'.
 
 
-==== genericMergedDeclarationUsingTypeParameter2.ts (2 errors) ====
+==== genericMergedDeclarationUsingTypeParameter2.ts (3 errors) ====
     class foo<T> { constructor(x: T) { } }
     module foo {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var x: T;
                       ~
 !!! error TS2304: Cannot find name 'T'.

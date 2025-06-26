@@ -1,3 +1,4 @@
+recursiveBaseCheck.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 recursiveBaseCheck.ts(2,11): error TS2506: 'C' is referenced directly or indirectly in its own base expression.
 recursiveBaseCheck.ts(4,18): error TS2506: 'B' is referenced directly or indirectly in its own base expression.
 recursiveBaseCheck.ts(6,18): error TS2506: 'A' is referenced directly or indirectly in its own base expression.
@@ -5,8 +6,10 @@ recursiveBaseCheck.ts(8,18): error TS2506: 'AmChart' is referenced directly or i
 recursiveBaseCheck.ts(10,18): error TS2506: 'D' is referenced directly or indirectly in its own base expression.
 
 
-==== recursiveBaseCheck.ts (5 errors) ====
+==== recursiveBaseCheck.ts (6 errors) ====
     declare module Module {
+                   ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class C extends D {
               ~
 !!! error TS2506: 'C' is referenced directly or indirectly in its own base expression.

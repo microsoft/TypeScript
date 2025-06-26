@@ -1,12 +1,18 @@
+typeValueConflict1.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+typeValueConflict1.ts(5,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 typeValueConflict1.ts(8,21): error TS2339: Property 'A' does not exist on type 'number'.
 
 
-==== typeValueConflict1.ts (1 errors) ====
+==== typeValueConflict1.ts (3 errors) ====
     module M1 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
      export class A {
      }
     }
     module M2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
      var M1 = 0;
      // Should error.  M1 should bind to the variable, not to the module.
      class B extends M1.A {

@@ -1,16 +1,22 @@
+decl.d.ts(3,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+decl.d.ts(8,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 in1.d.ts(1,8): error TS2300: Duplicate identifier 'a'.
 in2.d.ts(1,8): error TS2300: Duplicate identifier 'a'.
 
 
-==== decl.d.ts (0 errors) ====
+==== decl.d.ts (2 errors) ====
     // bug 535531: duplicate identifier error reported for "import" declarations in separate files
     
     declare module A
+                   ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     {
     
         class MyRoot { }
     
         export module B
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         {
             class MyClass{ }
         }

@@ -1,0 +1,24 @@
+constructorOverloads5.ts(3,17): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== constructorOverloads5.ts (1 errors) ====
+     interface IArguments {}
+    
+     declare module M {
+                    ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function RegExp(pattern: string): RegExp;
+        export function RegExp(pattern: string, flags: string): RegExp;
+        export class RegExp {
+            constructor(pattern: string);
+            constructor(pattern: string, flags: string);
+            exec(string: string): string[];
+            test(string: string): boolean;
+            source: string;
+            global: boolean;
+            ignoreCase: boolean;
+            multiline: boolean;
+            lastIndex: boolean;
+        }
+    }
+    

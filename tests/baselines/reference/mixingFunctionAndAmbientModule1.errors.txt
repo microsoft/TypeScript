@@ -1,0 +1,78 @@
+mixingFunctionAndAmbientModule1.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mixingFunctionAndAmbientModule1.ts(2,20): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mixingFunctionAndAmbientModule1.ts(8,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mixingFunctionAndAmbientModule1.ts(9,20): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mixingFunctionAndAmbientModule1.ts(16,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mixingFunctionAndAmbientModule1.ts(17,20): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mixingFunctionAndAmbientModule1.ts(23,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mixingFunctionAndAmbientModule1.ts(24,20): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mixingFunctionAndAmbientModule1.ts(32,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mixingFunctionAndAmbientModule1.ts(33,20): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mixingFunctionAndAmbientModule1.ts(37,20): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== mixingFunctionAndAmbientModule1.ts (11 errors) ====
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        declare module My {
+                       ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export var x: number;
+        }
+        function My(s: string) { }
+    }
+    
+    module B {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        declare module My {
+                       ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export var x: number;
+        }
+        function My(s: boolean);
+        function My(s: any) { }
+    }
+    
+    module C {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        declare module My {
+                       ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export var x: number;
+        }
+        declare function My(s: boolean);
+    }
+    
+    module D {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        declare module My {
+                       ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export var x: number;
+        }
+        declare function My(s: boolean);
+        declare function My(s: any);
+    }
+    
+    
+    module E {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        declare module My {
+                       ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export var x: number;
+        }
+        declare function My(s: boolean);
+        declare module My {
+                       ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export var y: number;
+        }
+        declare function My(s: any);
+    }
+    

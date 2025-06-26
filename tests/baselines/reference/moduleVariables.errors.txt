@@ -1,0 +1,29 @@
+moduleVariables.ts(4,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleVariables.ts(9,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleVariables.ts(13,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== moduleVariables.ts (3 errors) ====
+    declare var console: any;
+     
+    var x = 1;
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export var x = 2;
+        console.log(x); // 2
+    }
+     
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        console.log(x); // 2
+    }
+     
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        var x = 3;
+        console.log(x); // 3
+    }
+    

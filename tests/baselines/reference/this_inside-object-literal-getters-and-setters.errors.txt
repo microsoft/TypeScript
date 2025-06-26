@@ -1,0 +1,22 @@
+this_inside-object-literal-getters-and-setters.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== this_inside-object-literal-getters-and-setters.ts (1 errors) ====
+    module ObjectLiteral {
+           ~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        var ThisInObjectLiteral = {
+            _foo: '1',
+            get foo(): string {
+                return this._foo;
+            },
+            set foo(value: string) {
+                this._foo = value;
+            },
+            test: function () {
+                return this._foo;
+            }
+        }
+    }
+    
+    

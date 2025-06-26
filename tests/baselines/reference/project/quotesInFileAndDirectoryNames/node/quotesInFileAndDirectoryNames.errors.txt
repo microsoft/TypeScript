@@ -1,0 +1,17 @@
+li'b/class'A.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== li'b/class'A.ts (1 errors) ====
+    module test {
+           ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class ClassA
+        {
+            public method() { }
+        }
+    }
+==== m'ain.ts (0 errors) ====
+    /// <reference path="li'b/class'A.ts" />
+    
+    class ClassC extends test.ClassA {
+    }

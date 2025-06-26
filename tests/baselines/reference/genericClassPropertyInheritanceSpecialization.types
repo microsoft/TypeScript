@@ -157,6 +157,7 @@ module Portal.Controls.Validators {
 
         private _subscription;
 >_subscription : any
+>              : ^^^
 
         public message: KnockoutObservable<string>;
 >message : KnockoutObservable<string>

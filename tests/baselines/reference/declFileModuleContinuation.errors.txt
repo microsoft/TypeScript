@@ -1,0 +1,27 @@
+declFileModuleContinuation.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileModuleContinuation.ts(1,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileModuleContinuation.ts(6,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileModuleContinuation.ts(6,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileModuleContinuation.ts(6,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== declFileModuleContinuation.ts (5 errors) ====
+    module A.C {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+             ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface Z {
+        }
+    }
+    
+    module A.B.C {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+             ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class W implements A.C.Z {
+        }
+    }

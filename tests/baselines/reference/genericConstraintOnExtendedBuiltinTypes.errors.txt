@@ -1,0 +1,44 @@
+genericConstraintOnExtendedBuiltinTypes.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+genericConstraintOnExtendedBuiltinTypes.ts(9,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+genericConstraintOnExtendedBuiltinTypes.ts(9,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+genericConstraintOnExtendedBuiltinTypes.ts(20,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+genericConstraintOnExtendedBuiltinTypes.ts(20,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== genericConstraintOnExtendedBuiltinTypes.ts (5 errors) ====
+    declare module EndGate {
+                   ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface ICloneable {
+            Clone(): any;
+        }
+    }
+    
+    interface Number extends EndGate.ICloneable { }
+    
+    module EndGate.Tweening {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                   ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class Tween<T extends ICloneable>{
+            private _from: T;
+    
+    
+            constructor(from: T) {
+                this._from = from.Clone();
+            }
+        }
+    }
+    
+    module EndGate.Tweening {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                   ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class NumberTween extends Tween<number>{
+            constructor(from: number) {
+                super(from);
+            }
+        }
+    }

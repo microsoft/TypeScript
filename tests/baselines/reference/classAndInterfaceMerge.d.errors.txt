@@ -1,0 +1,33 @@
+classAndInterfaceMerge.d.ts(9,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+classAndInterfaceMerge.d.ts(22,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== classAndInterfaceMerge.d.ts (2 errors) ====
+    interface C { }
+    
+    declare class C { }
+    
+    interface C { }
+    
+    interface C { }
+    
+    declare module M {
+                   ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+        interface C1 { }
+    
+        class C1 { }
+    
+        interface C1 { }
+    
+        interface C1 { }
+    
+        export class C2 { }
+    }
+    
+    declare module M {
+                   ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface C2 { }
+    }

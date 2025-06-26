@@ -1,16 +1,29 @@
+cloduleTest2.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+cloduleTest2.ts(2,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 cloduleTest2.ts(4,13): error TS2554: Expected 1 arguments, but got 0.
+cloduleTest2.ts(7,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+cloduleTest2.ts(9,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 cloduleTest2.ts(10,13): error TS2554: Expected 1 arguments, but got 0.
+cloduleTest2.ts(13,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+cloduleTest2.ts(14,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 cloduleTest2.ts(18,7): error TS2576: Property 'bar' does not exist on type 'm3d'. Did you mean to access the static member 'm3d.bar' instead?
 cloduleTest2.ts(19,7): error TS2339: Property 'y' does not exist on type 'm3d'.
+cloduleTest2.ts(22,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+cloduleTest2.ts(24,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 cloduleTest2.ts(27,7): error TS2576: Property 'bar' does not exist on type 'm3d'. Did you mean to access the static member 'm3d.bar' instead?
 cloduleTest2.ts(28,7): error TS2339: Property 'y' does not exist on type 'm3d'.
+cloduleTest2.ts(31,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 cloduleTest2.ts(33,9): error TS2554: Expected 1 arguments, but got 0.
 cloduleTest2.ts(36,10): error TS2554: Expected 1 arguments, but got 0.
 
 
-==== cloduleTest2.ts (8 errors) ====
+==== cloduleTest2.ts (17 errors) ====
     module T1 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         module m3d { export var y = 2; }
+               ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         declare class m3d { constructor(foo); foo(): void ; static bar(); }
         var r = new m3d(); // error
                 ~~~~~~~~~
@@ -19,8 +32,12 @@ cloduleTest2.ts(36,10): error TS2554: Expected 1 arguments, but got 0.
     }
     
     module T2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         declare class m3d { constructor(foo); foo(): void; static bar(); }
         module m3d { export var y = 2; }
+               ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         var r = new m3d(); // error
                 ~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
@@ -28,7 +45,11 @@ cloduleTest2.ts(36,10): error TS2554: Expected 1 arguments, but got 0.
     }
     
     module T3 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         module m3d { export var y = 2; }
+               ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         declare class m3d { foo(): void; static bar(); }
         var r = new m3d();
         r.foo();
@@ -41,8 +62,12 @@ cloduleTest2.ts(36,10): error TS2554: Expected 1 arguments, but got 0.
     }
     
     module T4 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         declare class m3d { foo(): void; static bar(); }
         module m3d { export var y = 2; }
+               ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         var r = new m3d();
         r.foo();
         r.bar(); // error
@@ -54,6 +79,8 @@ cloduleTest2.ts(36,10): error TS2554: Expected 1 arguments, but got 0.
     }
     
     module m3d { export var y = 2; }
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     declare class m3d { constructor(foo); foo(): void; static bar(); }
     var r = new m3d(); // error
             ~~~~~~~~~

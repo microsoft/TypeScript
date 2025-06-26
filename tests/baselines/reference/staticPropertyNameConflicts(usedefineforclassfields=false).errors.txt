@@ -42,39 +42,49 @@ staticPropertyNameConflicts.ts(203,12): error TS2699: Static property 'arguments
 staticPropertyNameConflicts.ts(208,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArguments_Anonymous2'.
 staticPropertyNameConflicts.ts(213,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArgumentsFn_Anonymous'.
 staticPropertyNameConflicts.ts(218,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArgumentsFn_Anonymous2'.
+staticPropertyNameConflicts.ts(226,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 staticPropertyNameConflicts.ts(228,16): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticName'.
 staticPropertyNameConflicts.ts(234,12): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'ExportedStaticName'.
+staticPropertyNameConflicts.ts(238,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 staticPropertyNameConflicts.ts(240,16): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticNameFn'.
 staticPropertyNameConflicts.ts(246,12): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'ExportedStaticNameFn'.
+staticPropertyNameConflicts.ts(251,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 staticPropertyNameConflicts.ts(252,12): error TS1319: A default export can only be used in an ECMAScript-style module.
 staticPropertyNameConflicts.ts(253,16): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLength'.
 staticPropertyNameConflicts.ts(259,12): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'ExportedStaticLength'.
+staticPropertyNameConflicts.ts(263,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 staticPropertyNameConflicts.ts(264,12): error TS1319: A default export can only be used in an ECMAScript-style module.
 staticPropertyNameConflicts.ts(265,16): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLengthFn'.
 staticPropertyNameConflicts.ts(271,12): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'ExportedStaticLengthFn'.
+staticPropertyNameConflicts.ts(276,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 staticPropertyNameConflicts.ts(277,12): error TS1319: A default export can only be used in an ECMAScript-style module.
 staticPropertyNameConflicts.ts(278,16): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype'.
 staticPropertyNameConflicts.ts(284,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'ExportedStaticPrototype'.
+staticPropertyNameConflicts.ts(288,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 staticPropertyNameConflicts.ts(289,12): error TS1319: A default export can only be used in an ECMAScript-style module.
 staticPropertyNameConflicts.ts(290,16): error TS2300: Duplicate identifier 'prototype'.
 staticPropertyNameConflicts.ts(290,16): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn'.
 staticPropertyNameConflicts.ts(296,12): error TS2300: Duplicate identifier '[FunctionPropertyNames.prototype]'.
 staticPropertyNameConflicts.ts(296,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'ExportedStaticPrototypeFn'.
+staticPropertyNameConflicts.ts(301,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 staticPropertyNameConflicts.ts(302,12): error TS1319: A default export can only be used in an ECMAScript-style module.
 staticPropertyNameConflicts.ts(303,16): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCaller'.
 staticPropertyNameConflicts.ts(309,12): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'ExportedStaticCaller'.
+staticPropertyNameConflicts.ts(313,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 staticPropertyNameConflicts.ts(314,12): error TS1319: A default export can only be used in an ECMAScript-style module.
 staticPropertyNameConflicts.ts(315,16): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCallerFn'.
 staticPropertyNameConflicts.ts(321,12): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'ExportedStaticCallerFn'.
+staticPropertyNameConflicts.ts(326,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 staticPropertyNameConflicts.ts(327,12): error TS1319: A default export can only be used in an ECMAScript-style module.
 staticPropertyNameConflicts.ts(328,16): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArguments'.
 staticPropertyNameConflicts.ts(334,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'ExportedStaticArguments'.
+staticPropertyNameConflicts.ts(338,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 staticPropertyNameConflicts.ts(339,12): error TS1319: A default export can only be used in an ECMAScript-style module.
 staticPropertyNameConflicts.ts(340,16): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArgumentsFn'.
 staticPropertyNameConflicts.ts(346,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'ExportedStaticArgumentsFn'.
 
 
-==== staticPropertyNameConflicts.ts (74 errors) ====
+==== staticPropertyNameConflicts.ts (84 errors) ====
     const FunctionPropertyNames = {
         name: 'name',
         length: 'length',
@@ -389,6 +399,8 @@ staticPropertyNameConflicts.ts(346,12): error TS2699: Static property 'arguments
     
     // name
     module TestOnDefaultExportedClass_1 {
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class StaticName {
             static name: number; // error without useDefineForClassFields
                    ~~~~
@@ -405,6 +417,8 @@ staticPropertyNameConflicts.ts(346,12): error TS2699: Static property 'arguments
     }
     
     module TestOnDefaultExportedClass_2 {
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class StaticNameFn {
             static name() {} // error without useDefineForClassFields
                    ~~~~
@@ -422,6 +436,8 @@ staticPropertyNameConflicts.ts(346,12): error TS2699: Static property 'arguments
     
     // length
     module TestOnDefaultExportedClass_3 {
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export default class StaticLength {
                ~~~~~~~
 !!! error TS1319: A default export can only be used in an ECMAScript-style module.
@@ -440,6 +456,8 @@ staticPropertyNameConflicts.ts(346,12): error TS2699: Static property 'arguments
     }
     
     module TestOnDefaultExportedClass_4 {
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export default class StaticLengthFn {
                ~~~~~~~
 !!! error TS1319: A default export can only be used in an ECMAScript-style module.
@@ -459,6 +477,8 @@ staticPropertyNameConflicts.ts(346,12): error TS2699: Static property 'arguments
     
     // prototype
     module TestOnDefaultExportedClass_5 {
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export default class StaticPrototype {
                ~~~~~~~
 !!! error TS1319: A default export can only be used in an ECMAScript-style module.
@@ -477,6 +497,8 @@ staticPropertyNameConflicts.ts(346,12): error TS2699: Static property 'arguments
     }
     
     module TestOnDefaultExportedClass_6 {
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export default class StaticPrototypeFn {
                ~~~~~~~
 !!! error TS1319: A default export can only be used in an ECMAScript-style module.
@@ -500,6 +522,8 @@ staticPropertyNameConflicts.ts(346,12): error TS2699: Static property 'arguments
     
     // caller
     module TestOnDefaultExportedClass_7 {
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export default class StaticCaller {
                ~~~~~~~
 !!! error TS1319: A default export can only be used in an ECMAScript-style module.
@@ -518,6 +542,8 @@ staticPropertyNameConflicts.ts(346,12): error TS2699: Static property 'arguments
     }
     
     module TestOnDefaultExportedClass_8 {
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export default class StaticCallerFn {
                ~~~~~~~
 !!! error TS1319: A default export can only be used in an ECMAScript-style module.
@@ -537,6 +563,8 @@ staticPropertyNameConflicts.ts(346,12): error TS2699: Static property 'arguments
     
     // arguments
     module TestOnDefaultExportedClass_9 {
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export default class StaticArguments {
                ~~~~~~~
 !!! error TS1319: A default export can only be used in an ECMAScript-style module.
@@ -555,6 +583,8 @@ staticPropertyNameConflicts.ts(346,12): error TS2699: Static property 'arguments
     }
     
     module TestOnDefaultExportedClass_10 {
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export default class StaticArgumentsFn {
                ~~~~~~~
 !!! error TS1319: A default export can only be used in an ECMAScript-style module.

@@ -1,0 +1,101 @@
+declFileGenericType2.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileGenericType2.ts(1,23): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileGenericType2.ts(5,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileGenericType2.ts(5,23): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileGenericType2.ts(9,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileGenericType2.ts(9,23): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileGenericType2.ts(13,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileGenericType2.ts(13,23): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileGenericType2.ts(13,27): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileGenericType2.ts(18,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileGenericType2.ts(18,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileGenericType2.ts(18,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileGenericType2.ts(23,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileGenericType2.ts(23,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileGenericType2.ts(23,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileGenericType2.ts(32,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileGenericType2.ts(32,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileGenericType2.ts(32,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileGenericType2.ts(32,23): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== declFileGenericType2.ts (19 errors) ====
+    declare module templa.mvc {
+                   ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                          ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        interface IModel {
+        }
+    }
+    declare module templa.mvc {
+                   ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                          ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        interface IController<ModelType extends templa.mvc.IModel> {
+        }
+    }
+    declare module templa.mvc {
+                   ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                          ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        class AbstractController<ModelType extends templa.mvc.IModel> implements mvc.IController<ModelType> {
+        }
+    }
+    declare module templa.mvc.composite {
+                   ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                          ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                              ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        interface ICompositeControllerModel extends mvc.IModel {
+            getControllers(): mvc.IController<mvc.IModel>[];
+        }
+    }
+    module templa.dom.mvc {
+           ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                  ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                      ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface IElementController<ModelType extends templa.mvc.IModel> extends templa.mvc.IController<ModelType> {
+        }
+    }
+    // Module
+    module templa.dom.mvc {
+           ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                  ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                      ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+        export class AbstractElementController<ModelType extends templa.mvc.IModel> extends templa.mvc.AbstractController<ModelType> implements IElementController<ModelType> {
+            constructor() {
+                super();
+            }
+        }
+    }
+    // Module
+    module templa.dom.mvc.composite {
+           ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                  ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                      ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                          ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class AbstractCompositeElementController<ModelType extends templa.mvc.composite.ICompositeControllerModel> extends templa.dom.mvc.AbstractElementController<ModelType> {
+            public _controllers: templa.mvc.IController<templa.mvc.IModel>[];
+            constructor() {
+                super();
+                this._controllers = [];
+            }
+        }
+    }
+    

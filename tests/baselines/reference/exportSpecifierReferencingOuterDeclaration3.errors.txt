@@ -1,10 +1,16 @@
+exportSpecifierReferencingOuterDeclaration3.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+exportSpecifierReferencingOuterDeclaration3.ts(3,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 exportSpecifierReferencingOuterDeclaration3.ts(6,30): error TS2694: Namespace 'X' has no exported member 'bar'.
 
 
-==== exportSpecifierReferencingOuterDeclaration3.ts (1 errors) ====
+==== exportSpecifierReferencingOuterDeclaration3.ts (3 errors) ====
     declare module X { export interface bar { } }
+                   ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     declare module "m" {
         module X { export interface foo { } }
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export { X };
         export function foo(): X.foo;
         export function bar(): X.bar; // error

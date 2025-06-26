@@ -1,10 +1,13 @@
 ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.ts(4,12): error TS2300: Duplicate identifier 'Origin'.
+ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.ts(7,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.ts(8,16): error TS2300: Duplicate identifier 'Origin'.
+ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.ts(12,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.ts(16,16): error TS2300: Duplicate identifier 'Origin'.
+ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.ts(19,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.ts(20,20): error TS2300: Duplicate identifier 'Origin'.
 
 
-==== ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.ts (4 errors) ====
+==== ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.ts (7 errors) ====
     class Point {
         constructor(public x: number, public y: number) { }
     
@@ -14,6 +17,8 @@ ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.ts(20,20):
     }
     
     module Point {
+           ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var Origin = ""; //expected duplicate identifier error
                    ~~~~~~
 !!! error TS2300: Duplicate identifier 'Origin'.
@@ -21,6 +26,8 @@ ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.ts(20,20):
     
     
     module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class Point {
             constructor(public x: number, public y: number) { }
     
@@ -30,6 +37,8 @@ ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.ts(20,20):
         }
     
         export module Point {
+                      ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export var Origin = ""; //expected duplicate identifier error
                        ~~~~~~
 !!! error TS2300: Duplicate identifier 'Origin'.
