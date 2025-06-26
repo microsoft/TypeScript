@@ -49,7 +49,7 @@ In general, things we find useful when reviewing suggestions are:
 
 ## What You'll Need
 
-0. [A bug or feature you want to work on](https://github.com/microsoft/TypeScript/labels/help%20wanted)!
+0. [A bug or feature you want to work on](https://github.com/microsoft/TypeScript/issues?q=is%3Aissue%20label%3A%22Help%20Wanted%22)!
 1. [A GitHub account](https://github.com/join).
 2. A copy of the TypeScript code. See the next steps for instructions.
 3. [Node](https://nodejs.org), which runs JavaScript locally. Current or LTS will both work.
