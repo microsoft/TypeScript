@@ -50,6 +50,7 @@ type processedFiles struct {
 	sourceFileMetaDatas           map[tspath.Path]ast.SourceFileMetaData
 	jsxRuntimeImportSpecifiers    map[tspath.Path]*jsxRuntimeImportSpecifier
 	importHelpersImportSpecifiers map[tspath.Path]*ast.Node
+	libFiles                      collections.Set[tspath.Path]
 	// List of present unsupported extensions
 	unsupportedExtensions                []string
 	sourceFilesFoundSearchingNodeModules collections.Set[tspath.Path]
@@ -130,6 +131,7 @@ func processAllProgramFiles(
 	var importHelpersImportSpecifiers map[tspath.Path]*ast.Node
 	var unsupportedExtensions []string
 	var sourceFilesFoundSearchingNodeModules collections.Set[tspath.Path]
+	var libFileSet collections.Set[tspath.Path]
 
 	loader.parseTasks.collect(&loader, loader.rootTasks, func(task *parseTask, _ []tspath.Path) {
 		if task.isRedirected {
@@ -148,6 +150,7 @@ func processAllProgramFiles(
 		}
 		if task.isLib {
 			libFiles = append(libFiles, file)
+			libFileSet.Add(path)
 		} else {
 			files = append(files, file)
 		}
@@ -197,6 +200,7 @@ func processAllProgramFiles(
 		importHelpersImportSpecifiers:        importHelpersImportSpecifiers,
 		unsupportedExtensions:                unsupportedExtensions,
 		sourceFilesFoundSearchingNodeModules: sourceFilesFoundSearchingNodeModules,
+		libFiles:                             libFileSet,
 	}
 }
 

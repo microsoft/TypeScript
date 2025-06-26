@@ -196,7 +196,6 @@ func (tx *DeclarationTransformer) transformSourceFile(node *ast.SourceFile) *ast
 	result := tx.Factory().UpdateSourceFile(node, combinedStatements)
 	result.AsSourceFile().LibReferenceDirectives = tx.getLibReferences()
 	result.AsSourceFile().TypeReferenceDirectives = tx.getTypeReferences()
-	result.AsSourceFile().HasNoDefaultLib = node.HasNoDefaultLib
 	result.AsSourceFile().IsDeclarationFile = true
 	result.AsSourceFile().ReferencedFiles = tx.getReferencedFiles(outputFilePath)
 	return result.AsNode()

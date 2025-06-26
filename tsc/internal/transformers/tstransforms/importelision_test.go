@@ -156,6 +156,10 @@ func (p *fakeProgram) GetResolvedModules() map[tspath.Path]module.ModeAwareCache
 	panic("unimplemented")
 }
 
+func (p *fakeProgram) IsSourceFileDefaultLibrary(path tspath.Path) bool {
+	return false
+}
+
 func TestImportElision(t *testing.T) {
 	t.Parallel()
 	data := []struct {

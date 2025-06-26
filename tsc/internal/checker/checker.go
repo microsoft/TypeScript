@@ -539,6 +539,7 @@ type Program interface {
 	GetImportHelpersImportSpecifier(path tspath.Path) *ast.Node
 	SourceFileMayBeEmitted(sourceFile *ast.SourceFile, forceDtsEmit bool) bool
 	IsSourceFromProjectReference(path tspath.Path) bool
+	IsSourceFileDefaultLibrary(path tspath.Path) bool
 	GetSourceAndProjectReference(path tspath.Path) *tsoptions.SourceAndProjectReference
 	GetRedirectForResolution(file ast.HasFileName) *tsoptions.ParsedCommandLine
 	CommonSourceDirectory() string
