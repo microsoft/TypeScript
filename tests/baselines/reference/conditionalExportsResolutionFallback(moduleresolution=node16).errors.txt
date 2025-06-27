@@ -10,7 +10,7 @@ error TS5110: Option 'module' must be set to 'Node16' when option 'moduleResolut
         ".": {
             "import": "./dist/index.mjs",
             "require": "./dist/index.js",
-            "types": "./dist/index.d.ts",
+            "types": "./dist/index.d.ts"
         }
       }
     }
@@ -27,3 +27,4 @@ error TS5110: Option 'module' must be set to 'Node16' when option 'moduleResolut
     // but the first search is only for TS files, and when
     // there's no dist/index.d.mts, it continues looking for
     // matching conditions and resolves via `types`.
+    
