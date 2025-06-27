@@ -358,8 +358,15 @@ func (s *Server) dispatchLoop(ctx context.Context) error {
 					if r := recover(); r != nil {
 						stack := debug.Stack()
 						s.Log("panic handling request", req.Method, r, string(stack))
-						// !!! send something back to client
-						lspExit()
+						if isBlockingMethod(req.Method) {
+							lspExit()
+						} else {
+							if req.ID != nil {
+								s.sendError(req.ID, fmt.Errorf("%w: panic handling request %s: %v", lsproto.ErrInternalError, req.Method, r))
+							} else {
+								s.Log("unhandled panic in notification", req.Method, r)
+							}
+						}
 					}
 				}()
 				if err := s.handleRequestOrNotification(requestCtx, req); err != nil {
@@ -684,15 +691,6 @@ func (s *Server) handleReferences(ctx context.Context, req *lsproto.RequestMessa
 	project := s.projectService.EnsureDefaultProjectForURI(params.TextDocument.Uri)
 	languageService, done := project.GetLanguageServiceForRequest(ctx)
 	defer done()
-	// !!! remove this after find all references is fully ported/tested
-	defer func() {
-		if r := recover(); r != nil {
-			stack := debug.Stack()
-			s.Log("panic obtaining references:", r, string(stack))
-			s.sendResult(req.ID, []*lsproto.Location{})
-		}
-	}()
-
 	locations := languageService.ProvideReferences(params)
 	s.sendResult(req.ID, locations)
 	return nil
@@ -703,14 +701,6 @@ func (s *Server) handleCompletion(ctx context.Context, req *lsproto.RequestMessa
 	project := s.projectService.EnsureDefaultProjectForURI(params.TextDocument.Uri)
 	languageService, done := project.GetLanguageServiceForRequest(ctx)
 	defer done()
-	// !!! remove this after completions is fully ported/tested
-	defer func() {
-		if r := recover(); r != nil {
-			stack := debug.Stack()
-			s.Log("panic obtaining completions:", r, string(stack))
-			s.sendResult(req.ID, &lsproto.CompletionList{})
-		}
-	}()
 	// !!! get user preferences
 	list, err := languageService.ProvideCompletion(
 		ctx,
@@ -731,15 +721,6 @@ func (s *Server) handleDocumentFormat(ctx context.Context, req *lsproto.RequestM
 	project := s.projectService.EnsureDefaultProjectForURI(params.TextDocument.Uri)
 	languageService, done := project.GetLanguageServiceForRequest(ctx)
 	defer done()
-	// !!! remove this after formatting is fully ported/tested
-	defer func() {
-		if r := recover(); r != nil {
-			stack := debug.Stack()
-			s.Log("panic on document format:", r, string(stack))
-			s.sendResult(req.ID, []*lsproto.TextEdit{})
-		}
-	}()
-
 	res, err := languageService.ProvideFormatDocument(
 		ctx,
 		params.TextDocument.Uri,
@@ -757,15 +738,6 @@ func (s *Server) handleDocumentRangeFormat(ctx context.Context, req *lsproto.Req
 	project := s.projectService.EnsureDefaultProjectForURI(params.TextDocument.Uri)
 	languageService, done := project.GetLanguageServiceForRequest(ctx)
 	defer done()
-	// !!! remove this after formatting is fully ported/tested
-	defer func() {
-		if r := recover(); r != nil {
-			stack := debug.Stack()
-			s.Log("panic on document range format:", r, string(stack))
-			s.sendResult(req.ID, []*lsproto.TextEdit{})
-		}
-	}()
-
 	res, err := languageService.ProvideFormatDocumentRange(
 		ctx,
 		params.TextDocument.Uri,
@@ -784,15 +756,6 @@ func (s *Server) handleDocumentOnTypeFormat(ctx context.Context, req *lsproto.Re
 	project := s.projectService.EnsureDefaultProjectForURI(params.TextDocument.Uri)
 	languageService, done := project.GetLanguageServiceForRequest(ctx)
 	defer done()
-	// !!! remove this after formatting is fully ported/tested
-	defer func() {
-		if r := recover(); r != nil {
-			stack := debug.Stack()
-			s.Log("panic on type format:", r, string(stack))
-			s.sendResult(req.ID, []*lsproto.TextEdit{})
-		}
-	}()
-
 	res, err := languageService.ProvideFormatDocumentOnType(
 		ctx,
 		params.TextDocument.Uri,
