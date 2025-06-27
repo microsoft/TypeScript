@@ -35,13 +35,14 @@ const t = testIt<Sample, "Sample">()
 
 const i = t(null, { name: "addBook", group: "Sample", payload: { /**/ } })`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyCompletions(t, "", &fourslash.VerifyCompletionsExpectedList{
+	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
-		ItemDefaults: &lsproto.CompletionItemDefaults{
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &defaultCommitCharacters,
+			EditRange:        ignored,
 		},
-		Items: &fourslash.VerifyCompletionsExpectedItems{
-			Exact: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{Label: "name"}, &lsproto.CompletionItem{Label: "year"}},
+		Items: &fourslash.CompletionsExpectedItems{
+			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "name"}, &lsproto.CompletionItem{Label: "year"}},
 		},
 	})
 }

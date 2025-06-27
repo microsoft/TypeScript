@@ -132,16 +132,12 @@ p./*a*/`,
 								Kind:       fieldKind,
 								SortText:   sortTextLocationPriority,
 								FilterText: ptrTo(".x"),
-
+								InsertText: ptrTo(".x"),
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
-										NewText: "x",
-										Insert: lsproto.Range{
-											Start: lsproto.Position{Line: 6, Character: 2},
-											End:   lsproto.Position{Line: 6, Character: 2},
-										},
-										Replace: lsproto.Range{
-											Start: lsproto.Position{Line: 6, Character: 2},
+									TextEdit: &lsproto.TextEdit{
+										NewText: ".x",
+										Range: lsproto.Range{
+											Start: lsproto.Position{Line: 6, Character: 1},
 											End:   lsproto.Position{Line: 6, Character: 2},
 										},
 									},
@@ -152,16 +148,12 @@ p./*a*/`,
 								Kind:       fieldKind,
 								SortText:   sortTextLocationPriority,
 								FilterText: ptrTo(".y"),
-
+								InsertText: ptrTo(".y"),
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
-										NewText: "y",
-										Insert: lsproto.Range{
-											Start: lsproto.Position{Line: 6, Character: 2},
-											End:   lsproto.Position{Line: 6, Character: 2},
-										},
-										Replace: lsproto.Range{
-											Start: lsproto.Position{Line: 6, Character: 2},
+									TextEdit: &lsproto.TextEdit{
+										NewText: ".y",
+										Range: lsproto.Range{
+											Start: lsproto.Position{Line: 6, Character: 1},
 											End:   lsproto.Position{Line: 6, Character: 2},
 										},
 									},
@@ -246,16 +238,13 @@ x./*a*/`,
 								Label:      "foo",
 								Kind:       fieldKind,
 								SortText:   sortTextLocationPriority,
+								InsertText: ptrTo(".foo"),
 								FilterText: ptrTo(".foo"),
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
-										NewText: "foo",
-										Insert: lsproto.Range{
-											Start: lsproto.Position{Line: 2, Character: 2},
-											End:   lsproto.Position{Line: 2, Character: 2},
-										},
-										Replace: lsproto.Range{
-											Start: lsproto.Position{Line: 2, Character: 2},
+									TextEdit: &lsproto.TextEdit{
+										NewText: ".foo",
+										Range: lsproto.Range{
+											Start: lsproto.Position{Line: 2, Character: 1},
 											End:   lsproto.Position{Line: 2, Character: 2},
 										},
 									},
@@ -286,16 +275,12 @@ var t = new n(0, 1, '');t./*a*/`,
 								Kind:       fieldKind,
 								SortText:   sortTextLocationPriority,
 								FilterText: ptrTo(".x"),
-
+								InsertText: ptrTo(".x"),
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
-										NewText: "x",
-										Insert: lsproto.Range{
-											Start: lsproto.Position{Line: 3, Character: 26},
-											End:   lsproto.Position{Line: 3, Character: 26},
-										},
-										Replace: lsproto.Range{
-											Start: lsproto.Position{Line: 3, Character: 26},
+									TextEdit: &lsproto.TextEdit{
+										NewText: ".x",
+										Range: lsproto.Range{
+											Start: lsproto.Position{Line: 3, Character: 25},
 											End:   lsproto.Position{Line: 3, Character: 26},
 										},
 									},
@@ -306,16 +291,12 @@ var t = new n(0, 1, '');t./*a*/`,
 								Kind:       fieldKind,
 								SortText:   sortTextLocationPriority,
 								FilterText: ptrTo(".y"),
-
+								InsertText: ptrTo(".y"),
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
-										NewText: "y",
-										Insert: lsproto.Range{
-											Start: lsproto.Position{Line: 3, Character: 26},
-											End:   lsproto.Position{Line: 3, Character: 26},
-										},
-										Replace: lsproto.Range{
-											Start: lsproto.Position{Line: 3, Character: 26},
+									TextEdit: &lsproto.TextEdit{
+										NewText: ".y",
+										Range: lsproto.Range{
+											Start: lsproto.Position{Line: 3, Character: 25},
 											End:   lsproto.Position{Line: 3, Character: 26},
 										},
 									},
@@ -362,16 +343,12 @@ D./*a*/`,
 								Kind:       methodKind,
 								SortText:   sortTextLocalDeclarationPriority,
 								FilterText: ptrTo(".bar"),
-
+								InsertText: ptrTo(".bar"),
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
-										NewText: "bar",
-										Insert: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 2},
-											End:   lsproto.Position{Line: 19, Character: 2},
-										},
-										Replace: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 2},
+									TextEdit: &lsproto.TextEdit{
+										NewText: ".bar",
+										Range: lsproto.Range{
+											Start: lsproto.Position{Line: 19, Character: 1},
 											End:   lsproto.Position{Line: 19, Character: 2},
 										},
 									},
@@ -382,16 +359,12 @@ D./*a*/`,
 								Kind:       methodKind,
 								SortText:   sortTextLocalDeclarationPriority,
 								FilterText: ptrTo(".bar2"),
-
+								InsertText: ptrTo(".bar2"),
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
-										NewText: "bar2",
-										Insert: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 2},
-											End:   lsproto.Position{Line: 19, Character: 2},
-										},
-										Replace: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 2},
+									TextEdit: &lsproto.TextEdit{
+										NewText: ".bar2",
+										Range: lsproto.Range{
+											Start: lsproto.Position{Line: 19, Character: 1},
 											End:   lsproto.Position{Line: 19, Character: 2},
 										},
 									},
@@ -402,16 +375,12 @@ D./*a*/`,
 								Kind:       methodKind,
 								SortText:   sortTextLocationPriority,
 								FilterText: ptrTo(".apply"),
-
+								InsertText: ptrTo(".apply"),
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
-										NewText: "apply",
-										Insert: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 2},
-											End:   lsproto.Position{Line: 19, Character: 2},
-										},
-										Replace: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 2},
+									TextEdit: &lsproto.TextEdit{
+										NewText: ".apply",
+										Range: lsproto.Range{
+											Start: lsproto.Position{Line: 19, Character: 1},
 											End:   lsproto.Position{Line: 19, Character: 2},
 										},
 									},
@@ -422,16 +391,12 @@ D./*a*/`,
 								Kind:       fieldKind,
 								SortText:   sortTextLocationPriority,
 								FilterText: ptrTo(".arguments"),
-
+								InsertText: ptrTo(".arguments"),
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
-										NewText: "arguments",
-										Insert: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 2},
-											End:   lsproto.Position{Line: 19, Character: 2},
-										},
-										Replace: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 2},
+									TextEdit: &lsproto.TextEdit{
+										NewText: ".arguments",
+										Range: lsproto.Range{
+											Start: lsproto.Position{Line: 19, Character: 1},
 											End:   lsproto.Position{Line: 19, Character: 2},
 										},
 									},
@@ -442,16 +407,12 @@ D./*a*/`,
 								Kind:       functionKind,
 								SortText:   sortTextLocationPriority,
 								FilterText: ptrTo(".baz"),
-
+								InsertText: ptrTo(".baz"),
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
-										NewText: "baz",
-										Insert: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 2},
-											End:   lsproto.Position{Line: 19, Character: 2},
-										},
-										Replace: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 2},
+									TextEdit: &lsproto.TextEdit{
+										NewText: ".baz",
+										Range: lsproto.Range{
+											Start: lsproto.Position{Line: 19, Character: 1},
 											End:   lsproto.Position{Line: 19, Character: 2},
 										},
 									},
@@ -462,16 +423,12 @@ D./*a*/`,
 								Kind:       methodKind,
 								SortText:   sortTextLocationPriority,
 								FilterText: ptrTo(".bind"),
-
+								InsertText: ptrTo(".bind"),
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
-										NewText: "bind",
-										Insert: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 2},
-											End:   lsproto.Position{Line: 19, Character: 2},
-										},
-										Replace: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 2},
+									TextEdit: &lsproto.TextEdit{
+										NewText: ".bind",
+										Range: lsproto.Range{
+											Start: lsproto.Position{Line: 19, Character: 1},
 											End:   lsproto.Position{Line: 19, Character: 2},
 										},
 									},
@@ -482,16 +439,12 @@ D./*a*/`,
 								Kind:       methodKind,
 								SortText:   sortTextLocationPriority,
 								FilterText: ptrTo(".call"),
-
+								InsertText: ptrTo(".call"),
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
-										NewText: "call",
-										Insert: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 2},
-											End:   lsproto.Position{Line: 19, Character: 2},
-										},
-										Replace: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 2},
+									TextEdit: &lsproto.TextEdit{
+										NewText: ".call",
+										Range: lsproto.Range{
+											Start: lsproto.Position{Line: 19, Character: 1},
 											End:   lsproto.Position{Line: 19, Character: 2},
 										},
 									},
@@ -502,16 +455,12 @@ D./*a*/`,
 								Kind:       fieldKind,
 								SortText:   sortTextLocationPriority,
 								FilterText: ptrTo(".caller"),
-
+								InsertText: ptrTo(".caller"),
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
-										NewText: "caller",
-										Insert: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 2},
-											End:   lsproto.Position{Line: 19, Character: 2},
-										},
-										Replace: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 2},
+									TextEdit: &lsproto.TextEdit{
+										NewText: ".caller",
+										Range: lsproto.Range{
+											Start: lsproto.Position{Line: 19, Character: 1},
 											End:   lsproto.Position{Line: 19, Character: 2},
 										},
 									},
@@ -522,16 +471,12 @@ D./*a*/`,
 								Kind:       fieldKind,
 								SortText:   sortTextLocationPriority,
 								FilterText: ptrTo(".length"),
-
+								InsertText: ptrTo(".length"),
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
-										NewText: "length",
-										Insert: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 2},
-											End:   lsproto.Position{Line: 19, Character: 2},
-										},
-										Replace: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 2},
+									TextEdit: &lsproto.TextEdit{
+										NewText: ".length",
+										Range: lsproto.Range{
+											Start: lsproto.Position{Line: 19, Character: 1},
 											End:   lsproto.Position{Line: 19, Character: 2},
 										},
 									},
@@ -542,16 +487,12 @@ D./*a*/`,
 								Kind:       fieldKind,
 								SortText:   sortTextLocationPriority,
 								FilterText: ptrTo(".prototype"),
-
+								InsertText: ptrTo(".prototype"),
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
-										NewText: "prototype",
-										Insert: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 2},
-											End:   lsproto.Position{Line: 19, Character: 2},
-										},
-										Replace: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 2},
+									TextEdit: &lsproto.TextEdit{
+										NewText: ".prototype",
+										Range: lsproto.Range{
+											Start: lsproto.Position{Line: 19, Character: 1},
 											End:   lsproto.Position{Line: 19, Character: 2},
 										},
 									},
@@ -562,16 +503,12 @@ D./*a*/`,
 								Kind:       methodKind,
 								SortText:   sortTextLocationPriority,
 								FilterText: ptrTo(".toString"),
-
+								InsertText: ptrTo(".toString"),
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
-										NewText: "toString",
-										Insert: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 2},
-											End:   lsproto.Position{Line: 19, Character: 2},
-										},
-										Replace: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 2},
+									TextEdit: &lsproto.TextEdit{
+										NewText: ".toString",
+										Range: lsproto.Range{
+											Start: lsproto.Position{Line: 19, Character: 1},
 											End:   lsproto.Position{Line: 19, Character: 2},
 										},
 									},
@@ -582,16 +519,12 @@ D./*a*/`,
 								Kind:       variableKind,
 								SortText:   sortTextLocationPriority,
 								FilterText: ptrTo(".x"),
-
+								InsertText: ptrTo(".x"),
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
-										NewText: "x",
-										Insert: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 2},
-											End:   lsproto.Position{Line: 19, Character: 2},
-										},
-										Replace: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 2},
+									TextEdit: &lsproto.TextEdit{
+										NewText: ".x",
+										Range: lsproto.Range{
+											Start: lsproto.Position{Line: 19, Character: 1},
 											End:   lsproto.Position{Line: 19, Character: 2},
 										},
 									},
@@ -625,16 +558,12 @@ D./*a*/`,
 								Kind:       fieldKind,
 								SortText:   sortTextLocationPriority,
 								FilterText: ptrTo(".a"),
-
+								InsertText: ptrTo(".a"),
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
-										NewText: "a",
-										Insert: lsproto.Range{
-											Start: lsproto.Position{Line: 4, Character: 17},
-											End:   lsproto.Position{Line: 4, Character: 17},
-										},
-										Replace: lsproto.Range{
-											Start: lsproto.Position{Line: 4, Character: 17},
+									TextEdit: &lsproto.TextEdit{
+										NewText: ".a",
+										Range: lsproto.Range{
+											Start: lsproto.Position{Line: 4, Character: 16},
 											End:   lsproto.Position{Line: 4, Character: 17},
 										},
 									},
@@ -645,16 +574,12 @@ D./*a*/`,
 								Kind:       methodKind,
 								SortText:   sortTextLocationPriority,
 								FilterText: ptrTo(".b"),
-
+								InsertText: ptrTo(".b"),
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
-										NewText: "b",
-										Insert: lsproto.Range{
-											Start: lsproto.Position{Line: 4, Character: 17},
-											End:   lsproto.Position{Line: 4, Character: 17},
-										},
-										Replace: lsproto.Range{
-											Start: lsproto.Position{Line: 4, Character: 17},
+									TextEdit: &lsproto.TextEdit{
+										NewText: ".b",
+										Range: lsproto.Range{
+											Start: lsproto.Position{Line: 4, Character: 16},
 											End:   lsproto.Position{Line: 4, Character: 17},
 										},
 									},
@@ -679,15 +604,12 @@ x.forEach(function (y) { y./*1*/`,
 						Items: core.Map(stringMembers, func(basicItem *lsproto.CompletionItem) *lsproto.CompletionItem {
 							item := *basicItem
 							item.FilterText = ptrTo("." + item.Label)
+							item.InsertText = item.FilterText
 							item.TextEdit = &lsproto.TextEditOrInsertReplaceEdit{
-								InsertReplaceEdit: &lsproto.InsertReplaceEdit{
-									NewText: item.Label,
-									Insert: lsproto.Range{
-										Start: lsproto.Position{Line: 1, Character: 27},
-										End:   lsproto.Position{Line: 1, Character: 27},
-									},
-									Replace: lsproto.Range{
-										Start: lsproto.Position{Line: 1, Character: 27},
+								TextEdit: &lsproto.TextEdit{
+									NewText: *item.FilterText,
+									Range: lsproto.Range{
+										Start: lsproto.Position{Line: 1, Character: 26},
 										End:   lsproto.Position{Line: 1, Character: 27},
 									},
 								},
@@ -747,15 +669,12 @@ x./**/;`,
 						}, core.Map(arrayMembers, func(basicItem *lsproto.CompletionItem) *lsproto.CompletionItem {
 							item := *basicItem
 							item.FilterText = ptrTo("." + item.Label)
+							item.InsertText = item.FilterText
 							item.TextEdit = &lsproto.TextEditOrInsertReplaceEdit{
-								InsertReplaceEdit: &lsproto.InsertReplaceEdit{
-									NewText: item.Label,
-									Insert: lsproto.Range{
-										Start: lsproto.Position{Line: 1, Character: 2},
-										End:   lsproto.Position{Line: 1, Character: 2},
-									},
-									Replace: lsproto.Range{
-										Start: lsproto.Position{Line: 1, Character: 2},
+								TextEdit: &lsproto.TextEdit{
+									NewText: *item.FilterText,
+									Range: lsproto.Range{
+										Start: lsproto.Position{Line: 1, Character: 1},
 										End:   lsproto.Position{Line: 1, Character: 2},
 									},
 								},
@@ -1088,6 +1007,18 @@ declare namespace React {
 						IsIncomplete: false,
 						ItemDefaults: &lsproto.CompletionItemDefaults{
 							CommitCharacters: &[]string{},
+							EditRange: &lsproto.RangeOrEditRangeWithInsertReplace{
+								EditRangeWithInsertReplace: &lsproto.EditRangeWithInsertReplace{
+									Insert: lsproto.Range{
+										Start: lsproto.Position{Line: 2, Character: 11},
+										End:   lsproto.Position{Line: 2, Character: 16},
+									},
+									Replace: lsproto.Range{
+										Start: lsproto.Position{Line: 2, Character: 11},
+										End:   lsproto.Position{Line: 2, Character: 23},
+									},
+								},
+							},
 						},
 						Items: []*lsproto.CompletionItem{
 							{
@@ -1096,20 +1027,6 @@ declare namespace React {
 								SortText:   sortTextLocationPriority,
 								FilterText: ptrTo("contextType"),
 								InsertText: ptrTo("contextType"),
-
-								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
-										NewText: "contextType",
-										Insert: lsproto.Range{
-											Start: lsproto.Position{Line: 2, Character: 11},
-											End:   lsproto.Position{Line: 2, Character: 16},
-										},
-										Replace: lsproto.Range{
-											Start: lsproto.Position{Line: 2, Character: 11},
-											End:   lsproto.Position{Line: 2, Character: 23},
-										},
-									},
-								},
 							},
 							{
 								Label:    "abstract",
@@ -1265,20 +1182,6 @@ const bar: {
 								Label:    "foo",
 								Kind:     variableKind,
 								SortText: sortTextLocationPriority,
-
-								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
-										NewText: "foo",
-										Insert: lsproto.Range{
-											Start: lsproto.Position{Line: 6, Character: 5},
-											End:   lsproto.Position{Line: 6, Character: 5},
-										},
-										Replace: lsproto.Range{
-											Start: lsproto.Position{Line: 6, Character: 5},
-											End:   lsproto.Position{Line: 6, Character: 5},
-										},
-									},
-								},
 							},
 						},
 					},
@@ -1311,7 +1214,21 @@ function f2<T ext/*2*/>() {}`,
 				"2": {
 					list: &lsproto.CompletionList{
 						IsIncomplete: false,
-						ItemDefaults: itemDefaults,
+						ItemDefaults: &lsproto.CompletionItemDefaults{
+							CommitCharacters: &defaultCommitCharacters,
+							EditRange: &lsproto.RangeOrEditRangeWithInsertReplace{
+								EditRangeWithInsertReplace: &lsproto.EditRangeWithInsertReplace{
+									Insert: lsproto.Range{
+										Start: lsproto.Position{Line: 1, Character: 14},
+										End:   lsproto.Position{Line: 1, Character: 17},
+									},
+									Replace: lsproto.Range{
+										Start: lsproto.Position{Line: 1, Character: 14},
+										End:   lsproto.Position{Line: 1, Character: 17},
+									},
+								},
+							},
+						},
 						Items: []*lsproto.CompletionItem{
 							{
 								Label:    "extends",
@@ -1377,25 +1294,26 @@ export function isAnyDirectorySeparator(charCode: number): boolean {
 				"a": {
 					list: &lsproto.CompletionList{
 						IsIncomplete: false,
-						ItemDefaults: itemDefaults,
+						ItemDefaults: &lsproto.CompletionItemDefaults{
+							CommitCharacters: &defaultCommitCharacters,
+							EditRange: &lsproto.RangeOrEditRangeWithInsertReplace{
+								EditRangeWithInsertReplace: &lsproto.EditRangeWithInsertReplace{
+									Insert: lsproto.Range{
+										Start: lsproto.Position{Line: 33, Character: 0},
+										End:   lsproto.Position{Line: 33, Character: 1},
+									},
+									Replace: lsproto.Range{
+										Start: lsproto.Position{Line: 33, Character: 0},
+										End:   lsproto.Position{Line: 33, Character: 1},
+									},
+								},
+							},
+						},
 						Items: []*lsproto.CompletionItem{
 							{
 								Label:    "CharacterCodes",
 								Kind:     variableKind,
 								SortText: sortTextLocationPriority,
-								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
-										NewText: "CharacterCodes",
-										Insert: lsproto.Range{
-											Start: lsproto.Position{Line: 33, Character: 0},
-											End:   lsproto.Position{Line: 33, Character: 1},
-										},
-										Replace: lsproto.Range{
-											Start: lsproto.Position{Line: 33, Character: 0},
-											End:   lsproto.Position{Line: 33, Character: 1},
-										},
-									},
-								},
 							},
 						},
 					},
@@ -1484,26 +1402,26 @@ function fn3() {
 				"": {
 					list: &lsproto.CompletionList{
 						IsIncomplete: false,
-						ItemDefaults: itemDefaults,
+						ItemDefaults: &lsproto.CompletionItemDefaults{
+							CommitCharacters: &defaultCommitCharacters,
+							EditRange: &lsproto.RangeOrEditRangeWithInsertReplace{
+								EditRangeWithInsertReplace: &lsproto.EditRangeWithInsertReplace{
+									Insert: lsproto.Range{
+										Start: lsproto.Position{Line: 0, Character: 16},
+										End:   lsproto.Position{Line: 0, Character: 16},
+									},
+									Replace: lsproto.Range{
+										Start: lsproto.Position{Line: 0, Character: 16},
+										End:   lsproto.Position{Line: 0, Character: 16},
+									},
+								},
+							},
+						},
 						Items: []*lsproto.CompletionItem{
 							{
 								Label:    "div>",
 								Kind:     classKind,
 								SortText: sortTextLocationPriority,
-
-								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
-										NewText: "div>",
-										Insert: lsproto.Range{
-											Start: lsproto.Position{Line: 0, Character: 16},
-											End:   lsproto.Position{Line: 0, Character: 16},
-										},
-										Replace: lsproto.Range{
-											Start: lsproto.Position{Line: 0, Character: 16},
-											End:   lsproto.Position{Line: 0, Character: 16},
-										},
-									},
-								},
 							},
 						},
 					},
@@ -1605,7 +1523,21 @@ function fn3() {
 				"5": {
 					list: &lsproto.CompletionList{
 						IsIncomplete: false,
-						ItemDefaults: itemDefaults,
+						ItemDefaults: &lsproto.CompletionItemDefaults{
+							CommitCharacters: &defaultCommitCharacters,
+							EditRange: &lsproto.RangeOrEditRangeWithInsertReplace{
+								EditRangeWithInsertReplace: &lsproto.EditRangeWithInsertReplace{
+									Insert: lsproto.Range{
+										Start: lsproto.Position{Line: 6, Character: 13},
+										End:   lsproto.Position{Line: 6, Character: 16},
+									},
+									Replace: lsproto.Range{
+										Start: lsproto.Position{Line: 6, Character: 13},
+										End:   lsproto.Position{Line: 6, Character: 16},
+									},
+								},
+							},
+						},
 						Items: []*lsproto.CompletionItem{
 							{
 								Label:    "testlabel",
@@ -1623,7 +1555,21 @@ function fn3() {
 				"6": {
 					list: &lsproto.CompletionList{
 						IsIncomplete: false,
-						ItemDefaults: itemDefaults,
+						ItemDefaults: &lsproto.CompletionItemDefaults{
+							CommitCharacters: &defaultCommitCharacters,
+							EditRange: &lsproto.RangeOrEditRangeWithInsertReplace{
+								EditRangeWithInsertReplace: &lsproto.EditRangeWithInsertReplace{
+									Insert: lsproto.Range{
+										Start: lsproto.Position{Line: 7, Character: 16},
+										End:   lsproto.Position{Line: 7, Character: 19},
+									},
+									Replace: lsproto.Range{
+										Start: lsproto.Position{Line: 7, Character: 16},
+										End:   lsproto.Position{Line: 7, Character: 19},
+									},
+								},
+							},
+						},
 						Items: []*lsproto.CompletionItem{
 							{
 								Label:    "testlabel",
@@ -1746,20 +1692,16 @@ switch (x) {
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:    "B",
-								Kind:     enumMemberKind,
-								SortText: sortTextLocationPriority,
-
+								Label:      "B",
+								Kind:       enumMemberKind,
+								SortText:   sortTextLocationPriority,
+								InsertText: ptrTo(".B"),
 								FilterText: ptrTo(".B"),
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
-										NewText: "B",
-										Insert: lsproto.Range{
-											Start: lsproto.Position{Line: 5, Character: 11},
-											End:   lsproto.Position{Line: 5, Character: 11},
-										},
-										Replace: lsproto.Range{
-											Start: lsproto.Position{Line: 5, Character: 11},
+									TextEdit: &lsproto.TextEdit{
+										NewText: ".B",
+										Range: lsproto.Range{
+											Start: lsproto.Position{Line: 5, Character: 10},
 											End:   lsproto.Position{Line: 5, Character: 11},
 										},
 									},
@@ -1905,7 +1847,21 @@ files = {
 				"1": {
 					list: &lsproto.CompletionList{
 						IsIncomplete: false,
-						ItemDefaults: itemDefaults,
+						ItemDefaults: &lsproto.CompletionItemDefaults{
+							CommitCharacters: &defaultCommitCharacters,
+							EditRange: &lsproto.RangeOrEditRangeWithInsertReplace{
+								EditRangeWithInsertReplace: &lsproto.EditRangeWithInsertReplace{
+									Insert: lsproto.Range{
+										Start: lsproto.Position{Line: 8, Character: 4},
+										End:   lsproto.Position{Line: 8, Character: 4},
+									},
+									Replace: lsproto.Range{
+										Start: lsproto.Position{Line: 8, Character: 4},
+										End:   lsproto.Position{Line: 8, Character: 4},
+									},
+								},
+							},
+						},
 						Items: []*lsproto.CompletionItem{
 							{
 								Label:    "jspm",
@@ -2123,7 +2079,7 @@ func runTest(t *testing.T, files map[string]string, expected map[string]*testCas
 			InsertReplaceSupport:    ptrTrue,
 		},
 		CompletionList: &lsproto.CompletionListCapabilities{
-			ItemDefaults: &[]string{"commitCharacters"},
+			ItemDefaults: &[]string{"commitCharacters", "editRange"},
 		},
 	}
 	preferences := &ls.UserPreferences{}

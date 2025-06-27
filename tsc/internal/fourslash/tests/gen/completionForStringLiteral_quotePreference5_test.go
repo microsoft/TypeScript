@@ -15,13 +15,14 @@ func TestCompletionForStringLiteral_quotePreference5(t *testing.T) {
 	const content = `type T = "0" | "1";
 const t: T = /**/`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyCompletions(t, "", &fourslash.VerifyCompletionsExpectedList{
+	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
-		ItemDefaults: &lsproto.CompletionItemDefaults{
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &[]string{},
+			EditRange:        ignored,
 		},
-		Items: &fourslash.VerifyCompletionsExpectedItems{
-			Includes: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{Label: "'1'"}, &lsproto.CompletionItem{Label: "'0'"}},
+		Items: &fourslash.CompletionsExpectedItems{
+			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "'1'"}, &lsproto.CompletionItem{Label: "'0'"}},
 		},
 	})
 }

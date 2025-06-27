@@ -31,31 +31,34 @@ export var x = 9;
 // @Filename: some/other/path.ts
 export var y = 10;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyCompletions(t, []string{"import_as0"}, &fourslash.VerifyCompletionsExpectedList{
+	f.VerifyCompletions(t, []string{"import_as0"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
-		ItemDefaults: &lsproto.CompletionItemDefaults{
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &[]string{},
+			EditRange:        ignored,
 		},
-		Items: &fourslash.VerifyCompletionsExpectedItems{
-			Exact: []fourslash.ExpectedCompletionItem{"lib", "lib.decorators", "lib.decorators.legacy", "tests", &lsproto.CompletionItem{Label: "/module1"}, &lsproto.CompletionItem{Label: "/module2"}},
+		Items: &fourslash.CompletionsExpectedItems{
+			Exact: []fourslash.CompletionsExpectedItem{"lib", "lib.decorators", "lib.decorators.legacy", "tests", &lsproto.CompletionItem{Label: "/module1"}, &lsproto.CompletionItem{Label: "/module2"}},
 		},
 	})
-	f.VerifyCompletions(t, []string{"import_equals0"}, &fourslash.VerifyCompletionsExpectedList{
+	f.VerifyCompletions(t, []string{"import_equals0"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
-		ItemDefaults: &lsproto.CompletionItemDefaults{
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &[]string{},
+			EditRange:        ignored,
 		},
-		Items: &fourslash.VerifyCompletionsExpectedItems{
-			Exact: []fourslash.ExpectedCompletionItem{"lib", "lib.decorators", "lib.decorators.legacy", "tests", &lsproto.CompletionItem{Label: "/module1"}, &lsproto.CompletionItem{Label: "/module2"}},
+		Items: &fourslash.CompletionsExpectedItems{
+			Exact: []fourslash.CompletionsExpectedItem{"lib", "lib.decorators", "lib.decorators.legacy", "tests", &lsproto.CompletionItem{Label: "/module1"}, &lsproto.CompletionItem{Label: "/module2"}},
 		},
 	})
-	f.VerifyCompletions(t, []string{"require0"}, &fourslash.VerifyCompletionsExpectedList{
+	f.VerifyCompletions(t, []string{"require0"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
-		ItemDefaults: &lsproto.CompletionItemDefaults{
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &[]string{},
+			EditRange:        ignored,
 		},
-		Items: &fourslash.VerifyCompletionsExpectedItems{
-			Exact: []fourslash.ExpectedCompletionItem{"lib", "lib.decorators", "lib.decorators.legacy", "tests", &lsproto.CompletionItem{Label: "/module1"}, &lsproto.CompletionItem{Label: "/module2"}},
+		Items: &fourslash.CompletionsExpectedItems{
+			Exact: []fourslash.CompletionsExpectedItem{"lib", "lib.decorators", "lib.decorators.legacy", "tests", &lsproto.CompletionItem{Label: "/module1"}, &lsproto.CompletionItem{Label: "/module2"}},
 		},
 	})
 }

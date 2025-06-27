@@ -29,13 +29,14 @@ const i: I = {
   /*a*/
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyCompletions(t, []string{"a"}, &fourslash.VerifyCompletionsExpectedList{
+	f.VerifyCompletions(t, []string{"a"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
-		ItemDefaults: &lsproto.CompletionItemDefaults{
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &defaultCommitCharacters,
+			EditRange:        ignored,
 		},
-		Items: &fourslash.VerifyCompletionsExpectedItems{
-			Exact: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextLocationPriority)), Kind: ptrTo(lsproto.CompletionItemKindField), Label: "d"}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Kind: ptrTo(lsproto.CompletionItemKindField), Label: "c?", InsertText: ptrTo("c"), FilterText: ptrTo("c")}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextMemberDeclaredBySpreadAssignment)), Kind: ptrTo(lsproto.CompletionItemKindField), Label: "a"}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextMemberDeclaredBySpreadAssignment)), Kind: ptrTo(lsproto.CompletionItemKindField), Label: "B?", InsertText: ptrTo("B"), FilterText: ptrTo("B")}},
+		Items: &fourslash.CompletionsExpectedItems{
+			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextLocationPriority)), Kind: ptrTo(lsproto.CompletionItemKindField), Label: "d"}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Kind: ptrTo(lsproto.CompletionItemKindField), Label: "c?", InsertText: ptrTo("c"), FilterText: ptrTo("c")}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextMemberDeclaredBySpreadAssignment)), Kind: ptrTo(lsproto.CompletionItemKindField), Label: "a"}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextMemberDeclaredBySpreadAssignment)), Kind: ptrTo(lsproto.CompletionItemKindField), Label: "B?", InsertText: ptrTo("B"), FilterText: ptrTo("B")}},
 		},
 	})
 }

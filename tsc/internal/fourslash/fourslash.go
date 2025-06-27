@@ -189,7 +189,7 @@ var (
 			InsertReplaceSupport:    ptrTrue,
 		},
 		CompletionList: &lsproto.CompletionListCapabilities{
-			ItemDefaults: &[]string{"commitCharacters"},
+			ItemDefaults: &[]string{"commitCharacters", "editRange"},
 		},
 	}
 )
@@ -260,6 +260,10 @@ func (f *FourslashTest) Markers() []*Marker {
 	return f.testData.Markers
 }
 
+func (f *FourslashTest) Ranges() []*RangeMarker {
+	return f.testData.Ranges
+}
+
 func (f *FourslashTest) ensureActiveFile(t *testing.T, filename string) {
 	if f.activeFilename != filename {
 		file := core.Find(f.testData.Files, func(f *TestFileInfo) bool {
@@ -307,22 +311,35 @@ func getLanguageKind(filename string) lsproto.LanguageKind {
 	return lsproto.LanguageKindTypeScript // !!! should we error in this case?
 }
 
-// !!! break up this file into smaller files?
-// !!! add constant items like `classElementKeywords`
-type VerifyCompletionsExpectedList struct {
+type CompletionsExpectedList struct {
 	IsIncomplete bool
-	ItemDefaults *lsproto.CompletionItemDefaults
-	Items        *VerifyCompletionsExpectedItems
+	ItemDefaults *CompletionsExpectedItemDefaults
+	Items        *CompletionsExpectedItems
+}
+
+type Ignored = struct{}
+
+// *EditRange | Ignored
+type ExpectedCompletionEditRange = any
+
+type EditRange struct {
+	Insert  *RangeMarker
+	Replace *RangeMarker
+}
+
+type CompletionsExpectedItemDefaults struct {
+	CommitCharacters *[]string
+	EditRange        ExpectedCompletionEditRange
 }
 
 // *lsproto.CompletionItem | string
-type ExpectedCompletionItem = any
+type CompletionsExpectedItem = any
 
-// !!! unsorted completions? only used in 47 tests
-type VerifyCompletionsExpectedItems struct {
-	Includes []ExpectedCompletionItem
+// !!! unsorted completions
+type CompletionsExpectedItems struct {
+	Includes []CompletionsExpectedItem
 	Excludes []string
-	Exact    []ExpectedCompletionItem
+	Exact    []CompletionsExpectedItem
 }
 
 // string | *Marker | []string | []*Marker
@@ -331,7 +348,7 @@ type MarkerInput = any
 // !!! user preferences param
 // !!! completion context param
 // !!! go to marker: use current marker if none specified/support nil marker input
-func (f *FourslashTest) VerifyCompletions(t *testing.T, markerInput MarkerInput, expected *VerifyCompletionsExpectedList) {
+func (f *FourslashTest) VerifyCompletions(t *testing.T, markerInput MarkerInput, expected *CompletionsExpectedList) {
 	switch marker := markerInput.(type) {
 	case string:
 		f.verifyCompletionsAtMarker(t, marker, expected)
@@ -345,17 +362,19 @@ func (f *FourslashTest) VerifyCompletions(t *testing.T, markerInput MarkerInput,
 		for _, marker := range marker {
 			f.verifyCompletionsAtMarker(t, marker.Name, expected)
 		}
+	case nil:
+		f.verifyCompletionsWorker(t, expected)
 	default:
 		t.Fatalf("Invalid marker input type: %T. Expected string, *Marker, []string, or []*Marker.", markerInput)
 	}
 }
 
-func (f *FourslashTest) verifyCompletionsAtMarker(t *testing.T, markerName string, expected *VerifyCompletionsExpectedList) {
+func (f *FourslashTest) verifyCompletionsAtMarker(t *testing.T, markerName string, expected *CompletionsExpectedList) {
 	f.GoToMarker(t, markerName)
 	f.verifyCompletionsWorker(t, expected)
 }
 
-func (f *FourslashTest) verifyCompletionsWorker(t *testing.T, expected *VerifyCompletionsExpectedList) {
+func (f *FourslashTest) verifyCompletionsWorker(t *testing.T, expected *CompletionsExpectedList) {
 	params := &lsproto.CompletionParams{
 		TextDocumentPositionParams: lsproto.TextDocumentPositionParams{
 			TextDocument: lsproto.TextDocumentIdentifier{
@@ -378,7 +397,7 @@ func (f *FourslashTest) verifyCompletionsWorker(t *testing.T, expected *VerifyCo
 	}
 }
 
-func verifyCompletionsResult(t *testing.T, markerName string, actual *lsproto.CompletionList, expected *VerifyCompletionsExpectedList) {
+func verifyCompletionsResult(t *testing.T, markerName string, actual *lsproto.CompletionList, expected *CompletionsExpectedList) {
 	prefix := fmt.Sprintf("At marker '%s': ", markerName)
 	if actual == nil {
 		if !isEmptyExpectedList(expected) {
@@ -390,15 +409,53 @@ func verifyCompletionsResult(t *testing.T, markerName string, actual *lsproto.Co
 		t.Fatalf(prefix+"Expected nil completion list but got non-nil: %s", cmp.Diff(actual, nil))
 	}
 	assert.Equal(t, actual.IsIncomplete, expected.IsIncomplete, prefix+"IsIncomplete mismatch")
-	assertDeepEqual(t, actual.ItemDefaults, expected.ItemDefaults, prefix+"ItemDefaults mismatch")
+	verifyCompletionsItemDefaults(t, actual.ItemDefaults, expected.ItemDefaults, prefix+"ItemDefaults mismatch: ")
 	verifyCompletionsItems(t, prefix, actual.Items, expected.Items)
 }
 
-func isEmptyExpectedList(expected *VerifyCompletionsExpectedList) bool {
+func isEmptyExpectedList(expected *CompletionsExpectedList) bool {
 	return expected == nil || (len(expected.Items.Exact) == 0 && len(expected.Items.Includes) == 0 && len(expected.Items.Excludes) == 0)
 }
 
-func verifyCompletionsItems(t *testing.T, prefix string, actual []*lsproto.CompletionItem, expected *VerifyCompletionsExpectedItems) {
+func verifyCompletionsItemDefaults(t *testing.T, actual *lsproto.CompletionItemDefaults, expected *CompletionsExpectedItemDefaults, prefix string) {
+	if actual == nil {
+		if expected == nil {
+			return
+		}
+		t.Fatalf(prefix+"Expected non-nil completion item defaults but got nil: %s", cmp.Diff(actual, nil))
+	}
+	if expected == nil {
+		t.Fatalf(prefix+"Expected nil completion item defaults but got non-nil: %s", cmp.Diff(actual, nil))
+	}
+	assertDeepEqual(t, actual.CommitCharacters, expected.CommitCharacters, prefix+"CommitCharacters mismatch:")
+	switch editRange := expected.EditRange.(type) {
+	case *EditRange:
+		if actual.EditRange == nil {
+			t.Fatal(prefix + "Expected non-nil EditRange but got nil")
+		}
+		expectedInsert := editRange.Insert.LSRange
+		expectedReplace := editRange.Replace.LSRange
+		assertDeepEqual(
+			t,
+			actual.EditRange,
+			&lsproto.RangeOrEditRangeWithInsertReplace{
+				EditRangeWithInsertReplace: &lsproto.EditRangeWithInsertReplace{
+					Insert:  expectedInsert,
+					Replace: expectedReplace,
+				},
+			},
+			prefix+"EditRange mismatch:")
+	case nil:
+		if actual.EditRange != nil {
+			t.Fatalf(prefix+"Expected nil EditRange but got non-nil: %s", cmp.Diff(actual.EditRange, nil))
+		}
+	case Ignored:
+	default:
+		t.Fatalf(prefix+"Expected EditRange to be *EditRange or Ignored, got %T", editRange)
+	}
+}
+
+func verifyCompletionsItems(t *testing.T, prefix string, actual []*lsproto.CompletionItem, expected *CompletionsExpectedItems) {
 	if expected.Exact != nil {
 		if expected.Includes != nil {
 			t.Fatal(prefix + "Expected exact completion list but also specified 'includes'.")
@@ -415,10 +472,8 @@ func verifyCompletionsItems(t *testing.T, prefix string, actual []*lsproto.Compl
 		return
 	}
 	nameToActualItem := make(map[string]*lsproto.CompletionItem)
-	if actual != nil {
-		for _, item := range actual {
-			nameToActualItem[item.Label] = item
-		}
+	for _, item := range actual {
+		nameToActualItem[item.Label] = item
 	}
 	if expected.Includes != nil {
 		for _, item := range expected.Includes {
@@ -446,11 +501,11 @@ func verifyCompletionsItems(t *testing.T, prefix string, actual []*lsproto.Compl
 	}
 }
 
-func verifyCompletionsAreExactly(t *testing.T, prefix string, actual []*lsproto.CompletionItem, expected []ExpectedCompletionItem) {
+func verifyCompletionsAreExactly(t *testing.T, prefix string, actual []*lsproto.CompletionItem, expected []CompletionsExpectedItem) {
 	// Verify labels first
 	assertDeepEqual(t, core.Map(actual, func(item *lsproto.CompletionItem) string {
 		return item.Label
-	}), core.Map(expected, func(item ExpectedCompletionItem) string {
+	}), core.Map(expected, func(item CompletionsExpectedItem) string {
 		return getExpectedLabel(t, item)
 	}), prefix+"Labels mismatch")
 	for i, actualItem := range actual {
@@ -482,7 +537,7 @@ func verifyCompletionItem(t *testing.T, prefix string, actual *lsproto.Completio
 	assertDeepEqual(t, actual.SortText, core.OrElse(expected.SortText, ptrTo(string(ls.SortTextLocationPriority))), prefix+" SortText mismatch")
 }
 
-func getExpectedLabel(t *testing.T, item ExpectedCompletionItem) string {
+func getExpectedLabel(t *testing.T, item CompletionsExpectedItem) string {
 	switch item := item.(type) {
 	case string:
 		return item

@@ -20,22 +20,24 @@ f<I>({ /*f*/ });
 declare function g<T>(x: keyof T, y: number): void;
 g<I>("[|/*g*/|]");`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyCompletions(t, "f", &fourslash.VerifyCompletionsExpectedList{
+	f.VerifyCompletions(t, "f", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
-		ItemDefaults: &lsproto.CompletionItemDefaults{
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &defaultCommitCharacters,
+			EditRange:        ignored,
 		},
-		Items: &fourslash.VerifyCompletionsExpectedItems{
-			Exact: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{Label: "x"}, &lsproto.CompletionItem{Label: "y"}},
+		Items: &fourslash.CompletionsExpectedItems{
+			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "x"}, &lsproto.CompletionItem{Label: "y"}},
 		},
 	})
-	f.VerifyCompletions(t, "g", &fourslash.VerifyCompletionsExpectedList{
+	f.VerifyCompletions(t, "g", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
-		ItemDefaults: &lsproto.CompletionItemDefaults{
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &defaultCommitCharacters,
+			EditRange:        ignored,
 		},
-		Items: &fourslash.VerifyCompletionsExpectedItems{
-			Exact: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{Label: "x"}, &lsproto.CompletionItem{Label: "y"}},
+		Items: &fourslash.CompletionsExpectedItems{
+			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "x"}, &lsproto.CompletionItem{Label: "y"}},
 		},
 	})
 }

@@ -23,13 +23,14 @@ declare class Poltergeist implements Ghost {
     /*b*/
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyCompletions(t, "b", &fourslash.VerifyCompletionsExpectedList{
+	f.VerifyCompletions(t, "b", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
-		ItemDefaults: &lsproto.CompletionItemDefaults{
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &[]string{},
+			EditRange:        ignored,
 		},
-		Items: &fourslash.VerifyCompletionsExpectedItems{
-			Includes: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextLocationPriority)), Label: "boo", InsertText: ptrTo("boo(): string;"), FilterText: ptrTo("boo")}},
+		Items: &fourslash.CompletionsExpectedItems{
+			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextLocationPriority)), Label: "boo", InsertText: ptrTo("boo(): string;"), FilterText: ptrTo("boo")}},
 		},
 	})
 }

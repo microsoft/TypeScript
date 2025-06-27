@@ -24,22 +24,24 @@ let fifthCase: Foo["b/*case_5*/"]
 let sixthCase: Foo["qu/*case_6*/"]`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	f.VerifyCompletions(t, []string{"case_1", "case_2", "case_3", "case_4"}, nil)
-	f.VerifyCompletions(t, "case_5", &fourslash.VerifyCompletionsExpectedList{
+	f.VerifyCompletions(t, "case_5", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
-		ItemDefaults: &lsproto.CompletionItemDefaults{
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &defaultCommitCharacters,
+			EditRange:        ignored,
 		},
-		Items: &fourslash.VerifyCompletionsExpectedItems{
-			Includes: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{Label: "bar"}},
+		Items: &fourslash.CompletionsExpectedItems{
+			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "bar"}},
 		},
 	})
-	f.VerifyCompletions(t, "case_6", &fourslash.VerifyCompletionsExpectedList{
+	f.VerifyCompletions(t, "case_6", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
-		ItemDefaults: &lsproto.CompletionItemDefaults{
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &defaultCommitCharacters,
+			EditRange:        ignored,
 		},
-		Items: &fourslash.VerifyCompletionsExpectedItems{
-			Includes: []fourslash.ExpectedCompletionItem{&lsproto.CompletionItem{Label: "qux"}},
+		Items: &fourslash.CompletionsExpectedItems{
+			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "qux"}},
 		},
 	})
 }

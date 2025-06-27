@@ -1329,7 +1329,7 @@ func getAllSuperTypeNodes(node *ast.Node) []*ast.TypeNode {
 	}
 	if ast.IsClassLike(node) {
 		return append(
-			[]*ast.Node{ast.GetClassExtendsHeritageElement(node)},
+			core.SingleElementSlice(ast.GetClassExtendsHeritageElement(node)),
 			ast.GetImplementsTypeNodes(node)...,
 		)
 	}

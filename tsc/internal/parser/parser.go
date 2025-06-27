@@ -6500,7 +6500,7 @@ func extractPragmas(commentRange ast.CommentRange, text string) []ast.Pragma {
 		}
 	}
 	if commentRange.Kind == ast.KindMultiLineCommentTrivia {
-		text = text[:len(text)-2]
+		text = strings.TrimSuffix(text, "*/")
 		pos := 2
 		var pragmas []ast.Pragma
 		for {

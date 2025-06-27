@@ -109,7 +109,6 @@ func (l *LanguageService) convertStringLiteralCompletions(
 		_, items := l.getCompletionEntriesFromSymbols(
 			ctx,
 			data,
-			optionalReplacementRange,
 			contextToken, /*replacementToken*/
 			position,
 			file,
@@ -119,7 +118,14 @@ func (l *LanguageService) convertStringLiteralCompletions(
 			clientOptions,
 		)
 		defaultCommitCharacters := getDefaultCommitCharacters(completion.hasIndexSignature)
-		itemDefaults := setCommitCharacters(clientOptions, items, &defaultCommitCharacters)
+		itemDefaults := l.setItemDefaults(
+			clientOptions,
+			position,
+			file,
+			items,
+			&defaultCommitCharacters,
+			optionalReplacementRange,
+		)
 		return &lsproto.CompletionList{
 			IsIncomplete: false,
 			ItemDefaults: itemDefaults,
@@ -145,7 +151,6 @@ func (l *LanguageService) convertStringLiteralCompletions(
 				ScriptElementKindString,
 				collections.Set[ScriptElementKindModifier]{},
 				l.getReplacementRangeForContextToken(file, contextToken, position),
-				nil, /*optionalReplacementSpan*/
 				nil, /*commitCharacters*/
 				nil, /*labelDetails*/
 				file,
@@ -159,7 +164,14 @@ func (l *LanguageService) convertStringLiteralCompletions(
 			)
 		})
 		defaultCommitCharacters := getDefaultCommitCharacters(completion.isNewIdentifier)
-		itemDefaults := setCommitCharacters(clientOptions, items, &defaultCommitCharacters)
+		itemDefaults := l.setItemDefaults(
+			clientOptions,
+			position,
+			file,
+			items,
+			&defaultCommitCharacters,
+			nil, /*optionalReplacementSpan*/
+		)
 		return &lsproto.CompletionList{
 			IsIncomplete: false,
 			ItemDefaults: itemDefaults,
@@ -188,7 +200,6 @@ func (l *LanguageService) convertPathCompletions(
 			pathCompletion.kind,
 			*collections.NewSetFromItems(kindModifiersFromExtension(pathCompletion.extension)),
 			replacementSpan,
-			nil, /*optionalReplacementSpan*/
 			nil, /*commitCharacters*/
 			nil, /*labelDetails*/
 			file,
@@ -201,7 +212,14 @@ func (l *LanguageService) convertPathCompletions(
 			"",    /*source*/
 		)
 	})
-	itemDefaults := setCommitCharacters(clientOptions, items, &defaultCommitCharacters)
+	itemDefaults := l.setItemDefaults(
+		clientOptions,
+		position,
+		file,
+		items,
+		&defaultCommitCharacters,
+		nil, /*optionalReplacementSpan*/
+	)
 	return &lsproto.CompletionList{
 		IsIncomplete: false,
 		ItemDefaults: itemDefaults,
