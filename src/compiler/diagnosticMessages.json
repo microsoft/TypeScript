@@ -2080,6 +2080,10 @@
         "category": "Error",
         "code": 2345
     },
+    "Call target does not contain any signatures.": {
+        "category": "Error",
+        "code": 2346
+    },
     "Untyped function calls may not accept type arguments.": {
         "category": "Error",
         "code": 2347
