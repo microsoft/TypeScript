@@ -540,6 +540,7 @@ describe("unittests:: tscWatch:: moduleResolution::", () => {
                 sys,
                 commandLineArgs: ["-w", "--extendedDiagnostics"],
                 edits: edits(),
+                skipIncrementalVerification: true,
             }),
     );
 

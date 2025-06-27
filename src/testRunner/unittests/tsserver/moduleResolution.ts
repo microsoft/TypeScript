@@ -162,7 +162,7 @@ describe("unittests:: tsserver:: moduleResolution::", () => {
             it(scenario, () => {
                 const host = getHost();
                 const indexFile = "/home/src/projects/project/index.mts";
-                const session = new TestSession(host);
+                const session = new TestSession({ host, skipIncrementalVerification: true });
                 openFilesForSession([indexFile], session);
                 verifyGetErrRequest({ files: [indexFile], session });
                 forEachTscWatchEdit(session, edits(), () => verifyGetErrRequest({ session, files: [indexFile] }));

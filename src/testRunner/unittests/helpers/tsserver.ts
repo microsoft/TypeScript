@@ -197,6 +197,7 @@ export interface TestSessionOptions extends ts.server.SessionOptions, TestTyping
     disableAutomaticTypingAcquisition?: boolean;
     useCancellationToken?: boolean | number;
     regionDiagLineCountThreshold?: number;
+    skipIncrementalVerification?: true;
 }
 export type TestSessionPartialOptionsAndHost =
     & Partial<Omit<TestSessionOptions, "typingsInstaller" | "cancellationToken">>
@@ -237,7 +238,7 @@ export class TestSession extends ts.server.Session {
             hrtime: process.hrtime,
             logger: opts.logger,
             canUseEvents: true,
-            incrementalVerifier,
+            incrementalVerifier: opts.skipIncrementalVerification ? undefined : incrementalVerifier,
             typesMapLocation: customTypesMap.path,
             typingsInstaller,
             ...opts,

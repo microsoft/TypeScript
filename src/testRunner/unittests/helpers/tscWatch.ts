@@ -30,6 +30,7 @@ export interface TscWatchCompileChange<T extends ts.BuilderProgram = ts.EmitAndS
 export interface TscWatchCheckOptions {
     baselineSourceMap?: boolean;
     baselineDependencies?: boolean;
+    skipIncrementalVerification?: true;
 }
 export interface TscWatchCompileBase<T extends ts.BuilderProgram = ts.EmitAndSemanticDiagnosticsBuilderProgram> extends TscWatchCheckOptions {
     scenario: string;
@@ -57,6 +58,7 @@ function tscWatchCompile(input: TscWatchCompile) {
             edits,
             baselineSourceMap,
             baselineDependencies,
+            skipIncrementalVerification,
         } = input;
         ts.Debug.assert(isWatch(commandLineArgs), "use verifyTsc");
         const { cb, getPrograms } = commandLineCallbacks(sys);
@@ -74,6 +76,7 @@ function tscWatchCompile(input: TscWatchCompile) {
             getPrograms,
             baselineSourceMap,
             baselineDependencies,
+            skipIncrementalVerification,
             edits,
             watchOrSolution,
         });
@@ -143,6 +146,7 @@ export function runWatchBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanti
     baseline,
     baselineSourceMap,
     baselineDependencies,
+    skipIncrementalVerification,
     edits,
     watchOrSolution,
     useSourceOfProjectReferenceRedirect,
@@ -155,6 +159,7 @@ export function runWatchBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanti
         sys,
         baselineSourceMap,
         baselineDependencies,
+        skipIncrementalVerification,
     });
 
     if (edits) {
@@ -168,6 +173,7 @@ export function runWatchBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanti
                 sys,
                 baselineSourceMap,
                 baselineDependencies,
+                skipIncrementalVerification,
                 caption,
                 resolutionCache: (watchOrSolution as ts.WatchOfConfigFile<T> | undefined)?.getResolutionCache?.(),
                 useSourceOfProjectReferenceRedirect,
@@ -191,6 +197,7 @@ export function watchBaseline({
     sys,
     baselineSourceMap,
     baselineDependencies,
+    skipIncrementalVerification,
     caption,
     resolutionCache,
     useSourceOfProjectReferenceRedirect,
@@ -205,7 +212,7 @@ export function watchBaseline({
         baselineDependencies,
     );
     // Verify program structure and resolution cache when incremental edit with tsc --watch (without build mode)
-    if (resolutionCache && programs.length) {
+    if (!skipIncrementalVerification && resolutionCache && programs.length) {
         ts.Debug.assert(programs.length === 1);
         verifyProgramStructureAndResolutionCache(
             caption!,
