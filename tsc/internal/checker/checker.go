@@ -8535,6 +8535,13 @@ func (c *Checker) resolveCall(node *ast.Node, signatures []*Signature, candidate
 	if candidatesOutArray != nil {
 		*candidatesOutArray = s.candidates
 	}
+
+	if len(s.candidates) == 0 {
+		// In Strada we would error here, but no known repro doesn't have at least
+		// one other error in this codepath. Just return instead. See #54442
+		return c.unknownSignature
+	}
+
 	s.args = c.getEffectiveCallArguments(node)
 	// The excludeArgument array contains true for each context sensitive argument (an argument
 	// is context sensitive it is susceptible to a one-time permanent contextual typing).
