@@ -1887,14 +1887,14 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJS_option_to_get_errors_from_these__6600" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJs_option_to_get_errors_from_these__6600" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files.]]></Val>
+          <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the 'checkJs' option to get errors from these files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Lassen Sie zu, dass JavaScript-Dateien Teil Ihres Programms werden. Verwenden Sie die Option „checkJS“, um Fehler aus diesen Dateien abzurufen.]]></Val>
+            <Val><![CDATA[Lassen Sie zu, dass JavaScript-Dateien Teil Ihres Programms werden. Verwenden Sie die Option „checkJs“, um Fehler aus diesen Dateien abzurufen.]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files.]]></Val>
+            <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the `checkJs` option to get errors from these files.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />

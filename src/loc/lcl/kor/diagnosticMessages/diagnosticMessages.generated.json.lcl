@@ -1890,14 +1890,14 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJS_option_to_get_errors_from_these__6600" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJs_option_to_get_errors_from_these__6600" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files.]]></Val>
+          <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the 'checkJs' option to get errors from these files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[JavaScript 파일이 프로그램의 일부가 되도록 허용합니다. 이러한 파일에서 오류를 가져오려면 'checkJS' 옵션을 사용하세요.]]></Val>
+            <Val><![CDATA[JavaScript 파일이 프로그램의 일부가 되도록 허용합니다. 이러한 파일에서 오류를 가져오려면 'checkJs' 옵션을 사용하세요.]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files.]]></Val>
+            <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the `checkJs` option to get errors from these files.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
