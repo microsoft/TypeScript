@@ -7715,9 +7715,18 @@ export function base64decode(host: { base64decode?(input: string): string; } | u
 export function readJsonOrUndefined(path: string, hostOrText: { readFile(fileName: string): string | undefined; } | string): object | undefined {
     const jsonText = isString(hostOrText) ? hostOrText : hostOrText.readFile(path);
     if (!jsonText) return undefined;
-    // gracefully handle if readFile fails or returns not JSON
-    const result = parseConfigFileTextToJson(path, jsonText);
-    return !result.error ? result.config : undefined;
+    // Try strictly parsing first, then fall back to our (slower)
+    // parser that is resilient to comments/trailing commas.
+    // package.json files should never have these, but we
+    // have no way to communicate these issues in the first place.
+    let result = tryParseJson(jsonText);
+    if (result === undefined) {
+        const looseResult = parseConfigFileTextToJson(path, jsonText);
+        if (!looseResult.error) {
+            result = looseResult.config;
+        }
+    }
+    return result;
 }
 
 /** @internal */
@@ -8964,6 +8973,7 @@ const _computedOptions = createComputedCompilerOptions({
             return target ??
                 ((compilerOptions.module === ModuleKind.Node16 && ScriptTarget.ES2022) ||
                     (compilerOptions.module === ModuleKind.Node18 && ScriptTarget.ES2022) ||
+                    (compilerOptions.module === ModuleKind.Node20 && ScriptTarget.ES2023) ||
                     (compilerOptions.module === ModuleKind.NodeNext && ScriptTarget.ESNext) ||
                     ScriptTarget.ES5);
         },
@@ -8987,6 +8997,7 @@ const _computedOptions = createComputedCompilerOptions({
                         break;
                     case ModuleKind.Node16:
                     case ModuleKind.Node18:
+                    case ModuleKind.Node20:
                         moduleResolution = ModuleResolutionKind.Node16;
                         break;
                     case ModuleKind.NodeNext:
@@ -9030,6 +9041,7 @@ const _computedOptions = createComputedCompilerOptions({
             switch (_computedOptions.module.computeValue(compilerOptions)) {
                 case ModuleKind.Node16:
                 case ModuleKind.Node18:
+                case ModuleKind.Node20:
                 case ModuleKind.NodeNext:
                 case ModuleKind.Preserve:
                     return true;
@@ -9091,6 +9103,14 @@ const _computedOptions = createComputedCompilerOptions({
         computeValue: (compilerOptions): boolean => {
             if (compilerOptions.resolveJsonModule !== undefined) {
                 return compilerOptions.resolveJsonModule;
+            }
+            switch (_computedOptions.module.computeValue(compilerOptions)) {
+                // TODO in 6.0: uncomment
+                // case ModuleKind.Node16:
+                // case ModuleKind.Node18:
+                case ModuleKind.Node20:
+                case ModuleKind.NodeNext:
+                    return true;
             }
             return _computedOptions.moduleResolution.computeValue(compilerOptions) === ModuleResolutionKind.Bundler;
         },

@@ -9,7 +9,7 @@
 ////   "exports": {
 ////     "./only-with-custom-conditions": {
 ////       "custom-condition": "./something.js"
-////     },
+////     }
 ////   }
 //// }
 

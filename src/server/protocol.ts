@@ -3258,6 +3258,7 @@ export const enum ModuleKind {
     ESNext = "esnext",
     Node16 = "node16",
     Node18 = "node18",
+    Node20 = "node20",
     NodeNext = "nodenext",
     Preserve = "preserve",
 }

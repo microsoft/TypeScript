@@ -520,6 +520,9 @@ function getMeaningFromRightHandSideOfImportEquals(node: Node): SemanticMeaning 
 
 /** @internal */
 export function isInRightSideOfInternalImportEqualsDeclaration(node: Node): boolean {
+    if (!node.parent) {
+        return false;
+    }
     while (node.parent.kind === SyntaxKind.QualifiedName) {
         node = node.parent;
     }
@@ -1886,7 +1889,7 @@ export function isInsideJsxElementOrAttribute(sourceFile: SourceFile, position: 
     }
 
     // <div>|</div>
-    if (token.kind === SyntaxKind.LessThanToken && token.parent.kind === SyntaxKind.JsxClosingElement) {
+    if (token.kind === SyntaxKind.LessThanSlashToken && token.parent.kind === SyntaxKind.JsxClosingElement) {
         return true;
     }
 
@@ -1931,6 +1934,7 @@ export function isInsideJsxElement(sourceFile: SourceFile, position: number): bo
                 || node.kind === SyntaxKind.CloseBraceToken
                 || node.kind === SyntaxKind.OpenBraceToken
                 || node.kind === SyntaxKind.SlashToken
+                || node.kind === SyntaxKind.LessThanSlashToken
             ) {
                 node = node.parent;
             }
