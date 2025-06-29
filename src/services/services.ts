@@ -3548,6 +3548,7 @@ function getContainingObjectLiteralElementWorker(node: Node): ObjectLiteralEleme
         // falls through
 
         case SyntaxKind.Identifier:
+        case SyntaxKind.JsxNamespacedName:
             return isObjectLiteralElement(node.parent) &&
                     (node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression || node.parent.parent.kind === SyntaxKind.JsxAttributes) &&
                     node.parent.name === node ? node.parent : undefined;
