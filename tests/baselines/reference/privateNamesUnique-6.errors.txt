@@ -1,0 +1,17 @@
+privateNamesUnique-6.ts(6,7): error TS2322: Type '(Anonymous class)' is not assignable to type 'A'.
+  Property '#foo' in type '(Anonymous class)' refers to a different member that cannot be accessed from within type 'A'.
+
+
+==== privateNamesUnique-6.ts (1 errors) ====
+    class A {
+      #foo: number;
+    }
+    
+    // error
+    const test: A = new (class {
+          ~~~~
+!!! error TS2322: Type '(Anonymous class)' is not assignable to type 'A'.
+!!! error TS2322:   Property '#foo' in type '(Anonymous class)' refers to a different member that cannot be accessed from within type 'A'.
+      #foo: number;
+    })();
+    
