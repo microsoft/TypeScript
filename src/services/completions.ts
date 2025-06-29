@@ -3851,6 +3851,10 @@ function getCompletionData(
             if (firstAccessibleSymbolId && addToSeen(seenPropertySymbols, firstAccessibleSymbolId)) {
                 const index = symbols.length;
                 symbols.push(firstAccessibleSymbol);
+
+                // Symbol completions should have lower priority since they represent computed property access
+                symbolToSortTextMap[getSymbolId(firstAccessibleSymbol)] = SortText.GlobalsOrKeywords;
+
                 const moduleSymbol = firstAccessibleSymbol.parent;
                 if (
                     !moduleSymbol ||
