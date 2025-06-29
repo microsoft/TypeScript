@@ -1,0 +1,186 @@
+unconstrainedTypeComparison.ts(2,12): error TS18049: 'a' is possibly 'null' or 'undefined'.
+unconstrainedTypeComparison.ts(2,16): error TS18049: 'b' is possibly 'null' or 'undefined'.
+unconstrainedTypeComparison.ts(6,12): error TS18049: 'a' is possibly 'null' or 'undefined'.
+unconstrainedTypeComparison.ts(6,16): error TS18049: 'b' is possibly 'null' or 'undefined'.
+unconstrainedTypeComparison.ts(10,12): error TS18049: 'a' is possibly 'null' or 'undefined'.
+unconstrainedTypeComparison.ts(10,16): error TS18049: 'b' is possibly 'null' or 'undefined'.
+unconstrainedTypeComparison.ts(14,12): error TS18049: 'a' is possibly 'null' or 'undefined'.
+unconstrainedTypeComparison.ts(14,16): error TS18049: 'b' is possibly 'null' or 'undefined'.
+unconstrainedTypeComparison.ts(18,12): error TS18049: 'a' is possibly 'null' or 'undefined'.
+unconstrainedTypeComparison.ts(18,16): error TS18049: 'b' is possibly 'null' or 'undefined'.
+unconstrainedTypeComparison.ts(22,12): error TS18049: 'a' is possibly 'null' or 'undefined'.
+unconstrainedTypeComparison.ts(22,16): error TS18049: 'b' is possibly 'null' or 'undefined'.
+unconstrainedTypeComparison.ts(26,12): error TS18048: 'a' is possibly 'undefined'.
+unconstrainedTypeComparison.ts(26,16): error TS18048: 'b' is possibly 'undefined'.
+unconstrainedTypeComparison.ts(30,12): error TS18047: 'a' is possibly 'null'.
+unconstrainedTypeComparison.ts(30,16): error TS18047: 'b' is possibly 'null'.
+unconstrainedTypeComparison.ts(34,12): error TS18049: 'a' is possibly 'null' or 'undefined'.
+unconstrainedTypeComparison.ts(34,16): error TS18049: 'b' is possibly 'null' or 'undefined'.
+unconstrainedTypeComparison.ts(38,12): error TS18049: 'x' is possibly 'null' or 'undefined'.
+unconstrainedTypeComparison.ts(38,16): error TS18049: 'y' is possibly 'null' or 'undefined'.
+unconstrainedTypeComparison.ts(42,12): error TS18049: 'x' is possibly 'null' or 'undefined'.
+unconstrainedTypeComparison.ts(42,16): error TS18049: 'y' is possibly 'null' or 'undefined'.
+unconstrainedTypeComparison.ts(49,12): error TS18047: 'x' is possibly 'null'.
+unconstrainedTypeComparison.ts(49,16): error TS18049: 'y' is possibly 'null' or 'undefined'.
+unconstrainedTypeComparison.ts(56,12): error TS18047: 'x' is possibly 'null'.
+unconstrainedTypeComparison.ts(56,16): error TS18049: 'y' is possibly 'null' or 'undefined'.
+unconstrainedTypeComparison.ts(60,12): error TS18049: 'x' is possibly 'null' or 'undefined'.
+unconstrainedTypeComparison.ts(60,16): error TS18049: 'y' is possibly 'null' or 'undefined'.
+unconstrainedTypeComparison.ts(74,12): error TS18047: 'x' is possibly 'null'.
+unconstrainedTypeComparison.ts(74,16): error TS18048: 'y' is possibly 'undefined'.
+unconstrainedTypeComparison.ts(85,12): error TS18047: 'a' is possibly 'null'.
+unconstrainedTypeComparison.ts(85,16): error TS18048: 'b' is possibly 'undefined'.
+
+
+==== unconstrainedTypeComparison.ts (32 errors) ====
+    function f1<T>(a: T, b: T): boolean {
+        return a > b;
+               ~
+!!! error TS18049: 'a' is possibly 'null' or 'undefined'.
+                   ~
+!!! error TS18049: 'b' is possibly 'null' or 'undefined'.
+    }
+    
+    function f2<T extends {} | undefined | null>(a: T, b: T): boolean {
+        return a > b;
+               ~
+!!! error TS18049: 'a' is possibly 'null' or 'undefined'.
+                   ~
+!!! error TS18049: 'b' is possibly 'null' or 'undefined'.
+    }
+    
+    function f3<T extends unknown>(a: T, b: T): boolean {
+        return a > b;
+               ~
+!!! error TS18049: 'a' is possibly 'null' or 'undefined'.
+                   ~
+!!! error TS18049: 'b' is possibly 'null' or 'undefined'.
+    }
+    
+    function f4<T, U extends T>(a: U, b: U): boolean {
+        return a > b;
+               ~
+!!! error TS18049: 'a' is possibly 'null' or 'undefined'.
+                   ~
+!!! error TS18049: 'b' is possibly 'null' or 'undefined'.
+    }
+    
+    function f5<T extends {} | undefined | null, U extends T>(a: U, b: U): boolean {
+        return a > b;
+               ~
+!!! error TS18049: 'a' is possibly 'null' or 'undefined'.
+                   ~
+!!! error TS18049: 'b' is possibly 'null' or 'undefined'.
+    }
+    
+    function f6<T extends unknown, U extends T>(a: U, b: U): boolean {
+        return a > b;
+               ~
+!!! error TS18049: 'a' is possibly 'null' or 'undefined'.
+                   ~
+!!! error TS18049: 'b' is possibly 'null' or 'undefined'.
+    }
+    
+    function f7<T extends {} | undefined, U extends T>(a: U, b: U): boolean {
+        return a > b;
+               ~
+!!! error TS18048: 'a' is possibly 'undefined'.
+                   ~
+!!! error TS18048: 'b' is possibly 'undefined'.
+    }
+    
+    function f8<T extends {} | null, U extends T>(a: U, b: U): boolean {
+        return a > b;
+               ~
+!!! error TS18047: 'a' is possibly 'null'.
+                   ~
+!!! error TS18047: 'b' is possibly 'null'.
+    }
+    
+    function f9<T extends undefined | null, U extends T>(a: U, b: U): boolean {
+        return a > b;
+               ~
+!!! error TS18049: 'a' is possibly 'null' or 'undefined'.
+                   ~
+!!! error TS18049: 'b' is possibly 'null' or 'undefined'.
+    }
+    
+    function f10<T, U>(x: T | U, y: T | U) {
+        return x < y;
+               ~
+!!! error TS18049: 'x' is possibly 'null' or 'undefined'.
+                   ~
+!!! error TS18049: 'y' is possibly 'null' or 'undefined'.
+    }
+    
+    function f11<T, U extends T>(x: T | number, y: U | number) {
+        return x < y;
+               ~
+!!! error TS18049: 'x' is possibly 'null' or 'undefined'.
+                   ~
+!!! error TS18049: 'y' is possibly 'null' or 'undefined'.
+    }
+    
+    function f12<T, U extends T>(x: T | number, y: U | number) {
+        if (x === undefined) {
+            return false;
+        }
+        return x < y;
+               ~
+!!! error TS18047: 'x' is possibly 'null'.
+                   ~
+!!! error TS18049: 'y' is possibly 'null' or 'undefined'.
+    }
+    
+    function f13<T, U extends T | number>(x: U, y: U) {
+        if (x === undefined) {
+            return false;
+        }
+        return x < y;
+               ~
+!!! error TS18047: 'x' is possibly 'null'.
+                   ~
+!!! error TS18049: 'y' is possibly 'null' or 'undefined'.
+    }
+    
+    function f14<T, U>(x: T & U, y: T & U) {
+        return x < y;
+               ~
+!!! error TS18049: 'x' is possibly 'null' or 'undefined'.
+                   ~
+!!! error TS18049: 'y' is possibly 'null' or 'undefined'.
+    }
+    
+    function f15<T, U extends T>(x: T & number, y: U & number) {
+        return x < y;
+    }
+    
+    function f16<T, U extends T>(x: T & U, y: U) {
+        if (x === undefined) {
+            return false;
+        }
+        if (y === null) {
+            return false;
+        }
+        return x < y;
+               ~
+!!! error TS18047: 'x' is possibly 'null'.
+                   ~
+!!! error TS18048: 'y' is possibly 'undefined'.
+    }
+    
+    
+    function compare<T>(a: T, b: T): boolean {
+        if (a === undefined) {
+            return false;
+        }
+        if (b === null) {
+            return false;
+        }
+        return a > b;
+               ~
+!!! error TS18047: 'a' is possibly 'null'.
+                   ~
+!!! error TS18048: 'b' is possibly 'undefined'.
+    }
+    
