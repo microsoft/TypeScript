@@ -1838,13 +1838,13 @@ export namespace Core {
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.StringLiteral: {
                 const str = node as StringLiteralLike;
-                return str.text.length === searchSymbolName.length && (
+                return (
                     isLiteralNameOfPropertyDeclarationOrIndexAccess(str) ||
                     isNameOfModuleDeclaration(node) ||
                     isExpressionOfExternalModuleImportEqualsDeclaration(node) ||
                     (isCallExpression(node.parent) && isBindableObjectDefinePropertyCall(node.parent) && node.parent.arguments[1] === node) ||
                     isImportOrExportSpecifier(node.parent)
-                );
+                ) && str.text.length === searchSymbolName.length;
             }
 
             case SyntaxKind.NumericLiteral:
