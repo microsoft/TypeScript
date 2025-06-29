@@ -30,7 +30,7 @@ jobs:
           # corepack enable npm
           npm install -g $(jq -r '.packageManager' < package.json)
           npm --version
-      - name: Setup and publish nightly
+      - name: Setup and test nightly
         run: |
           npm ci
           npx hereby configure-nightly
