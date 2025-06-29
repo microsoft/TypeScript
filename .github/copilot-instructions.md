@@ -15,13 +15,13 @@ npx hereby local             # Build the compiler into built/local
 npx hereby clean             # Delete the built compiler  
 npx hereby tests             # Build the test infrastructure
 npx hereby runtests          # Run all tests
-npx hereby runtests-parallel # Run tests in parallel (recommended)
+npx hereby runtests-parallel # Run tests in parallel 🚨 MANDATORY BEFORE FINISHING!
 npx hereby runtests --runner=fourslash # Run only fourslash tests
 npx hereby runtests --runner=compiler # Run only compiler tests
 npx hereby runtests --tests=<testPath> # Run specific test
 npx hereby baseline-accept   # Accept new test baselines
-npx hereby lint              # Run eslint
-npx hereby format            # Run code formatting
+npx hereby lint              # Run eslint 🚨 MANDATORY BEFORE FINISHING!
+npx hereby format            # Run code formatting 🚨 MANDATORY BEFORE FINISHING!
 ```
 
 ## Fourslash Test Syntax Guide
@@ -258,10 +258,22 @@ npx hereby runtests --tests=tests/cases/fourslash/completion*.ts
 
 ## Important Guidelines
 
+### 🚨 CRITICAL: Before Finishing Your Work 🚨
+
+**THESE STEPS ARE MANDATORY BEFORE COMMITTING/PUSHING ANY CHANGES:**
+
+1. **MUST RUN:** `npx hereby runtests-parallel` (even though it takes 10-15 minutes)
+2. **MUST RUN:** `npx hereby lint` and fix ALL lint issues
+3. **MUST RUN:** `npx hereby format` as the final step
+
+**❌ PRs that fail these checks will be rejected without review.**
+
 ### Keeping Things Tidy
 
-- Once you think you're done, run `npx hereby lint` and fix any issues
-- Then always run `npx hereby format` as your last step
+- You can assume lint, tests, and formatting are clean on a fresh clone
+- Only run these verification steps AFTER making changes to code
+- Run `npx hereby lint` and fix ALL issues after making changes
+- Run `npx hereby format` as your final step after making changes
 
 ### Test Locations
 
@@ -317,11 +329,14 @@ When fixing bugs or implementing features, follow this workflow:
    - Once you've got the basics figured out, enhance your test to cover edge cases and other variations
    - Run the test again and commit the baseline diff along with the test edit
 
-5. **Run all other tests to ensure you didn't break anything**
-   - Run `npx hereby runtests-parallel` and wait for it to finish (10-15 minutes is normal!)
+5. **🚨 MANDATORY: Run all other tests to ensure you didn't break anything**
+   - **REQUIRED:** Run `npx hereby runtests-parallel` and wait for it to finish (10-15 minutes is normal!)
+   - **THIS STEP CANNOT BE SKIPPED** - patience is essential!
    - Some collateral baseline changes are normal, but review for correctness
    - Put these diffs in another commit
 
-6. **Always format and lint**
-   - Don't forget to run `npx hereby lint` and `npx hereby format` before you're done
+6. **🚨 MANDATORY: Lint and format your changes**
+   - **REQUIRED:** Run `npx hereby lint` and fix ALL issues
+   - **REQUIRED:** Run `npx hereby format` before you're done
+   - **YOU CANNOT FINISH WITHOUT THESE STEPS**
    - Double-check your line endings. Source files in this repo typically use CRLF line endings. Fix all line endings to be consistent before you wrap up
