@@ -1,0 +1,16 @@
+autonumberingInEnums.ts(1,6): error TS2567: Enum declarations can only merge with namespace declarations.
+autonumberingInEnums.ts(5,6): error TS2567: Enum declarations can only merge with namespace declarations.
+
+
+==== autonumberingInEnums.ts (2 errors) ====
+    enum Foo {
+         ~~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
+        a = 1
+    }
+    
+    enum Foo {
+         ~~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
+        b
+    }

@@ -40,7 +40,7 @@ E.A.A; // should error
 
 
 enum E2 {
->E2 : Symbol(E2, Decl(enumBasics1.ts, 25, 6), Decl(enumBasics1.ts, 31, 1))
+>E2 : Symbol(E2, Decl(enumBasics1.ts, 25, 6))
 
 	A,
 >A : Symbol(E2.A, Decl(enumBasics1.ts, 28, 9))
@@ -50,7 +50,7 @@ enum E2 {
 }
 
 enum E2 { // should error for continued autonumbering
->E2 : Symbol(E2, Decl(enumBasics1.ts, 25, 6), Decl(enumBasics1.ts, 31, 1))
+>E2 : Symbol(E2, Decl(enumBasics1.ts, 31, 1))
 
 	C,
 >C : Symbol(E2.C, Decl(enumBasics1.ts, 33, 9))

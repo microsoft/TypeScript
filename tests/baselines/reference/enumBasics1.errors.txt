@@ -1,8 +1,9 @@
 enumBasics1.ts(26,5): error TS2339: Property 'A' does not exist on type 'E.A'.
-enumBasics1.ts(35,2): error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
+enumBasics1.ts(29,6): error TS2567: Enum declarations can only merge with namespace declarations.
+enumBasics1.ts(34,6): error TS2567: Enum declarations can only merge with namespace declarations.
 
 
-==== enumBasics1.ts (2 errors) ====
+==== enumBasics1.ts (3 errors) ====
     enum E {
     	A = 1,
     	B,
@@ -34,13 +35,15 @@ enumBasics1.ts(35,2): error TS2432: In an enum with multiple declarations, only 
     
     
     enum E2 {
+         ~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
     	A,
     	B,
     }
     
     enum E2 { // should error for continued autonumbering
+         ~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
     	C,
-    	~
-!!! error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
     	D,
     }
