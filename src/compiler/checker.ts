@@ -15547,7 +15547,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let firstValueDeclaration: Declaration | undefined;
         let hasNonUniformValueDeclaration = false;
         for (const prop of props) {
-            if (!firstValueDeclaration) {
+            if (!prop.valueDeclaration) {
+                hasNonUniformValueDeclaration = true;
+            }
+            else if (!firstValueDeclaration) {
                 firstValueDeclaration = prop.valueDeclaration;
             }
             else if (prop.valueDeclaration && prop.valueDeclaration !== firstValueDeclaration) {
