@@ -239,7 +239,10 @@ func (c *ConfigFileRegistry) tryInvokeWildCardDirectories(fileName string, path 
 	configFiles := c.ConfigFiles.ToMap()
 	for configPath, entry := range configFiles {
 		entry.mu.Lock()
-		hasSet := entry.commandLine != nil && entry.commandLine.MatchesFileName(fileName) && entry.SetPendingReload(PendingReloadFileNames)
+		hasSet := false
+		if entry.commandLine != nil && entry.pendingReload == PendingReloadNone && entry.commandLine.MatchesFileName(fileName) {
+			hasSet = entry.SetPendingReload(PendingReloadFileNames)
+		}
 		var projects map[*Project]struct{}
 		if hasSet {
 			projects = maps.Clone(entry.projects.Keys())
