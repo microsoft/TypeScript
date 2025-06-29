@@ -218,3 +218,32 @@ export interface I {
 >noAnnotationLiteralName : "noAnnotationLiteralName"
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
+
+export const prop: unique symbol = Symbol();
+>prop : unique symbol
+>     : ^^^^^^^^^^^^^
+>Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+
+export class MyClass {
+>MyClass : MyClass
+>        : ^^^^^^^
+
+    [prop] = () => Math.random();
+>[prop] : () => number
+>       : ^^^^^^^^^^^^
+>prop : unique symbol
+>     : ^^^^^^^^^^^^^
+>() => Math.random() : () => number
+>                    : ^^^^^^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+}

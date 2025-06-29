@@ -9,24 +9,33 @@ isolatedDeclarationErrorsClasses.ts(12,17): error TS7006: Parameter 'value' impl
 isolatedDeclarationErrorsClasses.ts(12,17): error TS9009: At least one accessor must have an explicit type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsClasses.ts(36,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
 isolatedDeclarationErrorsClasses.ts(36,6): error TS2304: Cannot find name 'missing'.
+isolatedDeclarationErrorsClasses.ts(36,6): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
 isolatedDeclarationErrorsClasses.ts(38,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+isolatedDeclarationErrorsClasses.ts(38,6): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
 isolatedDeclarationErrorsClasses.ts(40,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+isolatedDeclarationErrorsClasses.ts(40,6): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
 isolatedDeclarationErrorsClasses.ts(42,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsClasses.ts(42,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+isolatedDeclarationErrorsClasses.ts(42,6): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
 isolatedDeclarationErrorsClasses.ts(44,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+isolatedDeclarationErrorsClasses.ts(44,6): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
 isolatedDeclarationErrorsClasses.ts(44,35): error TS7006: Parameter 'v' implicitly has an 'any' type.
 isolatedDeclarationErrorsClasses.ts(44,35): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsClasses.ts(46,9): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+isolatedDeclarationErrorsClasses.ts(46,10): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
 isolatedDeclarationErrorsClasses.ts(48,9): error TS7032: Property '[noParamAnnotationStringName]' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
 isolatedDeclarationErrorsClasses.ts(48,9): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+isolatedDeclarationErrorsClasses.ts(48,10): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
 isolatedDeclarationErrorsClasses.ts(48,39): error TS7006: Parameter 'value' implicitly has an 'any' type.
 isolatedDeclarationErrorsClasses.ts(50,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 isolatedDeclarationErrorsClasses.ts(50,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
 isolatedDeclarationErrorsClasses.ts(56,5): error TS7010: '[noAnnotationLiteralName]', which lacks return-type annotation, implicitly has an 'any' return type.
 isolatedDeclarationErrorsClasses.ts(56,5): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+isolatedDeclarationErrorsClasses.ts(62,6): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+isolatedDeclarationErrorsClasses.ts(62,14): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
 
 
-==== isolatedDeclarationErrorsClasses.ts (26 errors) ====
+==== isolatedDeclarationErrorsClasses.ts (35 errors) ====
     export class Cls {
     
         field = 1 + 1;
@@ -91,14 +100,22 @@ isolatedDeclarationErrorsClasses.ts(56,5): error TS9013: Expression type can't b
 !!! error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
          ~~~~~~~
 !!! error TS2304: Cannot find name 'missing'.
+         ~~~~~~~
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+!!! related TS9029 isolatedDeclarationErrorsClasses.ts:36:5: Add a type annotation to the property [missing].
+!!! related TS9035 isolatedDeclarationErrorsClasses.ts:36:6: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.
         
         [noAnnotationLiteralName](): void { }
         ~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+         ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
     
         [noParamAnnotationLiteralName](v: string): void { }
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
     
         [noAnnotationStringName]() { }
         ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -106,10 +123,14 @@ isolatedDeclarationErrorsClasses.ts(56,5): error TS9013: Expression type can't b
 !!! related TS9034 isolatedDeclarationErrorsClasses.ts:42:5: Add a return type to the method
         ~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+         ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
     
         [noParamAnnotationStringName](v): void { }
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
                                       ~
 !!! error TS7006: Parameter 'v' implicitly has an 'any' type.
                                       ~
@@ -119,12 +140,16 @@ isolatedDeclarationErrorsClasses.ts(56,5): error TS9013: Expression type can't b
         get [noAnnotationStringName]() { return 0;}
             ~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+             ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
     
         set [noParamAnnotationStringName](value) { }
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS7032: Property '[noParamAnnotationStringName]' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
                                           ~~~~~
 !!! error TS7006: Parameter 'value' implicitly has an 'any' type.
     
@@ -143,4 +168,18 @@ isolatedDeclarationErrorsClasses.ts(56,5): error TS9013: Expression type can't b
 !!! error TS7010: '[noAnnotationLiteralName]', which lacks return-type annotation, implicitly has an 'any' return type.
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+    }
+    
+    export const prop: unique symbol = Symbol();
+    
+    export class MyClass {
+        [prop] = () => Math.random();
+         ~~~~
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+!!! related TS9029 isolatedDeclarationErrorsClasses.ts:62:5: Add a type annotation to the property [prop].
+!!! related TS9035 isolatedDeclarationErrorsClasses.ts:62:6: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.
+                 ~~~~~~~~~~~~~~~~~~~
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9029 isolatedDeclarationErrorsClasses.ts:62:5: Add a type annotation to the property [prop].
+!!! related TS9030 isolatedDeclarationErrorsClasses.ts:62:14: Add a return type to the function expression.
     }

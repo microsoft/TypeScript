@@ -61,3 +61,9 @@ export interface I {
     [noAnnotationStringName]: 10;
     [noAnnotationLiteralName]();
 }
+
+export const prop: unique symbol = Symbol();
+
+export class MyClass {
+    [prop] = () => Math.random();
+}

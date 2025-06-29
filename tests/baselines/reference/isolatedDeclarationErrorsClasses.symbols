@@ -119,3 +119,18 @@ export interface I {
 >[noAnnotationLiteralName] : Symbol(I[noAnnotationLiteralName], Decl(isolatedDeclarationErrorsClasses.ts, 54, 33))
 >noAnnotationLiteralName : Symbol(noAnnotationLiteralName, Decl(isolatedDeclarationErrorsClasses.ts, 29, 5))
 }
+
+export const prop: unique symbol = Symbol();
+>prop : Symbol(prop, Decl(isolatedDeclarationErrorsClasses.ts, 58, 12))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+export class MyClass {
+>MyClass : Symbol(MyClass, Decl(isolatedDeclarationErrorsClasses.ts, 58, 44))
+
+    [prop] = () => Math.random();
+>[prop] : Symbol(MyClass[prop], Decl(isolatedDeclarationErrorsClasses.ts, 60, 22))
+>prop : Symbol(prop, Decl(isolatedDeclarationErrorsClasses.ts, 58, 12))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.float16.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+}

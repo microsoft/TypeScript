@@ -310,6 +310,20 @@ export function transformDeclarations(context: TransformationContext): Transform
     const { stripInternal, isolatedDeclarations } = options;
     return transformRoot;
 
+    function isUniqueSymbol(node: Expression): boolean {
+        // A unique symbol type is represented as a TypeQueryNode (e.g. `typeof mySymbol`).
+        // We can't get the `Type` object directly here, but we can check the kind of the node
+        // the resolver creates.
+        const typeNode = resolver.createTypeOfExpression(
+            node,
+            enclosingDeclaration,
+            declarationEmitNodeBuilderFlags,
+            declarationEmitInternalNodeBuilderFlags,
+            symbolTracker,
+        );
+        return !!typeNode && isTypeQueryNode(typeNode);
+    }
+
     function reportExpandoFunctionErrors(node: FunctionDeclaration | VariableDeclaration) {
         resolver.getPropertiesOfContainerFunction(node).forEach(p => {
             if (isExpandoPropertyDeclaration(p.valueDeclaration)) {
@@ -1010,7 +1024,8 @@ export function transformDeclarations(context: TransformationContext): Transform
                     // Classes and object literals usually elide properties with computed names that are not of a literal type
                     // In isolated declarations TSC needs to error on these as we don't know the type in a DTE.
                     if (!resolver.isDefinitelyReferenceToGlobalSymbolObject(input.name.expression)) {
-                        if (isClassDeclaration(input.parent) || isObjectLiteralExpression(input.parent)) {
+                        // Check if we're in a class/object literal context and the computed name is not a unique symbol
+                        if ((isClassDeclaration(input.parent) || isObjectLiteralExpression(input.parent)) && !isUniqueSymbol(input.name.expression)) {
                             context.addDiagnostic(createDiagnosticForNode(input, Diagnostics.Computed_property_names_on_class_or_object_literals_cannot_be_inferred_with_isolatedDeclarations));
                             return;
                         }
