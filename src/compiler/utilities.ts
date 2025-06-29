@@ -4588,13 +4588,13 @@ export function getJSDocCommentsAndTags(hostNode: Node, noCache?: boolean): read
     let result: (JSDoc | JSDocTag)[] | undefined;
     // Pull parameter comments from declaring function as well
     if (isVariableLike(hostNode) && hasInitializer(hostNode) && hasJSDocNodes(hostNode.initializer!)) {
-        result = addRange(result, filterOwnedJSDocTags(hostNode, hostNode.initializer.jsDoc!));
+        result = addRange(result, filterOwnedJSDocTags(hostNode, hostNode.initializer.jsDoc!, result));
     }
 
     let node: Node | undefined = hostNode;
     while (node && node.parent) {
         if (hasJSDocNodes(node)) {
-            result = addRange(result, filterOwnedJSDocTags(hostNode, node.jsDoc!));
+            result = addRange(result, filterOwnedJSDocTags(hostNode, node.jsDoc!, result));
         }
 
         if (node.kind === SyntaxKind.Parameter) {
@@ -4610,11 +4610,11 @@ export function getJSDocCommentsAndTags(hostNode: Node, noCache?: boolean): read
     return result || emptyArray;
 }
 
-function filterOwnedJSDocTags(hostNode: Node, comments: JSDocArray) {
+function filterOwnedJSDocTags(hostNode: Node, comments: JSDocArray, result: (JSDoc | JSDocTag)[] | undefined) {
     const lastJsDoc = last(comments);
     return flatMap<JSDoc, JSDoc | JSDocTag>(comments, jsDoc => {
         if (jsDoc === lastJsDoc) {
-            const ownedTags = filter(jsDoc.tags, tag => ownsJSDocTag(hostNode, tag));
+            const ownedTags = filter(jsDoc.tags, tag => ownsJSDocTag(hostNode, tag, result));
             return jsDoc.tags === ownedTags ? [jsDoc] : ownedTags;
         }
         else {
@@ -4627,12 +4627,22 @@ function filterOwnedJSDocTags(hostNode: Node, comments: JSDocArray) {
  * Determines whether a host node owns a jsDoc tag. A `@type`/`@satisfies` tag attached to a
  * a ParenthesizedExpression belongs only to the ParenthesizedExpression.
  */
-function ownsJSDocTag(hostNode: Node, tag: JSDocTag) {
-    return !(isJSDocTypeTag(tag) || isJSDocSatisfiesTag(tag))
-        || !tag.parent
+function ownsJSDocTag(hostNode: Node, tag: JSDocTag, result: (JSDoc | JSDocTag)[] | undefined) {
+    if (
+        (isJSDocTypeOrSatisfiesTag(tag)) && some(result, t => {
+            return isJSDoc(t) ? some(t.tags, isJSDocTypeOrSatisfiesTag) : isJSDocTypeOrSatisfiesTag(t);
+        })
+    ) {
+        return false;
+    }
+    return !tag.parent
         || !isJSDoc(tag.parent)
         || !isParenthesizedExpression(tag.parent.parent)
         || tag.parent.parent === hostNode;
+}
+
+function isJSDocTypeOrSatisfiesTag(tag: JSDocTag) {
+    return isJSDocTypeTag(tag) || isJSDocSatisfiesTag(tag);
 }
 
 /** @internal */
