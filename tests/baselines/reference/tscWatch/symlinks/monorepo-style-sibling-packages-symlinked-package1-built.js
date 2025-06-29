@@ -142,17 +142,6 @@ Resolving real path for '/home/src/projects/project/node_modules/package1/dist/i
 ======== Module name 'package1' was successfully resolved to '/home/src/projects/project/packages/package1/dist/index.d.ts' with Package ID 'package1/dist/index.d.ts@1.0.0'. ========
 FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts 250 undefined Source file
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/src 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/src 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/node_modules 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/node_modules 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/node_modules 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/node_modules 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
-FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/package.json 2000 undefined File location affecting resolution
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/node_modules/@types 1 undefined Type roots
@@ -188,19 +177,13 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
-/home/src/projects/project/packages/node_modules: *new*
-  {"pollingInterval":500}
 /home/src/projects/project/packages/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/packages/package2/node_modules: *new*
   {"pollingInterval":500}
 /home/src/projects/project/packages/package2/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
 /home/src/projects/project/packages/package1/dist/index.d.ts: *new*
-  {}
-/home/src/projects/project/packages/package1/package.json: *new*
   {}
 /home/src/projects/project/packages/package2/src/index.ts: *new*
   {}
@@ -210,13 +193,7 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/home/src/projects/project/node_modules: *new*
-  {}
-/home/src/projects/project/node_modules/package1: *new*
-  {}
 /home/src/projects/project/packages/package2: *new*
-  {}
-/home/src/projects/project/packages/package2/src: *new*
   {}
 
 Program root files: [
@@ -267,24 +244,13 @@ Output::
 FileWatcher:: Triggered with /home/src/projects/project/packages/package1/dist/index.d.ts 2:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/packages/package1/dist/index.d.ts 2:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 250 undefined Source file
-DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/package1/dist/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/package1/dist/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/package1/dist/index.js :: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup, Cancelled earlier one
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/package1/dist/index.js :: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/package1/dist :: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup, Cancelled earlier one
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/package1/dist :: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
 
 
-Timeout callback:: count: 2
+Timeout callback:: count: 1
 1: timerToUpdateProgram *new*
-4: timerToInvalidateFailedLookupResolutions *new*
 
-Before running Timeout callback:: count: 2
+Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
-4: timerToInvalidateFailedLookupResolutions
 
 After running Timeout callback:: count: 0
 Output::
@@ -302,11 +268,10 @@ Searching all ancestor node_modules directories for preferred extensions: TypeSc
 Directory '/home/src/projects/project/packages/package2/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/project/packages/package2/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/project/packages/node_modules' does not exist, skipping all lookups in it.
-Found 'package.json' at '/home/src/projects/project/node_modules/package1/package.json'.
+File '/home/src/projects/project/node_modules/package1/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/package1.ts' does not exist.
 File '/home/src/projects/project/node_modules/package1.tsx' does not exist.
 File '/home/src/projects/project/node_modules/package1.d.ts' does not exist.
-'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'dist/index.js' that references '/home/src/projects/project/node_modules/package1/dist/index.js'.
@@ -364,8 +329,19 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'package1' was not resolved. ========
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/src 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/node_modules 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/node_modules 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
+FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/package.json 2000 undefined File location affecting resolution
 [96mpackages/package2/src/index.ts[0m:[93m1[0m:[93m34[0m - [91merror[0m[90m TS2307: [0mCannot find module 'package1' or its corresponding type declarations.
 
 [7m1[0m import { FooType, BarType } from "package1"
@@ -389,17 +365,17 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/project/node_modules/@types:
   {"pollingInterval":500}
-/home/src/projects/project/packages/node_modules:
+/home/src/projects/project/packages/node_modules: *new*
   {"pollingInterval":500}
 /home/src/projects/project/packages/node_modules/@types:
   {"pollingInterval":500}
-/home/src/projects/project/packages/package2/node_modules:
+/home/src/projects/project/packages/package2/node_modules: *new*
   {"pollingInterval":500}
 /home/src/projects/project/packages/package2/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/projects/project/packages/package1/package.json:
+/home/src/projects/project/packages/package1/package.json: *new*
   {}
 /home/src/projects/project/packages/package2/src/index.ts:
   {}
@@ -413,17 +389,14 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
-/home/src/projects/project/node_modules:
+/home/src/projects/project/node_modules: *new*
   {}
-/home/src/projects/project/node_modules/package1:
+/home/src/projects/project/node_modules/package1: *new*
   {}
 /home/src/projects/project/packages/package2:
   {}
-/home/src/projects/project/packages/package2/src:
+/home/src/projects/project/packages/package2/src: *new*
   {}
-
-Timeout callback:: count: 0
-4: timerToInvalidateFailedLookupResolutions *deleted*
 
 
 Program root files: [
@@ -488,10 +461,10 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_
 
 
 Timeout callback:: count: 1
-7: timerToInvalidateFailedLookupResolutions *new*
+4: timerToInvalidateFailedLookupResolutions *new*
 
 Before running Timeout callback:: count: 1
-7: timerToInvalidateFailedLookupResolutions
+4: timerToInvalidateFailedLookupResolutions
 
 After running Timeout callback:: count: 1
 Output::
@@ -500,10 +473,10 @@ Scheduling update
 
 
 Timeout callback:: count: 1
-8: timerToUpdateProgram *new*
+5: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-8: timerToUpdateProgram
+5: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -537,8 +510,19 @@ File '/home/src/projects/project/node_modules/package1/dist/index.d.ts' exists -
 Resolving real path for '/home/src/projects/project/node_modules/package1/dist/index.d.ts', result '/home/src/projects/project/packages/package1/dist/index.d.ts'.
 ======== Module name 'package1' was successfully resolved to '/home/src/projects/project/packages/package1/dist/index.d.ts' with Package ID 'package1/dist/index.d.ts@1.0.0'. ========
 FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 250 undefined Source file
+DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package2/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package2/src 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package2/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package2/node_modules 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/node_modules 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
+FileWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package1/package.json 2000 undefined File location affecting resolution
 ../../tslibs/TS/Lib/lib.es2016.full.d.ts
   Default library for target 'es2016'
 packages/package1/dist/index.d.ts
@@ -557,11 +541,7 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/project/node_modules/@types:
   {"pollingInterval":500}
-/home/src/projects/project/packages/node_modules:
-  {"pollingInterval":500}
 /home/src/projects/project/packages/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/packages/package2/node_modules:
   {"pollingInterval":500}
 /home/src/projects/project/packages/package2/node_modules/@types:
   {"pollingInterval":500}
@@ -569,11 +549,13 @@ PolledWatches::
 PolledWatches *deleted*::
 /home/src/projects/node_modules:
   {"pollingInterval":500}
+/home/src/projects/project/packages/node_modules:
+  {"pollingInterval":500}
+/home/src/projects/project/packages/package2/node_modules:
+  {"pollingInterval":500}
 
 FsWatches::
 /home/src/projects/project/packages/package1/dist/index.d.ts: *new*
-  {}
-/home/src/projects/project/packages/package1/package.json:
   {}
 /home/src/projects/project/packages/package2/src/index.ts:
   {}
@@ -582,12 +564,18 @@ FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
   {}
 
+FsWatches *deleted*::
+/home/src/projects/project/packages/package1/package.json:
+  {}
+
 FsWatchesRecursive::
+/home/src/projects/project/packages/package2:
+  {}
+
+FsWatchesRecursive *deleted*::
 /home/src/projects/project/node_modules:
   {}
 /home/src/projects/project/node_modules/package1:
-  {}
-/home/src/projects/project/packages/package2:
   {}
 /home/src/projects/project/packages/package2/src:
   {}

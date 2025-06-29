@@ -352,10 +352,6 @@ FsWatches::
 FsWatchesRecursive::
 /home/src/projects/project: *new*
   {}
-/home/src/projects/project/node_modules: *new*
-  {}
-/home/src/projects/project/src: *new*
-  {}
 
 Program root files: [
   "/home/src/projects/project/src/anotherFile.ts",

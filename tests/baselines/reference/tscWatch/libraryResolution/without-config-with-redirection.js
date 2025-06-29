@@ -189,8 +189,6 @@ File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.
 File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts', result '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts'.
 ======== Module name '@typescript/lib-webworker' was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts'. ========
-DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Failed Lookup Locations
 File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist.
 File '/home/src/workspace/projects/node_modules/package.json' does not exist.
@@ -364,10 +362,6 @@ FsWatches::
 /home/src/workspace/projects/project1/utils.d.ts: *new*
   {}
 
-FsWatchesRecursive::
-/home/src/workspace/projects/node_modules: *new*
-  {}
-
 Program root files: [
   "project1/core.d.ts",
   "project1/utils.d.ts",
@@ -430,18 +424,13 @@ Output::
 FileWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts 2:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts 2:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts 250 undefined Source file
-DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Failed Lookup Locations
 
 
-Timeout callback:: count: 2
+Timeout callback:: count: 1
 1: timerToUpdateProgram *new*
-2: timerToInvalidateFailedLookupResolutions *new*
 
-Before running Timeout callback:: count: 2
+Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
-2: timerToInvalidateFailedLookupResolutions
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -476,7 +465,7 @@ File '/home/src/workspace/package.json' does not exist according to earlier cach
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
@@ -545,6 +534,8 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-dom' was not resolved. ========
+DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.dom.d.ts 250 undefined Source file
@@ -627,11 +618,8 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
-/home/src/workspace/projects/node_modules:
+/home/src/workspace/projects/node_modules: *new*
   {}
-
-Timeout callback:: count: 0
-2: timerToInvalidateFailedLookupResolutions *deleted*
 
 
 Program root files: [
@@ -700,10 +688,10 @@ Elapsed:: *ms FileWatcher:: Triggered with project1/file.ts 1:: WatchInfo: proje
 
 
 Timeout callback:: count: 1
-3: timerToUpdateProgram *new*
+2: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-3: timerToUpdateProgram
+2: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -824,10 +812,10 @@ Elapsed:: *ms FileWatcher:: Triggered with project1/core.d.ts 2:: WatchInfo: pro
 
 
 Timeout callback:: count: 1
-4: timerToUpdateProgram *new*
+3: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-4: timerToUpdateProgram
+3: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -1017,10 +1005,10 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/nod
 
 
 Timeout callback:: count: 1
-5: timerToInvalidateFailedLookupResolutions *new*
+4: timerToInvalidateFailedLookupResolutions *new*
 
 Before running Timeout callback:: count: 1
-5: timerToInvalidateFailedLookupResolutions
+4: timerToInvalidateFailedLookupResolutions
 
 Host is moving to new time
 After running Timeout callback:: count: 1
@@ -1030,10 +1018,10 @@ Scheduling update
 
 
 Timeout callback:: count: 1
-6: timerToUpdateProgram *new*
+5: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-6: timerToUpdateProgram
+5: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -1119,6 +1107,8 @@ File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts 250 undefined Source file
 FileWatcher:: Close:: WatchInfo: /home/src/tslibs/TS/Lib/lib.dom.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json 2000 undefined File location affecting resolution
+DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
 [91merror[0m[90m TS6053: [0mFile 'project1/core.d.ts' not found.
@@ -1200,7 +1190,7 @@ FsWatches *deleted*::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts:
   {}
 
-FsWatchesRecursive::
+FsWatchesRecursive *deleted*::
 /home/src/workspace/projects/node_modules:
   {}
 
@@ -1255,18 +1245,13 @@ Output::
 FileWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts 2:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts 2:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts 250 undefined Source file
-DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Failed Lookup Locations
 
 
-Timeout callback:: count: 2
-7: timerToUpdateProgram *new*
-8: timerToInvalidateFailedLookupResolutions *new*
+Timeout callback:: count: 1
+6: timerToUpdateProgram *new*
 
-Before running Timeout callback:: count: 2
-7: timerToUpdateProgram
-8: timerToInvalidateFailedLookupResolutions
+Before running Timeout callback:: count: 1
+6: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -1277,7 +1262,7 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
   options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
-File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
@@ -1319,6 +1304,8 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-webworker' was not resolved. ========
+DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.webworker.d.ts 250 undefined Source file
@@ -1430,11 +1417,8 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
-/home/src/workspace/projects/node_modules:
+/home/src/workspace/projects/node_modules: *new*
   {}
-
-Timeout callback:: count: 0
-8: timerToInvalidateFailedLookupResolutions *deleted*
 
 
 Program root files: [
@@ -1491,10 +1475,10 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/nod
 
 
 Timeout callback:: count: 1
-9: timerToInvalidateFailedLookupResolutions *new*
+7: timerToInvalidateFailedLookupResolutions *new*
 
 Before running Timeout callback:: count: 1
-9: timerToInvalidateFailedLookupResolutions
+7: timerToInvalidateFailedLookupResolutions
 
 Host is moving to new time
 After running Timeout callback:: count: 1
@@ -1504,10 +1488,10 @@ Scheduling update
 
 
 Timeout callback:: count: 1
-10: timerToUpdateProgram *new*
+8: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-10: timerToUpdateProgram
+8: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -1593,6 +1577,8 @@ File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Close:: WatchInfo: /home/src/tslibs/TS/Lib/lib.webworker.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json 2000 undefined File location affecting resolution
+DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
 [91merror[0m[90m TS6053: [0mFile 'project1/core.d.ts' not found.
@@ -1674,7 +1660,7 @@ FsWatches *deleted*::
 /home/src/tslibs/TS/Lib/lib.webworker.d.ts:
   {}
 
-FsWatchesRecursive::
+FsWatchesRecursive *deleted*::
 /home/src/workspace/projects/node_modules:
   {}
 
