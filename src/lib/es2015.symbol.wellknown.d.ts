@@ -119,11 +119,19 @@ interface Map<K, V> {
     readonly [Symbol.toStringTag]: string;
 }
 
+interface ReadonlyMap<K, V> {
+    readonly [Symbol.toStringTag]: string;
+}
+
 interface WeakMap<K extends WeakKey, V> {
     readonly [Symbol.toStringTag]: string;
 }
 
 interface Set<T> {
+    readonly [Symbol.toStringTag]: string;
+}
+
+interface ReadonlySet<T> {
     readonly [Symbol.toStringTag]: string;
 }
 
