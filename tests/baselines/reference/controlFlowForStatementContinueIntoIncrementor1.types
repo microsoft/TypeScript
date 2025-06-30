@@ -1,0 +1,129 @@
+//// [tests/cases/compiler/controlFlowForStatementContinueIntoIncrementor1.ts] ////
+
+=== controlFlowForStatementContinueIntoIncrementor1.ts ===
+// https://github.com/microsoft/TypeScript/issues/60945
+
+{
+  let iNext;
+>iNext : any
+>      : ^^^
+
+  for (
+    let i = 0;
+>i : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+    i < 10;
+>i < 10 : boolean
+>       : ^^^^^^^
+>i : number
+>  : ^^^^^^
+>10 : 10
+>   : ^^
+
+    i = iNext // error
+>i = iNext : string | number
+>          : ^^^^^^^^^^^^^^^
+>i : number
+>  : ^^^^^^
+>iNext : string | number
+>      : ^^^^^^^^^^^^^^^
+
+  ) {
+    if (i == 5) {
+>i == 5 : boolean
+>       : ^^^^^^^
+>i : number
+>  : ^^^^^^
+>5 : 5
+>  : ^
+
+      iNext = "bad";
+>iNext = "bad" : "bad"
+>              : ^^^^^
+>iNext : any
+>      : ^^^
+>"bad" : "bad"
+>      : ^^^^^
+
+      continue;
+    }
+    iNext = i + 1;
+>iNext = i + 1 : number
+>              : ^^^^^^
+>iNext : any
+>      : ^^^
+>i + 1 : number
+>      : ^^^^^^
+>i : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+  }
+}
+
+{
+  let iNext: string | number = "";
+>iNext : string | number
+>      : ^^^^^^^^^^^^^^^
+>"" : ""
+>   : ^^
+
+  for (
+    let i = 0;
+>i : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+    i < 10;
+>i < 10 : boolean
+>       : ^^^^^^^
+>i : number
+>  : ^^^^^^
+>10 : 10
+>   : ^^
+
+    i = iNext // error
+>i = iNext : string | number
+>          : ^^^^^^^^^^^^^^^
+>i : number
+>  : ^^^^^^
+>iNext : string | number
+>      : ^^^^^^^^^^^^^^^
+
+  ) {
+    if (i == 5) {
+>i == 5 : boolean
+>       : ^^^^^^^
+>i : number
+>  : ^^^^^^
+>5 : 5
+>  : ^
+
+      iNext = "bad";
+>iNext = "bad" : "bad"
+>              : ^^^^^
+>iNext : string | number
+>      : ^^^^^^^^^^^^^^^
+>"bad" : "bad"
+>      : ^^^^^
+
+      continue;
+    }
+    iNext = i + 1;
+>iNext = i + 1 : number
+>              : ^^^^^^
+>iNext : string | number
+>      : ^^^^^^^^^^^^^^^
+>i + 1 : number
+>      : ^^^^^^
+>i : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+  }
+}
+

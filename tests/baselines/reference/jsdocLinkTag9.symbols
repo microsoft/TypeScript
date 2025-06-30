@@ -1,0 +1,20 @@
+//// [tests/cases/conformance/jsdoc/jsdocLinkTag9.ts] ////
+
+=== /a.ts ===
+export interface A {}
+>A : Symbol(A, Decl(a.ts, 0, 0))
+
+=== /b.ts ===
+import type { A } from "./a";
+>A : Symbol(A, Decl(b.ts, 0, 13))
+
+export enum Enum {
+>Enum : Symbol(Enum, Decl(b.ts, 0, 29))
+
+  /**
+   * {@link A}
+   */
+  EnumValue,
+>EnumValue : Symbol(Enum.EnumValue, Decl(b.ts, 2, 18))
+}
+

@@ -1595,7 +1595,7 @@ function getJsxClosingTagCompletion(location: Node | undefined, sourceFile: Sour
         switch (node.kind) {
             case SyntaxKind.JsxClosingElement:
                 return true;
-            case SyntaxKind.SlashToken:
+            case SyntaxKind.LessThanSlashToken:
             case SyntaxKind.GreaterThanToken:
             case SyntaxKind.Identifier:
             case SyntaxKind.PropertyAccessExpression:
@@ -2666,7 +2666,7 @@ export function getCompletionEntriesFromSymbols(
     includeSymbol = false,
 ): UniqueNameSet {
     const start = timestamp();
-    const variableOrParameterDeclaration = getVariableOrParameterDeclaration(contextToken, location);
+    const closestSymbolDeclaration = getClosestSymbolDeclaration(contextToken, location);
     const useSemicolons = probablyUsesSemicolons(sourceFile);
     const typeChecker = program.getTypeChecker();
     // Tracks unique names.
@@ -2738,65 +2738,76 @@ export function getCompletionEntriesFromSymbols(
 
     function shouldIncludeSymbol(symbol: Symbol, symbolToSortTextMap: SymbolSortTextMap): boolean {
         let allFlags = symbol.flags;
-        if (!isSourceFile(location)) {
-            // export = /**/ here we want to get all meanings, so any symbol is ok
-            if (isExportAssignment(location.parent)) {
-                return true;
-            }
-            // Filter out variables from their own initializers
-            // `const a = /* no 'a' here */`
-            if (tryCast(variableOrParameterDeclaration, isVariableDeclaration) && symbol.valueDeclaration === variableOrParameterDeclaration) {
+        // export = /**/ here we want to get all meanings, so any symbol is ok
+        if (location.parent && isExportAssignment(location.parent)) {
+            return true;
+        }
+        // Filter out variables from their own initializers
+        // `const a = /* no 'a' here */`
+        if (closestSymbolDeclaration && tryCast(closestSymbolDeclaration, isVariableDeclaration)) {
+            if (symbol.valueDeclaration === closestSymbolDeclaration) {
                 return false;
             }
+            // const { a } = /* no 'a' here */;
+            if (isBindingPattern(closestSymbolDeclaration.name) && closestSymbolDeclaration.name.elements.some(e => e === symbol.valueDeclaration)) {
+                return false;
+            }
+        }
 
-            // Filter out parameters from their own initializers
-            // `function f(a = /* no 'a' and 'b' here */, b) { }` or
-            // `function f<T = /* no 'T' here */>(a: T) { }`
-            const symbolDeclaration = symbol.valueDeclaration ?? symbol.declarations?.[0];
-            if (
-                variableOrParameterDeclaration && symbolDeclaration && (
-                    (isTypeParameterDeclaration(variableOrParameterDeclaration) && isTypeParameterDeclaration(symbolDeclaration)) ||
-                    (isParameter(variableOrParameterDeclaration) && isParameter(symbolDeclaration))
-                )
-            ) {
-                const symbolDeclarationPos = symbolDeclaration.pos;
-                const parameters = isParameter(variableOrParameterDeclaration) ? variableOrParameterDeclaration.parent.parameters :
-                    isInferTypeNode(variableOrParameterDeclaration.parent) ? undefined :
-                    variableOrParameterDeclaration.parent.typeParameters;
-                if (symbolDeclarationPos >= variableOrParameterDeclaration.pos && parameters && symbolDeclarationPos < parameters.end) {
+        // Filter out current and latter parameters from defaults
+        // `function f(a = /* no 'a' and 'b' here */, b) { }` or
+        // `function f<T = /* no 'T' and 'T2' here */>(a: T, b: T2) { }`
+        const symbolDeclaration = symbol.valueDeclaration ?? symbol.declarations?.[0];
+        if (closestSymbolDeclaration && symbolDeclaration) {
+            if (isParameter(closestSymbolDeclaration) && isParameter(symbolDeclaration)) {
+                const parameters = closestSymbolDeclaration.parent.parameters;
+                if (symbolDeclaration.pos >= closestSymbolDeclaration.pos && symbolDeclaration.pos < parameters.end) {
                     return false;
                 }
             }
-
-            // External modules can have global export declarations that will be
-            // available as global keywords in all scopes. But if the external module
-            // already has an explicit export and user only wants to user explicit
-            // module imports then the global keywords will be filtered out so auto
-            // import suggestions will win in the completion
-            const symbolOrigin = skipAlias(symbol, typeChecker);
-            // We only want to filter out the global keywords
-            // Auto Imports are not available for scripts so this conditional is always false
-            if (
-                !!sourceFile.externalModuleIndicator
-                && !compilerOptions.allowUmdGlobalAccess
-                && symbolToSortTextMap[getSymbolId(symbol)] === SortText.GlobalsOrKeywords
-                && (symbolToSortTextMap[getSymbolId(symbolOrigin)] === SortText.AutoImportSuggestions
-                    || symbolToSortTextMap[getSymbolId(symbolOrigin)] === SortText.LocationPriority)
-            ) {
-                return false;
+            else if (isTypeParameterDeclaration(closestSymbolDeclaration) && isTypeParameterDeclaration(symbolDeclaration)) {
+                if (closestSymbolDeclaration === symbolDeclaration && contextToken?.kind === SyntaxKind.ExtendsKeyword) {
+                    // filter out the directly self-recursive type parameters
+                    // `type A<K extends /* no 'K' here*/> = K`
+                    return false;
+                }
+                if (isInTypeParameterDefault(contextToken) && !isInferTypeNode(closestSymbolDeclaration.parent)) {
+                    const typeParameters = closestSymbolDeclaration.parent.typeParameters;
+                    if (typeParameters && symbolDeclaration.pos >= closestSymbolDeclaration.pos && symbolDeclaration.pos < typeParameters.end) {
+                        return false;
+                    }
+                }
             }
+        }
 
-            allFlags |= getCombinedLocalAndExportSymbolFlags(symbolOrigin);
+        // External modules can have global export declarations that will be
+        // available as global keywords in all scopes. But if the external module
+        // already has an explicit export and user only wants to user explicit
+        // module imports then the global keywords will be filtered out so auto
+        // import suggestions will win in the completion
+        const symbolOrigin = skipAlias(symbol, typeChecker);
+        // We only want to filter out the global keywords
+        // Auto Imports are not available for scripts so this conditional is always false
+        if (
+            !!sourceFile.externalModuleIndicator
+            && !compilerOptions.allowUmdGlobalAccess
+            && symbolToSortTextMap[getSymbolId(symbol)] === SortText.GlobalsOrKeywords
+            && (symbolToSortTextMap[getSymbolId(symbolOrigin)] === SortText.AutoImportSuggestions
+                || symbolToSortTextMap[getSymbolId(symbolOrigin)] === SortText.LocationPriority)
+        ) {
+            return false;
+        }
 
-            // import m = /**/ <-- It can only access namespace (if typing import = x. this would get member symbols and not namespace)
-            if (isInRightSideOfInternalImportEqualsDeclaration(location)) {
-                return !!(allFlags & SymbolFlags.Namespace);
-            }
+        allFlags |= getCombinedLocalAndExportSymbolFlags(symbolOrigin);
 
-            if (isTypeOnlyLocation) {
-                // It's a type, but you can reach it by namespace.type as well
-                return symbolCanBeReferencedAtTypeLocation(symbol, typeChecker);
-            }
+        // import m = /**/ <-- It can only access namespace (if typing import = x. this would get member symbols and not namespace)
+        if (isInRightSideOfInternalImportEqualsDeclaration(location)) {
+            return !!(allFlags & SymbolFlags.Namespace);
+        }
+
+        if (isTypeOnlyLocation) {
+            // It's a type, but you can reach it by namespace.type as well
+            return symbolCanBeReferencedAtTypeLocation(symbol, typeChecker);
         }
 
         // expressions are value space (which includes the value namespaces)
@@ -3497,7 +3508,7 @@ function getCompletionData(
                         }
                         break;
 
-                    case SyntaxKind.SlashToken:
+                    case SyntaxKind.LessThanSlashToken:
                         if (currentToken.parent.kind === SyntaxKind.JsxSelfClosingElement) {
                             location = currentToken;
                         }
@@ -3507,7 +3518,7 @@ function getCompletionData(
 
             switch (parent.kind) {
                 case SyntaxKind.JsxClosingElement:
-                    if (contextToken.kind === SyntaxKind.SlashToken) {
+                    if (contextToken.kind === SyntaxKind.LessThanSlashToken) {
                         isStartingCloseTag = true;
                         location = contextToken;
                     }
@@ -3578,7 +3589,7 @@ function getCompletionData(
     let importSpecifierResolver: codefix.ImportSpecifierResolver | undefined;
     const symbolToOriginInfoMap: SymbolOriginInfoMap = [];
     const symbolToSortTextMap: SymbolSortTextMap = [];
-    const seenPropertySymbols = new Map<SymbolId, true>();
+    const seenPropertySymbols = new Set<SymbolId>();
     const isTypeOnlyLocation = isTypeOnlyCompletion();
     const getModuleSpecifierResolutionHost = memoizeOne((isFromPackageJson: boolean) => {
         return createModuleSpecifierResolutionHost(isFromPackageJson ? host.getPackageJsonAutoImportProvider!()! : program, host);
@@ -5794,7 +5805,7 @@ function isValidTrigger(sourceFile: SourceFile, triggerCharacter: CompletionsTri
         case "/":
             return !!contextToken && (isStringLiteralLike(contextToken)
                 ? !!tryGetImportFromModuleSpecifier(contextToken)
-                : contextToken.kind === SyntaxKind.SlashToken && isJsxClosingElement(contextToken.parent));
+                : contextToken.kind === SyntaxKind.LessThanSlashToken && isJsxClosingElement(contextToken.parent));
         case " ":
             return !!contextToken && isImportKeyword(contextToken) && contextToken.parent.kind === SyntaxKind.SourceFile;
         default:
@@ -6001,20 +6012,39 @@ function isModuleSpecifierMissingOrEmpty(specifier: ModuleReference | Expression
     return !tryCast(isExternalModuleReference(specifier) ? specifier.expression : specifier, isStringLiteralLike)?.text;
 }
 
-function getVariableOrParameterDeclaration(contextToken: Node | undefined, location: Node) {
+function getClosestSymbolDeclaration(contextToken: Node | undefined, location: Node) {
     if (!contextToken) return;
 
-    const possiblyParameterDeclaration = findAncestor(contextToken, node =>
+    let closestDeclaration = findAncestor(contextToken, node =>
         isFunctionBlock(node) || isArrowFunctionBody(node) || isBindingPattern(node)
             ? "quit"
             : ((isParameter(node) || isTypeParameterDeclaration(node)) && !isIndexSignatureDeclaration(node.parent)));
 
-    const possiblyVariableDeclaration = findAncestor(location, node =>
-        isFunctionBlock(node) || isArrowFunctionBody(node) || isBindingPattern(node)
-            ? "quit"
-            : isVariableDeclaration(node));
+    if (!closestDeclaration) {
+        closestDeclaration = findAncestor(location, node =>
+            isFunctionBlock(node) || isArrowFunctionBody(node) || isBindingPattern(node)
+                ? "quit"
+                : isVariableDeclaration(node));
+    }
+    return closestDeclaration as ParameterDeclaration | TypeParameterDeclaration | VariableDeclaration | undefined;
+}
 
-    return (possiblyParameterDeclaration || possiblyVariableDeclaration) as ParameterDeclaration | TypeParameterDeclaration | VariableDeclaration | undefined;
+function isInTypeParameterDefault(contextToken: Node | undefined) {
+    if (!contextToken) {
+        return false;
+    }
+
+    let node = contextToken;
+    let parent = contextToken.parent;
+    while (parent) {
+        if (isTypeParameterDeclaration(parent)) {
+            return parent.default === node || node.kind === SyntaxKind.EqualsToken;
+        }
+        node = parent;
+        parent = parent.parent;
+    }
+
+    return false;
 }
 
 function isArrowFunctionBody(node: Node) {
@@ -6025,14 +6055,14 @@ function isArrowFunctionBody(node: Node) {
 }
 
 /** True if symbol is a type or a module containing at least one type. */
-function symbolCanBeReferencedAtTypeLocation(symbol: Symbol, checker: TypeChecker, seenModules = new Map<SymbolId, true>()): boolean {
+function symbolCanBeReferencedAtTypeLocation(symbol: Symbol, checker: TypeChecker, seenModules = new Set<Symbol>()): boolean {
     // Since an alias can be merged with a local declaration, we need to test both the alias and its target.
     // This code used to just test the result of `skipAlias`, but that would ignore any locally introduced meanings.
     return nonAliasCanBeReferencedAtTypeLocation(symbol) || nonAliasCanBeReferencedAtTypeLocation(skipAlias(symbol.exportSymbol || symbol, checker));
 
     function nonAliasCanBeReferencedAtTypeLocation(symbol: Symbol): boolean {
         return !!(symbol.flags & SymbolFlags.Type) || checker.isUnknownSymbol(symbol) ||
-            !!(symbol.flags & SymbolFlags.Module) && addToSeen(seenModules, getSymbolId(symbol)) &&
+            !!(symbol.flags & SymbolFlags.Module) && addToSeen(seenModules, symbol) &&
                 checker.getExportsOfModule(symbol).some(e => symbolCanBeReferencedAtTypeLocation(e, checker, seenModules));
     }
 }

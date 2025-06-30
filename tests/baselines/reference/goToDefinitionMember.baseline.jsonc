@@ -1,0 +1,18 @@
+// === goToDefinition ===
+// === /a.ts ===
+// class A {
+//     <|private [|{| textSpan: true |}z|]/*GOTO DEF*/: string;|>
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "z",
+    "containerName": "A",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

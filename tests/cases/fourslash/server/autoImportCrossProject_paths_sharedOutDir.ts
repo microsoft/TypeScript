@@ -1,6 +1,6 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /tsconfig.base.json
+// @Filename: /home/src/workspaces/project/tsconfig.base.json
 //// {
 ////   "compilerOptions": {
 ////     "module": "commonjs",
@@ -11,30 +11,30 @@
 ////   }
 //// }
 
-// @Filename: /packages/app/tsconfig.json
+// @Filename: /home/src/workspaces/project/packages/app/tsconfig.json
 //// {
 ////   "extends": "../../tsconfig.base.json",
 ////   "compilerOptions": { "outDir": "../../dist/packages/app" },
 ////   "references": [{ "path": "../dep" }]
 //// }
 
-// @Filename: /packages/app/index.ts
+// @Filename: /home/src/workspaces/project/packages/app/index.ts
 //// dep/**/
 
-// @Filename: /packages/app/utils.ts
+// @Filename: /home/src/workspaces/project/packages/app/utils.ts
 //// import "packages/dep";
 
 
-// @Filename: /packages/dep/tsconfig.json
+// @Filename: /home/src/workspaces/project/packages/dep/tsconfig.json
 //// {
 ////   "extends": "../../tsconfig.base.json",
 ////   "compilerOptions": { "outDir": "../../dist/packages/dep" }
 //// }
 
-// @Filename: /packages/dep/index.ts
+// @Filename: /home/src/workspaces/project/packages/dep/index.ts
 //// import "./sub/folder";
 
-// @Filename: /packages/dep/sub/folder/index.ts
+// @Filename: /home/src/workspaces/project/packages/dep/sub/folder/index.ts
 //// export const dep = 0;
 
 goTo.marker("");

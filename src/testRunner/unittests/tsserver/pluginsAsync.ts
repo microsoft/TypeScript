@@ -9,14 +9,11 @@ import {
     openFilesForSession,
     TestSession,
 } from "../helpers/tsserver.js";
-import {
-    createServerHost,
-    libFile,
-} from "../helpers/virtualFileSystemWithWatch.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: pluginsAsync:: async loaded plugins", () => {
     function setup(globalPlugins: string[]) {
-        const host = createServerHost([libFile]);
+        const host = TestServerHost.createServerHost([]);
         const session = new TestSession({ host, globalPlugins });
         return { host, session };
     }
@@ -198,10 +195,9 @@ describe("unittests:: tsserver:: pluginsAsync:: async loaded plugins", () => {
     it("project is deferred closed before plugins are loaded", async () => {
         const config = "/home/src/projects/project/tsconfig.json";
         const file = "/home/src/projects/project/a.ts";
-        const host = createServerHost({
+        const host = TestServerHost.createServerHost({
             [config]: `{}`,
             [file]: "export const a = 10;",
-            [libFile.path]: libFile.content,
         });
         const session = new TestSession({ host, globalPlugins: ["plugin-a"] });
         const pluginALoaded = defer();

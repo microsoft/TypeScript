@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/declarationEmitComputedNamesInaccessible.ts] ////
+
+=== declarationEmitComputedNamesInaccessible.ts ===
+export function f1() {
+>f1 : Symbol(f1, Decl(declarationEmitComputedNamesInaccessible.ts, 0, 0))
+
+    const localClassFieldName = Math.random() > 0.5 ? "g1" : "g2";
+>localClassFieldName : Symbol(localClassFieldName, Decl(declarationEmitComputedNamesInaccessible.ts, 1, 9))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    const localOtherField = localClassFieldName === "g1" ? "g2" : "g1";
+>localOtherField : Symbol(localOtherField, Decl(declarationEmitComputedNamesInaccessible.ts, 2, 9))
+>localClassFieldName : Symbol(localClassFieldName, Decl(declarationEmitComputedNamesInaccessible.ts, 1, 9))
+
+    const localStaticField = Math.random() > 0.5 ? "s1" : "s2";
+>localStaticField : Symbol(localStaticField, Decl(declarationEmitComputedNamesInaccessible.ts, 3, 9))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    return class ParameterizedHolder {
+>ParameterizedHolder : Symbol(ParameterizedHolder, Decl(declarationEmitComputedNamesInaccessible.ts, 4, 10))
+
+        [localClassFieldName]() {
+>[localClassFieldName] : Symbol(ParameterizedHolder[localClassFieldName], Decl(declarationEmitComputedNamesInaccessible.ts, 4, 38))
+>localClassFieldName : Symbol(localClassFieldName, Decl(declarationEmitComputedNamesInaccessible.ts, 1, 9))
+
+            return "value";
+        }
+        [localOtherField]() {
+>[localOtherField] : Symbol(ParameterizedHolder[localOtherField], Decl(declarationEmitComputedNamesInaccessible.ts, 7, 9))
+>localOtherField : Symbol(localOtherField, Decl(declarationEmitComputedNamesInaccessible.ts, 2, 9))
+
+            return 42;
+        }
+        static [localStaticField]() {
+>[localStaticField] : Symbol(ParameterizedHolder[localStaticField], Decl(declarationEmitComputedNamesInaccessible.ts, 10, 9))
+>localStaticField : Symbol(localStaticField, Decl(declarationEmitComputedNamesInaccessible.ts, 3, 9))
+
+            return { static: true };
+>static : Symbol(static, Decl(declarationEmitComputedNamesInaccessible.ts, 12, 20))
+        }
+        static [localStaticField]() {
+>[localStaticField] : Symbol(ParameterizedHolder[localStaticField], Decl(declarationEmitComputedNamesInaccessible.ts, 13, 9))
+>localStaticField : Symbol(localStaticField, Decl(declarationEmitComputedNamesInaccessible.ts, 3, 9))
+
+            return { static: "sometimes" };
+>static : Symbol(static, Decl(declarationEmitComputedNamesInaccessible.ts, 15, 20))
+        }
+    }
+}

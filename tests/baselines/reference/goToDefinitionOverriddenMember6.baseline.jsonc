@@ -4,5 +4,18 @@
 //     m() {}
 // }
 // class Bar extends Foo {
-//     /*GOTO DEF*/override m1() {}
+//     /*GOTO DEF*/<|override [|m1|]() {}|>
 // }
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "m1",
+    "containerName": "Bar",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

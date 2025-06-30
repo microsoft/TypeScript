@@ -1,5 +1,5 @@
 regExpWithOpenBracketInCharClass.ts(4,7): error TS1005: ']' expected.
-regExpWithOpenBracketInCharClass.ts(4,8): error TS1501: This regular expression flag is only available when targeting 'esnext' or later.
+regExpWithOpenBracketInCharClass.ts(4,8): error TS1501: This regular expression flag is only available when targeting 'es2024' or later.
 
 
 ==== regExpWithOpenBracketInCharClass.ts (2 errors) ====
@@ -10,6 +10,6 @@ regExpWithOpenBracketInCharClass.ts(4,8): error TS1501: This regular expression 
           
 !!! error TS1005: ']' expected.
            ~
-!!! error TS1501: This regular expression flag is only available when targeting 'esnext' or later.
+!!! error TS1501: This regular expression flag is only available when targeting 'es2024' or later.
     ];
     

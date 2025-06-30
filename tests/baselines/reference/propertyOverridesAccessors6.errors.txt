@@ -1,0 +1,16 @@
+propertyOverridesAccessors6.ts(8,3): error TS2610: 'x' is defined as an accessor in class 'A', but is overridden here in 'C' as an instance property.
+
+
+==== propertyOverridesAccessors6.ts (1 errors) ====
+    class A {
+      get x() {
+        return 2;
+      }
+    }
+    class B extends A {}
+    class C extends B {
+      x = 1;
+      ~
+!!! error TS2610: 'x' is defined as an accessor in class 'A', but is overridden here in 'C' as an instance property.
+    }
+    
