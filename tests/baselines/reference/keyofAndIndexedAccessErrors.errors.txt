@@ -68,16 +68,16 @@ keyofAndIndexedAccessErrors.ts(105,9): error TS2322: Type 'T[Extract<keyof T, st
         'string' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
 keyofAndIndexedAccessErrors.ts(108,5): error TS2322: Type 'T[K]' is not assignable to type 'U[K]'.
   Type 'T' is not assignable to type 'U'.
-    'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+    'U' is constrained to be a subtype of 'T'.
 keyofAndIndexedAccessErrors.ts(111,5): error TS2322: Type 'T[J]' is not assignable to type 'U[J]'.
   Type 'T' is not assignable to type 'U'.
-    'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+    'U' is constrained to be a subtype of 'T'.
 keyofAndIndexedAccessErrors.ts(114,5): error TS2322: Type 'T[K]' is not assignable to type 'T[J]'.
   Type 'K' is not assignable to type 'J'.
     'K' is assignable to the constraint of type 'J', but 'J' could be instantiated with a different subtype of constraint 'string'.
 keyofAndIndexedAccessErrors.ts(117,5): error TS2322: Type 'T[K]' is not assignable to type 'U[J]'.
   Type 'T' is not assignable to type 'U'.
-    'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+    'U' is constrained to be a subtype of 'T'.
 keyofAndIndexedAccessErrors.ts(122,5): error TS2322: Type 'number' is not assignable to type 'keyof T'.
 keyofAndIndexedAccessErrors.ts(123,5): error TS2322: Type 'string' is not assignable to type 'keyof T'.
 keyofAndIndexedAccessErrors.ts(140,5): error TS2322: Type 'number' is not assignable to type 'T[K]'.
@@ -301,7 +301,7 @@ keyofAndIndexedAccessErrors.ts(165,5): error TS2322: Type 'number' is not assign
         ~~
 !!! error TS2322: Type 'T[K]' is not assignable to type 'U[K]'.
 !!! error TS2322:   Type 'T' is not assignable to type 'U'.
-!!! error TS2322:     'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! error TS2322:     'U' is constrained to be a subtype of 'T'.
 !!! related TS2208 keyofAndIndexedAccessErrors.ts:99:13: This type parameter might need an `extends U` constraint.
     
         tj = uj;
@@ -309,7 +309,7 @@ keyofAndIndexedAccessErrors.ts(165,5): error TS2322: Type 'number' is not assign
         ~~
 !!! error TS2322: Type 'T[J]' is not assignable to type 'U[J]'.
 !!! error TS2322:   Type 'T' is not assignable to type 'U'.
-!!! error TS2322:     'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! error TS2322:     'U' is constrained to be a subtype of 'T'.
 !!! related TS2208 keyofAndIndexedAccessErrors.ts:99:13: This type parameter might need an `extends U` constraint.
     
         tk = tj;
@@ -324,7 +324,7 @@ keyofAndIndexedAccessErrors.ts(165,5): error TS2322: Type 'number' is not assign
         ~~
 !!! error TS2322: Type 'T[K]' is not assignable to type 'U[J]'.
 !!! error TS2322:   Type 'T' is not assignable to type 'U'.
-!!! error TS2322:     'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! error TS2322:     'U' is constrained to be a subtype of 'T'.
 !!! related TS2208 keyofAndIndexedAccessErrors.ts:99:13: This type parameter might need an `extends U` constraint.
     }
     
