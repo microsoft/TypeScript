@@ -136,6 +136,7 @@ type Printer struct {
 	inExtends                         bool // whether we are emitting the `extends` clause of a ConditionalType or InferType
 	nameGenerator                     NameGenerator
 	makeFileLevelOptimisticUniqueName func(string) string
+	commentStatePool                  core.Pool[commentState]
 }
 
 type detachedCommentsInfo struct {
@@ -4993,7 +4994,9 @@ func (p *Printer) emitCommentsBeforeNode(node *ast.Node) *commentState {
 		p.commentsDisabled = true
 	}
 
-	return &commentState{emitFlags, commentRange, containerPos, containerEnd, declarationListContainerEnd}
+	c := p.commentStatePool.New()
+	*c = commentState{emitFlags, commentRange, containerPos, containerEnd, declarationListContainerEnd}
+	return c
 }
 
 func (p *Printer) emitCommentsAfterNode(node *ast.Node, state *commentState) {
@@ -5046,7 +5049,7 @@ func (p *Printer) emitCommentsBeforeToken(token ast.Kind, pos int, contextNode *
 		p.decreaseIndentIf(needsIndent)
 	}
 
-	return &commentState{}, pos
+	return p.commentStatePool.New(), pos
 }
 
 func (p *Printer) emitCommentsAfterToken(token ast.Kind, pos int, contextNode *ast.Node, state *commentState) {
