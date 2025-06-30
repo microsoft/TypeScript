@@ -62,9 +62,28 @@ export const ok7 = fnGen1({ message: "foo" }, function* <N>(n: N) {
 
 //// [contextualTypingGenericFunction2.d.ts]
 export declare const ok1: (n: number) => void;
-export declare const ok2: <N>(n: N) => void;
+export declare const ok2: (n: any) => void;
 export declare const ok3: <N>(n: N) => void;
 export declare const ok4: <N>(n: N) => number;
-export declare const ok5: <T>(params: T) => number;
+export declare const ok5: (params: T) => number;
 export declare const ok6: (n: number) => void;
-export declare const ok7: <N>(n: N) => void;
+export declare const ok7: (n: any) => void;
+
+
+//// [DtsFileErrors]
+
+
+contextualTypingGenericFunction2.d.ts(5,36): error TS2304: Cannot find name 'T'.
+
+
+==== contextualTypingGenericFunction2.d.ts (1 errors) ====
+    export declare const ok1: (n: number) => void;
+    export declare const ok2: (n: any) => void;
+    export declare const ok3: <N>(n: N) => void;
+    export declare const ok4: <N>(n: N) => number;
+    export declare const ok5: (params: T) => number;
+                                       ~
+!!! error TS2304: Cannot find name 'T'.
+    export declare const ok6: (n: number) => void;
+    export declare const ok7: (n: any) => void;
+    
