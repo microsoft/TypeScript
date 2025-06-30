@@ -650,3 +650,35 @@ type T51<U extends number> = typeof g3<U, any>;  // (b: U) => U
 >g3 : Symbol(g3, Decl(instantiationExpressions.ts, 165, 13))
 >U : Symbol(U, Decl(instantiationExpressions.ts, 171, 9))
 
+// repro #47607#issuecomment-1331744280
+
+type DivElement = { type: 'div' }
+>DivElement : Symbol(DivElement, Decl(instantiationExpressions.ts, 171, 47))
+>type : Symbol(type, Decl(instantiationExpressions.ts, 175, 19))
+
+interface ElementMap { div: DivElement }
+>ElementMap : Symbol(ElementMap, Decl(instantiationExpressions.ts, 175, 33))
+>div : Symbol(ElementMap.div, Decl(instantiationExpressions.ts, 176, 22))
+>DivElement : Symbol(DivElement, Decl(instantiationExpressions.ts, 171, 47))
+
+declare function foo<T extends keyof ElementMap>(arg: T): ElementMap[T];
+>foo : Symbol(foo, Decl(instantiationExpressions.ts, 176, 40), Decl(instantiationExpressions.ts, 178, 72))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 178, 21))
+>ElementMap : Symbol(ElementMap, Decl(instantiationExpressions.ts, 175, 33))
+>arg : Symbol(arg, Decl(instantiationExpressions.ts, 178, 49))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 178, 21))
+>ElementMap : Symbol(ElementMap, Decl(instantiationExpressions.ts, 175, 33))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 178, 21))
+
+declare function foo<T extends DivElement>(arg: T): T;
+>foo : Symbol(foo, Decl(instantiationExpressions.ts, 176, 40), Decl(instantiationExpressions.ts, 178, 72))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 179, 21))
+>DivElement : Symbol(DivElement, Decl(instantiationExpressions.ts, 171, 47))
+>arg : Symbol(arg, Decl(instantiationExpressions.ts, 179, 43))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 179, 21))
+>T : Symbol(T, Decl(instantiationExpressions.ts, 179, 21))
+
+type DivFromMap = typeof foo<"div">;
+>DivFromMap : Symbol(DivFromMap, Decl(instantiationExpressions.ts, 179, 54))
+>foo : Symbol(foo, Decl(instantiationExpressions.ts, 176, 40), Decl(instantiationExpressions.ts, 178, 72))
+
