@@ -1,0 +1,14 @@
+b.ts(1,8): error TS18059: Named imports are not allowed in a deferred import.
+
+
+==== a.ts (0 errors) ====
+    export function foo() {
+        console.log("foo from a");
+    }
+    
+==== b.ts (1 errors) ====
+    import defer { foo } from "a";
+           ~~~~~~~~~~~~~
+!!! error TS18059: Named imports are not allowed in a deferred import.
+    
+    foo();

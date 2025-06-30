@@ -1,0 +1,64 @@
+//// [tests/cases/compiler/lateBoundAssignmentCandidateJS1.ts] ////
+
+=== index.js ===
+// https://github.com/microsoft/TypeScript/issues/60590
+
+export const kBar = Symbol("bar");
+>kBar : unique symbol
+>     : ^^^^^^^^^^^^^
+>Symbol("bar") : unique symbol
+>              : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
+
+export class foo0 {
+>foo0 : foo0
+>     : ^^^^
+
+    /**
+     * @protected
+     * @type {null | string}
+     */
+    [kBar] = null;
+>[kBar] : string | null
+>       : ^^^^^^^^^^^^^
+>kBar : unique symbol
+>     : ^^^^^^^^^^^^^
+
+    get bar() {
+>bar : string | null
+>    : ^^^^^^^^^^^^^
+
+        return this[kBar];
+>this[kBar] : string | null
+>           : ^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>kBar : unique symbol
+>     : ^^^^^^^^^^^^^
+    }
+    /**
+     * @type {string}
+     */
+    set bar(value) {
+>bar : string | null
+>    : ^^^^^^^^^^^^^
+>value : string | null
+>      : ^^^^^^^^^^^^^
+
+        this[kBar] = value;
+>this[kBar] = value : string | null
+>                   : ^^^^^^^^^^^^^
+>this[kBar] : string | null
+>           : ^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>kBar : unique symbol
+>     : ^^^^^^^^^^^^^
+>value : string | null
+>      : ^^^^^^^^^^^^^
+    }
+}
+

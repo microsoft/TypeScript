@@ -1,0 +1,74 @@
+//// [tests/cases/compiler/declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts] ////
+
+=== declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts ===
+type Wrapper<T> = {
+>Wrapper : Wrapper<T>
+>        : ^^^^^^^^^^
+
+  _type: T;
+>_type : T
+>      : ^
+
+};
+
+declare function stringWrapper(): Wrapper<string>;
+>stringWrapper : () => Wrapper<string>
+>              : ^^^^^^               
+
+declare function objWrapper<T extends Record<string, Wrapper<any>>>(
+>objWrapper : <T extends Record<string, Wrapper<any>>>(obj: T) => Wrapper<T>
+>           : ^ ^^^^^^^^^                            ^^   ^^ ^^^^^          
+
+  obj: T,
+>obj : T
+>    : ^
+
+): Wrapper<T>;
+
+const value = objWrapper({
+>value : Wrapper<{ prop1: Wrapper<"hello">; }>
+>      : ^^^^^^^^^^^^^^^^^                ^^^^
+>objWrapper({  prop1: stringWrapper() as Wrapper<"hello">,}) : Wrapper<{ prop1: Wrapper<"hello">; }>
+>                                                            : ^^^^^^^^^^^^^^^^^                ^^^^
+>objWrapper : <T extends Record<string, Wrapper<any>>>(obj: T) => Wrapper<T>
+>           : ^ ^^^^^^^^^                            ^^   ^^ ^^^^^          
+>{  prop1: stringWrapper() as Wrapper<"hello">,} : { prop1: Wrapper<"hello">; }
+>                                                : ^^^^^^^^^                ^^^
+
+  prop1: stringWrapper() as Wrapper<"hello">,
+>prop1 : Wrapper<"hello">
+>      : ^^^^^^^^^^^^^^^^
+>stringWrapper() as Wrapper<"hello"> : Wrapper<"hello">
+>                                    : ^^^^^^^^^^^^^^^^
+>stringWrapper() : Wrapper<string>
+>                : ^^^^^^^^^^^^^^^
+>stringWrapper : () => Wrapper<string>
+>              : ^^^^^^               
+
+});
+
+type Unwrap<T> = T extends Wrapper<any>
+>Unwrap : Unwrap<T>
+>       : ^^^^^^^^^
+
+  ? T["_type"] extends Record<string, Wrapper<any>>
+    ? { [Key in keyof T["_type"]]: Unwrap<T["_type"][Key]> }
+    : T["_type"]
+  : never;
+
+declare function unwrap<T>(wrapper: T): Unwrap<T>;
+>unwrap : <T>(wrapper: T) => Unwrap<T>
+>       : ^ ^^       ^^ ^^^^^         
+>wrapper : T
+>        : ^
+
+export const unwrapped = unwrap(value);
+>unwrapped : { prop1: "hello"; }
+>          : ^^^^^^^^^^^^^^^^^^^
+>unwrap(value) : { prop1: "hello"; }
+>              : ^^^^^^^^^^^^^^^^^^^
+>unwrap : <T>(wrapper: T) => Unwrap<T>
+>       : ^ ^^       ^^ ^^^^^         
+>value : Wrapper<{ prop1: Wrapper<"hello">; }>
+>      : ^^^^^^^^^^^^^^^^^                ^^^^
+

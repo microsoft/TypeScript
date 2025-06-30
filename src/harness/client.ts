@@ -254,7 +254,7 @@ export class SessionClient implements LanguageService {
         return { line, character: offset };
     }
 
-    getQuickInfoAtPosition(fileName: string, position: number, verbosityLevel?: number | undefined): QuickInfo {
+    getQuickInfoAtPosition(fileName: string, position: number, maximumLength?: number, verbosityLevel?: number | undefined): QuickInfo {
         const args = { ...this.createFileLocationRequestArgs(fileName, position), verbosityLevel };
 
         const request = this.processRequest<protocol.QuickInfoRequest>(protocol.CommandTypes.Quickinfo, args);

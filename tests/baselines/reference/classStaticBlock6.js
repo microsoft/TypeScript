@@ -64,6 +64,17 @@ function foo1 () {
     }
 }
 
+class foo2 {
+    static {
+        this.b  // should error
+        let b: typeof this.b;   // ok
+        if (1) {
+            this.b; // should error
+        }
+    }
+
+    static b = 1;
+}
 
 //// [classStaticBlock6.js]
 var __extends = (this && this.__extends) || (function () {
@@ -214,3 +225,18 @@ function foo1() {
         }
     })();
 }
+var foo2 = /** @class */ (function () {
+    function foo2() {
+    }
+    var _a;
+    _a = foo2;
+    (function () {
+        _a.b; // should error
+        var b; // ok
+        if (1) {
+            _a.b; // should error
+        }
+    })();
+    foo2.b = 1;
+    return foo2;
+}());

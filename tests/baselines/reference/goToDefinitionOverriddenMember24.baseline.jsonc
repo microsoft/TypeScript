@@ -4,5 +4,18 @@
 // }
 // 
 // export class B extends A {
-//   /*GOTO DEF*/override [prop]() {}
+//   /*GOTO DEF*/<|override [|[prop]|]() {}|>
 // }
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "[prop]",
+    "containerName": "B",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

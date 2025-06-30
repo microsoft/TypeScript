@@ -1372,6 +1372,113 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         host.runPendingInstalls();
         baselineTsserverLogs("typingsInstaller", "non expired cache entry", session);
     });
+
+    it("expired cache entry (inferred project, should install typings) lockFile3", () => {
+        const file1 = {
+            path: "/home/src/projects/project/app.js",
+            content: "",
+        };
+        const packageJson = {
+            path: "/home/src/projects/project/package.json",
+            content: jsonToReadableText({
+                name: "test",
+                dependencies: {
+                    jquery: "^3.1.0",
+                },
+            }),
+        };
+        const jquery = {
+            path: getPathForTypeScriptTypingInstallerCacheTest("node_modules/@types/jquery/index.d.ts"),
+            content: "declare const $: { x: number }",
+        };
+        const cacheConfig = {
+            path: getPathForTypeScriptTypingInstallerCacheTest("package.json"),
+            content: jsonToReadableText({
+                dependencies: {
+                    "types-registry": "^0.1.317",
+                },
+                devDependencies: {
+                    "@types/jquery": "^1.0.0",
+                },
+            }),
+        };
+        const cacheLockConfig = {
+            path: getPathForTypeScriptTypingInstallerCacheTest("package-lock.json"),
+            content: jsonToReadableText({
+                packages: {
+                    "node_modules/@types/jquery": {
+                        version: "1.0.0",
+                    },
+                },
+            }),
+        };
+        const host = TestServerHost.createServerHost(
+            [file1, packageJson, jquery, cacheConfig, cacheLockConfig],
+            { typingsInstallerTypesRegistry: "jquery" },
+        );
+        const session = new TestSession({
+            host,
+            useSingleInferredProject: true,
+            installAction: [jquery],
+        });
+        openFilesForSession([file1], session);
+        host.runPendingInstalls();
+        host.runQueuedTimeoutCallbacks();
+        baselineTsserverLogs("typingsInstaller", "expired cache entry lockFile3", session);
+    });
+
+    it("non-expired cache entry (inferred project, should not install typings) lockFile3", () => {
+        const file1 = {
+            path: "/home/src/projects/project/app.js",
+            content: "",
+        };
+        const packageJson = {
+            path: "/home/src/projects/project/package.json",
+            content: jsonToReadableText({
+                name: "test",
+                dependencies: {
+                    jquery: "^3.1.0",
+                },
+            }),
+        };
+        const cacheConfig = {
+            path: getPathForTypeScriptTypingInstallerCacheTest("package.json"),
+            content: jsonToReadableText({
+                dependencies: {
+                    "types-registry": "^0.1.317",
+                },
+                devDependencies: {
+                    "@types/jquery": "^1.3.0",
+                },
+            }),
+        };
+        const cacheLockConfig = {
+            path: getPathForTypeScriptTypingInstallerCacheTest("package-lock.json"),
+            content: jsonToReadableText({
+                packages: {
+                    "node_modules/@types/jquery": {
+                        version: "1.3.0",
+                    },
+                },
+            }),
+        };
+        const jquery = {
+            path: getPathForTypeScriptTypingInstallerCacheTest("node_modules/@types/jquery/index.d.ts"),
+            content: "declare const $: { x: number }",
+        };
+        const host = TestServerHost.createServerHost(
+            [file1, packageJson, cacheConfig, cacheLockConfig, jquery],
+            { typingsInstallerTypesRegistry: "jquery" },
+        );
+        const session = new TestSession({
+            host,
+            useSingleInferredProject: true,
+            installAction: true,
+        });
+        openFilesForSession([file1], session);
+        host.runPendingInstalls();
+        baselineTsserverLogs("typingsInstaller", "non expired cache entry lockFile3", session);
+    });
 });
 
 describe("unittests:: tsserver:: typingsInstaller:: Validate package name:", () => {
