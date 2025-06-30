@@ -44,6 +44,7 @@ import {
     isCallSignatureDeclaration,
     isConditionalTypeNode,
     isConstructorTypeNode,
+    isConstructSignatureDeclaration,
     isEnumMember,
     isExpressionWithTypeArguments,
     isFunctionDeclaration,
@@ -819,6 +820,15 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     break;
                 case SyntaxKind.CallSignature:
                     Debug.assertNode(node, isCallSignatureDeclaration);
+                    visitParametersAndTypeParameters(node);
+                    if (node.type) {
+                        parts.push({ text: ": " });
+                        visitForDisplayParts(node.type);
+                    }
+                    break;
+                case SyntaxKind.ConstructSignature:
+                    Debug.assertNode(node, isConstructSignatureDeclaration);
+                    parts.push({ text: "new " });
                     visitParametersAndTypeParameters(node);
                     if (node.type) {
                         parts.push({ text: ": " });
