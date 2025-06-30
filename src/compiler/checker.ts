@@ -15507,8 +15507,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 propSet.set(id, prop);
                             }
                         }
-                        // classes created by mixins are represented as intersections and overriding a property in a derived class redefines it completely at runtime
-                        // so a get accessor can't be merged with a set accessor in a base class, for that reason the accessor flags are only used when they are the same in all consistuents
+                        // classes created by mixins are represented as intersections
+                        // and overriding a property in a derived class redefines it completely at runtime
+                        // so a get accessor can't be merged with a set accessor in a base class,
+                        // for that reason the accessor flags are only used when they are the same in all constituents
                         if (propFlags & SymbolFlags.Accessor && (prop.flags & SymbolFlags.Accessor) !== (propFlags & SymbolFlags.Accessor)) {
                             propFlags = (propFlags & ~SymbolFlags.Accessor) | SymbolFlags.Property;
                         }
