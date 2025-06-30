@@ -1,4 +1,4 @@
-accessorsOverrideProperty10.ts(6,7): error TS2611: 'x' is defined as a property in class 'A', but is overridden here in 'C' as an accessor.
+accessorsOverrideProperty10.ts(6,7): error TS2611: 'x' is defined as a property in class 'B', but is overridden here in 'C' as an accessor.
 
 
 ==== accessorsOverrideProperty10.ts (1 errors) ====
@@ -9,7 +9,7 @@ accessorsOverrideProperty10.ts(6,7): error TS2611: 'x' is defined as a property 
     class C extends B {
       get x() {
           ~
-!!! error TS2611: 'x' is defined as a property in class 'A', but is overridden here in 'C' as an accessor.
+!!! error TS2611: 'x' is defined as a property in class 'B', but is overridden here in 'C' as an accessor.
         return 2;
       }
     }
