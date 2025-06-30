@@ -30574,7 +30574,7 @@ func (c *Checker) GetTypeAtLocation(node *ast.Node) *Type {
 
 func (c *Checker) GetEmitResolver(file *ast.SourceFile) *emitResolver {
 	c.emitResolverOnce.Do(func() {
-		c.emitResolver = &emitResolver{checker: c}
+		c.emitResolver = newEmitResolver(c)
 	})
 
 	return c.emitResolver
