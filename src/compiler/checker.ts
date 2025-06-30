@@ -467,6 +467,7 @@ import {
     IntroducesNewScopeNode,
     isAccessExpression,
     isAccessor,
+    isAccessorModifier,
     isAliasableExpression,
     isAmbientModule,
     isArray,
@@ -7690,27 +7691,51 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (propertySymbol.flags & SymbolFlags.Accessor) {
                 const writeType = getWriteTypeOfSymbol(propertySymbol);
-                if (propertyType !== writeType && !isErrorType(propertyType) && !isErrorType(writeType)) {
+                if (!isErrorType(propertyType) && !isErrorType(writeType)) {
                     const symbolMapper = getSymbolLinks(propertySymbol).mapper;
-                    const getterDeclaration = getDeclarationOfKind<GetAccessorDeclaration>(propertySymbol, SyntaxKind.GetAccessor)!;
-                    const getterSignature = getSignatureFromDeclaration(getterDeclaration);
-                    typeElements.push(
-                        setCommentRange(
-                            context,
-                            signatureToSignatureDeclarationHelper(symbolMapper ? instantiateSignature(getterSignature, symbolMapper) : getterSignature, SyntaxKind.GetAccessor, context, { name: propertyName }) as GetAccessorDeclaration,
-                            getterDeclaration,
-                        ),
-                    );
-                    const setterDeclaration = getDeclarationOfKind<SetAccessorDeclaration>(propertySymbol, SyntaxKind.SetAccessor)!;
-                    const setterSignature = getSignatureFromDeclaration(setterDeclaration);
-                    typeElements.push(
-                        setCommentRange(
-                            context,
-                            signatureToSignatureDeclarationHelper(symbolMapper ? instantiateSignature(setterSignature, symbolMapper) : setterSignature, SyntaxKind.SetAccessor, context, { name: propertyName }) as SetAccessorDeclaration,
-                            setterDeclaration,
-                        ),
-                    );
-                    return;
+                    const propDeclaration = getDeclarationOfKind<PropertyDeclaration>(propertySymbol, SyntaxKind.PropertyDeclaration);
+                    if (propertyType !== writeType || propertySymbol.parent!.flags & SymbolFlags.Class && !propDeclaration) {
+                        const getterDeclaration = getDeclarationOfKind<GetAccessorDeclaration>(propertySymbol, SyntaxKind.GetAccessor);
+                        if (getterDeclaration) {
+                            const getterSignature = getSignatureFromDeclaration(getterDeclaration);
+                            typeElements.push(
+                                setCommentRange(
+                                    context,
+                                    signatureToSignatureDeclarationHelper(symbolMapper ? instantiateSignature(getterSignature, symbolMapper) : getterSignature, SyntaxKind.GetAccessor, context, { name: propertyName }) as GetAccessorDeclaration,
+                                    getterDeclaration,
+                                ),
+                            );
+                        }
+                        const setterDeclaration = getDeclarationOfKind<SetAccessorDeclaration>(propertySymbol, SyntaxKind.SetAccessor);
+                        if (setterDeclaration) {
+                            const setterSignature = getSignatureFromDeclaration(setterDeclaration);
+                            typeElements.push(
+                                setCommentRange(
+                                    context,
+                                    signatureToSignatureDeclarationHelper(symbolMapper ? instantiateSignature(setterSignature, symbolMapper) : setterSignature, SyntaxKind.SetAccessor, context, { name: propertyName }) as SetAccessorDeclaration,
+                                    setterDeclaration,
+                                ),
+                            );
+                        }
+                        return;
+                    }
+                    if (propertySymbol.parent!.flags & SymbolFlags.Class && propDeclaration && find(propDeclaration.modifiers, isAccessorModifier)) {
+                        const fakeGetterSignature = createSignature(/*declaration*/ undefined, /*typeParameters*/ undefined, /*thisParameter*/ undefined, emptyArray, propertyType, /*resolvedTypePredicate*/ undefined, 0, SignatureFlags.None);
+                        typeElements.push(
+                            setCommentRange(
+                                context,
+                                signatureToSignatureDeclarationHelper(fakeGetterSignature, SyntaxKind.GetAccessor, context, { name: propertyName }) as GetAccessorDeclaration,
+                                propDeclaration,
+                            ),
+                        );
+                        const setterParam = createSymbol(SymbolFlags.FunctionScopedVariable, "arg" as __String);
+                        setterParam.links.type = writeType;
+                        const fakeSetterSignature = createSignature(/*declaration*/ undefined, /*typeParameters*/ undefined, /*thisParameter*/ undefined, [setterParam], voidType, /*resolvedTypePredicate*/ undefined, 0, SignatureFlags.None);
+                        typeElements.push(
+                            signatureToSignatureDeclarationHelper(fakeSetterSignature, SyntaxKind.SetAccessor, context, { name: propertyName }) as SetAccessorDeclaration,
+                        );
+                        return;
+                    }
                 }
             }
 
@@ -12816,13 +12841,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      */
     function getWriteTypeOfSymbol(symbol: Symbol): Type {
         const checkFlags = getCheckFlags(symbol);
+        if (checkFlags & CheckFlags.SyntheticProperty) {
+            return checkFlags & CheckFlags.DeferredType ?
+                getWriteTypeOfSymbolWithDeferredType(symbol) || getTypeOfSymbolWithDeferredType(symbol) :
+                // NOTE: cast to TransientSymbol should be safe because only TransientSymbols can have CheckFlags.SyntheticProperty
+                (symbol as TransientSymbol).links.writeType || (symbol as TransientSymbol).links.type!;
+        }
         if (symbol.flags & SymbolFlags.Property) {
-            return checkFlags & CheckFlags.SyntheticProperty ?
-                checkFlags & CheckFlags.DeferredType ?
-                    getWriteTypeOfSymbolWithDeferredType(symbol) || getTypeOfSymbolWithDeferredType(symbol) :
-                    // NOTE: cast to TransientSymbol should be safe because only TransientSymbols can have CheckFlags.SyntheticProperty
-                    (symbol as TransientSymbol).links.writeType || (symbol as TransientSymbol).links.type! :
-                removeMissingType(getTypeOfSymbol(symbol), !!(symbol.flags & SymbolFlags.Optional));
+            return removeMissingType(getTypeOfSymbol(symbol), !!(symbol.flags & SymbolFlags.Optional));
         }
         if (symbol.flags & SymbolFlags.Accessor) {
             return checkFlags & CheckFlags.Instantiated ?
@@ -15439,6 +15465,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function createUnionOrIntersectionProperty(containingType: UnionOrIntersectionType, name: __String, skipObjectFunctionPropertyAugment?: boolean): Symbol | undefined {
+        let propFlags = SymbolFlags.None;
         let singleProp: Symbol | undefined;
         let propSet: Map<SymbolId, Symbol> | undefined;
         let indexTypes: Type[] | undefined;
@@ -15465,6 +15492,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     if (!singleProp) {
                         singleProp = prop;
+                        propFlags = (prop.flags & SymbolFlags.Accessor) || SymbolFlags.Property;
                     }
                     else if (prop !== singleProp) {
                         const isInstantiation = (getTargetSymbol(prop) || prop) === (getTargetSymbol(singleProp) || singleProp);
@@ -15487,6 +15515,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 propSet.set(id, prop);
                             }
                         }
+                        // classes created by mixins are represented as intersections
+                        // and overriding a property in a derived class redefines it completely at runtime
+                        // so a get accessor can't be merged with a set accessor in a base class,
+                        // for that reason the accessor flags are only used when they are the same in all constituents
+                        if (propFlags & SymbolFlags.Accessor && (prop.flags & SymbolFlags.Accessor) !== (propFlags & SymbolFlags.Accessor)) {
+                            propFlags = (propFlags & ~SymbolFlags.Accessor) | SymbolFlags.Property;
+                        }
                     }
                     if (isUnion && isReadonlySymbol(prop)) {
                         checkFlags |= CheckFlags.Readonly;
@@ -15505,6 +15540,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 else if (isUnion) {
                     const indexInfo = !isLateBoundName(name) && getApplicableIndexInfoForName(type, name);
                     if (indexInfo) {
+                        propFlags = (propFlags & ~SymbolFlags.Accessor) | SymbolFlags.Property;
                         checkFlags |= CheckFlags.WritePartial | (indexInfo.isReadonly ? CheckFlags.Readonly : 0);
                         indexTypes = append(indexTypes, isTupleType(type) ? getRestTypeOfTupleType(type) || undefinedType : indexInfo.type);
                     }
@@ -15583,7 +15619,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             propTypes.push(type);
         }
         addRange(propTypes, indexTypes);
-        const result = createSymbol(SymbolFlags.Property | (optionalFlag ?? 0), name, syntheticFlag | checkFlags);
+        const result = createSymbol(propFlags | (optionalFlag ?? 0), name, syntheticFlag | checkFlags);
         result.links.containingType = containingType;
         if (!hasNonUniformValueDeclaration && firstValueDeclaration) {
             result.valueDeclaration = firstValueDeclaration;
