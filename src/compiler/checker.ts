@@ -40441,8 +40441,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 grammarErrorOnNode(left, Diagnostics._0_and_1_operations_cannot_be_mixed_without_parentheses, tokenToString(SyntaxKind.QuestionQuestionToken), tokenToString(operatorToken.kind));
             }
         }
-        else if (isBinaryExpression(node.left) && node.left.operatorToken.kind === SyntaxKind.BarBarToken) {
-            grammarErrorOnNode(node.left, Diagnostics._0_and_1_operations_cannot_be_mixed_without_parentheses, tokenToString(node.left.operatorToken.kind), tokenToString(SyntaxKind.QuestionQuestionToken));
+        else if (isBinaryExpression(node.left)) {
+            const { operatorToken } = node.left;
+            if (operatorToken.kind === SyntaxKind.BarBarToken || operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
+                grammarErrorOnNode(node.left, Diagnostics._0_and_1_operations_cannot_be_mixed_without_parentheses, tokenToString(operatorToken.kind), tokenToString(SyntaxKind.QuestionQuestionToken));
+            }
         }
         else if (isBinaryExpression(node.right) && node.right.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
             grammarErrorOnNode(node.right, Diagnostics._0_and_1_operations_cannot_be_mixed_without_parentheses, tokenToString(SyntaxKind.QuestionQuestionToken), tokenToString(node.right.operatorToken.kind));
