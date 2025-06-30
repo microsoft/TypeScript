@@ -1,4 +1,4 @@
-// @module: node16,node18,nodenext
+// @module: node16,node18,node20,nodenext
 // @allowJs: true
 // @noEmit: true
 // @filename: foo.cjs

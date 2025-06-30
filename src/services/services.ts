@@ -49,6 +49,7 @@ import {
     Debug,
     Declaration,
     deduplicate,
+    defaultHoverMaximumTruncationLength,
     DefinitionInfo,
     DefinitionInfoAndBoundSpan,
     Diagnostic,
@@ -503,8 +504,9 @@ function createChildren(node: Node, sourceFile: SourceFileLike | undefined): rea
         });
         return children;
     }
-
+    const languageVariant = sourceFile?.languageVariant ?? LanguageVariant.Standard;
     scanner.setText((sourceFile || node.getSourceFile()).text);
+    scanner.setLanguageVariant(languageVariant);
     let pos = node.pos;
     const processNode = (child: Node) => {
         addSyntheticNodes(children, pos, child.pos, node);
@@ -525,6 +527,7 @@ function createChildren(node: Node, sourceFile: SourceFileLike | undefined): rea
     node.forEachChild(processNode, processNodes);
     addSyntheticNodes(children, pos, node.end, node);
     scanner.setText(undefined);
+    scanner.setLanguageVariant(LanguageVariant.Standard);
     return children;
 }
 
@@ -2274,7 +2277,7 @@ export function createLanguageService(
         return Completions.getCompletionEntrySymbol(program, log, getValidSourceFile(fileName), position, { name, source }, host, preferences);
     }
 
-    function getQuickInfoAtPosition(fileName: string, position: number, verbosityLevel?: number): QuickInfo | undefined {
+    function getQuickInfoAtPosition(fileName: string, position: number, maximumLength?: number, verbosityLevel?: number): QuickInfo | undefined {
         synchronizeHostData();
 
         const sourceFile = getValidSourceFile(fileName);
@@ -2310,6 +2313,7 @@ export function createLanguageService(
                     nodeForQuickInfo,
                     /*semanticMeaning*/ undefined,
                     /*alias*/ undefined,
+                    maximumLength ?? defaultHoverMaximumTruncationLength,
                     verbosityLevel,
                 ),
         );

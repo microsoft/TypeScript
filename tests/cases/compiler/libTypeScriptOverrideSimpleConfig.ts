@@ -1,4 +1,5 @@
 // @traceResolution: true
+// @libReplacement: true
 
 // @Filename: /somepath/node_modules/@typescript/lib-dom/index.d.ts
 interface ABC { abc: string }

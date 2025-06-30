@@ -1,0 +1,23 @@
+//// [tests/cases/conformance/jsdoc/jsdocLinkTag9.ts] ////
+
+=== /a.ts ===
+
+export interface A {}
+
+=== /b.ts ===
+import type { A } from "./a";
+>A : A
+>  : ^
+
+export enum Enum {
+>Enum : Enum
+>     : ^^^^
+
+  /**
+   * {@link A}
+   */
+  EnumValue,
+>EnumValue : Enum.EnumValue
+>          : ^^^^^^^^^^^^^^
+}
+

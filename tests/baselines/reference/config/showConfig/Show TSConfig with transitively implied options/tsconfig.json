@@ -8,6 +8,7 @@
         "allowSyntheticDefaultImports": true,
         "resolvePackageJsonExports": true,
         "resolvePackageJsonImports": true,
+        "resolveJsonModule": true,
         "useDefineForClassFields": true
     }
 }

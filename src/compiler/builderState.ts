@@ -206,7 +206,7 @@ export namespace BuilderState {
      * Gets the path to reference file from file name, it could be resolvedPath if present otherwise path
      */
     function getReferencedFileFromFileName(program: Program, fileName: string, sourceFileDirectory: Path, getCanonicalFileName: GetCanonicalFileName): Path {
-        return toPath(program.getProjectReferenceRedirect(fileName) || fileName, sourceFileDirectory, getCanonicalFileName);
+        return toPath(program.getRedirectFromSourceFile(fileName)?.outputDts || fileName, sourceFileDirectory, getCanonicalFileName);
     }
 
     /**

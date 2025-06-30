@@ -1068,7 +1068,7 @@ interface Array<T> {
 
     /**
       * Sorts an array.
-      * @param compareFn The name of the function used to determine the order of the elements. If omitted, the elements are sorted in ascending, ASCII character order.
+      * @param compareFn The name of the function used to determine the order of the elements. If omitted, the elements are sorted in ascending, UTF-16 code unit order.
       */
     sort(compareFn?: (a: T, b: T) => number): T[];
 
@@ -1612,7 +1612,7 @@ interface Int8Array {
     /**
       * Sorts an array.
       * @param compareFn The name of the function used to determine the order of the elements. If
-      * omitted, the elements are sorted in ascending, ASCII character order.
+      * omitted, the elements are sorted in ascending, numerical order.
       */
     sort(compareFn?: (a: number, b: number) => number): Int8Array;
 
@@ -1885,7 +1885,7 @@ interface Uint8Array {
     /**
       * Sorts an array.
       * @param compareFn The name of the function used to determine the order of the elements. If
-      * omitted, the elements are sorted in ascending, ASCII character order.
+      * omitted, the elements are sorted in ascending, numerical order.
       */
     sort(compareFn?: (a: number, b: number) => number): Uint8Array;
 
@@ -2159,7 +2159,7 @@ interface Uint8ClampedArray {
     /**
       * Sorts an array.
       * @param compareFn The name of the function used to determine the order of the elements. If
-      * omitted, the elements are sorted in ascending, ASCII character order.
+      * omitted, the elements are sorted in ascending, numerical order.
       */
     sort(compareFn?: (a: number, b: number) => number): Uint8ClampedArray;
 
@@ -2432,7 +2432,7 @@ interface Int16Array {
     /**
       * Sorts an array.
       * @param compareFn The name of the function used to determine the order of the elements. If
-      * omitted, the elements are sorted in ascending, ASCII character order.
+      * omitted, the elements are sorted in ascending, numerical order.
       */
     sort(compareFn?: (a: number, b: number) => number): Int16Array;
 
@@ -2706,7 +2706,7 @@ interface Uint16Array {
     /**
       * Sorts an array.
       * @param compareFn The name of the function used to determine the order of the elements. If
-      * omitted, the elements are sorted in ascending, ASCII character order.
+      * omitted, the elements are sorted in ascending, numerical order.
       */
     sort(compareFn?: (a: number, b: number) => number): Uint16Array;
 
@@ -2979,7 +2979,7 @@ interface Int32Array {
     /**
       * Sorts an array.
       * @param compareFn The name of the function used to determine the order of the elements. If
-      * omitted, the elements are sorted in ascending, ASCII character order.
+      * omitted, the elements are sorted in ascending, numerical order.
       */
     sort(compareFn?: (a: number, b: number) => number): Int32Array;
 
@@ -3252,7 +3252,7 @@ interface Uint32Array {
     /**
       * Sorts an array.
       * @param compareFn The name of the function used to determine the order of the elements. If
-      * omitted, the elements are sorted in ascending, ASCII character order.
+      * omitted, the elements are sorted in ascending, numerical order.
       */
     sort(compareFn?: (a: number, b: number) => number): Uint32Array;
 
@@ -3525,7 +3525,7 @@ interface Float32Array {
     /**
       * Sorts an array.
       * @param compareFn The name of the function used to determine the order of the elements. If
-      * omitted, the elements are sorted in ascending, ASCII character order.
+      * omitted, the elements are sorted in ascending, numerical order.
       */
     sort(compareFn?: (a: number, b: number) => number): Float32Array;
 
@@ -3799,7 +3799,7 @@ interface Float64Array {
     /**
       * Sorts an array.
       * @param compareFn The name of the function used to determine the order of the elements. If
-      * omitted, the elements are sorted in ascending, ASCII character order.
+      * omitted, the elements are sorted in ascending, numerical order.
       */
     sort(compareFn?: (a: number, b: number) => number): Float64Array;
 

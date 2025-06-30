@@ -1,0 +1,65 @@
+//// [tests/cases/compiler/controlFlowForStatementContinueIntoIncrementor1.ts] ////
+
+=== controlFlowForStatementContinueIntoIncrementor1.ts ===
+// https://github.com/microsoft/TypeScript/issues/60945
+
+{
+  let iNext;
+>iNext : Symbol(iNext, Decl(controlFlowForStatementContinueIntoIncrementor1.ts, 3, 5))
+
+  for (
+    let i = 0;
+>i : Symbol(i, Decl(controlFlowForStatementContinueIntoIncrementor1.ts, 5, 7))
+
+    i < 10;
+>i : Symbol(i, Decl(controlFlowForStatementContinueIntoIncrementor1.ts, 5, 7))
+
+    i = iNext // error
+>i : Symbol(i, Decl(controlFlowForStatementContinueIntoIncrementor1.ts, 5, 7))
+>iNext : Symbol(iNext, Decl(controlFlowForStatementContinueIntoIncrementor1.ts, 3, 5))
+
+  ) {
+    if (i == 5) {
+>i : Symbol(i, Decl(controlFlowForStatementContinueIntoIncrementor1.ts, 5, 7))
+
+      iNext = "bad";
+>iNext : Symbol(iNext, Decl(controlFlowForStatementContinueIntoIncrementor1.ts, 3, 5))
+
+      continue;
+    }
+    iNext = i + 1;
+>iNext : Symbol(iNext, Decl(controlFlowForStatementContinueIntoIncrementor1.ts, 3, 5))
+>i : Symbol(i, Decl(controlFlowForStatementContinueIntoIncrementor1.ts, 5, 7))
+  }
+}
+
+{
+  let iNext: string | number = "";
+>iNext : Symbol(iNext, Decl(controlFlowForStatementContinueIntoIncrementor1.ts, 18, 5))
+
+  for (
+    let i = 0;
+>i : Symbol(i, Decl(controlFlowForStatementContinueIntoIncrementor1.ts, 20, 7))
+
+    i < 10;
+>i : Symbol(i, Decl(controlFlowForStatementContinueIntoIncrementor1.ts, 20, 7))
+
+    i = iNext // error
+>i : Symbol(i, Decl(controlFlowForStatementContinueIntoIncrementor1.ts, 20, 7))
+>iNext : Symbol(iNext, Decl(controlFlowForStatementContinueIntoIncrementor1.ts, 18, 5))
+
+  ) {
+    if (i == 5) {
+>i : Symbol(i, Decl(controlFlowForStatementContinueIntoIncrementor1.ts, 20, 7))
+
+      iNext = "bad";
+>iNext : Symbol(iNext, Decl(controlFlowForStatementContinueIntoIncrementor1.ts, 18, 5))
+
+      continue;
+    }
+    iNext = i + 1;
+>iNext : Symbol(iNext, Decl(controlFlowForStatementContinueIntoIncrementor1.ts, 18, 5))
+>i : Symbol(i, Decl(controlFlowForStatementContinueIntoIncrementor1.ts, 20, 7))
+  }
+}
+
