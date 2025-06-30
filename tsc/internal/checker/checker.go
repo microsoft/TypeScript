@@ -30572,7 +30572,7 @@ func (c *Checker) GetTypeAtLocation(node *ast.Node) *Type {
 	return c.getTypeOfNode(node)
 }
 
-func (c *Checker) GetEmitResolver(file *ast.SourceFile) *emitResolver {
+func (c *Checker) GetEmitResolver() *emitResolver {
 	c.emitResolverOnce.Do(func() {
 		c.emitResolver = newEmitResolver(c)
 	})

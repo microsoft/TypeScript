@@ -1450,7 +1450,7 @@ func (b *nodeBuilderImpl) symbolToParameterDeclaration(parameterSymbol *ast.Symb
 	}
 	name := b.parameterToParameterDeclarationName(parameterSymbol, parameterDeclaration)
 	// TODO: isOptionalParameter on emit resolver here is silly - hoist to checker and reexpose on emit resolver?
-	isOptional := parameterDeclaration != nil && b.ch.GetEmitResolver(nil).isOptionalParameter(parameterDeclaration) || parameterSymbol.CheckFlags&ast.CheckFlagsOptionalParameter != 0
+	isOptional := parameterDeclaration != nil && b.ch.GetEmitResolver().isOptionalParameter(parameterDeclaration) || parameterSymbol.CheckFlags&ast.CheckFlagsOptionalParameter != 0
 	var questionToken *ast.Node
 	if isOptional {
 		questionToken = b.f.NewToken(ast.KindQuestionToken)
@@ -1887,7 +1887,7 @@ func (b *nodeBuilderImpl) serializeTypeForDeclaration(declaration *ast.Declarati
 			}
 		}
 		// !!! TODO: JSDoc, getEmitResolver call is unfortunate layering for the helper - hoist it into checker
-		addUndefinedForParameter := declaration != nil && (ast.IsParameter(declaration) /*|| ast.IsJSDocParameterTag(declaration)*/) && b.ch.GetEmitResolver(nil).requiresAddingImplicitUndefined(declaration, symbol, b.ctx.enclosingDeclaration)
+		addUndefinedForParameter := declaration != nil && (ast.IsParameter(declaration) /*|| ast.IsJSDocParameterTag(declaration)*/) && b.ch.GetEmitResolver().requiresAddingImplicitUndefined(declaration, symbol, b.ctx.enclosingDeclaration)
 		if addUndefinedForParameter {
 			t = b.ch.getOptionalType(t, false)
 		}

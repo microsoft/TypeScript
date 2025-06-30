@@ -32,14 +32,22 @@ type EmitHost interface {
 	GetCurrentDirectory() string
 	CommonSourceDirectory() string
 	IsEmitBlocked(file string) bool
-	GetEmitResolver(file *ast.SourceFile) printer.EmitResolver
 }
 
 var _ EmitHost = (*emitHost)(nil)
 
 // NOTE: emitHost operations must be thread-safe
 type emitHost struct {
-	program *Program
+	program      *Program
+	emitResolver printer.EmitResolver
+}
+
+func newEmitHost(ctx context.Context, program *Program, file *ast.SourceFile) (*emitHost, func()) {
+	checker, done := program.GetTypeCheckerForFile(ctx, file)
+	return &emitHost{
+		program:      program,
+		emitResolver: checker.GetEmitResolver(),
+	}, done
 }
 
 func (host *emitHost) GetModeForUsageLocation(file ast.HasFileName, moduleSpecifier *ast.StringLiteralLike) core.ResolutionMode {
@@ -83,7 +91,7 @@ func (host *emitHost) GetRedirectTargets(path tspath.Path) []string {
 }
 
 func (host *emitHost) GetEffectiveDeclarationFlags(node *ast.Node, flags ast.ModifierFlags) ast.ModifierFlags {
-	return host.GetEmitResolver(ast.GetSourceFileOfNode(node)).GetEffectiveDeclarationFlags(node, flags)
+	return host.GetEmitResolver().GetEffectiveDeclarationFlags(node, flags)
 }
 
 func (host *emitHost) GetOutputPathsFor(file *ast.SourceFile, forceDtsPaths bool) declarations.OutputPaths {
@@ -92,7 +100,7 @@ func (host *emitHost) GetOutputPathsFor(file *ast.SourceFile, forceDtsPaths bool
 }
 
 func (host *emitHost) GetResolutionModeOverride(node *ast.Node) core.ResolutionMode {
-	return host.GetEmitResolver(ast.GetSourceFileOfNode(node)).GetResolutionModeOverride(node)
+	return host.GetEmitResolver().GetResolutionModeOverride(node)
 }
 
 func (host *emitHost) GetSourceFileFromReference(origin *ast.SourceFile, ref *ast.FileReference) *ast.SourceFile {
@@ -116,13 +124,8 @@ func (host *emitHost) WriteFile(fileName string, text string, writeByteOrderMark
 	return host.program.Host().FS().WriteFile(fileName, text, writeByteOrderMark)
 }
 
-func (host *emitHost) GetEmitResolver(file *ast.SourceFile) printer.EmitResolver {
-	// The context and done function don't matter in tsc, currently the only caller of this function.
-	// But if this ever gets used by LSP code, we'll need to thread the context properly and pass the
-	// done function to the caller to ensure resources are cleaned up at the end of the request.
-	checker, done := host.program.GetTypeCheckerForFile(context.TODO(), file)
-	defer done()
-	return checker.GetEmitResolver(file)
+func (host *emitHost) GetEmitResolver() printer.EmitResolver {
+	return host.emitResolver
 }
 
 func (host *emitHost) IsSourceFileFromExternalLibrary(file *ast.SourceFile) bool {

@@ -449,7 +449,7 @@ func (p *Program) getSemanticDiagnosticsForFile(ctx context.Context, sourceFile 
 	return filtered
 }
 
-func (p *Program) getDeclarationDiagnosticsForFile(_ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
+func (p *Program) getDeclarationDiagnosticsForFile(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
 	if sourceFile.IsDeclarationFile {
 		return []*ast.Diagnostic{}
 	}
@@ -458,8 +458,9 @@ func (p *Program) getDeclarationDiagnosticsForFile(_ctx context.Context, sourceF
 		return cached
 	}
 
-	host := &emitHost{program: p}
-	diagnostics := getDeclarationDiagnostics(host, host.GetEmitResolver(sourceFile), sourceFile)
+	host, done := newEmitHost(ctx, p, sourceFile)
+	defer done()
+	diagnostics := getDeclarationDiagnostics(host, sourceFile)
 	diagnostics, _ = p.declarationDiagnosticCache.LoadOrStore(sourceFile, diagnostics)
 	return diagnostics
 }
@@ -651,9 +652,8 @@ func (p *Program) CommonSourceDirectory() string {
 			p.Options(),
 			func() []string {
 				var files []string
-				host := &emitHost{program: p}
 				for _, file := range p.files {
-					if sourceFileMayBeEmitted(file, host, false /*forceDtsEmit*/) {
+					if sourceFileMayBeEmitted(file, p, false /*forceDtsEmit*/) {
 						files = append(files, file.FileName())
 					}
 				}
@@ -688,20 +688,17 @@ func (p *Program) Emit(options EmitOptions) *EmitResult {
 	// !!! performance measurement
 	p.BindSourceFiles()
 
-	host := &emitHost{program: p}
-
 	writerPool := &sync.Pool{
 		New: func() any {
-			return printer.NewTextWriter(host.Options().NewLine.GetNewLineCharacter())
+			return printer.NewTextWriter(p.Options().NewLine.GetNewLineCharacter())
 		},
 	}
 	wg := core.NewWorkGroup(p.singleThreaded())
 	var emitters []*emitter
-	sourceFiles := getSourceFilesToEmit(host, options.TargetSourceFile, options.forceDtsEmit)
+	sourceFiles := getSourceFilesToEmit(p, options.TargetSourceFile, options.forceDtsEmit)
 
 	for _, sourceFile := range sourceFiles {
 		emitter := &emitter{
-			host:              host,
 			emittedFilesList:  nil,
 			sourceMapDataList: nil,
 			writer:            nil,
@@ -709,6 +706,10 @@ func (p *Program) Emit(options EmitOptions) *EmitResult {
 		}
 		emitters = append(emitters, emitter)
 		wg.Queue(func() {
+			host, done := newEmitHost(context.TODO(), p, sourceFile)
+			defer done()
+			emitter.host = host
+
 			// take an unused writer
 			writer := writerPool.Get().(printer.EmitTextWriter)
 			writer.Clear()

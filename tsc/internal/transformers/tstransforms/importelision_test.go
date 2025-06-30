@@ -241,7 +241,7 @@ func TestImportElision(t *testing.T) {
 				},
 			})
 
-			emitResolver := c.GetEmitResolver(file)
+			emitResolver := c.GetEmitResolver()
 			emitResolver.MarkLinkedReferencesRecursively(file)
 
 			emitContext := printer.NewEmitContext()

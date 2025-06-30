@@ -35,6 +35,7 @@ type DeclarationEmitHost interface {
 	GetOutputPathsFor(file *ast.SourceFile, forceDtsPaths bool) OutputPaths
 	GetResolutionModeOverride(node *ast.Node) core.ResolutionMode
 	GetEffectiveDeclarationFlags(node *ast.Node, flags ast.ModifierFlags) ast.ModifierFlags
+	GetEmitResolver() printer.EmitResolver
 }
 
 type DeclarationTransformer struct {
@@ -60,7 +61,8 @@ type DeclarationTransformer struct {
 	rawLibReferenceDirectives        []*ast.FileReference
 }
 
-func NewDeclarationTransformer(host DeclarationEmitHost, resolver printer.EmitResolver, context *printer.EmitContext, compilerOptions *core.CompilerOptions, declarationFilePath string, declarationMapPath string) *DeclarationTransformer {
+func NewDeclarationTransformer(host DeclarationEmitHost, context *printer.EmitContext, compilerOptions *core.CompilerOptions, declarationFilePath string, declarationMapPath string) *DeclarationTransformer {
+	resolver := host.GetEmitResolver()
 	state := &SymbolTrackerSharedState{isolatedDeclarations: compilerOptions.IsolatedDeclarations.IsTrue(), resolver: resolver}
 	tracker := NewSymbolTracker(host, resolver, state)
 	// TODO: Use new host GetOutputPathsFor method instead of passing in entrypoint paths (which will also better support bundled emit)
