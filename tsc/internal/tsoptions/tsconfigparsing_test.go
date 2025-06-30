@@ -583,6 +583,155 @@ export {}`,
 			},
 		}},
 	},
+	{
+		title:               "null overrides in extended tsconfig - array fields",
+		noSubmoduleBaseline: true,
+		input: []testConfig{{
+			jsonText: `{
+  "extends": "./tsconfig-base.json",
+  "compilerOptions": {
+    "types": null,
+    "lib": null,
+    "typeRoots": null
+  }
+}`,
+			configFileName: "tsconfig.json",
+			basePath:       "/",
+			allFileList: map[string]string{
+				"/tsconfig-base.json": `{
+  "compilerOptions": {
+    "types": ["node", "@types/jest"],
+    "lib": ["es2020", "dom"],
+    "typeRoots": ["./types", "./node_modules/@types"]
+  }
+}`,
+				"/app.ts": "",
+			},
+		}},
+	},
+	{
+		title:               "null overrides in extended tsconfig - string fields",
+		noSubmoduleBaseline: true,
+		input: []testConfig{{
+			jsonText: `{
+  "extends": "./tsconfig-base.json",
+  "compilerOptions": {
+    "outDir": null,
+    "baseUrl": null,
+    "rootDir": null
+  }
+}`,
+			configFileName: "tsconfig.json",
+			basePath:       "/",
+			allFileList: map[string]string{
+				"/tsconfig-base.json": `{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "baseUrl": "./src",
+    "rootDir": "./src"
+  }
+}`,
+				"/app.ts": "",
+			},
+		}},
+	},
+	{
+		title:               "null overrides in extended tsconfig - mixed field types",
+		noSubmoduleBaseline: true,
+		input: []testConfig{{
+			jsonText: `{
+  "extends": "./tsconfig-base.json",
+  "compilerOptions": {
+    "types": null,
+    "outDir": null,
+    "strict": false,
+    "lib": ["es2022"],
+    "allowJs": null
+  }
+}`,
+			configFileName: "tsconfig.json",
+			basePath:       "/",
+			allFileList: map[string]string{
+				"/tsconfig-base.json": `{
+  "compilerOptions": {
+    "types": ["node"],
+    "lib": ["es2020", "dom"],
+    "outDir": "./dist",
+    "strict": true,
+    "allowJs": true,
+    "target": "es2020"
+  }
+}`,
+				"/app.ts": "",
+			},
+		}},
+	},
+	{
+		title:               "null overrides with multiple extends levels",
+		noSubmoduleBaseline: true,
+		input: []testConfig{{
+			jsonText: `{
+  "extends": "./tsconfig-middle.json",
+  "compilerOptions": {
+    "types": null,
+    "lib": null
+  }
+}`,
+			configFileName: "tsconfig.json",
+			basePath:       "/",
+			allFileList: map[string]string{
+				"/tsconfig-middle.json": `{
+  "extends": "./tsconfig-base.json",
+  "compilerOptions": {
+    "types": ["jest"],
+    "outDir": "./build"
+  }
+}`,
+				"/tsconfig-base.json": `{
+  "compilerOptions": {
+    "types": ["node"],
+    "lib": ["es2020"],
+    "outDir": "./dist",
+    "strict": true
+  }
+}`,
+				"/app.ts": "",
+			},
+		}},
+	},
+	{
+		title:               "null overrides in middle level of extends chain",
+		noSubmoduleBaseline: true,
+		input: []testConfig{{
+			jsonText: `{
+  "extends": "./tsconfig-middle.json",
+  "compilerOptions": {
+    "outDir": "./final"
+  }
+}`,
+			configFileName: "tsconfig.json",
+			basePath:       "/",
+			allFileList: map[string]string{
+				"/tsconfig-middle.json": `{
+  "extends": "./tsconfig-base.json",
+  "compilerOptions": {
+    "types": null,
+    "lib": null,
+    "outDir": "./middle"
+  }
+}`,
+				"/tsconfig-base.json": `{
+  "compilerOptions": {
+    "types": ["node"],
+    "lib": ["es2020"],
+    "outDir": "./base",
+    "strict": true
+  }
+}`,
+				"/app.ts": "",
+			},
+		}},
+	},
 }
 
 var tsconfigWithExtends = `{

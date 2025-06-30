@@ -2,6 +2,7 @@ package tsoptions
 
 import (
 	"reflect"
+	"strings"
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/collections"
@@ -488,25 +489,54 @@ func ParseTypeAcquisition(key string, value any, allOptions *core.TypeAcquisitio
 	return nil
 }
 
-// mergeCompilerOptions merges the source compiler options into the target compiler options.
-// Fields in the source options will overwrite the corresponding fields in the target options.
-func mergeCompilerOptions(targetOptions, sourceOptions *core.CompilerOptions) *core.CompilerOptions {
+// mergeCompilerOptions merges the source compiler options into the target compiler options
+// with optional awareness of explicitly set null values in the raw JSON.
+// Fields in the source options will overwrite the corresponding fields in the target options,
+// including when they are explicitly set to null in the raw configuration (if rawSource is provided).
+func mergeCompilerOptions(targetOptions, sourceOptions *core.CompilerOptions, rawSource any) *core.CompilerOptions {
 	if sourceOptions == nil {
 		return targetOptions
 	}
 
+	// Collect explicitly null field names from raw JSON
+	var explicitNullFields collections.Set[string]
+	if rawSource != nil {
+		if rawMap, ok := rawSource.(*collections.OrderedMap[string, any]); ok {
+			if compilerOptionsRaw, exists := rawMap.Get("compilerOptions"); exists {
+				if compilerOptionsMap, ok := compilerOptionsRaw.(*collections.OrderedMap[string, any]); ok {
+					for key, value := range compilerOptionsMap.Entries() {
+						if value == nil {
+							explicitNullFields.Add(key)
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// Do the merge, handling explicit nulls during the normal merge
 	targetValue := reflect.ValueOf(targetOptions).Elem()
 	sourceValue := reflect.ValueOf(sourceOptions).Elem()
+	targetType := targetValue.Type()
 
 	for i := range targetValue.NumField() {
 		targetField := targetValue.Field(i)
 		sourceField := sourceValue.Field(i)
-		if sourceField.IsZero() {
-			continue
-		} else {
+
+		// Get the JSON field name for this struct field and check if it's explicitly null
+		if jsonTag := targetType.Field(i).Tag.Get("json"); jsonTag != "" {
+			if jsonFieldName, _, _ := strings.Cut(jsonTag, ","); jsonFieldName != "" && explicitNullFields.Has(jsonFieldName) {
+				targetField.SetZero()
+				continue
+			}
+		}
+
+		// Normal merge behavior: copy non-zero fields
+		if !sourceField.IsZero() {
 			targetField.Set(sourceField)
 		}
 	}
+
 	return targetOptions
 }
 

@@ -1040,7 +1040,7 @@ func parseConfig(
 					result.compileOnSave = compileOnSave
 				}
 			}
-			mergeCompilerOptions(result.options, extendedConfig.options)
+			mergeCompilerOptions(result.options, extendedConfig.options, extendsRaw)
 		}
 	}
 
@@ -1074,7 +1074,7 @@ func parseConfig(
 				sourceFile.ExtendedSourceFiles = append(sourceFile.ExtendedSourceFiles, extendedSourceFile)
 			}
 		}
-		ownConfig.options = mergeCompilerOptions(result.options, ownConfig.options)
+		ownConfig.options = mergeCompilerOptions(result.options, ownConfig.options, ownConfig.raw)
 		// ownConfig.watchOptions = ownConfig.watchOptions && result.watchOptions ?
 		//     assignWatchOptions(result, ownConfig.watchOptions) :
 		//     ownConfig.watchOptions || result.watchOptions;
@@ -1118,7 +1118,7 @@ func parseJsonConfigFileContentWorker(
 	var errors []*ast.Diagnostic
 	resolutionStackString := []string{}
 	parsedConfig, errors := parseConfig(json, sourceFile, host, basePath, configFileName, resolutionStackString, extendedConfigCache)
-	mergeCompilerOptions(parsedConfig.options, existingOptions)
+	mergeCompilerOptions(parsedConfig.options, existingOptions, nil)
 	handleOptionConfigDirTemplateSubstitution(parsedConfig.options, basePathForFileNames)
 	rawConfig := parseJsonToStringKey(parsedConfig.raw)
 	if configFileName != "" && parsedConfig.options != nil {
