@@ -13,7 +13,6 @@ import {
     EnumMember,
     ExportAssignment,
     find,
-    findAncestor,
     first,
     firstDefined,
     forEach,
@@ -51,7 +50,7 @@ import {
     isFunctionLike,
     isIdentifier,
     isInExpressionContext,
-    isJSDoc,
+    isInJSDoc,
     isJsxOpeningLikeElement,
     isLet,
     isModuleWithStringLiteralName,
@@ -732,7 +731,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
         }
     }
 
-    if (tags.length === 0 && !hasMultipleSignatures && !findAncestor(location, isJSDoc)) {
+    if (tags.length === 0 && !hasMultipleSignatures && !isInJSDoc(location)) {
         tags = symbol.getContextualJsDocTags(enclosingDeclaration, typeChecker);
     }
 
