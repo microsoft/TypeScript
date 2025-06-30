@@ -1,0 +1,115 @@
+contextualTypingGenericFunction2.ts(10,3): error TS2322: Type '<T>(params: T) => (a: boolean, b: unknown) => 1 | 0' is not assignable to type '(params: T) => (context: number, params: T) => number'.
+  Type '(a: boolean, b: unknown) => 1 | 0' is not assignable to type '(context: number, params: T) => number'.
+    Types of parameters 'a' and 'context' are incompatible.
+      Type 'number' is not assignable to type 'boolean'.
+contextualTypingGenericFunction2.ts(18,3): error TS2322: Type '<T>(params: T) => (a: number, b: unknown) => boolean' is not assignable to type '(params: T) => (context: number, params: T) => number'.
+  Call signature return types '(a: number, b: unknown) => boolean' and '(context: number, params: T) => number' are incompatible.
+    Type 'boolean' is not assignable to type 'number'.
+contextualTypingGenericFunction2.ts(26,3): error TS2322: Type '<T>(params: T) => (a: number, b: unknown) => boolean' is not assignable to type '(params: T) => (context: number, params: T) => number'.
+  Call signature return types '(a: number, b: unknown) => boolean' and '(context: number, params: T) => number' are incompatible.
+    Type 'boolean' is not assignable to type 'number'.
+contextualTypingGenericFunction2.ts(39,3): error TS2322: Type '<T>(params: T) => (a: boolean, b: unknown) => 1 | 0' is not assignable to type '(params: unknown) => (context: number, params: unknown) => number'.
+  Type '(a: boolean, b: unknown) => 1 | 0' is not assignable to type '(context: number, params: unknown) => number'.
+    Types of parameters 'a' and 'context' are incompatible.
+      Type 'number' is not assignable to type 'boolean'.
+contextualTypingGenericFunction2.ts(47,3): error TS2322: Type '<T>(params: T) => (a: number, b: unknown) => boolean' is not assignable to type '(params: T) => (context: number, params: T) => number'.
+  Call signature return types '(a: number, b: unknown) => boolean' and '(context: number, params: T) => number' are incompatible.
+    Type 'boolean' is not assignable to type 'number'.
+contextualTypingGenericFunction2.ts(55,3): error TS2322: Type '<T>(params: T) => (a: number, b: unknown) => boolean' is not assignable to type '(params: T) => (context: number, params: T) => number'.
+  Call signature return types '(a: number, b: unknown) => boolean' and '(context: number, params: T) => number' are incompatible.
+    Type 'boolean' is not assignable to type 'number'.
+
+
+==== contextualTypingGenericFunction2.ts (6 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/61979
+    
+    declare function fn<P>(config: {
+      callback: (params: P) => (context: number, params: P) => number;
+      unrelated?: (arg: string) => void;
+    }): (params: P) => number;
+    
+    // should error
+    export const result1 = fn({
+      callback: <T,>(params: T) => {
+      ~~~~~~~~
+!!! error TS2322: Type '<T>(params: T) => (a: boolean, b: unknown) => 1 | 0' is not assignable to type '(params: T) => (context: number, params: T) => number'.
+!!! error TS2322:   Type '(a: boolean, b: unknown) => 1 | 0' is not assignable to type '(context: number, params: T) => number'.
+!!! error TS2322:     Types of parameters 'a' and 'context' are incompatible.
+!!! error TS2322:       Type 'number' is not assignable to type 'boolean'.
+!!! related TS6500 contextualTypingGenericFunction2.ts:4:3: The expected type comes from property 'callback' which is declared here on type '{ callback: (params: T) => (context: number, params: T) => number; unrelated?: ((arg: string) => void) | undefined; }'
+        return (a: boolean, b) => (a ? 1 : 0);
+      },
+      unrelated: (_) => {},
+    });
+    
+    // should error
+    export const result2 = fn({
+      callback: <T,>(params: T) => {
+      ~~~~~~~~
+!!! error TS2322: Type '<T>(params: T) => (a: number, b: unknown) => boolean' is not assignable to type '(params: T) => (context: number, params: T) => number'.
+!!! error TS2322:   Call signature return types '(a: number, b: unknown) => boolean' and '(context: number, params: T) => number' are incompatible.
+!!! error TS2322:     Type 'boolean' is not assignable to type 'number'.
+!!! related TS6500 contextualTypingGenericFunction2.ts:4:3: The expected type comes from property 'callback' which is declared here on type '{ callback: (params: T) => (context: number, params: T) => number; unrelated?: ((arg: string) => void) | undefined; }'
+        return (a, b): boolean => true;
+      },
+      unrelated: (_) => {},
+    });
+    
+    // should error
+    export const result3 = fn({
+      callback: <T,>(params: T) => {
+      ~~~~~~~~
+!!! error TS2322: Type '<T>(params: T) => (a: number, b: unknown) => boolean' is not assignable to type '(params: T) => (context: number, params: T) => number'.
+!!! error TS2322:   Call signature return types '(a: number, b: unknown) => boolean' and '(context: number, params: T) => number' are incompatible.
+!!! error TS2322:     Type 'boolean' is not assignable to type 'number'.
+!!! related TS6500 contextualTypingGenericFunction2.ts:4:3: The expected type comes from property 'callback' which is declared here on type '{ callback: (params: T) => (context: number, params: T) => number; unrelated?: ((arg: string) => void) | undefined; }'
+        return (a, b) => true;
+      },
+      unrelated: (_) => {},
+    });
+    
+    declare function fn2<P>(config: {
+      callback: (params: P) => (context: number, params: P) => number;
+      unrelated?: (arg: string) => void;
+    }): any;
+    
+    // should error
+    export const result4 = fn2({
+      callback: <T,>(params: T) => {
+      ~~~~~~~~
+!!! error TS2322: Type '<T>(params: T) => (a: boolean, b: unknown) => 1 | 0' is not assignable to type '(params: unknown) => (context: number, params: unknown) => number'.
+!!! error TS2322:   Type '(a: boolean, b: unknown) => 1 | 0' is not assignable to type '(context: number, params: unknown) => number'.
+!!! error TS2322:     Types of parameters 'a' and 'context' are incompatible.
+!!! error TS2322:       Type 'number' is not assignable to type 'boolean'.
+!!! related TS6500 contextualTypingGenericFunction2.ts:33:3: The expected type comes from property 'callback' which is declared here on type '{ callback: (params: unknown) => (context: number, params: unknown) => number; unrelated?: ((arg: string) => void) | undefined; }'
+        return (a: boolean, b) => (a ? 1 : 0);
+      },
+      unrelated: (_) => {},
+    });
+    
+    // should error
+    export const result5 = fn({
+      callback: <T,>(params: T) => {
+      ~~~~~~~~
+!!! error TS2322: Type '<T>(params: T) => (a: number, b: unknown) => boolean' is not assignable to type '(params: T) => (context: number, params: T) => number'.
+!!! error TS2322:   Call signature return types '(a: number, b: unknown) => boolean' and '(context: number, params: T) => number' are incompatible.
+!!! error TS2322:     Type 'boolean' is not assignable to type 'number'.
+!!! related TS6500 contextualTypingGenericFunction2.ts:4:3: The expected type comes from property 'callback' which is declared here on type '{ callback: (params: T) => (context: number, params: T) => number; unrelated?: ((arg: string) => void) | undefined; }'
+        return (a, b): boolean => true;
+      },
+      unrelated: (_) => {},
+    });
+    
+    // should error
+    export const result6 = fn({
+      callback: <T,>(params: T) => {
+      ~~~~~~~~
+!!! error TS2322: Type '<T>(params: T) => (a: number, b: unknown) => boolean' is not assignable to type '(params: T) => (context: number, params: T) => number'.
+!!! error TS2322:   Call signature return types '(a: number, b: unknown) => boolean' and '(context: number, params: T) => number' are incompatible.
+!!! error TS2322:     Type 'boolean' is not assignable to type 'number'.
+!!! related TS6500 contextualTypingGenericFunction2.ts:4:3: The expected type comes from property 'callback' which is declared here on type '{ callback: (params: T) => (context: number, params: T) => number; unrelated?: ((arg: string) => void) | undefined; }'
+        return (a, b) => true;
+      },
+      unrelated: (_) => {},
+    });
+    
