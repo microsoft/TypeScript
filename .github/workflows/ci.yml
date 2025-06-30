@@ -50,10 +50,11 @@ jobs:
             node-version: '22'
             bundle: true
             skip: ${{ github.event_name == 'merge_group' }}
-          - os: macos-latest
-            node-version: '22'
-            bundle: true
-            skip: ${{ github.event_name == 'merge_group' }}
+          # Skip macOS for this version; resources are limited.
+          # - os: macos-latest
+          #   node-version: '22'
+          #   bundle: true
+          #   skip: ${{ github.event_name == 'merge_group' }}
           - os: ubuntu-latest
             node-version: '20'
             bundle: true
@@ -61,10 +62,11 @@ jobs:
             node-version: '20'
             bundle: true
             skip: ${{ github.event_name == 'merge_group' }}
-          - os: macos-latest
-            node-version: '20'
-            bundle: true
-            skip: ${{ github.event_name == 'merge_group' }}
+          # Skip macOS for this version; resources are limited.
+          # - os: macos-latest
+          #   node-version: '20'
+          #   bundle: true
+          #   skip: ${{ github.event_name == 'merge_group' }}
           - os: ubuntu-latest
             node-version: '18'
             bundle: true
@@ -72,10 +74,11 @@ jobs:
             node-version: '18'
             bundle: true
             skip: ${{ github.event_name == 'merge_group' }}
-          - os: macos-latest
-            node-version: '18'
-            bundle: true
-            skip: ${{ github.event_name == 'merge_group' }}
+          # Skip macOS for this version; resources are limited.
+          # - os: macos-latest
+          #   node-version: '18'
+          #   bundle: true
+          #   skip: ${{ github.event_name == 'merge_group' }}
           - os: ubuntu-latest
             node-version: '16'
             bundle: true
