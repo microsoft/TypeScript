@@ -40437,7 +40437,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         if (isBinaryExpression(node.parent)) {
             const { left, operatorToken } = node.parent;
-            if (isBinaryExpression(left) && (operatorToken.kind === SyntaxKind.BarBarToken || operatorToken.kind === SyntaxKind.AmpersandAmpersandToken)) {
+            if (isBinaryExpression(left) && operatorToken.kind === SyntaxKind.BarBarToken) {
                 grammarErrorOnNode(left, Diagnostics._0_and_1_operations_cannot_be_mixed_without_parentheses, tokenToString(SyntaxKind.QuestionQuestionToken), tokenToString(operatorToken.kind));
             }
         }
@@ -40447,8 +40447,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 grammarErrorOnNode(node.left, Diagnostics._0_and_1_operations_cannot_be_mixed_without_parentheses, tokenToString(operatorToken.kind), tokenToString(SyntaxKind.QuestionQuestionToken));
             }
         }
-        else if (isBinaryExpression(node.right) && node.right.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
-            grammarErrorOnNode(node.right, Diagnostics._0_and_1_operations_cannot_be_mixed_without_parentheses, tokenToString(SyntaxKind.QuestionQuestionToken), tokenToString(node.right.operatorToken.kind));
+        else if (isBinaryExpression(node.right)) {
+            const { operatorToken } = node.right;
+            if (operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
+                grammarErrorOnNode(node.right, Diagnostics._0_and_1_operations_cannot_be_mixed_without_parentheses, tokenToString(SyntaxKind.QuestionQuestionToken), tokenToString(operatorToken.kind));
+            }
         }
         checkNullishCoalesceOperandLeft(node);
         checkNullishCoalesceOperandRight(node);
