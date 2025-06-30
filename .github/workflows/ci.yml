@@ -364,6 +364,8 @@ jobs:
         run: npx hereby build-src --built
 
   baselines:
+    if: ${{ github.event_name != 'merge_group' }}
+
     runs-on: ubuntu-latest
 
     steps:
