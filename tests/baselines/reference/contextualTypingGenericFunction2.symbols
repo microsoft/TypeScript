@@ -27,31 +27,31 @@ declare const fn1: <T, Args extends Array<any>, Ret>(
 >Args : Symbol(Args, Decl(contextualTypingGenericFunction2.ts, 2, 22))
 >Ret : Symbol(Ret, Decl(contextualTypingGenericFunction2.ts, 2, 47))
 
-export const ok1 = fn1({ message: "foo" }, function (n: number) {
->ok1 : Symbol(ok1, Decl(contextualTypingGenericFunction2.ts, 7, 12))
+export const result1 = fn1({ message: "foo" }, function (n: number) {
+>result1 : Symbol(result1, Decl(contextualTypingGenericFunction2.ts, 7, 12))
 >fn1 : Symbol(fn1, Decl(contextualTypingGenericFunction2.ts, 2, 13))
->message : Symbol(message, Decl(contextualTypingGenericFunction2.ts, 7, 24))
->n : Symbol(n, Decl(contextualTypingGenericFunction2.ts, 7, 53))
+>message : Symbol(message, Decl(contextualTypingGenericFunction2.ts, 7, 28))
+>n : Symbol(n, Decl(contextualTypingGenericFunction2.ts, 7, 57))
 
   this.message;
->this.message : Symbol(message, Decl(contextualTypingGenericFunction2.ts, 7, 24))
+>this.message : Symbol(message, Decl(contextualTypingGenericFunction2.ts, 7, 28))
 >this : Symbol(this, Decl(contextualTypingGenericFunction2.ts, 4, 9))
->message : Symbol(message, Decl(contextualTypingGenericFunction2.ts, 7, 24))
+>message : Symbol(message, Decl(contextualTypingGenericFunction2.ts, 7, 28))
 
 });
 
-export const ok2 = fn1({ message: "foo" }, function <N>(n: N) {
->ok2 : Symbol(ok2, Decl(contextualTypingGenericFunction2.ts, 11, 12))
+export const result2 = fn1({ message: "foo" }, function <N>(n: N) {
+>result2 : Symbol(result2, Decl(contextualTypingGenericFunction2.ts, 11, 12))
 >fn1 : Symbol(fn1, Decl(contextualTypingGenericFunction2.ts, 2, 13))
->message : Symbol(message, Decl(contextualTypingGenericFunction2.ts, 11, 24))
->N : Symbol(N, Decl(contextualTypingGenericFunction2.ts, 11, 53))
->n : Symbol(n, Decl(contextualTypingGenericFunction2.ts, 11, 56))
->N : Symbol(N, Decl(contextualTypingGenericFunction2.ts, 11, 53))
+>message : Symbol(message, Decl(contextualTypingGenericFunction2.ts, 11, 28))
+>N : Symbol(N, Decl(contextualTypingGenericFunction2.ts, 11, 57))
+>n : Symbol(n, Decl(contextualTypingGenericFunction2.ts, 11, 60))
+>N : Symbol(N, Decl(contextualTypingGenericFunction2.ts, 11, 57))
 
   this.message;
->this.message : Symbol(message, Decl(contextualTypingGenericFunction2.ts, 11, 24))
+>this.message : Symbol(message, Decl(contextualTypingGenericFunction2.ts, 11, 28))
 >this : Symbol(this, Decl(contextualTypingGenericFunction2.ts, 4, 9))
->message : Symbol(message, Decl(contextualTypingGenericFunction2.ts, 11, 24))
+>message : Symbol(message, Decl(contextualTypingGenericFunction2.ts, 11, 28))
 
 });
 
@@ -73,13 +73,13 @@ declare const fn2: <Args extends Array<any>, Ret>(
 >Args : Symbol(Args, Decl(contextualTypingGenericFunction2.ts, 15, 20))
 >Ret : Symbol(Ret, Decl(contextualTypingGenericFunction2.ts, 15, 44))
 
-export const ok3 = fn2(function <N>(first, n: N) {});
->ok3 : Symbol(ok3, Decl(contextualTypingGenericFunction2.ts, 19, 12))
+export const result3 = fn2(function <N>(first, n: N) {});
+>result3 : Symbol(result3, Decl(contextualTypingGenericFunction2.ts, 19, 12))
 >fn2 : Symbol(fn2, Decl(contextualTypingGenericFunction2.ts, 15, 13))
->N : Symbol(N, Decl(contextualTypingGenericFunction2.ts, 19, 33))
->first : Symbol(first, Decl(contextualTypingGenericFunction2.ts, 19, 36))
->n : Symbol(n, Decl(contextualTypingGenericFunction2.ts, 19, 42))
->N : Symbol(N, Decl(contextualTypingGenericFunction2.ts, 19, 33))
+>N : Symbol(N, Decl(contextualTypingGenericFunction2.ts, 19, 37))
+>first : Symbol(first, Decl(contextualTypingGenericFunction2.ts, 19, 40))
+>n : Symbol(n, Decl(contextualTypingGenericFunction2.ts, 19, 46))
+>N : Symbol(N, Decl(contextualTypingGenericFunction2.ts, 19, 37))
 
 declare const fn3: <Args extends Array<any>, Ret>(
 >fn3 : Symbol(fn3, Decl(contextualTypingGenericFunction2.ts, 21, 13))
@@ -99,12 +99,12 @@ declare const fn3: <Args extends Array<any>, Ret>(
 >Args : Symbol(Args, Decl(contextualTypingGenericFunction2.ts, 21, 20))
 >Ret : Symbol(Ret, Decl(contextualTypingGenericFunction2.ts, 21, 44))
 
-export const ok4 = fn3(function <N>(n: N) {
->ok4 : Symbol(ok4, Decl(contextualTypingGenericFunction2.ts, 25, 12))
+export const result4 = fn3(function <N>(n: N) {
+>result4 : Symbol(result4, Decl(contextualTypingGenericFunction2.ts, 25, 12))
 >fn3 : Symbol(fn3, Decl(contextualTypingGenericFunction2.ts, 21, 13))
->N : Symbol(N, Decl(contextualTypingGenericFunction2.ts, 25, 33))
->n : Symbol(n, Decl(contextualTypingGenericFunction2.ts, 25, 36))
->N : Symbol(N, Decl(contextualTypingGenericFunction2.ts, 25, 33))
+>N : Symbol(N, Decl(contextualTypingGenericFunction2.ts, 25, 37))
+>n : Symbol(n, Decl(contextualTypingGenericFunction2.ts, 25, 40))
+>N : Symbol(N, Decl(contextualTypingGenericFunction2.ts, 25, 37))
 
     return (arg) => {
 >arg : Symbol(arg, Decl(contextualTypingGenericFunction2.ts, 26, 12))
@@ -132,81 +132,161 @@ declare function fn4<T, P>(config: {
 >params : Symbol(params, Decl(contextualTypingGenericFunction2.ts, 33, 39))
 >P : Symbol(P, Decl(contextualTypingGenericFunction2.ts, 31, 23))
 
+  other?: (arg: string) => void;
+>other : Symbol(other, Decl(contextualTypingGenericFunction2.ts, 33, 61))
+>arg : Symbol(arg, Decl(contextualTypingGenericFunction2.ts, 34, 11))
+
 }): (params: P) => number;
->params : Symbol(params, Decl(contextualTypingGenericFunction2.ts, 34, 5))
+>params : Symbol(params, Decl(contextualTypingGenericFunction2.ts, 35, 5))
 >P : Symbol(P, Decl(contextualTypingGenericFunction2.ts, 31, 23))
 
-export const ok5 = fn4({
->ok5 : Symbol(ok5, Decl(contextualTypingGenericFunction2.ts, 36, 12))
+export const result5 = fn4({
+>result5 : Symbol(result5, Decl(contextualTypingGenericFunction2.ts, 37, 12))
 >fn4 : Symbol(fn4, Decl(contextualTypingGenericFunction2.ts, 29, 3))
 
   context: 1,
->context : Symbol(context, Decl(contextualTypingGenericFunction2.ts, 36, 24))
+>context : Symbol(context, Decl(contextualTypingGenericFunction2.ts, 37, 28))
 
-  callback: <T,>(params: T) => {
->callback : Symbol(callback, Decl(contextualTypingGenericFunction2.ts, 37, 13))
->T : Symbol(T, Decl(contextualTypingGenericFunction2.ts, 38, 13))
->params : Symbol(params, Decl(contextualTypingGenericFunction2.ts, 38, 17))
->T : Symbol(T, Decl(contextualTypingGenericFunction2.ts, 38, 13))
+  callback: <N,>(params: N) => {
+>callback : Symbol(callback, Decl(contextualTypingGenericFunction2.ts, 38, 13))
+>N : Symbol(N, Decl(contextualTypingGenericFunction2.ts, 39, 13))
+>params : Symbol(params, Decl(contextualTypingGenericFunction2.ts, 39, 17))
+>N : Symbol(N, Decl(contextualTypingGenericFunction2.ts, 39, 13))
 
     return (a, b) => a + 1;
->a : Symbol(a, Decl(contextualTypingGenericFunction2.ts, 39, 12))
->b : Symbol(b, Decl(contextualTypingGenericFunction2.ts, 39, 14))
->a : Symbol(a, Decl(contextualTypingGenericFunction2.ts, 39, 12))
+>a : Symbol(a, Decl(contextualTypingGenericFunction2.ts, 40, 12))
+>b : Symbol(b, Decl(contextualTypingGenericFunction2.ts, 40, 14))
+>a : Symbol(a, Decl(contextualTypingGenericFunction2.ts, 40, 12))
 
   },
 });
 
-declare const fnGen1: <T, Args extends Array<any>, Ret>(
->fnGen1 : Symbol(fnGen1, Decl(contextualTypingGenericFunction2.ts, 43, 13))
->T : Symbol(T, Decl(contextualTypingGenericFunction2.ts, 43, 23))
->Args : Symbol(Args, Decl(contextualTypingGenericFunction2.ts, 43, 25))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
->Ret : Symbol(Ret, Decl(contextualTypingGenericFunction2.ts, 43, 50))
+export const result6 = fn4({
+>result6 : Symbol(result6, Decl(contextualTypingGenericFunction2.ts, 44, 12))
+>fn4 : Symbol(fn4, Decl(contextualTypingGenericFunction2.ts, 29, 3))
 
-  self: T,
->self : Symbol(self, Decl(contextualTypingGenericFunction2.ts, 43, 56))
->T : Symbol(T, Decl(contextualTypingGenericFunction2.ts, 43, 23))
+  context: 1,
+>context : Symbol(context, Decl(contextualTypingGenericFunction2.ts, 44, 28))
 
-  body: (this: T, ...args: Args) => Generator<any, Ret, never>,
->body : Symbol(body, Decl(contextualTypingGenericFunction2.ts, 44, 10))
->this : Symbol(this, Decl(contextualTypingGenericFunction2.ts, 45, 9))
->T : Symbol(T, Decl(contextualTypingGenericFunction2.ts, 43, 23))
->args : Symbol(args, Decl(contextualTypingGenericFunction2.ts, 45, 17))
->Args : Symbol(Args, Decl(contextualTypingGenericFunction2.ts, 43, 25))
->Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
->Ret : Symbol(Ret, Decl(contextualTypingGenericFunction2.ts, 43, 50))
+  callback: <N,>(params: N) => {
+>callback : Symbol(callback, Decl(contextualTypingGenericFunction2.ts, 45, 13))
+>N : Symbol(N, Decl(contextualTypingGenericFunction2.ts, 46, 13))
+>params : Symbol(params, Decl(contextualTypingGenericFunction2.ts, 46, 17))
+>N : Symbol(N, Decl(contextualTypingGenericFunction2.ts, 46, 13))
 
-) => (...args: Args) => Ret;
->args : Symbol(args, Decl(contextualTypingGenericFunction2.ts, 46, 6))
->Args : Symbol(Args, Decl(contextualTypingGenericFunction2.ts, 43, 25))
->Ret : Symbol(Ret, Decl(contextualTypingGenericFunction2.ts, 43, 50))
+    return (a, b) => a + 1;
+>a : Symbol(a, Decl(contextualTypingGenericFunction2.ts, 47, 12))
+>b : Symbol(b, Decl(contextualTypingGenericFunction2.ts, 47, 14))
+>a : Symbol(a, Decl(contextualTypingGenericFunction2.ts, 47, 12))
 
-export const ok6 = fnGen1({ message: "foo" }, function* (n: number) {
->ok6 : Symbol(ok6, Decl(contextualTypingGenericFunction2.ts, 48, 12))
->fnGen1 : Symbol(fnGen1, Decl(contextualTypingGenericFunction2.ts, 43, 13))
->message : Symbol(message, Decl(contextualTypingGenericFunction2.ts, 48, 27))
->n : Symbol(n, Decl(contextualTypingGenericFunction2.ts, 48, 57))
-
-  this.message;
->this.message : Symbol(message, Decl(contextualTypingGenericFunction2.ts, 48, 27))
->this : Symbol(this, Decl(contextualTypingGenericFunction2.ts, 45, 9))
->message : Symbol(message, Decl(contextualTypingGenericFunction2.ts, 48, 27))
+  },
+  other: (_) => {} // outer context-sensitive function
+>other : Symbol(other, Decl(contextualTypingGenericFunction2.ts, 48, 4))
+>_ : Symbol(_, Decl(contextualTypingGenericFunction2.ts, 49, 10))
 
 });
 
-export const ok7 = fnGen1({ message: "foo" }, function* <N>(n: N) {
->ok7 : Symbol(ok7, Decl(contextualTypingGenericFunction2.ts, 52, 12))
->fnGen1 : Symbol(fnGen1, Decl(contextualTypingGenericFunction2.ts, 43, 13))
->message : Symbol(message, Decl(contextualTypingGenericFunction2.ts, 52, 27))
->N : Symbol(N, Decl(contextualTypingGenericFunction2.ts, 52, 57))
->n : Symbol(n, Decl(contextualTypingGenericFunction2.ts, 52, 60))
->N : Symbol(N, Decl(contextualTypingGenericFunction2.ts, 52, 57))
+// should error
+export const result7 = fn4({
+>result7 : Symbol(result7, Decl(contextualTypingGenericFunction2.ts, 53, 12))
+>fn4 : Symbol(fn4, Decl(contextualTypingGenericFunction2.ts, 29, 3))
+
+  context: 1,
+>context : Symbol(context, Decl(contextualTypingGenericFunction2.ts, 53, 28))
+
+  callback: <N,>(params: N) => {
+>callback : Symbol(callback, Decl(contextualTypingGenericFunction2.ts, 54, 13))
+>N : Symbol(N, Decl(contextualTypingGenericFunction2.ts, 55, 13))
+>params : Symbol(params, Decl(contextualTypingGenericFunction2.ts, 55, 17))
+>N : Symbol(N, Decl(contextualTypingGenericFunction2.ts, 55, 13))
+
+    return (a: boolean, b) => a ? 1 : 2;
+>a : Symbol(a, Decl(contextualTypingGenericFunction2.ts, 56, 12))
+>b : Symbol(b, Decl(contextualTypingGenericFunction2.ts, 56, 23))
+>a : Symbol(a, Decl(contextualTypingGenericFunction2.ts, 56, 12))
+
+  },
+  other: (_) => {} // outer context-sensitive function
+>other : Symbol(other, Decl(contextualTypingGenericFunction2.ts, 57, 4))
+>_ : Symbol(_, Decl(contextualTypingGenericFunction2.ts, 58, 10))
+
+});
+
+ // should error
+export const result8 = fn4({
+>result8 : Symbol(result8, Decl(contextualTypingGenericFunction2.ts, 62, 12))
+>fn4 : Symbol(fn4, Decl(contextualTypingGenericFunction2.ts, 29, 3))
+
+  context: 1,
+>context : Symbol(context, Decl(contextualTypingGenericFunction2.ts, 62, 28))
+
+  callback: <N,>(params: N) => {
+>callback : Symbol(callback, Decl(contextualTypingGenericFunction2.ts, 63, 13))
+>N : Symbol(N, Decl(contextualTypingGenericFunction2.ts, 64, 13))
+>params : Symbol(params, Decl(contextualTypingGenericFunction2.ts, 64, 17))
+>N : Symbol(N, Decl(contextualTypingGenericFunction2.ts, 64, 13))
+
+    return (a, b) => true;
+>a : Symbol(a, Decl(contextualTypingGenericFunction2.ts, 65, 12))
+>b : Symbol(b, Decl(contextualTypingGenericFunction2.ts, 65, 14))
+
+  },
+  other: (_) => {} // outer context-sensitive function
+>other : Symbol(other, Decl(contextualTypingGenericFunction2.ts, 66, 4))
+>_ : Symbol(_, Decl(contextualTypingGenericFunction2.ts, 67, 10))
+
+});
+
+declare const fnGen1: <T, Args extends Array<any>, Ret>(
+>fnGen1 : Symbol(fnGen1, Decl(contextualTypingGenericFunction2.ts, 70, 13))
+>T : Symbol(T, Decl(contextualTypingGenericFunction2.ts, 70, 23))
+>Args : Symbol(Args, Decl(contextualTypingGenericFunction2.ts, 70, 25))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>Ret : Symbol(Ret, Decl(contextualTypingGenericFunction2.ts, 70, 50))
+
+  self: T,
+>self : Symbol(self, Decl(contextualTypingGenericFunction2.ts, 70, 56))
+>T : Symbol(T, Decl(contextualTypingGenericFunction2.ts, 70, 23))
+
+  body: (this: T, ...args: Args) => Generator<any, Ret, never>,
+>body : Symbol(body, Decl(contextualTypingGenericFunction2.ts, 71, 10))
+>this : Symbol(this, Decl(contextualTypingGenericFunction2.ts, 72, 9))
+>T : Symbol(T, Decl(contextualTypingGenericFunction2.ts, 70, 23))
+>args : Symbol(args, Decl(contextualTypingGenericFunction2.ts, 72, 17))
+>Args : Symbol(Args, Decl(contextualTypingGenericFunction2.ts, 70, 25))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>Ret : Symbol(Ret, Decl(contextualTypingGenericFunction2.ts, 70, 50))
+
+) => (...args: Args) => Ret;
+>args : Symbol(args, Decl(contextualTypingGenericFunction2.ts, 73, 6))
+>Args : Symbol(Args, Decl(contextualTypingGenericFunction2.ts, 70, 25))
+>Ret : Symbol(Ret, Decl(contextualTypingGenericFunction2.ts, 70, 50))
+
+export const result9 = fnGen1({ message: "foo" }, function* (n: number) {
+>result9 : Symbol(result9, Decl(contextualTypingGenericFunction2.ts, 75, 12))
+>fnGen1 : Symbol(fnGen1, Decl(contextualTypingGenericFunction2.ts, 70, 13))
+>message : Symbol(message, Decl(contextualTypingGenericFunction2.ts, 75, 31))
+>n : Symbol(n, Decl(contextualTypingGenericFunction2.ts, 75, 61))
 
   this.message;
->this.message : Symbol(message, Decl(contextualTypingGenericFunction2.ts, 52, 27))
->this : Symbol(this, Decl(contextualTypingGenericFunction2.ts, 45, 9))
->message : Symbol(message, Decl(contextualTypingGenericFunction2.ts, 52, 27))
+>this.message : Symbol(message, Decl(contextualTypingGenericFunction2.ts, 75, 31))
+>this : Symbol(this, Decl(contextualTypingGenericFunction2.ts, 72, 9))
+>message : Symbol(message, Decl(contextualTypingGenericFunction2.ts, 75, 31))
+
+});
+
+export const result10 = fnGen1({ message: "foo" }, function* <N>(n: N) {
+>result10 : Symbol(result10, Decl(contextualTypingGenericFunction2.ts, 79, 12))
+>fnGen1 : Symbol(fnGen1, Decl(contextualTypingGenericFunction2.ts, 70, 13))
+>message : Symbol(message, Decl(contextualTypingGenericFunction2.ts, 79, 32))
+>N : Symbol(N, Decl(contextualTypingGenericFunction2.ts, 79, 62))
+>n : Symbol(n, Decl(contextualTypingGenericFunction2.ts, 79, 65))
+>N : Symbol(N, Decl(contextualTypingGenericFunction2.ts, 79, 62))
+
+  this.message;
+>this.message : Symbol(message, Decl(contextualTypingGenericFunction2.ts, 79, 32))
+>this : Symbol(this, Decl(contextualTypingGenericFunction2.ts, 72, 9))
+>message : Symbol(message, Decl(contextualTypingGenericFunction2.ts, 79, 32))
 
 });
 

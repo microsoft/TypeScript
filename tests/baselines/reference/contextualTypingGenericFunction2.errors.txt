@@ -1,0 +1,98 @@
+contextualTypingGenericFunction2.ts(55,3): error TS2322: Type 'number' is not assignable to type 'boolean'.
+contextualTypingGenericFunction2.ts(65,3): error TS2322: Type '<N>(params: N) => (a: number, b: unknown) => boolean' is not assignable to type '(params: unknown) => (context: number, params: unknown) => number'.
+  Call signature return types '(a: number, b: unknown) => boolean' and '(context: number, params: unknown) => number' are incompatible.
+    Type 'boolean' is not assignable to type 'number'.
+
+
+==== contextualTypingGenericFunction2.ts (2 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/61791
+    
+    declare const fn1: <T, Args extends Array<any>, Ret>(
+      self: T,
+      body: (this: T, ...args: Args) => Ret,
+    ) => (...args: Args) => Ret;
+    
+    export const result1 = fn1({ message: "foo" }, function (n: number) {
+      this.message;
+    });
+    
+    export const result2 = fn1({ message: "foo" }, function <N>(n: N) {
+      this.message;
+    });
+    
+    declare const fn2: <Args extends Array<any>, Ret>(
+      body: (first: string, ...args: Args) => Ret,
+    ) => (...args: Args) => Ret;
+    
+    export const result3 = fn2(function <N>(first, n: N) {});
+    
+    declare const fn3: <Args extends Array<any>, Ret>(
+      body: (...args: Args) => (arg: string) => Ret,
+    ) => (...args: Args) => Ret;
+    
+    export const result4 = fn3(function <N>(n: N) {
+        return (arg) => {
+            return 10
+        }
+    });
+    
+    declare function fn4<T, P>(config: {
+      context: T;
+      callback: (params: P) => (context: T, params: P) => number;
+      other?: (arg: string) => void;
+    }): (params: P) => number;
+    
+    export const result5 = fn4({
+      context: 1,
+      callback: <N,>(params: N) => {
+        return (a, b) => a + 1;
+      },
+    });
+    
+    export const result6 = fn4({
+      context: 1,
+      callback: <N,>(params: N) => {
+        return (a, b) => a + 1;
+      },
+      other: (_) => {} // outer context-sensitive function
+    });
+    
+    // should error
+    export const result7 = fn4({
+      context: 1,
+      ~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'boolean'.
+!!! related TS6500 contextualTypingGenericFunction2.ts:33:3: The expected type comes from property 'context' which is declared here on type '{ context: boolean; callback: (params: unknown) => (context: boolean, params: unknown) => number; other?: ((arg: string) => void) | undefined; }'
+      callback: <N,>(params: N) => {
+        return (a: boolean, b) => a ? 1 : 2;
+      },
+      other: (_) => {} // outer context-sensitive function
+    });
+    
+     // should error
+    export const result8 = fn4({
+      context: 1,
+      callback: <N,>(params: N) => {
+      ~~~~~~~~
+!!! error TS2322: Type '<N>(params: N) => (a: number, b: unknown) => boolean' is not assignable to type '(params: unknown) => (context: number, params: unknown) => number'.
+!!! error TS2322:   Call signature return types '(a: number, b: unknown) => boolean' and '(context: number, params: unknown) => number' are incompatible.
+!!! error TS2322:     Type 'boolean' is not assignable to type 'number'.
+!!! related TS6500 contextualTypingGenericFunction2.ts:34:3: The expected type comes from property 'callback' which is declared here on type '{ context: number; callback: (params: unknown) => (context: number, params: unknown) => number; other?: ((arg: string) => void) | undefined; }'
+        return (a, b) => true;
+      },
+      other: (_) => {} // outer context-sensitive function
+    });
+    
+    declare const fnGen1: <T, Args extends Array<any>, Ret>(
+      self: T,
+      body: (this: T, ...args: Args) => Generator<any, Ret, never>,
+    ) => (...args: Args) => Ret;
+    
+    export const result9 = fnGen1({ message: "foo" }, function* (n: number) {
+      this.message;
+    });
+    
+    export const result10 = fnGen1({ message: "foo" }, function* <N>(n: N) {
+      this.message;
+    });
+    

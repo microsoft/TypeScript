@@ -27,9 +27,9 @@ declare const fn1: <T, Args extends Array<any>, Ret>(
 >args : Args
 >     : ^^^^
 
-export const ok1 = fn1({ message: "foo" }, function (n: number) {
->ok1 : (n: number) => void
->    : ^^^^^^^^^^^^^^^^^^^
+export const result1 = fn1({ message: "foo" }, function (n: number) {
+>result1 : (n: number) => void
+>        : ^^^^^^^^^^^^^^^^^^^
 >fn1({ message: "foo" }, function (n: number) {  this.message;}) : (n: number) => void
 >                                                                : ^^^^^^^^^^^^^^^^^^^
 >fn1 : <T, Args extends Array<any>, Ret>(self: T, body: (this: T, ...args: Args) => Ret) => (...args: Args) => Ret
@@ -55,9 +55,9 @@ export const ok1 = fn1({ message: "foo" }, function (n: number) {
 
 });
 
-export const ok2 = fn1({ message: "foo" }, function <N>(n: N) {
->ok2 : (n: any) => void
->    : ^^^^^^^^^^^^^^^^
+export const result2 = fn1({ message: "foo" }, function <N>(n: N) {
+>result2 : (n: any) => void
+>        : ^^^^^^^^^^^^^^^^
 >fn1({ message: "foo" }, function <N>(n: N) {  this.message;}) : (n: any) => void
 >                                                              : ^^^^^^^^^^^^^^^^
 >fn1 : <T, Args extends Array<any>, Ret>(self: T, body: (this: T, ...args: Args) => Ret) => (...args: Args) => Ret
@@ -99,9 +99,9 @@ declare const fn2: <Args extends Array<any>, Ret>(
 >args : Args
 >     : ^^^^
 
-export const ok3 = fn2(function <N>(first, n: N) {});
->ok3 : <N>(n: N) => void
->    : ^ ^^^^^^^^^^^^^^^
+export const result3 = fn2(function <N>(first, n: N) {});
+>result3 : <N>(n: N) => void
+>        : ^ ^^^^^^^^^^^^^^^
 >fn2(function <N>(first, n: N) {}) : <N>(n: N) => void
 >                                  : ^ ^^^^^^^^^^^^^^^
 >fn2 : <Args extends Array<any>, Ret>(body: (first: string, ...args: Args) => Ret) => (...args: Args) => Ret
@@ -129,9 +129,9 @@ declare const fn3: <Args extends Array<any>, Ret>(
 >args : Args
 >     : ^^^^
 
-export const ok4 = fn3(function <N>(n: N) {
->ok4 : <N>(n: N) => number
->    : ^ ^^^^^^^^^^^^^^^^^
+export const result4 = fn3(function <N>(n: N) {
+>result4 : <N>(n: N) => number
+>        : ^ ^^^^^^^^^^^^^^^^^
 >fn3(function <N>(n: N) {    return (arg) => {        return 10    }}) : <N>(n: N) => number
 >                                                                      : ^ ^^^^^^^^^^^^^^^^^
 >fn3 : <Args extends Array<any>, Ret>(body: (...args: Args) => (arg: string) => Ret) => (...args: Args) => Ret
@@ -154,10 +154,10 @@ export const ok4 = fn3(function <N>(n: N) {
 });
 
 declare function fn4<T, P>(config: {
->fn4 : <T, P>(config: { context: T; callback: (params: P) => (context: T, params: P) => number; }) => (params: P) => number
->    : ^ ^^ ^^      ^^                                                                           ^^^^^                     
->config : { context: T; callback: (params: P) => (context: T, params: P) => number; }
->       : ^^^^^^^^^^^ ^^^^^^^^^^^^                                                ^^^
+>fn4 : <T, P>(config: { context: T; callback: (params: P) => (context: T, params: P) => number; other?: (arg: string) => void; }) => (params: P) => number
+>    : ^ ^^ ^^      ^^                                                                                                          ^^^^^                     
+>config : { context: T; callback: (params: P) => (context: T, params: P) => number; other?: (arg: string) => void; }
+>       : ^^^^^^^^^^^ ^^^^^^^^^^^^                                                ^^^^^^^^^^                     ^^^
 
   context: T;
 >context : T
@@ -173,19 +173,25 @@ declare function fn4<T, P>(config: {
 >params : P
 >       : ^
 
+  other?: (arg: string) => void;
+>other : ((arg: string) => void) | undefined
+>      : ^^   ^^      ^^^^^    ^^^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+
 }): (params: P) => number;
 >params : P
 >       : ^
 
-export const ok5 = fn4({
->ok5 : (params: T) => number
->    : ^      ^^^^^^^^      
->fn4({  context: 1,  callback: <T,>(params: T) => {    return (a, b) => a + 1;  },}) : (params: T) => number
->                                                                                    : ^      ^^^^^^^^      
->fn4 : <T, P>(config: { context: T; callback: (params: P) => (context: T, params: P) => number; }) => (params: P) => number
->    : ^ ^^ ^^      ^^                                                                           ^^^^^                     
->{  context: 1,  callback: <T,>(params: T) => {    return (a, b) => a + 1;  },} : { context: number; callback: <T>(params: T) => (a: number, b: T) => number; }
->                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^ ^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+export const result5 = fn4({
+>result5 : (params: unknown) => number
+>        : ^      ^^^^^^^^^^^^^^      
+>fn4({  context: 1,  callback: <N,>(params: N) => {    return (a, b) => a + 1;  },}) : (params: unknown) => number
+>                                                                                    : ^      ^^^^^^^^^^^^^^      
+>fn4 : <T, P>(config: { context: T; callback: (params: P) => (context: T, params: P) => number; other?: (arg: string) => void; }) => (params: P) => number
+>    : ^ ^^ ^^      ^^                                                                                                          ^^^^^                     
+>{  context: 1,  callback: <N,>(params: N) => {    return (a, b) => a + 1;  },} : { context: number; callback: <N>(params: N) => (a: number, b: unknown) => number; }
+>                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^ ^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^
 
   context: 1,
 >context : number
@@ -193,21 +199,21 @@ export const ok5 = fn4({
 >1 : 1
 >  : ^
 
-  callback: <T,>(params: T) => {
->callback : <T>(params: T) => (a: number, b: T) => number
->         : ^ ^^      ^^ ^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^
-><T,>(params: T) => {    return (a, b) => a + 1;  } : <T>(params: T) => (a: number, b: T) => number
->                                                   : ^ ^^      ^^ ^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^
->params : T
+  callback: <N,>(params: N) => {
+>callback : <N>(params: N) => (a: number, b: unknown) => number
+>         : ^ ^^      ^^ ^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+><N,>(params: N) => {    return (a, b) => a + 1;  } : <N>(params: N) => (a: number, b: unknown) => number
+>                                                   : ^ ^^      ^^ ^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+>params : N
 >       : ^
 
     return (a, b) => a + 1;
->(a, b) => a + 1 : (a: number, b: T) => number
->                : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^
+>(a, b) => a + 1 : (a: number, b: unknown) => number
+>                : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->b : T
->  : ^
+>b : unknown
+>  : ^^^^^^^
 >a + 1 : number
 >      : ^^^^^^
 >a : number
@@ -216,6 +222,153 @@ export const ok5 = fn4({
 >  : ^
 
   },
+});
+
+export const result6 = fn4({
+>result6 : (params: unknown) => number
+>        : ^      ^^^^^^^^^^^^^^      
+>fn4({  context: 1,  callback: <N,>(params: N) => {    return (a, b) => a + 1;  },  other: (_) => {} // outer context-sensitive function}) : (params: unknown) => number
+>                                                                                                                                          : ^      ^^^^^^^^^^^^^^      
+>fn4 : <T, P>(config: { context: T; callback: (params: P) => (context: T, params: P) => number; other?: (arg: string) => void; }) => (params: P) => number
+>    : ^ ^^ ^^      ^^                                                                                                          ^^^^^                     
+>{  context: 1,  callback: <N,>(params: N) => {    return (a, b) => a + 1;  },  other: (_) => {} // outer context-sensitive function} : { context: number; callback: <N>(params: N) => (a: number, b: unknown) => number; other: (_: string) => void; }
+>                                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^ ^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+
+  context: 1,
+>context : number
+>        : ^^^^^^
+>1 : 1
+>  : ^
+
+  callback: <N,>(params: N) => {
+>callback : <N>(params: N) => (a: number, b: unknown) => number
+>         : ^ ^^      ^^ ^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+><N,>(params: N) => {    return (a, b) => a + 1;  } : <N>(params: N) => (a: number, b: unknown) => number
+>                                                   : ^ ^^      ^^ ^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+>params : N
+>       : ^
+
+    return (a, b) => a + 1;
+>(a, b) => a + 1 : (a: number, b: unknown) => number
+>                : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>b : unknown
+>  : ^^^^^^^
+>a + 1 : number
+>      : ^^^^^^
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+  },
+  other: (_) => {} // outer context-sensitive function
+>other : (_: string) => void
+>      : ^ ^^^^^^^^^^^^^^^^^
+>(_) => {} : (_: string) => void
+>          : ^ ^^^^^^^^^^^^^^^^^
+>_ : string
+>  : ^^^^^^
+
+});
+
+// should error
+export const result7 = fn4({
+>result7 : (params: unknown) => number
+>        : ^      ^^^^^^^^^^^^^^      
+>fn4({  context: 1,  callback: <N,>(params: N) => {    return (a: boolean, b) => a ? 1 : 2;  },  other: (_) => {} // outer context-sensitive function}) : (params: unknown) => number
+>                                                                                                                                                       : ^      ^^^^^^^^^^^^^^      
+>fn4 : <T, P>(config: { context: T; callback: (params: P) => (context: T, params: P) => number; other?: (arg: string) => void; }) => (params: P) => number
+>    : ^ ^^ ^^      ^^                                                                                                          ^^^^^                     
+>{  context: 1,  callback: <N,>(params: N) => {    return (a: boolean, b) => a ? 1 : 2;  },  other: (_) => {} // outer context-sensitive function} : { context: number; callback: <N>(params: N) => (a: boolean, b: unknown) => 1 | 2; other: (_: string) => void; }
+>                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^ ^^^^^^ ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+
+  context: 1,
+>context : number
+>        : ^^^^^^
+>1 : 1
+>  : ^
+
+  callback: <N,>(params: N) => {
+>callback : <N>(params: N) => (a: boolean, b: unknown) => 1 | 2
+>         : ^ ^^      ^^ ^^^^^^ ^^       ^^ ^^^^^^^^^^^^^^^^^^^
+><N,>(params: N) => {    return (a: boolean, b) => a ? 1 : 2;  } : <N>(params: N) => (a: boolean, b: unknown) => 1 | 2
+>                                                                : ^ ^^      ^^ ^^^^^^ ^^       ^^ ^^^^^^^^^^^^^^^^^^^
+>params : N
+>       : ^
+
+    return (a: boolean, b) => a ? 1 : 2;
+>(a: boolean, b) => a ? 1 : 2 : (a: boolean, b: unknown) => 1 | 2
+>                             : ^ ^^       ^^ ^^^^^^^^^^^^^^^^^^^
+>a : boolean
+>  : ^^^^^^^
+>b : unknown
+>  : ^^^^^^^
+>a ? 1 : 2 : 1 | 2
+>          : ^^^^^
+>a : boolean
+>  : ^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+
+  },
+  other: (_) => {} // outer context-sensitive function
+>other : (_: string) => void
+>      : ^ ^^^^^^^^^^^^^^^^^
+>(_) => {} : (_: string) => void
+>          : ^ ^^^^^^^^^^^^^^^^^
+>_ : string
+>  : ^^^^^^
+
+});
+
+ // should error
+export const result8 = fn4({
+>result8 : (params: unknown) => number
+>        : ^      ^^^^^^^^^^^^^^      
+>fn4({  context: 1,  callback: <N,>(params: N) => {    return (a, b) => true;  },  other: (_) => {} // outer context-sensitive function}) : (params: unknown) => number
+>                                                                                                                                         : ^      ^^^^^^^^^^^^^^      
+>fn4 : <T, P>(config: { context: T; callback: (params: P) => (context: T, params: P) => number; other?: (arg: string) => void; }) => (params: P) => number
+>    : ^ ^^ ^^      ^^                                                                                                          ^^^^^                     
+>{  context: 1,  callback: <N,>(params: N) => {    return (a, b) => true;  },  other: (_) => {} // outer context-sensitive function} : { context: number; callback: <N>(params: N) => (a: number, b: unknown) => boolean; other: (_: string) => void; }
+>                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^ ^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+
+  context: 1,
+>context : number
+>        : ^^^^^^
+>1 : 1
+>  : ^
+
+  callback: <N,>(params: N) => {
+>callback : <N>(params: N) => (a: number, b: unknown) => boolean
+>         : ^ ^^      ^^ ^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
+><N,>(params: N) => {    return (a, b) => true;  } : <N>(params: N) => (a: number, b: unknown) => boolean
+>                                                  : ^ ^^      ^^ ^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
+>params : N
+>       : ^
+
+    return (a, b) => true;
+>(a, b) => true : (a: number, b: unknown) => boolean
+>               : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>b : unknown
+>  : ^^^^^^^
+>true : true
+>     : ^^^^
+
+  },
+  other: (_) => {} // outer context-sensitive function
+>other : (_: string) => void
+>      : ^ ^^^^^^^^^^^^^^^^^
+>(_) => {} : (_: string) => void
+>          : ^ ^^^^^^^^^^^^^^^^^
+>_ : string
+>  : ^^^^^^
+
 });
 
 declare const fnGen1: <T, Args extends Array<any>, Ret>(
@@ -238,9 +391,9 @@ declare const fnGen1: <T, Args extends Array<any>, Ret>(
 >args : Args
 >     : ^^^^
 
-export const ok6 = fnGen1({ message: "foo" }, function* (n: number) {
->ok6 : (n: number) => void
->    : ^^^^^^^^^^^^^^^^^^^
+export const result9 = fnGen1({ message: "foo" }, function* (n: number) {
+>result9 : (n: number) => void
+>        : ^^^^^^^^^^^^^^^^^^^
 >fnGen1({ message: "foo" }, function* (n: number) {  this.message;}) : (n: number) => void
 >                                                                    : ^^^^^^^^^^^^^^^^^^^
 >fnGen1 : <T, Args extends Array<any>, Ret>(self: T, body: (this: T, ...args: Args) => Generator<any, Ret, never>) => (...args: Args) => Ret
@@ -266,9 +419,9 @@ export const ok6 = fnGen1({ message: "foo" }, function* (n: number) {
 
 });
 
-export const ok7 = fnGen1({ message: "foo" }, function* <N>(n: N) {
->ok7 : (n: any) => void
->    : ^^^^^^^^^^^^^^^^
+export const result10 = fnGen1({ message: "foo" }, function* <N>(n: N) {
+>result10 : (n: any) => void
+>         : ^^^^^^^^^^^^^^^^
 >fnGen1({ message: "foo" }, function* <N>(n: N) {  this.message;}) : (n: any) => void
 >                                                                  : ^^^^^^^^^^^^^^^^
 >fnGen1 : <T, Args extends Array<any>, Ret>(self: T, body: (this: T, ...args: Args) => Generator<any, Ret, never>) => (...args: Args) => Ret

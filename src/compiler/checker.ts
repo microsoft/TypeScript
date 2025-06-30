@@ -38452,6 +38452,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function inferFromAnnotatedParametersAndReturn(signature: Signature, context: Signature, inferenceContext: InferenceContext) {
+        if (inferenceContext.flags & InferenceFlags.IgnoreAnnotatedParametersAndReturns) {
+            return;
+        }
         const len = signature.parameters.length - (signatureHasRestParameter(signature) ? 1 : 0);
         for (let i = 0; i < len; i++) {
             const declaration = signature.parameters[i].valueDeclaration as ParameterDeclaration;
@@ -39460,9 +39463,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!signature) {
                     return;
                 }
+                let saveInferenceFlags: InferenceFlags = InferenceFlags.None;
+                const inferenceContext = getInferenceContext(node);
+                if (inferenceContext) {
+                    saveInferenceFlags = inferenceContext.flags;
+                    // inferring from those could possibly infer inner type parameters into outer inference context
+                    // and they could potentially leak in the final inferred type as `instantiateTypeWithSingleGenericCallSignature`
+                    // can only "hoist" them using `context.inferredTypeParameters` in a narrow set of cases
+                    inferenceContext.flags |= node.typeParameters ? InferenceFlags.IgnoreAnnotatedParametersAndReturns : InferenceFlags.None;
+                }
                 if (isContextSensitive(node)) {
                     if (contextualSignature) {
-                        const inferenceContext = getInferenceContext(node);
                         let instantiatedContextualSignature: Signature | undefined;
                         if (checkMode && checkMode & CheckMode.Inferential) {
                             inferFromAnnotatedParametersAndReturn(signature, contextualSignature, inferenceContext!);
@@ -39481,7 +39492,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 else if (contextualSignature && !node.typeParameters && contextualSignature.parameters.length > node.parameters.length) {
-                    const inferenceContext = getInferenceContext(node);
                     if (checkMode && checkMode & CheckMode.Inferential) {
                         inferFromAnnotatedParametersAndReturn(signature, contextualSignature, inferenceContext!);
                     }
@@ -39491,6 +39501,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (!signature.resolvedReturnType) {
                         signature.resolvedReturnType = returnType;
                     }
+                }
+                if (inferenceContext) {
+                    inferenceContext.flags = saveInferenceFlags;
                 }
                 checkSignatureDeclaration(node);
             }

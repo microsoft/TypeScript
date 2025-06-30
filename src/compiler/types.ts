@@ -7129,6 +7129,7 @@ export const enum InferenceFlags {
     NoDefault       = 1 << 0,  // Infer silentNeverType for no inferences (otherwise anyType or unknownType)
     AnyDefault      = 1 << 1,  // Infer anyType (in JS files) for no inferences (otherwise unknownType)
     SkippedGenericFunction = 1 << 2, // A generic function was skipped during inference
+    IgnoreAnnotatedParametersAndReturns = 1 << 3, // used when assigning contextual parameters types within generic functions
 }
 
 /**
