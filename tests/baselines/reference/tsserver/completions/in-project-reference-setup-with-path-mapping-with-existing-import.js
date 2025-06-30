@@ -437,6 +437,12 @@ Info seq  [hh:mm:ss:mss] response:
         "isNewIdentifierLocation": false,
         "entries": [
           {
+            "name": "MyClass",
+            "kind": "alias",
+            "kindModifiers": "export",
+            "sortText": "11"
+          },
+          {
             "name": "abstract",
             "kind": "keyword",
             "kindModifiers": "",
@@ -843,19 +849,6 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "keyword",
             "kindModifiers": "",
             "sortText": "15"
-          },
-          {
-            "name": "MyClass",
-            "kind": "class",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "source": "/user/username/projects/shared/src/index",
-            "hasAction": true,
-            "data": {
-              "exportName": "MyClass",
-              "exportMapKey": "7 * MyClass ",
-              "fileName": "/user/username/projects/shared/src/index.ts"
-            }
           },
           {
             "name": "MyHelper",
@@ -967,6 +960,12 @@ Info seq  [hh:mm:ss:mss] response:
         "isNewIdentifierLocation": false,
         "entries": [
           {
+            "name": "MyClass",
+            "kind": "alias",
+            "kindModifiers": "export",
+            "sortText": "11"
+          },
+          {
             "name": "abstract",
             "kind": "keyword",
             "kindModifiers": "",
@@ -1373,19 +1372,6 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "keyword",
             "kindModifiers": "",
             "sortText": "15"
-          },
-          {
-            "name": "MyClass",
-            "kind": "class",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "source": "/user/username/projects/shared/src/index",
-            "hasAction": true,
-            "data": {
-              "exportName": "MyClass",
-              "exportMapKey": "7 * MyClass ",
-              "fileName": "/user/username/projects/shared/src/index.ts"
-            }
           },
           {
             "name": "MyHelper",
@@ -1565,6 +1551,12 @@ Info seq  [hh:mm:ss:mss] response:
         "isNewIdentifierLocation": false,
         "entries": [
           {
+            "name": "MyClass",
+            "kind": "alias",
+            "kindModifiers": "export",
+            "sortText": "11"
+          },
+          {
             "name": "abstract",
             "kind": "keyword",
             "kindModifiers": "",
@@ -1971,19 +1963,6 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "keyword",
             "kindModifiers": "",
             "sortText": "15"
-          },
-          {
-            "name": "MyClass",
-            "kind": "class",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "source": "/user/username/projects/shared/src/index",
-            "hasAction": true,
-            "data": {
-              "exportName": "MyClass",
-              "exportMapKey": "7 * MyClass ",
-              "fileName": "/user/username/projects/shared/src/index.ts"
-            }
           },
           {
             "name": "MyHelper",
@@ -2114,6 +2093,12 @@ Info seq  [hh:mm:ss:mss] response:
         "isNewIdentifierLocation": false,
         "entries": [
           {
+            "name": "MyClass",
+            "kind": "alias",
+            "kindModifiers": "export",
+            "sortText": "11"
+          },
+          {
             "name": "abstract",
             "kind": "keyword",
             "kindModifiers": "",
@@ -2520,19 +2505,6 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "keyword",
             "kindModifiers": "",
             "sortText": "15"
-          },
-          {
-            "name": "MyClass",
-            "kind": "class",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "source": "/user/username/projects/shared/src/index",
-            "hasAction": true,
-            "data": {
-              "exportName": "MyClass",
-              "exportMapKey": "7 * MyClass ",
-              "fileName": "/user/username/projects/shared/src/index.ts"
-            }
           }
         ],
         "defaultCommitCharacters": [

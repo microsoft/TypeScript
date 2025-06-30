@@ -7,15 +7,17 @@ classStaticBlock6.ts(18,9): error TS18037: 'await' expression cannot be used ins
 classStaticBlock6.ts(18,14): error TS1109: Expression expected.
 classStaticBlock6.ts(19,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
 classStaticBlock6.ts(32,17): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
-classStaticBlock6.ts(41,13): error TS2815: 'arguments' cannot be referenced in property initializers.
+classStaticBlock6.ts(41,13): error TS2815: 'arguments' cannot be referenced in property initializers or class static initialization blocks.
 classStaticBlock6.ts(42,13): error TS18037: 'await' expression cannot be used inside a class static block.
 classStaticBlock6.ts(42,18): error TS1109: Expression expected.
 classStaticBlock6.ts(45,17): error TS2522: The 'arguments' object cannot be referenced in an async function or method in ES5. Consider using a standard function or method.
 classStaticBlock6.ts(46,22): error TS1109: Expression expected.
-classStaticBlock6.ts(55,13): error TS2815: 'arguments' cannot be referenced in property initializers.
+classStaticBlock6.ts(55,13): error TS2815: 'arguments' cannot be referenced in property initializers or class static initialization blocks.
+classStaticBlock6.ts(66,14): error TS2729: Property 'b' is used before its initialization.
+classStaticBlock6.ts(69,18): error TS2729: Property 'b' is used before its initialization.
 
 
-==== classStaticBlock6.ts (15 errors) ====
+==== classStaticBlock6.ts (17 errors) ====
     class B {
         static a = 1;
     }
@@ -76,7 +78,7 @@ classStaticBlock6.ts(55,13): error TS2815: 'arguments' cannot be referenced in p
             static {
                 arguments;
                 ~~~~~~~~~
-!!! error TS2815: 'arguments' cannot be referenced in property initializers.
+!!! error TS2815: 'arguments' cannot be referenced in property initializers or class static initialization blocks.
                 await;
                 ~~~~~
 !!! error TS18037: 'await' expression cannot be used inside a class static block.
@@ -100,7 +102,7 @@ classStaticBlock6.ts(55,13): error TS2815: 'arguments' cannot be referenced in p
             static {
                 arguments;
                 ~~~~~~~~~
-!!! error TS2815: 'arguments' cannot be referenced in property initializers.
+!!! error TS2815: 'arguments' cannot be referenced in property initializers or class static initialization blocks.
     
                 function ff () {
                     arguments;
@@ -109,3 +111,20 @@ classStaticBlock6.ts(55,13): error TS2815: 'arguments' cannot be referenced in p
         }
     }
     
+    class foo2 {
+        static {
+            this.b  // should error
+                 ~
+!!! error TS2729: Property 'b' is used before its initialization.
+!!! related TS2728 classStaticBlock6.ts:73:12: 'b' is declared here.
+            let b: typeof this.b;   // ok
+            if (1) {
+                this.b; // should error
+                     ~
+!!! error TS2729: Property 'b' is used before its initialization.
+!!! related TS2728 classStaticBlock6.ts:73:12: 'b' is declared here.
+            }
+        }
+    
+        static b = 1;
+    }

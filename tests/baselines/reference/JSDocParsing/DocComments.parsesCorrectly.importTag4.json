@@ -27,6 +27,7 @@
                 "modifierFlagsCache": 0,
                 "transformFlags": 1,
                 "isTypeOnly": true,
+                "phaseModifier": 156,
                 "namedBindings": {
                     "kind": "NamespaceImport",
                     "pos": 16,
