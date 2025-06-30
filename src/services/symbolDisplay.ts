@@ -50,6 +50,7 @@ import {
     isFunctionLike,
     isIdentifier,
     isInExpressionContext,
+    isInJSDoc,
     isJsxOpeningLikeElement,
     isLet,
     isModuleWithStringLiteralName,
@@ -797,7 +798,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
         }
     }
 
-    if (tags.length === 0 && !hasMultipleSignatures) {
+    if (tags.length === 0 && !hasMultipleSignatures && !isInJSDoc(location)) {
         tags = symbol.getContextualJsDocTags(enclosingDeclaration, typeChecker);
     }
 
