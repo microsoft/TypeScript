@@ -1,6 +1,10 @@
 package stringutil
 
-import "strings"
+import (
+	"strings"
+	"unicode"
+	"unicode/utf8"
+)
 
 func EquateStringCaseInsensitive(a, b string) bool {
 	// !!!
@@ -31,7 +35,29 @@ func CompareStringsCaseInsensitive(a string, b string) Comparison {
 	if a == b {
 		return ComparisonEqual
 	}
-	return strings.Compare(strings.ToUpper(a), strings.ToUpper(b))
+	for {
+		ca, sa := utf8.DecodeRuneInString(a)
+		cb, sb := utf8.DecodeRuneInString(b)
+		if sa == 0 {
+			if sb == 0 {
+				return ComparisonEqual
+			}
+			return ComparisonLessThan
+		}
+		if sb == 0 {
+			return ComparisonGreaterThan
+		}
+		lca := unicode.ToLower(ca)
+		lcb := unicode.ToLower(cb)
+		if lca != lcb {
+			if lca < lcb {
+				return ComparisonLessThan
+			}
+			return ComparisonGreaterThan
+		}
+		a = a[sa:]
+		b = b[sb:]
+	}
 }
 
 func CompareStringsCaseSensitive(a string, b string) Comparison {

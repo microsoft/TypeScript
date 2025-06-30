@@ -129,6 +129,10 @@ func (s *Service) DefaultLibraryPath() string {
 	return s.host.DefaultLibraryPath()
 }
 
+func (s *Service) Converters() *ls.Converters {
+	return s.converters
+}
+
 // TypingsInstaller implements ProjectHost.
 func (s *Service) TypingsInstaller() *TypingsInstaller {
 	if s.typingsInstaller != nil {

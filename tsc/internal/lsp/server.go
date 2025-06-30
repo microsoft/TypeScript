@@ -496,6 +496,8 @@ func (s *Server) handleRequestOrNotification(ctx context.Context, req *lsproto.R
 		return s.handleDocumentRangeFormat(ctx, req)
 	case *lsproto.DocumentOnTypeFormattingParams:
 		return s.handleDocumentOnTypeFormat(ctx, req)
+	case *lsproto.WorkspaceSymbolParams:
+		return s.handleWorkspaceSymbol(ctx, req)
 	default:
 		switch req.Method {
 		case lsproto.MethodShutdown:
@@ -572,6 +574,9 @@ func (s *Server) handleInitialize(req *lsproto.RequestMessage) {
 			DocumentOnTypeFormattingProvider: &lsproto.DocumentOnTypeFormattingOptions{
 				FirstTriggerCharacter: "{",
 				MoreTriggerCharacter:  &[]string{"}", ";", "\n"},
+			},
+			WorkspaceSymbolProvider: &lsproto.BooleanOrWorkspaceSymbolOptions{
+				Boolean: ptrTo(true),
 			},
 		},
 	})
@@ -767,6 +772,17 @@ func (s *Server) handleDocumentOnTypeFormat(ctx context.Context, req *lsproto.Re
 		return err
 	}
 	s.sendResult(req.ID, res)
+	return nil
+}
+
+func (s *Server) handleWorkspaceSymbol(ctx context.Context, req *lsproto.RequestMessage) error {
+	programs := core.Map(s.projectService.Projects(), (*project.Project).GetProgram)
+	params := req.Params.(*lsproto.WorkspaceSymbolParams)
+	symbols, err := ls.ProvideWorkspaceSymbols(ctx, programs, s.projectService.Converters(), params.Query)
+	if err != nil {
+		return err
+	}
+	s.sendResult(req.ID, symbols)
 	return nil
 }
 
