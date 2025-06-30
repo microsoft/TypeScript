@@ -1,0 +1,123 @@
+//// [tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass2.ts] ////
+
+=== protectedClassPropertyAccessibleWithinNestedSubclass2.ts ===
+// https://github.com/microsoft/TypeScript/issues/59989
+
+export class Foo {
+>Foo : Foo
+>    : ^^^
+
+  protected thisIsProtected = 1;
+>thisIsProtected : number
+>                : ^^^^^^
+>1 : 1
+>  : ^
+
+  private thisIsPrivate = 1;
+>thisIsPrivate : number
+>              : ^^^^^^
+>1 : 1
+>  : ^
+
+  bar(): Foo {
+>bar : () => Foo
+>    : ^^^^^^   
+
+    const that = this;
+>that : this
+>     : ^^^^
+>this : this
+>     : ^^^^
+
+    return new (class extends Foo {
+>new (class extends Foo {      something() {        return that.thisIsPrivate + that.thisIsProtected; // ok      }    })() : (Anonymous class)
+>                                                                                                                          : ^^^^^^^^^^^^^^^^^
+>(class extends Foo {      something() {        return that.thisIsPrivate + that.thisIsProtected; // ok      }    }) : typeof (Anonymous class)
+>                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>class extends Foo {      something() {        return that.thisIsPrivate + that.thisIsProtected; // ok      }    } : typeof (Anonymous class)
+>                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>Foo : Foo
+>    : ^^^
+
+      something() {
+>something : () => number
+>          : ^^^^^^^^^^^^
+
+        return that.thisIsPrivate + that.thisIsProtected; // ok
+>that.thisIsPrivate + that.thisIsProtected : number
+>                                          : ^^^^^^
+>that.thisIsPrivate : number
+>                   : ^^^^^^
+>that : this
+>     : ^^^^
+>thisIsPrivate : number
+>              : ^^^^^^
+>that.thisIsProtected : number
+>                     : ^^^^^^
+>that : this
+>     : ^^^^
+>thisIsProtected : number
+>                : ^^^^^^
+      }
+    })();
+  }
+}
+
+export class Foo2 {
+>Foo2 : Foo2
+>     : ^^^^
+
+  protected thisIsProtected = 1;
+>thisIsProtected : number
+>                : ^^^^^^
+>1 : 1
+>  : ^
+
+  private thisIsPrivate = 1;
+>thisIsPrivate : number
+>              : ^^^^^^
+>1 : 1
+>  : ^
+
+  bar() {
+>bar : () => (Anonymous class)
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
+
+    const that = this;
+>that : this
+>     : ^^^^
+>this : this
+>     : ^^^^
+
+    return new (class {
+>new (class {      something() {        return that.thisIsPrivate + that.thisIsProtected; // ok      }    })() : (Anonymous class)
+>                                                                                                              : ^^^^^^^^^^^^^^^^^
+>(class {      something() {        return that.thisIsPrivate + that.thisIsProtected; // ok      }    }) : typeof (Anonymous class)
+>                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>class {      something() {        return that.thisIsPrivate + that.thisIsProtected; // ok      }    } : typeof (Anonymous class)
+>                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+      something() {
+>something : () => number
+>          : ^^^^^^^^^^^^
+
+        return that.thisIsPrivate + that.thisIsProtected; // ok
+>that.thisIsPrivate + that.thisIsProtected : number
+>                                          : ^^^^^^
+>that.thisIsPrivate : number
+>                   : ^^^^^^
+>that : this
+>     : ^^^^
+>thisIsPrivate : number
+>              : ^^^^^^
+>that.thisIsProtected : number
+>                     : ^^^^^^
+>that : this
+>     : ^^^^
+>thisIsProtected : number
+>                : ^^^^^^
+      }
+    })();
+  }
+}
+
