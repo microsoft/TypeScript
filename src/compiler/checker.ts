@@ -47397,7 +47397,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         const errorMessage = overriddenInstanceProperty ?
                             Diagnostics._0_is_defined_as_an_accessor_in_class_1_but_is_overridden_here_in_2_as_an_instance_property :
                             Diagnostics._0_is_defined_as_a_property_in_class_1_but_is_overridden_here_in_2_as_an_accessor;
-                        error(getNameOfDeclaration(derived.valueDeclaration) || derived.valueDeclaration, errorMessage, symbolToString(base), typeToString(getDeclaredTypeOfSymbol(base.parent!)), typeToString(type));
+                        error(getNameOfDeclaration(derived.valueDeclaration) || derived.valueDeclaration, errorMessage, symbolToString(base), typeToString(baseType), typeToString(type));
                     }
                     else if (useDefineForClassFields) {
                         const uninitialized = derived.declarations?.find(d => d.kind === SyntaxKind.PropertyDeclaration && !(d as PropertyDeclaration).initializer);
