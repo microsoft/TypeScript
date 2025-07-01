@@ -30,3 +30,22 @@ class B extends A {
     }
 }
 
+/**
+ * @extends { A }
+ * @constructor
+ */
+class C extends A {
+>C : C
+>  : ^
+>A : A
+>  : ^
+
+    constructor() {
+        super();
+>super() : void
+>        : ^^^^
+>super : typeof A
+>      : ^^^^^^^^
+    }
+}
+

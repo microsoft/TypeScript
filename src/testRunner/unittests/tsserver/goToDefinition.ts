@@ -4,15 +4,15 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: services:: goToDefinition", () => {
+describe("unittests:: tsserver:: services:: goToDefinition::", () => {
     it("does not issue errors on jsdoc in TS", () => {
         const files: File[] = [
             {
-                path: "/packages/babel-loader/tsconfig.json",
+                path: "/home/src/projects/project/packages/babel-loader/tsconfig.json",
                 content: `
 {
     "compilerOptions": {
@@ -28,7 +28,7 @@ describe("unittests:: tsserver:: services:: goToDefinition", () => {
 `,
             },
             {
-                path: "/packages/babel-loader/src/index.ts",
+                path: "/home/src/projects/project/packages/babel-loader/src/index.ts",
                 content: `
 declare class Stuff {
     /** For more thorough tests, use {@link checkFooIs} */
@@ -39,7 +39,7 @@ declare class Stuff {
 `,
             },
         ];
-        const host = createServerHost(files);
+        const host = TestServerHost.createServerHost(files);
         const session = new TestSession(host);
         // Open files in the two configured projects
         session.executeCommandSeq<protocol.UpdateOpenRequest>({
@@ -58,14 +58,14 @@ declare class Stuff {
             arguments: {
                 line: 3,
                 offset: 45,
-                file: "/packages/babel-loader/src/index.ts",
+                file: "/home/src/projects/project/packages/babel-loader/src/index.ts",
             },
         });
         // Now change `babel-loader` project to no longer import `core` project
         session.executeCommandSeq<protocol.SemanticDiagnosticsSyncRequest>({
             command: protocol.CommandTypes.SemanticDiagnosticsSync,
             arguments: {
-                file: "/packages/babel-loader/src/index.ts",
+                file: "/home/src/projects/project/packages/babel-loader/src/index.ts",
             },
         });
         baselineTsserverLogs("goToDefinition", "does not issue errors on jsdoc in TS", session);
@@ -73,7 +73,7 @@ declare class Stuff {
     it("does not issue errors on jsdoc in TS", () => {
         const files: File[] = [
             {
-                path: "/packages/babel-loader/tsconfig.json",
+                path: "/home/src/projects/project/packages/babel-loader/tsconfig.json",
                 content: `
 {
     "compilerOptions": {
@@ -89,7 +89,7 @@ declare class Stuff {
 `,
             },
             {
-                path: "/packages/babel-loader/src/index.ts",
+                path: "/home/src/projects/project/packages/babel-loader/src/index.ts",
                 content: `
 declare class Stuff {
   /**
@@ -106,7 +106,7 @@ declare class Stuff {
 `,
             },
         ];
-        const host = createServerHost(files);
+        const host = TestServerHost.createServerHost(files);
         const session = new TestSession(host);
         // Open files in the two configured projects
         session.executeCommandSeq<protocol.UpdateOpenRequest>({
@@ -125,14 +125,14 @@ declare class Stuff {
             arguments: {
                 line: 6,
                 offset: 13,
-                file: "/packages/babel-loader/src/index.ts",
+                file: "/home/src/projects/project/packages/babel-loader/src/index.ts",
             },
         });
         // Now change `babel-loader` project to no longer import `core` project
         session.executeCommandSeq<protocol.SemanticDiagnosticsSyncRequest>({
             command: protocol.CommandTypes.SemanticDiagnosticsSync,
             arguments: {
-                file: "/packages/babel-loader/src/index.ts",
+                file: "/home/src/projects/project/packages/babel-loader/src/index.ts",
             },
         });
         baselineTsserverLogs("goToDefinition", "does not issue errors on jsdoc in TS2", session);

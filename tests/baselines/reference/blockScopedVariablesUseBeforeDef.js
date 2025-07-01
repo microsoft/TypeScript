@@ -152,6 +152,14 @@ function wrapI2() {
     })();
 }
 
+function foo18() {
+    let a = (() => Enum.Yes)();
+    enum Enum {
+        No = 0,
+        Yes = 1,
+    }
+}
+
 
 //// [blockScopedVariablesUseBeforeDef.js]
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -388,4 +396,12 @@ function wrapI2() {
             });
         });
     })();
+}
+function foo18() {
+    var a = (function () { return Enum.Yes; })();
+    var Enum;
+    (function (Enum) {
+        Enum[Enum["No"] = 0] = "No";
+        Enum[Enum["Yes"] = 1] = "Yes";
+    })(Enum || (Enum = {}));
 }

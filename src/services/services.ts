@@ -49,6 +49,7 @@ import {
     Debug,
     Declaration,
     deduplicate,
+    defaultHoverMaximumTruncationLength,
     DefinitionInfo,
     DefinitionInfoAndBoundSpan,
     Diagnostic,
@@ -258,6 +259,7 @@ import {
     positionIsSynthesized,
     PossibleProgramFileInfo,
     PragmaMap,
+    PreparePasteEdits,
     PrivateIdentifier,
     Program,
     PropertyName,
@@ -502,8 +504,9 @@ function createChildren(node: Node, sourceFile: SourceFileLike | undefined): rea
         });
         return children;
     }
-
+    const languageVariant = sourceFile?.languageVariant ?? LanguageVariant.Standard;
     scanner.setText((sourceFile || node.getSourceFile()).text);
+    scanner.setLanguageVariant(languageVariant);
     let pos = node.pos;
     const processNode = (child: Node) => {
         addSyntheticNodes(children, pos, child.pos, node);
@@ -524,6 +527,7 @@ function createChildren(node: Node, sourceFile: SourceFileLike | undefined): rea
     node.forEachChild(processNode, processNodes);
     addSyntheticNodes(children, pos, node.end, node);
     scanner.setText(undefined);
+    scanner.setLanguageVariant(LanguageVariant.Standard);
     return children;
 }
 
@@ -735,6 +739,8 @@ class SymbolObject implements Symbol {
         if (context) {
             if (isGetAccessor(context)) {
                 if (!this.contextualGetAccessorDocumentationComment) {
+                    this.contextualGetAccessorDocumentationComment = emptyArray; // Set temporarily to avoid an infinite loop finding inherited tags
+
                     this.contextualGetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isGetAccessor), checker);
                 }
                 if (length(this.contextualGetAccessorDocumentationComment)) {
@@ -743,6 +749,8 @@ class SymbolObject implements Symbol {
             }
             if (isSetAccessor(context)) {
                 if (!this.contextualSetAccessorDocumentationComment) {
+                    this.contextualSetAccessorDocumentationComment = emptyArray; // Set temporarily to avoid an infinite loop finding inherited tags
+
                     this.contextualSetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isSetAccessor), checker);
                 }
                 if (length(this.contextualSetAccessorDocumentationComment)) {
@@ -766,6 +774,8 @@ class SymbolObject implements Symbol {
         if (context) {
             if (isGetAccessor(context)) {
                 if (!this.contextualGetAccessorTags) {
+                    this.contextualGetAccessorTags = emptyArray; // Set temporarily to avoid an infinite loop finding inherited tags
+
                     this.contextualGetAccessorTags = getJsDocTagsOfDeclarations(filter(this.declarations, isGetAccessor), checker);
                 }
                 if (length(this.contextualGetAccessorTags)) {
@@ -774,6 +784,8 @@ class SymbolObject implements Symbol {
             }
             if (isSetAccessor(context)) {
                 if (!this.contextualSetAccessorTags) {
+                    this.contextualSetAccessorTags = emptyArray; // Set temporarily to avoid an infinite loop finding inherited tags
+
                     this.contextualSetAccessorTags = getJsDocTagsOfDeclarations(filter(this.declarations, isSetAccessor), checker);
                 }
                 if (length(this.contextualSetAccessorTags)) {
@@ -1363,7 +1375,7 @@ function isCamelCase(s: string) {
     return !s.length || s.charAt(0) === s.charAt(0).toLowerCase();
 }
 
-export function displayPartsToString(displayParts: SymbolDisplayPart[] | undefined) {
+export function displayPartsToString(displayParts: SymbolDisplayPart[] | undefined): string {
     if (displayParts) {
         return map(displayParts, displayPart => displayPart.text).join("");
     }
@@ -1379,7 +1391,7 @@ export function getDefaultCompilerOptions(): CompilerOptions {
     };
 }
 
-export function getSupportedCodeFixes() {
+export function getSupportedCodeFixes(): readonly string[] {
     return codefix.getSupportedErrorCodes();
 }
 
@@ -1613,6 +1625,7 @@ const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
     "getRenameInfo",
     "findRenameLocations",
     "getApplicableRefactors",
+    "preparePasteEditsForFile",
 ];
 export function createLanguageService(
     host: LanguageServiceHost,
@@ -1763,6 +1776,7 @@ export function createLanguageService(
             useSourceOfProjectReferenceRedirect: maybeBind(host, host.useSourceOfProjectReferenceRedirect),
             getParsedCommandLine,
             jsDocParsingMode: host.jsDocParsingMode,
+            getGlobalTypingsCacheLocation: maybeBind(host, host.getGlobalTypingsCacheLocation),
         };
 
         const originalGetSourceFile = compilerHost.getSourceFile;
@@ -2263,7 +2277,7 @@ export function createLanguageService(
         return Completions.getCompletionEntrySymbol(program, log, getValidSourceFile(fileName), position, { name, source }, host, preferences);
     }
 
-    function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo | undefined {
+    function getQuickInfoAtPosition(fileName: string, position: number, maximumLength?: number, verbosityLevel?: number): QuickInfo | undefined {
         synchronizeHostData();
 
         const sourceFile = getValidSourceFile(fileName);
@@ -2282,13 +2296,27 @@ export function createLanguageService(
                 kind: ScriptElementKind.unknown,
                 kindModifiers: ScriptElementKindModifier.none,
                 textSpan: createTextSpanFromNode(nodeForQuickInfo, sourceFile),
-                displayParts: typeChecker.runWithCancellationToken(cancellationToken, typeChecker => typeToDisplayParts(typeChecker, type, getContainerNode(nodeForQuickInfo))),
+                displayParts: typeChecker.runWithCancellationToken(cancellationToken, typeChecker => typeToDisplayParts(typeChecker, type, getContainerNode(nodeForQuickInfo), /*flags*/ undefined, verbosityLevel)),
                 documentation: type.symbol ? type.symbol.getDocumentationComment(typeChecker) : undefined,
                 tags: type.symbol ? type.symbol.getJsDocTags(typeChecker) : undefined,
             };
         }
 
-        const { symbolKind, displayParts, documentation, tags } = typeChecker.runWithCancellationToken(cancellationToken, typeChecker => SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, getContainerNode(nodeForQuickInfo), nodeForQuickInfo));
+        const { symbolKind, displayParts, documentation, tags, canIncreaseVerbosityLevel } = typeChecker.runWithCancellationToken(
+            cancellationToken,
+            typeChecker =>
+                SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(
+                    typeChecker,
+                    symbol,
+                    sourceFile,
+                    getContainerNode(nodeForQuickInfo),
+                    nodeForQuickInfo,
+                    /*semanticMeaning*/ undefined,
+                    /*alias*/ undefined,
+                    maximumLength ?? defaultHoverMaximumTruncationLength,
+                    verbosityLevel,
+                ),
+        );
         return {
             kind: symbolKind,
             kindModifiers: SymbolDisplay.getSymbolModifiers(typeChecker, symbol),
@@ -2296,7 +2324,17 @@ export function createLanguageService(
             displayParts,
             documentation,
             tags,
+            canIncreaseVerbosityLevel,
         };
+    }
+
+    function preparePasteEditsForFile(fileName: string, copiedTextRange: TextRange[]): boolean {
+        synchronizeHostData();
+        return PreparePasteEdits.preparePasteEdits(
+            getValidSourceFile(fileName),
+            copiedTextRange,
+            program.getTypeChecker(),
+        );
     }
 
     function getPasteEdits(
@@ -3166,7 +3204,7 @@ export function createLanguageService(
             //
             // The following three regexps are used to match the start of the text up to the TODO
             // comment portion.
-            const singleLineCommentStart = /(?:\/\/+\s*)/.source;
+            const singleLineCommentStart = /(?:\/{2,}\s*)/.source;
             const multiLineCommentStart = /(?:\/\*+\s*)/.source;
             const anyNumberOfSpacesAndAsterisksAtStartOfLine = /(?:^(?:\s|\*)*)/.source;
 
@@ -3415,6 +3453,7 @@ export function createLanguageService(
         uncommentSelection,
         provideInlayHints,
         getSupportedCodeFixes,
+        preparePasteEditsForFile,
         getPasteEdits,
         mapCode,
     };
@@ -3509,6 +3548,7 @@ function getContainingObjectLiteralElementWorker(node: Node): ObjectLiteralEleme
         // falls through
 
         case SyntaxKind.Identifier:
+        case SyntaxKind.JsxNamespacedName:
             return isObjectLiteralElement(node.parent) &&
                     (node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression || node.parent.parent.kind === SyntaxKind.JsxAttributes) &&
                     node.parent.name === node ? node.parent : undefined;

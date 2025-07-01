@@ -108,7 +108,7 @@ function f11(b: boolean) {
 
 function f12(b: boolean) {
 >f12 : (b: boolean) => any
->    : ^ ^^       ^^^^^   
+>    : ^ ^^       ^^^^^^^^
 >b : boolean
 >  : ^^^^^^^
 
@@ -123,7 +123,7 @@ function f12(b: boolean) {
 
 function f13(b: boolean) {  // Error
 >f13 : (b: boolean) => unknown
->    : ^ ^^       ^^^^^       
+>    : ^ ^^       ^^^^^^^^^^^^
 >b : boolean
 >  : ^^^^^^^
 

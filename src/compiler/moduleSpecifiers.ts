@@ -33,7 +33,7 @@ import {
     flatMap,
     flatten,
     forEach,
-    forEachAncestorDirectory,
+    forEachAncestorDirectoryStoppingAtGlobalCache,
     FutureSourceFile,
     getBaseFileName,
     GetCanonicalFileName,
@@ -390,7 +390,7 @@ export function getModuleSpecifiersWithCacheInfo(
     importingSourceFile: SourceFile | FutureSourceFile,
     host: ModuleSpecifierResolutionHost,
     userPreferences: UserPreferences,
-    options: ModuleSpecifierOptions = {},
+    options: ModuleSpecifierOptions | undefined = {},
     forAutoImport: boolean,
 ): ModuleSpecifierResult {
     let computedWithoutCache = false;
@@ -435,6 +435,7 @@ export function getLocalModuleSpecifierBetweenFileNames(
     targetFileName: string,
     compilerOptions: CompilerOptions,
     host: ModuleSpecifierResolutionHost,
+    preferences: UserPreferences,
     options: ModuleSpecifierOptions = {},
 ): string {
     const info = getInfo(importingFile.fileName, host);
@@ -445,7 +446,7 @@ export function getLocalModuleSpecifierBetweenFileNames(
         compilerOptions,
         host,
         importMode,
-        getModuleSpecifierPreferences({}, host, compilerOptions, importingFile),
+        getModuleSpecifierPreferences(preferences, host, compilerOptions, importingFile),
     );
 }
 
@@ -507,46 +508,44 @@ function computeModuleSpecifiers(
             }
         }
 
-        if (!specifier) {
-            const local = getLocalModuleSpecifier(
-                modulePath.path,
-                info,
-                compilerOptions,
-                host,
-                options.overrideImportMode || importingSourceFile.impliedNodeFormat,
-                preferences,
-                /*pathsOnly*/ modulePath.isRedirect,
-            );
-            if (!local || forAutoImport && isExcludedByRegex(local, preferences.excludeRegexes)) {
-                continue;
-            }
-            if (modulePath.isRedirect) {
-                redirectPathsSpecifiers = append(redirectPathsSpecifiers, local);
-            }
-            else if (pathIsBareSpecifier(local)) {
-                if (pathContainsNodeModules(local)) {
-                    // We could be in this branch due to inappropriate use of `baseUrl`, not intentional `paths`
-                    // usage. It's impossible to reason about where to prioritize baseUrl-generated module
-                    // specifiers, but if they contain `/node_modules/`, they're going to trigger a portability
-                    // error, so *at least* don't prioritize those.
-                    relativeSpecifiers = append(relativeSpecifiers, local);
-                }
-                else {
-                    pathsSpecifiers = append(pathsSpecifiers, local);
-                }
-            }
-            else if (forAutoImport || !importedFileIsInNodeModules || modulePath.isInNodeModules) {
-                // Why this extra conditional, not just an `else`? If some path to the file contained
-                // 'node_modules', but we can't create a non-relative specifier (e.g. "@foo/bar/path/to/file"),
-                // that means we had to go through a *sibling's* node_modules, not one we can access directly.
-                // If some path to the file was in node_modules but another was not, this likely indicates that
-                // we have a monorepo structure with symlinks. In this case, the non-node_modules path is
-                // probably the realpath, e.g. "../bar/path/to/file", but a relative path to another package
-                // in a monorepo is probably not portable. So, the module specifier we actually go with will be
-                // the relative path through node_modules, so that the declaration emitter can produce a
-                // portability error. (See declarationEmitReexportedSymlinkReference3)
+        const local = getLocalModuleSpecifier(
+            modulePath.path,
+            info,
+            compilerOptions,
+            host,
+            options.overrideImportMode || importingSourceFile.impliedNodeFormat,
+            preferences,
+            /*pathsOnly*/ modulePath.isRedirect || !!specifier,
+        );
+        if (!local || forAutoImport && isExcludedByRegex(local, preferences.excludeRegexes)) {
+            continue;
+        }
+        if (modulePath.isRedirect) {
+            redirectPathsSpecifiers = append(redirectPathsSpecifiers, local);
+        }
+        else if (pathIsBareSpecifier(local)) {
+            if (pathContainsNodeModules(local)) {
+                // We could be in this branch due to inappropriate use of `baseUrl`, not intentional `paths`
+                // usage. It's impossible to reason about where to prioritize baseUrl-generated module
+                // specifiers, but if they contain `/node_modules/`, they're going to trigger a portability
+                // error, so *at least* don't prioritize those.
                 relativeSpecifiers = append(relativeSpecifiers, local);
             }
+            else {
+                pathsSpecifiers = append(pathsSpecifiers, local);
+            }
+        }
+        else if (forAutoImport || !importedFileIsInNodeModules || modulePath.isInNodeModules) {
+            // Why this extra conditional, not just an `else`? If some path to the file contained
+            // 'node_modules', but we can't create a non-relative specifier (e.g. "@foo/bar/path/to/file"),
+            // that means we had to go through a *sibling's* node_modules, not one we can access directly.
+            // If some path to the file was in node_modules but another was not, this likely indicates that
+            // we have a monorepo structure with symlinks. In this case, the non-node_modules path is
+            // probably the realpath, e.g. "../bar/path/to/file", but a relative path to another package
+            // in a monorepo is probably not portable. So, the module specifier we actually go with will be
+            // the relative path through node_modules, so that the declaration emitter can produce a
+            // portability error. (See declarationEmitReexportedSymlinkReference3)
+            relativeSpecifiers = append(relativeSpecifiers, local);
         }
     }
 
@@ -612,7 +611,7 @@ function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOpt
             prefersTsExtension(allowedEndings),
         );
 
-    const fromPaths = pathsOnly || fromPackageJsonImports === undefined ? paths && tryGetModuleNameFromPaths(relativeToBaseUrl, paths, allowedEndings, host, compilerOptions) : undefined;
+    const fromPaths = pathsOnly || fromPackageJsonImports === undefined ? paths && tryGetModuleNameFromPaths(relativeToBaseUrl, paths, allowedEndings, baseDirectory, getCanonicalFileName, host, compilerOptions) : undefined;
     if (pathsOnly) {
         return fromPaths;
     }
@@ -700,9 +699,14 @@ function getNearestAncestorDirectoryWithPackageJson(host: ModuleSpecifierResolut
     if (host.getNearestAncestorDirectoryWithPackageJson) {
         return host.getNearestAncestorDirectoryWithPackageJson(fileName);
     }
-    return forEachAncestorDirectory(fileName, directory => {
-        return host.fileExists(combinePaths(directory, "package.json")) ? directory : undefined;
-    });
+    return forEachAncestorDirectoryStoppingAtGlobalCache(
+        host,
+        fileName,
+        directory =>
+            host.fileExists(combinePaths(directory, "package.json")) ?
+                directory :
+                undefined,
+    );
 }
 
 /** @internal */
@@ -715,7 +719,7 @@ export function forEachFileNameOfModule<T>(
 ): T | undefined {
     const getCanonicalFileName = hostGetCanonicalFileName(host);
     const cwd = host.getCurrentDirectory();
-    const referenceRedirect = host.isSourceOfProjectReferenceRedirect(importedFileName) ? host.getProjectReferenceRedirect(importedFileName) : undefined;
+    const referenceRedirect = host.isSourceOfProjectReferenceRedirect(importedFileName) ? host.getRedirectFromSourceFile(importedFileName)?.outputDts : undefined;
     const importedPath = toPath(importedFileName, cwd, getCanonicalFileName);
     const redirects = host.redirectTargetsMap.get(importedPath) || emptyArray;
     const importedFileNames = [...(referenceRedirect ? [referenceRedirect] : emptyArray), importedFileName, ...redirects];
@@ -731,29 +735,33 @@ export function forEachFileNameOfModule<T>(
 
     const symlinkedDirectories = host.getSymlinkCache?.().getSymlinkedDirectoriesByRealpath();
     const fullImportedFileName = getNormalizedAbsolutePath(importedFileName, cwd);
-    const result = symlinkedDirectories && forEachAncestorDirectory(getDirectoryPath(fullImportedFileName), realPathDirectory => {
-        const symlinkDirectories = symlinkedDirectories.get(ensureTrailingDirectorySeparator(toPath(realPathDirectory, cwd, getCanonicalFileName)));
-        if (!symlinkDirectories) return undefined; // Continue to ancestor directory
+    const result = symlinkedDirectories && forEachAncestorDirectoryStoppingAtGlobalCache(
+        host,
+        getDirectoryPath(fullImportedFileName),
+        realPathDirectory => {
+            const symlinkDirectories = symlinkedDirectories.get(ensureTrailingDirectorySeparator(toPath(realPathDirectory, cwd, getCanonicalFileName)));
+            if (!symlinkDirectories) return undefined; // Continue to ancestor directory
 
-        // Don't want to a package to globally import from itself (importNameCodeFix_symlink_own_package.ts)
-        if (startsWithDirectory(importingFileName, realPathDirectory, getCanonicalFileName)) {
-            return false; // Stop search, each ancestor directory will also hit this condition
-        }
-
-        return forEach(targets, target => {
-            if (!startsWithDirectory(target, realPathDirectory, getCanonicalFileName)) {
-                return;
+            // Don't want to a package to globally import from itself (importNameCodeFix_symlink_own_package.ts)
+            if (startsWithDirectory(importingFileName, realPathDirectory, getCanonicalFileName)) {
+                return false; // Stop search, each ancestor directory will also hit this condition
             }
 
-            const relative = getRelativePathFromDirectory(realPathDirectory, target, getCanonicalFileName);
-            for (const symlinkDirectory of symlinkDirectories) {
-                const option = resolvePath(symlinkDirectory, relative);
-                const result = cb(option, target === referenceRedirect);
-                shouldFilterIgnoredPaths = true; // We found a non-ignored path in symlinks, so we can reject ignored-path realpaths
-                if (result) return result;
-            }
-        });
-    });
+            return forEach(targets, target => {
+                if (!startsWithDirectory(target, realPathDirectory, getCanonicalFileName)) {
+                    return;
+                }
+
+                const relative = getRelativePathFromDirectory(realPathDirectory, target, getCanonicalFileName);
+                for (const symlinkDirectory of symlinkDirectories) {
+                    const option = resolvePath(symlinkDirectory, relative);
+                    const result = cb(option, target === referenceRedirect);
+                    shouldFilterIgnoredPaths = true; // We found a non-ignored path in symlinks, so we can reject ignored-path realpaths
+                    if (result) return result;
+                }
+            });
+        },
+    );
     return result || (preferSymlinks
         ? forEach(targets, p => shouldFilterIgnoredPaths && containsIgnoredPath(p) ? undefined : cb(p, p === referenceRedirect))
         : undefined);
@@ -915,10 +923,11 @@ function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol, checker: TypeCh
     }
 }
 
-function tryGetModuleNameFromPaths(relativeToBaseUrl: string, paths: MapLike<readonly string[]>, allowedEndings: ModuleSpecifierEnding[], host: ModuleSpecifierResolutionHost, compilerOptions: CompilerOptions): string | undefined {
+function tryGetModuleNameFromPaths(relativeToBaseUrl: string, paths: MapLike<readonly string[]>, allowedEndings: ModuleSpecifierEnding[], baseDirectory: string, getCanonicalFileName: GetCanonicalFileName, host: ModuleSpecifierResolutionHost, compilerOptions: CompilerOptions): string | undefined {
     for (const key in paths) {
         for (const patternText of paths[key]) {
-            const pattern = normalizePath(patternText);
+            const normalized = normalizePath(patternText);
+            const pattern = getRelativePathIfInSameVolume(normalized, baseDirectory, getCanonicalFileName) ?? normalized;
             const indexOfStar = pattern.indexOf("*");
             // In module resolution, if `pattern` itself has an extension, a file with that extension is looked up directly,
             // meaning a '.ts' or '.d.ts' extension is allowed to resolve. This is distinct from the case where a '*' substitution
@@ -1280,6 +1289,8 @@ function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCan
                     subModuleName,
                     versionPaths.paths,
                     allowedEndings,
+                    packageRootPath,
+                    getCanonicalFileName,
                     host,
                     options,
                 );
@@ -1402,7 +1413,7 @@ function processEnding(fileName: string, allowedEndings: readonly ModuleSpecifie
 }
 
 /** @internal */
-export function tryGetRealFileNameForNonJsDeclarationFileName(fileName: string) {
+export function tryGetRealFileNameForNonJsDeclarationFileName(fileName: string): string | undefined {
     const baseName = getBaseFileName(fileName);
     if (!endsWith(fileName, Extension.Ts) || !baseName.includes(".d.") || fileExtensionIsOneOf(baseName, [Extension.Dts])) return undefined;
     const noExtension = removeExtension(fileName, Extension.Ts);

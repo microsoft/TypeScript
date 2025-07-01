@@ -1,0 +1,18 @@
+// === Inlay Hints ===
+    accessor a = 1
+              ^
+{
+  "text": ": number",
+  "position": 24,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+    accessor d;
+              ^
+{
+  "text": ": number | null",
+  "position": 86,
+  "kind": "Type",
+  "whitespaceBefore": true
+}

@@ -1,0 +1,148 @@
+//// [tests/cases/compiler/contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts] ////
+
+=== contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts ===
+type ComputedGetter<T> = (oldValue?: T) => T;
+>ComputedGetter : ComputedGetter<T>
+>               : ^^^^^^^^^^^^^^^^^
+>oldValue : T | undefined
+>         : ^^^^^^^^^^^^^
+
+type ComputedOptions = Record<string, ComputedGetter<any>>;
+>ComputedOptions : ComputedOptions
+>                : ^^^^^^^^^^^^^^^
+
+type ExtractComputedReturns<T extends any> = {
+>ExtractComputedReturns : ExtractComputedReturns<T>
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  [key in keyof T]: T[key] extends (...args: any[]) => infer TReturn
+>args : any[]
+>     : ^^^^^
+
+    ? TReturn
+    : never;
+};
+
+interface ComponentOptionsBase<D, C extends ComputedOptions> {
+  data?: D;
+>data : D | undefined
+>     : ^^^^^^^^^^^^^
+
+  computed?: C;
+>computed : C | undefined
+>         : ^^^^^^^^^^^^^
+}
+
+type ComponentPublicInstance<D = {}, C extends ComputedOptions = {}> = D &
+>ComponentPublicInstance : ComponentPublicInstance<D, C>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  ExtractComputedReturns<C>;
+
+type ComponentOptions<
+>ComponentOptions : ComponentOptions<D, C>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
+
+  D = any,
+  C extends ComputedOptions = any,
+> = ComponentOptionsBase<D, C> & ThisType<ComponentPublicInstance<D, C>>;
+
+interface App {
+  mixin(mixin: ComponentOptions): this;
+>mixin : (mixin: ComponentOptions) => this
+>      : ^     ^^                ^^^^^    
+>mixin : ComponentOptions<any, any>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+interface InjectionKey<T> extends Symbol {}
+
+interface Ref<T> {
+  _v: T;
+>_v : T
+>   : ^
+}
+
+declare function reactive<T extends object>(target: T): Ref<T>;
+>reactive : <T extends object>(target: T) => Ref<T>
+>         : ^ ^^^^^^^^^      ^^      ^^ ^^^^^      
+>target : T
+>       : ^
+
+interface ThemeInstance {
+  readonly name: Readonly<Ref<string>>;
+>name : Readonly<Ref<string>>
+>     : ^^^^^^^^^^^^^^^^^^^^^
+}
+
+declare const ThemeSymbol: InjectionKey<ThemeInstance>;
+>ThemeSymbol : InjectionKey<ThemeInstance>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare function inject(
+>inject : (this: ComponentPublicInstance, key: InjectionKey<any> | string) => any
+>       : ^    ^^                       ^^   ^^                          ^^^^^   
+
+  this: ComponentPublicInstance,
+>this : ExtractComputedReturns<{}>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  key: InjectionKey<any> | string,
+>key : string | InjectionKey<any>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+): any;
+
+declare const app: App;
+>app : App
+>    : ^^^
+
+app.mixin({
+>app.mixin({  computed: {    $vuetify() {      // this is meant to be `any` here      return reactive({        theme: inject.call(this, ThemeSymbol),      });    },  },}) : App
+>                                                                                                                                                                          : ^^^
+>app.mixin : (mixin: ComponentOptions) => App
+>          : ^     ^^                ^^^^^^^^
+>app : App
+>    : ^^^
+>mixin : (mixin: ComponentOptions) => App
+>      : ^     ^^                ^^^^^^^^
+>{  computed: {    $vuetify() {      // this is meant to be `any` here      return reactive({        theme: inject.call(this, ThemeSymbol),      });    },  },} : { computed: { $vuetify(): Ref<{ theme: any; }>; }; }
+>                                                                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  computed: {
+>computed : { $vuetify(): Ref<{ theme: any; }>; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    $vuetify() {      // this is meant to be `any` here      return reactive({        theme: inject.call(this, ThemeSymbol),      });    },  } : { $vuetify(): Ref<{ theme: any; }>; }
+>                                                                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    $vuetify() {
+>$vuetify : () => Ref<{ theme: any; }>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      // this is meant to be `any` here
+      return reactive({
+>reactive({        theme: inject.call(this, ThemeSymbol),      }) : Ref<{ theme: any; }>
+>                                                                 : ^^^^^^^^^^^^^^^^^^^^
+>reactive : <T extends object>(target: T) => Ref<T>
+>         : ^ ^^^^^^^^^      ^^      ^^ ^^^^^      
+>{        theme: inject.call(this, ThemeSymbol),      } : { theme: any; }
+>                                                       : ^^^^^^^^^^^^^^^
+
+        theme: inject.call(this, ThemeSymbol),
+>theme : any
+>inject.call(this, ThemeSymbol) : any
+>inject.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>            : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
+>inject : (this: ComponentPublicInstance, key: InjectionKey<any> | string) => any
+>       : ^    ^^                       ^^   ^^                          ^^^^^   
+>call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
+>this : any
+>ThemeSymbol : InjectionKey<ThemeInstance>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      });
+    },
+  },
+});
+

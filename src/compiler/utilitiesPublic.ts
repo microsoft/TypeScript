@@ -204,6 +204,7 @@ import {
     JSDocTypedefTag,
     JSDocTypeTag,
     JsxAttributeLike,
+    JsxCallLike,
     JsxChild,
     JsxExpression,
     JsxOpeningLikeElement,
@@ -303,42 +304,54 @@ export function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics:
     return sortAndDeduplicate<T>(diagnostics, compareDiagnostics, diagnosticsEqualityComparer);
 }
 
+/** @internal */
+// NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
+//       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
+//       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts,
+//       compiler/utilitiesPublic.ts, and the contents of each lib/esnext.*.d.ts file.
+export const targetToLibMap: Map<ScriptTarget, string> = new Map([
+    [ScriptTarget.ESNext, "lib.esnext.full.d.ts"],
+    [ScriptTarget.ES2024, "lib.es2024.full.d.ts"],
+    [ScriptTarget.ES2023, "lib.es2023.full.d.ts"],
+    [ScriptTarget.ES2022, "lib.es2022.full.d.ts"],
+    [ScriptTarget.ES2021, "lib.es2021.full.d.ts"],
+    [ScriptTarget.ES2020, "lib.es2020.full.d.ts"],
+    [ScriptTarget.ES2019, "lib.es2019.full.d.ts"],
+    [ScriptTarget.ES2018, "lib.es2018.full.d.ts"],
+    [ScriptTarget.ES2017, "lib.es2017.full.d.ts"],
+    [ScriptTarget.ES2016, "lib.es2016.full.d.ts"],
+    [ScriptTarget.ES2015, "lib.es6.d.ts"], // We don't use lib.es2015.full.d.ts due to breaking change.
+]);
+
 export function getDefaultLibFileName(options: CompilerOptions): string {
-    switch (getEmitScriptTarget(options)) {
+    const target = getEmitScriptTarget(options);
+    switch (target) {
         case ScriptTarget.ESNext:
-            return "lib.esnext.full.d.ts";
+        case ScriptTarget.ES2024:
         case ScriptTarget.ES2023:
-            return "lib.es2023.full.d.ts";
         case ScriptTarget.ES2022:
-            return "lib.es2022.full.d.ts";
         case ScriptTarget.ES2021:
-            return "lib.es2021.full.d.ts";
         case ScriptTarget.ES2020:
-            return "lib.es2020.full.d.ts";
         case ScriptTarget.ES2019:
-            return "lib.es2019.full.d.ts";
         case ScriptTarget.ES2018:
-            return "lib.es2018.full.d.ts";
         case ScriptTarget.ES2017:
-            return "lib.es2017.full.d.ts";
         case ScriptTarget.ES2016:
-            return "lib.es2016.full.d.ts";
         case ScriptTarget.ES2015:
-            return "lib.es6.d.ts"; // We don't use lib.es2015.full.d.ts due to breaking change.
+            return targetToLibMap.get(target)!;
         default:
             return "lib.d.ts";
     }
 }
 
-export function textSpanEnd(span: TextSpan) {
+export function textSpanEnd(span: TextSpan): number {
     return span.start + span.length;
 }
 
-export function textSpanIsEmpty(span: TextSpan) {
+export function textSpanIsEmpty(span: TextSpan): boolean {
     return span.length === 0;
 }
 
-export function textSpanContainsPosition(span: TextSpan, position: number) {
+export function textSpanContainsPosition(span: TextSpan, position: number): boolean {
     return position >= span.start && position < textSpanEnd(span);
 }
 
@@ -348,21 +361,21 @@ export function textRangeContainsPositionInclusive(range: TextRange, position: n
 }
 
 // Returns true if 'span' contains 'other'.
-export function textSpanContainsTextSpan(span: TextSpan, other: TextSpan) {
+export function textSpanContainsTextSpan(span: TextSpan, other: TextSpan): boolean {
     return other.start >= span.start && textSpanEnd(other) <= textSpanEnd(span);
 }
 
 /** @internal */
-export function textSpanContainsTextRange(span: TextSpan, range: TextRange) {
+export function textSpanContainsTextRange(span: TextSpan, range: TextRange): boolean {
     return range.pos >= span.start && range.end <= textSpanEnd(span);
 }
 
 /** @internal */
-export function textRangeContainsTextSpan(range: TextRange, span: TextSpan) {
+export function textRangeContainsTextSpan(range: TextRange, span: TextSpan): boolean {
     return span.start >= range.pos && textSpanEnd(span) <= range.end;
 }
 
-export function textSpanOverlapsWith(span: TextSpan, other: TextSpan) {
+export function textSpanOverlapsWith(span: TextSpan, other: TextSpan): boolean {
     return textSpanOverlap(span, other) !== undefined;
 }
 
@@ -439,15 +452,15 @@ export function createTextSpan(start: number, length: number): TextSpan {
     return { start, length };
 }
 
-export function createTextSpanFromBounds(start: number, end: number) {
+export function createTextSpanFromBounds(start: number, end: number): TextSpan {
     return createTextSpan(start, end - start);
 }
 
-export function textChangeRangeNewSpan(range: TextChangeRange) {
+export function textChangeRangeNewSpan(range: TextChangeRange): TextSpan {
     return createTextSpan(range.span.start, range.newLength);
 }
 
-export function textChangeRangeIsUnchanged(range: TextChangeRange) {
+export function textChangeRangeIsUnchanged(range: TextChangeRange): boolean {
     return textSpanIsEmpty(range.span) && range.newLength === 0;
 }
 
@@ -459,7 +472,7 @@ export function createTextChangeRange(span: TextSpan, newLength: number): TextCh
     return { span, newLength };
 }
 
-export const unchangedTextChangeRange = createTextChangeRange(createTextSpan(0, 0), 0);
+export const unchangedTextChangeRange: TextChangeRange = createTextChangeRange(createTextSpan(0, 0), 0);
 
 /**
  * Called to merge all the changes that occurred across several versions of a script snapshot
@@ -669,7 +682,7 @@ function getNodeFlags(node: Node) {
 }
 
 /** @internal */
-export const supportedLocaleDirectories = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-br", "ru", "tr", "zh-cn", "zh-tw"];
+export const supportedLocaleDirectories = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-br", "ru", "tr", "zh-cn", "zh-tw"] as const;
 
 /**
  * Checks to see if the locale is in the appropriate format,
@@ -679,9 +692,9 @@ export function validateLocaleAndSetLanguage(
     locale: string,
     sys: { getExecutingFilePath(): string; resolvePath(path: string): string; fileExists(fileName: string): boolean; readFile(fileName: string): string | undefined; },
     errors?: Diagnostic[],
-) {
+): void {
     const lowerCaseLocale = locale.toLowerCase();
-    const matchResult = /^([a-z]+)([_-]([a-z]+))?$/.exec(lowerCaseLocale);
+    const matchResult = /^([a-z]+)(?:[_-]([a-z]+))?$/.exec(lowerCaseLocale);
 
     if (!matchResult) {
         if (errors) {
@@ -691,7 +704,7 @@ export function validateLocaleAndSetLanguage(
     }
 
     const language = matchResult[1];
-    const territory = matchResult[3];
+    const territory = matchResult[2];
 
     // First try the entire locale, then fall back to just language if that's all we have.
     // Either ways do not fail, and fallback to the English diagnostic strings.
@@ -723,7 +736,7 @@ export function validateLocaleAndSetLanguage(
         try {
             fileContents = sys.readFile(filePath);
         }
-        catch (e) {
+        catch {
             if (errors) {
                 errors.push(createCompilerDiagnostic(Diagnostics.Unable_to_open_file_0, filePath));
             }
@@ -913,7 +926,7 @@ function getDeclarationIdentifier(node: Declaration | Expression): Identifier | 
 }
 
 /** @internal */
-export function nodeHasName(statement: Node, name: Identifier) {
+export function nodeHasName(statement: Node, name: Identifier): boolean {
     if (isNamedDeclaration(statement) && isIdentifier(statement.name) && idText(statement.name as Identifier) === idText(name)) {
         return true;
     }
@@ -1276,7 +1289,7 @@ export function getAllJSDocTagsOfKind(node: Node, kind: SyntaxKind): readonly JS
 }
 
 /** Gets the text of a jsdoc comment, flattening links to their text. */
-export function getTextOfJSDocComment(comment?: string | NodeArray<JSDocComment>) {
+export function getTextOfJSDocComment(comment?: string | NodeArray<JSDocComment>): string | undefined {
     return typeof comment === "string" ? comment
         : comment?.map(c => c.kind === SyntaxKind.JSDocText ? c.text : formatJSDocLink(c)).join("");
 }
@@ -1398,17 +1411,17 @@ export function isExpressionOfOptionalChainRoot(node: Node): node is Expression 
  *
  * @internal
  */
-export function isOutermostOptionalChain(node: OptionalChain) {
+export function isOutermostOptionalChain(node: OptionalChain): boolean {
     return !isOptionalChain(node.parent) // cases 1, 2, and 3
         || isOptionalChainRoot(node.parent) // case 4
         || node !== node.parent.expression; // case 5
 }
 
-export function isNullishCoalesce(node: Node) {
+export function isNullishCoalesce(node: Node): boolean {
     return node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.QuestionQuestionToken;
 }
 
-export function isConstTypeReference(node: Node) {
+export function isConstTypeReference(node: Node): boolean {
     return isTypeReferenceNode(node) && isIdentifier(node.typeName) &&
         node.typeName.escapedText === "const" && !node.typeArguments;
 }
@@ -1444,7 +1457,7 @@ export function isJSDocPropertyLikeTag(node: Node): node is JSDocPropertyLikeTag
 // they may be used with transformations.
 
 /** @internal */
-export function isNodeKind(kind: SyntaxKind) {
+export function isNodeKind(kind: SyntaxKind): boolean {
     return kind >= SyntaxKind.FirstNode;
 }
 
@@ -1485,7 +1498,7 @@ export function isLiteralExpression(node: Node): node is LiteralExpression {
 }
 
 /** @internal */
-export function isLiteralExpressionOfObject(node: Node) {
+export function isLiteralExpressionOfObject(node: Node): boolean {
     switch (node.kind) {
         case SyntaxKind.ObjectLiteralExpression:
         case SyntaxKind.ArrayLiteralExpression:
@@ -1521,12 +1534,13 @@ export function isImportOrExportSpecifier(node: Node): node is ImportSpecifier |
 export function isTypeOnlyImportDeclaration(node: Node): node is TypeOnlyImportDeclaration {
     switch (node.kind) {
         case SyntaxKind.ImportSpecifier:
-            return (node as ImportSpecifier).isTypeOnly || (node as ImportSpecifier).parent.parent.isTypeOnly;
+            return (node as ImportSpecifier).isTypeOnly || (node as ImportSpecifier).parent.parent.phaseModifier === SyntaxKind.TypeKeyword;
         case SyntaxKind.NamespaceImport:
-            return (node as NamespaceImport).parent.isTypeOnly;
+            return (node as NamespaceImport).parent.phaseModifier === SyntaxKind.TypeKeyword;
         case SyntaxKind.ImportClause:
+            return (node as ImportClause).phaseModifier === SyntaxKind.TypeKeyword;
         case SyntaxKind.ImportEqualsDeclaration:
-            return (node as ImportClause | ImportEqualsDeclaration).isTypeOnly;
+            return (node as ImportEqualsDeclaration).isTypeOnly;
     }
     return false;
 }
@@ -1545,6 +1559,10 @@ export function isTypeOnlyExportDeclaration(node: Node): node is TypeOnlyExportD
 
 export function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnlyAliasDeclaration {
     return isTypeOnlyImportDeclaration(node) || isTypeOnlyExportDeclaration(node);
+}
+
+export function isPartOfTypeOnlyImportOrExportDeclaration(node: Node): boolean {
+    return findAncestor(node, isTypeOnlyImportOrExportDeclaration) !== undefined;
 }
 
 export function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken {
@@ -1568,7 +1586,7 @@ export function isGeneratedPrivateIdentifier(node: Node): node is GeneratedPriva
 }
 
 /** @internal */
-export function isFileLevelReservedGeneratedIdentifier(node: GeneratedIdentifier) {
+export function isFileLevelReservedGeneratedIdentifier(node: GeneratedIdentifier): boolean {
     const flags = node.emitNode.autoGenerate.flags;
     return !!(flags & GeneratedIdentifierFlags.FileLevel)
         && !!(flags & GeneratedIdentifierFlags.Optimistic)
@@ -1767,7 +1785,8 @@ export function isTypeElement(node: Node): node is TypeElement {
         || kind === SyntaxKind.MethodSignature
         || kind === SyntaxKind.IndexSignature
         || kind === SyntaxKind.GetAccessor
-        || kind === SyntaxKind.SetAccessor;
+        || kind === SyntaxKind.SetAccessor
+        || kind === SyntaxKind.NotEmittedTypeElement;
 }
 
 export function isClassOrTypeElement(node: Node): node is ClassElement | TypeElement {
@@ -1946,13 +1965,16 @@ export function isCallLikeOrFunctionLikeExpression(node: Node): node is CallLike
 
 export function isCallLikeExpression(node: Node): node is CallLikeExpression {
     switch (node.kind) {
-        case SyntaxKind.JsxOpeningElement:
-        case SyntaxKind.JsxSelfClosingElement:
         case SyntaxKind.CallExpression:
         case SyntaxKind.NewExpression:
         case SyntaxKind.TaggedTemplateExpression:
         case SyntaxKind.Decorator:
+        case SyntaxKind.JsxOpeningElement:
+        case SyntaxKind.JsxSelfClosingElement:
+        case SyntaxKind.JsxOpeningFragment:
             return true;
+        case SyntaxKind.BinaryExpression:
+            return (node as BinaryExpression).operatorToken.kind === SyntaxKind.InstanceOfKeyword;
         default:
             return false;
     }
@@ -2111,17 +2133,17 @@ function isScopeMarker(node: Node) {
 }
 
 /** @internal */
-export function hasScopeMarker(statements: readonly Statement[]) {
+export function hasScopeMarker(statements: readonly Statement[]): boolean {
     return some(statements, isScopeMarker);
 }
 
 /** @internal */
-export function needsScopeMarker(result: Statement) {
+export function needsScopeMarker(result: Statement): boolean {
     return !isAnyImportOrReExport(result) && !isExportAssignment(result) && !hasSyntacticModifier(result, ModifierFlags.Export) && !isAmbientModule(result);
 }
 
 /** @internal */
-export function isExternalModuleIndicator(result: Statement) {
+export function isExternalModuleIndicator(result: Statement): boolean {
     // Exported top-level member indicates moduleness
     return isAnyImportOrReExport(result) || isExportAssignment(result) || hasSyntacticModifier(result, ModifierFlags.Export);
 }
@@ -2468,6 +2490,13 @@ export function isJsxOpeningLikeElement(node: Node): node is JsxOpeningLikeEleme
         || kind === SyntaxKind.JsxSelfClosingElement;
 }
 
+export function isJsxCallLike(node: Node): node is JsxCallLike {
+    const kind = node.kind;
+    return kind === SyntaxKind.JsxOpeningElement
+        || kind === SyntaxKind.JsxSelfClosingElement
+        || kind === SyntaxKind.JsxOpeningFragment;
+}
+
 // Clauses
 
 export function isCaseOrDefaultClause(node: Node): node is CaseOrDefaultClause {
@@ -2569,7 +2598,7 @@ export function isTypeReferenceType(node: Node): node is TypeReferenceType {
 
 const MAX_SMI_X86 = 0x3fff_ffff;
 /** @internal */
-export function guessIndentation(lines: string[]) {
+export function guessIndentation(lines: string[]): number | undefined {
     let indentation = MAX_SMI_X86;
     for (const line of lines) {
         if (!line.length) {
@@ -2614,7 +2643,7 @@ function hasInternalAnnotation(range: CommentRange, sourceFile: SourceFile) {
     return comment.includes("@internal");
 }
 
-export function isInternalDeclaration(node: Node, sourceFile?: SourceFile) {
+export function isInternalDeclaration(node: Node, sourceFile?: SourceFile): boolean {
     sourceFile ??= getSourceFileOfNode(node);
     const parseTreeNode = getParseTreeNode(node);
     if (parseTreeNode && parseTreeNode.kind === SyntaxKind.Parameter) {

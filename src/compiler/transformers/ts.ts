@@ -190,6 +190,7 @@ import {
     takeWhile,
     TextRange,
     TransformationContext,
+    Transformer,
     TransformFlags,
     VariableDeclaration,
     VariableStatement,
@@ -208,6 +209,7 @@ import {
 const USE_NEW_TYPE_METADATA_FORMAT = false;
 
 const enum TypeScriptSubstitutionFlags {
+    None = 0,
     /** Enables substitutions for namespace exports. */
     NamespaceExports = 1 << 1,
     /* Enables substitutions for unqualified enum members */
@@ -230,7 +232,7 @@ const enum ClassFacts {
 }
 
 /** @internal */
-export function transformTypeScript(context: TransformationContext) {
+export function transformTypeScript(context: TransformationContext): Transformer<SourceFile | Bundle> {
     const {
         factory,
         getEmitHelperFactory: emitHelpers,
@@ -270,7 +272,7 @@ export function transformTypeScript(context: TransformationContext) {
      * Keeps track of whether expression substitution has been enabled for specific edge cases.
      * They are persisted between each SourceFile transformation and should not be reset.
      */
-    let enabledSubstitutions: TypeScriptSubstitutionFlags;
+    let enabledSubstitutions = TypeScriptSubstitutionFlags.None;
 
     /**
      * Keeps track of whether we are within any containing namespaces when performing
@@ -2280,11 +2282,11 @@ export function transformTypeScript(context: TransformationContext) {
      * @param node The import clause node.
      */
     function visitImportClause(node: ImportClause): VisitResult<ImportClause> | undefined {
-        Debug.assert(!node.isTypeOnly);
+        Debug.assert(node.phaseModifier !== SyntaxKind.TypeKeyword);
         // Elide the import clause if we elide both its name and its named bindings.
         const name = shouldEmitAliasDeclaration(node) ? node.name : undefined;
         const namedBindings = visitNode(node.namedBindings, visitNamedImportBindings, isNamedImportBindings);
-        return (name || namedBindings) ? factory.updateImportClause(node, /*isTypeOnly*/ false, name, namedBindings) : undefined;
+        return (name || namedBindings) ? factory.updateImportClause(node, node.phaseModifier, name, namedBindings) : undefined;
     }
 
     /**
@@ -2341,7 +2343,14 @@ export function transformTypeScript(context: TransformationContext) {
             // never elide `export <whatever> from <whereever>` declarations -
             // they should be kept for sideffects/untyped exports, even when the
             // type checker doesn't know about any exports
-            return node;
+            return factory.updateExportDeclaration(
+                node,
+                node.modifiers,
+                node.isTypeOnly,
+                node.exportClause,
+                node.moduleSpecifier,
+                node.attributes,
+            );
         }
 
         // Elide the export declaration if all of its named exports are elided.
@@ -2420,8 +2429,10 @@ export function transformTypeScript(context: TransformationContext) {
         }
 
         if (isExternalModuleImportEqualsDeclaration(node)) {
-            const isReferenced = shouldEmitAliasDeclaration(node);
-            return isReferenced ? visitEachChild(node, visitor, context) : undefined;
+            if (!shouldEmitAliasDeclaration(node)) {
+                return undefined;
+            }
+            return visitEachChild(node, visitor, context);
         }
 
         if (!shouldEmitImportEqualsDeclaration(node)) {

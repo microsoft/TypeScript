@@ -1,0 +1,114 @@
+//// [tests/cases/compiler/contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts] ////
+
+=== contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts ===
+type ComponentType<P> = (p: P) => any;
+>ComponentType : Symbol(ComponentType, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 0, 0))
+>P : Symbol(P, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 0, 19))
+>p : Symbol(p, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 0, 25))
+>P : Symbol(P, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 0, 19))
+
+type ComponentProps<C> = C extends ComponentType<infer P> ? P : never;
+>ComponentProps : Symbol(ComponentProps, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 0, 38))
+>C : Symbol(C, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 1, 20))
+>C : Symbol(C, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 1, 20))
+>ComponentType : Symbol(ComponentType, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 0, 0))
+>P : Symbol(P, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 1, 54))
+>P : Symbol(P, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 1, 54))
+
+type Attrs<P, A extends Partial<P>> = A;
+>Attrs : Symbol(Attrs, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 1, 70))
+>P : Symbol(P, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 3, 11))
+>A : Symbol(A, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 3, 13))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 3, 11))
+>A : Symbol(A, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 3, 13))
+
+interface StyledFunction<
+>StyledFunction : Symbol(StyledFunction, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 3, 40))
+
+  C extends ComponentType<any>,
+>C : Symbol(C, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 5, 25))
+>ComponentType : Symbol(ComponentType, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 0, 0))
+
+  O extends object = {},
+>O : Symbol(O, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 6, 31))
+
+  A extends keyof any = never,
+>A : Symbol(A, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 7, 24))
+
+> {
+  attrs<
+>attrs : Symbol(StyledFunction.attrs, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 9, 3))
+
+    U,
+>U : Symbol(U, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 10, 8))
+
+    NewA extends Partial<ComponentProps<C> & U> & {
+>NewA : Symbol(NewA, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 11, 6))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>ComponentProps : Symbol(ComponentProps, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 0, 38))
+>C : Symbol(C, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 5, 25))
+>U : Symbol(U, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 10, 8))
+
+      [others: string]: any;
+>others : Symbol(others, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 13, 7))
+
+    } = {},
+  >(
+    attrs: Attrs<ComponentProps<C> & U, NewA>,
+>attrs : Symbol(attrs, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 15, 4))
+>Attrs : Symbol(Attrs, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 1, 70))
+>ComponentProps : Symbol(ComponentProps, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 0, 38))
+>C : Symbol(C, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 5, 25))
+>U : Symbol(U, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 10, 8))
+>NewA : Symbol(NewA, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 11, 6))
+
+  ): StyledFunction<C, O & NewA, A | keyof NewA>;
+>StyledFunction : Symbol(StyledFunction, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 3, 40))
+>C : Symbol(C, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 5, 25))
+>O : Symbol(O, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 6, 31))
+>NewA : Symbol(NewA, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 11, 6))
+>A : Symbol(A, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 7, 24))
+>NewA : Symbol(NewA, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 11, 6))
+}
+
+interface StyledInterface {
+>StyledInterface : Symbol(StyledInterface, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 18, 1))
+
+  <C extends ComponentType<any>>(component: C): StyledFunction<C>;
+>C : Symbol(C, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 21, 3))
+>ComponentType : Symbol(ComponentType, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 0, 0))
+>component : Symbol(component, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 21, 33))
+>C : Symbol(C, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 21, 3))
+>StyledFunction : Symbol(StyledFunction, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 3, 40))
+>C : Symbol(C, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 21, 3))
+}
+
+declare const styled: StyledInterface;
+>styled : Symbol(styled, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 24, 13))
+>StyledInterface : Symbol(StyledInterface, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 18, 1))
+
+interface BaseProps {
+>BaseProps : Symbol(BaseProps, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 24, 38))
+
+  as?: "select" | "input";
+>as : Symbol(BaseProps.as, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 26, 21))
+}
+
+declare const Flex: (props: BaseProps) => null;
+>Flex : Symbol(Flex, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 30, 13))
+>props : Symbol(props, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 30, 21))
+>BaseProps : Symbol(BaseProps, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 24, 38))
+
+export const StyledSelect = styled(Flex).attrs({
+>StyledSelect : Symbol(StyledSelect, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 32, 12))
+>styled(Flex).attrs : Symbol(StyledFunction.attrs, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 9, 3))
+>styled : Symbol(styled, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 24, 13))
+>Flex : Symbol(Flex, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 30, 13))
+>attrs : Symbol(StyledFunction.attrs, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 9, 3))
+
+  as: "select",
+>as : Symbol(as, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 32, 48))
+
+});
+

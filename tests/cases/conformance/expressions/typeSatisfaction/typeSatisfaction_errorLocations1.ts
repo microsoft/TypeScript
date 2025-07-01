@@ -49,3 +49,6 @@ function fn6(): number {
 ((): { a: true } => ({}) satisfies unknown)();
 ((): { a: true } => ({ a: 1 }) satisfies unknown)();
 ((): { a: true } => obj1 satisfies unknown)();
+
+((): { a: true } => (({}) satisfies unknown) satisfies unknown)();
+((): { a: true } => ((({}) satisfies unknown)) satisfies unknown)();

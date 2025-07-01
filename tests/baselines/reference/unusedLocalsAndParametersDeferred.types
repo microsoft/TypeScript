@@ -246,9 +246,9 @@ new E();
 
 var o = {
 >o : { method(a: any): void; x: number; p: void; }
->  : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^
 >{    // Object literal method declaration paramter    method(a) {        defered(() => {            a;        });    },    // Accessor declaration paramter    set x(v: number) {        defered(() => {            v;        });    },    // in a property initalizer    p: defered(() => {        prop1;    })} : { method(a: any): void; x: number; p: void; }
->                                                                                                                                                                                                                                                                                                                  : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                                                                                                  : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^
 
     // Object literal method declaration paramter
     method(a) {
@@ -309,14 +309,14 @@ var o = {
 
 o;
 >o : { method(a: any): void; x: number; p: void; }
->  : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^
 
 // in a for..in statment
 for (let i in o) {
 >i : string
 >  : ^^^^^^
 >o : { method(a: any): void; x: number; p: void; }
->  : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^
 
     defered(() => {
 >defered(() => {        i;    }) : void
