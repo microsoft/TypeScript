@@ -1,16 +1,17 @@
+// @target: esnext
 // @declaration: true
+
 export var noPrivates = class {
     static getTags() { }
     tags() { }
-    private static ps = -1
-    private p = 12
+    static #ps = -1
+    #p = 12
 }
 
-// altered repro from #15066 to add private property
 export class FooItem {
     foo(): void { }
     name?: string;
-    private property = "capitalism"
+    #property = "capitalism"
 }
 
 export type Constructor<T> = new(...args: any[]) => T;
@@ -23,13 +24,8 @@ export function WithTags<T extends Constructor<FooItem>>(Base: T) {
 
 export class Test extends WithTags(FooItem) {}
 
-const test = new Test();
-
-Test.getTags()
-test.tags();
-
 export class Test2 {
   nested = class {
-    private prop = 42;
+    #prop = 42;
   }
 }
