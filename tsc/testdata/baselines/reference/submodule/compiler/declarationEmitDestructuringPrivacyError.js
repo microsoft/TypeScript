@@ -18,4 +18,8 @@ var m;
 
 //// [declarationEmitDestructuringPrivacyError.d.ts]
 declare namespace m {
+    class c {
+    }
+    export var x: number, y: c, z: number;
+    export {};
 }

@@ -1,9 +1,0 @@
---- old.declarationEmitDestructuringArrayPattern5.js
-+++ new.declarationEmitDestructuringArrayPattern5.js
-@@= skipped -11, +11 lines =@@
-
-
- //// [declarationEmitDestructuringArrayPattern5.d.ts]
--declare var z: number;
--declare var a: number;
--declare var b: number;

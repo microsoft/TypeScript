@@ -20,3 +20,9 @@ var { x9: a2, y9: b2 } = { x9: 5, y9: "hello" };
 
 
 //// [declarationEmitDestructuringObjectLiteralPattern1.d.ts]
+declare var x4: number;
+declare var y5: string;
+declare var x6: number, y6: string;
+declare var a1: number;
+declare var b1: string;
+declare var a2: number, b2: string;

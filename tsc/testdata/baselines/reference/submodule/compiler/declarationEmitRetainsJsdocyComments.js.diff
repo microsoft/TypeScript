@@ -29,15 +29,3 @@
 
 
  //// [declarationEmitRetainsJsdocyComments.d.ts]
-@@= skipped -30, +31 lines =@@
-      */
-     bar(s: number): void;
- }
--export declare let 
--/**
--* comment5
--*/
--someMethod: any;
- declare global {
-     interface ExtFunc {
-         /**

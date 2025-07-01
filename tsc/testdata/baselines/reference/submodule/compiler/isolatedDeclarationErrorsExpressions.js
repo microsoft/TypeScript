@@ -330,6 +330,8 @@ export declare function templateParamOk1(p?: string): void;
 export declare function templateParamOk2(p?: string): void;
 export declare function templateParamOk3(p?: string): void;
 export declare function templateParamOk4(p?: string): void;
+export declare const a: number;
+export declare const b: number;
 export declare function foo([, , b]?: [
     number,
     number,

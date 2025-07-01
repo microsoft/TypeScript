@@ -11,11 +11,3 @@
 +    [m.x, m.y, m.z] = [10, new c(), 30];
  })(m || (m = {}));
 
-
- //// [declarationEmitDestructuringPrivacyError.d.ts]
- declare namespace m {
--    class c {
--    }
--    export var x: number, y: c, z: number;
--    export {};
- }

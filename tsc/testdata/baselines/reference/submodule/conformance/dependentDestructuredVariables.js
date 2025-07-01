@@ -864,6 +864,7 @@ type Action3 = {
 declare const reducerBroken: (state: number, { type, payload }: Action3) => number;
 // Repro from #46143
 declare var it: Iterator<number>;
+declare const value: any, done: boolean | undefined;
 // Repro from #46658
 declare function f50(cb: (...args: Args) => void): void;
 declare const f51: (...args: ['A', number] | ['B', string]) => void;

@@ -106,12 +106,12 @@
  declare const reducerBroken: (state: number, { type, payload }: Action3) => number;
 +// Repro from #46143
  declare var it: Iterator<number>;
--declare const value: any, done: boolean | undefined;
+ declare const value: any, done: boolean | undefined;
 +// Repro from #46658
  declare function f50(cb: (...args: Args) => void): void;
  declare const f51: (...args: ['A', number] | ['B', string]) => void;
  declare const f52: (...args: ['A', number] | ['B']) => void;
-@@= skipped -14, +15 lines =@@
+@@= skipped -14, +16 lines =@@
      secondArr: any[];
  }];
  declare const reducer: (...args: ReducerArgs) => void;

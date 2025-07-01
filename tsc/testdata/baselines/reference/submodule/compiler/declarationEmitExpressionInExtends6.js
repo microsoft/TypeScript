@@ -33,26 +33,8 @@ exports.default = default_1;
 export declare class Foo {
 }
 //// [b.d.ts]
+import * as A from "./a";
+declare const Foo: typeof A.Foo;
 export default class extends Foo {
 }
-
-
-//// [DtsFileErrors]
-
-
-/b.d.ts(1,30): error TS2304: Cannot find name 'Foo'.
-
-
-==== /node_modules/@types/node/index.d.ts (0 errors) ====
-    declare const require: any;
-    
-==== /a.d.ts (0 errors) ====
-    export declare class Foo {
-    }
-    
-==== /b.d.ts (1 errors) ====
-    export default class extends Foo {
-                                 ~~~
-!!! error TS2304: Cannot find name 'Foo'.
-    }
-    
+export {};

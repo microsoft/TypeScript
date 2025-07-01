@@ -42,4 +42,7 @@ export declare function createApi<Definitions>(_: {
 };
 export {};
 //// [index.d.ts]
-export {};
+export declare const useTestQuery: () => {
+    status: "uninitialized";
+    originalArgs?: undefined;
+};

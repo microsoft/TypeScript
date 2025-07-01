@@ -673,9 +673,6 @@ func (tx *DeclarationTransformer) recreateBindingPattern(input *ast.BindingPatte
 }
 
 func (tx *DeclarationTransformer) recreateBindingElement(e *ast.BindingElement) *ast.Node {
-	if e.Kind == ast.KindBindingElement {
-		return nil
-	}
 	if e.Name() == nil {
 		return nil
 	}

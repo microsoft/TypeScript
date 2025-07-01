@@ -12,3 +12,6 @@ var [, , [, b,]] = [3, 5, [0, 1]];
 
 
 //// [declarationEmitDestructuringArrayPattern5.d.ts]
+declare var z: number;
+declare var a: number;
+declare var b: number;
