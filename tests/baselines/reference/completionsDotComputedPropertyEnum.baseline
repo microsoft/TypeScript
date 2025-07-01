@@ -1,0 +1,1059 @@
+// === Completions ===
+=== /n.ts ===
+// namespace N {
+//     export enum InnerEnumExported {
+//         A = "a"
+//     }
+//     enum InnerEnumNotExported {
+//         B = "b"
+//     }
+//     export type InnerObjectType = {
+//         [InnerEnumExported.A]: number
+//         [InnerEnumNotExported.B]: number
+//     }
+// }
+// enum OuterEnum {
+//     C = "c"
+// }
+// type OuterObjectType = N.InnerObjectType & {
+//     [OuterEnum.C]: number
+// }
+// import * as mu from './m'
+// declare const x1: N.InnerObjectType;
+// declare const x2: OuterObjectType;
+// declare const x3: mu.M.InnerObjectType;
+// declare const x4: mu.OuterObjectType;
+// declare const x5: mu.omega.O.InnerObjectType;
+// declare const x6: mu.omega.OuterObjectType;
+// x1.;
+//    ^
+// | ----------------------------------------------------------------------
+// | (property) [InnerEnumNotExported.B]: number
+// | (enum member) N.InnerEnumExported.A = "a"
+// | ----------------------------------------------------------------------
+// x2.;
+//    ^
+// | ----------------------------------------------------------------------
+// | (property) [InnerEnumNotExported.B]: number
+// | (enum member) N.InnerEnumExported.A = "a"
+// | (enum member) OuterEnum.C = "c"
+// | ----------------------------------------------------------------------
+// x3.;
+//    ^
+// | ----------------------------------------------------------------------
+// | (property) [InnerEnumNotExported.B]: number
+// | (enum member) M.InnerEnumExported.A = "a"
+// | ----------------------------------------------------------------------
+// x4.;
+//    ^
+// | ----------------------------------------------------------------------
+// | (property) [InnerEnumNotExported.B]: number
+// | (property) [OuterEnumNotExported.D]: number
+// | (enum member) M.InnerEnumExported.A = "a"
+// | (enum member) OuterEnumExported.C = "c"
+// | ----------------------------------------------------------------------
+// x5.;
+//    ^
+// | ----------------------------------------------------------------------
+// | (property) [InnerEnumNotExported.B]: number
+// | (enum member) O.InnerEnumExported.A = "a"
+// | ----------------------------------------------------------------------
+// x6.;
+//    ^
+// | ----------------------------------------------------------------------
+// | (property) [InnerEnumNotExported.B]: number
+// | (property) [OuterEnumNotExported.D]: number
+// | (enum member) O.InnerEnumExported.A = "a"
+// | (enum member) OuterEnumExported.C = "c"
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/n.ts",
+      "position": 622,
+      "name": "a"
+    },
+    "item": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "b",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "[InnerEnumNotExported.B]",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "N.InnerEnumExported.A",
+          "kind": "enum member",
+          "kindModifiers": "",
+          "sortText": "11",
+          "insertText": "[N.InnerEnumExported.A]",
+          "replacementSpan": {
+            "start": 621,
+            "length": 1
+          },
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "enum member",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "N",
+              "kind": "moduleName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "InnerEnumExported",
+              "kind": "enumName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "A",
+              "kind": "enumMemberName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "\"a\"",
+              "kind": "stringLiteral"
+            }
+          ],
+          "documentation": []
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/n.ts",
+      "position": 627,
+      "name": "b"
+    },
+    "item": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "b",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "[InnerEnumNotExported.B]",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "N.InnerEnumExported.A",
+          "kind": "enum member",
+          "kindModifiers": "",
+          "sortText": "11",
+          "insertText": "[N.InnerEnumExported.A]",
+          "replacementSpan": {
+            "start": 626,
+            "length": 1
+          },
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "enum member",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "N",
+              "kind": "moduleName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "InnerEnumExported",
+              "kind": "enumName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "A",
+              "kind": "enumMemberName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "\"a\"",
+              "kind": "stringLiteral"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "OuterEnum.C",
+          "kind": "enum member",
+          "kindModifiers": "",
+          "sortText": "11",
+          "insertText": "[OuterEnum.C]",
+          "replacementSpan": {
+            "start": 626,
+            "length": 1
+          },
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "enum member",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "OuterEnum",
+              "kind": "enumName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "C",
+              "kind": "enumMemberName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "\"c\"",
+              "kind": "stringLiteral"
+            }
+          ],
+          "documentation": []
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/n.ts",
+      "position": 632,
+      "name": "c"
+    },
+    "item": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "b",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "[InnerEnumNotExported.B]",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "mu.M.InnerEnumExported.A",
+          "kind": "enum member",
+          "kindModifiers": "",
+          "sortText": "11",
+          "insertText": "[mu.M.InnerEnumExported.A]",
+          "replacementSpan": {
+            "start": 631,
+            "length": 1
+          },
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "enum member",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "M",
+              "kind": "moduleName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "InnerEnumExported",
+              "kind": "enumName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "A",
+              "kind": "enumMemberName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "\"a\"",
+              "kind": "stringLiteral"
+            }
+          ],
+          "documentation": []
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/n.ts",
+      "position": 637,
+      "name": "d"
+    },
+    "item": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "b",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "[InnerEnumNotExported.B]",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "d",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "[OuterEnumNotExported.D]",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "mu.M.InnerEnumExported.A",
+          "kind": "enum member",
+          "kindModifiers": "",
+          "sortText": "11",
+          "insertText": "[mu.M.InnerEnumExported.A]",
+          "replacementSpan": {
+            "start": 636,
+            "length": 1
+          },
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "enum member",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "M",
+              "kind": "moduleName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "InnerEnumExported",
+              "kind": "enumName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "A",
+              "kind": "enumMemberName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "\"a\"",
+              "kind": "stringLiteral"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "mu.OuterEnumExported.C",
+          "kind": "enum member",
+          "kindModifiers": "",
+          "sortText": "11",
+          "insertText": "[mu.OuterEnumExported.C]",
+          "replacementSpan": {
+            "start": 636,
+            "length": 1
+          },
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "enum member",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "OuterEnumExported",
+              "kind": "enumName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "C",
+              "kind": "enumMemberName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "\"c\"",
+              "kind": "stringLiteral"
+            }
+          ],
+          "documentation": []
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/n.ts",
+      "position": 642,
+      "name": "e"
+    },
+    "item": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "b",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "[InnerEnumNotExported.B]",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "mu.omega.O.InnerEnumExported.A",
+          "kind": "enum member",
+          "kindModifiers": "",
+          "sortText": "11",
+          "insertText": "[mu.omega.O.InnerEnumExported.A]",
+          "replacementSpan": {
+            "start": 641,
+            "length": 1
+          },
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "enum member",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "O",
+              "kind": "moduleName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "InnerEnumExported",
+              "kind": "enumName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "A",
+              "kind": "enumMemberName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "\"a\"",
+              "kind": "stringLiteral"
+            }
+          ],
+          "documentation": []
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/n.ts",
+      "position": 647,
+      "name": "f"
+    },
+    "item": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "b",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "[InnerEnumNotExported.B]",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "d",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "[OuterEnumNotExported.D]",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "mu.omega.O.InnerEnumExported.A",
+          "kind": "enum member",
+          "kindModifiers": "",
+          "sortText": "11",
+          "insertText": "[mu.omega.O.InnerEnumExported.A]",
+          "replacementSpan": {
+            "start": 646,
+            "length": 1
+          },
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "enum member",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "O",
+              "kind": "moduleName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "InnerEnumExported",
+              "kind": "enumName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "A",
+              "kind": "enumMemberName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "\"a\"",
+              "kind": "stringLiteral"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "mu.omega.OuterEnumExported.C",
+          "kind": "enum member",
+          "kindModifiers": "",
+          "sortText": "11",
+          "insertText": "[mu.omega.OuterEnumExported.C]",
+          "replacementSpan": {
+            "start": 646,
+            "length": 1
+          },
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "enum member",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "OuterEnumExported",
+              "kind": "enumName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "C",
+              "kind": "enumMemberName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "\"c\"",
+              "kind": "stringLiteral"
+            }
+          ],
+          "documentation": []
+        }
+      ]
+    }
+  }
+]

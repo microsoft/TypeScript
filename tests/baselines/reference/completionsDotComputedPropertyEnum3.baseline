@@ -1,0 +1,304 @@
+// === Completions ===
+=== /tests/cases/fourslash/completionsDotComputedPropertyEnum3.ts ===
+// /**
+//  * Mimicking rxjs to avoid dependency import
+//  */
+// 
+// type Observable<X> = {
+// 	subscribe(): Observable<X>
+// };
+// 
+// enum CPEvents {
+// 	CLICK = "click",
+// 	EMSG = "emsg",
+// }
+// 
+// // Payloads have been replaced for the repro-case, but they do not matter right now.
+// interface CPMappedEvents {
+// 	[CPEvents.EMSG]: unknown; 
+// }
+// 
+// type CPUnmappedEvents = {
+// 	[K in Exclude<CPEvents, keyof CPMappedEvents>]: Event;
+// };
+// 
+// export type CPEventsMap = CPMappedEvents & CPUnmappedEvents;
+// 
+// export type CPObservableEvents = {
+// 	[K in keyof CPEventsMap]: Observable<CPEventsMap[K]>;
+// };
+// 
+// declare const eventObservables: CPObservableEvents;
+// eventObservables.;
+//                  ^
+// | ----------------------------------------------------------------------
+// | (property) click: Observable<Event>
+// | (enum member) CPEvents.EMSG = "emsg"
+// | ----------------------------------------------------------------------
+// eventObservables[''];
+//                   
+// | ----------------------------------------------------------------------
+// | (property) click: Observable<Event>
+// | (property) [CPEvents.EMSG]: Observable<unknown>
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/completionsDotComputedPropertyEnum3.ts",
+      "position": 616,
+      "name": "a"
+    },
+    "item": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "click",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "click",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Observable",
+              "kind": "aliasName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Event",
+              "kind": "text"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "CPEvents.EMSG",
+          "kind": "enum member",
+          "kindModifiers": "",
+          "sortText": "11",
+          "insertText": "[CPEvents.EMSG]",
+          "replacementSpan": {
+            "start": 615,
+            "length": 1
+          },
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "enum member",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "CPEvents",
+              "kind": "enumName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "EMSG",
+              "kind": "enumMemberName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "\"emsg\"",
+              "kind": "stringLiteral"
+            }
+          ],
+          "documentation": []
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/completionsDotComputedPropertyEnum3.ts",
+      "position": 636,
+      "name": "b"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": false,
+      "optionalReplacementSpan": {
+        "start": 636,
+        "length": 0
+      },
+      "entries": [
+        {
+          "name": "click",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 636,
+            "length": 0
+          },
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "click",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Observable",
+              "kind": "aliasName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Event",
+              "kind": "text"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "emsg",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 636,
+            "length": 0
+          },
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "[CPEvents.EMSG]",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Observable",
+              "kind": "aliasName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "unknown",
+              "kind": "keyword"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            }
+          ],
+          "documentation": []
+        }
+      ]
+    }
+  }
+]

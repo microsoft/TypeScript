@@ -17,6 +17,6 @@
 
 verify.completions({
     marker: "",
-    exact: { name: "M", insertText: "[M]", replacementSpan: test.ranges()[0] },
+    exact: { name: "M.sym", insertText: "[M.sym]", replacementSpan: test.ranges()[0] },
     preferences: { includeInsertTextCompletions: true },
 });
