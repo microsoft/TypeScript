@@ -667,7 +667,7 @@ func (tx *DeclarationTransformer) recreateBindingPattern(input *ast.BindingPatte
 		return nil
 	}
 	if len(results) == 1 {
-		return results[1]
+		return results[0]
 	}
 	return tx.Factory().NewSyntaxList(results)
 }
