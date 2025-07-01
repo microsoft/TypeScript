@@ -2,6 +2,7 @@ import {
     __String,
     AccessExpression,
     AccessorDeclaration,
+    addEmitFlags,
     addRange,
     affectsDeclarationPathOptionDeclarations,
     affectsEmitOptionDeclarations,
@@ -511,6 +512,8 @@ import {
     ScriptTarget,
     semanticDiagnosticsOptionDeclarations,
     SetAccessorDeclaration,
+    setOriginalNode,
+    setTextRange,
     ShorthandPropertyAssignment,
     shouldAllowImportingTsExtension,
     Signature,
@@ -592,6 +595,7 @@ import {
     VariableDeclarationList,
     VariableLikeDeclaration,
     VariableStatement,
+    visitEachChild,
     WhileStatement,
     WithStatement,
     WrappedExpression,
@@ -610,6 +614,8 @@ export const externalHelpersModuleNameText = "tslib";
 export const defaultMaximumTruncationLength = 160;
 /** @internal */
 export const noTruncationMaximumTruncationLength = 1_000_000;
+/** @internal */
+export const defaultHoverMaximumTruncationLength = 500;
 
 /** @internal */
 export function getDeclarationOfKind<T extends Declaration>(symbol: Symbol, kind: T["kind"]): T | undefined {
@@ -1445,6 +1451,9 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
             ],
             es2024: [
                 "waitAsync",
+            ],
+            esnext: [
+                "pause",
             ],
         })),
         SharedArrayBuffer: new Map(Object.entries({
@@ -2642,7 +2651,13 @@ export function isSuperCall(n: Node): n is SuperCall {
 
 /** @internal */
 export function isImportCall(n: Node): n is ImportCall {
-    return n.kind === SyntaxKind.CallExpression && (n as CallExpression).expression.kind === SyntaxKind.ImportKeyword;
+    if (n.kind !== SyntaxKind.CallExpression) return false;
+    const e = (n as CallExpression).expression;
+    return e.kind === SyntaxKind.ImportKeyword || (
+        isMetaProperty(e)
+        && e.keywordToken === SyntaxKind.ImportKeyword
+        && e.name.escapedText === "defer"
+    );
 }
 
 /** @internal */
@@ -3593,8 +3608,10 @@ export function isExpressionNode(node: Node): boolean {
         case SyntaxKind.JsxFragment:
         case SyntaxKind.YieldExpression:
         case SyntaxKind.AwaitExpression:
-        case SyntaxKind.MetaProperty:
             return true;
+        case SyntaxKind.MetaProperty:
+            // `import.defer` in `import.defer(...)` is not an expression
+            return !isImportCall(node.parent) || node.parent.expression !== node;
         case SyntaxKind.ExpressionWithTypeArguments:
             return !isHeritageClause(node.parent) && !isJSDocAugmentsTag(node.parent);
         case SyntaxKind.QualifiedName:
@@ -5658,17 +5675,17 @@ export const enum OperatorPrecedence {
     //     CoalesceExpression
     Conditional,
 
+    // LogicalORExpression:
+    //     LogicalANDExpression
+    //     LogicalORExpression `||` LogicalANDExpression
+    LogicalOR,
+
     // CoalesceExpression:
     //     CoalesceExpressionHead `??` BitwiseORExpression
     // CoalesceExpressionHead:
     //     CoalesceExpression
     //     BitwiseORExpression
-    Coalesce = Conditional, // NOTE: This is wrong
-
-    // LogicalORExpression:
-    //     LogicalANDExpression
-    //     LogicalORExpression `||` LogicalANDExpression
-    LogicalOR,
+    Coalesce = LogicalOR,
 
     // LogicalANDExpression:
     //     BitwiseORExpression
@@ -6585,7 +6602,7 @@ export function sourceFileMayBeEmitted(sourceFile: SourceFile, host: SourceFileM
     if (host.isSourceOfProjectReferenceRedirect(sourceFile.fileName)) return false;
     // Any non json file should be emitted
     if (!isJsonSourceFile(sourceFile)) return true;
-    if (host.getResolvedProjectReferenceToRedirect(sourceFile.fileName)) return false;
+    if (host.getRedirectFromSourceFile(sourceFile.fileName)) return false;
     // Emit json file if outFile is specified
     if (options.outFile) return true;
     // Json file is not emitted if outDir is not specified
@@ -7698,9 +7715,18 @@ export function base64decode(host: { base64decode?(input: string): string; } | u
 export function readJsonOrUndefined(path: string, hostOrText: { readFile(fileName: string): string | undefined; } | string): object | undefined {
     const jsonText = isString(hostOrText) ? hostOrText : hostOrText.readFile(path);
     if (!jsonText) return undefined;
-    // gracefully handle if readFile fails or returns not JSON
-    const result = parseConfigFileTextToJson(path, jsonText);
-    return !result.error ? result.config : undefined;
+    // Try strictly parsing first, then fall back to our (slower)
+    // parser that is resilient to comments/trailing commas.
+    // package.json files should never have these, but we
+    // have no way to communicate these issues in the first place.
+    let result = tryParseJson(jsonText);
+    if (result === undefined) {
+        const looseResult = parseConfigFileTextToJson(path, jsonText);
+        if (!looseResult.error) {
+            result = looseResult.config;
+        }
+    }
+    return result;
 }
 
 /** @internal */
@@ -8947,6 +8973,7 @@ const _computedOptions = createComputedCompilerOptions({
             return target ??
                 ((compilerOptions.module === ModuleKind.Node16 && ScriptTarget.ES2022) ||
                     (compilerOptions.module === ModuleKind.Node18 && ScriptTarget.ES2022) ||
+                    (compilerOptions.module === ModuleKind.Node20 && ScriptTarget.ES2023) ||
                     (compilerOptions.module === ModuleKind.NodeNext && ScriptTarget.ESNext) ||
                     ScriptTarget.ES5);
         },
@@ -8970,6 +8997,7 @@ const _computedOptions = createComputedCompilerOptions({
                         break;
                     case ModuleKind.Node16:
                     case ModuleKind.Node18:
+                    case ModuleKind.Node20:
                         moduleResolution = ModuleResolutionKind.Node16;
                         break;
                     case ModuleKind.NodeNext:
@@ -9013,6 +9041,7 @@ const _computedOptions = createComputedCompilerOptions({
             switch (_computedOptions.module.computeValue(compilerOptions)) {
                 case ModuleKind.Node16:
                 case ModuleKind.Node18:
+                case ModuleKind.Node20:
                 case ModuleKind.NodeNext:
                 case ModuleKind.Preserve:
                     return true;
@@ -9057,8 +9086,8 @@ const _computedOptions = createComputedCompilerOptions({
             if (!moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
                 return false;
             }
-            if (compilerOptions.resolvePackageJsonExports !== undefined) {
-                return compilerOptions.resolvePackageJsonExports;
+            if (compilerOptions.resolvePackageJsonImports !== undefined) {
+                return compilerOptions.resolvePackageJsonImports;
             }
             switch (moduleResolution) {
                 case ModuleResolutionKind.Node16:
@@ -9074,6 +9103,14 @@ const _computedOptions = createComputedCompilerOptions({
         computeValue: (compilerOptions): boolean => {
             if (compilerOptions.resolveJsonModule !== undefined) {
                 return compilerOptions.resolveJsonModule;
+            }
+            switch (_computedOptions.module.computeValue(compilerOptions)) {
+                // TODO in 6.0: uncomment
+                // case ModuleKind.Node16:
+                // case ModuleKind.Node18:
+                case ModuleKind.Node20:
+                case ModuleKind.NodeNext:
+                    return true;
             }
             return _computedOptions.moduleResolution.computeValue(compilerOptions) === ModuleResolutionKind.Bundler;
         },
@@ -9505,7 +9542,7 @@ const wildcardCharCodes = [CharacterCodes.asterisk, CharacterCodes.question];
 
 const commonPackageFolders: readonly string[] = ["node_modules", "bower_components", "jspm_packages"];
 
-const implicitExcludePathRegexPattern = `(?!(${commonPackageFolders.join("|")})(/|$))`;
+const implicitExcludePathRegexPattern = `(?!(?:${commonPackageFolders.join("|")})(?:/|$))`;
 
 /** @internal */
 export interface WildcardMatcher {
@@ -9521,12 +9558,12 @@ const filesMatcher: WildcardMatcher = {
      *  [^./]                   # matches everything up to the first . character (excluding directory separators)
      *  (\\.(?!min\\.js$))?     # matches . characters but not if they are part of the .min.js file extension
      */
-    singleAsteriskRegexFragment: "([^./]|(\\.(?!min\\.js$))?)*",
+    singleAsteriskRegexFragment: "(?:[^./]|(?:\\.(?!min\\.js$))?)*",
     /**
      * Regex for the ** wildcard. Matches any number of subdirectories. When used for including
      * files or directories, does not match subdirectories that start with a . character
      */
-    doubleAsteriskRegexFragment: `(/${implicitExcludePathRegexPattern}[^/.][^/]*)*?`,
+    doubleAsteriskRegexFragment: `(?:/${implicitExcludePathRegexPattern}[^/.][^/]*)*?`,
     replaceWildcardCharacter: match => replaceWildcardCharacter(match, filesMatcher.singleAsteriskRegexFragment),
 };
 
@@ -9536,13 +9573,13 @@ const directoriesMatcher: WildcardMatcher = {
      * Regex for the ** wildcard. Matches any number of subdirectories. When used for including
      * files or directories, does not match subdirectories that start with a . character
      */
-    doubleAsteriskRegexFragment: `(/${implicitExcludePathRegexPattern}[^/.][^/]*)*?`,
+    doubleAsteriskRegexFragment: `(?:/${implicitExcludePathRegexPattern}[^/.][^/]*)*?`,
     replaceWildcardCharacter: match => replaceWildcardCharacter(match, directoriesMatcher.singleAsteriskRegexFragment),
 };
 
 const excludeMatcher: WildcardMatcher = {
     singleAsteriskRegexFragment: "[^/]*",
-    doubleAsteriskRegexFragment: "(/.+?)?",
+    doubleAsteriskRegexFragment: "(?:/.+?)?",
     replaceWildcardCharacter: match => replaceWildcardCharacter(match, excludeMatcher.singleAsteriskRegexFragment),
 };
 
@@ -9559,10 +9596,10 @@ export function getRegularExpressionForWildcard(specs: readonly string[] | undef
         return undefined;
     }
 
-    const pattern = patterns.map(pattern => `(${pattern})`).join("|");
+    const pattern = patterns.map(pattern => `(?:${pattern})`).join("|");
     // If excluding, match "foo/bar/baz...", but if including, only allow "foo".
-    const terminator = usage === "exclude" ? "($|/)" : "$";
-    return `^(${pattern})${terminator}`;
+    const terminator = usage === "exclude" ? "(?:$|/)" : "$";
+    return `^(?:${pattern})${terminator}`;
 }
 
 /** @internal */
@@ -9587,7 +9624,7 @@ export function isImplicitGlob(lastPathComponent: string): boolean {
 /** @internal */
 export function getPatternFromSpec(spec: string, basePath: string, usage: "files" | "directories" | "exclude"): string | undefined {
     const pattern = spec && getSubPatternFromSpec(spec, basePath, usage, wildcardMatchers[usage]);
-    return pattern && `^(${pattern})${usage === "exclude" ? "($|/)" : "$"}`;
+    return pattern && `^(?:${pattern})${usage === "exclude" ? "(?:$|/)" : "$"}`;
 }
 
 /** @internal */
@@ -9620,7 +9657,7 @@ export function getSubPatternFromSpec(
         }
         else {
             if (usage === "directories") {
-                subpattern += "(";
+                subpattern += "(?:";
                 optionalCount++;
             }
 
@@ -9634,7 +9671,7 @@ export function getSubPatternFromSpec(
                 // appear first in a component. Dotted directories and files can be included explicitly
                 // like so: **/.*/.*
                 if (component.charCodeAt(0) === CharacterCodes.asterisk) {
-                    componentPattern += "([^./]" + singleAsteriskRegexFragment + ")?";
+                    componentPattern += "(?:[^./]" + singleAsteriskRegexFragment + ")?";
                     component = component.substr(1);
                 }
                 else if (component.charCodeAt(0) === CharacterCodes.question) {
@@ -10933,10 +10970,11 @@ export function isTypeDeclaration(node: Node): node is TypeParameterDeclaration 
         case SyntaxKind.JSDocEnumTag:
             return true;
         case SyntaxKind.ImportClause:
-            return (node as ImportClause).isTypeOnly;
+            return (node as ImportClause).phaseModifier === SyntaxKind.TypeKeyword;
         case SyntaxKind.ImportSpecifier:
+            return (node as ImportSpecifier).parent.parent.phaseModifier === SyntaxKind.TypeKeyword;
         case SyntaxKind.ExportSpecifier:
-            return (node as ImportSpecifier | ExportSpecifier).parent.parent.isTypeOnly;
+            return (node as ExportSpecifier).parent.parent.isTypeOnly;
         default:
             return false;
     }
@@ -12108,7 +12146,7 @@ function getNodeAtPosition(sourceFile: SourceFile, position: number, includeJSDo
     };
     while (true) {
         const child = isJavaScriptFile && includeJSDoc && hasJSDocNodes(current) && forEach(current.jsDoc, getContainingChild) || forEachChild(current, getContainingChild);
-        if (!child) {
+        if (!child || isMetaProperty(child)) {
             return current;
         }
         current = child;
@@ -12135,12 +12173,12 @@ export function getLibFileNameFromLibReference(libReference: FileReference): str
 /** @internal */
 export function forEachResolvedProjectReference<T>(
     resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined,
-    cb: (resolvedProjectReference: ResolvedProjectReference, parent: ResolvedProjectReference | undefined) => T | undefined,
+    cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined,
 ): T | undefined {
     return forEachProjectReference(
         /*projectReferences*/ undefined,
         resolvedProjectReferences,
-        (resolvedRef, parent) => resolvedRef && cb(resolvedRef, parent),
+        resolvedRef => resolvedRef && cb(resolvedRef),
     );
 }
 
@@ -12207,4 +12245,122 @@ export function getOptionsSyntaxByValue(optionsObject: ObjectLiteralExpression |
 /** @internal */
 export function forEachOptionsSyntaxByName<T>(optionsObject: ObjectLiteralExpression | undefined, name: string, callback: (prop: PropertyAssignment) => T | undefined): T | undefined {
     return forEachPropertyAssignment(optionsObject, name, callback);
+}
+
+/**
+ * Creates a deep, memberwise clone of a node with no source map location.
+ *
+ * WARNING: This is an expensive operation and is only intended to be used in refactorings
+ * and code fixes (because those are triggered by explicit user actions).
+ *
+ * @internal
+ */
+// Moved here to compiler utilities for usage in node builder for quickinfo.
+export function getSynthesizedDeepClone<T extends Node | undefined>(node: T, includeTrivia = true): T {
+    const clone = node && getSynthesizedDeepCloneWorker(node);
+    if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
+    return setParentRecursive(clone, /*incremental*/ false);
+}
+
+/** @internal */
+export function getSynthesizedDeepCloneWithReplacements<T extends Node>(
+    node: T,
+    includeTrivia: boolean,
+    replaceNode: (node: Node) => Node | undefined,
+): T {
+    let clone = replaceNode(node);
+    if (clone) {
+        setOriginalNode(clone, node);
+    }
+    else {
+        clone = getSynthesizedDeepCloneWorker(node as NonNullable<T>, replaceNode);
+    }
+
+    if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
+    return clone as T;
+}
+
+function getSynthesizedDeepCloneWorker<T extends Node>(node: T, replaceNode?: (node: Node) => Node | undefined): T {
+    const nodeClone: <T extends Node>(n: T) => T = replaceNode
+        ? n => getSynthesizedDeepCloneWithReplacements(n, /*includeTrivia*/ true, replaceNode)
+        : getSynthesizedDeepClone;
+    const nodesClone: <T extends Node>(ns: NodeArray<T> | undefined) => NodeArray<T> | undefined = replaceNode
+        ? ns => ns && getSynthesizedDeepClonesWithReplacements(ns, /*includeTrivia*/ true, replaceNode)
+        : ns => ns && getSynthesizedDeepClones(ns);
+    const visited = visitEachChild(node, nodeClone, /*context*/ undefined, nodesClone, nodeClone);
+
+    if (visited === node) {
+        // This only happens for leaf nodes - internal nodes always see their children change.
+        const clone = isStringLiteral(node) ? setOriginalNode(factory.createStringLiteralFromNode(node), node) as Node as T :
+            isNumericLiteral(node) ? setOriginalNode(factory.createNumericLiteral(node.text, node.numericLiteralFlags), node) as Node as T :
+            factory.cloneNode(node);
+        return setTextRange(clone, node);
+    }
+
+    // PERF: As an optimization, rather than calling factory.cloneNode, we'll update
+    // the new node created by visitEachChild with the extra changes factory.cloneNode
+    // would have made.
+    (visited as Mutable<T>).parent = undefined!;
+    return visited;
+}
+
+/** @internal */
+export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T>, includeTrivia?: boolean): NodeArray<T>;
+/** @internal */
+export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia?: boolean): NodeArray<T> | undefined;
+/** @internal */
+export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia = true): NodeArray<T> | undefined {
+    if (nodes) {
+        const cloned = factory.createNodeArray(nodes.map(n => getSynthesizedDeepClone(n, includeTrivia)), nodes.hasTrailingComma);
+        setTextRange(cloned, nodes);
+        return cloned;
+    }
+    return nodes;
+}
+
+/** @internal */
+export function getSynthesizedDeepClonesWithReplacements<T extends Node>(
+    nodes: NodeArray<T>,
+    includeTrivia: boolean,
+    replaceNode: (node: Node) => Node | undefined,
+): NodeArray<T> {
+    return factory.createNodeArray(nodes.map(n => getSynthesizedDeepCloneWithReplacements(n, includeTrivia, replaceNode)), nodes.hasTrailingComma);
+}
+
+/**
+ * Sets EmitFlags to suppress leading and trailing trivia on the node.
+ *
+ * @internal
+ */
+export function suppressLeadingAndTrailingTrivia(node: Node): void {
+    suppressLeadingTrivia(node);
+    suppressTrailingTrivia(node);
+}
+
+/**
+ * Sets EmitFlags to suppress leading trivia on the node.
+ *
+ * @internal
+ */
+export function suppressLeadingTrivia(node: Node): void {
+    addEmitFlagsRecursively(node, EmitFlags.NoLeadingComments, getFirstChild);
+}
+
+/**
+ * Sets EmitFlags to suppress trailing trivia on the node.
+ *
+ * @internal @knipignore
+ */
+export function suppressTrailingTrivia(node: Node): void {
+    addEmitFlagsRecursively(node, EmitFlags.NoTrailingComments, getLastChild);
+}
+
+function addEmitFlagsRecursively(node: Node, flag: EmitFlags, getChild: (n: Node) => Node | undefined) {
+    addEmitFlags(node, flag);
+    const child = getChild(node);
+    if (child) addEmitFlagsRecursively(child, flag, getChild);
+}
+
+function getFirstChild(node: Node): Node | undefined {
+    return forEachChild(node, child => child);
 }

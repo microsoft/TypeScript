@@ -274,7 +274,7 @@ File '/package.json' does not exist.
 ======== Resolving module './b' from '/user/username/projects/transitiveReferences/c.ts'. ========
 Module resolution kind is not specified, using 'NodeNext'.
 Resolving in CJS mode with conditions 'require', 'types', 'node'.
-Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/b', target file types: TypeScript, JavaScript, Declaration.
+Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/b', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/user/username/projects/transitiveReferences/b.ts' exists - use it as a name resolution result.
 ======== Module name './b' was successfully resolved to '/user/username/projects/transitiveReferences/b.ts'. ========
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/c.ts'. ========
@@ -284,7 +284,7 @@ Resolving in CJS mode with conditions 'require', 'types', 'node'.
 'paths' option is specified, looking for a pattern to match module name '@ref/a'.
 Module name '@ref/a', matched pattern '@ref/*'.
 Trying substitution './refs/*', candidate module location: './refs/a'.
-Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/refs/a', target file types: TypeScript, JavaScript, Declaration.
+Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/refs/a', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/user/username/projects/transitiveReferences/refs/a.ts' does not exist.
 File '/user/username/projects/transitiveReferences/refs/a.tsx' does not exist.
 File '/user/username/projects/transitiveReferences/refs/a.d.ts' exists - use it as a name resolution result.
@@ -703,7 +703,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module './b' from '/user/username/projects/transitiveReferences/c.ts'. ========
 Module resolution kind is not specified, using 'NodeNext'.
 Resolving in CJS mode with conditions 'require', 'types', 'node'.
-Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/b', target file types: TypeScript, JavaScript, Declaration.
+Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/b', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/user/username/projects/transitiveReferences/b.ts' exists - use it as a name resolution result.
 ======== Module name './b' was successfully resolved to '/user/username/projects/transitiveReferences/b.ts'. ========
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/c.ts'. ========
@@ -713,7 +713,7 @@ Resolving in CJS mode with conditions 'require', 'types', 'node'.
 'paths' option is specified, looking for a pattern to match module name '@ref/a'.
 Module name '@ref/a', matched pattern '@ref/*'.
 Trying substitution './nrefs/*', candidate module location: './nrefs/a'.
-Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/nrefs/a', target file types: TypeScript, JavaScript, Declaration.
+Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/nrefs/a', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/user/username/projects/transitiveReferences/nrefs/a.ts' does not exist.
 File '/user/username/projects/transitiveReferences/nrefs/a.tsx' does not exist.
 File '/user/username/projects/transitiveReferences/nrefs/a.d.ts' exists - use it as a name resolution result.
@@ -922,7 +922,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module './b' from '/user/username/projects/transitiveReferences/c.ts'. ========
 Module resolution kind is not specified, using 'NodeNext'.
 Resolving in CJS mode with conditions 'require', 'types', 'node'.
-Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/b', target file types: TypeScript, JavaScript, Declaration.
+Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/b', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/user/username/projects/transitiveReferences/b.ts' exists - use it as a name resolution result.
 ======== Module name './b' was successfully resolved to '/user/username/projects/transitiveReferences/b.ts'. ========
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/c.ts'. ========
@@ -932,7 +932,7 @@ Resolving in CJS mode with conditions 'require', 'types', 'node'.
 'paths' option is specified, looking for a pattern to match module name '@ref/a'.
 Module name '@ref/a', matched pattern '@ref/*'.
 Trying substitution './refs/*', candidate module location: './refs/a'.
-Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/refs/a', target file types: TypeScript, JavaScript, Declaration.
+Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/refs/a', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/user/username/projects/transitiveReferences/refs/a.ts' does not exist.
 File '/user/username/projects/transitiveReferences/refs/a.tsx' does not exist.
 File '/user/username/projects/transitiveReferences/refs/a.d.ts' exists - use it as a name resolution result.
@@ -1518,7 +1518,7 @@ Resolving in CJS mode with conditions 'require', 'types', 'node'.
 'paths' option is specified, looking for a pattern to match module name '@ref/a'.
 Module name '@ref/a', matched pattern '@ref/*'.
 Trying substitution './refs/*', candidate module location: './refs/a'.
-Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/refs/a', target file types: TypeScript, JavaScript, Declaration.
+Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/refs/a', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/user/username/projects/transitiveReferences/refs/a.ts' does not exist.
 File '/user/username/projects/transitiveReferences/refs/a.tsx' does not exist.
 File '/user/username/projects/transitiveReferences/refs/a.d.ts' exists - use it as a name resolution result.
