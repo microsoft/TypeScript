@@ -128,11 +128,11 @@ var n;
 
 // should get any on parameter initialisers
 function f(a = null, b = n, l = []) {
->f : (a?: null, b?: number | undefined, l?: never[]) => void
+>f : (a?: null, b?: number | undefined, l?: any[]) => void
 >a : null
 >b : number | undefined
 >n : number | undefined
->l : never[]
+>l : any[]
 >[] : never[]
 
     // a should be null in strict mode
@@ -184,16 +184,16 @@ function f(a = null, b = n, l = []) {
     // l should be any[]
     l.push(1)
 >l.push(1) : number
->l.push : (...items: never[]) => number
->l : never[]
->push : (...items: never[]) => number
+>l.push : (...items: any[]) => number
+>l : any[]
+>push : (...items: any[]) => number
 >1 : 1
 
     l.push('ok')
 >l.push('ok') : number
->l.push : (...items: never[]) => number
->l : never[]
->push : (...items: never[]) => number
+>l.push : (...items: any[]) => number
+>l : any[]
+>push : (...items: any[]) => number
 >'ok' : "ok"
 }
 

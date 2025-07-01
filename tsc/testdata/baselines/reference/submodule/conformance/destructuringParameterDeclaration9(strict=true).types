@@ -32,7 +32,7 @@ export function prepareConfigWithoutAnnotation({
 >additionalFiles : any
 
         json = []
->json : never[]
+>json : any[]
 >[] : never[]
 
     } = {}
@@ -42,7 +42,7 @@ export function prepareConfigWithoutAnnotation({
 >{} : {}
 
     json
->json : never[]
+>json : any[]
 }
 
 /** @type {(param: {

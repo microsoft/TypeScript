@@ -9,24 +9,7 @@
 
      additionalFiles: {
  >additionalFiles : any
-@@= skipped -26, +26 lines =@@
- >additionalFiles : any
-
-         json = []
-->json : any[]
-+>json : never[]
- >[] : never[]
-
-     } = {}
-@@= skipped -10, +10 lines =@@
- >{} : {}
-
-     json
-->json : any[]
-+>json : never[]
- }
-
- /** @type {(param: {
+@@= skipped -43, +43 lines =@@
    additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>;
  }) => void} */
  export const prepareConfigWithContextualSignature = ({
@@ -37,7 +20,7 @@
 
      additionalFiles: {
  >additionalFiles : any
-@@= skipped -33, +33 lines =@@
+@@= skipped -26, +26 lines =@@
   * @param {{ a?: { json?: string[] }}} [config]
   */
  function f1({ a: { json = [] } = {} } = {}) { return json }

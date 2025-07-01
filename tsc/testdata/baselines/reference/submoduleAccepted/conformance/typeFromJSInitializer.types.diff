@@ -164,39 +164,3 @@
  >'hi' : "hi"
 
  /** @type {number | undefined} */
-@@= skipped -126, +126 lines =@@
-
- // should get any on parameter initialisers
- function f(a = null, b = n, l = []) {
-->f : (a?: null, b?: number | undefined, l?: any[]) => void
-+>f : (a?: null, b?: number | undefined, l?: never[]) => void
- >a : null
- >b : number | undefined
- >n : number | undefined
-->l : any[]
-+>l : never[]
- >[] : never[]
-
-     // a should be null in strict mode
-@@= skipped -56, +56 lines =@@
-     // l should be any[]
-     l.push(1)
- >l.push(1) : number
-->l.push : (...items: any[]) => number
-->l : any[]
-->push : (...items: any[]) => number
-+>l.push : (...items: never[]) => number
-+>l : never[]
-+>push : (...items: never[]) => number
- >1 : 1
-
-     l.push('ok')
- >l.push('ok') : number
-->l.push : (...items: any[]) => number
-->l : any[]
-->push : (...items: any[]) => number
-+>l.push : (...items: never[]) => number
-+>l : never[]
-+>push : (...items: never[]) => number
- >'ok' : "ok"
- }

@@ -16092,6 +16092,21 @@ func (c *Checker) padTupleType(t *Type, pattern *ast.Node) *Type {
 }
 
 func (c *Checker) widenTypeInferredFromInitializer(declaration *ast.Node, t *Type) *Type {
+	widened := c.getWidenedLiteralTypeForInitializer(declaration, t)
+	if ast.IsInJSFile(declaration) {
+		if c.isEmptyLiteralType(widened) {
+			c.reportImplicitAny(declaration, c.anyType, WideningKindNormal)
+			return c.anyType
+		}
+		if c.isEmptyArrayLiteralType(widened) {
+			c.reportImplicitAny(declaration, c.anyArrayType, WideningKindNormal)
+			return c.anyArrayType
+		}
+	}
+	return widened
+}
+
+func (c *Checker) getWidenedLiteralTypeForInitializer(declaration *ast.Node, t *Type) *Type {
 	if c.getCombinedNodeFlagsCached(declaration)&ast.NodeFlagsConstant != 0 || isDeclarationReadonly(declaration) {
 		return t
 	}
@@ -17212,7 +17227,7 @@ func (c *Checker) getTypeFromBindingElement(element *ast.Node, includePatternInT
 		if ast.IsBindingPattern(element.Name()) {
 			contextualType = c.getTypeFromBindingPattern(element.Name(), true /*includePatternInType*/, false /*reportErrors*/)
 		}
-		return c.addOptionality(c.widenTypeInferredFromInitializer(element, c.checkDeclarationInitializer(element, CheckModeNormal, contextualType)))
+		return c.addOptionality(c.getWidenedLiteralTypeForInitializer(element, c.checkDeclarationInitializer(element, CheckModeNormal, contextualType)))
 	}
 	if ast.IsBindingPattern(element.Name()) {
 		return c.getTypeFromBindingPattern(element.Name(), includePatternInType, reportErrors)
