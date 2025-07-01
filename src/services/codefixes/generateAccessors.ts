@@ -9,9 +9,7 @@ import {
     Diagnostics,
     factory,
     FileTextChanges,
-    find,
     findAncestor,
-    getClassExtendsHeritageElement,
     getDecorators,
     getEffectiveModifierFlags,
     getFirstConstructorWithBody,
@@ -22,7 +20,6 @@ import {
     hasEffectiveReadonlyModifier,
     hasStaticModifier,
     Identifier,
-    InterfaceDeclaration,
     isClassLike,
     isElementAccessExpression,
     isFunctionLike,
@@ -50,10 +47,8 @@ import {
     startsWithUnderscore,
     StringLiteral,
     suppressLeadingAndTrailingTrivia,
-    SymbolFlags,
     SyntaxKind,
     textChanges,
-    TypeChecker,
     TypeNode,
 } from "../_namespaces/ts.js";
 
@@ -321,22 +316,3 @@ function getDeclarationType(declaration: AcceptedDeclaration, program: Program):
     }
     return typeNode;
 }
-
-/** @internal */
-export function getAllSupers(decl: ClassOrInterface | undefined, checker: TypeChecker): readonly ClassOrInterface[] {
-    const res: ClassLikeDeclaration[] = [];
-    while (decl) {
-        const superElement = getClassExtendsHeritageElement(decl);
-        const superSymbol = superElement && checker.getSymbolAtLocation(superElement.expression);
-        if (!superSymbol) break;
-        const symbol = superSymbol.flags & SymbolFlags.Alias ? checker.getAliasedSymbol(superSymbol) : superSymbol;
-        const superDecl = symbol.declarations && find(symbol.declarations, isClassLike);
-        if (!superDecl) break;
-        res.push(superDecl);
-        decl = superDecl;
-    }
-    return res;
-}
-
-/** @internal */
-export type ClassOrInterface = ClassLikeDeclaration | InterfaceDeclaration;

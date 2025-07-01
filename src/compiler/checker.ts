@@ -467,6 +467,7 @@ import {
     IntroducesNewScopeNode,
     isAccessExpression,
     isAccessor,
+    isAccessorModifier,
     isAliasableExpression,
     isAmbientModule,
     isArray,
@@ -2180,6 +2181,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     };
 
     var anyIterationTypes = createIterationTypes(anyType, anyType, anyType);
+    var silentNeverIterationTypes = createIterationTypes(silentNeverType, silentNeverType, silentNeverType);
 
     var asyncIterationTypesResolver: IterationTypesResolver = {
         iterableCacheKey: "iterationTypesOfAsyncIterable",
@@ -5981,7 +5983,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return addVisibleAlias(declaration, declaration.parent.parent.parent.parent);
                     }
                     else if (symbol.flags & SymbolFlags.BlockScopedVariable) {
-                        const variableStatement = findAncestor(declaration, isVariableStatement)!;
+                        const rootDeclaration = walkUpBindingElementsAndPatterns(declaration);
+                        if (rootDeclaration.kind === SyntaxKind.Parameter) {
+                            return false;
+                        }
+                        const variableStatement = rootDeclaration.parent.parent;
+                        if (variableStatement.kind !== SyntaxKind.VariableStatement) {
+                            return false;
+                        }
                         if (hasSyntacticModifier(variableStatement, ModifierFlags.Export)) {
                             return true;
                         }
@@ -7682,27 +7691,51 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (propertySymbol.flags & SymbolFlags.Accessor) {
                 const writeType = getWriteTypeOfSymbol(propertySymbol);
-                if (propertyType !== writeType && !isErrorType(propertyType) && !isErrorType(writeType)) {
+                if (!isErrorType(propertyType) && !isErrorType(writeType)) {
                     const symbolMapper = getSymbolLinks(propertySymbol).mapper;
-                    const getterDeclaration = getDeclarationOfKind<GetAccessorDeclaration>(propertySymbol, SyntaxKind.GetAccessor)!;
-                    const getterSignature = getSignatureFromDeclaration(getterDeclaration);
-                    typeElements.push(
-                        setCommentRange(
-                            context,
-                            signatureToSignatureDeclarationHelper(symbolMapper ? instantiateSignature(getterSignature, symbolMapper) : getterSignature, SyntaxKind.GetAccessor, context, { name: propertyName }) as GetAccessorDeclaration,
-                            getterDeclaration,
-                        ),
-                    );
-                    const setterDeclaration = getDeclarationOfKind<SetAccessorDeclaration>(propertySymbol, SyntaxKind.SetAccessor)!;
-                    const setterSignature = getSignatureFromDeclaration(setterDeclaration);
-                    typeElements.push(
-                        setCommentRange(
-                            context,
-                            signatureToSignatureDeclarationHelper(symbolMapper ? instantiateSignature(setterSignature, symbolMapper) : setterSignature, SyntaxKind.SetAccessor, context, { name: propertyName }) as SetAccessorDeclaration,
-                            setterDeclaration,
-                        ),
-                    );
-                    return;
+                    const propDeclaration = getDeclarationOfKind<PropertyDeclaration>(propertySymbol, SyntaxKind.PropertyDeclaration);
+                    if (propertyType !== writeType || propertySymbol.parent!.flags & SymbolFlags.Class && !propDeclaration) {
+                        const getterDeclaration = getDeclarationOfKind<GetAccessorDeclaration>(propertySymbol, SyntaxKind.GetAccessor);
+                        if (getterDeclaration) {
+                            const getterSignature = getSignatureFromDeclaration(getterDeclaration);
+                            typeElements.push(
+                                setCommentRange(
+                                    context,
+                                    signatureToSignatureDeclarationHelper(symbolMapper ? instantiateSignature(getterSignature, symbolMapper) : getterSignature, SyntaxKind.GetAccessor, context, { name: propertyName }) as GetAccessorDeclaration,
+                                    getterDeclaration,
+                                ),
+                            );
+                        }
+                        const setterDeclaration = getDeclarationOfKind<SetAccessorDeclaration>(propertySymbol, SyntaxKind.SetAccessor);
+                        if (setterDeclaration) {
+                            const setterSignature = getSignatureFromDeclaration(setterDeclaration);
+                            typeElements.push(
+                                setCommentRange(
+                                    context,
+                                    signatureToSignatureDeclarationHelper(symbolMapper ? instantiateSignature(setterSignature, symbolMapper) : setterSignature, SyntaxKind.SetAccessor, context, { name: propertyName }) as SetAccessorDeclaration,
+                                    setterDeclaration,
+                                ),
+                            );
+                        }
+                        return;
+                    }
+                    if (propertySymbol.parent!.flags & SymbolFlags.Class && propDeclaration && find(propDeclaration.modifiers, isAccessorModifier)) {
+                        const fakeGetterSignature = createSignature(/*declaration*/ undefined, /*typeParameters*/ undefined, /*thisParameter*/ undefined, emptyArray, propertyType, /*resolvedTypePredicate*/ undefined, 0, SignatureFlags.None);
+                        typeElements.push(
+                            setCommentRange(
+                                context,
+                                signatureToSignatureDeclarationHelper(fakeGetterSignature, SyntaxKind.GetAccessor, context, { name: propertyName }) as GetAccessorDeclaration,
+                                propDeclaration,
+                            ),
+                        );
+                        const setterParam = createSymbol(SymbolFlags.FunctionScopedVariable, "arg" as __String);
+                        setterParam.links.type = writeType;
+                        const fakeSetterSignature = createSignature(/*declaration*/ undefined, /*typeParameters*/ undefined, /*thisParameter*/ undefined, [setterParam], voidType, /*resolvedTypePredicate*/ undefined, 0, SignatureFlags.None);
+                        typeElements.push(
+                            signatureToSignatureDeclarationHelper(fakeSetterSignature, SyntaxKind.SetAccessor, context, { name: propertyName }) as SetAccessorDeclaration,
+                        );
+                        return;
+                    }
                 }
             }
 
@@ -12808,13 +12841,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      */
     function getWriteTypeOfSymbol(symbol: Symbol): Type {
         const checkFlags = getCheckFlags(symbol);
+        if (checkFlags & CheckFlags.SyntheticProperty) {
+            return checkFlags & CheckFlags.DeferredType ?
+                getWriteTypeOfSymbolWithDeferredType(symbol) || getTypeOfSymbolWithDeferredType(symbol) :
+                // NOTE: cast to TransientSymbol should be safe because only TransientSymbols can have CheckFlags.SyntheticProperty
+                (symbol as TransientSymbol).links.writeType || (symbol as TransientSymbol).links.type!;
+        }
         if (symbol.flags & SymbolFlags.Property) {
-            return checkFlags & CheckFlags.SyntheticProperty ?
-                checkFlags & CheckFlags.DeferredType ?
-                    getWriteTypeOfSymbolWithDeferredType(symbol) || getTypeOfSymbolWithDeferredType(symbol) :
-                    // NOTE: cast to TransientSymbol should be safe because only TransientSymbols can have CheckFlags.SyntheticProperty
-                    (symbol as TransientSymbol).links.writeType || (symbol as TransientSymbol).links.type! :
-                removeMissingType(getTypeOfSymbol(symbol), !!(symbol.flags & SymbolFlags.Optional));
+            return removeMissingType(getTypeOfSymbol(symbol), !!(symbol.flags & SymbolFlags.Optional));
         }
         if (symbol.flags & SymbolFlags.Accessor) {
             return checkFlags & CheckFlags.Instantiated ?
@@ -15431,6 +15465,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function createUnionOrIntersectionProperty(containingType: UnionOrIntersectionType, name: __String, skipObjectFunctionPropertyAugment?: boolean): Symbol | undefined {
+        let propFlags = SymbolFlags.None;
         let singleProp: Symbol | undefined;
         let propSet: Map<SymbolId, Symbol> | undefined;
         let indexTypes: Type[] | undefined;
@@ -15457,6 +15492,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     if (!singleProp) {
                         singleProp = prop;
+                        propFlags = (prop.flags & SymbolFlags.Accessor) || SymbolFlags.Property;
                     }
                     else if (prop !== singleProp) {
                         const isInstantiation = (getTargetSymbol(prop) || prop) === (getTargetSymbol(singleProp) || singleProp);
@@ -15479,6 +15515,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 propSet.set(id, prop);
                             }
                         }
+                        // classes created by mixins are represented as intersections
+                        // and overriding a property in a derived class redefines it completely at runtime
+                        // so a get accessor can't be merged with a set accessor in a base class,
+                        // for that reason the accessor flags are only used when they are the same in all constituents
+                        if (propFlags & SymbolFlags.Accessor && (prop.flags & SymbolFlags.Accessor) !== (propFlags & SymbolFlags.Accessor)) {
+                            propFlags = (propFlags & ~SymbolFlags.Accessor) | SymbolFlags.Property;
+                        }
                     }
                     if (isUnion && isReadonlySymbol(prop)) {
                         checkFlags |= CheckFlags.Readonly;
@@ -15497,6 +15540,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 else if (isUnion) {
                     const indexInfo = !isLateBoundName(name) && getApplicableIndexInfoForName(type, name);
                     if (indexInfo) {
+                        propFlags = (propFlags & ~SymbolFlags.Accessor) | SymbolFlags.Property;
                         checkFlags |= CheckFlags.WritePartial | (indexInfo.isReadonly ? CheckFlags.Readonly : 0);
                         indexTypes = append(indexTypes, isTupleType(type) ? getRestTypeOfTupleType(type) || undefinedType : indexInfo.type);
                     }
@@ -15575,7 +15619,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             propTypes.push(type);
         }
         addRange(propTypes, indexTypes);
-        const result = createSymbol(SymbolFlags.Property | (optionalFlag ?? 0), name, syntheticFlag | checkFlags);
+        const result = createSymbol(propFlags | (optionalFlag ?? 0), name, syntheticFlag | checkFlags);
         result.links.containingType = containingType;
         if (!hasNonUniformValueDeclaration && firstValueDeclaration) {
             result.valueDeclaration = firstValueDeclaration;
@@ -36421,7 +36465,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // reorderCandidates fills up the candidates array directly
         reorderCandidates(signatures, candidates, callChainFlags);
         if (!isJsxOpenFragment) {
-            Debug.assert(candidates.length, "Revert #54442 and add a testcase with whatever triggered this");
+            if (!candidates.length) {
+                if (reportErrors) {
+                    diagnostics.add(getDiagnosticForCallNode(node, Diagnostics.Call_target_does_not_contain_any_signatures));
+                }
+                return resolveErrorCall(node);
+            }
         }
         const args = getEffectiveCallArguments(node);
 
@@ -39159,6 +39208,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getYieldedTypeOfYieldExpression(node: YieldExpression, expressionType: Type, sentType: Type, isAsync: boolean): Type | undefined {
+        if (expressionType === silentNeverType) {
+            return silentNeverType;
+        }
         const errorNode = node.expression || node;
         // A `yield*` expression effectively yields everything that its operand yields
         const yieldedType = node.asteriskToken ? checkIteratedTypeOrElementType(isAsync ? IterationUse.AsyncYieldStar : IterationUse.YieldStar, expressionType, sentType, errorNode) : expressionType;
@@ -40427,18 +40479,29 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkNullishCoalesceOperands(node: BinaryExpression) {
-        const { left, operatorToken, right } = node;
-        if (operatorToken.kind === SyntaxKind.QuestionQuestionToken) {
-            if (isBinaryExpression(left) && (left.operatorToken.kind === SyntaxKind.BarBarToken || left.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken)) {
-                grammarErrorOnNode(left, Diagnostics._0_and_1_operations_cannot_be_mixed_without_parentheses, tokenToString(left.operatorToken.kind), tokenToString(operatorToken.kind));
-            }
-            if (isBinaryExpression(right) && (right.operatorToken.kind === SyntaxKind.BarBarToken || right.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken)) {
-                grammarErrorOnNode(right, Diagnostics._0_and_1_operations_cannot_be_mixed_without_parentheses, tokenToString(right.operatorToken.kind), tokenToString(operatorToken.kind));
-            }
-
-            checkNullishCoalesceOperandLeft(node);
-            checkNullishCoalesceOperandRight(node);
+        if (node.operatorToken.kind !== SyntaxKind.QuestionQuestionToken) {
+            return;
         }
+        if (isBinaryExpression(node.parent)) {
+            const { left, operatorToken } = node.parent;
+            if (isBinaryExpression(left) && operatorToken.kind === SyntaxKind.BarBarToken) {
+                grammarErrorOnNode(left, Diagnostics._0_and_1_operations_cannot_be_mixed_without_parentheses, tokenToString(SyntaxKind.QuestionQuestionToken), tokenToString(operatorToken.kind));
+            }
+        }
+        else if (isBinaryExpression(node.left)) {
+            const { operatorToken } = node.left;
+            if (operatorToken.kind === SyntaxKind.BarBarToken || operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
+                grammarErrorOnNode(node.left, Diagnostics._0_and_1_operations_cannot_be_mixed_without_parentheses, tokenToString(operatorToken.kind), tokenToString(SyntaxKind.QuestionQuestionToken));
+            }
+        }
+        else if (isBinaryExpression(node.right)) {
+            const { operatorToken } = node.right;
+            if (operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
+                grammarErrorOnNode(node.right, Diagnostics._0_and_1_operations_cannot_be_mixed_without_parentheses, tokenToString(SyntaxKind.QuestionQuestionToken), tokenToString(operatorToken.kind));
+            }
+        }
+        checkNullishCoalesceOperandLeft(node);
+        checkNullishCoalesceOperandRight(node);
     }
 
     function checkNullishCoalesceOperandLeft(node: BinaryExpression) {
@@ -45658,6 +45721,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * the `[Symbol.asyncIterator]()` method first, and then the `[Symbol.iterator]()` method.
      */
     function getIterationTypesOfIterable(type: Type, use: IterationUse, errorNode: Node | undefined) {
+        if (type === silentNeverType) {
+            return silentNeverIterationTypes;
+        }
         if (isTypeAny(type)) {
             return anyIterationTypes;
         }
@@ -46586,7 +46652,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             languageVersion >= ScriptTarget.ES5 && name.escapedText === "Object"
             && host.getEmitModuleFormatOfFile(getSourceFileOfNode(name)) < ModuleKind.ES2015
         ) {
-            error(name, Diagnostics.Class_name_cannot_be_Object_when_targeting_ES5_with_module_0, ModuleKind[moduleKind]); // https://github.com/Microsoft/TypeScript/issues/17494
+            error(name, Diagnostics.Class_name_cannot_be_Object_when_targeting_ES5_and_above_with_module_0, ModuleKind[moduleKind]); // https://github.com/Microsoft/TypeScript/issues/17494
         }
     }
 
