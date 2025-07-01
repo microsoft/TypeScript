@@ -40,7 +40,7 @@
     ],
     "devDependencies": {
         "@dprint/formatter": "^0.4.1",
-        "@dprint/typescript": "0.95.8",
+        "@dprint/typescript": "0.93.4",
         "@esfx/canceltoken": "^1.0.0",
         "@eslint/js": "^9.30.1",
         "@octokit/rest": "^22.0.0",
@@ -60,7 +60,7 @@
         "chai": "^4.5.0",
         "chokidar": "^4.0.3",
         "diff": "^7.0.0",
-        "dprint": "^0.50.1",
+        "dprint": "^0.49.0",
         "esbuild": "^0.25.5",
         "eslint": "^9.30.0",
         "eslint-formatter-autolinkable-stylish": "^1.4.0",
