@@ -1,0 +1,12 @@
+//// [tests/cases/conformance/externalModules/topLevelAwait.5.ts] ////
+
+=== topLevelAwait.5.ts ===
+(await
+0);
+
+export let aaa = 1;
+>aaa : Symbol(aaa, Decl(topLevelAwait.5.ts, 3, 10))
+
+export let bbb = 2;
+>bbb : Symbol(bbb, Decl(topLevelAwait.5.ts, 4, 10))
+
