@@ -14,7 +14,7 @@ interface Number {
 }
 
 interface String {
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(duplicateNumericIndexers.ts, 5, 1))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(duplicateNumericIndexers.ts, 5, 1))
 
     [x: number]: string;
 >x : Symbol(x, Decl(duplicateNumericIndexers.ts, 8, 5))

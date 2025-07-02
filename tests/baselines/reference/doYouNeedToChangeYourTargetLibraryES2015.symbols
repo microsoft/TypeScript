@@ -299,11 +299,11 @@ const testStringSup = "".sup();
 
 const testStringConstructorFromCodePoint = String.fromCodePoint();
 >testStringConstructorFromCodePoint : Symbol(testStringConstructorFromCodePoint, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 86, 5))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 const testStringConstructorRaw = String.raw``;
 >testStringConstructorRaw : Symbol(testStringConstructorRaw, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 87, 5))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 const testRegExpFlags = /abc/g.flags;
 >testRegExpFlags : Symbol(testRegExpFlags, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 88, 5))
