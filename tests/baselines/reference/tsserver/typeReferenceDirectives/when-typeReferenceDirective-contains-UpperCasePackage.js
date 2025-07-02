@@ -106,8 +106,6 @@ Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@types/Uppe
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts', result '/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Type reference directive 'UpperCasePackage' was successfully resolved to '/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts', primary: true. ========
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/lib 1 undefined Project: /user/username/projects/myproject/test/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/lib 1 undefined Project: /user/username/projects/myproject/test/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] ======== Resolving type reference directive 'lib', containing file '/user/username/projects/myproject/test/__inferred type names__.ts', root directory '/user/username/projects/myproject/lib/@types,/user/username/projects/myproject/lib/@app'. ========
 Info seq  [hh:mm:ss:mss] Resolving with primary search path '/user/username/projects/myproject/lib/@types, /user/username/projects/myproject/lib/@app'.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@types/lib.d.ts' does not exist.
@@ -249,8 +247,6 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/lib: *new*
-  {}
 /user/username/projects/myproject/lib/@app: *new*
   {}
 /user/username/projects/myproject/lib/@types: *new*

@@ -76,8 +76,6 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/pro
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/b/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/b/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/b/node_modules 1 undefined Project: /user/username/projects/project/a/b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/b/node_modules 1 undefined Project: /user/username/projects/project/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/a/b/node_modules/package.json 2000 undefined Project: /user/username/projects/project/a/b/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/a/b/package.json 2000 undefined Project: /user/username/projects/project/a/b/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/a/package.json 2000 undefined Project: /user/username/projects/project/a/b/tsconfig.json WatchType: File location affecting resolution
@@ -273,6 +271,36 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+PolledWatches::
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/project/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/project/a/b/node_modules/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/project/a/b/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/project/a/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/project/a/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/project/package.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
+/user/username/projects/project/a/b/tsconfig.json:
+  {}
+
+FsWatchesRecursive *deleted*::
+/user/username/projects/project/a/b/node_modules:
+  {}
+
 ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
@@ -387,10 +415,6 @@ FsWatches::
 /user/username/projects/project/a/b/tsconfig.json:
   {}
 
-FsWatchesRecursive::
-/user/username/projects/project/a/b/node_modules:
-  {}
-
 Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
@@ -475,10 +499,6 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/project/a/b/tsconfig.js
  }
 }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/project/a/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/b 0 undefined Project: /user/username/projects/project/a/b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/b 0 undefined Project: /user/username/projects/project/a/b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project/a/b/node_modules 1 undefined Project: /user/username/projects/project/a/b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project/a/b/node_modules 1 undefined Project: /user/username/projects/project/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/project/a/b/node_modules/package.json 2000 undefined Project: /user/username/projects/project/a/b/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/project/a/b/package.json 2000 undefined Project: /user/username/projects/project/a/b/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/project/a/package.json 2000 undefined Project: /user/username/projects/project/a/b/tsconfig.json WatchType: File location affecting resolution
@@ -666,13 +686,7 @@ PolledWatches *deleted*::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {}
-/user/username/projects/project/a/b: *new*
-  {}
 /user/username/projects/project/a/b/tsconfig.json:
-  {}
-
-FsWatchesRecursive *deleted*::
-/user/username/projects/project/a/b/node_modules:
   {}
 
 Projects::
@@ -811,8 +825,6 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
-  {}
-/user/username/projects/project/a/b:
   {}
 /user/username/projects/project/a/b/tsconfig.json:
   {}
