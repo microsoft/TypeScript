@@ -127,10 +127,11 @@ func (p *Parser) initializeClosures() {
 func (p *Parser) parseJSONText() *ast.SourceFile {
 	pos := p.nodePos()
 	var statements *ast.NodeList
+	var eof *ast.TokenNode
 
 	if p.token == ast.KindEndOfFile {
 		statements = p.newNodeList(core.NewTextRange(pos, p.nodePos()), nil)
-		p.parseTokenNode()
+		eof = p.parseTokenNode()
 	} else {
 		var expressions any // []*ast.Expression | *ast.Expression
 
@@ -183,9 +184,9 @@ func (p *Parser) parseJSONText() *ast.SourceFile {
 		statement := p.factory.NewExpressionStatement(expression)
 		p.finishNode(statement, pos)
 		statements = p.newNodeList(core.NewTextRange(pos, p.nodePos()), []*ast.Node{statement})
-		p.parseExpectedToken(ast.KindEndOfFile)
+		eof = p.parseExpectedToken(ast.KindEndOfFile)
 	}
-	node := p.factory.NewSourceFile(p.opts, p.sourceText, statements)
+	node := p.factory.NewSourceFile(p.opts, p.sourceText, statements, eof)
 	p.finishNode(node, pos)
 	result := node.AsSourceFile()
 	p.finishSourceFile(result, false)
@@ -333,11 +334,19 @@ func (p *Parser) parseSourceFileWorker() *ast.SourceFile {
 	}
 	pos := p.nodePos()
 	statements := p.parseListIndex(PCSourceElements, (*Parser).parseToplevelStatement)
+	end := p.nodePos()
+	endHasJSDoc := p.hasPrecedingJSDocComment()
 	eof := p.parseTokenNode()
+	p.withJSDoc(eof, endHasJSDoc)
 	if eof.Kind != ast.KindEndOfFile {
 		panic("Expected end of file token from scanner.")
 	}
-	node := p.factory.NewSourceFile(p.opts, p.sourceText, statements)
+	if len(p.reparseList) > 0 {
+		statements = append(statements, p.reparseList...)
+		p.reparseList = nil
+		end = p.nodePos()
+	}
+	node := p.factory.NewSourceFile(p.opts, p.sourceText, p.newNodeList(core.NewTextRange(pos, end), statements), eof)
 	p.finishNode(node, pos)
 	result := node.AsSourceFile()
 	p.finishSourceFile(result, isDeclarationFile)
@@ -475,15 +484,14 @@ func (p *Parser) reparseTopLevelAwait(sourceFile *ast.SourceFile) *ast.Node {
 		}
 	}
 
-	result := p.factory.NewSourceFile(sourceFile.ParseOptions(), p.sourceText, p.newNodeList(sourceFile.Statements.Loc, statements))
+	result := p.factory.NewSourceFile(sourceFile.ParseOptions(), p.sourceText, p.newNodeList(sourceFile.Statements.Loc, statements), sourceFile.EndOfFileToken)
 	for _, s := range statements {
 		s.Parent = result.AsNode() // force (re)set parent to reparsed source file
 	}
 	return result
 }
 
-func (p *Parser) parseListIndex(kind ParsingContext, parseElement func(p *Parser, index int) *ast.Node) *ast.NodeList {
-	pos := p.nodePos()
+func (p *Parser) parseListIndex(kind ParsingContext, parseElement func(p *Parser, index int) *ast.Node) []*ast.Node {
 	saveParsingContexts := p.parsingContexts
 	p.parsingContexts |= 1 << kind
 	list := make([]*ast.Node, 0, 16)
@@ -504,11 +512,13 @@ func (p *Parser) parseListIndex(kind ParsingContext, parseElement func(p *Parser
 	p.parsingContexts = saveParsingContexts
 	slice := p.nodeSlicePool.NewSlice(len(list))
 	copy(slice, list)
-	return p.newNodeList(core.NewTextRange(pos, p.nodePos()), slice)
+	return slice
 }
 
 func (p *Parser) parseList(kind ParsingContext, parseElement func(p *Parser) *ast.Node) *ast.NodeList {
-	return p.parseListIndex(kind, func(p *Parser, _ int) *ast.Node { return parseElement(p) })
+	pos := p.nodePos()
+	nodes := p.parseListIndex(kind, func(p *Parser, _ int) *ast.Node { return parseElement(p) })
+	return p.newNodeList(core.NewTextRange(pos, p.nodePos()), nodes)
 }
 
 // Return a non-nil (but possibly empty) slice if parsing was successful, or nil if parseElement returned nil

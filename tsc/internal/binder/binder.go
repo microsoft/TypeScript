@@ -1637,8 +1637,9 @@ func (b *Binder) bindChildren(node *ast.Node) {
 	// case *JSDocImportTag:
 	// 	b.bindJSDocImportTag(node)
 	case ast.KindSourceFile:
-		b.bindEachStatementFunctionsFirst(node.AsSourceFile().Statements)
-		// b.bind(node.endOfFileToken)
+		sourceFile := node.AsSourceFile()
+		b.bindEachStatementFunctionsFirst(sourceFile.Statements)
+		b.bind(sourceFile.EndOfFileToken)
 	case ast.KindBlock:
 		b.bindEachStatementFunctionsFirst(node.AsBlock().Statements)
 	case ast.KindModuleBlock:

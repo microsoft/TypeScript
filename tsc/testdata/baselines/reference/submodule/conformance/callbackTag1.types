@@ -22,12 +22,12 @@ var sid = s => s + "!";
 /** @type {NoReturn} */
 var noreturn = obj => void obj.title
 >noreturn : NoReturn
->obj => void obj.title : (obj: any) => any
->obj : any
+>obj => void obj.title : (obj: { e: number; m: number; title: string; }) => any
+>obj : { e: number; m: number; title: string; }
 >void obj.title : undefined
->obj.title : any
->obj : any
->title : any
+>obj.title : string
+>obj : { e: number; m: number; title: string; }
+>title : string
 
 /**
  * @callback NoReturn

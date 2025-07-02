@@ -13,12 +13,3 @@
  }
  export default Cls;
  >Cls : Symbol(Cls, Decl(index1.js, 0, 0))
-@@= skipped -28, +28 lines =@@
-
- export {x as default};
- >x : Symbol(x, Decl(index3.js, 1, 5))
-->default : Symbol(default, Decl(index3.js, 2, 8), Decl(index3.js, 4, 3))
-+>default : Symbol(default, Decl(index3.js, 2, 8))
-
- /**
-  * @typedef {string | number} default

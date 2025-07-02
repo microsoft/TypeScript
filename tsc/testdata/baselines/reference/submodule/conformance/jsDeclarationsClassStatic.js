@@ -44,18 +44,11 @@ export = Handler;
 module.exports = Handler;
 export var Strings = Strings;
 module.exports.Strings = Strings;
-/**
- * @typedef {Object} HandlerOptions
- * @property {String} name
- * Should be able to export a type alias at the same time.
- */
 
 
 //// [source.d.ts]
 export = Handler;
 export var Strings = Strings;
-/**
- * @typedef {Object} HandlerOptions
- * @property {String} name
- * Should be able to export a type alias at the same time.
- */
+export type HandlerOptions = {
+    name: String;
+};

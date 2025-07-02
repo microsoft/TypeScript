@@ -10017,10 +10017,11 @@ type SourceFile struct {
 	compositeNodeBase
 
 	// Fields set by NewSourceFile
-	fileName     string // For debugging convenience
-	parseOptions SourceFileParseOptions
-	text         string
-	Statements   *NodeList // NodeList[*Statement]
+	fileName       string // For debugging convenience
+	parseOptions   SourceFileParseOptions
+	text           string
+	Statements     *NodeList  // NodeList[*Statement]
+	EndOfFileToken *TokenNode // TokenNode[*EndOfFileToken]
 
 	// Fields set by parser
 	diagnostics                 []*Diagnostic
@@ -10070,7 +10071,7 @@ type SourceFile struct {
 	declarationMap   map[string][]*Node
 }
 
-func (f *NodeFactory) NewSourceFile(opts SourceFileParseOptions, text string, statements *NodeList) *Node {
+func (f *NodeFactory) NewSourceFile(opts SourceFileParseOptions, text string, statements *NodeList, endOfFileToken *TokenNode) *Node {
 	if (tspath.GetEncodedRootLength(opts.FileName) == 0 && !strings.HasPrefix(opts.FileName, "^/")) || opts.FileName != tspath.NormalizePath(opts.FileName) {
 		panic(fmt.Sprintf("fileName should be normalized and absolute: %q", opts.FileName))
 	}
@@ -10079,6 +10080,7 @@ func (f *NodeFactory) NewSourceFile(opts SourceFileParseOptions, text string, st
 	data.parseOptions = opts
 	data.text = text
 	data.Statements = statements
+	data.EndOfFileToken = endOfFileToken
 	return f.newNode(KindSourceFile, data)
 }
 
@@ -10139,11 +10141,11 @@ func (node *SourceFile) SetBindDiagnostics(diags []*Diagnostic) {
 }
 
 func (node *SourceFile) ForEachChild(v Visitor) bool {
-	return visitNodeList(v, node.Statements)
+	return visitNodeList(v, node.Statements) || visit(v, node.EndOfFileToken)
 }
 
 func (node *SourceFile) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateSourceFile(node, v.visitTopLevelStatements(node.Statements))
+	return v.Factory.UpdateSourceFile(node, v.visitTopLevelStatements(node.Statements), v.visitToken(node.EndOfFileToken))
 }
 
 func (node *SourceFile) IsJS() bool {
@@ -10171,7 +10173,7 @@ func (node *SourceFile) copyFrom(other *SourceFile) {
 }
 
 func (node *SourceFile) Clone(f NodeFactoryCoercible) *Node {
-	updated := f.AsNodeFactory().NewSourceFile(node.parseOptions, node.text, node.Statements)
+	updated := f.AsNodeFactory().NewSourceFile(node.parseOptions, node.text, node.Statements, node.EndOfFileToken)
 	newFile := updated.AsSourceFile()
 	newFile.copyFrom(node)
 	return cloneNode(updated, node.AsNode(), f.AsNodeFactory().hooks)
@@ -10181,9 +10183,9 @@ func (node *SourceFile) computeSubtreeFacts() SubtreeFacts {
 	return propagateNodeListSubtreeFacts(node.Statements, propagateSubtreeFacts)
 }
 
-func (f *NodeFactory) UpdateSourceFile(node *SourceFile, statements *StatementList) *Node {
-	if statements != node.Statements {
-		updated := f.NewSourceFile(node.parseOptions, node.text, statements).AsSourceFile()
+func (f *NodeFactory) UpdateSourceFile(node *SourceFile, statements *StatementList, endOfFileToken *TokenNode) *Node {
+	if statements != node.Statements || endOfFileToken != node.EndOfFileToken {
+		updated := f.NewSourceFile(node.parseOptions, node.text, statements, endOfFileToken).AsSourceFile()
 		updated.copyFrom(node)
 		return updateNode(updated.AsNode(), node.AsNode(), f.hooks)
 	}

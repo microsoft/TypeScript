@@ -363,7 +363,7 @@ func (tx *CommonJSModuleTransformer) transformCommonJSModule(node *ast.SourceFil
 
 	statementList := tx.Factory().NewNodeList(statements)
 	statementList.Loc = node.Statements.Loc
-	result := tx.Factory().UpdateSourceFile(node, statementList).AsSourceFile()
+	result := tx.Factory().UpdateSourceFile(node, statementList, node.EndOfFileToken).AsSourceFile()
 	tx.EmitContext().AddEmitHelper(result.AsNode(), tx.EmitContext().ReadEmitHelpers()...)
 
 	externalHelpersImportDeclaration := createExternalHelpersImportDeclarationIfNeeded(tx.EmitContext(), result, tx.compilerOptions, tx.getEmitModuleFormatOfFile(node), false /*hasExportStarsToExportValues*/, false /*hasImportStar*/, false /*hasImportDefault*/)
@@ -376,7 +376,7 @@ func (tx *CommonJSModuleTransformer) transformCommonJSModule(node *ast.SourceFil
 		statements = append(statements, rest...)
 		statementList := tx.Factory().NewNodeList(statements)
 		statementList.Loc = result.Statements.Loc
-		result = tx.Factory().UpdateSourceFile(result, statementList).AsSourceFile()
+		result = tx.Factory().UpdateSourceFile(result, statementList, node.EndOfFileToken).AsSourceFile()
 	}
 
 	return result.AsNode()

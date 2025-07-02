@@ -1,5 +1,5 @@
 KindSourceFile [0, 89), i=1, next=0
-  NodeList [0, 89), i=2, next=0
+  NodeList [0, 89), i=2, next=31
     KindImportDeclaration [0, 26), i=3, next=10
       KindImportClause [6, 14), i=4, next=9
         KindNamedImports [6, 14), i=5, next=0
@@ -28,3 +28,4 @@ KindSourceFile [0, 89), i=1, next=0
     KindExpressionStatement [82, 89), i=28, next=0
       KindCallExpression [82, 88), i=29, next=0
         KindIdentifier "foo" [82, 86), i=30, next=0
+  KindEndOfFile [89, 89), i=31, next=0

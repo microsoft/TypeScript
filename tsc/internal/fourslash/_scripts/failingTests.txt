@@ -1,4 +1,3 @@
-TestAsOperatorCompletion
 TestAutoImportsWithRootDirsAndRootedPath01
 TestClosedCommentsInConstructor
 TestCodeCompletionEscaping

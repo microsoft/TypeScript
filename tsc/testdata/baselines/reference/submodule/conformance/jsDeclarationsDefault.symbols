@@ -60,7 +60,7 @@ export default 12;
 === index6.js ===
 // merge type alias and function (OK)
 export default function func() {};
->func : Symbol(func, Decl(index6.js, 0, 0))
+>func : Symbol(func, Decl(index6.js, 0, 0), Decl(index6.js, 3, 3))
 
 /**
  * @typedef {string | number} default

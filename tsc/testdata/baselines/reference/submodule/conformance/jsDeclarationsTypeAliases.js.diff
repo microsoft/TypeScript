@@ -1,15 +1,38 @@
 --- old.jsDeclarationsTypeAliases.js
 +++ new.jsDeclarationsTypeAliases.js
-@@= skipped -76, +76 lines =@@
-  * @returns {T}
-  */
+@@= skipped -53, +53 lines =@@
+ //// [index.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-/**
+- * @typedef {string | number | symbol} PropName
+- */
+-/**
+- * Callback
+- *
+- * @callback NumberToStringCb
+- * @param {number} a
+- * @returns {string}
+- */
+-/**
+- * @template T
+- * @typedef {T & {name: string}} MixinName
+- */
+-/**
+- * Identity function
+- *
+- * @template T
+- * @callback Identity
+- * @param {T} x
+- * @returns {T}
+- */
  //// [mixed.js]
 +"use strict";
 +Object.defineProperty(exports, "__esModule", { value: true });
  /**
   * @typedef {{x: string} | number | LocalThing | ExportedThing} SomeType
   */
-@@= skipped -11, +13 lines =@@
+@@= skipped -34, +14 lines =@@
      return { x: "" + x };
  }
  class ExportedThing {
@@ -31,40 +54,22 @@
 
 
  //// [index.d.ts]
--export type PropName = string | number | symbol;
 +export {}; // flag file as module
-+/**
-+ * @typedef {string | number | symbol} PropName
-+ */
- /**
-  * Callback
+ export type PropName = string | number | symbol;
+-/**
+- * Callback
 - */
--export type NumberToStringCb = (a: number) => string;
--export type MixinName<T> = T & {
--    name: string;
--};
-+ *
-+ * @callback NumberToStringCb
-+ * @param {number} a
-+ * @returns {string}
-+ */
-+/**
-+ * @template T
-+ * @typedef {T & {name: string}} MixinName
-+ */
- /**
-  * Identity function
-+ *
-+ * @template T
-+ * @callback Identity
-+ * @param {T} x
-+ * @returns {T}
-  */
--export type Identity<T> = (x: T) => T;
+ export type NumberToStringCb = (a: number) => string;
+ export type MixinName<T> = T & {
+     name: string;
+ };
+-/**
+- * Identity function
+- */
+ export type Identity<T> = (x: T) => T;
  //// [mixed.d.ts]
  export type SomeType = {
-     x: string;
-@@= skipped -39, +46 lines =@@
+@@= skipped -39, +30 lines =@@
   * @param {number} x
   * @returns {SomeType}
   */

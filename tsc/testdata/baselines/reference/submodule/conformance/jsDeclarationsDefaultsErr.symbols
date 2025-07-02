@@ -34,7 +34,7 @@ const x = 12;
 
 export {x as default};
 >x : Symbol(x, Decl(index3.js, 1, 5))
->default : Symbol(default, Decl(index3.js, 2, 8))
+>default : Symbol(default, Decl(index3.js, 2, 8), Decl(index3.js, 4, 3))
 
 /**
  * @typedef {string | number} default

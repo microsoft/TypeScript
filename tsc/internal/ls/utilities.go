@@ -382,6 +382,9 @@ func isTypeReference(node *ast.Node) bool {
 }
 
 func isInRightSideOfInternalImportEqualsDeclaration(node *ast.Node) bool {
+	if node.Parent == nil {
+		return false
+	}
 	for node.Parent.Kind == ast.KindQualifiedName {
 		node = node.Parent
 	}

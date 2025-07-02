@@ -1,0 +1,11 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsDefault2.ts] ////
+
+=== index1.js ===
+export const _default = class {};
+>_default : Symbol(_default, Decl(index1.js, 0, 12))
+
+export default 12;
+/**
+ * @typedef {string | number} default
+ */
+

@@ -14,6 +14,7 @@ export interface Node extends ReadonlyTextRange {
 export interface SourceFile extends Node {
     readonly kind: SyntaxKind.SourceFile;
     readonly statements: NodeArray<Statement>;
+    readonly endOfFileToken: EndOfFile;
     readonly text: string;
     readonly fileName: string;
 }

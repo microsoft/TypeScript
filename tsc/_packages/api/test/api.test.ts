@@ -109,7 +109,7 @@ describe("SourceFile", () => {
             nodeCount++;
             node.forEachChild(visit);
         });
-        assert.equal(nodeCount, 7);
+        assert.equal(nodeCount, 8);
     });
 });
 

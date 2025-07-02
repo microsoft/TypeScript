@@ -17,13 +17,7 @@
  var noreturn = (barts, tidus, noctis) => "cecil"
  >noreturn : Final<{ fantasy: any; }, { heroes: any; }>
 ->(barts, tidus, noctis) => "cecil" : (barts: { fantasy: any; }, tidus: { heroes: any; }, noctis: { heroes: any; } & { fantasy: any; }) => "cecil" | "zidane"
-->barts : { fantasy: any; }
-->tidus : { heroes: any; }
-->noctis : { heroes: any; } & { fantasy: any; }
-+>(barts, tidus, noctis) => "cecil" : (barts: any, tidus: any, noctis: any) => string
-+>barts : any
-+>tidus : any
-+>noctis : any
- >"cecil" : "cecil"
-
- /**
++>(barts, tidus, noctis) => "cecil" : (barts: { fantasy: any; }, tidus: { heroes: any; }, noctis: { heroes: any; } & { fantasy: any; }) => "cecil"
+ >barts : { fantasy: any; }
+ >tidus : { heroes: any; }
+ >noctis : { heroes: any; } & { fantasy: any; }

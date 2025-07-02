@@ -173,7 +173,7 @@ func (tx *usingDeclarationTransformer) visitSourceFile(node *ast.SourceFile) *as
 			))
 		}
 
-		visited = tx.Factory().UpdateSourceFile(node, tx.Factory().NewNodeList(topLevelStatements))
+		visited = tx.Factory().UpdateSourceFile(node, tx.Factory().NewNodeList(topLevelStatements), node.EndOfFileToken)
 	} else {
 		visited = tx.Visitor().VisitEachChild(node.AsNode())
 	}

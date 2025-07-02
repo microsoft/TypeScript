@@ -2203,81 +2203,79 @@ func shouldIncludeSymbol(
 ) bool {
 	allFlags := symbol.Flags
 	location := data.location
-	if !ast.IsSourceFile(location) {
-		// export = /**/ here we want to get all meanings, so any symbol is ok
-		if ast.IsExportAssignment(location.Parent) {
-			return true
-		}
+	// export = /**/ here we want to get all meanings, so any symbol is ok
+	if location.Parent != nil && ast.IsExportAssignment(location.Parent) {
+		return true
+	}
 
-		// Filter out variables from their own initializers
-		// `const a = /* no 'a' here */`
-		if closestSymbolDeclaration != nil &&
-			ast.IsVariableDeclaration(closestSymbolDeclaration) &&
-			symbol.ValueDeclaration == closestSymbolDeclaration {
-			return false
-		}
+	// Filter out variables from their own initializers
+	// `const a = /* no 'a' here */`
+	if closestSymbolDeclaration != nil &&
+		ast.IsVariableDeclaration(closestSymbolDeclaration) &&
+		symbol.ValueDeclaration == closestSymbolDeclaration {
+		return false
+	}
 
-		// Filter out current and latter parameters from defaults
-		// `function f(a = /* no 'a' and 'b' here */, b) { }` or
-		// `function f<T = /* no 'T' and 'T2' here */>(a: T, b: T2) { }`
-		var symbolDeclaration *ast.Declaration
-		if symbol.ValueDeclaration != nil {
-			symbolDeclaration = symbol.ValueDeclaration
-		} else if len(symbol.Declarations) > 0 {
-			symbolDeclaration = symbol.Declarations[0]
-		}
+	// Filter out current and latter parameters from defaults
+	// `function f(a = /* no 'a' and 'b' here */, b) { }` or
+	// `function f<T = /* no 'T' and 'T2' here */>(a: T, b: T2) { }`
+	var symbolDeclaration *ast.Declaration
+	if symbol.ValueDeclaration != nil {
+		symbolDeclaration = symbol.ValueDeclaration
+	} else if len(symbol.Declarations) > 0 {
+		symbolDeclaration = symbol.Declarations[0]
+	}
 
-		if closestSymbolDeclaration != nil && symbolDeclaration != nil {
-			if ast.IsParameter(closestSymbolDeclaration) && ast.IsParameter(symbolDeclaration) {
-				parameters := closestSymbolDeclaration.Parent.ParameterList()
-				if symbolDeclaration.Pos() >= closestSymbolDeclaration.Pos() &&
-					symbolDeclaration.Pos() < parameters.End() {
+	if closestSymbolDeclaration != nil && symbolDeclaration != nil {
+		if ast.IsParameter(closestSymbolDeclaration) && ast.IsParameter(symbolDeclaration) {
+			parameters := closestSymbolDeclaration.Parent.ParameterList()
+			if symbolDeclaration.Pos() >= closestSymbolDeclaration.Pos() &&
+				symbolDeclaration.Pos() < parameters.End() {
+				return false
+			}
+		} else if ast.IsTypeParameterDeclaration(closestSymbolDeclaration) &&
+			ast.IsTypeParameterDeclaration(symbolDeclaration) {
+			if closestSymbolDeclaration == symbolDeclaration && data.contextToken != nil && data.contextToken.Kind == ast.KindExtendsKeyword {
+				// filter out the directly self-recursive type parameters
+				// `type A<K extends /* no 'K' here*/> = K`
+				return false
+			}
+			if isInTypeParameterDefault(data.contextToken) && !ast.IsInferTypeNode(closestSymbolDeclaration.Parent) {
+				typeParameters := closestSymbolDeclaration.Parent.TypeParameterList()
+				if typeParameters != nil && symbolDeclaration.Pos() >= closestSymbolDeclaration.Pos() &&
+					symbolDeclaration.Pos() < typeParameters.End() {
 					return false
-				}
-			} else if ast.IsTypeParameterDeclaration(closestSymbolDeclaration) &&
-				ast.IsTypeParameterDeclaration(symbolDeclaration) {
-				if closestSymbolDeclaration == symbolDeclaration && data.contextToken != nil && data.contextToken.Kind == ast.KindExtendsKeyword {
-					// filter out the directly self-recursive type parameters
-					// `type A<K extends /* no 'K' here*/> = K`
-					return false
-				}
-				if isInTypeParameterDefault(data.contextToken) && !ast.IsInferTypeNode(closestSymbolDeclaration.Parent) {
-					typeParameters := closestSymbolDeclaration.Parent.TypeParameterList()
-					if typeParameters != nil && symbolDeclaration.Pos() >= closestSymbolDeclaration.Pos() &&
-						symbolDeclaration.Pos() < typeParameters.End() {
-						return false
-					}
 				}
 			}
 		}
+	}
 
-		// External modules can have global export declarations that will be
-		// available as global keywords in all scopes. But if the external module
-		// already has an explicit export and user only wants to use explicit
-		// module imports then the global keywords will be filtered out so auto
-		// import suggestions will win in the completion.
-		symbolOrigin := checker.SkipAlias(symbol, typeChecker)
-		// We only want to filter out the global keywords.
-		// Auto Imports are not available for scripts so this conditional is always false.
-		if file.AsSourceFile().ExternalModuleIndicator != nil &&
-			compilerOptions.AllowUmdGlobalAccess != core.TSTrue &&
-			data.symbolToSortTextMap[ast.GetSymbolId(symbol)] == SortTextGlobalsOrKeywords &&
-			(data.symbolToSortTextMap[ast.GetSymbolId(symbolOrigin)] == SortTextAutoImportSuggestions ||
-				data.symbolToSortTextMap[ast.GetSymbolId(symbolOrigin)] == SortTextLocationPriority) {
-			return false
-		}
+	// External modules can have global export declarations that will be
+	// available as global keywords in all scopes. But if the external module
+	// already has an explicit export and user only wants to use explicit
+	// module imports then the global keywords will be filtered out so auto
+	// import suggestions will win in the completion.
+	symbolOrigin := checker.SkipAlias(symbol, typeChecker)
+	// We only want to filter out the global keywords.
+	// Auto Imports are not available for scripts so this conditional is always false.
+	if file.AsSourceFile().ExternalModuleIndicator != nil &&
+		compilerOptions.AllowUmdGlobalAccess != core.TSTrue &&
+		data.symbolToSortTextMap[ast.GetSymbolId(symbol)] == SortTextGlobalsOrKeywords &&
+		(data.symbolToSortTextMap[ast.GetSymbolId(symbolOrigin)] == SortTextAutoImportSuggestions ||
+			data.symbolToSortTextMap[ast.GetSymbolId(symbolOrigin)] == SortTextLocationPriority) {
+		return false
+	}
 
-		allFlags = allFlags | checker.GetCombinedLocalAndExportSymbolFlags(symbolOrigin)
+	allFlags = allFlags | checker.GetCombinedLocalAndExportSymbolFlags(symbolOrigin)
 
-		// import m = /**/ <-- It can only access namespace (if typing import = x. this would get member symbols and not namespace)
-		if isInRightSideOfInternalImportEqualsDeclaration(data.location) {
-			return allFlags&ast.SymbolFlagsNamespace != 0
-		}
+	// import m = /**/ <-- It can only access namespace (if typing import = x. this would get member symbols and not namespace)
+	if isInRightSideOfInternalImportEqualsDeclaration(data.location) {
+		return allFlags&ast.SymbolFlagsNamespace != 0
+	}
 
-		if data.isTypeOnlyLocation {
-			// It's a type, but you can reach it by namespace.type as well.
-			return symbolCanBeReferencedAtTypeLocation(symbol, typeChecker, collections.Set[ast.SymbolId]{})
-		}
+	if data.isTypeOnlyLocation {
+		// It's a type, but you can reach it by namespace.type as well.
+		return symbolCanBeReferencedAtTypeLocation(symbol, typeChecker, collections.Set[ast.SymbolId]{})
 	}
 
 	// expressions are value space (which includes the value namespaces)
@@ -3677,7 +3675,6 @@ func tryGetObjectTypeDeclarationCompletionContainer(
 			return location.Parent
 		}
 		return nil
-	// !!! we don't include EOF token anymore, verify what we should do in this case.
 	case ast.KindEndOfFile:
 		stmtList := location.Parent.AsSourceFile().Statements
 		if stmtList != nil && len(stmtList.Nodes) > 0 && ast.IsObjectTypeDeclaration(stmtList.Nodes[len(stmtList.Nodes)-1]) {

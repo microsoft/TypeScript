@@ -18,12 +18,3 @@
  }
  export default Bar;
  >Bar : Symbol(Bar, Decl(index4.js, 0, 27))
-@@= skipped -16, +16 lines =@@
- === index6.js ===
- // merge type alias and function (OK)
- export default function func() {};
-->func : Symbol(func, Decl(index6.js, 0, 0), Decl(index6.js, 3, 3))
-+>func : Symbol(func, Decl(index6.js, 0, 0))
-
- /**
-  * @typedef {string | number} default

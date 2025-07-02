@@ -273,7 +273,7 @@ func (tx *JSXTransformer) visitSourceFile(file *ast.SourceFile) *ast.Node {
 	}
 
 	if statementsUpdated {
-		visited = tx.Factory().UpdateSourceFile(file, tx.Factory().NewNodeList(statements))
+		visited = tx.Factory().UpdateSourceFile(file, tx.Factory().NewNodeList(statements), file.EndOfFileToken)
 	}
 
 	tx.currentSourceFile = nil

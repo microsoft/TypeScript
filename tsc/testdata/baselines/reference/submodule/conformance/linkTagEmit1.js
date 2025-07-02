@@ -45,7 +45,6 @@ function computeCommonSourceDirectoryOfFilenames(integer) {
 }
 /** {@link https://hvad} */
 var see3 = true;
-/** @typedef {number} Attempt {@link https://wat} {@linkcode I think lingcod is better} {@linkplain or lutefisk}*/
 
 
 //// [linkTagEmit1.d.ts]
@@ -55,4 +54,4 @@ export type D1 = {
     m: 1;
 };
 export type Z = number;
-/** @typedef {number} Attempt {@link https://wat} {@linkcode I think lingcod is better} {@linkplain or lutefisk}*/
+export type Attempt = number;

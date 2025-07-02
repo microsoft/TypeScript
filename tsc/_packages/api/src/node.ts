@@ -20,6 +20,7 @@ declare module "@typescript/ast" {
 const popcount8 = [0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4, 1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7, 1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7, 3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7, 4, 5, 5, 6, 5, 6, 6, 7, 5, 6, 6, 7, 6, 7, 7, 8];
 
 const childProperties: Readonly<Partial<Record<SyntaxKind, readonly string[]>>> = {
+    [SyntaxKind.SourceFile]: ["statements", "endOfFileToken"],
     [SyntaxKind.QualifiedName]: ["left", "right"],
     [SyntaxKind.TypeParameter]: ["modifiers", "name", "constraint", "defaultType"],
     [SyntaxKind.IfStatement]: ["expression", "thenStatement", "elseStatement"],
@@ -221,7 +222,7 @@ export class RemoteNodeBase {
 
     protected get childMask(): number {
         if (this.dataType !== NODE_DATA_TYPE_CHILDREN) {
-            return 0;
+            return -1;
         }
         return this.data & NODE_CHILD_MASK;
     }
@@ -673,6 +674,9 @@ export class RemoteNode extends RemoteNodeBase implements Node {
     }
     get elseStatement(): RemoteNode | undefined {
         return this.getNamedChild("elseStatement") as RemoteNode;
+    }
+    get endOfFileToken(): RemoteNode | undefined {
+        return this.getNamedChild("endOfFileToken") as RemoteNode;
     }
     get equalsGreaterThanToken(): RemoteNode | undefined {
         return this.getNamedChild("equalsGreaterThanToken") as RemoteNode;

@@ -77,9 +77,6 @@ exports.default = Bar;
 Object.defineProperty(exports, "__esModule", { value: true });
 // merge type alias and const (OK)
 exports.default = 12;
-/**
- * @typedef {string | number} default
- */
 //// [index6.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -87,9 +84,6 @@ exports.default = func;
 // merge type alias and function (OK)
 function func() { }
 ;
-/**
- * @typedef {string | number} default
- */
 
 
 //// [index1.d.ts]
@@ -114,12 +108,84 @@ export default Bar;
 //// [index5.d.ts]
 declare const _default: number;
 export default _default;
-/**
- * @typedef {string | number} default
- */
+export type default = string | number;
 //// [index6.d.ts]
 // merge type alias and function (OK)
 export default function func(): void;
-/**
- * @typedef {string | number} default
- */
+export type default = string | number;
+
+
+//// [DtsFileErrors]
+
+
+out/index5.d.ts(3,1): error TS1128: Declaration or statement expected.
+out/index5.d.ts(3,8): error TS2304: Cannot find name 'type'.
+out/index5.d.ts(3,13): error TS2457: Type alias name cannot be 'default'.
+out/index5.d.ts(3,21): error TS1128: Declaration or statement expected.
+out/index5.d.ts(3,23): error TS2693: 'string' only refers to a type, but is being used as a value here.
+out/index5.d.ts(3,32): error TS2693: 'number' only refers to a type, but is being used as a value here.
+out/index6.d.ts(3,1): error TS1128: Declaration or statement expected.
+out/index6.d.ts(3,8): error TS2304: Cannot find name 'type'.
+out/index6.d.ts(3,13): error TS2457: Type alias name cannot be 'default'.
+out/index6.d.ts(3,21): error TS1128: Declaration or statement expected.
+out/index6.d.ts(3,23): error TS2693: 'string' only refers to a type, but is being used as a value here.
+out/index6.d.ts(3,32): error TS2693: 'number' only refers to a type, but is being used as a value here.
+
+
+==== out/index1.d.ts (0 errors) ====
+    declare const _default: number;
+    export default _default;
+    
+==== out/index2.d.ts (0 errors) ====
+    export default function foo(): typeof foo;
+    export declare const x: typeof foo;
+    export { foo as bar };
+    
+==== out/index3.d.ts (0 errors) ====
+    export default class Foo {
+        a: Foo;
+    }
+    export declare const X: typeof Foo;
+    export { Foo as Bar };
+    
+==== out/index4.d.ts (0 errors) ====
+    import Fab from "./index3";
+    declare class Bar extends Fab {
+        x: Bar;
+    }
+    export default Bar;
+    
+==== out/index5.d.ts (6 errors) ====
+    declare const _default: number;
+    export default _default;
+    export type default = string | number;
+    ~~~~~~
+!!! error TS1128: Declaration or statement expected.
+           ~~~~
+!!! error TS2304: Cannot find name 'type'.
+                ~~~~~~~
+!!! error TS2457: Type alias name cannot be 'default'.
+                        ~
+!!! error TS1128: Declaration or statement expected.
+                          ~~~~~~
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
+                                   ~~~~~~
+!!! error TS2693: 'number' only refers to a type, but is being used as a value here.
+    
+==== out/index6.d.ts (6 errors) ====
+    // merge type alias and function (OK)
+    export default function func(): void;
+    export type default = string | number;
+    ~~~~~~
+!!! error TS1128: Declaration or statement expected.
+           ~~~~
+!!! error TS2304: Cannot find name 'type'.
+                ~~~~~~~
+!!! error TS2457: Type alias name cannot be 'default'.
+                        ~
+!!! error TS1128: Declaration or statement expected.
+                          ~~~~~~
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
+                                   ~~~~~~
+!!! error TS2693: 'number' only refers to a type, but is being used as a value here.
+    

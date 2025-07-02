@@ -36,9 +36,6 @@ class Cls {
     static y = "ok";
 }
 exports.default = Cls;
-/**
- * @typedef {string | number} default
- */
 //// [index2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -47,9 +44,6 @@ class C {
 }
 exports.default = C;
 ;
-/**
- * @typedef {string | number} default
- */
 //// [index3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -57,9 +51,6 @@ exports.default = void 0;
 // merge type alias and variable (behavior is borked, see #32366)
 const x = 12;
 exports.default = x;
-/**
- * @typedef {string | number} default
- */
 
 
 //// [index1.d.ts]
@@ -69,20 +60,14 @@ declare class Cls {
     static y: string;
 }
 export default Cls;
-/**
- * @typedef {string | number} default
- */
+export type default = string | number;
 //// [index2.d.ts]
 // merge type alias and class (error message improvement needed, see #32368)
 export default class C {
 }
-/**
- * @typedef {string | number} default
- */
+export type default = string | number;
 //// [index3.d.ts]
 // merge type alias and variable (behavior is borked, see #32366)
 declare const x = 12;
 export { x as default };
-/**
- * @typedef {string | number} default
- */
+export type default = string | number;

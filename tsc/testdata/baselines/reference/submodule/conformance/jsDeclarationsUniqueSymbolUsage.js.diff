@@ -5,15 +5,11 @@
 
  //// [a.d.ts]
 -export const kSymbol: unique symbol;
--export type WithSymbol = {
--    [kSymbol]: true;
--};
 +export declare const kSymbol: unique symbol;
-+/**
-+ * @typedef {{[kSymbol]: true}} WithSymbol
-+ */ 
- //// [b.d.ts]
- /**
+ export type WithSymbol = {
+     [kSymbol]: true;
+ };
+@@= skipped -9, +9 lines =@@
   * @returns {import('./a').WithSymbol}
   * @param {import('./a').WithSymbol} value
   */

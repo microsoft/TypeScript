@@ -110,6 +110,9 @@ func (p *Parser) reparseUnhosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Nod
 	case ast.KindJSDocImportTag:
 		importTag := tag.AsJSDocImportTag()
 		importClause := importTag.ImportClause
+		if importClause == nil {
+			break
+		}
 		importClause.Flags |= ast.NodeFlagsReparsed
 		importClause.AsImportClause().IsTypeOnly = true
 		p.finishReparsedNode(importClause)

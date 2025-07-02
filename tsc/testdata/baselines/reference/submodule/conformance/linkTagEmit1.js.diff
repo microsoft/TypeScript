@@ -9,7 +9,11 @@
  /** @typedef {number} N */
  /**
   * @typedef {Object} D1
-@@= skipped -19, +21 lines =@@
+@@= skipped -15, +17 lines =@@
+ }
+ /** {@link https://hvad} */
+ var see3 = true;
+-/** @typedef {number} Attempt {@link https://wat} {@linkcode I think lingcod is better} {@linkplain or lutefisk}*/
 
 
  //// [linkTagEmit1.d.ts]
@@ -45,4 +49,4 @@
 - */
 -type Attempt = number;
 +export type Z = number;
-+/** @typedef {number} Attempt {@link https://wat} {@linkcode I think lingcod is better} {@linkplain or lutefisk}*/
++export type Attempt = number;
