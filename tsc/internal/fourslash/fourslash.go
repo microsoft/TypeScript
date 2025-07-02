@@ -3,6 +3,8 @@ package fourslash
 import (
 	"fmt"
 	"io"
+	"maps"
+	"slices"
 	"strings"
 	"testing"
 	"unicode"
@@ -392,11 +394,11 @@ type CompletionsExpectedItemDefaults struct {
 // *lsproto.CompletionItem | string
 type CompletionsExpectedItem = any
 
-// !!! unsorted completions
 type CompletionsExpectedItems struct {
 	Includes []CompletionsExpectedItem
 	Excludes []string
 	Exact    []CompletionsExpectedItem
+	Unsorted []CompletionsExpectedItem
 }
 
 // string | *Marker | []string | []*Marker
@@ -520,6 +522,9 @@ func verifyCompletionsItems(t *testing.T, prefix string, actual []*lsproto.Compl
 		if expected.Excludes != nil {
 			t.Fatal(prefix + "Expected exact completion list but also specified 'excludes'.")
 		}
+		if expected.Unsorted != nil {
+			t.Fatal(prefix + "Expected exact completion list but also specified 'unsorted'.")
+		}
 		if len(actual) != len(expected.Exact) {
 			t.Fatalf(prefix+"Expected %d exact completion items but got %d: %s", len(expected.Exact), len(actual), cmp.Diff(actual, expected.Exact))
 		}
@@ -531,6 +536,38 @@ func verifyCompletionsItems(t *testing.T, prefix string, actual []*lsproto.Compl
 	nameToActualItem := make(map[string]*lsproto.CompletionItem)
 	for _, item := range actual {
 		nameToActualItem[item.Label] = item
+	}
+	if expected.Unsorted != nil {
+		if expected.Includes != nil {
+			t.Fatal(prefix + "Expected unsorted completion list but also specified 'includes'.")
+		}
+		if expected.Excludes != nil {
+			t.Fatal(prefix + "Expected unsorted completion list but also specified 'excludes'.")
+		}
+		for _, item := range expected.Unsorted {
+			switch item := item.(type) {
+			case string:
+				_, ok := nameToActualItem[item]
+				if !ok {
+					t.Fatalf("%sLabel '%s' not found in actual items. Actual items: %s", prefix, item, cmp.Diff(actual, nil))
+				}
+				delete(nameToActualItem, item)
+			case *lsproto.CompletionItem:
+				actualItem, ok := nameToActualItem[item.Label]
+				if !ok {
+					t.Fatalf("%sLabel '%s' not found in actual items. Actual items: %s", prefix, item.Label, cmp.Diff(actual, nil))
+				}
+				delete(nameToActualItem, item.Label)
+				verifyCompletionItem(t, prefix+"Includes completion item mismatch for label "+item.Label, actualItem, item)
+			default:
+				t.Fatalf("%sExpected completion item to be a string or *lsproto.CompletionItem, got %T", prefix, item)
+			}
+		}
+		if len(expected.Unsorted) != len(actual) {
+			unmatched := slices.Collect(maps.Keys(nameToActualItem))
+			t.Fatalf("%sAdditional completions found but not included in 'unsorted': %s", prefix, strings.Join(unmatched, "\n"))
+		}
+		return
 	}
 	if expected.Includes != nil {
 		for _, item := range expected.Includes {
