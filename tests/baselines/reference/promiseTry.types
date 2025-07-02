@@ -108,8 +108,8 @@ Promise.try((foo) => "Async result", "foo");
 
 // @ts-expect-error too few parameters
 Promise.try((foo) => "Async result");
->Promise.try((foo) => "Async result") : Promise<unknown>
->                                     : ^^^^^^^^^^^^^^^^
+>Promise.try((foo) => "Async result") : Promise<string>
+>                                     : ^^^^^^^^^^^^^^^
 >Promise.try : <T, U extends unknown[]>(callbackFn: (...args: U) => T | PromiseLike<T>, ...args: U) => Promise<Awaited<T>>
 >            : ^ ^^ ^^^^^^^^^         ^^          ^^                                  ^^^^^    ^^ ^^^^^                   
 >Promise : PromiseConstructor

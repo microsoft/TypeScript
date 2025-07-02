@@ -22,7 +22,9 @@ var b: number | string;
 var b = foo(g);            // Error, number and string are disjoint types
 var b = bar(1, "one", g);  // Error, number and string are disjoint types
 var b = bar("one", 1, g);  // Error, number and string are disjoint types
-var b = baz(b, b, g);      // Should be number | string
+
+var b2: number | string;
+var b2 = baz(b2, b2, g);      // Should be number | string
 
 var d: number[] | string[];
 var d = foo(h);            // Should be number[] | string[]
@@ -44,7 +46,8 @@ var b;
 var b = foo(g); // Error, number and string are disjoint types
 var b = bar(1, "one", g); // Error, number and string are disjoint types
 var b = bar("one", 1, g); // Error, number and string are disjoint types
-var b = baz(b, b, g); // Should be number | string
+var b2;
+var b2 = baz(b2, b2, g); // Should be number | string
 var d;
 var d = foo(h); // Should be number[] | string[]
 var d = bar(1, "one", h); // Should be number[] | string[]
