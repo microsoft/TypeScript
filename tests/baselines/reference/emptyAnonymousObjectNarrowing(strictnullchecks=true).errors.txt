@@ -1,0 +1,83 @@
+emptyAnonymousObjectNarrowing.ts(43,5): error TS2367: This comparison appears to be unintentional because the types '{}' and 'undefined' have no overlap.
+emptyAnonymousObjectNarrowing.ts(50,5): error TS2367: This comparison appears to be unintentional because the types '{}' and 'null' have no overlap.
+
+
+==== emptyAnonymousObjectNarrowing.ts (2 errors) ====
+    declare let nonNull: {};
+    if (nonNull === "foo") {
+      nonNull;
+    }
+    else {
+      nonNull;
+    }
+    
+    declare let obj: { a: string };
+    if (nonNull === obj) {
+      nonNull;
+    }
+    else {
+      nonNull;
+    }
+    
+    function f1<T>(x: T) {
+      if (nonNull === x) {
+        nonNull;
+      }
+      else {
+        nonNull;
+      }
+    }
+    
+    function f2<T extends object>(x: T) {
+      if (nonNull === x) {
+        nonNull;
+      }
+      else {
+        nonNull;
+      }
+    }
+    
+    declare let union: "xyz" | { a: string } | undefined;
+    if (nonNull === union) {
+      nonNull;
+    }
+    else {
+      nonNull;
+    }
+    
+    if (nonNull === undefined) {
+        ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types '{}' and 'undefined' have no overlap.
+      nonNull;
+    }
+    else {
+      nonNull;
+    }
+    
+    if (nonNull === null) {
+        ~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types '{}' and 'null' have no overlap.
+      nonNull;
+    }
+    else {
+      nonNull;
+    }
+    
+    if (nonNull == undefined) {
+      nonNull;
+    }
+    else {
+      nonNull;
+    }
+    
+    // Repro from #50567
+    const foo = (value: unknown): string => {
+      if (!value) {
+          return 'foo';
+      }
+      if (value === 'xyz') {
+          return value; // Type '{}' is not assignable to type 'string'.
+      }
+      return '';
+    };
+    
