@@ -365,6 +365,8 @@ function isSelfReference(reference, symbol) {
  * @param {ts.Symbol} moduleSymbol
  */
 function emitAsNamespace(name, parent, moduleSymbol, needExportModifier) {
+    if (name === "default") return;
+
     assert(moduleSymbol.flags & ts.SymbolFlags.ValueModule, "moduleSymbol is not a module");
 
     const fullName = parent ? `${parent}.${name}` : name;
@@ -482,6 +484,7 @@ function emitAsNamespace(name, parent, moduleSymbol, needExportModifier) {
 
 emitAsNamespace("ts", "", moduleSymbol, /*needExportModifier*/ false);
 
+// TODO(jakebailey): require(ESM) - fix this
 write("export = ts;", WriteTarget.Both);
 
 const copyrightNotice = fs.readFileSync(path.join(__dirname, "CopyrightNotice.txt"), "utf-8");
