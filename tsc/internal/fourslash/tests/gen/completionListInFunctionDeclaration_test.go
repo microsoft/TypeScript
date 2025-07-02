@@ -7,32 +7,31 @@ import (
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
 
-func TestCompletionListInObjectBindingPattern16(t *testing.T) {
+func TestCompletionListInFunctionDeclaration(t *testing.T) {
 	t.Parallel()
-
+	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @allowJs: true
-// @checkJs: true
-// @filename: a.js
-/**
- * @typedef Foo
- * @property {number} a
- * @property {string} b
- */
-
-/**
- * @param {Foo} options
- */
-function f({ /**/ }) {}`
+	const content = `var a = 0;
+function foo(/**/`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
+	f.VerifyCompletions(t, "", nil)
+	f.Insert(t, "a")
+	f.VerifyCompletions(t, nil, nil)
+	f.Insert(t, " , ")
+	f.VerifyCompletions(t, nil, nil)
+	f.Insert(t, "b")
+	f.VerifyCompletions(t, nil, nil)
+	f.Insert(t, ":")
+	f.VerifyCompletions(t, nil, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &defaultCommitCharacters,
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"a", "b"},
+			Exact: completionGlobalTypes,
 		},
 	})
+	f.Insert(t, "number, ")
+	f.VerifyCompletions(t, nil, nil)
 }
