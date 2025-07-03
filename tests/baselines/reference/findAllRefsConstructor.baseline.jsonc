@@ -1,0 +1,82 @@
+// === findAllReferences ===
+// === lib.d.ts ===
+// --- (line: --) skipped ---
+// 
+// interface Object {
+//     /** The initial value of Object.prototype.constructor is the standard built-in Object constructor. */
+//     <|[|{| isWriteAccess: true |}constructor|]: Function;|>
+// 
+//     /** Returns a string representation of an object. */
+//     toString(): string;
+// --- (line: --) skipped ---
+
+// === /tests/cases/fourslash/findAllRefsConstructor.ts ===
+// class A {
+//   'constructor'() { }
+// }
+// const a = new A()
+// console.log(a.[|constructor|]/*FIND ALL REFS*/)
+
+  // === Definitions ===
+  // === lib.d.ts ===
+  // --- (line: --) skipped ---
+  // 
+  // interface Object {
+  //     /** The initial value of Object.prototype.constructor is the standard built-in Object constructor. */
+  //     <|[|constructor|]: Function;|>
+  // 
+  //     /** Returns a string representation of an object. */
+  //     toString(): string;
+  // --- (line: --) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) Object.constructor: Function",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Object",
+      "kind": "localName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "constructor",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Function",
+      "kind": "localName"
+     }
+    ]
+   }
+  ]
