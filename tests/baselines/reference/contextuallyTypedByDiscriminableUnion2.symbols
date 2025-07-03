@@ -1,0 +1,95 @@
+//// [tests/cases/compiler/contextuallyTypedByDiscriminableUnion2.ts] ////
+
+=== contextuallyTypedByDiscriminableUnion2.ts ===
+type Props =
+>Props : Symbol(Props, Decl(contextuallyTypedByDiscriminableUnion2.ts, 0, 0))
+
+  | {
+      parentId: string[];
+>parentId : Symbol(parentId, Decl(contextuallyTypedByDiscriminableUnion2.ts, 1, 5))
+
+      onChange: (event: { id: string }) => void;
+>onChange : Symbol(onChange, Decl(contextuallyTypedByDiscriminableUnion2.ts, 2, 25))
+>event : Symbol(event, Decl(contextuallyTypedByDiscriminableUnion2.ts, 3, 17))
+>id : Symbol(id, Decl(contextuallyTypedByDiscriminableUnion2.ts, 3, 25))
+
+      onChange2: () => void;
+>onChange2 : Symbol(onChange2, Decl(contextuallyTypedByDiscriminableUnion2.ts, 3, 48))
+    }
+  | {
+      parentId?: never;
+>parentId : Symbol(parentId, Decl(contextuallyTypedByDiscriminableUnion2.ts, 6, 5))
+
+      onChange: (event: { id: number }) => void;
+>onChange : Symbol(onChange, Decl(contextuallyTypedByDiscriminableUnion2.ts, 7, 23))
+>event : Symbol(event, Decl(contextuallyTypedByDiscriminableUnion2.ts, 8, 17))
+>id : Symbol(id, Decl(contextuallyTypedByDiscriminableUnion2.ts, 8, 25))
+
+    };
+
+function NonGenericComponent(props: Props) {
+>NonGenericComponent : Symbol(NonGenericComponent, Decl(contextuallyTypedByDiscriminableUnion2.ts, 9, 6))
+>props : Symbol(props, Decl(contextuallyTypedByDiscriminableUnion2.ts, 11, 29))
+>Props : Symbol(Props, Decl(contextuallyTypedByDiscriminableUnion2.ts, 0, 0))
+
+  return null;
+}
+
+NonGenericComponent({
+>NonGenericComponent : Symbol(NonGenericComponent, Decl(contextuallyTypedByDiscriminableUnion2.ts, 9, 6))
+
+  onChange: (e) => {},
+>onChange : Symbol(onChange, Decl(contextuallyTypedByDiscriminableUnion2.ts, 15, 21))
+>e : Symbol(e, Decl(contextuallyTypedByDiscriminableUnion2.ts, 16, 13))
+
+});
+
+const parentId: string[] = [];
+>parentId : Symbol(parentId, Decl(contextuallyTypedByDiscriminableUnion2.ts, 19, 5))
+
+NonGenericComponent({
+>NonGenericComponent : Symbol(NonGenericComponent, Decl(contextuallyTypedByDiscriminableUnion2.ts, 9, 6))
+
+  parentId,
+>parentId : Symbol(parentId, Decl(contextuallyTypedByDiscriminableUnion2.ts, 21, 21))
+
+  onChange: (e) => {},
+>onChange : Symbol(onChange, Decl(contextuallyTypedByDiscriminableUnion2.ts, 22, 11))
+>e : Symbol(e, Decl(contextuallyTypedByDiscriminableUnion2.ts, 23, 13))
+
+  onChange2: () => {},
+>onChange2 : Symbol(onChange2, Decl(contextuallyTypedByDiscriminableUnion2.ts, 23, 22))
+
+});
+
+NonGenericComponent({
+>NonGenericComponent : Symbol(NonGenericComponent, Decl(contextuallyTypedByDiscriminableUnion2.ts, 9, 6))
+
+  parentId: parentId,
+>parentId : Symbol(parentId, Decl(contextuallyTypedByDiscriminableUnion2.ts, 27, 21))
+>parentId : Symbol(parentId, Decl(contextuallyTypedByDiscriminableUnion2.ts, 19, 5))
+
+  onChange: (e) => {},
+>onChange : Symbol(onChange, Decl(contextuallyTypedByDiscriminableUnion2.ts, 28, 21))
+>e : Symbol(e, Decl(contextuallyTypedByDiscriminableUnion2.ts, 29, 13))
+
+  onChange2: () => {},
+>onChange2 : Symbol(onChange2, Decl(contextuallyTypedByDiscriminableUnion2.ts, 29, 22))
+
+});
+
+NonGenericComponent({
+>NonGenericComponent : Symbol(NonGenericComponent, Decl(contextuallyTypedByDiscriminableUnion2.ts, 9, 6))
+
+  parentId: [],
+>parentId : Symbol(parentId, Decl(contextuallyTypedByDiscriminableUnion2.ts, 33, 21))
+
+  onChange: (e) => {},
+>onChange : Symbol(onChange, Decl(contextuallyTypedByDiscriminableUnion2.ts, 34, 15))
+>e : Symbol(e, Decl(contextuallyTypedByDiscriminableUnion2.ts, 35, 13))
+
+  onChange2: () => {},
+>onChange2 : Symbol(onChange2, Decl(contextuallyTypedByDiscriminableUnion2.ts, 35, 22))
+
+});
+
