@@ -10,7 +10,7 @@ import (
 
 func TestCompletionAfterNewline2(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `let foo = 5 as const /*1*/
 /*2*/`

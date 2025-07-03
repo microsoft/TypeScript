@@ -9,7 +9,7 @@ import (
 
 func TestCompletionListForUnicodeEscapeName(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function \u0042 () { /*0*/ }
 export default function \u0043 () {}

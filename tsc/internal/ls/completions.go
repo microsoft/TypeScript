@@ -2182,6 +2182,22 @@ func getLineOfPosition(file *ast.SourceFile, pos int) int {
 	return line
 }
 
+func getLineEndOfPosition(file *ast.SourceFile, pos int) int {
+	line := getLineOfPosition(file, pos)
+	lineStarts := scanner.GetLineStarts(file)
+	var lastCharPos int
+	if line+1 >= len(lineStarts) {
+		lastCharPos = file.End()
+	} else {
+		lastCharPos = int(lineStarts[line+1]) - 1
+	}
+	fullText := file.Text()
+	if lastCharPos > 0 && lastCharPos < len(fullText) && fullText[lastCharPos] == '\n' && fullText[lastCharPos-1] == '\r' {
+		return lastCharPos - 1
+	}
+	return lastCharPos
+}
+
 func isClassLikeMemberCompletion(symbol *ast.Symbol, location *ast.Node, file *ast.SourceFile) bool {
 	// !!! class member completions
 	return false
@@ -2723,7 +2739,7 @@ func getClosestSymbolDeclaration(contextToken *ast.Node, location *ast.Node) *as
 	})
 
 	if closestDeclaration == nil {
-		closestDeclaration = ast.FindAncestorOrQuit(contextToken, func(node *ast.Node) ast.FindAncestorResult {
+		closestDeclaration = ast.FindAncestorOrQuit(location, func(node *ast.Node) ast.FindAncestorResult {
 			if ast.IsFunctionBlock(node) || isArrowFunctionBody(node) || ast.IsBindingPattern(node) {
 				return ast.FindAncestorQuit
 			}
@@ -4338,7 +4354,7 @@ func isSolelyIdentifierDefinitionLocation(
 			return false
 		}
 		ancestorVariableDeclaration := ast.FindAncestor(parent, ast.IsVariableDeclaration)
-		if ancestorVariableDeclaration != nil && getLineOfPosition(file, contextToken.End()) < position {
+		if ancestorVariableDeclaration != nil && getLineEndOfPosition(file, contextToken.End()) < position {
 			// let a
 			// |
 			return false
