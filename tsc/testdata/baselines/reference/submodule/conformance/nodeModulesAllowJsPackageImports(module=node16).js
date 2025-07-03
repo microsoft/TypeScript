@@ -37,6 +37,14 @@ type;
     }
 }
 
+//// [index.js]
+// esm format file
+import * as cjs from "#cjs";
+import * as mjs from "#mjs";
+import * as type from "#type";
+cjs;
+mjs;
+type;
 //// [index.mjs]
 // esm format file
 import * as cjs from "#cjs";
@@ -88,19 +96,11 @@ const type = __importStar(require("#type"));
 cjs;
 mjs;
 type;
-//// [index.js]
-// esm format file
-import * as cjs from "#cjs";
-import * as mjs from "#mjs";
-import * as type from "#type";
-cjs;
-mjs;
-type;
 
 
+//// [index.d.ts]
+export {};
 //// [index.d.mts]
 export {};
 //// [index.d.cts]
-export {};
-//// [index.d.ts]
 export {};

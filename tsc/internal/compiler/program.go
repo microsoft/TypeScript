@@ -330,6 +330,11 @@ func (p *Program) GetSuggestionDiagnostics(ctx context.Context, sourceFile *ast.
 	return p.getDiagnosticsHelper(ctx, sourceFile, true /*ensureBound*/, true /*ensureChecked*/, p.getSuggestionDiagnosticsForFile)
 }
 
+func (p *Program) GetProgramDiagnostics() []*ast.Diagnostic {
+	// !!!
+	return SortAndDeduplicateDiagnostics(p.fileLoadDiagnostics.GetDiagnostics())
+}
+
 func (p *Program) GetGlobalDiagnostics(ctx context.Context) []*ast.Diagnostic {
 	var globalDiagnostics []*ast.Diagnostic
 	checkers, done := p.checkerPool.GetAllCheckers(ctx)

@@ -34,6 +34,10 @@ func continueSearching() *resolved {
 	return nil
 }
 
+func unresolved() *resolved {
+	return &resolved{}
+}
+
 type resolutionKindSpecificLoader = func(extensions extensions, candidate string, onlyRecordFailures bool) *resolved
 
 type resolutionState struct {
@@ -54,7 +58,7 @@ type resolutionState struct {
 	resolvedPackageDirectory        bool
 	failedLookupLocations           []string
 	affectingLocations              []string
-	diagnostics                     []ast.Diagnostic
+	diagnostics                     []*ast.Diagnostic
 }
 
 func newResolutionState(
@@ -748,8 +752,102 @@ func (r *resolutionState) loadModuleFromTargetExportOrImport(extensions extensio
 }
 
 func (r *resolutionState) tryLoadInputFileForPath(finalPath string, entry string, packagePath string, isImports bool) *resolved {
-	// !!!
+	// Replace any references to outputs for files in the program with the input files to support package self-names used with outDir
+	if !r.isConfigLookup &&
+		(r.compilerOptions.DeclarationDir != "" || r.compilerOptions.OutDir != "") &&
+		!strings.Contains(finalPath, "/node_modules/") &&
+		(r.compilerOptions.ConfigFilePath == "" || tspath.ContainsPath(
+			tspath.GetDirectoryPath(packagePath),
+			r.compilerOptions.ConfigFilePath,
+			tspath.ComparePathsOptions{
+				UseCaseSensitiveFileNames: r.resolver.host.FS().UseCaseSensitiveFileNames(),
+				CurrentDirectory:          r.resolver.host.GetCurrentDirectory(),
+			},
+		)) {
+
+		// Note: this differs from Strada's tryLoadInputFileForPath in that it
+		// does not attempt to perform "guesses", instead requring a clear root indicator.
+
+		var rootDir string
+		if r.compilerOptions.RootDir != "" {
+			// A `rootDir` compiler option strongly indicates the root location
+			rootDir = r.compilerOptions.RootDir
+		} else if r.compilerOptions.Composite.IsTrue() && r.compilerOptions.ConfigFilePath != "" {
+			// A `composite` project is using project references and has it's common src dir set to `.`, so it shouldn't need to check any other locations
+			rootDir = r.compilerOptions.ConfigFilePath
+		} else {
+			diagnostic := ast.NewDiagnostic(
+				nil,
+				core.TextRange{},
+				core.IfElse(isImports,
+					diagnostics.The_project_root_is_ambiguous_but_is_required_to_resolve_import_map_entry_0_in_file_1_Supply_the_rootDir_compiler_option_to_disambiguate,
+					diagnostics.The_project_root_is_ambiguous_but_is_required_to_resolve_export_map_entry_0_in_file_1_Supply_the_rootDir_compiler_option_to_disambiguate,
+				),
+				core.IfElse(entry == "", ".", entry), // replace empty string with `.` - the reverse of the operation done when entries are built - so main entrypoint errors don't look weird
+				packagePath,
+			)
+			r.diagnostics = append(r.diagnostics, diagnostic)
+			return unresolved()
+		}
+
+		candidateDirectories := r.getOutputDirectoriesForBaseDirectory(rootDir)
+		for _, candidateDir := range candidateDirectories {
+			if tspath.ContainsPath(candidateDir, finalPath, tspath.ComparePathsOptions{
+				UseCaseSensitiveFileNames: r.resolver.host.FS().UseCaseSensitiveFileNames(),
+				CurrentDirectory:          r.resolver.host.GetCurrentDirectory(),
+			}) {
+				// The matched export is looking up something in either the out declaration or js dir, now map the written path back into the source dir and source extension
+				pathFragment := finalPath[len(candidateDir)+1:] // +1 to also remove directory separator
+				possibleInputBase := tspath.CombinePaths(rootDir, pathFragment)
+				jsAndDtsExtensions := []string{tspath.ExtensionMjs, tspath.ExtensionCjs, tspath.ExtensionJs, tspath.ExtensionJson, tspath.ExtensionDmts, tspath.ExtensionDcts, tspath.ExtensionDts}
+				for _, ext := range jsAndDtsExtensions {
+					if tspath.FileExtensionIs(possibleInputBase, ext) {
+						inputExts := r.getPossibleOriginalInputExtensionForExtension(possibleInputBase)
+						for _, possibleExt := range inputExts {
+							if !extensionIsOk(r.extensions, possibleExt) {
+								continue
+							}
+							possibleInputWithInputExtension := tspath.ChangeExtension(possibleInputBase, possibleExt)
+							if r.resolver.host.FS().FileExists(possibleInputWithInputExtension) {
+								resolved := r.loadFileNameFromPackageJSONField(r.extensions, possibleInputWithInputExtension, "", false)
+								if !resolved.shouldContinueSearching() {
+									return resolved
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 	return continueSearching()
+}
+
+func (r *resolutionState) getOutputDirectoriesForBaseDirectory(commonSourceDirGuess string) []string {
+	// Config file output paths are processed to be relative to the host's current directory, while
+	// otherwise the paths are resolved relative to the common source dir the compiler puts together
+	currentDir := core.IfElse(r.compilerOptions.ConfigFilePath != "", r.resolver.host.GetCurrentDirectory(), commonSourceDirGuess)
+	var candidateDirectories []string
+	if r.compilerOptions.DeclarationDir != "" {
+		candidateDirectories = append(candidateDirectories, tspath.GetNormalizedAbsolutePath(tspath.CombinePaths(currentDir, r.compilerOptions.DeclarationDir), r.resolver.host.GetCurrentDirectory()))
+	}
+	if r.compilerOptions.OutDir != "" && r.compilerOptions.OutDir != r.compilerOptions.DeclarationDir {
+		candidateDirectories = append(candidateDirectories, tspath.GetNormalizedAbsolutePath(tspath.CombinePaths(currentDir, r.compilerOptions.OutDir), r.resolver.host.GetCurrentDirectory()))
+	}
+	return candidateDirectories
+}
+
+func (r *resolutionState) getPossibleOriginalInputExtensionForExtension(path string) []string {
+	if tspath.FileExtensionIsOneOf(path, []string{tspath.ExtensionDmts, tspath.ExtensionMjs, tspath.ExtensionMts}) {
+		return []string{tspath.ExtensionMts, tspath.ExtensionMjs}
+	}
+	if tspath.FileExtensionIsOneOf(path, []string{tspath.ExtensionDcts, tspath.ExtensionCjs, tspath.ExtensionCts}) {
+		return []string{tspath.ExtensionCts, tspath.ExtensionCjs}
+	}
+	if tspath.FileExtensionIs(path, ".d.json.ts") {
+		return []string{tspath.ExtensionJson}
+	}
+	return []string{tspath.ExtensionTsx, tspath.ExtensionTs, tspath.ExtensionJsx, tspath.ExtensionJs}
 }
 
 func (r *resolutionState) loadModuleFromNearestNodeModulesDirectory(typesScopeOnly bool) *resolved {
@@ -1377,7 +1475,7 @@ func (r *resolutionState) loadFileNameFromPackageJSONField(extensions extensions
 			return &resolved{
 				path:                     path,
 				extension:                extension,
-				resolvedUsingTsExtension: !strings.HasSuffix(packageJSONValue, extension),
+				resolvedUsingTsExtension: packageJSONValue != "" && !strings.HasSuffix(packageJSONValue, extension),
 			}
 		}
 		return continueSearching()

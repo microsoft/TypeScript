@@ -1,13 +1,30 @@
+error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
+index.cts(2,22): error TS2307: Cannot find module 'package/cjs' or its corresponding type declarations.
+index.cts(3,22): error TS2307: Cannot find module 'package/mjs' or its corresponding type declarations.
+index.cts(4,23): error TS2307: Cannot find module 'package' or its corresponding type declarations.
+index.mts(2,22): error TS2307: Cannot find module 'package/cjs' or its corresponding type declarations.
+index.mts(3,22): error TS2307: Cannot find module 'package/mjs' or its corresponding type declarations.
+index.mts(4,23): error TS2307: Cannot find module 'package' or its corresponding type declarations.
+index.ts(2,22): error TS2307: Cannot find module 'package/cjs' or its corresponding type declarations.
+index.ts(3,22): error TS2307: Cannot find module 'package/mjs' or its corresponding type declarations.
+index.ts(4,23): error TS2307: Cannot find module 'package' or its corresponding type declarations.
 node_modules/inner/index.d.cts(5,1): error TS1036: Statements are not allowed in ambient contexts.
 node_modules/inner/index.d.mts(5,1): error TS1036: Statements are not allowed in ambient contexts.
 node_modules/inner/index.d.ts(5,1): error TS1036: Statements are not allowed in ambient contexts.
 
 
-==== index.ts (0 errors) ====
+!!! error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
+==== index.ts (3 errors) ====
     // esm format file
     import * as cjs from "package/cjs";
+                         ~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'package/cjs' or its corresponding type declarations.
     import * as mjs from "package/mjs";
+                         ~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'package/mjs' or its corresponding type declarations.
     import * as type from "package";
+                          ~~~~~~~~~
+!!! error TS2307: Cannot find module 'package' or its corresponding type declarations.
     export const a = cjs;
     export const b = mjs;
     export const c = type;
@@ -17,11 +34,17 @@ node_modules/inner/index.d.ts(5,1): error TS1036: Statements are not allowed in 
     export const d = cjsi;
     export const e = mjsi;
     export const f = typei;
-==== index.mts (0 errors) ====
+==== index.mts (3 errors) ====
     // esm format file
     import * as cjs from "package/cjs";
+                         ~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'package/cjs' or its corresponding type declarations.
     import * as mjs from "package/mjs";
+                         ~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'package/mjs' or its corresponding type declarations.
     import * as type from "package";
+                          ~~~~~~~~~
+!!! error TS2307: Cannot find module 'package' or its corresponding type declarations.
     export const a = cjs;
     export const b = mjs;
     export const c = type;
@@ -31,11 +54,17 @@ node_modules/inner/index.d.ts(5,1): error TS1036: Statements are not allowed in 
     export const d = cjsi;
     export const e = mjsi;
     export const f = typei;
-==== index.cts (0 errors) ====
+==== index.cts (3 errors) ====
     // cjs format file
     import * as cjs from "package/cjs";
+                         ~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'package/cjs' or its corresponding type declarations.
     import * as mjs from "package/mjs";
+                         ~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'package/mjs' or its corresponding type declarations.
     import * as type from "package";
+                          ~~~~~~~~~
+!!! error TS2307: Cannot find module 'package' or its corresponding type declarations.
     export const a = cjs;
     export const b = mjs;
     export const c = type;

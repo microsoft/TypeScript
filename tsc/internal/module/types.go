@@ -63,7 +63,7 @@ func (p *PackageId) PackageName() string {
 type LookupLocations struct {
 	FailedLookupLocations []string
 	AffectingLocations    []string
-	ResolutionDiagnostics []ast.Diagnostic
+	ResolutionDiagnostics []*ast.Diagnostic
 }
 
 type ResolvedModule struct {

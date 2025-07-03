@@ -1,6 +1,33 @@
 --- old.nodeModulesPackageExports(module=node16).types
 +++ new.nodeModulesPackageExports(module=node16).types
-@@= skipped -23, +23 lines =@@
+@@= skipped -2, +2 lines =@@
+ === index.ts ===
+ // esm format file
+ import * as cjs from "package/cjs";
+->cjs : typeof cjs
++>cjs : any
+
+ import * as mjs from "package/mjs";
+->mjs : typeof mjs
++>mjs : any
+
+ import * as type from "package";
+->type : typeof type
++>type : any
+
+ cjs;
+->cjs : typeof cjs
++>cjs : any
+
+ mjs;
+->mjs : typeof mjs
++>mjs : any
+
+ type;
+->type : typeof type
++>type : any
+
+ import * as cjsi from "inner/cjs";
  >cjsi : typeof cjsi
 
  import * as mjsi from "inner/mjs";
@@ -9,7 +36,7 @@
 
  import * as typei from "inner";
  >typei : typeof typei
-@@= skipped -9, +9 lines =@@
+@@= skipped -30, +30 lines =@@
  >cjsi : typeof cjsi
 
  mjsi;
@@ -18,7 +45,34 @@
 
  typei;
  >typei : typeof typei
-@@= skipped -29, +29 lines =@@
+@@= skipped -8, +8 lines =@@
+ === index.mts ===
+ // esm format file
+ import * as cjs from "package/cjs";
+->cjs : typeof cjs
++>cjs : any
+
+ import * as mjs from "package/mjs";
+->mjs : typeof mjs
++>mjs : any
+
+ import * as type from "package";
+->type : typeof type
++>type : any
+
+ cjs;
+->cjs : typeof cjs
++>cjs : any
+
+ mjs;
+->mjs : typeof mjs
++>mjs : any
+
+ type;
+->type : typeof type
++>type : any
+
+ import * as cjsi from "inner/cjs";
  >cjsi : typeof cjsi
 
  import * as mjsi from "inner/mjs";
@@ -27,7 +81,7 @@
 
  import * as typei from "inner";
  >typei : typeof typei
-@@= skipped -9, +9 lines =@@
+@@= skipped -30, +30 lines =@@
  >cjsi : typeof cjsi
 
  mjsi;
@@ -36,7 +90,34 @@
 
  typei;
  >typei : typeof typei
-@@= skipped -29, +29 lines =@@
+@@= skipped -8, +8 lines =@@
+ === index.cts ===
+ // cjs format file
+ import * as cjs from "package/cjs";
+->cjs : typeof cjs
++>cjs : any
+
+ import * as mjs from "package/mjs";
+->mjs : typeof mjs
++>mjs : any
+
+ import * as type from "package";
+->type : typeof type
++>type : any
+
+ cjs;
+->cjs : typeof cjs
++>cjs : any
+
+ mjs;
+->mjs : typeof mjs
++>mjs : any
+
+ type;
+->type : typeof type
++>type : any
+
+ import * as cjsi from "inner/cjs";
  >cjsi : typeof cjsi
 
  import * as mjsi from "inner/mjs";
@@ -84,7 +165,7 @@
 
  === node_modules/inner/index.d.mts ===
  // esm format file
-@@= skipped -40, +40 lines =@@
+@@= skipped -61, +61 lines =@@
  >cjs : typeof cjs
 
  import * as mjs from "inner/mjs";
