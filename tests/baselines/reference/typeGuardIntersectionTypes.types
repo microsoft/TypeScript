@@ -241,16 +241,16 @@ function identifyBeast(beast: Beast) {
 >                : ^^^^^^^
 >hasWings : (x: Beast) => x is Winged
 >         : ^ ^^     ^^^^^           
->beast : Legged
->      : ^^^^^^
+>beast : Beast & Legged
+>      : ^^^^^^^^^^^^^^
 
             if (beast.legs === 4) {
 >beast.legs === 4 : boolean
 >                 : ^^^^^^^
 >beast.legs : number
 >           : ^^^^^^
->beast : Legged & Winged
->      : ^^^^^^^^^^^^^^^
+>beast : Beast & Legged & Winged
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
 >legs : number
 >     : ^^^^^^
 >4 : 4
@@ -269,8 +269,8 @@ function identifyBeast(beast: Beast) {
 >                 : ^^^^^^^
 >beast.legs : number
 >           : ^^^^^^
->beast : Legged & Winged
->      : ^^^^^^^^^^^^^^^
+>beast : Beast & Legged & Winged
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
 >legs : number
 >     : ^^^^^^
 >2 : 2
@@ -294,8 +294,8 @@ function identifyBeast(beast: Beast) {
 >                                      : ^^^^^^
 >beast.legs : number
 >           : ^^^^^^
->beast : Legged & Winged
->      : ^^^^^^^^^^^^^^^
+>beast : Beast & Legged & Winged
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
 >legs : number
 >     : ^^^^^^
             }
@@ -312,8 +312,8 @@ function identifyBeast(beast: Beast) {
 >                                            : ^^^^^^
 >beast.legs : number
 >           : ^^^^^^
->beast : Legged
->      : ^^^^^^
+>beast : Beast & Legged
+>      : ^^^^^^^^^^^^^^
 >legs : number
 >     : ^^^^^^
         }
@@ -402,3 +402,73 @@ function beastFoo(beast: Object) {
 >      : ^^^^^^^^^^^^^^^
     }
 }
+
+// https://github.com/microsoft/TypeScript/issues/58518
+
+interface A_58518 {
+  label?: string;
+>label : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+
+  a?: string;
+>a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+}
+
+interface B_58518 {
+  label?: string;
+>label : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+
+  b: boolean;
+>b : boolean
+>  : ^^^^^^^
+}
+
+function isB_58518(thing: object): thing is B_58518 {
+>isB_58518 : (thing: object) => thing is B_58518
+>          : ^     ^^      ^^^^^                
+>thing : object
+>      : ^^^^^^
+
+  return "b" in thing;
+>"b" in thing : boolean
+>             : ^^^^^^^
+>"b" : "b"
+>    : ^^^
+>thing : object
+>      : ^^^^^^
+}
+
+function test_58518(thing: A_58518) {
+>test_58518 : (thing: A_58518) => void
+>           : ^     ^^       ^^^^^^^^^
+>thing : A_58518
+>      : ^^^^^^^
+
+  thing.a;
+>thing.a : string | undefined
+>        : ^^^^^^^^^^^^^^^^^^
+>thing : A_58518
+>      : ^^^^^^^
+>a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+
+  if (isB_58518(thing)) {
+>isB_58518(thing) : boolean
+>                 : ^^^^^^^
+>isB_58518 : (thing: object) => thing is B_58518
+>          : ^     ^^      ^^^^^                
+>thing : A_58518
+>      : ^^^^^^^
+
+    thing.a;
+>thing.a : string | undefined
+>        : ^^^^^^^^^^^^^^^^^^
+>thing : A_58518 & B_58518
+>      : ^^^^^^^^^^^^^^^^^
+>a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+  }
+}
+
