@@ -86,7 +86,7 @@ func (p *ProjectServiceHost) Client() project.Client {
 
 var _ project.ServiceHost = (*ProjectServiceHost)(nil)
 
-func Setup(files map[string]any, testOptions *TestTypingsInstaller) (*project.Service, *ProjectServiceHost) {
+func Setup[FileContents any](files map[string]FileContents, testOptions *TestTypingsInstaller) (*project.Service, *ProjectServiceHost) {
 	host := newProjectServiceHost(files)
 	if testOptions != nil {
 		host.TestOptions = &testOptions.TestTypingsInstallerOptions
@@ -212,7 +212,7 @@ func appendTypesRegistryConfig(builder *strings.Builder, index int, entry string
 	builder.WriteString(fmt.Sprintf("\n    \"%s\": {%s\n    }", entry, TypesRegistryConfigText()))
 }
 
-func newProjectServiceHost(files map[string]any) *ProjectServiceHost {
+func newProjectServiceHost[FileContents any](files map[string]FileContents) *ProjectServiceHost {
 	fs := bundled.WrapFS(vfstest.FromMap(files, false /*useCaseSensitiveFileNames*/))
 	host := &ProjectServiceHost{
 		fs:                 fs,

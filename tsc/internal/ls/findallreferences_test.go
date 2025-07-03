@@ -15,7 +15,7 @@ func runFindReferencesTest(t *testing.T, input string, expectedLocations map[str
 	testData := fourslash.ParseTestData(t, input, "/file1.ts")
 	markerPositions := testData.MarkerPositions
 	ctx := projecttestutil.WithRequestID(t.Context())
-	service, done := createLanguageService(ctx, testData.Files[0].FileName(), map[string]any{
+	service, done := createLanguageService(ctx, testData.Files[0].FileName(), map[string]string{
 		testData.Files[0].FileName(): testData.Files[0].Content,
 	})
 	defer done()
