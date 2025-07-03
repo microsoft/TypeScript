@@ -1,0 +1,393 @@
+//// [tests/cases/compiler/arraySpliceParamDescription.ts] ////
+
+=== arraySpliceParamDescription.ts ===
+// @target es5
+
+export function isEmptyArr(l: { length: number }) {
+>isEmptyArr : (l: { length: number; }) => boolean
+>           : ^ ^^                   ^^^^^^^^^^^^
+>l : { length: number; }
+>  : ^^^^^^^^^^      ^^^
+>length : number
+>       : ^^^^^^
+
+    return l.length === 0   
+>l.length === 0 : boolean
+>               : ^^^^^^^
+>l.length : number
+>         : ^^^^^^
+>l : { length: number; }
+>  : ^^^^^^^^^^      ^^^
+>length : number
+>       : ^^^^^^
+>0 : 0
+>  : ^
+}
+
+var arrA : string[]
+>arrA : string[]
+>     : ^^^^^^^^
+
+arrA = ["a", "b", "c", "d", "e", "f", "g"]
+>arrA = ["a", "b", "c", "d", "e", "f", "g"] : string[]
+>                                           : ^^^^^^^^
+>arrA : string[]
+>     : ^^^^^^^^
+>["a", "b", "c", "d", "e", "f", "g"] : string[]
+>                                    : ^^^^^^^^
+>"a" : "a"
+>    : ^^^
+>"b" : "b"
+>    : ^^^
+>"c" : "c"
+>    : ^^^
+>"d" : "d"
+>    : ^^^
+>"e" : "e"
+>    : ^^^
+>"f" : "f"
+>    : ^^^
+>"g" : "g"
+>    : ^^^
+
+// deleteCount param: undefined | NaN | 0 | -int; no elements removed
+var undefSplice1 = arrA.splice(2, undefined) // OK
+>undefSplice1 : string[]
+>             : ^^^^^^^^
+>arrA.splice(2, undefined) : string[]
+>                          : ^^^^^^^^
+>arrA.splice : { (start: number, deleteCount?: number): string[]; (start: number, deleteCount: number, ...items: string[]): string[]; }
+>            : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>arrA : string[]
+>     : ^^^^^^^^
+>splice : { (start: number, deleteCount?: number): string[]; (start: number, deleteCount: number, ...items: string[]): string[]; }
+>       : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>2 : 2
+>  : ^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+var charSplice1 = arrA.splice(2, "a") // expect error
+>charSplice1 : string[]
+>            : ^^^^^^^^
+>arrA.splice(2, "a") : string[]
+>                    : ^^^^^^^^
+>arrA.splice : { (start: number, deleteCount?: number): string[]; (start: number, deleteCount: number, ...items: string[]): string[]; }
+>            : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>arrA : string[]
+>     : ^^^^^^^^
+>splice : { (start: number, deleteCount?: number): string[]; (start: number, deleteCount: number, ...items: string[]): string[]; }
+>       : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>2 : 2
+>  : ^
+>"a" : "a"
+>    : ^^^
+
+var naNSplice1 = arrA.splice(2, NaN) // OK
+>naNSplice1 : string[]
+>           : ^^^^^^^^
+>arrA.splice(2, NaN) : string[]
+>                    : ^^^^^^^^
+>arrA.splice : { (start: number, deleteCount?: number): string[]; (start: number, deleteCount: number, ...items: string[]): string[]; }
+>            : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>arrA : string[]
+>     : ^^^^^^^^
+>splice : { (start: number, deleteCount?: number): string[]; (start: number, deleteCount: number, ...items: string[]): string[]; }
+>       : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>2 : 2
+>  : ^
+>NaN : number
+>    : ^^^^^^
+
+var zeroSplice1 = arrA.splice(2, 0)  // OK
+>zeroSplice1 : string[]
+>            : ^^^^^^^^
+>arrA.splice(2, 0) : string[]
+>                  : ^^^^^^^^
+>arrA.splice : { (start: number, deleteCount?: number): string[]; (start: number, deleteCount: number, ...items: string[]): string[]; }
+>            : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>arrA : string[]
+>     : ^^^^^^^^
+>splice : { (start: number, deleteCount?: number): string[]; (start: number, deleteCount: number, ...items: string[]): string[]; }
+>       : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>2 : 2
+>  : ^
+>0 : 0
+>  : ^
+
+var negSplice1 = arrA.splice(2, -2) // OK and expect arrA = ["a", "b", "c", "d", "e", "f", "g"]
+>negSplice1 : string[]
+>           : ^^^^^^^^
+>arrA.splice(2, -2) : string[]
+>                   : ^^^^^^^^
+>arrA.splice : { (start: number, deleteCount?: number): string[]; (start: number, deleteCount: number, ...items: string[]): string[]; }
+>            : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>arrA : string[]
+>     : ^^^^^^^^
+>splice : { (start: number, deleteCount?: number): string[]; (start: number, deleteCount: number, ...items: string[]): string[]; }
+>       : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>2 : 2
+>  : ^
+>-2 : -2
+>   : ^^
+>2 : 2
+>  : ^
+
+// deleteCount param omitted; All elements after start param are removed
+var omitSplice1 = arrA.splice(2,) // OK expect arrA = ["a", "b"]
+>omitSplice1 : string[]
+>            : ^^^^^^^^
+>arrA.splice(2,) : string[]
+>                : ^^^^^^^^
+>arrA.splice : { (start: number, deleteCount?: number): string[]; (start: number, deleteCount: number, ...items: string[]): string[]; }
+>            : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>arrA : string[]
+>     : ^^^^^^^^
+>splice : { (start: number, deleteCount?: number): string[]; (start: number, deleteCount: number, ...items: string[]): string[]; }
+>       : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>2 : 2
+>  : ^
+
+// testing the splice arrays are empty
+isEmptyArr(undefSplice1) // OK and true
+>isEmptyArr(undefSplice1) : boolean
+>                         : ^^^^^^^
+>isEmptyArr : (l: { length: number; }) => boolean
+>           : ^ ^^                   ^^^^^^^^^^^^
+>undefSplice1 : string[]
+>             : ^^^^^^^^
+
+isEmptyArr(charSplice1) // OK and true
+>isEmptyArr(charSplice1) : boolean
+>                        : ^^^^^^^
+>isEmptyArr : (l: { length: number; }) => boolean
+>           : ^ ^^                   ^^^^^^^^^^^^
+>charSplice1 : string[]
+>            : ^^^^^^^^
+
+isEmptyArr(naNSplice1) // OK and true
+>isEmptyArr(naNSplice1) : boolean
+>                       : ^^^^^^^
+>isEmptyArr : (l: { length: number; }) => boolean
+>           : ^ ^^                   ^^^^^^^^^^^^
+>naNSplice1 : string[]
+>           : ^^^^^^^^
+
+isEmptyArr(zeroSplice1) // OK and true
+>isEmptyArr(zeroSplice1) : boolean
+>                        : ^^^^^^^
+>isEmptyArr : (l: { length: number; }) => boolean
+>           : ^ ^^                   ^^^^^^^^^^^^
+>zeroSplice1 : string[]
+>            : ^^^^^^^^
+
+isEmptyArr(negSplice1) // OK and true
+>isEmptyArr(negSplice1) : boolean
+>                       : ^^^^^^^
+>isEmptyArr : (l: { length: number; }) => boolean
+>           : ^ ^^                   ^^^^^^^^^^^^
+>negSplice1 : string[]
+>           : ^^^^^^^^
+
+isEmptyArr(omitSplice1) // OK and false. length of removed elements is 5
+>isEmptyArr(omitSplice1) : boolean
+>                        : ^^^^^^^
+>isEmptyArr : (l: { length: number; }) => boolean
+>           : ^ ^^                   ^^^^^^^^^^^^
+>omitSplice1 : string[]
+>            : ^^^^^^^^
+
+var arrB : string[]
+>arrB : string[]
+>     : ^^^^^^^^
+
+arrB = ["a", "b", "c", "d", "e", "f", "g"]
+>arrB = ["a", "b", "c", "d", "e", "f", "g"] : string[]
+>                                           : ^^^^^^^^
+>arrB : string[]
+>     : ^^^^^^^^
+>["a", "b", "c", "d", "e", "f", "g"] : string[]
+>                                    : ^^^^^^^^
+>"a" : "a"
+>    : ^^^
+>"b" : "b"
+>    : ^^^
+>"c" : "c"
+>    : ^^^
+>"d" : "d"
+>    : ^^^
+>"e" : "e"
+>    : ^^^
+>"f" : "f"
+>    : ^^^
+>"g" : "g"
+>    : ^^^
+
+var undefSplice2 = arrB.splice(2, undefined, "h", "i") // expect error and arrB = ["a", "b", "h", "i", "e", "f", "g"]
+>undefSplice2 : string[]
+>             : ^^^^^^^^
+>arrB.splice(2, undefined, "h", "i") : string[]
+>                                    : ^^^^^^^^
+>arrB.splice : { (start: number, deleteCount?: number): string[]; (start: number, deleteCount: number, ...items: string[]): string[]; }
+>            : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>arrB : string[]
+>     : ^^^^^^^^
+>splice : { (start: number, deleteCount?: number): string[]; (start: number, deleteCount: number, ...items: string[]): string[]; }
+>       : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>2 : 2
+>  : ^
+>undefined : undefined
+>          : ^^^^^^^^^
+>"h" : "h"
+>    : ^^^
+>"i" : "i"
+>    : ^^^
+
+var omitSplice2 = arrB.splice(2, , "j", "k") // expect error and arrB = ["a", "b", "j", "k", "e", "f", "g"]
+>omitSplice2 : string[]
+>            : ^^^^^^^^
+>arrB.splice(2, , "j", "k") : string[]
+>                           : ^^^^^^^^
+>arrB.splice : { (start: number, deleteCount?: number): string[]; (start: number, deleteCount: number, ...items: string[]): string[]; }
+>            : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>arrB : string[]
+>     : ^^^^^^^^
+>splice : { (start: number, deleteCount?: number): string[]; (start: number, deleteCount: number, ...items: string[]): string[]; }
+>       : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>2 : 2
+>  : ^
+>"j" : "j"
+>    : ^^^
+>"k" : "k"
+>    : ^^^
+
+var naNSplice2 = arrB.splice(2, NaN, "l", "m") // OK and arrB = ["a", "b", "l", "m", "e", "f", "g"]
+>naNSplice2 : string[]
+>           : ^^^^^^^^
+>arrB.splice(2, NaN, "l", "m") : string[]
+>                              : ^^^^^^^^
+>arrB.splice : { (start: number, deleteCount?: number): string[]; (start: number, deleteCount: number, ...items: string[]): string[]; }
+>            : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>arrB : string[]
+>     : ^^^^^^^^
+>splice : { (start: number, deleteCount?: number): string[]; (start: number, deleteCount: number, ...items: string[]): string[]; }
+>       : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>2 : 2
+>  : ^
+>NaN : number
+>    : ^^^^^^
+>"l" : "l"
+>    : ^^^
+>"m" : "m"
+>    : ^^^
+
+var charSplice2 = arrB.splice(2, "a", "n", "o") // expect error and arrB = ["a", "b", "n", "o", "e", "f", "g"]
+>charSplice2 : string[]
+>            : ^^^^^^^^
+>arrB.splice(2, "a", "n", "o") : string[]
+>                              : ^^^^^^^^
+>arrB.splice : { (start: number, deleteCount?: number): string[]; (start: number, deleteCount: number, ...items: string[]): string[]; }
+>            : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>arrB : string[]
+>     : ^^^^^^^^
+>splice : { (start: number, deleteCount?: number): string[]; (start: number, deleteCount: number, ...items: string[]): string[]; }
+>       : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>2 : 2
+>  : ^
+>"a" : "a"
+>    : ^^^
+>"n" : "n"
+>    : ^^^
+>"o" : "o"
+>    : ^^^
+
+var zeroSplice2 = arrB.splice(2, 0, "p", "q") // OK and arrB = ["a", "b", "p", "q", "e", "f", "g"]
+>zeroSplice2 : string[]
+>            : ^^^^^^^^
+>arrB.splice(2, 0, "p", "q") : string[]
+>                            : ^^^^^^^^
+>arrB.splice : { (start: number, deleteCount?: number): string[]; (start: number, deleteCount: number, ...items: string[]): string[]; }
+>            : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>arrB : string[]
+>     : ^^^^^^^^
+>splice : { (start: number, deleteCount?: number): string[]; (start: number, deleteCount: number, ...items: string[]): string[]; }
+>       : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>2 : 2
+>  : ^
+>0 : 0
+>  : ^
+>"p" : "p"
+>    : ^^^
+>"q" : "q"
+>    : ^^^
+
+var negSplice2 = arrB.splice(2, -2, "r", "s") // OK and arrB = ["a", "b", "r", "s", "e", "f", "g"]
+>negSplice2 : string[]
+>           : ^^^^^^^^
+>arrB.splice(2, -2, "r", "s") : string[]
+>                             : ^^^^^^^^
+>arrB.splice : { (start: number, deleteCount?: number): string[]; (start: number, deleteCount: number, ...items: string[]): string[]; }
+>            : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>arrB : string[]
+>     : ^^^^^^^^
+>splice : { (start: number, deleteCount?: number): string[]; (start: number, deleteCount: number, ...items: string[]): string[]; }
+>       : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>2 : 2
+>  : ^
+>-2 : -2
+>   : ^^
+>2 : 2
+>  : ^
+>"r" : "r"
+>    : ^^^
+>"s" : "s"
+>    : ^^^
+
+isEmptyArr(undefSplice2) // OK and true
+>isEmptyArr(undefSplice2) : boolean
+>                         : ^^^^^^^
+>isEmptyArr : (l: { length: number; }) => boolean
+>           : ^ ^^                   ^^^^^^^^^^^^
+>undefSplice2 : string[]
+>             : ^^^^^^^^
+
+isEmptyArr(omitSplice2) // OK and true
+>isEmptyArr(omitSplice2) : boolean
+>                        : ^^^^^^^
+>isEmptyArr : (l: { length: number; }) => boolean
+>           : ^ ^^                   ^^^^^^^^^^^^
+>omitSplice2 : string[]
+>            : ^^^^^^^^
+
+isEmptyArr(naNSplice2) // OK and true
+>isEmptyArr(naNSplice2) : boolean
+>                       : ^^^^^^^
+>isEmptyArr : (l: { length: number; }) => boolean
+>           : ^ ^^                   ^^^^^^^^^^^^
+>naNSplice2 : string[]
+>           : ^^^^^^^^
+
+isEmptyArr(charSplice2) // OK and true
+>isEmptyArr(charSplice2) : boolean
+>                        : ^^^^^^^
+>isEmptyArr : (l: { length: number; }) => boolean
+>           : ^ ^^                   ^^^^^^^^^^^^
+>charSplice2 : string[]
+>            : ^^^^^^^^
+
+isEmptyArr(zeroSplice2) // OK and true
+>isEmptyArr(zeroSplice2) : boolean
+>                        : ^^^^^^^
+>isEmptyArr : (l: { length: number; }) => boolean
+>           : ^ ^^                   ^^^^^^^^^^^^
+>zeroSplice2 : string[]
+>            : ^^^^^^^^
+
+isEmptyArr(negSplice2) // OK and true
+>isEmptyArr(negSplice2) : boolean
+>                       : ^^^^^^^
+>isEmptyArr : (l: { length: number; }) => boolean
+>           : ^ ^^                   ^^^^^^^^^^^^
+>negSplice2 : string[]
+>           : ^^^^^^^^
+

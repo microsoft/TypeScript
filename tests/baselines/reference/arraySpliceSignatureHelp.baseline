@@ -1,0 +1,828 @@
+// === SignatureHelp ===
+=== /tests/cases/fourslash/file1.ts ===
+// [].splice(
+//           ^
+// | ----------------------------------------------------------------------
+// | splice(**start: number**, deleteCount?: number): any[]
+// | Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
+// | @param start The zero-based location in the array from which to start removing elements.
+// | @param deleteCount The number of elements to remove. Omitting this argument will remove all elements from the start
+// | paramater location to end of the array. If value of this argument is either a negative number, zero, undefined, or a type
+// | that cannot be converted to an integer, the function will evaluate the argument as zero and not remove any elements.
+// | @returns An array containing the elements that were deleted.
+// | ----------------------------------------------------------------------
+// [].splice(2, 0, 
+//                 ^
+// | ----------------------------------------------------------------------
+// | splice(start: number, deleteCount: number, **...items: any[]**): any[]
+// | Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
+// | @param start The zero-based location in the array from which to start removing elements.
+// | @param deleteCount The number of elements to remove. If value of this argument is either a negative number, zero,
+// | undefined, or a type that cannot be converted to an integer, the function will evaluate the argument as zero and
+// | not remove any elements.
+// | @param items Elements to insert into the array in place of the deleted elements.
+// | @returns An array containing the elements that were deleted.
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/file1.ts",
+      "position": 10,
+      "name": "1"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "splice",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "any",
+              "kind": "keyword"
+            },
+            {
+              "text": "[",
+              "kind": "punctuation"
+            },
+            {
+              "text": "]",
+              "kind": "punctuation"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "start",
+              "documentation": [
+                {
+                  "text": "The zero-based location in the array from which to start removing elements.",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "start",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "deleteCount",
+              "documentation": [
+                {
+                  "text": "The number of elements to remove. Omitting this argument will remove all elements from the start\nparamater location to end of the array. If value of this argument is either a negative number, zero, undefined, or a type\nthat cannot be converted to an integer, the function will evaluate the argument as zero and not remove any elements.",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "deleteCount",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": "?",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": true,
+              "isRest": false
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.",
+              "kind": "text"
+            }
+          ],
+          "tags": [
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "start",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "The zero-based location in the array from which to start removing elements.",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "deleteCount",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "The number of elements to remove. Omitting this argument will remove all elements from the start\nparamater location to end of the array. If value of this argument is either a negative number, zero, undefined, or a type\nthat cannot be converted to an integer, the function will evaluate the argument as zero and not remove any elements.",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "returns",
+              "text": [
+                {
+                  "text": "An array containing the elements that were deleted.",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "isVariadic": true,
+          "prefixDisplayParts": [
+            {
+              "text": "splice",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "any",
+              "kind": "keyword"
+            },
+            {
+              "text": "[",
+              "kind": "punctuation"
+            },
+            {
+              "text": "]",
+              "kind": "punctuation"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "start",
+              "documentation": [
+                {
+                  "text": "The zero-based location in the array from which to start removing elements.",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "start",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "deleteCount",
+              "documentation": [
+                {
+                  "text": "The number of elements to remove. If value of this argument is either a negative number, zero,\nundefined, or a type that cannot be converted to an integer, the function will evaluate the argument as zero and\nnot remove any elements.",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "deleteCount",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "items",
+              "documentation": [
+                {
+                  "text": "Elements to insert into the array in place of the deleted elements.",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "items",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.",
+              "kind": "text"
+            }
+          ],
+          "tags": [
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "start",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "The zero-based location in the array from which to start removing elements.",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "deleteCount",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "The number of elements to remove. If value of this argument is either a negative number, zero,\nundefined, or a type that cannot be converted to an integer, the function will evaluate the argument as zero and\nnot remove any elements.",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "items",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "Elements to insert into the array in place of the deleted elements.",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "returns",
+              "text": [
+                {
+                  "text": "An array containing the elements that were deleted.",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "applicableSpan": {
+        "start": 10,
+        "length": 17
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 1
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/file1.ts",
+      "position": 27,
+      "name": "2"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "splice",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "any",
+              "kind": "keyword"
+            },
+            {
+              "text": "[",
+              "kind": "punctuation"
+            },
+            {
+              "text": "]",
+              "kind": "punctuation"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "start",
+              "documentation": [
+                {
+                  "text": "The zero-based location in the array from which to start removing elements.",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "start",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "deleteCount",
+              "documentation": [
+                {
+                  "text": "The number of elements to remove. Omitting this argument will remove all elements from the start\nparamater location to end of the array. If value of this argument is either a negative number, zero, undefined, or a type\nthat cannot be converted to an integer, the function will evaluate the argument as zero and not remove any elements.",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "deleteCount",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": "?",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": true,
+              "isRest": false
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.",
+              "kind": "text"
+            }
+          ],
+          "tags": [
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "start",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "The zero-based location in the array from which to start removing elements.",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "deleteCount",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "The number of elements to remove. Omitting this argument will remove all elements from the start\nparamater location to end of the array. If value of this argument is either a negative number, zero, undefined, or a type\nthat cannot be converted to an integer, the function will evaluate the argument as zero and not remove any elements.",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "returns",
+              "text": [
+                {
+                  "text": "An array containing the elements that were deleted.",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "isVariadic": true,
+          "prefixDisplayParts": [
+            {
+              "text": "splice",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "any",
+              "kind": "keyword"
+            },
+            {
+              "text": "[",
+              "kind": "punctuation"
+            },
+            {
+              "text": "]",
+              "kind": "punctuation"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "start",
+              "documentation": [
+                {
+                  "text": "The zero-based location in the array from which to start removing elements.",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "start",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "deleteCount",
+              "documentation": [
+                {
+                  "text": "The number of elements to remove. If value of this argument is either a negative number, zero,\nundefined, or a type that cannot be converted to an integer, the function will evaluate the argument as zero and\nnot remove any elements.",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "deleteCount",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "items",
+              "documentation": [
+                {
+                  "text": "Elements to insert into the array in place of the deleted elements.",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "items",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.",
+              "kind": "text"
+            }
+          ],
+          "tags": [
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "start",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "The zero-based location in the array from which to start removing elements.",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "deleteCount",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "The number of elements to remove. If value of this argument is either a negative number, zero,\nundefined, or a type that cannot be converted to an integer, the function will evaluate the argument as zero and\nnot remove any elements.",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "items",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "Elements to insert into the array in place of the deleted elements.",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "returns",
+              "text": [
+                {
+                  "text": "An array containing the elements that were deleted.",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "applicableSpan": {
+        "start": 21,
+        "length": 6
+      },
+      "selectedItemIndex": 1,
+      "argumentIndex": 2,
+      "argumentCount": 3
+    }
+  }
+]
