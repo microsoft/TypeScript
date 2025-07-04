@@ -1,1 +1,0 @@
-var test: any[] = new any[1];

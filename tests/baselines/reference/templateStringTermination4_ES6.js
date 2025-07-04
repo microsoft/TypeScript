@@ -1,7 +1,0 @@
-//// [tests/cases/conformance/es6/templates/templateStringTermination4_ES6.ts] ////
-
-//// [templateStringTermination4_ES6.ts]
-`\\\\`
-
-//// [templateStringTermination4_ES6.js]
-`\\\\`;

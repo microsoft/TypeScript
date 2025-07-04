@@ -1,9 +1,0 @@
-YieldStarExpression3_es6.ts(2,12): error TS1109: Expression expected.
-
-
-==== YieldStarExpression3_es6.ts (1 errors) ====
-    function *g() {
-        yield *;
-               ~
-!!! error TS1109: Expression expected.
-    }

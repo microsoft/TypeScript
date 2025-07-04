@@ -1,4 +1,0 @@
-interface I {
-    (): number;
-    (): string;
-}

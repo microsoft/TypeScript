@@ -1,9 +1,0 @@
-parserES5ComputedPropertyName1.ts(2,6): error TS2304: Cannot find name 'e'.
-
-
-==== parserES5ComputedPropertyName1.ts (1 errors) ====
-    declare class C {
-        [e]: number 
-         ~
-!!! error TS2304: Cannot find name 'e'.
-    }

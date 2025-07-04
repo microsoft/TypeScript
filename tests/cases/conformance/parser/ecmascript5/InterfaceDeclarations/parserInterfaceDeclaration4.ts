@@ -1,2 +1,0 @@
-static interface I {
-}

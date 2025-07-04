@@ -1,6 +1,0 @@
-{
-    "compilerOptions": {
-        "target": "es5",
-        "jsx": "react"
-    }
-}

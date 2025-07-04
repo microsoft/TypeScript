@@ -1,8 +1,0 @@
-function foo() {
-}
-
-function foo() {
-}
-
-)
-)

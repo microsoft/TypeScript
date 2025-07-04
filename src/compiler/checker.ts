@@ -51029,14 +51029,32 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function literalTypeToNode(type: FreshableType, enclosing: Node, tracker: SymbolTracker): Expression {
-        const enumResult = type.flags & TypeFlags.EnumLike ? nodeBuilder.symbolToExpression(type.symbol, SymbolFlags.Value, enclosing, /*flags*/ undefined, /*internalFlags*/ undefined, tracker)
-            : type === trueType ? factory.createTrue() : type === falseType && factory.createFalse();
+        const enumResult = type.flags & TypeFlags.EnumLike
+            ? nodeBuilder.symbolToExpression(
+                type.symbol,
+                SymbolFlags.Value,
+                enclosing,
+                /*flags*/ NodeBuilderFlags.UseFullyQualifiedType,
+                /*internalFlags*/ undefined,
+                tracker,
+            )
+            : type === trueType
+            ? factory.createTrue()
+            : type === falseType && factory.createFalse();
+
         if (enumResult) return enumResult;
+
         const literalValue = (type as LiteralType).value;
-        return typeof literalValue === "object" ? factory.createBigIntLiteral(literalValue) :
-            typeof literalValue === "string" ? factory.createStringLiteral(literalValue) :
-            literalValue < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-literalValue)) :
-            factory.createNumericLiteral(literalValue);
+        return typeof literalValue === "object"
+            ? factory.createBigIntLiteral(literalValue)
+            : typeof literalValue === "string"
+            ? factory.createStringLiteral(literalValue)
+            : literalValue < 0
+            ? factory.createPrefixUnaryExpression(
+                SyntaxKind.MinusToken,
+                factory.createNumericLiteral(-literalValue),
+            )
+            : factory.createNumericLiteral(literalValue);
     }
 
     function createLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, tracker: SymbolTracker) {

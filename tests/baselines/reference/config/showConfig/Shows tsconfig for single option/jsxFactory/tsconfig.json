@@ -1,5 +1,0 @@
-{
-    "compilerOptions": {
-        "jsxFactory": "someString"
-    }
-}

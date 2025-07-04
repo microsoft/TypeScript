@@ -1,3 +1,0 @@
-class test {
-    constructor (static) { }
-}

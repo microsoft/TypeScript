@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/enumNamespaceConstant.ts] ////
+
+=== enumNamespaceConstant.ts ===
+enum Foo {
+>Foo : Foo
+>    : ^^^
+
+  bar
+>bar : Foo.bar
+>    : ^^^^^^^
+}
+namespace Foo {
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+
+  export const baz = Foo.bar;
+>baz : Foo.bar
+>    : ^^^^^^^
+>Foo.bar : Foo
+>        : ^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>bar : Foo
+>    : ^^^
+}
+

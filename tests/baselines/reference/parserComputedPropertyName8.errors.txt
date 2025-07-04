@@ -1,9 +1,0 @@
-parserComputedPropertyName8.ts(2,12): error TS2304: Cannot find name 'e'.
-
-
-==== parserComputedPropertyName8.ts (1 errors) ====
-    class C {
-       public [e]
-               ~
-!!! error TS2304: Cannot find name 'e'.
-    }

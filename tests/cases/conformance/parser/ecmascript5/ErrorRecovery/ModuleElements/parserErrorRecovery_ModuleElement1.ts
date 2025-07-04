@@ -1,4 +1,0 @@
-return foo;
-}
-return bar;
-}

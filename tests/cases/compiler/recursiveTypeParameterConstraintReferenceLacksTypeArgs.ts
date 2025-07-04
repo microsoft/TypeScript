@@ -1,1 +1,0 @@
-class A<T extends A> { }

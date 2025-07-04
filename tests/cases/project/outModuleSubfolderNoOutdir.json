@@ -1,9 +1,0 @@
-{
-    "scenario": "outputdir_module_subfolder: no outdir",
-    "projectRoot": "tests/cases/projects/outputdir_module_subfolder",
-    "inputFiles": [
-        "test.ts"
-    ],
-    "declaration": true,
-    "baselineCheck": true
-}

@@ -1,3 +1,0 @@
-interface I {
-  D?:any;
-}

@@ -1,9 +1,0 @@
-{
-    "scenario": "Quotes in file and directory names",
-    "projectRoot": "tests/cases/projects/Quote'InName",
-    "inputFiles": [
-        "m'ain.ts"
-    ],
-    "declaration": true,
-    "baselineCheck": true
-}
