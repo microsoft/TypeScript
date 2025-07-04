@@ -31,7 +31,7 @@ type Marker struct {
 	FileName   string
 	Position   int
 	LSPosition lsproto.Position
-	Name       string
+	Name       *string // `nil` for anonymous markers such as `{| "foo": "bar" |}`
 	Data       map[string]interface{}
 }
 
@@ -75,10 +75,13 @@ func ParseTestData(t *testing.T, contents string, fileName string) TestData {
 		markers = append(markers, file.markers...)
 		ranges = append(ranges, file.ranges...)
 		for _, marker := range file.markers {
-			if _, ok := markerPositions[marker.Name]; ok {
-				t.Fatalf("Duplicate marker name: %s", marker.Name)
+			if marker.Name == nil {
+				continue
 			}
-			markerPositions[marker.Name] = marker
+			if _, ok := markerPositions[*marker.Name]; ok {
+				t.Fatalf("Duplicate marker name: '%s'", *marker.Name)
+			}
+			markerPositions[*marker.Name] = marker
 		}
 
 	}
@@ -271,7 +274,7 @@ func parseFileContent(fileName string, content string, fileOptions map[string]st
 				marker := &Marker{
 					FileName: fileName,
 					Position: openMarker.position,
-					Name:     markerNameText,
+					Name:     &markerNameText,
 				}
 				if len(openRanges) > 0 {
 					openRanges[len(openRanges)-1].marker = marker
@@ -380,7 +383,7 @@ func getObjectMarker(fileName string, location *locationInformation, text string
 	// Object markers can be anonymous
 	if markerValue["name"] != nil {
 		if name, ok := markerValue["name"].(string); ok && name != "" {
-			marker.Name = name
+			marker.Name = &name
 		}
 	}
 

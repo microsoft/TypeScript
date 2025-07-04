@@ -142,9 +142,9 @@ function parseFourslashStatement(statement: ts.Statement): Cmd[] | undefined {
         if (namespace.text === "verify" && func.text === "completions") {
             return parseVerifyCompletionsArgs(callExpression.arguments);
         }
-        // `goTo.marker(...)`
-        if (namespace.text === "goTo" && func.text === "marker") {
-            return parseGoToMarkerArgs(callExpression.arguments);
+        // `goTo....`
+        if (namespace.text === "goTo") {
+            return parseGoToArgs(callExpression.arguments, func.text);
         }
         // `edit....`
         if (namespace.text === "edit") {
@@ -208,20 +208,83 @@ function getGoStringLiteral(text: string): string {
     return `${JSON.stringify(text)}`;
 }
 
-function parseGoToMarkerArgs(args: readonly ts.Expression[]): GoToMarkerCmd[] | undefined {
-    if (args.length !== 1) {
-        console.error(`Expected exactly one argument in goTo.marker, got ${args.length}`);
-        return undefined;
+function parseGoToArgs(args: readonly ts.Expression[], funcName: string): GoToCmd[] | undefined {
+    switch (funcName) {
+        case "marker":
+            const arg = args[0];
+            if (arg === undefined) {
+                return [{
+                    kind: "goTo",
+                    funcName: "marker",
+                    args: [`""`],
+                }];
+            }
+            if (!ts.isStringLiteral(arg)) {
+                console.error(`Unrecognized argument in goTo.marker: ${arg.getText()}`);
+                return undefined;
+            }
+            return [{
+                kind: "goTo",
+                funcName: "marker",
+                args: [getGoStringLiteral(arg.text)],
+            }];
+        case "file":
+            if (args.length !== 1) {
+                console.error(`Expected a single argument in goTo.file, got ${args.map(arg => arg.getText()).join(", ")}`);
+                return undefined;
+            }
+            if (ts.isStringLiteral(args[0])) {
+                return [{
+                    kind: "goTo",
+                    funcName: "file",
+                    args: [getGoStringLiteral(args[0].text)],
+                }];
+            }
+            else if (ts.isNumericLiteral(args[0])) {
+                return [{
+                    kind: "goTo",
+                    funcName: "fileNumber",
+                    args: [args[0].text],
+                }];
+            }
+            console.error(`Expected string or number literal argument in goTo.file, got ${args[0].getText()}`);
+            return undefined;
+        case "position":
+            if (args.length !== 1 || !ts.isNumericLiteral(args[0])) {
+                console.error(`Expected a single numeric literal argument in goTo.position, got ${args.map(arg => arg.getText()).join(", ")}`);
+                return undefined;
+            }
+            return [{
+                kind: "goTo",
+                funcName: "position",
+                args: [`${args[0].text}`],
+            }];
+        case "eof":
+            return [{
+                kind: "goTo",
+                funcName: "EOF",
+                args: [],
+            }];
+        case "bof":
+            return [{
+                kind: "goTo",
+                funcName: "BOF",
+                args: [],
+            }];
+        case "select":
+            if (args.length !== 2 || !ts.isStringLiteral(args[0]) || !ts.isStringLiteral(args[1])) {
+                console.error(`Expected two string literal arguments in goTo.select, got ${args.map(arg => arg.getText()).join(", ")}`);
+                return undefined;
+            }
+            return [{
+                kind: "goTo",
+                funcName: "select",
+                args: [getGoStringLiteral(args[0].text), getGoStringLiteral(args[1].text)],
+            }];
+        default:
+            console.error(`Unrecognized goTo function: ${funcName}`);
+            return undefined;
     }
-    const arg = args[0];
-    if (!ts.isStringLiteral(arg)) {
-        console.error(`Unrecognized argument in goTo.marker: ${arg.getText()}`);
-        return undefined;
-    }
-    return [{
-        kind: "goToMarker",
-        marker: getGoStringLiteral(arg.text),
-    }];
 }
 
 function parseVerifyCompletionsArgs(args: readonly ts.Expression[]): VerifyCompletionsCmd[] | undefined {
@@ -666,9 +729,11 @@ interface VerifyCompletionsArgs {
     unsorted?: string;
 }
 
-interface GoToMarkerCmd {
-    kind: "goToMarker";
-    marker: string;
+interface GoToCmd {
+    kind: "goTo";
+    // !!! `selectRange` and `rangeStart` require parsing variables and `test.ranges()[n]`
+    funcName: "marker" | "file" | "fileNumber" | "EOF" | "BOF" | "position" | "select";
+    args: string[];
 }
 
 interface EditCmd {
@@ -676,7 +741,7 @@ interface EditCmd {
     goStatement: string;
 }
 
-type Cmd = VerifyCompletionsCmd | GoToMarkerCmd | EditCmd;
+type Cmd = VerifyCompletionsCmd | GoToCmd | EditCmd;
 
 function generateVerifyCompletions({ marker, args, isNewIdentifierLocation }: VerifyCompletionsCmd): string {
     let expectedList = "nil";
@@ -702,16 +767,17 @@ function generateVerifyCompletions({ marker, args, isNewIdentifierLocation }: Ve
     return `f.VerifyCompletions(t, ${marker}, ${expectedList})`;
 }
 
-function generateGoToMarker({ marker }: GoToMarkerCmd): string {
-    return `f.GoToMarker(t, ${marker})`;
+function generateGoToCommand({ funcName, args }: GoToCmd): string {
+    const funcNameCapitalized = funcName.charAt(0).toUpperCase() + funcName.slice(1);
+    return `f.GoTo${funcNameCapitalized}(t, ${args.join(", ")})`;
 }
 
 function generateCmd(cmd: Cmd): string {
     switch (cmd.kind) {
         case "verifyCompletions":
             return generateVerifyCompletions(cmd as VerifyCompletionsCmd);
-        case "goToMarker":
-            return generateGoToMarker(cmd as GoToMarkerCmd);
+        case "goTo":
+            return generateGoToCommand(cmd as GoToCmd);
         case "edit":
             return cmd.goStatement;
         default:

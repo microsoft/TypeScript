@@ -23,7 +23,7 @@ func runFindReferencesTest(t *testing.T, input string, expectedLocations map[str
 	// for each marker location, calculate the expected ref location ahead of time so we don't have to re-calculate each location for every reference call
 	allExpectedLocations := map[lsproto.Location]string{}
 	for _, expectedRange := range testData.Ranges {
-		allExpectedLocations[*service.GetExpectedReferenceFromMarker(expectedRange.FileName, expectedRange.Position)] = expectedRange.Name
+		allExpectedLocations[*service.GetExpectedReferenceFromMarker(expectedRange.FileName, expectedRange.Position)] = *expectedRange.Name
 	}
 
 	for requestMarkerName, expectedSet := range expectedLocations {

@@ -1600,3 +1600,31 @@ func findPrecedingMatchingToken(token *ast.Node, matchingTokenKind ast.Kind, sou
 		}
 	}
 }
+
+func findContainingList(node *ast.Node, file *ast.SourceFile) *ast.NodeList {
+	// The node might be a list element (nonsynthetic) or a comma (synthetic). Either way, it will
+	// be parented by the container of the SyntaxList, not the SyntaxList itself.
+	var list *ast.NodeList
+	visitNode := func(n *ast.Node, visitor *ast.NodeVisitor) *ast.Node {
+		return n
+	}
+	visitNodes := func(nodes *ast.NodeList, visitor *ast.NodeVisitor) *ast.NodeList {
+		if nodes != nil && RangeContainsRange(nodes.Loc, node.Loc) {
+			list = nodes
+		}
+		return nodes
+	}
+	nodeVisitor := ast.NewNodeVisitor(core.Identity, nil, ast.NodeVisitorHooks{
+		VisitNode:  visitNode,
+		VisitToken: visitNode,
+		VisitNodes: visitNodes,
+		VisitModifiers: func(modifiers *ast.ModifierList, visitor *ast.NodeVisitor) *ast.ModifierList {
+			if modifiers != nil {
+				visitNodes(&modifiers.NodeList, visitor)
+			}
+			return modifiers
+		},
+	})
+	astnav.VisitEachChildAndJSDoc(node.Parent, file, nodeVisitor)
+	return list
+}

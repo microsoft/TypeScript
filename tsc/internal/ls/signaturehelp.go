@@ -908,24 +908,10 @@ func getArgumentOrParameterListAndIndex(node *ast.Node, sourceFile *ast.SourceFi
 		//   - Between the type arguments and the arguments (greater than token)
 		//   - On the target of the call (parent.func)
 		//   - On the 'new' keyword in a 'new' expression
-		var arguments *ast.NodeList
-		switch node.Parent.Kind {
-		case ast.KindCallExpression:
-			arguments = node.Parent.AsCallExpression().Arguments
-		case ast.KindNewExpression:
-			arguments = node.Parent.AsNewExpression().Arguments
-		case ast.KindParenthesizedExpression:
-			arguments = node.Parent.AsParenthesizedExpression().ExpressionBase.NodeBase.Node.ArgumentList() // !!!
-		case ast.KindMethodDeclaration:
-			arguments = node.Parent.AsMethodDeclaration().FunctionLikeWithBodyBase.Parameters
-		case ast.KindFunctionExpression:
-			arguments = node.Parent.AsFunctionExpression().FunctionLikeWithBodyBase.Parameters
-		case ast.KindArrowFunction:
-			arguments = node.Parent.AsArrowFunction().FunctionLikeWithBodyBase.Parameters
-		}
+		list := findContainingList(node, sourceFile)
 		// Find the index of the argument that contains the node.
-		argumentIndex := getArgumentIndex(node, arguments, sourceFile, c)
-		return arguments, argumentIndex
+		argumentIndex := getArgumentIndex(node, list, sourceFile, c)
+		return list, argumentIndex
 	}
 }
 
