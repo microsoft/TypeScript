@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/substitutionTypeNonGenericIndexType2.ts] ////
+
+=== substitutionTypeNonGenericIndexType2.ts ===
+type BasicConditional<T> = keyof T extends infer R ? R : never;
+>BasicConditional : BasicConditional<T>
+>                 : ^^^^^^^^^^^^^^^^^^^
+
+type Config = { rejectClose: true };
+>Config : Config
+>       : ^^^^^^
+>rejectClose : true
+>            : ^^^^
+>true : true
+>     : ^^^^
+
+type Test = Config extends {}
+>Test : { rejectClose: BasicConditional<Config>; }
+>     : ^^^^^^^^^^^^^^^                        ^^^
+
+  ? {
+      rejectClose: BasicConditional<Config>;
+>rejectClose : "rejectClose"
+>            : ^^^^^^^^^^^^^
+    }
+  : never;
+
+const test: Test["rejectClose"] = "rejectClose";
+>test : "rejectClose"
+>     : ^^^^^^^^^^^^^
+>"rejectClose" : "rejectClose"
+>              : ^^^^^^^^^^^^^
+

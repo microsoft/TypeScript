@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/substitutionTypeNonGenericIndexType1.ts] ////
+
+=== substitutionTypeNonGenericIndexType1.ts ===
+// https://github.com/microsoft/TypeScript/issues/61728
+
+type BasicConditional<T> = keyof T extends any
+>BasicConditional : Symbol(BasicConditional, Decl(substitutionTypeNonGenericIndexType1.ts, 0, 0))
+>T : Symbol(T, Decl(substitutionTypeNonGenericIndexType1.ts, 2, 22))
+>T : Symbol(T, Decl(substitutionTypeNonGenericIndexType1.ts, 2, 22))
+
+  ? true
+  : false;
+
+type Config = { rejectClose: true };
+>Config : Symbol(Config, Decl(substitutionTypeNonGenericIndexType1.ts, 4, 10))
+>rejectClose : Symbol(rejectClose, Decl(substitutionTypeNonGenericIndexType1.ts, 6, 15))
+
+type Test =
+>Test : Symbol(Test, Decl(substitutionTypeNonGenericIndexType1.ts, 6, 36))
+
+  Config extends {}
+>Config : Symbol(Config, Decl(substitutionTypeNonGenericIndexType1.ts, 4, 10))
+
+    ? {
+        rejectClose: BasicConditional<Config>;
+>rejectClose : Symbol(rejectClose, Decl(substitutionTypeNonGenericIndexType1.ts, 9, 7))
+>BasicConditional : Symbol(BasicConditional, Decl(substitutionTypeNonGenericIndexType1.ts, 0, 0))
+>Config : Symbol(Config, Decl(substitutionTypeNonGenericIndexType1.ts, 4, 10))
+      }
+    : never;
+
+type RejectClose = Test["rejectClose"];
+>RejectClose : Symbol(RejectClose, Decl(substitutionTypeNonGenericIndexType1.ts, 12, 12))
+>Test : Symbol(Test, Decl(substitutionTypeNonGenericIndexType1.ts, 6, 36))
+

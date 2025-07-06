@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/substitutionTypeNonGenericIndexType1.ts] ////
+
+=== substitutionTypeNonGenericIndexType1.ts ===
+// https://github.com/microsoft/TypeScript/issues/61728
+
+type BasicConditional<T> = keyof T extends any
+>BasicConditional : BasicConditional<T>
+>                 : ^^^^^^^^^^^^^^^^^^^
+
+  ? true
+>true : true
+>     : ^^^^
+
+  : false;
+>false : false
+>      : ^^^^^
+
+type Config = { rejectClose: true };
+>Config : Config
+>       : ^^^^^^
+>rejectClose : true
+>            : ^^^^
+>true : true
+>     : ^^^^
+
+type Test =
+>Test : { rejectClose: BasicConditional<Config>; }
+>     : ^^^^^^^^^^^^^^^                        ^^^
+
+  Config extends {}
+    ? {
+        rejectClose: BasicConditional<Config>;
+>rejectClose : true
+>            : ^^^^
+      }
+    : never;
+
+type RejectClose = Test["rejectClose"];
+>RejectClose : true
+>            : ^^^^
+
