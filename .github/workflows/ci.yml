@@ -101,33 +101,7 @@ jobs:
           disable_search: true
           files: ./coverage/codecov.json
 
-  lint:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
-        with:
-          node-version: 'lts/*'
-      - run: npm ci
-
-      - name: Linter
-        run: npm run lint
-
-  knip:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
-        with:
-          node-version: 'lts/*'
-      - run: npm ci
-
-      - name: Unused exports
-        run: npm run knip
-
-  format:
+  quality-checks:
     runs-on: ubuntu-latest
 
     steps:
@@ -143,6 +117,12 @@ jobs:
           key: ${{ runner.os }}-dprint-${{ hashFiles('package-lock.json', '.dprint.jsonc') }}
           restore-keys: |
             ${{ runner.os }}-dprint-
+
+      - name: Linter
+        run: npm run lint
+
+      - name: Unused exports
+        run: npm run knip
 
       - name: Check formatting
         run: npx dprint check
@@ -163,7 +143,7 @@ jobs:
       - name: Validate the browser can import TypeScript
         run: npx hereby test-browser-integration
 
-  typecheck:
+  build-and-validate:
     runs-on: ubuntu-latest
 
     steps:
@@ -175,6 +155,67 @@ jobs:
 
       - name: Build src
         run: npx hereby build-src
+
+      - name: Build scripts
+        run: npx hereby scripts
+
+      - name: ESLint tests
+        run: npx hereby run-eslint-rules-tests
+
+      - name: Build tsc
+        run: npx hereby tsc
+
+      - name: Clean
+        run: npx hereby clean-src
+
+      - name: Self build
+        run: npx hereby build-src --built
+
+  baselines:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 'lts/*'
+      - run: npm ci
+
+      - name: Remove all baselines
+        run: rm -rf tests/baselines/reference
+
+      - name: Run tests
+        run: npm test &> /dev/null || exit 0
+
+      - name: Accept baselines
+        run: |
+          npx hereby baseline-accept
+          git add tests/baselines/reference
+
+      - name: Check baselines
+        id: check-baselines
+        run: |
+          function print_diff() {
+            if ! git diff --staged --exit-code --quiet --diff-filter=$1; then
+              echo "$2:"
+              git diff --staged --name-only --diff-filter=$1
+            fi
+          }
+
+          if ! git diff --staged --exit-code --quiet; then
+            print_diff ACR "Missing baselines"
+            print_diff MTUXB "Modified baselines"
+            print_diff D "Unused baselines"
+            git diff --staged > fix_baselines.patch
+            exit 1
+          fi
+
+      - name: Upload baseline diff artifact
+        if: ${{ failure() && steps.check-baselines.conclusion == 'failure' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: fix_baselines.patch
+          path: fix_baselines.patch
 
   smoke:
     runs-on: ubuntu-latest
@@ -257,84 +298,3 @@ jobs:
       - run: |
           echo "See $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID for more info."
           node ./pr/scripts/checkPackageSize.mjs ./base ./pr >> $GITHUB_STEP_SUMMARY
-
-  misc:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
-        with:
-          node-version: 'lts/*'
-      - run: npm ci
-
-      - name: Build scripts
-        run: npx hereby scripts
-
-      - name: ESLint tests
-        run: npx hereby run-eslint-rules-tests
-
-  self-check:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
-        with:
-          node-version: 'lts/*'
-      - run: npm ci
-
-      - name: Build tsc
-        run: npx hereby tsc
-
-      - name: Clean
-        run: npx hereby clean-src
-
-      - name: Self build
-        run: npx hereby build-src --built
-
-  baselines:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
-        with:
-          node-version: 'lts/*'
-      - run: npm ci
-
-      - name: Remove all baselines
-        run: rm -rf tests/baselines/reference
-
-      - name: Run tests
-        run: npm test &> /dev/null || exit 0
-
-      - name: Accept baselines
-        run: |
-          npx hereby baseline-accept
-          git add tests/baselines/reference
-
-      - name: Check baselines
-        id: check-baselines
-        run: |
-          function print_diff() {
-            if ! git diff --staged --exit-code --quiet --diff-filter=$1; then
-              echo "$2:"
-              git diff --staged --name-only --diff-filter=$1
-            fi
-          }
-
-          if ! git diff --staged --exit-code --quiet; then
-            print_diff ACR "Missing baselines"
-            print_diff MTUXB "Modified baselines"
-            print_diff D "Unused baselines"
-            git diff --staged > fix_baselines.patch
-            exit 1
-          fi
-
-      - name: Upload baseline diff artifact
-        if: ${{ failure() && steps.check-baselines.conclusion == 'failure' }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        with:
-          name: fix_baselines.patch
-          path: fix_baselines.patch
