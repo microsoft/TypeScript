@@ -119,13 +119,34 @@ jobs:
             ${{ runner.os }}-dprint-
 
       - name: Linter
+        id: lint
+        continue-on-error: true
         run: npm run lint
 
       - name: Unused exports
+        id: knip
+        continue-on-error: true
         run: npm run knip
 
       - name: Check formatting
+        id: format
+        continue-on-error: true
         run: npx dprint check
+
+      - name: Report failures
+        if: steps.lint.outcome == 'failure' || steps.knip.outcome == 'failure' || steps.format.outcome == 'failure'
+        run: |
+          echo "Quality check failures detected:"
+          if [ "${{ steps.lint.outcome }}" == "failure" ]; then
+            echo "Linting failed - run 'npm run lint' to see issues"
+          fi
+          if [ "${{ steps.knip.outcome }}" == "failure" ]; then
+            echo "Unused exports detected - run 'npm run knip' to see issues"
+          fi
+          if [ "${{ steps.format.outcome }}" == "failure" ]; then
+            echo "Formatting issues found - run 'npx dprint check' to see issues"
+          fi
+          exit 1
 
   browser-integration:
     runs-on: ubuntu-latest
@@ -154,22 +175,55 @@ jobs:
       - run: npm ci
 
       - name: Build src
+        id: build-src
+        continue-on-error: true
         run: npx hereby build-src
 
       - name: Build scripts
+        id: build-scripts
+        continue-on-error: true
         run: npx hereby scripts
 
       - name: ESLint tests
+        id: eslint-tests
+        continue-on-error: true
         run: npx hereby run-eslint-rules-tests
 
       - name: Build tsc
+        id: build-tsc
+        continue-on-error: true
         run: npx hereby tsc
 
       - name: Clean
+        if: steps.build-tsc.outcome == 'success'
         run: npx hereby clean-src
 
       - name: Self build
+        id: self-build
+        continue-on-error: true
+        if: steps.build-tsc.outcome == 'success'
         run: npx hereby build-src --built
+
+      - name: Report failures
+        if: steps.build-src.outcome == 'failure' || steps.build-scripts.outcome == 'failure' || steps.eslint-tests.outcome == 'failure' || steps.build-tsc.outcome == 'failure' || steps.self-build.outcome == 'failure'
+        run: |
+          echo "Build validation failures detected:"
+          if [ "${{ steps.build-src.outcome }}" == "failure" ]; then
+            echo "Source build failed - run 'npx hereby build-src'"
+          fi
+          if [ "${{ steps.build-scripts.outcome }}" == "failure" ]; then
+            echo "Scripts build failed - run 'npx hereby scripts'"
+          fi
+          if [ "${{ steps.eslint-tests.outcome }}" == "failure" ]; then
+            echo "ESLint rule tests failed - run 'npx hereby run-eslint-rules-tests'"
+          fi
+          if [ "${{ steps.build-tsc.outcome }}" == "failure" ]; then
+            echo "TSC build failed - run 'npx hereby tsc'"
+          fi
+          if [ "${{ steps.self-build.outcome }}" == "failure" ]; then
+            echo "Self build failed - run 'npx hereby build-src --built'"
+          fi
+          exit 1
 
   baselines:
     runs-on: ubuntu-latest
