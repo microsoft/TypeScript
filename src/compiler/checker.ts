@@ -32741,6 +32741,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function popContextualType() {
         contextualTypeCount--;
+        // Clear out the popped element's referenced objects.
+        contextualTypeNodes[contextualTypeCount] = undefined as any;
+        contextualTypes[contextualTypeCount] = undefined;
+        contextualIsCache[contextualTypeCount] = undefined as any;
     }
 
     function findContextualNode(node: Node, includeCaches: boolean) {
@@ -32760,6 +32764,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function popInferenceContext() {
         inferenceContextCount--;
+        inferenceContextNodes[inferenceContextCount] = undefined as any;
+        inferenceContexts[inferenceContextCount] = undefined;
     }
 
     function getInferenceContext(node: Node) {
@@ -32772,12 +32778,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function pushActiveMapper(mapper: TypeMapper) {
         activeTypeMappers[activeTypeMappersCount] = mapper;
-        activeTypeMappersCaches[activeTypeMappersCount] = new Map();
+        activeTypeMappersCaches[activeTypeMappersCount] ??= new Map();
         activeTypeMappersCount++;
     }
 
     function popActiveMapper() {
         activeTypeMappersCount--;
+        // Clear out the popped element's referenced objects.
+        activeTypeMappers[activeTypeMappersCount] = undefined as any;
+        activeTypeMappersCaches[activeTypeMappersCount].clear();
     }
 
     function findActiveMapper(mapper: TypeMapper) {
