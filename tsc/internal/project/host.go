@@ -20,7 +20,6 @@ type ServiceHost interface {
 	DefaultLibraryPath() string
 	TypingsLocation() string
 	GetCurrentDirectory() string
-	NewLine() string
 
 	Client() Client
 }

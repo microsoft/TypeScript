@@ -24,7 +24,7 @@ func start(w *watcher) ExitStatus {
 func (w *watcher) initialize() {
 	// if this function is updated, make sure to update `StartForTest` in export_test.go as needed
 	if w.configFileName == "" {
-		w.host = compiler.NewCompilerHost(w.options.CompilerOptions(), w.sys.GetCurrentDirectory(), w.sys.FS(), w.sys.DefaultLibraryPath(), nil)
+		w.host = compiler.NewCompilerHost(w.sys.GetCurrentDirectory(), w.sys.FS(), w.sys.DefaultLibraryPath())
 	}
 }
 
@@ -42,12 +42,12 @@ func (w *watcher) doCycle() {
 		JSDocParsingMode: ast.JSDocParsingModeParseForTypeErrors,
 	})
 	if w.hasBeenModified(w.program) {
-		fmt.Fprint(w.sys.Writer(), "build starting at ", w.sys.Now(), w.sys.NewLine())
+		fmt.Fprintln(w.sys.Writer(), "build starting at", w.sys.Now())
 		timeStart := w.sys.Now()
 		w.compileAndEmit()
-		fmt.Fprint(w.sys.Writer(), "build finished in ", w.sys.Now().Sub(timeStart), w.sys.NewLine())
+		fmt.Fprintln(w.sys.Writer(), "build finished in", w.sys.Now().Sub(timeStart))
 	} else {
 		// print something???
-		// fmt.Fprint(w.sys.Writer(), "no changes detected at ", w.sys.Now(), w.sys.NewLine())
+		// fmt.Fprintln(w.sys.Writer(), "no changes detected at", w.sys.Now())
 	}
 }

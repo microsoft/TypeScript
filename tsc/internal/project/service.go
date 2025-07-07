@@ -119,11 +119,6 @@ func (s *Service) HasLevel(level LogLevel) bool {
 	return s.options.Logger.HasLevel(level)
 }
 
-// NewLine implements ProjectHost.
-func (s *Service) NewLine() string {
-	return s.host.NewLine()
-}
-
 // DefaultLibraryPath implements ProjectHost.
 func (s *Service) DefaultLibraryPath() string {
 	return s.host.DefaultLibraryPath()

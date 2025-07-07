@@ -162,7 +162,6 @@ func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, conten
 		Err: &err,
 
 		Cwd:                "/",
-		NewLine:            core.NewLineKindLF,
 		FS:                 fs,
 		DefaultLibraryPath: bundled.LibPath(),
 

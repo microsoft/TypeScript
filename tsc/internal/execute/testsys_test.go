@@ -72,10 +72,6 @@ func (s *testSys) GetCurrentDirectory() string {
 	return s.cwd
 }
 
-func (s *testSys) NewLine() string {
-	return "\n"
-}
-
 func (s *testSys) Writer() io.Writer {
 	return s.currentWrite
 }

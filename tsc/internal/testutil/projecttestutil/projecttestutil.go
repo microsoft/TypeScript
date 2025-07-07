@@ -74,11 +74,6 @@ func (p *ProjectServiceHost) Log(msg ...any) {
 	fmt.Fprintln(&p.output, msg...)
 }
 
-// NewLine implements project.ProjectServiceHost.
-func (p *ProjectServiceHost) NewLine() string {
-	return "\n"
-}
-
 // Client implements project.ProjectServiceHost.
 func (p *ProjectServiceHost) Client() project.Client {
 	return p.ClientMock

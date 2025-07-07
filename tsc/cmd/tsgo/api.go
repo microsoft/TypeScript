@@ -26,7 +26,6 @@ func runAPI(args []string) int {
 		Out:                os.Stdout,
 		Err:                os.Stderr,
 		Cwd:                *cwd,
-		NewLine:            "\n",
 		DefaultLibraryPath: defaultLibraryPath,
 	})
 

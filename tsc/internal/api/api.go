@@ -111,11 +111,6 @@ func (api *API) Trace(s string) {
 	api.options.Logger.Info(s)
 }
 
-// NewLine implements ProjectHost.
-func (api *API) NewLine() string {
-	return api.host.NewLine()
-}
-
 // PositionEncoding implements ProjectHost.
 func (api *API) PositionEncoding() lsproto.PositionEncodingKind {
 	return lsproto.PositionEncodingKindUTF8

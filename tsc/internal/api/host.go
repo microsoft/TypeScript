@@ -6,5 +6,4 @@ type APIHost interface {
 	FS() vfs.FS
 	DefaultLibraryPath() string
 	GetCurrentDirectory() string
-	NewLine() string
 }

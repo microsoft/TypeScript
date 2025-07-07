@@ -98,7 +98,7 @@ func reportStatistics(sys System, program *compiler.Program, result compileAndEm
 }
 
 func printVersion(sys System) {
-	fmt.Fprint(sys.Writer(), diagnostics.Version_0.Format(core.Version())+sys.NewLine())
+	fmt.Fprintln(sys.Writer(), diagnostics.Version_0.Format(core.Version()))
 	sys.EndWrite()
 }
 
@@ -144,7 +144,7 @@ func getHeader(sys System, message string) []string {
 	//         header.push("".padStart(leftAlign) + tsIconSecondLine + sys.newLine);
 	//     }
 	//     else {
-	header = append(header, message+sys.NewLine(), sys.NewLine())
+	header = append(header, message+"\n", "\n")
 	//     }
 	return header
 }
@@ -156,15 +156,15 @@ func printEasyHelp(sys System, simpleOptions []*tsoptions.CommandLineOption) {
 		for _, example := range examples {
 			// !!! colors
 			// output.push("  " + colors.blue(example) + sys.newLine);
-			output = append(output, "  ", example, sys.NewLine())
+			output = append(output, "  ", example, "\n")
 		}
-		output = append(output, "  ", desc.Format(), sys.NewLine(), sys.NewLine())
+		output = append(output, "  ", desc.Format(), "\n", "\n")
 	}
 
 	msg := diagnostics.X_tsc_Colon_The_TypeScript_Compiler.Format() + " - " + diagnostics.Version_0.Format(core.Version())
 	output = append(output, getHeader(sys, msg)...)
 
-	output = append(output /*colors.bold(*/, diagnostics.COMMON_COMMANDS.Format() /*)*/, sys.NewLine(), sys.NewLine())
+	output = append(output /*colors.bold(*/, diagnostics.COMMON_COMMANDS.Format() /*)*/, "\n", "\n")
 
 	example([]string{"tsc"}, diagnostics.Compiles_the_current_project_tsconfig_json_in_the_working_directory)
 	example([]string{"tsc app.ts util.ts"}, diagnostics.Ignoring_tsconfig_json_compiles_the_specified_files_with_default_compiler_options)
@@ -206,15 +206,15 @@ func generateSectionOptionsOutput(
 	afterOptionsDescription *string,
 ) (output []string) {
 	// !!! color
-	output = append(output /*createColors(sys).bold(*/, sectionName /*)*/, sys.NewLine(), sys.NewLine())
+	output = append(output /*createColors(sys).bold(*/, sectionName /*)*/, "\n", "\n")
 
 	if beforeOptionsDescription != nil {
-		output = append(output, *beforeOptionsDescription, sys.NewLine(), sys.NewLine())
+		output = append(output, *beforeOptionsDescription, "\n", "\n")
 	}
 	if !subCategory {
 		output = append(output, generateGroupOptionOutput(sys, options)...)
 		if afterOptionsDescription != nil {
-			output = append(output, *afterOptionsDescription, sys.NewLine(), sys.NewLine())
+			output = append(output, *afterOptionsDescription, "\n", "\n")
 		}
 		return output
 	}
@@ -227,11 +227,11 @@ func generateSectionOptionsOutput(
 		categoryMap[curCategory] = append(categoryMap[curCategory], option)
 	}
 	for key, value := range categoryMap {
-		output = append(output, "### ", key, sys.NewLine(), sys.NewLine())
+		output = append(output, "### ", key, "\n", "\n")
 		output = append(output, generateGroupOptionOutput(sys, value)...)
 	}
 	if afterOptionsDescription != nil {
-		output = append(output, *afterOptionsDescription, sys.NewLine(), sys.NewLine())
+		output = append(output, *afterOptionsDescription, "\n", "\n")
 	}
 
 	return output
@@ -258,8 +258,8 @@ func generateGroupOptionOutput(sys System, optionsList []*tsoptions.CommandLineO
 	}
 
 	// make sure always a blank line in the end.
-	if len(lines) < 2 || lines[len(lines)-2] != sys.NewLine() {
-		lines = append(lines, sys.NewLine())
+	if len(lines) < 2 || lines[len(lines)-2] != "\n" {
+		lines = append(lines, "\n")
 	}
 
 	return lines
@@ -312,25 +312,25 @@ func generateOptionOutput(
 		// !!!     }
 		// !!!     text.push(sys.newLine);
 	} else {
-		text = append(text /* !!! colors.blue(name) */, name, sys.NewLine())
+		text = append(text /* !!! colors.blue(name) */, name, "\n")
 		if option.Description != nil {
 			text = append(text, option.Description.Format())
 		}
-		text = append(text, sys.NewLine())
+		text = append(text, "\n")
 		if showAdditionalInfoOutput(valueCandidates, option) {
 			if valueCandidates != nil {
 				text = append(text, valueCandidates.valueType, " ", valueCandidates.possibleValues)
 			}
 			if defaultValueDescription != "" {
 				if valueCandidates != nil {
-					text = append(text, sys.NewLine())
+					text = append(text, "\n")
 				}
 				text = append(text, diagnostics.X_default_Colon.Format(), " ", defaultValueDescription)
 			}
 
-			text = append(text, sys.NewLine())
+			text = append(text, "\n")
 		}
-		text = append(text, sys.NewLine())
+		text = append(text, "\n")
 	}
 
 	return text

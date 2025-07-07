@@ -61,7 +61,6 @@ type ServerOptions struct {
 	Out                io.Writer
 	Err                io.Writer
 	Cwd                string
-	NewLine            string
 	DefaultLibraryPath string
 }
 
@@ -98,7 +97,6 @@ func NewServer(options *ServerOptions) *Server {
 		w:                  bufio.NewWriter(options.Out),
 		stderr:             options.Err,
 		cwd:                options.Cwd,
-		newLine:            options.NewLine,
 		fs:                 bundled.WrapFS(osvfs.FS()),
 		defaultLibraryPath: options.DefaultLibraryPath,
 	}
@@ -124,11 +122,6 @@ func (s *Server) FS() vfs.FS {
 // GetCurrentDirectory implements APIHost.
 func (s *Server) GetCurrentDirectory() string {
 	return s.cwd
-}
-
-// NewLine implements APIHost.
-func (s *Server) NewLine() string {
-	return s.newLine
 }
 
 func (s *Server) Run() error {

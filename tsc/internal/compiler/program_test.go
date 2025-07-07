@@ -240,7 +240,7 @@ func TestProgram(t *testing.T) {
 						CompilerOptions: &opts,
 					},
 				},
-				Host: NewCompilerHost(&opts, "c:/dev/src", fs, bundled.LibPath(), nil),
+				Host: NewCompilerHost("c:/dev/src", fs, bundled.LibPath()),
 			})
 
 			actualFiles := []string{}
@@ -277,7 +277,7 @@ func BenchmarkNewProgram(b *testing.B) {
 						CompilerOptions: &opts,
 					},
 				},
-				Host: NewCompilerHost(&opts, "c:/dev/src", fs, bundled.LibPath(), nil),
+				Host: NewCompilerHost("c:/dev/src", fs, bundled.LibPath()),
 			}
 
 			for b.Loop() {
@@ -294,7 +294,7 @@ func BenchmarkNewProgram(b *testing.B) {
 		fs := osvfs.FS()
 		fs = bundled.WrapFS(fs)
 
-		host := NewCompilerHost(nil, rootPath, fs, bundled.LibPath(), nil)
+		host := NewCompilerHost(rootPath, fs, bundled.LibPath())
 
 		parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(tspath.CombinePaths(rootPath, "tsconfig.json"), nil, host, nil)
 		assert.Equal(b, len(errors), 0, "Expected no errors in parsed command line")

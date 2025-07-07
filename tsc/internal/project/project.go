@@ -77,7 +77,6 @@ const (
 type ProjectHost interface {
 	tsoptions.ParseConfigHost
 	module.ResolutionHost
-	NewLine() string
 	DefaultLibraryPath() string
 	TypingsInstaller() *TypingsInstaller
 	DocumentStore() *DocumentStore
@@ -292,11 +291,6 @@ func (p *Project) GetResolvedProjectReference(fileName string, path tspath.Path)
 func (p *Project) GetProgram() *compiler.Program {
 	program, _ := p.updateGraph()
 	return program
-}
-
-// NewLine implements compiler.CompilerHost.
-func (p *Project) NewLine() string {
-	return p.host.NewLine()
 }
 
 // Trace implements compiler.CompilerHost.

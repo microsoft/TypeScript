@@ -13,7 +13,6 @@ type System interface {
 	FS() vfs.FS
 	DefaultLibraryPath() string
 	GetCurrentDirectory() string
-	NewLine() string // #241 eventually we want to use "\n"
 
 	Now() time.Time
 	SinceStart() time.Duration
