@@ -1,0 +1,96 @@
+//// [tests/cases/compiler/asyncYieldStarContextualType.ts] ////
+
+=== asyncYieldStarContextualType.ts ===
+// https://github.com/microsoft/TypeScript/issues/57903
+interface Result<T, E> {
+>Result : Symbol(Result, Decl(asyncYieldStarContextualType.ts, 0, 0))
+>T : Symbol(T, Decl(asyncYieldStarContextualType.ts, 1, 17))
+>E : Symbol(E, Decl(asyncYieldStarContextualType.ts, 1, 19))
+
+    [Symbol.iterator](): Generator<E, T, unknown>
+>[Symbol.iterator] : Symbol(Result[Symbol.iterator], Decl(asyncYieldStarContextualType.ts, 1, 24))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>E : Symbol(E, Decl(asyncYieldStarContextualType.ts, 1, 19))
+>T : Symbol(T, Decl(asyncYieldStarContextualType.ts, 1, 17))
+}
+
+type Book = { id: string; title: string; authorId: string };
+>Book : Symbol(Book, Decl(asyncYieldStarContextualType.ts, 3, 1))
+>id : Symbol(id, Decl(asyncYieldStarContextualType.ts, 5, 13))
+>title : Symbol(title, Decl(asyncYieldStarContextualType.ts, 5, 25))
+>authorId : Symbol(authorId, Decl(asyncYieldStarContextualType.ts, 5, 40))
+
+type Author = { id: string; name: string };
+>Author : Symbol(Author, Decl(asyncYieldStarContextualType.ts, 5, 60))
+>id : Symbol(id, Decl(asyncYieldStarContextualType.ts, 6, 15))
+>name : Symbol(name, Decl(asyncYieldStarContextualType.ts, 6, 27))
+
+type BookWithAuthor = Book & { author: Author };
+>BookWithAuthor : Symbol(BookWithAuthor, Decl(asyncYieldStarContextualType.ts, 6, 43))
+>Book : Symbol(Book, Decl(asyncYieldStarContextualType.ts, 3, 1))
+>author : Symbol(author, Decl(asyncYieldStarContextualType.ts, 7, 30))
+>Author : Symbol(Author, Decl(asyncYieldStarContextualType.ts, 5, 60))
+
+declare const authorPromise: Promise<Result<Author, "NOT_FOUND_AUTHOR">>;
+>authorPromise : Symbol(authorPromise, Decl(asyncYieldStarContextualType.ts, 9, 13))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Result : Symbol(Result, Decl(asyncYieldStarContextualType.ts, 0, 0))
+>Author : Symbol(Author, Decl(asyncYieldStarContextualType.ts, 5, 60))
+
+declare const mapper: <T>(result: Result<T, "NOT_FOUND_AUTHOR">) => Result<T, "NOT_FOUND_AUTHOR">;
+>mapper : Symbol(mapper, Decl(asyncYieldStarContextualType.ts, 10, 13))
+>T : Symbol(T, Decl(asyncYieldStarContextualType.ts, 10, 23))
+>result : Symbol(result, Decl(asyncYieldStarContextualType.ts, 10, 26))
+>Result : Symbol(Result, Decl(asyncYieldStarContextualType.ts, 0, 0))
+>T : Symbol(T, Decl(asyncYieldStarContextualType.ts, 10, 23))
+>Result : Symbol(Result, Decl(asyncYieldStarContextualType.ts, 0, 0))
+>T : Symbol(T, Decl(asyncYieldStarContextualType.ts, 10, 23))
+
+declare const g: <T, U, V>() => AsyncGenerator<T, U, V>;
+>g : Symbol(g, Decl(asyncYieldStarContextualType.ts, 11, 13))
+>T : Symbol(T, Decl(asyncYieldStarContextualType.ts, 11, 18))
+>U : Symbol(U, Decl(asyncYieldStarContextualType.ts, 11, 20))
+>V : Symbol(V, Decl(asyncYieldStarContextualType.ts, 11, 23))
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+>T : Symbol(T, Decl(asyncYieldStarContextualType.ts, 11, 18))
+>U : Symbol(U, Decl(asyncYieldStarContextualType.ts, 11, 20))
+>V : Symbol(V, Decl(asyncYieldStarContextualType.ts, 11, 23))
+
+async function* f(): AsyncGenerator<"NOT_FOUND_AUTHOR" | "NOT_FOUND_BOOK", BookWithAuthor, unknown> {
+>f : Symbol(f, Decl(asyncYieldStarContextualType.ts, 11, 56))
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+>BookWithAuthor : Symbol(BookWithAuthor, Decl(asyncYieldStarContextualType.ts, 6, 43))
+
+    // Without yield*, the type of test1 is
+    //   Result<Author, "NOT_FOUND_AUTHOR>
+    const test1 = await authorPromise.then(mapper)
+>test1 : Symbol(test1, Decl(asyncYieldStarContextualType.ts, 16, 9))
+>authorPromise.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>authorPromise : Symbol(authorPromise, Decl(asyncYieldStarContextualType.ts, 9, 13))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>mapper : Symbol(mapper, Decl(asyncYieldStarContextualType.ts, 10, 13))
+
+    // With yield*, the type of test2 is
+    //    Author | BookWithAuthor
+    // But this codepath has no way to produce BookWithAuthor
+    const test2 = yield* await authorPromise.then(mapper)
+>test2 : Symbol(test2, Decl(asyncYieldStarContextualType.ts, 21, 9))
+>authorPromise.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>authorPromise : Symbol(authorPromise, Decl(asyncYieldStarContextualType.ts, 9, 13))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>mapper : Symbol(mapper, Decl(asyncYieldStarContextualType.ts, 10, 13))
+
+    const x1 = yield* g();
+>x1 : Symbol(x1, Decl(asyncYieldStarContextualType.ts, 23, 9))
+>g : Symbol(g, Decl(asyncYieldStarContextualType.ts, 11, 13))
+
+    const x2: number = yield* g();
+>x2 : Symbol(x2, Decl(asyncYieldStarContextualType.ts, 24, 9))
+>g : Symbol(g, Decl(asyncYieldStarContextualType.ts, 11, 13))
+
+    return null! as BookWithAuthor;
+>BookWithAuthor : Symbol(BookWithAuthor, Decl(asyncYieldStarContextualType.ts, 6, 43))
+}

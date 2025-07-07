@@ -87,6 +87,21 @@ Fs::
   "files": []
 }
 
+//// [c:/dev/configs/first/templateextends.json]
+{
+  "extends": "../second/templateextends.json",
+  "include": [
+    "${configDir}/../supplemental.*"
+  ],
+  "compilerOptions": {
+    "rootDirs": [
+      "root1",
+      "${configDir}/root2",
+      "root3"
+    ]
+  }
+}
+
 //// [c:/dev/configs/first.json]
 {
   "extends": "./base",
@@ -110,6 +125,28 @@ Fs::
   ]
 }
 
+//// [c:/dev/configs/second/templateextends.json]
+{
+  "files": [
+    "${configDir}/main.ts"
+  ],
+  "compilerOptions": {
+    "outDir": "./insecond",
+    "declarationDir": "${configDir}/decls",
+    "paths": {
+      "something": [
+        "${configDir}/something"
+      ],
+      "something/*": [
+        "${configDir}/something/*"
+      ],
+      "other/*": [
+        "./other/*"
+      ]
+    }
+  }
+}
+
 //// [c:/dev/configs/second.json]
 {
   "extends": "./base",
@@ -119,6 +156,44 @@ Fs::
   "include": [
     "../supplemental.*"
   ]
+}
+
+//// [c:/dev/configs/template.json]
+{
+  "include": [
+    "${configDir}/../supplemental.*"
+  ],
+  "files": [
+    "${configDir}/main.ts"
+  ],
+  "compilerOptions": {
+    "declarationDir": "${configDir}/decls",
+    "rootDirs": [
+      "root1",
+      "${configDir}/root2",
+      "root3"
+    ],
+    "paths": {
+      "something": [
+        "${configDir}/something"
+      ],
+      "something/*": [
+        "${configDir}/something/*"
+      ],
+      "other/*": [
+        "./other/*"
+      ]
+    }
+  }
+}
+
+//// [c:/dev/configs/templateandextends.json]
+{
+  "extends": "./first/templateextends.json",
+  "compilerOptions": {
+    "strict": true,
+    "baseUrl": "./src"
+  }
 }
 
 //// [c:/dev/configs/tests.json]

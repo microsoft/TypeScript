@@ -1,8 +1,6 @@
 //// [tests/cases/conformance/moduleResolution/untypedModuleImport_withAugmentation.ts] ////
 
 //// [index.js]
-// This tests that augmenting an untyped module is forbidden.
-
 This file is not processed.
 
 //// [a.ts]

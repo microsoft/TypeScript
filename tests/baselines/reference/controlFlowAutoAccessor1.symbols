@@ -1,0 +1,133 @@
+//// [tests/cases/compiler/controlFlowAutoAccessor1.ts] ////
+
+=== controlFlowAutoAccessor1.ts ===
+class Example {
+>Example : Symbol(Example, Decl(controlFlowAutoAccessor1.ts, 0, 0))
+
+  accessor test;
+>test : Symbol(Example.test, Decl(controlFlowAutoAccessor1.ts, 0, 15))
+
+  constructor(test: number) {
+>test : Symbol(test, Decl(controlFlowAutoAccessor1.ts, 3, 14))
+
+    this.test = test;
+>this.test : Symbol(Example.test, Decl(controlFlowAutoAccessor1.ts, 0, 15))
+>this : Symbol(Example, Decl(controlFlowAutoAccessor1.ts, 0, 0))
+>test : Symbol(Example.test, Decl(controlFlowAutoAccessor1.ts, 0, 15))
+>test : Symbol(test, Decl(controlFlowAutoAccessor1.ts, 3, 14))
+  }
+
+  getTest() {
+>getTest : Symbol(Example.getTest, Decl(controlFlowAutoAccessor1.ts, 5, 3))
+
+    return this.test;
+>this.test : Symbol(Example.test, Decl(controlFlowAutoAccessor1.ts, 0, 15))
+>this : Symbol(Example, Decl(controlFlowAutoAccessor1.ts, 0, 0))
+>test : Symbol(Example.test, Decl(controlFlowAutoAccessor1.ts, 0, 15))
+  }
+}
+
+class Example2 {
+>Example2 : Symbol(Example2, Decl(controlFlowAutoAccessor1.ts, 10, 1))
+
+  accessor test;
+>test : Symbol(Example2.test, Decl(controlFlowAutoAccessor1.ts, 12, 16))
+
+  constructor(test: number | undefined) {
+>test : Symbol(test, Decl(controlFlowAutoAccessor1.ts, 15, 14))
+
+    this.test = test;
+>this.test : Symbol(Example2.test, Decl(controlFlowAutoAccessor1.ts, 12, 16))
+>this : Symbol(Example2, Decl(controlFlowAutoAccessor1.ts, 10, 1))
+>test : Symbol(Example2.test, Decl(controlFlowAutoAccessor1.ts, 12, 16))
+>test : Symbol(test, Decl(controlFlowAutoAccessor1.ts, 15, 14))
+  }
+
+  getTest() {
+>getTest : Symbol(Example2.getTest, Decl(controlFlowAutoAccessor1.ts, 17, 3))
+
+    if (this.test) {
+>this.test : Symbol(Example2.test, Decl(controlFlowAutoAccessor1.ts, 12, 16))
+>this : Symbol(Example2, Decl(controlFlowAutoAccessor1.ts, 10, 1))
+>test : Symbol(Example2.test, Decl(controlFlowAutoAccessor1.ts, 12, 16))
+
+      return this.test;
+>this.test : Symbol(Example2.test, Decl(controlFlowAutoAccessor1.ts, 12, 16))
+>this : Symbol(Example2, Decl(controlFlowAutoAccessor1.ts, 10, 1))
+>test : Symbol(Example2.test, Decl(controlFlowAutoAccessor1.ts, 12, 16))
+    }
+    return 0;
+  }
+}
+
+// https://github.com/microsoft/TypeScript/issues/59728
+
+class Example3 {
+>Example3 : Symbol(Example3, Decl(controlFlowAutoAccessor1.ts, 25, 1))
+
+  accessor value;
+>value : Symbol(Example3.value, Decl(controlFlowAutoAccessor1.ts, 29, 16))
+
+  constructor(n: number) {
+>n : Symbol(n, Decl(controlFlowAutoAccessor1.ts, 32, 14))
+
+    this.value = n;
+>this.value : Symbol(Example3.value, Decl(controlFlowAutoAccessor1.ts, 29, 16))
+>this : Symbol(Example3, Decl(controlFlowAutoAccessor1.ts, 25, 1))
+>value : Symbol(Example3.value, Decl(controlFlowAutoAccessor1.ts, 29, 16))
+>n : Symbol(n, Decl(controlFlowAutoAccessor1.ts, 32, 14))
+
+    if (n < 0) {
+>n : Symbol(n, Decl(controlFlowAutoAccessor1.ts, 32, 14))
+
+      this.value = null;
+>this.value : Symbol(Example3.value, Decl(controlFlowAutoAccessor1.ts, 29, 16))
+>this : Symbol(Example3, Decl(controlFlowAutoAccessor1.ts, 25, 1))
+>value : Symbol(Example3.value, Decl(controlFlowAutoAccessor1.ts, 29, 16))
+    }
+  }
+}
+
+declare var n: number;
+>n : Symbol(n, Decl(controlFlowAutoAccessor1.ts, 41, 11))
+
+class Example4 {
+>Example4 : Symbol(Example4, Decl(controlFlowAutoAccessor1.ts, 41, 22))
+
+  static accessor value;
+>value : Symbol(Example4.value, Decl(controlFlowAutoAccessor1.ts, 42, 16))
+
+  static {
+    this.value = n;
+>this.value : Symbol(Example4.value, Decl(controlFlowAutoAccessor1.ts, 42, 16))
+>this : Symbol(Example4, Decl(controlFlowAutoAccessor1.ts, 41, 22))
+>value : Symbol(Example4.value, Decl(controlFlowAutoAccessor1.ts, 42, 16))
+>n : Symbol(n, Decl(controlFlowAutoAccessor1.ts, 41, 11))
+
+    if (n < 0) {
+>n : Symbol(n, Decl(controlFlowAutoAccessor1.ts, 41, 11))
+
+      this.value = null;
+>this.value : Symbol(Example4.value, Decl(controlFlowAutoAccessor1.ts, 42, 16))
+>this : Symbol(Example4, Decl(controlFlowAutoAccessor1.ts, 41, 22))
+>value : Symbol(Example4.value, Decl(controlFlowAutoAccessor1.ts, 42, 16))
+    }
+  }
+}
+
+class Example5 {
+>Example5 : Symbol(Example5, Decl(controlFlowAutoAccessor1.ts, 50, 1))
+
+  static accessor value; // error
+>value : Symbol(Example5.value, Decl(controlFlowAutoAccessor1.ts, 52, 16))
+}
+Example5.value = 123;
+>Example5.value : Symbol(Example5.value, Decl(controlFlowAutoAccessor1.ts, 52, 16))
+>Example5 : Symbol(Example5, Decl(controlFlowAutoAccessor1.ts, 50, 1))
+>value : Symbol(Example5.value, Decl(controlFlowAutoAccessor1.ts, 52, 16))
+
+Example5.value++;
+>Example5.value : Symbol(Example5.value, Decl(controlFlowAutoAccessor1.ts, 52, 16))
+>Example5 : Symbol(Example5, Decl(controlFlowAutoAccessor1.ts, 50, 1))
+>value : Symbol(Example5.value, Decl(controlFlowAutoAccessor1.ts, 52, 16))
+

@@ -1,24 +1,16 @@
 // @ts-check
-import {
-    CancelToken,
-} from "@esfx/canceltoken";
-import chalk from "chalk";
+import { CancelToken } from "@esfx/canceltoken";
+import assert from "assert";
 import chokidar from "chokidar";
 import esbuild from "esbuild";
-import {
-    EventEmitter,
-} from "events";
+import { EventEmitter } from "events";
 import fs from "fs";
-import _glob from "glob";
-import {
-    task,
-} from "hereby";
+import { glob } from "glob";
+import { task } from "hereby";
 import path from "path";
-import util from "util";
+import pc from "picocolors";
 
-import {
-    localizationDirectories,
-} from "./scripts/build/localization.mjs";
+import { localizationDirectories } from "./scripts/build/localization.mjs";
 import cmdLineOptions from "./scripts/build/options.mjs";
 import {
     buildProject,
@@ -41,13 +33,11 @@ import {
     rimraf,
 } from "./scripts/build/utils.mjs";
 
-const glob = util.promisify(_glob);
-
 /** @typedef {ReturnType<typeof task>} Task */
 void 0;
 
 const copyrightFilename = "./scripts/CopyrightNotice.txt";
-const copyright = memoize(async () => {
+const getCopyrightHeader = memoize(async () => {
     const contents = await fs.promises.readFile(copyrightFilename, "utf-8");
     return contents.replace(/\r\n/g, "\n");
 });
@@ -77,7 +67,7 @@ export const generateLibs = task({
     run: async () => {
         await fs.promises.mkdir("./built/local", { recursive: true });
         for (const lib of libs()) {
-            let output = await copyright();
+            let output = await getCopyrightHeader();
 
             for (const source of lib.sources) {
                 const contents = await fs.promises.readFile(source, "utf-8");
@@ -160,13 +150,15 @@ export const cleanSrc = task({
     run: () => cleanProject("src"),
 });
 
+const dtsBundlerPath = "./scripts/dtsBundler.mjs";
+
 /**
  * @param {string} entrypoint
  * @param {string} output
  */
 async function runDtsBundler(entrypoint, output) {
     await exec(process.execPath, [
-        "./scripts/dtsBundler.mjs",
+        dtsBundlerPath,
         "--entrypoint",
         entrypoint,
         "--output",
@@ -182,14 +174,18 @@ async function runDtsBundler(entrypoint, output) {
  * @typedef BundlerTaskOptions
  * @property {boolean} [exportIsTsObject]
  * @property {boolean} [treeShaking]
+ * @property {boolean} [usePublicAPI]
  * @property {() => void} [onWatchRebuild]
  */
 function createBundler(entrypoint, outfile, taskOptions = {}) {
     const getOptions = memoize(async () => {
+        const copyright = await getCopyrightHeader();
+        const banner = taskOptions.exportIsTsObject ? "var ts = {}; ((module) => {" : "";
+
         /** @type {esbuild.BuildOptions} */
         const options = {
             entryPoints: [entrypoint],
-            banner: { js: await copyright() },
+            banner: { js: copyright + banner },
             bundle: true,
             outfile,
             platform: "node",
@@ -203,13 +199,24 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             // legalComments: "none", // If we add copyright headers to the source files, uncomment.
         };
 
+        if (taskOptions.usePublicAPI) {
+            options.external = ["./typescript.js"];
+            options.plugins = options.plugins || [];
+            options.plugins.push({
+                name: "remap-typescript-to-require",
+                setup(build) {
+                    build.onLoad({ filter: /src[\\/]typescript[\\/]typescript\.ts$/ }, () => {
+                        return { contents: `export * from "./typescript.js"` };
+                    });
+                },
+            });
+        }
+
         if (taskOptions.exportIsTsObject) {
-            // We use an IIFE so we can inject the footer, and so that "ts" is global if not loaded as a module.
-            options.format = "iife";
-            // Name the variable ts, matching our old big bundle and so we can use the code below.
-            options.globalName = "ts";
-            // If we are in a CJS context, export the ts namespace.
-            options.footer = { js: `\nif (typeof module !== "undefined" && module.exports) { module.exports = ts; }` };
+            // Monaco bundles us as ESM by wrapping our code with something that defines module.exports
+            // but then does not use it, instead using the `ts` variable. Ensure that if we think we're CJS
+            // that we still set `ts` to the module.exports object.
+            options.footer = { js: `})({ get exports() { return ts; }, set exports(v) { ts = v; if (typeof module !== "undefined" && module.exports) { module.exports = v; } } })` };
 
             // esbuild converts calls to "require" to "__require"; this function
             // calls the real require if it exists, or throws if it does not (rather than
@@ -226,18 +233,31 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             const fakeName = "Q".repeat(require.length);
             const fakeNameRegExp = new RegExp(fakeName, "g");
             options.define = { [require]: fakeName };
-            options.plugins = [
+
+            // For historical reasons, TypeScript does not set __esModule. Hack esbuild's __toCommonJS to be a noop.
+            // We reference `__copyProps` to ensure the final bundle doesn't have any unreferenced code.
+            const toCommonJsRegExp = /var __toCommonJS .*/;
+            const toCommonJsRegExpReplacement = "var __toCommonJS = (mod) => (__copyProps, mod); // Modified helper to skip setting __esModule.";
+
+            options.plugins = options.plugins || [];
+            options.plugins.push(
                 {
-                    name: "fix-require",
+                    name: "post-process",
                     setup: build => {
                         build.onEnd(async () => {
                             let contents = await fs.promises.readFile(outfile, "utf-8");
                             contents = contents.replace(fakeNameRegExp, require);
+                            let matches = 0;
+                            contents = contents.replace(toCommonJsRegExp, () => {
+                                matches++;
+                                return toCommonJsRegExpReplacement;
+                            });
+                            assert(matches === 1, "Expected exactly one match for __toCommonJS");
                             await fs.promises.writeFile(outfile, contents);
                         });
                     },
                 },
-            ];
+            );
         }
 
         return options;
@@ -283,6 +303,7 @@ let printedWatchWarning = false;
  * @param {string} options.srcEntrypoint
  * @param {string} options.builtEntrypoint
  * @param {string} options.output
+ * @param {boolean} [options.enableCompileCache]
  * @param {Task[]} [options.mainDeps]
  * @param {BundlerTaskOptions} [options.bundlerOptions]
  */
@@ -293,7 +314,37 @@ function entrypointBuildTask(options) {
         run: () => buildProject(options.project),
     });
 
-    const bundler = createBundler(options.srcEntrypoint, options.output, options.bundlerOptions);
+    const mainDeps = options.mainDeps?.slice(0) ?? [];
+
+    let output = options.output;
+    if (options.enableCompileCache) {
+        const originalOutput = output;
+        output = path.join(path.dirname(output), "_" + path.basename(output));
+
+        const compileCacheShim = task({
+            name: `shim-compile-cache-${options.name}`,
+            run: async () => {
+                const outDir = path.dirname(originalOutput);
+                await fs.promises.mkdir(outDir, { recursive: true });
+                const moduleSpecifier = path.relative(outDir, output);
+                const lines = [
+                    `// This file is a shim which defers loading the real module until the compile cache is enabled.`,
+                    `try {`,
+                    `  const { enableCompileCache } = require("node:module");`,
+                    `  if (enableCompileCache) {`,
+                    `    enableCompileCache();`,
+                    `  }`,
+                    `} catch {}`,
+                    `module.exports = require("./${moduleSpecifier.replace(/[\\/]/g, "/")}");`,
+                ];
+                await fs.promises.writeFile(originalOutput, lines.join("\n") + "\n");
+            },
+        });
+
+        mainDeps.push(compileCacheShim);
+    }
+
+    const bundler = createBundler(options.srcEntrypoint, output, options.bundlerOptions);
 
     // If we ever need to bundle our own output, change this to depend on build
     // and run esbuild on builtEntrypoint.
@@ -316,14 +367,13 @@ function entrypointBuildTask(options) {
     const shim = task({
         name: `shim-${options.name}`,
         run: async () => {
-            const outDir = path.dirname(options.output);
+            const outDir = path.dirname(output);
             await fs.promises.mkdir(outDir, { recursive: true });
             const moduleSpecifier = path.relative(outDir, options.builtEntrypoint);
-            await fs.promises.writeFile(options.output, `module.exports = require("./${moduleSpecifier.replace(/[\\/]/g, "/")}")`);
+            await fs.promises.writeFile(output, `module.exports = require("./${moduleSpecifier.replace(/[\\/]/g, "/")}")`);
         },
     });
 
-    const mainDeps = options.mainDeps?.slice(0) ?? [];
     if (cmdLineOptions.bundle) {
         mainDeps.push(bundle);
         if (cmdLineOptions.typecheck) {
@@ -349,7 +399,7 @@ function entrypointBuildTask(options) {
             // allowing them to operate as regular tasks, while creating unresolved promises
             // in the background that keep the process running after all tasks have exited.
             if (!printedWatchWarning) {
-                console.error(chalk.yellowBright("Warning: watch mode is incomplete and may not work as expected. Use at your own risk."));
+                console.error(pc.yellowBright("Warning: watch mode is incomplete and may not work as expected. Use at your own risk."));
                 printedWatchWarning = true;
             }
 
@@ -372,6 +422,7 @@ const { main: tsc, watch: watchTsc } = entrypointBuildTask({
     builtEntrypoint: "./built/local/tsc/tsc.js",
     output: "./built/local/tsc.js",
     mainDeps: [generateLibs],
+    enableCompileCache: true,
 });
 export { tsc, watchTsc };
 
@@ -393,7 +444,7 @@ export const dtsServices = task({
     description: "Bundles typescript.d.ts",
     dependencies: [buildServices],
     run: async () => {
-        if (needsUpdate("./built/local/typescript/tsconfig.tsbuildinfo", ["./built/local/typescript.d.ts", "./built/local/typescript.internal.d.ts"])) {
+        if (needsUpdate(["./built/local/typescript/tsconfig.tsbuildinfo", dtsBundlerPath], ["./built/local/typescript.d.ts", "./built/local/typescript.internal.d.ts"])) {
             await runDtsBundler("./built/local/typescript/typescript.d.ts", "./built/local/typescript.d.ts");
         }
     },
@@ -407,7 +458,9 @@ const { main: tsserver, watch: watchTsserver } = entrypointBuildTask({
     srcEntrypoint: "./src/tsserver/server.ts",
     builtEntrypoint: "./built/local/tsserver/server.js",
     output: "./built/local/tsserver.js",
-    mainDeps: [generateLibs],
+    mainDeps: [generateLibs, services],
+    bundlerOptions: { usePublicAPI: true },
+    enableCompileCache: true,
 });
 export { tsserver, watchTsserver };
 
@@ -449,7 +502,7 @@ export = ts;
  * @param {string} contents
  */
 async function fileContentsWithCopyright(contents) {
-    return await copyright() + contents.trim().replace(/\r\n/g, "\n") + "\n";
+    return await getCopyrightHeader() + contents.trim().replace(/\r\n/g, "\n") + "\n";
 }
 
 const lssl = task({
@@ -516,6 +569,9 @@ export const lint = task({
             `${folder}/.eslintcache`,
             "--format",
             formatter,
+            "--report-unused-disable-directives",
+            "--max-warnings",
+            "0",
         ];
 
         if (cmdLineOptions.fix) {
@@ -541,12 +597,11 @@ export const checkFormat = task({
     run: () => exec(process.execPath, ["node_modules/dprint/bin.js", "check"], { ignoreStdout: true }),
 });
 
-const { main: cancellationToken, watch: watchCancellationToken } = entrypointBuildTask({
-    name: "cancellation-token",
-    project: "src/cancellationToken",
-    srcEntrypoint: "./src/cancellationToken/cancellationToken.ts",
-    builtEntrypoint: "./built/local/cancellationToken/cancellationToken.js",
-    output: "./built/local/cancellationToken.js",
+export const knip = task({
+    name: "knip",
+    description: "Runs knip.",
+    dependencies: [generateDiagnostics],
+    run: () => exec(process.execPath, ["node_modules/knip/bin/knip.js", "--tags=+internal,-knipignore", "--exclude=duplicates,enumMembers", ...(cmdLineOptions.fix ? ["--fix"] : [])]),
 });
 
 const { main: typingsInstaller, watch: watchTypingsInstaller } = entrypointBuildTask({
@@ -556,6 +611,9 @@ const { main: typingsInstaller, watch: watchTypingsInstaller } = entrypointBuild
     srcEntrypoint: "./src/typingsInstaller/nodeTypingsInstaller.ts",
     builtEntrypoint: "./built/local/typingsInstaller/nodeTypingsInstaller.js",
     output: "./built/local/typingsInstaller.js",
+    mainDeps: [services],
+    bundlerOptions: { usePublicAPI: true },
+    enableCompileCache: true,
 });
 
 const { main: watchGuard, watch: watchWatchGuard } = entrypointBuildTask({
@@ -574,7 +632,7 @@ export const generateTypesMap = task({
         const target = "built/local/typesMap.json";
         const contents = await fs.promises.readFile(source, "utf-8");
         JSON.parse(contents); // Validates that the JSON parses.
-        await fs.promises.writeFile(target, contents);
+        await fs.promises.writeFile(target, contents.replace(/\r\n/g, "\n"));
     },
 });
 
@@ -595,14 +653,14 @@ const copyBuiltLocalDiagnosticMessages = task({
 export const otherOutputs = task({
     name: "other-outputs",
     description: "Builds miscelaneous scripts and documents distributed with the LKG",
-    dependencies: [cancellationToken, typingsInstaller, watchGuard, generateTypesMap, copyBuiltLocalDiagnosticMessages],
+    dependencies: [typingsInstaller, watchGuard, generateTypesMap, copyBuiltLocalDiagnosticMessages],
 });
 
 export const watchOtherOutputs = task({
     name: "watch-other-outputs",
     description: "Builds miscelaneous scripts and documents distributed with the LKG",
     hiddenFromTaskList: true,
-    dependencies: [watchCancellationToken, watchTypingsInstaller, watchWatchGuard, generateTypesMap, copyBuiltLocalDiagnosticMessages],
+    dependencies: [watchTypingsInstaller, watchWatchGuard, generateTypesMap, copyBuiltLocalDiagnosticMessages],
 });
 
 export const local = task({
@@ -649,7 +707,7 @@ export const runTestsAndWatch = task({
     dependencies: [watchTests],
     run: async () => {
         if (!cmdLineOptions.tests && !cmdLineOptions.failed) {
-            console.log(chalk.redBright(`You must specifiy either --tests/-t or --failed to use 'runtests-watch'.`));
+            console.log(pc.redBright(`You must specifiy either --tests/-t or --failed to use 'runtests-watch'.`));
             return;
         }
 
@@ -661,9 +719,8 @@ export const runTestsAndWatch = task({
 
         const testsChangedDebouncer = new Debouncer(1_000, endRunTests);
         const testCaseWatcher = chokidar.watch([
-            "tests/cases/**/*.*",
-            "tests/lib/**/*.*",
-            "tests/projects/**/*.*",
+            "tests/cases",
+            "tests/lib",
         ], {
             ignorePermissionErrors: true,
             alwaysStat: true,
@@ -688,7 +745,7 @@ export const runTestsAndWatch = task({
                 running = false;
             }
             if (watching) {
-                console.log(chalk.yellowBright(`[watch] test run complete, waiting for changes...`));
+                console.log(pc.yellowBright(`[watch] test run complete, waiting for changes...`));
                 await promise;
             }
         }
@@ -698,7 +755,7 @@ export const runTestsAndWatch = task({
         }
 
         /**
-         * @param {'add' | 'addDir' | 'change' | 'unlink' | 'unlinkDir'} eventName
+         * @param {'add' | 'addDir' | 'change' | 'unlink' | 'unlinkDir' | 'all' | 'ready' | 'raw' | 'error'} eventName
          * @param {string} path
          * @param {fs.Stats | undefined} stats
          */
@@ -725,9 +782,9 @@ export const runTestsAndWatch = task({
          */
         function beginRunTests(path) {
             if (testsChangedDebouncer.empty) {
-                console.log(chalk.yellowBright(`[watch] tests changed due to '${path}', restarting...`));
+                console.log(pc.yellowBright(`[watch] tests changed due to '${path}', restarting...`));
                 if (running) {
-                    console.log(chalk.yellowBright("[watch] aborting in-progress test run..."));
+                    console.log(pc.yellowBright("[watch] aborting in-progress test run..."));
                 }
                 testsChangedCancelSource.cancel();
                 testsChangedCancelSource = CancelToken.source();
@@ -745,7 +802,7 @@ export const runTestsAndWatch = task({
         function endWatchMode() {
             if (watching) {
                 watching = false;
-                console.log(chalk.yellowBright("[watch] exiting watch mode..."));
+                console.log(pc.yellowBright("[watch] exiting watch mode..."));
                 testsChangedCancelSource.cancel();
                 testCaseWatcher.close();
                 watchTestsEmitter.off("rebuild", onRebuild);
@@ -850,14 +907,16 @@ export const produceLKG = task({
         }
 
         const expectedFiles = [
-            "built/local/cancellationToken.js",
             "built/local/tsc.js",
+            "built/local/_tsc.js",
             "built/local/tsserver.js",
+            "built/local/_tsserver.js",
             "built/local/tsserverlibrary.js",
             "built/local/tsserverlibrary.d.ts",
             "built/local/typescript.js",
             "built/local/typescript.d.ts",
             "built/local/typingsInstaller.js",
+            "built/local/_typingsInstaller.js",
             "built/local/watchGuard.js",
         ].concat(libs().map(lib => lib.target));
         const missingFiles = expectedFiles

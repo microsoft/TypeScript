@@ -78,7 +78,7 @@
 //      * This method mutates the array and returns a reference to the same array.
 //      * @param compareFn Function used to determine the order of the elements. It is expected to return
 //      * a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
-//      * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+//      * value otherwise. If omitted, the elements are sorted in ascending, UTF-16 code unit order.
 //      * ```ts
 //      * [11,2,22,1].sort((a, b) => a - b)
 //      * ```
@@ -87,14 +87,18 @@
 //     /**
 //      * Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
 //      * @param start The zero-based location in the array from which to start removing elements.
-//      * @param deleteCount The number of elements to remove.
+//      * @param deleteCount The number of elements to remove. Omitting this argument will remove all elements from the start
+//      * paramater location to end of the array. If value of this argument is either a negative number, zero, undefined, or a type
+//      * that cannot be converted to an integer, the function will evaluate the argument as zero and not remove any elements.
 //      * @returns An array containing the elements that were deleted.
 //      */
 //     splice(start: number, deleteCount?: number): T[];
 //     /**
 //      * Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
 //      * @param start The zero-based location in the array from which to start removing elements.
-//      * @param deleteCount The number of elements to remove.
+//      * @param deleteCount The number of elements to remove. If value of this argument is either a negative number, zero,
+//      * undefined, or a type that cannot be converted to an integer, the function will evaluate the argument as zero and
+//      * not remove any elements.
 //      * @param items Elements to insert into the array in place of the deleted elements.
 //      * @returns An array containing the elements that were deleted.
 //      */
@@ -145,8 +149,8 @@
 //     some(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean;
 //     /**
 //      * Performs the specified action for each element in an array.
-//      * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.
-//      * @param thisArg  An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+//      * @param callbackfn A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.
+//      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
 //      */
 //     forEach(callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any): void;
 //     /**
@@ -331,7 +335,7 @@
 //      * This method mutates the array and returns a reference to the same array.
 //      * @param compareFn Function used to determine the order of the elements. It is expected to return
 //      * a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
-//      * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+//      * value otherwise. If omitted, the elements are sorted in ascending, UTF-16 code unit order.
 //      * ```ts
 //      * [11,2,22,1].sort((a, b) => a - b)
 //      * ```
@@ -340,14 +344,18 @@
 //     /**
 //      * Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
 //      * @param start The zero-based location in the array from which to start removing elements.
-//      * @param deleteCount The number of elements to remove.
+//      * @param deleteCount The number of elements to remove. Omitting this argument will remove all elements from the start
+//      * paramater location to end of the array. If value of this argument is either a negative number, zero, undefined, or a type
+//      * that cannot be converted to an integer, the function will evaluate the argument as zero and not remove any elements.
 //      * @returns An array containing the elements that were deleted.
 //      */
 //     splice(start: number, deleteCount?: number): T[];
 //     /**
 //      * Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
 //      * @param start The zero-based location in the array from which to start removing elements.
-//      * @param deleteCount The number of elements to remove.
+//      * @param deleteCount The number of elements to remove. If value of this argument is either a negative number, zero,
+//      * undefined, or a type that cannot be converted to an integer, the function will evaluate the argument as zero and
+//      * not remove any elements.
 //      * @param items Elements to insert into the array in place of the deleted elements.
 //      * @returns An array containing the elements that were deleted.
 //      */
@@ -398,8 +406,8 @@
 //     some(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean;
 //     /**
 //      * Performs the specified action for each element in an array.
-//      * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.
-//      * @param thisArg  An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+//      * @param callbackfn A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.
+//      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
 //      */
 //     forEach(callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any): void;
 //     /**

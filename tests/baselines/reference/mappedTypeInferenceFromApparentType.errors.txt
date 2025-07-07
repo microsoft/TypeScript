@@ -1,0 +1,26 @@
+mappedTypeInferenceFromApparentType.ts(10,1): error TS2322: Type 'foo' is not assignable to type 'bar'.
+  Types of parameters 'target' and 'source' are incompatible.
+    Type '{ [K in keyof U]: Obj[K]; }' is not assignable to type '{ [K in keyof U]: U[K]; }'.
+      Type 'Obj[K]' is not assignable to type 'U[K]'.
+        Type 'Obj' is not assignable to type 'U'.
+          'U' could be instantiated with an arbitrary type which could be unrelated to 'Obj'.
+
+
+==== mappedTypeInferenceFromApparentType.ts (1 errors) ====
+    type Obj = {
+        [s: string]: number;
+    };
+    
+    type foo = <T>(target: { [K in keyof T]: T[K] }) => void;
+    type bar = <U extends string[]>(source: { [K in keyof U]: Obj[K] }) => void;
+    
+    declare let f: foo;
+    declare let b: bar;
+    b = f;
+    ~
+!!! error TS2322: Type 'foo' is not assignable to type 'bar'.
+!!! error TS2322:   Types of parameters 'target' and 'source' are incompatible.
+!!! error TS2322:     Type '{ [K in keyof U]: Obj[K]; }' is not assignable to type '{ [K in keyof U]: U[K]; }'.
+!!! error TS2322:       Type 'Obj[K]' is not assignable to type 'U[K]'.
+!!! error TS2322:         Type 'Obj' is not assignable to type 'U'.
+!!! error TS2322:           'U' could be instantiated with an arbitrary type which could be unrelated to 'Obj'.

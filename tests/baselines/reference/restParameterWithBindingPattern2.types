@@ -2,7 +2,10 @@
 
 === restParameterWithBindingPattern2.ts ===
 function a(...[a, b]) { }
->a : (__0_0: any, __0_1: any) => void
+>a : (a: any, b: any) => void
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 

@@ -1,3 +1,4 @@
+// @module: esnext
 // @moduleResolution: node16,nodenext,bundler
 // @traceResolution: true
 // @allowJs: true
@@ -14,7 +15,7 @@
     ".": {
         "import": "./dist/index.mjs",
         "require": "./dist/index.js",
-        "types": "./dist/index.d.ts",
+        "types": "./dist/index.d.ts"
     }
   }
 }

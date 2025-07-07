@@ -3,5 +3,7 @@
 === nullKeyword.ts ===
 null.foo;
 >null.foo : any
+>         : ^^^
 >foo : any
+>    : ^^^
 

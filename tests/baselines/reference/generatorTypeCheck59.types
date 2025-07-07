@@ -3,17 +3,21 @@
 === generatorTypeCheck59.ts ===
 function* g() {
 >g : () => Generator<never, void, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     class C {
 >C : C
+>  : ^
 
         @(yield "")
 >(yield "") : any
 >yield "" : any
 >"" : ""
+>   : ^^
 
         m() { }
 >m : () => void
+>  : ^^^^^^^^^^
 
     };
 }

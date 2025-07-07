@@ -63,34 +63,37 @@ var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (
 };
 let A = (() => {
     var _a, _A_x_accessor_storage, _A_y_accessor_storage;
-    let _staticExtraInitializers = [];
-    let _instanceExtraInitializers = [];
     let _static_x_decorators;
     let _static_x_initializers = [];
+    let _static_x_extraInitializers = [];
     let _y_decorators;
     let _y_initializers = [];
+    let _y_extraInitializers = [];
     return _a = class A {
-            constructor() {
-                _A_y_accessor_storage.set(this, (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _y_initializers, 2)));
-            }
             // uses class reference
             static get x() { return __classPrivateFieldGet(_a, _a, "f", _A_x_accessor_storage); }
             static set x(value) { __classPrivateFieldSet(_a, _a, value, "f", _A_x_accessor_storage); }
             // uses 'this'
             get y() { return __classPrivateFieldGet(this, _A_y_accessor_storage, "f"); }
             set y(value) { __classPrivateFieldSet(this, _A_y_accessor_storage, value, "f"); }
+            constructor() {
+                _A_y_accessor_storage.set(this, __runInitializers(this, _y_initializers, 2));
+                __runInitializers(this, _y_extraInitializers);
+            }
         },
         _A_y_accessor_storage = new WeakMap(),
         (() => {
             const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
             _static_x_decorators = [((t, c) => { })];
             _y_decorators = [((t, c) => { })];
-            __esDecorate(_a, null, _static_x_decorators, { kind: "accessor", name: "x", static: true, private: false, access: { has: obj => "x" in obj, get: obj => obj.x, set: (obj, value) => { obj.x = value; } }, metadata: _metadata }, _static_x_initializers, _staticExtraInitializers);
-            __esDecorate(_a, null, _y_decorators, { kind: "accessor", name: "y", static: false, private: false, access: { has: obj => "y" in obj, get: obj => obj.y, set: (obj, value) => { obj.y = value; } }, metadata: _metadata }, _y_initializers, _instanceExtraInitializers);
+            __esDecorate(_a, null, _static_x_decorators, { kind: "accessor", name: "x", static: true, private: false, access: { has: obj => "x" in obj, get: obj => obj.x, set: (obj, value) => { obj.x = value; } }, metadata: _metadata }, _static_x_initializers, _static_x_extraInitializers);
+            __esDecorate(_a, null, _y_decorators, { kind: "accessor", name: "y", static: false, private: false, access: { has: obj => "y" in obj, get: obj => obj.y, set: (obj, value) => { obj.y = value; } }, metadata: _metadata }, _y_initializers, _y_extraInitializers);
             if (_metadata) Object.defineProperty(_a, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
-            __runInitializers(_a, _staticExtraInitializers);
         })(),
         // uses class reference
         _A_x_accessor_storage = { value: __runInitializers(_a, _static_x_initializers, 1) },
+        (() => {
+            __runInitializers(_a, _static_x_extraInitializers);
+        })(),
         _a;
 })();

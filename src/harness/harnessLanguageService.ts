@@ -1,30 +1,25 @@
-import * as collections from "./_namespaces/collections";
-import * as fakes from "./_namespaces/fakes";
+import * as collections from "./_namespaces/collections.js";
+import * as fakes from "./_namespaces/fakes.js";
 import {
     Compiler,
     mockHash,
     virtualFileSystemRoot,
-} from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
-import {
-    getNewLineCharacter,
-} from "./_namespaces/ts";
-import * as vfs from "./_namespaces/vfs";
-import * as vpath from "./_namespaces/vpath";
-import {
-    incrementalVerifier,
-} from "./incrementalUtils";
+} from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
+import { getNewLineCharacter } from "./_namespaces/ts.js";
+import * as vfs from "./_namespaces/vfs.js";
+import * as vpath from "./_namespaces/vpath.js";
+import { incrementalVerifier } from "./incrementalUtils.js";
+import { patchServiceForStateBaseline } from "./projectServiceStateLogger.js";
 import {
     createLoggerWithInMemoryLogs,
     HarnessLSCouldNotResolveModule,
     LoggerWithInMemoryLogs,
-} from "./tsserverLogger";
-import {
-    createWatchUtils,
-} from "./watchUtils";
+} from "./tsserverLogger.js";
+import { createWatchUtils } from "./watchUtils.js";
 
 export function makeDefaultProxy(info: ts.server.PluginCreateInfo): ts.LanguageService {
-    const proxy = Object.create(/*o*/ null); // eslint-disable-line no-null/no-null
+    const proxy = Object.create(/*o*/ null); // eslint-disable-line no-restricted-syntax
     const langSvc: any = info.languageService;
     for (const k of Object.keys(langSvc)) {
         // eslint-disable-next-line local/only-arrow-functions
@@ -118,7 +113,7 @@ class ScriptSnapshot implements ts.IScriptSnapshot {
 }
 
 class DefaultHostCancellationToken implements ts.HostCancellationToken {
-    public static readonly instance = new DefaultHostCancellationToken();
+    public static readonly instance: DefaultHostCancellationToken = new DefaultHostCancellationToken();
 
     public isCancellationRequested() {
         return false;
@@ -134,16 +129,16 @@ export interface LanguageServiceAdapter {
 }
 
 export abstract class LanguageServiceAdapterHost {
-    public readonly sys = new fakes.System(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: virtualFileSystemRoot }));
+    public readonly sys: fakes.System = new fakes.System(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: virtualFileSystemRoot }));
     public typesRegistry: Map<string, void> | undefined;
     private scriptInfos: collections.SortedMap<string, ScriptInfo>;
     public jsDocParsingMode: ts.JSDocParsingMode | undefined;
 
-    constructor(protected cancellationToken = DefaultHostCancellationToken.instance, protected settings = ts.getDefaultCompilerOptions()) {
+    constructor(protected cancellationToken: DefaultHostCancellationToken = DefaultHostCancellationToken.instance, protected settings: ts.CompilerOptions = ts.getDefaultCompilerOptions()) {
         this.scriptInfos = new collections.SortedMap({ comparer: this.vfs.stringComparer, sort: "insertion" });
     }
 
-    public get vfs() {
+    public get vfs(): vfs.FileSystem {
         return this.sys.vfs;
     }
 
@@ -190,7 +185,7 @@ export abstract class LanguageServiceAdapterHost {
         }
     }
 
-    public directoryExists(path: string) {
+    public directoryExists(path: string): boolean {
         return this.vfs.statSync(path).isDirectory();
     }
 
@@ -219,7 +214,7 @@ export abstract class LanguageServiceAdapterHost {
         });
     }
 
-    public editScript(fileName: string, start: number, end: number, newText: string) {
+    public editScript(fileName: string, start: number, end: number, newText: string): void {
         const script = this.getScriptInfo(fileName);
         if (script) {
             script.editContent(start, end, newText);
@@ -249,28 +244,30 @@ export abstract class LanguageServiceAdapterHost {
         return ts.computePositionOfLineAndCharacter(script.getLineMap(), lineAndCharacter.line, lineAndCharacter.character);
     }
 
-    useCaseSensitiveFileNames() {
+    useCaseSensitiveFileNames(): boolean {
         return !this.vfs.ignoreCase;
     }
 }
 
+/** TypeScript Typings Installer global cache location for the tests */
+export const harnessTypingInstallerCacheLocation = "/home/src/Library/Caches/typescript";
 /// Native adapter
 class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceHost, LanguageServiceAdapterHost {
     isKnownTypesPackageName(name: string): boolean {
         return !!this.typesRegistry && this.typesRegistry.has(name);
     }
 
-    getGlobalTypingsCacheLocation() {
-        return "/Library/Caches/typescript";
+    getGlobalTypingsCacheLocation(): string {
+        return harnessTypingInstallerCacheLocation;
     }
 
-    installPackage = ts.notImplemented;
+    installPackage: typeof ts.notImplemented = ts.notImplemented;
 
-    getCompilationSettings() {
+    getCompilationSettings(): ts.CompilerOptions {
         return this.settings;
     }
 
-    getCancellationToken() {
+    getCancellationToken(): DefaultHostCancellationToken {
         return this.cancellationToken;
     }
 
@@ -328,14 +325,14 @@ class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts
         return 0;
     }
 
-    log = ts.noop;
-    trace = ts.noop;
-    error = ts.noop;
+    log: typeof ts.noop = ts.noop;
+    trace: typeof ts.noop = ts.noop;
+    error: typeof ts.noop = ts.noop;
 }
 
 export class NativeLanguageServiceAdapter implements LanguageServiceAdapter {
     private host: NativeLanguageServiceHost;
-    getLogger = ts.returnUndefined;
+    getLogger: typeof ts.returnUndefined = ts.returnUndefined;
     constructor(cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
         this.host = new NativeLanguageServiceHost(cancellationToken, options);
     }
@@ -353,6 +350,11 @@ export class NativeLanguageServiceAdapter implements LanguageServiceAdapter {
     }
 }
 
+/**
+ * This is set to vscode so that in tsserver tests its what is expected
+ * and is unrelated and is error to not specify for tsc tests
+ */
+export const harnessSessionCurrentDirectory = "/home/src/Vscode/Projects/bin";
 // Server adapter
 class SessionClientHost extends NativeLanguageServiceHost implements ts.server.SessionClientHost {
     private client!: ts.server.SessionClient;
@@ -361,10 +363,14 @@ class SessionClientHost extends NativeLanguageServiceHost implements ts.server.S
         super(cancellationToken, settings);
     }
 
-    onMessage = ts.noop;
-    writeMessage = ts.noop;
+    override getCurrentDirectory(): string {
+        return harnessSessionCurrentDirectory;
+    }
 
-    setClient(client: ts.server.SessionClient) {
+    onMessage: typeof ts.noop = ts.noop;
+    writeMessage: typeof ts.noop = ts.noop;
+
+    setClient(client: ts.server.SessionClient): void {
         this.client = client;
     }
 
@@ -373,7 +379,7 @@ class SessionClientHost extends NativeLanguageServiceHost implements ts.server.S
         this.client.openFile(fileName, content, scriptKindName);
     }
 
-    override editScript(fileName: string, start: number, end: number, newText: string) {
+    override editScript(fileName: string, start: number, end: number, newText: string): void {
         const changeArgs = this.client.createChangeFileRequestArgs(fileName, start, end, newText);
         super.editScript(fileName, start, end, newText);
         this.client.changeFile(fileName, changeArgs);
@@ -387,6 +393,9 @@ interface ServerHostFileWatcher {
 interface ServerHostDirectoryWatcher {
     cb: ts.DirectoryWatcherCallback;
 }
+
+/** Default typescript and lib installs location for tests */
+export const harnessSessionLibLocation = "/home/src/tslibs/TS/Lib";
 class SessionServerHost implements ts.server.ServerHost {
     args: string[] = [];
     newLine: string;
@@ -395,6 +404,7 @@ class SessionServerHost implements ts.server.ServerHost {
         "watchedFiles",
         "watchedDirectories",
         ts.createGetCanonicalFileName(this.useCaseSensitiveFileNames),
+        this,
     );
 
     constructor(private host: NativeLanguageServiceHost) {
@@ -408,10 +418,6 @@ class SessionServerHost implements ts.server.ServerHost {
     }
 
     readFile(fileName: string): string | undefined {
-        if (fileName.includes(Compiler.defaultLibFileName)) {
-            fileName = Compiler.defaultLibFileName;
-        }
-
         // System FS would follow symlinks, even though snapshots are stored by original file name
         const snapshot = this.host.getScriptSnapshot(fileName) || this.host.getScriptSnapshot(this.realpath(fileName));
         return snapshot && ts.getSnapshotText(snapshot);
@@ -437,7 +443,7 @@ class SessionServerHost implements ts.server.ServerHost {
     }
 
     getExecutingFilePath(): string {
-        return "";
+        return harnessSessionLibLocation + "/tsc.js";
     }
 
     exit = ts.noop;
@@ -595,6 +601,7 @@ class SessionServerHost implements ts.server.ServerHost {
 class FourslashSession extends ts.server.Session {
     constructor(opts: ts.server.SessionOptions, readonly baselineHost: (when: string) => void) {
         super(opts);
+        patchServiceForStateBaseline(this.projectService);
     }
     getText(fileName: string) {
         return ts.getSnapshotText(this.projectService.getDefaultProjectForFile(ts.server.toNormalizedPath(fileName), /*ensureProject*/ true)!.getScriptSnapshot(fileName)!);
@@ -608,6 +615,10 @@ class FourslashSession extends ts.server.Session {
         this.baselineHost("Before Request");
         super.onMessage(message);
         this.baselineHost("After Request");
+    }
+
+    getProjectService() {
+        return this.projectService;
     }
 }
 
@@ -630,7 +641,10 @@ export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
             cancellationToken: ts.server.nullCancellationToken,
             useSingleInferredProject: false,
             useInferredProjectPerProjectRoot: false,
-            typingsInstaller: { ...ts.server.nullTypingsInstaller, globalTypingsCacheLocation: "/Library/Caches/typescript" },
+            typingsInstaller: {
+                ...ts.server.nullTypingsInstaller,
+                globalTypingsCacheLocation: harnessTypingInstallerCacheLocation,
+            },
             byteLength: Buffer.byteLength,
             hrtime: process.hrtime,
             logger: this.logger,
@@ -642,6 +656,10 @@ export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
             if (baseline.length) {
                 this.logger.log(when);
                 baseline.forEach(s => this.logger.log(s));
+                this.server.getProjectService().baseline();
+            }
+            else {
+                this.server.getProjectService().baseline(when);
             }
         });
 
@@ -657,10 +675,10 @@ export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
         this.client = client;
         this.host = clientHost;
     }
-    getLogger() {
+    getLogger(): LoggerWithInMemoryLogs {
         return this.logger;
     }
-    getHost() {
+    getHost(): SessionClientHost {
         return this.host;
     }
     getLanguageService(): ts.LanguageService {
@@ -672,7 +690,7 @@ export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
     getPreProcessedFileInfo(): ts.PreProcessedFileInfo {
         throw new Error("getPreProcessedFileInfo is not available using the server interface.");
     }
-    assertTextConsistent(fileName: string) {
+    assertTextConsistent(fileName: string): void {
         const serverText = this.server.getText(fileName);
         const clientText = this.host.readFile(fileName);
         ts.Debug.assert(

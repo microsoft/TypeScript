@@ -1,0 +1,52 @@
+// === Completions ===
+=== /tests/cases/fourslash/./c.js ===
+// /**
+//  * @import * as types from "./"
+//                               ^
+// | ----------------------------------------------------------------------
+// | a
+// | b
+// | ----------------------------------------------------------------------
+//  */
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/./c.js",
+      "position": 34,
+      "name": ""
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": true,
+      "entries": [
+        {
+          "name": "a",
+          "kind": "script",
+          "kindModifiers": ".ts",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "a",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "b",
+          "kind": "script",
+          "kindModifiers": ".ts",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "b",
+              "kind": "text"
+            }
+          ]
+        }
+      ],
+      "defaultCommitCharacters": []
+    }
+  }
+]

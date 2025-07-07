@@ -83,10 +83,10 @@
           "text": "C",
           "kind": "linkName",
           "target": {
-            "fileName": "/module1.ts",
+            "fileName": "/jsdocLink3.ts",
             "textSpan": {
-              "start": 9,
-              "length": 1
+              "start": 0,
+              "length": 18
             }
           }
         },
@@ -111,10 +111,10 @@
               "text": "C",
               "kind": "linkName",
               "target": {
-                "fileName": "/module1.ts",
+                "fileName": "/jsdocLink3.ts",
                 "textSpan": {
-                  "start": 9,
-                  "length": 1
+                  "start": 0,
+                  "length": 18
                 }
               }
             },
@@ -134,10 +134,10 @@
               "text": "C()",
               "kind": "linkName",
               "target": {
-                "fileName": "/module1.ts",
+                "fileName": "/jsdocLink3.ts",
                 "textSpan": {
-                  "start": 9,
-                  "length": 1
+                  "start": 0,
+                  "length": 18
                 }
               }
             },
@@ -157,10 +157,10 @@
               "text": "C",
               "kind": "linkName",
               "target": {
-                "fileName": "/module1.ts",
+                "fileName": "/jsdocLink3.ts",
                 "textSpan": {
-                  "start": 9,
-                  "length": 1
+                  "start": 0,
+                  "length": 18
                 }
               }
             },
@@ -205,10 +205,10 @@
               "text": "C",
               "kind": "linkName",
               "target": {
-                "fileName": "/module1.ts",
+                "fileName": "/jsdocLink3.ts",
                 "textSpan": {
-                  "start": 9,
-                  "length": 1
+                  "start": 0,
+                  "length": 18
                 }
               }
             },

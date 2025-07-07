@@ -1,9 +1,9 @@
 // === goToSourceDefinition ===
-// === /node_modules/left-pad/index.js ===
+// === /home/src/workspaces/project/node_modules/left-pad/index.js ===
 // module.exports = leftPad;
 // function [|leftPad|](str, len, ch) {}
 
-// === /index.mts ===
+// === /home/src/workspaces/project/index.mts ===
 // import leftPad = require("left-pad");
 // /*GOTO SOURCE DEF*/leftPad("", 4);
 

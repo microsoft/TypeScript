@@ -3,4 +3,5 @@
 === parserFunctionDeclaration1.d.ts ===
 declare function F();
 >F : () => any
+>  : ^^^^^^^^^
 

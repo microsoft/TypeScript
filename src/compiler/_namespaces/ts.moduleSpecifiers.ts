@@ -1,3 +1,3 @@
 /* Generated file to emulate the ts.moduleSpecifiers namespace. */
 
-export * from "../moduleSpecifiers";
+export * from "../moduleSpecifiers.js";

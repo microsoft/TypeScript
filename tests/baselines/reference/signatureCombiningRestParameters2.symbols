@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/signatureCombiningRestParameters2.ts] ////
+
+=== signatureCombiningRestParameters2.ts ===
+interface Console {
+>Console : Symbol(Console, Decl(lib.dom.d.ts, --, --), Decl(signatureCombiningRestParameters2.ts, 0, 0))
+
+  log(message?: any, ...optionalParams: any[]): void;
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --), Decl(signatureCombiningRestParameters2.ts, 0, 19))
+>message : Symbol(message, Decl(signatureCombiningRestParameters2.ts, 1, 6))
+>optionalParams : Symbol(optionalParams, Decl(signatureCombiningRestParameters2.ts, 1, 20))
+}
+
+let logs: string[] = [];
+>logs : Symbol(logs, Decl(signatureCombiningRestParameters2.ts, 4, 3))
+
+let originalLog: typeof console.log;
+>originalLog : Symbol(originalLog, Decl(signatureCombiningRestParameters2.ts, 5, 3))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --), Decl(signatureCombiningRestParameters2.ts, 0, 19))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --), Decl(signatureCombiningRestParameters2.ts, 0, 19))
+
+console.log = (...args) => {
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --), Decl(signatureCombiningRestParameters2.ts, 0, 19))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --), Decl(signatureCombiningRestParameters2.ts, 0, 19))
+>args : Symbol(args, Decl(signatureCombiningRestParameters2.ts, 6, 15))
+
+  logs.push(...args);
+>logs.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>logs : Symbol(logs, Decl(signatureCombiningRestParameters2.ts, 4, 3))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(signatureCombiningRestParameters2.ts, 6, 15))
+
+};
+

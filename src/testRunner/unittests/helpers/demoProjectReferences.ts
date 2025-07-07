@@ -1,22 +1,8 @@
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    FsContents,
-    libContent,
-} from "./contents";
-import {
-    loadProjectFromFiles,
-} from "./vfs";
-import {
-    createWatchedSystem,
-    libFile,
-} from "./virtualFileSystemWithWatch";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { TestServerHost } from "./virtualFileSystemWithWatch.js";
 
-export function getFsContentsForDemoProjectReferencesCoreConfig(additional?: object) {
+export function getFsContentsForDemoProjectReferencesCoreConfig(additional?: object): string {
     return jsonToReadableText({
         extends: "../tsconfig-base.json",
         compilerOptions: {
@@ -26,8 +12,8 @@ export function getFsContentsForDemoProjectReferencesCoreConfig(additional?: obj
         ...additional,
     });
 }
-export function getFsContentsForDemoProjectReferences(): FsContents {
-    return {
+export function getSysForDemoProjectReferences(): TestServerHost {
+    return TestServerHost.createWatchedSystem({
         "/user/username/projects/demo/animals/animal.ts": dedent`
             export type Size = "small" | "medium" | "large";
             export default interface Animal {
@@ -130,25 +116,5 @@ export function getFsContentsForDemoProjectReferences(): FsContents {
                 },
             ],
         }),
-        [libFile.path]: libContent,
-    };
-}
-
-export function getFsForDemoProjectReferences() {
-    return loadProjectFromFiles(
-        getFsContentsForDemoProjectReferences(),
-        {
-            cwd: "/user/username/projects/demo",
-            executingFilePath: libFile.path,
-        },
-    );
-}
-
-export function getSysForDemoProjectReferences() {
-    return createWatchedSystem(
-        getFsContentsForDemoProjectReferences(),
-        {
-            currentDirectory: "/user/username/projects/demo",
-        },
-    );
+    }, { currentDirectory: "/user/username/projects/demo" });
 }

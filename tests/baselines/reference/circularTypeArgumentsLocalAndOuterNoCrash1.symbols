@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/circularTypeArgumentsLocalAndOuterNoCrash1.ts] ////
+
+=== circularTypeArgumentsLocalAndOuterNoCrash1.ts ===
+// https://github.com/microsoft/TypeScript/issues/59062
+
+function f<_T, _S>() {
+>f : Symbol(f, Decl(circularTypeArgumentsLocalAndOuterNoCrash1.ts, 0, 0))
+>_T : Symbol(_T, Decl(circularTypeArgumentsLocalAndOuterNoCrash1.ts, 2, 11))
+>_S : Symbol(_S, Decl(circularTypeArgumentsLocalAndOuterNoCrash1.ts, 2, 14))
+
+  interface NumArray<T extends number> extends Array<T> {}
+>NumArray : Symbol(NumArray, Decl(circularTypeArgumentsLocalAndOuterNoCrash1.ts, 2, 22))
+>T : Symbol(T, Decl(circularTypeArgumentsLocalAndOuterNoCrash1.ts, 3, 21))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(circularTypeArgumentsLocalAndOuterNoCrash1.ts, 3, 21))
+
+  type X = NumArray<X extends {} ? number : number>;
+>X : Symbol(X, Decl(circularTypeArgumentsLocalAndOuterNoCrash1.ts, 3, 58))
+>NumArray : Symbol(NumArray, Decl(circularTypeArgumentsLocalAndOuterNoCrash1.ts, 2, 22))
+>X : Symbol(X, Decl(circularTypeArgumentsLocalAndOuterNoCrash1.ts, 3, 58))
+}
+

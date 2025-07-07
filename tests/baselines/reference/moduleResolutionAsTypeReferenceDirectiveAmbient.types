@@ -3,12 +3,15 @@
 === /a.ts ===
 import { a2 } from "phaser";
 >a2 : number
+>   : ^^^^^^
 
 === /typings/phaser/types/phaser.d.ts ===
 declare module "phaser" {
 >"phaser" : typeof import("phaser")
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
 
     export const a2: number;
 >a2 : number
+>   : ^^^^^^
 }
 

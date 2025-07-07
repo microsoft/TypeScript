@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/node/nodePackageSelfName.ts] ////
+
+=== index.ts ===
+// esm format file
+import * as self from "package";
+>self : Symbol(self, Decl(index.ts, 1, 6))
+
+self;
+>self : Symbol(self, Decl(index.ts, 1, 6))
+
+=== index.mts ===
+// esm format file
+import * as self from "package";
+>self : Symbol(self, Decl(index.mts, 1, 6))
+
+self;
+>self : Symbol(self, Decl(index.mts, 1, 6))
+
+=== index.cts ===
+// esm format file
+import * as self from "package";
+>self : Symbol(self, Decl(index.cts, 1, 6))
+
+self;
+>self : Symbol(self, Decl(index.cts, 1, 6))
+

@@ -44,21 +44,20 @@ export class D {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.foo = exports.B = void 0;
+    exports.B = void 0;
+    exports.foo = foo;
     class B {
         print() { return "I am B"; }
     }
     exports.B = B;
     function foo() { return "foo"; }
-    exports.foo = foo;
 });
 //// [1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.backup = void 0;
-    function backup() { return "backup"; }
     exports.backup = backup;
+    function backup() { return "backup"; }
 });
 //// [2.js]
 define(["require", "exports"], function (require, exports) {

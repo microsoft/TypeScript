@@ -3,9 +3,11 @@
 === parserStrictMode13.ts ===
 "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 try {
 }
 catch(eval) {
 >eval : any
+>     : ^^^
 }

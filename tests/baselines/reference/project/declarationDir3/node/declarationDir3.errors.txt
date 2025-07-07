@@ -1,13 +1,9 @@
-error TS5053: Option 'declarationDir' cannot be specified with option 'out'.
-error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-  Use 'outFile' instead.
-error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
+error TS5053: Option 'declarationDir' cannot be specified with option 'outFile'.
+error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
 
 
-!!! error TS5053: Option 'declarationDir' cannot be specified with option 'out'.
-!!! error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-!!! error TS5101:   Use 'outFile' instead.
-!!! error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
+!!! error TS5053: Option 'declarationDir' cannot be specified with option 'outFile'.
+!!! error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
 ==== b.ts (0 errors) ====
     export class B {
         

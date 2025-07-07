@@ -2,7 +2,7 @@
 
 // @declaration: true
 // @newLine: lf
-// @out: out.js
+// @outFile: out.js
 // @allowJs: true
 // @Filename: b.js
 // @emitThisFile: true

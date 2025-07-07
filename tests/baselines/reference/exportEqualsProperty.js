@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/exportEqualsProperty.ts] ////
 
 //// [declarations.d.ts]
-// This test is just like exportDefaultProperty, but with `export =`.
-
 declare namespace foo.bar {
     export type X = number;
     export const X: number;

@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     CodeFixContextBase,
     Debug,
     Diagnostics,
@@ -7,7 +12,6 @@ import {
     getEffectiveBaseTypeNode,
     getEmitScriptTarget,
     getMeaningFromLocation,
-    getModeForUsageLocation,
     getTextOfNode,
     getTokenAtPosition,
     hasOverrideModifier,
@@ -37,12 +41,7 @@ import {
     symbolName,
     SyntaxKind,
     textChanges,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "fixSpelling";
 const errorCodes = [
@@ -119,7 +118,7 @@ function getInfo(sourceFile: SourceFile, pos: number, context: CodeFixContextBas
     else if (isImportSpecifier(parent) && parent.name === node) {
         Debug.assertNode(node, isIdentifier, "Expected an identifier for spelling (import)");
         const importDeclaration = findAncestor(node, isImportDeclaration)!;
-        const resolvedSourceFile = getResolvedSourceFileFromImportDeclaration(sourceFile, context, importDeclaration);
+        const resolvedSourceFile = getResolvedSourceFileFromImportDeclaration(context, importDeclaration, sourceFile);
         if (resolvedSourceFile && resolvedSourceFile.symbol) {
             suggestedSymbol = checker.getSuggestedSymbolForNonexistentModule(node, resolvedSourceFile.symbol);
         }
@@ -178,10 +177,10 @@ function convertSemanticMeaningToSymbolFlags(meaning: SemanticMeaning): SymbolFl
     return flags;
 }
 
-function getResolvedSourceFileFromImportDeclaration(sourceFile: SourceFile, context: CodeFixContextBase, importDeclaration: ImportDeclaration): SourceFile | undefined {
+function getResolvedSourceFileFromImportDeclaration(context: CodeFixContextBase, importDeclaration: ImportDeclaration, importingFile: SourceFile): SourceFile | undefined {
     if (!importDeclaration || !isStringLiteralLike(importDeclaration.moduleSpecifier)) return undefined;
 
-    const resolvedModule = context.program.getResolvedModule(sourceFile, importDeclaration.moduleSpecifier.text, getModeForUsageLocation(sourceFile, importDeclaration.moduleSpecifier))?.resolvedModule;
+    const resolvedModule = context.program.getResolvedModuleFromModuleSpecifier(importDeclaration.moduleSpecifier, importingFile)?.resolvedModule;
     if (!resolvedModule) return undefined;
 
     return context.program.getSourceFile(resolvedModule.resolvedFileName);

@@ -6,11 +6,14 @@ export declare var x;
 
 export declare function f();
 >f : () => any
+>  : ^^^^^^^^^
 
 export declare class C { }
 >C : C
+>  : ^
 
 export declare enum E { }
 >E : E
+>  : ^
 
 export declare module M { }

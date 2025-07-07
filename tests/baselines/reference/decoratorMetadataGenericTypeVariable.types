@@ -3,11 +3,14 @@
 === decoratorMetadataGenericTypeVariable.ts ===
 export class C<TypeVariable> {
 >C : C<TypeVariable>
+>  : ^^^^^^^^^^^^^^^
 
   @Decorate
 >Decorate : any
+>         : ^^^
 
   member: TypeVariable;
 >member : TypeVariable
+>       : ^^^^^^^^^^^^
 }
 

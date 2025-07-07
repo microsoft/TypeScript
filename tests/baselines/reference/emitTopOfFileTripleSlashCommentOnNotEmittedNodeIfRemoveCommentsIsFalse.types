@@ -13,5 +13,7 @@ interface F { }
 === file0.ts ===
 var x = 10
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 

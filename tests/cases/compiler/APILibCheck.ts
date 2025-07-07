@@ -3,6 +3,8 @@
 // @strictNullChecks: true
 // @lib: es2018
 // @exactOptionalPropertyTypes: true
+// @noTypesAndSymbols: true
+// @noEmit: true
 
 // @filename: node_modules/typescript/package.json
 {

@@ -6,4 +6,5 @@ export {};
 === folder/bar.ts ===
 import {nosuch} from './foo';
 >nosuch : any
+>       : ^^^
 

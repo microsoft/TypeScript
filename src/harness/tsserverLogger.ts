@@ -1,7 +1,5 @@
-import * as ts from "./_namespaces/ts";
-import {
-    Compiler,
-} from "./harnessIO";
+import * as ts from "./_namespaces/ts.js";
+import { Compiler } from "./harnessIO.js";
 
 export const HarnessLSCouldNotResolveModule = "HarnessLanguageService:: Could not resolve module";
 
@@ -54,11 +52,11 @@ export function createHasErrorMessageLogger(): Logger {
     logger.msg = (s, type) => ts.Debug.fail(`Error: ${s}, type: ${type}`);
     return logger;
 }
-function handleLoggerGroup(logger: Logger, host: ts.server.ServerHost, logText: (s: string) => void, sanitizeLibs: true | undefined): Logger {
+function handleLoggerGroup(logger: Logger, host: ts.server.ServerHost, sanitizeLibs: true | undefined): Logger {
+    const originaPush = logger.logs!.push;
     logger.hasLevel = ts.returnTrue;
     logger.loggingEnabled = ts.returnTrue;
     logger.host = host;
-    if (host) logText(`currentDirectory:: ${host.getCurrentDirectory()} useCaseSensitiveFileNames: ${host.useCaseSensitiveFileNames}`);
 
     let inGroup = false;
     let firstInGroup = false;
@@ -69,10 +67,12 @@ function handleLoggerGroup(logger: Logger, host: ts.server.ServerHost, logText: 
     logger.endGroup = () => inGroup = false;
     logger.info = s => msg(s, ts.server.Msg.Info, log);
     logger.log = log;
+    logger.logs!.push = log;
     return logger;
 
-    function log(s: string) {
-        logText((sanitizeLibs ? sanitizeLibFileText : ts.identity)(sanitizeLog(s)));
+    function log(...args: string[]) {
+        args.forEach(s => originaPush.call(logger.logs, (sanitizeLibs ? sanitizeLibFileText : ts.identity)(sanitizeLog(s))));
+        return 0;
     }
 
     function msg(s: string, type = ts.server.Msg.Err, write: (s: string) => void) {
@@ -103,7 +103,6 @@ export function createLoggerWritingToConsole(host: ts.server.ServerHost, sanitiz
     return handleLoggerGroup(
         logger,
         host,
-        s => console.log(s),
         sanitizeLibs,
     ) as LoggerWithInMemoryLogs;
 }
@@ -112,7 +111,7 @@ export function sanitizeLog(s: string): string {
     s = s.replace(/Elapsed::?\s*\d+(?:\.\d+)?ms/g, "Elapsed:: *ms");
     s = s.replace(/"updateGraphDurationMs":\s*\d+(?:\.\d+)?/g, `"updateGraphDurationMs": *`);
     s = s.replace(/"createAutoImportProviderProgramDurationMs":\s*\d+(?:\.\d+)?/g, `"createAutoImportProviderProgramDurationMs": *`);
-    s = replaceAll(s, ts.version, "FakeVersion");
+    s = s.replace(new RegExp(`\\b${ts.regExpEscape(ts.version)}\\b`, "g"), "FakeVersion");
     s = s.replace(/getCompletionData: Get current token: \d+(?:\.\d+)?/g, `getCompletionData: Get current token: *`);
     s = s.replace(/getCompletionData: Is inside comment: \d+(?:\.\d+)?/g, `getCompletionData: Is inside comment: *`);
     s = s.replace(/getCompletionData: Get previous token: \d+(?:\.\d+)?/g, `getCompletionData: Get previous token: *`);
@@ -123,11 +122,16 @@ export function sanitizeLog(s: string): string {
     s = s.replace(/getExportInfoMap: done in \d+(?:\.\d+)?/g, `getExportInfoMap: done in *`);
     s = s.replace(/collectAutoImports: \d+(?:\.\d+)?/g, `collectAutoImports: *`);
     s = s.replace(/continuePreviousIncompleteResponse: \d+(?:\.\d+)?/g, `continuePreviousIncompleteResponse: *`);
-    s = s.replace(/dependencies in \d+(?:\.\d+)?/g, `dependencies in *`);
+    s = s.replace(/referenced projects in \d+(?:\.\d+)?/g, `referenced projects in *`);
     s = s.replace(/"exportMapKey":\s*"\d+ \d+ /g, match => match.replace(/ \d+ /, ` * `));
     s = s.replace(/getIndentationAtPosition: getCurrentSourceFile: \d+(?:\.\d+)?/, `getIndentationAtPosition: getCurrentSourceFile: *`);
     s = s.replace(/getIndentationAtPosition: computeIndentation\s*: \d+(?:\.\d+)?/, `getIndentationAtPosition: computeIndentation: *`);
-    s = replaceAll(s, `@ts${ts.versionMajorMinor}`, `@tsFakeMajor.Minor`);
+    s = s.replace(/"syntaxDiag":\s*\d+(?:.\d+)?/g, `"syntaxDiag": *`);
+    s = s.replace(/"semanticDiag":\s*\d+(?:.\d+)?/g, `"semanticDiag": *`);
+    s = s.replace(/"suggestionDiag":\s*\d+(?:.\d+)?/g, `"suggestionDiag": *`);
+    s = s.replace(/"regionSemanticDiag":\s*\d+(?:.\d+)?/g, `"regionSemanticDiag": *`);
+    s = s.replace(new RegExp(`\\b@ts${ts.regExpEscape(ts.versionMajorMinor)}\\b`, "g"), `@tsFakeMajor.Minor`);
+
     s = sanitizeHarnessLSException(s);
     return s;
 }
@@ -153,5 +157,5 @@ export interface LoggerWithInMemoryLogs extends Logger {
 export function createLoggerWithInMemoryLogs(host: ts.server.ServerHost, sanitizeLibs?: true): LoggerWithInMemoryLogs {
     const logger = createHasErrorMessageLogger();
     logger.logs = [];
-    return handleLoggerGroup(logger, host, s => logger.logs!.push(s), sanitizeLibs) as LoggerWithInMemoryLogs;
+    return handleLoggerGroup(logger, host, sanitizeLibs) as LoggerWithInMemoryLogs;
 }

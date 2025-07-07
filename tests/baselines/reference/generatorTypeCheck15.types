@@ -3,7 +3,9 @@
 === generatorTypeCheck15.ts ===
 function* g() {
 >g : () => Generator<never, string, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return "";
 >"" : ""
+>   : ^^
 }

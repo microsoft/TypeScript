@@ -6,6 +6,7 @@ declare var decorator: any;
 
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     private prop
 >prop : any
@@ -15,9 +16,11 @@ class Foo {
 
     foo() {
 >foo : () => number
+>    : ^^^^^^^^^^^^
 
         return 0;
 >0 : 0
+>  : ^
     }
 }
 

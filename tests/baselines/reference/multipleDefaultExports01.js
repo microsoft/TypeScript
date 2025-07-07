@@ -20,6 +20,7 @@ Entity();
 //// [m1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = bar;
 var foo = /** @class */ (function () {
     function foo() {
     }
@@ -28,7 +29,6 @@ var foo = /** @class */ (function () {
 exports.default = foo;
 function bar() {
 }
-exports.default = bar;
 var x = 10;
 exports.default = x;
 //// [m2.js]

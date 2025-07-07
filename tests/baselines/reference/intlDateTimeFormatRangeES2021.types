@@ -1,0 +1,51 @@
+//// [tests/cases/conformance/es2021/intlDateTimeFormatRangeES2021.ts] ////
+
+=== intlDateTimeFormatRangeES2021.ts ===
+new Intl.DateTimeFormat().formatRange(new Date(0), new Date());
+>new Intl.DateTimeFormat().formatRange(new Date(0), new Date()) : string
+>                                                               : ^^^^^^
+>new Intl.DateTimeFormat().formatRange : (startDate: Date | number | bigint, endDate: Date | number | bigint) => string
+>                                      : ^         ^^                      ^^       ^^                      ^^^^^      
+>new Intl.DateTimeFormat() : Intl.DateTimeFormat
+>                          : ^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>DateTimeFormat : Intl.DateTimeFormatConstructor
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>formatRange : (startDate: Date | number | bigint, endDate: Date | number | bigint) => string
+>            : ^         ^^                      ^^       ^^                      ^^^^^      
+>new Date(0) : Date
+>            : ^^^^
+>Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+>new Date() : Date
+>           : ^^^^
+>Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
+
+const [ part ] = new Intl.DateTimeFormat().formatRangeToParts(1000, 1000000000);
+>part : Intl.DateTimeRangeFormatPart
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.DateTimeFormat().formatRangeToParts(1000, 1000000000) : Intl.DateTimeRangeFormatPart[]
+>                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.DateTimeFormat().formatRangeToParts : (startDate: Date | number | bigint, endDate: Date | number | bigint) => Intl.DateTimeRangeFormatPart[]
+>                                             : ^         ^^                      ^^       ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
+>new Intl.DateTimeFormat() : Intl.DateTimeFormat
+>                          : ^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>DateTimeFormat : Intl.DateTimeFormatConstructor
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>formatRangeToParts : (startDate: Date | number | bigint, endDate: Date | number | bigint) => Intl.DateTimeRangeFormatPart[]
+>                   : ^         ^^                      ^^       ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
+>1000 : 1000
+>     : ^^^^
+>1000000000 : 1000000000
+>           : ^^^^^^^^^^
+

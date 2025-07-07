@@ -1,9 +1,6 @@
 //// [tests/cases/compiler/systemModule11.ts] ////
 
 //// [file1.ts]
-// set of tests cases that checks generation of local storage for exported names
-
-
 export var x;
 export function foo() {}
 export * from 'bar';
@@ -36,7 +33,6 @@ function foo() {}
 export * from 'a';
 
 //// [file1.js]
-// set of tests cases that checks generation of local storage for exported names
 System.register(["bar"], function (exports_1, context_1) {
     "use strict";
     var x;
@@ -60,7 +56,7 @@ System.register(["bar"], function (exports_1, context_1) {
                 exportStar_1(bar_1_1);
             }
         ],
-        execute: function () {// set of tests cases that checks generation of local storage for exported names
+        execute: function () {
         }
     };
 });
