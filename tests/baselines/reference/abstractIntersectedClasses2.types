@@ -1,0 +1,85 @@
+//// [tests/cases/compiler/abstractIntersectedClasses2.ts] ////
+
+=== abstractIntersectedClasses2.ts ===
+// https://github.com/microsoft/TypeScript/issues/62014
+
+type Constructor = new (...args: any[]) => {};
+>Constructor : Constructor
+>            : ^^^^^^^^^^^
+>args : any[]
+>     : ^^^^^
+
+function MixinA<T extends Constructor>(base: T) {
+>MixinA : <T extends Constructor>(base: T) => ((abstract new (...args: any[]) => Mixin) & { prototype: MixinA<any>.Mixin; }) & T
+>       : ^ ^^^^^^^^^           ^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>base : T
+>     : ^
+
+  abstract class Mixin extends base {
+>Mixin : Mixin
+>      : ^^^^^
+>base : {}
+>     : ^^
+
+    abstract testMethod(): string;
+>testMethod : () => string
+>           : ^^^^^^      
+  }
+
+  return Mixin;
+>Mixin : ((abstract new (...args: any[]) => Mixin) & { prototype: MixinA<any>.Mixin; }) & T
+>      : ^^^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+function MixinB<T extends Constructor>(base: T) {
+>MixinB : <T extends Constructor>(base: T) => ((abstract new (...args: any[]) => Mixin) & { prototype: MixinB<any>.Mixin; }) & T
+>       : ^ ^^^^^^^^^           ^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>base : T
+>     : ^
+
+  abstract class Mixin extends base {
+>Mixin : Mixin
+>      : ^^^^^
+>base : {}
+>     : ^^
+
+    abstract testMethod(): string;
+>testMethod : () => string
+>           : ^^^^^^      
+  }
+
+  return Mixin;
+>Mixin : ((abstract new (...args: any[]) => Mixin) & { prototype: MixinB<any>.Mixin; }) & T
+>      : ^^^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+class Base {}
+>Base : Base
+>     : ^^^^
+
+// error
+class ImplementationB extends MixinB(MixinA(Base)) {}
+>ImplementationB : ImplementationB
+>                : ^^^^^^^^^^^^^^^
+>MixinB(MixinA(Base)) : MixinB<((abstract new (...args: any[]) => MixinA<typeof Base>.Mixin) & { prototype: MixinA<any>.Mixin; }) & typeof Base>.Mixin & MixinA<typeof Base>.Mixin & Base
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>MixinB : <T extends Constructor>(base: T) => ((abstract new (...args: any[]) => Mixin) & { prototype: MixinB<any>.Mixin; }) & T
+>       : ^ ^^^^^^^^^           ^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>MixinA(Base) : ((abstract new (...args: any[]) => MixinA<typeof Base>.Mixin) & { prototype: MixinA<any>.Mixin; }) & typeof Base
+>             : ^^^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>MixinA : <T extends Constructor>(base: T) => ((abstract new (...args: any[]) => Mixin) & { prototype: MixinA<any>.Mixin; }) & T
+>       : ^ ^^^^^^^^^           ^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Base : typeof Base
+>     : ^^^^^^^^^^^
+
+// error
+class ImplementationA extends MixinA(Base) {}
+>ImplementationA : ImplementationA
+>                : ^^^^^^^^^^^^^^^
+>MixinA(Base) : MixinA<typeof Base>.Mixin & Base
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>MixinA : <T extends Constructor>(base: T) => ((abstract new (...args: any[]) => Mixin) & { prototype: MixinA<any>.Mixin; }) & T
+>       : ^ ^^^^^^^^^           ^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Base : typeof Base
+>     : ^^^^^^^^^^^
+
