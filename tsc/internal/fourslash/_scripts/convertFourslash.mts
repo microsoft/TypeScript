@@ -2,6 +2,7 @@ import * as cp from "child_process";
 import * as fs from "fs";
 import * as path from "path";
 import * as ts from "typescript";
+import * as url from "url";
 import which from "which";
 
 const stradaFourslashPath = path.resolve(import.meta.dirname, "../", "../", "../", "_submodules", "TypeScript", "tests", "cases", "fourslash");
@@ -9,15 +10,18 @@ const stradaFourslashPath = path.resolve(import.meta.dirname, "../", "../", "../
 let inputFileSet: Set<string> | undefined;
 
 const failingTestsPath = path.join(import.meta.dirname, "failingTests.txt");
-const failingTestsList = fs.readFileSync(failingTestsPath, "utf-8").split("\n").map(line => line.trim().substring(4)).filter(line => line.length > 0);
-const failingTests = new Set(failingTestsList);
 const helperFilePath = path.join(import.meta.dirname, "../", "tests", "util_test.go");
 
 const outputDir = path.join(import.meta.dirname, "../", "tests", "gen");
 
 const unparsedFiles: string[] = [];
 
-function main() {
+function getFailingTests(): Set<string> {
+    const failingTestsList = fs.readFileSync(failingTestsPath, "utf-8").split("\n").map(line => line.trim().substring(4)).filter(line => line.length > 0);
+    return new Set(failingTestsList);
+}
+
+export function main() {
     const args = process.argv.slice(2);
     const inputFilesPath = args[0];
     if (inputFilesPath) {
@@ -28,18 +32,17 @@ function main() {
         inputFileSet = new Set(inputFiles);
     }
 
-    if (!fs.existsSync(outputDir)) {
-        fs.mkdirSync(outputDir, { recursive: true });
-    }
+    fs.rmSync(outputDir, { recursive: true, force: true });
+    fs.mkdirSync(outputDir, { recursive: true });
 
     generateHelperFile();
-    parseTypeScriptFiles(stradaFourslashPath);
+    parseTypeScriptFiles(getFailingTests(), stradaFourslashPath);
     console.log(unparsedFiles.join("\n"));
     const gofmt = which.sync("go");
     cp.execFileSync(gofmt, ["tool", "mvdan.cc/gofumpt", "-lang=go1.24", "-w", outputDir]);
 }
 
-function parseTypeScriptFiles(folder: string): void {
+function parseTypeScriptFiles(failingTests: Set<string>, folder: string): void {
     const files = fs.readdirSync(folder);
 
     files.forEach(file => {
@@ -50,13 +53,13 @@ function parseTypeScriptFiles(folder: string): void {
         }
 
         if (stat.isDirectory()) {
-            parseTypeScriptFiles(filePath);
+            parseTypeScriptFiles(failingTests, filePath);
         }
         else if (file.endsWith(".ts")) {
             const content = fs.readFileSync(filePath, "utf-8");
             const test = parseFileContent(file, content);
             if (test) {
-                const testContent = generateGoTest(test);
+                const testContent = generateGoTest(failingTests, test);
                 const testPath = path.join(outputDir, `${test.name}_test.go`);
                 fs.writeFileSync(testPath, testContent, "utf-8");
             }
@@ -791,7 +794,7 @@ interface GoTest {
     commands: Cmd[];
 }
 
-function generateGoTest(test: GoTest): string {
+function generateGoTest(failingTests: Set<string>, test: GoTest): string {
     const testName = test.name[0].toUpperCase() + test.name.substring(1);
     const content = test.content;
     const commands = test.commands.map(cmd => generateCmd(cmd)).join("\n");
@@ -827,4 +830,6 @@ function generateHelperFile() {
     fs.copyFileSync(helperFilePath, path.join(outputDir, "util_test.go"));
 }
 
-main();
+if (url.fileURLToPath(import.meta.url) == process.argv[1]) {
+    main();
+}
