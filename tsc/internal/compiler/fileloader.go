@@ -94,7 +94,7 @@ func processAllProgramFiles(
 	loader.resolver = module.NewResolver(loader.projectReferenceFileMapper.host, compilerOptions, opts.TypingsLocation, opts.ProjectName)
 
 	var libs []string
-	if compilerOptions.NoLib.IsFalseOrUnknown() {
+	if len(rootFiles) > 0 && compilerOptions.NoLib.IsFalseOrUnknown() {
 		if compilerOptions.Lib == nil {
 			name := tsoptions.GetDefaultLibFileName(compilerOptions)
 			libs = append(libs, loader.pathForLibFile(name))
@@ -110,7 +110,10 @@ func processAllProgramFiles(
 
 	loader.addRootTasks(rootFiles, false)
 	loader.addRootTasks(libs, true)
-	loader.addAutomaticTypeDirectiveTasks()
+
+	if len(rootFiles) > 0 {
+		loader.addAutomaticTypeDirectiveTasks()
+	}
 
 	loader.parseTasks.runAndWait(&loader, loader.rootTasks)
 	// Clear out loader and host to ensure its not used post program creation

@@ -336,6 +336,10 @@ func (p *Program) GetProgramDiagnostics() []*ast.Diagnostic {
 }
 
 func (p *Program) GetGlobalDiagnostics(ctx context.Context) []*ast.Diagnostic {
+	if len(p.files) == 0 {
+		return nil
+	}
+
 	var globalDiagnostics []*ast.Diagnostic
 	checkers, done := p.checkerPool.GetAllCheckers(ctx)
 	defer done()
