@@ -1,0 +1,25 @@
+// === findAllReferences ===
+// === /referencesForLabel4.ts ===
+
+// /*FIND ALL REFS*/[|label|]: function foo(label) {
+//     while (true) {
+//         break[| label|];
+//     }
+// }
+
+
+
+
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /referencesForLabel4.ts ===
+
+// [|label|]: function foo(label) {
+//     while (true) {
+//         break /*FIND ALL REFS*/[| label|];
+//     }
+// }

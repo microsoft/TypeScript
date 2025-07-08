@@ -1,0 +1,69 @@
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /referencesForExpressionKeywords.ts ===
+
+// class C {
+//     static x = 1;
+// }
+// new C();
+// void C;[|
+// /*FIND ALL REFS*/typeof|] C;
+// delete C.x;
+// async function* f() {
+//     yield C;
+// // --- (line: 10) skipped ---
+
+
+
+
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /referencesForExpressionKeywords.ts ===
+
+// class[| C|] {
+//     static x = 1;
+// }
+// new[| C|]();
+// void[| C|];
+// typeof[| C|];
+// delete[| C|].x;
+// async function* f() {
+//     yield[| C|];
+//     await[| C|];
+// }
+// "x" in[| C|];
+// undefined /*FIND ALL REFS*/instanceof[| C|];
+// undefined as[| C|];
+
+
+
+
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===

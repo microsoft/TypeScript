@@ -1,0 +1,43 @@
+// === findAllReferences ===
+// === /findAllRefsForObjectLiteralProperties.ts ===
+
+// var x = {[|
+//     /*FIND ALL REFS*/property|]: {}
+// };
+// 
+// x.[|property|];
+// 
+// let {[|property|]: pVar} = x;
+
+
+
+
+// === findAllReferences ===
+// === /findAllRefsForObjectLiteralProperties.ts ===
+
+// var x = {[|
+//     property|]: {}
+// };
+// 
+// x./*FIND ALL REFS*/[|property|];
+// 
+// let {[|property|]: pVar} = x;
+
+
+
+
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /findAllRefsForObjectLiteralProperties.ts ===
+
+// var x = {[|
+//     property|]: {}
+// };
+// 
+// x.[|property|];
+// 
+// let {/*FIND ALL REFS*/[|property|]: pVar} = x;

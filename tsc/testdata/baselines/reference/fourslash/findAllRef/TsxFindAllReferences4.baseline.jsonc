@@ -1,0 +1,63 @@
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /file.tsx ===
+
+// --- (line: 3) skipped ---
+//      }
+//      interface ElementAttributesProperty { props }
+//  }
+//  class /*FIND ALL REFS*/[| MyClass|] {
+//    props: {
+//      name?: string;
+//      size?: number;
+//  }
+// 
+// 
+//  var x = <[|MyClass|] name='hello'></[|MyClass|]>;
+
+
+
+
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /file.tsx ===
+
+// --- (line: 3) skipped ---
+//      }
+//      interface ElementAttributesProperty { props }
+//  }
+//  class[| MyClass|] {
+//    props: {
+//      name?: string;
+//      size?: number;
+//  }
+// 
+// 
+//  var x = </*FIND ALL REFS*/[|MyClass|] name='hello'></[|MyClass|]>;
+
+
+
+
+// === findAllReferences ===
+// === /file.tsx ===
+
+// --- (line: 3) skipped ---
+//      }
+//      interface ElementAttributesProperty { props }
+//  }
+//  class[| MyClass|] {
+//    props: {
+//      name?: string;
+//      size?: number;
+//  }
+// 
+// 
+//  var x = <MyClass name='hello'><//*FIND ALL REFS*/[|MyClass|] name='hello'></[|MyClass|]>;

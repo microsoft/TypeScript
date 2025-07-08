@@ -1,0 +1,91 @@
+// === findAllReferences ===
+// === /referencesForLabel5.ts ===
+
+// /*FIND ALL REFS*/[|label|]:  while (true) {
+//             if (false) break[| label|];
+//             function blah() {
+// label:          while (true) {
+//                     if (false) break label;
+//                 }
+//             }
+//             if (false) break[| label|];
+//         }
+
+
+
+
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /referencesForLabel5.ts ===
+
+// [|label|]:  while (true) {
+//             if (false) break /*FIND ALL REFS*/[| label|];
+//             function blah() {
+// label:          while (true) {
+//                     if (false) break label;
+//                 }
+//             }
+//             if (false) break[| label|];
+//         }
+
+
+
+
+// === findAllReferences ===
+// === /referencesForLabel5.ts ===
+
+// label:  while (true) {
+//             if (false) break label;
+//             function blah() {[|
+// /*FIND ALL REFS*/label|]:          while (true) {
+//                     if (false) break[| label|];
+//                 }
+//             }
+//             if (false) break label;
+//         }
+
+
+
+
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /referencesForLabel5.ts ===
+
+// label:  while (true) {
+//             if (false) break label;
+//             function blah() {[|
+// label|]:          while (true) {
+//                     if (false) break /*FIND ALL REFS*/[| label|];
+//                 }
+//             }
+//             if (false) break label;
+//         }
+
+
+
+
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /referencesForLabel5.ts ===
+
+// [|label|]:  while (true) {
+//             if (false) break[| label|];
+//             function blah() {
+// label:          while (true) {
+//                     if (false) break label;
+//                 }
+//             }
+//             if (false) break /*FIND ALL REFS*/[| label|];
+//         }

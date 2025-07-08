@@ -1,0 +1,27 @@
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /findAllRefsWithLeadingUnderscoreNames2.ts ===
+
+// class Foo {
+//     public /*FIND ALL REFS*/[| __bar|]() { return 0; }
+// }
+// 
+// var x: Foo;
+// x.[|__bar|];
+
+
+
+
+// === findAllReferences ===
+// === /findAllRefsWithLeadingUnderscoreNames2.ts ===
+
+// class Foo {
+//     public[| __bar|]() { return 0; }
+// }
+// 
+// var x: Foo;
+// x./*FIND ALL REFS*/[|__bar|];

@@ -1,0 +1,32 @@
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /file.tsx ===
+
+// --- (line: 9) skipped ---
+//  function SFC2(prop: { x: boolean }) {
+//      return <h1>World </h1>;
+//  }
+//  var /*FIND ALL REFS*/[| SFCComp|] = SFC1 || SFC2;
+//  <[|SFCComp|] x={ "hi" } />
+
+
+
+
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /file.tsx ===
+
+// --- (line: 9) skipped ---
+//  function SFC2(prop: { x: boolean }) {
+//      return <h1>World </h1>;
+//  }
+//  var[| SFCComp|] = SFC1 || SFC2;
+//  </*FIND ALL REFS*/[|SFCComp|] x={ "hi" } />

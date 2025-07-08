@@ -1,0 +1,221 @@
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /file.tsx ===
+
+// --- (line: 13) skipped ---
+//  interface LinkProps extends ClickableProps {
+//      goTo: string;
+//  }
+//  declare function /*FIND ALL REFS*/[| MainButton|](buttonProps: ButtonProps): JSX.Element;
+//  declare function[| MainButton|](linkProps: LinkProps): JSX.Element;
+//  declare function[| MainButton|](props: ButtonProps | LinkProps): JSX.Element;
+//  let opt = <[|MainButton|] />;
+//  let opt = <[|MainButton|] children="chidlren" />;
+//  let opt = <[|MainButton|] onClick={()=>{}} />;
+//  let opt = <[|MainButton|] onClick={()=>{}} ignore-prop />;
+//  let opt = <[|MainButton|] goTo="goTo" />;
+//  let opt = <[|MainButton|] wrong />;
+
+
+
+
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /file.tsx ===
+
+// --- (line: 13) skipped ---
+//  interface LinkProps extends ClickableProps {
+//      goTo: string;
+//  }
+//  declare function[| MainButton|](buttonProps: ButtonProps): JSX.Element;
+//  declare function /*FIND ALL REFS*/[| MainButton|](linkProps: LinkProps): JSX.Element;
+//  declare function[| MainButton|](props: ButtonProps | LinkProps): JSX.Element;
+//  let opt = <[|MainButton|] />;
+//  let opt = <[|MainButton|] children="chidlren" />;
+//  let opt = <[|MainButton|] onClick={()=>{}} />;
+//  let opt = <[|MainButton|] onClick={()=>{}} ignore-prop />;
+//  let opt = <[|MainButton|] goTo="goTo" />;
+//  let opt = <[|MainButton|] wrong />;
+
+
+
+
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /file.tsx ===
+
+// --- (line: 13) skipped ---
+//  interface LinkProps extends ClickableProps {
+//      goTo: string;
+//  }
+//  declare function[| MainButton|](buttonProps: ButtonProps): JSX.Element;
+//  declare function[| MainButton|](linkProps: LinkProps): JSX.Element;
+//  declare function /*FIND ALL REFS*/[| MainButton|](props: ButtonProps | LinkProps): JSX.Element;
+//  let opt = <[|MainButton|] />;
+//  let opt = <[|MainButton|] children="chidlren" />;
+//  let opt = <[|MainButton|] onClick={()=>{}} />;
+//  let opt = <[|MainButton|] onClick={()=>{}} ignore-prop />;
+//  let opt = <[|MainButton|] goTo="goTo" />;
+//  let opt = <[|MainButton|] wrong />;
+
+
+
+
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /file.tsx ===
+
+// --- (line: 13) skipped ---
+//  interface LinkProps extends ClickableProps {
+//      goTo: string;
+//  }
+//  declare function[| MainButton|](buttonProps: ButtonProps): JSX.Element;
+//  declare function[| MainButton|](linkProps: LinkProps): JSX.Element;
+//  declare function[| MainButton|](props: ButtonProps | LinkProps): JSX.Element;
+//  let opt = </*FIND ALL REFS*/[|MainButton|] />;
+//  let opt = <[|MainButton|] children="chidlren" />;
+//  let opt = <[|MainButton|] onClick={()=>{}} />;
+//  let opt = <[|MainButton|] onClick={()=>{}} ignore-prop />;
+//  let opt = <[|MainButton|] goTo="goTo" />;
+//  let opt = <[|MainButton|] wrong />;
+
+
+
+
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /file.tsx ===
+
+// --- (line: 13) skipped ---
+//  interface LinkProps extends ClickableProps {
+//      goTo: string;
+//  }
+//  declare function[| MainButton|](buttonProps: ButtonProps): JSX.Element;
+//  declare function[| MainButton|](linkProps: LinkProps): JSX.Element;
+//  declare function[| MainButton|](props: ButtonProps | LinkProps): JSX.Element;
+//  let opt = <[|MainButton|] />;
+//  let opt = </*FIND ALL REFS*/[|MainButton|] children="chidlren" />;
+//  let opt = <[|MainButton|] onClick={()=>{}} />;
+//  let opt = <[|MainButton|] onClick={()=>{}} ignore-prop />;
+//  let opt = <[|MainButton|] goTo="goTo" />;
+//  let opt = <[|MainButton|] wrong />;
+
+
+
+
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /file.tsx ===
+
+// --- (line: 13) skipped ---
+//  interface LinkProps extends ClickableProps {
+//      goTo: string;
+//  }
+//  declare function[| MainButton|](buttonProps: ButtonProps): JSX.Element;
+//  declare function[| MainButton|](linkProps: LinkProps): JSX.Element;
+//  declare function[| MainButton|](props: ButtonProps | LinkProps): JSX.Element;
+//  let opt = <[|MainButton|] />;
+//  let opt = <[|MainButton|] children="chidlren" />;
+//  let opt = </*FIND ALL REFS*/[|MainButton|] onClick={()=>{}} />;
+//  let opt = <[|MainButton|] onClick={()=>{}} ignore-prop />;
+//  let opt = <[|MainButton|] goTo="goTo" />;
+//  let opt = <[|MainButton|] wrong />;
+
+
+
+
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /file.tsx ===
+
+// --- (line: 13) skipped ---
+//  interface LinkProps extends ClickableProps {
+//      goTo: string;
+//  }
+//  declare function[| MainButton|](buttonProps: ButtonProps): JSX.Element;
+//  declare function[| MainButton|](linkProps: LinkProps): JSX.Element;
+//  declare function[| MainButton|](props: ButtonProps | LinkProps): JSX.Element;
+//  let opt = <[|MainButton|] />;
+//  let opt = <[|MainButton|] children="chidlren" />;
+//  let opt = <[|MainButton|] onClick={()=>{}} />;
+//  let opt = </*FIND ALL REFS*/[|MainButton|] onClick={()=>{}} ignore-prop />;
+//  let opt = <[|MainButton|] goTo="goTo" />;
+//  let opt = <[|MainButton|] wrong />;
+
+
+
+
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /file.tsx ===
+
+// --- (line: 13) skipped ---
+//  interface LinkProps extends ClickableProps {
+//      goTo: string;
+//  }
+//  declare function[| MainButton|](buttonProps: ButtonProps): JSX.Element;
+//  declare function[| MainButton|](linkProps: LinkProps): JSX.Element;
+//  declare function[| MainButton|](props: ButtonProps | LinkProps): JSX.Element;
+//  let opt = <[|MainButton|] />;
+//  let opt = <[|MainButton|] children="chidlren" />;
+//  let opt = <[|MainButton|] onClick={()=>{}} />;
+//  let opt = <[|MainButton|] onClick={()=>{}} ignore-prop />;
+//  let opt = </*FIND ALL REFS*/[|MainButton|] goTo="goTo" />;
+//  let opt = <[|MainButton|] wrong />;
+
+
+
+
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /file.tsx ===
+
+// --- (line: 13) skipped ---
+//  interface LinkProps extends ClickableProps {
+//      goTo: string;
+//  }
+//  declare function[| MainButton|](buttonProps: ButtonProps): JSX.Element;
+//  declare function[| MainButton|](linkProps: LinkProps): JSX.Element;
+//  declare function[| MainButton|](props: ButtonProps | LinkProps): JSX.Element;
+//  let opt = <[|MainButton|] />;
+//  let opt = <[|MainButton|] children="chidlren" />;
+//  let opt = <[|MainButton|] onClick={()=>{}} />;
+//  let opt = <[|MainButton|] onClick={()=>{}} ignore-prop />;
+//  let opt = <[|MainButton|] goTo="goTo" />;
+//  let opt = </*FIND ALL REFS*/[|MainButton|] wrong />;

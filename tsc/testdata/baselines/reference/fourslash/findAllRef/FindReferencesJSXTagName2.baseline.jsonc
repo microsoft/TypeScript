@@ -1,0 +1,19 @@
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /index.tsx ===
+
+// const /*FIND ALL REFS*/[| obj|] = {Component: () => <div/>};
+// const element = <[|obj|].Component/>;
+
+
+
+
+// === findAllReferences ===
+// === /index.tsx ===
+
+// const[| obj|] = {Component: () => <div/>};
+// const element = </*FIND ALL REFS*/[|obj|].Component/>;

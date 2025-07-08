@@ -1,0 +1,79 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/typescript-go/internal/fourslash"
+	"github.com/microsoft/typescript-go/internal/testutil"
+)
+
+func TestFindAllReferencesLinkTag1(t *testing.T) {
+	t.Parallel()
+
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `class C/*7*/ {
+    m/*1*/() { }
+    n/*2*/ = 1
+    static s/*3*/() { }
+    /**
+     * {@link m}
+     * @see {m}
+     * {@link C.m}
+     * @see {C.m}
+     * {@link C#m}
+     * @see {C#m}
+     * {@link C.prototype.m}
+     * @see {C.prototype.m}
+     */
+    p() { }
+    /**
+     * {@link n}
+     * @see {n}
+     * {@link C.n}
+     * @see {C.n}
+     * {@link C#n}
+     * @see {C#n}
+     * {@link C.prototype.n}
+     * @see {C.prototype.n}
+     */
+    q() { }
+    /**
+     * {@link s}
+     * @see {s}
+     * {@link C.s}
+     * @see {C.s}
+     */
+    r() { }
+}
+
+interface I/*8*/ {
+    a/*4*/()
+    b/*5*/: 1
+    /**
+     * {@link a}
+     * @see {a}
+     * {@link I.a}
+     * @see {I.a}
+     * {@link I#a}
+     * @see {I#a}
+     */
+    c()
+    /**
+     * {@link b}
+     * @see {b}
+     * {@link I.b}
+     * @see {I.b}
+     */
+    d()
+}
+
+function nestor() {
+    /** {@link r2} */
+    function ref() { }
+    /** @see {r2} */
+    function d3() { }
+    function r2/*6*/() { }
+}`
+	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.VerifyBaselineFindAllReferences(t, "1", "2", "3", "4", "5", "6", "7", "8")
+}

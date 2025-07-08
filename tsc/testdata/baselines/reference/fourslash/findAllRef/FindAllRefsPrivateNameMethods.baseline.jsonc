@@ -1,0 +1,60 @@
+// === findAllReferences ===
+// === /findAllRefsPrivateNameMethods.ts ===
+
+// class C {[|
+//     /*FIND ALL REFS*/#foo|](){ }
+//     constructor() {
+//         this.[|#foo|]();
+//     }
+// }
+// class D extends C {
+// // --- (line: 8) skipped ---
+
+
+
+
+// === findAllReferences ===
+// === /findAllRefsPrivateNameMethods.ts ===
+
+// class C {[|
+//     #foo|](){ }
+//     constructor() {
+//         this./*FIND ALL REFS*/[|#foo|]();
+//     }
+// }
+// class D extends C {
+// // --- (line: 8) skipped ---
+
+
+
+
+// === findAllReferences ===
+// === /findAllRefsPrivateNameMethods.ts ===
+
+// --- (line: 9) skipped ---
+//         this.#foo = 20;
+//     }
+// }
+// class E {[|
+//     /*FIND ALL REFS*/#foo|](){ }
+//     constructor() {
+//         this.[|#foo|]();
+//     }
+// }
+
+
+
+
+// === findAllReferences ===
+// === /findAllRefsPrivateNameMethods.ts ===
+
+// --- (line: 9) skipped ---
+//         this.#foo = 20;
+//     }
+// }
+// class E {[|
+//     #foo|](){ }
+//     constructor() {
+//         this./*FIND ALL REFS*/[|#foo|]();
+//     }
+// }

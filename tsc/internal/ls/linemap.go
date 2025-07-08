@@ -1,6 +1,8 @@
 package ls
 
 import (
+	"cmp"
+	"slices"
 	"strings"
 	"unicode/utf8"
 
@@ -47,4 +49,21 @@ func ComputeLineStarts(text string) *LineMap {
 		LineStarts: lineStarts,
 		AsciiOnly:  asciiOnly,
 	}
+}
+
+func (lm *LineMap) ComputeIndexOfLineStart(targetPos core.TextPos) int {
+	// port of computeLineOfPosition(lineStarts: readonly number[], position: number, lowerBound?: number): number {
+	lineNumber, ok := slices.BinarySearchFunc(lm.LineStarts, targetPos, func(p, t core.TextPos) int {
+		return cmp.Compare(int(p), int(t))
+	})
+	if !ok && lineNumber > 0 {
+		// If the actual position was not found, the binary search returns where the target line start would be inserted
+		// if the target was in the slice.
+		// e.g. if the line starts at [5, 10, 23, 80] and the position requested was 20
+		// then the search will return (3, false).
+		//
+		// We want the index of the previous line start, so we subtract 1.
+		lineNumber = lineNumber - 1
+	}
+	return lineNumber
 }

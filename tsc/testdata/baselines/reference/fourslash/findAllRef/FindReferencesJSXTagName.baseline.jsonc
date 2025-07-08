@@ -1,0 +1,17 @@
+// === findAllReferences ===
+// === /index.tsx ===
+
+// import { /*FIND ALL REFS*/[| SubmissionComp|] } from "./RedditSubmission"
+// function displaySubreddit(subreddit: string) {
+//     let components = submissions
+//         .map((value, index) => <[|SubmissionComp|] key={ index } elementPosition= { index } {...value.data} />);
+// }
+
+
+
+
+// === findAllReferences ===
+// === /RedditSubmission.ts ===
+
+// export const /*FIND ALL REFS*/[| SubmissionComp|] = (submission: SubmissionProps) =>
+//     <div style={{ fontFamily: "sans-serif" }}></div>;

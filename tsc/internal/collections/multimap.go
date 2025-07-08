@@ -10,6 +10,14 @@ type MultiMap[K comparable, V comparable] struct {
 	M map[K][]V
 }
 
+func GroupBy[K comparable, V comparable](items []V, groupId func(V) K) *MultiMap[K, V] {
+	m := &MultiMap[K, V]{}
+	for _, item := range items {
+		m.Add(groupId(item), item)
+	}
+	return m
+}
+
 func (s *MultiMap[K, V]) Has(key K) bool {
 	_, ok := s.M[key]
 	return ok

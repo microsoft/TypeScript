@@ -1,0 +1,31 @@
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /referencesForGlobals_1.ts ===
+
+// declare module "/*FIND ALL REFS*/[| "foo"|] {
+//     var f: number;
+// }
+
+
+
+
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /referencesForGlobals_1.ts ===
+
+// declare module[| "foo"|] {
+//     var f: number;
+// }
+
+
+// === /referencesForGlobals_2.ts ===
+
+// import f = require("/*FIND ALL REFS*/[|"foo"|]);

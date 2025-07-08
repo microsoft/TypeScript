@@ -1,0 +1,9 @@
+// === findAllReferences ===
+// === /a.js ===
+
+// export default function /*FIND ALL REFS*/[| a|]() {}
+
+
+
+
+// === findAllReferences ===

@@ -1,0 +1,37 @@
+// === findAllReferences ===
+// === /file.tsx ===
+
+//  declare module JSX {
+//      interface Element { }
+//      interface IntrinsicElements {[|
+//          /*FIND ALL REFS*/div|]: {
+//              name?: string;
+//              isOpen?: boolean;
+//          };
+//          span: { n: string; };
+//      }
+//  }
+//  var x = <[|div|] />;
+
+
+
+
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /file.tsx ===
+
+//  declare module JSX {
+//      interface Element { }
+//      interface IntrinsicElements {[|
+//          div|]: {
+//              name?: string;
+//              isOpen?: boolean;
+//          };
+//          span: { n: string; };
+//      }
+//  }
+//  var x = </*FIND ALL REFS*/[|div|] />;

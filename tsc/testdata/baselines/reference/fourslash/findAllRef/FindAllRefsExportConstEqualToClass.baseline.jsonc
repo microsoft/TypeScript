@@ -1,0 +1,13 @@
+// === findAllReferences ===
+// === /a.ts ===
+
+// class C {}
+// export const /*FIND ALL REFS*/[| D|] = C;
+
+
+
+
+// === findAllReferences ===
+// === /b.ts ===
+
+// import { /*FIND ALL REFS*/[| D|] } from "./a";

@@ -72,7 +72,7 @@ function parseFileContent(filename: string, content: string): GoTest | undefined
     const sourceFile = ts.createSourceFile("temp.ts", content, ts.ScriptTarget.Latest, true /*setParentNodes*/);
     const statements = sourceFile.statements;
     const goTest: GoTest = {
-        name: filename.replace(".ts", ""),
+        name: filename.replace(".ts", "").replace(".", ""),
         content: getTestInput(content),
         commands: [],
     };
@@ -141,9 +141,16 @@ function parseFourslashStatement(statement: ts.Statement): Cmd[] | undefined {
             console.error(`Expected identifiers for namespace and function, got ${namespace.getText()} and ${func.getText()}`);
             return undefined;
         }
-        // `verify.completions(...)`
-        if (namespace.text === "verify" && func.text === "completions") {
-            return parseVerifyCompletionsArgs(callExpression.arguments);
+        // `verify.(...)`
+        if (namespace.text === "verify") {
+            switch (func.text) {
+                case "completions":
+                    // `verify.completions(...)`
+                    return parseVerifyCompletionsArgs(callExpression.arguments);
+                case "baselineFindAllReferences":
+                    // `verify.baselineFindAllReferences(...)`
+                    return [parseBaselineFindAllReferencesArgs(callExpression.arguments)];
+            }
         }
         // `goTo....`
         if (namespace.text === "goTo") {
@@ -606,6 +613,27 @@ function parseExpectedCompletionItem(expr: ts.Expression): string | undefined {
     return undefined; // Unsupported expression type
 }
 
+function parseBaselineFindAllReferencesArgs(args: readonly ts.Expression[]): VerifyBaselineFindAllReferencesCmd {
+    const newArgs = [];
+    for (const arg of args) {
+        if (ts.isStringLiteral(arg)) {
+            newArgs.push(getGoStringLiteral(arg.text));
+        }
+        else if (arg.getText() === "...test.ranges()") {
+            return {
+                kind: "verifyBaselineFindAllReferences",
+                markers: [],
+                ranges: true,
+            };
+        }
+    }
+
+    return {
+        kind: "verifyBaselineFindAllReferences",
+        markers: newArgs,
+    };
+}
+
 function parseKind(expr: ts.Expression): string | undefined {
     if (!ts.isStringLiteral(expr)) {
         console.error(`Expected string literal for kind, got ${expr.getText()}`);
@@ -732,6 +760,18 @@ interface VerifyCompletionsArgs {
     unsorted?: string;
 }
 
+interface VerifyBaselineFindAllReferencesCmd {
+    kind: "verifyBaselineFindAllReferences";
+    markers: string[];
+    ranges?: boolean;
+}
+
+interface VerifyBaselineFindAllReferencesCmd {
+    kind: "verifyBaselineFindAllReferences";
+    markers: string[];
+    ranges?: boolean;
+}
+
 interface GoToCmd {
     kind: "goTo";
     // !!! `selectRange` and `rangeStart` require parsing variables and `test.ranges()[n]`
@@ -744,7 +784,7 @@ interface EditCmd {
     goStatement: string;
 }
 
-type Cmd = VerifyCompletionsCmd | GoToCmd | EditCmd;
+type Cmd = VerifyCompletionsCmd | VerifyBaselineFindAllReferencesCmd | GoToCmd | EditCmd;
 
 function generateVerifyCompletions({ marker, args, isNewIdentifierLocation }: VerifyCompletionsCmd): string {
     let expectedList = "nil";
@@ -770,6 +810,13 @@ function generateVerifyCompletions({ marker, args, isNewIdentifierLocation }: Ve
     return `f.VerifyCompletions(t, ${marker}, ${expectedList})`;
 }
 
+function generateBaselineFindAllReferences({ markers, ranges }: VerifyBaselineFindAllReferencesCmd): string {
+    if (ranges || markers.length === 0) {
+        return `f.VerifyBaselineFindAllReferences(t)`;
+    }
+    return `f.VerifyBaselineFindAllReferences(t, ${markers.join(", ")})`;
+}
+
 function generateGoToCommand({ funcName, args }: GoToCmd): string {
     const funcNameCapitalized = funcName.charAt(0).toUpperCase() + funcName.slice(1);
     return `f.GoTo${funcNameCapitalized}(t, ${args.join(", ")})`;
@@ -779,6 +826,8 @@ function generateCmd(cmd: Cmd): string {
     switch (cmd.kind) {
         case "verifyCompletions":
             return generateVerifyCompletions(cmd as VerifyCompletionsCmd);
+        case "verifyBaselineFindAllReferences":
+            return generateBaselineFindAllReferences(cmd as VerifyBaselineFindAllReferencesCmd);
         case "goTo":
             return generateGoToCommand(cmd as GoToCmd);
         case "edit":

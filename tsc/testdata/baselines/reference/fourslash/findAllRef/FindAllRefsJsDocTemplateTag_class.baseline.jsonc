@@ -1,0 +1,10 @@
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /findAllRefsJsDocTemplateTag_class.ts ===
+
+// /** @template T */
+// class C</*FIND ALL REFS*/[|T|]> {}

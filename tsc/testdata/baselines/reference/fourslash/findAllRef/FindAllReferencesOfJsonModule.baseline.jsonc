@@ -1,0 +1,19 @@
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /foo.ts ===
+
+// import /*FIND ALL REFS*/[| settings|] from "./settings.json";[|
+// settings|];
+
+
+
+
+// === findAllReferences ===
+// === /foo.ts ===
+
+// import[| settings|] from "./settings.json";[|
+// /*FIND ALL REFS*/settings|];

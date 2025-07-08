@@ -63,6 +63,10 @@ linters:
         type: module
 
   exclusions:
+    rules:
+      - path: internal/fourslash/tests/gen/
+        linters: misspell
+
     presets:
       - comments
       - std-error-handling

@@ -1,0 +1,178 @@
+// === findAllReferences ===
+// === /findAllReferencesLinkTag1.ts ===
+
+// class C {[|
+//     m|]/*FIND ALL REFS*/() { }
+//     n = 1
+//     static s() { }
+//     /**
+//      * {@link m}
+//      * @see {m}
+//      * {@link C.m}
+//      * @see {C.m}
+//      * {@link C#m}
+//      * @see {C#m}
+//      * {@link C.prototype.[|m|]}
+//      * @see {C.prototype.m}
+//      */
+//     p() { }
+// // --- (line: 16) skipped ---
+
+
+
+
+// === findAllReferences ===
+// === /findAllReferencesLinkTag1.ts ===
+
+// class C {
+//     m() { }[|
+//     n|]/*FIND ALL REFS*/ = 1
+//     static s() { }
+//     /**
+//      * {@link m}
+// // --- (line: 7) skipped ---
+
+
+// --- (line: 19) skipped ---
+//      * @see {C.n}
+//      * {@link C#n}
+//      * @see {C#n}
+//      * {@link C.prototype.[|n|]}
+//      * @see {C.prototype.n}
+//      */
+//     q() { }
+// // --- (line: 27) skipped ---
+
+
+
+
+// === findAllReferences ===
+// === /findAllReferencesLinkTag1.ts ===
+
+// class C {
+//     m() { }
+//     n = 1
+//     static s/*FIND ALL REFS*/[| s|]() { }
+//     /**
+//      * {@link m}
+//      * @see {m}
+// // --- (line: 8) skipped ---
+
+
+// --- (line: 26) skipped ---
+//     /**
+//      * {@link s}
+//      * @see {s}
+//      * {@link C.[|s|]}
+//      * @see {C.s}
+//      */
+//     r() { }
+// // --- (line: 34) skipped ---
+
+
+
+
+// === findAllReferences ===
+// === /findAllReferencesLinkTag1.ts ===
+
+// --- (line: 32) skipped ---
+//     r() { }
+// }
+// 
+// interface I {[|
+//     a|]/*FIND ALL REFS*/()
+//     b: 1
+//     /**
+//      * {@link a}
+// // --- (line: 41) skipped ---
+
+
+
+
+// === findAllReferences ===
+// === /findAllReferencesLinkTag1.ts ===
+
+// --- (line: 33) skipped ---
+// }
+// 
+// interface I {
+//     a()[|
+//     b|]/*FIND ALL REFS*/: 1
+//     /**
+//      * {@link a}
+//      * @see {a}
+// // --- (line: 42) skipped ---
+
+
+
+
+// === findAllReferences ===
+// === /findAllReferencesLinkTag1.ts ===
+
+// --- (line: 54) skipped ---
+// }
+// 
+// function nestor() {
+//     /** {@link [|r2|]} */
+//     function ref() { }
+//     /** @see {r2} */
+//     function d3() { }
+//     function r2/*FIND ALL REFS*/[| r2|]() { }
+// }
+
+
+
+
+// === findAllReferences ===
+// === /findAllReferencesLinkTag1.ts ===
+
+// class C/*FIND ALL REFS*/[| C|] {
+//     m() { }
+//     n = 1
+//     static s() { }
+//     /**
+//      * {@link m}
+//      * @see {m}
+//      * {@link [|C|].m}
+//      * @see {C.m}
+//      * {@link [|C|]#m}
+//      * @see {C#m}
+//      * {@link [|C|].prototype.m}
+//      * @see {C.prototype.m}
+//      */
+//     p() { }
+//     /**
+//      * {@link n}
+//      * @see {n}
+//      * {@link [|C|].n}
+//      * @see {C.n}
+//      * {@link [|C|]#n}
+//      * @see {C#n}
+//      * {@link [|C|].prototype.n}
+//      * @see {C.prototype.n}
+//      */
+//     q() { }
+//     /**
+//      * {@link s}
+//      * @see {s}
+//      * {@link [|C|].s}
+//      * @see {C.s}
+//      */
+//     r() { }
+// // --- (line: 34) skipped ---
+
+
+
+
+// === findAllReferences ===
+// === /findAllReferencesLinkTag1.ts ===
+
+// --- (line: 32) skipped ---
+//     r() { }
+// }
+// 
+// interface I/*FIND ALL REFS*/[| I|] {
+//     a()
+//     b: 1
+//     /**
+// // --- (line: 40) skipped ---

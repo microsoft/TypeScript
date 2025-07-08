@@ -1,0 +1,21 @@
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /findAllRefsWithLeadingUnderscoreNames7.ts ===
+
+// function /*FIND ALL REFS*/[| __foo|]() {[|
+//     __foo|]();
+// }
+
+
+
+
+// === findAllReferences ===
+// === /findAllRefsWithLeadingUnderscoreNames7.ts ===
+
+// function[| __foo|]() {[|
+//     /*FIND ALL REFS*/__foo|]();
+// }

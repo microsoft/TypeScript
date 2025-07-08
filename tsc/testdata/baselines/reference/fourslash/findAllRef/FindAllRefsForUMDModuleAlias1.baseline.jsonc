@@ -1,0 +1,27 @@
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /0.d.ts ===
+
+// export function doThing(): string;
+// export function doTheOtherThing(): void;
+// export as namespace /*FIND ALL REFS*/[| myLib|];
+
+
+
+
+// === findAllReferences ===
+// === /0.d.ts ===
+
+// export function doThing(): string;
+// export function doTheOtherThing(): void;
+// export as namespace[| myLib|];
+
+
+// === /1.ts ===
+
+// [|/// <reference path="0.d.ts" />
+// /*FIND ALL REFS*/myLib|].doThing();

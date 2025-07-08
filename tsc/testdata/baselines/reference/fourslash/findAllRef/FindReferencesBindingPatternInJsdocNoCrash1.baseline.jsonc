@@ -1,0 +1,5 @@
+// === findAllReferences ===
+// === /src/index.ts ===
+
+// import { useQuery } from "use-query";
+// const { /*FIND ALL REFS*/[| data|] } = useQuery();

@@ -1,0 +1,34 @@
+// === findAllReferences ===
+// === /referencesForLabel6.ts ===
+
+// /*FIND ALL REFS*/[|labela|]: while (true) {
+// labelb:     while (false) { break labelb; }
+//             break labelc;
+// }
+
+
+
+
+// === findAllReferences ===
+// === /referencesForLabel6.ts ===
+
+// labela: while (true) {[|
+// /*FIND ALL REFS*/labelb|]:     while (false) { break[| labelb|]; }
+//             break labelc;
+// }
+
+
+
+
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /referencesForLabel6.ts ===
+
+// labela: while (true) {[|
+// labelb:     while (false) { break /*FIND ALL REFS*/|]:     while (false) { break[| labelb|]; }
+//             break labelc;
+// }

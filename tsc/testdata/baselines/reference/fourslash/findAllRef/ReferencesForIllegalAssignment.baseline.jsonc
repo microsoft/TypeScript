@@ -1,0 +1,16 @@
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /referencesForIllegalAssignment.ts ===
+
+// foo = foo;
+// var /*FIND ALL REFS*/[| bar|] = function () { };[|
+// bar|] =[| bar|] + 1;

@@ -1,0 +1,13 @@
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /foo.js ===
+
+// --- (line: 5) skipped ---
+//  * @param {boolean} o.nested.great - much greatness
+//  * @param {number} o.nested.times - twice? probably!??
+//  */
+//  function f(o) { return o.nested./*FIND ALL REFS*/[|great|]; }

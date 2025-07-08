@@ -1,0 +1,42 @@
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+
+// export type /*FIND ALL REFS*/[| T|] = number;
+// export type U = string;
+
+
+
+
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+
+// export type T = number;
+// export type /*FIND ALL REFS*/[| U|] = string;
+
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+
+// export type[| T|] = number;
+// export type U = string;
+
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+
+// export type T = number;
+// export type[| U|] = string;

@@ -1,0 +1,43 @@
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+
+// var /*FIND ALL REFS*/[| x|]: number;
+
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+
+// var[| x|]: number;
+
+
+// === /b.ts ===
+
+// [|/// <reference path="a.ts" />
+// /*FIND ALL REFS*/x|]++;
+
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+
+// var[| x|]: number;
+
+
+// === /b.ts ===
+
+// [|/// <reference path="a.ts" />
+// x|]++;
+
+
+// === /c.ts ===
+
+// [|/// <reference path="a.ts" />
+// /*FIND ALL REFS*/x|]++;

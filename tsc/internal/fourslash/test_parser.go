@@ -27,12 +27,42 @@ type RangeMarker struct {
 	LSRange lsproto.Range
 }
 
+func (r *RangeMarker) LSPos() lsproto.Position {
+	return r.LSRange.Start
+}
+
+func (r *RangeMarker) FileName() string {
+	return r.fileName
+}
+
+func (r *RangeMarker) GetMarker() *Marker {
+	return r.Marker
+}
+
 type Marker struct {
-	FileName   string
+	fileName   string
 	Position   int
 	LSPosition lsproto.Position
 	Name       *string // `nil` for anonymous markers such as `{| "foo": "bar" |}`
 	Data       map[string]interface{}
+}
+
+func (m *Marker) LSPos() lsproto.Position {
+	return m.LSPosition
+}
+
+func (m *Marker) FileName() string {
+	return m.fileName
+}
+
+func (m *Marker) GetMarker() *Marker {
+	return m
+}
+
+type MarkerOrRange interface {
+	FileName() string
+	LSPos() lsproto.Position
+	GetMarker() *Marker
 }
 
 type TestData struct {
@@ -76,10 +106,14 @@ func ParseTestData(t *testing.T, contents string, fileName string) TestData {
 		ranges = append(ranges, file.ranges...)
 		for _, marker := range file.markers {
 			if marker.Name == nil {
-				continue
+				if marker.Data != nil {
+					// The marker is an anonymous object marker, which does not need a name. Markers are only set into markerPositions if they have a name
+					continue
+				}
+				t.Fatalf(`Marker at position %v is unnamed`, marker.Position)
 			}
-			if _, ok := markerPositions[*marker.Name]; ok {
-				t.Fatalf("Duplicate marker name: '%s'", *marker.Name)
+			if existing, ok := markerPositions[*marker.Name]; ok {
+				t.Fatalf(`Duplicate marker name: "%s" at %v and %v`, *marker.Name, marker.Position, existing.Position)
 			}
 			markerPositions[*marker.Name] = marker
 		}
@@ -214,8 +248,10 @@ func parseFileContent(fileName string, content string, fileOptions map[string]st
 				if rangeStart.marker != nil {
 					closedRange.Marker = rangeStart.marker
 				} else {
-					// RangeMarker is not added to list of markers
-					closedRange.Marker = &Marker{FileName: fileName}
+					// A default RangeMarker is not added to list of markers. If the RangeMarker was created by parsing an actual marker within the range
+					//     in the test file, then the marker should have been added to the marker list when the marker was parsed.
+					// Similarly, if the RangeMarker has a name, this means that there was a named marker parsed within the range (and has been already included in the marker list)
+					closedRange.Marker = &Marker{fileName: fileName}
 				}
 
 				rangeMarkers = append(rangeMarkers, closedRange)
@@ -272,7 +308,7 @@ func parseFileContent(fileName string, content string, fileOptions map[string]st
 				// start + 2 to ignore the */, -1 on the end to ignore the * (/ is next)
 				markerNameText := strings.TrimSpace(content[openMarker.sourcePosition+2 : i-1])
 				marker := &Marker{
-					FileName: fileName,
+					fileName: fileName,
 					Position: openMarker.position,
 					Name:     &markerNameText,
 				}
@@ -375,7 +411,7 @@ func getObjectMarker(fileName string, location *locationInformation, text string
 	}
 
 	marker := &Marker{
-		FileName: fileName,
+		fileName: fileName,
 		Position: location.position,
 		Data:     markerValue,
 	}

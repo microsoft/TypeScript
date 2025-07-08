@@ -1,0 +1,12 @@
+// === findAllReferences ===
+// === /user.ts ===
+
+// import {/*FIND ALL REFS*/[|x|]} from "jquery";
+
+
+
+
+// === findAllReferences ===
+// === /user2.ts ===
+
+// import {/*FIND ALL REFS*/[|x|]} from "jquery";

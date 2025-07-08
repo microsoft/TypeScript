@@ -1,0 +1,14 @@
+// === findAllReferences ===
+// === /referencesForContextuallyTypedUnionProperties2.ts ===
+
+// interface A {
+//     a: number;
+//     common: string;
+// }
+// 
+// interface B {[|
+//     /*FIND ALL REFS*/b|]: number;
+//     common: number;
+// }
+// 
+// // --- (line: 11) skipped ---

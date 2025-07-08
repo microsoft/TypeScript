@@ -1,0 +1,20 @@
+// === findAllReferences ===
+// === /findAllRefsWriteAccess.ts ===
+
+// interface Obj {
+//     [`/*FIND ALL REFS*/[|`num`|]]: number;
+// }
+// 
+// let o: Obj = {
+// // --- (line: 6) skipped ---
+
+
+// --- (line: 9) skipped ---
+//     ['num']: 1
+// };
+// 
+// o[[|'num'|]] = 2;
+// o[[|`num`|]] = 3;
+// 
+// o[[|'num'|]];
+// o[[|`num`|]];

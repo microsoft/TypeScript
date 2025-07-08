@@ -1,0 +1,32 @@
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /file.tsx ===
+
+// --- (line: 8) skipped ---
+//      }
+//      private method() { }
+//  }
+//  var /*FIND ALL REFS*/[| RCComp|] = RC1 || RC2;
+//  <[|RCComp|] />
+
+
+
+
+// === findAllReferences ===
+
+
+
+
+// === findAllReferences ===
+// === /file.tsx ===
+
+// --- (line: 8) skipped ---
+//      }
+//      private method() { }
+//  }
+//  var[| RCComp|] = RC1 || RC2;
+//  </*FIND ALL REFS*/[|RCComp|] />
