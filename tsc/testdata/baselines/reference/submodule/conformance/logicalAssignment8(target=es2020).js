@@ -18,11 +18,11 @@ function foo3(results: number[] | undefined) {
 
 //// [logicalAssignment8.js]
 function foo1(results) {
-    (results ||= bar?.value ?? []).push(100);
+    (results || (results = bar?.value ?? [])).push(100);
 }
 function foo2(results) {
-    (results ??= bar?.value ?? []).push(100);
+    (results ?? (results = bar?.value ?? [])).push(100);
 }
 function foo3(results) {
-    (results &&= bar?.value ?? []).push(100);
+    (results && (results = bar?.value ?? [])).push(100);
 }

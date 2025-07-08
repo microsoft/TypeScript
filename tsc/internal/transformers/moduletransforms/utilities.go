@@ -5,6 +5,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/outputpaths"
 	"github.com/microsoft/typescript-go/internal/printer"
+	"github.com/microsoft/typescript-go/internal/transformers"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
@@ -113,20 +114,9 @@ func isFileLevelReservedGeneratedIdentifier(emitContext *printer.EmitContext, na
 		info.Flags.IsReservedInNestedScopes()
 }
 
-// Used in the module transformer to check if an expression is reasonably without sideeffect,
-//
-//	and thus better to copy into multiple places rather than to cache in a temporary variable
-//	- this is mostly subjective beyond the requirement that the expression not be sideeffecting
-func isSimpleCopiableExpression(expression *ast.Expression) bool {
-	return ast.IsStringLiteralLike(expression) ||
-		ast.IsNumericLiteral(expression) ||
-		ast.IsKeywordKind(expression.Kind) ||
-		ast.IsIdentifier(expression)
-}
-
 // A simple inlinable expression is an expression which can be copied into multiple locations
 // without risk of repeating any sideeffects and whose value could not possibly change between
 // any such locations
 func isSimpleInlineableExpression(expression *ast.Expression) bool {
-	return !ast.IsIdentifier(expression) && isSimpleCopiableExpression(expression)
+	return !ast.IsIdentifier(expression) && transformers.IsSimpleCopiableExpression(expression)
 }

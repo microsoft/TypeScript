@@ -6,14 +6,15 @@
  //// [logicalAssignment10.js]
 -var _a, _b;
 -var _c, _d, _e;
++var _a, _b, _c;
  var count = 0;
  var obj = {};
  function incr() {
-@@= skipped -10, +8 lines =@@
+@@= skipped -10, +9 lines =@@
  const oobj = {
      obj
  };
 -(_a = obj[_c = incr()]) !== null && _a !== void 0 ? _a : (obj[_c] = incr());
 -(_b = (_d = oobj["obj"])[_e = incr()]) !== null && _b !== void 0 ? _b : (_d[_e] = incr());
-+obj[incr()] ??= incr();
-+oobj["obj"][incr()] ??= incr();
++obj[_a = incr()] ?? (obj[_a] = incr());
++(_b = oobj["obj"])[_c = incr()] ?? (_b[_c] = incr());

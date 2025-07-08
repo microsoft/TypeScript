@@ -7,7 +7,7 @@
 -"use strict";
  function f1(a) {
 -    a !== null && a !== void 0 ? a : (a = true);
-+    a ??= true;
++    a ?? (a = true);
      if (a === false) {
          console.log(a);
      }
@@ -16,7 +16,7 @@
  function f2() {
      let x = 0;
 -    x !== null && x !== void 0 ? x : (x = 1);
-+    x ??= 1;
++    x ?? (x = 1);
      if (x === 0) {
          console.log(x);
      }

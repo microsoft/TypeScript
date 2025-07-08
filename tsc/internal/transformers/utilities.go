@@ -231,3 +231,17 @@ func SingleOrMany(nodes []*ast.Node, factory *printer.NodeFactory) *ast.Node {
 	}
 	return factory.NewSyntaxList(nodes)
 }
+
+// Used in the module transformer to check if an expression is reasonably without sideeffect,
+//
+//	and thus better to copy into multiple places rather than to cache in a temporary variable
+//	- this is mostly subjective beyond the requirement that the expression not be sideeffecting
+//
+// Also used by the logical assignment downleveling transform to skip temp variables when they're
+// not needed.
+func IsSimpleCopiableExpression(expression *ast.Expression) bool {
+	return ast.IsStringLiteralLike(expression) ||
+		ast.IsNumericLiteral(expression) ||
+		ast.IsKeywordKind(expression.Kind) ||
+		ast.IsIdentifier(expression)
+}

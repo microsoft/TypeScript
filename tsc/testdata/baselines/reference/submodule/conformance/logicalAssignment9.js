@@ -8,5 +8,5 @@ x.a &&= false;
 
 
 //// [logicalAssignment9.js]
-x.a ??= true;
-x.a &&= false;
+x.a ?? (x.a = true);
+x.a && (x.a = false);

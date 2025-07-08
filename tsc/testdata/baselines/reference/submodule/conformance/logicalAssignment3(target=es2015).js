@@ -17,6 +17,6 @@ declare const c: A;
 
 
 //// [logicalAssignment3.js]
-(a.baz) &&= result.baz;
-(b.baz) ||= result.baz;
-(c.baz) ??= result.baz;
+a.baz && (a.baz = result.baz);
+b.baz || (b.baz = result.baz);
+c.baz ?? (c.baz = result.baz);
