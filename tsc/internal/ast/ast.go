@@ -309,6 +309,12 @@ func (n *Node) Text() string {
 		return n.AsRegularExpressionLiteral().Text
 	case KindJSDocText:
 		return strings.Join(n.AsJSDocText().text, "")
+	case KindJSDocLink:
+		return strings.Join(n.AsJSDocLink().text, "")
+	case KindJSDocLinkCode:
+		return strings.Join(n.AsJSDocLinkCode().text, "")
+	case KindJSDocLinkPlain:
+		return strings.Join(n.AsJSDocLinkPlain().text, "")
 	}
 	panic(fmt.Sprintf("Unhandled case in Node.Text: %T", n.data))
 }
