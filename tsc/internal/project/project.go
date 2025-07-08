@@ -42,6 +42,7 @@ type snapshot struct {
 	project          *Project
 	positionEncoding lsproto.PositionEncodingKind
 	program          *compiler.Program
+	lineMaps         collections.SyncMap[*ast.SourceFile, *ls.LineMap]
 }
 
 // GetLineMap implements ls.Host.
@@ -51,7 +52,13 @@ func (s *snapshot) GetLineMap(fileName string) *ls.LineMap {
 	if s.project.getFileVersion(file) == scriptInfo.Version() {
 		return scriptInfo.LineMap()
 	}
-	return ls.ComputeLineStarts(file.Text())
+	// The version changed; recompute the line map.
+	// !!! This shouldn't happen so often, but does. Probably removable once snapshotting is finished.
+	if cached, ok := s.lineMaps.Load(file); ok {
+		return cached
+	}
+	lineMap, _ := s.lineMaps.LoadOrStore(file, ls.ComputeLineStarts(file.Text()))
+	return lineMap
 }
 
 // GetPositionEncoding implements ls.Host.
