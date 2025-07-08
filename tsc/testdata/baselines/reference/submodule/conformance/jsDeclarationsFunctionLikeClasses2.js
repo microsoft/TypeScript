@@ -107,7 +107,7 @@ Vec.prototype = {
     magnitude() {
         let sum = 0;
         for (let i = 0; i < this.storage.length; i++) {
-            sum += (this.storage[i] ** 2);
+            sum += (Math.pow(this.storage[i], 2));
         }
         return Math.sqrt(sum);
     }

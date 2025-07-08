@@ -1,15 +1,6 @@
 --- old.jsDeclarationsFunctionLikeClasses2.js
 +++ new.jsDeclarationsFunctionLikeClasses2.js
-@@= skipped -106, +106 lines =@@
-     magnitude() {
-         let sum = 0;
-         for (let i = 0; i < this.storage.length; i++) {
--            sum += (Math.pow(this.storage[i], 2));
-+            sum += (this.storage[i] ** 2);
-         }
-         return Math.sqrt(sum);
-     }
-@@= skipped -42, +42 lines =@@
+@@= skipped -148, +148 lines =@@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.origin = void 0;

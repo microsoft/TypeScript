@@ -93,55 +93,58 @@ var value;
 // this
 class C {
     constructor() {
-        this **= value;
+        this = Math.pow(this, value);
     }
     foo() {
-        this **= value;
+        this = Math.pow(this, value);
     }
     static sfoo() {
-        this **= value;
+        this = Math.pow(this, value);
     }
 }
 function foo() {
-    this **= value;
+    this = Math.pow(this, value);
 }
-this **= value;
+this = Math.pow(this, value);
 // identifiers: module, class, enum, function
 var M;
 (function (M) {
 })(M || (M = {}));
-M **= value;
-C **= value;
+M = Math.pow(M, value);
+C = Math.pow(C, value);
 var E;
 (function (E) {
 })(E || (E = {}));
-E **= value;
-foo **= value;
+E = Math.pow(E, value);
+foo = Math.pow(foo, value);
 // literals
-null **= value;
-true **= value;
-false **= value;
-0 **= value;
-'' **= value;
-/d+/ **= value;
+null = Math.pow(null, value);
+true = Math.pow(true, value);
+false = Math.pow(false, value);
+0 = Math.pow(0, value);
+'' = Math.pow('', value);
+/d+/ = Math.pow(/d+/, value);
 // object literals
 {
     a: 0;
 }
 value;
 // array literals
-['', ''] **= value;
+['', ''] = Math.pow(['', ''], value);
 // super
 class Derived extends C {
     constructor() {
+        var _a;
         super();
-        super. **= value;
+        (_a = super). = Math.pow(_a., value);
     }
     foo() {
-        super. **= value;
+        var _a;
+        (_a = super). = Math.pow(_a., value);
     }
     static sfoo() {
-        super. **= value;
+        var _a;
+        (_a = super). = Math.pow(_a., value);
     }
 }
 // function expression
@@ -150,19 +153,19 @@ value;
 () => { };
 value;
 // function calls
-foo() **= value;
+foo() = Math.pow(foo(), value);
 // parentheses, the containted expression is value
-(this) **= value;
-(M) **= value;
-(C) **= value;
-(E) **= value;
-(foo) **= value;
-(null) **= value;
-(true) **= value;
-(0) **= value;
-('') **= value;
-(/d+/) **= value;
-({}) **= value;
-([]) **= value;
-(function baz1() { }) **= value;
-(foo()) **= value;
+(this) = Math.pow((this), value);
+(M) = Math.pow((M), value);
+(C) = Math.pow((C), value);
+(E) = Math.pow((E), value);
+(foo) = Math.pow((foo), value);
+(null) = Math.pow((null), value);
+(true) = Math.pow((true), value);
+(0) = Math.pow((0), value);
+('') = Math.pow((''), value);
+(/d+/) = Math.pow((/d+/), value);
+({}) = Math.pow(({}), value);
+([]) = Math.pow(([]), value);
+(function baz1() { }) = Math.pow((function baz1() { }), value);
+(foo()) = Math.pow((foo()), value);

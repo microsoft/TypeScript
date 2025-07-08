@@ -48,7 +48,7 @@ const source_1 = require("./source");
  * @param {Point} p
  */
 function magnitude(p) {
-    return Math.sqrt(p.x ** 2 + p.y ** 2);
+    return Math.sqrt(Math.pow(p.x, 2) + Math.pow(p.y, 2));
 }
 
 

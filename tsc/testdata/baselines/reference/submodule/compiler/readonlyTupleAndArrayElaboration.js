@@ -80,7 +80,7 @@ const at8: [1] = at7;
 // #Repro from #30839
 let point = [3, 4];
 function distanceFromOrigin([x, y]) {
-    return Math.sqrt(x ** 2 + y ** 2);
+    return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 }
 distanceFromOrigin(point);
 arryFn(point);

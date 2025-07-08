@@ -107,7 +107,7 @@ export const power = <Num extends number, PowerOf extends number>(
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.power = void 0;
-const power = (num, powerOf) => (num ** powerOf);
+const power = (num, powerOf) => (Math.pow(num, powerOf));
 exports.power = power;
 
 

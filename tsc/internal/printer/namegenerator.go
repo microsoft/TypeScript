@@ -286,8 +286,8 @@ func (g *NameGenerator) makeTempVariableName(flags tempFlags, reservedInNestedSc
 	for {
 		count := tempFlags & tempFlagsCountMask
 		tempFlags++
-		// Skip over 'i'
-		if count != 8 {
+		// Skip over 'i' and 'n'
+		if count != 8 && count != 13 {
 			var name string
 			if count < 26 {
 				name = fmt.Sprintf("_%c", 'a'+byte(count))

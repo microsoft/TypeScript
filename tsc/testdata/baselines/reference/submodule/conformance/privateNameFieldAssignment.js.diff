@@ -47,12 +47,13 @@
 -        __classPrivateFieldSet(_k = A.getInstance(), _A_field, __classPrivateFieldGet(_k, _A_field, "f") & 11, "f");
 -        __classPrivateFieldSet(_l = A.getInstance(), _A_field, __classPrivateFieldGet(_l, _A_field, "f") | 12, "f");
 -        __classPrivateFieldSet(_m = A.getInstance(), _A_field, __classPrivateFieldGet(_m, _A_field, "f") ^ 13, "f");
++        var _a, _b;
 +        this.#field = 1;
 +        this.#field += 2;
 +        this.#field -= 3;
 +        this.#field /= 4;
 +        this.#field *= 5;
-+        this.#field **= 6;
++        (_a = this).#field = Math.pow(_a.#field, 6);
 +        this.#field %= 7;
 +        this.#field <<= 8;
 +        this.#field >>= 9;
@@ -65,7 +66,7 @@
 +        A.getInstance().#field -= 3;
 +        A.getInstance().#field /= 4;
 +        A.getInstance().#field *= 5;
-+        A.getInstance().#field **= 6;
++        (_b = A.getInstance()).#field = Math.pow(_b.#field, 6);
 +        A.getInstance().#field %= 7;
 +        A.getInstance().#field <<= 8;
 +        A.getInstance().#field >>= 9;

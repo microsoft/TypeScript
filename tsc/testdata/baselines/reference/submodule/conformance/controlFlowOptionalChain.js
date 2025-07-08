@@ -1073,7 +1073,7 @@ function f41(o) {
 function getArea(shape) {
     switch (shape?.type) {
         case 'circle':
-            return Math.PI * shape.radius ** 2;
+            return Math.PI * Math.pow(shape.radius, 2);
         case 'rectangle':
             return shape.width * shape.height;
         default:

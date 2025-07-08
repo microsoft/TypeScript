@@ -9,12 +9,6 @@
  /**
   * @param {Point} p
   */
- function magnitude(p) {
--    return Math.sqrt(Math.pow(p.x, 2) + Math.pow(p.y, 2));
-+    return Math.sqrt(p.x ** 2 + p.y ** 2);
- }
-
-
 @@= skipped -14, +14 lines =@@
   * @param {number} x
   * @param {number} y

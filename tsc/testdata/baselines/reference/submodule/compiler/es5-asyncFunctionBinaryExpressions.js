@@ -207,8 +207,8 @@ async function binaryCompoundAssignment8() {
     x[await a] += await y;
 }
 async function binaryExponentiation() {
-    (await x) ** y;
-    x ** await y;
+    Math.pow((await x), y);
+    Math.pow(x, await y);
 }
 async function binaryComma0() {
     return (await x), y;

@@ -41,12 +41,13 @@ class A {
 class A {
     #field = 0;
     constructor() {
+        var _a, _b;
         this.#field = 1;
         this.#field += 2;
         this.#field -= 3;
         this.#field /= 4;
         this.#field *= 5;
-        this.#field **= 6;
+        (_a = this).#field = Math.pow(_a.#field, 6);
         this.#field %= 7;
         this.#field <<= 8;
         this.#field >>= 9;
@@ -59,7 +60,7 @@ class A {
         A.getInstance().#field -= 3;
         A.getInstance().#field /= 4;
         A.getInstance().#field *= 5;
-        A.getInstance().#field **= 6;
+        (_b = A.getInstance()).#field = Math.pow(_b.#field, 6);
         A.getInstance().#field %= 7;
         A.getInstance().#field <<= 8;
         A.getInstance().#field >>= 9;

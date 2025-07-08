@@ -272,6 +272,30 @@ func (f *NodeFactory) InlineExpressions(expressions []*ast.Expression) *ast.Expr
 // Utilities
 //
 
+func (f *NodeFactory) NewMethodCall(object *ast.Node, methodName *ast.Node, argumentsList []*ast.Node) *ast.Node {
+	// Preserve the optionality of `object`.
+	if ast.IsCallExpression(object) && (object.Flags&ast.NodeFlagsOptionalChain != 0) {
+		return f.NewCallExpression(
+			f.NewPropertyAccessExpression(object, nil, methodName, ast.NodeFlagsNone),
+			nil,
+			nil,
+			f.NewNodeList(argumentsList),
+			ast.NodeFlagsOptionalChain,
+		)
+	}
+	return f.NewCallExpression(
+		f.NewPropertyAccessExpression(object, nil, methodName, ast.NodeFlagsNone),
+		nil,
+		nil,
+		f.NewNodeList(argumentsList),
+		ast.NodeFlagsNone,
+	)
+}
+
+func (f *NodeFactory) NewGlobalMethodCall(globalObjectName string, methodName string, argumentsList []*ast.Node) *ast.Node {
+	return f.NewMethodCall(f.NewIdentifier(globalObjectName), f.NewIdentifier(methodName), argumentsList)
+}
+
 // Determines whether a node is a parenthesized expression that can be ignored when recreating outer expressions.
 //
 // A parenthesized expression can be ignored when all of the following are true:
