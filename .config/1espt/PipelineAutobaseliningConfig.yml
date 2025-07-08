@@ -19,3 +19,14 @@ pipelines:
           lastModifiedDate: 2024-12-07
         spotbugs:
           lastModifiedDate: 2024-12-07
+  72:
+    retail:
+      source:
+        credscan:
+          lastModifiedDate: 2025-07-08
+        eslint:
+          lastModifiedDate: 2025-07-08
+        psscriptanalyzer:
+          lastModifiedDate: 2025-07-08
+        armory:
+          lastModifiedDate: 2025-07-08
