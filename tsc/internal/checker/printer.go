@@ -182,7 +182,8 @@ func (c *Checker) typeToStringEx(t *Type, enclosingDeclaration *ast.Node, flags 
 	if noTruncation {
 		combinedFlags = combinedFlags | nodebuilder.FlagsNoTruncation
 	}
-	typeNode := c.nodeBuilder.TypeToTypeNode(t, enclosingDeclaration, combinedFlags, nodebuilder.InternalFlagsNone, nil)
+	nodeBuilder := c.getNodeBuilder()
+	typeNode := nodeBuilder.TypeToTypeNode(t, enclosingDeclaration, combinedFlags, nodebuilder.InternalFlagsNone, nil)
 	if typeNode == nil {
 		panic("should always get typenode")
 	}
@@ -190,9 +191,9 @@ func (c *Checker) typeToStringEx(t *Type, enclosingDeclaration *ast.Node, flags 
 	// Otherwise, we always strip comments out.
 	var printer *printer.Printer
 	if t == c.unresolvedType {
-		printer = createPrinterWithDefaults(c.diagnosticConstructionContext)
+		printer = createPrinterWithDefaults(nodeBuilder.EmitContext())
 	} else {
-		printer = createPrinterWithRemoveComments(c.diagnosticConstructionContext)
+		printer = createPrinterWithRemoveComments(nodeBuilder.EmitContext())
 	}
 	var sourceFile *ast.SourceFile
 	if enclosingDeclaration != nil {
@@ -245,22 +246,23 @@ func (c *Checker) symbolToStringEx(symbol *ast.Symbol, enclosingDeclaration *ast
 		internalNodeFlags |= nodebuilder.InternalFlagsWriteComputedProps
 	}
 
+	nodeBuilder := c.getNodeBuilder()
 	var sourceFile *ast.SourceFile
 	if enclosingDeclaration != nil {
 		sourceFile = ast.GetSourceFileOfNode(enclosingDeclaration)
 	}
 	var printer_ *printer.Printer
 	if enclosingDeclaration != nil && enclosingDeclaration.Kind == ast.KindSourceFile {
-		printer_ = createPrinterWithRemoveCommentsNeverAsciiEscape(c.diagnosticConstructionContext)
+		printer_ = createPrinterWithRemoveCommentsNeverAsciiEscape(nodeBuilder.EmitContext())
 	} else {
-		printer_ = createPrinterWithRemoveComments(c.diagnosticConstructionContext)
+		printer_ = createPrinterWithRemoveComments(nodeBuilder.EmitContext())
 	}
 
 	var builder func(symbol *ast.Symbol, meaning ast.SymbolFlags, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node
 	if flags&SymbolFormatFlagsAllowAnyNodeKind != 0 {
-		builder = c.nodeBuilder.SymbolToNode
+		builder = nodeBuilder.SymbolToNode
 	} else {
-		builder = c.nodeBuilder.SymbolToEntityName
+		builder = nodeBuilder.SymbolToEntityName
 	}
 	entity := builder(symbol, meaning, enclosingDeclaration, nodeFlags, internalNodeFlags, nil)         // TODO: GH#18217
 	printer_.Write(entity /*sourceFile*/, sourceFile, getTrailingSemicolonDeferringWriter(writer), nil) // TODO: GH#18217
@@ -294,9 +296,10 @@ func (c *Checker) signatureToStringEx(signature *Signature, enclosingDeclaration
 	writer, putWriter := printer.GetSingleLineStringWriter()
 	defer putWriter()
 
+	nodeBuilder := c.getNodeBuilder()
 	combinedFlags := toNodeBuilderFlags(flags) | nodebuilder.FlagsIgnoreErrors | nodebuilder.FlagsWriteTypeParametersInQualifiedName
-	sig := c.nodeBuilder.SignatureToSignatureDeclaration(signature, sigOutput, enclosingDeclaration, combinedFlags, nodebuilder.InternalFlagsNone, nil)
-	printer_ := createPrinterWithRemoveCommentsOmitTrailingSemicolon(c.diagnosticConstructionContext)
+	sig := nodeBuilder.SignatureToSignatureDeclaration(signature, sigOutput, enclosingDeclaration, combinedFlags, nodebuilder.InternalFlagsNone, nil)
+	printer_ := createPrinterWithRemoveCommentsOmitTrailingSemicolon(nodeBuilder.EmitContext())
 	var sourceFile *ast.SourceFile
 	if enclosingDeclaration != nil {
 		sourceFile = ast.GetSourceFileOfNode(enclosingDeclaration)
@@ -312,9 +315,10 @@ func (c *Checker) typePredicateToString(typePredicate *TypePredicate) string {
 func (c *Checker) typePredicateToStringEx(typePredicate *TypePredicate, enclosingDeclaration *ast.Node, flags TypeFormatFlags) string {
 	writer, putWriter := printer.GetSingleLineStringWriter()
 	defer putWriter()
+	nodeBuilder := c.getNodeBuilder()
 	combinedFlags := toNodeBuilderFlags(flags) | nodebuilder.FlagsIgnoreErrors | nodebuilder.FlagsWriteTypeParametersInQualifiedName
-	predicate := c.nodeBuilder.TypePredicateToTypePredicateNode(typePredicate, enclosingDeclaration, combinedFlags, nodebuilder.InternalFlagsNone, nil) // TODO: GH#18217
-	printer_ := createPrinterWithRemoveComments(c.diagnosticConstructionContext)
+	predicate := nodeBuilder.TypePredicateToTypePredicateNode(typePredicate, enclosingDeclaration, combinedFlags, nodebuilder.InternalFlagsNone, nil) // TODO: GH#18217
+	printer_ := createPrinterWithRemoveComments(nodeBuilder.EmitContext())
 	var sourceFile *ast.SourceFile
 	if enclosingDeclaration != nil {
 		sourceFile = ast.GetSourceFileOfNode(enclosingDeclaration)

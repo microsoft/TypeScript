@@ -22,7 +22,6 @@ import (
 	"github.com/microsoft/typescript-go/internal/jsnum"
 	"github.com/microsoft/typescript-go/internal/module"
 	"github.com/microsoft/typescript-go/internal/modulespecifiers"
-	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/stringutil"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
@@ -849,8 +848,6 @@ type Checker struct {
 	markNodeAssignments                         func(*ast.Node) bool
 	emitResolver                                *emitResolver
 	emitResolverOnce                            sync.Once
-	diagnosticConstructionContext               *printer.EmitContext
-	nodeBuilder                                 *NodeBuilder
 	_jsxNamespace                               string
 	_jsxFactoryEntity                           *ast.Node
 	skipDirectInferenceNodes                    collections.Set[*ast.Node]
@@ -1070,8 +1067,6 @@ func NewChecker(program Program) *Checker {
 	c.getGlobalClassAccessorDecoratorTargetType = c.getGlobalTypeResolver("ClassAccessorDecoratorTarget", 2 /*arity*/, true /*reportErrors*/)
 	c.getGlobalClassAccessorDecoratorResultType = c.getGlobalTypeResolver("ClassAccessorDecoratorResult", 2 /*arity*/, true /*reportErrors*/)
 	c.getGlobalClassFieldDecoratorContextType = c.getGlobalTypeResolver("ClassFieldDecoratorContext", 2 /*arity*/, true /*reportErrors*/)
-	c.diagnosticConstructionContext = printer.NewEmitContext()
-	c.nodeBuilder = NewNodeBuilder(c, c.diagnosticConstructionContext)
 	c.initializeClosures()
 	c.initializeIterationResolvers()
 	c.initializeChecker()

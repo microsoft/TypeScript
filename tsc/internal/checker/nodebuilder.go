@@ -170,6 +170,6 @@ func NewNodeBuilder(ch *Checker, e *printer.EmitContext) *NodeBuilder {
 	return &NodeBuilder{impl: impl, ctxStack: make([]*NodeBuilderContext, 0, 1), host: ch.program}
 }
 
-func (c *Checker) GetDiagnosticNodeBuilder() *NodeBuilder {
-	return c.nodeBuilder
+func (c *Checker) getNodeBuilder() *NodeBuilder {
+	return NewNodeBuilder(c, printer.NewEmitContext())
 }
