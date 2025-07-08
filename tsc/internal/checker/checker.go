@@ -17879,6 +17879,7 @@ func (c *Checker) pushTypeResolution(target TypeSystemEntity, propertyName TypeS
 func (c *Checker) popTypeResolution() bool {
 	lastIndex := len(c.typeResolutions) - 1
 	result := c.typeResolutions[lastIndex].result
+	c.typeResolutions[lastIndex] = TypeResolution{} // Clear the last entry to avoid memory leaks
 	c.typeResolutions = c.typeResolutions[:lastIndex]
 	return result
 }
@@ -29354,7 +29355,9 @@ func (c *Checker) pushContextualType(node *ast.Node, t *Type, isCache bool) {
 }
 
 func (c *Checker) popContextualType() {
-	c.contextualInfos = c.contextualInfos[:len(c.contextualInfos)-1]
+	lastIndex := len(c.contextualInfos) - 1
+	c.contextualInfos[lastIndex] = ContextualInfo{}
+	c.contextualInfos = c.contextualInfos[:lastIndex]
 }
 
 func (c *Checker) findContextualNode(node *ast.Node, includeCaches bool) int {
@@ -29424,7 +29427,9 @@ func (c *Checker) pushInferenceContext(node *ast.Node, context *InferenceContext
 }
 
 func (c *Checker) popInferenceContext() {
-	c.inferenceContextInfos = c.inferenceContextInfos[:len(c.inferenceContextInfos)-1]
+	lastIndex := len(c.inferenceContextInfos) - 1
+	c.inferenceContextInfos[lastIndex] = InferenceContextInfo{}
+	c.inferenceContextInfos = c.inferenceContextInfos[:lastIndex]
 }
 
 func (c *Checker) getInferenceContext(node *ast.Node) *InferenceContext {
