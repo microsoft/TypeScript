@@ -1329,6 +1329,7 @@ func (c *Checker) getInferredType(n *InferenceContext, index int) *Type {
 			}
 			inference.inferredType = inferredType
 		}
+		c.clearActiveMapperCaches()
 	}
 	return inference.inferredType
 }

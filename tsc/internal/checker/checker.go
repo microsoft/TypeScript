@@ -856,6 +856,8 @@ type Checker struct {
 	skipDirectInferenceNodes                    collections.Set[*ast.Node]
 	ctx                                         context.Context
 	packagesMap                                 map[string]bool
+	activeMappers                               []*TypeMapper
+	activeTypeMappersCaches                     []map[string]*Type
 }
 
 func NewChecker(program Program) *Checker {
@@ -21178,12 +21180,64 @@ func (c *Checker) instantiateTypeWithAlias(t *Type, m *TypeMapper, alias *TypeAl
 		c.error(c.currentNode, diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite)
 		return c.errorType
 	}
+	index := c.findActiveMapper(m)
+	if index == -1 {
+		c.pushActiveMapper(m)
+	}
+	var b KeyBuilder
+	b.WriteType(t)
+	b.WriteAlias(alias)
+	key := b.String()
+	cache := c.activeTypeMappersCaches[core.IfElse(index != -1, index, len(c.activeTypeMappersCaches)-1)]
+	if cachedType, ok := cache[key]; ok {
+		return cachedType
+	}
 	c.TotalInstantiationCount++
 	c.instantiationCount++
 	c.instantiationDepth++
 	result := c.instantiateTypeWorker(t, m, alias)
+	if index == -1 {
+		c.popActiveMapper()
+	} else {
+		cache[key] = result
+	}
 	c.instantiationDepth--
 	return result
+}
+
+func (c *Checker) pushActiveMapper(mapper *TypeMapper) {
+	c.activeMappers = append(c.activeMappers, mapper)
+
+	lastIndex := len(c.activeTypeMappersCaches)
+	if cap(c.activeTypeMappersCaches) > lastIndex {
+		// The cap may contain an empty map from popActiveMapper; reuse it.
+		c.activeTypeMappersCaches = c.activeTypeMappersCaches[:lastIndex+1]
+		if c.activeTypeMappersCaches[lastIndex] == nil {
+			c.activeTypeMappersCaches[lastIndex] = make(map[string]*Type, 1)
+		}
+	} else {
+		c.activeTypeMappersCaches = append(c.activeTypeMappersCaches, make(map[string]*Type, 1))
+	}
+}
+
+func (c *Checker) popActiveMapper() {
+	c.activeMappers[len(c.activeMappers)-1] = nil
+	c.activeMappers = c.activeMappers[:len(c.activeMappers)-1]
+
+	// Clear the map, but leave it in the list for later reuse.
+	lastIndex := len(c.activeTypeMappersCaches) - 1
+	clear(c.activeTypeMappersCaches[lastIndex])
+	c.activeTypeMappersCaches = c.activeTypeMappersCaches[:lastIndex]
+}
+
+func (c *Checker) findActiveMapper(mapper *TypeMapper) int {
+	return core.FindLastIndex(c.activeMappers, func(m *TypeMapper) bool { return m == mapper })
+}
+
+func (c *Checker) clearActiveMapperCaches() {
+	for _, cache := range c.activeTypeMappersCaches {
+		clear(cache)
+	}
 }
 
 // Return true if the given type could possibly reference a type parameter for which
