@@ -32,7 +32,7 @@ func (p *Parser) withJSDoc(node *ast.Node, hasJSDoc bool) []*ast.Node {
 	}
 
 	if p.jsdocCache == nil {
-		p.jsdocCache = make(map[*ast.Node][]*ast.Node)
+		p.jsdocCache = make(map[*ast.Node][]*ast.Node, strings.Count(p.sourceText, "/**"))
 	} else if _, ok := p.jsdocCache[node]; ok {
 		panic("tried to set JSDoc on a node with existing JSDoc")
 	}
@@ -368,20 +368,20 @@ func (p *Parser) skipWhitespaceOrAsterisk() string {
 
 	precedingLineBreak := p.scanner.HasPrecedingLineBreak()
 	seenLineBreak := false
-	indentText := ""
+	indents := make([]string, 0, 4)
 	for (precedingLineBreak && p.token == ast.KindAsteriskToken) || p.token == ast.KindWhitespaceTrivia || p.token == ast.KindNewLineTrivia {
-		indentText += p.scanner.TokenText()
+		indents = append(indents, p.scanner.TokenText())
 		if p.token == ast.KindNewLineTrivia {
 			precedingLineBreak = true
 			seenLineBreak = true
-			indentText = ""
+			indents = indents[:0]
 		} else if p.token == ast.KindAsteriskToken {
 			precedingLineBreak = false
 		}
 		p.nextTokenJSDoc()
 	}
 	if seenLineBreak {
-		return indentText
+		return strings.Join(indents, "")
 	} else {
 		return ""
 	}
@@ -475,7 +475,8 @@ func (p *Parser) parseTagComments(indent int, initialMargin *string) *ast.NodeLi
 	commentsPos := p.nodePos()
 	comments := p.jsdocTagCommentsSpace
 	p.jsdocTagCommentsSpace = nil // !!! can parseTagComments call itself?
-	var parts []*ast.Node
+	parts := p.jsdocTagCommentsPartsSpace
+	p.jsdocTagCommentsPartsSpace = nil
 	linkEnd := -1
 	state := jsdocStateBeginningOfLine
 	if indent < 0 {
@@ -594,8 +595,11 @@ loop:
 		p.finishNode(text, commentStart)
 		parts = append(parts, text)
 	}
+
+	p.jsdocTagCommentsPartsSpace = parts[:0]
+
 	if len(parts) > 0 {
-		return p.newNodeList(core.NewTextRange(commentsPos, p.scanner.TokenEnd()), parts)
+		return p.newNodeList(core.NewTextRange(commentsPos, p.scanner.TokenEnd()), p.nodeSlicePool.Clone(parts))
 	}
 	return nil
 }
