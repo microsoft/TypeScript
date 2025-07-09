@@ -250,11 +250,8 @@ jobs:
       - run: node ./internal/lsp/lsproto/_generate/fetchModel.mjs
       - run: node ./internal/lsp/lsproto/_generate/generate.mjs
 
-      - name: Remove all converted fourslash tests
-        run: rm -rf internal/fourslash/tests/gen
-
-      - name: Regenerate fourslash tests
-        run: npm run convertfourslash
+      - name: Regenerate fourslash tests and update failing test list
+        run: npm run updatefailing
 
       - run: git add .
       - run: git diff --staged --exit-code --stat
