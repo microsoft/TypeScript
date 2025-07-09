@@ -1816,7 +1816,9 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             }
             else {
                 forEach(options.lib, (libFileName, index) => {
-                    processRootFile(pathForLibFile(libFileName), /*isDefaultLib*/ true, { kind: FileIncludeKind.LibFile, index });
+                    for (const p of pathsForLibFile(libFileName)) {
+                        processRootFile(p, /*isDefaultLib*/ true, { kind: FileIncludeKind.LibFile, index });
+                    }
                 });
             }
         }
@@ -3818,6 +3820,22 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         }
     }
 
+    function pathsForLibFile(libFileName: string): string[] {
+        const names = [libFileName];
+        // Force the inclusion of ES6 and DOM's iterable libs.
+        switch (libFileName) {
+            case "lib.dom.d.ts":
+                names.push("lib.dom.iterable.d.ts");
+                // TODO: auto add dom.asynciterable.d.ts in es2018?
+                break;
+            case "lib.es5.d.ts":
+                names.push("lib.es2015.d.ts");
+                break;
+        }
+
+        return names.map(pathForLibFile);
+    }
+
     function pathForLibFile(libFileName: string): string {
         const existing = resolvedLibReferences?.get(libFileName);
         if (existing) return existing.actual;
@@ -3888,7 +3906,12 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         forEach(file.libReferenceDirectives, (libReference, index) => {
             const libFileName = getLibFileNameFromLibReference(libReference);
             if (libFileName) {
-                processRootFile(pathForLibFile(libFileName), /*isDefaultLib*/ true, { kind: FileIncludeKind.LibReferenceDirective, file: file.path, index });
+                for (const p of pathsForLibFile(libFileName)) {
+                    if (file.fileName === p) {
+                        continue;
+                    }
+                    processRootFile(p, /*isDefaultLib*/ true, { kind: FileIncludeKind.LibReferenceDirective, file: file.path, index });
+                }
             }
             else {
                 programDiagnostics.addFileProcessingDiagnostic({
