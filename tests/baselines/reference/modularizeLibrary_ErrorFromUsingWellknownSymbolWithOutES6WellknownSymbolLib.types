@@ -14,12 +14,12 @@ function f(x: number, y: number, z: number) {
     return Array.from(arguments);
 >Array.from(arguments) : any[]
 >                      : ^^^^^
->Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
->           : ^^^ ^^         ^^            ^^^   ^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^   ^^^
+>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>           : ^^^ ^^         ^^            ^^^   ^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^   ^^^ ^^        ^^                          ^^^   ^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^   ^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
->from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
->     : ^^^ ^^         ^^            ^^^   ^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^   ^^^
+>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>     : ^^^ ^^         ^^            ^^^   ^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^   ^^^ ^^        ^^                          ^^^   ^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^   ^^^
 >arguments : IArguments
 >          : ^^^^^^^^^^
 }
@@ -49,16 +49,15 @@ let a = ['c', 'd'];
 a[Symbol.isConcatSpreadable] = false;
 >a[Symbol.isConcatSpreadable] = false : false
 >                                     : ^^^^^
->a[Symbol.isConcatSpreadable] : string
->                             : ^^^^^^
+>a[Symbol.isConcatSpreadable] : error
 >a : string[]
 >  : ^^^^^^^^
->Symbol.isConcatSpreadable : any
->                          : ^^^
->Symbol : any
->       : ^^^
->isConcatSpreadable : any
->                   : ^^^
+>Symbol.isConcatSpreadable : unique symbol
+>                          : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>isConcatSpreadable : unique symbol
+>                   : ^^^^^^^^^^^^^
 >false : false
 >      : ^^^^^
 

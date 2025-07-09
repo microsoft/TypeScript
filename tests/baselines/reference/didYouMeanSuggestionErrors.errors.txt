@@ -9,17 +9,10 @@ didYouMeanSuggestionErrors.ts(10,9): error TS2584: Cannot find name 'document'. 
 didYouMeanSuggestionErrors.ts(12,19): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 didYouMeanSuggestionErrors.ts(13,19): error TS2580: Cannot find name 'Buffer'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 didYouMeanSuggestionErrors.ts(14,19): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-didYouMeanSuggestionErrors.ts(16,23): error TS2583: Cannot find name 'Map'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-didYouMeanSuggestionErrors.ts(17,23): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-didYouMeanSuggestionErrors.ts(18,23): error TS2583: Cannot find name 'WeakMap'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-didYouMeanSuggestionErrors.ts(19,23): error TS2583: Cannot find name 'WeakSet'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-didYouMeanSuggestionErrors.ts(20,19): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
-didYouMeanSuggestionErrors.ts(21,19): error TS2585: 'Promise' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
-didYouMeanSuggestionErrors.ts(23,18): error TS2583: Cannot find name 'Iterator'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
 didYouMeanSuggestionErrors.ts(24,18): error TS2583: Cannot find name 'AsyncIterator'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
 
 
-==== didYouMeanSuggestionErrors.ts (19 errors) ====
+==== didYouMeanSuggestionErrors.ts (12 errors) ====
     describe("my test suite", () => {
     ~~~~~~~~
 !!! error TS2582: Cannot find name 'describe'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
@@ -58,27 +51,13 @@ didYouMeanSuggestionErrors.ts(24,18): error TS2583: Cannot find name 'AsyncItera
 !!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
     
             const a = new Map();
-                          ~~~
-!!! error TS2583: Cannot find name 'Map'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
             const b = new Set();
-                          ~~~
-!!! error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
             const c = new WeakMap();
-                          ~~~~~~~
-!!! error TS2583: Cannot find name 'WeakMap'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
             const d = new WeakSet();
-                          ~~~~~~~
-!!! error TS2583: Cannot find name 'WeakSet'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
             const e = Symbol();
-                      ~~~~~~
-!!! error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
             const f = Promise.resolve(0);
-                      ~~~~~~~
-!!! error TS2585: 'Promise' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
     
             const i: Iterator<any> = null as any;
-                     ~~~~~~~~
-!!! error TS2583: Cannot find name 'Iterator'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
             const j: AsyncIterator<any> = null as any;
                      ~~~~~~~~~~~~~
 !!! error TS2583: Cannot find name 'AsyncIterator'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.

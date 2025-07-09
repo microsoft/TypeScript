@@ -311,6 +311,8 @@ Found 'package.json' at '/home/src/projects/component-type-checker/node_modules/
 
 ../../../../tslibs/TS/Lib/lib.es5.d.ts
   Library 'lib.es5.d.ts' specified in compilerOptions
+../../../../tslibs/TS/Lib/lib.es2015.d.ts
+  Library 'lib.es5.d.ts' specified in compilerOptions
 ../../node_modules/.pnpm/@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button/src/index.ts
   Imported via "@component-type-checker/button" from file '../../node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/components/src/index.ts' with packageId '@component-type-checker/button/src/index.ts@0.0.1'
 ../../node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/components/src/index.ts
@@ -330,6 +332,8 @@ Found 1 error in tsconfig.json[90m:8[0m
 
 
 //// [/home/src/tslibs/TS/Lib/lib.es5.d.ts] *Lib*
+
+//// [/home/src/tslibs/TS/Lib/lib.es2015.d.ts] *Lib*
 
 //// [/home/src/projects/component-type-checker/packages/app/dist/app.js]
 import { createButton } from "@component-type-checker/button";

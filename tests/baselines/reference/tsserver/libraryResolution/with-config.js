@@ -176,6 +176,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspac
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.webworker.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.scripthost.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es5.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2015.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] ======== Resolving type reference directive 'sometype', containing file '/home/src/workspace/projects/project1/__inferred type names__.ts', root directory '/home/src/workspace/projects/project1/typeroot1'. ========
 Info seq  [hh:mm:ss:mss] Resolving with primary search path '/home/src/workspace/projects/project1/typeroot1'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/project1/typeroot1/sometype.d.ts' does not exist.
@@ -186,13 +187,16 @@ Info seq  [hh:mm:ss:mss] ======== Type reference directive 'sometype' was succes
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/typeroot1 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/typeroot1 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.dom.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/typeroot1 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/typeroot1 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (10)
+Info seq  [hh:mm:ss:mss] 	Files (12)
 	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2015.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/tslibs/TS/Lib/lib.dom.d.ts Text-1 "interface DOMInterface { }"
+	/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/tslibs/TS/Lib/lib.webworker.d.ts Text-1 "interface WebWorkerInterface { }"
 	/home/src/tslibs/TS/Lib/lib.scripthost.d.ts Text-1 "interface ScriptHostInterface { }"
 	/home/src/workspace/projects/project1/core.d.ts Text-1 "export const core = 10;"
@@ -206,7 +210,12 @@ Info seq  [hh:mm:ss:mss] 	Files (10)
 	../../../tslibs/TS/Lib/lib.es5.d.ts
 	  Library referenced via 'es5' from file 'file2.ts'
 	  Library 'lib.es5.d.ts' specified in compilerOptions
+	../../../tslibs/TS/Lib/lib.es2015.d.ts
+	  Library referenced via 'es5' from file 'file2.ts'
+	  Library 'lib.es5.d.ts' specified in compilerOptions
 	../../../tslibs/TS/Lib/lib.dom.d.ts
+	  Library 'lib.dom.d.ts' specified in compilerOptions
+	../../../tslibs/TS/Lib/lib.dom.iterable.d.ts
 	  Library 'lib.dom.d.ts' specified in compilerOptions
 	../../../tslibs/TS/Lib/lib.webworker.d.ts
 	  Library referenced via 'webworker' from file 'file2.ts'
@@ -254,8 +263,8 @@ Info seq  [hh:mm:ss:mss] event:
             "tsSize": 142,
             "tsx": 0,
             "tsxSize": 0,
-            "dts": 7,
-            "dtsSize": 537,
+            "dts": 9,
+            "dtsSize": 1285,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -300,7 +309,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspace/projects/project1/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (10)
+Info seq  [hh:mm:ss:mss] 	Files (12)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -320,9 +329,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 //// [/home/src/tslibs/TS/Lib/lib.es5.d.ts] *Lib*
 
+//// [/home/src/tslibs/TS/Lib/lib.es2015.d.ts] *Lib*
+
+//// [/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts] *Lib*
+
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts: *new*
+  {}
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts: *new*
+  {}
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts: *new*
   {}
 /home/src/tslibs/TS/Lib/lib.es5.d.ts: *new*
   {}
@@ -357,6 +374,14 @@ Projects::
 
 ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts *new*
     version: Text-1
     containingProjects: 1
         /home/src/workspace/projects/project1/tsconfig.json
@@ -437,6 +462,14 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
 /home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
@@ -479,9 +512,11 @@ Info seq  [hh:mm:ss:mss] Running: /home/src/workspace/projects/project1/tsconfig
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (10)
+Info seq  [hh:mm:ss:mss] 	Files (12)
 	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2015.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/tslibs/TS/Lib/lib.dom.d.ts Text-1 "interface DOMInterface { }"
+	/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/tslibs/TS/Lib/lib.webworker.d.ts Text-1 "interface WebWorkerInterface { }"
 	/home/src/tslibs/TS/Lib/lib.scripthost.d.ts Text-1 "interface ScriptHostInterface { }"
 	/home/src/workspace/projects/project1/core.d.ts Text-1 "export const core = 10;"
@@ -495,7 +530,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (10)
+Info seq  [hh:mm:ss:mss] 	Files (12)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -503,7 +538,7 @@ Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspace/projects/project1/index.
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspace/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (10)
+Info seq  [hh:mm:ss:mss] 	Files (12)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -532,6 +567,14 @@ Projects::
 
 ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/workspace/projects/project1/tsconfig.json
@@ -603,6 +646,14 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
 /home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
@@ -647,9 +698,11 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspac
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'sometype' from '/home/src/workspace/projects/project1/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 3 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
 	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2015.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/tslibs/TS/Lib/lib.dom.d.ts Text-1 "interface DOMInterface { }"
+	/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/tslibs/TS/Lib/lib.webworker.d.ts Text-1 "interface WebWorkerInterface { }"
 	/home/src/tslibs/TS/Lib/lib.scripthost.d.ts Text-1 "interface ScriptHostInterface { }"
 	/home/src/workspace/projects/project1/file.ts Text-2 "export const file = 10;export const xyz = 10;"
@@ -662,7 +715,12 @@ Info seq  [hh:mm:ss:mss] 	Files (9)
 	../../../tslibs/TS/Lib/lib.es5.d.ts
 	  Library referenced via 'es5' from file 'file2.ts'
 	  Library 'lib.es5.d.ts' specified in compilerOptions
+	../../../tslibs/TS/Lib/lib.es2015.d.ts
+	  Library referenced via 'es5' from file 'file2.ts'
+	  Library 'lib.es5.d.ts' specified in compilerOptions
 	../../../tslibs/TS/Lib/lib.dom.d.ts
+	  Library 'lib.dom.d.ts' specified in compilerOptions
+	../../../tslibs/TS/Lib/lib.dom.iterable.d.ts
 	  Library 'lib.dom.d.ts' specified in compilerOptions
 	../../../tslibs/TS/Lib/lib.webworker.d.ts
 	  Library referenced via 'webworker' from file 'file2.ts'
@@ -684,7 +742,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -692,7 +750,7 @@ Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspace/projects/project1/index.
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspace/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -890,6 +948,35 @@ Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skip
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-es5' was not resolved. ========
+Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-es2015' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.es2015.d.ts__.ts'. ========
+Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
+Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-es2015' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-es2015'
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-es2015.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-es2015.tsx' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-es2015.d.ts' does not exist.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/projects/node_modules/@types' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-es2015'
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-es2015'
+Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-es2015'
+Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-es2015'
+Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-es2015'
+Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-es2015' from 'node_modules' folder, target file types: JavaScript.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-es2015.js' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-es2015.jsx' does not exist.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-es2015' was not resolved. ========
 Info seq  [hh:mm:ss:mss] ======== Resolving type reference directive 'sometype', containing file '/home/src/workspace/projects/project1/__inferred type names__.ts', root directory '/home/src/workspace/projects/project1/typeroot1,/home/src/workspace/projects/project1/typeroot2'. ========
 Info seq  [hh:mm:ss:mss] Resolving with primary search path '/home/src/workspace/projects/project1/typeroot1, /home/src/workspace/projects/project1/typeroot2'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/project1/typeroot1/sometype.d.ts' does not exist.
@@ -933,13 +1020,46 @@ Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skip
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-dom' was not resolved. ========
+Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-dom/iterable' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.dom.iterable.d.ts__.ts'. ========
+Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
+Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom/iterable' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.tsx' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.d.ts' does not exist.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/projects/node_modules/@types' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom/iterable' from 'node_modules' folder, target file types: JavaScript.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.js' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.jsx' does not exist.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-dom/iterable' was not resolved. ========
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/typeroot2 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/typeroot2 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 4 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
 	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2015.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/tslibs/TS/Lib/lib.dom.d.ts Text-1 "interface DOMInterface { }"
+	/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/tslibs/TS/Lib/lib.webworker.d.ts Text-1 "interface WebWorkerInterface { }"
 	/home/src/tslibs/TS/Lib/lib.scripthost.d.ts Text-1 "interface ScriptHostInterface { }"
 	/home/src/workspace/projects/project1/file.ts Text-2 "export const file = 10;export const xyz = 10;"
@@ -972,7 +1092,7 @@ Info seq  [hh:mm:ss:mss] event:
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -981,7 +1101,7 @@ Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspace/projects/project1/tscon
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspace/projects/project1/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -1011,6 +1131,10 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts:
+  {}
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts:
+  {}
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts:
   {}
 /home/src/tslibs/TS/Lib/lib.es5.d.ts:
   {}
@@ -1131,6 +1255,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspac
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-webworker' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts' of old program, it was not resolved.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was not resolved.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es5' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was not resolved.
+Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es2015' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.es2015.d.ts__.ts' of old program, it was not resolved.
 Info seq  [hh:mm:ss:mss] ======== Resolving type reference directive 'sometype', containing file '/home/src/workspace/projects/project1/__inferred type names__.ts', root directory '/home/src/workspace/projects/project1/typeroot1'. ========
 Info seq  [hh:mm:ss:mss] Resolving with primary search path '/home/src/workspace/projects/project1/typeroot1'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/project1/typeroot1/sometype.d.ts' does not exist.
@@ -1153,6 +1278,37 @@ Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typesc
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts', result '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-dom' was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts'. ========
+Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-dom/iterable' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.dom.iterable.d.ts__.ts'. ========
+Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
+Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom/iterable' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.tsx' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.d.ts' does not exist.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/projects/node_modules/@types' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom/iterable' from 'node_modules' folder, target file types: JavaScript.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.js' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.jsx' does not exist.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-dom/iterable' was not resolved. ========
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/package.json' does not exist.
@@ -1172,8 +1328,10 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/workspa
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/projects/project1/typeroot2 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 5 projectProgramVersion: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
 	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2015.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/tslibs/TS/Lib/lib.webworker.d.ts Text-1 "interface WebWorkerInterface { }"
 	/home/src/tslibs/TS/Lib/lib.scripthost.d.ts Text-1 "interface ScriptHostInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts Text-1 "interface DOMInterface { }"
@@ -1187,6 +1345,11 @@ Info seq  [hh:mm:ss:mss] 	Files (9)
 	../../../tslibs/TS/Lib/lib.es5.d.ts
 	  Library referenced via 'es5' from file 'file2.ts'
 	  Library 'lib.es5.d.ts' specified in compilerOptions
+	../../../tslibs/TS/Lib/lib.es2015.d.ts
+	  Library referenced via 'es5' from file 'file2.ts'
+	  Library 'lib.es5.d.ts' specified in compilerOptions
+	../../../tslibs/TS/Lib/lib.dom.iterable.d.ts
+	  Library 'lib.dom.d.ts' specified in compilerOptions
 	../../../tslibs/TS/Lib/lib.webworker.d.ts
 	  Library referenced via 'webworker' from file 'file2.ts'
 	../../../tslibs/TS/Lib/lib.scripthost.d.ts
@@ -1251,6 +1414,10 @@ PolledWatches *deleted*::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts:
   {}
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts:
+  {}
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts:
+  {}
 /home/src/tslibs/TS/Lib/lib.es5.d.ts:
   {}
 /home/src/tslibs/TS/Lib/lib.scripthost.d.ts:
@@ -1294,6 +1461,14 @@ ScriptInfos::
     version: Text-1
     containingProjects: 0 *changed*
         /home/src/workspace/projects/project1/tsconfig.json *deleted*
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
 /home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
@@ -1342,7 +1517,7 @@ Before running Timeout callback:: count: 1
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -1351,7 +1526,7 @@ Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspace/projects/project1/tscon
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspace/projects/project1/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -1445,8 +1620,10 @@ Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to e
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was not resolved.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es5' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was not resolved.
+Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es2015' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.es2015.d.ts__.ts' of old program, it was not resolved.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'sometype' from '/home/src/workspace/projects/project1/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-dom' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts'.
+Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-dom/iterable' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.dom.iterable.d.ts__.ts' of old program, it was not resolved.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -1458,8 +1635,10 @@ Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlie
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json 2000 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 6 projectProgramVersion: 4 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
 	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2015.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/tslibs/TS/Lib/lib.scripthost.d.ts Text-1 "interface ScriptHostInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts Text-1 "interface WebWorkerInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts Text-1 "interface DOMInterface { }"
@@ -1473,6 +1652,11 @@ Info seq  [hh:mm:ss:mss] 	Files (9)
 	../../../tslibs/TS/Lib/lib.es5.d.ts
 	  Library referenced via 'es5' from file 'file2.ts'
 	  Library 'lib.es5.d.ts' specified in compilerOptions
+	../../../tslibs/TS/Lib/lib.es2015.d.ts
+	  Library referenced via 'es5' from file 'file2.ts'
+	  Library 'lib.es5.d.ts' specified in compilerOptions
+	../../../tslibs/TS/Lib/lib.dom.iterable.d.ts
+	  Library 'lib.dom.d.ts' specified in compilerOptions
 	../../../tslibs/TS/Lib/lib.scripthost.d.ts
 	  Library referenced via 'scripthost' from file 'file2.ts'
 	../node_modules/@typescript/lib-webworker/index.d.ts
@@ -1495,7 +1679,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -1503,7 +1687,7 @@ Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspace/projects/project1/index.
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspace/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -1544,6 +1728,10 @@ PolledWatches::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts:
   {}
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts:
+  {}
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts:
+  {}
 /home/src/tslibs/TS/Lib/lib.es5.d.ts:
   {}
 /home/src/tslibs/TS/Lib/lib.scripthost.d.ts:
@@ -1581,6 +1769,14 @@ ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts
     version: Text-1
     containingProjects: 0
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
 /home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
@@ -1656,6 +1852,14 @@ ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts
     version: Text-1
     containingProjects: 0
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
 /home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
@@ -1752,8 +1956,10 @@ Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all 
 Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-webworker' was not resolved. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was not resolved.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es5' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was not resolved.
+Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es2015' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.es2015.d.ts__.ts' of old program, it was not resolved.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'sometype' from '/home/src/workspace/projects/project1/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-dom' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts'.
+Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-dom/iterable' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.dom.iterable.d.ts__.ts' of old program, it was not resolved.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -1765,8 +1971,10 @@ Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlie
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json 2000 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 7 projectProgramVersion: 5 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
 	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2015.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/tslibs/TS/Lib/lib.webworker.d.ts Text-1 "interface WebWorkerInterface { }"
 	/home/src/tslibs/TS/Lib/lib.scripthost.d.ts Text-1 "interface ScriptHostInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts Text-1 "interface DOMInterface { }"
@@ -1780,6 +1988,11 @@ Info seq  [hh:mm:ss:mss] 	Files (9)
 	../../../tslibs/TS/Lib/lib.es5.d.ts
 	  Library referenced via 'es5' from file 'file2.ts'
 	  Library 'lib.es5.d.ts' specified in compilerOptions
+	../../../tslibs/TS/Lib/lib.es2015.d.ts
+	  Library referenced via 'es5' from file 'file2.ts'
+	  Library 'lib.es5.d.ts' specified in compilerOptions
+	../../../tslibs/TS/Lib/lib.dom.iterable.d.ts
+	  Library 'lib.dom.d.ts' specified in compilerOptions
 	../../../tslibs/TS/Lib/lib.webworker.d.ts
 	  Library referenced via 'webworker' from file 'file2.ts'
 	../../../tslibs/TS/Lib/lib.scripthost.d.ts
@@ -1802,7 +2015,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -1810,7 +2023,7 @@ Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspace/projects/project1/index.
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspace/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -1853,6 +2066,10 @@ PolledWatches *deleted*::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts:
   {}
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts:
+  {}
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts:
+  {}
 /home/src/tslibs/TS/Lib/lib.es5.d.ts:
   {}
 /home/src/tslibs/TS/Lib/lib.scripthost.d.ts:
@@ -1890,6 +2107,14 @@ ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts
     version: Text-1
     containingProjects: 0
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
 /home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1

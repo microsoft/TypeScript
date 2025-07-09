@@ -304,6 +304,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/bar/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.dom.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/bar/node_modules/@types 1 undefined Project: /user/username/projects/myproject/bar/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/bar/node_modules/@types 1 undefined Project: /user/username/projects/myproject/bar/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/bar/tsconfig.json WatchType: Type roots
@@ -312,15 +313,18 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/bar/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/bar/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/bar/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/tslibs/TS/Lib/lib.es2017.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/tslibs/TS/Lib/lib.dom.d.ts Text-1 "\ndeclare var console: {\n    log(...args: any[]): void;\n};"
+	/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/myproject/bar/index.ts Text-1 "\nexport function bar() {\n  console.log(\"hello world\");\n}"
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2017.d.ts
 	  Library 'lib.es2017.d.ts' specified in compilerOptions
 	../../../../../home/src/tslibs/TS/Lib/lib.dom.d.ts
+	  Library 'lib.dom.d.ts' specified in compilerOptions
+	../../../../../home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
 	  Library 'lib.dom.d.ts' specified in compilerOptions
 	index.ts
 	  Matched by include pattern 'index.ts' in 'tsconfig.json'
@@ -353,8 +357,8 @@ Info seq  [hh:mm:ss:mss] event:
             "tsSize": 56,
             "tsx": 0,
             "tsxSize": 0,
-            "dts": 2,
-            "dtsSize": 431,
+            "dts": 3,
+            "dtsSize": 805,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -397,7 +401,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/bar/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -417,6 +421,8 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+//// [/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts] *Lib*
+
 
 PolledWatches::
 /user/username/projects/myproject/bar/node_modules/@types: *new*
@@ -430,6 +436,8 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts: *new*
+  {}
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts: *new*
   {}
 /home/src/tslibs/TS/Lib/lib.es2017.d.ts:
   {}
@@ -466,6 +474,10 @@ Projects::
 
 ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/bar/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/bar/tsconfig.json

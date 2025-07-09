@@ -161,10 +161,64 @@ declare const console: { log(msg: any): void; };
 
 /home/src/tslibs/TS/Lib/tsc.js project1/core.d.ts project1/utils.d.ts project1/file.ts project1/index.ts project1/file2.ts --lib es5,dom --traceResolution --explainFiles
 Output::
+[96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m10[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m10[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m12[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m12[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.es5.d.ts[0m:[93m12[0m:[93m15[0m
+    [7m12[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+
+[96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m10[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m10[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m12[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m12[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.es5.d.ts[0m:[93m12[0m:[93m15[0m
+    [7m12[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+
+[96m../../tslibs/TS/Lib/lib.es5.d.ts[0m:[93m10[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m10[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96m../../tslibs/TS/Lib/lib.es5.d.ts[0m:[93m12[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m12[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m12[0m:[93m15[0m
+    [7m12[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+  [96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m12[0m:[93m15[0m
+    [7m12[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    and here.
+
 ../../tslibs/TS/Lib/lib.es5.d.ts
   Library referenced via 'es5' from file 'project1/file2.ts'
   Library 'lib.es5.d.ts' specified in compilerOptions
+../../tslibs/TS/Lib/lib.es2015.d.ts
+  Library referenced via 'es5' from file 'project1/file2.ts'
+  Library 'lib.es5.d.ts' specified in compilerOptions
 ../../tslibs/TS/Lib/lib.dom.d.ts
+  Library 'lib.dom.d.ts' specified in compilerOptions
+../../tslibs/TS/Lib/lib.dom.iterable.d.ts
   Library 'lib.dom.d.ts' specified in compilerOptions
 ../../tslibs/TS/Lib/lib.webworker.d.ts
   Library referenced via 'webworker' from file 'project1/file2.ts'
@@ -181,8 +235,19 @@ project1/index.ts
 project1/file2.ts
   Root file specified for compilation
 
+Found 6 errors in 3 files.
+
+Errors  Files
+     2  ../../tslibs/TS/Lib/lib.dom.iterable.d.ts[90m:10[0m
+     2  ../../tslibs/TS/Lib/lib.es2015.d.ts[90m:10[0m
+     2  ../../tslibs/TS/Lib/lib.es5.d.ts[90m:10[0m
+
 
 //// [/home/src/tslibs/TS/Lib/lib.es5.d.ts] *Lib*
+
+//// [/home/src/tslibs/TS/Lib/lib.es2015.d.ts] *Lib*
+
+//// [/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts] *Lib*
 
 //// [/home/src/workspace/projects/project1/file.js]
 "use strict";
@@ -223,7 +288,9 @@ Program options: {
 Program structureReused: Not
 Program files::
 /home/src/tslibs/TS/Lib/lib.es5.d.ts
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
 /home/src/tslibs/TS/Lib/lib.dom.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
 /home/src/tslibs/TS/Lib/lib.webworker.d.ts
 /home/src/tslibs/TS/Lib/lib.scripthost.d.ts
 project1/core.d.ts
@@ -232,4 +299,4 @@ project1/file.ts
 project1/index.ts
 project1/file2.ts
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

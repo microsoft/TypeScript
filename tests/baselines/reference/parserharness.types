@@ -59,12 +59,12 @@ function switchToForwardSlashes(path: string) {
     return path.replace(/\\/g, "/");
 >path.replace(/\\/g, "/") : string
 >                         : ^^^^^^
->path.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->             : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
+>path.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: { [Symbol.replace](string: string, replaceValue: string): string; }, replaceValue: string): string; (searchValue: { [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string; }, replacer: (substring: string, ...args: any[]) => string): string; }
+>             : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^           ^^                                                                   ^^            ^^      ^^^      ^^^           ^^                                                                                                      ^^        ^^                                             ^^^      ^^^
 >path : string
 >     : ^^^^^^
->replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
+>replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: { [Symbol.replace](string: string, replaceValue: string): string; }, replaceValue: string): string; (searchValue: { [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string; }, replacer: (substring: string, ...args: any[]) => string): string; }
+>        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^           ^^                                                                   ^^            ^^      ^^^      ^^^           ^^                                                                                                      ^^        ^^                                             ^^^      ^^^
 >/\\/g : RegExp
 >      : ^^^^^^
 >"/" : "/"
@@ -94,12 +94,12 @@ function filePath(fullPath: string) {
 >           : ^^^^^^^^
 >fullPath.split("/") : string[]
 >                    : ^^^^^^^^
->fullPath.split : (separator: string | RegExp, limit?: number) => string[]
->               : ^         ^^               ^^     ^^^      ^^^^^        
+>fullPath.split : { (separator: string | RegExp, limit?: number): string[]; (splitter: { [Symbol.split](string: string, limit?: number): string[]; }, limit?: number): string[]; }
+>               : ^^^         ^^               ^^     ^^^      ^^^        ^^^        ^^                                                             ^^     ^^^      ^^^        ^^^
 >fullPath : string
 >         : ^^^^^^
->split : (separator: string | RegExp, limit?: number) => string[]
->      : ^         ^^               ^^     ^^^      ^^^^^        
+>split : { (separator: string | RegExp, limit?: number): string[]; (splitter: { [Symbol.split](string: string, limit?: number): string[]; }, limit?: number): string[]; }
+>      : ^^^         ^^               ^^     ^^^      ^^^        ^^^        ^^                                                             ^^     ^^^      ^^^        ^^^
 >"/" : "/"
 >    : ^^^
 
@@ -425,12 +425,12 @@ namespace Harness {
 >     : ^^^^^^^^^^^^^^^^
 >content.match(/\bbug (\d+)/i) : RegExpMatchArray
 >                              : ^^^^^^^^^^^^^^^^
->content.match : (regexp: string | RegExp) => RegExpMatchArray | null
->              : ^      ^^               ^^^^^                       
+>content.match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>              : ^^^      ^^               ^^^                       ^^^       ^^                                                            ^^^                       ^^^
 >content : string
 >        : ^^^^^^
->match : (regexp: string | RegExp) => RegExpMatchArray | null
->      : ^      ^^               ^^^^^                       
+>match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>      : ^^^      ^^               ^^^                       ^^^       ^^                                                            ^^^                       ^^^
 >/\bbug (\d+)/i : RegExp
 >               : ^^^^^^
 
@@ -1264,12 +1264,12 @@ namespace Harness {
 >      : ^^^^^^^^
 >content.split('\r\n') : string[]
 >                      : ^^^^^^^^
->content.split : (separator: string | RegExp, limit?: number) => string[]
->              : ^         ^^               ^^     ^^^      ^^^^^        
+>content.split : { (separator: string | RegExp, limit?: number): string[]; (splitter: { [Symbol.split](string: string, limit?: number): string[]; }, limit?: number): string[]; }
+>              : ^^^         ^^               ^^     ^^^      ^^^        ^^^        ^^                                                             ^^     ^^^      ^^^        ^^^
 >content : string
 >        : ^^^^^^
->split : (separator: string | RegExp, limit?: number) => string[]
->      : ^         ^^               ^^     ^^^      ^^^^^        
+>split : { (separator: string | RegExp, limit?: number): string[]; (splitter: { [Symbol.split](string: string, limit?: number): string[]; }, limit?: number): string[]; }
+>      : ^^^         ^^               ^^     ^^^      ^^^        ^^^        ^^                                                             ^^     ^^^      ^^^        ^^^
 >'\r\n' : "\r\n"
 >       : ^^^^^^
 
@@ -1292,12 +1292,12 @@ namespace Harness {
 >      : ^^^^^^^^
 >content.split('\n') : string[]
 >                    : ^^^^^^^^
->content.split : (separator: string | RegExp, limit?: number) => string[]
->              : ^         ^^               ^^     ^^^      ^^^^^        
+>content.split : { (separator: string | RegExp, limit?: number): string[]; (splitter: { [Symbol.split](string: string, limit?: number): string[]; }, limit?: number): string[]; }
+>              : ^^^         ^^               ^^     ^^^      ^^^        ^^^        ^^                                                             ^^     ^^^      ^^^        ^^^
 >content : string
 >        : ^^^^^^
->split : (separator: string | RegExp, limit?: number) => string[]
->      : ^         ^^               ^^     ^^^      ^^^^^        
+>split : { (separator: string | RegExp, limit?: number): string[]; (splitter: { [Symbol.split](string: string, limit?: number): string[]; }, limit?: number): string[]; }
+>      : ^^^         ^^               ^^     ^^^      ^^^        ^^^        ^^                                                             ^^     ^^^      ^^^        ^^^
 >'\n' : "\n"
 >     : ^^^^
         }
@@ -8048,16 +8048,16 @@ namespace Harness {
 >      : ^^^^^^^^^^^^^^^^
 >errorLines[i].match(/([^\(]*)\((\d+),(\d+)\):\s+((.*[\s\r\n]*.*)+)\s*$/) : RegExpMatchArray
 >                                                                         : ^^^^^^^^^^^^^^^^
->errorLines[i].match : (regexp: string | RegExp) => RegExpMatchArray | null
->                    : ^      ^^               ^^^^^                       
+>errorLines[i].match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>                    : ^^^      ^^               ^^^                       ^^^       ^^                                                            ^^^                       ^^^
 >errorLines[i] : string
 >              : ^^^^^^
 >errorLines : string[]
 >           : ^^^^^^^^
 >i : number
 >  : ^^^^^^
->match : (regexp: string | RegExp) => RegExpMatchArray | null
->      : ^      ^^               ^^^^^                       
+>match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>      : ^^^      ^^               ^^^                       ^^^       ^^                                                            ^^^                       ^^^
 >/([^\(]*)\((\d+),(\d+)\):\s+((.*[\s\r\n]*.*)+)\s*$/ : RegExp
 >                                                    : ^^^^^^
 
@@ -8764,12 +8764,12 @@ namespace Harness {
 >                         : ^^^^^^
 >path.match(/[^\/]*$/) : RegExpMatchArray
 >                      : ^^^^^^^^^^^^^^^^
->path.match : (regexp: string | RegExp) => RegExpMatchArray | null
->           : ^      ^^               ^^^^^                       
+>path.match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>           : ^^^      ^^               ^^^                       ^^^       ^^                                                            ^^^                       ^^^
 >path : string
 >     : ^^^^^^
->match : (regexp: string | RegExp) => RegExpMatchArray | null
->      : ^      ^^               ^^^^^                       
+>match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>      : ^^^      ^^               ^^^                       ^^^       ^^                                                            ^^^                       ^^^
 >/[^\/]*$/ : RegExp
 >          : ^^^^^^
 >0 : 0
@@ -9073,8 +9073,8 @@ namespace Harness {
 >                                                          : ^^^^^^
 >switchToForwardSlashes(lastUnit.name).match(/[^\/]*$/) : RegExpMatchArray
 >                                                       : ^^^^^^^^^^^^^^^^
->switchToForwardSlashes(lastUnit.name).match : (regexp: string | RegExp) => RegExpMatchArray | null
->                                            : ^      ^^               ^^^^^                       
+>switchToForwardSlashes(lastUnit.name).match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>                                            : ^^^      ^^               ^^^                       ^^^       ^^                                                            ^^^                       ^^^
 >switchToForwardSlashes(lastUnit.name) : string
 >                                      : ^^^^^^
 >switchToForwardSlashes : (path: string) => string
@@ -9085,8 +9085,8 @@ namespace Harness {
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->match : (regexp: string | RegExp) => RegExpMatchArray | null
->      : ^      ^^               ^^^^^                       
+>match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>      : ^^^      ^^               ^^^                       ^^^       ^^                                                            ^^^                       ^^^
 >/[^\/]*$/ : RegExp
 >          : ^^^^^^
 >0 : 0
@@ -9887,12 +9887,12 @@ namespace Harness {
 >      : ^^^^^^^^^^^^^^^^
 >line.match(/reference\spath='(\w*_?\w*\.?d?\.ts)'/) : RegExpMatchArray
 >                                                    : ^^^^^^^^^^^^^^^^
->line.match : (regexp: string | RegExp) => RegExpMatchArray | null
->           : ^      ^^               ^^^^^                       
+>line.match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>           : ^^^      ^^               ^^^                       ^^^       ^^                                                            ^^^                       ^^^
 >line : string
 >     : ^^^^^^
->match : (regexp: string | RegExp) => RegExpMatchArray | null
->      : ^      ^^               ^^^^^                       
+>match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>      : ^^^      ^^               ^^^                       ^^^       ^^                                                            ^^^                       ^^^
 >/reference\spath='(\w*_?\w*\.?d?\.ts)'/ : RegExp
 >                                        : ^^^^^^
 
@@ -12801,12 +12801,12 @@ namespace Harness {
 >                         : ^^^^^^
 >path.match(/[^\/]*$/) : RegExpMatchArray
 >                      : ^^^^^^^^^^^^^^^^
->path.match : (regexp: string | RegExp) => RegExpMatchArray | null
->           : ^      ^^               ^^^^^                       
+>path.match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>           : ^^^      ^^               ^^^                       ^^^       ^^                                                            ^^^                       ^^^
 >path : string
 >     : ^^^^^^
->match : (regexp: string | RegExp) => RegExpMatchArray | null
->      : ^      ^^               ^^^^^                       
+>match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>      : ^^^      ^^               ^^^                       ^^^       ^^                                                            ^^^                       ^^^
 >/[^\/]*$/ : RegExp
 >          : ^^^^^^
 >0 : 0
@@ -13391,12 +13391,12 @@ namespace Harness {
 >              : ^^^^^^
 >reportContent.replace(htmlTrailer, '') : string
 >                                       : ^^^^^^
->reportContent.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->                      : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
+>reportContent.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: { [Symbol.replace](string: string, replaceValue: string): string; }, replaceValue: string): string; (searchValue: { [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string; }, replacer: (substring: string, ...args: any[]) => string): string; }
+>                      : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^           ^^                                                                   ^^            ^^      ^^^      ^^^           ^^                                                                                                      ^^        ^^                                             ^^^      ^^^
 >reportContent : string
 >              : ^^^^^^
->replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
+>replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: { [Symbol.replace](string: string, replaceValue: string): string; }, replaceValue: string): string; (searchValue: { [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string; }, replacer: (substring: string, ...args: any[]) => string): string; }
+>        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^           ^^                                                                   ^^            ^^      ^^^      ^^^           ^^                                                                                                      ^^        ^^                                             ^^^      ^^^
 >htmlTrailer : string
 >            : ^^^^^^
 >'' : ""
@@ -13663,12 +13663,12 @@ namespace Harness {
 >         : ^^^^^^
 >expected.replace(/\r\n?/g, '\n') : string
 >                                 : ^^^^^^
->expected.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->                 : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
+>expected.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: { [Symbol.replace](string: string, replaceValue: string): string; }, replaceValue: string): string; (searchValue: { [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string; }, replacer: (substring: string, ...args: any[]) => string): string; }
+>                 : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^           ^^                                                                   ^^            ^^      ^^^      ^^^           ^^                                                                                                      ^^        ^^                                             ^^^      ^^^
 >expected : string
 >         : ^^^^^^
->replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
+>replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: { [Symbol.replace](string: string, replaceValue: string): string; }, replaceValue: string): string; (searchValue: { [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string; }, replacer: (substring: string, ...args: any[]) => string): string; }
+>        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^           ^^                                                                   ^^            ^^      ^^^      ^^^           ^^                                                                                                      ^^        ^^                                             ^^^      ^^^
 >/\r\n?/g : RegExp
 >         : ^^^^^^
 >'\n' : "\n"
@@ -13681,12 +13681,12 @@ namespace Harness {
 >       : ^^^^^^
 >actual.replace(/\r\n?/g, '\n') : string
 >                               : ^^^^^^
->actual.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->               : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
+>actual.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: { [Symbol.replace](string: string, replaceValue: string): string; }, replaceValue: string): string; (searchValue: { [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string; }, replacer: (substring: string, ...args: any[]) => string): string; }
+>               : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^           ^^                                                                   ^^            ^^      ^^^      ^^^           ^^                                                                                                      ^^        ^^                                             ^^^      ^^^
 >actual : string
 >       : ^^^^^^
->replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
+>replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: { [Symbol.replace](string: string, replaceValue: string): string; }, replaceValue: string): string; (searchValue: { [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string; }, replacer: (substring: string, ...args: any[]) => string): string; }
+>        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^           ^^                                                                   ^^            ^^      ^^^      ^^^           ^^                                                                                                      ^^        ^^                                             ^^^      ^^^
 >/\r\n?/g : RegExp
 >         : ^^^^^^
 >'\n' : "\n"

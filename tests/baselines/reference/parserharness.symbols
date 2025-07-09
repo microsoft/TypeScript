@@ -47,9 +47,9 @@ function switchToForwardSlashes(path: string) {
 >path : Symbol(path, Decl(parserharness.ts, 27, 32))
 
     return path.replace(/\\/g, "/");
->path.replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>path.replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >path : Symbol(path, Decl(parserharness.ts, 27, 32))
->replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }
 
 function filePath(fullPath: string) {
@@ -63,9 +63,9 @@ function filePath(fullPath: string) {
 
     var components = fullPath.split("/");
 >components : Symbol(components, Decl(parserharness.ts, 33, 7))
->fullPath.split : Symbol(String.split, Decl(lib.es5.d.ts, --, --))
+>fullPath.split : Symbol(String.split, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >fullPath : Symbol(fullPath, Decl(parserharness.ts, 31, 18))
->split : Symbol(String.split, Decl(lib.es5.d.ts, --, --))
+>split : Symbol(String.split, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     var path: string[] = components.slice(0, components.length - 1);
 >path : Symbol(path, Decl(parserharness.ts, 34, 7))
@@ -121,7 +121,7 @@ declare namespace process {
 >on : Symbol(on, Decl(parserharness.ts, 50, 56))
 >event : Symbol(event, Decl(parserharness.ts, 51, 23))
 >listener : Symbol(listener, Decl(parserharness.ts, 51, 37))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }
 
 namespace Harness {
@@ -134,7 +134,7 @@ namespace Harness {
     var global = <any>Function("return this").call(null);
 >global : Symbol(global, Decl(parserharness.ts, 57, 7))
 >Function("return this").call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
 
     export var usePull = false;
@@ -231,9 +231,9 @@ namespace Harness {
 
             var bugs = content.match(/\bbug (\d+)/i);
 >bugs : Symbol(bugs, Decl(parserharness.ts, 95, 15))
->content.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+>content.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >content : Symbol(content, Decl(parserharness.ts, 94, 29))
->match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
             if (bugs) {
 >bugs : Symbol(bugs, Decl(parserharness.ts, 95, 15))
@@ -551,9 +551,9 @@ namespace Harness {
         // we have to string-based splitting instead and try to figure out the delimiting chars
         var lines = content.split('\r\n');
 >lines : Symbol(lines, Decl(parserharness.ts, 202, 11))
->content.split : Symbol(String.split, Decl(lib.es5.d.ts, --, --))
+>content.split : Symbol(String.split, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >content : Symbol(content, Decl(parserharness.ts, 198, 43))
->split : Symbol(String.split, Decl(lib.es5.d.ts, --, --))
+>split : Symbol(String.split, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         if (lines.length === 1) {
 >lines.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
@@ -562,9 +562,9 @@ namespace Harness {
 
             lines = content.split('\n');
 >lines : Symbol(lines, Decl(parserharness.ts, 202, 11))
->content.split : Symbol(String.split, Decl(lib.es5.d.ts, --, --))
+>content.split : Symbol(String.split, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >content : Symbol(content, Decl(parserharness.ts, 198, 43))
->split : Symbol(String.split, Decl(lib.es5.d.ts, --, --))
+>split : Symbol(String.split, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
         }
         return lines;
 >lines : Symbol(lines, Decl(parserharness.ts, 202, 11))
@@ -1479,7 +1479,7 @@ namespace Harness {
 
                     return Date.now();
 >Date.now : Symbol(DateConstructor.now, Decl(lib.es5.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >now : Symbol(DateConstructor.now, Decl(lib.es5.d.ts, --, --))
                 }
 
@@ -1689,7 +1689,7 @@ namespace Harness {
                     sumOfSquares += Math.pow(this.data[i] - sampleMean, 2);
 >sumOfSquares : Symbol(sumOfSquares, Decl(parserharness.ts, 587, 19))
 >Math.pow : Symbol(Math.pow, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >pow : Symbol(Math.pow, Decl(lib.es5.d.ts, --, --))
 >this.data : Symbol(Dataset.data, Decl(parserharness.ts, 545, 30))
 >this : Symbol(Dataset, Decl(parserharness.ts, 543, 9))
@@ -1700,7 +1700,7 @@ namespace Harness {
 
                 return Math.sqrt(sumOfSquares / this.data.length);
 >Math.sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
 >sumOfSquares : Symbol(sumOfSquares, Decl(parserharness.ts, 587, 19))
 >this.data.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
@@ -2382,14 +2382,14 @@ namespace Harness {
 
                 if ((Array.isArray && Array.isArray(arg)) || arg instanceof Array)
 >Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
 >Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
 >arg : Symbol(arg, Decl(parserharness.ts, 806, 36))
 >arg : Symbol(arg, Decl(parserharness.ts, 806, 36))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
                     return arg;
 >arg : Symbol(arg, Decl(parserharness.ts, 806, 36))
@@ -3502,10 +3502,10 @@ namespace Harness {
                     } else {
                         var match = errorLines[i].match(/([^\(]*)\((\d+),(\d+)\):\s+((.*[\s\r\n]*.*)+)\s*$/);
 >match : Symbol(match, Decl(parserharness.ts, 1187, 27))
->errorLines[i].match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+>errorLines[i].match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >errorLines : Symbol(errorLines, Decl(parserharness.ts, 1175, 92))
 >i : Symbol(i, Decl(parserharness.ts, 1182, 24))
->match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
                         if (match) {
 >match : Symbol(match, Decl(parserharness.ts, 1187, 27))
@@ -3808,9 +3808,9 @@ namespace Harness {
 
             var filename = path.match(/[^\/]*$/)[0];
 >filename : Symbol(filename, Decl(parserharness.ts, 1287, 15))
->path.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+>path.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >path : Symbol(path, Decl(parserharness.ts, 1285, 36))
->match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >0 : Symbol(RegExpMatchArray[0], Decl(lib.es5.d.ts, --, --))
 
             var code = readFile(path);
@@ -3943,12 +3943,12 @@ namespace Harness {
 
             var unitName = switchToForwardSlashes(lastUnit.name).match(/[^\/]*$/)[0];
 >unitName : Symbol(unitName, Decl(parserharness.ts, 1327, 15))
->switchToForwardSlashes(lastUnit.name).match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+>switchToForwardSlashes(lastUnit.name).match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >switchToForwardSlashes : Symbol(switchToForwardSlashes, Decl(parserharness.ts, 25, 22))
 >lastUnit.name : Symbol(TestCaseParser.TestUnitData.name, Decl(parserharness.ts, 1422, 28))
 >lastUnit : Symbol(lastUnit, Decl(parserharness.ts, 1326, 15))
 >name : Symbol(TestCaseParser.TestUnitData.name, Decl(parserharness.ts, 1422, 28))
->match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >0 : Symbol(RegExpMatchArray[0], Decl(lib.es5.d.ts, --, --))
 
             var dependencies = units.slice(0, units.length - 1);
@@ -4358,9 +4358,9 @@ namespace Harness {
 
                     var isRef = line.match(/reference\spath='(\w*_?\w*\.?d?\.ts)'/);
 >isRef : Symbol(isRef, Decl(parserharness.ts, 1468, 23))
->line.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+>line.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >line : Symbol(line, Decl(parserharness.ts, 1463, 19))
->match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
                     if (isRef) {
 >isRef : Symbol(isRef, Decl(parserharness.ts, 1468, 23))
@@ -4768,7 +4768,7 @@ namespace Harness {
 >prev : Symbol(prev, Decl(parserharness.ts, 1595, 81))
 >current : Symbol(current, Decl(parserharness.ts, 1595, 86))
 >Math.min : Symbol(Math.min, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >min : Symbol(Math.min, Decl(lib.es5.d.ts, --, --))
 >prev : Symbol(prev, Decl(parserharness.ts, 1595, 81))
 >current : Symbol(current, Decl(parserharness.ts, 1595, 86))
@@ -4790,7 +4790,7 @@ namespace Harness {
 >prev : Symbol(prev, Decl(parserharness.ts, 1596, 90))
 >current : Symbol(current, Decl(parserharness.ts, 1596, 95))
 >Math.min : Symbol(Math.min, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >min : Symbol(Math.min, Decl(lib.es5.d.ts, --, --))
 >prev : Symbol(prev, Decl(parserharness.ts, 1596, 90))
 >current : Symbol(current, Decl(parserharness.ts, 1596, 95))
@@ -5579,7 +5579,7 @@ namespace Harness {
 
             return JSON.stringify({ usePullLanguageService: usePull });
 >JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >usePullLanguageService : Symbol(usePullLanguageService, Decl(parserharness.ts, 1839, 35))
 >usePull : Symbol(usePull, Decl(parserharness.ts, 58, 14))
@@ -5699,9 +5699,9 @@ namespace Harness {
 >runString : Symbol(runString, Decl(parserharness.ts, 1899, 9))
 >readFile : Symbol(readFile, Decl(parserharness.ts, 207, 5))
 >path : Symbol(path, Decl(parserharness.ts, 1869, 38))
->path.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+>path.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >path : Symbol(path, Decl(parserharness.ts, 1869, 38))
->match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >0 : Symbol(RegExpMatchArray[0], Decl(lib.es5.d.ts, --, --))
 >callback : Symbol(callback, Decl(parserharness.ts, 1869, 51))
         }
@@ -5939,9 +5939,9 @@ namespace Harness {
 
                 reportContent = reportContent.replace(htmlTrailer, '');
 >reportContent : Symbol(reportContent, Decl(parserharness.ts, 1955, 15))
->reportContent.replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>reportContent.replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >reportContent : Symbol(reportContent, Decl(parserharness.ts, 1955, 15))
->replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >htmlTrailer : Symbol(htmlTrailer, Decl(parserharness.ts, 1913, 11))
 
             } else {
@@ -6061,15 +6061,15 @@ namespace Harness {
 
                 expected = expected.replace(/\r\n?/g, '\n')
 >expected : Symbol(expected, Decl(parserharness.ts, 2005, 15))
->expected.replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>expected.replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >expected : Symbol(expected, Decl(parserharness.ts, 2005, 15))
->replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
                 actual = actual.replace(/\r\n?/g, '\n')
 >actual : Symbol(actual, Decl(parserharness.ts, 1991, 35))
->actual.replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>actual.replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >actual : Symbol(actual, Decl(parserharness.ts, 1991, 35))
->replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
             }
 
             return { expected: expected, actual: actual };

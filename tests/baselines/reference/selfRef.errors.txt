@@ -1,5 +1,5 @@
-selfRef.ts(8,8): error TS2304: Cannot find name 'name'.
-selfRef.ts(12,18): error TS2304: Cannot find name 'name'.
+selfRef.ts(8,8): error TS2662: Cannot find name 'name'. Did you mean the static member 'Test.name'?
+selfRef.ts(12,18): error TS2662: Cannot find name 'name'. Did you mean the static member 'Test.name'?
 
 
 ==== selfRef.ts (2 errors) ====
@@ -12,13 +12,13 @@ selfRef.ts(12,18): error TS2304: Cannot find name 'name'.
     	  (function () {
     	      name=value;
     	      ~~~~
-!!! error TS2304: Cannot find name 'name'.
+!!! error TS2662: Cannot find name 'name'. Did you mean the static member 'Test.name'?
     	  })();
           }
           public getName = function(): string {
               return name;
                      ~~~~
-!!! error TS2304: Cannot find name 'name'.
+!!! error TS2662: Cannot find name 'name'. Did you mean the static member 'Test.name'?
           }
         }
     }

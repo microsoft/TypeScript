@@ -132,17 +132,21 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/hunter2 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2015.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.dom.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/tslibs/TS/Lib/lib.es2015.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/tslibs/TS/Lib/lib.dom.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/project/a.ts SVC-1-0 ""
 
 
 	../../tslibs/TS/Lib/lib.es2015.d.ts
 	  Library 'lib.es2015.d.ts' specified in compilerOptions
 	../../tslibs/TS/Lib/lib.dom.d.ts
+	  Library 'lib.dom.d.ts' specified in compilerOptions
+	../../tslibs/TS/Lib/lib.dom.iterable.d.ts
 	  Library 'lib.dom.d.ts' specified in compilerOptions
 	a.ts
 	  Part of 'files' list in tsconfig.json
@@ -175,8 +179,8 @@ Info seq  [hh:mm:ss:mss] event:
             "tsSize": 0,
             "tsx": 0,
             "tsxSize": 0,
-            "dts": 2,
-            "dtsSize": 748,
+            "dts": 3,
+            "dtsSize": 1122,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -453,7 +457,7 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -475,6 +479,8 @@ After request
 
 //// [/home/src/tslibs/TS/Lib/lib.dom.d.ts] *Lib*
 
+//// [/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts] *Lib*
+
 
 PolledWatches::
 /home/src/projects/project/hunter2: *new*
@@ -484,6 +490,8 @@ FsWatches::
 /home/src/projects/project/tsconfig.json: *new*
   {}
 /home/src/tslibs/TS/Lib/lib.dom.d.ts: *new*
+  {}
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts: *new*
   {}
 /home/src/tslibs/TS/Lib/lib.es2015.d.ts: *new*
   {}
@@ -500,6 +508,10 @@ ScriptInfos::
     containingProjects: 1
         /home/src/projects/project/tsconfig.json *default*
 /home/src/tslibs/TS/Lib/lib.dom.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts *new*
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/tsconfig.json

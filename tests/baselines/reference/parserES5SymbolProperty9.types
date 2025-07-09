@@ -2,16 +2,16 @@
 
 === parserES5SymbolProperty9.ts ===
 var x: {
->x : { [x: number]: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { [Symbol.toPrimitive]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 
     [Symbol.toPrimitive]: string
 >[Symbol.toPrimitive] : string
 >                     : ^^^^^^
->Symbol.toPrimitive : any
->                   : ^^^
->Symbol : any
->       : ^^^
->toPrimitive : any
->            : ^^^
+>Symbol.toPrimitive : unique symbol
+>                   : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>toPrimitive : unique symbol
+>            : ^^^^^^^^^^^^^
 }

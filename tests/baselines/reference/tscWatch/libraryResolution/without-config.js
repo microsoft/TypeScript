@@ -135,15 +135,71 @@ FileWatcher:: Added:: WatchInfo: project1/file2.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.webworker.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.scripthost.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es5.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2015.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.dom.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules/@types 1 undefined Type roots
+[96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m10[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m10[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m12[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m12[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.es5.d.ts[0m:[93m12[0m:[93m15[0m
+    [7m12[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+
+[96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m10[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m10[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m12[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m12[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.es5.d.ts[0m:[93m12[0m:[93m15[0m
+    [7m12[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+
+[96m../../tslibs/TS/Lib/lib.es5.d.ts[0m:[93m10[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m10[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96m../../tslibs/TS/Lib/lib.es5.d.ts[0m:[93m12[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m12[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m12[0m:[93m15[0m
+    [7m12[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+  [96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m12[0m:[93m15[0m
+    [7m12[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    and here.
+
 ../../tslibs/TS/Lib/lib.es5.d.ts
   Library referenced via 'es5' from file 'project1/file2.ts'
   Library 'lib.es5.d.ts' specified in compilerOptions
+../../tslibs/TS/Lib/lib.es2015.d.ts
+  Library referenced via 'es5' from file 'project1/file2.ts'
+  Library 'lib.es5.d.ts' specified in compilerOptions
 ../../tslibs/TS/Lib/lib.dom.d.ts
+  Library 'lib.dom.d.ts' specified in compilerOptions
+../../tslibs/TS/Lib/lib.dom.iterable.d.ts
   Library 'lib.dom.d.ts' specified in compilerOptions
 ../../tslibs/TS/Lib/lib.webworker.d.ts
   Library referenced via 'webworker' from file 'project1/file2.ts'
@@ -159,11 +215,15 @@ project1/index.ts
   Root file specified for compilation
 project1/file2.ts
   Root file specified for compilation
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 6 errors. Watching for file changes.
 
 
 
 //// [/home/src/tslibs/TS/Lib/lib.es5.d.ts] *Lib*
+
+//// [/home/src/tslibs/TS/Lib/lib.es2015.d.ts] *Lib*
+
+//// [/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts] *Lib*
 
 //// [/home/src/workspace/projects/project1/file.js]
 "use strict";
@@ -194,6 +254,10 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts: *new*
+  {}
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts: *new*
+  {}
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts: *new*
   {}
 /home/src/tslibs/TS/Lib/lib.es5.d.ts: *new*
   {}
@@ -232,7 +296,9 @@ Program options: {
 Program structureReused: Not
 Program files::
 /home/src/tslibs/TS/Lib/lib.es5.d.ts
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
 /home/src/tslibs/TS/Lib/lib.dom.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
 /home/src/tslibs/TS/Lib/lib.webworker.d.ts
 /home/src/tslibs/TS/Lib/lib.scripthost.d.ts
 project1/core.d.ts
@@ -243,7 +309,9 @@ project1/file2.ts
 
 Semantic diagnostics in builder refreshed for::
 /home/src/tslibs/TS/Lib/lib.es5.d.ts
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
 /home/src/tslibs/TS/Lib/lib.dom.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
 /home/src/tslibs/TS/Lib/lib.webworker.d.ts
 /home/src/tslibs/TS/Lib/lib.scripthost.d.ts
 project1/core.d.ts
@@ -259,7 +327,9 @@ Shape signatures in builder refreshed for::
 /home/src/workspace/projects/project1/file.ts (used version)
 /home/src/workspace/projects/project1/index.ts (used version)
 /home/src/workspace/projects/project1/file2.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2015.d.ts (used version)
 /home/src/tslibs/ts/lib/lib.dom.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.dom.iterable.d.ts (used version)
 /home/src/tslibs/ts/lib/lib.webworker.d.ts (used version)
 /home/src/tslibs/ts/lib/lib.scripthost.d.ts (used version)
 
@@ -311,10 +381,64 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
   options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
+[96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m10[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m10[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m12[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m12[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.es5.d.ts[0m:[93m12[0m:[93m15[0m
+    [7m12[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+
+[96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m10[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m10[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m12[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m12[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.es5.d.ts[0m:[93m12[0m:[93m15[0m
+    [7m12[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+
+[96m../../tslibs/TS/Lib/lib.es5.d.ts[0m:[93m10[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m10[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96m../../tslibs/TS/Lib/lib.es5.d.ts[0m:[93m12[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m12[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m12[0m:[93m15[0m
+    [7m12[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+  [96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m12[0m:[93m15[0m
+    [7m12[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    and here.
+
 ../../tslibs/TS/Lib/lib.es5.d.ts
   Library referenced via 'es5' from file 'project1/file2.ts'
   Library 'lib.es5.d.ts' specified in compilerOptions
+../../tslibs/TS/Lib/lib.es2015.d.ts
+  Library referenced via 'es5' from file 'project1/file2.ts'
+  Library 'lib.es5.d.ts' specified in compilerOptions
 ../../tslibs/TS/Lib/lib.dom.d.ts
+  Library 'lib.dom.d.ts' specified in compilerOptions
+../../tslibs/TS/Lib/lib.dom.iterable.d.ts
   Library 'lib.dom.d.ts' specified in compilerOptions
 ../../tslibs/TS/Lib/lib.webworker.d.ts
   Library referenced via 'webworker' from file 'project1/file2.ts'
@@ -330,7 +454,7 @@ project1/index.ts
   Root file specified for compilation
 project1/file2.ts
   Root file specified for compilation
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 6 errors. Watching for file changes.
 
 
 
@@ -364,7 +488,9 @@ Program options: {
 Program structureReused: Completely
 Program files::
 /home/src/tslibs/TS/Lib/lib.es5.d.ts
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
 /home/src/tslibs/TS/Lib/lib.dom.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
 /home/src/tslibs/TS/Lib/lib.webworker.d.ts
 /home/src/tslibs/TS/Lib/lib.scripthost.d.ts
 project1/core.d.ts
@@ -416,7 +542,12 @@ FileWatcher:: Added:: WatchInfo: project1/core.d.ts 500 undefined Missing file
 ../../tslibs/TS/Lib/lib.es5.d.ts
   Library referenced via 'es5' from file 'project1/file2.ts'
   Library 'lib.es5.d.ts' specified in compilerOptions
+../../tslibs/TS/Lib/lib.es2015.d.ts
+  Library referenced via 'es5' from file 'project1/file2.ts'
+  Library 'lib.es5.d.ts' specified in compilerOptions
 ../../tslibs/TS/Lib/lib.dom.d.ts
+  Library 'lib.dom.d.ts' specified in compilerOptions
+../../tslibs/TS/Lib/lib.dom.iterable.d.ts
   Library 'lib.dom.d.ts' specified in compilerOptions
 ../../tslibs/TS/Lib/lib.webworker.d.ts
   Library referenced via 'webworker' from file 'project1/file2.ts'
@@ -445,6 +576,10 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts:
+  {}
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts:
+  {}
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts:
   {}
 /home/src/tslibs/TS/Lib/lib.es5.d.ts:
   {}
@@ -486,7 +621,9 @@ Program options: {
 Program structureReused: Not
 Program files::
 /home/src/tslibs/TS/Lib/lib.es5.d.ts
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
 /home/src/tslibs/TS/Lib/lib.dom.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
 /home/src/tslibs/TS/Lib/lib.webworker.d.ts
 /home/src/tslibs/TS/Lib/lib.scripthost.d.ts
 project1/utils.d.ts

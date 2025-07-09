@@ -8,7 +8,7 @@ interface Element {
 
     get style(): CSSStyleDeclaration;
 >style : Symbol(Element.style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
->CSSStyleDeclaration : Symbol(CSSStyleDeclaration, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>CSSStyleDeclaration : Symbol(CSSStyleDeclaration, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.iterable.d.ts, --, --))
 
     set style(cssText: string);
 >style : Symbol(Element.style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))

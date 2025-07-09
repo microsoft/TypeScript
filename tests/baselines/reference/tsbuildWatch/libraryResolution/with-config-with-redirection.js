@@ -234,6 +234,35 @@ File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.tsx' d
 File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts', result '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'.
 ======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
+======== Resolving module '@typescript/lib-es2015' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.es2015.d.ts__.ts'. ========
+Explicitly specified module resolution kind: 'Node10'.
+Loading module '@typescript/lib-es2015' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es2015'
+File '/home/src/workspace/projects/node_modules/@typescript/lib-es2015.ts' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-es2015.tsx' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-es2015.d.ts' does not exist.
+Directory '/home/src/workspace/projects/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es2015'
+Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es2015'
+Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es2015'
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es2015'
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es2015'
+Loading module '@typescript/lib-es2015' from 'node_modules' folder, target file types: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-es2015.js' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-es2015.jsx' does not exist.
+Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name '@typescript/lib-es2015' was not resolved. ========
 File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -264,6 +293,37 @@ File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.tsx' d
 File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts', result '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts'.
 ======== Module name '@typescript/lib-dom' was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts'. ========
+======== Resolving module '@typescript/lib-dom/iterable' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.dom.iterable.d.ts__.ts'. ========
+Explicitly specified module resolution kind: 'Node10'.
+Loading module '@typescript/lib-dom/iterable' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom/iterable'
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.ts' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.tsx' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.d.ts' does not exist.
+Directory '/home/src/workspace/projects/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Loading module '@typescript/lib-dom/iterable' from 'node_modules' folder, target file types: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.js' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.jsx' does not exist.
+Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name '@typescript/lib-dom/iterable' was not resolved. ========
 File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -272,6 +332,60 @@ File '/home/src/workspace/package.json' does not exist according to earlier cach
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
+[96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m10[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m10[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m12[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m12[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m12[0m:[93m15[0m
+    [7m12[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+
+[96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m10[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m10[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m12[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m12[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m12[0m:[93m15[0m
+    [7m12[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+  [96mnode_modules/@typescript/lib-es5/index.d.ts[0m:[93m12[0m:[93m15[0m
+    [7m12[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    and here.
+
+[96mnode_modules/@typescript/lib-es5/index.d.ts[0m:[93m10[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m10[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96mnode_modules/@typescript/lib-es5/index.d.ts[0m:[93m12[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m12[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m12[0m:[93m15[0m
+    [7m12[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+
+../../tslibs/TS/Lib/lib.es2015.d.ts
+  Library referenced via 'es5' from file 'project1/file2.ts'
+  Library 'lib.es5.d.ts' specified in compilerOptions
+../../tslibs/TS/Lib/lib.dom.iterable.d.ts
+  Library 'lib.dom.d.ts' specified in compilerOptions
 node_modules/@typescript/lib-webworker/index.d.ts
   Library referenced via 'webworker' from file 'project1/file2.ts'
 node_modules/@typescript/lib-scripthost/index.d.ts
@@ -306,6 +420,14 @@ Directory '/home/src/workspace/projects/project2/node_modules' does not exist, s
 Scoped package detected, looking in 'typescript__lib-es5'
 Resolution for module '@typescript/lib-es5' was found in cache from location '/home/src/workspace/projects'.
 ======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
+======== Resolving module '@typescript/lib-es2015' from '/home/src/workspace/projects/project2/__lib_node_modules_lookup_lib.es2015.d.ts__.ts'. ========
+Explicitly specified module resolution kind: 'Node10'.
+Loading module '@typescript/lib-es2015' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/home/src/workspace/projects/project2/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es2015'
+Resolution for module '@typescript/lib-es2015' was found in cache from location '/home/src/workspace/projects'.
+======== Module name '@typescript/lib-es2015' was not resolved. ========
 File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -322,6 +444,14 @@ Directory '/home/src/workspace/projects/project2/node_modules' does not exist, s
 Scoped package detected, looking in 'typescript__lib-dom'
 Resolution for module '@typescript/lib-dom' was found in cache from location '/home/src/workspace/projects'.
 ======== Module name '@typescript/lib-dom' was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts'. ========
+======== Resolving module '@typescript/lib-dom/iterable' from '/home/src/workspace/projects/project2/__lib_node_modules_lookup_lib.dom.iterable.d.ts__.ts'. ========
+Explicitly specified module resolution kind: 'Node10'.
+Loading module '@typescript/lib-dom/iterable' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/home/src/workspace/projects/project2/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Resolution for module '@typescript/lib-dom/iterable' was found in cache from location '/home/src/workspace/projects'.
+======== Module name '@typescript/lib-dom/iterable' was not resolved. ========
 File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -330,6 +460,59 @@ File '/home/src/workspace/package.json' does not exist according to earlier cach
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
+[96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m10[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m10[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m12[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m12[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m12[0m:[93m15[0m
+    [7m12[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+
+[96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m10[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m10[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m12[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m12[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m12[0m:[93m15[0m
+    [7m12[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+  [96mnode_modules/@typescript/lib-es5/index.d.ts[0m:[93m12[0m:[93m15[0m
+    [7m12[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    and here.
+
+[96mnode_modules/@typescript/lib-es5/index.d.ts[0m:[93m10[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m10[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96mnode_modules/@typescript/lib-es5/index.d.ts[0m:[93m12[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m12[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m12[0m:[93m15[0m
+    [7m12[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+
+../../tslibs/TS/Lib/lib.es2015.d.ts
+  Library 'lib.es5.d.ts' specified in compilerOptions
+../../tslibs/TS/Lib/lib.dom.iterable.d.ts
+  Library 'lib.dom.d.ts' specified in compilerOptions
 node_modules/@typescript/lib-es5/index.d.ts
   Library 'lib.es5.d.ts' specified in compilerOptions
 node_modules/@typescript/lib-dom/index.d.ts
@@ -350,6 +533,14 @@ Directory '/home/src/workspace/projects/project3/node_modules' does not exist, s
 Scoped package detected, looking in 'typescript__lib-es5'
 Resolution for module '@typescript/lib-es5' was found in cache from location '/home/src/workspace/projects'.
 ======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
+======== Resolving module '@typescript/lib-es2015' from '/home/src/workspace/projects/project3/__lib_node_modules_lookup_lib.es2015.d.ts__.ts'. ========
+Explicitly specified module resolution kind: 'Node10'.
+Loading module '@typescript/lib-es2015' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/home/src/workspace/projects/project3/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es2015'
+Resolution for module '@typescript/lib-es2015' was found in cache from location '/home/src/workspace/projects'.
+======== Module name '@typescript/lib-es2015' was not resolved. ========
 File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -366,6 +557,14 @@ Directory '/home/src/workspace/projects/project3/node_modules' does not exist, s
 Scoped package detected, looking in 'typescript__lib-dom'
 Resolution for module '@typescript/lib-dom' was found in cache from location '/home/src/workspace/projects'.
 ======== Module name '@typescript/lib-dom' was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts'. ========
+======== Resolving module '@typescript/lib-dom/iterable' from '/home/src/workspace/projects/project3/__lib_node_modules_lookup_lib.dom.iterable.d.ts__.ts'. ========
+Explicitly specified module resolution kind: 'Node10'.
+Loading module '@typescript/lib-dom/iterable' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/home/src/workspace/projects/project3/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Resolution for module '@typescript/lib-dom/iterable' was found in cache from location '/home/src/workspace/projects'.
+======== Module name '@typescript/lib-dom/iterable' was not resolved. ========
 File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -374,6 +573,59 @@ File '/home/src/workspace/package.json' does not exist according to earlier cach
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
+[96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m10[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m10[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m12[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m12[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m12[0m:[93m15[0m
+    [7m12[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+
+[96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m10[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m10[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m12[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m12[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m12[0m:[93m15[0m
+    [7m12[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+  [96mnode_modules/@typescript/lib-es5/index.d.ts[0m:[93m12[0m:[93m15[0m
+    [7m12[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    and here.
+
+[96mnode_modules/@typescript/lib-es5/index.d.ts[0m:[93m10[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m10[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96mnode_modules/@typescript/lib-es5/index.d.ts[0m:[93m12[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m12[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m12[0m:[93m15[0m
+    [7m12[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+
+../../tslibs/TS/Lib/lib.es2015.d.ts
+  Library 'lib.es5.d.ts' specified in compilerOptions
+../../tslibs/TS/Lib/lib.dom.iterable.d.ts
+  Library 'lib.dom.d.ts' specified in compilerOptions
 node_modules/@typescript/lib-es5/index.d.ts
   Library 'lib.es5.d.ts' specified in compilerOptions
 node_modules/@typescript/lib-dom/index.d.ts
@@ -417,6 +669,14 @@ Directory '/home/src/workspace/projects/project4/node_modules' does not exist, s
 Scoped package detected, looking in 'typescript__lib-dom'
 Resolution for module '@typescript/lib-dom' was found in cache from location '/home/src/workspace/projects'.
 ======== Module name '@typescript/lib-dom' was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts'. ========
+======== Resolving module '@typescript/lib-dom/iterable' from '/home/src/workspace/projects/project4/__lib_node_modules_lookup_lib.dom.iterable.d.ts__.ts'. ========
+Explicitly specified module resolution kind: 'Node10'.
+Loading module '@typescript/lib-dom/iterable' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/home/src/workspace/projects/project4/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Resolution for module '@typescript/lib-dom/iterable' was found in cache from location '/home/src/workspace/projects'.
+======== Module name '@typescript/lib-dom/iterable' was not resolved. ========
 File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -441,6 +701,38 @@ File '/home/src/workspace/package.json' does not exist according to earlier cach
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
+[96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m10[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m10[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m12[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m12[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96mnode_modules/@typescript/lib-esnext/index.d.ts[0m:[93m12[0m:[93m15[0m
+    [7m12[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+
+[96mnode_modules/@typescript/lib-esnext/index.d.ts[0m:[93m10[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m10[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96mnode_modules/@typescript/lib-esnext/index.d.ts[0m:[93m12[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m12[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m12[0m:[93m15[0m
+    [7m12[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+
+../../tslibs/TS/Lib/lib.dom.iterable.d.ts
+  Library 'lib.dom.d.ts' specified in compilerOptions
 node_modules/@typescript/lib-esnext/index.d.ts
   Library 'lib.esnext.d.ts' specified in compilerOptions
 node_modules/@typescript/lib-dom/index.d.ts
@@ -451,7 +743,7 @@ project4/index.ts
   Matched by default include pattern '**/*'
 project4/utils.d.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 22 errors. Watching for file changes.
 
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/tsconfig.json 2000 undefined Config file /home/src/workspace/projects/project1/tsconfig.json
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1 1 undefined Wild card directory /home/src/workspace/projects/project1/tsconfig.json
@@ -472,8 +764,10 @@ FileWatcher:: Added:: WatchInfo: /home/package.json 2000 undefined package.json 
 FileWatcher:: Added:: WatchInfo: /package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-scripthost/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
+FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-es2015/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/typeroot1/sometype/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
+FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project2/tsconfig.json 2000 undefined Config file /home/src/workspace/projects/project2/tsconfig.json
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project2 1 undefined Wild card directory /home/src/workspace/projects/project2/tsconfig.json
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project2 1 undefined Wild card directory /home/src/workspace/projects/project2/tsconfig.json
@@ -491,6 +785,10 @@ FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project4/index.ts 
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project4/utils.d.ts 250 undefined Source file /home/src/workspace/projects/project4/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-esnext/package.json 2000 undefined package.json file /home/src/workspace/projects/project4/tsconfig.json
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2015.d.ts] *Lib*
+
+//// [/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts] *Lib*
 
 //// [/home/src/workspace/projects/project1/file.js]
 "use strict";
@@ -524,11 +822,13 @@ export declare const x = "type1";
 
 
 //// [/home/src/workspace/projects/project1/tsconfig.tsbuildinfo]
-{"fileNames":["../node_modules/@typescript/lib-webworker/index.d.ts","../node_modules/@typescript/lib-scripthost/index.d.ts","../node_modules/@typescript/lib-es5/index.d.ts","../node_modules/@typescript/lib-dom/index.d.ts","./core.d.ts","./file.ts","./file2.ts","./index.ts","./utils.d.ts","./typeroot1/sometype/index.d.ts"],"fileInfos":[{"version":"-3990185033-interface WebWorkerInterface { }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5403980302-interface ScriptHostInterface { }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true,"impliedFormat":1},"-15683237936-export const core = 10;",{"version":"-16628394009-export const file = 10;","signature":"-9025507999-export declare const file = 10;\n"},{"version":"-11916614574-/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n","signature":"5381-"},{"version":"-11532698187-export const x = \"type1\";","signature":"-5899226897-export declare const x = \"type1\";\n"},"-13729955264-export const y = 10;","-12476477079-export type TheNum = \"type1\";"],"root":[[5,10]],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.es2015.d.ts","../../../tslibs/ts/lib/lib.dom.iterable.d.ts","../node_modules/@typescript/lib-webworker/index.d.ts","../node_modules/@typescript/lib-scripthost/index.d.ts","../node_modules/@typescript/lib-es5/index.d.ts","../node_modules/@typescript/lib-dom/index.d.ts","./core.d.ts","./file.ts","./file2.ts","./index.ts","./utils.d.ts","./typeroot1/sometype/index.d.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3990185033-interface WebWorkerInterface { }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5403980302-interface ScriptHostInterface { }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true,"impliedFormat":1},"-15683237936-export const core = 10;",{"version":"-16628394009-export const file = 10;","signature":"-9025507999-export declare const file = 10;\n"},{"version":"-11916614574-/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n","signature":"5381-"},{"version":"-11532698187-export const x = \"type1\";","signature":"-5899226897-export declare const x = \"type1\";\n"},"-13729955264-export const y = 10;","-12476477079-export type TheNum = \"type1\";"],"root":[[7,12]],"options":{"composite":true},"semanticDiagnosticsPerFile":[[1,[{"start":278,"length":15,"messageText":"Duplicate index signature for type 'number'.","category":1,"code":2374},{"start":340,"length":7,"messageText":"Cannot redeclare block-scoped variable 'console'.","category":1,"code":2451,"relatedInformation":[{"file":"../../../tslibs/ts/lib/lib.dom.iterable.d.ts","start":340,"length":7,"messageText":"'console' was also declared here.","category":3,"code":6203},{"file":"../node_modules/@typescript/lib-es5/index.d.ts","start":340,"length":7,"messageText":"and here.","category":3,"code":6204}]}]],[2,[{"start":278,"length":15,"messageText":"Duplicate index signature for type 'number'.","category":1,"code":2374},{"start":340,"length":7,"messageText":"Cannot redeclare block-scoped variable 'console'.","category":1,"code":2451,"relatedInformation":[{"file":"../../../tslibs/ts/lib/lib.es2015.d.ts","start":340,"length":7,"messageText":"'console' was also declared here.","category":3,"code":6203}]}]],[5,[{"start":278,"length":15,"messageText":"Duplicate index signature for type 'number'.","category":1,"code":2374},{"start":340,"length":7,"messageText":"Cannot redeclare block-scoped variable 'console'.","category":1,"code":2451,"relatedInformation":[{"file":"../../../tslibs/ts/lib/lib.es2015.d.ts","start":340,"length":7,"messageText":"'console' was also declared here.","category":3,"code":6203}]}]]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspace/projects/project1/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
+    "../../../tslibs/ts/lib/lib.es2015.d.ts",
+    "../../../tslibs/ts/lib/lib.dom.iterable.d.ts",
     "../node_modules/@typescript/lib-webworker/index.d.ts",
     "../node_modules/@typescript/lib-scripthost/index.d.ts",
     "../node_modules/@typescript/lib-es5/index.d.ts",
@@ -541,6 +841,24 @@ export declare const x = "type1";
     "./typeroot1/sometype/index.d.ts"
   ],
   "fileInfos": {
+    "../../../tslibs/ts/lib/lib.es2015.d.ts": {
+      "original": {
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "../../../tslibs/ts/lib/lib.dom.iterable.d.ts": {
+      "original": {
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
     "../node_modules/@typescript/lib-webworker/index.d.ts": {
       "original": {
         "version": "-3990185033-interface WebWorkerInterface { }",
@@ -625,8 +943,8 @@ export declare const x = "type1";
   "root": [
     [
       [
-        5,
-        10
+        7,
+        12
       ],
       [
         "./core.d.ts",
@@ -641,9 +959,106 @@ export declare const x = "type1";
   "options": {
     "composite": true
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../tslibs/ts/lib/lib.es2015.d.ts",
+      [
+        {
+          "start": 278,
+          "length": 15,
+          "messageText": "Duplicate index signature for type 'number'.",
+          "category": 1,
+          "code": 2374
+        },
+        {
+          "start": 340,
+          "length": 7,
+          "messageText": "Cannot redeclare block-scoped variable 'console'.",
+          "category": 1,
+          "code": 2451,
+          "relatedInformation": [
+            {
+              "file": "../../../tslibs/ts/lib/lib.dom.iterable.d.ts",
+              "start": 340,
+              "length": 7,
+              "messageText": "'console' was also declared here.",
+              "category": 3,
+              "code": 6203
+            },
+            {
+              "file": "../node_modules/@typescript/lib-es5/index.d.ts",
+              "start": 340,
+              "length": 7,
+              "messageText": "and here.",
+              "category": 3,
+              "code": 6204
+            }
+          ]
+        }
+      ]
+    ],
+    [
+      "../../../tslibs/ts/lib/lib.dom.iterable.d.ts",
+      [
+        {
+          "start": 278,
+          "length": 15,
+          "messageText": "Duplicate index signature for type 'number'.",
+          "category": 1,
+          "code": 2374
+        },
+        {
+          "start": 340,
+          "length": 7,
+          "messageText": "Cannot redeclare block-scoped variable 'console'.",
+          "category": 1,
+          "code": 2451,
+          "relatedInformation": [
+            {
+              "file": "../../../tslibs/ts/lib/lib.es2015.d.ts",
+              "start": 340,
+              "length": 7,
+              "messageText": "'console' was also declared here.",
+              "category": 3,
+              "code": 6203
+            }
+          ]
+        }
+      ]
+    ],
+    [
+      "../node_modules/@typescript/lib-es5/index.d.ts",
+      [
+        {
+          "start": 278,
+          "length": 15,
+          "messageText": "Duplicate index signature for type 'number'.",
+          "category": 1,
+          "code": 2374
+        },
+        {
+          "start": 340,
+          "length": 7,
+          "messageText": "Cannot redeclare block-scoped variable 'console'.",
+          "category": 1,
+          "code": 2451,
+          "relatedInformation": [
+            {
+              "file": "../../../tslibs/ts/lib/lib.es2015.d.ts",
+              "start": 340,
+              "length": 7,
+              "messageText": "'console' was also declared here.",
+              "category": 3,
+              "code": 6203
+            }
+          ]
+        }
+      ]
+    ]
+  ],
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 1712
+  "size": 4062
 }
 
 //// [/home/src/workspace/projects/project2/index.js]
@@ -658,17 +1073,37 @@ export declare const y = 10;
 
 
 //// [/home/src/workspace/projects/project2/tsconfig.tsbuildinfo]
-{"fileNames":["../node_modules/@typescript/lib-es5/index.d.ts","../node_modules/@typescript/lib-dom/index.d.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11999455899-export const y = 10","signature":"-7152472870-export declare const y = 10;\n"},"-13729955264-export const y = 10;"],"root":[3,4],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.es2015.d.ts","../../../tslibs/ts/lib/lib.dom.iterable.d.ts","../node_modules/@typescript/lib-es5/index.d.ts","../node_modules/@typescript/lib-dom/index.d.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11999455899-export const y = 10","signature":"-7152472870-export declare const y = 10;\n"},"-13729955264-export const y = 10;"],"root":[5,6],"options":{"composite":true},"semanticDiagnosticsPerFile":[[1,[{"start":278,"length":15,"messageText":"Duplicate index signature for type 'number'.","category":1,"code":2374},{"start":340,"length":7,"messageText":"Cannot redeclare block-scoped variable 'console'.","category":1,"code":2451,"relatedInformation":[{"file":"../../../tslibs/ts/lib/lib.dom.iterable.d.ts","start":340,"length":7,"messageText":"'console' was also declared here.","category":3,"code":6203},{"file":"../node_modules/@typescript/lib-es5/index.d.ts","start":340,"length":7,"messageText":"and here.","category":3,"code":6204}]}]],[2,[{"start":278,"length":15,"messageText":"Duplicate index signature for type 'number'.","category":1,"code":2374},{"start":340,"length":7,"messageText":"Cannot redeclare block-scoped variable 'console'.","category":1,"code":2451,"relatedInformation":[{"file":"../../../tslibs/ts/lib/lib.es2015.d.ts","start":340,"length":7,"messageText":"'console' was also declared here.","category":3,"code":6203}]}]],[3,[{"start":278,"length":15,"messageText":"Duplicate index signature for type 'number'.","category":1,"code":2374},{"start":340,"length":7,"messageText":"Cannot redeclare block-scoped variable 'console'.","category":1,"code":2451,"relatedInformation":[{"file":"../../../tslibs/ts/lib/lib.es2015.d.ts","start":340,"length":7,"messageText":"'console' was also declared here.","category":3,"code":6203}]}]]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspace/projects/project2/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
+    "../../../tslibs/ts/lib/lib.es2015.d.ts",
+    "../../../tslibs/ts/lib/lib.dom.iterable.d.ts",
     "../node_modules/@typescript/lib-es5/index.d.ts",
     "../node_modules/@typescript/lib-dom/index.d.ts",
     "./index.ts",
     "./utils.d.ts"
   ],
   "fileInfos": {
+    "../../../tslibs/ts/lib/lib.es2015.d.ts": {
+      "original": {
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "../../../tslibs/ts/lib/lib.dom.iterable.d.ts": {
+      "original": {
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
     "../node_modules/@typescript/lib-es5/index.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
@@ -706,20 +1141,117 @@ export declare const y = 10;
   },
   "root": [
     [
-      3,
+      5,
       "./index.ts"
     ],
     [
-      4,
+      6,
       "./utils.d.ts"
     ]
   ],
   "options": {
     "composite": true
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../tslibs/ts/lib/lib.es2015.d.ts",
+      [
+        {
+          "start": 278,
+          "length": 15,
+          "messageText": "Duplicate index signature for type 'number'.",
+          "category": 1,
+          "code": 2374
+        },
+        {
+          "start": 340,
+          "length": 7,
+          "messageText": "Cannot redeclare block-scoped variable 'console'.",
+          "category": 1,
+          "code": 2451,
+          "relatedInformation": [
+            {
+              "file": "../../../tslibs/ts/lib/lib.dom.iterable.d.ts",
+              "start": 340,
+              "length": 7,
+              "messageText": "'console' was also declared here.",
+              "category": 3,
+              "code": 6203
+            },
+            {
+              "file": "../node_modules/@typescript/lib-es5/index.d.ts",
+              "start": 340,
+              "length": 7,
+              "messageText": "and here.",
+              "category": 3,
+              "code": 6204
+            }
+          ]
+        }
+      ]
+    ],
+    [
+      "../../../tslibs/ts/lib/lib.dom.iterable.d.ts",
+      [
+        {
+          "start": 278,
+          "length": 15,
+          "messageText": "Duplicate index signature for type 'number'.",
+          "category": 1,
+          "code": 2374
+        },
+        {
+          "start": 340,
+          "length": 7,
+          "messageText": "Cannot redeclare block-scoped variable 'console'.",
+          "category": 1,
+          "code": 2451,
+          "relatedInformation": [
+            {
+              "file": "../../../tslibs/ts/lib/lib.es2015.d.ts",
+              "start": 340,
+              "length": 7,
+              "messageText": "'console' was also declared here.",
+              "category": 3,
+              "code": 6203
+            }
+          ]
+        }
+      ]
+    ],
+    [
+      "../node_modules/@typescript/lib-es5/index.d.ts",
+      [
+        {
+          "start": 278,
+          "length": 15,
+          "messageText": "Duplicate index signature for type 'number'.",
+          "category": 1,
+          "code": 2374
+        },
+        {
+          "start": 340,
+          "length": 7,
+          "messageText": "Cannot redeclare block-scoped variable 'console'.",
+          "category": 1,
+          "code": 2451,
+          "relatedInformation": [
+            {
+              "file": "../../../tslibs/ts/lib/lib.es2015.d.ts",
+              "start": 340,
+              "length": 7,
+              "messageText": "'console' was also declared here.",
+              "category": 3,
+              "code": 6203
+            }
+          ]
+        }
+      ]
+    ]
+  ],
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 955
+  "size": 3305
 }
 
 //// [/home/src/workspace/projects/project3/index.js]
@@ -734,17 +1266,37 @@ export declare const z = 10;
 
 
 //// [/home/src/workspace/projects/project3/tsconfig.tsbuildinfo]
-{"fileNames":["../node_modules/@typescript/lib-es5/index.d.ts","../node_modules/@typescript/lib-dom/index.d.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11960320506-export const z = 10","signature":"-7483702853-export declare const z = 10;\n"},"-13729955264-export const y = 10;"],"root":[3,4],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.es2015.d.ts","../../../tslibs/ts/lib/lib.dom.iterable.d.ts","../node_modules/@typescript/lib-es5/index.d.ts","../node_modules/@typescript/lib-dom/index.d.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11960320506-export const z = 10","signature":"-7483702853-export declare const z = 10;\n"},"-13729955264-export const y = 10;"],"root":[5,6],"options":{"composite":true},"semanticDiagnosticsPerFile":[[1,[{"start":278,"length":15,"messageText":"Duplicate index signature for type 'number'.","category":1,"code":2374},{"start":340,"length":7,"messageText":"Cannot redeclare block-scoped variable 'console'.","category":1,"code":2451,"relatedInformation":[{"file":"../../../tslibs/ts/lib/lib.dom.iterable.d.ts","start":340,"length":7,"messageText":"'console' was also declared here.","category":3,"code":6203},{"file":"../node_modules/@typescript/lib-es5/index.d.ts","start":340,"length":7,"messageText":"and here.","category":3,"code":6204}]}]],[2,[{"start":278,"length":15,"messageText":"Duplicate index signature for type 'number'.","category":1,"code":2374},{"start":340,"length":7,"messageText":"Cannot redeclare block-scoped variable 'console'.","category":1,"code":2451,"relatedInformation":[{"file":"../../../tslibs/ts/lib/lib.es2015.d.ts","start":340,"length":7,"messageText":"'console' was also declared here.","category":3,"code":6203}]}]],[3,[{"start":278,"length":15,"messageText":"Duplicate index signature for type 'number'.","category":1,"code":2374},{"start":340,"length":7,"messageText":"Cannot redeclare block-scoped variable 'console'.","category":1,"code":2451,"relatedInformation":[{"file":"../../../tslibs/ts/lib/lib.es2015.d.ts","start":340,"length":7,"messageText":"'console' was also declared here.","category":3,"code":6203}]}]]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspace/projects/project3/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
+    "../../../tslibs/ts/lib/lib.es2015.d.ts",
+    "../../../tslibs/ts/lib/lib.dom.iterable.d.ts",
     "../node_modules/@typescript/lib-es5/index.d.ts",
     "../node_modules/@typescript/lib-dom/index.d.ts",
     "./index.ts",
     "./utils.d.ts"
   ],
   "fileInfos": {
+    "../../../tslibs/ts/lib/lib.es2015.d.ts": {
+      "original": {
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "../../../tslibs/ts/lib/lib.dom.iterable.d.ts": {
+      "original": {
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
     "../node_modules/@typescript/lib-es5/index.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
@@ -782,20 +1334,117 @@ export declare const z = 10;
   },
   "root": [
     [
-      3,
+      5,
       "./index.ts"
     ],
     [
-      4,
+      6,
       "./utils.d.ts"
     ]
   ],
   "options": {
     "composite": true
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../tslibs/ts/lib/lib.es2015.d.ts",
+      [
+        {
+          "start": 278,
+          "length": 15,
+          "messageText": "Duplicate index signature for type 'number'.",
+          "category": 1,
+          "code": 2374
+        },
+        {
+          "start": 340,
+          "length": 7,
+          "messageText": "Cannot redeclare block-scoped variable 'console'.",
+          "category": 1,
+          "code": 2451,
+          "relatedInformation": [
+            {
+              "file": "../../../tslibs/ts/lib/lib.dom.iterable.d.ts",
+              "start": 340,
+              "length": 7,
+              "messageText": "'console' was also declared here.",
+              "category": 3,
+              "code": 6203
+            },
+            {
+              "file": "../node_modules/@typescript/lib-es5/index.d.ts",
+              "start": 340,
+              "length": 7,
+              "messageText": "and here.",
+              "category": 3,
+              "code": 6204
+            }
+          ]
+        }
+      ]
+    ],
+    [
+      "../../../tslibs/ts/lib/lib.dom.iterable.d.ts",
+      [
+        {
+          "start": 278,
+          "length": 15,
+          "messageText": "Duplicate index signature for type 'number'.",
+          "category": 1,
+          "code": 2374
+        },
+        {
+          "start": 340,
+          "length": 7,
+          "messageText": "Cannot redeclare block-scoped variable 'console'.",
+          "category": 1,
+          "code": 2451,
+          "relatedInformation": [
+            {
+              "file": "../../../tslibs/ts/lib/lib.es2015.d.ts",
+              "start": 340,
+              "length": 7,
+              "messageText": "'console' was also declared here.",
+              "category": 3,
+              "code": 6203
+            }
+          ]
+        }
+      ]
+    ],
+    [
+      "../node_modules/@typescript/lib-es5/index.d.ts",
+      [
+        {
+          "start": 278,
+          "length": 15,
+          "messageText": "Duplicate index signature for type 'number'.",
+          "category": 1,
+          "code": 2374
+        },
+        {
+          "start": 340,
+          "length": 7,
+          "messageText": "Cannot redeclare block-scoped variable 'console'.",
+          "category": 1,
+          "code": 2451,
+          "relatedInformation": [
+            {
+              "file": "../../../tslibs/ts/lib/lib.es2015.d.ts",
+              "start": 340,
+              "length": 7,
+              "messageText": "'console' was also declared here.",
+              "category": 3,
+              "code": 6203
+            }
+          ]
+        }
+      ]
+    ]
+  ],
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 955
+  "size": 3305
 }
 
 //// [/home/src/workspace/projects/project4/index.js]
@@ -810,11 +1459,12 @@ export declare const z = 10;
 
 
 //// [/home/src/workspace/projects/project4/tsconfig.tsbuildinfo]
-{"fileNames":["../node_modules/@typescript/lib-esnext/index.d.ts","../node_modules/@typescript/lib-dom/index.d.ts","../node_modules/@typescript/lib-webworker/index.d.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-3990185033-interface WebWorkerInterface { }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11960320506-export const z = 10","signature":"-7483702853-export declare const z = 10;\n"},"-13729955264-export const y = 10;"],"root":[4,5],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.dom.iterable.d.ts","../node_modules/@typescript/lib-esnext/index.d.ts","../node_modules/@typescript/lib-dom/index.d.ts","../node_modules/@typescript/lib-webworker/index.d.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-3990185033-interface WebWorkerInterface { }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11960320506-export const z = 10","signature":"-7483702853-export declare const z = 10;\n"},"-13729955264-export const y = 10;"],"root":[5,6],"options":{"composite":true},"semanticDiagnosticsPerFile":[[1,[{"start":278,"length":15,"messageText":"Duplicate index signature for type 'number'.","category":1,"code":2374},{"start":340,"length":7,"messageText":"Cannot redeclare block-scoped variable 'console'.","category":1,"code":2451,"relatedInformation":[{"file":"../node_modules/@typescript/lib-esnext/index.d.ts","start":340,"length":7,"messageText":"'console' was also declared here.","category":3,"code":6203}]}]],[2,[{"start":278,"length":15,"messageText":"Duplicate index signature for type 'number'.","category":1,"code":2374},{"start":340,"length":7,"messageText":"Cannot redeclare block-scoped variable 'console'.","category":1,"code":2451,"relatedInformation":[{"file":"../../../tslibs/ts/lib/lib.dom.iterable.d.ts","start":340,"length":7,"messageText":"'console' was also declared here.","category":3,"code":6203}]}]]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspace/projects/project4/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
+    "../../../tslibs/ts/lib/lib.dom.iterable.d.ts",
     "../node_modules/@typescript/lib-esnext/index.d.ts",
     "../node_modules/@typescript/lib-dom/index.d.ts",
     "../node_modules/@typescript/lib-webworker/index.d.ts",
@@ -822,6 +1472,15 @@ export declare const z = 10;
     "./utils.d.ts"
   ],
   "fileInfos": {
+    "../../../tslibs/ts/lib/lib.dom.iterable.d.ts": {
+      "original": {
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
     "../node_modules/@typescript/lib-esnext/index.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
@@ -870,20 +1529,80 @@ export declare const z = 10;
   },
   "root": [
     [
-      4,
+      5,
       "./index.ts"
     ],
     [
-      5,
+      6,
       "./utils.d.ts"
     ]
   ],
   "options": {
     "composite": true
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../tslibs/ts/lib/lib.dom.iterable.d.ts",
+      [
+        {
+          "start": 278,
+          "length": 15,
+          "messageText": "Duplicate index signature for type 'number'.",
+          "category": 1,
+          "code": 2374
+        },
+        {
+          "start": 340,
+          "length": 7,
+          "messageText": "Cannot redeclare block-scoped variable 'console'.",
+          "category": 1,
+          "code": 2451,
+          "relatedInformation": [
+            {
+              "file": "../node_modules/@typescript/lib-esnext/index.d.ts",
+              "start": 340,
+              "length": 7,
+              "messageText": "'console' was also declared here.",
+              "category": 3,
+              "code": 6203
+            }
+          ]
+        }
+      ]
+    ],
+    [
+      "../node_modules/@typescript/lib-esnext/index.d.ts",
+      [
+        {
+          "start": 278,
+          "length": 15,
+          "messageText": "Duplicate index signature for type 'number'.",
+          "category": 1,
+          "code": 2374
+        },
+        {
+          "start": 340,
+          "length": 7,
+          "messageText": "Cannot redeclare block-scoped variable 'console'.",
+          "category": 1,
+          "code": 2451,
+          "relatedInformation": [
+            {
+              "file": "../../../tslibs/ts/lib/lib.dom.iterable.d.ts",
+              "start": 340,
+              "length": 7,
+              "messageText": "'console' was also declared here.",
+              "category": 3,
+              "code": 6203
+            }
+          ]
+        }
+      ]
+    ]
+  ],
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 1116
+  "size": 2460
 }
 
 
@@ -894,7 +1613,11 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/workspace/package.json: *new*
   {"pollingInterval":2000}
+/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspace/projects/node_modules/@typescript/lib-es2015/package.json: *new*
   {"pollingInterval":2000}
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json: *new*
   {"pollingInterval":2000}
@@ -986,6 +1709,8 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
@@ -998,6 +1723,8 @@ Program files::
 /home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts
 
 Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
@@ -1010,13 +1737,15 @@ Semantic diagnostics in builder refreshed for::
 /home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts
 
 Shape signatures in builder refreshed for::
-/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2015.d.ts (used version)
 /home/src/workspace/projects/project1/core.d.ts (used version)
 /home/src/workspace/projects/project1/file.ts (computed .d.ts during emit)
 /home/src/workspace/projects/project1/file2.ts (computed .d.ts during emit)
 /home/src/workspace/projects/project1/index.ts (computed .d.ts during emit)
 /home/src/workspace/projects/project1/utils.d.ts (used version)
 /home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.dom.iterable.d.ts (used version)
+/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts (used version)
 /home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts (used version)
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts (used version)
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts (used version)
@@ -1041,21 +1770,27 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts
 /home/src/workspace/projects/project2/index.ts
 /home/src/workspace/projects/project2/utils.d.ts
 
 Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts
 /home/src/workspace/projects/project2/index.ts
 /home/src/workspace/projects/project2/utils.d.ts
 
 Shape signatures in builder refreshed for::
-/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2015.d.ts (used version)
 /home/src/workspace/projects/project2/index.ts (computed .d.ts during emit)
 /home/src/workspace/projects/project2/utils.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.dom.iterable.d.ts (used version)
+/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts (used version)
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts (used version)
 
 Program root files: [
@@ -1078,21 +1813,27 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts
 /home/src/workspace/projects/project3/index.ts
 /home/src/workspace/projects/project3/utils.d.ts
 
 Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts
 /home/src/workspace/projects/project3/index.ts
 /home/src/workspace/projects/project3/utils.d.ts
 
 Shape signatures in builder refreshed for::
-/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2015.d.ts (used version)
 /home/src/workspace/projects/project3/index.ts (computed .d.ts during emit)
 /home/src/workspace/projects/project3/utils.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.dom.iterable.d.ts (used version)
+/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts (used version)
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts (used version)
 
 Program root files: [
@@ -1116,6 +1857,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-esnext/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts
@@ -1123,6 +1865,7 @@ Program files::
 /home/src/workspace/projects/project4/utils.d.ts
 
 Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-esnext/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts
@@ -1130,9 +1873,10 @@ Semantic diagnostics in builder refreshed for::
 /home/src/workspace/projects/project4/utils.d.ts
 
 Shape signatures in builder refreshed for::
-/home/src/workspace/projects/node_modules/@typescript/lib-esnext/index.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.dom.iterable.d.ts (used version)
 /home/src/workspace/projects/project4/index.ts (computed .d.ts during emit)
 /home/src/workspace/projects/project4/utils.d.ts (used version)
+/home/src/workspace/projects/node_modules/@typescript/lib-esnext/index.d.ts (used version)
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts (used version)
 /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts (used version)
 

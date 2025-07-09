@@ -4,8 +4,8 @@
 // All will be error from using ES6 features but only include ES5 library
 // Using Es6 array
 function f(x: number, y: number, z: number) {
->f : (x: number, y: number, z: number) => any
->  : ^ ^^      ^^ ^^      ^^ ^^      ^^^^^^^^
+>f : (x: number, y: number, z: number) => any[]
+>  : ^ ^^      ^^ ^^      ^^ ^^      ^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : number
@@ -14,23 +14,23 @@ function f(x: number, y: number, z: number) {
 >  : ^^^^^^
 
     return Array.from(arguments);
->Array.from(arguments) : any
->                      : ^^^
->Array.from : any
->           : ^^^
+>Array.from(arguments) : any[]
+>                      : ^^^^^
+>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>           : ^^^ ^^         ^^            ^^^   ^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^   ^^^ ^^        ^^                          ^^^   ^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^   ^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
->from : any
->     : ^^^
+>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>     : ^^^ ^^         ^^            ^^^   ^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^   ^^^ ^^        ^^                          ^^^   ^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^   ^^^
 >arguments : IArguments
 >          : ^^^^^^^^^^
 }
 
 f(1, 2, 3);  // no error
->f(1, 2, 3) : any
->           : ^^^
->f : (x: number, y: number, z: number) => any
->  : ^ ^^      ^^ ^^      ^^ ^^      ^^^^^^^^
+>f(1, 2, 3) : any[]
+>           : ^^^^^
+>f : (x: number, y: number, z: number) => any[]
+>  : ^ ^^      ^^ ^^      ^^ ^^      ^^^^^^^^^^
 >1 : 1
 >  : ^
 >2 : 2
@@ -40,33 +40,33 @@ f(1, 2, 3);  // no error
 
 // Using ES6 collection
 var m = new Map<string, number>();
->m : any
->  : ^^^
->new Map<string, number>() : any
->                          : ^^^
->Map : any
->    : ^^^
+>m : Map<string, number>
+>  : ^^^^^^^^^^^^^^^^^^^
+>new Map<string, number>() : Map<string, number>
+>                          : ^^^^^^^^^^^^^^^^^^^
+>Map : MapConstructor
+>    : ^^^^^^^^^^^^^^
 
 m.clear();
->m.clear() : any
->          : ^^^
->m.clear : any
->        : ^^^
->m : any
->  : ^^^
->clear : any
->      : ^^^
+>m.clear() : void
+>          : ^^^^
+>m.clear : () => void
+>        : ^^^^^^    
+>m : Map<string, number>
+>  : ^^^^^^^^^^^^^^^^^^^
+>clear : () => void
+>      : ^^^^^^    
 
 // Using ES6 iterable
 m.keys();
->m.keys() : any
->         : ^^^
->m.keys : any
->       : ^^^
->m : any
->  : ^^^
->keys : any
->     : ^^^
+>m.keys() : MapIterator<string>
+>         : ^^^^^^^^^^^^^^^^^^^
+>m.keys : () => MapIterator<string>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>m : Map<string, number>
+>  : ^^^^^^^^^^^^^^^^^^^
+>keys : () => MapIterator<string>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // Using ES6 function
 function Baz() { }
@@ -74,32 +74,32 @@ function Baz() { }
 >    : ^^^^^^^^^^
 
 Baz.name;
->Baz.name : any
->         : ^^^
+>Baz.name : string
+>         : ^^^^^^
 >Baz : () => void
 >    : ^^^^^^^^^^
->name : any
->     : ^^^
+>name : string
+>     : ^^^^^^
 
 // Using ES6 math
 Math.sign(1);
->Math.sign(1) : any
->             : ^^^
->Math.sign : any
->          : ^^^
+>Math.sign(1) : number
+>             : ^^^^^^
+>Math.sign : (x: number) => number
+>          : ^ ^^      ^^^^^      
 >Math : Math
 >     : ^^^^
->sign : any
->     : ^^^
+>sign : (x: number) => number
+>     : ^ ^^      ^^^^^      
 >1 : 1
 >  : ^
 
 // Using ES6 object
 var o = {
->o : { [x: number]: (value: any) => boolean; a: number; }
->  : ^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
->{    a: 2,    [Symbol.hasInstance](value: any) {        return false;    }} : { [x: number]: (value: any) => boolean; a: number; }
->                                                                            : ^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>o : { a: number; [Symbol.hasInstance](value: any): boolean; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^
+>{    a: 2,    [Symbol.hasInstance](value: any) {        return false;    }} : { a: number; [Symbol.hasInstance](value: any): boolean; }
+>                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^
 
     a: 2,
 >a : number
@@ -110,14 +110,13 @@ var o = {
     [Symbol.hasInstance](value: any) {
 >[Symbol.hasInstance] : (value: any) => boolean
 >                     : ^     ^^   ^^^^^^^^^^^^
->Symbol.hasInstance : any
->                   : ^^^
->Symbol : any
->       : ^^^
->hasInstance : any
->            : ^^^
+>Symbol.hasInstance : unique symbol
+>                   : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>hasInstance : unique symbol
+>            : ^^^^^^^^^^^^^
 >value : any
->      : ^^^
 
         return false;
 >false : false
@@ -129,16 +128,16 @@ o.hasOwnProperty(Symbol.hasInstance);
 >                                     : ^^^^^^^
 >o.hasOwnProperty : (v: PropertyKey) => boolean
 >                 : ^ ^^           ^^^^^       
->o : { [x: number]: (value: any) => boolean; a: number; }
->  : ^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>o : { a: number; [Symbol.hasInstance](value: any): boolean; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^
 >hasOwnProperty : (v: PropertyKey) => boolean
 >               : ^ ^^           ^^^^^       
->Symbol.hasInstance : any
->                   : ^^^
->Symbol : any
->       : ^^^
->hasInstance : any
->            : ^^^
+>Symbol.hasInstance : unique symbol
+>                   : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>hasInstance : unique symbol
+>            : ^^^^^^^^^^^^^
 
 // Using Es6 proxy
 var t = {}
@@ -148,12 +147,12 @@ var t = {}
 >   : ^^
 
 var p = new Proxy(t, {});
->p : any
->  : ^^^
->new Proxy(t, {}) : any
->                 : ^^^
->Proxy : any
->      : ^^^
+>p : {}
+>  : ^^
+>new Proxy(t, {}) : {}
+>                 : ^^
+>Proxy : ProxyConstructor
+>      : ^^^^^^^^^^^^^^^^
 >t : {}
 >  : ^^
 >{} : {}
@@ -161,14 +160,14 @@ var p = new Proxy(t, {});
 
 // Using ES6 reflect
 Reflect.isExtensible({});
->Reflect.isExtensible({}) : any
->                         : ^^^
->Reflect.isExtensible : any
->                     : ^^^
->Reflect : any
->        : ^^^
->isExtensible : any
->             : ^^^
+>Reflect.isExtensible({}) : boolean
+>                         : ^^^^^^^
+>Reflect.isExtensible : (target: object) => boolean
+>                     : ^      ^^      ^^^^^       
+>Reflect : typeof Reflect
+>        : ^^^^^^^^^^^^^^
+>isExtensible : (target: object) => boolean
+>             : ^      ^^      ^^^^^       
 >{} : {}
 >   : ^^
 
@@ -184,12 +183,12 @@ var reg = new RegExp("/s");
 >     : ^^^^
 
 reg.flags;
->reg.flags : any
->          : ^^^
+>reg.flags : string
+>          : ^^^^^^
 >reg : RegExp
 >    : ^^^^^^
->flags : any
->      : ^^^
+>flags : string
+>      : ^^^^^^
 
 // Using ES6 string
 var str = "Hello world";
@@ -199,14 +198,14 @@ var str = "Hello world";
 >              : ^^^^^^^^^^^^^
 
 str.includes("hello", 0);
->str.includes("hello", 0) : any
->                         : ^^^
->str.includes : any
->             : ^^^
+>str.includes("hello", 0) : boolean
+>                         : ^^^^^^^
+>str.includes : (searchString: string, position?: number) => boolean
+>             : ^            ^^      ^^        ^^^      ^^^^^       
 >str : string
 >    : ^^^^^^
->includes : any
->         : ^^^
+>includes : (searchString: string, position?: number) => boolean
+>         : ^            ^^      ^^        ^^^      ^^^^^       
 >"hello" : "hello"
 >        : ^^^^^^^
 >0 : 0
@@ -214,31 +213,30 @@ str.includes("hello", 0);
 
 // Using ES6 symbol
 var s = Symbol();
->s : any
->  : ^^^
->Symbol() : any
->         : ^^^
->Symbol : any
->       : ^^^
+>s : symbol
+>  : ^^^^^^
+>Symbol() : symbol
+>         : ^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 // Using ES6 wellknown-symbol
 const o1 = {
->o1 : { [x: number]: (value: any) => boolean; }
->   : ^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^^^
->{    [Symbol.hasInstance](value: any) {        return false;    }} : { [x: number]: (value: any) => boolean; }
->                                                                   : ^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^^^
+>o1 : { [Symbol.hasInstance](value: any): boolean; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^
+>{    [Symbol.hasInstance](value: any) {        return false;    }} : { [Symbol.hasInstance](value: any): boolean; }
+>                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^
 
     [Symbol.hasInstance](value: any) {
 >[Symbol.hasInstance] : (value: any) => boolean
 >                     : ^     ^^   ^^^^^^^^^^^^
->Symbol.hasInstance : any
->                   : ^^^
->Symbol : any
->       : ^^^
->hasInstance : any
->            : ^^^
+>Symbol.hasInstance : unique symbol
+>                   : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>hasInstance : unique symbol
+>            : ^^^^^^^^^^^^^
 >value : any
->      : ^^^
 
         return false;
 >false : false
