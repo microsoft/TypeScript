@@ -22,8 +22,12 @@ type A1<K extends /*2*/, L> = K`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"Second"},
-			Excludes: []string{"First"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"Second",
+			},
+			Excludes: []string{
+				"First",
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"2"}, &fourslash.CompletionsExpectedList{
@@ -33,8 +37,12 @@ type A1<K extends /*2*/, L> = K`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"L"},
-			Excludes: []string{"K"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"L",
+			},
+			Excludes: []string{
+				"K",
+			},
 		},
 	})
 }

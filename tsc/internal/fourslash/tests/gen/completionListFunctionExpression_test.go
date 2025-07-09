@@ -33,7 +33,9 @@ func TestCompletionListFunctionExpression(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"xmlEvent"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"xmlEvent",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "this", nil)

@@ -30,7 +30,9 @@ var { property1: { propertyOfI_1, /**/ } } = foo;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"propertyOfI_2"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"propertyOfI_2",
+			},
 		},
 	})
 }

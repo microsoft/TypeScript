@@ -32,7 +32,14 @@ export class Class implements Interface {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextLocationPriority)), Label: "method", InsertText: ptrTo("method(): void {\n}"), FilterText: ptrTo("method")}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:      "method",
+					InsertText: ptrTo("method(): void {\n}"),
+					FilterText: ptrTo("method"),
+					SortText:   ptrTo(string(ls.SortTextLocationPriority)),
+				},
+			},
 		},
 	})
 }

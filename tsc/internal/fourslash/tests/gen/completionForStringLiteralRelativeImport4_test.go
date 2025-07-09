@@ -50,7 +50,13 @@ export const x = 0;
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"module1", "module2", "more", "module0", "inner"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"module1",
+				"module2",
+				"more",
+				"module0",
+				"inner",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "inner", &fourslash.CompletionsExpectedList{
@@ -60,7 +66,9 @@ export const x = 0;
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"inner1"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"inner1",
+			},
 		},
 	})
 }

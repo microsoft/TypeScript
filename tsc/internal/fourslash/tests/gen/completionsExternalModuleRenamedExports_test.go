@@ -27,8 +27,13 @@ export * as alsoNotInScope from "./other";
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"c"},
-			Excludes: []string{"yeahThisIsTotallyInScopeHuh", "alsoNotInScope"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"c",
+			},
+			Excludes: []string{
+				"yeahThisIsTotallyInScopeHuh",
+				"alsoNotInScope",
+			},
 		},
 	})
 }

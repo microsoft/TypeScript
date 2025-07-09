@@ -21,7 +21,9 @@ function func () {}`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"func"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"func",
+			},
 		},
 	})
 }

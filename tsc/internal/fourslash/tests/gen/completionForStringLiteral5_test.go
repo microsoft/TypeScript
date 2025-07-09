@@ -26,7 +26,10 @@ f("/*1*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"bar", "foo"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"bar",
+				"foo",
+			},
 		},
 	})
 }

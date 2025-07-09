@@ -26,7 +26,9 @@ import * as ns from () with { type: "/**/" };`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"json"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"json",
+			},
 		},
 	})
 }

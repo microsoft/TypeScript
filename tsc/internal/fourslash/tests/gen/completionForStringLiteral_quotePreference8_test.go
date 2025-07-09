@@ -28,7 +28,12 @@ foo[|./**/|]`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "\"a name's all good but it's better with more\"", InsertText: ptrTo("['\"a name\\'s all good but it\\'s better with more\"']")}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:      "\"a name's all good but it's better with more\"",
+					InsertText: ptrTo("['\"a name\\'s all good but it\\'s better with more\"']"),
+				},
+			},
 		},
 	})
 }

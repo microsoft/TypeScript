@@ -28,7 +28,9 @@ interface ImportAttributes {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"json"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"json",
+			},
 		},
 	})
 }

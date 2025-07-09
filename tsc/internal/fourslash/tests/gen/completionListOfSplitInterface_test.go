@@ -50,7 +50,14 @@ ci1./*2*/b;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Unsorted: []fourslash.CompletionsExpectedItem{"i1", "i2", "i3", "a", "b", "c"},
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"i1",
+				"i2",
+				"i3",
+				"a",
+				"b",
+				"c",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -60,7 +67,13 @@ ci1./*2*/b;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Unsorted: []fourslash.CompletionsExpectedItem{"i11", "i12", "a", "b", "b1"},
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"i11",
+				"i12",
+				"a",
+				"b",
+				"b1",
+			},
 		},
 	})
 }

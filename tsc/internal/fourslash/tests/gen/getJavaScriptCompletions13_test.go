@@ -30,8 +30,17 @@ file2Identifier2./*2*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"file2Identifier1", "file2Identifier2", &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)), Label: "file1Identifier"}},
-			Excludes: []string{"FooProp"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"file2Identifier1",
+				"file2Identifier2",
+				&lsproto.CompletionItem{
+					Label:    "file1Identifier",
+					SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)),
+				},
+			},
+			Excludes: []string{
+				"FooProp",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -41,8 +50,20 @@ file2Identifier2./*2*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)), Label: "file2Identifier1"}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)), Label: "file2Identifier2"}},
-			Excludes: []string{"file1Identifier", "FooProp"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:    "file2Identifier1",
+					SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)),
+				},
+				&lsproto.CompletionItem{
+					Label:    "file2Identifier2",
+					SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)),
+				},
+			},
+			Excludes: []string{
+				"file1Identifier",
+				"FooProp",
+			},
 		},
 	})
 }

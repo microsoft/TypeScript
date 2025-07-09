@@ -29,7 +29,17 @@ mod./**/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindField), Label: "a"}, &lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindText), SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)), Label: "mod"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "a",
+					Kind:  ptrTo(lsproto.CompletionItemKindField),
+				},
+				&lsproto.CompletionItem{
+					Label:    "mod",
+					Kind:     ptrTo(lsproto.CompletionItemKindText),
+					SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)),
+				},
+			},
 		},
 	})
 }

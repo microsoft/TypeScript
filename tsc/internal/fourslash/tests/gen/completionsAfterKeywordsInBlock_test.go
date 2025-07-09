@@ -61,7 +61,12 @@ class C4 {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextLocationPriority)), Label: "defaultValue"}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:    "defaultValue",
+					SortText: ptrTo(string(ls.SortTextLocationPriority)),
+				},
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"3", "4"}, &fourslash.CompletionsExpectedList{
@@ -71,7 +76,12 @@ class C4 {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextLocationPriority)), Label: "returnValue"}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:    "returnValue",
+					SortText: ptrTo(string(ls.SortTextLocationPriority)),
+				},
+			},
 		},
 	})
 }

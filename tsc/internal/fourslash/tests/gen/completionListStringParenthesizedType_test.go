@@ -38,7 +38,17 @@ const b: Foo[(("[|/*8*/|]"))];`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "a"}, &lsproto.CompletionItem{Label: "b"}, &lsproto.CompletionItem{Label: "c"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "a",
+				},
+				&lsproto.CompletionItem{
+					Label: "b",
+				},
+				&lsproto.CompletionItem{
+					Label: "c",
+				},
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -48,7 +58,17 @@ const b: Foo[(("[|/*8*/|]"))];`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "a"}, &lsproto.CompletionItem{Label: "b"}, &lsproto.CompletionItem{Label: "c"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "a",
+				},
+				&lsproto.CompletionItem{
+					Label: "b",
+				},
+				&lsproto.CompletionItem{
+					Label: "c",
+				},
+			},
 		},
 	})
 	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{
@@ -58,7 +78,17 @@ const b: Foo[(("[|/*8*/|]"))];`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "a"}, &lsproto.CompletionItem{Label: "b"}, &lsproto.CompletionItem{Label: "c"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "a",
+				},
+				&lsproto.CompletionItem{
+					Label: "b",
+				},
+				&lsproto.CompletionItem{
+					Label: "c",
+				},
+			},
 		},
 	})
 	f.VerifyCompletions(t, "4", &fourslash.CompletionsExpectedList{
@@ -68,7 +98,17 @@ const b: Foo[(("[|/*8*/|]"))];`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "a"}, &lsproto.CompletionItem{Label: "b"}, &lsproto.CompletionItem{Label: "c"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "a",
+				},
+				&lsproto.CompletionItem{
+					Label: "b",
+				},
+				&lsproto.CompletionItem{
+					Label: "c",
+				},
+			},
 		},
 	})
 	f.VerifyCompletions(t, "5", &fourslash.CompletionsExpectedList{
@@ -78,7 +118,17 @@ const b: Foo[(("[|/*8*/|]"))];`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "a"}, &lsproto.CompletionItem{Label: "b"}, &lsproto.CompletionItem{Label: "c"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "a",
+				},
+				&lsproto.CompletionItem{
+					Label: "b",
+				},
+				&lsproto.CompletionItem{
+					Label: "c",
+				},
+			},
 		},
 	})
 	f.VerifyCompletions(t, "6", &fourslash.CompletionsExpectedList{
@@ -88,7 +138,14 @@ const b: Foo[(("[|/*8*/|]"))];`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "a"}, &lsproto.CompletionItem{Label: "b"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "a",
+				},
+				&lsproto.CompletionItem{
+					Label: "b",
+				},
+			},
 		},
 	})
 	f.VerifyCompletions(t, "7", &fourslash.CompletionsExpectedList{
@@ -98,7 +155,14 @@ const b: Foo[(("[|/*8*/|]"))];`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "a"}, &lsproto.CompletionItem{Label: "b"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "a",
+				},
+				&lsproto.CompletionItem{
+					Label: "b",
+				},
+			},
 		},
 	})
 	f.VerifyCompletions(t, "8", &fourslash.CompletionsExpectedList{
@@ -108,7 +172,14 @@ const b: Foo[(("[|/*8*/|]"))];`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "a"}, &lsproto.CompletionItem{Label: "b"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "a",
+				},
+				&lsproto.CompletionItem{
+					Label: "b",
+				},
+			},
 		},
 	})
 }

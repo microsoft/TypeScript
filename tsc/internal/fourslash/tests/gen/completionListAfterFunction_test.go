@@ -30,7 +30,9 @@ function f4(d: number) { /*4*/}`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Excludes: []string{"a"},
+			Excludes: []string{
+				"a",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -40,7 +42,9 @@ function f4(d: number) { /*4*/}`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"b"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"b",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{
@@ -50,7 +54,9 @@ function f4(d: number) { /*4*/}`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Excludes: []string{"c"},
+			Excludes: []string{
+				"c",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "4", &fourslash.CompletionsExpectedList{
@@ -60,7 +66,9 @@ function f4(d: number) { /*4*/}`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"d"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"d",
+			},
 		},
 	})
 }

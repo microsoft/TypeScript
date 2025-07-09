@@ -21,7 +21,11 @@ func TestCompletionsAsserts(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "argument1"}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "argument1",
+				},
+			},
 		},
 	})
 }

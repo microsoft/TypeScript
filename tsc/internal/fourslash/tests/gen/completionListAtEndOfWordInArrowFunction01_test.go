@@ -20,7 +20,9 @@ func TestCompletionListAtEndOfWordInArrowFunction01(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"xyz"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"xyz",
+			},
 		},
 	})
 }

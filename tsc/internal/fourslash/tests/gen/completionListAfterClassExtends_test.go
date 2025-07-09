@@ -28,7 +28,11 @@ function Blah(x: Bar.Bleah) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"Bar", "Bleah", "Foo"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"Bar",
+				"Bleah",
+				"Foo",
+			},
 		},
 	})
 }

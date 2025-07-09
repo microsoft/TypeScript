@@ -31,7 +31,9 @@ var x: Foo./**/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"Bar"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"Bar",
+			},
 		},
 	})
 }

@@ -24,7 +24,12 @@ enum E {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"x", "y", "z", "E"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"x",
+				"y",
+				"z",
+				"E",
+			},
 		},
 	})
 }

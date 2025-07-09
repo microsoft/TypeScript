@@ -30,7 +30,10 @@ t2./**/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: completionFunctionMembersWithPrototypePlus([]fourslash.CompletionsExpectedItem{"foo"}),
+			Exact: completionFunctionMembersWithPrototypePlus(
+				[]fourslash.CompletionsExpectedItem{
+					"foo",
+				}),
 		},
 	})
 }

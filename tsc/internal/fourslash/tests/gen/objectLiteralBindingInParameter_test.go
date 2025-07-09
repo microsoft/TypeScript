@@ -34,7 +34,10 @@ let x: Foo = {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"x1", "x2"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"x1",
+				"x2",
+			},
 		},
 	})
 }

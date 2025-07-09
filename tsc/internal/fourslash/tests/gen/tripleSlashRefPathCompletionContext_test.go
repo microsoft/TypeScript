@@ -25,7 +25,9 @@ func TestTripleSlashRefPathCompletionContext(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"f.ts"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"f.ts",
+			},
 		},
 	})
 }

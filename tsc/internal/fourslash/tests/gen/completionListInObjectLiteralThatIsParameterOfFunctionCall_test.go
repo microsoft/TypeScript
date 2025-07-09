@@ -23,7 +23,10 @@ f({
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"xa", "xb"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"xa",
+				"xb",
+			},
 		},
 	})
 }

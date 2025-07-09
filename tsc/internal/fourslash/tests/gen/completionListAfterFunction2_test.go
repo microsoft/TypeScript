@@ -23,7 +23,9 @@ declare var f1: (b: number, b2: /*2*/) => void;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Excludes: []string{"a"},
+			Excludes: []string{
+				"a",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -33,7 +35,9 @@ declare var f1: (b: number, b2: /*2*/) => void;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Excludes: []string{"b"},
+			Excludes: []string{
+				"b",
+			},
 		},
 	})
 	f.Insert(t, "typeof ")
@@ -44,7 +48,9 @@ declare var f1: (b: number, b2: /*2*/) => void;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"b"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"b",
+			},
 		},
 	})
 }

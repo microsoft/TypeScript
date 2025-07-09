@@ -26,7 +26,11 @@ g("[|/*g*/|]");`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "a"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "a",
+				},
+			},
 		},
 	})
 	f.VerifyCompletions(t, "g", &fourslash.CompletionsExpectedList{
@@ -36,7 +40,14 @@ g("[|/*g*/|]");`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "a"}, &lsproto.CompletionItem{Label: "b"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "a",
+				},
+				&lsproto.CompletionItem{
+					Label: "b",
+				},
+			},
 		},
 	})
 }

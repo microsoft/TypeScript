@@ -21,7 +21,9 @@ Foo(function () { } )./**/;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"q"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"q",
+			},
 		},
 	})
 }

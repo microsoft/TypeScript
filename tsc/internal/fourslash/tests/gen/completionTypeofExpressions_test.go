@@ -22,7 +22,9 @@ function test1(arg: typeof (x./*2*/)) {}`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"length"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"length",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -32,7 +34,9 @@ function test1(arg: typeof (x./*2*/)) {}`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"length"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"length",
+			},
 		},
 	})
 }

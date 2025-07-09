@@ -36,7 +36,11 @@ f./*5*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Unsorted: []fourslash.CompletionsExpectedItem{"y", "x", "method"},
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"y",
+				"x",
+				"method",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -46,7 +50,13 @@ f./*5*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Unsorted: []fourslash.CompletionsExpectedItem{"z", "method1", "y", "x", "method"},
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"z",
+				"method1",
+				"y",
+				"x",
+				"method",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{
@@ -56,7 +66,12 @@ f./*5*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Unsorted: []fourslash.CompletionsExpectedItem{"method2", "y", "x", "method"},
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"method2",
+				"y",
+				"x",
+				"method",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "4", &fourslash.CompletionsExpectedList{
@@ -66,7 +81,14 @@ f./*5*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Unsorted: []fourslash.CompletionsExpectedItem{"method2", "z", "method1", "y", "x", "method"},
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"method2",
+				"z",
+				"method1",
+				"y",
+				"x",
+				"method",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "5", nil)

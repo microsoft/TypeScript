@@ -24,7 +24,9 @@ type List3<T1> = /*3*/;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"T"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"T",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{
@@ -34,8 +36,12 @@ type List3<T1> = /*3*/;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"T1"},
-			Excludes: []string{"T"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"T1",
+			},
+			Excludes: []string{
+				"T",
+			},
 		},
 	})
 }

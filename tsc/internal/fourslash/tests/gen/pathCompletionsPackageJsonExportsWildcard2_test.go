@@ -37,7 +37,12 @@ import { } from "salesforce-pageobjects//**/";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindFolder), Label: "action"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "action",
+					Kind:  ptrTo(lsproto.CompletionItemKindFolder),
+				},
+			},
 		},
 	})
 	f.Insert(t, "action/")
@@ -48,7 +53,12 @@ import { } from "salesforce-pageobjects//**/";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindFolder), Label: "pageObjects"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "pageObjects",
+					Kind:  ptrTo(lsproto.CompletionItemKindFolder),
+				},
+			},
 		},
 	})
 	f.Insert(t, "pageObjects/")
@@ -59,7 +69,12 @@ import { } from "salesforce-pageobjects//**/";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindFile), Label: "actionRenderer"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "actionRenderer",
+					Kind:  ptrTo(lsproto.CompletionItemKindFile),
+				},
+			},
 		},
 	})
 }

@@ -25,7 +25,9 @@ func TestJsdocImportTagCompletion1(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"import"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"import",
+			},
 		},
 	})
 }

@@ -21,7 +21,9 @@ let y = ({ a, /**/ } = x, 1);`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"b"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"b",
+			},
 		},
 	})
 }

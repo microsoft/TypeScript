@@ -34,7 +34,20 @@ f/*c3*/;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextLocationPriority)), Label: "x"}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextLocationPriority)), Label: "prototype"}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextLocalDeclarationPriority)), Label: "staticMethod"}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:    "x",
+					SortText: ptrTo(string(ls.SortTextLocationPriority)),
+				},
+				&lsproto.CompletionItem{
+					Label:    "prototype",
+					SortText: ptrTo(string(ls.SortTextLocationPriority)),
+				},
+				&lsproto.CompletionItem{
+					Label:    "staticMethod",
+					SortText: ptrTo(string(ls.SortTextLocalDeclarationPriority)),
+				},
+			},
 		},
 	})
 	f.GoToMarker(t, "c2")
@@ -49,7 +62,9 @@ f/*c3*/;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"doStuff"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"doStuff",
+			},
 		},
 	})
 }

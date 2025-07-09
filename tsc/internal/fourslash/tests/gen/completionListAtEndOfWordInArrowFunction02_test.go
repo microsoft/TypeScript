@@ -22,7 +22,14 @@ func TestCompletionListAtEndOfWordInArrowFunction02(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"d", "defaultIsAnInvalidParameterName", &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)), Label: "default"}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"d",
+				"defaultIsAnInvalidParameterName",
+				&lsproto.CompletionItem{
+					Label:    "default",
+					SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)),
+				},
+			},
 		},
 	})
 }

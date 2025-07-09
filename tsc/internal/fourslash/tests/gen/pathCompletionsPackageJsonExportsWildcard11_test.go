@@ -34,7 +34,12 @@ import { } from "repo//**/";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindFile), Label: "card.js"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "card.js",
+					Kind:  ptrTo(lsproto.CompletionItemKindFile),
+				},
+			},
 		},
 	})
 }

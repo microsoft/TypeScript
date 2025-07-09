@@ -37,7 +37,24 @@ class Foo {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: completionFunctionMembersPlus([]fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextLocalDeclarationPriority)), Label: "#a"}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextLocalDeclarationPriority)), Label: "a"}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextLocalDeclarationPriority)), Label: "b"}, &lsproto.CompletionItem{Label: "prototype"}}),
+			Exact: completionFunctionMembersPlus(
+				[]fourslash.CompletionsExpectedItem{
+					&lsproto.CompletionItem{
+						Label:    "#a",
+						SortText: ptrTo(string(ls.SortTextLocalDeclarationPriority)),
+					},
+					&lsproto.CompletionItem{
+						Label:    "a",
+						SortText: ptrTo(string(ls.SortTextLocalDeclarationPriority)),
+					},
+					&lsproto.CompletionItem{
+						Label:    "b",
+						SortText: ptrTo(string(ls.SortTextLocalDeclarationPriority)),
+					},
+					&lsproto.CompletionItem{
+						Label: "prototype",
+					},
+				}),
 		},
 	})
 }

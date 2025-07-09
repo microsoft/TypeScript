@@ -46,7 +46,10 @@ myFunction2("valA", { b: ` + "`" + `/*ts4*/` + "`" + ` });`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"1", "2"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"1",
+				"2",
+			},
 		},
 	})
 }

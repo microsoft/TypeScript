@@ -34,7 +34,9 @@ import {} from "#a/b/c/something//*5*/";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"#a"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"#a",
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"2"}, &fourslash.CompletionsExpectedList{
@@ -44,7 +46,9 @@ import {} from "#a/b/c/something//*5*/";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"b"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"b",
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"3"}, &fourslash.CompletionsExpectedList{
@@ -54,7 +58,9 @@ import {} from "#a/b/c/something//*5*/";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"c"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"c",
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"4"}, &fourslash.CompletionsExpectedList{
@@ -64,7 +70,10 @@ import {} from "#a/b/c/something//*5*/";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"d", "something"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"d",
+				"something",
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"5"}, &fourslash.CompletionsExpectedList{

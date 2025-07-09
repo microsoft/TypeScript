@@ -45,7 +45,9 @@ func TestTsxCompletionInFunctionExpressionOfChildrenCallback1(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"Name"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"Name",
+			},
 		},
 	})
 }

@@ -20,7 +20,10 @@ func TestCompletionListForShorthandPropertyAssignment2(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"id", "name"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"id",
+				"name",
+			},
 		},
 	})
 }

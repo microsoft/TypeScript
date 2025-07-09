@@ -26,7 +26,9 @@ items.forEach((n) => {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"items"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"items",
+			},
 		},
 	})
 }

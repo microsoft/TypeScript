@@ -27,7 +27,20 @@ partialFoo({ a: true, b: true }, { /*1*/ });`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "a?", InsertText: ptrTo("a"), FilterText: ptrTo("a")}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "b?", InsertText: ptrTo("b"), FilterText: ptrTo("b")}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:      "a?",
+					InsertText: ptrTo("a"),
+					FilterText: ptrTo("a"),
+					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+				},
+				&lsproto.CompletionItem{
+					Label:      "b?",
+					InsertText: ptrTo("b"),
+					FilterText: ptrTo("b"),
+					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+				},
+			},
 		},
 	})
 }

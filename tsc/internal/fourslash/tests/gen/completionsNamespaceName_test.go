@@ -28,7 +28,9 @@ namespace N2.M/*4*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"M"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"M",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "3", nil)
@@ -39,7 +41,9 @@ namespace N2.M/*4*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"M"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"M",
+			},
 		},
 	})
 }

@@ -30,7 +30,17 @@ p["[|/*3*/|]"];`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "bar"}, &lsproto.CompletionItem{Label: "foo"}, &lsproto.CompletionItem{Label: "some other name"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "bar",
+				},
+				&lsproto.CompletionItem{
+					Label: "foo",
+				},
+				&lsproto.CompletionItem{
+					Label: "some other name",
+				},
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -40,7 +50,11 @@ p["[|/*3*/|]"];`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"bar", "foo", "some other name"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"bar",
+				"foo",
+				"some other name",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{
@@ -50,7 +64,11 @@ p["[|/*3*/|]"];`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "a"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "a",
+				},
+			},
 		},
 	})
 }

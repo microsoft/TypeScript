@@ -25,7 +25,10 @@ function f(Abc: Ab/**/) {}`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: completionTypeKeywordsPlus([]fourslash.CompletionsExpectedItem{"Abc"}),
+			Exact: completionTypeKeywordsPlus(
+				[]fourslash.CompletionsExpectedItem{
+					"Abc",
+				}),
 		},
 	})
 }

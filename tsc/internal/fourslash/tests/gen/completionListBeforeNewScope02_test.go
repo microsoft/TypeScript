@@ -24,7 +24,9 @@ func TestCompletionListBeforeNewScope02(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Excludes: []string{"aaaaaa"},
+			Excludes: []string{
+				"aaaaaa",
+			},
 		},
 	})
 }

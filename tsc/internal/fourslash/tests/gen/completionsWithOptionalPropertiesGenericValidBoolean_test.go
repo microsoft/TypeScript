@@ -28,7 +28,14 @@ bar({ hello: true, /*1*/ });`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "world?", InsertText: ptrTo("world"), FilterText: ptrTo("world")}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:      "world?",
+					InsertText: ptrTo("world"),
+					FilterText: ptrTo("world"),
+					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+				},
+			},
 		},
 	})
 }

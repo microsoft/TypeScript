@@ -47,7 +47,17 @@ class C1 extends Base {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Unsorted: []fourslash.CompletionsExpectedItem{"privateMethod", "privateProperty", "protectedMethod", "protectedProperty", "publicMethod", "publicProperty", "protectedOverriddenMethod", "protectedOverriddenProperty", "test"},
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"privateMethod",
+				"privateProperty",
+				"protectedMethod",
+				"protectedProperty",
+				"publicMethod",
+				"publicProperty",
+				"protectedOverriddenMethod",
+				"protectedOverriddenProperty",
+				"test",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{
@@ -57,7 +67,15 @@ class C1 extends Base {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Unsorted: []fourslash.CompletionsExpectedItem{"privateMethod", "privateProperty", "protectedMethod", "protectedProperty", "publicMethod", "publicProperty", "test"},
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"privateMethod",
+				"privateProperty",
+				"protectedMethod",
+				"protectedProperty",
+				"publicMethod",
+				"publicProperty",
+				"test",
+			},
 		},
 	})
 }

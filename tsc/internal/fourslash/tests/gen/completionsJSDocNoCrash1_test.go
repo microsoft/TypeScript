@@ -38,7 +38,9 @@ var ngShowDirective = ['$animate', function($animate) {}];`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"url"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"url",
+			},
 		},
 	})
 }

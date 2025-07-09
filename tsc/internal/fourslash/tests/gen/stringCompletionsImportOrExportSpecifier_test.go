@@ -47,7 +47,11 @@ export { type foo, type "/*typeExport3*/" } from "./exports";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"__some type", "__some value", "foo"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"__some type",
+				"__some value",
+				"foo",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "valueImport1", &fourslash.CompletionsExpectedList{
@@ -57,7 +61,11 @@ export { type foo, type "/*typeExport3*/" } from "./exports";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"__some type", "__some value", "foo"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"__some type",
+				"__some value",
+				"foo",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "valueImport2", &fourslash.CompletionsExpectedList{
@@ -77,7 +85,10 @@ export { type foo, type "/*typeExport3*/" } from "./exports";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"__some type", "__some value"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"__some type",
+				"__some value",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "valueExport0", &fourslash.CompletionsExpectedList{
@@ -87,7 +98,11 @@ export { type foo, type "/*typeExport3*/" } from "./exports";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"__some type", "__some value", "foo"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"__some type",
+				"__some value",
+				"foo",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "valueExport1", &fourslash.CompletionsExpectedList{
@@ -97,7 +112,11 @@ export { type foo, type "/*typeExport3*/" } from "./exports";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"__some type", "__some value", "foo"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"__some type",
+				"__some value",
+				"foo",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "valueExport2", &fourslash.CompletionsExpectedList{
@@ -117,7 +136,10 @@ export { type foo, type "/*typeExport3*/" } from "./exports";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"__some type", "__some value"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"__some type",
+				"__some value",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "typeImport0", &fourslash.CompletionsExpectedList{
@@ -127,7 +149,11 @@ export { type foo, type "/*typeExport3*/" } from "./exports";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"__some type", "__some value", "foo"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"__some type",
+				"__some value",
+				"foo",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "typeImport1", &fourslash.CompletionsExpectedList{
@@ -137,7 +163,11 @@ export { type foo, type "/*typeExport3*/" } from "./exports";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"__some type", "__some value", "foo"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"__some type",
+				"__some value",
+				"foo",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "typeImport2", &fourslash.CompletionsExpectedList{
@@ -157,7 +187,10 @@ export { type foo, type "/*typeExport3*/" } from "./exports";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"__some type", "__some value"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"__some type",
+				"__some value",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "typeExport0", &fourslash.CompletionsExpectedList{
@@ -167,7 +200,11 @@ export { type foo, type "/*typeExport3*/" } from "./exports";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"__some type", "__some value", "foo"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"__some type",
+				"__some value",
+				"foo",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "typeExport1", &fourslash.CompletionsExpectedList{
@@ -177,7 +214,11 @@ export { type foo, type "/*typeExport3*/" } from "./exports";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"__some type", "__some value", "foo"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"__some type",
+				"__some value",
+				"foo",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "typeExport2", &fourslash.CompletionsExpectedList{
@@ -197,7 +238,10 @@ export { type foo, type "/*typeExport3*/" } from "./exports";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"__some type", "__some value"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"__some type",
+				"__some value",
+			},
 		},
 	})
 }

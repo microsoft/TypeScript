@@ -31,7 +31,9 @@ func TestCompletionListWithLabel(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"label"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"label",
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"3", "4", "5", "6"}, &fourslash.CompletionsExpectedList{
@@ -41,7 +43,10 @@ func TestCompletionListWithLabel(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"testlabel", "label"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"testlabel",
+				"label",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "8", &fourslash.CompletionsExpectedList{
@@ -51,7 +56,9 @@ func TestCompletionListWithLabel(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Excludes: []string{"label"},
+			Excludes: []string{
+				"label",
+			},
 		},
 	})
 }

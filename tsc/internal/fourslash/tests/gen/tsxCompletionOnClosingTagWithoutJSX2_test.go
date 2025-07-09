@@ -23,7 +23,9 @@ func TestTsxCompletionOnClosingTagWithoutJSX2(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"div"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"div",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -33,7 +35,9 @@ func TestTsxCompletionOnClosingTagWithoutJSX2(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"h1"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"h1",
+			},
 		},
 	})
 }

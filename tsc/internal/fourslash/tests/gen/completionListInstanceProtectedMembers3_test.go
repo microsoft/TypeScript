@@ -42,7 +42,10 @@ class C1 extends Base {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"publicMethod", "publicProperty"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"publicMethod",
+				"publicProperty",
+			},
 		},
 	})
 }

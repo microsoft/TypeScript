@@ -25,7 +25,9 @@ import {} from ".//**/"`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"foo.css"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"foo.css",
+			},
 		},
 	})
 }

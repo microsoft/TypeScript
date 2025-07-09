@@ -32,7 +32,9 @@ D./*value*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"T"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"T",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "value", &fourslash.CompletionsExpectedList{
@@ -42,7 +44,17 @@ D./*value*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: completionFunctionMembersPlus([]fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextLocalDeclarationPriority)), Label: "m"}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextLocationPriority)), Label: "prototype"}}),
+			Exact: completionFunctionMembersPlus(
+				[]fourslash.CompletionsExpectedItem{
+					&lsproto.CompletionItem{
+						Label:    "m",
+						SortText: ptrTo(string(ls.SortTextLocalDeclarationPriority)),
+					},
+					&lsproto.CompletionItem{
+						Label:    "prototype",
+						SortText: ptrTo(string(ls.SortTextLocationPriority)),
+					},
+				}),
 		},
 	})
 }

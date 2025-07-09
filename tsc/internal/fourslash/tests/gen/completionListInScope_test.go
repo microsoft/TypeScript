@@ -77,7 +77,20 @@ class TestClass {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"localVariable", "exportedVariable", "localFunction", "exportedFunction", "localClass", "exportedClass", "localModule", "exportedModule", "exportedVariable2", "exportedFunction2", "exportedClass2", "exportedModule2"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"localVariable",
+				"exportedVariable",
+				"localFunction",
+				"exportedFunction",
+				"localClass",
+				"exportedClass",
+				"localModule",
+				"exportedModule",
+				"exportedVariable2",
+				"exportedFunction2",
+				"exportedClass2",
+				"exportedModule2",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "typeReference", &fourslash.CompletionsExpectedList{
@@ -87,8 +100,18 @@ class TestClass {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"localInterface", "exportedInterface", "localClass", "exportedClass", "exportedClass2"},
-			Excludes: []string{"localModule", "exportedModule", "exportedModule2"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"localInterface",
+				"exportedInterface",
+				"localClass",
+				"exportedClass",
+				"exportedClass2",
+			},
+			Excludes: []string{
+				"localModule",
+				"exportedModule",
+				"exportedModule2",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "insideMethod", &fourslash.CompletionsExpectedList{
@@ -98,8 +121,18 @@ class TestClass {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"globalVar", "globalFunction", "param", "localVar", "localFunction"},
-			Excludes: []string{"property", "testMethod", "staticMethod"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"globalVar",
+				"globalFunction",
+				"param",
+				"localVar",
+				"localFunction",
+			},
+			Excludes: []string{
+				"property",
+				"testMethod",
+				"staticMethod",
+			},
 		},
 	})
 }

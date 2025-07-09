@@ -27,7 +27,9 @@ export type MyUnion = string | number;
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"pkg"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"pkg",
+			},
 		},
 	})
 }

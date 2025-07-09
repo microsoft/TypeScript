@@ -26,7 +26,9 @@ class Y implements X {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"bla"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"bla",
+			},
 		},
 	})
 }

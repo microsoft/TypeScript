@@ -28,7 +28,13 @@ declare module "M2" {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"V", &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)), Label: "type"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"V",
+				&lsproto.CompletionItem{
+					Label:    "type",
+					SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)),
+				},
+			},
 		},
 	})
 }

@@ -29,7 +29,9 @@ func TestTripleSlashRefPathCompletionHiddenFile(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"f.ts"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"f.ts",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
@@ -39,7 +41,11 @@ func TestTripleSlashRefPathCompletionHiddenFile(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "f.ts"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "f.ts",
+				},
+			},
 		},
 	})
 }

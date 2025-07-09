@@ -23,7 +23,11 @@ f2({ x/*2*/ });`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: completionGlobalsPlus([]fourslash.CompletionsExpectedItem{"f1", "f2"}, false),
+			Exact: completionGlobalsPlus(
+				[]fourslash.CompletionsExpectedItem{
+					"f1",
+					"f2",
+				}, false),
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -33,7 +37,9 @@ f2({ x/*2*/ });`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"xyz"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"xyz",
+			},
 		},
 	})
 }

@@ -29,8 +29,13 @@ class B extends A implements I {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"foo", "bar"},
-			Excludes: []string{"baz"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"foo",
+				"bar",
+			},
+			Excludes: []string{
+				"baz",
+			},
 		},
 	})
 }

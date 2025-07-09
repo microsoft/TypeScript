@@ -34,7 +34,10 @@ var x1; x1./*3*/;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"charAt", "toExponential"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"charAt",
+				"toExponential",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -44,7 +47,12 @@ var x1; x1./*3*/;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)), Label: "age"}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:    "age",
+					SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)),
+				},
+			},
 		},
 	})
 }

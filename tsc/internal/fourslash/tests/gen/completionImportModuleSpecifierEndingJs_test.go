@@ -27,7 +27,11 @@ import { f } from ".//**/"`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "test.js"}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "test.js",
+				},
+			},
 		},
 	})
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
@@ -37,7 +41,11 @@ import { f } from ".//**/"`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "test"}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "test",
+				},
+			},
 		},
 	})
 }

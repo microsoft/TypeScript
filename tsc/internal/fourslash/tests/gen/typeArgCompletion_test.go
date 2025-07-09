@@ -26,7 +26,9 @@ var x1: I1<Deri/**/>;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"Derived"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"Derived",
+			},
 		},
 	})
 }

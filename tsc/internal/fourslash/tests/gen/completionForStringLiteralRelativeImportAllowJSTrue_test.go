@@ -43,7 +43,16 @@ var foo6 = require("./f/*require1*/
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"f1", "f2", "f3", "f4", "f5", "f6", "g1", "g2"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"f1",
+				"f2",
+				"f3",
+				"f4",
+				"f5",
+				"f6",
+				"g1",
+				"g2",
+			},
 		},
 	})
 }

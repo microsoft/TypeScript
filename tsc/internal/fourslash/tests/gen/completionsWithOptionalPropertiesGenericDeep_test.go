@@ -32,7 +32,14 @@ bar({ deep: {/*1*/} });`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "another?", InsertText: ptrTo("another"), FilterText: ptrTo("another")}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:      "another?",
+					InsertText: ptrTo("another"),
+					FilterText: ptrTo("another"),
+					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+				},
+			},
 		},
 	})
 }

@@ -28,7 +28,9 @@ out.a.a./*3*/a`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"a"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"a",
+			},
 		},
 	})
 }

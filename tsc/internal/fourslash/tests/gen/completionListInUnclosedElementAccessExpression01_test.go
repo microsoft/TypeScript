@@ -21,7 +21,9 @@ var y = x[/*1*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"x"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"x",
+			},
 		},
 	})
 }

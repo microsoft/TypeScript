@@ -34,7 +34,11 @@ addListener("/*js*/");`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"", "drag", "dragenter"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"",
+				"drag",
+				"dragenter",
+			},
 		},
 	})
 	f.Insert(t, "drag")
@@ -45,7 +49,11 @@ addListener("/*js*/");`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"", "drag", "dragenter"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"",
+				"drag",
+				"dragenter",
+			},
 		},
 	})
 }

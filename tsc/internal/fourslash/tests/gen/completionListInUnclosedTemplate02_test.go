@@ -21,7 +21,10 @@ var y = (p) => ` + "`" + `abc ${ 123 } ${ /*1*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"p", "x"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"p",
+				"x",
+			},
 		},
 	})
 }

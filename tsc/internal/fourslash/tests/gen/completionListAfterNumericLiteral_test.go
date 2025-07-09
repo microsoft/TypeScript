@@ -34,7 +34,9 @@ func TestCompletionListAfterNumericLiteral(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"toExponential"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"toExponential",
+			},
 		},
 	})
 }

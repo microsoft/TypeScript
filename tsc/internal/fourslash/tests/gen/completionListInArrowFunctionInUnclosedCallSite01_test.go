@@ -22,7 +22,12 @@ function getAllFiles(rootFileNames: string[]) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"fileName", "rootFileNames", "getAllFiles", "foo"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"fileName",
+				"rootFileNames",
+				"getAllFiles",
+				"foo",
+			},
 		},
 	})
 }

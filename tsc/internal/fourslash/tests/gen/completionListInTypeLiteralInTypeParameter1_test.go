@@ -34,7 +34,15 @@ var foobar: Bar<{/**/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Unsorted: []fourslash.CompletionsExpectedItem{"one", "two", "\"333\"", "\"4four\"", "\"5 five\"", "number", "Object"},
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"one",
+				"two",
+				"\"333\"",
+				"\"4four\"",
+				"\"5 five\"",
+				"number",
+				"Object",
+			},
 		},
 	})
 }

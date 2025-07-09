@@ -31,7 +31,11 @@ v5 = "/*5*/";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"a", "b", "c"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"a",
+				"b",
+				"c",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -41,7 +45,11 @@ v5 = "/*5*/";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"0", "1", "2"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"0",
+				"1",
+				"2",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{
@@ -51,7 +59,11 @@ v5 = "/*5*/";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"a", "b", "c"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"a",
+				"b",
+				"c",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "4", &fourslash.CompletionsExpectedList{
@@ -71,7 +83,11 @@ v5 = "/*5*/";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"a", "b", "c"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"a",
+				"b",
+				"c",
+			},
 		},
 	})
 }

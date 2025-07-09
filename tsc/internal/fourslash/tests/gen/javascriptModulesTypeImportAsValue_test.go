@@ -28,7 +28,9 @@ import { /**/ } from "./types"`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Excludes: []string{"Pet"},
+			Excludes: []string{
+				"Pet",
+			},
 		},
 	})
 }

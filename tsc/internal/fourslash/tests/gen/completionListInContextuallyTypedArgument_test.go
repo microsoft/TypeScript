@@ -35,7 +35,10 @@ var t = new test((e) => {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"x1", "y1"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"x1",
+				"y1",
+			},
 		},
 	})
 }

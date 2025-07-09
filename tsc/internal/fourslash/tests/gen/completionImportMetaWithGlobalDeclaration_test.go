@@ -32,7 +32,9 @@ import./*4*/meta`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"meta"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"meta",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -42,8 +44,12 @@ import./*4*/meta`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"url"},
-			Excludes: []string{"meta"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"url",
+			},
+			Excludes: []string{
+				"meta",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{
@@ -53,8 +59,12 @@ import./*4*/meta`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"url"},
-			Excludes: []string{"meta"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"url",
+			},
+			Excludes: []string{
+				"meta",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "4", &fourslash.CompletionsExpectedList{
@@ -64,7 +74,9 @@ import./*4*/meta`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"meta"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"meta",
+			},
 		},
 	})
 }

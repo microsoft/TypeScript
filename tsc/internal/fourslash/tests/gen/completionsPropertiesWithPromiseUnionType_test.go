@@ -30,7 +30,12 @@ fakeTest(() => {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindField), Label: "foo"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "foo",
+					Kind:  ptrTo(lsproto.CompletionItemKindField),
+				},
+			},
 		},
 	})
 }

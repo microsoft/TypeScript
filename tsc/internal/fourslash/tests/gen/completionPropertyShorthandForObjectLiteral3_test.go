@@ -23,7 +23,11 @@ const obj = {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: completionGlobalsPlus([]fourslash.CompletionsExpectedItem{"bar", "foo"}, false),
+			Exact: completionGlobalsPlus(
+				[]fourslash.CompletionsExpectedItem{
+					"bar",
+					"foo",
+				}, false),
 		},
 	})
 }

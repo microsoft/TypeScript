@@ -37,7 +37,9 @@ wrap(function () {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"x"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"x",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "involvedInReturn", &fourslash.CompletionsExpectedList{
@@ -47,7 +49,9 @@ wrap(function () {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"x"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"x",
+			},
 		},
 	})
 }

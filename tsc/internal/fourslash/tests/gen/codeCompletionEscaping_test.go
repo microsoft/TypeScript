@@ -24,7 +24,18 @@ ___foo; __foo;/**/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindText), SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)), Label: "__foo"}, &lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindText), SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)), Label: "___foo"}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:    "__foo",
+					Kind:     ptrTo(lsproto.CompletionItemKindText),
+					SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)),
+				},
+				&lsproto.CompletionItem{
+					Label:    "___foo",
+					Kind:     ptrTo(lsproto.CompletionItemKindText),
+					SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)),
+				},
+			},
 		},
 	})
 }

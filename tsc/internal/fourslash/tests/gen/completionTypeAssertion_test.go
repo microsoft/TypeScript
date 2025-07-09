@@ -21,7 +21,10 @@ var y = this as/*1*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: completionGlobalsPlus([]fourslash.CompletionsExpectedItem{"x"}, false),
+			Exact: completionGlobalsPlus(
+				[]fourslash.CompletionsExpectedItem{
+					"x",
+				}, false),
 		},
 	})
 }

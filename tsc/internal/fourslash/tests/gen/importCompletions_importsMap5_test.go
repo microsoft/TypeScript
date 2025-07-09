@@ -42,7 +42,9 @@ import {} from "/*1*/";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"#is-browser"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"#is-browser",
+			},
 		},
 	})
 }

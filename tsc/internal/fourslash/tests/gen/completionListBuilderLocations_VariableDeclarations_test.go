@@ -33,7 +33,11 @@ var y = 10; y=/*var12*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: completionGlobalsPlus([]fourslash.CompletionsExpectedItem{"C", "y"}, false),
+			Exact: completionGlobalsPlus(
+				[]fourslash.CompletionsExpectedItem{
+					"C",
+					"y",
+				}, false),
 		},
 	})
 	f.VerifyCompletions(t, []string{"var2", "var3", "var4", "var5", "var6", "var7", "var8", "var9", "var10", "var11", "var12"}, &fourslash.CompletionsExpectedList{
@@ -43,7 +47,12 @@ var y = 10; y=/*var12*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: completionGlobalsPlus([]fourslash.CompletionsExpectedItem{"C", "x", "y"}, false),
+			Exact: completionGlobalsPlus(
+				[]fourslash.CompletionsExpectedItem{
+					"C",
+					"x",
+					"y",
+				}, false),
 		},
 	})
 }

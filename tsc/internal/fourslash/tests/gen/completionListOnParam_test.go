@@ -26,7 +26,9 @@ class Point {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"Blah"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"Blah",
+			},
 		},
 	})
 }

@@ -21,7 +21,9 @@ func TestCompletionListInEmptyFile(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"a"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"a",
+			},
 		},
 	})
 }

@@ -30,7 +30,32 @@ partialFoo({ /*1*/ });`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "a_a?", InsertText: ptrTo("a_a"), FilterText: ptrTo("a_a")}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "a_b?", InsertText: ptrTo("a_b"), FilterText: ptrTo("a_b")}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "a_c?", InsertText: ptrTo("a_c"), FilterText: ptrTo("a_c")}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "b_a?", InsertText: ptrTo("b_a"), FilterText: ptrTo("b_a")}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:      "a_a?",
+					InsertText: ptrTo("a_a"),
+					FilterText: ptrTo("a_a"),
+					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+				},
+				&lsproto.CompletionItem{
+					Label:      "a_b?",
+					InsertText: ptrTo("a_b"),
+					FilterText: ptrTo("a_b"),
+					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+				},
+				&lsproto.CompletionItem{
+					Label:      "a_c?",
+					InsertText: ptrTo("a_c"),
+					FilterText: ptrTo("a_c"),
+					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+				},
+				&lsproto.CompletionItem{
+					Label:      "b_a?",
+					InsertText: ptrTo("b_a"),
+					FilterText: ptrTo("b_a"),
+					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+				},
+			},
 		},
 	})
 }

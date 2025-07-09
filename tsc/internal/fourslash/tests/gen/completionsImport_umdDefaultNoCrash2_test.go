@@ -52,7 +52,11 @@ import Dottie from 'dottie';
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "Dottie"}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "Dottie",
+				},
+			},
 		},
 	})
 }

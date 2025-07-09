@@ -54,7 +54,14 @@ var tmp2: a./*7Type*/;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Unsorted: []fourslash.CompletionsExpectedItem{"F", "C", "E", "N", "V", "A"},
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"F",
+				"C",
+				"E",
+				"N",
+				"V",
+				"A",
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"1Type", "7Type"}, &fourslash.CompletionsExpectedList{
@@ -64,7 +71,12 @@ var tmp2: a./*7Type*/;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Unsorted: []fourslash.CompletionsExpectedItem{"I", "C", "E", "A"},
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"I",
+				"C",
+				"E",
+				"A",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -74,7 +86,17 @@ var tmp2: a./*7Type*/;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: completionFunctionMembersPlus([]fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextLocalDeclarationPriority)), Label: "property"}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextLocationPriority)), Label: "prototype"}}),
+			Exact: completionFunctionMembersPlus(
+				[]fourslash.CompletionsExpectedItem{
+					&lsproto.CompletionItem{
+						Label:    "property",
+						SortText: ptrTo(string(ls.SortTextLocalDeclarationPriority)),
+					},
+					&lsproto.CompletionItem{
+						Label:    "prototype",
+						SortText: ptrTo(string(ls.SortTextLocationPriority)),
+					},
+				}),
 		},
 	})
 	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{
@@ -84,7 +106,9 @@ var tmp2: a./*7Type*/;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"value"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"value",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "4", &fourslash.CompletionsExpectedList{
@@ -94,7 +118,9 @@ var tmp2: a./*7Type*/;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"v"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"v",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "5", &fourslash.CompletionsExpectedList{
@@ -104,7 +130,9 @@ var tmp2: a./*7Type*/;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"toFixed"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"toFixed",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "6", &fourslash.CompletionsExpectedList{
@@ -114,7 +142,9 @@ var tmp2: a./*7Type*/;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"call"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"call",
+			},
 		},
 	})
 }

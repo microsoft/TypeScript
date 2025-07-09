@@ -32,7 +32,10 @@ module TypeModule3 {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"C1", "C2"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"C1",
+				"C2",
+			},
 		},
 	})
 }

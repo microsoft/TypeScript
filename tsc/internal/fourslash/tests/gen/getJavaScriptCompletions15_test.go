@@ -36,7 +36,9 @@ v.x.V./*4*/;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"toExponential"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"toExponential",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -46,7 +48,9 @@ v.x.V./*4*/;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"toLowerCase"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"toLowerCase",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{
@@ -56,7 +60,29 @@ v.x.V./*4*/;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"V", &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)), Label: "ref1"}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)), Label: "ref2"}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)), Label: "require"}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)), Label: "v"}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)), Label: "x"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"V",
+				&lsproto.CompletionItem{
+					Label:    "ref1",
+					SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)),
+				},
+				&lsproto.CompletionItem{
+					Label:    "ref2",
+					SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)),
+				},
+				&lsproto.CompletionItem{
+					Label:    "require",
+					SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)),
+				},
+				&lsproto.CompletionItem{
+					Label:    "v",
+					SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)),
+				},
+				&lsproto.CompletionItem{
+					Label:    "x",
+					SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)),
+				},
+			},
 		},
 	})
 	f.VerifyCompletions(t, "4", &fourslash.CompletionsExpectedList{
@@ -66,7 +92,9 @@ v.x.V./*4*/;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"toLowerCase"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"toLowerCase",
+			},
 		},
 	})
 }

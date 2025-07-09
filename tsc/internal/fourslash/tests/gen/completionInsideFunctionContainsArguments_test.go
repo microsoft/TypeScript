@@ -28,7 +28,9 @@ let g = () => /*5*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"arguments"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"arguments",
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"2", "5"}, &fourslash.CompletionsExpectedList{
@@ -38,7 +40,9 @@ let g = () => /*5*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Excludes: []string{"arguments"},
+			Excludes: []string{
+				"arguments",
+			},
 		},
 	})
 }

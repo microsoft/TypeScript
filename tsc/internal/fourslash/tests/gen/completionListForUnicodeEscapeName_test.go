@@ -23,7 +23,9 @@ class \u0041 { /*2*/ }
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"B"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"B",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -33,7 +35,10 @@ class \u0041 { /*2*/ }
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Excludes: []string{"C", "A"},
+			Excludes: []string{
+				"C",
+				"A",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{
@@ -43,7 +48,11 @@ class \u0041 { /*2*/ }
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"B", "A", "C"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"B",
+				"A",
+				"C",
+			},
 		},
 	})
 }

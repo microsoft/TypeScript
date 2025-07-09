@@ -44,7 +44,9 @@ export var z = 0;
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"module0.ts"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"module0.ts",
+			},
 		},
 	})
 }

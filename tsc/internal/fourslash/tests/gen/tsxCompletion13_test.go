@@ -49,7 +49,24 @@ func TestTsxCompletion13(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"goTo", "onClick", &lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindField), SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "children?", InsertText: ptrTo("children"), FilterText: ptrTo("children")}, &lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindField), SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "className?", InsertText: ptrTo("className"), FilterText: ptrTo("className")}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"goTo",
+				"onClick",
+				&lsproto.CompletionItem{
+					Label:      "children?",
+					InsertText: ptrTo("children"),
+					FilterText: ptrTo("children"),
+					Kind:       ptrTo(lsproto.CompletionItemKindField),
+					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+				},
+				&lsproto.CompletionItem{
+					Label:      "className?",
+					InsertText: ptrTo("className"),
+					FilterText: ptrTo("className"),
+					Kind:       ptrTo(lsproto.CompletionItemKindField),
+					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+				},
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -59,7 +76,17 @@ func TestTsxCompletion13(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"goTo", "onClick", &lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindField), SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "className?", InsertText: ptrTo("className"), FilterText: ptrTo("className")}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"goTo",
+				"onClick",
+				&lsproto.CompletionItem{
+					Label:      "className?",
+					InsertText: ptrTo("className"),
+					FilterText: ptrTo("className"),
+					Kind:       ptrTo(lsproto.CompletionItemKindField),
+					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+				},
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"3", "4", "5"}, &fourslash.CompletionsExpectedList{
@@ -69,7 +96,22 @@ func TestTsxCompletion13(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindField), SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "children?", InsertText: ptrTo("children"), FilterText: ptrTo("children")}, &lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindField), SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "className?", InsertText: ptrTo("className"), FilterText: ptrTo("className")}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:      "children?",
+					InsertText: ptrTo("children"),
+					FilterText: ptrTo("children"),
+					Kind:       ptrTo(lsproto.CompletionItemKindField),
+					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+				},
+				&lsproto.CompletionItem{
+					Label:      "className?",
+					InsertText: ptrTo("className"),
+					FilterText: ptrTo("className"),
+					Kind:       ptrTo(lsproto.CompletionItemKindField),
+					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+				},
+			},
 		},
 	})
 }

@@ -27,7 +27,11 @@ f({ a: 1 }, { /*2*/ });`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"a", "b", "c"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"a",
+				"b",
+				"c",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -37,7 +41,10 @@ f({ a: 1 }, { /*2*/ });`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"b", "c"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"b",
+				"c",
+			},
 		},
 	})
 }

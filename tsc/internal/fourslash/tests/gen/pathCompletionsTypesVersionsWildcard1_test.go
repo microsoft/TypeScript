@@ -39,7 +39,11 @@ import { } from "foo//**/";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"blah", "index", "subfolder"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"blah",
+				"index",
+				"subfolder",
+			},
 		},
 	})
 	f.Insert(t, "subfolder/")
@@ -50,7 +54,9 @@ import { } from "foo//**/";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"one"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"one",
+			},
 		},
 	})
 }

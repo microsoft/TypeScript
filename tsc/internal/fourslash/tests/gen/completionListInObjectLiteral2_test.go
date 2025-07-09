@@ -39,7 +39,11 @@ class Foo {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"count", "fileCount", "isEmpty"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"count",
+				"fileCount",
+				"isEmpty",
+			},
 		},
 	})
 }

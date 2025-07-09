@@ -26,7 +26,9 @@ var p = <Shapes.`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"Point"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"Point",
+			},
 		},
 	})
 }

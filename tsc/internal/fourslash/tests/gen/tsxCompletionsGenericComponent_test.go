@@ -43,7 +43,10 @@ createTable(800);`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"widthInCol", "text"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"widthInCol",
+				"text",
+			},
 		},
 	})
 }

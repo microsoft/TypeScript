@@ -22,8 +22,12 @@ func TestCompletionListOnParamInClass(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"encoder"},
-			Excludes: []string{"parseInt"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"encoder",
+			},
+			Excludes: []string{
+				"parseInt",
+			},
 		},
 	})
 }

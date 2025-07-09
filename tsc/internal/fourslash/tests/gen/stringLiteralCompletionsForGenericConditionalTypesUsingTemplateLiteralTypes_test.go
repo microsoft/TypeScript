@@ -27,7 +27,11 @@ func TestStringLiteralCompletionsForGenericConditionalTypesUsingTemplateLiteralT
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"a", "b", "b.c"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"a",
+				"b",
+				"b.c",
+			},
 		},
 	})
 }

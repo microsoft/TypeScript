@@ -27,7 +27,12 @@ const obj2: any = {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: completionGlobalsPlus([]fourslash.CompletionsExpectedItem{"bar", "foo", "obj2"}, false),
+			Exact: completionGlobalsPlus(
+				[]fourslash.CompletionsExpectedItem{
+					"bar",
+					"foo",
+					"obj2",
+				}, false),
 		},
 	})
 	f.VerifyCompletions(t, []string{"2"}, &fourslash.CompletionsExpectedList{
@@ -37,7 +42,12 @@ const obj2: any = {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: completionGlobalsPlus([]fourslash.CompletionsExpectedItem{"bar", "foo", "obj1"}, false),
+			Exact: completionGlobalsPlus(
+				[]fourslash.CompletionsExpectedItem{
+					"bar",
+					"foo",
+					"obj1",
+				}, false),
 		},
 	})
 }

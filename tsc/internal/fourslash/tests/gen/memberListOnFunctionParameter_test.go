@@ -23,8 +23,12 @@ func TestMemberListOnFunctionParameter(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"charAt"},
-			Excludes: []string{"toFixed"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"charAt",
+			},
+			Excludes: []string{
+				"toFixed",
+			},
 		},
 	})
 }

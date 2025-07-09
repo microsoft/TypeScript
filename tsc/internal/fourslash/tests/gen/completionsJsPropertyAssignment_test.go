@@ -25,7 +25,14 @@ x.p = "[|/**/|]";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "x"}, &lsproto.CompletionItem{Label: "y"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "x",
+				},
+				&lsproto.CompletionItem{
+					Label: "y",
+				},
+			},
 		},
 	})
 }

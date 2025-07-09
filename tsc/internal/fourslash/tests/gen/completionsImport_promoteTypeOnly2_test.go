@@ -27,7 +27,11 @@ SomeI/**/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "SomeInterface"}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "SomeInterface",
+				},
+			},
 		},
 	})
 }

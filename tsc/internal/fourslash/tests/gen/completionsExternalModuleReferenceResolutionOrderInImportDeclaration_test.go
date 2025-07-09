@@ -31,8 +31,12 @@ import file1 = require('externalModuleRefernceResolutionOrderInImportDeclaration
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"bar"},
-			Excludes: []string{"foo"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"bar",
+			},
+			Excludes: []string{
+				"foo",
+			},
 		},
 	})
 }

@@ -40,7 +40,9 @@ import {} from "pkg/test//*2*/";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"test"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"test",
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"2"}, &fourslash.CompletionsExpectedList{
@@ -50,7 +52,9 @@ import {} from "pkg/test//*2*/";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"foo.js"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"foo.js",
+			},
 		},
 	})
 }

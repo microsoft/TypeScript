@@ -32,7 +32,9 @@ var foobar: Bar<{
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"three"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"three",
+			},
 		},
 	})
 }

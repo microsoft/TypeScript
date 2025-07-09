@@ -24,7 +24,10 @@ type Map1<K1, V1> = </*3*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"K", "V"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"K",
+				"V",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "3", nil)

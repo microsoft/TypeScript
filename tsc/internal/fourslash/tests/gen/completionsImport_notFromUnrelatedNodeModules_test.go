@@ -24,7 +24,9 @@ fo/**/;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Excludes: []string{"foo"},
+			Excludes: []string{
+				"foo",
+			},
 		},
 	})
 }

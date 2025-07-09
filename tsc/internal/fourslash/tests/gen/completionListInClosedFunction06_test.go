@@ -27,8 +27,12 @@ function foo(x: string, y: number, z: boolean) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"MyType"},
-			Excludes: []string{"x"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"MyType",
+			},
+			Excludes: []string{
+				"x",
+			},
 		},
 	})
 }

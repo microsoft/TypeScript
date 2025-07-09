@@ -46,7 +46,12 @@ var x: c./**/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"I1", "I2", "I1_OR_I2", "C1"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"I1",
+				"I2",
+				"I1_OR_I2",
+				"C1",
+			},
 		},
 	})
 }

@@ -34,7 +34,9 @@ import Foo from "foo";
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"Foo"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"Foo",
+			},
 		},
 	})
 }

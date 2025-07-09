@@ -25,7 +25,18 @@ function foo(x: string, y: number, z: boolean) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"foo", "x", "y", "z", "bar", "a", "b", "c", "v", "p"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"foo",
+				"x",
+				"y",
+				"z",
+				"bar",
+				"a",
+				"b",
+				"c",
+				"v",
+				"p",
+			},
 		},
 	})
 }

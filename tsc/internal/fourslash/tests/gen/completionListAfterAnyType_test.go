@@ -26,7 +26,9 @@ func TestCompletionListAfterAnyType(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"charAt"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"charAt",
+			},
 		},
 	})
 }

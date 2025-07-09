@@ -26,7 +26,9 @@ import {} from ".//**/"`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"foo"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"foo",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
@@ -36,7 +38,9 @@ import {} from ".//**/"`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"foo.ts"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"foo.ts",
+			},
 		},
 	})
 	f.Insert(t, "foo.ts\"\nimport {} from \"./")
@@ -47,7 +51,9 @@ import {} from ".//**/"`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"foo.ts"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"foo.ts",
+			},
 		},
 	})
 }

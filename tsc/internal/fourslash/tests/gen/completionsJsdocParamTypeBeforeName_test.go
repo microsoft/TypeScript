@@ -31,7 +31,9 @@ function toString(obj) {}`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"obj"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"obj",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "name2", &fourslash.CompletionsExpectedList{
@@ -41,7 +43,9 @@ function toString(obj) {}`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"obj"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"obj",
+			},
 		},
 	})
 }

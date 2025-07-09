@@ -27,7 +27,9 @@ const t = { a: 1 };`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"satisfies"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"satisfies",
+			},
 		},
 	})
 }

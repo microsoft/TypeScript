@@ -34,7 +34,11 @@ f2<Foo>("/*8*/", "/*9*/",,,);`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"a", "b", "c"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"a",
+				"b",
+				"c",
+			},
 		},
 	})
 }

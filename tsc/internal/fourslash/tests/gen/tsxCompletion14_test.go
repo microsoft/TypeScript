@@ -38,7 +38,10 @@ func TestTsxCompletion14(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"ONE", "TWO"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"ONE",
+				"TWO",
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"2", "4"}, &fourslash.CompletionsExpectedList{
@@ -48,7 +51,10 @@ func TestTsxCompletion14(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"Four", "Three"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"Four",
+				"Three",
+			},
 		},
 	})
 }

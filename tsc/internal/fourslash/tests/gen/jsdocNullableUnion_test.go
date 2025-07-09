@@ -33,7 +33,9 @@ function f(p1, p2, p3) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"x"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"x",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -43,7 +45,9 @@ function f(p1, p2, p3) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"y"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"y",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{
@@ -53,7 +57,9 @@ function f(p1, p2, p3) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"z"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"z",
+			},
 		},
 	})
 }

@@ -28,7 +28,12 @@ const foo: T = {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextLocationPriority)), Label: "foo"}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:    "foo",
+					SortText: ptrTo(string(ls.SortTextLocationPriority)),
+				},
+			},
 		},
 	})
 }

@@ -30,7 +30,12 @@ j[|./*j*/|];`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "s", InsertText: ptrTo("[s]")}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:      "s",
+					InsertText: ptrTo("[s]"),
+				},
+			},
 		},
 	})
 	f.VerifyCompletions(t, "j", &fourslash.CompletionsExpectedList{
@@ -40,7 +45,12 @@ j[|./*j*/|];`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "N", InsertText: ptrTo("[N]")}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:      "N",
+					InsertText: ptrTo("[N]"),
+				},
+			},
 		},
 	})
 }

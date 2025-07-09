@@ -22,7 +22,10 @@ get({ hello: 123, world: 456 }, "/**/");`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"hello", "world"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"hello",
+				"world",
+			},
 		},
 	})
 }

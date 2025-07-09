@@ -24,7 +24,13 @@ const x = /** @type {{ s: string }} */ ({ /**/ });`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"s", &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)), Label: "x"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"s",
+				&lsproto.CompletionItem{
+					Label:    "x",
+					SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)),
+				},
+			},
 		},
 	})
 }

@@ -30,8 +30,12 @@ const bar: {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"foo"},
-			Excludes: []string{"b"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"foo",
+			},
+			Excludes: []string{
+				"b",
+			},
 		},
 	})
 }

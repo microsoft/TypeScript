@@ -33,7 +33,12 @@ import { } from "/**/";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindFile), Label: "#blah"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "#blah",
+					Kind:  ptrTo(lsproto.CompletionItemKindFile),
+				},
+			},
 		},
 	})
 }

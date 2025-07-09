@@ -33,7 +33,20 @@ fn({ a: "a", b: "b" }, {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "on_a?", InsertText: ptrTo("on_a"), FilterText: ptrTo("on_a")}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "on_b?", InsertText: ptrTo("on_b"), FilterText: ptrTo("on_b")}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:      "on_a?",
+					InsertText: ptrTo("on_a"),
+					FilterText: ptrTo("on_a"),
+					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+				},
+				&lsproto.CompletionItem{
+					Label:      "on_b?",
+					InsertText: ptrTo("on_b"),
+					FilterText: ptrTo("on_b"),
+					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+				},
+			},
 		},
 	})
 }

@@ -41,8 +41,16 @@ class Class extends Base {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"publicInstanceMethod"},
-			Excludes: []string{"publicProperty", "publicStaticProperty", "publicStaticMethod", "privateProperty", "privateInstanceMethod"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"publicInstanceMethod",
+			},
+			Excludes: []string{
+				"publicProperty",
+				"publicStaticProperty",
+				"publicStaticMethod",
+				"privateProperty",
+				"privateInstanceMethod",
+			},
 		},
 	})
 }

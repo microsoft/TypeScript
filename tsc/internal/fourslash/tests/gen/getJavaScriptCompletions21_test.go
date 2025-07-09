@@ -27,7 +27,11 @@ new Prv()['[|/**/|]'];`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "notSoPrivate"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "notSoPrivate",
+				},
+			},
 		},
 	})
 }

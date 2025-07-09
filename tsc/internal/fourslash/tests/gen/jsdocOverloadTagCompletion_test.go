@@ -25,7 +25,9 @@ func TestJsdocOverloadTagCompletion(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"overload"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"overload",
+			},
 		},
 	})
 }

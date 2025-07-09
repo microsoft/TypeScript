@@ -39,7 +39,9 @@ import {} from "#internal//*2*/";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"#internal"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"#internal",
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"2"}, &fourslash.CompletionsExpectedList{
@@ -49,7 +51,9 @@ import {} from "#internal//*2*/";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"foo.js"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"foo.js",
+			},
 		},
 	})
 }

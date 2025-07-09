@@ -30,7 +30,14 @@ func TestMemberListInWithBlock(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Excludes: []string{"foo", "f", "c", "d", "x", "Object"},
+			Excludes: []string{
+				"foo",
+				"f",
+				"c",
+				"d",
+				"x",
+				"Object",
+			},
 		},
 	})
 }

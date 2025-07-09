@@ -41,7 +41,11 @@ func TestCompletionListPrivateNamesMethods(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Unsorted: []fourslash.CompletionsExpectedItem{"#z", "t", "y"},
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"#z",
+				"t",
+				"y",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -51,7 +55,11 @@ func TestCompletionListPrivateNamesMethods(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Unsorted: []fourslash.CompletionsExpectedItem{"#z", "#u", "v"},
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"#z",
+				"#u",
+				"v",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{
@@ -61,7 +69,11 @@ func TestCompletionListPrivateNamesMethods(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Unsorted: []fourslash.CompletionsExpectedItem{"#z", "t", "y"},
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"#z",
+				"t",
+				"y",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "4", &fourslash.CompletionsExpectedList{
@@ -71,7 +83,9 @@ func TestCompletionListPrivateNamesMethods(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"y"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"y",
+			},
 		},
 	})
 }

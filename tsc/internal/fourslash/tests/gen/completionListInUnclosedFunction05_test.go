@@ -22,7 +22,15 @@ func TestCompletionListInUnclosedFunction05(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"foo", "x", "y", "z", "bar", "a", "b"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"foo",
+				"x",
+				"y",
+				"z",
+				"bar",
+				"a",
+				"b",
+			},
 		},
 	})
 }

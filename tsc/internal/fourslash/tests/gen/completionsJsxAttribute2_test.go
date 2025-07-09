@@ -37,7 +37,10 @@ declare namespace JSX {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"aria-foo", "bar"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"aria-foo",
+				"bar",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -47,7 +50,10 @@ declare namespace JSX {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"aria-foo", "bar"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"aria-foo",
+				"bar",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{
@@ -57,7 +63,10 @@ declare namespace JSX {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"aria-foo", "foo"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"aria-foo",
+				"foo",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "4", &fourslash.CompletionsExpectedList{
@@ -67,7 +76,10 @@ declare namespace JSX {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"bar", "foo"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"bar",
+				"foo",
+			},
 		},
 	})
 }

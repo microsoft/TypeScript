@@ -30,7 +30,9 @@ func TestCompletions03(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"three"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"three",
+			},
 		},
 	})
 }

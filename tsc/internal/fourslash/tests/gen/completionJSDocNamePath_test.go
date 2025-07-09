@@ -26,7 +26,10 @@ export function cargo() {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Excludes: []string{"module", "ControlFlow"},
+			Excludes: []string{
+				"module",
+				"ControlFlow",
+			},
 		},
 	})
 }

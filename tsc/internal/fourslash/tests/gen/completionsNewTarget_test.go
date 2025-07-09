@@ -29,7 +29,9 @@ class D {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"target"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"target",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -39,7 +41,9 @@ class D {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Excludes: []string{"target"},
+			Excludes: []string{
+				"target",
+			},
 		},
 	})
 }

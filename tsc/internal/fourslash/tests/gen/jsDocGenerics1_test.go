@@ -40,7 +40,12 @@ func TestJsDocGenerics1(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindMethod), Label: "toFixed"}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "toFixed",
+					Kind:  ptrTo(lsproto.CompletionItemKindMethod),
+				},
+			},
 		},
 	})
 }

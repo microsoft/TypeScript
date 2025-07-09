@@ -29,7 +29,9 @@ const a5 = <Foo b={"somethingelse"} c={0} /*5*/ />`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"somethingelse"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"somethingelse",
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"3", "4"}, &fourslash.CompletionsExpectedList{
@@ -39,7 +41,9 @@ const a5 = <Foo b={"somethingelse"} c={0} /*5*/ />`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Excludes: []string{"\"somethingelse\""},
+			Excludes: []string{
+				"\"somethingelse\"",
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"5"}, &fourslash.CompletionsExpectedList{
@@ -49,7 +53,10 @@ const a5 = <Foo b={"somethingelse"} c={0} /*5*/ />`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Excludes: []string{"0", "1"},
+			Excludes: []string{
+				"0",
+				"1",
+			},
 		},
 	})
 }

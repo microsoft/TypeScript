@@ -46,7 +46,12 @@ var x = c./**/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"bVar", "C1", "cVar", "Inner"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"bVar",
+				"C1",
+				"cVar",
+				"Inner",
+			},
 		},
 	})
 }

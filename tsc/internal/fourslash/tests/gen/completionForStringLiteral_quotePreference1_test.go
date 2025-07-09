@@ -31,7 +31,17 @@ const b: B = {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "\"A\""}, &lsproto.CompletionItem{Label: "\"B\""}, &lsproto.CompletionItem{Label: "\"C\""}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "\"A\"",
+				},
+				&lsproto.CompletionItem{
+					Label: "\"B\"",
+				},
+				&lsproto.CompletionItem{
+					Label: "\"C\"",
+				},
+			},
 		},
 	})
 }

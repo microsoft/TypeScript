@@ -36,7 +36,9 @@ class ChildTwo extends Parent {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"shouldWork"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"shouldWork",
+			},
 		},
 	})
 }

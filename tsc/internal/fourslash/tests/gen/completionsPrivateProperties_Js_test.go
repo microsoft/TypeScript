@@ -34,8 +34,13 @@ foo./**/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"m3"},
-			Excludes: []string{"m1", "m2"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"m3",
+			},
+			Excludes: []string{
+				"m1",
+				"m2",
+			},
 		},
 	})
 }

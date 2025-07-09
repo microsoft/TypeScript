@@ -37,7 +37,23 @@ func TestGetJavaScriptCompletions20(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: completionFunctionMembersWithPrototypePlus([]fourslash.CompletionsExpectedItem{"getName", "getNa", &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)), Label: "Person"}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)), Label: "name"}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)), Label: "age"}}),
+			Exact: completionFunctionMembersWithPrototypePlus(
+				[]fourslash.CompletionsExpectedItem{
+					"getName",
+					"getNa",
+					&lsproto.CompletionItem{
+						Label:    "Person",
+						SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)),
+					},
+					&lsproto.CompletionItem{
+						Label:    "name",
+						SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)),
+					},
+					&lsproto.CompletionItem{
+						Label:    "age",
+						SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)),
+					},
+				}),
 		},
 	})
 }

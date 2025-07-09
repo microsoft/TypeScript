@@ -24,7 +24,12 @@ unrelatedIdentifier;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "foo ", InsertText: ptrTo("[\"foo \"]")}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:      "foo ",
+					InsertText: ptrTo("[\"foo \"]"),
+				},
+			},
 		},
 	})
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
@@ -34,7 +39,12 @@ unrelatedIdentifier;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "foo ", InsertText: ptrTo("[\"foo \"]")}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:      "foo ",
+					InsertText: ptrTo("[\"foo \"]"),
+				},
+			},
 		},
 	})
 }

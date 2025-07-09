@@ -30,7 +30,18 @@ func TestTsxCompletion7(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindField), SortText: ptrTo(string(ls.SortTextLocationPriority)), Label: "TWO"}, &lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindField), SortText: ptrTo(string(ls.SortTextMemberDeclaredBySpreadAssignment)), Label: "ONE"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:    "TWO",
+					Kind:     ptrTo(lsproto.CompletionItemKindField),
+					SortText: ptrTo(string(ls.SortTextLocationPriority)),
+				},
+				&lsproto.CompletionItem{
+					Label:    "ONE",
+					Kind:     ptrTo(lsproto.CompletionItemKindField),
+					SortText: ptrTo(string(ls.SortTextMemberDeclaredBySpreadAssignment)),
+				},
+			},
 		},
 	})
 }

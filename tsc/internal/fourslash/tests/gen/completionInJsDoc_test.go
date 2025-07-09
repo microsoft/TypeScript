@@ -78,7 +78,13 @@ func TestCompletionInJsDoc(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"constructor", "param", "type", "method", "template"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"constructor",
+				"param",
+				"type",
+				"method",
+				"template",
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"3", "15", "16"}, &fourslash.CompletionsExpectedList{
@@ -98,7 +104,12 @@ func TestCompletionInJsDoc(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)), Label: "number"}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:    "number",
+					SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)),
+				},
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"6", "7", "14"}, nil)
@@ -109,7 +120,10 @@ func TestCompletionInJsDoc(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"@argument", "@returns"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"@argument",
+				"@returns",
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"17"}, &fourslash.CompletionsExpectedList{
@@ -119,7 +133,10 @@ func TestCompletionInJsDoc(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"link", "tutorial"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"link",
+				"tutorial",
+			},
 		},
 	})
 }

@@ -20,7 +20,9 @@ func TestCompletionsAfterAsyncInObjectLiteral(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"m"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"m",
+			},
 		},
 	})
 }

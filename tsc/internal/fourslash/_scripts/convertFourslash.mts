@@ -399,15 +399,15 @@ function parseVerifyCompletionArg(arg: ts.Expression): VerifyCompletionsCmd | un
                         console.error(`Expected array literal expression for completion.globalsPlus items, got ${items.getText()}`);
                         return undefined;
                     }
-                    expected = `${funcName}([]fourslash.CompletionsExpectedItem{`;
+                    expected = `${funcName}(\n[]fourslash.CompletionsExpectedItem{`;
                     for (const elem of items.elements) {
                         const result = parseExpectedCompletionItem(elem);
                         if (!result) {
                             return undefined;
                         }
-                        expected += result + ", ";
+                        expected += "\n" + result + ",";
                     }
-                    expected += "}";
+                    expected += "\n}";
                     if (opts) {
                         if (!ts.isObjectLiteralExpression(opts)) {
                             console.error(`Expected object literal expression for completion.globalsPlus options, got ${opts.getText()}`);
@@ -444,7 +444,7 @@ function parseVerifyCompletionArg(arg: ts.Expression): VerifyCompletionsCmd | un
                             if (!result) {
                                 return undefined;
                             }
-                            expected += result + ", ";
+                            expected += "\n" + result + ",";
                         }
                     }
                     else {
@@ -452,9 +452,9 @@ function parseVerifyCompletionArg(arg: ts.Expression): VerifyCompletionsCmd | un
                         if (!result) {
                             return undefined;
                         }
-                        expected += result;
+                        expected += "\n" + result + ",";
                     }
-                    expected += "}";
+                    expected += "\n}";
                 }
                 if (propName === "includes") {
                     (goArgs ??= {}).includes = expected;
@@ -469,17 +469,17 @@ function parseVerifyCompletionArg(arg: ts.Expression): VerifyCompletionsCmd | un
             case "excludes":
                 let excludes = "[]string{";
                 if (ts.isStringLiteral(init)) {
-                    excludes += `${getGoStringLiteral(init.text)}, `;
+                    excludes += `\n${getGoStringLiteral(init.text)},`;
                 }
                 else if (ts.isArrayLiteralExpression(init)) {
                     for (const elem of init.elements) {
                         if (!ts.isStringLiteral(elem)) {
                             return undefined; // Shouldn't happen
                         }
-                        excludes += `${getGoStringLiteral(elem.text)}, `;
+                        excludes += `\n${getGoStringLiteral(elem.text)},`;
                     }
                 }
-                excludes += "}";
+                excludes += "\n}";
                 (goArgs ??= {}).excludes = excludes;
                 break;
             case "isNewIdentifierLocation":
@@ -518,7 +518,7 @@ function parseExpectedCompletionItem(expr: ts.Expression): string | undefined {
         let isDeprecated = false; // !!!
         let isOptional = false;
         let extensions: string[] = []; // !!!
-        let item = "&lsproto.CompletionItem{";
+        let itemProps: string[] = [];
         let name: string | undefined;
         let insertText: string | undefined;
         let filterText: string | undefined;
@@ -544,7 +544,7 @@ function parseExpectedCompletionItem(expr: ts.Expression): string | undefined {
                     if (!result) {
                         return undefined;
                     }
-                    item += `SortText: ptrTo(string(${result})), `;
+                    itemProps.push(`SortText: ptrTo(string(${result})),`);
                     if (result === "ls.SortTextOptionalMember") {
                         isOptional = true;
                     }
@@ -569,7 +569,7 @@ function parseExpectedCompletionItem(expr: ts.Expression): string | undefined {
                     break;
                 case "isRecommended":
                     if (init.kind === ts.SyntaxKind.TrueKeyword) {
-                        item += `Preselect: ptrTo(true), `;
+                        itemProps.push(`Preselect: ptrTo(true),`);
                     }
                     break;
                 case "kind":
@@ -577,7 +577,7 @@ function parseExpectedCompletionItem(expr: ts.Expression): string | undefined {
                     if (!kind) {
                         return undefined;
                     }
-                    item += `Kind: ptrTo(${kind}), `;
+                    itemProps.push(`Kind: ptrTo(${kind}),`);
                     break;
                 case "kindModifiers":
                     const modifiers = parseKindModifiers(init);
@@ -603,11 +603,10 @@ function parseExpectedCompletionItem(expr: ts.Expression): string | undefined {
             filterText ??= name;
             name += "?";
         }
-        item += `Label: ${getGoStringLiteral(name!)}, `;
-        if (insertText) item += `InsertText: ptrTo(${getGoStringLiteral(insertText)}), `;
-        if (filterText) item += `FilterText: ptrTo(${getGoStringLiteral(filterText)}), `;
-        item += "}";
-        return item;
+        if (filterText) itemProps.unshift(`FilterText: ptrTo(${getGoStringLiteral(filterText)}),`);
+        if (insertText) itemProps.unshift(`InsertText: ptrTo(${getGoStringLiteral(insertText)}),`);
+        itemProps.unshift(`Label: ${getGoStringLiteral(name!)},`);
+        return `&lsproto.CompletionItem{\n${itemProps.join("\n")}}`;
     }
     console.error(`Expected string literal or object literal for expected completion item, got ${expr.getText()}`);
     return undefined; // Unsupported expression type

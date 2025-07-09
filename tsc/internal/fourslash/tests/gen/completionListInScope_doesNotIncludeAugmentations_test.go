@@ -27,7 +27,9 @@ declare module "a" {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Excludes: []string{"a"},
+			Excludes: []string{
+				"a",
+			},
 		},
 	})
 }

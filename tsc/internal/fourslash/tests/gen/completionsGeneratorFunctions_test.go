@@ -35,7 +35,9 @@ const o: I = {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"baseMethod"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"baseMethod",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "e", &fourslash.CompletionsExpectedList{
@@ -45,7 +47,9 @@ const o: I = {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"baseMethod"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"baseMethod",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "f", &fourslash.CompletionsExpectedList{
@@ -55,7 +59,12 @@ const o: I = {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)), Label: "Number"}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:    "Number",
+					SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)),
+				},
+			},
 		},
 	})
 }

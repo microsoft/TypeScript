@@ -29,7 +29,12 @@ func TestCompletionsForRecursiveGenericTypesMember(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"privateMethod", "protectedMethod", "publicMethod", "test"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"privateMethod",
+				"protectedMethod",
+				"publicMethod",
+				"test",
+			},
 		},
 	})
 }

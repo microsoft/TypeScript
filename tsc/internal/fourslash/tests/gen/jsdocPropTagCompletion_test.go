@@ -23,7 +23,9 @@ func TestJsdocPropTagCompletion(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"prop"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"prop",
+			},
 		},
 	})
 }

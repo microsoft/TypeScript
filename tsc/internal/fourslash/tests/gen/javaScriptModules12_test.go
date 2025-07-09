@@ -39,8 +39,20 @@ var b = '';
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"x", &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)), Label: "a"}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)), Label: "b"}},
-			Excludes: []string{"y"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"x",
+				&lsproto.CompletionItem{
+					Label:    "a",
+					SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)),
+				},
+				&lsproto.CompletionItem{
+					Label:    "b",
+					SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)),
+				},
+			},
+			Excludes: []string{
+				"y",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -50,8 +62,20 @@ var b = '';
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"y", &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)), Label: "a"}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)), Label: "b"}},
-			Excludes: []string{"x"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"y",
+				&lsproto.CompletionItem{
+					Label:    "a",
+					SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)),
+				},
+				&lsproto.CompletionItem{
+					Label:    "b",
+					SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)),
+				},
+			},
+			Excludes: []string{
+				"x",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{
@@ -61,8 +85,17 @@ var b = '';
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"a", &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)), Label: "b"}},
-			Excludes: []string{"x", "y"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"a",
+				&lsproto.CompletionItem{
+					Label:    "b",
+					SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)),
+				},
+			},
+			Excludes: []string{
+				"x",
+				"y",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "4", &fourslash.CompletionsExpectedList{
@@ -72,8 +105,17 @@ var b = '';
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)), Label: "a"}, "b"},
-			Excludes: []string{"x", "y"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:    "a",
+					SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)),
+				},
+				"b",
+			},
+			Excludes: []string{
+				"x",
+				"y",
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"5"}, &fourslash.CompletionsExpectedList{
@@ -83,8 +125,20 @@ var b = '';
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)), Label: "a"}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)), Label: "b"}},
-			Excludes: []string{"x", "y"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:    "a",
+					SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)),
+				},
+				&lsproto.CompletionItem{
+					Label:    "b",
+					SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)),
+				},
+			},
+			Excludes: []string{
+				"x",
+				"y",
+			},
 		},
 	})
 }

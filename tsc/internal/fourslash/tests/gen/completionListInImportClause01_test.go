@@ -32,7 +32,11 @@ import { type b/*9*/ } from "m1";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"bar", "baz", "foo"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"bar",
+				"baz",
+				"foo",
+			},
 		},
 	})
 }

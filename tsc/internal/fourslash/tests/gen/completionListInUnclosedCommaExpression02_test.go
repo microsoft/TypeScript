@@ -21,7 +21,10 @@ foo((a, b) => (a,/*1*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"a", "b"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"a",
+				"b",
+			},
 		},
 	})
 }

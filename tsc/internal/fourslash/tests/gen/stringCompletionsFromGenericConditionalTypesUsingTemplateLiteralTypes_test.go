@@ -46,7 +46,14 @@ const nestedExpression = parse({ prop: "foo|/*ts2*/" })`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"bar", "baz", "foo", "foo|bar", "foo|baz", "foo|foo"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"bar",
+				"baz",
+				"foo",
+				"foo|bar",
+				"foo|baz",
+				"foo|foo",
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"ts2"}, &fourslash.CompletionsExpectedList{
@@ -56,7 +63,11 @@ const nestedExpression = parse({ prop: "foo|/*ts2*/" })`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"foo|bar", "foo|baz", "foo|foo"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"foo|bar",
+				"foo|baz",
+				"foo|foo",
+			},
 		},
 	})
 }

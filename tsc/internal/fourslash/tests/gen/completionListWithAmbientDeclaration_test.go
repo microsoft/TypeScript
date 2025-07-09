@@ -26,7 +26,9 @@ declare module 'https' {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Excludes: []string{"http"},
+			Excludes: []string{
+				"http",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -36,7 +38,10 @@ declare module 'https' {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Excludes: []string{"http", "https"},
+			Excludes: []string{
+				"http",
+				"https",
+			},
 		},
 	})
 }

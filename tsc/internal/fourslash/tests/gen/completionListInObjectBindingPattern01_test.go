@@ -26,7 +26,10 @@ var { /**/ } = foo;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"property1", "property2"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"property1",
+				"property2",
+			},
 		},
 	})
 }

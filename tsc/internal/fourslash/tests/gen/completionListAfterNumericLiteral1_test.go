@@ -20,7 +20,14 @@ func TestCompletionListAfterNumericLiteral1(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"toExponential", "toFixed", "toLocaleString", "toPrecision", "toString", "valueOf"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"toExponential",
+				"toFixed",
+				"toLocaleString",
+				"toPrecision",
+				"toString",
+				"valueOf",
+			},
 		},
 	})
 }

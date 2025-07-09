@@ -25,7 +25,10 @@ var C4 = class D<T extends /*4*/>{}`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: completionGlobalTypesPlus([]fourslash.CompletionsExpectedItem{"D"}),
+			Exact: completionGlobalTypesPlus(
+				[]fourslash.CompletionsExpectedItem{
+					"D",
+				}),
 		},
 	})
 }

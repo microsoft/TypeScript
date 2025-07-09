@@ -23,7 +23,9 @@ import ".//**/"`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Excludes: []string{"index.css"},
+			Excludes: []string{
+				"index.css",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
@@ -33,7 +35,9 @@ import ".//**/"`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Excludes: []string{"index"},
+			Excludes: []string{
+				"index",
+			},
 		},
 	})
 }

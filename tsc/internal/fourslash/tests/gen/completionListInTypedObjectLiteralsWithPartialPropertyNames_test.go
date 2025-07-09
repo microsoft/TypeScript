@@ -26,7 +26,10 @@ var p15: MyPoint = {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"x1", "y1"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"x1",
+				"y1",
+			},
 		},
 	})
 	f.Insert(t, "x")
@@ -37,7 +40,10 @@ var p15: MyPoint = {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"x1", "y1"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"x1",
+				"y1",
+			},
 		},
 	})
 	f.Insert(t, "1")
@@ -48,7 +54,10 @@ var p15: MyPoint = {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"x1", "y1"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"x1",
+				"y1",
+			},
 		},
 	})
 	f.Insert(t, ": null,")
@@ -59,7 +68,9 @@ var p15: MyPoint = {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"y1"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"y1",
+			},
 		},
 	})
 }

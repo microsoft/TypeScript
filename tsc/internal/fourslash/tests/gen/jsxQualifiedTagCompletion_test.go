@@ -28,7 +28,9 @@ func TestJsxQualifiedTagCompletion(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"NS.Foo>"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"NS.Foo>",
+			},
 		},
 	})
 }

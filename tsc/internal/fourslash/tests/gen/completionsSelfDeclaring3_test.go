@@ -21,7 +21,9 @@ f({ x/*x*/: 0, hello/*hello*/: "", goodbye/*goodbye*/: 0, abc/*abc*/: "" })`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"x"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"x",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "hello", &fourslash.CompletionsExpectedList{
@@ -41,7 +43,9 @@ f({ x/*x*/: 0, hello/*hello*/: "", goodbye/*goodbye*/: 0, abc/*abc*/: "" })`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"goodbye"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"goodbye",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "abc", &fourslash.CompletionsExpectedList{

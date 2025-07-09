@@ -39,7 +39,12 @@ interface TestInterface implements Module./*TypeReferenceInImplementsList*/ { }`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Unsorted: []fourslash.CompletionsExpectedItem{"exportedFunction", "exportedVariable", "exportedClass", "exportedModule"},
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"exportedFunction",
+				"exportedVariable",
+				"exportedClass",
+				"exportedModule",
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"TypeReference", "TypeReferenceInImplementsList"}, &fourslash.CompletionsExpectedList{
@@ -49,7 +54,10 @@ interface TestInterface implements Module./*TypeReferenceInImplementsList*/ { }`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Unsorted: []fourslash.CompletionsExpectedItem{"exportedClass", "exportedInterface"},
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"exportedClass",
+				"exportedInterface",
+			},
 		},
 	})
 }

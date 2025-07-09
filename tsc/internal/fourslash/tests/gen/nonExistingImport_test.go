@@ -23,7 +23,10 @@ func TestNonExistingImport(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: completionGlobalTypesPlus([]fourslash.CompletionsExpectedItem{"foo"}),
+			Exact: completionGlobalTypesPlus(
+				[]fourslash.CompletionsExpectedItem{
+					"foo",
+				}),
 		},
 	})
 }

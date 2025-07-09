@@ -24,7 +24,10 @@ function fun(param) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Excludes: []string{"param", "party"},
+			Excludes: []string{
+				"param",
+				"party",
+			},
 		},
 	})
 }

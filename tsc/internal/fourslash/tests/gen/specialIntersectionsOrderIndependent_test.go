@@ -23,7 +23,9 @@ b('/*2*/')`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"test"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"test",
+			},
 		},
 	})
 }

@@ -30,7 +30,9 @@ var route = [[51.452339,-0.26291],[51.452011,-0.26479],[51.451839,-0.26624],[51.
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Excludes: []string{""},
+			Excludes: []string{
+				"",
+			},
 		},
 	})
 }

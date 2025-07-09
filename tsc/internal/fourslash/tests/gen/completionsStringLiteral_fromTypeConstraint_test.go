@@ -22,7 +22,14 @@ type T = Pick<Foo, "[|/**/|]">;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "bar"}, &lsproto.CompletionItem{Label: "foo"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "bar",
+				},
+				&lsproto.CompletionItem{
+					Label: "foo",
+				},
+			},
 		},
 	})
 }

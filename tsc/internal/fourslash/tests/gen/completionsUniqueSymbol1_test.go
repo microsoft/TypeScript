@@ -34,7 +34,12 @@ i[|./**/|];`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "M", InsertText: ptrTo("[M]")}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:      "M",
+					InsertText: ptrTo("[M]"),
+				},
+			},
 		},
 	})
 }

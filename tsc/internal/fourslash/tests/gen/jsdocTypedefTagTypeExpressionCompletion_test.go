@@ -50,8 +50,28 @@ var y;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindClass), Label: "Foo"}, &lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindInterface), Label: "I"}},
-			Excludes: []string{"Namespace", "SomeType", "x", "x1", "y", "method1", "property1", "method3", "method4", "foo"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "Foo",
+					Kind:  ptrTo(lsproto.CompletionItemKindClass),
+				},
+				&lsproto.CompletionItem{
+					Label: "I",
+					Kind:  ptrTo(lsproto.CompletionItemKindInterface),
+				},
+			},
+			Excludes: []string{
+				"Namespace",
+				"SomeType",
+				"x",
+				"x1",
+				"y",
+				"method1",
+				"property1",
+				"method3",
+				"method4",
+				"foo",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "typeFooMember", &fourslash.CompletionsExpectedList{
@@ -61,7 +81,12 @@ var y;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindModule), Label: "Namespace"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "Namespace",
+					Kind:  ptrTo(lsproto.CompletionItemKindModule),
+				},
+			},
 		},
 	})
 	f.VerifyCompletions(t, "NamespaceMember", &fourslash.CompletionsExpectedList{
@@ -71,7 +96,12 @@ var y;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindInterface), Label: "SomeType"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "SomeType",
+					Kind:  ptrTo(lsproto.CompletionItemKindInterface),
+				},
+			},
 		},
 	})
 	f.VerifyCompletions(t, "globalValue", &fourslash.CompletionsExpectedList{
@@ -81,8 +111,34 @@ var y;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindClass), Label: "Foo"}, &lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindVariable), Label: "x"}, &lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindVariable), Label: "x1"}, &lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindVariable), Label: "y"}},
-			Excludes: []string{"I", "Namespace", "SomeType", "method1", "property1", "method3", "method4", "foo"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "Foo",
+					Kind:  ptrTo(lsproto.CompletionItemKindClass),
+				},
+				&lsproto.CompletionItem{
+					Label: "x",
+					Kind:  ptrTo(lsproto.CompletionItemKindVariable),
+				},
+				&lsproto.CompletionItem{
+					Label: "x1",
+					Kind:  ptrTo(lsproto.CompletionItemKindVariable),
+				},
+				&lsproto.CompletionItem{
+					Label: "y",
+					Kind:  ptrTo(lsproto.CompletionItemKindVariable),
+				},
+			},
+			Excludes: []string{
+				"I",
+				"Namespace",
+				"SomeType",
+				"method1",
+				"property1",
+				"method3",
+				"method4",
+				"foo",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "valueMemberOfSomeType", nil)
@@ -93,7 +149,20 @@ var y;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindMethod), Label: "method3"}, &lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindMethod), Label: "method4"}, &lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindField), Label: "property1"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "method3",
+					Kind:  ptrTo(lsproto.CompletionItemKindMethod),
+				},
+				&lsproto.CompletionItem{
+					Label: "method4",
+					Kind:  ptrTo(lsproto.CompletionItemKindMethod),
+				},
+				&lsproto.CompletionItem{
+					Label: "property1",
+					Kind:  ptrTo(lsproto.CompletionItemKindField),
+				},
+			},
 		},
 	})
 	f.VerifyCompletions(t, "valueMemberOfFoo", &fourslash.CompletionsExpectedList{
@@ -103,7 +172,18 @@ var y;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: completionFunctionMembersPlus([]fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindMethod), SortText: ptrTo(string(ls.SortTextLocalDeclarationPriority)), Label: "method1"}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextLocationPriority)), Label: "prototype"}}),
+			Exact: completionFunctionMembersPlus(
+				[]fourslash.CompletionsExpectedItem{
+					&lsproto.CompletionItem{
+						Label:    "method1",
+						Kind:     ptrTo(lsproto.CompletionItemKindMethod),
+						SortText: ptrTo(string(ls.SortTextLocalDeclarationPriority)),
+					},
+					&lsproto.CompletionItem{
+						Label:    "prototype",
+						SortText: ptrTo(string(ls.SortTextLocationPriority)),
+					},
+				}),
 		},
 	})
 	f.VerifyCompletions(t, "propertyName", nil)

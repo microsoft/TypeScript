@@ -31,7 +31,9 @@ var b = point./*2*/equals(p1, p2);`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"origin"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"origin",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -41,7 +43,9 @@ var b = point./*2*/equals(p1, p2);`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"equals"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"equals",
+			},
 		},
 	})
 }

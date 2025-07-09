@@ -26,7 +26,10 @@ var ast2: IASTNode = {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"children", "name"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"children",
+				"name",
+			},
 		},
 	})
 }

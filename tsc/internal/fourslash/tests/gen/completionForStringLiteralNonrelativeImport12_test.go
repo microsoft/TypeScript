@@ -30,7 +30,12 @@ var foo3 = require("m/*require0*/
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"module", "dev-module", "peer-module", "optional-module"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"module",
+				"dev-module",
+				"peer-module",
+				"optional-module",
+			},
 		},
 	})
 }

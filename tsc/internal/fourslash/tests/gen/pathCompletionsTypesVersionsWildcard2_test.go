@@ -39,7 +39,10 @@ import { } from "foo//**/";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"nope", "ts-old"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"nope",
+				"ts-old",
+			},
 		},
 	})
 }

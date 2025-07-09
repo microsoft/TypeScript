@@ -31,7 +31,10 @@ foo()./*callOfEnumReturnType*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"Green", "Red"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"Green",
+				"Red",
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"variableOfEnumType", "callOfEnumReturnType"}, &fourslash.CompletionsExpectedList{
@@ -41,7 +44,14 @@ foo()./*callOfEnumReturnType*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"toExponential", "toFixed", "toLocaleString", "toPrecision", "toString", "valueOf"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"toExponential",
+				"toFixed",
+				"toLocaleString",
+				"toPrecision",
+				"toString",
+				"valueOf",
+			},
 		},
 	})
 }

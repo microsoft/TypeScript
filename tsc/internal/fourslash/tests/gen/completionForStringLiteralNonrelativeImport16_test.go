@@ -34,7 +34,13 @@ export var x = 9;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"test0", "some", &lsproto.CompletionItem{Label: "module1/path1"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"test0",
+				"some",
+				&lsproto.CompletionItem{
+					Label: "module1/path1",
+				},
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"second"}, &fourslash.CompletionsExpectedList{
@@ -44,7 +50,11 @@ export var x = 9;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "module1/path1"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "module1/path1",
+				},
+			},
 		},
 	})
 }

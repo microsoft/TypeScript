@@ -25,7 +25,12 @@ const e2: E | E2 = /*b*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Preselect: ptrTo(true), Label: "E"}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:     "E",
+					Preselect: ptrTo(true),
+				},
+			},
 		},
 	})
 	f.VerifyCompletions(t, "b", &fourslash.CompletionsExpectedList{
@@ -35,7 +40,15 @@ const e2: E | E2 = /*b*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Preselect: ptrTo(true), Label: "E"}, &lsproto.CompletionItem{Label: "E2"}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:     "E",
+					Preselect: ptrTo(true),
+				},
+				&lsproto.CompletionItem{
+					Label: "E2",
+				},
+			},
 		},
 	})
 }

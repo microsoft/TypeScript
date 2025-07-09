@@ -33,7 +33,9 @@ var imp2: I1 = {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"b"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"b",
+			},
 		},
 	})
 }

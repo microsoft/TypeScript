@@ -24,7 +24,9 @@ var x = require('fs');
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Excludes: []string{"x"},
+			Excludes: []string{
+				"x",
+			},
 		},
 	})
 }

@@ -33,7 +33,9 @@ function walk(p) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"Pet"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"Pet",
+			},
 		},
 	})
 }

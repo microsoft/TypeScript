@@ -24,7 +24,12 @@ func TestCompletionAfterNewline(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: completionGlobalsPlus([]fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "foo"}}, false),
+			Exact: completionGlobalsPlus(
+				[]fourslash.CompletionsExpectedItem{
+					&lsproto.CompletionItem{
+						Label: "foo",
+					},
+				}, false),
 		},
 	})
 }

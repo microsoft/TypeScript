@@ -23,7 +23,9 @@ var x2 = (b: number) => {/*2*/ };`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Excludes: []string{"a"},
+			Excludes: []string{
+				"a",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -33,7 +35,9 @@ var x2 = (b: number) => {/*2*/ };`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"b"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"b",
+			},
 		},
 	})
 }

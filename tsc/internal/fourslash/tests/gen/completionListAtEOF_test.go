@@ -21,7 +21,9 @@ func TestCompletionListAtEOF(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"a"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"a",
+			},
 		},
 	})
 	f.InsertLine(t, "")
@@ -32,7 +34,9 @@ func TestCompletionListAtEOF(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"a"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"a",
+			},
 		},
 	})
 	f.InsertLine(t, "")
@@ -43,7 +47,9 @@ func TestCompletionListAtEOF(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"a"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"a",
+			},
 		},
 	})
 }

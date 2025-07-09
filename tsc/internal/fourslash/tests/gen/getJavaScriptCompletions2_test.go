@@ -25,7 +25,12 @@ v./**/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindMethod), Label: "valueOf"}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "valueOf",
+					Kind:  ptrTo(lsproto.CompletionItemKindMethod),
+				},
+			},
 		},
 	})
 }

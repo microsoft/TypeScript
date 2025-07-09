@@ -30,7 +30,14 @@ class Sub extends Base {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextLocationPriority)), Label: "foo", InsertText: ptrTo("protected foo: string;"), FilterText: ptrTo("foo")}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:      "foo",
+					InsertText: ptrTo("protected foo: string;"),
+					FilterText: ptrTo("foo"),
+					SortText:   ptrTo(string(ls.SortTextLocationPriority)),
+				},
+			},
 		},
 	})
 }

@@ -22,8 +22,12 @@ func TestCompletionListInUnclosedIndexSignature02(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"C"},
-			Excludes: []string{"foo"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"C",
+			},
+			Excludes: []string{
+				"foo",
+			},
 		},
 	})
 	f.Insert(t, "typeof ")
@@ -34,7 +38,10 @@ func TestCompletionListInUnclosedIndexSignature02(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"C", "foo"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"C",
+				"foo",
+			},
 		},
 	})
 }

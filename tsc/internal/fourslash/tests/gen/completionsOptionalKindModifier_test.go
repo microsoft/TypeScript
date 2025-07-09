@@ -24,7 +24,20 @@ x./*a*/;
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindField), Label: "a?", InsertText: ptrTo("a"), FilterText: ptrTo("a")}, &lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindMethod), Label: "method?", InsertText: ptrTo("method"), FilterText: ptrTo("method")}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:      "a?",
+					InsertText: ptrTo("a"),
+					FilterText: ptrTo("a"),
+					Kind:       ptrTo(lsproto.CompletionItemKindField),
+				},
+				&lsproto.CompletionItem{
+					Label:      "method?",
+					InsertText: ptrTo("method"),
+					FilterText: ptrTo("method"),
+					Kind:       ptrTo(lsproto.CompletionItemKindMethod),
+				},
+			},
 		},
 	})
 }

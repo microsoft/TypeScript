@@ -29,7 +29,14 @@ test({
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "pressed?", InsertText: ptrTo("pressed"), FilterText: ptrTo("pressed")}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:      "pressed?",
+					InsertText: ptrTo("pressed"),
+					FilterText: ptrTo("pressed"),
+					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+				},
+			},
 		},
 	})
 }

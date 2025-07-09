@@ -29,7 +29,9 @@ f(() => (({ /*3*/ })));`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"foo"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"foo",
+			},
 		},
 	})
 }

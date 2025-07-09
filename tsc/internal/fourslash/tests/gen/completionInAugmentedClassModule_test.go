@@ -22,7 +22,9 @@ var x: m3f./**/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"I"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"I",
+			},
 		},
 	})
 }

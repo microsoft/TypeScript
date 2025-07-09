@@ -31,7 +31,9 @@ export {}`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"whatever"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"whatever",
+			},
 		},
 	})
 }

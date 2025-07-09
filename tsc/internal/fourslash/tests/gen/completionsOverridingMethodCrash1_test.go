@@ -30,7 +30,14 @@ class SubComponent extends Component<{}> {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextLocationPriority)), Label: "setState", InsertText: ptrTo("setState(stateHandler: (oldState: {}, newState: {}) => void): void {\n}"), FilterText: ptrTo("setState")}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:      "setState",
+					InsertText: ptrTo("setState(stateHandler: (oldState: {}, newState: {}) => void): void {\n}"),
+					FilterText: ptrTo("setState"),
+					SortText:   ptrTo(string(ls.SortTextLocationPriority)),
+				},
+			},
 		},
 	})
 }

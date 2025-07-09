@@ -21,7 +21,10 @@ func TestCompletionListOutsideOfClosedArrowFunction01(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Excludes: []string{"a", "b"},
+			Excludes: []string{
+				"a",
+				"b",
+			},
 		},
 	})
 }

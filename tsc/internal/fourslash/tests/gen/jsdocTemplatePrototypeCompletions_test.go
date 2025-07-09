@@ -31,7 +31,9 @@ new Foo().foo({ id: 1234 })./**/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"id"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"id",
+			},
 		},
 	})
 }

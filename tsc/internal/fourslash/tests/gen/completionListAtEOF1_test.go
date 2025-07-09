@@ -21,7 +21,9 @@ func TestCompletionListAtEOF1(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"charAt"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"charAt",
+			},
 		},
 	})
 }

@@ -32,7 +32,10 @@ import {} from "#internal//*1*/";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"a", "something"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"a",
+				"something",
+			},
 		},
 	})
 }

@@ -29,7 +29,10 @@ var foobar: Bar<{ prop1: string } & {/**/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"one", "two"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"one",
+				"two",
+			},
 		},
 	})
 }

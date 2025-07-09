@@ -25,8 +25,13 @@ var t = new n(0, 1, '');`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"x", "y"},
-			Excludes: []string{"z"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"x",
+				"y",
+			},
+			Excludes: []string{
+				"z",
+			},
 		},
 	})
 }

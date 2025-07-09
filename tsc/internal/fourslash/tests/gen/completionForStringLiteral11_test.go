@@ -24,7 +24,11 @@ switch (a) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"abacus", "abaddon", "arf"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"abacus",
+				"abaddon",
+				"arf",
+			},
 		},
 	})
 }

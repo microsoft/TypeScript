@@ -44,7 +44,9 @@ const divide = 1 //*divide*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"param"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"param",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "comment", nil)
@@ -55,7 +57,14 @@ const divide = 1 //*divide*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "a"}, &lsproto.CompletionItem{Label: "b"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "a",
+				},
+				&lsproto.CompletionItem{
+					Label: "b",
+				},
+			},
 		},
 	})
 	f.VerifyCompletions(t, "closeQuote", nil)
@@ -66,7 +75,14 @@ const divide = 1 //*divide*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "a"}, &lsproto.CompletionItem{Label: "b"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "a",
+				},
+				&lsproto.CompletionItem{
+					Label: "b",
+				},
+			},
 		},
 	})
 	f.VerifyCompletions(t, "closeSingleQuote", nil)
@@ -77,7 +93,14 @@ const divide = 1 //*divide*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "a"}, &lsproto.CompletionItem{Label: "b"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "a",
+				},
+				&lsproto.CompletionItem{
+					Label: "b",
+				},
+			},
 		},
 	})
 	f.VerifyCompletions(t, "closeTemplate", nil)
@@ -90,7 +113,9 @@ const divide = 1 //*divide*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"div"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"div",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "lessThan", nil)
@@ -101,7 +126,9 @@ const divide = 1 //*divide*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"div>"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"div>",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "path", &fourslash.CompletionsExpectedList{
@@ -111,7 +138,9 @@ const divide = 1 //*divide*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"importMe"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"importMe",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "divide", nil)

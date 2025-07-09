@@ -21,7 +21,9 @@ let foo: /**/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"NonExistentType"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"NonExistentType",
+			},
 		},
 	})
 }

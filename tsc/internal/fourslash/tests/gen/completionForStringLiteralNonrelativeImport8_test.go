@@ -48,7 +48,13 @@ export var z = 5;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"2test", "prefix", "prefix-only", "0test", "1test"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"2test",
+				"prefix",
+				"prefix-only",
+				"0test",
+				"1test",
+			},
 		},
 	})
 }

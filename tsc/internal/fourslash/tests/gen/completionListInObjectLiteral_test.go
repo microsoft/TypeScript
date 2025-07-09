@@ -29,7 +29,10 @@ t.pos = { x: 4, y: 3 + t./**/ };`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"name", "pos"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"name",
+				"pos",
+			},
 		},
 	})
 }

@@ -31,7 +31,11 @@ export var x = 9;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"someFile.ts", "my_typings", "sub"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"someFile.ts",
+				"my_typings",
+				"sub",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
@@ -41,7 +45,9 @@ export var x = 9;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"some-module"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"some-module",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -51,7 +57,9 @@ export var x = 9;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"someOtherFile.ts"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"someOtherFile.ts",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{
@@ -61,7 +69,9 @@ export var x = 9;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"some-module"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"some-module",
+			},
 		},
 	})
 }

@@ -34,7 +34,12 @@ const { /*4*/ } = Foo;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Unsorted: []fourslash.CompletionsExpectedItem{"xxx1", "xxx2", "xxx3", "foo"},
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"xxx1",
+				"xxx2",
+				"xxx3",
+				"foo",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -44,7 +49,12 @@ const { /*4*/ } = Foo;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Unsorted: []fourslash.CompletionsExpectedItem{"prototype", "xxx4", "xxx5", "xxx6"},
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"prototype",
+				"xxx4",
+				"xxx5",
+				"xxx6",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{
@@ -54,7 +64,10 @@ const { /*4*/ } = Foo;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Unsorted: []fourslash.CompletionsExpectedItem{"xxx3", "foo"},
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"xxx3",
+				"foo",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "4", &fourslash.CompletionsExpectedList{
@@ -64,7 +77,10 @@ const { /*4*/ } = Foo;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Unsorted: []fourslash.CompletionsExpectedItem{"prototype", "xxx6"},
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"prototype",
+				"xxx6",
+			},
 		},
 	})
 }

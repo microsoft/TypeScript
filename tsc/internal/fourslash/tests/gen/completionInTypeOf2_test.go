@@ -23,7 +23,9 @@ var x: typeof m1c./*1*/;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"C"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"C",
+			},
 		},
 	})
 }

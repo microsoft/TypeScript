@@ -26,7 +26,10 @@ func TestMemberListOfEnumInModule(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"bar", "baz"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"bar",
+				"baz",
+			},
 		},
 	})
 }

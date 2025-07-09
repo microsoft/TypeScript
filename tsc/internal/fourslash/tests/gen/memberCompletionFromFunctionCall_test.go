@@ -26,7 +26,9 @@ foo.text(function() { })/**/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"text"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"text",
+			},
 		},
 	})
 }

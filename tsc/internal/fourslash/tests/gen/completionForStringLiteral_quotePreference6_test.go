@@ -22,7 +22,14 @@ const t: T = /**/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "\"1\""}, &lsproto.CompletionItem{Label: "\"0\""}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "\"1\"",
+				},
+				&lsproto.CompletionItem{
+					Label: "\"0\"",
+				},
+			},
 		},
 	})
 }

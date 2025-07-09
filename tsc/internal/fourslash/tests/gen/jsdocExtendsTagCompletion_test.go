@@ -21,7 +21,10 @@ class A {}`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: completionGlobalTypesPlus([]fourslash.CompletionsExpectedItem{"A"}),
+			Exact: completionGlobalTypesPlus(
+				[]fourslash.CompletionsExpectedItem{
+					"A",
+				}),
 		},
 	})
 }

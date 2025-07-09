@@ -25,7 +25,9 @@ a./**/;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"x"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"x",
+			},
 		},
 	})
 }

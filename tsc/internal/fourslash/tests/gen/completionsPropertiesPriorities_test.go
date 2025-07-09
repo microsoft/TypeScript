@@ -36,7 +36,32 @@ const i: I = {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextLocationPriority)), Kind: ptrTo(lsproto.CompletionItemKindField), Label: "d"}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Kind: ptrTo(lsproto.CompletionItemKindField), Label: "c?", InsertText: ptrTo("c"), FilterText: ptrTo("c")}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextMemberDeclaredBySpreadAssignment)), Kind: ptrTo(lsproto.CompletionItemKindField), Label: "a"}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextMemberDeclaredBySpreadAssignment)), Kind: ptrTo(lsproto.CompletionItemKindField), Label: "B?", InsertText: ptrTo("B"), FilterText: ptrTo("B")}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:    "d",
+					SortText: ptrTo(string(ls.SortTextLocationPriority)),
+					Kind:     ptrTo(lsproto.CompletionItemKindField),
+				},
+				&lsproto.CompletionItem{
+					Label:      "c?",
+					InsertText: ptrTo("c"),
+					FilterText: ptrTo("c"),
+					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+					Kind:       ptrTo(lsproto.CompletionItemKindField),
+				},
+				&lsproto.CompletionItem{
+					Label:    "a",
+					SortText: ptrTo(string(ls.SortTextMemberDeclaredBySpreadAssignment)),
+					Kind:     ptrTo(lsproto.CompletionItemKindField),
+				},
+				&lsproto.CompletionItem{
+					Label:      "B?",
+					InsertText: ptrTo("B"),
+					FilterText: ptrTo("B"),
+					SortText:   ptrTo(string(ls.SortTextMemberDeclaredBySpreadAssignment)),
+					Kind:       ptrTo(lsproto.CompletionItemKindField),
+				},
+			},
 		},
 	})
 }

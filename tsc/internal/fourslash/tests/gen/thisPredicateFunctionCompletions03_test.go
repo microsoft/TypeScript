@@ -62,7 +62,11 @@ func TestThisPredicateFunctionCompletions03(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Unsorted: []fourslash.CompletionsExpectedItem{"lead", "isLeader", "isFollower"},
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"lead",
+				"isLeader",
+				"isFollower",
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"4", "8"}, &fourslash.CompletionsExpectedList{
@@ -72,7 +76,11 @@ func TestThisPredicateFunctionCompletions03(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Unsorted: []fourslash.CompletionsExpectedItem{"follow", "isLeader", "isFollower"},
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"follow",
+				"isLeader",
+				"isFollower",
+			},
 		},
 	})
 }

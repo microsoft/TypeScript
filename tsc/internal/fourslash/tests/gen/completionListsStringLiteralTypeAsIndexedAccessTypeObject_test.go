@@ -31,7 +31,11 @@ let sixthCase: Foo["qu/*case_6*/"]`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "bar"}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "bar",
+				},
+			},
 		},
 	})
 	f.VerifyCompletions(t, "case_6", &fourslash.CompletionsExpectedList{
@@ -41,7 +45,11 @@ let sixthCase: Foo["qu/*case_6*/"]`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "qux"}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "qux",
+				},
+			},
 		},
 	})
 }

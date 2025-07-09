@@ -25,7 +25,9 @@ import./*3*/meta`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"meta"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"meta",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", nil)
@@ -36,7 +38,9 @@ import./*3*/meta`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"meta"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"meta",
+			},
 		},
 	})
 }

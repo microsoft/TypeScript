@@ -40,7 +40,12 @@ class C1 extends Base {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"protectedOverriddenMethod", "protectedOverriddenProperty", "publicMethod", "publicProperty"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"protectedOverriddenMethod",
+				"protectedOverriddenProperty",
+				"publicMethod",
+				"publicProperty",
+			},
 		},
 	})
 }

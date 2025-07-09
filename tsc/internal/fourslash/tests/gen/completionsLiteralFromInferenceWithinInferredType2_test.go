@@ -67,7 +67,10 @@ createMachine({
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"#wow_deep_id", ".child"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"#wow_deep_id",
+				".child",
+			},
 		},
 	})
 }

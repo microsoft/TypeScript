@@ -27,7 +27,10 @@ Foo.bar./*enumValueReference*/;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"bar", "baz"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"bar",
+				"baz",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "enumValueReference", &fourslash.CompletionsExpectedList{
@@ -37,7 +40,14 @@ Foo.bar./*enumValueReference*/;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Unsorted: []fourslash.CompletionsExpectedItem{"toString", "toFixed", "toExponential", "toPrecision", "valueOf", "toLocaleString"},
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"toString",
+				"toFixed",
+				"toExponential",
+				"toPrecision",
+				"valueOf",
+				"toLocaleString",
+			},
 		},
 	})
 }

@@ -27,7 +27,10 @@ class K {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"#value", "foo"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"#value",
+				"foo",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
@@ -37,7 +40,10 @@ class K {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"#value", "foo"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"#value",
+				"foo",
+			},
 		},
 	})
 }

@@ -51,7 +51,17 @@ const m = import("./src//*9*/");`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"decl.cjs", "decl.mjs", "decl.js", "js.cjs", "js.js", "js.mjs", "module.cjs", "module.js", "module.mjs"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"decl.cjs",
+				"decl.mjs",
+				"decl.js",
+				"js.cjs",
+				"js.js",
+				"js.mjs",
+				"module.cjs",
+				"module.js",
+				"module.mjs",
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"2", "4", "5", "7", "8"}, &fourslash.CompletionsExpectedList{
@@ -61,7 +71,17 @@ const m = import("./src//*9*/");`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"decl.cjs", "decl.mjs", "decl", "js.cjs", "js", "js.mjs", "module.cjs", "module", "module.mjs"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"decl.cjs",
+				"decl.mjs",
+				"decl",
+				"js.cjs",
+				"js",
+				"js.mjs",
+				"module.cjs",
+				"module",
+				"module.mjs",
+			},
 		},
 	})
 }

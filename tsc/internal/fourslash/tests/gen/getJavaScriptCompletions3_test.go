@@ -25,7 +25,12 @@ v./**/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindMethod), Label: "concat"}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "concat",
+					Kind:  ptrTo(lsproto.CompletionItemKindMethod),
+				},
+			},
 		},
 	})
 }

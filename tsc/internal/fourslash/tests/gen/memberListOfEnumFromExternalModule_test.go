@@ -25,7 +25,10 @@ var topic = t.Topic./*1*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"One", "Two"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"One",
+				"Two",
+			},
 		},
 	})
 }

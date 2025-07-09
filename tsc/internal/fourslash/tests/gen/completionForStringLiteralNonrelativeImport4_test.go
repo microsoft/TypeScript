@@ -35,7 +35,11 @@ var foo7 = require("f/*require0*/
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"fake-module3", "fake-module2", "fake-module"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"fake-module3",
+				"fake-module2",
+				"fake-module",
+			},
 		},
 	})
 }

@@ -22,8 +22,12 @@ func TestCompletionOfAwaitPromise4(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"then"},
-			Excludes: []string{"trim"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"then",
+			},
+			Excludes: []string{
+				"trim",
+			},
 		},
 	})
 }

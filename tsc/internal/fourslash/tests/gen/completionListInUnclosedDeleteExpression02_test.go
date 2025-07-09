@@ -21,7 +21,10 @@ var y = (p) => delete /*1*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"x", "p"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"x",
+				"p",
+			},
 		},
 	})
 }

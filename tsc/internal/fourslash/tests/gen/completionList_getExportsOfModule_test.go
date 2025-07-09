@@ -25,7 +25,9 @@ let y: /**/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Excludes: []string{"x"},
+			Excludes: []string{
+				"x",
+			},
 		},
 	})
 }

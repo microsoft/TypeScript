@@ -32,7 +32,10 @@ var foo3 = require("./dir//*require2*/
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"f1", "f2"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"f1",
+				"f2",
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"import_as2", "import_equals2", "require2"}, &fourslash.CompletionsExpectedList{
@@ -42,7 +45,10 @@ var foo3 = require("./dir//*require2*/
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"f1", "f2"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"f1",
+				"f2",
+			},
 		},
 	})
 }

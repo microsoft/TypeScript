@@ -22,7 +22,11 @@ type AorB = Foo["a" | "/*2*/"];`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"a", "b", "c"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"a",
+				"b",
+				"c",
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"2"}, &fourslash.CompletionsExpectedList{
@@ -32,7 +36,10 @@ type AorB = Foo["a" | "/*2*/"];`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"b", "c"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"b",
+				"c",
+			},
 		},
 	})
 }

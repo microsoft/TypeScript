@@ -37,7 +37,10 @@ export var y = 10;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"module1", "module2"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"module1",
+				"module2",
+			},
 		},
 	})
 }

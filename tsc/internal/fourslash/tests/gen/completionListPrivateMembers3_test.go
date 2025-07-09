@@ -36,7 +36,9 @@ class Self {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"p"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"p",
+			},
 		},
 	})
 }

@@ -25,8 +25,15 @@ declare function foo<TString, TNumber>(obj: I<TString, TNumber>): { str: T/*1*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"I", "TString", "TNumber"},
-			Excludes: []string{"foo", "obj"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"I",
+				"TString",
+				"TNumber",
+			},
+			Excludes: []string{
+				"foo",
+				"obj",
+			},
 		},
 	})
 }

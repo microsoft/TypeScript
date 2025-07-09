@@ -22,7 +22,10 @@ func TestCompletionOfAwaitPromise6(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"catch", "then"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"catch",
+				"then",
+			},
 		},
 	})
 }

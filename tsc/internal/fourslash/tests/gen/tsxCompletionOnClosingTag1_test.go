@@ -27,7 +27,9 @@ func TestTsxCompletionOnClosingTag1(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"div>"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"div>",
+			},
 		},
 	})
 }

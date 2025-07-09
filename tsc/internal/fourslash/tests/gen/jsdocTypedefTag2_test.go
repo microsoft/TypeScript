@@ -38,7 +38,9 @@ function b(my2) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"charAt"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"charAt",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -48,7 +50,9 @@ function b(my2) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Excludes: []string{"charAt"},
+			Excludes: []string{
+				"charAt",
+			},
 		},
 	})
 }

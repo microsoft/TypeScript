@@ -26,8 +26,12 @@ function f({ property1, /**/ }: I): void {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"property2"},
-			Excludes: []string{"property1"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"property2",
+			},
+			Excludes: []string{
+				"property1",
+			},
 		},
 	})
 }

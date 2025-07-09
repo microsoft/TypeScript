@@ -22,7 +22,11 @@ a4(...<crash>/**/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: completionGlobalsPlus([]fourslash.CompletionsExpectedItem{"a4", "array"}, false),
+			Exact: completionGlobalsPlus(
+				[]fourslash.CompletionsExpectedItem{
+					"a4",
+					"array",
+				}, false),
 		},
 	})
 }

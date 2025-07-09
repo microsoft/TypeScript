@@ -49,7 +49,13 @@ func TestThisPredicateFunctionCompletions02(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"contents", "extraContents", "isPackedTight", "isSundries", "isSupplies"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"contents",
+				"extraContents",
+				"isPackedTight",
+				"isSundries",
+				"isSupplies",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -59,7 +65,9 @@ func TestThisPredicateFunctionCompletions02(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"broken"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"broken",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "4", &fourslash.CompletionsExpectedList{
@@ -69,7 +77,9 @@ func TestThisPredicateFunctionCompletions02(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"spoiled"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"spoiled",
+			},
 		},
 	})
 }

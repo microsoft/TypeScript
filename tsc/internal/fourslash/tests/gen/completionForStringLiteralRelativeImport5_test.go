@@ -38,7 +38,11 @@ var foo3 = require(".//*require3*/
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Unsorted: []fourslash.CompletionsExpectedItem{"f1", "f2", "test2"},
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"f1",
+				"f2",
+				"test2",
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"import_as2", "import_equals2", "require2"}, &fourslash.CompletionsExpectedList{
@@ -48,7 +52,10 @@ var foo3 = require(".//*require3*/
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Unsorted: []fourslash.CompletionsExpectedItem{"dir", "index"},
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"dir",
+				"index",
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"import_as3", "import_equals3", "require3"}, &fourslash.CompletionsExpectedList{
@@ -58,7 +65,9 @@ var foo3 = require(".//*require3*/
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Unsorted: []fourslash.CompletionsExpectedItem{"dir"},
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"dir",
+			},
 		},
 	})
 }

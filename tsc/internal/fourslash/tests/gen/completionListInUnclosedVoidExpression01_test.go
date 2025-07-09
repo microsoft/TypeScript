@@ -21,7 +21,10 @@ var y = (p) => void /*1*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"p", "x"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"p",
+				"x",
+			},
 		},
 	})
 }

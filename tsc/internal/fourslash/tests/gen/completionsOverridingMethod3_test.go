@@ -30,7 +30,14 @@ declare class Poltergeist implements Ghost {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextLocationPriority)), Label: "boo", InsertText: ptrTo("boo(): string;"), FilterText: ptrTo("boo")}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:      "boo",
+					InsertText: ptrTo("boo(): string;"),
+					FilterText: ptrTo("boo"),
+					SortText:   ptrTo(string(ls.SortTextLocationPriority)),
+				},
+			},
 		},
 	})
 }

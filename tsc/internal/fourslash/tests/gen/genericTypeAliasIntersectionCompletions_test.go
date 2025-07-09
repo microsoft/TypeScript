@@ -46,7 +46,12 @@ func TestGenericTypeAliasIntersectionCompletions(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Unsorted: []fourslash.CompletionsExpectedItem{"right", "left", "value", "constructor"},
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"right",
+				"left",
+				"value",
+				"constructor",
+			},
 		},
 	})
 }

@@ -31,7 +31,9 @@ import { add } from ".//**/";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"add"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"add",
+			},
 		},
 	})
 }

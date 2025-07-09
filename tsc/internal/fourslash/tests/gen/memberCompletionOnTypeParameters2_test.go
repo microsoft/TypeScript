@@ -33,7 +33,9 @@ class C<U extends A, T extends A> {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"foo"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"foo",
+			},
 		},
 	})
 }

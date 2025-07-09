@@ -26,7 +26,10 @@ var p15: MyPoint = {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"x1", "y1"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"x1",
+				"y1",
+			},
 		},
 	})
 }

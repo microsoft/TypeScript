@@ -38,7 +38,18 @@ export var y = 10;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"lib", "lib.decorators", "lib.decorators.legacy", "tests", &lsproto.CompletionItem{Label: "/module1"}, &lsproto.CompletionItem{Label: "/module2"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"lib",
+				"lib.decorators",
+				"lib.decorators.legacy",
+				"tests",
+				&lsproto.CompletionItem{
+					Label: "/module1",
+				},
+				&lsproto.CompletionItem{
+					Label: "/module2",
+				},
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"import_equals0"}, &fourslash.CompletionsExpectedList{
@@ -48,7 +59,18 @@ export var y = 10;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"lib", "lib.decorators", "lib.decorators.legacy", "tests", &lsproto.CompletionItem{Label: "/module1"}, &lsproto.CompletionItem{Label: "/module2"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"lib",
+				"lib.decorators",
+				"lib.decorators.legacy",
+				"tests",
+				&lsproto.CompletionItem{
+					Label: "/module1",
+				},
+				&lsproto.CompletionItem{
+					Label: "/module2",
+				},
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"require0"}, &fourslash.CompletionsExpectedList{
@@ -58,7 +80,18 @@ export var y = 10;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"lib", "lib.decorators", "lib.decorators.legacy", "tests", &lsproto.CompletionItem{Label: "/module1"}, &lsproto.CompletionItem{Label: "/module2"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"lib",
+				"lib.decorators",
+				"lib.decorators.legacy",
+				"tests",
+				&lsproto.CompletionItem{
+					Label: "/module1",
+				},
+				&lsproto.CompletionItem{
+					Label: "/module2",
+				},
+			},
 		},
 	})
 }

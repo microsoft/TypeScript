@@ -39,7 +39,11 @@ import { } from "foo//**/";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"browser", "nope", "dist"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"browser",
+				"nope",
+				"dist",
+			},
 		},
 	})
 	f.Insert(t, "browser/")
@@ -50,7 +54,11 @@ import { } from "foo//**/";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"blah", "index", "subfolder"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"blah",
+				"index",
+				"subfolder",
+			},
 		},
 	})
 	f.Insert(t, "subfolder/")
@@ -61,7 +69,9 @@ import { } from "foo//**/";`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"one"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"one",
+			},
 		},
 	})
 }

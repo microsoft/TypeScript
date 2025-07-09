@@ -22,7 +22,9 @@ x./*1*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"toFixed"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"toFixed",
+			},
 		},
 	})
 }

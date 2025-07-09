@@ -29,7 +29,10 @@ class Bar extends Foo {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"foo", "y"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"foo",
+				"y",
+			},
 		},
 	})
 }

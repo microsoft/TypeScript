@@ -22,7 +22,9 @@ let x = /absidey/
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"v"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"v",
+			},
 		},
 	})
 }

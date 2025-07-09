@@ -39,7 +39,10 @@ test({
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"bar", "foo"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"bar",
+				"foo",
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"ts2"}, &fourslash.CompletionsExpectedList{
@@ -49,7 +52,10 @@ test({
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"\"foo\"", "\"bar\""},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"\"foo\"",
+				"\"bar\"",
+			},
 		},
 	})
 }

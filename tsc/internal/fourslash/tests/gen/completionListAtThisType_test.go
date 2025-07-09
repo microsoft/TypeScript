@@ -31,7 +31,11 @@ func TestCompletionListAtThisType(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"bar", "baz", "foo"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"bar",
+				"baz",
+				"foo",
+			},
 		},
 	})
 }

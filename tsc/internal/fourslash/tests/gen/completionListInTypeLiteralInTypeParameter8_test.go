@@ -43,7 +43,9 @@ var foobar: Bar<{
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"four"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"four",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "0", &fourslash.CompletionsExpectedList{
@@ -63,7 +65,9 @@ var foobar: Bar<{
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"one"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"one",
+			},
 		},
 	})
 }

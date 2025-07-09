@@ -27,7 +27,9 @@ function test(type) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"charAt"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"charAt",
+			},
 		},
 	})
 }

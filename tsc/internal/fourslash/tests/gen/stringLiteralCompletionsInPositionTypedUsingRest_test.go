@@ -30,7 +30,11 @@ new Q<{ id: string; name: string }>().select("name", "/*ts3*/");`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"aaa", "bbb", "ccc"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"aaa",
+				"bbb",
+				"ccc",
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"ts3"}, &fourslash.CompletionsExpectedList{
@@ -40,7 +44,10 @@ new Q<{ id: string; name: string }>().select("name", "/*ts3*/");`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"name", "id"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"name",
+				"id",
+			},
 		},
 	})
 }

@@ -30,7 +30,14 @@ class Foo implements IFoo {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextLocationPriority)), Label: "foo", InsertText: ptrTo("foo(arg: string): number {\n}"), FilterText: ptrTo("foo")}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:      "foo",
+					InsertText: ptrTo("foo(arg: string): number {\n}"),
+					FilterText: ptrTo("foo"),
+					SortText:   ptrTo(string(ls.SortTextLocationPriority)),
+				},
+			},
 		},
 	})
 }

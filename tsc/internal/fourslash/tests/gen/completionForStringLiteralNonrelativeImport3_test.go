@@ -40,7 +40,14 @@ var foo3 = require("fake-module//*require0*/
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"dts", "js", "jsx", "repeated", "ts", "tsx"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"dts",
+				"js",
+				"jsx",
+				"repeated",
+				"ts",
+				"tsx",
+			},
 		},
 	})
 }

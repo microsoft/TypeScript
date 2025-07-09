@@ -27,7 +27,10 @@ func TestLambdaThisMembers(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"a", "b"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"a",
+				"b",
+			},
 		},
 	})
 }

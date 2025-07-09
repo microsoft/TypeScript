@@ -38,8 +38,12 @@ const obj = {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"o"},
-			Excludes: []string{"obj"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"o",
+			},
+			Excludes: []string{
+				"obj",
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"2"}, &fourslash.CompletionsExpectedList{
@@ -49,8 +53,13 @@ const obj = {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"o", "obj"},
-			Excludes: []string{"obj1"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"o",
+				"obj",
+			},
+			Excludes: []string{
+				"obj1",
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"3"}, &fourslash.CompletionsExpectedList{
@@ -60,7 +69,11 @@ const obj = {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"o", "obj", "obj1"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"o",
+				"obj",
+				"obj1",
+			},
 		},
 	})
 	f.VerifyCompletions(t, []string{"4"}, &fourslash.CompletionsExpectedList{
@@ -70,8 +83,12 @@ const obj = {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"o"},
-			Excludes: []string{"obj"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"o",
+			},
+			Excludes: []string{
+				"obj",
+			},
 		},
 	})
 }

@@ -34,7 +34,12 @@ x/**/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindMethod), Label: "substring"}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "substring",
+					Kind:  ptrTo(lsproto.CompletionItemKindMethod),
+				},
+			},
 		},
 	})
 }

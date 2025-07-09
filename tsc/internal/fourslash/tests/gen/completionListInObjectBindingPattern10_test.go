@@ -30,7 +30,9 @@ var [{ property1: { propertyOfI_1, }, /*1*/ }, { /*2*/ }] = foo;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"property2"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"property2",
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -40,7 +42,10 @@ var [{ property1: { propertyOfI_1, }, /*1*/ }, { /*2*/ }] = foo;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"property1", "property2"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"property1",
+				"property2",
+			},
 		},
 	})
 }

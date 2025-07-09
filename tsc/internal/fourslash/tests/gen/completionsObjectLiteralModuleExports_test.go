@@ -26,8 +26,12 @@ module.exports = {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"almanac"},
-			Excludes: []string{"a"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"almanac",
+			},
+			Excludes: []string{
+				"a",
+			},
 		},
 	})
 }

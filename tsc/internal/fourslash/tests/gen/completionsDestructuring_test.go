@@ -23,7 +23,10 @@ for (const { /*c*/ } of points) {}`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"x", "y"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"x",
+				"y",
+			},
 		},
 	})
 }

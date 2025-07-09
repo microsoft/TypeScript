@@ -25,7 +25,17 @@ f("/*2*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "Option 1"}, &lsproto.CompletionItem{Label: "Option 2"}, &lsproto.CompletionItem{Label: "Option 3"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "Option 1",
+				},
+				&lsproto.CompletionItem{
+					Label: "Option 2",
+				},
+				&lsproto.CompletionItem{
+					Label: "Option 3",
+				},
+			},
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -35,7 +45,17 @@ f("/*2*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "Option 1"}, &lsproto.CompletionItem{Label: "Option 2"}, &lsproto.CompletionItem{Label: "Option 3"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "Option 1",
+				},
+				&lsproto.CompletionItem{
+					Label: "Option 2",
+				},
+				&lsproto.CompletionItem{
+					Label: "Option 3",
+				},
+			},
 		},
 	})
 }

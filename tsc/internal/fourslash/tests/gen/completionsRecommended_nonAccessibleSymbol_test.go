@@ -24,7 +24,9 @@ f()(new /**/);`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Excludes: []string{"C"},
+			Excludes: []string{
+				"C",
+			},
 		},
 	})
 }

@@ -22,7 +22,9 @@ var y = x satisfies /**/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"T"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"T",
+			},
 		},
 	})
 }

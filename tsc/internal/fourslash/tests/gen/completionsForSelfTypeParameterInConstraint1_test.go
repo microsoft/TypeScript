@@ -26,7 +26,9 @@ declare function createMachine<Config extends StateMachine</*1*/>>(
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"Config"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"Config",
+			},
 		},
 	})
 }

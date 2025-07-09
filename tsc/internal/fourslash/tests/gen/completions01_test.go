@@ -24,7 +24,9 @@ x.forEach(y => y/*2*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"trim"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"trim",
+			},
 		},
 	})
 	f.Insert(t, "});")
@@ -37,7 +39,9 @@ x.forEach(y => y/*2*/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"trim"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"trim",
+			},
 		},
 	})
 }

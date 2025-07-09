@@ -35,7 +35,11 @@ const c = <Component /**/ kind="component-one" />`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Label: "foo"}},
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "foo",
+				},
+			},
 		},
 	})
 }

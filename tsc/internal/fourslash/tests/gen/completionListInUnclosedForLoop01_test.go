@@ -20,7 +20,9 @@ func TestCompletionListInUnclosedForLoop01(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"i"},
+			Includes: []fourslash.CompletionsExpectedItem{
+				"i",
+			},
 		},
 	})
 }

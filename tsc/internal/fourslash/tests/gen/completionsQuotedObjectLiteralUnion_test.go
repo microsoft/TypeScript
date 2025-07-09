@@ -30,7 +30,10 @@ const obj: A | B = {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"a-prop", "b-prop"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"a-prop",
+				"b-prop",
+			},
 		},
 	})
 }

@@ -26,7 +26,9 @@ declare module 'thing' {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"Q"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"Q",
+			},
 		},
 	})
 }

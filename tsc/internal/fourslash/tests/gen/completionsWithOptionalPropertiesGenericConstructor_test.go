@@ -32,7 +32,20 @@ new Clazz({ /*1*/ })`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "someFunction?", InsertText: ptrTo("someFunction"), FilterText: ptrTo("someFunction")}, &lsproto.CompletionItem{SortText: ptrTo(string(ls.SortTextOptionalMember)), Label: "anotherFunction?", InsertText: ptrTo("anotherFunction"), FilterText: ptrTo("anotherFunction")}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:      "someFunction?",
+					InsertText: ptrTo("someFunction"),
+					FilterText: ptrTo("someFunction"),
+					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+				},
+				&lsproto.CompletionItem{
+					Label:      "anotherFunction?",
+					InsertText: ptrTo("anotherFunction"),
+					FilterText: ptrTo("anotherFunction"),
+					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+				},
+			},
 		},
 	})
 }

@@ -21,7 +21,8 @@ func TestCompletionListKeywords(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: completionGlobalsPlus([]fourslash.CompletionsExpectedItem{}, true),
+			Exact: completionGlobalsPlus(
+				[]fourslash.CompletionsExpectedItem{}, true),
 		},
 	})
 }

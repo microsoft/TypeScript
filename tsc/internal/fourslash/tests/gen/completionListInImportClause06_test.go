@@ -26,7 +26,9 @@ export declare let x: number;`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"@a/b"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"@a/b",
+			},
 		},
 	})
 }

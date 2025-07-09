@@ -27,7 +27,9 @@ func TestTsxCompletion6(t *testing.T) {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"TWO"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"TWO",
+			},
 		},
 	})
 }

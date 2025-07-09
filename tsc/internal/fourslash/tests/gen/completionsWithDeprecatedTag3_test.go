@@ -27,7 +27,13 @@ foo/**/`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{&lsproto.CompletionItem{Kind: ptrTo(lsproto.CompletionItemKindFunction), SortText: ptrTo(string(ls.SortTextLocationPriority)), Label: "foo"}},
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:    "foo",
+					Kind:     ptrTo(lsproto.CompletionItemKindFunction),
+					SortText: ptrTo(string(ls.SortTextLocationPriority)),
+				},
+			},
 		},
 	})
 }

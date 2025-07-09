@@ -33,7 +33,10 @@ class Service {
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"open", "openWrapped"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"open",
+				"openWrapped",
+			},
 		},
 	})
 }

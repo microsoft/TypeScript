@@ -31,7 +31,10 @@ let { /**/ }: I | J = { x: 10 };`
 			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{"x", "y"},
+			Exact: []fourslash.CompletionsExpectedItem{
+				"x",
+				"y",
+			},
 		},
 	})
 }
