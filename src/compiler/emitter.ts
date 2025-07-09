@@ -5815,14 +5815,36 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         }
     }
 
+    function shouldSkipJsxLeadingComments(node: Node) {
+        switch (node.kind) {
+            case SyntaxKind.JsxText:
+            case SyntaxKind.JsxExpression:
+            case SyntaxKind.JsxClosingElement:
+            case SyntaxKind.JsxClosingFragment:
+                return true;
+        }
+        return false;
+    }
+
+    function shouldSkipJsxTrailingComments(node: Node) {
+        switch (node.kind) {
+            case SyntaxKind.JsxText:
+            case SyntaxKind.JsxExpression:
+            case SyntaxKind.JsxOpeningElement:
+            case SyntaxKind.JsxOpeningFragment:
+                return true;
+        }
+        return false;
+    }
+
     function emitLeadingCommentsOfNode(node: Node, emitFlags: EmitFlags, pos: number, end: number) {
         enterComment();
         hasWrittenComment = false;
 
         // We have to explicitly check that the node is JsxText because if the compilerOptions.jsx is "preserve" we will not do any transformation.
         // It is expensive to walk entire tree just to set one kind of node to have no comments.
-        const skipLeadingComments = pos < 0 || (emitFlags & EmitFlags.NoLeadingComments) !== 0 || node.kind === SyntaxKind.JsxText;
-        const skipTrailingComments = end < 0 || (emitFlags & EmitFlags.NoTrailingComments) !== 0 || node.kind === SyntaxKind.JsxText;
+        const skipLeadingComments = pos < 0 || ((emitFlags & EmitFlags.NoLeadingComments) !== 0) || shouldSkipJsxLeadingComments(node);
+        const skipTrailingComments = end < 0 || ((emitFlags & EmitFlags.NoTrailingComments) !== 0) || shouldSkipJsxTrailingComments(node);
 
         // Save current container state on the stack.
         if ((pos > 0 || end > 0) && pos !== end) {
@@ -5854,7 +5876,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
     function emitTrailingCommentsOfNode(node: Node, emitFlags: EmitFlags, pos: number, end: number, savedContainerPos: number, savedContainerEnd: number, savedDeclarationListContainerEnd: number) {
         enterComment();
-        const skipTrailingComments = end < 0 || (emitFlags & EmitFlags.NoTrailingComments) !== 0 || node.kind === SyntaxKind.JsxText;
+        const skipTrailingComments = end < 0 || (emitFlags & EmitFlags.NoTrailingComments) !== 0 || shouldSkipJsxTrailingComments(node);
         forEach(getSyntheticTrailingComments(node), emitTrailingSynthesizedComment);
         if ((pos > 0 || end > 0) && pos !== end) {
             // Restore previous container state.

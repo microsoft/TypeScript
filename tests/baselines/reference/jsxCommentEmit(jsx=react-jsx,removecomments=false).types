@@ -1,0 +1,73 @@
+//// [tests/cases/compiler/jsxCommentEmit.ts] ////
+
+=== file.tsx ===
+let x = "hi";
+>x : string
+>  : ^^^^^^
+>"hi" : "hi"
+>     : ^^^^
+
+const eg1 = <div>{x}/*mid*/{x}</div>;
+>eg1 : any
+>    : ^^^
+><div>{x}/*mid*/{x}</div> : any
+>                         : ^^^
+>div : any
+>    : ^^^
+>x : string
+>  : ^^^^^^
+>x : string
+>  : ^^^^^^
+>div : any
+>    : ^^^
+
+const eg2 = <div>/*pre*/{x}/*post*/</div>;
+>eg2 : any
+>    : ^^^
+><div>/*pre*/{x}/*post*/</div> : any
+>                              : ^^^
+>div : any
+>    : ^^^
+>x : string
+>  : ^^^^^^
+>div : any
+>    : ^^^
+
+const eg3 = <div>/*pre*/{x}/*mid*/{x}/*post*/</div>;
+>eg3 : any
+>    : ^^^
+><div>/*pre*/{x}/*mid*/{x}/*post*/</div> : any
+>                                        : ^^^
+>div : any
+>    : ^^^
+>x : string
+>  : ^^^^^^
+>x : string
+>  : ^^^^^^
+>div : any
+>    : ^^^
+
+const eg4 = <div>/*pre*/<span/>*post*/</div>;
+>eg4 : any
+>    : ^^^
+><div>/*pre*/<span/>*post*/</div> : any
+>                                 : ^^^
+>div : any
+>    : ^^^
+><span/> : any
+>        : ^^^
+>span : any
+>     : ^^^
+>div : any
+>    : ^^^
+
+const eg5 = <div>/*pre*/{/*keep me*/}/*post*/</div>;
+>eg5 : any
+>    : ^^^
+><div>/*pre*/{/*keep me*/}/*post*/</div> : any
+>                                        : ^^^
+>div : any
+>    : ^^^
+>div : any
+>    : ^^^
+

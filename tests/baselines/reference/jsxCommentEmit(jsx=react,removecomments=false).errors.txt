@@ -1,0 +1,28 @@
+file.tsx(2,14): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+file.tsx(3,14): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+file.tsx(4,14): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+file.tsx(5,14): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+file.tsx(5,26): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+file.tsx(6,14): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+
+
+==== file.tsx (6 errors) ====
+    let x = "hi";
+    const eg1 = <div>{x}/*mid*/{x}</div>;
+                 ~~~
+!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+    const eg2 = <div>/*pre*/{x}/*post*/</div>;
+                 ~~~
+!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+    const eg3 = <div>/*pre*/{x}/*mid*/{x}/*post*/</div>;
+                 ~~~
+!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+    const eg4 = <div>/*pre*/<span/>*post*/</div>;
+                 ~~~
+!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+                             ~~~~
+!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+    const eg5 = <div>/*pre*/{/*keep me*/}/*post*/</div>;
+                 ~~~
+!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+    

@@ -1,0 +1,62 @@
+//// [tests/cases/compiler/jsxCommentEmit.ts] ////
+
+=== file.tsx ===
+let x = "hi";
+>x : string
+>  : ^^^^^^
+>"hi" : "hi"
+>     : ^^^^
+
+const eg1 = <div>{x}/*mid*/{x}</div>;
+>eg1 : error
+><div>{x}/*mid*/{x}</div> : error
+>div : any
+>    : ^^^
+>x : string
+>  : ^^^^^^
+>x : string
+>  : ^^^^^^
+>div : any
+>    : ^^^
+
+const eg2 = <div>/*pre*/{x}/*post*/</div>;
+>eg2 : error
+><div>/*pre*/{x}/*post*/</div> : error
+>div : any
+>    : ^^^
+>x : string
+>  : ^^^^^^
+>div : any
+>    : ^^^
+
+const eg3 = <div>/*pre*/{x}/*mid*/{x}/*post*/</div>;
+>eg3 : error
+><div>/*pre*/{x}/*mid*/{x}/*post*/</div> : error
+>div : any
+>    : ^^^
+>x : string
+>  : ^^^^^^
+>x : string
+>  : ^^^^^^
+>div : any
+>    : ^^^
+
+const eg4 = <div>/*pre*/<span/>*post*/</div>;
+>eg4 : error
+><div>/*pre*/<span/>*post*/</div> : error
+>div : any
+>    : ^^^
+><span/> : error
+>span : any
+>     : ^^^
+>div : any
+>    : ^^^
+
+const eg5 = <div>/*pre*/{/*keep me*/}/*post*/</div>;
+>eg5 : error
+><div>/*pre*/{/*keep me*/}/*post*/</div> : error
+>div : any
+>    : ^^^
+>div : any
+>    : ^^^
+

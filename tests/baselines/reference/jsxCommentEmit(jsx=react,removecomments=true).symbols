@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/jsxCommentEmit.ts] ////
+
+=== file.tsx ===
+let x = "hi";
+>x : Symbol(x, Decl(file.tsx, 0, 3))
+
+const eg1 = <div>{x}/*mid*/{x}</div>;
+>eg1 : Symbol(eg1, Decl(file.tsx, 1, 5))
+>x : Symbol(x, Decl(file.tsx, 0, 3))
+>x : Symbol(x, Decl(file.tsx, 0, 3))
+
+const eg2 = <div>/*pre*/{x}/*post*/</div>;
+>eg2 : Symbol(eg2, Decl(file.tsx, 2, 5))
+>x : Symbol(x, Decl(file.tsx, 0, 3))
+
+const eg3 = <div>/*pre*/{x}/*mid*/{x}/*post*/</div>;
+>eg3 : Symbol(eg3, Decl(file.tsx, 3, 5))
+>x : Symbol(x, Decl(file.tsx, 0, 3))
+>x : Symbol(x, Decl(file.tsx, 0, 3))
+
+const eg4 = <div>/*pre*/<span/>*post*/</div>;
+>eg4 : Symbol(eg4, Decl(file.tsx, 4, 5))
+
+const eg5 = <div>/*pre*/{/*keep me*/}/*post*/</div>;
+>eg5 : Symbol(eg5, Decl(file.tsx, 5, 5))
+
