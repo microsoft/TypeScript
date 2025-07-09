@@ -6,5 +6,6 @@ for (const i of obj?.arr ?? []) { }
 
 
 //// [nullishCoalescingOperator12.js]
+var _a;
 const obj = { arr: [] };
-for (const i of obj?.arr ?? []) { }
+for (const i of (_a = obj?.arr) !== null && _a !== void 0 ? _a : []) { }

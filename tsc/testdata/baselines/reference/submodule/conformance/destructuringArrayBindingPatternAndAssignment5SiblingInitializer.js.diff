@@ -1,9 +1,0 @@
---- old.destructuringArrayBindingPatternAndAssignment5SiblingInitializer.js
-+++ new.destructuringArrayBindingPatternAndAssignment5SiblingInitializer.js
-@@= skipped -43, +43 lines =@@
-     const [a2, b2 = a2 + '!'] = ['hi', 1];
- }
- function f4() {
--    const [a, b = a] = yadda !== null && yadda !== void 0 ? yadda : [];
-+    const [a, b = a] = yadda ?? [];
- }

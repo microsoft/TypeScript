@@ -9,4 +9,4 @@ let gg = f ?? (abc => { void abc.toLowerCase() })
 
 //// [nullishCoalescingOperator9.js]
 let g = f || (abc => { void abc.toLowerCase(); });
-let gg = f ?? (abc => { void abc.toLowerCase(); });
+let gg = f !== null && f !== void 0 ? f : (abc => { void abc.toLowerCase(); });

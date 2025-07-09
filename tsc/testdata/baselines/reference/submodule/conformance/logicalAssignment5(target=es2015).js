@@ -34,7 +34,7 @@ function bar3 (f?: (a: number) => void) {
 
 //// [logicalAssignment5.js]
 function foo1(f) {
-    f ?? (f = a => a);
+    f !== null && f !== void 0 ? f : (f = a => a);
     f(42);
 }
 function foo2(f) {
@@ -46,7 +46,7 @@ function foo3(f) {
     f(42);
 }
 function bar1(f) {
-    f ?? (f = (f.toString(), (a => a)));
+    f !== null && f !== void 0 ? f : (f = (f.toString(), (a => a)));
     f(42);
 }
 function bar2(f) {

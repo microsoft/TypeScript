@@ -107,6 +107,7 @@ const a = ver < (MyVer.v1 >= MyVer.v2 ? MyVer.v1 : MyVer.v2)
 
 
 //// [instantiationExpressionErrors.js]
+var _a;
 // Type arguments in member expressions
 const a1 = f; // { (): number; g<U>(): U; }
 const a2 = f.g; // () => number
@@ -125,7 +126,7 @@ const b2 = f?.();
 const b3 = f?.();
 const b4 = f?.(); // Error, expected no type arguments
 const c1 = g || ((x) => x);
-const c2 = g ?? ((x) => x);
+const c2 = (_a = g) !== null && _a !== void 0 ? _a : ((x) => x);
 const c3 = g && ((x) => x);
 // Parsed as function call, even though this differs from JavaScript
 const x1 = f(true);

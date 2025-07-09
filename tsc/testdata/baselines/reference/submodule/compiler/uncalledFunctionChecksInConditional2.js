@@ -75,6 +75,7 @@ function isMobile() {
 
 
 //// [uncalledFunctionChecksInConditional2.js]
+var _a;
 {
     const perf = window.performance;
     // Simplified
@@ -93,9 +94,9 @@ function isMobile() {
         perf.mark("");
     }
     // With ??
-    if ((perf &&
+    if ((_a = (perf &&
         perf.mark &&
-        perf.measure) ?? !!true) {
+        perf.measure)) !== null && _a !== void 0 ? _a : !!true) {
         perf.mark("");
     }
 }

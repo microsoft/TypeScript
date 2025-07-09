@@ -8,26 +8,3 @@
  function foo1(results) {
      (results || (results = [])).push(100);
  }
- function foo2(results) {
--    (results !== null && results !== void 0 ? results : (results = [])).push(100);
-+    (results ?? (results = [])).push(100);
- }
- function foo3(results) {
-     results || (results = []);
-     results.push(100);
- }
- function foo4(results) {
--    results !== null && results !== void 0 ? results : (results = []);
-+    results ?? (results = []);
-     results.push(100);
- }
- function doSomethingWithAlias(thing, defaultValue) {
-@@= skipped -34, +33 lines =@@
-         }
-     }
-     else {
--        if (thing !== null && thing !== void 0 ? thing : (thing = defaultValue)) {
-+        if (thing ?? (thing = defaultValue)) {
-             thing.name;
-             defaultValue.name;
-         }

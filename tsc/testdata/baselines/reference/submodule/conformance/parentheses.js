@@ -13,7 +13,7 @@ declare const o4: { b: ((...args: any[]) => { c: (...args: any[]) => number } ) 
 
 
 //// [parentheses.js]
-(o1)(o1 ?? 1);
-(o2?.b)(o1 ?? 1);
-(o3?.b())(o1 ?? 1);
-(o4?.b().c)(o1 ?? 1);
+(o1)(o1 !== null && o1 !== void 0 ? o1 : 1);
+(o2?.b)(o1 !== null && o1 !== void 0 ? o1 : 1);
+(o3?.b())(o1 !== null && o1 !== void 0 ? o1 : 1);
+(o4?.b().c)(o1 !== null && o1 !== void 0 ? o1 : 1);

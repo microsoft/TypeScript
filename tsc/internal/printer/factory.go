@@ -219,7 +219,9 @@ func (f *NodeFactory) NewLogicalORExpression(left *ast.Expression, right *ast.Ex
 // func (f *NodeFactory) NewBitwiseORExpression(left *ast.Expression, right *ast.Expression) *ast.Expression
 // func (f *NodeFactory) NewBitwiseXORExpression(left *ast.Expression, right *ast.Expression) *ast.Expression
 // func (f *NodeFactory) NewBitwiseANDExpression(left *ast.Expression, right *ast.Expression) *ast.Expression
-// func (f *NodeFactory) NewStrictEqualityExpression(left *ast.Expression, right *ast.Expression) *ast.Expression
+func (f *NodeFactory) NewStrictEqualityExpression(left *ast.Expression, right *ast.Expression) *ast.Expression {
+	return f.NewBinaryExpression(nil /*modifiers*/, left, nil /*typeNode*/, f.NewToken(ast.KindEqualsEqualsEqualsToken), right)
+}
 
 func (f *NodeFactory) NewStrictInequalityExpression(left *ast.Expression, right *ast.Expression) *ast.Expression {
 	return f.NewBinaryExpression(nil /*modifiers*/, left, nil /*typeNode*/, f.NewToken(ast.KindExclamationEqualsEqualsToken), right)
@@ -271,6 +273,16 @@ func (f *NodeFactory) InlineExpressions(expressions []*ast.Expression) *ast.Expr
 //
 // Utilities
 //
+
+func (f *NodeFactory) NewTypeCheck(value *ast.Node, tag string) *ast.Node {
+	if tag == "null" {
+		return f.NewStrictEqualityExpression(value, f.NewKeywordExpression(ast.KindNullKeyword))
+	} else if tag == "undefined" {
+		return f.NewStrictEqualityExpression(value, f.NewVoidZeroExpression())
+	} else {
+		return f.NewStrictEqualityExpression(f.NewTypeOfExpression(value), f.NewStringLiteral(tag))
+	}
+}
 
 func (f *NodeFactory) NewMethodCall(object *ast.Node, methodName *ast.Node, argumentsList []*ast.Node) *ast.Node {
 	// Preserve the optionality of `object`.

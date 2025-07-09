@@ -8,4 +8,5 @@ let gg = f() ?? 'foo'
 
 
 //// [nullishCoalescingOperator10.js]
-let gg = f() ?? 'foo';
+var _a;
+let gg = (_a = f()) !== null && _a !== void 0 ? _a : 'foo';

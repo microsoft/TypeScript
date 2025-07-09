@@ -231,10 +231,10 @@ function test(required1, required2, b, optional) {
     if (required1 || required2) {
     }
     // error
-    if (required1 ?? b) {
+    if (required1 !== null && required1 !== void 0 ? required1 : b) {
     }
     // error
-    if (required1 ?? required2) {
+    if (required1 !== null && required1 !== void 0 ? required1 : required2) {
     }
     // error
     if (((required1 && b))) {
@@ -248,11 +248,11 @@ function test(required1, required2, b, optional) {
         required1();
     }
     // ok
-    if (required1 ?? b) {
+    if (required1 !== null && required1 !== void 0 ? required1 : b) {
         required1();
     }
     // ok
-    if (b ?? required1) {
+    if (b !== null && b !== void 0 ? b : required1) {
         required1();
     }
     // ok
@@ -269,10 +269,10 @@ function test(required1, required2, b, optional) {
     if ((required1 || required2) && b) {
     }
     // error
-    if (b && (required1 ?? required2)) {
+    if (b && (required1 !== null && required1 !== void 0 ? required1 : required2)) {
     }
     // error
-    if ((required1 ?? required2) && b) {
+    if ((required1 !== null && required1 !== void 0 ? required1 : required2) && b) {
     }
 }
 function checksConsole() {
@@ -281,6 +281,7 @@ function checksConsole() {
         (window.console.firebug || (window.console.error && window.console.table));
 }
 function checksPropertyAccess() {
+    var _a, _b;
     const x = {
         foo: {
             bar() { return true; }
@@ -315,10 +316,10 @@ function checksPropertyAccess() {
     if ((x1.a.b.c || x2.a.b.c) && 1) {
     }
     // error
-    if (1 && (x1.a.b.c ?? x2.a.b.c)) {
+    if (1 && ((_a = x1.a.b.c) !== null && _a !== void 0 ? _a : x2.a.b.c)) {
     }
     // error
-    if ((x1.a.b.c ?? x2.a.b.c) && 1) {
+    if (((_b = x1.a.b.c) !== null && _b !== void 0 ? _b : x2.a.b.c) && 1) {
     }
 }
 class Foo {

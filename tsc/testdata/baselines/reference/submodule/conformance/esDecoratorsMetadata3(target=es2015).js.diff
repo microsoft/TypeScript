@@ -44,9 +44,8 @@
 -};
  function appendMeta(key, value) {
      return (_, context) => {
--        var _a;
--        const existing = (_a = context.metadata[key]) !== null && _a !== void 0 ? _a : [];
-+        const existing = context.metadata[key] ?? [];
+         var _a;
+@@= skipped -45, +7 lines =@@
          context.metadata[key] = [...existing, value];
      };
  }

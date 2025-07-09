@@ -21,7 +21,7 @@ function f2() {
 
 //// [equalityWithtNullishCoalescingAssignment.js]
 function f1(a) {
-    a ?? (a = true);
+    a !== null && a !== void 0 ? a : (a = true);
     if (a === false) {
         console.log(a);
     }
@@ -29,7 +29,7 @@ function f1(a) {
 f1(false);
 function f2() {
     let x = 0;
-    x ?? (x = 1);
+    x !== null && x !== void 0 ? x : (x = 1);
     if (x === 0) {
         console.log(x);
     }

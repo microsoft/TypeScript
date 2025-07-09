@@ -19,6 +19,7 @@ function run(options: { something?(b?: string): void }) {
 //// [unionReductionMutualSubtypes.js]
 const k = { something() { } };
 function run(options) {
-    const something = options.something ?? val.something;
+    var _a;
+    const something = (_a = options.something) !== null && _a !== void 0 ? _a : val.something;
     something('');
 }

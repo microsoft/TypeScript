@@ -8,12 +8,3 @@
  function f1(x, y) {
      let z = !!true ? x : y; // { f(x?: string): void }
      z.f();
-@@= skipped -38, +37 lines =@@
- }
- const k = { something() { } };
- function run(options) {
--    var _a;
--    const something = (_a = options.something) !== null && _a !== void 0 ? _a : val.something;
-+    const something = options.something ?? val.something;
-     something('');
- }

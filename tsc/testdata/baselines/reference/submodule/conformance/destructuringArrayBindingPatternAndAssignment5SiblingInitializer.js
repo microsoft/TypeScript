@@ -44,5 +44,5 @@ function f3() {
     const [a2, b2 = a2 + '!'] = ['hi', 1];
 }
 function f4() {
-    const [a, b = a] = yadda ?? [];
+    const [a, b = a] = yadda !== null && yadda !== void 0 ? yadda : [];
 }

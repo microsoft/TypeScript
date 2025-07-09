@@ -5,4 +5,4 @@ function foo(foo: string, bar = foo ?? "bar") { }
 
 
 //// [nullishCoalescingOperator6.js]
-function foo(foo, bar = foo ?? "bar") { }
+function foo(foo, bar = foo !== null && foo !== void 0 ? foo : "bar") { }

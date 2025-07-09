@@ -23,7 +23,8 @@ D[Symbol.metadata].a; // ['x', 'z']
 //// [foo.js]
 function appendMeta(key, value) {
     return (_, context) => {
-        const existing = context.metadata[key] ?? [];
+        var _a;
+        const existing = (_a = context.metadata[key]) !== null && _a !== void 0 ? _a : [];
         context.metadata[key] = [...existing, value];
     };
 }

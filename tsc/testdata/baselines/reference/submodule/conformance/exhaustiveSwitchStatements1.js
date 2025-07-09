@@ -440,7 +440,8 @@ var Animal;
     Animal[Animal["CAT"] = 1] = "CAT";
 })(Animal || (Animal = {}));
 function expression() {
-    switch (zoo?.animal ?? Animal.DOG) {
+    var _a;
+    switch ((_a = zoo?.animal) !== null && _a !== void 0 ? _a : Animal.DOG) {
         case Animal.DOG: return Animal.DOG;
         case Animal.CAT: return Animal.CAT;
     }

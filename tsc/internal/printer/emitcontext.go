@@ -27,9 +27,19 @@ type EmitContext struct {
 	emitHelpers   collections.OrderedSet[*EmitHelper]
 }
 
+type environmentFlags int
+
+const (
+	environmentFlagsNone                         environmentFlags = 0
+	environmentFlagsInParameters                 environmentFlags = 1 << 0 // currently visiting a parameter list
+	environmentFlagsVariablesHoistedInParameters environmentFlags = 1 << 1 // a temp variable was hoisted while visiting a parameter list
+)
+
 type varScope struct {
-	variables []*ast.VariableDeclarationNode
-	functions []*ast.FunctionDeclarationNode
+	variables                []*ast.VariableDeclarationNode
+	functions                []*ast.FunctionDeclarationNode
+	flags                    environmentFlags
+	initializationStatements []*ast.Node
 }
 
 func NewEmitContext() *EmitContext {
@@ -105,11 +115,17 @@ func (c *EmitContext) StartVariableEnvironment() {
 func (c *EmitContext) EndVariableEnvironment() []*ast.Statement {
 	scope := c.varScopeStack.Pop()
 	var statements []*ast.Statement
+	if len(scope.functions) > 0 {
+		statements = slices.Clone(scope.functions)
+	}
 	if len(scope.variables) > 0 {
 		varDeclList := c.Factory.NewVariableDeclarationList(ast.NodeFlagsNone, c.Factory.NewNodeList(scope.variables))
 		varStatement := c.Factory.NewVariableStatement(nil /*modifiers*/, varDeclList)
 		c.SetEmitFlags(varStatement, EFCustomPrologue)
 		statements = append(statements, varStatement)
+	}
+	if len(scope.initializationStatements) > 0 {
+		statements = append(statements, scope.initializationStatements...)
 	}
 	return append(statements, c.EndLexicalEnvironment()...)
 }
@@ -148,6 +164,9 @@ func (c *EmitContext) AddVariableDeclaration(name *ast.IdentifierNode) {
 	c.SetEmitFlags(varDecl, EFNoNestedSourceMaps)
 	scope := c.varScopeStack.Peek()
 	scope.variables = append(scope.variables, varDecl)
+	if scope.flags&environmentFlagsInParameters != 0 {
+		scope.flags |= environmentFlagsVariablesHoistedInParameters
+	}
 }
 
 // Adds a hoisted function declaration to the current VariableEnvironment
@@ -721,9 +740,133 @@ func (c *EmitContext) VisitVariableEnvironment(nodes *ast.StatementList, visitor
 
 func (c *EmitContext) VisitParameters(nodes *ast.ParameterList, visitor *ast.NodeVisitor) *ast.ParameterList {
 	c.StartVariableEnvironment()
+	scope := c.varScopeStack.Peek()
+	oldFlags := scope.flags
+	scope.flags |= environmentFlagsInParameters
 	nodes = visitor.VisitNodes(nodes)
+
+	// As of ES2015, any runtime execution of that occurs in for a parameter (such as evaluating an
+	// initializer or a binding pattern), occurs in its own lexical scope. As a result, any expression
+	// that we might transform that introduces a temporary variable would fail as the temporary variable
+	// exists in a different lexical scope. To address this, we move any binding patterns and initializers
+	// in a parameter list to the body if we detect a variable being hoisted while visiting a parameter list
+	// when the emit target is greater than ES2015. (Which is now all targets.)
+	if scope.flags&environmentFlagsVariablesHoistedInParameters != 0 {
+		nodes = c.addDefaultValueAssignmentsIfNeeded(nodes)
+	}
+	scope.flags = oldFlags
 	// !!! c.suspendVariableEnvironment()
 	return nodes
+}
+
+func (c *EmitContext) addDefaultValueAssignmentsIfNeeded(nodeList *ast.ParameterList) *ast.ParameterList {
+	if nodeList == nil {
+		return nodeList
+	}
+	var result []*ast.Node
+	nodes := nodeList.Nodes
+	for i, parameter := range nodes {
+		updated := c.addDefaultValueAssignmentIfNeeded(parameter.AsParameterDeclaration())
+		if updated != parameter {
+			if result == nil {
+				result = slices.Clone(nodes)
+			}
+			result[i] = updated
+		}
+	}
+	if result != nil {
+		res := c.Factory.NewNodeList(result)
+		res.Loc = nodeList.Loc
+		return res
+	}
+	return nodeList
+}
+
+func (c *EmitContext) addDefaultValueAssignmentIfNeeded(parameter *ast.ParameterDeclaration) *ast.Node {
+	// A rest parameter cannot have a binding pattern or an initializer,
+	// so let's just ignore it.
+	if parameter.DotDotDotToken != nil {
+		return parameter.AsNode()
+	} else if ast.IsBindingPattern(parameter.Name()) {
+		return c.addDefaultValueAssignmentForBindingPattern(parameter)
+	} else if parameter.Initializer != nil {
+		return c.addDefaultValueAssignmentForInitializer(parameter, parameter.Name(), parameter.Initializer)
+	}
+	return parameter.AsNode()
+}
+
+func (c *EmitContext) addDefaultValueAssignmentForBindingPattern(parameter *ast.ParameterDeclaration) *ast.Node {
+	var initNode *ast.Node
+	if parameter.Initializer != nil {
+		initNode = c.Factory.NewConditionalExpression(
+			c.Factory.NewStrictEqualityExpression(
+				c.Factory.NewGeneratedNameForNode(parameter.AsNode()),
+				c.Factory.NewVoidZeroExpression(),
+			),
+			c.Factory.NewToken(ast.KindQuestionToken),
+			parameter.Initializer,
+			c.Factory.NewToken(ast.KindColonToken),
+			c.Factory.NewGeneratedNameForNode(parameter.AsNode()),
+		)
+	} else {
+		initNode = c.Factory.NewGeneratedNameForNode(parameter.AsNode())
+	}
+	c.AddInitializationStatement(c.Factory.NewVariableStatement(
+		nil,
+		c.Factory.NewVariableDeclarationList(ast.NodeFlagsNone, c.Factory.NewNodeList([]*ast.Node{c.Factory.NewVariableDeclaration(
+			parameter.Name(),
+			nil,
+			parameter.Type,
+			initNode,
+		)})),
+	))
+	return c.Factory.UpdateParameterDeclaration(
+		parameter,
+		parameter.Modifiers(),
+		parameter.DotDotDotToken,
+		c.Factory.NewGeneratedNameForNode(parameter.AsNode()),
+		parameter.QuestionToken,
+		parameter.Type,
+		nil,
+	)
+}
+
+func (c *EmitContext) addDefaultValueAssignmentForInitializer(parameter *ast.ParameterDeclaration, name *ast.Node, initializer *ast.Node) *ast.Node {
+	c.AddEmitFlags(initializer, EFNoSourceMap|EFNoComments)
+	nameClone := name.Clone(c.Factory)
+	c.AddEmitFlags(nameClone, EFNoSourceMap)
+	initAssignment := c.Factory.NewAssignmentExpression(
+		nameClone,
+		initializer,
+	)
+	initAssignment.Loc = parameter.Loc
+	c.AddEmitFlags(initAssignment, EFNoComments)
+	initBlock := c.Factory.NewBlock(c.Factory.NewNodeList([]*ast.Node{c.Factory.NewExpressionStatement(initAssignment)}), false)
+	initBlock.Loc = parameter.Loc
+	c.AddEmitFlags(initBlock, EFSingleLine|EFNoTrailingSourceMap|EFNoTokenSourceMaps|EFNoComments)
+	c.AddInitializationStatement(c.Factory.NewIfStatement(
+		c.Factory.NewTypeCheck(name.Clone(c.Factory), "undefined"),
+		initBlock,
+		nil,
+	))
+	return c.Factory.UpdateParameterDeclaration(
+		parameter,
+		parameter.Modifiers(),
+		parameter.DotDotDotToken,
+		parameter.Name(),
+		parameter.QuestionToken,
+		parameter.Type,
+		nil,
+	)
+}
+
+func (c *EmitContext) AddInitializationStatement(node *ast.Node) {
+	scope := c.varScopeStack.Peek()
+	if scope == nil {
+		panic("Tried to add an initialization statement without a surrounding variable scope")
+	}
+	c.AddEmitFlags(node, EFCustomPrologue)
+	scope.initializationStatements = append(scope.initializationStatements, node)
 }
 
 func (c *EmitContext) VisitFunctionBody(node *ast.BlockOrExpression, visitor *ast.NodeVisitor) *ast.BlockOrExpression {

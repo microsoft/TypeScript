@@ -72,13 +72,13 @@ var MyStringEnumWithEmpty;
     MyStringEnumWithEmpty["C"] = "c";
 })(MyStringEnumWithEmpty || (MyStringEnumWithEmpty = {}));
 function fn(optionalEnum) {
-    return optionalEnum ?? MyEnum.A;
+    return optionalEnum !== null && optionalEnum !== void 0 ? optionalEnum : MyEnum.A;
 }
 function fn2(optionalEnum) {
     return optionalEnum || MyEnum.B;
 }
 function fn3(optionalEnum) {
-    return optionalEnum ?? MyEnum.A;
+    return optionalEnum !== null && optionalEnum !== void 0 ? optionalEnum : MyEnum.A;
 }
 function fn4(optionalEnum) {
     return optionalEnum || MyEnum.B;

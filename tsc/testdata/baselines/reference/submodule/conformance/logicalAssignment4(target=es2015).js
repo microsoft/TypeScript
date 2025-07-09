@@ -56,14 +56,14 @@ function foo1(results) {
     (results || (results = [])).push(100);
 }
 function foo2(results) {
-    (results ?? (results = [])).push(100);
+    (results !== null && results !== void 0 ? results : (results = [])).push(100);
 }
 function foo3(results) {
     results || (results = []);
     results.push(100);
 }
 function foo4(results) {
-    results ?? (results = []);
+    results !== null && results !== void 0 ? results : (results = []);
     results.push(100);
 }
 function doSomethingWithAlias(thing, defaultValue) {
@@ -85,7 +85,7 @@ function doSomethingWithAlias(thing, defaultValue) {
         }
     }
     else {
-        if (thing ?? (thing = defaultValue)) {
+        if (thing !== null && thing !== void 0 ? thing : (thing = defaultValue)) {
             thing.name;
             defaultValue.name;
         }

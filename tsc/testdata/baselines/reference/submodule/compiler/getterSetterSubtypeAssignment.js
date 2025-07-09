@@ -90,7 +90,7 @@ numberOrObject.x /= 1;
 //// [getterSetterSubtypeAssignment.js]
 class NumberOrUndefined {
     _x;
-    get x() { return this._x ?? 0; }
+    get x() { var _a; return (_a = this._x) !== null && _a !== void 0 ? _a : 0; }
     set x(value) { this._x = value; }
     additionAssignment() {
         this.x += 1;
