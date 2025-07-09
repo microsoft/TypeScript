@@ -3944,6 +3944,9 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             if (libFileName) {
                 // we ignore any 'no-default-lib' reference set on this file.
                 for (const p of pathsForLibFile(libFileName)) {
+                    if (file.fileName === p) {
+                        continue;
+                    }
                     processRootFile(p, /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ true, { kind: FileIncludeKind.LibReferenceDirective, file: file.path, index });
                 }
             }
