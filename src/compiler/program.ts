@@ -1821,7 +1821,9 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             }
             else {
                 forEach(options.lib, (libFileName, index) => {
-                    processRootFile(pathForLibFile(libFileName), /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ false, { kind: FileIncludeKind.LibFile, index });
+                    for (const p of pathsForLibFile(libFileName)) {
+                        processRootFile(p, /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ false, { kind: FileIncludeKind.LibFile, index });
+                    }
                 });
             }
         }
@@ -3855,12 +3857,27 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         }
     }
 
-    function pathForLibFile(libFileName: string): string {
-        const existing = resolvedLibReferences?.get(libFileName);
-        if (existing) return existing.actual;
-        const result = pathForLibFileWorker(libFileName);
-        (resolvedLibReferences ??= new Map()).set(libFileName, result);
-        return result.actual;
+    function pathsForLibFile(libFileName: string): string[] {
+        const names = [libFileName];
+        // Force the inclusion of ES6 and DOM's iterable libs.
+        switch (libFileName) {
+            case "lib.dom.d.ts":
+                names.push("lib.dom.iterable.d.ts", "lib.dom.asynciterable.d.ts");
+                break;
+            case "lib.es5.d.ts":
+                names.push("lib.es2015.d.ts");
+                break;
+        }
+
+        return names.map(pathForLibFile);
+
+        function pathForLibFile(libFileName: string): string {
+            const existing = resolvedLibReferences?.get(libFileName);
+            if (existing) return existing.actual;
+            const result = pathForLibFileWorker(libFileName);
+            (resolvedLibReferences ??= new Map()).set(libFileName, result);
+            return result.actual;
+        }
     }
 
     function pathForLibFileWorker(libFileName: string): LibResolution {
@@ -3925,7 +3942,9 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             const libFileName = getLibFileNameFromLibReference(libReference);
             if (libFileName) {
                 // we ignore any 'no-default-lib' reference set on this file.
-                processRootFile(pathForLibFile(libFileName), /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ true, { kind: FileIncludeKind.LibReferenceDirective, file: file.path, index });
+                for (const p of pathsForLibFile(libFileName)) {
+                    processRootFile(p, /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ true, { kind: FileIncludeKind.LibReferenceDirective, file: file.path, index });
+                }
             }
             else {
                 programDiagnostics.addFileProcessingDiagnostic({
