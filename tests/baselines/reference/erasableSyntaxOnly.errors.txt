@@ -1,4 +1,3 @@
-error TS2318: Cannot find global type 'IterableIterator'.
 commonjs.cts(1,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 commonjs.cts(2,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 index.ts(3,17): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
@@ -23,7 +22,6 @@ index.ts(90,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnl
 index.ts(94,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-!!! error TS2318: Cannot find global type 'IterableIterator'.
 ==== index.ts (20 errors) ====
     class MyClassErr {
         // No parameter properties

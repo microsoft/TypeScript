@@ -2,8 +2,8 @@
 
 === castOfYield.ts ===
 function* f() {
->f : () => {}
->  : ^^^^^^^^
+>f : () => Generator<number, void, number>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     <number> (yield 0);
 ><number> (yield 0) : number

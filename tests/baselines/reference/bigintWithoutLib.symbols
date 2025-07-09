@@ -78,15 +78,15 @@ bigIntArray = new BigInt64Array([1, 2, 3]);
 
 bigIntArray = new BigInt64Array(new ArrayBuffer(80));
 >bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 17, 3))
->ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8);
 >bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 17, 3))
->ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8, 3);
 >bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 17, 3))
->ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 let len: number = bigIntArray.length;
 >len : Symbol(len, Decl(bigintWithoutLib.ts, 24, 3))
@@ -116,15 +116,15 @@ bigUintArray = new BigUint64Array([1, 2, 3]);
 
 bigUintArray = new BigUint64Array(new ArrayBuffer(80));
 >bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 29, 3))
->ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 bigUintArray = new BigUint64Array(new ArrayBuffer(80), 8);
 >bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 29, 3))
->ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 bigUintArray = new BigUint64Array(new ArrayBuffer(80), 8, 3);
 >bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 29, 3))
->ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 len = bigIntArray.length;
 >len : Symbol(len, Decl(bigintWithoutLib.ts, 24, 3))
@@ -140,8 +140,8 @@ arrayBufferLike = bigIntArray;
 // Test added DataView methods
 const dataView = new DataView(new ArrayBuffer(80));
 >dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 41, 5))
->DataView : Symbol(DataView, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>DataView : Symbol(DataView, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 dataView.setBigInt64(1, -1n);
 >dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 41, 5))
