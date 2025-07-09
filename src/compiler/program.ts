@@ -3862,7 +3862,8 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         // Force the inclusion of ES6 and DOM's iterable libs.
         switch (libFileName) {
             case "lib.dom.d.ts":
-                names.push("lib.dom.iterable.d.ts", "lib.dom.asynciterable.d.ts");
+                names.push("lib.dom.iterable.d.ts");
+                // TODO: auto add dom.asynciterable.d.ts in es2018?
                 break;
             case "lib.es5.d.ts":
                 names.push("lib.es2015.d.ts");
