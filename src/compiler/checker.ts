@@ -5757,7 +5757,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             // If the symbol with this name is present it should refer to the symbol
             if (symbolFromSymbolTable === symbol) {
-                // No need to qualify
+                // No need to qualify, unless this was from an enum and we're using it in a value context, e.g.
+                // enum Foo { bar }
+                // namespace Foo { export const q = Foo.bar }
+                // where we can't legally decl emit 'const q = bar'
+                if (symbol.flags & SymbolFlags.EnumMember) {
+                    qualify = true;
+                }
                 return true;
             }
 

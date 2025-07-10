@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/invalidUnqualifiedEnum.ts] ////
+
+=== invalidUnqualifiedEnum.ts ===
+export enum Foo {
+>Foo : Foo
+>    : ^^^
+
+    bar
+>bar : Foo.bar
+>    : ^^^^^^^
+}
+export namespace Foo {
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+
+    export const q = Foo.bar;
+>q : Foo.bar
+>  : ^^^^^^^
+>Foo.bar : Foo
+>        : ^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>bar : Foo
+>    : ^^^
+}
+
