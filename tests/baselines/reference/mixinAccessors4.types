@@ -1,0 +1,70 @@
+//// [tests/cases/conformance/classes/mixinAccessors4.ts] ////
+
+=== mixinAccessors4.ts ===
+// https://github.com/microsoft/TypeScript/issues/44938
+
+class A {
+>A : A
+>  : ^
+
+  constructor(...args: any[]) {}
+>args : any[]
+>     : ^^^^^
+
+  get myName(): string {
+>myName : string
+>       : ^^^^^^
+
+    return "A";
+>"A" : "A"
+>    : ^^^
+  }
+}
+
+function Mixin<T extends typeof A>(Super: T) {
+>Mixin : <T extends typeof A>(Super: T) => { new (...args: any[]): B; prototype: Mixin<any>.B; } & T
+>      : ^ ^^^^^^^^^        ^^     ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>A : typeof A
+>  : ^^^^^^^^
+>Super : T
+>      : ^
+
+  return class B extends Super {
+>class B extends Super {    get myName(): string {      return "B";    }  } : { new (...args: any[]): B; prototype: Mixin<any>.B; } & T
+>                                                                           : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>B : { new (...args: any[]): B; prototype: Mixin<any>.B; } & T
+>  : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Super : A
+>      : ^
+
+    get myName(): string {
+>myName : string
+>       : ^^^^^^
+
+      return "B";
+>"B" : "B"
+>    : ^^^
+    }
+  };
+}
+
+class C extends Mixin(A) {
+>C : C
+>  : ^
+>Mixin(A) : Mixin<typeof A>.B & A
+>         : ^^^^^^^^^^^^^^^^^^^^^
+>Mixin : <T extends typeof A>(Super: T) => { new (...args: any[]): B; prototype: Mixin<any>.B; } & T
+>      : ^ ^^^^^^^^^        ^^     ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>A : typeof A
+>  : ^^^^^^^^
+
+  get myName(): string {
+>myName : string
+>       : ^^^^^^
+
+    return "C";
+>"C" : "C"
+>    : ^^^
+  }
+}
+

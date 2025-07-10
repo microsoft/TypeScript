@@ -2080,6 +2080,10 @@
         "category": "Error",
         "code": 2345
     },
+    "Call target does not contain any signatures.": {
+        "category": "Error",
+        "code": 2346
+    },
     "Untyped function calls may not accept type arguments.": {
         "category": "Error",
         "code": 2347
@@ -3419,7 +3423,7 @@
         "category": "Error",
         "code": 2724
     },
-    "Class name cannot be 'Object' when targeting ES5 with module {0}.": {
+    "Class name cannot be 'Object' when targeting ES5 and above with module {0}.": {
         "category": "Error",
         "code": 2725
     },
@@ -6058,7 +6062,7 @@
         "category": "Message",
         "code": 6506
     },
-    "Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files.": {
+    "Allow JavaScript files to be a part of your program. Use the 'checkJs' option to get errors from these files.": {
         "category": "Message",
         "code": 6600
     },
