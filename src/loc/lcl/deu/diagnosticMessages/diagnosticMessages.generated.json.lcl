@@ -4071,11 +4071,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Class_name_cannot_be_Object_when_targeting_ES5_with_module_0_2725" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Class_name_cannot_be_Object_when_targeting_ES5_and_above_with_module_0_2725" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Class name cannot be 'Object' when targeting ES5 with module {0}.]]></Val>
+          <Val><![CDATA[Class name cannot be 'Object' when targeting ES5 and above with module {0}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Der Klassenname darf nicht "Object" lauten, wenn ES5 mit Modul "{0}" als Ziel verwendet wird.]]></Val>
+            <Val><![CDATA[Der Klassenname darf nicht „Object“ lauten, wenn ES5 und höher mit Modul „{0}“ als Ziel verwendet wird.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
