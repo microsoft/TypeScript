@@ -4086,11 +4086,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Class_name_cannot_be_Object_when_targeting_ES5_with_module_0_2725" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Class_name_cannot_be_Object_when_targeting_ES5_and_above_with_module_0_2725" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Class name cannot be 'Object' when targeting ES5 with module {0}.]]></Val>
+          <Val><![CDATA[Class name cannot be 'Object' when targeting ES5 and above with module {0}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El nombre de clase no puede ser "Object" cuando el destino es ES5 con un módulo {0}.]]></Val>
+            <Val><![CDATA[El nombre de clase no puede ser 'Object' cuando el destino es ES5 y versiones posteriores con el módulo {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
