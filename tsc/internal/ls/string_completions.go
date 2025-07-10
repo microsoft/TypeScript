@@ -657,3 +657,66 @@ func getStringLiteralCompletionsFromSignature(
 	}
 	return nil
 }
+
+func (l *LanguageService) getStringLiteralCompletionDetails(
+	ctx context.Context,
+	item *lsproto.CompletionItem,
+	name string,
+	file *ast.SourceFile,
+	position int,
+	contextToken *ast.Node,
+	program *compiler.Program,
+	preferences *UserPreferences,
+) *lsproto.CompletionItem {
+	if contextToken == nil || !ast.IsStringLiteralLike(contextToken) {
+		return nil
+	}
+	completions := l.getStringLiteralCompletionEntries(
+		ctx,
+		file,
+		contextToken,
+		position,
+		program,
+		preferences,
+	)
+	if completions == nil {
+		return nil
+	}
+	checker, done := program.GetTypeCheckerForFile(ctx, file)
+	defer done()
+	return stringLiteralCompletionDetails(item, name, contextToken, completions, file, checker)
+}
+
+func stringLiteralCompletionDetails(
+	item *lsproto.CompletionItem,
+	name string,
+	location *ast.Node,
+	completion *stringLiteralCompletions,
+	file *ast.SourceFile,
+	checker *checker.Checker,
+) *lsproto.CompletionItem {
+	switch {
+	case completion.fromPaths != nil:
+		pathCompletions := completion.fromPaths
+		for _, pathCompletion := range pathCompletions {
+			if pathCompletion.name == name {
+				return createCompletionDetails(item, name, "" /*documentation*/)
+			}
+		}
+	case completion.fromProperties != nil:
+		properties := completion.fromProperties
+		for _, symbol := range properties.symbols {
+			if symbol.Name == name {
+				return createCompletionDetailsForSymbol(item, symbol, checker, location, nil /*actions*/)
+			}
+		}
+	case completion.fromTypes != nil:
+		types := completion.fromTypes
+		for _, t := range types.types {
+			if t.AsLiteralType().Value().(string) == name {
+				return createCompletionDetails(item, name, "" /*documentation*/)
+			}
+		}
+	}
+	return nil
+}

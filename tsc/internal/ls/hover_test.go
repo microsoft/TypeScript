@@ -44,7 +44,7 @@ function myFunction() {
 					Contents: lsproto.MarkupContentOrMarkedStringOrMarkedStrings{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
-							Value: "```tsx\nfunction myFunction(): string\n```\nA function with JSDoc links that previously caused panic\n`console.log` and `Array.from` and `Object.keys`\n",
+							Value: "```tsx\nfunction myFunction(): string\n```\nA function with JSDoc links that previously caused panic\n`console.log` and `Array.from` and `Object.keys`",
 						},
 					},
 				},

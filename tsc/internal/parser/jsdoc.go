@@ -2,6 +2,7 @@ package parser
 
 import (
 	"strings"
+	"unicode"
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
@@ -285,6 +286,7 @@ loop:
 	}
 
 	if len(comments) > 0 {
+		comments[len(comments)-1] = strings.TrimRightFunc(comments[len(comments)-1], unicode.IsSpace)
 		jsdocText := p.factory.NewJSDocText(p.stringSlicePool.Clone(comments))
 		p.finishNodeWithEnd(jsdocText, linkEnd, commentsPos)
 		commentParts = append(commentParts, jsdocText)

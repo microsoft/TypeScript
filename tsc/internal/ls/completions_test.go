@@ -5,6 +5,7 @@ import (
 	"slices"
 	"testing"
 
+	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/microsoft/typescript-go/internal/bundled"
 	"github.com/microsoft/typescript-go/internal/core"
@@ -2047,6 +2048,19 @@ var x4 = <div>/*10*/</div>;
 	}
 }
 
+// Ignore completionItem.Data
+var ignoreData = cmp.FilterPath(
+	func(p cmp.Path) bool {
+		switch p.Last().String() {
+		case ".Data":
+			return true
+		default:
+			return false
+		}
+	},
+	cmp.Ignore(),
+)
+
 func runTest(t *testing.T, files map[string]string, expected map[string]*testCaseResult, mainFileName string) {
 	if mainFileName == "" {
 		mainFileName = defaultMainFileName
@@ -2100,7 +2114,7 @@ func runTest(t *testing.T, files map[string]string, expected map[string]*testCas
 		if expectedResult.isIncludes {
 			assertIncludesItem(t, completionList, expectedResult.list)
 		} else {
-			assert.DeepEqual(t, completionList, expectedResult.list)
+			assert.DeepEqual(t, completionList, expectedResult.list, ignoreData)
 		}
 		for _, excludedLabel := range expectedResult.excludes {
 			for _, item := range completionList.Items {
@@ -2121,7 +2135,7 @@ func assertIncludesItem(t *testing.T, actual *lsproto.CompletionList, expected *
 		if index == -1 {
 			t.Fatalf("Label %s not found in actual items. Actual items: %v", item.Label, actual.Items)
 		}
-		assert.DeepEqual(t, actual.Items[index], item)
+		assert.DeepEqual(t, actual.Items[index], item, ignoreData)
 	}
 	return false
 }

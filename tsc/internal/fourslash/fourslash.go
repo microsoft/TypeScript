@@ -571,7 +571,7 @@ func (f *FourslashTest) verifyCompletionsResult(
 	}
 	assert.Equal(t, actual.IsIncomplete, expected.IsIncomplete, prefix+"IsIncomplete mismatch")
 	verifyCompletionsItemDefaults(t, actual.ItemDefaults, expected.ItemDefaults, prefix+"ItemDefaults mismatch: ")
-	verifyCompletionsItems(t, prefix, actual.Items, expected.Items)
+	f.verifyCompletionsItems(t, prefix, actual.Items, expected.Items)
 }
 
 func isEmptyExpectedList(expected *CompletionsExpectedList) bool {
@@ -616,7 +616,7 @@ func verifyCompletionsItemDefaults(t *testing.T, actual *lsproto.CompletionItemD
 	}
 }
 
-func verifyCompletionsItems(t *testing.T, prefix string, actual []*lsproto.CompletionItem, expected *CompletionsExpectedItems) {
+func (f *FourslashTest) verifyCompletionsItems(t *testing.T, prefix string, actual []*lsproto.CompletionItem, expected *CompletionsExpectedItems) {
 	if expected.Exact != nil {
 		if expected.Includes != nil {
 			t.Fatal(prefix + "Expected exact completion list but also specified 'includes'.")
@@ -631,7 +631,7 @@ func verifyCompletionsItems(t *testing.T, prefix string, actual []*lsproto.Compl
 			t.Fatalf(prefix+"Expected %d exact completion items but got %d: %s", len(expected.Exact), len(actual), cmp.Diff(actual, expected.Exact))
 		}
 		if len(actual) > 0 {
-			verifyCompletionsAreExactly(t, prefix, actual, expected.Exact)
+			f.verifyCompletionsAreExactly(t, prefix, actual, expected.Exact)
 		}
 		return
 	}
@@ -660,7 +660,7 @@ func verifyCompletionsItems(t *testing.T, prefix string, actual []*lsproto.Compl
 					t.Fatalf("%sLabel '%s' not found in actual items. Actual items: %s", prefix, item.Label, cmp.Diff(actual, nil))
 				}
 				delete(nameToActualItem, item.Label)
-				verifyCompletionItem(t, prefix+"Includes completion item mismatch for label "+item.Label, actualItem, item)
+				f.verifyCompletionItem(t, prefix+"Includes completion item mismatch for label "+item.Label, actualItem, item)
 			default:
 				t.Fatalf("%sExpected completion item to be a string or *lsproto.CompletionItem, got %T", prefix, item)
 			}
@@ -684,7 +684,7 @@ func verifyCompletionsItems(t *testing.T, prefix string, actual []*lsproto.Compl
 				if !ok {
 					t.Fatalf("%sLabel '%s' not found in actual items. Actual items: %s", prefix, item.Label, cmp.Diff(actual, nil))
 				}
-				verifyCompletionItem(t, prefix+"Includes completion item mismatch for label "+item.Label, actualItem, item)
+				f.verifyCompletionItem(t, prefix+"Includes completion item mismatch for label "+item.Label, actualItem, item)
 			default:
 				t.Fatalf("%sExpected completion item to be a string or *lsproto.CompletionItem, got %T", prefix, item)
 			}
@@ -697,7 +697,7 @@ func verifyCompletionsItems(t *testing.T, prefix string, actual []*lsproto.Compl
 	}
 }
 
-func verifyCompletionsAreExactly(t *testing.T, prefix string, actual []*lsproto.CompletionItem, expected []CompletionsExpectedItem) {
+func (f *FourslashTest) verifyCompletionsAreExactly(t *testing.T, prefix string, actual []*lsproto.CompletionItem, expected []CompletionsExpectedItem) {
 	// Verify labels first
 	assertDeepEqual(t, core.Map(actual, func(item *lsproto.CompletionItem) string {
 		return item.Label
@@ -709,24 +709,36 @@ func verifyCompletionsAreExactly(t *testing.T, prefix string, actual []*lsproto.
 		case string:
 			continue // already checked labels
 		case *lsproto.CompletionItem:
-			verifyCompletionItem(t, prefix+"Completion item mismatch for label "+actualItem.Label, actualItem, expectedItem)
+			f.verifyCompletionItem(t, prefix+"Completion item mismatch for label "+actualItem.Label, actualItem, expectedItem)
 		}
 	}
 }
 
-func verifyCompletionItem(t *testing.T, prefix string, actual *lsproto.CompletionItem, expected *lsproto.CompletionItem) {
-	ignoreKind := cmp.FilterPath(
-		func(p cmp.Path) bool {
-			switch p.Last().String() {
-			case ".Kind", ".SortText":
-				return true
-			default:
-				return false
-			}
-		},
-		cmp.Ignore(),
-	)
-	assertDeepEqual(t, actual, expected, prefix, ignoreKind)
+var completionIgnoreOpts = cmp.FilterPath(
+	func(p cmp.Path) bool {
+		switch p.Last().String() {
+		case ".Kind", ".SortText", ".Data":
+			return true
+		default:
+			return false
+		}
+	},
+	cmp.Ignore(),
+)
+
+func (f *FourslashTest) verifyCompletionItem(t *testing.T, prefix string, actual *lsproto.CompletionItem, expected *lsproto.CompletionItem) {
+	if expected.Detail != nil || expected.Documentation != nil {
+		response := f.sendRequest(t, lsproto.MethodCompletionItemResolve, actual)
+		if response == nil {
+			t.Fatal(prefix + "Expected non-nil response for completion item resolve, got nil")
+		}
+		resolvedItem, ok := response.AsResponse().Result.(*lsproto.CompletionItem)
+		if !ok {
+			t.Fatalf(prefix+"Expected response to be *lsproto.CompletionItem, got %T", response.AsResponse().Result)
+		}
+		actual = resolvedItem
+	}
+	assertDeepEqual(t, actual, expected, prefix, completionIgnoreOpts)
 	if expected.Kind != nil {
 		assertDeepEqual(t, actual.Kind, expected.Kind, prefix+" Kind mismatch")
 	}

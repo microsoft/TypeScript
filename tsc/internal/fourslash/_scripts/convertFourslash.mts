@@ -586,6 +586,29 @@ function parseExpectedCompletionItem(expr: ts.Expression): string | undefined {
                     }
                     ({ isDeprecated, isOptional, extensions } = modifiers);
                     break;
+                case "text":
+                    if (ts.isStringLiteralLike(init)) {
+                        itemProps.push(`Detail: ptrTo(${getGoStringLiteral(init.text)}),`);
+                    }
+                    else {
+                        console.error(`Expected string literal for text, got ${init.getText()}`);
+                        return undefined;
+                    }
+                    break;
+                case "documentation":
+                    if (ts.isStringLiteral(init)) {
+                        itemProps.push(`Documentation: &lsproto.StringOrMarkupContent{
+						MarkupContent: &lsproto.MarkupContent{
+							Kind:  lsproto.MarkupKindMarkdown,
+							Value: ${getGoStringLiteral(init.text)},
+						},
+					},`);
+                    }
+                    else {
+                        console.error(`Expected string literal for documentation, got ${init.getText()}`);
+                        return undefined;
+                    }
+                    break;
                 case "commitCharacters":
                 case "replacementSpan":
                     // !!! support these later
