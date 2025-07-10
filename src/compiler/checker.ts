@@ -51038,7 +51038,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function literalTypeToNode(type: FreshableType, enclosing: Node, tracker: SymbolTracker): Expression {
-        const enumResult = type.flags & TypeFlags.EnumLike ? nodeBuilder.symbolToExpression(type.symbol, SymbolFlags.Value, /*enclosingDeclaration*/ undefined, NodeBuilderFlags.UseFullyQualifiedType, /*internalFlags*/ undefined, tracker)
+        const enumResult = type.flags & TypeFlags.EnumLike ? nodeBuilder.symbolToExpression(type.symbol, SymbolFlags.Value, enclosing, /*flags*/ undefined, /*internalFlags*/ undefined, tracker)
             : type === trueType ? factory.createTrue() : type === falseType && factory.createFalse();
         if (enumResult) return enumResult;
         const literalValue = (type as LiteralType).value;
@@ -51050,6 +51050,35 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function createLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, tracker: SymbolTracker) {
         const type = getTypeOfSymbol(getSymbolOfDeclaration(node));
+
+        // Check if we're in a namespace declaration - in this case we need fully qualified enum references
+        let enclosingNode: Node | undefined = node;
+        let useFullyQualified = false;
+
+        if (isVariableDeclaration(node) && type.flags & TypeFlags.EnumLike) {
+            const parentStatement = node.parent?.parent; // VariableDeclaration -> VariableDeclarationList -> VariableStatement
+            const moduleBlock = parentStatement?.parent; // VariableStatement -> ModuleBlock
+            const moduleDeclaration = moduleBlock?.parent; // ModuleBlock -> ModuleDeclaration
+            if (moduleDeclaration && isModuleDeclaration(moduleDeclaration)) {
+                // We're in a namespace - use fully qualified references for enum constants
+                useFullyQualified = true;
+                enclosingNode = undefined;
+            }
+        }
+
+        // For enum types, use the nodeBuilder to get properly qualified references
+        if (type.flags & TypeFlags.EnumLike) {
+            const enumExpression = nodeBuilder.symbolToExpression(
+                type.symbol,
+                SymbolFlags.Value,
+                enclosingNode,
+                useFullyQualified ? NodeBuilderFlags.UseFullyQualifiedType : undefined,
+                /*internalFlags*/ undefined,
+                tracker,
+            );
+            if (enumExpression) return enumExpression;
+        }
+
         return literalTypeToNode(type as FreshableType, node, tracker);
     }
 
