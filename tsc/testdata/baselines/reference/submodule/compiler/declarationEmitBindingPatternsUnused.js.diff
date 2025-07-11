@@ -26,22 +26,3 @@
  declare function referencedNestedAlias({ p: { name: alias } }: {
      p: Named;
  }): typeof alias;
-@@= skipped -34, +34 lines =@@
- declare let referencedInSignartureParamTypeCtorType: new ({ name: alias }: Named, p: typeof alias) => void;
- interface NotReferencedInterface {
-     ({ name: alias }: Named): void;
--    new ({ name: alias }: Named): void;
-+    new ({ name: alias }: Named);
-     set x({ name: alias }: Named);
-     m({ name: alias }: Named): any;
- }
- interface ReferencedInSignartureInterface {
-     ({ name: alias }: Named, p: typeof alias): void;
-     ({ name: alias }: Named): typeof alias;
--    new ({ name: alias }: Named, p: typeof alias): void;
--    new ({ name: alias }: Named): typeof alias;
-+    new ({ name: alias }: Named, p: typeof alias);
-+    new ({ name: alias }: Named);
-     set x({ name: alias }: Named & {
-         o: typeof alias;
-     });

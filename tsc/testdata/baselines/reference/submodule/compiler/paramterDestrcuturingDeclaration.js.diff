@@ -1,9 +1,0 @@
---- old.paramterDestrcuturingDeclaration.js
-+++ new.paramterDestrcuturingDeclaration.js
-@@= skipped -16, +16 lines =@@
-     }): any;
-     new ({ p: boolean }: {
-         p: any;
--    }): any;
-+    });
- }

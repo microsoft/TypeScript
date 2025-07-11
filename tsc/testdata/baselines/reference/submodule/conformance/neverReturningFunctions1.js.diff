@@ -8,12 +8,3 @@
  export interface Component<T extends object = any> {
      attrName?: string;
      data: T;
-@@= skipped -21, +22 lines =@@
-     flushToDOM(): void;
- }
- export interface ComponentConstructor<T extends object> {
--    new (el: unknown, attrValue: string, id: string): T & Component;
-+    new (el: unknown, attrValue: string, id: string);
-     prototype: T & {
-         name: string;
-         system: unknown;

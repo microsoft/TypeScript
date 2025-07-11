@@ -264,15 +264,15 @@ declare let referencedInSignartureReturnTypeCtorType: new ({ name: alias }: Name
 declare let referencedInSignartureParamTypeCtorType: new ({ name: alias }: Named, p: typeof alias) => void;
 interface NotReferencedInterface {
     ({ name: alias }: Named): void;
-    new ({ name: alias }: Named);
+    new ({ name: alias }: Named): void;
     set x({ name: alias }: Named);
     m({ name: alias }: Named): any;
 }
 interface ReferencedInSignartureInterface {
     ({ name: alias }: Named, p: typeof alias): void;
     ({ name: alias }: Named): typeof alias;
-    new ({ name: alias }: Named, p: typeof alias);
-    new ({ name: alias }: Named);
+    new ({ name: alias }: Named, p: typeof alias): void;
+    new ({ name: alias }: Named): typeof alias;
     set x({ name: alias }: Named & {
         o: typeof alias;
     });

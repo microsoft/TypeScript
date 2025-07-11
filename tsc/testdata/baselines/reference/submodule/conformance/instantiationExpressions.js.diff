@@ -151,33 +151,7 @@
  declare class C<T> {
      constructor(x: T);
      static f<U>(x: U): U[];
-@@= skipped -30, +30 lines =@@
-     y: string;
- }): void;
- declare function f14(f: {
--    new <T>(a: T): T;
--    new <U>(a: U, b: number): U[];
-+    new <T>(a: T);
-+    new <U>(a: U, b: number);
- }): void;
- declare function f15(f: {
--    new <T>(a: T): T;
-+    new <T>(a: T);
-     <U>(a: U, b: number): U[];
- }): void;
- declare function f16(f: {
--    new <T>(a: T): T;
-+    new <T>(a: T);
-     (a: string, b: number): string[];
- }): void;
- declare function f17(f: {
-     <T>(a: T): T;
--    new (a: string, b: number): string[];
-+    new (a: string, b: number);
- }): void;
- declare function f20(f: (<T>(a: T) => T) & (<U>(a: U, b: number) => U[])): void;
- declare function f21(f: (<T>(a: T) => T) & ((a: string, b: number) => string[])): void;
-@@= skipped -47, +47 lines =@@
+@@= skipped -77, +77 lines =@@
  declare function makeBox<T>(value: T): {
      value: T;
  };
@@ -194,11 +168,9 @@
  declare const g1: {
      <T>(a: T): {
          a: T;
+@@= skipped -13, +13 lines =@@
+         b: U;
      };
--    new <U>(b: U): {
--        b: U;
--    };
-+    new <U>(b: U);
  };
 -type T30<V> = typeof g1<V>;
 -type T31<A> = ReturnType<T30<A>>;
@@ -208,8 +180,7 @@
 +type T32<B> = InstanceType<T30<B>>; // { b: B }
  declare const g2: {
      <T extends string>(a: T): T;
--    new <T extends number>(b: T): T;
-+    new <T extends number>(b: T);
+     new <T extends number>(b: T): T;
  };
 -type T40<U extends string> = typeof g2<U>;
 -type T41<U extends number> = typeof g2<U>;
@@ -217,8 +188,7 @@
 +type T41<U extends number> = typeof g2<U>; // Error
  declare const g3: {
      <T extends string>(a: T): T;
--    new <T extends number, Q>(b: T): T;
-+    new <T extends number, Q>(b: T);
+     new <T extends number, Q>(b: T): T;
  };
 -type T50<U extends string> = typeof g3<U>;
 -type T51<U extends number> = typeof g3<U, any>;

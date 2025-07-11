@@ -2161,13 +2161,13 @@ declare class privateClass {
 export declare class publicClass {
 }
 export interface publicInterfaceWithPrivateParmeterTypes {
-    new (); // Error
+    new (): privateClass; // Error
     (): privateClass; // Error
     [x: number]: privateClass; // Error
     myMethod(): privateClass; // Error
 }
 export interface publicInterfaceWithPublicParmeterTypes {
-    new ();
+    new (): publicClass;
     (): publicClass;
     [x: number]: publicClass;
     myMethod(): publicClass;
@@ -2199,7 +2199,7 @@ export declare function publicFunctionWithPublicParmeterTypes1(): publicClass;
 export declare function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass; // Error
 export declare function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
 export interface publicInterfaceWithPrivateModuleParameterTypes {
-    new (); // Error
+    new (): privateModule.publicClass; // Error
     (): privateModule.publicClass; // Error
     [x: number]: privateModule.publicClass; // Error
     myMethod(): privateModule.publicClass; // Error
@@ -2219,13 +2219,13 @@ export declare namespace publicModule {
     export class publicClass {
     }
     export interface publicInterfaceWithPrivateParmeterTypes {
-        new (); // Error
+        new (): privateClass; // Error
         (): privateClass; // Error
         [x: number]: privateClass; // Error
         myMethod(): privateClass; // Error
     }
     export interface publicInterfaceWithPublicParmeterTypes {
-        new ();
+        new (): publicClass;
         (): publicClass;
         [x: number]: publicClass;
         myMethod(): publicClass;
@@ -2257,7 +2257,7 @@ export declare namespace publicModule {
     export function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass; // Error
     export function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
     export interface publicInterfaceWithPrivateModuleParameterTypes {
-        new (); // Error
+        new (): privateModule.publicClass; // Error
         (): privateModule.publicClass; // Error
         [x: number]: privateModule.publicClass; // Error
         myMethod(): privateModule.publicClass; // Error
@@ -2279,13 +2279,13 @@ declare namespace privateModule {
     export class publicClass {
     }
     export interface publicInterfaceWithPrivateParmeterTypes {
-        new ();
+        new (): privateClass;
         (): privateClass;
         [x: number]: privateClass;
         myMethod(): privateClass;
     }
     export interface publicInterfaceWithPublicParmeterTypes {
-        new ();
+        new (): publicClass;
         (): publicClass;
         [x: number]: publicClass;
         myMethod(): publicClass;
@@ -2317,7 +2317,7 @@ declare namespace privateModule {
     export function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass;
     export function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
     export interface publicInterfaceWithPrivateModuleParameterTypes {
-        new ();
+        new (): privateModule.publicClass;
         (): privateModule.publicClass;
         [x: number]: privateModule.publicClass;
         myMethod(): privateModule.publicClass;
@@ -2338,7 +2338,7 @@ export {};
 declare class publicClassInGlobal {
 }
 interface publicInterfaceWithPublicParmeterTypesInGlobal {
-    new ();
+    new (): publicClassInGlobal;
     (): publicClassInGlobal;
     [x: number]: publicClassInGlobal;
     myMethod(): publicClassInGlobal;
@@ -2367,13 +2367,13 @@ declare namespace publicModuleInGlobal {
         export class publicClass {
         }
         export interface publicInterfaceWithPrivateParmeterTypes {
-            new ();
+            new (): privateClass;
             (): privateClass;
             [x: number]: privateClass;
             myMethod(): privateClass;
         }
         export interface publicInterfaceWithPublicParmeterTypes {
-            new ();
+            new (): publicClass;
             (): publicClass;
             [x: number]: publicClass;
             myMethod(): publicClass;
@@ -2405,7 +2405,7 @@ declare namespace publicModuleInGlobal {
         export function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass;
         export function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
         export interface publicInterfaceWithPrivateModuleParameterTypes {
-            new ();
+            new (): privateModule.publicClass;
             (): privateModule.publicClass;
             [x: number]: privateModule.publicClass;
             myMethod(): privateModule.publicClass;
@@ -2422,13 +2422,13 @@ declare namespace publicModuleInGlobal {
         export {};
     }
     export interface publicInterfaceWithPrivateParmeterTypes {
-        new (); // Error
+        new (): privateClass; // Error
         (): privateClass; // Error
         [x: number]: privateClass; // Error
         myMethod(): privateClass; // Error
     }
     export interface publicInterfaceWithPublicParmeterTypes {
-        new ();
+        new (): publicClass;
         (): publicClass;
         [x: number]: publicClass;
         myMethod(): publicClass;
@@ -2460,7 +2460,7 @@ declare namespace publicModuleInGlobal {
     export function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass; // Error
     export function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
     export interface publicInterfaceWithPrivateModuleParameterTypes {
-        new (); // Error
+        new (): privateModule.publicClass; // Error
         (): privateModule.publicClass; // Error
         [x: number]: privateModule.publicClass; // Error
         myMethod(): privateModule.publicClass; // Error

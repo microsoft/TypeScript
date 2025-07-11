@@ -152,19 +152,19 @@ declare namespace schema {
 // union types
 declare namespace schema {
     function createValidator3(schema: any): number | {
-        new <T>(data: T);
+        new <T>(data: T): T;
     };
 }
 // Array types
 declare namespace schema {
     function createValidator4(schema: any): {
-        new <T>(data: T);
+        new <T>(data: T): T;
     }[];
 }
 // TypeLiterals
 declare namespace schema {
     function createValidator5(schema: any): {
-        new <T>(data: T);
+        new <T>(data: T): T;
     };
 }
 // Tuple types

@@ -74,8 +74,8 @@ declare var x: {
     (a: number): c;
     (a: string): g<string>;
     // Construct signatures
-    new (a: number);
-    new (a: string);
+    new (a: number): c;
+    new (a: string): m.c;
     // Indexers
     [n: number]: c;
     [n: string]: c;

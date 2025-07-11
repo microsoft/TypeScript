@@ -286,16 +286,12 @@
 -    new (param: privateClass): publicClass;
 -    (param: privateClass): publicClass;
 -    myMethod(param: privateClass): void;
-+    new (param: privateClass); // Error
++    new (param: privateClass): publicClass; // Error
 +    (param: privateClass): publicClass; // Error
 +    myMethod(param: privateClass): void; // Error
  }
  export interface publicInterfaceWithPublicParmeterTypes {
--    new (param: publicClass): publicClass;
-+    new (param: publicClass);
-     (param: publicClass): publicClass;
-     myMethod(param: publicClass): void;
- }
+     new (param: publicClass): publicClass;
 @@= skipped -29, +29 lines =@@
  }
  export declare function publicFunctionWithPrivateParmeterTypes(param: privateClass): void;
@@ -307,7 +303,7 @@
 -    new (param: privateModule.publicClass): publicClass;
 -    (param: privateModule.publicClass): publicClass;
 -    myMethod(param: privateModule.publicClass): void;
-+    new (param: privateModule.publicClass); // Error
++    new (param: privateModule.publicClass): publicClass; // Error
 +    (param: privateModule.publicClass): publicClass; // Error
 +    myMethod(param: privateModule.publicClass): void; // Error
  }
@@ -328,16 +324,12 @@
 -        new (param: privateClass): publicClass;
 -        (param: privateClass): publicClass;
 -        myMethod(param: privateClass): void;
-+        new (param: privateClass); // Error
++        new (param: privateClass): publicClass; // Error
 +        (param: privateClass): publicClass; // Error
 +        myMethod(param: privateClass): void; // Error
      }
      export interface publicInterfaceWithPublicParmeterTypes {
--        new (param: publicClass): publicClass;
-+        new (param: publicClass);
-         (param: publicClass): publicClass;
-         myMethod(param: publicClass): void;
-     }
+         new (param: publicClass): publicClass;
 @@= skipped -36, +36 lines =@@
      }
      export function publicFunctionWithPrivateParmeterTypes(param: privateClass): void;
@@ -349,7 +341,7 @@
 -        new (param: privateModule.publicClass): publicClass;
 -        (param: privateModule.publicClass): publicClass;
 -        myMethod(param: privateModule.publicClass): void;
-+        new (param: privateModule.publicClass); // Error
++        new (param: privateModule.publicClass): publicClass; // Error
 +        (param: privateModule.publicClass): publicClass; // Error
 +        myMethod(param: privateModule.publicClass): void; // Error
      }
@@ -364,80 +356,19 @@
      export {};
  }
  declare namespace privateModule {
-@@= skipped -9, +9 lines =@@
-     export class publicClass {
-     }
-     export interface publicInterfaceWithPrivateParmeterTypes {
--        new (param: privateClass): publicClass;
-+        new (param: privateClass);
-         (param: privateClass): publicClass;
-         myMethod(param: privateClass): void;
-     }
-     export interface publicInterfaceWithPublicParmeterTypes {
--        new (param: publicClass): publicClass;
-+        new (param: publicClass);
-         (param: publicClass): publicClass;
-         myMethod(param: publicClass): void;
-     }
-@@= skipped -32, +32 lines =@@
-     export function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
-     export function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
-     export interface publicInterfaceWithPrivateModuleParameterTypes {
--        new (param: privateModule.publicClass): publicClass;
-+        new (param: privateModule.publicClass);
-         (param: privateModule.publicClass): publicClass;
-         myMethod(param: privateModule.publicClass): void;
-     }
-@@= skipped -20, +20 lines =@@
- declare class publicClassInGlobal {
- }
- interface publicInterfaceWithPublicParmeterTypesInGlobal {
--    new (param: publicClassInGlobal): publicClassInGlobal;
-+    new (param: publicClassInGlobal);
-     (param: publicClassInGlobal): publicClassInGlobal;
-     myMethod(param: publicClassInGlobal): void;
- }
-@@= skipped -26, +26 lines =@@
-         export class publicClass {
-         }
-         export interface publicInterfaceWithPrivateParmeterTypes {
--            new (param: privateClass): publicClass;
-+            new (param: privateClass);
-             (param: privateClass): publicClass;
-             myMethod(param: privateClass): void;
-         }
-         export interface publicInterfaceWithPublicParmeterTypes {
--            new (param: publicClass): publicClass;
-+            new (param: publicClass);
-             (param: publicClass): publicClass;
-             myMethod(param: publicClass): void;
-         }
-@@= skipped -32, +32 lines =@@
-         export function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
-         export function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
-         export interface publicInterfaceWithPrivateModuleParameterTypes {
--            new (param: privateModule.publicClass): publicClass;
-+            new (param: privateModule.publicClass);
-             (param: privateModule.publicClass): publicClass;
-             myMethod(param: privateModule.publicClass): void;
-         }
-@@= skipped -16, +16 lines =@@
+@@= skipped -135, +135 lines =@@
          export {};
      }
      export interface publicInterfaceWithPrivateParmeterTypes {
 -        new (param: privateClass): publicClass;
 -        (param: privateClass): publicClass;
 -        myMethod(param: privateClass): void;
-+        new (param: privateClass); // Error
++        new (param: privateClass): publicClass; // Error
 +        (param: privateClass): publicClass; // Error
 +        myMethod(param: privateClass): void; // Error
      }
      export interface publicInterfaceWithPublicParmeterTypes {
--        new (param: publicClass): publicClass;
-+        new (param: publicClass);
-         (param: publicClass): publicClass;
-         myMethod(param: publicClass): void;
-     }
+         new (param: publicClass): publicClass;
 @@= skipped -29, +29 lines =@@
      }
      export function publicFunctionWithPrivateParmeterTypes(param: privateClass): void;
@@ -449,7 +380,7 @@
 -        new (param: privateModule.publicClass): publicClass;
 -        (param: privateModule.publicClass): publicClass;
 -        myMethod(param: privateModule.publicClass): void;
-+        new (param: privateModule.publicClass); // Error
++        new (param: privateModule.publicClass): publicClass; // Error
 +        (param: privateModule.publicClass): publicClass; // Error
 +        myMethod(param: privateModule.publicClass): void; // Error
      }

@@ -17,5 +17,5 @@ interface C {
     }): any;
     new ({ p: boolean }: {
         p: any;
-    });
+    }): any;
 }

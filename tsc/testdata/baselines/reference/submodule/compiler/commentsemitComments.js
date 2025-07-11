@@ -172,7 +172,7 @@ interface i1 {
     /** caller comments*/
     (a: number): number;
     /** new comments*/
-    new (b: string);
+    new (b: string): any;
     /**indexer property*/
     [a: number]: string;
     /** function property;*/

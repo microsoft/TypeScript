@@ -165,10 +165,10 @@ interface I {
     ({ a: string }: {
         a: any;
     }): any; // Error
-    new (arg: number); // OK
+    new (arg: number): any; // OK
     new ({ a: string }: {
         a: any;
-    }); // Error
+    }): any; // Error
 }
 // Below are OK but renaming should be removed from declaration emit
 declare function f1({ a: string }: O): void;

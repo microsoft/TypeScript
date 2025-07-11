@@ -71,39 +71,3 @@
      export import m1_im1_public = m1_M1_public;
      export import m1_im2_public = m1_M2_private;
      export {};
-@@= skipped -16, +34 lines =@@
-     class c1 {
-     }
-     var v1: {
--        new (): c1;
-+        new ();
-     };
-     var v2: c1;
- }
- declare module "use_glo_M1_public" {
-     import use_glo_M1_public = glo_M1_public;
-     var use_glo_M1_public_v1_public: {
--        new (): use_glo_M1_public.c1;
-+        new ();
-     };
-     var use_glo_M1_public_v2_public: typeof use_glo_M1_public;
-     var use_glo_M1_public_v3_public: () => use_glo_M1_public.c1;
-     var use_glo_M1_public_v1_private: {
--        new (): use_glo_M1_public.c1;
-+        new ();
-     };
-     var use_glo_M1_public_v2_private: typeof use_glo_M1_public;
-     var use_glo_M1_public_v3_private: () => use_glo_M1_public.c1;
-     import use_glo_M2_public = require("glo_M2_public");
-     var use_glo_M2_public_v1_public: {
--        new (): use_glo_M2_public.c1;
-+        new ();
-     };
-     var use_glo_M2_public_v2_public: typeof use_glo_M2_public;
-     var use_glo_M2_public_v3_public: () => use_glo_M2_public.c1;
-     var use_glo_M2_public_v1_private: {
--        new (): use_glo_M2_public.c1;
-+        new ();
-     };
-     var use_glo_M2_public_v2_private: typeof use_glo_M2_public;
-     var use_glo_M2_public_v3_private: () => use_glo_M2_public.c1;

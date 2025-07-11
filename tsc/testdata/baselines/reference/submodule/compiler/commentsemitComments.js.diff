@@ -20,16 +20,7 @@
          constructor(x) {
              this.x = x;
          }
-@@= skipped -39, +40 lines =@@
-     /** caller comments*/
-     (a: number): number;
-     /** new comments*/
--    new (b: string): any;
-+    new (b: string);
-     /**indexer property*/
-     [a: number]: string;
-     /** function property;*/
-@@= skipped -17, +17 lines =@@
+@@= skipped -56, +57 lines =@@
          x: number;
          constructor(x: number);
      }

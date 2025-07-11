@@ -492,7 +492,7 @@ export interface Component<T extends object = any> {
     flushToDOM(): void;
 }
 export interface ComponentConstructor<T extends object> {
-    new (el: unknown, attrValue: string, id: string);
+    new (el: unknown, attrValue: string, id: string): T & Component;
     prototype: T & {
         name: string;
         system: unknown;

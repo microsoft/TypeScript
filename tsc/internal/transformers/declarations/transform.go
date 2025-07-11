@@ -827,7 +827,7 @@ func (tx *DeclarationTransformer) transformConstructSignatureDeclaration(input *
 		input,
 		tx.ensureTypeParams(input.AsNode(), input.TypeParameters),
 		tx.updateParamList(input.AsNode(), input.Parameters),
-		nil, // no return type
+		tx.ensureType(input.AsNode(), false),
 	)
 }
 

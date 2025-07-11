@@ -291,15 +291,15 @@ interface i1 {
     /** foo4 any */
     foo4(c: any): any;
     /// new 1
-    new (a: string);
+    new (a: string): any;
     /** new 1*/
-    new (b: number);
+    new (b: number): any;
 }
 declare var i1_i: i1;
 interface i2 {
-    new (a: string);
+    new (a: string): any;
     /** new 2*/
-    new (b: number);
+    new (b: number): any;
     (a: number): number;
     /**this is signature 2*/
     (b: string): number;
@@ -307,17 +307,17 @@ interface i2 {
 declare var i2_i: i2;
 interface i3 {
     /** new 1*/
-    new (a: string);
+    new (a: string): any;
     /** new 2*/
-    new (b: number);
+    new (b: number): any;
     /**this is signature 1*/
     (a: number): number;
     (b: string): number;
 }
 declare var i3_i: i3;
 interface i4 {
-    new (a: string);
-    new (b: number);
+    new (a: string): any;
+    new (b: number): any;
     (a: number): number;
     (b: string): number;
 }

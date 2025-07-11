@@ -143,9 +143,9 @@ export interface C<T, U> {
     (): number;
     (x: T): U;
     <Q>(x: Q): T & Q;
-    new ();
-    new (x: T);
-    new <Q>(x: Q);
+    new (): string;
+    new (x: T): U;
+    new <Q>(x: Q): T & Q;
     method<Q = number>(): number;
     method<Q>(a: T & Q): Q & number;
     method(a?: number): number;

@@ -16,15 +16,3 @@
 +}
  exports.default = MyComponent;
 
-
-@@= skipped -15, +13 lines =@@
-     t: T;
- }
- export declare function make<P, CTor>(x: {
--    new (): CTor & {
--        props: P;
--    };
-+    new ();
- }): Things<P, CTor>;
- export interface Props {
- }

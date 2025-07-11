@@ -7,33 +7,20 @@
 -    new <T extends privateClass>(): privateClass;
 -    <T extends privateClass>(): privateClass;
 -    myMethod<T extends privateClass>(): privateClass;
-+    new <T extends privateClass>(); // Error
++    new <T extends privateClass>(): privateClass; // Error
 +    <T extends privateClass>(): privateClass; // Error
 +    myMethod<T extends privateClass>(): privateClass; // Error
  }
  export interface publicInterfaceWithPublicTypeParameters {
--    new <T extends publicClass>(): publicClass;
-+    new <T extends publicClass>();
-     <T extends publicClass>(): publicClass;
-     myMethod<T extends publicClass>(): publicClass;
- }
-@@= skipped -24, +24 lines =@@
- export declare function publicFunctionWithPrivateTypeParameters<T extends privateClass>(): void;
- export declare function publicFunctionWithPublicTypeParameters<T extends publicClass>(): void;
- export interface publicInterfaceWithPublicTypeParametersWithoutExtends {
--    new <T>(): publicClass;
-+    new <T>();
-     <T>(): publicClass;
-     myMethod<T>(): publicClass;
- }
-@@= skipped -12, +12 lines =@@
+     new <T extends publicClass>(): publicClass;
+@@= skipped -36, +36 lines =@@
  }
  export declare function publicFunctionWithPublicTypeParametersWithoutExtends<T>(): void;
  export interface publicInterfaceWithPrivatModuleTypeParameters {
 -    new <T extends privateModule.publicClass>(): privateModule.publicClass;
 -    <T extends privateModule.publicClass>(): privateModule.publicClass;
 -    myMethod<T extends privateModule.publicClass>(): privateModule.publicClass;
-+    new <T extends privateModule.publicClass>(); // Error
++    new <T extends privateModule.publicClass>(): privateModule.publicClass; // Error
 +    <T extends privateModule.publicClass>(): privateModule.publicClass; // Error
 +    myMethod<T extends privateModule.publicClass>(): privateModule.publicClass; // Error
  }
@@ -46,59 +33,22 @@
 -        new <T extends privateClass>(): privateClass;
 -        <T extends privateClass>(): privateClass;
 -        myMethod<T extends privateClass>(): privateClass;
-+        new <T extends privateClass>(); // Error
++        new <T extends privateClass>(): privateClass; // Error
 +        <T extends privateClass>(): privateClass; // Error
 +        myMethod<T extends privateClass>(): privateClass; // Error
      }
      export interface publicInterfaceWithPublicTypeParameters {
--        new <T extends publicClass>(): publicClass;
-+        new <T extends publicClass>();
-         <T extends publicClass>(): publicClass;
-         myMethod<T extends publicClass>(): publicClass;
-     }
-@@= skipped -24, +24 lines =@@
-     export function publicFunctionWithPrivateTypeParameters<T extends privateClass>(): void;
-     export function publicFunctionWithPublicTypeParameters<T extends publicClass>(): void;
-     export interface publicInterfaceWithPublicTypeParametersWithoutExtends {
--        new <T>(): publicClass;
-+        new <T>();
-         <T>(): publicClass;
-         myMethod<T>(): publicClass;
-     }
-@@= skipped -12, +12 lines =@@
+         new <T extends publicClass>(): publicClass;
+@@= skipped -36, +36 lines =@@
      }
      export function publicFunctionWithPublicTypeParametersWithoutExtends<T>(): void;
      export interface publicInterfaceWithPrivatModuleTypeParameters {
 -        new <T extends privateModule.publicClass>(): privateModule.publicClass;
 -        <T extends privateModule.publicClass>(): privateModule.publicClass;
 -        myMethod<T extends privateModule.publicClass>(): privateModule.publicClass;
-+        new <T extends privateModule.publicClass>(); // Error
++        new <T extends privateModule.publicClass>(): privateModule.publicClass; // Error
 +        <T extends privateModule.publicClass>(): privateModule.publicClass; // Error
 +        myMethod<T extends privateModule.publicClass>(): privateModule.publicClass; // Error
      }
      export class publicClassWithWithPrivateModuleTypeParameters {
          static myPublicStaticMethod<T extends privateModule.publicClass>(): void;
-@@= skipped -17, +17 lines =@@
-     export class publicClass {
-     }
-     export interface publicInterfaceWithPrivateTypeParameters {
--        new <T extends privateClass>(): privateClass;
-+        new <T extends privateClass>();
-         <T extends privateClass>(): privateClass;
-         myMethod<T extends privateClass>(): privateClass;
-     }
-     export interface publicInterfaceWithPublicTypeParameters {
--        new <T extends publicClass>(): publicClass;
-+        new <T extends publicClass>();
-         <T extends publicClass>(): publicClass;
-         myMethod<T extends publicClass>(): publicClass;
-     }
-@@= skipped -24, +24 lines =@@
-     export function publicFunctionWithPrivateTypeParameters<T extends privateClass>(): void;
-     export function publicFunctionWithPublicTypeParameters<T extends publicClass>(): void;
-     export interface publicInterfaceWithPublicTypeParametersWithoutExtends {
--        new <T>(): publicClass;
-+        new <T>();
-         <T>(): publicClass;
-         myMethod<T>(): publicClass;
-     }

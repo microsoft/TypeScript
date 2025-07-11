@@ -48,16 +48,7 @@
  declare function f20<T, U = V, V = U & C>(a?: T, b?: U, c?: V): [T, U, V];
  interface i00<T = number> {
      a: T;
-@@= skipped -80, +101 lines =@@
-     a: T;
- }
- interface Base01Constructor {
--    new <T = number>(a?: T): Base01<T>;
-+    new <T = number>(a?: T);
- }
- declare const Base01: Base01Constructor;
- declare const Base01c00: Base01<number>;
-@@= skipped -19, +19 lines =@@
+@@= skipped -99, +120 lines =@@
  declare const Derived02c01: Derived02<number>;
  declare const Derived02c02: Derived02<number>;
  declare const Derived02c03: Derived02<number>;
@@ -65,11 +56,6 @@
  interface Base02 {
  }
  interface Base02Constructor {
--    new <T = A>(a: T): Base02 & T;
-+    new <T = A>(a: T);
- }
- declare const Base02: Base02Constructor;
- declare class Derived03 extends Base02 {
 @@= skipped -37, +38 lines =@@
  declare const t03c02: [number, number];
  declare const t03c03: [1, 1];

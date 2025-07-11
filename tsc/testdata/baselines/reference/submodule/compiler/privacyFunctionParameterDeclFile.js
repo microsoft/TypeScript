@@ -1285,12 +1285,12 @@ declare class privateClass {
 export declare class publicClass {
 }
 export interface publicInterfaceWithPrivateParmeterTypes {
-    new (param: privateClass); // Error
+    new (param: privateClass): publicClass; // Error
     (param: privateClass): publicClass; // Error
     myMethod(param: privateClass): void; // Error
 }
 export interface publicInterfaceWithPublicParmeterTypes {
-    new (param: publicClass);
+    new (param: publicClass): publicClass;
     (param: publicClass): publicClass;
     myMethod(param: publicClass): void;
 }
@@ -1317,7 +1317,7 @@ export declare function publicFunctionWithPublicParmeterTypes(param: publicClass
 export declare function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void; // Error
 export declare function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
 export interface publicInterfaceWithPrivateModuleParameterTypes {
-    new (param: privateModule.publicClass); // Error
+    new (param: privateModule.publicClass): publicClass; // Error
     (param: privateModule.publicClass): publicClass; // Error
     myMethod(param: privateModule.publicClass): void; // Error
 }
@@ -1336,12 +1336,12 @@ export declare namespace publicModule {
     export class publicClass {
     }
     export interface publicInterfaceWithPrivateParmeterTypes {
-        new (param: privateClass); // Error
+        new (param: privateClass): publicClass; // Error
         (param: privateClass): publicClass; // Error
         myMethod(param: privateClass): void; // Error
     }
     export interface publicInterfaceWithPublicParmeterTypes {
-        new (param: publicClass);
+        new (param: publicClass): publicClass;
         (param: publicClass): publicClass;
         myMethod(param: publicClass): void;
     }
@@ -1368,7 +1368,7 @@ export declare namespace publicModule {
     export function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void; // Error
     export function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
     export interface publicInterfaceWithPrivateModuleParameterTypes {
-        new (param: privateModule.publicClass); // Error
+        new (param: privateModule.publicClass): publicClass; // Error
         (param: privateModule.publicClass): publicClass; // Error
         myMethod(param: privateModule.publicClass): void; // Error
     }
@@ -1389,12 +1389,12 @@ declare namespace privateModule {
     export class publicClass {
     }
     export interface publicInterfaceWithPrivateParmeterTypes {
-        new (param: privateClass);
+        new (param: privateClass): publicClass;
         (param: privateClass): publicClass;
         myMethod(param: privateClass): void;
     }
     export interface publicInterfaceWithPublicParmeterTypes {
-        new (param: publicClass);
+        new (param: publicClass): publicClass;
         (param: publicClass): publicClass;
         myMethod(param: publicClass): void;
     }
@@ -1421,7 +1421,7 @@ declare namespace privateModule {
     export function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
     export function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
     export interface publicInterfaceWithPrivateModuleParameterTypes {
-        new (param: privateModule.publicClass);
+        new (param: privateModule.publicClass): publicClass;
         (param: privateModule.publicClass): publicClass;
         myMethod(param: privateModule.publicClass): void;
     }
@@ -1441,7 +1441,7 @@ export {};
 declare class publicClassInGlobal {
 }
 interface publicInterfaceWithPublicParmeterTypesInGlobal {
-    new (param: publicClassInGlobal);
+    new (param: publicClassInGlobal): publicClassInGlobal;
     (param: publicClassInGlobal): publicClassInGlobal;
     myMethod(param: publicClassInGlobal): void;
 }
@@ -1467,12 +1467,12 @@ declare namespace publicModuleInGlobal {
         export class publicClass {
         }
         export interface publicInterfaceWithPrivateParmeterTypes {
-            new (param: privateClass);
+            new (param: privateClass): publicClass;
             (param: privateClass): publicClass;
             myMethod(param: privateClass): void;
         }
         export interface publicInterfaceWithPublicParmeterTypes {
-            new (param: publicClass);
+            new (param: publicClass): publicClass;
             (param: publicClass): publicClass;
             myMethod(param: publicClass): void;
         }
@@ -1499,7 +1499,7 @@ declare namespace publicModuleInGlobal {
         export function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
         export function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
         export interface publicInterfaceWithPrivateModuleParameterTypes {
-            new (param: privateModule.publicClass);
+            new (param: privateModule.publicClass): publicClass;
             (param: privateModule.publicClass): publicClass;
             myMethod(param: privateModule.publicClass): void;
         }
@@ -1515,12 +1515,12 @@ declare namespace publicModuleInGlobal {
         export {};
     }
     export interface publicInterfaceWithPrivateParmeterTypes {
-        new (param: privateClass); // Error
+        new (param: privateClass): publicClass; // Error
         (param: privateClass): publicClass; // Error
         myMethod(param: privateClass): void; // Error
     }
     export interface publicInterfaceWithPublicParmeterTypes {
-        new (param: publicClass);
+        new (param: publicClass): publicClass;
         (param: publicClass): publicClass;
         myMethod(param: publicClass): void;
     }
@@ -1547,7 +1547,7 @@ declare namespace publicModuleInGlobal {
     export function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void; // Error
     export function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
     export interface publicInterfaceWithPrivateModuleParameterTypes {
-        new (param: privateModule.publicClass); // Error
+        new (param: privateModule.publicClass): publicClass; // Error
         (param: privateModule.publicClass): publicClass; // Error
         myMethod(param: privateModule.publicClass): void; // Error
     }

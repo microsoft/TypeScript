@@ -994,7 +994,7 @@ interface Base01<T> {
     a: T;
 }
 interface Base01Constructor {
-    new <T = number>(a?: T);
+    new <T = number>(a?: T): Base01<T>;
 }
 declare const Base01: Base01Constructor;
 declare const Base01c00: Base01<number>;
@@ -1017,7 +1017,7 @@ declare const Derived02c03: Derived02<number>;
 interface Base02 {
 }
 interface Base02Constructor {
-    new <T = A>(a: T);
+    new <T = A>(a: T): Base02 & T;
 }
 declare const Base02: Base02Constructor;
 declare class Derived03 extends Base02 {

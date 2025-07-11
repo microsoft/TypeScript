@@ -306,20 +306,20 @@ declare function f13(f: {
     y: string;
 }): void;
 declare function f14(f: {
-    new <T>(a: T);
-    new <U>(a: U, b: number);
+    new <T>(a: T): T;
+    new <U>(a: U, b: number): U[];
 }): void;
 declare function f15(f: {
-    new <T>(a: T);
+    new <T>(a: T): T;
     <U>(a: U, b: number): U[];
 }): void;
 declare function f16(f: {
-    new <T>(a: T);
+    new <T>(a: T): T;
     (a: string, b: number): string[];
 }): void;
 declare function f17(f: {
     <T>(a: T): T;
-    new (a: string, b: number);
+    new (a: string, b: number): string[];
 }): void;
 declare function f20(f: (<T>(a: T) => T) & (<U>(a: U, b: number) => U[])): void;
 declare function f21(f: (<T>(a: T) => T) & ((a: string, b: number) => string[])): void;
@@ -362,20 +362,22 @@ declare const g1: {
     <T>(a: T): {
         a: T;
     };
-    new <U>(b: U);
+    new <U>(b: U): {
+        b: U;
+    };
 };
 type T30<V> = typeof g1<V>; // { (a: V) => { a: V }; new (b: V) => { b: V }; }
 type T31<A> = ReturnType<T30<A>>; // { a: A }
 type T32<B> = InstanceType<T30<B>>; // { b: B }
 declare const g2: {
     <T extends string>(a: T): T;
-    new <T extends number>(b: T);
+    new <T extends number>(b: T): T;
 };
 type T40<U extends string> = typeof g2<U>; // Error
 type T41<U extends number> = typeof g2<U>; // Error
 declare const g3: {
     <T extends string>(a: T): T;
-    new <T extends number, Q>(b: T);
+    new <T extends number, Q>(b: T): T;
 };
 type T50<U extends string> = typeof g3<U>; // (a: U) => U
 type T51<U extends number> = typeof g3<U, any>; // (b: U) => U

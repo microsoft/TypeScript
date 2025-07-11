@@ -312,30 +312,30 @@ declare module "glo_M2_public" {
     class c1 {
     }
     var v1: {
-        new ();
+        new (): c1;
     };
     var v2: c1;
 }
 declare module "use_glo_M1_public" {
     import use_glo_M1_public = glo_M1_public;
     var use_glo_M1_public_v1_public: {
-        new ();
+        new (): use_glo_M1_public.c1;
     };
     var use_glo_M1_public_v2_public: typeof use_glo_M1_public;
     var use_glo_M1_public_v3_public: () => use_glo_M1_public.c1;
     var use_glo_M1_public_v1_private: {
-        new ();
+        new (): use_glo_M1_public.c1;
     };
     var use_glo_M1_public_v2_private: typeof use_glo_M1_public;
     var use_glo_M1_public_v3_private: () => use_glo_M1_public.c1;
     import use_glo_M2_public = require("glo_M2_public");
     var use_glo_M2_public_v1_public: {
-        new ();
+        new (): use_glo_M2_public.c1;
     };
     var use_glo_M2_public_v2_public: typeof use_glo_M2_public;
     var use_glo_M2_public_v3_public: () => use_glo_M2_public.c1;
     var use_glo_M2_public_v1_private: {
-        new ();
+        new (): use_glo_M2_public.c1;
     };
     var use_glo_M2_public_v2_private: typeof use_glo_M2_public;
     var use_glo_M2_public_v3_private: () => use_glo_M2_public.c1;

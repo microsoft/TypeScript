@@ -47,11 +47,11 @@ export declare class Derived2 extends Derived {
 }
 export type Foo = {
     new (x: {
-        new <T extends Derived>(a: T);
-        new <T extends Base>(a: T);
-    });
+        new <T extends Derived>(a: T): T;
+        new <T extends Base>(a: T): T;
+    }): any[];
     new (x: {
-        new <T extends Derived2>(a: T);
-        new <T extends Base>(a: T);
-    });
+        new <T extends Derived2>(a: T): T;
+        new <T extends Base>(a: T): T;
+    }): any[];
 };

@@ -8,10 +8,3 @@
  interface Type {
      t: void;
  }
-@@= skipped -14, +15 lines =@@
-     new (selector: Type | string, { descendants, read }?: {
-         descendants?: boolean;
-         read?: any;
--    }): QueryMetadata;
-+    });
- }

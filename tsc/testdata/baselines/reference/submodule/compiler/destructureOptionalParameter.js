@@ -56,5 +56,5 @@ interface QueryMetadataFactory {
     new (selector: Type | string, { descendants, read }?: {
         descendants?: boolean;
         read?: any;
-    });
+    }): QueryMetadata;
 }

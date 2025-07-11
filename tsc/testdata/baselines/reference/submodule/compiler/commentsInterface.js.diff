@@ -9,16 +9,7 @@
      l: this.f,
      /** own x*/
      x: this.f(10),
-@@= skipped -31, +31 lines =@@
-     /** this is indexer*/
-     [/**string param*/ i: string]: any;
-     /**new method*/
--    new (/** param*/ i: i1): any;
-+    new (/** param*/ i: i1);
-     nc_x: number;
-     nc_foo: (b: number) => string;
-     [i: number]: number;
-@@= skipped -9, +9 lines =@@
+@@= skipped -40, +40 lines =@@
      /** this is fnfoo*/
      fnfoo(/**param help*/ b: number): string;
      nc_fnfoo(b: number): string;

@@ -14,18 +14,7 @@
  }
  exports.default = MyComponent;
  var Something;
-@@= skipped -21, +22 lines =@@
-     t: T;
- }
- export declare function make<P, CTor>(x: {
--    new (): CTor & {
--        props: P;
--    };
-+    new ();
- }): Things<P, CTor>;
- export interface Props {
- }
-@@= skipped -10, +8 lines =@@
+@@= skipped -31, +32 lines =@@
      props: Props;
  }
  export declare namespace Something {

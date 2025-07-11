@@ -122,7 +122,7 @@ interface i2 {
     /** this is indexer*/
     [/**string param*/ i: string]: any;
     /**new method*/
-    new (/** param*/ i: i1);
+    new (/** param*/ i: i1): any;
     nc_x: number;
     nc_foo: (b: number) => string;
     [i: number]: number;

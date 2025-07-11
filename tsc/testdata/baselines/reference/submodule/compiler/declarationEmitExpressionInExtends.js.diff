@@ -8,12 +8,3 @@
  }
  class B extends x {
  }
-@@= skipped -9, +10 lines =@@
-
- //// [declarationEmitExpressionInExtends.d.ts]
- declare var x: {
--    new <T>(s: any): Q;
-+    new <T>(s: any);
- };
- declare class Q {
-     s: string;

@@ -58,8 +58,8 @@ var instance2 = new c1();
 interface a0 {
     (): string;
     (a: any, b: any, c?: string): number;
-    new ();
-    new (s: string);
+    new (): string;
+    new (s: string): any;
     [n: number]: () => string;
     [s: string]: any;
     p1: any;

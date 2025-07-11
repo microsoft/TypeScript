@@ -73,50 +73,50 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [declFileConstructSignatures_0.d.ts]
 export interface IConstructSignature {
     /** This comment should appear for foo*/
-    new ();
+    new (): string;
 }
 export interface IConstructSignatureWithParameters {
     /** This is comment for function signature*/
     new (/** this is comment about a*/ a: string, 
     /** this is comment for b*/
-    b: number);
+    b: number): any;
 }
 export interface IConstructSignatureWithRestParameters {
-    new (a: string, ...rests: string[]);
+    new (a: string, ...rests: string[]): string;
 }
 export interface IConstructSignatureWithOverloads {
-    new (a: string);
-    new (a: number);
+    new (a: string): string;
+    new (a: number): number;
 }
 export interface IConstructSignatureWithTypeParameters<T> {
     /** This comment should appear for foo*/
-    new (a: T);
+    new (a: T): T;
 }
 export interface IConstructSignatureWithOwnTypeParametes {
-    new <T extends IConstructSignature>(a: T);
+    new <T extends IConstructSignature>(a: T): T;
 }
 //// [declFileConstructSignatures_1.d.ts]
 interface IGlobalConstructSignature {
     /** This comment should appear for foo*/
-    new ();
+    new (): string;
 }
 interface IGlobalConstructSignatureWithParameters {
     /** This is comment for function signature*/
     new (/** this is comment about a*/ a: string, 
     /** this is comment for b*/
-    b: number);
+    b: number): any;
 }
 interface IGlobalConstructSignatureWithRestParameters {
-    new (a: string, ...rests: string[]);
+    new (a: string, ...rests: string[]): string;
 }
 interface IGlobalConstructSignatureWithOverloads {
-    new (a: string);
-    new (a: number);
+    new (a: string): string;
+    new (a: number): number;
 }
 interface IGlobalConstructSignatureWithTypeParameters<T> {
     /** This comment should appear for foo*/
-    new (a: T);
+    new (a: T): T;
 }
 interface IGlobalConstructSignatureWithOwnTypeParametes {
-    new <T extends IGlobalConstructSignature>(a: T);
+    new <T extends IGlobalConstructSignature>(a: T): T;
 }
