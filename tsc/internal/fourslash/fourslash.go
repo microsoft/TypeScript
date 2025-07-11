@@ -338,7 +338,7 @@ func (f *FourslashTest) goToPosition(t *testing.T, position lsproto.Position) {
 	f.selectionEnd = nil
 }
 
-func (f *FourslashTest) GoToEachMarker(t *testing.T, markerNames []string, action func(t *testing.T, marker *Marker, index int)) {
+func (f *FourslashTest) GoToEachMarker(t *testing.T, markerNames []string, action func(marker *Marker, index int)) {
 	var markers []*Marker
 	if len(markers) == 0 {
 		markers = f.Markers()
@@ -354,7 +354,7 @@ func (f *FourslashTest) GoToEachMarker(t *testing.T, markerNames []string, actio
 	}
 	for i, marker := range markers {
 		f.goToMarker(t, marker)
-		action(t, marker, i)
+		action(marker, i)
 	}
 }
 

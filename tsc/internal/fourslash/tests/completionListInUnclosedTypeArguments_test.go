@@ -34,7 +34,7 @@ f2</*1x*/T/*2x*/y/*3x*/, () =>/*4x*/T/*5x*/y/*6x*/
 f2<() =>/*1y*/T/*2y*/y/*3y*/, () =>/*4y*/T/*5y*/y/*6y*/
 f2<any, () =>/*1z*/T/*2z*/y/*3z*/`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.GoToEachMarker(t, nil, func(t *testing.T, marker *fourslash.Marker, index int) {
+	f.GoToEachMarker(t, nil, func(marker *fourslash.Marker, index int) {
 		markerName := marker.Name
 		valueOnly := markerName != nil && strings.HasSuffix(*markerName, "ValueOnly")
 		commitCharacters := &defaultCommitCharacters

@@ -370,6 +370,13 @@ function parseVerifyCompletionArg(arg: ts.Expression): VerifyCompletionsCmd | un
                 else if (init.getText() === "test.markers()") {
                     marker = "f.Markers()";
                 }
+                else if (
+                    ts.isCallExpression(init)
+                    && init.expression.getText() === "test.marker"
+                    && ts.isStringLiteralLike(init.arguments[0])
+                ) {
+                    marker = getGoStringLiteral(init.arguments[0].text);
+                }
                 else {
                     console.error(`Unrecognized marker initializer: ${init.getText()}`);
                     return undefined;
@@ -511,7 +518,7 @@ function parseExpectedCompletionItem(expr: ts.Expression): string | undefined {
     if (completionConstants.has(expr.getText())) {
         return completionConstants.get(expr.getText())!;
     }
-    if (ts.isStringLiteral(expr)) {
+    if (ts.isStringLiteralLike(expr)) {
         return getGoStringLiteral(expr.text);
     }
     if (ts.isObjectLiteralExpression(expr)) {
@@ -531,7 +538,7 @@ function parseExpectedCompletionItem(expr: ts.Expression): string | undefined {
             const init = prop.initializer;
             switch (propName) {
                 case "name":
-                    if (ts.isStringLiteral(init)) {
+                    if (ts.isStringLiteralLike(init)) {
                         name = init.text;
                     }
                     else {
@@ -550,8 +557,11 @@ function parseExpectedCompletionItem(expr: ts.Expression): string | undefined {
                     }
                     break;
                 case "insertText":
-                    if (ts.isStringLiteral(init)) {
+                    if (ts.isStringLiteralLike(init)) {
                         insertText = init.text;
+                    }
+                    else if (init.getText() === "undefined") {
+                        // Ignore
                     }
                     else {
                         console.error(`Expected string literal for insertText, got ${init.getText()}`);
@@ -559,7 +569,7 @@ function parseExpectedCompletionItem(expr: ts.Expression): string | undefined {
                     }
                     break;
                 case "filterText":
-                    if (ts.isStringLiteral(init)) {
+                    if (ts.isStringLiteralLike(init)) {
                         filterText = init.text;
                     }
                     else {
@@ -609,6 +619,8 @@ function parseExpectedCompletionItem(expr: ts.Expression): string | undefined {
                         return undefined;
                     }
                     break;
+                case "isFromUncheckedFile":
+                    break; // Ignored
                 case "commitCharacters":
                 case "replacementSpan":
                     // !!! support these later
@@ -742,6 +754,9 @@ function parseKindModifiers(expr: ts.Expression): { isOptional: boolean; isDepre
 }
 
 function parseSortText(expr: ts.Expression): string | undefined {
+    if (ts.isCallExpression(expr) && expr.expression.getText() === "completion.SortText.Deprecated") {
+        return `ls.DeprecateSortText(${parseSortText(expr.arguments[0])})`;
+    }
     const text = expr.getText();
     switch (text) {
         case "completion.SortText.LocalDeclarationPriority":

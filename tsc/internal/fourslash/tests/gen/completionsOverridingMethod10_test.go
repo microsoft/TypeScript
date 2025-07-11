@@ -1,0 +1,57 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/typescript-go/internal/fourslash"
+	"github.com/microsoft/typescript-go/internal/ls"
+	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
+	"github.com/microsoft/typescript-go/internal/testutil"
+)
+
+func TestCompletionsOverridingMethod10(t *testing.T) {
+	t.Parallel()
+	t.Skip()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: a.ts
+// @newline: LF
+interface Base {
+    a: string;
+    b(a: string): void;
+    c(a: string): string;
+    c(a: number): number;
+}
+class Sub implements Base {
+   /*a*/
+}`
+	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.VerifyCompletions(t, "a", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &[]string{},
+			EditRange:        ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:      "a",
+					InsertText: ptrTo("a: string;"),
+					FilterText: ptrTo("a"),
+					SortText:   ptrTo(string(ls.SortTextLocationPriority)),
+				},
+				&lsproto.CompletionItem{
+					Label:      "b",
+					InsertText: ptrTo("b(a: string): void {\n}"),
+					FilterText: ptrTo("b"),
+					SortText:   ptrTo(string(ls.SortTextLocationPriority)),
+				},
+				&lsproto.CompletionItem{
+					Label:      "c",
+					InsertText: ptrTo("c(a: string): string;\nc(a: number): number;\nc(a: unknown): string | number {\n}"),
+					FilterText: ptrTo("c"),
+					SortText:   ptrTo(string(ls.SortTextLocationPriority)),
+				},
+			},
+		},
+	})
+}
