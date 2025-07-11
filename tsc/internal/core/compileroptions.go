@@ -26,7 +26,6 @@ type CompilerOptions struct {
 	AllowUnusedLabels                         Tristate                                  `json:"allowUnusedLabels,omitzero"`
 	AssumeChangesOnlyAffectDirectDependencies Tristate                                  `json:"assumeChangesOnlyAffectDirectDependencies,omitzero"`
 	AlwaysStrict                              Tristate                                  `json:"alwaysStrict,omitzero"`
-	BaseUrl                                   string                                    `json:"baseUrl,omitzero"`
 	Build                                     Tristate                                  `json:"build,omitzero"`
 	CheckJs                                   Tristate                                  `json:"checkJs,omitzero"`
 	CustomConditions                          []string                                  `json:"customConditions,omitzero"`
@@ -59,7 +58,6 @@ type CompilerOptions struct {
 	JsxFactory                                string                                    `json:"jsxFactory,omitzero"`
 	JsxFragmentFactory                        string                                    `json:"jsxFragmentFactory,omitzero"`
 	JsxImportSource                           string                                    `json:"jsxImportSource,omitzero"`
-	KeyofStringsOnly                          Tristate                                  `json:"keyofStringsOnly,omitzero"`
 	Lib                                       []string                                  `json:"lib,omitzero"`
 	LibReplacement                            Tristate                                  `json:"libReplacement,omitzero"`
 	Locale                                    string                                    `json:"locale,omitzero"`
@@ -86,9 +84,7 @@ type CompilerOptions struct {
 	NoResolve                                 Tristate                                  `json:"noResolve,omitzero"`
 	NoImplicitOverride                        Tristate                                  `json:"noImplicitOverride,omitzero"`
 	NoUncheckedSideEffectImports              Tristate                                  `json:"noUncheckedSideEffectImports,omitzero"`
-	Out                                       string                                    `json:"out,omitzero"`
 	OutDir                                    string                                    `json:"outDir,omitzero"`
-	OutFile                                   string                                    `json:"outFile,omitzero"`
 	Paths                                     *collections.OrderedMap[string, []string] `json:"paths,omitzero"`
 	PreserveConstEnums                        Tristate                                  `json:"preserveConstEnums,omitzero"`
 	PreserveSymlinks                          Tristate                                  `json:"preserveSymlinks,omitzero"`
@@ -122,6 +118,11 @@ type CompilerOptions struct {
 	UseUnknownInCatchVariables                Tristate                                  `json:"useUnknownInCatchVariables,omitzero"`
 	VerbatimModuleSyntax                      Tristate                                  `json:"verbatimModuleSyntax,omitzero"`
 	MaxNodeModuleJsDepth                      *int                                      `json:"maxNodeModuleJsDepth,omitzero"`
+
+	// Deprecated: Do not use outside of options parsing and validation.
+	BaseUrl string `json:"baseUrl,omitzero"`
+	// Deprecated: Do not use outside of options parsing and validation.
+	OutFile string `json:"outFile,omitzero"`
 
 	// Internal fields
 	ConfigFilePath      string   `json:"configFilePath,omitzero"`
@@ -385,9 +386,12 @@ type ModuleKind int32
 const (
 	ModuleKindNone     ModuleKind = 0
 	ModuleKindCommonJS ModuleKind = 1
-	ModuleKindAMD      ModuleKind = 2
-	ModuleKindUMD      ModuleKind = 3
-	ModuleKindSystem   ModuleKind = 4
+	// Deprecated: Do not use outside of options parsing and validation.
+	ModuleKindAMD ModuleKind = 2
+	// Deprecated: Do not use outside of options parsing and validation.
+	ModuleKindUMD ModuleKind = 3
+	// Deprecated: Do not use outside of options parsing and validation.
+	ModuleKindSystem ModuleKind = 4
 	// NOTE: ES module kinds should be contiguous to more easily check whether a module kind is *any* ES module kind.
 	//       Non-ES module kinds should not come between ES2015 (the earliest ES module kind) and ESNext (the last ES
 	//       module kind).
@@ -434,6 +438,11 @@ const (
 	ModuleResolutionKindNodeNext ModuleResolutionKind = 99 // Not simply `Node16` so that compiled code linked against TS can use the `Next` value reliably (same as with `ModuleKind`)
 	ModuleResolutionKindBundler  ModuleResolutionKind = 100
 )
+
+var ModuleKindToModuleResolutionKind = map[ModuleKind]ModuleResolutionKind{
+	ModuleKindNode16:   ModuleResolutionKindNode16,
+	ModuleKindNodeNext: ModuleResolutionKindNodeNext,
+}
 
 // We don't use stringer on this for now, because these values
 // are user-facing in --traceResolution, and stringer currently

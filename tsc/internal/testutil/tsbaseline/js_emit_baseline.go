@@ -26,11 +26,6 @@ func DoJSEmitBaseline(
 	harnessSettings *harnessutil.HarnessOptions,
 	opts baseline.Options,
 ) {
-	if options.OutFile != "" || options.Out != "" {
-		// Just return, no t.Skip; these options are not going to be supported so noting them is not helpful.
-		return
-	}
-
 	if !options.NoEmit.IsTrue() && !options.EmitDeclarationOnly.IsTrue() && result.JS.Size() == 0 && len(result.Diagnostics) == 0 {
 		t.Fatal("Expected at least one js file to be emitted or at least one error to be created.")
 	}
@@ -205,8 +200,6 @@ func prepareDeclarationCompilationContext(
 		// Is this file going to be emitted separately
 		var sourceFileName string
 
-		////outFile := options.OutFile;
-		////if len(outFile) == 0 {
 		if len(options.OutDir) != 0 {
 			sourceFilePath := tspath.GetNormalizedAbsolutePath(sourceFile.FileName(), result.Program.GetCurrentDirectory())
 			sourceFilePath = strings.Replace(sourceFilePath, result.Program.CommonSourceDirectory(), "", 1)
@@ -214,10 +207,6 @@ func prepareDeclarationCompilationContext(
 		} else {
 			sourceFileName = sourceFile.FileName()
 		}
-		////} else {
-		////	// Goes to single --out file
-		////	sourceFileName = outFile
-		////}
 
 		dTsFileName := tspath.RemoveFileExtension(sourceFileName) + tspath.GetDeclarationEmitExtensionForPath(sourceFileName)
 		return result.DTS.GetOrZero(dTsFileName)

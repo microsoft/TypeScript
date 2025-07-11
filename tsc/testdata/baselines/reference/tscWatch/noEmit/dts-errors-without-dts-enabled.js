@@ -20,6 +20,14 @@ CompilerOptions::{
 
 
 Output::
+[96mtsconfig.json[0m:[93m4[0m:[93m13[0m - [91merror[0m[90m TS5102: [0mOption 'outFile' has been removed. Please remove it from your configuration.
+
+[7m4[0m             "outFile": "../outFile.js"
+[7m [0m [91m            ~~~~~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:4[0m
+
 //// [/home/src/workspaces/project/a.ts] no change
 //// [/home/src/workspaces/project/tsconfig.json] no change
 
@@ -28,6 +36,14 @@ Output::
 Edit:: fix syntax error
 
 Output::
+[96mtsconfig.json[0m:[93m4[0m:[93m13[0m - [91merror[0m[90m TS5102: [0mOption 'outFile' has been removed. Please remove it from your configuration.
+
+[7m4[0m             "outFile": "../outFile.js"
+[7m [0m [91m            ~~~~~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:4[0m
+
 //// [/home/src/workspaces/project/a.ts] modified. new content:
 const a = "hello";
 //// [/home/src/workspaces/project/tsconfig.json] no change
@@ -37,6 +53,14 @@ const a = "hello";
 Edit:: emit after fixing error
 
 Output::
+[96mtsconfig.json[0m:[93m3[0m:[93m13[0m - [91merror[0m[90m TS5102: [0mOption 'outFile' has been removed. Please remove it from your configuration.
+
+[7m3[0m             "outFile": "../outFile.js"
+[7m [0m [91m            ~~~~~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:3[0m
+
 //// [/home/src/workspaces/project/a.js] new file
 const a = "hello";
 
@@ -53,6 +77,14 @@ const a = "hello";
 Edit:: no emit run after fixing error
 
 Output::
+[96mtsconfig.json[0m:[93m4[0m:[93m13[0m - [91merror[0m[90m TS5102: [0mOption 'outFile' has been removed. Please remove it from your configuration.
+
+[7m4[0m             "outFile": "../outFile.js"
+[7m [0m [91m            ~~~~~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:4[0m
+
 //// [/home/src/workspaces/project/a.js] no change
 //// [/home/src/workspaces/project/a.ts] no change
 //// [/home/src/workspaces/project/tsconfig.json] modified. new content:
@@ -68,6 +100,14 @@ Output::
 Edit:: introduce error
 
 Output::
+[96mtsconfig.json[0m:[93m4[0m:[93m13[0m - [91merror[0m[90m TS5102: [0mOption 'outFile' has been removed. Please remove it from your configuration.
+
+[7m4[0m             "outFile": "../outFile.js"
+[7m [0m [91m            ~~~~~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:4[0m
+
 //// [/home/src/workspaces/project/a.js] no change
 //// [/home/src/workspaces/project/a.ts] modified. new content:
 const a = class { private p = 10; };
@@ -78,6 +118,14 @@ const a = class { private p = 10; };
 Edit:: emit when error
 
 Output::
+[96mtsconfig.json[0m:[93m3[0m:[93m13[0m - [91merror[0m[90m TS5102: [0mOption 'outFile' has been removed. Please remove it from your configuration.
+
+[7m3[0m             "outFile": "../outFile.js"
+[7m [0m [91m            ~~~~~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:3[0m
+
 //// [/home/src/workspaces/project/a.js] modified. new content:
 const a = class {
     p = 10;
@@ -96,6 +144,14 @@ const a = class {
 Edit:: no emit run when error
 
 Output::
+[96mtsconfig.json[0m:[93m4[0m:[93m13[0m - [91merror[0m[90m TS5102: [0mOption 'outFile' has been removed. Please remove it from your configuration.
+
+[7m4[0m             "outFile": "../outFile.js"
+[7m [0m [91m            ~~~~~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:4[0m
+
 //// [/home/src/workspaces/project/a.js] no change
 //// [/home/src/workspaces/project/a.ts] no change
 //// [/home/src/workspaces/project/tsconfig.json] modified. new content:

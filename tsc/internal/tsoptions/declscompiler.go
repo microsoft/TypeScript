@@ -940,18 +940,6 @@ var commonOptionsWithBuild = []*CommandLineOption{
 	},
 
 	{
-		Name:                   "out",
-		Kind:                   CommandLineOptionTypeString,
-		AffectsEmit:            true,
-		AffectsBuildInfo:       true,
-		AffectsDeclarationPath: true,
-		isFilePath:             false, // This is intentionally broken to support compatibility with existing tsconfig files
-		// for correct behaviour, please use outFile
-		Category:             diagnostics.Backwards_Compatibility,
-		transpileOptionValue: core.TSUnknown,
-		Description:          diagnostics.Deprecated_setting_Use_outFile_instead,
-	},
-	{
 		Name:                    "reactNamespace",
 		Kind:                    CommandLineOptionTypeString,
 		AffectsEmit:             true,
@@ -968,13 +956,6 @@ var commonOptionsWithBuild = []*CommandLineOption{
 		Category:                diagnostics.Completeness,
 		Description:             diagnostics.Skip_type_checking_d_ts_files_that_are_included_with_TypeScript,
 		DefaultValueDescription: false,
-	},
-	{
-		Name:                    "charset",
-		Kind:                    CommandLineOptionTypeString,
-		Category:                diagnostics.Backwards_Compatibility,
-		Description:             diagnostics.No_longer_supported_In_early_versions_manually_set_the_text_encoding_for_reading_files,
-		DefaultValueDescription: "utf8",
 	},
 	{
 		Name:                    "emitBOM",
@@ -1067,15 +1048,6 @@ var commonOptionsWithBuild = []*CommandLineOption{
 		DefaultValueDescription: false,
 	},
 	{
-		Name:                       "noImplicitUseStrict",
-		Kind:                       CommandLineOptionTypeBoolean,
-		AffectsSemanticDiagnostics: true,
-		AffectsBuildInfo:           true,
-		Category:                   diagnostics.Backwards_Compatibility,
-		Description:                diagnostics.Disable_adding_use_strict_directives_in_emitted_JavaScript_files,
-		DefaultValueDescription:    false,
-	},
-	{
 		Name:                    "noEmitHelpers",
 		Kind:                    CommandLineOptionTypeBoolean,
 		AffectsEmit:             true,
@@ -1144,24 +1116,6 @@ var commonOptionsWithBuild = []*CommandLineOption{
 		DefaultValueDescription:    core.TSUnknown,
 	},
 	{
-		Name:                       "suppressExcessPropertyErrors",
-		Kind:                       CommandLineOptionTypeBoolean,
-		AffectsSemanticDiagnostics: true,
-		AffectsBuildInfo:           true,
-		Category:                   diagnostics.Backwards_Compatibility,
-		Description:                diagnostics.Disable_reporting_of_excess_property_errors_during_the_creation_of_object_literals,
-		DefaultValueDescription:    false,
-	},
-	{
-		Name:                       "suppressImplicitAnyIndexErrors",
-		Kind:                       CommandLineOptionTypeBoolean,
-		AffectsSemanticDiagnostics: true,
-		AffectsBuildInfo:           true,
-		Category:                   diagnostics.Backwards_Compatibility,
-		Description:                diagnostics.Suppress_noImplicitAny_errors_when_indexing_objects_that_lack_index_signatures,
-		DefaultValueDescription:    false,
-	},
-	{
 		Name:                    "forceConsistentCasingInFileNames",
 		Kind:                    CommandLineOptionTypeBoolean,
 		AffectsModuleResolution: true,
@@ -1176,15 +1130,6 @@ var commonOptionsWithBuild = []*CommandLineOption{
 		Category:                diagnostics.JavaScript_Support,
 		Description:             diagnostics.Specify_the_maximum_folder_depth_used_for_checking_JavaScript_files_from_node_modules_Only_applicable_with_allowJs,
 		DefaultValueDescription: 0,
-	},
-	{
-		Name:                       "noStrictGenericChecks",
-		Kind:                       CommandLineOptionTypeBoolean,
-		AffectsSemanticDiagnostics: true,
-		AffectsBuildInfo:           true,
-		Category:                   diagnostics.Backwards_Compatibility,
-		Description:                diagnostics.Disable_strict_checking_of_generic_signatures_in_function_types,
-		DefaultValueDescription:    false,
 	},
 	{
 		Name:                       "useDefineForClassFields",
@@ -1206,13 +1151,6 @@ var commonOptionsWithBuild = []*CommandLineOption{
 		DefaultValueDescription: false,
 	},
 
-	{
-		Name:                    "keyofStringsOnly",
-		Kind:                    CommandLineOptionTypeBoolean,
-		Category:                diagnostics.Backwards_Compatibility,
-		Description:             diagnostics.Make_keyof_only_return_strings_instead_of_string_numbers_or_symbols_Legacy_option,
-		DefaultValueDescription: false,
-	},
 	{
 		// A list of plugins to load in the language service
 		Name:           "plugins",

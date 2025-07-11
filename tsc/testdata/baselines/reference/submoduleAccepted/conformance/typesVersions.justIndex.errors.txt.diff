@@ -2,9 +2,11 @@
 +++ new.typesVersions.justIndex.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
++error TS5102: Option 'baseUrl' has been removed. Please remove it from your configuration.
 +/b/user.ts(1,19): error TS2307: Cannot find module 'a' or its corresponding type declarations.
 +
 +
++!!! error TS5102: Option 'baseUrl' has been removed. Please remove it from your configuration.
 +==== /a/package.json (0 errors) ====
 +    {
 +        "typesVersions": {

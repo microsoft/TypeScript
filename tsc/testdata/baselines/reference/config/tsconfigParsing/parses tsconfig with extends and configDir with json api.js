@@ -32,12 +32,12 @@ Fs::
 configFileName:: tsconfig.json
 CompilerOptions::
 {
-  "baseUrl": "/baseUrl",
   "declarationDir": "/declarationDir",
   "outDir": "/outDir",
-  "outFile": "/outFile",
   "rootDir": "/rootDir",
   "tsBuildInfoFile": "/tsBuildInfoFile",
+  "baseUrl": "/baseUrl",
+  "outFile": "/outFile",
   "configFilePath": "/tsconfig.json"
 }
 

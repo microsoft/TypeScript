@@ -89,7 +89,6 @@ CompilerOptions::
 {
   "allowJs": true,
   "allowSyntheticDefaultImports": true,
-  "baseUrl": "/",
   "emitDecoratorMetadata": true,
   "esModuleInterop": true,
   "experimentalDecorators": true,
@@ -111,6 +110,7 @@ CompilerOptions::
     "node",
     "vitest/globals"
   ],
+  "baseUrl": "/",
   "configFilePath": "/tsconfig.json"
 }
 

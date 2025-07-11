@@ -1,11 +1,9 @@
-file1.ts(1,1): error TS2448: Block-scoped variable 'c' used before its declaration.
+error TS5102: Option 'outFile' has been removed. Please remove it from your configuration.
 
 
-==== file1.ts (1 errors) ====
+!!! error TS5102: Option 'outFile' has been removed. Please remove it from your configuration.
+==== file1.ts (0 errors) ====
     c;
-    ~
-!!! error TS2448: Block-scoped variable 'c' used before its declaration.
-!!! related TS2728 file2.ts:1:7: 'c' is declared here.
     
 ==== file2.ts (0 errors) ====
     const c = 0;

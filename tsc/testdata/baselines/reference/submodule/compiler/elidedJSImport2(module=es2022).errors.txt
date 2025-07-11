@@ -1,0 +1,31 @@
+error TS5110: Option 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+
+
+!!! error TS5110: Option 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+==== index.js (0 errors) ====
+    import { Foo } from "./other.js";
+    import * as other from "./other.js";
+    import defaultFoo from "./other.js";
+    
+    const x = new Foo();
+    const y = other.Foo();
+    const z = new defaultFoo();
+    
+==== other.d.ts (0 errors) ====
+    export interface Foo {
+        bar: number;
+    }
+    
+    export default interface Bar {
+        foo: number;
+    }
+    
+==== other.js (0 errors) ====
+    export class Foo {
+        bar = 2.4;
+    }
+    
+    export default class Bar {
+        foo = 1.2;
+    }
+    

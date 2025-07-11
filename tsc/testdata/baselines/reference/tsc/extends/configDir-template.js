@@ -62,13 +62,19 @@ CompilerOptions::{
     "explainFiles": true
 }
 Output::
-[96msrc/secondary.ts[0m:[93m4[0m:[93m20[0m - [91merror[0m[90m TS2307: [0mCannot find module 'other/sometype2' or its corresponding type declarations.
+[96mtsconfig.json[0m:[93m3[0m:[93m2[0m - [91merror[0m[90m TS5090: [0mNon-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
 
-[7m4[0m  import { k } from "other/sometype2";
-[7m [0m [91m                   ~~~~~~~~~~~~~~~~~[0m
+[7m3[0m  "compilerOptions": {
+[7m [0m [91m ~~~~~~~~~~~~~~~~~[0m
+
+[96mtsconfig.json[0m:[93m3[0m:[93m2[0m - [91merror[0m[90m TS5102: [0mOption 'baseUrl' has been removed. Please remove it from your configuration.
+  Use '"paths": {"*": "./*"}' instead.
+
+[7m3[0m  "compilerOptions": {
+[7m [0m [91m ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in src/secondary.ts[90m:4[0m
+Found 2 errors in the same file, starting at: tsconfig.json[90m:3[0m
 
 //// [/home/src/projects/configs/first/tsconfig.json] no change
 //// [/home/src/projects/configs/second/tsconfig.json] no change

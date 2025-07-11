@@ -70,32 +70,3 @@ export declare class B2 extends A<string> {
 export declare class B3 extends A<string, string> {
     constructor();
 }
-
-
-//// [DtsFileErrors]
-
-
-b.d.ts(2,33): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
-b.d.ts(8,33): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
-
-
-==== a.d.ts (0 errors) ====
-    export declare class A<T> {
-    }
-    
-==== b.d.ts (2 errors) ====
-    import { A } from './a.js';
-    export declare class B1 extends A {
-                                    ~
-!!! error TS2314: Generic type 'A<T>' requires 1 type argument(s).
-        constructor();
-    }
-    export declare class B2 extends A<string> {
-        constructor();
-    }
-    export declare class B3 extends A<string, string> {
-                                    ~~~~~~~~~~~~~~~~~
-!!! error TS2314: Generic type 'A<T>' requires 1 type argument(s).
-        constructor();
-    }
-    

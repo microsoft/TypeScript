@@ -15,7 +15,7 @@ func createDiagnosticForInvalidEnumType(opt *CommandLineOption, sourceFile *ast.
 	namesOfType := slices.Collect(opt.EnumMap().Keys())
 	stringNames := formatEnumTypeKeys(opt, namesOfType)
 	optName := "--" + opt.Name
-	return createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, node, diagnostics.Argument_for_0_option_must_be_Colon_1, optName, stringNames)
+	return CreateDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, node, diagnostics.Argument_for_0_option_must_be_Colon_1, optName, stringNames)
 }
 
 func formatEnumTypeKeys(opt *CommandLineOption, keys []string) string {
@@ -68,17 +68,17 @@ func createUnknownOptionError(
 			if otherOption.Name == "build" {
 				diagnostic = diagnostics.Option_build_must_be_the_first_command_line_argument
 			}
-			return createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, node, diagnostic, unknownOption)
+			return CreateDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, node, diagnostic, unknownOption)
 		}
 	}
 	if unknownOptionErrorText == "" {
 		unknownOptionErrorText = unknownOption
 	}
 	// TODO: possibleOption := spelling suggestion
-	return createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, node, unknownOptionDiagnostic, unknownOptionErrorText)
+	return CreateDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, node, unknownOptionDiagnostic, unknownOptionErrorText)
 }
 
-func createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile *ast.SourceFile, node *ast.Node, message *diagnostics.Message, args ...any) *ast.Diagnostic {
+func CreateDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile *ast.SourceFile, node *ast.Node, message *diagnostics.Message, args ...any) *ast.Diagnostic {
 	if sourceFile != nil && node != nil {
 		return ast.NewDiagnostic(sourceFile, core.NewTextRange(scanner.SkipTrivia(sourceFile.Text(), node.Loc.Pos()), node.End()), message, args...)
 	}

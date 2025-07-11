@@ -229,8 +229,7 @@ func (tx *CommonJSModuleTransformer) visitAssignmentPatternNoStack(node *ast.Nod
 func (tx *CommonJSModuleTransformer) visitSourceFile(node *ast.SourceFile) *ast.Node {
 	if node.IsDeclarationFile ||
 		!(ast.IsEffectiveExternalModule(node, tx.compilerOptions) ||
-			node.SubtreeFacts()&ast.SubtreeContainsDynamicImport != 0 ||
-			ast.IsJsonSourceFile(node) && tx.compilerOptions.HasJsonModuleEmitEnabled() && len(tx.compilerOptions.OutFile) > 0) {
+			node.SubtreeFacts()&ast.SubtreeContainsDynamicImport != 0) {
 		return node.AsNode()
 	}
 

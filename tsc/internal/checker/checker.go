@@ -1830,17 +1830,8 @@ func (c *Checker) isBlockScopedNameDeclaredBeforeUse(declaration *ast.Node, usag
 	useFile := ast.GetSourceFileOfNode(usage)
 	declContainer := ast.GetEnclosingBlockScopeContainer(declaration)
 	if declarationFile != useFile {
-		if (c.moduleKind != core.ModuleKindNone && (declarationFile.ExternalModuleIndicator != nil || useFile.ExternalModuleIndicator != nil)) || c.compilerOptions.OutFile == "" || IsInTypeQuery(usage) || declaration.Flags&ast.NodeFlagsAmbient != 0 {
-			// nodes are in different files and order cannot be determined
-			return true
-		}
-		// declaration is after usage
-		// can be legal if usage is deferred (i.e. inside function or in initializer of instance property)
-		if c.isUsedInFunctionOrInstanceProperty(usage, declaration, declContainer) {
-			return true
-		}
-		sourceFiles := c.program.SourceFiles()
-		return slices.Index(sourceFiles, declarationFile) <= slices.Index(sourceFiles, useFile)
+		// nodes are in different files and order cannot be determined
+		return true
 	}
 	// deferred usage in a type context is always OK regardless of the usage position:
 	if usage.Flags&ast.NodeFlagsJSDoc != 0 || IsInTypeQuery(usage) || c.isInAmbientOrTypeNode(usage) {

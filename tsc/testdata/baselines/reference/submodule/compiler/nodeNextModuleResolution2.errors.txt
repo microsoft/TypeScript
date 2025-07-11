@@ -1,0 +1,18 @@
+error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
+
+
+!!! error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
+==== /a/node_modules/foo/index.d.ts (0 errors) ====
+    export declare let x: number
+==== /a/node_modules/foo/package.json (0 errors) ====
+    {
+        "name": "foo",
+        "type": "module",
+        "exports": {
+            ".": "./index.d.ts"
+        }
+    }
+    
+==== /a/b/c/d/e/app.mts (0 errors) ====
+    import {x} from "foo";
+    

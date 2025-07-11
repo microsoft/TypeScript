@@ -1,6 +1,8 @@
+error TS5102: Option 'outFile' has been removed. Please remove it from your configuration.
 /mod1.ts(1,24): error TS2304: Cannot find name 'Lib'.
 
 
+!!! error TS5102: Option 'outFile' has been removed. Please remove it from your configuration.
 ==== /mod2.ts (0 errors) ====
     import {foo} from "./mod1";
     export const bar = foo();

@@ -3,19 +3,30 @@
 @@= skipped -0, +0 lines =@@
 -<no content>
 +c:/root/src/file1.ts(1,17): error TS2307: Cannot find module './project/file2' or its corresponding type declarations.
++c:/root/src/tsconfig.json(3,9): error TS5102: Option 'baseUrl' has been removed. Please remove it from your configuration.
++  Use '"paths": {"*": "./../*"}' instead.
++c:/root/src/tsconfig.json(6,17): error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
++c:/root/src/tsconfig.json(10,17): error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
 +
 +
-+==== c:/root/src/tsconfig.json (0 errors) ====
++==== c:/root/src/tsconfig.json (3 errors) ====
 +    {
 +        "compilerOptions": {
 +            "baseUrl": "../",
++            ~~~~~~~~~
++!!! error TS5102: Option 'baseUrl' has been removed. Please remove it from your configuration.
++!!! error TS5102:   Use '"paths": {"*": "./../*"}' instead.
 +            "paths": {
 +                "*": [
 +                    "*",
++                    ~~~
++!!! error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
 +                    "c:/shared/*"
 +                ],
 +                "templates/*": [
 +                    "generated/src/templates/*"
++                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
 +                ]
 +            },
 +            "rootDirs": [

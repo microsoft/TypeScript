@@ -71,7 +71,6 @@ func GetOutputPathsFor(sourceFile *ast.SourceFile, options *core.CompilerOptions
 }
 
 func ForEachEmittedFile(host OutputPathsHost, options *core.CompilerOptions, action func(emitFileNames *OutputPaths, sourceFile *ast.SourceFile) bool, sourceFiles []*ast.SourceFile, forceDtsEmit bool) bool {
-	// !!! outFile not yet implemented, may be deprecated
 	for _, sourceFile := range sourceFiles {
 		if action(GetOutputPathsFor(sourceFile, options, host, forceDtsEmit), sourceFile) {
 			return true

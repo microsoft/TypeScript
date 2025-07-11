@@ -1073,7 +1073,7 @@ func (b *nodeBuilderImpl) getSpecifierForModuleSymbol(symbol *ast.Symbol, overri
 	if ok {
 		return result
 	}
-	isBundle := len(b.ch.compilerOptions.OutFile) > 0
+	isBundle := false // !!! remove me
 	// For declaration bundles, we need to generate absolute paths relative to the common source dir for imports,
 	// just like how the declaration emitter does for the ambient module declarations - we can easily accomplish this
 	// using the `baseUrl` compiler option (which we would otherwise never use in declaration emit) and a non-relative

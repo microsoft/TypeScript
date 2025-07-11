@@ -80,9 +80,6 @@ func tryGetModuleNameFromFile(factory *printer.NodeFactory, file *ast.SourceFile
 	// if file.moduleName {
 	// 	return factory.createStringLiteral(file.moduleName)
 	// }
-	if !file.IsDeclarationFile && len(options.OutFile) > 0 {
-		return factory.NewStringLiteral(getExternalModuleNameFromPath(host, file.FileName(), "" /*referencePath*/))
-	}
 	return nil
 }
 

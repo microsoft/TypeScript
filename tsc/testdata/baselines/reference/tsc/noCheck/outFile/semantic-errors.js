@@ -13,13 +13,21 @@ export const b = 10;
 	}
 }
 
-ExitStatus:: 0
+ExitStatus:: 2
 
 CompilerOptions::{
     "noCheck": true,
     "outFile": "/home/src/workspaces/project/built"
 }
 Output::
+[96mtsconfig.json[0m:[93m2[0m:[93m2[0m - [91merror[0m[90m TS5102: [0mOption 'outFile' has been removed. Please remove it from your configuration.
+
+[7m2[0m  "compilerOptions": {
+[7m [0m [91m ~~~~~~~~~~~~~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:2[0m
+
 //// [/home/src/workspaces/project/a.d.ts] new file
 export declare const a: number;
 

@@ -29,8 +29,17 @@ Output::
     [7m1[0m export const a = class { private p = 10; };
     [7m [0m [96m             ~[0m
 
+[96mtsconfig.json[0m:[93m2[0m:[93m2[0m - [91merror[0m[90m TS5102: [0mOption 'outFile' has been removed. Please remove it from your configuration.
 
-Found 1 error in a.ts[90m:1[0m
+[7m2[0m  "compilerOptions": {
+[7m [0m [91m ~~~~~~~~~~~~~~~~~[0m
+
+
+Found 2 errors in 2 files.
+
+Errors  Files
+     1  a.ts[90m:1[0m
+     1  tsconfig.json[90m:2[0m
 
 //// [/home/src/workspaces/project/a.d.ts] new file
 export declare const a: {

@@ -58,3 +58,10 @@ func (t Tristate) MarshalJSON() ([]byte, error) {
 		return []byte("null"), nil
 	}
 }
+
+func BoolToTristate(b bool) Tristate {
+	if b {
+		return TSTrue
+	}
+	return TSFalse
+}

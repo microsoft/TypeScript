@@ -1,0 +1,23 @@
+c:/root/tsconfig.json(5,17): error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
+c:/root/tsconfig.json(6,17): error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
+
+
+==== c:/root/tsconfig.json (2 errors) ====
+    {
+        "compilerOptions": {
+            "paths": {
+                "*": [
+                    "*",
+                    ~~~
+!!! error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
+                    "generated/*"
+                    ~~~~~~~~~~~~~
+!!! error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
+                ]
+            }
+        }
+    }
+    
+==== c:/root/f1.ts (0 errors) ====
+    export var x = 1;
+    

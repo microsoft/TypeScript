@@ -39,10 +39,10 @@ Fs::
 configFileName:: tsconfig.json
 CompilerOptions::
 {
-  "baseUrl": "/",
   "noImplicitAny": true,
   "outDir": "/dist",
   "strict": true,
+  "baseUrl": "/",
   "configFilePath": "/tsconfig.json"
 }
 

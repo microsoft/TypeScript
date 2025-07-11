@@ -187,6 +187,17 @@ var jsxOptionMap = collections.NewOrderedMapFromList([]collections.MapEntry[stri
 	{Key: "react-jsxdev", Value: core.JsxEmitReactJSXDev},
 })
 
+var InverseJsxOptionMap = collections.NewOrderedMapFromList(func() []collections.MapEntry[core.JsxEmit, string] {
+	entries := make([]collections.MapEntry[core.JsxEmit, string], 0, jsxOptionMap.Size())
+	for key, value := range jsxOptionMap.Entries() {
+		entries = append(entries, collections.MapEntry[core.JsxEmit, string]{
+			Key:   value.(core.JsxEmit),
+			Value: key,
+		})
+	}
+	return entries
+}())
+
 var newLineOptionMap = collections.NewOrderedMapFromList([]collections.MapEntry[string, any]{
 	{Key: "crlf", Value: core.NewLineKindCRLF},
 	{Key: "lf", Value: core.NewLineKindLF},

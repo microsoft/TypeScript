@@ -265,8 +265,6 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 		allOptions.JsxFragmentFactory = parseString(value)
 	case "jsxImportSource":
 		allOptions.JsxImportSource = parseString(value)
-	case "keyofStringsOnly":
-		allOptions.KeyofStringsOnly = parseTristate(value)
 	case "lib":
 		if _, ok := value.([]string); ok {
 			allOptions.Lib = value.([]string)
@@ -327,8 +325,6 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 		allOptions.NoImplicitOverride = parseTristate(value)
 	case "noUncheckedSideEffectImports":
 		allOptions.NoUncheckedSideEffectImports = parseTristate(value)
-	case "out":
-		allOptions.Out = parseString(value)
 	case "outFile":
 		allOptions.OutFile = parseString(value)
 	case "noResolve":
