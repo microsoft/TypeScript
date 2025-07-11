@@ -36,10 +36,10 @@ runs:
       run: |
         if [[ "$CACHE_FROM_PREVIOUS_RUN" == "true" ]]; then
           echo "key=$PREFIX-$CACHE_NAME-$RUN_ID" >> $GITHUB_OUTPUT
-          echo "restore-keys=$PREFIX-$CACHE_NAME" >> $GITHUB_OUTPUT
+          echo "restore-keys=$PREFIX-$CACHE_NAME-" >> $GITHUB_OUTPUT
         else
           echo "key=$PREFIX-$CACHE_NAME" >> $GITHUB_OUTPUT
-          echo "restore-keys=$PREFIX" >> $GITHUB_OUTPUT
+          echo "restore-keys=$PREFIX-" >> $GITHUB_OUTPUT
         fi
 
       env:
