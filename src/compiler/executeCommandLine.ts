@@ -639,20 +639,17 @@ function executeCommandLineWorker(
         const extendedConfigCache = new Map<string, ExtendedConfigCacheEntry>();
         const configParseResult = parseConfigFileWithSystem(configFileName, commandLineOptions, extendedConfigCache, commandLine.watchOptions, sys, reportDiagnostic)!; // TODO: GH#18217
         if (commandLineOptions.showConfig) {
-            // For --showConfig, filter out "no inputs found" errors since the purpose is to show configuration, not compile
-            const errorsExcludingNoInputs = configParseResult.errors.filter(error => error.code !== Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code);
-
-            if (errorsExcludingNoInputs.length !== 0) {
+            // eslint-disable-next-line no-restricted-syntax
+            sys.write(JSON.stringify(convertToTSConfig(configParseResult, configFileName, sys), null, 4) + sys.newLine);
+            if (configParseResult.errors.length !== 0) {
                 reportDiagnostic = updateReportDiagnostic(
                     sys,
                     reportDiagnostic,
                     configParseResult.options,
                 );
-                errorsExcludingNoInputs.forEach(reportDiagnostic);
+                configParseResult.errors.forEach(reportDiagnostic);
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
-            // eslint-disable-next-line no-restricted-syntax
-            sys.write(JSON.stringify(convertToTSConfig(configParseResult, configFileName, sys), null, 4) + sys.newLine);
             return sys.exit(ExitStatus.Success);
         }
         reportDiagnostic = updateReportDiagnostic(
