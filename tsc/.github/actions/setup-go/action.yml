@@ -8,9 +8,6 @@ inputs:
   cache-name:
     description: Name of scoped cache for this set up.
     default: 'cache'
-  cache-from-previous-run:
-    description: Use the cache from the previous run if available.
-    default: 'false'
 
 runs:
   using: composite
@@ -26,33 +23,12 @@ runs:
     # so give each job its own cache to try and not end up sharing the wrong
     # cache between jobs, and hash the Herebyfile and golancgi-lint version.
 
-    # In cache-from-previous-run mode, we try to restore the cache from the
-    # previous run, and force the next cache to be saved by keying it on the
-    # run ID.
-
-    - name: Create Go cache keys
-      id: go-cache-keys
-      shell: bash
-      run: |
-        if [[ "$CACHE_FROM_PREVIOUS_RUN" == "true" ]]; then
-          echo "key=$PREFIX-$CACHE_NAME-$RUN_ID" >> $GITHUB_OUTPUT
-          echo "restore-keys=$PREFIX-$CACHE_NAME-" >> $GITHUB_OUTPUT
-        else
-          echo "key=$PREFIX-$CACHE_NAME" >> $GITHUB_OUTPUT
-          echo "restore-keys=$PREFIX-" >> $GITHUB_OUTPUT
-        fi
-
-      env:
-        PREFIX: ts-setup-go-${{ runner.os }}-${{ steps.install-go.outputs.go-version }}-${{ hashFiles('**/go.sum', '**/Herebyfile.mjs', '**/.custom-gcl.yml') }}-${{ github.workflow }}
-        CACHE_NAME: ${{ inputs.cache-name }}
-        RUN_ID: ${{ github.run_id }}
-        CACHE_FROM_PREVIOUS_RUN: ${{ inputs.cache-from-previous-run }}
-
     - name: Go cache
       uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
       with:
-        key: ${{ steps.go-cache-keys.outputs.key }}
-        restore-keys: ${{ steps.go-cache-keys.outputs.restore-keys }}
+        key: ts-setup-go-${{ runner.os }}-${{ steps.install-go.outputs.go-version }}-${{ hashFiles('**/go.sum', '**/Herebyfile.mjs', '**/.custom-gcl.yml') }}-${{ github.workflow }}-${{ inputs.cache-name }}
+        restore-keys: |
+          ts-setup-go-${{ runner.os }}-${{ steps.install-go.outputs.go-version }}-${{ hashFiles('**/go.sum', '**/Herebyfile.mjs', '**/.custom-gcl.yml') }}-${{ github.workflow }}-
         path: |
           ~/go/pkg/mod
           ~/.cache/go-build
