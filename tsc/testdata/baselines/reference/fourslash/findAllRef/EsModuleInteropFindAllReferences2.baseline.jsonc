@@ -7,7 +7,7 @@
 // === /a.d.ts ===
 
 // export as namespace abc;
-// export const /*FIND ALL REFS*/[| x|]: number;
+// export const /*FIND ALL REFS*/[|x|]: number;
 
 
 
@@ -16,7 +16,7 @@
 // === /a.d.ts ===
 
 // export as namespace abc;
-// export const[| x|]: number;
+// export const [|x|]: number;
 
 
 // === /b.ts ===

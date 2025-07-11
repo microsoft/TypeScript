@@ -1,9 +1,9 @@
 // === findAllReferences ===
 // === /constructorFindAllReferences3.ts ===
 
-// export class[| C|] {
+// export class [|C|] {
 //     /*FIND ALL REFS*/constructor() { }
 //     public foo() { }
 // }
 // 
-// new[| C|]().foo();
+// new [|C|]().foo();

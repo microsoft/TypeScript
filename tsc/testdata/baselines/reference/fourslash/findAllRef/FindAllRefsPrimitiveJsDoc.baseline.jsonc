@@ -5,7 +5,7 @@
 //  * @param {/*FIND ALL REFS*/[|number|]} n
 //  * @returns {[|number|]}
 //  */
-// function f(n:[| number|]):[| number|] {}
+// function f(n: [|number|]): [|number|] {}
 
 
 
@@ -17,7 +17,7 @@
 //  * @param {[|number|]} n
 //  * @returns {/*FIND ALL REFS*/[|number|]}
 //  */
-// function f(n:[| number|]):[| number|] {}
+// function f(n: [|number|]): [|number|] {}
 
 
 
@@ -29,7 +29,7 @@
 //  * @param {[|number|]} n
 //  * @returns {[|number|]}
 //  */
-// function f(n: /*FIND ALL REFS*/[| number|]):[| number|] {}
+// function f(n: /*FIND ALL REFS*/[|number|]): [|number|] {}
 
 
 
@@ -41,4 +41,4 @@
 //  * @param {[|number|]} n
 //  * @returns {[|number|]}
 //  */
-// function f(n: number): /*FIND ALL REFS*/[| number|]):[| number|] {}
+// function f(n: number): /*FIND ALL REFS*/[|number|]): [|number|] {}

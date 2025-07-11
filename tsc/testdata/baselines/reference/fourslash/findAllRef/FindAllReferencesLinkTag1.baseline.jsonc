@@ -1,8 +1,8 @@
 // === findAllReferences ===
 // === /findAllReferencesLinkTag1.ts ===
 
-// class C {[|
-//     m|]/*FIND ALL REFS*/() { }
+// class C {
+//     m/*FIND ALL REFS*/[|m|]() { }
 //     n = 1
 //     static s() { }
 //     /**
@@ -25,8 +25,8 @@
 // === /findAllReferencesLinkTag1.ts ===
 
 // class C {
-//     m() { }[|
-//     n|]/*FIND ALL REFS*/ = 1
+//     m() { }
+//     n/*FIND ALL REFS*/[|n|] = 1
 //     static s() { }
 //     /**
 //      * {@link m}
@@ -52,7 +52,7 @@
 // class C {
 //     m() { }
 //     n = 1
-//     static s/*FIND ALL REFS*/[| s|]() { }
+//     static s/*FIND ALL REFS*/[|s|]() { }
 //     /**
 //      * {@link m}
 //      * @see {m}
@@ -75,12 +75,11 @@
 // === findAllReferences ===
 // === /findAllReferencesLinkTag1.ts ===
 
-// --- (line: 32) skipped ---
-//     r() { }
+// --- (line: 33) skipped ---
 // }
 // 
-// interface I {[|
-//     a|]/*FIND ALL REFS*/()
+// interface I {
+//     a/*FIND ALL REFS*/[|a|]()
 //     b: 1
 //     /**
 //      * {@link a}
@@ -92,12 +91,11 @@
 // === findAllReferences ===
 // === /findAllReferencesLinkTag1.ts ===
 
-// --- (line: 33) skipped ---
-// }
+// --- (line: 34) skipped ---
 // 
 // interface I {
-//     a()[|
-//     b|]/*FIND ALL REFS*/: 1
+//     a()
+//     b/*FIND ALL REFS*/[|b|]: 1
 //     /**
 //      * {@link a}
 //      * @see {a}
@@ -117,7 +115,7 @@
 //     function ref() { }
 //     /** @see {r2} */
 //     function d3() { }
-//     function r2/*FIND ALL REFS*/[| r2|]() { }
+//     function r2/*FIND ALL REFS*/[|r2|]() { }
 // }
 
 
@@ -126,7 +124,7 @@
 // === findAllReferences ===
 // === /findAllReferencesLinkTag1.ts ===
 
-// class C/*FIND ALL REFS*/[| C|] {
+// class C/*FIND ALL REFS*/[|C|] {
 //     m() { }
 //     n = 1
 //     static s() { }
@@ -171,7 +169,7 @@
 //     r() { }
 // }
 // 
-// interface I/*FIND ALL REFS*/[| I|] {
+// interface I/*FIND ALL REFS*/[|I|] {
 //     a()
 //     b: 1
 //     /**

@@ -1,7 +1,7 @@
 // === findAllReferences ===
 // === /m.ts ===
 
-// export var /*FIND ALL REFS*/[| x|] = 12;
+// export var /*FIND ALL REFS*/[|x|] = 12;
 
 
 
@@ -9,5 +9,5 @@
 // === findAllReferences ===
 // === /main.ts ===
 
-// import { /*FIND ALL REFS*/[| x|] } from "./m";
-// const y =[| x|];
+// import { /*FIND ALL REFS*/[|x|] } from "./m";
+// const y = [|x|];

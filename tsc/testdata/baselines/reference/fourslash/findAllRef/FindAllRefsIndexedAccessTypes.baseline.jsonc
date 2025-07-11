@@ -1,8 +1,8 @@
 // === findAllReferences ===
 // === /findAllRefsIndexedAccessTypes.ts ===
 
-// interface I {[|
-//     /*FIND ALL REFS*/0|]: number;
+// interface I {
+//     /*FIND ALL REFS*/[|0|]: number;
 //     s: string;
 // }
 // interface J {
@@ -17,12 +17,12 @@
 // === /findAllRefsIndexedAccessTypes.ts ===
 
 // interface I {
-//     0: number;[|
-//     /*FIND ALL REFS*/s|]: string;
+//     0: number;
+//     /*FIND ALL REFS*/[|s|]: string;
 // }
 // interface J {
 //     a: I[0],
-//     b: I[[|"s"|]],
+//     b: I["[|s|]"],
 // }
 
 
@@ -31,8 +31,8 @@
 // === findAllReferences ===
 // === /findAllRefsIndexedAccessTypes.ts ===
 
-// interface I {[|
-//     0|]: number;
+// interface I {
+//     [|0|]: number;
 //     s: string;
 // }
 // interface J {
@@ -47,10 +47,10 @@
 // === /findAllRefsIndexedAccessTypes.ts ===
 
 // interface I {
-//     0: number;[|
-//     s|]: string;
+//     0: number;
+//     [|s|]: string;
 // }
 // interface J {
 //     a: I[0],
-//     b: I["/*FIND ALL REFS*/[|"s"|]],
+//     b: I["/*FIND ALL REFS*/[|s|]"],
 // }

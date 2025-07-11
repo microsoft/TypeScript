@@ -1,8 +1,8 @@
 // === findAllReferences ===
 // === /referencesForInheritedProperties4.ts ===
 
-//  class class1 extends class1 {[|
-//     /*FIND ALL REFS*/doStuff|]() { }
+//  class class1 extends class1 {
+//     /*FIND ALL REFS*/[|doStuff|]() { }
 //     propName: string;
 //  }
 // 
@@ -17,8 +17,8 @@
 // === /referencesForInheritedProperties4.ts ===
 
 //  class class1 extends class1 {
-//     doStuff() { }[|
-//     /*FIND ALL REFS*/propName|]: string;
+//     doStuff() { }
+//     /*FIND ALL REFS*/[|propName|]: string;
 //  }
 // 
 //  var c: class1;
@@ -31,8 +31,8 @@
 // === findAllReferences ===
 // === /referencesForInheritedProperties4.ts ===
 
-//  class class1 extends class1 {[|
-//     doStuff|]() { }
+//  class class1 extends class1 {
+//     [|doStuff|]() { }
 //     propName: string;
 //  }
 // 
@@ -47,8 +47,8 @@
 // === /referencesForInheritedProperties4.ts ===
 
 //  class class1 extends class1 {
-//     doStuff() { }[|
-//     propName|]: string;
+//     doStuff() { }
+//     [|propName|]: string;
 //  }
 // 
 //  var c: class1;

@@ -6,7 +6,7 @@
 // === findAllReferences ===
 // === /referencesForMergedDeclarations.ts ===
 
-// interface /*FIND ALL REFS*/[| Foo|] {
+// interface /*FIND ALL REFS*/[|Foo|] {
 // }
 // 
 // module Foo {
@@ -17,7 +17,7 @@
 // }
 // 
 // var f1: Foo.Bar;
-// var f2:[| Foo|];
+// var f2: [|Foo|];
 // Foo.bind(this);
 
 
@@ -34,14 +34,14 @@
 // interface Foo {
 // }
 // 
-// module /*FIND ALL REFS*/[| Foo|] {
+// module /*FIND ALL REFS*/[|Foo|] {
 //     export interface Bar { }
 // }
 // 
 // function Foo(): void {
 // }
 // 
-// var f1:[| Foo|].Bar;
+// var f1: [|Foo|].Bar;
 // var f2: Foo;
 // Foo.bind(this);
 
@@ -60,12 +60,12 @@
 //     export interface Bar { }
 // }
 // 
-// function /*FIND ALL REFS*/[| Foo|](): void {
+// function /*FIND ALL REFS*/[|Foo|](): void {
 // }
 // 
 // var f1: Foo.Bar;
-// var f2: Foo;[|
-// Foo|].bind(this);
+// var f2: Foo;
+// [|Foo|].bind(this);
 
 
 
@@ -76,14 +76,14 @@
 // interface Foo {
 // }
 // 
-// module[| Foo|] {
+// module [|Foo|] {
 //     export interface Bar { }
 // }
 // 
 // function Foo(): void {
 // }
 // 
-// var f1: /*FIND ALL REFS*/[| Foo|].Bar;
+// var f1: /*FIND ALL REFS*/[|Foo|].Bar;
 // var f2: Foo;
 // Foo.bind(this);
 
@@ -93,7 +93,7 @@
 // === findAllReferences ===
 // === /referencesForMergedDeclarations.ts ===
 
-// interface[| Foo|] {
+// interface [|Foo|] {
 // }
 // 
 // module Foo {
@@ -104,7 +104,7 @@
 // }
 // 
 // var f1: Foo.Bar;
-// var f2: /*FIND ALL REFS*/[| Foo|];
+// var f2: /*FIND ALL REFS*/[|Foo|];
 // Foo.bind(this);
 
 
@@ -117,9 +117,9 @@
 //     export interface Bar { }
 // }
 // 
-// function[| Foo|](): void {
+// function [|Foo|](): void {
 // }
 // 
 // var f1: Foo.Bar;
-// var f2: Foo;[|
-// /*FIND ALL REFS*/Foo|].bind(this);
+// var f2: Foo;
+// /*FIND ALL REFS*/[|Foo|].bind(this);

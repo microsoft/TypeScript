@@ -6,7 +6,7 @@
 // === findAllReferences ===
 // === /referencesForGlobals_1.ts ===
 
-// module /*FIND ALL REFS*/[| globalModule|] {
+// module /*FIND ALL REFS*/[|globalModule|] {
 //      export f() { };
 // }
 
@@ -16,11 +16,11 @@
 // === findAllReferences ===
 // === /referencesForGlobals_1.ts ===
 
-// module[| globalModule|] {
+// module [|globalModule|] {
 //      export f() { };
 // }
 
 
 // === /referencesForGlobals_2.ts ===
 
-// var m = /*FIND ALL REFS*/[| globalModule|];
+// var m = /*FIND ALL REFS*/[|globalModule|];

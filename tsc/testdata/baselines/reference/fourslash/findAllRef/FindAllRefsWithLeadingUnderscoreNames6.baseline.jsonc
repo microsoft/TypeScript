@@ -8,7 +8,7 @@
 
 // class Foo {
 //     public _bar;
-//     public /*FIND ALL REFS*/[| __bar|];
+//     public /*FIND ALL REFS*/[|__bar|];
 //     public ___bar;
 //     public ____bar;
 // }
@@ -27,7 +27,7 @@
 
 // class Foo {
 //     public _bar;
-//     public[| __bar|];
+//     public [|__bar|];
 //     public ___bar;
 //     public ____bar;
 // }

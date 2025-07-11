@@ -10,7 +10,7 @@
 //      propString: string
 //      optional?: boolean
 //  }
-//  declare function /*FIND ALL REFS*/[| Opt|](attributes: OptionPropBag): JSX.Element;
+//  declare function /*FIND ALL REFS*/[|Opt|](attributes: OptionPropBag): JSX.Element;
 //  let opt = <[|Opt|] />;
 //  let opt1 = <[|Opt|] propx={100} propString />;
 //  let opt2 = <[|Opt|] propx={100} optional/>;
@@ -32,7 +32,7 @@
 //      propString: string
 //      optional?: boolean
 //  }
-//  declare function[| Opt|](attributes: OptionPropBag): JSX.Element;
+//  declare function [|Opt|](attributes: OptionPropBag): JSX.Element;
 //  let opt = </*FIND ALL REFS*/[|Opt|] />;
 //  let opt1 = <[|Opt|] propx={100} propString />;
 //  let opt2 = <[|Opt|] propx={100} optional/>;
@@ -54,7 +54,7 @@
 //      propString: string
 //      optional?: boolean
 //  }
-//  declare function[| Opt|](attributes: OptionPropBag): JSX.Element;
+//  declare function [|Opt|](attributes: OptionPropBag): JSX.Element;
 //  let opt = <[|Opt|] />;
 //  let opt1 = </*FIND ALL REFS*/[|Opt|] propx={100} propString />;
 //  let opt2 = <[|Opt|] propx={100} optional/>;
@@ -76,7 +76,7 @@
 //      propString: string
 //      optional?: boolean
 //  }
-//  declare function[| Opt|](attributes: OptionPropBag): JSX.Element;
+//  declare function [|Opt|](attributes: OptionPropBag): JSX.Element;
 //  let opt = <[|Opt|] />;
 //  let opt1 = <[|Opt|] propx={100} propString />;
 //  let opt2 = </*FIND ALL REFS*/[|Opt|] propx={100} optional/>;
@@ -98,7 +98,7 @@
 //      propString: string
 //      optional?: boolean
 //  }
-//  declare function[| Opt|](attributes: OptionPropBag): JSX.Element;
+//  declare function [|Opt|](attributes: OptionPropBag): JSX.Element;
 //  let opt = <[|Opt|] />;
 //  let opt1 = <[|Opt|] propx={100} propString />;
 //  let opt2 = <[|Opt|] propx={100} optional/>;
@@ -120,7 +120,7 @@
 //      propString: string
 //      optional?: boolean
 //  }
-//  declare function[| Opt|](attributes: OptionPropBag): JSX.Element;
+//  declare function [|Opt|](attributes: OptionPropBag): JSX.Element;
 //  let opt = <[|Opt|] />;
 //  let opt1 = <[|Opt|] propx={100} propString />;
 //  let opt2 = <[|Opt|] propx={100} optional/>;

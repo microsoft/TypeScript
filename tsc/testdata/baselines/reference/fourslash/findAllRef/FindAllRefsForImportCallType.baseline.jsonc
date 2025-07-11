@@ -1,4 +1,4 @@
 // === findAllReferences ===
 // === /app.ts ===
 
-// export function he/*FIND ALL REFS*/[| hello|]() {};
+// export function he/*FIND ALL REFS*/[|hello|]() {};

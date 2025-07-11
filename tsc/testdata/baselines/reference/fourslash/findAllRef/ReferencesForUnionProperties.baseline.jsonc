@@ -2,7 +2,7 @@
 // === /referencesForUnionProperties.ts ===
 
 // interface One {
-//     common: { /*FIND ALL REFS*/[| a|]: number; };
+//     common: { /*FIND ALL REFS*/[|a|]: number; };
 // }
 // 
 // interface Base {
@@ -25,13 +25,13 @@
 //     common: { a: number; };
 // }
 // 
-// interface Base {[|
-//     /*FIND ALL REFS*/a|]: string;
+// interface Base {
+//     /*FIND ALL REFS*/[|a|]: string;
 //     b: string;
 // }
 // 
-// interface HasAOrB extends Base {[|
-//     a|]: string;
+// interface HasAOrB extends Base {
+//     [|a|]: string;
 //     b: string;
 // }
 // 
@@ -50,16 +50,16 @@
 // === /referencesForUnionProperties.ts ===
 
 // interface One {
-//     common: {[| a|]: number; };
+//     common: { [|a|]: number; };
 // }
 // 
-// interface Base {[|
-//     a|]: string;
+// interface Base {
+//     [|a|]: string;
 //     b: string;
 // }
 // 
-// interface HasAOrB extends Base {[|
-//     a|]: string;
+// interface HasAOrB extends Base {
+//     [|a|]: string;
 //     b: string;
 // }
 // 

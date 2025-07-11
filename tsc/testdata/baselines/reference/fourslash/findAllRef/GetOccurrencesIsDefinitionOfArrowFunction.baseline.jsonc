@@ -6,8 +6,8 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfArrowFunction.ts ===
 
-// var /*FIND ALL REFS*/[| f|] = x => x + 1;[|
-// f|](12);
+// var /*FIND ALL REFS*/[|f|] = x => x + 1;
+// [|f|](12);
 
 
 
@@ -15,5 +15,5 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfArrowFunction.ts ===
 
-// var[| f|] = x => x + 1;[|
-// /*FIND ALL REFS*/f|](12);
+// var [|f|] = x => x + 1;
+// /*FIND ALL REFS*/[|f|](12);

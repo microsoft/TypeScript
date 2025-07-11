@@ -6,8 +6,8 @@
 // === findAllReferences ===
 // === /findAllRefsForVariableInExtendsClause01.ts ===
 
-// var /*FIND ALL REFS*/[| Base|] = class { };
-// class C extends[| Base|] { }
+// var /*FIND ALL REFS*/[|Base|] = class { };
+// class C extends [|Base|] { }
 
 
 
@@ -15,5 +15,5 @@
 // === findAllReferences ===
 // === /findAllRefsForVariableInExtendsClause01.ts ===
 
-// var[| Base|] = class { };
-// class C extends /*FIND ALL REFS*/[| Base|] { }
+// var [|Base|] = class { };
+// class C extends /*FIND ALL REFS*/[|Base|] { }

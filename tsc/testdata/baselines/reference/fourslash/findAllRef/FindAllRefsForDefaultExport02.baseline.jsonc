@@ -6,13 +6,13 @@
 // === findAllReferences ===
 // === /findAllRefsForDefaultExport02.ts ===
 
-// export default function /*FIND ALL REFS*/[| DefaultExportedFunction|]() {
-//     return[| DefaultExportedFunction|];
+// export default function /*FIND ALL REFS*/[|DefaultExportedFunction|]() {
+//     return [|DefaultExportedFunction|];
 // }
 // 
-// var x: typeof[| DefaultExportedFunction|];
+// var x: typeof [|DefaultExportedFunction|];
 // 
-// var y =[| DefaultExportedFunction|]();
+// var y = [|DefaultExportedFunction|]();
 // 
 // namespace DefaultExportedFunction {
 // }
@@ -23,13 +23,13 @@
 // === findAllReferences ===
 // === /findAllRefsForDefaultExport02.ts ===
 
-// export default function[| DefaultExportedFunction|]() {
-//     return /*FIND ALL REFS*/[| DefaultExportedFunction|];
+// export default function [|DefaultExportedFunction|]() {
+//     return /*FIND ALL REFS*/[|DefaultExportedFunction|];
 // }
 // 
-// var x: typeof[| DefaultExportedFunction|];
+// var x: typeof [|DefaultExportedFunction|];
 // 
-// var y =[| DefaultExportedFunction|]();
+// var y = [|DefaultExportedFunction|]();
 // 
 // namespace DefaultExportedFunction {
 // }
@@ -40,13 +40,13 @@
 // === findAllReferences ===
 // === /findAllRefsForDefaultExport02.ts ===
 
-// export default function[| DefaultExportedFunction|]() {
-//     return[| DefaultExportedFunction|];
+// export default function [|DefaultExportedFunction|]() {
+//     return [|DefaultExportedFunction|];
 // }
 // 
-// var x: typeof /*FIND ALL REFS*/[| DefaultExportedFunction|];
+// var x: typeof /*FIND ALL REFS*/[|DefaultExportedFunction|];
 // 
-// var y =[| DefaultExportedFunction|]();
+// var y = [|DefaultExportedFunction|]();
 // 
 // namespace DefaultExportedFunction {
 // }
@@ -57,13 +57,13 @@
 // === findAllReferences ===
 // === /findAllRefsForDefaultExport02.ts ===
 
-// export default function[| DefaultExportedFunction|]() {
-//     return[| DefaultExportedFunction|];
+// export default function [|DefaultExportedFunction|]() {
+//     return [|DefaultExportedFunction|];
 // }
 // 
-// var x: typeof[| DefaultExportedFunction|];
+// var x: typeof [|DefaultExportedFunction|];
 // 
-// var y = /*FIND ALL REFS*/[| DefaultExportedFunction|]();
+// var y = /*FIND ALL REFS*/[|DefaultExportedFunction|]();
 // 
 // namespace DefaultExportedFunction {
 // }
@@ -83,5 +83,5 @@
 // 
 // var y = DefaultExportedFunction();
 // 
-// namespace /*FIND ALL REFS*/[| DefaultExportedFunction|] {
+// namespace /*FIND ALL REFS*/[|DefaultExportedFunction|] {
 // }

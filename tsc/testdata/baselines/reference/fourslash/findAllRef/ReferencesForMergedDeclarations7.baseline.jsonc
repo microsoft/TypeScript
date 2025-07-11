@@ -3,7 +3,7 @@
 
 // interface Foo { }
 // module Foo {
-//     export interface /*FIND ALL REFS*/[| Bar|] { }
+//     export interface /*FIND ALL REFS*/[|Bar|] { }
 //     export module Bar { export interface Baz { } }
 //     export function Bar() { }
 // }
@@ -18,7 +18,7 @@
 // interface Foo { }
 // module Foo {
 //     export interface Bar { }
-//     export module /*FIND ALL REFS*/[| Bar|] { export interface Baz { } }
+//     export module /*FIND ALL REFS*/[|Bar|] { export interface Baz { } }
 //     export function Bar() { }
 // }
 // 
@@ -35,7 +35,7 @@
 // module Foo {
 //     export interface Bar { }
 //     export module Bar { export interface Baz { } }
-//     export function /*FIND ALL REFS*/[| Bar|]() { }
+//     export function /*FIND ALL REFS*/[|Bar|]() { }
 // }
 // 
 // // module, value and type
@@ -50,7 +50,7 @@
 // interface Foo { }
 // module Foo {
 //     export interface Bar { }
-//     export module[| Bar|] { export interface Baz { } }
+//     export module [|Bar|] { export interface Baz { } }
 //     export function Bar() { }
 // }
 // 

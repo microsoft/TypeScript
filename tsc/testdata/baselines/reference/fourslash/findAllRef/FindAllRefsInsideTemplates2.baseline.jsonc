@@ -6,8 +6,8 @@
 // === findAllReferences ===
 // === /findAllRefsInsideTemplates2.ts ===
 
-// function /*FIND ALL REFS*/[| f|](...rest: any[]) { }[|
-// f|] `${[| f|] } ${[| f|] }`
+// function /*FIND ALL REFS*/[|f|](...rest: any[]) { }
+// [|f|] `${ [|f|] } ${ [|f|] }`
 
 
 
@@ -15,8 +15,8 @@
 // === findAllReferences ===
 // === /findAllRefsInsideTemplates2.ts ===
 
-// function[| f|](...rest: any[]) { }[|
-// /*FIND ALL REFS*/f|] `${[| f|] } ${[| f|] }`
+// function [|f|](...rest: any[]) { }
+// /*FIND ALL REFS*/[|f|] `${ [|f|] } ${ [|f|] }`
 
 
 
@@ -24,8 +24,8 @@
 // === findAllReferences ===
 // === /findAllRefsInsideTemplates2.ts ===
 
-// function[| f|](...rest: any[]) { }[|
-// f `${ /*FIND ALL REFS*/|] `${[| f|] } ${[| f|] }`
+// function [|f|](...rest: any[]) { }
+// f `${ /*FIND ALL REFS*/[|f|] `${ [|f|] } ${ [|f|] }`
 
 
 
@@ -33,5 +33,5 @@
 // === findAllReferences ===
 // === /findAllRefsInsideTemplates2.ts ===
 
-// function[| f|](...rest: any[]) { }[|
-// f `${ f } ${ /*FIND ALL REFS*/|] `${[| f|] } ${[| f|] }`
+// function [|f|](...rest: any[]) { }
+// f `${ f } ${ /*FIND ALL REFS*/[|f|] `${ [|f|] } ${ [|f|] }`

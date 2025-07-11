@@ -6,12 +6,12 @@
 // === findAllReferences ===
 // === /referencesForAmbients.ts ===
 
-// declare module "/*FIND ALL REFS*/[| "foo"|] {
+// declare module "/*FIND ALL REFS*/[|foo|]" {
 //     var f: number;
 // }
 // 
 // declare module "bar" {
-//     export import foo = require([|"foo"|]);
+//     export import foo = require("[|foo|]");
 //     var f2: typeof foo.f;
 // }
 // 
@@ -29,7 +29,7 @@
 // === /referencesForAmbients.ts ===
 
 // declare module "foo" {
-//     var /*FIND ALL REFS*/[| f|]: number;
+//     var /*FIND ALL REFS*/[|f|]: number;
 // }
 // 
 // declare module "bar" {
@@ -55,13 +55,13 @@
 //     var f: number;
 // }
 // 
-// declare module "/*FIND ALL REFS*/[| "bar"|] {
+// declare module "/*FIND ALL REFS*/[|bar|]" {
 //     export import foo = require("foo");
 //     var f2: typeof foo.f;
 // }
 // 
 // declare module "baz" {
-//     import bar = require([|"bar"|]);
+//     import bar = require("[|bar|]");
 //     var f2: typeof bar.foo;
 // }
 
@@ -81,8 +81,8 @@
 // }
 // 
 // declare module "bar" {
-//     export import /*FIND ALL REFS*/[| foo|] = require("foo");
-//     var f2: typeof[| foo|].f;
+//     export import /*FIND ALL REFS*/[|foo|] = require("foo");
+//     var f2: typeof [|foo|].f;
 // }
 // 
 // declare module "baz" {
@@ -96,12 +96,12 @@
 // === findAllReferences ===
 // === /referencesForAmbients.ts ===
 
-// declare module[| "foo"|] {
+// declare module "[|foo|]" {
 //     var f: number;
 // }
 // 
 // declare module "bar" {
-//     export import foo = require("/*FIND ALL REFS*/[|"foo"|]);
+//     export import foo = require("/*FIND ALL REFS*/[|foo|]");
 //     var f2: typeof foo.f;
 // }
 // 
@@ -118,8 +118,8 @@
 // }
 // 
 // declare module "bar" {
-//     export import[| foo|] = require("foo");
-//     var f2: typeof /*FIND ALL REFS*/[| foo|].f;
+//     export import [|foo|] = require("foo");
+//     var f2: typeof /*FIND ALL REFS*/[|foo|].f;
 // }
 // 
 // declare module "baz" {
@@ -134,7 +134,7 @@
 // === /referencesForAmbients.ts ===
 
 // declare module "foo" {
-//     var[| f|]: number;
+//     var [|f|]: number;
 // }
 // 
 // declare module "bar" {
@@ -160,13 +160,13 @@
 //     var f: number;
 // }
 // 
-// declare module[| "bar"|] {
+// declare module "[|bar|]" {
 //     export import foo = require("foo");
 //     var f2: typeof foo.f;
 // }
 // 
 // declare module "baz" {
-//     import bar = require("/*FIND ALL REFS*/[|"bar"|]);
+//     import bar = require("/*FIND ALL REFS*/[|bar|]");
 //     var f2: typeof bar.foo;
 // }
 
@@ -181,8 +181,8 @@
 // }
 // 
 // declare module "bar" {
-//     export import[| foo|] = require("foo");
-//     var f2: typeof[| foo|].f;
+//     export import [|foo|] = require("foo");
+//     var f2: typeof [|foo|].f;
 // }
 // 
 // declare module "baz" {

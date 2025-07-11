@@ -3,8 +3,8 @@
 
 //  declare module JSX {
 //      interface Element { }
-//      interface IntrinsicElements {[|
-//          /*FIND ALL REFS*/div|]: {
+//      interface IntrinsicElements {
+//          /*FIND ALL REFS*/[|div|]: {
 //              name?: string;
 //              isOpen?: boolean;
 //          };
@@ -26,8 +26,8 @@
 
 //  declare module JSX {
 //      interface Element { }
-//      interface IntrinsicElements {[|
-//          div|]: {
+//      interface IntrinsicElements {
+//          [|div|]: {
 //              name?: string;
 //              isOpen?: boolean;
 //          };

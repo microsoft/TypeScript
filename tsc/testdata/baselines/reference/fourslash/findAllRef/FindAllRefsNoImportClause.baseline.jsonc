@@ -6,4 +6,4 @@
 // === findAllReferences ===
 // === /a.ts ===
 
-// export const /*FIND ALL REFS*/[| x|] = 0;
+// export const /*FIND ALL REFS*/[|x|] = 0;

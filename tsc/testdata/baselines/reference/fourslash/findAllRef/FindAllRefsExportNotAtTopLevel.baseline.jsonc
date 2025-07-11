@@ -7,8 +7,8 @@
 // === /findAllRefsExportNotAtTopLevel.ts ===
 
 // {
-//     export const /*FIND ALL REFS*/[| x|] = 0;[|
-//     x|];
+//     export const /*FIND ALL REFS*/[|x|] = 0;
+//     [|x|];
 // }
 
 
@@ -18,6 +18,6 @@
 // === /findAllRefsExportNotAtTopLevel.ts ===
 
 // {
-//     export const[| x|] = 0;[|
-//     /*FIND ALL REFS*/x|];
+//     export const [|x|] = 0;
+//     /*FIND ALL REFS*/[|x|];
 // }

@@ -6,9 +6,9 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfFunction.ts ===
 
-// function /*FIND ALL REFS*/[| func|](x: number) {
-// }[|
-// func|](x)
+// function /*FIND ALL REFS*/[|func|](x: number) {
+// }
+// [|func|](x)
 
 
 
@@ -16,6 +16,6 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfFunction.ts ===
 
-// function[| func|](x: number) {
-// }[|
-// /*FIND ALL REFS*/func|](x)
+// function [|func|](x: number) {
+// }
+// /*FIND ALL REFS*/[|func|](x)

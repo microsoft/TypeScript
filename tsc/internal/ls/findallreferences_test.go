@@ -241,6 +241,19 @@ class C extends [|/*3*/Base|] { }`,
 				"3": collections.NewSetFromItems("2", "3"),
 			},
 		},
+		{
+			title: "findAllRefsTrivia",
+			input: `export interface A {
+    /** Comment */
+    [|/*m1*/method|](): string;
+    /** Comment */
+    [|/*m2*/method|](format: string): string;
+}`,
+			expectedLocations: map[string]*collections.Set[string]{
+				"m1": collections.NewSetFromItems("m1", "m2"),
+				"m2": collections.NewSetFromItems("m1", "m2"),
+			},
+		},
 	}
 
 	for _, testCase := range testCases {

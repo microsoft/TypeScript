@@ -1,11 +1,11 @@
 // === findAllReferences ===
 // === /findAllRefsDestructureGeneric.ts ===
 
-// interface I<T> {[|
-//     /*FIND ALL REFS*/x|]: boolean;
+// interface I<T> {
+//     /*FIND ALL REFS*/[|x|]: boolean;
 // }
 // declare const i: I<number>;
-// const {[| x|] } = i;
+// const { [|x|] } = i;
 
 
 
@@ -13,8 +13,8 @@
 // === findAllReferences ===
 // === /findAllRefsDestructureGeneric.ts ===
 
-// interface I<T> {[|
-//     x|]: boolean;
+// interface I<T> {
+//     [|x|]: boolean;
 // }
 // declare const i: I<number>;
-// const { /*FIND ALL REFS*/[| x|] } = i;
+// const { /*FIND ALL REFS*/[|x|] } = i;

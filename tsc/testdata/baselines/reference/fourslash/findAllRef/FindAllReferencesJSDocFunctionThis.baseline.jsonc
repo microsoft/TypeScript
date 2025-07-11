@@ -2,4 +2,4 @@
 // === /Foo.js ===
 
 // /** @type {function (this: string, string): string} */
-// var f = function (s) { return /*FIND ALL REFS*/[| this|] + s; }
+// var f = function (s) { return /*FIND ALL REFS*/[|this|] + s; }

@@ -3,7 +3,7 @@
 
 // /*FIND ALL REFS*/[|label|]: function foo(label) {
 //     while (true) {
-//         break[| label|];
+//         break [|label|];
 //     }
 // }
 
@@ -20,6 +20,6 @@
 
 // [|label|]: function foo(label) {
 //     while (true) {
-//         break /*FIND ALL REFS*/[| label|];
+//         break /*FIND ALL REFS*/[|label|];
 //     }
 // }

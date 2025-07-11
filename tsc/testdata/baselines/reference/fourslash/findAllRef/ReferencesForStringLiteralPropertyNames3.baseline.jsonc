@@ -7,8 +7,8 @@
 // === /referencesForStringLiteralPropertyNames3.ts ===
 
 // class Foo2 {
-//     get "/*FIND ALL REFS*/[| "42"|]() { return 0; }
-//     set[| 42|](n) { }
+//     get "/*FIND ALL REFS*/[|42|]"() { return 0; }
+//     set [|42|](n) { }
 // }
 // 
 // var y: Foo2;
@@ -26,8 +26,8 @@
 // === /referencesForStringLiteralPropertyNames3.ts ===
 
 // class Foo2 {
-//     get[| "42"|]() { return 0; }
-//     set /*FIND ALL REFS*/[| 42|](n) { }
+//     get "[|42|]"() { return 0; }
+//     set /*FIND ALL REFS*/[|42|](n) { }
 // }
 // 
 // var y: Foo2;
@@ -40,8 +40,8 @@
 // === /referencesForStringLiteralPropertyNames3.ts ===
 
 // class Foo2 {
-//     get[| "42"|]() { return 0; }
-//     set[| 42|](n) { }
+//     get "[|42|]"() { return 0; }
+//     set [|42|](n) { }
 // }
 // 
 // var y: Foo2;

@@ -1,8 +1,8 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfBindingPattern.ts ===
 
-// const { /*FIND ALL REFS*/[| x|], y } = {[| x|]: 1, y: 2 };
-// const z =[| x|];
+// const { /*FIND ALL REFS*/[|x|], y } = { [|x|]: 1, y: 2 };
+// const z = [|x|];
 
 
 
@@ -10,7 +10,7 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfBindingPattern.ts ===
 
-// const { x, y } = { /*FIND ALL REFS*/[| x|], y } = {[| x|]: 1, y: 2 };
+// const { x, y } = { /*FIND ALL REFS*/[|x|], y } = { [|x|]: 1, y: 2 };
 // const z = x;
 
 
@@ -19,5 +19,5 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfBindingPattern.ts ===
 
-// const {[| x|], y } = { x: 1, y: 2 };
-// const z = /*FIND ALL REFS*/[| x|];
+// const { [|x|], y } = { x: 1, y: 2 };
+// const z = /*FIND ALL REFS*/[|x|];

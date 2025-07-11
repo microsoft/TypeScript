@@ -41,5 +41,5 @@
 // }
 // 
 // var x: I = {
-//     ["/*FIND ALL REFS*/[|"42"|]]: function () { }
+//     ["/*FIND ALL REFS*/[|42|]"]: function () { }
 // }

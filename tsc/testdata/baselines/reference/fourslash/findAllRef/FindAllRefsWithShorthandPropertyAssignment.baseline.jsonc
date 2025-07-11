@@ -1,7 +1,7 @@
 // === findAllReferences ===
 // === /findAllRefsWithShorthandPropertyAssignment.ts ===
 
-//  var /*FIND ALL REFS*/[| name|] = "Foo";
+//  var /*FIND ALL REFS*/[|name|] = "Foo";
 // 
 //  var obj = { name };
 //  var obj1 = { name: name };
@@ -15,8 +15,8 @@
 
 //  var name = "Foo";
 // 
-//  var obj = {[| name|] };
-//  var obj1 = { name: /*FIND ALL REFS*/[| name|] };
+//  var obj = { [|name|] };
+//  var obj1 = { name: /*FIND ALL REFS*/[|name|] };
 //  obj.name;
 
 
@@ -27,7 +27,7 @@
 
 //  var name = "Foo";
 // 
-//  var obj = { /*FIND ALL REFS*/[| name|] };
+//  var obj = { /*FIND ALL REFS*/[|name|] };
 //  var obj1 = { name: name };
 //  obj.[|name|];
 
@@ -40,7 +40,7 @@
 //  var name = "Foo";
 // 
 //  var obj = { name };
-//  var obj1 = { /*FIND ALL REFS*/[| name|]: name };
+//  var obj1 = { /*FIND ALL REFS*/[|name|]: name };
 //  obj.name;
 
 
@@ -51,6 +51,6 @@
 
 //  var name = "Foo";
 // 
-//  var obj = {[| name|] };
+//  var obj = { [|name|] };
 //  var obj1 = { name: name };
 //  obj./*FIND ALL REFS*/[|name|];

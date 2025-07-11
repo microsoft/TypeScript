@@ -1,8 +1,8 @@
 // === findAllReferences ===
 // === /export.ts ===
 
-// const /*FIND ALL REFS*/[| foo|] = 1;
-// export default[| foo|];
+// const /*FIND ALL REFS*/[|foo|] = 1;
+// export default [|foo|];
 
 
 
@@ -10,8 +10,8 @@
 // === findAllReferences ===
 // === /export.ts ===
 
-// const[| foo|] = 1;
-// export default /*FIND ALL REFS*/[| foo|];
+// const [|foo|] = 1;
+// export default /*FIND ALL REFS*/[|foo|];
 
 
 
@@ -24,4 +24,4 @@
 // === findAllReferences ===
 // === /re-export-dep.ts ===
 
-// import /*FIND ALL REFS*/[| fooDefault|] from "./re-export";
+// import /*FIND ALL REFS*/[|fooDefault|] from "./re-export";

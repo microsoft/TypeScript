@@ -1,15 +1,15 @@
 // === findAllReferences ===
 // === /referencesForIndexProperty3.ts ===
 
-// interface Object {[|
-//     /*FIND ALL REFS*/toMyString|]();
+// interface Object {
+//     /*FIND ALL REFS*/[|toMyString|]();
 // }
 // 
 // var y: Object;
 // y.[|toMyString|]();
 // 
 // var x = {};
-// x[[|"toMyString"|]]();
+// x["[|toMyString|]"]();
 
 
 
@@ -17,15 +17,15 @@
 // === findAllReferences ===
 // === /referencesForIndexProperty3.ts ===
 
-// interface Object {[|
-//     toMyString|]();
+// interface Object {
+//     [|toMyString|]();
 // }
 // 
 // var y: Object;
 // y./*FIND ALL REFS*/[|toMyString|]();
 // 
 // var x = {};
-// x[[|"toMyString"|]]();
+// x["[|toMyString|]"]();
 
 
 
@@ -33,12 +33,12 @@
 // === findAllReferences ===
 // === /referencesForIndexProperty3.ts ===
 
-// interface Object {[|
-//     toMyString|]();
+// interface Object {
+//     [|toMyString|]();
 // }
 // 
 // var y: Object;
 // y.[|toMyString|]();
 // 
 // var x = {};
-// x["/*FIND ALL REFS*/[|"toMyString"|]]();
+// x["/*FIND ALL REFS*/[|toMyString|]"]();

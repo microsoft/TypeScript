@@ -5,4 +5,4 @@
 //      optional?: boolean
 //  }
 //  declare function Opt(attributes: OptionPropBag): JSX.Element;
-//  let opt = <Opt /*FIND ALL REFS*/[| wrong|] />;
+//  let opt = <Opt /*FIND ALL REFS*/[|wrong|] />;

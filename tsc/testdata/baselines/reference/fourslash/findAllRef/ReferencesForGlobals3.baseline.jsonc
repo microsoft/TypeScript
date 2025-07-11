@@ -6,7 +6,7 @@
 // === findAllReferences ===
 // === /referencesForGlobals_1.ts ===
 
-// interface /*FIND ALL REFS*/[| globalInterface|] {
+// interface /*FIND ALL REFS*/[|globalInterface|] {
 //      f();
 // }
 
@@ -16,11 +16,11 @@
 // === findAllReferences ===
 // === /referencesForGlobals_1.ts ===
 
-// interface[| globalInterface|] {
+// interface [|globalInterface|] {
 //      f();
 // }
 
 
 // === /referencesForGlobals_2.ts ===
 
-// var i: /*FIND ALL REFS*/[| globalInterface|];
+// var i: /*FIND ALL REFS*/[|globalInterface|];

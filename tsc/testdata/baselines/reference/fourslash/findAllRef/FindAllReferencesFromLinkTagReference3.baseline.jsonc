@@ -8,7 +8,7 @@
 
 // === /b.ts ===
 
-// enum E {[|
+// enum E {
 //     /** {@link /*FIND ALL REFS*/[|Foo|]} */
-//     Foo|]
+//     [|Foo|]
 // }

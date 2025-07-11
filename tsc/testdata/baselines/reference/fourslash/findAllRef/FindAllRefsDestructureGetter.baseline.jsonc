@@ -2,11 +2,11 @@
 // === /findAllRefsDestructureGetter.ts ===
 
 // class Test {
-//     get /*FIND ALL REFS*/[| x|]() { return 0; }
+//     get /*FIND ALL REFS*/[|x|]() { return 0; }
 // 
 //     set y(a: number) {}
 // }
-// const {[| x|], y } = new Test();
+// const { [|x|], y } = new Test();
 // x; y;
 
 
@@ -16,12 +16,12 @@
 // === /findAllRefsDestructureGetter.ts ===
 
 // class Test {
-//     get[| x|]() { return 0; }
+//     get [|x|]() { return 0; }
 // 
 //     set y(a: number) {}
 // }
-// const { /*FIND ALL REFS*/[| x|], y } = new Test();[|
-// x|]; y;
+// const { /*FIND ALL REFS*/[|x|], y } = new Test();
+// [|x|]; y;
 
 
 
@@ -34,8 +34,8 @@
 // 
 //     set y(a: number) {}
 // }
-// const {[| x|], y } = new Test();[|
-// /*FIND ALL REFS*/x|]; y;
+// const { [|x|], y } = new Test();
+// /*FIND ALL REFS*/[|x|]; y;
 
 
 
@@ -46,9 +46,9 @@
 // class Test {
 //     get x() { return 0; }
 // 
-//     set /*FIND ALL REFS*/[| y|](a: number) {}
+//     set /*FIND ALL REFS*/[|y|](a: number) {}
 // }
-// const { x,[| y|] } = new Test();
+// const { x, [|y|] } = new Test();
 // x; y;
 
 
@@ -60,10 +60,10 @@
 // class Test {
 //     get x() { return 0; }
 // 
-//     set[| y|](a: number) {}
+//     set [|y|](a: number) {}
 // }
-// const { x, /*FIND ALL REFS*/[| y|] } = new Test();
-// x;[| y|];
+// const { x, /*FIND ALL REFS*/[|y|] } = new Test();
+// x; [|y|];
 
 
 
@@ -76,5 +76,5 @@
 // 
 //     set y(a: number) {}
 // }
-// const { x,[| y|] } = new Test();
-// x; /*FIND ALL REFS*/[| y|];
+// const { x, [|y|] } = new Test();
+// x; /*FIND ALL REFS*/[|y|];

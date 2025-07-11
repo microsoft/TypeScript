@@ -1,12 +1,11 @@
 // === findAllReferences ===
 // === /file.tsx ===
 
-// --- (line: 4) skipped ---
-//      interface ElementAttributesProperty { props }
+// --- (line: 5) skipped ---
 //  }
 //  class MyClass {
-//    props: {[|
-//      /*FIND ALL REFS*/name|]?: string;
+//    props: {
+//      /*FIND ALL REFS*/[|name|]?: string;
 //      size?: number;
 //  }
 // 

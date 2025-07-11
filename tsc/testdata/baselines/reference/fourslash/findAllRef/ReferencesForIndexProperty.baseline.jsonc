@@ -1,13 +1,13 @@
 // === findAllReferences ===
 // === /referencesForIndexProperty.ts ===
 
-// class Foo {[|
-//     /*FIND ALL REFS*/property|]: number;
+// class Foo {
+//     /*FIND ALL REFS*/[|property|]: number;
 //     method(): void { }
 // }
 // 
 // var f: Foo;
-// f[[|"property"|]];
+// f["[|property|]"];
 // f["method"];
 
 
@@ -17,13 +17,13 @@
 // === /referencesForIndexProperty.ts ===
 
 // class Foo {
-//     property: number;[|
-//     /*FIND ALL REFS*/method|](): void { }
+//     property: number;
+//     /*FIND ALL REFS*/[|method|](): void { }
 // }
 // 
 // var f: Foo;
 // f["property"];
-// f[[|"method"|]];
+// f["[|method|]"];
 
 
 
@@ -31,13 +31,13 @@
 // === findAllReferences ===
 // === /referencesForIndexProperty.ts ===
 
-// class Foo {[|
-//     property|]: number;
+// class Foo {
+//     [|property|]: number;
 //     method(): void { }
 // }
 // 
 // var f: Foo;
-// f["/*FIND ALL REFS*/[|"property"|]];
+// f["/*FIND ALL REFS*/[|property|]"];
 // f["method"];
 
 
@@ -47,10 +47,10 @@
 // === /referencesForIndexProperty.ts ===
 
 // class Foo {
-//     property: number;[|
-//     method|](): void { }
+//     property: number;
+//     [|method|](): void { }
 // }
 // 
 // var f: Foo;
 // f["property"];
-// f["/*FIND ALL REFS*/[|"method"|]];
+// f["/*FIND ALL REFS*/[|method|]"];

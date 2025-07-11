@@ -6,4 +6,4 @@
 // === findAllReferences ===
 // === /findAllRefsBadImport.ts ===
 
-// import { ab as /*FIND ALL REFS*/[| cd|] } from "doesNotExist";
+// import { ab as /*FIND ALL REFS*/[|cd|] } from "doesNotExist";

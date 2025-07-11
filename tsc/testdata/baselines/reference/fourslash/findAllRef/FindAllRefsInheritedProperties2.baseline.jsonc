@@ -1,8 +1,8 @@
 // === findAllReferences ===
 // === /findAllRefsInheritedProperties2.ts ===
 
-//  interface interface1 extends interface1 {[|
-//     /*FIND ALL REFS*/doStuff|](): void;   // r0
+//  interface interface1 extends interface1 {
+//     /*FIND ALL REFS*/[|doStuff|](): void;   // r0
 //     propName: string;  // r1
 //  }
 // 
@@ -17,8 +17,8 @@
 // === /findAllRefsInheritedProperties2.ts ===
 
 //  interface interface1 extends interface1 {
-//     doStuff(): void;[|   // r0
-//     /*FIND ALL REFS*/propName|]: string;  // r1
+//     doStuff(): void;   // r0
+//     /*FIND ALL REFS*/[|propName|]: string;  // r1
 //  }
 // 
 //  var v: interface1;
@@ -31,8 +31,8 @@
 // === findAllReferences ===
 // === /findAllRefsInheritedProperties2.ts ===
 
-//  interface interface1 extends interface1 {[|
-//     doStuff|](): void;   // r0
+//  interface interface1 extends interface1 {
+//     [|doStuff|](): void;   // r0
 //     propName: string;  // r1
 //  }
 // 
@@ -47,8 +47,8 @@
 // === /findAllRefsInheritedProperties2.ts ===
 
 //  interface interface1 extends interface1 {
-//     doStuff(): void;[|   // r0
-//     propName|]: string;  // r1
+//     doStuff(): void;   // r0
+//     [|propName|]: string;  // r1
 //  }
 // 
 //  var v: interface1;

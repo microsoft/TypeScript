@@ -21,10 +21,9 @@
 // === findAllReferences ===
 // === /findAllRefsForDefaultKeyword.ts ===
 
-// --- (line: 5) skipped ---
-// 
+// --- (line: 6) skipped ---
 // class default {}
 // 
-// const foo = {[|
-//     /*FIND ALL REFS*/default|]: 1
+// const foo = {
+//     /*FIND ALL REFS*/[|default|]: 1
 // }

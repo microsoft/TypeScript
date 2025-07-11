@@ -1,8 +1,8 @@
 // === findAllReferences ===
 // === /referencesForStringLiteralPropertyNames2.ts ===
 
-// class Foo {[|
-//     /*FIND ALL REFS*/"blah"|]() { return 0; }
+// class Foo {
+//     /*FIND ALL REFS*/"[|blah|]"() { return 0; }
 // }
 // 
 // var x: Foo;
@@ -14,8 +14,8 @@
 // === findAllReferences ===
 // === /referencesForStringLiteralPropertyNames2.ts ===
 
-// class Foo {[|
-//     "/*FIND ALL REFS*/blah"|]() { return 0; }
+// class Foo {
+//     "/*FIND ALL REFS*/[|blah|]"() { return 0; }
 // }
 // 
 // var x: Foo;
@@ -27,8 +27,8 @@
 // === findAllReferences ===
 // === /referencesForStringLiteralPropertyNames2.ts ===
 
-// class Foo {[|
-//     "blah"|]() { return 0; }
+// class Foo {
+//     "[|blah|]"() { return 0; }
 // }
 // 
 // var x: Foo;

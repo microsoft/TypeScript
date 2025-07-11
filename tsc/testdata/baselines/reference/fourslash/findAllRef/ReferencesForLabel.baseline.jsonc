@@ -2,8 +2,8 @@
 // === /referencesForLabel.ts ===
 
 // /*FIND ALL REFS*/[|label|]: while (true) {
-//     if (false) break[| label|];
-//     if (true) continue[| label|];
+//     if (false) break [|label|];
+//     if (true) continue [|label|];
 // }
 // 
 // label: while (false) { }
@@ -21,8 +21,8 @@
 // === /referencesForLabel.ts ===
 
 // [|label|]: while (true) {
-//     if (false) break /*FIND ALL REFS*/[| label|];
-//     if (true) continue[| label|];
+//     if (false) break /*FIND ALL REFS*/[|label|];
+//     if (true) continue [|label|];
 // }
 // 
 // label: while (false) { }
@@ -40,8 +40,8 @@
 // === /referencesForLabel.ts ===
 
 // [|label|]: while (true) {
-//     if (false) break[| label|];
-//     if (true) continue /*FIND ALL REFS*/[| label|];
+//     if (false) break [|label|];
+//     if (true) continue /*FIND ALL REFS*/[|label|];
 // }
 // 
 // label: while (false) { }
@@ -56,7 +56,7 @@
 // label: while (true) {
 //     if (false) break label;
 //     if (true) continue label;
-// }[|
+// }
 // 
-// /*FIND ALL REFS*/label|]: while (false) { }
+// /*FIND ALL REFS*/[|label|]: while (false) { }
 // var label = "label";

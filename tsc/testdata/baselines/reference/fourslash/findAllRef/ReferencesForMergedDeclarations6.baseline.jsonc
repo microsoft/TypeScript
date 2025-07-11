@@ -7,14 +7,14 @@
 // === /referencesForMergedDeclarations6.ts ===
 
 // interface Foo { }
-// module /*FIND ALL REFS*/[| Foo|] {
+// module /*FIND ALL REFS*/[|Foo|] {
 //     export interface Bar { }
 //     export module Bar { export interface Baz { } }
 //     export function Bar() { }
 // }
 // 
 // // module
-// import a1 =[| Foo|];
+// import a1 = [|Foo|];
 
 
 
@@ -23,11 +23,11 @@
 // === /referencesForMergedDeclarations6.ts ===
 
 // interface Foo { }
-// module[| Foo|] {
+// module [|Foo|] {
 //     export interface Bar { }
 //     export module Bar { export interface Baz { } }
 //     export function Bar() { }
 // }
 // 
 // // module
-// import a1 = /*FIND ALL REFS*/[| Foo|];
+// import a1 = /*FIND ALL REFS*/[|Foo|];

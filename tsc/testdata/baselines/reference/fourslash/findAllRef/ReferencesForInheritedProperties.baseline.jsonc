@@ -1,16 +1,16 @@
 // === findAllReferences ===
 // === /referencesForInheritedProperties.ts ===
 
-// interface interface1 {[|
-//     /*FIND ALL REFS*/doStuff|](): void;
+// interface interface1 {
+//     /*FIND ALL REFS*/[|doStuff|](): void;
 // }
 // 
-// interface interface2  extends interface1{[|
-//     doStuff|](): void;
+// interface interface2  extends interface1{
+//     [|doStuff|](): void;
 // }
 // 
-// class class1 implements interface2 {[|
-//     doStuff|]() {
+// class class1 implements interface2 {
+//     [|doStuff|]() {
 // 
 //     }
 // }
@@ -28,16 +28,16 @@
 // === findAllReferences ===
 // === /referencesForInheritedProperties.ts ===
 
-// interface interface1 {[|
-//     doStuff|](): void;
+// interface interface1 {
+//     [|doStuff|](): void;
 // }
 // 
-// interface interface2  extends interface1{[|
-//     /*FIND ALL REFS*/doStuff|](): void;
+// interface interface2  extends interface1{
+//     /*FIND ALL REFS*/[|doStuff|](): void;
 // }
 // 
-// class class1 implements interface2 {[|
-//     doStuff|]() {
+// class class1 implements interface2 {
+//     [|doStuff|]() {
 // 
 //     }
 // }
@@ -55,16 +55,16 @@
 // === findAllReferences ===
 // === /referencesForInheritedProperties.ts ===
 
-// interface interface1 {[|
-//     doStuff|](): void;
+// interface interface1 {
+//     [|doStuff|](): void;
 // }
 // 
-// interface interface2  extends interface1{[|
-//     doStuff|](): void;
+// interface interface2  extends interface1{
+//     [|doStuff|](): void;
 // }
 // 
-// class class1 implements interface2 {[|
-//     /*FIND ALL REFS*/doStuff|]() {
+// class class1 implements interface2 {
+//     /*FIND ALL REFS*/[|doStuff|]() {
 // 
 //     }
 // }
@@ -82,16 +82,16 @@
 // === findAllReferences ===
 // === /referencesForInheritedProperties.ts ===
 
-// interface interface1 {[|
-//     doStuff|](): void;
+// interface interface1 {
+//     [|doStuff|](): void;
 // }
 // 
-// interface interface2  extends interface1{[|
-//     doStuff|](): void;
+// interface interface2  extends interface1{
+//     [|doStuff|](): void;
 // }
 // 
-// class class1 implements interface2 {[|
-//     doStuff|]() {
+// class class1 implements interface2 {
+//     [|doStuff|]() {
 // 
 //     }
 // }

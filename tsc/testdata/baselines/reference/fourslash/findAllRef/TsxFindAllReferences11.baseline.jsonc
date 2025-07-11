@@ -5,4 +5,4 @@
 //  declare function MainButton(buttonProps: ButtonProps): JSX.Element;
 //  declare function MainButton(linkProps: LinkProps): JSX.Element;
 //  declare function MainButton(props: ButtonProps | LinkProps): JSX.Element;
-//  let opt = <MainButton /*FIND ALL REFS*/[| wrong|] />;
+//  let opt = <MainButton /*FIND ALL REFS*/[|wrong|] />;

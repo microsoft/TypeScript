@@ -2,11 +2,11 @@
 // === /referencesForClassMembersExtendingAbstractClass.ts ===
 
 // abstract class Base {
-//     abstract /*FIND ALL REFS*/[| a|]: number;
+//     abstract /*FIND ALL REFS*/[|a|]: number;
 //     abstract method(): void;
 // }
-// class MyClass extends Base {[|
-//     a|];
+// class MyClass extends Base {
+//     [|a|];
 //     method() { }
 // }
 // 
@@ -21,11 +21,11 @@
 // === /referencesForClassMembersExtendingAbstractClass.ts ===
 
 // abstract class Base {
-//     abstract[| a|]: number;
+//     abstract [|a|]: number;
 //     abstract method(): void;
 // }
-// class MyClass extends Base {[|
-//     /*FIND ALL REFS*/a|];
+// class MyClass extends Base {
+//     /*FIND ALL REFS*/[|a|];
 //     method() { }
 // }
 // 
@@ -40,11 +40,11 @@
 // === /referencesForClassMembersExtendingAbstractClass.ts ===
 
 // abstract class Base {
-//     abstract[| a|]: number;
+//     abstract [|a|]: number;
 //     abstract method(): void;
 // }
-// class MyClass extends Base {[|
-//     a|];
+// class MyClass extends Base {
+//     [|a|];
 //     method() { }
 // }
 // 
@@ -60,11 +60,11 @@
 
 // abstract class Base {
 //     abstract a: number;
-//     abstract /*FIND ALL REFS*/[| method|](): void;
+//     abstract /*FIND ALL REFS*/[|method|](): void;
 // }
 // class MyClass extends Base {
-//     a;[|
-//     method|]() { }
+//     a;
+//     [|method|]() { }
 // }
 // 
 // var c: MyClass;
@@ -79,11 +79,11 @@
 
 // abstract class Base {
 //     abstract a: number;
-//     abstract[| method|](): void;
+//     abstract [|method|](): void;
 // }
 // class MyClass extends Base {
-//     a;[|
-//     /*FIND ALL REFS*/method|]() { }
+//     a;
+//     /*FIND ALL REFS*/[|method|]() { }
 // }
 // 
 // var c: MyClass;
@@ -98,11 +98,11 @@
 
 // abstract class Base {
 //     abstract a: number;
-//     abstract[| method|](): void;
+//     abstract [|method|](): void;
 // }
 // class MyClass extends Base {
-//     a;[|
-//     method|]() { }
+//     a;
+//     [|method|]() { }
 // }
 // 
 // var c: MyClass;

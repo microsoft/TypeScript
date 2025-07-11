@@ -1,12 +1,12 @@
 // === findAllReferences ===
 // === /referencesForClassMembers.ts ===
 
-// class Base {[|
-//     /*FIND ALL REFS*/a|]: number;
+// class Base {
+//     /*FIND ALL REFS*/[|a|]: number;
 //     method(): void { }
 // }
-// class MyClass extends Base {[|
-//     a|];
+// class MyClass extends Base {
+//     [|a|];
 //     method() { }
 // }
 // 
@@ -20,12 +20,12 @@
 // === findAllReferences ===
 // === /referencesForClassMembers.ts ===
 
-// class Base {[|
-//     a|]: number;
+// class Base {
+//     [|a|]: number;
 //     method(): void { }
 // }
-// class MyClass extends Base {[|
-//     /*FIND ALL REFS*/a|];
+// class MyClass extends Base {
+//     /*FIND ALL REFS*/[|a|];
 //     method() { }
 // }
 // 
@@ -39,12 +39,12 @@
 // === findAllReferences ===
 // === /referencesForClassMembers.ts ===
 
-// class Base {[|
-//     a|]: number;
+// class Base {
+//     [|a|]: number;
 //     method(): void { }
 // }
-// class MyClass extends Base {[|
-//     a|];
+// class MyClass extends Base {
+//     [|a|];
 //     method() { }
 // }
 // 
@@ -59,12 +59,12 @@
 // === /referencesForClassMembers.ts ===
 
 // class Base {
-//     a: number;[|
-//     /*FIND ALL REFS*/method|](): void { }
+//     a: number;
+//     /*FIND ALL REFS*/[|method|](): void { }
 // }
 // class MyClass extends Base {
-//     a;[|
-//     method|]() { }
+//     a;
+//     [|method|]() { }
 // }
 // 
 // var c: MyClass;
@@ -78,12 +78,12 @@
 // === /referencesForClassMembers.ts ===
 
 // class Base {
-//     a: number;[|
-//     method|](): void { }
+//     a: number;
+//     [|method|](): void { }
 // }
 // class MyClass extends Base {
-//     a;[|
-//     /*FIND ALL REFS*/method|]() { }
+//     a;
+//     /*FIND ALL REFS*/[|method|]() { }
 // }
 // 
 // var c: MyClass;
@@ -97,12 +97,12 @@
 // === /referencesForClassMembers.ts ===
 
 // class Base {
-//     a: number;[|
-//     method|](): void { }
+//     a: number;
+//     [|method|](): void { }
 // }
 // class MyClass extends Base {
-//     a;[|
-//     method|]() { }
+//     a;
+//     [|method|]() { }
 // }
 // 
 // var c: MyClass;

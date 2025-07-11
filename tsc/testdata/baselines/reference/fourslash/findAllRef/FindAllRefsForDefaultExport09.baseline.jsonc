@@ -1,7 +1,7 @@
 // === findAllReferences ===
 // === /foo.ts ===
 
-// import * as /*FIND ALL REFS*/[| a|] from "./a.js"
+// import * as /*FIND ALL REFS*/[|a|] from "./a.js"
 // import aDefault from "./a.js"
 // import * as b from "./b.js"
 // import bDefault from "./b.js"
@@ -14,7 +14,7 @@
 // === /foo.ts ===
 
 // import * as a from "./a.js"
-// import /*FIND ALL REFS*/[| aDefault|] from "./a.js"
+// import /*FIND ALL REFS*/[|aDefault|] from "./a.js"
 // import * as b from "./b.js"
 // import bDefault from "./b.js"
 // 
@@ -28,7 +28,7 @@
 
 // import * as a from "./a.js"
 // import aDefault from "./a.js"
-// import * as /*FIND ALL REFS*/[| b|] from "./b.js"
+// import * as /*FIND ALL REFS*/[|b|] from "./b.js"
 // import bDefault from "./b.js"
 // 
 // import * as c from "./c"
@@ -43,7 +43,7 @@
 // import * as a from "./a.js"
 // import aDefault from "./a.js"
 // import * as b from "./b.js"
-// import /*FIND ALL REFS*/[| bDefault|] from "./b.js"
+// import /*FIND ALL REFS*/[|bDefault|] from "./b.js"
 // 
 // import * as c from "./c"
 // import cDefault from "./c"
@@ -61,7 +61,7 @@
 // import * as b from "./b.js"
 // import bDefault from "./b.js"
 // 
-// import * as /*FIND ALL REFS*/[| c|] from "./c"
+// import * as /*FIND ALL REFS*/[|c|] from "./c"
 // import cDefault from "./c"
 // import * as d from "./d"
 // import dDefault from "./d"
@@ -76,7 +76,7 @@
 // import bDefault from "./b.js"
 // 
 // import * as c from "./c"
-// import /*FIND ALL REFS*/[| cDefault|] from "./c"
+// import /*FIND ALL REFS*/[|cDefault|] from "./c"
 // import * as d from "./d"
 // import dDefault from "./d"
 
@@ -90,7 +90,7 @@
 // 
 // import * as c from "./c"
 // import cDefault from "./c"
-// import * as /*FIND ALL REFS*/[| d|] from "./d"
+// import * as /*FIND ALL REFS*/[|d|] from "./d"
 // import dDefault from "./d"
 
 
@@ -103,4 +103,4 @@
 // import * as c from "./c"
 // import cDefault from "./c"
 // import * as d from "./d"
-// import /*FIND ALL REFS*/[| dDefault|] from "./d"
+// import /*FIND ALL REFS*/[|dDefault|] from "./d"

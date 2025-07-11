@@ -7,7 +7,7 @@
 // === /findAllRefsOnPrivateParameterProperty1.ts ===
 
 // class ABCD {
-//     constructor(private x: number, public y: number, private /*FIND ALL REFS*/[| z|]: number) {
+//     constructor(private x: number, public y: number, private /*FIND ALL REFS*/[|z|]: number) {
 //     }
 // 
 //     func() {
@@ -22,7 +22,7 @@
 // === /findAllRefsOnPrivateParameterProperty1.ts ===
 
 // class ABCD {
-//     constructor(private x: number, public y: number, private[| z|]: number) {
+//     constructor(private x: number, public y: number, private [|z|]: number) {
 //     }
 // 
 //     func() {

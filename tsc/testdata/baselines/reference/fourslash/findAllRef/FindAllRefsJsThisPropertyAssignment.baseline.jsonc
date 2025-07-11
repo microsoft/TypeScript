@@ -12,7 +12,7 @@
 
 // === /infer.d.ts ===
 
-// export declare function infer(o: { m(): void } & ThisType<{[| x|]: number }>): void;
+// export declare function infer(o: { m(): void } & ThisType<{ [|x|]: number }>): void;
 
 
 

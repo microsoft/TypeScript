@@ -7,8 +7,8 @@
 // === /findAllRefsPrivateNameAccessors.ts ===
 
 // class C {
-//     get /*FIND ALL REFS*/[| #foo|](){ return 1; }
-//     set[| #foo|](value: number){  }
+//     get /*FIND ALL REFS*/[|#foo|](){ return 1; }
+//     set [|#foo|](value: number){  }
 //     constructor() {
 //         this.[|#foo|]();
 //     }
@@ -28,8 +28,8 @@
 // === /findAllRefsPrivateNameAccessors.ts ===
 
 // class C {
-//     get[| #foo|](){ return 1; }
-//     set /*FIND ALL REFS*/[| #foo|](value: number){  }
+//     get [|#foo|](){ return 1; }
+//     set /*FIND ALL REFS*/[|#foo|](value: number){  }
 //     constructor() {
 //         this.[|#foo|]();
 //     }
@@ -44,8 +44,8 @@
 // === /findAllRefsPrivateNameAccessors.ts ===
 
 // class C {
-//     get[| #foo|](){ return 1; }
-//     set[| #foo|](value: number){  }
+//     get [|#foo|](){ return 1; }
+//     set [|#foo|](value: number){  }
 //     constructor() {
 //         this./*FIND ALL REFS*/[|#foo|]();
 //     }
@@ -68,8 +68,8 @@
 //     }
 // }
 // class E {
-//     get /*FIND ALL REFS*/[| #foo|](){ return 1; }
-//     set[| #foo|](value: number){  }
+//     get /*FIND ALL REFS*/[|#foo|](){ return 1; }
+//     set [|#foo|](value: number){  }
 //     constructor() {
 //         this.[|#foo|]();
 //     }
@@ -90,8 +90,8 @@
 //     }
 // }
 // class E {
-//     get[| #foo|](){ return 1; }
-//     set /*FIND ALL REFS*/[| #foo|](value: number){  }
+//     get [|#foo|](){ return 1; }
+//     set /*FIND ALL REFS*/[|#foo|](value: number){  }
 //     constructor() {
 //         this.[|#foo|]();
 //     }
@@ -107,8 +107,8 @@
 //     }
 // }
 // class E {
-//     get[| #foo|](){ return 1; }
-//     set[| #foo|](value: number){  }
+//     get [|#foo|](){ return 1; }
+//     set [|#foo|](value: number){  }
 //     constructor() {
 //         this./*FIND ALL REFS*/[|#foo|]();
 //     }

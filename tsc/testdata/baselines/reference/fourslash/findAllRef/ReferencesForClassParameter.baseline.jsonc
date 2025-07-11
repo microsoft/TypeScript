@@ -11,7 +11,7 @@
 // class p { }
 // 
 // class foo {
-//     constructor (public /*FIND ALL REFS*/[| p|]: any) {
+//     constructor (public /*FIND ALL REFS*/[|p|]: any) {
 //     }
 // 
 //     public f(p) {
@@ -34,7 +34,7 @@
 // class p { }
 // 
 // class foo {
-//     constructor (public[| p|]: any) {
+//     constructor (public [|p|]: any) {
 //     }
 // 
 //     public f(p) {
@@ -57,7 +57,7 @@
 // class p { }
 // 
 // class foo {
-//     constructor (public[| p|]: any) {
+//     constructor (public [|p|]: any) {
 //     }
 // 
 //     public f(p) {

@@ -1,9 +1,9 @@
 // === findAllReferences ===
 // === /findAllRefsUnresolvedSymbols1.ts ===
 
-// let a: /*FIND ALL REFS*/[| Bar|];
-// let b:[| Bar|]<string>;
-// let c:[| Bar|]<string, number>;
+// let a: /*FIND ALL REFS*/[|Bar|];
+// let b: [|Bar|]<string>;
+// let c: [|Bar|]<string, number>;
 // let d: Bar.X;
 // let e: Bar.X<string>;
 // let f: Bar.X.Y;
@@ -14,9 +14,9 @@
 // === findAllReferences ===
 // === /findAllRefsUnresolvedSymbols1.ts ===
 
-// let a:[| Bar|];
-// let b: /*FIND ALL REFS*/[| Bar|]<string>;
-// let c:[| Bar|]<string, number>;
+// let a: [|Bar|];
+// let b: /*FIND ALL REFS*/[|Bar|]<string>;
+// let c: [|Bar|]<string, number>;
 // let d: Bar.X;
 // let e: Bar.X<string>;
 // let f: Bar.X.Y;
@@ -27,9 +27,9 @@
 // === findAllReferences ===
 // === /findAllRefsUnresolvedSymbols1.ts ===
 
-// let a:[| Bar|];
-// let b:[| Bar|]<string>;
-// let c: /*FIND ALL REFS*/[| Bar|]<string, number>;
+// let a: [|Bar|];
+// let b: [|Bar|]<string>;
+// let c: /*FIND ALL REFS*/[|Bar|]<string, number>;
 // let d: Bar.X;
 // let e: Bar.X<string>;
 // let f: Bar.X.Y;
@@ -43,9 +43,9 @@
 // let a: Bar;
 // let b: Bar<string>;
 // let c: Bar<string, number>;
-// let d: /*FIND ALL REFS*/[| Bar|].X;
-// let e:[| Bar|].X<string>;
-// let f:[| Bar|].X.Y;
+// let d: /*FIND ALL REFS*/[|Bar|].X;
+// let e: [|Bar|].X<string>;
+// let f: [|Bar|].X.Y;
 
 
 
@@ -56,9 +56,9 @@
 // let a: Bar;
 // let b: Bar<string>;
 // let c: Bar<string, number>;
-// let d:[| Bar|].X;
-// let e: /*FIND ALL REFS*/[| Bar|].X<string>;
-// let f:[| Bar|].X.Y;
+// let d: [|Bar|].X;
+// let e: /*FIND ALL REFS*/[|Bar|].X<string>;
+// let f: [|Bar|].X.Y;
 
 
 
@@ -69,9 +69,9 @@
 // let a: Bar;
 // let b: Bar<string>;
 // let c: Bar<string, number>;
-// let d:[| Bar|].X;
-// let e:[| Bar|].X<string>;
-// let f: /*FIND ALL REFS*/[| Bar|].X.Y;
+// let d: [|Bar|].X;
+// let e: [|Bar|].X<string>;
+// let f: /*FIND ALL REFS*/[|Bar|].X.Y;
 
 
 

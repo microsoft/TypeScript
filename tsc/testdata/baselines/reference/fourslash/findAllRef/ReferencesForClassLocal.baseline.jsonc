@@ -9,7 +9,7 @@
 // var n = 14;
 // 
 // class foo {
-//     private /*FIND ALL REFS*/[| n|] = 0;
+//     private /*FIND ALL REFS*/[|n|] = 0;
 // 
 //     public bar() {
 //         this.[|n|] = 9;
@@ -31,7 +31,7 @@
 // var n = 14;
 // 
 // class foo {
-//     private[| n|] = 0;
+//     private [|n|] = 0;
 // 
 //     public bar() {
 //         this./*FIND ALL REFS*/[|n|] = 9;
@@ -53,7 +53,7 @@
 // var n = 14;
 // 
 // class foo {
-//     private[| n|] = 0;
+//     private [|n|] = 0;
 // 
 //     public bar() {
 //         this.[|n|] = 9;

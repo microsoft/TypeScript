@@ -1,4 +1,4 @@
 // === findAllReferences ===
 // === /declaration.ts ===
 
-// var container = { /*FIND ALL REFS*/[| searchProp|] : 1 };
+// var container = { /*FIND ALL REFS*/[|searchProp|] : 1 };

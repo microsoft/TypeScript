@@ -2,7 +2,7 @@
 // === /home/src/workspaces/project/a/index.ts ===
 
 // namespace NS {
-//     export function /*FIND ALL REFS*/[| FA|]() {
+//     export function /*FIND ALL REFS*/[|FA|]() {
 //         FB();
 //     }
 // }
@@ -18,11 +18,11 @@
 //     }
 // }
 // 
-// interface /*FIND ALL REFS*/[| I|] {
+// interface /*FIND ALL REFS*/[|I|] {
 //     FA();
 // }
 // 
-// const ia:[| I|] = {
+// const ia: [|I|] = {
 //     FA() { },
 //     FB() { },
 //     FC() { },
@@ -34,12 +34,11 @@
 // === findAllReferences ===
 // === /home/src/workspaces/project/a/index.ts ===
 
-// --- (line: 3) skipped ---
-//     }
+// --- (line: 4) skipped ---
 // }
 // 
-// interface I {[|
-//     /*FIND ALL REFS*/FA|]();
+// interface I {
+//     /*FIND ALL REFS*/[|FA|]();
 // }
 // 
 // const ia: I = {
@@ -52,7 +51,7 @@
 // === /home/src/workspaces/project/b/index.ts ===
 
 // namespace NS {
-//     export function /*FIND ALL REFS*/[| FB|]() {}
+//     export function /*FIND ALL REFS*/[|FB|]() {}
 // }
 // 
 // interface I {
@@ -68,11 +67,11 @@
 //     export function FB() {}
 // }
 // 
-// interface /*FIND ALL REFS*/[| I|] {
+// interface /*FIND ALL REFS*/[|I|] {
 //     FB();
 // }
 // 
-// const ib:[| I|] = { FB() {} };
+// const ib: [|I|] = { FB() {} };
 
 
 
@@ -84,8 +83,8 @@
 //     export function FB() {}
 // }
 // 
-// interface I {[|
-//     /*FIND ALL REFS*/FB|]();
+// interface I {
+//     /*FIND ALL REFS*/[|FB|]();
 // }
 // 
 // const ib: I = { FB() {} };
@@ -97,7 +96,7 @@
 // === /home/src/workspaces/project/c/index.ts ===
 
 // namespace NS {
-//     export function /*FIND ALL REFS*/[| FC|]() {}
+//     export function /*FIND ALL REFS*/[|FC|]() {}
 // }
 // 
 // interface I {
@@ -113,11 +112,11 @@
 //     export function FC() {}
 // }
 // 
-// interface /*FIND ALL REFS*/[| I|] {
+// interface /*FIND ALL REFS*/[|I|] {
 //     FC();
 // }
 // 
-// const ic:[| I|] = { FC() {} };
+// const ic: [|I|] = { FC() {} };
 
 
 
@@ -129,8 +128,8 @@
 //     export function FC() {}
 // }
 // 
-// interface I {[|
-//     /*FIND ALL REFS*/FC|]();
+// interface I {
+//     /*FIND ALL REFS*/[|FC|]();
 // }
 // 
 // const ic: I = { FC() {} };

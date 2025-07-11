@@ -6,10 +6,10 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfNamespace.ts ===
 
-// namespace /*FIND ALL REFS*/[| Numbers|] {
+// namespace /*FIND ALL REFS*/[|Numbers|] {
 //     export var n = 12;
 // }
-// let x =[| Numbers|].n + 1;
+// let x = [|Numbers|].n + 1;
 
 
 
@@ -17,7 +17,7 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfNamespace.ts ===
 
-// namespace[| Numbers|] {
+// namespace [|Numbers|] {
 //     export var n = 12;
 // }
-// let x = /*FIND ALL REFS*/[| Numbers|].n + 1;
+// let x = /*FIND ALL REFS*/[|Numbers|].n + 1;

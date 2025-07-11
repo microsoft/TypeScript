@@ -1,12 +1,12 @@
 // === findAllReferences ===
 // === /referencesForClassMembersExtendingGenericClass.ts ===
 
-// class Base<T> {[|
-//     /*FIND ALL REFS*/a|]: this;
+// class Base<T> {
+//     /*FIND ALL REFS*/[|a|]: this;
 //     method<U>(a?:T, b?:U): this { }
 // }
-// class MyClass extends Base<number> {[|
-//     a|];
+// class MyClass extends Base<number> {
+//     [|a|];
 //     method() { }
 // }
 // 
@@ -20,12 +20,12 @@
 // === findAllReferences ===
 // === /referencesForClassMembersExtendingGenericClass.ts ===
 
-// class Base<T> {[|
-//     a|]: this;
+// class Base<T> {
+//     [|a|]: this;
 //     method<U>(a?:T, b?:U): this { }
 // }
-// class MyClass extends Base<number> {[|
-//     /*FIND ALL REFS*/a|];
+// class MyClass extends Base<number> {
+//     /*FIND ALL REFS*/[|a|];
 //     method() { }
 // }
 // 
@@ -39,12 +39,12 @@
 // === findAllReferences ===
 // === /referencesForClassMembersExtendingGenericClass.ts ===
 
-// class Base<T> {[|
-//     a|]: this;
+// class Base<T> {
+//     [|a|]: this;
 //     method<U>(a?:T, b?:U): this { }
 // }
-// class MyClass extends Base<number> {[|
-//     a|];
+// class MyClass extends Base<number> {
+//     [|a|];
 //     method() { }
 // }
 // 
@@ -59,12 +59,12 @@
 // === /referencesForClassMembersExtendingGenericClass.ts ===
 
 // class Base<T> {
-//     a: this;[|
-//     /*FIND ALL REFS*/method|]<U>(a?:T, b?:U): this { }
+//     a: this;
+//     /*FIND ALL REFS*/[|method|]<U>(a?:T, b?:U): this { }
 // }
 // class MyClass extends Base<number> {
-//     a;[|
-//     method|]() { }
+//     a;
+//     [|method|]() { }
 // }
 // 
 // var c: MyClass;
@@ -78,12 +78,12 @@
 // === /referencesForClassMembersExtendingGenericClass.ts ===
 
 // class Base<T> {
-//     a: this;[|
-//     method|]<U>(a?:T, b?:U): this { }
+//     a: this;
+//     [|method|]<U>(a?:T, b?:U): this { }
 // }
 // class MyClass extends Base<number> {
-//     a;[|
-//     /*FIND ALL REFS*/method|]() { }
+//     a;
+//     /*FIND ALL REFS*/[|method|]() { }
 // }
 // 
 // var c: MyClass;
@@ -97,12 +97,12 @@
 // === /referencesForClassMembersExtendingGenericClass.ts ===
 
 // class Base<T> {
-//     a: this;[|
-//     method|]<U>(a?:T, b?:U): this { }
+//     a: this;
+//     [|method|]<U>(a?:T, b?:U): this { }
 // }
 // class MyClass extends Base<number> {
-//     a;[|
-//     method|]() { }
+//     a;
+//     [|method|]() { }
 // }
 // 
 // var c: MyClass;

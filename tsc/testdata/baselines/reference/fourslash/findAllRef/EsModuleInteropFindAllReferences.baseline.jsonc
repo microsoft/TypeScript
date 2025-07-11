@@ -7,7 +7,7 @@
 // === /abc.d.ts ===
 
 // declare module "a" {
-//     export const /*FIND ALL REFS*/[| x|]: number;
+//     export const /*FIND ALL REFS*/[|x|]: number;
 // }
 
 
@@ -17,5 +17,5 @@
 // === /abc.d.ts ===
 
 // declare module "a" {
-//     export const[| x|]: number;
+//     export const [|x|]: number;
 // }

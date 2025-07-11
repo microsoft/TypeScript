@@ -6,7 +6,7 @@
 // 
 // declare module "../b" {
 //     export namespace NS {
-//         export function /*FIND ALL REFS*/[| FA|]();
+//         export function /*FIND ALL REFS*/[|FA|]();
 //     }
 // }
 // 
@@ -31,7 +31,7 @@
 // }
 // 
 // declare module "../c" {
-//     export interface /*FIND ALL REFS*/[| I|] {
+//     export interface /*FIND ALL REFS*/[|I|] {
 //         FA();
 //     }
 // }
@@ -44,11 +44,11 @@
 //     export function FC() {}
 // }
 // 
-// export interface[| I|] {
+// export interface [|I|] {
 //     FC();
 // }
 // 
-// const ic:[| I|] = { FC() {} };
+// const ic: [|I|] = { FC() {} };
 
 
 
@@ -56,12 +56,11 @@
 // === findAllReferences ===
 // === /home/src/workspaces/project/a/index.ts ===
 
-// --- (line: 7) skipped ---
-// }
+// --- (line: 8) skipped ---
 // 
 // declare module "../c" {
-//     export interface I {[|
-//         /*FIND ALL REFS*/FA|]();
+//     export interface I {
+//         /*FIND ALL REFS*/[|FA|]();
 //     }
 // }
 // 
@@ -78,7 +77,7 @@
 // 
 // declare module "../b" {
 //     export namespace NS {
-//         export function /*FIND ALL REFS*/[| FA|]();
+//         export function /*FIND ALL REFS*/[|FA|]();
 //     }
 // }
 // 
@@ -103,7 +102,7 @@
 // }
 // 
 // declare module "../c" {
-//     export interface /*FIND ALL REFS*/[| I|] {
+//     export interface /*FIND ALL REFS*/[|I|] {
 //         FA();
 //     }
 // }
@@ -116,11 +115,11 @@
 //     export function FC() {}
 // }
 // 
-// export interface[| I|] {
+// export interface [|I|] {
 //     FC();
 // }
 // 
-// const ic:[| I|] = { FC() {} };
+// const ic: [|I|] = { FC() {} };
 
 
 
@@ -128,12 +127,11 @@
 // === findAllReferences ===
 // === /home/src/workspaces/project/a2/index.ts ===
 
-// --- (line: 7) skipped ---
-// }
+// --- (line: 8) skipped ---
 // 
 // declare module "../c" {
-//     export interface I {[|
-//         /*FIND ALL REFS*/FA|]();
+//     export interface I {
+//         /*FIND ALL REFS*/[|FA|]();
 //     }
 // }
 // 
@@ -146,7 +144,7 @@
 // === /home/src/workspaces/project/b/index.ts ===
 
 // export namespace NS {
-//     export function /*FIND ALL REFS*/[| FB|]() {}
+//     export function /*FIND ALL REFS*/[|FB|]() {}
 // }
 // 
 // export interface I {
@@ -162,11 +160,11 @@
 //     export function FB() {}
 // }
 // 
-// export interface /*FIND ALL REFS*/[| I|] {
+// export interface /*FIND ALL REFS*/[|I|] {
 //     FB();
 // }
 // 
-// const ib:[| I|] = { FB() {} };
+// const ib: [|I|] = { FB() {} };
 
 
 
@@ -178,8 +176,8 @@
 //     export function FB() {}
 // }
 // 
-// export interface I {[|
-//     /*FIND ALL REFS*/FB|]();
+// export interface I {
+//     /*FIND ALL REFS*/[|FB|]();
 // }
 // 
 // const ib: I = { FB() {} };
@@ -191,7 +189,7 @@
 // === /home/src/workspaces/project/c/index.ts ===
 
 // export namespace NS {
-//     export function /*FIND ALL REFS*/[| FC|]() {}
+//     export function /*FIND ALL REFS*/[|FC|]() {}
 // }
 // 
 // export interface I {
@@ -207,11 +205,11 @@
 //     export function FC() {}
 // }
 // 
-// export interface /*FIND ALL REFS*/[| I|] {
+// export interface /*FIND ALL REFS*/[|I|] {
 //     FC();
 // }
 // 
-// const ic:[| I|] = { FC() {} };
+// const ic: [|I|] = { FC() {} };
 
 
 
@@ -223,8 +221,8 @@
 //     export function FC() {}
 // }
 // 
-// export interface I {[|
-//     /*FIND ALL REFS*/FC|]();
+// export interface I {
+//     /*FIND ALL REFS*/[|FC|]();
 // }
 // 
 // const ic: I = { FC() {} };

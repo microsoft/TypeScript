@@ -10,7 +10,7 @@
 //     export var x;
 // }
 // 
-// import /*FIND ALL REFS*/[| globalAlias|] = globalModule;
+// import /*FIND ALL REFS*/[|globalAlias|] = globalModule;
 
 
 
@@ -22,9 +22,9 @@
 //     export var x;
 // }
 // 
-// import[| globalAlias|] = globalModule;
+// import [|globalAlias|] = globalModule;
 
 
 // === /referencesForGlobals_2.ts ===
 
-// var m = /*FIND ALL REFS*/[| globalAlias|];
+// var m = /*FIND ALL REFS*/[|globalAlias|];

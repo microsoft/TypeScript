@@ -1,7 +1,7 @@
 // === findAllReferences ===
 // === /a.js ===
 
-// module.exports = class /*FIND ALL REFS*/[| A|] {}
+// module.exports = class /*FIND ALL REFS*/[|A|] {}
 
 
 
@@ -9,4 +9,4 @@
 // === findAllReferences ===
 // === /b.js ===
 
-// const /*FIND ALL REFS*/[| A|] = require("./a");
+// const /*FIND ALL REFS*/[|A|] = require("./a");

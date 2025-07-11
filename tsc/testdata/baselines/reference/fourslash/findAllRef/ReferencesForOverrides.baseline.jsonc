@@ -4,11 +4,11 @@
 // module FindRef3 {
 // 	module SimpleClassTest {
 // 		export class Foo {
-// 			public /*FIND ALL REFS*/[| foo|](): void {
+// 			public /*FIND ALL REFS*/[|foo|](): void {
 // 			}
 // 		}
 // 		export class Bar extends Foo {
-// 			public[| foo|](): void {
+// 			public [|foo|](): void {
 // 			}
 // 		}
 // 	}
@@ -31,15 +31,14 @@
 // === findAllReferences ===
 // === /referencesForOverrides.ts ===
 
-// --- (line: 10) skipped ---
-// 	}
+// --- (line: 11) skipped ---
 // 
 // 	module SimpleInterfaceTest {
-// 		export interface IFoo {[|
-// 			/*FIND ALL REFS*/ifoo|](): void;
+// 		export interface IFoo {
+// 			/*FIND ALL REFS*/[|ifoo|](): void;
 // 		}
-// 		export interface IBar extends IFoo {[|
-// 			ifoo|](): void;
+// 		export interface IBar extends IFoo {
+// 			[|ifoo|](): void;
 // 		}
 // 	}
 // 
@@ -62,15 +61,14 @@
 // === findAllReferences ===
 // === /referencesForOverrides.ts ===
 
-// --- (line: 19) skipped ---
-// 	}
+// --- (line: 20) skipped ---
 // 
 // 	module SimpleClassInterfaceTest {
-// 		export interface IFoo {[|
-// 			/*FIND ALL REFS*/icfoo|](): void;
+// 		export interface IFoo {
+// 			/*FIND ALL REFS*/[|icfoo|](): void;
 // 		}
 // 		export class Bar implements IFoo {
-// 			public[| icfoo|](): void {
+// 			public [|icfoo|](): void {
 // 			}
 // 		}
 // 	}
@@ -93,21 +91,20 @@
 // === findAllReferences ===
 // === /referencesForOverrides.ts ===
 
-// --- (line: 29) skipped ---
-// 	}
+// --- (line: 30) skipped ---
 // 
 // 	module Test {
-// 		export interface IBase {[|
-// 			/*FIND ALL REFS*/field|]: string;
+// 		export interface IBase {
+// 			/*FIND ALL REFS*/[|field|]: string;
 // 			method(): void;
 // 		}
 // 
-// 		export interface IBlah extends IBase {[|
-// 			field|]: string;
+// 		export interface IBlah extends IBase {
+// 			[|field|]: string;
 // 		}
 // 
-// 		export interface IBlah2 extends IBlah {[|
-// 			field|]: string;
+// 		export interface IBlah2 extends IBlah {
+// 			[|field|]: string;
 // 		}
 // 
 // 		export interface IDerived extends IBlah2 {
@@ -115,12 +112,12 @@
 // 		}
 // 
 // 		export class Bar implements IDerived {
-// 			public[| field|]: string;
+// 			public [|field|]: string;
 // 			public method(): void { }
 // 		}
 // 
 // 		export class BarBlah extends Bar {
-// 			public[| field|]: string;
+// 			public [|field|]: string;
 // 		}
 // 	}
 // 
@@ -142,29 +139,27 @@
 // === findAllReferences ===
 // === /referencesForOverrides.ts ===
 
-// --- (line: 30) skipped ---
-// 
+// --- (line: 31) skipped ---
 // 	module Test {
 // 		export interface IBase {
-// 			field: string;[|
-// 			/*FIND ALL REFS*/method|](): void;
+// 			field: string;
+// 			/*FIND ALL REFS*/[|method|](): void;
 // 		}
 // 
 // 		export interface IBlah extends IBase {
 // // --- (line: 39) skipped ---
 
 
-// --- (line: 42) skipped ---
-// 			field: string;
+// --- (line: 43) skipped ---
 // 		}
 // 
-// 		export interface IDerived extends IBlah2 {[|
-// 			method|](): void;
+// 		export interface IDerived extends IBlah2 {
+// 			[|method|](): void;
 // 		}
 // 
 // 		export class Bar implements IDerived {
 // 			public field: string;
-// 			public[| method|](): void { }
+// 			public [|method|](): void { }
 // 		}
 // 
 // 		export class BarBlah extends Bar {

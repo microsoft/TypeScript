@@ -1,7 +1,7 @@
 // === findAllReferences ===
 // === /a.ts ===
 
-// export class[| C|] {
+// export class [|C|] {
 //     /*FIND ALL REFS*/constructor(n: number);
 //     constructor();
 //     constructor(n?: number){}
@@ -10,8 +10,8 @@
 //         new this();
 //     }
 // }
-// new[| C|]();
-// const D =[| C|];
+// new [|C|]();
+// const D = [|C|];
 // new D();
 
 
@@ -20,7 +20,7 @@
 // === findAllReferences ===
 // === /a.ts ===
 
-// export class[| C|] {
+// export class [|C|] {
 //     constructor(n: number);
 //     /*FIND ALL REFS*/constructor();
 //     constructor(n?: number){}
@@ -29,8 +29,8 @@
 //         new this();
 //     }
 // }
-// new[| C|]();
-// const D =[| C|];
+// new [|C|]();
+// const D = [|C|];
 // new D();
 
 
@@ -39,7 +39,7 @@
 // === findAllReferences ===
 // === /a.ts ===
 
-// export class[| C|] {
+// export class [|C|] {
 //     constructor(n: number);
 //     constructor();
 //     /*FIND ALL REFS*/constructor(n?: number){}
@@ -48,6 +48,6 @@
 //         new this();
 //     }
 // }
-// new[| C|]();
-// const D =[| C|];
+// new [|C|]();
+// const D = [|C|];
 // new D();

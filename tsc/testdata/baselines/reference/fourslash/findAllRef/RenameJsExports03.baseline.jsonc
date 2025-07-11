@@ -1,10 +1,10 @@
 // === findAllReferences ===
 // === /a.js ===
 
-// class /*FIND ALL REFS*/[| A|] {
+// class /*FIND ALL REFS*/[|A|] {
 //     constructor() { }
 // }
-// module.exports =[| A|];
+// module.exports = [|A|];
 
 
 
@@ -12,10 +12,10 @@
 // === findAllReferences ===
 // === /a.js ===
 
-// class[| A|] {
+// class [|A|] {
 //     /*FIND ALL REFS*/constructor() { }
 // }
-// module.exports =[| A|];
+// module.exports = [|A|];
 
 
 
@@ -23,8 +23,8 @@
 // === findAllReferences ===
 // === /b.js ===
 
-// const /*FIND ALL REFS*/[| A|] = require("./a");
-// new[| A|];
+// const /*FIND ALL REFS*/[|A|] = require("./a");
+// new [|A|];
 
 
 
@@ -32,5 +32,5 @@
 // === findAllReferences ===
 // === /b.js ===
 
-// const[| A|] = require("./a");
-// new /*FIND ALL REFS*/[| A|];
+// const [|A|] = require("./a");
+// new /*FIND ALL REFS*/[|A|];

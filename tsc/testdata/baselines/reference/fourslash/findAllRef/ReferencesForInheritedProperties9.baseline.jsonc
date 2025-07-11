@@ -1,8 +1,8 @@
 // === findAllReferences ===
 // === /referencesForInheritedProperties9.ts ===
 
-//  class D extends C {[|
-//      /*FIND ALL REFS*/prop1|]: string;
+//  class D extends C {
+//      /*FIND ALL REFS*/[|prop1|]: string;
 //  }
 // 
 //  class C extends D {
@@ -18,8 +18,8 @@
 //      prop1: string;
 //  }
 // 
-//  class C extends D {[|
-//      /*FIND ALL REFS*/prop1|]: string;
+//  class C extends D {
+//      /*FIND ALL REFS*/[|prop1|]: string;
 //  }
 // 
 //  var c: C;
@@ -35,8 +35,8 @@
 //      prop1: string;
 //  }
 // 
-//  class C extends D {[|
-//      prop1|]: string;
+//  class C extends D {
+//      [|prop1|]: string;
 //  }
 // 
 //  var c: C;

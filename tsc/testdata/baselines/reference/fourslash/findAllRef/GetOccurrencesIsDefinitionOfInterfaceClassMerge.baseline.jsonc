@@ -6,18 +6,18 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfInterfaceClassMerge.ts ===
 
-// interface /*FIND ALL REFS*/[| Numbers|] {
+// interface /*FIND ALL REFS*/[|Numbers|] {
 //     p: number;
 // }
-// interface[| Numbers|] {
+// interface [|Numbers|] {
 //     m: number;
 // }
-// class[| Numbers|] {
+// class [|Numbers|] {
 //     f(n: number) {
 //         return this.p + this.m + n;
 //     }
 // }
-// let i:[| Numbers|] = new[| Numbers|]();
+// let i: [|Numbers|] = new [|Numbers|]();
 // let x = i.f(i.p + i.m);
 
 
@@ -31,18 +31,18 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfInterfaceClassMerge.ts ===
 
-// interface[| Numbers|] {
+// interface [|Numbers|] {
 //     p: number;
 // }
-// interface /*FIND ALL REFS*/[| Numbers|] {
+// interface /*FIND ALL REFS*/[|Numbers|] {
 //     m: number;
 // }
-// class[| Numbers|] {
+// class [|Numbers|] {
 //     f(n: number) {
 //         return this.p + this.m + n;
 //     }
 // }
-// let i:[| Numbers|] = new[| Numbers|]();
+// let i: [|Numbers|] = new [|Numbers|]();
 // let x = i.f(i.p + i.m);
 
 
@@ -56,18 +56,18 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfInterfaceClassMerge.ts ===
 
-// interface[| Numbers|] {
+// interface [|Numbers|] {
 //     p: number;
 // }
-// interface[| Numbers|] {
+// interface [|Numbers|] {
 //     m: number;
 // }
-// class /*FIND ALL REFS*/[| Numbers|] {
+// class /*FIND ALL REFS*/[|Numbers|] {
 //     f(n: number) {
 //         return this.p + this.m + n;
 //     }
 // }
-// let i:[| Numbers|] = new[| Numbers|]();
+// let i: [|Numbers|] = new [|Numbers|]();
 // let x = i.f(i.p + i.m);
 
 
@@ -76,18 +76,18 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfInterfaceClassMerge.ts ===
 
-// interface[| Numbers|] {
+// interface [|Numbers|] {
 //     p: number;
 // }
-// interface[| Numbers|] {
+// interface [|Numbers|] {
 //     m: number;
 // }
-// class[| Numbers|] {
+// class [|Numbers|] {
 //     f(n: number) {
 //         return this.p + this.m + n;
 //     }
 // }
-// let i: /*FIND ALL REFS*/[| Numbers|] = new[| Numbers|]();
+// let i: /*FIND ALL REFS*/[|Numbers|] = new [|Numbers|]();
 // let x = i.f(i.p + i.m);
 
 
@@ -96,16 +96,16 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfInterfaceClassMerge.ts ===
 
-// interface[| Numbers|] {
+// interface [|Numbers|] {
 //     p: number;
 // }
-// interface[| Numbers|] {
+// interface [|Numbers|] {
 //     m: number;
 // }
-// class[| Numbers|] {
+// class [|Numbers|] {
 //     f(n: number) {
 //         return this.p + this.m + n;
 //     }
 // }
-// let i: Numbers = new /*FIND ALL REFS*/[| Numbers|] = new[| Numbers|]();
+// let i: Numbers = new /*FIND ALL REFS*/[|Numbers|] = new [|Numbers|]();
 // let x = i.f(i.p + i.m);

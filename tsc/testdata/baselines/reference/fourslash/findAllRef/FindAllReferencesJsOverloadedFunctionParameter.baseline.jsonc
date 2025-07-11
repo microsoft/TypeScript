@@ -6,5 +6,5 @@
 //  * @returns {unknown} 
 //  */
 // function foo(x/*FIND ALL REFS*/[|x|]) {
-//   return[| x|];
+//   return [|x|];
 // }

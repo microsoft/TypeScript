@@ -15,8 +15,8 @@
 //     static x = 1;
 // }
 // new C();
-// void C;[|
-// /*FIND ALL REFS*/typeof|] C;
+// void C;
+// /*FIND ALL REFS*/[|typeof|] C;
 // delete C.x;
 // async function* f() {
 //     yield C;
@@ -43,20 +43,20 @@
 // === findAllReferences ===
 // === /referencesForExpressionKeywords.ts ===
 
-// class[| C|] {
+// class [|C|] {
 //     static x = 1;
 // }
-// new[| C|]();
-// void[| C|];
-// typeof[| C|];
-// delete[| C|].x;
+// new [|C|]();
+// void [|C|];
+// typeof [|C|];
+// delete [|C|].x;
 // async function* f() {
-//     yield[| C|];
-//     await[| C|];
+//     yield [|C|];
+//     await [|C|];
 // }
-// "x" in[| C|];
-// undefined /*FIND ALL REFS*/instanceof[| C|];
-// undefined as[| C|];
+// "x" in [|C|];
+// undefined /*FIND ALL REFS*/instanceof [|C|];
+// undefined as [|C|];
 
 
 

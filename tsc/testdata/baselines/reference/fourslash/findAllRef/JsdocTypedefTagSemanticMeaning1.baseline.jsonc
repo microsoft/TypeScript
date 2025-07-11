@@ -7,9 +7,9 @@
 // === /a.js ===
 
 // /** @typedef {number} */
-// const /*FIND ALL REFS*/[| T|] = 1;
+// const /*FIND ALL REFS*/[|T|] = 1;
 // /** @type {T} */
-// const n =[| T|];
+// const n = [|T|];
 
 
 
@@ -23,6 +23,6 @@
 // === /a.js ===
 
 // /** @typedef {number} */
-// const[| T|] = 1;
+// const [|T|] = 1;
 // /** @type {T} */
-// const n = /*FIND ALL REFS*/[| T|];
+// const n = /*FIND ALL REFS*/[|T|];

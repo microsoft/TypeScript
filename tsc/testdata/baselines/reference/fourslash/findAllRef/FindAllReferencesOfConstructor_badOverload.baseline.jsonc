@@ -1,7 +1,7 @@
 // === findAllReferences ===
 // === /findAllReferencesOfConstructor_badOverload.ts ===
 
-// class[| C|] {
+// class [|C|] {
 //     /*FIND ALL REFS*/constructor(n: number);
 //     constructor(){}
 // }
@@ -12,7 +12,7 @@
 // === findAllReferences ===
 // === /findAllReferencesOfConstructor_badOverload.ts ===
 
-// class[| C|] {
+// class [|C|] {
 //     constructor(n: number);
 //     /*FIND ALL REFS*/constructor(){}
 // }

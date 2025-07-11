@@ -1,7 +1,7 @@
 // === findAllReferences ===
 // === /declaration.ts ===
 
-// enum Test { /*FIND ALL REFS*/[| "42"|] = 1 };
+// enum Test { /*FIND ALL REFS*/"[|42|]" = 1 };
 
 
 
@@ -9,7 +9,7 @@
 // === findAllReferences ===
 // === /declaration.ts ===
 
-// enum Test { "/*FIND ALL REFS*/[| "42"|] = 1 };
+// enum Test { "/*FIND ALL REFS*/[|42|]" = 1 };
 
 
 
@@ -17,7 +17,7 @@
 // === findAllReferences ===
 // === /declaration.ts ===
 
-// enum Test {[| "42"|] = 1 };
+// enum Test { "[|42|]" = 1 };
 
 
 // === /expression.ts ===

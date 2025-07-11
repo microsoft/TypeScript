@@ -1,8 +1,8 @@
 // === findAllReferences ===
 // === /referencesForStringLiteralPropertyNames4.ts ===
 
-// var x = { "/*FIND ALL REFS*/[| "someProperty"|]: 0 }
-// x[[|"someProperty"|]] = 3;
+// var x = { "/*FIND ALL REFS*/[|someProperty|]": 0 }
+// x["[|someProperty|]"] = 3;
 // x.[|someProperty|] = 5;
 
 
@@ -11,6 +11,6 @@
 // === findAllReferences ===
 // === /referencesForStringLiteralPropertyNames4.ts ===
 
-// var x = {[| "someProperty"|]: 0 }
-// x[/*FIND ALL REFS*/[|"someProperty"|]] = 3;
+// var x = { "[|someProperty|]": 0 }
+// x[/*FIND ALL REFS*/"[|someProperty|]"] = 3;
 // x.[|someProperty|] = 5;

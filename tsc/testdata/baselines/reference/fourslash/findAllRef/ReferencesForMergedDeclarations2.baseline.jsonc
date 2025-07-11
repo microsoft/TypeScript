@@ -10,10 +10,10 @@
 // 
 // function ATest() { }
 // 
-// import /*FIND ALL REFS*/[| alias|] = ATest; // definition
+// import /*FIND ALL REFS*/[|alias|] = ATest; // definition
 // 
-// var a:[| alias|].Bar;[| // namespace
-// alias|].call(this); // value
+// var a: [|alias|].Bar; // namespace
+// [|alias|].call(this); // value
 
 
 
@@ -25,10 +25,10 @@
 // 
 // function ATest() { }
 // 
-// import[| alias|] = ATest; // definition
+// import [|alias|] = ATest; // definition
 // 
-// var a: /*FIND ALL REFS*/[| alias|].Bar;[| // namespace
-// alias|].call(this); // value
+// var a: /*FIND ALL REFS*/[|alias|].Bar; // namespace
+// [|alias|].call(this); // value
 
 
 
@@ -40,7 +40,7 @@
 // 
 // function ATest() { }
 // 
-// import[| alias|] = ATest; // definition
+// import [|alias|] = ATest; // definition
 // 
-// var a:[| alias|].Bar;[| // namespace
-// /*FIND ALL REFS*/alias|].call(this); // value
+// var a: [|alias|].Bar; // namespace
+// /*FIND ALL REFS*/[|alias|].call(this); // value

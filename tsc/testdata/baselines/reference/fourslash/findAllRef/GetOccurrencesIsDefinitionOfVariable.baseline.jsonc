@@ -6,23 +6,23 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfVariable.ts ===
 
-// var /*FIND ALL REFS*/[| x|] = 0;
-// var assignmentRightHandSide =[| x|];
-// var assignmentRightHandSide2 = 1 +[| x|];[|
+// var /*FIND ALL REFS*/[|x|] = 0;
+// var assignmentRightHandSide = [|x|];
+// var assignmentRightHandSide2 = 1 + [|x|];
 // 
-// x|] = 1;[|
-// x|] =[| x|] +[| x|];[|
+// [|x|] = 1;
+// [|x|] = [|x|] + [|x|];
 // 
-// x|] == 1;[|
-// x|] <= 1;
+// [|x|] == 1;
+// [|x|] <= 1;
 // 
 // var preIncrement = ++[|x|];
-// var postIncrement =[| x|]++;
+// var postIncrement = [|x|]++;
 // var preDecrement = --[|x|];
-// var postDecrement =[| x|]--;[|
+// var postDecrement = [|x|]--;
 // 
-// x|] += 1;[|
-// x|] <<= 1;
+// [|x|] += 1;
+// [|x|] <<= 1;
 
 
 
@@ -30,23 +30,23 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfVariable.ts ===
 
-// var[| x|] = 0;
-// var assignmentRightHandSide = /*FIND ALL REFS*/[| x|];
-// var assignmentRightHandSide2 = 1 +[| x|];[|
+// var [|x|] = 0;
+// var assignmentRightHandSide = /*FIND ALL REFS*/[|x|];
+// var assignmentRightHandSide2 = 1 + [|x|];
 // 
-// x|] = 1;[|
-// x|] =[| x|] +[| x|];[|
+// [|x|] = 1;
+// [|x|] = [|x|] + [|x|];
 // 
-// x|] == 1;[|
-// x|] <= 1;
+// [|x|] == 1;
+// [|x|] <= 1;
 // 
 // var preIncrement = ++[|x|];
-// var postIncrement =[| x|]++;
+// var postIncrement = [|x|]++;
 // var preDecrement = --[|x|];
-// var postDecrement =[| x|]--;[|
+// var postDecrement = [|x|]--;
 // 
-// x|] += 1;[|
-// x|] <<= 1;
+// [|x|] += 1;
+// [|x|] <<= 1;
 
 
 
@@ -54,23 +54,23 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfVariable.ts ===
 
-// var[| x|] = 0;
-// var assignmentRightHandSide =[| x|];
-// var assignmentRightHandSide2 = 1 + /*FIND ALL REFS*/[| x|];[|
+// var [|x|] = 0;
+// var assignmentRightHandSide = [|x|];
+// var assignmentRightHandSide2 = 1 + /*FIND ALL REFS*/[|x|];
 // 
-// x|] = 1;[|
-// x|] =[| x|] +[| x|];[|
+// [|x|] = 1;
+// [|x|] = [|x|] + [|x|];
 // 
-// x|] == 1;[|
-// x|] <= 1;
+// [|x|] == 1;
+// [|x|] <= 1;
 // 
 // var preIncrement = ++[|x|];
-// var postIncrement =[| x|]++;
+// var postIncrement = [|x|]++;
 // var preDecrement = --[|x|];
-// var postDecrement =[| x|]--;[|
+// var postDecrement = [|x|]--;
 // 
-// x|] += 1;[|
-// x|] <<= 1;
+// [|x|] += 1;
+// [|x|] <<= 1;
 
 
 
@@ -78,23 +78,23 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfVariable.ts ===
 
-// var[| x|] = 0;
-// var assignmentRightHandSide =[| x|];
-// var assignmentRightHandSide2 = 1 +[| x|];[|
+// var [|x|] = 0;
+// var assignmentRightHandSide = [|x|];
+// var assignmentRightHandSide2 = 1 + [|x|];
 // 
-// /*FIND ALL REFS*/x|] = 1;[|
-// x|] =[| x|] +[| x|];[|
+// /*FIND ALL REFS*/[|x|] = 1;
+// [|x|] = [|x|] + [|x|];
 // 
-// x|] == 1;[|
-// x|] <= 1;
+// [|x|] == 1;
+// [|x|] <= 1;
 // 
 // var preIncrement = ++[|x|];
-// var postIncrement =[| x|]++;
+// var postIncrement = [|x|]++;
 // var preDecrement = --[|x|];
-// var postDecrement =[| x|]--;[|
+// var postDecrement = [|x|]--;
 // 
-// x|] += 1;[|
-// x|] <<= 1;
+// [|x|] += 1;
+// [|x|] <<= 1;
 
 
 
@@ -102,23 +102,23 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfVariable.ts ===
 
-// var[| x|] = 0;
-// var assignmentRightHandSide =[| x|];
-// var assignmentRightHandSide2 = 1 +[| x|];[|
+// var [|x|] = 0;
+// var assignmentRightHandSide = [|x|];
+// var assignmentRightHandSide2 = 1 + [|x|];
 // 
-// x|] = 1;[|
-// /*FIND ALL REFS*/x|] =[| x|] +[| x|];[|
+// [|x|] = 1;
+// /*FIND ALL REFS*/[|x|] = [|x|] + [|x|];
 // 
-// x|] == 1;[|
-// x|] <= 1;
+// [|x|] == 1;
+// [|x|] <= 1;
 // 
 // var preIncrement = ++[|x|];
-// var postIncrement =[| x|]++;
+// var postIncrement = [|x|]++;
 // var preDecrement = --[|x|];
-// var postDecrement =[| x|]--;[|
+// var postDecrement = [|x|]--;
 // 
-// x|] += 1;[|
-// x|] <<= 1;
+// [|x|] += 1;
+// [|x|] <<= 1;
 
 
 
@@ -126,23 +126,23 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfVariable.ts ===
 
-// var[| x|] = 0;
-// var assignmentRightHandSide =[| x|];
-// var assignmentRightHandSide2 = 1 +[| x|];[|
+// var [|x|] = 0;
+// var assignmentRightHandSide = [|x|];
+// var assignmentRightHandSide2 = 1 + [|x|];
 // 
-// x|] = 1;[|
-// x = /*FIND ALL REFS*/|] =[| x|] +[| x|];[|
+// [|x|] = 1;
+// x = /*FIND ALL REFS*/[|x|] = [|x|] + [|x|];
 // 
-// x|] == 1;[|
-// x|] <= 1;
+// [|x|] == 1;
+// [|x|] <= 1;
 // 
 // var preIncrement = ++[|x|];
-// var postIncrement =[| x|]++;
+// var postIncrement = [|x|]++;
 // var preDecrement = --[|x|];
-// var postDecrement =[| x|]--;[|
+// var postDecrement = [|x|]--;
 // 
-// x|] += 1;[|
-// x|] <<= 1;
+// [|x|] += 1;
+// [|x|] <<= 1;
 
 
 
@@ -150,23 +150,23 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfVariable.ts ===
 
-// var[| x|] = 0;
-// var assignmentRightHandSide =[| x|];
-// var assignmentRightHandSide2 = 1 +[| x|];[|
+// var [|x|] = 0;
+// var assignmentRightHandSide = [|x|];
+// var assignmentRightHandSide2 = 1 + [|x|];
 // 
-// x|] = 1;[|
-// x = x + /*FIND ALL REFS*/|] =[| x|] +[| x|];[|
+// [|x|] = 1;
+// x = x + /*FIND ALL REFS*/[|x|] = [|x|] + [|x|];
 // 
-// x|] == 1;[|
-// x|] <= 1;
+// [|x|] == 1;
+// [|x|] <= 1;
 // 
 // var preIncrement = ++[|x|];
-// var postIncrement =[| x|]++;
+// var postIncrement = [|x|]++;
 // var preDecrement = --[|x|];
-// var postDecrement =[| x|]--;[|
+// var postDecrement = [|x|]--;
 // 
-// x|] += 1;[|
-// x|] <<= 1;
+// [|x|] += 1;
+// [|x|] <<= 1;
 
 
 
@@ -174,23 +174,23 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfVariable.ts ===
 
-// var[| x|] = 0;
-// var assignmentRightHandSide =[| x|];
-// var assignmentRightHandSide2 = 1 +[| x|];[|
+// var [|x|] = 0;
+// var assignmentRightHandSide = [|x|];
+// var assignmentRightHandSide2 = 1 + [|x|];
 // 
-// x|] = 1;[|
-// x|] =[| x|] +[| x|];[|
+// [|x|] = 1;
+// [|x|] = [|x|] + [|x|];
 // 
-// /*FIND ALL REFS*/x|] == 1;[|
-// x|] <= 1;
+// /*FIND ALL REFS*/[|x|] == 1;
+// [|x|] <= 1;
 // 
 // var preIncrement = ++[|x|];
-// var postIncrement =[| x|]++;
+// var postIncrement = [|x|]++;
 // var preDecrement = --[|x|];
-// var postDecrement =[| x|]--;[|
+// var postDecrement = [|x|]--;
 // 
-// x|] += 1;[|
-// x|] <<= 1;
+// [|x|] += 1;
+// [|x|] <<= 1;
 
 
 
@@ -198,23 +198,23 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfVariable.ts ===
 
-// var[| x|] = 0;
-// var assignmentRightHandSide =[| x|];
-// var assignmentRightHandSide2 = 1 +[| x|];[|
+// var [|x|] = 0;
+// var assignmentRightHandSide = [|x|];
+// var assignmentRightHandSide2 = 1 + [|x|];
 // 
-// x|] = 1;[|
-// x|] =[| x|] +[| x|];[|
+// [|x|] = 1;
+// [|x|] = [|x|] + [|x|];
 // 
-// x|] == 1;[|
-// /*FIND ALL REFS*/x|] <= 1;
+// [|x|] == 1;
+// /*FIND ALL REFS*/[|x|] <= 1;
 // 
 // var preIncrement = ++[|x|];
-// var postIncrement =[| x|]++;
+// var postIncrement = [|x|]++;
 // var preDecrement = --[|x|];
-// var postDecrement =[| x|]--;[|
+// var postDecrement = [|x|]--;
 // 
-// x|] += 1;[|
-// x|] <<= 1;
+// [|x|] += 1;
+// [|x|] <<= 1;
 
 
 
@@ -222,23 +222,23 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfVariable.ts ===
 
-// var[| x|] = 0;
-// var assignmentRightHandSide =[| x|];
-// var assignmentRightHandSide2 = 1 +[| x|];[|
+// var [|x|] = 0;
+// var assignmentRightHandSide = [|x|];
+// var assignmentRightHandSide2 = 1 + [|x|];
 // 
-// x|] = 1;[|
-// x|] =[| x|] +[| x|];[|
+// [|x|] = 1;
+// [|x|] = [|x|] + [|x|];
 // 
-// x|] == 1;[|
-// x|] <= 1;
+// [|x|] == 1;
+// [|x|] <= 1;
 // 
 // var preIncrement = ++/*FIND ALL REFS*/[|x|];
-// var postIncrement =[| x|]++;
+// var postIncrement = [|x|]++;
 // var preDecrement = --[|x|];
-// var postDecrement =[| x|]--;[|
+// var postDecrement = [|x|]--;
 // 
-// x|] += 1;[|
-// x|] <<= 1;
+// [|x|] += 1;
+// [|x|] <<= 1;
 
 
 
@@ -246,23 +246,23 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfVariable.ts ===
 
-// var[| x|] = 0;
-// var assignmentRightHandSide =[| x|];
-// var assignmentRightHandSide2 = 1 +[| x|];[|
+// var [|x|] = 0;
+// var assignmentRightHandSide = [|x|];
+// var assignmentRightHandSide2 = 1 + [|x|];
 // 
-// x|] = 1;[|
-// x|] =[| x|] +[| x|];[|
+// [|x|] = 1;
+// [|x|] = [|x|] + [|x|];
 // 
-// x|] == 1;[|
-// x|] <= 1;
+// [|x|] == 1;
+// [|x|] <= 1;
 // 
 // var preIncrement = ++[|x|];
-// var postIncrement = /*FIND ALL REFS*/[| x|]++;
+// var postIncrement = /*FIND ALL REFS*/[|x|]++;
 // var preDecrement = --[|x|];
-// var postDecrement =[| x|]--;[|
+// var postDecrement = [|x|]--;
 // 
-// x|] += 1;[|
-// x|] <<= 1;
+// [|x|] += 1;
+// [|x|] <<= 1;
 
 
 
@@ -270,23 +270,23 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfVariable.ts ===
 
-// var[| x|] = 0;
-// var assignmentRightHandSide =[| x|];
-// var assignmentRightHandSide2 = 1 +[| x|];[|
+// var [|x|] = 0;
+// var assignmentRightHandSide = [|x|];
+// var assignmentRightHandSide2 = 1 + [|x|];
 // 
-// x|] = 1;[|
-// x|] =[| x|] +[| x|];[|
+// [|x|] = 1;
+// [|x|] = [|x|] + [|x|];
 // 
-// x|] == 1;[|
-// x|] <= 1;
+// [|x|] == 1;
+// [|x|] <= 1;
 // 
 // var preIncrement = ++[|x|];
-// var postIncrement =[| x|]++;
+// var postIncrement = [|x|]++;
 // var preDecrement = --/*FIND ALL REFS*/[|x|];
-// var postDecrement =[| x|]--;[|
+// var postDecrement = [|x|]--;
 // 
-// x|] += 1;[|
-// x|] <<= 1;
+// [|x|] += 1;
+// [|x|] <<= 1;
 
 
 
@@ -294,23 +294,23 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfVariable.ts ===
 
-// var[| x|] = 0;
-// var assignmentRightHandSide =[| x|];
-// var assignmentRightHandSide2 = 1 +[| x|];[|
+// var [|x|] = 0;
+// var assignmentRightHandSide = [|x|];
+// var assignmentRightHandSide2 = 1 + [|x|];
 // 
-// x|] = 1;[|
-// x|] =[| x|] +[| x|];[|
+// [|x|] = 1;
+// [|x|] = [|x|] + [|x|];
 // 
-// x|] == 1;[|
-// x|] <= 1;
+// [|x|] == 1;
+// [|x|] <= 1;
 // 
 // var preIncrement = ++[|x|];
-// var postIncrement =[| x|]++;
+// var postIncrement = [|x|]++;
 // var preDecrement = --[|x|];
-// var postDecrement = /*FIND ALL REFS*/[| x|]--;[|
+// var postDecrement = /*FIND ALL REFS*/[|x|]--;
 // 
-// x|] += 1;[|
-// x|] <<= 1;
+// [|x|] += 1;
+// [|x|] <<= 1;
 
 
 
@@ -318,23 +318,23 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfVariable.ts ===
 
-// var[| x|] = 0;
-// var assignmentRightHandSide =[| x|];
-// var assignmentRightHandSide2 = 1 +[| x|];[|
+// var [|x|] = 0;
+// var assignmentRightHandSide = [|x|];
+// var assignmentRightHandSide2 = 1 + [|x|];
 // 
-// x|] = 1;[|
-// x|] =[| x|] +[| x|];[|
+// [|x|] = 1;
+// [|x|] = [|x|] + [|x|];
 // 
-// x|] == 1;[|
-// x|] <= 1;
+// [|x|] == 1;
+// [|x|] <= 1;
 // 
 // var preIncrement = ++[|x|];
-// var postIncrement =[| x|]++;
+// var postIncrement = [|x|]++;
 // var preDecrement = --[|x|];
-// var postDecrement =[| x|]--;[|
+// var postDecrement = [|x|]--;
 // 
-// /*FIND ALL REFS*/x|] += 1;[|
-// x|] <<= 1;
+// /*FIND ALL REFS*/[|x|] += 1;
+// [|x|] <<= 1;
 
 
 
@@ -342,20 +342,20 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfVariable.ts ===
 
-// var[| x|] = 0;
-// var assignmentRightHandSide =[| x|];
-// var assignmentRightHandSide2 = 1 +[| x|];[|
+// var [|x|] = 0;
+// var assignmentRightHandSide = [|x|];
+// var assignmentRightHandSide2 = 1 + [|x|];
 // 
-// x|] = 1;[|
-// x|] =[| x|] +[| x|];[|
+// [|x|] = 1;
+// [|x|] = [|x|] + [|x|];
 // 
-// x|] == 1;[|
-// x|] <= 1;
+// [|x|] == 1;
+// [|x|] <= 1;
 // 
 // var preIncrement = ++[|x|];
-// var postIncrement =[| x|]++;
+// var postIncrement = [|x|]++;
 // var preDecrement = --[|x|];
-// var postDecrement =[| x|]--;[|
+// var postDecrement = [|x|]--;
 // 
-// x|] += 1;[|
-// /*FIND ALL REFS*/x|] <<= 1;
+// [|x|] += 1;
+// /*FIND ALL REFS*/[|x|] <<= 1;

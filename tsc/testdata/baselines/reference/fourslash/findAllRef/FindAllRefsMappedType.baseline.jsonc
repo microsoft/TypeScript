@@ -1,7 +1,7 @@
 // === findAllReferences ===
 // === /findAllRefsMappedType.ts ===
 
-// interface T { /*FIND ALL REFS*/[| a|]: number; }
+// interface T { /*FIND ALL REFS*/[|a|]: number; }
 // type U = { readonly [K in keyof T]?: string };
 // declare const t: T;
 // t.[|a|];
@@ -14,7 +14,7 @@
 // === findAllReferences ===
 // === /findAllRefsMappedType.ts ===
 
-// interface T {[| a|]: number; }
+// interface T { [|a|]: number; }
 // type U = { readonly [K in keyof T]?: string };
 // declare const t: T;
 // t./*FIND ALL REFS*/[|a|];
@@ -27,7 +27,7 @@
 // === findAllReferences ===
 // === /findAllRefsMappedType.ts ===
 
-// interface T {[| a|]: number; }
+// interface T { [|a|]: number; }
 // type U = { readonly [K in keyof T]?: string };
 // declare const t: T;
 // t.[|a|];

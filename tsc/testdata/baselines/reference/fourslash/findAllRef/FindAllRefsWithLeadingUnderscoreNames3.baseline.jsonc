@@ -7,7 +7,7 @@
 // === /findAllRefsWithLeadingUnderscoreNames3.ts ===
 
 // class Foo {
-//     public /*FIND ALL REFS*/[| ___bar|]() { return 0; }
+//     public /*FIND ALL REFS*/[|___bar|]() { return 0; }
 // }
 // 
 // var x: Foo;
@@ -20,7 +20,7 @@
 // === /findAllRefsWithLeadingUnderscoreNames3.ts ===
 
 // class Foo {
-//     public[| ___bar|]() { return 0; }
+//     public [|___bar|]() { return 0; }
 // }
 // 
 // var x: Foo;

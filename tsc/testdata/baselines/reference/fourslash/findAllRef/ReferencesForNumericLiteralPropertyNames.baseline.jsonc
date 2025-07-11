@@ -2,7 +2,7 @@
 // === /referencesForNumericLiteralPropertyNames.ts ===
 
 // class Foo {
-//     public /*FIND ALL REFS*/[| 12|]: any;
+//     public /*FIND ALL REFS*/[|12|]: any;
 // }
 // 
 // var x: Foo;

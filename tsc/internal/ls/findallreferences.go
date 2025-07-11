@@ -419,7 +419,7 @@ func (l *LanguageService) convertSymbolAndEntryToLocation(s *SymbolAndEntries) [
 	for _, ref := range s.references {
 		if ref.textRange == nil {
 			sourceFile := ast.GetSourceFileOfNode(ref.node)
-			ref.textRange = l.createLspRangeFromNode(ref.node, ast.GetSourceFileOfNode(ref.node))
+			ref.textRange = l.getRangeOfNode(ref.node, sourceFile, nil /*endNode*/)
 			ref.fileName = sourceFile.FileName()
 		}
 		locations = append(locations, &lsproto.Location{

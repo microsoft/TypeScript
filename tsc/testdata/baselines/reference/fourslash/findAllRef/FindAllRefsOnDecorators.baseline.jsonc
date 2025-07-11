@@ -6,10 +6,10 @@
 // === findAllReferences ===
 // === /a.ts ===
 
-// function /*FIND ALL REFS*/[| decorator|](target) {
+// function /*FIND ALL REFS*/[|decorator|](target) {
 //     return target;
-// }[|
-// decorator|]();
+// }
+// [|decorator|]();
 
 
 
@@ -17,10 +17,10 @@
 // === findAllReferences ===
 // === /a.ts ===
 
-// function[| decorator|](target) {
+// function [|decorator|](target) {
 //     return target;
-// }[|
-// /*FIND ALL REFS*/decorator|]();
+// }
+// /*FIND ALL REFS*/[|decorator|]();
 
 
 
@@ -28,10 +28,10 @@
 // === findAllReferences ===
 // === /a.ts ===
 
-// function[| decorator|](target) {
+// function [|decorator|](target) {
 //     return target;
-// }[|
-// decorator|]();
+// }
+// [|decorator|]();
 
 
 // === /b.ts ===
@@ -48,10 +48,10 @@
 // === findAllReferences ===
 // === /a.ts ===
 
-// function[| decorator|](target) {
+// function [|decorator|](target) {
 //     return target;
-// }[|
-// decorator|]();
+// }
+// [|decorator|]();
 
 
 // === /b.ts ===
@@ -68,10 +68,10 @@
 // === findAllReferences ===
 // === /a.ts ===
 
-// function[| decorator|](target) {
+// function [|decorator|](target) {
 //     return target;
-// }[|
-// decorator|]();
+// }
+// [|decorator|]();
 
 
 // === /b.ts ===

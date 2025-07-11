@@ -1,7 +1,7 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfStringNamedProperty.ts ===
 
-// let o = { /*FIND ALL REFS*/[| "x"|]: 12 };
+// let o = { /*FIND ALL REFS*/"[|x|]": 12 };
 // let y = o.[|x|];
 
 
@@ -10,7 +10,7 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfStringNamedProperty.ts ===
 
-// let o = { "/*FIND ALL REFS*/[| "x"|]: 12 };
+// let o = { "/*FIND ALL REFS*/[|x|]": 12 };
 // let y = o.[|x|];
 
 
@@ -19,5 +19,5 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfStringNamedProperty.ts ===
 
-// let o = {[| "x"|]: 12 };
+// let o = { "[|x|]": 12 };
 // let y = o./*FIND ALL REFS*/[|x|];

@@ -13,7 +13,7 @@ func (l *LanguageService) GetExpectedReferenceFromMarker(fileName string, pos in
 	node := astnav.GetTouchingPropertyName(sourceFile, pos)
 	return &lsproto.Location{
 		Uri:   FileNameToDocumentURI(fileName),
-		Range: *l.createLspRangeFromNode(node, sourceFile),
+		Range: *l.getRangeOfNode(node, sourceFile, nil /*endNode*/),
 	}
 }
 

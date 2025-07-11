@@ -1,9 +1,9 @@
 // === findAllReferences ===
 // === /findAllRefsInClassExpression.ts ===
 
-// interface I { /*FIND ALL REFS*/[| boom|](): void; }
-// new class C implements I {[|
-//    boom|](){}
+// interface I { /*FIND ALL REFS*/[|boom|](): void; }
+// new class C implements I {
+//    [|boom|](){}
 // }
 
 
@@ -12,7 +12,7 @@
 // === findAllReferences ===
 // === /findAllRefsInClassExpression.ts ===
 
-// interface I {[| boom|](): void; }
-// new class C implements I {[|
-//    /*FIND ALL REFS*/boom|](){}
+// interface I { [|boom|](): void; }
+// new class C implements I {
+//    /*FIND ALL REFS*/[|boom|](){}
 // }

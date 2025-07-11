@@ -8,7 +8,7 @@
 
 // export module Test{
 // 
-//     export interface /*FIND ALL REFS*/[| start|] { }
+//     export interface /*FIND ALL REFS*/[|start|] { }
 // 
 //     export interface stop { }
 // }
@@ -21,7 +21,7 @@
 
 // export module Test{
 // 
-//     export interface[| start|] { }
+//     export interface [|start|] { }
 // 
 //     export interface stop { }
 // }

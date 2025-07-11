@@ -4,9 +4,9 @@
 // var x;
 // var n;
 // 
-// function n(x: number, /*FIND ALL REFS*/[| n|]: number) {[|
-//     n|] = 32;
-//     x =[| n|];
+// function n(x: number, /*FIND ALL REFS*/[|n|]: number) {
+//     [|n|] = 32;
+//     x = [|n|];
 // }
 
 
@@ -18,9 +18,9 @@
 // var x;
 // var n;
 // 
-// function n(x: number,[| n|]: number) {[|
-//     /*FIND ALL REFS*/n|] = 32;
-//     x =[| n|];
+// function n(x: number, [|n|]: number) {
+//     /*FIND ALL REFS*/[|n|] = 32;
+//     x = [|n|];
 // }
 
 
@@ -32,7 +32,7 @@
 // var x;
 // var n;
 // 
-// function n(x: number,[| n|]: number) {[|
-//     n|] = 32;
-//     x = /*FIND ALL REFS*/[| n|];
+// function n(x: number, [|n|]: number) {
+//     [|n|] = 32;
+//     x = /*FIND ALL REFS*/[|n|];
 // }

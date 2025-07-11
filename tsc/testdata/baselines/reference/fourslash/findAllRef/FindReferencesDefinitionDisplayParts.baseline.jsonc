@@ -1,7 +1,7 @@
 // === findAllReferences ===
 // === /findReferencesDefinitionDisplayParts.ts ===
 
-// class Gre/*FIND ALL REFS*/[| Greeter|] {
+// class Gre/*FIND ALL REFS*/[|Greeter|] {
 //     someFunction() { this;  }
 // }
 // 
@@ -14,7 +14,7 @@
 // === /findReferencesDefinitionDisplayParts.ts ===
 
 // class Greeter {
-//     someFunction() { th/*FIND ALL REFS*/[| this|];  }
+//     someFunction() { th/*FIND ALL REFS*/[|this|];  }
 // }
 // 
 // type Options = "option 1" | "option 2";
@@ -31,12 +31,9 @@
 // === findAllReferences ===
 // === /findReferencesDefinitionDisplayParts.ts ===
 
-// class Greeter {
-//     someFunction() { this;  }
-// }
-// 
+// --- (line: 4) skipped ---
 // type Options = "option 1" | "option 2";
-// let myOption: Options = "option 1";[|
+// let myOption: Options = "option 1";
 // 
-// some/*FIND ALL REFS*/Label|]:
-// break[| someLabel|];
+// some/*FIND ALL REFS*/[|someLabel|]:
+// break [|someLabel|];

@@ -1,8 +1,8 @@
 // === findAllReferences ===
 // === /findAllRefsForStaticInstancePropertyInheritance.ts ===
 
-// class X{[|
-// 	/*FIND ALL REFS*/foo|]:any
+// class X{
+// 	/*FIND ALL REFS*/[|foo|]:any
 // }
 // 
 // class Y extends X{
@@ -10,8 +10,8 @@
 // }
 // 
 // class Z extends Y{
-// 	static foo:any[|
-// 	foo|]:any
+// 	static foo:any
+// 	[|foo|]:any
 // }
 // 
 // const x = new X();
@@ -34,7 +34,7 @@
 // }
 // 
 // class Y extends X{
-// 	static /*FIND ALL REFS*/[| foo|]:any
+// 	static /*FIND ALL REFS*/[|foo|]:any
 // }
 // 
 // class Z extends Y{
@@ -58,7 +58,7 @@
 // }
 // 
 // class Z extends Y{
-// 	static /*FIND ALL REFS*/[| foo|]:any
+// 	static /*FIND ALL REFS*/[|foo|]:any
 // 	foo:any
 // }
 // 
@@ -77,8 +77,8 @@
 // === findAllReferences ===
 // === /findAllRefsForStaticInstancePropertyInheritance.ts ===
 
-// class X{[|
-// 	foo|]:any
+// class X{
+// 	[|foo|]:any
 // }
 // 
 // class Y extends X{
@@ -86,8 +86,8 @@
 // }
 // 
 // class Z extends Y{
-// 	static foo:any[|
-// 	/*FIND ALL REFS*/foo|]:any
+// 	static foo:any
+// 	/*FIND ALL REFS*/[|foo|]:any
 // }
 // 
 // const x = new X();
@@ -105,8 +105,8 @@
 // === findAllReferences ===
 // === /findAllRefsForStaticInstancePropertyInheritance.ts ===
 
-// class X{[|
-// 	foo|]:any
+// class X{
+// 	[|foo|]:any
 // }
 // 
 // class Y extends X{
@@ -114,8 +114,8 @@
 // }
 // 
 // class Z extends Y{
-// 	static foo:any[|
-// 	foo|]:any
+// 	static foo:any
+// 	[|foo|]:any
 // }
 // 
 // const x = new X();
@@ -133,8 +133,8 @@
 // === findAllReferences ===
 // === /findAllRefsForStaticInstancePropertyInheritance.ts ===
 
-// class X{[|
-// 	foo|]:any
+// class X{
+// 	[|foo|]:any
 // }
 // 
 // class Y extends X{
@@ -142,8 +142,8 @@
 // }
 // 
 // class Z extends Y{
-// 	static foo:any[|
-// 	foo|]:any
+// 	static foo:any
+// 	[|foo|]:any
 // }
 // 
 // const x = new X();
@@ -161,8 +161,8 @@
 // === findAllReferences ===
 // === /findAllRefsForStaticInstancePropertyInheritance.ts ===
 
-// class X{[|
-// 	foo|]:any
+// class X{
+// 	[|foo|]:any
 // }
 // 
 // class Y extends X{
@@ -170,8 +170,8 @@
 // }
 // 
 // class Z extends Y{
-// 	static foo:any[|
-// 	foo|]:any
+// 	static foo:any
+// 	[|foo|]:any
 // }
 // 
 // const x = new X();
@@ -194,7 +194,7 @@
 // }
 // 
 // class Y extends X{
-// 	static[| foo|]:any
+// 	static [|foo|]:any
 // }
 // 
 // class Z extends Y{
@@ -218,7 +218,7 @@
 // }
 // 
 // class Z extends Y{
-// 	static[| foo|]:any
+// 	static [|foo|]:any
 // 	foo:any
 // }
 // 

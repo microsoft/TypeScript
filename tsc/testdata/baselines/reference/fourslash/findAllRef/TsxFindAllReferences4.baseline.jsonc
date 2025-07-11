@@ -10,7 +10,7 @@
 //      }
 //      interface ElementAttributesProperty { props }
 //  }
-//  class /*FIND ALL REFS*/[| MyClass|] {
+//  class /*FIND ALL REFS*/[|MyClass|] {
 //    props: {
 //      name?: string;
 //      size?: number;
@@ -34,7 +34,7 @@
 //      }
 //      interface ElementAttributesProperty { props }
 //  }
-//  class[| MyClass|] {
+//  class [|MyClass|] {
 //    props: {
 //      name?: string;
 //      size?: number;
@@ -53,7 +53,7 @@
 //      }
 //      interface ElementAttributesProperty { props }
 //  }
-//  class[| MyClass|] {
+//  class [|MyClass|] {
 //    props: {
 //      name?: string;
 //      size?: number;

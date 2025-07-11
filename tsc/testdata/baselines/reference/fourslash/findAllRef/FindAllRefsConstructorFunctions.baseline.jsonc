@@ -1,8 +1,8 @@
 // === findAllReferences ===
 // === /a.js ===
 
-// function f() {[|
-//     /*FIND ALL REFS*/this|].x = 0;
+// function f() {
+//     /*FIND ALL REFS*/[|this|].x = 0;
 // }
 // f.prototype.setX = function() {
 //     this.x = 1;
@@ -23,8 +23,8 @@
 // function f() {
 //     this.x = 0;
 // }
-// f.prototype.setX = function() {[|
-//     /*FIND ALL REFS*/this|].x = 1;
+// f.prototype.setX = function() {
+//     /*FIND ALL REFS*/[|this|].x = 1;
 // }
 // f.prototype.useX = function() { this.x; }
 

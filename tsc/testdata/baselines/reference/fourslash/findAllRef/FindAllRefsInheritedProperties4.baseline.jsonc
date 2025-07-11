@@ -1,13 +1,13 @@
 // === findAllReferences ===
 // === /findAllRefsInheritedProperties4.ts ===
 
-//  interface C extends D {[|
-//      /*FIND ALL REFS*/prop0|]: string;
+//  interface C extends D {
+//      /*FIND ALL REFS*/[|prop0|]: string;
 //      prop1: number;
 //  }
 // 
-//  interface D extends C {[|
-//      prop0|]: string;
+//  interface D extends C {
+//      [|prop0|]: string;
 //  }
 // 
 //  var d: D;
@@ -20,13 +20,13 @@
 // === findAllReferences ===
 // === /findAllRefsInheritedProperties4.ts ===
 
-//  interface C extends D {[|
-//      prop0|]: string;
+//  interface C extends D {
+//      [|prop0|]: string;
 //      prop1: number;
 //  }
 // 
-//  interface D extends C {[|
-//      /*FIND ALL REFS*/prop0|]: string;
+//  interface D extends C {
+//      /*FIND ALL REFS*/[|prop0|]: string;
 //  }
 // 
 //  var d: D;
@@ -39,13 +39,13 @@
 // === findAllReferences ===
 // === /findAllRefsInheritedProperties4.ts ===
 
-//  interface C extends D {[|
-//      prop0|]: string;
+//  interface C extends D {
+//      [|prop0|]: string;
 //      prop1: number;
 //  }
 // 
-//  interface D extends C {[|
-//      prop0|]: string;
+//  interface D extends C {
+//      [|prop0|]: string;
 //  }
 // 
 //  var d: D;
@@ -59,8 +59,8 @@
 // === /findAllRefsInheritedProperties4.ts ===
 
 //  interface C extends D {
-//      prop0: string;[|
-//      /*FIND ALL REFS*/prop1|]: number;
+//      prop0: string;
+//      /*FIND ALL REFS*/[|prop1|]: number;
 //  }
 // 
 //  interface D extends C {

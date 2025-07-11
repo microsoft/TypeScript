@@ -1,7 +1,7 @@
 // === findAllReferences ===
 // === /home/src/workspaces/project/referencesForGlobals_1.ts ===
 
-// class[| globalClass|] {
+// class [|globalClass|] {
 //     public f() { }
 // }
 
@@ -9,4 +9,4 @@
 // === /home/src/workspaces/project/referencesForGlobals_2.ts ===
 
 // ///<reference path="referencesForGlobals_1.ts" />
-// var c = /*FIND ALL REFS*/[| globalClass|]();
+// var c = /*FIND ALL REFS*/[|globalClass|]();

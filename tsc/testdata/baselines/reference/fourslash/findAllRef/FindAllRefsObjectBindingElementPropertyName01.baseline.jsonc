@@ -1,13 +1,13 @@
 // === findAllReferences ===
 // === /findAllRefsObjectBindingElementPropertyName01.ts ===
 
-// interface I {[|
-//     /*FIND ALL REFS*/property1|]: number;
+// interface I {
+//     /*FIND ALL REFS*/[|property1|]: number;
 //     property2: string;
 // }
 // 
 // var foo: I;
-// var {[| property1|]: prop1 } = foo;
+// var { [|property1|]: prop1 } = foo;
 
 
 
@@ -20,10 +20,10 @@
 // === findAllReferences ===
 // === /findAllRefsObjectBindingElementPropertyName01.ts ===
 
-// interface I {[|
-//     property1|]: number;
+// interface I {
+//     [|property1|]: number;
 //     property2: string;
 // }
 // 
 // var foo: I;
-// var { /*FIND ALL REFS*/[| property1|]: prop1 } = foo;
+// var { /*FIND ALL REFS*/[|property1|]: prop1 } = foo;

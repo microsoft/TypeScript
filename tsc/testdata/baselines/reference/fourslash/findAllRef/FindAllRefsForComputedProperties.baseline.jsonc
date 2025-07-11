@@ -2,11 +2,11 @@
 // === /findAllRefsForComputedProperties.ts ===
 
 // interface I {
-//     ["/*FIND ALL REFS*/[|"prop1"|]]: () => void;
+//     ["/*FIND ALL REFS*/[|prop1|]"]: () => void;
 // }
 // 
 // class C implements I {
-//     [[|"prop1"|]]: any;
+//     ["[|prop1|]"]: any;
 // }
 // 
 // var x: I = {
@@ -20,11 +20,11 @@
 // === /findAllRefsForComputedProperties.ts ===
 
 // interface I {
-//     [[|"prop1"|]]: () => void;
+//     ["[|prop1|]"]: () => void;
 // }
 // 
 // class C implements I {
-//     ["/*FIND ALL REFS*/[|"prop1"|]]: any;
+//     ["/*FIND ALL REFS*/[|prop1|]"]: any;
 // }
 // 
 // var x: I = {
@@ -41,5 +41,5 @@
 // }
 // 
 // var x: I = {
-//     ["/*FIND ALL REFS*/[|"prop1"|]]: function () { },
+//     ["/*FIND ALL REFS*/[|prop1|]"]: function () { },
 // }

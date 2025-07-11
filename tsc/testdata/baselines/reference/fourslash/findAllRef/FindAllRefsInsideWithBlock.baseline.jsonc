@@ -6,14 +6,14 @@
 // === findAllReferences ===
 // === /findAllRefsInsideWithBlock.ts ===
 
-// var /*FIND ALL REFS*/[| x|] = 0;
+// var /*FIND ALL REFS*/[|x|] = 0;
 // 
 // with ({}) {
 //     var y = x;  // Reference of x here should not be picked
 //     y++;        // also reference for y should be ignored
-// }[|
+// }
 // 
-// x|] =[| x|] + 1;
+// [|x|] = [|x|] + 1;
 
 
 
@@ -21,14 +21,14 @@
 // === findAllReferences ===
 // === /findAllRefsInsideWithBlock.ts ===
 
-// var[| x|] = 0;
+// var [|x|] = 0;
 // 
 // with ({}) {
 //     var y = x;  // Reference of x here should not be picked
 //     y++;        // also reference for y should be ignored
-// }[|
+// }
 // 
-// /*FIND ALL REFS*/x|] =[| x|] + 1;
+// /*FIND ALL REFS*/[|x|] = [|x|] + 1;
 
 
 
@@ -36,11 +36,11 @@
 // === findAllReferences ===
 // === /findAllRefsInsideWithBlock.ts ===
 
-// var[| x|] = 0;
+// var [|x|] = 0;
 // 
 // with ({}) {
 //     var y = x;  // Reference of x here should not be picked
 //     y++;        // also reference for y should be ignored
-// }[|
+// }
 // 
-// x = /*FIND ALL REFS*/|] =[| x|] + 1;
+// x = /*FIND ALL REFS*/[|x|] = [|x|] + 1;

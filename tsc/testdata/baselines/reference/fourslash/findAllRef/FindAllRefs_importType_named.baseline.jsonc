@@ -6,7 +6,7 @@
 // === findAllReferences ===
 // === /a.ts ===
 
-// export type /*FIND ALL REFS*/[| T|] = number;
+// export type /*FIND ALL REFS*/[|T|] = number;
 // export type U = string;
 
 
@@ -21,7 +21,7 @@
 // === /a.ts ===
 
 // export type T = number;
-// export type /*FIND ALL REFS*/[| U|] = string;
+// export type /*FIND ALL REFS*/[|U|] = string;
 
 
 
@@ -29,7 +29,7 @@
 // === findAllReferences ===
 // === /a.ts ===
 
-// export type[| T|] = number;
+// export type [|T|] = number;
 // export type U = string;
 
 
@@ -39,4 +39,4 @@
 // === /a.ts ===
 
 // export type T = number;
-// export type[| U|] = string;
+// export type [|U|] = string;

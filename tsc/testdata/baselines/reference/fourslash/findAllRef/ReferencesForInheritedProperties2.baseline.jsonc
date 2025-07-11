@@ -1,19 +1,19 @@
 // === findAllReferences ===
 // === /referencesForInheritedProperties2.ts ===
 
-// interface interface1 {[|
-//     /*FIND ALL REFS*/doStuff|](): void;
+// interface interface1 {
+//     /*FIND ALL REFS*/[|doStuff|](): void;
 // }
 // 
-// interface interface2 {[|
-//     doStuff|](): void;
+// interface interface2 {
+//     [|doStuff|](): void;
 // }
 // 
 // interface interface2 extends interface1 {
 // }
 // 
-// class class1 implements interface2 {[|
-//     doStuff|]() {
+// class class1 implements interface2 {
+//     [|doStuff|]() {
 // 
 //     }
 // }

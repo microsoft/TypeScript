@@ -2,7 +2,7 @@
 // === /getOccurrencesIsDefinitionOfParameter.ts ===
 
 // function f(/*FIND ALL REFS*/[|x|]: number) {
-//   return[| x|] + 1
+//   return [|x|] + 1
 // }
 
 
@@ -12,5 +12,5 @@
 // === /getOccurrencesIsDefinitionOfParameter.ts ===
 
 // function f([|x|]: number) {
-//   return /*FIND ALL REFS*/[| x|] + 1
+//   return /*FIND ALL REFS*/[|x|] + 1
 // }

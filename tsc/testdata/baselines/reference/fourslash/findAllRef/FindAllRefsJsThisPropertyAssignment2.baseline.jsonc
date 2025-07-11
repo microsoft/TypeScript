@@ -14,7 +14,7 @@
 
 // === /infer.d.ts ===
 
-// export declare function infer(o: { m: Record<string, Function> } & ThisType<{[| x|]: number }>): void;
+// export declare function infer(o: { m: Record<string, Function> } & ThisType<{ [|x|]: number }>): void;
 
 
 
@@ -48,4 +48,4 @@
 
 // === /infer.d.ts ===
 
-// export declare function infer(o: { m: Record<string, Function> } & ThisType<{[| x|]: number }>): void;
+// export declare function infer(o: { m: Record<string, Function> } & ThisType<{ [|x|]: number }>): void;

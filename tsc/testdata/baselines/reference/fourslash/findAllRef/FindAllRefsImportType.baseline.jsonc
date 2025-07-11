@@ -7,7 +7,7 @@
 // === /a.js ===
 
 // module.exports = 0;
-// export type /*FIND ALL REFS*/[| N|] = number;
+// export type /*FIND ALL REFS*/[|N|] = number;
 
 
 

@@ -1,8 +1,8 @@
 // === findAllReferences ===
 // === /a.ts ===
 
-// const /*FIND ALL REFS*/[| a|] = 0;
-// export default[| a|];
+// const /*FIND ALL REFS*/[|a|] = 0;
+// export default [|a|];
 
 
 
@@ -10,8 +10,8 @@
 // === findAllReferences ===
 // === /a.ts ===
 
-// const[| a|] = 0;
-// export default /*FIND ALL REFS*/[| a|];
+// const [|a|] = 0;
+// export default /*FIND ALL REFS*/[|a|];
 
 
 
@@ -24,8 +24,8 @@
 // === findAllReferences ===
 // === /b.ts ===
 
-// import /*FIND ALL REFS*/[| a|] from "./a";[|
-// a|];
+// import /*FIND ALL REFS*/[|a|] from "./a";
+// [|a|];
 
 
 
@@ -33,5 +33,5 @@
 // === findAllReferences ===
 // === /b.ts ===
 
-// import[| a|] from "./a";[|
-// /*FIND ALL REFS*/a|];
+// import [|a|] from "./a";
+// /*FIND ALL REFS*/[|a|];

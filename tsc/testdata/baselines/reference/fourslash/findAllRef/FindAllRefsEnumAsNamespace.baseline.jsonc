@@ -6,8 +6,8 @@
 // === findAllReferences ===
 // === /findAllRefsEnumAsNamespace.ts ===
 
-// enum /*FIND ALL REFS*/[| E|] { A }
-// let e:[| E|].A;
+// enum /*FIND ALL REFS*/[|E|] { A }
+// let e: [|E|].A;
 
 
 
@@ -15,5 +15,5 @@
 // === findAllReferences ===
 // === /findAllRefsEnumAsNamespace.ts ===
 
-// enum[| E|] { A }
-// let e: /*FIND ALL REFS*/[| E|].A;
+// enum [|E|] { A }
+// let e: /*FIND ALL REFS*/[|E|].A;

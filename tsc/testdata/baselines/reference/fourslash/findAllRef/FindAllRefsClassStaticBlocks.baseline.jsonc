@@ -2,8 +2,8 @@
 // === /findAllRefsClassStaticBlocks.ts ===
 
 // class ClassStaticBocks {
-//     static x;[|
-//     /*FIND ALL REFS*/static|] {}
+//     static x;
+//     /*FIND ALL REFS*/[|static|] {}
 //     static y;
 //     static {}
 //     static y;
@@ -19,8 +19,8 @@
 // class ClassStaticBocks {
 //     static x;
 //     static {}
-//     static y;[|
-//     /*FIND ALL REFS*/static|] {}
+//     static y;
+//     /*FIND ALL REFS*/[|static|] {}
 //     static y;
 //     static {}
 // }
@@ -31,11 +31,9 @@
 // === findAllReferences ===
 // === /findAllRefsClassStaticBlocks.ts ===
 
-// class ClassStaticBocks {
-//     static x;
-//     static {}
+// --- (line: 3) skipped ---
 //     static y;
 //     static {}
-//     static y;[|
-//     /*FIND ALL REFS*/static|] {}
+//     static y;
+//     /*FIND ALL REFS*/[|static|] {}
 // }

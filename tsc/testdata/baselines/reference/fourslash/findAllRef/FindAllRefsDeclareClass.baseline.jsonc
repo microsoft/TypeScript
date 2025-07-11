@@ -6,6 +6,6 @@
 // === findAllReferences ===
 // === /findAllRefsDeclareClass.ts ===
 
-// declare class /*FIND ALL REFS*/[| C|] {
+// declare class /*FIND ALL REFS*/[|C|] {
 //     static m(): void;
 // }

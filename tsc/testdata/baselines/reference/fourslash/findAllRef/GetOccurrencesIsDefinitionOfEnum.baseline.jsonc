@@ -6,11 +6,11 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfEnum.ts ===
 
-// enum /*FIND ALL REFS*/[| E|] {
+// enum /*FIND ALL REFS*/[|E|] {
 //     First,
 //     Second
 // }
-// let first =[| E|].First;
+// let first = [|E|].First;
 
 
 
@@ -18,8 +18,8 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfEnum.ts ===
 
-// enum[| E|] {
+// enum [|E|] {
 //     First,
 //     Second
 // }
-// let first = /*FIND ALL REFS*/[| E|].First;
+// let first = /*FIND ALL REFS*/[|E|].First;

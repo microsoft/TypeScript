@@ -6,13 +6,13 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfClass.ts ===
 
-// class /*FIND ALL REFS*/[| C|] {
+// class /*FIND ALL REFS*/[|C|] {
 //     n: number;
 //     constructor() {
 //         this.n = 12;
 //     }
 // }
-// let c = new[| C|]();
+// let c = new [|C|]();
 
 
 
@@ -20,10 +20,10 @@
 // === findAllReferences ===
 // === /getOccurrencesIsDefinitionOfClass.ts ===
 
-// class[| C|] {
+// class [|C|] {
 //     n: number;
 //     constructor() {
 //         this.n = 12;
 //     }
 // }
-// let c = new /*FIND ALL REFS*/[| C|]();
+// let c = new /*FIND ALL REFS*/[|C|]();

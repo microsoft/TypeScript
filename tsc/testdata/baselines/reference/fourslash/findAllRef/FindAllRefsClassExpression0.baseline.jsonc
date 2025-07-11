@@ -1,8 +1,8 @@
 // === findAllReferences ===
 // === /a.ts ===
 
-// export = class /*FIND ALL REFS*/[| A|] {
-//     m() {[| A|]; }
+// export = class /*FIND ALL REFS*/[|A|] {
+//     m() { [|A|]; }
 // };
 
 
@@ -11,8 +11,8 @@
 // === findAllReferences ===
 // === /a.ts ===
 
-// export = class[| A|] {
-//     m() { /*FIND ALL REFS*/[| A|]; }
+// export = class [|A|] {
+//     m() { /*FIND ALL REFS*/[|A|]; }
 // };
 
 
@@ -21,8 +21,8 @@
 // === findAllReferences ===
 // === /b.ts ===
 
-// import /*FIND ALL REFS*/[| A|] = require("./a");[|
-// A|];
+// import /*FIND ALL REFS*/[|A|] = require("./a");
+// [|A|];
 
 
 
@@ -30,5 +30,5 @@
 // === findAllReferences ===
 // === /b.ts ===
 
-// import[| A|] = require("./a");[|
-// /*FIND ALL REFS*/A|];
+// import [|A|] = require("./a");
+// /*FIND ALL REFS*/[|A|];

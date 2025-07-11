@@ -3,8 +3,8 @@
 
 // module FindRef4 {
 // 	module MixedStaticsClassTest {
-// 		export class Foo {[|
-// 			/*FIND ALL REFS*/bar|]: Foo;
+// 		export class Foo {
+// 			/*FIND ALL REFS*/[|bar|]: Foo;
 // 			static bar: Foo;
 // 
 // 			public foo(): void {
@@ -36,7 +36,7 @@
 // 	module MixedStaticsClassTest {
 // 		export class Foo {
 // 			bar: Foo;
-// 			static /*FIND ALL REFS*/[| bar|]: Foo;
+// 			static /*FIND ALL REFS*/[|bar|]: Foo;
 // 
 // 			public foo(): void {
 // 			}
@@ -66,7 +66,7 @@
 // 			bar: Foo;
 // 			static bar: Foo;
 // 
-// 			public /*FIND ALL REFS*/[| foo|](): void {
+// 			public /*FIND ALL REFS*/[|foo|](): void {
 // 			}
 // 			public static foo(): void {
 // 			}
@@ -97,7 +97,7 @@
 // 
 // 			public foo(): void {
 // 			}
-// 			public static /*FIND ALL REFS*/[| foo|](): void {
+// 			public static /*FIND ALL REFS*/[|foo|](): void {
 // 			}
 // 		}
 // 	}
@@ -123,7 +123,7 @@
 // 			bar: Foo;
 // 			static bar: Foo;
 // 
-// 			public[| foo|](): void {
+// 			public [|foo|](): void {
 // 			}
 // 			public static foo(): void {
 // 			}
@@ -147,8 +147,8 @@
 
 // module FindRef4 {
 // 	module MixedStaticsClassTest {
-// 		export class Foo {[|
-// 			bar|]: Foo;
+// 		export class Foo {
+// 			[|bar|]: Foo;
 // 			static bar: Foo;
 // 
 // 			public foo(): void {
@@ -175,7 +175,7 @@
 // 
 // 			public foo(): void {
 // 			}
-// 			public static[| foo|](): void {
+// 			public static [|foo|](): void {
 // 			}
 // 		}
 // 	}
@@ -201,7 +201,7 @@
 // 	module MixedStaticsClassTest {
 // 		export class Foo {
 // 			bar: Foo;
-// 			static[| bar|]: Foo;
+// 			static [|bar|]: Foo;
 // 
 // 			public foo(): void {
 // 			}

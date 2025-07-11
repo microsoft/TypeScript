@@ -10,7 +10,7 @@
 //      }
 //      private method() { }
 //  }
-//  var /*FIND ALL REFS*/[| RCComp|] = RC1 || RC2;
+//  var /*FIND ALL REFS*/[|RCComp|] = RC1 || RC2;
 //  <[|RCComp|] />
 
 
@@ -28,5 +28,5 @@
 //      }
 //      private method() { }
 //  }
-//  var[| RCComp|] = RC1 || RC2;
+//  var [|RCComp|] = RC1 || RC2;
 //  </*FIND ALL REFS*/[|RCComp|] />

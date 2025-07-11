@@ -6,25 +6,25 @@
 // === findAllReferences ===
 // === /referencesForMergedDeclarations4.ts ===
 
-// class /*FIND ALL REFS*/[| testClass|] {
+// class /*FIND ALL REFS*/[|testClass|] {
 //     static staticMethod() { }
 //     method() { }
 // }
 // 
-// module[| testClass|] {
+// module [|testClass|] {
 //     export interface Bar {
 // 
 //     }
 //     export var s = 0;
 // }
 // 
-// var c1:[| testClass|];
-// var c2:[| testClass|].Bar;[|
-// testClass|].staticMethod();[|
-// testClass|].prototype.method();[|
-// testClass|].bind(this);[|
-// testClass|].s;
-// new[| testClass|]();
+// var c1: [|testClass|];
+// var c2: [|testClass|].Bar;
+// [|testClass|].staticMethod();
+// [|testClass|].prototype.method();
+// [|testClass|].bind(this);
+// [|testClass|].s;
+// new [|testClass|]();
 
 
 
@@ -37,25 +37,25 @@
 // === findAllReferences ===
 // === /referencesForMergedDeclarations4.ts ===
 
-// class[| testClass|] {
+// class [|testClass|] {
 //     static staticMethod() { }
 //     method() { }
 // }
 // 
-// module /*FIND ALL REFS*/[| testClass|] {
+// module /*FIND ALL REFS*/[|testClass|] {
 //     export interface Bar {
 // 
 //     }
 //     export var s = 0;
 // }
 // 
-// var c1:[| testClass|];
-// var c2:[| testClass|].Bar;[|
-// testClass|].staticMethod();[|
-// testClass|].prototype.method();[|
-// testClass|].bind(this);[|
-// testClass|].s;
-// new[| testClass|]();
+// var c1: [|testClass|];
+// var c2: [|testClass|].Bar;
+// [|testClass|].staticMethod();
+// [|testClass|].prototype.method();
+// [|testClass|].bind(this);
+// [|testClass|].s;
+// new [|testClass|]();
 
 
 
@@ -63,25 +63,25 @@
 // === findAllReferences ===
 // === /referencesForMergedDeclarations4.ts ===
 
-// class[| testClass|] {
+// class [|testClass|] {
 //     static staticMethod() { }
 //     method() { }
 // }
 // 
-// module[| testClass|] {
+// module [|testClass|] {
 //     export interface Bar {
 // 
 //     }
 //     export var s = 0;
 // }
 // 
-// var c1: /*FIND ALL REFS*/[| testClass|];
-// var c2:[| testClass|].Bar;[|
-// testClass|].staticMethod();[|
-// testClass|].prototype.method();[|
-// testClass|].bind(this);[|
-// testClass|].s;
-// new[| testClass|]();
+// var c1: /*FIND ALL REFS*/[|testClass|];
+// var c2: [|testClass|].Bar;
+// [|testClass|].staticMethod();
+// [|testClass|].prototype.method();
+// [|testClass|].bind(this);
+// [|testClass|].s;
+// new [|testClass|]();
 
 
 
@@ -89,25 +89,25 @@
 // === findAllReferences ===
 // === /referencesForMergedDeclarations4.ts ===
 
-// class[| testClass|] {
+// class [|testClass|] {
 //     static staticMethod() { }
 //     method() { }
 // }
 // 
-// module[| testClass|] {
+// module [|testClass|] {
 //     export interface Bar {
 // 
 //     }
 //     export var s = 0;
 // }
 // 
-// var c1:[| testClass|];
-// var c2: /*FIND ALL REFS*/[| testClass|].Bar;[|
-// testClass|].staticMethod();[|
-// testClass|].prototype.method();[|
-// testClass|].bind(this);[|
-// testClass|].s;
-// new[| testClass|]();
+// var c1: [|testClass|];
+// var c2: /*FIND ALL REFS*/[|testClass|].Bar;
+// [|testClass|].staticMethod();
+// [|testClass|].prototype.method();
+// [|testClass|].bind(this);
+// [|testClass|].s;
+// new [|testClass|]();
 
 
 
@@ -115,25 +115,25 @@
 // === findAllReferences ===
 // === /referencesForMergedDeclarations4.ts ===
 
-// class[| testClass|] {
+// class [|testClass|] {
 //     static staticMethod() { }
 //     method() { }
 // }
 // 
-// module[| testClass|] {
+// module [|testClass|] {
 //     export interface Bar {
 // 
 //     }
 //     export var s = 0;
 // }
 // 
-// var c1:[| testClass|];
-// var c2:[| testClass|].Bar;[|
-// /*FIND ALL REFS*/testClass|].staticMethod();[|
-// testClass|].prototype.method();[|
-// testClass|].bind(this);[|
-// testClass|].s;
-// new[| testClass|]();
+// var c1: [|testClass|];
+// var c2: [|testClass|].Bar;
+// /*FIND ALL REFS*/[|testClass|].staticMethod();
+// [|testClass|].prototype.method();
+// [|testClass|].bind(this);
+// [|testClass|].s;
+// new [|testClass|]();
 
 
 
@@ -141,25 +141,25 @@
 // === findAllReferences ===
 // === /referencesForMergedDeclarations4.ts ===
 
-// class[| testClass|] {
+// class [|testClass|] {
 //     static staticMethod() { }
 //     method() { }
 // }
 // 
-// module[| testClass|] {
+// module [|testClass|] {
 //     export interface Bar {
 // 
 //     }
 //     export var s = 0;
 // }
 // 
-// var c1:[| testClass|];
-// var c2:[| testClass|].Bar;[|
-// testClass|].staticMethod();[|
-// /*FIND ALL REFS*/testClass|].prototype.method();[|
-// testClass|].bind(this);[|
-// testClass|].s;
-// new[| testClass|]();
+// var c1: [|testClass|];
+// var c2: [|testClass|].Bar;
+// [|testClass|].staticMethod();
+// /*FIND ALL REFS*/[|testClass|].prototype.method();
+// [|testClass|].bind(this);
+// [|testClass|].s;
+// new [|testClass|]();
 
 
 
@@ -167,25 +167,25 @@
 // === findAllReferences ===
 // === /referencesForMergedDeclarations4.ts ===
 
-// class[| testClass|] {
+// class [|testClass|] {
 //     static staticMethod() { }
 //     method() { }
 // }
 // 
-// module[| testClass|] {
+// module [|testClass|] {
 //     export interface Bar {
 // 
 //     }
 //     export var s = 0;
 // }
 // 
-// var c1:[| testClass|];
-// var c2:[| testClass|].Bar;[|
-// testClass|].staticMethod();[|
-// testClass|].prototype.method();[|
-// /*FIND ALL REFS*/testClass|].bind(this);[|
-// testClass|].s;
-// new[| testClass|]();
+// var c1: [|testClass|];
+// var c2: [|testClass|].Bar;
+// [|testClass|].staticMethod();
+// [|testClass|].prototype.method();
+// /*FIND ALL REFS*/[|testClass|].bind(this);
+// [|testClass|].s;
+// new [|testClass|]();
 
 
 
@@ -193,25 +193,25 @@
 // === findAllReferences ===
 // === /referencesForMergedDeclarations4.ts ===
 
-// class[| testClass|] {
+// class [|testClass|] {
 //     static staticMethod() { }
 //     method() { }
 // }
 // 
-// module[| testClass|] {
+// module [|testClass|] {
 //     export interface Bar {
 // 
 //     }
 //     export var s = 0;
 // }
 // 
-// var c1:[| testClass|];
-// var c2:[| testClass|].Bar;[|
-// testClass|].staticMethod();[|
-// testClass|].prototype.method();[|
-// testClass|].bind(this);[|
-// /*FIND ALL REFS*/testClass|].s;
-// new[| testClass|]();
+// var c1: [|testClass|];
+// var c2: [|testClass|].Bar;
+// [|testClass|].staticMethod();
+// [|testClass|].prototype.method();
+// [|testClass|].bind(this);
+// /*FIND ALL REFS*/[|testClass|].s;
+// new [|testClass|]();
 
 
 
@@ -219,22 +219,22 @@
 // === findAllReferences ===
 // === /referencesForMergedDeclarations4.ts ===
 
-// class[| testClass|] {
+// class [|testClass|] {
 //     static staticMethod() { }
 //     method() { }
 // }
 // 
-// module[| testClass|] {
+// module [|testClass|] {
 //     export interface Bar {
 // 
 //     }
 //     export var s = 0;
 // }
 // 
-// var c1:[| testClass|];
-// var c2:[| testClass|].Bar;[|
-// testClass|].staticMethod();[|
-// testClass|].prototype.method();[|
-// testClass|].bind(this);[|
-// testClass|].s;
-// new /*FIND ALL REFS*/[| testClass|]();
+// var c1: [|testClass|];
+// var c2: [|testClass|].Bar;
+// [|testClass|].staticMethod();
+// [|testClass|].prototype.method();
+// [|testClass|].bind(this);
+// [|testClass|].s;
+// new /*FIND ALL REFS*/[|testClass|]();

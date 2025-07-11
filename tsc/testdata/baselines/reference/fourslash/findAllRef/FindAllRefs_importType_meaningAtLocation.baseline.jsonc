@@ -6,7 +6,7 @@
 // === findAllReferences ===
 // === /a.ts ===
 
-// export type /*FIND ALL REFS*/[| T|] = 0;
+// export type /*FIND ALL REFS*/[|T|] = 0;
 // export const T = 0;
 
 
@@ -21,7 +21,7 @@
 // === /a.ts ===
 
 // export type T = 0;
-// export const /*FIND ALL REFS*/[| T|] = 0;
+// export const /*FIND ALL REFS*/[|T|] = 0;
 
 
 
@@ -29,7 +29,7 @@
 // === findAllReferences ===
 // === /a.ts ===
 
-// export type[| T|] = 0;
+// export type [|T|] = 0;
 // export const T = 0;
 
 
@@ -39,4 +39,4 @@
 // === /a.ts ===
 
 // export type T = 0;
-// export const[| T|] = 0;
+// export const [|T|] = 0;

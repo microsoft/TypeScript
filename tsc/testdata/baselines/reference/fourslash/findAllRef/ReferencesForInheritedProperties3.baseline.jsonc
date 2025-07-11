@@ -1,8 +1,8 @@
 // === findAllReferences ===
 // === /referencesForInheritedProperties3.ts ===
 
-//  interface interface1 extends interface1 {[|
-//     /*FIND ALL REFS*/doStuff|](): void;
+//  interface interface1 extends interface1 {
+//     /*FIND ALL REFS*/[|doStuff|](): void;
 //     propName: string;
 //  }
 // 
@@ -17,8 +17,8 @@
 // === /referencesForInheritedProperties3.ts ===
 
 //  interface interface1 extends interface1 {
-//     doStuff(): void;[|
-//     /*FIND ALL REFS*/propName|]: string;
+//     doStuff(): void;
+//     /*FIND ALL REFS*/[|propName|]: string;
 //  }
 // 
 //  var v: interface1;
@@ -32,8 +32,8 @@
 // === /referencesForInheritedProperties3.ts ===
 
 //  interface interface1 extends interface1 {
-//     doStuff(): void;[|
-//     propName|]: string;
+//     doStuff(): void;
+//     [|propName|]: string;
 //  }
 // 
 //  var v: interface1;
@@ -46,8 +46,8 @@
 // === findAllReferences ===
 // === /referencesForInheritedProperties3.ts ===
 
-//  interface interface1 extends interface1 {[|
-//     doStuff|](): void;
+//  interface interface1 extends interface1 {
+//     [|doStuff|](): void;
 //     propName: string;
 //  }
 // 

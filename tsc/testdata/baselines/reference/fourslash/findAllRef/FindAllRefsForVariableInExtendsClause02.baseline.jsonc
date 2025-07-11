@@ -6,10 +6,10 @@
 // === findAllReferences ===
 // === /findAllRefsForVariableInExtendsClause02.ts ===
 
-// interface /*FIND ALL REFS*/[| Base|] { }
+// interface /*FIND ALL REFS*/[|Base|] { }
 // namespace n {
 //     var Base = class { };
-//     interface I extends[| Base|] { }
+//     interface I extends [|Base|] { }
 // }
 
 
@@ -18,8 +18,8 @@
 // === findAllReferences ===
 // === /findAllRefsForVariableInExtendsClause02.ts ===
 
-// interface[| Base|] { }
+// interface [|Base|] { }
 // namespace n {
 //     var Base = class { };
-//     interface I extends /*FIND ALL REFS*/[| Base|] { }
+//     interface I extends /*FIND ALL REFS*/[|Base|] { }
 // }
