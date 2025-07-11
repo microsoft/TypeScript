@@ -6,5 +6,5 @@
 
     "references": [],
 
-    "include": ["**/*"]
+    "include": ["**/*", "../lib/customUtilities.d.ts", "../lib/customDecorators.ts"]
 }
