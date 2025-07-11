@@ -67,6 +67,7 @@ type NodeFactory struct {
 	importSpecifierPool               core.Pool[ImportSpecifier]
 	indexedAccessTypeNodePool         core.Pool[IndexedAccessTypeNode]
 	interfaceDeclarationPool          core.Pool[InterfaceDeclaration]
+	intersectionTypeNodePool          core.Pool[IntersectionTypeNode]
 	jsdocDeprecatedTagPool            core.Pool[JSDocDeprecatedTag]
 	jsdocParameterOrPropertyTagPool   core.Pool[JSDocParameterOrPropertyTag]
 	jsdocPool                         core.Pool[JSDoc]
@@ -7110,7 +7111,7 @@ func (f *NodeFactory) UpdateIntersectionTypeNode(node *IntersectionTypeNode, typ
 }
 
 func (f *NodeFactory) NewIntersectionTypeNode(types *NodeList) *Node {
-	data := &IntersectionTypeNode{}
+	data := f.intersectionTypeNodePool.New()
 	data.Types = types
 	return f.newNode(KindIntersectionType, data)
 }

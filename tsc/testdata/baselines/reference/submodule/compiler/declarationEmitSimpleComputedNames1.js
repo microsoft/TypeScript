@@ -74,11 +74,19 @@ export declare const conatainer: {
     [x: string]: () => string;
 };
 export declare class Holder {
-    static [x: string]: Holder | (typeof Holder)[typeof staticField] | (typeof Holder)[typeof staticField];
+    static [x: string]: Holder | (() => {
+        static: boolean;
+    }) | (() => {
+        static: string;
+    });
     [x: string]: (() => string) | (() => number);
 }
 /**
  * Could be `"prototype"`, so all static string indexers include the instance type
  */
-export declare const staticLookup: Holder | (typeof Holder)[typeof staticField] | (typeof Holder)[typeof staticField];
+export declare const staticLookup: Holder | (() => {
+    static: boolean;
+}) | (() => {
+    static: string;
+});
 export declare const instanceLookup: (() => string) | (() => number);

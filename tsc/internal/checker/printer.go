@@ -164,7 +164,11 @@ func getTrailingSemicolonDeferringWriter(writer printer.EmitTextWriter) printer.
 }
 
 func (c *Checker) TypeToString(t *Type) string {
-	return c.typeToStringEx(t, nil, TypeFormatFlagsAllowUniqueESSymbolType|TypeFormatFlagsUseAliasDefinedOutsideCurrentScope)
+	return c.typeToString(t, nil)
+}
+
+func (c *Checker) typeToString(t *Type, enclosingDeclaration *ast.Node) string {
+	return c.typeToStringEx(t, enclosingDeclaration, TypeFormatFlagsAllowUniqueESSymbolType|TypeFormatFlagsUseAliasDefinedOutsideCurrentScope)
 }
 
 func toNodeBuilderFlags(flags TypeFormatFlags) nodebuilder.Flags {

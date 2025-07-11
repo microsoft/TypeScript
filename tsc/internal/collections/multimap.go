@@ -60,6 +60,10 @@ func (s *MultiMap[K, V]) Keys() iter.Seq[K] {
 	return maps.Keys(s.M)
 }
 
+func (s *MultiMap[K, V]) Values() iter.Seq[[]V] {
+	return maps.Values(s.M)
+}
+
 func (s *MultiMap[K, V]) Clear() {
 	clear(s.M)
 }

@@ -12,24 +12,22 @@
 -declare const staticField: string;
  export declare class Holder {
 -    static [staticField]: () => {
--        static: boolean;
++    static [x: string]: Holder | (() => {
+         static: boolean;
 -    };
 -    static [staticField]: () => {
--        static: string;
++    }) | (() => {
+         static: string;
 -    };
 -    [classFieldName]: () => string;
 -    [otherField]: () => number;
-+    static [x: string]: Holder | (typeof Holder)[typeof staticField] | (typeof Holder)[typeof staticField];
++    });
 +    [x: string]: (() => string) | (() => number);
  }
  /**
   * Could be `"prototype"`, so all static string indexers include the instance type
-  */
--export declare const staticLookup: Holder | (() => {
--    static: boolean;
--}) | (() => {
--    static: string;
--});
-+export declare const staticLookup: Holder | (typeof Holder)[typeof staticField] | (typeof Holder)[typeof staticField];
+@@= skipped -24, +19 lines =@@
+     static: string;
+ });
  export declare const instanceLookup: (() => string) | (() => number);
 -export {};

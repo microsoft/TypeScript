@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/jsnum"
 	"github.com/microsoft/typescript-go/internal/module"
@@ -63,7 +64,7 @@ type NodeBuilderContext struct {
 	enclosingDeclaration            *ast.Node
 	enclosingFile                   *ast.SourceFile
 	inferTypeParameters             []*Type
-	visitedTypes                    map[TypeId]bool
+	visitedTypes                    collections.Set[TypeId]
 	symbolDepth                     map[CompositeSymbolIdentity]int
 	trackedSymbols                  []*TrackedSymbolArgs
 	mapper                          *TypeMapper
@@ -212,12 +213,121 @@ func (b *nodeBuilderImpl) createElidedInformationPlaceholder() *ast.TypeNode {
 	return b.f.NewKeywordTypeNode(ast.KindAnyKeyword)
 }
 
-func (b *nodeBuilderImpl) mapToTypeNodes(list []*Type) *ast.NodeList {
+func (b *nodeBuilderImpl) mapToTypeNodes(list []*Type, isBareList bool) *ast.NodeList {
 	if len(list) == 0 {
 		return nil
 	}
-	contents := core.Map(list, b.typeToTypeNode)
-	return b.f.NewNodeList(contents)
+
+	if b.checkTruncationLength() {
+		if !isBareList {
+			var node *ast.Node
+			if b.ctx.flags&nodebuilder.FlagsNoTruncation != 0 {
+				// addSyntheticLeadingComment(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), SyntaxKind.MultiLineCommentTrivia, `... ${types.length} elided ...`)
+				node = b.f.NewKeywordTypeNode(ast.KindAnyKeyword)
+			} else {
+				node = b.f.NewTypeReferenceNode(b.f.NewIdentifier("..."), nil /*typeArguments*/)
+			}
+			return b.f.NewNodeList([]*ast.Node{node})
+		} else if len(list) > 2 {
+			nodes := []*ast.Node{
+				b.typeToTypeNode(list[0]),
+				nil,
+				b.typeToTypeNode(list[len(list)-1]),
+			}
+
+			if b.ctx.flags&nodebuilder.FlagsNoTruncation != 0 {
+				// addSyntheticLeadingComment(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), SyntaxKind.MultiLineCommentTrivia, `... ${types.length - 2} more elided ...`)
+				nodes[1] = b.f.NewKeywordTypeNode(ast.KindAnyKeyword)
+			} else {
+				text := fmt.Sprintf("... %d more ...", len(list)-2)
+				nodes[1] = b.f.NewTypeReferenceNode(b.f.NewIdentifier(text), nil /*typeArguments*/)
+			}
+			return b.f.NewNodeList(nodes)
+		}
+	}
+
+	mayHaveNameCollisions := b.ctx.flags&nodebuilder.FlagsUseFullyQualifiedType == 0
+	type seenName struct {
+		t *Type
+		i int
+	}
+	var seenNames *collections.MultiMap[string, seenName]
+	if mayHaveNameCollisions {
+		seenNames = &collections.MultiMap[string, seenName]{}
+	}
+
+	result := make([]*ast.Node, 0, len(list))
+
+	for i, t := range list {
+		if b.checkTruncationLength() && (i+2 < len(list)-1) {
+			if b.ctx.flags&nodebuilder.FlagsNoTruncation != 0 {
+				// addSyntheticLeadingComment(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), SyntaxKind.MultiLineCommentTrivia, `... ${types.length} elided ...`)
+				result = append(result, b.f.NewKeywordTypeNode(ast.KindAnyKeyword))
+			} else {
+				text := fmt.Sprintf("... %d more ...", len(list)-i)
+				result = append(result, b.f.NewTypeReferenceNode(b.f.NewIdentifier(text), nil /*typeArguments*/))
+			}
+			typeNode := b.typeToTypeNode(list[len(list)-1])
+			if typeNode != nil {
+				result = append(result, typeNode)
+			}
+			break
+		}
+		b.ctx.approximateLength += 2 // Account for whitespace + separator
+		typeNode := b.typeToTypeNode(t)
+		if typeNode != nil {
+			result = append(result, typeNode)
+			if seenNames != nil && isIdentifierTypeReference(typeNode) {
+				seenNames.Add(typeNode.AsTypeReferenceNode().TypeName.Text(), seenName{t, len(result) - 1})
+			}
+		}
+	}
+
+	if seenNames != nil {
+		// To avoid printing types like `[Foo, Foo]` or `Bar & Bar` where
+		// occurrences of the same name actually come from different
+		// namespaces, go through the single-identifier type reference nodes
+		// we just generated, and see if any names were generated more than
+		// once while referring to different types. If so, regenerate the
+		// type node for each entry by that name with the
+		// `UseFullyQualifiedType` flag enabled.
+		restoreFlags := b.saveRestoreFlags()
+		b.ctx.flags |= nodebuilder.FlagsUseFullyQualifiedType
+		for types := range seenNames.Values() {
+			if !arrayIsHomogeneous(types, func(a, b seenName) bool {
+				return typesAreSameReference(a.t, b.t)
+			}) {
+				for _, seen := range types {
+					result[seen.i] = b.typeToTypeNode(seen.t)
+				}
+			}
+		}
+		restoreFlags()
+	}
+
+	return b.f.NewNodeList(result)
+}
+
+func isIdentifierTypeReference(node *ast.Node) bool {
+	return ast.IsTypeReferenceNode(node) && ast.IsIdentifier(node.AsTypeReferenceNode().TypeName)
+}
+
+func arrayIsHomogeneous[T any](array []T, comparer func(a, B T) bool) bool {
+	if len(array) < 2 {
+		return true
+	}
+	first := array[0]
+	for i := 1; i < len(array); i++ {
+		target := array[i]
+		if !comparer(first, target) {
+			return false
+		}
+	}
+	return true
+}
+
+func typesAreSameReference(a, b *Type) bool {
+	return a == b || a.symbol != nil && a.symbol == b.symbol || a.alias != nil && a.alias == b.alias
 }
 
 func (b *nodeBuilderImpl) setCommentRange(node *ast.Node, range_ *ast.Node) {
@@ -819,7 +929,7 @@ func (b *nodeBuilderImpl) lookupTypeParameterNodes(chain []*ast.Symbol, index in
 			if targetMapper != nil {
 				params = core.Map(params, targetMapper.Map)
 			}
-			return b.mapToTypeNodes(params)
+			return b.mapToTypeNodes(params, false /*isBareList*/)
 		} else {
 			typeParameterNodes := b.typeParametersToTypeParameterDeclarations(symbol)
 			if len(typeParameterNodes) > 0 {
@@ -1314,6 +1424,7 @@ func (b *nodeBuilderImpl) createMappedTypeNodeFromType(t *Type) *ast.TypeNode {
 		templateTypeNode,
 		nil,
 	)
+	b.ctx.approximateLength += 10
 	b.e.AddEmitFlags(result, printer.EFSingleLine)
 
 	if b.ctx.flags&nodebuilder.FlagsGenerateNamesForShadowedTypeParams != 0 && b.isHomomorphicMappedTypeWithNonHomomorphicInstantiation(mapped) {
@@ -2301,7 +2412,7 @@ func getTypeAliasForTypeLiteral(c *Checker, t *Type) *ast.Symbol {
 
 func (b *nodeBuilderImpl) shouldWriteTypeOfFunctionSymbol(symbol *ast.Symbol, typeId TypeId) bool {
 	isStaticMethodSymbol := symbol.Flags&ast.SymbolFlagsMethod != 0 && core.Some(symbol.Declarations, func(declaration *ast.Node) bool {
-		return ast.IsStatic(declaration)
+		return ast.IsStatic(declaration) && !b.ch.isLateBindableIndexSignature(ast.GetNameOfDeclaration(declaration))
 	})
 	isNonLocalFunctionSymbol := false
 	if symbol.Flags&ast.SymbolFlagsFunction != 0 {
@@ -2318,9 +2429,8 @@ func (b *nodeBuilderImpl) shouldWriteTypeOfFunctionSymbol(symbol *ast.Symbol, ty
 	}
 	if isStaticMethodSymbol || isNonLocalFunctionSymbol {
 		// typeof is allowed only for static/non local functions
-		_, visited := b.ctx.visitedTypes[typeId]
-		return (b.ctx.flags&nodebuilder.FlagsUseTypeOfFunction != 0 || visited) && (b.ctx.flags&nodebuilder.FlagsUseStructuralFallback == 0 || b.ch.IsValueSymbolAccessible(symbol, b.ctx.enclosingDeclaration))
-		// And the build is going to succeed without visibility error or there is no structural fallback allowed
+		return (b.ctx.flags&nodebuilder.FlagsUseTypeOfFunction != 0 || b.ctx.visitedTypes.Has(typeId)) && // it is type of the symbol uses itself recursively
+			(b.ctx.flags&nodebuilder.FlagsUseStructuralFallback == 0 || b.ch.IsValueSymbolAccessible(symbol, b.ctx.enclosingDeclaration)) // And the build is going to succeed without visibility error or there is no structural fallback allowed
 	}
 	return false
 }
@@ -2339,7 +2449,7 @@ func (b *nodeBuilderImpl) createAnonymousTypeNode(t *Type) *ast.TypeNode {
 					return typeNode
 				}
 			}
-			if _, ok := b.ctx.visitedTypes[typeId]; ok {
+			if b.ctx.visitedTypes.Has(typeId) {
 				return b.createElidedInformationPlaceholder()
 			}
 			return b.visitAndTransformType(t, (*nodeBuilderImpl).createTypeNodeFromObjectType)
@@ -2358,7 +2468,7 @@ func (b *nodeBuilderImpl) createAnonymousTypeNode(t *Type) *ast.TypeNode {
 		// } else
 		if symbol.Flags&ast.SymbolFlagsClass != 0 && b.ch.getBaseTypeVariableOfClass(symbol) == nil && !(symbol.ValueDeclaration != nil && ast.IsClassLike(symbol.ValueDeclaration) && b.ctx.flags&nodebuilder.FlagsWriteClassExpressionAsTypeLiteral != 0 && (!ast.IsClassDeclaration(symbol.ValueDeclaration) || b.ch.IsSymbolAccessible(symbol, b.ctx.enclosingDeclaration, isInstanceType, false /*shouldComputeAliasesToMakeVisible*/).Accessibility != printer.SymbolAccessibilityAccessible)) || symbol.Flags&(ast.SymbolFlagsEnum|ast.SymbolFlagsValueModule) != 0 || b.shouldWriteTypeOfFunctionSymbol(symbol, typeId) {
 			return b.symbolToTypeNode(symbol, isInstanceType, nil)
-		} else if _, ok := b.ctx.visitedTypes[typeId]; ok {
+		} else if b.ctx.visitedTypes.Has(typeId) {
 			// If type is an anonymous type literal in a type alias declaration, use type alias name
 			typeAlias := getTypeAliasForTypeLiteral(b.ch, t)
 			if typeAlias != nil {
@@ -2392,7 +2502,7 @@ func (b *nodeBuilderImpl) getTypeFromTypeNode(node *ast.TypeNode, noMappedTypes 
 
 func (b *nodeBuilderImpl) typeToTypeNodeOrCircularityElision(t *Type) *ast.TypeNode {
 	if t.flags&TypeFlagsUnion != 0 {
-		if _, ok := b.ctx.visitedTypes[t.id]; ok {
+		if b.ctx.visitedTypes.Has(t.id) {
 			if b.ctx.flags&nodebuilder.FlagsAllowAnonymousIdentifier == 0 {
 				b.ctx.encounteredError = true
 				b.ctx.tracker.ReportCyclicStructureError()
@@ -2486,7 +2596,7 @@ func (b *nodeBuilderImpl) typeReferenceToTypeNode(t *Type) *ast.TypeNode {
 		})
 		if len(typeArguments) > 0 {
 			arity := b.ch.getTypeReferenceArity(t)
-			tupleConstituentNodes := b.mapToTypeNodes(typeArguments[0:arity])
+			tupleConstituentNodes := b.mapToTypeNodes(typeArguments[0:arity], false /*isBareList*/)
 			if tupleConstituentNodes != nil {
 				for i := 0; i < len(tupleConstituentNodes.Nodes); i++ {
 					flags := t.Target().AsTupleType().elementInfos[i].flags
@@ -2543,7 +2653,7 @@ func (b *nodeBuilderImpl) typeReferenceToTypeNode(t *Type) *ast.TypeNode {
 				// the default outer type arguments), we don't show the group.
 
 				if !slices.Equal(outerTypeParameters[start:i], typeArguments[start:i]) {
-					typeArgumentSlice := b.mapToTypeNodes(typeArguments[start:i])
+					typeArgumentSlice := b.mapToTypeNodes(typeArguments[start:i], false /*isBareList*/)
 					restoreFlags := b.saveRestoreFlags()
 					b.ctx.flags |= nodebuilder.FlagsForbidIndexedAccessSymbolReferences
 					ref := b.symbolToTypeNode(parent, ast.SymbolFlagsType, typeArgumentSlice)
@@ -2582,7 +2692,7 @@ func (b *nodeBuilderImpl) typeReferenceToTypeNode(t *Type) *ast.TypeNode {
 				}
 			}
 
-			typeArgumentNodes = b.mapToTypeNodes(typeArguments[i:typeParameterCount])
+			typeArgumentNodes = b.mapToTypeNodes(typeArguments[i:typeParameterCount], false /*isBareList*/)
 		}
 		restoreFlags := b.saveRestoreFlags()
 		b.ctx.flags |= nodebuilder.FlagsForbidIndexedAccessSymbolReferences
@@ -2614,7 +2724,7 @@ func (b *nodeBuilderImpl) visitAndTransformType(t *Type, transform func(b *nodeB
 	// of types allows us to catch circular references to instantiations of the same anonymous type
 
 	key := CompositeTypeCacheIdentity{typeId, b.ctx.flags, b.ctx.internalFlags}
-	if b.links.Has(b.ctx.enclosingDeclaration) {
+	if b.ctx.enclosingDeclaration != nil && b.links.Has(b.ctx.enclosingDeclaration) {
 		links := b.links.Get(b.ctx.enclosingDeclaration)
 		cachedResult, ok := links.serializedTypes[key]
 		if ok {
@@ -2638,7 +2748,7 @@ func (b *nodeBuilderImpl) visitAndTransformType(t *Type, transform func(b *nodeB
 		}
 		b.ctx.symbolDepth[*id] = depth + 1
 	}
-	b.ctx.visitedTypes[typeId] = true
+	b.ctx.visitedTypes.Add(typeId)
 	prevTrackedSymbols := b.ctx.trackedSymbols
 	b.ctx.trackedSymbols = nil
 	startLength := b.ctx.approximateLength
@@ -2656,7 +2766,7 @@ func (b *nodeBuilderImpl) visitAndTransformType(t *Type, transform func(b *nodeB
 			trackedSymbols: b.ctx.trackedSymbols,
 		}
 	}
-	delete(b.ctx.visitedTypes, typeId)
+	b.ctx.visitedTypes.Delete(typeId)
 	if id != nil {
 		b.ctx.symbolDepth[*id] = depth
 	}
@@ -2828,7 +2938,7 @@ func (b *nodeBuilderImpl) typeToTypeNode(t *Type) *ast.TypeNode {
 
 	if inTypeAlias == 0 && t.alias != nil && (b.ctx.flags&nodebuilder.FlagsUseAliasDefinedOutsideCurrentScope != 0 || b.ch.IsTypeSymbolAccessible(t.alias.Symbol(), b.ctx.enclosingDeclaration)) {
 		sym := t.alias.Symbol()
-		typeArgumentNodes := b.mapToTypeNodes(t.alias.TypeArguments())
+		typeArgumentNodes := b.mapToTypeNodes(t.alias.TypeArguments(), false /*isBareList*/)
 		if isReservedMemberName(sym.Name) && sym.Flags&ast.SymbolFlagsClass == 0 {
 			return b.f.NewTypeReferenceNode(b.f.NewIdentifier(""), typeArgumentNodes)
 		}
@@ -2896,7 +3006,7 @@ func (b *nodeBuilderImpl) typeToTypeNode(t *Type) *ast.TypeNode {
 		if len(types) == 1 {
 			return b.typeToTypeNode(types[0])
 		}
-		typeNodes := b.mapToTypeNodes(types)
+		typeNodes := b.mapToTypeNodes(types, true /*isBareList*/)
 		if typeNodes != nil && len(typeNodes.Nodes) > 0 {
 			if t.flags&TypeFlagsUnion != 0 {
 				return b.f.NewUnionTypeNode(typeNodes)
@@ -2970,5 +3080,5 @@ func (b *nodeBuilderImpl) typeToTypeNode(t *Type) *ast.TypeNode {
 // Direct serialization core functions for types, type aliases, and symbols
 
 func (t *TypeAlias) ToTypeReferenceNode(b *nodeBuilderImpl) *ast.Node {
-	return b.f.NewTypeReferenceNode(b.symbolToEntityNameNode(t.Symbol()), b.mapToTypeNodes(t.TypeArguments()))
+	return b.f.NewTypeReferenceNode(b.symbolToEntityNameNode(t.Symbol()), b.mapToTypeNodes(t.TypeArguments(), false /*isBareList*/))
 }

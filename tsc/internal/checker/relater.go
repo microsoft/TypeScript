@@ -1270,13 +1270,13 @@ func isNonPrimitiveType(t *Type) bool {
 func (c *Checker) getTypeNamesForErrorDisplay(left *Type, right *Type) (string, string) {
 	var leftStr string
 	if c.symbolValueDeclarationIsContextSensitive(left.symbol) {
-		leftStr = c.typeToStringEx(left, left.symbol.ValueDeclaration, TypeFormatFlagsNone)
+		leftStr = c.typeToString(left, left.symbol.ValueDeclaration)
 	} else {
 		leftStr = c.TypeToString(left)
 	}
 	var rightStr string
 	if c.symbolValueDeclarationIsContextSensitive(right.symbol) {
-		rightStr = c.typeToStringEx(right, right.symbol.ValueDeclaration, TypeFormatFlagsNone)
+		rightStr = c.typeToString(right, right.symbol.ValueDeclaration)
 	} else {
 		rightStr = c.TypeToString(right)
 	}
