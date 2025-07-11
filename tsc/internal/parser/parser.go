@@ -6337,16 +6337,26 @@ func (p *Parser) isUsingDeclaration() bool {
 	// 'using' always starts a lexical declaration if followed by an identifier. We also eagerly parse
 	// |ObjectBindingPattern| so that we can report a grammar error during check. We don't parse out
 	// |ArrayBindingPattern| since it potentially conflicts with element access (i.e., `using[x]`).
-	return p.lookAhead((*Parser).nextTokenIsBindingIdentifierOrStartOfDestructuringOnSameLine)
+	return p.lookAhead(func(p *Parser) bool {
+		return p.nextTokenIsBindingIdentifierOrStartOfDestructuringOnSameLine( /*disallowOf*/ false)
+	})
 }
 
-func (p *Parser) nextTokenIsBindingIdentifierOrStartOfDestructuringOnSameLine() bool {
+func (p *Parser) nextTokenIsEqualsOrSemicolonOrColonToken() bool {
 	p.nextToken()
+	return p.token == ast.KindEqualsToken || p.token == ast.KindSemicolonToken || p.token == ast.KindColonToken
+}
+
+func (p *Parser) nextTokenIsBindingIdentifierOrStartOfDestructuringOnSameLine(disallowOf bool) bool {
+	p.nextToken()
+	if disallowOf && p.token == ast.KindOfKeyword {
+		return p.lookAhead((*Parser).nextTokenIsEqualsOrSemicolonOrColonToken)
+	}
 	return p.isBindingIdentifier() || p.token == ast.KindOpenBraceToken && !p.hasPrecedingLineBreak()
 }
 
 func (p *Parser) nextTokenIsBindingIdentifierOrStartOfDestructuringOnSameLineDisallowOf() bool {
-	return p.nextTokenIsBindingIdentifierOrStartOfDestructuringOnSameLine() && p.token != ast.KindOfKeyword
+	return p.nextTokenIsBindingIdentifierOrStartOfDestructuringOnSameLine( /*disallowOf*/ true)
 }
 
 func (p *Parser) isAwaitUsingDeclaration() bool {
@@ -6354,7 +6364,7 @@ func (p *Parser) isAwaitUsingDeclaration() bool {
 }
 
 func (p *Parser) nextIsUsingKeywordThenBindingIdentifierOrStartOfObjectDestructuringOnSameLine() bool {
-	return p.nextToken() == ast.KindUsingKeyword && p.nextTokenIsBindingIdentifierOrStartOfDestructuringOnSameLine()
+	return p.nextToken() == ast.KindUsingKeyword && p.nextTokenIsBindingIdentifierOrStartOfDestructuringOnSameLine( /*disallowOf*/ false)
 }
 
 func (p *Parser) nextTokenIsTokenStringLiteral() bool {
