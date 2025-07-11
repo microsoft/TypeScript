@@ -9,3 +9,6 @@ query-filters:
   # This query takes too long on complicated string manipulations
   - exclude:
       id: go/unsafe-quoting
+  # Times out in our code.
+  - exclude:
+      id: go/allocation-size-overflow
