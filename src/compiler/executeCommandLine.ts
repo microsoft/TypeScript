@@ -640,10 +640,8 @@ function executeCommandLineWorker(
         const configParseResult = parseConfigFileWithSystem(configFileName, commandLineOptions, extendedConfigCache, commandLine.watchOptions, sys, reportDiagnostic)!; // TODO: GH#18217
         if (commandLineOptions.showConfig) {
             // For --showConfig, filter out "no inputs found" errors since the purpose is to show configuration, not compile
-            const errorsExcludingNoInputs = configParseResult.errors.filter(error => 
-                error.code !== Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code
-            );
-            
+            const errorsExcludingNoInputs = configParseResult.errors.filter(error => error.code !== Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code);
+
             if (errorsExcludingNoInputs.length !== 0) {
                 reportDiagnostic = updateReportDiagnostic(
                     sys,
