@@ -26,6 +26,7 @@ jobs:
           # Updated to 1.25.0-rc.1 to improve compilation time
           go-version: '>=1.25.0-rc.1'
           cache-name: copilot-setup-steps
+          cache-from-previous-run: 'true'
       - run: npm i -g @playwright/mcp@0.0.28
       - run: npm ci
       # pull dprint caches before network access is blocked
