@@ -1890,15 +1890,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJS_option_to_get_errors_from_these__6600" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJs_option_to_get_errors_from_these__6600" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files.]]></Val>
+          <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the 'checkJs' option to get errors from these files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[JavaScript 파일이 프로그램의 일부가 되도록 허용합니다. 이러한 파일에서 오류를 가져오려면 'checkJS' 옵션을 사용하세요.]]></Val>
+            <Val><![CDATA[JavaScript 파일이 프로그램의 일부가 되도록 허용합니다. 이러한 파일에서 오류를 가져오려면 'checkJs' 옵션을 사용하세요.]]></Val>
           </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files.]]></Val>
-          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3038,6 +3035,15 @@
           <Val><![CDATA[Call signatures with no arguments have incompatible return types '{0}' and '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[인수가 없는 호출 시그니처의 반환 형식 '{0}' 및 '{1}'이(가) 호환되지 않습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Call_target_does_not_contain_any_signatures_2346" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Call target does not contain any signatures.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[호출 대상에 시그니처가 포함되어 있지 않습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

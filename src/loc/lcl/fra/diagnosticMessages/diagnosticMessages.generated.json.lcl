@@ -1902,15 +1902,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJS_option_to_get_errors_from_these__6600" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJs_option_to_get_errors_from_these__6600" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files.]]></Val>
+          <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the 'checkJs' option to get errors from these files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Autorisez les fichiers JavaScript à faire partie de votre programme. Utilisez l’option « checkJS » pour obtenir des erreurs à partir de ces fichiers.]]></Val>
+            <Val><![CDATA[Autorisez les fichiers JavaScript à faire partie de votre programme. Utilisez l’option « checkJS » pour obtenir des erreurs à partir de ces fichiers.]]></Val>
           </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files.]]></Val>
-          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3050,6 +3047,15 @@
           <Val><![CDATA[Call signatures with no arguments have incompatible return types '{0}' and '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Les signatures d'appel sans arguments ont des types de retour incompatibles : '{0}' et '{1}'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Call_target_does_not_contain_any_signatures_2346" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Call target does not contain any signatures.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La cible de l'appel ne contient aucune signature.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

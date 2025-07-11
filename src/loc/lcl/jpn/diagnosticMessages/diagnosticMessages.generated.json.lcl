@@ -1890,15 +1890,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJS_option_to_get_errors_from_these__6600" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJs_option_to_get_errors_from_these__6600" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files.]]></Val>
+          <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the 'checkJs' option to get errors from these files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[JavaScript ファイルをプログラムの一部として使用することを許可します。'checkJS' オプションを使用して、これらのファイルからエラーを取得してください。]]></Val>
+            <Val><![CDATA[JavaScript ファイルをプログラムの一部として使用することを許可します。'checkJs' オプションを使用して、これらのファイルからエラーを取得してください。]]></Val>
           </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files.]]></Val>
-          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3038,6 +3035,15 @@
           <Val><![CDATA[Call signatures with no arguments have incompatible return types '{0}' and '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[引数なしの呼び出しシグネチャに、互換性のない戻り値の型 '{0}' と '{1}' が含まれています。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Call_target_does_not_contain_any_signatures_2346" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Call target does not contain any signatures.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[呼び出しターゲットにシグネチャが含まれていません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
