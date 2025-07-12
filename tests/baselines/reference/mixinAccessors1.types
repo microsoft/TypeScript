@@ -1,0 +1,87 @@
+//// [tests/cases/conformance/classes/mixinAccessors1.ts] ////
+
+=== mixinAccessors1.ts ===
+// https://github.com/microsoft/TypeScript/issues/58790
+
+function mixin<T extends { new (...args: any[]): {} }>(superclass: T) {
+>mixin : <T extends { new (...args: any[]): {}; }>(superclass: T) => { new (...args: any[]): (Anonymous class); prototype: mixin<any>.(Anonymous class); } & T
+>      : ^ ^^^^^^^^^                             ^^          ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>args : any[]
+>     : ^^^^^
+>superclass : T
+>           : ^
+
+  return class extends superclass {
+>class extends superclass {    get validationTarget(): HTMLElement {      return document.createElement("input");    }  } : { new (...args: any[]): (Anonymous class); prototype: mixin<any>.(Anonymous class); } & T
+>                                                                                                                         : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>superclass : {}
+>           : ^^
+
+    get validationTarget(): HTMLElement {
+>validationTarget : HTMLElement
+>                 : ^^^^^^^^^^^
+
+      return document.createElement("input");
+>document.createElement("input") : HTMLInputElement
+>                                : ^^^^^^^^^^^^^^^^
+>document.createElement : { <K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; <K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementDeprecatedTagNameMap[K]; (tagName: string, options?: ElementCreationOptions): HTMLElement; }
+>                       : ^^^ ^^^^^^^^^                           ^^       ^^ ^^       ^^^                      ^^^                        ^^^ ^^^^^^^^^                                     ^^       ^^ ^^       ^^^                      ^^^                                  ^^^       ^^      ^^       ^^^                      ^^^           ^^^
+>document : Document
+>         : ^^^^^^^^
+>createElement : { <K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; <K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementDeprecatedTagNameMap[K]; (tagName: string, options?: ElementCreationOptions): HTMLElement; }
+>              : ^^^ ^^^^^^^^^                           ^^       ^^ ^^       ^^^                      ^^^                        ^^^ ^^^^^^^^^                                     ^^       ^^ ^^       ^^^                      ^^^                                  ^^^       ^^      ^^       ^^^                      ^^^           ^^^
+>"input" : "input"
+>        : ^^^^^^^
+    }
+  };
+}
+
+class BaseClass {
+>BaseClass : BaseClass
+>          : ^^^^^^^^^
+
+  get validationTarget(): HTMLElement {
+>validationTarget : HTMLElement
+>                 : ^^^^^^^^^^^
+
+    return document.createElement("div");
+>document.createElement("div") : HTMLDivElement
+>                              : ^^^^^^^^^^^^^^
+>document.createElement : { <K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; <K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementDeprecatedTagNameMap[K]; (tagName: string, options?: ElementCreationOptions): HTMLElement; }
+>                       : ^^^ ^^^^^^^^^                           ^^       ^^ ^^       ^^^                      ^^^                        ^^^ ^^^^^^^^^                                     ^^       ^^ ^^       ^^^                      ^^^                                  ^^^       ^^      ^^       ^^^                      ^^^           ^^^
+>document : Document
+>         : ^^^^^^^^
+>createElement : { <K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; <K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementDeprecatedTagNameMap[K]; (tagName: string, options?: ElementCreationOptions): HTMLElement; }
+>              : ^^^ ^^^^^^^^^                           ^^       ^^ ^^       ^^^                      ^^^                        ^^^ ^^^^^^^^^                                     ^^       ^^ ^^       ^^^                      ^^^                                  ^^^       ^^      ^^       ^^^                      ^^^           ^^^
+>"div" : "div"
+>      : ^^^^^
+  }
+}
+
+class MyClass extends mixin(BaseClass) {
+>MyClass : MyClass
+>        : ^^^^^^^
+>mixin(BaseClass) : mixin<typeof BaseClass>.(Anonymous class) & BaseClass
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixin : <T extends { new (...args: any[]): {}; }>(superclass: T) => { new (...args: any[]): (Anonymous class); prototype: mixin<any>.(Anonymous class); } & T
+>      : ^ ^^^^^^^^^                             ^^          ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>BaseClass : typeof BaseClass
+>          : ^^^^^^^^^^^^^^^^
+
+  get validationTarget(): HTMLElement {
+>validationTarget : HTMLElement
+>                 : ^^^^^^^^^^^
+
+    return document.createElement("select");
+>document.createElement("select") : HTMLSelectElement
+>                                 : ^^^^^^^^^^^^^^^^^
+>document.createElement : { <K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; <K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementDeprecatedTagNameMap[K]; (tagName: string, options?: ElementCreationOptions): HTMLElement; }
+>                       : ^^^ ^^^^^^^^^                           ^^       ^^ ^^       ^^^                      ^^^                        ^^^ ^^^^^^^^^                                     ^^       ^^ ^^       ^^^                      ^^^                                  ^^^       ^^      ^^       ^^^                      ^^^           ^^^
+>document : Document
+>         : ^^^^^^^^
+>createElement : { <K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; <K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementDeprecatedTagNameMap[K]; (tagName: string, options?: ElementCreationOptions): HTMLElement; }
+>              : ^^^ ^^^^^^^^^                           ^^       ^^ ^^       ^^^                      ^^^                        ^^^ ^^^^^^^^^                                     ^^       ^^ ^^       ^^^                      ^^^                                  ^^^       ^^      ^^       ^^^                      ^^^           ^^^
+>"select" : "select"
+>         : ^^^^^^^^
+  }
+}

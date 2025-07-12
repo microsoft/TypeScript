@@ -5559,12 +5559,15 @@ namespace Parser {
             return parseFunctionBlock(SignatureFlags.IgnoreMissingOpenBrace | (isAsync ? SignatureFlags.Await : SignatureFlags.None));
         }
 
+        const savedYieldContext = inYieldContext();
+        setYieldContext(false);
         const savedTopLevel = topLevel;
         topLevel = false;
         const node = isAsync
             ? doInAwaitContext(() => parseAssignmentExpressionOrHigher(allowReturnTypeInArrowFunction))
             : doOutsideOfAwaitContext(() => parseAssignmentExpressionOrHigher(allowReturnTypeInArrowFunction));
         topLevel = savedTopLevel;
+        setYieldContext(savedYieldContext);
         return node;
     }
 
