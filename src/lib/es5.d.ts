@@ -4419,7 +4419,7 @@ declare namespace Intl {
     }
 
     interface Collator {
-        get compare(): (this: void, x: string, y: string) => number;
+        compare(this: void, x: string, y: string): number;
         resolvedOptions(): ResolvedCollatorOptions;
     }
 
