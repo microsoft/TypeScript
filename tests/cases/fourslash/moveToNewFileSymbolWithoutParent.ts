@@ -1,20 +1,19 @@
 /// <reference path='fourslash.ts'/>
 
-// Test for move to new file with symbols that don't have a parent but aren't modules
-// This reproduces the scenario that caused the debug assertion failure
+// Test for the debug assertion failure with symbols exported separately from declaration
+// This reproduces the issue reported in #62029
 
-// @Filename: /a.ts
-////export const someVar = 42;
-////[|export const anotherVar = 24;|]
+// @Filename: /bar.ts
+////class Bar {}
+////
+////export default Bar;
 
-verify.moveToNewFile({
-    newFileContents: {
-        "/a.ts":
-`export const someVar = 42;
-`,
+// @Filename: /foo.ts
+////import Bar from './bar';
+////
+////[|function makeBar() {
+////    return new Bar();
+////}|]
 
-        "/anotherVar.ts":
-`export const anotherVar = 24;
-`,
-    },
-});
+// Check that the refactor is available
+verify.applicableRefactorAvailableAtMarker("Move to a new file");

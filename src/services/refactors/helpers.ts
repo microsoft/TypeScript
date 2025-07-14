@@ -80,9 +80,15 @@ export function addTargetFileImports(
         if (checker.isUnknownSymbol(targetSymbol)) {
             importAdder.addVerbatimImport(Debug.checkDefined(declaration ?? findAncestor(symbol.declarations?.[0], isAnyImportOrRequireStatement)));
         }
-        else if (targetSymbol.parent === undefined && (targetSymbol.flags & SymbolFlags.Module)) {
-            Debug.assert(declaration !== undefined, "expected module symbol to have a declaration");
-            importAdder.addImportForModuleSymbol(symbol, isValidTypeOnlyUseSite, declaration);
+        else if (targetSymbol.parent === undefined) {
+            if (targetSymbol.flags & SymbolFlags.Module) {
+                Debug.assert(declaration !== undefined, "expected module symbol to have a declaration");
+                importAdder.addImportForModuleSymbol(symbol, isValidTypeOnlyUseSite, declaration);
+            }
+            else {
+                // For symbols without a parent that aren't modules, fall back to verbatim import
+                importAdder.addVerbatimImport(Debug.checkDefined(declaration ?? findAncestor(symbol.declarations?.[0], isAnyImportOrRequireStatement)));
+            }
         }
         else {
             importAdder.addImportFromExportedSymbol(targetSymbol, isValidTypeOnlyUseSite, declaration);
