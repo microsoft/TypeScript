@@ -28,8 +28,9 @@ class A {
     #fieldFunc2 = function (a, ...b) { };
     x = 1;
     test() {
+        var _a;
         this.#fieldFunc();
-        this.#fieldFunc?.();
+        (_a = this.#fieldFunc) === null || _a === void 0 ? void 0 : _a.call(this);
         const func = this.#fieldFunc;
         func();
         new this.#fieldFunc();

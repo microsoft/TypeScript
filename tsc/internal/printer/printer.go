@@ -3093,12 +3093,12 @@ func (p *Printer) emitExpression(node *ast.Expression, precedence ast.OperatorPr
 		return
 	case ast.KindPartiallyEmittedExpression:
 		p.emitPartiallyEmittedExpression(node.AsPartiallyEmittedExpression(), precedence)
+	case ast.KindSyntheticReferenceExpression:
+		panic("SyntheticReferenceExpression should not be printed")
 
 	// !!!
 	////case ast.KindCommaListExpression:
 	////	p.emitCommaList(node.AsCommaListExpression())
-	////case ast.KindSyntheticReferenceExpression:
-	////	return Debug.fail("SyntheticReferenceExpression should not be printed")
 
 	default:
 		panic(fmt.Sprintf("unexpected Expression: %v", node.Kind))

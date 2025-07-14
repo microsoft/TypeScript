@@ -11,4 +11,4 @@ const test = (names: string[]) =>
 // https://github.com/microsoft/TypeScript/issues/41814
 const test = (names) => 
 // single-line comment
-names?.filter(x => x);
+names === null || names === void 0 ? void 0 : names.filter(x => x);

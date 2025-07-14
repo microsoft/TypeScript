@@ -23,8 +23,9 @@
 -        __classPrivateFieldGet(_a, _a, "f", _A_fieldFunc).call(_a);
 -        (_b = __classPrivateFieldGet(_a, _a, "f", _A_fieldFunc)) === null || _b === void 0 ? void 0 : _b.call(_a);
 -        const func = __classPrivateFieldGet(_a, _a, "f", _A_fieldFunc);
++        var _a;
 +        A.#fieldFunc();
-+        A.#fieldFunc?.();
++        (_a = A.#fieldFunc) === null || _a === void 0 ? void 0 : _a.call(A);
 +        const func = A.#fieldFunc;
          func();
 -        new (__classPrivateFieldGet(_a, _a, "f", _A_fieldFunc))();

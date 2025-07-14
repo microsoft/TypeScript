@@ -879,6 +879,20 @@ func (n *Node) Elements() []*Node {
 	return nil
 }
 
+func (n *Node) QuestionDotToken() *Node {
+	switch n.Kind {
+	case KindElementAccessExpression:
+		return n.AsElementAccessExpression().QuestionDotToken
+	case KindPropertyAccessExpression:
+		return n.AsPropertyAccessExpression().QuestionDotToken
+	case KindCallExpression:
+		return n.AsCallExpression().QuestionDotToken
+	case KindTaggedTemplateExpression:
+		return n.AsTaggedTemplateExpression().QuestionDotToken
+	}
+	panic("Unhandled case in Node.QuestionDotToken: " + n.Kind.String())
+}
+
 // Determines if `n` contains `descendant` by walking up the `Parent` pointers from `descendant`. This method panics if
 // `descendant` or one of its ancestors is not parented except when that node is a `SourceFile`.
 func (n *Node) Contains(descendant *Node) bool {
@@ -1671,6 +1685,10 @@ func (n *Node) AsSyntheticExpression() *SyntheticExpression {
 
 func (n *Node) AsSyntaxList() *SyntaxList {
 	return n.data.(*SyntaxList)
+}
+
+func (n *Node) AsSyntheticReferenceExpression() *SyntheticReferenceExpression {
+	return n.data.(*SyntheticReferenceExpression)
 }
 
 // NodeData
@@ -4125,6 +4143,53 @@ func (node *NotEmittedTypeElement) Clone(f NodeFactoryCoercible) *Node {
 
 func IsNotEmittedTypeElement(node *Node) bool {
 	return node.Kind == KindNotEmittedTypeElement
+}
+
+// SyntheticReferenceExpression
+// Used by optional chaining transform to shuffle a `this` arg expression between steps of a chain.
+// While this does implement the full expected interface of a node, and is used in place of a node in transforms,
+// it generally shouldn't be treated or visited like a normal node.
+
+type SyntheticReferenceExpression struct {
+	ExpressionBase
+	Expression *Expression
+	ThisArg    *Expression
+}
+
+func (f *NodeFactory) NewSyntheticReferenceExpression(expr *Expression, thisArg *Expression) *Node {
+	data := &SyntheticReferenceExpression{Expression: expr, ThisArg: thisArg}
+	return newNode(KindSyntheticReferenceExpression, data, f.hooks)
+}
+
+func (f *NodeFactory) UpdateSyntheticReferenceExpression(node *SyntheticReferenceExpression, expr *Expression, thisArg *Expression) *Node {
+	if expr != node.Expression || thisArg != node.ThisArg {
+		return updateNode(f.NewSyntheticReferenceExpression(expr, thisArg), node.AsNode(), f.hooks)
+	}
+	return node.AsNode()
+}
+
+func (node *SyntheticReferenceExpression) ForEachChild(v Visitor) bool {
+	return visit(v, node.Expression)
+}
+
+func (node *SyntheticReferenceExpression) VisitEachChild(v *NodeVisitor) *Node {
+	return v.Factory.UpdateSyntheticReferenceExpression(node, v.visitNode(node.Expression), node.ThisArg)
+}
+
+func (node *SyntheticReferenceExpression) Clone(f NodeFactoryCoercible) *Node {
+	return cloneNode(f.AsNodeFactory().NewSyntheticReferenceExpression(node.Expression, node.ThisArg), node.AsNode(), f.AsNodeFactory().hooks)
+}
+
+func (node *SyntheticReferenceExpression) computeSubtreeFacts() SubtreeFacts {
+	return propagateSubtreeFacts(node.Expression)
+}
+
+func (node *SyntheticReferenceExpression) propagateSubtreeFacts() SubtreeFacts {
+	return node.SubtreeFacts()
+}
+
+func IsSyntheticReferenceExpression(node *Node) bool {
+	return node.Kind == KindSyntheticReferenceExpression
 }
 
 // ImportEqualsDeclaration

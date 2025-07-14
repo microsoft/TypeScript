@@ -107,7 +107,8 @@ const a = ver < (MyVer.v1 >= MyVer.v2 ? MyVer.v1 : MyVer.v2)
 
 
 //// [instantiationExpressionErrors.js]
-var _a;
+var _a, _b;
+var _c;
 // Type arguments in member expressions
 const a1 = f; // { (): number; g<U>(): U; }
 const a2 = f.g; // () => number
@@ -121,12 +122,12 @@ const a7 = (f)['g'];
 const a8 = f < number > ; // Relational operator error
 const a9 = (f); // Error, no applicable signatures
 // Type arguments with `?.` token
-const b1 = f?.(); // Error, `(` expected
-const b2 = f?.();
-const b3 = f?.();
-const b4 = f?.(); // Error, expected no type arguments
+const b1 = f === null || f === void 0 ? void 0 : f(); // Error, `(` expected
+const b2 = f === null || f === void 0 ? void 0 : f();
+const b3 = (_a = f) === null || _a === void 0 ? void 0 : _a();
+const b4 = (_b = f) === null || _b === void 0 ? void 0 : _b(); // Error, expected no type arguments
 const c1 = g || ((x) => x);
-const c2 = (_a = g) !== null && _a !== void 0 ? _a : ((x) => x);
+const c2 = (_c = g) !== null && _c !== void 0 ? _c : ((x) => x);
 const c3 = g && ((x) => x);
 // Parsed as function call, even though this differs from JavaScript
 const x1 = f(true);

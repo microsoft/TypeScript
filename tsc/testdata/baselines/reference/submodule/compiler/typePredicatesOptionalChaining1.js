@@ -22,6 +22,7 @@ isNotNull(x?.y?.z) ? title(x.y.z) : null; // should not error
 
 
 //// [typePredicatesOptionalChaining1.js]
+var _a;
 const x = {
     y: {},
 };
@@ -33,4 +34,4 @@ function isNotNull(x) {
 function title(str) {
     return str.length > 0 ? "Dear " + str : "Dear nobody";
 }
-isNotNull(x?.y?.z) ? title(x.y.z) : null; // should not error
+isNotNull((_a = x === null || x === void 0 ? void 0 : x.y) === null || _a === void 0 ? void 0 : _a.z) ? title(x.y.z) : null; // should not error

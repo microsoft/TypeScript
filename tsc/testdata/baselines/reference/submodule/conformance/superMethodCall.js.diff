@@ -17,11 +17,9 @@
  class Base {
      method() { }
  }
- class Derived extends Base {
-     method() {
--        var _a;
--        return (_a = super.method) === null || _a === void 0 ? void 0 : _a.call(this);
-+        return super.method?.();
+@@= skipped -18, +8 lines =@@
+         var _a;
+         return (_a = super.method) === null || _a === void 0 ? void 0 : _a.call(this);
      }
 -    asyncMethod() {
 -        const _super = Object.create(null, {
@@ -32,6 +30,7 @@
 -            return (_a = _super.method) === null || _a === void 0 ? void 0 : _a.call(this);
 -        });
 +    async asyncMethod() {
-+        return super.method?.();
++        var _a;
++        return (_a = super.method) === null || _a === void 0 ? void 0 : _a.call(this);
      }
  }

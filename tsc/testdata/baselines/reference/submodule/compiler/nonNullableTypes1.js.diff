@@ -8,25 +8,7 @@
  function f1(x) {
      let y = x || "hello"; // NonNullable<T> | string
  }
-@@= skipped -14, +13 lines =@@
-     let y = x; // {}
- }
- function f4(obj) {
--    if ((obj === null || obj === void 0 ? void 0 : obj.x) === "hello") {
--        obj; // NonNullable<T>
--    }
--    if (obj === null || obj === void 0 ? void 0 : obj.x) {
--        obj; // NonNullable<T>
--    }
--    if (typeof (obj === null || obj === void 0 ? void 0 : obj.x) === "string") {
-+    if (obj?.x === "hello") {
-+        obj; // NonNullable<T>
-+    }
-+    if (obj?.x) {
-+        obj; // NonNullable<T>
-+    }
-+    if (typeof obj?.x === "string") {
-         obj; // NonNullable<T>
+@@= skipped -25, +24 lines =@@
      }
  }
  class A {
@@ -35,7 +17,5 @@
 -    }
 +    x = "hello";
      foo() {
--        let zz = this === null || this === void 0 ? void 0 : this.x; // string
-+        let zz = this?.x; // string
+         let zz = this === null || this === void 0 ? void 0 : this.x; // string
      }
- }

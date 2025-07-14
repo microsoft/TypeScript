@@ -47,11 +47,12 @@ class SomeClass {
 class SomeClass2 {
     state;
     method() {
+        var _a;
         const c = false;
         while (c) { }
         if (this.state.type === "numberVariant") {
             this.state.data;
         }
-        let n = this.state?.data; // This should be an error
+        let n = (_a = this.state) === null || _a === void 0 ? void 0 : _a.data; // This should be an error
     }
 }

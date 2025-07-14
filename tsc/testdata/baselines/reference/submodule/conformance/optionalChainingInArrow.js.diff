@@ -1,8 +1,0 @@
---- old.optionalChainingInArrow.js
-+++ new.optionalChainingInArrow.js
-@@= skipped -10, +10 lines =@@
- // https://github.com/microsoft/TypeScript/issues/41814
- const test = (names) => 
- // single-line comment
--names === null || names === void 0 ? void 0 : names.filter(x => x);
-+names?.filter(x => x);

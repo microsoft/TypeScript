@@ -18,11 +18,11 @@ const getName2 = (person?: Person): string => {
 
 //// [typePredicatesOptionalChaining2.js]
 const getName1 = (person) => {
-    return typeof person?.name === 'string' ? person?.name : '';
+    return typeof (person === null || person === void 0 ? void 0 : person.name) === 'string' ? person === null || person === void 0 ? void 0 : person.name : '';
 };
 const isString = (value) => {
     return typeof value === 'string';
 };
 const getName2 = (person) => {
-    return isString(person?.name) ? person?.name : '';
+    return isString(person === null || person === void 0 ? void 0 : person.name) ? person === null || person === void 0 ? void 0 : person.name : '';
 };

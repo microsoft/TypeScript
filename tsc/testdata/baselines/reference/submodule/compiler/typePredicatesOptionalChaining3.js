@@ -29,7 +29,8 @@ function getBreedSizeWithFunction(animal: Animal): string | undefined {
 
 //// [typePredicatesOptionalChaining3.js]
 function getBreedSizeWithoutFunction(animal) {
-    if (animal?.breed?.size != null) {
+    var _a;
+    if (((_a = animal === null || animal === void 0 ? void 0 : animal.breed) === null || _a === void 0 ? void 0 : _a.size) != null) {
         return animal.breed.size;
     }
     else {
@@ -37,7 +38,8 @@ function getBreedSizeWithoutFunction(animal) {
     }
 }
 function getBreedSizeWithFunction(animal) {
-    if (!isNil(animal?.breed?.size)) {
+    var _a;
+    if (!isNil((_a = animal === null || animal === void 0 ? void 0 : animal.breed) === null || _a === void 0 ? void 0 : _a.size)) {
         return animal.breed.size;
     }
     else {

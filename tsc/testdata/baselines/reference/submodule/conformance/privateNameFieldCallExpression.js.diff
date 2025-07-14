@@ -20,13 +20,13 @@
 +    #fieldFunc2 = function (a, ...b) { };
 +    x = 1;
      test() {
--        var _a;
+         var _a;
 -        var _b;
 -        __classPrivateFieldGet(this, _A_fieldFunc, "f").call(this);
 -        (_a = __classPrivateFieldGet(this, _A_fieldFunc, "f")) === null || _a === void 0 ? void 0 : _a.call(this);
 -        const func = __classPrivateFieldGet(this, _A_fieldFunc, "f");
 +        this.#fieldFunc();
-+        this.#fieldFunc?.();
++        (_a = this.#fieldFunc) === null || _a === void 0 ? void 0 : _a.call(this);
 +        const func = this.#fieldFunc;
          func();
 -        new (__classPrivateFieldGet(this, _A_fieldFunc, "f"))();

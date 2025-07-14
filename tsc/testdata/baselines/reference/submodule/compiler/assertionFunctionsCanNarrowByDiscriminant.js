@@ -31,5 +31,5 @@ const animal = { type: 'cat', canMeow: true };
 assertEqual(animal.type, 'cat');
 animal.canMeow; // since is cat, should not be an error
 const animalOrUndef = { type: 'cat', canMeow: true };
-assertEqual(animalOrUndef?.type, 'cat');
+assertEqual(animalOrUndef === null || animalOrUndef === void 0 ? void 0 : animalOrUndef.type, 'cat');
 animalOrUndef.canMeow; // since is cat, should not be an error

@@ -308,6 +308,14 @@ func (f *NodeFactory) NewGlobalMethodCall(globalObjectName string, methodName st
 	return f.NewMethodCall(f.NewIdentifier(globalObjectName), f.NewIdentifier(methodName), argumentsList)
 }
 
+func (f *NodeFactory) NewFunctionCallCall(target *ast.Expression, thisArg *ast.Expression, argumentsList []*ast.Node) *ast.Node {
+	if thisArg == nil {
+		panic("Attempted to construct function call call without this argument expression")
+	}
+	args := append([]*ast.Expression{thisArg}, argumentsList...)
+	return f.NewMethodCall(target, f.NewIdentifier("call"), args)
+}
+
 // Determines whether a node is a parenthesized expression that can be ignored when recreating outer expressions.
 //
 // A parenthesized expression can be ignored when all of the following are true:

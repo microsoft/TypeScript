@@ -7,5 +7,5 @@ function maybeBind<T, A extends any[], R>(obj: T, fn: ((this: T, ...args: A) => 
 
 //// [thisTypeOptionalCall.js]
 function maybeBind(obj, fn) {
-    return fn?.bind(obj);
+    return fn === null || fn === void 0 ? void 0 : fn.bind(obj);
 }

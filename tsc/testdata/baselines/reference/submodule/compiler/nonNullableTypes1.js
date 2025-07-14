@@ -51,20 +51,20 @@ function f3(x) {
     let y = x; // {}
 }
 function f4(obj) {
-    if (obj?.x === "hello") {
+    if ((obj === null || obj === void 0 ? void 0 : obj.x) === "hello") {
         obj; // NonNullable<T>
     }
-    if (obj?.x) {
+    if (obj === null || obj === void 0 ? void 0 : obj.x) {
         obj; // NonNullable<T>
     }
-    if (typeof obj?.x === "string") {
+    if (typeof (obj === null || obj === void 0 ? void 0 : obj.x) === "string") {
         obj; // NonNullable<T>
     }
 }
 class A {
     x = "hello";
     foo() {
-        let zz = this?.x; // string
+        let zz = this === null || this === void 0 ? void 0 : this.x; // string
     }
 }
 

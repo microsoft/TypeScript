@@ -20,7 +20,7 @@ var A;
     A.B = B;
 })(A || (A = {}));
 // ok
-class C1 extends (A?.B) {
+class C1 extends (A === null || A === void 0 ? void 0 : A.B) {
 }
 // error
 class C2 {
