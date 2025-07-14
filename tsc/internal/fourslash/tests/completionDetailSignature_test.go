@@ -9,26 +9,31 @@ import (
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
 
-func TestCompletionListAtEndOfWordInArrowFunction03(t *testing.T) {
+func TestCompletionDetailSignature(t *testing.T) {
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `(d, defaultIsAnInvalidParameterName) => default/*1*/`
+	const content = `
+
+/*a*/
+
+function foo(x: string): string;
+function foo(x: number): number;
+function foo(x: any): any {
+    return x;
+}`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
+	f.VerifyCompletions(t, "a", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
-				"defaultIsAnInvalidParameterName",
 				&lsproto.CompletionItem{
-					Label:    "default",
-					Detail:   ptrTo("default"),
-					Kind:     ptrTo(lsproto.CompletionItemKindKeyword),
-					SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)),
+					Label:    "foo",
+					Kind:     ptrTo(lsproto.CompletionItemKindFunction),
+					SortText: ptrTo(string(ls.SortTextLocationPriority)),
+					Detail:   ptrTo("function foo(x: string): string\nfunction foo(x: number): number"),
 				},
 			},
 		},

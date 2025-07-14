@@ -660,7 +660,7 @@ func (f *FourslashTest) verifyCompletionsItems(t *testing.T, prefix string, actu
 					t.Fatalf("%sLabel '%s' not found in actual items. Actual items: %s", prefix, item.Label, cmp.Diff(actual, nil))
 				}
 				delete(nameToActualItem, item.Label)
-				f.verifyCompletionItem(t, prefix+"Includes completion item mismatch for label "+item.Label, actualItem, item)
+				f.verifyCompletionItem(t, prefix+"Includes completion item mismatch for label "+item.Label+": ", actualItem, item)
 			default:
 				t.Fatalf("%sExpected completion item to be a string or *lsproto.CompletionItem, got %T", prefix, item)
 			}
@@ -684,7 +684,7 @@ func (f *FourslashTest) verifyCompletionsItems(t *testing.T, prefix string, actu
 				if !ok {
 					t.Fatalf("%sLabel '%s' not found in actual items. Actual items: %s", prefix, item.Label, cmp.Diff(actual, nil))
 				}
-				f.verifyCompletionItem(t, prefix+"Includes completion item mismatch for label "+item.Label, actualItem, item)
+				f.verifyCompletionItem(t, prefix+"Includes completion item mismatch for label "+item.Label+": ", actualItem, item)
 			default:
 				t.Fatalf("%sExpected completion item to be a string or *lsproto.CompletionItem, got %T", prefix, item)
 			}

@@ -28,7 +28,7 @@ import (
 func (l *LanguageService) ProvideCompletion(
 	ctx context.Context,
 	documentURI lsproto.DocumentUri,
-	position lsproto.Position,
+	LSPPosition lsproto.Position,
 	context *lsproto.CompletionContext,
 	clientOptions *lsproto.CompletionClientCapabilities,
 	preferences *UserPreferences,
@@ -38,15 +38,34 @@ func (l *LanguageService) ProvideCompletion(
 	if context != nil {
 		triggerCharacter = context.TriggerCharacter
 	}
-	return l.getCompletionsAtPosition(
+	position := int(l.converters.LineAndCharacterToPosition(file, LSPPosition))
+	completionList := l.getCompletionsAtPosition(
 		ctx,
 		program,
 		file,
-		int(l.converters.LineAndCharacterToPosition(file, position)),
+		position,
 		triggerCharacter,
 		preferences,
 		clientOptions,
-	), nil
+	)
+	return ensureItemData(file.FileName(), position, completionList), nil
+}
+
+func ensureItemData(fileName string, pos int, list *lsproto.CompletionList) *lsproto.CompletionList {
+	if list == nil {
+		return nil
+	}
+	for _, item := range list.Items {
+		if item.Data == nil {
+			var data any = &itemData{
+				FileName: fileName,
+				Position: pos,
+				Name:     item.Label,
+			}
+			item.Data = &data
+		}
+	}
+	return list
 }
 
 // *completionDataData | *completionDataKeyword
