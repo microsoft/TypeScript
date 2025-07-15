@@ -190,6 +190,11 @@ func GetEncodedRootLength(path string) int {
 		}
 	}
 
+	// Untitled paths (e.g., "^/untitled/ts-nul-authority/Untitled-1")
+	if ch0 == '^' && ln > 1 && path[1] == '/' {
+		return 2 // Untitled: "^/"
+	}
+
 	// URL
 	schemeEnd := strings.Index(path, urlSchemeSeparator)
 	if schemeEnd != -1 {
