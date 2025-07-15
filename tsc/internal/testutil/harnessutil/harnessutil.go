@@ -290,7 +290,7 @@ func setOptionsFromTestConfig(t *testing.T, testConfig TestConfiguration, compil
 		harnessOption := getHarnessOption(name)
 		if harnessOption != nil {
 			parsedValue := getOptionValue(t, harnessOption, value)
-			parseHarnessOption(t, harnessOption.Name, parsedValue, harnessOptions, compilerOptions)
+			parseHarnessOption(t, harnessOption.Name, parsedValue, harnessOptions)
 			continue
 		}
 
@@ -298,11 +298,29 @@ func setOptionsFromTestConfig(t *testing.T, testConfig TestConfiguration, compil
 	}
 }
 
-var harnessCommandLineOptions = []*tsoptions.CommandLineOption{
-	{
-		Name: "allowNonTsExtensions",
-		Kind: tsoptions.CommandLineOptionTypeBoolean,
+var compilerOptions = core.Concatenate(
+	tsoptions.OptionsDeclarations,
+	[]*tsoptions.CommandLineOption{
+		{
+			Name: "allowNonTsExtensions",
+			Kind: tsoptions.CommandLineOptionTypeBoolean,
+		},
+		{
+			Name: "noErrorTruncation",
+			Kind: tsoptions.CommandLineOptionTypeBoolean,
+		},
+		{
+			Name: "suppressOutputPathCheck",
+			Kind: tsoptions.CommandLineOptionTypeBoolean,
+		},
+		{
+			Name: "noCheck",
+			Kind: tsoptions.CommandLineOptionTypeBoolean,
+		},
 	},
+)
+
+var harnessCommandLineOptions = []*tsoptions.CommandLineOption{
 	{
 		Name: "useCaseSensitiveFileNames",
 		Kind: tsoptions.CommandLineOptionTypeBoolean,
@@ -322,14 +340,6 @@ var harnessCommandLineOptions = []*tsoptions.CommandLineOption{
 	{
 		Name: "libFiles",
 		Kind: tsoptions.CommandLineOptionTypeList,
-	},
-	{
-		Name: "noErrorTruncation",
-		Kind: tsoptions.CommandLineOptionTypeBoolean,
-	},
-	{
-		Name: "suppressOutputPathCheck",
-		Kind: tsoptions.CommandLineOptionTypeBoolean,
 	},
 	{
 		Name: "noImplicitReferences",
@@ -356,10 +366,6 @@ var harnessCommandLineOptions = []*tsoptions.CommandLineOption{
 		Name: "fullEmitPaths",
 		Kind: tsoptions.CommandLineOptionTypeBoolean,
 	},
-	{
-		Name: "noCheck",
-		Kind: tsoptions.CommandLineOptionTypeBoolean,
-	},
 	// used to enable error collection in `transpile` baselines
 	{
 		Name: "reportDiagnostics",
@@ -374,14 +380,12 @@ var harnessCommandLineOptions = []*tsoptions.CommandLineOption{
 
 func getHarnessOption(name string) *tsoptions.CommandLineOption {
 	return core.Find(harnessCommandLineOptions, func(option *tsoptions.CommandLineOption) bool {
-		return strings.ToLower(option.Name) == strings.ToLower(name)
+		return strings.EqualFold(option.Name, name)
 	})
 }
 
-func parseHarnessOption(t *testing.T, key string, value any, harnessOptions *HarnessOptions, compilerOptions *core.CompilerOptions) {
+func parseHarnessOption(t *testing.T, key string, value any, harnessOptions *HarnessOptions) {
 	switch key {
-	case "allowNonTsExtensions":
-		compilerOptions.AllowNonTsExtensions = core.BoolToTristate(value.(bool))
 	case "useCaseSensitiveFileNames":
 		harnessOptions.UseCaseSensitiveFileNames = value.(bool)
 	case "baselineFile":
@@ -392,10 +396,6 @@ func parseHarnessOption(t *testing.T, key string, value any, harnessOptions *Har
 		harnessOptions.FileName = value.(string)
 	case "libFiles":
 		harnessOptions.LibFiles = value.([]string)
-	case "noErrorTruncation":
-		compilerOptions.NoErrorTruncation = core.BoolToTristate(value.(bool))
-	case "suppressOutputPathCheck":
-		compilerOptions.SuppressOutputPathCheck = core.BoolToTristate(value.(bool))
 	case "noImplicitReferences":
 		harnessOptions.NoImplicitReferences = value.(bool)
 	case "currentDirectory":
@@ -408,8 +408,6 @@ func parseHarnessOption(t *testing.T, key string, value any, harnessOptions *Har
 		harnessOptions.NoTypesAndSymbols = value.(bool)
 	case "fullEmitPaths":
 		harnessOptions.FullEmitPaths = value.(bool)
-	case "noCheck":
-		compilerOptions.NoCheck = core.BoolToTristate(value.(bool))
 	case "reportDiagnostics":
 		harnessOptions.ReportDiagnostics = value.(bool)
 	case "captureSuggestions":
@@ -993,7 +991,7 @@ func getValueOfOptionString(t *testing.T, option string, value string) tsoptions
 }
 
 func getCommandLineOption(option string) *tsoptions.CommandLineOption {
-	return core.Find(tsoptions.OptionsDeclarations, func(optionDecl *tsoptions.CommandLineOption) bool {
+	return core.Find(compilerOptions, func(optionDecl *tsoptions.CommandLineOption) bool {
 		return strings.EqualFold(optionDecl.Name, option)
 	})
 }

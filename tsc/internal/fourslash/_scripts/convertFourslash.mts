@@ -389,7 +389,7 @@ function parseVerifyCompletionArg(arg: ts.Expression): VerifyCompletionsCmd | un
                     return {
                         kind: "verifyCompletions",
                         marker: marker ? marker : "nil",
-                        args: undefined,
+                        args: "nil",
                     };
                 }
                 let expected: string;
@@ -787,7 +787,7 @@ interface VerifyCompletionsCmd {
     kind: "verifyCompletions";
     marker: string;
     isNewIdentifierLocation?: true;
-    args?: VerifyCompletionsArgs;
+    args?: VerifyCompletionsArgs | "nil";
 }
 
 interface VerifyCompletionsArgs {
@@ -824,13 +824,16 @@ interface EditCmd {
 type Cmd = VerifyCompletionsCmd | VerifyBaselineFindAllReferencesCmd | GoToCmd | EditCmd;
 
 function generateVerifyCompletions({ marker, args, isNewIdentifierLocation }: VerifyCompletionsCmd): string {
-    let expectedList = "nil";
-    if (args) {
+    let expectedList: string;
+    if (args === "nil") {
+        expectedList = "nil";
+    }
+    else {
         const expected = [];
-        if (args.includes) expected.push(`Includes: ${args.includes},`);
-        if (args.excludes) expected.push(`Excludes: ${args.excludes},`);
-        if (args.exact) expected.push(`Exact: ${args.exact},`);
-        if (args.unsorted) expected.push(`Unsorted: ${args.unsorted},`);
+        if (args?.includes) expected.push(`Includes: ${args.includes},`);
+        if (args?.excludes) expected.push(`Excludes: ${args.excludes},`);
+        if (args?.exact) expected.push(`Exact: ${args.exact},`);
+        if (args?.unsorted) expected.push(`Unsorted: ${args.unsorted},`);
         // !!! isIncomplete
         const commitCharacters = isNewIdentifierLocation ? "[]string{}" : "defaultCommitCharacters";
         expectedList = `&fourslash.CompletionsExpectedList{

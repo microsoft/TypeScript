@@ -11,7 +11,7 @@ import (
 
 func TestCompletionsWithDeprecatedTag9(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @lib: dom
 // @allowJs: true
@@ -42,5 +42,12 @@ class Foo {
 			},
 		},
 	})
-	f.VerifyCompletions(t, nil, nil)
+	f.VerifyCompletions(t, nil, &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &defaultCommitCharacters,
+			EditRange:        ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{},
+	})
 }

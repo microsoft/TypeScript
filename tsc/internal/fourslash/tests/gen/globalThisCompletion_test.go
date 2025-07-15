@@ -9,7 +9,7 @@ import (
 
 func TestGlobalThisCompletion(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @allowJs: true
 // @target: esnext
@@ -22,5 +22,12 @@ func TestGlobalThisCompletion(t *testing.T) {
 declare var foo: typeof globalThis;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	f.GoToMarker(t, "")
-	f.VerifyCompletions(t, "", nil)
+	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &defaultCommitCharacters,
+			EditRange:        ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{},
+	})
 }
