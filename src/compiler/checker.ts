@@ -22145,21 +22145,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (s & TypeFlags.BigIntLike && t & TypeFlags.BigInt) return true;
         if (s & TypeFlags.BooleanLike && t & TypeFlags.Boolean) return true;
         if (s & TypeFlags.ESSymbolLike && t & TypeFlags.ESSymbol) return true;
-        // For comparable relation, revert `this` type parameters back to their constrained class type
-        if (relation === comparableRelation) {
-            if (s & TypeFlags.TypeParameter && (source as TypeParameter).isThisType) {
-                const constraint = getConstraintOfTypeParameter(source as TypeParameter);
-                if (constraint && isTypeRelatedTo(constraint, target, relation)) {
-                    return true;
-                }
-            }
-            if (t & TypeFlags.TypeParameter && (target as TypeParameter).isThisType) {
-                const constraint = getConstraintOfTypeParameter(target as TypeParameter);
-                if (constraint && isTypeRelatedTo(source, constraint, relation)) {
-                    return true;
-                }
-            }
-        }
         if (
             s & TypeFlags.Enum && t & TypeFlags.Enum && source.symbol.escapedName === target.symbol.escapedName &&
             isEnumTypeRelatedTo(source.symbol, target.symbol, errorReporter)
@@ -22212,6 +22197,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // We have excluded types that may simplify to other forms, so types must have identical flags
             if (source.flags !== target.flags) return false;
             if (source.flags & TypeFlags.Singleton) return true;
+        }
+        if (relation === comparableRelation) {
+            // Allow comparability between 'this' and derived classes
+            if (source.flags & TypeFlags.TypeParameter && (source as TypeParameter).isThisType) {
+                const constraint = getConstraintOfTypeParameter(source as TypeParameter);
+                if (constraint && isTypeRelatedTo(constraint, target, relation)) {
+                    return true;
+                }
+            }
         }
         if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Object) {
             const related = relation.get(getRelationKey(source, target, IntersectionState.None, relation, /*ignoreConstraints*/ false));
