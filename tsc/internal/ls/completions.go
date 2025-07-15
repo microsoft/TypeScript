@@ -399,6 +399,7 @@ func getCompletionData(program *compiler.Program, typeChecker *checker.Checker, 
 	isInSnippetScope := false
 	if insideComment != nil {
 		// !!! jsdoc
+		return nil
 	}
 
 	// The decision to provide completion depends on the contextToken, which is determined through the previousToken.

@@ -3,6 +3,7 @@ package ls
 import (
 	"cmp"
 	"fmt"
+	"iter"
 	"slices"
 	"strings"
 
@@ -133,9 +134,8 @@ func isExportSpecifierAlias(referenceLocation *ast.Identifier, exportSpecifier *
 	}
 }
 
-// !!! formatting function
 func isInComment(file *ast.SourceFile, position int, tokenAtPosition *ast.Node) *ast.CommentRange {
-	return nil
+	return getRangeOfEnclosingComment(file, position, nil /*precedingToken*/, tokenAtPosition)
 }
 
 func hasChildOfKind(containingNode *ast.Node, kind ast.Kind, sourceFile *ast.SourceFile) bool {
@@ -1627,4 +1627,11 @@ func findContainingList(node *ast.Node, file *ast.SourceFile) *ast.NodeList {
 	})
 	astnav.VisitEachChildAndJSDoc(node.Parent, file, nodeVisitor)
 	return list
+}
+
+func getLeadingCommentRangesOfNode(node *ast.Node, file *ast.SourceFile) iter.Seq[ast.CommentRange] {
+	if node.Kind == ast.KindJsxText {
+		return nil
+	}
+	return scanner.GetLeadingCommentRanges(&ast.NodeFactory{}, file.Text(), node.Pos())
 }

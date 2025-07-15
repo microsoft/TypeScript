@@ -570,3 +570,18 @@ func SingleElementSlice[T any](element *T) []*T {
 	}
 	return []*T{element}
 }
+
+func ConcatenateSeq[T any](seqs ...iter.Seq[T]) iter.Seq[T] {
+	return func(yield func(T) bool) {
+		for _, seq := range seqs {
+			if seq == nil {
+				continue
+			}
+			for e := range seq {
+				if !yield(e) {
+					return
+				}
+			}
+		}
+	}
+}

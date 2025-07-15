@@ -8920,6 +8920,10 @@ func (node *JSDoc) Clone(f NodeFactoryCoercible) *Node {
 	return cloneNode(f.AsNodeFactory().NewJSDoc(node.Comment, node.Tags), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
+func (node *Node) IsJSDoc() bool {
+	return node.Kind == KindJSDoc
+}
+
 type JSDocTagBase struct {
 	NodeBase
 	TagName *IdentifierNode
