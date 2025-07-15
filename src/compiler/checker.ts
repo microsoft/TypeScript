@@ -22206,6 +22206,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return true;
                 }
             }
+            if (target.flags & TypeFlags.TypeParameter && (target as TypeParameter).isThisType) {
+                const constraint = getConstraintOfTypeParameter(target as TypeParameter);
+                if (constraint && isTypeRelatedTo(source, constraint, relation)) {
+                    return true;
+                }
+            }
         }
         if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Object) {
             const related = relation.get(getRelationKey(source, target, IntersectionState.None, relation, /*ignoreConstraints*/ false));
