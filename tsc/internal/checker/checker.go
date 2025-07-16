@@ -8349,7 +8349,7 @@ func (c *Checker) isConstructorAccessible(node *ast.Node, signature *Signature) 
 }
 
 func (c *Checker) typeHasProtectedAccessibleBase(target *ast.Symbol, t *Type) bool {
-	baseTypes := c.getBaseTypes(t)
+	baseTypes := c.getBaseTypes(c.getTargetType(t))
 	if len(baseTypes) == 0 {
 		return false
 	}
