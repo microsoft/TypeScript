@@ -7,7 +7,7 @@ declare const x: "foo".charCodeAt(0);
 
 === string.ts ===
 interface String {
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(string.ts, 0, 0))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 2 more)
 
     typeof<T>(x: T): T;
 >typeof : Symbol(String.typeof, Decl(string.ts, 0, 18))

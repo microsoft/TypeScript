@@ -15,44 +15,44 @@ interface WeakSet<T extends object> {}
 >                                                                                                               : ^^^^^^^^^^
 
     new Promise;
->new Promise : any
->            : ^^^
->Promise : any
->        : ^^^
+>new Promise : Promise<unknown>
+>            : ^^^^^^^^^^^^^^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 
     new Symbol; Symbol();
 >new Symbol : any
 >           : ^^^
->Symbol : any
->       : ^^^
->Symbol() : any
->         : ^^^
->Symbol : any
->       : ^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>Symbol() : symbol
+>         : ^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
     new Map;
->new Map : any
->        : ^^^
->Map : any
->    : ^^^
+>new Map : Map<any, any>
+>        : ^^^^^^^^^^^^^
+>Map : MapConstructor
+>    : ^^^^^^^^^^^^^^
 
     new WeakMap;
->new WeakMap : any
->            : ^^^
->WeakMap : any
->        : ^^^
+>new WeakMap : WeakMap<object, any>
+>            : ^^^^^^^^^^^^^^^^^^^^
+>WeakMap : WeakMapConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 
     new Set;
->new Set : any
->        : ^^^
->Set : any
->    : ^^^
+>new Set : Set<unknown>
+>        : ^^^^^^^^^^^^
+>Set : SetConstructor
+>    : ^^^^^^^^^^^^^^
 
     new WeakSet;
->new WeakSet : any
->            : ^^^
->WeakSet : any
->        : ^^^
+>new WeakSet : WeakSet<object>
+>            : ^^^^^^^^^^^^^^^
+>WeakSet : WeakSetConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 
 });
 
