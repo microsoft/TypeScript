@@ -1,0 +1,120 @@
+enumMerging.ts(4,10): error TS2567: Enum declarations can only merge with namespace declarations.
+enumMerging.ts(8,10): error TS2567: Enum declarations can only merge with namespace declarations.
+enumMerging.ts(12,17): error TS2567: Enum declarations can only merge with namespace declarations.
+enumMerging.ts(16,17): error TS2567: Enum declarations can only merge with namespace declarations.
+enumMerging.ts(20,22): error TS2339: Property 'A' does not exist on type 'typeof EConst1'.
+enumMerging.ts(20,33): error TS2339: Property 'B' does not exist on type 'typeof EConst1'.
+enumMerging.ts(20,44): error TS2339: Property 'C' does not exist on type 'typeof EConst1'.
+enumMerging.ts(25,17): error TS2567: Enum declarations can only merge with namespace declarations.
+enumMerging.ts(29,17): error TS2567: Enum declarations can only merge with namespace declarations.
+enumMerging.ts(33,21): error TS2339: Property 'A' does not exist on type 'typeof EComp2'.
+enumMerging.ts(33,31): error TS2339: Property 'B' does not exist on type 'typeof EComp2'.
+enumMerging.ts(33,41): error TS2339: Property 'C' does not exist on type 'typeof EComp2'.
+enumMerging.ts(38,10): error TS2567: Enum declarations can only merge with namespace declarations.
+enumMerging.ts(43,10): error TS2567: Enum declarations can only merge with namespace declarations.
+enumMerging.ts(57,17): error TS2567: Enum declarations can only merge with namespace declarations.
+enumMerging.ts(61,21): error TS2567: Enum declarations can only merge with namespace declarations.
+enumMerging.ts(63,21): error TS2339: Property 'Yellow' does not exist on type 'typeof Color'.
+
+
+==== enumMerging.ts (17 errors) ====
+    // Enum with only constant members across 2 declarations with the same root module
+    // Enum with initializer in all declarations with constant members with the same root module
+    module M1 {
+        enum EImpl1 {
+             ~~~~~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
+            A, B, C
+        }
+    
+        enum EImpl1 {
+             ~~~~~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
+            D = 1, E, F
+        }
+    
+        export enum EConst1 {
+                    ~~~~~~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
+            A = 3, B = 2, C = 1
+        }
+    
+        export enum EConst1 {
+                    ~~~~~~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
+            D = 7, E = 9, F = 8
+        }
+    
+        var x = [EConst1.A, EConst1.B, EConst1.C, EConst1.D, EConst1.E, EConst1.F];
+                         ~
+!!! error TS2339: Property 'A' does not exist on type 'typeof EConst1'.
+                                    ~
+!!! error TS2339: Property 'B' does not exist on type 'typeof EConst1'.
+                                               ~
+!!! error TS2339: Property 'C' does not exist on type 'typeof EConst1'.
+    }
+    
+    // Enum with only computed members across 2 declarations with the same root module 
+    module M2 {
+        export enum EComp2 {
+                    ~~~~~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
+            A = 'foo'.length, B = 'foo'.length, C = 'foo'.length
+        }
+    
+        export enum EComp2 {
+                    ~~~~~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
+            D = 'foo'.length, E = 'foo'.length, F = 'foo'.length
+        }
+    
+        var x = [EComp2.A, EComp2.B, EComp2.C, EComp2.D, EComp2.E, EComp2.F];
+                        ~
+!!! error TS2339: Property 'A' does not exist on type 'typeof EComp2'.
+                                  ~
+!!! error TS2339: Property 'B' does not exist on type 'typeof EComp2'.
+                                            ~
+!!! error TS2339: Property 'C' does not exist on type 'typeof EComp2'.
+    }
+    
+    // Enum with initializer in only one of two declarations with constant members with the same root module
+    module M3 {
+        enum EInit {
+             ~~~~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
+            A,
+            B
+        }
+    
+        enum EInit {
+             ~~~~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
+            C = 1, D, E
+        }
+    }
+    
+    // Enums with same name but different root module
+    module M4 {
+        export enum Color { Red, Green, Blue }
+    }
+    module M5 {
+        export enum Color { Red, Green, Blue }
+    }
+    
+    module M6.A {
+        export enum Color { Red, Green, Blue }
+                    ~~~~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
+    }
+    module M6 {
+        export module A {
+            export enum Color { Yellow = 1 }
+                        ~~~~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
+        }
+        var t = A.Color.Yellow;
+                        ~~~~~~
+!!! error TS2339: Property 'Yellow' does not exist on type 'typeof Color'.
+        t = A.Color.Red;
+    }
+    

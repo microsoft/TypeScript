@@ -18,25 +18,25 @@ module F { var t; }
 >t : Symbol(t, Decl(augmentedTypesEnum3.ts, 6, 14))
 
 module A {
->A : Symbol(A, Decl(augmentedTypesEnum3.ts, 6, 19), Decl(augmentedTypesEnum3.ts, 10, 1), Decl(augmentedTypesEnum3.ts, 13, 1), Decl(augmentedTypesEnum3.ts, 16, 1))
+>A : Symbol(A, Decl(augmentedTypesEnum3.ts, 6, 19), Decl(augmentedTypesEnum3.ts, 10, 1), Decl(augmentedTypesEnum3.ts, 16, 1))
 
     var o;
 >o : Symbol(o, Decl(augmentedTypesEnum3.ts, 9, 7))
 }
 enum A {
->A : Symbol(A, Decl(augmentedTypesEnum3.ts, 6, 19), Decl(augmentedTypesEnum3.ts, 10, 1), Decl(augmentedTypesEnum3.ts, 13, 1), Decl(augmentedTypesEnum3.ts, 16, 1))
+>A : Symbol(A, Decl(augmentedTypesEnum3.ts, 6, 19), Decl(augmentedTypesEnum3.ts, 10, 1), Decl(augmentedTypesEnum3.ts, 16, 1))
 
     b
 >b : Symbol(A.b, Decl(augmentedTypesEnum3.ts, 11, 8))
 }
 enum A {
->A : Symbol(A, Decl(augmentedTypesEnum3.ts, 6, 19), Decl(augmentedTypesEnum3.ts, 10, 1), Decl(augmentedTypesEnum3.ts, 13, 1), Decl(augmentedTypesEnum3.ts, 16, 1))
+>A : Symbol(A, Decl(augmentedTypesEnum3.ts, 13, 1))
 
     c
 >c : Symbol(A.c, Decl(augmentedTypesEnum3.ts, 14, 8))
 }
 module A {
->A : Symbol(A, Decl(augmentedTypesEnum3.ts, 6, 19), Decl(augmentedTypesEnum3.ts, 10, 1), Decl(augmentedTypesEnum3.ts, 13, 1), Decl(augmentedTypesEnum3.ts, 16, 1))
+>A : Symbol(A, Decl(augmentedTypesEnum3.ts, 6, 19), Decl(augmentedTypesEnum3.ts, 10, 1), Decl(augmentedTypesEnum3.ts, 16, 1))
 
     var p;
 >p : Symbol(p, Decl(augmentedTypesEnum3.ts, 18, 7))
