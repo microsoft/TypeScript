@@ -1,0 +1,82 @@
+//// [tests/cases/conformance/esnext/toFromHexBase64.ts] ////
+
+=== toFromHexBase64.ts ===
+const arr1 = Uint8Array.fromBase64("AAAAAA==");
+>arr1 : Symbol(arr1, Decl(toFromHexBase64.ts, 0, 5))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+
+const arr2 = Uint8Array.fromBase64("AAAAAA", { alphabet: "base64url" });
+>arr2 : Symbol(arr2, Decl(toFromHexBase64.ts, 1, 5))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>alphabet : Symbol(alphabet, Decl(toFromHexBase64.ts, 1, 46))
+
+const arr3 = Uint8Array.fromHex("000000");
+>arr3 : Symbol(arr3, Decl(toFromHexBase64.ts, 2, 5))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+
+const encodedBase64_1 = arr1.toBase64();
+>encodedBase64_1 : Symbol(encodedBase64_1, Decl(toFromHexBase64.ts, 4, 5))
+>arr1 : Symbol(arr1, Decl(toFromHexBase64.ts, 0, 5))
+
+const encodedBase64_2 = arr1.toBase64({ alphabet: "base64" });
+>encodedBase64_2 : Symbol(encodedBase64_2, Decl(toFromHexBase64.ts, 5, 5))
+>arr1 : Symbol(arr1, Decl(toFromHexBase64.ts, 0, 5))
+>alphabet : Symbol(alphabet, Decl(toFromHexBase64.ts, 5, 39))
+
+const encodedBase64_3 = arr1.toBase64({ alphabet: "base64url", omitPadding: true });
+>encodedBase64_3 : Symbol(encodedBase64_3, Decl(toFromHexBase64.ts, 6, 5))
+>arr1 : Symbol(arr1, Decl(toFromHexBase64.ts, 0, 5))
+>alphabet : Symbol(alphabet, Decl(toFromHexBase64.ts, 6, 39))
+>omitPadding : Symbol(omitPadding, Decl(toFromHexBase64.ts, 6, 62))
+
+const encodedHex_1 = arr1.toHex();
+>encodedHex_1 : Symbol(encodedHex_1, Decl(toFromHexBase64.ts, 8, 5))
+>arr1 : Symbol(arr1, Decl(toFromHexBase64.ts, 0, 5))
+
+const target1 = new Uint8Array(10);
+>target1 : Symbol(target1, Decl(toFromHexBase64.ts, 10, 5))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+
+const r1 = target1.setFromBase64("AAAAAA==");
+>r1 : Symbol(r1, Decl(toFromHexBase64.ts, 11, 5))
+>target1 : Symbol(target1, Decl(toFromHexBase64.ts, 10, 5))
+
+const r2 = target1.setFromBase64("AAAAAA==", { lastChunkHandling: "strict" });
+>r2 : Symbol(r2, Decl(toFromHexBase64.ts, 12, 5))
+>target1 : Symbol(target1, Decl(toFromHexBase64.ts, 10, 5))
+>lastChunkHandling : Symbol(lastChunkHandling, Decl(toFromHexBase64.ts, 12, 46))
+
+const r3 = target1.setFromBase64("AAAAAA", {
+>r3 : Symbol(r3, Decl(toFromHexBase64.ts, 13, 5))
+>target1 : Symbol(target1, Decl(toFromHexBase64.ts, 10, 5))
+
+  alphabet: "base64url",
+>alphabet : Symbol(alphabet, Decl(toFromHexBase64.ts, 13, 44))
+
+  lastChunkHandling: "stop-before-partial"
+>lastChunkHandling : Symbol(lastChunkHandling, Decl(toFromHexBase64.ts, 14, 24))
+
+});
+
+const target2 = new Uint8Array(10);
+>target2 : Symbol(target2, Decl(toFromHexBase64.ts, 18, 5))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+
+const r4 = target2.setFromHex("000000");
+>r4 : Symbol(r4, Decl(toFromHexBase64.ts, 19, 5))
+>target2 : Symbol(target2, Decl(toFromHexBase64.ts, 18, 5))
+
+const totalWritten = r1.written + r2.written + r3.written + r4.written;
+>totalWritten : Symbol(totalWritten, Decl(toFromHexBase64.ts, 21, 5))
+>r1 : Symbol(r1, Decl(toFromHexBase64.ts, 11, 5))
+>r2 : Symbol(r2, Decl(toFromHexBase64.ts, 12, 5))
+>r3 : Symbol(r3, Decl(toFromHexBase64.ts, 13, 5))
+>r4 : Symbol(r4, Decl(toFromHexBase64.ts, 19, 5))
+
+const totalRead = r1.read + r2.read + r3.read + r4.read;
+>totalRead : Symbol(totalRead, Decl(toFromHexBase64.ts, 22, 5))
+>r1 : Symbol(r1, Decl(toFromHexBase64.ts, 11, 5))
+>r2 : Symbol(r2, Decl(toFromHexBase64.ts, 12, 5))
+>r3 : Symbol(r3, Decl(toFromHexBase64.ts, 13, 5))
+>r4 : Symbol(r4, Decl(toFromHexBase64.ts, 19, 5))
+
