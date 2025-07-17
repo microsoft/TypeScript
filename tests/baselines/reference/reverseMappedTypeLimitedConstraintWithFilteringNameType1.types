@@ -1,0 +1,264 @@
+//// [tests/cases/compiler/reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts] ////
+
+=== reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts ===
+type XNumber = { x: number };
+>XNumber : XNumber
+>        : ^^^^^^^
+>x : number
+>  : ^^^^^^
+
+declare function foo<T extends XNumber>(props: {
+>foo : <T extends XNumber>(props: { [K in keyof T as K & keyof XNumber]: T[K]; }) => T
+>    : ^ ^^^^^^^^^       ^^     ^^                                              ^^^^^ 
+>props : { [K in keyof T as K & "x"]: T[K]; }
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  [K in keyof T as K & keyof XNumber]: T[K];
+}): T;
+const foo1 = foo({ x: 1, y: "foo" });
+>foo1 : { x: 1; }
+>     : ^^^^^^^^^
+>foo({ x: 1, y: "foo" }) : { x: 1; }
+>                        : ^^^^^^^^^
+>foo : <T extends XNumber>(props: { [K in keyof T as K & keyof XNumber]: T[K]; }) => T
+>    : ^ ^^^^^^^^^       ^^     ^^                                              ^^^^^ 
+>{ x: 1, y: "foo" } : { x: 1; y: string; }
+>                   : ^^^^^^^^^^^^^^^^^^^^
+>x : 1
+>  : ^
+>1 : 1
+>  : ^
+>y : string
+>  : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+const objFoo = { x: 1, y: "foo" };
+>objFoo : { x: number; y: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ x: 1, y: "foo" } : { x: number; y: string; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+>y : string
+>  : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+const foo2 = foo(objFoo);
+>foo2 : { x: number; }
+>     : ^^^^^^^^^^^^^^
+>foo(objFoo) : { x: number; }
+>            : ^^^^^^^^^^^^^^
+>foo : <T extends XNumber>(props: { [K in keyof T as K & keyof XNumber]: T[K]; }) => T
+>    : ^ ^^^^^^^^^       ^^     ^^                                              ^^^^^ 
+>objFoo : { x: number; y: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const checkType =
+>checkType : <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K]; }) => { [K in keyof U & keyof T]: U[K]; }
+>          : ^ ^^^^^^^^           ^^                                          ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  <T,>() =>
+><T,>() =>  <U extends T>(value: { [K in keyof U & keyof T]: U[K] }) =>    value : <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K]; }) => { [K in keyof U & keyof T]: U[K]; }
+>                                                                                : ^ ^^^^^^^^           ^^                                          ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  <U extends T>(value: { [K in keyof U & keyof T]: U[K] }) =>
+><U extends T>(value: { [K in keyof U & keyof T]: U[K] }) =>    value : <U extends T>(value: { [K in keyof U & keyof T]: U[K]; }) => { [K in keyof U & keyof T]: U[K]; }
+>                                                                     : ^ ^^^^^^^^^ ^^     ^^                                   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : { [K in keyof U & keyof T]: U[K]; }
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    value;
+>value : { [K in keyof U & keyof T]: U[K]; }
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const checked1 = checkType<{ x: number; y: string }>()({
+>checked1 : { x: number; y: "y"; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^
+>checkType<{ x: number; y: string }>()({  x: 1 as number,  y: "y",  z: "z",}) : { x: number; y: "y"; }
+>                                                                             : ^^^^^^^^^^^^^^^^^^^^^^
+>checkType<{ x: number; y: string }>() : <U extends { x: number; y: string; }>(value: { [K in keyof U & ("x" | "y")]: U[K]; }) => { [K in keyof U & ("x" | "y")]: U[K]; }
+>                                      : ^ ^^^^^^^^^^^^^^      ^^^^^      ^^^^^     ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>checkType : <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K]; }) => { [K in keyof U & keyof T]: U[K]; }
+>          : ^ ^^^^^^^^           ^^                                          ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>y : string
+>  : ^^^^^^
+>{  x: 1 as number,  y: "y",  z: "z",} : { x: number; y: "y"; z: string; }
+>                                      : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^
+
+  x: 1 as number,
+>x : number
+>  : ^^^^^^
+>1 as number : number
+>            : ^^^^^^
+>1 : 1
+>  : ^
+
+  y: "y",
+>y : "y"
+>  : ^^^
+>"y" : "y"
+>    : ^^^
+
+  z: "z",
+>z : string
+>  : ^^^^^^
+>"z" : "z"
+>    : ^^^
+
+});
+const objChecked = {
+>objChecked : { x: number; y: string; z: string; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  x: 1,  y: "y",  z: "z",} : { x: number; y: string; z: string; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  x: 1,
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+  y: "y",
+>y : string
+>  : ^^^^^^
+>"y" : "y"
+>    : ^^^
+
+  z: "z",
+>z : string
+>  : ^^^^^^
+>"z" : "z"
+>    : ^^^
+
+};
+const checked2 = checkType<{ x: number; y: string }>()(objChecked);
+>checked2 : { x: number; y: string; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>checkType<{ x: number; y: string }>()(objChecked) : { x: number; y: string; }
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>checkType<{ x: number; y: string }>() : <U extends { x: number; y: string; }>(value: { [K in keyof U & ("x" | "y")]: U[K]; }) => { [K in keyof U & ("x" | "y")]: U[K]; }
+>                                      : ^ ^^^^^^^^^^^^^^      ^^^^^      ^^^^^     ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>checkType : <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K]; }) => { [K in keyof U & keyof T]: U[K]; }
+>          : ^ ^^^^^^^^           ^^                                          ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>y : string
+>  : ^^^^^^
+>objChecked : { x: number; y: string; z: string; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare function fn1<T extends Record<string, number>>(obj: {
+>fn1 : <T extends Record<string, number>>(obj: { [K in keyof T as K extends "a" ? K : never]: T[K]; }) => T
+>    : ^ ^^^^^^^^^                      ^^   ^^                                                      ^^^^^ 
+>obj : { [K in keyof T as K extends "a" ? K : never]: T[K]; }
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  [K in keyof T as K extends "a" ? K : never]: T[K];
+}): T;
+const obj1 = {
+>obj1 : { a: number; b: boolean; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  a: 42,  b: true,} : { a: number; b: boolean; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  a: 42,
+>a : number
+>  : ^^^^^^
+>42 : 42
+>   : ^^
+
+  b: true,
+>b : boolean
+>  : ^^^^^^^
+>true : true
+>     : ^^^^
+
+};
+const result1 = fn1(obj1);
+>result1 : { a: number; }
+>        : ^^^^^^^^^^^^^^
+>fn1(obj1) : { a: number; }
+>          : ^^^^^^^^^^^^^^
+>fn1 : <T extends Record<string, number>>(obj: { [K in keyof T as K extends "a" ? K : never]: T[K]; }) => T
+>    : ^ ^^^^^^^^^                      ^^   ^^                                                      ^^^^^ 
+>obj1 : { a: number; b: boolean; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare function fn2<T>(obj: {
+>fn2 : <T>(obj: { [K in keyof T & ("a" | "b") as K extends "a" | "c" ? K : never]: T[K]; }) => T
+>    : ^ ^^   ^^                                                                          ^^^^^ 
+>obj : { [K in keyof T & ("a" | "b") as K extends "a" | "c" ? K : never]: T[K]; }
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  [K in keyof T & ("a" | "b") as K extends "a" | "c" ? K : never]: T[K];
+}): T;
+const obj2 = { a: 1, b: 2, c: 3 };
+>obj2 : { a: number; b: number; c: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ a: 1, b: 2, c: 3 } : { a: number; b: number; c: number; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+>b : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+>c : number
+>  : ^^^^^^
+>3 : 3
+>  : ^
+
+const result2 = fn2(obj2);
+>result2 : { a: number; }
+>        : ^^^^^^^^^^^^^^
+>fn2(obj2) : { a: number; }
+>          : ^^^^^^^^^^^^^^
+>fn2 : <T>(obj: { [K in keyof T & ("a" | "b") as K extends "a" | "c" ? K : never]: T[K]; }) => T
+>    : ^ ^^   ^^                                                                          ^^^^^ 
+>obj2 : { a: number; b: number; c: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare function fn3<T>(obj: {
+>fn3 : <T>(obj: { [K in keyof T & ("a" | "c") as K extends "a" | "b" ? K : never]: T[K]; }) => T
+>    : ^ ^^   ^^                                                                          ^^^^^ 
+>obj : { [K in keyof T & ("a" | "c") as K extends "a" | "b" ? K : never]: T[K]; }
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  [K in keyof T & ("a" | "c") as K extends "a" | "b" ? K : never]: T[K];
+}): T;
+const obj3 = { a: 1, b: 2, c: 3 };
+>obj3 : { a: number; b: number; c: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ a: 1, b: 2, c: 3 } : { a: number; b: number; c: number; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+>b : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+>c : number
+>  : ^^^^^^
+>3 : 3
+>  : ^
+
+const result3 = fn3(obj3);
+>result3 : { a: number; }
+>        : ^^^^^^^^^^^^^^
+>fn3(obj3) : { a: number; }
+>          : ^^^^^^^^^^^^^^
+>fn3 : <T>(obj: { [K in keyof T & ("a" | "c") as K extends "a" | "b" ? K : never]: T[K]; }) => T
+>    : ^ ^^   ^^                                                                          ^^^^^ 
+>obj3 : { a: number; b: number; c: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
