@@ -11829,6 +11829,13 @@ export function createNameResolver({
                 return undefined;
             }
             if (!result) {
+                // Check for parameter symbol in JSDoc typeof context before failing
+                if (originalLocation && !isString(nameArg) && (originalLocation.flags & NodeFlags.JSDoc) && isInTypeQuery(originalLocation)) {
+                    const parameterSymbol = getParameterSymbolFromJSDocHost(originalLocation, (nameArg as Identifier).escapedText);
+                    if (parameterSymbol) {
+                        return parameterSymbol;
+                    }
+                }
                 onFailedToResolveSymbol(originalLocation, nameArg, meaning, nameNotFoundMessage);
             }
             else {
@@ -11837,6 +11844,25 @@ export function createNameResolver({
         }
 
         return result;
+    }
+
+    function getParameterSymbolFromJSDocHost(node: Node, name: __String): Symbol | undefined {
+        const decl = getHostSignatureFromJSDoc(node);
+        if (!decl) {
+            return undefined;
+        }
+        const parameter = find(decl.parameters, p => p.name && p.name.kind === SyntaxKind.Identifier && p.name.escapedText === name);
+        if (parameter && parameter.symbol) {
+            return parameter.symbol;
+        }
+        // If parameter.symbol is not available, try to get it from the function's locals
+        if (parameter && decl.locals) {
+            const localSymbol = decl.locals.get(name);
+            if (localSymbol) {
+                return localSymbol;
+            }
+        }
+        return undefined;
     }
 
     function useOuterVariableScopeInParameter(result: Symbol, location: Node, lastLocation: Node) {

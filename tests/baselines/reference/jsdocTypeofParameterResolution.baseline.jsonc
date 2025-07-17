@@ -1,0 +1,286 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/jsdocTypeofParameterResolution.ts ===
+// /**
+//  * @template T
+//  * @param {T} /*FIND ALL REFS*/[|a|]
+//  * @return {typeof [|a|]}
+//  */
+// function f([|{| isWriteAccess: true |}a|]) {
+//     return [|a|];
+// }
+// 
+// let a = 123;
+// --- (line: 11) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/jsdocTypeofParameterResolution.ts ===
+  // /**
+  //  * @template T
+  //  * @param {T} /*FIND ALL REFS*/a
+  //  * @return {typeof a}
+  //  */
+  // function f([|a|]) {
+  //     return a;
+  // }
+  // 
+  // --- (line: 10) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "parameter",
+    "name": "(parameter) a: any",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/jsdocTypeofParameterResolution.ts ===
+// /**
+//  * @template T
+//  * @param {T} [|a|]
+//  * @return {typeof /*FIND ALL REFS*/[|a|]}
+//  */
+// function f([|{| isWriteAccess: true |}a|]) {
+//     return [|a|];
+// }
+// 
+// let a = 123;
+// --- (line: 11) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/jsdocTypeofParameterResolution.ts ===
+  // /**
+  //  * @template T
+  //  * @param {T} a
+  //  * @return {typeof /*FIND ALL REFS*/a}
+  //  */
+  // function f([|a|]) {
+  //     return a;
+  // }
+  // 
+  // --- (line: 10) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "parameter",
+    "name": "(parameter) a: any",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/jsdocTypeofParameterResolution.ts ===
+// --- (line: 10) skipped ---
+// 
+// /**
+//  * @template T
+//  * @param {T} /*FIND ALL REFS*/[|a|]
+//  * @return {typeof [|a|]}
+//  */
+// function g([|{| isWriteAccess: true |}a|]) {
+//     return [|a|];
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/jsdocTypeofParameterResolution.ts ===
+  // --- (line: 10) skipped ---
+  // 
+  // /**
+  //  * @template T
+  //  * @param {T} /*FIND ALL REFS*/a
+  //  * @return {typeof a}
+  //  */
+  // function g([|a|]) {
+  //     return a;
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "parameter",
+    "name": "(parameter) a: any",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/jsdocTypeofParameterResolution.ts ===
+// --- (line: 10) skipped ---
+// 
+// /**
+//  * @template T
+//  * @param {T} [|a|]
+//  * @return {typeof /*FIND ALL REFS*/[|a|]}
+//  */
+// function g([|{| isWriteAccess: true |}a|]) {
+//     return [|a|];
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/jsdocTypeofParameterResolution.ts ===
+  // --- (line: 11) skipped ---
+  // /**
+  //  * @template T
+  //  * @param {T} a
+  //  * @return {typeof /*FIND ALL REFS*/a}
+  //  */
+  // function g([|a|]) {
+  //     return a;
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "parameter",
+    "name": "(parameter) a: any",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
