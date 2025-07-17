@@ -1144,7 +1144,7 @@ declare var AbortSignal: {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/AbortSignal/abort_static)
      */
-    // abort(reason?: any): AbortSignal; - To be re-added in the future
+    abort(reason?: any): AbortSignal;
     /**
      * The **`AbortSignal.any()`** static method takes an iterable of abort signals and returns an AbortSignal.
      *
