@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/propertyAssignmentDynamicOptionalProp.ts] ////
+
+=== propertyAssignmentDynamicOptionalProp.ts ===
+// https://github.com/microsoft/TypeScript/issues/55526
+
+type Something1 = {
+>Something1 : Symbol(Something1, Decl(propertyAssignmentDynamicOptionalProp.ts, 0, 0))
+
+  a?: string;
+>a : Symbol(a, Decl(propertyAssignmentDynamicOptionalProp.ts, 2, 19))
+
+};
+
+const x1: Something1 = {};
+>x1 : Symbol(x1, Decl(propertyAssignmentDynamicOptionalProp.ts, 6, 5))
+>Something1 : Symbol(Something1, Decl(propertyAssignmentDynamicOptionalProp.ts, 0, 0))
+
+function assignToKey1(key: keyof Something1, value: string | undefined) {
+>assignToKey1 : Symbol(assignToKey1, Decl(propertyAssignmentDynamicOptionalProp.ts, 6, 26))
+>key : Symbol(key, Decl(propertyAssignmentDynamicOptionalProp.ts, 8, 22))
+>Something1 : Symbol(Something1, Decl(propertyAssignmentDynamicOptionalProp.ts, 0, 0))
+>value : Symbol(value, Decl(propertyAssignmentDynamicOptionalProp.ts, 8, 44))
+
+  x1[key] = value;
+>x1 : Symbol(x1, Decl(propertyAssignmentDynamicOptionalProp.ts, 6, 5))
+>key : Symbol(key, Decl(propertyAssignmentDynamicOptionalProp.ts, 8, 22))
+>value : Symbol(value, Decl(propertyAssignmentDynamicOptionalProp.ts, 8, 44))
+}
+
+type Something2 = {
+>Something2 : Symbol(Something2, Decl(propertyAssignmentDynamicOptionalProp.ts, 10, 1))
+
+  a?: string;
+>a : Symbol(a, Decl(propertyAssignmentDynamicOptionalProp.ts, 12, 19))
+
+  b?: string;
+>b : Symbol(b, Decl(propertyAssignmentDynamicOptionalProp.ts, 13, 13))
+
+};
+
+const x2: Something2 = {};
+>x2 : Symbol(x2, Decl(propertyAssignmentDynamicOptionalProp.ts, 17, 5))
+>Something2 : Symbol(Something2, Decl(propertyAssignmentDynamicOptionalProp.ts, 10, 1))
+
+function assignToKey2(key: keyof Something2, value: string | undefined) {
+>assignToKey2 : Symbol(assignToKey2, Decl(propertyAssignmentDynamicOptionalProp.ts, 17, 26))
+>key : Symbol(key, Decl(propertyAssignmentDynamicOptionalProp.ts, 19, 22))
+>Something2 : Symbol(Something2, Decl(propertyAssignmentDynamicOptionalProp.ts, 10, 1))
+>value : Symbol(value, Decl(propertyAssignmentDynamicOptionalProp.ts, 19, 44))
+
+  x2[key] = value;
+>x2 : Symbol(x2, Decl(propertyAssignmentDynamicOptionalProp.ts, 17, 5))
+>key : Symbol(key, Decl(propertyAssignmentDynamicOptionalProp.ts, 19, 22))
+>value : Symbol(value, Decl(propertyAssignmentDynamicOptionalProp.ts, 19, 44))
+}
+
