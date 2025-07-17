@@ -393,7 +393,7 @@ func isInRightSideOfInternalImportEqualsDeclaration(node *ast.Node) bool {
 }
 
 func (l *LanguageService) createLspRangeFromNode(node *ast.Node, file *ast.SourceFile) *lsproto.Range {
-	return l.createLspRangeFromBounds(node.Pos(), node.End(), file)
+	return l.createLspRangeFromBounds(scanner.GetTokenPosOfNode(node, file, false /*includeJSDoc*/), node.End(), file)
 }
 
 func (l *LanguageService) createLspRangeFromBounds(start, end int, file *ast.SourceFile) *lsproto.Range {
@@ -1418,11 +1418,11 @@ func getPropertySymbolOfObjectBindingPatternWithoutPropertyName(symbol *ast.Symb
 	return nil
 }
 
-func getTargetLabel(referenceNode *ast.Node, labelName string) *ast.Identifier {
+func getTargetLabel(referenceNode *ast.Node, labelName string) *ast.Node {
 	// todo: rewrite as `ast.FindAncestor`
 	for referenceNode != nil {
 		if referenceNode.Kind == ast.KindLabeledStatement && referenceNode.AsLabeledStatement().Label.Text() == labelName {
-			return referenceNode.AsLabeledStatement().Label.AsIdentifier()
+			return referenceNode.AsLabeledStatement().Label
 		}
 		referenceNode = referenceNode.Parent
 	}

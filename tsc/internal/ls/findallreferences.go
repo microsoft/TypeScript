@@ -640,7 +640,7 @@ func getReferencedSymbolsSpecial(node *ast.Node, sourceFiles []*ast.SourceFile) 
 
 	if isLabelOfLabeledStatement(node) {
 		// it is a label definition and not a target, search within the parent labeledStatement
-		return getLabelReferencesInNode(node.Parent, node.AsIdentifier())
+		return getLabelReferencesInNode(node.Parent, node)
 	}
 
 	if isThis(node) {
@@ -654,9 +654,9 @@ func getReferencedSymbolsSpecial(node *ast.Node, sourceFiles []*ast.SourceFile) 
 	return nil
 }
 
-func getLabelReferencesInNode(container *ast.Node, targetLabel *ast.Identifier) []*SymbolAndEntries {
+func getLabelReferencesInNode(container *ast.Node, targetLabel *ast.Node) []*SymbolAndEntries {
 	sourceFile := ast.GetSourceFileOfNode(container)
-	labelName := targetLabel.Text
+	labelName := targetLabel.Text()
 	references := core.MapNonNil(getPossibleSymbolReferenceNodes(sourceFile, labelName, container), func(node *ast.Node) *referenceEntry {
 		// Only pick labels that are either the target label, or have a target that is the target label
 		if node == targetLabel.AsNode() || (isJumpStatementTarget(node) && getTargetLabel(node, labelName) == targetLabel) {
@@ -664,7 +664,7 @@ func getLabelReferencesInNode(container *ast.Node, targetLabel *ast.Identifier) 
 		}
 		return nil
 	})
-	return []*SymbolAndEntries{NewSymbolAndEntries(definitionKindLabel, targetLabel.AsNode(), nil, references)}
+	return []*SymbolAndEntries{NewSymbolAndEntries(definitionKindLabel, targetLabel, nil, references)}
 }
 
 func getReferencesForThisKeyword(thisOrSuperKeyword *ast.Node, sourceFiles []*ast.SourceFile) []*SymbolAndEntries {

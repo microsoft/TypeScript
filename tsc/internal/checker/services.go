@@ -618,3 +618,68 @@ func (c *Checker) GetTypeParameterAtPosition(s *Signature, pos int) *Type {
 	}
 	return t
 }
+
+func (c *Checker) GetContextualDeclarationsForObjectLiteralElement(objectLiteral *ast.Node, name string) []*ast.Node {
+	var result []*ast.Node
+	if t := c.getApparentTypeOfContextualType(objectLiteral, ContextFlagsNone); t != nil {
+		for _, t := range t.Distributed() {
+			prop := c.getPropertyOfType(t, name)
+			if prop != nil {
+				for _, declaration := range prop.Declarations {
+					result = core.AppendIfUnique(result, declaration)
+				}
+			} else {
+				for _, info := range c.getApplicableIndexInfos(t, c.getStringLiteralType(name)) {
+					if info.declaration != nil {
+						result = core.AppendIfUnique(result, info.declaration)
+					}
+				}
+			}
+		}
+	}
+	return result
+}
+
+var knownGenericTypeNames = map[string]struct{}{
+	"Array":            {},
+	"ArrayLike":        {},
+	"ReadonlyArray":    {},
+	"Promise":          {},
+	"PromiseLike":      {},
+	"Iterable":         {},
+	"IterableIterator": {},
+	"AsyncIterable":    {},
+	"Set":              {},
+	"WeakSet":          {},
+	"ReadonlySet":      {},
+	"Map":              {},
+	"WeakMap":          {},
+	"ReadonlyMap":      {},
+	"Partial":          {},
+	"Required":         {},
+	"Readonly":         {},
+	"Pick":             {},
+	"Omit":             {},
+	"NonNullable":      {},
+}
+
+func isKnownGenericTypeName(name string) bool {
+	_, exists := knownGenericTypeNames[name]
+	return exists
+}
+
+func (c *Checker) GetFirstTypeArgumentFromKnownType(t *Type) *Type {
+	if t.objectFlags&ObjectFlagsReference != 0 && isKnownGenericTypeName(t.symbol.Name) {
+		symbol := c.getGlobalSymbol(t.symbol.Name, ast.SymbolFlagsType, nil)
+		if symbol != nil && symbol == t.Target().symbol {
+			return core.FirstOrNil(c.getTypeArguments(t))
+		}
+	}
+	if t.alias != nil && isKnownGenericTypeName(t.alias.symbol.Name) {
+		symbol := c.getGlobalSymbol(t.alias.symbol.Name, ast.SymbolFlagsType, nil)
+		if symbol != nil && symbol == t.alias.symbol {
+			return core.FirstOrNil(t.alias.typeArguments)
+		}
+	}
+	return nil
+}

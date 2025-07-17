@@ -142,3 +142,11 @@ func (c *Checker) GetTypeOfPropertyOfType(t *Type, name string) *Type {
 func (c *Checker) GetContextualTypeForArgumentAtIndex(node *ast.Node, argIndex int) *Type {
 	return c.getContextualTypeForArgumentAtIndex(node, argIndex)
 }
+
+func (c *Checker) GetIndexSignaturesAtLocation(node *ast.Node) []*ast.Node {
+	return c.getIndexSignaturesAtLocation(node)
+}
+
+func (c *Checker) GetResolvedSymbol(node *ast.Node) *ast.Symbol {
+	return c.getResolvedSymbol(node)
+}

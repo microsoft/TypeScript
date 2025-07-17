@@ -2785,6 +2785,10 @@ func (node *SwitchStatement) computeSubtreeFacts() SubtreeFacts {
 		propagateSubtreeFacts(node.CaseBlock)
 }
 
+func IsSwitchStatement(node *Node) bool {
+	return node.Kind == KindSwitchStatement
+}
+
 // CaseBlock
 
 type CaseBlock struct {

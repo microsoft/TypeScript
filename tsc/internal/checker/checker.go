@@ -30263,6 +30263,22 @@ func (c *Checker) getSymbolAtLocation(node *ast.Node, ignoreErrors bool) *ast.Sy
 	}
 }
 
+func (c *Checker) getIndexSignaturesAtLocation(node *ast.Node) []*ast.Node {
+	var signatures []*ast.Node
+	if ast.IsIdentifier(node) && ast.IsPropertyAccessExpression(node.Parent) && node.Parent.Name() == node {
+		keyType := c.getLiteralTypeFromPropertyName(node)
+		objectType := c.getTypeOfExpression(node.Parent.Expression())
+		for _, t := range objectType.Distributed() {
+			for _, info := range c.getApplicableIndexInfos(t, keyType) {
+				if info.declaration != nil {
+					signatures = core.AppendIfUnique(signatures, info.declaration)
+				}
+			}
+		}
+	}
+	return signatures
+}
+
 func (c *Checker) getSymbolOfNameOrPropertyAccessExpression(name *ast.Node) *ast.Symbol {
 	if ast.IsDeclarationName(name) {
 		return c.getSymbolOfNode(name.Parent)

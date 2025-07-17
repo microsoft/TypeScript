@@ -2318,21 +2318,94 @@ func GetTokenPosOfNode(node *ast.Node, sourceFile *ast.SourceFile, includeJSDoc 
 	if ast.NodeIsMissing(node) {
 		return node.Pos()
 	}
-
 	if ast.IsJSDocNode(node) || node.Kind == ast.KindJsxText {
 		// JsxText cannot actually contain comments, even though the scanner will think it sees comments
 		return SkipTriviaEx(sourceFile.Text(), node.Pos(), &SkipTriviaOptions{StopAtComments: true})
 	}
-
 	if includeJSDoc && len(node.JSDoc(sourceFile)) > 0 {
 		return GetTokenPosOfNode(node.JSDoc(sourceFile)[0], sourceFile, false /*includeJSDoc*/)
 	}
+	return SkipTriviaEx(sourceFile.Text(), node.Pos(), &SkipTriviaOptions{InJSDoc: node.Flags&ast.NodeFlagsJSDoc != 0})
+}
 
-	return SkipTriviaEx(
-		sourceFile.Text(),
-		node.Pos(),
-		&SkipTriviaOptions{InJSDoc: node.Flags&ast.NodeFlagsJSDoc != 0},
-	)
+func getErrorRangeForArrowFunction(sourceFile *ast.SourceFile, node *ast.Node) core.TextRange {
+	pos := SkipTrivia(sourceFile.Text(), node.Pos())
+	body := node.AsArrowFunction().Body
+	if body != nil && body.Kind == ast.KindBlock {
+		startLine, _ := GetLineAndCharacterOfPosition(sourceFile, body.Pos())
+		endLine, _ := GetLineAndCharacterOfPosition(sourceFile, body.End())
+		if startLine < endLine {
+			// The arrow function spans multiple lines,
+			// make the error span be the first line, inclusive.
+			return core.NewTextRange(pos, GetEndLinePosition(sourceFile, startLine))
+		}
+	}
+	return core.NewTextRange(pos, node.End())
+}
+
+func GetErrorRangeForNode(sourceFile *ast.SourceFile, node *ast.Node) core.TextRange {
+	errorNode := node
+	switch node.Kind {
+	case ast.KindSourceFile:
+		pos := SkipTrivia(sourceFile.Text(), 0)
+		if pos == len(sourceFile.Text()) {
+			return core.NewTextRange(0, 0)
+		}
+		return GetRangeOfTokenAtPosition(sourceFile, pos)
+	// This list is a work in progress. Add missing node kinds to improve their error spans
+	case ast.KindFunctionDeclaration, ast.KindMethodDeclaration:
+		if node.Flags&ast.NodeFlagsReparsed != 0 {
+			errorNode = node
+			break
+		}
+		fallthrough
+	case ast.KindVariableDeclaration, ast.KindBindingElement, ast.KindClassDeclaration, ast.KindClassExpression, ast.KindInterfaceDeclaration,
+		ast.KindModuleDeclaration, ast.KindEnumDeclaration, ast.KindEnumMember, ast.KindFunctionExpression,
+		ast.KindGetAccessor, ast.KindSetAccessor, ast.KindTypeAliasDeclaration, ast.KindJSTypeAliasDeclaration, ast.KindPropertyDeclaration,
+		ast.KindPropertySignature, ast.KindNamespaceImport:
+		errorNode = ast.GetNameOfDeclaration(node)
+	case ast.KindArrowFunction:
+		return getErrorRangeForArrowFunction(sourceFile, node)
+	case ast.KindCaseClause, ast.KindDefaultClause:
+		start := SkipTrivia(sourceFile.Text(), node.Pos())
+		end := node.End()
+		statements := node.AsCaseOrDefaultClause().Statements.Nodes
+		if len(statements) != 0 {
+			end = statements[0].Pos()
+		}
+		return core.NewTextRange(start, end)
+	case ast.KindReturnStatement, ast.KindYieldExpression:
+		pos := SkipTrivia(sourceFile.Text(), node.Pos())
+		return GetRangeOfTokenAtPosition(sourceFile, pos)
+	case ast.KindSatisfiesExpression:
+		pos := SkipTrivia(sourceFile.Text(), node.AsSatisfiesExpression().Expression.End())
+		return GetRangeOfTokenAtPosition(sourceFile, pos)
+	case ast.KindConstructor:
+		if node.Flags&ast.NodeFlagsReparsed != 0 {
+			errorNode = node
+			break
+		}
+		scanner := GetScannerForSourceFile(sourceFile, node.Pos())
+		start := scanner.TokenStart()
+		for scanner.Token() != ast.KindConstructorKeyword && scanner.Token() != ast.KindStringLiteral && scanner.Token() != ast.KindEndOfFile {
+			scanner.Scan()
+		}
+		return core.NewTextRange(start, scanner.TokenEnd())
+		// !!!
+		// case KindJSDocSatisfiesTag:
+		// 	pos := scanner.SkipTrivia(sourceFile.Text(), node.tagName.pos)
+		// 	return scanner.GetRangeOfTokenAtPosition(sourceFile, pos)
+	}
+	if errorNode == nil {
+		// If we don't have a better node, then just set the error on the first token of
+		// construct.
+		return GetRangeOfTokenAtPosition(sourceFile, node.Pos())
+	}
+	pos := errorNode.Pos()
+	if !ast.NodeIsMissing(errorNode) && !ast.IsJsxText(errorNode) {
+		pos = SkipTrivia(sourceFile.Text(), pos)
+	}
+	return core.NewTextRange(pos, errorNode.End())
 }
 
 func ComputeLineOfPosition(lineStarts []core.TextPos, pos int) int {

@@ -482,6 +482,8 @@ func (s *Server) handleRequestOrNotification(ctx context.Context, req *lsproto.R
 		return s.handleHover(ctx, req)
 	case *lsproto.DefinitionParams:
 		return s.handleDefinition(ctx, req)
+	case *lsproto.TypeDefinitionParams:
+		return s.handleTypeDefinition(ctx, req)
 	case *lsproto.CompletionParams:
 		return s.handleCompletion(ctx, req)
 	case *lsproto.ReferenceParams:
@@ -550,6 +552,9 @@ func (s *Server) handleInitialize(req *lsproto.RequestMessage) {
 				Boolean: ptrTo(true),
 			},
 			DefinitionProvider: &lsproto.BooleanOrDefinitionOptions{
+				Boolean: ptrTo(true),
+			},
+			TypeDefinitionProvider: &lsproto.BooleanOrTypeDefinitionOptionsOrTypeDefinitionRegistrationOptions{
 				Boolean: ptrTo(true),
 			},
 			ReferencesProvider: &lsproto.BooleanOrReferenceOptions{
@@ -689,6 +694,19 @@ func (s *Server) handleDefinition(ctx context.Context, req *lsproto.RequestMessa
 	languageService, done := project.GetLanguageServiceForRequest(ctx)
 	defer done()
 	definition, err := languageService.ProvideDefinition(ctx, params.TextDocument.Uri, params.Position)
+	if err != nil {
+		return err
+	}
+	s.sendResult(req.ID, definition)
+	return nil
+}
+
+func (s *Server) handleTypeDefinition(ctx context.Context, req *lsproto.RequestMessage) error {
+	params := req.Params.(*lsproto.TypeDefinitionParams)
+	project := s.projectService.EnsureDefaultProjectForURI(params.TextDocument.Uri)
+	languageService, done := project.GetLanguageServiceForRequest(ctx)
+	defer done()
+	definition, err := languageService.ProvideTypeDefinition(ctx, params.TextDocument.Uri, params.Position)
 	if err != nil {
 		return err
 	}
