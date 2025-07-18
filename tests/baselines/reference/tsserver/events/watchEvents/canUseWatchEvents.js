@@ -143,8 +143,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Custom watchFile:: Added:: {"id":6,"path":"/home/src/tslibs/TS/Lib/lib.d.ts"}
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/something/package.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -1346,15 +1344,11 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projec
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/something/index.d.ts :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/something/index.d.ts :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/something/index.d.ts :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 After request
 
-Timeout callback:: count: 3
+Timeout callback:: count: 2
 13: /user/username/projects/myproject/tsconfig.json *new*
 14: *ensureProjectForOpenFiles* *new*
-15: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation *new*
 
 Projects::
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
@@ -1397,15 +1391,13 @@ ScriptInfos::
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 
-Before running Timeout callback:: count: 3
+Before running Timeout callback:: count: 2
 13: /user/username/projects/myproject/tsconfig.json
 14: *ensureProjectForOpenFiles*
-15: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json projectStateVersion: 6 projectProgramVersion: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json projectStateVersion: 6 projectProgramVersion: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (8)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
@@ -1418,17 +1410,41 @@ Info seq  [hh:mm:ss:mss] 	Files (8)
 	/user/username/projects/myproject/e.ts Text-1 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-After running Timeout callback:: count: 1
+Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (8)
 
-Timeout callback:: count: 1
-14: *ensureProjectForOpenFiles* *deleted*
-15: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation *deleted*
-16: *ensureProjectForOpenFiles* *new*
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (8)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] got projects updated in background /user/username/projects/myproject/a.ts
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/user/username/projects/myproject/a.ts"
+        ]
+      }
+    }
+After running Timeout callback:: count: 0
 
 Projects::
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 6
-    projectProgramVersion: 4 *changed*
+    projectProgramVersion: 3
     dirty: false *changed*
 
 ScriptInfos::
@@ -1466,36 +1482,6 @@ ScriptInfos::
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 
-Before running Timeout callback:: count: 1
-16: *ensureProjectForOpenFiles*
+Before running Timeout callback:: count: 0
 
-Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
-Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
-Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (8)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
-Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (8)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background /user/username/projects/myproject/a.ts
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectsUpdatedInBackground",
-      "body": {
-        "openFiles": [
-          "/user/username/projects/myproject/a.ts"
-        ]
-      }
-    }
 After running Timeout callback:: count: 0

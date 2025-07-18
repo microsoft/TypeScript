@@ -132,22 +132,8 @@ Info seq  [hh:mm:ss:mss] Auto discovery for typings is enabled in project '/dev/
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/undici-types.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/undici-types.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2020.full.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/^ 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/^ 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/node/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
@@ -185,17 +171,9 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/Library/Caches/typescript/node_modules/package.json: *new*
   {"pollingInterval":2000}
-/home/src/Vscode/Projects/bin/^: *new*
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules: *new*
-  {"pollingInterval":500}
 /home/src/Vscode/Projects/bin/node_modules/@types: *new*
   {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules: *new*
-  {"pollingInterval":500}
 /home/src/Vscode/Projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules: *new*
   {"pollingInterval":500}
 /home/src/Vscode/node_modules/@types: *new*
   {"pollingInterval":500}
@@ -203,12 +181,6 @@ PolledWatches::
 FsWatches::
 /home/src/Library/Caches/typescript/package.json: *new*
   {"inode":116}
-/home/src/Vscode: *new*
-  {"inode":10}
-/home/src/Vscode/Projects: *new*
-  {"inode":11}
-/home/src/Vscode/Projects/bin: *new*
-  {"inode":12}
 /home/src/tslibs/TS/Lib/lib.es2020.full.d.ts: *new*
   {"inode":22}
 
@@ -383,19 +355,13 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/Library/Caches/typescript/node_modules/package.json:
   {"pollingInterval":2000}
-/home/src/Vscode/Projects/bin/^:
-  {"pollingInterval":500}
 /home/src/Vscode/Projects/bin/bower_components: *new*
   {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules:
+/home/src/Vscode/Projects/bin/node_modules: *new*
   {"pollingInterval":500}
 /home/src/Vscode/Projects/bin/node_modules/@types:
   {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules:
-  {"pollingInterval":500}
 /home/src/Vscode/Projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules:
   {"pollingInterval":500}
 /home/src/Vscode/node_modules/@types:
   {"pollingInterval":500}
@@ -403,12 +369,6 @@ PolledWatches::
 FsWatches::
 /home/src/Library/Caches/typescript/package.json:
   {"inode":116}
-/home/src/Vscode:
-  {"inode":10}
-/home/src/Vscode/Projects:
-  {"inode":11}
-/home/src/Vscode/Projects/bin:
-  {"inode":12}
 /home/src/tslibs/TS/Lib/lib.es2020.full.d.ts:
   {"inode":22}
 

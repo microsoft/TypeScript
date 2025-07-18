@@ -105,8 +105,6 @@ Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/node/x.d.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/node/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] ======== Module name './x' was successfully resolved to '/home/src/Library/Caches/typescript/node_modules/@types/node/x.d.ts'. ========
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/node/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -152,10 +150,6 @@ FsWatches::
   {"inode":114}
 /home/src/tslibs/TS/Lib/lib.es2020.full.d.ts: *new*
   {"inode":20}
-
-FsWatchesRecursive::
-/home/src/Library/Caches/typescript/node_modules: *new*
-  {"inode":6}
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *new*

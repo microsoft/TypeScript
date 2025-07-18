@@ -78,10 +78,6 @@ FsWatches::
 /user/username/workspace/solution/projects/project/tsconfig.json: *new*
   {}
 
-FsWatchesRecursive::
-/user/username/workspace/solution/projects/project/node_modules: *new*
-  {}
-
 Program root files: [
   "/user/username/workspace/solution/projects/project/file1.ts"
 ]
@@ -171,8 +167,6 @@ FsWatches::
   {}
 /user/username/workspace/solution/projects/module1.ts: *new*
   {}
-/user/username/workspace/solution/projects/project: *new*
-  {}
 /user/username/workspace/solution/projects/project/file1.ts:
   {}
 /user/username/workspace/solution/projects/project/tsconfig.json:
@@ -180,10 +174,6 @@ FsWatches::
 
 FsWatches *deleted*::
 /user/username/workspace/solution/projects/project/node_modules/module1.ts:
-  {}
-
-FsWatchesRecursive *deleted*::
-/user/username/workspace/solution/projects/project/node_modules:
   {}
 
 
