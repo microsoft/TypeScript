@@ -6601,7 +6601,7 @@
     },
     "module === `AMD` or `UMD` or `System` or `ES6`, then `Classic`, Otherwise `Node`": {
         "category": "Message",
-        "code": 69010
+        "code": 6910
     },
     "Computed from the list of input files": {
         "category": "Message",
