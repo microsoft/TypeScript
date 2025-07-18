@@ -177,3 +177,20 @@ type Evolver<T extends Evolvable<any> = any> = {
 
 };
 
+// https://github.com/microsoft/TypeScript/issues/61203
+type Obj61203 = { [k in keyof any]: number };
+>Obj61203 : Symbol(Obj61203, Decl(mappedTypeWithAny.ts, 61, 2))
+>k : Symbol(k, Decl(mappedTypeWithAny.ts, 64, 19))
+
+declare const obj61203: Obj61203;
+>obj61203 : Symbol(obj61203, Decl(mappedTypeWithAny.ts, 65, 13))
+>Obj61203 : Symbol(Obj61203, Decl(mappedTypeWithAny.ts, 61, 2))
+
+declare const key61203: keyof Obj61203;
+>key61203 : Symbol(key61203, Decl(mappedTypeWithAny.ts, 66, 13))
+>Obj61203 : Symbol(Obj61203, Decl(mappedTypeWithAny.ts, 61, 2))
+
+obj61203[key61203]; // ok
+>obj61203 : Symbol(obj61203, Decl(mappedTypeWithAny.ts, 65, 13))
+>key61203 : Symbol(key61203, Decl(mappedTypeWithAny.ts, 66, 13))
+
