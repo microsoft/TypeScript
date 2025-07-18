@@ -394,6 +394,8 @@ function convertClassification(type: ClassificationType): TokenClass {
         case ClassificationType.text:
         case ClassificationType.parameterName:
             return TokenClass.Identifier;
+        case ClassificationType.regularExpressionLiteral:
+            return TokenClass.StringLiteral;
         default:
             return undefined!; // TODO: GH#18217 Debug.assertNever(type);
     }
@@ -692,6 +694,8 @@ function getClassificationTypeName(type: ClassificationType): ClassificationType
             return ClassificationTypeNames.jsxText;
         case ClassificationType.jsxAttributeStringLiteralValue:
             return ClassificationTypeNames.jsxAttributeStringLiteralValue;
+        case ClassificationType.regularExpressionLiteral:
+            return ClassificationTypeNames.stringLiteral;
         default:
             return undefined!; // TODO: GH#18217 Debug.assertNever(type);
     }
