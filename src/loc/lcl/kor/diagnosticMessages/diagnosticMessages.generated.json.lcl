@@ -4074,9 +4074,9 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Class_name_cannot_be_Object_when_targeting_ES5_with_module_0_2725" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Class_name_cannot_be_Object_when_targeting_ES5_and_above_with_module_0_2725" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Class name cannot be 'Object' when targeting ES5 with module {0}.]]></Val>
+          <Val><![CDATA[Class name cannot be 'Object' when targeting ES5 and above with module {0}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[{0} 모듈을 사용하는 ES5를 대상으로 하는 경우 클래스 이름은 'Object'일 수 없습니다.]]></Val>
           </Tgt>
