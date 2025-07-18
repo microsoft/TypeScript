@@ -2903,7 +2903,7 @@ func (c *Checker) checkTypePredicate(node *ast.Node) {
 }
 
 func (c *Checker) getTypePredicateParent(node *ast.Node) *ast.SignatureDeclaration {
-	parent := ast.GetEffectiveTypeParent(node.Parent)
+	parent := node.Parent
 	switch parent.Kind {
 	case ast.KindArrowFunction, ast.KindCallSignature, ast.KindFunctionDeclaration, ast.KindFunctionExpression, ast.KindFunctionType,
 		ast.KindMethodDeclaration, ast.KindMethodSignature:
@@ -13971,9 +13971,6 @@ func (c *Checker) getTargetOfImportSpecifier(node *ast.Node, dontResolveAlias bo
 		}
 	}
 	root := node.Parent.Parent.Parent // ImportDeclaration
-	if root.Kind == ast.KindJSDocImportTag {
-		root = root.AsJSDocImportTag().JSImportDeclaration.AsNode()
-	}
 	if ast.IsBindingElement(node) {
 		root = ast.GetRootDeclaration(node)
 	}
@@ -14344,8 +14341,6 @@ func (c *Checker) getModuleSpecifierForImportOrExport(node *ast.Node) *ast.Node 
 
 func getModuleSpecifierFromNode(node *ast.Node) *ast.Node {
 	switch node.Kind {
-	case ast.KindJSDocImportTag:
-		return node.AsJSDocImportTag().JSImportDeclaration.ModuleSpecifier
 	case ast.KindImportDeclaration, ast.KindJSImportDeclaration:
 		return node.AsImportDeclaration().ModuleSpecifier
 	case ast.KindExportDeclaration:
@@ -14449,12 +14444,6 @@ func (c *Checker) resolveExternalModule(location *ast.Node, moduleReference stri
 		contextSpecifier = location.AsVariableDeclaration().Initializer.AsCallExpression().Arguments.Nodes[0]
 	} else {
 		var ancestor *ast.Node
-		if location.Flags&ast.NodeFlagsJSDoc != 0 {
-			ancestor = ast.FindAncestor(location, ast.IsJSDocImportTag)
-			if ancestor != nil {
-				contextSpecifier = ancestor.AsJSDocImportTag().JSImportDeclaration.ModuleSpecifier
-			}
-		}
 		if ancestor == nil {
 			ancestor = ast.FindAncestor(location, ast.IsImportCall)
 			if ancestor != nil {
@@ -22039,7 +22028,6 @@ func (c *Checker) getTypeFromTypeOperatorNode(node *ast.Node) *Type {
 }
 
 func (c *Checker) getESSymbolLikeTypeForNode(node *ast.Node) *Type {
-	node = ast.GetEffectiveTypeParent(node)
 	if isValidESSymbolDeclaration(node) {
 		symbol := c.getSymbolOfNode(node)
 		if symbol != nil {
@@ -22710,9 +22698,9 @@ func (c *Checker) getAliasForTypeNode(node *ast.Node) *TypeAlias {
 }
 
 func (c *Checker) getAliasSymbolForTypeNode(node *ast.Node) *ast.Symbol {
-	host := ast.GetEffectiveTypeParent(node.Parent)
+	host := node.Parent
 	for ast.IsParenthesizedTypeNode(host) || ast.IsTypeOperatorNode(host) && host.AsTypeOperatorNode().Operator == ast.KindReadonlyKeyword {
-		host = ast.GetEffectiveTypeParent(host.Parent)
+		host = host.Parent
 	}
 	if isTypeAlias(host) {
 		return c.getSymbolOfDeclaration(host)
@@ -22748,7 +22736,7 @@ func (c *Checker) getOuterTypeParametersOfClassOrInterface(symbol *ast.Symbol) [
 // Return the outer type parameters of a node or undefined if the node has no outer type parameters.
 func (c *Checker) getOuterTypeParameters(node *ast.Node, includeThisTypes bool) []*Type {
 	for {
-		node = ast.GetEffectiveTypeParent(node.Parent)
+		node = node.Parent
 		if node == nil {
 			return nil
 		}

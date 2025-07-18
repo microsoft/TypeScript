@@ -10,12 +10,12 @@
 ->exports : typeof import("index")
 ->class Q {    constructor() {        this.x = new A();    }} : typeof import("index")
 ->Q : typeof import("index")
-+>module.exports = class Q {    constructor() {        this.x = new A();    }} : typeof import(".")
-+>module.exports : typeof import(".")
-+>module : { Q: typeof import("."); }
-+>exports : typeof import(".")
-+>class Q {    constructor() {        this.x = new A();    }} : typeof import(".")
-+>Q : typeof import(".")
++>module.exports = class Q {    constructor() {        this.x = new A();    }} : typeof Q
++>module.exports : typeof Q
++>module : { Q: typeof Q; }
++>exports : typeof Q
++>class Q {    constructor() {        this.x = new A();    }} : typeof Q
++>Q : typeof Q
 
      constructor() {
          this.x = new A();
@@ -35,9 +35,10 @@
 ->module.exports : typeof import("index")
 ->module : { exports: typeof import("index"); }
 ->exports : typeof import("index")
+->Another : typeof Q
 +>module.exports.Another : any
-+>module.exports : typeof import(".")
-+>module : { Q: typeof import("."); }
-+>exports : typeof import(".")
- >Another : typeof Q
++>module.exports : typeof Q
++>module : { Q: typeof Q; }
++>exports : typeof Q
++>Another : any
  >Q : typeof Q

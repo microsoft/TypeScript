@@ -558,13 +558,7 @@ func (c *compilerTest) verifyParentPointers(t *testing.T) {
 			} else {
 				elab += "!synthetic! no text available"
 			}
-			if ((n.Parent.Kind == ast.KindBinaryExpression || n.Parent.Kind == ast.KindPropertyAccessExpression || n.Parent.Kind == ast.KindElementAccessExpression) && (parent.Kind == ast.KindJSExportAssignment || parent.Kind == ast.KindCommonJSExport)) ||
-				((parent.Kind == ast.KindBinaryExpression || parent.Kind == ast.KindPropertyAccessExpression || parent.Kind == ast.KindElementAccessExpression) && (n.Parent.Kind == ast.KindJSExportAssignment || n.Parent.Kind == ast.KindCommonJSExport)) ||
-				(ast.IsFunctionLike(n.Parent) && ast.IsFunctionLike(parent)) {
-				// known current violation of parent pointer invariant, ignore (type nodes on js exports/binary expressions, names on signatures)
-			} else {
-				assert.Assert(t, n.Parent == parent, "parent node does not match traversed parent: "+n.Kind.String()+": "+elab)
-			}
+			assert.Assert(t, n.Parent == parent, "parent node does not match traversed parent: "+n.Kind.String()+": "+elab)
 			oldParent := parent
 			parent = n
 			n.ForEachChild(verifier)

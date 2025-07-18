@@ -40,7 +40,9 @@
 -    instance: import(".");
 -}
 +declare const _default: {
-+    new (p: number): import(".");
++    new (p: number): {
++        t: number;
++    };
 +};
 +export = _default;
 +export var Sub = class {

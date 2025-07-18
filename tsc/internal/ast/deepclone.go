@@ -3,7 +3,7 @@ package ast
 import "github.com/microsoft/typescript-go/internal/core"
 
 // Ideally, this would get cached on the node factory so there's only ever one set of closures made per factory
-func getDeepCloneVisitor(f *NodeFactory) *NodeVisitor {
+func getDeepCloneVisitor(f *NodeFactory, syntheticLocation bool) *NodeVisitor {
 	var visitor *NodeVisitor
 	visitor = NewNodeVisitor(
 		func(node *Node) *Node {
@@ -15,7 +15,9 @@ func getDeepCloneVisitor(f *NodeFactory) *NodeVisitor {
 			// In strada, `factory.cloneNode` was dynamic and did _not_ clone positions for any "special cases", meanwhile
 			// Node.Clone in corsa reliably uses `Update` calls for all nodes and so copies locations by default.
 			// Deep clones are done to copy a node across files, so here, we explicitly make the location range synthetic on all cloned nodes
-			c.Loc = core.NewTextRange(-1, -1)
+			if syntheticLocation {
+				c.Loc = core.NewTextRange(-1, -1)
+			}
 			return c
 		},
 		f,
@@ -46,5 +48,18 @@ func getDeepCloneVisitor(f *NodeFactory) *NodeVisitor {
 }
 
 func (f *NodeFactory) DeepCloneNode(node *Node) *Node {
-	return getDeepCloneVisitor(f).VisitNode(node)
+	return getDeepCloneVisitor(f, true /*syntheticLocation*/).VisitNode(node)
+}
+
+func (f *NodeFactory) DeepCloneReparse(node *Node) *Node {
+	if node != nil {
+		node = getDeepCloneVisitor(f, false /*syntheticLocation*/).VisitNode(node)
+		SetParentInChildren(node)
+		node.Flags |= NodeFlagsReparsed
+	}
+	return node
+}
+
+func (f *NodeFactory) DeepCloneReparseModifiers(modifiers *ModifierList) *ModifierList {
+	return getDeepCloneVisitor(f, false /*syntheticLocation*/).VisitModifiers(modifiers)
 }

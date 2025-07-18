@@ -21,9 +21,10 @@
 ->module.exports : { member: number; additional: 20; }
 ->module : { exports: { member: number; additional: 20; }; }
 ->exports : { member: number; additional: 20; }
+->additional : 20
 +>module.exports.additional : any
 +>module.exports : Foo
 +>module : { "export=": Foo; }
 +>exports : Foo
- >additional : 20
++>additional : any
  >20 : 20

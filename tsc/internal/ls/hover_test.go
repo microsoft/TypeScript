@@ -50,6 +50,92 @@ function myFunction() {
 				},
 			},
 		},
+		{
+			title: "JSDocParamHoverFunctionDeclaration",
+			input: `
+// @filename: index.js
+/**
+ * @param {string} param - the greatest of days
+ */
+function /*marker*/myFunction(param) {
+    return "test" + param;
+}
+
+myFunction();`,
+			expected: map[string]*lsproto.Hover{
+				"marker": {
+					Contents: lsproto.MarkupContentOrMarkedStringOrMarkedStrings{
+						MarkupContent: &lsproto.MarkupContent{
+							Kind:  lsproto.MarkupKindMarkdown,
+							Value: "```tsx\nfunction myFunction(param: string): string\n```\n\n\n*@param* `param` - the greatest of days\n",
+						},
+					},
+				},
+			},
+		},
+		{
+			title: "JSDocParamHoverFunctionCall",
+			input: `
+// @filename: index.js
+/**
+ * @param {string} param - the greatest of days
+ */
+function myFunction(param) {
+    return "test" + param;
+}
+
+/*marker*/myFunction();`,
+			expected: map[string]*lsproto.Hover{
+				"marker": {
+					Contents: lsproto.MarkupContentOrMarkedStringOrMarkedStrings{
+						MarkupContent: &lsproto.MarkupContent{
+							Kind:  lsproto.MarkupKindMarkdown,
+							Value: "```tsx\nfunction myFunction(param: string): string\n```\n\n\n*@param* `param` - the greatest of days\n",
+						},
+					},
+				},
+			},
+		},
+		{
+			title: "JSDocParamHoverParameter",
+			input: `
+// @filename: index.js
+/**
+ * @param {string} param - the greatest of days
+ */
+function myFunction(/*marker*/param) {
+    return "test" + param;
+}
+
+myFunction();`,
+			expected: map[string]*lsproto.Hover{
+				"marker": {
+					Contents: lsproto.MarkupContentOrMarkedStringOrMarkedStrings{
+						MarkupContent: &lsproto.MarkupContent{
+							Kind:  lsproto.MarkupKindMarkdown,
+							Value: "```tsx\n(parameter) param: string\n```\n- the greatest of days\n",
+						},
+					},
+				},
+			},
+		},
+		{
+			title: "JSDocParamHoverTagIdentifier",
+			input: `
+// @filename: index.js
+/**
+ * @param {string} /*marker*/param - the greatest of days
+ */
+function myFunction(param) {
+    return "test" + param;
+}
+
+myFunction();`,
+			expected: map[string]*lsproto.Hover{
+				// TODO: Should have same result as hovering on the parameter itself.
+				"marker": nil,
+			},
+		},
 	}
 
 	for _, testCase := range testCases {

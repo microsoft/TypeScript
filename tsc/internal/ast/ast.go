@@ -9067,7 +9067,6 @@ func (node *JSDocLinkCode) Name() *DeclarationName {
 
 type JSDocTypeExpression struct {
 	TypeNodeBase
-	Host *Node
 	Type *TypeNode
 }
 
@@ -9325,7 +9324,6 @@ type JSDocTemplateTag struct {
 	JSDocTagBase
 	Constraint     *Node
 	TypeParameters *TypeParameterList
-	Host           *Node
 }
 
 func (f *NodeFactory) NewJSDocTemplateTag(tagName *IdentifierNode, constraint *Node, typeParameters *TypeParameterList, comment *NodeList) *Node {
@@ -9820,10 +9818,9 @@ func (node *JSDocThisTag) Clone(f NodeFactoryCoercible) *Node {
 // JSDocImportTag
 type JSDocImportTag struct {
 	JSDocTagBase
-	JSImportDeclaration *ImportDeclaration
-	ImportClause        *Declaration
-	ModuleSpecifier     *Expression
-	Attributes          *Node
+	ImportClause    *Declaration
+	ModuleSpecifier *Expression
+	Attributes      *Node
 }
 
 func (f *NodeFactory) NewJSDocImportTag(tagName *IdentifierNode, importClause *Declaration, moduleSpecifier *Node, attributes *Node, comment *NodeList) *Node {

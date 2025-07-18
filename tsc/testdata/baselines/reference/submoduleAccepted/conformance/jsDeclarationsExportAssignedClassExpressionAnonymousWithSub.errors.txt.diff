@@ -3,7 +3,7 @@
 @@= skipped -0, +0 lines =@@
 -<no content>
 +index.js(1,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-+index.js(9,16): error TS2339: Property 'Sub' does not exist on type 'typeof exports'.
++index.js(9,16): error TS2339: Property 'Sub' does not exist on type 'typeof (Anonymous class)'.
 +
 +
 +==== index.js (2 errors) ====
@@ -26,7 +26,7 @@
 +!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
 +    module.exports.Sub = class {
 +                   ~~~
-+!!! error TS2339: Property 'Sub' does not exist on type 'typeof exports'.
++!!! error TS2339: Property 'Sub' does not exist on type 'typeof (Anonymous class)'.
 +        constructor() {
 +            this.instance = new module.exports(10);
 +        }

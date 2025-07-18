@@ -26,7 +26,9 @@
 -    x: number;
 -}
 +declare const _default: {
-+    new (): import("./obj");
++    new (): {
++        x: number;
++    };
 +};
 +export = _default;
  //// [index.d.ts]
@@ -50,7 +52,9 @@
 +    
 +==== out/obj.d.ts (0 errors) ====
 +    declare const _default: {
-+        new (): import("./obj");
++        new (): {
++            x: number;
++        };
 +    };
 +    export = _default;
 +    

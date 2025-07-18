@@ -47,9 +47,8 @@
 ->module.exports : number
 ->module : { exports: number; }
 ->exports : number
-->f : any
 +>module.exports : 1
 +>module : { "export=": 1; }
 +>exports : 1
-+>f : () => void
+ >f : any
  >function () { } : () => void

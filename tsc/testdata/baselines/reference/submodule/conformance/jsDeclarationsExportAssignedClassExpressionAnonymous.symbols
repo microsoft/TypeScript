@@ -2,9 +2,9 @@
 
 === index.js ===
 module.exports = class {
->module.exports : Symbol(exports, Decl(index.js, 0, 16))
+>module.exports : Symbol((Anonymous class), Decl(index.js, 0, 16))
 >module : Symbol(module.exports)
->exports : Symbol(exports, Decl(index.js, 0, 16))
+>exports : Symbol((Anonymous class), Decl(index.js, 0, 16))
 
     /**
      * @param {number} p

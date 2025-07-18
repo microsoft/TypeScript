@@ -1842,9 +1842,6 @@ func getAnyImportSyntax(node *ast.Node) *ast.Node {
 	default:
 		return nil
 	}
-	if importNode.Kind == ast.KindJSDocImportTag {
-		return importNode.AsJSDocImportTag().JSImportDeclaration.AsNode()
-	}
 	return importNode
 }
 

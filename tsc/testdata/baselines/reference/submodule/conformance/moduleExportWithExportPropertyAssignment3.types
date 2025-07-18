@@ -56,7 +56,7 @@ module.exports.bothBefore = 'string'
 >module.exports : { justExport: number; bothBefore: number; bothAfter: number; }
 >module : { "export=": { justExport: number; bothBefore: number; bothAfter: number; }; }
 >exports : { justExport: number; bothBefore: number; bothAfter: number; }
->bothBefore : "string"
+>bothBefore : number
 >'string' : "string"
 
 module.exports = {
@@ -84,7 +84,7 @@ module.exports.bothAfter = 'string'
 >module.exports : { justExport: number; bothBefore: number; bothAfter: number; }
 >module : { "export=": { justExport: number; bothBefore: number; bothAfter: number; }; }
 >exports : { justExport: number; bothBefore: number; bothAfter: number; }
->bothAfter : "string"
+>bothAfter : number
 >'string' : "string"
 
 module.exports.justProperty = 'string'
@@ -93,6 +93,6 @@ module.exports.justProperty = 'string'
 >module.exports : { justExport: number; bothBefore: number; bothAfter: number; }
 >module : { "export=": { justExport: number; bothBefore: number; bothAfter: number; }; }
 >exports : { justExport: number; bothBefore: number; bothAfter: number; }
->justProperty : "string"
+>justProperty : any
 >'string' : "string"
 

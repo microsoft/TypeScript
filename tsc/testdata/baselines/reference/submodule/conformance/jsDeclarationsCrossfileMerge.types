@@ -22,7 +22,7 @@ module.exports.memberName = "thing";
 >module.exports : () => void
 >module : { validate(): void; }
 >exports : () => void
->memberName : "thing"
+>memberName : any
 >"thing" : "thing"
 
 === exporter.js ===

@@ -289,7 +289,7 @@ loop:
 			lastSelfReferenceLocation = location
 		}
 		lastLocation = location
-		location = ast.GetEffectiveTypeParent(location.Parent)
+		location = location.Parent
 	}
 	// We just climbed up parents looking for the name, meaning that we started in a descendant node of `lastLocation`.
 	// If `result === lastSelfReferenceLocation.symbol`, that means that we are somewhere inside `lastSelfReferenceLocation` looking up a name, and resolving to `lastLocation` itself.
@@ -483,9 +483,6 @@ func isTypeParameterSymbolDeclaredInContainer(symbol *ast.Symbol, container *ast
 	for _, decl := range symbol.Declarations {
 		if decl.Kind == ast.KindTypeParameter {
 			parent := decl.Parent
-			if parent.Kind == ast.KindJSDocTemplateTag {
-				parent = parent.AsJSDocTemplateTag().Host
-			}
 			if parent == container {
 				return true
 			}

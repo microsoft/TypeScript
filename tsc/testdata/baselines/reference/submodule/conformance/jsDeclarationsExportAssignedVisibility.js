@@ -41,7 +41,9 @@ module.exports = Container;
 
 //// [obj.d.ts]
 declare const _default: {
-    new (): import("./obj");
+    new (): {
+        x: number;
+    };
 };
 export = _default;
 //// [index.d.ts]
@@ -61,7 +63,9 @@ out/index.d.ts(1,10): error TS2304: Cannot find name 'Container'.
     
 ==== out/obj.d.ts (0 errors) ====
     declare const _default: {
-        new (): import("./obj");
+        new (): {
+            x: number;
+        };
     };
     export = _default;
     

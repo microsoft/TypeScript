@@ -46,8 +46,7 @@
  >exports.methods = m : () => void
  >exports.methods : any
 ->exports : any
-->methods : any
 +>exports : typeof import(".")
-+>methods : () => void
+ >methods : any
  >m : () => void
  }

@@ -4,16 +4,6 @@
 
 
 // === findAllReferences ===
-// === /a.js ===
-
-// /**
-//  * @typedef I {Object}
-//  * @prop /*FIND ALL REFS*/[|p|] {number}
-//  */
-// 
-// /** @type {I} */
-// let x;
-// x.[|p|];
 
 
 
@@ -21,10 +11,7 @@
 // === findAllReferences ===
 // === /a.js ===
 
-// /**
-//  * @typedef I {Object}
-//  * @prop [|p|] {number}
-//  */
+// --- (line: 4) skipped ---
 // 
 // /** @type {I} */
 // let x;

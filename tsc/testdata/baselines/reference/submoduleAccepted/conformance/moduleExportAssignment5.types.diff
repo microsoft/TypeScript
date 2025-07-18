@@ -20,9 +20,10 @@
 ->module.exports : { m(): void; default: Axios; }
 ->module : { exports: { m(): void; default: Axios; }; }
 ->exports : { m(): void; default: Axios; }
+->default : Axios
 +>module.exports.default : any
 +>module.exports : Axios
 +>module : { axios: Axios; }
 +>exports : Axios
- >default : Axios
++>default : any
  >axios : Axios

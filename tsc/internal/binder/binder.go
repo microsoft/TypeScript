@@ -1651,8 +1651,6 @@ func (b *Binder) bindChildren(node *ast.Node) {
 	case ast.KindObjectLiteralExpression, ast.KindArrayLiteralExpression, ast.KindPropertyAssignment, ast.KindSpreadElement:
 		b.inAssignmentPattern = saveInAssignmentPattern
 		b.bindEachChild(node)
-	case ast.KindJSExportAssignment, ast.KindCommonJSExport:
-		// Reparsed nodes do not double-bind children, which are not reparsed
 	default:
 		b.bindEachChild(node)
 	}

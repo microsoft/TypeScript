@@ -1394,7 +1394,7 @@ func (c *Checker) checkGrammarTypeOperatorNode(node *ast.TypeOperatorNode) bool 
 		if innerType.Kind != ast.KindSymbolKeyword {
 			return c.grammarErrorOnNode(innerType, diagnostics.X_0_expected, scanner.TokenToString(ast.KindSymbolKeyword))
 		}
-		parent := ast.GetEffectiveTypeParent(ast.WalkUpParenthesizedTypes(node.Parent))
+		parent := ast.WalkUpParenthesizedTypes(node.Parent)
 		switch parent.Kind {
 		case ast.KindVariableDeclaration:
 			decl := parent.AsVariableDeclaration()

@@ -33,5 +33,5 @@
 +>module.exports : {}
 +>module : { axios: {}; }
 +>exports : {}
-+>default : {}
++>default : any
 +>axios : {}
