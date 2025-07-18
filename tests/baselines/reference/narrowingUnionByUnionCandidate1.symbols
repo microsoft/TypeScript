@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/narrowingUnionByUnionCandidate1.ts] ////
+
+=== narrowingUnionByUnionCandidate1.ts ===
+// https://github.com/microsoft/TypeScript/issues/61581
+
+type Result<A, E> =
+>Result : Symbol(Result, Decl(narrowingUnionByUnionCandidate1.ts, 0, 0))
+>A : Symbol(A, Decl(narrowingUnionByUnionCandidate1.ts, 2, 12))
+>E : Symbol(E, Decl(narrowingUnionByUnionCandidate1.ts, 2, 14))
+
+  | {
+      readonly _tag: "Ok";
+>_tag : Symbol(_tag, Decl(narrowingUnionByUnionCandidate1.ts, 3, 5))
+
+      readonly value: A;
+>value : Symbol(value, Decl(narrowingUnionByUnionCandidate1.ts, 4, 26))
+>A : Symbol(A, Decl(narrowingUnionByUnionCandidate1.ts, 2, 12))
+    }
+  | {
+      readonly _tag: "Fail";
+>_tag : Symbol(_tag, Decl(narrowingUnionByUnionCandidate1.ts, 7, 5))
+
+      readonly error: E;
+>error : Symbol(error, Decl(narrowingUnionByUnionCandidate1.ts, 8, 28))
+>E : Symbol(E, Decl(narrowingUnionByUnionCandidate1.ts, 2, 14))
+
+    };
+
+declare const isResult: (u: unknown) => u is Result<any, any>;
+>isResult : Symbol(isResult, Decl(narrowingUnionByUnionCandidate1.ts, 12, 13))
+>u : Symbol(u, Decl(narrowingUnionByUnionCandidate1.ts, 12, 25))
+>u : Symbol(u, Decl(narrowingUnionByUnionCandidate1.ts, 12, 25))
+>Result : Symbol(Result, Decl(narrowingUnionByUnionCandidate1.ts, 0, 0))
+
+// return type: Result<A, E> | "ok"
+export const fn = <A, E>(inp: Result<A, E> | string) =>
+>fn : Symbol(fn, Decl(narrowingUnionByUnionCandidate1.ts, 15, 12))
+>A : Symbol(A, Decl(narrowingUnionByUnionCandidate1.ts, 15, 19))
+>E : Symbol(E, Decl(narrowingUnionByUnionCandidate1.ts, 15, 21))
+>inp : Symbol(inp, Decl(narrowingUnionByUnionCandidate1.ts, 15, 25))
+>Result : Symbol(Result, Decl(narrowingUnionByUnionCandidate1.ts, 0, 0))
+>A : Symbol(A, Decl(narrowingUnionByUnionCandidate1.ts, 15, 19))
+>E : Symbol(E, Decl(narrowingUnionByUnionCandidate1.ts, 15, 21))
+
+  isResult(inp) ? inp : "ok";
+>isResult : Symbol(isResult, Decl(narrowingUnionByUnionCandidate1.ts, 12, 13))
+>inp : Symbol(inp, Decl(narrowingUnionByUnionCandidate1.ts, 15, 25))
+>inp : Symbol(inp, Decl(narrowingUnionByUnionCandidate1.ts, 15, 25))
+
