@@ -1718,7 +1718,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         preSwitchCaseFlow = currentFlow;
         bind(node.caseBlock);
         addAntecedent(postSwitchLabel, currentFlow);
-        const hasDefault = forEach(node.caseBlock.clauses, c => c.kind === SyntaxKind.DefaultClause);
+        const hasDefault = forEach(node.caseBlock.clauses, c => c.kind === SyntaxKind.DefaultClause) ||
+            (skipParentheses(node.expression).kind === SyntaxKind.TrueKeyword && node.caseBlock.clauses.some(clause => clause.kind === SyntaxKind.CaseClause && skipParentheses(clause.expression).kind === SyntaxKind.TrueKeyword));
         // We mark a switch statement as possibly exhaustive if it has no default clause and if all
         // case clauses have unreachable end points (e.g. they all return). Note, we no longer need
         // this property in control flow analysis, it's there only for backwards compatibility.
