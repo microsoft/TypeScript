@@ -1,0 +1,143 @@
+//// [tests/cases/compiler/mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts] ////
+
+=== mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts ===
+type ExtractEvent<
+>ExtractEvent : Symbol(ExtractEvent, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 0, 0))
+
+  TEvent extends { type: string },
+>TEvent : Symbol(TEvent, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 0, 18))
+>type : Symbol(type, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 1, 18))
+
+  TEventType extends TEvent["type"]
+>TEventType : Symbol(TEventType, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 1, 34))
+>TEvent : Symbol(TEvent, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 0, 18))
+
+> = TEvent extends {
+>TEvent : Symbol(TEvent, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 0, 18))
+
+  type: TEventType;
+>type : Symbol(type, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 3, 20))
+>TEventType : Symbol(TEventType, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 1, 34))
+}
+  ? TEvent
+>TEvent : Symbol(TEvent, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 0, 18))
+
+  : never;
+
+type TransitionConfig<TContext, TEvent extends { type: string }> = {
+>TransitionConfig : Symbol(TransitionConfig, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 7, 10))
+>TContext : Symbol(TContext, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 9, 22))
+>TEvent : Symbol(TEvent, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 9, 31))
+>type : Symbol(type, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 9, 48))
+
+  actions?: {
+>actions : Symbol(actions, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 9, 68))
+
+    type: string;
+>type : Symbol(type, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 10, 13))
+
+  };
+};
+
+type IntersectedTransitionConfigMap<TContext, TEvent extends { type: string }> = {
+>IntersectedTransitionConfigMap : Symbol(IntersectedTransitionConfigMap, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 13, 2))
+>TContext : Symbol(TContext, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 15, 36))
+>TEvent : Symbol(TEvent, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 15, 45))
+>type : Symbol(type, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 15, 62))
+
+  [K in TEvent["type"]]?: TransitionConfig<TContext, ExtractEvent<TEvent, K>>;
+>K : Symbol(K, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 16, 3))
+>TEvent : Symbol(TEvent, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 15, 45))
+>TransitionConfig : Symbol(TransitionConfig, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 7, 10))
+>TContext : Symbol(TContext, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 15, 36))
+>ExtractEvent : Symbol(ExtractEvent, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 0, 0))
+>TEvent : Symbol(TEvent, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 15, 45))
+>K : Symbol(K, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 16, 3))
+
+} & {
+  "*": TransitionConfig<TContext, TEvent>;
+>"*" : Symbol("*", Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 17, 5))
+>TransitionConfig : Symbol(TransitionConfig, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 7, 10))
+>TContext : Symbol(TContext, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 15, 36))
+>TEvent : Symbol(TEvent, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 15, 45))
+
+};
+
+type TransitionConfigMap<TContext, TEvent extends { type: string }> = {
+>TransitionConfigMap : Symbol(TransitionConfigMap, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 19, 2))
+>TContext : Symbol(TContext, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 21, 25))
+>TEvent : Symbol(TEvent, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 21, 34))
+>type : Symbol(type, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 21, 51))
+
+  [K in TEvent["type"] | "*"]?: K extends "*"
+>K : Symbol(K, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 22, 3))
+>TEvent : Symbol(TEvent, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 21, 34))
+>K : Symbol(K, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 22, 3))
+
+    ? TransitionConfig<TContext, TEvent>
+>TransitionConfig : Symbol(TransitionConfig, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 7, 10))
+>TContext : Symbol(TContext, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 21, 25))
+>TEvent : Symbol(TEvent, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 21, 34))
+
+    : TransitionConfig<TContext, ExtractEvent<TEvent, K>>;
+>TransitionConfig : Symbol(TransitionConfig, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 7, 10))
+>TContext : Symbol(TContext, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 21, 25))
+>ExtractEvent : Symbol(ExtractEvent, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 0, 0))
+>TEvent : Symbol(TEvent, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 21, 34))
+>K : Symbol(K, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 22, 3))
+
+};
+
+export function genericFn<TEvent extends { type: string }>() {
+>genericFn : Symbol(genericFn, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 25, 2))
+>TEvent : Symbol(TEvent, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 27, 26))
+>type : Symbol(type, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 27, 42))
+
+  const wildcardTransitionConfig = {
+>wildcardTransitionConfig : Symbol(wildcardTransitionConfig, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 28, 7))
+
+    "*": { actions: { type: "someAction" } },
+>"*" : Symbol("*", Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 28, 36))
+>actions : Symbol(actions, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 29, 10))
+>type : Symbol(type, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 29, 21))
+
+  } as const;
+>const : Symbol(const)
+
+  // this should be assignable, in the same way as the following assignment is OK
+  let test: TransitionConfigMap<
+>test : Symbol(test, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 33, 5))
+>TransitionConfigMap : Symbol(TransitionConfigMap, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 19, 2))
+
+    { counter: number },
+>counter : Symbol(counter, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 34, 5))
+
+    { type: TEvent["type"] }
+>type : Symbol(type, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 35, 5))
+>TEvent : Symbol(TEvent, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 27, 26))
+
+  > = {} as typeof wildcardTransitionConfig;
+>wildcardTransitionConfig : Symbol(wildcardTransitionConfig, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 28, 7))
+
+  // concrete prop is assignable to the concrete prop of this mapped type
+  test["*"] = {} as typeof wildcardTransitionConfig["*"];
+>test : Symbol(test, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 33, 5))
+>"*" : Symbol("*")
+>wildcardTransitionConfig : Symbol(wildcardTransitionConfig, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 28, 7))
+
+  // similar intersected type accepts this concrete object
+  let test2: IntersectedTransitionConfigMap<
+>test2 : Symbol(test2, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 42, 5))
+>IntersectedTransitionConfigMap : Symbol(IntersectedTransitionConfigMap, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 13, 2))
+
+    { counter: number },
+>counter : Symbol(counter, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 43, 5))
+
+    { type: TEvent["type"] }
+>type : Symbol(type, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 44, 5))
+>TEvent : Symbol(TEvent, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 27, 26))
+
+  > = {} as typeof wildcardTransitionConfig;
+>wildcardTransitionConfig : Symbol(wildcardTransitionConfig, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 28, 7))
+}
+
