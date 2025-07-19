@@ -185,6 +185,7 @@ const enum Extensions {
     Json        = 1 << 3, // '.json'
 
     ImplementationFiles = TypeScript | JavaScript,
+    Any         = (TypeScript | JavaScript | Declaration | Json | 1 << 4),
 }
 
 function formatExtensions(extensions: Extensions) {
@@ -193,6 +194,7 @@ function formatExtensions(extensions: Extensions) {
     if (extensions & Extensions.JavaScript) result.push("JavaScript");
     if (extensions & Extensions.Declaration) result.push("Declaration");
     if (extensions & Extensions.Json) result.push("JSON");
+    if (extensions & Extensions.Any) result.push("Any");
     return result.join(", ");
 }
 
@@ -1772,7 +1774,7 @@ export function nodeModuleNameResolver(moduleName: string, containingFile: strin
 export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, conditions?: string[], isConfigLookup?: boolean): ResolvedModuleWithFailedLookupLocations {
     let extensions;
     if (isConfigLookup) {
-        extensions = Extensions.Json;
+        extensions = Extensions.Any;
     }
     else if (compilerOptions.noDtsResolution) {
         extensions = Extensions.ImplementationFiles;
@@ -1788,8 +1790,8 @@ export function nodeModuleNameResolver(moduleName: string, containingFile: strin
 }
 
 /** @internal */
-export function nodeNextJsonConfigResolver(moduleName: string, containingFile: string, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
-    return nodeModuleNameResolverWorker(NodeResolutionFeatures.NodeNextDefault, moduleName, getDirectoryPath(containingFile), { moduleResolution: ModuleResolutionKind.NodeNext }, host, /*cache*/ undefined, Extensions.Json, /*isConfigLookup*/ true, /*redirectedReference*/ undefined, /*conditions*/ undefined);
+export function nodeNextTsconfigResolver(moduleName: string, containingFile: string, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
+    return nodeModuleNameResolverWorker(NodeResolutionFeatures.NodeNextDefault, moduleName, getDirectoryPath(containingFile), { moduleResolution: ModuleResolutionKind.NodeNext }, host, /*cache*/ undefined, Extensions.Any, /*isConfigLookup*/ true, /*redirectedReference*/ undefined, /*conditions*/ undefined);
 }
 
 function nodeModuleNameResolverWorker(
@@ -2111,9 +2113,9 @@ function loadFileNameFromPackageJsonField(extensions: Extensions, candidate: str
         return result !== undefined ? { path: candidate, ext, resolvedUsingTsExtension: packageJsonValue ? !endsWith(packageJsonValue, ext) : undefined } : undefined;
     }
 
-    if (state.isConfigLookup && extensions === Extensions.Json && fileExtensionIs(candidate, Extension.Json)) {
+    if (state.isConfigLookup && (extensions === Extensions.Any || extensionsToExtensionsArray(extensions).some(ext => fileExtensionIs(candidate, ext)))) {
         const result = tryFile(candidate, onlyRecordFailures, state);
-        return result !== undefined ? { path: candidate, ext: Extension.Json, resolvedUsingTsExtension: undefined } : undefined;
+        return result !== undefined ? { path: candidate, ext: getAnyExtensionFromPath(candidate), resolvedUsingTsExtension: undefined } : undefined;
     }
 
     return loadModuleFromFileNoImplicitExtensions(extensions, candidate, onlyRecordFailures, state);
@@ -2168,6 +2170,7 @@ function tryAddingExtensions(candidate: string, extensions: Extensions, original
                 || undefined;
         default:
             return extensions & Extensions.Declaration && !isDeclarationFileName(candidate + originalExtension) && tryExtension(`.d${originalExtension}.ts`)
+                || extensions & Extensions.Any && tryExtension(originalExtension)
                 || undefined;
     }
 
