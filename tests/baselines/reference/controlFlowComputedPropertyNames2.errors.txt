@@ -1,0 +1,51 @@
+controlFlowComputedPropertyNames2.ts(20,49): error TS2339: Property 'type' does not exist on type 'Type'.
+controlFlowComputedPropertyNames2.ts(28,39): error TS2339: Property 'type' does not exist on type 'Type'.
+controlFlowComputedPropertyNames2.ts(35,39): error TS2339: Property 'type' does not exist on type 'Type'.
+
+
+==== controlFlowComputedPropertyNames2.ts (3 errors) ====
+    interface Type {
+      kind: number;
+      isIndexType(): this is IndexType;
+    }
+    
+    interface IndexType extends Type {
+      kind: 1;
+      type: Type;
+    }
+    
+    function test1(types: Type[]) {
+      for (let i = 0; i < types.length; i++) {
+        const t = types[i].isIndexType() ? types[i].type : types[i]; // ok
+      }
+    }
+    
+    function test2(types: Type[]) {
+      for (let i = 0; i < types.length; i++) {
+        i++;
+        const t = types[i].isIndexType() ? types[i].type : types[i]; // error
+                                                    ~~~~
+!!! error TS2339: Property 'type' does not exist on type 'Type'.
+      }
+    }
+    
+    function test3(types: Type[]) {
+      for (
+        let i = 0;
+        i < types.length;
+        types[i].isIndexType() ? types[i].type : types[i], i++ // error
+                                          ~~~~
+!!! error TS2339: Property 'type' does not exist on type 'Type'.
+      ) {}
+    }
+    
+    function test4(types: Type[]) {
+      for (
+        let i = 0;
+        types[i].isIndexType() ? types[i].type : types[i], i < types.length; // error
+                                          ~~~~
+!!! error TS2339: Property 'type' does not exist on type 'Type'.
+        i++
+      ) {}
+    }
+    
