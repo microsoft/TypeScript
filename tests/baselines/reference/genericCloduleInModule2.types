@@ -36,8 +36,8 @@ module A {
 }
 
 var b: A.B;
->b : any
->  : ^^^
+>b : A.B<any>
+>  : ^^^^^^^^
 >A : any
 >  : ^^^
 
@@ -46,8 +46,8 @@ b.foo();
 >        : ^^^
 >b.foo : any
 >      : ^^^
->b : any
->  : ^^^
+>b : A.B<any>
+>  : ^^^^^^^^
 >foo : any
 >    : ^^^
 
