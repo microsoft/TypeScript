@@ -644,6 +644,7 @@ import {
     isJsxCallLike,
     isJsxElement,
     isJsxFragment,
+    isJsxIntrinsicTagName,
     isJsxNamespacedName,
     isJsxOpeningElement,
     isJsxOpeningFragment,
@@ -837,7 +838,6 @@ import {
     JsxExpression,
     JsxFlags,
     JsxFragment,
-    JsxNamespacedName,
     JsxOpeningElement,
     JsxOpeningFragment,
     JsxOpeningLikeElement,
@@ -33658,13 +33658,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isHyphenatedJsxName(name: string | __String) {
         return (name as string).includes("-");
-    }
-
-    /**
-     * Returns true iff React would emit this tag name as a string rather than an identifier or qualified name
-     */
-    function isJsxIntrinsicTagName(tagName: Node): tagName is Identifier | JsxNamespacedName {
-        return isIdentifier(tagName) && isIntrinsicJsxName(tagName.escapedText) || isJsxNamespacedName(tagName);
     }
 
     function checkJsxAttribute(node: JsxAttribute, checkMode?: CheckMode) {
