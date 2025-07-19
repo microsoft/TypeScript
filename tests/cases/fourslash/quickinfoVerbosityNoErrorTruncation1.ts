@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
+// @noErrorTruncation: true
+
 // https://github.com/microsoft/TypeScript/issues/62032
 
 //// type /*1*/T = [
