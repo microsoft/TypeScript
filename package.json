@@ -19,6 +19,7 @@
         "type": "git",
         "url": "https://github.com/microsoft/TypeScript.git"
     },
+    "type": "module",
     "main": "./lib/typescript.js",
     "typings": "./lib/typescript.d.ts",
     "bin": {
@@ -26,7 +27,7 @@
         "tsserver": "./bin/tsserver"
     },
     "engines": {
-        "node": ">=14.17"
+        "node": ">=20.19.0 <21 || >=22.12.0"
     },
     "files": [
         "bin",
