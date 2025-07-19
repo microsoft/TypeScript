@@ -1,0 +1,102 @@
+//// [tests/cases/conformance/es6/destructuring/bindingPatternWithNullableInitializer1.ts] ////
+
+=== bindingPatternWithNullableInitializer1.ts ===
+// https://github.com/microsoft/TypeScript/issues/60119
+
+interface T {
+>T : Symbol(T, Decl(bindingPatternWithNullableInitializer1.ts, 0, 0))
+
+  a?: unknown;
+>a : Symbol(T.a, Decl(bindingPatternWithNullableInitializer1.ts, 2, 13))
+
+  b?: unknown;
+>b : Symbol(T.b, Decl(bindingPatternWithNullableInitializer1.ts, 3, 14))
+
+  c?: unknown;
+>c : Symbol(T.c, Decl(bindingPatternWithNullableInitializer1.ts, 4, 14))
+}
+
+function f1<L extends keyof T>(k: L, t: T | undefined) {
+>f1 : Symbol(f1, Decl(bindingPatternWithNullableInitializer1.ts, 6, 1))
+>L : Symbol(L, Decl(bindingPatternWithNullableInitializer1.ts, 8, 12))
+>T : Symbol(T, Decl(bindingPatternWithNullableInitializer1.ts, 0, 0))
+>k : Symbol(k, Decl(bindingPatternWithNullableInitializer1.ts, 8, 31))
+>L : Symbol(L, Decl(bindingPatternWithNullableInitializer1.ts, 8, 12))
+>t : Symbol(t, Decl(bindingPatternWithNullableInitializer1.ts, 8, 36))
+>T : Symbol(T, Decl(bindingPatternWithNullableInitializer1.ts, 0, 0))
+
+  const { [k]: v } = t;
+>k : Symbol(k, Decl(bindingPatternWithNullableInitializer1.ts, 8, 31))
+>v : Symbol(v, Decl(bindingPatternWithNullableInitializer1.ts, 9, 9))
+>t : Symbol(t, Decl(bindingPatternWithNullableInitializer1.ts, 8, 36))
+}
+
+function f2<L extends keyof T>(k: L, t: T | null) {
+>f2 : Symbol(f2, Decl(bindingPatternWithNullableInitializer1.ts, 10, 1))
+>L : Symbol(L, Decl(bindingPatternWithNullableInitializer1.ts, 12, 12))
+>T : Symbol(T, Decl(bindingPatternWithNullableInitializer1.ts, 0, 0))
+>k : Symbol(k, Decl(bindingPatternWithNullableInitializer1.ts, 12, 31))
+>L : Symbol(L, Decl(bindingPatternWithNullableInitializer1.ts, 12, 12))
+>t : Symbol(t, Decl(bindingPatternWithNullableInitializer1.ts, 12, 36))
+>T : Symbol(T, Decl(bindingPatternWithNullableInitializer1.ts, 0, 0))
+
+  const { [k]: v } = t;
+>k : Symbol(k, Decl(bindingPatternWithNullableInitializer1.ts, 12, 31))
+>v : Symbol(v, Decl(bindingPatternWithNullableInitializer1.ts, 13, 9))
+>t : Symbol(t, Decl(bindingPatternWithNullableInitializer1.ts, 12, 36))
+}
+
+function f3<L extends keyof T>(k: L, t: T | null | undefined) {
+>f3 : Symbol(f3, Decl(bindingPatternWithNullableInitializer1.ts, 14, 1))
+>L : Symbol(L, Decl(bindingPatternWithNullableInitializer1.ts, 16, 12))
+>T : Symbol(T, Decl(bindingPatternWithNullableInitializer1.ts, 0, 0))
+>k : Symbol(k, Decl(bindingPatternWithNullableInitializer1.ts, 16, 31))
+>L : Symbol(L, Decl(bindingPatternWithNullableInitializer1.ts, 16, 12))
+>t : Symbol(t, Decl(bindingPatternWithNullableInitializer1.ts, 16, 36))
+>T : Symbol(T, Decl(bindingPatternWithNullableInitializer1.ts, 0, 0))
+
+  const { [k]: v } = t;
+>k : Symbol(k, Decl(bindingPatternWithNullableInitializer1.ts, 16, 31))
+>v : Symbol(v, Decl(bindingPatternWithNullableInitializer1.ts, 17, 9))
+>t : Symbol(t, Decl(bindingPatternWithNullableInitializer1.ts, 16, 36))
+}
+
+function f4<L extends keyof T>(k: L, t: { f: T | undefined }) {
+>f4 : Symbol(f4, Decl(bindingPatternWithNullableInitializer1.ts, 18, 1))
+>L : Symbol(L, Decl(bindingPatternWithNullableInitializer1.ts, 20, 12))
+>T : Symbol(T, Decl(bindingPatternWithNullableInitializer1.ts, 0, 0))
+>k : Symbol(k, Decl(bindingPatternWithNullableInitializer1.ts, 20, 31))
+>L : Symbol(L, Decl(bindingPatternWithNullableInitializer1.ts, 20, 12))
+>t : Symbol(t, Decl(bindingPatternWithNullableInitializer1.ts, 20, 36))
+>f : Symbol(f, Decl(bindingPatternWithNullableInitializer1.ts, 20, 41))
+>T : Symbol(T, Decl(bindingPatternWithNullableInitializer1.ts, 0, 0))
+
+  const { f: { [k]: v } } = t;
+>f : Symbol(f, Decl(bindingPatternWithNullableInitializer1.ts, 20, 41))
+>k : Symbol(k, Decl(bindingPatternWithNullableInitializer1.ts, 20, 31))
+>v : Symbol(v, Decl(bindingPatternWithNullableInitializer1.ts, 21, 14))
+>t : Symbol(t, Decl(bindingPatternWithNullableInitializer1.ts, 20, 36))
+}
+
+// https://github.com/microsoft/TypeScript/issues/60179
+
+const input: {
+>input : Symbol(input, Decl(bindingPatternWithNullableInitializer1.ts, 26, 5))
+
+  a?: { b?: { c: string } };
+>a : Symbol(a, Decl(bindingPatternWithNullableInitializer1.ts, 26, 14))
+>b : Symbol(b, Decl(bindingPatternWithNullableInitializer1.ts, 27, 7))
+>c : Symbol(c, Decl(bindingPatternWithNullableInitializer1.ts, 27, 13))
+
+} = { a: undefined };
+>a : Symbol(a, Decl(bindingPatternWithNullableInitializer1.ts, 28, 5))
+>undefined : Symbol(undefined)
+
+const { ...b } = input.a?.b;
+>b : Symbol(b, Decl(bindingPatternWithNullableInitializer1.ts, 30, 7))
+>input.a?.b : Symbol(b, Decl(bindingPatternWithNullableInitializer1.ts, 27, 7))
+>input.a : Symbol(a, Decl(bindingPatternWithNullableInitializer1.ts, 26, 14))
+>input : Symbol(input, Decl(bindingPatternWithNullableInitializer1.ts, 26, 5))
+>a : Symbol(a, Decl(bindingPatternWithNullableInitializer1.ts, 26, 14))
+>b : Symbol(b, Decl(bindingPatternWithNullableInitializer1.ts, 27, 7))
+
