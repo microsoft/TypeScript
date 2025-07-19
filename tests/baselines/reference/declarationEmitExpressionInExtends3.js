@@ -128,16 +128,12 @@ export interface ExportedInterface {
 interface LocalInterface {
     x: number;
 }
-declare const MyClass_base: typeof LocalClass;
-export declare class MyClass extends MyClass_base<string, number> {
+export declare class MyClass extends ({} as typeof LocalClass)<string, number> {
 }
-declare const MyClass2_base: typeof ExportedClass;
-export declare class MyClass2 extends MyClass2_base<string> {
+export declare class MyClass2 extends ({} as typeof ExportedClass)<string> {
 }
-declare const MyClass3_base: typeof ExportedClass;
-export declare class MyClass3 extends MyClass3_base<LocalInterface> {
+export declare class MyClass3 extends ({} as typeof ExportedClass)<LocalInterface> {
 }
-declare const MyClass4_base: typeof ExportedClass;
-export declare class MyClass4 extends MyClass4_base<ExportedInterface> {
+export declare class MyClass4 extends ({} as typeof ExportedClass)<ExportedInterface> {
 }
 export {};
