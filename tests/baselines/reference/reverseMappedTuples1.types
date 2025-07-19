@@ -1,0 +1,1031 @@
+//// [tests/cases/compiler/reverseMappedTuples1.ts] ////
+
+=== Performance Stats ===
+Type Count: 2,500
+Instantiation count: 2,500
+
+=== reverseMappedTuples1.ts ===
+// https://github.com/microsoft/TypeScript/issues/58726
+
+type Constructor<T> = {
+>Constructor : Constructor<T>
+>            : ^^^^^^^^^^^^^^
+
+  new (...args: never[]): T;
+>args : never[]
+>     : ^^^^^^^
+
+};
+
+interface GenericParams<T> {
+  bar: (t: T) => void;
+>bar : (t: T) => void
+>    : ^ ^^ ^^^^^    
+>t : T
+>  : ^
+}
+
+type Pair<T> = [Constructor<T>, GenericParams<T>];
+>Pair : Pair<T>
+>     : ^^^^^^^
+
+type List<T> = {
+>List : List<T>
+>     : ^^^^^^^
+
+  [K in keyof T]: Pair<T[K]>;
+};
+
+class Foo {
+>Foo : Foo
+>    : ^^^
+
+  test() {}
+>test : () => void
+>     : ^^^^^^^^^^
+}
+class Bar {
+>Bar : Bar
+>    : ^^^
+
+  other() {}
+>other : () => void
+>      : ^^^^^^^^^^
+}
+class Baz {
+>Baz : Baz
+>    : ^^^
+
+  third() {}
+>third : () => void
+>      : ^^^^^^^^^^
+}
+
+declare const withFooPair: [Pair<Foo>];
+>withFooPair : [Pair<Foo>]
+>            : ^^^^^^^^^^^
+
+declare const with2FooPairs: [Pair<Foo>, Pair<Foo>];
+>with2FooPairs : [Pair<Foo>, Pair<Foo>]
+>              : ^^^^^^^^^^^^^^^^^^^^^^
+
+declare function fn1<T extends readonly {}[]>(params: List<[...T]>): T;
+>fn1 : <T extends readonly {}[]>(params: List<[...T]>) => T
+>    : ^ ^^^^^^^^^             ^^      ^^            ^^^^^ 
+>params : [...List<T>]
+>       : ^^^^^^^^^^^^
+
+const res1 = fn1([
+>res1 : [Foo, Bar]
+>     : ^^^^^^^^^^
+>fn1([  [Foo, { bar(t) {} }],  [Bar, { bar(t) {} }],]) : [Foo, Bar]
+>                                                      : ^^^^^^^^^^
+>fn1 : <T extends readonly {}[]>(params: List<[...T]>) => T
+>    : ^ ^^^^^^^^^             ^^      ^^            ^^^^^ 
+>[  [Foo, { bar(t) {} }],  [Bar, { bar(t) {} }],] : [[typeof Foo, { bar(t: Foo): void; }], [typeof Bar, { bar(t: Bar): void; }]]
+>                                                 : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+
+  [Foo, { bar(t) {} }],
+>[Foo, { bar(t) {} }] : [typeof Foo, { bar(t: Foo): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Foo): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Foo) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Foo
+>  : ^^^
+
+  [Bar, { bar(t) {} }],
+>[Bar, { bar(t) {} }] : [typeof Bar, { bar(t: Bar): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Bar : typeof Bar
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Bar): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Bar) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Bar
+>  : ^^^
+
+]);
+
+const res2 = fn1([
+>res2 : [Foo, Bar]
+>     : ^^^^^^^^^^
+>fn1([  ...withFooPair,  [Bar, { bar(t) {} }], // implicit any]) : [Foo, Bar]
+>                                                                : ^^^^^^^^^^
+>fn1 : <T extends readonly {}[]>(params: List<[...T]>) => T
+>    : ^ ^^^^^^^^^             ^^      ^^            ^^^^^ 
+>[  ...withFooPair,  [Bar, { bar(t) {} }], // implicit any] : [Pair<Foo>, [typeof Bar, { bar(t: any): void; }]]
+>                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+
+  ...withFooPair,
+>...withFooPair : Pair<Foo>
+>               : ^^^^^^^^^
+>withFooPair : [Pair<Foo>]
+>            : ^^^^^^^^^^^
+
+  [Bar, { bar(t) {} }], // implicit any
+>[Bar, { bar(t) {} }] : [typeof Bar, { bar(t: any): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Bar : typeof Bar
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: any): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: any) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : any
+>  : ^^^
+
+]);
+
+const res3 = fn1([
+>res3 : [Foo, Foo, Bar]
+>     : ^^^^^^^^^^^^^^^
+>fn1([  ...with2FooPairs,  [Bar, { bar(t) {} }], // implicit any]) : [Foo, Foo, Bar]
+>                                                                  : ^^^^^^^^^^^^^^^
+>fn1 : <T extends readonly {}[]>(params: List<[...T]>) => T
+>    : ^ ^^^^^^^^^             ^^      ^^            ^^^^^ 
+>[  ...with2FooPairs,  [Bar, { bar(t) {} }], // implicit any] : [Pair<Foo>, Pair<Foo>, [typeof Bar, { bar(t: any): void; }]]
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+
+  ...with2FooPairs,
+>...with2FooPairs : Pair<Foo>
+>                 : ^^^^^^^^^
+>with2FooPairs : [Pair<Foo>, Pair<Foo>]
+>              : ^^^^^^^^^^^^^^^^^^^^^^
+
+  [Bar, { bar(t) {} }], // implicit any
+>[Bar, { bar(t) {} }] : [typeof Bar, { bar(t: any): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Bar : typeof Bar
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: any): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: any) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : any
+>  : ^^^
+
+]);
+
+const res4 = fn1([
+>res4 : [Bar, Foo, Foo]
+>     : ^^^^^^^^^^^^^^^
+>fn1([  [Bar, { bar(t) {} }],  ...with2FooPairs,]) : [Bar, Foo, Foo]
+>                                                  : ^^^^^^^^^^^^^^^
+>fn1 : <T extends readonly {}[]>(params: List<[...T]>) => T
+>    : ^ ^^^^^^^^^             ^^      ^^            ^^^^^ 
+>[  [Bar, { bar(t) {} }],  ...with2FooPairs,] : [[typeof Bar, { bar(t: Bar): void; }], Pair<Foo>, Pair<Foo>]
+>                                             : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  [Bar, { bar(t) {} }],
+>[Bar, { bar(t) {} }] : [typeof Bar, { bar(t: Bar): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Bar : typeof Bar
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Bar): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Bar) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Bar
+>  : ^^^
+
+  ...with2FooPairs,
+>...with2FooPairs : Pair<Foo>
+>                 : ^^^^^^^^^
+>with2FooPairs : [Pair<Foo>, Pair<Foo>]
+>              : ^^^^^^^^^^^^^^^^^^^^^^
+
+]);
+
+declare function fn2<T extends readonly {}[]>(params: List<[Foo, Foo, ...T]>): T;
+>fn2 : <T extends readonly {}[]>(params: List<[Foo, Foo, ...T]>) => T
+>    : ^ ^^^^^^^^^             ^^      ^^                      ^^^^^ 
+>params : [Pair<Foo>, Pair<Foo>, ...List<T>]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const res5 = fn2([
+>res5 : [Bar, Baz]
+>     : ^^^^^^^^^^
+>fn2([  [Foo, { bar(t) {} }],  [Foo, { bar(t) {} }],  [Bar, { bar(t) {} }],  [Baz, { bar(t) {} }],]) : [Bar, Baz]
+>                                                                                                    : ^^^^^^^^^^
+>fn2 : <T extends readonly {}[]>(params: List<[Foo, Foo, ...T]>) => T
+>    : ^ ^^^^^^^^^             ^^      ^^                      ^^^^^ 
+>[  [Foo, { bar(t) {} }],  [Foo, { bar(t) {} }],  [Bar, { bar(t) {} }],  [Baz, { bar(t) {} }],] : [[typeof Foo, { bar(t: Foo): void; }], [typeof Foo, { bar(t: Foo): void; }], [typeof Bar, { bar(t: Bar): void; }], [typeof Baz, { bar(t: Baz): void; }]]
+>                                                                                               : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+
+  [Foo, { bar(t) {} }],
+>[Foo, { bar(t) {} }] : [typeof Foo, { bar(t: Foo): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Foo): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Foo) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Foo
+>  : ^^^
+
+  [Foo, { bar(t) {} }],
+>[Foo, { bar(t) {} }] : [typeof Foo, { bar(t: Foo): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Foo): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Foo) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Foo
+>  : ^^^
+
+  [Bar, { bar(t) {} }],
+>[Bar, { bar(t) {} }] : [typeof Bar, { bar(t: Bar): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Bar : typeof Bar
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Bar): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Bar) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Bar
+>  : ^^^
+
+  [Baz, { bar(t) {} }],
+>[Baz, { bar(t) {} }] : [typeof Baz, { bar(t: Baz): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Baz : typeof Baz
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Baz): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Baz) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Baz
+>  : ^^^
+
+]);
+
+const res6 = fn2([
+>res6 : [Bar]
+>     : ^^^^^
+>fn2([  ...with2FooPairs,  [Bar, { bar(t) {} }], // implicit any]) : [Bar]
+>                                                                  : ^^^^^
+>fn2 : <T extends readonly {}[]>(params: List<[Foo, Foo, ...T]>) => T
+>    : ^ ^^^^^^^^^             ^^      ^^                      ^^^^^ 
+>[  ...with2FooPairs,  [Bar, { bar(t) {} }], // implicit any] : [Pair<Foo>, Pair<Foo>, [typeof Bar, { bar(t: any): void; }]]
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+
+  ...with2FooPairs,
+>...with2FooPairs : Pair<Foo>
+>                 : ^^^^^^^^^
+>with2FooPairs : [Pair<Foo>, Pair<Foo>]
+>              : ^^^^^^^^^^^^^^^^^^^^^^
+
+  [Bar, { bar(t) {} }], // implicit any
+>[Bar, { bar(t) {} }] : [typeof Bar, { bar(t: any): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Bar : typeof Bar
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: any): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: any) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : any
+>  : ^^^
+
+]);
+
+const res7 = fn2([
+>res7 : [Bar, Baz]
+>     : ^^^^^^^^^^
+>fn2([  ...with2FooPairs,  [Bar, { bar(t) {} }], // implicit any  [Baz, { bar(t) {} }], // implicit any]) : [Bar, Baz]
+>                                                                                                         : ^^^^^^^^^^
+>fn2 : <T extends readonly {}[]>(params: List<[Foo, Foo, ...T]>) => T
+>    : ^ ^^^^^^^^^             ^^      ^^                      ^^^^^ 
+>[  ...with2FooPairs,  [Bar, { bar(t) {} }], // implicit any  [Baz, { bar(t) {} }], // implicit any] : [Pair<Foo>, Pair<Foo>, [typeof Bar, { bar(t: any): void; }], [typeof Baz, { bar(t: any): void; }]]
+>                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+
+  ...with2FooPairs,
+>...with2FooPairs : Pair<Foo>
+>                 : ^^^^^^^^^
+>with2FooPairs : [Pair<Foo>, Pair<Foo>]
+>              : ^^^^^^^^^^^^^^^^^^^^^^
+
+  [Bar, { bar(t) {} }], // implicit any
+>[Bar, { bar(t) {} }] : [typeof Bar, { bar(t: any): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Bar : typeof Bar
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: any): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: any) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : any
+>  : ^^^
+
+  [Baz, { bar(t) {} }], // implicit any
+>[Baz, { bar(t) {} }] : [typeof Baz, { bar(t: any): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Baz : typeof Baz
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: any): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: any) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : any
+>  : ^^^
+
+]);
+
+declare function fn3<T extends readonly {}[]>(params: List<[...T, Foo, Foo]>): T;
+>fn3 : <T extends readonly {}[]>(params: List<[...T, Foo, Foo]>) => T
+>    : ^ ^^^^^^^^^             ^^      ^^                      ^^^^^ 
+>params : [...List<T>, Pair<Foo>, Pair<Foo>]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const res8 = fn3([
+>res8 : [Bar, Baz]
+>     : ^^^^^^^^^^
+>fn3([  [Bar, { bar(t) {} }],  [Baz, { bar(t) {} }],  [Foo, { bar(t) {} }],  [Foo, { bar(t) {} }],]) : [Bar, Baz]
+>                                                                                                    : ^^^^^^^^^^
+>fn3 : <T extends readonly {}[]>(params: List<[...T, Foo, Foo]>) => T
+>    : ^ ^^^^^^^^^             ^^      ^^                      ^^^^^ 
+>[  [Bar, { bar(t) {} }],  [Baz, { bar(t) {} }],  [Foo, { bar(t) {} }],  [Foo, { bar(t) {} }],] : [[typeof Bar, { bar(t: Bar): void; }], [typeof Baz, { bar(t: Baz): void; }], [typeof Foo, { bar(t: Foo): void; }], [typeof Foo, { bar(t: Foo): void; }]]
+>                                                                                               : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+
+  [Bar, { bar(t) {} }],
+>[Bar, { bar(t) {} }] : [typeof Bar, { bar(t: Bar): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Bar : typeof Bar
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Bar): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Bar) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Bar
+>  : ^^^
+
+  [Baz, { bar(t) {} }],
+>[Baz, { bar(t) {} }] : [typeof Baz, { bar(t: Baz): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Baz : typeof Baz
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Baz): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Baz) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Baz
+>  : ^^^
+
+  [Foo, { bar(t) {} }],
+>[Foo, { bar(t) {} }] : [typeof Foo, { bar(t: Foo): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Foo): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Foo) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Foo
+>  : ^^^
+
+  [Foo, { bar(t) {} }],
+>[Foo, { bar(t) {} }] : [typeof Foo, { bar(t: Foo): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Foo): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Foo) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Foo
+>  : ^^^
+
+]);
+
+const res9 = fn3([
+>res9 : [Bar, Baz]
+>     : ^^^^^^^^^^
+>fn3([  [Bar, { bar(t) {} }],  [Baz, { bar(t) {} }],  ...with2FooPairs]) : [Bar, Baz]
+>                                                                        : ^^^^^^^^^^
+>fn3 : <T extends readonly {}[]>(params: List<[...T, Foo, Foo]>) => T
+>    : ^ ^^^^^^^^^             ^^      ^^                      ^^^^^ 
+>[  [Bar, { bar(t) {} }],  [Baz, { bar(t) {} }],  ...with2FooPairs] : [[typeof Bar, { bar(t: Bar): void; }], [typeof Baz, { bar(t: Baz): void; }], Pair<Foo>, Pair<Foo>]
+>                                                                   : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  [Bar, { bar(t) {} }],
+>[Bar, { bar(t) {} }] : [typeof Bar, { bar(t: Bar): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Bar : typeof Bar
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Bar): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Bar) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Bar
+>  : ^^^
+
+  [Baz, { bar(t) {} }],
+>[Baz, { bar(t) {} }] : [typeof Baz, { bar(t: Baz): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Baz : typeof Baz
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Baz): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Baz) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Baz
+>  : ^^^
+
+  ...with2FooPairs
+>...with2FooPairs : Pair<Foo>
+>                 : ^^^^^^^^^
+>with2FooPairs : [Pair<Foo>, Pair<Foo>]
+>              : ^^^^^^^^^^^^^^^^^^^^^^
+
+]);
+
+const res10 = fn3([
+>res10 : [Bar, Baz]
+>      : ^^^^^^^^^^
+>fn3([  [Bar, { bar(t) {} }],  [Baz, { bar(t) {} }],  ...withFooPair,  [Foo, { bar(t) {} }],]) : [Bar, Baz]
+>                                                                                              : ^^^^^^^^^^
+>fn3 : <T extends readonly {}[]>(params: List<[...T, Foo, Foo]>) => T
+>    : ^ ^^^^^^^^^             ^^      ^^                      ^^^^^ 
+>[  [Bar, { bar(t) {} }],  [Baz, { bar(t) {} }],  ...withFooPair,  [Foo, { bar(t) {} }],] : [[typeof Bar, { bar(t: Bar): void; }], [typeof Baz, { bar(t: Baz): void; }], Pair<Foo>, [typeof Foo, { bar(t: Foo): void; }]]
+>                                                                                         : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+
+  [Bar, { bar(t) {} }],
+>[Bar, { bar(t) {} }] : [typeof Bar, { bar(t: Bar): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Bar : typeof Bar
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Bar): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Bar) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Bar
+>  : ^^^
+
+  [Baz, { bar(t) {} }],
+>[Baz, { bar(t) {} }] : [typeof Baz, { bar(t: Baz): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Baz : typeof Baz
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Baz): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Baz) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Baz
+>  : ^^^
+
+  ...withFooPair,
+>...withFooPair : Pair<Foo>
+>               : ^^^^^^^^^
+>withFooPair : [Pair<Foo>]
+>            : ^^^^^^^^^^^
+
+  [Foo, { bar(t) {} }],
+>[Foo, { bar(t) {} }] : [typeof Foo, { bar(t: Foo): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Foo): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Foo) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Foo
+>  : ^^^
+
+]);
+
+const res11 = fn3([
+>res11 : [Bar, Baz]
+>      : ^^^^^^^^^^
+>fn3([  [Bar, { bar(t) {} }],  [Baz, { bar(t) {} }],  [Foo, { bar(t) {} }],  ...withFooPair,]) : [Bar, Baz]
+>                                                                                              : ^^^^^^^^^^
+>fn3 : <T extends readonly {}[]>(params: List<[...T, Foo, Foo]>) => T
+>    : ^ ^^^^^^^^^             ^^      ^^                      ^^^^^ 
+>[  [Bar, { bar(t) {} }],  [Baz, { bar(t) {} }],  [Foo, { bar(t) {} }],  ...withFooPair,] : [[typeof Bar, { bar(t: Bar): void; }], [typeof Baz, { bar(t: Baz): void; }], [typeof Foo, { bar(t: any): void; }], Pair<Foo>]
+>                                                                                         : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  [Bar, { bar(t) {} }],
+>[Bar, { bar(t) {} }] : [typeof Bar, { bar(t: Bar): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Bar : typeof Bar
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Bar): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Bar) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Bar
+>  : ^^^
+
+  [Baz, { bar(t) {} }],
+>[Baz, { bar(t) {} }] : [typeof Baz, { bar(t: Baz): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Baz : typeof Baz
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Baz): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Baz) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Baz
+>  : ^^^
+
+  [Foo, { bar(t) {} }],
+>[Foo, { bar(t) {} }] : [typeof Foo, { bar(t: any): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: any): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: any) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : any
+>  : ^^^
+
+  ...withFooPair,
+>...withFooPair : Pair<Foo>
+>               : ^^^^^^^^^
+>withFooPair : [Pair<Foo>]
+>            : ^^^^^^^^^^^
+
+]);
+
+declare function fn4<T extends readonly {}[]>(params: List<[Foo, Foo?, ...T]>): T;
+>fn4 : <T extends readonly {}[]>(params: List<[Foo, Foo?, ...T]>) => T
+>    : ^ ^^^^^^^^^             ^^      ^^                       ^^^^^ 
+>params : [Pair<Foo>, (Pair<Foo | undefined> | undefined)?, ...List<T>]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const res12 = fn4([
+>res12 : [Bar, Baz]
+>      : ^^^^^^^^^^
+>fn4([  [Foo, { bar(t) {} }],  [Foo, { bar(t) {} }],  [Bar, { bar(t) {} }],  [Baz, { bar(t) {} }],]) : [Bar, Baz]
+>                                                                                                    : ^^^^^^^^^^
+>fn4 : <T extends readonly {}[]>(params: List<[Foo, Foo?, ...T]>) => T
+>    : ^ ^^^^^^^^^             ^^      ^^                       ^^^^^ 
+>[  [Foo, { bar(t) {} }],  [Foo, { bar(t) {} }],  [Bar, { bar(t) {} }],  [Baz, { bar(t) {} }],] : [[typeof Foo, { bar(t: Foo): void; }], [typeof Foo, { bar(t: Foo | undefined): void; }], [typeof Bar, { bar(t: Bar): void; }], [typeof Baz, { bar(t: Baz): void; }]]
+>                                                                                               : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+
+  [Foo, { bar(t) {} }],
+>[Foo, { bar(t) {} }] : [typeof Foo, { bar(t: Foo): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Foo): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Foo) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Foo
+>  : ^^^
+
+  [Foo, { bar(t) {} }],
+>[Foo, { bar(t) {} }] : [typeof Foo, { bar(t: Foo | undefined): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Foo | undefined): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : (t: Foo | undefined) => void
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>t : Foo | undefined
+>  : ^^^^^^^^^^^^^^^
+
+  [Bar, { bar(t) {} }],
+>[Bar, { bar(t) {} }] : [typeof Bar, { bar(t: Bar): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Bar : typeof Bar
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Bar): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Bar) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Bar
+>  : ^^^
+
+  [Baz, { bar(t) {} }],
+>[Baz, { bar(t) {} }] : [typeof Baz, { bar(t: Baz): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Baz : typeof Baz
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Baz): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Baz) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Baz
+>  : ^^^
+
+]);
+
+const res13 = fn4([
+>res13 : [Baz]
+>      : ^^^^^
+>fn4([  [Foo, { bar(t) {} }],  [Bar, { bar(t) {} }], // error  [Baz, { bar(t) {} }],]) : [Baz]
+>                                                                                      : ^^^^^
+>fn4 : <T extends readonly {}[]>(params: List<[Foo, Foo?, ...T]>) => T
+>    : ^ ^^^^^^^^^             ^^      ^^                       ^^^^^ 
+>[  [Foo, { bar(t) {} }],  [Bar, { bar(t) {} }], // error  [Baz, { bar(t) {} }],] : [[typeof Foo, { bar(t: Foo): void; }], [typeof Bar, { bar(t: Foo | undefined): void; }], [typeof Baz, { bar(t: Baz): void; }]]
+>                                                                                 : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+
+  [Foo, { bar(t) {} }],
+>[Foo, { bar(t) {} }] : [typeof Foo, { bar(t: Foo): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Foo): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Foo) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Foo
+>  : ^^^
+
+  [Bar, { bar(t) {} }], // error
+>[Bar, { bar(t) {} }] : [typeof Bar, { bar(t: Foo | undefined): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Bar : typeof Bar
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Foo | undefined): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : (t: Foo | undefined) => void
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>t : Foo | undefined
+>  : ^^^^^^^^^^^^^^^
+
+  [Baz, { bar(t) {} }],
+>[Baz, { bar(t) {} }] : [typeof Baz, { bar(t: Baz): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Baz : typeof Baz
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Baz): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Baz) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Baz
+>  : ^^^
+
+]);
+
+declare function fn5<T extends readonly {}[]>(params: List<[...T, Foo?]>): T;
+>fn5 : <T extends readonly {}[]>(params: List<[...T, Foo?]>) => T
+>    : ^ ^^^^^^^^^             ^^      ^^                  ^^^^^ 
+>params : [...List<T>, (Pair<Foo | undefined> | undefined)?]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const res14 = fn5([
+>res14 : [Bar, Baz]
+>      : ^^^^^^^^^^
+>fn5([  [Bar, { bar(t) {} }],  [Baz, { bar(t) {} }],  [Foo, { bar(t) {} }],]) : [Bar, Baz]
+>                                                                             : ^^^^^^^^^^
+>fn5 : <T extends readonly {}[]>(params: List<[...T, Foo?]>) => T
+>    : ^ ^^^^^^^^^             ^^      ^^                  ^^^^^ 
+>[  [Bar, { bar(t) {} }],  [Baz, { bar(t) {} }],  [Foo, { bar(t) {} }],] : [[typeof Bar, { bar(t: Bar): void; }], [typeof Baz, { bar(t: Baz): void; }], [typeof Foo, { bar(t: Foo | undefined): void; }]]
+>                                                                        : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  [Bar, { bar(t) {} }],
+>[Bar, { bar(t) {} }] : [typeof Bar, { bar(t: Bar): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Bar : typeof Bar
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Bar): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Bar) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Bar
+>  : ^^^
+
+  [Baz, { bar(t) {} }],
+>[Baz, { bar(t) {} }] : [typeof Baz, { bar(t: Baz): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Baz : typeof Baz
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Baz): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Baz) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Baz
+>  : ^^^
+
+  [Foo, { bar(t) {} }],
+>[Foo, { bar(t) {} }] : [typeof Foo, { bar(t: Foo | undefined): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Foo | undefined): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : (t: Foo | undefined) => void
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>t : Foo | undefined
+>  : ^^^^^^^^^^^^^^^
+
+]);
+
+const res15 = fn5([
+>res15 : [Bar]
+>      : ^^^^^
+>fn5([  [Bar, { bar(t) {} }],  [Baz, { bar(t) {} }], // error, inferred [Bar, Baz] would satisfy but the checker prefers picking up trailing optional element for contextual typing etc]) : [Bar]
+>                                                                                                                                                                                         : ^^^^^
+>fn5 : <T extends readonly {}[]>(params: List<[...T, Foo?]>) => T
+>    : ^ ^^^^^^^^^             ^^      ^^                  ^^^^^ 
+>[  [Bar, { bar(t) {} }],  [Baz, { bar(t) {} }], // error, inferred [Bar, Baz] would satisfy but the checker prefers picking up trailing optional element for contextual typing etc] : [[typeof Bar, { bar(t: Bar): void; }], [typeof Baz, { bar(t: Foo | undefined): void; }]]
+>                                                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  [Bar, { bar(t) {} }],
+>[Bar, { bar(t) {} }] : [typeof Bar, { bar(t: Bar): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Bar : typeof Bar
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Bar): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Bar) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Bar
+>  : ^^^
+
+  [Baz, { bar(t) {} }], // error, inferred [Bar, Baz] would satisfy but the checker prefers picking up trailing optional element for contextual typing etc
+>[Baz, { bar(t) {} }] : [typeof Baz, { bar(t: Foo | undefined): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Baz : typeof Baz
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Foo | undefined): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : (t: Foo | undefined) => void
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>t : Foo | undefined
+>  : ^^^^^^^^^^^^^^^
+
+]);
+
+declare function fn6<T extends readonly {}[]>(params: List<[Foo, Foo, ...T, Foo, Foo]>): T;
+>fn6 : <T extends readonly {}[]>(params: List<[Foo, Foo, ...T, Foo, Foo]>) => T
+>    : ^ ^^^^^^^^^             ^^      ^^                                ^^^^^ 
+>params : [Pair<Foo>, Pair<Foo>, ...List<T>, Pair<Foo>, Pair<Foo>]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const res16 = fn6([
+>res16 : [Bar, Baz]
+>      : ^^^^^^^^^^
+>fn6([  [Foo, { bar(t) {} }],  [Foo, { bar(t) {} }],  [Bar, { bar(t) {} }],  [Baz, { bar(t) {} }],  [Foo, { bar(t) {} }],  [Foo, { bar(t) {} }],]) : [Bar, Baz]
+>                                                                                                                                                  : ^^^^^^^^^^
+>fn6 : <T extends readonly {}[]>(params: List<[Foo, Foo, ...T, Foo, Foo]>) => T
+>    : ^ ^^^^^^^^^             ^^      ^^                                ^^^^^ 
+>[  [Foo, { bar(t) {} }],  [Foo, { bar(t) {} }],  [Bar, { bar(t) {} }],  [Baz, { bar(t) {} }],  [Foo, { bar(t) {} }],  [Foo, { bar(t) {} }],] : [[typeof Foo, { bar(t: Foo): void; }], [typeof Foo, { bar(t: Foo): void; }], [typeof Bar, { bar(t: Bar): void; }], [typeof Baz, { bar(t: Baz): void; }], [typeof Foo, { bar(t: Foo): void; }], [typeof Foo, { bar(t: Foo): void; }]]
+>                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+
+  [Foo, { bar(t) {} }],
+>[Foo, { bar(t) {} }] : [typeof Foo, { bar(t: Foo): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Foo): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Foo) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Foo
+>  : ^^^
+
+  [Foo, { bar(t) {} }],
+>[Foo, { bar(t) {} }] : [typeof Foo, { bar(t: Foo): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Foo): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Foo) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Foo
+>  : ^^^
+
+  [Bar, { bar(t) {} }],
+>[Bar, { bar(t) {} }] : [typeof Bar, { bar(t: Bar): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Bar : typeof Bar
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Bar): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Bar) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Bar
+>  : ^^^
+
+  [Baz, { bar(t) {} }],
+>[Baz, { bar(t) {} }] : [typeof Baz, { bar(t: Baz): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Baz : typeof Baz
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Baz): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Baz) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Baz
+>  : ^^^
+
+  [Foo, { bar(t) {} }],
+>[Foo, { bar(t) {} }] : [typeof Foo, { bar(t: Foo): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Foo): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Foo) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Foo
+>  : ^^^
+
+  [Foo, { bar(t) {} }],
+>[Foo, { bar(t) {} }] : [typeof Foo, { bar(t: Foo): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Foo): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Foo) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Foo
+>  : ^^^
+
+]);
+
+declare function fn7<T extends readonly {}[], T2 extends readonly {}[]>(params: List<[Foo, Foo, ...T, ...T2, Foo]>): [T, T2];
+>fn7 : <T extends readonly {}[], T2 extends readonly {}[]>(params: List<[Foo, Foo, ...T, ...T2, Foo]>) => [T, T2]
+>    : ^ ^^^^^^^^^             ^^  ^^^^^^^^^             ^^      ^^                                  ^^^^^       
+>params : [Pair<Foo>, Pair<Foo>, ...List<T>, ...List<T2>, Pair<Foo>]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const res17 = fn7([
+>res17 : [readonly {}[], readonly {}[]]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn7([  [Foo, { bar(t) {} }],  [Foo, { bar(t) {} }],  [Bar, { bar(t) {} }], // implicit any  [Baz, { bar(t) {} }], // implicit any  [Foo, { bar(t) {} }], // implicit any  [Foo, { bar(t) {} }],]) : [readonly {}[], readonly {}[]]
+>                                                                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn7 : <T extends readonly {}[], T2 extends readonly {}[]>(params: List<[Foo, Foo, ...T, ...T2, Foo]>) => [T, T2]
+>    : ^ ^^^^^^^^^             ^^  ^^^^^^^^^             ^^      ^^                                  ^^^^^       
+>[  [Foo, { bar(t) {} }],  [Foo, { bar(t) {} }],  [Bar, { bar(t) {} }], // implicit any  [Baz, { bar(t) {} }], // implicit any  [Foo, { bar(t) {} }], // implicit any  [Foo, { bar(t) {} }],] : [[typeof Foo, { bar(t: Foo): void; }], [typeof Foo, { bar(t: Foo): void; }], [typeof Bar, { bar(t: any): void; }], [typeof Baz, { bar(t: any): void; }], [typeof Foo, { bar(t: any): void; }], [typeof Foo, { bar(t: Foo): void; }]]
+>                                                                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+
+  [Foo, { bar(t) {} }],
+>[Foo, { bar(t) {} }] : [typeof Foo, { bar(t: Foo): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Foo): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Foo) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Foo
+>  : ^^^
+
+  [Foo, { bar(t) {} }],
+>[Foo, { bar(t) {} }] : [typeof Foo, { bar(t: Foo): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Foo): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Foo) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Foo
+>  : ^^^
+
+  [Bar, { bar(t) {} }], // implicit any
+>[Bar, { bar(t) {} }] : [typeof Bar, { bar(t: any): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Bar : typeof Bar
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: any): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: any) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : any
+>  : ^^^
+
+  [Baz, { bar(t) {} }], // implicit any
+>[Baz, { bar(t) {} }] : [typeof Baz, { bar(t: any): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Baz : typeof Baz
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: any): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: any) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : any
+>  : ^^^
+
+  [Foo, { bar(t) {} }], // implicit any
+>[Foo, { bar(t) {} }] : [typeof Foo, { bar(t: any): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: any): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: any) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : any
+>  : ^^^
+
+  [Foo, { bar(t) {} }],
+>[Foo, { bar(t) {} }] : [typeof Foo, { bar(t: Foo): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Foo): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Foo) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Foo
+>  : ^^^
+
+]);
+
+declare function fn8<T extends readonly {}[]>(params: List<[Foo, Foo, ...T, ...Foo[]]>): T;
+>fn8 : <T extends readonly {}[]>(params: List<[Foo, Foo, ...T, ...Foo[]]>) => T
+>    : ^ ^^^^^^^^^             ^^      ^^                                ^^^^^ 
+>params : [Pair<Foo>, Pair<Foo>, ...List<T>, ...Pair<Foo>[]]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const res18 = fn8([
+>res18 : readonly {}[]
+>      : ^^^^^^^^^^^^^
+>fn8([  [Foo, { bar(t) {} }],  [Foo, { bar(t) {} }],  [Bar, { bar(t) {} }], // implicit any  [Baz, { bar(t) {} }], // implicit any  [Foo, { bar(t) {} }], // implicit any  [Foo, { bar(t) {} }], // implicit any]) : readonly {}[]
+>                                                                                                                                                                                                                  : ^^^^^^^^^^^^^
+>fn8 : <T extends readonly {}[]>(params: List<[Foo, Foo, ...T, ...Foo[]]>) => T
+>    : ^ ^^^^^^^^^             ^^      ^^                                ^^^^^ 
+>[  [Foo, { bar(t) {} }],  [Foo, { bar(t) {} }],  [Bar, { bar(t) {} }], // implicit any  [Baz, { bar(t) {} }], // implicit any  [Foo, { bar(t) {} }], // implicit any  [Foo, { bar(t) {} }], // implicit any] : [[typeof Foo, { bar(t: Foo): void; }], [typeof Foo, { bar(t: Foo): void; }], [typeof Bar, { bar(t: any): void; }], [typeof Baz, { bar(t: any): void; }], [typeof Foo, { bar(t: any): void; }], [typeof Foo, { bar(t: any): void; }]]
+>                                                                                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+
+  [Foo, { bar(t) {} }],
+>[Foo, { bar(t) {} }] : [typeof Foo, { bar(t: Foo): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Foo): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Foo) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Foo
+>  : ^^^
+
+  [Foo, { bar(t) {} }],
+>[Foo, { bar(t) {} }] : [typeof Foo, { bar(t: Foo): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: Foo): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: Foo) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : Foo
+>  : ^^^
+
+  [Bar, { bar(t) {} }], // implicit any
+>[Bar, { bar(t) {} }] : [typeof Bar, { bar(t: any): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Bar : typeof Bar
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: any): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: any) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : any
+>  : ^^^
+
+  [Baz, { bar(t) {} }], // implicit any
+>[Baz, { bar(t) {} }] : [typeof Baz, { bar(t: any): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Baz : typeof Baz
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: any): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: any) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : any
+>  : ^^^
+
+  [Foo, { bar(t) {} }], // implicit any
+>[Foo, { bar(t) {} }] : [typeof Foo, { bar(t: any): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: any): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: any) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : any
+>  : ^^^
+
+  [Foo, { bar(t) {} }], // implicit any
+>[Foo, { bar(t) {} }] : [typeof Foo, { bar(t: any): void; }]
+>                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>{ bar(t) {} } : { bar(t: any): void; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^
+>bar : (t: any) => void
+>    : ^ ^^^^^^^^^^^^^^
+>t : any
+>  : ^^^
+
+]);
+
