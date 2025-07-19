@@ -1100,7 +1100,7 @@ function moveStatementsToTargetFile(changes: textChanges.ChangeTracker, program:
     }
 }
 
-function getOverloadRangeToMove(sourceFile: SourceFile, statement: Statement) {
+function getOverloadRangeToMove(sourceFile: SourceFile, statement: Statement | undefined) {
     if (isFunctionLikeDeclaration(statement)) {
         const declarations = statement.symbol.declarations;
         if (declarations === undefined || length(declarations) <= 1 || !contains(declarations, statement)) {

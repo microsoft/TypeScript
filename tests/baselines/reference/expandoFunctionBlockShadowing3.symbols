@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/expandoFunctionBlockShadowing3.ts] ////
+
+=== expandoFunctionBlockShadowing3.ts ===
+export function Z() {}
+>Z : Symbol(Z, Decl(expandoFunctionBlockShadowing3.ts, 0, 0), Decl(expandoFunctionBlockShadowing3.ts, 0, 22))
+
+Z.test = "foo";
+>Z.test : Symbol(Z.test, Decl(expandoFunctionBlockShadowing3.ts, 0, 22))
+>Z : Symbol(Z, Decl(expandoFunctionBlockShadowing3.ts, 0, 0), Decl(expandoFunctionBlockShadowing3.ts, 0, 22))
+>test : Symbol(Z.test, Decl(expandoFunctionBlockShadowing3.ts, 0, 22))
+
+const aliasTopZ = Z;
+>aliasTopZ : Symbol(aliasTopZ, Decl(expandoFunctionBlockShadowing3.ts, 2, 5))
+>Z : Symbol(Z, Decl(expandoFunctionBlockShadowing3.ts, 0, 0), Decl(expandoFunctionBlockShadowing3.ts, 0, 22))
+
+if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+  const Z = function Z() {};
+>Z : Symbol(Z, Decl(expandoFunctionBlockShadowing3.ts, 4, 7))
+>Z : Symbol(Z, Decl(expandoFunctionBlockShadowing3.ts, 4, 11))
+
+  if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    Z.test = 42;
+>Z.test : Symbol(Z.test, Decl(expandoFunctionBlockShadowing3.ts, 5, 22))
+>Z : Symbol(Z, Decl(expandoFunctionBlockShadowing3.ts, 4, 7))
+>test : Symbol(Z.test, Decl(expandoFunctionBlockShadowing3.ts, 5, 22))
+  }
+
+  const topZcheck: { (): void; test: string } = aliasTopZ;
+>topZcheck : Symbol(topZcheck, Decl(expandoFunctionBlockShadowing3.ts, 9, 7))
+>test : Symbol(test, Decl(expandoFunctionBlockShadowing3.ts, 9, 30))
+>aliasTopZ : Symbol(aliasTopZ, Decl(expandoFunctionBlockShadowing3.ts, 2, 5))
+
+  const blockZcheck: { (): void; test: number } = Z;
+>blockZcheck : Symbol(blockZcheck, Decl(expandoFunctionBlockShadowing3.ts, 10, 7))
+>test : Symbol(test, Decl(expandoFunctionBlockShadowing3.ts, 10, 32))
+>Z : Symbol(Z, Decl(expandoFunctionBlockShadowing3.ts, 4, 7))
+}
+
