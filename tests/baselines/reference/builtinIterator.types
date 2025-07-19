@@ -6,12 +6,12 @@ const iterator = Iterator.from([0, 1, 2]);
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Iterator.from([0, 1, 2]) : IteratorObject<number, undefined, unknown>
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Iterator.from : <T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
->              : ^ ^^     ^^                                                                 ^^^^^                                     
+>Iterator.from : <T, TReturn = any>(value: Iterator<T, TReturn, undefined> | Iterable<T, TReturn, undefined>) => IteratorObject<T, TReturn, unknown>
+>              : ^ ^^       ^^^^^^^^     ^^                                                                 ^^^^^                                   
 >Iterator : IteratorConstructor
 >         : ^^^^^^^^^^^^^^^^^^^
->from : <T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
->     : ^ ^^     ^^                                                                 ^^^^^                                     
+>from : <T, TReturn = any>(value: Iterator<T, TReturn, undefined> | Iterable<T, TReturn, undefined>) => IteratorObject<T, TReturn, unknown>
+>     : ^ ^^       ^^^^^^^^     ^^                                                                 ^^^^^                                   
 >[0, 1, 2] : number[]
 >          : ^^^^^^^^
 >0 : 0
@@ -86,16 +86,16 @@ const zero = iterator.filter(isZero);
 >       : ^ ^^      ^^^^^      
 
 const iteratorFromBare = Iterator.from({
->iteratorFromBare : IteratorObject<string, undefined, unknown>
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Iterator.from({  next() {    return {      done: Math.random() < .5,      value: "a string",    };  },}) : IteratorObject<string, undefined, unknown>
->                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Iterator.from : <T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
->              : ^ ^^     ^^                                                                 ^^^^^                                     
+>iteratorFromBare : IteratorObject<string, string, unknown>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Iterator.from({  next() {    return {      done: Math.random() < .5,      value: "a string",    };  },}) : IteratorObject<string, string, unknown>
+>                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Iterator.from : <T, TReturn = any>(value: Iterator<T, TReturn, undefined> | Iterable<T, TReturn, undefined>) => IteratorObject<T, TReturn, unknown>
+>              : ^ ^^       ^^^^^^^^     ^^                                                                 ^^^^^                                   
 >Iterator : IteratorConstructor
 >         : ^^^^^^^^^^^^^^^^^^^
->from : <T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
->     : ^ ^^     ^^                                                                 ^^^^^                                     
+>from : <T, TReturn = any>(value: Iterator<T, TReturn, undefined> | Iterable<T, TReturn, undefined>) => IteratorObject<T, TReturn, unknown>
+>     : ^ ^^       ^^^^^^^^     ^^                                                                 ^^^^^                                   
 >{  next() {    return {      done: Math.random() < .5,      value: "a string",    };  },} : { next(): { done: boolean; value: string; }; }
 >                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -393,16 +393,16 @@ declare const g1: Generator<string, number, boolean>;
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const iter1 = Iterator.from(g1);
->iter1 : IteratorObject<string, undefined, unknown>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Iterator.from(g1) : IteratorObject<string, undefined, unknown>
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Iterator.from : <T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
->              : ^ ^^     ^^                                                                 ^^^^^                                     
+>iter1 : IteratorObject<string, number, unknown>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Iterator.from(g1) : IteratorObject<string, number, unknown>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Iterator.from : <T, TReturn = any>(value: Iterator<T, TReturn, undefined> | Iterable<T, TReturn, undefined>) => IteratorObject<T, TReturn, unknown>
+>              : ^ ^^       ^^^^^^^^     ^^                                                                 ^^^^^                                   
 >Iterator : IteratorConstructor
 >         : ^^^^^^^^^^^^^^^^^^^
->from : <T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
->     : ^ ^^     ^^                                                                 ^^^^^                                     
+>from : <T, TReturn = any>(value: Iterator<T, TReturn, undefined> | Iterable<T, TReturn, undefined>) => IteratorObject<T, TReturn, unknown>
+>     : ^ ^^       ^^^^^^^^     ^^                                                                 ^^^^^                                   
 >g1 : Generator<string, number, boolean>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -425,4 +425,54 @@ const iter3 = iter2.flatMap(() => g1);
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >g1 : Generator<string, number, boolean>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+// Iterator.from pass-through of return value
+const customGenerator = function* () {
+>customGenerator : Generator<never, number, unknown>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function* () {  return 42;}() : Generator<never, number, unknown>
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function* () {  return 42;} : () => Generator<never, number, unknown>
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  return 42;
+>42 : 42
+>   : ^^
+
+}();
+const withHelpers = Iterator.from(customGenerator);
+>withHelpers : IteratorObject<never, number, unknown>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Iterator.from(customGenerator) : IteratorObject<never, number, unknown>
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Iterator.from : <T, TReturn = any>(value: Iterator<T, TReturn, undefined> | Iterable<T, TReturn, undefined>) => IteratorObject<T, TReturn, unknown>
+>              : ^ ^^       ^^^^^^^^     ^^                                                                 ^^^^^                                   
+>Iterator : IteratorConstructor
+>         : ^^^^^^^^^^^^^^^^^^^
+>from : <T, TReturn = any>(value: Iterator<T, TReturn, undefined> | Iterable<T, TReturn, undefined>) => IteratorObject<T, TReturn, unknown>
+>     : ^ ^^       ^^^^^^^^     ^^                                                                 ^^^^^                                   
+>customGenerator : Generator<never, number, unknown>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const result = withHelpers.next();
+>result : IteratorResult<never, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>withHelpers.next() : IteratorResult<never, number>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>withHelpers.next : (...[value]: [] | [unknown]) => IteratorResult<never, number>
+>                 : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>withHelpers : IteratorObject<never, number, unknown>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>next : (...[value]: [] | [unknown]) => IteratorResult<never, number>
+>     : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const resultValue: number = result.value; // this should work
+>resultValue : number
+>            : ^^^^^^
+>result.value : number
+>             : ^^^^^^
+>result : IteratorResult<never, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : number
+>      : ^^^^^^
 
