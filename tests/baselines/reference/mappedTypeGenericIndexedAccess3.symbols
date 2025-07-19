@@ -1,0 +1,158 @@
+//// [tests/cases/compiler/mappedTypeGenericIndexedAccess3.ts] ////
+
+=== mappedTypeGenericIndexedAccess3.ts ===
+type EventPayloads = {
+>EventPayloads : Symbol(EventPayloads, Decl(mappedTypeGenericIndexedAccess3.ts, 0, 0))
+
+  completeSprint: {
+>completeSprint : Symbol(completeSprint, Decl(mappedTypeGenericIndexedAccess3.ts, 0, 22))
+
+    automationId: string;
+>automationId : Symbol(automationId, Decl(mappedTypeGenericIndexedAccess3.ts, 1, 19))
+
+    spaceId: string;
+>spaceId : Symbol(spaceId, Decl(mappedTypeGenericIndexedAccess3.ts, 2, 25))
+
+  };
+  sendMessage: {
+>sendMessage : Symbol(sendMessage, Decl(mappedTypeGenericIndexedAccess3.ts, 4, 4))
+
+    message: string;
+>message : Symbol(message, Decl(mappedTypeGenericIndexedAccess3.ts, 5, 16))
+
+  };
+};
+
+type Nested = {
+>Nested : Symbol(Nested, Decl(mappedTypeGenericIndexedAccess3.ts, 8, 2))
+
+  bar: {
+>bar : Symbol(bar, Decl(mappedTypeGenericIndexedAccess3.ts, 10, 15))
+
+    a: string;
+>a : Symbol(a, Decl(mappedTypeGenericIndexedAccess3.ts, 11, 8))
+
+  };
+  baz: {
+>baz : Symbol(baz, Decl(mappedTypeGenericIndexedAccess3.ts, 13, 4))
+
+    b: string;
+>b : Symbol(b, Decl(mappedTypeGenericIndexedAccess3.ts, 14, 8))
+
+  };
+};
+
+type CompletedEvent<T extends keyof EventPayloads, Z extends keyof Nested> = {
+>CompletedEvent : Symbol(CompletedEvent, Decl(mappedTypeGenericIndexedAccess3.ts, 17, 2))
+>T : Symbol(T, Decl(mappedTypeGenericIndexedAccess3.ts, 19, 20))
+>EventPayloads : Symbol(EventPayloads, Decl(mappedTypeGenericIndexedAccess3.ts, 0, 0))
+>Z : Symbol(Z, Decl(mappedTypeGenericIndexedAccess3.ts, 19, 50))
+>Nested : Symbol(Nested, Decl(mappedTypeGenericIndexedAccess3.ts, 8, 2))
+
+  [E in T]: {
+>E : Symbol(E, Decl(mappedTypeGenericIndexedAccess3.ts, 20, 3))
+>T : Symbol(T, Decl(mappedTypeGenericIndexedAccess3.ts, 19, 20))
+
+    type: E;
+>type : Symbol(type, Decl(mappedTypeGenericIndexedAccess3.ts, 20, 13))
+>E : Symbol(E, Decl(mappedTypeGenericIndexedAccess3.ts, 20, 3))
+
+    payload: {
+>payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess3.ts, 21, 12))
+
+      [K in Z]: {
+>K : Symbol(K, Decl(mappedTypeGenericIndexedAccess3.ts, 23, 7))
+>Z : Symbol(Z, Decl(mappedTypeGenericIndexedAccess3.ts, 19, 50))
+
+        other: string;
+>other : Symbol(other, Decl(mappedTypeGenericIndexedAccess3.ts, 23, 17))
+
+        nested: Nested[K];
+>nested : Symbol(nested, Decl(mappedTypeGenericIndexedAccess3.ts, 24, 22))
+>Nested : Symbol(Nested, Decl(mappedTypeGenericIndexedAccess3.ts, 8, 2))
+>K : Symbol(K, Decl(mappedTypeGenericIndexedAccess3.ts, 23, 7))
+
+      };
+    }[Z];
+>Z : Symbol(Z, Decl(mappedTypeGenericIndexedAccess3.ts, 19, 50))
+
+    appName: string;
+>appName : Symbol(appName, Decl(mappedTypeGenericIndexedAccess3.ts, 27, 9))
+
+  };
+}[T];
+>T : Symbol(T, Decl(mappedTypeGenericIndexedAccess3.ts, 19, 20))
+
+function overwriteAppName<
+>overwriteAppName : Symbol(overwriteAppName, Decl(mappedTypeGenericIndexedAccess3.ts, 30, 5))
+
+  U extends keyof EventPayloads,
+>U : Symbol(U, Decl(mappedTypeGenericIndexedAccess3.ts, 32, 26))
+>EventPayloads : Symbol(EventPayloads, Decl(mappedTypeGenericIndexedAccess3.ts, 0, 0))
+
+  Z extends keyof Nested,
+>Z : Symbol(Z, Decl(mappedTypeGenericIndexedAccess3.ts, 33, 32))
+>Nested : Symbol(Nested, Decl(mappedTypeGenericIndexedAccess3.ts, 8, 2))
+
+>(scheduled: CompletedEvent<U, Z>): CompletedEvent<U, Z> {
+>scheduled : Symbol(scheduled, Decl(mappedTypeGenericIndexedAccess3.ts, 35, 2))
+>CompletedEvent : Symbol(CompletedEvent, Decl(mappedTypeGenericIndexedAccess3.ts, 17, 2))
+>U : Symbol(U, Decl(mappedTypeGenericIndexedAccess3.ts, 32, 26))
+>Z : Symbol(Z, Decl(mappedTypeGenericIndexedAccess3.ts, 33, 32))
+>CompletedEvent : Symbol(CompletedEvent, Decl(mappedTypeGenericIndexedAccess3.ts, 17, 2))
+>U : Symbol(U, Decl(mappedTypeGenericIndexedAccess3.ts, 32, 26))
+>Z : Symbol(Z, Decl(mappedTypeGenericIndexedAccess3.ts, 33, 32))
+
+  const { appName, type, ...rest } = scheduled;
+>appName : Symbol(appName, Decl(mappedTypeGenericIndexedAccess3.ts, 36, 9))
+>type : Symbol(type, Decl(mappedTypeGenericIndexedAccess3.ts, 36, 18))
+>rest : Symbol(rest, Decl(mappedTypeGenericIndexedAccess3.ts, 36, 24))
+>scheduled : Symbol(scheduled, Decl(mappedTypeGenericIndexedAccess3.ts, 35, 2))
+
+  const { other, ...restrest } = rest.payload;
+>other : Symbol(other, Decl(mappedTypeGenericIndexedAccess3.ts, 37, 9))
+>restrest : Symbol(restrest, Decl(mappedTypeGenericIndexedAccess3.ts, 37, 16))
+>rest.payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess3.ts, 21, 12))
+>rest : Symbol(rest, Decl(mappedTypeGenericIndexedAccess3.ts, 36, 24))
+>payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess3.ts, 21, 12))
+
+  rest.payload.nested = restrest.nested; // ok
+>rest.payload.nested : Symbol(nested, Decl(mappedTypeGenericIndexedAccess3.ts, 24, 22))
+>rest.payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess3.ts, 21, 12))
+>rest : Symbol(rest, Decl(mappedTypeGenericIndexedAccess3.ts, 36, 24))
+>payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess3.ts, 21, 12))
+>nested : Symbol(nested, Decl(mappedTypeGenericIndexedAccess3.ts, 24, 22))
+>restrest.nested : Symbol(nested, Decl(mappedTypeGenericIndexedAccess3.ts, 24, 22))
+>restrest : Symbol(restrest, Decl(mappedTypeGenericIndexedAccess3.ts, 37, 16))
+>nested : Symbol(nested, Decl(mappedTypeGenericIndexedAccess3.ts, 24, 22))
+
+  restrest.nested = rest.payload.nested; // ok
+>restrest.nested : Symbol(nested, Decl(mappedTypeGenericIndexedAccess3.ts, 24, 22))
+>restrest : Symbol(restrest, Decl(mappedTypeGenericIndexedAccess3.ts, 37, 16))
+>nested : Symbol(nested, Decl(mappedTypeGenericIndexedAccess3.ts, 24, 22))
+>rest.payload.nested : Symbol(nested, Decl(mappedTypeGenericIndexedAccess3.ts, 24, 22))
+>rest.payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess3.ts, 21, 12))
+>rest : Symbol(rest, Decl(mappedTypeGenericIndexedAccess3.ts, 36, 24))
+>payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess3.ts, 21, 12))
+>nested : Symbol(nested, Decl(mappedTypeGenericIndexedAccess3.ts, 24, 22))
+
+  return {
+    type,
+>type : Symbol(type, Decl(mappedTypeGenericIndexedAccess3.ts, 42, 10))
+
+    payload: {
+>payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess3.ts, 43, 9))
+
+      ...restrest,
+>restrest : Symbol(restrest, Decl(mappedTypeGenericIndexedAccess3.ts, 37, 16))
+
+      other,
+>other : Symbol(other, Decl(mappedTypeGenericIndexedAccess3.ts, 45, 18))
+
+    },
+    appName: "test",
+>appName : Symbol(appName, Decl(mappedTypeGenericIndexedAccess3.ts, 47, 6))
+
+  };
+}
+
