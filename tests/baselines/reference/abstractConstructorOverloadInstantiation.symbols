@@ -1,0 +1,79 @@
+//// [tests/cases/compiler/abstractConstructorOverloadInstantiation.ts] ////
+
+=== abstractConstructorOverloadInstantiation.ts ===
+declare const concreteConstructor: new () => void;
+>concreteConstructor : Symbol(concreteConstructor, Decl(abstractConstructorOverloadInstantiation.ts, 0, 13))
+
+declare const abstractConstructor: abstract new () => void;
+>abstractConstructor : Symbol(abstractConstructor, Decl(abstractConstructorOverloadInstantiation.ts, 1, 13))
+
+new concreteConstructor(); // should work
+>concreteConstructor : Symbol(concreteConstructor, Decl(abstractConstructorOverloadInstantiation.ts, 0, 13))
+
+new abstractConstructor(); // should error
+>abstractConstructor : Symbol(abstractConstructor, Decl(abstractConstructorOverloadInstantiation.ts, 1, 13))
+
+type AmbiguousMixedConstructorAbstractFirst =
+>AmbiguousMixedConstructorAbstractFirst : Symbol(AmbiguousMixedConstructorAbstractFirst, Decl(abstractConstructorOverloadInstantiation.ts, 4, 26))
+
+    & (abstract new () => void)
+    & (new () => void);
+
+type AmbiguousMixedConstructorConcreteFirst =
+>AmbiguousMixedConstructorConcreteFirst : Symbol(AmbiguousMixedConstructorConcreteFirst, Decl(abstractConstructorOverloadInstantiation.ts, 8, 23))
+
+    & (new () => void)
+    & (abstract new () => void);
+
+declare const ambiguousMixedConstructorAbstractFirst: AmbiguousMixedConstructorAbstractFirst;
+>ambiguousMixedConstructorAbstractFirst : Symbol(ambiguousMixedConstructorAbstractFirst, Decl(abstractConstructorOverloadInstantiation.ts, 14, 13))
+>AmbiguousMixedConstructorAbstractFirst : Symbol(AmbiguousMixedConstructorAbstractFirst, Decl(abstractConstructorOverloadInstantiation.ts, 4, 26))
+
+declare const ambiguousMixedConstructorConcreteFirst: AmbiguousMixedConstructorConcreteFirst;
+>ambiguousMixedConstructorConcreteFirst : Symbol(ambiguousMixedConstructorConcreteFirst, Decl(abstractConstructorOverloadInstantiation.ts, 15, 13))
+>AmbiguousMixedConstructorConcreteFirst : Symbol(AmbiguousMixedConstructorConcreteFirst, Decl(abstractConstructorOverloadInstantiation.ts, 8, 23))
+
+new ambiguousMixedConstructorAbstractFirst(); // should error
+>ambiguousMixedConstructorAbstractFirst : Symbol(ambiguousMixedConstructorAbstractFirst, Decl(abstractConstructorOverloadInstantiation.ts, 14, 13))
+
+new ambiguousMixedConstructorConcreteFirst(); // should work
+>ambiguousMixedConstructorConcreteFirst : Symbol(ambiguousMixedConstructorConcreteFirst, Decl(abstractConstructorOverloadInstantiation.ts, 15, 13))
+
+type DistinctMixedConstructorAbstractFirst =
+>DistinctMixedConstructorAbstractFirst : Symbol(DistinctMixedConstructorAbstractFirst, Decl(abstractConstructorOverloadInstantiation.ts, 18, 45))
+
+    & (abstract new (arg: "abstract") => void)
+>arg : Symbol(arg, Decl(abstractConstructorOverloadInstantiation.ts, 21, 21))
+
+    & (new (arg: "concrete") => void);
+>arg : Symbol(arg, Decl(abstractConstructorOverloadInstantiation.ts, 22, 12))
+
+type DistinctMixedConstructorConcreteFirst =
+>DistinctMixedConstructorConcreteFirst : Symbol(DistinctMixedConstructorConcreteFirst, Decl(abstractConstructorOverloadInstantiation.ts, 22, 38))
+
+    & (new (arg: "concrete") => void)
+>arg : Symbol(arg, Decl(abstractConstructorOverloadInstantiation.ts, 25, 12))
+
+    & (abstract new (arg: "abstract") => void);
+>arg : Symbol(arg, Decl(abstractConstructorOverloadInstantiation.ts, 26, 21))
+
+declare let distinctMixedConstructorAbstractFirst: DistinctMixedConstructorAbstractFirst;
+>distinctMixedConstructorAbstractFirst : Symbol(distinctMixedConstructorAbstractFirst, Decl(abstractConstructorOverloadInstantiation.ts, 28, 11))
+>DistinctMixedConstructorAbstractFirst : Symbol(DistinctMixedConstructorAbstractFirst, Decl(abstractConstructorOverloadInstantiation.ts, 18, 45))
+
+declare let distinctMixedConstructorConcreteFirst: DistinctMixedConstructorConcreteFirst;
+>distinctMixedConstructorConcreteFirst : Symbol(distinctMixedConstructorConcreteFirst, Decl(abstractConstructorOverloadInstantiation.ts, 29, 11))
+>DistinctMixedConstructorConcreteFirst : Symbol(DistinctMixedConstructorConcreteFirst, Decl(abstractConstructorOverloadInstantiation.ts, 22, 38))
+
+new distinctMixedConstructorAbstractFirst("abstract"); // should error
+>distinctMixedConstructorAbstractFirst : Symbol(distinctMixedConstructorAbstractFirst, Decl(abstractConstructorOverloadInstantiation.ts, 28, 11))
+
+new distinctMixedConstructorAbstractFirst("concrete"); // should work
+>distinctMixedConstructorAbstractFirst : Symbol(distinctMixedConstructorAbstractFirst, Decl(abstractConstructorOverloadInstantiation.ts, 28, 11))
+
+new distinctMixedConstructorConcreteFirst("abstract"); // should error
+>distinctMixedConstructorConcreteFirst : Symbol(distinctMixedConstructorConcreteFirst, Decl(abstractConstructorOverloadInstantiation.ts, 29, 11))
+
+new distinctMixedConstructorConcreteFirst("concrete"); // should work
+>distinctMixedConstructorConcreteFirst : Symbol(distinctMixedConstructorConcreteFirst, Decl(abstractConstructorOverloadInstantiation.ts, 29, 11))
+
