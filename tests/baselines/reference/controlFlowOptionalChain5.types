@@ -1,0 +1,580 @@
+//// [tests/cases/conformance/controlFlow/controlFlowOptionalChain5.ts] ////
+
+=== controlFlowOptionalChain5.ts ===
+// https://github.com/microsoft/TypeScript/issues/60106
+
+declare class A {
+>A : A
+>  : ^
+
+  IsA(): this is A;
+>IsA : () => this is A
+>    : ^^^^^^         
+}
+
+declare const patternWithUndefined: A | undefined;
+>patternWithUndefined : A | undefined
+>                     : ^^^^^^^^^^^^^
+
+function applyPatternWithUndefined() {
+>applyPatternWithUndefined : () => void
+>                          : ^^^^^^^^^^
+
+  if (patternWithUndefined?.IsA() === false) {
+>patternWithUndefined?.IsA() === false : boolean
+>                                      : ^^^^^^^
+>patternWithUndefined?.IsA() : boolean | undefined
+>                            : ^^^^^^^^^^^^^^^^^^^
+>patternWithUndefined?.IsA : (() => this is A) | undefined
+>                          : ^^^^^^^         ^^^^^^^^^^^^^
+>patternWithUndefined : A | undefined
+>                     : ^^^^^^^^^^^^^
+>IsA : (() => this is A) | undefined
+>    : ^^^^^^^         ^^^^^^^^^^^^^
+>false : false
+>      : ^^^^^
+
+    patternWithUndefined; // never
+>patternWithUndefined : never
+>                     : ^^^^^
+
+    return;
+  }
+  patternWithUndefined; // A | undefined
+>patternWithUndefined : A | undefined
+>                     : ^^^^^^^^^^^^^
+}
+
+function applyPatternWithUndefined2() {
+>applyPatternWithUndefined2 : () => void
+>                           : ^^^^^^^^^^
+
+  if (!patternWithUndefined?.IsA()) {
+>!patternWithUndefined?.IsA() : boolean
+>                             : ^^^^^^^
+>patternWithUndefined?.IsA() : boolean | undefined
+>                            : ^^^^^^^^^^^^^^^^^^^
+>patternWithUndefined?.IsA : (() => this is A) | undefined
+>                          : ^^^^^^^         ^^^^^^^^^^^^^
+>patternWithUndefined : A | undefined
+>                     : ^^^^^^^^^^^^^
+>IsA : (() => this is A) | undefined
+>    : ^^^^^^^         ^^^^^^^^^^^^^
+
+    patternWithUndefined; // undefined
+>patternWithUndefined : undefined
+>                     : ^^^^^^^^^
+
+    return;
+  }
+  patternWithUndefined; // A
+>patternWithUndefined : A
+>                     : ^
+}
+
+function applyPatternWithUndefined3() {
+>applyPatternWithUndefined3 : () => void
+>                           : ^^^^^^^^^^
+
+  if (patternWithUndefined?.IsA() === true) {
+>patternWithUndefined?.IsA() === true : boolean
+>                                     : ^^^^^^^
+>patternWithUndefined?.IsA() : boolean | undefined
+>                            : ^^^^^^^^^^^^^^^^^^^
+>patternWithUndefined?.IsA : (() => this is A) | undefined
+>                          : ^^^^^^^         ^^^^^^^^^^^^^
+>patternWithUndefined : A | undefined
+>                     : ^^^^^^^^^^^^^
+>IsA : (() => this is A) | undefined
+>    : ^^^^^^^         ^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+
+    patternWithUndefined; // A
+>patternWithUndefined : A
+>                     : ^
+
+    return;
+  }
+  patternWithUndefined; // undefined
+>patternWithUndefined : undefined
+>                     : ^^^^^^^^^
+}
+
+function applyPatternWithUndefined4() {
+>applyPatternWithUndefined4 : () => void
+>                           : ^^^^^^^^^^
+
+  if (patternWithUndefined?.IsA()) {
+>patternWithUndefined?.IsA() : boolean | undefined
+>                            : ^^^^^^^^^^^^^^^^^^^
+>patternWithUndefined?.IsA : (() => this is A) | undefined
+>                          : ^^^^^^^         ^^^^^^^^^^^^^
+>patternWithUndefined : A | undefined
+>                     : ^^^^^^^^^^^^^
+>IsA : (() => this is A) | undefined
+>    : ^^^^^^^         ^^^^^^^^^^^^^
+
+    patternWithUndefined; // A
+>patternWithUndefined : A
+>                     : ^
+
+    return;
+  }
+  patternWithUndefined; // undefined
+>patternWithUndefined : undefined
+>                     : ^^^^^^^^^
+}
+
+declare const patternWithNull: A | null;
+>patternWithNull : A | null
+>                : ^^^^^^^^
+
+function applyPatternWithNull() {
+>applyPatternWithNull : () => void
+>                     : ^^^^^^^^^^
+
+  if (patternWithNull?.IsA() === false) {
+>patternWithNull?.IsA() === false : boolean
+>                                 : ^^^^^^^
+>patternWithNull?.IsA() : boolean | undefined
+>                       : ^^^^^^^^^^^^^^^^^^^
+>patternWithNull?.IsA : (() => this is A) | undefined
+>                     : ^^^^^^^         ^^^^^^^^^^^^^
+>patternWithNull : A | null
+>                : ^^^^^^^^
+>IsA : (() => this is A) | undefined
+>    : ^^^^^^^         ^^^^^^^^^^^^^
+>false : false
+>      : ^^^^^
+
+    patternWithNull; // never
+>patternWithNull : never
+>                : ^^^^^
+
+    return;
+  }
+  patternWithNull; // A | null
+>patternWithNull : A | null
+>                : ^^^^^^^^
+}
+
+function applyPatternWithNull2() {
+>applyPatternWithNull2 : () => void
+>                      : ^^^^^^^^^^
+
+  if (!patternWithNull?.IsA()) {
+>!patternWithNull?.IsA() : boolean
+>                        : ^^^^^^^
+>patternWithNull?.IsA() : boolean | undefined
+>                       : ^^^^^^^^^^^^^^^^^^^
+>patternWithNull?.IsA : (() => this is A) | undefined
+>                     : ^^^^^^^         ^^^^^^^^^^^^^
+>patternWithNull : A | null
+>                : ^^^^^^^^
+>IsA : (() => this is A) | undefined
+>    : ^^^^^^^         ^^^^^^^^^^^^^
+
+    patternWithNull; // null
+>patternWithNull : null
+>                : ^^^^
+
+    return;
+  }
+  patternWithNull; // A
+>patternWithNull : A
+>                : ^
+}
+
+function applyPatternWithNull3() {
+>applyPatternWithNull3 : () => void
+>                      : ^^^^^^^^^^
+
+  if (patternWithNull?.IsA() === true) {
+>patternWithNull?.IsA() === true : boolean
+>                                : ^^^^^^^
+>patternWithNull?.IsA() : boolean | undefined
+>                       : ^^^^^^^^^^^^^^^^^^^
+>patternWithNull?.IsA : (() => this is A) | undefined
+>                     : ^^^^^^^         ^^^^^^^^^^^^^
+>patternWithNull : A | null
+>                : ^^^^^^^^
+>IsA : (() => this is A) | undefined
+>    : ^^^^^^^         ^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+
+    patternWithNull; // A
+>patternWithNull : A
+>                : ^
+
+    return;
+  }
+  patternWithNull; // null
+>patternWithNull : null
+>                : ^^^^
+}
+
+function applyPatternWithNull4() {
+>applyPatternWithNull4 : () => void
+>                      : ^^^^^^^^^^
+
+  if (patternWithNull?.IsA()) {
+>patternWithNull?.IsA() : boolean | undefined
+>                       : ^^^^^^^^^^^^^^^^^^^
+>patternWithNull?.IsA : (() => this is A) | undefined
+>                     : ^^^^^^^         ^^^^^^^^^^^^^
+>patternWithNull : A | null
+>                : ^^^^^^^^
+>IsA : (() => this is A) | undefined
+>    : ^^^^^^^         ^^^^^^^^^^^^^
+
+    patternWithNull; // A
+>patternWithNull : A
+>                : ^
+
+    return;
+  }
+  patternWithNull; // null
+>patternWithNull : null
+>                : ^^^^
+}
+
+declare const nullablePattern: A | null | undefined;
+>nullablePattern : A | null | undefined
+>                : ^^^^^^^^^^^^^^^^^^^^
+
+function applyNullablePattern() {
+>applyNullablePattern : () => void
+>                     : ^^^^^^^^^^
+
+  if (nullablePattern?.IsA() === false) {
+>nullablePattern?.IsA() === false : boolean
+>                                 : ^^^^^^^
+>nullablePattern?.IsA() : boolean | undefined
+>                       : ^^^^^^^^^^^^^^^^^^^
+>nullablePattern?.IsA : (() => this is A) | undefined
+>                     : ^^^^^^^         ^^^^^^^^^^^^^
+>nullablePattern : A | null | undefined
+>                : ^^^^^^^^^^^^^^^^^^^^
+>IsA : (() => this is A) | undefined
+>    : ^^^^^^^         ^^^^^^^^^^^^^
+>false : false
+>      : ^^^^^
+
+    nullablePattern; // never
+>nullablePattern : never
+>                : ^^^^^
+
+    return;
+  }
+  nullablePattern; // A | null | undefined
+>nullablePattern : A | null | undefined
+>                : ^^^^^^^^^^^^^^^^^^^^
+}
+
+function applyNullablePattern2() {
+>applyNullablePattern2 : () => void
+>                      : ^^^^^^^^^^
+
+  if (!nullablePattern?.IsA()) {
+>!nullablePattern?.IsA() : boolean
+>                        : ^^^^^^^
+>nullablePattern?.IsA() : boolean | undefined
+>                       : ^^^^^^^^^^^^^^^^^^^
+>nullablePattern?.IsA : (() => this is A) | undefined
+>                     : ^^^^^^^         ^^^^^^^^^^^^^
+>nullablePattern : A | null | undefined
+>                : ^^^^^^^^^^^^^^^^^^^^
+>IsA : (() => this is A) | undefined
+>    : ^^^^^^^         ^^^^^^^^^^^^^
+
+    nullablePattern; // null | undefined
+>nullablePattern : null | undefined
+>                : ^^^^^^^^^^^^^^^^
+
+    return;
+  }
+  nullablePattern; // A
+>nullablePattern : A
+>                : ^
+}
+
+function applyNullablePattern3() {
+>applyNullablePattern3 : () => void
+>                      : ^^^^^^^^^^
+
+  if (nullablePattern?.IsA() === true) {
+>nullablePattern?.IsA() === true : boolean
+>                                : ^^^^^^^
+>nullablePattern?.IsA() : boolean | undefined
+>                       : ^^^^^^^^^^^^^^^^^^^
+>nullablePattern?.IsA : (() => this is A) | undefined
+>                     : ^^^^^^^         ^^^^^^^^^^^^^
+>nullablePattern : A | null | undefined
+>                : ^^^^^^^^^^^^^^^^^^^^
+>IsA : (() => this is A) | undefined
+>    : ^^^^^^^         ^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+
+    nullablePattern; // A
+>nullablePattern : A
+>                : ^
+
+    return;
+  }
+  nullablePattern; // null | undefined
+>nullablePattern : null | undefined
+>                : ^^^^^^^^^^^^^^^^
+}
+
+function applyNullablePattern4() {
+>applyNullablePattern4 : () => void
+>                      : ^^^^^^^^^^
+
+  if (nullablePattern?.IsA()) {
+>nullablePattern?.IsA() : boolean | undefined
+>                       : ^^^^^^^^^^^^^^^^^^^
+>nullablePattern?.IsA : (() => this is A) | undefined
+>                     : ^^^^^^^         ^^^^^^^^^^^^^
+>nullablePattern : A | null | undefined
+>                : ^^^^^^^^^^^^^^^^^^^^
+>IsA : (() => this is A) | undefined
+>    : ^^^^^^^         ^^^^^^^^^^^^^
+
+    nullablePattern; // A
+>nullablePattern : A
+>                : ^
+
+    return;
+  }
+  nullablePattern; // null | undefined
+>nullablePattern : null | undefined
+>                : ^^^^^^^^^^^^^^^^
+}
+
+declare const pattern: A;
+>pattern : A
+>        : ^
+
+function applyPatternInChain() {
+>applyPatternInChain : () => void
+>                    : ^^^^^^^^^^
+
+  if (pattern?.IsA() === false) {
+>pattern?.IsA() === false : boolean
+>                         : ^^^^^^^
+>pattern?.IsA() : boolean
+>               : ^^^^^^^
+>pattern?.IsA : () => this is A
+>             : ^^^^^^         
+>pattern : A
+>        : ^
+>IsA : () => this is A
+>    : ^^^^^^         
+>false : false
+>      : ^^^^^
+
+    pattern; // never
+>pattern : never
+>        : ^^^^^
+
+    return;
+  }
+  pattern; // A
+>pattern : A
+>        : ^
+}
+
+function applyPatternInChain2() {
+>applyPatternInChain2 : () => void
+>                     : ^^^^^^^^^^
+
+  if (!pattern?.IsA()) {
+>!pattern?.IsA() : boolean
+>                : ^^^^^^^
+>pattern?.IsA() : boolean
+>               : ^^^^^^^
+>pattern?.IsA : () => this is A
+>             : ^^^^^^         
+>pattern : A
+>        : ^
+>IsA : () => this is A
+>    : ^^^^^^         
+
+    pattern; // never
+>pattern : never
+>        : ^^^^^
+
+    return;
+  }
+  pattern; // A
+>pattern : A
+>        : ^
+}
+
+function applyPatternInChain3() {
+>applyPatternInChain3 : () => void
+>                     : ^^^^^^^^^^
+
+  if (pattern?.IsA() === true) {
+>pattern?.IsA() === true : boolean
+>                        : ^^^^^^^
+>pattern?.IsA() : boolean
+>               : ^^^^^^^
+>pattern?.IsA : () => this is A
+>             : ^^^^^^         
+>pattern : A
+>        : ^
+>IsA : () => this is A
+>    : ^^^^^^         
+>true : true
+>     : ^^^^
+
+    pattern; // A
+>pattern : A
+>        : ^
+
+    return;
+  }
+  pattern; // never
+>pattern : never
+>        : ^^^^^
+}
+
+function applyPatternInChain4() {
+>applyPatternInChain4 : () => void
+>                     : ^^^^^^^^^^
+
+  if (pattern?.IsA()) {
+>pattern?.IsA() : boolean
+>               : ^^^^^^^
+>pattern?.IsA : () => this is A
+>             : ^^^^^^         
+>pattern : A
+>        : ^
+>IsA : () => this is A
+>    : ^^^^^^         
+
+    pattern; // A
+>pattern : A
+>        : ^
+
+    return;
+  }
+  pattern; // never
+>pattern : never
+>        : ^^^^^
+}
+
+function applyPattern() {
+>applyPattern : () => void
+>             : ^^^^^^^^^^
+
+  if (pattern.IsA() === false) {
+>pattern.IsA() === false : boolean
+>                        : ^^^^^^^
+>pattern.IsA() : boolean
+>              : ^^^^^^^
+>pattern.IsA : () => this is A
+>            : ^^^^^^         
+>pattern : A
+>        : ^
+>IsA : () => this is A
+>    : ^^^^^^         
+>false : false
+>      : ^^^^^
+
+    pattern; // never
+>pattern : never
+>        : ^^^^^
+
+    return;
+  }
+  pattern; // A
+>pattern : A
+>        : ^
+}
+
+function applyPattern2() {
+>applyPattern2 : () => void
+>              : ^^^^^^^^^^
+
+  if (!pattern.IsA()) {
+>!pattern.IsA() : boolean
+>               : ^^^^^^^
+>pattern.IsA() : boolean
+>              : ^^^^^^^
+>pattern.IsA : () => this is A
+>            : ^^^^^^         
+>pattern : A
+>        : ^
+>IsA : () => this is A
+>    : ^^^^^^         
+
+    pattern; // never
+>pattern : never
+>        : ^^^^^
+
+    return;
+  }
+  pattern; // A
+>pattern : A
+>        : ^
+}
+
+function applyPattern3() {
+>applyPattern3 : () => void
+>              : ^^^^^^^^^^
+
+  if (pattern.IsA() === true) {
+>pattern.IsA() === true : boolean
+>                       : ^^^^^^^
+>pattern.IsA() : boolean
+>              : ^^^^^^^
+>pattern.IsA : () => this is A
+>            : ^^^^^^         
+>pattern : A
+>        : ^
+>IsA : () => this is A
+>    : ^^^^^^         
+>true : true
+>     : ^^^^
+
+    pattern; // A
+>pattern : A
+>        : ^
+
+    return;
+  }
+  pattern; // never
+>pattern : never
+>        : ^^^^^
+}
+
+function applyPattern4() {
+>applyPattern4 : () => void
+>              : ^^^^^^^^^^
+
+  if (pattern.IsA()) {
+>pattern.IsA() : boolean
+>              : ^^^^^^^
+>pattern.IsA : () => this is A
+>            : ^^^^^^         
+>pattern : A
+>        : ^
+>IsA : () => this is A
+>    : ^^^^^^         
+
+    pattern; // A
+>pattern : A
+>        : ^
+
+    return;
+  }
+  pattern; // never
+>pattern : never
+>        : ^^^^^
+}
+
