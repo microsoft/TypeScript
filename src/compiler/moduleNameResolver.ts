@@ -194,7 +194,7 @@ function formatExtensions(extensions: Extensions) {
     if (extensions & Extensions.JavaScript) result.push("JavaScript");
     if (extensions & Extensions.Declaration) result.push("Declaration");
     if (extensions & Extensions.Json) result.push("JSON");
-    if (extensions & Extensions.Any) result.push("Any");
+    if (extensions === Extensions.Any) result.push("Any");
     return result.join(", ");
 }
 
@@ -2170,7 +2170,7 @@ function tryAddingExtensions(candidate: string, extensions: Extensions, original
                 || undefined;
         default:
             return extensions & Extensions.Declaration && !isDeclarationFileName(candidate + originalExtension) && tryExtension(`.d${originalExtension}.ts`)
-                || extensions & Extensions.Any && tryExtension(originalExtension)
+                || extensions === Extensions.Any && tryExtension(originalExtension)
                 || undefined;
     }
 
@@ -2606,7 +2606,7 @@ function loadModuleFromSelfNameReference(extensions: Extensions, moduleName: str
         return loadModuleFromExports(scope, extensions, subpath, state, cache, redirectedReference);
     }
     const priorityExtensions = extensions & (Extensions.TypeScript | Extensions.Declaration);
-    const secondaryExtensions = extensions & ~(Extensions.TypeScript | Extensions.Declaration);
+    const secondaryExtensions = extensions === Extensions.Any ? Extensions.Any : extensions & ~(Extensions.TypeScript | Extensions.Declaration);
     return loadModuleFromExports(scope, priorityExtensions, subpath, state, cache, redirectedReference)
         || loadModuleFromExports(scope, secondaryExtensions, subpath, state, cache, redirectedReference);
 }
@@ -3005,7 +3005,7 @@ function loadModuleFromNearestNodeModulesDirectoryWorker(extensions: Extensions,
     //   2. For each ancestor node_modules directory, try to find:
     //      i.  JS files in the implementation package
     const priorityExtensions = extensions & (Extensions.TypeScript | Extensions.Declaration);
-    const secondaryExtensions = extensions & ~(Extensions.TypeScript | Extensions.Declaration);
+    const secondaryExtensions = extensions === Extensions.Any ? Extensions.Any : extensions & ~(Extensions.TypeScript | Extensions.Declaration);
     // (1)
     if (priorityExtensions) {
         traceIfEnabled(state, Diagnostics.Searching_all_ancestor_node_modules_directories_for_preferred_extensions_Colon_0, formatExtensions(priorityExtensions));
