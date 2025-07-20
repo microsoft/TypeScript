@@ -27162,7 +27162,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function inferToConditionalType(source: Type, target: ConditionalType) {
             const info = target.root.isDistributive ? getInferenceInfoForType(getActualTypeVariable(target.checkType)) : undefined;
-            const saveIndividualPriority = info?.individualPriority
+            const saveIndividualPriority = info?.individualPriority;
             if (info) {
                 info.individualPriority = (info.individualPriority || InferencePriority.None) | InferencePriority.DistributiveConditional;
             }
