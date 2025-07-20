@@ -26784,14 +26784,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (candidate === blockedStringType) {
                             return;
                         }
-                        const combinedPriority = priority | (inference.individualPriority || InferencePriority.None)
-                        if (inference.priority === undefined || combinedPriority < inference.priority) {
+                        const combinedPriority = priority | (inference.individualPriority || InferencePriority.None);
+                        if (inference.priority === undefined || priority < (inference.priority & ~InferencePriority.DistributiveConditional)) {
                             inference.candidates = undefined;
                             inference.contraCandidates = undefined;
                             inference.topLevel = true;
                             inference.priority = combinedPriority;
                         }
-                        if (combinedPriority === inference.priority) {
+                        if (priority === (inference.priority & ~InferencePriority.DistributiveConditional)) {
+                            if (inference.priority !== combinedPriority) {
+                                inference.priority = combinedPriority;
+                                clearCachedInferences(inferences);
+                            }
                             // We make contravariant inferences only if we are in a pure contravariant position,
                             // i.e. only if we have not descended into a bivariant position.
                             if (contravariant && !bivariant) {
