@@ -88,9 +88,9 @@ const values1 = [item1, item2, item3].map(item => item.value);
 >item3 : Symbol(item3, Decl(typePredicateFreshLiteralWidening.ts, 19, 5))
 >map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >item : Symbol(item, Decl(typePredicateFreshLiteralWidening.ts, 24, 42))
->item.value : Symbol(value, Decl(typePredicateFreshLiteralWidening.ts, 17, 33), Decl(typePredicateFreshLiteralWidening.ts, 18, 33), Decl(typePredicateFreshLiteralWidening.ts, 19, 33))
+>item.value : Symbol(value, Decl(typePredicateFreshLiteralWidening.ts, 15, 13))
 >item : Symbol(item, Decl(typePredicateFreshLiteralWidening.ts, 24, 42))
->value : Symbol(value, Decl(typePredicateFreshLiteralWidening.ts, 17, 33), Decl(typePredicateFreshLiteralWidening.ts, 18, 33), Decl(typePredicateFreshLiteralWidening.ts, 19, 33))
+>value : Symbol(value, Decl(typePredicateFreshLiteralWidening.ts, 15, 13))
 
 const filteredValues1 = values1.filter(isNotNull);
 >filteredValues1 : Symbol(filteredValues1, Decl(typePredicateFreshLiteralWidening.ts, 25, 5))

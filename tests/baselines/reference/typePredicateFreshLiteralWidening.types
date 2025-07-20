@@ -51,34 +51,34 @@ type Item = { value: string | null };
 >      : ^^^^^^^^^^^^^
 
 const item1 = satisfies<Item>()({ value: "1" });
->item1 : { value: "1"; }
->      : ^^^^^^^^^^^^^^^
->satisfies<Item>()({ value: "1" }) : { value: "1"; }
->                                  : ^^^^^^^^^^^^^^^
+>item1 : { value: Narrow<string | null>; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>satisfies<Item>()({ value: "1" }) : { value: Narrow<string | null>; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >satisfies<Item>() : <TNarrow extends Item>(narrow: Narrow<TNarrow>) => Narrow<TNarrow>
 >                  : ^       ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >satisfies : <TWide>() => <TNarrow extends TWide>(narrow: Narrow<TNarrow>) => Narrow<TNarrow>
 >          : ^     ^^^^^^^^                     ^^                       ^^^^^^^^^^^^^^^^^^^^
->{ value: "1" } : { value: "1"; }
->               : ^^^^^^^^^^^^^^^
->value : "1"
->      : ^^^
+>{ value: "1" } : { value: string; }
+>               : ^^^^^^^^^^^^^^^^^^
+>value : string
+>      : ^^^^^^
 >"1" : "1"
 >    : ^^^
 
 const item2 = satisfies<Item>()({ value: "2" });
->item2 : { value: "2"; }
->      : ^^^^^^^^^^^^^^^
->satisfies<Item>()({ value: "2" }) : { value: "2"; }
->                                  : ^^^^^^^^^^^^^^^
+>item2 : { value: Narrow<string | null>; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>satisfies<Item>()({ value: "2" }) : { value: Narrow<string | null>; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >satisfies<Item>() : <TNarrow extends Item>(narrow: Narrow<TNarrow>) => Narrow<TNarrow>
 >                  : ^       ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >satisfies : <TWide>() => <TNarrow extends TWide>(narrow: Narrow<TNarrow>) => Narrow<TNarrow>
 >          : ^     ^^^^^^^^                     ^^                       ^^^^^^^^^^^^^^^^^^^^
->{ value: "2" } : { value: "2"; }
->               : ^^^^^^^^^^^^^^^
->value : "2"
->      : ^^^
+>{ value: "2" } : { value: string; }
+>               : ^^^^^^^^^^^^^^^^^^
+>value : string
+>      : ^^^^^^
 >"2" : "2"
 >    : ^^^
 
@@ -121,44 +121,44 @@ const filteredValues2 = values2.filter(isNotNull);
 >          : ^ ^^     ^^        ^^^^^          
 
 const values1 = [item1, item2, item3].map(item => item.value);
->values1 : ("1" | "2" | null)[]
->        : ^^^^^^^^^^^^^^^^^^^^
->[item1, item2, item3].map(item => item.value) : ("1" | "2" | null)[]
->                                              : ^^^^^^^^^^^^^^^^^^^^
->[item1, item2, item3].map : <U>(callbackfn: (value: { value: "1"; } | { value: "2"; } | { value: null; }, index: number, array: ({ value: "1"; } | { value: "2"; } | { value: null; })[]) => U, thisArg?: any) => U[]
->                          : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
->[item1, item2, item3] : ({ value: "1"; } | { value: "2"; } | { value: null; })[]
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->item1 : { value: "1"; }
->      : ^^^^^^^^^^^^^^^
->item2 : { value: "2"; }
->      : ^^^^^^^^^^^^^^^
+>values1 : Narrow<string | null>[]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
+>[item1, item2, item3].map(item => item.value) : Narrow<string | null>[]
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^
+>[item1, item2, item3].map : <U>(callbackfn: (value: { value: Narrow<string | null>; }, index: number, array: { value: Narrow<string | null>; }[]) => U, thisArg?: any) => U[]
+>                          : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>[item1, item2, item3] : { value: Narrow<string | null>; }[]
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>item1 : { value: Narrow<string | null>; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>item2 : { value: Narrow<string | null>; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >item3 : { value: null; }
 >      : ^^^^^^^^^^^^^^^^
->map : <U>(callbackfn: (value: { value: "1"; } | { value: "2"; } | { value: null; }, index: number, array: ({ value: "1"; } | { value: "2"; } | { value: null; })[]) => U, thisArg?: any) => U[]
->    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
->item => item.value : (item: { value: "1"; } | { value: "2"; } | { value: null; }) => "1" | "2" | null
->                   : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->item : { value: "1"; } | { value: "2"; } | { value: null; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->item.value : "1" | "2" | null
->           : ^^^^^^^^^^^^^^^^
->item : { value: "1"; } | { value: "2"; } | { value: null; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->value : "1" | "2" | null
->      : ^^^^^^^^^^^^^^^^
+>map : <U>(callbackfn: (value: { value: Narrow<string | null>; }, index: number, array: { value: Narrow<string | null>; }[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>item => item.value : (item: { value: Narrow<string | null>; }) => Narrow<string | null>
+>                   : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>item : { value: Narrow<string | null>; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>item.value : Narrow<string | null>
+>           : ^^^^^^^^^^^^^^^^^^^^^
+>item : { value: Narrow<string | null>; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : Narrow<string | null>
+>      : ^^^^^^^^^^^^^^^^^^^^^
 
 const filteredValues1 = values1.filter(isNotNull);
->filteredValues1 : ("1" | "2")[]
->                : ^^^^^^^^^^^^^
->values1.filter(isNotNull) : ("1" | "2")[]
->                          : ^^^^^^^^^^^^^
->values1.filter : { <S extends "1" | "2" | null>(predicate: (value: "1" | "2" | null, index: number, array: ("1" | "2" | null)[]) => value is S, thisArg?: any): S[]; (predicate: (value: "1" | "2" | null, index: number, array: ("1" | "2" | null)[]) => unknown, thisArg?: any): ("1" | "2" | null)[]; }
->               : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
->values1 : ("1" | "2" | null)[]
->        : ^^^^^^^^^^^^^^^^^^^^
->filter : { <S extends "1" | "2" | null>(predicate: (value: "1" | "2" | null, index: number, array: ("1" | "2" | null)[]) => value is S, thisArg?: any): S[]; (predicate: (value: "1" | "2" | null, index: number, array: ("1" | "2" | null)[]) => unknown, thisArg?: any): ("1" | "2" | null)[]; }
->       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>filteredValues1 : string[]
+>                : ^^^^^^^^
+>values1.filter(isNotNull) : string[]
+>                          : ^^^^^^^^
+>values1.filter : { <S extends Narrow<string | null>>(predicate: (value: Narrow<string | null>, index: number, array: Narrow<string | null>[]) => value is S, thisArg?: any): S[]; (predicate: (value: Narrow<string | null>, index: number, array: Narrow<string | null>[]) => unknown, thisArg?: any): Narrow<string | null>[]; }
+>               : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>values1 : Narrow<string | null>[]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
+>filter : { <S extends Narrow<string | null>>(predicate: (value: Narrow<string | null>, index: number, array: Narrow<string | null>[]) => value is S, thisArg?: any): S[]; (predicate: (value: Narrow<string | null>, index: number, array: Narrow<string | null>[]) => unknown, thisArg?: any): Narrow<string | null>[]; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isNotNull : <T>(value: T | null) => value is T
 >          : ^ ^^     ^^        ^^^^^          
 

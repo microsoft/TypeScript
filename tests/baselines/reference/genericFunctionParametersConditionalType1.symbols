@@ -1,0 +1,145 @@
+//// [tests/cases/compiler/genericFunctionParametersConditionalType1.ts] ////
+
+=== genericFunctionParametersConditionalType1.ts ===
+// https://github.com/microsoft/TypeScript/issues/62079
+
+export {};
+
+interface _Map {
+>_Map : Symbol(_Map, Decl(genericFunctionParametersConditionalType1.ts, 2, 10))
+
+  foo: { a: 123 }
+>foo : Symbol(_Map.foo, Decl(genericFunctionParametersConditionalType1.ts, 4, 16))
+>a : Symbol(a, Decl(genericFunctionParametersConditionalType1.ts, 5, 8))
+}
+
+type ModuleSubType = "bar" & { brand: true };
+>ModuleSubType : Symbol(ModuleSubType, Decl(genericFunctionParametersConditionalType1.ts, 6, 1))
+>brand : Symbol(brand, Decl(genericFunctionParametersConditionalType1.ts, 8, 30))
+
+type Map = _Map & Record<ModuleSubType, { blah: string }>
+>Map : Symbol(Map, Decl(genericFunctionParametersConditionalType1.ts, 8, 45))
+>_Map : Symbol(_Map, Decl(genericFunctionParametersConditionalType1.ts, 2, 10))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>ModuleSubType : Symbol(ModuleSubType, Decl(genericFunctionParametersConditionalType1.ts, 6, 1))
+>blah : Symbol(blah, Decl(genericFunctionParametersConditionalType1.ts, 10, 41))
+
+type SubTypeGet<
+>SubTypeGet : Symbol(SubTypeGet, Decl(genericFunctionParametersConditionalType1.ts, 10, 57))
+
+  SubType extends string,
+>SubType : Symbol(SubType, Decl(genericFunctionParametersConditionalType1.ts, 12, 16))
+
+  Map extends Record<SubType, unknown>,
+>Map : Symbol(Map, Decl(genericFunctionParametersConditionalType1.ts, 13, 25))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>SubType : Symbol(SubType, Decl(genericFunctionParametersConditionalType1.ts, 12, 16))
+
+> = SubType extends unknown
+>SubType : Symbol(SubType, Decl(genericFunctionParametersConditionalType1.ts, 12, 16))
+
+? { type?: SubType } & Map[SubType]
+>type : Symbol(type, Decl(genericFunctionParametersConditionalType1.ts, 16, 3))
+>SubType : Symbol(SubType, Decl(genericFunctionParametersConditionalType1.ts, 12, 16))
+>Map : Symbol(Map, Decl(genericFunctionParametersConditionalType1.ts, 13, 25))
+>SubType : Symbol(SubType, Decl(genericFunctionParametersConditionalType1.ts, 12, 16))
+
+: never;
+
+type TestParameters = Parameters<<T extends "foo" | ModuleSubType>(arg: SubTypeGet<T, Map>) => void>
+>TestParameters : Symbol(TestParameters, Decl(genericFunctionParametersConditionalType1.ts, 17, 8))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(genericFunctionParametersConditionalType1.ts, 19, 34))
+>ModuleSubType : Symbol(ModuleSubType, Decl(genericFunctionParametersConditionalType1.ts, 6, 1))
+>arg : Symbol(arg, Decl(genericFunctionParametersConditionalType1.ts, 19, 67))
+>SubTypeGet : Symbol(SubTypeGet, Decl(genericFunctionParametersConditionalType1.ts, 10, 57))
+>T : Symbol(T, Decl(genericFunctionParametersConditionalType1.ts, 19, 34))
+>Map : Symbol(Map, Decl(genericFunctionParametersConditionalType1.ts, 8, 45))
+
+declare class Test<T extends "foo" | ModuleSubType> {
+>Test : Symbol(Test, Decl(genericFunctionParametersConditionalType1.ts, 19, 100))
+>T : Symbol(T, Decl(genericFunctionParametersConditionalType1.ts, 21, 19))
+>ModuleSubType : Symbol(ModuleSubType, Decl(genericFunctionParametersConditionalType1.ts, 6, 1))
+
+  constructor(arg: SubTypeGet<T, Map>);
+>arg : Symbol(arg, Decl(genericFunctionParametersConditionalType1.ts, 22, 14))
+>SubTypeGet : Symbol(SubTypeGet, Decl(genericFunctionParametersConditionalType1.ts, 10, 57))
+>T : Symbol(T, Decl(genericFunctionParametersConditionalType1.ts, 21, 19))
+>Map : Symbol(Map, Decl(genericFunctionParametersConditionalType1.ts, 8, 45))
+}
+
+type TestConstructorParameters = ConstructorParameters<typeof Test>;
+>TestConstructorParameters : Symbol(TestConstructorParameters, Decl(genericFunctionParametersConditionalType1.ts, 23, 1))
+>ConstructorParameters : Symbol(ConstructorParameters, Decl(lib.es5.d.ts, --, --))
+>Test : Symbol(Test, Decl(genericFunctionParametersConditionalType1.ts, 19, 100))
+
+declare class Animal { eat(): void; }
+>Animal : Symbol(Animal, Decl(genericFunctionParametersConditionalType1.ts, 25, 68))
+>eat : Symbol(Animal.eat, Decl(genericFunctionParametersConditionalType1.ts, 27, 22))
+
+declare class Cat extends Animal { meow(): void; }
+>Cat : Symbol(Cat, Decl(genericFunctionParametersConditionalType1.ts, 27, 37))
+>Animal : Symbol(Animal, Decl(genericFunctionParametersConditionalType1.ts, 25, 68))
+>meow : Symbol(Cat.meow, Decl(genericFunctionParametersConditionalType1.ts, 28, 34))
+
+declare class Dog extends Animal { bark(): void; }
+>Dog : Symbol(Dog, Decl(genericFunctionParametersConditionalType1.ts, 28, 50))
+>Animal : Symbol(Animal, Decl(genericFunctionParametersConditionalType1.ts, 25, 68))
+>bark : Symbol(Dog.bark, Decl(genericFunctionParametersConditionalType1.ts, 29, 34))
+
+type WithDistributiveConditionalDirectlyInParam = <T extends Cat | Dog>(
+>WithDistributiveConditionalDirectlyInParam : Symbol(WithDistributiveConditionalDirectlyInParam, Decl(genericFunctionParametersConditionalType1.ts, 29, 50))
+>T : Symbol(T, Decl(genericFunctionParametersConditionalType1.ts, 31, 51))
+>Cat : Symbol(Cat, Decl(genericFunctionParametersConditionalType1.ts, 27, 37))
+>Dog : Symbol(Dog, Decl(genericFunctionParametersConditionalType1.ts, 28, 50))
+
+  arg: T extends unknown ? T : never,
+>arg : Symbol(arg, Decl(genericFunctionParametersConditionalType1.ts, 31, 72))
+>T : Symbol(T, Decl(genericFunctionParametersConditionalType1.ts, 31, 51))
+>T : Symbol(T, Decl(genericFunctionParametersConditionalType1.ts, 31, 51))
+
+) => void;
+
+type Result1 = Parameters<WithDistributiveConditionalDirectlyInParam>;
+>Result1 : Symbol(Result1, Decl(genericFunctionParametersConditionalType1.ts, 33, 10))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>WithDistributiveConditionalDirectlyInParam : Symbol(WithDistributiveConditionalDirectlyInParam, Decl(genericFunctionParametersConditionalType1.ts, 29, 50))
+
+type WithDistributiveConditionalNested = <T extends Cat | Dog>(
+>WithDistributiveConditionalNested : Symbol(WithDistributiveConditionalNested, Decl(genericFunctionParametersConditionalType1.ts, 35, 70))
+>T : Symbol(T, Decl(genericFunctionParametersConditionalType1.ts, 37, 42))
+>Cat : Symbol(Cat, Decl(genericFunctionParametersConditionalType1.ts, 27, 37))
+>Dog : Symbol(Dog, Decl(genericFunctionParametersConditionalType1.ts, 28, 50))
+
+  arg: T extends unknown ? { animal: T } : never,
+>arg : Symbol(arg, Decl(genericFunctionParametersConditionalType1.ts, 37, 63))
+>T : Symbol(T, Decl(genericFunctionParametersConditionalType1.ts, 37, 42))
+>animal : Symbol(animal, Decl(genericFunctionParametersConditionalType1.ts, 38, 28))
+>T : Symbol(T, Decl(genericFunctionParametersConditionalType1.ts, 37, 42))
+
+) => void;
+
+type Result2 = Parameters<WithDistributiveConditionalNested>;
+>Result2 : Symbol(Result2, Decl(genericFunctionParametersConditionalType1.ts, 39, 10))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>WithDistributiveConditionalNested : Symbol(WithDistributiveConditionalNested, Decl(genericFunctionParametersConditionalType1.ts, 35, 70))
+
+type WithNonDistributiveConditionalNested = <T extends Cat | Dog>(
+>WithNonDistributiveConditionalNested : Symbol(WithNonDistributiveConditionalNested, Decl(genericFunctionParametersConditionalType1.ts, 41, 61))
+>T : Symbol(T, Decl(genericFunctionParametersConditionalType1.ts, 43, 45))
+>Cat : Symbol(Cat, Decl(genericFunctionParametersConditionalType1.ts, 27, 37))
+>Dog : Symbol(Dog, Decl(genericFunctionParametersConditionalType1.ts, 28, 50))
+
+  arg: [T] extends [unknown] ? { animal: T } : never,
+>arg : Symbol(arg, Decl(genericFunctionParametersConditionalType1.ts, 43, 66))
+>T : Symbol(T, Decl(genericFunctionParametersConditionalType1.ts, 43, 45))
+>animal : Symbol(animal, Decl(genericFunctionParametersConditionalType1.ts, 44, 32))
+>T : Symbol(T, Decl(genericFunctionParametersConditionalType1.ts, 43, 45))
+
+) => void;
+
+type Result3 = Parameters<WithNonDistributiveConditionalNested>;
+>Result3 : Symbol(Result3, Decl(genericFunctionParametersConditionalType1.ts, 45, 10))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>WithNonDistributiveConditionalNested : Symbol(WithNonDistributiveConditionalNested, Decl(genericFunctionParametersConditionalType1.ts, 41, 61))
+

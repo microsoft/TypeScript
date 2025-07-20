@@ -7102,11 +7102,12 @@ export const enum InferencePriority {
     ContravariantConditional     = 1 << 6,  // Conditional type in contravariant position
     ReturnType                   = 1 << 7,  // Inference made from return type of generic function
     LiteralKeyof                 = 1 << 8,  // Inference made from a string literal to a keyof T
-    NoConstraints                = 1 << 9,  // Don't infer from constraints of instantiable types
-    AlwaysStrict                 = 1 << 10, // Always use strict rules for contravariant inferences
-    MaxValue                     = 1 << 11, // Seed for inference priority tracking
+    DistributiveConditional      = 1 << 9,
+    NoConstraints                = 1 << 10,  // Don't infer from constraints of instantiable types
+    AlwaysStrict                 = 1 << 11, // Always use strict rules for contravariant inferences
+    MaxValue                     = 1 << 12, // Seed for inference priority tracking
 
-    PriorityImpliesCombination = ReturnType | MappedTypeConstraint | LiteralKeyof, // These priorities imply that the resulting type should be a combination of all candidates
+    PriorityImpliesCombination = ReturnType | MappedTypeConstraint | LiteralKeyof | DistributiveConditional, // These priorities imply that the resulting type should be a combination of all candidates
     Circularity = -1,  // Inference circularity (value less than all other priorities)
 }
 
@@ -7118,6 +7119,7 @@ export interface InferenceInfo {
     contraCandidates: Type[] | undefined;    // Candidates in contravariant positions (or undefined)
     inferredType?: Type;                     // Cache for resolved inferred type
     priority?: InferencePriority;            // Priority of current inference set
+    individualPriority?: InferencePriority;
     topLevel: boolean;                       // True if all inferences are to top level occurrences
     isFixed: boolean;                        // True if inferences are fixed
     impliedArity?: number;
