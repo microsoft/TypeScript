@@ -36071,7 +36071,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // parameter types yet and therefore excess property checks may yield false positives (see #17041).
                 // Also skip fresh literal checking when the call is in certain destructuring contexts that can cause
                 // incorrect excess property errors (see #41548).
-                const shouldSkipFreshness = (checkMode & CheckMode.SkipContextSensitive) || 
+                const shouldSkipFreshness = (checkMode & CheckMode.SkipContextSensitive) ||
                     (isCallExpression(node) && isCallInProblematicDestructuringContext(node));
                 const checkArgType = shouldSkipFreshness ? getRegularTypeOfObjectLiteral(argType) : argType;
                 const effectiveCheckArgumentNode = getEffectiveCheckNode(arg);
@@ -36438,7 +36438,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
         }
-        
+
         // Check for assignment expressions: [a, b, c] = foo()
         if (parent && isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken && parent.right === node) {
             if (isArrayLiteralExpression(parent.left)) {
@@ -36452,7 +36452,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
         }
-        
+
         return false;
     }
 
