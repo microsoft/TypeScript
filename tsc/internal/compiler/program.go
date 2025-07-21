@@ -604,7 +604,6 @@ func (p *Program) verifyCompilerOptions() {
 		}
 		for i, subst := range value {
 			if !hasZeroOrOneAsteriskCharacter(subst) {
-				fmt.Println(key, value, i, subst)
 				createDiagnosticForOptionPathKeyValue(key, i, diagnostics.Substitution_0_in_pattern_1_can_have_at_most_one_Asterisk_character, subst, key)
 			}
 			if !tspath.PathIsRelative(subst) && !tspath.PathIsAbsolute(subst) {
