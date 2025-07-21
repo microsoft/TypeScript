@@ -31860,7 +31860,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (parent.name.kind === SyntaxKind.ArrayBindingPattern) {
             const index = indexOfNode(declaration.parent.elements, declaration);
             if (index < 0) return undefined;
-            return getContextualTypeForElementExpression(parentType, index);
+            return getContextualTypeForElementExpression(parentType, index, declaration.parent.elements.length);
         }
         const nameType = getLiteralTypeFromPropertyName(name);
         if (isTypeUsableAsPropertyName(nameType)) {
@@ -36069,11 +36069,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // If one or more arguments are still excluded (as indicated by CheckMode.SkipContextSensitive),
                 // we obtain the regular type of any object literal arguments because we may not have inferred complete
                 // parameter types yet and therefore excess property checks may yield false positives (see #17041).
-                // Also skip fresh literal checking when the call is in certain destructuring contexts that can cause
-                // incorrect excess property errors (see #41548).
-                const shouldSkipFreshness = (checkMode & CheckMode.SkipContextSensitive) ||
-                    (isCallExpression(node) && isCallInProblematicDestructuringContext(node));
-                const checkArgType = shouldSkipFreshness ? getRegularTypeOfObjectLiteral(argType) : argType;
+                const checkArgType = checkMode & CheckMode.SkipContextSensitive ? getRegularTypeOfObjectLiteral(argType) : argType;
                 const effectiveCheckArgumentNode = getEffectiveCheckNode(arg);
                 if (!checkTypeRelatedToAndOptionallyElaborate(checkArgType, paramType, relation, reportErrors ? effectiveCheckArgumentNode : undefined, effectiveCheckArgumentNode, headMessage, containingMessageChain, errorOutputContainer)) {
                     Debug.assert(!reportErrors || !!errorOutputContainer.errors, "parameter should have errors when reporting errors");
@@ -36419,24 +36415,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return createDiagnosticForNodeArrayFromMessageChain(getSourceFileOfNode(node), typeArguments, chain);
         }
         return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_arguments_but_got_1, belowArgCount === -Infinity ? aboveArgCount : belowArgCount, argCount);
-    }
-
-    function isCallInProblematicDestructuringContext(node: CallLikeExpression): boolean {
-        // Check if this call expression is used as the initializer in a variable declaration with a destructuring pattern
-        const parent = node.parent;
-        if (parent && isVariableDeclaration(parent) && parent.initializer === node) {
-            if (isArrayBindingPattern(parent.name)) {
-                // Only apply this fix for the specific known problematic case:
-                // destructuring where the third position (index 2) is accessed
-                const elements = parent.name.elements;
-                return elements.length === 3 && 
-                       isOmittedExpression(elements[0]) && 
-                       isOmittedExpression(elements[1]) && 
-                       !isOmittedExpression(elements[2]);
-            }
-        }
-        
-        return false;
     }
 
     function resolveCall(node: CallLikeExpression, signatures: readonly Signature[], candidatesOutArray: Signature[] | undefined, checkMode: CheckMode, callChainFlags: SignatureFlags, headMessage?: DiagnosticMessage): Signature {
