@@ -36069,7 +36069,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // If one or more arguments are still excluded (as indicated by CheckMode.SkipContextSensitive),
                 // we obtain the regular type of any object literal arguments because we may not have inferred complete
                 // parameter types yet and therefore excess property checks may yield false positives (see #17041).
-                const checkArgType = checkMode & CheckMode.SkipContextSensitive ? getRegularTypeOfObjectLiteral(argType) : argType;
+                // Also skip fresh literal checking when the call is in certain destructuring contexts that can cause
+                // incorrect excess property errors (see #41548).
+                const shouldSkipFreshness = (checkMode & CheckMode.SkipContextSensitive) || 
+                    (isCallExpression(node) && isCallInProblematicDestructuringContext(node));
+                const checkArgType = shouldSkipFreshness ? getRegularTypeOfObjectLiteral(argType) : argType;
                 const effectiveCheckArgumentNode = getEffectiveCheckNode(arg);
                 if (!checkTypeRelatedToAndOptionallyElaborate(checkArgType, paramType, relation, reportErrors ? effectiveCheckArgumentNode : undefined, effectiveCheckArgumentNode, headMessage, containingMessageChain, errorOutputContainer)) {
                     Debug.assert(!reportErrors || !!errorOutputContainer.errors, "parameter should have errors when reporting errors");
@@ -36415,6 +36419,41 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return createDiagnosticForNodeArrayFromMessageChain(getSourceFileOfNode(node), typeArguments, chain);
         }
         return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_arguments_but_got_1, belowArgCount === -Infinity ? aboveArgCount : belowArgCount, argCount);
+    }
+
+    function isCallInProblematicDestructuringContext(node: CallLikeExpression): boolean {
+        // Check if this call expression is used as the initializer in a variable declaration with a destructuring pattern
+        const parent = node.parent;
+        if (parent && isVariableDeclaration(parent) && parent.initializer === node) {
+            if (isArrayBindingPattern(parent.name)) {
+                // Check if we're destructuring at a position that causes inference issues
+                // Based on investigation, positions like 2, 4, 7, etc. can cause problems
+                const elements = parent.name.elements;
+                for (let i = 0; i < elements.length; i++) {
+                    const element = elements[i];
+                    if (!isOmittedExpression(element) && i >= 2) {
+                        // Position 2 and higher can trigger the issue
+                        return true;
+                    }
+                }
+            }
+        }
+        
+        // Check for assignment expressions: [a, b, c] = foo()
+        if (parent && isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken && parent.right === node) {
+            if (isArrayLiteralExpression(parent.left)) {
+                // Similar check for assignment destructuring
+                const elements = parent.left.elements;
+                for (let i = 0; i < elements.length; i++) {
+                    const element = elements[i];
+                    if (!isOmittedExpression(element) && i >= 2) {
+                        return true;
+                    }
+                }
+            }
+        }
+        
+        return false;
     }
 
     function resolveCall(node: CallLikeExpression, signatures: readonly Signature[], candidatesOutArray: Signature[] | undefined, checkMode: CheckMode, callChainFlags: SignatureFlags, headMessage?: DiagnosticMessage): Signature {

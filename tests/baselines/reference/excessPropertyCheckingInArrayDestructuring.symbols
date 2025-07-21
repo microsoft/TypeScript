@@ -1,0 +1,88 @@
+//// [tests/cases/compiler/excessPropertyCheckingInArrayDestructuring.ts] ////
+
+=== excessPropertyCheckingInArrayDestructuring.ts ===
+declare function foo<T extends { dataType: 'a' | 'b' }>(template: T): [T, any, any];
+>foo : Symbol(foo, Decl(excessPropertyCheckingInArrayDestructuring.ts, 0, 0))
+>T : Symbol(T, Decl(excessPropertyCheckingInArrayDestructuring.ts, 0, 21))
+>dataType : Symbol(dataType, Decl(excessPropertyCheckingInArrayDestructuring.ts, 0, 32))
+>template : Symbol(template, Decl(excessPropertyCheckingInArrayDestructuring.ts, 0, 56))
+>T : Symbol(T, Decl(excessPropertyCheckingInArrayDestructuring.ts, 0, 21))
+>T : Symbol(T, Decl(excessPropertyCheckingInArrayDestructuring.ts, 0, 21))
+
+declare function bar<T extends { dataType: 'a' | 'b' }>(template: T): [any, T, any];
+>bar : Symbol(bar, Decl(excessPropertyCheckingInArrayDestructuring.ts, 0, 84))
+>T : Symbol(T, Decl(excessPropertyCheckingInArrayDestructuring.ts, 1, 21))
+>dataType : Symbol(dataType, Decl(excessPropertyCheckingInArrayDestructuring.ts, 1, 32))
+>template : Symbol(template, Decl(excessPropertyCheckingInArrayDestructuring.ts, 1, 56))
+>T : Symbol(T, Decl(excessPropertyCheckingInArrayDestructuring.ts, 1, 21))
+>T : Symbol(T, Decl(excessPropertyCheckingInArrayDestructuring.ts, 1, 21))
+
+// Test cases that should work (no excess property errors)
+const [, works1] = foo({ dataType: 'a', day: 0 });
+>works1 : Symbol(works1, Decl(excessPropertyCheckingInArrayDestructuring.ts, 4, 8))
+>foo : Symbol(foo, Decl(excessPropertyCheckingInArrayDestructuring.ts, 0, 0))
+>dataType : Symbol(dataType, Decl(excessPropertyCheckingInArrayDestructuring.ts, 4, 24))
+>day : Symbol(day, Decl(excessPropertyCheckingInArrayDestructuring.ts, 4, 39))
+
+const [, , works2] = foo({ dataType: 'a', day: 0 });
+>works2 : Symbol(works2, Decl(excessPropertyCheckingInArrayDestructuring.ts, 5, 10))
+>foo : Symbol(foo, Decl(excessPropertyCheckingInArrayDestructuring.ts, 0, 0))
+>dataType : Symbol(dataType, Decl(excessPropertyCheckingInArrayDestructuring.ts, 5, 26))
+>day : Symbol(day, Decl(excessPropertyCheckingInArrayDestructuring.ts, 5, 41))
+
+const [, , , works3] = foo({ dataType: 'a', day: 0 });
+>works3 : Symbol(works3, Decl(excessPropertyCheckingInArrayDestructuring.ts, 6, 12))
+>foo : Symbol(foo, Decl(excessPropertyCheckingInArrayDestructuring.ts, 0, 0))
+>dataType : Symbol(dataType, Decl(excessPropertyCheckingInArrayDestructuring.ts, 6, 28))
+>day : Symbol(day, Decl(excessPropertyCheckingInArrayDestructuring.ts, 6, 43))
+
+// Test with different function signatures
+const [, , works4] = bar({ dataType: 'b', extra: 'value' });
+>works4 : Symbol(works4, Decl(excessPropertyCheckingInArrayDestructuring.ts, 9, 10))
+>bar : Symbol(bar, Decl(excessPropertyCheckingInArrayDestructuring.ts, 0, 84))
+>dataType : Symbol(dataType, Decl(excessPropertyCheckingInArrayDestructuring.ts, 9, 26))
+>extra : Symbol(extra, Decl(excessPropertyCheckingInArrayDestructuring.ts, 9, 41))
+
+// Test assignment destructuring
+let a: any, b: any, c: any;
+>a : Symbol(a, Decl(excessPropertyCheckingInArrayDestructuring.ts, 12, 3))
+>b : Symbol(b, Decl(excessPropertyCheckingInArrayDestructuring.ts, 12, 11))
+>c : Symbol(c, Decl(excessPropertyCheckingInArrayDestructuring.ts, 12, 19))
+
+[, , a] = foo({ dataType: 'a', day: 0 });
+>a : Symbol(a, Decl(excessPropertyCheckingInArrayDestructuring.ts, 12, 3))
+>foo : Symbol(foo, Decl(excessPropertyCheckingInArrayDestructuring.ts, 0, 0))
+>dataType : Symbol(dataType, Decl(excessPropertyCheckingInArrayDestructuring.ts, 13, 15))
+>day : Symbol(day, Decl(excessPropertyCheckingInArrayDestructuring.ts, 13, 30))
+
+[, b, ] = foo({ dataType: 'a', day: 0 });
+>b : Symbol(b, Decl(excessPropertyCheckingInArrayDestructuring.ts, 12, 11))
+>foo : Symbol(foo, Decl(excessPropertyCheckingInArrayDestructuring.ts, 0, 0))
+>dataType : Symbol(dataType, Decl(excessPropertyCheckingInArrayDestructuring.ts, 14, 15))
+>day : Symbol(day, Decl(excessPropertyCheckingInArrayDestructuring.ts, 14, 30))
+
+// Test that legitimate errors are still caught
+const [, , fails1] = foo({ dataType: 'c' }); // Error: 'c' not assignable to 'a' | 'b'
+>fails1 : Symbol(fails1, Decl(excessPropertyCheckingInArrayDestructuring.ts, 17, 10))
+>foo : Symbol(foo, Decl(excessPropertyCheckingInArrayDestructuring.ts, 0, 0))
+>dataType : Symbol(dataType, Decl(excessPropertyCheckingInArrayDestructuring.ts, 17, 26))
+
+const [, , fails2] = foo(123); // Error: number not assignable to constraint
+>fails2 : Symbol(fails2, Decl(excessPropertyCheckingInArrayDestructuring.ts, 18, 10))
+>foo : Symbol(foo, Decl(excessPropertyCheckingInArrayDestructuring.ts, 0, 0))
+
+// Test that non-destructuring cases work as before
+const result = foo({ dataType: 'a', day: 0 }); // Should work
+>result : Symbol(result, Decl(excessPropertyCheckingInArrayDestructuring.ts, 21, 5))
+>foo : Symbol(foo, Decl(excessPropertyCheckingInArrayDestructuring.ts, 0, 0))
+>dataType : Symbol(dataType, Decl(excessPropertyCheckingInArrayDestructuring.ts, 21, 20))
+>day : Symbol(day, Decl(excessPropertyCheckingInArrayDestructuring.ts, 21, 35))
+
+const explicit: [{ dataType: 'a', day: number }, any, any] = foo({ dataType: 'a', day: 0 }); // Should work
+>explicit : Symbol(explicit, Decl(excessPropertyCheckingInArrayDestructuring.ts, 22, 5))
+>dataType : Symbol(dataType, Decl(excessPropertyCheckingInArrayDestructuring.ts, 22, 18))
+>day : Symbol(day, Decl(excessPropertyCheckingInArrayDestructuring.ts, 22, 33))
+>foo : Symbol(foo, Decl(excessPropertyCheckingInArrayDestructuring.ts, 0, 0))
+>dataType : Symbol(dataType, Decl(excessPropertyCheckingInArrayDestructuring.ts, 22, 66))
+>day : Symbol(day, Decl(excessPropertyCheckingInArrayDestructuring.ts, 22, 81))
+

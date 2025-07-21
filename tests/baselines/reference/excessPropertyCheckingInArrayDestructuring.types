@@ -1,0 +1,242 @@
+//// [tests/cases/compiler/excessPropertyCheckingInArrayDestructuring.ts] ////
+
+=== excessPropertyCheckingInArrayDestructuring.ts ===
+declare function foo<T extends { dataType: 'a' | 'b' }>(template: T): [T, any, any];
+>foo : <T extends { dataType: "a" | "b"; }>(template: T) => [T, any, any]
+>    : ^ ^^^^^^^^^                        ^^        ^^ ^^^^^             
+>dataType : "a" | "b"
+>         : ^^^^^^^^^
+>template : T
+>         : ^
+
+declare function bar<T extends { dataType: 'a' | 'b' }>(template: T): [any, T, any];
+>bar : <T extends { dataType: "a" | "b"; }>(template: T) => [any, T, any]
+>    : ^ ^^^^^^^^^                        ^^        ^^ ^^^^^             
+>dataType : "a" | "b"
+>         : ^^^^^^^^^
+>template : T
+>         : ^
+
+// Test cases that should work (no excess property errors)
+const [, works1] = foo({ dataType: 'a', day: 0 });
+> : undefined
+> : ^^^^^^^^^
+>works1 : any
+>       : ^^^
+>foo({ dataType: 'a', day: 0 }) : [{ dataType: "a"; day: number; }, any, any]
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : <T extends { dataType: "a" | "b"; }>(template: T) => [T, any, any]
+>    : ^ ^^^^^^^^^                        ^^        ^^ ^^^^^             
+>{ dataType: 'a', day: 0 } : { dataType: "a"; day: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dataType : "a"
+>         : ^^^
+>'a' : "a"
+>    : ^^^
+>day : number
+>    : ^^^^^^
+>0 : 0
+>  : ^
+
+const [, , works2] = foo({ dataType: 'a', day: 0 });
+> : undefined
+> : ^^^^^^^^^
+> : undefined
+> : ^^^^^^^^^
+>works2 : any
+>       : ^^^
+>foo({ dataType: 'a', day: 0 }) : [{ dataType: "a" | "b"; }, any, any]
+>                               : ^^^^^^^^^^^^^         ^^^^^^^^^^^^^^
+>foo : <T extends { dataType: "a" | "b"; }>(template: T) => [T, any, any]
+>    : ^ ^^^^^^^^^                        ^^        ^^ ^^^^^             
+>{ dataType: 'a', day: 0 } : { dataType: "a"; day: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dataType : "a"
+>         : ^^^
+>'a' : "a"
+>    : ^^^
+>day : number
+>    : ^^^^^^
+>0 : 0
+>  : ^
+
+const [, , , works3] = foo({ dataType: 'a', day: 0 });
+> : undefined
+> : ^^^^^^^^^
+> : undefined
+> : ^^^^^^^^^
+> : undefined
+> : ^^^^^^^^^
+>works3 : undefined
+>       : ^^^^^^^^^
+>foo({ dataType: 'a', day: 0 }) : [{ dataType: "a"; day: number; }, any, any]
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : <T extends { dataType: "a" | "b"; }>(template: T) => [T, any, any]
+>    : ^ ^^^^^^^^^                        ^^        ^^ ^^^^^             
+>{ dataType: 'a', day: 0 } : { dataType: "a"; day: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dataType : "a"
+>         : ^^^
+>'a' : "a"
+>    : ^^^
+>day : number
+>    : ^^^^^^
+>0 : 0
+>  : ^
+
+// Test with different function signatures
+const [, , works4] = bar({ dataType: 'b', extra: 'value' });
+> : undefined
+> : ^^^^^^^^^
+> : undefined
+> : ^^^^^^^^^
+>works4 : any
+>       : ^^^
+>bar({ dataType: 'b', extra: 'value' }) : [any, { dataType: "a" | "b"; }, any]
+>                                       : ^^^^^^^^^^^^^^^^^^         ^^^^^^^^^
+>bar : <T extends { dataType: "a" | "b"; }>(template: T) => [any, T, any]
+>    : ^ ^^^^^^^^^                        ^^        ^^ ^^^^^             
+>{ dataType: 'b', extra: 'value' } : { dataType: "b"; extra: string; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dataType : "b"
+>         : ^^^
+>'b' : "b"
+>    : ^^^
+>extra : string
+>      : ^^^^^^
+>'value' : "value"
+>        : ^^^^^^^
+
+// Test assignment destructuring
+let a: any, b: any, c: any;
+>a : any
+>  : ^^^
+>b : any
+>  : ^^^
+>c : any
+>  : ^^^
+
+[, , a] = foo({ dataType: 'a', day: 0 });
+>[, , a] = foo({ dataType: 'a', day: 0 }) : [{ dataType: "a"; day: number; }, any, any]
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[, , a] : [undefined, undefined, any]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> : undefined
+> : ^^^^^^^^^
+> : undefined
+> : ^^^^^^^^^
+>a : any
+>  : ^^^
+>foo({ dataType: 'a', day: 0 }) : [{ dataType: "a"; day: number; }, any, any]
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : <T extends { dataType: "a" | "b"; }>(template: T) => [T, any, any]
+>    : ^ ^^^^^^^^^                        ^^        ^^ ^^^^^             
+>{ dataType: 'a', day: 0 } : { dataType: "a"; day: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dataType : "a"
+>         : ^^^
+>'a' : "a"
+>    : ^^^
+>day : number
+>    : ^^^^^^
+>0 : 0
+>  : ^
+
+[, b, ] = foo({ dataType: 'a', day: 0 });
+>[, b, ] = foo({ dataType: 'a', day: 0 }) : [{ dataType: "a"; day: number; }, any, any]
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[, b, ] : [undefined, any]
+>        : ^^^^^^^^^^^^^^^^
+> : undefined
+> : ^^^^^^^^^
+>b : any
+>  : ^^^
+>foo({ dataType: 'a', day: 0 }) : [{ dataType: "a"; day: number; }, any, any]
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : <T extends { dataType: "a" | "b"; }>(template: T) => [T, any, any]
+>    : ^ ^^^^^^^^^                        ^^        ^^ ^^^^^             
+>{ dataType: 'a', day: 0 } : { dataType: "a"; day: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dataType : "a"
+>         : ^^^
+>'a' : "a"
+>    : ^^^
+>day : number
+>    : ^^^^^^
+>0 : 0
+>  : ^
+
+// Test that legitimate errors are still caught
+const [, , fails1] = foo({ dataType: 'c' }); // Error: 'c' not assignable to 'a' | 'b'
+> : undefined
+> : ^^^^^^^^^
+> : undefined
+> : ^^^^^^^^^
+>fails1 : any
+>       : ^^^
+>foo({ dataType: 'c' }) : [{ dataType: "a" | "b"; }, any, any]
+>                       : ^^^^^^^^^^^^^         ^^^^^^^^^^^^^^
+>foo : <T extends { dataType: "a" | "b"; }>(template: T) => [T, any, any]
+>    : ^ ^^^^^^^^^                        ^^        ^^ ^^^^^             
+>{ dataType: 'c' } : { dataType: "c"; }
+>                  : ^^^^^^^^^^^^^^^^^^
+>dataType : "c"
+>         : ^^^
+>'c' : "c"
+>    : ^^^
+
+const [, , fails2] = foo(123); // Error: number not assignable to constraint
+> : undefined
+> : ^^^^^^^^^
+> : undefined
+> : ^^^^^^^^^
+>fails2 : any
+>       : ^^^
+>foo(123) : [{ dataType: "a" | "b"; }, any, any]
+>         : ^^^^^^^^^^^^^         ^^^^^^^^^^^^^^
+>foo : <T extends { dataType: "a" | "b"; }>(template: T) => [T, any, any]
+>    : ^ ^^^^^^^^^                        ^^        ^^ ^^^^^             
+>123 : 123
+>    : ^^^
+
+// Test that non-destructuring cases work as before
+const result = foo({ dataType: 'a', day: 0 }); // Should work
+>result : [{ dataType: "a"; day: number; }, any, any]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo({ dataType: 'a', day: 0 }) : [{ dataType: "a"; day: number; }, any, any]
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : <T extends { dataType: "a" | "b"; }>(template: T) => [T, any, any]
+>    : ^ ^^^^^^^^^                        ^^        ^^ ^^^^^             
+>{ dataType: 'a', day: 0 } : { dataType: "a"; day: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dataType : "a"
+>         : ^^^
+>'a' : "a"
+>    : ^^^
+>day : number
+>    : ^^^^^^
+>0 : 0
+>  : ^
+
+const explicit: [{ dataType: 'a', day: number }, any, any] = foo({ dataType: 'a', day: 0 }); // Should work
+>explicit : [{ dataType: "a"; day: number; }, any, any]
+>         : ^^^^^^^^^^^^^   ^^^^^^^      ^^^^^^^^^^^^^^
+>dataType : "a"
+>         : ^^^
+>day : number
+>    : ^^^^^^
+>foo({ dataType: 'a', day: 0 }) : [{ dataType: "a"; day: number; }, any, any]
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : <T extends { dataType: "a" | "b"; }>(template: T) => [T, any, any]
+>    : ^ ^^^^^^^^^                        ^^        ^^ ^^^^^             
+>{ dataType: 'a', day: 0 } : { dataType: "a"; day: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dataType : "a"
+>         : ^^^
+>'a' : "a"
+>    : ^^^
+>day : number
+>    : ^^^^^^
+>0 : 0
+>  : ^
+
