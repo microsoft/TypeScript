@@ -36069,11 +36069,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // If one or more arguments are still excluded (as indicated by CheckMode.SkipContextSensitive),
                 // we obtain the regular type of any object literal arguments because we may not have inferred complete
                 // parameter types yet and therefore excess property checks may yield false positives (see #17041).
-                // Also skip fresh literal checking when the call is in a destructuring context to avoid inappropriate
-                // excess property checking (see #41548).
-                const shouldSkipFreshness = (checkMode & CheckMode.SkipContextSensitive) ||
-                    (isCallExpression(node) && isCallInDestructuringContext(node));
-                const checkArgType = shouldSkipFreshness ? getRegularTypeOfObjectLiteral(argType) : argType;
+                const checkArgType = checkMode & CheckMode.SkipContextSensitive ? getRegularTypeOfObjectLiteral(argType) : argType;
                 const effectiveCheckArgumentNode = getEffectiveCheckNode(arg);
                 if (!checkTypeRelatedToAndOptionallyElaborate(checkArgType, paramType, relation, reportErrors ? effectiveCheckArgumentNode : undefined, effectiveCheckArgumentNode, headMessage, containingMessageChain, errorOutputContainer)) {
                     Debug.assert(!reportErrors || !!errorOutputContainer.errors, "parameter should have errors when reporting errors");
@@ -36421,21 +36417,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_arguments_but_got_1, belowArgCount === -Infinity ? aboveArgCount : belowArgCount, argCount);
     }
 
-    function isCallInDestructuringContext(node: CallLikeExpression): boolean {
-        // Check if this call expression is used as the initializer in a variable declaration with a destructuring pattern
-        const parent = node.parent;
-        if (parent && isVariableDeclaration(parent) && parent.initializer === node) {
-            return isBindingPattern(parent.name);
-        }
-
-        // Check for assignment expressions: [a, b] = foo()
-        if (parent && isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken && parent.right === node) {
-            return isArrayLiteralExpression(parent.left) || isObjectLiteralExpression(parent.left);
-        }
-
-        return false;
-    }
-
     function resolveCall(node: CallLikeExpression, signatures: readonly Signature[], candidatesOutArray: Signature[] | undefined, checkMode: CheckMode, callChainFlags: SignatureFlags, headMessage?: DiagnosticMessage): Signature {
         const isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
         const isDecorator = node.kind === SyntaxKind.Decorator;
@@ -36508,16 +36489,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // For a decorator, no arguments are susceptible to contextual typing due to the fact
         // decorators are applied to a declaration by the emitter, and not to an expression.
         const isSingleNonGenericCandidate = candidates.length === 1 && !candidates[0].typeParameters;
-        let shouldSkipContextSensitive = !isDecorator && !isSingleNonGenericCandidate && some(args, isContextSensitive);
-
-        // Also skip context sensitive checking when the call is used in a destructuring context
-        // to avoid inappropriate excess property checking on object literal arguments
-        const isInDestructuring = !isDecorator && isCallInDestructuringContext(node);
-        if (isInDestructuring && !shouldSkipContextSensitive) {
-            shouldSkipContextSensitive = true;
-        }
-
-        if (shouldSkipContextSensitive) {
+        if (!isDecorator && !isSingleNonGenericCandidate && some(args, isContextSensitive)) {
             argCheckMode = CheckMode.SkipContextSensitive;
         }
 
@@ -36706,7 +36678,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (some(typeArguments) || !hasCorrectArity(node, args, candidate, signatureHelpTrailingComma)) {
                     return undefined;
                 }
-                if (getSignatureApplicabilityError(node, args, candidate, relation, argCheckMode, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
+                if (getSignatureApplicabilityError(node, args, candidate, relation, CheckMode.Normal, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
                     candidatesForArgumentError = [candidate];
                     return undefined;
                 }
