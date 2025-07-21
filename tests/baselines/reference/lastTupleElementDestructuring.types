@@ -1,0 +1,248 @@
+//// [tests/cases/compiler/lastTupleElementDestructuring.ts] ////
+
+=== lastTupleElementDestructuring.ts ===
+// Test for fixing excess property checking when accessing last tuple element in destructuring
+// Fixes https://github.com/microsoft/TypeScript/issues/41548
+
+declare function foo<T extends { dataType: 'a' | 'b' }>(template: T): [T, any, any];
+>foo : <T extends { dataType: "a" | "b"; }>(template: T) => [T, any, any]
+>    : ^ ^^^^^^^^^                        ^^        ^^ ^^^^^             
+>dataType : "a" | "b"
+>         : ^^^^^^^^^
+>template : T
+>         : ^
+
+declare function bar<T extends { dataType: 'a' | 'b' }>(template: T): [T, any, any, any];
+>bar : <T extends { dataType: "a" | "b"; }>(template: T) => [T, any, any, any]
+>    : ^ ^^^^^^^^^                        ^^        ^^ ^^^^^                  
+>dataType : "a" | "b"
+>         : ^^^^^^^^^
+>template : T
+>         : ^
+
+// Cases that should NOT error after fix (accessing last element)
+const [, , last1] = foo({ dataType: 'a', day: 0 });
+> : undefined
+> : ^^^^^^^^^
+> : undefined
+> : ^^^^^^^^^
+>last1 : any
+>      : ^^^
+>foo({ dataType: 'a', day: 0 }) : [{ dataType: "a" | "b"; }, any, any]
+>                               : ^^^^^^^^^^^^^         ^^^^^^^^^^^^^^
+>foo : <T extends { dataType: "a" | "b"; }>(template: T) => [T, any, any]
+>    : ^ ^^^^^^^^^                        ^^        ^^ ^^^^^             
+>{ dataType: 'a', day: 0 } : { dataType: "a"; day: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dataType : "a"
+>         : ^^^
+>'a' : "a"
+>    : ^^^
+>day : number
+>    : ^^^^^^
+>0 : 0
+>  : ^
+
+const [,,last2] = foo({ dataType: 'a', day: 0 });
+> : undefined
+> : ^^^^^^^^^
+> : undefined
+> : ^^^^^^^^^
+>last2 : any
+>      : ^^^
+>foo({ dataType: 'a', day: 0 }) : [{ dataType: "a" | "b"; }, any, any]
+>                               : ^^^^^^^^^^^^^         ^^^^^^^^^^^^^^
+>foo : <T extends { dataType: "a" | "b"; }>(template: T) => [T, any, any]
+>    : ^ ^^^^^^^^^                        ^^        ^^ ^^^^^             
+>{ dataType: 'a', day: 0 } : { dataType: "a"; day: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dataType : "a"
+>         : ^^^
+>'a' : "a"
+>    : ^^^
+>day : number
+>    : ^^^^^^
+>0 : 0
+>  : ^
+
+const [,,,last3] = bar({ dataType: 'a', day: 0 });
+> : undefined
+> : ^^^^^^^^^
+> : undefined
+> : ^^^^^^^^^
+> : undefined
+> : ^^^^^^^^^
+>last3 : any
+>      : ^^^
+>bar({ dataType: 'a', day: 0 }) : [{ dataType: "a" | "b"; }, any, any, any]
+>                               : ^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^
+>bar : <T extends { dataType: "a" | "b"; }>(template: T) => [T, any, any, any]
+>    : ^ ^^^^^^^^^                        ^^        ^^ ^^^^^                  
+>{ dataType: 'a', day: 0 } : { dataType: "a"; day: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dataType : "a"
+>         : ^^^
+>'a' : "a"
+>    : ^^^
+>day : number
+>    : ^^^^^^
+>0 : 0
+>  : ^
+
+// Cases that already worked (not accessing last element)
+const [, mid1, ] = foo({ dataType: 'a', day: 0 });
+> : undefined
+> : ^^^^^^^^^
+>mid1 : any
+>     : ^^^
+>foo({ dataType: 'a', day: 0 }) : [{ dataType: "a"; day: number; }, any, any]
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : <T extends { dataType: "a" | "b"; }>(template: T) => [T, any, any]
+>    : ^ ^^^^^^^^^                        ^^        ^^ ^^^^^             
+>{ dataType: 'a', day: 0 } : { dataType: "a"; day: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dataType : "a"
+>         : ^^^
+>'a' : "a"
+>    : ^^^
+>day : number
+>    : ^^^^^^
+>0 : 0
+>  : ^
+
+const [first1, , ] = foo({ dataType: 'a', day: 0 });
+>first1 : { dataType: "a"; day: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> : undefined
+> : ^^^^^^^^^
+>foo({ dataType: 'a', day: 0 }) : [{ dataType: "a"; day: number; }, any, any]
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : <T extends { dataType: "a" | "b"; }>(template: T) => [T, any, any]
+>    : ^ ^^^^^^^^^                        ^^        ^^ ^^^^^             
+>{ dataType: 'a', day: 0 } : { dataType: "a"; day: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dataType : "a"
+>         : ^^^
+>'a' : "a"
+>    : ^^^
+>day : number
+>    : ^^^^^^
+>0 : 0
+>  : ^
+
+const [,,third,] = bar({ dataType: 'a', day: 0 });
+> : undefined
+> : ^^^^^^^^^
+> : undefined
+> : ^^^^^^^^^
+>third : any
+>      : ^^^
+>bar({ dataType: 'a', day: 0 }) : [{ dataType: "a"; day: number; }, any, any, any]
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : <T extends { dataType: "a" | "b"; }>(template: T) => [T, any, any, any]
+>    : ^ ^^^^^^^^^                        ^^        ^^ ^^^^^                  
+>{ dataType: 'a', day: 0 } : { dataType: "a"; day: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dataType : "a"
+>         : ^^^
+>'a' : "a"
+>    : ^^^
+>day : number
+>    : ^^^^^^
+>0 : 0
+>  : ^
+
+// Legitimate errors should still be caught
+const [, , last4] = foo({ dataType: 'c' }); // Error: 'c' not assignable to 'a' | 'b'
+> : undefined
+> : ^^^^^^^^^
+> : undefined
+> : ^^^^^^^^^
+>last4 : any
+>      : ^^^
+>foo({ dataType: 'c' }) : [{ dataType: "a" | "b"; }, any, any]
+>                       : ^^^^^^^^^^^^^         ^^^^^^^^^^^^^^
+>foo : <T extends { dataType: "a" | "b"; }>(template: T) => [T, any, any]
+>    : ^ ^^^^^^^^^                        ^^        ^^ ^^^^^             
+>{ dataType: 'c' } : { dataType: "c"; }
+>                  : ^^^^^^^^^^^^^^^^^^
+>dataType : "c"
+>         : ^^^
+>'c' : "c"
+>    : ^^^
+
+const [,,,last5] = bar({ notDataType: 'a' }); // Error: missing required property 'dataType'
+> : undefined
+> : ^^^^^^^^^
+> : undefined
+> : ^^^^^^^^^
+> : undefined
+> : ^^^^^^^^^
+>last5 : any
+>      : ^^^
+>bar({ notDataType: 'a' }) : [{ dataType: "a" | "b"; }, any, any, any]
+>                          : ^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^
+>bar : <T extends { dataType: "a" | "b"; }>(template: T) => [T, any, any, any]
+>    : ^ ^^^^^^^^^                        ^^        ^^ ^^^^^                  
+>{ notDataType: 'a' } : { notDataType: string; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>notDataType : string
+>            : ^^^^^^
+>'a' : "a"
+>    : ^^^
+
+// Test with more complex object properties
+interface Config {
+    required: string;
+>required : string
+>         : ^^^^^^
+
+    optional?: number;
+>optional : number
+>         : ^^^^^^
+}
+
+declare function withConfig<T extends Config>(template: T): [T, string];
+>withConfig : <T extends Config>(template: T) => [T, string]
+>           : ^ ^^^^^^^^^      ^^        ^^ ^^^^^           
+>template : T
+>         : ^
+
+// Should work - accessing last element with extra property
+const [,configStr] = withConfig({ required: 'test', extra: 'should work' });
+> : undefined
+> : ^^^^^^^^^
+>configStr : string
+>          : ^^^^^^
+>withConfig({ required: 'test', extra: 'should work' }) : [{ required: string; extra: string; }, string]
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>withConfig : <T extends Config>(template: T) => [T, string]
+>           : ^ ^^^^^^^^^      ^^        ^^ ^^^^^           
+>{ required: 'test', extra: 'should work' } : { required: string; extra: string; }
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>required : string
+>         : ^^^^^^
+>'test' : "test"
+>       : ^^^^^^
+>extra : string
+>      : ^^^^^^
+>'should work' : "should work"
+>              : ^^^^^^^^^^^^^
+
+// Should still error - missing required property
+const [,configStr2] = withConfig({ optional: 42 }); // Error: missing 'required'
+> : undefined
+> : ^^^^^^^^^
+>configStr2 : string
+>           : ^^^^^^
+>withConfig({ optional: 42 }) : [Config, string]
+>                             : ^^^^^^^^^^^^^^^^
+>withConfig : <T extends Config>(template: T) => [T, string]
+>           : ^ ^^^^^^^^^      ^^        ^^ ^^^^^           
+>{ optional: 42 } : { optional: number; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^
+>optional : number
+>         : ^^^^^^
+>42 : 42
+>   : ^^
+

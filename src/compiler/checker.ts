@@ -36027,6 +36027,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return skipOuterExpressions(argument, flags);
     }
 
+    function isCallInLastTupleElementDestructuring(node: CallLikeExpression): boolean {
+        // Check if this call expression is used as initializer in a variable declaration with array destructuring
+        const parent = node.parent;
+        if (parent && isVariableDeclaration(parent) && parent.initializer === node && isArrayBindingPattern(parent.name)) {
+            const elements = parent.name.elements;
+            // Check if the destructuring pattern accesses the last element
+            // (i.e., the last non-omitted element is at the end of the pattern)
+            for (let i = elements.length - 1; i >= 0; i--) {
+                if (!isOmittedExpression(elements[i])) {
+                    // If the last non-omitted element is at the last position, it's accessing the last tuple element
+                    return i === elements.length - 1;
+                }
+            }
+        }
+        return false;
+    }
+
     function getSignatureApplicabilityError(
         node: CallLikeExpression,
         args: readonly Expression[],
@@ -36069,7 +36086,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // If one or more arguments are still excluded (as indicated by CheckMode.SkipContextSensitive),
                 // we obtain the regular type of any object literal arguments because we may not have inferred complete
                 // parameter types yet and therefore excess property checks may yield false positives (see #17041).
-                const checkArgType = checkMode & CheckMode.SkipContextSensitive ? getRegularTypeOfObjectLiteral(argType) : argType;
+                // Also skip fresh literal checking when the call is in last tuple element destructuring context
+                // to prevent incorrect excess property errors (see #41548).
+                const shouldSkipFreshness = (checkMode & CheckMode.SkipContextSensitive) ||
+                    (isCallExpression(node) && isCallInLastTupleElementDestructuring(node));
+                const checkArgType = shouldSkipFreshness ? getRegularTypeOfObjectLiteral(argType) : argType;
                 const effectiveCheckArgumentNode = getEffectiveCheckNode(arg);
                 if (!checkTypeRelatedToAndOptionallyElaborate(checkArgType, paramType, relation, reportErrors ? effectiveCheckArgumentNode : undefined, effectiveCheckArgumentNode, headMessage, containingMessageChain, errorOutputContainer)) {
                     Debug.assert(!reportErrors || !!errorOutputContainer.errors, "parameter should have errors when reporting errors");

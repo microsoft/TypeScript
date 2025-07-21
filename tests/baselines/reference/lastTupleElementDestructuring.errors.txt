@@ -1,0 +1,52 @@
+lastTupleElementDestructuring.ts(18,27): error TS2322: Type '"c"' is not assignable to type '"a" | "b"'.
+lastTupleElementDestructuring.ts(19,24): error TS2345: Argument of type '{ notDataType: string; }' is not assignable to parameter of type '{ dataType: "a" | "b"; }'.
+  Property 'dataType' is missing in type '{ notDataType: string; }' but required in type '{ dataType: "a" | "b"; }'.
+lastTupleElementDestructuring.ts(33,34): error TS2345: Argument of type '{ optional: number; }' is not assignable to parameter of type 'Config'.
+  Property 'required' is missing in type '{ optional: number; }' but required in type 'Config'.
+
+
+==== lastTupleElementDestructuring.ts (3 errors) ====
+    // Test for fixing excess property checking when accessing last tuple element in destructuring
+    // Fixes https://github.com/microsoft/TypeScript/issues/41548
+    
+    declare function foo<T extends { dataType: 'a' | 'b' }>(template: T): [T, any, any];
+    declare function bar<T extends { dataType: 'a' | 'b' }>(template: T): [T, any, any, any];
+    
+    // Cases that should NOT error after fix (accessing last element)
+    const [, , last1] = foo({ dataType: 'a', day: 0 });
+    const [,,last2] = foo({ dataType: 'a', day: 0 });
+    const [,,,last3] = bar({ dataType: 'a', day: 0 });
+    
+    // Cases that already worked (not accessing last element)
+    const [, mid1, ] = foo({ dataType: 'a', day: 0 });
+    const [first1, , ] = foo({ dataType: 'a', day: 0 });
+    const [,,third,] = bar({ dataType: 'a', day: 0 });
+    
+    // Legitimate errors should still be caught
+    const [, , last4] = foo({ dataType: 'c' }); // Error: 'c' not assignable to 'a' | 'b'
+                              ~~~~~~~~
+!!! error TS2322: Type '"c"' is not assignable to type '"a" | "b"'.
+!!! related TS6500 lastTupleElementDestructuring.ts:4:34: The expected type comes from property 'dataType' which is declared here on type '{ dataType: "a" | "b"; }'
+    const [,,,last5] = bar({ notDataType: 'a' }); // Error: missing required property 'dataType'
+                           ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ notDataType: string; }' is not assignable to parameter of type '{ dataType: "a" | "b"; }'.
+!!! error TS2345:   Property 'dataType' is missing in type '{ notDataType: string; }' but required in type '{ dataType: "a" | "b"; }'.
+!!! related TS2728 lastTupleElementDestructuring.ts:5:34: 'dataType' is declared here.
+    
+    // Test with more complex object properties
+    interface Config {
+        required: string;
+        optional?: number;
+    }
+    
+    declare function withConfig<T extends Config>(template: T): [T, string];
+    
+    // Should work - accessing last element with extra property
+    const [,configStr] = withConfig({ required: 'test', extra: 'should work' });
+    
+    // Should still error - missing required property
+    const [,configStr2] = withConfig({ optional: 42 }); // Error: missing 'required'
+                                     ~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ optional: number; }' is not assignable to parameter of type 'Config'.
+!!! error TS2345:   Property 'required' is missing in type '{ optional: number; }' but required in type 'Config'.
+!!! related TS2728 lastTupleElementDestructuring.ts:23:5: 'required' is declared here.

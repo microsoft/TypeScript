@@ -1,0 +1,103 @@
+//// [tests/cases/compiler/lastTupleElementDestructuring.ts] ////
+
+=== lastTupleElementDestructuring.ts ===
+// Test for fixing excess property checking when accessing last tuple element in destructuring
+// Fixes https://github.com/microsoft/TypeScript/issues/41548
+
+declare function foo<T extends { dataType: 'a' | 'b' }>(template: T): [T, any, any];
+>foo : Symbol(foo, Decl(lastTupleElementDestructuring.ts, 0, 0))
+>T : Symbol(T, Decl(lastTupleElementDestructuring.ts, 3, 21))
+>dataType : Symbol(dataType, Decl(lastTupleElementDestructuring.ts, 3, 32))
+>template : Symbol(template, Decl(lastTupleElementDestructuring.ts, 3, 56))
+>T : Symbol(T, Decl(lastTupleElementDestructuring.ts, 3, 21))
+>T : Symbol(T, Decl(lastTupleElementDestructuring.ts, 3, 21))
+
+declare function bar<T extends { dataType: 'a' | 'b' }>(template: T): [T, any, any, any];
+>bar : Symbol(bar, Decl(lastTupleElementDestructuring.ts, 3, 84))
+>T : Symbol(T, Decl(lastTupleElementDestructuring.ts, 4, 21))
+>dataType : Symbol(dataType, Decl(lastTupleElementDestructuring.ts, 4, 32))
+>template : Symbol(template, Decl(lastTupleElementDestructuring.ts, 4, 56))
+>T : Symbol(T, Decl(lastTupleElementDestructuring.ts, 4, 21))
+>T : Symbol(T, Decl(lastTupleElementDestructuring.ts, 4, 21))
+
+// Cases that should NOT error after fix (accessing last element)
+const [, , last1] = foo({ dataType: 'a', day: 0 });
+>last1 : Symbol(last1, Decl(lastTupleElementDestructuring.ts, 7, 10))
+>foo : Symbol(foo, Decl(lastTupleElementDestructuring.ts, 0, 0))
+>dataType : Symbol(dataType, Decl(lastTupleElementDestructuring.ts, 7, 25))
+>day : Symbol(day, Decl(lastTupleElementDestructuring.ts, 7, 40))
+
+const [,,last2] = foo({ dataType: 'a', day: 0 });
+>last2 : Symbol(last2, Decl(lastTupleElementDestructuring.ts, 8, 9))
+>foo : Symbol(foo, Decl(lastTupleElementDestructuring.ts, 0, 0))
+>dataType : Symbol(dataType, Decl(lastTupleElementDestructuring.ts, 8, 23))
+>day : Symbol(day, Decl(lastTupleElementDestructuring.ts, 8, 38))
+
+const [,,,last3] = bar({ dataType: 'a', day: 0 });
+>last3 : Symbol(last3, Decl(lastTupleElementDestructuring.ts, 9, 10))
+>bar : Symbol(bar, Decl(lastTupleElementDestructuring.ts, 3, 84))
+>dataType : Symbol(dataType, Decl(lastTupleElementDestructuring.ts, 9, 24))
+>day : Symbol(day, Decl(lastTupleElementDestructuring.ts, 9, 39))
+
+// Cases that already worked (not accessing last element)
+const [, mid1, ] = foo({ dataType: 'a', day: 0 });
+>mid1 : Symbol(mid1, Decl(lastTupleElementDestructuring.ts, 12, 8))
+>foo : Symbol(foo, Decl(lastTupleElementDestructuring.ts, 0, 0))
+>dataType : Symbol(dataType, Decl(lastTupleElementDestructuring.ts, 12, 24))
+>day : Symbol(day, Decl(lastTupleElementDestructuring.ts, 12, 39))
+
+const [first1, , ] = foo({ dataType: 'a', day: 0 });
+>first1 : Symbol(first1, Decl(lastTupleElementDestructuring.ts, 13, 7))
+>foo : Symbol(foo, Decl(lastTupleElementDestructuring.ts, 0, 0))
+>dataType : Symbol(dataType, Decl(lastTupleElementDestructuring.ts, 13, 26))
+>day : Symbol(day, Decl(lastTupleElementDestructuring.ts, 13, 41))
+
+const [,,third,] = bar({ dataType: 'a', day: 0 });
+>third : Symbol(third, Decl(lastTupleElementDestructuring.ts, 14, 9))
+>bar : Symbol(bar, Decl(lastTupleElementDestructuring.ts, 3, 84))
+>dataType : Symbol(dataType, Decl(lastTupleElementDestructuring.ts, 14, 24))
+>day : Symbol(day, Decl(lastTupleElementDestructuring.ts, 14, 39))
+
+// Legitimate errors should still be caught
+const [, , last4] = foo({ dataType: 'c' }); // Error: 'c' not assignable to 'a' | 'b'
+>last4 : Symbol(last4, Decl(lastTupleElementDestructuring.ts, 17, 10))
+>foo : Symbol(foo, Decl(lastTupleElementDestructuring.ts, 0, 0))
+>dataType : Symbol(dataType, Decl(lastTupleElementDestructuring.ts, 17, 25))
+
+const [,,,last5] = bar({ notDataType: 'a' }); // Error: missing required property 'dataType'
+>last5 : Symbol(last5, Decl(lastTupleElementDestructuring.ts, 18, 10))
+>bar : Symbol(bar, Decl(lastTupleElementDestructuring.ts, 3, 84))
+>notDataType : Symbol(notDataType, Decl(lastTupleElementDestructuring.ts, 18, 24))
+
+// Test with more complex object properties
+interface Config {
+>Config : Symbol(Config, Decl(lastTupleElementDestructuring.ts, 18, 45))
+
+    required: string;
+>required : Symbol(Config.required, Decl(lastTupleElementDestructuring.ts, 21, 18))
+
+    optional?: number;
+>optional : Symbol(Config.optional, Decl(lastTupleElementDestructuring.ts, 22, 21))
+}
+
+declare function withConfig<T extends Config>(template: T): [T, string];
+>withConfig : Symbol(withConfig, Decl(lastTupleElementDestructuring.ts, 24, 1))
+>T : Symbol(T, Decl(lastTupleElementDestructuring.ts, 26, 28))
+>Config : Symbol(Config, Decl(lastTupleElementDestructuring.ts, 18, 45))
+>template : Symbol(template, Decl(lastTupleElementDestructuring.ts, 26, 46))
+>T : Symbol(T, Decl(lastTupleElementDestructuring.ts, 26, 28))
+>T : Symbol(T, Decl(lastTupleElementDestructuring.ts, 26, 28))
+
+// Should work - accessing last element with extra property
+const [,configStr] = withConfig({ required: 'test', extra: 'should work' });
+>configStr : Symbol(configStr, Decl(lastTupleElementDestructuring.ts, 29, 8))
+>withConfig : Symbol(withConfig, Decl(lastTupleElementDestructuring.ts, 24, 1))
+>required : Symbol(required, Decl(lastTupleElementDestructuring.ts, 29, 33))
+>extra : Symbol(extra, Decl(lastTupleElementDestructuring.ts, 29, 51))
+
+// Should still error - missing required property
+const [,configStr2] = withConfig({ optional: 42 }); // Error: missing 'required'
+>configStr2 : Symbol(configStr2, Decl(lastTupleElementDestructuring.ts, 32, 8))
+>withConfig : Symbol(withConfig, Decl(lastTupleElementDestructuring.ts, 24, 1))
+>optional : Symbol(optional, Decl(lastTupleElementDestructuring.ts, 32, 34))
+
