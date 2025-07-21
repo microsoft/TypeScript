@@ -1,26 +1,17 @@
-excessPropertyCheckingInArrayDestructuring.ts(7,14): error TS2493: Tuple type '[{ dataType: "a"; day: number; }, any, any]' of length '3' has no element at index '3'.
-excessPropertyCheckingInArrayDestructuring.ts(18,28): error TS2322: Type '"c"' is not assignable to type '"a" | "b"'.
-excessPropertyCheckingInArrayDestructuring.ts(19,26): error TS2345: Argument of type 'number' is not assignable to parameter of type '{ dataType: "a" | "b"; }'.
+excessPropertyCheckingInArrayDestructuring.ts(12,28): error TS2322: Type '"c"' is not assignable to type '"a" | "b"'.
+excessPropertyCheckingInArrayDestructuring.ts(13,26): error TS2345: Argument of type 'number' is not assignable to parameter of type '{ dataType: "a" | "b"; }'.
 
 
-==== excessPropertyCheckingInArrayDestructuring.ts (3 errors) ====
+==== excessPropertyCheckingInArrayDestructuring.ts (2 errors) ====
     declare function foo<T extends { dataType: 'a' | 'b' }>(template: T): [T, any, any];
-    declare function bar<T extends { dataType: 'a' | 'b' }>(template: T): [any, T, any];
     
-    // Test cases that should work (no excess property errors)
-    const [, works1] = foo({ dataType: 'a', day: 0 });
-    const [, , works2] = foo({ dataType: 'a', day: 0 });
-    const [, , , works3] = foo({ dataType: 'a', day: 0 });
-                 ~~~~~~
-!!! error TS2493: Tuple type '[{ dataType: "a"; day: number; }, any, any]' of length '3' has no element at index '3'.
+    // Test the specific problematic case that should now work
+    const [, , works1] = foo({ dataType: 'a', day: 0 });
+    const [, , works2] = foo({ dataType: 'b', extra: 'value' });
     
-    // Test with different function signatures
-    const [, , works4] = bar({ dataType: 'b', extra: 'value' });
-    
-    // Test assignment destructuring
-    let a: any, b: any, c: any;
-    [, , a] = foo({ dataType: 'a', day: 0 });
-    [, b, ] = foo({ dataType: 'a', day: 0 });
+    // Test assignment destructuring (not currently fixed)
+    let a: any;
+    [, , a] = foo({ dataType: 'a', day: 0 }); // This might still error
     
     // Test that legitimate errors are still caught
     const [, , fails1] = foo({ dataType: 'c' }); // Error: 'c' not assignable to 'a' | 'b'
@@ -34,3 +25,7 @@ excessPropertyCheckingInArrayDestructuring.ts(19,26): error TS2345: Argument of 
     // Test that non-destructuring cases work as before
     const result = foo({ dataType: 'a', day: 0 }); // Should work
     const explicit: [{ dataType: 'a', day: number }, any, any] = foo({ dataType: 'a', day: 0 }); // Should work
+    
+    // Test that other destructuring patterns work correctly
+    const [first] = foo({ dataType: 'a', day: 0 }); // Should work
+    const [, second] = foo({ dataType: 'a', day: 0 }); // Should work

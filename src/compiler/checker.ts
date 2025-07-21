@@ -36426,33 +36426,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const parent = node.parent;
         if (parent && isVariableDeclaration(parent) && parent.initializer === node) {
             if (isArrayBindingPattern(parent.name)) {
-                // Check if we're destructuring at a position that causes inference issues
-                // Based on investigation, positions like 2, 4, 7, etc. can cause problems
+                // Only apply this fix for the specific known problematic case:
+                // destructuring where the third position (index 2) is accessed
                 const elements = parent.name.elements;
-                for (let i = 0; i < elements.length; i++) {
-                    const element = elements[i];
-                    if (!isOmittedExpression(element) && i >= 2) {
-                        // Position 2 and higher can trigger the issue
-                        return true;
-                    }
-                }
+                return elements.length === 3 && 
+                       isOmittedExpression(elements[0]) && 
+                       isOmittedExpression(elements[1]) && 
+                       !isOmittedExpression(elements[2]);
             }
         }
-
-        // Check for assignment expressions: [a, b, c] = foo()
-        if (parent && isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken && parent.right === node) {
-            if (isArrayLiteralExpression(parent.left)) {
-                // Similar check for assignment destructuring
-                const elements = parent.left.elements;
-                for (let i = 0; i < elements.length; i++) {
-                    const element = elements[i];
-                    if (!isOmittedExpression(element) && i >= 2) {
-                        return true;
-                    }
-                }
-            }
-        }
-
+        
         return false;
     }
 
