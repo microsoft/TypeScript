@@ -8,14 +8,12 @@
  /**
   * foo
   *
-@@= skipped -28, +27 lines =@@
-  * @returns {number}
+@@= skipped -29, +28 lines =@@
   */
  declare function foo({ a, b, c }: {
--    a: number;
+     a: number;
 -    b?: number | undefined;
 -    c?: number | undefined;
-+    a: any;
-+    b: any;
-+    c: any;
++    b?: number;
++    c?: number;
  }): number;

@@ -5,23 +5,7 @@
   */
  function foo({ a, b, c }) {
 ->foo : ({ a, b, c }: {    a: number;    b?: number;    c?: number;}) => number
-->a : number
-->b : number
-->c : number
-+>foo : ({ a, b, c }: { a: any; b: any; c: any; }) => number
-+>a : any
-+>b : any
-+>c : any
-
-     return a + b + c;
-->a + b + c : number
-->a + b : number
-->a : number
-->b : number
-->c : number
-+>a + b + c : any
-+>a + b : any
-+>a : any
-+>b : any
-+>c : any
- }
++>foo : ({ a, b, c }: { a: number; b?: number; c?: number; }) => number
+ >a : number
+ >b : number
+ >c : number

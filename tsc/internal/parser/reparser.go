@@ -527,19 +527,25 @@ func (p *Parser) makeQuestionIfOptional(parameter *ast.JSDocParameterTag) *ast.N
 	return questionToken
 }
 
-func findMatchingParameter(fun *ast.Node, tag *ast.JSDocParameterTag, jsDoc *ast.Node) (*ast.ParameterDeclaration, bool) {
-	tagIndex := core.FindIndex(jsDoc.AsJSDoc().Tags.Nodes, func(n *ast.Node) bool {
-		return n.Kind == ast.KindJSDocParameterTag && n.AsJSDocParameterOrPropertyTag() == tag
-	})
+func findMatchingParameter(fun *ast.Node, parameterTag *ast.JSDocParameterTag, jsDoc *ast.Node) (*ast.ParameterDeclaration, bool) {
+	tagIndex := -1
+	paramCount := -1
+	for _, tag := range jsDoc.AsJSDoc().Tags.Nodes {
+		if tag.Kind == ast.KindJSDocParameterTag {
+			paramCount++
+			if tag.AsJSDocParameterOrPropertyTag() == parameterTag {
+				tagIndex = paramCount
+				break
+			}
+		}
+	}
 	for parameterIndex, parameter := range fun.Parameters() {
 		if parameter.Name().Kind == ast.KindIdentifier {
-			if tag.Name().Kind == ast.KindIdentifier && parameter.Name().Text() == tag.Name().Text() {
+			if parameterTag.Name().Kind == ast.KindIdentifier && parameter.Name().Text() == parameterTag.Name().Text() {
 				return parameter.AsParameterDeclaration(), true
 			}
-		} else {
-			if parameterIndex == tagIndex {
-				return parameter.AsParameterDeclaration(), true
-			}
+		} else if parameterIndex == tagIndex {
+			return parameter.AsParameterDeclaration(), true
 		}
 	}
 	return nil, false

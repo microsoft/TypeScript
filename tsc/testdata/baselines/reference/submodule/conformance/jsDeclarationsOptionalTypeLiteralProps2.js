@@ -44,7 +44,7 @@ function foo({ a, b, c }) {
  * @returns {number}
  */
 declare function foo({ a, b, c }: {
-    a: any;
-    b: any;
-    c: any;
+    a: number;
+    b?: number;
+    c?: number;
 }): number;
