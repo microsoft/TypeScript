@@ -45,3 +45,41 @@ class A {
     }
 }
 
+class B {
+>B : Symbol(B, Decl(privateIdentifierChain.1.ts, 13, 1))
+
+    a?: A
+>a : Symbol(B.a, Decl(privateIdentifierChain.1.ts, 15, 9))
+>A : Symbol(A, Decl(privateIdentifierChain.1.ts, 0, 0))
+
+    getA(): A {
+>getA : Symbol(B.getA, Decl(privateIdentifierChain.1.ts, 16, 9))
+>A : Symbol(A, Decl(privateIdentifierChain.1.ts, 0, 0))
+
+        return new A();
+>A : Symbol(A, Decl(privateIdentifierChain.1.ts, 0, 0))
+    }
+    constructor() {
+        this.a = new A();
+>this.a : Symbol(B.a, Decl(privateIdentifierChain.1.ts, 15, 9))
+>this : Symbol(B, Decl(privateIdentifierChain.1.ts, 13, 1))
+>a : Symbol(B.a, Decl(privateIdentifierChain.1.ts, 15, 9))
+>A : Symbol(A, Decl(privateIdentifierChain.1.ts, 0, 0))
+
+        this.a?.#b; // Error
+>this.a : Symbol(B.a, Decl(privateIdentifierChain.1.ts, 15, 9))
+>this : Symbol(B, Decl(privateIdentifierChain.1.ts, 13, 1))
+>a : Symbol(B.a, Decl(privateIdentifierChain.1.ts, 15, 9))
+
+        this?.a.#b; // Error
+>this?.a : Symbol(B.a, Decl(privateIdentifierChain.1.ts, 15, 9))
+>this : Symbol(B, Decl(privateIdentifierChain.1.ts, 13, 1))
+>a : Symbol(B.a, Decl(privateIdentifierChain.1.ts, 15, 9))
+
+        this?.getA().#b; // Error
+>this?.getA : Symbol(B.getA, Decl(privateIdentifierChain.1.ts, 16, 9))
+>this : Symbol(B, Decl(privateIdentifierChain.1.ts, 13, 1))
+>getA : Symbol(B.getA, Decl(privateIdentifierChain.1.ts, 16, 9))
+    }
+}
+

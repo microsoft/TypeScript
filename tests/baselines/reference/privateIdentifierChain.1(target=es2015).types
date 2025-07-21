@@ -67,3 +67,70 @@ class A {
     }
 }
 
+class B {
+>B : B
+>  : ^
+
+    a?: A
+>a : A | undefined
+>  : ^^^^^^^^^^^^^
+
+    getA(): A {
+>getA : () => A
+>     : ^^^^^^ 
+
+        return new A();
+>new A() : A
+>        : ^
+>A : typeof A
+>  : ^^^^^^^^
+    }
+    constructor() {
+        this.a = new A();
+>this.a = new A() : A
+>                 : ^
+>this.a : A | undefined
+>       : ^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>a : A | undefined
+>  : ^^^^^^^^^^^^^
+>new A() : A
+>        : ^
+>A : typeof A
+>  : ^^^^^^^^
+
+        this.a?.#b; // Error
+>this.a?.#b : any
+>           : ^^^
+>this.a : A
+>       : ^
+>this : this
+>     : ^^^^
+>a : A
+>  : ^
+
+        this?.a.#b; // Error
+>this?.a.#b : any
+>           : ^^^
+>this?.a : A
+>        : ^
+>this : this
+>     : ^^^^
+>a : A
+>  : ^
+
+        this?.getA().#b; // Error
+>this?.getA().#b : any
+>                : ^^^
+>this?.getA() : A
+>             : ^
+>this?.getA : () => A
+>           : ^^^^^^ 
+>this : this
+>     : ^^^^
+>getA : () => A
+>     : ^^^^^^ 
+    }
+}
+

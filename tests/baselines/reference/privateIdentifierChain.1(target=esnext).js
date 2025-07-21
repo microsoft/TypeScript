@@ -16,6 +16,19 @@ class A {
     }
 }
 
+class B {
+    a?: A
+    getA(): A {
+        return new A();
+    }
+    constructor() {
+        this.a = new A();
+        this.a?.#b; // Error
+        this?.a.#b; // Error
+        this?.getA().#b; // Error
+    }
+}
+
 
 //// [privateIdentifierChain.1.js]
 "use strict";
@@ -30,5 +43,16 @@ class A {
         this?.#b;
         this?.a.#b;
         this?.getA().#b;
+    }
+}
+class B {
+    getA() {
+        return new A();
+    }
+    constructor() {
+        this.a = new A();
+        this.a?.#b; // Error
+        this?.a.#b; // Error
+        this?.getA().#b; // Error
     }
 }
