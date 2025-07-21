@@ -145,9 +145,9 @@ import React from "react";
 >React : typeof React
 
 const TabbedShowLayout = (/** @type {{className: string}}*/prop) => {
->TabbedShowLayout : { (prop: any): JSX.Element; defaultProps: { tabs: string; }; }
->(/** @type {{className: string}}*/prop) => {    return (        <div className={prop.className} key="">            ok        </div>    );} : { (prop: any): JSX.Element; defaultProps: { tabs: string; }; }
->prop : any
+>TabbedShowLayout : { (prop: { className: string; }): JSX.Element; defaultProps: { tabs: string; }; }
+>(/** @type {{className: string}}*/prop) => {    return (        <div className={prop.className} key="">            ok        </div>    );} : { (prop: { className: string; }): JSX.Element; defaultProps: { tabs: string; }; }
+>prop : { className: string; }
 
     return (
 >(        <div className={prop.className} key="">            ok        </div>    ) : JSX.Element
@@ -155,10 +155,10 @@ const TabbedShowLayout = (/** @type {{className: string}}*/prop) => {
         <div className={prop.className} key="">
 ><div className={prop.className} key="">            ok        </div> : JSX.Element
 >div : any
->className : any
->prop.className : any
->prop : any
->className : any
+>className : string
+>prop.className : string
+>prop : { className: string; }
+>className : string
 >key : string
 
             ok
@@ -171,7 +171,7 @@ const TabbedShowLayout = (/** @type {{className: string}}*/prop) => {
 TabbedShowLayout.defaultProps = {
 >TabbedShowLayout.defaultProps = {    tabs: "default value"} : { tabs: string; }
 >TabbedShowLayout.defaultProps : { tabs: string; }
->TabbedShowLayout : { (prop: any): JSX.Element; defaultProps: { tabs: string; }; }
+>TabbedShowLayout : { (prop: { className: string; }): JSX.Element; defaultProps: { tabs: string; }; }
 >defaultProps : { tabs: string; }
 >{    tabs: "default value"} : { tabs: string; }
 
@@ -182,7 +182,7 @@ TabbedShowLayout.defaultProps = {
 };
 
 export default TabbedShowLayout;
->TabbedShowLayout : { (prop: any): JSX.Element; defaultProps: { tabs: string; }; }
+>TabbedShowLayout : { (prop: { className: string; }): JSX.Element; defaultProps: { tabs: string; }; }
 
 === jsDeclarationsReactComponents5.jsx ===
 import React from 'react';

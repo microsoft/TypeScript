@@ -144,10 +144,9 @@
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 +>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  >className : Symbol(className, Decl(jsDeclarationsReactComponents4.jsx, 3, 12))
-->prop.className : Symbol(className, Decl(jsDeclarationsReactComponents4.jsx, 1, 38))
+ >prop.className : Symbol(className, Decl(jsDeclarationsReactComponents4.jsx, 1, 38))
  >prop : Symbol(prop, Decl(jsDeclarationsReactComponents4.jsx, 1, 26))
-->className : Symbol(className, Decl(jsDeclarationsReactComponents4.jsx, 1, 38))
- >key : Symbol(key, Decl(jsDeclarationsReactComponents4.jsx, 3, 39))
+@@= skipped -21, +21 lines =@@
 
              ok
          </div>
@@ -167,7 +166,7 @@
 
      tabs: "default value"
  >tabs : Symbol(tabs, Decl(jsDeclarationsReactComponents4.jsx, 9, 33))
-@@= skipped -37, +35 lines =@@
+@@= skipped -16, +16 lines =@@
  };
 
  export default TabbedShowLayout;

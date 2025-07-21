@@ -36,52 +36,7 @@
 
  === jsDeclarationsReactComponents4.jsx ===
  import React from "react";
- >React : typeof React
-
- const TabbedShowLayout = (/** @type {{className: string}}*/prop) => {
-->TabbedShowLayout : { (prop: { className: string; }): JSX.Element; defaultProps: { tabs: string; }; }
-->(/** @type {{className: string}}*/prop) => {    return (        <div className={prop.className} key="">            ok        </div>    );} : { (prop: { className: string; }): JSX.Element; defaultProps: { tabs: string; }; }
-->prop : { className: string; }
-+>TabbedShowLayout : { (prop: any): JSX.Element; defaultProps: { tabs: string; }; }
-+>(/** @type {{className: string}}*/prop) => {    return (        <div className={prop.className} key="">            ok        </div>    );} : { (prop: any): JSX.Element; defaultProps: { tabs: string; }; }
-+>prop : any
-
-     return (
- >(        <div className={prop.className} key="">            ok        </div>    ) : JSX.Element
-@@= skipped -17, +17 lines =@@
-         <div className={prop.className} key="">
- ><div className={prop.className} key="">            ok        </div> : JSX.Element
- >div : any
-->className : string
-->prop.className : string
-->prop : { className: string; }
-->className : string
-+>className : any
-+>prop.className : any
-+>prop : any
-+>className : any
- >key : string
-
-             ok
-@@= skipped -16, +16 lines =@@
- TabbedShowLayout.defaultProps = {
- >TabbedShowLayout.defaultProps = {    tabs: "default value"} : { tabs: string; }
- >TabbedShowLayout.defaultProps : { tabs: string; }
-->TabbedShowLayout : { (prop: { className: string; }): JSX.Element; defaultProps: { tabs: string; }; }
-+>TabbedShowLayout : { (prop: any): JSX.Element; defaultProps: { tabs: string; }; }
- >defaultProps : { tabs: string; }
- >{    tabs: "default value"} : { tabs: string; }
-
-@@= skipped -11, +11 lines =@@
- };
-
- export default TabbedShowLayout;
-->TabbedShowLayout : { (prop: { className: string; }): JSX.Element; defaultProps: { tabs: string; }; }
-+>TabbedShowLayout : { (prop: any): JSX.Element; defaultProps: { tabs: string; }; }
-
- === jsDeclarationsReactComponents5.jsx ===
- import React from 'react';
-@@= skipped -10, +10 lines =@@
+@@= skipped -54, +54 lines =@@
  >PropTypes : typeof PropTypes
 
  function Tree({ allowDropOnRoot }) {

@@ -216,7 +216,9 @@ declare const TabbedShowLayout: {
 export default TabbedShowLayout;
 //// [jsDeclarationsReactComponents4.d.ts]
 declare const TabbedShowLayout: {
-    (prop: any): JSX.Element;
+    (prop: {
+        className: string;
+    }): JSX.Element;
     defaultProps: {
         tabs: string;
     };
@@ -236,7 +238,7 @@ out/jsDeclarationsReactComponents1.d.ts(1,23): error TS2307: Cannot find module 
 out/jsDeclarationsReactComponents1.d.ts(3,15): error TS2503: Cannot find namespace 'JSX'.
 out/jsDeclarationsReactComponents2.d.ts(1,19): error TS2307: Cannot find module 'react' or its corresponding type declarations.
 out/jsDeclarationsReactComponents3.d.ts(10,7): error TS2503: Cannot find namespace 'JSX'.
-out/jsDeclarationsReactComponents4.d.ts(2,18): error TS2503: Cannot find namespace 'JSX'.
+out/jsDeclarationsReactComponents4.d.ts(4,9): error TS2503: Cannot find namespace 'JSX'.
 out/jsDeclarationsReactComponents5.d.ts(3,5): error TS2503: Cannot find namespace 'JSX'.
 
 
@@ -284,8 +286,10 @@ out/jsDeclarationsReactComponents5.d.ts(3,5): error TS2503: Cannot find namespac
     
 ==== out/jsDeclarationsReactComponents4.d.ts (1 errors) ====
     declare const TabbedShowLayout: {
-        (prop: any): JSX.Element;
-                     ~~~
+        (prop: {
+            className: string;
+        }): JSX.Element;
+            ~~~
 !!! error TS2503: Cannot find namespace 'JSX'.
         defaultProps: {
             tabs: string;

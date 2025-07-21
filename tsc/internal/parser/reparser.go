@@ -292,6 +292,12 @@ func (p *Parser) reparseHosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Node)
 				parent.AsVariableDeclaration().Type = p.factory.DeepCloneReparse(tag.AsJSDocTypeTag().TypeExpression.Type())
 				p.finishMutatedNode(parent)
 			}
+		case ast.KindParameter:
+			param := parent.AsParameterDeclaration()
+			if param.Type == nil && tag.AsJSDocTypeTag().TypeExpression != nil {
+				param.Type = p.reparseJSDocTypeLiteral(tag.AsJSDocTypeTag().TypeExpression.Type())
+			}
+			p.finishMutatedNode(parent)
 		case ast.KindCommonJSExport:
 			export := parent.AsCommonJSExport()
 			if export.Type == nil && tag.AsJSDocTypeTag().TypeExpression != nil {
