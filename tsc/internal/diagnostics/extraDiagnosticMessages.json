@@ -10,5 +10,9 @@
     "Generate pprof CPU/memory profiles to the given directory.": {
         "category": "Message",
         "code": 100002
+    },
+    "Non-relative paths are not allowed. Did you forget a leading './'?": {
+        "category": "Error",
+        "code": 5090
     }
 }

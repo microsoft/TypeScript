@@ -62,7 +62,7 @@ CompilerOptions::{
     "explainFiles": true
 }
 Output::
-[96mtsconfig.json[0m:[93m3[0m:[93m2[0m - [91merror[0m[90m TS5090: [0mNon-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
+[96mtsconfig.json[0m:[93m3[0m:[93m2[0m - [91merror[0m[90m TS5090: [0mNon-relative paths are not allowed. Did you forget a leading './'?
 
 [7m3[0m  "compilerOptions": {
 [7m [0m [91m ~~~~~~~~~~~~~~~~~[0m

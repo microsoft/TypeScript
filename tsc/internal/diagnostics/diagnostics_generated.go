@@ -2306,7 +2306,7 @@ var The_inferred_type_of_0_references_a_type_with_a_cyclic_structure_which_canno
 
 var Option_0_cannot_be_specified_when_option_jsx_is_1 = &Message{code: 5089, category: CategoryError, key: "Option_0_cannot_be_specified_when_option_jsx_is_1_5089", text: "Option '{0}' cannot be specified when option 'jsx' is '{1}'."}
 
-var Non_relative_paths_are_not_allowed_when_baseUrl_is_not_set_Did_you_forget_a_leading_Slash = &Message{code: 5090, category: CategoryError, key: "Non_relative_paths_are_not_allowed_when_baseUrl_is_not_set_Did_you_forget_a_leading_Slash_5090", text: "Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?"}
+var Non_relative_paths_are_not_allowed_Did_you_forget_a_leading_Slash = &Message{code: 5090, category: CategoryError, key: "Non_relative_paths_are_not_allowed_Did_you_forget_a_leading_Slash_5090", text: "Non-relative paths are not allowed. Did you forget a leading './'?"}
 
 var Option_preserveConstEnums_cannot_be_disabled_when_0_is_enabled = &Message{code: 5091, category: CategoryError, key: "Option_preserveConstEnums_cannot_be_disabled_when_0_is_enabled_5091", text: "Option 'preserveConstEnums' cannot be disabled when '{0}' is enabled."}
 

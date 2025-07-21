@@ -2,7 +2,7 @@ root/tsconfig.json(3,9): error TS5102: Option 'baseUrl' has been removed. Please
   Use '"paths": {"*": "./src/*"}' instead.
 root/tsconfig.json(5,13): error TS5061: Pattern '*1*' can have at most one '*' character.
 root/tsconfig.json(5,22): error TS5062: Substitution '*2*' in pattern '*1*' can have at most one '*' character.
-root/tsconfig.json(5,22): error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
+root/tsconfig.json(5,22): error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
 
 
 ==== root/tsconfig.json (4 errors) ====
@@ -19,7 +19,7 @@ root/tsconfig.json(5,22): error TS5090: Non-relative paths are not allowed when 
                          ~~~~~
 !!! error TS5062: Substitution '*2*' in pattern '*1*' can have at most one '*' character.
                          ~~~~~
-!!! error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
+!!! error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
             }
         }
     }

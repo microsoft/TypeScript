@@ -55,13 +55,9 @@ func main() {
 	filename = filepath.FromSlash(filename) // runtime.Caller always returns forward slashes; https://go.dev/issues/3335, https://go.dev/cl/603275
 
 	rawExtraMessages := readRawMessages(filepath.Join(filepath.Dir(filename), "extraDiagnosticMessages.json"))
-	maps.Copy(rawDiagnosticMessages, rawExtraMessages)
 
-	diagnosticMessages := make([]*diagnosticMessage, 0, len(rawDiagnosticMessages))
-	for k, v := range rawDiagnosticMessages {
-		v.key = k
-		diagnosticMessages = append(diagnosticMessages, v)
-	}
+	maps.Copy(rawDiagnosticMessages, rawExtraMessages)
+	diagnosticMessages := slices.Collect(maps.Values(rawDiagnosticMessages))
 
 	slices.SortFunc(diagnosticMessages, func(a *diagnosticMessage, b *diagnosticMessage) int {
 		return cmp.Compare(a.Code, b.Code)
@@ -103,7 +99,7 @@ func main() {
 	}
 }
 
-func readRawMessages(p string) map[string]*diagnosticMessage {
+func readRawMessages(p string) map[int]*diagnosticMessage {
 	file, err := os.Open(p)
 	if err != nil {
 		log.Fatalf("failed to open file: %v", err)
@@ -117,7 +113,13 @@ func readRawMessages(p string) map[string]*diagnosticMessage {
 		return nil
 	}
 
-	return rawMessages
+	codeToMessage := make(map[int]*diagnosticMessage, len(rawMessages))
+	for k, m := range rawMessages {
+		m.key = k
+		codeToMessage[m.Code] = m
+	}
+
+	return codeToMessage
 }
 
 var (

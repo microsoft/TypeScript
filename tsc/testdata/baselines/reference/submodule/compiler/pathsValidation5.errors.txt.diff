@@ -1,0 +1,29 @@
+--- old.pathsValidation5.errors.txt
++++ new.pathsValidation5.errors.txt
+@@= skipped -0, +0 lines =@@
+-tsconfig.json(5,26): error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
+-tsconfig.json(6,19): error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
+-tsconfig.json(7,23): error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
++tsconfig.json(5,26): error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
++tsconfig.json(6,19): error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
++tsconfig.json(7,23): error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
+
+
+ ==== tsconfig.json (3 errors) ====
+@@= skipped -9, +9 lines =@@
+           "paths": {
+             "@interface/*": ["src/interface/*"],
+                              ~~~~~~~~~~~~~~~~~
+-!!! error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
++!!! error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
+             "@blah": ["blah"],
+                       ~~~~~~
+-!!! error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
++!!! error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
+             "@humbug/*": ["*/generated"]
+                           ~~~~~~~~~~~~~
+-!!! error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
++!!! error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
+           }
+       }
+     }

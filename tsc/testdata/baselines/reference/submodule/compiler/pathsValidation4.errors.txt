@@ -3,7 +3,7 @@ tsconfig.json(4,9): error TS5102: Option 'baseUrl' has been removed. Please remo
 tsconfig.json(6,11): error TS5061: Pattern '@interface/**/*' can have at most one '*' character.
 tsconfig.json(7,11): error TS5061: Pattern '@service/**/*' can have at most one '*' character.
 tsconfig.json(7,29): error TS5062: Substitution './src/service/**/*' in pattern '@service/**/*' can have at most one '*' character.
-tsconfig.json(8,29): error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
+tsconfig.json(8,29): error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
 
 
 ==== tsconfig.json (5 errors) ====
@@ -25,7 +25,7 @@ tsconfig.json(8,29): error TS5090: Non-relative paths are not allowed when 'base
 !!! error TS5062: Substitution './src/service/**/*' in pattern '@service/**/*' can have at most one '*' character.
               "@controller/*": ["controller/*"],
                                 ~~~~~~~~~~~~~~
-!!! error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
+!!! error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
             }
         }
     }

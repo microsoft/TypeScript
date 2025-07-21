@@ -8,7 +8,7 @@
 -
 -
 -==== root/tsconfig.json (2 errors) ====
-+root/tsconfig.json(5,22): error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
++root/tsconfig.json(5,22): error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
 +
 +
 +==== root/tsconfig.json (4 errors) ====
@@ -25,7 +25,7 @@
                           ~~~~~
  !!! error TS5062: Substitution '*2*' in pattern '*1*' can have at most one '*' character.
 +                         ~~~~~
-+!!! error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
++!!! error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
              }
          }
      }

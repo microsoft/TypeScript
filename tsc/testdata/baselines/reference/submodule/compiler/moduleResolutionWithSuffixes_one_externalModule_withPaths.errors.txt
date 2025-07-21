@@ -1,7 +1,7 @@
 /tsconfig.json(9,3): error TS5102: Option 'baseUrl' has been removed. Please remove it from your configuration.
   Use '"paths": {"*": "./*"}' instead.
-/tsconfig.json(11,21): error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
-/tsconfig.json(12,23): error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
+/tsconfig.json(11,21): error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
+/tsconfig.json(12,23): error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
 
 
 ==== /tsconfig.json (3 errors) ====
@@ -20,10 +20,10 @@
     		"paths": {
     			"some-library": ["node_modules/some-library/lib"],
     			                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
+!!! error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
     			"some-library/*": ["node_modules/some-library/lib/*"]
     			                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
+!!! error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
     		}
     	}
     }
