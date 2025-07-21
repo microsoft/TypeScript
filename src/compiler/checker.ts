@@ -36071,7 +36071,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // parameter types yet and therefore excess property checks may yield false positives (see #17041).
                 // Also skip fresh literal checking when the call is in a destructuring context to avoid inappropriate
                 // excess property checking (see #41548).
-                const shouldSkipFreshness = (checkMode & CheckMode.SkipContextSensitive) || 
+                const shouldSkipFreshness = (checkMode & CheckMode.SkipContextSensitive) ||
                     (isCallExpression(node) && isCallInDestructuringContext(node));
                 const checkArgType = shouldSkipFreshness ? getRegularTypeOfObjectLiteral(argType) : argType;
                 const effectiveCheckArgumentNode = getEffectiveCheckNode(arg);
@@ -36427,12 +36427,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (parent && isVariableDeclaration(parent) && parent.initializer === node) {
             return isBindingPattern(parent.name);
         }
-        
+
         // Check for assignment expressions: [a, b] = foo()
         if (parent && isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken && parent.right === node) {
             return isArrayLiteralExpression(parent.left) || isObjectLiteralExpression(parent.left);
         }
-        
+
         return false;
     }
 
@@ -36509,14 +36509,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // decorators are applied to a declaration by the emitter, and not to an expression.
         const isSingleNonGenericCandidate = candidates.length === 1 && !candidates[0].typeParameters;
         let shouldSkipContextSensitive = !isDecorator && !isSingleNonGenericCandidate && some(args, isContextSensitive);
-        
+
         // Also skip context sensitive checking when the call is used in a destructuring context
         // to avoid inappropriate excess property checking on object literal arguments
         const isInDestructuring = !isDecorator && isCallInDestructuringContext(node);
         if (isInDestructuring && !shouldSkipContextSensitive) {
             shouldSkipContextSensitive = true;
         }
-        
+
         if (shouldSkipContextSensitive) {
             argCheckMode = CheckMode.SkipContextSensitive;
         }

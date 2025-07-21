@@ -1,0 +1,93 @@
+//// [tests/cases/compiler/excessPropertyCheckingInDestructuring.ts] ////
+
+=== excessPropertyCheckingInDestructuring.ts ===
+declare function foo<T extends { dataType: 'a' | 'b' }>(template: T): [T, any, any];
+>foo : Symbol(foo, Decl(excessPropertyCheckingInDestructuring.ts, 0, 0))
+>T : Symbol(T, Decl(excessPropertyCheckingInDestructuring.ts, 0, 21))
+>dataType : Symbol(dataType, Decl(excessPropertyCheckingInDestructuring.ts, 0, 32))
+>template : Symbol(template, Decl(excessPropertyCheckingInDestructuring.ts, 0, 56))
+>T : Symbol(T, Decl(excessPropertyCheckingInDestructuring.ts, 0, 21))
+>T : Symbol(T, Decl(excessPropertyCheckingInDestructuring.ts, 0, 21))
+
+declare function bar(template: { dataType: 'a' | 'b' }): [any, any, any];
+>bar : Symbol(bar, Decl(excessPropertyCheckingInDestructuring.ts, 0, 84))
+>template : Symbol(template, Decl(excessPropertyCheckingInDestructuring.ts, 1, 21))
+>dataType : Symbol(dataType, Decl(excessPropertyCheckingInDestructuring.ts, 1, 32))
+
+// These should work without excess property errors - destructuring contexts
+const [, ,] = foo({ dataType: 'a', day: 0 });
+>foo : Symbol(foo, Decl(excessPropertyCheckingInDestructuring.ts, 0, 0))
+>dataType : Symbol(dataType, Decl(excessPropertyCheckingInDestructuring.ts, 4, 19))
+>day : Symbol(day, Decl(excessPropertyCheckingInDestructuring.ts, 4, 34))
+
+const [, , t] = foo({ dataType: 'a', day: 0 });
+>t : Symbol(t, Decl(excessPropertyCheckingInDestructuring.ts, 5, 10))
+>foo : Symbol(foo, Decl(excessPropertyCheckingInDestructuring.ts, 0, 0))
+>dataType : Symbol(dataType, Decl(excessPropertyCheckingInDestructuring.ts, 5, 21))
+>day : Symbol(day, Decl(excessPropertyCheckingInDestructuring.ts, 5, 36))
+
+const [x, y, z] = foo({ dataType: 'a', day: 0 });
+>x : Symbol(x, Decl(excessPropertyCheckingInDestructuring.ts, 6, 7))
+>y : Symbol(y, Decl(excessPropertyCheckingInDestructuring.ts, 6, 9))
+>z : Symbol(z, Decl(excessPropertyCheckingInDestructuring.ts, 6, 12))
+>foo : Symbol(foo, Decl(excessPropertyCheckingInDestructuring.ts, 0, 0))
+>dataType : Symbol(dataType, Decl(excessPropertyCheckingInDestructuring.ts, 6, 23))
+>day : Symbol(day, Decl(excessPropertyCheckingInDestructuring.ts, 6, 38))
+
+const [, ,] = bar({ dataType: 'a', day: 0 });
+>bar : Symbol(bar, Decl(excessPropertyCheckingInDestructuring.ts, 0, 84))
+>dataType : Symbol(dataType, Decl(excessPropertyCheckingInDestructuring.ts, 8, 19))
+>day : Symbol(day, Decl(excessPropertyCheckingInDestructuring.ts, 8, 34))
+
+const [, , u] = bar({ dataType: 'a', day: 0 });
+>u : Symbol(u, Decl(excessPropertyCheckingInDestructuring.ts, 9, 10))
+>bar : Symbol(bar, Decl(excessPropertyCheckingInDestructuring.ts, 0, 84))
+>dataType : Symbol(dataType, Decl(excessPropertyCheckingInDestructuring.ts, 9, 21))
+>day : Symbol(day, Decl(excessPropertyCheckingInDestructuring.ts, 9, 36))
+
+const [a, b, c] = bar({ dataType: 'a', day: 0 });
+>a : Symbol(a, Decl(excessPropertyCheckingInDestructuring.ts, 10, 7))
+>b : Symbol(b, Decl(excessPropertyCheckingInDestructuring.ts, 10, 9))
+>c : Symbol(c, Decl(excessPropertyCheckingInDestructuring.ts, 10, 12))
+>bar : Symbol(bar, Decl(excessPropertyCheckingInDestructuring.ts, 0, 84))
+>dataType : Symbol(dataType, Decl(excessPropertyCheckingInDestructuring.ts, 10, 23))
+>day : Symbol(day, Decl(excessPropertyCheckingInDestructuring.ts, 10, 38))
+
+// These should still report legitimate type errors
+const [, , invalid1] = foo({ dataType: 'invalid' });
+>invalid1 : Symbol(invalid1, Decl(excessPropertyCheckingInDestructuring.ts, 13, 10))
+>foo : Symbol(foo, Decl(excessPropertyCheckingInDestructuring.ts, 0, 0))
+>dataType : Symbol(dataType, Decl(excessPropertyCheckingInDestructuring.ts, 13, 28))
+
+const [, , invalid2] = bar({ dataType: 'invalid' });
+>invalid2 : Symbol(invalid2, Decl(excessPropertyCheckingInDestructuring.ts, 14, 10))
+>bar : Symbol(bar, Decl(excessPropertyCheckingInDestructuring.ts, 0, 84))
+>dataType : Symbol(dataType, Decl(excessPropertyCheckingInDestructuring.ts, 14, 28))
+
+// Non-destructuring cases - generic function should work, non-generic should error
+const result1 = foo({ dataType: 'a', day: 0 }); // OK - generic function
+>result1 : Symbol(result1, Decl(excessPropertyCheckingInDestructuring.ts, 17, 5))
+>foo : Symbol(foo, Decl(excessPropertyCheckingInDestructuring.ts, 0, 0))
+>dataType : Symbol(dataType, Decl(excessPropertyCheckingInDestructuring.ts, 17, 21))
+>day : Symbol(day, Decl(excessPropertyCheckingInDestructuring.ts, 17, 36))
+
+const result2 = bar({ dataType: 'a', day: 0 }); // Error - non-generic with excess property
+>result2 : Symbol(result2, Decl(excessPropertyCheckingInDestructuring.ts, 18, 5))
+>bar : Symbol(bar, Decl(excessPropertyCheckingInDestructuring.ts, 0, 84))
+>dataType : Symbol(dataType, Decl(excessPropertyCheckingInDestructuring.ts, 18, 21))
+>day : Symbol(day, Decl(excessPropertyCheckingInDestructuring.ts, 18, 36))
+
+// Assignment destructuring should also work
+let d, e, f: any;
+>d : Symbol(d, Decl(excessPropertyCheckingInDestructuring.ts, 21, 3))
+>e : Symbol(e, Decl(excessPropertyCheckingInDestructuring.ts, 21, 6))
+>f : Symbol(f, Decl(excessPropertyCheckingInDestructuring.ts, 21, 9))
+
+[d, e, f] = foo({ dataType: 'a', day: 0 });
+>d : Symbol(d, Decl(excessPropertyCheckingInDestructuring.ts, 21, 3))
+>e : Symbol(e, Decl(excessPropertyCheckingInDestructuring.ts, 21, 6))
+>f : Symbol(f, Decl(excessPropertyCheckingInDestructuring.ts, 21, 9))
+>foo : Symbol(foo, Decl(excessPropertyCheckingInDestructuring.ts, 0, 0))
+>dataType : Symbol(dataType, Decl(excessPropertyCheckingInDestructuring.ts, 22, 17))
+>day : Symbol(day, Decl(excessPropertyCheckingInDestructuring.ts, 22, 32))
+
