@@ -1068,7 +1068,7 @@ func getCompletionData(program *compiler.Program, typeChecker *checker.Checker, 
 			existing.Add(element.PropertyNameOrName().Text())
 		}
 		uniques := core.Filter(exports, func(symbol *ast.Symbol) bool {
-			return symbol.Name != ast.InternalSymbolNameDefault && !existing.Has(symbol.Name)
+			return ast.SymbolName(symbol) != ast.InternalSymbolNameDefault && !existing.Has(ast.SymbolName(symbol))
 		})
 
 		symbols = append(symbols, uniques...)
@@ -1104,7 +1104,7 @@ func getCompletionData(program *compiler.Program, typeChecker *checker.Checker, 
 		uniques := core.Filter(
 			typeChecker.GetApparentProperties(typeChecker.GetTypeAtLocation(importAttributes)),
 			func(symbol *ast.Symbol) bool {
-				return !existing.Has(symbol.Name)
+				return !existing.Has(ast.SymbolName(symbol))
 			})
 		symbols = append(symbols, uniques...)
 		return globalsSearchSuccess
@@ -1279,7 +1279,7 @@ func getCompletionData(program *compiler.Program, typeChecker *checker.Checker, 
 		// Set sort texts.
 		for _, symbol := range filteredSymbols {
 			symbolId := ast.GetSymbolId(symbol)
-			if spreadMemberNames.Has(symbol.Name) {
+			if spreadMemberNames.Has(ast.SymbolName(symbol)) {
 				symbolToSortTextMap[symbolId] = SortTextMemberDeclaredBySpreadAssignment
 			}
 			if symbol.Flags&ast.SymbolFlagsOptional != 0 {
@@ -1375,7 +1375,7 @@ func getCompletionData(program *compiler.Program, typeChecker *checker.Checker, 
 			}
 		}
 
-		// Need to insert 'this.' before properties of `this` type, so only do that if `includeInsertTextCompletions`
+		// Need to insert 'this.' before properties of `this` type.
 		if scopeNode.Kind != ast.KindSourceFile {
 			thisType := typeChecker.TryGetThisTypeAtEx(
 				scopeNode,
@@ -1810,7 +1810,7 @@ func (l *LanguageService) createCompletionItem(
 		} else {
 			insertText = fmt.Sprintf(
 				"this%s%s",
-				core.IfElse(insertQuestionDot, "?.", ""),
+				core.IfElse(insertQuestionDot, "?.", "."),
 				name)
 		}
 	} else if data.propertyAccessToConvert != nil && (useBraces || insertQuestionDot) {
@@ -2052,15 +2052,15 @@ func isRecommendedCompletionMatch(localSymbol *ast.Symbol, recommendedCompletion
 		localSymbol.Flags&ast.SymbolFlagsExportValue != 0 && typeChecker.GetExportSymbolOfSymbol(localSymbol) == recommendedCompletion
 }
 
-// Ported from vscode's `USUAL_WORD_SEPARATORS`.
+// Ported from vscode.
 var wordSeparators = collections.NewSetFromItems(
-	'`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '=', '+', '[', '{', ']', '}', '\\', '|',
+	'`', '~', '!', '@', '%', '^', '&', '*', '(', ')', '-', '=', '+', '[', '{', ']', '}', '\\', '|',
 	';', ':', '\'', '"', ',', '.', '<', '>', '/', '?',
 )
 
-// Finds the range of the word that ends at the given position.
-// e.g. for "abc def.ghi|jkl", the word range is "ghi" and the word start is 'g'.
-func getWordRange(sourceFile *ast.SourceFile, position int) (wordRange *core.TextRange, wordStart rune) {
+// Finds the length and first rune of the word that ends at the given position.
+// e.g. for "abc def.ghi|jkl", the word length is 3 and the word start is 'g'.
+func getWordLengthAndStart(sourceFile *ast.SourceFile, position int) (wordLength int, wordStart rune) {
 	// !!! Port other case of vscode's `DEFAULT_WORD_REGEXP` that covers words that start like numbers, e.g. -123.456abcd.
 	text := sourceFile.Text()[:position]
 	totalSize := 0
@@ -2077,11 +2077,22 @@ func getWordRange(sourceFile *ast.SourceFile, position int) (wordRange *core.Tex
 		totalSize -= 1
 		firstRune, _ = utf8.DecodeRuneInString(text[len(text)-totalSize:])
 	}
-	if totalSize == 0 {
-		return nil, firstRune
+	return totalSize, firstRune
+}
+
+// `["ab c"]` -> `ab c`
+// `['ab c']` -> `ab c`
+// `[123]` -> `123`
+func trimElementAccess(text string) string {
+	text = strings.TrimPrefix(text, "[")
+	text = strings.TrimSuffix(text, "]")
+	if strings.HasPrefix(text, `'`) && strings.HasSuffix(text, `'`) {
+		text = strings.TrimPrefix(strings.TrimSuffix(text, `'`), `'`)
 	}
-	textRange := core.NewTextRange(position-totalSize, position)
-	return &textRange, firstRune
+	if strings.HasPrefix(text, `"`) && strings.HasSuffix(text, `"`) {
+		text = strings.TrimPrefix(strings.TrimSuffix(text, `"`), `"`)
+	}
+	return text
 }
 
 // Ported from vscode ts extension: `getFilterText`.
@@ -2090,31 +2101,36 @@ func getFilterText(
 	position int,
 	insertText string,
 	label string,
-	isMemberCompletion bool,
-	isSnippet bool,
 	wordStart rune,
+	dotAccessor string,
 ) string {
-	// Private field completion.
+	// Private field completion, e.g. label `#bar`.
 	if strings.HasPrefix(label, "#") {
-		// !!! document theses cases
 		if insertText != "" {
 			if strings.HasPrefix(insertText, "this.#") {
 				if wordStart == '#' {
-					return insertText
+					// `method() { this.#| }`
+					// `method() { #| }`
+					return ""
 				} else {
+					// `method() { this.| }`
+					// `method() { | }`
 					return strings.TrimPrefix(insertText, "this.#")
 				}
 			}
 		} else {
 			if wordStart == '#' {
+				// `method() { this.#| }`
 				return ""
 			} else {
+				// `method() { this.| }`
+				// `method() { | }`
 				return strings.TrimPrefix(label, "#")
 			}
 		}
 	}
 
-	// For `this.` completions, generally don't set the filter text since we don't want them to be overly prioritized. microsoft/vscode#74164
+	// For `this.` completions, generally don't set the filter text since we don't want them to be overly deprioritized. microsoft/vscode#74164
 	if strings.HasPrefix(insertText, "this.") {
 		return ""
 	}
@@ -2127,13 +2143,26 @@ func getFilterText(
 	// In which case we want to insert a bracket accessor but should use `.abc` as the filter text instead of
 	// the bracketed insert text.
 	if strings.HasPrefix(insertText, "[") {
-		if strings.HasPrefix(insertText, `['`) && strings.HasSuffix(insertText, `']`) {
-			return "." + strings.TrimPrefix(strings.TrimSuffix(insertText, `']`), `['`)
+		return dotAccessor + trimElementAccess(insertText)
+	}
+
+	if strings.HasPrefix(insertText, "?.") {
+		// Handle this case like the case above:
+		// ```
+		// const xyz = { 'ab c': 1 } | undefined;
+		// xyz.ab|
+		// ```
+		// filterText should be `.ab c` instead of `?.['ab c']`.
+		if strings.HasPrefix(insertText, "?.[") {
+			return dotAccessor + trimElementAccess(insertText[2:])
+		} else {
+			// ```
+			// const xyz = { abc: 1 } | undefined;
+			// xyz.ab|
+			// ```
+			// filterText should be `.abc` instead of `?.abc.
+			return dotAccessor + insertText[2:]
 		}
-		if strings.HasPrefix(insertText, `["`) && strings.HasSuffix(insertText, `"]`) {
-			return "." + strings.TrimPrefix(strings.TrimSuffix(insertText, `"]`), `["`)
-		}
-		return insertText
 	}
 
 	// In all other cases, fall back to using the insertText.
@@ -2141,27 +2170,18 @@ func getFilterText(
 }
 
 // Ported from vscode's `provideCompletionItems`.
-func getDotAccessorContext(file *ast.SourceFile, position int) (acessorRange *core.TextRange, accessorText string) {
+func getDotAccessor(file *ast.SourceFile, position int) string {
 	text := file.Text()[:position]
 	totalSize := 0
-	for r, size := utf8.DecodeLastRuneInString(text); size != 0; r, size = utf8.DecodeLastRuneInString(text[:len(text)-totalSize]) {
-		if !unicode.IsSpace(r) {
-			break
-		}
-		totalSize += size
-		text = text[:len(text)-size]
-	}
 	if strings.HasSuffix(text, "?.") {
 		totalSize += 2
-		newRange := core.NewTextRange(position-totalSize, position)
-		return &newRange, file.Text()[position-totalSize : position]
+		return file.Text()[position-totalSize : position]
 	}
 	if strings.HasSuffix(text, ".") {
 		totalSize += 1
-		newRange := core.NewTextRange(position-totalSize, position)
-		return &newRange, file.Text()[position-totalSize : position]
+		return file.Text()[position-totalSize : position]
 	}
-	return nil, ""
+	return ""
 }
 
 func strPtrTo(v string) *string {
@@ -2334,7 +2354,7 @@ func getCompletionEntryDisplayNameForSymbol(
 	if originIncludesSymbolName(origin) {
 		name = origin.symbolName()
 	} else {
-		name = symbol.Name
+		name = ast.SymbolName(symbol)
 	}
 	if name == "" ||
 		// If the symbol is external module, don't show it in the completion list
@@ -2428,7 +2448,7 @@ func originIsPromise(origin *symbolOriginInfo) bool {
 
 func getSourceFromOrigin(origin *symbolOriginInfo) string {
 	if originIsExport(origin) {
-		return stringutil.StripQuotes(origin.asExport().moduleSymbol.Name)
+		return stringutil.StripQuotes(ast.SymbolName(origin.asExport().moduleSymbol))
 	}
 
 	if originIsResolvedExport(origin) {
@@ -3194,7 +3214,7 @@ func getJSCompletionEntries(
 
 func (l *LanguageService) getOptionalReplacementSpan(location *ast.Node, file *ast.SourceFile) *lsproto.Range {
 	// StringLiteralLike locations are handled separately in stringCompletions.ts
-	if location != nil && location.Kind == ast.KindIdentifier {
+	if location != nil && (location.Kind == ast.KindIdentifier || location.Kind == ast.KindPrivateIdentifier) {
 		start := astnav.GetStartOfNode(location, file, false /*includeJSDoc*/)
 		return l.createLspRangeFromBounds(start, location.End(), file)
 	}
@@ -3844,7 +3864,7 @@ func filterClassMembersList(
 	}
 
 	return core.Filter(baseSymbols, func(propertySymbol *ast.Symbol) bool {
-		return !existingMemberNames.Has(propertySymbol.Name) &&
+		return !existingMemberNames.Has(ast.SymbolName(propertySymbol)) &&
 			len(propertySymbol.Declarations) > 0 &&
 			checker.GetDeclarationModifierFlagsFromSymbol(propertySymbol)&ast.ModifierFlagsPrivate == 0 &&
 			!(propertySymbol.ValueDeclaration != nil && ast.IsPrivateIdentifierClassElementDeclaration(propertySymbol.ValueDeclaration))
@@ -4137,40 +4157,10 @@ func (l *LanguageService) createLSPCompletionItem(
 	// Filter text
 
 	// Ported from vscode ts extension.
-	wordRange, wordStart := getWordRange(file, position)
+	wordSize, wordStart := getWordLengthAndStart(file, position)
+	dotAccessor := getDotAccessor(file, position-wordSize)
 	if filterText == "" {
-		filterText = getFilterText(file, position, insertText, name, isMemberCompletion, isSnippet, wordStart)
-	}
-	if isMemberCompletion && !isSnippet {
-		accessorRange, accessorText := getDotAccessorContext(file, position)
-		if accessorText != "" {
-			filterText = accessorText + core.IfElse(insertText != "", insertText, name)
-			if textEdit == nil {
-				insertText = filterText
-				if wordRange != nil && clientSupportsItemInsertReplace(clientOptions) {
-					textEdit = &lsproto.TextEditOrInsertReplaceEdit{
-						InsertReplaceEdit: &lsproto.InsertReplaceEdit{
-							NewText: insertText,
-							Insert: *l.createLspRangeFromBounds(
-								accessorRange.Pos(),
-								accessorRange.End(),
-								file),
-							Replace: *l.createLspRangeFromBounds(
-								min(accessorRange.Pos(), wordRange.Pos()),
-								accessorRange.End(),
-								file),
-						},
-					}
-				} else {
-					textEdit = &lsproto.TextEditOrInsertReplaceEdit{
-						TextEdit: &lsproto.TextEdit{
-							NewText: insertText,
-							Range:   *l.createLspRangeFromBounds(accessorRange.Pos(), accessorRange.End(), file),
-						},
-					}
-				}
-			}
-		}
+		filterText = getFilterText(file, position, insertText, name, wordStart, dotAccessor)
 	}
 
 	// Adjustements based on kind modifiers.

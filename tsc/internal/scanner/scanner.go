@@ -863,12 +863,11 @@ func (s *Scanner) Scan() ast.Kind {
 				}
 				s.pos--
 			}
-			if s.scanIdentifier(1) {
-				s.token = ast.KindPrivateIdentifier
-			} else {
+			if !s.scanIdentifier(1) {
 				s.errorAt(diagnostics.Invalid_character, s.pos-1, 1)
-				s.token = ast.KindUnknown
+				s.tokenValue = "#"
 			}
+			s.token = ast.KindPrivateIdentifier
 		default:
 			if ch < 0 {
 				s.token = ast.KindEndOfFile

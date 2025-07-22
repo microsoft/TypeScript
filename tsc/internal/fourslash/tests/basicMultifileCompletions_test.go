@@ -27,20 +27,9 @@ const test = foo./*1*/`
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
-					Label:      "bar",
-					Kind:       ptrTo(lsproto.CompletionItemKindField),
-					SortText:   ptrTo(string(ls.SortTextLocationPriority)),
-					FilterText: ptrTo(".bar"),
-					InsertText: ptrTo(".bar"),
-					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-						TextEdit: &lsproto.TextEdit{
-							NewText: ".bar",
-							Range: lsproto.Range{
-								Start: lsproto.Position{Line: 1, Character: 16},
-								End:   lsproto.Position{Line: 1, Character: 17},
-							},
-						},
-					},
+					Label:    "bar",
+					Kind:     ptrTo(lsproto.CompletionItemKindField),
+					SortText: ptrTo(string(ls.SortTextLocationPriority)),
 				},
 			},
 		},

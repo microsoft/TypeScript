@@ -4,60 +4,58 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
 
-func TestGetJavaScriptCompletions19(t *testing.T) {
+func TestCompletionFilterText2(t *testing.T) {
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @allowNonTsExtensions: true
-// @Filename: file.js
-function fn() {
-	if (foo) {
-		return 0;
-	} else {
-		return '0';
-	}
+	const content = `// @strict: true
+declare const foo1: { bar: string } | undefined;
+if (true) {
+    foo1[|.|]/*1*/
 }
-let x = fn();
-if(typeof x === 'string') {
-	x/*str*/
-} else {
-	x/*num*/
-}`
+else {
+    foo1?./*2*/
+}
+`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.GoToMarker(t, "str")
-	f.Insert(t, ".")
-	f.VerifyCompletions(t, nil, &fourslash.CompletionsExpectedList{
+	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
-					Label: "substring",
-					Kind:  ptrTo(lsproto.CompletionItemKindMethod),
+					Label:      "bar",
+					Kind:       ptrTo(lsproto.CompletionItemKindField),
+					SortText:   ptrTo(string(ls.SortTextLocationPriority)),
+					InsertText: ptrTo("?.bar"),
+					FilterText: ptrTo(".bar"),
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "?.bar",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
 				},
 			},
 		},
 	})
-	f.GoToMarker(t, "num")
-	f.Insert(t, ".")
-	f.VerifyCompletions(t, nil, &fourslash.CompletionsExpectedList{
+	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
-					Label: "toFixed",
-					Kind:  ptrTo(lsproto.CompletionItemKindMethod),
+					Label:    "bar",
+					Kind:     ptrTo(lsproto.CompletionItemKindField),
+					SortText: ptrTo(string(ls.SortTextLocationPriority)),
 				},
 			},
 		},

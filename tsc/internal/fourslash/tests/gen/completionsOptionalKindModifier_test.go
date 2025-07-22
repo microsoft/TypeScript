@@ -10,7 +10,7 @@ import (
 
 func TestCompletionsOptionalKindModifier(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface A { a?: number; method?(): number; };
 function f(x: A) {

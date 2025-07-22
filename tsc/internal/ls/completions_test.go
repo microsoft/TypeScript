@@ -112,117 +112,6 @@ func TestCompletions(t *testing.T) {
 
 	testCases := []testCase{
 		{
-			name: "basicInterfaceMembers",
-			files: map[string]string{
-				defaultMainFileName: `export {};
-interface Point {
-    x: number;
-    y: number;
-}
-declare const p: Point;
-p./*a*/`,
-			},
-			expectedResult: map[string]*testCaseResult{
-				"a": {
-					list: &lsproto.CompletionList{
-						IsIncomplete: false,
-						ItemDefaults: itemDefaults,
-						Items: []*lsproto.CompletionItem{
-							{
-								Label:      "x",
-								Kind:       fieldKind,
-								SortText:   sortTextLocationPriority,
-								FilterText: ptrTo(".x"),
-								InsertText: ptrTo(".x"),
-								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									TextEdit: &lsproto.TextEdit{
-										NewText: ".x",
-										Range: lsproto.Range{
-											Start: lsproto.Position{Line: 6, Character: 1},
-											End:   lsproto.Position{Line: 6, Character: 2},
-										},
-									},
-								},
-							},
-							{
-								Label:      "y",
-								Kind:       fieldKind,
-								SortText:   sortTextLocationPriority,
-								FilterText: ptrTo(".y"),
-								InsertText: ptrTo(".y"),
-								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									TextEdit: &lsproto.TextEdit{
-										NewText: ".y",
-										Range: lsproto.Range{
-											Start: lsproto.Position{Line: 6, Character: 1},
-											End:   lsproto.Position{Line: 6, Character: 2},
-										},
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-		},
-		{
-			name: "basicInterfaceMembersOptional",
-			files: map[string]string{
-				"/tsconfig.json": `{ "compilerOptions": { "strict": true } }`,
-				defaultMainFileName: `export {};
-interface Point {
-    x: number;
-    y: number;
-}
-declare const p: Point | undefined;
-p./*a*/`,
-			},
-			expectedResult: map[string]*testCaseResult{
-				"a": {
-					list: &lsproto.CompletionList{
-						IsIncomplete: false,
-						ItemDefaults: itemDefaults,
-						Items: []*lsproto.CompletionItem{
-							{
-								Label:      "x",
-								Kind:       fieldKind,
-								SortText:   sortTextLocationPriority,
-								FilterText: ptrTo(".?.x"),
-								InsertText: ptrTo("?.x"),
-
-								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									TextEdit: &lsproto.TextEdit{
-										NewText: "?.x",
-										Range: lsproto.Range{
-											Start: lsproto.Position{Line: 6, Character: 1},
-											End:   lsproto.Position{Line: 6, Character: 2},
-										},
-									},
-								},
-							},
-							{
-								Label:      "y",
-								Kind:       fieldKind,
-								SortText:   sortTextLocationPriority,
-								FilterText: ptrTo(".?.y"),
-								InsertText: ptrTo("?.y"),
-
-								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									TextEdit: &lsproto.TextEdit{
-										NewText: "?.y",
-										Range: lsproto.Range{
-											Start: lsproto.Position{Line: 6, Character: 1},
-											End:   lsproto.Position{Line: 6, Character: 2},
-										},
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-		},
-		{
 			name: "objectLiteralType",
 			files: map[string]string{
 				defaultMainFileName: `export {};
@@ -236,20 +125,9 @@ x./*a*/`,
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:      "foo",
-								Kind:       fieldKind,
-								SortText:   sortTextLocationPriority,
-								InsertText: ptrTo(".foo"),
-								FilterText: ptrTo(".foo"),
-								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									TextEdit: &lsproto.TextEdit{
-										NewText: ".foo",
-										Range: lsproto.Range{
-											Start: lsproto.Position{Line: 2, Character: 1},
-											End:   lsproto.Position{Line: 2, Character: 2},
-										},
-									},
-								},
+								Label:    "foo",
+								Kind:     fieldKind,
+								SortText: sortTextLocationPriority,
 							},
 						},
 					},
@@ -272,36 +150,14 @@ var t = new n(0, 1, '');t./*a*/`,
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:      "x",
-								Kind:       fieldKind,
-								SortText:   sortTextLocationPriority,
-								FilterText: ptrTo(".x"),
-								InsertText: ptrTo(".x"),
-								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									TextEdit: &lsproto.TextEdit{
-										NewText: ".x",
-										Range: lsproto.Range{
-											Start: lsproto.Position{Line: 3, Character: 25},
-											End:   lsproto.Position{Line: 3, Character: 26},
-										},
-									},
-								},
+								Label:    "x",
+								Kind:     fieldKind,
+								SortText: sortTextLocationPriority,
 							},
 							{
-								Label:      "y",
-								Kind:       fieldKind,
-								SortText:   sortTextLocationPriority,
-								FilterText: ptrTo(".y"),
-								InsertText: ptrTo(".y"),
-								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									TextEdit: &lsproto.TextEdit{
-										NewText: ".y",
-										Range: lsproto.Range{
-											Start: lsproto.Position{Line: 3, Character: 25},
-											End:   lsproto.Position{Line: 3, Character: 26},
-										},
-									},
-								},
+								Label:    "y",
+								Kind:     fieldKind,
+								SortText: sortTextLocationPriority,
 							},
 						},
 					},
@@ -340,196 +196,64 @@ D./*a*/`,
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{ // !!! `funcionMembersPlus`
 							{
-								Label:      "bar",
-								Kind:       methodKind,
-								SortText:   sortTextLocalDeclarationPriority,
-								FilterText: ptrTo(".bar"),
-								InsertText: ptrTo(".bar"),
-								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									TextEdit: &lsproto.TextEdit{
-										NewText: ".bar",
-										Range: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 1},
-											End:   lsproto.Position{Line: 19, Character: 2},
-										},
-									},
-								},
+								Label:    "bar",
+								Kind:     methodKind,
+								SortText: sortTextLocalDeclarationPriority,
 							},
 							{
-								Label:      "bar2",
-								Kind:       methodKind,
-								SortText:   sortTextLocalDeclarationPriority,
-								FilterText: ptrTo(".bar2"),
-								InsertText: ptrTo(".bar2"),
-								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									TextEdit: &lsproto.TextEdit{
-										NewText: ".bar2",
-										Range: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 1},
-											End:   lsproto.Position{Line: 19, Character: 2},
-										},
-									},
-								},
+								Label:    "bar2",
+								Kind:     methodKind,
+								SortText: sortTextLocalDeclarationPriority,
 							},
 							{
-								Label:      "apply",
-								Kind:       methodKind,
-								SortText:   sortTextLocationPriority,
-								FilterText: ptrTo(".apply"),
-								InsertText: ptrTo(".apply"),
-								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									TextEdit: &lsproto.TextEdit{
-										NewText: ".apply",
-										Range: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 1},
-											End:   lsproto.Position{Line: 19, Character: 2},
-										},
-									},
-								},
+								Label:    "apply",
+								Kind:     methodKind,
+								SortText: sortTextLocationPriority,
 							},
 							{
-								Label:      "arguments",
-								Kind:       fieldKind,
-								SortText:   sortTextLocationPriority,
-								FilterText: ptrTo(".arguments"),
-								InsertText: ptrTo(".arguments"),
-								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									TextEdit: &lsproto.TextEdit{
-										NewText: ".arguments",
-										Range: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 1},
-											End:   lsproto.Position{Line: 19, Character: 2},
-										},
-									},
-								},
+								Label:    "arguments",
+								Kind:     fieldKind,
+								SortText: sortTextLocationPriority,
 							},
 							{
-								Label:      "baz",
-								Kind:       functionKind,
-								SortText:   sortTextLocationPriority,
-								FilterText: ptrTo(".baz"),
-								InsertText: ptrTo(".baz"),
-								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									TextEdit: &lsproto.TextEdit{
-										NewText: ".baz",
-										Range: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 1},
-											End:   lsproto.Position{Line: 19, Character: 2},
-										},
-									},
-								},
+								Label:    "baz",
+								Kind:     functionKind,
+								SortText: sortTextLocationPriority,
 							},
 							{
-								Label:      "bind",
-								Kind:       methodKind,
-								SortText:   sortTextLocationPriority,
-								FilterText: ptrTo(".bind"),
-								InsertText: ptrTo(".bind"),
-								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									TextEdit: &lsproto.TextEdit{
-										NewText: ".bind",
-										Range: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 1},
-											End:   lsproto.Position{Line: 19, Character: 2},
-										},
-									},
-								},
+								Label:    "bind",
+								Kind:     methodKind,
+								SortText: sortTextLocationPriority,
 							},
 							{
-								Label:      "call",
-								Kind:       methodKind,
-								SortText:   sortTextLocationPriority,
-								FilterText: ptrTo(".call"),
-								InsertText: ptrTo(".call"),
-								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									TextEdit: &lsproto.TextEdit{
-										NewText: ".call",
-										Range: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 1},
-											End:   lsproto.Position{Line: 19, Character: 2},
-										},
-									},
-								},
+								Label:    "call",
+								Kind:     methodKind,
+								SortText: sortTextLocationPriority,
 							},
 							{
-								Label:      "caller",
-								Kind:       fieldKind,
-								SortText:   sortTextLocationPriority,
-								FilterText: ptrTo(".caller"),
-								InsertText: ptrTo(".caller"),
-								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									TextEdit: &lsproto.TextEdit{
-										NewText: ".caller",
-										Range: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 1},
-											End:   lsproto.Position{Line: 19, Character: 2},
-										},
-									},
-								},
+								Label:    "caller",
+								Kind:     fieldKind,
+								SortText: sortTextLocationPriority,
 							},
 							{
-								Label:      "length",
-								Kind:       fieldKind,
-								SortText:   sortTextLocationPriority,
-								FilterText: ptrTo(".length"),
-								InsertText: ptrTo(".length"),
-								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									TextEdit: &lsproto.TextEdit{
-										NewText: ".length",
-										Range: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 1},
-											End:   lsproto.Position{Line: 19, Character: 2},
-										},
-									},
-								},
+								Label:    "length",
+								Kind:     fieldKind,
+								SortText: sortTextLocationPriority,
 							},
 							{
-								Label:      "prototype",
-								Kind:       fieldKind,
-								SortText:   sortTextLocationPriority,
-								FilterText: ptrTo(".prototype"),
-								InsertText: ptrTo(".prototype"),
-								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									TextEdit: &lsproto.TextEdit{
-										NewText: ".prototype",
-										Range: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 1},
-											End:   lsproto.Position{Line: 19, Character: 2},
-										},
-									},
-								},
+								Label:    "prototype",
+								Kind:     fieldKind,
+								SortText: sortTextLocationPriority,
 							},
 							{
-								Label:      "toString",
-								Kind:       methodKind,
-								SortText:   sortTextLocationPriority,
-								FilterText: ptrTo(".toString"),
-								InsertText: ptrTo(".toString"),
-								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									TextEdit: &lsproto.TextEdit{
-										NewText: ".toString",
-										Range: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 1},
-											End:   lsproto.Position{Line: 19, Character: 2},
-										},
-									},
-								},
+								Label:    "toString",
+								Kind:     methodKind,
+								SortText: sortTextLocationPriority,
 							},
 							{
-								Label:      "x",
-								Kind:       variableKind,
-								SortText:   sortTextLocationPriority,
-								FilterText: ptrTo(".x"),
-								InsertText: ptrTo(".x"),
-								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									TextEdit: &lsproto.TextEdit{
-										NewText: ".x",
-										Range: lsproto.Range{
-											Start: lsproto.Position{Line: 19, Character: 1},
-											End:   lsproto.Position{Line: 19, Character: 2},
-										},
-									},
-								},
+								Label:    "x",
+								Kind:     variableKind,
+								SortText: sortTextLocationPriority,
 							},
 						},
 					},
@@ -555,36 +279,14 @@ D./*a*/`,
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:      "a",
-								Kind:       fieldKind,
-								SortText:   sortTextLocationPriority,
-								FilterText: ptrTo(".a"),
-								InsertText: ptrTo(".a"),
-								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									TextEdit: &lsproto.TextEdit{
-										NewText: ".a",
-										Range: lsproto.Range{
-											Start: lsproto.Position{Line: 4, Character: 16},
-											End:   lsproto.Position{Line: 4, Character: 17},
-										},
-									},
-								},
+								Label:    "a",
+								Kind:     fieldKind,
+								SortText: sortTextLocationPriority,
 							},
 							{
-								Label:      "b",
-								Kind:       methodKind,
-								SortText:   sortTextLocationPriority,
-								FilterText: ptrTo(".b"),
-								InsertText: ptrTo(".b"),
-								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									TextEdit: &lsproto.TextEdit{
-										NewText: ".b",
-										Range: lsproto.Range{
-											Start: lsproto.Position{Line: 4, Character: 16},
-											End:   lsproto.Position{Line: 4, Character: 17},
-										},
-									},
-								},
+								Label:    "b",
+								Kind:     methodKind,
+								SortText: sortTextLocationPriority,
 							},
 						},
 					},
@@ -602,21 +304,7 @@ x.forEach(function (y) { y./*1*/`,
 					list: &lsproto.CompletionList{
 						IsIncomplete: false,
 						ItemDefaults: itemDefaults,
-						Items: core.Map(stringMembers, func(basicItem *lsproto.CompletionItem) *lsproto.CompletionItem {
-							item := *basicItem
-							item.FilterText = ptrTo("." + item.Label)
-							item.InsertText = item.FilterText
-							item.TextEdit = &lsproto.TextEditOrInsertReplaceEdit{
-								TextEdit: &lsproto.TextEdit{
-									NewText: *item.FilterText,
-									Range: lsproto.Range{
-										Start: lsproto.Position{Line: 1, Character: 26},
-										End:   lsproto.Position{Line: 1, Character: 27},
-									},
-								},
-							}
-							return &item
-						}),
+						Items:        stringMembers,
 					},
 				},
 			},
@@ -638,8 +326,7 @@ x./**/;`,
 								Kind:       fieldKind,
 								SortText:   sortTextLocationPriority,
 								InsertText: ptrTo("[0]"),
-
-								FilterText: ptrTo(".[0]"),
+								FilterText: ptrTo(".0"),
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 									TextEdit: &lsproto.TextEdit{
 										NewText: "[0]",
@@ -655,8 +342,7 @@ x./**/;`,
 								Kind:       fieldKind,
 								SortText:   sortTextLocationPriority,
 								InsertText: ptrTo("[1]"),
-
-								FilterText: ptrTo(".[1]"),
+								FilterText: ptrTo(".1"),
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 									TextEdit: &lsproto.TextEdit{
 										NewText: "[1]",
@@ -667,21 +353,7 @@ x./**/;`,
 									},
 								},
 							},
-						}, core.Map(arrayMembers, func(basicItem *lsproto.CompletionItem) *lsproto.CompletionItem {
-							item := *basicItem
-							item.FilterText = ptrTo("." + item.Label)
-							item.InsertText = item.FilterText
-							item.TextEdit = &lsproto.TextEditOrInsertReplaceEdit{
-								TextEdit: &lsproto.TextEdit{
-									NewText: *item.FilterText,
-									Range: lsproto.Range{
-										Start: lsproto.Position{Line: 1, Character: 1},
-										End:   lsproto.Position{Line: 1, Character: 2},
-									},
-								},
-							}
-							return &item
-						})...),
+						}, arrayMembers...),
 					},
 				},
 			},
@@ -1693,20 +1365,9 @@ switch (x) {
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:      "B",
-								Kind:       enumMemberKind,
-								SortText:   sortTextLocationPriority,
-								InsertText: ptrTo(".B"),
-								FilterText: ptrTo(".B"),
-								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-									TextEdit: &lsproto.TextEdit{
-										NewText: ".B",
-										Range: lsproto.Range{
-											Start: lsproto.Position{Line: 5, Character: 10},
-											End:   lsproto.Position{Line: 5, Character: 11},
-										},
-									},
-								},
+								Label:    "B",
+								Kind:     enumMemberKind,
+								SortText: sortTextLocationPriority,
 							},
 						},
 					},

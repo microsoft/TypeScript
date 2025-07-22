@@ -5473,7 +5473,8 @@ func (p *Parser) parseCallExpressionRest(pos int, expression *ast.Expression) *a
 		if questionDotToken != nil {
 			// We parsed `?.` but then failed to parse anything, so report a missing identifier here.
 			p.parseErrorAtCurrentToken(diagnostics.Identifier_expected)
-			expression = p.createMissingIdentifier()
+			name := p.createMissingIdentifier()
+			expression = p.factory.NewPropertyAccessExpression(expression, questionDotToken, name, ast.NodeFlagsOptionalChain)
 			p.finishNode(expression, pos)
 		}
 		break

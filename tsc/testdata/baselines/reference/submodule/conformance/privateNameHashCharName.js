@@ -13,8 +13,10 @@ class C {
 
 
 //// [privateNameHashCharName.js]
+#;
 class C {
+    #;
     m() {
-        this.;
+        this.#;
     }
 }

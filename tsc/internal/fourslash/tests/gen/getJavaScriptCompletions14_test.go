@@ -10,7 +10,7 @@ import (
 
 func TestGetJavaScriptCompletions14(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @allowNonTsExtensions: true
 // @Filename: file1.js

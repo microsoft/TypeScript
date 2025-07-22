@@ -10,14 +10,15 @@
 -    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 -};
 -var _C_;
--#;
+ #;
  class C {
 -    constructor() {
 -        _C_.set(this, void 0);
 -    }
++    #;
      m() {
 -        __classPrivateFieldGet(this, _C_, "f");
-+        this.;
++        this.#;
      }
  }
 -_C_ = new WeakMap();
