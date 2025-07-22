@@ -18364,9 +18364,8 @@ func (c *Checker) getInstantiatedConstructorsForTypeArguments(t *Type, typeArgum
 
 func (c *Checker) getConstructorsForTypeArguments(t *Type, typeArgumentNodes []*ast.Node, location *ast.Node) []*Signature {
 	typeArgCount := len(typeArgumentNodes)
-	isJavaScript := ast.IsInJSFile(location)
 	return core.Filter(c.getSignaturesOfType(t, SignatureKindConstruct), func(sig *Signature) bool {
-		return isJavaScript || typeArgCount >= c.getMinTypeArgumentCount(sig.typeParameters) && typeArgCount <= len(sig.typeParameters)
+		return typeArgCount >= c.getMinTypeArgumentCount(sig.typeParameters) && typeArgCount <= len(sig.typeParameters)
 	})
 }
 
