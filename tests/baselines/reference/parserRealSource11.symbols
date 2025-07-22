@@ -443,7 +443,7 @@ module TypeScript {
                     resolved += String.fromCharCode(charCode);
 >resolved : Symbol(resolved, Decl(parserRealSource11.ts, 160, 15))
 >String.fromCharCode : Symbol(StringConstructor.fromCharCode, Decl(lib.es5.d.ts, --, --))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >fromCharCode : Symbol(StringConstructor.fromCharCode, Decl(lib.es5.d.ts, --, --))
 >charCode : Symbol(charCode, Decl(parserRealSource11.ts, 166, 23))
 
@@ -7280,11 +7280,11 @@ module TypeScript {
 >this.text : Symbol(Comment.text, Decl(parserRealSource11.ts, 2325, 38))
 >this : Symbol(Comment, Decl(parserRealSource11.ts, 2323, 5))
 >text : Symbol(Comment.text, Decl(parserRealSource11.ts, 2325, 38))
->this.content.split : Symbol(String.split, Decl(lib.es5.d.ts, --, --))
+>this.content.split : Symbol(String.split, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >this.content : Symbol(Comment.content, Decl(parserRealSource11.ts, 2329, 21))
 >this : Symbol(Comment, Decl(parserRealSource11.ts, 2323, 5))
 >content : Symbol(Comment.content, Decl(parserRealSource11.ts, 2329, 21))
->split : Symbol(String.split, Decl(lib.es5.d.ts, --, --))
+>split : Symbol(String.split, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
                     for (var i = 0; i < this.text.length; i++) {
 >i : Symbol(i, Decl(parserRealSource11.ts, 2337, 28))

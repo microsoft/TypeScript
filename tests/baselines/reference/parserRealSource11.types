@@ -18550,16 +18550,16 @@ module TypeScript {
 >     : ^^^^^^^^
 >this.content.split("\n") : string[]
 >                         : ^^^^^^^^
->this.content.split : (separator: string | RegExp, limit?: number) => string[]
->                   : ^         ^^               ^^     ^^^      ^^^^^        
+>this.content.split : { (separator: string | RegExp, limit?: number): string[]; <Source extends string, Separator extends string>(this: Source, separator: Separator, limit?: undefined): Split<Source, Separator>; (separator: string | RegExp, limit: 0): []; }
+>                   : ^^^         ^^               ^^     ^^^      ^^^        ^^^      ^^^^^^^^^      ^^         ^^^^^^^^^      ^^    ^^      ^^         ^^         ^^     ^^^         ^^^                        ^^^         ^^               ^^     ^^ ^^^  ^^^
 >this.content : string
 >             : ^^^^^^
 >this : this
 >     : ^^^^
 >content : string
 >        : ^^^^^^
->split : (separator: string | RegExp, limit?: number) => string[]
->      : ^         ^^               ^^     ^^^      ^^^^^        
+>split : { (separator: string | RegExp, limit?: number): string[]; <Source extends string, Separator extends string>(this: Source, separator: Separator, limit?: undefined): Split<Source, Separator>; (separator: string | RegExp, limit: 0): []; }
+>      : ^^^         ^^               ^^     ^^^      ^^^        ^^^      ^^^^^^^^^      ^^         ^^^^^^^^^      ^^    ^^      ^^         ^^         ^^     ^^^         ^^^                        ^^^         ^^               ^^     ^^ ^^^  ^^^
 >"\n" : "\n"
 >     : ^^^^
 

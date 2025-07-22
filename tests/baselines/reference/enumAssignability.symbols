@@ -152,7 +152,7 @@ module Others {
 
     var q: String = e;
 >q : Symbol(q, Decl(enumAssignability.ts, 44, 7))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
 
     function foo<T, U extends T, V extends Date, A extends Number, B extends E>(x: T, y: U, z: V) {
