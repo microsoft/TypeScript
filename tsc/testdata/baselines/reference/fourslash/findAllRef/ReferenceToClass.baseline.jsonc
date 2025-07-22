@@ -16,6 +16,11 @@
 // }
 
 
+// === /referenceToClass_2.ts ===
+
+// var k: [|foo|];
+
+
 
 
 // === findAllReferences ===
@@ -36,6 +41,11 @@
 // }
 
 
+// === /referenceToClass_2.ts ===
+
+// var k: [|foo|];
+
+
 
 
 // === findAllReferences ===
@@ -54,6 +64,11 @@
 // module mod {
 //     var k: [|foo|] = null;
 // }
+
+
+// === /referenceToClass_2.ts ===
+
+// var k: [|foo|];
 
 
 
@@ -76,6 +91,11 @@
 // }
 
 
+// === /referenceToClass_2.ts ===
+
+// var k: [|foo|];
+
+
 
 
 // === findAllReferences ===
@@ -94,6 +114,11 @@
 // module mod {
 //     var k: /*FIND ALL REFS*/[|foo|] = null;
 // }
+
+
+// === /referenceToClass_2.ts ===
+
+// var k: [|foo|];
 
 
 

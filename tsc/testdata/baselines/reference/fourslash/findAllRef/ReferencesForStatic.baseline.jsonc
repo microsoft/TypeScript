@@ -31,6 +31,11 @@
 // }
 
 
+// === /referencesOnStatic_2.ts ===
+
+// var q = foo.[|n|];
+
+
 
 
 // === findAllReferences ===
@@ -59,6 +64,11 @@
 //         n = foo.[|n|];
 //     }
 // }
+
+
+// === /referencesOnStatic_2.ts ===
+
+// var q = foo.[|n|];
 
 
 
@@ -91,6 +101,11 @@
 // }
 
 
+// === /referencesOnStatic_2.ts ===
+
+// var q = foo.[|n|];
+
+
 
 
 // === findAllReferences ===
@@ -119,6 +134,11 @@
 //         n = foo.[|n|];
 //     }
 // }
+
+
+// === /referencesOnStatic_2.ts ===
+
+// var q = foo.[|n|];
 
 
 
@@ -151,6 +171,11 @@
 // }
 
 
+// === /referencesOnStatic_2.ts ===
+
+// var q = foo.[|n|];
+
+
 
 
 // === findAllReferences ===
@@ -181,6 +206,11 @@
 // }
 
 
+// === /referencesOnStatic_2.ts ===
+
+// var q = foo.[|n|];
+
+
 
 
 // === findAllReferences ===
@@ -209,6 +239,11 @@
 //         n = foo./*FIND ALL REFS*/[|n|];
 //     }
 // }
+
+
+// === /referencesOnStatic_2.ts ===
+
+// var q = foo.[|n|];
 
 
 

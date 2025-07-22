@@ -11,6 +11,12 @@
 // export as namespace /*FIND ALL REFS*/[|myLib|];
 
 
+// === /1.ts ===
+
+// /// <reference path="0.d.ts" />
+// [|myLib|].doThing();
+
+
 
 
 // === findAllReferences ===

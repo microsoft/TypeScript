@@ -4,12 +4,22 @@
 // enum Test { /*FIND ALL REFS*/"[|42|]" = 1 };
 
 
+// === /expression.ts ===
+
+// (Test[[|42|]]);
+
+
 
 
 // === findAllReferences ===
 // === /declaration.ts ===
 
 // enum Test { "/*FIND ALL REFS*/[|42|]" = 1 };
+
+
+// === /expression.ts ===
+
+// (Test[[|42|]]);
 
 
 

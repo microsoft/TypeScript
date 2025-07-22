@@ -12,6 +12,19 @@
 // });
 
 
+// === /b.ts ===
+
+// import { infer } from "./infer";
+// infer({
+//     m: {
+//         initData() {
+//             this.[|x|] = 1;
+//             this.[|x|];
+//         },
+//     }
+// });
+
+
 // === /infer.d.ts ===
 
 // export declare function infer(o: { m: Record<string, Function> } & ThisType<{ [|x|]: number }>): void;

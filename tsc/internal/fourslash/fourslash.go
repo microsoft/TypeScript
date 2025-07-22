@@ -149,9 +149,10 @@ func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, conten
 		scriptInfos[filePath] = newScriptInfo(filePath, file.Content)
 	}
 
-	compilerOptions := &core.CompilerOptions{}
+	compilerOptions := &core.CompilerOptions{
+		SkipDefaultLibCheck: core.TSTrue,
+	}
 	harnessutil.SetCompilerOptionsFromTestConfig(t, testData.GlobalOptions, compilerOptions)
-	compilerOptions.SkipDefaultLibCheck = core.TSTrue
 
 	inputReader, inputWriter := newLSPPipe()
 	outputReader, outputWriter := newLSPPipe()
@@ -202,7 +203,10 @@ func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, conten
 	// !!! replace with a proper request *after initialize*
 	f.server.SetCompilerOptionsForInferredProjects(compilerOptions)
 	f.initialize(t, capabilities)
-	f.openFile(t, f.testData.Files[0].fileName)
+	for _, file := range testData.Files {
+		f.openFile(t, file.fileName)
+	}
+	f.activeFilename = f.testData.Files[0].fileName
 
 	t.Cleanup(func() {
 		inputWriter.Close()

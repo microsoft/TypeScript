@@ -11,6 +11,11 @@
 // }
 
 
+// === /referencesForGlobals_2.ts ===
+
+// var m = [|globalModule|];
+
+
 
 
 // === findAllReferences ===

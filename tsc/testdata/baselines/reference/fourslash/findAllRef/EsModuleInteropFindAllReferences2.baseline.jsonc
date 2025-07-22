@@ -10,6 +10,12 @@
 // export const /*FIND ALL REFS*/[|x|]: number;
 
 
+// === /b.ts ===
+
+// import a from "./a";
+// a.[|x|];
+
+
 
 
 // === findAllReferences ===

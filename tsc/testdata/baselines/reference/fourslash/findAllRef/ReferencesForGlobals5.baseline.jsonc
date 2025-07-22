@@ -13,6 +13,11 @@
 // import /*FIND ALL REFS*/[|globalAlias|] = globalModule;
 
 
+// === /referencesForGlobals_2.ts ===
+
+// var m = [|globalAlias|];
+
+
 
 
 // === findAllReferences ===
