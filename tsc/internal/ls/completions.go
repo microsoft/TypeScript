@@ -4556,7 +4556,7 @@ type argumentInfoForCompletions struct {
 
 func getArgumentInfoForCompletions(node *ast.Node, position int, file *ast.SourceFile, typeChecker *checker.Checker) *argumentInfoForCompletions {
 	info := getImmediatelyContainingArgumentInfo(node, position, file, typeChecker)
-	if info == nil || info.isTypeParameterList || info.invocation.callInvocation == nil {
+	if info == nil || info.isTypeParameterList || info.invocation.callInvocation == nil || info.argumentIndex == nil {
 		return nil
 	}
 	return &argumentInfoForCompletions{
