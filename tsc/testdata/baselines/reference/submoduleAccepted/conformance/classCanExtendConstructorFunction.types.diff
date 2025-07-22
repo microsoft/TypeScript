@@ -127,14 +127,6 @@
 
          this.foonly = 12
  >this.foonly = 12 : 12
-->this.foonly : any
-+>this.foonly : number
- >this : this
-->foonly : any
-+>foonly : number
- >12 : 12
-     }
-     /**
 @@= skipped -38, +38 lines =@@
       * This is not assignable, so should have a type error
       */

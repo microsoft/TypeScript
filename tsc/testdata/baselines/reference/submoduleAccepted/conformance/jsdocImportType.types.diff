@@ -1,17 +1,6 @@
 --- old.jsdocImportType.types
 +++ new.jsdocImportType.types
-@@= skipped -46, +46 lines =@@
-     constructor() {
-         this.chunk = 1;
- >this.chunk = 1 : 1
-->this.chunk : any
-+>this.chunk : number
- >this : this
-->chunk : any
-+>chunk : number
- >1 : 1
-     }
- }
+@@= skipped -55, +55 lines =@@
  module.exports = Chunk;
  >module.exports = Chunk : typeof Chunk
  >module.exports : typeof Chunk

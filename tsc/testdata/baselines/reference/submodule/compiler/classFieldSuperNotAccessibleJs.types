@@ -9,9 +9,9 @@ class YaddaBase {
     constructor() {
         this.roots = "hi";
 >this.roots = "hi" : "hi"
->this.roots : string
+>this.roots : any
 >this : this
->roots : string
+>roots : any
 >"hi" : "hi"
 
         /** @type number */

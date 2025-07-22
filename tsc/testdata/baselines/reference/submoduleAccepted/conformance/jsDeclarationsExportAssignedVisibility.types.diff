@@ -1,18 +1,6 @@
 --- old.jsDeclarationsExportAssignedVisibility.types
 +++ new.jsDeclarationsExportAssignedVisibility.types
-@@= skipped -12, +12 lines =@@
-     constructor() {
-         this.usage = new Obj();
- >this.usage = new Obj() : Obj
-->this.usage : any
-+>this.usage : Obj
- >this : this
-->usage : any
-+>usage : Obj
- >new Obj() : Obj
- >Obj : typeof Obj
-     }
-@@= skipped -11, +11 lines =@@
+@@= skipped -23, +23 lines =@@
  module.exports = Container;
  >module.exports = Container : typeof Container
  >module.exports : typeof Container
@@ -38,12 +26,3 @@
 
      constructor() {
          this.x = 12;
- >this.x = 12 : 12
-->this.x : any
-+>this.x : number
- >this : this
-->x : any
-+>x : number
- >12 : 12
-     }
- }

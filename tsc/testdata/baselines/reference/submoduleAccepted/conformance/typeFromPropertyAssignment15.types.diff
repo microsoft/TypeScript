@@ -17,17 +17,6 @@
  >Inner : typeof Inner
  >class {    constructor() {        this.x = 1    }    m() { }} : typeof Inner
 
-     constructor() {
-         this.x = 1
- >this.x = 1 : 1
-->this.x : any
-+>this.x : number
- >this : this
-->x : any
-+>x : number
- >1 : 1
-     }
-     m() { }
 @@= skipped -24, +24 lines =@@
 
  /** @type {Outer.Inner} */

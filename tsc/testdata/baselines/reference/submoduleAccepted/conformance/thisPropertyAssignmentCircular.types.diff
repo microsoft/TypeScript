@@ -1,18 +1,6 @@
 --- old.thisPropertyAssignmentCircular.types
 +++ new.thisPropertyAssignmentCircular.types
-@@= skipped -6, +6 lines =@@
-     constructor() {
-         this.foo = "Hello";
- >this.foo = "Hello" : "Hello"
-->this.foo : any
-+>this.foo : string
- >this : this
-->foo : any
-+>foo : string
- >"Hello" : "Hello"
-     }
-     slicey() {
-@@= skipped -32, +32 lines =@@
+@@= skipped -38, +38 lines =@@
 
  /** @class */
  function C() {

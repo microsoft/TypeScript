@@ -20,14 +20,7 @@
  >class {    constructor() {        this.treeOutline = 12    }} : typeof TreeElement
 
      constructor() {
-         this.treeOutline = 12
- >this.treeOutline = 12 : 12
-->this.treeOutline : any
-+>this.treeOutline : number
- >this : this
-->treeOutline : any
-+>treeOutline : number
- >12 : 12
+@@= skipped -20, +20 lines =@@
      }
  };
  UI.context = new UI.TreeElement()
@@ -59,7 +52,7 @@
 
      onpopulate() {
  >onpopulate : () => void
-@@= skipped -46, +46 lines =@@
+@@= skipped -26, +26 lines =@@
          this.treeOutline.doesntExistEither()
  >this.treeOutline.doesntExistEither() : any
  >this.treeOutline.doesntExistEither : any

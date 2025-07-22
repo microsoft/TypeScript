@@ -17,19 +17,7 @@
 
      /**
       * @param {number} p
-@@= skipped -14, +14 lines =@@
-
-         this.t = 12 + p;
- >this.t = 12 + p : number
-->this.t : any
-+>this.t : number
- >this : this
-->t : any
-+>t : number
- >12 + p : number
- >12 : 12
- >p : number
-@@= skipped -10, +10 lines =@@
+@@= skipped -24, +24 lines =@@
  }
  module.exports.Sub = class {
  >module.exports.Sub = class {    constructor() {        this.instance = new module.exports(10);    }} : typeof Sub
@@ -48,16 +36,14 @@
      constructor() {
          this.instance = new module.exports(10);
 ->this.instance = new module.exports(10) : import("index")
-->this.instance : any
 +>this.instance = new module.exports(10) : (Anonymous class)
-+>this.instance : (Anonymous class)
+ >this.instance : any
  >this : this
-->instance : any
+ >instance : any
 ->new module.exports(10) : import("index")
 ->module.exports : typeof import("index")
 ->module : { exports: typeof import("index"); }
 ->exports : typeof import("index")
-+>instance : (Anonymous class)
 +>new module.exports(10) : (Anonymous class)
 +>module.exports : typeof (Anonymous class)
 +>module : { "\uFFFDclass": typeof (Anonymous class); }

@@ -19,12 +19,3 @@
 
      constructor() {
          this.chunk = 1;
- >this.chunk = 1 : 1
-->this.chunk : any
-+>this.chunk : number
- >this : this
-->chunk : any
-+>chunk : number
- >1 : 1
-     }
- }

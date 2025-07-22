@@ -19,15 +19,3 @@
 
      /**
       * @param {number} p
-@@= skipped -15, +15 lines =@@
-
-         this.t = 12 + p;
- >this.t = 12 + p : number
-->this.t : any
-+>this.t : number
- >this : this
-->t : any
-+>t : number
- >12 + p : number
- >12 : 12
- >p : number

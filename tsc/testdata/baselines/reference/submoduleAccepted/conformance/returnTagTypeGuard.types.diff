@@ -1,30 +1,6 @@
 --- old.returnTagTypeGuard.types
 +++ new.returnTagTypeGuard.types
-@@= skipped -6, +6 lines =@@
-     constructor() {
-         this.c = 1
- >this.c = 1 : 1
-->this.c : any
-+>this.c : number
- >this : this
-->c : any
-+>c : number
- >1 : 1
-     }
-     /**
-@@= skipped -23, +23 lines =@@
-     constructor() {
-         this.d = 'no'
- >this.d = 'no' : "no"
-->this.d : any
-+>this.d : string
- >this : this
-->d : any
-+>d : string
- >'no' : "no"
-     }
-     /**
-@@= skipped -58, +58 lines =@@
+@@= skipped -87, +87 lines =@@
 
  /** @param {boolean | number} val */
  function foo(val) {

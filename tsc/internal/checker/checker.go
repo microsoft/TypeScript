@@ -10908,7 +10908,9 @@ func (c *Checker) getControlFlowContainer(node *ast.Node) *ast.Node {
 func (c *Checker) getFlowTypeOfProperty(reference *ast.Node, prop *ast.Symbol) *Type {
 	initialType := c.undefinedType
 	if prop != nil && prop.ValueDeclaration != nil && (!c.isAutoTypedProperty(prop) || prop.ValueDeclaration.ModifierFlags()&ast.ModifierFlagsAmbient != 0) {
-		initialType = c.getTypeOfPropertyInBaseClass(prop)
+		if baseType := c.getTypeOfPropertyInBaseClass(prop); baseType != nil {
+			initialType = baseType
+		}
 	}
 	return c.getFlowTypeOfReferenceEx(reference, c.autoType, initialType, nil, nil)
 }
@@ -26217,7 +26219,13 @@ func (c *Checker) isAssignmentToReadonlyEntity(expr *ast.Node, symbol *ast.Symbo
 }
 
 func (c *Checker) isThisPropertyAccessInConstructor(node *ast.Node, prop *ast.Symbol) bool {
-	return isThisProperty(node) && c.isAutoTypedProperty(prop) && ast.GetThisContainer(node, true /*includeArrowFunctions*/, false /*includeClassComputedPropertyName*/) == c.getDeclaringConstructor(prop)
+	var constructor *ast.Node
+	if kind, location := c.isConstructorDeclaredThisProperty(prop); kind == thisAssignmentDeclarationConstructor {
+		constructor = location
+	} else if isThisProperty(node) && c.isAutoTypedProperty(prop) {
+		constructor = c.getDeclaringConstructor(prop)
+	}
+	return ast.GetThisContainer(node, true /*includeArrowFunctions*/, false /*includeClassComputedPropertyName*/) == constructor
 }
 
 func (c *Checker) isAutoTypedProperty(symbol *ast.Symbol) bool {

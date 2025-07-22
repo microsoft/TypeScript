@@ -52,9 +52,9 @@ exports.B = class {
     constructor() {
         this.x = 1;
 >this.x = 1 : 1
->this.x : number
+>this.x : any
 >this : this
->x : number
+>x : any
 >1 : 1
     }
 };
@@ -137,9 +137,9 @@ export class E {
     constructor() {
         this.x = 1;
 >this.x = 1 : 1
->this.x : number
+>this.x : any
 >this : this
->x : number
+>x : any
 >1 : 1
     }
 }
@@ -208,9 +208,9 @@ class H {
     constructor() {
         this.x = 1;
 >this.x = 1 : 1
->this.x : number
+>this.x : any
 >this : this
->x : number
+>x : any
 >1 : 1
     }
 }

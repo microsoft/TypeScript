@@ -28,13 +28,11 @@
 
      this.compiler = compiler;
 ->this.compiler = compiler : import("MC")
-->this.compiler : any
 +>this.compiler = compiler : MC
-+>this.compiler : MC
+ >this.compiler : any
  >this : this
-->compiler : any
+ >compiler : any
 ->compiler : import("MC")
-+>compiler : MC
 +>compiler : MC
    }
  }

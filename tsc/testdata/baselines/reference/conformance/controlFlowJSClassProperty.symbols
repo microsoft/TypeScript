@@ -1,0 +1,35 @@
+//// [tests/cases/conformance/salsa/controlFlowJSClassProperty.ts] ////
+
+=== controlFlowJSClassProperty.js ===
+export class C {
+>C : Symbol(C, Decl(controlFlowJSClassProperty.js, 0, 0))
+
+  name = "CompileDiagnostic";
+>name : Symbol(name, Decl(controlFlowJSClassProperty.js, 0, 16))
+
+  /**
+   * @param {[number, number] | undefined} position
+   */
+  constructor(position) {
+>position : Symbol(position, Decl(controlFlowJSClassProperty.js, 6, 14))
+
+    if (position) {
+>position : Symbol(position, Decl(controlFlowJSClassProperty.js, 6, 14))
+
+      this.position = position;
+>this.position : Symbol(position, Decl(controlFlowJSClassProperty.js, 7, 19))
+>this : Symbol(C, Decl(controlFlowJSClassProperty.js, 0, 0))
+>position : Symbol(position, Decl(controlFlowJSClassProperty.js, 7, 19))
+>position : Symbol(position, Decl(controlFlowJSClassProperty.js, 6, 14))
+    }
+  }
+}
+var c = new C([1, 2]);
+>c : Symbol(c, Decl(controlFlowJSClassProperty.js, 12, 3))
+>C : Symbol(C, Decl(controlFlowJSClassProperty.js, 0, 0))
+
+c.position;
+>c.position : Symbol(position, Decl(controlFlowJSClassProperty.js, 7, 19))
+>c : Symbol(c, Decl(controlFlowJSClassProperty.js, 12, 3))
+>position : Symbol(position, Decl(controlFlowJSClassProperty.js, 7, 19))
+

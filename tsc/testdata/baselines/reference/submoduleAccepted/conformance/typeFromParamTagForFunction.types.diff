@@ -53,17 +53,6 @@
  >B : typeof B
  >class {    constructor() {        this.x = 1;    }} : typeof B
 
-     constructor() {
-         this.x = 1;
- >this.x = 1 : 1
-->this.x : any
-+>this.x : number
- >this : this
-->x : any
-+>x : number
- >1 : 1
-     }
- };
 @@= skipped -25, +25 lines =@@
  === b.js ===
  const { B } = require("./b-ext");
@@ -154,19 +143,7 @@
 
  === e-ext.js ===
  export class E {
-@@= skipped -11, +11 lines =@@
-     constructor() {
-         this.x = 1;
- >this.x = 1 : 1
-->this.x : any
-+>this.x : number
- >this : this
-->x : any
-+>x : number
- >1 : 1
-     }
- }
-@@= skipped -10, +10 lines =@@
+@@= skipped -21, +21 lines =@@
  === e.js ===
  const { E } = require("./e-ext");
  >E : typeof E
@@ -227,15 +204,3 @@
 
  === h.js ===
  class H {
-@@= skipped -11, +11 lines =@@
-     constructor() {
-         this.x = 1;
- >this.x = 1 : 1
-->this.x : any
-+>this.x : number
- >this : this
-->x : any
-+>x : number
- >1 : 1
-     }
- }

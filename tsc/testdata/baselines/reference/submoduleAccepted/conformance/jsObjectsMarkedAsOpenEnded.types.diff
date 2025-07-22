@@ -22,13 +22,11 @@
      constructor() {
          this.member = {};
 ->this.member = {} : {}
-->this.member : any
 +>this.member = {} : { a: number; }
-+>this.member : { a: number; }
+ >this.member : any
  >this : this
-->member : any
+ >member : any
 ->{} : {}
-+>member : { a: number; }
 +>{} : { a: number; }
 
          this.member.a = 0;

@@ -1,18 +1,6 @@
 --- old.jsFileMethodOverloads2.types
 +++ new.jsFileMethodOverloads2.types
-@@= skipped -15, +15 lines =@@
-
-     this.value = value;
- >this.value = value : T
-->this.value : any
-+>this.value : T
- >this : this
-->value : any
-+>value : T
- >value : T
-   }
-
-@@= skipped -40, +40 lines =@@
+@@= skipped -55, +55 lines =@@
     * @returns {unknown}
     */
    transform(fn) {

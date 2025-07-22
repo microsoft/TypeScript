@@ -1,15 +1,6 @@
 --- old.classFieldSuperNotAccessibleJs.types
 +++ new.classFieldSuperNotAccessibleJs.types
-@@= skipped -8, +8 lines =@@
-     constructor() {
-         this.roots = "hi";
- >this.roots = "hi" : "hi"
-->this.roots : any
-+>this.roots : string
- >this : this
-->roots : any
-+>roots : string
- >"hi" : "hi"
+@@= skipped -15, +15 lines =@@
 
          /** @type number */
          this.justProp;
@@ -21,7 +12,7 @@
 
          /** @type string */
          this['literalElementAccess'];
-@@= skipped -57, +57 lines =@@
+@@= skipped -50, +50 lines =@@
  >foo : number | undefined
      }
      get justPropTests() {

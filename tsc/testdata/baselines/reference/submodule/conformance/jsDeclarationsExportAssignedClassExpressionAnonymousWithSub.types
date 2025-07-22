@@ -16,9 +16,9 @@ module.exports = class {
 
         this.t = 12 + p;
 >this.t = 12 + p : number
->this.t : number
+>this.t : any
 >this : this
->t : number
+>t : any
 >12 + p : number
 >12 : 12
 >p : number
@@ -36,9 +36,9 @@ module.exports.Sub = class {
     constructor() {
         this.instance = new module.exports(10);
 >this.instance = new module.exports(10) : (Anonymous class)
->this.instance : (Anonymous class)
+>this.instance : any
 >this : this
->instance : (Anonymous class)
+>instance : any
 >new module.exports(10) : (Anonymous class)
 >module.exports : typeof (Anonymous class)
 >module : { "\uFFFDclass": typeof (Anonymous class); }

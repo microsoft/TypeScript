@@ -15,9 +15,9 @@
 
     this.value = value;
 >this.value = value : T
->this.value : T
+>this.value : any
 >this : this
->value : T
+>value : any
 >value : T
   }
 

@@ -23,19 +23,7 @@
  >Inner : typeof I
  >class I {    constructor() {        this.x = 1    }} : typeof I
  >I : typeof I
-@@= skipped -20, +20 lines =@@
-     constructor() {
-         this.x = 1
- >this.x = 1 : 1
-->this.x : any
-+>this.x : number
- >this : this
-->x : any
-+>x : number
- >1 : 1
-     }
- }
-@@= skipped -11, +11 lines =@@
+@@= skipped -31, +31 lines =@@
  >ok : Outer
 
  ok.y

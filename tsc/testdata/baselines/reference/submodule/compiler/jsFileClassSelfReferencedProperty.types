@@ -12,9 +12,9 @@ export class StackOverflowTest {
 >testStackOverflow : any
 >this.testStackOverflow.bind(this) : any
 >this.testStackOverflow.bind : any
->this.testStackOverflow : any
+>this.testStackOverflow : undefined
 >this : this
->testStackOverflow : any
+>testStackOverflow : undefined
 >bind : any
 >this : this
   }

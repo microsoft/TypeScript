@@ -52,17 +52,7 @@
  }
 
  class C {
-@@= skipped -40, +40 lines =@@
-
-         this.length = n;
- >this.length = n : number
-->this.length : any
-+>this.length : number
- >this : this
-->length : any
-+>length : number
- >n : number
-     }
+@@= skipped -48, +48 lines =@@
  }
 
  var y = id2(C);
@@ -108,7 +98,7 @@
  >"a" : "a"
  >3 : 3
  >4 : 4
-@@= skipped -43, +43 lines =@@
+@@= skipped -35, +35 lines =@@
   * @param {number} n
   */
  function D(n) {

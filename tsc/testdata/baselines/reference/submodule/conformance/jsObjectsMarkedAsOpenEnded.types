@@ -22,9 +22,9 @@ class C {
     constructor() {
         this.member = {};
 >this.member = {} : { a: number; }
->this.member : { a: number; }
+>this.member : any
 >this : this
->member : { a: number; }
+>member : any
 >{} : { a: number; }
 
         this.member.a = 0;
