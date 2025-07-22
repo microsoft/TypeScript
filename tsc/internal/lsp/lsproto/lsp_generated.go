@@ -25,6 +25,34 @@ type Location struct {
 	Range Range `json:"range"`
 }
 
+func (s *Location) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Uri   requiredProp `json:"uri"`
+		Range requiredProp `json:"range"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Uri {
+		return fmt.Errorf("required key 'uri' is missing")
+	}
+	if !keys.Range {
+		return fmt.Errorf("required key 'range' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Uri   DocumentUri `json:"uri"`
+		Range Range       `json:"range"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 type ImplementationRegistrationOptions struct {
 	TextDocumentRegistrationOptions
 	ImplementationOptions
@@ -53,15 +81,89 @@ type WorkspaceFolder struct {
 	Name string `json:"name"`
 }
 
+func (s *WorkspaceFolder) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Uri  requiredProp `json:"uri"`
+		Name requiredProp `json:"name"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Uri {
+		return fmt.Errorf("required key 'uri' is missing")
+	}
+	if !keys.Name {
+		return fmt.Errorf("required key 'name' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Uri  URI    `json:"uri"`
+		Name string `json:"name"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // The parameters of a `workspace/didChangeWorkspaceFolders` notification.
 type DidChangeWorkspaceFoldersParams struct {
 	// The actual workspace folder change event.
 	Event *WorkspaceFoldersChangeEvent `json:"event"`
 }
 
+func (s *DidChangeWorkspaceFoldersParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Event requiredProp `json:"event"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Event {
+		return fmt.Errorf("required key 'event' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Event *WorkspaceFoldersChangeEvent `json:"event"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // The parameters of a configuration request.
 type ConfigurationParams struct {
 	Items []*ConfigurationItem `json:"items"`
+}
+
+func (s *ConfigurationParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Items requiredProp `json:"items"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Items {
+		return fmt.Errorf("required key 'items' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Items []*ConfigurationItem `json:"items"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Parameters for a DocumentColorRequest.
@@ -73,6 +175,32 @@ type DocumentColorParams struct {
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 }
 
+func (s *DocumentColorParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgressParams
+		PartialResultParams
+
+		TextDocument TextDocumentIdentifier `json:"textDocument"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Represents a color range from a document.
 type ColorInformation struct {
 	// The range in the document where this color appears.
@@ -80,6 +208,34 @@ type ColorInformation struct {
 
 	// The actual color value for this color range.
 	Color Color `json:"color"`
+}
+
+func (s *ColorInformation) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Range requiredProp `json:"range"`
+		Color requiredProp `json:"color"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Range {
+		return fmt.Errorf("required key 'range' is missing")
+	}
+	if !keys.Color {
+		return fmt.Errorf("required key 'color' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Range Range `json:"range"`
+		Color Color `json:"color"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 type DocumentColorRegistrationOptions struct {
@@ -103,6 +259,42 @@ type ColorPresentationParams struct {
 	Range Range `json:"range"`
 }
 
+func (s *ColorPresentationParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+		Color        requiredProp `json:"color"`
+		Range        requiredProp `json:"range"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+	if !keys.Color {
+		return fmt.Errorf("required key 'color' is missing")
+	}
+	if !keys.Range {
+		return fmt.Errorf("required key 'range' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgressParams
+		PartialResultParams
+
+		TextDocument TextDocumentIdentifier `json:"textDocument"`
+		Color        Color                  `json:"color"`
+		Range        Range                  `json:"range"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 type ColorPresentation struct {
 	// The label of this color presentation. It will be shown on the color
 	// picker header. By default this is also the text that is inserted when selecting
@@ -119,6 +311,31 @@ type ColorPresentation struct {
 	AdditionalTextEdits *[]*TextEdit `json:"additionalTextEdits,omitempty"`
 }
 
+func (s *ColorPresentation) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Label requiredProp `json:"label"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Label {
+		return fmt.Errorf("required key 'label' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Label               string       `json:"label"`
+		TextEdit            *TextEdit    `json:"textEdit,omitempty"`
+		AdditionalTextEdits *[]*TextEdit `json:"additionalTextEdits,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 type WorkDoneProgressOptions struct {
 	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
 }
@@ -130,6 +347,29 @@ type TextDocumentRegistrationOptions struct {
 	DocumentSelector Nullable[DocumentSelector] `json:"documentSelector"`
 }
 
+func (s *TextDocumentRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		DocumentSelector requiredProp `json:"documentSelector"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		DocumentSelector Nullable[DocumentSelector] `json:"documentSelector"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Parameters for a FoldingRangeRequest.
 type FoldingRangeParams struct {
 	WorkDoneProgressParams
@@ -137,6 +377,32 @@ type FoldingRangeParams struct {
 
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
+}
+
+func (s *FoldingRangeParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgressParams
+		PartialResultParams
+
+		TextDocument TextDocumentIdentifier `json:"textDocument"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Represents a folding range. To be valid, start and end line must be bigger than zero and smaller
@@ -169,6 +435,38 @@ type FoldingRange struct {
 	CollapsedText *string `json:"collapsedText,omitempty"`
 }
 
+func (s *FoldingRange) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		StartLine requiredProp `json:"startLine"`
+		EndLine   requiredProp `json:"endLine"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.StartLine {
+		return fmt.Errorf("required key 'startLine' is missing")
+	}
+	if !keys.EndLine {
+		return fmt.Errorf("required key 'endLine' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		StartLine      uint32            `json:"startLine"`
+		StartCharacter *uint32           `json:"startCharacter,omitempty"`
+		EndLine        uint32            `json:"endLine"`
+		EndCharacter   *uint32           `json:"endCharacter,omitempty"`
+		Kind           *FoldingRangeKind `json:"kind,omitempty"`
+		CollapsedText  *string           `json:"collapsedText,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 type FoldingRangeRegistrationOptions struct {
 	TextDocumentRegistrationOptions
 	FoldingRangeOptions
@@ -199,6 +497,37 @@ type SelectionRangeParams struct {
 	Positions []Position `json:"positions"`
 }
 
+func (s *SelectionRangeParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+		Positions    requiredProp `json:"positions"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+	if !keys.Positions {
+		return fmt.Errorf("required key 'positions' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgressParams
+		PartialResultParams
+
+		TextDocument TextDocumentIdentifier `json:"textDocument"`
+		Positions    []Position             `json:"positions"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // A selection range represents a part of a selection hierarchy. A selection range
 // may have a parent selection range that contains it.
 type SelectionRange struct {
@@ -207,6 +536,30 @@ type SelectionRange struct {
 
 	// The parent selection range containing this range. Therefore `parent.range` must contain `this.range`.
 	Parent *SelectionRange `json:"parent,omitempty"`
+}
+
+func (s *SelectionRange) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Range requiredProp `json:"range"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Range {
+		return fmt.Errorf("required key 'range' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Range  Range           `json:"range"`
+		Parent *SelectionRange `json:"parent,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 type SelectionRangeRegistrationOptions struct {
@@ -220,9 +573,55 @@ type WorkDoneProgressCreateParams struct {
 	Token ProgressToken `json:"token"`
 }
 
+func (s *WorkDoneProgressCreateParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Token requiredProp `json:"token"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Token {
+		return fmt.Errorf("required key 'token' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Token ProgressToken `json:"token"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 type WorkDoneProgressCancelParams struct {
 	// The token to be used to report progress.
 	Token ProgressToken `json:"token"`
+}
+
+func (s *WorkDoneProgressCancelParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Token requiredProp `json:"token"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Token {
+		return fmt.Errorf("required key 'token' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Token ProgressToken `json:"token"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // The parameter of a `textDocument/prepareCallHierarchy` request.
@@ -265,6 +664,52 @@ type CallHierarchyItem struct {
 	Data *any `json:"data,omitempty"`
 }
 
+func (s *CallHierarchyItem) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Name           requiredProp `json:"name"`
+		Kind           requiredProp `json:"kind"`
+		Uri            requiredProp `json:"uri"`
+		Range          requiredProp `json:"range"`
+		SelectionRange requiredProp `json:"selectionRange"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Name {
+		return fmt.Errorf("required key 'name' is missing")
+	}
+	if !keys.Kind {
+		return fmt.Errorf("required key 'kind' is missing")
+	}
+	if !keys.Uri {
+		return fmt.Errorf("required key 'uri' is missing")
+	}
+	if !keys.Range {
+		return fmt.Errorf("required key 'range' is missing")
+	}
+	if !keys.SelectionRange {
+		return fmt.Errorf("required key 'selectionRange' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Name           string       `json:"name"`
+		Kind           SymbolKind   `json:"kind"`
+		Tags           *[]SymbolTag `json:"tags,omitempty"`
+		Detail         *string      `json:"detail,omitempty"`
+		Uri            DocumentUri  `json:"uri"`
+		Range          Range        `json:"range"`
+		SelectionRange Range        `json:"selectionRange"`
+		Data           *any         `json:"data,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Call hierarchy options used during static or dynamic registration.
 //
 // Since: 3.16.0
@@ -284,6 +729,32 @@ type CallHierarchyIncomingCallsParams struct {
 	Item *CallHierarchyItem `json:"item"`
 }
 
+func (s *CallHierarchyIncomingCallsParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Item requiredProp `json:"item"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Item {
+		return fmt.Errorf("required key 'item' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgressParams
+		PartialResultParams
+
+		Item *CallHierarchyItem `json:"item"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Represents an incoming call, e.g. a caller of a method or constructor.
 //
 // Since: 3.16.0
@@ -296,6 +767,34 @@ type CallHierarchyIncomingCall struct {
 	FromRanges []Range `json:"fromRanges"`
 }
 
+func (s *CallHierarchyIncomingCall) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		From       requiredProp `json:"from"`
+		FromRanges requiredProp `json:"fromRanges"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.From {
+		return fmt.Errorf("required key 'from' is missing")
+	}
+	if !keys.FromRanges {
+		return fmt.Errorf("required key 'fromRanges' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		From       *CallHierarchyItem `json:"from"`
+		FromRanges []Range            `json:"fromRanges"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // The parameter of a `callHierarchy/outgoingCalls` request.
 //
 // Since: 3.16.0
@@ -304,6 +803,32 @@ type CallHierarchyOutgoingCallsParams struct {
 	PartialResultParams
 
 	Item *CallHierarchyItem `json:"item"`
+}
+
+func (s *CallHierarchyOutgoingCallsParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Item requiredProp `json:"item"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Item {
+		return fmt.Errorf("required key 'item' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgressParams
+		PartialResultParams
+
+		Item *CallHierarchyItem `json:"item"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Represents an outgoing call, e.g. calling a getter from a method or a method from a constructor etc.
@@ -319,6 +844,34 @@ type CallHierarchyOutgoingCall struct {
 	FromRanges []Range `json:"fromRanges"`
 }
 
+func (s *CallHierarchyOutgoingCall) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		To         requiredProp `json:"to"`
+		FromRanges requiredProp `json:"fromRanges"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.To {
+		return fmt.Errorf("required key 'to' is missing")
+	}
+	if !keys.FromRanges {
+		return fmt.Errorf("required key 'fromRanges' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		To         *CallHierarchyItem `json:"to"`
+		FromRanges []Range            `json:"fromRanges"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Since: 3.16.0
 type SemanticTokensParams struct {
 	WorkDoneProgressParams
@@ -326,6 +879,32 @@ type SemanticTokensParams struct {
 
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
+}
+
+func (s *SemanticTokensParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgressParams
+		PartialResultParams
+
+		TextDocument TextDocumentIdentifier `json:"textDocument"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Since: 3.16.0
@@ -340,9 +919,56 @@ type SemanticTokens struct {
 	Data []uint32 `json:"data"`
 }
 
+func (s *SemanticTokens) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Data requiredProp `json:"data"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Data {
+		return fmt.Errorf("required key 'data' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		ResultId *string  `json:"resultId,omitempty"`
+		Data     []uint32 `json:"data"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Since: 3.16.0
 type SemanticTokensPartialResult struct {
 	Data []uint32 `json:"data"`
+}
+
+func (s *SemanticTokensPartialResult) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Data requiredProp `json:"data"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Data {
+		return fmt.Errorf("required key 'data' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Data []uint32 `json:"data"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Since: 3.16.0
@@ -365,6 +991,37 @@ type SemanticTokensDeltaParams struct {
 	PreviousResultId string `json:"previousResultId"`
 }
 
+func (s *SemanticTokensDeltaParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument     requiredProp `json:"textDocument"`
+		PreviousResultId requiredProp `json:"previousResultId"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+	if !keys.PreviousResultId {
+		return fmt.Errorf("required key 'previousResultId' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgressParams
+		PartialResultParams
+
+		TextDocument     TextDocumentIdentifier `json:"textDocument"`
+		PreviousResultId string                 `json:"previousResultId"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Since: 3.16.0
 type SemanticTokensDelta struct {
 	ResultId *string `json:"resultId,omitempty"`
@@ -373,9 +1030,56 @@ type SemanticTokensDelta struct {
 	Edits []*SemanticTokensEdit `json:"edits"`
 }
 
+func (s *SemanticTokensDelta) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Edits requiredProp `json:"edits"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Edits {
+		return fmt.Errorf("required key 'edits' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		ResultId *string               `json:"resultId,omitempty"`
+		Edits    []*SemanticTokensEdit `json:"edits"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Since: 3.16.0
 type SemanticTokensDeltaPartialResult struct {
 	Edits []*SemanticTokensEdit `json:"edits"`
+}
+
+func (s *SemanticTokensDeltaPartialResult) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Edits requiredProp `json:"edits"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Edits {
+		return fmt.Errorf("required key 'edits' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Edits []*SemanticTokensEdit `json:"edits"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Since: 3.16.0
@@ -388,6 +1092,37 @@ type SemanticTokensRangeParams struct {
 
 	// The range the semantic tokens are requested for.
 	Range Range `json:"range"`
+}
+
+func (s *SemanticTokensRangeParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+		Range        requiredProp `json:"range"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+	if !keys.Range {
+		return fmt.Errorf("required key 'range' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgressParams
+		PartialResultParams
+
+		TextDocument TextDocumentIdentifier `json:"textDocument"`
+		Range        Range                  `json:"range"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Params to show a resource in the UI.
@@ -415,12 +1150,61 @@ type ShowDocumentParams struct {
 	Selection *Range `json:"selection,omitempty"`
 }
 
+func (s *ShowDocumentParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Uri requiredProp `json:"uri"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Uri {
+		return fmt.Errorf("required key 'uri' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Uri       URI    `json:"uri"`
+		External  *bool  `json:"external,omitempty"`
+		TakeFocus *bool  `json:"takeFocus,omitempty"`
+		Selection *Range `json:"selection,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // The result of a showDocument request.
 //
 // Since: 3.16.0
 type ShowDocumentResult struct {
 	// A boolean indicating if the show was successful.
 	Success bool `json:"success"`
+}
+
+func (s *ShowDocumentResult) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Success requiredProp `json:"success"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Success {
+		return fmt.Errorf("required key 'success' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Success bool `json:"success"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 type LinkedEditingRangeParams struct {
@@ -442,6 +1226,30 @@ type LinkedEditingRanges struct {
 	WordPattern *string `json:"wordPattern,omitempty"`
 }
 
+func (s *LinkedEditingRanges) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Ranges requiredProp `json:"ranges"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Ranges {
+		return fmt.Errorf("required key 'ranges' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Ranges      []Range `json:"ranges"`
+		WordPattern *string `json:"wordPattern,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 type LinkedEditingRangeRegistrationOptions struct {
 	TextDocumentRegistrationOptions
 	LinkedEditingRangeOptions
@@ -455,6 +1263,29 @@ type LinkedEditingRangeRegistrationOptions struct {
 type CreateFilesParams struct {
 	// An array of all files/folders created in this operation.
 	Files []*FileCreate `json:"files"`
+}
+
+func (s *CreateFilesParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Files requiredProp `json:"files"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Files {
+		return fmt.Errorf("required key 'files' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Files []*FileCreate `json:"files"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // A workspace edit represents changes to many resources managed in the workspace. The edit
@@ -502,6 +1333,29 @@ type FileOperationRegistrationOptions struct {
 	Filters []*FileOperationFilter `json:"filters"`
 }
 
+func (s *FileOperationRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Filters requiredProp `json:"filters"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Filters {
+		return fmt.Errorf("required key 'filters' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Filters []*FileOperationFilter `json:"filters"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // The parameters sent in notifications/requests for user-initiated renames of
 // files.
 //
@@ -512,6 +1366,29 @@ type RenameFilesParams struct {
 	Files []*FileRename `json:"files"`
 }
 
+func (s *RenameFilesParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Files requiredProp `json:"files"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Files {
+		return fmt.Errorf("required key 'files' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Files []*FileRename `json:"files"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // The parameters sent in notifications/requests for user-initiated deletes of
 // files.
 //
@@ -519,6 +1396,29 @@ type RenameFilesParams struct {
 type DeleteFilesParams struct {
 	// An array of all files/folders deleted in this operation.
 	Files []*FileDelete `json:"files"`
+}
+
+func (s *DeleteFilesParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Files requiredProp `json:"files"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Files {
+		return fmt.Errorf("required key 'files' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Files []*FileDelete `json:"files"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 type MonikerParams struct {
@@ -543,6 +1443,40 @@ type Moniker struct {
 
 	// The moniker kind if known.
 	Kind *MonikerKind `json:"kind,omitempty"`
+}
+
+func (s *Moniker) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Scheme     requiredProp `json:"scheme"`
+		Identifier requiredProp `json:"identifier"`
+		Unique     requiredProp `json:"unique"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Scheme {
+		return fmt.Errorf("required key 'scheme' is missing")
+	}
+	if !keys.Identifier {
+		return fmt.Errorf("required key 'identifier' is missing")
+	}
+	if !keys.Unique {
+		return fmt.Errorf("required key 'unique' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Scheme     string          `json:"scheme"`
+		Identifier string          `json:"identifier"`
+		Unique     UniquenessLevel `json:"unique"`
+		Kind       *MonikerKind    `json:"kind,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 type MonikerRegistrationOptions struct {
@@ -591,6 +1525,52 @@ type TypeHierarchyItem struct {
 	Data *any `json:"data,omitempty"`
 }
 
+func (s *TypeHierarchyItem) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Name           requiredProp `json:"name"`
+		Kind           requiredProp `json:"kind"`
+		Uri            requiredProp `json:"uri"`
+		Range          requiredProp `json:"range"`
+		SelectionRange requiredProp `json:"selectionRange"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Name {
+		return fmt.Errorf("required key 'name' is missing")
+	}
+	if !keys.Kind {
+		return fmt.Errorf("required key 'kind' is missing")
+	}
+	if !keys.Uri {
+		return fmt.Errorf("required key 'uri' is missing")
+	}
+	if !keys.Range {
+		return fmt.Errorf("required key 'range' is missing")
+	}
+	if !keys.SelectionRange {
+		return fmt.Errorf("required key 'selectionRange' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Name           string       `json:"name"`
+		Kind           SymbolKind   `json:"kind"`
+		Tags           *[]SymbolTag `json:"tags,omitempty"`
+		Detail         *string      `json:"detail,omitempty"`
+		Uri            DocumentUri  `json:"uri"`
+		Range          Range        `json:"range"`
+		SelectionRange Range        `json:"selectionRange"`
+		Data           *any         `json:"data,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Type hierarchy options used during static or dynamic registration.
 //
 // Since: 3.17.0
@@ -610,6 +1590,32 @@ type TypeHierarchySupertypesParams struct {
 	Item *TypeHierarchyItem `json:"item"`
 }
 
+func (s *TypeHierarchySupertypesParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Item requiredProp `json:"item"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Item {
+		return fmt.Errorf("required key 'item' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgressParams
+		PartialResultParams
+
+		Item *TypeHierarchyItem `json:"item"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // The parameter of a `typeHierarchy/subtypes` request.
 //
 // Since: 3.17.0
@@ -618,6 +1624,32 @@ type TypeHierarchySubtypesParams struct {
 	PartialResultParams
 
 	Item *TypeHierarchyItem `json:"item"`
+}
+
+func (s *TypeHierarchySubtypesParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Item requiredProp `json:"item"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Item {
+		return fmt.Errorf("required key 'item' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgressParams
+		PartialResultParams
+
+		Item *TypeHierarchyItem `json:"item"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // A parameter literal used in inline value requests.
@@ -635,6 +1667,41 @@ type InlineValueParams struct {
 	// Additional information about the context in which inline values were
 	// requested.
 	Context *InlineValueContext `json:"context"`
+}
+
+func (s *InlineValueParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+		Range        requiredProp `json:"range"`
+		Context      requiredProp `json:"context"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+	if !keys.Range {
+		return fmt.Errorf("required key 'range' is missing")
+	}
+	if !keys.Context {
+		return fmt.Errorf("required key 'context' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgressParams
+
+		TextDocument TextDocumentIdentifier `json:"textDocument"`
+		Range        Range                  `json:"range"`
+		Context      *InlineValueContext    `json:"context"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Inline value options used during static or dynamic registration.
@@ -657,6 +1724,36 @@ type InlayHintParams struct {
 
 	// The document range for which inlay hints should be computed.
 	Range Range `json:"range"`
+}
+
+func (s *InlayHintParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+		Range        requiredProp `json:"range"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+	if !keys.Range {
+		return fmt.Errorf("required key 'range' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgressParams
+
+		TextDocument TextDocumentIdentifier `json:"textDocument"`
+		Range        Range                  `json:"range"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Inlay hint information.
@@ -708,6 +1805,40 @@ type InlayHint struct {
 	Data *any `json:"data,omitempty"`
 }
 
+func (s *InlayHint) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Position requiredProp `json:"position"`
+		Label    requiredProp `json:"label"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Position {
+		return fmt.Errorf("required key 'position' is missing")
+	}
+	if !keys.Label {
+		return fmt.Errorf("required key 'label' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Position     Position                    `json:"position"`
+		Label        StringOrInlayHintLabelParts `json:"label"`
+		Kind         *InlayHintKind              `json:"kind,omitempty"`
+		TextEdits    *[]*TextEdit                `json:"textEdits,omitempty"`
+		Tooltip      *StringOrMarkupContent      `json:"tooltip,omitempty"`
+		PaddingLeft  *bool                       `json:"paddingLeft,omitempty"`
+		PaddingRight *bool                       `json:"paddingRight,omitempty"`
+		Data         *any                        `json:"data,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Inlay hint options used during static or dynamic registration.
 //
 // Since: 3.17.0
@@ -734,6 +1865,34 @@ type DocumentDiagnosticParams struct {
 	PreviousResultId *string `json:"previousResultId,omitempty"`
 }
 
+func (s *DocumentDiagnosticParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgressParams
+		PartialResultParams
+
+		TextDocument     TextDocumentIdentifier `json:"textDocument"`
+		Identifier       *string                `json:"identifier,omitempty"`
+		PreviousResultId *string                `json:"previousResultId,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // A partial result for a document diagnostic report.
 //
 // Since: 3.17.0
@@ -741,11 +1900,57 @@ type DocumentDiagnosticReportPartialResult struct {
 	RelatedDocuments map[DocumentUri]FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport `json:"relatedDocuments"`
 }
 
+func (s *DocumentDiagnosticReportPartialResult) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		RelatedDocuments requiredProp `json:"relatedDocuments"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.RelatedDocuments {
+		return fmt.Errorf("required key 'relatedDocuments' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		RelatedDocuments map[DocumentUri]FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport `json:"relatedDocuments"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Cancellation data returned from a diagnostic request.
 //
 // Since: 3.17.0
 type DiagnosticServerCancellationData struct {
 	RetriggerRequest bool `json:"retriggerRequest"`
+}
+
+func (s *DiagnosticServerCancellationData) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		RetriggerRequest requiredProp `json:"retriggerRequest"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.RetriggerRequest {
+		return fmt.Errorf("required key 'retriggerRequest' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		RetriggerRequest bool `json:"retriggerRequest"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Diagnostic registration options.
@@ -772,6 +1977,33 @@ type WorkspaceDiagnosticParams struct {
 	PreviousResultIds []PreviousResultId `json:"previousResultIds"`
 }
 
+func (s *WorkspaceDiagnosticParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		PreviousResultIds requiredProp `json:"previousResultIds"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.PreviousResultIds {
+		return fmt.Errorf("required key 'previousResultIds' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgressParams
+		PartialResultParams
+
+		Identifier        *string            `json:"identifier,omitempty"`
+		PreviousResultIds []PreviousResultId `json:"previousResultIds"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // A workspace diagnostic report.
 //
 // Since: 3.17.0
@@ -779,11 +2011,57 @@ type WorkspaceDiagnosticReport struct {
 	Items []WorkspaceDocumentDiagnosticReport `json:"items"`
 }
 
+func (s *WorkspaceDiagnosticReport) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Items requiredProp `json:"items"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Items {
+		return fmt.Errorf("required key 'items' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Items []WorkspaceDocumentDiagnosticReport `json:"items"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // A partial result for a workspace diagnostic report.
 //
 // Since: 3.17.0
 type WorkspaceDiagnosticReportPartialResult struct {
 	Items []WorkspaceDocumentDiagnosticReport `json:"items"`
+}
+
+func (s *WorkspaceDiagnosticReportPartialResult) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Items requiredProp `json:"items"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Items {
+		return fmt.Errorf("required key 'items' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Items []WorkspaceDocumentDiagnosticReport `json:"items"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // The params sent in an open notebook document notification.
@@ -796,6 +2074,34 @@ type DidOpenNotebookDocumentParams struct {
 	// The text documents that represent the content
 	// of a notebook cell.
 	CellTextDocuments []*TextDocumentItem `json:"cellTextDocuments"`
+}
+
+func (s *DidOpenNotebookDocumentParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		NotebookDocument  requiredProp `json:"notebookDocument"`
+		CellTextDocuments requiredProp `json:"cellTextDocuments"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.NotebookDocument {
+		return fmt.Errorf("required key 'notebookDocument' is missing")
+	}
+	if !keys.CellTextDocuments {
+		return fmt.Errorf("required key 'cellTextDocuments' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		NotebookDocument  *NotebookDocument   `json:"notebookDocument"`
+		CellTextDocuments []*TextDocumentItem `json:"cellTextDocuments"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Registration options specific to a notebook.
@@ -832,12 +2138,63 @@ type DidChangeNotebookDocumentParams struct {
 	Change *NotebookDocumentChangeEvent `json:"change"`
 }
 
+func (s *DidChangeNotebookDocumentParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		NotebookDocument requiredProp `json:"notebookDocument"`
+		Change           requiredProp `json:"change"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.NotebookDocument {
+		return fmt.Errorf("required key 'notebookDocument' is missing")
+	}
+	if !keys.Change {
+		return fmt.Errorf("required key 'change' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		NotebookDocument VersionedNotebookDocumentIdentifier `json:"notebookDocument"`
+		Change           *NotebookDocumentChangeEvent        `json:"change"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // The params sent in a save notebook document notification.
 //
 // Since: 3.17.0
 type DidSaveNotebookDocumentParams struct {
 	// The notebook document that got saved.
 	NotebookDocument NotebookDocumentIdentifier `json:"notebookDocument"`
+}
+
+func (s *DidSaveNotebookDocumentParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		NotebookDocument requiredProp `json:"notebookDocument"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.NotebookDocument {
+		return fmt.Errorf("required key 'notebookDocument' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		NotebookDocument NotebookDocumentIdentifier `json:"notebookDocument"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // The params sent in a close notebook document notification.
@@ -850,6 +2207,34 @@ type DidCloseNotebookDocumentParams struct {
 	// The text documents that represent the content
 	// of a notebook cell that got closed.
 	CellTextDocuments []TextDocumentIdentifier `json:"cellTextDocuments"`
+}
+
+func (s *DidCloseNotebookDocumentParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		NotebookDocument  requiredProp `json:"notebookDocument"`
+		CellTextDocuments requiredProp `json:"cellTextDocuments"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.NotebookDocument {
+		return fmt.Errorf("required key 'notebookDocument' is missing")
+	}
+	if !keys.CellTextDocuments {
+		return fmt.Errorf("required key 'cellTextDocuments' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		NotebookDocument  NotebookDocumentIdentifier `json:"notebookDocument"`
+		CellTextDocuments []TextDocumentIdentifier   `json:"cellTextDocuments"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // A parameter literal used in inline completion requests.
@@ -866,6 +2251,32 @@ type InlineCompletionParams struct {
 	Context *InlineCompletionContext `json:"context"`
 }
 
+func (s *InlineCompletionParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Context requiredProp `json:"context"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Context {
+		return fmt.Errorf("required key 'context' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TextDocumentPositionParams
+		WorkDoneProgressParams
+
+		Context *InlineCompletionContext `json:"context"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Represents a collection of items to be presented in the editor.
 //
 // Since: 3.18.0
@@ -874,6 +2285,29 @@ type InlineCompletionParams struct {
 type InlineCompletionList struct {
 	// The inline completion items
 	Items []*InlineCompletionItem `json:"items"`
+}
+
+func (s *InlineCompletionList) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Items requiredProp `json:"items"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Items {
+		return fmt.Errorf("required key 'items' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Items []*InlineCompletionItem `json:"items"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // An inline completion item represents a text snippet that is proposed inline to complete text that is being typed.
@@ -893,6 +2327,32 @@ type InlineCompletionItem struct {
 
 	// An optional Command that is executed *after* inserting this completion.
 	Command *Command `json:"command,omitempty"`
+}
+
+func (s *InlineCompletionItem) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		InsertText requiredProp `json:"insertText"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.InsertText {
+		return fmt.Errorf("required key 'insertText' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		InsertText StringOrStringValue `json:"insertText"`
+		FilterText *string             `json:"filterText,omitempty"`
+		Range      *Range              `json:"range,omitempty"`
+		Command    *Command            `json:"command,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Inline completion options used during static or dynamic registration.
@@ -916,6 +2376,29 @@ type TextDocumentContentParams struct {
 	Uri DocumentUri `json:"uri"`
 }
 
+func (s *TextDocumentContentParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Uri requiredProp `json:"uri"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Uri {
+		return fmt.Errorf("required key 'uri' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Uri DocumentUri `json:"uri"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Result of the `workspace/textDocumentContent` request.
 //
 // Since: 3.18.0
@@ -927,6 +2410,29 @@ type TextDocumentContentResult struct {
 	// from the returned content due to whitespace and line ending
 	// normalizations done on the client
 	Text string `json:"text"`
+}
+
+func (s *TextDocumentContentResult) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Text requiredProp `json:"text"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Text {
+		return fmt.Errorf("required key 'text' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Text string `json:"text"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Text document content provider registration options.
@@ -949,12 +2455,81 @@ type TextDocumentContentRefreshParams struct {
 	Uri DocumentUri `json:"uri"`
 }
 
+func (s *TextDocumentContentRefreshParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Uri requiredProp `json:"uri"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Uri {
+		return fmt.Errorf("required key 'uri' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Uri DocumentUri `json:"uri"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 type RegistrationParams struct {
 	Registrations []*Registration `json:"registrations"`
 }
 
+func (s *RegistrationParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Registrations requiredProp `json:"registrations"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Registrations {
+		return fmt.Errorf("required key 'registrations' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Registrations []*Registration `json:"registrations"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 type UnregistrationParams struct {
 	Unregisterations []*Unregistration `json:"unregisterations"`
+}
+
+func (s *UnregistrationParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Unregisterations requiredProp `json:"unregisterations"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Unregisterations {
+		return fmt.Errorf("required key 'unregisterations' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Unregisterations []*Unregistration `json:"unregisterations"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 type InitializeParams struct {
@@ -973,6 +2548,30 @@ type InitializeResult struct {
 	ServerInfo *ServerInfo `json:"serverInfo,omitempty"`
 }
 
+func (s *InitializeResult) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Capabilities requiredProp `json:"capabilities"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Capabilities {
+		return fmt.Errorf("required key 'capabilities' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Capabilities *ServerCapabilities `json:"capabilities"`
+		ServerInfo   *ServerInfo         `json:"serverInfo,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // The data type of the ResponseError if the
 // initialize request fails.
 type InitializeError struct {
@@ -983,12 +2582,58 @@ type InitializeError struct {
 	Retry bool `json:"retry"`
 }
 
+func (s *InitializeError) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Retry requiredProp `json:"retry"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Retry {
+		return fmt.Errorf("required key 'retry' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Retry bool `json:"retry"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 type InitializedParams struct{}
 
 // The parameters of a change configuration notification.
 type DidChangeConfigurationParams struct {
 	// The actual changed settings
 	Settings any `json:"settings"`
+}
+
+func (s *DidChangeConfigurationParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Settings requiredProp `json:"settings"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Settings {
+		return fmt.Errorf("required key 'settings' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Settings any `json:"settings"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 type DidChangeConfigurationRegistrationOptions struct {
@@ -1004,6 +2649,34 @@ type ShowMessageParams struct {
 	Message string `json:"message"`
 }
 
+func (s *ShowMessageParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Type    requiredProp `json:"type"`
+		Message requiredProp `json:"message"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Type {
+		return fmt.Errorf("required key 'type' is missing")
+	}
+	if !keys.Message {
+		return fmt.Errorf("required key 'message' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Type    MessageType `json:"type"`
+		Message string      `json:"message"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 type ShowMessageRequestParams struct {
 	// The message type. See MessageType
 	Type MessageType `json:"type"`
@@ -1015,9 +2688,61 @@ type ShowMessageRequestParams struct {
 	Actions *[]*MessageActionItem `json:"actions,omitempty"`
 }
 
+func (s *ShowMessageRequestParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Type    requiredProp `json:"type"`
+		Message requiredProp `json:"message"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Type {
+		return fmt.Errorf("required key 'type' is missing")
+	}
+	if !keys.Message {
+		return fmt.Errorf("required key 'message' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Type    MessageType           `json:"type"`
+		Message string                `json:"message"`
+		Actions *[]*MessageActionItem `json:"actions,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 type MessageActionItem struct {
 	// A short title like 'Retry', 'Open Log' etc.
 	Title string `json:"title"`
+}
+
+func (s *MessageActionItem) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Title requiredProp `json:"title"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Title {
+		return fmt.Errorf("required key 'title' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Title string `json:"title"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // The log message parameters.
@@ -1029,10 +2754,61 @@ type LogMessageParams struct {
 	Message string `json:"message"`
 }
 
+func (s *LogMessageParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Type    requiredProp `json:"type"`
+		Message requiredProp `json:"message"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Type {
+		return fmt.Errorf("required key 'type' is missing")
+	}
+	if !keys.Message {
+		return fmt.Errorf("required key 'message' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Type    MessageType `json:"type"`
+		Message string      `json:"message"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // The parameters sent in an open text document notification
 type DidOpenTextDocumentParams struct {
 	// The document that was opened.
 	TextDocument *TextDocumentItem `json:"textDocument"`
+}
+
+func (s *DidOpenTextDocumentParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TextDocument *TextDocumentItem `json:"textDocument"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // The change text document notification's parameters.
@@ -1056,6 +2832,34 @@ type DidChangeTextDocumentParams struct {
 	ContentChanges []TextDocumentContentChangeEvent `json:"contentChanges"`
 }
 
+func (s *DidChangeTextDocumentParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument   requiredProp `json:"textDocument"`
+		ContentChanges requiredProp `json:"contentChanges"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+	if !keys.ContentChanges {
+		return fmt.Errorf("required key 'contentChanges' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TextDocument   VersionedTextDocumentIdentifier  `json:"textDocument"`
+		ContentChanges []TextDocumentContentChangeEvent `json:"contentChanges"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Describe options to be used when registered for text document change events.
 type TextDocumentChangeRegistrationOptions struct {
 	TextDocumentRegistrationOptions
@@ -1064,10 +2868,58 @@ type TextDocumentChangeRegistrationOptions struct {
 	SyncKind TextDocumentSyncKind `json:"syncKind"`
 }
 
+func (s *TextDocumentChangeRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		SyncKind requiredProp `json:"syncKind"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.SyncKind {
+		return fmt.Errorf("required key 'syncKind' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TextDocumentRegistrationOptions
+
+		SyncKind TextDocumentSyncKind `json:"syncKind"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // The parameters sent in a close text document notification
 type DidCloseTextDocumentParams struct {
 	// The document that was closed.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
+}
+
+func (s *DidCloseTextDocumentParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TextDocument TextDocumentIdentifier `json:"textDocument"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // The parameters sent in a save text document notification
@@ -1078,6 +2930,30 @@ type DidSaveTextDocumentParams struct {
 	// Optional the content when saved. Depends on the includeText value
 	// when the save notification was requested.
 	Text *string `json:"text,omitempty"`
+}
+
+func (s *DidSaveTextDocumentParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TextDocument TextDocumentIdentifier `json:"textDocument"`
+		Text         *string                `json:"text,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Save registration options.
@@ -1095,6 +2971,34 @@ type WillSaveTextDocumentParams struct {
 	Reason TextDocumentSaveReason `json:"reason"`
 }
 
+func (s *WillSaveTextDocumentParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+		Reason       requiredProp `json:"reason"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+	if !keys.Reason {
+		return fmt.Errorf("required key 'reason' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TextDocument TextDocumentIdentifier `json:"textDocument"`
+		Reason       TextDocumentSaveReason `json:"reason"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // A text edit applicable to a text document.
 type TextEdit struct {
 	// The range of the text document to be manipulated. To insert
@@ -1106,16 +3010,90 @@ type TextEdit struct {
 	NewText string `json:"newText"`
 }
 
+func (s *TextEdit) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Range   requiredProp `json:"range"`
+		NewText requiredProp `json:"newText"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Range {
+		return fmt.Errorf("required key 'range' is missing")
+	}
+	if !keys.NewText {
+		return fmt.Errorf("required key 'newText' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Range   Range  `json:"range"`
+		NewText string `json:"newText"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // The watched files change notification's parameters.
 type DidChangeWatchedFilesParams struct {
 	// The actual file events.
 	Changes []*FileEvent `json:"changes"`
 }
 
+func (s *DidChangeWatchedFilesParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Changes requiredProp `json:"changes"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Changes {
+		return fmt.Errorf("required key 'changes' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Changes []*FileEvent `json:"changes"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Describe options to be used when registered for text document change events.
 type DidChangeWatchedFilesRegistrationOptions struct {
 	// The watchers to register.
 	Watchers []*FileSystemWatcher `json:"watchers"`
+}
+
+func (s *DidChangeWatchedFilesRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Watchers requiredProp `json:"watchers"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Watchers {
+		return fmt.Errorf("required key 'watchers' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Watchers []*FileSystemWatcher `json:"watchers"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // The publish diagnostic notification's parameters.
@@ -1130,6 +3108,35 @@ type PublishDiagnosticsParams struct {
 
 	// An array of diagnostic information items.
 	Diagnostics []*Diagnostic `json:"diagnostics"`
+}
+
+func (s *PublishDiagnosticsParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Uri         requiredProp `json:"uri"`
+		Diagnostics requiredProp `json:"diagnostics"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Uri {
+		return fmt.Errorf("required key 'uri' is missing")
+	}
+	if !keys.Diagnostics {
+		return fmt.Errorf("required key 'diagnostics' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Uri         DocumentUri   `json:"uri"`
+		Version     *int32        `json:"version,omitempty"`
+		Diagnostics []*Diagnostic `json:"diagnostics"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Completion parameters
@@ -1284,6 +3291,47 @@ type CompletionItem struct {
 	Data *any `json:"data,omitempty"`
 }
 
+func (s *CompletionItem) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Label requiredProp `json:"label"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Label {
+		return fmt.Errorf("required key 'label' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Label               string                       `json:"label"`
+		LabelDetails        *CompletionItemLabelDetails  `json:"labelDetails,omitempty"`
+		Kind                *CompletionItemKind          `json:"kind,omitempty"`
+		Tags                *[]CompletionItemTag         `json:"tags,omitempty"`
+		Detail              *string                      `json:"detail,omitempty"`
+		Documentation       *StringOrMarkupContent       `json:"documentation,omitempty"`
+		Deprecated          *bool                        `json:"deprecated,omitempty"`
+		Preselect           *bool                        `json:"preselect,omitempty"`
+		SortText            *string                      `json:"sortText,omitempty"`
+		FilterText          *string                      `json:"filterText,omitempty"`
+		InsertText          *string                      `json:"insertText,omitempty"`
+		InsertTextFormat    *InsertTextFormat            `json:"insertTextFormat,omitempty"`
+		InsertTextMode      *InsertTextMode              `json:"insertTextMode,omitempty"`
+		TextEdit            *TextEditOrInsertReplaceEdit `json:"textEdit,omitempty"`
+		TextEditText        *string                      `json:"textEditText,omitempty"`
+		AdditionalTextEdits *[]*TextEdit                 `json:"additionalTextEdits,omitempty"`
+		CommitCharacters    *[]string                    `json:"commitCharacters,omitempty"`
+		Command             *Command                     `json:"command,omitempty"`
+		Data                *any                         `json:"data,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Represents a collection of items to be presented
 // in the editor.
 type CompletionList struct {
@@ -1333,6 +3381,36 @@ type CompletionList struct {
 	Items []*CompletionItem `json:"items"`
 }
 
+func (s *CompletionList) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		IsIncomplete requiredProp `json:"isIncomplete"`
+		Items        requiredProp `json:"items"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.IsIncomplete {
+		return fmt.Errorf("required key 'isIncomplete' is missing")
+	}
+	if !keys.Items {
+		return fmt.Errorf("required key 'items' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		IsIncomplete bool                      `json:"isIncomplete"`
+		ItemDefaults *CompletionItemDefaults   `json:"itemDefaults,omitempty"`
+		ApplyKind    *CompletionItemApplyKinds `json:"applyKind,omitempty"`
+		Items        []*CompletionItem         `json:"items"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Registration options for a CompletionRequest.
 type CompletionRegistrationOptions struct {
 	TextDocumentRegistrationOptions
@@ -1353,6 +3431,30 @@ type Hover struct {
 	// An optional range inside the text document that is used to
 	// visualize the hover, e.g. by changing the background color.
 	Range *Range `json:"range,omitempty"`
+}
+
+func (s *Hover) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Contents requiredProp `json:"contents"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Contents {
+		return fmt.Errorf("required key 'contents' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Contents MarkupContentOrMarkedStringOrMarkedStrings `json:"contents"`
+		Range    *Range                                     `json:"range,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Registration options for a HoverRequest.
@@ -1410,6 +3512,31 @@ type SignatureHelp struct {
 	ActiveParameter *Nullable[uint32] `json:"activeParameter,omitempty"`
 }
 
+func (s *SignatureHelp) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Signatures requiredProp `json:"signatures"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Signatures {
+		return fmt.Errorf("required key 'signatures' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Signatures      []*SignatureInformation `json:"signatures"`
+		ActiveSignature *uint32                 `json:"activeSignature,omitempty"`
+		ActiveParameter *Nullable[uint32]       `json:"activeParameter,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Registration options for a SignatureHelpRequest.
 type SignatureHelpRegistrationOptions struct {
 	TextDocumentRegistrationOptions
@@ -1438,6 +3565,33 @@ type ReferenceParams struct {
 	Context *ReferenceContext `json:"context"`
 }
 
+func (s *ReferenceParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Context requiredProp `json:"context"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Context {
+		return fmt.Errorf("required key 'context' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TextDocumentPositionParams
+		WorkDoneProgressParams
+		PartialResultParams
+
+		Context *ReferenceContext `json:"context"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Registration options for a ReferencesRequest.
 type ReferenceRegistrationOptions struct {
 	TextDocumentRegistrationOptions
@@ -1462,6 +3616,30 @@ type DocumentHighlight struct {
 	Kind *DocumentHighlightKind `json:"kind,omitempty"`
 }
 
+func (s *DocumentHighlight) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Range requiredProp `json:"range"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Range {
+		return fmt.Errorf("required key 'range' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Range Range                  `json:"range"`
+		Kind  *DocumentHighlightKind `json:"kind,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Registration options for a DocumentHighlightRequest.
 type DocumentHighlightRegistrationOptions struct {
 	TextDocumentRegistrationOptions
@@ -1475,6 +3653,32 @@ type DocumentSymbolParams struct {
 
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
+}
+
+func (s *DocumentSymbolParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgressParams
+		PartialResultParams
+
+		TextDocument TextDocumentIdentifier `json:"textDocument"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Represents information about programming constructs like variables, classes,
@@ -1497,6 +3701,32 @@ type SymbolInformation struct {
 	// syntax tree. It can therefore not be used to re-construct a hierarchy of
 	// the symbols.
 	Location Location `json:"location"`
+}
+
+func (s *SymbolInformation) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Location requiredProp `json:"location"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Location {
+		return fmt.Errorf("required key 'location' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		BaseSymbolInformation
+
+		Deprecated *bool    `json:"deprecated,omitempty"`
+		Location   Location `json:"location"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Represents programming constructs like variables, classes, interfaces etc.
@@ -1537,6 +3767,48 @@ type DocumentSymbol struct {
 	Children *[]*DocumentSymbol `json:"children,omitempty"`
 }
 
+func (s *DocumentSymbol) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Name           requiredProp `json:"name"`
+		Kind           requiredProp `json:"kind"`
+		Range          requiredProp `json:"range"`
+		SelectionRange requiredProp `json:"selectionRange"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Name {
+		return fmt.Errorf("required key 'name' is missing")
+	}
+	if !keys.Kind {
+		return fmt.Errorf("required key 'kind' is missing")
+	}
+	if !keys.Range {
+		return fmt.Errorf("required key 'range' is missing")
+	}
+	if !keys.SelectionRange {
+		return fmt.Errorf("required key 'selectionRange' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Name           string             `json:"name"`
+		Detail         *string            `json:"detail,omitempty"`
+		Kind           SymbolKind         `json:"kind"`
+		Tags           *[]SymbolTag       `json:"tags,omitempty"`
+		Deprecated     *bool              `json:"deprecated,omitempty"`
+		Range          Range              `json:"range"`
+		SelectionRange Range              `json:"selectionRange"`
+		Children       *[]*DocumentSymbol `json:"children,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Registration options for a DocumentSymbolRequest.
 type DocumentSymbolRegistrationOptions struct {
 	TextDocumentRegistrationOptions
@@ -1556,6 +3828,42 @@ type CodeActionParams struct {
 
 	// Context carrying additional information.
 	Context *CodeActionContext `json:"context"`
+}
+
+func (s *CodeActionParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+		Range        requiredProp `json:"range"`
+		Context      requiredProp `json:"context"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+	if !keys.Range {
+		return fmt.Errorf("required key 'range' is missing")
+	}
+	if !keys.Context {
+		return fmt.Errorf("required key 'context' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgressParams
+		PartialResultParams
+
+		TextDocument TextDocumentIdentifier `json:"textDocument"`
+		Range        Range                  `json:"range"`
+		Context      *CodeActionContext     `json:"context"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Represents a reference to a command. Provides a title which
@@ -1579,6 +3887,36 @@ type Command struct {
 	// Arguments that the command handler should be
 	// invoked with.
 	Arguments *[]any `json:"arguments,omitempty"`
+}
+
+func (s *Command) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Title   requiredProp `json:"title"`
+		Command requiredProp `json:"command"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Title {
+		return fmt.Errorf("required key 'title' is missing")
+	}
+	if !keys.Command {
+		return fmt.Errorf("required key 'command' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Title     string  `json:"title"`
+		Tooltip   *string `json:"tooltip,omitempty"`
+		Command   string  `json:"command"`
+		Arguments *[]any  `json:"arguments,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // A code action represents a change that can be performed in code, e.g. to fix a problem or
@@ -1643,6 +3981,37 @@ type CodeAction struct {
 	Tags *[]CodeActionTag `json:"tags,omitempty"`
 }
 
+func (s *CodeAction) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Title requiredProp `json:"title"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Title {
+		return fmt.Errorf("required key 'title' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Title       string              `json:"title"`
+		Kind        *CodeActionKind     `json:"kind,omitempty"`
+		Diagnostics *[]*Diagnostic      `json:"diagnostics,omitempty"`
+		IsPreferred *bool               `json:"isPreferred,omitempty"`
+		Disabled    *CodeActionDisabled `json:"disabled,omitempty"`
+		Edit        *WorkspaceEdit      `json:"edit,omitempty"`
+		Command     *Command            `json:"command,omitempty"`
+		Data        *any                `json:"data,omitempty"`
+		Tags        *[]CodeActionTag    `json:"tags,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Registration options for a CodeActionRequest.
 type CodeActionRegistrationOptions struct {
 	TextDocumentRegistrationOptions
@@ -1665,6 +4034,32 @@ type WorkspaceSymbolParams struct {
 	Query string `json:"query"`
 }
 
+func (s *WorkspaceSymbolParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Query requiredProp `json:"query"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Query {
+		return fmt.Errorf("required key 'query' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgressParams
+		PartialResultParams
+
+		Query string `json:"query"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // A special workspace symbol that supports locations without a range.
 //
 // See also SymbolInformation.
@@ -1685,6 +4080,32 @@ type WorkspaceSymbol struct {
 	Data *any `json:"data,omitempty"`
 }
 
+func (s *WorkspaceSymbol) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Location requiredProp `json:"location"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Location {
+		return fmt.Errorf("required key 'location' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		BaseSymbolInformation
+
+		Location LocationOrLocationUriOnly `json:"location"`
+		Data     *any                      `json:"data,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Registration options for a WorkspaceSymbolRequest.
 type WorkspaceSymbolRegistrationOptions struct {
 	WorkspaceSymbolOptions
@@ -1697,6 +4118,32 @@ type CodeLensParams struct {
 
 	// The document to request code lens for.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
+}
+
+func (s *CodeLensParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgressParams
+		PartialResultParams
+
+		TextDocument TextDocumentIdentifier `json:"textDocument"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // A code lens represents a command that should be shown along with
@@ -1716,6 +4163,31 @@ type CodeLens struct {
 	Data *any `json:"data,omitempty"`
 }
 
+func (s *CodeLens) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Range requiredProp `json:"range"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Range {
+		return fmt.Errorf("required key 'range' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Range   Range    `json:"range"`
+		Command *Command `json:"command,omitempty"`
+		Data    *any     `json:"data,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Registration options for a CodeLensRequest.
 type CodeLensRegistrationOptions struct {
 	TextDocumentRegistrationOptions
@@ -1729,6 +4201,32 @@ type DocumentLinkParams struct {
 
 	// The document to provide document links for.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
+}
+
+func (s *DocumentLinkParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgressParams
+		PartialResultParams
+
+		TextDocument TextDocumentIdentifier `json:"textDocument"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // A document link is a range in a text document that links to an internal or external resource, like another
@@ -1754,6 +4252,32 @@ type DocumentLink struct {
 	Data *any `json:"data,omitempty"`
 }
 
+func (s *DocumentLink) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Range requiredProp `json:"range"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Range {
+		return fmt.Errorf("required key 'range' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Range   Range   `json:"range"`
+		Target  *URI    `json:"target,omitempty"`
+		Tooltip *string `json:"tooltip,omitempty"`
+		Data    *any    `json:"data,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Registration options for a DocumentLinkRequest.
 type DocumentLinkRegistrationOptions struct {
 	TextDocumentRegistrationOptions
@@ -1769,6 +4293,36 @@ type DocumentFormattingParams struct {
 
 	// The format options.
 	Options *FormattingOptions `json:"options"`
+}
+
+func (s *DocumentFormattingParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+		Options      requiredProp `json:"options"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+	if !keys.Options {
+		return fmt.Errorf("required key 'options' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgressParams
+
+		TextDocument TextDocumentIdentifier `json:"textDocument"`
+		Options      *FormattingOptions     `json:"options"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Registration options for a DocumentFormattingRequest.
@@ -1789,6 +4343,41 @@ type DocumentRangeFormattingParams struct {
 
 	// The format options
 	Options *FormattingOptions `json:"options"`
+}
+
+func (s *DocumentRangeFormattingParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+		Range        requiredProp `json:"range"`
+		Options      requiredProp `json:"options"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+	if !keys.Range {
+		return fmt.Errorf("required key 'range' is missing")
+	}
+	if !keys.Options {
+		return fmt.Errorf("required key 'options' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgressParams
+
+		TextDocument TextDocumentIdentifier `json:"textDocument"`
+		Range        Range                  `json:"range"`
+		Options      *FormattingOptions     `json:"options"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Registration options for a DocumentRangeFormattingRequest.
@@ -1815,6 +4404,41 @@ type DocumentRangesFormattingParams struct {
 	Options *FormattingOptions `json:"options"`
 }
 
+func (s *DocumentRangesFormattingParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+		Ranges       requiredProp `json:"ranges"`
+		Options      requiredProp `json:"options"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+	if !keys.Ranges {
+		return fmt.Errorf("required key 'ranges' is missing")
+	}
+	if !keys.Options {
+		return fmt.Errorf("required key 'options' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgressParams
+
+		TextDocument TextDocumentIdentifier `json:"textDocument"`
+		Ranges       []Range                `json:"ranges"`
+		Options      *FormattingOptions     `json:"options"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // The parameters of a DocumentOnTypeFormattingRequest.
 type DocumentOnTypeFormattingParams struct {
 	// The document to format.
@@ -1833,6 +4457,44 @@ type DocumentOnTypeFormattingParams struct {
 
 	// The formatting options.
 	Options *FormattingOptions `json:"options"`
+}
+
+func (s *DocumentOnTypeFormattingParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+		Position     requiredProp `json:"position"`
+		Ch           requiredProp `json:"ch"`
+		Options      requiredProp `json:"options"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+	if !keys.Position {
+		return fmt.Errorf("required key 'position' is missing")
+	}
+	if !keys.Ch {
+		return fmt.Errorf("required key 'ch' is missing")
+	}
+	if !keys.Options {
+		return fmt.Errorf("required key 'options' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TextDocument TextDocumentIdentifier `json:"textDocument"`
+		Position     Position               `json:"position"`
+		Ch           string                 `json:"ch"`
+		Options      *FormattingOptions     `json:"options"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Registration options for a DocumentOnTypeFormattingRequest.
@@ -1857,6 +4519,41 @@ type RenameParams struct {
 	NewName string `json:"newName"`
 }
 
+func (s *RenameParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+		Position     requiredProp `json:"position"`
+		NewName      requiredProp `json:"newName"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+	if !keys.Position {
+		return fmt.Errorf("required key 'position' is missing")
+	}
+	if !keys.NewName {
+		return fmt.Errorf("required key 'newName' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgressParams
+
+		TextDocument TextDocumentIdentifier `json:"textDocument"`
+		Position     Position               `json:"position"`
+		NewName      string                 `json:"newName"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Registration options for a RenameRequest.
 type RenameRegistrationOptions struct {
 	TextDocumentRegistrationOptions
@@ -1877,6 +4574,32 @@ type ExecuteCommandParams struct {
 
 	// Arguments that the command should be invoked with.
 	Arguments *[]any `json:"arguments,omitempty"`
+}
+
+func (s *ExecuteCommandParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Command requiredProp `json:"command"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Command {
+		return fmt.Errorf("required key 'command' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgressParams
+
+		Command   string `json:"command"`
+		Arguments *[]any `json:"arguments,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Registration options for a ExecuteCommandRequest.
@@ -1902,6 +4625,31 @@ type ApplyWorkspaceEditParams struct {
 	Metadata *WorkspaceEditMetadata `json:"metadata,omitempty"`
 }
 
+func (s *ApplyWorkspaceEditParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Edit requiredProp `json:"edit"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Edit {
+		return fmt.Errorf("required key 'edit' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Label    *string                `json:"label,omitempty"`
+		Edit     *WorkspaceEdit         `json:"edit"`
+		Metadata *WorkspaceEditMetadata `json:"metadata,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // The result returned from the apply workspace edit request.
 //
 // Since: 3.17 renamed from ApplyWorkspaceEditResponse
@@ -1918,6 +4666,31 @@ type ApplyWorkspaceEditResult struct {
 	// contain the index of the change that failed. This property is only available
 	// if the client signals a `failureHandlingStrategy` in its client capabilities.
 	FailedChange *uint32 `json:"failedChange,omitempty"`
+}
+
+func (s *ApplyWorkspaceEditResult) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Applied requiredProp `json:"applied"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Applied {
+		return fmt.Errorf("required key 'applied' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Applied       bool    `json:"applied"`
+		FailureReason *string `json:"failureReason,omitempty"`
+		FailedChange  *uint32 `json:"failedChange,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 type WorkDoneProgressBegin struct {
@@ -1950,6 +4723,37 @@ type WorkDoneProgressBegin struct {
 	Percentage *uint32 `json:"percentage,omitempty"`
 }
 
+func (s *WorkDoneProgressBegin) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Kind  requiredProp `json:"kind"`
+		Title requiredProp `json:"title"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Kind {
+		return fmt.Errorf("required key 'kind' is missing")
+	}
+	if !keys.Title {
+		return fmt.Errorf("required key 'title' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Kind        StringLiteralBegin `json:"kind"`
+		Title       string             `json:"title"`
+		Cancellable *bool              `json:"cancellable,omitempty"`
+		Message     *string            `json:"message,omitempty"`
+		Percentage  *uint32            `json:"percentage,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 type WorkDoneProgressReport struct {
 	Kind StringLiteralReport `json:"kind"`
 
@@ -1975,6 +4779,32 @@ type WorkDoneProgressReport struct {
 	Percentage *uint32 `json:"percentage,omitempty"`
 }
 
+func (s *WorkDoneProgressReport) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Kind requiredProp `json:"kind"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Kind {
+		return fmt.Errorf("required key 'kind' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Kind        StringLiteralReport `json:"kind"`
+		Cancellable *bool               `json:"cancellable,omitempty"`
+		Message     *string             `json:"message,omitempty"`
+		Percentage  *uint32             `json:"percentage,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 type WorkDoneProgressEnd struct {
 	Kind StringLiteralEnd `json:"kind"`
 
@@ -1983,8 +4813,55 @@ type WorkDoneProgressEnd struct {
 	Message *string `json:"message,omitempty"`
 }
 
+func (s *WorkDoneProgressEnd) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Kind requiredProp `json:"kind"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Kind {
+		return fmt.Errorf("required key 'kind' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Kind    StringLiteralEnd `json:"kind"`
+		Message *string          `json:"message,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 type SetTraceParams struct {
 	Value TraceValue `json:"value"`
+}
+
+func (s *SetTraceParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Value requiredProp `json:"value"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Value {
+		return fmt.Errorf("required key 'value' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Value TraceValue `json:"value"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 type LogTraceParams struct {
@@ -1993,9 +4870,56 @@ type LogTraceParams struct {
 	Verbose *string `json:"verbose,omitempty"`
 }
 
+func (s *LogTraceParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Message requiredProp `json:"message"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Message {
+		return fmt.Errorf("required key 'message' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Message string  `json:"message"`
+		Verbose *string `json:"verbose,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 type CancelParams struct {
 	// The request id to cancel.
 	Id IntegerOrString `json:"id"`
+}
+
+func (s *CancelParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Id requiredProp `json:"id"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Id {
+		return fmt.Errorf("required key 'id' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Id IntegerOrString `json:"id"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 type ProgressParams struct {
@@ -2006,6 +4930,34 @@ type ProgressParams struct {
 	Value any `json:"value"`
 }
 
+func (s *ProgressParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Token requiredProp `json:"token"`
+		Value requiredProp `json:"value"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Token {
+		return fmt.Errorf("required key 'token' is missing")
+	}
+	if !keys.Value {
+		return fmt.Errorf("required key 'value' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Token ProgressToken `json:"token"`
+		Value any           `json:"value"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // A parameter literal used in requests to pass a text document and a position inside that
 // document.
 type TextDocumentPositionParams struct {
@@ -2014,6 +4966,34 @@ type TextDocumentPositionParams struct {
 
 	// The position inside the text document.
 	Position Position `json:"position"`
+}
+
+func (s *TextDocumentPositionParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+		Position     requiredProp `json:"position"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+	if !keys.Position {
+		return fmt.Errorf("required key 'position' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TextDocument TextDocumentIdentifier `json:"textDocument"`
+		Position     Position               `json:"position"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 type WorkDoneProgressParams struct {
@@ -2049,6 +5029,40 @@ type LocationLink struct {
 	TargetSelectionRange Range `json:"targetSelectionRange"`
 }
 
+func (s *LocationLink) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TargetUri            requiredProp `json:"targetUri"`
+		TargetRange          requiredProp `json:"targetRange"`
+		TargetSelectionRange requiredProp `json:"targetSelectionRange"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TargetUri {
+		return fmt.Errorf("required key 'targetUri' is missing")
+	}
+	if !keys.TargetRange {
+		return fmt.Errorf("required key 'targetRange' is missing")
+	}
+	if !keys.TargetSelectionRange {
+		return fmt.Errorf("required key 'targetSelectionRange' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		OriginSelectionRange *Range      `json:"originSelectionRange,omitempty"`
+		TargetUri            DocumentUri `json:"targetUri"`
+		TargetRange          Range       `json:"targetRange"`
+		TargetSelectionRange Range       `json:"targetSelectionRange"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // A range in a text document expressed as (zero-based) start and end positions.
 //
 // If you want to specify a range that contains a line including the line ending
@@ -2068,6 +5082,34 @@ type Range struct {
 
 	// The range's end position.
 	End Position `json:"end"`
+}
+
+func (s *Range) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Start requiredProp `json:"start"`
+		End   requiredProp `json:"end"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Start {
+		return fmt.Errorf("required key 'start' is missing")
+	}
+	if !keys.End {
+		return fmt.Errorf("required key 'end' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Start Position `json:"start"`
+		End   Position `json:"end"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 type ImplementationOptions struct {
@@ -2095,6 +5137,34 @@ type WorkspaceFoldersChangeEvent struct {
 	Removed []*WorkspaceFolder `json:"removed"`
 }
 
+func (s *WorkspaceFoldersChangeEvent) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Added   requiredProp `json:"added"`
+		Removed requiredProp `json:"removed"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Added {
+		return fmt.Errorf("required key 'added' is missing")
+	}
+	if !keys.Removed {
+		return fmt.Errorf("required key 'removed' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Added   []*WorkspaceFolder `json:"added"`
+		Removed []*WorkspaceFolder `json:"removed"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 type ConfigurationItem struct {
 	// The scope to get the configuration section for.
 	ScopeUri *URI `json:"scopeUri,omitempty"`
@@ -2107,6 +5177,29 @@ type ConfigurationItem struct {
 type TextDocumentIdentifier struct {
 	// The text document's uri.
 	Uri DocumentUri `json:"uri"`
+}
+
+func (s *TextDocumentIdentifier) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Uri requiredProp `json:"uri"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Uri {
+		return fmt.Errorf("required key 'uri' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Uri DocumentUri `json:"uri"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Represents a color in RGBA space.
@@ -2122,6 +5215,44 @@ type Color struct {
 
 	// The alpha component of this color in the range [0-1].
 	Alpha float64 `json:"alpha"`
+}
+
+func (s *Color) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Red   requiredProp `json:"red"`
+		Green requiredProp `json:"green"`
+		Blue  requiredProp `json:"blue"`
+		Alpha requiredProp `json:"alpha"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Red {
+		return fmt.Errorf("required key 'red' is missing")
+	}
+	if !keys.Green {
+		return fmt.Errorf("required key 'green' is missing")
+	}
+	if !keys.Blue {
+		return fmt.Errorf("required key 'blue' is missing")
+	}
+	if !keys.Alpha {
+		return fmt.Errorf("required key 'alpha' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Red   float64 `json:"red"`
+		Green float64 `json:"green"`
+		Blue  float64 `json:"blue"`
+		Alpha float64 `json:"alpha"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 type DocumentColorOptions struct {
@@ -2174,6 +5305,34 @@ type Position struct {
 	Character uint32 `json:"character"`
 }
 
+func (s *Position) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Line      requiredProp `json:"line"`
+		Character requiredProp `json:"character"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Line {
+		return fmt.Errorf("required key 'line' is missing")
+	}
+	if !keys.Character {
+		return fmt.Errorf("required key 'character' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Line      uint32 `json:"line"`
+		Character uint32 `json:"character"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 type SelectionRangeOptions struct {
 	WorkDoneProgressOptions
 }
@@ -2200,6 +5359,33 @@ type SemanticTokensOptions struct {
 	Full *BooleanOrSemanticTokensFullDelta `json:"full,omitempty"`
 }
 
+func (s *SemanticTokensOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Legend requiredProp `json:"legend"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Legend {
+		return fmt.Errorf("required key 'legend' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgressOptions
+
+		Legend *SemanticTokensLegend             `json:"legend"`
+		Range  *BooleanOrEmptyObject             `json:"range,omitempty"`
+		Full   *BooleanOrSemanticTokensFullDelta `json:"full,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Since: 3.16.0
 type SemanticTokensEdit struct {
 	// The start offset of the edit.
@@ -2212,6 +5398,35 @@ type SemanticTokensEdit struct {
 	Data *[]uint32 `json:"data,omitempty"`
 }
 
+func (s *SemanticTokensEdit) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Start       requiredProp `json:"start"`
+		DeleteCount requiredProp `json:"deleteCount"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Start {
+		return fmt.Errorf("required key 'start' is missing")
+	}
+	if !keys.DeleteCount {
+		return fmt.Errorf("required key 'deleteCount' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Start       uint32    `json:"start"`
+		DeleteCount uint32    `json:"deleteCount"`
+		Data        *[]uint32 `json:"data,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 type LinkedEditingRangeOptions struct {
 	WorkDoneProgressOptions
 }
@@ -2222,6 +5437,29 @@ type LinkedEditingRangeOptions struct {
 type FileCreate struct {
 	// A file:// URI for the location of the file/folder being created.
 	Uri string `json:"uri"`
+}
+
+func (s *FileCreate) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Uri requiredProp `json:"uri"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Uri {
+		return fmt.Errorf("required key 'uri' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Uri string `json:"uri"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Describes textual changes on a text document. A TextDocumentEdit describes all changes
@@ -2242,6 +5480,34 @@ type TextDocumentEdit struct {
 	Edits []TextEditOrAnnotatedTextEditOrSnippetTextEdit `json:"edits"`
 }
 
+func (s *TextDocumentEdit) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+		Edits        requiredProp `json:"edits"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+	if !keys.Edits {
+		return fmt.Errorf("required key 'edits' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TextDocument OptionalVersionedTextDocumentIdentifier        `json:"textDocument"`
+		Edits        []TextEditOrAnnotatedTextEditOrSnippetTextEdit `json:"edits"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Create file operation.
 type CreateFile struct {
 	ResourceOperation
@@ -2254,6 +5520,37 @@ type CreateFile struct {
 
 	// Additional options
 	Options *CreateFileOptions `json:"options,omitempty"`
+}
+
+func (s *CreateFile) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Kind requiredProp `json:"kind"`
+		Uri  requiredProp `json:"uri"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Kind {
+		return fmt.Errorf("required key 'kind' is missing")
+	}
+	if !keys.Uri {
+		return fmt.Errorf("required key 'uri' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		ResourceOperation
+
+		Kind    StringLiteralCreate `json:"kind"`
+		Uri     DocumentUri         `json:"uri"`
+		Options *CreateFileOptions  `json:"options,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Rename file operation
@@ -2273,6 +5570,42 @@ type RenameFile struct {
 	Options *RenameFileOptions `json:"options,omitempty"`
 }
 
+func (s *RenameFile) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Kind   requiredProp `json:"kind"`
+		OldUri requiredProp `json:"oldUri"`
+		NewUri requiredProp `json:"newUri"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Kind {
+		return fmt.Errorf("required key 'kind' is missing")
+	}
+	if !keys.OldUri {
+		return fmt.Errorf("required key 'oldUri' is missing")
+	}
+	if !keys.NewUri {
+		return fmt.Errorf("required key 'newUri' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		ResourceOperation
+
+		Kind    StringLiteralRename `json:"kind"`
+		OldUri  DocumentUri         `json:"oldUri"`
+		NewUri  DocumentUri         `json:"newUri"`
+		Options *RenameFileOptions  `json:"options,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Delete file operation
 type DeleteFile struct {
 	ResourceOperation
@@ -2285,6 +5618,37 @@ type DeleteFile struct {
 
 	// Delete options.
 	Options *DeleteFileOptions `json:"options,omitempty"`
+}
+
+func (s *DeleteFile) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Kind requiredProp `json:"kind"`
+		Uri  requiredProp `json:"uri"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Kind {
+		return fmt.Errorf("required key 'kind' is missing")
+	}
+	if !keys.Uri {
+		return fmt.Errorf("required key 'uri' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		ResourceOperation
+
+		Kind    StringLiteralDelete `json:"kind"`
+		Uri     DocumentUri         `json:"uri"`
+		Options *DeleteFileOptions  `json:"options,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Additional information that describes document changes.
@@ -2304,6 +5668,31 @@ type ChangeAnnotation struct {
 	Description *string `json:"description,omitempty"`
 }
 
+func (s *ChangeAnnotation) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Label requiredProp `json:"label"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Label {
+		return fmt.Errorf("required key 'label' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Label             string  `json:"label"`
+		NeedsConfirmation *bool   `json:"needsConfirmation,omitempty"`
+		Description       *string `json:"description,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // A filter to describe in which file operation requests or notifications
 // the server is interested in receiving.
 //
@@ -2314,6 +5703,30 @@ type FileOperationFilter struct {
 
 	// The actual file operation pattern.
 	Pattern *FileOperationPattern `json:"pattern"`
+}
+
+func (s *FileOperationFilter) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Pattern requiredProp `json:"pattern"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Pattern {
+		return fmt.Errorf("required key 'pattern' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Scheme  *string               `json:"scheme,omitempty"`
+		Pattern *FileOperationPattern `json:"pattern"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Represents information on a file/folder rename.
@@ -2327,12 +5740,63 @@ type FileRename struct {
 	NewUri string `json:"newUri"`
 }
 
+func (s *FileRename) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		OldUri requiredProp `json:"oldUri"`
+		NewUri requiredProp `json:"newUri"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.OldUri {
+		return fmt.Errorf("required key 'oldUri' is missing")
+	}
+	if !keys.NewUri {
+		return fmt.Errorf("required key 'newUri' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		OldUri string `json:"oldUri"`
+		NewUri string `json:"newUri"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Represents information on a file/folder delete.
 //
 // Since: 3.16.0
 type FileDelete struct {
 	// A file:// URI for the location of the file/folder being deleted.
 	Uri string `json:"uri"`
+}
+
+func (s *FileDelete) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Uri requiredProp `json:"uri"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Uri {
+		return fmt.Errorf("required key 'uri' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Uri string `json:"uri"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 type MonikerOptions struct {
@@ -2356,6 +5820,34 @@ type InlineValueContext struct {
 	StoppedLocation Range `json:"stoppedLocation"`
 }
 
+func (s *InlineValueContext) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		FrameId         requiredProp `json:"frameId"`
+		StoppedLocation requiredProp `json:"stoppedLocation"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.FrameId {
+		return fmt.Errorf("required key 'frameId' is missing")
+	}
+	if !keys.StoppedLocation {
+		return fmt.Errorf("required key 'stoppedLocation' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		FrameId         int32 `json:"frameId"`
+		StoppedLocation Range `json:"stoppedLocation"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Provide inline value as text.
 //
 // Since: 3.17.0
@@ -2365,6 +5857,34 @@ type InlineValueText struct {
 
 	// The text of the inline value.
 	Text string `json:"text"`
+}
+
+func (s *InlineValueText) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Range requiredProp `json:"range"`
+		Text  requiredProp `json:"text"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Range {
+		return fmt.Errorf("required key 'range' is missing")
+	}
+	if !keys.Text {
+		return fmt.Errorf("required key 'text' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Range Range  `json:"range"`
+		Text  string `json:"text"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Provide inline value through a variable lookup.
@@ -2384,6 +5904,35 @@ type InlineValueVariableLookup struct {
 	CaseSensitiveLookup bool `json:"caseSensitiveLookup"`
 }
 
+func (s *InlineValueVariableLookup) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Range               requiredProp `json:"range"`
+		CaseSensitiveLookup requiredProp `json:"caseSensitiveLookup"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Range {
+		return fmt.Errorf("required key 'range' is missing")
+	}
+	if !keys.CaseSensitiveLookup {
+		return fmt.Errorf("required key 'caseSensitiveLookup' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Range               Range   `json:"range"`
+		VariableName        *string `json:"variableName,omitempty"`
+		CaseSensitiveLookup bool    `json:"caseSensitiveLookup"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Provide an inline value through an expression evaluation.
 // If only a range is specified, the expression will be extracted from the underlying document.
 // An optional expression can be used to override the extracted expression.
@@ -2396,6 +5945,30 @@ type InlineValueEvaluatableExpression struct {
 
 	// If specified the expression overrides the extracted expression.
 	Expression *string `json:"expression,omitempty"`
+}
+
+func (s *InlineValueEvaluatableExpression) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Range requiredProp `json:"range"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Range {
+		return fmt.Errorf("required key 'range' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Range      Range   `json:"range"`
+		Expression *string `json:"expression,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Inline value options used during static registration.
@@ -2438,6 +6011,32 @@ type InlayHintLabelPart struct {
 	Command *Command `json:"command,omitempty"`
 }
 
+func (s *InlayHintLabelPart) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Value requiredProp `json:"value"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Value {
+		return fmt.Errorf("required key 'value' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Value    string                 `json:"value"`
+		Tooltip  *StringOrMarkupContent `json:"tooltip,omitempty"`
+		Location *Location              `json:"location,omitempty"`
+		Command  *Command               `json:"command,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // A `MarkupContent` literal represents a string value which content is interpreted base on its
 // kind flag. Currently the protocol supports `plaintext` and `markdown` as markup kinds.
 //
@@ -2468,6 +6067,34 @@ type MarkupContent struct {
 
 	// The content itself
 	Value string `json:"value"`
+}
+
+func (s *MarkupContent) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Kind  requiredProp `json:"kind"`
+		Value requiredProp `json:"value"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Kind {
+		return fmt.Errorf("required key 'kind' is missing")
+	}
+	if !keys.Value {
+		return fmt.Errorf("required key 'value' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Kind  MarkupKind `json:"kind"`
+		Value string     `json:"value"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Inlay hint options used during static registration.
@@ -2529,6 +6156,35 @@ type FullDocumentDiagnosticReport struct {
 	Items []*Diagnostic `json:"items"`
 }
 
+func (s *FullDocumentDiagnosticReport) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Kind  requiredProp `json:"kind"`
+		Items requiredProp `json:"items"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Kind {
+		return fmt.Errorf("required key 'kind' is missing")
+	}
+	if !keys.Items {
+		return fmt.Errorf("required key 'items' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Kind     StringLiteralFull `json:"kind"`
+		ResultId *string           `json:"resultId,omitempty"`
+		Items    []*Diagnostic     `json:"items"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // A diagnostic report indicating that the last returned
 // report is still accurate.
 //
@@ -2543,6 +6199,34 @@ type UnchangedDocumentDiagnosticReport struct {
 	// A result id which will be sent on the next
 	// diagnostic request for the same document.
 	ResultId string `json:"resultId"`
+}
+
+func (s *UnchangedDocumentDiagnosticReport) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Kind     requiredProp `json:"kind"`
+		ResultId requiredProp `json:"resultId"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Kind {
+		return fmt.Errorf("required key 'kind' is missing")
+	}
+	if !keys.ResultId {
+		return fmt.Errorf("required key 'resultId' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Kind     StringLiteralUnchanged `json:"kind"`
+		ResultId string                 `json:"resultId"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Diagnostic options.
@@ -2565,6 +6249,37 @@ type DiagnosticOptions struct {
 	WorkspaceDiagnostics bool `json:"workspaceDiagnostics"`
 }
 
+func (s *DiagnosticOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		InterFileDependencies requiredProp `json:"interFileDependencies"`
+		WorkspaceDiagnostics  requiredProp `json:"workspaceDiagnostics"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.InterFileDependencies {
+		return fmt.Errorf("required key 'interFileDependencies' is missing")
+	}
+	if !keys.WorkspaceDiagnostics {
+		return fmt.Errorf("required key 'workspaceDiagnostics' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgressOptions
+
+		Identifier            *string `json:"identifier,omitempty"`
+		InterFileDependencies bool    `json:"interFileDependencies"`
+		WorkspaceDiagnostics  bool    `json:"workspaceDiagnostics"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // A previous result id in a workspace pull request.
 //
 // Since: 3.17.0
@@ -2575,6 +6290,34 @@ type PreviousResultId struct {
 
 	// The value of the previous result id.
 	Value string `json:"value"`
+}
+
+func (s *PreviousResultId) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Uri   requiredProp `json:"uri"`
+		Value requiredProp `json:"value"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Uri {
+		return fmt.Errorf("required key 'uri' is missing")
+	}
+	if !keys.Value {
+		return fmt.Errorf("required key 'value' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Uri   DocumentUri `json:"uri"`
+		Value string      `json:"value"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // A notebook document.
@@ -2601,6 +6344,45 @@ type NotebookDocument struct {
 	Cells []*NotebookCell `json:"cells"`
 }
 
+func (s *NotebookDocument) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Uri          requiredProp `json:"uri"`
+		NotebookType requiredProp `json:"notebookType"`
+		Version      requiredProp `json:"version"`
+		Cells        requiredProp `json:"cells"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Uri {
+		return fmt.Errorf("required key 'uri' is missing")
+	}
+	if !keys.NotebookType {
+		return fmt.Errorf("required key 'notebookType' is missing")
+	}
+	if !keys.Version {
+		return fmt.Errorf("required key 'version' is missing")
+	}
+	if !keys.Cells {
+		return fmt.Errorf("required key 'cells' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Uri          URI             `json:"uri"`
+		NotebookType string          `json:"notebookType"`
+		Version      int32           `json:"version"`
+		Metadata     *map[string]any `json:"metadata,omitempty"`
+		Cells        []*NotebookCell `json:"cells"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // An item to transfer a text document from the client to the
 // server.
 type TextDocumentItem struct {
@@ -2616,6 +6398,44 @@ type TextDocumentItem struct {
 
 	// The content of the opened text document.
 	Text string `json:"text"`
+}
+
+func (s *TextDocumentItem) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Uri        requiredProp `json:"uri"`
+		LanguageId requiredProp `json:"languageId"`
+		Version    requiredProp `json:"version"`
+		Text       requiredProp `json:"text"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Uri {
+		return fmt.Errorf("required key 'uri' is missing")
+	}
+	if !keys.LanguageId {
+		return fmt.Errorf("required key 'languageId' is missing")
+	}
+	if !keys.Version {
+		return fmt.Errorf("required key 'version' is missing")
+	}
+	if !keys.Text {
+		return fmt.Errorf("required key 'text' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Uri        DocumentUri  `json:"uri"`
+		LanguageId LanguageKind `json:"languageId"`
+		Version    int32        `json:"version"`
+		Text       string       `json:"text"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Options specific to a notebook plus its cells
@@ -2640,6 +6460,30 @@ type NotebookDocumentSyncOptions struct {
 	Save *bool `json:"save,omitempty"`
 }
 
+func (s *NotebookDocumentSyncOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		NotebookSelector requiredProp `json:"notebookSelector"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.NotebookSelector {
+		return fmt.Errorf("required key 'notebookSelector' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		NotebookSelector []NotebookDocumentFilterWithNotebookOrNotebookDocumentFilterWithCells `json:"notebookSelector"`
+		Save             *bool                                                                 `json:"save,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // A versioned notebook document identifier.
 //
 // Since: 3.17.0
@@ -2649,6 +6493,34 @@ type VersionedNotebookDocumentIdentifier struct {
 
 	// The notebook document's uri.
 	Uri URI `json:"uri"`
+}
+
+func (s *VersionedNotebookDocumentIdentifier) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Version requiredProp `json:"version"`
+		Uri     requiredProp `json:"uri"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Version {
+		return fmt.Errorf("required key 'version' is missing")
+	}
+	if !keys.Uri {
+		return fmt.Errorf("required key 'uri' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Version int32 `json:"version"`
+		Uri     URI   `json:"uri"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // A change event for a notebook document.
@@ -2672,6 +6544,29 @@ type NotebookDocumentIdentifier struct {
 	Uri URI `json:"uri"`
 }
 
+func (s *NotebookDocumentIdentifier) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Uri requiredProp `json:"uri"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Uri {
+		return fmt.Errorf("required key 'uri' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Uri URI `json:"uri"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Provides information about the context in which an inline completion was requested.
 //
 // Since: 3.18.0
@@ -2683,6 +6578,30 @@ type InlineCompletionContext struct {
 
 	// Provides information about the currently selected item in the autocomplete widget if it is visible.
 	SelectedCompletionInfo *SelectedCompletionInfo `json:"selectedCompletionInfo,omitempty"`
+}
+
+func (s *InlineCompletionContext) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TriggerKind requiredProp `json:"triggerKind"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TriggerKind {
+		return fmt.Errorf("required key 'triggerKind' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TriggerKind            InlineCompletionTriggerKind `json:"triggerKind"`
+		SelectedCompletionInfo *SelectedCompletionInfo     `json:"selectedCompletionInfo,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // A string value used as a snippet is a template which allows to insert text
@@ -2704,6 +6623,34 @@ type StringValue struct {
 	Value string `json:"value"`
 }
 
+func (s *StringValue) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Kind  requiredProp `json:"kind"`
+		Value requiredProp `json:"value"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Kind {
+		return fmt.Errorf("required key 'kind' is missing")
+	}
+	if !keys.Value {
+		return fmt.Errorf("required key 'value' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Kind  StringLiteralSnippet `json:"kind"`
+		Value string               `json:"value"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Inline completion options used during static registration.
 //
 // Since: 3.18.0
@@ -2723,6 +6670,29 @@ type TextDocumentContentOptions struct {
 	Schemes []string `json:"schemes"`
 }
 
+func (s *TextDocumentContentOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Schemes requiredProp `json:"schemes"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Schemes {
+		return fmt.Errorf("required key 'schemes' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Schemes []string `json:"schemes"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // General parameters to register for a notification or to register a provider.
 type Registration struct {
 	// The id used to register the request. The id can be used to deregister
@@ -2736,6 +6706,35 @@ type Registration struct {
 	RegisterOptions *any `json:"registerOptions,omitempty"`
 }
 
+func (s *Registration) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Id     requiredProp `json:"id"`
+		Method requiredProp `json:"method"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Id {
+		return fmt.Errorf("required key 'id' is missing")
+	}
+	if !keys.Method {
+		return fmt.Errorf("required key 'method' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Id              string `json:"id"`
+		Method          string `json:"method"`
+		RegisterOptions *any   `json:"registerOptions,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // General parameters to unregister a request or notification.
 type Unregistration struct {
 	// The id used to unregister the request or notification. Usually an id
@@ -2744,6 +6743,34 @@ type Unregistration struct {
 
 	// The method to unregister for.
 	Method string `json:"method"`
+}
+
+func (s *Unregistration) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Id     requiredProp `json:"id"`
+		Method requiredProp `json:"method"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Id {
+		return fmt.Errorf("required key 'id' is missing")
+	}
+	if !keys.Method {
+		return fmt.Errorf("required key 'method' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Id     string `json:"id"`
+		Method string `json:"method"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // The initialize parameters
@@ -2793,6 +6820,46 @@ type InitializeParamsBase struct {
 
 	// The initial trace setting. If omitted trace is disabled ('off').
 	Trace *TraceValue `json:"trace,omitempty"`
+}
+
+func (s *InitializeParamsBase) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		ProcessId    requiredProp `json:"processId"`
+		RootUri      requiredProp `json:"rootUri"`
+		Capabilities requiredProp `json:"capabilities"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.ProcessId {
+		return fmt.Errorf("required key 'processId' is missing")
+	}
+	if !keys.RootUri {
+		return fmt.Errorf("required key 'rootUri' is missing")
+	}
+	if !keys.Capabilities {
+		return fmt.Errorf("required key 'capabilities' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgressParams
+
+		ProcessId             Nullable[int32]       `json:"processId"`
+		ClientInfo            *ClientInfo           `json:"clientInfo,omitempty"`
+		Locale                *string               `json:"locale,omitempty"`
+		RootPath              *Nullable[string]     `json:"rootPath,omitempty"`
+		RootUri               Nullable[DocumentUri] `json:"rootUri"`
+		Capabilities          *ClientCapabilities   `json:"capabilities"`
+		InitializationOptions *any                  `json:"initializationOptions,omitempty"`
+		Trace                 *TraceValue           `json:"trace,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 type WorkspaceFoldersInitializeParams struct {
@@ -2967,12 +7034,61 @@ type ServerInfo struct {
 	Version *string `json:"version,omitempty"`
 }
 
+func (s *ServerInfo) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Name requiredProp `json:"name"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Name {
+		return fmt.Errorf("required key 'name' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Name    string  `json:"name"`
+		Version *string `json:"version,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // A text document identifier to denote a specific version of a text document.
 type VersionedTextDocumentIdentifier struct {
 	TextDocumentIdentifier
 
 	// The version number of this document.
 	Version int32 `json:"version"`
+}
+
+func (s *VersionedTextDocumentIdentifier) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Version requiredProp `json:"version"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Version {
+		return fmt.Errorf("required key 'version' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TextDocumentIdentifier
+
+		Version int32 `json:"version"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Save options.
@@ -2990,6 +7106,34 @@ type FileEvent struct {
 	Type FileChangeType `json:"type"`
 }
 
+func (s *FileEvent) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Uri  requiredProp `json:"uri"`
+		Type requiredProp `json:"type"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Uri {
+		return fmt.Errorf("required key 'uri' is missing")
+	}
+	if !keys.Type {
+		return fmt.Errorf("required key 'type' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Uri  DocumentUri    `json:"uri"`
+		Type FileChangeType `json:"type"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 type FileSystemWatcher struct {
 	// The glob pattern to watch. See pattern for more detail.
 	//
@@ -3000,6 +7144,30 @@ type FileSystemWatcher struct {
 	// to WatchKind.Create | WatchKind.Change | WatchKind.Delete
 	// which is 7.
 	Kind *WatchKind `json:"kind,omitempty"`
+}
+
+func (s *FileSystemWatcher) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		GlobPattern requiredProp `json:"globPattern"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.GlobPattern {
+		return fmt.Errorf("required key 'globPattern' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		GlobPattern GlobPattern `json:"globPattern"`
+		Kind        *WatchKind  `json:"kind,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Represents a diagnostic, such as a compiler error or warning. Diagnostic objects
@@ -3046,6 +7214,41 @@ type Diagnostic struct {
 	Data *any `json:"data,omitempty"`
 }
 
+func (s *Diagnostic) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Range   requiredProp `json:"range"`
+		Message requiredProp `json:"message"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Range {
+		return fmt.Errorf("required key 'range' is missing")
+	}
+	if !keys.Message {
+		return fmt.Errorf("required key 'message' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Range              Range                            `json:"range"`
+		Severity           *DiagnosticSeverity              `json:"severity,omitempty"`
+		Code               *IntegerOrString                 `json:"code,omitempty"`
+		CodeDescription    *CodeDescription                 `json:"codeDescription,omitempty"`
+		Source             *string                          `json:"source,omitempty"`
+		Message            string                           `json:"message"`
+		Tags               *[]DiagnosticTag                 `json:"tags,omitempty"`
+		RelatedInformation *[]*DiagnosticRelatedInformation `json:"relatedInformation,omitempty"`
+		Data               *any                             `json:"data,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Contains additional information about the context in which a completion request is triggered.
 type CompletionContext struct {
 	// How the completion was triggered.
@@ -3054,6 +7257,30 @@ type CompletionContext struct {
 	// The trigger character (a single character) that has trigger code complete.
 	// Is undefined if `triggerKind !== CompletionTriggerKind.TriggerCharacter`
 	TriggerCharacter *string `json:"triggerCharacter,omitempty"`
+}
+
+func (s *CompletionContext) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TriggerKind requiredProp `json:"triggerKind"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TriggerKind {
+		return fmt.Errorf("required key 'triggerKind' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TriggerKind      CompletionTriggerKind `json:"triggerKind"`
+		TriggerCharacter *string               `json:"triggerCharacter,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Additional details for a completion item label.
@@ -3081,6 +7308,39 @@ type InsertReplaceEdit struct {
 
 	// The range if the replace is requested.
 	Replace Range `json:"replace"`
+}
+
+func (s *InsertReplaceEdit) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		NewText requiredProp `json:"newText"`
+		Insert  requiredProp `json:"insert"`
+		Replace requiredProp `json:"replace"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.NewText {
+		return fmt.Errorf("required key 'newText' is missing")
+	}
+	if !keys.Insert {
+		return fmt.Errorf("required key 'insert' is missing")
+	}
+	if !keys.Replace {
+		return fmt.Errorf("required key 'replace' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		NewText string `json:"newText"`
+		Insert  Range  `json:"insert"`
+		Replace Range  `json:"replace"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // In many cases the items of an actual completion result share the same
@@ -3250,6 +7510,36 @@ type SignatureHelpContext struct {
 	ActiveSignatureHelp *SignatureHelp `json:"activeSignatureHelp,omitempty"`
 }
 
+func (s *SignatureHelpContext) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TriggerKind requiredProp `json:"triggerKind"`
+		IsRetrigger requiredProp `json:"isRetrigger"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TriggerKind {
+		return fmt.Errorf("required key 'triggerKind' is missing")
+	}
+	if !keys.IsRetrigger {
+		return fmt.Errorf("required key 'isRetrigger' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TriggerKind         SignatureHelpTriggerKind `json:"triggerKind"`
+		TriggerCharacter    *string                  `json:"triggerCharacter,omitempty"`
+		IsRetrigger         bool                     `json:"isRetrigger"`
+		ActiveSignatureHelp *SignatureHelp           `json:"activeSignatureHelp,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Represents the signature of something callable. A signature
 // can have a label, like a function-name, a doc-comment, and
 // a set of parameters.
@@ -3277,6 +7567,32 @@ type SignatureInformation struct {
 	//
 	// Since: 3.16.0
 	ActiveParameter *Nullable[uint32] `json:"activeParameter,omitempty"`
+}
+
+func (s *SignatureInformation) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Label requiredProp `json:"label"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Label {
+		return fmt.Errorf("required key 'label' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Label           string                   `json:"label"`
+		Documentation   *StringOrMarkupContent   `json:"documentation,omitempty"`
+		Parameters      *[]*ParameterInformation `json:"parameters,omitempty"`
+		ActiveParameter *Nullable[uint32]        `json:"activeParameter,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Server Capabilities for a SignatureHelpRequest.
@@ -3307,6 +7623,29 @@ type ReferenceContext struct {
 	IncludeDeclaration bool `json:"includeDeclaration"`
 }
 
+func (s *ReferenceContext) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		IncludeDeclaration requiredProp `json:"includeDeclaration"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.IncludeDeclaration {
+		return fmt.Errorf("required key 'includeDeclaration' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		IncludeDeclaration bool `json:"includeDeclaration"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Reference options.
 type ReferenceOptions struct {
 	WorkDoneProgressOptions
@@ -3335,6 +7674,36 @@ type BaseSymbolInformation struct {
 	// if necessary). It can't be used to re-infer a hierarchy for the document
 	// symbols.
 	ContainerName *string `json:"containerName,omitempty"`
+}
+
+func (s *BaseSymbolInformation) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Name requiredProp `json:"name"`
+		Kind requiredProp `json:"kind"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Name {
+		return fmt.Errorf("required key 'name' is missing")
+	}
+	if !keys.Kind {
+		return fmt.Errorf("required key 'kind' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Name          string       `json:"name"`
+		Kind          SymbolKind   `json:"kind"`
+		Tags          *[]SymbolTag `json:"tags,omitempty"`
+		ContainerName *string      `json:"containerName,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Provider options for a DocumentSymbolRequest.
@@ -3370,6 +7739,31 @@ type CodeActionContext struct {
 	TriggerKind *CodeActionTriggerKind `json:"triggerKind,omitempty"`
 }
 
+func (s *CodeActionContext) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Diagnostics requiredProp `json:"diagnostics"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Diagnostics {
+		return fmt.Errorf("required key 'diagnostics' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Diagnostics []*Diagnostic          `json:"diagnostics"`
+		Only        *[]CodeActionKind      `json:"only,omitempty"`
+		TriggerKind *CodeActionTriggerKind `json:"triggerKind,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Captures why the code action is currently disabled.
 //
 // Since: 3.18.0
@@ -3378,6 +7772,29 @@ type CodeActionDisabled struct {
 	//
 	// This is displayed in the code actions UI.
 	Reason string `json:"reason"`
+}
+
+func (s *CodeActionDisabled) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Reason requiredProp `json:"reason"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Reason {
+		return fmt.Errorf("required key 'reason' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Reason string `json:"reason"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Provider options for a CodeActionRequest.
@@ -3420,6 +7837,29 @@ type CodeActionOptions struct {
 // Since: 3.18.0
 type LocationUriOnly struct {
 	Uri DocumentUri `json:"uri"`
+}
+
+func (s *LocationUriOnly) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Uri requiredProp `json:"uri"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Uri {
+		return fmt.Errorf("required key 'uri' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Uri DocumentUri `json:"uri"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Server capabilities for a WorkspaceSymbolRequest.
@@ -3473,6 +7913,37 @@ type FormattingOptions struct {
 	TrimFinalNewlines *bool `json:"trimFinalNewlines,omitempty"`
 }
 
+func (s *FormattingOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TabSize      requiredProp `json:"tabSize"`
+		InsertSpaces requiredProp `json:"insertSpaces"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TabSize {
+		return fmt.Errorf("required key 'tabSize' is missing")
+	}
+	if !keys.InsertSpaces {
+		return fmt.Errorf("required key 'insertSpaces' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TabSize                uint32 `json:"tabSize"`
+		InsertSpaces           bool   `json:"insertSpaces"`
+		TrimTrailingWhitespace *bool  `json:"trimTrailingWhitespace,omitempty"`
+		InsertFinalNewline     *bool  `json:"insertFinalNewline,omitempty"`
+		TrimFinalNewlines      *bool  `json:"trimFinalNewlines,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Provider options for a DocumentFormattingRequest.
 type DocumentFormattingOptions struct {
 	WorkDoneProgressOptions
@@ -3499,6 +7970,30 @@ type DocumentOnTypeFormattingOptions struct {
 	MoreTriggerCharacter *[]string `json:"moreTriggerCharacter,omitempty"`
 }
 
+func (s *DocumentOnTypeFormattingOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		FirstTriggerCharacter requiredProp `json:"firstTriggerCharacter"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.FirstTriggerCharacter {
+		return fmt.Errorf("required key 'firstTriggerCharacter' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		FirstTriggerCharacter string    `json:"firstTriggerCharacter"`
+		MoreTriggerCharacter  *[]string `json:"moreTriggerCharacter,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Provider options for a RenameRequest.
 type RenameOptions struct {
 	WorkDoneProgressOptions
@@ -3516,9 +8011,60 @@ type PrepareRenamePlaceholder struct {
 	Placeholder string `json:"placeholder"`
 }
 
+func (s *PrepareRenamePlaceholder) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Range       requiredProp `json:"range"`
+		Placeholder requiredProp `json:"placeholder"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Range {
+		return fmt.Errorf("required key 'range' is missing")
+	}
+	if !keys.Placeholder {
+		return fmt.Errorf("required key 'placeholder' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Range       Range  `json:"range"`
+		Placeholder string `json:"placeholder"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Since: 3.18.0
 type PrepareRenameDefaultBehavior struct {
 	DefaultBehavior bool `json:"defaultBehavior"`
+}
+
+func (s *PrepareRenameDefaultBehavior) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		DefaultBehavior requiredProp `json:"defaultBehavior"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.DefaultBehavior {
+		return fmt.Errorf("required key 'defaultBehavior' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		DefaultBehavior bool `json:"defaultBehavior"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // The server capabilities of a ExecuteCommandRequest.
@@ -3527,6 +8073,31 @@ type ExecuteCommandOptions struct {
 
 	// The commands to be executed on the server
 	Commands []string `json:"commands"`
+}
+
+func (s *ExecuteCommandOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Commands requiredProp `json:"commands"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Commands {
+		return fmt.Errorf("required key 'commands' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgressOptions
+
+		Commands []string `json:"commands"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Additional data about a workspace edit.
@@ -3546,6 +8117,34 @@ type SemanticTokensLegend struct {
 
 	// The token modifiers a server uses.
 	TokenModifiers []string `json:"tokenModifiers"`
+}
+
+func (s *SemanticTokensLegend) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TokenTypes     requiredProp `json:"tokenTypes"`
+		TokenModifiers requiredProp `json:"tokenModifiers"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TokenTypes {
+		return fmt.Errorf("required key 'tokenTypes' is missing")
+	}
+	if !keys.TokenModifiers {
+		return fmt.Errorf("required key 'tokenModifiers' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TokenTypes     []string `json:"tokenTypes"`
+		TokenModifiers []string `json:"tokenModifiers"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Semantic tokens options to support deltas for full documents
@@ -3568,6 +8167,31 @@ type OptionalVersionedTextDocumentIdentifier struct {
 	Version Nullable[int32] `json:"version"`
 }
 
+func (s *OptionalVersionedTextDocumentIdentifier) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Version requiredProp `json:"version"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Version {
+		return fmt.Errorf("required key 'version' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TextDocumentIdentifier
+
+		Version Nullable[int32] `json:"version"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // A special text edit with an additional change annotation.
 //
 // Since: 3.16.0.
@@ -3576,6 +8200,31 @@ type AnnotatedTextEdit struct {
 
 	// The actual identifier of the change annotation
 	AnnotationId ChangeAnnotationIdentifier `json:"annotationId"`
+}
+
+func (s *AnnotatedTextEdit) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		AnnotationId requiredProp `json:"annotationId"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.AnnotationId {
+		return fmt.Errorf("required key 'annotationId' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TextEdit
+
+		AnnotationId ChangeAnnotationIdentifier `json:"annotationId"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // An interactive text edit.
@@ -3594,6 +8243,35 @@ type SnippetTextEdit struct {
 	AnnotationId *ChangeAnnotationIdentifier `json:"annotationId,omitempty"`
 }
 
+func (s *SnippetTextEdit) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Range   requiredProp `json:"range"`
+		Snippet requiredProp `json:"snippet"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Range {
+		return fmt.Errorf("required key 'range' is missing")
+	}
+	if !keys.Snippet {
+		return fmt.Errorf("required key 'snippet' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Range        Range                       `json:"range"`
+		Snippet      *StringValue                `json:"snippet"`
+		AnnotationId *ChangeAnnotationIdentifier `json:"annotationId,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // A generic resource operation.
 type ResourceOperation struct {
 	// The resource operation kind.
@@ -3603,6 +8281,30 @@ type ResourceOperation struct {
 	//
 	// Since: 3.16.0
 	AnnotationId *ChangeAnnotationIdentifier `json:"annotationId,omitempty"`
+}
+
+func (s *ResourceOperation) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Kind requiredProp `json:"kind"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Kind {
+		return fmt.Errorf("required key 'kind' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Kind         string                      `json:"kind"`
+		AnnotationId *ChangeAnnotationIdentifier `json:"annotationId,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Options to create a file.
@@ -3655,6 +8357,31 @@ type FileOperationPattern struct {
 	Options *FileOperationPatternOptions `json:"options,omitempty"`
 }
 
+func (s *FileOperationPattern) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Glob requiredProp `json:"glob"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Glob {
+		return fmt.Errorf("required key 'glob' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Glob    string                       `json:"glob"`
+		Matches *FileOperationPatternKind    `json:"matches,omitempty"`
+		Options *FileOperationPatternOptions `json:"options,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // A full document diagnostic report for a workspace diagnostic result.
 //
 // Since: 3.17.0
@@ -3669,6 +8396,36 @@ type WorkspaceFullDocumentDiagnosticReport struct {
 	Version Nullable[int32] `json:"version"`
 }
 
+func (s *WorkspaceFullDocumentDiagnosticReport) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Uri     requiredProp `json:"uri"`
+		Version requiredProp `json:"version"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Uri {
+		return fmt.Errorf("required key 'uri' is missing")
+	}
+	if !keys.Version {
+		return fmt.Errorf("required key 'version' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		FullDocumentDiagnosticReport
+
+		Uri     DocumentUri     `json:"uri"`
+		Version Nullable[int32] `json:"version"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // An unchanged document diagnostic report for a workspace diagnostic result.
 //
 // Since: 3.17.0
@@ -3681,6 +8438,36 @@ type WorkspaceUnchangedDocumentDiagnosticReport struct {
 	// The version number for which the diagnostics are reported.
 	// If the document is not marked as open `null` can be provided.
 	Version Nullable[int32] `json:"version"`
+}
+
+func (s *WorkspaceUnchangedDocumentDiagnosticReport) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Uri     requiredProp `json:"uri"`
+		Version requiredProp `json:"version"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Uri {
+		return fmt.Errorf("required key 'uri' is missing")
+	}
+	if !keys.Version {
+		return fmt.Errorf("required key 'version' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		UnchangedDocumentDiagnosticReport
+
+		Uri     DocumentUri     `json:"uri"`
+		Version Nullable[int32] `json:"version"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // A notebook cell.
@@ -3708,6 +8495,36 @@ type NotebookCell struct {
 	ExecutionSummary *ExecutionSummary `json:"executionSummary,omitempty"`
 }
 
+func (s *NotebookCell) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Kind     requiredProp `json:"kind"`
+		Document requiredProp `json:"document"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Kind {
+		return fmt.Errorf("required key 'kind' is missing")
+	}
+	if !keys.Document {
+		return fmt.Errorf("required key 'document' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Kind             NotebookCellKind  `json:"kind"`
+		Document         DocumentUri       `json:"document"`
+		Metadata         *map[string]any   `json:"metadata,omitempty"`
+		ExecutionSummary *ExecutionSummary `json:"executionSummary,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Since: 3.18.0
 type NotebookDocumentFilterWithNotebook struct {
 	// The notebook to be synced If a string
@@ -3719,6 +8536,30 @@ type NotebookDocumentFilterWithNotebook struct {
 	Cells *[]*NotebookCellLanguage `json:"cells,omitempty"`
 }
 
+func (s *NotebookDocumentFilterWithNotebook) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Notebook requiredProp `json:"notebook"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Notebook {
+		return fmt.Errorf("required key 'notebook' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Notebook StringOrNotebookDocumentFilter `json:"notebook"`
+		Cells    *[]*NotebookCellLanguage       `json:"cells,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Since: 3.18.0
 type NotebookDocumentFilterWithCells struct {
 	// The notebook to be synced If a string
@@ -3728,6 +8569,30 @@ type NotebookDocumentFilterWithCells struct {
 
 	// The cells of the matching notebook to be synced.
 	Cells []*NotebookCellLanguage `json:"cells"`
+}
+
+func (s *NotebookDocumentFilterWithCells) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Cells requiredProp `json:"cells"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Cells {
+		return fmt.Errorf("required key 'cells' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Notebook *StringOrNotebookDocumentFilter `json:"notebook,omitempty"`
+		Cells    []*NotebookCellLanguage         `json:"cells"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Cell changes to a notebook document.
@@ -3759,6 +8624,34 @@ type SelectedCompletionInfo struct {
 	Text string `json:"text"`
 }
 
+func (s *SelectedCompletionInfo) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Range requiredProp `json:"range"`
+		Text  requiredProp `json:"text"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Range {
+		return fmt.Errorf("required key 'range' is missing")
+	}
+	if !keys.Text {
+		return fmt.Errorf("required key 'text' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Range Range  `json:"range"`
+		Text  string `json:"text"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Information about the client
 //
 // Since: 3.15.0
@@ -3770,6 +8663,30 @@ type ClientInfo struct {
 
 	// The client's version as defined by the client.
 	Version *string `json:"version,omitempty"`
+}
+
+func (s *ClientInfo) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Name requiredProp `json:"name"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Name {
+		return fmt.Errorf("required key 'name' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Name    string  `json:"name"`
+		Version *string `json:"version,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Defines the capabilities provided by the client.
@@ -3855,10 +8772,62 @@ type TextDocumentContentChangePartial struct {
 	Text string `json:"text"`
 }
 
+func (s *TextDocumentContentChangePartial) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Range requiredProp `json:"range"`
+		Text  requiredProp `json:"text"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Range {
+		return fmt.Errorf("required key 'range' is missing")
+	}
+	if !keys.Text {
+		return fmt.Errorf("required key 'text' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Range       Range   `json:"range"`
+		RangeLength *uint32 `json:"rangeLength,omitempty"`
+		Text        string  `json:"text"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Since: 3.18.0
 type TextDocumentContentChangeWholeDocument struct {
 	// The new text of the whole document.
 	Text string `json:"text"`
+}
+
+func (s *TextDocumentContentChangeWholeDocument) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Text requiredProp `json:"text"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Text {
+		return fmt.Errorf("required key 'text' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Text string `json:"text"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Structure to capture a description for an error code.
@@ -3867,6 +8836,29 @@ type TextDocumentContentChangeWholeDocument struct {
 type CodeDescription struct {
 	// An URI to open with more information about the diagnostic error.
 	Href URI `json:"href"`
+}
+
+func (s *CodeDescription) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Href requiredProp `json:"href"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Href {
+		return fmt.Errorf("required key 'href' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Href URI `json:"href"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Represents a related message and source code location for a diagnostic. This should be
@@ -3880,6 +8872,34 @@ type DiagnosticRelatedInformation struct {
 	Message string `json:"message"`
 }
 
+func (s *DiagnosticRelatedInformation) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Location requiredProp `json:"location"`
+		Message  requiredProp `json:"message"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Location {
+		return fmt.Errorf("required key 'location' is missing")
+	}
+	if !keys.Message {
+		return fmt.Errorf("required key 'message' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Location Location `json:"location"`
+		Message  string   `json:"message"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Edit range variant that includes ranges for insert and replace operations.
 //
 // Since: 3.18.0
@@ -3887,6 +8907,34 @@ type EditRangeWithInsertReplace struct {
 	Insert Range `json:"insert"`
 
 	Replace Range `json:"replace"`
+}
+
+func (s *EditRangeWithInsertReplace) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Insert  requiredProp `json:"insert"`
+		Replace requiredProp `json:"replace"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Insert {
+		return fmt.Errorf("required key 'insert' is missing")
+	}
+	if !keys.Replace {
+		return fmt.Errorf("required key 'replace' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Insert  Range `json:"insert"`
+		Replace Range `json:"replace"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Since: 3.18.0
@@ -3906,6 +8954,34 @@ type MarkedStringWithLanguage struct {
 	Language string `json:"language"`
 
 	Value string `json:"value"`
+}
+
+func (s *MarkedStringWithLanguage) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Language requiredProp `json:"language"`
+		Value    requiredProp `json:"value"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Language {
+		return fmt.Errorf("required key 'language' is missing")
+	}
+	if !keys.Value {
+		return fmt.Errorf("required key 'value' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Language string `json:"language"`
+		Value    string `json:"value"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Represents a parameter of a callable-signature. A parameter can
@@ -3930,6 +9006,30 @@ type ParameterInformation struct {
 	Documentation *StringOrMarkupContent `json:"documentation,omitempty"`
 }
 
+func (s *ParameterInformation) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Label requiredProp `json:"label"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Label {
+		return fmt.Errorf("required key 'label' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Label         StringOrTuple          `json:"label"`
+		Documentation *StringOrMarkupContent `json:"documentation,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Documentation for a class of code actions.
 //
 // Since: 3.18.0
@@ -3949,6 +9049,34 @@ type CodeActionKindDocumentation struct {
 	Command *Command `json:"command"`
 }
 
+func (s *CodeActionKindDocumentation) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Kind    requiredProp `json:"kind"`
+		Command requiredProp `json:"command"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Kind {
+		return fmt.Errorf("required key 'kind' is missing")
+	}
+	if !keys.Command {
+		return fmt.Errorf("required key 'command' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Kind    CodeActionKind `json:"kind"`
+		Command *Command       `json:"command"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // A notebook cell text document filter denotes a cell text
 // document by different properties.
 //
@@ -3965,6 +9093,30 @@ type NotebookCellTextDocumentFilter struct {
 	// Will be matched against the language id of the
 	// notebook cell document. '*' matches every language.
 	Language *string `json:"language,omitempty"`
+}
+
+func (s *NotebookCellTextDocumentFilter) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Notebook requiredProp `json:"notebook"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Notebook {
+		return fmt.Errorf("required key 'notebook' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Notebook StringOrNotebookDocumentFilter `json:"notebook"`
+		Language *string                        `json:"language,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Matching options for the file operation pattern.
@@ -3986,9 +9138,56 @@ type ExecutionSummary struct {
 	Success *bool `json:"success,omitempty"`
 }
 
+func (s *ExecutionSummary) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		ExecutionOrder requiredProp `json:"executionOrder"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.ExecutionOrder {
+		return fmt.Errorf("required key 'executionOrder' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		ExecutionOrder uint32 `json:"executionOrder"`
+		Success        *bool  `json:"success,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Since: 3.18.0
 type NotebookCellLanguage struct {
 	Language string `json:"language"`
+}
+
+func (s *NotebookCellLanguage) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Language requiredProp `json:"language"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Language {
+		return fmt.Errorf("required key 'language' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Language string `json:"language"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Structural changes to cells in a notebook document.
@@ -4005,6 +9204,31 @@ type NotebookDocumentCellChangeStructure struct {
 	DidClose *[]TextDocumentIdentifier `json:"didClose,omitempty"`
 }
 
+func (s *NotebookDocumentCellChangeStructure) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Array requiredProp `json:"array"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Array {
+		return fmt.Errorf("required key 'array' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Array    *NotebookCellArrayChange  `json:"array"`
+		DidOpen  *[]*TextDocumentItem      `json:"didOpen,omitempty"`
+		DidClose *[]TextDocumentIdentifier `json:"didClose,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Content changes to a cell in a notebook document.
 //
 // Since: 3.18.0
@@ -4012,6 +9236,34 @@ type NotebookDocumentCellContentChanges struct {
 	Document VersionedTextDocumentIdentifier `json:"document"`
 
 	Changes []TextDocumentContentChangeEvent `json:"changes"`
+}
+
+func (s *NotebookDocumentCellContentChanges) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Document requiredProp `json:"document"`
+		Changes  requiredProp `json:"changes"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Document {
+		return fmt.Errorf("required key 'document' is missing")
+	}
+	if !keys.Changes {
+		return fmt.Errorf("required key 'changes' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Document VersionedTextDocumentIdentifier  `json:"document"`
+		Changes  []TextDocumentContentChangeEvent `json:"changes"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Workspace specific client capabilities.
@@ -4240,6 +9492,29 @@ type NotebookDocumentClientCapabilities struct {
 	Synchronization *NotebookDocumentSyncClientCapabilities `json:"synchronization"`
 }
 
+func (s *NotebookDocumentClientCapabilities) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Synchronization requiredProp `json:"synchronization"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Synchronization {
+		return fmt.Errorf("required key 'synchronization' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Synchronization *NotebookDocumentSyncClientCapabilities `json:"synchronization"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 type WindowClientCapabilities struct {
 	// It indicates whether the client supports server initiated
 	// progress using the `window/workDoneProgress/create` request.
@@ -4357,6 +9632,34 @@ type RelativePattern struct {
 	Pattern Pattern `json:"pattern"`
 }
 
+func (s *RelativePattern) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		BaseUri requiredProp `json:"baseUri"`
+		Pattern requiredProp `json:"pattern"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.BaseUri {
+		return fmt.Errorf("required key 'baseUri' is missing")
+	}
+	if !keys.Pattern {
+		return fmt.Errorf("required key 'pattern' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		BaseUri WorkspaceFolderOrURI `json:"baseUri"`
+		Pattern Pattern              `json:"pattern"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // A document filter where `language` is required field.
 //
 // Since: 3.18.0
@@ -4373,6 +9676,31 @@ type TextDocumentFilterLanguage struct {
 	// relative patterns depends on the client capability
 	// `textDocuments.filters.relativePatternSupport`.
 	Pattern *GlobPattern `json:"pattern,omitempty"`
+}
+
+func (s *TextDocumentFilterLanguage) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Language requiredProp `json:"language"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Language {
+		return fmt.Errorf("required key 'language' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Language string       `json:"language"`
+		Scheme   *string      `json:"scheme,omitempty"`
+		Pattern  *GlobPattern `json:"pattern,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // A document filter where `scheme` is required field.
@@ -4393,6 +9721,31 @@ type TextDocumentFilterScheme struct {
 	Pattern *GlobPattern `json:"pattern,omitempty"`
 }
 
+func (s *TextDocumentFilterScheme) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Scheme requiredProp `json:"scheme"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Scheme {
+		return fmt.Errorf("required key 'scheme' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Language *string      `json:"language,omitempty"`
+		Scheme   string       `json:"scheme"`
+		Pattern  *GlobPattern `json:"pattern,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // A document filter where `pattern` is required field.
 //
 // Since: 3.18.0
@@ -4411,6 +9764,31 @@ type TextDocumentFilterPattern struct {
 	Pattern GlobPattern `json:"pattern"`
 }
 
+func (s *TextDocumentFilterPattern) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Pattern requiredProp `json:"pattern"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Pattern {
+		return fmt.Errorf("required key 'pattern' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Language *string     `json:"language,omitempty"`
+		Scheme   *string     `json:"scheme,omitempty"`
+		Pattern  GlobPattern `json:"pattern"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // A notebook document filter where `notebookType` is required field.
 //
 // Since: 3.18.0
@@ -4423,6 +9801,31 @@ type NotebookDocumentFilterNotebookType struct {
 
 	// A glob pattern.
 	Pattern *GlobPattern `json:"pattern,omitempty"`
+}
+
+func (s *NotebookDocumentFilterNotebookType) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		NotebookType requiredProp `json:"notebookType"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.NotebookType {
+		return fmt.Errorf("required key 'notebookType' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		NotebookType string       `json:"notebookType"`
+		Scheme       *string      `json:"scheme,omitempty"`
+		Pattern      *GlobPattern `json:"pattern,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // A notebook document filter where `scheme` is required field.
@@ -4439,6 +9842,31 @@ type NotebookDocumentFilterScheme struct {
 	Pattern *GlobPattern `json:"pattern,omitempty"`
 }
 
+func (s *NotebookDocumentFilterScheme) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Scheme requiredProp `json:"scheme"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Scheme {
+		return fmt.Errorf("required key 'scheme' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		NotebookType *string      `json:"notebookType,omitempty"`
+		Scheme       string       `json:"scheme"`
+		Pattern      *GlobPattern `json:"pattern,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // A notebook document filter where `pattern` is required field.
 //
 // Since: 3.18.0
@@ -4451,6 +9879,31 @@ type NotebookDocumentFilterPattern struct {
 
 	// A glob pattern.
 	Pattern GlobPattern `json:"pattern"`
+}
+
+func (s *NotebookDocumentFilterPattern) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Pattern requiredProp `json:"pattern"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Pattern {
+		return fmt.Errorf("required key 'pattern' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		NotebookType *string     `json:"notebookType,omitempty"`
+		Scheme       *string     `json:"scheme,omitempty"`
+		Pattern      GlobPattern `json:"pattern"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // A change describing how to move a `NotebookCell`
@@ -4466,6 +9919,35 @@ type NotebookCellArrayChange struct {
 
 	// The new cells, if any
 	Cells *[]*NotebookCell `json:"cells,omitempty"`
+}
+
+func (s *NotebookCellArrayChange) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Start       requiredProp `json:"start"`
+		DeleteCount requiredProp `json:"deleteCount"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Start {
+		return fmt.Errorf("required key 'start' is missing")
+	}
+	if !keys.DeleteCount {
+		return fmt.Errorf("required key 'deleteCount' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Start       uint32           `json:"start"`
+		DeleteCount uint32           `json:"deleteCount"`
+		Cells       *[]*NotebookCell `json:"cells,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 type WorkspaceEditClientCapabilities struct {
@@ -5099,6 +10581,49 @@ type SemanticTokensClientCapabilities struct {
 	AugmentsSyntaxTokens *bool `json:"augmentsSyntaxTokens,omitempty"`
 }
 
+func (s *SemanticTokensClientCapabilities) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Requests       requiredProp `json:"requests"`
+		TokenTypes     requiredProp `json:"tokenTypes"`
+		TokenModifiers requiredProp `json:"tokenModifiers"`
+		Formats        requiredProp `json:"formats"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Requests {
+		return fmt.Errorf("required key 'requests' is missing")
+	}
+	if !keys.TokenTypes {
+		return fmt.Errorf("required key 'tokenTypes' is missing")
+	}
+	if !keys.TokenModifiers {
+		return fmt.Errorf("required key 'tokenModifiers' is missing")
+	}
+	if !keys.Formats {
+		return fmt.Errorf("required key 'formats' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		DynamicRegistration     *bool                               `json:"dynamicRegistration,omitempty"`
+		Requests                *ClientSemanticTokensRequestOptions `json:"requests"`
+		TokenTypes              []string                            `json:"tokenTypes"`
+		TokenModifiers          []string                            `json:"tokenModifiers"`
+		Formats                 []TokenFormat                       `json:"formats"`
+		OverlappingTokenSupport *bool                               `json:"overlappingTokenSupport,omitempty"`
+		MultilineTokenSupport   *bool                               `json:"multilineTokenSupport,omitempty"`
+		ServerCancelSupport     *bool                               `json:"serverCancelSupport,omitempty"`
+		AugmentsSyntaxTokens    *bool                               `json:"augmentsSyntaxTokens,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Client capabilities for the linked editing range request.
 //
 // Since: 3.16.0
@@ -5201,6 +10726,29 @@ type ShowDocumentClientCapabilities struct {
 	Support bool `json:"support"`
 }
 
+func (s *ShowDocumentClientCapabilities) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Support requiredProp `json:"support"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Support {
+		return fmt.Errorf("required key 'support' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Support bool `json:"support"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Since: 3.18.0
 type StaleRequestSupportOptions struct {
 	// The client will actively cancel the request.
@@ -5212,6 +10760,34 @@ type StaleRequestSupportOptions struct {
 	RetryOnContentModified []string `json:"retryOnContentModified"`
 }
 
+func (s *StaleRequestSupportOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Cancel                 requiredProp `json:"cancel"`
+		RetryOnContentModified requiredProp `json:"retryOnContentModified"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Cancel {
+		return fmt.Errorf("required key 'cancel' is missing")
+	}
+	if !keys.RetryOnContentModified {
+		return fmt.Errorf("required key 'retryOnContentModified' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Cancel                 bool     `json:"cancel"`
+		RetryOnContentModified []string `json:"retryOnContentModified"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Client capabilities specific to regular expressions.
 //
 // Since: 3.16.0
@@ -5221,6 +10797,30 @@ type RegularExpressionsClientCapabilities struct {
 
 	// The engine's version.
 	Version *string `json:"version,omitempty"`
+}
+
+func (s *RegularExpressionsClientCapabilities) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Engine requiredProp `json:"engine"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Engine {
+		return fmt.Errorf("required key 'engine' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Engine  RegularExpressionEngineKind `json:"engine"`
+		Version *string                     `json:"version,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Client capabilities specific to the used markdown parser.
@@ -5238,6 +10838,31 @@ type MarkdownClientCapabilities struct {
 	//
 	// Since: 3.17.0
 	AllowedTags *[]string `json:"allowedTags,omitempty"`
+}
+
+func (s *MarkdownClientCapabilities) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Parser requiredProp `json:"parser"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Parser {
+		return fmt.Errorf("required key 'parser' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Parser      string    `json:"parser"`
+		Version     *string   `json:"version,omitempty"`
+		AllowedTags *[]string `json:"allowedTags,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Since: 3.18.0
@@ -5267,11 +10892,57 @@ type ClientSymbolTagOptions struct {
 	ValueSet []SymbolTag `json:"valueSet"`
 }
 
+func (s *ClientSymbolTagOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		ValueSet requiredProp `json:"valueSet"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.ValueSet {
+		return fmt.Errorf("required key 'valueSet' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		ValueSet []SymbolTag `json:"valueSet"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Since: 3.18.0
 type ClientSymbolResolveOptions struct {
 	// The properties that a client can resolve lazily. Usually
 	// `location.range`
 	Properties []string `json:"properties"`
+}
+
+func (s *ClientSymbolResolveOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Properties requiredProp `json:"properties"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Properties {
+		return fmt.Errorf("required key 'properties' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Properties []string `json:"properties"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Since: 3.18.0
@@ -5406,10 +11077,56 @@ type ClientCodeActionLiteralOptions struct {
 	CodeActionKind *ClientCodeActionKindOptions `json:"codeActionKind"`
 }
 
+func (s *ClientCodeActionLiteralOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		CodeActionKind requiredProp `json:"codeActionKind"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.CodeActionKind {
+		return fmt.Errorf("required key 'codeActionKind' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		CodeActionKind *ClientCodeActionKindOptions `json:"codeActionKind"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Since: 3.18.0
 type ClientCodeActionResolveOptions struct {
 	// The properties that a client can resolve lazily.
 	Properties []string `json:"properties"`
+}
+
+func (s *ClientCodeActionResolveOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Properties requiredProp `json:"properties"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Properties {
+		return fmt.Errorf("required key 'properties' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Properties []string `json:"properties"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Since: 3.18.0 - proposed
@@ -5418,10 +11135,56 @@ type CodeActionTagOptions struct {
 	ValueSet []CodeActionTag `json:"valueSet"`
 }
 
+func (s *CodeActionTagOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		ValueSet requiredProp `json:"valueSet"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.ValueSet {
+		return fmt.Errorf("required key 'valueSet' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		ValueSet []CodeActionTag `json:"valueSet"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Since: 3.18.0
 type ClientCodeLensResolveOptions struct {
 	// The properties that a client can resolve lazily.
 	Properties []string `json:"properties"`
+}
+
+func (s *ClientCodeLensResolveOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Properties requiredProp `json:"properties"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Properties {
+		return fmt.Errorf("required key 'properties' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Properties []string `json:"properties"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Since: 3.18.0
@@ -5483,6 +11246,29 @@ type ClientInlayHintResolveOptions struct {
 	Properties []string `json:"properties"`
 }
 
+func (s *ClientInlayHintResolveOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Properties requiredProp `json:"properties"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Properties {
+		return fmt.Errorf("required key 'properties' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Properties []string `json:"properties"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Since: 3.18.0
 type ClientShowMessageActionItemOptions struct {
 	// Whether the client supports additional attributes which
@@ -5497,15 +11283,84 @@ type CompletionItemTagOptions struct {
 	ValueSet []CompletionItemTag `json:"valueSet"`
 }
 
+func (s *CompletionItemTagOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		ValueSet requiredProp `json:"valueSet"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.ValueSet {
+		return fmt.Errorf("required key 'valueSet' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		ValueSet []CompletionItemTag `json:"valueSet"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Since: 3.18.0
 type ClientCompletionItemResolveOptions struct {
 	// The properties that a client can resolve lazily.
 	Properties []string `json:"properties"`
 }
 
+func (s *ClientCompletionItemResolveOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Properties requiredProp `json:"properties"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Properties {
+		return fmt.Errorf("required key 'properties' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Properties []string `json:"properties"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Since: 3.18.0
 type ClientCompletionItemInsertTextModeOptions struct {
 	ValueSet []InsertTextMode `json:"valueSet"`
+}
+
+func (s *ClientCompletionItemInsertTextModeOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		ValueSet requiredProp `json:"valueSet"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.ValueSet {
+		return fmt.Errorf("required key 'valueSet' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		ValueSet []InsertTextMode `json:"valueSet"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Since: 3.18.0
@@ -5526,10 +11381,56 @@ type ClientCodeActionKindOptions struct {
 	ValueSet []CodeActionKind `json:"valueSet"`
 }
 
+func (s *ClientCodeActionKindOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		ValueSet requiredProp `json:"valueSet"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.ValueSet {
+		return fmt.Errorf("required key 'valueSet' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		ValueSet []CodeActionKind `json:"valueSet"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // Since: 3.18.0
 type ClientDiagnosticsTagOptions struct {
 	// The tags supported by the client.
 	ValueSet []DiagnosticTag `json:"valueSet"`
+}
+
+func (s *ClientDiagnosticsTagOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		ValueSet requiredProp `json:"valueSet"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.ValueSet {
+		return fmt.Errorf("required key 'valueSet' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		ValueSet []DiagnosticTag `json:"valueSet"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Since: 3.18.0

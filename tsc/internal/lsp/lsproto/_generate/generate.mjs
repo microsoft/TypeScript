@@ -361,44 +361,95 @@ function generateCode() {
     writeLine("// Structures\n");
 
     for (const structure of model.structures) {
-        write(formatDocumentation(structure.documentation));
-
-        writeLine(`type ${structure.name} struct {`); // Embed extended types and mixins
-        for (const e of structure.extends || []) {
-            if (e.kind !== "reference") {
-                throw new Error(`Unexpected extends kind: ${e.kind}`);
+        /**
+         * @param {string} name
+         * @param {boolean} includeDocumentation
+         */
+        function generateStructFields(name, includeDocumentation) {
+            if (includeDocumentation) {
+                write(formatDocumentation(structure.documentation));
             }
-            writeLine(`\t${e.name}`);
-        }
 
-        for (const m of structure.mixins || []) {
-            if (m.kind !== "reference") {
-                throw new Error(`Unexpected mixin kind: ${m.kind}`);
+            writeLine(`type ${name} struct {`);
+
+            // Embed extended types and mixins
+            for (const e of structure.extends || []) {
+                if (e.kind !== "reference") {
+                    throw new Error(`Unexpected extends kind: ${e.kind}`);
+                }
+                writeLine(`\t${e.name}`);
             }
-            writeLine(`\t${m.name}`);
-        }
 
-        // Insert a blank line after embeds if there were any
-        if (
-            (structure.extends && structure.extends.length > 0) ||
-            (structure.mixins && structure.mixins.length > 0)
-        ) {
+            for (const m of structure.mixins || []) {
+                if (m.kind !== "reference") {
+                    throw new Error(`Unexpected mixin kind: ${m.kind}`);
+                }
+                writeLine(`\t${m.name}`);
+            }
+
+            // Insert a blank line after embeds if there were any
+            if (
+                (structure.extends && structure.extends.length > 0) ||
+                (structure.mixins && structure.mixins.length > 0)
+            ) {
+                writeLine("");
+            }
+
+            // Then properties
+            for (const prop of structure.properties) {
+                if (includeDocumentation) {
+                    write(formatDocumentation(prop.documentation));
+                }
+
+                const type = resolveType(prop.type);
+                const goType = prop.optional || type.needsPointer ? `*${type.name}` : type.name;
+
+                writeLine(`\t${titleCase(prop.name)} ${goType} \`json:"${prop.name}${prop.optional ? ",omitempty" : ""}"\``);
+
+                if (includeDocumentation) {
+                    writeLine("");
+                }
+            }
+
+            writeLine("}");
             writeLine("");
         }
 
-        // Then properties
-        for (const prop of structure.properties) {
-            write(formatDocumentation(prop.documentation));
-
-            const type = resolveType(prop.type);
-            const goType = prop.optional || type.needsPointer ? `*${type.name}` : type.name;
-
-            writeLine(`\t${titleCase(prop.name)} ${goType} \`json:"${prop.name}${prop.optional ? ",omitempty" : ""}"\``);
-            writeLine("");
-        }
-
-        writeLine("}");
+        generateStructFields(structure.name, true);
         writeLine("");
+
+        // Generate UnmarshalJSON method for structure validation
+        const requiredProps = structure.properties?.filter(p => !p.optional) || [];
+        if (requiredProps.length > 0) {
+            writeLine(`func (s *${structure.name}) UnmarshalJSON(data []byte) error {`);
+            writeLine(`\t// Check required props`);
+            writeLine(`\ttype requiredProps struct {`);
+            for (const prop of requiredProps) {
+                writeLine(`\t\t${titleCase(prop.name)} requiredProp \`json:"${prop.name}"\``);
+            }
+            writeLine(`}`);
+            writeLine("");
+
+            writeLine(`\tvar keys requiredProps`);
+            writeLine(`\tif err := json.Unmarshal(data, &keys); err != nil {`);
+            writeLine(`\t\treturn err`);
+            writeLine(`\t}`);
+            writeLine("");
+
+            // writeLine(`\t// Check for missing required keys`);
+            for (const prop of requiredProps) {
+                writeLine(`if !keys.${titleCase(prop.name)} {`);
+                writeLine(`\t\treturn fmt.Errorf("required key '${prop.name}' is missing")`);
+                writeLine(`}`);
+            }
+
+            writeLine(``);
+            writeLine(`\t// Redeclare the struct to prevent infinite recursion`);
+            generateStructFields("temp", false);
+            writeLine(`\treturn json.Unmarshal(data, (*temp)(s))`);
+            writeLine(`}`);
+            writeLine("");
+        }
     }
 
     // Generate enumerations
