@@ -488,6 +488,8 @@ func (s *Server) handleRequestOrNotification(ctx context.Context, req *lsproto.R
 		return s.handleCompletion(ctx, req)
 	case *lsproto.ReferenceParams:
 		return s.handleReferences(ctx, req)
+	case *lsproto.ImplementationParams:
+		return s.handleImplementations(ctx, req)
 	case *lsproto.SignatureHelpParams:
 		return s.handleSignatureHelp(ctx, req)
 	case *lsproto.DocumentFormattingParams:
@@ -558,6 +560,9 @@ func (s *Server) handleInitialize(req *lsproto.RequestMessage) {
 				Boolean: ptrTo(true),
 			},
 			ReferencesProvider: &lsproto.BooleanOrReferenceOptions{
+				Boolean: ptrTo(true),
+			},
+			ImplementationProvider: &lsproto.BooleanOrImplementationOptionsOrImplementationRegistrationOptions{
 				Boolean: ptrTo(true),
 			},
 			DiagnosticProvider: &lsproto.DiagnosticOptionsOrDiagnosticRegistrationOptions{
@@ -721,6 +726,17 @@ func (s *Server) handleReferences(ctx context.Context, req *lsproto.RequestMessa
 	languageService, done := project.GetLanguageServiceForRequest(ctx)
 	defer done()
 	locations := languageService.ProvideReferences(params)
+	s.sendResult(req.ID, locations)
+	return nil
+}
+
+func (s *Server) handleImplementations(ctx context.Context, req *lsproto.RequestMessage) error {
+	// goToImplementation
+	params := req.Params.(*lsproto.ImplementationParams)
+	project := s.projectService.EnsureDefaultProjectForURI(params.TextDocument.Uri)
+	languageService, done := project.GetLanguageServiceForRequest(ctx)
+	defer done()
+	locations := languageService.ProvideImplementations(params)
 	s.sendResult(req.ID, locations)
 	return nil
 }

@@ -119,7 +119,7 @@ func getDeclarationNameForKeyword(node *ast.Node) *ast.Node {
 			if decl := core.FirstOrNil(node.Parent.AsVariableDeclarationList().Declarations.Nodes); decl != nil && decl.Name() != nil {
 				return decl.Name()
 			}
-		} else if node.Parent.Name() != nil && node.Pos() < node.Parent.Name().Pos() {
+		} else if node.Parent.DeclarationData() != nil && node.Parent.Name() != nil && node.Pos() < node.Parent.Name().Pos() {
 			return node.Parent.Name()
 		}
 	}

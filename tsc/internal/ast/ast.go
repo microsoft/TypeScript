@@ -605,15 +605,13 @@ func (n *Node) Type() *Node {
 		return n.AsCommonJSExport().Type
 	case KindBinaryExpression:
 		return n.AsBinaryExpression().Type
-	case KindEnumMember, KindBindingElement:
-		return nil
 	default:
 		funcLike := n.FunctionLikeData()
 		if funcLike != nil {
 			return funcLike.Type
 		}
 	}
-	panic("Unhandled case in Node.Type: " + n.Kind.String())
+	return nil
 }
 
 func (n *Node) Initializer() *Node {
