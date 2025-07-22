@@ -7,6 +7,8 @@
         "strict": true,
         "noEmit": true,
         "allowImportingTsExtensions": true,
+        "erasableSyntaxOnly": true,
+        "verbatimModuleSyntax": true,
         "types": ["node"],
         "noUnusedLocals": true,
         "noUnusedParameters": true,

@@ -247,8 +247,8 @@ jobs:
 
       - run: npx hereby generate
 
-      - run: node ./internal/lsp/lsproto/_generate/fetchModel.mjs
-      - run: node ./internal/lsp/lsproto/_generate/generate.mjs
+      - run: node --experimental-strip-types ./internal/lsp/lsproto/_generate/fetchModel.mts
+      - run: node --experimental-strip-types ./internal/lsp/lsproto/_generate/generate.mts
 
       - name: Regenerate fourslash tests and update failing test list
         run: npm run updatefailing
