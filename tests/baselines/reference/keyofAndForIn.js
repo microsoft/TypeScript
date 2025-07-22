@@ -1,8 +1,6 @@
 //// [tests/cases/conformance/types/keyof/keyofAndForIn.ts] ////
 
 //// [keyofAndForIn.ts]
-// Repro from #12513
-
 function f1<K extends string, T>(obj: { [P in K]: T }, k: K) {
     const b = k in obj;
     let k1: K;
@@ -37,7 +35,6 @@ function f3<T, K extends keyof T>(obj: { [P in K]: T[P] }, k: K) {
 }
 
 //// [keyofAndForIn.js]
-// Repro from #12513
 function f1(obj, k) {
     var b = k in obj;
     var k1;
