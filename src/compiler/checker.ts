@@ -9737,18 +9737,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     context.approximateLength += 16 + internalSymbolName.length; // `export default internalName;`
                     addResult(factory.createExportAssignment(/*modifiers*/ undefined, /*isExportEquals*/ false, factory.createIdentifier(internalSymbolName)), ModifierFlags.None);
                 }
-                else if (needsExportDeclaration) {
-                    const internalSymbolName = getInternalSymbolName(symbol, symbolName);
-                    context.approximateLength += 22 + symbolName.length + internalSymbolName.length; // `export { internalName as symbolName };`
-                    addResult(
-                        factory.createExportDeclaration(
-                            /*modifiers*/ undefined,
-                            /*isTypeOnly*/ false,
-                            factory.createNamedExports([factory.createExportSpecifier(/*isTypeOnly*/ false, internalSymbolName, symbolName)]),
-                        ),
-                        ModifierFlags.None,
-                    );
-                }
             }
 
             function includePrivateSymbol(symbol: Symbol) {
