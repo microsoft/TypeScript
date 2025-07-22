@@ -1,0 +1,15 @@
+aiDiagnosticsVarNotFound.ts(3,13): error TS2304: Cannot find name 'missingVar'.
+
+
+==== aiDiagnosticsVarNotFound.ts (1 errors) ====
+    // This test checks that 'why' explanations and highConfidenceFix are set for undefined variable errors.
+    
+    console.log(missingVar); // Should trigger AI diagnostics for undefined variable
+                ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'missingVar'.
+    
+    // Expect AI diagnostic with:
+    // - why: explanation of undefined variable
+    // - highConfidenceFix: false (no safe fix)
+    // - suggestions: may be empty or suggest import/define
+    

@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/aiDiagnosticsWhyAndFix.ts] ////
+
+=== aiDiagnosticsWhyAndFix.ts ===
+// This test checks that actionable, explainable errors include 'why' and 'highConfidenceFix'.
+
+interface User { name: string; }
+>name : string
+>     : ^^^^^^
+
+const user: User = {}; // Error: Property 'name' is missing
+>user : User
+>     : ^^^^
+>{} : {}
+>   : ^^
+
+// Expect AI diagnostic with:
+// - why: explanation of missing property
+// - highConfidenceFix: true
+// - suggestions[0].why: explanation for the fix
+

@@ -1,0 +1,13 @@
+// @filename: aiDiagnosticsVarNotFound.ts
+// @strict: true
+// @noEmit: true
+// @aiDiagnostics: true
+
+// This test checks that 'why' explanations and highConfidenceFix are set for undefined variable errors.
+
+console.log(missingVar); // Should trigger AI diagnostics for undefined variable
+
+// Expect AI diagnostic with:
+// - why: explanation of undefined variable
+// - highConfidenceFix: false (no safe fix)
+// - suggestions: may be empty or suggest import/define

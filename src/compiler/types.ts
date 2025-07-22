@@ -7397,6 +7397,15 @@ export enum PollingWatchKind {
 export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined; // eslint-disable-line no-restricted-syntax
 
 export interface CompilerOptions {
+    /** AI Diagnostics options */
+    aiDiagnostics?: boolean;
+    structuredOutput?: boolean;
+    machineReadable?: boolean;
+    aiContext?: boolean;
+    suggestionConfidence?: number;
+    aiErrorSummary?: boolean;
+    semanticHints?: boolean;
+    patternSuggestions?: boolean;
     /** @internal */ all?: boolean;
     allowImportingTsExtensions?: boolean;
     allowJs?: boolean;

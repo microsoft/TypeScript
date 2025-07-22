@@ -1,0 +1,106 @@
+{
+    "name": "typescript-ai-diagnostics",
+    "version": "5.8.3-ai.1.0.0",
+    "description": "TypeScript compiler with AI-enhanced diagnostics for intelligent error analysis and fix suggestions",
+    "keywords": [
+        "typescript",
+        "compiler",
+        "ai",
+        "diagnostics",
+        "error-analysis",
+        "code-intelligence",
+        "developer-tools",
+        "static-analysis",
+        "pattern-recognition",
+        "automated-fixes"
+    ],
+    "author": "AI Diagnostics Team",
+    "license": "Apache-2.0",
+    "homepage": "https://github.com/yourusername/typescript-ai-diagnostics",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/yourusername/typescript-ai-diagnostics.git"
+    },
+    "bugs": {
+        "url": "https://github.com/yourusername/typescript-ai-diagnostics/issues"
+    },
+    "main": "./built/local/typescript.js",
+    "types": "./built/local/typescript.d.ts",
+    "bin": {
+        "tsc": "./bin/tsc",
+        "tsserver": "./bin/tsserver",
+        "tsc-ai": "./built/local/tsc.js",
+        "ts-ai-diagnostics": "./built/local/ai-cli.js"
+    },
+    "engines": {
+        "node": ">=14.17"
+    },
+    "scripts": {
+        "build": "npm run build:compiler",
+        "build:compiler": "hereby local",
+        "build:tests": "hereby build-tests",
+        "test": "hereby test",
+        "clean": "hereby clean",
+        "start": "node ./built/local/tsc.js",
+        "ai-demo": "node ./built/local/tsc.js --aiDiagnostics --demo",
+        "prepare": "npm run build",
+        "prepack": "npm run build && npm run test",
+        "postinstall": "echo '\n🚀 TypeScript AI Diagnostics installed successfully!\n   Try: tsc --aiDiagnostics --help\n'"
+    },
+    "devDependencies": {
+        "@types/node": "latest",
+        "@types/mocha": "latest",
+        "@types/diff": "latest",
+        "eslint": "^8.0.0",
+        "hereby": "^1.8.9",
+        "mocha": "^10.0.0",
+        "typescript": "~5.8.0"
+    },
+    "peerDependencies": {
+        "typescript": ">=4.0.0"
+    },
+    "files": [
+        "built/local/**/*",
+        "bin/**/*",
+        "lib/**/*",
+        "src/**/*",
+        "README-AI.md",
+        "AI_DIAGNOSTICS_GUIDE.md",
+        "LICENSE.txt",
+        "CONTRIBUTING.md",
+        "examples/**/*",
+        "docs/**/*"
+    ],
+    "publishConfig": {
+        "access": "public",
+        "registry": "https://registry.npmjs.org/"
+    },
+    "funding": {
+        "type": "github",
+        "url": "https://github.com/sponsors/microsoft"
+    },
+    "ai-diagnostics": {
+        "version": "1.0.0",
+        "features": [
+            "confidence-scoring",
+            "pattern-recognition",
+            "context-awareness",
+            "multiple-output-formats",
+            "educational-hints",
+            "quick-wins-detection"
+        ],
+        "compatibility": {
+            "typescript": "5.8.3",
+            "node": ">=14.17",
+            "browsers": "modern"
+        }
+    },
+    "capabilities": {
+        "ai-integration": true,
+        "structured-output": true,
+        "machine-readable": true,
+        "confidence-scoring": true,
+        "pattern-suggestions": true,
+        "educational-context": true
+    }
+}

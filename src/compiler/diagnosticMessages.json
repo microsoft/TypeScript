@@ -8515,5 +8515,38 @@
     "'{0}' is not a valid meta-property for keyword 'import'. Did you mean 'meta' or 'defer'?": {
         "category": "Error",
         "code": 18061
+    },
+
+    "Enable AI-enhanced visual diagnostic output": {
+        "category": "Message",
+        "code": 20001
+    },
+    "Output comprehensive JSON format for AI tools": {
+        "category": "Message",
+        "code": 20002
+    },
+    "Output parseable text format for automation": {
+        "category": "Message",
+        "code": 20003
+    },
+    "Include additional semantic context for AI diagnostics": {
+        "category": "Message",
+        "code": 20004
+    },
+    "Filter suggestions by confidence (0-1)": {
+        "category": "Message",
+        "code": 20005
+    },
+    "Generate intelligent error summaries": {
+        "category": "Message",
+        "code": 20006
+    },
+    "Include AST and semantic information in diagnostics": {
+        "category": "Message",
+        "code": 20007
+    },
+    "Enable pattern-based fix recommendations": {
+        "category": "Message",
+        "code": 20008
     }
 }

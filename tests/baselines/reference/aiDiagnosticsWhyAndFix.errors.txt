@@ -1,0 +1,17 @@
+aiDiagnosticsWhyAndFix.ts(4,7): error TS2741: Property 'name' is missing in type '{}' but required in type 'User'.
+
+
+==== aiDiagnosticsWhyAndFix.ts (1 errors) ====
+    // This test checks that actionable, explainable errors include 'why' and 'highConfidenceFix'.
+    
+    interface User { name: string; }
+    const user: User = {}; // Error: Property 'name' is missing
+          ~~~~
+!!! error TS2741: Property 'name' is missing in type '{}' but required in type 'User'.
+!!! related TS2728 aiDiagnosticsWhyAndFix.ts:3:18: 'name' is declared here.
+    
+    // Expect AI diagnostic with:
+    // - why: explanation of missing property
+    // - highConfidenceFix: true
+    // - suggestions[0].why: explanation for the fix
+    

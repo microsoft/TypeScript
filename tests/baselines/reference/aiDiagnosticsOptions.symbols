@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/aiDiagnosticsOptions.ts] ////
+
+=== aiDiagnosticsOptions.ts ===
+// This file tests the AI diagnostics compiler options and output formats.
+
+let x: string = 42; // Should trigger type error and AI diagnostics
+>x : Symbol(x, Decl(aiDiagnosticsOptions.ts, 2, 3))
+
+function foo(a: number) {
+>foo : Symbol(foo, Decl(aiDiagnosticsOptions.ts, 2, 19))
+>a : Symbol(a, Decl(aiDiagnosticsOptions.ts, 4, 13))
+
+    return a + 1;
+>a : Symbol(a, Decl(aiDiagnosticsOptions.ts, 4, 13))
+}
+
+foo("bar"); // Should trigger type error and AI diagnostics
+>foo : Symbol(foo, Decl(aiDiagnosticsOptions.ts, 2, 19))
+
+// Intentionally missing import
+console.log(missingVar); // Should trigger AI diagnostics for undefined variable
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+// Edge case: valid code
+const ok: number = 123;
+>ok : Symbol(ok, Decl(aiDiagnosticsOptions.ts, 14, 5))
+

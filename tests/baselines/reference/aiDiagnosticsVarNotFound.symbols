@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/aiDiagnosticsVarNotFound.ts] ////
+
+=== aiDiagnosticsVarNotFound.ts ===
+// This test checks that 'why' explanations and highConfidenceFix are set for undefined variable errors.
+
+console.log(missingVar); // Should trigger AI diagnostics for undefined variable
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+// Expect AI diagnostic with:
+// - why: explanation of undefined variable
+// - highConfidenceFix: false (no safe fix)
+// - suggestions: may be empty or suggest import/define
+

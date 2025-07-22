@@ -87,6 +87,11 @@ import {
     WatchOfConfigFile,
     WatchOptions,
 } from "./_namespaces/ts.js";
+import { convertToAIDiagnostics } from "./aiDiagnostics.js";
+import {
+    AIOutputFormat,
+    formatAIDiagnostics,
+} from "./aiFormatter.js";
 import * as performance from "./performance.js";
 
 interface Statistic {
@@ -913,15 +918,41 @@ function performCompilation(
         configFileParsingDiagnostics: getConfigFileParsingDiagnostics(config),
     };
     const program = createProgram(programOptions);
-    const exitStatus = emitFilesAndReportErrorsAndGetExitStatus(
-        program,
-        reportDiagnostic,
-        s => sys.write(s + sys.newLine),
-        createReportErrorSummary(sys, options),
-    );
-    reportStatistics(sys, program, /*solutionPerformance*/ undefined);
-    cb(program);
-    return sys.exit(exitStatus);
+
+    // AI Diagnostics integration
+    if (options.aiDiagnostics) {
+        // Get standard diagnostics
+        const allDiagnostics = [
+            ...program.getOptionsDiagnostics(),
+            ...program.getGlobalDiagnostics(),
+            ...program.getSyntacticDiagnostics(),
+            ...program.getSemanticDiagnostics(),
+            ...program.getDeclarationDiagnostics(),
+        ];
+        // Convert to AI diagnostics
+        const aiDiagnostics = convertToAIDiagnostics(allDiagnostics, options);
+        // Determine output format
+        let aiFormat: AIOutputFormat = "visual";
+        if (options.structuredOutput) aiFormat = "json";
+        if (options.machineReadable) aiFormat = "machine";
+        // Format and output
+        const output = formatAIDiagnostics(aiDiagnostics, aiFormat);
+        sys.write(output + sys.newLine);
+        reportStatistics(sys, program, /*solutionPerformance*/ undefined);
+        cb(program);
+        return sys.exit(aiDiagnostics.length > 0 ? ExitStatus.DiagnosticsPresent_OutputsSkipped : ExitStatus.Success);
+    }
+    else {
+        const exitStatus = emitFilesAndReportErrorsAndGetExitStatus(
+            program,
+            reportDiagnostic,
+            s => sys.write(s + sys.newLine),
+            createReportErrorSummary(sys, options),
+        );
+        reportStatistics(sys, program, /*solutionPerformance*/ undefined);
+        cb(program);
+        return sys.exit(exitStatus);
+    }
 }
 
 function performIncrementalCompilation(
@@ -934,21 +965,50 @@ function performIncrementalCompilation(
     enableStatisticsAndTracing(sys, options, /*isBuildMode*/ false);
     const host = createIncrementalCompilerHost(options, sys);
     host.jsDocParsingMode = defaultJSDocParsingMode;
-    const exitStatus = ts_performIncrementalCompilation({
-        host,
-        system: sys,
-        rootNames: fileNames,
-        options,
-        configFileParsingDiagnostics: getConfigFileParsingDiagnostics(config),
-        projectReferences,
-        reportDiagnostic,
-        reportErrorSummary: createReportErrorSummary(sys, options),
-        afterProgramEmitAndDiagnostics: builderProgram => {
-            reportStatistics(sys, builderProgram.getProgram(), /*solutionPerformance*/ undefined);
-            cb(builderProgram);
-        },
-    });
-    return sys.exit(exitStatus);
+
+    // AI Diagnostics integration for incremental mode
+    if (options.aiDiagnostics) {
+        const program = createProgram({
+            rootNames: fileNames,
+            options,
+            projectReferences,
+            host,
+            configFileParsingDiagnostics: getConfigFileParsingDiagnostics(config),
+        });
+        const allDiagnostics = [
+            ...program.getOptionsDiagnostics(),
+            ...program.getGlobalDiagnostics(),
+            ...program.getSyntacticDiagnostics(),
+            ...program.getSemanticDiagnostics(),
+            ...program.getDeclarationDiagnostics(),
+        ];
+        const aiDiagnostics = convertToAIDiagnostics(allDiagnostics, options);
+        let aiFormat = "visual";
+        if (options.structuredOutput) aiFormat = "json";
+        if (options.machineReadable) aiFormat = "machine";
+        const output = formatAIDiagnostics(aiDiagnostics, aiFormat as AIOutputFormat);
+        sys.write(output + sys.newLine);
+        reportStatistics(sys, program, /*solutionPerformance*/ undefined);
+        cb(program);
+        return sys.exit(aiDiagnostics.length > 0 ? ExitStatus.DiagnosticsPresent_OutputsSkipped : ExitStatus.Success);
+    }
+    else {
+        const exitStatus = ts_performIncrementalCompilation({
+            host,
+            system: sys,
+            rootNames: fileNames,
+            options,
+            configFileParsingDiagnostics: getConfigFileParsingDiagnostics(config),
+            projectReferences,
+            reportDiagnostic,
+            reportErrorSummary: createReportErrorSummary(sys, options),
+            afterProgramEmitAndDiagnostics: builderProgram => {
+                reportStatistics(sys, builderProgram.getProgram(), /*solutionPerformance*/ undefined);
+                cb(builderProgram);
+            },
+        });
+        return sys.exit(exitStatus);
+    }
 }
 
 function updateSolutionBuilderHost(
@@ -984,9 +1044,31 @@ function updateWatchCompilationHost(
     updateCreateProgram(sys, watchCompilerHost, /*isBuildMode*/ false);
     const emitFilesUsingBuilder = watchCompilerHost.afterProgramCreate!; // TODO: GH#18217
     watchCompilerHost.afterProgramCreate = builderProgram => {
-        emitFilesUsingBuilder(builderProgram);
-        reportStatistics(sys, builderProgram.getProgram(), /*solutionPerformance*/ undefined);
-        cb(builderProgram);
+        // AI Diagnostics integration for watch mode
+        const options = builderProgram.getProgram().getCompilerOptions();
+        if (options.aiDiagnostics) {
+            const program = builderProgram.getProgram();
+            const allDiagnostics = [
+                ...program.getOptionsDiagnostics(),
+                ...program.getGlobalDiagnostics(),
+                ...program.getSyntacticDiagnostics(),
+                ...program.getSemanticDiagnostics(),
+                ...program.getDeclarationDiagnostics(),
+            ];
+            const aiDiagnostics = convertToAIDiagnostics(allDiagnostics, options);
+            let aiFormat = "visual";
+            if (options.structuredOutput) aiFormat = "json";
+            if (options.machineReadable) aiFormat = "machine";
+            const output = formatAIDiagnostics(aiDiagnostics, aiFormat as AIOutputFormat);
+            sys.write(output + sys.newLine);
+            reportStatistics(sys, program, /*solutionPerformance*/ undefined);
+            cb(builderProgram);
+        }
+        else {
+            emitFilesUsingBuilder(builderProgram);
+            reportStatistics(sys, builderProgram.getProgram(), /*solutionPerformance*/ undefined);
+            cb(builderProgram);
+        }
     };
 }
 
