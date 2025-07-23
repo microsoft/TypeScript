@@ -9,7 +9,7 @@ parserRealSource9.ts(29,55): error TS2304: Cannot find name 'Type'.
 parserRealSource9.ts(67,54): error TS2304: Cannot find name 'SignatureGroup'.
 parserRealSource9.ts(67,77): error TS2304: Cannot find name 'SymbolScope'.
 parserRealSource9.ts(67,104): error TS2304: Cannot find name 'Type'.
-parserRealSource9.ts(83,38): error TS2304: Cannot find name 'ParameterSymbol'.
+parserRealSource9.ts(83,38): error TS2552: Cannot find name 'ParameterSymbol'. Did you mean 'Parameters'?
 parserRealSource9.ts(94,32): error TS2304: Cannot find name 'SymbolScope'.
 parserRealSource9.ts(94,51): error TS2304: Cannot find name 'Type'.
 parserRealSource9.ts(94,71): error TS2304: Cannot find name 'Type'.
@@ -32,7 +32,7 @@ parserRealSource9.ts(167,45): error TS2304: Cannot find name 'Identifier'.
 parserRealSource9.ts(185,26): error TS2304: Cannot find name 'SymbolKind'.
 parserRealSource9.ts(186,63): error TS2304: Cannot find name 'FieldSymbol'.
 parserRealSource9.ts(189,26): error TS2304: Cannot find name 'SymbolKind'.
-parserRealSource9.ts(191,51): error TS2304: Cannot find name 'ParameterSymbol'.
+parserRealSource9.ts(191,51): error TS2552: Cannot find name 'ParameterSymbol'. Did you mean 'Parameters'?
 parserRealSource9.ts(197,20): error TS2339: Property 'bound' does not exist on type 'Symbol'.
 parserRealSource9.ts(200,28): error TS2304: Cannot find name 'SymbolScope'.
 parserRealSource9.ts(200,48): error TS2304: Cannot find name 'IHashTable'.
@@ -145,7 +145,7 @@ parserRealSource9.ts(200,48): error TS2304: Cannot find name 'IHashTable'.
                         // check that last parameter has an array type
                         var lastParam = <ParameterSymbol>signature.parameters[paramLen - 1];
                                          ~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'ParameterSymbol'.
+!!! error TS2552: Cannot find name 'ParameterSymbol'. Did you mean 'Parameters'?
                         lastParam.argsOffset = paramLen - 1;
                         if (!lastParam.getType().isArray()) {
                             this.checker.errorReporter.simpleErrorFromSym(lastParam,
@@ -299,7 +299,7 @@ parserRealSource9.ts(200,48): error TS2304: Cannot find name 'IHashTable'.
                             this.checker.resolveTypeLink(scope,
                                                     (<ParameterSymbol>symbol).parameter.typeLink,
                                                       ~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'ParameterSymbol'.
+!!! error TS2552: Cannot find name 'ParameterSymbol'. Did you mean 'Parameters'?
                                                     true);
                             break;
                     }

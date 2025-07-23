@@ -5,11 +5,26 @@
  parserRealSource13.ts(8,35): error TS2304: Cannot find name 'AST'.
  parserRealSource13.ts(9,39): error TS2304: Cannot find name 'AST'.
  parserRealSource13.ts(10,34): error TS2304: Cannot find name 'AST'.
-@@= skipped -115, +114 lines =@@
- parserRealSource13.ts(135,36): error TS2304: Cannot find name 'NodeType'.
-
-
+@@= skipped -81, +80 lines =@@
+ parserRealSource13.ts(88,32): error TS2304: Cannot find name 'AST'.
+ parserRealSource13.ts(89,35): error TS2304: Cannot find name 'AST'.
+ parserRealSource13.ts(90,37): error TS2304: Cannot find name 'AST'.
+-parserRealSource13.ts(91,37): error TS2304: Cannot find name 'Block'.
++parserRealSource13.ts(91,37): error TS2552: Cannot find name 'Block'. Did you mean 'Lock'?
+ parserRealSource13.ts(92,34): error TS2304: Cannot find name 'AST'.
+ parserRealSource13.ts(93,36): error TS2304: Cannot find name 'AST'.
+ parserRealSource13.ts(94,33): error TS2304: Cannot find name 'AST'.
+@@= skipped -31, +31 lines =@@
+ parserRealSource13.ts(123,39): error TS2304: Cannot find name 'AST'.
+ parserRealSource13.ts(128,33): error TS2339: Property 'getAstWalkerFactory' does not exist on type 'typeof TypeScript'.
+ parserRealSource13.ts(132,51): error TS2304: Cannot find name 'AST'.
+-parserRealSource13.ts(135,36): error TS2304: Cannot find name 'NodeType'.
+-
+-
 -==== parserRealSource13.ts (116 errors) ====
++parserRealSource13.ts(135,36): error TS2552: Cannot find name 'NodeType'. Did you mean 'nodeType'?
++
++
 +==== parserRealSource13.ts (115 errors) ====
      // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
      // See LICENSE.txt in the project root for complete license information.
@@ -20,3 +35,23 @@
      
      module TypeScript.AstWalkerWithDetailCallback {
          export interface AstWalkerDetailCallback {
+@@= skipped -264, +262 lines =@@
+ !!! error TS2304: Cannot find name 'AST'.
+             BlockCallback? (pre, block: Block): boolean;
+                                         ~~~~~
+-!!! error TS2304: Cannot find name 'Block'.
++!!! error TS2552: Cannot find name 'Block'. Did you mean 'Lock'?
++!!! related TS2728 lib.dom.d.ts:--:--: 'Lock' is declared here.
+             CaseCallback? (pre, ast: AST): boolean;
+                                      ~~~
+ !!! error TS2304: Cannot find name 'AST'.
+@@= skipped -106, +107 lines =@@
+             var nodeType = ast.nodeType;
+             var callbackString = (<any>NodeType)._map[nodeType] + "Callback";
+                                        ~~~~~~~~
+-!!! error TS2304: Cannot find name 'NodeType'.
++!!! error TS2552: Cannot find name 'NodeType'. Did you mean 'nodeType'?
++!!! related TS2728 parserRealSource13.ts:134:13: 'nodeType' is declared here.
+             if (callback[callbackString]) {
+                 return callback[callbackString](pre, ast);
+             }

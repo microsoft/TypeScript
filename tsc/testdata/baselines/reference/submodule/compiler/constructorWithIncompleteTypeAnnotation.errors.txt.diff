@@ -9,7 +9,16 @@
  constructorWithIncompleteTypeAnnotation.ts(181,13): error TS2322: Type 'boolean' is not assignable to type 'number'.
  constructorWithIncompleteTypeAnnotation.ts(183,13): error TS2322: Type 'boolean' is not assignable to type 'number'.
  constructorWithIncompleteTypeAnnotation.ts(187,13): error TS2322: Type 'boolean' is not assignable to type 'number'.
-@@= skipped -182, +182 lines =@@
+@@= skipped -13, +13 lines =@@
+ constructorWithIncompleteTypeAnnotation.ts(234,14): error TS1005: '{' expected.
+ constructorWithIncompleteTypeAnnotation.ts(235,9): error TS1128: Declaration or statement expected.
+ constructorWithIncompleteTypeAnnotation.ts(235,16): error TS2304: Cannot find name 'method1'.
+-constructorWithIncompleteTypeAnnotation.ts(235,24): error TS2304: Cannot find name 'val'.
++constructorWithIncompleteTypeAnnotation.ts(235,24): error TS2552: Cannot find name 'val'. Did you mean 'eval'?
+ constructorWithIncompleteTypeAnnotation.ts(235,27): error TS1005: ',' expected.
+ constructorWithIncompleteTypeAnnotation.ts(235,28): error TS2693: 'number' only refers to a type, but is being used as a value here.
+ constructorWithIncompleteTypeAnnotation.ts(235,36): error TS1005: ';' expected.
+@@= skipped -169, +169 lines =@@
                  var undef = undefined;
      
                  var  _\uD4A5\u7204\uC316\uE59F  = local;
@@ -27,3 +36,13 @@
  !!! error TS2447: The '^' operator is not allowed for boolean types. Consider using '!==' instead.
                  b = !b;/*!*/
                  ~
+@@= skipped -82, +82 lines =@@
+                    ~~~~~~~
+ !!! error TS2304: Cannot find name 'method1'.
+                            ~~~
+-!!! error TS2304: Cannot find name 'val'.
++!!! error TS2552: Cannot find name 'val'. Did you mean 'eval'?
++!!! related TS2728 lib.es5.d.ts:--:--: 'eval' is declared here.
+                               ~
+ !!! error TS1005: ',' expected.
+                                ~~~~~~

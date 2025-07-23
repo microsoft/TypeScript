@@ -10,11 +10,11 @@ parserRealSource7.ts(34,54): error TS2304: Cannot find name 'AST'.
 parserRealSource7.ts(34,68): error TS2304: Cannot find name 'TypeCollectionContext'.
 parserRealSource7.ts(35,25): error TS2304: Cannot find name 'ValueLocation'.
 parserRealSource7.ts(36,30): error TS2304: Cannot find name 'TypeLink'.
-parserRealSource7.ts(41,17): error TS2304: Cannot find name 'FieldSymbol'.
+parserRealSource7.ts(41,17): error TS2552: Cannot find name 'FieldSymbol'. Did you mean 'fieldSymbol'?
 parserRealSource7.ts(43,31): error TS2304: Cannot find name 'SymbolFlags'.
 parserRealSource7.ts(43,54): error TS2304: Cannot find name 'SymbolFlags'.
 parserRealSource7.ts(49,58): error TS2304: Cannot find name 'Type'.
-parserRealSource7.ts(50,29): error TS2304: Cannot find name 'Signature'.
+parserRealSource7.ts(50,29): error TS2552: Cannot find name 'Signature'. Did you mean 'signature'?
 parserRealSource7.ts(51,36): error TS2304: Cannot find name 'TypeLink'.
 parserRealSource7.ts(55,30): error TS2304: Cannot find name 'SignatureGroup'.
 parserRealSource7.ts(59,66): error TS2304: Cannot find name 'Type'.
@@ -45,7 +45,7 @@ parserRealSource7.ts(155,26): error TS2304: Cannot find name 'hasFlag'.
 parserRealSource7.ts(155,55): error TS2304: Cannot find name 'VarFlags'.
 parserRealSource7.ts(162,51): error TS2339: Property 'getType' does not exist on type 'Symbol'.
 parserRealSource7.ts(165,28): error TS2304: Cannot find name 'ModuleType'.
-parserRealSource7.ts(169,26): error TS2304: Cannot find name 'TypeSymbol'.
+parserRealSource7.ts(169,26): error TS2552: Cannot find name 'TypeSymbol'. Did you mean 'typeSymbol'?
 parserRealSource7.ts(186,48): error TS2304: Cannot find name 'AST'.
 parserRealSource7.ts(186,61): error TS2304: Cannot find name 'AST'.
 parserRealSource7.ts(186,75): error TS2304: Cannot find name 'TypeCollectionContext'.
@@ -70,7 +70,7 @@ parserRealSource7.ts(206,48): error TS2304: Cannot find name 'ScopedMembers'.
 parserRealSource7.ts(206,66): error TS2304: Cannot find name 'DualStringHashTable'.
 parserRealSource7.ts(206,90): error TS2304: Cannot find name 'StringHashTable'.
 parserRealSource7.ts(206,113): error TS2304: Cannot find name 'StringHashTable'.
-parserRealSource7.ts(207,31): error TS2304: Cannot find name 'ModuleType'.
+parserRealSource7.ts(207,31): error TS2552: Cannot find name 'ModuleType'. Did you mean 'modType'?
 parserRealSource7.ts(209,42): error TS2304: Cannot find name 'TypeFlags'.
 parserRealSource7.ts(211,39): error TS2304: Cannot find name 'ScopedMembers'.
 parserRealSource7.ts(211,57): error TS2304: Cannot find name 'DualStringHashTable'.
@@ -80,8 +80,8 @@ parserRealSource7.ts(212,46): error TS2304: Cannot find name 'ScopedMembers'.
 parserRealSource7.ts(212,64): error TS2304: Cannot find name 'DualStringHashTable'.
 parserRealSource7.ts(212,88): error TS2304: Cannot find name 'StringHashTable'.
 parserRealSource7.ts(212,111): error TS2304: Cannot find name 'StringHashTable'.
-parserRealSource7.ts(216,30): error TS2304: Cannot find name 'TypeSymbol'.
-parserRealSource7.ts(231,72): error TS2304: Cannot find name 'NodeType'.
+parserRealSource7.ts(216,30): error TS2552: Cannot find name 'TypeSymbol'. Did you mean 'typeSymbol'?
+parserRealSource7.ts(231,72): error TS2552: Cannot find name 'NodeType'. Did you mean 'modType'?
 parserRealSource7.ts(234,27): error TS2304: Cannot find name 'TypeSymbol'.
 parserRealSource7.ts(238,80): error TS2304: Cannot find name 'StringHashTable'.
 parserRealSource7.ts(239,37): error TS2304: Cannot find name 'ScopedMembers'.
@@ -99,7 +99,7 @@ parserRealSource7.ts(250,82): error TS2304: Cannot find name 'StringHashTable'.
 parserRealSource7.ts(251,38): error TS2304: Cannot find name 'ScopedMembers'.
 parserRealSource7.ts(251,56): error TS2304: Cannot find name 'DualStringHashTable'.
 parserRealSource7.ts(251,107): error TS2304: Cannot find name 'StringHashTable'.
-parserRealSource7.ts(253,27): error TS2304: Cannot find name 'ModuleType'.
+parserRealSource7.ts(253,27): error TS2552: Cannot find name 'ModuleType'. Did you mean 'modType'?
 parserRealSource7.ts(255,38): error TS2304: Cannot find name 'TypeFlags'.
 parserRealSource7.ts(272,33): error TS2304: Cannot find name 'SymbolFlags'.
 parserRealSource7.ts(276,33): error TS2304: Cannot find name 'SymbolFlags'.
@@ -107,7 +107,7 @@ parserRealSource7.ts(280,9): error TS2304: Cannot find name 'pushTypeCollectionS
 parserRealSource7.ts(289,47): error TS2304: Cannot find name 'AST'.
 parserRealSource7.ts(289,60): error TS2304: Cannot find name 'AST'.
 parserRealSource7.ts(289,74): error TS2304: Cannot find name 'TypeCollectionContext'.
-parserRealSource7.ts(291,26): error TS2304: Cannot find name 'ClassDeclaration'.
+parserRealSource7.ts(291,26): error TS2552: Cannot find name 'ClassDeclaration'. Did you mean 'ClassDecorator'?
 parserRealSource7.ts(293,24): error TS2304: Cannot find name 'Type'.
 parserRealSource7.ts(294,27): error TS2304: Cannot find name 'Type'.
 parserRealSource7.ts(295,25): error TS2304: Cannot find name 'TypeSymbol'.
@@ -141,7 +141,7 @@ parserRealSource7.ts(349,47): error TS2304: Cannot find name 'ScopedMembers'.
 parserRealSource7.ts(349,65): error TS2304: Cannot find name 'DualStringHashTable'.
 parserRealSource7.ts(349,89): error TS2304: Cannot find name 'StringHashTable'.
 parserRealSource7.ts(349,112): error TS2304: Cannot find name 'StringHashTable'.
-parserRealSource7.ts(350,30): error TS2304: Cannot find name 'TypeSymbol'.
+parserRealSource7.ts(350,30): error TS2552: Cannot find name 'TypeSymbol'. Did you mean 'typeSymbol'?
 parserRealSource7.ts(360,37): error TS2304: Cannot find name 'SymbolFlags'.
 parserRealSource7.ts(364,37): error TS2304: Cannot find name 'SymbolFlags'.
 parserRealSource7.ts(368,37): error TS2304: Cannot find name 'SymbolFlags'.
@@ -195,7 +195,7 @@ parserRealSource7.ts(476,57): error TS2304: Cannot find name 'VarFlags'.
 parserRealSource7.ts(477,29): error TS2304: Cannot find name 'ValueLocation'.
 parserRealSource7.ts(478,29): error TS2304: Cannot find name 'hasFlag'.
 parserRealSource7.ts(478,55): error TS2304: Cannot find name 'VarFlags'.
-parserRealSource7.ts(480,21): error TS2304: Cannot find name 'FieldSymbol'.
+parserRealSource7.ts(480,21): error TS2552: Cannot find name 'FieldSymbol'. Did you mean 'fieldSymbol'?
 parserRealSource7.ts(482,34): error TS2304: Cannot find name 'hasFlag'.
 parserRealSource7.ts(482,60): error TS2304: Cannot find name 'VarFlags'.
 parserRealSource7.ts(492,30): error TS2304: Cannot find name 'getTypeLink'.
@@ -217,7 +217,7 @@ parserRealSource7.ts(507,26): error TS2304: Cannot find name 'hasFlag'.
 parserRealSource7.ts(507,52): error TS2304: Cannot find name 'ASTFlags'.
 parserRealSource7.ts(518,22): error TS2304: Cannot find name 'FieldSymbol'.
 parserRealSource7.ts(531,29): error TS2304: Cannot find name 'ValueLocation'.
-parserRealSource7.ts(533,21): error TS2304: Cannot find name 'FieldSymbol'.
+parserRealSource7.ts(533,21): error TS2552: Cannot find name 'FieldSymbol'. Did you mean 'fieldSymbol'?
 parserRealSource7.ts(535,53): error TS2304: Cannot find name 'VarFlags'.
 parserRealSource7.ts(535,75): error TS2304: Cannot find name 'VarFlags'.
 parserRealSource7.ts(539,38): error TS2304: Cannot find name 'SymbolFlags'.
@@ -373,7 +373,8 @@ parserRealSource7.ts(828,13): error TS2304: Cannot find name 'popTypeCollectionS
             var fieldSymbol =
                 new FieldSymbol("prototype", ast.minChar,
                     ~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'FieldSymbol'.
+!!! error TS2552: Cannot find name 'FieldSymbol'. Did you mean 'fieldSymbol'?
+!!! related TS2728 parserRealSource7.ts:40:13: 'fieldSymbol' is declared here.
                                 context.checker.locationInfo.unitIndex, true, field);
             fieldSymbol.flags |= (SymbolFlags.Property | SymbolFlags.BuiltIn);
                                   ~~~~~~~~~~~
@@ -390,7 +391,8 @@ parserRealSource7.ts(828,13): error TS2304: Cannot find name 'popTypeCollectionS
 !!! error TS2304: Cannot find name 'Type'.
             var signature = new Signature();
                                 ~~~~~~~~~
-!!! error TS2304: Cannot find name 'Signature'.
+!!! error TS2552: Cannot find name 'Signature'. Did you mean 'signature'?
+!!! related TS2728 parserRealSource7.ts:50:13: 'signature' is declared here.
             signature.returnType = new TypeLink();
                                        ~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeLink'.
@@ -571,7 +573,8 @@ parserRealSource7.ts(828,13): error TS2304: Cannot find name 'popTypeCollectionS
     
             typeSymbol = new TypeSymbol(importDecl.id.text, importDecl.minChar,
                              ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeSymbol'.
+!!! error TS2552: Cannot find name 'TypeSymbol'. Did you mean 'typeSymbol'?
+!!! related TS2728 parserRealSource7.ts:152:13: 'typeSymbol' is declared here.
                                         context.checker.locationInfo.unitIndex, modType);
     
             typeSymbol.aliasLink = importDecl;
@@ -659,7 +662,8 @@ parserRealSource7.ts(828,13): error TS2304: Cannot find name 'popTypeCollectionS
 !!! error TS2304: Cannot find name 'StringHashTable'.
                     modType = new ModuleType(enclosedTypes, ambientEnclosedTypes);
                                   ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'ModuleType'.
+!!! error TS2552: Cannot find name 'ModuleType'. Did you mean 'modType'?
+!!! related TS2728 parserRealSource7.ts:201:13: 'modType' is declared here.
                     if (isEnum) {
                         modType.typeFlags |= TypeFlags.IsEnum;
                                              ~~~~~~~~~
@@ -688,7 +692,8 @@ parserRealSource7.ts(828,13): error TS2304: Cannot find name 'popTypeCollectionS
     
                 typeSymbol = new TypeSymbol(modName, moduleDecl.minChar,
                                  ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeSymbol'.
+!!! error TS2552: Cannot find name 'TypeSymbol'. Did you mean 'typeSymbol'?
+!!! related TS2728 parserRealSource7.ts:200:13: 'typeSymbol' is declared here.
                                             context.checker.locationInfo.unitIndex, modType);
     
                 if (context.scopeChain.moduleDecl) {
@@ -705,7 +710,8 @@ parserRealSource7.ts(828,13): error TS2304: Cannot find name 'popTypeCollectionS
             else {
                 if (symbol && symbol.declAST && symbol.declAST.nodeType != NodeType.ModuleDeclaration) {
                                                                            ~~~~~~~~
-!!! error TS2304: Cannot find name 'NodeType'.
+!!! error TS2552: Cannot find name 'NodeType'. Did you mean 'modType'?
+!!! related TS2728 parserRealSource7.ts:201:13: 'modType' is declared here.
                     context.checker.errorReporter.simpleError(moduleDecl, "Conflicting symbol name for module '" + modName + "'");
                 }
                 typeSymbol = <TypeSymbol>symbol;
@@ -763,7 +769,8 @@ parserRealSource7.ts(828,13): error TS2304: Cannot find name 'popTypeCollectionS
     
                 modType = new ModuleType(enclosedTypes, ambientEnclosedTypes);
                               ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'ModuleType'.
+!!! error TS2552: Cannot find name 'ModuleType'. Did you mean 'modType'?
+!!! related TS2728 parserRealSource7.ts:201:13: 'modType' is declared here.
                 if (isEnum) {
                     modType.typeFlags |= TypeFlags.IsEnum;
                                          ~~~~~~~~~
@@ -817,7 +824,7 @@ parserRealSource7.ts(828,13): error TS2304: Cannot find name 'popTypeCollectionS
             var scopeChain = context.scopeChain;
             var classDecl = <ClassDeclaration>ast;
                              ~~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'ClassDeclaration'.
+!!! error TS2552: Cannot find name 'ClassDeclaration'. Did you mean 'ClassDecorator'?
     
             var classType: Type;
                            ~~~~
@@ -944,7 +951,8 @@ parserRealSource7.ts(828,13): error TS2304: Cannot find name 'popTypeCollectionS
 !!! error TS2304: Cannot find name 'StringHashTable'.
                 typeSymbol = new TypeSymbol(className, classDecl.minChar,
                                  ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeSymbol'.
+!!! error TS2552: Cannot find name 'TypeSymbol'. Did you mean 'typeSymbol'?
+!!! related TS2728 parserRealSource7.ts:295:13: 'typeSymbol' is declared here.
                                             context.checker.locationInfo.unitIndex, classType);
                 typeSymbol.declAST = classDecl;
                 typeSymbol.instanceType = instanceType;
@@ -1182,7 +1190,8 @@ parserRealSource7.ts(828,13): error TS2304: Cannot find name 'popTypeCollectionS
                 var fieldSymbol =
                     new FieldSymbol(argDecl.id.text, argDecl.minChar,
                         ~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'FieldSymbol'.
+!!! error TS2552: Cannot find name 'FieldSymbol'. Did you mean 'fieldSymbol'?
+!!! related TS2728 parserRealSource7.ts:479:17: 'fieldSymbol' is declared here.
                                     context.checker.locationInfo.unitIndex,
                                     !hasFlag(argDecl.varFlags, VarFlags.Readonly),
                                      ~~~~~~~
@@ -1279,7 +1288,8 @@ parserRealSource7.ts(828,13): error TS2304: Cannot find name 'popTypeCollectionS
                 var fieldSymbol =
                     new FieldSymbol(varDecl.id.text, varDecl.minChar,
                         ~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'FieldSymbol'.
+!!! error TS2552: Cannot find name 'FieldSymbol'. Did you mean 'fieldSymbol'?
+!!! related TS2728 parserRealSource7.ts:532:17: 'fieldSymbol' is declared here.
                                     context.checker.locationInfo.unitIndex,
                                     (varDecl.varFlags & VarFlags.Readonly) == VarFlags.None,
                                                         ~~~~~~~~

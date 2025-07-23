@@ -476,7 +476,7 @@ func GetSpellingSuggestion[T any](name string, candidates []T, getName func(T) s
 			}
 			// Only consider candidates less than 3 characters long when they differ by case.
 			// Otherwise, don't bother, since a user would usually notice differences of a 2-character name.
-			if len(candidateName) < 3 && strings.ToLower(candidateName) != strings.ToLower(name) {
+			if len(candidateName) < 3 && !strings.EqualFold(candidateName, name) {
 				continue
 			}
 			distance := levenshteinWithMax(runeName, []rune(candidateName), bestDistance-0.1)

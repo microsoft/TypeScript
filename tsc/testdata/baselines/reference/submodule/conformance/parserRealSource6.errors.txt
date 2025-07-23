@@ -11,7 +11,7 @@ parserRealSource6.ts(26,35): error TS2304: Cannot find name 'SymbolScope'.
 parserRealSource6.ts(27,48): error TS2304: Cannot find name 'SymbolScope'.
 parserRealSource6.ts(28,31): error TS2304: Cannot find name 'AST'.
 parserRealSource6.ts(30,35): error TS2304: Cannot find name 'ModuleDeclaration'.
-parserRealSource6.ts(31,36): error TS2304: Cannot find name 'TypeDeclaration'.
+parserRealSource6.ts(31,36): error TS2552: Cannot find name 'TypeDeclaration'. Did you mean 'CSSStyleDeclaration'?
 parserRealSource6.ts(32,36): error TS2304: Cannot find name 'UnaryExpression'.
 parserRealSource6.ts(35,33): error TS2304: Cannot find name 'Script'.
 parserRealSource6.ts(37,37): error TS2304: Cannot find name 'ILogger'.
@@ -43,7 +43,7 @@ parserRealSource6.ts(120,29): error TS2304: Cannot find name 'NodeType'.
 parserRealSource6.ts(126,22): error TS2304: Cannot find name 'NodeType'.
 parserRealSource6.ts(127,35): error TS2304: Cannot find name 'Script'.
 parserRealSource6.ts(134,22): error TS2304: Cannot find name 'NodeType'.
-parserRealSource6.ts(139,51): error TS2304: Cannot find name 'TypeDeclaration'.
+parserRealSource6.ts(139,51): error TS2552: Cannot find name 'TypeDeclaration'. Did you mean 'CSSStyleDeclaration'?
 parserRealSource6.ts(142,22): error TS2304: Cannot find name 'NodeType'.
 parserRealSource6.ts(143,38): error TS2304: Cannot find name 'UnaryExpression'.
 parserRealSource6.ts(156,22): error TS2304: Cannot find name 'NodeType'.
@@ -118,7 +118,8 @@ parserRealSource6.ts(215,20): error TS2339: Property 'getAstWalkerFactory' does 
 !!! error TS2304: Cannot find name 'ModuleDeclaration'.
             public enclosingClassDecl: TypeDeclaration = null;
                                        ~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeDeclaration'.
+!!! error TS2552: Cannot find name 'TypeDeclaration'. Did you mean 'CSSStyleDeclaration'?
+!!! related TS2728 lib.dom.d.ts:--:--: 'CSSStyleDeclaration' is declared here.
             public enclosingObjectLit: UnaryExpression = null;
                                        ~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'UnaryExpression'.
@@ -290,7 +291,8 @@ parserRealSource6.ts(215,20): error TS2339: Property 'getAstWalkerFactory' does 
                         context.scopeStartAST = ast;
                         context.enclosingClassDecl = <TypeDeclaration>ast;
                                                       ~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeDeclaration'.
+!!! error TS2552: Cannot find name 'TypeDeclaration'. Did you mean 'CSSStyleDeclaration'?
+!!! related TS2728 lib.dom.d.ts:--:--: 'CSSStyleDeclaration' is declared here.
                         break;
     
                     case NodeType.ObjectLit:

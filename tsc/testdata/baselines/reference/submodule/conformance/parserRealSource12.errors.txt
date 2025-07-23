@@ -154,7 +154,7 @@ parserRealSource12.ts(371,60): error TS2304: Cannot find name 'WhileStatement'.
 parserRealSource12.ts(371,84): error TS2304: Cannot find name 'AST'.
 parserRealSource12.ts(378,62): error TS2304: Cannot find name 'DoWhileStatement'.
 parserRealSource12.ts(378,88): error TS2304: Cannot find name 'AST'.
-parserRealSource12.ts(385,51): error TS2304: Cannot find name 'Block'.
+parserRealSource12.ts(385,51): error TS2552: Cannot find name 'Block'. Did you mean 'Lock'?
 parserRealSource12.ts(385,66): error TS2304: Cannot find name 'AST'.
 parserRealSource12.ts(387,38): error TS2304: Cannot find name 'ASTList'.
 parserRealSource12.ts(391,59): error TS2304: Cannot find name 'CaseStatement'.
@@ -168,22 +168,22 @@ parserRealSource12.ts(411,62): error TS2304: Cannot find name 'AST'.
 parserRealSource12.ts(417,54): error TS2304: Cannot find name 'TryCatch'.
 parserRealSource12.ts(417,72): error TS2304: Cannot find name 'AST'.
 parserRealSource12.ts(419,35): error TS2304: Cannot find name 'Try'.
-parserRealSource12.ts(423,37): error TS2304: Cannot find name 'Catch'.
+parserRealSource12.ts(423,37): error TS2552: Cannot find name 'Catch'. Did you mean 'Cache'?
 parserRealSource12.ts(427,56): error TS2304: Cannot find name 'TryFinally'.
 parserRealSource12.ts(427,76): error TS2304: Cannot find name 'AST'.
 parserRealSource12.ts(433,39): error TS2304: Cannot find name 'Finally'.
 parserRealSource12.ts(437,53): error TS2304: Cannot find name 'Finally'.
 parserRealSource12.ts(437,70): error TS2304: Cannot find name 'AST'.
-parserRealSource12.ts(443,51): error TS2304: Cannot find name 'Catch'.
+parserRealSource12.ts(443,51): error TS2552: Cannot find name 'Catch'. Did you mean 'Cache'?
 parserRealSource12.ts(443,66): error TS2304: Cannot find name 'AST'.
 parserRealSource12.ts(445,33): error TS2304: Cannot find name 'VarDecl'.
 parserRealSource12.ts(453,52): error TS2304: Cannot find name 'NamedDeclaration'.
 parserRealSource12.ts(453,78): error TS2304: Cannot find name 'AST'.
 parserRealSource12.ts(454,28): error TS2304: Cannot find name 'Identifier'.
 parserRealSource12.ts(456,35): error TS2304: Cannot find name 'ASTList'.
-parserRealSource12.ts(461,55): error TS2304: Cannot find name 'TypeDeclaration'.
+parserRealSource12.ts(461,55): error TS2552: Cannot find name 'TypeDeclaration'. Did you mean 'CSSStyleDeclaration'?
 parserRealSource12.ts(461,80): error TS2304: Cannot find name 'AST'.
-parserRealSource12.ts(465,55): error TS2304: Cannot find name 'ClassDeclaration'.
+parserRealSource12.ts(465,55): error TS2552: Cannot find name 'ClassDeclaration'. Did you mean 'ClassDecorator'?
 parserRealSource12.ts(465,81): error TS2304: Cannot find name 'AST'.
 parserRealSource12.ts(469,39): error TS2304: Cannot find name 'ASTList'.
 parserRealSource12.ts(473,42): error TS2304: Cannot find name 'ASTList'.
@@ -907,7 +907,8 @@ parserRealSource12.ts(524,30): error TS2304: Cannot find name 'ASTList'.
     
             export function walkBlockChildren(preAst: Block, parent: AST, walker: IAstWalker): void {
                                                       ~~~~~
-!!! error TS2304: Cannot find name 'Block'.
+!!! error TS2552: Cannot find name 'Block'. Did you mean 'Lock'?
+!!! related TS2728 lib.dom.d.ts:--:--: 'Lock' is declared here.
                                                                      ~~~
 !!! error TS2304: Cannot find name 'AST'.
                 if (preAst.statements) {
@@ -973,7 +974,8 @@ parserRealSource12.ts(524,30): error TS2304: Cannot find name 'ASTList'.
                 if ((preAst.catchNode) && walker.options.goNextSibling) {
                     preAst.catchNode = <Catch>walker.walk(preAst.catchNode, preAst);
                                         ~~~~~
-!!! error TS2304: Cannot find name 'Catch'.
+!!! error TS2552: Cannot find name 'Catch'. Did you mean 'Cache'?
+!!! related TS2728 lib.dom.d.ts:--:--: 'Cache' is declared here.
                 }
             }
     
@@ -1005,7 +1007,8 @@ parserRealSource12.ts(524,30): error TS2304: Cannot find name 'ASTList'.
     
             export function walkCatchChildren(preAst: Catch, parent: AST, walker: IAstWalker): void {
                                                       ~~~~~
-!!! error TS2304: Cannot find name 'Catch'.
+!!! error TS2552: Cannot find name 'Catch'. Did you mean 'Cache'?
+!!! related TS2728 lib.dom.d.ts:--:--: 'Cache' is declared here.
                                                                      ~~~
 !!! error TS2304: Cannot find name 'AST'.
                 if (preAst.param) {
@@ -1037,7 +1040,8 @@ parserRealSource12.ts(524,30): error TS2304: Cannot find name 'ASTList'.
     
             export function walkNamedTypeChildren(preAst: TypeDeclaration, parent: AST, walker: IAstWalker): void {
                                                           ~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeDeclaration'.
+!!! error TS2552: Cannot find name 'TypeDeclaration'. Did you mean 'CSSStyleDeclaration'?
+!!! related TS2728 lib.dom.d.ts:--:--: 'CSSStyleDeclaration' is declared here.
                                                                                    ~~~
 !!! error TS2304: Cannot find name 'AST'.
                 walkRecordChildren(preAst, parent, walker);
@@ -1045,7 +1049,7 @@ parserRealSource12.ts(524,30): error TS2304: Cannot find name 'ASTList'.
     
             export function walkClassDeclChildren(preAst: ClassDeclaration, parent: AST, walker: IAstWalker): void {
                                                           ~~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'ClassDeclaration'.
+!!! error TS2552: Cannot find name 'ClassDeclaration'. Did you mean 'ClassDecorator'?
                                                                                     ~~~
 !!! error TS2304: Cannot find name 'AST'.
                 walkNamedTypeChildren(preAst, parent, walker);

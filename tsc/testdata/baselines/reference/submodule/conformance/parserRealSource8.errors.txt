@@ -39,7 +39,7 @@ parserRealSource8.ts(160,52): error TS2304: Cannot find name 'DualStringHashTabl
 parserRealSource8.ts(160,76): error TS2304: Cannot find name 'StringHashTable'.
 parserRealSource8.ts(160,99): error TS2304: Cannot find name 'StringHashTable'.
 parserRealSource8.ts(162,28): error TS2304: Cannot find name 'Type'.
-parserRealSource8.ts(163,30): error TS2304: Cannot find name 'WithSymbol'.
+parserRealSource8.ts(163,30): error TS2552: Cannot find name 'WithSymbol'. Did you mean 'withSymbol'?
 parserRealSource8.ts(170,40): error TS2339: Property 'SymbolScopeBuilder' does not exist on type 'typeof TypeScript'.
 parserRealSource8.ts(176,50): error TS2304: Cannot find name 'AST'.
 parserRealSource8.ts(177,25): error TS2304: Cannot find name 'FuncDecl'.
@@ -89,13 +89,13 @@ parserRealSource8.ts(322,27): error TS2304: Cannot find name 'SymbolScopeBuilder
 parserRealSource8.ts(353,26): error TS2304: Cannot find name 'TypeSymbol'.
 parserRealSource8.ts(354,39): error TS2304: Cannot find name 'FncFlags'.
 parserRealSource8.ts(354,62): error TS2304: Cannot find name 'FncFlags'.
-parserRealSource8.ts(363,35): error TS2304: Cannot find name 'ParameterSymbol'.
+parserRealSource8.ts(363,35): error TS2552: Cannot find name 'ParameterSymbol'. Did you mean 'Parameters'?
 parserRealSource8.ts(372,40): error TS2304: Cannot find name 'hasFlag'.
 parserRealSource8.ts(372,67): error TS2304: Cannot find name 'FncFlags'.
 parserRealSource8.ts(373,55): error TS2304: Cannot find name 'hasFlag'.
 parserRealSource8.ts(373,82): error TS2304: Cannot find name 'FncFlags'.
 parserRealSource8.ts(378,47): error TS2304: Cannot find name 'AST'.
-parserRealSource8.ts(379,27): error TS2304: Cannot find name 'Catch'.
+parserRealSource8.ts(379,27): error TS2552: Cannot find name 'Catch'. Did you mean 'Cache'?
 parserRealSource8.ts(381,34): error TS2304: Cannot find name 'ScopedMembers'.
 parserRealSource8.ts(381,52): error TS2304: Cannot find name 'DualStringHashTable'.
 parserRealSource8.ts(381,76): error TS2304: Cannot find name 'StringHashTable'.
@@ -126,7 +126,7 @@ parserRealSource8.ts(448,33): error TS2304: Cannot find name 'FuncDecl'.
 parserRealSource8.ts(449,49): error TS2304: Cannot find name 'hasFlag'.
 parserRealSource8.ts(449,76): error TS2304: Cannot find name 'FncFlags'.
 parserRealSource8.ts(453,38): error TS2304: Cannot find name 'NodeType'.
-parserRealSource8.ts(454,35): error TS2304: Cannot find name 'Catch'.
+parserRealSource8.ts(454,35): error TS2552: Cannot find name 'Catch'. Did you mean 'Cache'?
 
 
 ==== parserRealSource8.ts (129 errors) ====
@@ -376,7 +376,8 @@ parserRealSource8.ts(454,35): error TS2304: Cannot find name 'Catch'.
 !!! error TS2304: Cannot find name 'Type'.
             var withSymbol = new WithSymbol(withStmt.minChar, context.typeFlow.checker.locationInfo.unitIndex, withType);
                                  ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'WithSymbol'.
+!!! error TS2552: Cannot find name 'WithSymbol'. Did you mean 'withSymbol'?
+!!! related TS2728 parserRealSource8.ts:163:13: 'withSymbol' is declared here.
             withType.members = members;
             withType.ambientMembers = ambientMembers;
             withType.symbol = withSymbol;
@@ -676,7 +677,7 @@ parserRealSource8.ts(454,35): error TS2304: Cannot find name 'Catch'.
                     for (var i = 0; i < len; i++) {
                         var paramSym: ParameterSymbol = signature.parameters[i];
                                       ~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'ParameterSymbol'.
+!!! error TS2552: Cannot find name 'ParameterSymbol'. Did you mean 'Parameters'?
                         context.typeFlow.checker.resolveTypeLink(locals,
                                                                     paramSym.parameter.typeLink, true);
                     }
@@ -704,7 +705,8 @@ parserRealSource8.ts(454,35): error TS2304: Cannot find name 'Catch'.
 !!! error TS2304: Cannot find name 'AST'.
             var catchBlock = <Catch>ast;
                               ~~~~~
-!!! error TS2304: Cannot find name 'Catch'.
+!!! error TS2552: Cannot find name 'Catch'. Did you mean 'Cache'?
+!!! related TS2728 lib.dom.d.ts:--:--: 'Cache' is declared here.
             if (catchBlock.param) {
                 var catchTable = new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable())); // REVIEW: Should we be allocating a public table instead of a private one?
                                      ~~~~~~~~~~~~~
@@ -841,7 +843,8 @@ parserRealSource8.ts(454,35): error TS2304: Cannot find name 'Catch'.
 !!! error TS2304: Cannot find name 'NodeType'.
                     var catchBlock = <Catch>ast;
                                       ~~~~~
-!!! error TS2304: Cannot find name 'Catch'.
+!!! error TS2552: Cannot find name 'Catch'. Did you mean 'Cache'?
+!!! related TS2728 lib.dom.d.ts:--:--: 'Cache' is declared here.
                     if (catchBlock.param) {
                         popAssignScope(context);
                     }

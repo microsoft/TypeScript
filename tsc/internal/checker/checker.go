@@ -588,7 +588,6 @@ type Checker struct {
 	wasCanceled                                 bool
 	arrayVariances                              []VarianceFlags
 	globals                                     ast.SymbolTable
-	globalSymbols                               []*ast.Symbol
 	evaluate                                    evaluator.Evaluator
 	stringLiteralTypes                          map[string]*Type
 	numberLiteralTypes                          map[jsnum.Number]*Type
@@ -755,7 +754,6 @@ type Checker struct {
 	typeResolutions                             []TypeResolution
 	resolutionStart                             int
 	inVarianceComputation                       bool
-	suggestionCount                             int
 	apparentArgumentCount                       *int
 	lastGetCombinedNodeFlagsNode                *ast.Node
 	lastGetCombinedNodeFlagsResult              ast.NodeFlags
@@ -1518,27 +1516,22 @@ func (c *Checker) onFailedToResolveSymbol(errorLocation *ast.Node, name string, 
 	suggestedLib := c.getSuggestedLibForNonExistentName(name)
 	if suggestedLib != "" {
 		c.error(errorLocation, nameNotFoundMessage, name, suggestedLib)
-		c.suggestionCount++
 		return
 	}
 	// Then spelling suggestions
-	if c.suggestionCount < 10 {
-		suggestion := c.getSuggestedSymbolForNonexistentSymbol(errorLocation, name, meaning)
-		if suggestion != nil && !(suggestion.ValueDeclaration != nil && ast.IsAmbientModule(suggestion.ValueDeclaration) && ast.IsGlobalScopeAugmentation(suggestion.ValueDeclaration)) {
-			suggestionName := c.symbolToString(suggestion)
-			message := core.IfElse(meaning == ast.SymbolFlagsNamespace, diagnostics.Cannot_find_namespace_0_Did_you_mean_1, diagnostics.Cannot_find_name_0_Did_you_mean_1)
-			diagnostic := NewDiagnosticForNode(errorLocation, message, name, suggestionName)
-			if suggestion.ValueDeclaration != nil {
-				diagnostic.AddRelatedInfo(NewDiagnosticForNode(suggestion.ValueDeclaration, diagnostics.X_0_is_declared_here, suggestionName))
-			}
-			c.diagnostics.Add(diagnostic)
-			c.suggestionCount++
-			return
+	suggestion := c.getSuggestedSymbolForNonexistentSymbol(errorLocation, name, meaning)
+	if suggestion != nil && !(suggestion.ValueDeclaration != nil && ast.IsAmbientModule(suggestion.ValueDeclaration) && ast.IsGlobalScopeAugmentation(suggestion.ValueDeclaration)) {
+		suggestionName := c.symbolToString(suggestion)
+		message := core.IfElse(meaning == ast.SymbolFlagsNamespace, diagnostics.Cannot_find_namespace_0_Did_you_mean_1, diagnostics.Cannot_find_name_0_Did_you_mean_1)
+		diagnostic := NewDiagnosticForNode(errorLocation, message, name, suggestionName)
+		if suggestion.ValueDeclaration != nil {
+			diagnostic.AddRelatedInfo(NewDiagnosticForNode(suggestion.ValueDeclaration, diagnostics.X_0_is_declared_here, suggestionName))
 		}
+		c.diagnostics.Add(diagnostic)
+		return
 	}
 	// And then fall back to unspecified "not found"
 	c.error(errorLocation, nameNotFoundMessage, name)
-	c.suggestionCount++
 }
 
 func (c *Checker) checkAndReportErrorForUsingTypeAsNamespace(errorLocation *ast.Node, name string, meaning ast.SymbolFlags) bool {

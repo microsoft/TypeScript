@@ -14,62 +14,62 @@ parserharness.ts(721,62): error TS2304: Cannot find name 'ITextWriter'.
 parserharness.ts(724,29): error TS2304: Cannot find name 'ITextWriter'.
 parserharness.ts(754,53): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
 parserharness.ts(764,56): error TS2503: Cannot find namespace 'TypeScript'.
-parserharness.ts(765,37): error TS2304: Cannot find name 'TypeScript'.
-parserharness.ts(767,47): error TS2304: Cannot find name 'TypeScript'.
-parserharness.ts(776,13): error TS2304: Cannot find name 'TypeScript'.
-parserharness.ts(776,42): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(765,37): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+parserharness.ts(767,47): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+parserharness.ts(776,13): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+parserharness.ts(776,42): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
 parserharness.ts(781,23): error TS2503: Cannot find namespace 'TypeScript'.
-parserharness.ts(794,49): error TS2304: Cannot find name 'TypeScript'.
-parserharness.ts(795,49): error TS2304: Cannot find name 'TypeScript'.
-parserharness.ts(987,53): error TS2304: Cannot find name 'TypeScript'.
-parserharness.ts(987,89): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(794,49): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+parserharness.ts(795,49): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+parserharness.ts(987,53): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+parserharness.ts(987,89): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
 parserharness.ts(987,115): error TS2503: Cannot find namespace 'TypeScript'.
-parserharness.ts(987,145): error TS2304: Cannot find name 'TypeScript'.
-parserharness.ts(988,43): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(987,145): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+parserharness.ts(988,43): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
 parserharness.ts(999,40): error TS2503: Cannot find namespace 'TypeScript'.
 parserharness.ts(1041,43): error TS2503: Cannot find namespace 'TypeScript'.
-parserharness.ts(1044,26): error TS2304: Cannot find name 'TypeScript'.
-parserharness.ts(1045,26): error TS2304: Cannot find name 'TypeScript'.
-parserharness.ts(1046,26): error TS2304: Cannot find name 'TypeScript'.
-parserharness.ts(1047,26): error TS2304: Cannot find name 'TypeScript'.
-parserharness.ts(1048,26): error TS2304: Cannot find name 'TypeScript'.
-parserharness.ts(1049,26): error TS2304: Cannot find name 'TypeScript'.
-parserharness.ts(1050,26): error TS2304: Cannot find name 'TypeScript'.
-parserharness.ts(1051,26): error TS2304: Cannot find name 'TypeScript'.
-parserharness.ts(1052,26): error TS2304: Cannot find name 'TypeScript'.
-parserharness.ts(1053,26): error TS2304: Cannot find name 'TypeScript'.
-parserharness.ts(1055,26): error TS2304: Cannot find name 'TypeScript'.
-parserharness.ts(1058,26): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1044,26): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+parserharness.ts(1045,26): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+parserharness.ts(1046,26): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+parserharness.ts(1047,26): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+parserharness.ts(1048,26): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+parserharness.ts(1049,26): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+parserharness.ts(1050,26): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+parserharness.ts(1051,26): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+parserharness.ts(1052,26): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+parserharness.ts(1053,26): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+parserharness.ts(1055,26): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+parserharness.ts(1058,26): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
 parserharness.ts(1059,34): error TS2503: Cannot find namespace 'TypeScript'.
-parserharness.ts(1061,26): error TS2304: Cannot find name 'TypeScript'.
-parserharness.ts(1064,26): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1061,26): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+parserharness.ts(1064,26): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
 parserharness.ts(1065,34): error TS2503: Cannot find namespace 'TypeScript'.
-parserharness.ts(1067,26): error TS2304: Cannot find name 'TypeScript'.
-parserharness.ts(1070,26): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1067,26): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+parserharness.ts(1070,26): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
 parserharness.ts(1071,34): error TS2503: Cannot find namespace 'TypeScript'.
-parserharness.ts(1073,26): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1073,26): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
 parserharness.ts(1074,34): error TS2503: Cannot find namespace 'TypeScript'.
-parserharness.ts(1076,26): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1076,26): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
 parserharness.ts(1077,34): error TS2503: Cannot find namespace 'TypeScript'.
-parserharness.ts(1079,26): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1079,26): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
 parserharness.ts(1080,35): error TS2503: Cannot find namespace 'TypeScript'.
 parserharness.ts(1080,74): error TS2503: Cannot find namespace 'TypeScript'.
 parserharness.ts(1107,173): error TS2503: Cannot find namespace 'TypeScript'.
 parserharness.ts(1176,132): error TS2503: Cannot find namespace 'TypeScript'.
-parserharness.ts(1193,29): error TS2304: Cannot find name 'WScript'.
+parserharness.ts(1193,29): error TS2552: Cannot find name 'WScript'. Did you mean 'scripts'?
 parserharness.ts(1256,126): error TS2503: Cannot find namespace 'TypeScript'.
 parserharness.ts(1257,25): error TS2503: Cannot find namespace 'TypeScript'.
 parserharness.ts(1263,31): error TS2503: Cannot find namespace 'TypeScript'.
-parserharness.ts(1280,45): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1280,45): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
 parserharness.ts(1286,124): error TS2503: Cannot find namespace 'TypeScript'.
 parserharness.ts(1286,209): error TS2503: Cannot find namespace 'TypeScript'.
 parserharness.ts(1294,142): error TS2503: Cannot find namespace 'TypeScript'.
 parserharness.ts(1294,227): error TS2503: Cannot find namespace 'TypeScript'.
-parserharness.ts(1302,43): error TS2304: Cannot find name 'TypeScript'.
-parserharness.ts(1304,39): error TS2304: Cannot find name 'TypeScript'.
-parserharness.ts(1307,38): error TS2304: Cannot find name 'TypeScript'.
-parserharness.ts(1311,45): error TS2304: Cannot find name 'TypeScript'.
-parserharness.ts(1321,21): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1302,43): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+parserharness.ts(1304,39): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+parserharness.ts(1307,38): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+parserharness.ts(1311,45): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+parserharness.ts(1321,21): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
 parserharness.ts(1340,38): error TS2503: Cannot find namespace 'TypeScript'.
 parserharness.ts(1344,165): error TS2503: Cannot find namespace 'TypeScript'.
 parserharness.ts(1345,26): error TS2503: Cannot find namespace 'TypeScript'.
@@ -81,21 +81,21 @@ parserharness.ts(1461,23): error TS2503: Cannot find namespace 'TypeScript'.
 parserharness.ts(1466,36): error TS2304: Cannot find name 'optionRegex'.
 parserharness.ts(1484,21): error TS2304: Cannot find name 'optionRegex'.
 parserharness.ts(1548,57): error TS2503: Cannot find namespace 'TypeScript'.
-parserharness.ts(1571,32): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1571,32): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
 parserharness.ts(1582,59): error TS2503: Cannot find namespace 'TypeScript'.
-parserharness.ts(1591,24): error TS2304: Cannot find name 'TypeScript'.
-parserharness.ts(1600,24): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1591,24): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+parserharness.ts(1600,24): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
 parserharness.ts(1604,42): error TS2503: Cannot find namespace 'Services'.
 parserharness.ts(1605,21): error TS2503: Cannot find namespace 'Services'.
 parserharness.ts(1705,38): error TS2503: Cannot find namespace 'Services'.
 parserharness.ts(1706,26): error TS2304: Cannot find name 'Services'.
 parserharness.ts(1713,62): error TS2503: Cannot find namespace 'TypeScript'.
 parserharness.ts(1713,87): error TS2503: Cannot find namespace 'TypeScript'.
-parserharness.ts(1714,30): error TS2304: Cannot find name 'TypeScript'.
-parserharness.ts(1724,34): error TS2304: Cannot find name 'TypeScript'.
-parserharness.ts(1739,20): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1714,30): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+parserharness.ts(1724,34): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+parserharness.ts(1739,20): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
 parserharness.ts(1746,80): error TS2503: Cannot find namespace 'TypeScript'.
-parserharness.ts(1750,26): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1750,26): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
 parserharness.ts(1758,84): error TS2503: Cannot find namespace 'Services'.
 parserharness.ts(1769,51): error TS2503: Cannot find namespace 'Services'.
 parserharness.ts(1784,39): error TS2503: Cannot find namespace 'Services'.
@@ -103,7 +103,7 @@ parserharness.ts(1784,61): error TS2503: Cannot find namespace 'Services'.
 parserharness.ts(1785,25): error TS2503: Cannot find namespace 'Services'.
 parserharness.ts(1787,38): error TS2503: Cannot find namespace 'Services'.
 parserharness.ts(1787,68): error TS2503: Cannot find namespace 'Services'.
-parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
+parserharness.ts(2030,32): error TS2552: Cannot find name 'Diff'. Did you mean 'diff'?
 
 
 ==== parserharness.ts (106 errors) ====
@@ -905,11 +905,11 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
 !!! error TS2503: Cannot find namespace 'TypeScript'.
                 var compiler = c || new TypeScript.TypeScriptCompiler(stderr);
                                         ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                 compiler.parser.errorRecovery = true;
                 compiler.settings.codeGenTarget = TypeScript.CodeGenTarget.ES5;
                                                   ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                 compiler.settings.controlFlow = true;
                 compiler.settings.controlFlowUseDef = true;
                 if (Harness.usePull) {
@@ -920,9 +920,9 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
                 compiler.parseEmitOption(stdout);
                 TypeScript.moduleGenTarget = TypeScript.ModuleGenTarget.Synchronous;
                 ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                                              ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                 compiler.addUnit(Harness.Compiler.libText, "lib.d.ts", true);
                 return compiler;
             }
@@ -944,10 +944,10 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
                         // requires unit to already exist in the compiler
                         compiler.pullUpdateUnit(new TypeScript.StringSourceText(""), filename, true);
                                                     ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                         compiler.pullUpdateUnit(new TypeScript.StringSourceText(code), filename, true);
                                                     ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                     }
                 }
                 else {
@@ -1141,16 +1141,16 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
                             var script = compiler.scripts.members[m];
                             var enclosingScopeContext = TypeScript.findEnclosingScopeAt(new TypeScript.NullLogger(), <TypeScript.Script>script, new TypeScript.StringSourceText(code), 0, false);
                                                         ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                                                                                             ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                                                                                                                       ~~~~~~~~~~
 !!! error TS2503: Cannot find namespace 'TypeScript'.
                                                                                                                                                     ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                             var entries = new TypeScript.ScopeTraversal(compiler).getScopeEntries(enclosingScopeContext);
                                               ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
     
                             for (var i = 0; i < entries.length; i++) {
                                 if (entries[i].name === targetIdentifier) {
@@ -1212,88 +1212,88 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
                     switch (ast.nodeType) {
                         case TypeScript.NodeType.Name: // Type Name?
                              ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                         case TypeScript.NodeType.Null:
                              ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                         case TypeScript.NodeType.List:
                              ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                         case TypeScript.NodeType.Empty:
                              ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                         case TypeScript.NodeType.EmptyExpr:
                              ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                         case TypeScript.NodeType.Asg:
                              ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                         case TypeScript.NodeType.True:
                              ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                         case TypeScript.NodeType.False:
                              ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                         case TypeScript.NodeType.ArrayLit:
                              ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                         case TypeScript.NodeType.TypeRef:
                              ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                             break;
                         case TypeScript.NodeType.Super:
                              ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                             name = (<any>ast).text;
                             break;
                         case TypeScript.NodeType.Regex:
                              ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                             name = (<TypeScript.RegexLiteral>ast).text;
                                      ~~~~~~~~~~
 !!! error TS2503: Cannot find namespace 'TypeScript'.
                             break;
                         case TypeScript.NodeType.QString:
                              ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                             name = (<any>ast).text;
                             break;
                         case TypeScript.NodeType.NumberLit:
                              ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                             name = (<TypeScript.NumberLiteral>ast).text;
                                      ~~~~~~~~~~
 !!! error TS2503: Cannot find namespace 'TypeScript'.
                             break;
                         case TypeScript.NodeType.Return:
                              ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                             //name = (<TypeScript.ReturnStatement>tyInfo.ast).returnExpression.actualText; // why is this complaining?
                             break;
                         case TypeScript.NodeType.InterfaceDeclaration:
                              ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                             name = (<TypeScript.InterfaceDeclaration>ast).name.actualText;
                                      ~~~~~~~~~~
 !!! error TS2503: Cannot find namespace 'TypeScript'.
                             break;
                         case TypeScript.NodeType.ModuleDeclaration:
                              ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                             name = (<TypeScript.ModuleDeclaration>ast).name.actualText;
                                      ~~~~~~~~~~
 !!! error TS2503: Cannot find namespace 'TypeScript'.
                             break;
                         case TypeScript.NodeType.ClassDeclaration:
                              ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                             name = (<TypeScript.ClassDeclaration>ast).name.actualText;
                                      ~~~~~~~~~~
 !!! error TS2503: Cannot find namespace 'TypeScript'.
                             break;
                         case TypeScript.NodeType.FuncDecl:
                              ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                             name = !(<TypeScript.FuncDecl>ast).name ? "" : (<TypeScript.FuncDecl>ast).name.actualText; // name == null for lambdas
                                       ~~~~~~~~~~
 !!! error TS2503: Cannot find namespace 'TypeScript'.
@@ -1417,7 +1417,8 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
                             else {
                                 WScript.Echo("non-match on: " + errorLines[i]);
                                 ~~~~~~~
-!!! error TS2304: Cannot find name 'WScript'.
+!!! error TS2552: Cannot find name 'WScript'. Did you mean 'scripts'?
+!!! related TS2728 parserharness.ts:1176:116: 'scripts' is declared here.
                             }
                         }
                     }
@@ -1512,7 +1513,7 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
                 if (Harness.usePull) {
                     compiler.pullUpdateUnit(new TypeScript.StringSourceText(code), unitName, setRecovery);
                                                 ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                 } else {
                     compiler.updateUnit(code, unitName, setRecovery);
                 }
@@ -1544,22 +1545,22 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
     
                 var oldCompilerSettings = new TypeScript.CompilationSettings();
                                               ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                 clone(compiler.settings, oldCompilerSettings);
                 var oldEmitSettings = new TypeScript.EmitOptions(compiler.settings);
                                           ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                 clone(compiler.emitSettings, oldEmitSettings);
     
                 var oldModuleGenTarget = TypeScript.moduleGenTarget;
                                          ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
     
                 if (settingsCallback) {
                     settingsCallback(compiler.settings);
                     compiler.emitSettings = new TypeScript.EmitOptions(compiler.settings);
                                                 ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                 }
                 try {
                     compileString(code, filename, callback, context, references);
@@ -1571,7 +1572,7 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
                         compiler.emitSettings = oldEmitSettings;
                         TypeScript.moduleGenTarget = oldModuleGenTarget;
                         ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                     }
                 }
             }
@@ -1845,7 +1846,7 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
                     length: this.content.length,
                     editRange: new TypeScript.ScriptEditRange(minChar, limChar, (limChar - minChar) + newText.length)
                                    ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                 });
     
                 if (this.editRanges.length > this.maxScriptVersions) {
@@ -1869,7 +1870,7 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
                     // Too far away from what we know
                     return TypeScript.ScriptEditRange.unknown();
                            ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                 }
     
                 var entries = this.editRanges.slice(initialEditRangeIndex);
@@ -1880,7 +1881,7 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
     
                 return new TypeScript.ScriptEditRange(minDistFromStart, entries[0].length - minDistFromEnd, aggDelta);
                            ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
             }
         }
     
@@ -2008,7 +2009,7 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
 !!! error TS2503: Cannot find namespace 'TypeScript'.
                 var parser = new TypeScript.Parser();
                                  ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                 parser.setErrorRecovery(null);
                 parser.errorCallback = (a, b, c, d) => { };
     
@@ -2020,7 +2021,7 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
             public parseFile(fileName: string) {
                 var sourceText = new TypeScript.StringSourceText(IO.readFile(fileName))
                                      ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                 return this.parseSourceText(fileName, sourceText);
             }
             
@@ -2037,7 +2038,7 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
     
                 return TypeScript.getPositionFromZeroBasedLineColumn(script, line - 1, col - 1);
                        ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
             }
     
             /**
@@ -2052,7 +2053,7 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
     
                 var result = TypeScript.getZeroBasedLineColumnFromPosition(script, position);
                              ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
     
                 assert.is(result.line >= 0);
                 assert.is(result.col >= 0);
@@ -2348,7 +2349,8 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
                     // Append diff to the report
                     var diff = new Diff.StringDiff(expected, actual);
                                    ~~~~
-!!! error TS2304: Cannot find name 'Diff'.
+!!! error TS2552: Cannot find name 'Diff'. Did you mean 'diff'?
+!!! related TS2728 parserharness.ts:2030:21: 'diff' is declared here.
                     var header = '<h2>' + descriptionForDescribe + '</h2>';
                     header += '<h4>Left file: ' + actualFilename + '; Right file: ' + refFilename + '</h4>';
                     var trailer = '<hr>';

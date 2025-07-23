@@ -44,14 +44,14 @@ parserRealSource11.ts(199,42): error TS2304: Cannot find name 'ControlFlowContex
 parserRealSource11.ts(219,33): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(231,30): error TS2304: Cannot find name 'Emitter'.
 parserRealSource11.ts(231,48): error TS2304: Cannot find name 'TokenID'.
-parserRealSource11.ts(233,52): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(233,52): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(237,36): error TS2304: Cannot find name 'TypeFlow'.
 parserRealSource11.ts(268,19): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(298,36): error TS2304: Cannot find name 'TypeFlow'.
 parserRealSource11.ts(302,30): error TS2304: Cannot find name 'Emitter'.
 parserRealSource11.ts(302,48): error TS2304: Cannot find name 'TokenID'.
 parserRealSource11.ts(306,40): error TS2304: Cannot find name 'Token'.
-parserRealSource11.ts(307,54): error TS2304: Cannot find name 'IdentifierToken'.
+parserRealSource11.ts(307,54): error TS2552: Cannot find name 'IdentifierToken'. Did you mean 'Identifier'?
 parserRealSource11.ts(320,30): error TS2304: Cannot find name 'Emitter'.
 parserRealSource11.ts(320,48): error TS2304: Cannot find name 'TokenID'.
 parserRealSource11.ts(327,19): error TS2304: Cannot find name 'NodeType'.
@@ -82,35 +82,35 @@ parserRealSource11.ts(427,22): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(441,30): error TS2304: Cannot find name 'Emitter'.
 parserRealSource11.ts(441,48): error TS2304: Cannot find name 'TokenID'.
 parserRealSource11.ts(445,22): error TS2304: Cannot find name 'NodeType'.
-parserRealSource11.ts(446,58): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(446,58): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(449,22): error TS2304: Cannot find name 'NodeType'.
-parserRealSource11.ts(451,58): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(451,58): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(453,22): error TS2304: Cannot find name 'NodeType'.
-parserRealSource11.ts(454,58): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(454,58): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(457,22): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(460,22): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(463,22): error TS2304: Cannot find name 'NodeType'.
-parserRealSource11.ts(465,58): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(465,58): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(467,22): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(469,50): error TS2304: Cannot find name 'NodeType'.
-parserRealSource11.ts(472,58): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(472,58): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(474,22): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(476,50): error TS2304: Cannot find name 'NodeType'.
-parserRealSource11.ts(479,58): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(479,58): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(481,22): error TS2304: Cannot find name 'NodeType'.
-parserRealSource11.ts(483,58): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(483,58): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(485,22): error TS2304: Cannot find name 'NodeType'.
-parserRealSource11.ts(487,58): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(487,58): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(489,22): error TS2304: Cannot find name 'NodeType'.
-parserRealSource11.ts(491,58): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(491,58): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(494,22): error TS2304: Cannot find name 'NodeType'.
-parserRealSource11.ts(496,58): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(496,58): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(498,22): error TS2304: Cannot find name 'NodeType'.
-parserRealSource11.ts(500,58): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(500,58): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(502,22): error TS2304: Cannot find name 'NodeType'.
-parserRealSource11.ts(504,58): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(504,58): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(506,22): error TS2304: Cannot find name 'NodeType'.
-parserRealSource11.ts(507,58): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(507,58): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(518,32): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(520,29): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
 parserRealSource11.ts(525,27): error TS2304: Cannot find name 'Signature'.
@@ -171,26 +171,26 @@ parserRealSource11.ts(644,21): error TS2304: Cannot find name 'tokenTable'.
 parserRealSource11.ts(647,26): error TS2304: Cannot find name 'tokenTable'.
 parserRealSource11.ts(651,58): error TS2304: Cannot find name 'tokenTable'.
 parserRealSource11.ts(658,26): error TS2304: Cannot find name 'NodeType'.
-parserRealSource11.ts(660,67): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(660,67): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(665,26): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(669,26): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(670,55): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(672,33): error TS2304: Cannot find name 'hasFlag'.
 parserRealSource11.ts(672,60): error TS2304: Cannot find name 'FncFlags'.
-parserRealSource11.ts(678,67): error TS2304: Cannot find name 'TokenID'.
-parserRealSource11.ts(681,67): error TS2304: Cannot find name 'TokenID'.
-parserRealSource11.ts(684,63): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(678,67): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+parserRealSource11.ts(681,67): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+parserRealSource11.ts(684,63): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(686,26): error TS2304: Cannot find name 'NodeType'.
-parserRealSource11.ts(687,63): error TS2304: Cannot find name 'TokenID'.
-parserRealSource11.ts(694,63): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(687,63): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+parserRealSource11.ts(694,63): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(696,26): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(711,19): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(714,36): error TS2304: Cannot find name 'TypeFlow'.
 parserRealSource11.ts(718,30): error TS2304: Cannot find name 'Emitter'.
 parserRealSource11.ts(718,48): error TS2304: Cannot find name 'TokenID'.
-parserRealSource11.ts(721,51): error TS2304: Cannot find name 'TokenID'.
-parserRealSource11.ts(723,51): error TS2304: Cannot find name 'TokenID'.
-parserRealSource11.ts(725,51): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(721,51): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+parserRealSource11.ts(723,51): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+parserRealSource11.ts(725,51): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(733,19): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(738,36): error TS2304: Cannot find name 'TypeFlow'.
 parserRealSource11.ts(747,30): error TS2304: Cannot find name 'Emitter'.
@@ -210,7 +210,7 @@ parserRealSource11.ts(837,30): error TS2304: Cannot find name 'Emitter'.
 parserRealSource11.ts(837,48): error TS2304: Cannot find name 'TokenID'.
 parserRealSource11.ts(838,24): error TS2304: Cannot find name 'ModuleType'.
 parserRealSource11.ts(841,61): error TS2304: Cannot find name 'TypeSymbol'.
-parserRealSource11.ts(850,52): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(850,52): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(863,36): error TS2304: Cannot find name 'TypeFlow'.
 parserRealSource11.ts(868,38): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(877,40): error TS2304: Cannot find name 'NodeType'.
@@ -304,7 +304,7 @@ parserRealSource11.ts(1164,47): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(1164,97): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(1172,30): error TS2304: Cannot find name 'Emitter'.
 parserRealSource11.ts(1172,48): error TS2304: Cannot find name 'TokenID'.
-parserRealSource11.ts(1176,60): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(1176,60): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(1187,32): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(1195,27): error TS2304: Cannot find name 'ModuleFlags'.
 parserRealSource11.ts(1196,21): error TS2304: Cannot find name 'ModuleType'.
@@ -347,7 +347,7 @@ parserRealSource11.ts(1339,26): error TS2304: Cannot find name 'BasicBlock'.
 parserRealSource11.ts(1348,19): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(1351,30): error TS2304: Cannot find name 'Emitter'.
 parserRealSource11.ts(1351,48): error TS2304: Cannot find name 'TokenID'.
-parserRealSource11.ts(1362,67): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(1362,67): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(1374,42): error TS2304: Cannot find name 'ControlFlowContext'.
 parserRealSource11.ts(1375,37): error TS2304: Cannot find name 'BasicBlock'.
 parserRealSource11.ts(1388,36): error TS2304: Cannot find name 'TypeFlow'.
@@ -363,7 +363,7 @@ parserRealSource11.ts(1438,34): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(1457,19): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(1462,30): error TS2304: Cannot find name 'Emitter'.
 parserRealSource11.ts(1462,48): error TS2304: Cannot find name 'TokenID'.
-parserRealSource11.ts(1467,47): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(1467,47): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(1475,36): error TS2304: Cannot find name 'TypeFlow'.
 parserRealSource11.ts(1479,42): error TS2304: Cannot find name 'ControlFlowContext'.
 parserRealSource11.ts(1481,33): error TS2304: Cannot find name 'BasicBlock'.
@@ -373,7 +373,7 @@ parserRealSource11.ts(1490,39): error TS2304: Cannot find name 'BasicBlock'.
 parserRealSource11.ts(1515,19): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(1518,30): error TS2304: Cannot find name 'Emitter'.
 parserRealSource11.ts(1518,48): error TS2304: Cannot find name 'TokenID'.
-parserRealSource11.ts(1528,47): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(1528,47): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(1535,36): error TS2304: Cannot find name 'TypeFlow'.
 parserRealSource11.ts(1539,42): error TS2304: Cannot find name 'ControlFlowContext'.
 parserRealSource11.ts(1541,33): error TS2304: Cannot find name 'BasicBlock'.
@@ -382,7 +382,7 @@ parserRealSource11.ts(1545,29): error TS2304: Cannot find name 'ITargetInfo'.
 parserRealSource11.ts(1572,19): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(1577,30): error TS2304: Cannot find name 'Emitter'.
 parserRealSource11.ts(1577,48): error TS2304: Cannot find name 'TokenID'.
-parserRealSource11.ts(1583,47): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(1583,47): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(1596,36): error TS2304: Cannot find name 'TypeFlow'.
 parserRealSource11.ts(1600,42): error TS2304: Cannot find name 'ControlFlowContext'.
 parserRealSource11.ts(1602,31): error TS2304: Cannot find name 'BasicBlock'.
@@ -391,7 +391,7 @@ parserRealSource11.ts(1615,39): error TS2304: Cannot find name 'BasicBlock'.
 parserRealSource11.ts(1651,19): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(1654,30): error TS2304: Cannot find name 'Emitter'.
 parserRealSource11.ts(1654,48): error TS2304: Cannot find name 'TokenID'.
-parserRealSource11.ts(1660,63): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(1660,63): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(1670,42): error TS2304: Cannot find name 'ControlFlowContext'.
 parserRealSource11.ts(1675,36): error TS2304: Cannot find name 'TypeFlow'.
 parserRealSource11.ts(1682,19): error TS2304: Cannot find name 'NodeType'.
@@ -409,8 +409,8 @@ parserRealSource11.ts(1732,66): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(1733,73): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(1749,30): error TS2304: Cannot find name 'Emitter'.
 parserRealSource11.ts(1749,48): error TS2304: Cannot find name 'TokenID'.
-parserRealSource11.ts(1755,47): error TS2304: Cannot find name 'TokenID'.
-parserRealSource11.ts(1757,46): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(1755,47): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+parserRealSource11.ts(1757,46): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(1766,36): error TS2304: Cannot find name 'TypeFlow'.
 parserRealSource11.ts(1775,42): error TS2304: Cannot find name 'ControlFlowContext'.
 parserRealSource11.ts(1784,33): error TS2304: Cannot find name 'BasicBlock'.
@@ -419,10 +419,10 @@ parserRealSource11.ts(1811,19): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(1816,30): error TS2304: Cannot find name 'Emitter'.
 parserRealSource11.ts(1816,48): error TS2304: Cannot find name 'TokenID'.
 parserRealSource11.ts(1822,43): error TS2304: Cannot find name 'NodeType'.
-parserRealSource11.ts(1823,55): error TS2304: Cannot find name 'TokenID'.
-parserRealSource11.ts(1827,65): error TS2304: Cannot find name 'TokenID'.
-parserRealSource11.ts(1831,47): error TS2304: Cannot find name 'TokenID'.
-parserRealSource11.ts(1833,47): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(1823,55): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+parserRealSource11.ts(1827,65): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+parserRealSource11.ts(1831,47): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+parserRealSource11.ts(1833,47): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(1841,36): error TS2304: Cannot find name 'TypeFlow'.
 parserRealSource11.ts(1845,42): error TS2304: Cannot find name 'ControlFlowContext'.
 parserRealSource11.ts(1850,33): error TS2304: Cannot find name 'BasicBlock'.
@@ -436,13 +436,13 @@ parserRealSource11.ts(1908,25): error TS2304: Cannot find name 'WithSymbol'.
 parserRealSource11.ts(1911,19): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(1914,30): error TS2304: Cannot find name 'Emitter'.
 parserRealSource11.ts(1914,48): error TS2304: Cannot find name 'TokenID'.
-parserRealSource11.ts(1919,51): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(1919,51): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(1928,36): error TS2304: Cannot find name 'TypeFlow'.
 parserRealSource11.ts(1939,19): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(1944,30): error TS2304: Cannot find name 'Emitter'.
 parserRealSource11.ts(1944,48): error TS2304: Cannot find name 'TokenID'.
-parserRealSource11.ts(1950,46): error TS2304: Cannot find name 'TokenID'.
-parserRealSource11.ts(1958,50): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(1950,46): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+parserRealSource11.ts(1958,50): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(1969,36): error TS2304: Cannot find name 'TypeFlow'.
 parserRealSource11.ts(1981,42): error TS2304: Cannot find name 'ControlFlowContext'.
 parserRealSource11.ts(1984,33): error TS2304: Cannot find name 'BasicBlock'.
@@ -450,7 +450,7 @@ parserRealSource11.ts(1985,35): error TS2304: Cannot find name 'BasicBlock'.
 parserRealSource11.ts(2014,19): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(2017,30): error TS2304: Cannot find name 'Emitter'.
 parserRealSource11.ts(2017,48): error TS2304: Cannot find name 'TokenID'.
-parserRealSource11.ts(2022,51): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(2022,51): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(2033,36): error TS2304: Cannot find name 'TypeFlow'.
 parserRealSource11.ts(2042,42): error TS2304: Cannot find name 'ControlFlowContext'.
 parserRealSource11.ts(2043,33): error TS2304: Cannot find name 'BasicBlock'.
@@ -459,12 +459,12 @@ parserRealSource11.ts(2067,19): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(2070,30): error TS2304: Cannot find name 'Emitter'.
 parserRealSource11.ts(2070,48): error TS2304: Cannot find name 'TokenID'.
 parserRealSource11.ts(2074,36): error TS2304: Cannot find name 'TypeFlow'.
-parserRealSource11.ts(2077,28): error TS2304: Cannot find name 'getTypeLink'.
+parserRealSource11.ts(2077,28): error TS2552: Cannot find name 'getTypeLink'. Did you mean 'typeLink'?
 parserRealSource11.ts(2100,19): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(2105,30): error TS2304: Cannot find name 'Emitter'.
 parserRealSource11.ts(2105,48): error TS2304: Cannot find name 'TokenID'.
-parserRealSource11.ts(2107,50): error TS2304: Cannot find name 'TokenID'.
-parserRealSource11.ts(2108,54): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(2107,50): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+parserRealSource11.ts(2108,54): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(2112,36): error TS2304: Cannot find name 'TypeFlow'.
 parserRealSource11.ts(2119,42): error TS2304: Cannot find name 'ControlFlowContext'.
 parserRealSource11.ts(2120,36): error TS2304: Cannot find name 'BasicBlock'.
@@ -472,8 +472,8 @@ parserRealSource11.ts(2122,32): error TS2304: Cannot find name 'BasicBlock'.
 parserRealSource11.ts(2145,19): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(2150,30): error TS2304: Cannot find name 'Emitter'.
 parserRealSource11.ts(2150,48): error TS2304: Cannot find name 'TokenID'.
-parserRealSource11.ts(2153,50): error TS2304: Cannot find name 'TokenID'.
-parserRealSource11.ts(2154,52): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(2153,50): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+parserRealSource11.ts(2154,52): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(2159,42): error TS2304: Cannot find name 'ControlFlowContext'.
 parserRealSource11.ts(2161,32): error TS2304: Cannot find name 'BasicBlock'.
 parserRealSource11.ts(2164,37): error TS2304: Cannot find name 'BasicBlock'.
@@ -482,7 +482,7 @@ parserRealSource11.ts(2185,36): error TS2304: Cannot find name 'TypeFlow'.
 parserRealSource11.ts(2195,19): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(2198,30): error TS2304: Cannot find name 'Emitter'.
 parserRealSource11.ts(2198,48): error TS2304: Cannot find name 'TokenID'.
-parserRealSource11.ts(2202,47): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(2202,47): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(2207,36): error TS2304: Cannot find name 'TypeFlow'.
 parserRealSource11.ts(2212,42): error TS2304: Cannot find name 'ControlFlowContext'.
 parserRealSource11.ts(2223,19): error TS2304: Cannot find name 'NodeType'.
@@ -490,8 +490,8 @@ parserRealSource11.ts(2225,40): error TS2304: Cannot find name 'VarFlags'.
 parserRealSource11.ts(2229,32): error TS2304: Cannot find name 'SymbolScope'.
 parserRealSource11.ts(2231,30): error TS2304: Cannot find name 'Emitter'.
 parserRealSource11.ts(2231,48): error TS2304: Cannot find name 'TokenID'.
-parserRealSource11.ts(2237,48): error TS2304: Cannot find name 'TokenID'.
-parserRealSource11.ts(2240,47): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(2237,48): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+parserRealSource11.ts(2240,47): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(2245,42): error TS2304: Cannot find name 'ControlFlowContext'.
 parserRealSource11.ts(2248,36): error TS2304: Cannot find name 'BasicBlock'.
 parserRealSource11.ts(2259,36): error TS2304: Cannot find name 'TypeFlow'.
@@ -501,7 +501,7 @@ parserRealSource11.ts(2269,38): error TS2304: Cannot find name 'TypeLink'.
 parserRealSource11.ts(2300,19): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(2303,30): error TS2304: Cannot find name 'Emitter'.
 parserRealSource11.ts(2303,48): error TS2304: Cannot find name 'TokenID'.
-parserRealSource11.ts(2307,47): error TS2304: Cannot find name 'TokenID'.
+parserRealSource11.ts(2307,47): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 parserRealSource11.ts(2312,42): error TS2304: Cannot find name 'ControlFlowContext'.
 parserRealSource11.ts(2320,36): error TS2304: Cannot find name 'TypeFlow'.
 parserRealSource11.ts(2331,19): error TS2304: Cannot find name 'NodeType'.
@@ -837,7 +837,8 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                 emitter.recordSourceMappingStart(this);
                 emitter.emitJavascriptList(this, null, TokenID.Semicolon, startLine, false, false);
                                                        ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:231:39: 'tokenId' is declared here.
                 emitter.recordSourceMappingEnd(this);
             }
     
@@ -925,7 +926,8 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
 !!! error TS2304: Cannot find name 'Token'.
                 return new Identifier(token.getText(), (<IdentifierToken>token).hasEscapeSequence);
                                                          ~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'IdentifierToken'.
+!!! error TS2552: Cannot find name 'IdentifierToken'. Did you mean 'Identifier'?
+!!! related TS2728 parserRealSource11.ts:250:18: 'Identifier' is declared here.
             }
         }
     
@@ -1126,7 +1128,8 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
 !!! error TS2304: Cannot find name 'NodeType'.
                         emitter.emitJavascript(this.operand, TokenID.PlusPlus, false);
                                                              ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:441:39: 'tokenId' is declared here.
                         emitter.writeToOutput("++");
                         break;
                     case NodeType.LogNot:
@@ -1135,14 +1138,16 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                         emitter.writeToOutput("!");
                         emitter.emitJavascript(this.operand, TokenID.Exclamation, false);
                                                              ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:441:39: 'tokenId' is declared here.
                         break;
                     case NodeType.DecPost:
                          ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
                         emitter.emitJavascript(this.operand, TokenID.MinusMinus, false);
                                                              ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:441:39: 'tokenId' is declared here.
                         emitter.writeToOutput("--");
                         break;
                     case NodeType.ObjectLit:
@@ -1161,7 +1166,8 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                         emitter.writeToOutput("~");
                         emitter.emitJavascript(this.operand, TokenID.Tilde, false);
                                                              ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:441:39: 'tokenId' is declared here.
                         break;
                     case NodeType.Neg:
                          ~~~~~~~~
@@ -1174,7 +1180,8 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                         }
                         emitter.emitJavascript(this.operand, TokenID.Minus, false);
                                                              ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:441:39: 'tokenId' is declared here.
                         break;
                     case NodeType.Pos:
                          ~~~~~~~~
@@ -1187,7 +1194,8 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                         }
                         emitter.emitJavascript(this.operand, TokenID.Plus, false);
                                                              ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:441:39: 'tokenId' is declared here.
                         break;
                     case NodeType.IncPre:
                          ~~~~~~~~
@@ -1195,7 +1203,8 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                         emitter.writeToOutput("++");
                         emitter.emitJavascript(this.operand, TokenID.PlusPlus, false);
                                                              ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:441:39: 'tokenId' is declared here.
                         break;
                     case NodeType.DecPre:
                          ~~~~~~~~
@@ -1203,7 +1212,8 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                         emitter.writeToOutput("--");
                         emitter.emitJavascript(this.operand, TokenID.MinusMinus, false);
                                                              ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:441:39: 'tokenId' is declared here.
                         break;
                     case NodeType.Throw:
                          ~~~~~~~~
@@ -1211,7 +1221,8 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                         emitter.writeToOutput("throw ");
                         emitter.emitJavascript(this.operand, TokenID.Tilde, false);
                                                              ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:441:39: 'tokenId' is declared here.
                         emitter.writeToOutput(";");
                         break;
                     case NodeType.Typeof:
@@ -1220,7 +1231,8 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                         emitter.writeToOutput("typeof ");
                         emitter.emitJavascript(this.operand, TokenID.Tilde, false);
                                                              ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:441:39: 'tokenId' is declared here.
                         break;
                     case NodeType.Delete:
                          ~~~~~~~~
@@ -1228,7 +1240,8 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                         emitter.writeToOutput("delete ");
                         emitter.emitJavascript(this.operand, TokenID.Tilde, false);
                                                              ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:441:39: 'tokenId' is declared here.
                         break;
                     case NodeType.Void:
                          ~~~~~~~~
@@ -1236,14 +1249,16 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                         emitter.writeToOutput("void ");
                         emitter.emitJavascript(this.operand, TokenID.Tilde, false);
                                                              ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:441:39: 'tokenId' is declared here.
                         break;
                     case NodeType.TypeAssertion:
                          ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
                         emitter.emitJavascript(this.operand, TokenID.Tilde, false);
                                                              ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:441:39: 'tokenId' is declared here.
                         break;
                     default:
                         throw new Error("please implement in derived class");
@@ -1518,7 +1533,8 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                             if (!emitter.tryEmitConstant(this)) {
                                 emitter.emitJavascript(this.operand1, TokenID.Dot, false);
                                                                       ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:635:39: 'tokenId' is declared here.
                                 emitter.writeToOutput(".");
                                 emitter.emitJavascriptName(<Identifier>this.operand2, false);
                             }
@@ -1548,24 +1564,28 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                                 }
                                 emitter.emitJavascript(this.operand1, TokenID.Colon, false);
                                                                       ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:635:39: 'tokenId' is declared here.
                             }
                             else {
                                 emitter.emitJavascript(this.operand1, TokenID.Colon, false);
                                                                       ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:635:39: 'tokenId' is declared here.
                                 emitter.writeToOutputTrimmable(": ");
                             }
                             emitter.emitJavascript(this.operand2, TokenID.Comma, false);
                                                                   ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:635:39: 'tokenId' is declared here.
                             break;
                         case NodeType.Comma:
                              ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
                             emitter.emitJavascript(this.operand1, TokenID.Comma, false);
                                                                   ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:635:39: 'tokenId' is declared here.
                             if (emitter.emitState.inObjectLiteral) {
                                 emitter.writeLineToOutput(", ");
                             }
@@ -1574,7 +1594,8 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                             }
                             emitter.emitJavascript(this.operand2, TokenID.Comma, false);
                                                                   ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:635:39: 'tokenId' is declared here.
                             break;
                         case NodeType.Is:
                              ~~~~~~~~
@@ -1613,15 +1634,18 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                 emitter.recordSourceMappingStart(this);
                 emitter.emitJavascript(this.operand1, TokenID.Question, false);
                                                       ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:718:39: 'tokenId' is declared here.
                 emitter.writeToOutput(" ? ");
                 emitter.emitJavascript(this.operand2, TokenID.Question, false);
                                                       ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:718:39: 'tokenId' is declared here.
                 emitter.writeToOutput(" : ");
                 emitter.emitJavascript(this.operand3, TokenID.Question, false);
                                                       ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:718:39: 'tokenId' is declared here.
                 emitter.recordSourceMappingEnd(this);
                 emitter.emitParensAndCommentsInPlace(this, false);
             }
@@ -1786,7 +1810,8 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                     emitter.firstModAlias = this.firstAliasedModToString();
                     emitter.emitJavascript(this.alias, TokenID.Tilde, false);
                                                        ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:837:39: 'tokenId' is declared here.
                     // the dynamic import case will insert the semi-colon automatically
                     if (!this.isDynamicImport) {
                         emitter.writeToOutput(";");
@@ -2300,7 +2325,8 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                     emitter.recordSourceMappingStart(this);
                     emitter.emitJavascriptList(this.bod, null, TokenID.Semicolon, true, false, false, true, this.requiresInherits);
                                                                ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:1172:39: 'tokenId' is declared here.
                     emitter.recordSourceMappingEnd(this);
                     emitter.emitParensAndCommentsInPlace(this, false);
                 }
@@ -2572,7 +2598,8 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                 if (this.statements) {
                     emitter.emitJavascriptList(this.statements, null, TokenID.Semicolon, true, false, false);
                                                                       ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:1351:39: 'tokenId' is declared here.
                 }
                 if (this.isStatementBlock) {
                     emitter.indenter.decreaseIndent();
@@ -2709,7 +2736,8 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                 emitter.writeToOutput("while(");
                 emitter.emitJavascript(this.cond, TokenID.While, false);
                                                   ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:1462:39: 'tokenId' is declared here.
                 emitter.writeToOutput(")");
                 emitter.emitJavascriptStatements(this.body, false, false);
                 emitter.setInObjectLiteral(temp);
@@ -2790,7 +2818,8 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                 emitter.writeToOutput('(');
                 emitter.emitJavascript(this.cond, TokenID.CloseParen, false);
                                                   ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:1518:39: 'tokenId' is declared here.
                 emitter.writeToOutput(")");
                 emitter.setInObjectLiteral(temp);
                 emitter.recordSourceMappingEnd(this);
@@ -2863,7 +2892,8 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                 emitter.writeToOutput("if(");
                 emitter.emitJavascript(this.cond, TokenID.If, false);
                                                   ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:1577:39: 'tokenId' is declared here.
                 emitter.writeToOutput(")");
                 emitter.recordSourceMappingEnd(this.statement);
                 emitter.emitJavascriptStatements(this.thenBod, true, false);
@@ -2958,7 +2988,8 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                     emitter.writeToOutput("return ");
                     emitter.emitJavascript(this.returnExpression, TokenID.Semicolon, false);
                                                                   ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:1654:39: 'tokenId' is declared here.
                 }
                 else {
                     emitter.writeToOutput("return;");
@@ -3089,11 +3120,13 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                 emitter.writeToOutput("for(");
                 emitter.emitJavascript(this.lval, TokenID.For, false);
                                                   ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:1749:39: 'tokenId' is declared here.
                 emitter.writeToOutput(" in ");
                 emitter.emitJavascript(this.obj, TokenID.For, false);
                                                  ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:1749:39: 'tokenId' is declared here.
                 emitter.writeToOutput(")");
                 emitter.recordSourceMappingEnd(this.statement);
                 emitter.emitJavascriptStatements(this.body, true, false);
@@ -3177,23 +3210,27 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
 !!! error TS2304: Cannot find name 'NodeType'.
                         emitter.emitJavascript(this.init, TokenID.For, false);
                                                           ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:1816:39: 'tokenId' is declared here.
                     }
                     else {
                         emitter.setInVarBlock((<ASTList>this.init).members.length); 
                         emitter.emitJavascriptList(this.init, null, TokenID.For, false, false, false);
                                                                     ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:1816:39: 'tokenId' is declared here.
                     }
                 }
                 emitter.writeToOutput("; ");
                 emitter.emitJavascript(this.cond, TokenID.For, false);
                                                   ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:1816:39: 'tokenId' is declared here.
                 emitter.writeToOutput("; ");
                 emitter.emitJavascript(this.incr, TokenID.For, false);
                                                   ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:1816:39: 'tokenId' is declared here.
                 emitter.writeToOutput(")");
                 emitter.emitJavascriptStatements(this.body, true, false);
                 emitter.setInObjectLiteral(temp);
@@ -3307,7 +3344,8 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                 if (this.expr) {
                     emitter.emitJavascript(this.expr, TokenID.With, false);
                                                       ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:1914:39: 'tokenId' is declared here.
                 }
     
                 emitter.writeToOutput(")");
@@ -3348,7 +3386,8 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                 emitter.writeToOutput("switch(");
                 emitter.emitJavascript(this.val, TokenID.Identifier, false);
                                                  ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:1944:39: 'tokenId' is declared here.
                 emitter.writeToOutput(")"); 
                 emitter.recordSourceMappingEnd(this.statement);
                 emitter.writeLineToOutput(" {");
@@ -3358,7 +3397,8 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                     var caseExpr = this.caseList.members[i];
                     emitter.emitJavascript(caseExpr, TokenID.Case, true);
                                                      ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:1944:39: 'tokenId' is declared here.
                     emitter.writeLineToOutput("");
                 }
                 emitter.indenter.decreaseIndent();
@@ -3438,7 +3478,8 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                     emitter.writeToOutput("case ");
                     emitter.emitJavascript(this.expr, TokenID.Identifier, false);
                                                       ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:2017:39: 'tokenId' is declared here.
                 }
                 else {
                     emitter.writeToOutput("default");
@@ -3511,7 +3552,8 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                 typeFlow.inTypeRefTypeCheck = true;
                 var typeLink = getTypeLink(this, typeFlow.checker, true);
                                ~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'getTypeLink'.
+!!! error TS2552: Cannot find name 'getTypeLink'. Did you mean 'typeLink'?
+!!! related TS2728 parserRealSource11.ts:2077:17: 'typeLink' is declared here.
                 typeFlow.checker.resolveTypeLink(typeFlow.scope, typeLink, false);
     
                 if (this.term) {
@@ -3549,10 +3591,12 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                 emitter.recordSourceMappingStart(this);
                 emitter.emitJavascript(this.tryNode, TokenID.Try, false);
                                                      ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:2105:39: 'tokenId' is declared here.
                 emitter.emitJavascript(this.finallyNode, TokenID.Finally, false);
                                                          ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:2105:39: 'tokenId' is declared here.
                 emitter.recordSourceMappingEnd(this);
             }
     
@@ -3613,10 +3657,12 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                 emitter.recordSourceMappingStart(this);
                 emitter.emitJavascript(this.tryNode, TokenID.Try, false);
                                                      ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:2150:39: 'tokenId' is declared here.
                 emitter.emitJavascript(this.catchNode, TokenID.Catch, false);
                                                        ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:2150:39: 'tokenId' is declared here.
                 emitter.recordSourceMappingEnd(this);
                 emitter.emitParensAndCommentsInPlace(this, false);
             }
@@ -3682,7 +3728,8 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                 emitter.writeToOutput("try ");
                 emitter.emitJavascript(this.body, TokenID.Try, false);
                                                   ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:2198:39: 'tokenId' is declared here.
                 emitter.recordSourceMappingEnd(this);
                 emitter.emitParensAndCommentsInPlace(this, false);
             }
@@ -3733,12 +3780,14 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                 emitter.writeToOutput("catch (");
                 emitter.emitJavascript(this.param, TokenID.OpenParen, false);
                                                    ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:2231:39: 'tokenId' is declared here.
                 emitter.writeToOutput(")");
                 emitter.recordSourceMappingEnd(this.statement);
                 emitter.emitJavascript(this.body, TokenID.Catch, false);
                                                   ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:2231:39: 'tokenId' is declared here.
                 emitter.recordSourceMappingEnd(this);
                 emitter.emitParensAndCommentsInPlace(this, false);
             }
@@ -3825,7 +3874,8 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                 emitter.writeToOutput("finally");
                 emitter.emitJavascript(this.body, TokenID.Finally, false);
                                                   ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
+!!! related TS2728 parserRealSource11.ts:2303:39: 'tokenId' is declared here.
                 emitter.recordSourceMappingEnd(this);
                 emitter.emitParensAndCommentsInPlace(this, false);
             }

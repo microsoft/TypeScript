@@ -17,7 +17,7 @@ commonMissingSemicolons.ts(15,1): error TS2304: Cannot find name 'consd'.
 commonMissingSemicolons.ts(15,7): error TS2552: Cannot find name 'myConst2'. Did you mean 'myConst1'?
 commonMissingSemicolons.ts(16,1): error TS1435: Unknown keyword or identifier. Did you mean 'const'?
 commonMissingSemicolons.ts(16,1): error TS2304: Cannot find name 'constd'.
-commonMissingSemicolons.ts(16,8): error TS2304: Cannot find name 'myConst3'.
+commonMissingSemicolons.ts(16,8): error TS2552: Cannot find name 'myConst3'. Did you mean 'myConst1'?
 commonMissingSemicolons.ts(19,1): error TS1435: Unknown keyword or identifier. Did you mean 'declare'?
 commonMissingSemicolons.ts(19,1): error TS2304: Cannot find name 'declared'.
 commonMissingSemicolons.ts(20,1): error TS2304: Cannot find name 'declare'.
@@ -28,11 +28,11 @@ commonMissingSemicolons.ts(21,1): error TS2304: Cannot find name 'declared'.
 commonMissingSemicolons.ts(21,10): error TS1435: Unknown keyword or identifier. Did you mean 'const'?
 commonMissingSemicolons.ts(21,10): error TS2304: Cannot find name 'constd'.
 commonMissingSemicolons.ts(22,1): error TS1435: Unknown keyword or identifier. Did you mean 'declare const'?
-commonMissingSemicolons.ts(22,1): error TS2304: Cannot find name 'declareconst'.
-commonMissingSemicolons.ts(22,14): error TS2304: Cannot find name 'myDeclareConst5'.
+commonMissingSemicolons.ts(22,1): error TS2552: Cannot find name 'declareconst'. Did you mean 'myDeclareConst1'?
+commonMissingSemicolons.ts(22,14): error TS2552: Cannot find name 'myDeclareConst5'. Did you mean 'myDeclareConst1'?
 commonMissingSemicolons.ts(25,1): error TS1435: Unknown keyword or identifier. Did you mean 'function'?
-commonMissingSemicolons.ts(25,1): error TS2304: Cannot find name 'functiond'.
-commonMissingSemicolons.ts(25,11): error TS2304: Cannot find name 'myFunction2'.
+commonMissingSemicolons.ts(25,1): error TS2552: Cannot find name 'functiond'. Did you mean 'Function'?
+commonMissingSemicolons.ts(25,11): error TS2552: Cannot find name 'myFunction2'. Did you mean 'myFunction1'?
 commonMissingSemicolons.ts(25,25): error TS1005: ';' expected.
 commonMissingSemicolons.ts(26,10): error TS1359: Identifier expected. 'function' is a reserved word that cannot be used here.
 commonMissingSemicolons.ts(26,18): error TS1003: Identifier expected.
@@ -48,8 +48,8 @@ commonMissingSemicolons.ts(33,11): error TS2427: Interface name cannot be 'void'
 commonMissingSemicolons.ts(34,1): error TS1435: Unknown keyword or identifier. Did you mean 'interface MyInterface'?
 commonMissingSemicolons.ts(34,1): error TS2304: Cannot find name 'interfaceMyInterface'.
 commonMissingSemicolons.ts(38,1): error TS1435: Unknown keyword or identifier. Did you mean 'let'?
-commonMissingSemicolons.ts(38,1): error TS2304: Cannot find name 'letd'.
-commonMissingSemicolons.ts(38,6): error TS2304: Cannot find name 'let2'.
+commonMissingSemicolons.ts(38,1): error TS2552: Cannot find name 'letd'. Did you mean 'let'?
+commonMissingSemicolons.ts(38,6): error TS2552: Cannot find name 'let2'. Did you mean 'let'?
 commonMissingSemicolons.ts(39,1): error TS2304: Cannot find name 'letMyLet'.
 commonMissingSemicolons.ts(41,10): error TS1005: '=' expected.
 commonMissingSemicolons.ts(45,1): error TS1435: Unknown keyword or identifier. Did you mean 'type'?
@@ -62,7 +62,7 @@ commonMissingSemicolons.ts(46,15): error TS2693: 'type' only refers to a type, b
 commonMissingSemicolons.ts(47,1): error TS2304: Cannot find name 'typeMyType'.
 commonMissingSemicolons.ts(50,1): error TS1435: Unknown keyword or identifier. Did you mean 'var'?
 commonMissingSemicolons.ts(50,1): error TS2304: Cannot find name 'vard'.
-commonMissingSemicolons.ts(50,6): error TS2304: Cannot find name 'myVar2'.
+commonMissingSemicolons.ts(50,6): error TS2552: Cannot find name 'myVar2'. Did you mean 'myVar1'?
 commonMissingSemicolons.ts(51,1): error TS2304: Cannot find name 'varMyVar'.
 commonMissingSemicolons.ts(55,3): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
 commonMissingSemicolons.ts(56,1): error TS1128: Declaration or statement expected.
@@ -135,7 +135,8 @@ commonMissingSemicolons.ts(78,1): error TS1128: Declaration or statement expecte
     ~~~~~~
 !!! error TS2304: Cannot find name 'constd'.
            ~~~~~~~~
-!!! error TS2304: Cannot find name 'myConst3'.
+!!! error TS2552: Cannot find name 'myConst3'. Did you mean 'myConst1'?
+!!! related TS2728 commonMissingSemicolons.ts:14:7: 'myConst1' is declared here.
     
     declare const myDeclareConst1: 1;
     declared const myDeclareConst2: 1;
@@ -163,18 +164,22 @@ commonMissingSemicolons.ts(78,1): error TS1128: Declaration or statement expecte
     ~~~~~~~~~~~~
 !!! error TS1435: Unknown keyword or identifier. Did you mean 'declare const'?
     ~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'declareconst'.
+!!! error TS2552: Cannot find name 'declareconst'. Did you mean 'myDeclareConst1'?
+!!! related TS2728 commonMissingSemicolons.ts:18:15: 'myDeclareConst1' is declared here.
                  ~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'myDeclareConst5'.
+!!! error TS2552: Cannot find name 'myDeclareConst5'. Did you mean 'myDeclareConst1'?
+!!! related TS2728 commonMissingSemicolons.ts:18:15: 'myDeclareConst1' is declared here.
     
     function myFunction1() { }
     functiond myFunction2() { }
     ~~~~~~~~~
 !!! error TS1435: Unknown keyword or identifier. Did you mean 'function'?
     ~~~~~~~~~
-!!! error TS2304: Cannot find name 'functiond'.
+!!! error TS2552: Cannot find name 'functiond'. Did you mean 'Function'?
+!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
               ~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'myFunction2'.
+!!! error TS2552: Cannot find name 'myFunction2'. Did you mean 'myFunction1'?
+!!! related TS2728 commonMissingSemicolons.ts:24:10: 'myFunction1' is declared here.
                             ~
 !!! error TS1005: ';' expected.
     function function() { }
@@ -219,9 +224,11 @@ commonMissingSemicolons.ts(78,1): error TS1128: Declaration or statement expecte
     ~~~~
 !!! error TS1435: Unknown keyword or identifier. Did you mean 'let'?
     ~~~~
-!!! error TS2304: Cannot find name 'letd'.
+!!! error TS2552: Cannot find name 'letd'. Did you mean 'let'?
+!!! related TS2728 commonMissingSemicolons.ts:36:5: 'let' is declared here.
          ~~~~
-!!! error TS2304: Cannot find name 'let2'.
+!!! error TS2552: Cannot find name 'let2'. Did you mean 'let'?
+!!! related TS2728 commonMissingSemicolons.ts:36:5: 'let' is declared here.
     letMyLet;
     ~~~~~~~~
 !!! error TS2304: Cannot find name 'letMyLet'.
@@ -259,7 +266,8 @@ commonMissingSemicolons.ts(78,1): error TS1128: Declaration or statement expecte
     ~~~~
 !!! error TS2304: Cannot find name 'vard'.
          ~~~~~~
-!!! error TS2304: Cannot find name 'myVar2'.
+!!! error TS2552: Cannot find name 'myVar2'. Did you mean 'myVar1'?
+!!! related TS2728 commonMissingSemicolons.ts:49:5: 'myVar1' is declared here.
     varMyVar;
     ~~~~~~~~
 !!! error TS2304: Cannot find name 'varMyVar'.
