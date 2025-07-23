@@ -2510,6 +2510,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return diagnostic;
     }
 
+    function getVerbatimModuleSyntaxErrorMessage(node: Node): DiagnosticMessage {
+        const sourceFile = getSourceFileOfNode(node);
+        const fileName = sourceFile.fileName;
+        
+        // Check if the file is .cts or .cjs (CommonJS-specific extensions)
+        if (fileExtensionIsOneOf(fileName, [Extension.Cts, Extension.Cjs])) {
+            return Diagnostics.ECMAScript_imports_and_exports_cannot_be_written_in_a_CommonJS_file_under_verbatimModuleSyntax;
+        } else {
+            // For .ts, .tsx, .js, etc.
+            return Diagnostics.ECMAScript_imports_and_exports_cannot_be_written_in_a_CommonJS_file_under_verbatimModuleSyntax_Adjust_the_type_field_in_the_nearest_package_json_to_make_this_file_an_ECMAScript_module_or_adjust_your_verbatimModuleSyntax_module_and_moduleResolution_settings_in_TypeScript;
+        }
+    }
+
     function addErrorOrSuggestion(isError: boolean, diagnostic: Diagnostic) {
         if (isError) {
             diagnostics.add(diagnostic);
@@ -47966,7 +47979,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     !isInJSFile(node) &&
                     host.getEmitModuleFormatOfFile(getSourceFileOfNode(node)) === ModuleKind.CommonJS
                 ) {
-                    error(node, Diagnostics.ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled);
+                    error(node, getVerbatimModuleSyntaxErrorMessage(node));
                 }
                 else if (
                     moduleKind === ModuleKind.Preserve &&
@@ -47978,7 +47991,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // when we look at the `impliedNodeFormat` of this file and decide it's CommonJS (i.e., currently,
                     // only if the file extension is .cjs/.cts). To avoid that inconsistency, we disallow ESM syntax
                     // in files that are unambiguously CommonJS in this mode.
-                    error(node, Diagnostics.ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_module_is_set_to_preserve);
+                    error(node, Diagnostics.ECMAScript_module_syntax_is_not_allowed_in_a_CommonJS_module_when_module_is_set_to_preserve);
                 }
 
                 if (
@@ -48394,7 +48407,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         if (isIllegalExportDefaultInCJS) {
-            error(node, Diagnostics.ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled);
+            error(node, getVerbatimModuleSyntaxErrorMessage(node));
         }
 
         checkExternalModuleExports(container);
@@ -52878,7 +52891,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkGrammarImportCallExpression(node: ImportCall): boolean {
         if (compilerOptions.verbatimModuleSyntax && moduleKind === ModuleKind.CommonJS) {
-            return grammarErrorOnNode(node, Diagnostics.ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled);
+            return grammarErrorOnNode(node, getVerbatimModuleSyntaxErrorMessage(node));
         }
 
         if (moduleKind === ModuleKind.ES2015) {

@@ -939,7 +939,7 @@
         "category": "Error",
         "code": 1285
     },
-    "ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.": {
+    "ECMAScript imports and exports cannot be written in a CommonJS file under 'verbatimModuleSyntax'.": {
         "category": "Error",
         "code": 1286
     },
@@ -967,9 +967,13 @@
         "category": "Error",
         "code": 1292
     },
-    "ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.": {
+    "ECMAScript module syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.": {
         "category": "Error",
         "code": 1293
+    },
+    "ECMAScript imports and exports cannot be written in a CommonJS file under 'verbatimModuleSyntax'. Adjust the 'type' field in the nearest 'package.json' to make this file an ECMAScript module, or adjust your 'verbatimModuleSyntax', 'module', and 'moduleResolution' settings in TypeScript.": {
+        "category": "Error",
+        "code": 1295
     },
 
     "'with' statements are not allowed in an async function block.": {
