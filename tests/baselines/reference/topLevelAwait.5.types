@@ -1,0 +1,25 @@
+//// [tests/cases/conformance/externalModules/topLevelAwait.5.ts] ////
+
+=== topLevelAwait.5.ts ===
+(await
+>(await0) : 0
+>         : ^
+>await0 : 0
+>       : ^
+
+0);
+>0 : 0
+>  : ^
+
+export let aaa = 1;
+>aaa : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+
+export let bbb = 2;
+>bbb : number
+>    : ^^^^^^
+>2 : 2
+>  : ^
+
