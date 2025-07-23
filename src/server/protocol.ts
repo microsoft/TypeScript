@@ -2006,7 +2006,10 @@ export interface QuickInfoRequest extends FileLocationRequest {
 }
 
 export interface QuickInfoRequestArgs extends FileLocationRequestArgs {
-    /** TODO */
+    /**
+     * This controls how many levels of definitions will be expanded in the quick info response.
+     * The default value is 0.
+     */
     verbosityLevel?: number;
 }
 
@@ -2051,7 +2054,7 @@ export interface QuickInfoResponseBody {
     tags: JSDocTagInfo[];
 
     /**
-     * TODO
+     * Whether the verbosity level can be increased for this quick info response.
      */
     canIncreaseVerbosityLevel?: boolean;
 }
@@ -3254,6 +3257,8 @@ export const enum ModuleKind {
     ES2022 = "es2022",
     ESNext = "esnext",
     Node16 = "node16",
+    Node18 = "node18",
+    Node20 = "node20",
     NodeNext = "nodenext",
     Preserve = "preserve",
 }

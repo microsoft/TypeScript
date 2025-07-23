@@ -624,28 +624,128 @@ export function getNormalizedPathComponents(path: string, currentDirectory: stri
 }
 
 /** @internal */
-export function getNormalizedAbsolutePath(fileName: string, currentDirectory: string | undefined): string {
-    return getPathFromPathComponents(getNormalizedPathComponents(fileName, currentDirectory));
+export function getNormalizedAbsolutePath(path: string, currentDirectory: string | undefined): string {
+    let rootLength = getRootLength(path);
+    if (rootLength === 0 && currentDirectory) {
+        path = combinePaths(currentDirectory, path);
+        rootLength = getRootLength(path);
+    }
+    else {
+        // combinePaths normalizes slashes, so not necessary in the other branch
+        path = normalizeSlashes(path);
+    }
+
+    const simpleNormalized = simpleNormalizePath(path);
+    if (simpleNormalized !== undefined) {
+        return simpleNormalized.length > rootLength ? removeTrailingDirectorySeparator(simpleNormalized) : simpleNormalized;
+    }
+
+    const length = path.length;
+    const root = path.substring(0, rootLength);
+    // `normalized` is only initialized once `path` is determined to be non-normalized
+    let normalized;
+    let index = rootLength;
+    let segmentStart = index;
+    let normalizedUpTo = index;
+    let seenNonDotDotSegment = rootLength !== 0;
+    while (index < length) {
+        // At beginning of segment
+        segmentStart = index;
+        let ch = path.charCodeAt(index);
+        while (ch === CharacterCodes.slash && index + 1 < length) {
+            index++;
+            ch = path.charCodeAt(index);
+        }
+        if (index > segmentStart) {
+            // Seen superfluous separator
+            normalized ??= path.substring(0, segmentStart - 1);
+            segmentStart = index;
+        }
+        // Past any superfluous separators
+        let segmentEnd = path.indexOf(directorySeparator, index + 1);
+        if (segmentEnd === -1) {
+            segmentEnd = length;
+        }
+        const segmentLength = segmentEnd - segmentStart;
+        if (segmentLength === 1 && path.charCodeAt(index) === CharacterCodes.dot) {
+            // "." segment (skip)
+            normalized ??= path.substring(0, normalizedUpTo);
+        }
+        else if (segmentLength === 2 && path.charCodeAt(index) === CharacterCodes.dot && path.charCodeAt(index + 1) === CharacterCodes.dot) {
+            // ".." segment
+            if (!seenNonDotDotSegment) {
+                if (normalized !== undefined) {
+                    normalized += normalized.length === rootLength ? ".." : "/..";
+                }
+                else {
+                    normalizedUpTo = index + 2;
+                }
+            }
+            else if (normalized === undefined) {
+                if (normalizedUpTo - 2 >= 0) {
+                    normalized = path.substring(0, Math.max(rootLength, path.lastIndexOf(directorySeparator, normalizedUpTo - 2)));
+                }
+                else {
+                    normalized = path.substring(0, normalizedUpTo);
+                }
+            }
+            else {
+                const lastSlash = normalized.lastIndexOf(directorySeparator);
+                if (lastSlash !== -1) {
+                    normalized = normalized.substring(0, Math.max(rootLength, lastSlash));
+                }
+                else {
+                    normalized = root;
+                }
+                if (normalized.length === rootLength) {
+                    seenNonDotDotSegment = rootLength !== 0;
+                }
+            }
+        }
+        else if (normalized !== undefined) {
+            if (normalized.length !== rootLength) {
+                normalized += directorySeparator;
+            }
+            seenNonDotDotSegment = true;
+            normalized += path.substring(segmentStart, segmentEnd);
+        }
+        else {
+            seenNonDotDotSegment = true;
+            normalizedUpTo = segmentEnd;
+        }
+        index = segmentEnd + 1;
+    }
+    return normalized ?? (length > rootLength ? removeTrailingDirectorySeparator(path) : path);
 }
 
 /** @internal */
 export function normalizePath(path: string): string {
     path = normalizeSlashes(path);
+    let normalized = simpleNormalizePath(path);
+    if (normalized !== undefined) {
+        return normalized;
+    }
+    normalized = getNormalizedAbsolutePath(path, "");
+    return normalized && hasTrailingDirectorySeparator(path) ? ensureTrailingDirectorySeparator(normalized) : normalized;
+}
+
+function simpleNormalizePath(path: string): string | undefined {
     // Most paths don't require normalization
     if (!relativePathSegmentRegExp.test(path)) {
         return path;
     }
     // Some paths only require cleanup of `/./` or leading `./`
-    const simplified = path.replace(/\/\.\//g, "/").replace(/^\.\//, "");
+    let simplified = path.replace(/\/\.\//g, "/");
+    if (simplified.startsWith("./")) {
+        simplified = simplified.slice(2);
+    }
     if (simplified !== path) {
         path = simplified;
         if (!relativePathSegmentRegExp.test(path)) {
             return path;
         }
     }
-    // Other paths require full normalization
-    const normalized = getPathFromPathComponents(reducePathComponents(getPathComponents(path)));
-    return normalized && hasTrailingDirectorySeparator(path) ? ensureTrailingDirectorySeparator(normalized) : normalized;
+    return undefined;
 }
 
 function getPathWithoutRoot(pathComponents: readonly string[]) {
