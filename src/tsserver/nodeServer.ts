@@ -275,7 +275,7 @@ export function initializeNodeSystem(): StartInput {
         sys.gc = () => global.gc?.();
     }
 
-    const cancellationToken = createCancellationToken(sys.args);
+    const cancellationToken = createCancellationToken();
 
     const localeStr = ts.server.findArgument("--locale");
     if (localeStr) {
@@ -673,14 +673,8 @@ function pipeExists(name: string): boolean {
     return fs.existsSync(name);
 }
 
-function createCancellationToken(args: string[]): ts.server.ServerCancellationToken {
-    let cancellationPipeName: string | undefined;
-    for (let i = 0; i < args.length - 1; i++) {
-        if (args[i] === "--cancellationPipeName") {
-            cancellationPipeName = args[i + 1];
-            break;
-        }
-    }
+function createCancellationToken(): ts.server.ServerCancellationToken {
+    const cancellationPipeName = ts.server.findArgument("--cancellationPipeName");
     if (!cancellationPipeName) {
         return ts.server.nullCancellationToken;
     }
