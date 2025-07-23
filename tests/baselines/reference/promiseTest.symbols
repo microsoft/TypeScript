@@ -2,18 +2,18 @@
 
 === promiseTest.ts ===
 interface Promise<T> {
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promiseTest.ts, 0, 0))
->T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(promiseTest.ts, 0, 18))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promiseTest.ts, 0, 0))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promiseTest.ts, 0, 18))
 
     then<A>(success?: (value: T) => Promise<A>): Promise<A>;
 >then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promiseTest.ts, 0, 22), Decl(promiseTest.ts, 1, 60))
 >A : Symbol(A, Decl(promiseTest.ts, 1, 9))
 >success : Symbol(success, Decl(promiseTest.ts, 1, 12))
 >value : Symbol(value, Decl(promiseTest.ts, 1, 23))
->T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(promiseTest.ts, 0, 18))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promiseTest.ts, 0, 0))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promiseTest.ts, 0, 18))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promiseTest.ts, 0, 0))
 >A : Symbol(A, Decl(promiseTest.ts, 1, 9))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promiseTest.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promiseTest.ts, 0, 0))
 >A : Symbol(A, Decl(promiseTest.ts, 1, 9))
 
     then<B>(success?: (value: T) => B): Promise<B>;
@@ -21,19 +21,19 @@ interface Promise<T> {
 >B : Symbol(B, Decl(promiseTest.ts, 2, 9))
 >success : Symbol(success, Decl(promiseTest.ts, 2, 12))
 >value : Symbol(value, Decl(promiseTest.ts, 2, 23))
->T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(promiseTest.ts, 0, 18))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promiseTest.ts, 0, 18))
 >B : Symbol(B, Decl(promiseTest.ts, 2, 9))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promiseTest.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promiseTest.ts, 0, 0))
 >B : Symbol(B, Decl(promiseTest.ts, 2, 9))
 
     data: T;
 >data : Symbol(Promise.data, Decl(promiseTest.ts, 2, 51))
->T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(promiseTest.ts, 0, 18))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promiseTest.ts, 0, 18))
 }
 
 var p: Promise<number> = null;
 >p : Symbol(p, Decl(promiseTest.ts, 6, 3))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promiseTest.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promiseTest.ts, 0, 0))
 
 var p2 = p.then(function (x) {
 >p2 : Symbol(p2, Decl(promiseTest.ts, 7, 3))
