@@ -495,7 +495,7 @@ namespace TypeScript {
 >scope : Symbol(scope, Decl(parserRealSource9.ts, 144, 26))
 >SymbolScope : Symbol(SymbolScope)
 >symbol : Symbol(symbol, Decl(parserRealSource9.ts, 144, 45))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
             if (!symbol.bound) {
 >symbol : Symbol(symbol, Decl(parserRealSource9.ts, 144, 45))

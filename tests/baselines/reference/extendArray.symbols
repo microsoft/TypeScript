@@ -31,7 +31,7 @@ declare namespace _Core {
 
 var arr = (<any>Array).prototype;
 >arr : Symbol(arr, Decl(extendArray.ts, 11, 3))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 arr.collect = function (fn) {
 >arr : Symbol(arr, Decl(extendArray.ts, 11, 3))

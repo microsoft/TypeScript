@@ -39,7 +39,7 @@ namespace onlyT {
     function other2<T extends Date>(x: T) {
 >other2 : Symbol(other2, Decl(genericCallWithGenericSignatureArguments2.ts, 9, 69))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 11, 20))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 11, 36))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 11, 20))
 
@@ -57,7 +57,7 @@ namespace onlyT {
         var r9 = r7(new Date()); // should be ok
 >r9 : Symbol(r9, Decl(genericCallWithGenericSignatureArguments2.ts, 14, 11))
 >r7 : Symbol(r7, Decl(genericCallWithGenericSignatureArguments2.ts, 12, 11))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         var r10 = r7(1); // error
 >r10 : Symbol(r10, Decl(genericCallWithGenericSignatureArguments2.ts, 15, 11))
@@ -67,7 +67,7 @@ namespace onlyT {
     function foo2<T extends Date>(a: (x: T) => T, b: (x: T) => T) {
 >foo2 : Symbol(foo2, Decl(genericCallWithGenericSignatureArguments2.ts, 16, 5))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 18, 18))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >a : Symbol(a, Decl(genericCallWithGenericSignatureArguments2.ts, 18, 34))
 >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 18, 38))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 18, 18))
@@ -90,7 +90,7 @@ namespace onlyT {
     function other3<T extends RegExp>(x: T) {
 >other3 : Symbol(other3, Decl(genericCallWithGenericSignatureArguments2.ts, 21, 5))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 23, 20))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 23, 38))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 23, 20))
 
@@ -197,7 +197,7 @@ namespace TU {
     function other2<T extends Date>(x: T) {
 >other2 : Symbol(other2, Decl(genericCallWithGenericSignatureArguments2.ts, 45, 69))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 47, 20))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 47, 36))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 47, 20))
 
@@ -214,7 +214,7 @@ namespace TU {
         var r9 = r7(new Date()); 
 >r9 : Symbol(r9, Decl(genericCallWithGenericSignatureArguments2.ts, 49, 11))
 >r7 : Symbol(r7, Decl(genericCallWithGenericSignatureArguments2.ts, 48, 11))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         var r10 = r7(1); 
 >r10 : Symbol(r10, Decl(genericCallWithGenericSignatureArguments2.ts, 50, 11))
@@ -224,9 +224,9 @@ namespace TU {
     function foo2<T extends Date, U extends Date>(a: (x: T) => T, b: (x: U) => U) {
 >foo2 : Symbol(foo2, Decl(genericCallWithGenericSignatureArguments2.ts, 51, 5))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 53, 18))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >U : Symbol(U, Decl(genericCallWithGenericSignatureArguments2.ts, 53, 33))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >a : Symbol(a, Decl(genericCallWithGenericSignatureArguments2.ts, 53, 50))
 >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 53, 54))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 53, 18))
@@ -249,7 +249,7 @@ namespace TU {
     function other3<T extends RegExp>(x: T) {
 >other3 : Symbol(other3, Decl(genericCallWithGenericSignatureArguments2.ts, 56, 5))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 58, 20))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 58, 38))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 58, 20))
 

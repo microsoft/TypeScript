@@ -104,7 +104,7 @@ function isFunction<T>(value: T): value is Extract<T, Function> {
 >value : Symbol(value, Decl(conditionalTypes2.ts, 28, 23))
 >Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 28, 20))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     return typeof value === "function";
 >value : Symbol(value, Decl(conditionalTypes2.ts, 28, 23))
@@ -139,7 +139,7 @@ function f10<T>(x: T) {
 
         const f: Function = x;
 >f : Symbol(f, Decl(conditionalTypes2.ts, 41, 13))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >x : Symbol(x, Decl(conditionalTypes2.ts, 39, 16))
 
         const t: T = x;
@@ -389,12 +389,12 @@ interface B1<T> extends A1<T> {
 declare function toString1(value: object | Function): string ;
 >toString1 : Symbol(toString1, Decl(conditionalTypes2.ts, 107, 1))
 >value : Symbol(value, Decl(conditionalTypes2.ts, 111, 27))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 declare function toString2(value: Function): string ;
 >toString2 : Symbol(toString2, Decl(conditionalTypes2.ts, 111, 62))
 >value : Symbol(value, Decl(conditionalTypes2.ts, 112, 27))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 function foo<T>(value: T) {
 >foo : Symbol(foo, Decl(conditionalTypes2.ts, 112, 53))

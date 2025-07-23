@@ -235,8 +235,8 @@ declare namespace AmbientStuff {
 
 // return and yield ASI
 function *gen() {
->gen : () => {}
->    : ^^^^^^^^
+>gen : () => Generator<any, any, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield <any>
 >yield <any>        1 : any
