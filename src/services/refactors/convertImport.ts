@@ -21,6 +21,7 @@ import {
     ImportDeclaration,
     ImportKind,
     ImportSpecifier,
+    InternalSymbolName,
     isExportSpecifier,
     isImportDeclaration,
     isJSDocImportTag,
@@ -281,8 +282,7 @@ export function doChangeNamedToNamespaceOrDefault(sourceFile: SourceFile, progra
 function isExportEqualsModule(moduleSpecifier: Expression, checker: TypeChecker) {
     const externalModule = checker.resolveExternalModuleName(moduleSpecifier);
     if (!externalModule) return false;
-    const exportEquals = checker.resolveExternalModuleSymbol(externalModule);
-    return externalModule !== exportEquals;
+    return !!externalModule.exports?.has(InternalSymbolName.ExportEquals);
 }
 
 function createImport(node: ImportDeclaration, defaultImportName: Identifier | undefined, elements: readonly ImportSpecifier[] | undefined): ImportDeclaration {

@@ -1878,7 +1878,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const moduleSpecifier = getParseTreeNode(moduleSpecifierIn, isExpression);
             return moduleSpecifier && resolveExternalModuleName(moduleSpecifier, moduleSpecifier, /*ignoreErrors*/ true);
         },
-        resolveExternalModuleSymbol,
         tryGetThisTypeAt: (nodeIn, includeGlobalThis, container) => {
             const node = getParseTreeNode(nodeIn);
             return node && tryGetThisTypeAt(node, includeGlobalThis, container);
@@ -2850,8 +2849,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!mainModule) {
                 return;
             }
-            // obtain item referenced by 'export='
-            mainModule = resolveExternalModuleSymbol(mainModule);
+            mainModule = resolveSymbol(mainModule);
             if (mainModule.flags & SymbolFlags.Namespace) {
                 // If we're merging an augmentation to a pattern ambient module, we want to
                 // perform the merge unidirectionally from the augmentation ('a.foo') to
@@ -3701,7 +3699,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 node,
                 getExternalModuleRequireArgument(node) || getExternalModuleImportEqualsDeclarationExpression(node),
             );
-            const resolved = resolveExternalModuleSymbol(immediate);
+            const resolved = resolveSymbol(immediate);
             if (resolved && ModuleKind.Node20 <= moduleKind && moduleKind <= ModuleKind.NodeNext) {
                 const moduleExports = getExportOfModule(resolved, "module.exports" as __String, node, dontResolveAlias);
                 if (moduleExports) {
@@ -3894,7 +3892,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         else if (hasSyntheticDefault || hasDefaultOnly) {
             // per emit behavior, a synthetic default overrides a "real" .default member if `__esModule` is not present
-            const resolved = resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias) || resolveSymbol(moduleSymbol, dontResolveAlias);
+            const resolved = resolveSymbol(moduleSymbol, dontResolveAlias);
             markSymbolOfAliasDeclarationIfTypeOnly(node, moduleSymbol, resolved, /*overwriteEmpty*/ false);
             return resolved;
         }
@@ -4035,7 +4033,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (symbolFromModule === undefined && nameText === InternalSymbolName.Default) {
                     const file = moduleSymbol.declarations?.find(isSourceFile);
                     if (isOnlyImportableAsDefault(moduleSpecifier, moduleSymbol) || canHaveSyntheticDefault(file, moduleSymbol, dontResolveAlias, moduleSpecifier)) {
-                        symbolFromModule = resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias) || resolveSymbol(moduleSymbol, dontResolveAlias);
+                        symbolFromModule = resolveSymbol(moduleSymbol, dontResolveAlias);
                     }
                 }
 
@@ -4150,7 +4148,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getTargetOfNamespaceExportDeclaration(node: NamespaceExportDeclaration, dontResolveAlias: boolean): Symbol | undefined {
         if (canHaveSymbol(node.parent)) {
-            const resolved = resolveExternalModuleSymbol(node.parent.symbol, dontResolveAlias);
+            const resolved = resolveSymbol(node.parent.symbol, dontResolveAlias);
             markSymbolOfAliasDeclarationIfTypeOnly(node, /*immediateTarget*/ undefined, resolved, /*overwriteEmpty*/ false);
             return resolved;
         }
@@ -4539,7 +4537,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const moduleName = (namespace.valueDeclaration.initializer as CallExpression).arguments[0] as StringLiteral;
                 const moduleSym = resolveExternalModuleName(moduleName, moduleName);
                 if (moduleSym) {
-                    const resolvedModuleSymbol = resolveExternalModuleSymbol(moduleSym);
+                    const resolvedModuleSymbol = resolveSymbol(moduleSym);
                     if (resolvedModuleSymbol) {
                         namespace = resolvedModuleSymbol;
                     }
@@ -4958,17 +4956,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         );
     }
 
-    function resolveExternalModuleSymbol(moduleSymbol: Symbol, dontResolveAlias?: boolean): Symbol;
-    function resolveExternalModuleSymbol(moduleSymbol: Symbol | undefined, dontResolveAlias?: boolean): Symbol | undefined;
-    function resolveExternalModuleSymbol(moduleSymbol: Symbol | undefined, dontResolveAlias?: boolean): Symbol | undefined {
-        return resolveSymbol(moduleSymbol, dontResolveAlias)
-    }
-
     // An external module with an 'export =' declaration may be referenced as an ES6 module provided the 'export ='
     // references a symbol that is at least declared as a module or a variable. The target of the 'export =' may
     // combine other declarations with the module or variable (e.g. a class/module, function/module, interface/variable).
     function resolveESModuleSymbol(moduleSymbol: Symbol | undefined, referencingLocation: Node, dontResolveAlias: boolean, suppressInteropError: boolean): Symbol | undefined {
-        const symbol = resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias);
+        const symbol = resolveSymbol(moduleSymbol, dontResolveAlias);
 
         if (!dontResolveAlias && symbol) {
             if (!suppressInteropError && !(symbol.flags & (SymbolFlags.Module | SymbolFlags.Variable)) && !getDeclarationOfKind(symbol, SyntaxKind.SourceFile)) {
@@ -5059,9 +5051,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getExportsAndPropertiesOfModule(moduleSymbol: Symbol): Symbol[] {
         const exports = getExportsOfModuleAsArray(moduleSymbol);
-        const exportEquals = resolveExternalModuleSymbol(moduleSymbol);
-        if (exportEquals !== moduleSymbol) {
-            const type = getTypeOfSymbol(exportEquals);
+        if (hasExportAssignmentSymbol(moduleSymbol)) {
+            const type = getTypeOfSymbol(moduleSymbol);
             if (shouldTreatPropertiesOfExternalModuleAsExports(type)) {
                 addRange(exports, getPropertiesOfType(type));
             }
@@ -5076,9 +5067,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 cb(symbol, key);
             }
         });
-        const exportEquals = resolveExternalModuleSymbol(moduleSymbol);
-        if (exportEquals !== moduleSymbol) {
-            const type = getTypeOfSymbol(exportEquals);
+        if (hasExportAssignmentSymbol(moduleSymbol)) {
+            const type = getTypeOfSymbol(moduleSymbol);
             if (shouldTreatPropertiesOfExternalModuleAsExports(type)) {
                 forEachPropertyOfType(type, (symbol, escapedName) => {
                     cb(symbol, escapedName);
@@ -5100,12 +5090,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return symbol;
         }
 
-        const exportEquals = resolveExternalModuleSymbol(moduleSymbol);
-        if (exportEquals === moduleSymbol) {
+        if (!moduleSymbol.exports || !hasExportAssignmentSymbol(moduleSymbol)) {
             return undefined;
         }
 
-        const type = getTypeOfSymbol(exportEquals);
+        const type = getTypeOfSymbol(moduleSymbol);
         return shouldTreatPropertiesOfExternalModuleAsExports(type) ? getPropertyOfType(type, memberName) : undefined;
     }
 
@@ -5177,7 +5166,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const nonTypeOnlyNames = new Set<__String>();
 
         // A module defined by an 'export=' consists of one export that needs to be resolved
-        moduleSymbol = resolveExternalModuleSymbol(moduleSymbol);
+        moduleSymbol = resolveSymbol(moduleSymbol);
         const exports = visit(moduleSymbol) || emptySymbols;
 
         if (typeOnlyExportStarMap) {
@@ -5367,8 +5356,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return getSymbolOfDeclaration(d.parent as Declaration);
                 }
                 // export ='d member of an ambient module
-                if (isModuleBlock(d.parent) && d.parent.parent && resolveExternalModuleSymbol(getSymbolOfDeclaration(d.parent.parent)) === symbol) {
-                    return getSymbolOfDeclaration(d.parent.parent);
+                if (isModuleBlock(d.parent) && d.parent.parent) {
+                    const container = resolveSymbol(getSymbolOfDeclaration(d.parent.parent))
+                    if (container && container.exports && hasExportAssignmentSymbol(container) && container.exports.get(InternalSymbolName.ExportEquals) === symbol) {
+                        return getSymbolOfDeclaration(d.parent.parent);
+                    }
                 }
             }
             if (isClassExpression(d) && isBinaryExpression(d.parent) && d.parent.operatorToken.kind === SyntaxKind.EqualsToken && isAccessExpression(d.parent.left) && isEntityNameExpression(d.parent.left.expression)) {
@@ -13021,7 +13013,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     // The outer type parameters are those defined by enclosing generic classes, methods, or functions.
-    function getOuterTypeParametersOfClassOrInterface(symbol: Symbol): TypeParameter[] | undefined {
+    function getOuterTypeParametersOfClassOrInterface(symbol: Symbol | undefined): TypeParameter[] | undefined {
+        if (!symbol) {
+            return undefined;
+        }
+        if (symbol.exports && hasExportAssignmentSymbol(symbol)) {
+            return getOuterTypeParametersOfClassOrInterface(resolveSymbol(symbol.exports?.get(InternalSymbolName.ExportEquals)));
+        }
         const declaration = (symbol.flags & SymbolFlags.Class || symbol.flags & SymbolFlags.Function)
             ? symbol.valueDeclaration
             : symbol.declarations?.find(decl => {
@@ -13040,9 +13038,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     // The local type parameters are the combined set of type parameters from all declarations of the class,
     // interface, or type alias.
-    function getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol: Symbol): TypeParameter[] | undefined {
-        if (!symbol.declarations) {
+    function getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol: Symbol | undefined): TypeParameter[] | undefined {
+        if (!symbol || !symbol.declarations) {
             return;
+        }
+        if (symbol.exports && hasExportAssignmentSymbol(symbol)) {
+            return getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(resolveSymbol(symbol.exports?.get(InternalSymbolName.ExportEquals)));
         }
         let result: TypeParameter[] | undefined;
         for (const node of symbol.declarations) {
@@ -16352,7 +16353,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function resolveExternalModuleTypeByLiteral(name: StringLiteral) {
         const moduleSym = resolveExternalModuleName(name, name);
         if (moduleSym) {
-            const resolvedModuleSymbol = resolveExternalModuleSymbol(moduleSym);
+            const resolvedModuleSymbol = resolveSymbol(moduleSym);
             if (resolvedModuleSymbol) {
                 return getTypeOfSymbol(resolvedModuleSymbol);
             }
@@ -17123,6 +17124,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (res) {
             return checkNoTypeArguments(node, symbol) ? getRegularTypeOfLiteralType(res) : errorType;
         }
+        if (symbol.exports && hasExportAssignmentSymbol(symbol)) {
+            const res = getTypeReferenceType(node, resolveSymbol(symbol.exports.get(InternalSymbolName.ExportEquals)!));
+            if (res !== errorType) {
+                return res;
+            }
+        }
         if (symbol.flags & SymbolFlags.Value && isJSDocTypeReference(node)) {
             const jsdocType = getTypeFromJSDocValueReference(node, symbol);
             if (jsdocType) {
@@ -17133,9 +17140,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 resolveTypeReferenceName(node, SymbolFlags.Type);
                 return getTypeOfSymbol(symbol);
             }
-        }
-        if (symbol.exports && hasExportAssignmentSymbol(symbol)) {
-            return getTypeReferenceType(node, resolveSymbol(symbol.exports.get(InternalSymbolName.ExportEquals)!))
         }
         return errorType;
     }
@@ -19970,7 +19974,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return links.resolvedType = errorType;
             }
             const isExportEquals = !!innerModuleSymbol.exports?.get(InternalSymbolName.ExportEquals);
-            const moduleSymbol = resolveExternalModuleSymbol(innerModuleSymbol, /*dontResolveAlias*/ false);
+            const moduleSymbol = resolveSymbol(innerModuleSymbol, /*dontResolveAlias*/ false);
             if (!nodeIsMissing(node.qualifier)) {
                 const nameStack: Identifier[] = getIdentifierChain(node.qualifier!);
                 let currentNamespace = moduleSymbol;
@@ -50539,12 +50543,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!symbol) {
             return false;
         }
-        const container = getSourceFileOfNode(symbol.valueDeclaration);
-        const fileSymbol = container && getSymbolOfDeclaration(container);
-        // Ensures cjs export assignment is setup, since this symbol may point at, and merge with, the file itself.
-        // If we don't, the merge may not have yet occured, and the flags check below will be missing flags that
-        // are added as a result of the merge.
-        void resolveExternalModuleSymbol(fileSymbol);
         const target = getExportSymbolOfValueSymbolIfExported(resolveAlias(symbol));
         if (target === unknownSymbol) {
             return !excludeTypeOnlyValues || !getTypeOnlyAliasDeclaration(symbol);
@@ -51208,7 +51206,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!sym) {
                     return !node.locals ? [] : nodeBuilder.symbolTableToDeclarationStatements(node.locals, node, flags, internalFlags, tracker);
                 }
-                resolveExternalModuleSymbol(sym); // ensures cjs export assignment is setup
                 return !sym.exports ? [] : nodeBuilder.symbolTableToDeclarationStatements(sym.exports, node, flags, internalFlags, tracker);
             },
             isImportRequiredByAugmentation,
