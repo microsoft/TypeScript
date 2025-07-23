@@ -22711,9 +22711,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function isRelatedTo(originalSource: Type, originalTarget: Type, recursionFlags: RecursionFlags = RecursionFlags.Both, reportErrors = false, headMessage?: DiagnosticMessage, intersectionState = IntersectionState.None): Ternary {
             if (originalSource === originalTarget) return Ternary.True;
 
+            let skipPrenormalFastpath: Type | undefined;
+            // LEGACY COMPAT: In non-esm-compatible module loaders, and `export =` target of a primitive makes the module into that primitive.
+            // We restore that flag-level compatability on type originating from modules with `export=` statements here (rather than it being purely structural).
+            if (originalSource.symbol && originalSource.symbol.exports && hasExportAssignmentSymbol(originalSource.symbol)) {
+                const candidate = getTypeOfSymbol(originalSource.symbol.exports.get(InternalSymbolName.ExportEquals)!)
+                if (candidate.flags & TypeFlags.Primitive) {
+                    skipPrenormalFastpath = candidate
+                }
+            }
+
             // Before normalization: if `source` is type an object type, and `target` is primitive,
             // skip all the checks we don't need and just return `isSimpleTypeRelatedTo` result
-            if (originalSource.flags & TypeFlags.Object && originalTarget.flags & TypeFlags.Primitive) {
+            if (!skipPrenormalFastpath && originalSource.flags & TypeFlags.Object && originalTarget.flags & TypeFlags.Primitive) {
                 if (
                     relation === comparableRelation && !(originalTarget.flags & TypeFlags.Never) && isSimpleTypeRelatedTo(originalTarget, originalSource, relation) ||
                     isSimpleTypeRelatedTo(originalSource, originalTarget, relation, reportErrors ? reportError : undefined)
@@ -22730,7 +22740,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // turn deferred type references into regular type references, simplify indexed access and
             // conditional types, and resolve substitution types to either the substitution (on the source
             // side) or the type variable (on the target side).
-            const source = getNormalizedType(originalSource, /*writing*/ false);
+            const source = getNormalizedType(skipPrenormalFastpath || originalSource, /*writing*/ false);
             let target = getNormalizedType(originalTarget, /*writing*/ true);
 
             if (source === target) return Ternary.True;
