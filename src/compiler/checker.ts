@@ -29396,6 +29396,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
             }
+            // Fix for #23572: Allow discriminant property narrowing for non-union types
+            // This enables narrowing to never when all possibilities are eliminated
+            else {
+                const access = getCandidateDiscriminantPropertyAccess(expr);
+                if (access) {
+                    const name = getAccessedPropertyName(access);
+                    if (name) {
+                        // For non-union types, check if the property exists and has a literal type
+                        const type = declaredType.flags & TypeFlags.Union && isTypeSubsetOf(computedType, declaredType) ? declaredType : computedType;
+                        const propType = getTypeOfPropertyOfType(type, name);
+                        if (propType && isUnitLikeType(propType)) {
+                            return access;
+                        }
+                    }
+                }
+            }
             return undefined;
         }
 
@@ -29414,7 +29430,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const narrowedPropType = narrowType(propType);
             return filterType(type, t => {
                 const discriminantType = getTypeOfPropertyOrIndexSignatureOfType(t, propName) || unknownType;
-                return !(discriminantType.flags & TypeFlags.Never) && !(narrowedPropType.flags & TypeFlags.Never) && areTypesComparable(narrowedPropType, discriminantType);
+                const result = !(discriminantType.flags & TypeFlags.Never) && !(narrowedPropType.flags & TypeFlags.Never) && areTypesComparable(narrowedPropType, discriminantType);
+                return result;
             });
         }
 
@@ -29651,7 +29668,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return replacePrimitivesWithLiterals(filteredType, valueType);
             }
             if (isUnitType(valueType)) {
-                return filterType(type, t => !(isUnitLikeType(t) && areTypesComparable(t, valueType)));
+                const result = filterType(type, t => !(isUnitLikeType(t) && areTypesComparable(t, valueType)));
+                return result;
             }
             return type;
         }
@@ -39274,7 +39292,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!switchTypes.length || some(switchTypes, isNeitherUnitTypeNorNever)) {
             return false;
         }
-        return eachTypeContainedIn(mapType(type, getRegularTypeOfLiteralType), switchTypes);
+        const mappedType = mapType(type, getRegularTypeOfLiteralType);
+        const result = eachTypeContainedIn(mappedType, switchTypes);
+        return result;
     }
 
     function functionHasImplicitReturn(func: FunctionLikeDeclaration) {
