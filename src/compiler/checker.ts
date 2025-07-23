@@ -2531,11 +2531,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getVerbatimModuleSyntaxErrorMessage(node: Node): DiagnosticMessage {
         const sourceFile = getSourceFileOfNode(node);
         const fileName = sourceFile.fileName;
-        
+
         // Check if the file is .cts or .cjs (CommonJS-specific extensions)
         if (fileExtensionIsOneOf(fileName, [Extension.Cts, Extension.Cjs])) {
             return Diagnostics.ECMAScript_imports_and_exports_cannot_be_written_in_a_CommonJS_file_under_verbatimModuleSyntax;
-        } else {
+        }
+        else {
             // For .ts, .tsx, .js, etc.
             return Diagnostics.ECMAScript_imports_and_exports_cannot_be_written_in_a_CommonJS_file_under_verbatimModuleSyntax_Adjust_the_type_field_in_the_nearest_package_json_to_make_this_file_an_ECMAScript_module_or_adjust_your_verbatimModuleSyntax_module_and_moduleResolution_settings_in_TypeScript;
         }
