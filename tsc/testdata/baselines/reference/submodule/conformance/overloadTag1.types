@@ -17,7 +17,7 @@
  * @returns {string | number}
  */
 export function overloaded(a,b) {
->overloaded : (a: string | number, b: string | number) => string | number
+>overloaded : { (a: number, b: number): number; (a: string, b: boolean): string; }
 >a : string | number
 >b : string | number
 
@@ -59,23 +59,23 @@ export function overloaded(a,b) {
 >"Invalid arguments" : "Invalid arguments"
 }
 var o1 = overloaded(1,2)
->o1 : string | number
->overloaded(1,2) : string | number
->overloaded : (a: string | number, b: string | number) => string | number
+>o1 : number
+>overloaded(1,2) : number
+>overloaded : { (a: number, b: number): number; (a: string, b: boolean): string; }
 >1 : 1
 >2 : 2
 
 var o2 = overloaded("zero", "one")
->o2 : string | number
->overloaded("zero", "one") : string | number
->overloaded : (a: string | number, b: string | number) => string | number
+>o2 : never
+>overloaded("zero", "one") : never
+>overloaded : { (a: number, b: number): number; (a: string, b: boolean): string; }
 >"zero" : "zero"
 >"one" : "one"
 
 var o3 = overloaded("a",false)
->o3 : string | number
->overloaded("a",false) : string | number
->overloaded : (a: string | number, b: string | number) => string | number
+>o3 : string
+>overloaded("a",false) : string
+>overloaded : { (a: number, b: number): number; (a: string, b: boolean): string; }
 >"a" : "a"
 >false : false
 
@@ -91,7 +91,7 @@ var o3 = overloaded("a",false)
  * @returns {string}
  */
 export function uncheckedInternally(a, b) {
->uncheckedInternally : (a: any, b: any) => any
+>uncheckedInternally : { (a: number, b: number): number; (a: string, b: boolean): string; }
 >a : any
 >b : any
 
@@ -101,14 +101,14 @@ export function uncheckedInternally(a, b) {
 >b : any
 }
 uncheckedInternally(1,2)
->uncheckedInternally(1,2) : any
->uncheckedInternally : (a: any, b: any) => any
+>uncheckedInternally(1,2) : number
+>uncheckedInternally : { (a: number, b: number): number; (a: string, b: boolean): string; }
 >1 : 1
 >2 : 2
 
 uncheckedInternally("zero", "one")
->uncheckedInternally("zero", "one") : any
->uncheckedInternally : (a: any, b: any) => any
+>uncheckedInternally("zero", "one") : never
+>uncheckedInternally : { (a: number, b: number): number; (a: string, b: boolean): string; }
 >"zero" : "zero"
 >"one" : "one"
 

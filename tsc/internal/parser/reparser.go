@@ -104,7 +104,7 @@ func (p *Parser) reparseUnhosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Nod
 		export.Loc = tag.Loc
 		export.Flags = p.contextFlags | ast.NodeFlagsReparsed
 		modifiers := p.newModifierList(export.Loc, p.nodeSlicePool.NewSlice1(export))
-		functionType := p.reparseJSDocSignature(callbackTag.TypeExpression, tag, jsDoc, tag)
+		functionType := p.reparseJSDocSignature(callbackTag.TypeExpression, tag, jsDoc, tag, nil)
 
 		typeAlias := p.factory.NewJSTypeAliasDeclaration(modifiers, p.factory.DeepCloneReparse(callbackTag.FullName), nil, functionType)
 		typeAlias.AsTypeAliasDeclaration().TypeParameters = p.gatherTypeParameters(jsDoc, tag)
@@ -127,20 +127,21 @@ func (p *Parser) reparseUnhosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Nod
 		p.reparseList = append(p.reparseList, importDeclaration)
 	case ast.KindJSDocOverloadTag:
 		if fun, ok := getFunctionLikeHost(parent); ok {
-			p.reparseList = append(p.reparseList, p.reparseJSDocSignature(tag.AsJSDocOverloadTag().TypeExpression, fun, jsDoc, tag))
+			p.reparseList = append(p.reparseList, p.reparseJSDocSignature(tag.AsJSDocOverloadTag().TypeExpression, fun, jsDoc, tag, fun.Modifiers()))
 		}
 	}
 }
 
-func (p *Parser) reparseJSDocSignature(jsSignature *ast.Node, fun *ast.Node, jsDoc *ast.Node, tag *ast.Node) *ast.Node {
+func (p *Parser) reparseJSDocSignature(jsSignature *ast.Node, fun *ast.Node, jsDoc *ast.Node, tag *ast.Node, modifiers *ast.ModifierList) *ast.Node {
 	var signature *ast.Node
+	clonedModifiers := p.factory.DeepCloneReparseModifiers(modifiers)
 	switch fun.Kind {
 	case ast.KindFunctionDeclaration, ast.KindFunctionExpression, ast.KindArrowFunction:
-		signature = p.factory.NewFunctionDeclaration(nil, nil, p.factory.DeepCloneReparse(fun.Name()), nil, nil, nil, nil)
+		signature = p.factory.NewFunctionDeclaration(clonedModifiers, nil, p.factory.DeepCloneReparse(fun.Name()), nil, nil, nil, nil)
 	case ast.KindMethodDeclaration, ast.KindMethodSignature:
-		signature = p.factory.NewMethodDeclaration(nil, nil, p.factory.DeepCloneReparse(fun.Name()), nil, nil, nil, nil, nil)
+		signature = p.factory.NewMethodDeclaration(clonedModifiers, nil, p.factory.DeepCloneReparse(fun.Name()), nil, nil, nil, nil, nil)
 	case ast.KindConstructor:
-		signature = p.factory.NewConstructorDeclaration(nil, nil, nil, nil, nil)
+		signature = p.factory.NewConstructorDeclaration(clonedModifiers, nil, nil, nil, nil)
 	case ast.KindJSDocCallbackTag:
 		signature = p.factory.NewFunctionTypeNode(nil, nil, nil)
 	default:

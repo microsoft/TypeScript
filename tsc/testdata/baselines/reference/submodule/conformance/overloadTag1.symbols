@@ -17,7 +17,7 @@
  * @returns {string | number}
  */
 export function overloaded(a,b) {
->overloaded : Symbol(overloaded, Decl(overloadTag1.js, 0, 0))
+>overloaded : Symbol(overloaded, Decl(overloadTag1.js, 1, 4), Decl(overloadTag1.js, 6, 4), Decl(overloadTag1.js, 0, 0))
 >a : Symbol(a, Decl(overloadTag1.js, 15, 27))
 >b : Symbol(b, Decl(overloadTag1.js, 15, 29))
 
@@ -64,7 +64,7 @@ var o3 = overloaded("a",false)
  * @returns {string}
  */
 export function uncheckedInternally(a, b) {
->uncheckedInternally : Symbol(uncheckedInternally, Decl(overloadTag1.js, 25, 30))
+>uncheckedInternally : Symbol(uncheckedInternally, Decl(overloadTag1.js, 28, 4), Decl(overloadTag1.js, 33, 4), Decl(overloadTag1.js, 25, 30))
 >a : Symbol(a, Decl(overloadTag1.js, 38, 36))
 >b : Symbol(b, Decl(overloadTag1.js, 38, 38))
 

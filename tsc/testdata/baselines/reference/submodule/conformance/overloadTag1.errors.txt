@@ -1,7 +1,13 @@
-overloadTag1.js(26,25): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string | number'.
+overloadTag1.js(7,5): error TS2394: This overload signature is not compatible with its implementation signature.
+overloadTag1.js(25,29): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'boolean'.
+overloadTag1.js(43,29): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'boolean'.
 
 
-==== overloadTag1.js (1 errors) ====
+==== overloadTag1.js (3 errors) ====
     /**
      * @overload
      * @param {number} a 
@@ -9,6 +15,9 @@ overloadTag1.js(26,25): error TS2345: Argument of type 'boolean' is not assignab
      * @returns {number} 
      *
      * @overload
+        ~~~~~~~~
+!!! error TS2394: This overload signature is not compatible with its implementation signature.
+!!! related TS2750 overloadTag1.js:16:17: The implementation signature is declared here.
      * @param {string} a
      * @param {boolean} b
      * @returns {string}
@@ -27,9 +36,13 @@ overloadTag1.js(26,25): error TS2345: Argument of type 'boolean' is not assignab
     }
     var o1 = overloaded(1,2)
     var o2 = overloaded("zero", "one")
+                                ~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type 'string' is not assignable to parameter of type 'boolean'.
+!!! related TS2771 overloadTag1.js:7:5: The last overload is declared here.
+!!! related TS2793 overloadTag1.js:16:17: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
     var o3 = overloaded("a",false)
-                            ~~~~~
-!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string | number'.
     
     /**
      * @overload
@@ -47,4 +60,10 @@ overloadTag1.js(26,25): error TS2345: Argument of type 'boolean' is not assignab
     }
     uncheckedInternally(1,2)
     uncheckedInternally("zero", "one")
+                                ~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type 'string' is not assignable to parameter of type 'boolean'.
+!!! related TS2771 overloadTag1.js:34:5: The last overload is declared here.
+!!! related TS2793 overloadTag1.js:39:17: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
     
