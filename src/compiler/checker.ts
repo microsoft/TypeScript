@@ -29405,9 +29405,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (name) {
                         // For non-union types, check if the property exists and has a literal type
                         const type = declaredType.flags & TypeFlags.Union && isTypeSubsetOf(computedType, declaredType) ? declaredType : computedType;
-                        const propType = getTypeOfPropertyOfType(type, name);
-                        if (propType && isUnitLikeType(propType)) {
-                            return access;
+                        // Only try to get property type for safe types (avoid EvolvingArray and other special types)
+                        if (type.flags & TypeFlags.Object && !((type as ObjectType).objectFlags & ObjectFlags.EvolvingArray)) {
+                            const propType = getTypeOfPropertyOfType(type, name);
+                            if (propType && isUnitLikeType(propType)) {
+                                return access;
+                            }
                         }
                     }
                 }
