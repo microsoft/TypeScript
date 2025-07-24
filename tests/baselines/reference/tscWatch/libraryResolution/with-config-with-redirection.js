@@ -190,10 +190,6 @@ File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.
 File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts', result '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts'.
 ======== Module name '@typescript/lib-webworker' was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts'. ========
-DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/node_modules 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/node_modules 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Failed Lookup Locations
 File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist.
 File '/home/src/workspace/projects/node_modules/package.json' does not exist.
@@ -261,8 +257,6 @@ File '/home/src/workspace/projects/project1/typeroot1/sometype/package.json' doe
 File '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts', result '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts'.
 ======== Type reference directive 'sometype' was successfully resolved to '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts', primary: true. ========
-DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/typeroot1 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/typeroot1 1 undefined Failed Lookup Locations
 ======== Resolving module '@typescript/lib-dom' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -497,8 +491,6 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/workspace/projects/package.json: *new*
   {"pollingInterval":2000}
-/home/src/workspace/projects/project1/node_modules: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts: *new*
@@ -525,8 +517,6 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/home/src/workspace/projects/node_modules: *new*
-  {}
 /home/src/workspace/projects/project1: *new*
   {}
 /home/src/workspace/projects/project1/typeroot1: *new*
@@ -605,18 +595,13 @@ Output::
 FileWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts 2:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts 2:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts 250 undefined Source file
-DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Failed Lookup Locations
 
 
-Timeout callback:: count: 2
+Timeout callback:: count: 1
 1: timerToUpdateProgram *new*
-2: timerToInvalidateFailedLookupResolutions *new*
 
-Before running Timeout callback:: count: 2
+Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
-2: timerToInvalidateFailedLookupResolutions
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -651,7 +636,7 @@ File '/home/src/workspace/package.json' does not exist according to earlier cach
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
@@ -724,6 +709,10 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-dom' was not resolved. ========
+DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/node_modules 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.dom.d.ts 250 undefined Source file
@@ -896,7 +885,7 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/workspace/projects/package.json:
   {"pollingInterval":2000}
-/home/src/workspace/projects/project1/node_modules:
+/home/src/workspace/projects/project1/node_modules: *new*
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -932,15 +921,12 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
-/home/src/workspace/projects/node_modules:
+/home/src/workspace/projects/node_modules: *new*
   {}
 /home/src/workspace/projects/project1:
   {}
 /home/src/workspace/projects/project1/typeroot1:
   {}
-
-Timeout callback:: count: 0
-2: timerToInvalidateFailedLookupResolutions *deleted*
 
 
 Program root files: [
@@ -1020,10 +1006,10 @@ Elapsed:: *ms FileWatcher:: Triggered with /home/src/workspace/projects/project1
 
 
 Timeout callback:: count: 1
-3: timerToUpdateProgram *new*
+2: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-3: timerToUpdateProgram
+2: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -1285,10 +1271,10 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/pro
 
 
 Timeout callback:: count: 1
-5: timerToUpdateProgram *new*
+4: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-5: timerToUpdateProgram
+4: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -1581,10 +1567,10 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/nod
 
 
 Timeout callback:: count: 1
-6: timerToInvalidateFailedLookupResolutions *new*
+5: timerToInvalidateFailedLookupResolutions *new*
 
 Before running Timeout callback:: count: 1
-6: timerToInvalidateFailedLookupResolutions
+5: timerToInvalidateFailedLookupResolutions
 
 Host is moving to new time
 After running Timeout callback:: count: 1
@@ -1594,10 +1580,10 @@ Scheduling update
 
 
 Timeout callback:: count: 1
-7: timerToUpdateProgram *new*
+6: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-7: timerToUpdateProgram
+6: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -1686,6 +1672,10 @@ File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts 250 undefined Source file
 FileWatcher:: Close:: WatchInfo: /home/src/tslibs/TS/Lib/lib.dom.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json 2000 undefined File location affecting resolution
+DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/projects/project1/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/projects/project1/node_modules 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
 node_modules/@typescript/lib-webworker/index.d.ts
@@ -1850,11 +1840,11 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/workspace/projects/package.json:
   {"pollingInterval":2000}
-/home/src/workspace/projects/project1/node_modules:
-  {"pollingInterval":500}
 
 PolledWatches *deleted*::
 /home/src/workspace/node_modules:
+  {"pollingInterval":500}
+/home/src/workspace/projects/project1/node_modules:
   {"pollingInterval":500}
 
 FsWatches::
@@ -1884,11 +1874,13 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
-/home/src/workspace/projects/node_modules:
-  {}
 /home/src/workspace/projects/project1:
   {}
 /home/src/workspace/projects/project1/typeroot1:
+  {}
+
+FsWatchesRecursive *deleted*::
+/home/src/workspace/projects/node_modules:
   {}
 
 
@@ -1979,10 +1971,10 @@ Elapsed:: *ms FileWatcher:: Triggered with /home/src/workspace/projects/project1
 
 
 Timeout callback:: count: 1
-8: timerToUpdateProgram *new*
+7: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-8: timerToUpdateProgram
+7: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -2081,8 +2073,6 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/workspace/projects/package.json:
   {"pollingInterval":2000}
-/home/src/workspace/projects/project1/node_modules:
-  {"pollingInterval":500}
 /home/src/workspace/projects/project1/typeroot2: *new*
   {"pollingInterval":500}
 
@@ -2109,8 +2099,6 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/home/src/workspace/projects/node_modules:
-  {}
 /home/src/workspace/projects/project1:
   {}
 /home/src/workspace/projects/project1/typeroot1:
@@ -2192,18 +2180,13 @@ Elapsed:: *ms FileWatcher:: Triggered with /home/src/workspace/projects/project1
 FileWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts 2:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts 2:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts 250 undefined Source file
-DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Failed Lookup Locations
 
 
-Timeout callback:: count: 2
-10: timerToUpdateProgram *new*
-11: timerToInvalidateFailedLookupResolutions *new*
+Timeout callback:: count: 1
+9: timerToUpdateProgram *new*
 
-Before running Timeout callback:: count: 2
-10: timerToUpdateProgram
-11: timerToInvalidateFailedLookupResolutions
+Before running Timeout callback:: count: 1
+9: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -2255,7 +2238,7 @@ Loading module '@typescript/lib-dom' from 'node_modules' folder, target file typ
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-dom'
-File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.ts' does not exist.
 File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.tsx' does not exist.
 File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.d.ts' does not exist.
@@ -2285,6 +2268,10 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-dom' was not resolved. ========
+DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/node_modules 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.dom.d.ts 250 undefined Source file
@@ -2452,7 +2439,7 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/workspace/projects/package.json:
   {"pollingInterval":2000}
-/home/src/workspace/projects/project1/node_modules:
+/home/src/workspace/projects/project1/node_modules: *new*
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -2488,15 +2475,12 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
-/home/src/workspace/projects/node_modules:
+/home/src/workspace/projects/node_modules: *new*
   {}
 /home/src/workspace/projects/project1:
   {}
 /home/src/workspace/projects/project1/typeroot1:
   {}
-
-Timeout callback:: count: 0
-11: timerToInvalidateFailedLookupResolutions *deleted*
 
 Before running Timeout callback:: count: 0
 
@@ -2577,12 +2561,12 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/nod
 
 
 Timeout callback:: count: 2
-12: timerToUpdateProgram *new*
-13: timerToInvalidateFailedLookupResolutions *new*
+10: timerToUpdateProgram *new*
+11: timerToInvalidateFailedLookupResolutions *new*
 
 Before running Timeout callback:: count: 2
-12: timerToUpdateProgram
-13: timerToInvalidateFailedLookupResolutions
+10: timerToUpdateProgram
+11: timerToInvalidateFailedLookupResolutions
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -2858,7 +2842,7 @@ FsWatchesRecursive::
   {}
 
 Timeout callback:: count: 0
-13: timerToInvalidateFailedLookupResolutions *deleted*
+11: timerToInvalidateFailedLookupResolutions *deleted*
 
 
 Program root files: [
@@ -2933,10 +2917,10 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/nod
 
 
 Timeout callback:: count: 1
-14: timerToInvalidateFailedLookupResolutions *new*
+12: timerToInvalidateFailedLookupResolutions *new*
 
 Before running Timeout callback:: count: 1
-14: timerToInvalidateFailedLookupResolutions
+12: timerToInvalidateFailedLookupResolutions
 
 Host is moving to new time
 After running Timeout callback:: count: 1
@@ -2946,10 +2930,10 @@ Scheduling update
 
 
 Timeout callback:: count: 1
-15: timerToUpdateProgram *new*
+13: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-15: timerToUpdateProgram
+13: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0

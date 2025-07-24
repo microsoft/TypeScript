@@ -212,17 +212,6 @@ Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/myproject/r
 Info seq  [hh:mm:ss:mss] ======== Module name 'other/sometype2' was successfully resolved to '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'. ========
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2/other/sometype2/index.d.ts 500 {"excludeDirectories":["/home/src/Vscode/Projects/bin/node_modules"]} WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 {"excludeDirectories":["/home/src/Vscode/Projects/bin/node_modules"]} WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/other 1 {"excludeDirectories":["/home/src/projects/myproject/node_modules"],"excludeFiles":["/home/src/projects/myproject/main.ts"]} Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/other 1 {"excludeDirectories":["/home/src/projects/myproject/node_modules"],"excludeFiles":["/home/src/projects/myproject/main.ts"]} Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src 1 {"excludeDirectories":["/home/src/projects/myproject/node_modules"],"excludeFiles":["/home/src/projects/myproject/main.ts"]} Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src 1 {"excludeDirectories":["/home/src/projects/myproject/node_modules"],"excludeFiles":["/home/src/projects/myproject/main.ts"]} Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] ExcludeWatcher:: Added:: WatchInfo: /home/src/projects/myproject/node_modules 1 {"excludeDirectories":["/home/src/projects/myproject/node_modules"],"excludeFiles":["/home/src/projects/myproject/main.ts"]} Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 {"excludeDirectories":["/home/src/projects/myproject/node_modules"],"excludeFiles":["/home/src/projects/myproject/main.ts"]} Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 {"excludeDirectories":["/home/src/projects/myproject/node_modules"],"excludeFiles":["/home/src/projects/myproject/main.ts"]} Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/configs 1 {"excludeDirectories":["/home/src/projects/myproject/node_modules"],"excludeFiles":["/home/src/projects/myproject/main.ts"]} Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/configs 1 {"excludeDirectories":["/home/src/projects/myproject/node_modules"],"excludeFiles":["/home/src/projects/myproject/main.ts"]} Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2 1 {"excludeDirectories":["/home/src/projects/myproject/node_modules"],"excludeFiles":["/home/src/projects/myproject/main.ts"]} Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2 1 {"excludeDirectories":["/home/src/projects/myproject/node_modules"],"excludeFiles":["/home/src/projects/myproject/main.ts"]} Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/myproject/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
@@ -339,12 +328,6 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-PolledWatches::
-/home/src/projects/myproject/other: *new*
-  {"pollingInterval":500}
-/home/src/projects/node_modules: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/projects/configs/first/tsconfig.json: *new*
   {}
@@ -362,10 +345,6 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/home/src/projects/configs: *new*
-  {}
-/home/src/projects/myproject/root2: *new*
-  {}
 /home/src/projects/myproject/src: *new*
   {}
 
@@ -504,8 +483,6 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/myproject/root2/other/sometype
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/myproject/root2/other/sometype2/index.d.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/myproject/root2/other/sometype2/index.d.ts', result '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'other/sometype2' was successfully resolved to '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'. ========
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/configs 1 {"excludeDirectories":["/home/src/projects/myproject/node_modules"],"excludeFiles":["/home/src/projects/myproject/main.ts"]} Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/configs 1 {"excludeDirectories":["/home/src/projects/myproject/node_modules"],"excludeFiles":["/home/src/projects/myproject/main.ts"]} Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/myproject/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
@@ -566,38 +543,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
-
-PolledWatches::
-/home/src/projects/myproject/other:
-  {"pollingInterval":500}
-/home/src/projects/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/projects/configs/first/tsconfig.json:
-  {}
-/home/src/projects/configs/second/tsconfig.json:
-  {}
-/home/src/projects/myproject/main.ts:
-  {}
-/home/src/projects/myproject/root2/other/sometype2/index.d.ts:
-  {}
-/home/src/projects/myproject/tsconfig.json:
-  {}
-/home/src/projects/myproject/types/sometype.ts:
-  {}
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/home/src/projects/myproject/root2:
-  {}
-/home/src/projects/myproject/src:
-  {}
-
-FsWatchesRecursive *deleted*::
-/home/src/projects/configs:
-  {}
 
 Projects::
 /home/src/projects/myproject/tsconfig.json (Configured) *changed*

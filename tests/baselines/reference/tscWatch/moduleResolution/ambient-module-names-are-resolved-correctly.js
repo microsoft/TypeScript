@@ -449,6 +449,8 @@ File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb/node_modules/mymoduleutils/index.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb/node_modules/mymoduleutils/package.json 2000 undefined File location affecting resolution
+DirectoryWatcher:: Close:: WatchInfo: /home/src/workspaces/project/withb 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/workspaces/project/withb 1 undefined Failed Lookup Locations
 FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/withb/node_modules/mymodule/package.json 2000 undefined File location affecting resolution
 ../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
@@ -518,6 +520,8 @@ FsWatchesRecursive::
   {}
 /home/src/workspaces/project/witha:
   {}
+
+FsWatchesRecursive *deleted*::
 /home/src/workspaces/project/withb:
   {}
 
