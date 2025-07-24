@@ -6,7 +6,7 @@ class C {
 
     [x: number]: Date;
 >x : Symbol(x, Decl(indexersInClassType.ts, 1, 5))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     [x: string]: Object;
 >x : Symbol(x, Decl(indexersInClassType.ts, 2, 5))
@@ -14,7 +14,7 @@ class C {
 
     1: Date;
 >1 : Symbol(C[1], Decl(indexersInClassType.ts, 2, 24))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     'a': {}
 >'a' : Symbol(C['a'], Decl(indexersInClassType.ts, 3, 12))

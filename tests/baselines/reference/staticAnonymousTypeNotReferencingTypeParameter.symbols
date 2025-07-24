@@ -138,7 +138,7 @@ class ListWrapper {
 >dit : Symbol(dit, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 42, 25))
 >ListWrapper : Symbol(ListWrapper, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 38, 1))
 >size : Symbol(size, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 42, 49))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 137, 75))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
 >size : Symbol(size, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 42, 49))
 
   static createGrowableSize(dit: typeof ListWrapper, size: number): any[] { return new Array(size); }
@@ -146,7 +146,7 @@ class ListWrapper {
 >dit : Symbol(dit, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 43, 28))
 >ListWrapper : Symbol(ListWrapper, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 38, 1))
 >size : Symbol(size, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 43, 52))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 137, 75))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
 >size : Symbol(size, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 43, 52))
 
   static clone<T>(dit: typeof ListWrapper, array: T[]): T[] { return array.slice(0); }
@@ -438,9 +438,9 @@ class ListWrapper {
 >end : Symbol(end, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 91, 82))
 
     list.fill(value, start, end === null ? list.length : end);
->list.fill : Symbol(Array.fill, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 138, 20))
+>list.fill : Symbol(Array.fill, Decl(lib.es2015.core.d.ts, --, --), Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 138, 20))
 >list : Symbol(list, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 91, 38))
->fill : Symbol(Array.fill, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 138, 20))
+>fill : Symbol(Array.fill, Decl(lib.es2015.core.d.ts, --, --), Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 138, 20))
 >value : Symbol(value, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 91, 51))
 >start : Symbol(start, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 91, 63))
 >end : Symbol(end, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 91, 82))
@@ -565,7 +565,7 @@ class ListWrapper {
 >l : Symbol(l, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 113, 43))
 >T : Symbol(T, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 113, 16))
 >JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >l : Symbol(l, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 113, 43))
 
@@ -658,11 +658,11 @@ declare function isPresent<T>(compareFn?: (a: T, b: T) => number): boolean;
 >T : Symbol(T, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 137, 27))
 
 interface Array<T> {
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 137, 75))
->T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 138, 16))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 138, 16))
 
 	fill(value: any, start: number, end: number): void;
->fill : Symbol(Array.fill, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 138, 20))
+>fill : Symbol(Array.fill, Decl(lib.es2015.core.d.ts, --, --), Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 138, 20))
 >value : Symbol(value, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 139, 6))
 >start : Symbol(start, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 139, 17))
 >end : Symbol(end, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 139, 32))

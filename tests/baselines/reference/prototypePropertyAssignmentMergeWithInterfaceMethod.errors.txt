@@ -3,7 +3,7 @@ lovefield-ts.d.ts(5,24): error TS2503: Cannot find namespace 'schema'.
 lovefield-ts.d.ts(7,25): error TS2503: Cannot find namespace 'query'.
 lovefield-ts.d.ts(9,14): error TS2552: Cannot find name 'TransactionStats'. Did you mean 'Transaction'?
 lovefield.js(3,23): error TS2694: Namespace 'lf' has no exported member 'schema'.
-lovefield.js(4,14): error TS2304: Cannot find name 'IThenable'.
+lovefield.js(4,14): error TS2552: Cannot find name 'IThenable'. Did you mean 'Iterable'?
 
 
 ==== lovefield-ts.d.ts (4 errors) ====
@@ -35,7 +35,7 @@ lovefield.js(4,14): error TS2304: Cannot find name 'IThenable'.
 !!! error TS2694: Namespace 'lf' has no exported member 'schema'.
      * @return {!IThenable}
                  ~~~~~~~~~
-!!! error TS2304: Cannot find name 'IThenable'.
+!!! error TS2552: Cannot find name 'IThenable'. Did you mean 'Iterable'?
      */
     lf.Transaction.prototype.begin = function(scope) {};
     
