@@ -331,7 +331,65 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-es5' was not resolved. ========
+======== Resolving module '@typescript/lib-es2015' from '/home/src/projects/component-type-checker/packages/app/__lib_node_modules_lookup_lib.es2015.d.ts__.ts'. ========
+Explicitly specified module resolution kind: 'Node10'.
+Loading module '@typescript/lib-es2015' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/home/src/projects/component-type-checker/packages/app/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es2015'
+Directory '/home/src/projects/component-type-checker/packages/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es2015'
+Directory '/home/src/projects/component-type-checker/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es2015'
+Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es2015'
+Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es2015'
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es2015'
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es2015'
+Loading module '@typescript/lib-es2015' from 'node_modules' folder, target file types: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+Directory '/home/src/projects/component-type-checker/packages/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name '@typescript/lib-es2015' was not resolved. ========
+[96m../../../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m11[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m11[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96m../../../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m13[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m13[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../../../tslibs/TS/Lib/lib.es5.d.ts[0m:[93m13[0m:[93m15[0m
+    [7m13[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+
+[96m../../../../tslibs/TS/Lib/lib.es5.d.ts[0m:[93m11[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m11[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96m../../../../tslibs/TS/Lib/lib.es5.d.ts[0m:[93m13[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m13[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m13[0m:[93m15[0m
+    [7m13[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+
 ../../../../tslibs/TS/Lib/lib.es5.d.ts
+  Library 'lib.es5.d.ts' specified in compilerOptions
+../../../../tslibs/TS/Lib/lib.es2015.d.ts
   Library 'lib.es5.d.ts' specified in compilerOptions
 ../../node_modules/.pnpm/@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button/src/index.ts
   Imported via "@component-type-checker/button" from file '../../node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/components/src/index.ts' with packageId '@component-type-checker/button/src/index.ts@0.0.1'
@@ -347,8 +405,16 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 src/app.tsx
   Matched by include pattern 'src' in 'tsconfig.json'
 
+Found 4 errors in 2 files.
+
+Errors  Files
+     2  ../../../../tslibs/TS/Lib/lib.es2015.d.ts[90m:11[0m
+     2  ../../../../tslibs/TS/Lib/lib.es5.d.ts[90m:11[0m
+
 
 //// [/home/src/tslibs/TS/Lib/lib.es5.d.ts] *Lib*
+
+//// [/home/src/tslibs/TS/Lib/lib.es2015.d.ts] *Lib*
 
 //// [/home/src/projects/component-type-checker/packages/app/dist/app.js]
 import { createButton } from "@component-type-checker/button";
@@ -356,4 +422,4 @@ var button = createButton();
 
 
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

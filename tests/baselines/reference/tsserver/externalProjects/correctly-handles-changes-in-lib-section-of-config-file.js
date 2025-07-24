@@ -88,6 +88,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/src/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/src/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es5.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2015.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/src/node_modules/@types 1 undefined Project: /home/src/projects/project/src/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/src/node_modules/@types 1 undefined Project: /home/src/projects/project/src/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/src/tsconfig.json WatchType: Type roots
@@ -96,12 +97,15 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/src/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/src/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/src/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 "declare const eval: any"
+	/home/src/tslibs/TS/Lib/lib.es2015.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/project/src/app.ts SVC-1-0 "var x: Promise<string>;"
 
 
 	../../../tslibs/TS/Lib/lib.es5.d.ts
+	  Library 'lib.es5.d.ts' specified in compilerOptions
+	../../../tslibs/TS/Lib/lib.es2015.d.ts
 	  Library 'lib.es5.d.ts' specified in compilerOptions
 	app.ts
 	  Matched by default include pattern '**/*'
@@ -134,8 +138,8 @@ Info seq  [hh:mm:ss:mss] event:
             "tsSize": 23,
             "tsx": 0,
             "tsxSize": 0,
-            "dts": 1,
-            "dtsSize": 23,
+            "dts": 2,
+            "dtsSize": 436,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -173,52 +177,11 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/home/src/projects/project/src/app.ts",
         "configFile": "/home/src/projects/project/src/tsconfig.json",
-        "diagnostics": [
-          {
-            "text": "Cannot find global type 'Array'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Boolean'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Function'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'IArguments'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Number'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Object'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'RegExp'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'String'.",
-            "code": 2318,
-            "category": "error"
-          }
-        ]
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/src/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -236,6 +199,8 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+//// [/home/src/tslibs/TS/Lib/lib.es2015.d.ts] *Lib*
+
 
 PolledWatches::
 /home/src/projects/node_modules: *new*
@@ -253,6 +218,8 @@ PolledWatches::
 
 FsWatches::
 /home/src/projects/project/src/tsconfig.json: *new*
+  {}
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts: *new*
   {}
 /home/src/tslibs/TS/Lib/lib.es5.d.ts: *new*
   {}
@@ -272,6 +239,10 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /home/src/projects/project/src/tsconfig.json *default*
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/src/tsconfig.json
 /home/src/tslibs/TS/Lib/lib.es5.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -342,13 +313,16 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2015.promise.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/src/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/src/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 "declare const eval: any"
+	/home/src/tslibs/TS/Lib/lib.es2015.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/tslibs/TS/Lib/lib.es2015.promise.d.ts Text-1 "declare class Promise<T> {}"
 	/home/src/projects/project/src/app.ts SVC-1-0 "var x: Promise<string>;"
 
 
 	../../../tslibs/TS/Lib/lib.es5.d.ts
+	  Library 'lib.es5.d.ts' specified in compilerOptions
+	../../../tslibs/TS/Lib/lib.es2015.d.ts
 	  Library 'lib.es5.d.ts' specified in compilerOptions
 	../../../tslibs/TS/Lib/lib.es2015.promise.d.ts
 	  Library 'lib.es2015.promise.d.ts' specified in compilerOptions
@@ -373,54 +347,13 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/home/src/projects/project/src/tsconfig.json",
         "configFile": "/home/src/projects/project/src/tsconfig.json",
-        "diagnostics": [
-          {
-            "text": "Cannot find global type 'Array'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Boolean'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Function'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'IArguments'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Number'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Object'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'RegExp'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'String'.",
-            "code": 2318,
-            "category": "error"
-          }
-        ]
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/src/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -428,7 +361,7 @@ Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/src/app.ts Projec
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/src/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -465,6 +398,8 @@ PolledWatches::
 FsWatches::
 /home/src/projects/project/src/tsconfig.json:
   {}
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts:
+  {}
 /home/src/tslibs/TS/Lib/lib.es2015.promise.d.ts: *new*
   {}
 /home/src/tslibs/TS/Lib/lib.es5.d.ts:
@@ -485,6 +420,10 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /home/src/projects/project/src/tsconfig.json *default*
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/src/tsconfig.json
 /home/src/tslibs/TS/Lib/lib.es2015.promise.d.ts *new*
     version: Text-1
     containingProjects: 1

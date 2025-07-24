@@ -4,12 +4,11 @@
 // Allow generators to fallback to IterableIterator if they do not need a type for the sent value while in strictNullChecks mode.
 // Report an error if IterableIterator cannot be found.
 function* f() {
->f : () => {}
->  : ^^^^^^^^
+>f : () => Generator<number, void, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield 1;
 >yield 1 : any
->        : ^^^
 >1 : 1
 >  : ^
 }
