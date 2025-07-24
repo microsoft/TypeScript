@@ -1,37 +1,11 @@
-
 currentDirectory::/home/src/workspaces/project
 useCaseSensitiveFileNames::true
-Input::--help
+Input::
 
-ExitStatus:: 0
-
-ParsedCommandLine::{
-    "parsedConfig": {
-        "compilerOptions": {
-            "help": true
-        },
-        "watchOptions": {
-            "watchInterval": null,
-            "watchFile": 0,
-            "watchDirectory": 0,
-            "fallbackPolling": 0,
-            "synchronousWatchDirectory": null,
-            "excludeDirectories": null,
-            "excludeFiles": null
-        },
-        "typeAcquisition": null,
-        "fileNames": [],
-        "projectReferences": null
-    },
-    "configFile": null,
-    "errors": [],
-    "raw": {
-        "help": true
-    },
-    "compileOnSave": null
-}
+tsgo --help
+ExitStatus:: Success
 Output::
-tsc: The TypeScript Compiler - Version 7.0.0-dev
+tsc: The TypeScript Compiler - Version FakeTSVersion
 
 COMMON COMMANDS
 

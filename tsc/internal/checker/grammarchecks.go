@@ -42,6 +42,17 @@ func (c *Checker) grammarErrorOnNode(node *ast.Node, message *diagnostics.Messag
 	return false
 }
 
+func (c *Checker) grammarErrorOnNodeSkippedOnNoEmit(node *ast.Node, message *diagnostics.Message, args ...any) bool {
+	sourceFile := ast.GetSourceFileOfNode(node)
+	if !c.hasParseDiagnostics(sourceFile) {
+		d := NewDiagnosticForNode(node, message, args...)
+		d.SetSkippedOnNoEmit()
+		c.diagnostics.Add(d)
+		return true
+	}
+	return false
+}
+
 func (c *Checker) checkGrammarRegularExpressionLiteral(_ *ast.RegularExpressionLiteral) bool {
 	// !!!
 	// Unclear if this is needed until regular expression parsing is more thoroughly implemented.
@@ -1648,7 +1659,7 @@ func (c *Checker) checkGrammarVariableDeclaration(node *ast.VariableDeclaration)
 func (c *Checker) checkGrammarForEsModuleMarkerInBindingName(name *ast.Node) bool {
 	if ast.IsIdentifier(name) {
 		if name.Text() == "__esModule" {
-			return c.grammarErrorOnNode(name, diagnostics.Identifier_expected_esModule_is_reserved_as_an_exported_marker_when_transforming_ECMAScript_modules)
+			return c.grammarErrorOnNodeSkippedOnNoEmit(name, diagnostics.Identifier_expected_esModule_is_reserved_as_an_exported_marker_when_transforming_ECMAScript_modules)
 		}
 	} else {
 		for _, element := range name.AsBindingPattern().Elements.Nodes {

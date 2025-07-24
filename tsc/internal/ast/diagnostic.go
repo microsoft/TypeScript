@@ -21,6 +21,7 @@ type Diagnostic struct {
 	relatedInformation []*Diagnostic
 	reportsUnnecessary bool
 	reportsDeprecated  bool
+	skippedOnNoEmit    bool
 }
 
 func (d *Diagnostic) File() *SourceFile                 { return d.file }
@@ -35,10 +36,12 @@ func (d *Diagnostic) MessageChain() []*Diagnostic       { return d.messageChain 
 func (d *Diagnostic) RelatedInformation() []*Diagnostic { return d.relatedInformation }
 func (d *Diagnostic) ReportsUnnecessary() bool          { return d.reportsUnnecessary }
 func (d *Diagnostic) ReportsDeprecated() bool           { return d.reportsDeprecated }
+func (d *Diagnostic) SkippedOnNoEmit() bool             { return d.skippedOnNoEmit }
 
 func (d *Diagnostic) SetFile(file *SourceFile)                  { d.file = file }
 func (d *Diagnostic) SetLocation(loc core.TextRange)            { d.loc = loc }
 func (d *Diagnostic) SetCategory(category diagnostics.Category) { d.category = category }
+func (d *Diagnostic) SetSkippedOnNoEmit()                       { d.skippedOnNoEmit = true }
 
 func (d *Diagnostic) SetMessageChain(messageChain []*Diagnostic) *Diagnostic {
 	d.messageChain = messageChain
@@ -67,6 +70,32 @@ func (d *Diagnostic) AddRelatedInfo(relatedInformation *Diagnostic) *Diagnostic 
 func (d *Diagnostic) Clone() *Diagnostic {
 	result := *d
 	return &result
+}
+
+func NewDiagnosticWith(
+	file *SourceFile,
+	loc core.TextRange,
+	code int32,
+	category diagnostics.Category,
+	message string,
+	messageChain []*Diagnostic,
+	relatedInformation []*Diagnostic,
+	reportsUnnecessary bool,
+	reportsDeprecated bool,
+	skippedOnNoEmit bool,
+) *Diagnostic {
+	return &Diagnostic{
+		file:               file,
+		loc:                loc,
+		code:               code,
+		category:           category,
+		message:            message,
+		messageChain:       messageChain,
+		relatedInformation: relatedInformation,
+		reportsUnnecessary: reportsUnnecessary,
+		reportsDeprecated:  reportsDeprecated,
+		skippedOnNoEmit:    skippedOnNoEmit,
+	}
 }
 
 func NewDiagnostic(file *SourceFile, loc core.TextRange, message *diagnostics.Message, args ...any) *Diagnostic {

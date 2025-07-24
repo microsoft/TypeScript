@@ -168,6 +168,10 @@ func ParseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 }
 
 func parseCompilerOptions(key string, value any, allOptions *core.CompilerOptions) (foundKey bool) {
+	option := CommandLineCompilerOptionsMap.Get(key)
+	if option != nil {
+		key = option.Name
+	}
 	switch key {
 	case "allowJs":
 		allOptions.AllowJs = parseTristate(value)
@@ -258,7 +262,7 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 	case "isolatedDeclarations":
 		allOptions.IsolatedDeclarations = parseTristate(value)
 	case "jsx":
-		allOptions.Jsx = value.(core.JsxEmit)
+		allOptions.Jsx = floatOrInt32ToFlag[core.JsxEmit](value)
 	case "jsxFactory":
 		allOptions.JsxFactory = parseString(value)
 	case "jsxFragmentFactory":
@@ -284,15 +288,15 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 	case "mapRoot":
 		allOptions.MapRoot = parseString(value)
 	case "module":
-		allOptions.Module = value.(core.ModuleKind)
+		allOptions.Module = floatOrInt32ToFlag[core.ModuleKind](value)
 	case "moduleDetectionKind":
-		allOptions.ModuleDetection = value.(core.ModuleDetectionKind)
+		allOptions.ModuleDetection = floatOrInt32ToFlag[core.ModuleDetectionKind](value)
 	case "moduleResolution":
-		allOptions.ModuleResolution = value.(core.ModuleResolutionKind)
+		allOptions.ModuleResolution = floatOrInt32ToFlag[core.ModuleResolutionKind](value)
 	case "moduleSuffixes":
 		allOptions.ModuleSuffixes = parseStringArray(value)
 	case "moduleDetection":
-		allOptions.ModuleDetection = value.(core.ModuleDetectionKind)
+		allOptions.ModuleDetection = floatOrInt32ToFlag[core.ModuleDetectionKind](value)
 	case "noCheck":
 		allOptions.NoCheck = parseTristate(value)
 	case "noFallthroughCasesInSwitch":
@@ -380,7 +384,7 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 	case "suppressOutputPathCheck":
 		allOptions.SuppressOutputPathCheck = parseTristate(value)
 	case "target":
-		allOptions.Target = value.(core.ScriptTarget)
+		allOptions.Target = floatOrInt32ToFlag[core.ScriptTarget](value)
 	case "traceResolution":
 		allOptions.TraceResolution = parseTristate(value)
 	case "tsBuildInfoFile":
@@ -420,7 +424,7 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 	case "outDir":
 		allOptions.OutDir = parseString(value)
 	case "newLine":
-		allOptions.NewLine = value.(core.NewLineKind)
+		allOptions.NewLine = floatOrInt32ToFlag[core.NewLineKind](value)
 	case "watch":
 		allOptions.Watch = parseTristate(value)
 	case "pprofDir":
@@ -434,6 +438,13 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 		return false
 	}
 	return true
+}
+
+func floatOrInt32ToFlag[T ~int32](value any) T {
+	if v, ok := value.(T); ok {
+		return v
+	}
+	return T(value.(float64))
 }
 
 func ParseWatchOptions(key string, value any, allOptions *core.WatchOptions) []*ast.Diagnostic {
@@ -536,26 +547,34 @@ func mergeCompilerOptions(targetOptions, sourceOptions *core.CompilerOptions, ra
 	return targetOptions
 }
 
-func convertToOptionsWithAbsolutePaths(optionsBase *collections.OrderedMap[string, any], optionMap map[string]*CommandLineOption, cwd string) *collections.OrderedMap[string, any] {
+func convertToOptionsWithAbsolutePaths(optionsBase *collections.OrderedMap[string, any], optionMap CommandLineOptionNameMap, cwd string) *collections.OrderedMap[string, any] {
 	// !!! convert to options with absolute paths was previously done with `CompilerOptions` object, but for ease of implementation, we do it pre-conversion.
 	// !!! Revisit this choice if/when refactoring when conversion is done in tsconfig parsing
 	if optionsBase == nil {
 		return nil
 	}
 	for o, v := range optionsBase.Entries() {
-		option := optionMap[o]
-		if option == nil || !option.isFilePath {
-			continue
-		}
-		if option.Kind == "list" {
-			if arr, ok := v.([]string); ok {
-				optionsBase.Set(o, core.Map(arr, func(item string) string {
-					return tspath.GetNormalizedAbsolutePath(item, cwd)
-				}))
-			}
-		} else {
-			optionsBase.Set(o, tspath.GetNormalizedAbsolutePath(v.(string), cwd))
+		result, ok := ConvertOptionToAbsolutePath(o, v, optionMap, cwd)
+		if ok {
+			optionsBase.Set(o, result)
 		}
 	}
 	return optionsBase
+}
+
+func ConvertOptionToAbsolutePath(o string, v any, optionMap CommandLineOptionNameMap, cwd string) (any, bool) {
+	option := optionMap.Get(o)
+	if option == nil || !option.IsFilePath {
+		return nil, false
+	}
+	if option.Kind == "list" {
+		if arr, ok := v.([]string); ok {
+			return core.Map(arr, func(item string) string {
+				return tspath.GetNormalizedAbsolutePath(item, cwd)
+			}), true
+		}
+	} else {
+		return tspath.GetNormalizedAbsolutePath(v.(string), cwd), true
+	}
+	return nil, false
 }

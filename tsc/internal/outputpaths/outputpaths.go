@@ -19,7 +19,6 @@ type OutputPaths struct {
 	sourceMapFilePath   string
 	declarationFilePath string
 	declarationMapPath  string
-	buildInfoPath       string
 }
 
 // DeclarationFilePath implements declarations.OutputPaths.
@@ -38,10 +37,6 @@ func (o *OutputPaths) SourceMapFilePath() string {
 
 func (o *OutputPaths) DeclarationMapPath() string {
 	return o.declarationMapPath
-}
-
-func (o *OutputPaths) BuildInfoPath() string {
-	return o.buildInfoPath
 }
 
 func GetOutputPathsFor(sourceFile *ast.SourceFile, options *core.CompilerOptions, host OutputPathsHost, forceDtsEmit bool) *OutputPaths {
@@ -197,4 +192,28 @@ func getDeclarationEmitExtensionForPath(fileName string) string {
 		return ".d.json.ts"
 	}
 	return tspath.ExtensionDts
+}
+
+func GetBuildInfoFileName(options *core.CompilerOptions, opts tspath.ComparePathsOptions) string {
+	if !options.IsIncremental() && !options.TscBuild.IsTrue() {
+		return ""
+	}
+	if options.TsBuildInfoFile != "" {
+		return options.TsBuildInfoFile
+	}
+	if options.ConfigFilePath == "" {
+		return ""
+	}
+	configFileExtensionLess := tspath.RemoveFileExtension(options.ConfigFilePath)
+	var buildInfoExtensionLess string
+	if options.OutDir != "" {
+		if options.RootDir != "" {
+			buildInfoExtensionLess = tspath.ResolvePath(options.OutDir, tspath.GetRelativePathFromDirectory(options.RootDir, configFileExtensionLess, opts))
+		} else {
+			buildInfoExtensionLess = tspath.CombinePaths(options.OutDir, tspath.GetBaseFileName(configFileExtensionLess))
+		}
+	} else {
+		buildInfoExtensionLess = configFileExtensionLess
+	}
+	return buildInfoExtensionLess + tspath.ExtensionTsBuildInfo
 }

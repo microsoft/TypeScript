@@ -1460,8 +1460,8 @@ func forEachYieldExpression(body *ast.Node, visitor func(expr *ast.Node)) {
 	traverse(body)
 }
 
-func SkipTypeChecking(sourceFile *ast.SourceFile, options *core.CompilerOptions, host Program) bool {
-	return options.NoCheck.IsTrue() ||
+func SkipTypeChecking(sourceFile *ast.SourceFile, options *core.CompilerOptions, host Program, ignoreNoCheck bool) bool {
+	return (!ignoreNoCheck && options.NoCheck.IsTrue()) ||
 		options.SkipLibCheck.IsTrue() && sourceFile.IsDeclarationFile ||
 		options.SkipDefaultLibCheck.IsTrue() && host.IsSourceFileDefaultLibrary(sourceFile.Path()) ||
 		host.IsSourceFromProjectReference(sourceFile.Path()) ||

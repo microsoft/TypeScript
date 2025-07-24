@@ -34,7 +34,7 @@ type extendsResult struct {
 var compilerOptionsDeclaration = &CommandLineOption{
 	Name:           "compilerOptions",
 	Kind:           CommandLineOptionTypeObject,
-	ElementOptions: commandLineCompilerOptionsMap,
+	ElementOptions: CommandLineCompilerOptionsMap,
 }
 
 var compileOnSaveCommandLineOption = &CommandLineOption{
@@ -47,9 +47,9 @@ var extendsOptionDeclaration = &CommandLineOption{
 	Name:     "extends",
 	Kind:     CommandLineOptionTypeListOrElement,
 	Category: diagnostics.File_Management,
-	ElementOptions: map[string]*CommandLineOption{
-		"extends": {Name: "extends", Kind: CommandLineOptionTypeString},
-	},
+	ElementOptions: commandLineOptionsToMap([]*CommandLineOption{
+		{Name: "extends", Kind: CommandLineOptionTypeString},
+	}),
 }
 
 var tsconfigRootOptionsMap = &CommandLineOption{
@@ -391,7 +391,7 @@ func startsWithConfigDirTemplate(value any) bool {
 }
 
 func normalizeNonListOptionValue(option *CommandLineOption, basePath string, value any) any {
-	if option.isFilePath {
+	if option.IsFilePath {
 		value = tspath.NormalizeSlashes(value.(string))
 		if !startsWithConfigDirTemplate(value) {
 			value = tspath.GetNormalizedAbsolutePath(value.(string), basePath)
@@ -535,15 +535,26 @@ type tsConfigOptions struct {
 	notDefined string
 }
 
-func commandLineOptionsToMap(compilerOptions []*CommandLineOption) map[string]*CommandLineOption {
-	result := make(map[string]*CommandLineOption)
+type CommandLineOptionNameMap map[string]*CommandLineOption
+
+func (m CommandLineOptionNameMap) Get(name string) *CommandLineOption {
+	opt, ok := m[name]
+	if !ok {
+		opt, _ = m[strings.ToLower(name)]
+	}
+	return opt
+}
+
+func commandLineOptionsToMap(compilerOptions []*CommandLineOption) CommandLineOptionNameMap {
+	result := make(map[string]*CommandLineOption, len(compilerOptions)*2)
 	for i := range compilerOptions {
-		result[(compilerOptions[i]).Name] = compilerOptions[i]
+		result[compilerOptions[i].Name] = compilerOptions[i]
+		result[strings.ToLower(compilerOptions[i].Name)] = compilerOptions[i]
 	}
 	return result
 }
 
-var commandLineCompilerOptionsMap map[string]*CommandLineOption = commandLineOptionsToMap(OptionsDeclarations)
+var CommandLineCompilerOptionsMap CommandLineOptionNameMap = commandLineOptionsToMap(OptionsDeclarations)
 
 func convertMapToOptions[O optionParser](compilerOptions *collections.OrderedMap[string, any], result O) O {
 	// this assumes any `key`, `value` pair in `options` will have `value` already be the correct type. this function should no error handling
@@ -553,7 +564,7 @@ func convertMapToOptions[O optionParser](compilerOptions *collections.OrderedMap
 	return result
 }
 
-func convertOptionsFromJson[O optionParser](optionsNameMap map[string]*CommandLineOption, jsonOptions any, basePath string, result O) (O, []*ast.Diagnostic) {
+func convertOptionsFromJson[O optionParser](optionsNameMap CommandLineOptionNameMap, jsonOptions any, basePath string, result O) (O, []*ast.Diagnostic) {
 	if jsonOptions == nil {
 		return result, nil
 	}
@@ -564,8 +575,8 @@ func convertOptionsFromJson[O optionParser](optionsNameMap map[string]*CommandLi
 	}
 	var errors []*ast.Diagnostic
 	for key, value := range jsonMap.Entries() {
-		opt, ok := optionsNameMap[key]
-		if !ok {
+		opt := optionsNameMap.Get(key)
+		if opt == nil {
 			// !!! TODO?: support suggestion
 			errors = append(errors, createUnknownOptionError(key, result.UnknownOptionDiagnostic(), "", nil, nil, nil))
 			continue
@@ -698,7 +709,7 @@ func convertObjectLiteralExpressionToJson(
 		keyText := textOfKey
 		var option *CommandLineOption = nil
 		if keyText != "" && objectOption != nil && objectOption.ElementOptions != nil {
-			option = objectOption.ElementOptions[keyText]
+			option = objectOption.ElementOptions.Get(keyText)
 		}
 		value, err := convertPropertyValueToJson(sourceFile, element.AsPropertyAssignment().Initializer, option, returnValue, jsonConversionNotifier)
 		errors = append(errors, err...)
@@ -836,7 +847,7 @@ func getDefaultTypeAcquisition(configFileName string) *core.TypeAcquisition {
 
 func convertCompilerOptionsFromJsonWorker(jsonOptions any, basePath string, configFileName string) (*core.CompilerOptions, []*ast.Diagnostic) {
 	options := getDefaultCompilerOptions(configFileName)
-	_, errors := convertOptionsFromJson(commandLineCompilerOptionsMap, jsonOptions, basePath, &compilerOptionsParser{options})
+	_, errors := convertOptionsFromJson(CommandLineCompilerOptionsMap, jsonOptions, basePath, &compilerOptionsParser{options})
 	if configFileName != "" {
 		options.ConfigFilePath = tspath.NormalizeSlashes(configFileName)
 	}

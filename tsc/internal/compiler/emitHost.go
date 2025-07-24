@@ -14,14 +14,6 @@ import (
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
-type WriteFileData struct {
-	SourceMapUrlPos int
-	// BuildInfo BuildInfo
-	Diagnostics      []*ast.Diagnostic
-	DiffersOnlyInMap bool
-	SkippedDtsWrite  bool
-}
-
 // NOTE: EmitHost operations must be thread-safe
 type EmitHost interface {
 	printer.EmitHost
@@ -120,7 +112,7 @@ func (host *emitHost) IsEmitBlocked(file string) bool {
 	return false
 }
 
-func (host *emitHost) WriteFile(fileName string, text string, writeByteOrderMark bool, _ []*ast.SourceFile, _ *printer.WriteFileData) error {
+func (host *emitHost) WriteFile(fileName string, text string, writeByteOrderMark bool) error {
 	return host.program.Host().FS().WriteFile(fileName, text, writeByteOrderMark)
 }
 

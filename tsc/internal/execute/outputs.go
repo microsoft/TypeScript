@@ -54,7 +54,7 @@ func shouldBePretty(sys System, options *core.CompilerOptions) bool {
 		// todo: return defaultIsPretty(sys);
 		return true
 	}
-	return options.Pretty.IsTrue()
+	return false
 }
 
 func createReportErrorSummary(sys System, options *core.CompilerOptions) func(diagnostics []*ast.Diagnostic) {

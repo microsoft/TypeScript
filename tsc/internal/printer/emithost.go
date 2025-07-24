@@ -7,14 +7,6 @@ import (
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
-type WriteFileData struct {
-	SourceMapUrlPos int
-	// BuildInfo BuildInfo
-	Diagnostics      []*ast.Diagnostic
-	DiffersOnlyInMap bool
-	SkippedDtsWrite  bool
-}
-
 // NOTE: EmitHost operations must be thread-safe
 type EmitHost interface {
 	Options() *core.CompilerOptions
@@ -23,7 +15,7 @@ type EmitHost interface {
 	GetCurrentDirectory() string
 	CommonSourceDirectory() string
 	IsEmitBlocked(file string) bool
-	WriteFile(fileName string, text string, writeByteOrderMark bool, relatedSourceFiles []*ast.SourceFile, data *WriteFileData) error
+	WriteFile(fileName string, text string, writeByteOrderMark bool) error
 	GetEmitModuleFormatOfFile(file ast.HasFileName) core.ModuleKind
 	GetEmitResolver() EmitResolver
 	GetOutputAndProjectReference(path tspath.Path) *tsoptions.OutputDtsAndProjectReference

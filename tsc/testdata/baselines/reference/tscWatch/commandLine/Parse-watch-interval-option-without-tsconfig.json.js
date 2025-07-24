@@ -1,40 +1,13 @@
-
 currentDirectory::/home/src/workspaces/project
 useCaseSensitiveFileNames::true
-Input::-w --watchInterval 1000
+Input::
 
-ExitStatus:: 1
-
-ParsedCommandLine::{
-    "parsedConfig": {
-        "compilerOptions": {
-            "watch": true
-        },
-        "watchOptions": {
-            "watchInterval": 1000,
-            "watchFile": 0,
-            "watchDirectory": 0,
-            "fallbackPolling": 0,
-            "synchronousWatchDirectory": null,
-            "excludeDirectories": null,
-            "excludeFiles": null
-        },
-        "typeAcquisition": null,
-        "fileNames": [],
-        "projectReferences": null
-    },
-    "configFile": null,
-    "errors": [],
-    "raw": {
-        "watch": true,
-        "watchInterval": 1000
-    },
-    "compileOnSave": null
-}
+tsgo -w --watchInterval 1000
+ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
-Version 7.0.0-dev
+Version FakeTSVersion
 
-tsc: The TypeScript Compiler - Version 7.0.0-dev
+tsc: The TypeScript Compiler - Version FakeTSVersion
 
 COMMON COMMANDS
 

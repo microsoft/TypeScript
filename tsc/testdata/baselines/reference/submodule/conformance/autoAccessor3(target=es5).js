@@ -9,6 +9,9 @@ class C1 {
 }
 
 
+
+
+!!!! File autoAccessor3.js missing from original emit, but present in noCheck emit
 //// [autoAccessor3.js]
 class C1 {
     accessor "w";

@@ -1,129 +1,116 @@
-
 currentDirectory::/home/src/workspaces/project
 useCaseSensitiveFileNames::true
-Input::-w
-//// [/home/src/workspaces/project/a.ts] new file
+Input::
+//// [/home/src/workspaces/project/a.ts] *new* 
 const a = class { private p = 10; };
-//// [/home/src/workspaces/project/tsconfig.json] new file
+//// [/home/src/workspaces/project/tsconfig.json] *new* 
 {
 	"compilerOptions": {
             "noEmit": true,
-            "outFile": "../outFile.js",
+            "declaration": true
+	}
+}
+
+tsgo -w
+ExitStatus:: Success
+Output::
+[96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+
+[7m1[0m const a = class { private p = 10; };
+[7m [0m [91m      ~[0m
+
+  [96ma.ts[0m:[93m1[0m:[93m7[0m - Add a type annotation to the variable a.
+    [7m1[0m const a = class { private p = 10; };
+    [7m [0m [96m      ~[0m
+
+
+Found 1 error in a.ts[90m:1[0m
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts] *Lib*
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+interface SymbolConstructor {
+    (desc?: string | number): symbol;
+    for(name: string): symbol;
+    readonly toStringTag: symbol;
+}
+declare var Symbol: SymbolConstructor;
+interface Symbol {
+    readonly [Symbol.toStringTag]: string;
+}
+declare const console: { log(msg: any): void; };
+
+SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/workspaces/project/a.ts
+Signatures::
+
+
+Edit [0]:: fix error
+//// [/home/src/workspaces/project/a.ts] *modified* 
+const a = "hello";
+
+
+Output::
+
+SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/workspaces/project/a.ts
+Signatures::
+(computed .d.ts) /home/src/workspaces/project/a.ts
+
+
+Edit [1]:: emit after fixing error
+//// [/home/src/workspaces/project/tsconfig.json] *modified* 
+{
+	"compilerOptions": {
             "declaration": true
 	}
 }
 
 
-
-CompilerOptions::{
-    "watch": true
-}
-
-
 Output::
-[96mtsconfig.json[0m:[93m4[0m:[93m13[0m - [91merror[0m[90m TS5102: [0mOption 'outFile' has been removed. Please remove it from your configuration.
-
-[7m4[0m             "outFile": "../outFile.js",
-[7m [0m [91m            ~~~~~~~~~[0m
-
-
-Found 1 error in tsconfig.json[90m:4[0m
-
-//// [/home/src/workspaces/project/a.ts] no change
-//// [/home/src/workspaces/project/tsconfig.json] no change
-
-
-
-Edit:: fix syntax error
-
-Output::
-[96mtsconfig.json[0m:[93m4[0m:[93m13[0m - [91merror[0m[90m TS5102: [0mOption 'outFile' has been removed. Please remove it from your configuration.
-
-[7m4[0m             "outFile": "../outFile.js",
-[7m [0m [91m            ~~~~~~~~~[0m
-
-
-Found 1 error in tsconfig.json[90m:4[0m
-
-//// [/home/src/workspaces/project/a.ts] modified. new content:
-const a = "hello";
-//// [/home/src/workspaces/project/tsconfig.json] no change
-
-
-
-Edit:: emit after fixing error
-
-Output::
-[96mtsconfig.json[0m:[93m3[0m:[93m13[0m - [91merror[0m[90m TS5102: [0mOption 'outFile' has been removed. Please remove it from your configuration.
-
-[7m3[0m             "outFile": "../outFile.js",
-[7m [0m [91m            ~~~~~~~~~[0m
-
-
-Found 1 error in tsconfig.json[90m:3[0m
-
-//// [/home/src/workspaces/project/a.d.ts] new file
+//// [/home/src/workspaces/project/a.d.ts] *new* 
 declare const a = "hello";
 
-//// [/home/src/workspaces/project/a.js] new file
+//// [/home/src/workspaces/project/a.js] *new* 
 const a = "hello";
 
-//// [/home/src/workspaces/project/a.ts] no change
-//// [/home/src/workspaces/project/tsconfig.json] modified. new content:
-{
-	"compilerOptions": {
-            "outFile": "../outFile.js",
-            "declaration": true
-	}
-}
+
+SemanticDiagnostics::
+Signatures::
 
 
-
-Edit:: no emit run after fixing error
-
-Output::
-[96mtsconfig.json[0m:[93m4[0m:[93m13[0m - [91merror[0m[90m TS5102: [0mOption 'outFile' has been removed. Please remove it from your configuration.
-
-[7m4[0m             "outFile": "../outFile.js",
-[7m [0m [91m            ~~~~~~~~~[0m
-
-
-Found 1 error in tsconfig.json[90m:4[0m
-
-//// [/home/src/workspaces/project/a.d.ts] no change
-//// [/home/src/workspaces/project/a.js] no change
-//// [/home/src/workspaces/project/a.ts] no change
-//// [/home/src/workspaces/project/tsconfig.json] modified. new content:
+Edit [2]:: no emit run after fixing error
+//// [/home/src/workspaces/project/tsconfig.json] *modified* 
 {
 	"compilerOptions": {
             "noEmit": true,
-            "outFile": "../outFile.js",
             "declaration": true
 	}
 }
 
 
-
-Edit:: introduce error
-
 Output::
-[96mtsconfig.json[0m:[93m4[0m:[93m13[0m - [91merror[0m[90m TS5102: [0mOption 'outFile' has been removed. Please remove it from your configuration.
 
-[7m4[0m             "outFile": "../outFile.js",
-[7m [0m [91m            ~~~~~~~~~[0m
+SemanticDiagnostics::
+Signatures::
 
 
-Found 1 error in tsconfig.json[90m:4[0m
-
-//// [/home/src/workspaces/project/a.d.ts] no change
-//// [/home/src/workspaces/project/a.js] no change
-//// [/home/src/workspaces/project/a.ts] modified. new content:
+Edit [3]:: introduce error
+//// [/home/src/workspaces/project/a.ts] *modified* 
 const a = class { private p = 10; };
-//// [/home/src/workspaces/project/tsconfig.json] no change
 
-
-
-Edit:: emit when error
 
 Output::
 [96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
@@ -135,61 +122,79 @@ Output::
     [7m1[0m const a = class { private p = 10; };
     [7m [0m [96m      ~[0m
 
-[96mtsconfig.json[0m:[93m3[0m:[93m13[0m - [91merror[0m[90m TS5102: [0mOption 'outFile' has been removed. Please remove it from your configuration.
 
-[7m3[0m             "outFile": "../outFile.js",
-[7m [0m [91m            ~~~~~~~~~[0m
+Found 1 error in a.ts[90m:1[0m
 
 
-Found 2 errors in 2 files.
+SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/workspaces/project/a.ts
+Signatures::
+(computed .d.ts) /home/src/workspaces/project/a.ts
 
-Errors  Files
-     1  a.ts[90m:1[0m
-     1  tsconfig.json[90m:3[0m
 
-//// [/home/src/workspaces/project/a.d.ts] modified. new content:
+Edit [4]:: emit when error
+//// [/home/src/workspaces/project/tsconfig.json] *modified* 
+{
+	"compilerOptions": {
+            "declaration": true
+	}
+}
+
+
+Output::
+[96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+
+[7m1[0m const a = class { private p = 10; };
+[7m [0m [91m      ~[0m
+
+  [96ma.ts[0m:[93m1[0m:[93m7[0m - Add a type annotation to the variable a.
+    [7m1[0m const a = class { private p = 10; };
+    [7m [0m [96m      ~[0m
+
+
+Found 1 error in a.ts[90m:1[0m
+
+//// [/home/src/workspaces/project/a.d.ts] *modified* 
 declare const a: {
     new (): {
         p: number;
     };
 };
 
-//// [/home/src/workspaces/project/a.js] modified. new content:
+//// [/home/src/workspaces/project/a.js] *modified* 
 const a = class {
     p = 10;
 };
 
-//// [/home/src/workspaces/project/a.ts] no change
-//// [/home/src/workspaces/project/tsconfig.json] modified. new content:
-{
-	"compilerOptions": {
-            "outFile": "../outFile.js",
-            "declaration": true
-	}
-}
+
+SemanticDiagnostics::
+Signatures::
 
 
-
-Edit:: no emit run when error
-
-Output::
-[96mtsconfig.json[0m:[93m4[0m:[93m13[0m - [91merror[0m[90m TS5102: [0mOption 'outFile' has been removed. Please remove it from your configuration.
-
-[7m4[0m             "outFile": "../outFile.js",
-[7m [0m [91m            ~~~~~~~~~[0m
-
-
-Found 1 error in tsconfig.json[90m:4[0m
-
-//// [/home/src/workspaces/project/a.d.ts] no change
-//// [/home/src/workspaces/project/a.js] no change
-//// [/home/src/workspaces/project/a.ts] no change
-//// [/home/src/workspaces/project/tsconfig.json] modified. new content:
+Edit [5]:: no emit run when error
+//// [/home/src/workspaces/project/tsconfig.json] *modified* 
 {
 	"compilerOptions": {
             "noEmit": true,
-            "outFile": "../outFile.js",
             "declaration": true
 	}
 }
 
+
+Output::
+[96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+
+[7m1[0m const a = class { private p = 10; };
+[7m [0m [91m      ~[0m
+
+  [96ma.ts[0m:[93m1[0m:[93m7[0m - Add a type annotation to the variable a.
+    [7m1[0m const a = class { private p = 10; };
+    [7m [0m [96m      ~[0m
+
+
+Found 1 error in a.ts[90m:1[0m
+
+
+SemanticDiagnostics::
+Signatures::

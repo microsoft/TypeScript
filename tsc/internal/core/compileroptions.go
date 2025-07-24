@@ -321,6 +321,10 @@ func (options *CompilerOptions) GetIsolatedModules() bool {
 	return options.IsolatedModules == TSTrue || options.VerbatimModuleSyntax == TSTrue
 }
 
+func (options *CompilerOptions) IsIncremental() bool {
+	return options.Incremental.IsTrue() || options.Composite.IsTrue()
+}
+
 func (options *CompilerOptions) GetEmitStandardClassFields() bool {
 	return options.UseDefineForClassFields != TSFalse && options.GetEmitScriptTarget() >= ScriptTargetES2022
 }

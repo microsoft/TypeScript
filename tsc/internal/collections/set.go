@@ -1,5 +1,7 @@
 package collections
 
+import "maps"
+
 type Set[T comparable] struct {
 	M map[T]struct{}
 }
@@ -46,6 +48,24 @@ func (s *Set[T]) AddIfAbsent(key T) bool {
 	}
 	s.Add(key)
 	return true
+}
+
+func (s *Set[T]) Clone() *Set[T] {
+	if s == nil {
+		return nil
+	}
+	clone := &Set[T]{M: maps.Clone(s.M)}
+	return clone
+}
+
+func (s *Set[T]) Equals(other *Set[T]) bool {
+	if s == other {
+		return true
+	}
+	if s == nil || other == nil {
+		return false
+	}
+	return maps.Equal(s.M, other.M)
 }
 
 func NewSetFromItems[T comparable](items ...T) *Set[T] {

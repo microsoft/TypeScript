@@ -21,32 +21,34 @@ import (
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
-type emitOnly byte
+type EmitOnly byte
 
 const (
-	emitAll emitOnly = iota
-	emitOnlyJs
-	emitOnlyDts
-	emitOnlyBuildInfo
+	EmitAll EmitOnly = iota
+	EmitOnlyJs
+	EmitOnlyDts
+	EmitOnlyForcedDts
 )
 
 type emitter struct {
 	host               EmitHost
-	emitOnly           emitOnly
-	emittedFilesList   []string
+	emitOnly           EmitOnly
 	emitterDiagnostics ast.DiagnosticsCollection
-	emitSkipped        bool
-	sourceMapDataList  []*SourceMapEmitResult
 	writer             printer.EmitTextWriter
 	paths              *outputpaths.OutputPaths
 	sourceFile         *ast.SourceFile
+	emitResult         EmitResult
+	writeFile          func(fileName string, text string, writeByteOrderMark bool, data *WriteFileData) error
 }
 
 func (e *emitter) emit() {
+	if e.host.Options().ListEmittedFiles.IsTrue() {
+		e.emitResult.EmittedFiles = []string{}
+	}
 	// !!! tracing
 	e.emitJSFile(e.sourceFile, e.paths.JsFilePath(), e.paths.SourceMapFilePath())
 	e.emitDeclarationFile(e.sourceFile, e.paths.DeclarationFilePath(), e.paths.DeclarationMapPath())
-	e.emitBuildInfo(e.paths.BuildInfoPath())
+	e.emitResult.Diagnostics = e.emitterDiagnostics.GetDiagnostics()
 }
 
 func (e *emitter) getDeclarationTransformers(emitContext *printer.EmitContext, declarationFilePath string, declarationMapPath string) []*declarations.DeclarationTransformer {
@@ -124,11 +126,12 @@ func getScriptTransformers(emitContext *printer.EmitContext, host printer.EmitHo
 func (e *emitter) emitJSFile(sourceFile *ast.SourceFile, jsFilePath string, sourceMapFilePath string) {
 	options := e.host.Options()
 
-	if sourceFile == nil || e.emitOnly != emitAll && e.emitOnly != emitOnlyJs || len(jsFilePath) == 0 {
+	if sourceFile == nil || e.emitOnly != EmitAll && e.emitOnly != EmitOnlyJs || len(jsFilePath) == 0 {
 		return
 	}
 
 	if options.NoEmit == core.TSTrue || e.host.IsEmitBlocked(jsFilePath) {
+		e.emitResult.EmitSkipped = true
 		return
 	}
 
@@ -155,23 +158,17 @@ func (e *emitter) emitJSFile(sourceFile *ast.SourceFile, jsFilePath string, sour
 	}, emitContext)
 
 	e.printSourceFile(jsFilePath, sourceMapFilePath, sourceFile, printer, shouldEmitSourceMaps(options, sourceFile))
-
-	if e.emittedFilesList != nil {
-		e.emittedFilesList = append(e.emittedFilesList, jsFilePath)
-		if sourceMapFilePath != "" {
-			e.emittedFilesList = append(e.emittedFilesList, sourceMapFilePath)
-		}
-	}
 }
 
 func (e *emitter) emitDeclarationFile(sourceFile *ast.SourceFile, declarationFilePath string, declarationMapPath string) {
 	options := e.host.Options()
 
-	if sourceFile == nil || e.emitOnly != emitAll && e.emitOnly != emitOnlyDts || len(declarationFilePath) == 0 {
+	if sourceFile == nil || e.emitOnly == EmitOnlyJs || len(declarationFilePath) == 0 {
 		return
 	}
 
-	if options.NoEmit == core.TSTrue || e.host.IsEmitBlocked(declarationFilePath) {
+	if e.emitOnly != EmitOnlyForcedDts && (options.NoEmit == core.TSTrue || e.host.IsEmitBlocked(declarationFilePath)) {
+		e.emitResult.EmitSkipped = true
 		return
 	}
 
@@ -182,6 +179,8 @@ func (e *emitter) emitDeclarationFile(sourceFile *ast.SourceFile, declarationFil
 		sourceFile = transformer.TransformSourceFile(sourceFile)
 		diags = append(diags, transformer.GetDiagnostics()...)
 	}
+
+	// !!! strada skipped emit if there were diagnostics
 
 	printerOptions := printer.PrinterOptions{
 		RemoveComments:  options.RemoveComments.IsTrue(),
@@ -198,19 +197,14 @@ func (e *emitter) emitDeclarationFile(sourceFile *ast.SourceFile, declarationFil
 		// !!!
 	}, emitContext)
 
-	e.printSourceFile(declarationFilePath, declarationMapPath, sourceFile, printer, shouldEmitDeclarationSourceMaps(options, sourceFile))
-
 	for _, elem := range diags {
 		// Add declaration transform diagnostics to emit diagnostics
 		e.emitterDiagnostics.Add(elem)
 	}
+	e.printSourceFile(declarationFilePath, declarationMapPath, sourceFile, printer, e.emitOnly != EmitOnlyForcedDts && shouldEmitDeclarationSourceMaps(options, sourceFile))
 }
 
-func (e *emitter) emitBuildInfo(buildInfoPath string) {
-	// !!!
-}
-
-func (e *emitter) printSourceFile(jsFilePath string, sourceMapFilePath string, sourceFile *ast.SourceFile, printer_ *printer.Printer, shouldEmitSourceMaps bool) bool {
+func (e *emitter) printSourceFile(jsFilePath string, sourceMapFilePath string, sourceFile *ast.SourceFile, printer_ *printer.Printer, shouldEmitSourceMaps bool) {
 	// !!! sourceMapGenerator
 	options := e.host.Options()
 	var sourceMapGenerator *sourcemap.Generator
@@ -226,15 +220,12 @@ func (e *emitter) printSourceFile(jsFilePath string, sourceMapFilePath string, s
 		)
 	}
 
-	// !!! bundles not implemented, may be deprecated
-	sourceFiles := []*ast.SourceFile{sourceFile}
-
 	printer_.Write(sourceFile.AsNode(), sourceFile, e.writer, sourceMapGenerator)
 
 	sourceMapUrlPos := -1
 	if sourceMapGenerator != nil {
 		if options.SourceMap.IsTrue() || options.InlineSourceMap.IsTrue() || options.GetAreDeclarationMapsEnabled() {
-			e.sourceMapDataList = append(e.sourceMapDataList, &SourceMapEmitResult{
+			e.emitResult.SourceMaps = append(e.emitResult.SourceMaps, &SourceMapEmitResult{
 				InputSourceFileNames: sourceMapGenerator.Sources(),
 				SourceMap:            sourceMapGenerator.RawSourceMap(),
 				GeneratedFile:        jsFilePath,
@@ -260,9 +251,11 @@ func (e *emitter) printSourceFile(jsFilePath string, sourceMapFilePath string, s
 		// Write the source map
 		if len(sourceMapFilePath) > 0 {
 			sourceMap := sourceMapGenerator.String()
-			err := e.host.WriteFile(sourceMapFilePath, sourceMap, false /*writeByteOrderMark*/, sourceFiles, nil /*data*/)
+			err := e.host.WriteFile(sourceMapFilePath, sourceMap, false /*writeByteOrderMark*/)
 			if err != nil {
 				e.emitterDiagnostics.Add(ast.NewCompilerDiagnostic(diagnostics.Could_not_write_file_0_Colon_1, jsFilePath, err.Error()))
+			} else if e.emitResult.EmittedFiles != nil {
+				e.emitResult.EmittedFiles = append(e.emitResult.EmittedFiles, sourceMapFilePath)
 			}
 		}
 	} else {
@@ -271,15 +264,26 @@ func (e *emitter) printSourceFile(jsFilePath string, sourceMapFilePath string, s
 
 	// Write the output file
 	text := e.writer.String()
-	data := &printer.WriteFileData{SourceMapUrlPos: sourceMapUrlPos} // !!! transform diagnostics
-	err := e.host.WriteFile(jsFilePath, text, e.host.Options().EmitBOM.IsTrue(), sourceFiles, data)
+	var err error
+	var skippedDtsWrite bool
+	if e.writeFile == nil {
+		err = e.host.WriteFile(jsFilePath, text, e.host.Options().EmitBOM.IsTrue())
+	} else {
+		data := &WriteFileData{
+			SourceMapUrlPos: sourceMapUrlPos,
+			Diagnostics:     e.emitterDiagnostics.GetDiagnostics(),
+		}
+		err = e.writeFile(jsFilePath, text, e.host.Options().EmitBOM.IsTrue(), data)
+		skippedDtsWrite = data.SkippedDtsWrite
+	}
 	if err != nil {
 		e.emitterDiagnostics.Add(ast.NewCompilerDiagnostic(diagnostics.Could_not_write_file_0_Colon_1, jsFilePath, err.Error()))
+	} else if e.emitResult.EmittedFiles != nil && !skippedDtsWrite {
+		e.emitResult.EmittedFiles = append(e.emitResult.EmittedFiles, jsFilePath)
 	}
 
 	// Reset state
 	e.writer.Clear()
-	return !data.SkippedDtsWrite
 }
 
 func shouldEmitSourceMaps(mapOptions *core.CompilerOptions, sourceFile *ast.SourceFile) bool {

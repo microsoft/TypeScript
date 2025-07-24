@@ -27,5 +27,4 @@ const (
 	ExitStatusInvalidProject_OutputsSkipped        ExitStatus = 3
 	ExitStatusProjectReferenceCycle_OutputsSkipped ExitStatus = 4
 	ExitStatusNotImplemented                       ExitStatus = 5
-	ExitStatusNotImplementedWatch                  ExitStatus = 6
 )

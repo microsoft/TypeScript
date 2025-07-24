@@ -53,7 +53,7 @@ func (p *checkerPool) GetChecker(ctx context.Context) (*checker.Checker, func())
 
 func (p *checkerPool) createCheckers() {
 	p.createCheckersOnce.Do(func() {
-		wg := core.NewWorkGroup(p.program.singleThreaded())
+		wg := core.NewWorkGroup(p.program.SingleThreaded())
 		for i := range p.checkerCount {
 			wg.Queue(func() {
 				p.checkers[i] = checker.NewChecker(p.program)

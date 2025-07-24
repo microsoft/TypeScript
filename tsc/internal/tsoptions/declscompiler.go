@@ -1,6 +1,7 @@
 package tsoptions
 
 import (
+	"reflect"
 	"slices"
 
 	"github.com/microsoft/typescript-go/internal/core"
@@ -100,7 +101,7 @@ var optionsForCompiler = []*CommandLineOption{
 	{
 		Name:                    "generateCpuProfile",
 		Kind:                    CommandLineOptionTypeString,
-		isFilePath:              true,
+		IsFilePath:              true,
 		Category:                diagnostics.Compiler_Diagnostics,
 		Description:             diagnostics.Emit_a_v8_CPU_profile_of_the_compiler_run_for_debugging,
 		DefaultValueDescription: "profile.cpuprofile",
@@ -109,7 +110,7 @@ var optionsForCompiler = []*CommandLineOption{
 	{
 		Name:        "generateTrace",
 		Kind:        CommandLineOptionTypeString,
-		isFilePath:  true,
+		IsFilePath:  true,
 		Category:    diagnostics.Compiler_Diagnostics,
 		Description: diagnostics.Generates_an_event_trace_and_a_list_of_types,
 	},
@@ -228,7 +229,7 @@ var optionsForCompiler = []*CommandLineOption{
 	{
 		Name:        "pprofDir",
 		Kind:        CommandLineOptionTypeString,
-		isFilePath:  true,
+		IsFilePath:  true,
 		Category:    diagnostics.Command_line_Options,
 		Description: diagnostics.Generate_pprof_CPU_Slashmemory_profiles_to_the_given_directory,
 	},
@@ -267,7 +268,7 @@ var commonOptionsWithBuild = []*CommandLineOption{
 		Name:                     "project",
 		ShortName:                "p",
 		Kind:                     CommandLineOptionTypeString,
-		isFilePath:               true,
+		IsFilePath:               true,
 		ShowInSimplifiedHelpView: true,
 		Category:                 diagnostics.Command_line_Options,
 		Description:              diagnostics.Compile_the_project_given_the_path_to_its_configuration_file_or_to_a_folder_with_a_tsconfig_json,
@@ -376,7 +377,7 @@ var commonOptionsWithBuild = []*CommandLineOption{
 		AffectsEmit:              true,
 		AffectsBuildInfo:         true,
 		AffectsDeclarationPath:   true,
-		isFilePath:               true,
+		IsFilePath:               true,
 		ShowInSimplifiedHelpView: true,
 		Category:                 diagnostics.Emit,
 		Description:              diagnostics.Specify_a_file_that_bundles_all_outputs_into_one_JavaScript_file_If_declaration_is_true_also_designates_a_file_that_bundles_all_d_ts_output,
@@ -388,7 +389,7 @@ var commonOptionsWithBuild = []*CommandLineOption{
 		AffectsEmit:              true,
 		AffectsBuildInfo:         true,
 		AffectsDeclarationPath:   true,
-		isFilePath:               true,
+		IsFilePath:               true,
 		ShowInSimplifiedHelpView: true,
 		Category:                 diagnostics.Emit,
 		Description:              diagnostics.Specify_an_output_folder_for_all_emitted_files,
@@ -399,7 +400,7 @@ var commonOptionsWithBuild = []*CommandLineOption{
 		AffectsEmit:             true,
 		AffectsBuildInfo:        true,
 		AffectsDeclarationPath:  true,
-		isFilePath:              true,
+		IsFilePath:              true,
 		Category:                diagnostics.Modules,
 		Description:             diagnostics.Specify_the_root_folder_within_your_source_files,
 		DefaultValueDescription: diagnostics.Computed_from_the_list_of_input_files,
@@ -420,7 +421,7 @@ var commonOptionsWithBuild = []*CommandLineOption{
 		Kind:                    CommandLineOptionTypeString,
 		AffectsEmit:             true,
 		AffectsBuildInfo:        true,
-		isFilePath:              true,
+		IsFilePath:              true,
 		Category:                diagnostics.Projects,
 		transpileOptionValue:    core.TSUnknown,
 		DefaultValueDescription: ".tsbuildinfo",
@@ -704,7 +705,7 @@ var commonOptionsWithBuild = []*CommandLineOption{
 		Name:                    "baseUrl",
 		Kind:                    CommandLineOptionTypeString,
 		AffectsModuleResolution: true,
-		isFilePath:              true,
+		IsFilePath:              true,
 		Category:                diagnostics.Modules,
 		Description:             diagnostics.Specify_the_base_directory_to_resolve_non_relative_module_names,
 	},
@@ -1081,7 +1082,7 @@ var commonOptionsWithBuild = []*CommandLineOption{
 		AffectsEmit:            true,
 		AffectsBuildInfo:       true,
 		AffectsDeclarationPath: true,
-		isFilePath:             true,
+		IsFilePath:             true,
 		Category:               diagnostics.Emit,
 		transpileOptionValue:   core.TSUnknown,
 		Description:            diagnostics.Specify_the_output_directory_for_generated_declaration_files,
@@ -1173,4 +1174,59 @@ var commonOptionsWithBuild = []*CommandLineOption{
 		Kind:                    CommandLineOptionTypeString,
 		DefaultValueDescription: core.TSUnknown,
 	},
+}
+
+var optionsType = reflect.TypeFor[core.CompilerOptions]()
+
+func optionsHaveChanges(oldOptions *core.CompilerOptions, newOptions *core.CompilerOptions, declFilter func(*CommandLineOption) bool) bool {
+	if oldOptions == newOptions {
+		return false
+	}
+	if oldOptions == nil || newOptions == nil {
+		return true
+	}
+	oldOptionsValue := reflect.ValueOf(oldOptions).Elem()
+	return ForEachCompilerOptionValue(newOptions, declFilter, func(option *CommandLineOption, value reflect.Value, i int) bool {
+		return !reflect.DeepEqual(value.Interface(), oldOptionsValue.Field(i).Interface())
+	})
+}
+
+func ForEachCompilerOptionValue(options *core.CompilerOptions, declFilter func(*CommandLineOption) bool, fn func(option *CommandLineOption, value reflect.Value, i int) bool) bool {
+	optionsValue := reflect.ValueOf(options).Elem()
+	for i := range optionsValue.NumField() {
+		field := optionsType.Field(i)
+		if !field.IsExported() {
+			continue
+		}
+		if optionDeclaration := CommandLineCompilerOptionsMap.Get(field.Name); optionDeclaration != nil && declFilter(optionDeclaration) {
+			if fn(optionDeclaration, optionsValue.Field(i), i) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func CompilerOptionsAffectSemanticDiagnostics(
+	oldOptions *core.CompilerOptions,
+	newOptions *core.CompilerOptions,
+) bool {
+	return optionsHaveChanges(oldOptions, newOptions, func(option *CommandLineOption) bool {
+		return option.AffectsSemanticDiagnostics
+	})
+}
+
+func CompilerOptionsAffectDeclarationPath(
+	oldOptions *core.CompilerOptions,
+	newOptions *core.CompilerOptions,
+) bool {
+	return optionsHaveChanges(oldOptions, newOptions, func(option *CommandLineOption) bool {
+		return option.AffectsDeclarationPath
+	})
+}
+
+func CompilerOptionsAffectEmit(oldOptions *core.CompilerOptions, newOptions *core.CompilerOptions) bool {
+	return optionsHaveChanges(oldOptions, newOptions, func(option *CommandLineOption) bool {
+		return option.AffectsEmit
+	})
 }

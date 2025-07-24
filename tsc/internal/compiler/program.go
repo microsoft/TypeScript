@@ -43,7 +43,6 @@ func (p *ProgramOptions) canUseProjectReferenceSource() bool {
 
 type Program struct {
 	opts        ProgramOptions
-	nodeModules map[string]*ast.SourceFile
 	checkerPool CheckerPool
 
 	comparePathsOptions tspath.ComparePathsOptions
@@ -124,6 +123,10 @@ func (p *Program) GetRedirectForResolution(file ast.HasFileName) *tsoptions.Pars
 	return p.projectReferenceFileMapper.getRedirectForResolution(file)
 }
 
+func (p *Program) GetParseFileRedirect(fileName string) string {
+	return p.projectReferenceFileMapper.getParseFileRedirect(ast.NewHasFileName(fileName, p.toPath(fileName)))
+}
+
 func (p *Program) ForEachResolvedProjectReference(
 	fn func(path tspath.Path, config *tsoptions.ParsedCommandLine),
 ) {
@@ -184,7 +187,7 @@ func (p *Program) GetSourceFileFromReference(origin *ast.SourceFile, ref *ast.Fi
 func NewProgram(opts ProgramOptions) *Program {
 	p := &Program{opts: opts}
 	p.initCheckerPool()
-	p.processedFiles = processAllProgramFiles(p.opts, p.singleThreaded())
+	p.processedFiles = processAllProgramFiles(p.opts, p.SingleThreaded())
 	p.verifyCompilerOptions()
 	return p
 }
@@ -200,7 +203,6 @@ func (p *Program) UpdateProgram(changedFilePath tspath.Path) (*Program, bool) {
 	// TODO: reverify compiler options when config has changed?
 	result := &Program{
 		opts:                        p.opts,
-		nodeModules:                 p.nodeModules,
 		comparePathsOptions:         p.comparePathsOptions,
 		processedFiles:              p.processedFiles,
 		usesUriStyleNodeCoreModules: p.usesUriStyleNodeCoreModules,
@@ -220,7 +222,7 @@ func (p *Program) initCheckerPool() {
 	if p.opts.CreateCheckerPool != nil {
 		p.checkerPool = p.opts.CreateCheckerPool(p)
 	} else {
-		p.checkerPool = newCheckerPool(core.IfElse(p.singleThreaded(), 1, 4), p)
+		p.checkerPool = newCheckerPool(core.IfElse(p.SingleThreaded(), 1, 4), p)
 	}
 }
 
@@ -260,12 +262,12 @@ func (p *Program) GetConfigFileParsingDiagnostics() []*ast.Diagnostic {
 	return slices.Clip(p.opts.Config.GetConfigFileParsingDiagnostics())
 }
 
-func (p *Program) singleThreaded() bool {
+func (p *Program) SingleThreaded() bool {
 	return p.opts.SingleThreaded.DefaultIfUnknown(p.Options().SingleThreaded).IsTrue()
 }
 
 func (p *Program) BindSourceFiles() {
-	wg := core.NewWorkGroup(p.singleThreaded())
+	wg := core.NewWorkGroup(p.SingleThreaded())
 	for _, file := range p.files {
 		if !file.IsBound() {
 			wg.Queue(func() {
@@ -276,14 +278,16 @@ func (p *Program) BindSourceFiles() {
 	wg.RunAndWait()
 }
 
-func (p *Program) CheckSourceFiles(ctx context.Context) {
-	wg := core.NewWorkGroup(p.singleThreaded())
+func (p *Program) CheckSourceFiles(ctx context.Context, files []*ast.SourceFile) {
+	wg := core.NewWorkGroup(p.SingleThreaded())
 	checkers, done := p.checkerPool.GetAllCheckers(ctx)
 	defer done()
 	for _, checker := range checkers {
 		wg.Queue(func() {
 			for file := range p.checkerPool.Files(checker) {
-				checker.CheckSourceFile(ctx, file)
+				if files == nil || slices.Contains(files, file) {
+					checker.CheckSourceFile(ctx, file)
+				}
 			}
 		})
 	}
@@ -338,6 +342,19 @@ func (p *Program) GetBindDiagnostics(ctx context.Context, sourceFile *ast.Source
 
 func (p *Program) GetSemanticDiagnostics(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
 	return p.getDiagnosticsHelper(ctx, sourceFile, true /*ensureBound*/, true /*ensureChecked*/, p.getSemanticDiagnosticsForFile)
+}
+
+func (p *Program) GetSemanticDiagnosticsNoFilter(ctx context.Context, sourceFiles []*ast.SourceFile) map[*ast.SourceFile][]*ast.Diagnostic {
+	p.BindSourceFiles()
+	p.CheckSourceFiles(ctx, sourceFiles)
+	if ctx.Err() != nil {
+		return nil
+	}
+	result := make(map[*ast.SourceFile][]*ast.Diagnostic, len(sourceFiles))
+	for _, file := range sourceFiles {
+		result[file] = SortAndDeduplicateDiagnostics(p.getSemanticDiagnosticsForFileNotFilter(ctx, file))
+	}
+	return result
 }
 
 func (p *Program) GetSuggestionDiagnostics(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
@@ -875,9 +892,26 @@ func (p *Program) getBindDiagnosticsForFile(ctx context.Context, sourceFile *ast
 	return sourceFile.BindDiagnostics()
 }
 
+func FilterNoEmitSemanticDiagnostics(diagnostics []*ast.Diagnostic, options *core.CompilerOptions) []*ast.Diagnostic {
+	if !options.NoEmit.IsTrue() {
+		return diagnostics
+	}
+	return core.Filter(diagnostics, func(d *ast.Diagnostic) bool {
+		return !d.SkippedOnNoEmit()
+	})
+}
+
 func (p *Program) getSemanticDiagnosticsForFile(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
+	diagnostics := p.getSemanticDiagnosticsForFileNotFilter(ctx, sourceFile)
+	if diagnostics == nil {
+		return nil
+	}
+	return FilterNoEmitSemanticDiagnostics(diagnostics, p.Options())
+}
+
+func (p *Program) getSemanticDiagnosticsForFileNotFilter(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
 	compilerOptions := p.Options()
-	if checker.SkipTypeChecking(sourceFile, compilerOptions, p) {
+	if checker.SkipTypeChecking(sourceFile, compilerOptions, p, false) {
 		return nil
 	}
 
@@ -971,7 +1005,7 @@ func (p *Program) getDeclarationDiagnosticsForFile(ctx context.Context, sourceFi
 }
 
 func (p *Program) getSuggestionDiagnosticsForFile(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
-	if checker.SkipTypeChecking(sourceFile, p.Options(), p) {
+	if checker.SkipTypeChecking(sourceFile, p.Options(), p, false) {
 		return nil
 	}
 
@@ -1062,7 +1096,7 @@ func (p *Program) getDiagnosticsHelper(ctx context.Context, sourceFile *ast.Sour
 		p.BindSourceFiles()
 	}
 	if ensureChecked {
-		p.CheckSourceFiles(ctx)
+		p.CheckSourceFiles(ctx, nil)
 		if ctx.Err() != nil {
 			return nil
 		}
@@ -1171,9 +1205,18 @@ func (p *Program) CommonSourceDirectory() string {
 	return p.commonSourceDirectory
 }
 
+type WriteFileData struct {
+	SourceMapUrlPos  int
+	BuildInfo        any
+	Diagnostics      []*ast.Diagnostic
+	DiffersOnlyInMap bool
+	SkippedDtsWrite  bool
+}
+
 type EmitOptions struct {
 	TargetSourceFile *ast.SourceFile // Single file to emit. If `nil`, emits all files
-	forceDtsEmit     bool
+	EmitOnly         EmitOnly
+	WriteFile        func(fileName string, text string, writeByteOrderMark bool, data *WriteFileData) error
 }
 
 type EmitResult struct {
@@ -1189,29 +1232,39 @@ type SourceMapEmitResult struct {
 	GeneratedFile        string
 }
 
-func (p *Program) Emit(options EmitOptions) *EmitResult {
+func (p *Program) Emit(ctx context.Context, options EmitOptions) *EmitResult {
 	// !!! performance measurement
 	p.BindSourceFiles()
+	if options.EmitOnly != EmitOnlyForcedDts {
+		result := HandleNoEmitOnError(
+			ctx,
+			p,
+			options.TargetSourceFile,
+		)
+		if result != nil || ctx.Err() != nil {
+			return result
+		}
+	}
 
 	writerPool := &sync.Pool{
 		New: func() any {
 			return printer.NewTextWriter(p.Options().NewLine.GetNewLineCharacter())
 		},
 	}
-	wg := core.NewWorkGroup(p.singleThreaded())
+	wg := core.NewWorkGroup(p.SingleThreaded())
 	var emitters []*emitter
-	sourceFiles := p.getSourceFilesToEmit(options.TargetSourceFile, options.forceDtsEmit)
+	sourceFiles := p.getSourceFilesToEmit(options.TargetSourceFile, options.EmitOnly == EmitOnlyForcedDts)
 
 	for _, sourceFile := range sourceFiles {
 		emitter := &emitter{
-			emittedFilesList:  nil,
-			sourceMapDataList: nil,
-			writer:            nil,
-			sourceFile:        sourceFile,
+			writer:     nil,
+			sourceFile: sourceFile,
+			emitOnly:   options.EmitOnly,
+			writeFile:  options.WriteFile,
 		}
 		emitters = append(emitters, emitter)
 		wg.Queue(func() {
-			host, done := newEmitHost(context.TODO(), p, sourceFile)
+			host, done := newEmitHost(ctx, p, sourceFile)
 			defer done()
 			emitter.host = host
 
@@ -1221,7 +1274,7 @@ func (p *Program) Emit(options EmitOptions) *EmitResult {
 
 			// attach writer and perform emit
 			emitter.writer = writer
-			emitter.paths = outputpaths.GetOutputPathsFor(sourceFile, host.Options(), host, options.forceDtsEmit)
+			emitter.paths = outputpaths.GetOutputPathsFor(sourceFile, host.Options(), host, options.EmitOnly == EmitOnlyForcedDts)
 			emitter.emit()
 			emitter.writer = nil
 
@@ -1234,20 +1287,102 @@ func (p *Program) Emit(options EmitOptions) *EmitResult {
 	wg.RunAndWait()
 
 	// collect results from emit, preserving input order
+	return CombineEmitResults(core.Map(emitters, func(e *emitter) *EmitResult {
+		return &e.emitResult
+	}))
+}
+
+func CombineEmitResults(results []*EmitResult) *EmitResult {
 	result := &EmitResult{}
-	for _, emitter := range emitters {
-		if emitter.emitSkipped {
+	for _, emitResult := range results {
+		if emitResult == nil {
+			continue // Skip nil results
+		}
+		if emitResult.EmitSkipped {
 			result.EmitSkipped = true
 		}
-		result.Diagnostics = append(result.Diagnostics, emitter.emitterDiagnostics.GetDiagnostics()...)
-		if emitter.emittedFilesList != nil {
-			result.EmittedFiles = append(result.EmittedFiles, emitter.emittedFilesList...)
+		result.Diagnostics = append(result.Diagnostics, emitResult.Diagnostics...)
+		if emitResult.EmittedFiles != nil {
+			result.EmittedFiles = append(result.EmittedFiles, emitResult.EmittedFiles...)
 		}
-		if emitter.sourceMapDataList != nil {
-			result.SourceMaps = append(result.SourceMaps, emitter.sourceMapDataList...)
+		if emitResult.SourceMaps != nil {
+			result.SourceMaps = append(result.SourceMaps, emitResult.SourceMaps...)
 		}
 	}
 	return result
+}
+
+type ProgramLike interface {
+	Options() *core.CompilerOptions
+	GetSourceFiles() []*ast.SourceFile
+	GetConfigFileParsingDiagnostics() []*ast.Diagnostic
+	GetSyntacticDiagnostics(ctx context.Context, file *ast.SourceFile) []*ast.Diagnostic
+	GetBindDiagnostics(ctx context.Context, file *ast.SourceFile) []*ast.Diagnostic
+	GetOptionsDiagnostics(ctx context.Context) []*ast.Diagnostic
+	GetProgramDiagnostics() []*ast.Diagnostic
+	GetGlobalDiagnostics(ctx context.Context) []*ast.Diagnostic
+	GetSemanticDiagnostics(ctx context.Context, file *ast.SourceFile) []*ast.Diagnostic
+	GetDeclarationDiagnostics(ctx context.Context, file *ast.SourceFile) []*ast.Diagnostic
+	Emit(ctx context.Context, options EmitOptions) *EmitResult
+}
+
+func HandleNoEmitOnError(ctx context.Context, program ProgramLike, file *ast.SourceFile) *EmitResult {
+	if !program.Options().NoEmitOnError.IsTrue() {
+		return nil // No emit on error is not set, so we can proceed with emitting
+	}
+
+	diagnostics := GetDiagnosticsOfAnyProgram(
+		ctx,
+		program,
+		file,
+		true,
+		program.GetBindDiagnostics,
+		program.GetSemanticDiagnostics,
+	)
+	if len(diagnostics) == 0 {
+		return nil // No diagnostics, so we can proceed with emitting
+	}
+	return &EmitResult{
+		Diagnostics: diagnostics,
+		EmitSkipped: true,
+	}
+}
+
+func GetDiagnosticsOfAnyProgram(
+	ctx context.Context,
+	program ProgramLike,
+	file *ast.SourceFile,
+	skipNoEmitCheckForDtsDiagnostics bool,
+	getBindDiagnostics func(context.Context, *ast.SourceFile) []*ast.Diagnostic,
+	getSemanticDiagnostics func(context.Context, *ast.SourceFile) []*ast.Diagnostic,
+) []*ast.Diagnostic {
+	allDiagnostics := slices.Clip(program.GetConfigFileParsingDiagnostics())
+	configFileParsingDiagnosticsLength := len(allDiagnostics)
+
+	allDiagnostics = append(allDiagnostics, program.GetSyntacticDiagnostics(ctx, file)...)
+	allDiagnostics = append(allDiagnostics, program.GetProgramDiagnostics()...)
+
+	if len(allDiagnostics) == configFileParsingDiagnosticsLength {
+		// Options diagnostics include global diagnostics (even though we collect them separately),
+		// and global diagnostics create checkers, which then bind all of the files. Do this binding
+		// early so we can track the time.
+		getBindDiagnostics(ctx, file)
+
+		allDiagnostics = append(allDiagnostics, program.GetOptionsDiagnostics(ctx)...)
+
+		if program.Options().ListFilesOnly.IsFalseOrUnknown() {
+			allDiagnostics = append(allDiagnostics, program.GetGlobalDiagnostics(ctx)...)
+
+			if len(allDiagnostics) == configFileParsingDiagnosticsLength {
+				allDiagnostics = append(allDiagnostics, getSemanticDiagnostics(ctx, file)...)
+			}
+
+			if (skipNoEmitCheckForDtsDiagnostics || program.Options().NoEmit.IsTrue()) && program.Options().GetEmitDeclarations() && len(allDiagnostics) == configFileParsingDiagnosticsLength {
+				allDiagnostics = append(allDiagnostics, program.GetDeclarationDiagnostics(ctx, file)...)
+			}
+		}
+	}
+	return allDiagnostics
 }
 
 func (p *Program) toPath(filename string) tspath.Path {
@@ -1262,7 +1397,7 @@ func (p *Program) GetSourceFile(filename string) *ast.SourceFile {
 func (p *Program) GetSourceFileForResolvedModule(fileName string) *ast.SourceFile {
 	file := p.GetSourceFile(fileName)
 	if file == nil {
-		filename := p.projectReferenceFileMapper.getParseFileRedirect(ast.NewHasFileName(fileName, p.toPath(fileName)))
+		filename := p.GetParseFileRedirect(fileName)
 		if filename != "" {
 			return p.GetSourceFile(filename)
 		}
@@ -1350,7 +1485,7 @@ func (p *Program) GetImportHelpersImportSpecifier(path tspath.Path) *ast.Node {
 }
 
 func (p *Program) SourceFileMayBeEmitted(sourceFile *ast.SourceFile, forceDtsEmit bool) bool {
-	return sourceFileMayBeEmitted(sourceFile, &emitHost{program: p}, forceDtsEmit)
+	return sourceFileMayBeEmitted(sourceFile, p, forceDtsEmit)
 }
 
 var plainJSErrors = collections.NewSetFromItems(
