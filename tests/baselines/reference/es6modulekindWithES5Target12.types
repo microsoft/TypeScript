@@ -29,12 +29,12 @@ export enum E {
 }
 
 export enum E {
->E : E
->  : ^
+>E : import("es6modulekindWithES5Target12").E
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x = 2
->x : E.x
->  : ^^^
+>x : import("es6modulekindWithES5Target12").E.x
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
 >  : ^
 }
