@@ -28,7 +28,7 @@ var res = (0, exports.x)('a', 'b');
 
 
 //// [callbackTagVariadicType.d.ts]
-export type Foo = (args: string[]) => number;
+export type Foo = (...args: string) => number;
 /**
  * @callback Foo
  * @param {...string} args

@@ -165,10 +165,23 @@ func (p *Parser) reparseJSDocSignature(jsSignature *ast.Node, fun *ast.Node, jsD
 			}
 		} else {
 			jsparam := param.AsJSDocParameterOrPropertyTag()
-			parameter = p.factory.NewParameterDeclaration(nil, nil, p.factory.DeepCloneReparse(jsparam.Name()), p.makeQuestionIfOptional(jsparam), nil, nil)
+			var dotDotDotToken *ast.Node
+			var paramType *ast.TypeNode
+
 			if jsparam.TypeExpression != nil {
-				parameter.AsParameterDeclaration().Type = p.reparseJSDocTypeLiteral(jsparam.TypeExpression.Type())
+				if jsparam.TypeExpression.Type().Kind == ast.KindJSDocVariadicType {
+					dotDotDotToken = p.factory.NewToken(ast.KindDotDotDotToken)
+					dotDotDotToken.Loc = jsparam.Loc
+					dotDotDotToken.Flags = p.contextFlags | ast.NodeFlagsReparsed
+
+					variadicType := jsparam.TypeExpression.Type().AsJSDocVariadicType()
+					paramType = p.reparseJSDocTypeLiteral(variadicType.Type)
+				} else {
+					paramType = p.reparseJSDocTypeLiteral(jsparam.TypeExpression.Type())
+				}
 			}
+
+			parameter = p.factory.NewParameterDeclaration(nil, dotDotDotToken, p.factory.DeepCloneReparse(jsparam.Name()), p.makeQuestionIfOptional(jsparam), paramType, nil)
 		}
 		p.finishReparsedNode(parameter, param)
 		parameters = append(parameters, parameter)
