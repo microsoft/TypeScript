@@ -42,10 +42,7 @@ func createWatcher(sys System, configParseResult *tsoptions.ParsedCommandLine, r
 }
 
 func (w *Watcher) start() {
-	// if this function is updated, make sure to update `StartForTest` in export_test.go as needed
-	if w.configFileName == "" {
-		w.host = compiler.NewCompilerHost(w.sys.GetCurrentDirectory(), w.sys.FS(), w.sys.DefaultLibraryPath(), nil)
-	}
+	w.host = compiler.NewCompilerHost(w.sys.GetCurrentDirectory(), w.sys.FS(), w.sys.DefaultLibraryPath(), nil)
 	w.program = incremental.ReadBuildInfoProgram(w.options, incremental.NewBuildInfoReader(w.host))
 
 	if !w.testing {

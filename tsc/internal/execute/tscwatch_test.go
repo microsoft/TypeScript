@@ -15,6 +15,14 @@ func TestWatch(t *testing.T) {
 			},
 			commandLineArgs: []string{"index.ts", "--watch"},
 		},
+		{
+			subScenario: "watch with tsconfig and incremental",
+			files: FileMap{
+				"/home/src/workspaces/project/index.ts":      "",
+				"/home/src/workspaces/project/tsconfig.json": "{}",
+			},
+			commandLineArgs: []string{"--watch", "--incremental"},
+		},
 	}
 
 	for _, test := range testCases {
