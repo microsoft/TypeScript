@@ -660,6 +660,9 @@ function parseBaselineFindAllReferencesArgs(args: readonly ts.Expression[]): Ver
         if (ts.isStringLiteral(arg)) {
             newArgs.push(getGoStringLiteral(arg.text));
         }
+        else if (arg.getText() === "...test.markerNames()") {
+            newArgs.push("f.MarkerNames()...");
+        }
         else if (arg.getText() === "...test.ranges()") {
             return {
                 kind: "verifyBaselineFindAllReferences",
@@ -680,6 +683,9 @@ function parseBaselineGoToDefinitionArgs(args: readonly ts.Expression[]): Verify
     for (const arg of args) {
         if (ts.isStringLiteral(arg)) {
             newArgs.push(getGoStringLiteral(arg.text));
+        }
+        else if (arg.getText() === "...test.markerNames()") {
+            newArgs.push("f.MarkerNames()...");
         }
         else if (arg.getText() === "...test.ranges()") {
             return {

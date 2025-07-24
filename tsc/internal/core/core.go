@@ -95,6 +95,18 @@ func MapNonNil[T any, U comparable](slice []T, f func(T) U) []U {
 	return result
 }
 
+func MapFiltered[T any, U any](slice []T, f func(T) (U, bool)) []U {
+	var result []U
+	for _, value := range slice {
+		mapped, ok := f(value)
+		if !ok {
+			continue
+		}
+		result = append(result, mapped)
+	}
+	return result
+}
+
 func FlatMap[T any, U comparable](slice []T, f func(T) []U) []U {
 	var result []U
 	for _, value := range slice {

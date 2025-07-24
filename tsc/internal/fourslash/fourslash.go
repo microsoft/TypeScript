@@ -414,6 +414,15 @@ func (f *FourslashTest) Markers() []*Marker {
 	return f.testData.Markers
 }
 
+func (f *FourslashTest) MarkerNames() []string {
+	return core.MapFiltered(f.testData.Markers, func(marker *Marker) (string, bool) {
+		if marker.Name == nil {
+			return "", false
+		}
+		return *marker.Name, true
+	})
+}
+
 func (f *FourslashTest) Ranges() []*RangeMarker {
 	return f.testData.Ranges
 }
