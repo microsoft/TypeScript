@@ -1,0 +1,34 @@
+usingDeclarationWithGlobalInterfaceModification.ts(26,17): error TS2850: The initializer of a 'using' declaration must be either an object with a '[Symbol.dispose]()' method, or be 'null' or 'undefined'.
+
+
+==== usingDeclarationWithGlobalInterfaceModification.ts (1 errors) ====
+    // Test case that demonstrates the issue from https://github.com/microsoft/TypeScript/issues/62121
+    // When an empty global Disposable interface is declared, it should NOT affect
+    // the checking for Symbol.dispose properties
+    
+    declare global {
+      interface Disposable {}
+    }
+    
+    // This should pass - has Symbol.dispose method
+    const validDisposable = {
+        [Symbol.dispose]() {
+            // disposed
+        }
+    };
+    
+    // This should fail - no Symbol.dispose method
+    const invalidDisposable = {
+        cleanup() {
+            // cleanup
+        }
+    };
+    
+    // With the fix, the checker should directly check for Symbol.dispose properties
+    // rather than relying on assignability to the global Disposable interface
+    using valid = validDisposable;      // should pass
+    using invalid = invalidDisposable;  // should error
+                    ~~~~~~~~~~~~~~~~~
+!!! error TS2850: The initializer of a 'using' declaration must be either an object with a '[Symbol.dispose]()' method, or be 'null' or 'undefined'.
+    
+    export {};

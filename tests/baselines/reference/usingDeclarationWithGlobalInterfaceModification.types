@@ -1,0 +1,65 @@
+//// [tests/cases/compiler/usingDeclarationWithGlobalInterfaceModification.ts] ////
+
+=== usingDeclarationWithGlobalInterfaceModification.ts ===
+// Test case that demonstrates the issue from https://github.com/microsoft/TypeScript/issues/62121
+// When an empty global Disposable interface is declared, it should NOT affect
+// the checking for Symbol.dispose properties
+
+declare global {
+>global : any
+>       : ^^^
+
+  interface Disposable {}
+}
+
+// This should pass - has Symbol.dispose method
+const validDisposable = {
+>validDisposable : { [Symbol.dispose](): void; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    [Symbol.dispose]() {        // disposed    }} : { [Symbol.dispose](): void; }
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    [Symbol.dispose]() {
+>[Symbol.dispose] : () => void
+>                 : ^^^^^^^^^^
+>Symbol.dispose : unique symbol
+>               : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>dispose : unique symbol
+>        : ^^^^^^^^^^^^^
+
+        // disposed
+    }
+};
+
+// This should fail - no Symbol.dispose method
+const invalidDisposable = {
+>invalidDisposable : { cleanup(): void; }
+>                  : ^^^^^^^^^^^^^^^^^^^^
+>{    cleanup() {        // cleanup    }} : { cleanup(): void; }
+>                                         : ^^^^^^^^^^^^^^^^^^^^
+
+    cleanup() {
+>cleanup : () => void
+>        : ^^^^^^^^^^
+
+        // cleanup
+    }
+};
+
+// With the fix, the checker should directly check for Symbol.dispose properties
+// rather than relying on assignability to the global Disposable interface
+using valid = validDisposable;      // should pass
+>valid : { [Symbol.dispose](): void; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>validDisposable : { [Symbol.dispose](): void; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+using invalid = invalidDisposable;  // should error
+>invalid : { cleanup(): void; }
+>        : ^^^^^^^^^^^^^^^^^^^^
+>invalidDisposable : { cleanup(): void; }
+>                  : ^^^^^^^^^^^^^^^^^^^^
+
+export {};

@@ -17542,11 +17542,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return (deferredGlobalIteratorReturnResultType ||= getGlobalType("IteratorReturnResult" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
     }
 
-    function getGlobalDisposableType(reportErrors: boolean) {
+    function _getGlobalDisposableType(reportErrors: boolean) {
         return (deferredGlobalDisposableType ||= getGlobalType("Disposable" as __String, /*arity*/ 0, reportErrors)) || emptyObjectType;
     }
 
-    function getGlobalAsyncDisposableType(reportErrors: boolean) {
+    function _getGlobalAsyncDisposableType(reportErrors: boolean) {
         return (deferredGlobalAsyncDisposableType ||= getGlobalType("AsyncDisposable" as __String, /*arity*/ 0, reportErrors)) || emptyObjectType;
     }
 
@@ -17562,7 +17562,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         const disposePropertyName = getPropertyNameForKnownSymbolName("dispose");
         const disposeProperty = getPropertyOfType(type, disposePropertyName);
-        
+
         return !!disposeProperty && !(disposeProperty.flags & SymbolFlags.Optional);
     }
 
@@ -17578,7 +17578,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         const asyncDisposePropertyName = getPropertyNameForKnownSymbolName("asyncDispose");
         const asyncDisposeProperty = getPropertyOfType(type, asyncDisposePropertyName);
-        
+
         if (asyncDisposeProperty && !(asyncDisposeProperty.flags & SymbolFlags.Optional)) {
             return true;
         }
@@ -45036,12 +45036,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     checkTypeAssignableToAndOptionallyElaborate(initializerType, type, node, initializer, /*headMessage*/ undefined);
                     const blockScopeKind = getCombinedNodeFlagsCached(node) & NodeFlags.BlockScoped;
                     if (blockScopeKind === NodeFlags.AwaitUsing) {
-                        if (!checkTypeIsAsyncDisposable(widenTypeForVariableLikeDeclaration(initializerType, node))) {
+                        if (!checkTypeIsAsyncDisposable(initializerType)) {
                             error(initializer, Diagnostics.The_initializer_of_an_await_using_declaration_must_be_either_an_object_with_a_Symbol_asyncDispose_or_Symbol_dispose_method_or_be_null_or_undefined);
                         }
                     }
                     else if (blockScopeKind === NodeFlags.Using) {
-                        if (!checkTypeIsDisposable(widenTypeForVariableLikeDeclaration(initializerType, node))) {
+                        if (!checkTypeIsDisposable(initializerType)) {
                             error(initializer, Diagnostics.The_initializer_of_a_using_declaration_must_be_either_an_object_with_a_Symbol_dispose_method_or_be_null_or_undefined);
                         }
                     }
