@@ -6987,7 +6987,7 @@ func (c *Checker) getQuickTypeOfExpression(node *ast.Node) *Type {
 
 func (c *Checker) getReturnTypeOfSingleNonGenericCallSignature(funcType *Type) *Type {
 	signature := c.getSingleCallSignature(funcType)
-	if signature != nil && signature.typeParameters == nil {
+	if signature != nil && len(signature.typeParameters) == 0 {
 		return c.getReturnTypeOfSignature(signature)
 	}
 	return nil
@@ -9121,7 +9121,7 @@ func (c *Checker) inferTypeArguments(node *ast.Node, signature *Signature, args 
 					// Above, the type of the 'value' parameter is inferred to be 'A'.
 					contextualSignature := c.getSingleCallSignature(instantiatedType)
 					var inferenceSourceType *Type
-					if contextualSignature != nil && contextualSignature.typeParameters != nil {
+					if contextualSignature != nil && len(contextualSignature.typeParameters) != 0 {
 						inferenceSourceType = c.getOrCreateTypeFromSignature(c.getSignatureInstantiationWithoutFillingInTypeArguments(contextualSignature, contextualSignature.typeParameters), nil)
 					} else {
 						inferenceSourceType = instantiatedType
@@ -9382,7 +9382,7 @@ func (c *Checker) addImplementationSuccessElaboration(s *CallState, failed *Sign
 				candidate := c.getSignatureFromDeclaration(implementation)
 				localState := *s
 				localState.candidates = []*Signature{candidate}
-				localState.isSingleNonGenericCandidate = candidate.typeParameters == nil
+				localState.isSingleNonGenericCandidate = len(candidate.typeParameters) == 0
 				if c.chooseOverload(&localState, c.assignableRelation) != nil {
 					diagnostic.AddRelatedInfo(NewDiagnosticForNode(implementation, diagnostics.The_call_would_have_succeeded_against_this_implementation_but_implementation_signatures_of_overloads_are_not_externally_visible))
 				}
@@ -9949,8 +9949,8 @@ func (c *Checker) isAritySmaller(signature *Signature, target *ast.Node) bool {
 }
 
 func (c *Checker) assignContextualParameterTypes(sig *Signature, context *Signature) {
-	if context.typeParameters != nil {
-		if sig.typeParameters != nil {
+	if len(context.typeParameters) != 0 {
+		if len(sig.typeParameters) != 0 {
 			// This signature has already has a contextual inference performed and cached on it
 			return
 		}
@@ -20201,8 +20201,8 @@ func (c *Checker) getUnionSignatures(signatureLists [][]*Signature) []*Signature
 			if !core.Same(signatures, masterList) {
 				signature := signatures[0]
 				// Debug.assert(signature, "getUnionSignatures bails early on empty signature lists and should not have empty lists on second pass")
-				if signature.typeParameters != nil && core.Some(results, func(s *Signature) bool {
-					return s.typeParameters != nil && !c.compareTypeParametersIdentical(signature.typeParameters, s.typeParameters)
+				if len(signature.typeParameters) != 0 && core.Some(results, func(s *Signature) bool {
+					return len(s.typeParameters) != 0 && !c.compareTypeParametersIdentical(signature.typeParameters, s.typeParameters)
 				}) {
 					results = nil
 				} else {

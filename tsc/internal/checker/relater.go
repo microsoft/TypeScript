@@ -1462,7 +1462,7 @@ func (c *Checker) compareSignaturesRelated(source *Signature, target *Signature,
 		}
 		return TernaryFalse
 	}
-	if source.typeParameters != nil && !core.Same(source.typeParameters, target.typeParameters) {
+	if len(source.typeParameters) != 0 && !core.Same(source.typeParameters, target.typeParameters) {
 		target = c.getCanonicalSignature(target)
 		source = c.instantiateSignatureInContextOf(source, target /*inferenceContext*/, nil, compareTypes)
 	}
@@ -1653,7 +1653,7 @@ func (c *Checker) compareTypePredicateRelatedTo(source *TypePredicate, target *T
 
 // Returns true if `s` is `(...args: A) => R` where `A` is `any`, `any[]`, `never`, or `never[]`, and `R` is `any` or `unknown`.
 func (c *Checker) isTopSignature(s *Signature) bool {
-	if s.typeParameters == nil && (s.thisParameter == nil || IsTypeAny(c.getTypeOfParameter(s.thisParameter))) && len(s.parameters) == 1 && signatureHasRestParameter(s) {
+	if len(s.typeParameters) == 0 && (s.thisParameter == nil || IsTypeAny(c.getTypeOfParameter(s.thisParameter))) && len(s.parameters) == 1 && signatureHasRestParameter(s) {
 		paramType := c.getTypeOfParameter(s.parameters[0])
 		var restType *Type
 		if c.isArrayType(paramType) {
@@ -2090,7 +2090,7 @@ func (c *Checker) isResolvingReturnTypeOfSignature(signature *Signature) bool {
 }
 
 func (c *Checker) findMatchingSignatures(signatureLists [][]*Signature, signature *Signature, listIndex int) []*Signature {
-	if signature.typeParameters != nil {
+	if len(signature.typeParameters) != 0 {
 		// We require an exact match for generic signatures, so we only return signatures from the first
 		// signature list and only if they have exact matches in the other signature lists.
 		if listIndex > 0 {
@@ -2150,7 +2150,7 @@ func (c *Checker) compareSignaturesIdentical(source *Signature, target *Signatur
 	}
 	// Check that type parameter constraints and defaults match. If they do, instantiate the source
 	// signature with the type parameters of the target signature and continue the comparison.
-	if target.typeParameters != nil {
+	if len(target.typeParameters) != 0 {
 		mapper := newTypeMapper(source.typeParameters, target.typeParameters)
 		for i := range len(target.typeParameters) {
 			s := source.typeParameters[i]

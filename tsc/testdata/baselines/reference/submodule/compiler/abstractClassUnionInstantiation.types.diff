@@ -1,15 +1,6 @@
 --- old.abstractClassUnionInstantiation.types
 +++ new.abstractClassUnionInstantiation.types
-@@= skipped -45, +45 lines =@@
- >cls2 : Abstracts
-
- new cls3(); // should work
-->new cls3() : ConcreteA | ConcreteB
-+>new cls3() : ConcreteA
- >cls3 : Concretes
-
- [ConcreteA, AbstractA, AbstractB].map(cls => new cls()); // should error
-@@= skipped -31, +31 lines =@@
+@@= skipped -76, +76 lines =@@
 
  [ConcreteA, ConcreteB].map(cls => new cls()); // should work
  >[ConcreteA, ConcreteB].map(cls => new cls()) : ConcreteA[]

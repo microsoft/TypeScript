@@ -46,7 +46,7 @@ new cls2(); // should error
 >cls2 : Abstracts
 
 new cls3(); // should work
->new cls3() : ConcreteA
+>new cls3() : ConcreteA | ConcreteB
 >cls3 : Concretes
 
 [ConcreteA, AbstractA, AbstractB].map(cls => new cls()); // should error

@@ -1690,11 +1690,11 @@ func (b *nodeBuilderImpl) signatureToSignatureDeclarationHelper(signature *Signa
 	b.ctx.approximateLength += 3
 	// Usually a signature contributes a few more characters than this, but 3 is the minimum
 
-	if b.ctx.flags&nodebuilder.FlagsWriteTypeArgumentsOfSignature != 0 && signature.target != nil && signature.mapper != nil && signature.target.typeParameters != nil {
+	if b.ctx.flags&nodebuilder.FlagsWriteTypeArgumentsOfSignature != 0 && signature.target != nil && signature.mapper != nil && len(signature.target.typeParameters) != 0 {
 		for _, parameter := range signature.target.typeParameters {
 			typeParameters = append(typeParameters, b.typeToTypeNode(b.ch.instantiateType(parameter, signature.mapper)))
 		}
-	} else if signature.typeParameters != nil {
+	} else {
 		for _, parameter := range signature.typeParameters {
 			typeParameters = append(typeParameters, b.typeParameterToDeclaration(parameter))
 		}
