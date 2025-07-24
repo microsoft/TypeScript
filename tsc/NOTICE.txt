@@ -230,7 +230,7 @@ SOFTWARE.
 
 ---------------------------------------------------------
 
-github.com/go-json-experiment/json v0.0.0-20250517221953-25912455fbc8 - BSD-3-Clause
+github.com/go-json-experiment/json v0.0.0-20250714165856-be8212f5270d - BSD-3-Clause
 
 Copyright (c) 2020 The Go Authors. All rights reserved.
 
@@ -264,7 +264,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ---------------------------------------------------------
 
-golang.org/x/sync v0.15.0 - BSD-3-Clause
+golang.org/x/sync v0.16.0 - BSD-3-Clause
 
 Copyright 2009 The Go Authors.
 
