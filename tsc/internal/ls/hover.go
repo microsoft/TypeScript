@@ -30,7 +30,7 @@ func (l *LanguageService) ProvideHover(ctx context.Context, documentURI lsproto.
 	quickInfo, documentation := getQuickInfoAndDocumentation(c, node)
 	if quickInfo != "" {
 		return &lsproto.Hover{
-			Contents: lsproto.MarkupContentOrMarkedStringOrMarkedStrings{
+			Contents: lsproto.MarkupContentOrStringOrMarkedStringWithLanguageOrMarkedStrings{
 				MarkupContent: &lsproto.MarkupContent{
 					Kind:  lsproto.MarkupKindMarkdown,
 					Value: formatQuickInfo(quickInfo) + documentation,

@@ -126,15 +126,15 @@ func createTypeHelpItems(symbol *ast.Symbol, argumentInfo *argumentListInfo, sou
 		},
 	}
 
-	var activeParameter *lsproto.Nullable[uint32]
+	var activeParameter *lsproto.UintegerOrNull
 	if argumentInfo.argumentIndex == nil {
 		if clientOptions.SignatureInformation.NoActiveParameterSupport != nil && *clientOptions.SignatureInformation.NoActiveParameterSupport {
 			activeParameter = nil
 		} else {
-			activeParameter = ptrTo(lsproto.ToNullable(uint32(0)))
+			activeParameter = &lsproto.UintegerOrNull{Uinteger: ptrTo(uint32(0))}
 		}
 	} else {
-		activeParameter = ptrTo(lsproto.ToNullable(uint32(*argumentInfo.argumentIndex)))
+		activeParameter = &lsproto.UintegerOrNull{Uinteger: ptrTo(uint32(*argumentInfo.argumentIndex))}
 	}
 	return &lsproto.SignatureHelp{
 		Signatures:      signatureInformation,
@@ -240,13 +240,13 @@ func createSignatureHelpItems(candidates []*checker.Signature, resolvedSignature
 		}
 	}
 
-	var activeParameter *lsproto.Nullable[uint32]
+	var activeParameter *lsproto.UintegerOrNull
 	if argumentInfo.argumentIndex == nil {
 		if clientOptions.SignatureInformation.NoActiveParameterSupport != nil && *clientOptions.SignatureInformation.NoActiveParameterSupport {
 			activeParameter = nil
 		}
 	} else {
-		activeParameter = ptrTo(lsproto.ToNullable(uint32(*argumentInfo.argumentIndex)))
+		activeParameter = &lsproto.UintegerOrNull{Uinteger: ptrTo(uint32(*argumentInfo.argumentIndex))}
 	}
 	help := &lsproto.SignatureHelp{
 		Signatures:      signatureInformation,
@@ -261,10 +261,10 @@ func createSignatureHelpItems(candidates []*checker.Signature, resolvedSignature
 		})
 		if -1 < firstRest && firstRest < len(activeSignature.Parameters)-1 {
 			// We don't have any code to get this correct; instead, don't highlight a current parameter AT ALL
-			help.ActiveParameter = ptrTo(lsproto.ToNullable(uint32(len(activeSignature.Parameters))))
+			help.ActiveParameter = &lsproto.UintegerOrNull{Uinteger: ptrTo(uint32(len(activeSignature.Parameters)))}
 		}
-		if help.ActiveParameter != nil && *&help.ActiveParameter.Value > uint32(len(activeSignature.Parameters)-1) {
-			help.ActiveParameter = ptrTo(lsproto.ToNullable(uint32(len(activeSignature.Parameters) - 1)))
+		if help.ActiveParameter != nil && help.ActiveParameter.Uinteger != nil && *help.ActiveParameter.Uinteger > uint32(len(activeSignature.Parameters)-1) {
+			help.ActiveParameter = &lsproto.UintegerOrNull{Uinteger: ptrTo(uint32(len(activeSignature.Parameters) - 1))}
 		}
 	}
 	return help

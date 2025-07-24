@@ -17,7 +17,7 @@ func (l *LanguageService) GetExpectedReferenceFromMarker(fileName string, pos in
 	}
 }
 
-func (l *LanguageService) TestProvideReferences(fileName string, pos int) []*lsproto.Location {
+func (l *LanguageService) TestProvideReferences(fileName string, pos int) []lsproto.Location {
 	_, sourceFile := l.tryGetProgramAndFile(fileName)
 	lsPos := l.converters.PositionToLineAndCharacter(sourceFile, core.TextPos(pos))
 	return l.ProvideReferences(&lsproto.ReferenceParams{

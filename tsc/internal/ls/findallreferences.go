@@ -396,7 +396,7 @@ func getSymbolScope(symbol *ast.Symbol) *ast.Node {
 
 // === functions on (*ls) ===
 
-func (l *LanguageService) ProvideReferences(params *lsproto.ReferenceParams) []*lsproto.Location {
+func (l *LanguageService) ProvideReferences(params *lsproto.ReferenceParams) []lsproto.Location {
 	// `findReferencedSymbols` except only computes the information needed to return reference locations
 	program, sourceFile := l.getProgramAndFile(params.TextDocument.Uri)
 	position := int(l.converters.LineAndCharacterToPosition(sourceFile, params.Position))
@@ -409,7 +409,7 @@ func (l *LanguageService) ProvideReferences(params *lsproto.ReferenceParams) []*
 	return core.FlatMap(symbolsAndEntries, l.convertSymbolAndEntriesToLocations)
 }
 
-func (l *LanguageService) ProvideImplementations(params *lsproto.ImplementationParams) []*lsproto.Location {
+func (l *LanguageService) ProvideImplementations(params *lsproto.ImplementationParams) []lsproto.Location {
 	program, sourceFile := l.getProgramAndFile(params.TextDocument.Uri)
 	position := int(l.converters.LineAndCharacterToPosition(sourceFile, params.Position))
 	node := astnav.GetTouchingPropertyName(sourceFile, position)
@@ -437,19 +437,19 @@ func (l *LanguageService) getImplementationReferenceEntries(program *compiler.Pr
 }
 
 // == functions for conversions ==
-func (l *LanguageService) convertSymbolAndEntriesToLocations(s *SymbolAndEntries) []*lsproto.Location {
+func (l *LanguageService) convertSymbolAndEntriesToLocations(s *SymbolAndEntries) []lsproto.Location {
 	return l.convertEntriesToLocations(s.references)
 }
 
-func (l *LanguageService) convertEntriesToLocations(entries []*referenceEntry) []*lsproto.Location {
-	locations := make([]*lsproto.Location, len(entries))
+func (l *LanguageService) convertEntriesToLocations(entries []*referenceEntry) []lsproto.Location {
+	locations := make([]lsproto.Location, len(entries))
 	for i, entry := range entries {
 		if entry.textRange == nil {
 			sourceFile := ast.GetSourceFileOfNode(entry.node)
 			entry.textRange = l.getRangeOfNode(entry.node, sourceFile, nil /*endNode*/)
 			entry.fileName = sourceFile.FileName()
 		}
-		locations[i] = &lsproto.Location{
+		locations[i] = lsproto.Location{
 			Uri:   FileNameToDocumentURI(entry.fileName),
 			Range: *entry.textRange,
 		}

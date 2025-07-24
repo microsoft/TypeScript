@@ -224,7 +224,7 @@ func (s *Service) OpenFile(fileName string, fileContent string, scriptKind core.
 	s.printProjects()
 }
 
-func (s *Service) ChangeFile(document lsproto.VersionedTextDocumentIdentifier, changes []lsproto.TextDocumentContentChangeEvent) error {
+func (s *Service) ChangeFile(document lsproto.VersionedTextDocumentIdentifier, changes []lsproto.TextDocumentContentChangePartialOrWholeDocument) error {
 	fileName := ls.DocumentURIToFileName(document.Uri)
 	path := s.toPath(fileName)
 	scriptInfo := s.documentStore.GetScriptInfoByPath(path)
@@ -234,9 +234,9 @@ func (s *Service) ChangeFile(document lsproto.VersionedTextDocumentIdentifier, c
 
 	textChanges := make([]core.TextChange, len(changes))
 	for i, change := range changes {
-		if partialChange := change.TextDocumentContentChangePartial; partialChange != nil {
+		if partialChange := change.Partial; partialChange != nil {
 			textChanges[i] = s.converters.FromLSPTextChange(scriptInfo, partialChange)
-		} else if wholeChange := change.TextDocumentContentChangeWholeDocument; wholeChange != nil {
+		} else if wholeChange := change.WholeDocument; wholeChange != nil {
 			textChanges[i] = core.TextChange{
 				TextRange: core.NewTextRange(0, len(scriptInfo.Text())),
 				NewText:   wholeChange.Text,

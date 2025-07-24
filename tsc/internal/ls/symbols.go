@@ -193,7 +193,7 @@ type DeclarationInfo struct {
 	matchScore  int
 }
 
-func ProvideWorkspaceSymbols(ctx context.Context, programs []*compiler.Program, converters *Converters, query string) ([]lsproto.SymbolInformation, error) {
+func ProvideWorkspaceSymbols(ctx context.Context, programs []*compiler.Program, converters *Converters, query string) ([]*lsproto.SymbolInformation, error) {
 	// Obtain set of non-declaration source files from all active programs.
 	var sourceFiles collections.Set[*ast.SourceFile]
 	for _, program := range programs {
@@ -207,7 +207,7 @@ func ProvideWorkspaceSymbols(ctx context.Context, programs []*compiler.Program, 
 	var infos []DeclarationInfo
 	for sourceFile := range sourceFiles.Keys() {
 		if ctx != nil && ctx.Err() != nil {
-			return []lsproto.SymbolInformation{}, nil
+			return []*lsproto.SymbolInformation{}, nil
 		}
 		declarationMap := sourceFile.GetDeclarationMap()
 		for name, declarations := range declarationMap {
@@ -222,7 +222,7 @@ func ProvideWorkspaceSymbols(ctx context.Context, programs []*compiler.Program, 
 	// Sort the DeclarationInfos and return the top 256 matches.
 	slices.SortFunc(infos, compareDeclarationInfos)
 	count := min(len(infos), 256)
-	symbols := make([]lsproto.SymbolInformation, count)
+	symbols := make([]*lsproto.SymbolInformation, count)
 	for i, info := range infos[0:count] {
 		node := core.OrElse(ast.GetNameOfDeclaration(info.declaration), info.declaration)
 		sourceFile := ast.GetSourceFileOfNode(node)
@@ -231,7 +231,7 @@ func ProvideWorkspaceSymbols(ctx context.Context, programs []*compiler.Program, 
 		symbol.Name = info.name
 		symbol.Kind = getSymbolKindFromNode(info.declaration)
 		symbol.Location = converters.ToLSPLocation(sourceFile, core.NewTextRange(pos, node.End()))
-		symbols[i] = symbol
+		symbols[i] = &symbol
 	}
 	return symbols, nil
 }

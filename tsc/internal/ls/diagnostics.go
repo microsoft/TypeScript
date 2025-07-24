@@ -10,8 +10,8 @@ import (
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 )
 
-func (l *LanguageService) GetDocumentDiagnostics(ctx context.Context, documentURI lsproto.DocumentUri) (*lsproto.DocumentDiagnosticReport, error) {
-	program, file := l.getProgramAndFile(documentURI)
+func (l *LanguageService) ProvideDiagnostics(ctx context.Context, uri lsproto.DocumentUri) (lsproto.DocumentDiagnosticResponse, error) {
+	program, file := l.getProgramAndFile(uri)
 
 	diagnostics := make([][]*ast.Diagnostic, 0, 3)
 	if syntaxDiagnostics := program.GetSyntacticDiagnostics(ctx, file); len(syntaxDiagnostics) != 0 {
@@ -26,8 +26,8 @@ func (l *LanguageService) GetDocumentDiagnostics(ctx context.Context, documentUR
 		}
 	}
 
-	return &lsproto.DocumentDiagnosticReport{
-		RelatedFullDocumentDiagnosticReport: &lsproto.RelatedFullDocumentDiagnosticReport{
+	return lsproto.RelatedFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport{
+		FullDocumentDiagnosticReport: &lsproto.RelatedFullDocumentDiagnosticReport{
 			FullDocumentDiagnosticReport: lsproto.FullDocumentDiagnosticReport{
 				Items: toLSPDiagnostics(l.converters, diagnostics...),
 			},

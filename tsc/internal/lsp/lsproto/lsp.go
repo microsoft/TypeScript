@@ -13,35 +13,6 @@ type URI string // !!!
 
 type Method string
 
-type Nullable[T any] struct {
-	Value T
-	Null  bool
-}
-
-func ToNullable[T any](v T) Nullable[T] {
-	return Nullable[T]{Value: v}
-}
-
-func Null[T any]() Nullable[T] {
-	return Nullable[T]{Null: true}
-}
-
-func (n Nullable[T]) MarshalJSON() ([]byte, error) {
-	if n.Null {
-		return []byte(`null`), nil
-	}
-	return json.Marshal(n.Value)
-}
-
-func (n *Nullable[T]) UnmarshalJSON(data []byte) error {
-	*n = Nullable[T]{}
-	if string(data) == `null` {
-		n.Null = true
-		return nil
-	}
-	return json.Unmarshal(data, &n.Value)
-}
-
 func unmarshalPtrTo[T any](data []byte) (*T, error) {
 	var v T
 	if err := json.Unmarshal(data, &v); err != nil {
@@ -77,6 +48,18 @@ func assertOnlyOne(message string, values ...bool) {
 	}
 }
 
+func assertAtMostOne(message string, values ...bool) {
+	count := 0
+	for _, v := range values {
+		if v {
+			count++
+		}
+	}
+	if count > 1 {
+		panic(message)
+	}
+}
+
 func ptrTo[T any](v T) *T {
 	return &v
 }
@@ -91,4 +74,17 @@ func (v *requiredProp) UnmarshalJSON(data []byte) error {
 func (v *requiredProp) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
 	*v = true
 	return dec.SkipValue()
+}
+
+// Inspired by https://www.youtube.com/watch?v=dab3I-HcTVk
+
+type RequestInfo[Params, Resp any] struct {
+	_      [0]Params
+	_      [0]Resp
+	Method Method
+}
+
+type NotificationInfo[Params any] struct {
+	_      [0]Params
+	Method Method
 }

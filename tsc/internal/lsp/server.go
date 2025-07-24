@@ -290,7 +290,11 @@ func (s *Server) readLoop(ctx context.Context) error {
 		if s.initializeParams == nil && msg.Kind == lsproto.MessageKindRequest {
 			req := msg.AsRequest()
 			if req.Method == lsproto.MethodInitialize {
-				s.handleInitialize(req)
+				resp, err := s.handleInitialize(ctx, req.Params.(*lsproto.InitializeParams))
+				if err != nil {
+					return err
+				}
+				s.sendResult(req.ID, resp)
 			} else {
 				s.sendError(req.ID, lsproto.ErrServerNotInitialized)
 			}
@@ -459,71 +463,81 @@ func (s *Server) sendResponse(resp *lsproto.ResponseMessage) {
 }
 
 func (s *Server) handleRequestOrNotification(ctx context.Context, req *lsproto.RequestMessage) error {
-	params := req.Params
-	switch params.(type) {
-	case *lsproto.InitializeParams:
+	if handler := handlers()[req.Method]; handler != nil {
+		return handler(s, ctx, req)
+	}
+	s.Log("unknown method", req.Method)
+	if req.ID != nil {
 		s.sendError(req.ID, lsproto.ErrInvalidRequest)
-		return nil
-	case *lsproto.InitializedParams:
-		return s.handleInitialized(ctx, req)
-	case *lsproto.DidOpenTextDocumentParams:
-		return s.handleDidOpen(ctx, req)
-	case *lsproto.DidChangeTextDocumentParams:
-		return s.handleDidChange(ctx, req)
-	case *lsproto.DidSaveTextDocumentParams:
-		return s.handleDidSave(ctx, req)
-	case *lsproto.DidCloseTextDocumentParams:
-		return s.handleDidClose(ctx, req)
-	case *lsproto.DidChangeWatchedFilesParams:
-		return s.handleDidChangeWatchedFiles(ctx, req)
-	case *lsproto.DocumentDiagnosticParams:
-		return s.handleDocumentDiagnostic(ctx, req)
-	case *lsproto.HoverParams:
-		return s.handleHover(ctx, req)
-	case *lsproto.DefinitionParams:
-		return s.handleDefinition(ctx, req)
-	case *lsproto.TypeDefinitionParams:
-		return s.handleTypeDefinition(ctx, req)
-	case *lsproto.CompletionParams:
-		return s.handleCompletion(ctx, req)
-	case *lsproto.ReferenceParams:
-		return s.handleReferences(ctx, req)
-	case *lsproto.ImplementationParams:
-		return s.handleImplementations(ctx, req)
-	case *lsproto.SignatureHelpParams:
-		return s.handleSignatureHelp(ctx, req)
-	case *lsproto.DocumentFormattingParams:
-		return s.handleDocumentFormat(ctx, req)
-	case *lsproto.DocumentRangeFormattingParams:
-		return s.handleDocumentRangeFormat(ctx, req)
-	case *lsproto.DocumentOnTypeFormattingParams:
-		return s.handleDocumentOnTypeFormat(ctx, req)
-	case *lsproto.WorkspaceSymbolParams:
-		return s.handleWorkspaceSymbol(ctx, req)
-	case *lsproto.DocumentSymbolParams:
-		return s.handleDocumentSymbol(ctx, req)
-	case *lsproto.CompletionItem:
-		return s.handleCompletionItemResolve(ctx, req)
-	default:
-		switch req.Method {
-		case lsproto.MethodShutdown:
-			s.projectService.Close()
-			s.sendResult(req.ID, nil)
-			return nil
-		case lsproto.MethodExit:
-			return io.EOF
-		default:
-			s.Log("unknown method", req.Method)
-			if req.ID != nil {
-				s.sendError(req.ID, lsproto.ErrInvalidRequest)
-			}
-			return nil
+	}
+	return nil
+}
+
+type handlerMap map[lsproto.Method]func(*Server, context.Context, *lsproto.RequestMessage) error
+
+var handlers = sync.OnceValue(func() handlerMap {
+	handlers := make(handlerMap)
+
+	registerRequestHandler(handlers, lsproto.InitializeInfo, (*Server).handleInitialize)
+	registerNotificationHandler(handlers, lsproto.InitializedInfo, (*Server).handleInitialized)
+	registerRequestHandler(handlers, lsproto.ShutdownInfo, (*Server).handleShutdown)
+	registerNotificationHandler(handlers, lsproto.ExitInfo, (*Server).handleExit)
+
+	registerNotificationHandler(handlers, lsproto.TextDocumentDidOpenInfo, (*Server).handleDidOpen)
+	registerNotificationHandler(handlers, lsproto.TextDocumentDidChangeInfo, (*Server).handleDidChange)
+	registerNotificationHandler(handlers, lsproto.TextDocumentDidSaveInfo, (*Server).handleDidSave)
+	registerNotificationHandler(handlers, lsproto.TextDocumentDidCloseInfo, (*Server).handleDidClose)
+	registerNotificationHandler(handlers, lsproto.WorkspaceDidChangeWatchedFilesInfo, (*Server).handleDidChangeWatchedFiles)
+
+	registerRequestHandler(handlers, lsproto.TextDocumentDiagnosticInfo, (*Server).handleDocumentDiagnostic)
+	registerRequestHandler(handlers, lsproto.TextDocumentHoverInfo, (*Server).handleHover)
+	registerRequestHandler(handlers, lsproto.TextDocumentDefinitionInfo, (*Server).handleDefinition)
+	registerRequestHandler(handlers, lsproto.TextDocumentTypeDefinitionInfo, (*Server).handleTypeDefinition)
+	registerRequestHandler(handlers, lsproto.TextDocumentCompletionInfo, (*Server).handleCompletion)
+	registerRequestHandler(handlers, lsproto.TextDocumentReferencesInfo, (*Server).handleReferences)
+	registerRequestHandler(handlers, lsproto.TextDocumentImplementationInfo, (*Server).handleImplementations)
+	registerRequestHandler(handlers, lsproto.TextDocumentSignatureHelpInfo, (*Server).handleSignatureHelp)
+	registerRequestHandler(handlers, lsproto.TextDocumentFormattingInfo, (*Server).handleDocumentFormat)
+	registerRequestHandler(handlers, lsproto.TextDocumentRangeFormattingInfo, (*Server).handleDocumentRangeFormat)
+	registerRequestHandler(handlers, lsproto.TextDocumentOnTypeFormattingInfo, (*Server).handleDocumentOnTypeFormat)
+	registerRequestHandler(handlers, lsproto.WorkspaceSymbolInfo, (*Server).handleWorkspaceSymbol)
+	registerRequestHandler(handlers, lsproto.TextDocumentDocumentSymbolInfo, (*Server).handleDocumentSymbol)
+	registerRequestHandler(handlers, lsproto.CompletionItemResolveInfo, (*Server).handleCompletionItemResolve)
+
+	return handlers
+})
+
+func registerNotificationHandler[Req any](handlers handlerMap, info lsproto.NotificationInfo[Req], fn func(*Server, context.Context, Req) error) {
+	handlers[info.Method] = func(s *Server, ctx context.Context, req *lsproto.RequestMessage) error {
+		params := req.Params.(Req)
+		if err := fn(s, ctx, params); err != nil {
+			return err
 		}
+		return ctx.Err()
 	}
 }
 
-func (s *Server) handleInitialize(req *lsproto.RequestMessage) {
-	s.initializeParams = req.Params.(*lsproto.InitializeParams)
+func registerRequestHandler[Req, Resp any](handlers handlerMap, info lsproto.RequestInfo[Req, Resp], fn func(*Server, context.Context, Req) (Resp, error)) {
+	handlers[info.Method] = func(s *Server, ctx context.Context, req *lsproto.RequestMessage) error {
+		params := req.Params.(Req)
+		resp, err := fn(s, ctx, params)
+		if err != nil {
+			return err
+		}
+		if ctx.Err() != nil {
+			return ctx.Err()
+		}
+		s.sendResult(req.ID, resp)
+		return nil
+	}
+}
+
+func (s *Server) handleInitialize(ctx context.Context, params *lsproto.InitializeParams) (lsproto.InitializeResponse, error) {
+	if s.initializeParams != nil {
+		return nil, lsproto.ErrInvalidRequest
+	}
+
+	s.initializeParams = params
 
 	s.positionEncoding = lsproto.PositionEncodingKindUTF16
 	if genCapabilities := s.initializeParams.Capabilities.General; genCapabilities != nil && genCapabilities.PositionEncodings != nil {
@@ -532,15 +546,15 @@ func (s *Server) handleInitialize(req *lsproto.RequestMessage) {
 		}
 	}
 
-	s.sendResult(req.ID, &lsproto.InitializeResult{
+	response := &lsproto.InitializeResult{
 		ServerInfo: &lsproto.ServerInfo{
 			Name:    "typescript-go",
 			Version: ptrTo(core.Version()),
 		},
 		Capabilities: &lsproto.ServerCapabilities{
 			PositionEncoding: ptrTo(s.positionEncoding),
-			TextDocumentSync: &lsproto.TextDocumentSyncOptionsOrTextDocumentSyncKind{
-				TextDocumentSyncOptions: &lsproto.TextDocumentSyncOptions{
+			TextDocumentSync: &lsproto.TextDocumentSyncOptionsOrKind{
+				Options: &lsproto.TextDocumentSyncOptions{
 					OpenClose: ptrTo(true),
 					Change:    ptrTo(lsproto.TextDocumentSyncKindIncremental),
 					Save: &lsproto.BooleanOrSaveOptions{
@@ -565,8 +579,8 @@ func (s *Server) handleInitialize(req *lsproto.RequestMessage) {
 			ImplementationProvider: &lsproto.BooleanOrImplementationOptionsOrImplementationRegistrationOptions{
 				Boolean: ptrTo(true),
 			},
-			DiagnosticProvider: &lsproto.DiagnosticOptionsOrDiagnosticRegistrationOptions{
-				DiagnosticOptions: &lsproto.DiagnosticOptions{
+			DiagnosticProvider: &lsproto.DiagnosticOptionsOrRegistrationOptions{
+				Options: &lsproto.DiagnosticOptions{
 					InterFileDependencies: true,
 				},
 			},
@@ -595,10 +609,12 @@ func (s *Server) handleInitialize(req *lsproto.RequestMessage) {
 				Boolean: ptrTo(true),
 			},
 		},
-	})
+	}
+
+	return response, nil
 }
 
-func (s *Server) handleInitialized(ctx context.Context, req *lsproto.RequestMessage) error {
+func (s *Server) handleInitialized(ctx context.Context, params *lsproto.InitializedParams) error {
 	if shouldEnableWatch(s.initializeParams) {
 		s.watchEnabled = true
 	}
@@ -622,127 +638,101 @@ func (s *Server) handleInitialized(ctx context.Context, req *lsproto.RequestMess
 	return nil
 }
 
-func (s *Server) handleDidOpen(ctx context.Context, req *lsproto.RequestMessage) error {
-	params := req.Params.(*lsproto.DidOpenTextDocumentParams)
+func (s *Server) handleShutdown(ctx context.Context, params any) (lsproto.ShutdownResponse, error) {
+	s.projectService.Close()
+	return nil, nil
+}
+
+func (s *Server) handleExit(ctx context.Context, params any) error {
+	return io.EOF
+}
+
+func (s *Server) handleDidOpen(ctx context.Context, params *lsproto.DidOpenTextDocumentParams) error {
 	s.projectService.OpenFile(ls.DocumentURIToFileName(params.TextDocument.Uri), params.TextDocument.Text, ls.LanguageKindToScriptKind(params.TextDocument.LanguageId), "")
 	return nil
 }
 
-func (s *Server) handleDidChange(ctx context.Context, req *lsproto.RequestMessage) error {
-	params := req.Params.(*lsproto.DidChangeTextDocumentParams)
+func (s *Server) handleDidChange(ctx context.Context, params *lsproto.DidChangeTextDocumentParams) error {
 	return s.projectService.ChangeFile(params.TextDocument, params.ContentChanges)
 }
 
-func (s *Server) handleDidSave(ctx context.Context, req *lsproto.RequestMessage) error {
-	params := req.Params.(*lsproto.DidSaveTextDocumentParams)
+func (s *Server) handleDidSave(ctx context.Context, params *lsproto.DidSaveTextDocumentParams) error {
 	s.projectService.MarkFileSaved(ls.DocumentURIToFileName(params.TextDocument.Uri), *params.Text)
 	return nil
 }
 
-func (s *Server) handleDidClose(ctx context.Context, req *lsproto.RequestMessage) error {
-	params := req.Params.(*lsproto.DidCloseTextDocumentParams)
+func (s *Server) handleDidClose(ctx context.Context, params *lsproto.DidCloseTextDocumentParams) error {
 	s.projectService.CloseFile(ls.DocumentURIToFileName(params.TextDocument.Uri))
 	return nil
 }
 
-func (s *Server) handleDidChangeWatchedFiles(ctx context.Context, req *lsproto.RequestMessage) error {
-	params := req.Params.(*lsproto.DidChangeWatchedFilesParams)
+func (s *Server) handleDidChangeWatchedFiles(ctx context.Context, params *lsproto.DidChangeWatchedFilesParams) error {
 	return s.projectService.OnWatchedFilesChanged(ctx, params.Changes)
 }
 
-func (s *Server) handleDocumentDiagnostic(ctx context.Context, req *lsproto.RequestMessage) error {
-	params := req.Params.(*lsproto.DocumentDiagnosticParams)
+func (s *Server) handleDocumentDiagnostic(ctx context.Context, params *lsproto.DocumentDiagnosticParams) (lsproto.DocumentDiagnosticResponse, error) {
 	project := s.projectService.EnsureDefaultProjectForURI(params.TextDocument.Uri)
 	languageService, done := project.GetLanguageServiceForRequest(ctx)
 	defer done()
-	diagnostics, err := languageService.GetDocumentDiagnostics(ctx, params.TextDocument.Uri)
-	if err != nil {
-		return err
-	}
-	s.sendResult(req.ID, diagnostics)
-	return nil
+	return languageService.ProvideDiagnostics(ctx, params.TextDocument.Uri)
 }
 
-func (s *Server) handleHover(ctx context.Context, req *lsproto.RequestMessage) error {
-	params := req.Params.(*lsproto.HoverParams)
+func (s *Server) handleHover(ctx context.Context, params *lsproto.HoverParams) (lsproto.HoverResponse, error) {
 	project := s.projectService.EnsureDefaultProjectForURI(params.TextDocument.Uri)
 	languageService, done := project.GetLanguageServiceForRequest(ctx)
 	defer done()
-	hover, err := languageService.ProvideHover(ctx, params.TextDocument.Uri, params.Position)
-	if err != nil {
-		return err
-	}
-	s.sendResult(req.ID, hover)
-	return nil
+	return languageService.ProvideHover(ctx, params.TextDocument.Uri, params.Position)
 }
 
-func (s *Server) handleSignatureHelp(ctx context.Context, req *lsproto.RequestMessage) error {
-	params := req.Params.(*lsproto.SignatureHelpParams)
+func (s *Server) handleSignatureHelp(ctx context.Context, params *lsproto.SignatureHelpParams) (lsproto.SignatureHelpResponse, error) {
 	project := s.projectService.EnsureDefaultProjectForURI(params.TextDocument.Uri)
 	languageService, done := project.GetLanguageServiceForRequest(ctx)
 	defer done()
-	signatureHelp := languageService.ProvideSignatureHelp(
+	return languageService.ProvideSignatureHelp(
 		ctx,
 		params.TextDocument.Uri,
 		params.Position,
 		params.Context,
 		s.initializeParams.Capabilities.TextDocument.SignatureHelp,
 		&ls.UserPreferences{},
-	)
-	s.sendResult(req.ID, signatureHelp)
-	return nil
+	), nil
 }
 
-func (s *Server) handleDefinition(ctx context.Context, req *lsproto.RequestMessage) error {
-	params := req.Params.(*lsproto.DefinitionParams)
+func (s *Server) handleDefinition(ctx context.Context, params *lsproto.DefinitionParams) (lsproto.DefinitionResponse, error) {
 	project := s.projectService.EnsureDefaultProjectForURI(params.TextDocument.Uri)
 	languageService, done := project.GetLanguageServiceForRequest(ctx)
 	defer done()
-	definition, err := languageService.ProvideDefinition(ctx, params.TextDocument.Uri, params.Position)
-	if err != nil {
-		return err
-	}
-	s.sendResult(req.ID, definition)
-	return nil
+	return languageService.ProvideDefinition(ctx, params.TextDocument.Uri, params.Position)
 }
 
-func (s *Server) handleTypeDefinition(ctx context.Context, req *lsproto.RequestMessage) error {
-	params := req.Params.(*lsproto.TypeDefinitionParams)
+func (s *Server) handleTypeDefinition(ctx context.Context, params *lsproto.TypeDefinitionParams) (lsproto.TypeDefinitionResponse, error) {
 	project := s.projectService.EnsureDefaultProjectForURI(params.TextDocument.Uri)
 	languageService, done := project.GetLanguageServiceForRequest(ctx)
 	defer done()
-	definition, err := languageService.ProvideTypeDefinition(ctx, params.TextDocument.Uri, params.Position)
-	if err != nil {
-		return err
-	}
-	s.sendResult(req.ID, definition)
-	return nil
+	return languageService.ProvideTypeDefinition(ctx, params.TextDocument.Uri, params.Position)
 }
 
-func (s *Server) handleReferences(ctx context.Context, req *lsproto.RequestMessage) error {
+func (s *Server) handleReferences(ctx context.Context, params *lsproto.ReferenceParams) (lsproto.ReferencesResponse, error) {
 	// findAllReferences
-	params := req.Params.(*lsproto.ReferenceParams)
 	project := s.projectService.EnsureDefaultProjectForURI(params.TextDocument.Uri)
 	languageService, done := project.GetLanguageServiceForRequest(ctx)
 	defer done()
 	locations := languageService.ProvideReferences(params)
-	s.sendResult(req.ID, locations)
-	return nil
+	return &locations, nil
 }
 
-func (s *Server) handleImplementations(ctx context.Context, req *lsproto.RequestMessage) error {
+func (s *Server) handleImplementations(ctx context.Context, params *lsproto.ImplementationParams) (lsproto.ImplementationResponse, error) {
 	// goToImplementation
-	params := req.Params.(*lsproto.ImplementationParams)
 	project := s.projectService.EnsureDefaultProjectForURI(params.TextDocument.Uri)
 	languageService, done := project.GetLanguageServiceForRequest(ctx)
 	defer done()
 	locations := languageService.ProvideImplementations(params)
-	s.sendResult(req.ID, locations)
-	return nil
+	return &lsproto.LocationOrLocationsOrDefinitionLinks{
+		Locations: &locations,
+	}, nil
 }
 
-func (s *Server) handleCompletion(ctx context.Context, req *lsproto.RequestMessage) error {
-	params := req.Params.(*lsproto.CompletionParams)
+func (s *Server) handleCompletion(ctx context.Context, params *lsproto.CompletionParams) (lsproto.CompletionResponse, error) {
 	project := s.projectService.EnsureDefaultProjectForURI(params.TextDocument.Uri)
 	languageService, done := project.GetLanguageServiceForRequest(ctx)
 	defer done()
@@ -755,37 +745,31 @@ func (s *Server) handleCompletion(ctx context.Context, req *lsproto.RequestMessa
 		getCompletionClientCapabilities(s.initializeParams),
 		&ls.UserPreferences{})
 	if err != nil {
-		return err
+		return nil, err
 	}
-	s.sendResult(req.ID, list)
-	return nil
+	return &lsproto.CompletionItemsOrList{
+		List: list,
+	}, nil
 }
 
-func (s *Server) handleCompletionItemResolve(ctx context.Context, req *lsproto.RequestMessage) error {
-	params := req.Params.(*lsproto.CompletionItem)
+func (s *Server) handleCompletionItemResolve(ctx context.Context, params *lsproto.CompletionItem) (lsproto.CompletionResolveResponse, error) {
 	data, err := ls.GetCompletionItemData(params)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	_, project := s.projectService.EnsureDefaultProjectForFile(data.FileName)
 	languageService, done := project.GetLanguageServiceForRequest(ctx)
 	defer done()
-	resolvedItem, err := languageService.ResolveCompletionItem(
+	return languageService.ResolveCompletionItem(
 		ctx,
 		params,
 		data,
 		getCompletionClientCapabilities(s.initializeParams),
 		&ls.UserPreferences{},
 	)
-	if err != nil {
-		return err
-	}
-	s.sendResult(req.ID, resolvedItem)
-	return nil
 }
 
-func (s *Server) handleDocumentFormat(ctx context.Context, req *lsproto.RequestMessage) error {
-	params := req.Params.(*lsproto.DocumentFormattingParams)
+func (s *Server) handleDocumentFormat(ctx context.Context, params *lsproto.DocumentFormattingParams) (lsproto.DocumentFormattingResponse, error) {
 	project := s.projectService.EnsureDefaultProjectForURI(params.TextDocument.Uri)
 	languageService, done := project.GetLanguageServiceForRequest(ctx)
 	defer done()
@@ -795,14 +779,12 @@ func (s *Server) handleDocumentFormat(ctx context.Context, req *lsproto.RequestM
 		params.Options,
 	)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	s.sendResult(req.ID, res)
-	return nil
+	return &res, nil
 }
 
-func (s *Server) handleDocumentRangeFormat(ctx context.Context, req *lsproto.RequestMessage) error {
-	params := req.Params.(*lsproto.DocumentRangeFormattingParams)
+func (s *Server) handleDocumentRangeFormat(ctx context.Context, params *lsproto.DocumentRangeFormattingParams) (lsproto.DocumentRangeFormattingResponse, error) {
 	project := s.projectService.EnsureDefaultProjectForURI(params.TextDocument.Uri)
 	languageService, done := project.GetLanguageServiceForRequest(ctx)
 	defer done()
@@ -813,14 +795,12 @@ func (s *Server) handleDocumentRangeFormat(ctx context.Context, req *lsproto.Req
 		params.Range,
 	)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	s.sendResult(req.ID, res)
-	return nil
+	return &res, nil
 }
 
-func (s *Server) handleDocumentOnTypeFormat(ctx context.Context, req *lsproto.RequestMessage) error {
-	params := req.Params.(*lsproto.DocumentOnTypeFormattingParams)
+func (s *Server) handleDocumentOnTypeFormat(ctx context.Context, params *lsproto.DocumentOnTypeFormattingParams) (lsproto.DocumentOnTypeFormattingResponse, error) {
 	project := s.projectService.EnsureDefaultProjectForURI(params.TextDocument.Uri)
 	languageService, done := project.GetLanguageServiceForRequest(ctx)
 	defer done()
@@ -832,34 +812,33 @@ func (s *Server) handleDocumentOnTypeFormat(ctx context.Context, req *lsproto.Re
 		params.Ch,
 	)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	s.sendResult(req.ID, res)
-	return nil
+	return &res, nil
 }
 
-func (s *Server) handleWorkspaceSymbol(ctx context.Context, req *lsproto.RequestMessage) error {
+func (s *Server) handleWorkspaceSymbol(ctx context.Context, params *lsproto.WorkspaceSymbolParams) (lsproto.WorkspaceSymbolResponse, error) {
 	programs := core.Map(s.projectService.Projects(), (*project.Project).GetProgram)
-	params := req.Params.(*lsproto.WorkspaceSymbolParams)
 	symbols, err := ls.ProvideWorkspaceSymbols(ctx, programs, s.projectService.Converters(), params.Query)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	s.sendResult(req.ID, symbols)
-	return nil
+	return &lsproto.SymbolInformationsOrWorkspaceSymbols{
+		SymbolInformations: &symbols,
+	}, nil
 }
 
-func (s *Server) handleDocumentSymbol(ctx context.Context, req *lsproto.RequestMessage) error {
-	params := req.Params.(*lsproto.DocumentSymbolParams)
+func (s *Server) handleDocumentSymbol(ctx context.Context, params *lsproto.DocumentSymbolParams) (lsproto.DocumentSymbolResponse, error) {
 	project := s.projectService.EnsureDefaultProjectForURI(params.TextDocument.Uri)
 	languageService, done := project.GetLanguageServiceForRequest(ctx)
 	defer done()
-	hover, err := languageService.ProvideDocumentSymbols(ctx, params.TextDocument.Uri)
+	symbols, err := languageService.ProvideDocumentSymbols(ctx, params.TextDocument.Uri)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	s.sendResult(req.ID, hover)
-	return nil
+	return &lsproto.SymbolInformationsOrDocumentSymbols{
+		DocumentSymbols: &symbols,
+	}, nil
 }
 
 func (s *Server) Log(msg ...any) {

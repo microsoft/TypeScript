@@ -100,9 +100,9 @@ func TestService(t *testing.T) {
 					},
 					Version: 1,
 				},
-				[]lsproto.TextDocumentContentChangeEvent{
-					lsproto.TextDocumentContentChangePartialOrTextDocumentContentChangeWholeDocument{
-						TextDocumentContentChangePartial: ptrTo(lsproto.TextDocumentContentChangePartial{
+				[]lsproto.TextDocumentContentChangePartialOrWholeDocument{
+					{
+						Partial: ptrTo(lsproto.TextDocumentContentChangePartial{
 							Range: lsproto.Range{
 								Start: lsproto.Position{
 									Line:      0,
@@ -139,9 +139,9 @@ func TestService(t *testing.T) {
 					},
 					Version: 1,
 				},
-				[]lsproto.TextDocumentContentChangeEvent{
-					lsproto.TextDocumentContentChangePartialOrTextDocumentContentChangeWholeDocument{
-						TextDocumentContentChangePartial: ptrTo(lsproto.TextDocumentContentChangePartial{
+				[]lsproto.TextDocumentContentChangePartialOrWholeDocument{
+					{
+						Partial: ptrTo(lsproto.TextDocumentContentChangePartial{
 							Range: lsproto.Range{
 								Start: lsproto.Position{
 									Line:      0,
@@ -178,9 +178,9 @@ func TestService(t *testing.T) {
 					},
 					Version: 1,
 				},
-				[]lsproto.TextDocumentContentChangeEvent{
-					lsproto.TextDocumentContentChangePartialOrTextDocumentContentChangeWholeDocument{
-						TextDocumentContentChangePartial: ptrTo(lsproto.TextDocumentContentChangePartial{
+				[]lsproto.TextDocumentContentChangePartialOrWholeDocument{
+					{
+						Partial: ptrTo(lsproto.TextDocumentContentChangePartial{
 							Range: lsproto.Range{
 								Start: lsproto.Position{
 									Line:      0,
@@ -226,9 +226,9 @@ func TestService(t *testing.T) {
 					},
 					Version: 1,
 				},
-				[]lsproto.TextDocumentContentChangeEvent{
-					lsproto.TextDocumentContentChangePartialOrTextDocumentContentChangeWholeDocument{
-						TextDocumentContentChangePartial: ptrTo(lsproto.TextDocumentContentChangePartial{
+				[]lsproto.TextDocumentContentChangePartialOrWholeDocument{
+					{
+						Partial: ptrTo(lsproto.TextDocumentContentChangePartial{
 							Range: lsproto.Range{
 								Start: lsproto.Position{
 									Line:      0,
@@ -562,19 +562,19 @@ func TestService(t *testing.T) {
 			assert.DeepEqual(t, host.ClientMock.WatchFilesCalls()[0].Watchers, []*lsproto.FileSystemWatcher{
 				{
 					Kind: ptrTo(lsproto.WatchKindCreate | lsproto.WatchKindChange | lsproto.WatchKindDelete),
-					GlobPattern: lsproto.GlobPattern{
+					GlobPattern: lsproto.PatternOrRelativePattern{
 						Pattern: ptrTo("/home/projects/TS/p1/src/index.ts"),
 					},
 				},
 				{
 					Kind: ptrTo(lsproto.WatchKindCreate | lsproto.WatchKindChange | lsproto.WatchKindDelete),
-					GlobPattern: lsproto.GlobPattern{
+					GlobPattern: lsproto.PatternOrRelativePattern{
 						Pattern: ptrTo("/home/projects/TS/p1/src/y.ts"),
 					},
 				},
 				{
 					Kind: ptrTo(lsproto.WatchKindCreate | lsproto.WatchKindChange | lsproto.WatchKindDelete),
-					GlobPattern: lsproto.GlobPattern{
+					GlobPattern: lsproto.PatternOrRelativePattern{
 						Pattern: ptrTo("/home/projects/TS/p1/tsconfig.json"),
 					},
 				},

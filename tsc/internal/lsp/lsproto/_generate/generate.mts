@@ -34,20 +34,22 @@ interface GoType {
 interface TypeInfo {
     types: Map<string, GoType>;
     literalTypes: Map<string, string>;
-    unionTypes: Map<string, { name: string; type: Type; }[]>;
+    unionTypes: Map<string, { name: string; type: Type; containedNull: boolean; }[]>;
+    typeAliasMap: Map<string, Type>;
 }
 
 const typeInfo: TypeInfo = {
     types: new Map(),
     literalTypes: new Map(),
     unionTypes: new Map(),
+    typeAliasMap: new Map(),
 };
 
 function titleCase(s: string) {
     return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
-function resolveType(type: Type): GoType {
+function resolveType(type: Type, nullToPointer?: boolean): GoType {
     switch (type.kind) {
         case "base":
             switch (type.name) {
@@ -65,6 +67,8 @@ function resolveType(type: Type): GoType {
                     return { name: "DocumentUri", needsPointer: false };
                 case "decimal":
                     return { name: "float64", needsPointer: false };
+                case "null":
+                    return { name: "any", needsPointer: false };
                 default:
                     throw new Error(`Unsupported base type: ${type.name}`);
             }
@@ -73,6 +77,12 @@ function resolveType(type: Type): GoType {
             const typeAliasOverride = typeAliasOverrides.get(type.name);
             if (typeAliasOverride) {
                 return typeAliasOverride;
+            }
+
+            // Check if this is a type alias that resolves to a union type
+            const aliasedType = typeInfo.typeAliasMap.get(type.name);
+            if (aliasedType) {
+                return resolveType(aliasedType);
             }
 
             let refType = typeInfo.types.get(type.name);
@@ -141,7 +151,7 @@ function resolveType(type: Type): GoType {
             throw new Error("Unexpected non-empty literal object: " + JSON.stringify(type.value));
 
         case "or": {
-            return handleOrType(type);
+            return handleOrType(type, nullToPointer);
         }
 
         default:
@@ -149,34 +159,57 @@ function resolveType(type: Type): GoType {
     }
 }
 
-function handleOrType(orType: OrType): GoType {
-    const types = orType.items;
+function flattenOrTypes(types: Type[]): Type[] {
+    const flattened = new Set<Type>();
+
+    for (const rawType of types) {
+        let type = rawType;
+
+        // Dereference reference types that point to OR types
+        if (rawType.kind === "reference") {
+            const aliasedType = typeInfo.typeAliasMap.get(rawType.name);
+            if (aliasedType && aliasedType.kind === "or") {
+                type = aliasedType;
+            }
+        }
+
+        if (type.kind === "or") {
+            // Recursively flatten OR types
+            for (const subType of flattenOrTypes(type.items)) {
+                flattened.add(subType);
+            }
+        }
+        else {
+            flattened.add(rawType);
+        }
+    }
+
+    return Array.from(flattened);
+}
+
+function handleOrType(orType: OrType, nullToPointer: boolean | undefined): GoType {
+    // First, flatten any nested OR types
+    const types = flattenOrTypes(orType.items);
 
     // Check for nullable types (OR with null)
     const nullIndex = types.findIndex(item => item.kind === "base" && item.name === "null");
+    let containedNull = nullIndex !== -1;
 
-    // If it's nullable and only has one other type
-    if (nullIndex !== -1) {
-        if (types.length !== 2) {
-            throw new Error("Expected exactly two items in OR type for null handling: " + JSON.stringify(types));
-        }
-
-        const otherType = types[1 - nullIndex];
-        const resolvedType = resolveType(otherType);
-
-        // Use Nullable[T] instead of pointer for null union with one other type
-        return {
-            name: `Nullable[${resolvedType.name}]`,
-            needsPointer: false,
-        };
+    // If it's nullable, remove the null type from the list
+    let nonNullTypes = types;
+    if (containedNull) {
+        nonNullTypes = types.filter((_, i) => i !== nullIndex);
     }
 
-    // If only one type remains after filtering null
-    if (types.length === 1) {
-        return resolveType(types[0]);
+    // If no types remain after filtering null, this shouldn't happen
+    if (nonNullTypes.length === 0) {
+        throw new Error("Union type with only null is not supported: " + JSON.stringify(types));
     }
 
-    const memberNames = types.map(type => {
+    // Even if only one type remains after filtering null, we still need to create a union type
+    // to preserve the nullable behavior (all fields nil = null)
+
+    let memberNames = nonNullTypes.map(type => {
         if (type.kind === "reference") {
             return type.name;
         }
@@ -189,6 +222,11 @@ function handleOrType(orType: OrType): GoType {
         ) {
             return `${titleCase(type.element.name)}s`;
         }
+        else if (type.kind === "array") {
+            // Handle more complex array types
+            const elementType = resolveType(type.element);
+            return `${elementType.name}Array`;
+        }
         else if (type.kind === "literal" && type.value.properties.length === 0) {
             return "EmptyObject";
         }
@@ -200,14 +238,95 @@ function handleOrType(orType: OrType): GoType {
         }
     });
 
-    const unionTypeName = memberNames.join("Or");
-    const union = memberNames.map((name, i) => ({ name, type: types[i] }));
+    const needsPointer = containedNull && !!nullToPointer;
+
+    if (needsPointer && nonNullTypes.length === 1) {
+        const name = resolveType(nonNullTypes[0], true).name;
+        return {
+            name,
+            needsPointer: true,
+        };
+    }
+
+    // Find longest common prefix of member names chunked by PascalCase
+    function findLongestCommonPrefix(names: string[]): string {
+        if (names.length === 0) return "";
+        if (names.length === 1) return "";
+
+        // Split each name into PascalCase chunks
+        function splitPascalCase(name: string): string[] {
+            const chunks: string[] = [];
+            let currentChunk = "";
+
+            for (let i = 0; i < name.length; i++) {
+                const char = name[i];
+                if (char >= "A" && char <= "Z" && currentChunk.length > 0) {
+                    // Start of a new chunk
+                    chunks.push(currentChunk);
+                    currentChunk = char;
+                }
+                else {
+                    currentChunk += char;
+                }
+            }
+
+            if (currentChunk.length > 0) {
+                chunks.push(currentChunk);
+            }
+
+            return chunks;
+        }
+
+        const allChunks = names.map(splitPascalCase);
+        const minChunkLength = Math.min(...allChunks.map(chunks => chunks.length));
+
+        // Find the longest common prefix of chunks
+        let commonChunks: string[] = [];
+        for (let i = 0; i < minChunkLength; i++) {
+            const chunk = allChunks[0][i];
+            if (allChunks.every(chunks => chunks[i] === chunk)) {
+                commonChunks.push(chunk);
+            }
+            else {
+                break;
+            }
+        }
+
+        return commonChunks.join("");
+    }
+
+    const commonPrefix = findLongestCommonPrefix(memberNames);
+
+    let unionTypeName = "";
+
+    if (commonPrefix.length > 0) {
+        const trimmedMemberNames = memberNames.map(name => name.slice(commonPrefix.length));
+        if (trimmedMemberNames.every(name => name)) {
+            unionTypeName = commonPrefix + trimmedMemberNames.join("Or");
+            memberNames = trimmedMemberNames;
+        }
+        else {
+            unionTypeName = memberNames.join("Or");
+        }
+    }
+    else {
+        unionTypeName = memberNames.join("Or");
+    }
+
+    if (containedNull && !nullToPointer) {
+        unionTypeName += "OrNull";
+    }
+    else {
+        containedNull = false;
+    }
+
+    const union = memberNames.map((name, i) => ({ name, type: nonNullTypes[i], containedNull }));
 
     typeInfo.unionTypes.set(unionTypeName, union);
 
     return {
         name: unionTypeName,
-        needsPointer: false,
+        needsPointer,
     };
 }
 
@@ -256,11 +375,8 @@ function collectTypeDefinitions() {
             continue;
         }
 
-        const resolvedType = resolveType(typeAlias.type);
-        typeInfo.types.set(typeAlias.name, {
-            name: typeAlias.name,
-            needsPointer: resolvedType.needsPointer,
-        });
+        // Store the alias mapping so we can resolve it later
+        typeInfo.typeAliasMap.set(typeAlias.name, typeAlias.type);
     }
 }
 
@@ -483,21 +599,6 @@ function generateCode() {
         writeLine("");
     }
 
-    // Generate type aliases
-    writeLine("// Type aliases\n");
-
-    for (const typeAlias of model.typeAliases) {
-        if (typeAliasOverrides.has(typeAlias.name)) {
-            continue;
-        }
-
-        write(formatDocumentation(typeAlias.documentation));
-
-        const resolvedType = resolveType(typeAlias.type);
-        writeLine(`type ${typeAlias.name} = ${resolvedType.name}`);
-        writeLine("");
-    }
-
     const requestsAndNotifications: (Request | Notification)[] = [...model.requests, ...model.notifications];
 
     // Generate unmarshalParams function
@@ -546,6 +647,49 @@ function generateCode() {
     writeLine(")");
     writeLine("");
 
+    // Generate request response types
+    writeLine("// Request response types");
+    writeLine("");
+
+    for (const request of requestsAndNotifications) {
+        const methodName = methodNameIdentifier(request.method);
+
+        let responseTypeName: string | undefined;
+
+        if ("result" in request) {
+            if (request.typeName && request.typeName.endsWith("Request")) {
+                responseTypeName = request.typeName.replace(/Request$/, "Response");
+            }
+            else {
+                responseTypeName = `${methodName}Response`;
+            }
+
+            writeLine(`// Response type for \`${request.method}\``);
+            const resultType = resolveType(request.result, /*nullToPointer*/ true);
+            const goType = resultType.needsPointer ? `*${resultType.name}` : resultType.name;
+
+            writeLine(`type ${responseTypeName} = ${goType}`);
+            writeLine("");
+        }
+
+        if (Array.isArray(request.params)) {
+            throw new Error("Unexpected request params for " + methodName + ": " + JSON.stringify(request.params));
+        }
+
+        const paramType = request.params ? resolveType(request.params) : undefined;
+        const paramGoType = paramType ? (paramType.needsPointer ? `*${paramType.name}` : paramType.name) : "any";
+
+        writeLine(`// Type mapping info for \`${request.method}\``);
+        if (responseTypeName) {
+            writeLine(`var ${methodName}Info = RequestInfo[${paramGoType}, ${responseTypeName}]{Method: Method${methodName}}`);
+        }
+        else {
+            writeLine(`var ${methodName}Info = NotificationInfo[${paramGoType}]{Method: Method${methodName}}`);
+        }
+
+        writeLine("");
+    }
+
     // Generate union types
     writeLine("// Union types\n");
 
@@ -574,8 +718,12 @@ function generateCode() {
         // Marshal method
         writeLine(`func (o ${name}) MarshalJSON() ([]byte, error) {`);
 
-        // Create assertion to ensure only one field is set at a time
-        write(`\tassertOnlyOne("more than one element of ${name} is set", `);
+        // Determine if this union contained null (check if any member has containedNull = true)
+        const unionContainedNull = members.some(member => member.containedNull);
+        const assertionFunc = unionContainedNull ? "assertAtMostOne" : "assertOnlyOne";
+
+        // Create assertion to ensure at most one field is set at a time
+        write(`\t${assertionFunc}("more than one element of ${name} is set", `);
 
         // Write the assertion conditions
         for (let i = 0; i < fieldEntries.length; i++) {
@@ -584,19 +732,37 @@ function generateCode() {
         }
         writeLine(`)`);
         writeLine("");
+
         for (const entry of fieldEntries) {
             writeLine(`\tif o.${entry.fieldName} != nil {`);
             writeLine(`\t\treturn json.Marshal(*o.${entry.fieldName})`);
             writeLine(`\t}`);
         }
 
-        writeLine(`\tpanic("unreachable")`);
+        // If all fields are nil, marshal as null (only for unions that can contain null)
+        if (unionContainedNull) {
+            writeLine(`\t// All fields are nil, represent as null`);
+            writeLine(`\treturn []byte("null"), nil`);
+        }
+        else {
+            writeLine(`\tpanic("unreachable")`);
+        }
         writeLine(`}`);
         writeLine("");
 
         // Unmarshal method
         writeLine(`func (o *${name}) UnmarshalJSON(data []byte) error {`);
         writeLine(`\t*o = ${name}{}`);
+        writeLine("");
+
+        // Handle null case only for unions that can contain null
+        if (unionContainedNull) {
+            writeLine(`\t// Handle null case`);
+            writeLine(`\tif string(data) == "null" {`);
+            writeLine(`\t\treturn nil`);
+            writeLine(`\t}`);
+            writeLine("");
+        }
 
         for (const entry of fieldEntries) {
             writeLine(`\tvar v${entry.fieldName} ${entry.typeName}`);

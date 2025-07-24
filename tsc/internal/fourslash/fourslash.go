@@ -230,8 +230,8 @@ func (f *FourslashTest) initialize(t *testing.T, capabilities *lsproto.ClientCap
 	params := &lsproto.InitializeParams{}
 	params.Capabilities = getCapabilitiesWithDefaults(capabilities)
 	// !!! check for errors?
-	f.sendRequest(t, lsproto.MethodInitialize, params)
-	f.sendNotification(t, lsproto.MethodInitialized, &lsproto.InitializedParams{})
+	sendRequest(t, f, lsproto.InitializeInfo, params)
+	sendNotification(t, f, lsproto.InitializedInfo, &lsproto.InitializedParams{})
 }
 
 var (
@@ -267,20 +267,25 @@ func getCapabilitiesWithDefaults(capabilities *lsproto.ClientCapabilities) *lspr
 	return &capabilitiesWithDefaults
 }
 
-func (f *FourslashTest) sendRequest(t *testing.T, method lsproto.Method, params any) *lsproto.Message {
+func sendRequest[Params, Resp any](t *testing.T, f *FourslashTest, info lsproto.RequestInfo[Params, Resp], params Params) (*lsproto.Message, Resp, bool) {
 	id := f.nextID()
 	req := lsproto.NewRequestMessage(
-		method,
+		info.Method,
 		lsproto.NewID(lsproto.IntegerOrString{Integer: &id}),
 		params,
 	)
 	f.writeMsg(t, req.Message())
-	return f.readMsg(t)
+	resp := f.readMsg(t)
+	if resp == nil {
+		return nil, *new(Resp), false
+	}
+	result, ok := resp.AsResponse().Result.(Resp)
+	return resp, result, ok
 }
 
-func (f *FourslashTest) sendNotification(t *testing.T, method lsproto.Method, params any) {
+func sendNotification[Params any](t *testing.T, f *FourslashTest, info lsproto.NotificationInfo[Params], params Params) {
 	notification := lsproto.NewNotificationMessage(
-		method,
+		info.Method,
 		params,
 	)
 	f.writeMsg(t, notification.Message())
@@ -439,7 +444,7 @@ func (f *FourslashTest) openFile(t *testing.T, filename string) {
 		t.Fatalf("File %s not found in test data", filename)
 	}
 	f.activeFilename = filename
-	f.sendNotification(t, lsproto.MethodTextDocumentDidOpen, &lsproto.DidOpenTextDocumentParams{
+	sendNotification(t, f, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
 		TextDocument: &lsproto.TextDocumentItem{
 			Uri:        ls.FileNameToDocumentURI(filename),
 			LanguageId: getLanguageKind(filename),
@@ -553,17 +558,14 @@ func (f *FourslashTest) verifyCompletionsWorker(t *testing.T, expected *Completi
 		TextDocumentPositionParams: f.currentTextDocumentPositionParams(),
 		Context:                    &lsproto.CompletionContext{},
 	}
-	resMsg := f.sendRequest(t, lsproto.MethodTextDocumentCompletion, params)
+	resMsg, result, resultOk := sendRequest(t, f, lsproto.TextDocumentCompletionInfo, params)
 	if resMsg == nil {
 		t.Fatalf(prefix+"Nil response received for completion request", f.lastKnownMarkerName)
 	}
-	result := resMsg.AsResponse().Result
-	switch result := result.(type) {
-	case *lsproto.CompletionList:
-		f.verifyCompletionsResult(t, f.currentCaretPosition, result, expected, prefix)
-	default:
-		t.Fatalf(prefix+"Unexpected response type for completion request: %v", result)
+	if !resultOk {
+		t.Fatalf(prefix+"Unexpected response type for completion request: %T", resMsg.AsResponse().Result)
 	}
+	f.verifyCompletionsResult(t, f.currentCaretPosition, result.List, expected, prefix)
 }
 
 func (f *FourslashTest) verifyCompletionsResult(
@@ -741,15 +743,14 @@ var completionIgnoreOpts = cmp.FilterPath(
 
 func (f *FourslashTest) verifyCompletionItem(t *testing.T, prefix string, actual *lsproto.CompletionItem, expected *lsproto.CompletionItem) {
 	if expected.Detail != nil || expected.Documentation != nil {
-		response := f.sendRequest(t, lsproto.MethodCompletionItemResolve, actual)
-		if response == nil {
+		resMsg, result, resultOk := sendRequest(t, f, lsproto.CompletionItemResolveInfo, actual)
+		if resMsg == nil {
 			t.Fatal(prefix + "Expected non-nil response for completion item resolve, got nil")
 		}
-		resolvedItem, ok := response.AsResponse().Result.(*lsproto.CompletionItem)
-		if !ok {
-			t.Fatalf(prefix+"Expected response to be *lsproto.CompletionItem, got %T", response.AsResponse().Result)
+		if !resultOk {
+			t.Fatalf(prefix+"Unexpected response type for completion item resolve: %T", resMsg.AsResponse().Result)
 		}
-		actual = resolvedItem
+		actual = result
 	}
 	assertDeepEqual(t, actual, expected, prefix, completionIgnoreOpts)
 	if expected.Kind != nil {
@@ -808,7 +809,7 @@ func (f *FourslashTest) VerifyBaselineFindAllReferences(
 			TextDocumentPositionParams: f.currentTextDocumentPositionParams(),
 			Context:                    &lsproto.ReferenceContext{},
 		}
-		resMsg := f.sendRequest(t, lsproto.MethodTextDocumentReferences, params)
+		resMsg, result, resultOk := sendRequest(t, f, lsproto.TextDocumentReferencesInfo, params)
 		if resMsg == nil {
 			if f.lastKnownMarkerName == nil {
 				t.Fatalf("Nil response received for references request at pos %v", f.currentCaretPosition)
@@ -816,20 +817,19 @@ func (f *FourslashTest) VerifyBaselineFindAllReferences(
 				t.Fatalf("Nil response received for references request at marker '%s'", *f.lastKnownMarkerName)
 			}
 		}
-
-		result := resMsg.AsResponse().Result
-		if resultAsLocation, ok := result.([]*lsproto.Location); ok {
-			f.baseline.addResult("findAllReferences", f.getBaselineForLocationsWithFileContents(resultAsLocation, baselineFourslashLocationsOptions{
-				marker:     markerOrRange.GetMarker(),
-				markerName: "/*FIND ALL REFS*/",
-			}))
-		} else {
+		if !resultOk {
 			if f.lastKnownMarkerName == nil {
-				t.Fatalf("Unexpected references response type at pos %v: %T", f.currentCaretPosition, result)
+				t.Fatalf("Unexpected references response type at pos %v: %T", f.currentCaretPosition, resMsg.AsResponse().Result)
 			} else {
-				t.Fatalf("Unexpected references response type at marker '%s': %T", *f.lastKnownMarkerName, result)
+				t.Fatalf("Unexpected references response type at marker '%s': %T", *f.lastKnownMarkerName, resMsg.AsResponse().Result)
 			}
 		}
+
+		f.baseline.addResult("findAllReferences", f.getBaselineForLocationsWithFileContents(*result, baselineFourslashLocationsOptions{
+			marker:     markerOrRange.GetMarker(),
+			markerName: "/*FIND ALL REFS*/",
+		}))
+
 	}
 
 	baseline.Run(t, f.baseline.getBaselineFileName(), f.baseline.content.String(), baseline.Options{})
@@ -863,7 +863,8 @@ func (f *FourslashTest) VerifyBaselineGoToDefinition(
 		params := &lsproto.DefinitionParams{
 			TextDocumentPositionParams: f.currentTextDocumentPositionParams(),
 		}
-		resMsg := f.sendRequest(t, lsproto.MethodTextDocumentDefinition, params)
+
+		resMsg, result, resultOk := sendRequest(t, f, lsproto.TextDocumentDefinitionInfo, params)
 		if resMsg == nil {
 			if f.lastKnownMarkerName == nil {
 				t.Fatalf("Nil response received for definition request at pos %v", f.currentCaretPosition)
@@ -871,31 +872,29 @@ func (f *FourslashTest) VerifyBaselineGoToDefinition(
 				t.Fatalf("Nil response received for definition request at marker '%s'", *f.lastKnownMarkerName)
 			}
 		}
-
-		result := resMsg.AsResponse().Result
-		if resultAsLocOrLocations, ok := result.(*lsproto.LocationOrLocations); ok {
-			var resultAsLocations []*lsproto.Location
-			if resultAsLocOrLocations != nil {
-				if resultAsLocOrLocations.Locations != nil {
-					resultAsLocations = core.Map(*resultAsLocOrLocations.Locations, func(loc lsproto.Location) *lsproto.Location {
-						return &loc
-					})
-				} else {
-					resultAsLocations = []*lsproto.Location{resultAsLocOrLocations.Location}
-				}
-			}
-
-			f.baseline.addResult("goToDefinition", f.getBaselineForLocationsWithFileContents(resultAsLocations, baselineFourslashLocationsOptions{
-				marker:     markerOrRange.GetMarker(),
-				markerName: "/*GO TO DEFINITION*/",
-			}))
-		} else {
+		if !resultOk {
 			if f.lastKnownMarkerName == nil {
-				t.Fatalf("Unexpected definition response type at pos %v: %T", f.currentCaretPosition, result)
+				t.Fatalf("Unexpected definition response type at pos %v: %T", f.currentCaretPosition, resMsg.AsResponse().Result)
 			} else {
-				t.Fatalf("Unexpected definition response type at marker '%s': %T", *f.lastKnownMarkerName, result)
+				t.Fatalf("Unexpected definition response type at marker '%s': %T", *f.lastKnownMarkerName, resMsg.AsResponse().Result)
 			}
 		}
+
+		var resultAsLocations []lsproto.Location
+		if result != nil {
+			if result.Locations != nil {
+				resultAsLocations = *result.Locations
+			} else if result.Location != nil {
+				resultAsLocations = []lsproto.Location{*result.Location}
+			} else {
+				t.Fatalf("Unexpected definition response type at marker '%s': %T", *f.lastKnownMarkerName, result.DefinitionLinks)
+			}
+		}
+
+		f.baseline.addResult("goToDefinition", f.getBaselineForLocationsWithFileContents(resultAsLocations, baselineFourslashLocationsOptions{
+			marker:     markerOrRange.GetMarker(),
+			markerName: "/*GO TO DEFINITION*/",
+		}))
 	}
 
 	baseline.Run(t, f.baseline.getBaselineFileName(), f.baseline.content.String(), baseline.Options{})
@@ -1069,16 +1068,16 @@ func (f *FourslashTest) editScript(t *testing.T, fileName string, start int, end
 	if err != nil {
 		panic(fmt.Sprintf("Failed to write file %s: %v", fileName, err))
 	}
-	f.sendNotification(t, lsproto.MethodTextDocumentDidChange, &lsproto.DidChangeTextDocumentParams{
+	sendNotification(t, f, lsproto.TextDocumentDidChangeInfo, &lsproto.DidChangeTextDocumentParams{
 		TextDocument: lsproto.VersionedTextDocumentIdentifier{
 			TextDocumentIdentifier: lsproto.TextDocumentIdentifier{
 				Uri: ls.FileNameToDocumentURI(fileName),
 			},
 			Version: script.version,
 		},
-		ContentChanges: []lsproto.TextDocumentContentChangeEvent{
+		ContentChanges: []lsproto.TextDocumentContentChangePartialOrWholeDocument{
 			{
-				TextDocumentContentChangePartial: &lsproto.TextDocumentContentChangePartial{
+				Partial: &lsproto.TextDocumentContentChangePartial{
 					Range: changeRange,
 					Text:  newText,
 				},
