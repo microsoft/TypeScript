@@ -1,4 +1,9 @@
 // === findAllReferences ===
+// === /abc.d.ts ===
+
+// declare module "a" {
+//     /*FIND ALL REFS*/export const x: number;
+// }
 
 
 
@@ -19,3 +24,9 @@
 // declare module "a" {
 //     export const [|x|]: number;
 // }
+
+
+// === /b.ts ===
+
+// import a from "a";
+// a./*FIND ALL REFS*/x;

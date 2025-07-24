@@ -1,0 +1,10 @@
+// === goToDefinition ===
+// === /goToDefinitionShorthandProperty05.ts ===
+
+// interface Foo {
+//     foo(): void
+// }
+// const [|foo|] = 1;
+// let x: Foo = {
+//     f/*GO TO DEFINITION*/oo
+// }

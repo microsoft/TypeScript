@@ -1,9 +1,19 @@
 // === findAllReferences ===
+// === /referencesForIllegalAssignment.ts ===
+
+// f/*FIND ALL REFS*/oo = foo;
+// var bar = function () { };
+// bar = bar + 1;
 
 
 
 
 // === findAllReferences ===
+// === /referencesForIllegalAssignment.ts ===
+
+// foo = fo/*FIND ALL REFS*/o;
+// var bar = function () { };
+// bar = bar + 1;
 
 
 

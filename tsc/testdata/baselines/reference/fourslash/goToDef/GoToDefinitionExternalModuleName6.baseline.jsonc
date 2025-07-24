@@ -1,0 +1,11 @@
+// === goToDefinition ===
+// === /a.ts ===
+
+// declare module [|"e"|] {
+//     class Foo { }
+// }
+
+
+// === /b.ts ===
+
+// import * from 'e/*GO TO DEFINITION*/';

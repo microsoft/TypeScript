@@ -1,0 +1,12 @@
+// === goToDefinition ===
+// === /a.ts ===
+
+// declare module [|"e"|] {
+//     class Foo { }
+// }
+
+
+// === /b.ts ===
+
+// import n = require('e/*GO TO DEFINITION*/');
+// var x = new n.Foo();

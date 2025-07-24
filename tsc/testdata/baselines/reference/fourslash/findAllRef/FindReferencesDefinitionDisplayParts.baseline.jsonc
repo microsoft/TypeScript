@@ -24,6 +24,17 @@
 
 
 // === findAllReferences ===
+// === /findReferencesDefinitionDisplayParts.ts ===
+
+// class Greeter {
+//     someFunction() { this;  }
+// }
+// 
+// type Options = "opt/*FIND ALL REFS*/ion 1" | "option 2";
+// let myOption: Options = "option 1";
+// 
+// someLabel:
+// break someLabel;
 
 
 

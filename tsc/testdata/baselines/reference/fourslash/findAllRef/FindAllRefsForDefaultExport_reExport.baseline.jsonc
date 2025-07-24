@@ -17,6 +17,9 @@
 
 
 // === findAllReferences ===
+// === /re-export.ts ===
+
+// export { /*FIND ALL REFS*/default } from "./export";
 
 
 

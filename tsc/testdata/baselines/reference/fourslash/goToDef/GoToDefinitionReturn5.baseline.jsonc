@@ -1,0 +1,8 @@
+// === goToDefinition ===
+// === /goToDefinitionReturn5.ts ===
+
+// function [|foo|]() {
+//     class Foo {
+//         static { /*GO TO DEFINITION*/return; }
+//     }
+// }

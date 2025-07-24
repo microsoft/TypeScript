@@ -1,4 +1,8 @@
 // === findAllReferences ===
+// === /findAllRefsForVariableInExtendsClause01.ts ===
+
+// /*FIND ALL REFS*/var Base = class { };
+// class C extends Base { }
 
 
 

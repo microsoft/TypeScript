@@ -1,4 +1,8 @@
 // === findAllReferences ===
+// === /findAllRefsJsDocTemplateTag_class.ts ===
+
+// /** @template /*FIND ALL REFS*/T */
+// class C<T> {}
 
 
 

@@ -1,4 +1,8 @@
 // === findAllReferences ===
+// === /a.js ===
+
+// module.exports = 0;
+// /*FIND ALL REFS*/export type N = number;
 
 
 
@@ -13,3 +17,6 @@
 
 
 // === findAllReferences ===
+// === /b.js ===
+
+// type T = import("./a")./*FIND ALL REFS*/N;

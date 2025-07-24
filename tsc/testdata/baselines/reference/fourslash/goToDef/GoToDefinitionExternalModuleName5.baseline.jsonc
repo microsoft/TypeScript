@@ -1,0 +1,6 @@
+// === goToDefinition ===
+// === /a.ts ===
+
+// declare module "external/*GO TO DEFINITION*/[|"external"|] {
+//     class Foo { }
+// }

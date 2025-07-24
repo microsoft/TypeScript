@@ -1,4 +1,10 @@
 // === findAllReferences ===
+// === /findAllRefsExportNotAtTopLevel.ts ===
+
+// {
+//     /*FIND ALL REFS*/export const x = 0;
+//     x;
+// }
 
 
 

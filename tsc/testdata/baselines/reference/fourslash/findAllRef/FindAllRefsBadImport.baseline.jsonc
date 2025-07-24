@@ -1,4 +1,7 @@
 // === findAllReferences ===
+// === /findAllRefsBadImport.ts ===
+
+// import { /*FIND ALL REFS*/ab as cd } from "doesNotExist";
 
 
 

@@ -1,0 +1,9 @@
+// === goToDefinition ===
+// === /goToDefinitionYield2.ts ===
+
+// function* outerGen() {
+//     function* [|gen|]() {
+//         /*GO TO DEFINITION*/yield 0;
+//     }
+//     return gen
+// }

@@ -1,4 +1,11 @@
 // === findAllReferences ===
+// === /findAllRefsInsideWithBlock.ts ===
+
+// /*FIND ALL REFS*/var x = 0;
+// 
+// with ({}) {
+//     var y = x;  // Reference of x here should not be picked
+// // --- (line: 5) skipped ---
 
 
 

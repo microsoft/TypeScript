@@ -1,4 +1,11 @@
 // === findAllReferences ===
+// === /findAllRefsForVariableInExtendsClause02.ts ===
+
+// /*FIND ALL REFS*/interface Base { }
+// namespace n {
+//     var Base = class { };
+//     interface I extends Base { }
+// }
 
 
 

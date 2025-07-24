@@ -11,6 +11,13 @@
 
 
 // === findAllReferences ===
+// === /referencesForLabel4.ts ===
+
+// label: function foo(label) {
+//     while (true) {
+//         /*FIND ALL REFS*/break label;
+//     }
+// }
 
 
 

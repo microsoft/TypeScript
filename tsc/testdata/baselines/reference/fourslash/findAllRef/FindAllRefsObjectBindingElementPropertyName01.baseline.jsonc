@@ -13,6 +13,13 @@
 
 
 // === findAllReferences ===
+// === /findAllRefsObjectBindingElementPropertyName01.ts ===
+
+// --- (line: 3) skipped ---
+// }
+// 
+// var foo: I;
+// /*FIND ALL REFS*/var { property1: prop1 } = foo;
 
 
 

@@ -1,4 +1,11 @@
 // === findAllReferences ===
+// === /getOccurrencesIsDefinitionOfInterfaceClassMerge.ts ===
+
+// /*FIND ALL REFS*/interface Numbers {
+//     p: number;
+// }
+// interface Numbers {
+// // --- (line: 5) skipped ---
 
 
 
@@ -24,6 +31,16 @@
 
 
 // === findAllReferences ===
+// === /getOccurrencesIsDefinitionOfInterfaceClassMerge.ts ===
+
+// interface Numbers {
+//     p: number;
+// }
+// /*FIND ALL REFS*/interface Numbers {
+//     m: number;
+// }
+// class Numbers {
+// // --- (line: 8) skipped ---
 
 
 
@@ -49,6 +66,17 @@
 
 
 // === findAllReferences ===
+// === /getOccurrencesIsDefinitionOfInterfaceClassMerge.ts ===
+
+// --- (line: 3) skipped ---
+// interface Numbers {
+//     m: number;
+// }
+// /*FIND ALL REFS*/class Numbers {
+//     f(n: number) {
+//         return this.p + this.m + n;
+//     }
+// // --- (line: 11) skipped ---
 
 
 

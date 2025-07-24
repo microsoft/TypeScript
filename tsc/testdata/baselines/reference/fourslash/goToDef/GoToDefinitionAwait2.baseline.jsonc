@@ -1,0 +1,4 @@
+// === goToDefinition ===
+// === /goToDefinitionAwait2.ts ===
+
+// /*GO TO DEFINITION*/await Promise.resolve(0);

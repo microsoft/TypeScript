@@ -1,4 +1,8 @@
 // === findAllReferences ===
+// === /foo.ts ===
+
+// /*FIND ALL REFS*/import settings from "./settings.json";
+// settings;
 
 
 

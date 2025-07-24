@@ -1,4 +1,13 @@
 // === findAllReferences ===
+// === /findAllRefsWithLeadingUnderscoreNames6.ts ===
+
+// class Foo {
+//     public _bar;
+//     /*FIND ALL REFS*/public __bar;
+//     public ___bar;
+//     public ____bar;
+// }
+// // --- (line: 7) skipped ---
 
 
 

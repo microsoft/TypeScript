@@ -1,0 +1,14 @@
+// === goToDefinition ===
+// === /moduleThing.ts ===
+
+// import /*GO TO DEFINITION*/"./scriptThing";
+// import "./stylez.css";
+
+
+
+
+// === goToDefinition ===
+// === /moduleThing.ts ===
+
+// import "./scriptThing";
+// import /*GO TO DEFINITION*/"./stylez.css";

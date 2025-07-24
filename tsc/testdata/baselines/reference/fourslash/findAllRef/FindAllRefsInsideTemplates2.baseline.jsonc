@@ -1,4 +1,8 @@
 // === findAllReferences ===
+// === /findAllRefsInsideTemplates2.ts ===
+
+// /*FIND ALL REFS*/function f(...rest: any[]) { }
+// f `${ f } ${ f }`
 
 
 

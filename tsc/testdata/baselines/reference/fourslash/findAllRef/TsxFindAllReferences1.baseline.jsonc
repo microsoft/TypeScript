@@ -17,6 +17,13 @@
 
 
 // === findAllReferences ===
+// === /file.tsx ===
+
+// --- (line: 7) skipped ---
+//          span: { n: string; };
+//      }
+//  }
+//  var x = /*FIND ALL REFS*/<div />;
 
 
 

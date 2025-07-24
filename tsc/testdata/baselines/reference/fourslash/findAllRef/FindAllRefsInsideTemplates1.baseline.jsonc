@@ -1,4 +1,8 @@
 // === findAllReferences ===
+// === /findAllRefsInsideTemplates1.ts ===
+
+// /*FIND ALL REFS*/var x = 10;
+// var y = `${ x } ${ x }`
 
 
 

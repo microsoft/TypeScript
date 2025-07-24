@@ -1,4 +1,11 @@
 // === findAllReferences ===
+// === /referencesForMergedDeclarations4.ts ===
+
+// /*FIND ALL REFS*/class testClass {
+//     static staticMethod() { }
+//     method() { }
+// }
+// // --- (line: 5) skipped ---
 
 
 
@@ -30,6 +37,18 @@
 
 
 // === findAllReferences ===
+// === /referencesForMergedDeclarations4.ts ===
+
+// class testClass {
+//     static staticMethod() { }
+//     method() { }
+// }
+// 
+// /*FIND ALL REFS*/module testClass {
+//     export interface Bar {
+// 
+//     }
+// // --- (line: 10) skipped ---
 
 
 

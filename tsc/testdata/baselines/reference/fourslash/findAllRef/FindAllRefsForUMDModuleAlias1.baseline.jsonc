@@ -1,4 +1,9 @@
 // === findAllReferences ===
+// === /0.d.ts ===
+
+// export function doThing(): string;
+// export function doTheOtherThing(): void;
+// /*FIND ALL REFS*/export as namespace myLib;
 
 
 

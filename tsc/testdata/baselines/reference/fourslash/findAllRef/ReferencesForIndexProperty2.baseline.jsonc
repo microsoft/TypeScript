@@ -1,1 +1,5 @@
 // === findAllReferences ===
+// === /referencesForIndexProperty2.ts ===
+
+// var a;
+// a["/*FIND ALL REFS*/blah"];

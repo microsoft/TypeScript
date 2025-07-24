@@ -1,0 +1,4 @@
+// === goToDefinition ===
+// === /a.ts ===
+
+// import { foo } from     /*GO TO DEFINITION*/ "./b";

@@ -1,4 +1,9 @@
 // === findAllReferences ===
+// === /getOccurrencesIsDefinitionOfComputedProperty.ts ===
+
+// let o = { /*FIND ALL REFS*/["foo"]: 12 };
+// let y = o.foo;
+// let z = o['foo'];
 
 
 

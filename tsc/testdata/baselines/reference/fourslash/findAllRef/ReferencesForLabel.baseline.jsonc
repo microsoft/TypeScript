@@ -13,6 +13,15 @@
 
 
 // === findAllReferences ===
+// === /referencesForLabel.ts ===
+
+// label: while (true) {
+//     if (false) /*FIND ALL REFS*/break label;
+//     if (true) continue label;
+// }
+// 
+// label: while (false) { }
+// var label = "label";
 
 
 
@@ -32,6 +41,15 @@
 
 
 // === findAllReferences ===
+// === /referencesForLabel.ts ===
+
+// label: while (true) {
+//     if (false) break label;
+//     if (true) /*FIND ALL REFS*/continue label;
+// }
+// 
+// label: while (false) { }
+// var label = "label";
 
 
 

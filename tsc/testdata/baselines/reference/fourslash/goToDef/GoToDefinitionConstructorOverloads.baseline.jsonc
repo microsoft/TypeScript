@@ -1,0 +1,90 @@
+// === goToDefinition ===
+// === /goToDefinitionConstructorOverloads.ts ===
+
+// class ConstructorOverload {
+//     [|constructor();|]
+//     constructor(foo: string);
+//     constructor(foo: any)  { }
+// }
+// 
+// var constructorOverload = new /*GO TO DEFINITION*/ConstructorOverload();
+// var constructorOverload = new ConstructorOverload("foo");
+// 
+// class Extended extends ConstructorOverload {
+// // --- (line: 11) skipped ---
+
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionConstructorOverloads.ts ===
+
+// class ConstructorOverload {
+//     constructor();
+//     [|constructor(foo: string);|]
+//     constructor(foo: any)  { }
+// }
+// 
+// var constructorOverload = new ConstructorOverload();
+// var constructorOverload = new /*GO TO DEFINITION*/ConstructorOverload("foo");
+// 
+// class Extended extends ConstructorOverload {
+//     readonly name = "extended";
+// // --- (line: 12) skipped ---
+
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionConstructorOverloads.ts ===
+
+// class ConstructorOverload {
+//     /*GO TO DEFINITION*/constructor();
+//     constructor(foo: string);
+//     [|constructor(foo: any)  { }|]
+// }
+// 
+// var constructorOverload = new ConstructorOverload();
+// // --- (line: 8) skipped ---
+
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionConstructorOverloads.ts ===
+
+// class ConstructorOverload {
+//     [|constructor();|]
+//     constructor(foo: string);
+//     constructor(foo: any)  { }
+// }
+// // --- (line: 6) skipped ---
+
+
+// --- (line: 9) skipped ---
+// class Extended extends ConstructorOverload {
+//     readonly name = "extended";
+// }
+// var extended1 = new /*GO TO DEFINITION*/Extended();
+// var extended2 = new Extended("foo");
+
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionConstructorOverloads.ts ===
+
+// class ConstructorOverload {
+//     constructor();
+//     [|constructor(foo: string);|]
+//     constructor(foo: any)  { }
+// }
+// 
+// // --- (line: 7) skipped ---
+
+
+// --- (line: 10) skipped ---
+//     readonly name = "extended";
+// }
+// var extended1 = new Extended();
+// var extended2 = new /*GO TO DEFINITION*/Extended("foo");

@@ -1,4 +1,12 @@
 // === findAllReferences ===
+// === /findAllRefsWithLeadingUnderscoreNames4.ts ===
+
+// class Foo {
+//     /*FIND ALL REFS*/public ____bar() { return 0; }
+// }
+// 
+// var x: Foo;
+// x.____bar;
 
 
 

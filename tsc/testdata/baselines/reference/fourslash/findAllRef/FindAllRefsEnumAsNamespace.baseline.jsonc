@@ -1,4 +1,8 @@
 // === findAllReferences ===
+// === /findAllRefsEnumAsNamespace.ts ===
+
+// /*FIND ALL REFS*/enum E { A }
+// let e: E.A;
 
 
 

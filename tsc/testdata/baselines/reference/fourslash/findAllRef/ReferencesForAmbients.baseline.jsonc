@@ -1,4 +1,11 @@
 // === findAllReferences ===
+// === /referencesForAmbients.ts ===
+
+// /*FIND ALL REFS*/declare module "foo" {
+//     var f: number;
+// }
+// 
+// // --- (line: 5) skipped ---
 
 
 
@@ -21,6 +28,14 @@
 
 
 // === findAllReferences ===
+// === /referencesForAmbients.ts ===
+
+// declare module "foo" {
+//     /*FIND ALL REFS*/var f: number;
+// }
+// 
+// declare module "bar" {
+// // --- (line: 6) skipped ---
 
 
 
@@ -44,6 +59,17 @@
 
 
 // === findAllReferences ===
+// === /referencesForAmbients.ts ===
+
+// declare module "foo" {
+//     var f: number;
+// }
+// 
+// /*FIND ALL REFS*/declare module "bar" {
+//     export import foo = require("foo");
+//     var f2: typeof foo.f;
+// }
+// // --- (line: 9) skipped ---
 
 
 
@@ -69,6 +95,18 @@
 
 
 // === findAllReferences ===
+// === /referencesForAmbients.ts ===
+
+// declare module "foo" {
+//     var f: number;
+// }
+// 
+// declare module "bar" {
+//     /*FIND ALL REFS*/export import foo = require("foo");
+//     var f2: typeof foo.f;
+// }
+// 
+// // --- (line: 10) skipped ---
 
 
 
@@ -149,6 +187,15 @@
 
 
 // === findAllReferences ===
+// === /referencesForAmbients.ts ===
+
+// --- (line: 7) skipped ---
+// }
+// 
+// declare module "baz" {
+//     /*FIND ALL REFS*/import bar = require("bar");
+//     var f2: typeof bar.foo;
+// }
 
 
 

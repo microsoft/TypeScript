@@ -1,4 +1,9 @@
 // === findAllReferences ===
+// === /a.ts ===
+
+// /*FIND ALL REFS*/export const x = 0;
+// declare const a: typeof import("./a");
+// a.x;
 
 
 

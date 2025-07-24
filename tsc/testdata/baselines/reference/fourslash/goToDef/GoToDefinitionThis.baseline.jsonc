@@ -1,0 +1,38 @@
+// === goToDefinition ===
+// === /goToDefinitionThis.ts ===
+
+// function f([|this|]: number) {
+//     return /*GO TO DEFINITION*/this;
+// }
+// class C {
+//     constructor() { return this; }
+//     get self(this: number) { return this; }
+// }
+
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionThis.ts ===
+
+// function f(this: number) {
+//     return this;
+// }
+// class [|C|] {
+//     constructor() { return /*GO TO DEFINITION*/this; }
+//     get self(this: number) { return this; }
+// }
+
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionThis.ts ===
+
+// function f(this: number) {
+//     return this;
+// }
+// class C {
+//     constructor() { return this; }
+//     get self(this: number) { return /*GO TO DEFINITION*/[|this|]: number) { return this; }
+// }

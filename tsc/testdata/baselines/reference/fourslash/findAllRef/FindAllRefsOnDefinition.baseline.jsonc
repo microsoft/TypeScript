@@ -1,4 +1,15 @@
 // === findAllReferences ===
+// === /findAllRefsOnDefinition-import.ts ===
+
+// --- (line: 3) skipped ---
+// 
+//     }
+// 
+//     /*FIND ALL REFS*/public start(){
+//         return this;
+//     }
+// 
+// // --- (line: 11) skipped ---
 
 
 

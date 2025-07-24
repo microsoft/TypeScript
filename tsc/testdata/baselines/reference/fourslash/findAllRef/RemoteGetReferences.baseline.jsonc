@@ -752,6 +752,13 @@
 
 
 // === findAllReferences ===
+// === /remoteGetReferences_2.ts ===
+
+// /*FIND ALL REFS*/var remoteglobalVar: number = 2;
+// 
+// class remotefooCls {
+// 	//Declare
+// // --- (line: 5) skipped ---
 
 
 
@@ -833,6 +840,15 @@
 
 
 // === findAllReferences ===
+// === /remoteGetReferences_2.ts ===
+
+// var remoteglobalVar: number = 2;
+// 
+// /*FIND ALL REFS*/class remotefooCls {
+// 	//Declare
+// 	remoteclsVar = 1;
+// 	static remoteclsSVar = 1;
+// // --- (line: 7) skipped ---
 
 
 
@@ -936,6 +952,18 @@
 
 
 // === findAllReferences ===
+// === /remoteGetReferences_2.ts ===
+
+// var remoteglobalVar: number = 2;
+// 
+// class remotefooCls {
+// 	//Declare
+// 	remoteclsVar = 1;
+// 	/*FIND ALL REFS*/static remoteclsSVar = 1;
+// 
+// 	constructor(public remoteclsParam: number) {
+// 		//Increments
+// // --- (line: 10) skipped ---
 
 
 

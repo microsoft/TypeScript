@@ -1,0 +1,38 @@
+// === goToDefinition ===
+// === /goToDefinitionTypeofThis.ts ===
+
+// function f([|this|]: number) {
+//     type X = typeof /*GO TO DEFINITION*/this;
+// }
+// class C {
+//     constructor() { type X = typeof this; }
+//     get self(this: number) { type X = typeof this; }
+// }
+
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionTypeofThis.ts ===
+
+// function f(this: number) {
+//     type X = typeof this;
+// }
+// class [|C|] {
+//     constructor() { type X = typeof /*GO TO DEFINITION*/this; }
+//     get self(this: number) { type X = typeof this; }
+// }
+
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionTypeofThis.ts ===
+
+// function f(this: number) {
+//     type X = typeof this;
+// }
+// class C {
+//     constructor() { type X = typeof this; }
+//     get self(this: number) { type X = typeof /*GO TO DEFINITION*/[|this|]: number) { type X = typeof this; }
+// }

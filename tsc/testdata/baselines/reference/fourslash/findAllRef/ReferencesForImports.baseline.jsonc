@@ -1,4 +1,13 @@
 // === findAllReferences ===
+// === /referencesForImports.ts ===
+
+// declare module "jquery" {
+//     function $(s: string): any;
+//     export = $;
+// }
+// /*FIND ALL REFS*/import $ = require("jquery");
+// $("a");
+// import $ = require("jquery");
 
 
 
@@ -32,6 +41,13 @@
 
 
 // === findAllReferences ===
+// === /referencesForImports.ts ===
+
+// --- (line: 3) skipped ---
+// }
+// import $ = require("jquery");
+// $("a");
+// /*FIND ALL REFS*/import $ = require("jquery");
 
 
 

@@ -1,0 +1,8 @@
+// === goToDefinition ===
+// === /file.d.ts ===
+
+// namespace /*GO TO DEFINITION*/[|Foo|] {
+// 
+// 
+// 
+// // --- (line: 5) skipped ---

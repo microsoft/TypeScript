@@ -1,4 +1,12 @@
 // === findAllReferences ===
+// === /referencesForMergedDeclarations6.ts ===
+
+// interface Foo { }
+// /*FIND ALL REFS*/module Foo {
+//     export interface Bar { }
+//     export module Bar { export interface Baz { } }
+//     export function Bar() { }
+// // --- (line: 6) skipped ---
 
 
 

@@ -13,6 +13,15 @@
 
 
 // === findAllReferences ===
+// === /findAllRefsObjectBindingElementPropertyName10.ts ===
+
+// interface Recursive {
+//     next?: Recursive;
+//     value: any;
+// }
+// 
+// function f (/*FIND ALL REFS*/{ next: { next: x} }: Recursive) {
+// }
 
 
 

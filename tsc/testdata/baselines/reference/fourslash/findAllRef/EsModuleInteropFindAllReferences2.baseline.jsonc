@@ -1,4 +1,8 @@
 // === findAllReferences ===
+// === /a.d.ts ===
+
+// export as namespace abc;
+// /*FIND ALL REFS*/export const x: number;
 
 
 

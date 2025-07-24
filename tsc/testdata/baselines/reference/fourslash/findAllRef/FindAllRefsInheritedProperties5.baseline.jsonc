@@ -60,3 +60,10 @@
 
 
 // === findAllReferences ===
+// === /findAllRefsInheritedProperties5.ts ===
+
+// --- (line: 8) skipped ---
+// 
+//  var d: D;
+//  d.prop0;
+//  d./*FIND ALL REFS*/prop1;

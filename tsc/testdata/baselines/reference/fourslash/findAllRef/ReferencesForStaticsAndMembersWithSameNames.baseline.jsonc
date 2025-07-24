@@ -25,6 +25,17 @@
 
 
 // === findAllReferences ===
+// === /referencesForStaticsAndMembersWithSameNames.ts ===
+
+// module FindRef4 {
+// 	module MixedStaticsClassTest {
+// 		export class Foo {
+// 			bar: Foo;
+// 			/*FIND ALL REFS*/static bar: Foo;
+// 
+// 			public foo(): void {
+// 			}
+// // --- (line: 9) skipped ---
 
 
 
@@ -55,6 +66,17 @@
 
 
 // === findAllReferences ===
+// === /referencesForStaticsAndMembersWithSameNames.ts ===
+
+// --- (line: 3) skipped ---
+// 			bar: Foo;
+// 			static bar: Foo;
+// 
+// 			/*FIND ALL REFS*/public foo(): void {
+// 			}
+// 			public static foo(): void {
+// 			}
+// // --- (line: 11) skipped ---
 
 
 
@@ -86,6 +108,17 @@
 
 
 // === findAllReferences ===
+// === /referencesForStaticsAndMembersWithSameNames.ts ===
+
+// --- (line: 5) skipped ---
+// 
+// 			public foo(): void {
+// 			}
+// 			/*FIND ALL REFS*/public static foo(): void {
+// 			}
+// 		}
+// 	}
+// // --- (line: 13) skipped ---
 
 
 

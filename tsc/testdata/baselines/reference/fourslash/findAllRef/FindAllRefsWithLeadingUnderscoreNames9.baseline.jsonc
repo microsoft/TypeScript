@@ -1,4 +1,9 @@
 // === findAllReferences ===
+// === /findAllRefsWithLeadingUnderscoreNames9.ts ===
+
+// (/*FIND ALL REFS*/function ___foo() {
+//     ___foo();
+// })
 
 
 

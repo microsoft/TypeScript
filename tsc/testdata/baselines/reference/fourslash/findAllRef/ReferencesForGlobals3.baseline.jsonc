@@ -1,4 +1,9 @@
 // === findAllReferences ===
+// === /referencesForGlobals_1.ts ===
+
+// /*FIND ALL REFS*/interface globalInterface {
+//      f();
+// }
 
 
 

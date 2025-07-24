@@ -1,4 +1,14 @@
 // === findAllReferences ===
+// === /referencesOnStatic_1.ts ===
+
+// var n = 43;
+// 
+// class foo {
+//     /*FIND ALL REFS*/static n = '';
+// 
+//     public bar() {
+//         foo.n = "'";
+// // --- (line: 8) skipped ---
 
 
 

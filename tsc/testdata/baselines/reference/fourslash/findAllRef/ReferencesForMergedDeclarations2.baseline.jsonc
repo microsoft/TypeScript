@@ -1,4 +1,14 @@
 // === findAllReferences ===
+// === /referencesForMergedDeclarations2.ts ===
+
+// --- (line: 3) skipped ---
+// 
+// function ATest() { }
+// 
+// /*FIND ALL REFS*/import alias = ATest; // definition
+// 
+// var a: alias.Bar; // namespace
+// alias.call(this); // value
 
 
 

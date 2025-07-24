@@ -1,4 +1,14 @@
 // === findAllReferences ===
+// === /referencesForClassLocal.ts ===
+
+// var n = 14;
+// 
+// class foo {
+//     /*FIND ALL REFS*/private n = 0;
+// 
+//     public bar() {
+//         this.n = 9;
+// // --- (line: 8) skipped ---
 
 
 

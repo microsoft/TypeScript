@@ -1,4 +1,11 @@
 // === findAllReferences ===
+// === /getOccurrencesIsDefinitionOfVariable.ts ===
+
+// /*FIND ALL REFS*/var x = 0;
+// var assignmentRightHandSide = x;
+// var assignmentRightHandSide2 = 1 + x;
+// 
+// // --- (line: 5) skipped ---
 
 
 

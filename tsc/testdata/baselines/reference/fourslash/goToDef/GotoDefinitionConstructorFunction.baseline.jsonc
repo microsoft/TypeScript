@@ -1,0 +1,11 @@
+// === goToDefinition ===
+// === /gotoDefinitionConstructorFunction.js ===
+
+// function [|StringStreamm|]() {
+// }
+// StringStreamm.prototype = {
+// };
+// 
+// function runMode () {
+// new /*GO TO DEFINITION*/StringStreamm()
+// };

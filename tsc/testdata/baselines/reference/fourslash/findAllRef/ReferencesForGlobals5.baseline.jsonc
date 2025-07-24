@@ -1,4 +1,11 @@
 // === findAllReferences ===
+// === /referencesForGlobals_1.ts ===
+
+// module globalModule {
+//     export var x;
+// }
+// 
+// /*FIND ALL REFS*/import globalAlias = globalModule;
 
 
 

@@ -1,0 +1,13 @@
+// === goToDefinition ===
+// === /goToDefinitionInterfaceAfterImplement.ts ===
+
+// interface [|sInt|] {
+//     sVar: number;
+//     sFn: () => void;
+// }
+// 
+// class iClass implements /*GO TO DEFINITION*/sInt {
+//     public sVar = 1;
+//     public sFn() {
+//     }
+// }

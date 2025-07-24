@@ -13,6 +13,15 @@
 
 
 // === findAllReferences ===
+// === /a.js ===
+
+// function f() {
+//     this./*FIND ALL REFS*/x = 0;
+// }
+// f.prototype.setX = function() {
+//     this.x = 1;
+// }
+// f.prototype.useX = function() { this.x; }
 
 
 
@@ -32,8 +41,24 @@
 
 
 // === findAllReferences ===
+// === /a.js ===
+
+// function f() {
+//     this.x = 0;
+// }
+// f.prototype.setX = function() {
+//     this./*FIND ALL REFS*/x = 1;
+// }
+// f.prototype.useX = function() { this.x; }
 
 
 
 
 // === findAllReferences ===
+// === /a.js ===
+
+// --- (line: 3) skipped ---
+// f.prototype.setX = function() {
+//     this.x = 1;
+// }
+// f.prototype.useX = function() { this./*FIND ALL REFS*/x; }

@@ -1,4 +1,16 @@
 // === findAllReferences ===
+// === /referencesForClassParameter.ts ===
+
+// var p = 2;
+// 
+// class p { }
+// 
+// class foo {
+//     constructor (/*FIND ALL REFS*/public p: any) {
+//     }
+// 
+//     public f(p) {
+// // --- (line: 10) skipped ---
 
 
 

@@ -27,6 +27,13 @@
 
 
 // === findAllReferences ===
+// === /findAllRefsForObjectLiteralProperties.ts ===
+
+// --- (line: 3) skipped ---
+// 
+// x.property;
+// 
+// /*FIND ALL REFS*/let {property: pVar} = x;
 
 
 

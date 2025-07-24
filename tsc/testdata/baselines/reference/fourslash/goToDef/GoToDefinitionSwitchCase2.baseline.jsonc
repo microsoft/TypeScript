@@ -1,0 +1,6 @@
+// === goToDefinition ===
+// === /goToDefinitionSwitchCase2.ts ===
+
+// [|switch|] (null) {
+//   /*GO TO DEFINITION*/default: break;
+// }

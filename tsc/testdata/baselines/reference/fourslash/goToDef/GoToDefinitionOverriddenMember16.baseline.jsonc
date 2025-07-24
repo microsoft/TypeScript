@@ -1,0 +1,10 @@
+// === goToDefinition ===
+// === /goToDefinitionOverrideJsdoc.ts ===
+
+// export class C extends CompletelyUndefined {
+//     /**
+//      * @override/*GO TO DEFINITION*/
+//      * @returns {{}}
+//      */
+//     static foo() {
+// // --- (line: 7) skipped ---

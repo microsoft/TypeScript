@@ -17,6 +17,10 @@
 
 
 // === findAllReferences ===
+// === /a.ts ===
+
+// const a = 0;
+// export /*FIND ALL REFS*/default a;
 
 
 

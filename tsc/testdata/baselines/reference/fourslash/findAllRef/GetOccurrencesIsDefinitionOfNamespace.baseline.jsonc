@@ -1,4 +1,10 @@
 // === findAllReferences ===
+// === /getOccurrencesIsDefinitionOfNamespace.ts ===
+
+// /*FIND ALL REFS*/namespace Numbers {
+//     export var n = 12;
+// }
+// let x = Numbers.n + 1;
 
 
 

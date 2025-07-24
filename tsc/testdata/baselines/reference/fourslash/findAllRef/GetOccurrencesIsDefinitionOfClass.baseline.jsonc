@@ -1,4 +1,11 @@
 // === findAllReferences ===
+// === /getOccurrencesIsDefinitionOfClass.ts ===
+
+// /*FIND ALL REFS*/class C {
+//     n: number;
+//     constructor() {
+//         this.n = 12;
+// // --- (line: 5) skipped ---
 
 
 

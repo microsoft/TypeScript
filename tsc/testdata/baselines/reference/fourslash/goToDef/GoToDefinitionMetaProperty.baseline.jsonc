@@ -1,0 +1,59 @@
+// === goToDefinition ===
+// === /a.ts ===
+
+// im/*GO TO DEFINITION*/port.meta;
+// function f() { new.target; }
+
+
+
+
+// === goToDefinition ===
+// === /a.ts ===
+
+// import.met/*GO TO DEFINITION*/a;
+// function f() { new.target; }
+
+
+
+
+// === goToDefinition ===
+// === /a.ts ===
+
+// import.meta;
+// function f() { n/*GO TO DEFINITION*/ew.target; }
+
+
+
+
+// === goToDefinition ===
+// === /a.ts ===
+
+// import.meta;
+// function f() { new.t/*GO TO DEFINITION*/[|f|]() { new.target; }
+
+
+
+
+// === goToDefinition ===
+// === /b.ts ===
+
+// im/*GO TO DEFINITION*/port.m;
+// class c { constructor() { new.target; } }
+
+
+
+
+// === goToDefinition ===
+// === /b.ts ===
+
+// import.m;
+// class c { constructor() { n/*GO TO DEFINITION*/ew.target; } }
+
+
+
+
+// === goToDefinition ===
+// === /b.ts ===
+
+// import.m;
+// class c { constructor() { new.t/*GO TO DEFINITION*/[|c|] { constructor() { new.target; } }

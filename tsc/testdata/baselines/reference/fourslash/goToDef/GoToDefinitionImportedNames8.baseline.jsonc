@@ -1,0 +1,12 @@
+// === goToDefinition ===
+// === /a.js ===
+
+// class [|Class|] {
+//     private f;
+// }
+//  export { Class };
+
+
+// === /b.js ===
+
+// import { /*GO TO DEFINITION*/Class } from "./a";

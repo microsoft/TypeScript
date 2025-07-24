@@ -21,6 +21,12 @@
 
 
 // === findAllReferences ===
+// === /referencesForLabel6.ts ===
+
+// labela: while (true) {
+// labelb:     while (false) { /*FIND ALL REFS*/break labelb; }
+//             break labelc;
+// }
 
 
 

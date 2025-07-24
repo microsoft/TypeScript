@@ -1,4 +1,12 @@
 // === findAllReferences ===
+// === /findAllRefsOnDefinition2-import.ts ===
+
+// export module Test{
+// 
+//     /*FIND ALL REFS*/export interface start { }
+// 
+//     export interface stop { }
+// }
 
 
 

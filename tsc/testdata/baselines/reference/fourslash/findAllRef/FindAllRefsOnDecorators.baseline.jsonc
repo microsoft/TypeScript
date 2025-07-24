@@ -1,4 +1,10 @@
 // === findAllReferences ===
+// === /a.ts ===
+
+// /*FIND ALL REFS*/function decorator(target) {
+//     return target;
+// }
+// decorator();
 
 
 

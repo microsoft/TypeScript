@@ -1,4 +1,9 @@
 // === findAllReferences ===
+// === /findAllRefsDeclareClass.ts ===
+
+// /*FIND ALL REFS*/declare class C {
+//     static m(): void;
+// }
 
 
 

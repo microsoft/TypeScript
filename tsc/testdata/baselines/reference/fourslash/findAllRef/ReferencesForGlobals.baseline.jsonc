@@ -1,4 +1,11 @@
 // === findAllReferences ===
+// === /referencesForGlobals_1.ts ===
+
+// /*FIND ALL REFS*/var global = 2;
+// 
+// class foo {
+//     constructor (public global) { }
+// // --- (line: 5) skipped ---
 
 
 

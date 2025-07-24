@@ -1,4 +1,15 @@
 // === findAllReferences ===
+// === /referencesForMergedDeclarations8.ts ===
+
+// interface Foo { }
+// module Foo {
+//     export interface Bar { }
+//     /*FIND ALL REFS*/export module Bar { export interface Baz { } }
+//     export function Bar() { }
+// }
+// 
+// // module
+// import a3 = Foo.Bar.Baz;
 
 
 
