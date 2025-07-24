@@ -1,0 +1,136 @@
+//// [tests/cases/compiler/contextuallyTypedJsxAttribute3.tsx] ////
+
+=== Performance Stats ===
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 100,000
+Symbol count: 50,000
+
+=== contextuallyTypedJsxAttribute3.tsx ===
+/// <reference path="react16.d.ts" />
+
+import React from "react";
+>React : typeof React
+>      : ^^^^^^^^^^^^
+
+// https://github.com/microsoft/TypeScript/issues/61095
+
+type Props =
+>Props : Props
+>      : ^^^^^
+
+  | {
+      parentId: string[];
+>parentId : string[]
+>         : ^^^^^^^^
+
+      onChange: (event: { id: string }) => void;
+>onChange : (event: { id: string; }) => void
+>         : ^     ^^               ^^^^^    
+>event : { id: string; }
+>      : ^^^^^^      ^^^
+>id : string
+>   : ^^^^^^
+
+      onChange2: () => void;
+>onChange2 : () => void
+>          : ^^^^^^    
+    }
+  | {
+      parentId?: never;
+>parentId : undefined
+>         : ^^^^^^^^^
+
+      onChange: (event: { id: number }) => void;
+>onChange : (event: { id: number; }) => void
+>         : ^     ^^               ^^^^^    
+>event : { id: number; }
+>      : ^^^^^^      ^^^
+>id : number
+>   : ^^^^^^
+
+    };
+
+function NonGenericComponent(props: Props) {
+>NonGenericComponent : (props: Props) => null
+>                    : ^     ^^     ^^^^^^^^^
+>props : Props
+>      : ^^^^^
+
+  return null;
+}
+
+<NonGenericComponent onChange={(e) => {}} />;
+><NonGenericComponent onChange={(e) => {}} /> : JSX.Element
+>                                             : ^^^^^^^^^^^
+>NonGenericComponent : (props: Props) => null
+>                    : ^     ^^     ^^^^^^^^^
+>onChange : (e: { id: number; }) => void
+>         : ^ ^^^^^^^^      ^^^^^^^^^^^^
+>(e) => {} : (e: { id: number; }) => void
+>          : ^ ^^^^^^^^      ^^^^^^^^^^^^
+>e : { id: number; }
+>  : ^^^^^^      ^^^
+
+const parentId: string[] = [];
+>parentId : string[]
+>         : ^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
+
+<NonGenericComponent
+><NonGenericComponent  parentId={parentId}  onChange={(e) => {}}  onChange2={() => {}}/> : JSX.Element
+>                                                                                        : ^^^^^^^^^^^
+>NonGenericComponent : (props: Props) => null
+>                    : ^     ^^     ^^^^^^^^^
+
+  parentId={parentId}
+>parentId : string[]
+>         : ^^^^^^^^
+>parentId : string[]
+>         : ^^^^^^^^
+
+  onChange={(e) => {}}
+>onChange : (e: { id: string; }) => void
+>         : ^ ^^^^^^^^      ^^^^^^^^^^^^
+>(e) => {} : (e: { id: string; }) => void
+>          : ^ ^^^^^^^^      ^^^^^^^^^^^^
+>e : { id: string; }
+>  : ^^^^^^      ^^^
+
+  onChange2={() => {}}
+>onChange2 : () => void
+>          : ^^^^^^^^^^
+>() => {} : () => void
+>         : ^^^^^^^^^^
+
+/>;
+
+<NonGenericComponent
+><NonGenericComponent  parentId={[]}  onChange={(e) => {}}  onChange2={() => {}}/> : JSX.Element
+>                                                                                  : ^^^^^^^^^^^
+>NonGenericComponent : (props: Props) => null
+>                    : ^     ^^     ^^^^^^^^^
+
+  parentId={[]}
+>parentId : never[]
+>         : ^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
+
+  onChange={(e) => {}}
+>onChange : (e: { id: string; }) => void
+>         : ^ ^^^^^^^^      ^^^^^^^^^^^^
+>(e) => {} : (e: { id: string; }) => void
+>          : ^ ^^^^^^^^      ^^^^^^^^^^^^
+>e : { id: string; }
+>  : ^^^^^^      ^^^
+
+  onChange2={() => {}}
+>onChange2 : () => void
+>          : ^^^^^^^^^^
+>() => {} : () => void
+>         : ^^^^^^^^^^
+
+/>;
+
