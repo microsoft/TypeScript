@@ -3497,7 +3497,7 @@ export function getNameTable(sourceFile: SourceFile): Map<__String, number> {
 function initializeNameTable(sourceFile: SourceFile): void {
     const nameTable = sourceFile.nameTable = new Map();
     sourceFile.forEachChild(function walk(node) {
-        if (isIdentifier(node) && !isTagName(node) && node.escapedText || isStringOrNumericLiteralLike(node) && literalIsName(node)) {
+        if (isIdentifier(node) && !isTagName(node) && node.escapedText || isStringOrNumericLiteralLike(node) && literalIsName(node) || isJsxNamespacedName(node)) {
             const text = getEscapedTextOfIdentifierOrLiteral(node);
             nameTable.set(text, nameTable.get(text) === undefined ? node.pos : -1);
         }

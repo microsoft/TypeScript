@@ -74,6 +74,7 @@ import {
     getDeclarationFromName,
     getDeclarationOfKind,
     getEffectiveModifierFlags,
+    getEscapedTextOfIdentifierOrLiteral,
     getLocalSymbolForExportDefault,
     getMeaningFromDeclaration,
     getMeaningFromLocation,
@@ -149,6 +150,7 @@ import {
     isJsxClosingElement,
     isJsxElement,
     isJsxFragment,
+    isJsxNamespacedName,
     isJsxOpeningElement,
     isJsxSelfClosingElement,
     isJumpStatementTarget,
@@ -202,6 +204,7 @@ import {
     isVoidExpression,
     isWriteAccess,
     JSDocPropertyLikeTag,
+    JsxNamespacedName,
     length,
     map,
     mapDefined,
@@ -1052,11 +1055,14 @@ export namespace Core {
     }
 
     export function getAdjustedNode(node: Node, options: Options): Node {
-        if (options.use === FindReferencesUse.References) {
-            node = getAdjustedReferenceLocation(node);
+        if (isIdentifier(node) && isJsxNamespacedName(node.parent)) {
+            node = node.parent;
         }
-        else if (options.use === FindReferencesUse.Rename) {
-            node = getAdjustedRenameLocation(node);
+        if (options.use === FindReferencesUse.References) {
+            return getAdjustedReferenceLocation(node);
+        }
+        if (options.use === FindReferencesUse.Rename) {
+            return getAdjustedRenameLocation(node);
         }
         return node;
     }
@@ -1835,6 +1841,8 @@ export namespace Core {
                 // falls through I guess
             case SyntaxKind.Identifier:
                 return (node as PrivateIdentifier | Identifier).text.length === searchSymbolName.length;
+            case SyntaxKind.JsxNamespacedName:
+                return (getEscapedTextOfIdentifierOrLiteral(node as JsxNamespacedName) as string).length === searchSymbolName.length;
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.StringLiteral: {
                 const str = node as StringLiteralLike;

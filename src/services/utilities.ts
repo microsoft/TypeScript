@@ -203,6 +203,7 @@ import {
     isJSDocTypeAlias,
     isJsxElement,
     isJsxExpression,
+    isJsxNamespacedName,
     isJsxOpeningLikeElement,
     isJsxText,
     isKeyword,
@@ -1322,6 +1323,9 @@ function getAdjustedLocationForHeritageClause(node: HeritageClause) {
 }
 
 function getAdjustedLocation(node: Node, forRename: boolean): Node {
+    if (isIdentifier(node) && isJsxNamespacedName(node.parent)) {
+        node = node.parent;
+    }
     const { parent } = node;
     // /**/<modifier> [|name|] ...
     // /**/<modifier> <class|interface|type|enum|module|namespace|function|get|set> [|name|] ...
@@ -1547,7 +1551,8 @@ export function getAdjustedRenameLocation(node: Node): Node {
  * @internal
  */
 export function getTouchingPropertyName(sourceFile: SourceFile, position: number): Node {
-    return getTouchingToken(sourceFile, position, n => isPropertyNameLiteral(n) || isKeyword(n.kind) || isPrivateIdentifier(n));
+    const token = getTouchingToken(sourceFile, position, n => isPropertyNameLiteral(n) || isKeyword(n.kind) || isPrivateIdentifier(n));
+    return isIdentifier(token) && isJsxNamespacedName(token.parent) ? token.parent : token;
 }
 
 /**
