@@ -12,6 +12,7 @@ import {
     canHaveDecorators,
     canUsePropertyAccess,
     CaseBlock,
+    CaseClause,
     cast,
     CharacterCodes,
     ClassElement,
@@ -47,6 +48,7 @@ import {
     createTextSpanFromRange,
     Debug,
     Declaration,
+    DefaultClause,
     Decorator,
     Diagnostics,
     diagnosticToString,
@@ -355,6 +357,7 @@ import {
     startsWith,
     stringToToken,
     stripQuotes,
+    SwitchStatement,
     Symbol,
     SymbolDisplay,
     SymbolDisplayPart,
@@ -1269,6 +1272,83 @@ function getOptionalReplacementSpan(location: Node | undefined) {
     return location?.kind === SyntaxKind.Identifier ? createTextSpanFromNode(location) : undefined;
 }
 
+function shouldPrioritizeCaseAndDefaultKeywords(contextToken: Node | undefined, position: number): boolean {
+    if (!contextToken) return false;
+    
+    // Check if we're in a switch statement context
+    const switchStatement = findAncestor(contextToken, node => 
+        node.kind === SyntaxKind.SwitchStatement ? true :
+        isFunctionLikeDeclaration(node) || isClassLike(node) ? "quit" :
+        false
+    ) as SwitchStatement | undefined;
+    
+    if (!switchStatement) return false;
+    
+    const sourceFile = contextToken.getSourceFile();
+    const { line: currentLine, character: currentColumn } = getLineAndCharacterOfPosition(sourceFile, position);
+    
+    // Case 1: Cursor is directly inside the switch block
+    // switch (thing) {
+    //     /*cursor*/
+    // }
+    if (contextToken.parent === switchStatement.caseBlock) {
+        return true;
+    }
+    
+    // Case 2: Cursor is at the same column as a case/default keyword but on a different line,
+    // with at least one statement in the previous clause that meets certain conditions
+    const caseBlock = switchStatement.caseBlock;
+    if (!caseBlock) return false;
+    
+    // Find the last case/default clause before the cursor position
+    let lastClause: CaseClause | DefaultClause | undefined;
+    for (const clause of caseBlock.clauses) {
+        if (clause.pos >= position) break;
+        lastClause = clause;
+    }
+    
+    if (!lastClause) return false;
+    
+    // Check if cursor is at the same column as the last clause's keyword
+    const clauseKeywordPos = lastClause.kind === SyntaxKind.CaseClause ? 
+        lastClause.getFirstToken(sourceFile)!.getStart(sourceFile) :
+        lastClause.getFirstToken(sourceFile)!.getStart(sourceFile);
+    const { line: clauseLine, character: clauseColumn } = getLineAndCharacterOfPosition(sourceFile, clauseKeywordPos);
+    
+    if (currentLine === clauseLine || currentColumn !== clauseColumn) {
+        return false;
+    }
+    
+    // Check if there's at least one statement in the clause
+    if (!lastClause.statements || lastClause.statements.length === 0) {
+        return false;
+    }
+    
+    const lastStatement = lastClause.statements[lastClause.statements.length - 1];
+    
+    // Get position of the last statement
+    const { line: stmtLine, character: stmtColumn } = getLineAndCharacterOfPosition(sourceFile, lastStatement.getStart(sourceFile));
+    
+    // Check if it's a jump statement
+    const isJumpStatement = isBreakOrContinueStatement(lastStatement) ||
+                           lastStatement.kind === SyntaxKind.ReturnStatement ||
+                           lastStatement.kind === SyntaxKind.ThrowStatement;
+    
+    if (isJumpStatement) {
+        // For jump statements: prioritize if on same line as case, or on different line with different indentation
+        if (stmtLine === clauseLine || (stmtLine !== clauseLine && stmtColumn !== clauseColumn)) {
+            return true;
+        }
+    } else {
+        // For non-jump statements: prioritize only if on different line and different column  
+        if (stmtLine !== clauseLine && stmtColumn !== clauseColumn) {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
 function completionInfoFromData(
     sourceFile: SourceFile,
     host: LanguageServiceHost,
@@ -1369,6 +1449,7 @@ function completionInfoFromData(
     );
 
     if (keywordFilters !== KeywordCompletionFilters.None) {
+        const shouldPrioritizeCaseDefault = shouldPrioritizeCaseAndDefaultKeywords(contextToken, position);
         for (const keywordEntry of getKeywordCompletions(keywordFilters, !insideJsDocTagTypeExpression && isSourceFileJS(sourceFile))) {
             if (
                 isTypeOnlyLocation && isTypeKeyword(stringToToken(keywordEntry.name)!) ||
@@ -1376,7 +1457,11 @@ function completionInfoFromData(
                 !uniqueNames.has(keywordEntry.name)
             ) {
                 uniqueNames.add(keywordEntry.name);
-                insertSorted(entries, keywordEntry, compareCompletionEntries, /*equalityComparer*/ undefined, /*allowDuplicates*/ true);
+                // Create a modified keyword entry with prioritized sort text for case/default in switch contexts
+                const modifiedKeywordEntry = shouldPrioritizeCaseDefault && (keywordEntry.name === "case" || keywordEntry.name === "default") 
+                    ? { ...keywordEntry, sortText: SortText.LocalDeclarationPriority }
+                    : keywordEntry;
+                insertSorted(entries, modifiedKeywordEntry, compareCompletionEntries, /*equalityComparer*/ undefined, /*allowDuplicates*/ true);
             }
         }
     }
