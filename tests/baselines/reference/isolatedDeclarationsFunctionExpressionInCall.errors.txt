@@ -1,0 +1,37 @@
+isolatedDeclarationsFunctionExpressionInCall.ts(4,14): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+isolatedDeclarationsFunctionExpressionInCall.ts(8,14): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+isolatedDeclarationsFunctionExpressionInCall.ts(12,14): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+isolatedDeclarationsFunctionExpressionInCall.ts(16,14): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+
+
+==== isolatedDeclarationsFunctionExpressionInCall.ts (4 errors) ====
+    declare function observer<T>(fn: T): T;
+    declare function action<T>(fn: T): T;
+    
+    export const Component = observer(() => {
+                 ~~~~~~~~~
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 isolatedDeclarationsFunctionExpressionInCall.ts:4:14: Add a type annotation to the variable Component.
+      return "hello";
+    });
+    
+    export const thing = action(function () {
+                 ~~~~~
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 isolatedDeclarationsFunctionExpressionInCall.ts:8:14: Add a type annotation to the variable thing.
+      return Component;
+    });
+    
+    export const arrowWithType = observer((): string => {
+                 ~~~~~~~~~~~~~
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 isolatedDeclarationsFunctionExpressionInCall.ts:12:14: Add a type annotation to the variable arrowWithType.
+      return "typed";
+    });
+    
+    export const functionWithType = action(function (): typeof Component {
+                 ~~~~~~~~~~~~~~~~
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 isolatedDeclarationsFunctionExpressionInCall.ts:16:14: Add a type annotation to the variable functionWithType.
+      return Component;
+    });
