@@ -30,96 +30,53 @@
 ////   /*sameAll3*/
 //// }
 
-//// // NEW - prioritize case/default (after break on different column)
+//// // After break statement with proper indentation
 //// switch (thing) {
 ////   case 42:
 ////     break;
 ////   /*newPrio1*/
 //// }
 
-//// // NEW - prioritize case/default (break on same line)
+//// // After same-line break statement
 //// switch (thing) {
 ////   case 42: break;
 ////   /*newPrio2*/
 //// }
 
-//// // NEW - prioritize case/default (after return)
+//// // After return statement with proper indentation
 //// switch (thing) {
 ////   case 42:
 ////     return 1;
 ////   /*newPrio3*/
 //// }
 
-//// // NEW - prioritize case/default (after throw)
+//// // After throw statement with proper indentation
 //// switch (thing) {
 ////   case 42:
 ////     throw new Error();
 ////   /*newPrio4*/
 //// }
 
-verify.completions(
-    {
-        marker: "basic",
-        isNewIdentifierLocation: false,
-        includes: [
-            { name: "case", sortText: completion.SortText.LocalDeclarationPriority },
-            { name: "default", sortText: completion.SortText.LocalDeclarationPriority }
-        ]
-    },
-    {
-        marker: "sameAll1",
-        isNewIdentifierLocation: false,
-        includes: [
-            { name: "case", sortText: completion.SortText.GlobalsOrKeywords },
-            { name: "default", sortText: completion.SortText.GlobalsOrKeywords }
-        ]
-    },
-    {
-        marker: "sameAll2",
-        isNewIdentifierLocation: false,
-        includes: [
-            { name: "case", sortText: completion.SortText.GlobalsOrKeywords },
-            { name: "default", sortText: completion.SortText.GlobalsOrKeywords }
-        ]
-    },
-    {
-        marker: "sameAll3",
-        isNewIdentifierLocation: false,
-        includes: [
-            { name: "case", sortText: completion.SortText.GlobalsOrKeywords },
-            { name: "default", sortText: completion.SortText.GlobalsOrKeywords }
-        ]
-    },
-    {
-        marker: "newPrio1",
-        isNewIdentifierLocation: false,
-        includes: [
-            { name: "case", sortText: completion.SortText.LocalDeclarationPriority },
-            { name: "default", sortText: completion.SortText.LocalDeclarationPriority }
-        ]
-    },
-    {
-        marker: "newPrio2",
-        isNewIdentifierLocation: false,
-        includes: [
-            { name: "case", sortText: completion.SortText.LocalDeclarationPriority },
-            { name: "default", sortText: completion.SortText.LocalDeclarationPriority }
-        ]
-    },
-    {
-        marker: "newPrio3",
-        isNewIdentifierLocation: false,
-        includes: [
-            { name: "case", sortText: completion.SortText.LocalDeclarationPriority },
-            { name: "default", sortText: completion.SortText.LocalDeclarationPriority }
-        ]
-    },
-    {
-        marker: "newPrio4",
-        isNewIdentifierLocation: false,
-        includes: [
-            { name: "case", sortText: completion.SortText.LocalDeclarationPriority },
-            { name: "default", sortText: completion.SortText.LocalDeclarationPriority }
-        ]
-    }
-);
+goTo.marker("basic");
+verify.baselineCompletions();
+
+goTo.marker("sameAll1");
+verify.baselineCompletions();
+
+goTo.marker("sameAll2");
+verify.baselineCompletions();
+
+goTo.marker("sameAll3");
+verify.baselineCompletions();
+
+goTo.marker("newPrio1");
+verify.baselineCompletions();
+
+goTo.marker("newPrio2");
+verify.baselineCompletions();
+
+goTo.marker("newPrio3");
+verify.baselineCompletions();
+
+goTo.marker("newPrio4");
+verify.baselineCompletions();
