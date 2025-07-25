@@ -731,6 +731,9 @@ export function createSyntacticTypeNodeBuilder(
             case SyntaxKind.ConstructorType:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
+                // Don't report inference fallback for function expressions that are arguments to call expressions
+                const shouldReportFallback = !(node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.ArrowFunction) || !isCallExpression(node.parent);
+                return createReturnFromSignature(node, symbol, context, shouldReportFallback);
             case SyntaxKind.JSDocFunctionType:
             case SyntaxKind.JSDocSignature:
                 return createReturnFromSignature(node, symbol, context);
@@ -968,7 +971,9 @@ export function createSyntacticTypeNodeBuilder(
         return failed;
     }
     function typeFromFunctionLikeExpression(fnNode: FunctionExpression | ArrowFunction, context: SyntacticTypeNodeBuilderContext) {
-        const returnType = createReturnFromSignature(fnNode, /*symbol*/ undefined, context);
+        // Don't report inference fallback for function expressions that are arguments to call expressions
+        const shouldReportFallback = !isCallExpression(fnNode.parent);
+        const returnType = createReturnFromSignature(fnNode, /*symbol*/ undefined, context, shouldReportFallback);
         const typeParameters = reuseTypeParameters(fnNode.typeParameters, context);
         const parameters = fnNode.parameters.map(p => ensureParameter(p, context));
         return syntacticResult(
