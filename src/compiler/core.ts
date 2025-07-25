@@ -175,6 +175,20 @@ export function find<T>(array: readonly T[] | undefined, predicate: (element: T,
 }
 
 /** @internal */
+export function findIterator<T>(iter: Iterable<T>, predicate: (element: T, index: number) => boolean, startIndex = 0): T | undefined {
+    let i = 0;
+    for (const value of iter) {
+        if (i >= startIndex) {
+            if (predicate(value, i)) {
+                return value;
+            }
+        }
+        i++;
+    }
+    return undefined;
+}
+
+/** @internal */
 export function findLast<T, U extends T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => element is U, startIndex?: number): U | undefined;
 /** @internal */
 export function findLast<T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): T | undefined;
@@ -626,6 +640,16 @@ export function some<T>(array: readonly T[] | undefined, predicate?: (value: T) 
         }
         else {
             return array.length > 0;
+        }
+    }
+    return false;
+}
+
+/** @internal */
+export function someIterator<T>(iter: Iterable<T>, predicate: (value: T) => boolean): boolean {
+    for (const v of iter) {
+        if (predicate(v)) {
+            return true;
         }
     }
     return false;
