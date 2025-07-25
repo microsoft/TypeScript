@@ -44,7 +44,7 @@ func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, nod
 		return result
 	}
 	visit = func(node *ast.Node) bool {
-		if ctx != nil && ctx.Err() != nil {
+		if ctx.Err() != nil {
 			return true
 		}
 		switch node.Kind {
@@ -206,7 +206,7 @@ func ProvideWorkspaceSymbols(ctx context.Context, programs []*compiler.Program, 
 	// Create DeclarationInfos for all declarations in the source files.
 	var infos []DeclarationInfo
 	for sourceFile := range sourceFiles.Keys() {
-		if ctx != nil && ctx.Err() != nil {
+		if ctx.Err() != nil {
 			return lsproto.SymbolInformationsOrWorkspaceSymbolsOrNull{}, nil
 		}
 		declarationMap := sourceFile.GetDeclarationMap()

@@ -2,6 +2,7 @@ package ls
 
 import (
 	"cmp"
+	"context"
 	"fmt"
 	"slices"
 	"strings"
@@ -396,7 +397,7 @@ func getSymbolScope(symbol *ast.Symbol) *ast.Node {
 
 // === functions on (*ls) ===
 
-func (l *LanguageService) ProvideReferences(params *lsproto.ReferenceParams) (lsproto.ReferencesResponse, error) {
+func (l *LanguageService) ProvideReferences(ctx context.Context, params *lsproto.ReferenceParams) (lsproto.ReferencesResponse, error) {
 	// `findReferencedSymbols` except only computes the information needed to return reference locations
 	program, sourceFile := l.getProgramAndFile(params.TextDocument.Uri)
 	position := int(l.converters.LineAndCharacterToPosition(sourceFile, params.Position))
@@ -404,27 +405,31 @@ func (l *LanguageService) ProvideReferences(params *lsproto.ReferenceParams) (ls
 	node := astnav.GetTouchingPropertyName(sourceFile, position)
 	options := refOptions{use: referenceUseReferences}
 
-	symbolsAndEntries := l.getReferencedSymbolsForNode(position, node, program, program.GetSourceFiles(), options, nil)
+	symbolsAndEntries := l.getReferencedSymbolsForNode(ctx, position, node, program, program.GetSourceFiles(), options, nil)
 
 	locations := core.FlatMap(symbolsAndEntries, l.convertSymbolAndEntriesToLocations)
 	return lsproto.LocationsOrNull{Locations: &locations}, nil
 }
 
-func (l *LanguageService) ProvideImplementations(params *lsproto.ImplementationParams) (lsproto.ImplementationResponse, error) {
+func (l *LanguageService) ProvideImplementations(ctx context.Context, params *lsproto.ImplementationParams) (lsproto.ImplementationResponse, error) {
 	program, sourceFile := l.getProgramAndFile(params.TextDocument.Uri)
 	position := int(l.converters.LineAndCharacterToPosition(sourceFile, params.Position))
 	node := astnav.GetTouchingPropertyName(sourceFile, position)
 
 	var seenNodes collections.Set[*ast.Node]
 	var entries []*referenceEntry
-	queue := l.getImplementationReferenceEntries(program, node, position)
+	queue := l.getImplementationReferenceEntries(ctx, program, node, position)
 	for len(queue) != 0 {
+		if ctx.Err() != nil {
+			return lsproto.LocationOrLocationsOrDefinitionLinksOrNull{}, ctx.Err()
+		}
+
 		entry := queue[0]
 		queue = queue[1:]
 		if !seenNodes.Has(entry.node) {
 			seenNodes.Add(entry.node)
 			entries = append(entries, entry)
-			queue = append(queue, l.getImplementationReferenceEntries(program, entry.node, entry.node.Pos())...)
+			queue = append(queue, l.getImplementationReferenceEntries(ctx, program, entry.node, entry.node.Pos())...)
 		}
 	}
 
@@ -432,9 +437,9 @@ func (l *LanguageService) ProvideImplementations(params *lsproto.ImplementationP
 	return lsproto.LocationOrLocationsOrDefinitionLinksOrNull{Locations: &locations}, nil
 }
 
-func (l *LanguageService) getImplementationReferenceEntries(program *compiler.Program, node *ast.Node, position int) []*referenceEntry {
+func (l *LanguageService) getImplementationReferenceEntries(ctx context.Context, program *compiler.Program, node *ast.Node, position int) []*referenceEntry {
 	options := refOptions{use: referenceUseReferences, implementations: true}
-	symbolsAndEntries := l.getReferencedSymbolsForNode(position, node, program, program.GetSourceFiles(), options, nil)
+	symbolsAndEntries := l.getReferencedSymbolsForNode(ctx, position, node, program, program.GetSourceFiles(), options, nil)
 	return core.FlatMap(symbolsAndEntries, func(s *SymbolAndEntries) []*referenceEntry { return s.references })
 }
 
@@ -517,7 +522,7 @@ func (l *LanguageService) mergeReferences(program *compiler.Program, referencesT
 
 // === functions for find all ref implementation ===
 
-func (l *LanguageService) getReferencedSymbolsForNode(position int, node *ast.Node, program *compiler.Program, sourceFiles []*ast.SourceFile, options refOptions, sourceFilesSet *collections.Set[string]) []*SymbolAndEntries {
+func (l *LanguageService) getReferencedSymbolsForNode(ctx context.Context, position int, node *ast.Node, program *compiler.Program, sourceFiles []*ast.SourceFile, options refOptions, sourceFilesSet *collections.Set[string]) []*SymbolAndEntries {
 	// !!! cancellationToken
 	if sourceFilesSet == nil || sourceFilesSet.Len() == 0 {
 		sourceFilesSet = collections.NewSetWithSizeHint[string](len(sourceFiles))
@@ -532,7 +537,7 @@ func (l *LanguageService) getReferencedSymbolsForNode(position int, node *ast.No
 			return nil
 		}
 
-		checker, done := program.GetTypeChecker(l.ctx)
+		checker, done := program.GetTypeChecker(ctx)
 		defer done()
 
 		if moduleSymbol := checker.GetMergedSymbol(resolvedRef.file.Symbol); moduleSymbol != nil {
@@ -557,7 +562,7 @@ func (l *LanguageService) getReferencedSymbolsForNode(position int, node *ast.No
 		}
 	}
 
-	checker, done := program.GetTypeChecker(l.ctx)
+	checker, done := program.GetTypeChecker(ctx)
 	defer done()
 
 	// constructors should use the class symbol, detected by name, if present
@@ -590,19 +595,19 @@ func (l *LanguageService) getReferencedSymbolsForNode(position int, node *ast.No
 		return getReferencedSymbolsForModule(program, symbol.Parent, false /*excludeImportTypeOfExportEquals*/, sourceFiles, sourceFilesSet)
 	}
 
-	moduleReferences := l.getReferencedSymbolsForModuleIfDeclaredBySourceFile(symbol, program, sourceFiles, options, sourceFilesSet) // !!! cancellationToken
+	moduleReferences := l.getReferencedSymbolsForModuleIfDeclaredBySourceFile(ctx, symbol, program, sourceFiles, options, sourceFilesSet) // !!! cancellationToken
 	if moduleReferences != nil && symbol.Flags&ast.SymbolFlagsTransient != 0 {
 		return moduleReferences
 	}
 
 	aliasedSymbol := getMergedAliasedSymbolOfNamespaceExportDeclaration(node, symbol, checker)
-	moduleReferencesOfExportTarget := l.getReferencedSymbolsForModuleIfDeclaredBySourceFile(aliasedSymbol, program, sourceFiles, options, sourceFilesSet) // !!! cancellationToken
+	moduleReferencesOfExportTarget := l.getReferencedSymbolsForModuleIfDeclaredBySourceFile(ctx, aliasedSymbol, program, sourceFiles, options, sourceFilesSet) // !!! cancellationToken
 
 	references := getReferencedSymbolsForSymbol(symbol, node, sourceFiles, sourceFilesSet, checker, options) // !!! cancellationToken
 	return l.mergeReferences(program, moduleReferences, references, moduleReferencesOfExportTarget)
 }
 
-func (l *LanguageService) getReferencedSymbolsForModuleIfDeclaredBySourceFile(symbol *ast.Symbol, program *compiler.Program, sourceFiles []*ast.SourceFile, options refOptions, sourceFilesSet *collections.Set[string]) []*SymbolAndEntries {
+func (l *LanguageService) getReferencedSymbolsForModuleIfDeclaredBySourceFile(ctx context.Context, symbol *ast.Symbol, program *compiler.Program, sourceFiles []*ast.SourceFile, options refOptions, sourceFilesSet *collections.Set[string]) []*SymbolAndEntries {
 	moduleSourceFileName := ""
 	if symbol == nil || !((symbol.Flags&ast.SymbolFlagsModule != 0) && len(symbol.Declarations) != 0) {
 		return nil
@@ -619,7 +624,7 @@ func (l *LanguageService) getReferencedSymbolsForModuleIfDeclaredBySourceFile(sy
 		return moduleReferences
 	}
 	// Continue to get references to 'export ='.
-	checker, done := program.GetTypeChecker(l.ctx)
+	checker, done := program.GetTypeChecker(ctx)
 	defer done()
 
 	symbol, _ = checker.ResolveAlias(exportEquals)

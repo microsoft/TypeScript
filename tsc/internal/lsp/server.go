@@ -727,7 +727,7 @@ func (s *Server) handleReferences(ctx context.Context, params *lsproto.Reference
 	project := s.projectService.EnsureDefaultProjectForURI(params.TextDocument.Uri)
 	languageService, done := project.GetLanguageServiceForRequest(ctx)
 	defer done()
-	return languageService.ProvideReferences(params)
+	return languageService.ProvideReferences(ctx, params)
 }
 
 func (s *Server) handleImplementations(ctx context.Context, params *lsproto.ImplementationParams) (lsproto.ImplementationResponse, error) {
@@ -735,7 +735,7 @@ func (s *Server) handleImplementations(ctx context.Context, params *lsproto.Impl
 	project := s.projectService.EnsureDefaultProjectForURI(params.TextDocument.Uri)
 	languageService, done := project.GetLanguageServiceForRequest(ctx)
 	defer done()
-	return languageService.ProvideImplementations(params)
+	return languageService.ProvideImplementations(ctx, params)
 }
 
 func (s *Server) handleCompletion(ctx context.Context, params *lsproto.CompletionParams) (lsproto.CompletionResponse, error) {
