@@ -1,0 +1,80 @@
+//// [tests/cases/compiler/isolatedDeclarationsFunctionExpressionInCall.ts] ////
+
+=== isolatedDeclarationsFunctionExpressionInCall.ts ===
+declare function observer<T>(fn: T): T;
+>observer : <T>(fn: T) => T
+>         : ^ ^^  ^^ ^^^^^ 
+>fn : T
+>   : ^
+
+declare function action<T>(fn: T): T;
+>action : <T>(fn: T) => T
+>       : ^ ^^  ^^ ^^^^^ 
+>fn : T
+>   : ^
+
+export const Component = observer(() => {
+>Component : () => "hello"
+>          : ^^^^^^^^^^^^^
+>observer(() => {  return "hello";}) : () => "hello"
+>                                    : ^^^^^^^^^^^^^
+>observer : <T>(fn: T) => T
+>         : ^ ^^  ^^ ^^^^^ 
+>() => {  return "hello";} : () => "hello"
+>                          : ^^^^^^^^^^^^^
+
+  return "hello";
+>"hello" : "hello"
+>        : ^^^^^^^
+
+});
+
+export const thing = action(function () {
+>thing : () => () => "hello"
+>      : ^^^^^^^^^^^^^^^^^^^
+>action(function () {  return Component;}) : () => () => "hello"
+>                                          : ^^^^^^^^^^^^^^^^^^^
+>action : <T>(fn: T) => T
+>       : ^ ^^  ^^ ^^^^^ 
+>function () {  return Component;} : () => () => "hello"
+>                                  : ^^^^^^^^^^^^^^^^^^^
+
+  return Component;
+>Component : () => "hello"
+>          : ^^^^^^^^^^^^^
+
+});
+
+export const arrowWithType = observer((): string => {
+>arrowWithType : () => string
+>              : ^^^^^^      
+>observer((): string => {  return "typed";}) : () => string
+>                                            : ^^^^^^      
+>observer : <T>(fn: T) => T
+>         : ^ ^^  ^^ ^^^^^ 
+>(): string => {  return "typed";} : () => string
+>                                  : ^^^^^^      
+
+  return "typed";
+>"typed" : "typed"
+>        : ^^^^^^^
+
+});
+
+export const functionWithType = action(function (): typeof Component {
+>functionWithType : () => typeof Component
+>                 : ^^^^^^                
+>action(function (): typeof Component {  return Component;}) : () => typeof Component
+>                                                            : ^^^^^^                
+>action : <T>(fn: T) => T
+>       : ^ ^^  ^^ ^^^^^ 
+>function (): typeof Component {  return Component;} : () => typeof Component
+>                                                    : ^^^^^^                
+>Component : () => "hello"
+>          : ^^^^^^^^^^^^^
+
+  return Component;
+>Component : () => "hello"
+>          : ^^^^^^^^^^^^^
+
+});

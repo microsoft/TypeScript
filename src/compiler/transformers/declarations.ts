@@ -94,6 +94,7 @@ import {
     isBinaryExpression,
     isBindingElement,
     isBindingPattern,
+    isCallExpression,
     isClassDeclaration,
     isClassElement,
     isComputedPropertyName,
@@ -331,6 +332,11 @@ export function transformDeclarations(context: TransformationContext): Transform
             reportExpandoFunctionErrors(node);
         }
         else {
+            // Don't report errors for function expressions that are arguments to call expressions
+            if ((node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.ArrowFunction) && 
+                isCallExpression(node.parent)) {
+                return;
+            }
             context.addDiagnostic(getIsolatedDeclarationError(node));
         }
     }

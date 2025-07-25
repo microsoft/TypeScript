@@ -37,6 +37,7 @@ import {
     isAsExpression,
     isBinaryExpression,
     isBindingElement,
+    isCallExpression,
     isCallSignatureDeclaration,
     isClassDeclaration,
     isConstructorDeclaration,
