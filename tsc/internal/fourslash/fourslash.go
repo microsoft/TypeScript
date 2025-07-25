@@ -1,6 +1,7 @@
 package fourslash
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"maps"
@@ -292,6 +293,8 @@ func sendNotification[Params any](t *testing.T, f *FourslashTest, info lsproto.N
 }
 
 func (f *FourslashTest) writeMsg(t *testing.T, msg *lsproto.Message) {
+	enc := json.NewEncoder(io.Discard)
+	assert.NilError(t, enc.Encode(msg), "failed to encode message as JSON")
 	if err := f.in.Write(msg); err != nil {
 		t.Fatalf("failed to write message: %v", err)
 	}
@@ -303,6 +306,8 @@ func (f *FourslashTest) readMsg(t *testing.T) *lsproto.Message {
 	if err != nil {
 		t.Fatalf("failed to read message: %v", err)
 	}
+	enc := json.NewEncoder(io.Discard)
+	assert.NilError(t, enc.Encode(msg), "failed to encode message as JSON")
 	return msg
 }
 
@@ -825,7 +830,7 @@ func (f *FourslashTest) VerifyBaselineFindAllReferences(
 			}
 		}
 
-		f.baseline.addResult("findAllReferences", f.getBaselineForLocationsWithFileContents(*result, baselineFourslashLocationsOptions{
+		f.baseline.addResult("findAllReferences", f.getBaselineForLocationsWithFileContents(*result.Locations, baselineFourslashLocationsOptions{
 			marker:     markerOrRange.GetMarker(),
 			markerName: "/*FIND ALL REFS*/",
 		}))
@@ -881,14 +886,12 @@ func (f *FourslashTest) VerifyBaselineGoToDefinition(
 		}
 
 		var resultAsLocations []lsproto.Location
-		if result != nil {
-			if result.Locations != nil {
-				resultAsLocations = *result.Locations
-			} else if result.Location != nil {
-				resultAsLocations = []lsproto.Location{*result.Location}
-			} else {
-				t.Fatalf("Unexpected definition response type at marker '%s': %T", *f.lastKnownMarkerName, result.DefinitionLinks)
-			}
+		if result.Locations != nil {
+			resultAsLocations = *result.Locations
+		} else if result.Location != nil {
+			resultAsLocations = []lsproto.Location{*result.Location}
+		} else if result.DefinitionLinks != nil {
+			t.Fatalf("Unexpected definition response type at marker '%s': %T", *f.lastKnownMarkerName, result.DefinitionLinks)
 		}
 
 		f.baseline.addResult("goToDefinition", f.getBaselineForLocationsWithFileContents(resultAsLocations, baselineFourslashLocationsOptions{

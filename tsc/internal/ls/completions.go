@@ -32,7 +32,7 @@ func (l *LanguageService) ProvideCompletion(
 	context *lsproto.CompletionContext,
 	clientOptions *lsproto.CompletionClientCapabilities,
 	preferences *UserPreferences,
-) (*lsproto.CompletionList, error) {
+) (lsproto.CompletionResponse, error) {
 	program, file := l.getProgramAndFile(documentURI)
 	var triggerCharacter *string
 	if context != nil {
@@ -48,7 +48,8 @@ func (l *LanguageService) ProvideCompletion(
 		preferences,
 		clientOptions,
 	)
-	return ensureItemData(file.FileName(), position, completionList), nil
+	completionList = ensureItemData(file.FileName(), position, completionList)
+	return lsproto.CompletionItemsOrListOrNull{List: completionList}, nil
 }
 
 func ensureItemData(fileName string, pos int, list *lsproto.CompletionList) *lsproto.CompletionList {

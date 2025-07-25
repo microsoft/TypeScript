@@ -32,8 +32,11 @@ func runFindReferencesTest(t *testing.T, input string, expectedLocations map[str
 			t.Fatalf("No marker found for '%s'", requestMarkerName)
 		}
 
-		referencesResult := service.TestProvideReferences(marker.FileName(), marker.Position)
+		referencesResp, err := service.TestProvideReferences(marker.FileName(), marker.Position)
+		assert.NilError(t, err, "Failed to get references for marker '%s'", requestMarkerName)
 		libReference := 0
+
+		referencesResult := *referencesResp.Locations
 
 		for _, loc := range referencesResult {
 			if name, ok := allExpectedLocations[loc]; ok {

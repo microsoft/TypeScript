@@ -41,13 +41,14 @@ func (l *LanguageService) ProvideFormatDocument(
 	ctx context.Context,
 	documentURI lsproto.DocumentUri,
 	options *lsproto.FormattingOptions,
-) ([]*lsproto.TextEdit, error) {
+) (lsproto.DocumentFormattingResponse, error) {
 	_, file := l.getProgramAndFile(documentURI)
-	return l.toLSProtoTextEdits(file, l.getFormattingEditsForDocument(
+	edits := l.toLSProtoTextEdits(file, l.getFormattingEditsForDocument(
 		ctx,
 		file,
 		toFormatCodeSettings(options),
-	)), nil
+	))
+	return lsproto.TextEditsOrNull{TextEdits: &edits}, nil
 }
 
 func (l *LanguageService) ProvideFormatDocumentRange(
@@ -55,14 +56,15 @@ func (l *LanguageService) ProvideFormatDocumentRange(
 	documentURI lsproto.DocumentUri,
 	options *lsproto.FormattingOptions,
 	r lsproto.Range,
-) ([]*lsproto.TextEdit, error) {
+) (lsproto.DocumentRangeFormattingResponse, error) {
 	_, file := l.getProgramAndFile(documentURI)
-	return l.toLSProtoTextEdits(file, l.getFormattingEditsForRange(
+	edits := l.toLSProtoTextEdits(file, l.getFormattingEditsForRange(
 		ctx,
 		file,
 		toFormatCodeSettings(options),
 		l.converters.FromLSPRange(file, r),
-	)), nil
+	))
+	return lsproto.TextEditsOrNull{TextEdits: &edits}, nil
 }
 
 func (l *LanguageService) ProvideFormatDocumentOnType(
@@ -71,15 +73,16 @@ func (l *LanguageService) ProvideFormatDocumentOnType(
 	options *lsproto.FormattingOptions,
 	position lsproto.Position,
 	character string,
-) ([]*lsproto.TextEdit, error) {
+) (lsproto.DocumentOnTypeFormattingResponse, error) {
 	_, file := l.getProgramAndFile(documentURI)
-	return l.toLSProtoTextEdits(file, l.getFormattingEditsAfterKeystroke(
+	edits := l.toLSProtoTextEdits(file, l.getFormattingEditsAfterKeystroke(
 		ctx,
 		file,
 		toFormatCodeSettings(options),
 		int(l.converters.LineAndCharacterToPosition(file, position)),
 		character,
-	)), nil
+	))
+	return lsproto.TextEditsOrNull{TextEdits: &edits}, nil
 }
 
 func (l *LanguageService) getFormattingEditsForRange(

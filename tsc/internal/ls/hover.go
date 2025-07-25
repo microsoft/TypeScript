@@ -18,27 +18,29 @@ const (
 	typeFormatFlags   = checker.TypeFormatFlagsNone
 )
 
-func (l *LanguageService) ProvideHover(ctx context.Context, documentURI lsproto.DocumentUri, position lsproto.Position) (*lsproto.Hover, error) {
+func (l *LanguageService) ProvideHover(ctx context.Context, documentURI lsproto.DocumentUri, position lsproto.Position) (lsproto.HoverResponse, error) {
 	program, file := l.getProgramAndFile(documentURI)
 	node := astnav.GetTouchingPropertyName(file, int(l.converters.LineAndCharacterToPosition(file, position)))
 	if node.Kind == ast.KindSourceFile {
 		// Avoid giving quickInfo for the sourceFile as a whole.
-		return nil, nil
+		return lsproto.HoverOrNull{}, nil
 	}
 	c, done := program.GetTypeCheckerForFile(ctx, file)
 	defer done()
 	quickInfo, documentation := getQuickInfoAndDocumentation(c, node)
-	if quickInfo != "" {
-		return &lsproto.Hover{
+	if quickInfo == "" {
+		return lsproto.HoverOrNull{}, nil
+	}
+	return lsproto.HoverOrNull{
+		Hover: &lsproto.Hover{
 			Contents: lsproto.MarkupContentOrStringOrMarkedStringWithLanguageOrMarkedStrings{
 				MarkupContent: &lsproto.MarkupContent{
 					Kind:  lsproto.MarkupKindMarkdown,
 					Value: formatQuickInfo(quickInfo) + documentation,
 				},
 			},
-		}, nil
-	}
-	return nil, nil
+		},
+	}, nil
 }
 
 func getQuickInfoAndDocumentation(c *checker.Checker, node *ast.Node) (string, string) {

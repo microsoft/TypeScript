@@ -396,7 +396,7 @@ func getSymbolScope(symbol *ast.Symbol) *ast.Node {
 
 // === functions on (*ls) ===
 
-func (l *LanguageService) ProvideReferences(params *lsproto.ReferenceParams) []lsproto.Location {
+func (l *LanguageService) ProvideReferences(params *lsproto.ReferenceParams) (lsproto.ReferencesResponse, error) {
 	// `findReferencedSymbols` except only computes the information needed to return reference locations
 	program, sourceFile := l.getProgramAndFile(params.TextDocument.Uri)
 	position := int(l.converters.LineAndCharacterToPosition(sourceFile, params.Position))
@@ -406,10 +406,11 @@ func (l *LanguageService) ProvideReferences(params *lsproto.ReferenceParams) []l
 
 	symbolsAndEntries := l.getReferencedSymbolsForNode(position, node, program, program.GetSourceFiles(), options, nil)
 
-	return core.FlatMap(symbolsAndEntries, l.convertSymbolAndEntriesToLocations)
+	locations := core.FlatMap(symbolsAndEntries, l.convertSymbolAndEntriesToLocations)
+	return lsproto.LocationsOrNull{Locations: &locations}, nil
 }
 
-func (l *LanguageService) ProvideImplementations(params *lsproto.ImplementationParams) []lsproto.Location {
+func (l *LanguageService) ProvideImplementations(params *lsproto.ImplementationParams) (lsproto.ImplementationResponse, error) {
 	program, sourceFile := l.getProgramAndFile(params.TextDocument.Uri)
 	position := int(l.converters.LineAndCharacterToPosition(sourceFile, params.Position))
 	node := astnav.GetTouchingPropertyName(sourceFile, position)
@@ -427,7 +428,8 @@ func (l *LanguageService) ProvideImplementations(params *lsproto.ImplementationP
 		}
 	}
 
-	return l.convertEntriesToLocations(entries)
+	locations := l.convertEntriesToLocations(entries)
+	return lsproto.LocationOrLocationsOrDefinitionLinksOrNull{Locations: &locations}, nil
 }
 
 func (l *LanguageService) getImplementationReferenceEntries(program *compiler.Program, node *ast.Node, position int) []*referenceEntry {

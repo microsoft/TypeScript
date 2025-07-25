@@ -42,9 +42,9 @@ func (l *LanguageService) ProvideSignatureHelp(
 	context *lsproto.SignatureHelpContext,
 	clientOptions *lsproto.SignatureHelpClientCapabilities,
 	preferences *UserPreferences,
-) *lsproto.SignatureHelp {
+) (lsproto.SignatureHelpResponse, error) {
 	program, sourceFile := l.getProgramAndFile(documentURI)
-	return l.GetSignatureHelpItems(
+	items := l.GetSignatureHelpItems(
 		ctx,
 		int(l.converters.LineAndCharacterToPosition(sourceFile, position)),
 		program,
@@ -52,6 +52,7 @@ func (l *LanguageService) ProvideSignatureHelp(
 		context,
 		clientOptions,
 		preferences)
+	return lsproto.SignatureHelpOrNull{SignatureHelp: items}, nil
 }
 
 func (l *LanguageService) GetSignatureHelpItems(

@@ -166,11 +166,12 @@ func runHoverTest(t *testing.T, input string, expected map[string]*lsproto.Hover
 			ls.FileNameToDocumentURI(file),
 			marker.LSPosition)
 		assert.NilError(t, err)
+		hovers := result.Hover
 		if expectedResult == nil {
-			assert.Assert(t, result == nil)
+			assert.Assert(t, hovers == nil)
 		} else {
-			assert.Assert(t, result != nil)
-			assert.DeepEqual(t, result, expectedResult)
+			assert.Assert(t, hovers != nil)
+			assert.DeepEqual(t, hovers, expectedResult)
 		}
 	}
 }

@@ -60,7 +60,10 @@ x++;`
 	position := 13 // After "let x = 42;\n\n"
 
 	// Call ProvideReferences using the test method
-	refs := service.TestProvideReferences("/Untitled-2.ts", position)
+	resp, err := service.TestProvideReferences("/Untitled-2.ts", position)
+	assert.NilError(t, err)
+
+	refs := *resp.Locations
 
 	// Log the results
 	t.Logf("Input file name: %s", "/Untitled-2.ts")
@@ -77,7 +80,7 @@ x++;`
 	lspPosition := lsproto.Position{Line: 2, Character: 0}
 	definition, err := service.ProvideDefinition(t.Context(), uri, lspPosition)
 	assert.NilError(t, err)
-	if definition != nil && definition.Locations != nil {
+	if definition.Locations != nil {
 		t.Logf("Definition found: %d locations", len(*definition.Locations))
 		for i, loc := range *definition.Locations {
 			t.Logf("Definition %d: URI=%s, Range=%+v", i+1, loc.Uri, loc.Range)

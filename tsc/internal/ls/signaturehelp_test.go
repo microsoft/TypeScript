@@ -1045,7 +1045,9 @@ func runSignatureHelpTest(t *testing.T, input string, expected map[string]verify
 		if !ok {
 			t.Fatalf("No marker found for '%s'", markerName)
 		}
-		result := languageService.ProvideSignatureHelp(ctx, ls.FileNameToDocumentURI(file), marker.LSPosition, context, capabilities, preferences)
+		rawResult, err := languageService.ProvideSignatureHelp(ctx, ls.FileNameToDocumentURI(file), marker.LSPosition, context, capabilities, preferences)
+		assert.NilError(t, err)
+		result := rawResult.SignatureHelp
 		assert.Equal(t, expectedResult.text, result.Signatures[*result.ActiveSignature].Label)
 		assert.Equal(t, expectedResult.parameterCount, len(*result.Signatures[*result.ActiveSignature].Parameters))
 		assert.DeepEqual(t, expectedResult.activeParameter, result.ActiveParameter)

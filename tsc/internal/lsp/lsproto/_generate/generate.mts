@@ -49,7 +49,7 @@ function titleCase(s: string) {
     return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
-function resolveType(type: Type, nullToPointer?: boolean): GoType {
+function resolveType(type: Type): GoType {
     switch (type.kind) {
         case "base":
             switch (type.name) {
@@ -151,7 +151,7 @@ function resolveType(type: Type, nullToPointer?: boolean): GoType {
             throw new Error("Unexpected non-empty literal object: " + JSON.stringify(type.value));
 
         case "or": {
-            return handleOrType(type, nullToPointer);
+            return handleOrType(type);
         }
 
         default:
@@ -187,7 +187,7 @@ function flattenOrTypes(types: Type[]): Type[] {
     return Array.from(flattened);
 }
 
-function handleOrType(orType: OrType, nullToPointer: boolean | undefined): GoType {
+function handleOrType(orType: OrType): GoType {
     // First, flatten any nested OR types
     const types = flattenOrTypes(orType.items);
 
@@ -237,16 +237,6 @@ function handleOrType(orType: OrType, nullToPointer: boolean | undefined): GoTyp
             throw new Error(`Unsupported type kind in union: ${type.kind}`);
         }
     });
-
-    const needsPointer = containedNull && !!nullToPointer;
-
-    if (needsPointer && nonNullTypes.length === 1) {
-        const name = resolveType(nonNullTypes[0], true).name;
-        return {
-            name,
-            needsPointer: true,
-        };
-    }
 
     // Find longest common prefix of member names chunked by PascalCase
     function findLongestCommonPrefix(names: string[]): string {
@@ -313,7 +303,7 @@ function handleOrType(orType: OrType, nullToPointer: boolean | undefined): GoTyp
         unionTypeName = memberNames.join("Or");
     }
 
-    if (containedNull && !nullToPointer) {
+    if (containedNull) {
         unionTypeName += "OrNull";
     }
     else {
@@ -326,7 +316,7 @@ function handleOrType(orType: OrType, nullToPointer: boolean | undefined): GoTyp
 
     return {
         name: unionTypeName,
-        needsPointer,
+        needsPointer: false,
     };
 }
 
@@ -665,7 +655,7 @@ function generateCode() {
             }
 
             writeLine(`// Response type for \`${request.method}\``);
-            const resultType = resolveType(request.result, /*nullToPointer*/ true);
+            const resultType = resolveType(request.result);
             const goType = resultType.needsPointer ? `*${resultType.name}` : resultType.name;
 
             writeLine(`type ${responseTypeName} = ${goType}`);
