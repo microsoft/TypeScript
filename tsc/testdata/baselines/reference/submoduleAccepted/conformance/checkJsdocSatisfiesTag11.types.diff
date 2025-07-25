@@ -1,0 +1,9 @@
+--- old.checkJsdocSatisfiesTag11.types
++++ new.checkJsdocSatisfiesTag11.types
+@@= skipped -17, +17 lines =@@
+ const t1 = { a: 1 };
+ >t1 : { a: number; }
+ >{ a: 1 } : { a: number; }
++>{ a: 1 } : { a: number; }
+ >a : number
+ >1 : 1

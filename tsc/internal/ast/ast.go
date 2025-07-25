@@ -410,6 +410,84 @@ func (n *Node) Expression() *Node {
 	panic("Unhandled case in Node.Expression: " + n.Kind.String())
 }
 
+func (m *mutableNode) SetExpression(expr *Node) {
+	n := (*Node)(m)
+	switch n.Kind {
+	case KindPropertyAccessExpression:
+		n.AsPropertyAccessExpression().Expression = expr
+	case KindElementAccessExpression:
+		n.AsElementAccessExpression().Expression = expr
+	case KindParenthesizedExpression:
+		n.AsParenthesizedExpression().Expression = expr
+	case KindCallExpression:
+		n.AsCallExpression().Expression = expr
+	case KindNewExpression:
+		n.AsNewExpression().Expression = expr
+	case KindExpressionWithTypeArguments:
+		n.AsExpressionWithTypeArguments().Expression = expr
+	case KindComputedPropertyName:
+		n.AsComputedPropertyName().Expression = expr
+	case KindNonNullExpression:
+		n.AsNonNullExpression().Expression = expr
+	case KindTypeAssertionExpression:
+		n.AsTypeAssertion().Expression = expr
+	case KindAsExpression:
+		n.AsAsExpression().Expression = expr
+	case KindSatisfiesExpression:
+		n.AsSatisfiesExpression().Expression = expr
+	case KindTypeOfExpression:
+		n.AsTypeOfExpression().Expression = expr
+	case KindSpreadAssignment:
+		n.AsSpreadAssignment().Expression = expr
+	case KindSpreadElement:
+		n.AsSpreadElement().Expression = expr
+	case KindTemplateSpan:
+		n.AsTemplateSpan().Expression = expr
+	case KindDeleteExpression:
+		n.AsDeleteExpression().Expression = expr
+	case KindVoidExpression:
+		n.AsVoidExpression().Expression = expr
+	case KindAwaitExpression:
+		n.AsAwaitExpression().Expression = expr
+	case KindYieldExpression:
+		n.AsYieldExpression().Expression = expr
+	case KindPartiallyEmittedExpression:
+		n.AsPartiallyEmittedExpression().Expression = expr
+	case KindIfStatement:
+		n.AsIfStatement().Expression = expr
+	case KindDoStatement:
+		n.AsDoStatement().Expression = expr
+	case KindWhileStatement:
+		n.AsWhileStatement().Expression = expr
+	case KindWithStatement:
+		n.AsWithStatement().Expression = expr
+	case KindForInStatement, KindForOfStatement:
+		n.AsForInOrOfStatement().Expression = expr
+	case KindSwitchStatement:
+		n.AsSwitchStatement().Expression = expr
+	case KindCaseClause:
+		n.AsCaseOrDefaultClause().Expression = expr
+	case KindExpressionStatement:
+		n.AsExpressionStatement().Expression = expr
+	case KindReturnStatement:
+		n.AsReturnStatement().Expression = expr
+	case KindThrowStatement:
+		n.AsThrowStatement().Expression = expr
+	case KindExternalModuleReference:
+		n.AsExternalModuleReference().Expression = expr
+	case KindExportAssignment, KindJSExportAssignment:
+		n.AsExportAssignment().Expression = expr
+	case KindDecorator:
+		n.AsDecorator().Expression = expr
+	case KindJsxExpression:
+		n.AsJsxExpression().Expression = expr
+	case KindJsxSpreadAttribute:
+		n.AsJsxSpreadAttribute().Expression = expr
+	default:
+		panic("Unhandled case in mutableNode.SetExpression: " + n.Kind.String())
+	}
+}
+
 func (n *Node) ArgumentList() *NodeList {
 	switch n.Kind {
 	case KindCallExpression:
@@ -606,12 +684,75 @@ func (n *Node) Type() *Node {
 	case KindBinaryExpression:
 		return n.AsBinaryExpression().Type
 	default:
-		funcLike := n.FunctionLikeData()
-		if funcLike != nil {
+		if funcLike := n.FunctionLikeData(); funcLike != nil {
 			return funcLike.Type
 		}
 	}
 	return nil
+}
+
+func (m *mutableNode) SetType(t *Node) {
+	n := (*Node)(m)
+	switch m.Kind {
+	case KindVariableDeclaration:
+		n.AsVariableDeclaration().Type = t
+	case KindParameter:
+		n.AsParameterDeclaration().Type = t
+	case KindPropertySignature:
+		n.AsPropertySignatureDeclaration().Type = t
+	case KindPropertyDeclaration:
+		n.AsPropertyDeclaration().Type = t
+	case KindPropertyAssignment:
+		n.AsPropertyAssignment().Type = t
+	case KindShorthandPropertyAssignment:
+		n.AsShorthandPropertyAssignment().Type = t
+	case KindTypePredicate:
+		n.AsTypePredicateNode().Type = t
+	case KindParenthesizedType:
+		n.AsParenthesizedTypeNode().Type = t
+	case KindTypeOperator:
+		n.AsTypeOperatorNode().Type = t
+	case KindMappedType:
+		n.AsMappedTypeNode().Type = t
+	case KindTypeAssertionExpression:
+		n.AsTypeAssertion().Type = t
+	case KindAsExpression:
+		n.AsAsExpression().Type = t
+	case KindSatisfiesExpression:
+		n.AsSatisfiesExpression().Type = t
+	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
+		n.AsTypeAliasDeclaration().Type = t
+	case KindNamedTupleMember:
+		n.AsNamedTupleMember().Type = t
+	case KindOptionalType:
+		n.AsOptionalTypeNode().Type = t
+	case KindRestType:
+		n.AsRestTypeNode().Type = t
+	case KindTemplateLiteralTypeSpan:
+		n.AsTemplateLiteralTypeSpan().Type = t
+	case KindJSDocTypeExpression:
+		n.AsJSDocTypeExpression().Type = t
+	case KindJSDocParameterTag, KindJSDocPropertyTag:
+		n.AsJSDocParameterOrPropertyTag().TypeExpression = t
+	case KindJSDocNullableType:
+		n.AsJSDocNullableType().Type = t
+	case KindJSDocNonNullableType:
+		n.AsJSDocNonNullableType().Type = t
+	case KindJSDocOptionalType:
+		n.AsJSDocOptionalType().Type = t
+	case KindExportAssignment, KindJSExportAssignment:
+		n.AsExportAssignment().Type = t
+	case KindCommonJSExport:
+		n.AsCommonJSExport().Type = t
+	case KindBinaryExpression:
+		n.AsBinaryExpression().Type = t
+	default:
+		if funcLike := n.FunctionLikeData(); funcLike != nil {
+			funcLike.Type = t
+		} else {
+			panic("Unhandled case in mutableNode.SetType: " + n.Kind.String())
+		}
+	}
 }
 
 func (n *Node) Initializer() *Node {
@@ -638,6 +779,34 @@ func (n *Node) Initializer() *Node {
 		return n.AsJsxAttribute().Initializer
 	}
 	panic("Unhandled case in Node.Initializer")
+}
+
+func (m *mutableNode) SetInitializer(initializer *Node) {
+	n := (*Node)(m)
+	switch n.Kind {
+	case KindVariableDeclaration:
+		n.AsVariableDeclaration().Initializer = initializer
+	case KindParameter:
+		n.AsParameterDeclaration().Initializer = initializer
+	case KindBindingElement:
+		n.AsBindingElement().Initializer = initializer
+	case KindPropertyDeclaration:
+		n.AsPropertyDeclaration().Initializer = initializer
+	case KindPropertySignature:
+		n.AsPropertySignatureDeclaration().Initializer = initializer
+	case KindPropertyAssignment:
+		n.AsPropertyAssignment().Initializer = initializer
+	case KindEnumMember:
+		n.AsEnumMember().Initializer = initializer
+	case KindForStatement:
+		n.AsForStatement().Initializer = initializer
+	case KindForInStatement, KindForOfStatement:
+		n.AsForInOrOfStatement().Initializer = initializer
+	case KindJsxAttribute:
+		n.AsJsxAttribute().Initializer = initializer
+	default:
+		panic("Unhandled case in mutableNode.SetInitializer")
+	}
 }
 
 func (n *Node) TagName() *Node {

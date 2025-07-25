@@ -5,8 +5,10 @@
  >f : Symbol(f, Decl(a.js, 1, 12))
  >s : Symbol(s, Decl(a.js, 1, 15))
 ->s.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
++>s.toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
  >s : Symbol(s, Decl(a.js, 1, 15))
 ->toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
++>toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
 
  /** @satisfies {{ f: (x: string) => string }} */
  const t2 = { g: "oops" }; // should error
