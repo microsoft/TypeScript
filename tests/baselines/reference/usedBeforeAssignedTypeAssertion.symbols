@@ -1,0 +1,57 @@
+//// [tests/cases/compiler/usedBeforeAssignedTypeAssertion.ts] ////
+
+=== usedBeforeAssignedTypeAssertion.ts ===
+// Test case for type assertion (angle bracket syntax) - assignment should not error
+function testTypeAssertion() {
+>testTypeAssertion : Symbol(testTypeAssertion, Decl(usedBeforeAssignedTypeAssertion.ts, 0, 0))
+
+    let x: number;
+>x : Symbol(x, Decl(usedBeforeAssignedTypeAssertion.ts, 2, 7))
+
+    (<any>x) = 42; // Should not error - this is an assignment
+>x : Symbol(x, Decl(usedBeforeAssignedTypeAssertion.ts, 2, 7))
+}
+
+// Test case for 'as' expression - assignment should not error 
+function testAsExpression() {
+>testAsExpression : Symbol(testAsExpression, Decl(usedBeforeAssignedTypeAssertion.ts, 4, 1))
+
+    let y: number;
+>y : Symbol(y, Decl(usedBeforeAssignedTypeAssertion.ts, 8, 7))
+
+    (y as any) = 42; // Should not error - this is an assignment
+>y : Symbol(y, Decl(usedBeforeAssignedTypeAssertion.ts, 8, 7))
+}
+
+// Test case for parenthesized expression (should already work)
+function testParentheses() {
+>testParentheses : Symbol(testParentheses, Decl(usedBeforeAssignedTypeAssertion.ts, 10, 1))
+
+    let z: number;
+>z : Symbol(z, Decl(usedBeforeAssignedTypeAssertion.ts, 14, 7))
+
+    (z) = 42; // Should not error - this is an assignment
+>z : Symbol(z, Decl(usedBeforeAssignedTypeAssertion.ts, 14, 7))
+}
+
+// Test case with nested type assertions
+function testNested() {
+>testNested : Symbol(testNested, Decl(usedBeforeAssignedTypeAssertion.ts, 16, 1))
+
+    let nested: any;
+>nested : Symbol(nested, Decl(usedBeforeAssignedTypeAssertion.ts, 20, 7))
+
+    ((nested as any) as unknown) = "test"; // Should not error
+>nested : Symbol(nested, Decl(usedBeforeAssignedTypeAssertion.ts, 20, 7))
+}
+
+// Test cases that should still produce errors for proper context
+function shouldStillError() {
+>shouldStillError : Symbol(shouldStillError, Decl(usedBeforeAssignedTypeAssertion.ts, 22, 1))
+
+    let uninitialized: number;
+>uninitialized : Symbol(uninitialized, Decl(usedBeforeAssignedTypeAssertion.ts, 26, 7))
+
+    return uninitialized; // Should error - never assigned
+>uninitialized : Symbol(uninitialized, Decl(usedBeforeAssignedTypeAssertion.ts, 26, 7))
+}
