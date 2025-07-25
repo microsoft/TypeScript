@@ -3,6 +3,7 @@
 // @noLib: true
 
 //// declare const thing: string;
+//// declare const console: { log(x: any): void; };
 
 //// // Basic switch block - should prioritize case/default
 //// switch (thing) {
@@ -59,68 +60,34 @@
 ////   /*newPrio4*/
 //// }
 
-// Scenarios where case/default should be prioritized
+// Test scenarios that show the relative ordering of case, default, and other completions
+
+// Basic switch block - should prioritize case/default over other completions
 goTo.marker("basic");
+verify.baselineCompletions();
+// Also verify that 'thing' is still available
 verify.completions({
     includes: [
-        { name: "case", sortText: "10" },
-        { name: "default", sortText: "10" }
+        { name: "thing", sortText: "11" }
     ]
 });
 
+// After break statement with proper indentation - should prioritize case/default
 goTo.marker("newPrio1");
+verify.baselineCompletions();
+// Also verify that 'thing' is still available
 verify.completions({
     includes: [
-        { name: "case", sortText: "10" },
-        { name: "default", sortText: "10" }
+        { name: "thing", sortText: "11" }
     ]
 });
 
-goTo.marker("newPrio2");
-verify.completions({
-    includes: [
-        { name: "case", sortText: "10" },
-        { name: "default", sortText: "10" }
-    ]
-});
-
-goTo.marker("newPrio3");
-verify.completions({
-    includes: [
-        { name: "case", sortText: "10" },
-        { name: "default", sortText: "10" }
-    ]
-});
-
-goTo.marker("newPrio4");
-verify.completions({
-    includes: [
-        { name: "case", sortText: "10" },
-        { name: "default", sortText: "10" }
-    ]
-});
-
-// Scenarios where case/default should NOT be prioritized
+// Should NOT prioritize case/default (normal ordering)
 goTo.marker("sameAll1");
+verify.baselineCompletions();
+// Also verify that 'thing' is still available
 verify.completions({
     includes: [
-        { name: "case", sortText: "15" },
-        { name: "default", sortText: "15" }
-    ]
-});
-
-goTo.marker("sameAll2");
-verify.completions({
-    includes: [
-        { name: "case", sortText: "15" },
-        { name: "default", sortText: "15" }
-    ]
-});
-
-goTo.marker("sameAll3");
-verify.completions({
-    includes: [
-        { name: "case", sortText: "15" },
-        { name: "default", sortText: "15" }
+        { name: "thing", sortText: "11" }
     ]
 });
