@@ -1,5 +1,7 @@
 /// <reference path="fourslash.ts" />
 
+// @noLib: true
+
 //// declare const thing: string;
 
 //// // Basic switch block - should prioritize case/default
@@ -57,26 +59,68 @@
 ////   /*newPrio4*/
 //// }
 
+// Scenarios where case/default should be prioritized
 goTo.marker("basic");
-verify.baselineCompletions();
-
-goTo.marker("sameAll1");
-verify.baselineCompletions();
-
-goTo.marker("sameAll2");
-verify.baselineCompletions();
-
-goTo.marker("sameAll3");
-verify.baselineCompletions();
+verify.completions({
+    includes: [
+        { name: "case", sortText: "10" },
+        { name: "default", sortText: "10" }
+    ]
+});
 
 goTo.marker("newPrio1");
-verify.baselineCompletions();
+verify.completions({
+    includes: [
+        { name: "case", sortText: "10" },
+        { name: "default", sortText: "10" }
+    ]
+});
 
 goTo.marker("newPrio2");
-verify.baselineCompletions();
+verify.completions({
+    includes: [
+        { name: "case", sortText: "10" },
+        { name: "default", sortText: "10" }
+    ]
+});
 
 goTo.marker("newPrio3");
-verify.baselineCompletions();
+verify.completions({
+    includes: [
+        { name: "case", sortText: "10" },
+        { name: "default", sortText: "10" }
+    ]
+});
 
 goTo.marker("newPrio4");
-verify.baselineCompletions();
+verify.completions({
+    includes: [
+        { name: "case", sortText: "10" },
+        { name: "default", sortText: "10" }
+    ]
+});
+
+// Scenarios where case/default should NOT be prioritized
+goTo.marker("sameAll1");
+verify.completions({
+    includes: [
+        { name: "case", sortText: "15" },
+        { name: "default", sortText: "15" }
+    ]
+});
+
+goTo.marker("sameAll2");
+verify.completions({
+    includes: [
+        { name: "case", sortText: "15" },
+        { name: "default", sortText: "15" }
+    ]
+});
+
+goTo.marker("sameAll3");
+verify.completions({
+    includes: [
+        { name: "case", sortText: "15" },
+        { name: "default", sortText: "15" }
+    ]
+});
