@@ -333,8 +333,10 @@ export function transformDeclarations(context: TransformationContext): Transform
         }
         else {
             // Don't report errors for function expressions that are arguments to call expressions
-            if ((node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.ArrowFunction) && 
-                isCallExpression(node.parent)) {
+            if (
+                (node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.ArrowFunction) &&
+                isCallExpression(node.parent)
+            ) {
                 return;
             }
             context.addDiagnostic(getIsolatedDeclarationError(node));
