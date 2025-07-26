@@ -1055,14 +1055,11 @@ export namespace Core {
     }
 
     export function getAdjustedNode(node: Node, options: Options): Node {
-        if (isIdentifier(node) && isJsxNamespacedName(node.parent)) {
-            node = node.parent;
-        }
         if (options.use === FindReferencesUse.References) {
-            return getAdjustedReferenceLocation(node);
+            node = getAdjustedReferenceLocation(node);
         }
-        if (options.use === FindReferencesUse.Rename) {
-            return getAdjustedRenameLocation(node);
+        else if (options.use === FindReferencesUse.Rename) {
+            node = getAdjustedRenameLocation(node);
         }
         return node;
     }

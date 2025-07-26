@@ -1323,9 +1323,6 @@ function getAdjustedLocationForHeritageClause(node: HeritageClause) {
 }
 
 function getAdjustedLocation(node: Node, forRename: boolean): Node {
-    if (isIdentifier(node) && isJsxNamespacedName(node.parent)) {
-        node = node.parent;
-    }
     const { parent } = node;
     // /**/<modifier> [|name|] ...
     // /**/<modifier> <class|interface|type|enum|module|namespace|function|get|set> [|name|] ...
