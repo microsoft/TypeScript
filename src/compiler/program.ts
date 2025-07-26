@@ -776,37 +776,207 @@ export function formatLocation(file: SourceFile, start: number, host: FormatDiag
     return output;
 }
 
+// Enhanced formatting constants (Issue #45717)
+const ENHANCED_FORMAT_MIN_WIDTH = 60;
+const ENHANCED_BULLET = "●";
+const ENHANCED_VERTICAL_BAR = "|";
+const ENHANCED_OVERLINE = "▔";
+
+/**
+ * Formats code span with enhanced visual formatting (Issue #45717)
+ * Shows code with vertical bar and overline instead of tilde underline
+ */
+function formatCodeSpanEnhanced(
+    file: SourceFile,
+    start: number,
+    length: number,
+    indent: string,
+    squiggleColor: ForegroundColorEscapeSequences,
+    host: FormatDiagnosticsHost
+): string {
+    const { line: errorLine, character: errorStartChar } = getLineAndCharacterOfPosition(file, start);
+    
+    // Ensure we don't go past the end of the file
+    const safeEnd = Math.min(start + length, file.text.length);
+    const { character: errorEndChar } = getLineAndCharacterOfPosition(file, safeEnd);
+    
+    // Get the full line content
+    const lineStart = getPositionOfLineAndCharacter(file, errorLine, 0);
+    let lineEnd = file.text.indexOf('\n', lineStart);
+    if (lineEnd === -1) lineEnd = file.text.length;
+    
+    const lineText = file.text.slice(lineStart, lineEnd);
+    
+    // Clean up the line content
+    const cleanedLine = lineText.trimEnd().replace(/\t/g, " ");
+    
+    let output = "";
+    
+    // Line 1: Vertical bar + code
+    output += indent + formatColorAndReset(ENHANCED_VERTICAL_BAR, gutterStyleSequence) + " " + cleanedLine + host.getNewLine();
+    
+    // Line 2: Vertical bar + overline at error position
+    output += indent + formatColorAndReset(ENHANCED_VERTICAL_BAR, gutterStyleSequence) + " ";
+    
+    // Add spaces to reach the error position
+    output += " ".repeat(Math.max(0, errorStartChar));
+    
+    // Add overline characters for the error span
+    const overlineLength = Math.min(errorEndChar - errorStartChar, cleanedLine.length - errorStartChar);
+    output += formatColorAndReset(ENHANCED_OVERLINE.repeat(Math.max(1, overlineLength)), squiggleColor);
+    
+    return output;
+}
+
+/**
+ * Determines if enhanced formatting should be used based on terminal width
+ */
+function shouldUseEnhancedFormatting(): boolean {
+    // Check if terminal width detection is available and meets minimum width
+    if (sys && sys.getWidthOfTerminal) {
+        const width = sys.getWidthOfTerminal();
+        if (width !== undefined) {
+            return width >= ENHANCED_FORMAT_MIN_WIDTH;
+        }
+    }
+    
+    // If we can't detect terminal width but have TTY with color support,
+    // assume the terminal is modern enough for enhanced formatting
+    if (sys && sys.writeOutputIsTTY && sys.writeOutputIsTTY()) {
+        return true;
+    }
+    
+    // If environment suggests color support, use enhanced formatting
+    if (sys && sys.getEnvironmentVariable) {
+        const colorTerm = sys.getEnvironmentVariable("COLORTERM");
+        const termProgram = sys.getEnvironmentVariable("TERM_PROGRAM");
+        const term = sys.getEnvironmentVariable("TERM");
+        
+        // Modern terminal indicators
+        if (colorTerm === "truecolor" || colorTerm === "24bit") return true;
+        if (termProgram === "vscode" || termProgram === "iTerm.app") return true;
+        if (term && (term.includes("256color") || term.includes("color"))) return true;
+    }
+    
+    return false;
+}
+
 export function formatDiagnosticsWithColorAndContext(diagnostics: readonly Diagnostic[], host: FormatDiagnosticsHost): string {
+    const useEnhancedFormatting = shouldUseEnhancedFormatting();
+    
     let output = "";
     for (const diagnostic of diagnostics) {
-        if (diagnostic.file) {
-            const { file, start } = diagnostic;
-            output += formatLocation(file, start!, host); // TODO: GH#18217
-            output += " - ";
+        if (useEnhancedFormatting) {
+            // Enhanced formatting (Issue #45717)
+            output += formatDiagnosticEnhanced(diagnostic, host);
         }
-
-        output += formatColorAndReset(diagnosticCategoryName(diagnostic), getCategoryFormat(diagnostic.category));
-        output += formatColorAndReset(` TS${diagnostic.code}: `, ForegroundColorEscapeSequences.Grey);
-        output += flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine());
-
-        if (diagnostic.file && diagnostic.code !== Diagnostics.File_appears_to_be_binary.code) {
-            output += host.getNewLine();
-            output += formatCodeSpan(diagnostic.file, diagnostic.start!, diagnostic.length!, "", getCategoryFormat(diagnostic.category), host); // TODO: GH#18217
-        }
-        if (diagnostic.relatedInformation) {
-            output += host.getNewLine();
-            for (const { file, start, length, messageText } of diagnostic.relatedInformation) {
-                if (file) {
-                    output += host.getNewLine();
-                    output += halfIndent + formatLocation(file, start!, host); // TODO: GH#18217
-                    output += formatCodeSpan(file, start!, length!, indent, ForegroundColorEscapeSequences.Cyan, host); // TODO: GH#18217
-                }
-                output += host.getNewLine();
-                output += indent + flattenDiagnosticMessageText(messageText, host.getNewLine());
-            }
+        else {
+            // Original formatting for backwards compatibility
+            output += formatDiagnosticOriginal(diagnostic, host);
         }
         output += host.getNewLine();
     }
+    return output;
+}
+
+/**
+ * Enhanced diagnostic formatting as specified in Issue #45717
+ * Format: ● file:line:col TS####
+ *         | code line
+ *         ▔
+ *         Error message
+ */
+function formatDiagnosticEnhanced(diagnostic: Diagnostic, host: FormatDiagnosticsHost): string {
+    let output = "";
+    
+    // Header line: ● file:line:col TS####
+    output += formatColorAndReset(ENHANCED_BULLET + " ", getCategoryFormat(diagnostic.category));
+    
+    if (diagnostic.file && diagnostic.start !== undefined) {
+        output += formatLocation(diagnostic.file, diagnostic.start, host);
+        output += " ";
+    }
+    
+    output += formatColorAndReset(`TS${diagnostic.code}`, ForegroundColorEscapeSequences.Grey);
+    output += host.getNewLine();
+    
+    // Code span (if applicable)
+    if (diagnostic.file && diagnostic.start !== undefined && diagnostic.code !== Diagnostics.File_appears_to_be_binary.code) {
+        output += formatCodeSpanEnhanced(
+            diagnostic.file,
+            diagnostic.start,
+            diagnostic.length || 1,
+            "",
+            getCategoryFormat(diagnostic.category),
+            host
+        );
+        output += host.getNewLine();
+    }
+    
+    // Error message
+    output += flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine());
+    
+    // Related information
+    if (diagnostic.relatedInformation) {
+        for (const related of diagnostic.relatedInformation) {
+            output += host.getNewLine();
+            output += host.getNewLine();
+            
+            if (related.file && related.start !== undefined) {
+                output += halfIndent + formatLocation(related.file, related.start, host);
+                output += host.getNewLine();
+                output += formatCodeSpanEnhanced(
+                    related.file,
+                    related.start,
+                    related.length || 1,
+                    halfIndent,
+                    ForegroundColorEscapeSequences.Cyan,
+                    host
+                );
+                output += host.getNewLine();
+            }
+            
+            output += halfIndent + flattenDiagnosticMessageText(related.messageText, host.getNewLine());
+        }
+    }
+    
+    return output;
+}
+
+/**
+ * Original diagnostic formatting for backwards compatibility
+ */
+function formatDiagnosticOriginal(diagnostic: Diagnostic, host: FormatDiagnosticsHost): string {
+    let output = "";
+    
+    if (diagnostic.file) {
+        const { file, start } = diagnostic;
+        output += formatLocation(file, start!, host); // TODO: GH#18217
+        output += " - ";
+    }
+
+    output += formatColorAndReset(diagnosticCategoryName(diagnostic), getCategoryFormat(diagnostic.category));
+    output += formatColorAndReset(` TS${diagnostic.code}: `, ForegroundColorEscapeSequences.Grey);
+    output += flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine());
+
+    if (diagnostic.file && diagnostic.code !== Diagnostics.File_appears_to_be_binary.code) {
+        output += host.getNewLine();
+        output += formatCodeSpan(diagnostic.file, diagnostic.start!, diagnostic.length!, "", getCategoryFormat(diagnostic.category), host); // TODO: GH#18217
+    }
+    
+    if (diagnostic.relatedInformation) {
+        output += host.getNewLine();
+        for (const { file, start, length, messageText } of diagnostic.relatedInformation) {
+            if (file) {
+                output += host.getNewLine();
+                output += halfIndent + formatLocation(file, start!, host); // TODO: GH#18217
+                output += formatCodeSpan(file, start!, length!, indent, ForegroundColorEscapeSequences.Cyan, host); // TODO: GH#18217
+            }
+            output += host.getNewLine();
+            output += indent + flattenDiagnosticMessageText(messageText, host.getNewLine());
+        }
+    }
+    
     return output;
 }
 
