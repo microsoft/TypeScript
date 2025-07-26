@@ -74,7 +74,6 @@ import {
     getDeclarationFromName,
     getDeclarationOfKind,
     getEffectiveModifierFlags,
-    getEscapedTextOfIdentifierOrLiteral,
     getLocalSymbolForExportDefault,
     getMeaningFromDeclaration,
     getMeaningFromLocation,
