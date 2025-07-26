@@ -1,0 +1,198 @@
+//// [tests/cases/compiler/narrowDestructuredVariables.ts] ////
+
+=== narrowDestructuredVariables.ts ===
+interface Ref<T> { current: T };
+>current : T
+>        : ^
+
+type ToRefs<T> = { [K in keyof T]: Ref<T[K]> };
+>ToRefs : ToRefs<T>
+>       : ^^^^^^^^^
+
+declare function toRefs<T>(o: T): ToRefs<T>;
+>toRefs : <T>(o: T) => ToRefs<T>
+>       : ^ ^^ ^^ ^^^^^         
+>o : T
+>  : ^
+
+interface DataPrepared {
+    prepared: true
+>prepared : true
+>         : ^^^^
+>true : true
+>     : ^^^^
+
+    payload: string
+>payload : string
+>        : ^^^^^^
+
+};
+
+interface DataPending {
+    prepared: false
+>prepared : false
+>         : ^^^^^
+>false : false
+>      : ^^^^^
+
+    payload: null
+>payload : null
+>        : ^^^^
+
+};
+
+type Data = DataPrepared | DataPending;
+>Data : Data
+>     : ^^^^
+
+declare function isDataRefsPrepared(refs: ToRefs<Data>): refs is ToRefs<DataPrepared>;
+>isDataRefsPrepared : (refs: ToRefs<Data>) => refs is ToRefs<DataPrepared>
+>                   : ^    ^^            ^^^^^                            
+>refs : ToRefs<Data>
+>     : ^^^^^^^^^^^^
+
+declare const data: Data;
+>data : Data
+>     : ^^^^
+
+const dataRefs = toRefs(data);
+>dataRefs : ToRefs<Data>
+>         : ^^^^^^^^^^^^
+>toRefs(data) : ToRefs<Data>
+>             : ^^^^^^^^^^^^
+>toRefs : <T>(o: T) => ToRefs<T>
+>       : ^ ^^ ^^ ^^^^^         
+>data : Data
+>     : ^^^^
+
+const { prepared, payload } = dataRefs;
+>prepared : Ref<true> | Ref<false>
+>         : ^^^^^^^^^^^^^^^^^^^^^^
+>payload : Ref<string> | Ref<null>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
+>dataRefs : ToRefs<Data>
+>         : ^^^^^^^^^^^^
+
+if (prepared.current) {
+>prepared.current : boolean
+>                 : ^^^^^^^
+>prepared : Ref<true> | Ref<false>
+>         : ^^^^^^^^^^^^^^^^^^^^^^
+>current : boolean
+>        : ^^^^^^^
+
+    prepared.current;
+>prepared.current : true
+>                 : ^^^^
+>prepared : Ref<true>
+>         : ^^^^^^^^^
+>current : true
+>        : ^^^^
+
+    payload.current;
+>payload.current : string | null
+>                : ^^^^^^^^^^^^^
+>payload : Ref<string> | Ref<null>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
+>current : string | null
+>        : ^^^^^^^^^^^^^
+
+    data.prepared;
+>data.prepared : boolean
+>              : ^^^^^^^
+>data : Data
+>     : ^^^^
+>prepared : boolean
+>         : ^^^^^^^
+
+    data.payload;
+>data.payload : string | null
+>             : ^^^^^^^^^^^^^
+>data : Data
+>     : ^^^^
+>payload : string | null
+>        : ^^^^^^^^^^^^^
+}
+
+if (isDataRefsPrepared(dataRefs)) {
+>isDataRefsPrepared(dataRefs) : boolean
+>                             : ^^^^^^^
+>isDataRefsPrepared : (refs: ToRefs<Data>) => refs is ToRefs<DataPrepared>
+>                   : ^    ^^            ^^^^^                            
+>dataRefs : ToRefs<Data>
+>         : ^^^^^^^^^^^^
+
+    prepared.current;
+>prepared.current : true
+>                 : ^^^^
+>prepared : Ref<true>
+>         : ^^^^^^^^^
+>current : true
+>        : ^^^^
+
+    payload.current;
+>payload.current : string
+>                : ^^^^^^
+>payload : Ref<string>
+>        : ^^^^^^^^^^^
+>current : string
+>        : ^^^^^^
+
+    data.prepared;
+>data.prepared : boolean
+>              : ^^^^^^^
+>data : Data
+>     : ^^^^
+>prepared : boolean
+>         : ^^^^^^^
+
+    data.payload;
+>data.payload : string | null
+>             : ^^^^^^^^^^^^^
+>data : Data
+>     : ^^^^
+>payload : string | null
+>        : ^^^^^^^^^^^^^
+}
+
+if (data.prepared) {
+>data.prepared : boolean
+>              : ^^^^^^^
+>data : Data
+>     : ^^^^
+>prepared : boolean
+>         : ^^^^^^^
+
+    prepared.current;
+>prepared.current : boolean
+>                 : ^^^^^^^
+>prepared : Ref<true> | Ref<false>
+>         : ^^^^^^^^^^^^^^^^^^^^^^
+>current : boolean
+>        : ^^^^^^^
+
+    payload.current;
+>payload.current : string | null
+>                : ^^^^^^^^^^^^^
+>payload : Ref<string> | Ref<null>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
+>current : string | null
+>        : ^^^^^^^^^^^^^
+
+    data.prepared;
+>data.prepared : true
+>              : ^^^^
+>data : DataPrepared
+>     : ^^^^^^^^^^^^
+>prepared : true
+>         : ^^^^
+
+    data.payload;
+>data.payload : string
+>             : ^^^^^^
+>data : DataPrepared
+>     : ^^^^^^^^^^^^
+>payload : string
+>        : ^^^^^^
+}
+
