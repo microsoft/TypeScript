@@ -328,7 +328,7 @@ export interface SpanEntry {
 function nodeEntry(node: Node, kind: NodeEntryKind = EntryKind.Node): NodeEntry {
     return {
         kind,
-        node: (node as NamedDeclaration).name || node,
+        node: isJsxNamespacedName(node) ? node : ((node as NamedDeclaration).name || node),
         context: getContextNodeForNodeEntry(node),
     };
 }

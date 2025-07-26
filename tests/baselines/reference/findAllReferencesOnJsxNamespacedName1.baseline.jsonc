@@ -9,7 +9,7 @@
 // }
 
 // === /a.tsx ===
-// <my-el /*FIND ALL REFS*/<|prop:[|foo|]="bar"|> />
+// <my-el /*FIND ALL REFS*/<|[|prop:foo|]="bar"|> />
 
   // === Definitions ===
   // === /types.d.ts ===
@@ -78,7 +78,7 @@
 // }
 
 // === /a.tsx ===
-// <my-el <|prop:/*FIND ALL REFS*/[|foo|]="bar"|> />
+// <my-el <|[|prop:/*FIND ALL REFS*/foo|]="bar"|> />
 
   // === Definitions ===
   // === /types.d.ts ===
@@ -147,7 +147,7 @@
 // }
 
 // === /a.tsx ===
-// <my-el <|prop:[|foo|]="bar"|> />
+// <my-el <|[|prop:foo|]="bar"|> />
 
   // === Definitions ===
   // === /types.d.ts ===

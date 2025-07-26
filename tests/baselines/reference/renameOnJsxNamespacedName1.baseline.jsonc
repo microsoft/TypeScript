@@ -9,7 +9,7 @@
 // }
 
 // === /a.tsx ===
-// <my-el /*RENAME*/<|prop:[|fooRENAME|]="bar"|> />
+// <my-el /*RENAME*/<|[|prop:fooRENAME|]="bar"|> />
 
 
 
@@ -24,7 +24,7 @@
 // }
 
 // === /a.tsx ===
-// <my-el <|prop:/*RENAME*/[|fooRENAME|]="bar"|> />
+// <my-el <|[|prop:/*RENAME*/fooRENAME|]="bar"|> />
 
 
 
@@ -39,4 +39,4 @@
 // }
 
 // === /a.tsx ===
-// <my-el <|prop:[|fooRENAME|]="bar"|> />
+// <my-el <|[|prop:fooRENAME|]="bar"|> />
