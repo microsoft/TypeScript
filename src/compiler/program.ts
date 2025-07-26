@@ -792,25 +792,25 @@ function formatCodeSpanEnhanced(
     length: number,
     indent: string,
     squiggleColor: ForegroundColorEscapeSequences,
-    host: FormatDiagnosticsHost
+    host: FormatDiagnosticsHost,
 ): string {
     const { line: errorLine, character: errorStartChar } = getLineAndCharacterOfPosition(file, start);
-    
+
     // Calculate end position safely, defaulting length to 1 if not provided
     const errorLength = Math.max(1, length || 1);
     const endPosition = Math.min(start + errorLength, file.text.length);
     const { line: errorEndLine, character: errorEndChar } = getLineAndCharacterOfPosition(file, endPosition);
-    
+
     // Only show enhanced formatting for single-line errors
     if (errorLine !== errorEndLine) {
         // For multi-line errors, fall back to showing just the first line
         const lineStart = getPositionOfLineAndCharacter(file, errorLine, 0);
-        const lineEnd = file.text.indexOf('\n', lineStart);
+        const lineEnd = file.text.indexOf("\n", lineStart);
         const lineText = file.text.slice(lineStart, lineEnd === -1 ? file.text.length : lineEnd);
         const cleanedLine = lineText.trimEnd();
         return formatCodeSpanEnhancedSingleLine(file, errorLine, errorStartChar, cleanedLine.length - errorStartChar, indent, squiggleColor, host);
     }
-    
+
     return formatCodeSpanEnhancedSingleLine(file, errorLine, errorStartChar, errorEndChar - errorStartChar, indent, squiggleColor, host);
 }
 
@@ -821,34 +821,34 @@ function formatCodeSpanEnhancedSingleLine(
     length: number,
     indent: string,
     squiggleColor: ForegroundColorEscapeSequences,
-    host: FormatDiagnosticsHost
+    host: FormatDiagnosticsHost,
 ): string {
     // Get line content
     const lineStart = getPositionOfLineAndCharacter(file, line, 0);
-    const lineEnd = file.text.indexOf('\n', lineStart);
+    const lineEnd = file.text.indexOf("\n", lineStart);
     const lineText = file.text.slice(lineStart, lineEnd === -1 ? file.text.length : lineEnd);
     const cleanedLine = lineText.trimEnd().replace(/\t/g, " ");
-    
+
     let output = "";
-    
+
     // Line 1: Vertical bar + code
     output += indent + formatColorAndReset(ENHANCED_VERTICAL_BAR, gutterStyleSequence) + " " + cleanedLine + host.getNewLine();
-    
+
     // Line 2: Vertical bar + overline at error position
     output += indent + formatColorAndReset(ENHANCED_VERTICAL_BAR, gutterStyleSequence) + " ";
-    
+
     // Add spacing - simpler approach without pre-allocated buffer
     // Modern V8 optimizes repeat() well for reasonable sizes
     if (startChar > 0 && startChar < cleanedLine.length) {
         output += " ".repeat(startChar);
     }
-    
+
     // Calculate overline length, ensuring we stay within line bounds
     if (startChar < cleanedLine.length) {
         const overlineLength = Math.max(1, Math.min(length, cleanedLine.length - startChar));
         output += formatColorAndReset(ENHANCED_OVERLINE.repeat(overlineLength), squiggleColor);
     }
-    
+
     return output;
 }
 
@@ -857,12 +857,12 @@ function formatCodeSpanEnhancedSingleLine(
  */
 function shouldUseEnhancedFormatting(): boolean {
     if (!sys) return false;
-    
+
     // Respect NO_COLOR environment variable
     if (sys.getEnvironmentVariable?.("NO_COLOR")) {
         return false;
     }
-    
+
     // Check terminal width if available
     if (sys.getWidthOfTerminal) {
         const width = sys.getWidthOfTerminal();
@@ -870,26 +870,26 @@ function shouldUseEnhancedFormatting(): boolean {
             return false;
         }
     }
-    
+
     // For CI environments, require explicit opt-in
     if (sys.getEnvironmentVariable?.("CI") === "true") {
         return sys.getEnvironmentVariable("TS_ENHANCED_ERRORS") === "true";
     }
-    
+
     // Check if we're in a TTY with color support
     if (sys.writeOutputIsTTY?.()) {
         const term = sys.getEnvironmentVariable?.("TERM");
         // Exclude known limited terminals
         return term !== "dumb" && term !== "unknown";
     }
-    
+
     // Not a TTY, so no enhanced formatting
     return false;
 }
 
 export function formatDiagnosticsWithColorAndContext(diagnostics: readonly Diagnostic[], host: FormatDiagnosticsHost): string {
     const useEnhancedFormatting = shouldUseEnhancedFormatting();
-    
+
     let output = "";
     for (const diagnostic of diagnostics) {
         if (useEnhancedFormatting) {
@@ -914,18 +914,18 @@ export function formatDiagnosticsWithColorAndContext(diagnostics: readonly Diagn
  */
 function formatDiagnosticEnhanced(diagnostic: Diagnostic, host: FormatDiagnosticsHost): string {
     let output = "";
-    
+
     // Header line: ● file:line:col TS####
     output += formatColorAndReset(ENHANCED_BULLET + " ", getCategoryFormat(diagnostic.category));
-    
+
     if (diagnostic.file && diagnostic.start !== undefined) {
         output += formatLocation(diagnostic.file, diagnostic.start, host);
         output += " ";
     }
-    
+
     output += formatColorAndReset(`TS${diagnostic.code}`, ForegroundColorEscapeSequences.Grey);
     output += host.getNewLine();
-    
+
     // Code span (if applicable)
     if (diagnostic.file && diagnostic.start !== undefined && diagnostic.code !== Diagnostics.File_appears_to_be_binary.code) {
         output += formatCodeSpanEnhanced(
@@ -934,20 +934,20 @@ function formatDiagnosticEnhanced(diagnostic: Diagnostic, host: FormatDiagnostic
             diagnostic.length || 1,
             "",
             getCategoryFormat(diagnostic.category),
-            host
+            host,
         );
         output += host.getNewLine();
     }
-    
+
     // Error message
     output += flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine());
-    
+
     // Related information
     if (diagnostic.relatedInformation) {
         for (const related of diagnostic.relatedInformation) {
             output += host.getNewLine();
             output += host.getNewLine();
-            
+
             if (related.file && related.start !== undefined) {
                 output += halfIndent + formatLocation(related.file, related.start, host);
                 output += host.getNewLine();
@@ -957,15 +957,15 @@ function formatDiagnosticEnhanced(diagnostic: Diagnostic, host: FormatDiagnostic
                     related.length || 1,
                     halfIndent,
                     ForegroundColorEscapeSequences.Cyan,
-                    host
+                    host,
                 );
                 output += host.getNewLine();
             }
-            
+
             output += halfIndent + flattenDiagnosticMessageText(related.messageText, host.getNewLine());
         }
     }
-    
+
     return output;
 }
 
@@ -974,7 +974,7 @@ function formatDiagnosticEnhanced(diagnostic: Diagnostic, host: FormatDiagnostic
  */
 function formatDiagnosticOriginal(diagnostic: Diagnostic, host: FormatDiagnosticsHost): string {
     let output = "";
-    
+
     if (diagnostic.file) {
         const { file, start } = diagnostic;
         output += formatLocation(file, start!, host); // TODO: GH#18217
@@ -989,7 +989,7 @@ function formatDiagnosticOriginal(diagnostic: Diagnostic, host: FormatDiagnostic
         output += host.getNewLine();
         output += formatCodeSpan(diagnostic.file, diagnostic.start!, diagnostic.length!, "", getCategoryFormat(diagnostic.category), host); // TODO: GH#18217
     }
-    
+
     if (diagnostic.relatedInformation) {
         output += host.getNewLine();
         for (const { file, start, length, messageText } of diagnostic.relatedInformation) {
@@ -1002,7 +1002,7 @@ function formatDiagnosticOriginal(diagnostic: Diagnostic, host: FormatDiagnostic
             output += indent + flattenDiagnosticMessageText(messageText, host.getNewLine());
         }
     }
-    
+
     return output;
 }
 
