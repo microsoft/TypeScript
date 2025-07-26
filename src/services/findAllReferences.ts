@@ -1841,8 +1841,10 @@ export namespace Core {
                 // falls through I guess
             case SyntaxKind.Identifier:
                 return (node as PrivateIdentifier | Identifier).text.length === searchSymbolName.length;
-            case SyntaxKind.JsxNamespacedName:
-                return (getEscapedTextOfIdentifierOrLiteral(node as JsxNamespacedName) as string).length === searchSymbolName.length;
+            case SyntaxKind.JsxNamespacedName: {
+                const { namespace, name } = node as JsxNamespacedName;
+                return (namespace.text.length + 1 + name.text.length) === searchSymbolName.length;
+            }
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.StringLiteral: {
                 const str = node as StringLiteralLike;
