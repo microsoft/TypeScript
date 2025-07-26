@@ -796,18 +796,37 @@ function formatCodeSpanEnhanced(
 ): string {
     const { line: errorLine, character: errorStartChar } = getLineAndCharacterOfPosition(file, start);
     
-    // Ensure we don't go past the end of the file
-    const safeEnd = Math.min(start + length, file.text.length);
-    const { character: errorEndChar } = getLineAndCharacterOfPosition(file, safeEnd);
+    // Calculate end position safely, defaulting length to 1 if not provided
+    const errorLength = Math.max(1, length || 1);
+    const endPosition = Math.min(start + errorLength, file.text.length);
+    const { line: errorEndLine, character: errorEndChar } = getLineAndCharacterOfPosition(file, endPosition);
     
-    // Get the full line content
-    const lineStart = getPositionOfLineAndCharacter(file, errorLine, 0);
-    let lineEnd = file.text.indexOf('\n', lineStart);
-    if (lineEnd === -1) lineEnd = file.text.length;
+    // Only show enhanced formatting for single-line errors
+    if (errorLine !== errorEndLine) {
+        // For multi-line errors, fall back to showing just the first line
+        const lineStart = getPositionOfLineAndCharacter(file, errorLine, 0);
+        const lineEnd = file.text.indexOf('\n', lineStart);
+        const lineText = file.text.slice(lineStart, lineEnd === -1 ? file.text.length : lineEnd);
+        const cleanedLine = lineText.trimEnd();
+        return formatCodeSpanEnhancedSingleLine(file, errorLine, errorStartChar, cleanedLine.length - errorStartChar, indent, squiggleColor, host);
+    }
     
-    const lineText = file.text.slice(lineStart, lineEnd);
-    
-    // Clean up the line content
+    return formatCodeSpanEnhancedSingleLine(file, errorLine, errorStartChar, errorEndChar - errorStartChar, indent, squiggleColor, host);
+}
+
+function formatCodeSpanEnhancedSingleLine(
+    file: SourceFile,
+    line: number,
+    startChar: number,
+    length: number,
+    indent: string,
+    squiggleColor: ForegroundColorEscapeSequences,
+    host: FormatDiagnosticsHost
+): string {
+    // Get line content
+    const lineStart = getPositionOfLineAndCharacter(file, line, 0);
+    const lineEnd = file.text.indexOf('\n', lineStart);
+    const lineText = file.text.slice(lineStart, lineEnd === -1 ? file.text.length : lineEnd);
     const cleanedLine = lineText.trimEnd().replace(/\t/g, " ");
     
     let output = "";
@@ -818,12 +837,17 @@ function formatCodeSpanEnhanced(
     // Line 2: Vertical bar + overline at error position
     output += indent + formatColorAndReset(ENHANCED_VERTICAL_BAR, gutterStyleSequence) + " ";
     
-    // Add spaces to reach the error position
-    output += " ".repeat(Math.max(0, errorStartChar));
+    // Add spacing - simpler approach without pre-allocated buffer
+    // Modern V8 optimizes repeat() well for reasonable sizes
+    if (startChar > 0 && startChar < cleanedLine.length) {
+        output += " ".repeat(startChar);
+    }
     
-    // Add overline characters for the error span
-    const overlineLength = Math.min(errorEndChar - errorStartChar, cleanedLine.length - errorStartChar);
-    output += formatColorAndReset(ENHANCED_OVERLINE.repeat(Math.max(1, overlineLength)), squiggleColor);
+    // Calculate overline length, ensuring we stay within line bounds
+    if (startChar < cleanedLine.length) {
+        const overlineLength = Math.max(1, Math.min(length, cleanedLine.length - startChar));
+        output += formatColorAndReset(ENHANCED_OVERLINE.repeat(overlineLength), squiggleColor);
+    }
     
     return output;
 }
@@ -832,32 +856,34 @@ function formatCodeSpanEnhanced(
  * Determines if enhanced formatting should be used based on terminal width
  */
 function shouldUseEnhancedFormatting(): boolean {
-    // Check if terminal width detection is available and meets minimum width
-    if (sys && sys.getWidthOfTerminal) {
+    if (!sys) return false;
+    
+    // Respect NO_COLOR environment variable
+    if (sys.getEnvironmentVariable?.("NO_COLOR")) {
+        return false;
+    }
+    
+    // Check terminal width if available
+    if (sys.getWidthOfTerminal) {
         const width = sys.getWidthOfTerminal();
-        if (width !== undefined) {
-            return width >= ENHANCED_FORMAT_MIN_WIDTH;
+        if (width !== undefined && width < ENHANCED_FORMAT_MIN_WIDTH) {
+            return false;
         }
     }
     
-    // If we can't detect terminal width but have TTY with color support,
-    // assume the terminal is modern enough for enhanced formatting
-    if (sys && sys.writeOutputIsTTY && sys.writeOutputIsTTY()) {
-        return true;
+    // For CI environments, require explicit opt-in
+    if (sys.getEnvironmentVariable?.("CI") === "true") {
+        return sys.getEnvironmentVariable("TS_ENHANCED_ERRORS") === "true";
     }
     
-    // If environment suggests color support, use enhanced formatting
-    if (sys && sys.getEnvironmentVariable) {
-        const colorTerm = sys.getEnvironmentVariable("COLORTERM");
-        const termProgram = sys.getEnvironmentVariable("TERM_PROGRAM");
-        const term = sys.getEnvironmentVariable("TERM");
-        
-        // Modern terminal indicators
-        if (colorTerm === "truecolor" || colorTerm === "24bit") return true;
-        if (termProgram === "vscode" || termProgram === "iTerm.app") return true;
-        if (term && (term.includes("256color") || term.includes("color"))) return true;
+    // Check if we're in a TTY with color support
+    if (sys.writeOutputIsTTY?.()) {
+        const term = sys.getEnvironmentVariable?.("TERM");
+        // Exclude known limited terminals
+        return term !== "dumb" && term !== "unknown";
     }
     
+    // Not a TTY, so no enhanced formatting
     return false;
 }
 
