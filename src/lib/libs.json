@@ -89,6 +89,7 @@
         "esnext.float16",
         "esnext.error",
         "esnext.sharedmemory",
+        "esnext.regexp",
         "decorators",
         "decorators.legacy",
         // Default libraries
