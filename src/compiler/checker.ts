@@ -34281,6 +34281,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (targetType.flags & TypeFlags.Substitution) {
             return isKnownProperty((targetType as SubstitutionType).baseType, name, isComparingJsxAttributes);
         }
+        if (targetType.flags & TypeFlags.TypeParameter) {
+            const constraint = getConstraintOfTypeParameter(targetType as TypeParameter);
+            return constraint ? isKnownProperty(constraint, name, isComparingJsxAttributes) : false;
+        }
         if (targetType.flags & TypeFlags.UnionOrIntersection && isExcessPropertyCheckTarget(targetType)) {
             for (const t of (targetType as UnionOrIntersectionType).types) {
                 if (isKnownProperty(t, name, isComparingJsxAttributes)) {
