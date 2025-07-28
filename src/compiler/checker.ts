@@ -22901,47 +22901,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             ) {
                 return false;
             }
-
-            // Heuristic: If the target type looks like a constraint (simple object type with few properties),
-            // be more lenient with excess property checking. This handles cases like T extends { prop: Type }
-            // where the constraint should allow additional properties.
-            if (target.flags & TypeFlags.Object && !isComparingJsxAttributes) {
-                const targetProperties = getPropertiesOfType(target);
-                const targetIndexInfos = getIndexInfosOfType(target);
-                // If it's a simple object with few properties and no index signatures, it might be a constraint
-                if (targetProperties.length <= 2 && targetIndexInfos.length === 0) {
-                    // Additional check: at least one property should be a simple string literal union (common in constraints)
-                    // This helps distinguish constraints like { dataType: 'a' | 'b' } from complex intersection types
-                    let hasSimpleUnionProperty = false;
-                    for (const targetProp of targetProperties) {
-                        const propType = getTypeOfSymbol(targetProp);
-                        if (propType.flags & TypeFlags.Union) {
-                            const unionType = propType as UnionType;
-                            // Check if it's a union of string literals (typical of enum-like constraints)
-                            if (unionType.types.length <= 5 && unionType.types.every(t => t.flags & TypeFlags.StringLiteral)) {
-                                hasSimpleUnionProperty = true;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (hasSimpleUnionProperty) {
-                        // Check if all properties in the target exist in the source
-                        let allTargetPropsExist = true;
-                        for (const targetProp of targetProperties) {
-                            if (!source.symbol?.members?.has(targetProp.escapedName)) {
-                                allTargetPropsExist = false;
-                                break;
-                            }
-                        }
-                        // If the source contains all target properties, likely this is a constraint scenario
-                        if (allTargetPropsExist) {
-                            return false;
-                        }
-                    }
-                }
-            }
-
             let reducedTarget = target;
             let checkTypes: Type[] | undefined;
             if (target.flags & TypeFlags.Union) {
@@ -34321,10 +34280,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         if (targetType.flags & TypeFlags.Substitution) {
             return isKnownProperty((targetType as SubstitutionType).baseType, name, isComparingJsxAttributes);
-        }
-        if (targetType.flags & TypeFlags.TypeParameter) {
-            const constraint = getConstraintOfTypeParameter(targetType as TypeParameter);
-            return constraint ? isKnownProperty(constraint, name, isComparingJsxAttributes) : false;
         }
         if (targetType.flags & TypeFlags.UnionOrIntersection && isExcessPropertyCheckTarget(targetType)) {
             for (const t of (targetType as UnionOrIntersectionType).types) {
