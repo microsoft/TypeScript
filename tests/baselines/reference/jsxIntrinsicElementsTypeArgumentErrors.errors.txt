@@ -7,7 +7,7 @@ jsxIntrinsicElementsTypeArgumentErrors.tsx(11,16): error TS2304: Cannot find nam
 jsxIntrinsicElementsTypeArgumentErrors.tsx(11,16): error TS2558: Expected 0 type arguments, but got 1.
 jsxIntrinsicElementsTypeArgumentErrors.tsx(11,24): error TS2304: Cannot find name 'AlsoMissing'.
 jsxIntrinsicElementsTypeArgumentErrors.tsx(13,16): error TS2558: Expected 0 type arguments, but got 1.
-jsxIntrinsicElementsTypeArgumentErrors.tsx(13,23): error TS2344: Type 'object' does not satisfy the constraint 'string | number | symbol'.
+jsxIntrinsicElementsTypeArgumentErrors.tsx(13,23): error TS2344: Type 'object' does not satisfy the constraint 'PropertyKey'.
 jsxIntrinsicElementsTypeArgumentErrors.tsx(15,16): error TS2558: Expected 0 type arguments, but got 1.
 jsxIntrinsicElementsTypeArgumentErrors.tsx(18,15): error TS1099: Type argument list cannot be empty.
 jsxIntrinsicElementsTypeArgumentErrors.tsx(20,16): error TS2558: Expected 0 type arguments, but got 1.
@@ -18,7 +18,7 @@ jsxIntrinsicElementsTypeArgumentErrors.tsx(24,16): error TS2304: Cannot find nam
 jsxIntrinsicElementsTypeArgumentErrors.tsx(24,16): error TS2558: Expected 0 type arguments, but got 1.
 jsxIntrinsicElementsTypeArgumentErrors.tsx(24,24): error TS2304: Cannot find name 'AlsoMissing'.
 jsxIntrinsicElementsTypeArgumentErrors.tsx(26,16): error TS2558: Expected 0 type arguments, but got 1.
-jsxIntrinsicElementsTypeArgumentErrors.tsx(26,23): error TS2344: Type 'object' does not satisfy the constraint 'string | number | symbol'.
+jsxIntrinsicElementsTypeArgumentErrors.tsx(26,23): error TS2344: Type 'object' does not satisfy the constraint 'PropertyKey'.
 jsxIntrinsicElementsTypeArgumentErrors.tsx(28,16): error TS2558: Expected 0 type arguments, but got 1.
 
 
@@ -55,7 +55,7 @@ jsxIntrinsicElementsTypeArgumentErrors.tsx(28,16): error TS2558: Expected 0 type
                    ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2558: Expected 0 type arguments, but got 1.
                           ~~~~~~
-!!! error TS2344: Type 'object' does not satisfy the constraint 'string | number | symbol'.
+!!! error TS2344: Type 'object' does not satisfy the constraint 'PropertyKey'.
     
     const f = <div<number>></div>; // existing type argument with no internal issues
                    ~~~~~~
@@ -90,7 +90,7 @@ jsxIntrinsicElementsTypeArgumentErrors.tsx(28,16): error TS2558: Expected 0 type
                    ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2558: Expected 0 type arguments, but got 1.
                           ~~~~~~
-!!! error TS2344: Type 'object' does not satisfy the constraint 'string | number | symbol'.
+!!! error TS2344: Type 'object' does not satisfy the constraint 'PropertyKey'.
     
     const l = <div<number>/>; // existing type argument with no internal issues
                    ~~~~~~
