@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/intersectionWithConflictingPrivates2.ts] ////
+
+=== intersectionWithConflictingPrivates2.ts ===
+declare class A {
+>A : Symbol(A, Decl(intersectionWithConflictingPrivates2.ts, 0, 0))
+
+  private a: number;
+>a : Symbol(A.a, Decl(intersectionWithConflictingPrivates2.ts, 0, 17))
+
+}
+type B = Pick<{ a: number }, 'a'> & A;
+>B : Symbol(B, Decl(intersectionWithConflictingPrivates2.ts, 3, 1))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(intersectionWithConflictingPrivates2.ts, 4, 15))
+>A : Symbol(A, Decl(intersectionWithConflictingPrivates2.ts, 0, 0))
+
