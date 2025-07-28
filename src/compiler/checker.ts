@@ -22901,7 +22901,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             ) {
                 return false;
             }
-            
+
             // Heuristic: If the target type looks like a constraint (simple object type with few properties),
             // be more lenient with excess property checking. This handles cases like T extends { prop: Type }
             // where the constraint should allow additional properties.
@@ -22909,19 +22909,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const targetProperties = getPropertiesOfType(target);
                 const targetIndexInfos = getIndexInfosOfType(target);
                 // If it's a simple object with few properties and no index signatures, it might be a constraint
-                if (targetProperties.length <= 3 && targetIndexInfos.length === 0) {
-                    // Additional check: at least one property should be a union type (common in constraints)
-                    // This helps distinguish constraints like { dataType: 'a' | 'b' } from regular types like { a: string }
-                    let hasUnionTypeProperty = false;
+                if (targetProperties.length <= 2 && targetIndexInfos.length === 0) {
+                    // Additional check: at least one property should be a simple string literal union (common in constraints)
+                    // This helps distinguish constraints like { dataType: 'a' | 'b' } from complex intersection types
+                    let hasSimpleUnionProperty = false;
                     for (const targetProp of targetProperties) {
                         const propType = getTypeOfSymbol(targetProp);
                         if (propType.flags & TypeFlags.Union) {
-                            hasUnionTypeProperty = true;
-                            break;
+                            const unionType = propType as UnionType;
+                            // Check if it's a union of string literals (typical of enum-like constraints)
+                            if (unionType.types.length <= 5 && unionType.types.every(t => t.flags & TypeFlags.StringLiteral)) {
+                                hasSimpleUnionProperty = true;
+                                break;
+                            }
                         }
                     }
-                    
-                    if (hasUnionTypeProperty) {
+
+                    if (hasSimpleUnionProperty) {
                         // Check if all properties in the target exist in the source
                         let allTargetPropsExist = true;
                         for (const targetProp of targetProperties) {
@@ -22937,7 +22941,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
             }
-            
+
             let reducedTarget = target;
             let checkTypes: Type[] | undefined;
             if (target.flags & TypeFlags.Union) {
