@@ -1,0 +1,63 @@
+//// [tests/cases/conformance/controlFlow/controlFlowOptionalChain5.ts] ////
+
+=== controlFlowOptionalChain5.ts ===
+// https://github.com/microsoft/TypeScript/issues/59145
+
+function resolve1(id: string | undefined) {
+>resolve1 : (id: string | undefined) => void
+>         : ^  ^^                  ^^^^^^^^^
+>id : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
+
+  const isBundled = id?.includes("_bundled");
+>isBundled : boolean | undefined
+>          : ^^^^^^^^^^^^^^^^^^^
+>id?.includes("_bundled") : boolean | undefined
+>                         : ^^^^^^^^^^^^^^^^^^^
+>id?.includes : ((searchString: string, position?: number) => boolean) | undefined
+>             : ^^            ^^      ^^        ^^^      ^^^^^       ^^^^^^^^^^^^^
+>id : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
+>includes : ((searchString: string, position?: number) => boolean) | undefined
+>         : ^^            ^^      ^^        ^^^      ^^^^^       ^^^^^^^^^^^^^
+>"_bundled" : "_bundled"
+>           : ^^^^^^^^^^
+
+  if (isBundled) {
+>isBundled : boolean | undefined
+>          : ^^^^^^^^^^^^^^^^^^^
+
+    const str: string = id;
+>str : string
+>    : ^^^^^^
+>id : string
+>   : ^^^^^^
+  }
+}
+
+function resolve2(id: string | undefined) {
+>resolve2 : (id: string | undefined) => void
+>         : ^  ^^                  ^^^^^^^^^
+>id : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
+
+  if (id?.includes("_bundled")) {
+>id?.includes("_bundled") : boolean | undefined
+>                         : ^^^^^^^^^^^^^^^^^^^
+>id?.includes : ((searchString: string, position?: number) => boolean) | undefined
+>             : ^^            ^^      ^^        ^^^      ^^^^^       ^^^^^^^^^^^^^
+>id : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
+>includes : ((searchString: string, position?: number) => boolean) | undefined
+>         : ^^            ^^      ^^        ^^^      ^^^^^       ^^^^^^^^^^^^^
+>"_bundled" : "_bundled"
+>           : ^^^^^^^^^^
+
+    const str: string = id;
+>str : string
+>    : ^^^^^^
+>id : string
+>   : ^^^^^^
+  }
+}
+
