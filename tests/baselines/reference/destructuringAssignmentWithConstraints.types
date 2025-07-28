@@ -1,0 +1,228 @@
+//// [tests/cases/compiler/destructuringAssignmentWithConstraints.ts] ////
+
+=== destructuringAssignmentWithConstraints.ts ===
+// Test case for destructuring assignment with generic constraints issue
+
+type DataType = 'a' | 'b';
+>DataType : DataType
+>         : ^^^^^^^^
+
+declare function foo<T extends { dataType: DataType }>(template: T): [T, any, any];
+>foo : <T extends { dataType: DataType; }>(template: T) => [T, any, any]
+>    : ^ ^^^^^^^^^                       ^^        ^^ ^^^^^             
+>dataType : DataType
+>         : ^^^^^^^^
+>template : T
+>         : ^
+
+declare function bar<T extends { dataType: DataType }>(template: T): [T, any];
+>bar : <T extends { dataType: DataType; }>(template: T) => [T, any]
+>    : ^ ^^^^^^^^^                       ^^        ^^ ^^^^^        
+>dataType : DataType
+>         : ^^^^^^^^
+>template : T
+>         : ^
+
+function testDestructuringBug() {
+>testDestructuringBug : () => void
+>                     : ^^^^^^^^^^
+
+  // These work fine (and should continue to work)
+  const [, ,] = foo({ dataType: 'a', day: 0 });
+> : undefined
+> : ^^^^^^^^^
+> : undefined
+> : ^^^^^^^^^
+>foo({ dataType: 'a', day: 0 }) : [{ dataType: "a"; day: number; }, any, any]
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : <T extends { dataType: DataType; }>(template: T) => [T, any, any]
+>    : ^ ^^^^^^^^^                       ^^        ^^ ^^^^^             
+>{ dataType: 'a', day: 0 } : { dataType: "a"; day: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dataType : "a"
+>         : ^^^
+>'a' : "a"
+>    : ^^^
+>day : number
+>    : ^^^^^^
+>0 : 0
+>  : ^
+
+  const [x, y, z] = foo({ dataType: 'a', day: 0 });
+>x : { dataType: "a"; day: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : any
+>  : ^^^
+>z : any
+>  : ^^^
+>foo({ dataType: 'a', day: 0 }) : [{ dataType: "a"; day: number; }, any, any]
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : <T extends { dataType: DataType; }>(template: T) => [T, any, any]
+>    : ^ ^^^^^^^^^                       ^^        ^^ ^^^^^             
+>{ dataType: 'a', day: 0 } : { dataType: "a"; day: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dataType : "a"
+>         : ^^^
+>'a' : "a"
+>    : ^^^
+>day : number
+>    : ^^^^^^
+>0 : 0
+>  : ^
+
+  const [,] = bar({ dataType: 'a', day: 0 });
+> : undefined
+> : ^^^^^^^^^
+>bar({ dataType: 'a', day: 0 }) : [{ dataType: "a"; day: number; }, any]
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : <T extends { dataType: DataType; }>(template: T) => [T, any]
+>    : ^ ^^^^^^^^^                       ^^        ^^ ^^^^^        
+>{ dataType: 'a', day: 0 } : { dataType: "a"; day: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dataType : "a"
+>         : ^^^
+>'a' : "a"
+>    : ^^^
+>day : number
+>    : ^^^^^^
+>0 : 0
+>  : ^
+
+  const [a, b] = bar({ dataType: 'a', day: 0 });
+>a : { dataType: "a"; day: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : any
+>  : ^^^
+>bar({ dataType: 'a', day: 0 }) : [{ dataType: "a"; day: number; }, any]
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : <T extends { dataType: DataType; }>(template: T) => [T, any]
+>    : ^ ^^^^^^^^^                       ^^        ^^ ^^^^^        
+>{ dataType: 'a', day: 0 } : { dataType: "a"; day: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dataType : "a"
+>         : ^^^
+>'a' : "a"
+>    : ^^^
+>day : number
+>    : ^^^^^^
+>0 : 0
+>  : ^
+  
+  // These should work but currently don't (this is the bug)
+  const [, , t] = foo({ dataType: 'a', day: 0 }); // Should not error
+> : undefined
+> : ^^^^^^^^^
+> : undefined
+> : ^^^^^^^^^
+>t : any
+>  : ^^^
+>foo({ dataType: 'a', day: 0 }) : [{ dataType: DataType; }, any, any]
+>                               : ^^^^^^^^^^^^^        ^^^^^^^^^^^^^^
+>foo : <T extends { dataType: DataType; }>(template: T) => [T, any, any]
+>    : ^ ^^^^^^^^^                       ^^        ^^ ^^^^^             
+>{ dataType: 'a', day: 0 } : { dataType: "a"; day: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dataType : "a"
+>         : ^^^
+>'a' : "a"
+>    : ^^^
+>day : number
+>    : ^^^^^^
+>0 : 0
+>  : ^
+
+  const [, u] = bar({ dataType: 'a', day: 0 });   // Should not error
+> : undefined
+> : ^^^^^^^^^
+>u : any
+>  : ^^^
+>bar({ dataType: 'a', day: 0 }) : [{ dataType: DataType; }, any]
+>                               : ^^^^^^^^^^^^^        ^^^^^^^^^
+>bar : <T extends { dataType: DataType; }>(template: T) => [T, any]
+>    : ^ ^^^^^^^^^                       ^^        ^^ ^^^^^        
+>{ dataType: 'a', day: 0 } : { dataType: "a"; day: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dataType : "a"
+>         : ^^^
+>'a' : "a"
+>    : ^^^
+>day : number
+>    : ^^^^^^
+>0 : 0
+>  : ^
+  
+  console.log(x, y, z, t, a, b, u);
+>console.log(x, y, z, t, a, b, u) : void
+>                                 : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>x : { dataType: "a"; day: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : any
+>z : any
+>t : any
+>a : { dataType: "a"; day: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : any
+>u : any
+}
+
+// Test that direct calls work fine (they do)
+function testDirectCalls() {
+>testDirectCalls : () => void
+>                : ^^^^^^^^^^
+
+  const result1 = foo({ dataType: 'a', day: 0 });
+>result1 : [{ dataType: "a"; day: number; }, any, any]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo({ dataType: 'a', day: 0 }) : [{ dataType: "a"; day: number; }, any, any]
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : <T extends { dataType: DataType; }>(template: T) => [T, any, any]
+>    : ^ ^^^^^^^^^                       ^^        ^^ ^^^^^             
+>{ dataType: 'a', day: 0 } : { dataType: "a"; day: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dataType : "a"
+>         : ^^^
+>'a' : "a"
+>    : ^^^
+>day : number
+>    : ^^^^^^
+>0 : 0
+>  : ^
+
+  const result2 = bar({ dataType: 'a', day: 0 });
+>result2 : [{ dataType: "a"; day: number; }, any]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar({ dataType: 'a', day: 0 }) : [{ dataType: "a"; day: number; }, any]
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : <T extends { dataType: DataType; }>(template: T) => [T, any]
+>    : ^ ^^^^^^^^^                       ^^        ^^ ^^^^^        
+>{ dataType: 'a', day: 0 } : { dataType: "a"; day: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dataType : "a"
+>         : ^^^
+>'a' : "a"
+>    : ^^^
+>day : number
+>    : ^^^^^^
+>0 : 0
+>  : ^
+
+  console.log(result1, result2);
+>console.log(result1, result2) : void
+>                              : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>result1 : [{ dataType: "a"; day: number; }, any, any]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>result2 : [{ dataType: "a"; day: number; }, any]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}

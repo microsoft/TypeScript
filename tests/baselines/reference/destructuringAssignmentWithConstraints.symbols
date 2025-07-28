@@ -1,0 +1,104 @@
+//// [tests/cases/compiler/destructuringAssignmentWithConstraints.ts] ////
+
+=== destructuringAssignmentWithConstraints.ts ===
+// Test case for destructuring assignment with generic constraints issue
+
+type DataType = 'a' | 'b';
+>DataType : Symbol(DataType, Decl(destructuringAssignmentWithConstraints.ts, 0, 0))
+
+declare function foo<T extends { dataType: DataType }>(template: T): [T, any, any];
+>foo : Symbol(foo, Decl(destructuringAssignmentWithConstraints.ts, 2, 26))
+>T : Symbol(T, Decl(destructuringAssignmentWithConstraints.ts, 4, 21))
+>dataType : Symbol(dataType, Decl(destructuringAssignmentWithConstraints.ts, 4, 32))
+>DataType : Symbol(DataType, Decl(destructuringAssignmentWithConstraints.ts, 0, 0))
+>template : Symbol(template, Decl(destructuringAssignmentWithConstraints.ts, 4, 55))
+>T : Symbol(T, Decl(destructuringAssignmentWithConstraints.ts, 4, 21))
+>T : Symbol(T, Decl(destructuringAssignmentWithConstraints.ts, 4, 21))
+
+declare function bar<T extends { dataType: DataType }>(template: T): [T, any];
+>bar : Symbol(bar, Decl(destructuringAssignmentWithConstraints.ts, 4, 83))
+>T : Symbol(T, Decl(destructuringAssignmentWithConstraints.ts, 5, 21))
+>dataType : Symbol(dataType, Decl(destructuringAssignmentWithConstraints.ts, 5, 32))
+>DataType : Symbol(DataType, Decl(destructuringAssignmentWithConstraints.ts, 0, 0))
+>template : Symbol(template, Decl(destructuringAssignmentWithConstraints.ts, 5, 55))
+>T : Symbol(T, Decl(destructuringAssignmentWithConstraints.ts, 5, 21))
+>T : Symbol(T, Decl(destructuringAssignmentWithConstraints.ts, 5, 21))
+
+function testDestructuringBug() {
+>testDestructuringBug : Symbol(testDestructuringBug, Decl(destructuringAssignmentWithConstraints.ts, 5, 78))
+
+  // These work fine (and should continue to work)
+  const [, ,] = foo({ dataType: 'a', day: 0 });
+>foo : Symbol(foo, Decl(destructuringAssignmentWithConstraints.ts, 2, 26))
+>dataType : Symbol(dataType, Decl(destructuringAssignmentWithConstraints.ts, 9, 21))
+>day : Symbol(day, Decl(destructuringAssignmentWithConstraints.ts, 9, 36))
+
+  const [x, y, z] = foo({ dataType: 'a', day: 0 });
+>x : Symbol(x, Decl(destructuringAssignmentWithConstraints.ts, 10, 9))
+>y : Symbol(y, Decl(destructuringAssignmentWithConstraints.ts, 10, 11))
+>z : Symbol(z, Decl(destructuringAssignmentWithConstraints.ts, 10, 14))
+>foo : Symbol(foo, Decl(destructuringAssignmentWithConstraints.ts, 2, 26))
+>dataType : Symbol(dataType, Decl(destructuringAssignmentWithConstraints.ts, 10, 25))
+>day : Symbol(day, Decl(destructuringAssignmentWithConstraints.ts, 10, 40))
+
+  const [,] = bar({ dataType: 'a', day: 0 });
+>bar : Symbol(bar, Decl(destructuringAssignmentWithConstraints.ts, 4, 83))
+>dataType : Symbol(dataType, Decl(destructuringAssignmentWithConstraints.ts, 11, 19))
+>day : Symbol(day, Decl(destructuringAssignmentWithConstraints.ts, 11, 34))
+
+  const [a, b] = bar({ dataType: 'a', day: 0 });
+>a : Symbol(a, Decl(destructuringAssignmentWithConstraints.ts, 12, 9))
+>b : Symbol(b, Decl(destructuringAssignmentWithConstraints.ts, 12, 11))
+>bar : Symbol(bar, Decl(destructuringAssignmentWithConstraints.ts, 4, 83))
+>dataType : Symbol(dataType, Decl(destructuringAssignmentWithConstraints.ts, 12, 22))
+>day : Symbol(day, Decl(destructuringAssignmentWithConstraints.ts, 12, 37))
+  
+  // These should work but currently don't (this is the bug)
+  const [, , t] = foo({ dataType: 'a', day: 0 }); // Should not error
+>t : Symbol(t, Decl(destructuringAssignmentWithConstraints.ts, 15, 12))
+>foo : Symbol(foo, Decl(destructuringAssignmentWithConstraints.ts, 2, 26))
+>dataType : Symbol(dataType, Decl(destructuringAssignmentWithConstraints.ts, 15, 23))
+>day : Symbol(day, Decl(destructuringAssignmentWithConstraints.ts, 15, 38))
+
+  const [, u] = bar({ dataType: 'a', day: 0 });   // Should not error
+>u : Symbol(u, Decl(destructuringAssignmentWithConstraints.ts, 16, 10))
+>bar : Symbol(bar, Decl(destructuringAssignmentWithConstraints.ts, 4, 83))
+>dataType : Symbol(dataType, Decl(destructuringAssignmentWithConstraints.ts, 16, 21))
+>day : Symbol(day, Decl(destructuringAssignmentWithConstraints.ts, 16, 36))
+  
+  console.log(x, y, z, t, a, b, u);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(destructuringAssignmentWithConstraints.ts, 10, 9))
+>y : Symbol(y, Decl(destructuringAssignmentWithConstraints.ts, 10, 11))
+>z : Symbol(z, Decl(destructuringAssignmentWithConstraints.ts, 10, 14))
+>t : Symbol(t, Decl(destructuringAssignmentWithConstraints.ts, 15, 12))
+>a : Symbol(a, Decl(destructuringAssignmentWithConstraints.ts, 12, 9))
+>b : Symbol(b, Decl(destructuringAssignmentWithConstraints.ts, 12, 11))
+>u : Symbol(u, Decl(destructuringAssignmentWithConstraints.ts, 16, 10))
+}
+
+// Test that direct calls work fine (they do)
+function testDirectCalls() {
+>testDirectCalls : Symbol(testDirectCalls, Decl(destructuringAssignmentWithConstraints.ts, 19, 1))
+
+  const result1 = foo({ dataType: 'a', day: 0 });
+>result1 : Symbol(result1, Decl(destructuringAssignmentWithConstraints.ts, 23, 7))
+>foo : Symbol(foo, Decl(destructuringAssignmentWithConstraints.ts, 2, 26))
+>dataType : Symbol(dataType, Decl(destructuringAssignmentWithConstraints.ts, 23, 23))
+>day : Symbol(day, Decl(destructuringAssignmentWithConstraints.ts, 23, 38))
+
+  const result2 = bar({ dataType: 'a', day: 0 });
+>result2 : Symbol(result2, Decl(destructuringAssignmentWithConstraints.ts, 24, 7))
+>bar : Symbol(bar, Decl(destructuringAssignmentWithConstraints.ts, 4, 83))
+>dataType : Symbol(dataType, Decl(destructuringAssignmentWithConstraints.ts, 24, 23))
+>day : Symbol(day, Decl(destructuringAssignmentWithConstraints.ts, 24, 38))
+
+  console.log(result1, result2);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>result1 : Symbol(result1, Decl(destructuringAssignmentWithConstraints.ts, 23, 7))
+>result2 : Symbol(result2, Decl(destructuringAssignmentWithConstraints.ts, 24, 7))
+}
