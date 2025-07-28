@@ -57,7 +57,7 @@ var t5 = new new Date;
 
 // Can be an expression
 new String;
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 // Error on union
 declare const union: { a: string } | { b: string }
