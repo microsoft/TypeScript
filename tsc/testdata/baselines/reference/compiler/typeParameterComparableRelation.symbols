@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/typeParameterComparableRelation.ts] ////
+
+=== typeParameterComparableRelation.ts ===
+// https://github.com/microsoft/typescript-go/issues/1462
+
+type StringOrT<T> = T | string
+>StringOrT : Symbol(StringOrT, Decl(typeParameterComparableRelation.ts, 0, 0))
+>T : Symbol(T, Decl(typeParameterComparableRelation.ts, 2, 15))
+>T : Symbol(T, Decl(typeParameterComparableRelation.ts, 2, 15))
+
+function func<A, B, T extends StringOrT<B>>(thing: T): void {
+>func : Symbol(func, Decl(typeParameterComparableRelation.ts, 2, 30))
+>A : Symbol(A, Decl(typeParameterComparableRelation.ts, 4, 14))
+>B : Symbol(B, Decl(typeParameterComparableRelation.ts, 4, 16))
+>T : Symbol(T, Decl(typeParameterComparableRelation.ts, 4, 19))
+>StringOrT : Symbol(StringOrT, Decl(typeParameterComparableRelation.ts, 0, 0))
+>B : Symbol(B, Decl(typeParameterComparableRelation.ts, 4, 16))
+>thing : Symbol(thing, Decl(typeParameterComparableRelation.ts, 4, 44))
+>T : Symbol(T, Decl(typeParameterComparableRelation.ts, 4, 19))
+
+    thing as A; // Error
+>thing : Symbol(thing, Decl(typeParameterComparableRelation.ts, 4, 44))
+>A : Symbol(A, Decl(typeParameterComparableRelation.ts, 4, 14))
+}
+

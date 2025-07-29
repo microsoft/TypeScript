@@ -3365,15 +3365,8 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 		if r.relation == r.c.comparableRelation && source.flags&TypeFlagsTypeParameter != 0 {
 			// This is a carve-out in comparability to essentially forbid comparing a type parameter with another type parameter
 			// unless one extends the other. (Remember: comparability is mostly bidirectional!)
-			constraint := r.c.getConstraintOfTypeParameter(source)
-			if constraint != nil {
-				for constraint != nil && someType(constraint, func(c *Type) bool { return c.flags&TypeFlagsTypeParameter != 0 }) {
-					result = r.isRelatedTo(constraint, target, RecursionFlagsSource, false /*reportErrors*/)
-					if result != TernaryFalse {
-						return result
-					}
-					constraint = r.c.getConstraintOfTypeParameter(constraint)
-				}
+			if constraint := r.c.getConstraintOfTypeParameter(source); constraint != nil && someType(constraint, func(c *Type) bool { return c.flags&TypeFlagsTypeParameter != 0 }) {
+				return r.isRelatedTo(constraint, target, RecursionFlagsSource, false /*reportErrors*/)
 			}
 			return TernaryFalse
 		}
