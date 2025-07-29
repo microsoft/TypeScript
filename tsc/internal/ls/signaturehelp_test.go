@@ -30,9 +30,10 @@ func TestSignatureHelp(t *testing.T) {
 	}
 
 	testCases := []struct {
-		title    string
-		input    string
-		expected map[string]verifySignatureHelpOptions
+		title     string
+		input     string
+		expected  map[string]verifySignatureHelpOptions
+		noContext bool
 	}{
 		{
 			title: "SignatureHelpCallExpressions",
@@ -1006,17 +1007,25 @@ f</*1*/>(1, 2);`,
 				"1": {text: "eval(x: string): any", parameterCount: 1, parameterSpan: "x: string", activeParameter: &lsproto.UintegerOrNull{Uinteger: ptrTo(uint32(0))}},
 			},
 		},
+		{
+			title: "signatureHelpWithoutContext",
+			input: `let x = /*1*/`,
+			expected: map[string]verifySignatureHelpOptions{
+				"1": {text: "", parameterCount: 0, parameterSpan: "", activeParameter: nil},
+			},
+			noContext: true,
+		},
 	}
 
 	for _, testCase := range testCases {
 		t.Run(testCase.title, func(t *testing.T) {
 			t.Parallel()
-			runSignatureHelpTest(t, testCase.input, testCase.expected)
+			runSignatureHelpTest(t, testCase.input, testCase.expected, testCase.noContext)
 		})
 	}
 }
 
-func runSignatureHelpTest(t *testing.T, input string, expected map[string]verifySignatureHelpOptions) {
+func runSignatureHelpTest(t *testing.T, input string, expected map[string]verifySignatureHelpOptions, noContext bool) {
 	testData := fourslash.ParseTestData(t, input, "/mainFile.ts")
 	file := testData.Files[0].FileName()
 	markerPositions := testData.MarkerPositions
@@ -1025,10 +1034,15 @@ func runSignatureHelpTest(t *testing.T, input string, expected map[string]verify
 		file: testData.Files[0].Content,
 	})
 	defer done()
-	context := &lsproto.SignatureHelpContext{
-		TriggerKind:      lsproto.SignatureHelpTriggerKindInvoked,
-		TriggerCharacter: nil,
+
+	var context *lsproto.SignatureHelpContext
+	if !noContext {
+		context = &lsproto.SignatureHelpContext{
+			TriggerKind:      lsproto.SignatureHelpTriggerKindInvoked,
+			TriggerCharacter: nil,
+		}
 	}
+
 	ptrTrue := ptrTo(true)
 	capabilities := &lsproto.SignatureHelpClientCapabilities{
 		SignatureInformation: &lsproto.ClientSignatureInformationOptions{
@@ -1048,6 +1062,10 @@ func runSignatureHelpTest(t *testing.T, input string, expected map[string]verify
 		rawResult, err := languageService.ProvideSignatureHelp(ctx, ls.FileNameToDocumentURI(file), marker.LSPosition, context, capabilities, preferences)
 		assert.NilError(t, err)
 		result := rawResult.SignatureHelp
+		if result == nil {
+			assert.Equal(t, expectedResult.text, "")
+			continue
+		}
 		assert.Equal(t, expectedResult.text, result.Signatures[*result.ActiveSignature].Label)
 		assert.Equal(t, expectedResult.parameterCount, len(*result.Signatures[*result.ActiveSignature].Parameters))
 		assert.DeepEqual(t, expectedResult.activeParameter, result.ActiveParameter)

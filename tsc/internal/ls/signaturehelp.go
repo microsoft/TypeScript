@@ -75,14 +75,14 @@ func (l *LanguageService) GetSignatureHelpItems(
 	}
 
 	// Only need to be careful if the user typed a character and signature help wasn't showing.
-	onlyUseSyntacticOwners := context.TriggerKind == lsproto.SignatureHelpTriggerKindTriggerCharacter
+	onlyUseSyntacticOwners := context != nil && context.TriggerKind == lsproto.SignatureHelpTriggerKindTriggerCharacter
 
 	// Bail out quickly in the middle of a string or comment, don't provide signature help unless the user explicitly requested it.
 	if onlyUseSyntacticOwners && IsInString(sourceFile, position, startingToken) { // isInComment(sourceFile, position) needs formatting implemented
 		return nil
 	}
 
-	isManuallyInvoked := context.TriggerKind == 1
+	isManuallyInvoked := context != nil && context.TriggerKind == lsproto.SignatureHelpTriggerKindInvoked
 	argumentInfo := getContainingArgumentInfo(startingToken, sourceFile, typeChecker, isManuallyInvoked, position)
 	if argumentInfo == nil {
 		return nil
