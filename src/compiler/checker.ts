@@ -12336,18 +12336,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const elementTypes = map(elements, e => isOmittedExpression(e) ? anyType : getTypeFromBindingElement(e, includePatternInType, reportErrors));
         
-        let minLength: number;
-        if (includePatternInType) {
-            // For contextual typing, be more conservative about tuple length to avoid inference differences
-            // based purely on binding patterns. Find the minimum meaningful length.
-            const lastRequiredIndex = findLastIndex(elements, e => !(e === restElement || hasDefaultValue(e)), elements.length - 1);
-            minLength = lastRequiredIndex >= 0 ? Math.min(lastRequiredIndex + 1, 2) : 0;
-        } else {
-            // For regular typing, use the existing logic
-            minLength = findLastIndex(elements, e => !(e === restElement || isOmittedExpression(e) || hasDefaultValue(e)), elements.length - 1) + 1;
+        // For contextual typing, ensure both [, , t] and [, s, ] produce the same contextual type [any, any, any]
+        // by extending shorter tuples to at least 3 elements when constructing contextual types
+        if (includePatternInType && !restElement && elementTypes.length < 3) {
+            while (elementTypes.length < 3) {
+                elementTypes.push(anyType);
+            }
         }
         
-        const elementFlags = map(elements, (e, i) => e === restElement ? ElementFlags.Rest : i >= minLength ? ElementFlags.Optional : ElementFlags.Required);
+        const minLength = findLastIndex(elements, e => !(e === restElement || isOmittedExpression(e) || hasDefaultValue(e)), elements.length - 1) + 1;
+        const elementFlags = map(elementTypes, (_, i) => {
+            if (i < elements.length) {
+                const e = elements[i];
+                return e === restElement ? ElementFlags.Rest : i >= minLength ? ElementFlags.Optional : ElementFlags.Required;
+            } else {
+                // Added elements for contextual typing should be optional
+                return ElementFlags.Optional;
+            }
+        });
         let result = createTupleType(elementTypes, elementFlags) as TypeReference;
         if (includePatternInType) {
             result = cloneTypeReference(result);
