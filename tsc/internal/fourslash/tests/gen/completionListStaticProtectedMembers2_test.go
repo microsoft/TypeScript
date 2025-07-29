@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
@@ -42,39 +43,39 @@ class C2 extends Base {
 	f.VerifyCompletions(t, []string{"1"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: completionFunctionMembersPlus(
+			Exact: CompletionFunctionMembersPlus(
 				[]fourslash.CompletionsExpectedItem{
 					&lsproto.CompletionItem{
 						Label:    "protectedMethod",
-						SortText: ptrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "protectedOverriddenMethod",
-						SortText: ptrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "protectedOverriddenProperty",
-						SortText: ptrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "protectedProperty",
-						SortText: ptrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "publicMethod",
-						SortText: ptrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "publicProperty",
-						SortText: ptrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "prototype",
-						SortText: ptrTo(string(ls.SortTextLocationPriority)),
+						SortText: PtrTo(string(ls.SortTextLocationPriority)),
 					},
 				}),
 		},
@@ -82,43 +83,43 @@ class C2 extends Base {
 	f.VerifyCompletions(t, []string{"2", "3"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: completionFunctionMembersPlus(
+			Exact: CompletionFunctionMembersPlus(
 				[]fourslash.CompletionsExpectedItem{
 					&lsproto.CompletionItem{
 						Label:    "protectedMethod",
-						SortText: ptrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "protectedOverriddenMethod",
-						SortText: ptrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "protectedOverriddenProperty",
-						SortText: ptrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "protectedProperty",
-						SortText: ptrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "publicMethod",
-						SortText: ptrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "publicProperty",
-						SortText: ptrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "test",
-						SortText: ptrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "prototype",
-						SortText: ptrTo(string(ls.SortTextLocationPriority)),
+						SortText: PtrTo(string(ls.SortTextLocationPriority)),
 					},
 				}),
 		},
@@ -126,38 +127,38 @@ class C2 extends Base {
 	f.VerifyCompletions(t, "4", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "protectedMethod",
-					SortText: ptrTo(string(ls.SortTextLocalDeclarationPriority)),
+					SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
 				},
 				&lsproto.CompletionItem{
 					Label:    "protectedOverriddenMethod",
-					SortText: ptrTo(string(ls.SortTextLocalDeclarationPriority)),
+					SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
 				},
 				&lsproto.CompletionItem{
 					Label:    "publicMethod",
-					SortText: ptrTo(string(ls.SortTextLocalDeclarationPriority)),
+					SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
 				},
 				&lsproto.CompletionItem{
 					Label:    "apply",
-					SortText: ptrTo(string(ls.SortTextLocationPriority)),
+					SortText: PtrTo(string(ls.SortTextLocationPriority)),
 				},
 				&lsproto.CompletionItem{
 					Label:    "bind",
-					SortText: ptrTo(string(ls.SortTextLocationPriority)),
+					SortText: PtrTo(string(ls.SortTextLocationPriority)),
 				},
 				&lsproto.CompletionItem{
 					Label:    "call",
-					SortText: ptrTo(string(ls.SortTextLocationPriority)),
+					SortText: PtrTo(string(ls.SortTextLocationPriority)),
 				},
 				&lsproto.CompletionItem{
 					Label:    "toString",
-					SortText: ptrTo(string(ls.SortTextLocationPriority)),
+					SortText: PtrTo(string(ls.SortTextLocationPriority)),
 				},
 			},
 		},

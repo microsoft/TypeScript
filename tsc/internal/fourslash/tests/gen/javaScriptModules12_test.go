@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
@@ -35,19 +36,19 @@ var b = '';
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				"x",
 				&lsproto.CompletionItem{
 					Label:    "a",
-					SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)),
+					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
 				},
 				&lsproto.CompletionItem{
 					Label:    "b",
-					SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)),
+					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 			Excludes: []string{
@@ -58,19 +59,19 @@ var b = '';
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				"y",
 				&lsproto.CompletionItem{
 					Label:    "a",
-					SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)),
+					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
 				},
 				&lsproto.CompletionItem{
 					Label:    "b",
-					SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)),
+					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 			Excludes: []string{
@@ -81,15 +82,15 @@ var b = '';
 	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				"a",
 				&lsproto.CompletionItem{
 					Label:    "b",
-					SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)),
+					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 			Excludes: []string{
@@ -101,14 +102,14 @@ var b = '';
 	f.VerifyCompletions(t, "4", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "a",
-					SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)),
+					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
 				},
 				"b",
 			},
@@ -121,18 +122,18 @@ var b = '';
 	f.VerifyCompletions(t, []string{"5"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "a",
-					SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)),
+					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
 				},
 				&lsproto.CompletionItem{
 					Label:    "b",
-					SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)),
+					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 			Excludes: []string{

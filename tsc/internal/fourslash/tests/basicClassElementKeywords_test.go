@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
 
@@ -20,7 +21,7 @@ func TestBasicClassElementKeywords(t *testing.T) {
 			CommitCharacters: &[]string{},
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: completionClassElementKeywords,
+			Exact: CompletionClassElementKeywords,
 		},
 	})
 }

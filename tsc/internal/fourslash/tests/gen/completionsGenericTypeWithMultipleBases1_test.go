@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
@@ -27,22 +28,22 @@ x./**/`
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "family",
-					Detail: ptrTo("(property) iScope<number>.family: number"),
+					Detail: PtrTo("(property) iScope<number>.family: number"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "moveUp",
-					Detail: ptrTo("(property) iMover.moveUp: () => void"),
+					Detail: PtrTo("(property) iMover.moveUp: () => void"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "watch",
-					Detail: ptrTo("(property) iBaseScope.watch: () => void"),
+					Detail: PtrTo("(property) iBaseScope.watch: () => void"),
 				},
 			},
 		},

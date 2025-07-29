@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
 
@@ -37,7 +38,7 @@ f2<any, () =>/*1z*/T/*2z*/y/*3z*/`
 	f.GoToEachMarker(t, nil, func(marker *fourslash.Marker, index int) {
 		markerName := marker.Name
 		valueOnly := markerName != nil && strings.HasSuffix(*markerName, "ValueOnly")
-		commitCharacters := &defaultCommitCharacters
+		commitCharacters := &DefaultCommitCharacters
 		if marker.Data != nil {
 			newId := marker.Data["newId"]
 			typeOnly := marker.Data["typeOnly"]
@@ -66,7 +67,7 @@ f2<any, () =>/*1z*/T/*2z*/y/*3z*/`
 			IsIncomplete: false,
 			ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 				CommitCharacters: commitCharacters,
-				EditRange:        ignored,
+				EditRange:        Ignored,
 			},
 			Items: &fourslash.CompletionsExpectedItems{
 				Includes: includes,

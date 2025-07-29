@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
@@ -26,20 +27,20 @@ func TestTsxCompletion7(t *testing.T) {
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "TWO",
-					Kind:     ptrTo(lsproto.CompletionItemKindField),
-					SortText: ptrTo(string(ls.SortTextLocationPriority)),
+					Kind:     PtrTo(lsproto.CompletionItemKindField),
+					SortText: PtrTo(string(ls.SortTextLocationPriority)),
 				},
 				&lsproto.CompletionItem{
 					Label:    "ONE",
-					Kind:     ptrTo(lsproto.CompletionItemKindField),
-					SortText: ptrTo(string(ls.SortTextMemberDeclaredBySpreadAssignment)),
+					Kind:     PtrTo(lsproto.CompletionItemKindField),
+					SortText: PtrTo(string(ls.SortTextMemberDeclaredBySpreadAssignment)),
 				},
 			},
 		},

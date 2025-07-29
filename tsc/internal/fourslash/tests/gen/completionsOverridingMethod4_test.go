@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
@@ -42,21 +43,21 @@ class Gossip extends Secret {
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &[]string{},
-			EditRange:        ignored,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "hint",
-					InsertText: ptrTo("protected hint(): string {\n}"),
-					FilterText: ptrTo("hint"),
-					SortText:   ptrTo(string(ls.SortTextLocationPriority)),
+					InsertText: PtrTo("protected hint(): string {\n}"),
+					FilterText: PtrTo("hint"),
+					SortText:   PtrTo(string(ls.SortTextLocationPriority)),
 				},
 				&lsproto.CompletionItem{
 					Label:      "refuse",
-					InsertText: ptrTo("public refuse(): string {\n}"),
-					FilterText: ptrTo("refuse"),
-					SortText:   ptrTo(string(ls.SortTextLocationPriority)),
+					InsertText: PtrTo("public refuse(): string {\n}"),
+					FilterText: PtrTo("refuse"),
+					SortText:   PtrTo(string(ls.SortTextLocationPriority)),
 				},
 			},
 			Excludes: []string{

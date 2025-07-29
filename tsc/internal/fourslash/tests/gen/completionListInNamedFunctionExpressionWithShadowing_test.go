@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
@@ -24,15 +25,15 @@ var y = function () {
 	f.VerifyCompletions(t, []string{"0", "2"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "foo",
-					Detail: ptrTo("function foo(): void"),
-					Kind:   ptrTo(lsproto.CompletionItemKindFunction),
+					Detail: PtrTo("function foo(): void"),
+					Kind:   PtrTo(lsproto.CompletionItemKindFunction),
 				},
 			},
 		},
@@ -40,15 +41,15 @@ var y = function () {
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "foo",
-					Detail: ptrTo("(local function) foo(): void"),
-					Kind:   ptrTo(lsproto.CompletionItemKindFunction),
+					Detail: PtrTo("(local function) foo(): void"),
+					Kind:   PtrTo(lsproto.CompletionItemKindFunction),
 				},
 			},
 		},

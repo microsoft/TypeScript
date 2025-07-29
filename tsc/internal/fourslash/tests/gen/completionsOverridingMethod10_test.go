@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
@@ -29,27 +30,27 @@ class Sub implements Base {
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &[]string{},
-			EditRange:        ignored,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "a",
-					InsertText: ptrTo("a: string;"),
-					FilterText: ptrTo("a"),
-					SortText:   ptrTo(string(ls.SortTextLocationPriority)),
+					InsertText: PtrTo("a: string;"),
+					FilterText: PtrTo("a"),
+					SortText:   PtrTo(string(ls.SortTextLocationPriority)),
 				},
 				&lsproto.CompletionItem{
 					Label:      "b",
-					InsertText: ptrTo("b(a: string): void {\n}"),
-					FilterText: ptrTo("b"),
-					SortText:   ptrTo(string(ls.SortTextLocationPriority)),
+					InsertText: PtrTo("b(a: string): void {\n}"),
+					FilterText: PtrTo("b"),
+					SortText:   PtrTo(string(ls.SortTextLocationPriority)),
 				},
 				&lsproto.CompletionItem{
 					Label:      "c",
-					InsertText: ptrTo("c(a: string): string;\nc(a: number): number;\nc(a: unknown): string | number {\n}"),
-					FilterText: ptrTo("c"),
-					SortText:   ptrTo(string(ls.SortTextLocationPriority)),
+					InsertText: PtrTo("c(a: string): string;\nc(a: number): number;\nc(a: unknown): string | number {\n}"),
+					FilterText: PtrTo("c"),
+					SortText:   PtrTo(string(ls.SortTextLocationPriority)),
 				},
 			},
 		},

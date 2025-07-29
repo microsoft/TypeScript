@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
@@ -70,16 +71,16 @@ f4({
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "world?",
-					InsertText: ptrTo("world"),
-					FilterText: ptrTo("world"),
-					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+					InsertText: PtrTo("world"),
+					FilterText: PtrTo("world"),
+					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
 				},
 			},
 		},
@@ -87,22 +88,22 @@ f4({
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "autoIncrement?",
-					InsertText: ptrTo("autoIncrement"),
-					FilterText: ptrTo("autoIncrement"),
-					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+					InsertText: PtrTo("autoIncrement"),
+					FilterText: PtrTo("autoIncrement"),
+					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
 				},
 				&lsproto.CompletionItem{
 					Label:      "keyPath?",
-					InsertText: ptrTo("keyPath"),
-					FilterText: ptrTo("keyPath"),
-					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+					InsertText: PtrTo("keyPath"),
+					FilterText: PtrTo("keyPath"),
+					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
 				},
 			},
 		},
@@ -110,8 +111,8 @@ f4({
 	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
@@ -124,16 +125,16 @@ f4({
 	f.VerifyCompletions(t, "4", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "a?",
-					InsertText: ptrTo("a"),
-					FilterText: ptrTo("a"),
-					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+					InsertText: PtrTo("a"),
+					FilterText: PtrTo("a"),
+					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
 				},
 			},
 		},
@@ -141,16 +142,16 @@ f4({
 	f.VerifyCompletions(t, "5", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "x?",
-					InsertText: ptrTo("x"),
-					FilterText: ptrTo("x"),
-					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+					InsertText: PtrTo("x"),
+					FilterText: PtrTo("x"),
+					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
 				},
 			},
 		},
@@ -158,8 +159,8 @@ f4({
 	f.VerifyCompletions(t, "6", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{

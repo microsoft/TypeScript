@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
@@ -20,15 +21,15 @@ func TestExportDefaultClass(t *testing.T) {
 	f.VerifyCompletions(t, f.Markers(), &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "C",
-					Detail: ptrTo("class C"),
-					Kind:   ptrTo(lsproto.CompletionItemKindClass),
+					Detail: PtrTo("class C"),
+					Kind:   PtrTo(lsproto.CompletionItemKindClass),
 				},
 			},
 		},

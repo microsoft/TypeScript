@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
@@ -37,22 +38,22 @@ testFunc({
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "a?",
-					InsertText: ptrTo("a"),
-					FilterText: ptrTo("a"),
-					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+					InsertText: PtrTo("a"),
+					FilterText: PtrTo("a"),
+					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
 				},
 				&lsproto.CompletionItem{
 					Label:      "b?",
-					InsertText: ptrTo("b"),
-					FilterText: ptrTo("b"),
-					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+					InsertText: PtrTo("b"),
+					FilterText: PtrTo("b"),
+					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
 				},
 			},
 		},

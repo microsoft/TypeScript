@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
@@ -20,20 +21,20 @@ ___foo; __foo;/**/`
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "__foo",
-					Kind:     ptrTo(lsproto.CompletionItemKindText),
-					SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)),
+					Kind:     PtrTo(lsproto.CompletionItemKindText),
+					SortText: PtrTo(string(ls.SortTextJavascriptIdentifiers)),
 				},
 				&lsproto.CompletionItem{
 					Label:    "___foo",
-					Kind:     ptrTo(lsproto.CompletionItemKindText),
-					SortText: ptrTo(string(ls.SortTextJavascriptIdentifiers)),
+					Kind:     PtrTo(lsproto.CompletionItemKindText),
+					SortText: PtrTo(string(ls.SortTextJavascriptIdentifiers)),
 				},
 			},
 		},

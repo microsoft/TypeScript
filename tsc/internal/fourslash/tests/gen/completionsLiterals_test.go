@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
@@ -20,19 +21,19 @@ const y2: 0 | "one" | 1n = 'one'/*2*/;`
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &[]string{},
-			EditRange:        ignored,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "0",
-					Kind:   ptrTo(lsproto.CompletionItemKindConstant),
-					Detail: ptrTo("0"),
+					Kind:   PtrTo(lsproto.CompletionItemKindConstant),
+					Detail: PtrTo("0"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "\"one\"",
-					Kind:   ptrTo(lsproto.CompletionItemKindConstant),
-					Detail: ptrTo("\"one\""),
+					Kind:   PtrTo(lsproto.CompletionItemKindConstant),
+					Detail: PtrTo("\"one\""),
 				},
 			},
 		},
@@ -41,24 +42,24 @@ const y2: 0 | "one" | 1n = 'one'/*2*/;`
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &[]string{},
-			EditRange:        ignored,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "0",
-					Kind:   ptrTo(lsproto.CompletionItemKindConstant),
-					Detail: ptrTo("0"),
+					Kind:   PtrTo(lsproto.CompletionItemKindConstant),
+					Detail: PtrTo("0"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "\"one\"",
-					Kind:   ptrTo(lsproto.CompletionItemKindConstant),
-					Detail: ptrTo("\"one\""),
+					Kind:   PtrTo(lsproto.CompletionItemKindConstant),
+					Detail: PtrTo("\"one\""),
 				},
 				&lsproto.CompletionItem{
 					Label:  "1n",
-					Kind:   ptrTo(lsproto.CompletionItemKindConstant),
-					Detail: ptrTo("1n"),
+					Kind:   PtrTo(lsproto.CompletionItemKindConstant),
+					Detail: PtrTo("1n"),
 				},
 			},
 		},
@@ -66,8 +67,8 @@ const y2: 0 | "one" | 1n = 'one'/*2*/;`
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Excludes: []string{

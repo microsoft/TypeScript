@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
@@ -36,14 +37,14 @@ function f2() {
 	f.VerifyCompletions(t, []string{"1", "2", "3"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "f",
-					Detail: ptrTo("function f(): void"),
+					Detail: PtrTo("function f(): void"),
 				},
 			},
 			Excludes: []string{
@@ -55,22 +56,22 @@ function f2() {
 	f.VerifyCompletions(t, "11", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "f2",
-					Detail: ptrTo("function f2(): void"),
+					Detail: PtrTo("function f2(): void"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "n2",
-					Detail: ptrTo("namespace n2"),
+					Detail: PtrTo("namespace n2"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "I2",
-					Detail: ptrTo("class I2"),
+					Detail: PtrTo("class I2"),
 				},
 			},
 		},
@@ -78,18 +79,18 @@ function f2() {
 	f.VerifyCompletions(t, "22", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "f2",
-					Detail: ptrTo("function f2(): void"),
+					Detail: PtrTo("function f2(): void"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "n2",
-					Detail: ptrTo("namespace n2"),
+					Detail: PtrTo("namespace n2"),
 				},
 			},
 			Excludes: []string{
@@ -100,14 +101,14 @@ function f2() {
 	f.VerifyCompletions(t, "33", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "f2",
-					Detail: ptrTo("function f2(): void"),
+					Detail: PtrTo("function f2(): void"),
 				},
 			},
 			Excludes: []string{

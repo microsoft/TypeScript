@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
@@ -24,19 +25,19 @@ function f<T extends Address>(x: T) {
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "city",
-					Detail: ptrTo("(property) Address.city: string"),
+					Detail: PtrTo("(property) Address.city: string"),
 				},
 				&lsproto.CompletionItem{
 					Label:      "postal code",
-					InsertText: ptrTo("[\"postal code\"]"),
-					Detail:     ptrTo("(property) Address[\"postal code\"]: string"),
+					InsertText: PtrTo("[\"postal code\"]"),
+					Detail:     PtrTo("(property) Address[\"postal code\"]: string"),
 				},
 			},
 		},

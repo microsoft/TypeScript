@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
@@ -26,34 +27,34 @@ partialFoo({ /*1*/ });`
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "a_a?",
-					InsertText: ptrTo("a_a"),
-					FilterText: ptrTo("a_a"),
-					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+					InsertText: PtrTo("a_a"),
+					FilterText: PtrTo("a_a"),
+					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
 				},
 				&lsproto.CompletionItem{
 					Label:      "a_b?",
-					InsertText: ptrTo("a_b"),
-					FilterText: ptrTo("a_b"),
-					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+					InsertText: PtrTo("a_b"),
+					FilterText: PtrTo("a_b"),
+					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
 				},
 				&lsproto.CompletionItem{
 					Label:      "a_c?",
-					InsertText: ptrTo("a_c"),
-					FilterText: ptrTo("a_c"),
-					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+					InsertText: PtrTo("a_c"),
+					FilterText: PtrTo("a_c"),
+					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
 				},
 				&lsproto.CompletionItem{
 					Label:      "b_a?",
-					InsertText: ptrTo("b_a"),
-					FilterText: ptrTo("b_a"),
-					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+					InsertText: PtrTo("b_a"),
+					FilterText: PtrTo("b_a"),
+					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
 				},
 			},
 		},

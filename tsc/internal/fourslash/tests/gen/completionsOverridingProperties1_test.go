@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
@@ -27,15 +28,15 @@ class Sub extends Base {
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &[]string{},
-			EditRange:        ignored,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "foo",
-					InsertText: ptrTo("protected foo: string;"),
-					FilterText: ptrTo("foo"),
-					SortText:   ptrTo(string(ls.SortTextLocationPriority)),
+					InsertText: PtrTo("protected foo: string;"),
+					FilterText: PtrTo("foo"),
+					SortText:   PtrTo(string(ls.SortTextLocationPriority)),
 				},
 			},
 		},

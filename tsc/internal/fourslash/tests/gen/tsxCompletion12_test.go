@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
@@ -37,8 +38,8 @@ func TestTsxCompletion12(t *testing.T) {
 	f.VerifyCompletions(t, []string{"1", "2", "5"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
@@ -46,10 +47,10 @@ func TestTsxCompletion12(t *testing.T) {
 				"propx",
 				&lsproto.CompletionItem{
 					Label:      "optional?",
-					InsertText: ptrTo("optional"),
-					FilterText: ptrTo("optional"),
-					Kind:       ptrTo(lsproto.CompletionItemKindField),
-					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+					InsertText: PtrTo("optional"),
+					FilterText: PtrTo("optional"),
+					Kind:       PtrTo(lsproto.CompletionItemKindField),
+					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
 				},
 			},
 		},
@@ -57,18 +58,18 @@ func TestTsxCompletion12(t *testing.T) {
 	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				"propString",
 				&lsproto.CompletionItem{
 					Label:      "optional?",
-					InsertText: ptrTo("optional"),
-					FilterText: ptrTo("optional"),
-					Kind:       ptrTo(lsproto.CompletionItemKindField),
-					SortText:   ptrTo(string(ls.SortTextOptionalMember)),
+					InsertText: PtrTo("optional"),
+					FilterText: PtrTo("optional"),
+					Kind:       PtrTo(lsproto.CompletionItemKindField),
+					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
 				},
 			},
 		},
@@ -76,8 +77,8 @@ func TestTsxCompletion12(t *testing.T) {
 	f.VerifyCompletions(t, "4", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{

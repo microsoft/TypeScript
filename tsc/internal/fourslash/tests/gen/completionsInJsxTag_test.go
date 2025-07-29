@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
@@ -35,32 +36,32 @@ class Foo {
 	f.VerifyCompletions(t, []string{"1", "2"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "aria-label",
-					Detail: ptrTo("(property) \"aria-label\": string"),
+					Detail: PtrTo("(property) \"aria-label\": string"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
 							Value: "Label docs",
 						},
 					},
-					Kind: ptrTo(lsproto.CompletionItemKindField),
+					Kind: PtrTo(lsproto.CompletionItemKindField),
 				},
 				&lsproto.CompletionItem{
 					Label:  "foo",
-					Detail: ptrTo("(property) foo: string"),
+					Detail: PtrTo("(property) foo: string"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
 							Value: "Doc",
 						},
 					},
-					Kind: ptrTo(lsproto.CompletionItemKindField),
+					Kind: PtrTo(lsproto.CompletionItemKindField),
 				},
 			},
 		},

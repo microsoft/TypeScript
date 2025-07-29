@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
@@ -46,18 +47,18 @@ var y;`
 	f.VerifyCompletions(t, "type1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "Foo",
-					Kind:  ptrTo(lsproto.CompletionItemKindClass),
+					Kind:  PtrTo(lsproto.CompletionItemKindClass),
 				},
 				&lsproto.CompletionItem{
 					Label: "I",
-					Kind:  ptrTo(lsproto.CompletionItemKindInterface),
+					Kind:  PtrTo(lsproto.CompletionItemKindInterface),
 				},
 			},
 			Excludes: []string{
@@ -77,14 +78,14 @@ var y;`
 	f.VerifyCompletions(t, "typeFooMember", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "Namespace",
-					Kind:  ptrTo(lsproto.CompletionItemKindModule),
+					Kind:  PtrTo(lsproto.CompletionItemKindModule),
 				},
 			},
 		},
@@ -92,14 +93,14 @@ var y;`
 	f.VerifyCompletions(t, "NamespaceMember", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "SomeType",
-					Kind:  ptrTo(lsproto.CompletionItemKindInterface),
+					Kind:  PtrTo(lsproto.CompletionItemKindInterface),
 				},
 			},
 		},
@@ -107,26 +108,26 @@ var y;`
 	f.VerifyCompletions(t, "globalValue", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "Foo",
-					Kind:  ptrTo(lsproto.CompletionItemKindClass),
+					Kind:  PtrTo(lsproto.CompletionItemKindClass),
 				},
 				&lsproto.CompletionItem{
 					Label: "x",
-					Kind:  ptrTo(lsproto.CompletionItemKindVariable),
+					Kind:  PtrTo(lsproto.CompletionItemKindVariable),
 				},
 				&lsproto.CompletionItem{
 					Label: "x1",
-					Kind:  ptrTo(lsproto.CompletionItemKindVariable),
+					Kind:  PtrTo(lsproto.CompletionItemKindVariable),
 				},
 				&lsproto.CompletionItem{
 					Label: "y",
-					Kind:  ptrTo(lsproto.CompletionItemKindVariable),
+					Kind:  PtrTo(lsproto.CompletionItemKindVariable),
 				},
 			},
 			Excludes: []string{
@@ -145,22 +146,22 @@ var y;`
 	f.VerifyCompletions(t, "valueMemberOfFooInstance", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "method3",
-					Kind:  ptrTo(lsproto.CompletionItemKindMethod),
+					Kind:  PtrTo(lsproto.CompletionItemKindMethod),
 				},
 				&lsproto.CompletionItem{
 					Label: "method4",
-					Kind:  ptrTo(lsproto.CompletionItemKindMethod),
+					Kind:  PtrTo(lsproto.CompletionItemKindMethod),
 				},
 				&lsproto.CompletionItem{
 					Label: "property1",
-					Kind:  ptrTo(lsproto.CompletionItemKindField),
+					Kind:  PtrTo(lsproto.CompletionItemKindField),
 				},
 			},
 		},
@@ -168,20 +169,20 @@ var y;`
 	f.VerifyCompletions(t, "valueMemberOfFoo", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: completionFunctionMembersPlus(
+			Exact: CompletionFunctionMembersPlus(
 				[]fourslash.CompletionsExpectedItem{
 					&lsproto.CompletionItem{
 						Label:    "method1",
-						Kind:     ptrTo(lsproto.CompletionItemKindMethod),
-						SortText: ptrTo(string(ls.SortTextLocalDeclarationPriority)),
+						Kind:     PtrTo(lsproto.CompletionItemKindMethod),
+						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "prototype",
-						SortText: ptrTo(string(ls.SortTextLocationPriority)),
+						SortText: PtrTo(string(ls.SortTextLocationPriority)),
 					},
 				}),
 		},

@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
@@ -27,26 +28,26 @@ function g(this: Restricted) {this./*4*/}`
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "f",
-					Detail: ptrTo("(method) C1.f(this: this): void"),
+					Detail: PtrTo("(method) C1.f(this: this): void"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "g",
-					Detail: ptrTo("(method) C1.g(this: Restricted): void"),
+					Detail: PtrTo("(method) C1.g(this: Restricted): void"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "m",
-					Detail: ptrTo("(property) C1.m: number"),
+					Detail: PtrTo("(property) C1.m: number"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "n",
-					Detail: ptrTo("(property) C1.n: number"),
+					Detail: PtrTo("(property) C1.n: number"),
 				},
 			},
 		},
@@ -54,14 +55,14 @@ function g(this: Restricted) {this./*4*/}`
 	f.VerifyCompletions(t, []string{"2", "4"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "n",
-					Detail: ptrTo("(property) Restricted.n: number"),
+					Detail: PtrTo("(property) Restricted.n: number"),
 				},
 			},
 		},

@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
@@ -31,33 +32,33 @@ import { x, y, await as await_, interface as interface_, unique, /*6*/ } from ".
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "await",
-					InsertText: ptrTo("await as await_"),
+					InsertText: PtrTo("await as await_"),
 				},
 				&lsproto.CompletionItem{
 					Label:      "interface",
-					InsertText: ptrTo("interface as interface_"),
+					InsertText: PtrTo("interface as interface_"),
 				},
 				&lsproto.CompletionItem{
 					Label: "unique",
 				},
 				&lsproto.CompletionItem{
 					Label:  "x",
-					Detail: ptrTo("var x: number"),
+					Detail: PtrTo("var x: number"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "y",
-					Detail: ptrTo("var y: number"),
+					Detail: PtrTo("var y: number"),
 				},
 				&lsproto.CompletionItem{
 					Label:    "type",
-					SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)),
+					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 		},
@@ -65,29 +66,29 @@ import { x, y, await as await_, interface as interface_, unique, /*6*/ } from ".
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "await",
-					InsertText: ptrTo("await as await_"),
+					InsertText: PtrTo("await as await_"),
 				},
 				&lsproto.CompletionItem{
 					Label:      "interface",
-					InsertText: ptrTo("interface as interface_"),
+					InsertText: PtrTo("interface as interface_"),
 				},
 				&lsproto.CompletionItem{
 					Label: "unique",
 				},
 				&lsproto.CompletionItem{
 					Label:  "y",
-					Detail: ptrTo("var y: number"),
+					Detail: PtrTo("var y: number"),
 				},
 				&lsproto.CompletionItem{
 					Label:    "type",
-					SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)),
+					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 		},
@@ -95,25 +96,25 @@ import { x, y, await as await_, interface as interface_, unique, /*6*/ } from ".
 	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "await",
-					InsertText: ptrTo("await as await_"),
+					InsertText: PtrTo("await as await_"),
 				},
 				&lsproto.CompletionItem{
 					Label:      "interface",
-					InsertText: ptrTo("interface as interface_"),
+					InsertText: PtrTo("interface as interface_"),
 				},
 				&lsproto.CompletionItem{
 					Label: "unique",
 				},
 				&lsproto.CompletionItem{
 					Label:    "type",
-					SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)),
+					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 		},
@@ -121,21 +122,21 @@ import { x, y, await as await_, interface as interface_, unique, /*6*/ } from ".
 	f.VerifyCompletions(t, "4", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "interface",
-					InsertText: ptrTo("interface as interface_"),
+					InsertText: PtrTo("interface as interface_"),
 				},
 				&lsproto.CompletionItem{
 					Label: "unique",
 				},
 				&lsproto.CompletionItem{
 					Label:    "type",
-					SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)),
+					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 		},
@@ -143,8 +144,8 @@ import { x, y, await as await_, interface as interface_, unique, /*6*/ } from ".
 	f.VerifyCompletions(t, "5", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
@@ -153,7 +154,7 @@ import { x, y, await as await_, interface as interface_, unique, /*6*/ } from ".
 				},
 				&lsproto.CompletionItem{
 					Label:    "type",
-					SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)),
+					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 		},
@@ -161,8 +162,8 @@ import { x, y, await as await_, interface as interface_, unique, /*6*/ } from ".
 	f.VerifyCompletions(t, "6", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{},

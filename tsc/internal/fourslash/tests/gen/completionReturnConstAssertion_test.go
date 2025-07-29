@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
@@ -22,18 +23,18 @@ F(()=>({/*1*/} as const))`
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "foo1",
-					Detail: ptrTo("(property) foo1: 1"),
+					Detail: PtrTo("(property) foo1: 1"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "foo2",
-					Detail: ptrTo("(property) foo2: 2"),
+					Detail: PtrTo("(property) foo2: 2"),
 				},
 			},
 		},

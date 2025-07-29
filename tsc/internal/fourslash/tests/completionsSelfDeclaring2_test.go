@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
 
@@ -23,7 +24,7 @@ f1({ [|abc|]/*1*/ });`
 			},
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: completionGlobalsPlus([]fourslash.CompletionsExpectedItem{
+			Exact: CompletionGlobalsPlus([]fourslash.CompletionsExpectedItem{
 				"f1",
 			}, false /*noLib*/),
 		},

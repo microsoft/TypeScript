@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
@@ -32,14 +33,14 @@ o["[|/*prop*/|]"];`
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &[]string{},
-			EditRange:        ignored,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "other",
-					Detail: ptrTo("other"),
-					Kind:   ptrTo(lsproto.CompletionItemKindFile),
+					Detail: PtrTo("other"),
+					Kind:   PtrTo(lsproto.CompletionItemKindFile),
 				},
 			},
 		},
@@ -47,15 +48,15 @@ o["[|/*prop*/|]"];`
 	f.VerifyCompletions(t, "type", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "a",
-					Detail: ptrTo("a"),
-					Kind:   ptrTo(lsproto.CompletionItemKindConstant),
+					Detail: PtrTo("a"),
+					Kind:   PtrTo(lsproto.CompletionItemKindConstant),
 				},
 			},
 		},
@@ -63,32 +64,32 @@ o["[|/*prop*/|]"];`
 	f.VerifyCompletions(t, "prop", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "m",
-					Detail: ptrTo("(method) I.m(): void"),
+					Detail: PtrTo("(method) I.m(): void"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
 							Value: "Method doc",
 						},
 					},
-					Kind: ptrTo(lsproto.CompletionItemKindMethod),
+					Kind: PtrTo(lsproto.CompletionItemKindMethod),
 				},
 				&lsproto.CompletionItem{
 					Label:  "x",
-					Detail: ptrTo("(property) I.x: number"),
+					Detail: PtrTo("(property) I.x: number"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
 							Value: "Prop doc",
 						},
 					},
-					Kind: ptrTo(lsproto.CompletionItemKindField),
+					Kind: PtrTo(lsproto.CompletionItemKindField),
 				},
 			},
 		},

@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
@@ -21,22 +22,22 @@ f({ /*f*/ });`
 	f.VerifyCompletions(t, "x", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "a",
-					Detail: ptrTo("(property) a: string | number"),
+					Detail: PtrTo("(property) a: string | number"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "b",
-					Detail: ptrTo("(property) b: number | boolean"),
+					Detail: PtrTo("(property) b: number | boolean"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "c",
-					Detail: ptrTo("(property) c: string"),
+					Detail: PtrTo("(property) c: string"),
 				},
 			},
 		},
@@ -44,14 +45,14 @@ f({ /*f*/ });`
 	f.VerifyCompletions(t, "f", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "a",
-					Detail: ptrTo("(property) I.a: number"),
+					Detail: PtrTo("(property) I.a: number"),
 				},
 			},
 		},

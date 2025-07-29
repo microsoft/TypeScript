@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
@@ -27,15 +28,15 @@ class SubComponent extends Component<{}> {
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &[]string{},
-			EditRange:        ignored,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "setState",
-					InsertText: ptrTo("setState(stateHandler: (oldState: {}, newState: {}) => void): void {\n}"),
-					FilterText: ptrTo("setState"),
-					SortText:   ptrTo(string(ls.SortTextLocationPriority)),
+					InsertText: PtrTo("setState(stateHandler: (oldState: {}, newState: {}) => void): void {\n}"),
+					FilterText: PtrTo("setState"),
+					SortText:   PtrTo(string(ls.SortTextLocationPriority)),
 				},
 			},
 		},

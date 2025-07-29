@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
@@ -21,18 +22,18 @@ v./**/`
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "toExponential",
-					Kind:  ptrTo(lsproto.CompletionItemKindMethod),
+					Kind:  PtrTo(lsproto.CompletionItemKindMethod),
 				},
 				&lsproto.CompletionItem{
 					Label: "charCodeAt",
-					Kind:  ptrTo(lsproto.CompletionItemKindMethod),
+					Kind:  PtrTo(lsproto.CompletionItemKindMethod),
 				},
 			},
 		},

@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
@@ -23,21 +24,21 @@ export import foo = N.foo;
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: completionGlobalsPlus(
+			Exact: CompletionGlobalsPlus(
 				[]fourslash.CompletionsExpectedItem{
 					&lsproto.CompletionItem{
 						Label:  "foo",
-						Kind:   ptrTo(lsproto.CompletionItemKindVariable),
-						Detail: ptrTo("(alias) const foo: number\nimport foo = N.foo"),
+						Kind:   PtrTo(lsproto.CompletionItemKindVariable),
+						Detail: PtrTo("(alias) const foo: number\nimport foo = N.foo"),
 					},
 					&lsproto.CompletionItem{
 						Label:  "N",
-						Kind:   ptrTo(lsproto.CompletionItemKindModule),
-						Detail: ptrTo("namespace N"),
+						Kind:   PtrTo(lsproto.CompletionItemKindModule),
+						Detail: PtrTo("namespace N"),
 					},
 				}, false),
 		},

@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
@@ -37,15 +38,15 @@ func TestCompletionsWithDeprecatedTag1(t *testing.T) {
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "Foo",
-					Kind:     ptrTo(lsproto.CompletionItemKindInterface),
-					SortText: ptrTo(string(ls.DeprecateSortText(ls.SortTextLocationPriority))),
+					Kind:     PtrTo(lsproto.CompletionItemKindInterface),
+					SortText: PtrTo(string(ls.DeprecateSortText(ls.SortTextLocationPriority))),
 				},
 			},
 		},
@@ -53,15 +54,15 @@ func TestCompletionsWithDeprecatedTag1(t *testing.T) {
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "bar",
-					Kind:     ptrTo(lsproto.CompletionItemKindMethod),
-					SortText: ptrTo(string(ls.DeprecateSortText(ls.SortTextLocationPriority))),
+					Kind:     PtrTo(lsproto.CompletionItemKindMethod),
+					SortText: PtrTo(string(ls.DeprecateSortText(ls.SortTextLocationPriority))),
 				},
 			},
 		},
@@ -69,15 +70,15 @@ func TestCompletionsWithDeprecatedTag1(t *testing.T) {
 	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "prop",
-					Kind:     ptrTo(lsproto.CompletionItemKindField),
-					SortText: ptrTo(string(ls.DeprecateSortText(ls.SortTextLocationPriority))),
+					Kind:     PtrTo(lsproto.CompletionItemKindField),
+					SortText: PtrTo(string(ls.DeprecateSortText(ls.SortTextLocationPriority))),
 				},
 			},
 		},
@@ -85,15 +86,15 @@ func TestCompletionsWithDeprecatedTag1(t *testing.T) {
 	f.VerifyCompletions(t, "4", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "foobar",
-					Kind:     ptrTo(lsproto.CompletionItemKindFunction),
-					SortText: ptrTo(string(ls.DeprecateSortText(ls.SortTextLocationPriority))),
+					Kind:     PtrTo(lsproto.CompletionItemKindFunction),
+					SortText: PtrTo(string(ls.DeprecateSortText(ls.SortTextLocationPriority))),
 				},
 			},
 		},
@@ -101,15 +102,15 @@ func TestCompletionsWithDeprecatedTag1(t *testing.T) {
 	f.VerifyCompletions(t, "5", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "foobar",
-					Kind:     ptrTo(lsproto.CompletionItemKindVariable),
-					SortText: ptrTo(string(ls.DeprecateSortText(ls.SortTextLocationPriority))),
+					Kind:     PtrTo(lsproto.CompletionItemKindVariable),
+					SortText: PtrTo(string(ls.DeprecateSortText(ls.SortTextLocationPriority))),
 				},
 			},
 		},

@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
@@ -25,9 +26,9 @@ func TestCompletionResolveKeyword(t *testing.T) {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "abstract",
-					Kind:     ptrTo(lsproto.CompletionItemKindKeyword),
-					SortText: ptrTo(string(ls.SortTextGlobalsOrKeywords)),
-					Detail:   ptrTo("abstract"),
+					Kind:     PtrTo(lsproto.CompletionItemKindKeyword),
+					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
+					Detail:   PtrTo("abstract"),
 				},
 			},
 		},

@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
@@ -33,21 +34,21 @@ import {} from "foo/dir//*1*/";
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &[]string{},
-			EditRange:        ignored,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "a",
-					Kind:  ptrTo(lsproto.CompletionItemKindFile),
+					Kind:  PtrTo(lsproto.CompletionItemKindFile),
 				},
 				&lsproto.CompletionItem{
 					Label: "b",
-					Kind:  ptrTo(lsproto.CompletionItemKindFile),
+					Kind:  PtrTo(lsproto.CompletionItemKindFile),
 				},
 				&lsproto.CompletionItem{
 					Label: "dir",
-					Kind:  ptrTo(lsproto.CompletionItemKindFolder),
+					Kind:  PtrTo(lsproto.CompletionItemKindFolder),
 				},
 			},
 		},
@@ -56,13 +57,13 @@ import {} from "foo/dir//*1*/";
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &[]string{},
-			EditRange:        ignored,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "x",
-					Kind:  ptrTo(lsproto.CompletionItemKindFile),
+					Kind:  PtrTo(lsproto.CompletionItemKindFile),
 				},
 			},
 		},

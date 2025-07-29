@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
@@ -22,26 +23,26 @@ func TestMemberListOnThisInClassWithPrivates(t *testing.T) {
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "privMeth",
-					Detail: ptrTo("(method) C1.privMeth(): void"),
+					Detail: PtrTo("(method) C1.privMeth(): void"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "privProp",
-					Detail: ptrTo("(property) C1.privProp: number"),
+					Detail: PtrTo("(property) C1.privProp: number"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "pubMeth",
-					Detail: ptrTo("(method) C1.pubMeth(): void"),
+					Detail: PtrTo("(method) C1.pubMeth(): void"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "pubProp",
-					Detail: ptrTo("(property) C1.pubProp: number"),
+					Detail: PtrTo("(property) C1.pubProp: number"),
 				},
 			},
 		},

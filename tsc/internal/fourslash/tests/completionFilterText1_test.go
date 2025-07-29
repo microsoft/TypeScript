@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
@@ -73,7 +74,7 @@ class Foo8 {
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &DefaultCommitCharacters,
 			EditRange: &fourslash.EditRange{
 				Insert:  f.Ranges()[0],
 				Replace: f.Ranges()[0],
@@ -83,9 +84,9 @@ class Foo8 {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "#bar",
-					Kind:       ptrTo(lsproto.CompletionItemKindField),
-					SortText:   ptrTo(string(ls.SortTextLocationPriority)),
-					FilterText: ptrTo("bar"),
+					Kind:       PtrTo(lsproto.CompletionItemKindField),
+					SortText:   PtrTo(string(ls.SortTextLocationPriority)),
+					FilterText: PtrTo("bar"),
 				},
 			},
 		},
@@ -93,15 +94,15 @@ class Foo8 {
 	f.VerifyCompletions(t, "5", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &DefaultCommitCharacters,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "#bar",
-					Kind:       ptrTo(lsproto.CompletionItemKindField),
-					SortText:   ptrTo(string(ls.SortTextLocationPriority)),
-					FilterText: ptrTo("bar"),
+					Kind:       PtrTo(lsproto.CompletionItemKindField),
+					SortText:   PtrTo(string(ls.SortTextLocationPriority)),
+					FilterText: PtrTo("bar"),
 				},
 			},
 		},
@@ -109,7 +110,7 @@ class Foo8 {
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &DefaultCommitCharacters,
 			EditRange: &fourslash.EditRange{
 				Insert:  f.Ranges()[1],
 				Replace: f.Ranges()[1],
@@ -119,8 +120,8 @@ class Foo8 {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "#bar",
-					Kind:     ptrTo(lsproto.CompletionItemKindField),
-					SortText: ptrTo(string(ls.SortTextLocationPriority)),
+					Kind:     PtrTo(lsproto.CompletionItemKindField),
+					SortText: PtrTo(string(ls.SortTextLocationPriority)),
 				},
 			},
 		},
@@ -128,7 +129,7 @@ class Foo8 {
 	f.VerifyCompletions(t, "6", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &DefaultCommitCharacters,
 			EditRange: &fourslash.EditRange{
 				Insert:  f.Ranges()[2],
 				Replace: f.Ranges()[2],
@@ -138,8 +139,8 @@ class Foo8 {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "#bar",
-					Kind:     ptrTo(lsproto.CompletionItemKindField),
-					SortText: ptrTo(string(ls.SortTextLocationPriority)),
+					Kind:     PtrTo(lsproto.CompletionItemKindField),
+					SortText: PtrTo(string(ls.SortTextLocationPriority)),
 				},
 			},
 		},
@@ -147,7 +148,7 @@ class Foo8 {
 	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &DefaultCommitCharacters,
 			EditRange: &fourslash.EditRange{
 				Insert:  f.Ranges()[3],
 				Replace: f.Ranges()[3],
@@ -157,10 +158,10 @@ class Foo8 {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "#bar",
-					Kind:       ptrTo(lsproto.CompletionItemKindField),
-					SortText:   ptrTo(string(ls.SortTextSuggestedClassMembers)),
-					FilterText: ptrTo("bar"),
-					InsertText: ptrTo("this.#bar"),
+					Kind:       PtrTo(lsproto.CompletionItemKindField),
+					SortText:   PtrTo(string(ls.SortTextSuggestedClassMembers)),
+					FilterText: PtrTo("bar"),
+					InsertText: PtrTo("this.#bar"),
 				},
 			},
 		},
@@ -168,16 +169,16 @@ class Foo8 {
 	f.VerifyCompletions(t, "7", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &DefaultCommitCharacters,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "#bar",
-					Kind:       ptrTo(lsproto.CompletionItemKindField),
-					SortText:   ptrTo(string(ls.SortTextSuggestedClassMembers)),
-					FilterText: ptrTo("bar"),
-					InsertText: ptrTo("this.#bar"),
+					Kind:       PtrTo(lsproto.CompletionItemKindField),
+					SortText:   PtrTo(string(ls.SortTextSuggestedClassMembers)),
+					FilterText: PtrTo("bar"),
+					InsertText: PtrTo("this.#bar"),
 				},
 			},
 		},
@@ -185,7 +186,7 @@ class Foo8 {
 	f.VerifyCompletions(t, "4", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &DefaultCommitCharacters,
 			EditRange: &fourslash.EditRange{
 				Insert:  f.Ranges()[4],
 				Replace: f.Ranges()[4],
@@ -195,9 +196,9 @@ class Foo8 {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "#bar",
-					Kind:       ptrTo(lsproto.CompletionItemKindField),
-					SortText:   ptrTo(string(ls.SortTextSuggestedClassMembers)),
-					InsertText: ptrTo("this.#bar"),
+					Kind:       PtrTo(lsproto.CompletionItemKindField),
+					SortText:   PtrTo(string(ls.SortTextSuggestedClassMembers)),
+					InsertText: PtrTo("this.#bar"),
 				},
 			},
 		},
@@ -205,7 +206,7 @@ class Foo8 {
 	f.VerifyCompletions(t, "8", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
+			CommitCharacters: &DefaultCommitCharacters,
 			EditRange: &fourslash.EditRange{
 				Insert:  f.Ranges()[5],
 				Replace: f.Ranges()[5],
@@ -215,9 +216,9 @@ class Foo8 {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "#bar",
-					Kind:       ptrTo(lsproto.CompletionItemKindField),
-					SortText:   ptrTo(string(ls.SortTextSuggestedClassMembers)),
-					InsertText: ptrTo("this.#bar"),
+					Kind:       PtrTo(lsproto.CompletionItemKindField),
+					SortText:   PtrTo(string(ls.SortTextSuggestedClassMembers)),
+					InsertText: PtrTo("this.#bar"),
 				},
 			},
 		},

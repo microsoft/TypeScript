@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
@@ -20,16 +21,16 @@ e === E/*b*/`
 	f.VerifyCompletions(t, []string{"a", "b"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:     "Enu",
-					Detail:    ptrTo("enum Enu"),
-					Kind:      ptrTo(lsproto.CompletionItemKindEnum),
-					Preselect: ptrTo(true),
+					Detail:    PtrTo("enum Enu"),
+					Kind:      PtrTo(lsproto.CompletionItemKindEnum),
+					Preselect: PtrTo(true),
 				},
 			},
 		},

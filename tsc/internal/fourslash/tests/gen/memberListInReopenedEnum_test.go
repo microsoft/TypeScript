@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
@@ -25,26 +26,26 @@ func TestMemberListInReopenedEnum(t *testing.T) {
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &defaultCommitCharacters,
-			EditRange:        ignored,
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "A",
-					Detail: ptrTo("(enum member) E.A = 0"),
+					Detail: PtrTo("(enum member) E.A = 0"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "B",
-					Detail: ptrTo("(enum member) E.B = 1"),
+					Detail: PtrTo("(enum member) E.B = 1"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "C",
-					Detail: ptrTo("(enum member) E.C = 0"),
+					Detail: PtrTo("(enum member) E.C = 0"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "D",
-					Detail: ptrTo("(enum member) E.D = 1"),
+					Detail: PtrTo("(enum member) E.D = 1"),
 				},
 			},
 		},
