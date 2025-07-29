@@ -8858,12 +8858,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 else {
                     if (firstChar === CharacterCodes.openBracket) {
-                        symbolName = symbolName.substring(1, symbolName.length - 1).trim();
+                        symbolName = symbolName.substring(1, symbolName.length - 1);
                         firstChar = symbolName.charCodeAt(0);
                     }
                     let expression: Expression | undefined;
                     if (isSingleOrDoubleQuote(firstChar) && !(symbol.flags & SymbolFlags.EnumMember)) {
-                        const literalText = stripQuotes(symbolName).replace(/\\./g, s => s.substring(1));
+                        const literalText = stripQuotes(symbolName.trim()).replace(/\\./g, s => s.substring(1));
                         context.approximateLength += literalText.length + 2; // "literalText"
                         expression = factory.createStringLiteral(literalText, firstChar === CharacterCodes.singleQuote);
                     }
