@@ -232,7 +232,9 @@ func performIncrementalCompilation(
 	testing bool,
 ) CommandLineResult {
 	host := compiler.NewCachedFSCompilerHost(sys.GetCurrentDirectory(), sys.FS(), sys.DefaultLibraryPath(), extendedConfigCache)
+	buildInfoReadStart := sys.Now()
 	oldProgram := incremental.ReadBuildInfoProgram(config, incremental.NewBuildInfoReader(host))
+	buildInfoReadTime := sys.Now().Sub(buildInfoReadStart)
 	// todo: cache, statistics, tracing
 	parseStart := sys.Now()
 	program := compiler.NewProgram(compiler.ProgramOptions{
@@ -241,7 +243,9 @@ func performIncrementalCompilation(
 		JSDocParsingMode: ast.JSDocParsingModeParseForTypeErrors,
 	})
 	parseTime := sys.Now().Sub(parseStart)
+	changesComputeStart := sys.Now()
 	incrementalProgram := incremental.NewProgram(program, oldProgram, testing)
+	changesComputeTime := sys.Now().Sub(changesComputeStart)
 	return CommandLineResult{
 		Status: emitAndReportStatistics(
 			sys,
@@ -251,6 +255,9 @@ func performIncrementalCompilation(
 			reportDiagnostic,
 			configTime,
 			parseTime,
+
+			buildInfoReadTime,
+			changesComputeTime,
 		),
 		IncrementalProgram: incrementalProgram,
 	}
@@ -281,6 +288,8 @@ func performCompilation(
 			reportDiagnostic,
 			configTime,
 			parseTime,
+			0,
+			0,
 		),
 	}
 }
@@ -293,6 +302,8 @@ func emitAndReportStatistics(
 	reportDiagnostic diagnosticReporter,
 	configTime time.Duration,
 	parseTime time.Duration,
+	buildInfoReadTime time.Duration,
+	changesComputeTime time.Duration,
 ) ExitStatus {
 	result := emitFilesAndReportErrors(sys, programLike, reportDiagnostic)
 	if result.status != ExitStatusSuccess {
@@ -302,6 +313,8 @@ func emitAndReportStatistics(
 
 	result.configTime = configTime
 	result.parseTime = parseTime
+	result.buildInfoReadTime = buildInfoReadTime
+	result.changesComputeTime = changesComputeTime
 	result.totalTime = sys.SinceStart()
 
 	if config.CompilerOptions().Diagnostics.IsTrue() || config.CompilerOptions().ExtendedDiagnostics.IsTrue() {
@@ -323,15 +336,17 @@ func emitAndReportStatistics(
 }
 
 type compileAndEmitResult struct {
-	diagnostics []*ast.Diagnostic
-	emitResult  *compiler.EmitResult
-	status      ExitStatus
-	configTime  time.Duration
-	parseTime   time.Duration
-	bindTime    time.Duration
-	checkTime   time.Duration
-	totalTime   time.Duration
-	emitTime    time.Duration
+	diagnostics        []*ast.Diagnostic
+	emitResult         *compiler.EmitResult
+	status             ExitStatus
+	configTime         time.Duration
+	parseTime          time.Duration
+	bindTime           time.Duration
+	checkTime          time.Duration
+	totalTime          time.Duration
+	emitTime           time.Duration
+	buildInfoReadTime  time.Duration
+	changesComputeTime time.Duration
 }
 
 func emitFilesAndReportErrors(
