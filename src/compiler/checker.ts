@@ -12335,7 +12335,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return languageVersion >= ScriptTarget.ES2015 ? createIterableType(anyType) : anyArrayType;
         }
         const elementTypes = map(elements, e => isOmittedExpression(e) ? anyType : getTypeFromBindingElement(e, includePatternInType, reportErrors));
-        const minLength = findLastIndex(elements, e => !(e === restElement || isOmittedExpression(e) || hasDefaultValue(e)), elements.length - 1) + 1;
+        
+        let minLength: number;
+        if (includePatternInType) {
+            // For contextual typing, be more conservative about tuple length to avoid inference differences
+            // based purely on binding patterns. Find the minimum meaningful length.
+            const lastRequiredIndex = findLastIndex(elements, e => !(e === restElement || hasDefaultValue(e)), elements.length - 1);
+            minLength = lastRequiredIndex >= 0 ? Math.min(lastRequiredIndex + 1, 2) : 0;
+        } else {
+            // For regular typing, use the existing logic
+            minLength = findLastIndex(elements, e => !(e === restElement || isOmittedExpression(e) || hasDefaultValue(e)), elements.length - 1) + 1;
+        }
+        
         const elementFlags = map(elements, (e, i) => e === restElement ? ElementFlags.Rest : i >= minLength ? ElementFlags.Optional : ElementFlags.Required);
         let result = createTupleType(elementTypes, elementFlags) as TypeReference;
         if (includePatternInType) {
