@@ -10,7 +10,7 @@ const stradaFourslashPath = path.resolve(import.meta.dirname, "../", "../", "../
 let inputFileSet: Set<string> | undefined;
 
 const failingTestsPath = path.join(import.meta.dirname, "failingTests.txt");
-const helperFilePath = path.join(import.meta.dirname, "../", "tests", "util_test.go");
+const manualTestsPath = path.join(import.meta.dirname, "manualTests.txt");
 
 const outputDir = path.join(import.meta.dirname, "../", "tests", "gen");
 
@@ -19,6 +19,14 @@ const unparsedFiles: string[] = [];
 function getFailingTests(): Set<string> {
     const failingTestsList = fs.readFileSync(failingTestsPath, "utf-8").split("\n").map(line => line.trim().substring(4)).filter(line => line.length > 0);
     return new Set(failingTestsList);
+}
+
+function getManualTests(): Set<string> {
+    if (!fs.existsSync(manualTestsPath)) {
+        return new Set();
+    }
+    const manualTestsList = fs.readFileSync(manualTestsPath, "utf-8").split("\n").map(line => line.trim()).filter(line => line.length > 0);
+    return new Set(manualTestsList);
 }
 
 export function main() {
@@ -35,13 +43,13 @@ export function main() {
     fs.rmSync(outputDir, { recursive: true, force: true });
     fs.mkdirSync(outputDir, { recursive: true });
 
-    parseTypeScriptFiles(getFailingTests(), stradaFourslashPath);
+    parseTypeScriptFiles(getFailingTests(), getManualTests(), stradaFourslashPath);
     console.log(unparsedFiles.join("\n"));
     const gofmt = which.sync("go");
     cp.execFileSync(gofmt, ["tool", "mvdan.cc/gofumpt", "-lang=go1.24", "-w", outputDir]);
 }
 
-function parseTypeScriptFiles(failingTests: Set<string>, folder: string): void {
+function parseTypeScriptFiles(failingTests: Set<string>, manualTests: Set<string>, folder: string): void {
     const files = fs.readdirSync(folder);
 
     files.forEach(file => {
@@ -52,9 +60,9 @@ function parseTypeScriptFiles(failingTests: Set<string>, folder: string): void {
         }
 
         if (stat.isDirectory()) {
-            parseTypeScriptFiles(failingTests, filePath);
+            parseTypeScriptFiles(failingTests, manualTests, filePath);
         }
-        else if (file.endsWith(".ts")) {
+        else if (file.endsWith(".ts") && !manualTests.has(file.slice(0, -3))) {
             const content = fs.readFileSync(filePath, "utf-8");
             const test = parseFileContent(file, content);
             if (test) {
