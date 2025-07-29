@@ -8858,7 +8858,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 else {
                     if (firstChar === CharacterCodes.openBracket) {
-                        symbolName = symbolName.substring(1, symbolName.length - 1);
+                        symbolName = symbolName.substring(1, symbolName.length - 1).trim();
                         firstChar = symbolName.charCodeAt(0);
                     }
                     let expression: Expression | undefined;
