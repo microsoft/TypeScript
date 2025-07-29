@@ -458,15 +458,6 @@ func (f *FourslashTest) openFile(t *testing.T, filename string) {
 	})
 }
 
-func (f *FourslashTest) currentTextDocumentPositionParams() lsproto.TextDocumentPositionParams {
-	return lsproto.TextDocumentPositionParams{
-		TextDocument: lsproto.TextDocumentIdentifier{
-			Uri: ls.FileNameToDocumentURI(f.activeFilename),
-		},
-		Position: f.currentCaretPosition,
-	}
-}
-
 func getLanguageKind(filename string) lsproto.LanguageKind {
 	if tspath.FileExtensionIsOneOf(
 		filename,
@@ -560,8 +551,11 @@ func (f *FourslashTest) verifyCompletionsWorker(t *testing.T, expected *Completi
 		prefix = fmt.Sprintf("At position (Ln %d, Col %d): ", f.currentCaretPosition.Line, f.currentCaretPosition.Character)
 	}
 	params := &lsproto.CompletionParams{
-		TextDocumentPositionParams: f.currentTextDocumentPositionParams(),
-		Context:                    &lsproto.CompletionContext{},
+		TextDocument: lsproto.TextDocumentIdentifier{
+			Uri: ls.FileNameToDocumentURI(f.activeFilename),
+		},
+		Position: f.currentCaretPosition,
+		Context:  &lsproto.CompletionContext{},
 	}
 	resMsg, result, resultOk := sendRequest(t, f, lsproto.TextDocumentCompletionInfo, params)
 	if resMsg == nil {
@@ -811,8 +805,11 @@ func (f *FourslashTest) VerifyBaselineFindAllReferences(
 		f.GoToMarkerOrRange(t, markerOrRange)
 
 		params := &lsproto.ReferenceParams{
-			TextDocumentPositionParams: f.currentTextDocumentPositionParams(),
-			Context:                    &lsproto.ReferenceContext{},
+			TextDocument: lsproto.TextDocumentIdentifier{
+				Uri: ls.FileNameToDocumentURI(f.activeFilename),
+			},
+			Position: f.currentCaretPosition,
+			Context:  &lsproto.ReferenceContext{},
 		}
 		resMsg, result, resultOk := sendRequest(t, f, lsproto.TextDocumentReferencesInfo, params)
 		if resMsg == nil {
@@ -866,7 +863,10 @@ func (f *FourslashTest) VerifyBaselineGoToDefinition(
 		f.GoToMarkerOrRange(t, markerOrRange)
 
 		params := &lsproto.DefinitionParams{
-			TextDocumentPositionParams: f.currentTextDocumentPositionParams(),
+			TextDocument: lsproto.TextDocumentIdentifier{
+				Uri: ls.FileNameToDocumentURI(f.activeFilename),
+			},
+			Position: f.currentCaretPosition,
 		}
 
 		resMsg, result, resultOk := sendRequest(t, f, lsproto.TextDocumentDefinitionInfo, params)
@@ -1073,9 +1073,7 @@ func (f *FourslashTest) editScript(t *testing.T, fileName string, start int, end
 	}
 	sendNotification(t, f, lsproto.TextDocumentDidChangeInfo, &lsproto.DidChangeTextDocumentParams{
 		TextDocument: lsproto.VersionedTextDocumentIdentifier{
-			TextDocumentIdentifier: lsproto.TextDocumentIdentifier{
-				Uri: ls.FileNameToDocumentURI(fileName),
-			},
+			Uri:     ls.FileNameToDocumentURI(fileName),
 			Version: script.version,
 		},
 		ContentChanges: []lsproto.TextDocumentContentChangePartialOrWholeDocument{

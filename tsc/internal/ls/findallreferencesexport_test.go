@@ -23,11 +23,9 @@ func (l *LanguageService) TestProvideReferences(fileName string, pos int) (lspro
 	_, sourceFile := l.tryGetProgramAndFile(fileName)
 	lsPos := l.converters.PositionToLineAndCharacter(sourceFile, core.TextPos(pos))
 	return l.ProvideReferences(context.TODO(), &lsproto.ReferenceParams{
-		TextDocumentPositionParams: lsproto.TextDocumentPositionParams{
-			TextDocument: lsproto.TextDocumentIdentifier{
-				Uri: FileNameToDocumentURI(fileName),
-			},
-			Position: lsPos,
+		TextDocument: lsproto.TextDocumentIdentifier{
+			Uri: FileNameToDocumentURI(fileName),
 		},
+		Position: lsPos,
 	})
 }

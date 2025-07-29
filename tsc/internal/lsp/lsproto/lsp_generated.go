@@ -12,9 +12,48 @@ import (
 // Structures
 
 type ImplementationParams struct {
-	TextDocumentPositionParams
-	WorkDoneProgressParams
-	PartialResultParams
+	// The text document.
+	TextDocument TextDocumentIdentifier `json:"textDocument"`
+
+	// The position inside the text document.
+	Position Position `json:"position"`
+
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+
+	// An optional token that a server can use to report partial results (e.g. streaming) to
+	// the client.
+	PartialResultToken *IntegerOrString `json:"partialResultToken,omitempty"`
+}
+
+func (s *ImplementationParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+		Position     requiredProp `json:"position"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+	if !keys.Position {
+		return fmt.Errorf("required key 'position' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TextDocument       TextDocumentIdentifier `json:"textDocument"`
+		Position           Position               `json:"position"`
+		WorkDoneToken      *IntegerOrString       `json:"workDoneToken,omitempty"`
+		PartialResultToken *IntegerOrString       `json:"partialResultToken,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Represents a location inside a resource, such as a line
@@ -54,21 +93,122 @@ func (s *Location) UnmarshalJSON(data []byte) error {
 }
 
 type ImplementationRegistrationOptions struct {
-	TextDocumentRegistrationOptions
-	ImplementationOptions
-	StaticRegistrationOptions
+	// A document selector to identify the scope of the registration. If set to null
+	// the document selector provided on the client side will be used.
+	DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
+
+	// The id used to register the request. The id can be used to deregister
+	// the request again. See also Registration#id.
+	Id *string `json:"id,omitempty"`
+}
+
+func (s *ImplementationRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		DocumentSelector requiredProp `json:"documentSelector"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+		WorkDoneProgress *bool                  `json:"workDoneProgress,omitempty"`
+		Id               *string                `json:"id,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 type TypeDefinitionParams struct {
-	TextDocumentPositionParams
-	WorkDoneProgressParams
-	PartialResultParams
+	// The text document.
+	TextDocument TextDocumentIdentifier `json:"textDocument"`
+
+	// The position inside the text document.
+	Position Position `json:"position"`
+
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+
+	// An optional token that a server can use to report partial results (e.g. streaming) to
+	// the client.
+	PartialResultToken *IntegerOrString `json:"partialResultToken,omitempty"`
+}
+
+func (s *TypeDefinitionParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+		Position     requiredProp `json:"position"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+	if !keys.Position {
+		return fmt.Errorf("required key 'position' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TextDocument       TextDocumentIdentifier `json:"textDocument"`
+		Position           Position               `json:"position"`
+		WorkDoneToken      *IntegerOrString       `json:"workDoneToken,omitempty"`
+		PartialResultToken *IntegerOrString       `json:"partialResultToken,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 type TypeDefinitionRegistrationOptions struct {
-	TextDocumentRegistrationOptions
-	TypeDefinitionOptions
-	StaticRegistrationOptions
+	// A document selector to identify the scope of the registration. If set to null
+	// the document selector provided on the client side will be used.
+	DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
+
+	// The id used to register the request. The id can be used to deregister
+	// the request again. See also Registration#id.
+	Id *string `json:"id,omitempty"`
+}
+
+func (s *TypeDefinitionRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		DocumentSelector requiredProp `json:"documentSelector"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+		WorkDoneProgress *bool                  `json:"workDoneProgress,omitempty"`
+		Id               *string                `json:"id,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // A workspace folder inside a client.
@@ -168,8 +308,12 @@ func (s *ConfigurationParams) UnmarshalJSON(data []byte) error {
 
 // Parameters for a DocumentColorRequest.
 type DocumentColorParams struct {
-	WorkDoneProgressParams
-	PartialResultParams
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+
+	// An optional token that a server can use to report partial results (e.g. streaming) to
+	// the client.
+	PartialResultToken *IntegerOrString `json:"partialResultToken,omitempty"`
 
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
@@ -192,10 +336,9 @@ func (s *DocumentColorParams) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		WorkDoneProgressParams
-		PartialResultParams
-
-		TextDocument TextDocumentIdentifier `json:"textDocument"`
+		WorkDoneToken      *IntegerOrString       `json:"workDoneToken,omitempty"`
+		PartialResultToken *IntegerOrString       `json:"partialResultToken,omitempty"`
+		TextDocument       TextDocumentIdentifier `json:"textDocument"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -239,15 +382,50 @@ func (s *ColorInformation) UnmarshalJSON(data []byte) error {
 }
 
 type DocumentColorRegistrationOptions struct {
-	TextDocumentRegistrationOptions
-	DocumentColorOptions
-	StaticRegistrationOptions
+	// A document selector to identify the scope of the registration. If set to null
+	// the document selector provided on the client side will be used.
+	DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
+
+	// The id used to register the request. The id can be used to deregister
+	// the request again. See also Registration#id.
+	Id *string `json:"id,omitempty"`
+}
+
+func (s *DocumentColorRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		DocumentSelector requiredProp `json:"documentSelector"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+		WorkDoneProgress *bool                  `json:"workDoneProgress,omitempty"`
+		Id               *string                `json:"id,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Parameters for a ColorPresentationRequest.
 type ColorPresentationParams struct {
-	WorkDoneProgressParams
-	PartialResultParams
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+
+	// An optional token that a server can use to report partial results (e.g. streaming) to
+	// the client.
+	PartialResultToken *IntegerOrString `json:"partialResultToken,omitempty"`
 
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
@@ -284,12 +462,11 @@ func (s *ColorPresentationParams) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		WorkDoneProgressParams
-		PartialResultParams
-
-		TextDocument TextDocumentIdentifier `json:"textDocument"`
-		Color        Color                  `json:"color"`
-		Range        Range                  `json:"range"`
+		WorkDoneToken      *IntegerOrString       `json:"workDoneToken,omitempty"`
+		PartialResultToken *IntegerOrString       `json:"partialResultToken,omitempty"`
+		TextDocument       TextDocumentIdentifier `json:"textDocument"`
+		Color              Color                  `json:"color"`
+		Range              Range                  `json:"range"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -372,8 +549,12 @@ func (s *TextDocumentRegistrationOptions) UnmarshalJSON(data []byte) error {
 
 // Parameters for a FoldingRangeRequest.
 type FoldingRangeParams struct {
-	WorkDoneProgressParams
-	PartialResultParams
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+
+	// An optional token that a server can use to report partial results (e.g. streaming) to
+	// the client.
+	PartialResultToken *IntegerOrString `json:"partialResultToken,omitempty"`
 
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
@@ -396,10 +577,9 @@ func (s *FoldingRangeParams) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		WorkDoneProgressParams
-		PartialResultParams
-
-		TextDocument TextDocumentIdentifier `json:"textDocument"`
+		WorkDoneToken      *IntegerOrString       `json:"workDoneToken,omitempty"`
+		PartialResultToken *IntegerOrString       `json:"partialResultToken,omitempty"`
+		TextDocument       TextDocumentIdentifier `json:"textDocument"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -468,27 +648,132 @@ func (s *FoldingRange) UnmarshalJSON(data []byte) error {
 }
 
 type FoldingRangeRegistrationOptions struct {
-	TextDocumentRegistrationOptions
-	FoldingRangeOptions
-	StaticRegistrationOptions
+	// A document selector to identify the scope of the registration. If set to null
+	// the document selector provided on the client side will be used.
+	DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
+
+	// The id used to register the request. The id can be used to deregister
+	// the request again. See also Registration#id.
+	Id *string `json:"id,omitempty"`
+}
+
+func (s *FoldingRangeRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		DocumentSelector requiredProp `json:"documentSelector"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+		WorkDoneProgress *bool                  `json:"workDoneProgress,omitempty"`
+		Id               *string                `json:"id,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 type DeclarationParams struct {
-	TextDocumentPositionParams
-	WorkDoneProgressParams
-	PartialResultParams
+	// The text document.
+	TextDocument TextDocumentIdentifier `json:"textDocument"`
+
+	// The position inside the text document.
+	Position Position `json:"position"`
+
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+
+	// An optional token that a server can use to report partial results (e.g. streaming) to
+	// the client.
+	PartialResultToken *IntegerOrString `json:"partialResultToken,omitempty"`
+}
+
+func (s *DeclarationParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+		Position     requiredProp `json:"position"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+	if !keys.Position {
+		return fmt.Errorf("required key 'position' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TextDocument       TextDocumentIdentifier `json:"textDocument"`
+		Position           Position               `json:"position"`
+		WorkDoneToken      *IntegerOrString       `json:"workDoneToken,omitempty"`
+		PartialResultToken *IntegerOrString       `json:"partialResultToken,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 type DeclarationRegistrationOptions struct {
-	DeclarationOptions
-	TextDocumentRegistrationOptions
-	StaticRegistrationOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
+
+	// A document selector to identify the scope of the registration. If set to null
+	// the document selector provided on the client side will be used.
+	DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+
+	// The id used to register the request. The id can be used to deregister
+	// the request again. See also Registration#id.
+	Id *string `json:"id,omitempty"`
+}
+
+func (s *DeclarationRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		DocumentSelector requiredProp `json:"documentSelector"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgress *bool                  `json:"workDoneProgress,omitempty"`
+		DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+		Id               *string                `json:"id,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // A parameter literal used in selection range requests.
 type SelectionRangeParams struct {
-	WorkDoneProgressParams
-	PartialResultParams
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+
+	// An optional token that a server can use to report partial results (e.g. streaming) to
+	// the client.
+	PartialResultToken *IntegerOrString `json:"partialResultToken,omitempty"`
 
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
@@ -518,11 +803,10 @@ func (s *SelectionRangeParams) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		WorkDoneProgressParams
-		PartialResultParams
-
-		TextDocument TextDocumentIdentifier `json:"textDocument"`
-		Positions    []Position             `json:"positions"`
+		WorkDoneToken      *IntegerOrString       `json:"workDoneToken,omitempty"`
+		PartialResultToken *IntegerOrString       `json:"partialResultToken,omitempty"`
+		TextDocument       TextDocumentIdentifier `json:"textDocument"`
+		Positions          []Position             `json:"positions"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -563,9 +847,40 @@ func (s *SelectionRange) UnmarshalJSON(data []byte) error {
 }
 
 type SelectionRangeRegistrationOptions struct {
-	SelectionRangeOptions
-	TextDocumentRegistrationOptions
-	StaticRegistrationOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
+
+	// A document selector to identify the scope of the registration. If set to null
+	// the document selector provided on the client side will be used.
+	DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+
+	// The id used to register the request. The id can be used to deregister
+	// the request again. See also Registration#id.
+	Id *string `json:"id,omitempty"`
+}
+
+func (s *SelectionRangeRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		DocumentSelector requiredProp `json:"documentSelector"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgress *bool                  `json:"workDoneProgress,omitempty"`
+		DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+		Id               *string                `json:"id,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 type WorkDoneProgressCreateParams struct {
@@ -628,8 +943,43 @@ func (s *WorkDoneProgressCancelParams) UnmarshalJSON(data []byte) error {
 //
 // Since: 3.16.0
 type CallHierarchyPrepareParams struct {
-	TextDocumentPositionParams
-	WorkDoneProgressParams
+	// The text document.
+	TextDocument TextDocumentIdentifier `json:"textDocument"`
+
+	// The position inside the text document.
+	Position Position `json:"position"`
+
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+}
+
+func (s *CallHierarchyPrepareParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+		Position     requiredProp `json:"position"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+	if !keys.Position {
+		return fmt.Errorf("required key 'position' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TextDocument  TextDocumentIdentifier `json:"textDocument"`
+		Position      Position               `json:"position"`
+		WorkDoneToken *IntegerOrString       `json:"workDoneToken,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Represents programming constructs like functions or constructors in the context
@@ -714,17 +1064,52 @@ func (s *CallHierarchyItem) UnmarshalJSON(data []byte) error {
 //
 // Since: 3.16.0
 type CallHierarchyRegistrationOptions struct {
-	TextDocumentRegistrationOptions
-	CallHierarchyOptions
-	StaticRegistrationOptions
+	// A document selector to identify the scope of the registration. If set to null
+	// the document selector provided on the client side will be used.
+	DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
+
+	// The id used to register the request. The id can be used to deregister
+	// the request again. See also Registration#id.
+	Id *string `json:"id,omitempty"`
+}
+
+func (s *CallHierarchyRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		DocumentSelector requiredProp `json:"documentSelector"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+		WorkDoneProgress *bool                  `json:"workDoneProgress,omitempty"`
+		Id               *string                `json:"id,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // The parameter of a `callHierarchy/incomingCalls` request.
 //
 // Since: 3.16.0
 type CallHierarchyIncomingCallsParams struct {
-	WorkDoneProgressParams
-	PartialResultParams
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+
+	// An optional token that a server can use to report partial results (e.g. streaming) to
+	// the client.
+	PartialResultToken *IntegerOrString `json:"partialResultToken,omitempty"`
 
 	Item *CallHierarchyItem `json:"item"`
 }
@@ -746,10 +1131,9 @@ func (s *CallHierarchyIncomingCallsParams) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		WorkDoneProgressParams
-		PartialResultParams
-
-		Item *CallHierarchyItem `json:"item"`
+		WorkDoneToken      *IntegerOrString   `json:"workDoneToken,omitempty"`
+		PartialResultToken *IntegerOrString   `json:"partialResultToken,omitempty"`
+		Item               *CallHierarchyItem `json:"item"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -799,8 +1183,12 @@ func (s *CallHierarchyIncomingCall) UnmarshalJSON(data []byte) error {
 //
 // Since: 3.16.0
 type CallHierarchyOutgoingCallsParams struct {
-	WorkDoneProgressParams
-	PartialResultParams
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+
+	// An optional token that a server can use to report partial results (e.g. streaming) to
+	// the client.
+	PartialResultToken *IntegerOrString `json:"partialResultToken,omitempty"`
 
 	Item *CallHierarchyItem `json:"item"`
 }
@@ -822,10 +1210,9 @@ func (s *CallHierarchyOutgoingCallsParams) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		WorkDoneProgressParams
-		PartialResultParams
-
-		Item *CallHierarchyItem `json:"item"`
+		WorkDoneToken      *IntegerOrString   `json:"workDoneToken,omitempty"`
+		PartialResultToken *IntegerOrString   `json:"partialResultToken,omitempty"`
+		Item               *CallHierarchyItem `json:"item"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -874,8 +1261,12 @@ func (s *CallHierarchyOutgoingCall) UnmarshalJSON(data []byte) error {
 
 // Since: 3.16.0
 type SemanticTokensParams struct {
-	WorkDoneProgressParams
-	PartialResultParams
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+
+	// An optional token that a server can use to report partial results (e.g. streaming) to
+	// the client.
+	PartialResultToken *IntegerOrString `json:"partialResultToken,omitempty"`
 
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
@@ -898,10 +1289,9 @@ func (s *SemanticTokensParams) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		WorkDoneProgressParams
-		PartialResultParams
-
-		TextDocument TextDocumentIdentifier `json:"textDocument"`
+		WorkDoneToken      *IntegerOrString       `json:"workDoneToken,omitempty"`
+		PartialResultToken *IntegerOrString       `json:"partialResultToken,omitempty"`
+		TextDocument       TextDocumentIdentifier `json:"textDocument"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -973,15 +1363,67 @@ func (s *SemanticTokensPartialResult) UnmarshalJSON(data []byte) error {
 
 // Since: 3.16.0
 type SemanticTokensRegistrationOptions struct {
-	TextDocumentRegistrationOptions
-	SemanticTokensOptions
-	StaticRegistrationOptions
+	// A document selector to identify the scope of the registration. If set to null
+	// the document selector provided on the client side will be used.
+	DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
+
+	// The legend used by the server
+	Legend *SemanticTokensLegend `json:"legend"`
+
+	// Server supports providing semantic tokens for a specific range
+	// of a document.
+	Range *BooleanOrEmptyObject `json:"range,omitempty"`
+
+	// Server supports providing semantic tokens for a full document.
+	Full *BooleanOrSemanticTokensFullDelta `json:"full,omitempty"`
+
+	// The id used to register the request. The id can be used to deregister
+	// the request again. See also Registration#id.
+	Id *string `json:"id,omitempty"`
+}
+
+func (s *SemanticTokensRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		DocumentSelector requiredProp `json:"documentSelector"`
+		Legend           requiredProp `json:"legend"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
+	if !keys.Legend {
+		return fmt.Errorf("required key 'legend' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		DocumentSelector DocumentSelectorOrNull            `json:"documentSelector"`
+		WorkDoneProgress *bool                             `json:"workDoneProgress,omitempty"`
+		Legend           *SemanticTokensLegend             `json:"legend"`
+		Range            *BooleanOrEmptyObject             `json:"range,omitempty"`
+		Full             *BooleanOrSemanticTokensFullDelta `json:"full,omitempty"`
+		Id               *string                           `json:"id,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Since: 3.16.0
 type SemanticTokensDeltaParams struct {
-	WorkDoneProgressParams
-	PartialResultParams
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+
+	// An optional token that a server can use to report partial results (e.g. streaming) to
+	// the client.
+	PartialResultToken *IntegerOrString `json:"partialResultToken,omitempty"`
 
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
@@ -1012,11 +1454,10 @@ func (s *SemanticTokensDeltaParams) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		WorkDoneProgressParams
-		PartialResultParams
-
-		TextDocument     TextDocumentIdentifier `json:"textDocument"`
-		PreviousResultId string                 `json:"previousResultId"`
+		WorkDoneToken      *IntegerOrString       `json:"workDoneToken,omitempty"`
+		PartialResultToken *IntegerOrString       `json:"partialResultToken,omitempty"`
+		TextDocument       TextDocumentIdentifier `json:"textDocument"`
+		PreviousResultId   string                 `json:"previousResultId"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -1084,8 +1525,12 @@ func (s *SemanticTokensDeltaPartialResult) UnmarshalJSON(data []byte) error {
 
 // Since: 3.16.0
 type SemanticTokensRangeParams struct {
-	WorkDoneProgressParams
-	PartialResultParams
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+
+	// An optional token that a server can use to report partial results (e.g. streaming) to
+	// the client.
+	PartialResultToken *IntegerOrString `json:"partialResultToken,omitempty"`
 
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
@@ -1115,11 +1560,10 @@ func (s *SemanticTokensRangeParams) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		WorkDoneProgressParams
-		PartialResultParams
-
-		TextDocument TextDocumentIdentifier `json:"textDocument"`
-		Range        Range                  `json:"range"`
+		WorkDoneToken      *IntegerOrString       `json:"workDoneToken,omitempty"`
+		PartialResultToken *IntegerOrString       `json:"partialResultToken,omitempty"`
+		TextDocument       TextDocumentIdentifier `json:"textDocument"`
+		Range              Range                  `json:"range"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -1208,8 +1652,43 @@ func (s *ShowDocumentResult) UnmarshalJSON(data []byte) error {
 }
 
 type LinkedEditingRangeParams struct {
-	TextDocumentPositionParams
-	WorkDoneProgressParams
+	// The text document.
+	TextDocument TextDocumentIdentifier `json:"textDocument"`
+
+	// The position inside the text document.
+	Position Position `json:"position"`
+
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+}
+
+func (s *LinkedEditingRangeParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+		Position     requiredProp `json:"position"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+	if !keys.Position {
+		return fmt.Errorf("required key 'position' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TextDocument  TextDocumentIdentifier `json:"textDocument"`
+		Position      Position               `json:"position"`
+		WorkDoneToken *IntegerOrString       `json:"workDoneToken,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // The result of a linked editing range request.
@@ -1251,9 +1730,40 @@ func (s *LinkedEditingRanges) UnmarshalJSON(data []byte) error {
 }
 
 type LinkedEditingRangeRegistrationOptions struct {
-	TextDocumentRegistrationOptions
-	LinkedEditingRangeOptions
-	StaticRegistrationOptions
+	// A document selector to identify the scope of the registration. If set to null
+	// the document selector provided on the client side will be used.
+	DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
+
+	// The id used to register the request. The id can be used to deregister
+	// the request again. See also Registration#id.
+	Id *string `json:"id,omitempty"`
+}
+
+func (s *LinkedEditingRangeRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		DocumentSelector requiredProp `json:"documentSelector"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+		WorkDoneProgress *bool                  `json:"workDoneProgress,omitempty"`
+		Id               *string                `json:"id,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // The parameters sent in notifications/requests for user-initiated creation of
@@ -1422,9 +1932,48 @@ func (s *DeleteFilesParams) UnmarshalJSON(data []byte) error {
 }
 
 type MonikerParams struct {
-	TextDocumentPositionParams
-	WorkDoneProgressParams
-	PartialResultParams
+	// The text document.
+	TextDocument TextDocumentIdentifier `json:"textDocument"`
+
+	// The position inside the text document.
+	Position Position `json:"position"`
+
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+
+	// An optional token that a server can use to report partial results (e.g. streaming) to
+	// the client.
+	PartialResultToken *IntegerOrString `json:"partialResultToken,omitempty"`
+}
+
+func (s *MonikerParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+		Position     requiredProp `json:"position"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+	if !keys.Position {
+		return fmt.Errorf("required key 'position' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TextDocument       TextDocumentIdentifier `json:"textDocument"`
+		Position           Position               `json:"position"`
+		WorkDoneToken      *IntegerOrString       `json:"workDoneToken,omitempty"`
+		PartialResultToken *IntegerOrString       `json:"partialResultToken,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Moniker definition to match LSIF 0.5 moniker definition.
@@ -1480,16 +2029,78 @@ func (s *Moniker) UnmarshalJSON(data []byte) error {
 }
 
 type MonikerRegistrationOptions struct {
-	TextDocumentRegistrationOptions
-	MonikerOptions
+	// A document selector to identify the scope of the registration. If set to null
+	// the document selector provided on the client side will be used.
+	DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
+}
+
+func (s *MonikerRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		DocumentSelector requiredProp `json:"documentSelector"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+		WorkDoneProgress *bool                  `json:"workDoneProgress,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // The parameter of a `textDocument/prepareTypeHierarchy` request.
 //
 // Since: 3.17.0
 type TypeHierarchyPrepareParams struct {
-	TextDocumentPositionParams
-	WorkDoneProgressParams
+	// The text document.
+	TextDocument TextDocumentIdentifier `json:"textDocument"`
+
+	// The position inside the text document.
+	Position Position `json:"position"`
+
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+}
+
+func (s *TypeHierarchyPrepareParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+		Position     requiredProp `json:"position"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+	if !keys.Position {
+		return fmt.Errorf("required key 'position' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TextDocument  TextDocumentIdentifier `json:"textDocument"`
+		Position      Position               `json:"position"`
+		WorkDoneToken *IntegerOrString       `json:"workDoneToken,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Since: 3.17.0
@@ -1575,17 +2186,52 @@ func (s *TypeHierarchyItem) UnmarshalJSON(data []byte) error {
 //
 // Since: 3.17.0
 type TypeHierarchyRegistrationOptions struct {
-	TextDocumentRegistrationOptions
-	TypeHierarchyOptions
-	StaticRegistrationOptions
+	// A document selector to identify the scope of the registration. If set to null
+	// the document selector provided on the client side will be used.
+	DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
+
+	// The id used to register the request. The id can be used to deregister
+	// the request again. See also Registration#id.
+	Id *string `json:"id,omitempty"`
+}
+
+func (s *TypeHierarchyRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		DocumentSelector requiredProp `json:"documentSelector"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+		WorkDoneProgress *bool                  `json:"workDoneProgress,omitempty"`
+		Id               *string                `json:"id,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // The parameter of a `typeHierarchy/supertypes` request.
 //
 // Since: 3.17.0
 type TypeHierarchySupertypesParams struct {
-	WorkDoneProgressParams
-	PartialResultParams
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+
+	// An optional token that a server can use to report partial results (e.g. streaming) to
+	// the client.
+	PartialResultToken *IntegerOrString `json:"partialResultToken,omitempty"`
 
 	Item *TypeHierarchyItem `json:"item"`
 }
@@ -1607,10 +2253,9 @@ func (s *TypeHierarchySupertypesParams) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		WorkDoneProgressParams
-		PartialResultParams
-
-		Item *TypeHierarchyItem `json:"item"`
+		WorkDoneToken      *IntegerOrString   `json:"workDoneToken,omitempty"`
+		PartialResultToken *IntegerOrString   `json:"partialResultToken,omitempty"`
+		Item               *TypeHierarchyItem `json:"item"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -1620,8 +2265,12 @@ func (s *TypeHierarchySupertypesParams) UnmarshalJSON(data []byte) error {
 //
 // Since: 3.17.0
 type TypeHierarchySubtypesParams struct {
-	WorkDoneProgressParams
-	PartialResultParams
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+
+	// An optional token that a server can use to report partial results (e.g. streaming) to
+	// the client.
+	PartialResultToken *IntegerOrString `json:"partialResultToken,omitempty"`
 
 	Item *TypeHierarchyItem `json:"item"`
 }
@@ -1643,10 +2292,9 @@ func (s *TypeHierarchySubtypesParams) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		WorkDoneProgressParams
-		PartialResultParams
-
-		Item *TypeHierarchyItem `json:"item"`
+		WorkDoneToken      *IntegerOrString   `json:"workDoneToken,omitempty"`
+		PartialResultToken *IntegerOrString   `json:"partialResultToken,omitempty"`
+		Item               *TypeHierarchyItem `json:"item"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -1656,7 +2304,8 @@ func (s *TypeHierarchySubtypesParams) UnmarshalJSON(data []byte) error {
 //
 // Since: 3.17.0
 type InlineValueParams struct {
-	WorkDoneProgressParams
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
 
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
@@ -1694,11 +2343,10 @@ func (s *InlineValueParams) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		WorkDoneProgressParams
-
-		TextDocument TextDocumentIdentifier `json:"textDocument"`
-		Range        Range                  `json:"range"`
-		Context      *InlineValueContext    `json:"context"`
+		WorkDoneToken *IntegerOrString       `json:"workDoneToken,omitempty"`
+		TextDocument  TextDocumentIdentifier `json:"textDocument"`
+		Range         Range                  `json:"range"`
+		Context       *InlineValueContext    `json:"context"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -1708,16 +2356,48 @@ func (s *InlineValueParams) UnmarshalJSON(data []byte) error {
 //
 // Since: 3.17.0
 type InlineValueRegistrationOptions struct {
-	InlineValueOptions
-	TextDocumentRegistrationOptions
-	StaticRegistrationOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
+
+	// A document selector to identify the scope of the registration. If set to null
+	// the document selector provided on the client side will be used.
+	DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+
+	// The id used to register the request. The id can be used to deregister
+	// the request again. See also Registration#id.
+	Id *string `json:"id,omitempty"`
+}
+
+func (s *InlineValueRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		DocumentSelector requiredProp `json:"documentSelector"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgress *bool                  `json:"workDoneProgress,omitempty"`
+		DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+		Id               *string                `json:"id,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // A parameter literal used in inlay hint requests.
 //
 // Since: 3.17.0
 type InlayHintParams struct {
-	WorkDoneProgressParams
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
 
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
@@ -1747,10 +2427,9 @@ func (s *InlayHintParams) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		WorkDoneProgressParams
-
-		TextDocument TextDocumentIdentifier `json:"textDocument"`
-		Range        Range                  `json:"range"`
+		WorkDoneToken *IntegerOrString       `json:"workDoneToken,omitempty"`
+		TextDocument  TextDocumentIdentifier `json:"textDocument"`
+		Range         Range                  `json:"range"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -1843,17 +2522,57 @@ func (s *InlayHint) UnmarshalJSON(data []byte) error {
 //
 // Since: 3.17.0
 type InlayHintRegistrationOptions struct {
-	InlayHintOptions
-	TextDocumentRegistrationOptions
-	StaticRegistrationOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
+
+	// The server provides support to resolve additional
+	// information for an inlay hint item.
+	ResolveProvider *bool `json:"resolveProvider,omitempty"`
+
+	// A document selector to identify the scope of the registration. If set to null
+	// the document selector provided on the client side will be used.
+	DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+
+	// The id used to register the request. The id can be used to deregister
+	// the request again. See also Registration#id.
+	Id *string `json:"id,omitempty"`
+}
+
+func (s *InlayHintRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		DocumentSelector requiredProp `json:"documentSelector"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgress *bool                  `json:"workDoneProgress,omitempty"`
+		ResolveProvider  *bool                  `json:"resolveProvider,omitempty"`
+		DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+		Id               *string                `json:"id,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Parameters of the document diagnostic request.
 //
 // Since: 3.17.0
 type DocumentDiagnosticParams struct {
-	WorkDoneProgressParams
-	PartialResultParams
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+
+	// An optional token that a server can use to report partial results (e.g. streaming) to
+	// the client.
+	PartialResultToken *IntegerOrString `json:"partialResultToken,omitempty"`
 
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
@@ -1882,12 +2601,11 @@ func (s *DocumentDiagnosticParams) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		WorkDoneProgressParams
-		PartialResultParams
-
-		TextDocument     TextDocumentIdentifier `json:"textDocument"`
-		Identifier       *string                `json:"identifier,omitempty"`
-		PreviousResultId *string                `json:"previousResultId,omitempty"`
+		WorkDoneToken      *IntegerOrString       `json:"workDoneToken,omitempty"`
+		PartialResultToken *IntegerOrString       `json:"partialResultToken,omitempty"`
+		TextDocument       TextDocumentIdentifier `json:"textDocument"`
+		Identifier         *string                `json:"identifier,omitempty"`
+		PreviousResultId   *string                `json:"previousResultId,omitempty"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -1957,17 +2675,76 @@ func (s *DiagnosticServerCancellationData) UnmarshalJSON(data []byte) error {
 //
 // Since: 3.17.0
 type DiagnosticRegistrationOptions struct {
-	TextDocumentRegistrationOptions
-	DiagnosticOptions
-	StaticRegistrationOptions
+	// A document selector to identify the scope of the registration. If set to null
+	// the document selector provided on the client side will be used.
+	DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
+
+	// An optional identifier under which the diagnostics are
+	// managed by the client.
+	Identifier *string `json:"identifier,omitempty"`
+
+	// Whether the language has inter file dependencies meaning that
+	// editing code in one file can result in a different diagnostic
+	// set in another file. Inter file dependencies are common for
+	// most programming languages and typically uncommon for linters.
+	InterFileDependencies bool `json:"interFileDependencies"`
+
+	// The server provides support for workspace diagnostics as well.
+	WorkspaceDiagnostics bool `json:"workspaceDiagnostics"`
+
+	// The id used to register the request. The id can be used to deregister
+	// the request again. See also Registration#id.
+	Id *string `json:"id,omitempty"`
+}
+
+func (s *DiagnosticRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		DocumentSelector      requiredProp `json:"documentSelector"`
+		InterFileDependencies requiredProp `json:"interFileDependencies"`
+		WorkspaceDiagnostics  requiredProp `json:"workspaceDiagnostics"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
+	if !keys.InterFileDependencies {
+		return fmt.Errorf("required key 'interFileDependencies' is missing")
+	}
+	if !keys.WorkspaceDiagnostics {
+		return fmt.Errorf("required key 'workspaceDiagnostics' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		DocumentSelector      DocumentSelectorOrNull `json:"documentSelector"`
+		WorkDoneProgress      *bool                  `json:"workDoneProgress,omitempty"`
+		Identifier            *string                `json:"identifier,omitempty"`
+		InterFileDependencies bool                   `json:"interFileDependencies"`
+		WorkspaceDiagnostics  bool                   `json:"workspaceDiagnostics"`
+		Id                    *string                `json:"id,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Parameters of the workspace diagnostic request.
 //
 // Since: 3.17.0
 type WorkspaceDiagnosticParams struct {
-	WorkDoneProgressParams
-	PartialResultParams
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+
+	// An optional token that a server can use to report partial results (e.g. streaming) to
+	// the client.
+	PartialResultToken *IntegerOrString `json:"partialResultToken,omitempty"`
 
 	// The additional identifier provided during registration.
 	Identifier *string `json:"identifier,omitempty"`
@@ -1994,11 +2771,10 @@ func (s *WorkspaceDiagnosticParams) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		WorkDoneProgressParams
-		PartialResultParams
-
-		Identifier        *string            `json:"identifier,omitempty"`
-		PreviousResultIds []PreviousResultId `json:"previousResultIds"`
+		WorkDoneToken      *IntegerOrString   `json:"workDoneToken,omitempty"`
+		PartialResultToken *IntegerOrString   `json:"partialResultToken,omitempty"`
+		Identifier         *string            `json:"identifier,omitempty"`
+		PreviousResultIds  []PreviousResultId `json:"previousResultIds"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -2108,8 +2884,41 @@ func (s *DidOpenNotebookDocumentParams) UnmarshalJSON(data []byte) error {
 //
 // Since: 3.17.0
 type NotebookDocumentSyncRegistrationOptions struct {
-	NotebookDocumentSyncOptions
-	StaticRegistrationOptions
+	// The notebooks to be synced
+	NotebookSelector []NotebookDocumentFilterWithNotebookOrCells `json:"notebookSelector"`
+
+	// Whether save notification should be forwarded to
+	// the server. Will only be honored if mode === `notebook`.
+	Save *bool `json:"save,omitempty"`
+
+	// The id used to register the request. The id can be used to deregister
+	// the request again. See also Registration#id.
+	Id *string `json:"id,omitempty"`
+}
+
+func (s *NotebookDocumentSyncRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		NotebookSelector requiredProp `json:"notebookSelector"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.NotebookSelector {
+		return fmt.Errorf("required key 'notebookSelector' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		NotebookSelector []NotebookDocumentFilterWithNotebookOrCells `json:"notebookSelector"`
+		Save             *bool                                       `json:"save,omitempty"`
+		Id               *string                                     `json:"id,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // The params sent in a change notebook document notification.
@@ -2243,8 +3052,14 @@ func (s *DidCloseNotebookDocumentParams) UnmarshalJSON(data []byte) error {
 //
 // Proposed.
 type InlineCompletionParams struct {
-	TextDocumentPositionParams
-	WorkDoneProgressParams
+	// The text document.
+	TextDocument TextDocumentIdentifier `json:"textDocument"`
+
+	// The position inside the text document.
+	Position Position `json:"position"`
+
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
 
 	// Additional information about the context in which inline completions were
 	// requested.
@@ -2254,7 +3069,9 @@ type InlineCompletionParams struct {
 func (s *InlineCompletionParams) UnmarshalJSON(data []byte) error {
 	// Check required props
 	type requiredProps struct {
-		Context requiredProp `json:"context"`
+		TextDocument requiredProp `json:"textDocument"`
+		Position     requiredProp `json:"position"`
+		Context      requiredProp `json:"context"`
 	}
 
 	var keys requiredProps
@@ -2262,16 +3079,22 @@ func (s *InlineCompletionParams) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+	if !keys.Position {
+		return fmt.Errorf("required key 'position' is missing")
+	}
 	if !keys.Context {
 		return fmt.Errorf("required key 'context' is missing")
 	}
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		TextDocumentPositionParams
-		WorkDoneProgressParams
-
-		Context *InlineCompletionContext `json:"context"`
+		TextDocument  TextDocumentIdentifier   `json:"textDocument"`
+		Position      Position                 `json:"position"`
+		WorkDoneToken *IntegerOrString         `json:"workDoneToken,omitempty"`
+		Context       *InlineCompletionContext `json:"context"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -2361,9 +3184,40 @@ func (s *InlineCompletionItem) UnmarshalJSON(data []byte) error {
 //
 // Proposed.
 type InlineCompletionRegistrationOptions struct {
-	InlineCompletionOptions
-	TextDocumentRegistrationOptions
-	StaticRegistrationOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
+
+	// A document selector to identify the scope of the registration. If set to null
+	// the document selector provided on the client side will be used.
+	DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+
+	// The id used to register the request. The id can be used to deregister
+	// the request again. See also Registration#id.
+	Id *string `json:"id,omitempty"`
+}
+
+func (s *InlineCompletionRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		DocumentSelector requiredProp `json:"documentSelector"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgress *bool                  `json:"workDoneProgress,omitempty"`
+		DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+		Id               *string                `json:"id,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Parameters for the `workspace/textDocumentContent` request.
@@ -2441,8 +3295,36 @@ func (s *TextDocumentContentResult) UnmarshalJSON(data []byte) error {
 //
 // Proposed.
 type TextDocumentContentRegistrationOptions struct {
-	TextDocumentContentOptions
-	StaticRegistrationOptions
+	// The schemes for which the server provides content.
+	Schemes []string `json:"schemes"`
+
+	// The id used to register the request. The id can be used to deregister
+	// the request again. See also Registration#id.
+	Id *string `json:"id,omitempty"`
+}
+
+func (s *TextDocumentContentRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Schemes requiredProp `json:"schemes"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Schemes {
+		return fmt.Errorf("required key 'schemes' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Schemes []string `json:"schemes"`
+		Id      *string  `json:"id,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Parameters for the `workspace/textDocumentContent/refresh` request.
@@ -2533,8 +3415,101 @@ func (s *UnregistrationParams) UnmarshalJSON(data []byte) error {
 }
 
 type InitializeParams struct {
-	InitializeParamsBase
-	WorkspaceFoldersInitializeParams
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+
+	// The process Id of the parent process that started
+	// the server.
+	//
+	// Is `null` if the process has not been started by another process.
+	// If the parent process is not alive then the server should exit.
+	ProcessId IntegerOrNull `json:"processId"`
+
+	// Information about the client
+	//
+	// Since: 3.15.0
+	ClientInfo *ClientInfo `json:"clientInfo,omitempty"`
+
+	// The locale the client is currently showing the user interface
+	// in. This must not necessarily be the locale of the operating
+	// system.
+	//
+	// Uses IETF language tags as the value's syntax
+	// (See https://en.wikipedia.org/wiki/IETF_language_tag)
+	//
+	// Since: 3.16.0
+	Locale *string `json:"locale,omitempty"`
+
+	// The rootPath of the workspace. Is null
+	// if no folder is open.
+	//
+	// Deprecated: in favour of rootUri.
+	RootPath *StringOrNull `json:"rootPath,omitempty"`
+
+	// The rootUri of the workspace. Is null if no
+	// folder is open. If both `rootPath` and `rootUri` are set
+	// `rootUri` wins.
+	//
+	// Deprecated: in favour of workspaceFolders.
+	RootUri DocumentUriOrNull `json:"rootUri"`
+
+	// The capabilities provided by the client (editor or tool)
+	Capabilities *ClientCapabilities `json:"capabilities"`
+
+	// User provided initialization options.
+	InitializationOptions *any `json:"initializationOptions,omitempty"`
+
+	// The initial trace setting. If omitted trace is disabled ('off').
+	Trace *TraceValue `json:"trace,omitempty"`
+
+	// The workspace folders configured in the client when the server starts.
+	//
+	// This property is only available if the client supports workspace folders.
+	// It can be `null` if the client supports workspace folders but none are
+	// configured.
+	//
+	// Since: 3.6.0
+	WorkspaceFolders *WorkspaceFoldersOrNull `json:"workspaceFolders,omitempty"`
+}
+
+func (s *InitializeParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		ProcessId    requiredProp `json:"processId"`
+		RootUri      requiredProp `json:"rootUri"`
+		Capabilities requiredProp `json:"capabilities"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.ProcessId {
+		return fmt.Errorf("required key 'processId' is missing")
+	}
+	if !keys.RootUri {
+		return fmt.Errorf("required key 'rootUri' is missing")
+	}
+	if !keys.Capabilities {
+		return fmt.Errorf("required key 'capabilities' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneToken         *IntegerOrString        `json:"workDoneToken,omitempty"`
+		ProcessId             IntegerOrNull           `json:"processId"`
+		ClientInfo            *ClientInfo             `json:"clientInfo,omitempty"`
+		Locale                *string                 `json:"locale,omitempty"`
+		RootPath              *StringOrNull           `json:"rootPath,omitempty"`
+		RootUri               DocumentUriOrNull       `json:"rootUri"`
+		Capabilities          *ClientCapabilities     `json:"capabilities"`
+		InitializationOptions *any                    `json:"initializationOptions,omitempty"`
+		Trace                 *TraceValue             `json:"trace,omitempty"`
+		WorkspaceFolders      *WorkspaceFoldersOrNull `json:"workspaceFolders,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // The result returned from an initialize request.
@@ -2862,7 +3837,9 @@ func (s *DidChangeTextDocumentParams) UnmarshalJSON(data []byte) error {
 
 // Describe options to be used when registered for text document change events.
 type TextDocumentChangeRegistrationOptions struct {
-	TextDocumentRegistrationOptions
+	// A document selector to identify the scope of the registration. If set to null
+	// the document selector provided on the client side will be used.
+	DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
 
 	// How documents are synced to the server.
 	SyncKind TextDocumentSyncKind `json:"syncKind"`
@@ -2871,7 +3848,8 @@ type TextDocumentChangeRegistrationOptions struct {
 func (s *TextDocumentChangeRegistrationOptions) UnmarshalJSON(data []byte) error {
 	// Check required props
 	type requiredProps struct {
-		SyncKind requiredProp `json:"syncKind"`
+		DocumentSelector requiredProp `json:"documentSelector"`
+		SyncKind         requiredProp `json:"syncKind"`
 	}
 
 	var keys requiredProps
@@ -2879,15 +3857,17 @@ func (s *TextDocumentChangeRegistrationOptions) UnmarshalJSON(data []byte) error
 		return err
 	}
 
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
 	if !keys.SyncKind {
 		return fmt.Errorf("required key 'syncKind' is missing")
 	}
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		TextDocumentRegistrationOptions
-
-		SyncKind TextDocumentSyncKind `json:"syncKind"`
+		DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+		SyncKind         TextDocumentSyncKind   `json:"syncKind"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -2958,8 +3938,36 @@ func (s *DidSaveTextDocumentParams) UnmarshalJSON(data []byte) error {
 
 // Save registration options.
 type TextDocumentSaveRegistrationOptions struct {
-	TextDocumentRegistrationOptions
-	SaveOptions
+	// A document selector to identify the scope of the registration. If set to null
+	// the document selector provided on the client side will be used.
+	DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+
+	// The client is supposed to include the content on save.
+	IncludeText *bool `json:"includeText,omitempty"`
+}
+
+func (s *TextDocumentSaveRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		DocumentSelector requiredProp `json:"documentSelector"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+		IncludeText      *bool                  `json:"includeText,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // The parameters sent in a will save text document notification.
@@ -3141,13 +4149,53 @@ func (s *PublishDiagnosticsParams) UnmarshalJSON(data []byte) error {
 
 // Completion parameters
 type CompletionParams struct {
-	TextDocumentPositionParams
-	WorkDoneProgressParams
-	PartialResultParams
+	// The text document.
+	TextDocument TextDocumentIdentifier `json:"textDocument"`
+
+	// The position inside the text document.
+	Position Position `json:"position"`
+
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+
+	// An optional token that a server can use to report partial results (e.g. streaming) to
+	// the client.
+	PartialResultToken *IntegerOrString `json:"partialResultToken,omitempty"`
 
 	// The completion context. This is only available it the client specifies
 	// to send this using the client capability `textDocument.completion.contextSupport === true`
 	Context *CompletionContext `json:"context,omitempty"`
+}
+
+func (s *CompletionParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+		Position     requiredProp `json:"position"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+	if !keys.Position {
+		return fmt.Errorf("required key 'position' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TextDocument       TextDocumentIdentifier `json:"textDocument"`
+		Position           Position               `json:"position"`
+		WorkDoneToken      *IntegerOrString       `json:"workDoneToken,omitempty"`
+		PartialResultToken *IntegerOrString       `json:"partialResultToken,omitempty"`
+		Context            *CompletionContext     `json:"context,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // A completion item represents a text snippet that is
@@ -3413,14 +4461,110 @@ func (s *CompletionList) UnmarshalJSON(data []byte) error {
 
 // Registration options for a CompletionRequest.
 type CompletionRegistrationOptions struct {
-	TextDocumentRegistrationOptions
-	CompletionOptions
+	// A document selector to identify the scope of the registration. If set to null
+	// the document selector provided on the client side will be used.
+	DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
+
+	// Most tools trigger completion request automatically without explicitly requesting
+	// it using a keyboard shortcut (e.g. Ctrl+Space). Typically they do so when the user
+	// starts to type an identifier. For example if the user types `c` in a JavaScript file
+	// code complete will automatically pop up present `console` besides others as a
+	// completion item. Characters that make up identifiers don't need to be listed here.
+	//
+	// If code complete should automatically be trigger on characters not being valid inside
+	// an identifier (for example `.` in JavaScript) list them in `triggerCharacters`.
+	TriggerCharacters *[]string `json:"triggerCharacters,omitempty"`
+
+	// The list of all possible characters that commit a completion. This field can be used
+	// if clients don't support individual commit characters per completion item. See
+	// `ClientCapabilities.textDocument.completion.completionItem.commitCharactersSupport`
+	//
+	// If a server provides both `allCommitCharacters` and commit characters on an individual
+	// completion item the ones on the completion item win.
+	//
+	// Since: 3.2.0
+	AllCommitCharacters *[]string `json:"allCommitCharacters,omitempty"`
+
+	// The server provides support to resolve additional
+	// information for a completion item.
+	ResolveProvider *bool `json:"resolveProvider,omitempty"`
+
+	// The server supports the following `CompletionItem` specific
+	// capabilities.
+	//
+	// Since: 3.17.0
+	CompletionItem *ServerCompletionItemOptions `json:"completionItem,omitempty"`
+}
+
+func (s *CompletionRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		DocumentSelector requiredProp `json:"documentSelector"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		DocumentSelector    DocumentSelectorOrNull       `json:"documentSelector"`
+		WorkDoneProgress    *bool                        `json:"workDoneProgress,omitempty"`
+		TriggerCharacters   *[]string                    `json:"triggerCharacters,omitempty"`
+		AllCommitCharacters *[]string                    `json:"allCommitCharacters,omitempty"`
+		ResolveProvider     *bool                        `json:"resolveProvider,omitempty"`
+		CompletionItem      *ServerCompletionItemOptions `json:"completionItem,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Parameters for a HoverRequest.
 type HoverParams struct {
-	TextDocumentPositionParams
-	WorkDoneProgressParams
+	// The text document.
+	TextDocument TextDocumentIdentifier `json:"textDocument"`
+
+	// The position inside the text document.
+	Position Position `json:"position"`
+
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+}
+
+func (s *HoverParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+		Position     requiredProp `json:"position"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+	if !keys.Position {
+		return fmt.Errorf("required key 'position' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TextDocument  TextDocumentIdentifier `json:"textDocument"`
+		Position      Position               `json:"position"`
+		WorkDoneToken *IntegerOrString       `json:"workDoneToken,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // The result of a hover request.
@@ -3459,20 +4603,83 @@ func (s *Hover) UnmarshalJSON(data []byte) error {
 
 // Registration options for a HoverRequest.
 type HoverRegistrationOptions struct {
-	TextDocumentRegistrationOptions
-	HoverOptions
+	// A document selector to identify the scope of the registration. If set to null
+	// the document selector provided on the client side will be used.
+	DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
+}
+
+func (s *HoverRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		DocumentSelector requiredProp `json:"documentSelector"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+		WorkDoneProgress *bool                  `json:"workDoneProgress,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Parameters for a SignatureHelpRequest.
 type SignatureHelpParams struct {
-	TextDocumentPositionParams
-	WorkDoneProgressParams
+	// The text document.
+	TextDocument TextDocumentIdentifier `json:"textDocument"`
+
+	// The position inside the text document.
+	Position Position `json:"position"`
+
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
 
 	// The signature help context. This is only available if the client specifies
 	// to send this using the client capability `textDocument.signatureHelp.contextSupport === true`
 	//
 	// Since: 3.15.0
 	Context *SignatureHelpContext `json:"context,omitempty"`
+}
+
+func (s *SignatureHelpParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+		Position     requiredProp `json:"position"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+	if !keys.Position {
+		return fmt.Errorf("required key 'position' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TextDocument  TextDocumentIdentifier `json:"textDocument"`
+		Position      Position               `json:"position"`
+		WorkDoneToken *IntegerOrString       `json:"workDoneToken,omitempty"`
+		Context       *SignatureHelpContext  `json:"context,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Signature help represents the signature of something
@@ -3539,36 +4746,28 @@ func (s *SignatureHelp) UnmarshalJSON(data []byte) error {
 
 // Registration options for a SignatureHelpRequest.
 type SignatureHelpRegistrationOptions struct {
-	TextDocumentRegistrationOptions
-	SignatureHelpOptions
+	// A document selector to identify the scope of the registration. If set to null
+	// the document selector provided on the client side will be used.
+	DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
+
+	// List of characters that trigger signature help automatically.
+	TriggerCharacters *[]string `json:"triggerCharacters,omitempty"`
+
+	// List of characters that re-trigger signature help.
+	//
+	// These trigger characters are only active when signature help is already showing. All trigger characters
+	// are also counted as re-trigger characters.
+	//
+	// Since: 3.15.0
+	RetriggerCharacters *[]string `json:"retriggerCharacters,omitempty"`
 }
 
-// Parameters for a DefinitionRequest.
-type DefinitionParams struct {
-	TextDocumentPositionParams
-	WorkDoneProgressParams
-	PartialResultParams
-}
-
-// Registration options for a DefinitionRequest.
-type DefinitionRegistrationOptions struct {
-	TextDocumentRegistrationOptions
-	DefinitionOptions
-}
-
-// Parameters for a ReferencesRequest.
-type ReferenceParams struct {
-	TextDocumentPositionParams
-	WorkDoneProgressParams
-	PartialResultParams
-
-	Context *ReferenceContext `json:"context"`
-}
-
-func (s *ReferenceParams) UnmarshalJSON(data []byte) error {
+func (s *SignatureHelpRegistrationOptions) UnmarshalJSON(data []byte) error {
 	// Check required props
 	type requiredProps struct {
-		Context requiredProp `json:"context"`
+		DocumentSelector requiredProp `json:"documentSelector"`
 	}
 
 	var keys requiredProps
@@ -3576,17 +4775,148 @@ func (s *ReferenceParams) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		DocumentSelector    DocumentSelectorOrNull `json:"documentSelector"`
+		WorkDoneProgress    *bool                  `json:"workDoneProgress,omitempty"`
+		TriggerCharacters   *[]string              `json:"triggerCharacters,omitempty"`
+		RetriggerCharacters *[]string              `json:"retriggerCharacters,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
+// Parameters for a DefinitionRequest.
+type DefinitionParams struct {
+	// The text document.
+	TextDocument TextDocumentIdentifier `json:"textDocument"`
+
+	// The position inside the text document.
+	Position Position `json:"position"`
+
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+
+	// An optional token that a server can use to report partial results (e.g. streaming) to
+	// the client.
+	PartialResultToken *IntegerOrString `json:"partialResultToken,omitempty"`
+}
+
+func (s *DefinitionParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+		Position     requiredProp `json:"position"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+	if !keys.Position {
+		return fmt.Errorf("required key 'position' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TextDocument       TextDocumentIdentifier `json:"textDocument"`
+		Position           Position               `json:"position"`
+		WorkDoneToken      *IntegerOrString       `json:"workDoneToken,omitempty"`
+		PartialResultToken *IntegerOrString       `json:"partialResultToken,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
+// Registration options for a DefinitionRequest.
+type DefinitionRegistrationOptions struct {
+	// A document selector to identify the scope of the registration. If set to null
+	// the document selector provided on the client side will be used.
+	DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
+}
+
+func (s *DefinitionRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		DocumentSelector requiredProp `json:"documentSelector"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+		WorkDoneProgress *bool                  `json:"workDoneProgress,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
+// Parameters for a ReferencesRequest.
+type ReferenceParams struct {
+	// The text document.
+	TextDocument TextDocumentIdentifier `json:"textDocument"`
+
+	// The position inside the text document.
+	Position Position `json:"position"`
+
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+
+	// An optional token that a server can use to report partial results (e.g. streaming) to
+	// the client.
+	PartialResultToken *IntegerOrString `json:"partialResultToken,omitempty"`
+
+	Context *ReferenceContext `json:"context"`
+}
+
+func (s *ReferenceParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+		Position     requiredProp `json:"position"`
+		Context      requiredProp `json:"context"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+	if !keys.Position {
+		return fmt.Errorf("required key 'position' is missing")
+	}
 	if !keys.Context {
 		return fmt.Errorf("required key 'context' is missing")
 	}
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		TextDocumentPositionParams
-		WorkDoneProgressParams
-		PartialResultParams
-
-		Context *ReferenceContext `json:"context"`
+		TextDocument       TextDocumentIdentifier `json:"textDocument"`
+		Position           Position               `json:"position"`
+		WorkDoneToken      *IntegerOrString       `json:"workDoneToken,omitempty"`
+		PartialResultToken *IntegerOrString       `json:"partialResultToken,omitempty"`
+		Context            *ReferenceContext      `json:"context"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -3594,15 +4924,81 @@ func (s *ReferenceParams) UnmarshalJSON(data []byte) error {
 
 // Registration options for a ReferencesRequest.
 type ReferenceRegistrationOptions struct {
-	TextDocumentRegistrationOptions
-	ReferenceOptions
+	// A document selector to identify the scope of the registration. If set to null
+	// the document selector provided on the client side will be used.
+	DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
+}
+
+func (s *ReferenceRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		DocumentSelector requiredProp `json:"documentSelector"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+		WorkDoneProgress *bool                  `json:"workDoneProgress,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Parameters for a DocumentHighlightRequest.
 type DocumentHighlightParams struct {
-	TextDocumentPositionParams
-	WorkDoneProgressParams
-	PartialResultParams
+	// The text document.
+	TextDocument TextDocumentIdentifier `json:"textDocument"`
+
+	// The position inside the text document.
+	Position Position `json:"position"`
+
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+
+	// An optional token that a server can use to report partial results (e.g. streaming) to
+	// the client.
+	PartialResultToken *IntegerOrString `json:"partialResultToken,omitempty"`
+}
+
+func (s *DocumentHighlightParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+		Position     requiredProp `json:"position"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+	if !keys.Position {
+		return fmt.Errorf("required key 'position' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TextDocument       TextDocumentIdentifier `json:"textDocument"`
+		Position           Position               `json:"position"`
+		WorkDoneToken      *IntegerOrString       `json:"workDoneToken,omitempty"`
+		PartialResultToken *IntegerOrString       `json:"partialResultToken,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // A document highlight is a range inside a text document which deserves
@@ -3642,14 +5038,45 @@ func (s *DocumentHighlight) UnmarshalJSON(data []byte) error {
 
 // Registration options for a DocumentHighlightRequest.
 type DocumentHighlightRegistrationOptions struct {
-	TextDocumentRegistrationOptions
-	DocumentHighlightOptions
+	// A document selector to identify the scope of the registration. If set to null
+	// the document selector provided on the client side will be used.
+	DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
+}
+
+func (s *DocumentHighlightRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		DocumentSelector requiredProp `json:"documentSelector"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+		WorkDoneProgress *bool                  `json:"workDoneProgress,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // Parameters for a DocumentSymbolRequest.
 type DocumentSymbolParams struct {
-	WorkDoneProgressParams
-	PartialResultParams
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+
+	// An optional token that a server can use to report partial results (e.g. streaming) to
+	// the client.
+	PartialResultToken *IntegerOrString `json:"partialResultToken,omitempty"`
 
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
@@ -3672,10 +5099,9 @@ func (s *DocumentSymbolParams) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		WorkDoneProgressParams
-		PartialResultParams
-
-		TextDocument TextDocumentIdentifier `json:"textDocument"`
+		WorkDoneToken      *IntegerOrString       `json:"workDoneToken,omitempty"`
+		PartialResultToken *IntegerOrString       `json:"partialResultToken,omitempty"`
+		TextDocument       TextDocumentIdentifier `json:"textDocument"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -3684,7 +5110,22 @@ func (s *DocumentSymbolParams) UnmarshalJSON(data []byte) error {
 // Represents information about programming constructs like variables, classes,
 // interfaces etc.
 type SymbolInformation struct {
-	BaseSymbolInformation
+	// The name of this symbol.
+	Name string `json:"name"`
+
+	// The kind of this symbol.
+	Kind SymbolKind `json:"kind"`
+
+	// Tags for this symbol.
+	//
+	// Since: 3.16.0
+	Tags *[]SymbolTag `json:"tags,omitempty"`
+
+	// The name of the symbol containing this symbol. This information is for
+	// user interface purposes (e.g. to render a qualifier in the user interface
+	// if necessary). It can't be used to re-infer a hierarchy for the document
+	// symbols.
+	ContainerName *string `json:"containerName,omitempty"`
 
 	// Indicates if this symbol is deprecated.
 	//
@@ -3706,6 +5147,8 @@ type SymbolInformation struct {
 func (s *SymbolInformation) UnmarshalJSON(data []byte) error {
 	// Check required props
 	type requiredProps struct {
+		Name     requiredProp `json:"name"`
+		Kind     requiredProp `json:"kind"`
 		Location requiredProp `json:"location"`
 	}
 
@@ -3714,16 +5157,24 @@ func (s *SymbolInformation) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
+	if !keys.Name {
+		return fmt.Errorf("required key 'name' is missing")
+	}
+	if !keys.Kind {
+		return fmt.Errorf("required key 'kind' is missing")
+	}
 	if !keys.Location {
 		return fmt.Errorf("required key 'location' is missing")
 	}
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		BaseSymbolInformation
-
-		Deprecated *bool    `json:"deprecated,omitempty"`
-		Location   Location `json:"location"`
+		Name          string       `json:"name"`
+		Kind          SymbolKind   `json:"kind"`
+		Tags          *[]SymbolTag `json:"tags,omitempty"`
+		ContainerName *string      `json:"containerName,omitempty"`
+		Deprecated    *bool        `json:"deprecated,omitempty"`
+		Location      Location     `json:"location"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -3811,14 +5262,52 @@ func (s *DocumentSymbol) UnmarshalJSON(data []byte) error {
 
 // Registration options for a DocumentSymbolRequest.
 type DocumentSymbolRegistrationOptions struct {
-	TextDocumentRegistrationOptions
-	DocumentSymbolOptions
+	// A document selector to identify the scope of the registration. If set to null
+	// the document selector provided on the client side will be used.
+	DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
+
+	// A human-readable string that is shown when multiple outlines trees
+	// are shown for the same document.
+	//
+	// Since: 3.16.0
+	Label *string `json:"label,omitempty"`
+}
+
+func (s *DocumentSymbolRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		DocumentSelector requiredProp `json:"documentSelector"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+		WorkDoneProgress *bool                  `json:"workDoneProgress,omitempty"`
+		Label            *string                `json:"label,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // The parameters of a CodeActionRequest.
 type CodeActionParams struct {
-	WorkDoneProgressParams
-	PartialResultParams
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+
+	// An optional token that a server can use to report partial results (e.g. streaming) to
+	// the client.
+	PartialResultToken *IntegerOrString `json:"partialResultToken,omitempty"`
 
 	// The document in which the command was invoked.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
@@ -3855,12 +5344,11 @@ func (s *CodeActionParams) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		WorkDoneProgressParams
-		PartialResultParams
-
-		TextDocument TextDocumentIdentifier `json:"textDocument"`
-		Range        Range                  `json:"range"`
-		Context      *CodeActionContext     `json:"context"`
+		WorkDoneToken      *IntegerOrString       `json:"workDoneToken,omitempty"`
+		PartialResultToken *IntegerOrString       `json:"partialResultToken,omitempty"`
+		TextDocument       TextDocumentIdentifier `json:"textDocument"`
+		Range              Range                  `json:"range"`
+		Context            *CodeActionContext     `json:"context"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -4014,14 +5502,78 @@ func (s *CodeAction) UnmarshalJSON(data []byte) error {
 
 // Registration options for a CodeActionRequest.
 type CodeActionRegistrationOptions struct {
-	TextDocumentRegistrationOptions
-	CodeActionOptions
+	// A document selector to identify the scope of the registration. If set to null
+	// the document selector provided on the client side will be used.
+	DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
+
+	// CodeActionKinds that this server may return.
+	//
+	// The list of kinds may be generic, such as `CodeActionKind.Refactor`, or the server
+	// may list out every specific kind they provide.
+	CodeActionKinds *[]CodeActionKind `json:"codeActionKinds,omitempty"`
+
+	// Static documentation for a class of code actions.
+	//
+	// Documentation from the provider should be shown in the code actions menu if either:
+	//
+	// - Code actions of `kind` are requested by the editor. In this case, the editor will show the documentation that
+	//   most closely matches the requested code action kind. For example, if a provider has documentation for
+	//   both `Refactor` and `RefactorExtract`, when the user requests code actions for `RefactorExtract`,
+	//   the editor will use the documentation for `RefactorExtract` instead of the documentation for `Refactor`.
+	//
+	// - Any code actions of `kind` are returned by the provider.
+	//
+	// At most one documentation entry should be shown per provider.
+	//
+	// Since: 3.18.0
+	//
+	// Proposed.
+	Documentation *[]*CodeActionKindDocumentation `json:"documentation,omitempty"`
+
+	// The server provides support to resolve additional
+	// information for a code action.
+	//
+	// Since: 3.16.0
+	ResolveProvider *bool `json:"resolveProvider,omitempty"`
+}
+
+func (s *CodeActionRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		DocumentSelector requiredProp `json:"documentSelector"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		DocumentSelector DocumentSelectorOrNull          `json:"documentSelector"`
+		WorkDoneProgress *bool                           `json:"workDoneProgress,omitempty"`
+		CodeActionKinds  *[]CodeActionKind               `json:"codeActionKinds,omitempty"`
+		Documentation    *[]*CodeActionKindDocumentation `json:"documentation,omitempty"`
+		ResolveProvider  *bool                           `json:"resolveProvider,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // The parameters of a WorkspaceSymbolRequest.
 type WorkspaceSymbolParams struct {
-	WorkDoneProgressParams
-	PartialResultParams
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+
+	// An optional token that a server can use to report partial results (e.g. streaming) to
+	// the client.
+	PartialResultToken *IntegerOrString `json:"partialResultToken,omitempty"`
 
 	// A query string to filter symbols by. Clients may send an empty
 	// string here to request all symbols.
@@ -4051,10 +5603,9 @@ func (s *WorkspaceSymbolParams) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		WorkDoneProgressParams
-		PartialResultParams
-
-		Query string `json:"query"`
+		WorkDoneToken      *IntegerOrString `json:"workDoneToken,omitempty"`
+		PartialResultToken *IntegerOrString `json:"partialResultToken,omitempty"`
+		Query              string           `json:"query"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -4066,7 +5617,22 @@ func (s *WorkspaceSymbolParams) UnmarshalJSON(data []byte) error {
 //
 // Since: 3.17.0
 type WorkspaceSymbol struct {
-	BaseSymbolInformation
+	// The name of this symbol.
+	Name string `json:"name"`
+
+	// The kind of this symbol.
+	Kind SymbolKind `json:"kind"`
+
+	// Tags for this symbol.
+	//
+	// Since: 3.16.0
+	Tags *[]SymbolTag `json:"tags,omitempty"`
+
+	// The name of the symbol containing this symbol. This information is for
+	// user interface purposes (e.g. to render a qualifier in the user interface
+	// if necessary). It can't be used to re-infer a hierarchy for the document
+	// symbols.
+	ContainerName *string `json:"containerName,omitempty"`
 
 	// The location of the symbol. Whether a server is allowed to
 	// return a location without a range depends on the client
@@ -4083,6 +5649,8 @@ type WorkspaceSymbol struct {
 func (s *WorkspaceSymbol) UnmarshalJSON(data []byte) error {
 	// Check required props
 	type requiredProps struct {
+		Name     requiredProp `json:"name"`
+		Kind     requiredProp `json:"kind"`
 		Location requiredProp `json:"location"`
 	}
 
@@ -4091,16 +5659,24 @@ func (s *WorkspaceSymbol) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
+	if !keys.Name {
+		return fmt.Errorf("required key 'name' is missing")
+	}
+	if !keys.Kind {
+		return fmt.Errorf("required key 'kind' is missing")
+	}
 	if !keys.Location {
 		return fmt.Errorf("required key 'location' is missing")
 	}
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		BaseSymbolInformation
-
-		Location LocationOrLocationUriOnly `json:"location"`
-		Data     *any                      `json:"data,omitempty"`
+		Name          string                    `json:"name"`
+		Kind          SymbolKind                `json:"kind"`
+		Tags          *[]SymbolTag              `json:"tags,omitempty"`
+		ContainerName *string                   `json:"containerName,omitempty"`
+		Location      LocationOrLocationUriOnly `json:"location"`
+		Data          *any                      `json:"data,omitempty"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -4108,13 +5684,23 @@ func (s *WorkspaceSymbol) UnmarshalJSON(data []byte) error {
 
 // Registration options for a WorkspaceSymbolRequest.
 type WorkspaceSymbolRegistrationOptions struct {
-	WorkspaceSymbolOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
+
+	// The server provides support to resolve additional
+	// information for a workspace symbol.
+	//
+	// Since: 3.17.0
+	ResolveProvider *bool `json:"resolveProvider,omitempty"`
 }
 
 // The parameters of a CodeLensRequest.
 type CodeLensParams struct {
-	WorkDoneProgressParams
-	PartialResultParams
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+
+	// An optional token that a server can use to report partial results (e.g. streaming) to
+	// the client.
+	PartialResultToken *IntegerOrString `json:"partialResultToken,omitempty"`
 
 	// The document to request code lens for.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
@@ -4137,10 +5723,9 @@ func (s *CodeLensParams) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		WorkDoneProgressParams
-		PartialResultParams
-
-		TextDocument TextDocumentIdentifier `json:"textDocument"`
+		WorkDoneToken      *IntegerOrString       `json:"workDoneToken,omitempty"`
+		PartialResultToken *IntegerOrString       `json:"partialResultToken,omitempty"`
+		TextDocument       TextDocumentIdentifier `json:"textDocument"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -4190,14 +5775,49 @@ func (s *CodeLens) UnmarshalJSON(data []byte) error {
 
 // Registration options for a CodeLensRequest.
 type CodeLensRegistrationOptions struct {
-	TextDocumentRegistrationOptions
-	CodeLensOptions
+	// A document selector to identify the scope of the registration. If set to null
+	// the document selector provided on the client side will be used.
+	DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
+
+	// Code lens has a resolve provider as well.
+	ResolveProvider *bool `json:"resolveProvider,omitempty"`
+}
+
+func (s *CodeLensRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		DocumentSelector requiredProp `json:"documentSelector"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+		WorkDoneProgress *bool                  `json:"workDoneProgress,omitempty"`
+		ResolveProvider  *bool                  `json:"resolveProvider,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // The parameters of a DocumentLinkRequest.
 type DocumentLinkParams struct {
-	WorkDoneProgressParams
-	PartialResultParams
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+
+	// An optional token that a server can use to report partial results (e.g. streaming) to
+	// the client.
+	PartialResultToken *IntegerOrString `json:"partialResultToken,omitempty"`
 
 	// The document to provide document links for.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
@@ -4220,10 +5840,9 @@ func (s *DocumentLinkParams) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		WorkDoneProgressParams
-		PartialResultParams
-
-		TextDocument TextDocumentIdentifier `json:"textDocument"`
+		WorkDoneToken      *IntegerOrString       `json:"workDoneToken,omitempty"`
+		PartialResultToken *IntegerOrString       `json:"partialResultToken,omitempty"`
+		TextDocument       TextDocumentIdentifier `json:"textDocument"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -4280,13 +5899,45 @@ func (s *DocumentLink) UnmarshalJSON(data []byte) error {
 
 // Registration options for a DocumentLinkRequest.
 type DocumentLinkRegistrationOptions struct {
-	TextDocumentRegistrationOptions
-	DocumentLinkOptions
+	// A document selector to identify the scope of the registration. If set to null
+	// the document selector provided on the client side will be used.
+	DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
+
+	// Document links have a resolve provider as well.
+	ResolveProvider *bool `json:"resolveProvider,omitempty"`
+}
+
+func (s *DocumentLinkRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		DocumentSelector requiredProp `json:"documentSelector"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+		WorkDoneProgress *bool                  `json:"workDoneProgress,omitempty"`
+		ResolveProvider  *bool                  `json:"resolveProvider,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // The parameters of a DocumentFormattingRequest.
 type DocumentFormattingParams struct {
-	WorkDoneProgressParams
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
 
 	// The document to format.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
@@ -4316,10 +5967,9 @@ func (s *DocumentFormattingParams) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		WorkDoneProgressParams
-
-		TextDocument TextDocumentIdentifier `json:"textDocument"`
-		Options      *FormattingOptions     `json:"options"`
+		WorkDoneToken *IntegerOrString       `json:"workDoneToken,omitempty"`
+		TextDocument  TextDocumentIdentifier `json:"textDocument"`
+		Options       *FormattingOptions     `json:"options"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -4327,13 +5977,41 @@ func (s *DocumentFormattingParams) UnmarshalJSON(data []byte) error {
 
 // Registration options for a DocumentFormattingRequest.
 type DocumentFormattingRegistrationOptions struct {
-	TextDocumentRegistrationOptions
-	DocumentFormattingOptions
+	// A document selector to identify the scope of the registration. If set to null
+	// the document selector provided on the client side will be used.
+	DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
+}
+
+func (s *DocumentFormattingRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		DocumentSelector requiredProp `json:"documentSelector"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+		WorkDoneProgress *bool                  `json:"workDoneProgress,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // The parameters of a DocumentRangeFormattingRequest.
 type DocumentRangeFormattingParams struct {
-	WorkDoneProgressParams
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
 
 	// The document to format.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
@@ -4370,11 +6048,10 @@ func (s *DocumentRangeFormattingParams) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		WorkDoneProgressParams
-
-		TextDocument TextDocumentIdentifier `json:"textDocument"`
-		Range        Range                  `json:"range"`
-		Options      *FormattingOptions     `json:"options"`
+		WorkDoneToken *IntegerOrString       `json:"workDoneToken,omitempty"`
+		TextDocument  TextDocumentIdentifier `json:"textDocument"`
+		Range         Range                  `json:"range"`
+		Options       *FormattingOptions     `json:"options"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -4382,8 +6059,43 @@ func (s *DocumentRangeFormattingParams) UnmarshalJSON(data []byte) error {
 
 // Registration options for a DocumentRangeFormattingRequest.
 type DocumentRangeFormattingRegistrationOptions struct {
-	TextDocumentRegistrationOptions
-	DocumentRangeFormattingOptions
+	// A document selector to identify the scope of the registration. If set to null
+	// the document selector provided on the client side will be used.
+	DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
+
+	// Whether the server supports formatting multiple ranges at once.
+	//
+	// Since: 3.18.0
+	//
+	// Proposed.
+	RangesSupport *bool `json:"rangesSupport,omitempty"`
+}
+
+func (s *DocumentRangeFormattingRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		DocumentSelector requiredProp `json:"documentSelector"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+		WorkDoneProgress *bool                  `json:"workDoneProgress,omitempty"`
+		RangesSupport    *bool                  `json:"rangesSupport,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // The parameters of a DocumentRangesFormattingRequest.
@@ -4392,7 +6104,8 @@ type DocumentRangeFormattingRegistrationOptions struct {
 //
 // Proposed.
 type DocumentRangesFormattingParams struct {
-	WorkDoneProgressParams
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
 
 	// The document to format.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
@@ -4429,11 +6142,10 @@ func (s *DocumentRangesFormattingParams) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		WorkDoneProgressParams
-
-		TextDocument TextDocumentIdentifier `json:"textDocument"`
-		Ranges       []Range                `json:"ranges"`
-		Options      *FormattingOptions     `json:"options"`
+		WorkDoneToken *IntegerOrString       `json:"workDoneToken,omitempty"`
+		TextDocument  TextDocumentIdentifier `json:"textDocument"`
+		Ranges        []Range                `json:"ranges"`
+		Options       *FormattingOptions     `json:"options"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -4499,13 +6211,50 @@ func (s *DocumentOnTypeFormattingParams) UnmarshalJSON(data []byte) error {
 
 // Registration options for a DocumentOnTypeFormattingRequest.
 type DocumentOnTypeFormattingRegistrationOptions struct {
-	TextDocumentRegistrationOptions
-	DocumentOnTypeFormattingOptions
+	// A document selector to identify the scope of the registration. If set to null
+	// the document selector provided on the client side will be used.
+	DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+
+	// A character on which formatting should be triggered, like `{`.
+	FirstTriggerCharacter string `json:"firstTriggerCharacter"`
+
+	// More trigger characters.
+	MoreTriggerCharacter *[]string `json:"moreTriggerCharacter,omitempty"`
+}
+
+func (s *DocumentOnTypeFormattingRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		DocumentSelector      requiredProp `json:"documentSelector"`
+		FirstTriggerCharacter requiredProp `json:"firstTriggerCharacter"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
+	if !keys.FirstTriggerCharacter {
+		return fmt.Errorf("required key 'firstTriggerCharacter' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		DocumentSelector      DocumentSelectorOrNull `json:"documentSelector"`
+		FirstTriggerCharacter string                 `json:"firstTriggerCharacter"`
+		MoreTriggerCharacter  *[]string              `json:"moreTriggerCharacter,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // The parameters of a RenameRequest.
 type RenameParams struct {
-	WorkDoneProgressParams
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
 
 	// The document to rename.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
@@ -4544,11 +6293,10 @@ func (s *RenameParams) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		WorkDoneProgressParams
-
-		TextDocument TextDocumentIdentifier `json:"textDocument"`
-		Position     Position               `json:"position"`
-		NewName      string                 `json:"newName"`
+		WorkDoneToken *IntegerOrString       `json:"workDoneToken,omitempty"`
+		TextDocument  TextDocumentIdentifier `json:"textDocument"`
+		Position      Position               `json:"position"`
+		NewName       string                 `json:"newName"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -4556,18 +6304,87 @@ func (s *RenameParams) UnmarshalJSON(data []byte) error {
 
 // Registration options for a RenameRequest.
 type RenameRegistrationOptions struct {
-	TextDocumentRegistrationOptions
-	RenameOptions
+	// A document selector to identify the scope of the registration. If set to null
+	// the document selector provided on the client side will be used.
+	DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
+
+	// Renames should be checked and tested before being executed.
+	//
+	// Since: version 3.12.0
+	PrepareProvider *bool `json:"prepareProvider,omitempty"`
+}
+
+func (s *RenameRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		DocumentSelector requiredProp `json:"documentSelector"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.DocumentSelector {
+		return fmt.Errorf("required key 'documentSelector' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		DocumentSelector DocumentSelectorOrNull `json:"documentSelector"`
+		WorkDoneProgress *bool                  `json:"workDoneProgress,omitempty"`
+		PrepareProvider  *bool                  `json:"prepareProvider,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 type PrepareRenameParams struct {
-	TextDocumentPositionParams
-	WorkDoneProgressParams
+	// The text document.
+	TextDocument TextDocumentIdentifier `json:"textDocument"`
+
+	// The position inside the text document.
+	Position Position `json:"position"`
+
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+}
+
+func (s *PrepareRenameParams) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		TextDocument requiredProp `json:"textDocument"`
+		Position     requiredProp `json:"position"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.TextDocument {
+		return fmt.Errorf("required key 'textDocument' is missing")
+	}
+	if !keys.Position {
+		return fmt.Errorf("required key 'position' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		TextDocument  TextDocumentIdentifier `json:"textDocument"`
+		Position      Position               `json:"position"`
+		WorkDoneToken *IntegerOrString       `json:"workDoneToken,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // The parameters of a ExecuteCommandRequest.
 type ExecuteCommandParams struct {
-	WorkDoneProgressParams
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
 
 	// The identifier of the actual command handler.
 	Command string `json:"command"`
@@ -4593,10 +6410,9 @@ func (s *ExecuteCommandParams) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		WorkDoneProgressParams
-
-		Command   string `json:"command"`
-		Arguments *[]any `json:"arguments,omitempty"`
+		WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
+		Command       string           `json:"command"`
+		Arguments     *[]any           `json:"arguments,omitempty"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -4604,7 +6420,34 @@ func (s *ExecuteCommandParams) UnmarshalJSON(data []byte) error {
 
 // Registration options for a ExecuteCommandRequest.
 type ExecuteCommandRegistrationOptions struct {
-	ExecuteCommandOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
+
+	// The commands to be executed on the server
+	Commands []string `json:"commands"`
+}
+
+func (s *ExecuteCommandRegistrationOptions) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Commands requiredProp `json:"commands"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Commands {
+		return fmt.Errorf("required key 'commands' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		WorkDoneProgress *bool    `json:"workDoneProgress,omitempty"`
+		Commands         []string `json:"commands"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // The parameters passed via an apply workspace edit request.
@@ -5113,7 +6956,7 @@ func (s *Range) UnmarshalJSON(data []byte) error {
 }
 
 type ImplementationOptions struct {
-	WorkDoneProgressOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
 }
 
 // Static registration options to be returned in the initialize
@@ -5125,7 +6968,7 @@ type StaticRegistrationOptions struct {
 }
 
 type TypeDefinitionOptions struct {
-	WorkDoneProgressOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
 }
 
 // The workspace folder change event.
@@ -5256,15 +7099,15 @@ func (s *Color) UnmarshalJSON(data []byte) error {
 }
 
 type DocumentColorOptions struct {
-	WorkDoneProgressOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
 }
 
 type FoldingRangeOptions struct {
-	WorkDoneProgressOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
 }
 
 type DeclarationOptions struct {
-	WorkDoneProgressOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
 }
 
 // Position in a text document expressed as zero-based line and character
@@ -5334,19 +7177,19 @@ func (s *Position) UnmarshalJSON(data []byte) error {
 }
 
 type SelectionRangeOptions struct {
-	WorkDoneProgressOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
 }
 
 // Call hierarchy options used during static registration.
 //
 // Since: 3.16.0
 type CallHierarchyOptions struct {
-	WorkDoneProgressOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
 }
 
 // Since: 3.16.0
 type SemanticTokensOptions struct {
-	WorkDoneProgressOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
 
 	// The legend used by the server
 	Legend *SemanticTokensLegend `json:"legend"`
@@ -5376,11 +7219,10 @@ func (s *SemanticTokensOptions) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		WorkDoneProgressOptions
-
-		Legend *SemanticTokensLegend             `json:"legend"`
-		Range  *BooleanOrEmptyObject             `json:"range,omitempty"`
-		Full   *BooleanOrSemanticTokensFullDelta `json:"full,omitempty"`
+		WorkDoneProgress *bool                             `json:"workDoneProgress,omitempty"`
+		Legend           *SemanticTokensLegend             `json:"legend"`
+		Range            *BooleanOrEmptyObject             `json:"range,omitempty"`
+		Full             *BooleanOrSemanticTokensFullDelta `json:"full,omitempty"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -5428,7 +7270,7 @@ func (s *SemanticTokensEdit) UnmarshalJSON(data []byte) error {
 }
 
 type LinkedEditingRangeOptions struct {
-	WorkDoneProgressOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
 }
 
 // Represents information on a file/folder create.
@@ -5510,10 +7352,13 @@ func (s *TextDocumentEdit) UnmarshalJSON(data []byte) error {
 
 // Create file operation.
 type CreateFile struct {
-	ResourceOperation
-
 	// A create
 	Kind StringLiteralCreate `json:"kind"`
+
+	// An optional annotation identifier describing the operation.
+	//
+	// Since: 3.16.0
+	AnnotationId *string `json:"annotationId,omitempty"`
 
 	// The resource to create.
 	Uri DocumentUri `json:"uri"`
@@ -5543,11 +7388,10 @@ func (s *CreateFile) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		ResourceOperation
-
-		Kind    StringLiteralCreate `json:"kind"`
-		Uri     DocumentUri         `json:"uri"`
-		Options *CreateFileOptions  `json:"options,omitempty"`
+		Kind         StringLiteralCreate `json:"kind"`
+		AnnotationId *string             `json:"annotationId,omitempty"`
+		Uri          DocumentUri         `json:"uri"`
+		Options      *CreateFileOptions  `json:"options,omitempty"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -5555,10 +7399,13 @@ func (s *CreateFile) UnmarshalJSON(data []byte) error {
 
 // Rename file operation
 type RenameFile struct {
-	ResourceOperation
-
 	// A rename
 	Kind StringLiteralRename `json:"kind"`
+
+	// An optional annotation identifier describing the operation.
+	//
+	// Since: 3.16.0
+	AnnotationId *string `json:"annotationId,omitempty"`
 
 	// The old (existing) location.
 	OldUri DocumentUri `json:"oldUri"`
@@ -5595,12 +7442,11 @@ func (s *RenameFile) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		ResourceOperation
-
-		Kind    StringLiteralRename `json:"kind"`
-		OldUri  DocumentUri         `json:"oldUri"`
-		NewUri  DocumentUri         `json:"newUri"`
-		Options *RenameFileOptions  `json:"options,omitempty"`
+		Kind         StringLiteralRename `json:"kind"`
+		AnnotationId *string             `json:"annotationId,omitempty"`
+		OldUri       DocumentUri         `json:"oldUri"`
+		NewUri       DocumentUri         `json:"newUri"`
+		Options      *RenameFileOptions  `json:"options,omitempty"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -5608,10 +7454,13 @@ func (s *RenameFile) UnmarshalJSON(data []byte) error {
 
 // Delete file operation
 type DeleteFile struct {
-	ResourceOperation
-
 	// A delete
 	Kind StringLiteralDelete `json:"kind"`
+
+	// An optional annotation identifier describing the operation.
+	//
+	// Since: 3.16.0
+	AnnotationId *string `json:"annotationId,omitempty"`
 
 	// The file to delete.
 	Uri DocumentUri `json:"uri"`
@@ -5641,11 +7490,10 @@ func (s *DeleteFile) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		ResourceOperation
-
-		Kind    StringLiteralDelete `json:"kind"`
-		Uri     DocumentUri         `json:"uri"`
-		Options *DeleteFileOptions  `json:"options,omitempty"`
+		Kind         StringLiteralDelete `json:"kind"`
+		AnnotationId *string             `json:"annotationId,omitempty"`
+		Uri          DocumentUri         `json:"uri"`
+		Options      *DeleteFileOptions  `json:"options,omitempty"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -5800,14 +7648,14 @@ func (s *FileDelete) UnmarshalJSON(data []byte) error {
 }
 
 type MonikerOptions struct {
-	WorkDoneProgressOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
 }
 
 // Type hierarchy options used during static registration.
 //
 // Since: 3.17.0
 type TypeHierarchyOptions struct {
-	WorkDoneProgressOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
 }
 
 // Since: 3.17.0
@@ -5975,7 +7823,7 @@ func (s *InlineValueEvaluatableExpression) UnmarshalJSON(data []byte) error {
 //
 // Since: 3.17.0
 type InlineValueOptions struct {
-	WorkDoneProgressOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
 }
 
 // An inlay hint label part allows for interactive and composite labels
@@ -6101,7 +7949,7 @@ func (s *MarkupContent) UnmarshalJSON(data []byte) error {
 //
 // Since: 3.17.0
 type InlayHintOptions struct {
-	WorkDoneProgressOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
 
 	// The server provides support to resolve additional
 	// information for an inlay hint item.
@@ -6112,7 +7960,16 @@ type InlayHintOptions struct {
 //
 // Since: 3.17.0
 type RelatedFullDocumentDiagnosticReport struct {
-	FullDocumentDiagnosticReport
+	// A full document diagnostic report.
+	Kind StringLiteralFull `json:"kind"`
+
+	// An optional result id. If provided it will
+	// be sent on the next diagnostic request for the
+	// same document.
+	ResultId *string `json:"resultId,omitempty"`
+
+	// The actual items.
+	Items []*Diagnostic `json:"items"`
 
 	// Diagnostics of related documents. This information is useful
 	// in programming languages where code in a file A can generate
@@ -6124,11 +7981,49 @@ type RelatedFullDocumentDiagnosticReport struct {
 	RelatedDocuments *map[DocumentUri]FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport `json:"relatedDocuments,omitempty"`
 }
 
+func (s *RelatedFullDocumentDiagnosticReport) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Kind  requiredProp `json:"kind"`
+		Items requiredProp `json:"items"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Kind {
+		return fmt.Errorf("required key 'kind' is missing")
+	}
+	if !keys.Items {
+		return fmt.Errorf("required key 'items' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Kind             StringLiteralFull                                                                `json:"kind"`
+		ResultId         *string                                                                          `json:"resultId,omitempty"`
+		Items            []*Diagnostic                                                                    `json:"items"`
+		RelatedDocuments *map[DocumentUri]FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport `json:"relatedDocuments,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
+}
+
 // An unchanged diagnostic report with a set of related documents.
 //
 // Since: 3.17.0
 type RelatedUnchangedDocumentDiagnosticReport struct {
-	UnchangedDocumentDiagnosticReport
+	// A document diagnostic report indicating
+	// no changes to the last result. A server can
+	// only return `unchanged` if result ids are
+	// provided.
+	Kind StringLiteralUnchanged `json:"kind"`
+
+	// A result id which will be sent on the next
+	// diagnostic request for the same document.
+	ResultId string `json:"resultId"`
 
 	// Diagnostics of related documents. This information is useful
 	// in programming languages where code in a file A can generate
@@ -6138,6 +8033,35 @@ type RelatedUnchangedDocumentDiagnosticReport struct {
 	//
 	// Since: 3.17.0
 	RelatedDocuments *map[DocumentUri]FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport `json:"relatedDocuments,omitempty"`
+}
+
+func (s *RelatedUnchangedDocumentDiagnosticReport) UnmarshalJSON(data []byte) error {
+	// Check required props
+	type requiredProps struct {
+		Kind     requiredProp `json:"kind"`
+		ResultId requiredProp `json:"resultId"`
+	}
+
+	var keys requiredProps
+	if err := json.Unmarshal(data, &keys); err != nil {
+		return err
+	}
+
+	if !keys.Kind {
+		return fmt.Errorf("required key 'kind' is missing")
+	}
+	if !keys.ResultId {
+		return fmt.Errorf("required key 'resultId' is missing")
+	}
+
+	// Redeclare the struct to prevent infinite recursion
+	type temp struct {
+		Kind             StringLiteralUnchanged                                                           `json:"kind"`
+		ResultId         string                                                                           `json:"resultId"`
+		RelatedDocuments *map[DocumentUri]FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport `json:"relatedDocuments,omitempty"`
+	}
+
+	return json.Unmarshal(data, (*temp)(s))
 }
 
 // A diagnostic report with a full set of problems.
@@ -6233,7 +8157,7 @@ func (s *UnchangedDocumentDiagnosticReport) UnmarshalJSON(data []byte) error {
 //
 // Since: 3.17.0
 type DiagnosticOptions struct {
-	WorkDoneProgressOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
 
 	// An optional identifier under which the diagnostics are
 	// managed by the client.
@@ -6270,8 +8194,7 @@ func (s *DiagnosticOptions) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		WorkDoneProgressOptions
-
+		WorkDoneProgress      *bool   `json:"workDoneProgress,omitempty"`
 		Identifier            *string `json:"identifier,omitempty"`
 		InterFileDependencies bool    `json:"interFileDependencies"`
 		WorkspaceDiagnostics  bool    `json:"workspaceDiagnostics"`
@@ -6657,7 +8580,7 @@ func (s *StringValue) UnmarshalJSON(data []byte) error {
 //
 // Proposed.
 type InlineCompletionOptions struct {
-	WorkDoneProgressOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
 }
 
 // Text document content provider options.
@@ -6775,7 +8698,8 @@ func (s *Unregistration) UnmarshalJSON(data []byte) error {
 
 // The initialize parameters
 type InitializeParamsBase struct {
-	WorkDoneProgressParams
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitempty"`
 
 	// The process Id of the parent process that started
 	// the server.
@@ -6847,8 +8771,7 @@ func (s *InitializeParamsBase) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		WorkDoneProgressParams
-
+		WorkDoneToken         *IntegerOrString    `json:"workDoneToken,omitempty"`
 		ProcessId             IntegerOrNull       `json:"processId"`
 		ClientInfo            *ClientInfo         `json:"clientInfo,omitempty"`
 		Locale                *string             `json:"locale,omitempty"`
@@ -7060,7 +8983,8 @@ func (s *ServerInfo) UnmarshalJSON(data []byte) error {
 
 // A text document identifier to denote a specific version of a text document.
 type VersionedTextDocumentIdentifier struct {
-	TextDocumentIdentifier
+	// The text document's uri.
+	Uri DocumentUri `json:"uri"`
 
 	// The version number of this document.
 	Version int32 `json:"version"`
@@ -7069,6 +8993,7 @@ type VersionedTextDocumentIdentifier struct {
 func (s *VersionedTextDocumentIdentifier) UnmarshalJSON(data []byte) error {
 	// Check required props
 	type requiredProps struct {
+		Uri     requiredProp `json:"uri"`
 		Version requiredProp `json:"version"`
 	}
 
@@ -7077,15 +9002,17 @@ func (s *VersionedTextDocumentIdentifier) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
+	if !keys.Uri {
+		return fmt.Errorf("required key 'uri' is missing")
+	}
 	if !keys.Version {
 		return fmt.Errorf("required key 'version' is missing")
 	}
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		TextDocumentIdentifier
-
-		Version int32 `json:"version"`
+		Uri     DocumentUri `json:"uri"`
+		Version int32       `json:"version"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -7447,7 +9374,7 @@ type CompletionItemApplyKinds struct {
 
 // Completion options.
 type CompletionOptions struct {
-	WorkDoneProgressOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
 
 	// Most tools trigger completion request automatically without explicitly requesting
 	// it using a keyboard shortcut (e.g. Ctrl+Space). Typically they do so when the user
@@ -7482,7 +9409,7 @@ type CompletionOptions struct {
 
 // Hover options.
 type HoverOptions struct {
-	WorkDoneProgressOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
 }
 
 // Additional information about the context in which a signature help request was triggered.
@@ -7597,7 +9524,7 @@ func (s *SignatureInformation) UnmarshalJSON(data []byte) error {
 
 // Server Capabilities for a SignatureHelpRequest.
 type SignatureHelpOptions struct {
-	WorkDoneProgressOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
 
 	// List of characters that trigger signature help automatically.
 	TriggerCharacters *[]string `json:"triggerCharacters,omitempty"`
@@ -7613,7 +9540,7 @@ type SignatureHelpOptions struct {
 
 // Server Capabilities for a DefinitionRequest.
 type DefinitionOptions struct {
-	WorkDoneProgressOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
 }
 
 // Value-object that contains additional information when
@@ -7648,12 +9575,12 @@ func (s *ReferenceContext) UnmarshalJSON(data []byte) error {
 
 // Reference options.
 type ReferenceOptions struct {
-	WorkDoneProgressOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
 }
 
 // Provider options for a DocumentHighlightRequest.
 type DocumentHighlightOptions struct {
-	WorkDoneProgressOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
 }
 
 // A base for all symbol information.
@@ -7708,7 +9635,7 @@ func (s *BaseSymbolInformation) UnmarshalJSON(data []byte) error {
 
 // Provider options for a DocumentSymbolRequest.
 type DocumentSymbolOptions struct {
-	WorkDoneProgressOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
 
 	// A human-readable string that is shown when multiple outlines trees
 	// are shown for the same document.
@@ -7799,7 +9726,7 @@ func (s *CodeActionDisabled) UnmarshalJSON(data []byte) error {
 
 // Provider options for a CodeActionRequest.
 type CodeActionOptions struct {
-	WorkDoneProgressOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
 
 	// CodeActionKinds that this server may return.
 	//
@@ -7864,7 +9791,7 @@ func (s *LocationUriOnly) UnmarshalJSON(data []byte) error {
 
 // Server capabilities for a WorkspaceSymbolRequest.
 type WorkspaceSymbolOptions struct {
-	WorkDoneProgressOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
 
 	// The server provides support to resolve additional
 	// information for a workspace symbol.
@@ -7875,7 +9802,7 @@ type WorkspaceSymbolOptions struct {
 
 // Code Lens provider options of a CodeLensRequest.
 type CodeLensOptions struct {
-	WorkDoneProgressOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
 
 	// Code lens has a resolve provider as well.
 	ResolveProvider *bool `json:"resolveProvider,omitempty"`
@@ -7883,7 +9810,7 @@ type CodeLensOptions struct {
 
 // Provider options for a DocumentLinkRequest.
 type DocumentLinkOptions struct {
-	WorkDoneProgressOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
 
 	// Document links have a resolve provider as well.
 	ResolveProvider *bool `json:"resolveProvider,omitempty"`
@@ -7946,12 +9873,12 @@ func (s *FormattingOptions) UnmarshalJSON(data []byte) error {
 
 // Provider options for a DocumentFormattingRequest.
 type DocumentFormattingOptions struct {
-	WorkDoneProgressOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
 }
 
 // Provider options for a DocumentRangeFormattingRequest.
 type DocumentRangeFormattingOptions struct {
-	WorkDoneProgressOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
 
 	// Whether the server supports formatting multiple ranges at once.
 	//
@@ -7996,7 +9923,7 @@ func (s *DocumentOnTypeFormattingOptions) UnmarshalJSON(data []byte) error {
 
 // Provider options for a RenameRequest.
 type RenameOptions struct {
-	WorkDoneProgressOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
 
 	// Renames should be checked and tested before being executed.
 	//
@@ -8069,7 +9996,7 @@ func (s *PrepareRenameDefaultBehavior) UnmarshalJSON(data []byte) error {
 
 // The server capabilities of a ExecuteCommandRequest.
 type ExecuteCommandOptions struct {
-	WorkDoneProgressOptions
+	WorkDoneProgress *bool `json:"workDoneProgress,omitempty"`
 
 	// The commands to be executed on the server
 	Commands []string `json:"commands"`
@@ -8092,9 +10019,8 @@ func (s *ExecuteCommandOptions) UnmarshalJSON(data []byte) error {
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		WorkDoneProgressOptions
-
-		Commands []string `json:"commands"`
+		WorkDoneProgress *bool    `json:"workDoneProgress,omitempty"`
+		Commands         []string `json:"commands"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -8157,7 +10083,8 @@ type SemanticTokensFullDelta struct {
 
 // A text document identifier to optionally denote a specific version of a text document.
 type OptionalVersionedTextDocumentIdentifier struct {
-	TextDocumentIdentifier
+	// The text document's uri.
+	Uri DocumentUri `json:"uri"`
 
 	// The version number of this document. If a versioned text document identifier
 	// is sent from the server to the client and the file is not open in the editor
@@ -8170,6 +10097,7 @@ type OptionalVersionedTextDocumentIdentifier struct {
 func (s *OptionalVersionedTextDocumentIdentifier) UnmarshalJSON(data []byte) error {
 	// Check required props
 	type requiredProps struct {
+		Uri     requiredProp `json:"uri"`
 		Version requiredProp `json:"version"`
 	}
 
@@ -8178,14 +10106,16 @@ func (s *OptionalVersionedTextDocumentIdentifier) UnmarshalJSON(data []byte) err
 		return err
 	}
 
+	if !keys.Uri {
+		return fmt.Errorf("required key 'uri' is missing")
+	}
 	if !keys.Version {
 		return fmt.Errorf("required key 'version' is missing")
 	}
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		TextDocumentIdentifier
-
+		Uri     DocumentUri   `json:"uri"`
 		Version IntegerOrNull `json:"version"`
 	}
 
@@ -8196,7 +10126,13 @@ func (s *OptionalVersionedTextDocumentIdentifier) UnmarshalJSON(data []byte) err
 //
 // Since: 3.16.0.
 type AnnotatedTextEdit struct {
-	TextEdit
+	// The range of the text document to be manipulated. To insert
+	// text into a document create a range where start === end.
+	Range Range `json:"range"`
+
+	// The string to be inserted. For delete operations use an
+	// empty string.
+	NewText string `json:"newText"`
 
 	// The actual identifier of the change annotation
 	AnnotationId string `json:"annotationId"`
@@ -8205,6 +10141,8 @@ type AnnotatedTextEdit struct {
 func (s *AnnotatedTextEdit) UnmarshalJSON(data []byte) error {
 	// Check required props
 	type requiredProps struct {
+		Range        requiredProp `json:"range"`
+		NewText      requiredProp `json:"newText"`
 		AnnotationId requiredProp `json:"annotationId"`
 	}
 
@@ -8213,14 +10151,20 @@ func (s *AnnotatedTextEdit) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
+	if !keys.Range {
+		return fmt.Errorf("required key 'range' is missing")
+	}
+	if !keys.NewText {
+		return fmt.Errorf("required key 'newText' is missing")
+	}
 	if !keys.AnnotationId {
 		return fmt.Errorf("required key 'annotationId' is missing")
 	}
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		TextEdit
-
+		Range        Range  `json:"range"`
+		NewText      string `json:"newText"`
 		AnnotationId string `json:"annotationId"`
 	}
 
@@ -8386,7 +10330,16 @@ func (s *FileOperationPattern) UnmarshalJSON(data []byte) error {
 //
 // Since: 3.17.0
 type WorkspaceFullDocumentDiagnosticReport struct {
-	FullDocumentDiagnosticReport
+	// A full document diagnostic report.
+	Kind StringLiteralFull `json:"kind"`
+
+	// An optional result id. If provided it will
+	// be sent on the next diagnostic request for the
+	// same document.
+	ResultId *string `json:"resultId,omitempty"`
+
+	// The actual items.
+	Items []*Diagnostic `json:"items"`
 
 	// The URI for which diagnostic information is reported.
 	Uri DocumentUri `json:"uri"`
@@ -8399,6 +10352,8 @@ type WorkspaceFullDocumentDiagnosticReport struct {
 func (s *WorkspaceFullDocumentDiagnosticReport) UnmarshalJSON(data []byte) error {
 	// Check required props
 	type requiredProps struct {
+		Kind    requiredProp `json:"kind"`
+		Items   requiredProp `json:"items"`
 		Uri     requiredProp `json:"uri"`
 		Version requiredProp `json:"version"`
 	}
@@ -8408,6 +10363,12 @@ func (s *WorkspaceFullDocumentDiagnosticReport) UnmarshalJSON(data []byte) error
 		return err
 	}
 
+	if !keys.Kind {
+		return fmt.Errorf("required key 'kind' is missing")
+	}
+	if !keys.Items {
+		return fmt.Errorf("required key 'items' is missing")
+	}
 	if !keys.Uri {
 		return fmt.Errorf("required key 'uri' is missing")
 	}
@@ -8417,10 +10378,11 @@ func (s *WorkspaceFullDocumentDiagnosticReport) UnmarshalJSON(data []byte) error
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		FullDocumentDiagnosticReport
-
-		Uri     DocumentUri   `json:"uri"`
-		Version IntegerOrNull `json:"version"`
+		Kind     StringLiteralFull `json:"kind"`
+		ResultId *string           `json:"resultId,omitempty"`
+		Items    []*Diagnostic     `json:"items"`
+		Uri      DocumentUri       `json:"uri"`
+		Version  IntegerOrNull     `json:"version"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -8430,7 +10392,15 @@ func (s *WorkspaceFullDocumentDiagnosticReport) UnmarshalJSON(data []byte) error
 //
 // Since: 3.17.0
 type WorkspaceUnchangedDocumentDiagnosticReport struct {
-	UnchangedDocumentDiagnosticReport
+	// A document diagnostic report indicating
+	// no changes to the last result. A server can
+	// only return `unchanged` if result ids are
+	// provided.
+	Kind StringLiteralUnchanged `json:"kind"`
+
+	// A result id which will be sent on the next
+	// diagnostic request for the same document.
+	ResultId string `json:"resultId"`
 
 	// The URI for which diagnostic information is reported.
 	Uri DocumentUri `json:"uri"`
@@ -8443,8 +10413,10 @@ type WorkspaceUnchangedDocumentDiagnosticReport struct {
 func (s *WorkspaceUnchangedDocumentDiagnosticReport) UnmarshalJSON(data []byte) error {
 	// Check required props
 	type requiredProps struct {
-		Uri     requiredProp `json:"uri"`
-		Version requiredProp `json:"version"`
+		Kind     requiredProp `json:"kind"`
+		ResultId requiredProp `json:"resultId"`
+		Uri      requiredProp `json:"uri"`
+		Version  requiredProp `json:"version"`
 	}
 
 	var keys requiredProps
@@ -8452,6 +10424,12 @@ func (s *WorkspaceUnchangedDocumentDiagnosticReport) UnmarshalJSON(data []byte) 
 		return err
 	}
 
+	if !keys.Kind {
+		return fmt.Errorf("required key 'kind' is missing")
+	}
+	if !keys.ResultId {
+		return fmt.Errorf("required key 'resultId' is missing")
+	}
 	if !keys.Uri {
 		return fmt.Errorf("required key 'uri' is missing")
 	}
@@ -8461,10 +10439,10 @@ func (s *WorkspaceUnchangedDocumentDiagnosticReport) UnmarshalJSON(data []byte) 
 
 	// Redeclare the struct to prevent infinite recursion
 	type temp struct {
-		UnchangedDocumentDiagnosticReport
-
-		Uri     DocumentUri   `json:"uri"`
-		Version IntegerOrNull `json:"version"`
+		Kind     StringLiteralUnchanged `json:"kind"`
+		ResultId string                 `json:"resultId"`
+		Uri      DocumentUri            `json:"uri"`
+		Version  IntegerOrNull          `json:"version"`
 	}
 
 	return json.Unmarshal(data, (*temp)(s))
@@ -10511,7 +12489,26 @@ type SelectionRangeClientCapabilities struct {
 
 // The publish diagnostic client capabilities.
 type PublishDiagnosticsClientCapabilities struct {
-	DiagnosticsCapabilities
+	// Whether the clients accepts diagnostics with related information.
+	RelatedInformation *bool `json:"relatedInformation,omitempty"`
+
+	// Client supports the tag property to provide meta data about a diagnostic.
+	// Clients supporting tags have to handle unknown tags gracefully.
+	//
+	// Since: 3.15.0
+	TagSupport *ClientDiagnosticsTagOptions `json:"tagSupport,omitempty"`
+
+	// Client supports a codeDescription property
+	//
+	// Since: 3.16.0
+	CodeDescriptionSupport *bool `json:"codeDescriptionSupport,omitempty"`
+
+	// Whether code action supports the `data` property which is
+	// preserved between a `textDocument/publishDiagnostics` and
+	// `textDocument/codeAction` request.
+	//
+	// Since: 3.16.0
+	DataSupport *bool `json:"dataSupport,omitempty"`
 
 	// Whether the client interprets the version property of the
 	// `textDocument/publishDiagnostics` notification's parameter.
@@ -10676,7 +12673,26 @@ type InlayHintClientCapabilities struct {
 //
 // Since: 3.17.0
 type DiagnosticClientCapabilities struct {
-	DiagnosticsCapabilities
+	// Whether the clients accepts diagnostics with related information.
+	RelatedInformation *bool `json:"relatedInformation,omitempty"`
+
+	// Client supports the tag property to provide meta data about a diagnostic.
+	// Clients supporting tags have to handle unknown tags gracefully.
+	//
+	// Since: 3.15.0
+	TagSupport *ClientDiagnosticsTagOptions `json:"tagSupport,omitempty"`
+
+	// Client supports a codeDescription property
+	//
+	// Since: 3.16.0
+	CodeDescriptionSupport *bool `json:"codeDescriptionSupport,omitempty"`
+
+	// Whether code action supports the `data` property which is
+	// preserved between a `textDocument/publishDiagnostics` and
+	// `textDocument/codeAction` request.
+	//
+	// Since: 3.16.0
+	DataSupport *bool `json:"dataSupport,omitempty"`
 
 	// Whether implementation supports dynamic registration. If this is set to `true`
 	// the client supports the new `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
@@ -13649,36 +15665,6 @@ var ProgressInfo = NotificationInfo[*ProgressParams]{Method: MethodProgress}
 
 // Union types
 
-type DocumentSelectorOrNull struct {
-	DocumentSelector *[]TextDocumentFilterLanguageOrTextDocumentFilterSchemeOrTextDocumentFilterPatternOrNotebookCellTextDocumentFilter
-}
-
-func (o DocumentSelectorOrNull) MarshalJSON() ([]byte, error) {
-	assertAtMostOne("more than one element of DocumentSelectorOrNull is set", o.DocumentSelector != nil)
-
-	if o.DocumentSelector != nil {
-		return json.Marshal(*o.DocumentSelector)
-	}
-	// All fields are nil, represent as null
-	return []byte("null"), nil
-}
-
-func (o *DocumentSelectorOrNull) UnmarshalJSON(data []byte) error {
-	*o = DocumentSelectorOrNull{}
-
-	// Handle null case
-	if string(data) == "null" {
-		return nil
-	}
-
-	var vDocumentSelector []TextDocumentFilterLanguageOrTextDocumentFilterSchemeOrTextDocumentFilterPatternOrNotebookCellTextDocumentFilter
-	if err := json.Unmarshal(data, &vDocumentSelector); err == nil {
-		o.DocumentSelector = &vDocumentSelector
-		return nil
-	}
-	return fmt.Errorf("invalid DocumentSelectorOrNull: %s", data)
-}
-
 type IntegerOrString struct {
 	Integer *int32
 	String  *string
@@ -13710,6 +15696,102 @@ func (o *IntegerOrString) UnmarshalJSON(data []byte) error {
 		return nil
 	}
 	return fmt.Errorf("invalid IntegerOrString: %s", data)
+}
+
+type DocumentSelectorOrNull struct {
+	DocumentSelector *[]TextDocumentFilterLanguageOrTextDocumentFilterSchemeOrTextDocumentFilterPatternOrNotebookCellTextDocumentFilter
+}
+
+func (o DocumentSelectorOrNull) MarshalJSON() ([]byte, error) {
+	assertAtMostOne("more than one element of DocumentSelectorOrNull is set", o.DocumentSelector != nil)
+
+	if o.DocumentSelector != nil {
+		return json.Marshal(*o.DocumentSelector)
+	}
+	// All fields are nil, represent as null
+	return []byte("null"), nil
+}
+
+func (o *DocumentSelectorOrNull) UnmarshalJSON(data []byte) error {
+	*o = DocumentSelectorOrNull{}
+
+	// Handle null case
+	if string(data) == "null" {
+		return nil
+	}
+
+	var vDocumentSelector []TextDocumentFilterLanguageOrTextDocumentFilterSchemeOrTextDocumentFilterPatternOrNotebookCellTextDocumentFilter
+	if err := json.Unmarshal(data, &vDocumentSelector); err == nil {
+		o.DocumentSelector = &vDocumentSelector
+		return nil
+	}
+	return fmt.Errorf("invalid DocumentSelectorOrNull: %s", data)
+}
+
+type BooleanOrEmptyObject struct {
+	Boolean     *bool
+	EmptyObject *struct{}
+}
+
+func (o BooleanOrEmptyObject) MarshalJSON() ([]byte, error) {
+	assertOnlyOne("more than one element of BooleanOrEmptyObject is set", o.Boolean != nil, o.EmptyObject != nil)
+
+	if o.Boolean != nil {
+		return json.Marshal(*o.Boolean)
+	}
+	if o.EmptyObject != nil {
+		return json.Marshal(*o.EmptyObject)
+	}
+	panic("unreachable")
+}
+
+func (o *BooleanOrEmptyObject) UnmarshalJSON(data []byte) error {
+	*o = BooleanOrEmptyObject{}
+
+	var vBoolean bool
+	if err := json.Unmarshal(data, &vBoolean); err == nil {
+		o.Boolean = &vBoolean
+		return nil
+	}
+	var vEmptyObject struct{}
+	if err := json.Unmarshal(data, &vEmptyObject); err == nil {
+		o.EmptyObject = &vEmptyObject
+		return nil
+	}
+	return fmt.Errorf("invalid BooleanOrEmptyObject: %s", data)
+}
+
+type BooleanOrSemanticTokensFullDelta struct {
+	Boolean                 *bool
+	SemanticTokensFullDelta *SemanticTokensFullDelta
+}
+
+func (o BooleanOrSemanticTokensFullDelta) MarshalJSON() ([]byte, error) {
+	assertOnlyOne("more than one element of BooleanOrSemanticTokensFullDelta is set", o.Boolean != nil, o.SemanticTokensFullDelta != nil)
+
+	if o.Boolean != nil {
+		return json.Marshal(*o.Boolean)
+	}
+	if o.SemanticTokensFullDelta != nil {
+		return json.Marshal(*o.SemanticTokensFullDelta)
+	}
+	panic("unreachable")
+}
+
+func (o *BooleanOrSemanticTokensFullDelta) UnmarshalJSON(data []byte) error {
+	*o = BooleanOrSemanticTokensFullDelta{}
+
+	var vBoolean bool
+	if err := json.Unmarshal(data, &vBoolean); err == nil {
+		o.Boolean = &vBoolean
+		return nil
+	}
+	var vSemanticTokensFullDelta SemanticTokensFullDelta
+	if err := json.Unmarshal(data, &vSemanticTokensFullDelta); err == nil {
+		o.SemanticTokensFullDelta = &vSemanticTokensFullDelta
+		return nil
+	}
+	return fmt.Errorf("invalid BooleanOrSemanticTokensFullDelta: %s", data)
 }
 
 type TextDocumentEditOrCreateFileOrRenameFileOrDeleteFile struct {
@@ -13895,6 +15977,39 @@ func (o *WorkspaceFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticRepor
 	return fmt.Errorf("invalid WorkspaceFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport: %s", data)
 }
 
+type NotebookDocumentFilterWithNotebookOrCells struct {
+	Notebook *NotebookDocumentFilterWithNotebook
+	Cells    *NotebookDocumentFilterWithCells
+}
+
+func (o NotebookDocumentFilterWithNotebookOrCells) MarshalJSON() ([]byte, error) {
+	assertOnlyOne("more than one element of NotebookDocumentFilterWithNotebookOrCells is set", o.Notebook != nil, o.Cells != nil)
+
+	if o.Notebook != nil {
+		return json.Marshal(*o.Notebook)
+	}
+	if o.Cells != nil {
+		return json.Marshal(*o.Cells)
+	}
+	panic("unreachable")
+}
+
+func (o *NotebookDocumentFilterWithNotebookOrCells) UnmarshalJSON(data []byte) error {
+	*o = NotebookDocumentFilterWithNotebookOrCells{}
+
+	var vNotebook NotebookDocumentFilterWithNotebook
+	if err := json.Unmarshal(data, &vNotebook); err == nil {
+		o.Notebook = &vNotebook
+		return nil
+	}
+	var vCells NotebookDocumentFilterWithCells
+	if err := json.Unmarshal(data, &vCells); err == nil {
+		o.Cells = &vCells
+		return nil
+	}
+	return fmt.Errorf("invalid NotebookDocumentFilterWithNotebookOrCells: %s", data)
+}
+
 type StringOrStringValue struct {
 	String      *string
 	StringValue *StringValue
@@ -13926,6 +16041,126 @@ func (o *StringOrStringValue) UnmarshalJSON(data []byte) error {
 		return nil
 	}
 	return fmt.Errorf("invalid StringOrStringValue: %s", data)
+}
+
+type IntegerOrNull struct {
+	Integer *int32
+}
+
+func (o IntegerOrNull) MarshalJSON() ([]byte, error) {
+	assertAtMostOne("more than one element of IntegerOrNull is set", o.Integer != nil)
+
+	if o.Integer != nil {
+		return json.Marshal(*o.Integer)
+	}
+	// All fields are nil, represent as null
+	return []byte("null"), nil
+}
+
+func (o *IntegerOrNull) UnmarshalJSON(data []byte) error {
+	*o = IntegerOrNull{}
+
+	// Handle null case
+	if string(data) == "null" {
+		return nil
+	}
+
+	var vInteger int32
+	if err := json.Unmarshal(data, &vInteger); err == nil {
+		o.Integer = &vInteger
+		return nil
+	}
+	return fmt.Errorf("invalid IntegerOrNull: %s", data)
+}
+
+type StringOrNull struct {
+	String *string
+}
+
+func (o StringOrNull) MarshalJSON() ([]byte, error) {
+	assertAtMostOne("more than one element of StringOrNull is set", o.String != nil)
+
+	if o.String != nil {
+		return json.Marshal(*o.String)
+	}
+	// All fields are nil, represent as null
+	return []byte("null"), nil
+}
+
+func (o *StringOrNull) UnmarshalJSON(data []byte) error {
+	*o = StringOrNull{}
+
+	// Handle null case
+	if string(data) == "null" {
+		return nil
+	}
+
+	var vString string
+	if err := json.Unmarshal(data, &vString); err == nil {
+		o.String = &vString
+		return nil
+	}
+	return fmt.Errorf("invalid StringOrNull: %s", data)
+}
+
+type DocumentUriOrNull struct {
+	DocumentUri *DocumentUri
+}
+
+func (o DocumentUriOrNull) MarshalJSON() ([]byte, error) {
+	assertAtMostOne("more than one element of DocumentUriOrNull is set", o.DocumentUri != nil)
+
+	if o.DocumentUri != nil {
+		return json.Marshal(*o.DocumentUri)
+	}
+	// All fields are nil, represent as null
+	return []byte("null"), nil
+}
+
+func (o *DocumentUriOrNull) UnmarshalJSON(data []byte) error {
+	*o = DocumentUriOrNull{}
+
+	// Handle null case
+	if string(data) == "null" {
+		return nil
+	}
+
+	var vDocumentUri DocumentUri
+	if err := json.Unmarshal(data, &vDocumentUri); err == nil {
+		o.DocumentUri = &vDocumentUri
+		return nil
+	}
+	return fmt.Errorf("invalid DocumentUriOrNull: %s", data)
+}
+
+type WorkspaceFoldersOrNull struct {
+	WorkspaceFolders *[]*WorkspaceFolder
+}
+
+func (o WorkspaceFoldersOrNull) MarshalJSON() ([]byte, error) {
+	assertAtMostOne("more than one element of WorkspaceFoldersOrNull is set", o.WorkspaceFolders != nil)
+
+	if o.WorkspaceFolders != nil {
+		return json.Marshal(*o.WorkspaceFolders)
+	}
+	// All fields are nil, represent as null
+	return []byte("null"), nil
+}
+
+func (o *WorkspaceFoldersOrNull) UnmarshalJSON(data []byte) error {
+	*o = WorkspaceFoldersOrNull{}
+
+	// Handle null case
+	if string(data) == "null" {
+		return nil
+	}
+
+	var vWorkspaceFolders []*WorkspaceFolder
+	if err := json.Unmarshal(data, &vWorkspaceFolders); err == nil {
+		o.WorkspaceFolders = &vWorkspaceFolders
+		return nil
+	}
+	return fmt.Errorf("invalid WorkspaceFoldersOrNull: %s", data)
 }
 
 type StringOrStrings struct {
@@ -14141,72 +16376,6 @@ func (o *LocationOrLocationUriOnly) UnmarshalJSON(data []byte) error {
 	return fmt.Errorf("invalid LocationOrLocationUriOnly: %s", data)
 }
 
-type BooleanOrEmptyObject struct {
-	Boolean     *bool
-	EmptyObject *struct{}
-}
-
-func (o BooleanOrEmptyObject) MarshalJSON() ([]byte, error) {
-	assertOnlyOne("more than one element of BooleanOrEmptyObject is set", o.Boolean != nil, o.EmptyObject != nil)
-
-	if o.Boolean != nil {
-		return json.Marshal(*o.Boolean)
-	}
-	if o.EmptyObject != nil {
-		return json.Marshal(*o.EmptyObject)
-	}
-	panic("unreachable")
-}
-
-func (o *BooleanOrEmptyObject) UnmarshalJSON(data []byte) error {
-	*o = BooleanOrEmptyObject{}
-
-	var vBoolean bool
-	if err := json.Unmarshal(data, &vBoolean); err == nil {
-		o.Boolean = &vBoolean
-		return nil
-	}
-	var vEmptyObject struct{}
-	if err := json.Unmarshal(data, &vEmptyObject); err == nil {
-		o.EmptyObject = &vEmptyObject
-		return nil
-	}
-	return fmt.Errorf("invalid BooleanOrEmptyObject: %s", data)
-}
-
-type BooleanOrSemanticTokensFullDelta struct {
-	Boolean                 *bool
-	SemanticTokensFullDelta *SemanticTokensFullDelta
-}
-
-func (o BooleanOrSemanticTokensFullDelta) MarshalJSON() ([]byte, error) {
-	assertOnlyOne("more than one element of BooleanOrSemanticTokensFullDelta is set", o.Boolean != nil, o.SemanticTokensFullDelta != nil)
-
-	if o.Boolean != nil {
-		return json.Marshal(*o.Boolean)
-	}
-	if o.SemanticTokensFullDelta != nil {
-		return json.Marshal(*o.SemanticTokensFullDelta)
-	}
-	panic("unreachable")
-}
-
-func (o *BooleanOrSemanticTokensFullDelta) UnmarshalJSON(data []byte) error {
-	*o = BooleanOrSemanticTokensFullDelta{}
-
-	var vBoolean bool
-	if err := json.Unmarshal(data, &vBoolean); err == nil {
-		o.Boolean = &vBoolean
-		return nil
-	}
-	var vSemanticTokensFullDelta SemanticTokensFullDelta
-	if err := json.Unmarshal(data, &vSemanticTokensFullDelta); err == nil {
-		o.SemanticTokensFullDelta = &vSemanticTokensFullDelta
-		return nil
-	}
-	return fmt.Errorf("invalid BooleanOrSemanticTokensFullDelta: %s", data)
-}
-
 type TextEditOrAnnotatedTextEditOrSnippetTextEdit struct {
 	TextEdit          *TextEdit
 	AnnotatedTextEdit *AnnotatedTextEdit
@@ -14247,159 +16416,6 @@ func (o *TextEditOrAnnotatedTextEditOrSnippetTextEdit) UnmarshalJSON(data []byte
 		return nil
 	}
 	return fmt.Errorf("invalid TextEditOrAnnotatedTextEditOrSnippetTextEdit: %s", data)
-}
-
-type NotebookDocumentFilterWithNotebookOrCells struct {
-	Notebook *NotebookDocumentFilterWithNotebook
-	Cells    *NotebookDocumentFilterWithCells
-}
-
-func (o NotebookDocumentFilterWithNotebookOrCells) MarshalJSON() ([]byte, error) {
-	assertOnlyOne("more than one element of NotebookDocumentFilterWithNotebookOrCells is set", o.Notebook != nil, o.Cells != nil)
-
-	if o.Notebook != nil {
-		return json.Marshal(*o.Notebook)
-	}
-	if o.Cells != nil {
-		return json.Marshal(*o.Cells)
-	}
-	panic("unreachable")
-}
-
-func (o *NotebookDocumentFilterWithNotebookOrCells) UnmarshalJSON(data []byte) error {
-	*o = NotebookDocumentFilterWithNotebookOrCells{}
-
-	var vNotebook NotebookDocumentFilterWithNotebook
-	if err := json.Unmarshal(data, &vNotebook); err == nil {
-		o.Notebook = &vNotebook
-		return nil
-	}
-	var vCells NotebookDocumentFilterWithCells
-	if err := json.Unmarshal(data, &vCells); err == nil {
-		o.Cells = &vCells
-		return nil
-	}
-	return fmt.Errorf("invalid NotebookDocumentFilterWithNotebookOrCells: %s", data)
-}
-
-type IntegerOrNull struct {
-	Integer *int32
-}
-
-func (o IntegerOrNull) MarshalJSON() ([]byte, error) {
-	assertAtMostOne("more than one element of IntegerOrNull is set", o.Integer != nil)
-
-	if o.Integer != nil {
-		return json.Marshal(*o.Integer)
-	}
-	// All fields are nil, represent as null
-	return []byte("null"), nil
-}
-
-func (o *IntegerOrNull) UnmarshalJSON(data []byte) error {
-	*o = IntegerOrNull{}
-
-	// Handle null case
-	if string(data) == "null" {
-		return nil
-	}
-
-	var vInteger int32
-	if err := json.Unmarshal(data, &vInteger); err == nil {
-		o.Integer = &vInteger
-		return nil
-	}
-	return fmt.Errorf("invalid IntegerOrNull: %s", data)
-}
-
-type StringOrNull struct {
-	String *string
-}
-
-func (o StringOrNull) MarshalJSON() ([]byte, error) {
-	assertAtMostOne("more than one element of StringOrNull is set", o.String != nil)
-
-	if o.String != nil {
-		return json.Marshal(*o.String)
-	}
-	// All fields are nil, represent as null
-	return []byte("null"), nil
-}
-
-func (o *StringOrNull) UnmarshalJSON(data []byte) error {
-	*o = StringOrNull{}
-
-	// Handle null case
-	if string(data) == "null" {
-		return nil
-	}
-
-	var vString string
-	if err := json.Unmarshal(data, &vString); err == nil {
-		o.String = &vString
-		return nil
-	}
-	return fmt.Errorf("invalid StringOrNull: %s", data)
-}
-
-type DocumentUriOrNull struct {
-	DocumentUri *DocumentUri
-}
-
-func (o DocumentUriOrNull) MarshalJSON() ([]byte, error) {
-	assertAtMostOne("more than one element of DocumentUriOrNull is set", o.DocumentUri != nil)
-
-	if o.DocumentUri != nil {
-		return json.Marshal(*o.DocumentUri)
-	}
-	// All fields are nil, represent as null
-	return []byte("null"), nil
-}
-
-func (o *DocumentUriOrNull) UnmarshalJSON(data []byte) error {
-	*o = DocumentUriOrNull{}
-
-	// Handle null case
-	if string(data) == "null" {
-		return nil
-	}
-
-	var vDocumentUri DocumentUri
-	if err := json.Unmarshal(data, &vDocumentUri); err == nil {
-		o.DocumentUri = &vDocumentUri
-		return nil
-	}
-	return fmt.Errorf("invalid DocumentUriOrNull: %s", data)
-}
-
-type WorkspaceFoldersOrNull struct {
-	WorkspaceFolders *[]*WorkspaceFolder
-}
-
-func (o WorkspaceFoldersOrNull) MarshalJSON() ([]byte, error) {
-	assertAtMostOne("more than one element of WorkspaceFoldersOrNull is set", o.WorkspaceFolders != nil)
-
-	if o.WorkspaceFolders != nil {
-		return json.Marshal(*o.WorkspaceFolders)
-	}
-	// All fields are nil, represent as null
-	return []byte("null"), nil
-}
-
-func (o *WorkspaceFoldersOrNull) UnmarshalJSON(data []byte) error {
-	*o = WorkspaceFoldersOrNull{}
-
-	// Handle null case
-	if string(data) == "null" {
-		return nil
-	}
-
-	var vWorkspaceFolders []*WorkspaceFolder
-	if err := json.Unmarshal(data, &vWorkspaceFolders); err == nil {
-		o.WorkspaceFolders = &vWorkspaceFolders
-		return nil
-	}
-	return fmt.Errorf("invalid WorkspaceFoldersOrNull: %s", data)
 }
 
 type TextDocumentSyncOptionsOrKind struct {

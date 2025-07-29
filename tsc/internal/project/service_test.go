@@ -95,9 +95,7 @@ func TestService(t *testing.T) {
 			programBefore := proj.GetProgram()
 			err := service.ChangeFile(
 				lsproto.VersionedTextDocumentIdentifier{
-					TextDocumentIdentifier: lsproto.TextDocumentIdentifier{
-						Uri: "file:///home/projects/TS/p1/src/x.ts",
-					},
+					Uri:     "file:///home/projects/TS/p1/src/x.ts",
 					Version: 1,
 				},
 				[]lsproto.TextDocumentContentChangePartialOrWholeDocument{
@@ -134,9 +132,7 @@ func TestService(t *testing.T) {
 			indexFileBefore := programBefore.GetSourceFile("/home/projects/TS/p1/src/index.ts")
 			err := service.ChangeFile(
 				lsproto.VersionedTextDocumentIdentifier{
-					TextDocumentIdentifier: lsproto.TextDocumentIdentifier{
-						Uri: "file:///home/projects/TS/p1/src/x.ts",
-					},
+					Uri:     "file:///home/projects/TS/p1/src/x.ts",
 					Version: 1,
 				},
 				[]lsproto.TextDocumentContentChangePartialOrWholeDocument{
@@ -173,9 +169,7 @@ func TestService(t *testing.T) {
 
 			err := service.ChangeFile(
 				lsproto.VersionedTextDocumentIdentifier{
-					TextDocumentIdentifier: lsproto.TextDocumentIdentifier{
-						Uri: "file:///home/projects/TS/p1/src/index.ts",
-					},
+					Uri:     "file:///home/projects/TS/p1/src/index.ts",
 					Version: 1,
 				},
 				[]lsproto.TextDocumentContentChangePartialOrWholeDocument{
@@ -221,9 +215,7 @@ func TestService(t *testing.T) {
 
 			err := service.ChangeFile(
 				lsproto.VersionedTextDocumentIdentifier{
-					TextDocumentIdentifier: lsproto.TextDocumentIdentifier{
-						Uri: "file:///home/projects/TS/p1/src/index.ts",
-					},
+					Uri:     "file:///home/projects/TS/p1/src/index.ts",
 					Version: 1,
 				},
 				[]lsproto.TextDocumentContentChangePartialOrWholeDocument{
