@@ -3,7 +3,7 @@
 export const versionMajorMinor = "5.9";
 // The following is baselined as a literal template type without intervention
 /** The version of the TypeScript compiler release */
-export const version = "5.9.1-rc" as string;
+export const version = "5.9.2" as string;
 
 /**
  * Type of objects whose values are all of the same type.
