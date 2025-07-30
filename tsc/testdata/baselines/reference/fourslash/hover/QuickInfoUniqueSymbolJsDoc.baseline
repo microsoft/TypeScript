@@ -1,0 +1,31 @@
+// === QuickInfo ===
+=== /a.js ===
+// /** @type {unique symbol} */
+// const foo = Symbol();
+// foo
+//    ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const foo: typeof foo
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 54,
+      "LSPosition": {
+        "line": 2,
+        "character": 3
+      },
+      "Name": "",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nconst foo: typeof foo\n```\n"
+      }
+    }
+  }
+]

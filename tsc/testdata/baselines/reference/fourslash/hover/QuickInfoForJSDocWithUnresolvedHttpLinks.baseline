@@ -1,0 +1,59 @@
+// === QuickInfo ===
+=== /quickInfoForJSDocWithHttpLinks.js ===
+// /** @see {@link https://hva} */
+// var see2 = true
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var see2: boolean
+// | ```
+// | 
+// | 
+// | *@see* — https://hva 
+// | ----------------------------------------------------------------------
+// 
+// /** {@link https://hvaD} */
+// var see3 = true
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var see3: boolean
+// | ```
+// | https://hvaD
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 36,
+      "LSPosition": {
+        "line": 1,
+        "character": 4
+      },
+      "Name": "5",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar see2: boolean\n```\n\n\n*@see* — https://hva "
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 81,
+      "LSPosition": {
+        "line": 4,
+        "character": 4
+      },
+      "Name": "6",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar see3: boolean\n```\nhttps://hvaD"
+      }
+    }
+  }
+]

@@ -1,0 +1,40 @@
+// === QuickInfo ===
+=== /quickInfoInheritDoc5.js ===
+// function A() {}
+// 
+// class B extends A {
+//     /**
+//      * @inheritdoc
+//      */
+//     static value() {
+//            ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) B.value(): any
+// | ```
+// | 
+// | 
+// | *@inheritdoc*
+// | ----------------------------------------------------------------------
+//         return undefined;
+//     }
+// }
+[
+  {
+    "marker": {
+      "Position": 83,
+      "LSPosition": {
+        "line": 6,
+        "character": 11
+      },
+      "Name": "",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) B.value(): any\n```\n\n\n*@inheritdoc*"
+      }
+    }
+  }
+]

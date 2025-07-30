@@ -1,0 +1,45 @@
+// === QuickInfo ===
+=== /quickInfoJsDocTags3.ts ===
+// interface Foo {
+//     /**
+//      * comment
+//      * @author Me <me@domain.tld>
+//      * @see x (the parameter)
+//      * @param {number} x - x comment
+//      * @param {number} y - y comment
+//      * @throws {Error} comment
+//      */
+//     method(x: number, y: number): void;
+// }
+// 
+// class Bar implements Foo {
+//     method(): void {
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) Bar.method(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         throw new Error("Method not implemented.");
+//     }
+// }
+[
+  {
+    "marker": {
+      "Position": 290,
+      "LSPosition": {
+        "line": 13,
+        "character": 4
+      },
+      "Name": "",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) Bar.method(): void\n```\n"
+      }
+    }
+  }
+]

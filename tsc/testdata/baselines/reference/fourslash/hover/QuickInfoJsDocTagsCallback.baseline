@@ -1,0 +1,55 @@
+// === QuickInfo ===
+=== /quickInfoJsDocTagsCallback.js ===
+// /**
+//  * @callback cb
+//                ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*1*/.
+// | ----------------------------------------------------------------------
+//  * @param {string} x - x comment
+//  */
+// 
+// /**
+//  * @param {cb} bar -callback comment
+//            ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | type cb = (x: string) => any
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//  */
+// function foo(bar) {
+//     bar(bar);
+// }
+[
+  {
+    "marker": {
+      "Position": 19,
+      "LSPosition": {
+        "line": 1,
+        "character": 15
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": null
+  },
+  {
+    "marker": {
+      "Position": 73,
+      "LSPosition": {
+        "line": 6,
+        "character": 11
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\ntype cb = (x: string) =\u003e any\n```\n"
+      }
+    }
+  }
+]

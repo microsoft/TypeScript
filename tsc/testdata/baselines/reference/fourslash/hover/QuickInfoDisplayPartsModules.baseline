@@ -1,0 +1,416 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsModules.ts ===
+// namespace m {
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | namespace m
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     var namespaceElemWithoutExport = 10;
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var namespaceElemWithoutExport: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     export var namespaceElemWithExport = 10;
+//                ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var namespaceElemWithExport: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// }
+// var a = m;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var a: typeof m
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | namespace m
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// var b: typeof m;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var b: typeof m
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//               ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | namespace m
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// namespace m1.m2 {
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | namespace m1
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//              ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*9*/.
+// | ----------------------------------------------------------------------
+//     var namespaceElemWithoutExport = 10;
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var namespaceElemWithoutExport: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     export var namespaceElemWithExport = 10;
+//                ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var namespaceElemWithExport: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// }
+// var x = m1.m2;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var x: typeof m1.m2
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | namespace m1
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//            ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | namespace m1.m2
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// var y: typeof m1.m2;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var y: typeof m1.m2
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//               ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | namespace m1
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                  ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | namespace m1.m2
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 10,
+      "LSPosition": {
+        "line": 0,
+        "character": 10
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nnamespace m\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 22,
+      "LSPosition": {
+        "line": 1,
+        "character": 8
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar namespaceElemWithoutExport: number\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 70,
+      "LSPosition": {
+        "line": 2,
+        "character": 15
+      },
+      "Name": "3",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar namespaceElemWithExport: number\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 106,
+      "LSPosition": {
+        "line": 4,
+        "character": 4
+      },
+      "Name": "4",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar a: typeof m\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 110,
+      "LSPosition": {
+        "line": 4,
+        "character": 8
+      },
+      "Name": "5",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nnamespace m\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 117,
+      "LSPosition": {
+        "line": 5,
+        "character": 4
+      },
+      "Name": "6",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar b: typeof m\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 127,
+      "LSPosition": {
+        "line": 5,
+        "character": 14
+      },
+      "Name": "7",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nnamespace m\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 140,
+      "LSPosition": {
+        "line": 6,
+        "character": 10
+      },
+      "Name": "8",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nnamespace m1\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 143,
+      "LSPosition": {
+        "line": 6,
+        "character": 13
+      },
+      "Name": "9",
+      "Data": null
+    },
+    "item": null
+  },
+  {
+    "marker": {
+      "Position": 156,
+      "LSPosition": {
+        "line": 7,
+        "character": 8
+      },
+      "Name": "10",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar namespaceElemWithoutExport: number\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 204,
+      "LSPosition": {
+        "line": 8,
+        "character": 15
+      },
+      "Name": "11",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar namespaceElemWithExport: number\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 240,
+      "LSPosition": {
+        "line": 10,
+        "character": 4
+      },
+      "Name": "12",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar x: typeof m1.m2\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 244,
+      "LSPosition": {
+        "line": 10,
+        "character": 8
+      },
+      "Name": "13",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nnamespace m1\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 247,
+      "LSPosition": {
+        "line": 10,
+        "character": 11
+      },
+      "Name": "14",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nnamespace m1.m2\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 255,
+      "LSPosition": {
+        "line": 11,
+        "character": 4
+      },
+      "Name": "15",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar y: typeof m1.m2\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 265,
+      "LSPosition": {
+        "line": 11,
+        "character": 14
+      },
+      "Name": "16",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nnamespace m1\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 268,
+      "LSPosition": {
+        "line": 11,
+        "character": 17
+      },
+      "Name": "17",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nnamespace m1.m2\n```\n"
+      }
+    }
+  }
+]

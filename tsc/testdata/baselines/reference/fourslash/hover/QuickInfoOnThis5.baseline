@@ -1,0 +1,160 @@
+// === QuickInfo ===
+=== /quickInfoOnThis5.ts ===
+// const foo = {
+//     num: 0,
+//     f() {
+//         type Y = typeof this;
+//                           ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*1*/.
+// | ----------------------------------------------------------------------
+//         type Z = typeof this.num;
+//                           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | any
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     },
+//     g(this: number) {
+//         type X = typeof this;
+//                           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) this: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     }
+// }
+// class Foo {
+//     num = 0;
+//     f() {
+//         type Y = typeof this;
+//                           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | this
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         type Z = typeof this.num;
+//                           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | this
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     }
+//     g(this: number) {
+//         type X = typeof this;
+//                           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) this: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     }
+// }
+[
+  {
+    "marker": {
+      "Position": 62,
+      "LSPosition": {
+        "line": 3,
+        "character": 26
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": null
+  },
+  {
+    "marker": {
+      "Position": 92,
+      "LSPosition": {
+        "line": 4,
+        "character": 26
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nany\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 155,
+      "LSPosition": {
+        "line": 7,
+        "character": 26
+      },
+      "Name": "3",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) this: number\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 228,
+      "LSPosition": {
+        "line": 13,
+        "character": 26
+      },
+      "Name": "4",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nthis\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 258,
+      "LSPosition": {
+        "line": 14,
+        "character": 26
+      },
+      "Name": "5",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nthis\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 320,
+      "LSPosition": {
+        "line": 17,
+        "character": 26
+      },
+      "Name": "6",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) this: number\n```\n"
+      }
+    }
+  }
+]

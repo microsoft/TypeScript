@@ -1,0 +1,355 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsVar.ts ===
+// var a = 10;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var a: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// function foo() {
+//     var b = a;
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var b: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//             ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var a: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// }
+// module m {
+//     var c = 10;
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var c: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     export var d = 10;
+//                ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var d: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// }
+// var f: () => number;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var f: () => number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// var g = f;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var g: () => number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var f: () => number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// f();
+// ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var f: () => number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// var h: { (a: string): number; (a: number): string; };
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var h: { (a: string): number; (a: number): string; }
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// var i = h;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var i: { (a: string): number; (a: number): string; }
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var h: { (a: string): number; (a: number): string; }
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// h(10);
+// ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var h: { (a: string): number; (a: number): string; }
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// h("hello");
+// ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var h: { (a: string): number; (a: number): string; }
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 4,
+      "LSPosition": {
+        "line": 0,
+        "character": 4
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar a: number\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 37,
+      "LSPosition": {
+        "line": 2,
+        "character": 8
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar b: number\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 41,
+      "LSPosition": {
+        "line": 2,
+        "character": 12
+      },
+      "Name": "3",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar a: number\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 65,
+      "LSPosition": {
+        "line": 5,
+        "character": 8
+      },
+      "Name": "4",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar c: number\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 88,
+      "LSPosition": {
+        "line": 6,
+        "character": 15
+      },
+      "Name": "5",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar d: number\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 102,
+      "LSPosition": {
+        "line": 8,
+        "character": 4
+      },
+      "Name": "6",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar f: () =\u003e number\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 123,
+      "LSPosition": {
+        "line": 9,
+        "character": 4
+      },
+      "Name": "7",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar g: () =\u003e number\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 127,
+      "LSPosition": {
+        "line": 9,
+        "character": 8
+      },
+      "Name": "8",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar f: () =\u003e number\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 130,
+      "LSPosition": {
+        "line": 10,
+        "character": 0
+      },
+      "Name": "9",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar f: () =\u003e number\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 139,
+      "LSPosition": {
+        "line": 11,
+        "character": 4
+      },
+      "Name": "10",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar h: { (a: string): number; (a: number): string; }\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 193,
+      "LSPosition": {
+        "line": 12,
+        "character": 4
+      },
+      "Name": "11",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar i: { (a: string): number; (a: number): string; }\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 197,
+      "LSPosition": {
+        "line": 12,
+        "character": 8
+      },
+      "Name": "12",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar h: { (a: string): number; (a: number): string; }\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 200,
+      "LSPosition": {
+        "line": 13,
+        "character": 0
+      },
+      "Name": "13",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar h: { (a: string): number; (a: number): string; }\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 207,
+      "LSPosition": {
+        "line": 14,
+        "character": 0
+      },
+      "Name": "14",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar h: { (a: string): number; (a: number): string; }\n```\n"
+      }
+    }
+  }
+]

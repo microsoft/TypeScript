@@ -1,0 +1,92 @@
+// === QuickInfo ===
+=== /jsdocLink4.ts ===
+// declare class I {
+//   /** {@link I} */
+//   bar(): void
+//      ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) I.bar(): void
+// | ```
+// | `I`
+// | ----------------------------------------------------------------------
+// }
+// /** {@link I} */
+// var n = 1
+//      ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var n: number
+// | ```
+// | `I`
+// | ----------------------------------------------------------------------
+// /**
+//  * A real, very serious {@link I to an interface}. Right there.
+//  * @param x one {@link Pos here too}
+//  */
+// function f(x) {
+// }
+// f()
+//  ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function f(x: any): void
+// | ```
+// | A real, very serious Ito an interface. Right there.
+// | 
+// | *@param* `x` — one Poshere too
+// | ----------------------------------------------------------------------
+// type Pos = [number, number]
+[
+  {
+    "marker": {
+      "Position": 42,
+      "LSPosition": {
+        "line": 2,
+        "character": 5
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) I.bar(): void\n```\n`I`"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 75,
+      "LSPosition": {
+        "line": 5,
+        "character": 5
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar n: number\n```\n`I`"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 208,
+      "LSPosition": {
+        "line": 12,
+        "character": 1
+      },
+      "Name": "3",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction f(x: any): void\n```\nA real, very serious Ito an interface. Right there.\n\n*@param* `x` — one Poshere too"
+      }
+    }
+  }
+]

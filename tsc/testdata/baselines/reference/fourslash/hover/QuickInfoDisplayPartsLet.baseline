@@ -1,0 +1,409 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsLet.ts ===
+// let a = 10;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | let a: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// function foo() {
+//     let b = a;
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | let b: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//             ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | let a: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     if (b) {
+//         let b1 = 10;
+//             ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | let b1: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     }
+// }
+// module m {
+//     let c = 10;
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | let c: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     export let d = 10;
+//                ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | let d: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     if (c) {
+//         let e = 10;
+//             ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | let e: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     }
+// }
+// let f: () => number;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | let f: () => number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// let g = f;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | let g: () => number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | let f: () => number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// f();
+// ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | let f: () => number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// let h: { (a: string): number; (a: number): string; };
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | let h: { (a: string): number; (a: number): string; }
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// let i = h;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | let i: { (a: string): number; (a: number): string; }
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | let h: { (a: string): number; (a: number): string; }
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// h(10);
+// ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | let h: { (a: string): number; (a: number): string; }
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// h("hello");
+// ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | let h: { (a: string): number; (a: number): string; }
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 4,
+      "LSPosition": {
+        "line": 0,
+        "character": 4
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nlet a: number\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 37,
+      "LSPosition": {
+        "line": 2,
+        "character": 8
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nlet b: number\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 41,
+      "LSPosition": {
+        "line": 2,
+        "character": 12
+      },
+      "Name": "3",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nlet a: number\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 69,
+      "LSPosition": {
+        "line": 4,
+        "character": 12
+      },
+      "Name": "4",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nlet b1: number\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 105,
+      "LSPosition": {
+        "line": 8,
+        "character": 8
+      },
+      "Name": "5",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nlet c: number\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 128,
+      "LSPosition": {
+        "line": 9,
+        "character": 15
+      },
+      "Name": "6",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nlet d: number\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 161,
+      "LSPosition": {
+        "line": 11,
+        "character": 12
+      },
+      "Name": "7",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nlet e: number\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 181,
+      "LSPosition": {
+        "line": 14,
+        "character": 4
+      },
+      "Name": "8",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nlet f: () =\u003e number\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 202,
+      "LSPosition": {
+        "line": 15,
+        "character": 4
+      },
+      "Name": "9",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nlet g: () =\u003e number\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 206,
+      "LSPosition": {
+        "line": 15,
+        "character": 8
+      },
+      "Name": "10",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nlet f: () =\u003e number\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 209,
+      "LSPosition": {
+        "line": 16,
+        "character": 0
+      },
+      "Name": "11",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nlet f: () =\u003e number\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 218,
+      "LSPosition": {
+        "line": 17,
+        "character": 4
+      },
+      "Name": "12",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nlet h: { (a: string): number; (a: number): string; }\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 272,
+      "LSPosition": {
+        "line": 18,
+        "character": 4
+      },
+      "Name": "13",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nlet i: { (a: string): number; (a: number): string; }\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 276,
+      "LSPosition": {
+        "line": 18,
+        "character": 8
+      },
+      "Name": "14",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nlet h: { (a: string): number; (a: number): string; }\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 279,
+      "LSPosition": {
+        "line": 19,
+        "character": 0
+      },
+      "Name": "15",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nlet h: { (a: string): number; (a: number): string; }\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 286,
+      "LSPosition": {
+        "line": 20,
+        "character": 0
+      },
+      "Name": "16",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nlet h: { (a: string): number; (a: number): string; }\n```\n"
+      }
+    }
+  }
+]

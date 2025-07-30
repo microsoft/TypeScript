@@ -1,0 +1,61 @@
+// === QuickInfo ===
+=== /a.js ===
+// const foo = {
+//     f1: (params) => { }
+// }
+// 
+// function f2(x) {
+//          ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function f2(x: any): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//    foo.f1({ x, arguments: [] });
+// }
+// 
+// f2('');
+// ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function f2(x: any): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 50,
+      "LSPosition": {
+        "line": 4,
+        "character": 9
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction f2(x: any): void\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 94,
+      "LSPosition": {
+        "line": 8,
+        "character": 0
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction f2(x: any): void\n```\n"
+      }
+    }
+  }
+]

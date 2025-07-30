@@ -1,0 +1,29 @@
+// === QuickInfo ===
+=== /a.js ===
+// class C {
+//     constructor() {
+//         this.prop = "";
+//     }
+//     declare prop: string;
+//     method() {
+//         this.prop.foo
+//                      ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /**/.
+// | ----------------------------------------------------------------------
+//     }
+// }
+[
+  {
+    "marker": {
+      "Position": 122,
+      "LSPosition": {
+        "line": 6,
+        "character": 21
+      },
+      "Name": "",
+      "Data": null
+    },
+    "item": null
+  }
+]

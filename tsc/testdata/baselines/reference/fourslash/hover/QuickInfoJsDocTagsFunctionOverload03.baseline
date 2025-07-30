@@ -1,0 +1,61 @@
+// === QuickInfo ===
+=== /quickInfoJsDocTagsFunctionOverload03.ts ===
+// declare function foo(): void;
+//                  ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function foo(): void
+// | function foo(x: number): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// 
+// /**
+//  * Doc foo overloaded
+//  * @tag Tag text
+//  */
+// declare function foo(x: number): void
+//                  ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function foo(): void
+// | function foo(x: number): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 17,
+      "LSPosition": {
+        "line": 0,
+        "character": 17
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction foo(): void\nfunction foo(x: number): void\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 95,
+      "LSPosition": {
+        "line": 6,
+        "character": 17
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction foo(): void\nfunction foo(x: number): void\n```\n"
+      }
+    }
+  }
+]

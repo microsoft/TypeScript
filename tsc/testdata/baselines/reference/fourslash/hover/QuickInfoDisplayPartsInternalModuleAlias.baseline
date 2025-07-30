@@ -1,0 +1,210 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsInternalModuleAlias.ts ===
+// module m.m1 {
+//     export class c {
+//     }
+// }
+// module m2 {
+//     import a1 = m;
+//            ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (alias) namespace m
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     new a1.m1.c();
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (alias) namespace m
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     import a2 = m.m1;
+//            ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (alias) namespace m.m1
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     new a2.c();
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (alias) namespace m.m1
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     export import a3 = m;
+//                   ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (alias) namespace m
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     new a3.m1.c();
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (alias) namespace m
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     export import a4 = m.m1;
+//                   ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (alias) namespace m.m1
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     new a4.c();
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (alias) namespace m.m1
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// }
+[
+  {
+    "marker": {
+      "Position": 66,
+      "LSPosition": {
+        "line": 5,
+        "character": 11
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(alias) namespace m\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 82,
+      "LSPosition": {
+        "line": 6,
+        "character": 8
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(alias) namespace m\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 104,
+      "LSPosition": {
+        "line": 7,
+        "character": 11
+      },
+      "Name": "3",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(alias) namespace m.m1\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 123,
+      "LSPosition": {
+        "line": 8,
+        "character": 8
+      },
+      "Name": "4",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(alias) namespace m.m1\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 149,
+      "LSPosition": {
+        "line": 9,
+        "character": 18
+      },
+      "Name": "5",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(alias) namespace m\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 165,
+      "LSPosition": {
+        "line": 10,
+        "character": 8
+      },
+      "Name": "6",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(alias) namespace m\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 194,
+      "LSPosition": {
+        "line": 11,
+        "character": 18
+      },
+      "Name": "7",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(alias) namespace m.m1\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 213,
+      "LSPosition": {
+        "line": 12,
+        "character": 8
+      },
+      "Name": "8",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(alias) namespace m.m1\n```\n"
+      }
+    }
+  }
+]

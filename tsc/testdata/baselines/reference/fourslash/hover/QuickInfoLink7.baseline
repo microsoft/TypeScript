@@ -1,0 +1,32 @@
+// === QuickInfo ===
+=== /quickInfoLink7.ts ===
+// /**
+//  * See {@link |       } instead
+//  */
+// const B = 456;
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const B: 456
+// | ```
+// | See |        instead
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 46,
+      "LSPosition": {
+        "line": 3,
+        "character": 6
+      },
+      "Name": "",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nconst B: 456\n```\nSee |        instead"
+      }
+    }
+  }
+]

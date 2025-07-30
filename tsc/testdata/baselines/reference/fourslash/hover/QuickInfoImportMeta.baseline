@@ -1,0 +1,47 @@
+// === QuickInfo ===
+=== /foo.ts ===
+// /// <reference no-default-lib="true"/>
+// /// <reference path='./bar.d.ts' />
+// import.meta;
+//   ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*1*/.
+// | ----------------------------------------------------------------------
+//          ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (property) ImportMetaExpression.meta: ImportMeta
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 77,
+      "LSPosition": {
+        "line": 2,
+        "character": 2
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": null
+  },
+  {
+    "marker": {
+      "Position": 84,
+      "LSPosition": {
+        "line": 2,
+        "character": 9
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(property) ImportMetaExpression.meta: ImportMeta\n```\n"
+      }
+    }
+  }
+]

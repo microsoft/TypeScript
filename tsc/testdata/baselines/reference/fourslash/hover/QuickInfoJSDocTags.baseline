@@ -1,0 +1,396 @@
+// === QuickInfo ===
+=== /quickInfoJSDocTags.ts ===
+// /**
+//  * This is class Foo.
+//  * @mytag comment1 comment2
+//  */
+// class Foo {
+//     /**
+//      * This is the constructor.
+//      * @myjsdoctag this is a comment
+//      */
+//     constructor(value: number) {}
+//     /**
+//      * method1 documentation
+//      * @mytag comment1 comment2
+//      */
+//     static method1() {}
+//     /**
+//      * @mytag
+//      */
+//     method2() {}
+//     /**
+//      * @mytag comment1 comment2
+//      */
+//     property1: string;
+//     /**
+//      * @mytag1 some comments
+//      * some more comments about mytag1
+//      * @mytag2
+//      * here all the comments are on a new line
+//      * @mytag3
+//      * @mytag
+//      */
+//     property2: number;
+//     /**
+//      * @returns {number} a value
+//      */
+//     method3(): number { return 3; }
+//     /**
+//      * @param {string} foo A value.
+//      * @returns {number} Another value
+//      * @mytag
+//      */
+//     method4(foo: string): number { return 3; }
+//     /** @mytag */
+//     method5() {}
+//     /** method documentation
+//      *  @mytag a JSDoc tag
+//      */
+//     newMethod() {}
+// }
+// var foo = new Foo(4);
+//               ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | constructor Foo(value: number): Foo
+// | ```
+// | This is the constructor.
+// | 
+// | *@myjsdoctag* — this is a comment
+// | 
+// | ----------------------------------------------------------------------
+//                   ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*10*/.
+// | ----------------------------------------------------------------------
+// Foo.method1();
+// ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class Foo
+// | ```
+// | This is class Foo.
+// | 
+// | *@mytag* — comment1 comment2
+// | 
+// | ----------------------------------------------------------------------
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) Foo.method1(): void
+// | ```
+// | method1 documentation
+// | 
+// | *@mytag* — comment1 comment2
+// | 
+// | ----------------------------------------------------------------------
+//             ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*11*/.
+// | ----------------------------------------------------------------------
+// foo.method2();
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) Foo.method2(): void
+// | ```
+// | 
+// | 
+// | *@mytag*
+// | ----------------------------------------------------------------------
+//             ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*12*/.
+// | ----------------------------------------------------------------------
+// foo.method3();
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) Foo.method3(): number
+// | ```
+// | 
+// | 
+// | *@returns* — a value
+// | 
+// | ----------------------------------------------------------------------
+//             ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*13*/.
+// | ----------------------------------------------------------------------
+// foo.method4();
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) Foo.method4(foo: string): number
+// | ```
+// | 
+// | 
+// | *@param* `foo` — A value.
+// | 
+// | 
+// | *@returns* — Another value
+// | 
+// | 
+// | *@mytag*
+// | ----------------------------------------------------------------------
+// foo.property1;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (property) Foo.property1: string
+// | ```
+// | 
+// | 
+// | *@mytag* — comment1 comment2
+// | 
+// | ----------------------------------------------------------------------
+// foo.property2;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (property) Foo.property2: number
+// | ```
+// | 
+// | 
+// | *@mytag1* — some comments
+// | some more comments about mytag1
+// | 
+// | 
+// | *@mytag2* — here all the comments are on a new line
+// | 
+// | 
+// | *@mytag3*
+// | 
+// | *@mytag*
+// | ----------------------------------------------------------------------
+// foo.method5();
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) Foo.method5(): void
+// | ```
+// | 
+// | 
+// | *@mytag*
+// | ----------------------------------------------------------------------
+// foo.newMet
+//           ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*14*/.
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 977,
+      "LSPosition": {
+        "line": 49,
+        "character": 14
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nconstructor Foo(value: number): Foo\n```\nThis is the constructor.\n\n*@myjsdoctag* — this is a comment\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 981,
+      "LSPosition": {
+        "line": 49,
+        "character": 18
+      },
+      "Name": "10",
+      "Data": null
+    },
+    "item": null
+  },
+  {
+    "marker": {
+      "Position": 985,
+      "LSPosition": {
+        "line": 50,
+        "character": 0
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nclass Foo\n```\nThis is class Foo.\n\n*@mytag* — comment1 comment2\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 989,
+      "LSPosition": {
+        "line": 50,
+        "character": 4
+      },
+      "Name": "3",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) Foo.method1(): void\n```\nmethod1 documentation\n\n*@mytag* — comment1 comment2\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 997,
+      "LSPosition": {
+        "line": 50,
+        "character": 12
+      },
+      "Name": "11",
+      "Data": null
+    },
+    "item": null
+  },
+  {
+    "marker": {
+      "Position": 1004,
+      "LSPosition": {
+        "line": 51,
+        "character": 4
+      },
+      "Name": "4",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) Foo.method2(): void\n```\n\n\n*@mytag*"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1012,
+      "LSPosition": {
+        "line": 51,
+        "character": 12
+      },
+      "Name": "12",
+      "Data": null
+    },
+    "item": null
+  },
+  {
+    "marker": {
+      "Position": 1019,
+      "LSPosition": {
+        "line": 52,
+        "character": 4
+      },
+      "Name": "5",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) Foo.method3(): number\n```\n\n\n*@returns* — a value\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1027,
+      "LSPosition": {
+        "line": 52,
+        "character": 12
+      },
+      "Name": "13",
+      "Data": null
+    },
+    "item": null
+  },
+  {
+    "marker": {
+      "Position": 1034,
+      "LSPosition": {
+        "line": 53,
+        "character": 4
+      },
+      "Name": "6",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) Foo.method4(foo: string): number\n```\n\n\n*@param* `foo` — A value.\n\n\n*@returns* — Another value\n\n\n*@mytag*"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1049,
+      "LSPosition": {
+        "line": 54,
+        "character": 4
+      },
+      "Name": "7",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(property) Foo.property1: string\n```\n\n\n*@mytag* — comment1 comment2\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1064,
+      "LSPosition": {
+        "line": 55,
+        "character": 4
+      },
+      "Name": "8",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(property) Foo.property2: number\n```\n\n\n*@mytag1* — some comments\nsome more comments about mytag1\n\n\n*@mytag2* — here all the comments are on a new line\n\n\n*@mytag3*\n\n*@mytag*"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1079,
+      "LSPosition": {
+        "line": 56,
+        "character": 4
+      },
+      "Name": "9",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) Foo.method5(): void\n```\n\n\n*@mytag*"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1100,
+      "LSPosition": {
+        "line": 57,
+        "character": 10
+      },
+      "Name": "14",
+      "Data": null
+    },
+    "item": null
+  }
+]

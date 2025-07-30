@@ -1,0 +1,150 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsTypeParameterInTypeAlias.ts ===
+// type List<T> = T[]
+//      ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | type List<T> = T[]
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) T
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) T
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// type List2<T extends string> = T[];
+//      ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | type List2<T extends string> = T[]
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//            ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) T extends string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) T extends string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 5,
+      "LSPosition": {
+        "line": 0,
+        "character": 5
+      },
+      "Name": "0",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\ntype List\u003cT\u003e = T[]\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 10,
+      "LSPosition": {
+        "line": 0,
+        "character": 10
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) T\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 15,
+      "LSPosition": {
+        "line": 0,
+        "character": 15
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) T\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 24,
+      "LSPosition": {
+        "line": 1,
+        "character": 5
+      },
+      "Name": "3",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\ntype List2\u003cT extends string\u003e = T[]\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 30,
+      "LSPosition": {
+        "line": 1,
+        "character": 11
+      },
+      "Name": "4",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) T extends string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 50,
+      "LSPosition": {
+        "line": 1,
+        "character": 31
+      },
+      "Name": "5",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) T extends string\n```\n"
+      }
+    }
+  }
+]

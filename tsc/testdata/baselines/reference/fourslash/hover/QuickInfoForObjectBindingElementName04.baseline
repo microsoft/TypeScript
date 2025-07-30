@@ -1,0 +1,68 @@
+// === QuickInfo ===
+=== /quickInfoForObjectBindingElementName04.ts ===
+// interface Options {
+//    /**
+//     * A description of 'a'
+//     */
+//     a: {
+//        /**
+//         * A description of 'b'
+//         */
+//        b: string;
+//    }
+// }
+// 
+// function f({ a, a: { b } }: Options) {
+//     a;
+//      ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var a: { b: string; }
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     b;
+//      ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var b: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// }
+[
+  {
+    "marker": {
+      "Position": 193,
+      "LSPosition": {
+        "line": 13,
+        "character": 5
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar a: { b: string; }\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 200,
+      "LSPosition": {
+        "line": 14,
+        "character": 5
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar b: string\n```\n"
+      }
+    }
+  }
+]

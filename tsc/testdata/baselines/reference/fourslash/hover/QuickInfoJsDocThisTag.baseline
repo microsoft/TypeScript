@@ -1,0 +1,34 @@
+// === QuickInfo ===
+=== /a.ts ===
+// /** @this {number} */
+// function f() {
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function f(): void
+// | ```
+// | 
+// | 
+// | *@this*
+// | ----------------------------------------------------------------------
+//     this
+// }
+[
+  {
+    "marker": {
+      "Position": 32,
+      "LSPosition": {
+        "line": 1,
+        "character": 10
+      },
+      "Name": "",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction f(): void\n```\n\n\n*@this*"
+      }
+    }
+  }
+]

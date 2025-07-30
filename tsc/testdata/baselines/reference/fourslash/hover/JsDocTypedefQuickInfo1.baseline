@@ -1,0 +1,78 @@
+// === QuickInfo ===
+=== /jsDocTypedef1.js ===
+// /**
+//  * @typedef {Object} Opts
+//  * @property {string} x
+//  * @property {string=} y
+//  * @property {string} [z]
+//  * @property {string} [w="hi"]
+//  * 
+//  * @param {Opts} opts
+//  */
+// function foo(opts) {
+//              ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) opts: Opts
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     opts.x;
+// }
+// foo({x: 'abc'});
+// /**
+//  * @typedef {object} Opts1
+//  * @property {string} x
+//  * @property {string=} y
+//  * @property {string} [z]
+//  * @property {string} [w="hi"]
+//  * 
+//  * @param {Opts1} opts
+//  */
+// function foo1(opts1) {
+//               ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) opts1: any
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     opts1.x;
+// }
+// foo1({x: 'abc'});
+[
+  {
+    "marker": {
+      "Position": 179,
+      "LSPosition": {
+        "line": 9,
+        "character": 13
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) opts: Opts\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 400,
+      "LSPosition": {
+        "line": 22,
+        "character": 14
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) opts1: any\n```\n"
+      }
+    }
+  }
+]

@@ -1,0 +1,128 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsClass.ts ===
+// class c {
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class c
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// }
+// var cInstance = new c();
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var cInstance: c
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class c
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// var cVal = c;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var cVal: typeof c
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//            ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class c
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 6,
+      "LSPosition": {
+        "line": 0,
+        "character": 6
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nclass c\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 16,
+      "LSPosition": {
+        "line": 2,
+        "character": 4
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar cInstance: c\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 32,
+      "LSPosition": {
+        "line": 2,
+        "character": 20
+      },
+      "Name": "3",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nclass c\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 41,
+      "LSPosition": {
+        "line": 3,
+        "character": 4
+      },
+      "Name": "4",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar cVal: typeof c\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 48,
+      "LSPosition": {
+        "line": 3,
+        "character": 11
+      },
+      "Name": "5",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nclass c\n```\n"
+      }
+    }
+  }
+]

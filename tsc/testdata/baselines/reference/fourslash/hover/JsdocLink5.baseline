@@ -1,0 +1,37 @@
+// === QuickInfo ===
+=== /jsdocLink5.ts ===
+// function g() { }
+// /**
+//  * {@link g()} {@link g() } {@link g ()} {@link g () 0} {@link g()1} {@link g() 2}
+//  * {@link u()} {@link u() } {@link u ()} {@link u () 0} {@link u()1} {@link u() 2}
+//  */
+// function f(x) {
+// }
+// f()
+//  ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function f(x: any): void
+// | ```
+// | g() g()  g() g() 0 g()1 g() 2
+// | u() u()  u() u() 0 u()1 u() 2
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 210,
+      "LSPosition": {
+        "line": 7,
+        "character": 1
+      },
+      "Name": "3",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction f(x: any): void\n```\ng() g()  g() g() 0 g()1 g() 2\nu() u()  u() u() 0 u()1 u() 2"
+      }
+    }
+  }
+]

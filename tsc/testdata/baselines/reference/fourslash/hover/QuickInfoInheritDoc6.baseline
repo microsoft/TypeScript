@@ -1,0 +1,38 @@
+// === QuickInfo ===
+=== /quickInfoInheritDoc6.js ===
+// class B extends UNRESOLVED_VALUE_DEFINITELY_DOES_NOT_EXIST {
+//     /**
+//      * @inheritdoc
+//      */
+//     static value() {
+//            ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) B.value(): any
+// | ```
+// | 
+// | 
+// | *@inheritdoc*
+// | ----------------------------------------------------------------------
+//         return undefined;
+//     }
+// }
+[
+  {
+    "marker": {
+      "Position": 107,
+      "LSPosition": {
+        "line": 4,
+        "character": 11
+      },
+      "Name": "",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) B.value(): any\n```\n\n\n*@inheritdoc*"
+      }
+    }
+  }
+]

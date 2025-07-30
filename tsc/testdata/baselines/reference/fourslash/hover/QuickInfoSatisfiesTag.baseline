@@ -1,0 +1,32 @@
+// === QuickInfo ===
+=== /a.js ===
+// /** @satisfies {number} comment */
+// const a = 1;
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const a: 1
+// | ```
+// | 
+// | 
+// | *@satisfies* — comment 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 41,
+      "LSPosition": {
+        "line": 1,
+        "character": 6
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nconst a: 1\n```\n\n\n*@satisfies* — comment "
+      }
+    }
+  }
+]

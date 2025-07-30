@@ -1,0 +1,77 @@
+// === QuickInfo ===
+=== /quickInfoOnParameterProperties.ts ===
+// interface IFoo {
+//   /** this is the name of blabla 
+//    *  - use blabla 
+//    *  @example blabla
+//    */
+//   name?: string;
+// }
+// 
+// // test1 should work
+// class Foo implements IFoo {
+//   //public name: string = '';
+//   constructor(
+//     public name: string, // documentation should leech and work ! 
+//              ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (property) Foo.name: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//   ) {
+//   }
+// }
+// 
+// // test2 work
+// class Foo2 implements IFoo {
+//   public name: string = ''; // documentation leeched and work ! 
+//            ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (property) Foo2.name: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//   constructor(
+//     //public name: string,
+//   ) {
+//   }
+// }
+[
+  {
+    "marker": {
+      "Position": 226,
+      "LSPosition": {
+        "line": 12,
+        "character": 13
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(property) Foo.name: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 347,
+      "LSPosition": {
+        "line": 19,
+        "character": 11
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(property) Foo2.name: string\n```\n"
+      }
+    }
+  }
+]

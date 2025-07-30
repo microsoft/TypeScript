@@ -1,0 +1,229 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsParameters.ts ===
+// /** @return *crunch* */
+// function foo(param: string, optionalParam?: string, paramWithInitializer = "hello", ...restParam: string[]) {
+//          ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void
+// | ```
+// | 
+// | 
+// | *@return* — *crunch* 
+// | ----------------------------------------------------------------------
+//              ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) param: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                             ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) optionalParam: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                                     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) paramWithInitializer: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                                                                        ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) restParam: string[]
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     param = "Hello";
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) param: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     optionalParam = "World";
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) optionalParam: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     paramWithInitializer = "Hello";
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) paramWithInitializer: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     restParam[0] = "World";
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) restParam: string[]
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// }
+[
+  {
+    "marker": {
+      "Position": 33,
+      "LSPosition": {
+        "line": 1,
+        "character": 9
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void\n```\n\n\n*@return* — *crunch* "
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 37,
+      "LSPosition": {
+        "line": 1,
+        "character": 13
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) param: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 52,
+      "LSPosition": {
+        "line": 1,
+        "character": 28
+      },
+      "Name": "3",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) optionalParam: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 76,
+      "LSPosition": {
+        "line": 1,
+        "character": 52
+      },
+      "Name": "4",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) paramWithInitializer: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 111,
+      "LSPosition": {
+        "line": 1,
+        "character": 87
+      },
+      "Name": "5",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) restParam: string[]\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 138,
+      "LSPosition": {
+        "line": 2,
+        "character": 4
+      },
+      "Name": "6",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) param: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 159,
+      "LSPosition": {
+        "line": 3,
+        "character": 4
+      },
+      "Name": "7",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) optionalParam: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 188,
+      "LSPosition": {
+        "line": 4,
+        "character": 4
+      },
+      "Name": "8",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) paramWithInitializer: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 224,
+      "LSPosition": {
+        "line": 5,
+        "character": 4
+      },
+      "Name": "9",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) restParam: string[]\n```\n"
+      }
+    }
+  }
+]

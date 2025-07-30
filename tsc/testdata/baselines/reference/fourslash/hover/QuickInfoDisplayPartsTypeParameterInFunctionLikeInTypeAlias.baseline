@@ -1,0 +1,78 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsTypeParameterInFunctionLikeInTypeAlias.ts ===
+// type MixinCtor<A> = new () => A & { constructor: MixinCtor<A> };
+//                               ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) A
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                                            ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) A
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// type MixinCtor<A> = new () => A & { constructor: { constructor: MixinCtor<A> } };
+//                                                                           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) A
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 30,
+      "LSPosition": {
+        "line": 0,
+        "character": 30
+      },
+      "Name": "0",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) A\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 59,
+      "LSPosition": {
+        "line": 0,
+        "character": 59
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) A\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 139,
+      "LSPosition": {
+        "line": 1,
+        "character": 74
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) A\n```\n"
+      }
+    }
+  }
+]

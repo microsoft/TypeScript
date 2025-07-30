@@ -1,0 +1,141 @@
+// === QuickInfo ===
+=== /quickInfoCommentsFunctionDeclaration.ts ===
+// /** This comment should appear for foo*/
+// function foo() {
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function foo(): void
+// | ```
+// | This comment should appear for foo
+// | ----------------------------------------------------------------------
+// }
+// foo();
+//  ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function foo(): void
+// | ```
+// | This comment should appear for foo
+// | ----------------------------------------------------------------------
+// /** This is comment for function signature*/
+// function fooWithParameters(/** this is comment about a*/a: string,
+//            ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function fooWithParameters(a: string, b: number): void
+// | ```
+// | This is comment for function signature
+// | ----------------------------------------------------------------------
+//     /** this is comment for b*/
+//     b: number) {
+//     var d = a;
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var d: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// }
+// fooWithParameters("a",10);
+//             ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function fooWithParameters(a: string, b: number): void
+// | ```
+// | This is comment for function signature
+// | ----------------------------------------------------------------------
+// /**
+// * Does something
+// * @param a a string
+// */
+// declare function fn(a: string);
+// fn("hello");
+[
+  {
+    "marker": {
+      "Position": 51,
+      "LSPosition": {
+        "line": 1,
+        "character": 10
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction foo(): void\n```\nThis comment should appear for foo"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 61,
+      "LSPosition": {
+        "line": 3,
+        "character": 1
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction foo(): void\n```\nThis comment should appear for foo"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 123,
+      "LSPosition": {
+        "line": 5,
+        "character": 11
+      },
+      "Name": "5",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction fooWithParameters(a: string, b: number): void\n```\nThis is comment for function signature"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 236,
+      "LSPosition": {
+        "line": 8,
+        "character": 8
+      },
+      "Name": "6",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar d: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 257,
+      "LSPosition": {
+        "line": 10,
+        "character": 12
+      },
+      "Name": "8",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction fooWithParameters(a: string, b: number): void\n```\nThis is comment for function signature"
+      }
+    }
+  }
+]

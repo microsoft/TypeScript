@@ -1,0 +1,291 @@
+// === QuickInfo ===
+=== /quickInfoJsDocGetterSetter.ts ===
+// class A {
+//     /**
+//      * getter A
+//      * @returns return A
+//      */
+//     get x(): string {
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) A.x: string
+// | ```
+// | getter A
+// | 
+// | *@returns* — return A
+// | 
+// | ----------------------------------------------------------------------
+//         return "";
+//     }
+//     /**
+//      * setter A
+//      * @param value foo A
+//      * @todo empty jsdoc
+//      */
+//     set x(value) { }
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) A.x: string
+// | ```
+// | getter A
+// | 
+// | *@returns* — return A
+// | 
+// | ----------------------------------------------------------------------
+// }
+// // override both getter and setter
+// class B extends A {
+//     /**
+//      * getter B
+//      * @returns return B
+//      */
+//     get x(): string {
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) B.x: string
+// | ```
+// | getter B
+// | 
+// | *@returns* — return B
+// | 
+// | ----------------------------------------------------------------------
+//         return "";
+//     }
+//     /**
+//      * setter B
+//      * @param value foo B
+//      */
+//     set x(vale) { }
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) B.x: string
+// | ```
+// | getter B
+// | 
+// | *@returns* — return B
+// | 
+// | ----------------------------------------------------------------------
+// }
+// // not override
+// class C extends A { }
+// // only override setter
+// class D extends A {
+//     /**
+//      * setter D
+//      * @param value foo D
+//      */
+//     set x(val: string) { }
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) D.x: string
+// | ```
+// | setter D
+// | 
+// | *@param* `value` — foo D
+// | 
+// | ----------------------------------------------------------------------
+// }
+// new A().x = "1";
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) A.x: string
+// | ```
+// | getter A
+// | 
+// | *@returns* — return A
+// | 
+// | ----------------------------------------------------------------------
+// new B().x = "1";
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) B.x: string
+// | ```
+// | getter B
+// | 
+// | *@returns* — return B
+// | 
+// | ----------------------------------------------------------------------
+// new C().x = "1";
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) A.x: string
+// | ```
+// | getter A
+// | 
+// | *@returns* — return A
+// | 
+// | ----------------------------------------------------------------------
+// new D().x = "1";
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) D.x: string
+// | ```
+// | setter D
+// | 
+// | *@param* `value` — foo D
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 75,
+      "LSPosition": {
+        "line": 5,
+        "character": 8
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) A.x: string\n```\ngetter A\n\n*@returns* — return A\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 205,
+      "LSPosition": {
+        "line": 13,
+        "character": 8
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) A.x: string\n```\ngetter A\n\n*@returns* — return A\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 340,
+      "LSPosition": {
+        "line": 21,
+        "character": 8
+      },
+      "Name": "3",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) B.x: string\n```\ngetter B\n\n*@returns* — return B\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 445,
+      "LSPosition": {
+        "line": 28,
+        "character": 8
+      },
+      "Name": "4",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) B.x: string\n```\ngetter B\n\n*@returns* — return B\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 607,
+      "LSPosition": {
+        "line": 38,
+        "character": 8
+      },
+      "Name": "5",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) D.x: string\n```\nsetter D\n\n*@param* `value` — foo D\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 636,
+      "LSPosition": {
+        "line": 40,
+        "character": 8
+      },
+      "Name": "6",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) A.x: string\n```\ngetter A\n\n*@returns* — return A\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 653,
+      "LSPosition": {
+        "line": 41,
+        "character": 8
+      },
+      "Name": "7",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) B.x: string\n```\ngetter B\n\n*@returns* — return B\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 670,
+      "LSPosition": {
+        "line": 42,
+        "character": 8
+      },
+      "Name": "8",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) A.x: string\n```\ngetter A\n\n*@returns* — return A\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 687,
+      "LSPosition": {
+        "line": 43,
+        "character": 8
+      },
+      "Name": "9",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) D.x: string\n```\nsetter D\n\n*@param* `value` — foo D\n"
+      }
+    }
+  }
+]

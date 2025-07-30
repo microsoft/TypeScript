@@ -1,0 +1,61 @@
+// === QuickInfo ===
+=== /jsDocAliasQuickInfo.ts ===
+// /**
+//  * Comment
+//  * @type {number}
+//  */
+// export default 10;
+//        ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*1*/.
+// | ----------------------------------------------------------------------
+=== /test.ts ===
+// export { default as test } from "./jsDocAliasQuickInfo";
+//          ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*2*/.
+// | ----------------------------------------------------------------------
+//                     ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*3*/.
+// | ----------------------------------------------------------------------
+
+
+[
+  {
+    "marker": {
+      "Position": 44,
+      "LSPosition": {
+        "line": 4,
+        "character": 7
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": null
+  },
+  {
+    "marker": {
+      "Position": 9,
+      "LSPosition": {
+        "line": 0,
+        "character": 9
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": null
+  },
+  {
+    "marker": {
+      "Position": 20,
+      "LSPosition": {
+        "line": 0,
+        "character": 20
+      },
+      "Name": "3",
+      "Data": null
+    },
+    "item": null
+  }
+]

@@ -1,0 +1,1008 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsTypeParameterInClass.ts ===
+// class c<T> {
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class c<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) T
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     constructor(a: T) {
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | constructor c<T>(a: T): c<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                 ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) a: T
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                    ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) T
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     }
+//     method<U>(a: U, b: T) {
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) c.method<U>(a: U, b: T): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//            ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//               ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) a: U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                  ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) b: T
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                        ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) T
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         return a;
+//                ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) a: U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     }
+// }
+// var cInstance = new c("Hello");
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var cInstance: c<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | constructor c<string>(a: string): c<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// var cVal = c;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var cVal: typeof c
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//            ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class c<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// cInstance.method("hello", "cello");
+// ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var cInstance: c<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) c.method<"hello">(a: "hello", b: string): "hello"
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// class c2<T extends c<string>> {
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class c2<T extends c<string>>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//          ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) T extends c<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                    ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class c<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     constructor(a: T) {
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | constructor c2<T extends c<string>>(a: T): c2<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                 ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) a: T
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                    ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) T extends c<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     }
+//     method<U extends c<string>>(a: U, b: T) {
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) c2.method<U extends c<string>>(a: U, b: T): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//            ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) U extends c<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                      ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class c<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                 ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) a: U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                    ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) U extends c<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) b: T
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                          ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) T extends c<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         return a;
+//                ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) a: U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     }
+// }
+// var cInstance1 = new c2(cInstance);
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var cInstance1: c2<c<string>>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                      ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | constructor c2<c<string>>(a: c<string>): c2<c<string>>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var cInstance: c<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// var cVal2 = c2;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var cVal2: typeof c2
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//             ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class c2<T extends c<string>>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// cInstance1.method(cInstance, cInstance);
+// ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var cInstance1: c2<c<string>>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//            ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) c2.method<c<string>>(a: c<string>, b: c<string>): c<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                   ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var cInstance: c<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                              ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var cInstance: c<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 6,
+      "LSPosition": {
+        "line": 0,
+        "character": 6
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nclass c\u003cT\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 8,
+      "LSPosition": {
+        "line": 0,
+        "character": 8
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) T\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 17,
+      "LSPosition": {
+        "line": 1,
+        "character": 4
+      },
+      "Name": "3",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nconstructor c\u003cT\u003e(a: T): c\u003cT\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 29,
+      "LSPosition": {
+        "line": 1,
+        "character": 16
+      },
+      "Name": "4",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) a: T\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 32,
+      "LSPosition": {
+        "line": 1,
+        "character": 19
+      },
+      "Name": "5",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) T\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 47,
+      "LSPosition": {
+        "line": 3,
+        "character": 4
+      },
+      "Name": "6",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) c.method\u003cU\u003e(a: U, b: T): U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 54,
+      "LSPosition": {
+        "line": 3,
+        "character": 11
+      },
+      "Name": "7",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 57,
+      "LSPosition": {
+        "line": 3,
+        "character": 14
+      },
+      "Name": "8",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) a: U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 60,
+      "LSPosition": {
+        "line": 3,
+        "character": 17
+      },
+      "Name": "9",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 63,
+      "LSPosition": {
+        "line": 3,
+        "character": 20
+      },
+      "Name": "10",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) b: T\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 66,
+      "LSPosition": {
+        "line": 3,
+        "character": 23
+      },
+      "Name": "11",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) T\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 86,
+      "LSPosition": {
+        "line": 4,
+        "character": 15
+      },
+      "Name": "12",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) a: U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 101,
+      "LSPosition": {
+        "line": 7,
+        "character": 4
+      },
+      "Name": "13",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar cInstance: c\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 117,
+      "LSPosition": {
+        "line": 7,
+        "character": 20
+      },
+      "Name": "14",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nconstructor c\u003cstring\u003e(a: string): c\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 133,
+      "LSPosition": {
+        "line": 8,
+        "character": 4
+      },
+      "Name": "15",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar cVal: typeof c\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 140,
+      "LSPosition": {
+        "line": 8,
+        "character": 11
+      },
+      "Name": "16",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nclass c\u003cT\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 143,
+      "LSPosition": {
+        "line": 9,
+        "character": 0
+      },
+      "Name": "17",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar cInstance: c\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 153,
+      "LSPosition": {
+        "line": 9,
+        "character": 10
+      },
+      "Name": "18",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) c.method\u003c\"hello\"\u003e(a: \"hello\", b: string): \"hello\"\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 185,
+      "LSPosition": {
+        "line": 10,
+        "character": 6
+      },
+      "Name": "19",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nclass c2\u003cT extends c\u003cstring\u003e\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 188,
+      "LSPosition": {
+        "line": 10,
+        "character": 9
+      },
+      "Name": "20",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) T extends c\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 198,
+      "LSPosition": {
+        "line": 10,
+        "character": 19
+      },
+      "Name": "21",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nclass c\u003cT\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 215,
+      "LSPosition": {
+        "line": 11,
+        "character": 4
+      },
+      "Name": "22",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nconstructor c2\u003cT extends c\u003cstring\u003e\u003e(a: T): c2\u003cT\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 227,
+      "LSPosition": {
+        "line": 11,
+        "character": 16
+      },
+      "Name": "23",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) a: T\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 230,
+      "LSPosition": {
+        "line": 11,
+        "character": 19
+      },
+      "Name": "24",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) T extends c\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 245,
+      "LSPosition": {
+        "line": 13,
+        "character": 4
+      },
+      "Name": "25",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) c2.method\u003cU extends c\u003cstring\u003e\u003e(a: U, b: T): U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 252,
+      "LSPosition": {
+        "line": 13,
+        "character": 11
+      },
+      "Name": "26",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) U extends c\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 262,
+      "LSPosition": {
+        "line": 13,
+        "character": 21
+      },
+      "Name": "27",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nclass c\u003cT\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 273,
+      "LSPosition": {
+        "line": 13,
+        "character": 32
+      },
+      "Name": "28",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) a: U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 276,
+      "LSPosition": {
+        "line": 13,
+        "character": 35
+      },
+      "Name": "29",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) U extends c\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 279,
+      "LSPosition": {
+        "line": 13,
+        "character": 38
+      },
+      "Name": "30",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) b: T\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 282,
+      "LSPosition": {
+        "line": 13,
+        "character": 41
+      },
+      "Name": "31",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) T extends c\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 302,
+      "LSPosition": {
+        "line": 14,
+        "character": 15
+      },
+      "Name": "32",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) a: U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 317,
+      "LSPosition": {
+        "line": 17,
+        "character": 4
+      },
+      "Name": "33",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar cInstance1: c2\u003cc\u003cstring\u003e\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 334,
+      "LSPosition": {
+        "line": 17,
+        "character": 21
+      },
+      "Name": "34",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nconstructor c2\u003cc\u003cstring\u003e\u003e(a: c\u003cstring\u003e): c2\u003cc\u003cstring\u003e\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 337,
+      "LSPosition": {
+        "line": 17,
+        "character": 24
+      },
+      "Name": "35",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar cInstance: c\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 353,
+      "LSPosition": {
+        "line": 18,
+        "character": 4
+      },
+      "Name": "36",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar cVal2: typeof c2\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 361,
+      "LSPosition": {
+        "line": 18,
+        "character": 12
+      },
+      "Name": "37",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nclass c2\u003cT extends c\u003cstring\u003e\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 365,
+      "LSPosition": {
+        "line": 19,
+        "character": 0
+      },
+      "Name": "38",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar cInstance1: c2\u003cc\u003cstring\u003e\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 376,
+      "LSPosition": {
+        "line": 19,
+        "character": 11
+      },
+      "Name": "39",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) c2.method\u003cc\u003cstring\u003e\u003e(a: c\u003cstring\u003e, b: c\u003cstring\u003e): c\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 383,
+      "LSPosition": {
+        "line": 19,
+        "character": 18
+      },
+      "Name": "40",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar cInstance: c\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 394,
+      "LSPosition": {
+        "line": 19,
+        "character": 29
+      },
+      "Name": "41",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar cInstance: c\u003cstring\u003e\n```\n"
+      }
+    }
+  }
+]

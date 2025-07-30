@@ -1,0 +1,310 @@
+// === QuickInfo ===
+=== /quickInfoCommentsFunctionExpression.ts ===
+// /** lambdaFoo var comment*/
+// var lambdaFoo = /** this is lambda comment*/ (/**param a*/a: number, /**param b*/b: number) => a + b;
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var lambdaFoo: (a: number, b: number) => number
+// | ```
+// | lambdaFoo var comment
+// | ----------------------------------------------------------------------
+// var lambddaNoVarComment = /** this is lambda multiplication*/ (/**param a*/a: number, /**param b*/b: number) => a * b;
+//             ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var lambddaNoVarComment: (a: number, b: number) => number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// lambdaFoo(10, 20);
+// function anotherFunc(a: number) {
+//          ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function anotherFunc(a: number): string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     /** documentation
+//         @param b {string} inner parameter */
+//     var lambdaVar = /** inner docs */(b: string) => {
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var lambdaVar: (b: string) => string
+// | ```
+// | documentation
+// | 
+// | *@param* `b` — inner parameter 
+// | ----------------------------------------------------------------------
+//                                       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) b: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         var localVar = "Hello ";
+//             ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var localVar: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         return localVar + b;
+//                ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var localVar: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) b: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     }
+//     return lambdaVar("World") + a;
+//                ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var lambdaVar: (b: string) => string
+// | ```
+// | documentation
+// | 
+// | *@param* `b` — inner parameter 
+// | ----------------------------------------------------------------------
+// }
+// /**
+//  * On variable
+//  * @param s the first parameter!
+//  * @returns the parameter's length
+//  */
+// var assigned = /**
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var assigned: (s: string) => number
+// | ```
+// | On variable
+// | 
+// | *@param* `s` — the first parameter!
+// | 
+// | 
+// | *@returns* — the parameter's length
+// | 
+// | ----------------------------------------------------------------------
+//                 * Summary on expression
+//                 * @param s param on expression
+//                 * @returns return on expression
+//                 */function(/** On parameter */s: string) {
+//   return s.length;
+// }
+// assigned("hey");
+//      ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var assigned: (s: string) => number
+// | ```
+// | On variable
+// | 
+// | *@param* `s` — the first parameter!
+// | 
+// | 
+// | *@returns* — the parameter's length
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 36,
+      "LSPosition": {
+        "line": 1,
+        "character": 8
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar lambdaFoo: (a: number, b: number) =\u003e number\n```\nlambdaFoo var comment"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 142,
+      "LSPosition": {
+        "line": 2,
+        "character": 12
+      },
+      "Name": "3",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar lambddaNoVarComment: (a: number, b: number) =\u003e number\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 277,
+      "LSPosition": {
+        "line": 4,
+        "character": 9
+      },
+      "Name": "7",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction anotherFunc(a: number): string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 377,
+      "LSPosition": {
+        "line": 7,
+        "character": 8
+      },
+      "Name": "8",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar lambdaVar: (b: string) =\u003e string\n```\ndocumentation\n\n*@param* `b` — inner parameter "
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 407,
+      "LSPosition": {
+        "line": 7,
+        "character": 38
+      },
+      "Name": "9",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) b: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 435,
+      "LSPosition": {
+        "line": 8,
+        "character": 12
+      },
+      "Name": "10",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar localVar: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 471,
+      "LSPosition": {
+        "line": 9,
+        "character": 15
+      },
+      "Name": "11",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar localVar: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 482,
+      "LSPosition": {
+        "line": 9,
+        "character": 26
+      },
+      "Name": "12",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) b: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 506,
+      "LSPosition": {
+        "line": 11,
+        "character": 15
+      },
+      "Name": "13",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar lambdaVar: (b: string) =\u003e string\n```\ndocumentation\n\n*@param* `b` — inner parameter "
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 627,
+      "LSPosition": {
+        "line": 18,
+        "character": 8
+      },
+      "Name": "14",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar assigned: (s: string) =\u003e number\n```\nOn variable\n\n*@param* `s` — the first parameter!\n\n\n*@returns* — the parameter's length\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 858,
+      "LSPosition": {
+        "line": 25,
+        "character": 5
+      },
+      "Name": "16",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar assigned: (s: string) =\u003e number\n```\nOn variable\n\n*@param* `s` — the first parameter!\n\n\n*@returns* — the parameter's length\n"
+      }
+    }
+  }
+]

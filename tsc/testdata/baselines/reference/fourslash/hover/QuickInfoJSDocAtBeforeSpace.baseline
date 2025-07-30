@@ -1,0 +1,99 @@
+// === QuickInfo ===
+=== /quickInfoJSDocAtBeforeSpace.ts ===
+// /**
+//  * @return Don't @ me
+//  */
+// function f() { }
+//          ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function f(): void
+// | ```
+// | 
+// | 
+// | *@return* — Don't @ me
+// | 
+// | ----------------------------------------------------------------------
+// /**
+//  * @return One final @
+//  */
+// function g() { }
+//          ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function g(): void
+// | ```
+// | 
+// | 
+// | *@return* — One final @
+// | 
+// | ----------------------------------------------------------------------
+// /**
+//  * @return An @
+//  * But another line
+//  */
+// function h() { }
+//          ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function h(): void
+// | ```
+// | 
+// | 
+// | *@return* — An @
+// | But another line
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 39,
+      "LSPosition": {
+        "line": 3,
+        "character": 9
+      },
+      "Name": "f",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction f(): void\n```\n\n\n*@return* — Don't @ me\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 87,
+      "LSPosition": {
+        "line": 7,
+        "character": 9
+      },
+      "Name": "g",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction g(): void\n```\n\n\n*@return* — One final @\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 148,
+      "LSPosition": {
+        "line": 12,
+        "character": 9
+      },
+      "Name": "h",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction h(): void\n```\n\n\n*@return* — An @\nBut another line\n"
+      }
+    }
+  }
+]

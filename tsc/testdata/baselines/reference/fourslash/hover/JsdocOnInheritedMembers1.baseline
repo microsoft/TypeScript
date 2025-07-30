@@ -1,0 +1,41 @@
+// === QuickInfo ===
+=== /a.js ===
+// /** @template T */
+// class A {
+//     /** Method documentation. */
+//     method() {}
+// }
+// 
+// /** @extends {A<number>} */
+// class B extends A {
+//     method() {}
+// }
+// 
+// const b = new B();
+// b.method;
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) B.method(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 175,
+      "LSPosition": {
+        "line": 12,
+        "character": 8
+      },
+      "Name": "",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) B.method(): void\n```\n"
+      }
+    }
+  }
+]

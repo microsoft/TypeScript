@@ -1,0 +1,104 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsExternalModuleAlias_file1.ts ===
+// import a1 = require("./quickInfoDisplayPartsExternalModuleAlias_file0");
+//        ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*1*/.
+// | ----------------------------------------------------------------------
+//                     ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*mod1*/.
+// | ----------------------------------------------------------------------
+// new a1.m1.c();
+//     ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*2*/.
+// | ----------------------------------------------------------------------
+// export import a2 = require("./quickInfoDisplayPartsExternalModuleAlias_file0");
+//               ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*3*/.
+// | ----------------------------------------------------------------------
+//                            ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*mod2*/.
+// | ----------------------------------------------------------------------
+// new a2.m1.c();
+//     ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*4*/.
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 7,
+      "LSPosition": {
+        "line": 0,
+        "character": 7
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": null
+  },
+  {
+    "marker": {
+      "Position": 20,
+      "LSPosition": {
+        "line": 0,
+        "character": 20
+      },
+      "Name": "mod1",
+      "Data": null
+    },
+    "item": null
+  },
+  {
+    "marker": {
+      "Position": 77,
+      "LSPosition": {
+        "line": 1,
+        "character": 4
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": null
+  },
+  {
+    "marker": {
+      "Position": 102,
+      "LSPosition": {
+        "line": 2,
+        "character": 14
+      },
+      "Name": "3",
+      "Data": null
+    },
+    "item": null
+  },
+  {
+    "marker": {
+      "Position": 115,
+      "LSPosition": {
+        "line": 2,
+        "character": 27
+      },
+      "Name": "mod2",
+      "Data": null
+    },
+    "item": null
+  },
+  {
+    "marker": {
+      "Position": 172,
+      "LSPosition": {
+        "line": 3,
+        "character": 4
+      },
+      "Name": "4",
+      "Data": null
+    },
+    "item": null
+  }
+]

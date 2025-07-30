@@ -1,0 +1,257 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsLiteralLikeNames01.ts ===
+// class C {
+//     public 1() { }
+//            ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) C[1](): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     private Infinity() { }
+//             ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) C.Infinity(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     protected NaN() { }
+//               ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) C.NaN(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     static "stringLiteralName"() { }
+//            ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) C["stringLiteralName"](): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     method() {
+//         this[1]();
+//              ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) C[1](): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         this["1"]();
+//              ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) C[1](): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         this.Infinity();
+//              ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) C.Infinity(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         this["Infinity"]();
+//              ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) C.Infinity(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         this.NaN();
+//              ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) C.NaN(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         C.stringLiteralName();
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) C["stringLiteralName"](): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     }
+[
+  {
+    "marker": {
+      "Position": 21,
+      "LSPosition": {
+        "line": 1,
+        "character": 11
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) C[1](): void\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 41,
+      "LSPosition": {
+        "line": 2,
+        "character": 12
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) C.Infinity(): void\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 70,
+      "LSPosition": {
+        "line": 3,
+        "character": 14
+      },
+      "Name": "3",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) C.NaN(): void\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 91,
+      "LSPosition": {
+        "line": 4,
+        "character": 11
+      },
+      "Name": "4",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) C[\"stringLiteralName\"](): void\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 145,
+      "LSPosition": {
+        "line": 6,
+        "character": 13
+      },
+      "Name": "5",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) C[1](): void\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 164,
+      "LSPosition": {
+        "line": 7,
+        "character": 13
+      },
+      "Name": "6",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) C[1](): void\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 185,
+      "LSPosition": {
+        "line": 8,
+        "character": 13
+      },
+      "Name": "7",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) C.Infinity(): void\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 210,
+      "LSPosition": {
+        "line": 9,
+        "character": 13
+      },
+      "Name": "8",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) C.Infinity(): void\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 238,
+      "LSPosition": {
+        "line": 10,
+        "character": 13
+      },
+      "Name": "9",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) C.NaN(): void\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 255,
+      "LSPosition": {
+        "line": 11,
+        "character": 10
+      },
+      "Name": "10",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) C[\"stringLiteralName\"](): void\n```\n"
+      }
+    }
+  }
+]

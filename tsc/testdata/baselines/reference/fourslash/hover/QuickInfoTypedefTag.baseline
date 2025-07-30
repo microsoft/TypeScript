@@ -1,0 +1,98 @@
+// === QuickInfo ===
+=== /a.js ===
+// /**
+//  * The typedef tag should not appear in the quickinfo.
+//  * @typedef {{ foo: 'foo' }} Foo
+//  */
+// function f() { }
+// f()
+//  ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function f(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// /**
+//  * A removed comment
+//  * @tag Usage shows that non-param tags in comments explain the typedef instead of using it
+//  * @typedef {{ nope: any }} Nope not here
+//  * @tag comment 2
+//  */
+// function g() { }
+// g()
+//  ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function g(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// /**
+//  * The whole thing is kept
+//  * @param {Local} keep
+//  * @typedef {{ local: any }} Local kept too
+//  * @returns {void} also kept
+//  */
+// function h(keep) { }
+// h({ nope: 1 })
+//  ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function h(keep: Local): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 114,
+      "LSPosition": {
+        "line": 5,
+        "character": 1
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction f(): void\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 316,
+      "LSPosition": {
+        "line": 13,
+        "character": 1
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction g(): void\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 472,
+      "LSPosition": {
+        "line": 21,
+        "character": 1
+      },
+      "Name": "3",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction h(keep: Local): void\n```\n"
+      }
+    }
+  }
+]

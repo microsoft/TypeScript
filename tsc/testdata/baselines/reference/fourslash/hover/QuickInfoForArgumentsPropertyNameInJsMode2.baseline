@@ -1,0 +1,57 @@
+// === QuickInfo ===
+=== /a.js ===
+// function f(x) {
+//          ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function f(x: any): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//    arguments;
+// }
+// 
+// f('');
+// ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function f(x: any): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 9,
+      "LSPosition": {
+        "line": 0,
+        "character": 9
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction f(x: any): void\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 33,
+      "LSPosition": {
+        "line": 4,
+        "character": 0
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction f(x: any): void\n```\n"
+      }
+    }
+  }
+]

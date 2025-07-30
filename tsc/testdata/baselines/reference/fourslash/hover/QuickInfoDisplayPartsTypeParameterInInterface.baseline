@@ -1,0 +1,1582 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsTypeParameterInInterface.ts ===
+// interface I<T> {
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface I<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//             ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) T
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     new <U>(a: U, b: T): U;
+//          ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//             ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) a: U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                   ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) b: T
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                      ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) T
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                          ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     <U>(a: U, b: T): U;
+//      ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) a: U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//            ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//               ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) b: T
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                  ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) T
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                      ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     method<U>(a: U, b: T): U;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) I.method<U>(a: U, b: T): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//            ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//               ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) a: U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                  ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) b: T
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                        ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) T
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                            ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// }
+// var iVal: I<string>;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var iVal: I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface I<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// new iVal("hello", "hello");
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var iVal: I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// iVal("hello", "hello");
+// ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var iVal: I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// iVal.method("hello", "hello");
+// ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var iVal: I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//      ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) I.method<"hello">(a: "hello", b: string): "hello"
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// interface I1<T extends I<string>> {
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface I1<T extends I<string>>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//              ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) T extends I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                        ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface I<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     new <U extends I<string>>(a: U, b: T): U;
+//          ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) U extends I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                    ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface I<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                               ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) a: U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                  ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) U extends I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) b: T
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                        ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) T extends I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                            ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) U extends I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     <U extends I<string>>(a: U, b: T): U;
+//      ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) U extends I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface I<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) a: U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                              ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) U extends I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                 ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) b: T
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                    ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) T extends I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                        ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) U extends I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     method<U extends I<string>>(a: U, b: T): U;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) I1.method<U extends I<string>>(a: U, b: T): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//            ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) U extends I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                      ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface I<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                 ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) a: U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                    ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) U extends I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) b: T
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                          ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) T extends I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                              ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) U extends I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// }
+// var iVal1: I1<I<string>>;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var iVal1: I1<I<string>>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//            ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface I1<T extends I<string>>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//               ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface I<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// new iVal1(iVal, iVal);
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var iVal1: I1<I<string>>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var iVal: I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                 ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var iVal: I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// iVal1(iVal, iVal);
+// ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var iVal1: I1<I<string>>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var iVal: I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//             ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var iVal: I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// iVal1.method(iVal, iVal);
+// ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var iVal1: I1<I<string>>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) I1.method<I<string>>(a: I<string>, b: I<string>): I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//              ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var iVal: I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                    ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var iVal: I<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 10,
+      "LSPosition": {
+        "line": 0,
+        "character": 10
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\ninterface I\u003cT\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 12,
+      "LSPosition": {
+        "line": 0,
+        "character": 12
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) T\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 26,
+      "LSPosition": {
+        "line": 1,
+        "character": 9
+      },
+      "Name": "3",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 29,
+      "LSPosition": {
+        "line": 1,
+        "character": 12
+      },
+      "Name": "4",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) a: U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 32,
+      "LSPosition": {
+        "line": 1,
+        "character": 15
+      },
+      "Name": "5",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 35,
+      "LSPosition": {
+        "line": 1,
+        "character": 18
+      },
+      "Name": "6",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) b: T\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 38,
+      "LSPosition": {
+        "line": 1,
+        "character": 21
+      },
+      "Name": "7",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) T\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 42,
+      "LSPosition": {
+        "line": 1,
+        "character": 25
+      },
+      "Name": "8",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 50,
+      "LSPosition": {
+        "line": 2,
+        "character": 5
+      },
+      "Name": "9",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 53,
+      "LSPosition": {
+        "line": 2,
+        "character": 8
+      },
+      "Name": "10",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) a: U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 56,
+      "LSPosition": {
+        "line": 2,
+        "character": 11
+      },
+      "Name": "11",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 59,
+      "LSPosition": {
+        "line": 2,
+        "character": 14
+      },
+      "Name": "12",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) b: T\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 62,
+      "LSPosition": {
+        "line": 2,
+        "character": 17
+      },
+      "Name": "13",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) T\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 66,
+      "LSPosition": {
+        "line": 2,
+        "character": 21
+      },
+      "Name": "14",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 73,
+      "LSPosition": {
+        "line": 3,
+        "character": 4
+      },
+      "Name": "15",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) I.method\u003cU\u003e(a: U, b: T): U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 80,
+      "LSPosition": {
+        "line": 3,
+        "character": 11
+      },
+      "Name": "16",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 83,
+      "LSPosition": {
+        "line": 3,
+        "character": 14
+      },
+      "Name": "17",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) a: U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 86,
+      "LSPosition": {
+        "line": 3,
+        "character": 17
+      },
+      "Name": "18",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 89,
+      "LSPosition": {
+        "line": 3,
+        "character": 20
+      },
+      "Name": "19",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) b: T\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 92,
+      "LSPosition": {
+        "line": 3,
+        "character": 23
+      },
+      "Name": "20",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) T\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 96,
+      "LSPosition": {
+        "line": 3,
+        "character": 27
+      },
+      "Name": "21",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 105,
+      "LSPosition": {
+        "line": 5,
+        "character": 4
+      },
+      "Name": "22",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar iVal: I\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 111,
+      "LSPosition": {
+        "line": 5,
+        "character": 10
+      },
+      "Name": "23",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\ninterface I\u003cT\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 126,
+      "LSPosition": {
+        "line": 6,
+        "character": 4
+      },
+      "Name": "24",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar iVal: I\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 150,
+      "LSPosition": {
+        "line": 7,
+        "character": 0
+      },
+      "Name": "25",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar iVal: I\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 174,
+      "LSPosition": {
+        "line": 8,
+        "character": 0
+      },
+      "Name": "26",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar iVal: I\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 179,
+      "LSPosition": {
+        "line": 8,
+        "character": 5
+      },
+      "Name": "27",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) I.method\u003c\"hello\"\u003e(a: \"hello\", b: string): \"hello\"\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 215,
+      "LSPosition": {
+        "line": 9,
+        "character": 10
+      },
+      "Name": "28",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\ninterface I1\u003cT extends I\u003cstring\u003e\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 218,
+      "LSPosition": {
+        "line": 9,
+        "character": 13
+      },
+      "Name": "29",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) T extends I\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 228,
+      "LSPosition": {
+        "line": 9,
+        "character": 23
+      },
+      "Name": "30",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\ninterface I\u003cT\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 250,
+      "LSPosition": {
+        "line": 10,
+        "character": 9
+      },
+      "Name": "31",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) U extends I\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 260,
+      "LSPosition": {
+        "line": 10,
+        "character": 19
+      },
+      "Name": "32",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\ninterface I\u003cT\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 271,
+      "LSPosition": {
+        "line": 10,
+        "character": 30
+      },
+      "Name": "33",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) a: U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 274,
+      "LSPosition": {
+        "line": 10,
+        "character": 33
+      },
+      "Name": "34",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) U extends I\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 277,
+      "LSPosition": {
+        "line": 10,
+        "character": 36
+      },
+      "Name": "35",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) b: T\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 280,
+      "LSPosition": {
+        "line": 10,
+        "character": 39
+      },
+      "Name": "36",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) T extends I\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 284,
+      "LSPosition": {
+        "line": 10,
+        "character": 43
+      },
+      "Name": "37",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) U extends I\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 292,
+      "LSPosition": {
+        "line": 11,
+        "character": 5
+      },
+      "Name": "38",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) U extends I\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 302,
+      "LSPosition": {
+        "line": 11,
+        "character": 15
+      },
+      "Name": "39",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\ninterface I\u003cT\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 313,
+      "LSPosition": {
+        "line": 11,
+        "character": 26
+      },
+      "Name": "40",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) a: U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 316,
+      "LSPosition": {
+        "line": 11,
+        "character": 29
+      },
+      "Name": "41",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) U extends I\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 319,
+      "LSPosition": {
+        "line": 11,
+        "character": 32
+      },
+      "Name": "42",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) b: T\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 322,
+      "LSPosition": {
+        "line": 11,
+        "character": 35
+      },
+      "Name": "43",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) T extends I\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 326,
+      "LSPosition": {
+        "line": 11,
+        "character": 39
+      },
+      "Name": "44",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) U extends I\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 333,
+      "LSPosition": {
+        "line": 12,
+        "character": 4
+      },
+      "Name": "45",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) I1.method\u003cU extends I\u003cstring\u003e\u003e(a: U, b: T): U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 340,
+      "LSPosition": {
+        "line": 12,
+        "character": 11
+      },
+      "Name": "46",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) U extends I\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 350,
+      "LSPosition": {
+        "line": 12,
+        "character": 21
+      },
+      "Name": "47",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\ninterface I\u003cT\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 361,
+      "LSPosition": {
+        "line": 12,
+        "character": 32
+      },
+      "Name": "48",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) a: U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 364,
+      "LSPosition": {
+        "line": 12,
+        "character": 35
+      },
+      "Name": "49",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) U extends I\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 367,
+      "LSPosition": {
+        "line": 12,
+        "character": 38
+      },
+      "Name": "50",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) b: T\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 370,
+      "LSPosition": {
+        "line": 12,
+        "character": 41
+      },
+      "Name": "51",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) T extends I\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 374,
+      "LSPosition": {
+        "line": 12,
+        "character": 45
+      },
+      "Name": "52",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) U extends I\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 383,
+      "LSPosition": {
+        "line": 14,
+        "character": 4
+      },
+      "Name": "53",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar iVal1: I1\u003cI\u003cstring\u003e\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 390,
+      "LSPosition": {
+        "line": 14,
+        "character": 11
+      },
+      "Name": "54",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\ninterface I1\u003cT extends I\u003cstring\u003e\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 393,
+      "LSPosition": {
+        "line": 14,
+        "character": 14
+      },
+      "Name": "55",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\ninterface I\u003cT\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 409,
+      "LSPosition": {
+        "line": 15,
+        "character": 4
+      },
+      "Name": "56",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar iVal1: I1\u003cI\u003cstring\u003e\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 415,
+      "LSPosition": {
+        "line": 15,
+        "character": 10
+      },
+      "Name": "57",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar iVal: I\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 421,
+      "LSPosition": {
+        "line": 15,
+        "character": 16
+      },
+      "Name": "58",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar iVal: I\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 428,
+      "LSPosition": {
+        "line": 16,
+        "character": 0
+      },
+      "Name": "59",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar iVal1: I1\u003cI\u003cstring\u003e\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 434,
+      "LSPosition": {
+        "line": 16,
+        "character": 6
+      },
+      "Name": "60",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar iVal: I\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 440,
+      "LSPosition": {
+        "line": 16,
+        "character": 12
+      },
+      "Name": "61",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar iVal: I\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 447,
+      "LSPosition": {
+        "line": 17,
+        "character": 0
+      },
+      "Name": "62",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar iVal1: I1\u003cI\u003cstring\u003e\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 453,
+      "LSPosition": {
+        "line": 17,
+        "character": 6
+      },
+      "Name": "63",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) I1.method\u003cI\u003cstring\u003e\u003e(a: I\u003cstring\u003e, b: I\u003cstring\u003e): I\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 460,
+      "LSPosition": {
+        "line": 17,
+        "character": 13
+      },
+      "Name": "64",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar iVal: I\u003cstring\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 466,
+      "LSPosition": {
+        "line": 17,
+        "character": 19
+      },
+      "Name": "65",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar iVal: I\u003cstring\u003e\n```\n"
+      }
+    }
+  }
+]

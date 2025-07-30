@@ -1,0 +1,230 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsInterfaceMembers.ts ===
+// interface I {
+//     property: string;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (property) I.property: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     method(): string;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) I.method(): string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     (): string;
+//     new (): I;
+// }
+// var iInstance: I;
+// iInstance.property = iInstance.method();
+// ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var iInstance: I
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (property) I.property: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                      ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var iInstance: I
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) I.method(): string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// iInstance();
+// ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var iInstance: I
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// var anotherInstance = new iInstance();
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var anotherInstance: I
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var iInstance: I
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 18,
+      "LSPosition": {
+        "line": 1,
+        "character": 4
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(property) I.property: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 40,
+      "LSPosition": {
+        "line": 2,
+        "character": 4
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) I.method(): string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 109,
+      "LSPosition": {
+        "line": 7,
+        "character": 0
+      },
+      "Name": "3",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar iInstance: I\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 119,
+      "LSPosition": {
+        "line": 7,
+        "character": 10
+      },
+      "Name": "4",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(property) I.property: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 130,
+      "LSPosition": {
+        "line": 7,
+        "character": 21
+      },
+      "Name": "5",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar iInstance: I\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 140,
+      "LSPosition": {
+        "line": 7,
+        "character": 31
+      },
+      "Name": "6",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) I.method(): string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 150,
+      "LSPosition": {
+        "line": 8,
+        "character": 0
+      },
+      "Name": "7",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar iInstance: I\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 167,
+      "LSPosition": {
+        "line": 9,
+        "character": 4
+      },
+      "Name": "8",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar anotherInstance: I\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 189,
+      "LSPosition": {
+        "line": 9,
+        "character": 26
+      },
+      "Name": "9",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar iInstance: I\n```\n"
+      }
+    }
+  }
+]

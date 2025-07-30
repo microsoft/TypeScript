@@ -1,0 +1,41 @@
+// === QuickInfo ===
+=== /quickInfoJsDocTags10.js ===
+// /**
+//  * @param {T1} a
+//  * @param {T2} a
+//  * @template T1,T2 Comment Text
+//  */
+// const foo = (a, b) => {};
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const foo: <T1, T2>(a: T1, b: any) => void
+// | ```
+// | 
+// | 
+// | *@param* `a`
+// | 
+// | *@param* `a`
+// | 
+// | *@template* `T1`, `T2` — Comment Text
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 80,
+      "LSPosition": {
+        "line": 5,
+        "character": 6
+      },
+      "Name": "",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nconst foo: \u003cT1, T2\u003e(a: T1, b: any) =\u003e void\n```\n\n\n*@param* `a`\n\n*@param* `a`\n\n*@template* `T1`, `T2` — Comment Text\n"
+      }
+    }
+  }
+]

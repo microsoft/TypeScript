@@ -1,0 +1,146 @@
+// === QuickInfo ===
+=== /quickInfoForJSDocWithHttpLinks.js ===
+// /** @typedef {number} https://wat */
+//                       ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*1*/.
+// | ----------------------------------------------------------------------
+// 
+// /**
+// * @typedef {Object} Oops
+// * @property {number} https://wass
+//                      ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*2*/.
+// | ----------------------------------------------------------------------
+// */
+// 
+// 
+// /** @callback http://vad */
+//               ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*3*/.
+// | ----------------------------------------------------------------------
+// 
+// /** @see https://hvad */
+// var see1 = true
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var see1: boolean
+// | ```
+// | 
+// | 
+// | *@see* `https` — ://hvad 
+// | ----------------------------------------------------------------------
+// 
+// /** @see {@link https://hva} */
+// var see2 = true
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var see2: boolean
+// | ```
+// | 
+// | 
+// | *@see* — https://hva 
+// | ----------------------------------------------------------------------
+// 
+// /** {@link https://hvaD} */
+// var see3 = true
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var see3: boolean
+// | ```
+// | https://hvaD
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 22,
+      "LSPosition": {
+        "line": 0,
+        "character": 22
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": null
+  },
+  {
+    "marker": {
+      "Position": 88,
+      "LSPosition": {
+        "line": 4,
+        "character": 21
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": null
+  },
+  {
+    "marker": {
+      "Position": 120,
+      "LSPosition": {
+        "line": 8,
+        "character": 14
+      },
+      "Name": "3",
+      "Data": null
+    },
+    "item": null
+  },
+  {
+    "marker": {
+      "Position": 164,
+      "LSPosition": {
+        "line": 11,
+        "character": 4
+      },
+      "Name": "4",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar see1: boolean\n```\n\n\n*@see* `https` — ://hvad "
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 213,
+      "LSPosition": {
+        "line": 14,
+        "character": 4
+      },
+      "Name": "5",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar see2: boolean\n```\n\n\n*@see* — https://hva "
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 258,
+      "LSPosition": {
+        "line": 17,
+        "character": 4
+      },
+      "Name": "6",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar see3: boolean\n```\nhttps://hvaD"
+      }
+    }
+  }
+]

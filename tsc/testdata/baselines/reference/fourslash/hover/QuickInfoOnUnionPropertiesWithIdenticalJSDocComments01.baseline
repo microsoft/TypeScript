@@ -1,0 +1,53 @@
+// === QuickInfo ===
+=== /quickInfoOnUnionPropertiesWithIdenticalJSDocComments01.ts ===
+// export type DocumentFilter = {
+//     /** A language id, like `typescript`. */
+//     language: string;
+//     /** A Uri [scheme](#Uri.scheme), like `file` or `untitled`. */
+//     scheme?: string;
+//     /** A glob pattern, like `*.{ts,js}`. */
+//     pattern?: string;
+// } | {
+//     /** A language id, like `typescript`. */
+//     language?: string;
+//     /** A Uri [scheme](#Uri.scheme), like `file` or `untitled`. */
+//     scheme: string;
+//     /** A glob pattern, like `*.{ts,js}`. */
+//     pattern?: string;
+// } | {
+//     /** A language id, like `typescript`. */
+//     language?: string;
+//     /** A Uri [scheme](#Uri.scheme), like `file` or `untitled`. */
+//     scheme?: string;
+//     /** A glob pattern, like `*.{ts,js}`. */
+//     pattern: string;
+// };
+// 
+// declare let x: DocumentFilter;
+// x.language
+//   ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (property) language: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 746,
+      "LSPosition": {
+        "line": 24,
+        "character": 2
+      },
+      "Name": "",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(property) language: string\n```\n"
+      }
+    }
+  }
+]

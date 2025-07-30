@@ -1,0 +1,300 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsTypeParameterInFunction.ts ===
+// function foo<U>(a: U) {
+//          ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function foo<U>(a: U): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//              ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                 ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) a: U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                    ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     return a;
+//            ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) a: U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// }
+// foo("Hello");
+// ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function foo<"Hello">(a: "Hello"): "Hello"
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// function foo2<U extends string>(a: U) {
+//          ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function foo2<U extends string>(a: U): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//               ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) U extends string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                 ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) a: U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                    ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (type parameter) U extends string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     return a;
+//            ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) a: U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// }
+// foo2("hello");
+// ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function foo2<"hello">(a: "hello"): "hello"
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 9,
+      "LSPosition": {
+        "line": 0,
+        "character": 9
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction foo\u003cU\u003e(a: U): U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 13,
+      "LSPosition": {
+        "line": 0,
+        "character": 13
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 16,
+      "LSPosition": {
+        "line": 0,
+        "character": 16
+      },
+      "Name": "3",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) a: U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 19,
+      "LSPosition": {
+        "line": 0,
+        "character": 19
+      },
+      "Name": "4",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 35,
+      "LSPosition": {
+        "line": 1,
+        "character": 11
+      },
+      "Name": "5",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) a: U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 40,
+      "LSPosition": {
+        "line": 3,
+        "character": 0
+      },
+      "Name": "6",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction foo\u003c\"Hello\"\u003e(a: \"Hello\"): \"Hello\"\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 63,
+      "LSPosition": {
+        "line": 4,
+        "character": 9
+      },
+      "Name": "7",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction foo2\u003cU extends string\u003e(a: U): U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 68,
+      "LSPosition": {
+        "line": 4,
+        "character": 14
+      },
+      "Name": "8",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) U extends string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 86,
+      "LSPosition": {
+        "line": 4,
+        "character": 32
+      },
+      "Name": "9",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) a: U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 89,
+      "LSPosition": {
+        "line": 4,
+        "character": 35
+      },
+      "Name": "10",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(type parameter) U extends string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 105,
+      "LSPosition": {
+        "line": 5,
+        "character": 11
+      },
+      "Name": "11",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) a: U\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 110,
+      "LSPosition": {
+        "line": 7,
+        "character": 0
+      },
+      "Name": "12",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction foo2\u003c\"hello\"\u003e(a: \"hello\"): \"hello\"\n```\n"
+      }
+    }
+  }
+]

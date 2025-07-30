@@ -1,0 +1,46 @@
+// === QuickInfo ===
+=== /quickInfoInheritDoc3.ts ===
+// function getBaseClass() {
+//     return class Base {
+//         /**
+//          * Base.prop
+//          */
+//         prop: string | undefined;
+//     }
+// }
+// class SubClass extends getBaseClass() {
+//     /**
+//      * @inheritdoc
+//      * SubClass.prop
+//      */
+//     prop: string | undefined;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (property) SubClass.prop: string
+// | ```
+// | 
+// | 
+// | *@inheritdoc* — SubClass.prop
+// | 
+// | ----------------------------------------------------------------------
+// }
+[
+  {
+    "marker": {
+      "Position": 237,
+      "LSPosition": {
+        "line": 13,
+        "character": 4
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(property) SubClass.prop: string\n```\n\n\n*@inheritdoc* — SubClass.prop\n"
+      }
+    }
+  }
+]

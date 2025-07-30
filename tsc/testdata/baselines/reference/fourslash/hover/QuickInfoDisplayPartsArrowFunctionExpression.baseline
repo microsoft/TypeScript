@@ -1,0 +1,200 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsArrowFunctionExpression.ts ===
+// var x = a => 10;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var x: (a: any) => number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) a: any
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// var y = (a, b) => 10;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var y: (a: any, b: any) => number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//          ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) a: any
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//             ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) b: any
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// var z = (a: number) => 10;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var z: (a: number) => number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//          ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) a: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// var z2 = () => 10;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var z2: () => number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 4,
+      "LSPosition": {
+        "line": 0,
+        "character": 4
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar x: (a: any) =\u003e number\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 8,
+      "LSPosition": {
+        "line": 0,
+        "character": 8
+      },
+      "Name": "5",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) a: any\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 21,
+      "LSPosition": {
+        "line": 1,
+        "character": 4
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar y: (a: any, b: any) =\u003e number\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 26,
+      "LSPosition": {
+        "line": 1,
+        "character": 9
+      },
+      "Name": "6",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) a: any\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 29,
+      "LSPosition": {
+        "line": 1,
+        "character": 12
+      },
+      "Name": "7",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) b: any\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 43,
+      "LSPosition": {
+        "line": 2,
+        "character": 4
+      },
+      "Name": "3",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar z: (a: number) =\u003e number\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 48,
+      "LSPosition": {
+        "line": 2,
+        "character": 9
+      },
+      "Name": "8",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(parameter) a: number\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 70,
+      "LSPosition": {
+        "line": 3,
+        "character": 4
+      },
+      "Name": "4",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar z2: () =\u003e number\n```\n"
+      }
+    }
+  }
+]

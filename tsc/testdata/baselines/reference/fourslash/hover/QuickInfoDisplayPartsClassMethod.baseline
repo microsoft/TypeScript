@@ -1,0 +1,407 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsClassMethod.ts ===
+// class c {
+//     public publicMethod() { }
+//            ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) c.publicMethod(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     private privateMethod() { }
+//             ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) c.privateMethod(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     protected protectedMethod() { }
+//               ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) c.protectedMethod(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     static staticMethod() { }
+//            ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) c.staticMethod(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     private static privateStaticMethod() { }
+//                    ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) c.privateStaticMethod(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     protected static protectedStaticMethod() { }
+//                      ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) c.protectedStaticMethod(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     method() {
+//         this.publicMethod();
+//              ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) c.publicMethod(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         this.privateMethod();
+//              ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) c.privateMethod(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         this.protectedMethod();
+//              ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) c.protectedMethod(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         c.staticMethod();
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) c.staticMethod(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         c.privateStaticMethod();
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) c.privateStaticMethod(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         c.protectedStaticMethod();
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) c.protectedStaticMethod(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     }
+// }
+// var cInstance = new c();
+// cInstance.publicMethod();
+// ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var cInstance: c
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) c.publicMethod(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// c.staticMethod();
+// ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class c
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//   ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) c.staticMethod(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 21,
+      "LSPosition": {
+        "line": 1,
+        "character": 11
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) c.publicMethod(): void\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 52,
+      "LSPosition": {
+        "line": 2,
+        "character": 12
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) c.privateMethod(): void\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 86,
+      "LSPosition": {
+        "line": 3,
+        "character": 14
+      },
+      "Name": "21",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) c.protectedMethod(): void\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 119,
+      "LSPosition": {
+        "line": 4,
+        "character": 11
+      },
+      "Name": "3",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) c.staticMethod(): void\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 157,
+      "LSPosition": {
+        "line": 5,
+        "character": 19
+      },
+      "Name": "4",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) c.privateStaticMethod(): void\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 204,
+      "LSPosition": {
+        "line": 6,
+        "character": 21
+      },
+      "Name": "41",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) c.protectedStaticMethod(): void\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 260,
+      "LSPosition": {
+        "line": 8,
+        "character": 13
+      },
+      "Name": "5",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) c.publicMethod(): void\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 289,
+      "LSPosition": {
+        "line": 9,
+        "character": 13
+      },
+      "Name": "6",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) c.privateMethod(): void\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 319,
+      "LSPosition": {
+        "line": 10,
+        "character": 13
+      },
+      "Name": "61",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) c.protectedMethod(): void\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 348,
+      "LSPosition": {
+        "line": 11,
+        "character": 10
+      },
+      "Name": "7",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) c.staticMethod(): void\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 374,
+      "LSPosition": {
+        "line": 12,
+        "character": 10
+      },
+      "Name": "8",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) c.privateStaticMethod(): void\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 407,
+      "LSPosition": {
+        "line": 13,
+        "character": 10
+      },
+      "Name": "81",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) c.protectedStaticMethod(): void\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 465,
+      "LSPosition": {
+        "line": 17,
+        "character": 0
+      },
+      "Name": "9",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar cInstance: c\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 475,
+      "LSPosition": {
+        "line": 17,
+        "character": 10
+      },
+      "Name": "10",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) c.publicMethod(): void\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 491,
+      "LSPosition": {
+        "line": 18,
+        "character": 0
+      },
+      "Name": "11",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nclass c\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 493,
+      "LSPosition": {
+        "line": 18,
+        "character": 2
+      },
+      "Name": "12",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) c.staticMethod(): void\n```\n"
+      }
+    }
+  }
+]

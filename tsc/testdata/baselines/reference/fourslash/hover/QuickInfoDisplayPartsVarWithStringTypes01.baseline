@@ -1,0 +1,79 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsVarWithStringTypes01.ts ===
+// let hello: "hello" | 'hello' = "hello";
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | let hello: "hello"
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// let world: 'world' = "world";
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | let world: "world"
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// let helloOrWorld: "hello" | 'world';
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | let helloOrWorld: "hello" | "world"
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 4,
+      "LSPosition": {
+        "line": 0,
+        "character": 4
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nlet hello: \"hello\"\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 44,
+      "LSPosition": {
+        "line": 1,
+        "character": 4
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nlet world: \"world\"\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 74,
+      "LSPosition": {
+        "line": 2,
+        "character": 4
+      },
+      "Name": "3",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nlet helloOrWorld: \"hello\" | \"world\"\n```\n"
+      }
+    }
+  }
+]

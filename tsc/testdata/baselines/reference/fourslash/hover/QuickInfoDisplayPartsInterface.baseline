@@ -1,0 +1,79 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsInterface.ts ===
+// interface i {
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface i
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// }
+// var iInstance: i;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var iInstance: i
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface i
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 10,
+      "LSPosition": {
+        "line": 0,
+        "character": 10
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\ninterface i\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 20,
+      "LSPosition": {
+        "line": 2,
+        "character": 4
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar iInstance: i\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 31,
+      "LSPosition": {
+        "line": 2,
+        "character": 15
+      },
+      "Name": "3",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\ninterface i\n```\n"
+      }
+    }
+  }
+]

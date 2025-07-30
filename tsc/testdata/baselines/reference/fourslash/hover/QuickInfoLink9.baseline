@@ -1,0 +1,26 @@
+// === QuickInfo ===
+=== /quickInfoLink9.ts ===
+// type Foo = {
+//     /**
+//      * Text before {@link a} text after
+//                           ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /**/.
+// | ----------------------------------------------------------------------
+//      */
+//     c: (a: number) => void;
+// }
+[
+  {
+    "marker": {
+      "Position": 47,
+      "LSPosition": {
+        "line": 2,
+        "character": 26
+      },
+      "Name": "",
+      "Data": null
+    },
+    "item": null
+  }
+]

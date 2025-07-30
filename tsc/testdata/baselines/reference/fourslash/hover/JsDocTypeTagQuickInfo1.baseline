@@ -1,0 +1,342 @@
+// === QuickInfo ===
+=== /jsDocTypeTag1.js ===
+// /** @type {String} */
+// var S;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var S: String
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// /** @type {Number} */
+// var N;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var N: Number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// /** @type {Boolean} */
+// var B;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var B: Boolean
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// /** @type {Void} */
+// var V;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var V: Void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// /** @type {Undefined} */
+// var U;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var U: Undefined
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// /** @type {Null} */
+// var Nl;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var Nl: Null
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// /** @type {Array} */
+// var A;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var A: any[]
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// /** @type {Promise} */
+// var P;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var P: Promise<any>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// /** @type {Object} */
+// var Obj;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var Obj: Object
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// /** @type {Function} */
+// var Func;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var Func: Function
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// /** @type {*} */
+// var AnyType;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var AnyType: any
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// /** @type {?} */
+// var QType;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var QType: any
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// /** @type {String|Number} */
+// var SOrN;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var SOrN: Number | String
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 26,
+      "LSPosition": {
+        "line": 1,
+        "character": 4
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar S: String\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 55,
+      "LSPosition": {
+        "line": 3,
+        "character": 4
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar N: Number\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 85,
+      "LSPosition": {
+        "line": 5,
+        "character": 4
+      },
+      "Name": "3",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar B: Boolean\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 112,
+      "LSPosition": {
+        "line": 7,
+        "character": 4
+      },
+      "Name": "4",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar V: Void\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 144,
+      "LSPosition": {
+        "line": 9,
+        "character": 4
+      },
+      "Name": "5",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar U: Undefined\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 171,
+      "LSPosition": {
+        "line": 11,
+        "character": 4
+      },
+      "Name": "6",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar Nl: Null\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 200,
+      "LSPosition": {
+        "line": 13,
+        "character": 4
+      },
+      "Name": "7",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar A: any[]\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 230,
+      "LSPosition": {
+        "line": 15,
+        "character": 4
+      },
+      "Name": "8",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar P: Promise\u003cany\u003e\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 259,
+      "LSPosition": {
+        "line": 17,
+        "character": 4
+      },
+      "Name": "9",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar Obj: Object\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 292,
+      "LSPosition": {
+        "line": 19,
+        "character": 4
+      },
+      "Name": "10",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar Func: Function\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 319,
+      "LSPosition": {
+        "line": 21,
+        "character": 4
+      },
+      "Name": "11",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar AnyType: any\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 349,
+      "LSPosition": {
+        "line": 23,
+        "character": 4
+      },
+      "Name": "12",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar QType: any\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 389,
+      "LSPosition": {
+        "line": 25,
+        "character": 4
+      },
+      "Name": "13",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar SOrN: Number | String\n```\n"
+      }
+    }
+  }
+]

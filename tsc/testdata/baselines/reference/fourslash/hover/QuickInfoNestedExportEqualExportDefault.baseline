@@ -1,0 +1,48 @@
+// === QuickInfo ===
+=== /quickInfoNestedExportEqualExportDefault.ts ===
+// export = (state, messages) => {
+//    export default {
+//          ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (property) (Anonymous function).default: {}
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                  ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*2*/.
+// | ----------------------------------------------------------------------
+//    }
+// }
+[
+  {
+    "marker": {
+      "Position": 41,
+      "LSPosition": {
+        "line": 1,
+        "character": 9
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(property) (Anonymous function).default: {}\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 49,
+      "LSPosition": {
+        "line": 1,
+        "character": 17
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": null
+  }
+]

@@ -1,0 +1,807 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsClassAccessors.ts ===
+// class c {
+//     public get publicProperty() { return ""; }
+//                ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) c.publicProperty: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     public set publicProperty(x: string) { }
+//                ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) c.publicProperty: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     private get privateProperty() { return ""; }
+//                 ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) c.privateProperty: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     private set privateProperty(x: string) { }
+//                 ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) c.privateProperty: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     protected get protectedProperty() { return ""; }
+//                   ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) c.protectedProperty: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     protected set protectedProperty(x: string) { }
+//                   ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) c.protectedProperty: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     static get staticProperty() { return ""; }
+//                ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) c.staticProperty: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     static set staticProperty(x: string) { }
+//                ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) c.staticProperty: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     private static get  privateStaticProperty() { return ""; }
+//                         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) c.privateStaticProperty: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     private static set privateStaticProperty(x: string) { }
+//                        ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) c.privateStaticProperty: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     protected static get protectedStaticProperty() { return ""; }
+//                          ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) c.protectedStaticProperty: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     protected static set protectedStaticProperty(x: string) { }
+//                          ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) c.protectedStaticProperty: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     method() {
+//         var x : string;
+//         x = this.publicProperty;
+//                  ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) c.publicProperty: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         x = this.privateProperty;
+//                  ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) c.privateProperty: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         x = this.protectedProperty;
+//                  ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) c.protectedProperty: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         x = c.staticProperty;
+//               ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) c.staticProperty: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         x = c.privateStaticProperty;
+//               ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) c.privateStaticProperty: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         x = c.protectedStaticProperty;
+//               ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) c.protectedStaticProperty: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         this.publicProperty = "";
+//              ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) c.publicProperty: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         this.privateProperty = "";
+//              ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) c.privateProperty: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         this.protectedProperty = "";
+//              ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) c.protectedProperty: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         c.staticProperty = "";
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) c.staticProperty: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         c.privateStaticProperty = "";
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) c.privateStaticProperty: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         c.protectedStaticProperty = "";
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) c.protectedStaticProperty: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     }
+// }
+// var cInstance = new c();
+// var y: string;
+// y = cInstance.publicProperty;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var cInstance: c
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//               ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) c.publicProperty: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// y = c.staticProperty;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class c
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) c.staticProperty: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// cInstance.publicProperty = y;
+// ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | var cInstance: c
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) c.publicProperty: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// c.staticProperty = y;
+// ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class c
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//   ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (accessor) c.staticProperty: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 25,
+      "LSPosition": {
+        "line": 1,
+        "character": 15
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) c.publicProperty: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 72,
+      "LSPosition": {
+        "line": 2,
+        "character": 15
+      },
+      "Name": "1s",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) c.publicProperty: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 118,
+      "LSPosition": {
+        "line": 3,
+        "character": 16
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) c.privateProperty: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 167,
+      "LSPosition": {
+        "line": 4,
+        "character": 16
+      },
+      "Name": "2s",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) c.privateProperty: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 216,
+      "LSPosition": {
+        "line": 5,
+        "character": 18
+      },
+      "Name": "21",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) c.protectedProperty: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 269,
+      "LSPosition": {
+        "line": 6,
+        "character": 18
+      },
+      "Name": "21s",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) c.protectedProperty: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 317,
+      "LSPosition": {
+        "line": 7,
+        "character": 15
+      },
+      "Name": "3",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) c.staticProperty: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 364,
+      "LSPosition": {
+        "line": 8,
+        "character": 15
+      },
+      "Name": "3s",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) c.staticProperty: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 418,
+      "LSPosition": {
+        "line": 9,
+        "character": 24
+      },
+      "Name": "4",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) c.privateStaticProperty: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 480,
+      "LSPosition": {
+        "line": 10,
+        "character": 23
+      },
+      "Name": "4s",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) c.privateStaticProperty: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 542,
+      "LSPosition": {
+        "line": 11,
+        "character": 25
+      },
+      "Name": "41",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) c.protectedStaticProperty: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 608,
+      "LSPosition": {
+        "line": 12,
+        "character": 25
+      },
+      "Name": "41s",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) c.protectedStaticProperty: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 703,
+      "LSPosition": {
+        "line": 15,
+        "character": 17
+      },
+      "Name": "5",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) c.publicProperty: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 736,
+      "LSPosition": {
+        "line": 16,
+        "character": 17
+      },
+      "Name": "6",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) c.privateProperty: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 770,
+      "LSPosition": {
+        "line": 17,
+        "character": 17
+      },
+      "Name": "61",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) c.protectedProperty: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 803,
+      "LSPosition": {
+        "line": 18,
+        "character": 14
+      },
+      "Name": "7",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) c.staticProperty: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 833,
+      "LSPosition": {
+        "line": 19,
+        "character": 14
+      },
+      "Name": "8",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) c.privateStaticProperty: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 870,
+      "LSPosition": {
+        "line": 20,
+        "character": 14
+      },
+      "Name": "81",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) c.protectedStaticProperty: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 908,
+      "LSPosition": {
+        "line": 21,
+        "character": 13
+      },
+      "Name": "5s",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) c.publicProperty: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 942,
+      "LSPosition": {
+        "line": 22,
+        "character": 13
+      },
+      "Name": "6s",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) c.privateProperty: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 977,
+      "LSPosition": {
+        "line": 23,
+        "character": 13
+      },
+      "Name": "61s",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) c.protectedProperty: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1011,
+      "LSPosition": {
+        "line": 24,
+        "character": 10
+      },
+      "Name": "7s",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) c.staticProperty: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1042,
+      "LSPosition": {
+        "line": 25,
+        "character": 10
+      },
+      "Name": "8s",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) c.privateStaticProperty: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1080,
+      "LSPosition": {
+        "line": 26,
+        "character": 10
+      },
+      "Name": "81s",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) c.protectedStaticProperty: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1162,
+      "LSPosition": {
+        "line": 31,
+        "character": 4
+      },
+      "Name": "9",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar cInstance: c\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1172,
+      "LSPosition": {
+        "line": 31,
+        "character": 14
+      },
+      "Name": "10",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) c.publicProperty: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1192,
+      "LSPosition": {
+        "line": 32,
+        "character": 4
+      },
+      "Name": "11",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nclass c\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1194,
+      "LSPosition": {
+        "line": 32,
+        "character": 6
+      },
+      "Name": "12",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) c.staticProperty: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1210,
+      "LSPosition": {
+        "line": 33,
+        "character": 0
+      },
+      "Name": "9s",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nvar cInstance: c\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1220,
+      "LSPosition": {
+        "line": 33,
+        "character": 10
+      },
+      "Name": "10s",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) c.publicProperty: string\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1240,
+      "LSPosition": {
+        "line": 34,
+        "character": 0
+      },
+      "Name": "11s",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nclass c\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1242,
+      "LSPosition": {
+        "line": 34,
+        "character": 2
+      },
+      "Name": "12s",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(accessor) c.staticProperty: string\n```\n"
+      }
+    }
+  }
+]

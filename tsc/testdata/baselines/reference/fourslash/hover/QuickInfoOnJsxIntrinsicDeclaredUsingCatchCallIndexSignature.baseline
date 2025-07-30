@@ -1,0 +1,32 @@
+// === QuickInfo ===
+=== /a.tsx ===
+// declare namespace JSX {
+//   interface IntrinsicElements { [elemName: string]: any; }
+// }
+// <div class="democlass" />;
+//  ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | any
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 86,
+      "LSPosition": {
+        "line": 3,
+        "character": 1
+      },
+      "Name": "",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nany\n```\n"
+      }
+    }
+  }
+]

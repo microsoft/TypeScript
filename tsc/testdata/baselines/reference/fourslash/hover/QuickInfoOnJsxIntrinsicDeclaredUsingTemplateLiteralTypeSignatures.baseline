@@ -1,0 +1,60 @@
+// === QuickInfo ===
+=== /a.tsx ===
+// declare namespace JSX {
+//   interface IntrinsicElements {
+//     [k: `foo${string}`]: any;
+//     [k: `foobar${string}`]: any;
+//   }
+// }
+// <foobaz />;
+//  ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | any
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// <foobarbaz />;
+//  ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | any
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 126,
+      "LSPosition": {
+        "line": 6,
+        "character": 1
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nany\n```\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 138,
+      "LSPosition": {
+        "line": 7,
+        "character": 1
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nany\n```\n"
+      }
+    }
+  }
+]

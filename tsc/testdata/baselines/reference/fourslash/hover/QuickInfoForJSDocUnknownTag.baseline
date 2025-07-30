@@ -1,0 +1,199 @@
+// === QuickInfo ===
+=== /quickInfoForJSDocUnknownTag.ts ===
+// /**
+//  * @example
+//  * if (true) {
+//  *     foo()
+//  * }
+//  */
+// function foo() {
+//            ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function foo(): string
+// | ```
+// | 
+// | 
+// | *@example* — if (true) {
+// |     foo()
+// | }
+// | 
+// | ----------------------------------------------------------------------
+//     return '2';
+// }
+// /**
+//  @example
+//  {
+//      foo()
+//  }
+//  */
+// function foo2() {
+//            ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function foo2(): string
+// | ```
+// | 
+// | 
+// | *@example* — {
+// |     foo()
+// | }
+// | 
+// | ----------------------------------------------------------------------
+//     return '2';
+// }
+// /**
+//  * @example
+//  *   x y
+//  *   12345
+//  *      b
+//  */
+// function moo() {
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function moo(): string
+// | ```
+// | 
+// | 
+// | *@example* —   x y
+// |   12345
+// |      b
+// | 
+// | ----------------------------------------------------------------------
+//     return '2';
+// }
+// /**
+//  * @func
+//  * @example
+//  *   x y
+//  *   12345
+//  *      b
+//  */
+// function boo() {
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function boo(): string
+// | ```
+// | 
+// | 
+// | *@func*
+// | 
+// | *@example* —   x y
+// |   12345
+// |      b
+// | 
+// | ----------------------------------------------------------------------
+//     return '2';
+// }
+// /**
+//  * @func
+//  * @example    x y
+//  *             12345
+//  *                b
+//  */
+// function goo() {
+//            ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function goo(): string
+// | ```
+// | 
+// | 
+// | *@func*
+// | 
+// | *@example* — x y
+// | 12345
+// |    b
+// | 
+// | ----------------------------------------------------------------------
+//     return '2';
+// }
+[
+  {
+    "marker": {
+      "Position": 64,
+      "LSPosition": {
+        "line": 6,
+        "character": 11
+      },
+      "Name": "1",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction foo(): string\n```\n\n\n*@example* — if (true) {\n    foo()\n}\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 134,
+      "LSPosition": {
+        "line": 15,
+        "character": 11
+      },
+      "Name": "2",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction foo2(): string\n```\n\n\n*@example* — {\n    foo()\n}\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 219,
+      "LSPosition": {
+        "line": 24,
+        "character": 10
+      },
+      "Name": "3",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction moo(): string\n```\n\n\n*@example* —   x y\n  12345\n     b\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 313,
+      "LSPosition": {
+        "line": 34,
+        "character": 10
+      },
+      "Name": "4",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction boo(): string\n```\n\n\n*@func*\n\n*@example* —   x y\n  12345\n     b\n"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 426,
+      "LSPosition": {
+        "line": 43,
+        "character": 11
+      },
+      "Name": "5",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction goo(): string\n```\n\n\n*@func*\n\n*@example* — x y\n12345\n   b\n"
+      }
+    }
+  }
+]

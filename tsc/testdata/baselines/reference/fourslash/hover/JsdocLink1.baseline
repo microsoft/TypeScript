@@ -1,0 +1,48 @@
+// === QuickInfo ===
+=== /jsdocLink1.ts ===
+// class C {
+// }
+// /**
+//  * {@link C}
+//  * @wat Makes a {@link C}. A default one.
+//  * {@link C()}
+//  * {@link C|postfix text}
+//  * {@link unformatted postfix text}
+//  * @see {@link C} its great
+//  */
+// function CC() {
+//          ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function CC(): void
+// | ```
+// | `C`
+// | 
+// | *@wat* — Makes a `C`. A default one.
+// | C()
+// | C|postfix text
+// | unformattedpostfix text
+// | 
+// | *@see* — `C` its great
+// | 
+// | ----------------------------------------------------------------------
+// }
+[
+  {
+    "marker": {
+      "Position": 189,
+      "LSPosition": {
+        "line": 10,
+        "character": 9
+      },
+      "Name": "",
+      "Data": null
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction CC(): void\n```\n`C`\n\n*@wat* — Makes a `C`. A default one.\nC()\nC|postfix text\nunformattedpostfix text\n\n*@see* — `C` its great\n"
+      }
+    }
+  }
+]
