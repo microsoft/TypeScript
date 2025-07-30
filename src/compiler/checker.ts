@@ -25677,6 +25677,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getDefinitelyFalsyPartOfType(type: Type): Type {
+        if (type.flags & TypeFlags.TypeParameter) {
+            const constraint = getBaseConstraintOfType(type);
+            if (!constraint || constraint === type) {
+                return neverType;
+            }
+            return getDefinitelyFalsyPartOfType(constraint);
+        }
+
         return type.flags & TypeFlags.String ? emptyStringType :
             type.flags & TypeFlags.Number ? zeroType :
             type.flags & TypeFlags.BigInt ? zeroBigIntType :

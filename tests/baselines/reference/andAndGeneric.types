@@ -1,0 +1,75 @@
+//// [tests/cases/compiler/andAndGeneric.ts] ////
+
+=== andAndGeneric.ts ===
+declare function id<T>(x: T): T;
+>id : <T>(x: T) => T
+>   : ^ ^^ ^^ ^^^^^ 
+>x : T
+>  : ^
+
+function f<T>(x: T) {
+>f : <T>(x: T) => NonNullable<T>
+>  : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^
+>x : T
+>  : ^
+
+    return id(x && x);  // should NOT be narrowed to NonNullable<T>
+>id(x && x) : NonNullable<T>
+>           : ^^^^^^^^^^^^^^
+>id : <T_1>(x: T_1) => T_1
+>   : ^^^^^^ ^^   ^^^^^   
+>x && x : NonNullable<T>
+>       : ^^^^^^^^^^^^^^
+>x : T
+>  : ^
+>x : NonNullable<T>
+>  : ^^^^^^^^^^^^^^
+}
+
+// ---- expected types ----
+const t1 = f(null);      // null  (currently incorrectly NonNullable<null> -> never)
+>t1 : never
+>   : ^^^^^
+>f(null) : never
+>        : ^^^^^
+>f : <T>(x: T) => NonNullable<T>
+>  : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^
+
+const t2 = f(0);         // 0
+>t2 : 0
+>   : ^
+>f(0) : 0
+>     : ^
+>f : <T>(x: T) => NonNullable<T>
+>  : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+const t3 = f(1);         // 1
+>t3 : 1
+>   : ^
+>f(1) : 1
+>     : ^
+>f : <T>(x: T) => NonNullable<T>
+>  : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+
+const t4 = f<"a" | null>("a");  // "a"
+>t4 : "a"
+>   : ^^^
+>f<"a" | null>("a") : "a"
+>                   : ^^^
+>f : <T>(x: T) => NonNullable<T>
+>  : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^
+>"a" : "a"
+>    : ^^^
+
+const t5 = f<"a" | null>(null); // null
+>t5 : "a"
+>   : ^^^
+>f<"a" | null>(null) : "a"
+>                    : ^^^
+>f : <T>(x: T) => NonNullable<T>
+>  : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^
+
