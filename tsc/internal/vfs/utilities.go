@@ -75,16 +75,10 @@ func replaceWildcardCharacter(match string, singleAsteriskRegexFragment string) 
 	}
 }
 
-var isImplicitGlobRegex = regexp2.MustCompile(`[.*?]`, regexp2.None)
-
 // An "includes" path "foo" is implicitly a glob "foo/** /*" (without the space) if its last component has no extension,
 // and does not contain any glob characters itself.
 func IsImplicitGlob(lastPathComponent string) bool {
-	match, err := isImplicitGlobRegex.MatchString(lastPathComponent)
-	if err != nil {
-		return false
-	}
-	return !match
+	return !strings.ContainsAny(lastPathComponent, ".*?")
 }
 
 // Reserved characters, forces escaping of any non-word (or digit), non-whitespace character.
