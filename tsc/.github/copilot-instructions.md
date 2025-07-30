@@ -58,6 +58,8 @@ function greet(person) {
 }
 ```
 
+**New compiler tests should always enable strict mode (`@strict: true`) unless the bug specifically involves non-strict mode behavior.**
+
 Tests don't always need the above `@option`s specified, but they are common to specify or modify.
 Tests can be run with multiple settings for a given option by using a comma-separated list (e.g. `@option: settingA,settingB`).
 `@filename` is only required when a test has multiple files, or when writing a test for a single JavaScript file (where `allowJs` or `checkJs` is enabled).
