@@ -5,12 +5,18 @@
 -
 -
 -==== bug27346.js (1 errors) ====
--    /**
--     * @type {MyClass}
--              ~~~~~~~
++bug27346.js(2,11): error TS2749: 'MyClass' refers to a value, but is being used as a type here. Did you mean 'typeof MyClass'?
++bug27346.js(2,11): error TS8030: A JSDoc '@type' tag on a function must have a signature with the correct number of arguments.
++
++
++==== bug27346.js (2 errors) ====
+     /**
+      * @type {MyClass}
+               ~~~~~~~
 -!!! error TS8030: The type of a function declaration must match the function's signature.
--     */
--    function MyClass() { }
--    MyClass.prototype = {};
--    
-+<no content>
++!!! error TS2749: 'MyClass' refers to a value, but is being used as a type here. Did you mean 'typeof MyClass'?
++              ~~~~~~~
++!!! error TS8030: A JSDoc '@type' tag on a function must have a signature with the correct number of arguments.
+      */
+     function MyClass() { }
+     MyClass.prototype = {};

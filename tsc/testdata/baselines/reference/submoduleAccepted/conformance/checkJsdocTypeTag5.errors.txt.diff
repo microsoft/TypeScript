@@ -1,30 +1,22 @@
 --- old.checkJsdocTypeTag5.errors.txt
 +++ new.checkJsdocTypeTag5.errors.txt
 @@= skipped -0, +0 lines =@@
--test.js(3,17): error TS2322: Type 'number' is not assignable to type 'string'.
+ test.js(3,17): error TS2322: Type 'number' is not assignable to type 'string'.
  test.js(5,14): error TS2322: Type 'number' is not assignable to type 'string'.
 -test.js(7,24): error TS2322: Type 'number' is not assignable to type 'string'.
--test.js(10,17): error TS2322: Type 'number' is not assignable to type 'string'.
 +test.js(7,5): error TS2322: Type '(x: number) => number' is not assignable to type '(x: number) => string'.
 +  Type 'number' is not assignable to type 'string'.
+ test.js(10,17): error TS2322: Type 'number' is not assignable to type 'string'.
  test.js(12,14): error TS2322: Type 'number' is not assignable to type 'string'.
 -test.js(14,24): error TS2322: Type 'number' is not assignable to type 'string'.
 -test.js(28,12): error TS8030: The type of a function declaration must match the function's signature.
 +test.js(14,5): error TS2322: Type '(x: number) => number' is not assignable to type '(x: number) => string'.
 +  Type 'number' is not assignable to type 'string'.
-+test.js(24,5): error TS2322: Type 'number' is not assignable to type '0 | 1 | 2'.
++test.js(28,12): error TS8030: A JSDoc '@type' tag on a function must have a signature with the correct number of arguments.
  test.js(34,5): error TS2322: Type '1 | 2' is not assignable to type '2 | 3'.
    Type '1' is not assignable to type '2 | 3'.
 
-
--==== test.js (8 errors) ====
-+==== test.js (6 errors) ====
-     // all 6 should error on return statement/expression
-     /** @type {(x: number) => string} */
-     function h(x) { return x }
--                    ~~~~~~
--!!! error TS2322: Type 'number' is not assignable to type 'string'.
-     /** @type {(x: number) => string} */
+@@= skipped -18, +20 lines =@@
      var f = x => x
                   ~
  !!! error TS2322: Type 'number' is not assignable to type 'string'.
@@ -39,9 +31,7 @@
      
      /** @type {{ (x: number): string }} */
      function i(x) { return x }
--                    ~~~~~~
--!!! error TS2322: Type 'number' is not assignable to type 'string'.
-     /** @type {{ (x: number): string }} */
+@@= skipped -13, +15 lines =@@
      var j = x => x
                   ~
  !!! error TS2322: Type 'number' is not assignable to type 'string'.
@@ -56,18 +46,12 @@
      
      
      /** @typedef {(x: 'hi' | 'bye') => 0 | 1 | 2} Argle */
-@@= skipped -45, +45 lines =@@
-     
-     /** @type {0 | 1 | 2} - assignment should not error */
-     var zeroonetwo = blargle('hi')
-+        ~~~~~~~~~~
-+!!! error TS2322: Type 'number' is not assignable to type '0 | 1 | 2'.
-     
-     /** @typedef {{(s: string): 0 | 1; (b: boolean): 2 | 3 }} Gioconda */
+@@= skipped -19, +21 lines =@@
      
      /** @type {Gioconda} */
--               ~~~~~~~~
+                ~~~~~~~~
 -!!! error TS8030: The type of a function declaration must match the function's signature.
++!!! error TS8030: A JSDoc '@type' tag on a function must have a signature with the correct number of arguments.
      function monaLisa(sb) {
          return typeof sb === 'string' ? 1 : 2;
      }

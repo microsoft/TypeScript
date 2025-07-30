@@ -1,0 +1,33 @@
+/a.js(2,11): error TS8040: A JSDoc '@type' tag may not occur with a '@param' or '@returns' tag.
+/a.js(8,11): error TS8040: A JSDoc '@type' tag may not occur with a '@param' or '@returns' tag.
+/a.js(15,11): error TS8040: A JSDoc '@type' tag may not occur with a '@param' or '@returns' tag.
+
+
+==== /a.js (3 errors) ====
+    /**
+     * @type {(a: 1) => true}
+              ~~~~~~~~~~~~~~
+!!! error TS8040: A JSDoc '@type' tag may not occur with a '@param' or '@returns' tag.
+     * @param {2} a
+     */
+    export function conflictingParam(a) { return true }
+    
+    /**
+     * @type {(b: 3) => true}
+              ~~~~~~~~~~~~~~
+!!! error TS8040: A JSDoc '@type' tag may not occur with a '@param' or '@returns' tag.
+     * @return {false}
+     */
+    export function conflictingReturn(b) { return false }
+    
+    
+    /**
+     * @type {(c: 4) => true}
+              ~~~~~~~~~~~~~~
+!!! error TS8040: A JSDoc '@type' tag may not occur with a '@param' or '@returns' tag.
+     * @param {5} d
+     * @return {false}
+     */
+    export function conflictingBoth(d) { return false }
+    
+    

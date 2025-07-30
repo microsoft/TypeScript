@@ -8,10 +8,9 @@ functions.js(31,19): error TS7006: Parameter 'ab' implicitly has an 'any' type.
 functions.js(31,23): error TS7006: Parameter 'onetwo' implicitly has an 'any' type.
 functions.js(49,13): error TS2749: 'D' refers to a value, but is being used as a type here. Did you mean 'typeof D'?
 functions.js(51,26): error TS7006: Parameter 'dref' implicitly has an 'any' type.
-functions.js(72,14): error TS7019: Rest parameter 'args' implicitly has an 'any[]' type.
 
 
-==== functions.js (11 errors) ====
+==== functions.js (10 errors) ====
     /**
      * @param {function(this: string, number): number} c is just passing on through
      * @return {function(this: string, number): number}
@@ -107,8 +106,6 @@ functions.js(72,14): error TS7019: Rest parameter 'args' implicitly has an 'any[
      * @type {(...args: [string, string] | [number, string, string]) => void}
      */
     function foo(...args) {
-                 ~~~~~~~
-!!! error TS7019: Rest parameter 'args' implicitly has an 'any[]' type.
       args;
     }
     

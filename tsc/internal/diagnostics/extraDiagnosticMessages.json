@@ -14,5 +14,13 @@
     "Non-relative paths are not allowed. Did you forget a leading './'?": {
         "category": "Error",
         "code": 5090
+    },
+    "A JSDoc '@type' tag on a function must have a signature with the correct number of arguments.": {
+        "category": "Error",
+        "code": 8030
+    },
+    "A JSDoc '@type' tag may not occur with a '@param' or '@returns' tag.": {
+        "category": "Error",
+        "code": 8040
     }
 }

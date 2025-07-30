@@ -90,6 +90,13 @@ func (b *NodeBuilder) SerializeReturnTypeForSignature(signatureDeclaration *ast.
 	return b.exitContext(b.impl.serializeInferredReturnTypeForSignature(signature, returnType))
 }
 
+func (b *NodeBuilder) SerializeTypeParametersForSignature(signatureDeclaration *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) []*ast.Node {
+	b.enterContext(enclosingDeclaration, flags, internalFlags, tracker)
+	symbol := b.impl.ch.getSymbolOfDeclaration(signatureDeclaration)
+	typeParams := b.SymbolToTypeParameterDeclarations(symbol, enclosingDeclaration, flags, internalFlags, tracker)
+	return b.exitContextSlice(typeParams)
+}
+
 // SerializeTypeForDeclaration implements NodeBuilderInterface.
 func (b *NodeBuilder) SerializeTypeForDeclaration(declaration *ast.Node, symbol *ast.Symbol, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node {
 	b.enterContext(enclosingDeclaration, flags, internalFlags, tracker)

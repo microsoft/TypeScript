@@ -344,7 +344,7 @@ func (tx *RuntimeSyntaxTransformer) visitEnumDeclaration(node *ast.EnumDeclarati
 
 	enumParam := tx.Factory().NewParameterDeclaration(nil, nil, enumParamName, nil, nil, nil)
 	enumBody := tx.transformEnumBody(node)
-	enumFunc := tx.Factory().NewFunctionExpression(nil, nil, nil, nil, tx.Factory().NewNodeList([]*ast.Node{enumParam}), nil, enumBody)
+	enumFunc := tx.Factory().NewFunctionExpression(nil, nil, nil, nil, tx.Factory().NewNodeList([]*ast.Node{enumParam}), nil, nil, enumBody)
 	enumCall := tx.Factory().NewCallExpression(tx.Factory().NewParenthesizedExpression(enumFunc), nil, nil, tx.Factory().NewNodeList([]*ast.Node{enumArg}), ast.NodeFlagsNone)
 	enumStatement := tx.Factory().NewExpressionStatement(enumCall)
 	tx.EmitContext().SetOriginal(enumStatement, node.AsNode())
@@ -588,7 +588,7 @@ func (tx *RuntimeSyntaxTransformer) visitModuleDeclaration(node *ast.ModuleDecla
 
 	moduleParam := tx.Factory().NewParameterDeclaration(nil, nil, moduleParamName, nil, nil, nil)
 	moduleBody := tx.transformModuleBody(node, tx.getNamespaceContainerName(node.AsNode()))
-	moduleFunc := tx.Factory().NewFunctionExpression(nil, nil, nil, nil, tx.Factory().NewNodeList([]*ast.Node{moduleParam}), nil, moduleBody)
+	moduleFunc := tx.Factory().NewFunctionExpression(nil, nil, nil, nil, tx.Factory().NewNodeList([]*ast.Node{moduleParam}), nil, nil, moduleBody)
 	moduleCall := tx.Factory().NewCallExpression(tx.Factory().NewParenthesizedExpression(moduleFunc), nil, nil, tx.Factory().NewNodeList([]*ast.Node{moduleArg}), ast.NodeFlagsNone)
 	moduleStatement := tx.Factory().NewExpressionStatement(moduleCall)
 	tx.EmitContext().SetOriginal(moduleStatement, node.AsNode())
@@ -724,6 +724,7 @@ func (tx *RuntimeSyntaxTransformer) visitFunctionDeclaration(node *ast.FunctionD
 			nil, /*typeParameters*/
 			tx.Visitor().VisitNodes(node.Parameters),
 			nil, /*returnType*/
+			nil, /*fullSignature*/
 			tx.Visitor().VisitNode(node.Body),
 		)
 		export := tx.createExportStatementForDeclaration(node.AsNode())
@@ -829,7 +830,7 @@ func (tx *RuntimeSyntaxTransformer) visitConstructorDeclaration(node *ast.Constr
 	modifiers := tx.Visitor().VisitModifiers(node.Modifiers())
 	parameters := tx.EmitContext().VisitParameters(node.ParameterList(), tx.Visitor())
 	body := tx.visitConstructorBody(node.Body.AsBlock(), node.AsNode())
-	return tx.Factory().UpdateConstructorDeclaration(node, modifiers, nil /*typeParameters*/, parameters, nil /*returnType*/, body)
+	return tx.Factory().UpdateConstructorDeclaration(node, modifiers, nil /*typeParameters*/, parameters, nil /*returnType*/, nil /*fullSignature*/, body)
 }
 
 func (tx *RuntimeSyntaxTransformer) visitConstructorBody(body *ast.Block, constructor *ast.Node) *ast.Node {

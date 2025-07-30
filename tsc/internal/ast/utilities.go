@@ -3281,6 +3281,7 @@ func ReplaceModifiers(factory *NodeFactory, node *Node, modifierArray *ModifierL
 			node.TypeParameterList(),
 			node.ParameterList(),
 			node.Type(),
+			node.AsMethodDeclaration().FullSignature,
 			node.Body(),
 		)
 	case KindConstructor:
@@ -3290,6 +3291,7 @@ func ReplaceModifiers(factory *NodeFactory, node *Node, modifierArray *ModifierL
 			node.TypeParameterList(),
 			node.ParameterList(),
 			node.Type(),
+			node.AsConstructorDeclaration().FullSignature,
 			node.Body(),
 		)
 	case KindGetAccessor:
@@ -3300,6 +3302,7 @@ func ReplaceModifiers(factory *NodeFactory, node *Node, modifierArray *ModifierL
 			node.TypeParameterList(),
 			node.ParameterList(),
 			node.Type(),
+			node.AsGetAccessorDeclaration().FullSignature,
 			node.Body(),
 		)
 	case KindSetAccessor:
@@ -3310,6 +3313,7 @@ func ReplaceModifiers(factory *NodeFactory, node *Node, modifierArray *ModifierL
 			node.TypeParameterList(),
 			node.ParameterList(),
 			node.Type(),
+			node.AsSetAccessorDeclaration().FullSignature,
 			node.Body(),
 		)
 	case KindIndexSignature:
@@ -3328,6 +3332,7 @@ func ReplaceModifiers(factory *NodeFactory, node *Node, modifierArray *ModifierL
 			node.TypeParameterList(),
 			node.ParameterList(),
 			node.Type(),
+			node.AsFunctionExpression().FullSignature,
 			node.Body(),
 		)
 	case KindArrowFunction:
@@ -3337,6 +3342,7 @@ func ReplaceModifiers(factory *NodeFactory, node *Node, modifierArray *ModifierL
 			node.TypeParameterList(),
 			node.ParameterList(),
 			node.Type(),
+			node.AsArrowFunction().FullSignature,
 			node.AsArrowFunction().EqualsGreaterThanToken,
 			node.Body(),
 		)
@@ -3364,6 +3370,7 @@ func ReplaceModifiers(factory *NodeFactory, node *Node, modifierArray *ModifierL
 			node.TypeParameterList(),
 			node.ParameterList(),
 			node.Type(),
+			node.AsFunctionDeclaration().FullSignature,
 			node.Body(),
 		)
 	case KindClassDeclaration:

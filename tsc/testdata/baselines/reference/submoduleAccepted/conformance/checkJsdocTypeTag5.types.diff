@@ -1,16 +1,6 @@
 --- old.checkJsdocTypeTag5.types
 +++ new.checkJsdocTypeTag5.types
-@@= skipped -3, +3 lines =@@
- // all 6 should error on return statement/expression
- /** @type {(x: number) => string} */
- function h(x) { return x }
-->h : (x: number) => string
-->x : number
-->x : number
-+>h : (x: any) => any
-+>x : any
-+>x : any
-
+@@= skipped -10, +10 lines =@@
  /** @type {(x: number) => string} */
  var f = x => x
  >f : (x: number) => string
@@ -27,15 +17,7 @@
  >x : number
  >x : number
 
- /** @type {{ (x: number): string }} */
- function i(x) { return x }
-->i : (x: number) => string
-->x : number
-->x : number
-+>i : (x: any) => any
-+>x : any
-+>x : any
-
+@@= skipped -20, +20 lines =@@
  /** @type {{ (x: number): string }} */
  var j = x => x
  >j : (x: number) => string
@@ -52,25 +34,21 @@
  >x : number
  >x : number
 
-@@= skipped -42, +42 lines =@@
+@@= skipped -15, +15 lines =@@
  /** @typedef {(x: 'hi' | 'bye') => 0 | 1 | 2} Argle */
  /** @type {Argle} */
  function blargle(s) {
 ->blargle : (x: "hi" | "bye") => 0 | 1 | 2
-->s : "bye" | "hi"
-+>blargle : (s: any) => number
-+>s : any
++>blargle : (s: "bye" | "hi") => 0 | 1 | 2
+ >s : "bye" | "hi"
 
      return 0;
- >0 : 0
-@@= skipped -10, +10 lines =@@
- /** @type {0 | 1 | 2} - assignment should not error */
+@@= skipped -11, +11 lines =@@
  var zeroonetwo = blargle('hi')
  >zeroonetwo : 0 | 1 | 2
-->blargle('hi') : 0 | 1 | 2
+ >blargle('hi') : 0 | 1 | 2
 ->blargle : (x: "hi" | "bye") => 0 | 1 | 2
-+>blargle('hi') : number
-+>blargle : (s: any) => number
++>blargle : (s: "bye" | "hi") => 0 | 1 | 2
  >'hi' : "hi"
 
  /** @typedef {{(s: string): 0 | 1; (b: boolean): 2 | 3 }} Gioconda */

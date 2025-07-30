@@ -2,10 +2,12 @@
 +++ new.checkJsdocTypeTagOnObjectProperty1.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
++0.js(8,14): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++0.js(8,14): error TS8030: A JSDoc '@type' tag on a function must have a signature with the correct number of arguments.
 +0.js(16,14): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 +
 +
-+==== 0.js (1 errors) ====
++==== 0.js (3 errors) ====
 +    // @ts-check
 +    var lol = "hello Lol"
 +    const obj = {
@@ -14,6 +16,11 @@
 +      /** @type {string|undefined} */
 +      bar: "42",
 +      /** @type {function(number): number} */
++                 ~~~~~~~~
++!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
++                 ~~~~~~~~
++!!! error TS8030: A JSDoc '@type' tag on a function must have a signature with the correct number of arguments.
 +      method1(n1) {
 +          return n1 + 42;
 +      },

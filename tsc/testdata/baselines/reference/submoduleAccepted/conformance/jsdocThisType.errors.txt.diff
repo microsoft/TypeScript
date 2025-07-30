@@ -1,40 +1,27 @@
 --- old.jsdocThisType.errors.txt
 +++ new.jsdocThisType.errors.txt
-@@= skipped -0, +0 lines =@@
- /a.js(3,10): error TS2339: Property 'test' does not exist on type 'Foo'.
--/a.js(8,10): error TS2339: Property 'test' does not exist on type 'Foo'.
+@@= skipped -1, +1 lines =@@
+ /a.js(8,10): error TS2339: Property 'test' does not exist on type 'Foo'.
  /a.js(13,10): error TS2339: Property 'test' does not exist on type 'Foo'.
--/a.js(18,10): error TS2339: Property 'test' does not exist on type 'Foo'.
+ /a.js(18,10): error TS2339: Property 'test' does not exist on type 'Foo'.
 -/a.js(23,10): error TS2339: Property 'test' does not exist on type 'Foo'.
 -/a.js(28,10): error TS2339: Property 'test' does not exist on type 'Foo'.
 +/a.js(21,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++/a.js(26,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++/a.js(26,12): error TS8030: A JSDoc '@type' tag on a function must have a signature with the correct number of arguments.
 
 
  ==== /types.d.ts (0 errors) ====
-@@= skipped -12, +9 lines =@@
+@@= skipped -11, +12 lines =@@
      
      export type M = (this: Foo) => void;
      
 -==== /a.js (6 errors) ====
-+==== /a.js (3 errors) ====
++==== /a.js (7 errors) ====
      /** @type {import('./types').M} */
      export const f1 = function() {
          this.test();
-@@= skipped -11, +11 lines =@@
-     /** @type {import('./types').M} */
-     export function f2() {
-         this.test();
--             ~~~~
--!!! error TS2339: Property 'test' does not exist on type 'Foo'.
-     }
-     
-     /** @type {(this: import('./types').Foo) => void} */
-@@= skipped -14, +12 lines =@@
-     /** @type {(this: import('./types').Foo) => void} */
-     export function f4() {
-         this.test();
--             ~~~~
--!!! error TS2339: Property 'test' does not exist on type 'Foo'.
+@@= skipped -30, +30 lines =@@
      }
      
      /** @type {function(this: import('./types').Foo): void} */
@@ -48,6 +35,11 @@
      }
      
      /** @type {function(this: import('./types').Foo): void} */
++               ~~~~~~~~
++!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
++               ~~~~~~~~
++!!! error TS8030: A JSDoc '@type' tag on a function must have a signature with the correct number of arguments.
      export function f6() {
          this.test();
 -             ~~~~

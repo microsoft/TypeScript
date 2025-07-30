@@ -10,9 +10,9 @@ class C {
 
     /** @type {Foo} */
     foo(a, b) {}
->foo : (a: any, b: any) => void
->a : any
->b : any
+>foo : (a: string, b: number) => void
+>a : string
+>b : number
 
     /** @type {(optional?) => void} */
     methodWithOptionalParameters() {}

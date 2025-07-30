@@ -13,18 +13,7 @@
 
  };
  /** @type {(s: string) => void} */
- function g(s) {
-->g : (s: string) => void
-->s : string
-+>g : (s: any) => void
-+>s : any
- }
- /** @type {{(s: string): void}} */
- function h(s) {
-->h : (s: string) => void
-->s : string
-+>h : (s: any) => void
-+>s : any
+@@= skipped -17, +17 lines =@@
  }
 
  f() // should error
@@ -35,10 +24,3 @@
 
  g() // should error
  >g() : void
-->g : (s: string) => void
-+>g : (s: any) => void
-
- h()
- >h() : void
-->h : (s: string) => void
-+>h : (s: any) => void

@@ -3,24 +3,24 @@
 === a.js ===
 /** @type {() => undefined} */
 function f1() {
->f1 : () => any
+>f1 : () => undefined
 
     return undefined;
 >undefined : undefined
 }
 const a = f1()
->a : any
->f1() : any
->f1 : () => any
+>a : undefined
+>f1() : undefined
+>f1 : () => undefined
 
 /** @type {() => null} */
 function f2() {
->f2 : () => any
+>f2 : () => null
 
     return null;
 }
 const b = f2()
->b : any
->f2() : any
->f2 : () => any
+>b : null
+>f2() : null
+>f2 : () => null
 

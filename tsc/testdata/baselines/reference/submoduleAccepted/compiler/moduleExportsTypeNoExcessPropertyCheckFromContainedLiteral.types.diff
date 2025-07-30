@@ -14,8 +14,8 @@
  const tseslint = require('./typescript-eslint.js');
 ->tseslint : typeof tseslint
 ->require('./typescript-eslint.js') : typeof tseslint
-+>tseslint : { config: (...configs: any[]) => void; }
-+>require('./typescript-eslint.js') : { config: (...configs: any[]) => void; }
++>tseslint : { config: (...configs: import("./typescript-eslint.js").Config[]) => void; }
++>require('./typescript-eslint.js') : { config: (...configs: import("./typescript-eslint.js").Config[]) => void; }
  >require : any
  >'./typescript-eslint.js' : "./typescript-eslint.js"
 
@@ -25,9 +25,9 @@
 ->tseslint : typeof tseslint
 ->config : (...configs: Config[]) => void
 ->eslintReact : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }; }
-+>tseslint.config : (...configs: any[]) => void
-+>tseslint : { config: (...configs: any[]) => void; }
-+>config : (...configs: any[]) => void
++>tseslint.config : (...configs: import("./typescript-eslint.js").Config[]) => void
++>tseslint : { config: (...configs: import("./typescript-eslint.js").Config[]) => void; }
++>config : (...configs: import("./typescript-eslint.js").Config[]) => void
 +>eslintReact : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { "no-unsafe": boolean; }; }; }; }
 
  === eslint-plugin-react.js ===
@@ -81,25 +81,17 @@
 
      },
    },
-@@= skipped -38, +38 lines =@@
-  * @type {(...configs: Config[]) => void}
-  */
- function config(...configs) { }
-->config : (...configs: Config[]) => void
-->configs : Config[]
-+>config : (...configs: any[]) => void
-+>configs : any[]
+@@= skipped -42, +42 lines =@@
+ >configs : Config[]
 
  module.exports = { config };
 ->module.exports = { config } : typeof module.exports
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-->{ config } : { config: (...configs: Config[]) => void; }
-->config : (...configs: Config[]) => void
-+>module.exports = { config } : { config: (...configs: any[]) => void; }
-+>module.exports : { config: (...configs: any[]) => void; }
-+>module : { "export=": { config: (...configs: any[]) => void; }; }
-+>exports : { config: (...configs: any[]) => void; }
-+>{ config } : { config: (...configs: any[]) => void; }
-+>config : (...configs: any[]) => void
++>module.exports = { config } : { config: (...configs: Config[]) => void; }
++>module.exports : { config: (...configs: Config[]) => void; }
++>module : { "export=": { config: (...configs: Config[]) => void; }; }
++>exports : { config: (...configs: Config[]) => void; }
+ >{ config } : { config: (...configs: Config[]) => void; }
+ >config : (...configs: Config[]) => void

@@ -2,7 +2,6 @@
 +++ new.moduleExportsTypeNoExcessPropertyCheckFromContainedLiteral.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
-+typescript-eslint.js(12,17): error TS7019: Rest parameter 'configs' implicitly has an 'any[]' type.
 +typescript-eslint.js(14,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 +
 +
@@ -30,7 +29,7 @@
 +      },
 +    };
 +    
-+==== typescript-eslint.js (2 errors) ====
++==== typescript-eslint.js (1 errors) ====
 +    /**
 +     * @typedef {{ rules: Record<string, boolean> }} Plugin
 +     */
@@ -43,8 +42,6 @@
 +     * @type {(...configs: Config[]) => void}
 +     */
 +    function config(...configs) { }
-+                    ~~~~~~~~~~
-+!!! error TS7019: Rest parameter 'configs' implicitly has an 'any[]' type.
 +    
 +    module.exports = { config };
 +    ~~~~~~~~~~~~~~~~~~~~~~~~~~~

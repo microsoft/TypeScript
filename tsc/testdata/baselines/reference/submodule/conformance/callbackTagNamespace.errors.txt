@@ -1,0 +1,21 @@
+namespaced.js(8,12): error TS2702: 'NS' only refers to a type, but is being used as a namespace here.
+namespaced.js(8,12): error TS8030: A JSDoc '@type' tag on a function must have a signature with the correct number of arguments.
+
+
+==== namespaced.js (2 errors) ====
+    /**
+     * @callback NS.Nested.Inner
+     * @param {Object} space - spaaaaaaaaace
+     * @param {Object} peace - peaaaaaaaaace
+     * @return {string | number}
+     */
+    var x = 1;
+    /** @type {NS.Nested.Inner} */
+               ~~
+!!! error TS2702: 'NS' only refers to a type, but is being used as a namespace here.
+               ~~~~~~~~~~~~~~~
+!!! error TS8030: A JSDoc '@type' tag on a function must have a signature with the correct number of arguments.
+    function f(space, peace) {
+        return '1'
+    }
+    

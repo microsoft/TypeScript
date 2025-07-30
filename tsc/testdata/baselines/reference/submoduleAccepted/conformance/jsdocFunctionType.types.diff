@@ -209,32 +209,3 @@
 +>E : (n: number) => void
 
  // Repro from #39229
-
-@@= skipped -11, +11 lines =@@
-  * @type {(...args: [string, string] | [number, string, string]) => void}
-  */
- function foo(...args) {
-->foo : (...args: [string, string] | [number, string, string]) => void
-->args : [string, string] | [number, string, string]
-+>foo : (...args: any[]) => void
-+>args : any[]
-
-   args;
-->args : [string, string] | [number, string, string]
-+>args : any[]
- }
-
- foo('abc', 'def');
- >foo('abc', 'def') : void
-->foo : (...args: [string, string] | [number, string, string]) => void
-+>foo : (...args: any[]) => void
- >'abc' : "abc"
- >'def' : "def"
-
- foo(42, 'abc', 'def');
- >foo(42, 'abc', 'def') : void
-->foo : (...args: [string, string] | [number, string, string]) => void
-+>foo : (...args: any[]) => void
- >42 : 42
- >'abc' : "abc"
- >'def' : "def"

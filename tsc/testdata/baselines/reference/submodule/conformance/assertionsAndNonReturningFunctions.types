@@ -18,15 +18,15 @@ const assert = check => {
 
 /** @type {(x: unknown) => asserts x is string } */
 function assertIsString(x) {
->assertIsString : (x: any) => void
->x : any
+>assertIsString : (x: unknown) => asserts x is string
+>x : unknown
 
     if (!(typeof x === "string")) throw new Error();
 >!(typeof x === "string") : boolean
 >(typeof x === "string") : boolean
 >typeof x === "string" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : any
+>x : unknown
 >"string" : "string"
 >new Error() : Error
 >Error : ErrorConstructor
@@ -108,13 +108,13 @@ function f1(x) {
 
         assertIsString(x);
 >assertIsString(x) : void
->assertIsString : (x: any) => void
+>assertIsString : (x: unknown) => asserts x is string
 >x : any
 
         x.length;
->x.length : any
->x : any
->length : any
+>x.length : number
+>x : string
+>length : number
     }
     if (!!true) {
 >!!true : boolean

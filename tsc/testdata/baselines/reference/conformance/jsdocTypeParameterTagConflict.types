@@ -1,0 +1,33 @@
+//// [tests/cases/conformance/jsdoc/jsdocTypeParameterTagConflict.ts] ////
+
+=== /a.js ===
+/**
+ * @type {(a: 1) => true}
+ * @param {2} a
+ */
+export function conflictingParam(a) { return true }
+>conflictingParam : (a: 2) => true
+>a : 2
+>true : true
+
+/**
+ * @type {(b: 3) => true}
+ * @return {false}
+ */
+export function conflictingReturn(b) { return false }
+>conflictingReturn : (b: 3) => false
+>b : 3
+>false : false
+
+
+/**
+ * @type {(c: 4) => true}
+ * @param {5} d
+ * @return {false}
+ */
+export function conflictingBoth(d) { return false }
+>conflictingBoth : (d: 5) => false
+>d : 5
+>false : false
+
+

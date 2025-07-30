@@ -173,22 +173,22 @@ var y3 = id2(E);
  * @type {(...args: [string, string] | [number, string, string]) => void}
  */
 function foo(...args) {
->foo : (...args: any[]) => void
->args : any[]
+>foo : (...args: [string, string] | [number, string, string]) => void
+>args : [string, string] | [number, string, string]
 
   args;
->args : any[]
+>args : [string, string] | [number, string, string]
 }
 
 foo('abc', 'def');
 >foo('abc', 'def') : void
->foo : (...args: any[]) => void
+>foo : (...args: [string, string] | [number, string, string]) => void
 >'abc' : "abc"
 >'def' : "def"
 
 foo(42, 'abc', 'def');
 >foo(42, 'abc', 'def') : void
->foo : (...args: any[]) => void
+>foo : (...args: [string, string] | [number, string, string]) => void
 >42 : 42
 >'abc' : "abc"
 >'def' : "def"

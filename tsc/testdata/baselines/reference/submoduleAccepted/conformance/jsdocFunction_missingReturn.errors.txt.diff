@@ -5,9 +5,18 @@
 -
 -
 -==== /a.js (1 errors) ====
--    /** @type {function(): number} */
++/a.js(1,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++/a.js(1,12): error TS8030: A JSDoc '@type' tag on a function must have a signature with the correct number of arguments.
++
++
++==== /a.js (2 errors) ====
+     /** @type {function(): number} */
 -                           ~~~~~~
 -!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
--    function f() {}
--    
-+<no content>
++               ~~~~~~~~
++!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
++               ~~~~~~~~
++!!! error TS8030: A JSDoc '@type' tag on a function must have a signature with the correct number of arguments.
+     function f() {}
+     

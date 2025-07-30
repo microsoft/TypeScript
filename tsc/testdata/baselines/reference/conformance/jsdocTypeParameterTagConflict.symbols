@@ -1,0 +1,30 @@
+//// [tests/cases/conformance/jsdoc/jsdocTypeParameterTagConflict.ts] ////
+
+=== /a.js ===
+/**
+ * @type {(a: 1) => true}
+ * @param {2} a
+ */
+export function conflictingParam(a) { return true }
+>conflictingParam : Symbol(conflictingParam, Decl(a.js, 0, 0))
+>a : Symbol(a, Decl(a.js, 4, 33))
+
+/**
+ * @type {(b: 3) => true}
+ * @return {false}
+ */
+export function conflictingReturn(b) { return false }
+>conflictingReturn : Symbol(conflictingReturn, Decl(a.js, 4, 51))
+>b : Symbol(b, Decl(a.js, 10, 34))
+
+
+/**
+ * @type {(c: 4) => true}
+ * @param {5} d
+ * @return {false}
+ */
+export function conflictingBoth(d) { return false }
+>conflictingBoth : Symbol(conflictingBoth, Decl(a.js, 10, 53))
+>d : Symbol(d, Decl(a.js, 18, 32))
+
+

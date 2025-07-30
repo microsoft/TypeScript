@@ -9,23 +9,7 @@
  }
 
  export type M = (this: Foo) => void;
-@@= skipped -22, +22 lines =@@
- >f2 : Symbol(f2, Decl(a.js, 3, 1))
-
-     this.test();
-->this : Symbol(Foo, Decl(types.d.ts, 0, 0))
- }
-
- /** @type {(this: import('./types').Foo) => void} */
-@@= skipped -16, +15 lines =@@
- >f4 : Symbol(f4, Decl(a.js, 13, 1))
-
-     this.test();
-->this : Symbol(Foo, Decl(types.d.ts, 0, 0))
- }
-
- /** @type {function(this: import('./types').Foo): void} */
-@@= skipped -8, +7 lines =@@
+@@= skipped -46, +46 lines =@@
  >f5 : Symbol(f5, Decl(a.js, 21, 12))
 
      this.test();

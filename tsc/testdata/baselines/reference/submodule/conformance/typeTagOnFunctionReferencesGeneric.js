@@ -43,4 +43,4 @@ export type IFn = <T>(m: T) => T;
  * @typedef {<T>(m : T) => T} IFn
  */
 /**@type {IFn}*/
-export declare function inJs(l: any): any;
+export declare function inJs<T>(l: T): T;

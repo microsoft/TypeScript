@@ -8,16 +8,16 @@ const eslintReact = require('./eslint-plugin-react.js');
 >'./eslint-plugin-react.js' : "./eslint-plugin-react.js"
 
 const tseslint = require('./typescript-eslint.js');
->tseslint : { config: (...configs: any[]) => void; }
->require('./typescript-eslint.js') : { config: (...configs: any[]) => void; }
+>tseslint : { config: (...configs: import("./typescript-eslint.js").Config[]) => void; }
+>require('./typescript-eslint.js') : { config: (...configs: import("./typescript-eslint.js").Config[]) => void; }
 >require : any
 >'./typescript-eslint.js' : "./typescript-eslint.js"
 
 tseslint.config(eslintReact)
 >tseslint.config(eslintReact) : void
->tseslint.config : (...configs: any[]) => void
->tseslint : { config: (...configs: any[]) => void; }
->config : (...configs: any[]) => void
+>tseslint.config : (...configs: import("./typescript-eslint.js").Config[]) => void
+>tseslint : { config: (...configs: import("./typescript-eslint.js").Config[]) => void; }
+>config : (...configs: import("./typescript-eslint.js").Config[]) => void
 >eslintReact : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { "no-unsafe": boolean; }; }; }; }
 
 === eslint-plugin-react.js ===
@@ -78,14 +78,14 @@ module.exports = {
  * @type {(...configs: Config[]) => void}
  */
 function config(...configs) { }
->config : (...configs: any[]) => void
->configs : any[]
+>config : (...configs: Config[]) => void
+>configs : Config[]
 
 module.exports = { config };
->module.exports = { config } : { config: (...configs: any[]) => void; }
->module.exports : { config: (...configs: any[]) => void; }
->module : { "export=": { config: (...configs: any[]) => void; }; }
->exports : { config: (...configs: any[]) => void; }
->{ config } : { config: (...configs: any[]) => void; }
->config : (...configs: any[]) => void
+>module.exports = { config } : { config: (...configs: Config[]) => void; }
+>module.exports : { config: (...configs: Config[]) => void; }
+>module : { "export=": { config: (...configs: Config[]) => void; }; }
+>exports : { config: (...configs: Config[]) => void; }
+>{ config } : { config: (...configs: Config[]) => void; }
+>config : (...configs: Config[]) => void
 

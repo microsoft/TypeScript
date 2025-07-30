@@ -30,7 +30,7 @@ export function f2() {
     this.test();
 >this.test() : any
 >this.test : any
->this : any
+>this : import("./types").Foo
 >test : any
 }
 
@@ -53,7 +53,7 @@ export function f4() {
     this.test();
 >this.test() : any
 >this.test : any
->this : any
+>this : import("./types").Foo
 >test : any
 }
 

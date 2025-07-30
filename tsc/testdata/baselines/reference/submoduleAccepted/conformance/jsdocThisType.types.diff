@@ -26,7 +26,7 @@
  >this.test() : any
  >this.test : any
 ->this : import("/types").Foo
-+>this : any
++>this : import("./types").Foo
  >test : any
  }
 
@@ -48,7 +48,7 @@
  >this.test() : any
  >this.test : any
 ->this : import("/types").Foo
-+>this : any
++>this : import("./types").Foo
  >test : any
  }
 

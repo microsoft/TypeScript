@@ -4,14 +4,12 @@
 -a.js(11,1): error TS2554: Expected 1 arguments, but got 0.
 +a.js(1,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 +a.js(2,12): error TS7006: Parameter 'value' implicitly has an 'any' type.
-+a.js(5,12): error TS7006: Parameter 's' implicitly has an 'any' type.
-+a.js(8,12): error TS7006: Parameter 's' implicitly has an 'any' type.
  a.js(12,1): error TS2554: Expected 1 arguments, but got 0.
  a.js(13,1): error TS2554: Expected 1 arguments, but got 0.
 
 
 -==== a.js (3 errors) ====
-+==== a.js (6 errors) ====
++==== a.js (4 errors) ====
      /** @type {function(string): void} */
 +               ~~~~~~~~
 +!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
@@ -22,13 +20,7 @@
      };
      /** @type {(s: string) => void} */
      function g(s) {
-+               ~
-+!!! error TS7006: Parameter 's' implicitly has an 'any' type.
-     }
-     /** @type {{(s: string): void}} */
-     function h(s) {
-+               ~
-+!!! error TS7006: Parameter 's' implicitly has an 'any' type.
+@@= skipped -14, +20 lines =@@
      }
      
      f() // should error

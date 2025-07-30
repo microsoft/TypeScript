@@ -5,48 +5,20 @@
  /** @type {(a: number) => number} */
  function add1(a, b) { return a + b; }
 ->add1 : (a: number) => number
-->a : number
-+>add1 : (a: any, b: any) => any
-+>a : any
++>add1 : (a: number, b: any) => number
+ >a : number
  >b : any
  >a + b : any
-->a : number
-+>a : any
- >b : any
-
- /** @type {(a: number, b: number) => number} */
- function add2(a, b) { return a + b; }
-->add2 : (a: number, b: number) => number
-->a : number
-->b : number
-->a + b : number
-->a : number
-->b : number
-+>add2 : (a: any, b: any) => any
-+>a : any
-+>b : any
-+>a + b : any
-+>a : any
-+>b : any
-
+@@= skipped -19, +19 lines =@@
  // TODO: Should be an error since signature doesn't match.
  /** @type {(a: number, b: number, c: number) => number} */
  function add3(a, b) { return a + b; }
 ->add3 : (a: number, b: number, c: number) => number
-->a : number
-->b : number
-->a + b : number
-->a : number
-->b : number
-+>add3 : (a: any, b: any) => any
-+>a : any
-+>b : any
-+>a + b : any
-+>a : any
-+>b : any
-
- // Confirm initializers are compatible.
- // They can't have more parameters than the type/context.
++>add3 : (a: number, b: number) => number
+ >a : number
+ >b : number
+ >a + b : number
+@@= skipped -12, +12 lines =@@
 
  /** @type {() => void} */
  function funcWithMoreParameters(more) {} // error
@@ -55,14 +27,12 @@
  >more : any
 
  /** @type {() => void} */
-@@= skipped -47, +47 lines =@@
- >more : any
-
- ({
-->({  /** @type {() => void} */  methodWithMoreParameters(more) {}, // error}) : { methodWithMoreParameters(): void; }
-->{  /** @type {() => void} */  methodWithMoreParameters(more) {}, // error} : { methodWithMoreParameters(): void; }
-+>({  /** @type {() => void} */  methodWithMoreParameters(more) {}, // error}) : { methodWithMoreParameters(more: any): void; }
-+>{  /** @type {() => void} */  methodWithMoreParameters(more) {}, // error} : { methodWithMoreParameters(more: any): void; }
+@@= skipped -21, +21 lines =@@
 
    /** @type {() => void} */
    methodWithMoreParameters(more) {}, // error
+->methodWithMoreParameters : (more: any) => void
++>methodWithMoreParameters : () => void
+ >more : any
+
+ });

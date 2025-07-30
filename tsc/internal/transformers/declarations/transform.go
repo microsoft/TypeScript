@@ -753,6 +753,7 @@ func (tx *DeclarationTransformer) transformSetAccessorDeclaration(input *ast.Set
 		tx.updateAccessorParamList(input.AsNode(), tx.host.GetEffectiveDeclarationFlags(tx.EmitContext().ParseNode(input.AsNode()), ast.ModifierFlagsPrivate) != 0),
 		nil,
 		nil,
+		nil,
 	)
 }
 
@@ -767,6 +768,7 @@ func (tx *DeclarationTransformer) transformGetAccesorDeclaration(input *ast.GetA
 		nil, // accessors shouldn't have type params
 		tx.updateAccessorParamList(input.AsNode(), tx.host.GetEffectiveDeclarationFlags(tx.EmitContext().ParseNode(input.AsNode()), ast.ModifierFlagsPrivate) != 0),
 		tx.ensureType(input.AsNode(), false),
+		nil,
 		nil,
 	)
 }
@@ -818,6 +820,7 @@ func (tx *DeclarationTransformer) transformConstructorDeclaration(input *ast.Con
 		nil, // no type params
 		tx.updateParamList(input.AsNode(), input.Parameters),
 		nil, // no return type
+		nil,
 		nil,
 	)
 }
@@ -878,6 +881,7 @@ func (tx *DeclarationTransformer) transformMethodDeclaration(input *ast.MethodDe
 			tx.ensureTypeParams(input.AsNode(), input.TypeParameters),
 			tx.updateParamList(input.AsNode(), input.Parameters),
 			tx.ensureType(input.AsNode(), false),
+			nil,
 			nil,
 		)
 	}
@@ -1141,6 +1145,7 @@ func (tx *DeclarationTransformer) transformFunctionDeclaration(input *ast.Functi
 		tx.ensureTypeParams(input.AsNode(), input.TypeParameters),
 		tx.updateParamList(input.AsNode(), input.Parameters),
 		tx.ensureType(input.AsNode(), false),
+		nil, /*fullSignature*/
 		nil,
 	)
 	if updated == nil || !tx.resolver.IsExpandoFunctionDeclaration(input.AsNode()) || !shouldEmitFunctionProperties(input) {
@@ -1501,7 +1506,36 @@ func (tx *DeclarationTransformer) ensureTypeParams(node *ast.Node, params *ast.T
 	if tx.host.GetEffectiveDeclarationFlags(tx.EmitContext().ParseNode(node), ast.ModifierFlagsPrivate) != 0 {
 		return nil
 	}
-	return tx.Visitor().VisitNodes(params)
+	var typeParameters *ast.TypeParameterList
+	if typeParameters = tx.Visitor().VisitNodes(params); typeParameters != nil {
+		return typeParameters
+	}
+	oldErrorNameNode := tx.state.errorNameNode
+	tx.state.errorNameNode = node.Name()
+	var oldDiag GetSymbolAccessibilityDiagnostic
+	if !tx.suppressNewDiagnosticContexts {
+		oldDiag = tx.state.getSymbolAccessibilityDiagnostic
+		if canProduceDiagnostics(node) {
+			tx.state.getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(node)
+		}
+	}
+
+	if data := node.FunctionLikeData(); data != nil && data.FullSignature != nil {
+		if nodes := tx.resolver.CreateTypeParametersOfSignatureDeclaration(tx.EmitContext(), node, tx.enclosingDeclaration, declarationEmitNodeBuilderFlags, declarationEmitInternalNodeBuilderFlags, tx.tracker); nodes != nil {
+			typeParameters = &ast.TypeParameterList{
+				Loc:   node.Loc,
+				Nodes: nodes,
+			}
+		}
+	} else {
+		// Debug.assertNever(node); // !!!
+	}
+
+	tx.state.errorNameNode = oldErrorNameNode
+	if !tx.suppressNewDiagnosticContexts {
+		tx.state.getSymbolAccessibilityDiagnostic = oldDiag
+	}
+	return typeParameters
 }
 
 func (tx *DeclarationTransformer) updateParamList(node *ast.Node, params *ast.ParameterList) *ast.ParameterList {

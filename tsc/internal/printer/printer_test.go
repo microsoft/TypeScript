@@ -1141,6 +1141,7 @@ func TestParenthesizeArrowFunction1(t *testing.T) {
 					nil, /*typeParameters*/
 					factory.NewNodeList([]*ast.Node{}),
 					nil, /*returnType*/
+					nil, /*fullSignature*/
 					factory.NewToken(ast.KindEqualsGreaterThanToken),
 					// will be parenthesized on emit:
 					factory.NewObjectLiteralExpression(
@@ -1168,6 +1169,7 @@ func TestParenthesizeArrowFunction2(t *testing.T) {
 					nil, /*typeParameters*/
 					factory.NewNodeList([]*ast.Node{}),
 					nil, /*returnType*/
+					nil, /*fullSignature*/
 					factory.NewToken(ast.KindEqualsGreaterThanToken),
 					// will be parenthesized on emit:
 					factory.NewPropertyAccessExpression(
@@ -1347,6 +1349,7 @@ func makeSide(label string, kind ast.Kind, factory *ast.NodeFactory) *ast.Node {
 			nil, /*typeParameters*/
 			factory.NewNodeList([]*ast.Node{}),
 			nil, /*returnType*/
+			nil, /*fullSignature*/
 			factory.NewToken(ast.KindEqualsGreaterThanToken),
 			factory.NewBlock(factory.NewNodeList([]*ast.Node{}), false /*multiLine*/),
 		)
@@ -1485,6 +1488,7 @@ func TestParenthesizeConditional3(t *testing.T) {
 						nil, /*typeParameters*/
 						factory.NewNodeList([]*ast.Node{}),
 						nil, /*returnType*/
+						nil, /*fullSignature*/
 						factory.NewToken(ast.KindEqualsGreaterThanToken),
 						factory.NewBlock(
 							factory.NewNodeList([]*ast.Node{}),
@@ -1869,6 +1873,7 @@ func TestParenthesizeExpressionStatement2(t *testing.T) {
 						[]*ast.Node{},
 					),
 					nil, /*returnType*/
+					nil, /*fullSignature*/
 					factory.NewBlock(
 						factory.NewNodeList([]*ast.Node{}),
 						false, /*multiLine*/
@@ -1954,6 +1959,7 @@ func TestParenthesizeExpressionDefault2(t *testing.T) {
 						[]*ast.Node{},
 					),
 					nil, /*returnType*/
+					nil, /*fullSignature*/
 					factory.NewBlock(
 						factory.NewNodeList(
 							[]*ast.Node{},
@@ -2434,6 +2440,7 @@ func TestNameGeneration(t *testing.T) {
 			ec.Factory.NewIdentifier("f"),
 			nil,
 			ec.Factory.NewNodeList([]*ast.Node{}),
+			nil,
 			nil,
 			ec.Factory.NewBlock(ec.Factory.NewNodeList([]*ast.Node{
 				ec.Factory.NewVariableStatement(nil, ec.Factory.NewVariableDeclarationList(

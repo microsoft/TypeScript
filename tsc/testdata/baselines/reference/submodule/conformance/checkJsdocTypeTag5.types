@@ -4,9 +4,9 @@
 // all 6 should error on return statement/expression
 /** @type {(x: number) => string} */
 function h(x) { return x }
->h : (x: any) => any
->x : any
->x : any
+>h : (x: number) => string
+>x : number
+>x : number
 
 /** @type {(x: number) => string} */
 var f = x => x
@@ -24,9 +24,9 @@ var g = function (x) { return x }
 
 /** @type {{ (x: number): string }} */
 function i(x) { return x }
->i : (x: any) => any
->x : any
->x : any
+>i : (x: number) => string
+>x : number
+>x : number
 
 /** @type {{ (x: number): string }} */
 var j = x => x
@@ -46,8 +46,8 @@ var k = function (x) { return x }
 /** @typedef {(x: 'hi' | 'bye') => 0 | 1 | 2} Argle */
 /** @type {Argle} */
 function blargle(s) {
->blargle : (s: any) => number
->s : any
+>blargle : (s: "bye" | "hi") => 0 | 1 | 2
+>s : "bye" | "hi"
 
     return 0;
 >0 : 0
@@ -56,8 +56,8 @@ function blargle(s) {
 /** @type {0 | 1 | 2} - assignment should not error */
 var zeroonetwo = blargle('hi')
 >zeroonetwo : 0 | 1 | 2
->blargle('hi') : number
->blargle : (s: any) => number
+>blargle('hi') : 0 | 1 | 2
+>blargle : (s: "bye" | "hi") => 0 | 1 | 2
 >'hi' : "hi"
 
 /** @typedef {{(s: string): 0 | 1; (b: boolean): 2 | 3 }} Gioconda */

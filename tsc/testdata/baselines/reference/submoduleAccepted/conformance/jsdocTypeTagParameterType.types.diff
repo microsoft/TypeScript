@@ -18,16 +18,3 @@
  >1 : 1
 
  };
- /** @type {(s: string) => void} */
- function g(s) {
-->g : (s: string) => void
-->s : string
-+>g : (s: any) => void
-+>s : any
-
-     s = 1 // Should error
- >s = 1 : 1
-->s : string
-+>s : any
- >1 : 1
- }

@@ -10,13 +10,13 @@ const f = (value) => {
 };
 /** @type {(s: string) => void} */
 function g(s) {
->g : (s: any) => void
->s : any
+>g : (s: string) => void
+>s : string
 }
 /** @type {{(s: string): void}} */
 function h(s) {
->h : (s: any) => void
->s : any
+>h : (s: string) => void
+>s : string
 }
 
 f() // should error
@@ -25,9 +25,9 @@ f() // should error
 
 g() // should error
 >g() : void
->g : (s: any) => void
+>g : (s: string) => void
 
 h()
 >h() : void
->h : (s: any) => void
+>h : (s: string) => void
 

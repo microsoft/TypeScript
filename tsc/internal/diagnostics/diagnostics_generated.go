@@ -3466,7 +3466,7 @@ var JSDoc_may_only_appear_in_the_last_parameter_of_a_signature = &Message{code: 
 
 var JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name_It_would_match_arguments_if_it_had_an_array_type = &Message{code: 8029, category: CategoryError, key: "JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name_It_would_match_arguments_if_it_h_8029", text: "JSDoc '@param' tag has name '{0}', but there is no parameter with that name. It would match 'arguments' if it had an array type."}
 
-var The_type_of_a_function_declaration_must_match_the_function_s_signature = &Message{code: 8030, category: CategoryError, key: "The_type_of_a_function_declaration_must_match_the_function_s_signature_8030", text: "The type of a function declaration must match the function's signature."}
+var A_JSDoc_type_tag_on_a_function_must_have_a_signature_with_the_correct_number_of_arguments = &Message{code: 8030, category: CategoryError, key: "A_JSDoc_type_tag_on_a_function_must_have_a_signature_with_the_correct_number_of_arguments_8030", text: "A JSDoc '@type' tag on a function must have a signature with the correct number of arguments."}
 
 var You_cannot_rename_a_module_via_a_global_import = &Message{code: 8031, category: CategoryError, key: "You_cannot_rename_a_module_via_a_global_import_8031", text: "You cannot rename a module via a global import."}
 
@@ -3485,6 +3485,8 @@ var Type_satisfaction_expressions_can_only_be_used_in_TypeScript_files = &Messag
 var Decorators_may_not_appear_after_export_or_export_default_if_they_also_appear_before_export = &Message{code: 8038, category: CategoryError, key: "Decorators_may_not_appear_after_export_or_export_default_if_they_also_appear_before_export_8038", text: "Decorators may not appear after 'export' or 'export default' if they also appear before 'export'."}
 
 var A_JSDoc_template_tag_may_not_follow_a_typedef_callback_or_overload_tag = &Message{code: 8039, category: CategoryError, key: "A_JSDoc_template_tag_may_not_follow_a_typedef_callback_or_overload_tag_8039", text: "A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag"}
+
+var A_JSDoc_type_tag_may_not_occur_with_a_param_or_returns_tag = &Message{code: 8040, category: CategoryError, key: "A_JSDoc_type_tag_may_not_occur_with_a_param_or_returns_tag_8040", text: "A JSDoc '@type' tag may not occur with a '@param' or '@returns' tag."}
 
 var Declaration_emit_for_this_file_requires_using_private_name_0_An_explicit_type_annotation_may_unblock_declaration_emit = &Message{code: 9005, category: CategoryError, key: "Declaration_emit_for_this_file_requires_using_private_name_0_An_explicit_type_annotation_may_unblock_9005", text: "Declaration emit for this file requires using private name '{0}'. An explicit type annotation may unblock declaration emit."}
 
