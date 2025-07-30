@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/parameterPropertyWithDefaultValue.ts] ////
+
+=== parameterPropertyWithDefaultValue.ts ===
+export class SomeClass {
+>SomeClass : SomeClass
+
+  constructor(readonly timestamp = new Date()) {}
+>timestamp : Date
+>new Date() : Date
+>Date : DateConstructor
+}

@@ -60,12 +60,16 @@ type MapOrUndefined = Map | undefined | "dummy";
 export declare class Foo {
     reuseTypeNode?: Map | undefined;
     reuseTypeNode2?: Exclude<MapOrUndefined, "dummy">;
-    resolveType?: Map;
+    resolveType?: {
+        [x: string]: any;
+    } | undefined;
     constructor(
     // Type node is accurate, preserve
     reuseTypeNode?: Map | undefined, reuseTypeNode2?: Exclude<MapOrUndefined, "dummy">, 
     // Resolve type node, requires adding | undefined
-    resolveType?: Map);
+    resolveType?: {
+        [x: string]: any;
+    } | undefined);
 }
 export declare function foo1(
 // Type node is accurate, preserve

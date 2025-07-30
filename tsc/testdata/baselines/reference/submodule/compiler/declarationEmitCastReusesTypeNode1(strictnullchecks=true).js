@@ -49,7 +49,7 @@ export declare function fnWithRequiredDefaultParam(p: {
 export declare class C {
     ctorField: {
         name: string;
-    } | undefined;
+    };
     field: {
         name: string;
     };
@@ -67,7 +67,7 @@ export declare class C {
     }, req: number): void;
     constructor(ctorField?: {
         name: string;
-    } | undefined);
+    });
     get x(): {
         name: string;
     };

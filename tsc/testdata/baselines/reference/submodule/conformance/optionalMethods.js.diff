@@ -31,19 +31,9 @@
      f() { return 1; }
  }
 
-@@= skipped -19, +17 lines =@@
- }
- declare function test1(x: Foo): void;
- declare class Bar {
--    d?: number | undefined;
--    e: number;
-+    d?: number;
-+    e: number | undefined;
-     a: number;
-     b?: number;
+@@= skipped -26, +24 lines =@@
      c?: number | undefined;
--    constructor(d?: number | undefined, e?: number);
-+    constructor(d?: number, e?: number | undefined);
+     constructor(d?: number | undefined, e?: number);
      f(): number;
 -    g?(): number;
 +    g?(): number; // Body of optional method can be omitted

@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/parameterPropertyWithDefaultValueExtended.ts] ////
+
+=== parameterPropertyWithDefaultValueExtended.ts ===
+// Test with default value - should not have undefined
+export class WithDefault {
+>WithDefault : Symbol(WithDefault, Decl(parameterPropertyWithDefaultValueExtended.ts, 0, 0))
+
+  constructor(readonly timestamp = new Date()) {}
+>timestamp : Symbol(timestamp, Decl(parameterPropertyWithDefaultValueExtended.ts, 2, 14))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+}
+
+// Test without default value but optional - should have undefined
+export class WithoutDefault {
+>WithoutDefault : Symbol(WithoutDefault, Decl(parameterPropertyWithDefaultValueExtended.ts, 3, 1))
+
+  constructor(readonly timestamp?: Date) {}
+>timestamp : Symbol(timestamp, Decl(parameterPropertyWithDefaultValueExtended.ts, 7, 14))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+}
+
+// Test with explicit undefined type - should keep it
+export class ExplicitUndefined {
+>ExplicitUndefined : Symbol(ExplicitUndefined, Decl(parameterPropertyWithDefaultValueExtended.ts, 8, 1))
+
+  constructor(readonly timestamp: Date | undefined = new Date()) {}
+>timestamp : Symbol(timestamp, Decl(parameterPropertyWithDefaultValueExtended.ts, 12, 14))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+}
+
+// Test private parameter property with default value
+export class PrivateWithDefault {
+>PrivateWithDefault : Symbol(PrivateWithDefault, Decl(parameterPropertyWithDefaultValueExtended.ts, 13, 1))
+
+  constructor(private timestamp = new Date()) {}
+>timestamp : Symbol(timestamp, Decl(parameterPropertyWithDefaultValueExtended.ts, 17, 14))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+}
+
+// Test public parameter property with default value
+export class PublicWithDefault {
+>PublicWithDefault : Symbol(PublicWithDefault, Decl(parameterPropertyWithDefaultValueExtended.ts, 18, 1))
+
+  constructor(public timestamp = new Date()) {}
+>timestamp : Symbol(timestamp, Decl(parameterPropertyWithDefaultValueExtended.ts, 22, 14))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+}

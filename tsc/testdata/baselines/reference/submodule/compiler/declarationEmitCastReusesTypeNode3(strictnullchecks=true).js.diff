@@ -32,7 +32,7 @@
 -    set x(v: P);
 +    ctorField: {
 +        name: string;
-+    } | undefined;
++    };
 +    field: {
 +        name: string;
 +    };
@@ -50,7 +50,7 @@
 +    }, req: number): void;
 +    constructor(ctorField?: {
 +        name: string;
-+    } | undefined);
++    });
 +    get x(): {
 +        name: string;
 +    };

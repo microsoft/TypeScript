@@ -41,7 +41,7 @@
 -    method(p?: {} & {
 +    ctorField: {
 +        name: string;
-+    } | undefined;
++    };
 +    field: {
 +        name: string;
 +    };
@@ -55,18 +55,15 @@
          name: string;
      }): void;
 -    methodWithRequiredDefault(p: ({} & {
--        name: string;
++    methodWithRequiredDefault(p: {
+         name: string;
 -    }) | undefined, req: number): void;
 -    constructor(ctorField?: {} & {
--        name: string;
--    });
--    get x(): {} & {
-+    methodWithRequiredDefault(p: {
-+        name: string;
 +    }, req: number): void;
 +    constructor(ctorField?: {
-+        name: string;
-+    } | undefined);
+         name: string;
+     });
+-    get x(): {} & {
 +    get x(): {
          name: string;
      };

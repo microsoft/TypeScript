@@ -546,7 +546,7 @@ func (r *emitResolver) declaredParameterTypeContainsUndefined(parameter *ast.Nod
 func (r *emitResolver) isOptionalUninitializedParameterProperty(parameter *ast.Node) bool {
 	return r.checker.strictNullChecks &&
 		r.isOptionalParameter(parameter) &&
-		( /*isJSDocParameterTag(parameter) ||*/ parameter.Initializer() != nil) && // !!! TODO: JSDoc support
+		( /*isJSDocParameterTag(parameter) ||*/ parameter.Initializer() == nil) && // !!! TODO: JSDoc support
 		ast.HasSyntacticModifier(parameter, ast.ModifierFlagsParameterPropertyModifier)
 }
 
