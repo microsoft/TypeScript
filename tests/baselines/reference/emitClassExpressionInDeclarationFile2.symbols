@@ -75,3 +75,16 @@ test.tags();
 >test : Symbol(test, Decl(emitClassExpressionInDeclarationFile2.ts, 24, 5))
 >tags : Symbol((Anonymous class).tags, Decl(emitClassExpressionInDeclarationFile2.ts, 17, 34))
 
+export var noPrivates2 = class {
+>noPrivates2 : Symbol(noPrivates2, Decl(emitClassExpressionInDeclarationFile2.ts, 29, 10))
+
+    static getTags() { }
+>getTags : Symbol(noPrivates2.getTags, Decl(emitClassExpressionInDeclarationFile2.ts, 29, 32))
+
+    tags() { }
+>tags : Symbol(noPrivates2.tags, Decl(emitClassExpressionInDeclarationFile2.ts, 30, 24))
+
+    #p = -1
+>#p : Symbol(noPrivates2.#p, Decl(emitClassExpressionInDeclarationFile2.ts, 31, 14))
+}
+

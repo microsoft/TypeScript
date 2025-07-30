@@ -30,71 +30,53 @@ const test = new Test();
 Test.getTags()
 test.tags();
 
+export var noPrivates2 = class {
+    static getTags() { }
+    tags() { }
+    #p = -1
+}
+
 
 //// [emitClassExpressionInDeclarationFile2.js]
-"use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
     if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
     return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
 };
-var _a;
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Test = exports.FooItem = exports.noPrivates = void 0;
-exports.WithTags = WithTags;
-exports.noPrivates = (_a = /** @class */ (function () {
-        function class_1() {
+var _a, _noPrivates2_p, _b;
+export var noPrivates = (_a = class {
+        constructor() {
             this.p = 12;
         }
-        class_1.getTags = function () { };
-        class_1.prototype.tags = function () { };
-        return class_1;
-    }()),
+        static getTags() { }
+        tags() { }
+    },
     __setFunctionName(_a, "noPrivates"),
     _a.ps = -1,
     _a);
 // altered repro from #15066 to add private property
-var FooItem = /** @class */ (function () {
-    function FooItem() {
+export class FooItem {
+    constructor() {
         this.property = "capitalism";
     }
-    FooItem.prototype.foo = function () { };
-    return FooItem;
-}());
-exports.FooItem = FooItem;
-function WithTags(Base) {
-    return /** @class */ (function (_super) {
-        __extends(class_2, _super);
-        function class_2() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        class_2.getTags = function () { };
-        class_2.prototype.tags = function () { };
-        return class_2;
-    }(Base));
+    foo() { }
 }
-var Test = /** @class */ (function (_super) {
-    __extends(Test, _super);
-    function Test() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return Test;
-}(WithTags(FooItem)));
-exports.Test = Test;
-var test = new Test();
+export function WithTags(Base) {
+    return class extends Base {
+        static getTags() { }
+        tags() { }
+    };
+}
+export class Test extends WithTags(FooItem) {
+}
+const test = new Test();
 Test.getTags();
 test.tags();
+export var noPrivates2 = (_b = class {
+        constructor() {
+            _noPrivates2_p.set(this, -1);
+        }
+        static getTags() { }
+        tags() { }
+    },
+    _noPrivates2_p = new WeakMap(),
+    _b);
