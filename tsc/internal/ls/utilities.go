@@ -135,7 +135,7 @@ func isExportSpecifierAlias(referenceLocation *ast.Identifier, exportSpecifier *
 }
 
 func isInComment(file *ast.SourceFile, position int, tokenAtPosition *ast.Node) *ast.CommentRange {
-	return getRangeOfEnclosingComment(file, position, nil /*precedingToken*/, tokenAtPosition)
+	return getRangeOfEnclosingComment(file, position, astnav.FindPrecedingToken(file, position), tokenAtPosition)
 }
 
 func hasChildOfKind(containingNode *ast.Node, kind ast.Kind, sourceFile *ast.SourceFile) bool {

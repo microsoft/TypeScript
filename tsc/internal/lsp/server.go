@@ -21,6 +21,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/project"
 	"github.com/microsoft/typescript-go/internal/vfs"
 	"golang.org/x/sync/errgroup"
+	"golang.org/x/text/language"
 )
 
 type ServerOptions struct {
@@ -138,6 +139,7 @@ type Server struct {
 
 	initializeParams *lsproto.InitializeParams
 	positionEncoding lsproto.PositionEncodingKind
+	locale           language.Tag
 
 	watchEnabled bool
 	watcherID    atomic.Uint32
@@ -343,7 +345,7 @@ func (s *Server) dispatchLoop(ctx context.Context) error {
 		case <-ctx.Done():
 			return ctx.Err()
 		case req := <-s.requestQueue:
-			requestCtx := ctx
+			requestCtx := core.WithLocale(ctx, s.locale)
 			if req.ID != nil {
 				var cancel context.CancelFunc
 				requestCtx, cancel = context.WithCancel(core.WithRequestID(requestCtx, req.ID.String()))
@@ -554,6 +556,14 @@ func (s *Server) handleInitialize(ctx context.Context, params *lsproto.Initializ
 		if slices.Contains(*genCapabilities.PositionEncodings, lsproto.PositionEncodingKindUTF8) {
 			s.positionEncoding = lsproto.PositionEncodingKindUTF8
 		}
+	}
+
+	if s.initializeParams.Locale != nil {
+		locale, err := language.Parse(*s.initializeParams.Locale)
+		if err != nil {
+			return nil, err
+		}
+		s.locale = locale
 	}
 
 	response := &lsproto.InitializeResult{

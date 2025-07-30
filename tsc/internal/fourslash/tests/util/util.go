@@ -1,7 +1,6 @@
 package fourslash_test
 
 import (
-	"cmp"
 	"fmt"
 	"slices"
 
@@ -9,6 +8,8 @@ import (
 	"github.com/microsoft/typescript-go/internal/fourslash"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
+	"golang.org/x/text/collate"
+	"golang.org/x/text/language"
 )
 
 func PtrTo[T any](v T) *T {
@@ -13264,7 +13265,10 @@ var CompletionGlobals = sortCompletionItems(append(
 	CompletionUndefinedVarItem,
 ))
 
+var defaultLanguage = language.AmericanEnglish
+
 func sortCompletionItems(items []fourslash.CompletionsExpectedItem) []fourslash.CompletionsExpectedItem {
+	compareStringsUI := collate.New(defaultLanguage).CompareString
 	items = slices.Clone(items)
 	slices.SortStableFunc(items, func(a fourslash.CompletionsExpectedItem, b fourslash.CompletionsExpectedItem) int {
 		defaultSortText := string(ls.SortTextLocationPriority)
@@ -13283,7 +13287,7 @@ func sortCompletionItems(items []fourslash.CompletionsExpectedItem) []fourslash.
 		}
 		aSortText = core.OrElse(aSortText, defaultSortText)
 		bSortText = core.OrElse(bSortText, defaultSortText)
-		bySortText := cmp.Compare(aSortText, bSortText)
+		bySortText := compareStringsUI(aSortText, bSortText)
 		if bySortText != 0 {
 			return bySortText
 		}
@@ -13304,7 +13308,7 @@ func sortCompletionItems(items []fourslash.CompletionsExpectedItem) []fourslash.
 		default:
 			panic(fmt.Sprintf("unexpected completion item type: %T", b))
 		}
-		return cmp.Compare(aLabel, bLabel)
+		return compareStringsUI(aLabel, bLabel)
 	})
 	return items
 }
@@ -13409,7 +13413,7 @@ var CompletionFunctionMembers = []fourslash.CompletionsExpectedItem{
 	},
 	&lsproto.CompletionItem{
 		Label: "arguments",
-		Kind:  PtrTo(lsproto.CompletionItemKindProperty),
+		Kind:  PtrTo(lsproto.CompletionItemKindField),
 	},
 	&lsproto.CompletionItem{
 		Label: "bind",
@@ -13421,11 +13425,11 @@ var CompletionFunctionMembers = []fourslash.CompletionsExpectedItem{
 	},
 	&lsproto.CompletionItem{
 		Label: "caller",
-		Kind:  PtrTo(lsproto.CompletionItemKindProperty),
+		Kind:  PtrTo(lsproto.CompletionItemKindField),
 	},
 	&lsproto.CompletionItem{
 		Label: "length",
-		Kind:  PtrTo(lsproto.CompletionItemKindProperty),
+		Kind:  PtrTo(lsproto.CompletionItemKindField),
 	},
 	&lsproto.CompletionItem{
 		Label: "toString",
@@ -13446,7 +13450,7 @@ var CompletionFunctionMembersWithPrototype = sortCompletionItems(append(
 	CompletionFunctionMembers,
 	&lsproto.CompletionItem{
 		Label: "prototype",
-		Kind:  PtrTo(lsproto.CompletionItemKindProperty),
+		Kind:  PtrTo(lsproto.CompletionItemKindField),
 	},
 ))
 

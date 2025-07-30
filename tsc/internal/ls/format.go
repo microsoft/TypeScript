@@ -153,7 +153,7 @@ func getRangeOfEnclosingComment(
 	// or leading on the latter (and none are in both lists).
 	var trailingRangesOfPreviousToken iter.Seq[ast.CommentRange]
 	if precedingToken != nil {
-		trailingRangesOfPreviousToken = scanner.GetTrailingCommentRanges(&ast.NodeFactory{}, file.Text(), position)
+		trailingRangesOfPreviousToken = scanner.GetTrailingCommentRanges(&ast.NodeFactory{}, file.Text(), precedingToken.End())
 	}
 	leadingRangesOfNextToken := getLeadingCommentRangesOfNode(tokenAtPosition, file)
 	commentRanges := core.ConcatenateSeq(trailingRangesOfPreviousToken, leadingRangesOfNextToken)

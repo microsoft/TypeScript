@@ -228,7 +228,9 @@ func (f *FourslashTest) nextID() int32 {
 }
 
 func (f *FourslashTest) initialize(t *testing.T, capabilities *lsproto.ClientCapabilities) {
-	params := &lsproto.InitializeParams{}
+	params := &lsproto.InitializeParams{
+		Locale: ptrTo("en-US"),
+	}
 	params.Capabilities = getCapabilitiesWithDefaults(capabilities)
 	// !!! check for errors?
 	sendRequest(t, f, lsproto.InitializeInfo, params)

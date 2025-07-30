@@ -12,7 +12,7 @@ import (
 
 func TestCompletionsInterfaceElement(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `const foo = 0;
 interface I {

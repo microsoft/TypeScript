@@ -53,7 +53,7 @@ func getTokenAtPosition(
 			prevSubtree = node
 		}
 
-		if node.End() <= position {
+		if node.End() < position || node.Kind != ast.KindEndOfFile && node.End() == position {
 			return -1
 		}
 		if getPosition(node, sourceFile, allowPositionInLeadingTrivia) > position {

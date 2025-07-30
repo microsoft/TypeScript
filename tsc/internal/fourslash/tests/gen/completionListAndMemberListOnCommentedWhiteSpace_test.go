@@ -9,7 +9,7 @@ import (
 
 func TestCompletionListAndMemberListOnCommentedWhiteSpace(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `module M {
   export class C { public pub = 0; private priv = 1; }
