@@ -6060,20 +6060,29 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_module_is_set_to_preserve_1293" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";ECMAScript_imports_and_exports_cannot_be_written_in_a_CommonJS_file_under_verbatimModuleSyntax_1286" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.]]></Val>
+          <Val><![CDATA[ECMAScript imports and exports cannot be written in a CommonJS file under 'verbatimModuleSyntax'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Sintassi ESM non consentita in un modulo CommonJS quando 'module' è impostato su 'preserve'.]]></Val>
+            <Val><![CDATA[Le importazioni e le esportazioni di ECMAScript non possono essere scritte in un file CommonJS in "verbatimModuleSyntax".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled_1286" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";ECMAScript_imports_and_exports_cannot_be_written_in_a_CommonJS_file_under_verbatimModuleSyntax_Adjus_1295" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.]]></Val>
+          <Val><![CDATA[ECMAScript imports and exports cannot be written in a CommonJS file under 'verbatimModuleSyntax'. Adjust the 'type' field in the nearest 'package.json' to make this file an ECMAScript module, or adjust your 'verbatimModuleSyntax', 'module', and 'moduleResolution' settings in TypeScript.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Sintassi ESM non consentita in un modulo CommonJS quando 'verbatimModuleSyntax' è abilitato.]]></Val>
+            <Val><![CDATA[Le importazioni e le esportazioni di ECMAScript non possono essere scritte in un file CommonJS in "verbatimModuleSyntax". Modificare il campo "type" nel "package.json" più vicino per rendere questo file un modulo ECMAScript oppure modificare le impostazioni "verbatimModuleSyntax", "module" e "moduleResolution" in TypeScript.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ECMAScript_module_syntax_is_not_allowed_in_a_CommonJS_module_when_module_is_set_to_preserve_1293" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[ECMAScript module syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La sintassi del modulo ECMAScript non è consentita in un modulo CommonJS quando "module" è impostato su "preserve".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
