@@ -2,8 +2,8 @@
 
 === promiseDefinitionTest.ts ===
 class Promise<T> {}
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promiseDefinitionTest.ts, 0, 0))
->T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(promiseDefinitionTest.ts, 0, 14))
+>Promise : Symbol(Promise, Decl(promiseDefinitionTest.ts, 0, 0))
+>T : Symbol(T, Decl(promiseDefinitionTest.ts, 0, 14))
 
 async function foo() {}
 >foo : Symbol(foo, Decl(promiseDefinitionTest.ts, 0, 19))

@@ -8,7 +8,7 @@ declare function isFunction(x): x is Function;
 >isFunction : Symbol(isFunction, Decl(narrowFromAnyWithTypePredicate.ts, 0, 19))
 >x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 1, 28))
 >x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 1, 28))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 declare function isObject(x): x is Object;
 >isObject : Symbol(isObject, Decl(narrowFromAnyWithTypePredicate.ts, 1, 46))
@@ -31,7 +31,7 @@ declare function isDate(x): x is Date;
 >isDate : Symbol(isDate, Decl(narrowFromAnyWithTypePredicate.ts, 4, 40))
 >x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 5, 24))
 >x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 5, 24))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 
 if (isFunction(x)) { // 'any' is not narrowed when target type is 'Function'

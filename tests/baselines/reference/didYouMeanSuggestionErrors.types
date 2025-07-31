@@ -117,62 +117,62 @@ suite("another suite", () => {
 >        : ^^^
 
         const a = new Map();
->a : any
->  : ^^^
->new Map() : any
->          : ^^^
->Map : any
->    : ^^^
+>a : Map<any, any>
+>  : ^^^^^^^^^^^^^
+>new Map() : Map<any, any>
+>          : ^^^^^^^^^^^^^
+>Map : MapConstructor
+>    : ^^^^^^^^^^^^^^
 
         const b = new Set();
->b : any
->  : ^^^
->new Set() : any
->          : ^^^
->Set : any
->    : ^^^
+>b : Set<unknown>
+>  : ^^^^^^^^^^^^
+>new Set() : Set<unknown>
+>          : ^^^^^^^^^^^^
+>Set : SetConstructor
+>    : ^^^^^^^^^^^^^^
 
         const c = new WeakMap();
->c : any
->  : ^^^
->new WeakMap() : any
->              : ^^^
->WeakMap : any
->        : ^^^
+>c : WeakMap<object, any>
+>  : ^^^^^^^^^^^^^^^^^^^^
+>new WeakMap() : WeakMap<object, any>
+>              : ^^^^^^^^^^^^^^^^^^^^
+>WeakMap : WeakMapConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 
         const d = new WeakSet();
->d : any
->  : ^^^
->new WeakSet() : any
->              : ^^^
->WeakSet : any
->        : ^^^
+>d : WeakSet<object>
+>  : ^^^^^^^^^^^^^^^
+>new WeakSet() : WeakSet<object>
+>              : ^^^^^^^^^^^^^^^
+>WeakSet : WeakSetConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 
         const e = Symbol();
->e : any
->  : ^^^
->Symbol() : any
->         : ^^^
->Symbol : any
->       : ^^^
+>e : unique symbol
+>  : ^^^^^^^^^^^^^
+>Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
         const f = Promise.resolve(0);
->f : any
->  : ^^^
->Promise.resolve(0) : any
->                   : ^^^
->Promise.resolve : any
->                : ^^^
->Promise : any
->        : ^^^
->resolve : any
->        : ^^^
+>f : Promise<number>
+>  : ^^^^^^^^^^^^^^^
+>Promise.resolve(0) : Promise<number>
+>                   : ^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >0 : 0
 >  : ^
 
         const i: Iterator<any> = null as any;
->i : Iterator<any>
->  : ^^^^^^^^^^^^^
+>i : Iterator<any, any, any>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 >null as any : any
 >            : ^^^
 
