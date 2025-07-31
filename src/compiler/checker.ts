@@ -710,6 +710,7 @@ import {
     isPrivateIdentifier,
     isPrivateIdentifierClassElementDeclaration,
     isPrivateIdentifierPropertyAccessExpression,
+    isPrivateIdentifierSymbol,
     isPropertyAccessEntityNameExpression,
     isPropertyAccessExpression,
     isPropertyAccessOrQualifiedName,
@@ -7610,9 +7611,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (getDeclarationModifierFlagsFromSymbol(propertySymbol) & (ModifierFlags.Private | ModifierFlags.Protected) && context.tracker.reportPrivateInBaseOfClassExpression) {
                             context.tracker.reportPrivateInBaseOfClassExpression(unescapeLeadingUnderscores(propertySymbol.escapedName));
                         }
-                        // Skip ECMAScript private identifier fields (e.g., #field) in class expression type literals
-                        if (propertySymbol.valueDeclaration && isNamedDeclaration(propertySymbol.valueDeclaration) && isPrivateIdentifier(propertySymbol.valueDeclaration.name)) {
-                            continue;
+                        if (isPrivateIdentifierSymbol(propertySymbol) && context.tracker.reportPrivateInBaseOfClassExpression) {
+                            context.tracker.reportPrivateInBaseOfClassExpression(idText((propertySymbol.valueDeclaration! as NamedDeclaration).name! as PrivateIdentifier));
                         }
                     }
                     if (checkTruncationLength(context) && (i + 2 < properties.length - 1)) {
