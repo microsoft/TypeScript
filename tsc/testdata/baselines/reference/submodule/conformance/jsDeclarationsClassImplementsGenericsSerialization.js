@@ -44,6 +44,10 @@ class Encoder {
     }
 }
 exports.Encoder = Encoder;
+/**
+ * @template T
+ * @typedef {import('./interface').Encoder<T>} IEncoder
+ */ 
 
 
 //// [interface.d.ts]
@@ -62,3 +66,7 @@ export declare class Encoder<T> implements IEncoder<T> {
     encode(value: T): Uint8Array<ArrayBuffer>;
 }
 export type IEncoder<T> = import('./interface').Encoder<T>;
+/**
+ * @template T
+ * @typedef {import('./interface').Encoder<T>} IEncoder
+ */ 

@@ -23,6 +23,9 @@ export declare const kSymbol: unique symbol;
 export type WithSymbol = {
     [kSymbol]: true;
 };
+/**
+ * @typedef {{[kSymbol]: true}} WithSymbol
+ */ 
 //// [b.d.ts]
 /**
  * @returns {import('./a').WithSymbol}

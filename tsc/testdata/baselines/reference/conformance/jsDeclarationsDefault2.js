@@ -17,6 +17,9 @@ const _default = class {
 };
 exports._default = _default;
 exports.default = 12;
+/**
+ * @typedef {string | number} default
+ */
 
 
 //// [index1.d.ts]
@@ -26,6 +29,9 @@ export declare const _default: {
 declare const _default_1: number;
 export default _default_1;
 export type default = string | number;
+/**
+ * @typedef {string | number} default
+ */
 
 
 //// [DtsFileErrors]
@@ -58,4 +64,7 @@ out/index1.d.ts(6,32): error TS2693: 'number' only refers to a type, but is bein
 !!! error TS2693: 'string' only refers to a type, but is being used as a value here.
                                    ~~~~~~
 !!! error TS2693: 'number' only refers to a type, but is being used as a value here.
+    /**
+     * @typedef {string | number} default
+     */
     

@@ -4,12 +4,14 @@
 
 
  //// [types.d.ts]
--/**
-- * a Record containing
-- *   keyword pairs with descriptions of parameters under governance.
-- */
 +export {};
- export type ParamStateRecord = Record<Keyword, ParamValueTyped>;
++export type ParamStateRecord = Record<Keyword, ParamValueTyped>;
+ /**
+- * a Record containing
++ * @typedef {Record<Keyword, ParamValueTyped>} ParamStateRecord a Record containing
+  *   keyword pairs with descriptions of parameters under governance.
+  */
+-export type ParamStateRecord = Record<Keyword, ParamValueTyped>;
  //// [index.d.ts]
 -export const blah: {
 +export declare const blah: {

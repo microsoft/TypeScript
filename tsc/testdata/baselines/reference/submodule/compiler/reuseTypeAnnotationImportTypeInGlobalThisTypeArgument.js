@@ -35,6 +35,10 @@ export const blah = handleParamGovernance({});
 //// [types.d.ts]
 export {};
 export type ParamStateRecord = Record<Keyword, ParamValueTyped>;
+/**
+ * @typedef {Record<Keyword, ParamValueTyped>} ParamStateRecord a Record containing
+ *   keyword pairs with descriptions of parameters under governance.
+ */
 //// [index.d.ts]
 export declare const blah: {
     publicMixin: {

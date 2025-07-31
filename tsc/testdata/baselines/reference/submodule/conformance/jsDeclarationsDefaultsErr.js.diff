@@ -18,29 +18,9 @@
 +    static y = "ok";
 +}
  exports.default = Cls;
--/**
-- * @typedef {string | number} default
-- */
- //// [index2.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
-@@= skipped -21, +13 lines =@@
- }
- exports.default = C;
- ;
--/**
-- * @typedef {string | number} default
-- */
- //// [index3.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
-@@= skipped -10, +7 lines =@@
- // merge type alias and variable (behavior is borked, see #32366)
- const x = 12;
- exports.default = x;
--/**
-- * @typedef {string | number} default
-- */
+ /**
+  * @typedef {string | number} default
+@@= skipped -37, +32 lines =@@
 
 
  //// [index1.d.ts]
@@ -54,11 +34,17 @@
  }
 +export default Cls;
 +export type default = string | number;
++/**
++ * @typedef {string | number} default
++ */
  //// [index2.d.ts]
 +// merge type alias and class (error message improvement needed, see #32368)
  export default class C {
  }
 +export type default = string | number;
++/**
++ * @typedef {string | number} default
++ */
  //// [index3.d.ts]
 -export type _default = string | number;
 +// merge type alias and variable (behavior is borked, see #32366)
@@ -66,3 +52,6 @@
  export { x as default };
 -declare const x: 12;
 +export type default = string | number;
++/**
++ * @typedef {string | number} default
++ */

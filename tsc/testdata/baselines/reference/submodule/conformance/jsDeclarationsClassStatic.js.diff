@@ -17,12 +17,9 @@
  module.exports = Handler;
 +export var Strings = Strings;
  module.exports.Strings = Strings;
--/**
-- * @typedef {Object} HandlerOptions
-- * @property {String} name
-- * Should be able to export a type alias at the same time.
-- */
-
+ /**
+  * @typedef {Object} HandlerOptions
+@@= skipped -11, +13 lines =@@
 
  //// [source.d.ts]
  export = Handler;
@@ -47,3 +44,8 @@
 +export type HandlerOptions = {
 +    name: String;
  };
++/**
++ * @typedef {Object} HandlerOptions
++ * @property {String} name
++ * Should be able to export a type alias at the same time.
++ */

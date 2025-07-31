@@ -10,15 +10,7 @@
  module.exports = MyClass;
  function MyClass() { }
  MyClass.staticMethod = function () { };
- MyClass.prototype.method = function () { };
- MyClass.staticProperty = 123;
--/**
-- * Callback to be invoked when test execution is complete.
-- *
-- * @callback DoneCB
-- * @param {number} failures - Number of failures that occurred.
-- */ 
-
+@@= skipped -15, +18 lines =@@
 
  //// [source.d.ts]
  export = MyClass;
@@ -31,8 +23,12 @@
 -}
 -declare function staticMethod(): void;
 -declare var staticProperty: number;
--/**
-- * Callback to be invoked when test execution is complete.
++export type DoneCB = (failures: number) ;
+ /**
+  * Callback to be invoked when test execution is complete.
 - */
 -type DoneCB = (failures: number) => any;
-+export type DoneCB = (failures: number) ;
++ *
++ * @callback DoneCB
++ * @param {number} failures - Number of failures that occurred.
++ */ 

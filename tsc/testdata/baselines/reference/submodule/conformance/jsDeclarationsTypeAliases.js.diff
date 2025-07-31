@@ -1,38 +1,15 @@
 --- old.jsDeclarationsTypeAliases.js
 +++ new.jsDeclarationsTypeAliases.js
-@@= skipped -53, +53 lines =@@
- //// [index.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--/**
-- * @typedef {string | number | symbol} PropName
-- */
--/**
-- * Callback
-- *
-- * @callback NumberToStringCb
-- * @param {number} a
-- * @returns {string}
-- */
--/**
-- * @template T
-- * @typedef {T & {name: string}} MixinName
-- */
--/**
-- * Identity function
-- *
-- * @template T
-- * @callback Identity
-- * @param {T} x
-- * @returns {T}
-- */
+@@= skipped -76, +76 lines =@@
+  * @returns {T}
+  */
  //// [mixed.js]
 +"use strict";
 +Object.defineProperty(exports, "__esModule", { value: true });
  /**
   * @typedef {{x: string} | number | LocalThing | ExportedThing} SomeType
   */
-@@= skipped -34, +14 lines =@@
+@@= skipped -11, +13 lines =@@
      return { x: "" + x };
  }
  class ExportedThing {
@@ -67,9 +44,32 @@
 - * Identity function
 - */
  export type Identity<T> = (x: T) => T;
++/**
++ * @typedef {string | number | symbol} PropName
++ */
++/**
++ * Callback
++ *
++ * @callback NumberToStringCb
++ * @param {number} a
++ * @returns {string}
++ */
++/**
++ * @template T
++ * @typedef {T & {name: string}} MixinName
++ */
++/**
++ * Identity function
++ *
++ * @template T
++ * @callback Identity
++ * @param {T} x
++ * @returns {T}
++ */
  //// [mixed.d.ts]
  export type SomeType = {
-@@= skipped -39, +30 lines =@@
+     x: string;
+@@= skipped -39, +52 lines =@@
   * @param {number} x
   * @returns {SomeType}
   */

@@ -77,6 +77,9 @@ exports.default = Bar;
 Object.defineProperty(exports, "__esModule", { value: true });
 // merge type alias and const (OK)
 exports.default = 12;
+/**
+ * @typedef {string | number} default
+ */
 //// [index6.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -84,6 +87,9 @@ exports.default = func;
 // merge type alias and function (OK)
 function func() { }
 ;
+/**
+ * @typedef {string | number} default
+ */
 
 
 //// [index1.d.ts]
@@ -109,10 +115,16 @@ export default Bar;
 declare const _default: number;
 export default _default;
 export type default = string | number;
+/**
+ * @typedef {string | number} default
+ */
 //// [index6.d.ts]
 // merge type alias and function (OK)
 export default function func(): void;
 export type default = string | number;
+/**
+ * @typedef {string | number} default
+ */
 
 
 //// [DtsFileErrors]
@@ -171,6 +183,9 @@ out/index6.d.ts(3,32): error TS2693: 'number' only refers to a type, but is bein
 !!! error TS2693: 'string' only refers to a type, but is being used as a value here.
                                    ~~~~~~
 !!! error TS2693: 'number' only refers to a type, but is being used as a value here.
+    /**
+     * @typedef {string | number} default
+     */
     
 ==== out/index6.d.ts (6 errors) ====
     // merge type alias and function (OK)
@@ -188,4 +203,7 @@ out/index6.d.ts(3,32): error TS2693: 'number' only refers to a type, but is bein
 !!! error TS2693: 'string' only refers to a type, but is being used as a value here.
                                    ~~~~~~
 !!! error TS2693: 'number' only refers to a type, but is being used as a value here.
+    /**
+     * @typedef {string | number} default
+     */
     

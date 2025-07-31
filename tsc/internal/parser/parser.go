@@ -345,7 +345,6 @@ func (p *Parser) parseSourceFileWorker() *ast.SourceFile {
 	if len(p.reparseList) > 0 {
 		statements = append(statements, p.reparseList...)
 		p.reparseList = nil
-		end = p.nodePos()
 	}
 	node := p.factory.NewSourceFile(p.opts, p.sourceText, p.newNodeList(core.NewTextRange(pos, end), statements), eof)
 	p.finishNode(node, pos)

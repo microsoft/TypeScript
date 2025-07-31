@@ -9,7 +9,11 @@
  export type WithSymbol = {
      [kSymbol]: true;
  };
-@@= skipped -9, +9 lines =@@
++/**
++ * @typedef {{[kSymbol]: true}} WithSymbol
++ */ 
+ //// [b.d.ts]
+ /**
   * @returns {import('./a').WithSymbol}
   * @param {import('./a').WithSymbol} value
   */
