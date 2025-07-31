@@ -47,41 +47,15 @@ export const ClassExpressionStatic = (_b = class {
 //// [privateFieldsInClassExpressionDeclaration.d.ts]
 export declare const ClassExpression: {
     new (): {
-        "__#1@#context": number;
-        "__#1@#method"(): number;
+        "__#private@#context": number;
+        "__#private@#method"(): number;
         value: number;
     };
 };
 export declare const ClassExpressionStatic: {
     new (): {
-        "__#2@#instancePrivate": boolean;
+        "__#private@#instancePrivate": boolean;
         exposed: string;
     };
-    "__#2@#staticPrivate": string;
+    "__#private@#staticPrivate": string;
 };
-
-
-!!!! File privateFieldsInClassExpressionDeclaration.d.ts differs from original emit in noCheck emit
-//// [privateFieldsInClassExpressionDeclaration.d.ts]
-===================================================================
---- Expected	The full check baseline
-+++ Actual	with noCheck set
-@@ -1,14 +1,14 @@
- export declare const ClassExpression: {
-     new (): {
--        "__#1@#context": number;
--        "__#1@#method"(): number;
-+        "__#37@#context": number;
-+        "__#37@#method"(): number;
-         value: number;
-     };
- };
- export declare const ClassExpressionStatic: {
-     new (): {
--        "__#2@#instancePrivate": boolean;
-+        "__#38@#instancePrivate": boolean;
-         exposed: string;
-     };
--    "__#2@#staticPrivate": string;
-+    "__#38@#staticPrivate": string;
- };

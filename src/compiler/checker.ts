@@ -8912,6 +8912,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral;
                 if (!shouldEmitErroneousFieldName) {
                     return hashPrivateName;
+                } else {
+                    let rawName = unescapeLeadingUnderscores(symbol.escapedName);
+                    // symbol IDs are unstable - replace #nnn# with #private#
+                    rawName = rawName.replace(/__#\d+@#/g, "__#private@#");
+                    return createPropertyNameNodeForIdentifierOrLiteral(rawName, getEmitScriptTarget(compilerOptions), /*singleQuote*/ false, /*stringNamed*/ true, !!(symbol.flags & SymbolFlags.Method));
                 }
             }
             const stringNamed = !!length(symbol.declarations) && every(symbol.declarations, isStringNamed);
