@@ -8908,7 +8908,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function getPropertyNameNodeForSymbol(symbol: Symbol, context: NodeBuilderContext) {
             const hashPrivateName = getClonedHashPrivateName(symbol);
             if (hashPrivateName) {
-                return hashPrivateName;
+                const shouldEmitErroneousFieldName = !!context.tracker.reportPrivateInBaseOfClassExpression &&
+                    context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral
+                if (!shouldEmitErroneousFieldName) {
+                    return hashPrivateName;
+                }
             }
             const stringNamed = !!length(symbol.declarations) && every(symbol.declarations, isStringNamed);
             const singleQuote = !!length(symbol.declarations) && every(symbol.declarations, isSingleQuotedStringNamed);
