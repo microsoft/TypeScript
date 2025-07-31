@@ -115,30 +115,30 @@ export declare const outer: ProxyMap<XXX>;
 >      : ^^^^^^^^^^^^^
 
 export const a = inner.log(100); // Effect<100, never, never>
->a : F<Effect<100, never, never>, this>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->inner.log(100) : F<Effect<100, never, never>, this>
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->inner.log : <N extends number>(n: N) => F<Effect<N, never, never>, this>
->          : ^ ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : Effect<100, never, never>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>inner.log(100) : Effect<100, never, never>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>inner.log : <N extends number>(n: N) => Effect<N, never, never>
+>          : ^ ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >inner : XXX
 >      : ^^^
->log : <N extends number>(n: N) => F<Effect<N, never, never>, this>
->    : ^ ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>log : <N extends number>(n: N) => Effect<N, never, never>
+>    : ^ ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >100 : 100
 >    : ^^^
 
 export const b = outer.log(100); // Effect<100, never, XXX>
->b : F<Effect<100, never, never>, this>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->outer.log(100) : F<Effect<100, never, never>, this>
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->outer.log : <N extends number>(n: N) => F<Effect<N, never, never>, this>
->          : ^ ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : Effect<100, never, never>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>outer.log(100) : Effect<100, never, never>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>outer.log : <N extends number>(n: N) => Effect<N, never, never>
+>          : ^ ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >outer : ProxyMap<XXX>
 >      : ^^^^^^^^^^^^^
->log : <N extends number>(n: N) => F<Effect<N, never, never>, this>
->    : ^ ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>log : <N extends number>(n: N) => Effect<N, never, never>
+>    : ^ ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >100 : 100
 >    : ^^^
 

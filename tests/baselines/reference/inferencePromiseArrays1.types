@@ -20,10 +20,10 @@ const p1 = Promise.resolve([]).then(() => Promise.all([getNum(), getStr()])).the
 >   : ^^^^^^^^^^^^^
 >Promise.resolve([]).then(() => Promise.all([getNum(), getStr()])).then(useTuple) : Promise<void>
 >                                                                                 : ^^^^^^^^^^^^^
->Promise.resolve([]).then(() => Promise.all([getNum(), getStr()])).then : <TResult1 = (string | number)[], TResult2 = never>(onfulfilled?: ((value: (string | number)[]) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
->                                                                       : ^        ^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Promise.resolve([]).then(() => Promise.all([getNum(), getStr()])) : Promise<(string | number)[]>
->                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve([]).then(() => Promise.all([getNum(), getStr()])).then : <TResult1 = [number, string], TResult2 = never>(onfulfilled?: ((value: [number, string]) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>                                                                       : ^        ^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve([]).then(() => Promise.all([getNum(), getStr()])) : Promise<[number, string]>
+>                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.resolve([]).then : <TResult1 = never[], TResult2 = never>(onfulfilled?: ((value: never[]) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >                         : ^        ^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.resolve([]) : Promise<never[]>
@@ -38,18 +38,18 @@ const p1 = Promise.resolve([]).then(() => Promise.all([getNum(), getStr()])).the
 >   : ^^^^^^^
 >then : <TResult1 = never[], TResult2 = never>(onfulfilled?: ((value: never[]) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >     : ^        ^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->() => Promise.all([getNum(), getStr()]) : () => Promise<(string | number)[]>
->                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Promise.all([getNum(), getStr()]) : Promise<(string | number)[]>
->                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => Promise.all([getNum(), getStr()]) : () => Promise<[number, string]>
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.all([getNum(), getStr()]) : Promise<[number, string]>
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
 >            : ^^^ ^^      ^^                            ^^^                     ^^^ ^^^^^^^^^                       ^^      ^^ ^^^                                                     ^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
 >    : ^^^ ^^      ^^                            ^^^                     ^^^ ^^^^^^^^^                       ^^      ^^ ^^^                                                     ^^^
->[getNum(), getStr()] : (Promise<number> | Promise<string>)[]
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[getNum(), getStr()] : [Promise<number>, Promise<string>]
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getNum() : Promise<number>
 >         : ^^^^^^^^^^^^^^^
 >getNum : () => Promise<number>
@@ -58,16 +58,16 @@ const p1 = Promise.resolve([]).then(() => Promise.all([getNum(), getStr()])).the
 >         : ^^^^^^^^^^^^^^^
 >getStr : () => Promise<string>
 >       : ^^^^^^               
->then : <TResult1 = (string | number)[], TResult2 = never>(onfulfilled?: ((value: (string | number)[]) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
->     : ^        ^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>then : <TResult1 = [number, string], TResult2 = never>(onfulfilled?: ((value: [number, string]) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >useTuple : (tuple: [number, string]) => void
 >         : ^     ^^                ^^^^^    
 
 const p2 = Promise.resolve([]).then(()=> {
->p2 : Promise<(string | number)[]>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Promise.resolve([]).then(()=> {    return Promise.all([0, ""]);}) : Promise<(string | number)[]>
->                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>p2 : Promise<[number, string]>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve([]).then(()=> {    return Promise.all([0, ""]);}) : Promise<[number, string]>
+>                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.resolve([]).then : <TResult1 = never[], TResult2 = never>(onfulfilled?: ((value: never[]) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >                         : ^        ^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.resolve([]) : Promise<never[]>
@@ -82,20 +82,20 @@ const p2 = Promise.resolve([]).then(()=> {
 >   : ^^^^^^^
 >then : <TResult1 = never[], TResult2 = never>(onfulfilled?: ((value: never[]) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >     : ^        ^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->()=> {    return Promise.all([0, ""]);} : () => Promise<(string | number)[]>
->                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>()=> {    return Promise.all([0, ""]);} : () => Promise<[number, string]>
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return Promise.all([0, ""]);
->Promise.all([0, ""]) : Promise<(string | number)[]>
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.all([0, ""]) : Promise<[number, string]>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
 >            : ^^^ ^^      ^^                            ^^^                     ^^^ ^^^^^^^^^                       ^^      ^^ ^^^                                                     ^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
 >    : ^^^ ^^      ^^                            ^^^                     ^^^ ^^^^^^^^^                       ^^      ^^ ^^^                                                     ^^^
->[0, ""] : (string | number)[]
->        : ^^^^^^^^^^^^^^^^^^^
+>[0, ""] : [number, string]
+>        : ^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 >"" : ""
@@ -105,6 +105,6 @@ const p2 = Promise.resolve([]).then(()=> {
 const p3: Promise<[number, string]> = p2;
 >p3 : Promise<[number, string]>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
->p2 : Promise<(string | number)[]>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>p2 : Promise<[number, string]>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
