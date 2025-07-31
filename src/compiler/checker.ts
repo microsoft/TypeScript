@@ -7610,6 +7610,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (getDeclarationModifierFlagsFromSymbol(propertySymbol) & (ModifierFlags.Private | ModifierFlags.Protected) && context.tracker.reportPrivateInBaseOfClassExpression) {
                             context.tracker.reportPrivateInBaseOfClassExpression(unescapeLeadingUnderscores(propertySymbol.escapedName));
                         }
+                        // Skip ECMAScript private identifier fields (e.g., #field) in class expression type literals
+                        if (propertySymbol.valueDeclaration && isNamedDeclaration(propertySymbol.valueDeclaration) && isPrivateIdentifier(propertySymbol.valueDeclaration.name)) {
+                            continue;
+                        }
                     }
                     if (checkTruncationLength(context) && (i + 2 < properties.length - 1)) {
                         context.out.truncated = true;
