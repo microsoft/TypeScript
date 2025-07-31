@@ -1,0 +1,50 @@
+//// [tests/cases/compiler/inferencePromiseArrays1.ts] ////
+
+=== inferencePromiseArrays1.ts ===
+declare function getNum(): Promise<number>;
+>getNum : Symbol(getNum, Decl(inferencePromiseArrays1.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+declare function getStr(): Promise<string>;
+>getStr : Symbol(getStr, Decl(inferencePromiseArrays1.ts, 0, 43))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+declare function useTuple(tuple: [number, string]): void;
+>useTuple : Symbol(useTuple, Decl(inferencePromiseArrays1.ts, 1, 43))
+>tuple : Symbol(tuple, Decl(inferencePromiseArrays1.ts, 2, 26))
+
+const p1 = Promise.resolve([]).then(() => Promise.all([getNum(), getStr()])).then(useTuple);
+>p1 : Symbol(p1, Decl(inferencePromiseArrays1.ts, 3, 5))
+>Promise.resolve([]).then(() => Promise.all([getNum(), getStr()])).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>Promise.resolve([]).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>Promise.all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>getNum : Symbol(getNum, Decl(inferencePromiseArrays1.ts, 0, 0))
+>getStr : Symbol(getStr, Decl(inferencePromiseArrays1.ts, 0, 43))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>useTuple : Symbol(useTuple, Decl(inferencePromiseArrays1.ts, 1, 43))
+
+const p2 = Promise.resolve([]).then(()=> {
+>p2 : Symbol(p2, Decl(inferencePromiseArrays1.ts, 5, 5))
+>Promise.resolve([]).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+
+    return Promise.all([0, ""]);
+>Promise.all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+})
+const p3: Promise<[number, string]> = p2;
+>p3 : Symbol(p3, Decl(inferencePromiseArrays1.ts, 8, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>p2 : Symbol(p2, Decl(inferencePromiseArrays1.ts, 5, 5))
+
