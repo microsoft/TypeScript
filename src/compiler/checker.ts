@@ -8912,7 +8912,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral;
                 if (!shouldEmitErroneousFieldName) {
                     return hashPrivateName;
-                } else {
+                }
+                else {
                     let rawName = unescapeLeadingUnderscores(symbol.escapedName);
                     // symbol IDs are unstable - replace #nnn# with #private#
                     rawName = rawName.replace(/__#\d+@#/g, "__#private@#");
