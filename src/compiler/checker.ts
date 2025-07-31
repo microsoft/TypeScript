@@ -8909,7 +8909,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const hashPrivateName = getClonedHashPrivateName(symbol);
             if (hashPrivateName) {
                 const shouldEmitErroneousFieldName = !!context.tracker.reportPrivateInBaseOfClassExpression &&
-                    context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral
+                    context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral;
                 if (!shouldEmitErroneousFieldName) {
                     return hashPrivateName;
                 }
