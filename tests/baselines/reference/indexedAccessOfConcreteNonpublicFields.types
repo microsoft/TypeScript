@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/indexedAccessOfConcreteNonpublicFields.ts] ////
+
+=== indexedAccessOfConcreteNonpublicFields.ts ===
+export class Foo {
+>Foo : Foo
+>    : ^^^
+
+    private _property: string = '';
+>_property : string
+>          : ^^^^^^
+>'' : ""
+>   : ^^
+
+    protected _property2: string = '';
+>_property2 : string
+>           : ^^^^^^
+>'' : ""
+>   : ^^
+
+    constructor(arg: Foo['_property'], other: Foo['_property2']) {
+>arg : string
+>    : ^^^^^^
+>other : string
+>      : ^^^^^^
+    }
+}
