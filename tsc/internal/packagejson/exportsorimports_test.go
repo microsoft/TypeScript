@@ -1,10 +1,9 @@
 package packagejson_test
 
 import (
-	"encoding/json"
 	"testing"
 
-	json2 "github.com/go-json-experiment/json"
+	"github.com/microsoft/typescript-go/internal/json"
 	"github.com/microsoft/typescript-go/internal/packagejson"
 	"gotest.tools/v3/assert"
 )
@@ -12,13 +11,9 @@ import (
 func TestExports(t *testing.T) {
 	t.Parallel()
 
-	t.Run("UnmarshalJSON", func(t *testing.T) {
-		t.Parallel()
-		testExports(t, json.Unmarshal)
-	})
 	t.Run("UnmarshalJSONV2", func(t *testing.T) {
 		t.Parallel()
-		testExports(t, func(in []byte, out any) error { return json2.Unmarshal(in, out) })
+		testExports(t, func(in []byte, out any) error { return json.Unmarshal(in, out) })
 	})
 }
 

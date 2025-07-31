@@ -64,7 +64,7 @@
         "character": 22
       },
       "Name": "1",
-      "Data": null
+      "Data": {}
     },
     "item": null
   },
@@ -76,7 +76,7 @@
         "character": 21
       },
       "Name": "2",
-      "Data": null
+      "Data": {}
     },
     "item": null
   },
@@ -88,7 +88,7 @@
         "character": 14
       },
       "Name": "3",
-      "Data": null
+      "Data": {}
     },
     "item": null
   },
@@ -100,7 +100,7 @@
         "character": 4
       },
       "Name": "4",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -117,7 +117,7 @@
         "character": 4
       },
       "Name": "5",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -134,7 +134,7 @@
         "character": 4
       },
       "Name": "6",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {

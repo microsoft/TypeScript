@@ -137,7 +137,7 @@
         "character": 17
       },
       "Name": "1",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -154,7 +154,7 @@
         "character": 8
       },
       "Name": "2",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -171,7 +171,7 @@
         "character": 15
       },
       "Name": "3",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -188,7 +188,7 @@
         "character": 11
       },
       "Name": "4",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -205,7 +205,7 @@
         "character": 15
       },
       "Name": "5",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -222,7 +222,7 @@
         "character": 11
       },
       "Name": "6",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -239,7 +239,7 @@
         "character": 21
       },
       "Name": "7",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -256,7 +256,7 @@
         "character": 17
       },
       "Name": "8",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -273,7 +273,7 @@
         "character": 20
       },
       "Name": "9",
-      "Data": null
+      "Data": {}
     },
     "item": null
   },
@@ -285,7 +285,7 @@
         "character": 8
       },
       "Name": "10",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -302,7 +302,7 @@
         "character": 15
       },
       "Name": "11",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -319,7 +319,7 @@
         "character": 11
       },
       "Name": "12",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -336,7 +336,7 @@
         "character": 15
       },
       "Name": "13",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -353,7 +353,7 @@
         "character": 18
       },
       "Name": "14",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -370,7 +370,7 @@
         "character": 11
       },
       "Name": "15",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -387,7 +387,7 @@
         "character": 21
       },
       "Name": "16",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -404,7 +404,7 @@
         "character": 24
       },
       "Name": "17",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {

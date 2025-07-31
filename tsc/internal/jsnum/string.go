@@ -1,7 +1,6 @@
 package jsnum
 
 import (
-	"encoding/json"
 	"errors"
 	"math"
 	"math/big"
@@ -10,6 +9,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
+	"github.com/microsoft/typescript-go/internal/json"
 	"github.com/microsoft/typescript-go/internal/stringutil"
 )
 
@@ -33,7 +33,7 @@ func (n Number) String() string {
 	}
 
 	// Otherwise, the Go json package handles this correctly.
-	b, _ := json.Marshal(float64(n)) //nolint:errchkjson
+	b, _ := json.Marshal(float64(n))
 	return string(b)
 }
 

@@ -220,7 +220,7 @@
         "character": 20
       },
       "Name": "1a",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -237,7 +237,7 @@
         "character": 21
       },
       "Name": "2a",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -254,7 +254,7 @@
         "character": 23
       },
       "Name": "3a",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -271,7 +271,7 @@
         "character": 20
       },
       "Name": "4a",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -288,7 +288,7 @@
         "character": 28
       },
       "Name": "5a",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -305,7 +305,7 @@
         "character": 30
       },
       "Name": "6a",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -322,7 +322,7 @@
         "character": 17
       },
       "Name": "1g",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -339,7 +339,7 @@
         "character": 17
       },
       "Name": "2g",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -356,7 +356,7 @@
         "character": 17
       },
       "Name": "3g",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -373,7 +373,7 @@
         "character": 14
       },
       "Name": "4g",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -390,7 +390,7 @@
         "character": 14
       },
       "Name": "5g",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -407,7 +407,7 @@
         "character": 14
       },
       "Name": "6g",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -424,7 +424,7 @@
         "character": 13
       },
       "Name": "1s",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -441,7 +441,7 @@
         "character": 13
       },
       "Name": "2s",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -458,7 +458,7 @@
         "character": 13
       },
       "Name": "3s",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -475,7 +475,7 @@
         "character": 10
       },
       "Name": "4s",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -492,7 +492,7 @@
         "character": 10
       },
       "Name": "5s",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -509,7 +509,7 @@
         "character": 10
       },
       "Name": "6s",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -526,7 +526,7 @@
         "character": 4
       },
       "Name": "7g",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -543,7 +543,7 @@
         "character": 14
       },
       "Name": "8g",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -560,7 +560,7 @@
         "character": 4
       },
       "Name": "9g",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -577,7 +577,7 @@
         "character": 6
       },
       "Name": "10g",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -594,7 +594,7 @@
         "character": 0
       },
       "Name": "7s",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -611,7 +611,7 @@
         "character": 10
       },
       "Name": "8s",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -628,7 +628,7 @@
         "character": 0
       },
       "Name": "9s",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -645,7 +645,7 @@
         "character": 2
       },
       "Name": "10s",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {

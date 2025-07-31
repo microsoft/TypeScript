@@ -79,7 +79,7 @@
         "character": 11
       },
       "Name": "1",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -96,7 +96,7 @@
         "character": 8
       },
       "Name": "2",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -113,7 +113,7 @@
         "character": 11
       },
       "Name": "3",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -130,7 +130,7 @@
         "character": 8
       },
       "Name": "4",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -147,7 +147,7 @@
         "character": 18
       },
       "Name": "5",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -164,7 +164,7 @@
         "character": 8
       },
       "Name": "6",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -181,7 +181,7 @@
         "character": 18
       },
       "Name": "7",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -198,7 +198,7 @@
         "character": 8
       },
       "Name": "8",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {

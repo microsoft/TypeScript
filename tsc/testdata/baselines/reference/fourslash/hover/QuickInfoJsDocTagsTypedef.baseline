@@ -35,7 +35,7 @@
         "character": 21
       },
       "Name": "1",
-      "Data": null
+      "Data": {}
     },
     "item": null
   },
@@ -47,7 +47,7 @@
         "character": 11
       },
       "Name": "2",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {

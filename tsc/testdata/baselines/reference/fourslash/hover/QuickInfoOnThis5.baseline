@@ -68,7 +68,7 @@
         "character": 26
       },
       "Name": "1",
-      "Data": null
+      "Data": {}
     },
     "item": null
   },
@@ -80,7 +80,7 @@
         "character": 26
       },
       "Name": "2",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -97,7 +97,7 @@
         "character": 26
       },
       "Name": "3",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -114,7 +114,7 @@
         "character": 26
       },
       "Name": "4",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -131,7 +131,7 @@
         "character": 26
       },
       "Name": "5",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -148,7 +148,7 @@
         "character": 26
       },
       "Name": "6",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {

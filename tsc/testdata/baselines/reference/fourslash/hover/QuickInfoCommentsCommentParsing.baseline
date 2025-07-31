@@ -705,7 +705,7 @@
         "character": 3
       },
       "Name": "1q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -722,7 +722,7 @@
         "character": 3
       },
       "Name": "2q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -739,7 +739,7 @@
         "character": 5
       },
       "Name": "3q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -756,7 +756,7 @@
         "character": 6
       },
       "Name": "4q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -773,7 +773,7 @@
         "character": 7
       },
       "Name": "5q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -790,7 +790,7 @@
         "character": 8
       },
       "Name": "6q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -807,7 +807,7 @@
         "character": 7
       },
       "Name": "7q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -824,7 +824,7 @@
         "character": 9
       },
       "Name": "8q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -841,7 +841,7 @@
         "character": 10
       },
       "Name": "9q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -858,7 +858,7 @@
         "character": 6
       },
       "Name": "10q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -875,7 +875,7 @@
         "character": 8
       },
       "Name": "11q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -892,7 +892,7 @@
         "character": 5
       },
       "Name": "12q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -909,7 +909,7 @@
         "character": 7
       },
       "Name": "13q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -926,7 +926,7 @@
         "character": 7
       },
       "Name": "14q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -943,7 +943,7 @@
         "character": 13
       },
       "Name": "16aq",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -960,7 +960,7 @@
         "character": 24
       },
       "Name": "17aq",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -977,7 +977,7 @@
         "character": 1
       },
       "Name": "16q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -994,7 +994,7 @@
         "character": 18
       },
       "Name": "19aq",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1011,7 +1011,7 @@
         "character": 29
       },
       "Name": "20aq",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1028,7 +1028,7 @@
         "character": 40
       },
       "Name": "21aq",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1045,7 +1045,7 @@
         "character": 52
       },
       "Name": "22aq",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1062,7 +1062,7 @@
         "character": 56
       },
       "Name": "23aq",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1079,7 +1079,7 @@
         "character": 4
       },
       "Name": "19q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1096,7 +1096,7 @@
         "character": 12
       },
       "Name": "25aq",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1113,7 +1113,7 @@
         "character": 12
       },
       "Name": "26aq",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1130,7 +1130,7 @@
         "character": 1
       },
       "Name": "25q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1147,7 +1147,7 @@
         "character": 1
       },
       "Name": "26q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1164,7 +1164,7 @@
         "character": 18
       },
       "Name": "28aq",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1181,7 +1181,7 @@
         "character": 29
       },
       "Name": "29aq",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1198,12 +1198,12 @@
         "character": 40
       },
       "Name": "30aq",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) c: () =\u003e string\n```\nthis is optional param c\n"
+        "value": "```tsx\n(parameter) c: () => string\n```\nthis is optional param c\n"
       }
     }
   },
@@ -1215,12 +1215,12 @@
         "character": 58
       },
       "Name": "31aq",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) d: () =\u003e string\n```\nthis is optional param d\n"
+        "value": "```tsx\n(parameter) d: () => string\n```\nthis is optional param d\n"
       }
     }
   },
@@ -1232,12 +1232,12 @@
         "character": 76
       },
       "Name": "32aq",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) e: () =\u003e string\n```\nthis is optional param e\n"
+        "value": "```tsx\n(parameter) e: () => string\n```\nthis is optional param e\n"
       }
     }
   },
@@ -1249,12 +1249,12 @@
         "character": 94
       },
       "Name": "33aq",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) f: () =\u003e string\n```\n"
+        "value": "```tsx\n(parameter) f: () => string\n```\n"
       }
     }
   },
@@ -1266,12 +1266,12 @@
         "character": 4
       },
       "Name": "28q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction subtract(a: number, b: number, c?: () =\u003e string, d?: () =\u003e string, e?: () =\u003e string, f?: () =\u003e string): void\n```\nThis is subtract function\n\n*@param* ``\n\n*@param* `b` — this is about b\n\n\n*@param* `c` — this is optional param c\n\n\n*@param* `d` — this is optional param d\n\n\n*@param* `e` — this is optional param e\n\n\n*@param* `` — { () =\u003e string; } } f this is optional param f\n"
+        "value": "```tsx\nfunction subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void\n```\nThis is subtract function\n\n*@param* ``\n\n*@param* `b` — this is about b\n\n\n*@param* `c` — this is optional param c\n\n\n*@param* `d` — this is optional param d\n\n\n*@param* `e` — this is optional param e\n\n\n*@param* `` — { () => string; } } f this is optional param f\n"
       }
     }
   },
@@ -1283,7 +1283,7 @@
         "character": 16
       },
       "Name": "34aq",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1300,7 +1300,7 @@
         "character": 3
       },
       "Name": "34q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1317,7 +1317,7 @@
         "character": 16
       },
       "Name": "35aq",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1334,7 +1334,7 @@
         "character": 27
       },
       "Name": "36aq",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1351,7 +1351,7 @@
         "character": 3
       },
       "Name": "35q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1368,7 +1368,7 @@
         "character": 16
       },
       "Name": "37aq",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1385,7 +1385,7 @@
         "character": 29
       },
       "Name": "38aq",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1402,7 +1402,7 @@
         "character": 2
       },
       "Name": "37q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1419,7 +1419,7 @@
         "character": 59
       },
       "Name": "40aq",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1436,7 +1436,7 @@
         "character": 105
       },
       "Name": "41aq",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1453,7 +1453,7 @@
         "character": 116
       },
       "Name": "42aq",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1470,7 +1470,7 @@
         "character": 127
       },
       "Name": "43aq",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1487,7 +1487,7 @@
         "character": 3
       },
       "Name": "40q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1504,7 +1504,7 @@
         "character": 8
       },
       "Name": "45q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1521,7 +1521,7 @@
         "character": 10
       },
       "Name": "46q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1538,7 +1538,7 @@
         "character": 36
       },
       "Name": "47aq",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1555,7 +1555,7 @@
         "character": 47
       },
       "Name": "48aq",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1572,7 +1572,7 @@
         "character": 50
       },
       "Name": "49aq",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1589,7 +1589,7 @@
         "character": 10
       },
       "Name": "47q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1606,7 +1606,7 @@
         "character": 0
       },
       "Name": "",
-      "Data": null
+      "Data": {}
     },
     "item": null
   },
@@ -1618,7 +1618,7 @@
         "character": 12
       },
       "Name": "50q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {

@@ -1,19 +1,16 @@
 package collections
 
 import (
-	"bytes"
 	"encoding"
-	"encoding/json"
 	"errors"
-	"fmt"
 	"iter"
 	"maps"
 	"reflect"
 	"slices"
 	"strconv"
 
-	json2 "github.com/go-json-experiment/json"
 	"github.com/go-json-experiment/json/jsontext"
+	"github.com/microsoft/typescript-go/internal/json"
 )
 
 // OrderedMap is an insertion ordered map.
@@ -203,37 +200,30 @@ func (m *OrderedMap[K, V]) clone() OrderedMap[K, V] {
 	}
 }
 
-func (m *OrderedMap[K, V]) MarshalJSON() ([]byte, error) {
-	if len(m.mp) == 0 {
-		return []byte("{}"), nil
+var _ json.MarshalerTo = (*OrderedMap[string, string])(nil)
+
+func (m *OrderedMap[K, V]) MarshalJSONTo(enc *jsontext.Encoder) error {
+	if err := enc.WriteToken(jsontext.BeginObject); err != nil {
+		return err
 	}
-	var buf bytes.Buffer
-	buf.WriteByte('{')
-	enc := json.NewEncoder(&buf)
-	enc.SetEscapeHTML(false)
 
-	for i, k := range m.keys {
-		if i > 0 {
-			buf.WriteByte(',')
-		}
-
+	for _, k := range m.keys {
+		// TODO: is this needed? Can we just MarshalEncode k directly?
 		keyString, err := resolveKeyName(reflect.ValueOf(k))
 		if err != nil {
-			return nil, err
+			return err
 		}
 
-		if err := enc.Encode(keyString); err != nil {
-			return nil, err
+		if err := json.MarshalEncode(enc, keyString); err != nil {
+			return err
 		}
 
-		buf.WriteByte(':')
-
-		if err := enc.Encode(m.mp[k]); err != nil {
-			return nil, err
+		if err := json.MarshalEncode(enc, m.mp[k]); err != nil {
+			return err
 		}
 	}
-	buf.WriteByte('}')
-	return buf.Bytes(), nil
+
+	return enc.WriteToken(jsontext.EndObject)
 }
 
 func resolveKeyName(k reflect.Value) (string, error) {
@@ -256,50 +246,7 @@ func resolveKeyName(k reflect.Value) (string, error) {
 	panic("unexpected map key type")
 }
 
-var (
-	_ json.Unmarshaler      = (*OrderedMap[string, string])(nil)
-	_ json2.UnmarshalerFrom = (*OrderedMap[string, string])(nil)
-)
-
-func (m *OrderedMap[K, V]) UnmarshalJSON(data []byte) error {
-	if string(data) == "null" {
-		// By convention, to approximate the behavior of Unmarshal itself,
-		// Unmarshalers implement UnmarshalJSON([]byte("null")) as a no-op.
-		// https://pkg.go.dev/encoding/json#Unmarshaler
-		return nil
-	}
-	dec := json.NewDecoder(bytes.NewReader(data))
-	token, err := dec.Token()
-	if err != nil {
-		return err
-	}
-	if token != json.Delim('{') {
-		return errors.New("cannot unmarshal non-object JSON value into Map")
-	}
-	for dec.More() {
-		nameToken, err := dec.Token()
-		if err != nil {
-			return err
-		}
-		if nameToken == json.Delim('}') {
-			break
-		}
-		if key, ok := nameToken.(K); ok {
-			var valueBytes json.RawMessage
-			if err := dec.Decode(&valueBytes); err != nil {
-				return err
-			}
-			var value V
-			if err := json.Unmarshal(valueBytes, &value); err != nil {
-				return err
-			}
-			m.Set(key, value)
-		} else {
-			return fmt.Errorf("cannot unmarshal key into Map[%v, ...]", reflect.TypeFor[K]())
-		}
-	}
-	return nil
-}
+var _ json.UnmarshalerFrom = (*OrderedMap[string, string])(nil)
 
 func (m *OrderedMap[K, V]) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
 	token, err := dec.ReadToken()
@@ -310,6 +257,7 @@ func (m *OrderedMap[K, V]) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
 		// By convention, to approximate the behavior of Unmarshal itself,
 		// Unmarshalers implement UnmarshalJSON([]byte("null")) as a no-op.
 		// https://pkg.go.dev/encoding/json#Unmarshaler
+		// TODO: reconsider
 		return nil
 	}
 	if token.Kind() != '{' { // jsontext.ObjectStart.Kind()
@@ -318,10 +266,10 @@ func (m *OrderedMap[K, V]) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
 	for dec.PeekKind() != '}' { // jsontext.ObjectEnd.Kind()
 		var key K
 		var value V
-		if err := json2.UnmarshalDecode(dec, &key); err != nil {
+		if err := json.UnmarshalDecode(dec, &key); err != nil {
 			return err
 		}
-		if err := json2.UnmarshalDecode(dec, &value); err != nil {
+		if err := json.UnmarshalDecode(dec, &value); err != nil {
 			return err
 		}
 		m.Set(key, value)

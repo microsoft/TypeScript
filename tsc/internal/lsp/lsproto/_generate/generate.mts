@@ -477,8 +477,9 @@ function generateCode() {
     writeLine("package lsproto");
     writeLine("");
     writeLine(`import (`);
-    writeLine(`\t"encoding/json"`);
     writeLine(`\t"fmt"`);
+    writeLine("");
+    writeLine(`\t"github.com/microsoft/typescript-go/internal/json"`);
     writeLine(`)`);
     writeLine("");
     writeLine("// Meta model version " + model.metaData.version);
@@ -504,7 +505,7 @@ function generateCode() {
                 const type = resolveType(prop.type);
                 const goType = prop.optional || type.needsPointer ? `*${type.name}` : type.name;
 
-                writeLine(`\t${titleCase(prop.name)} ${goType} \`json:"${prop.name}${prop.optional ? ",omitempty" : ""}"\``);
+                writeLine(`\t${titleCase(prop.name)} ${goType} \`json:"${prop.name}${prop.optional ? ",omitzero" : ""}"\``);
 
                 if (includeDocumentation) {
                     writeLine("");

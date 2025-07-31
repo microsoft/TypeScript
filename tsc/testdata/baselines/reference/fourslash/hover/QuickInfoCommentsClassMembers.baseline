@@ -787,7 +787,7 @@
         "character": 7
       },
       "Name": "1",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -804,7 +804,7 @@
         "character": 12
       },
       "Name": "2",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -821,7 +821,7 @@
         "character": 12
       },
       "Name": "3",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -838,7 +838,7 @@
         "character": 16
       },
       "Name": "6",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -855,7 +855,7 @@
         "character": 21
       },
       "Name": "8q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -872,7 +872,7 @@
         "character": 16
       },
       "Name": "10",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -889,7 +889,7 @@
         "character": 24
       },
       "Name": "13q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -906,7 +906,7 @@
         "character": 13
       },
       "Name": "14",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -923,7 +923,7 @@
         "character": 13
       },
       "Name": "15",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -940,7 +940,7 @@
         "character": 17
       },
       "Name": "18",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -957,7 +957,7 @@
         "character": 21
       },
       "Name": "20q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -974,7 +974,7 @@
         "character": 17
       },
       "Name": "22",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -991,7 +991,7 @@
         "character": 25
       },
       "Name": "25q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1008,7 +1008,7 @@
         "character": 11
       },
       "Name": "26",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1025,7 +1025,7 @@
         "character": 12
       },
       "Name": "27",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1042,7 +1042,7 @@
         "character": 12
       },
       "Name": "28",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1059,7 +1059,7 @@
         "character": 16
       },
       "Name": "32",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1076,7 +1076,7 @@
         "character": 19
       },
       "Name": "35q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1093,7 +1093,7 @@
         "character": 16
       },
       "Name": "37",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1110,7 +1110,7 @@
         "character": 20
       },
       "Name": "42q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1127,7 +1127,7 @@
         "character": 14
       },
       "Name": "43",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1144,7 +1144,7 @@
         "character": 14
       },
       "Name": "44",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1161,7 +1161,7 @@
         "character": 18
       },
       "Name": "46",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1178,7 +1178,7 @@
         "character": 22
       },
       "Name": "47q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1195,7 +1195,7 @@
         "character": 17
       },
       "Name": "48",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1212,7 +1212,7 @@
         "character": 28
       },
       "Name": "49q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1229,7 +1229,7 @@
         "character": 14
       },
       "Name": "50",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1246,7 +1246,7 @@
         "character": 15
       },
       "Name": "51",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1263,7 +1263,7 @@
         "character": 18
       },
       "Name": "53",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1280,7 +1280,7 @@
         "character": 23
       },
       "Name": "54q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1297,7 +1297,7 @@
         "character": 20
       },
       "Name": "55",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1314,7 +1314,7 @@
         "character": 27
       },
       "Name": "56q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1331,7 +1331,7 @@
         "character": 13
       },
       "Name": "57",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1348,7 +1348,7 @@
         "character": 13
       },
       "Name": "58",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1365,7 +1365,7 @@
         "character": 17
       },
       "Name": "60",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1382,7 +1382,7 @@
         "character": 20
       },
       "Name": "61q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1399,7 +1399,7 @@
         "character": 17
       },
       "Name": "62",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1416,7 +1416,7 @@
         "character": 25
       },
       "Name": "63q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1433,7 +1433,7 @@
         "character": 5
       },
       "Name": "64",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1450,7 +1450,7 @@
         "character": 14
       },
       "Name": "65q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1467,7 +1467,7 @@
         "character": 6
       },
       "Name": "66",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1484,12 +1484,12 @@
         "character": 6
       },
       "Name": "68",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar i1_f: (b: number) =\u003e number\n```\n"
+        "value": "```tsx\nvar i1_f: (b: number) => number\n```\n"
       }
     }
   },
@@ -1501,7 +1501,7 @@
         "character": 15
       },
       "Name": "69",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1518,7 +1518,7 @@
         "character": 6
       },
       "Name": "70",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1535,7 +1535,7 @@
         "character": 15
       },
       "Name": "71q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1552,7 +1552,7 @@
         "character": 8
       },
       "Name": "72",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1569,7 +1569,7 @@
         "character": 17
       },
       "Name": "73",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1586,7 +1586,7 @@
         "character": 3
       },
       "Name": "74",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1603,7 +1603,7 @@
         "character": 11
       },
       "Name": "75",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1620,7 +1620,7 @@
         "character": 7
       },
       "Name": "76",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1637,7 +1637,7 @@
         "character": 18
       },
       "Name": "77",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1654,12 +1654,12 @@
         "character": 6
       },
       "Name": "78",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar i1_ncf: (b: number) =\u003e number\n```\n"
+        "value": "```tsx\nvar i1_ncf: (b: number) => number\n```\n"
       }
     }
   },
@@ -1671,7 +1671,7 @@
         "character": 19
       },
       "Name": "79",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1688,7 +1688,7 @@
         "character": 7
       },
       "Name": "80",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1705,7 +1705,7 @@
         "character": 18
       },
       "Name": "81q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1722,7 +1722,7 @@
         "character": 8
       },
       "Name": "82",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1739,7 +1739,7 @@
         "character": 20
       },
       "Name": "83",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1756,7 +1756,7 @@
         "character": 5
       },
       "Name": "84",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1773,7 +1773,7 @@
         "character": 14
       },
       "Name": "85",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1790,7 +1790,7 @@
         "character": 7
       },
       "Name": "86",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1807,7 +1807,7 @@
         "character": 13
       },
       "Name": "87",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1824,7 +1824,7 @@
         "character": 16
       },
       "Name": "88",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1841,12 +1841,12 @@
         "character": 8
       },
       "Name": "89",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar i1_s_f: (b: number) =\u003e number\n```\n"
+        "value": "```tsx\nvar i1_s_f: (b: number) => number\n```\n"
       }
     }
   },
@@ -1858,7 +1858,7 @@
         "character": 16
       },
       "Name": "90",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1875,7 +1875,7 @@
         "character": 7
       },
       "Name": "91",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1892,7 +1892,7 @@
         "character": 17
       },
       "Name": "92q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1909,7 +1909,7 @@
         "character": 8
       },
       "Name": "93",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1926,7 +1926,7 @@
         "character": 20
       },
       "Name": "94",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1943,7 +1943,7 @@
         "character": 4
       },
       "Name": "95",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1960,7 +1960,7 @@
         "character": 12
       },
       "Name": "96",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1977,7 +1977,7 @@
         "character": 8
       },
       "Name": "97",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1994,7 +1994,7 @@
         "character": 20
       },
       "Name": "98",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -2011,12 +2011,12 @@
         "character": 9
       },
       "Name": "99",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar i1_s_ncf: (b: number) =\u003e number\n```\n"
+        "value": "```tsx\nvar i1_s_ncf: (b: number) => number\n```\n"
       }
     }
   },
@@ -2028,7 +2028,7 @@
         "character": 20
       },
       "Name": "100",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -2045,7 +2045,7 @@
         "character": 9
       },
       "Name": "101",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -2062,7 +2062,7 @@
         "character": 19
       },
       "Name": "102q",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -2079,7 +2079,7 @@
         "character": 10
       },
       "Name": "103",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -2096,7 +2096,7 @@
         "character": 23
       },
       "Name": "104",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -2113,7 +2113,7 @@
         "character": 5
       },
       "Name": "105",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -2130,7 +2130,7 @@
         "character": 18
       },
       "Name": "106",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -2147,7 +2147,7 @@
         "character": 6
       },
       "Name": "107",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -2164,7 +2164,7 @@
         "character": 12
       },
       "Name": "108",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -2181,7 +2181,7 @@
         "character": 14
       },
       "Name": "110",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -2198,7 +2198,7 @@
         "character": 34
       },
       "Name": "111",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -2215,7 +2215,7 @@
         "character": 16
       },
       "Name": "112",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -2232,7 +2232,7 @@
         "character": 38
       },
       "Name": "113",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -2249,7 +2249,7 @@
         "character": 4
       },
       "Name": "119",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -2266,7 +2266,7 @@
         "character": 13
       },
       "Name": "118",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -2283,7 +2283,7 @@
         "character": 10
       },
       "Name": "116",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -2300,7 +2300,7 @@
         "character": 13
       },
       "Name": "114",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -2317,7 +2317,7 @@
         "character": 17
       },
       "Name": "115",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -2334,7 +2334,7 @@
         "character": 27
       },
       "Name": "117",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {

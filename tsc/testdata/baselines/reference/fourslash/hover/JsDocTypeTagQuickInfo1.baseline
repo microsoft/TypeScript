@@ -126,7 +126,7 @@
         "character": 4
       },
       "Name": "1",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -143,7 +143,7 @@
         "character": 4
       },
       "Name": "2",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -160,7 +160,7 @@
         "character": 4
       },
       "Name": "3",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -177,7 +177,7 @@
         "character": 4
       },
       "Name": "4",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -194,7 +194,7 @@
         "character": 4
       },
       "Name": "5",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -211,7 +211,7 @@
         "character": 4
       },
       "Name": "6",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -228,7 +228,7 @@
         "character": 4
       },
       "Name": "7",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -245,12 +245,12 @@
         "character": 4
       },
       "Name": "8",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar P: Promise\u003cany\u003e\n```\n"
+        "value": "```tsx\nvar P: Promise<any>\n```\n"
       }
     }
   },
@@ -262,7 +262,7 @@
         "character": 4
       },
       "Name": "9",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -279,7 +279,7 @@
         "character": 4
       },
       "Name": "10",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -296,7 +296,7 @@
         "character": 4
       },
       "Name": "11",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -313,7 +313,7 @@
         "character": 4
       },
       "Name": "12",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -330,7 +330,7 @@
         "character": 4
       },
       "Name": "13",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {

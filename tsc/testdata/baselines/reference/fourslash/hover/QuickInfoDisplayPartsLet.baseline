@@ -142,7 +142,7 @@
         "character": 4
       },
       "Name": "1",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -159,7 +159,7 @@
         "character": 8
       },
       "Name": "2",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -176,7 +176,7 @@
         "character": 12
       },
       "Name": "3",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -193,7 +193,7 @@
         "character": 12
       },
       "Name": "4",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -210,7 +210,7 @@
         "character": 8
       },
       "Name": "5",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -227,7 +227,7 @@
         "character": 15
       },
       "Name": "6",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -244,7 +244,7 @@
         "character": 12
       },
       "Name": "7",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -261,12 +261,12 @@
         "character": 4
       },
       "Name": "8",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nlet f: () =\u003e number\n```\n"
+        "value": "```tsx\nlet f: () => number\n```\n"
       }
     }
   },
@@ -278,12 +278,12 @@
         "character": 4
       },
       "Name": "9",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nlet g: () =\u003e number\n```\n"
+        "value": "```tsx\nlet g: () => number\n```\n"
       }
     }
   },
@@ -295,12 +295,12 @@
         "character": 8
       },
       "Name": "10",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nlet f: () =\u003e number\n```\n"
+        "value": "```tsx\nlet f: () => number\n```\n"
       }
     }
   },
@@ -312,12 +312,12 @@
         "character": 0
       },
       "Name": "11",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nlet f: () =\u003e number\n```\n"
+        "value": "```tsx\nlet f: () => number\n```\n"
       }
     }
   },
@@ -329,7 +329,7 @@
         "character": 4
       },
       "Name": "12",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -346,7 +346,7 @@
         "character": 4
       },
       "Name": "13",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -363,7 +363,7 @@
         "character": 8
       },
       "Name": "14",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -380,7 +380,7 @@
         "character": 0
       },
       "Name": "15",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -397,7 +397,7 @@
         "character": 0
       },
       "Name": "16",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {

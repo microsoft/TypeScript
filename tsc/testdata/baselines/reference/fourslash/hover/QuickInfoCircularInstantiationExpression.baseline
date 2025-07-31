@@ -18,12 +18,12 @@
         "character": 0
       },
       "Name": "",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foo\u003cstring\u003e(t: string): (t: string) =\u003e ...\n```\n"
+        "value": "```tsx\nfunction foo<string>(t: string): (t: string) => ...\n```\n"
       }
     }
   }

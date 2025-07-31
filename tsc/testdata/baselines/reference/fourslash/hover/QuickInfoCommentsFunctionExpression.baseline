@@ -128,12 +128,12 @@
         "character": 8
       },
       "Name": "1",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar lambdaFoo: (a: number, b: number) =\u003e number\n```\nlambdaFoo var comment"
+        "value": "```tsx\nvar lambdaFoo: (a: number, b: number) => number\n```\nlambdaFoo var comment"
       }
     }
   },
@@ -145,12 +145,12 @@
         "character": 12
       },
       "Name": "3",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar lambddaNoVarComment: (a: number, b: number) =\u003e number\n```\n"
+        "value": "```tsx\nvar lambddaNoVarComment: (a: number, b: number) => number\n```\n"
       }
     }
   },
@@ -162,7 +162,7 @@
         "character": 9
       },
       "Name": "7",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -179,12 +179,12 @@
         "character": 8
       },
       "Name": "8",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar lambdaVar: (b: string) =\u003e string\n```\ndocumentation\n\n*@param* `b` — inner parameter "
+        "value": "```tsx\nvar lambdaVar: (b: string) => string\n```\ndocumentation\n\n*@param* `b` — inner parameter "
       }
     }
   },
@@ -196,7 +196,7 @@
         "character": 38
       },
       "Name": "9",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -213,7 +213,7 @@
         "character": 12
       },
       "Name": "10",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -230,7 +230,7 @@
         "character": 15
       },
       "Name": "11",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -247,7 +247,7 @@
         "character": 26
       },
       "Name": "12",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -264,12 +264,12 @@
         "character": 15
       },
       "Name": "13",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar lambdaVar: (b: string) =\u003e string\n```\ndocumentation\n\n*@param* `b` — inner parameter "
+        "value": "```tsx\nvar lambdaVar: (b: string) => string\n```\ndocumentation\n\n*@param* `b` — inner parameter "
       }
     }
   },
@@ -281,12 +281,12 @@
         "character": 8
       },
       "Name": "14",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar assigned: (s: string) =\u003e number\n```\nOn variable\n\n*@param* `s` — the first parameter!\n\n\n*@returns* — the parameter's length\n"
+        "value": "```tsx\nvar assigned: (s: string) => number\n```\nOn variable\n\n*@param* `s` — the first parameter!\n\n\n*@returns* — the parameter's length\n"
       }
     }
   },
@@ -298,12 +298,12 @@
         "character": 5
       },
       "Name": "16",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar assigned: (s: string) =\u003e number\n```\nOn variable\n\n*@param* `s` — the first parameter!\n\n\n*@returns* — the parameter's length\n"
+        "value": "```tsx\nvar assigned: (s: string) => number\n```\nOn variable\n\n*@param* `s` — the first parameter!\n\n\n*@returns* — the parameter's length\n"
       }
     }
   }

@@ -1,10 +1,10 @@
 package lsproto
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/go-json-experiment/json/jsontext"
+	"github.com/microsoft/typescript-go/internal/json"
 )
 
 type DocumentUri string // !!!
@@ -65,11 +65,6 @@ func ptrTo[T any](v T) *T {
 }
 
 type requiredProp bool
-
-func (v *requiredProp) UnmarshalJSON(data []byte) error {
-	*v = true
-	return nil
-}
 
 func (v *requiredProp) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
 	*v = true

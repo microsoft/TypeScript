@@ -37,7 +37,7 @@
         "character": 7
       },
       "Name": "1",
-      "Data": null
+      "Data": {}
     },
     "item": null
   },
@@ -49,7 +49,7 @@
         "character": 20
       },
       "Name": "mod1",
-      "Data": null
+      "Data": {}
     },
     "item": null
   },
@@ -61,7 +61,7 @@
         "character": 4
       },
       "Name": "2",
-      "Data": null
+      "Data": {}
     },
     "item": null
   },
@@ -73,7 +73,7 @@
         "character": 14
       },
       "Name": "3",
-      "Data": null
+      "Data": {}
     },
     "item": null
   },
@@ -85,7 +85,7 @@
         "character": 27
       },
       "Name": "mod2",
-      "Data": null
+      "Data": {}
     },
     "item": null
   },
@@ -97,7 +97,7 @@
         "character": 4
       },
       "Name": "4",
-      "Data": null
+      "Data": {}
     },
     "item": null
   }

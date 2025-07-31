@@ -2,7 +2,6 @@ package incremental
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"slices"
 
@@ -10,6 +9,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
+	"github.com/microsoft/typescript-go/internal/json"
 	"github.com/microsoft/typescript-go/internal/outputpaths"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )

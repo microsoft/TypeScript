@@ -230,7 +230,7 @@ SOFTWARE.
 
 ---------------------------------------------------------
 
-github.com/go-json-experiment/json v0.0.0-20250714165856-be8212f5270d - BSD-3-Clause
+github.com/go-json-experiment/json v0.0.0-20250725192818-e39067aee2d2 - BSD-3-Clause
 
 Copyright (c) 2020 The Go Authors. All rights reserved.
 

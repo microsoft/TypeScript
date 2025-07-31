@@ -19,7 +19,7 @@
         "character": 0
       },
       "Name": "1",
-      "Data": null
+      "Data": {}
     },
     "item": null
   },
@@ -31,7 +31,7 @@
         "character": 6
       },
       "Name": "2",
-      "Data": null
+      "Data": {}
     },
     "item": null
   }

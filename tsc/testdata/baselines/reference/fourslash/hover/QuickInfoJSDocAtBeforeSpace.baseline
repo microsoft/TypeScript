@@ -53,7 +53,7 @@
         "character": 9
       },
       "Name": "f",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -70,7 +70,7 @@
         "character": 9
       },
       "Name": "g",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -87,7 +87,7 @@
         "character": 9
       },
       "Name": "h",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {

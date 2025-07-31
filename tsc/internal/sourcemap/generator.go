@@ -1,11 +1,11 @@
 package sourcemap
 
 import (
-	"encoding/json"
 	"errors"
 	"slices"
 	"strings"
 
+	"github.com/microsoft/typescript-go/internal/json"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
@@ -57,7 +57,7 @@ type RawSourceMap struct {
 	Sources        []string  `json:"sources"`
 	Names          []string  `json:"names"`
 	Mappings       string    `json:"mappings"`
-	SourcesContent []*string `json:"sourcesContent,omitempty"`
+	SourcesContent []*string `json:"sourcesContent,omitzero"`
 }
 
 func NewGenerator(file string, sourceRoot string, sourcesDirectoryPath string, options tspath.ComparePathsOptions) *Generator {

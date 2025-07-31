@@ -53,12 +53,12 @@
         "character": 5
       },
       "Name": "0",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ntype List\u003cT\u003e = T[]\n```\n"
+        "value": "```tsx\ntype List<T> = T[]\n```\n"
       }
     }
   },
@@ -70,7 +70,7 @@
         "character": 10
       },
       "Name": "1",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -87,7 +87,7 @@
         "character": 15
       },
       "Name": "2",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -104,12 +104,12 @@
         "character": 5
       },
       "Name": "3",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ntype List2\u003cT extends string\u003e = T[]\n```\n"
+        "value": "```tsx\ntype List2<T extends string> = T[]\n```\n"
       }
     }
   },
@@ -121,7 +121,7 @@
         "character": 11
       },
       "Name": "4",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -138,7 +138,7 @@
         "character": 31
       },
       "Name": "5",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {

@@ -15,6 +15,7 @@ linters:
     - canonicalheader
     - copyloopvar
     - customlint
+    - depguard
     - durationcheck
     - errcheck
     - errchkjson
@@ -62,10 +63,18 @@ linters:
       customlint:
         type: module
 
+    depguard:
+      rules:
+        main:
+          deny:
+            - pkg: 'encoding/json$'
+              desc: 'Use "github.com/microsoft/typescript-go/internal/json" instead.'
+
   exclusions:
     rules:
       - path: internal/fourslash/tests/gen/
-        linters: misspell
+        linters:
+          - misspell
 
     presets:
       - comments

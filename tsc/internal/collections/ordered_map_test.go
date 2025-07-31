@@ -1,13 +1,12 @@
 package collections_test
 
 import (
-	"encoding/json"
 	"fmt"
 	"slices"
 	"testing"
 
-	json2 "github.com/go-json-experiment/json"
 	"github.com/microsoft/typescript-go/internal/collections"
+	"github.com/microsoft/typescript-go/internal/json"
 	"gotest.tools/v3/assert"
 )
 
@@ -162,13 +161,9 @@ func TestOrderedMapWithSizeHint(t *testing.T) { //nolint:paralleltest
 func TestOrderedMapUnmarshalJSON(t *testing.T) {
 	t.Parallel()
 
-	t.Run("UnmarshalJSON", func(t *testing.T) {
-		t.Parallel()
-		testOrderedMapUnmarshalJSON(t, json.Unmarshal)
-	})
 	t.Run("UnmarshalJSONV2", func(t *testing.T) {
 		t.Parallel()
-		testOrderedMapUnmarshalJSON(t, func(in []byte, out any) error { return json2.Unmarshal(in, out) })
+		testOrderedMapUnmarshalJSON(t, func(in []byte, out any) error { return json.Unmarshal(in, out) })
 	})
 }
 

@@ -2,7 +2,6 @@ package execute
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"runtime"
 	"strings"
@@ -15,6 +14,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/format"
 	"github.com/microsoft/typescript-go/internal/incremental"
+	"github.com/microsoft/typescript-go/internal/json"
 	"github.com/microsoft/typescript-go/internal/parser"
 	"github.com/microsoft/typescript-go/internal/pprof"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
@@ -413,9 +413,7 @@ func emitFilesAndReportErrors(
 
 func showConfig(sys System, config *core.CompilerOptions) {
 	// !!!
-	enc := json.NewEncoder(sys.Writer())
-	enc.SetIndent("", "    ")
-	enc.Encode(config) //nolint:errcheck,errchkjson
+	_ = json.MarshalIndentWrite(sys.Writer(), config, "", "    ")
 }
 
 func listFiles(sys System, program compiler.ProgramLike) {

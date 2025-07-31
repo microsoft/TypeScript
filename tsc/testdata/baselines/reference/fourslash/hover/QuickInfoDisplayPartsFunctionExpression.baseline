@@ -59,12 +59,12 @@
         "character": 4
       },
       "Name": "1",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar x: () =\u003e void\n```\n"
+        "value": "```tsx\nvar x: () => void\n```\n"
       }
     }
   },
@@ -76,7 +76,7 @@
         "character": 17
       },
       "Name": "2",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -93,7 +93,7 @@
         "character": 4
       },
       "Name": "3",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -110,12 +110,12 @@
         "character": 4
       },
       "Name": "4",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar y: () =\u003e void\n```\n"
+        "value": "```tsx\nvar y: () => void\n```\n"
       }
     }
   },
@@ -127,7 +127,7 @@
         "character": 10
       },
       "Name": "5",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -144,7 +144,7 @@
         "character": 4
       },
       "Name": "6",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {

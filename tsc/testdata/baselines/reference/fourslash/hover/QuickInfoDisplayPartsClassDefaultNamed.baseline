@@ -34,7 +34,7 @@
         "character": 0
       },
       "Name": "1",
-      "Data": null
+      "Data": {}
     },
     "item": null
   },
@@ -46,7 +46,7 @@
         "character": 7
       },
       "Name": "2",
-      "Data": null
+      "Data": {}
     },
     "item": null
   },
@@ -58,7 +58,7 @@
         "character": 15
       },
       "Name": "3",
-      "Data": null
+      "Data": {}
     },
     "item": null
   },
@@ -70,7 +70,7 @@
         "character": 21
       },
       "Name": "4",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -87,7 +87,7 @@
         "character": 23
       },
       "Name": "5",
-      "Data": null
+      "Data": {}
     },
     "item": null
   }

@@ -316,12 +316,12 @@
         "character": 6
       },
       "Name": "1",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass c\u003cT\u003e\n```\n"
+        "value": "```tsx\nclass c<T>\n```\n"
       }
     }
   },
@@ -333,7 +333,7 @@
         "character": 8
       },
       "Name": "2",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -350,12 +350,12 @@
         "character": 4
       },
       "Name": "3",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconstructor c\u003cT\u003e(a: T): c\u003cT\u003e\n```\n"
+        "value": "```tsx\nconstructor c<T>(a: T): c<T>\n```\n"
       }
     }
   },
@@ -367,7 +367,7 @@
         "character": 16
       },
       "Name": "4",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -384,7 +384,7 @@
         "character": 19
       },
       "Name": "5",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -401,12 +401,12 @@
         "character": 4
       },
       "Name": "6",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) c.method\u003cU\u003e(a: U, b: T): U\n```\n"
+        "value": "```tsx\n(method) c.method<U>(a: U, b: T): U\n```\n"
       }
     }
   },
@@ -418,7 +418,7 @@
         "character": 11
       },
       "Name": "7",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -435,7 +435,7 @@
         "character": 14
       },
       "Name": "8",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -452,7 +452,7 @@
         "character": 17
       },
       "Name": "9",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -469,7 +469,7 @@
         "character": 20
       },
       "Name": "10",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -486,7 +486,7 @@
         "character": 23
       },
       "Name": "11",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -503,7 +503,7 @@
         "character": 15
       },
       "Name": "12",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -520,12 +520,12 @@
         "character": 4
       },
       "Name": "13",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar cInstance: c\u003cstring\u003e\n```\n"
+        "value": "```tsx\nvar cInstance: c<string>\n```\n"
       }
     }
   },
@@ -537,12 +537,12 @@
         "character": 20
       },
       "Name": "14",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconstructor c\u003cstring\u003e(a: string): c\u003cstring\u003e\n```\n"
+        "value": "```tsx\nconstructor c<string>(a: string): c<string>\n```\n"
       }
     }
   },
@@ -554,7 +554,7 @@
         "character": 4
       },
       "Name": "15",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -571,12 +571,12 @@
         "character": 11
       },
       "Name": "16",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass c\u003cT\u003e\n```\n"
+        "value": "```tsx\nclass c<T>\n```\n"
       }
     }
   },
@@ -588,12 +588,12 @@
         "character": 0
       },
       "Name": "17",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar cInstance: c\u003cstring\u003e\n```\n"
+        "value": "```tsx\nvar cInstance: c<string>\n```\n"
       }
     }
   },
@@ -605,12 +605,12 @@
         "character": 10
       },
       "Name": "18",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) c.method\u003c\"hello\"\u003e(a: \"hello\", b: string): \"hello\"\n```\n"
+        "value": "```tsx\n(method) c.method<\"hello\">(a: \"hello\", b: string): \"hello\"\n```\n"
       }
     }
   },
@@ -622,12 +622,12 @@
         "character": 6
       },
       "Name": "19",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass c2\u003cT extends c\u003cstring\u003e\u003e\n```\n"
+        "value": "```tsx\nclass c2<T extends c<string>>\n```\n"
       }
     }
   },
@@ -639,12 +639,12 @@
         "character": 9
       },
       "Name": "20",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T extends c\u003cstring\u003e\n```\n"
+        "value": "```tsx\n(type parameter) T extends c<string>\n```\n"
       }
     }
   },
@@ -656,12 +656,12 @@
         "character": 19
       },
       "Name": "21",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass c\u003cT\u003e\n```\n"
+        "value": "```tsx\nclass c<T>\n```\n"
       }
     }
   },
@@ -673,12 +673,12 @@
         "character": 4
       },
       "Name": "22",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconstructor c2\u003cT extends c\u003cstring\u003e\u003e(a: T): c2\u003cT\u003e\n```\n"
+        "value": "```tsx\nconstructor c2<T extends c<string>>(a: T): c2<T>\n```\n"
       }
     }
   },
@@ -690,7 +690,7 @@
         "character": 16
       },
       "Name": "23",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -707,12 +707,12 @@
         "character": 19
       },
       "Name": "24",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T extends c\u003cstring\u003e\n```\n"
+        "value": "```tsx\n(type parameter) T extends c<string>\n```\n"
       }
     }
   },
@@ -724,12 +724,12 @@
         "character": 4
       },
       "Name": "25",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) c2.method\u003cU extends c\u003cstring\u003e\u003e(a: U, b: T): U\n```\n"
+        "value": "```tsx\n(method) c2.method<U extends c<string>>(a: U, b: T): U\n```\n"
       }
     }
   },
@@ -741,12 +741,12 @@
         "character": 11
       },
       "Name": "26",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U extends c\u003cstring\u003e\n```\n"
+        "value": "```tsx\n(type parameter) U extends c<string>\n```\n"
       }
     }
   },
@@ -758,12 +758,12 @@
         "character": 21
       },
       "Name": "27",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass c\u003cT\u003e\n```\n"
+        "value": "```tsx\nclass c<T>\n```\n"
       }
     }
   },
@@ -775,7 +775,7 @@
         "character": 32
       },
       "Name": "28",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -792,12 +792,12 @@
         "character": 35
       },
       "Name": "29",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U extends c\u003cstring\u003e\n```\n"
+        "value": "```tsx\n(type parameter) U extends c<string>\n```\n"
       }
     }
   },
@@ -809,7 +809,7 @@
         "character": 38
       },
       "Name": "30",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -826,12 +826,12 @@
         "character": 41
       },
       "Name": "31",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T extends c\u003cstring\u003e\n```\n"
+        "value": "```tsx\n(type parameter) T extends c<string>\n```\n"
       }
     }
   },
@@ -843,7 +843,7 @@
         "character": 15
       },
       "Name": "32",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -860,12 +860,12 @@
         "character": 4
       },
       "Name": "33",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar cInstance1: c2\u003cc\u003cstring\u003e\u003e\n```\n"
+        "value": "```tsx\nvar cInstance1: c2<c<string>>\n```\n"
       }
     }
   },
@@ -877,12 +877,12 @@
         "character": 21
       },
       "Name": "34",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconstructor c2\u003cc\u003cstring\u003e\u003e(a: c\u003cstring\u003e): c2\u003cc\u003cstring\u003e\u003e\n```\n"
+        "value": "```tsx\nconstructor c2<c<string>>(a: c<string>): c2<c<string>>\n```\n"
       }
     }
   },
@@ -894,12 +894,12 @@
         "character": 24
       },
       "Name": "35",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar cInstance: c\u003cstring\u003e\n```\n"
+        "value": "```tsx\nvar cInstance: c<string>\n```\n"
       }
     }
   },
@@ -911,7 +911,7 @@
         "character": 4
       },
       "Name": "36",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -928,12 +928,12 @@
         "character": 12
       },
       "Name": "37",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass c2\u003cT extends c\u003cstring\u003e\u003e\n```\n"
+        "value": "```tsx\nclass c2<T extends c<string>>\n```\n"
       }
     }
   },
@@ -945,12 +945,12 @@
         "character": 0
       },
       "Name": "38",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar cInstance1: c2\u003cc\u003cstring\u003e\u003e\n```\n"
+        "value": "```tsx\nvar cInstance1: c2<c<string>>\n```\n"
       }
     }
   },
@@ -962,12 +962,12 @@
         "character": 11
       },
       "Name": "39",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) c2.method\u003cc\u003cstring\u003e\u003e(a: c\u003cstring\u003e, b: c\u003cstring\u003e): c\u003cstring\u003e\n```\n"
+        "value": "```tsx\n(method) c2.method<c<string>>(a: c<string>, b: c<string>): c<string>\n```\n"
       }
     }
   },
@@ -979,12 +979,12 @@
         "character": 18
       },
       "Name": "40",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar cInstance: c\u003cstring\u003e\n```\n"
+        "value": "```tsx\nvar cInstance: c<string>\n```\n"
       }
     }
   },
@@ -996,12 +996,12 @@
         "character": 29
       },
       "Name": "41",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar cInstance: c\u003cstring\u003e\n```\n"
+        "value": "```tsx\nvar cInstance: c<string>\n```\n"
       }
     }
   }

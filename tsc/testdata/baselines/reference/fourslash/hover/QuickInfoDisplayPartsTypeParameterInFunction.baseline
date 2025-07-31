@@ -101,12 +101,12 @@
         "character": 9
       },
       "Name": "1",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foo\u003cU\u003e(a: U): U\n```\n"
+        "value": "```tsx\nfunction foo<U>(a: U): U\n```\n"
       }
     }
   },
@@ -118,7 +118,7 @@
         "character": 13
       },
       "Name": "2",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -135,7 +135,7 @@
         "character": 16
       },
       "Name": "3",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -152,7 +152,7 @@
         "character": 19
       },
       "Name": "4",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -169,7 +169,7 @@
         "character": 11
       },
       "Name": "5",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -186,12 +186,12 @@
         "character": 0
       },
       "Name": "6",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foo\u003c\"Hello\"\u003e(a: \"Hello\"): \"Hello\"\n```\n"
+        "value": "```tsx\nfunction foo<\"Hello\">(a: \"Hello\"): \"Hello\"\n```\n"
       }
     }
   },
@@ -203,12 +203,12 @@
         "character": 9
       },
       "Name": "7",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foo2\u003cU extends string\u003e(a: U): U\n```\n"
+        "value": "```tsx\nfunction foo2<U extends string>(a: U): U\n```\n"
       }
     }
   },
@@ -220,7 +220,7 @@
         "character": 14
       },
       "Name": "8",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -237,7 +237,7 @@
         "character": 32
       },
       "Name": "9",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -254,7 +254,7 @@
         "character": 35
       },
       "Name": "10",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -271,7 +271,7 @@
         "character": 11
       },
       "Name": "11",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -288,12 +288,12 @@
         "character": 0
       },
       "Name": "12",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foo2\u003c\"hello\"\u003e(a: \"hello\"): \"hello\"\n```\n"
+        "value": "```tsx\nfunction foo2<\"hello\">(a: \"hello\"): \"hello\"\n```\n"
       }
     }
   }

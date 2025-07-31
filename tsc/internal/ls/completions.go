@@ -2,7 +2,6 @@ package ls
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"maps"
@@ -19,6 +18,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/jsnum"
+	"github.com/microsoft/typescript-go/internal/json"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/lsutil"
 	"github.com/microsoft/typescript-go/internal/scanner"
@@ -4578,9 +4578,9 @@ func getArgumentInfoForCompletions(node *ast.Node, position int, file *ast.Sourc
 type itemData struct {
 	FileName   string          `json:"fileName"`
 	Position   int             `json:"position"`
-	Source     string          `json:"source,omitempty"`
-	Name       string          `json:"name,omitempty"`
-	AutoImport *autoImportData `json:"autoImport,omitempty"`
+	Source     string          `json:"source,omitzero"`
+	Name       string          `json:"name,omitzero"`
+	AutoImport *autoImportData `json:"autoImport,omitzero"`
 }
 
 // !!! CompletionEntryDataAutoImport

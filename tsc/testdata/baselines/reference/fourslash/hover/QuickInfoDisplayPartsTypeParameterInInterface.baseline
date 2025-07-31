@@ -482,12 +482,12 @@
         "character": 10
       },
       "Name": "1",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ninterface I\u003cT\u003e\n```\n"
+        "value": "```tsx\ninterface I<T>\n```\n"
       }
     }
   },
@@ -499,7 +499,7 @@
         "character": 12
       },
       "Name": "2",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -516,7 +516,7 @@
         "character": 9
       },
       "Name": "3",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -533,7 +533,7 @@
         "character": 12
       },
       "Name": "4",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -550,7 +550,7 @@
         "character": 15
       },
       "Name": "5",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -567,7 +567,7 @@
         "character": 18
       },
       "Name": "6",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -584,7 +584,7 @@
         "character": 21
       },
       "Name": "7",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -601,7 +601,7 @@
         "character": 25
       },
       "Name": "8",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -618,7 +618,7 @@
         "character": 5
       },
       "Name": "9",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -635,7 +635,7 @@
         "character": 8
       },
       "Name": "10",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -652,7 +652,7 @@
         "character": 11
       },
       "Name": "11",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -669,7 +669,7 @@
         "character": 14
       },
       "Name": "12",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -686,7 +686,7 @@
         "character": 17
       },
       "Name": "13",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -703,7 +703,7 @@
         "character": 21
       },
       "Name": "14",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -720,12 +720,12 @@
         "character": 4
       },
       "Name": "15",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) I.method\u003cU\u003e(a: U, b: T): U\n```\n"
+        "value": "```tsx\n(method) I.method<U>(a: U, b: T): U\n```\n"
       }
     }
   },
@@ -737,7 +737,7 @@
         "character": 11
       },
       "Name": "16",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -754,7 +754,7 @@
         "character": 14
       },
       "Name": "17",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -771,7 +771,7 @@
         "character": 17
       },
       "Name": "18",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -788,7 +788,7 @@
         "character": 20
       },
       "Name": "19",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -805,7 +805,7 @@
         "character": 23
       },
       "Name": "20",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -822,7 +822,7 @@
         "character": 27
       },
       "Name": "21",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -839,12 +839,12 @@
         "character": 4
       },
       "Name": "22",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal: I\u003cstring\u003e\n```\n"
+        "value": "```tsx\nvar iVal: I<string>\n```\n"
       }
     }
   },
@@ -856,12 +856,12 @@
         "character": 10
       },
       "Name": "23",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ninterface I\u003cT\u003e\n```\n"
+        "value": "```tsx\ninterface I<T>\n```\n"
       }
     }
   },
@@ -873,12 +873,12 @@
         "character": 4
       },
       "Name": "24",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal: I\u003cstring\u003e\n```\n"
+        "value": "```tsx\nvar iVal: I<string>\n```\n"
       }
     }
   },
@@ -890,12 +890,12 @@
         "character": 0
       },
       "Name": "25",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal: I\u003cstring\u003e\n```\n"
+        "value": "```tsx\nvar iVal: I<string>\n```\n"
       }
     }
   },
@@ -907,12 +907,12 @@
         "character": 0
       },
       "Name": "26",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal: I\u003cstring\u003e\n```\n"
+        "value": "```tsx\nvar iVal: I<string>\n```\n"
       }
     }
   },
@@ -924,12 +924,12 @@
         "character": 5
       },
       "Name": "27",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) I.method\u003c\"hello\"\u003e(a: \"hello\", b: string): \"hello\"\n```\n"
+        "value": "```tsx\n(method) I.method<\"hello\">(a: \"hello\", b: string): \"hello\"\n```\n"
       }
     }
   },
@@ -941,12 +941,12 @@
         "character": 10
       },
       "Name": "28",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ninterface I1\u003cT extends I\u003cstring\u003e\u003e\n```\n"
+        "value": "```tsx\ninterface I1<T extends I<string>>\n```\n"
       }
     }
   },
@@ -958,12 +958,12 @@
         "character": 13
       },
       "Name": "29",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T extends I\u003cstring\u003e\n```\n"
+        "value": "```tsx\n(type parameter) T extends I<string>\n```\n"
       }
     }
   },
@@ -975,12 +975,12 @@
         "character": 23
       },
       "Name": "30",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ninterface I\u003cT\u003e\n```\n"
+        "value": "```tsx\ninterface I<T>\n```\n"
       }
     }
   },
@@ -992,12 +992,12 @@
         "character": 9
       },
       "Name": "31",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U extends I\u003cstring\u003e\n```\n"
+        "value": "```tsx\n(type parameter) U extends I<string>\n```\n"
       }
     }
   },
@@ -1009,12 +1009,12 @@
         "character": 19
       },
       "Name": "32",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ninterface I\u003cT\u003e\n```\n"
+        "value": "```tsx\ninterface I<T>\n```\n"
       }
     }
   },
@@ -1026,7 +1026,7 @@
         "character": 30
       },
       "Name": "33",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1043,12 +1043,12 @@
         "character": 33
       },
       "Name": "34",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U extends I\u003cstring\u003e\n```\n"
+        "value": "```tsx\n(type parameter) U extends I<string>\n```\n"
       }
     }
   },
@@ -1060,7 +1060,7 @@
         "character": 36
       },
       "Name": "35",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1077,12 +1077,12 @@
         "character": 39
       },
       "Name": "36",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T extends I\u003cstring\u003e\n```\n"
+        "value": "```tsx\n(type parameter) T extends I<string>\n```\n"
       }
     }
   },
@@ -1094,12 +1094,12 @@
         "character": 43
       },
       "Name": "37",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U extends I\u003cstring\u003e\n```\n"
+        "value": "```tsx\n(type parameter) U extends I<string>\n```\n"
       }
     }
   },
@@ -1111,12 +1111,12 @@
         "character": 5
       },
       "Name": "38",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U extends I\u003cstring\u003e\n```\n"
+        "value": "```tsx\n(type parameter) U extends I<string>\n```\n"
       }
     }
   },
@@ -1128,12 +1128,12 @@
         "character": 15
       },
       "Name": "39",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ninterface I\u003cT\u003e\n```\n"
+        "value": "```tsx\ninterface I<T>\n```\n"
       }
     }
   },
@@ -1145,7 +1145,7 @@
         "character": 26
       },
       "Name": "40",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1162,12 +1162,12 @@
         "character": 29
       },
       "Name": "41",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U extends I\u003cstring\u003e\n```\n"
+        "value": "```tsx\n(type parameter) U extends I<string>\n```\n"
       }
     }
   },
@@ -1179,7 +1179,7 @@
         "character": 32
       },
       "Name": "42",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1196,12 +1196,12 @@
         "character": 35
       },
       "Name": "43",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T extends I\u003cstring\u003e\n```\n"
+        "value": "```tsx\n(type parameter) T extends I<string>\n```\n"
       }
     }
   },
@@ -1213,12 +1213,12 @@
         "character": 39
       },
       "Name": "44",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U extends I\u003cstring\u003e\n```\n"
+        "value": "```tsx\n(type parameter) U extends I<string>\n```\n"
       }
     }
   },
@@ -1230,12 +1230,12 @@
         "character": 4
       },
       "Name": "45",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) I1.method\u003cU extends I\u003cstring\u003e\u003e(a: U, b: T): U\n```\n"
+        "value": "```tsx\n(method) I1.method<U extends I<string>>(a: U, b: T): U\n```\n"
       }
     }
   },
@@ -1247,12 +1247,12 @@
         "character": 11
       },
       "Name": "46",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U extends I\u003cstring\u003e\n```\n"
+        "value": "```tsx\n(type parameter) U extends I<string>\n```\n"
       }
     }
   },
@@ -1264,12 +1264,12 @@
         "character": 21
       },
       "Name": "47",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ninterface I\u003cT\u003e\n```\n"
+        "value": "```tsx\ninterface I<T>\n```\n"
       }
     }
   },
@@ -1281,7 +1281,7 @@
         "character": 32
       },
       "Name": "48",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1298,12 +1298,12 @@
         "character": 35
       },
       "Name": "49",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U extends I\u003cstring\u003e\n```\n"
+        "value": "```tsx\n(type parameter) U extends I<string>\n```\n"
       }
     }
   },
@@ -1315,7 +1315,7 @@
         "character": 38
       },
       "Name": "50",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -1332,12 +1332,12 @@
         "character": 41
       },
       "Name": "51",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T extends I\u003cstring\u003e\n```\n"
+        "value": "```tsx\n(type parameter) T extends I<string>\n```\n"
       }
     }
   },
@@ -1349,12 +1349,12 @@
         "character": 45
       },
       "Name": "52",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U extends I\u003cstring\u003e\n```\n"
+        "value": "```tsx\n(type parameter) U extends I<string>\n```\n"
       }
     }
   },
@@ -1366,12 +1366,12 @@
         "character": 4
       },
       "Name": "53",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal1: I1\u003cI\u003cstring\u003e\u003e\n```\n"
+        "value": "```tsx\nvar iVal1: I1<I<string>>\n```\n"
       }
     }
   },
@@ -1383,12 +1383,12 @@
         "character": 11
       },
       "Name": "54",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ninterface I1\u003cT extends I\u003cstring\u003e\u003e\n```\n"
+        "value": "```tsx\ninterface I1<T extends I<string>>\n```\n"
       }
     }
   },
@@ -1400,12 +1400,12 @@
         "character": 14
       },
       "Name": "55",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ninterface I\u003cT\u003e\n```\n"
+        "value": "```tsx\ninterface I<T>\n```\n"
       }
     }
   },
@@ -1417,12 +1417,12 @@
         "character": 4
       },
       "Name": "56",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal1: I1\u003cI\u003cstring\u003e\u003e\n```\n"
+        "value": "```tsx\nvar iVal1: I1<I<string>>\n```\n"
       }
     }
   },
@@ -1434,12 +1434,12 @@
         "character": 10
       },
       "Name": "57",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal: I\u003cstring\u003e\n```\n"
+        "value": "```tsx\nvar iVal: I<string>\n```\n"
       }
     }
   },
@@ -1451,12 +1451,12 @@
         "character": 16
       },
       "Name": "58",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal: I\u003cstring\u003e\n```\n"
+        "value": "```tsx\nvar iVal: I<string>\n```\n"
       }
     }
   },
@@ -1468,12 +1468,12 @@
         "character": 0
       },
       "Name": "59",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal1: I1\u003cI\u003cstring\u003e\u003e\n```\n"
+        "value": "```tsx\nvar iVal1: I1<I<string>>\n```\n"
       }
     }
   },
@@ -1485,12 +1485,12 @@
         "character": 6
       },
       "Name": "60",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal: I\u003cstring\u003e\n```\n"
+        "value": "```tsx\nvar iVal: I<string>\n```\n"
       }
     }
   },
@@ -1502,12 +1502,12 @@
         "character": 12
       },
       "Name": "61",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal: I\u003cstring\u003e\n```\n"
+        "value": "```tsx\nvar iVal: I<string>\n```\n"
       }
     }
   },
@@ -1519,12 +1519,12 @@
         "character": 0
       },
       "Name": "62",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal1: I1\u003cI\u003cstring\u003e\u003e\n```\n"
+        "value": "```tsx\nvar iVal1: I1<I<string>>\n```\n"
       }
     }
   },
@@ -1536,12 +1536,12 @@
         "character": 6
       },
       "Name": "63",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) I1.method\u003cI\u003cstring\u003e\u003e(a: I\u003cstring\u003e, b: I\u003cstring\u003e): I\u003cstring\u003e\n```\n"
+        "value": "```tsx\n(method) I1.method<I<string>>(a: I<string>, b: I<string>): I<string>\n```\n"
       }
     }
   },
@@ -1553,12 +1553,12 @@
         "character": 13
       },
       "Name": "64",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal: I\u003cstring\u003e\n```\n"
+        "value": "```tsx\nvar iVal: I<string>\n```\n"
       }
     }
   },
@@ -1570,12 +1570,12 @@
         "character": 19
       },
       "Name": "65",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal: I\u003cstring\u003e\n```\n"
+        "value": "```tsx\nvar iVal: I<string>\n```\n"
       }
     }
   }

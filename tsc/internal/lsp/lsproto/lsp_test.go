@@ -1,9 +1,9 @@
 package lsproto
 
 import (
-	"encoding/json"
 	"testing"
 
+	"github.com/microsoft/typescript-go/internal/json"
 	"gotest.tools/v3/assert"
 )
 

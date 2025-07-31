@@ -69,12 +69,12 @@
         "character": 4
       },
       "Name": "1",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar x: (a: any) =\u003e number\n```\n"
+        "value": "```tsx\nvar x: (a: any) => number\n```\n"
       }
     }
   },
@@ -86,7 +86,7 @@
         "character": 8
       },
       "Name": "5",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -103,12 +103,12 @@
         "character": 4
       },
       "Name": "2",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar y: (a: any, b: any) =\u003e number\n```\n"
+        "value": "```tsx\nvar y: (a: any, b: any) => number\n```\n"
       }
     }
   },
@@ -120,7 +120,7 @@
         "character": 9
       },
       "Name": "6",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -137,7 +137,7 @@
         "character": 12
       },
       "Name": "7",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -154,12 +154,12 @@
         "character": 4
       },
       "Name": "3",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar z: (a: number) =\u003e number\n```\n"
+        "value": "```tsx\nvar z: (a: number) => number\n```\n"
       }
     }
   },
@@ -171,7 +171,7 @@
         "character": 9
       },
       "Name": "8",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
@@ -188,12 +188,12 @@
         "character": 4
       },
       "Name": "4",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar z2: () =\u003e number\n```\n"
+        "value": "```tsx\nvar z2: () => number\n```\n"
       }
     }
   }

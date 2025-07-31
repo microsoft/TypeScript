@@ -29,12 +29,12 @@
         "character": 6
       },
       "Name": "",
-      "Data": null
+      "Data": {}
     },
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconst foo: \u003cT1, T2\u003e(a: T1, b: any) =\u003e void\n```\n\n\n*@param* `a`\n\n*@param* `a`\n\n*@template* `T1`, `T2` — Comment Text\n"
+        "value": "```tsx\nconst foo: <T1, T2>(a: T1, b: any) => void\n```\n\n\n*@param* `a`\n\n*@param* `a`\n\n*@template* `T1`, `T2` — Comment Text\n"
       }
     }
   }

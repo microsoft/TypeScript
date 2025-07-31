@@ -2,13 +2,13 @@ package tsbaseline
 
 import (
 	"encoding/base64"
-	"encoding/json"
 	"net/url"
 	"slices"
 	"strings"
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/json"
 	"github.com/microsoft/typescript-go/internal/sourcemap"
 	"github.com/microsoft/typescript-go/internal/testutil/baseline"
 	"github.com/microsoft/typescript-go/internal/testutil/harnessutil"
