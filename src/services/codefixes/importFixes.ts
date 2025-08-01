@@ -1834,7 +1834,10 @@ function promoteFromTypeOnly(
     }
 
     function promoteImportClause(importClause: ImportClause) {
-        changes.delete(sourceFile, getTypeKeywordOfTypeOnlyImport(importClause, sourceFile));
+        // JSDoc imports are inherently type-only and don't have a removable 'type' keyword
+        if (!isJSDocImportTag(importClause.parent)) {
+            changes.delete(sourceFile, getTypeKeywordOfTypeOnlyImport(importClause, sourceFile));
+        }
         // Change .ts extension to .js if necessary
         if (!compilerOptions.allowImportingTsExtensions) {
             const moduleSpecifier = tryGetModuleSpecifierFromDeclaration(importClause.parent);
