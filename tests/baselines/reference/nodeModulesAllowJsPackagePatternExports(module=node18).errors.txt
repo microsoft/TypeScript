@@ -64,7 +64,7 @@ node_modules/inner/index.d.ts(3,22): error TS1479: The current file is a CommonJ
     {
         "name": "package",
         "private": true,
-        "type": "module",
+        "type": "module"
     }
 ==== node_modules/inner/package.json (0 errors) ====
     {
@@ -76,3 +76,4 @@ node_modules/inner/index.d.ts(3,22): error TS1479: The current file is a CommonJ
             "./js/*": "./*.js"
         }
     }
+    

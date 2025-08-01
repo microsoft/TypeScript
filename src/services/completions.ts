@@ -1595,7 +1595,7 @@ function getJsxClosingTagCompletion(location: Node | undefined, sourceFile: Sour
         switch (node.kind) {
             case SyntaxKind.JsxClosingElement:
                 return true;
-            case SyntaxKind.SlashToken:
+            case SyntaxKind.LessThanSlashToken:
             case SyntaxKind.GreaterThanToken:
             case SyntaxKind.Identifier:
             case SyntaxKind.PropertyAccessExpression:
@@ -3508,7 +3508,7 @@ function getCompletionData(
                         }
                         break;
 
-                    case SyntaxKind.SlashToken:
+                    case SyntaxKind.LessThanSlashToken:
                         if (currentToken.parent.kind === SyntaxKind.JsxSelfClosingElement) {
                             location = currentToken;
                         }
@@ -3518,7 +3518,7 @@ function getCompletionData(
 
             switch (parent.kind) {
                 case SyntaxKind.JsxClosingElement:
-                    if (contextToken.kind === SyntaxKind.SlashToken) {
+                    if (contextToken.kind === SyntaxKind.LessThanSlashToken) {
                         isStartingCloseTag = true;
                         location = contextToken;
                     }
@@ -3851,6 +3851,10 @@ function getCompletionData(
             if (firstAccessibleSymbolId && addToSeen(seenPropertySymbols, firstAccessibleSymbolId)) {
                 const index = symbols.length;
                 symbols.push(firstAccessibleSymbol);
+
+                // Symbol completions should have lower priority since they represent computed property access
+                symbolToSortTextMap[getSymbolId(firstAccessibleSymbol)] = SortText.GlobalsOrKeywords;
+
                 const moduleSymbol = firstAccessibleSymbol.parent;
                 if (
                     !moduleSymbol ||
@@ -5805,7 +5809,7 @@ function isValidTrigger(sourceFile: SourceFile, triggerCharacter: CompletionsTri
         case "/":
             return !!contextToken && (isStringLiteralLike(contextToken)
                 ? !!tryGetImportFromModuleSpecifier(contextToken)
-                : contextToken.kind === SyntaxKind.SlashToken && isJsxClosingElement(contextToken.parent));
+                : contextToken.kind === SyntaxKind.LessThanSlashToken && isJsxClosingElement(contextToken.parent));
         case " ":
             return !!contextToken && isImportKeyword(contextToken) && contextToken.parent.kind === SyntaxKind.SourceFile;
         default:

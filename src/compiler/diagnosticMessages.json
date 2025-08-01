@@ -939,7 +939,7 @@
         "category": "Error",
         "code": 1285
     },
-    "ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.": {
+    "ECMAScript imports and exports cannot be written in a CommonJS file under 'verbatimModuleSyntax'.": {
         "category": "Error",
         "code": 1286
     },
@@ -967,13 +967,17 @@
         "category": "Error",
         "code": 1292
     },
-    "ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.": {
+    "ECMAScript module syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.": {
         "category": "Error",
         "code": 1293
     },
     "This syntax is not allowed when 'erasableSyntaxOnly' is enabled.": {
         "category": "Error",
         "code": 1294
+    },
+    "ECMAScript imports and exports cannot be written in a CommonJS file under 'verbatimModuleSyntax'. Adjust the 'type' field in the nearest 'package.json' to make this file an ECMAScript module, or adjust your 'verbatimModuleSyntax', 'module', and 'moduleResolution' settings in TypeScript.": {
+        "category": "Error",
+        "code": 1295
     },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
@@ -2079,6 +2083,10 @@
     "Argument of type '{0}' is not assignable to parameter of type '{1}'.": {
         "category": "Error",
         "code": 2345
+    },
+    "Call target does not contain any signatures.": {
+        "category": "Error",
+        "code": 2346
     },
     "Untyped function calls may not accept type arguments.": {
         "category": "Error",
@@ -3419,7 +3427,7 @@
         "category": "Error",
         "code": 2724
     },
-    "Class name cannot be 'Object' when targeting ES5 with module {0}.": {
+    "Class name cannot be 'Object' when targeting ES5 and above with module {0}.": {
         "category": "Error",
         "code": 2725
     },
@@ -6058,7 +6066,7 @@
         "category": "Message",
         "code": 6506
     },
-    "Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files.": {
+    "Allow JavaScript files to be a part of your program. Use the 'checkJs' option to get errors from these files.": {
         "category": "Message",
         "code": 6600
     },

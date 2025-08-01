@@ -4564,6 +4564,7 @@ namespace Parser {
             }
             parseExpected(SyntaxKind.ColonToken);
             attributes = parseImportAttributes(currentToken as SyntaxKind.WithKeyword | SyntaxKind.AssertKeyword, /*skipKeyword*/ true);
+            parseOptional(SyntaxKind.CommaToken);
             if (!parseExpected(SyntaxKind.CloseBraceToken)) {
                 const lastError = lastOrUndefined(parseDiagnostics);
                 if (lastError && lastError.code === Diagnostics._0_expected.code) {
@@ -5558,12 +5559,15 @@ namespace Parser {
             return parseFunctionBlock(SignatureFlags.IgnoreMissingOpenBrace | (isAsync ? SignatureFlags.Await : SignatureFlags.None));
         }
 
+        const savedYieldContext = inYieldContext();
+        setYieldContext(false);
         const savedTopLevel = topLevel;
         topLevel = false;
         const node = isAsync
             ? doInAwaitContext(() => parseAssignmentExpressionOrHigher(allowReturnTypeInArrowFunction))
             : doOutsideOfAwaitContext(() => parseAssignmentExpressionOrHigher(allowReturnTypeInArrowFunction));
         topLevel = savedTopLevel;
+        setYieldContext(savedYieldContext);
         return node;
     }
 

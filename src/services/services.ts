@@ -504,8 +504,9 @@ function createChildren(node: Node, sourceFile: SourceFileLike | undefined): rea
         });
         return children;
     }
-
+    const languageVariant = sourceFile?.languageVariant ?? LanguageVariant.Standard;
     scanner.setText((sourceFile || node.getSourceFile()).text);
+    scanner.setLanguageVariant(languageVariant);
     let pos = node.pos;
     const processNode = (child: Node) => {
         addSyntheticNodes(children, pos, child.pos, node);
@@ -526,6 +527,7 @@ function createChildren(node: Node, sourceFile: SourceFileLike | undefined): rea
     node.forEachChild(processNode, processNodes);
     addSyntheticNodes(children, pos, node.end, node);
     scanner.setText(undefined);
+    scanner.setLanguageVariant(LanguageVariant.Standard);
     return children;
 }
 
@@ -3546,6 +3548,7 @@ function getContainingObjectLiteralElementWorker(node: Node): ObjectLiteralEleme
         // falls through
 
         case SyntaxKind.Identifier:
+        case SyntaxKind.JsxNamespacedName:
             return isObjectLiteralElement(node.parent) &&
                     (node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression || node.parent.parent.kind === SyntaxKind.JsxAttributes) &&
                     node.parent.name === node ? node.parent : undefined;

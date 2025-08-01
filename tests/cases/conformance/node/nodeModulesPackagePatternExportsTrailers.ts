@@ -54,7 +54,7 @@ export { type };
 {
     "name": "package",
     "private": true,
-    "type": "module",
+    "type": "module"
 }
 // @filename: node_modules/inner/package.json
 {

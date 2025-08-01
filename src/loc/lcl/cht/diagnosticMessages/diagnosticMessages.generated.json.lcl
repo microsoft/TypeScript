@@ -1890,15 +1890,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJS_option_to_get_errors_from_these__6600" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJs_option_to_get_errors_from_these__6600" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files.]]></Val>
+          <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the 'checkJs' option to get errors from these files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[允許 JavaScript 檔案成為您程式的一部分。使用 'checkJS' 選項可從這些檔案取得錯誤。]]></Val>
+            <Val><![CDATA[允許 JavaScript 檔案成為您程式的一部分。使用 'checkJs' 選項可從這些檔案取得錯誤。]]></Val>
           </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files.]]></Val>
-          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3042,6 +3039,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Call_target_does_not_contain_any_signatures_2346" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Call target does not contain any signatures.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[呼叫目標未包含任何特徵標記。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Can_only_convert_logical_AND_access_chains_95142" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Can only convert logical AND access chains]]></Val>
@@ -4068,11 +4074,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Class_name_cannot_be_Object_when_targeting_ES5_with_module_0_2725" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Class_name_cannot_be_Object_when_targeting_ES5_and_above_with_module_0_2725" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Class name cannot be 'Object' when targeting ES5 with module {0}.]]></Val>
+          <Val><![CDATA[Class name cannot be 'Object' when targeting ES5 and above with module {0}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[當目標為具有模組 {0} 的 ES5 時，類別名稱不可為 'Object'。]]></Val>
+            <Val><![CDATA[當目標為具有模組 {0} 的 ES5 和更新版本時，類別名稱不可為 'Object'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
