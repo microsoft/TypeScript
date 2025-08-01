@@ -1184,3 +1184,89 @@ func (f *FourslashTest) editScript(t *testing.T, fileName string, start int, end
 func (f *FourslashTest) getScriptInfo(fileName string) *scriptInfo {
 	return f.scriptInfos[fileName]
 }
+
+// !!! expected tags
+func (f *FourslashTest) VerifyQuickInfoAt(t *testing.T, marker string, expectedText string, expectedDocumentation string) {
+	f.GoToMarker(t, marker)
+	hover := f.getQuickInfoAtCurrentPosition(t)
+
+	f.verifyHoverContent(t, hover.Contents, expectedText, expectedDocumentation, fmt.Sprintf("At marker '%s': ", marker))
+}
+
+func (f *FourslashTest) getQuickInfoAtCurrentPosition(t *testing.T) *lsproto.Hover {
+	params := &lsproto.HoverParams{
+		TextDocument: lsproto.TextDocumentIdentifier{
+			Uri: ls.FileNameToDocumentURI(f.activeFilename),
+		},
+		Position: f.currentCaretPosition,
+	}
+	resMsg, result, resultOk := sendRequest(t, f, lsproto.TextDocumentHoverInfo, params)
+	if resMsg == nil {
+		t.Fatalf("Nil response received for hover request at marker '%s'", *f.lastKnownMarkerName)
+	}
+	if !resultOk {
+		t.Fatalf("Unexpected hover response type at marker '%s': %T", *f.lastKnownMarkerName, resMsg.AsResponse().Result)
+	}
+	if result.Hover == nil {
+		t.Fatalf("Expected hover result at marker '%s' but got nil", *f.lastKnownMarkerName)
+	}
+	return result.Hover
+}
+
+func (f *FourslashTest) verifyHoverContent(
+	t *testing.T,
+	actual lsproto.MarkupContentOrStringOrMarkedStringWithLanguageOrMarkedStrings,
+	expectedText string,
+	expectedDocumentation string,
+	prefix string,
+) {
+	switch {
+	case actual.MarkupContent != nil:
+		f.verifyHoverMarkdown(t, actual.MarkupContent.Value, expectedText, expectedDocumentation, prefix)
+	default:
+		t.Fatalf(prefix+"Expected markup content, got: %s", cmp.Diff(actual, nil))
+	}
+}
+
+func (f *FourslashTest) verifyHoverMarkdown(
+	t *testing.T,
+	actual string,
+	expectedText string,
+	expectedDocumentation string,
+	prefix string,
+) {
+	expected := fmt.Sprintf("```tsx\n%s\n```\n%s", expectedText, expectedDocumentation)
+	assertDeepEqual(t, actual, expected, prefix+"Hover markdown content mismatch")
+}
+
+func (f *FourslashTest) VerifyQuickInfoExists(t *testing.T) {
+	if isEmpty, _ := f.quickInfoIsEmpty(t); isEmpty {
+		t.Fatalf("Expected non-nil hover content at marker '%s'", *f.lastKnownMarkerName)
+	}
+}
+
+func (f *FourslashTest) VerifyNotQuickInfoExists(t *testing.T) {
+	if isEmpty, hover := f.quickInfoIsEmpty(t); !isEmpty {
+		t.Fatalf("Expected empty hover content at marker '%s', got '%s'", *f.lastKnownMarkerName, cmp.Diff(hover, nil))
+	}
+}
+
+func (f *FourslashTest) quickInfoIsEmpty(t *testing.T) (bool, *lsproto.Hover) {
+	hover := f.getQuickInfoAtCurrentPosition(t)
+	if hover == nil ||
+		(hover.Contents.MarkupContent == nil && hover.Contents.MarkedStrings == nil && hover.Contents.String == nil) {
+		return true, nil
+	}
+	return false, hover
+}
+
+func (f *FourslashTest) VerifyQuickInfoIs(t *testing.T, expectedText string, expectedDocumentation string) {
+	hover := f.getQuickInfoAtCurrentPosition(t)
+	var prefix string
+	if f.lastKnownMarkerName != nil {
+		prefix = fmt.Sprintf("At marker '%s': ", *f.lastKnownMarkerName)
+	} else {
+		prefix = fmt.Sprintf("At position (Ln %d, Col %d): ", f.currentCaretPosition.Line, f.currentCaretPosition.Character)
+	}
+	f.verifyHoverContent(t, hover.Contents, expectedText, expectedDocumentation, prefix)
+}
