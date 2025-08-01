@@ -1,0 +1,134 @@
+//// [tests/cases/compiler/returnTypeContextualTupleTyping1.ts] ////
+
+=== returnTypeContextualTupleTyping1.ts ===
+// https://github.com/microsoft/TypeScript/issues/62071
+
+declare function getNum(): Promise<number>;
+>getNum : Symbol(getNum, Decl(returnTypeContextualTupleTyping1.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+declare function getStr(): Promise<string>;
+>getStr : Symbol(getStr, Decl(returnTypeContextualTupleTyping1.ts, 2, 43))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+declare function useTuple(tuple: [number, string]): void;
+>useTuple : Symbol(useTuple, Decl(returnTypeContextualTupleTyping1.ts, 3, 43))
+>tuple : Symbol(tuple, Decl(returnTypeContextualTupleTyping1.ts, 4, 26))
+
+const p = Promise.resolve([])
+>p : Symbol(p, Decl(returnTypeContextualTupleTyping1.ts, 6, 5))
+>Promise.resolve([])  .then(() => Promise.all([getNum(), getStr()]))  .then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>Promise.resolve([])  .then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+  .then(() => Promise.all([getNum(), getStr()]))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>Promise.all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>getNum : Symbol(getNum, Decl(returnTypeContextualTupleTyping1.ts, 0, 0))
+>getStr : Symbol(getStr, Decl(returnTypeContextualTupleTyping1.ts, 2, 43))
+
+  .then(useTuple); // ok
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>useTuple : Symbol(useTuple, Decl(returnTypeContextualTupleTyping1.ts, 3, 43))
+
+// same as above but without relying as much on builtin libs
+interface MyPromise<T> {
+>MyPromise : Symbol(MyPromise, Decl(returnTypeContextualTupleTyping1.ts, 8, 18))
+>T : Symbol(T, Decl(returnTypeContextualTupleTyping1.ts, 11, 20))
+
+  then<
+>then : Symbol(MyPromise.then, Decl(returnTypeContextualTupleTyping1.ts, 11, 24))
+
+    TResult1 = T, // outer type parameter used as default here is important for the test
+>TResult1 : Symbol(TResult1, Decl(returnTypeContextualTupleTyping1.ts, 12, 7))
+>T : Symbol(T, Decl(returnTypeContextualTupleTyping1.ts, 11, 20))
+
+    TResult2 = never,
+>TResult2 : Symbol(TResult2, Decl(returnTypeContextualTupleTyping1.ts, 13, 17))
+
+  >(
+    onfulfilled?:
+>onfulfilled : Symbol(onfulfilled, Decl(returnTypeContextualTupleTyping1.ts, 15, 4))
+
+      | ((value: T) => TResult1 | PromiseLike<TResult1>)
+>value : Symbol(value, Decl(returnTypeContextualTupleTyping1.ts, 17, 10))
+>T : Symbol(T, Decl(returnTypeContextualTupleTyping1.ts, 11, 20))
+>TResult1 : Symbol(TResult1, Decl(returnTypeContextualTupleTyping1.ts, 12, 7))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>TResult1 : Symbol(TResult1, Decl(returnTypeContextualTupleTyping1.ts, 12, 7))
+
+      | undefined
+      | null,
+    onrejected?:
+>onrejected : Symbol(onrejected, Decl(returnTypeContextualTupleTyping1.ts, 19, 13))
+
+      | ((reason: any) => TResult2 | PromiseLike<TResult2>)
+>reason : Symbol(reason, Decl(returnTypeContextualTupleTyping1.ts, 21, 10))
+>TResult2 : Symbol(TResult2, Decl(returnTypeContextualTupleTyping1.ts, 13, 17))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>TResult2 : Symbol(TResult2, Decl(returnTypeContextualTupleTyping1.ts, 13, 17))
+
+      | undefined
+      | null,
+  ): MyPromise<TResult1 | TResult2>;
+>MyPromise : Symbol(MyPromise, Decl(returnTypeContextualTupleTyping1.ts, 8, 18))
+>TResult1 : Symbol(TResult1, Decl(returnTypeContextualTupleTyping1.ts, 12, 7))
+>TResult2 : Symbol(TResult2, Decl(returnTypeContextualTupleTyping1.ts, 13, 17))
+}
+
+declare function resolve<T>(value: T): MyPromise<Awaited<T>>;
+>resolve : Symbol(resolve, Decl(returnTypeContextualTupleTyping1.ts, 25, 1), Decl(returnTypeContextualTupleTyping1.ts, 27, 61))
+>T : Symbol(T, Decl(returnTypeContextualTupleTyping1.ts, 27, 25))
+>value : Symbol(value, Decl(returnTypeContextualTupleTyping1.ts, 27, 28))
+>T : Symbol(T, Decl(returnTypeContextualTupleTyping1.ts, 27, 25))
+>MyPromise : Symbol(MyPromise, Decl(returnTypeContextualTupleTyping1.ts, 8, 18))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(returnTypeContextualTupleTyping1.ts, 27, 25))
+
+declare function resolve<T>(value: T | PromiseLike<T>): MyPromise<Awaited<T>>;
+>resolve : Symbol(resolve, Decl(returnTypeContextualTupleTyping1.ts, 25, 1), Decl(returnTypeContextualTupleTyping1.ts, 27, 61))
+>T : Symbol(T, Decl(returnTypeContextualTupleTyping1.ts, 28, 25))
+>value : Symbol(value, Decl(returnTypeContextualTupleTyping1.ts, 28, 28))
+>T : Symbol(T, Decl(returnTypeContextualTupleTyping1.ts, 28, 25))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(returnTypeContextualTupleTyping1.ts, 28, 25))
+>MyPromise : Symbol(MyPromise, Decl(returnTypeContextualTupleTyping1.ts, 8, 18))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(returnTypeContextualTupleTyping1.ts, 28, 25))
+
+declare function all<T extends readonly unknown[] | []>(
+>all : Symbol(all, Decl(returnTypeContextualTupleTyping1.ts, 28, 78))
+>T : Symbol(T, Decl(returnTypeContextualTupleTyping1.ts, 30, 21))
+
+  values: T,
+>values : Symbol(values, Decl(returnTypeContextualTupleTyping1.ts, 30, 56))
+>T : Symbol(T, Decl(returnTypeContextualTupleTyping1.ts, 30, 21))
+
+): MyPromise<{ -readonly [P in keyof T]: Awaited<T[P]> }>;
+>MyPromise : Symbol(MyPromise, Decl(returnTypeContextualTupleTyping1.ts, 8, 18))
+>P : Symbol(P, Decl(returnTypeContextualTupleTyping1.ts, 32, 26))
+>T : Symbol(T, Decl(returnTypeContextualTupleTyping1.ts, 30, 21))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(returnTypeContextualTupleTyping1.ts, 30, 21))
+>P : Symbol(P, Decl(returnTypeContextualTupleTyping1.ts, 32, 26))
+
+const p2 = resolve([])
+>p2 : Symbol(p2, Decl(returnTypeContextualTupleTyping1.ts, 34, 5))
+>resolve([])  .then(() => all([getNum(), getStr()]))  .then : Symbol(MyPromise.then, Decl(returnTypeContextualTupleTyping1.ts, 11, 24))
+>resolve([])  .then : Symbol(MyPromise.then, Decl(returnTypeContextualTupleTyping1.ts, 11, 24))
+>resolve : Symbol(resolve, Decl(returnTypeContextualTupleTyping1.ts, 25, 1), Decl(returnTypeContextualTupleTyping1.ts, 27, 61))
+
+  .then(() => all([getNum(), getStr()]))
+>then : Symbol(MyPromise.then, Decl(returnTypeContextualTupleTyping1.ts, 11, 24))
+>all : Symbol(all, Decl(returnTypeContextualTupleTyping1.ts, 28, 78))
+>getNum : Symbol(getNum, Decl(returnTypeContextualTupleTyping1.ts, 0, 0))
+>getStr : Symbol(getStr, Decl(returnTypeContextualTupleTyping1.ts, 2, 43))
+
+  .then(useTuple); // ok
+>then : Symbol(MyPromise.then, Decl(returnTypeContextualTupleTyping1.ts, 11, 24))
+>useTuple : Symbol(useTuple, Decl(returnTypeContextualTupleTyping1.ts, 3, 43))
+
