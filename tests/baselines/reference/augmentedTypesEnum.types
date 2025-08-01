@@ -60,7 +60,7 @@ enum e5 { One }
 enum e5 { Two } // error
 >e5 : e5
 >   : ^^
->Two : e5.One
+>Two : e5.Two
 >    : ^^^^^^
 
 enum e5a { One } // error

@@ -1,12 +1,12 @@
-enumGenericTypeClash.ts(1,7): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-enumGenericTypeClash.ts(2,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+enumGenericTypeClash.ts(1,7): error TS2567: Enum declarations can only merge with namespace declarations.
+enumGenericTypeClash.ts(2,6): error TS2567: Enum declarations can only merge with namespace declarations.
 
 
 ==== enumGenericTypeClash.ts (2 errors) ====
     class X<A,B,C> { }
           ~
-!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
     enum X { MyVal }
          ~
-!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
     
