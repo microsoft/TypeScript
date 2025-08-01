@@ -15,7 +15,7 @@ export function Vec(len) {
 >this.storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
 >this : Symbol(Vec, Decl(source.js, 0, 0), Decl(source.js, 8, 1))
 >storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >len : Symbol(len, Decl(source.js, 3, 20))
 }
 
@@ -99,7 +99,7 @@ Vec.prototype = {
         }
         return Math.sqrt(sum);
 >Math.sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
 >sum : Symbol(sum, Decl(source.js, 25, 11))
     }

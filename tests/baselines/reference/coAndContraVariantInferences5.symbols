@@ -58,11 +58,11 @@ type SelectOptions<KeyT extends string> =
 >KeyT : Symbol(KeyT, Decl(coAndContraVariantInferences5.ts, 19, 19))
 
     | Array<{key: KeyT}>
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >key : Symbol(key, Decl(coAndContraVariantInferences5.ts, 20, 13))
 >KeyT : Symbol(KeyT, Decl(coAndContraVariantInferences5.ts, 19, 19))
 
     | Array<KeyT>;
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >KeyT : Symbol(KeyT, Decl(coAndContraVariantInferences5.ts, 19, 19))
 
