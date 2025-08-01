@@ -1,0 +1,87 @@
+//// [tests/cases/compiler/circularRefFromClassMember.ts] ////
+
+=== circularRefFromClassMember.ts ===
+// Test for #61606
+
+const result: boolean[] = [];
+>result : boolean[]
+>       : ^^^^^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+
+class Test {
+>Test : Test
+>     : ^^^^
+
+    n: 42 | "" = 42 as any;
+>n : "" | 42
+>  : ^^^^^^^
+>42 as any : any
+>42 : 42
+>   : ^^
+
+    foo(): void {
+>foo : () => void
+>    : ^^^^^^    
+
+        if (this.n === "") {
+>this.n === "" : boolean
+>              : ^^^^^^^
+>this.n : "" | 42
+>       : ^^^^^^^
+>this : this
+>     : ^^^^
+>n : "" | 42
+>  : ^^^^^^^
+>"" : ""
+>   : ^^
+
+            return;
+        }
+        for (let i = 0; i < 1; i++) {
+>i : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+>i < 1 : boolean
+>      : ^^^^^^^
+>i : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+>i++ : number
+>    : ^^^^^^
+>i : number
+>  : ^^^^^^
+
+            const localN = this.n;
+>localN : 42
+>       : ^^
+>this.n : 42
+>       : ^^
+>this : this
+>     : ^^^^
+>n : 42
+>  : ^^
+
+            const localN_alias = localN;
+>localN_alias : 42
+>             : ^^
+>localN : 42
+>       : ^^
+
+            result[localN_alias] = true;
+>result[localN_alias] = true : true
+>                            : ^^^^
+>result[localN_alias] : boolean
+>                     : ^^^^^^^
+>result : boolean[]
+>       : ^^^^^^^^^
+>localN_alias : 42
+>             : ^^
+>true : true
+>     : ^^^^
+        }
+    }
+}
+
