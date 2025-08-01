@@ -331,6 +331,9 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
                     factory.createBlock([node.statement], /*multiLine*/ true);
                 statements.push(wrappedStatement);
             }
+            else {
+                statements.push(...(isBlock(node.statement) ? node.statement.statements : [node.statement]))
+            }
             
             return visitNode(
                 factory.updateForOfStatement(
