@@ -200,7 +200,7 @@ type GetSourceFileParams struct {
 	FileName string                  `json:"fileName"`
 }
 
-func unmarshalPayload(method string, payload json.RawMessage) (any, error) {
+func unmarshalPayload(method string, payload json.Value) (any, error) {
 	unmarshaler, ok := unmarshalers[Method(method)]
 	if !ok {
 		return nil, fmt.Errorf("unknown API method %q", method)

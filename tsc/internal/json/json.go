@@ -5,7 +5,6 @@ import (
 
 	jsonv2 "github.com/go-json-experiment/json"
 	"github.com/go-json-experiment/json/jsontext"
-	jsonv1 "github.com/go-json-experiment/json/v1"
 )
 
 func Marshal(in any, opts ...jsonv2.Options) (out []byte, err error) {
@@ -47,7 +46,7 @@ func UnmarshalRead(in io.Reader, out any, opts ...jsonv2.Options) (err error) {
 }
 
 type (
-	RawMessage      = jsonv1.RawMessage
+	Value           = jsontext.Value
 	UnmarshalerFrom = jsonv2.UnmarshalerFrom
 	MarshalerTo     = jsonv2.MarshalerTo
 )

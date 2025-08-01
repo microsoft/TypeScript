@@ -213,7 +213,7 @@ func (b *BuildInfoDiagnosticsOfFile) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BuildInfoDiagnosticsOfFile) UnmarshalJSON(data []byte) error {
-	var fileIdAndDiagnostics []json.RawMessage
+	var fileIdAndDiagnostics []json.Value
 	if err := json.Unmarshal(data, &fileIdAndDiagnostics); err != nil {
 		return fmt.Errorf("invalid BuildInfoDiagnosticsOfFile: %s", data)
 	}
