@@ -1,0 +1,44 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Boolean'.
+error TS2318: Cannot find global type 'CallableFunction'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'NewableFunction'.
+error TS2318: Cannot find global type 'Number'.
+error TS2318: Cannot find global type 'Object'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+collatorCompareBoundFunction.ts(1,27): error TS2339: Property 'Collator' does not exist on type 'typeof Intl'.
+collatorCompareBoundFunction.ts(14,32): error TS2339: Property 'sort' does not exist on type '{}'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Boolean'.
+!!! error TS2318: Cannot find global type 'CallableFunction'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'NewableFunction'.
+!!! error TS2318: Cannot find global type 'Number'.
+!!! error TS2318: Cannot find global type 'Object'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+==== collatorCompareBoundFunction.ts (2 errors) ====
+    const collator = new Intl.Collator();
+                              ~~~~~~~~
+!!! error TS2339: Property 'Collator' does not exist on type 'typeof Intl'.
+    
+    // Should be usable as a function with no dynamic `this`
+    const cmp: (a: string, b: string) => number = collator.compare;
+    
+    // Function expecting a `this: void` bound compare function
+    function useCompare(fn: (this: void, a: string, b: string) => number): number {
+        return fn("a", "b");
+    }
+    
+    useCompare(collator.compare);
+    
+    // Should work with Array.prototype.sort
+    const sorted = ["z", "ä", "a"].sort(collator.compare);
+                                   ~~~~
+!!! error TS2339: Property 'sort' does not exist on type '{}'.
+    
