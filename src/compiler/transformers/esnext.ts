@@ -315,7 +315,7 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
             const usingVar = factory.updateVariableDeclaration(forDecl, forDecl.name, /*exclamationToken*/ undefined, /*type*/ undefined, temp);
             const usingVarList = factory.createVariableDeclarationList([usingVar], isAwaitUsing ? NodeFlags.AwaitUsing : NodeFlags.Using);
             const usingVarStatement = factory.createVariableStatement(/*modifiers*/ undefined, usingVarList);
-            
+
             // Wrap the original loop body in an additional block scope to handle shadowing
             // Don't create an extra block if the original statement is empty or contains only empty statements
             const isEmptyBlock = isBlock(node.statement) && (
@@ -323,18 +323,18 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
                 node.statement.statements.every(stmt => stmt.kind === SyntaxKind.EmptyStatement)
             );
             const shouldWrapInBlock = !isEmptyBlock;
-            
+
             const statements: Statement[] = [usingVarStatement];
             if (shouldWrapInBlock) {
-                const wrappedStatement = isBlock(node.statement) ? 
-                    node.statement : 
+                const wrappedStatement = isBlock(node.statement) ?
+                    node.statement :
                     factory.createBlock([node.statement], /*multiLine*/ true);
                 statements.push(wrappedStatement);
             }
             else {
-                statements.push(...(isBlock(node.statement) ? node.statement.statements : [node.statement]))
+                statements.push(...(isBlock(node.statement) ? node.statement.statements : [node.statement]));
             }
-            
+
             return visitNode(
                 factory.updateForOfStatement(
                     node,
