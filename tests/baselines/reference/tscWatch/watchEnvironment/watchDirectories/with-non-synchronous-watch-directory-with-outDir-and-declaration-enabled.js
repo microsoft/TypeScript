@@ -131,11 +131,10 @@ Before running Timeout callback:: count: 1
 1: timerToUpdateChildWatches
 
 Host is moving to new time
-After running Timeout callback:: count: 2
+After running Timeout callback:: count: 1
 
-Timeout callback:: count: 2
-2: timerToInvalidateFailedLookupResolutions *new*
-3: timerToUpdateProgram *new*
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
 
 
 exitCode:: ExitStatus.undefined
@@ -144,9 +143,8 @@ Change:: Actual program update to include new file
 
 Input::
 
-Before running Timeout callback:: count: 2
-2: timerToInvalidateFailedLookupResolutions
-3: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 1
@@ -207,7 +205,7 @@ FsWatches::
   {"inode":10}
 
 Timeout callback:: count: 1
-5: timerToUpdateChildWatches *new*
+4: timerToUpdateChildWatches *new*
 
 
 Program root files: [
@@ -240,7 +238,7 @@ Change:: After program emit with new file, should schedule and run timeout to up
 Input::
 
 Before running Timeout callback:: count: 1
-5: timerToUpdateChildWatches
+4: timerToUpdateChildWatches
 
 After running Timeout callback:: count: 0
 

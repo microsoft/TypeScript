@@ -72,8 +72,6 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/username/works
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/username/workspace/project 1 {"synchronousWatchDirectory":true} Config: /a/username/workspace/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/username/workspace/project/src/file1.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/username/workspace/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/username/workspace/project/src 1 {"synchronousWatchDirectory":true} Project: /a/username/workspace/project/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/username/workspace/project/src 1 {"synchronousWatchDirectory":true} Project: /a/username/workspace/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/username/workspace/project/node_modules/@types 1 {"synchronousWatchDirectory":true} Project: /a/username/workspace/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/username/workspace/project/node_modules/@types 1 {"synchronousWatchDirectory":true} Project: /a/username/workspace/project/tsconfig.json WatchType: Type roots
@@ -255,21 +253,16 @@ Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Scheduled: /a/username/workspace/project/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/username/workspace/project/src :: WatchInfo: /a/username/workspace/project 1 {"synchronousWatchDirectory":true} Config: /a/username/workspace/project/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/username/workspace/project/src :: WatchInfo: /a/username/workspace/project/src 1 {"synchronousWatchDirectory":true} Project: /a/username/workspace/project/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Scheduled: /a/username/workspace/project/tsconfig.jsonFailedLookupInvalidation
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/username/workspace/project/src :: WatchInfo: /a/username/workspace/project/src 1 {"synchronousWatchDirectory":true} Project: /a/username/workspace/project/tsconfig.json WatchType: Failed Lookup Locations
-Before running Timeout callback:: count: 3
+Before running Timeout callback:: count: 2
 3: /a/username/workspace/project/tsconfig.json
 4: *ensureProjectForOpenFiles*
-5: /a/username/workspace/project/tsconfig.jsonFailedLookupInvalidation
 //// [/a/username/workspace/project/src/file2.ts] Inode:: 117
 
 
 
-Timeout callback:: count: 3
+Timeout callback:: count: 2
 3: /a/username/workspace/project/tsconfig.json *new*
 4: *ensureProjectForOpenFiles* *new*
-5: /a/username/workspace/project/tsconfig.jsonFailedLookupInvalidation *new*
 
 Projects::
 /a/username/workspace/project/tsconfig.json (Configured) *changed*
@@ -294,7 +287,6 @@ ScriptInfos::
         /a/username/workspace/project/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] Running: /a/username/workspace/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/username/workspace/project/src/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/username/workspace/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/username/workspace/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -317,7 +309,36 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-After running Timeout callback:: count: 1
+Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/a/username/workspace/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/username/workspace/project/src/index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /a/username/workspace/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/a/username/workspace/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/username/workspace/project/src/index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /a/username/workspace/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] got projects updated in background /a/username/workspace/project/src/index.ts
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/a/username/workspace/project/src/index.ts"
+        ]
+      }
+    }
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/username/workspace/node_modules/@types:
@@ -338,11 +359,6 @@ FsWatches::
   {"inode":8}
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {"inode":17}
-
-Timeout callback:: count: 1
-4: *ensureProjectForOpenFiles* *deleted*
-5: /a/username/workspace/project/tsconfig.jsonFailedLookupInvalidation *deleted*
-6: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /a/username/workspace/project/tsconfig.json (Configured) *changed*

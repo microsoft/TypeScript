@@ -129,8 +129,6 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/tslibs/package.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/node_modules: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2022.full.d.ts: *new*
@@ -148,8 +146,6 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject: *new*
-  {}
-/user/username/projects/myproject/node_modules: *new*
   {}
 
 Program root files: [
@@ -279,8 +275,6 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/tslibs/package.json:
   {"pollingInterval":2000}
-/user/username/projects/node_modules:
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2022.full.d.ts:
@@ -302,8 +296,6 @@ FsWatches *deleted*::
 
 FsWatchesRecursive::
 /user/username/projects/myproject:
-  {}
-/user/username/projects/myproject/node_modules:
   {}
 
 

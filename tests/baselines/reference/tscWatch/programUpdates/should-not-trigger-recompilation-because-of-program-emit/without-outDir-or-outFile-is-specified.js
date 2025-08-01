@@ -76,8 +76,6 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/myproject: *new*
   {}
-/user/username/projects/myproject/src: *new*
-  {}
 
 Program root files: [
   "/user/username/projects/myproject/file1.ts",
@@ -121,13 +119,11 @@ Input::
 export const y = 10;
 
 
-Timeout callback:: count: 2
-1: timerToInvalidateFailedLookupResolutions *new*
-2: timerToUpdateProgram *new*
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
 
-Before running Timeout callback:: count: 2
-1: timerToInvalidateFailedLookupResolutions
-2: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -169,8 +165,6 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject:
-  {}
-/user/username/projects/myproject/src:
   {}
 
 
