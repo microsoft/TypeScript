@@ -5757,6 +5757,7 @@ function tryGetTypeLiteralNode(node: Node): TypeLiteralNode | undefined {
         case SyntaxKind.SemicolonToken:
         case SyntaxKind.CommaToken:
         case SyntaxKind.Identifier:
+        case SyntaxKind.StringKeyword:
             if (parent.kind === SyntaxKind.PropertySignature && isTypeLiteralNode(parent.parent)) {
                 return parent.parent;
             }
