@@ -17,7 +17,7 @@
 ////var foobar: Bar<{
 ////    two: {
 ////        three: {
-////            five: string,
+////            five: string
 ////            /*4*/
 ////        },
 ////        /*0*/
