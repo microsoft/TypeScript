@@ -1971,27 +1971,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function runWithoutResolvedSignatureCaching<T>(node: Node | undefined, fn: () => T): T {
         node = findAncestor(node, isCallLikeOrFunctionLikeExpression);
         if (node) {
-            const cachedResolvedSignatures = [];
-            const cachedTypes = [];
-            while (node) {
-                const nodeLinks = getNodeLinks(node);
-                cachedResolvedSignatures.push([nodeLinks, nodeLinks.resolvedSignature] as const);
-                nodeLinks.resolvedSignature = undefined;
-                if (isFunctionExpressionOrArrowFunction(node)) {
-                    const symbolLinks = getSymbolLinks(getSymbolOfDeclaration(node));
-                    const type = symbolLinks.type;
-                    cachedTypes.push([symbolLinks, type] as const);
-                    symbolLinks.type = undefined;
-                }
-                node = findAncestor(node.parent, isCallLikeOrFunctionLikeExpression);
-            }
+            sourceFileWithoutResolvedSignatureCaching = getSourceFileOfNode(node);
             const result = fn();
-            for (const [nodeLinks, resolvedSignature] of cachedResolvedSignatures) {
-                nodeLinks.resolvedSignature = resolvedSignature;
-            }
-            for (const [symbolLinks, type] of cachedTypes) {
-                symbolLinks.type = type;
-            }
+            sourceFileWithoutResolvedSignatureCaching = undefined;
+            symbolLinksWithoutResolvedSignatureCaching = undefined;
+            nodeLinksWithoutResolvedSignatureCaching = undefined;
             return result;
         }
         return fn();
@@ -2342,7 +2326,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var maximumSuggestionCount = 10;
     var mergedSymbols: Symbol[] = [];
     var symbolLinks: SymbolLinks[] = [];
+    var symbolLinksWithoutResolvedSignatureCaching: SymbolLinks[] | undefined;
     var nodeLinks: NodeLinks[] = [];
+    var nodeLinksWithoutResolvedSignatureCaching: NodeLinks[] | undefined;
+    var sourceFileWithoutResolvedSignatureCaching: SourceFile | undefined;
     var flowLoopCaches: Map<string, Type>[] = [];
     var flowLoopNodes: FlowNode[] = [];
     var flowLoopKeys: string[] = [];
@@ -2917,12 +2904,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getSymbolLinks(symbol: Symbol): SymbolLinks {
         if (symbol.flags & SymbolFlags.Transient) return (symbol as TransientSymbol).links;
         const id = getSymbolId(symbol);
+        if (sourceFileWithoutResolvedSignatureCaching && symbol.valueDeclaration && (isFunctionExpressionOrArrowFunction(symbol.valueDeclaration) || tryGetRootParameterDeclaration(symbol.valueDeclaration)) && getSourceFileOfNode(symbol.valueDeclaration) === sourceFileWithoutResolvedSignatureCaching) {
+            symbolLinksWithoutResolvedSignatureCaching ??= [];
+            return symbolLinksWithoutResolvedSignatureCaching[id] ??= new SymbolLinks();
+        }
         return symbolLinks[id] ??= new SymbolLinks();
     }
 
     function getNodeLinks(node: Node): NodeLinks {
         const nodeId = getNodeId(node);
-        return nodeLinks[nodeId] || (nodeLinks[nodeId] = new (NodeLinks as any)());
+        if (sourceFileWithoutResolvedSignatureCaching && (isCallLikeOrFunctionLikeExpression(node) || tryGetRootParameterDeclaration(node)) && getSourceFileOfNode(node) === sourceFileWithoutResolvedSignatureCaching) {
+            nodeLinksWithoutResolvedSignatureCaching ??= [];
+            return nodeLinksWithoutResolvedSignatureCaching[nodeId] ??= new (NodeLinks as any)();
+        }
+        return nodeLinks[nodeId] ??= new (NodeLinks as any)();
     }
 
     function getSymbol(symbols: SymbolTable, name: __String, meaning: SymbolFlags): Symbol | undefined {
