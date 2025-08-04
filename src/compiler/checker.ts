@@ -2065,6 +2065,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var autoType = createIntrinsicType(TypeFlags.Any, "any", ObjectFlags.NonInferrableType, "auto");
     var wildcardType = createIntrinsicType(TypeFlags.Any, "any", /*objectFlags*/ undefined, "wildcard");
     var blockedStringType = createIntrinsicType(TypeFlags.Any, "any", /*objectFlags*/ undefined, "blocked string");
+    var templateStringType = createIntrinsicType(TypeFlags.Any, "any", /*objectFlags*/ undefined, "template string");
     var errorType = createIntrinsicType(TypeFlags.Any, "error");
     var unresolvedType = createIntrinsicType(TypeFlags.Any, "unresolved");
     var nonInferrableAnyType = createIntrinsicType(TypeFlags.Any, "any", ObjectFlags.ContainsWideningType, "non-inferrable");
@@ -41198,7 +41199,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             types.push(isTypeAssignableTo(type, templateConstraintType) ? type : stringType);
         }
         const evaluated = node.parent.kind !== SyntaxKind.TaggedTemplateExpression && evaluate(node).value;
-        if (evaluated) {
+        if (typeof evaluated === "string") {
             return getFreshTypeOfLiteralType(getStringLiteralType(evaluated));
         }
         if (isConstContext(node) || isTemplateLiteralContext(node) || someType(getContextualType(node, /*contextFlags*/ undefined) || unknownType, isTemplateLiteralContextualType)) {
@@ -41208,7 +41209,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isTemplateLiteralContextualType(type: Type): boolean {
-        return !!(type.flags & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral) ||
+        return type === templateStringType || !!(type.flags & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral) ||
             type.flags & TypeFlags.InstantiableNonPrimitive && maybeTypeOfKind(getBaseConstraintOfType(type) || unknownType, TypeFlags.StringLike));
     }
 
@@ -41651,7 +41652,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (links.contextFreeType) {
             return links.contextFreeType;
         }
-        pushContextualType(node, anyType, /*isCache*/ false);
+        pushContextualType(node, node.kind === SyntaxKind.TemplateExpression ? templateStringType : anyType, /*isCache*/ false);
         const type = links.contextFreeType = checkExpression(node, CheckMode.SkipContextSensitive);
         popContextualType();
         return type;

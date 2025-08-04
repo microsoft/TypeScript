@@ -14,3 +14,13 @@ foo({
     x; // string
   },
 });
+
+type E1 = { d: "main1-sub1"; cb: (x: string) => void };
+type E2 = { d: "main2-sub2"; cb: (x: number) => void };
+
+declare function bar(_: E1 | E2): void;
+
+const someCategory = "main1";
+const someSubcategory = "sub1";
+
+bar({ d: `${someCategory}-${someSubcategory}`, cb: (x) => {} });

@@ -1,0 +1,68 @@
+//// [tests/cases/compiler/evolvingArrayTemplateLiterals1.ts] ////
+
+=== evolvingArrayTemplateLiterals1.ts ===
+type Vegetable = "spinach" | "carrot";
+>Vegetable : Symbol(Vegetable, Decl(evolvingArrayTemplateLiterals1.ts, 0, 0))
+
+const arr1 = [];
+>arr1 : Symbol(arr1, Decl(evolvingArrayTemplateLiterals1.ts, 2, 5))
+
+const v1 = "carrot";
+>v1 : Symbol(v1, Decl(evolvingArrayTemplateLiterals1.ts, 3, 5))
+
+arr1.push(`vegetable_${v1}`);
+>arr1.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>arr1 : Symbol(arr1, Decl(evolvingArrayTemplateLiterals1.ts, 2, 5))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>v1 : Symbol(v1, Decl(evolvingArrayTemplateLiterals1.ts, 3, 5))
+
+arr1;
+>arr1 : Symbol(arr1, Decl(evolvingArrayTemplateLiterals1.ts, 2, 5))
+
+const arr2 = [];
+>arr2 : Symbol(arr2, Decl(evolvingArrayTemplateLiterals1.ts, 7, 5))
+
+const v2: "carrot" = "carrot";
+>v2 : Symbol(v2, Decl(evolvingArrayTemplateLiterals1.ts, 8, 5))
+
+arr2.push(`vegetable_${v2}`);
+>arr2.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>arr2 : Symbol(arr2, Decl(evolvingArrayTemplateLiterals1.ts, 7, 5))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>v2 : Symbol(v2, Decl(evolvingArrayTemplateLiterals1.ts, 8, 5))
+
+arr2;
+>arr2 : Symbol(arr2, Decl(evolvingArrayTemplateLiterals1.ts, 7, 5))
+
+const arr3 = [];
+>arr3 : Symbol(arr3, Decl(evolvingArrayTemplateLiterals1.ts, 12, 5))
+
+const v3: Vegetable = "carrot";
+>v3 : Symbol(v3, Decl(evolvingArrayTemplateLiterals1.ts, 13, 5))
+>Vegetable : Symbol(Vegetable, Decl(evolvingArrayTemplateLiterals1.ts, 0, 0))
+
+arr3.push(`vegetable_${v3}`);
+>arr3.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>arr3 : Symbol(arr3, Decl(evolvingArrayTemplateLiterals1.ts, 12, 5))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>v3 : Symbol(v3, Decl(evolvingArrayTemplateLiterals1.ts, 13, 5))
+
+arr3;
+>arr3 : Symbol(arr3, Decl(evolvingArrayTemplateLiterals1.ts, 12, 5))
+
+const arr4 = [];
+>arr4 : Symbol(arr4, Decl(evolvingArrayTemplateLiterals1.ts, 17, 5))
+
+declare const v4: Vegetable;
+>v4 : Symbol(v4, Decl(evolvingArrayTemplateLiterals1.ts, 18, 13))
+>Vegetable : Symbol(Vegetable, Decl(evolvingArrayTemplateLiterals1.ts, 0, 0))
+
+arr4.push(`vegetable_${v4}`);
+>arr4.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>arr4 : Symbol(arr4, Decl(evolvingArrayTemplateLiterals1.ts, 17, 5))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>v4 : Symbol(v4, Decl(evolvingArrayTemplateLiterals1.ts, 18, 13))
+
+arr4;
+>arr4 : Symbol(arr4, Decl(evolvingArrayTemplateLiterals1.ts, 17, 5))
+
