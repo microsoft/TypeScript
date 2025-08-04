@@ -5,7 +5,8 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/microsoft/typescript-go/internal/json"
+	"github.com/go-json-experiment/json"
+	"github.com/go-json-experiment/json/jsontext"
 )
 
 type JSONRPCVersion struct{}
@@ -103,7 +104,7 @@ func (m *Message) UnmarshalJSON(data []byte) error {
 		JSONRPC JSONRPCVersion `json:"jsonrpc"`
 		Method  Method         `json:"method"`
 		ID      *ID            `json:"id,omitzero"`
-		Params  json.Value     `json:"params"`
+		Params  jsontext.Value `json:"params"`
 		Result  any            `json:"result,omitzero"`
 		Error   *ResponseError `json:"error,omitzero"`
 	}
@@ -185,7 +186,7 @@ func (r *RequestMessage) UnmarshalJSON(data []byte) error {
 		JSONRPC JSONRPCVersion `json:"jsonrpc"`
 		ID      *ID            `json:"id"`
 		Method  Method         `json:"method"`
-		Params  json.Value     `json:"params"`
+		Params  jsontext.Value `json:"params"`
 	}
 	if err := json.Unmarshal(data, &raw); err != nil {
 		return fmt.Errorf("%w: %w", ErrInvalidRequest, err)

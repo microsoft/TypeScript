@@ -9,7 +9,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/microsoft/typescript-go/internal/json"
+	"github.com/microsoft/typescript-go/internal/jsonutil"
 	"github.com/microsoft/typescript-go/internal/stringutil"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
@@ -427,7 +427,7 @@ func FirstResult[T1 any](t1 T1, _ ...any) T1 {
 }
 
 func StringifyJson(input any, prefix string, indent string) (string, error) {
-	output, err := json.MarshalIndent(input, prefix, indent)
+	output, err := jsonutil.MarshalIndent(input, prefix, indent)
 	return string(output), err
 }
 

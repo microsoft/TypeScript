@@ -12,7 +12,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnosticwriter"
-	"github.com/microsoft/typescript-go/internal/json"
+	"github.com/microsoft/typescript-go/internal/jsonutil"
 	"github.com/microsoft/typescript-go/internal/parser"
 	"github.com/microsoft/typescript-go/internal/repo"
 	"github.com/microsoft/typescript-go/internal/testutil/baseline"
@@ -850,13 +850,13 @@ func baselineParseConfigWith(t *testing.T, baselineFileName string, noSubmoduleB
 		baselineContent.WriteString("configFileName:: " + config.configFileName + "\n")
 		if noSubmoduleBaseline {
 			baselineContent.WriteString("CompilerOptions::\n")
-			assert.NilError(t, json.MarshalIndentWrite(&baselineContent, parsedConfigFileContent.ParsedConfig.CompilerOptions, "", "  "))
+			assert.NilError(t, jsonutil.MarshalIndentWrite(&baselineContent, parsedConfigFileContent.ParsedConfig.CompilerOptions, "", "  "))
 			baselineContent.WriteString("\n")
 			baselineContent.WriteString("\n")
 
 			if parsedConfigFileContent.ParsedConfig.TypeAcquisition != nil {
 				baselineContent.WriteString("TypeAcquisition::\n")
-				assert.NilError(t, json.MarshalIndentWrite(&baselineContent, parsedConfigFileContent.ParsedConfig.TypeAcquisition, "", "  "))
+				assert.NilError(t, jsonutil.MarshalIndentWrite(&baselineContent, parsedConfigFileContent.ParsedConfig.TypeAcquisition, "", "  "))
 				baselineContent.WriteString("\n")
 				baselineContent.WriteString("\n")
 			}
@@ -884,7 +884,7 @@ func baselineParseConfigWith(t *testing.T, baselineFileName string, noSubmoduleB
 }
 
 func writeJsonReadableText(output io.Writer, input any) error {
-	return json.MarshalIndentWrite(output, input, "", "  ")
+	return jsonutil.MarshalIndentWrite(output, input, "", "  ")
 }
 
 func TestParseTypeAcquisition(t *testing.T) {

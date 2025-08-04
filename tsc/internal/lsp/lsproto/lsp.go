@@ -3,8 +3,8 @@ package lsproto
 import (
 	"fmt"
 
+	"github.com/go-json-experiment/json"
 	"github.com/go-json-experiment/json/jsontext"
-	"github.com/microsoft/typescript-go/internal/json"
 )
 
 type DocumentUri string // !!!

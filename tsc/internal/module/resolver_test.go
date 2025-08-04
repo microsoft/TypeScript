@@ -9,9 +9,10 @@ import (
 	"sync"
 	"testing"
 
+	"github.com/go-json-experiment/json"
 	"github.com/go-json-experiment/json/jsontext"
 	"github.com/microsoft/typescript-go/internal/core"
-	"github.com/microsoft/typescript-go/internal/json"
+	"github.com/microsoft/typescript-go/internal/jsonutil"
 	"github.com/microsoft/typescript-go/internal/module"
 	"github.com/microsoft/typescript-go/internal/repo"
 	"github.com/microsoft/typescript-go/internal/testutil/baseline"
@@ -326,7 +327,7 @@ func runTraceBaseline(t *testing.T, test traceTestCase) {
 
 		if test.trace {
 			t.Run("trace", func(t *testing.T) {
-				output, err := json.MarshalIndent(resolver, "", "    ")
+				output, err := jsonutil.MarshalIndent(resolver, "", "    ")
 				if err != nil {
 					t.Fatal(err)
 				}

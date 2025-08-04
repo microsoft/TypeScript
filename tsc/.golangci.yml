@@ -68,7 +68,7 @@ linters:
         main:
           deny:
             - pkg: 'encoding/json$'
-              desc: 'Use "github.com/microsoft/typescript-go/internal/json" instead.'
+              desc: 'Use "github.com/go-json-experiment/json" instead.'
 
   exclusions:
     rules:

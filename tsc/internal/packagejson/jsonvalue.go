@@ -3,9 +3,9 @@ package packagejson
 import (
 	"fmt"
 
+	"github.com/go-json-experiment/json"
 	"github.com/go-json-experiment/json/jsontext"
 	"github.com/microsoft/typescript-go/internal/collections"
-	"github.com/microsoft/typescript-go/internal/json"
 )
 
 type JSONValueType int8

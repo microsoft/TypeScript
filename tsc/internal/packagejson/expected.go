@@ -3,7 +3,7 @@ package packagejson
 import (
 	"reflect"
 
-	"github.com/microsoft/typescript-go/internal/json"
+	"github.com/go-json-experiment/json"
 )
 
 type Expected[T any] struct {
