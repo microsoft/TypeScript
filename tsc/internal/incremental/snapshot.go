@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/hex"
 	"fmt"
-	"hash/fnv"
 	"maps"
 	"strings"
 	"sync"
@@ -17,6 +16,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
+	"github.com/zeebo/xxh3"
 )
 
 type fileInfo struct {
@@ -307,9 +307,8 @@ func diagnosticToStringBuilder(diagnostic *ast.Diagnostic, file *ast.SourceFile,
 }
 
 func (s *snapshot) computeHash(text string) string {
-	hasher := fnv.New128a()
-	hasher.Write([]byte(text))
-	hash := hex.EncodeToString(hasher.Sum(nil))
+	hashBytes := xxh3.Hash128([]byte(text)).Bytes()
+	hash := hex.EncodeToString(hashBytes[:])
 	if s.hashWithText {
 		hash += "-" + text
 	}
