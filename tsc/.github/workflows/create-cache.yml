@@ -38,11 +38,15 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
+      - run: git config --system core.longpaths true
+        if: ${{ matrix.os == 'windows-latest' }}
+
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           submodules: true
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
       - uses: dtolnay/rust-toolchain@fcf085fcb4b4b8f63f96906cd713eb52181b5ea4 # stable
+
       - uses: ./.github/actions/setup-go
         with:
           go-version: ${{ matrix.go-version }}
