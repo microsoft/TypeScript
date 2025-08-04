@@ -1,9 +1,0 @@
---- old.jsFileCompilationWithoutOut.js
-+++ new.jsFileCompilationWithoutOut.js
-@@= skipped -11, +11 lines =@@
- //// [a.js]
- class c {
- }
-+//// [b.js]
-+function foo() {
-+}

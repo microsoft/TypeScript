@@ -3,9 +3,7 @@ package incremental
 import (
 	"github.com/go-json-experiment/json"
 	"github.com/microsoft/typescript-go/internal/compiler"
-	"github.com/microsoft/typescript-go/internal/outputpaths"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
-	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
 type BuildInfoReader interface {
@@ -39,10 +37,7 @@ func NewBuildInfoReader(
 }
 
 func ReadBuildInfoProgram(config *tsoptions.ParsedCommandLine, reader BuildInfoReader) *Program {
-	buildInfoFileName := outputpaths.GetBuildInfoFileName(config.CompilerOptions(), tspath.ComparePathsOptions{
-		CurrentDirectory:          config.GetCurrentDirectory(),
-		UseCaseSensitiveFileNames: config.UseCaseSensitiveFileNames(),
-	})
+	buildInfoFileName := config.GetBuildInfoFileName()
 	if buildInfoFileName == "" {
 		return nil
 	}

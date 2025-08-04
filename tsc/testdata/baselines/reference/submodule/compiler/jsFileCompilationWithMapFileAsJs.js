@@ -16,7 +16,3 @@ function bar() {
 class c {
 }
 //# sourceMappingURL=a.js.map
-//// [b.js]
-function bar() {
-}
-//# sourceMappingURL=b.js.map

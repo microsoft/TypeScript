@@ -26,38 +26,4 @@ sourceFile:a.ts
   >}
 1 >Emitted(2, 2) Source(2, 2) + SourceIndex(0)
 ---
->>>//# sourceMappingURL=a.js.map===================================================================
-JsFile: b.js
-mapUrl: b.js.map
-sourceRoot: 
-sources: b.js
-===================================================================
--------------------------------------------------------------------
-emittedFile:b.js
-sourceFile:b.js
--------------------------------------------------------------------
->>>function bar() {
-1 >
-2 >^^^^^^^^^
-3 >         ^^^
-4 >            ^^^
-1 >
-2 >function 
-3 >         bar
-4 >            () 
-1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
-3 >Emitted(1, 13) Source(1, 13) + SourceIndex(0)
-4 >Emitted(1, 16) Source(1, 16) + SourceIndex(0)
----
->>>}
-1 >
-2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >{
-2 >
-  >}
-1 >Emitted(2, 1) Source(1, 17) + SourceIndex(0)
-2 >Emitted(2, 2) Source(2, 2) + SourceIndex(0)
----
->>>//# sourceMappingURL=b.js.map
+>>>//# sourceMappingURL=a.js.map

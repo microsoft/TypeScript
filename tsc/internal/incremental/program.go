@@ -240,7 +240,7 @@ func (p *Program) emitBuildInfo(ctx context.Context, options compiler.EmitOption
 		CurrentDirectory:          p.program.GetCurrentDirectory(),
 		UseCaseSensitiveFileNames: p.program.UseCaseSensitiveFileNames(),
 	})
-	if buildInfoFileName == "" {
+	if buildInfoFileName == "" || p.program.IsEmitBlocked(buildInfoFileName) {
 		return nil
 	}
 	if p.snapshot.hasErrors == core.TSUnknown {

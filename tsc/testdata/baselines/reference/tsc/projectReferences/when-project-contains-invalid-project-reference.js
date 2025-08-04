@@ -11,8 +11,16 @@ export const x = 10;
 }
 
 tsgo --p project
-ExitStatus:: Success
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
+[96mproject/tsconfig.json[0m:[93m3[0m:[93m9[0m - [91merror[0m[90m TS6053: [0mFile '/home/src/workspaces/solution/utils' not found.
+
+[7m3[0m         { "path": "../utils" },
+[7m [0m [91m        ~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+Found 1 error in project/tsconfig.json[90m:3[0m
+
 //// [/home/src/tslibs/TS/Lib/lib.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}

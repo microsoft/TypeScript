@@ -140,23 +140,30 @@ func (mapper *projectReferenceFileMapper) getResolvedReferenceFor(path tspath.Pa
 }
 
 func (mapper *projectReferenceFileMapper) forEachResolvedProjectReference(
-	fn func(path tspath.Path, config *tsoptions.ParsedCommandLine),
+	fn func(path tspath.Path, config *tsoptions.ParsedCommandLine, parent *tsoptions.ParsedCommandLine, index int),
 ) {
 	if mapper.opts.Config.ConfigFile == nil {
 		return
 	}
+	seenRef := collections.NewSetWithSizeHint[tspath.Path](len(mapper.referencesInConfigFile))
+	seenRef.Add(mapper.opts.Config.ConfigFile.SourceFile.Path())
 	refs := mapper.referencesInConfigFile[mapper.opts.Config.ConfigFile.SourceFile.Path()]
-	mapper.forEachResolvedReferenceWorker(refs, fn)
+	mapper.forEachResolvedReferenceWorker(refs, fn, mapper.opts.Config, seenRef)
 }
 
 func (mapper *projectReferenceFileMapper) forEachResolvedReferenceWorker(
 	references []tspath.Path,
-	fn func(path tspath.Path, config *tsoptions.ParsedCommandLine),
+	fn func(path tspath.Path, config *tsoptions.ParsedCommandLine, parent *tsoptions.ParsedCommandLine, index int),
+	parent *tsoptions.ParsedCommandLine,
+	seenRef *collections.Set[tspath.Path],
 ) {
-	for _, path := range references {
+	for index, path := range references {
+		if !seenRef.AddIfAbsent(path) {
+			continue
+		}
 		config, _ := mapper.configToProjectReference[path]
-		fn(path, config)
-		mapper.forEachResolvedReferenceWorker(mapper.referencesInConfigFile[path], fn)
+		fn(path, config, parent, index)
+		mapper.forEachResolvedReferenceWorker(mapper.referencesInConfigFile[path], fn, config, seenRef)
 	}
 }
 

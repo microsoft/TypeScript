@@ -17,9 +17,6 @@ function bar() {
 //// [a.js]
 class c {
 }
-//// [c.js]
-function bar() {
-}
 //// [b.js]
 /// <reference path="c.js"/>
 // b.d.ts should have c.d.ts as the reference path

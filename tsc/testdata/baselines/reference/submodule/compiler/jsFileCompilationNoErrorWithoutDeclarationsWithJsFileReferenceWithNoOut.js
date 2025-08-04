@@ -17,9 +17,6 @@ function bar() {
 //// [a.js]
 class c {
 }
-//// [c.js]
-function bar() {
-}
 //// [b.js]
 /// <reference path="c.js"/>
 // no error on above reference path since not emitting declarations

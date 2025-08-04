@@ -9,10 +9,6 @@ export var y;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
-//// [file2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.y = void 0;
 
 
 //// [file1.d.ts]

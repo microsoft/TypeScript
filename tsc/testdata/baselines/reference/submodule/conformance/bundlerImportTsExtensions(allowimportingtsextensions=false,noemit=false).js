@@ -67,10 +67,6 @@ import type {} from "./a.d.ts";
 
 //// [a.js]
 export {};
-//// [b.js]
-export {};
-//// [c.js]
-export {};
 //// [index.js]
 export {};
 //// [e.js]

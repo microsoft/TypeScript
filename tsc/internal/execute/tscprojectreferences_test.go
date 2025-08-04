@@ -9,7 +9,6 @@ import (
 func TestProjectReferences(t *testing.T) {
 	t.Parallel()
 	cases := []tscInput{
-		// !!! sheetal todo verifyCompilerOptions - check for noEmit
 		{
 			subScenario: "when project references composite project with noEmit",
 			files: FileMap{
@@ -76,7 +75,6 @@ func TestProjectReferences(t *testing.T) {
 			commandLineArgs: []string{"--p", "project"},
 		},
 		{
-			// !!! sheetal verifyProjectReferences - checks this
 			subScenario: "when project contains invalid project reference",
 			files: FileMap{
 				"/home/src/workspaces/solution/project/index.ts": `export const x = 10;`,

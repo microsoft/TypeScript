@@ -12,6 +12,3 @@ function foo() {
 //// [a.js]
 class c {
 }
-//// [b.js]
-function foo() {
-}

@@ -108,8 +108,7 @@ func (host *emitHost) UseCaseSensitiveFileNames() bool {
 }
 
 func (host *emitHost) IsEmitBlocked(file string) bool {
-	// !!!
-	return false
+	return host.program.IsEmitBlocked(file)
 }
 
 func (host *emitHost) WriteFile(fileName string, text string, writeByteOrderMark bool) error {

@@ -128,7 +128,7 @@ func (p *Program) GetParseFileRedirect(fileName string) string {
 }
 
 func (p *Program) ForEachResolvedProjectReference(
-	fn func(path tspath.Path, config *tsoptions.ParsedCommandLine),
+	fn func(path tspath.Path, config *tsoptions.ParsedCommandLine, parent *tsoptions.ParsedCommandLine, index int),
 ) {
 	p.projectReferenceFileMapper.forEachResolvedProjectReference(fn)
 }
@@ -544,9 +544,7 @@ func (p *Program) verifyCompilerOptions() {
 		}
 	}
 
-	// !!! Option_incremental_can_only_be_specified_using_tsconfig_emitting_to_single_file_or_when_option_tsBuildInfoFile_is_specified
-
-	// !!! verifyProjectReferences
+	p.verifyProjectReferences()
 
 	if options.Composite.IsTrue() {
 		var rootPaths collections.Set[tspath.Path]
@@ -810,18 +808,71 @@ func (p *Program) verifyCompilerOptions() {
 		}
 
 		outputpaths.ForEachEmittedFile(p, options, func(emitFileNames *outputpaths.OutputPaths, sourceFile *ast.SourceFile) bool {
-			if !options.EmitDeclarationOnly.IsTrue() {
-				verifyEmitFilePath(emitFileNames.JsFilePath())
-			}
+			verifyEmitFilePath(emitFileNames.JsFilePath())
+			verifyEmitFilePath(emitFileNames.SourceMapFilePath())
 			verifyEmitFilePath(emitFileNames.DeclarationFilePath())
+			verifyEmitFilePath(emitFileNames.DeclarationMapPath())
 			return false
 		}, p.getSourceFilesToEmit(nil, false), false)
+		verifyEmitFilePath(p.opts.Config.GetBuildInfoFileName())
 	}
 }
 
 func (p *Program) blockEmittingOfFile(emitFileName string, diag *ast.Diagnostic) {
 	p.hasEmitBlockingDiagnostics.Add(p.toPath(emitFileName))
 	p.programDiagnostics = append(p.programDiagnostics, diag)
+}
+
+func (p *Program) IsEmitBlocked(emitFileName string) bool {
+	return p.hasEmitBlockingDiagnostics.Has(p.toPath(emitFileName))
+}
+
+func (p *Program) verifyProjectReferences() {
+	buildInfoFileName := core.IfElse(!p.Options().SuppressOutputPathCheck.IsTrue(), p.opts.Config.GetBuildInfoFileName(), "")
+	createDiagnosticForReference := func(config *tsoptions.ParsedCommandLine, index int, message *diagnostics.Message, args ...any) {
+		var sourceFile *ast.SourceFile
+		if config.ConfigFile != nil {
+			sourceFile = config.ConfigFile.SourceFile
+		}
+		diag := tsoptions.ForEachTsConfigPropArray(sourceFile, "references", func(property *ast.PropertyAssignment) *ast.Diagnostic {
+			if ast.IsArrayLiteralExpression(property.Initializer) {
+				value := property.Initializer.AsArrayLiteralExpression().Elements.Nodes
+				if len(value) > index {
+					return tsoptions.CreateDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, value[index], message, args...)
+				}
+			}
+			return nil
+		})
+		if diag == nil {
+			diag = ast.NewCompilerDiagnostic(message, args...)
+		}
+		p.programDiagnostics = append(p.programDiagnostics, diag)
+	}
+
+	p.ForEachResolvedProjectReference(func(path tspath.Path, config *tsoptions.ParsedCommandLine, parent *tsoptions.ParsedCommandLine, index int) {
+		ref := parent.ProjectReferences()[index]
+		// !!! Deprecated in 5.0 and removed since 5.5
+		// verifyRemovedProjectReference(ref, parent, index);
+		if config == nil {
+			createDiagnosticForReference(parent, index, diagnostics.File_0_not_found, ref.Path)
+			return
+		}
+		refOptions := config.CompilerOptions()
+		if !refOptions.Composite.IsTrue() || refOptions.NoEmit.IsTrue() {
+			if len(config.FileNames()) > 0 {
+				if !refOptions.Composite.IsTrue() {
+					createDiagnosticForReference(parent, index, diagnostics.Referenced_project_0_must_have_setting_composite_Colon_true, ref.Path)
+				}
+				if refOptions.NoEmit.IsTrue() {
+					createDiagnosticForReference(parent, index, diagnostics.Referenced_project_0_may_not_disable_emit, ref.Path)
+				}
+			}
+		}
+		if buildInfoFileName != "" && buildInfoFileName == config.GetBuildInfoFileName() {
+			createDiagnosticForReference(parent, index, diagnostics.Cannot_write_file_0_because_it_will_overwrite_tsbuildinfo_file_generated_by_referenced_project_1, buildInfoFileName, ref.Path)
+			p.hasEmitBlockingDiagnostics.Add(p.toPath(buildInfoFileName))
+		}
+	})
 }
 
 func hasZeroOrOneAsteriskCharacter(str string) bool {

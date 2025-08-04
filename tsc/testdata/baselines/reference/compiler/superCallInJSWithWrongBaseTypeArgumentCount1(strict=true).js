@@ -31,29 +31,6 @@ exports.A = void 0;
 class A {
 }
 exports.A = A;
-//// [b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.B3 = exports.B2 = exports.B1 = void 0;
-const a_js_1 = require("./a.js");
-class B1 extends a_js_1.A {
-    constructor() {
-        super();
-    }
-}
-exports.B1 = B1;
-class B2 extends a_js_1.A {
-    constructor() {
-        super();
-    }
-}
-exports.B2 = B2;
-class B3 extends a_js_1.A {
-    constructor() {
-        super();
-    }
-}
-exports.B3 = B3;
 
 
 //// [a.d.ts]

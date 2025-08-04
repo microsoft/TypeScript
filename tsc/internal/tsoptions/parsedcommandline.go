@@ -179,6 +179,10 @@ func (p *ParsedCommandLine) CompilerOptions() *core.CompilerOptions {
 	return p.ParsedConfig.CompilerOptions
 }
 
+func (p *ParsedCommandLine) GetBuildInfoFileName() string {
+	return outputpaths.GetBuildInfoFileName(p.CompilerOptions(), p.comparePathsOptions)
+}
+
 func (p *ParsedCommandLine) SetTypeAcquisition(o *core.TypeAcquisition) {
 	p.ParsedConfig.TypeAcquisition = o
 }
