@@ -183,8 +183,8 @@ func (s *testSys) baselineProgram(baseline *strings.Builder, program *incrementa
 	baseline.WriteString("SemanticDiagnostics::\n")
 	testingData := program.GetTestingData(program.GetProgram())
 	for _, file := range program.GetProgram().GetSourceFiles() {
-		if diagnostics, ok := testingData.SemanticDiagnosticsPerFile[file.Path()]; ok {
-			if oldDiagnostics, ok := testingData.OldProgramSemanticDiagnosticsPerFile[file.Path()]; !ok || oldDiagnostics != diagnostics {
+		if diagnostics, ok := testingData.SemanticDiagnosticsPerFile.Load(file.Path()); ok {
+			if oldDiagnostics, ok := testingData.OldProgramSemanticDiagnosticsPerFile.Load(file.Path()); !ok || oldDiagnostics != diagnostics {
 				baseline.WriteString("*refresh*    " + file.FileName() + "\n")
 			}
 		} else {

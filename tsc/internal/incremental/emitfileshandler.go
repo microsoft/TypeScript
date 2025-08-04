@@ -51,76 +51,76 @@ func (h *emitFilesHandler) emitAllAffectedFiles(options compiler.EmitOptions) *c
 
 	// Emit all affected files
 	var results []*compiler.EmitResult
-	if len(h.program.snapshot.affectedFilesPendingEmit) != 0 {
-		wg := core.NewWorkGroup(h.program.program.SingleThreaded())
-		for path, emitKind := range h.program.snapshot.affectedFilesPendingEmit {
-			affectedFile := h.program.program.GetSourceFileByPath(path)
-			if affectedFile == nil || !h.program.program.SourceFileMayBeEmitted(affectedFile, false) {
-				h.deletedPendingKinds.Add(path)
-				continue
-			}
-			pendingKind := h.getPendingEmitKindForEmitOptions(emitKind, options)
-			if pendingKind != 0 {
-				wg.Queue(func() {
-					// Determine if we can do partial emit
-					var emitOnly compiler.EmitOnly
-					if (pendingKind & FileEmitKindAllJs) != 0 {
-						emitOnly = compiler.EmitOnlyJs
-					}
-					if (pendingKind & FileEmitKindAllDts) != 0 {
-						if emitOnly == compiler.EmitOnlyJs {
-							emitOnly = compiler.EmitAll
-						} else {
-							emitOnly = compiler.EmitOnlyDts
-						}
-					}
-					var result *compiler.EmitResult
-					if !h.isForDtsErrors {
-						result = h.program.program.Emit(h.ctx, h.getEmitOptions(compiler.EmitOptions{
-							TargetSourceFile: affectedFile,
-							EmitOnly:         emitOnly,
-							WriteFile:        options.WriteFile,
-						}))
+	wg := core.NewWorkGroup(h.program.program.SingleThreaded())
+	h.program.snapshot.affectedFilesPendingEmit.Range(func(path tspath.Path, emitKind FileEmitKind) bool {
+		affectedFile := h.program.program.GetSourceFileByPath(path)
+		if affectedFile == nil || !h.program.program.SourceFileMayBeEmitted(affectedFile, false) {
+			h.deletedPendingKinds.Add(path)
+			return true
+		}
+		pendingKind := h.getPendingEmitKindForEmitOptions(emitKind, options)
+		if pendingKind != 0 {
+			wg.Queue(func() {
+				// Determine if we can do partial emit
+				var emitOnly compiler.EmitOnly
+				if (pendingKind & FileEmitKindAllJs) != 0 {
+					emitOnly = compiler.EmitOnlyJs
+				}
+				if (pendingKind & FileEmitKindAllDts) != 0 {
+					if emitOnly == compiler.EmitOnlyJs {
+						emitOnly = compiler.EmitAll
 					} else {
-						result = &compiler.EmitResult{
-							EmitSkipped: true,
-							Diagnostics: h.program.program.GetDeclarationDiagnostics(h.ctx, affectedFile),
-						}
+						emitOnly = compiler.EmitOnlyDts
 					}
+				}
+				var result *compiler.EmitResult
+				if !h.isForDtsErrors {
+					result = h.program.program.Emit(h.ctx, h.getEmitOptions(compiler.EmitOptions{
+						TargetSourceFile: affectedFile,
+						EmitOnly:         emitOnly,
+						WriteFile:        options.WriteFile,
+					}))
+				} else {
+					result = &compiler.EmitResult{
+						EmitSkipped: true,
+						Diagnostics: h.program.program.GetDeclarationDiagnostics(h.ctx, affectedFile),
+					}
+				}
 
-					// Update the pendingEmit for the file
-					h.emitUpdates.Store(path, &emitUpdate{pendingKind: getPendingEmitKind(emitKind, pendingKind), result: result})
-				})
-			}
+				// Update the pendingEmit for the file
+				h.emitUpdates.Store(path, &emitUpdate{pendingKind: getPendingEmitKind(emitKind, pendingKind), result: result})
+			})
 		}
-		wg.RunAndWait()
-		if h.ctx.Err() != nil {
-			return nil
-		}
+		return true
+	})
+	wg.RunAndWait()
+	if h.ctx.Err() != nil {
+		return nil
 	}
 
 	// Get updated errors that were not included in affected files emit
-	for path, diagnostics := range h.program.snapshot.emitDiagnosticsPerFile {
+	h.program.snapshot.emitDiagnosticsPerFile.Range(func(path tspath.Path, diagnostics *diagnosticsOrBuildInfoDiagnosticsWithFileName) bool {
 		if _, ok := h.emitUpdates.Load(path); !ok {
 			affectedFile := h.program.program.GetSourceFileByPath(path)
 			if affectedFile == nil || !h.program.program.SourceFileMayBeEmitted(affectedFile, false) {
 				h.deletedPendingKinds.Add(path)
-				continue
+				return true
 			}
-			pendingKind := h.program.snapshot.affectedFilesPendingEmit[path]
+			pendingKind, _ := h.program.snapshot.affectedFilesPendingEmit.Load(path)
 			h.emitUpdates.Store(path, &emitUpdate{pendingKind: pendingKind, result: &compiler.EmitResult{
 				EmitSkipped: true,
 				Diagnostics: diagnostics.getDiagnostics(h.program.program, affectedFile),
 			}})
 		}
-	}
+		return true
+	})
 
 	results = h.updateSnapshot()
 
 	// Combine results and update buildInfo
 	if h.isForDtsErrors && options.TargetSourceFile != nil {
 		// Result from cache
-		diagnostics := h.program.snapshot.emitDiagnosticsPerFile[options.TargetSourceFile.Path()]
+		diagnostics, _ := h.program.snapshot.emitDiagnosticsPerFile.Load(options.TargetSourceFile.Path())
 		return &compiler.EmitResult{
 			EmitSkipped: true,
 			Diagnostics: diagnostics.getDiagnostics(h.program.program, options.TargetSourceFile),
@@ -149,7 +149,7 @@ func (h *emitFilesHandler) getEmitOptions(options compiler.EmitOptions) compiler
 		WriteFile: func(fileName string, text string, writeByteOrderMark bool, data *compiler.WriteFileData) error {
 			if tspath.IsDeclarationFileName(fileName) {
 				var emitSignature string
-				info := h.program.snapshot.fileInfos[options.TargetSourceFile.Path()]
+				info, _ := h.program.snapshot.fileInfos.Load(options.TargetSourceFile.Path())
 				if info.signature == info.version {
 					signature := h.program.snapshot.computeSignatureWithDiagnostics(options.TargetSourceFile, text, data)
 					// With d.ts diagnostics they are also part of the signature so emitSignature will be different from it since its just hash of d.ts
@@ -184,7 +184,7 @@ func (h *emitFilesHandler) skipDtsOutputOfComposite(file *ast.SourceFile, output
 		return false
 	}
 	var oldSignature string
-	oldSignatureFormat, ok := h.program.snapshot.emitSignatures[file.Path()]
+	oldSignatureFormat, ok := h.program.snapshot.emitSignatures.Load(file.Path())
 	if ok {
 		if oldSignatureFormat.signature != "" {
 			oldSignature = oldSignatureFormat.signature
@@ -215,49 +215,43 @@ func (h *emitFilesHandler) skipDtsOutputOfComposite(file *ast.SourceFile, output
 
 func (h *emitFilesHandler) updateSnapshot() []*compiler.EmitResult {
 	h.signatures.Range(func(file tspath.Path, signature string) bool {
-		info := h.program.snapshot.fileInfos[file]
+		info, _ := h.program.snapshot.fileInfos.Load(file)
 		info.signature = signature
 		if h.program.updatedSignatureKinds != nil {
 			h.program.updatedSignatureKinds[file] = SignatureUpdateKindStoredAtEmit
 		}
-		h.program.snapshot.buildInfoEmitPending = true
+		h.program.snapshot.buildInfoEmitPending.Store(true)
 		return true
 	})
 	h.emitSignatures.Range(func(file tspath.Path, signature *emitSignature) bool {
-		if h.program.snapshot.emitSignatures == nil {
-			h.program.snapshot.emitSignatures = make(map[tspath.Path]*emitSignature)
-		}
-		h.program.snapshot.emitSignatures[file] = signature
-		h.program.snapshot.buildInfoEmitPending = true
+		h.program.snapshot.emitSignatures.Store(file, signature)
+		h.program.snapshot.buildInfoEmitPending.Store(true)
 		return true
 	})
 	latestChangedDtsFiles := h.latestChangedDtsFiles.ToSlice()
 	slices.Sort(latestChangedDtsFiles)
 	if latestChangedDtsFile := core.LastOrNil(latestChangedDtsFiles); latestChangedDtsFile != "" {
 		h.program.snapshot.latestChangedDtsFile = latestChangedDtsFile
-		h.program.snapshot.buildInfoEmitPending = true
+		h.program.snapshot.buildInfoEmitPending.Store(true)
 	}
 	for file := range h.deletedPendingKinds.Keys() {
-		delete(h.program.snapshot.affectedFilesPendingEmit, file)
-		h.program.snapshot.buildInfoEmitPending = true
+		h.program.snapshot.affectedFilesPendingEmit.Delete(file)
+		h.program.snapshot.buildInfoEmitPending.Store(true)
 	}
 	var results []*compiler.EmitResult
 	h.emitUpdates.Range(func(file tspath.Path, update *emitUpdate) bool {
 		if update.pendingKind == 0 {
-			delete(h.program.snapshot.affectedFilesPendingEmit, file)
+			h.program.snapshot.affectedFilesPendingEmit.Delete(file)
 		} else {
-			h.program.snapshot.affectedFilesPendingEmit[file] = update.pendingKind
+			h.program.snapshot.affectedFilesPendingEmit.Store(file, update.pendingKind)
 		}
 		if update.result != nil {
 			results = append(results, update.result)
 			if len(update.result.Diagnostics) != 0 {
-				if h.program.snapshot.emitDiagnosticsPerFile == nil {
-					h.program.snapshot.emitDiagnosticsPerFile = make(map[tspath.Path]*diagnosticsOrBuildInfoDiagnosticsWithFileName)
-				}
-				h.program.snapshot.emitDiagnosticsPerFile[file] = &diagnosticsOrBuildInfoDiagnosticsWithFileName{diagnostics: update.result.Diagnostics}
+				h.program.snapshot.emitDiagnosticsPerFile.Store(file, &diagnosticsOrBuildInfoDiagnosticsWithFileName{diagnostics: update.result.Diagnostics})
 			}
 		}
-		h.program.snapshot.buildInfoEmitPending = true
+		h.program.snapshot.buildInfoEmitPending.Store(true)
 		return true
 	})
 	return results

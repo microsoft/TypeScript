@@ -7,6 +7,7 @@ import (
 
 	"github.com/go-json-experiment/json"
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
@@ -25,7 +26,7 @@ const (
 type Program struct {
 	snapshot                   *snapshot
 	program                    *compiler.Program
-	semanticDiagnosticsPerFile map[tspath.Path]*diagnosticsOrBuildInfoDiagnosticsWithFileName
+	semanticDiagnosticsPerFile *collections.SyncMap[tspath.Path, *diagnosticsOrBuildInfoDiagnosticsWithFileName]
 	updatedSignatureKinds      map[tspath.Path]SignatureUpdateKind
 }
 
@@ -33,13 +34,15 @@ var _ compiler.ProgramLike = (*Program)(nil)
 
 func NewProgram(program *compiler.Program, oldProgram *Program, testing bool) *Program {
 	incrementalProgram := &Program{
-		snapshot: newSnapshotForProgram(program, oldProgram, testing),
+		snapshot: programToSnapshot(program, oldProgram, testing),
 		program:  program,
 	}
 
 	if testing {
 		if oldProgram != nil {
-			incrementalProgram.semanticDiagnosticsPerFile = oldProgram.snapshot.semanticDiagnosticsPerFile
+			incrementalProgram.semanticDiagnosticsPerFile = &oldProgram.snapshot.semanticDiagnosticsPerFile
+		} else {
+			incrementalProgram.semanticDiagnosticsPerFile = &collections.SyncMap[tspath.Path, *diagnosticsOrBuildInfoDiagnosticsWithFileName]{}
 		}
 		incrementalProgram.updatedSignatureKinds = make(map[tspath.Path]SignatureUpdateKind)
 	}
@@ -47,14 +50,14 @@ func NewProgram(program *compiler.Program, oldProgram *Program, testing bool) *P
 }
 
 type TestingData struct {
-	SemanticDiagnosticsPerFile           map[tspath.Path]*diagnosticsOrBuildInfoDiagnosticsWithFileName
-	OldProgramSemanticDiagnosticsPerFile map[tspath.Path]*diagnosticsOrBuildInfoDiagnosticsWithFileName
+	SemanticDiagnosticsPerFile           *collections.SyncMap[tspath.Path, *diagnosticsOrBuildInfoDiagnosticsWithFileName]
+	OldProgramSemanticDiagnosticsPerFile *collections.SyncMap[tspath.Path, *diagnosticsOrBuildInfoDiagnosticsWithFileName]
 	UpdatedSignatureKinds                map[tspath.Path]SignatureUpdateKind
 }
 
 func (p *Program) GetTestingData(program *compiler.Program) TestingData {
 	return TestingData{
-		SemanticDiagnosticsPerFile:           p.snapshot.semanticDiagnosticsPerFile,
+		SemanticDiagnosticsPerFile:           &p.snapshot.semanticDiagnosticsPerFile,
 		OldProgramSemanticDiagnosticsPerFile: p.semanticDiagnosticsPerFile,
 		UpdatedSignatureKinds:                p.updatedSignatureKinds,
 	}
@@ -131,7 +134,7 @@ func (p *Program) GetSemanticDiagnostics(ctx context.Context, file *ast.SourceFi
 
 	// Return result from cache
 	if file != nil {
-		cachedDiagnostics, ok := p.snapshot.semanticDiagnosticsPerFile[file.Path()]
+		cachedDiagnostics, ok := p.snapshot.semanticDiagnosticsPerFile.Load(file.Path())
 		if !ok {
 			panic("After handling all the affected files, there shouldnt be more changes")
 		}
@@ -140,7 +143,7 @@ func (p *Program) GetSemanticDiagnostics(ctx context.Context, file *ast.SourceFi
 
 	var diagnostics []*ast.Diagnostic
 	for _, file := range p.program.GetSourceFiles() {
-		cachedDiagnostics, ok := p.snapshot.semanticDiagnosticsPerFile[file.Path()]
+		cachedDiagnostics, ok := p.snapshot.semanticDiagnosticsPerFile.Load(file.Path())
 		if !ok {
 			panic("After handling all the affected files, there shouldnt be more changes")
 		}
@@ -198,21 +201,21 @@ func (p *Program) collectSemanticDiagnosticsOfAffectedFiles(ctx context.Context,
 		return
 	}
 
-	if len(p.snapshot.semanticDiagnosticsPerFile) == len(p.program.GetSourceFiles()) {
+	if p.snapshot.semanticDiagnosticsPerFile.Size() == len(p.program.GetSourceFiles()) {
 		// If we have all the files,
 		return
 	}
 
 	var affectedFiles []*ast.SourceFile
 	if file != nil {
-		_, ok := p.snapshot.semanticDiagnosticsPerFile[file.Path()]
+		_, ok := p.snapshot.semanticDiagnosticsPerFile.Load(file.Path())
 		if ok {
 			return
 		}
 		affectedFiles = []*ast.SourceFile{file}
 	} else {
 		for _, file := range p.program.GetSourceFiles() {
-			if _, ok := p.snapshot.semanticDiagnosticsPerFile[file.Path()]; !ok {
+			if _, ok := p.snapshot.semanticDiagnosticsPerFile.Load(file.Path()); !ok {
 				affectedFiles = append(affectedFiles, file)
 			}
 		}
@@ -227,12 +230,12 @@ func (p *Program) collectSemanticDiagnosticsOfAffectedFiles(ctx context.Context,
 
 	// Commit changes to snapshot
 	for file, diagnostics := range diagnosticsPerFile {
-		p.snapshot.semanticDiagnosticsPerFile[file.Path()] = &diagnosticsOrBuildInfoDiagnosticsWithFileName{diagnostics: diagnostics}
+		p.snapshot.semanticDiagnosticsPerFile.Store(file.Path(), &diagnosticsOrBuildInfoDiagnosticsWithFileName{diagnostics: diagnostics})
 	}
-	if len(p.snapshot.semanticDiagnosticsPerFile) == len(p.program.GetSourceFiles()) && p.snapshot.checkPending && !p.snapshot.options.NoCheck.IsTrue() {
+	if p.snapshot.semanticDiagnosticsPerFile.Size() == len(p.program.GetSourceFiles()) && p.snapshot.checkPending && !p.snapshot.options.NoCheck.IsTrue() {
 		p.snapshot.checkPending = false
 	}
-	p.snapshot.buildInfoEmitPending = true
+	p.snapshot.buildInfoEmitPending.Store(true)
 }
 
 func (p *Program) emitBuildInfo(ctx context.Context, options compiler.EmitOptions) *compiler.EmitResult {
@@ -246,10 +249,10 @@ func (p *Program) emitBuildInfo(ctx context.Context, options compiler.EmitOption
 	if p.snapshot.hasErrors == core.TSUnknown {
 		p.snapshot.hasErrors = p.ensureHasErrorsForState(ctx, p.program)
 		if p.snapshot.hasErrors != p.snapshot.hasErrorsFromOldState {
-			p.snapshot.buildInfoEmitPending = true
+			p.snapshot.buildInfoEmitPending.Store(true)
 		}
 	}
-	if !p.snapshot.buildInfoEmitPending {
+	if !p.snapshot.buildInfoEmitPending.Load() {
 		return nil
 	}
 	if ctx.Err() != nil {
@@ -275,7 +278,7 @@ func (p *Program) emitBuildInfo(ctx context.Context, options compiler.EmitOption
 			},
 		}
 	}
-	p.snapshot.buildInfoEmitPending = false
+	p.snapshot.buildInfoEmitPending.Store(false)
 
 	var emittedFiles []string
 	if p.snapshot.options.ListEmittedFiles.IsTrue() {
@@ -290,8 +293,8 @@ func (p *Program) emitBuildInfo(ctx context.Context, options compiler.EmitOption
 func (p *Program) ensureHasErrorsForState(ctx context.Context, program *compiler.Program) core.Tristate {
 	// Check semantic and emit diagnostics first as we dont need to ask program about it
 	if slices.ContainsFunc(program.GetSourceFiles(), func(file *ast.SourceFile) bool {
-		semanticDiagnostics := p.snapshot.semanticDiagnosticsPerFile[file.Path()]
-		if semanticDiagnostics == nil {
+		semanticDiagnostics, ok := p.snapshot.semanticDiagnosticsPerFile.Load(file.Path())
+		if !ok {
 			// Missing semantic diagnostics in cache will be encoded in incremental buildInfo
 			return p.snapshot.options.IsIncremental()
 		}
@@ -299,7 +302,7 @@ func (p *Program) ensureHasErrorsForState(ctx context.Context, program *compiler
 			// cached semantic diagnostics will be encoded in buildInfo
 			return true
 		}
-		if _, ok := p.snapshot.emitDiagnosticsPerFile[file.Path()]; ok {
+		if _, ok := p.snapshot.emitDiagnosticsPerFile.Load(file.Path()); ok {
 			// emit diagnostics will be encoded in buildInfo;
 			return true
 		}

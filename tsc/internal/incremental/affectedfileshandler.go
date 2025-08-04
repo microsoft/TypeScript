@@ -2,6 +2,7 @@ package incremental
 
 import (
 	"context"
+	"iter"
 	"maps"
 	"slices"
 	"sync"
@@ -41,8 +42,8 @@ func (h *affectedFilesHandler) getDtsMayChange(affectedFilePath tspath.Path, aff
 
 func (h *affectedFilesHandler) isChangedSignature(path tspath.Path) bool {
 	newSignature, _ := h.updatedSignatures.Load(path)
-	oldSignature := h.program.snapshot.fileInfos[path].signature
-	return newSignature != oldSignature
+	oldInfo, _ := h.program.snapshot.fileInfos.Load(path)
+	return newSignature != oldInfo.signature
 }
 
 func (h *affectedFilesHandler) removeSemanticDiagnosticsOf(path tspath.Path) {
@@ -81,7 +82,7 @@ func (h *affectedFilesHandler) updateShapeSignature(file *ast.SourceFile, useFil
 		return false
 	}
 
-	info := h.program.snapshot.fileInfos[file.Path()]
+	info, _ := h.program.snapshot.fileInfos.Load(file.Path())
 	prevSignature := info.signature
 	var latestSignature string
 	var updateKind SignatureUpdateKind
@@ -110,7 +111,7 @@ func (h *affectedFilesHandler) getFilesAffectedBy(path tspath.Path) []*ast.Sourc
 		return []*ast.SourceFile{file}
 	}
 
-	if info := h.program.snapshot.fileInfos[file.Path()]; info.affectsGlobalScope {
+	if info, _ := h.program.snapshot.fileInfos.Load(file.Path()); info.affectsGlobalScope {
 		h.hasAllFilesExcludingDefaultLibraryFile.Store(true)
 		h.program.snapshot.getAllFilesExcludingDefaultLibraryFile(h.program.program, file)
 	}
@@ -139,10 +140,10 @@ func (h *affectedFilesHandler) getFilesAffectedBy(path tspath.Path) []*ast.Sourc
 }
 
 // Gets the files referenced by the the file path
-func (h *affectedFilesHandler) getReferencedByPaths(file tspath.Path) map[tspath.Path]struct{} {
+func (h *affectedFilesHandler) getReferencedByPaths(file tspath.Path) iter.Seq[tspath.Path] {
 	keys, ok := h.program.snapshot.referencedMap.GetKeys(file)
 	if !ok {
-		return nil
+		return func(yield func(tspath.Path) bool) {}
 	}
 	return keys.Keys()
 }
@@ -154,8 +155,7 @@ func (h *affectedFilesHandler) forEachFileReferencedBy(file *ast.SourceFile, fn 
 	seenFileNamesMap := map[tspath.Path]*ast.SourceFile{}
 	// Start with the paths this file was referenced by
 	seenFileNamesMap[file.Path()] = file
-	references := h.getReferencedByPaths(file.Path())
-	queue := slices.Collect(maps.Keys(references))
+	queue := slices.Collect(h.getReferencedByPaths(file.Path()))
 	for len(queue) > 0 {
 		currentPath := queue[len(queue)-1]
 		queue = queue[:len(queue)-1]
@@ -290,7 +290,7 @@ func (h *affectedFilesHandler) handleDtsMayChangeOfFileAndExportsOfFile(dtsMayCh
 }
 
 func (h *affectedFilesHandler) handleDtsMayChangeOfGlobalScope(dtsMayChange dtsMayChange, filePath tspath.Path, invalidateJsFiles bool) bool {
-	if info, ok := h.program.snapshot.fileInfos[filePath]; !ok || !info.affectsGlobalScope {
+	if info, ok := h.program.snapshot.fileInfos.Load(filePath); !ok || !info.affectsGlobalScope {
 		return false
 	}
 	// Every file needs to be handled
@@ -331,7 +331,9 @@ func (h *affectedFilesHandler) updateSnapshot() {
 		return
 	}
 	h.updatedSignatures.Range(func(filePath tspath.Path, signature string) bool {
-		h.program.snapshot.fileInfos[filePath].signature = signature
+		if info, ok := h.program.snapshot.fileInfos.Load(filePath); ok {
+			info.signature = signature
+		}
 		return true
 	})
 	if h.updatedSignatureKinds != nil {
@@ -341,7 +343,7 @@ func (h *affectedFilesHandler) updateSnapshot() {
 		})
 	}
 	h.filesToRemoveDiagnostics.Range(func(file tspath.Path) bool {
-		delete(h.program.snapshot.semanticDiagnosticsPerFile, file)
+		h.program.snapshot.semanticDiagnosticsPerFile.Delete(file)
 		return true
 	})
 	for _, change := range h.dtsMayChange {
@@ -349,25 +351,26 @@ func (h *affectedFilesHandler) updateSnapshot() {
 			h.program.snapshot.addFileToAffectedFilesPendingEmit(filePath, emitKind)
 		}
 	}
-	h.program.snapshot.changedFilesSet = &collections.Set[tspath.Path]{}
-	h.program.snapshot.buildInfoEmitPending = true
+	h.program.snapshot.changedFilesSet = collections.SyncSet[tspath.Path]{}
+	h.program.snapshot.buildInfoEmitPending.Store(true)
 }
 
 func collectAllAffectedFiles(ctx context.Context, program *Program) {
-	if program.snapshot.changedFilesSet.Len() == 0 {
+	if program.snapshot.changedFilesSet.Size() == 0 {
 		return
 	}
 
 	handler := affectedFilesHandler{ctx: ctx, program: program, updatedSignatureKinds: core.IfElse(program.updatedSignatureKinds == nil, nil, &collections.SyncMap[tspath.Path, SignatureUpdateKind]{})}
 	wg := core.NewWorkGroup(handler.program.program.SingleThreaded())
 	var result collections.SyncSet[*ast.SourceFile]
-	for file := range program.snapshot.changedFilesSet.Keys() {
+	program.snapshot.changedFilesSet.Range(func(file tspath.Path) bool {
 		wg.Queue(func() {
 			for _, affectedFile := range handler.getFilesAffectedBy(file) {
 				result.Add(affectedFile)
 			}
 		})
-	}
+		return true
+	})
 	wg.RunAndWait()
 
 	if ctx.Err() != nil {

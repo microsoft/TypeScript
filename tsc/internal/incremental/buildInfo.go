@@ -328,12 +328,13 @@ func (b *BuildInfoEmitSignature) noEmitSignature() bool {
 	return b.Signature == "" && !b.DiffersOnlyInDtsMap && !b.DiffersInOptions
 }
 
-func (b *BuildInfoEmitSignature) toEmitSignature(path tspath.Path, emitSignatures map[tspath.Path]*emitSignature) *emitSignature {
+func (b *BuildInfoEmitSignature) toEmitSignature(path tspath.Path, emitSignatures *collections.SyncMap[tspath.Path, *emitSignature]) *emitSignature {
 	var signature string
 	var signatureWithDifferentOptions []string
 	if b.DiffersOnlyInDtsMap {
 		signatureWithDifferentOptions = make([]string, 0, 1)
-		signatureWithDifferentOptions = append(signatureWithDifferentOptions, emitSignatures[path].signature)
+		info, _ := emitSignatures.Load(path)
+		signatureWithDifferentOptions = append(signatureWithDifferentOptions, info.signature)
 	} else if b.DiffersInOptions {
 		signatureWithDifferentOptions = make([]string, 0, 1)
 		signatureWithDifferentOptions = append(signatureWithDifferentOptions, b.Signature)

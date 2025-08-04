@@ -171,7 +171,7 @@ func (t *toBuildInfo) toBuildInfoDiagnosticsOfFile(filePath tspath.Path, diags *
 
 func (t *toBuildInfo) setFileInfoAndEmitSignatures() {
 	t.buildInfo.FileInfos = core.Map(t.program.GetSourceFiles(), func(file *ast.SourceFile) *BuildInfoFileInfo {
-		info := t.snapshot.fileInfos[file.Path()]
+		info, _ := t.snapshot.fileInfos.Load(file.Path())
 		fileId := t.toFileId(file.Path())
 		//  tryAddRoot(key, fileId);
 		if t.buildInfo.FileNames[fileId-1] != t.relativeToBuildInfo(string(file.Path())) {
@@ -179,8 +179,7 @@ func (t *toBuildInfo) setFileInfoAndEmitSignatures() {
 		}
 		if t.snapshot.options.Composite.IsTrue() {
 			if !ast.IsJsonSourceFile(file) && t.program.SourceFileMayBeEmitted(file, false) {
-				emitSignature := t.snapshot.emitSignatures[file.Path()]
-				if emitSignature == nil {
+				if emitSignature, loaded := t.snapshot.emitSignatures.Load(file.Path()); !loaded {
 					t.buildInfo.EmitSignatures = append(t.buildInfo.EmitSignatures, &BuildInfoEmitSignature{
 						FileId: fileId,
 					})
@@ -225,7 +224,7 @@ func (t *toBuildInfo) setCompilerOptions() {
 }
 
 func (t *toBuildInfo) setReferencedMap() {
-	keys := slices.Collect(maps.Keys(t.snapshot.referencedMap.Keys()))
+	keys := slices.Collect(t.snapshot.referencedMap.Keys().Keys())
 	slices.Sort(keys)
 	t.buildInfo.ReferencedMap = core.Map(keys, func(filePath tspath.Path) *BuildInfoReferenceMapEntry {
 		references, _ := t.snapshot.referencedMap.GetValues(filePath)
@@ -237,14 +236,14 @@ func (t *toBuildInfo) setReferencedMap() {
 }
 
 func (t *toBuildInfo) setChangeFileSet() {
-	files := slices.Collect(maps.Keys(t.snapshot.changedFilesSet.Keys()))
+	files := slices.Collect(t.snapshot.changedFilesSet.Keys())
 	slices.Sort(files)
 	t.buildInfo.ChangeFileSet = core.Map(files, t.toFileId)
 }
 
 func (t *toBuildInfo) setSemanticDiagnostics() {
 	for _, file := range t.program.GetSourceFiles() {
-		value, ok := t.snapshot.semanticDiagnosticsPerFile[file.Path()]
+		value, ok := t.snapshot.semanticDiagnosticsPerFile.Load(file.Path())
 		if !ok {
 			if !t.snapshot.changedFilesSet.Has(file.Path()) {
 				t.buildInfo.SemanticDiagnosticsPerFile = append(t.buildInfo.SemanticDiagnosticsPerFile, &BuildInfoSemanticDiagnostic{
@@ -263,18 +262,16 @@ func (t *toBuildInfo) setSemanticDiagnostics() {
 }
 
 func (t *toBuildInfo) setEmitDiagnostics() {
-	files := slices.Collect(maps.Keys(t.snapshot.emitDiagnosticsPerFile))
+	files := slices.Collect(t.snapshot.emitDiagnosticsPerFile.Keys())
 	slices.Sort(files)
 	t.buildInfo.EmitDiagnosticsPerFile = core.Map(files, func(filePath tspath.Path) *BuildInfoDiagnosticsOfFile {
-		return t.toBuildInfoDiagnosticsOfFile(filePath, t.snapshot.emitDiagnosticsPerFile[filePath])
+		value, _ := t.snapshot.emitDiagnosticsPerFile.Load(filePath)
+		return t.toBuildInfoDiagnosticsOfFile(filePath, value)
 	})
 }
 
 func (t *toBuildInfo) setAffectedFilesPendingEmit() {
-	if len(t.snapshot.affectedFilesPendingEmit) == 0 {
-		return
-	}
-	files := slices.Collect(maps.Keys(t.snapshot.affectedFilesPendingEmit))
+	files := slices.Collect(t.snapshot.affectedFilesPendingEmit.Keys())
 	slices.Sort(files)
 	fullEmitKind := GetFileEmitKind(t.snapshot.options)
 	for _, filePath := range files {
@@ -282,7 +279,7 @@ func (t *toBuildInfo) setAffectedFilesPendingEmit() {
 		if file == nil || !t.program.SourceFileMayBeEmitted(file, false) {
 			continue
 		}
-		pendingEmit := t.snapshot.affectedFilesPendingEmit[filePath]
+		pendingEmit, _ := t.snapshot.affectedFilesPendingEmit.Load(filePath)
 		t.buildInfo.AffectedFilesPendingEmit = append(t.buildInfo.AffectedFilesPendingEmit, &BuildInfoFilePendingEmit{
 			FileId:   t.toFileId(filePath),
 			EmitKind: core.IfElse(pendingEmit == fullEmitKind, 0, pendingEmit),

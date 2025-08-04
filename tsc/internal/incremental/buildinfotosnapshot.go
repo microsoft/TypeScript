@@ -93,36 +93,34 @@ func (t *toSnapshot) setCompilerOptions() {
 }
 
 func (t *toSnapshot) setFileInfoAndEmitSignatures() {
-	t.snapshot.fileInfos = make(map[tspath.Path]*fileInfo, len(t.buildInfo.FileInfos))
-	t.snapshot.createEmitSignaturesMap()
+	isComposite := t.snapshot.options.Composite.IsTrue()
 	for index, buildInfoFileInfo := range t.buildInfo.FileInfos {
 		path := t.toFilePath(BuildInfoFileId(index + 1))
 		info := buildInfoFileInfo.GetFileInfo()
-		t.snapshot.fileInfos[path] = info
+		t.snapshot.fileInfos.Store(path, info)
 		// Add default emit signature as file's signature
-		if info.signature != "" && t.snapshot.emitSignatures != nil {
-			t.snapshot.emitSignatures[path] = &emitSignature{signature: info.signature}
+		if info.signature != "" && isComposite {
+			t.snapshot.emitSignatures.Store(path, &emitSignature{signature: info.signature})
 		}
 	}
 	// Fix up emit signatures
 	for _, value := range t.buildInfo.EmitSignatures {
 		if value.noEmitSignature() {
-			delete(t.snapshot.emitSignatures, t.toFilePath(value.FileId))
+			t.snapshot.emitSignatures.Delete(t.toFilePath(value.FileId))
 		} else {
 			path := t.toFilePath(value.FileId)
-			t.snapshot.emitSignatures[path] = value.toEmitSignature(path, t.snapshot.emitSignatures)
+			t.snapshot.emitSignatures.Store(path, value.toEmitSignature(path, &t.snapshot.emitSignatures))
 		}
 	}
 }
 
 func (t *toSnapshot) setReferencedMap() {
 	for _, entry := range t.buildInfo.ReferencedMap {
-		t.snapshot.referencedMap.Set(t.toFilePath(entry.FileId), t.toFilePathSet(entry.FileIdListId))
+		t.snapshot.referencedMap.Store(t.toFilePath(entry.FileId), t.toFilePathSet(entry.FileIdListId))
 	}
 }
 
 func (t *toSnapshot) setChangeFileSet() {
-	t.snapshot.changedFilesSet = collections.NewSetWithSizeHint[tspath.Path](len(t.buildInfo.ChangeFileSet))
 	for _, fileId := range t.buildInfo.ChangeFileSet {
 		filePath := t.toFilePath(fileId)
 		t.snapshot.changedFilesSet.Add(filePath)
@@ -130,29 +128,28 @@ func (t *toSnapshot) setChangeFileSet() {
 }
 
 func (t *toSnapshot) setSemanticDiagnostics() {
-	t.snapshot.semanticDiagnosticsPerFile = make(map[tspath.Path]*diagnosticsOrBuildInfoDiagnosticsWithFileName, len(t.snapshot.fileInfos))
-	for path := range t.snapshot.fileInfos {
+	t.snapshot.fileInfos.Range(func(path tspath.Path, info *fileInfo) bool {
 		// Initialize to have no diagnostics if its not changed file
 		if !t.snapshot.changedFilesSet.Has(path) {
-			t.snapshot.semanticDiagnosticsPerFile[path] = &diagnosticsOrBuildInfoDiagnosticsWithFileName{}
+			t.snapshot.semanticDiagnosticsPerFile.Store(path, &diagnosticsOrBuildInfoDiagnosticsWithFileName{})
 		}
-	}
+		return true
+	})
 	for _, diagnostic := range t.buildInfo.SemanticDiagnosticsPerFile {
 		if diagnostic.FileId != 0 {
 			filePath := t.toFilePath(diagnostic.FileId)
-			delete(t.snapshot.semanticDiagnosticsPerFile, filePath) // does not have cached diagnostics
+			t.snapshot.semanticDiagnosticsPerFile.Delete(filePath) // does not have cached diagnostics
 		} else {
 			filePath := t.toFilePath(diagnostic.Diagnostics.FileId)
-			t.snapshot.semanticDiagnosticsPerFile[filePath] = t.toDiagnosticsOrBuildInfoDiagnosticsWithFileName(diagnostic.Diagnostics)
+			t.snapshot.semanticDiagnosticsPerFile.Store(filePath, t.toDiagnosticsOrBuildInfoDiagnosticsWithFileName(diagnostic.Diagnostics))
 		}
 	}
 }
 
 func (t *toSnapshot) setEmitDiagnostics() {
-	t.snapshot.emitDiagnosticsPerFile = make(map[tspath.Path]*diagnosticsOrBuildInfoDiagnosticsWithFileName, len(t.snapshot.fileInfos))
 	for _, diagnostic := range t.buildInfo.EmitDiagnosticsPerFile {
 		filePath := t.toFilePath(diagnostic.FileId)
-		t.snapshot.emitDiagnosticsPerFile[filePath] = t.toDiagnosticsOrBuildInfoDiagnosticsWithFileName(diagnostic)
+		t.snapshot.emitDiagnosticsPerFile.Store(filePath, t.toDiagnosticsOrBuildInfoDiagnosticsWithFileName(diagnostic))
 	}
 }
 
@@ -161,8 +158,7 @@ func (t *toSnapshot) setAffectedFilesPendingEmit() {
 		return
 	}
 	ownOptionsEmitKind := GetFileEmitKind(t.snapshot.options)
-	t.snapshot.affectedFilesPendingEmit = make(map[tspath.Path]FileEmitKind, len(t.buildInfo.AffectedFilesPendingEmit))
 	for _, pendingEmit := range t.buildInfo.AffectedFilesPendingEmit {
-		t.snapshot.affectedFilesPendingEmit[t.toFilePath(pendingEmit.FileId)] = core.IfElse(pendingEmit.EmitKind == 0, ownOptionsEmitKind, pendingEmit.EmitKind)
+		t.snapshot.affectedFilesPendingEmit.Store(t.toFilePath(pendingEmit.FileId), core.IfElse(pendingEmit.EmitKind == 0, ownOptionsEmitKind, pendingEmit.EmitKind))
 	}
 }
