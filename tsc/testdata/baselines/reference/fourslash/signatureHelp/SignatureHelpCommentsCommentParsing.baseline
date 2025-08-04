@@ -1,0 +1,1658 @@
+// === SignatureHelp ===
+=== /signatureHelpCommentsCommentParsing.ts ===
+// /// This is simple /// comments
+// function simple() {
+// }
+// 
+// simple( );
+//         ^
+// | ----------------------------------------------------------------------
+// | simple(): void
+// | ----------------------------------------------------------------------
+// 
+// /// multiLine /// Comments
+// /// This is example of multiline /// comments
+// /// Another multiLine
+// function multiLine() {
+// }
+// multiLine( );
+//            ^
+// | ----------------------------------------------------------------------
+// | multiLine(): void
+// | ----------------------------------------------------------------------
+// 
+// /** this is eg of single line jsdoc style comment */
+// function jsDocSingleLine() {
+// }
+// jsDocSingleLine();
+//                 ^
+// | ----------------------------------------------------------------------
+// | jsDocSingleLine(): void
+// | ----------------------------------------------------------------------
+// 
+// 
+// /** this is multiple line jsdoc stule comment
+// *New line1
+// *New Line2*/
+// function jsDocMultiLine() {
+// }
+// jsDocMultiLine();
+//                ^
+// | ----------------------------------------------------------------------
+// | jsDocMultiLine(): void
+// | ----------------------------------------------------------------------
+// 
+// /** multiple line jsdoc comments no longer merge
+// *New line1
+// *New Line2*/
+// /** Shoul mege this line as well
+// * and this too*/ /** Another this one too*/
+// function jsDocMultiLineMerge() {
+// }
+// jsDocMultiLineMerge();
+//                     ^
+// | ----------------------------------------------------------------------
+// | jsDocMultiLineMerge(): void
+// | ----------------------------------------------------------------------
+// 
+// 
+// /// Triple slash comment
+// /** jsdoc comment */
+// function jsDocMixedComments1() {
+// }
+// jsDocMixedComments1();
+//                     ^
+// | ----------------------------------------------------------------------
+// | jsDocMixedComments1(): void
+// | ----------------------------------------------------------------------
+// 
+// /// Triple slash comment
+// /** jsdoc comment */ /** another jsDocComment*/
+// function jsDocMixedComments2() {
+// }
+// jsDocMixedComments2();
+//                     ^
+// | ----------------------------------------------------------------------
+// | jsDocMixedComments2(): void
+// | ----------------------------------------------------------------------
+// 
+// /** jsdoc comment */ /*** triplestar jsDocComment*/
+// /// Triple slash comment
+// function jsDocMixedComments3() {
+// }
+// jsDocMixedComments3();
+//                     ^
+// | ----------------------------------------------------------------------
+// | jsDocMixedComments3(): void
+// | ----------------------------------------------------------------------
+// 
+// /** jsdoc comment */ /** another jsDocComment*/
+// /// Triple slash comment
+// /// Triple slash comment 2
+// function jsDocMixedComments4() {
+// }
+// jsDocMixedComments4();
+//                     ^
+// | ----------------------------------------------------------------------
+// | jsDocMixedComments4(): void
+// | ----------------------------------------------------------------------
+// 
+// /// Triple slash comment 1
+// /** jsdoc comment */ /** another jsDocComment*/
+// /// Triple slash comment
+// /// Triple slash comment 2
+// function jsDocMixedComments5() {
+// }
+// jsDocMixedComments5();
+//                     ^
+// | ----------------------------------------------------------------------
+// | jsDocMixedComments5(): void
+// | ----------------------------------------------------------------------
+// 
+// /** another jsDocComment*/
+// /// Triple slash comment 1
+// /// Triple slash comment
+// /// Triple slash comment 2
+// /** jsdoc comment */
+// function jsDocMixedComments6() {
+// }
+// jsDocMixedComments6();
+//                     ^
+// | ----------------------------------------------------------------------
+// | jsDocMixedComments6(): void
+// | ----------------------------------------------------------------------
+// 
+// // This shoulnot be help comment
+// function noHelpComment1() {
+// }
+// noHelpComment1();
+//                ^
+// | ----------------------------------------------------------------------
+// | noHelpComment1(): void
+// | ----------------------------------------------------------------------
+// 
+// /* This shoulnot be help comment */
+// function noHelpComment2() {
+// }
+// noHelpComment2();
+//                ^
+// | ----------------------------------------------------------------------
+// | noHelpComment2(): void
+// | ----------------------------------------------------------------------
+// 
+// function noHelpComment3() {
+// }
+// noHelpComment3();
+//                ^
+// | ----------------------------------------------------------------------
+// | noHelpComment3(): void
+// | ----------------------------------------------------------------------
+// /** Adds two integers and returns the result
+//   * @param {number} a first number
+//   * @param b second number
+//   */
+// function sum(a: number, b: number) {
+//     return a + b;
+// }
+// sum(10, 20);
+//     ^
+// | ----------------------------------------------------------------------
+// | sum(**a: number**, b: number): number
+// | ----------------------------------------------------------------------
+//         ^
+// | ----------------------------------------------------------------------
+// | sum(a: number, **b: number**): number
+// | ----------------------------------------------------------------------
+// /** This is multiplication function
+//  * @param 
+//  * @param a first number
+//  * @param b
+//  * @param c {
+//  @param d @anotherTag
+//  * @param e LastParam @anotherTag*/
+// function multiply(a: number, b: number, c?: number, d?, e?) {
+// }
+// multiply(10, 20, 30, 40, 50);
+//          ^
+// | ----------------------------------------------------------------------
+// | multiply(**a: number**, b: number, c?: number, d?: any, e?: any): void
+// | ----------------------------------------------------------------------
+//             ^
+// | ----------------------------------------------------------------------
+// | multiply(a: number, **b: number**, c?: number, d?: any, e?: any): void
+// | ----------------------------------------------------------------------
+//                 ^
+// | ----------------------------------------------------------------------
+// | multiply(a: number, b: number, **c?: number**, d?: any, e?: any): void
+// | ----------------------------------------------------------------------
+//                      ^
+// | ----------------------------------------------------------------------
+// | multiply(a: number, b: number, c?: number, **d?: any**, e?: any): void
+// | ----------------------------------------------------------------------
+//                          ^
+// | ----------------------------------------------------------------------
+// | multiply(a: number, b: number, c?: number, d?: any, **e?: any**): void
+// | ----------------------------------------------------------------------
+// /** fn f1 with number
+// * @param { string} b about b
+// */
+// function f1(a: number);
+// function f1(b: string);
+// /**@param opt optional parameter*/
+// function f1(aOrb, opt?) {
+//     return aOrb;
+// }
+// f1(10);
+//    ^
+// | ----------------------------------------------------------------------
+// | f1(**a: number**): any
+// | ----------------------------------------------------------------------
+// f1("hello");
+//    ^
+// | ----------------------------------------------------------------------
+// | f1(**b: string**): any
+// | ----------------------------------------------------------------------
+// 
+// /** This is subtract function
+// @param { a
+// *@param { number | } b this is about b
+// @param { { () => string; } } c this is optional param c
+// @param { { () => string; } d this is optional param d
+// @param { { () => string; } } e this is optional param e
+// @param { { { () => string; } } f this is optional param f
+// */
+// function subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string) {
+// }
+// subtract(10,  20,  null,  null,  null, null);
+//          ^
+// | ----------------------------------------------------------------------
+// | subtract(**a: number**, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void
+// | ----------------------------------------------------------------------
+//              ^
+// | ----------------------------------------------------------------------
+// | subtract(a: number, **b: number**, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void
+// | ----------------------------------------------------------------------
+//                   ^
+// | ----------------------------------------------------------------------
+// | subtract(a: number, b: number, **c?: () => string**, d?: () => string, e?: () => string, f?: () => string): void
+// | ----------------------------------------------------------------------
+//                          ^
+// | ----------------------------------------------------------------------
+// | subtract(a: number, b: number, c?: () => string, **d?: () => string**, e?: () => string, f?: () => string): void
+// | ----------------------------------------------------------------------
+//                                 ^
+// | ----------------------------------------------------------------------
+// | subtract(a: number, b: number, c?: () => string, d?: () => string, **e?: () => string**, f?: () => string): void
+// | ----------------------------------------------------------------------
+//                                        ^
+// | ----------------------------------------------------------------------
+// | subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, **f?: () => string**): void
+// | ----------------------------------------------------------------------
+// /** this is square function
+// @paramTag { number } a this is input number of paramTag
+// @param { number } a this is input number
+// @returnType { number } it is return type
+// */
+// function square(a: number) {
+//     return a * a;
+// }
+// square(10);
+//        ^
+// | ----------------------------------------------------------------------
+// | square(**a: number**): number
+// | ----------------------------------------------------------------------
+// /** this is divide function
+// @param { number} a this is a
+// @paramTag { number } g this is optional param g
+// @param { number} b this is b
+// */
+// function divide(a: number, b: number) {
+// }
+// divide(10, 20);
+//        ^
+// | ----------------------------------------------------------------------
+// | divide(**a: number**, b: number): void
+// | ----------------------------------------------------------------------
+//            ^
+// | ----------------------------------------------------------------------
+// | divide(a: number, **b: number**): void
+// | ----------------------------------------------------------------------
+// /**
+// Function returns string concat of foo and bar
+// @param			{string}		foo		is string
+// @param		    {string}		bar		is second string
+// */
+// function fooBar(foo: string, bar: string) {
+//     return foo + bar;
+// }
+// fooBar("foo","bar");
+//        ^
+// | ----------------------------------------------------------------------
+// | fooBar(**foo: string**, bar: string): string
+// | ----------------------------------------------------------------------
+//              ^
+// | ----------------------------------------------------------------------
+// | fooBar(foo: string, **bar: string**): string
+// | ----------------------------------------------------------------------
+// /** This is a comment */
+// var x;
+// /**
+//   * This is a comment
+//   */
+// var y;
+// /** this is jsdoc style function with param tag as well as inline parameter help
+// *@param a it is first parameter
+// *@param c it is third parameter
+// */
+// function jsDocParamTest(/** this is inline comment for a */a: number, /** this is inline comment for b*/ b: number, c: number, d: number) {
+//     return a + b + c + d;
+//            ^
+// | ----------------------------------------------------------------------
+// | No signaturehelp at /*39*/.
+// | ----------------------------------------------------------------------
+// }
+// jsDocParamTest(30, 40, 50, 60);
+//                ^
+// | ----------------------------------------------------------------------
+// | jsDocParamTest(**a: number**, b: number, c: number, d: number): number
+// | ----------------------------------------------------------------------
+//                    ^
+// | ----------------------------------------------------------------------
+// | jsDocParamTest(a: number, **b: number**, c: number, d: number): number
+// | ----------------------------------------------------------------------
+//                        ^
+// | ----------------------------------------------------------------------
+// | jsDocParamTest(a: number, b: number, **c: number**, d: number): number
+// | ----------------------------------------------------------------------
+//                            ^
+// | ----------------------------------------------------------------------
+// | jsDocParamTest(a: number, b: number, c: number, **d: number**): number
+// | ----------------------------------------------------------------------
+// /** This is function comment
+//   * And properly aligned comment
+//   */
+// function jsDocCommentAlignmentTest1() {
+// }
+// jsDocCommentAlignmentTest1();
+//                            ^
+// | ----------------------------------------------------------------------
+// | jsDocCommentAlignmentTest1(): void
+// | ----------------------------------------------------------------------
+// /** This is function comment
+//   *     And aligned with 4 space char margin
+//   */
+// function jsDocCommentAlignmentTest2() {
+// }
+// jsDocCommentAlignmentTest2();
+//                            ^
+// | ----------------------------------------------------------------------
+// | jsDocCommentAlignmentTest2(): void
+// | ----------------------------------------------------------------------
+// /** This is function comment
+//   *     And aligned with 4 space char margin
+//   * @param {string} a this is info about a
+//   *                   spanning on two lines and aligned perfectly
+//   * @param b          this is info about b
+//   *                   spanning on two lines and aligned perfectly
+//   *                   spanning one more line alined perfectly
+//   *                       spanning another line with more margin
+//   * @param c          this is info about b
+//   *  not aligned text about parameter will eat only one space
+//   */
+// function jsDocCommentAlignmentTest3(a: string, b, c) {
+// }
+// jsDocCommentAlignmentTest3("hello",1, 2);
+//                            ^
+// | ----------------------------------------------------------------------
+// | jsDocCommentAlignmentTest3(**a: string**, b: any, c: any): void
+// | ----------------------------------------------------------------------
+//                                    ^
+// | ----------------------------------------------------------------------
+// | jsDocCommentAlignmentTest3(a: string, **b: any**, c: any): void
+// | ----------------------------------------------------------------------
+//                                       ^
+// | ----------------------------------------------------------------------
+// | jsDocCommentAlignmentTest3(a: string, b: any, **c: any**): void
+// | ----------------------------------------------------------------------
+// 
+// ^
+// | ----------------------------------------------------------------------
+// | No signaturehelp at /**/.
+// | ----------------------------------------------------------------------
+// class NoQuickInfoClass {
+// }
+[
+  {
+    "marker": {
+      "Position": 63,
+      "LSPosition": {
+        "line": 4,
+        "character": 8
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "simple(): void",
+          "parameters": []
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 198,
+      "LSPosition": {
+        "line": 11,
+        "character": 11
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "multiLine(): void",
+          "parameters": []
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 302,
+      "LSPosition": {
+        "line": 16,
+        "character": 16
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "jsDocSingleLine(): void",
+          "parameters": []
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 422,
+      "LSPosition": {
+        "line": 24,
+        "character": 15
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "jsDocMultiLine(): void",
+          "parameters": []
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 631,
+      "LSPosition": {
+        "line": 33,
+        "character": 20
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "jsDocMultiLineMerge(): void",
+          "parameters": []
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 737,
+      "LSPosition": {
+        "line": 40,
+        "character": 20
+      },
+      "Name": "6",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "jsDocMixedComments1(): void",
+          "parameters": []
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 869,
+      "LSPosition": {
+        "line": 46,
+        "character": 20
+      },
+      "Name": "7",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "jsDocMixedComments2(): void",
+          "parameters": []
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 1005,
+      "LSPosition": {
+        "line": 52,
+        "character": 20
+      },
+      "Name": "8",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "jsDocMixedComments3(): void",
+          "parameters": []
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 1164,
+      "LSPosition": {
+        "line": 59,
+        "character": 20
+      },
+      "Name": "9",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "jsDocMixedComments4(): void",
+          "parameters": []
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 1350,
+      "LSPosition": {
+        "line": 67,
+        "character": 20
+      },
+      "Name": "10",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "jsDocMixedComments5(): void",
+          "parameters": []
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 1536,
+      "LSPosition": {
+        "line": 76,
+        "character": 20
+      },
+      "Name": "11",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "jsDocMixedComments6(): void",
+          "parameters": []
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 1618,
+      "LSPosition": {
+        "line": 81,
+        "character": 15
+      },
+      "Name": "12",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "noHelpComment1(): void",
+          "parameters": []
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 1703,
+      "LSPosition": {
+        "line": 86,
+        "character": 15
+      },
+      "Name": "13",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "noHelpComment2(): void",
+          "parameters": []
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 1752,
+      "LSPosition": {
+        "line": 90,
+        "character": 15
+      },
+      "Name": "14",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "noHelpComment3(): void",
+          "parameters": []
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 1928,
+      "LSPosition": {
+        "line": 98,
+        "character": 4
+      },
+      "Name": "16",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "sum(a: number, b: number): number",
+          "parameters": [
+            {
+              "label": "a: number"
+            },
+            {
+              "label": "b: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 1932,
+      "LSPosition": {
+        "line": 98,
+        "character": 8
+      },
+      "Name": "17",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "sum(a: number, b: number): number",
+          "parameters": [
+            {
+              "label": "a: number"
+            },
+            {
+              "label": "b: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 2166,
+      "LSPosition": {
+        "line": 108,
+        "character": 9
+      },
+      "Name": "19",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "multiply(a: number, b: number, c?: number, d?: any, e?: any): void",
+          "parameters": [
+            {
+              "label": "a: number"
+            },
+            {
+              "label": "b: number"
+            },
+            {
+              "label": "c?: number"
+            },
+            {
+              "label": "d?: any"
+            },
+            {
+              "label": "e?: any"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 2169,
+      "LSPosition": {
+        "line": 108,
+        "character": 12
+      },
+      "Name": "20",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "multiply(a: number, b: number, c?: number, d?: any, e?: any): void",
+          "parameters": [
+            {
+              "label": "a: number"
+            },
+            {
+              "label": "b: number"
+            },
+            {
+              "label": "c?: number"
+            },
+            {
+              "label": "d?: any"
+            },
+            {
+              "label": "e?: any"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 2173,
+      "LSPosition": {
+        "line": 108,
+        "character": 16
+      },
+      "Name": "21",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "multiply(a: number, b: number, c?: number, d?: any, e?: any): void",
+          "parameters": [
+            {
+              "label": "a: number"
+            },
+            {
+              "label": "b: number"
+            },
+            {
+              "label": "c?: number"
+            },
+            {
+              "label": "d?: any"
+            },
+            {
+              "label": "e?: any"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 2178,
+      "LSPosition": {
+        "line": 108,
+        "character": 21
+      },
+      "Name": "22",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "multiply(a: number, b: number, c?: number, d?: any, e?: any): void",
+          "parameters": [
+            {
+              "label": "a: number"
+            },
+            {
+              "label": "b: number"
+            },
+            {
+              "label": "c?: number"
+            },
+            {
+              "label": "d?: any"
+            },
+            {
+              "label": "e?: any"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 3
+    }
+  },
+  {
+    "marker": {
+      "Position": 2182,
+      "LSPosition": {
+        "line": 108,
+        "character": 25
+      },
+      "Name": "23",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "multiply(a: number, b: number, c?: number, d?: any, e?: any): void",
+          "parameters": [
+            {
+              "label": "a: number"
+            },
+            {
+              "label": "b: number"
+            },
+            {
+              "label": "c?: number"
+            },
+            {
+              "label": "d?: any"
+            },
+            {
+              "label": "e?: any"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 4
+    }
+  },
+  {
+    "marker": {
+      "Position": 2372,
+      "LSPosition": {
+        "line": 118,
+        "character": 3
+      },
+      "Name": "25",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "f1(a: number): any",
+          "parameters": [
+            {
+              "label": "a: number"
+            }
+          ]
+        },
+        {
+          "label": "f1(b: string): any",
+          "parameters": [
+            {
+              "label": "b: string"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 2380,
+      "LSPosition": {
+        "line": 119,
+        "character": 3
+      },
+      "Name": "26",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "f1(a: number): any",
+          "parameters": [
+            {
+              "label": "a: number"
+            }
+          ]
+        },
+        {
+          "label": "f1(b: string): any",
+          "parameters": [
+            {
+              "label": "b: string"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 1,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 2823,
+      "LSPosition": {
+        "line": 131,
+        "character": 9
+      },
+      "Name": "28",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void",
+          "parameters": [
+            {
+              "label": "a: number"
+            },
+            {
+              "label": "b: number"
+            },
+            {
+              "label": "c?: () => string"
+            },
+            {
+              "label": "d?: () => string"
+            },
+            {
+              "label": "e?: () => string"
+            },
+            {
+              "label": "f?: () => string"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 2827,
+      "LSPosition": {
+        "line": 131,
+        "character": 13
+      },
+      "Name": "29",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void",
+          "parameters": [
+            {
+              "label": "a: number"
+            },
+            {
+              "label": "b: number"
+            },
+            {
+              "label": "c?: () => string"
+            },
+            {
+              "label": "d?: () => string"
+            },
+            {
+              "label": "e?: () => string"
+            },
+            {
+              "label": "f?: () => string"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 2832,
+      "LSPosition": {
+        "line": 131,
+        "character": 18
+      },
+      "Name": "30",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void",
+          "parameters": [
+            {
+              "label": "a: number"
+            },
+            {
+              "label": "b: number"
+            },
+            {
+              "label": "c?: () => string"
+            },
+            {
+              "label": "d?: () => string"
+            },
+            {
+              "label": "e?: () => string"
+            },
+            {
+              "label": "f?: () => string"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 2839,
+      "LSPosition": {
+        "line": 131,
+        "character": 25
+      },
+      "Name": "31",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void",
+          "parameters": [
+            {
+              "label": "a: number"
+            },
+            {
+              "label": "b: number"
+            },
+            {
+              "label": "c?: () => string"
+            },
+            {
+              "label": "d?: () => string"
+            },
+            {
+              "label": "e?: () => string"
+            },
+            {
+              "label": "f?: () => string"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 3
+    }
+  },
+  {
+    "marker": {
+      "Position": 2846,
+      "LSPosition": {
+        "line": 131,
+        "character": 32
+      },
+      "Name": "32",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void",
+          "parameters": [
+            {
+              "label": "a: number"
+            },
+            {
+              "label": "b: number"
+            },
+            {
+              "label": "c?: () => string"
+            },
+            {
+              "label": "d?: () => string"
+            },
+            {
+              "label": "e?: () => string"
+            },
+            {
+              "label": "f?: () => string"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 4
+    }
+  },
+  {
+    "marker": {
+      "Position": 2853,
+      "LSPosition": {
+        "line": 131,
+        "character": 39
+      },
+      "Name": "33",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void",
+          "parameters": [
+            {
+              "label": "a: number"
+            },
+            {
+              "label": "b: number"
+            },
+            {
+              "label": "c?: () => string"
+            },
+            {
+              "label": "d?: () => string"
+            },
+            {
+              "label": "e?: () => string"
+            },
+            {
+              "label": "f?: () => string"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 5
+    }
+  },
+  {
+    "marker": {
+      "Position": 3085,
+      "LSPosition": {
+        "line": 140,
+        "character": 7
+      },
+      "Name": "34",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "square(a: number): number",
+          "parameters": [
+            {
+              "label": "a: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 3276,
+      "LSPosition": {
+        "line": 148,
+        "character": 7
+      },
+      "Name": "35",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "divide(a: number, b: number): void",
+          "parameters": [
+            {
+              "label": "a: number"
+            },
+            {
+              "label": "b: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 3280,
+      "LSPosition": {
+        "line": 148,
+        "character": 11
+      },
+      "Name": "36",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "divide(a: number, b: number): void",
+          "parameters": [
+            {
+              "label": "a: number"
+            },
+            {
+              "label": "b: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 3491,
+      "LSPosition": {
+        "line": 157,
+        "character": 7
+      },
+      "Name": "37",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "fooBar(foo: string, bar: string): string",
+          "parameters": [
+            {
+              "label": "foo: string"
+            },
+            {
+              "label": "bar: string"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 3497,
+      "LSPosition": {
+        "line": 157,
+        "character": 13
+      },
+      "Name": "38",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "fooBar(foo: string, bar: string): string",
+          "parameters": [
+            {
+              "label": "foo: string"
+            },
+            {
+              "label": "bar: string"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 3874,
+      "LSPosition": {
+        "line": 169,
+        "character": 11
+      },
+      "Name": "39",
+      "Data": {}
+    },
+    "item": null
+  },
+  {
+    "marker": {
+      "Position": 3906,
+      "LSPosition": {
+        "line": 171,
+        "character": 15
+      },
+      "Name": "40",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "jsDocParamTest(a: number, b: number, c: number, d: number): number",
+          "parameters": [
+            {
+              "label": "a: number"
+            },
+            {
+              "label": "b: number"
+            },
+            {
+              "label": "c: number"
+            },
+            {
+              "label": "d: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 3910,
+      "LSPosition": {
+        "line": 171,
+        "character": 19
+      },
+      "Name": "41",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "jsDocParamTest(a: number, b: number, c: number, d: number): number",
+          "parameters": [
+            {
+              "label": "a: number"
+            },
+            {
+              "label": "b: number"
+            },
+            {
+              "label": "c: number"
+            },
+            {
+              "label": "d: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 3914,
+      "LSPosition": {
+        "line": 171,
+        "character": 23
+      },
+      "Name": "42",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "jsDocParamTest(a: number, b: number, c: number, d: number): number",
+          "parameters": [
+            {
+              "label": "a: number"
+            },
+            {
+              "label": "b: number"
+            },
+            {
+              "label": "c: number"
+            },
+            {
+              "label": "d: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 3918,
+      "LSPosition": {
+        "line": 171,
+        "character": 27
+      },
+      "Name": "43",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "jsDocParamTest(a: number, b: number, c: number, d: number): number",
+          "parameters": [
+            {
+              "label": "a: number"
+            },
+            {
+              "label": "b: number"
+            },
+            {
+              "label": "c: number"
+            },
+            {
+              "label": "d: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 3
+    }
+  },
+  {
+    "marker": {
+      "Position": 4059,
+      "LSPosition": {
+        "line": 177,
+        "character": 27
+      },
+      "Name": "45",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "jsDocCommentAlignmentTest1(): void",
+          "parameters": []
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 4210,
+      "LSPosition": {
+        "line": 183,
+        "character": 27
+      },
+      "Name": "46",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "jsDocCommentAlignmentTest2(): void",
+          "parameters": []
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 4826,
+      "LSPosition": {
+        "line": 197,
+        "character": 27
+      },
+      "Name": "47",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "jsDocCommentAlignmentTest3(a: string, b: any, c: any): void",
+          "parameters": [
+            {
+              "label": "a: string"
+            },
+            {
+              "label": "b: any"
+            },
+            {
+              "label": "c: any"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 4834,
+      "LSPosition": {
+        "line": 197,
+        "character": 35
+      },
+      "Name": "48",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "jsDocCommentAlignmentTest3(a: string, b: any, c: any): void",
+          "parameters": [
+            {
+              "label": "a: string"
+            },
+            {
+              "label": "b: any"
+            },
+            {
+              "label": "c: any"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 4837,
+      "LSPosition": {
+        "line": 197,
+        "character": 38
+      },
+      "Name": "49",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "jsDocCommentAlignmentTest3(a: string, b: any, c: any): void",
+          "parameters": [
+            {
+              "label": "a: string"
+            },
+            {
+              "label": "b: any"
+            },
+            {
+              "label": "c: any"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 4841,
+      "LSPosition": {
+        "line": 198,
+        "character": 0
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": null
+  }
+]

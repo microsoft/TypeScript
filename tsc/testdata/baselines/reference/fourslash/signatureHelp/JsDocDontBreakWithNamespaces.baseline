@@ -1,0 +1,94 @@
+// === SignatureHelp ===
+=== /jsDocDontBreakWithNamespaces.js ===
+// /**
+//  * @returns {module:@nodefuel/web~Webserver~wsServer#hello} Websocket server object
+//  */
+// function foo() { }
+// foo('');
+//       ^
+// | ----------------------------------------------------------------------
+// | foo(): module
+// | ----------------------------------------------------------------------
+// 
+// /**
+//  * @type {module:xxxxx} */
+//  */
+// function bar() { }
+// bar('');
+//       ^
+// | ----------------------------------------------------------------------
+// | bar(): void
+// | ----------------------------------------------------------------------
+// 
+// /** @type {function(module:xxxx, module:xxxx): module:xxxxx} */
+// function zee() { }
+// zee('');
+//       ^
+// | ----------------------------------------------------------------------
+// | zee(): void
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 117,
+      "LSPosition": {
+        "line": 4,
+        "character": 6
+      },
+      "Name": "foo",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "foo(): module",
+          "parameters": []
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 181,
+      "LSPosition": {
+        "line": 10,
+        "character": 6
+      },
+      "Name": "bar",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "bar(): void",
+          "parameters": []
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 274,
+      "LSPosition": {
+        "line": 14,
+        "character": 6
+      },
+      "Name": "zee",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "zee(): void",
+          "parameters": []
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  }
+]

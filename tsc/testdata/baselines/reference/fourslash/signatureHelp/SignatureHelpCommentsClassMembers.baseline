@@ -1,0 +1,624 @@
+// === SignatureHelp ===
+=== /signatureHelpCommentsClassMembers.ts ===
+// /** This is comment for c1*/
+// class c1 {
+//     /** p1 is property of c1*/
+//     public p1: number;
+//     /** sum with property*/
+//     public p2(/** number to add*/b: number) {
+//         return this.p1 + b;
+//     }
+//     /** getter property 1*/
+//     public get p3() {
+//         return this.p2(this.p1);
+//                        ^
+// | ----------------------------------------------------------------------
+// | p2(**b: number**): number
+// | ----------------------------------------------------------------------
+//     }
+//     /** setter property 1*/
+//     public set p3(/** this is value*/value: number) {
+//         this.p1 = this.p2(value);
+//                           ^
+// | ----------------------------------------------------------------------
+// | p2(**b: number**): number
+// | ----------------------------------------------------------------------
+//     }
+//     /** pp1 is property of c1*/
+//     private pp1: number;
+//     /** sum with property*/
+//     private pp2(/** number to add*/b: number) {
+//         return this.p1 + b;
+//     }
+//     /** getter property 2*/
+//     private get pp3() {
+//         return this.pp2(this.pp1);
+//                         ^
+// | ----------------------------------------------------------------------
+// | pp2(**b: number**): number
+// | ----------------------------------------------------------------------
+//     }
+//     /** setter property 2*/
+//     private set pp3( /** this is value*/value: number) {
+//         this.pp1 = this.pp2(value);
+//                             ^
+// | ----------------------------------------------------------------------
+// | pp2(**b: number**): number
+// | ----------------------------------------------------------------------
+//     }
+//     /** Constructor method*/
+//     constructor() {
+//     }
+//     /** s1 is static property of c1*/
+//     static s1: number;
+//     /** static sum with property*/
+//     static s2(/** number to add*/b: number) {
+//         return c1.s1 + b;
+//     }
+//     /** static getter property*/
+//     static get s3() {
+//         return c1.s2(c1.s1);
+//                      ^
+// | ----------------------------------------------------------------------
+// | s2(**b: number**): number
+// | ----------------------------------------------------------------------
+//     }
+//     /** setter property 3*/
+//     static set s3( /** this is value*/value: number) {
+//         c1.s1 = c1.s2(value);
+//                       ^
+// | ----------------------------------------------------------------------
+// | s2(**b: number**): number
+// | ----------------------------------------------------------------------
+//     }
+//     public nc_p1: number;
+//     public nc_p2(b: number) {
+//         return this.nc_p1 + b;
+//     }
+//     public get nc_p3() {
+//         return this.nc_p2(this.nc_p1);
+//                           ^
+// | ----------------------------------------------------------------------
+// | nc_p2(**b: number**): number
+// | ----------------------------------------------------------------------
+//     }
+//     public set nc_p3(value: number) {
+//         this.nc_p1 = this.nc_p2(value);
+//                                 ^
+// | ----------------------------------------------------------------------
+// | nc_p2(**b: number**): number
+// | ----------------------------------------------------------------------
+//     }
+//     private nc_pp1: number;
+//     private nc_pp2(b: number) {
+//         return this.nc_pp1 + b;
+//     }
+//     private get nc_pp3() {
+//         return this.nc_pp2(this.nc_pp1);
+//                            ^
+// | ----------------------------------------------------------------------
+// | nc_pp2(**b: number**): number
+// | ----------------------------------------------------------------------
+//     }
+//     private set nc_pp3(value: number) {
+//         this.nc_pp1 = this.nc_pp2(value);
+//                                   ^
+// | ----------------------------------------------------------------------
+// | nc_pp2(**b: number**): number
+// | ----------------------------------------------------------------------
+//     }
+//     static nc_s1: number;
+//     static nc_s2(b: number) {
+//         return c1.nc_s1 + b;
+//     }
+//     static get nc_s3() {
+//         return c1.nc_s2(c1.nc_s1);
+//                         ^
+// | ----------------------------------------------------------------------
+// | nc_s2(**b: number**): number
+// | ----------------------------------------------------------------------
+//     }
+//     static set nc_s3(value: number) {
+//         c1.nc_s1 = c1.nc_s2(value);
+//                             ^
+// | ----------------------------------------------------------------------
+// | nc_s2(**b: number**): number
+// | ----------------------------------------------------------------------
+//     }
+// }
+// var i1 = new c1();
+//                 ^
+// | ----------------------------------------------------------------------
+// | c1(): c1
+// | ----------------------------------------------------------------------
+// var i1_p = i1.p1;
+// var i1_f = i1.p2;
+// var i1_r = i1.p2(20);
+//                  ^
+// | ----------------------------------------------------------------------
+// | p2(**b: number**): number
+// | ----------------------------------------------------------------------
+// var i1_prop = i1.p3;
+// i1.p3 = i1_prop;
+// var i1_nc_p = i1.nc_p1;
+// var i1_ncf = i1.nc_p2;
+// var i1_ncr = i1.nc_p2(20);
+//                       ^
+// | ----------------------------------------------------------------------
+// | nc_p2(**b: number**): number
+// | ----------------------------------------------------------------------
+// var i1_ncprop = i1.nc_p3;
+// i1.nc_p3 = i1_ncprop;
+// var i1_s_p = c1.s1;
+// var i1_s_f = c1.s2;
+// var i1_s_r = c1.s2(20);
+//                    ^
+// | ----------------------------------------------------------------------
+// | s2(**b: number**): number
+// | ----------------------------------------------------------------------
+// var i1_s_prop = c1.s3;
+// c1.s3 = i1_s_prop;
+// var i1_s_nc_p = c1.nc_s1;
+// var i1_s_ncf = c1.nc_s2;
+// var i1_s_ncr = c1.nc_s2(20);
+//                         ^
+// | ----------------------------------------------------------------------
+// | nc_s2(**b: number**): number
+// | ----------------------------------------------------------------------
+// var i1_s_ncprop = c1.nc_s3;
+// c1.nc_s3 = i1_s_ncprop;
+// var i1_c = c1;
+// 
+// class cProperties {
+//     private val: number;
+//     /** getter only property*/
+//     public get p1() {
+//         return this.val;
+//     }
+//     public get nc_p1() {
+//         return this.val;
+//     }
+//     /**setter only property*/
+//     public set p2(value: number) {
+//         this.val = value;
+//     }
+//     public set nc_p2(value: number) {
+//         this.val = value;
+//     }
+// }
+// var cProperties_i = new cProperties();
+// cProperties_i.p2 = cProperties_i.p1;
+// cProperties_i.nc_p2 = cProperties_i.nc_p1;
+// class cWithConstructorProperty {
+//     /**
+//     * this is class cWithConstructorProperty's constructor
+//     * @param a this is first parameter a
+//     */
+//     constructor(/**more info about a*/public a: number) {
+//         var bbbb = 10;
+//         this.a = a + 2 + bbbb;
+//     }
+// }
+[
+  {
+    "marker": {
+      "Position": 275,
+      "LSPosition": {
+        "line": 10,
+        "character": 23
+      },
+      "Name": "8",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "p2(b: number): number",
+          "parameters": [
+            {
+              "label": "b: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 399,
+      "LSPosition": {
+        "line": 14,
+        "character": 26
+      },
+      "Name": "13",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "p2(b: number): number",
+          "parameters": [
+            {
+              "label": "b: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 656,
+      "LSPosition": {
+        "line": 24,
+        "character": 24
+      },
+      "Name": "20",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "pp2(b: number): number",
+          "parameters": [
+            {
+              "label": "b: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 786,
+      "LSPosition": {
+        "line": 28,
+        "character": 28
+      },
+      "Name": "25",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "pp2(b: number): number",
+          "parameters": [
+            {
+              "label": "b: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 1105,
+      "LSPosition": {
+        "line": 41,
+        "character": 21
+      },
+      "Name": "35",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "s2(b: number): number",
+          "parameters": [
+            {
+              "label": "b: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 1224,
+      "LSPosition": {
+        "line": 45,
+        "character": 22
+      },
+      "Name": "42",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "s2(b: number): number",
+          "parameters": [
+            {
+              "label": "b: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 1382,
+      "LSPosition": {
+        "line": 52,
+        "character": 26
+      },
+      "Name": "47",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "nc_p2(b: number): number",
+          "parameters": [
+            {
+              "label": "b: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 1471,
+      "LSPosition": {
+        "line": 55,
+        "character": 32
+      },
+      "Name": "49",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "nc_p2(b: number): number",
+          "parameters": [
+            {
+              "label": "b: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 1637,
+      "LSPosition": {
+        "line": 62,
+        "character": 27
+      },
+      "Name": "54",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "nc_pp2(b: number): number",
+          "parameters": [
+            {
+              "label": "b: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 1731,
+      "LSPosition": {
+        "line": 65,
+        "character": 34
+      },
+      "Name": "56",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "nc_pp2(b: number): number",
+          "parameters": [
+            {
+              "label": "b: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 1885,
+      "LSPosition": {
+        "line": 72,
+        "character": 24
+      },
+      "Name": "61",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "nc_s2(b: number): number",
+          "parameters": [
+            {
+              "label": "b: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 1968,
+      "LSPosition": {
+        "line": 75,
+        "character": 28
+      },
+      "Name": "63",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "nc_s2(b: number): number",
+          "parameters": [
+            {
+              "label": "b: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 2000,
+      "LSPosition": {
+        "line": 78,
+        "character": 16
+      },
+      "Name": "65",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "c1(): c1",
+          "parameters": []
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 2056,
+      "LSPosition": {
+        "line": 81,
+        "character": 17
+      },
+      "Name": "71",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "p2(b: number): number",
+          "parameters": [
+            {
+              "label": "b: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 2168,
+      "LSPosition": {
+        "line": 86,
+        "character": 22
+      },
+      "Name": "81",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "nc_p2(b: number): number",
+          "parameters": [
+            {
+              "label": "b: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 2280,
+      "LSPosition": {
+        "line": 91,
+        "character": 19
+      },
+      "Name": "92",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "s2(b: number): number",
+          "parameters": [
+            {
+              "label": "b: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 2402,
+      "LSPosition": {
+        "line": 96,
+        "character": 24
+      },
+      "Name": "102",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "nc_s2(b: number): number",
+          "parameters": [
+            {
+              "label": "b: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  }
+]

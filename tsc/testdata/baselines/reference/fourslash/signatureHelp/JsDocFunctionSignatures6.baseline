@@ -1,0 +1,164 @@
+// === SignatureHelp ===
+=== /Foo.js ===
+// /**
+//  * @param {string} p1 - A string param
+//  * @param {string?} p2 - An optional param
+//  * @param {string} [p3] - Another optional param
+//  * @param {string} [p4="test"] - An optional param with a default value
+//  */
+// function f1(p1, p2, p3, p4){}
+// f1('foo', 'bar', 'baz', 'qux');
+//    ^
+// | ----------------------------------------------------------------------
+// | f1(**p1: string**, p2: string, p3?: string, p4?: string): void
+// | ----------------------------------------------------------------------
+//           ^
+// | ----------------------------------------------------------------------
+// | f1(p1: string, **p2: string**, p3?: string, p4?: string): void
+// | ----------------------------------------------------------------------
+//                  ^
+// | ----------------------------------------------------------------------
+// | f1(p1: string, p2: string, **p3?: string**, p4?: string): void
+// | ----------------------------------------------------------------------
+//                         ^
+// | ----------------------------------------------------------------------
+// | f1(p1: string, p2: string, p3?: string, **p4?: string**): void
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 244,
+      "LSPosition": {
+        "line": 7,
+        "character": 3
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "f1(p1: string, p2: string, p3?: string, p4?: string): void",
+          "parameters": [
+            {
+              "label": "p1: string"
+            },
+            {
+              "label": "p2: string"
+            },
+            {
+              "label": "p3?: string"
+            },
+            {
+              "label": "p4?: string"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 251,
+      "LSPosition": {
+        "line": 7,
+        "character": 10
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "f1(p1: string, p2: string, p3?: string, p4?: string): void",
+          "parameters": [
+            {
+              "label": "p1: string"
+            },
+            {
+              "label": "p2: string"
+            },
+            {
+              "label": "p3?: string"
+            },
+            {
+              "label": "p4?: string"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 258,
+      "LSPosition": {
+        "line": 7,
+        "character": 17
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "f1(p1: string, p2: string, p3?: string, p4?: string): void",
+          "parameters": [
+            {
+              "label": "p1: string"
+            },
+            {
+              "label": "p2: string"
+            },
+            {
+              "label": "p3?: string"
+            },
+            {
+              "label": "p4?: string"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 265,
+      "LSPosition": {
+        "line": 7,
+        "character": 24
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "f1(p1: string, p2: string, p3?: string, p4?: string): void",
+          "parameters": [
+            {
+              "label": "p1: string"
+            },
+            {
+              "label": "p2: string"
+            },
+            {
+              "label": "p3?: string"
+            },
+            {
+              "label": "p4?: string"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 3
+    }
+  }
+]

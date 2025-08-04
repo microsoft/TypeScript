@@ -1,0 +1,85 @@
+// === SignatureHelp ===
+=== /trailingCommaSignatureHelp.ts ===
+// function str(n: number): string;
+// /**
+//  * Stringifies a number with radix
+//  * @param radix The radix
+//  */
+// function str(n: number, radix: number): string;
+// function str(n: number, radix?: number): string { return ""; }
+// 
+// str(1, )
+//        ^
+// | ----------------------------------------------------------------------
+// | str(n: number, **radix: number**): string
+// | ----------------------------------------------------------------------
+// 
+// declare function f<T>(a: T): T;
+// f(2, );
+//      ^
+// | ----------------------------------------------------------------------
+// | f(a: 2): 2
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 221,
+      "LSPosition": {
+        "line": 8,
+        "character": 7
+      },
+      "Name": "a",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "str(n: number): string",
+          "parameters": [
+            {
+              "label": "n: number"
+            }
+          ]
+        },
+        {
+          "label": "str(n: number, radix: number): string",
+          "parameters": [
+            {
+              "label": "n: number"
+            },
+            {
+              "label": "radix: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 1,
+      "activeParameter": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 261,
+      "LSPosition": {
+        "line": 11,
+        "character": 5
+      },
+      "Name": "b",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "f(a: 2): 2",
+          "parameters": [
+            {
+              "label": "a: 2"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 1
+    }
+  }
+]

@@ -1,0 +1,100 @@
+// === SignatureHelp ===
+=== /a.js ===
+// /**
+//  * First overload
+//  * @overload
+//  * @param {number} a
+//  * @returns {void}
+//  */
+// 
+// /**
+//  * Second overload
+//  * @overload
+//  * @param {string} a
+//  * @returns {void}
+//  */
+// 
+// /**
+//  * @param {string | number} a
+//  * @returns {void}
+//  */
+// function f(a) {}
+// 
+// f(1);
+//   ^
+// | ----------------------------------------------------------------------
+// | f(**a: number**): void
+// | ----------------------------------------------------------------------
+// f("");
+//   ^
+// | ----------------------------------------------------------------------
+// | f(**a: string**): void
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 238,
+      "LSPosition": {
+        "line": 20,
+        "character": 2
+      },
+      "Name": "a",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "f(a: number): void",
+          "parameters": [
+            {
+              "label": "a: number"
+            }
+          ]
+        },
+        {
+          "label": "f(a: string): void",
+          "parameters": [
+            {
+              "label": "a: string"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 244,
+      "LSPosition": {
+        "line": 21,
+        "character": 2
+      },
+      "Name": "b",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "f(a: number): void",
+          "parameters": [
+            {
+              "label": "a: number"
+            }
+          ]
+        },
+        {
+          "label": "f(a: string): void",
+          "parameters": [
+            {
+              "label": "a: string"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 1,
+      "activeParameter": 0
+    }
+  }
+]

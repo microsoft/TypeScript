@@ -1,0 +1,139 @@
+// === SignatureHelp ===
+=== /signatureHelpCommentsFunctionDeclaration.ts ===
+// /** This comment should appear for foo*/
+// function foo() {
+// }
+// foo();
+//     ^
+// | ----------------------------------------------------------------------
+// | foo(): void
+// | ----------------------------------------------------------------------
+// /** This is comment for function signature*/
+// function fooWithParameters(/** this is comment about a*/a: string,
+//     /** this is comment for b*/
+//     b: number) {
+//     var d = a;
+// }
+// fooWithParameters("a",10);
+//                   ^
+// | ----------------------------------------------------------------------
+// | fooWithParameters(**a: string**, b: number): void
+// | ----------------------------------------------------------------------
+//                       ^
+// | ----------------------------------------------------------------------
+// | fooWithParameters(a: string, **b: number**): void
+// | ----------------------------------------------------------------------
+// /**
+// * Does something
+// * @param a a string
+// */
+// declare function fn(a: string);
+// fn("hello");
+//    ^
+// | ----------------------------------------------------------------------
+// | fn(**a: string**): any
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 64,
+      "LSPosition": {
+        "line": 3,
+        "character": 4
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "foo(): void",
+          "parameters": []
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 263,
+      "LSPosition": {
+        "line": 10,
+        "character": 18
+      },
+      "Name": "10",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "fooWithParameters(a: string, b: number): void",
+          "parameters": [
+            {
+              "label": "a: string"
+            },
+            {
+              "label": "b: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 267,
+      "LSPosition": {
+        "line": 10,
+        "character": 22
+      },
+      "Name": "11",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "fooWithParameters(a: string, b: number): void",
+          "parameters": [
+            {
+              "label": "a: string"
+            },
+            {
+              "label": "b: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 351,
+      "LSPosition": {
+        "line": 16,
+        "character": 3
+      },
+      "Name": "12",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "fn(a: string): any",
+          "parameters": [
+            {
+              "label": "a: string"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  }
+]

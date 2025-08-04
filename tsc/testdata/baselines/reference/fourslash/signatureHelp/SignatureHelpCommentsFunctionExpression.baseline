@@ -1,0 +1,123 @@
+// === SignatureHelp ===
+=== /signatureHelpCommentsFunctionExpression.ts ===
+// /** lambdaFoo var comment*/
+// var lambdaFoo = /** this is lambda comment*/ (/**param a*/a: number, /**param b*/b: number) => a + b;
+// var lambddaNoVarComment = /** this is lambda multiplication*/ (/**param a*/a: number, /**param b*/b: number) => a * b;
+// lambdaFoo(10, 20);
+//           ^
+// | ----------------------------------------------------------------------
+// | lambdaFoo(**a: number**, b: number): number
+// | ----------------------------------------------------------------------
+//               ^
+// | ----------------------------------------------------------------------
+// | lambdaFoo(a: number, **b: number**): number
+// | ----------------------------------------------------------------------
+// function anotherFunc(a: number) {
+//     /** documentation
+//         @param b {string} inner parameter */
+//     var lambdaVar = /** inner docs */(b: string) => {
+//         var localVar = "Hello ";
+//         return localVar + b;
+//     }
+//     return lambdaVar("World") + a;
+// }
+// /**
+//  * On variable
+//  * @param s the first parameter!
+//  * @returns the parameter's length
+//  */
+// var assigned = /**
+//                 * Summary on expression
+//                 * @param s param on expression
+//                 * @returns return on expression
+//                 */function(/** On parameter */s: string) {
+//   return s.length;
+// }
+// assigned("hey");
+//          ^
+// | ----------------------------------------------------------------------
+// | assigned(**s: string**): number
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 259,
+      "LSPosition": {
+        "line": 3,
+        "character": 10
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "lambdaFoo(a: number, b: number): number",
+          "parameters": [
+            {
+              "label": "a: number"
+            },
+            {
+              "label": "b: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 263,
+      "LSPosition": {
+        "line": 3,
+        "character": 14
+      },
+      "Name": "6",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "lambdaFoo(a: number, b: number): number",
+          "parameters": [
+            {
+              "label": "a: number"
+            },
+            {
+              "label": "b: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 862,
+      "LSPosition": {
+        "line": 25,
+        "character": 9
+      },
+      "Name": "18",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "assigned(s: string): number",
+          "parameters": [
+            {
+              "label": "s: string"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  }
+]

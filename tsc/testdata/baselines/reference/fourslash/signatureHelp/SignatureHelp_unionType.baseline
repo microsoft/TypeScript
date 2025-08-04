@@ -1,0 +1,107 @@
+// === SignatureHelp ===
+=== /signatureHelp_unionType.ts ===
+// declare const a: (fn?: ((x: string) => string) | ((y: number) => number)) => void;
+// declare const b: (x: string | number) => void;
+// 
+// interface Callback {
+//     (x: string): string;
+//     (x: number): number;
+//     (x: string | number): string | number;
+// }
+// declare function c(callback: Callback): void;
+// a(() => {
+//    ^
+// | ----------------------------------------------------------------------
+// | a(**fn?: ((x: string) => string) | ((y: number) => number)**): void
+// | ----------------------------------------------------------------------
+//     return undefined;
+// });
+// 
+// b();
+//   ^
+// | ----------------------------------------------------------------------
+// | b(**x: string | number**): void
+// | ----------------------------------------------------------------------
+// 
+// c(() => {});
+//    ^
+// | ----------------------------------------------------------------------
+// | Callback(**x: string | number**): string | number
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 296,
+      "LSPosition": {
+        "line": 9,
+        "character": 3
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "a(fn?: ((x: string) => string) | ((y: number) => number)): void",
+          "parameters": [
+            {
+              "label": "fn?: ((x: string) => string) | ((y: number) => number)"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 332,
+      "LSPosition": {
+        "line": 13,
+        "character": 2
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "b(x: string | number): void",
+          "parameters": [
+            {
+              "label": "x: string | number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 339,
+      "LSPosition": {
+        "line": 15,
+        "character": 3
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "Callback(x: string | number): string | number",
+          "parameters": [
+            {
+              "label": "x: string | number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  }
+]

@@ -1,0 +1,28 @@
+// === SignatureHelp ===
+=== /index.js ===
+// const promisify = function (thisArg, fnName) {
+//     const fn = thisArg[fnName];
+//     return function () {
+//         return new Promise((resolve) => {
+//             fn.call(thisArg, ...arguments, );
+//                                            ^
+// | ----------------------------------------------------------------------
+// | No signaturehelp at /*1*/.
+// | ----------------------------------------------------------------------
+//         });
+//     };
+// };
+[
+  {
+    "marker": {
+      "Position": 189,
+      "LSPosition": {
+        "line": 4,
+        "character": 43
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": null
+  }
+]

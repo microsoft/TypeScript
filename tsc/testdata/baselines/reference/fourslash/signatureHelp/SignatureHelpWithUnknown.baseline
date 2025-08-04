@@ -1,0 +1,34 @@
+// === SignatureHelp ===
+=== /signatureHelpWithUnknown.ts ===
+// eval(\
+//       ^
+// | ----------------------------------------------------------------------
+// | eval(**x: string**): any
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 6,
+      "LSPosition": {
+        "line": 0,
+        "character": 6
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "eval(x: string): any",
+          "parameters": [
+            {
+              "label": "x: string"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  }
+]

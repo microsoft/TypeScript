@@ -1,0 +1,205 @@
+// === SignatureHelp ===
+=== /quickInfoJsDocTextFormatting1.ts ===
+// /**
+//  * @param {number} var1 **Highlighted text**
+//  * @param {string} var2 Another **Highlighted text**
+// */
+// function f1(var1, var2) { }
+// 
+// /**
+//  * @param {number} var1 *Regular text with an asterisk
+//  * @param {string} var2 Another *Regular text with an asterisk
+// */
+// function f2(var1, var2) { }
+// 
+// /**
+//  * @param {number} var1 
+//  * *Regular text with an asterisk
+//  * @param {string} var2 
+//  * Another *Regular text with an asterisk
+// */
+// function f3(var1, var2) { }
+// 
+// /**
+//  * @param {number} var1 
+//  * **Highlighted text**
+//  * @param {string} var2 
+//  * Another **Highlighted text**
+// */
+// function f4(var1, var2) { }
+// 
+// /**
+//  * @param {number} var1 
+//    **Highlighted text**
+//  * @param {string} var2 
+//    Another **Highlighted text**
+// */
+// function f5(var1, var2) { }
+// 
+// f1();
+//    ^
+// | ----------------------------------------------------------------------
+// | f1(**var1: any**, var2: any): void
+// | ----------------------------------------------------------------------
+// f2();
+//    ^
+// | ----------------------------------------------------------------------
+// | f2(**var1: any**, var2: any): void
+// | ----------------------------------------------------------------------
+// f3();
+//    ^
+// | ----------------------------------------------------------------------
+// | f3(**var1: any**, var2: any): void
+// | ----------------------------------------------------------------------
+// f4();
+//    ^
+// | ----------------------------------------------------------------------
+// | f4(**var1: any**, var2: any): void
+// | ----------------------------------------------------------------------
+// f5();
+//    ^
+// | ----------------------------------------------------------------------
+// | f5(**var1: any**, var2: any): void
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 737,
+      "LSPosition": {
+        "line": 36,
+        "character": 3
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "f1(var1: any, var2: any): void",
+          "parameters": [
+            {
+              "label": "var1: any"
+            },
+            {
+              "label": "var2: any"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 743,
+      "LSPosition": {
+        "line": 37,
+        "character": 3
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "f2(var1: any, var2: any): void",
+          "parameters": [
+            {
+              "label": "var1: any"
+            },
+            {
+              "label": "var2: any"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 749,
+      "LSPosition": {
+        "line": 38,
+        "character": 3
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "f3(var1: any, var2: any): void",
+          "parameters": [
+            {
+              "label": "var1: any"
+            },
+            {
+              "label": "var2: any"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 755,
+      "LSPosition": {
+        "line": 39,
+        "character": 3
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "f4(var1: any, var2: any): void",
+          "parameters": [
+            {
+              "label": "var1: any"
+            },
+            {
+              "label": "var2: any"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 761,
+      "LSPosition": {
+        "line": 40,
+        "character": 3
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "f5(var1: any, var2: any): void",
+          "parameters": [
+            {
+              "label": "var1: any"
+            },
+            {
+              "label": "var2: any"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  }
+]

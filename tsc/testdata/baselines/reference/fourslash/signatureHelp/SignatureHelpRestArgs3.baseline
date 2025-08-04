@@ -1,0 +1,79 @@
+// === SignatureHelp ===
+=== /signatureHelpRestArgs3.ts ===
+// const layers = Object.assign({}, ...[]);
+//                                  ^
+// | ----------------------------------------------------------------------
+// | assign(target: object, **...sources: any[]**): any
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 33,
+      "LSPosition": {
+        "line": 0,
+        "character": 33
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "assign<T extends {}U>(target: T, source: U): T & U",
+          "parameters": [
+            {
+              "label": "target: T"
+            },
+            {
+              "label": "source: U"
+            }
+          ]
+        },
+        {
+          "label": "assign<T extends {}UV>(target: T, source1: U, source2: V): T & U & V",
+          "parameters": [
+            {
+              "label": "target: T"
+            },
+            {
+              "label": "source1: U"
+            },
+            {
+              "label": "source2: V"
+            }
+          ]
+        },
+        {
+          "label": "assign<T extends {}UVW>(target: T, source1: U, source2: V, source3: W): T & U & V & W",
+          "parameters": [
+            {
+              "label": "target: T"
+            },
+            {
+              "label": "source1: U"
+            },
+            {
+              "label": "source2: V"
+            },
+            {
+              "label": "source3: W"
+            }
+          ]
+        },
+        {
+          "label": "assign(target: object, ...sources: any[]): any",
+          "parameters": [
+            {
+              "label": "target: object"
+            },
+            {
+              "label": "...sources: any[]"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 3,
+      "activeParameter": 1
+    }
+  }
+]

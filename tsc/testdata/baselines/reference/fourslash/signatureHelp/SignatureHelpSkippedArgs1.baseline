@@ -1,0 +1,181 @@
+// === SignatureHelp ===
+=== /signatureHelpSkippedArgs1.ts ===
+// function fn(a: number, b: number, c: number) {}
+// fn(, , , , );
+//    ^
+// | ----------------------------------------------------------------------
+// | fn(**a: number**, b: number, c: number): void
+// | ----------------------------------------------------------------------
+//      ^
+// | ----------------------------------------------------------------------
+// | fn(a: number, **b: number**, c: number): void
+// | ----------------------------------------------------------------------
+//        ^
+// | ----------------------------------------------------------------------
+// | fn(a: number, b: number, **c: number**): void
+// | ----------------------------------------------------------------------
+//          ^
+// | ----------------------------------------------------------------------
+// | fn(a: number, b: number, c: number): void
+// | ----------------------------------------------------------------------
+//            ^
+// | ----------------------------------------------------------------------
+// | fn(a: number, b: number, c: number): void
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 51,
+      "LSPosition": {
+        "line": 1,
+        "character": 3
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "fn(a: number, b: number, c: number): void",
+          "parameters": [
+            {
+              "label": "a: number"
+            },
+            {
+              "label": "b: number"
+            },
+            {
+              "label": "c: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 53,
+      "LSPosition": {
+        "line": 1,
+        "character": 5
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "fn(a: number, b: number, c: number): void",
+          "parameters": [
+            {
+              "label": "a: number"
+            },
+            {
+              "label": "b: number"
+            },
+            {
+              "label": "c: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 55,
+      "LSPosition": {
+        "line": 1,
+        "character": 7
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "fn(a: number, b: number, c: number): void",
+          "parameters": [
+            {
+              "label": "a: number"
+            },
+            {
+              "label": "b: number"
+            },
+            {
+              "label": "c: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 57,
+      "LSPosition": {
+        "line": 1,
+        "character": 9
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "fn(a: number, b: number, c: number): void",
+          "parameters": [
+            {
+              "label": "a: number"
+            },
+            {
+              "label": "b: number"
+            },
+            {
+              "label": "c: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 3
+    }
+  },
+  {
+    "marker": {
+      "Position": 59,
+      "LSPosition": {
+        "line": 1,
+        "character": 11
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "fn(a: number, b: number, c: number): void",
+          "parameters": [
+            {
+              "label": "a: number"
+            },
+            {
+              "label": "b: number"
+            },
+            {
+              "label": "c: number"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 4
+    }
+  }
+]

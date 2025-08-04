@@ -1,0 +1,54 @@
+// === SignatureHelp ===
+=== /Foo.js ===
+// /**
+//  * Filters a path based on a regexp or glob pattern.
+//  * @param {String} basePath The base path where the search will be performed.
+//  * @param {String} pattern A string defining a regexp of a glob pattern.
+//  * @param {String} type The search pattern type, can be a regexp or a glob.
+//  * @param {Object} options A object containing options to the search.
+//  * @return {Array} A list containing the filtered paths.
+//  */
+// function pathFilter(basePath, pattern, type, options){
+// //...
+// }
+// pathFilter('foo', 'bar', 'baz', {});
+//            ^
+// | ----------------------------------------------------------------------
+// | pathFilter(**basePath: String**, pattern: String, type: String, options: Object): any[]
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 489,
+      "LSPosition": {
+        "line": 11,
+        "character": 11
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "pathFilter(basePath: String, pattern: String, type: String, options: Object): any[]",
+          "parameters": [
+            {
+              "label": "basePath: String"
+            },
+            {
+              "label": "pattern: String"
+            },
+            {
+              "label": "type: String"
+            },
+            {
+              "label": "options: Object"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  }
+]

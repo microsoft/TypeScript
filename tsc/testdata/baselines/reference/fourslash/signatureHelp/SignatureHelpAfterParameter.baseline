@@ -1,0 +1,428 @@
+// === SignatureHelp ===
+=== /signatureHelpAfterParameter.ts ===
+// type Type = (a, b, c) => void
+// const a: Type = (a, b) => {}
+//                   ^
+// | ----------------------------------------------------------------------
+// | Type(**a: any**, b: any, c: any): void
+// | ----------------------------------------------------------------------
+//                      ^
+// | ----------------------------------------------------------------------
+// | Type(a: any, **b: any**, c: any): void
+// | ----------------------------------------------------------------------
+// const b: Type = function (a, b) {}
+//                            ^
+// | ----------------------------------------------------------------------
+// | Type(**a: any**, b: any, c: any): void
+// | ----------------------------------------------------------------------
+//                               ^
+// | ----------------------------------------------------------------------
+// | Type(a: any, **b: any**, c: any): void
+// | ----------------------------------------------------------------------
+// const c: Type = ({ a: { b }} = { }, [b], ...c) => {}
+//                    ^
+// | ----------------------------------------------------------------------
+// | Type(**a: any**, b: any, c: any): void
+// | ----------------------------------------------------------------------
+//                          ^
+// | ----------------------------------------------------------------------
+// | Type(**a: any**, b: any, c: any): void
+// | ----------------------------------------------------------------------
+//                             ^
+// | ----------------------------------------------------------------------
+// | Type(**a: any**, b: any, c: any): void
+// | ----------------------------------------------------------------------
+//                                   ^
+// | ----------------------------------------------------------------------
+// | Type(**a: any**, b: any, c: any): void
+// | ----------------------------------------------------------------------
+//                                       ^
+// | ----------------------------------------------------------------------
+// | Type(a: any, **b: any**, c: any): void
+// | ----------------------------------------------------------------------
+//                                        ^
+// | ----------------------------------------------------------------------
+// | Type(a: any, **b: any**, c: any): void
+// | ----------------------------------------------------------------------
+//                                             ^
+// | ----------------------------------------------------------------------
+// | Type(a: any, b: any, **c: any**): void
+// | ----------------------------------------------------------------------
+//                                              ^
+// | ----------------------------------------------------------------------
+// | Type(a: any, b: any, **c: any**): void
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 48,
+      "LSPosition": {
+        "line": 1,
+        "character": 18
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "Type(a: any, b: any, c: any): void",
+          "parameters": [
+            {
+              "label": "a: any"
+            },
+            {
+              "label": "b: any"
+            },
+            {
+              "label": "c: any"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 51,
+      "LSPosition": {
+        "line": 1,
+        "character": 21
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "Type(a: any, b: any, c: any): void",
+          "parameters": [
+            {
+              "label": "a: any"
+            },
+            {
+              "label": "b: any"
+            },
+            {
+              "label": "c: any"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 86,
+      "LSPosition": {
+        "line": 2,
+        "character": 27
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "Type(a: any, b: any, c: any): void",
+          "parameters": [
+            {
+              "label": "a: any"
+            },
+            {
+              "label": "b: any"
+            },
+            {
+              "label": "c: any"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 89,
+      "LSPosition": {
+        "line": 2,
+        "character": 30
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "Type(a: any, b: any, c: any): void",
+          "parameters": [
+            {
+              "label": "a: any"
+            },
+            {
+              "label": "b: any"
+            },
+            {
+              "label": "c: any"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 113,
+      "LSPosition": {
+        "line": 3,
+        "character": 19
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "Type(a: any, b: any, c: any): void",
+          "parameters": [
+            {
+              "label": "a: any"
+            },
+            {
+              "label": "b: any"
+            },
+            {
+              "label": "c: any"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 119,
+      "LSPosition": {
+        "line": 3,
+        "character": 25
+      },
+      "Name": "6",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "Type(a: any, b: any, c: any): void",
+          "parameters": [
+            {
+              "label": "a: any"
+            },
+            {
+              "label": "b: any"
+            },
+            {
+              "label": "c: any"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 122,
+      "LSPosition": {
+        "line": 3,
+        "character": 28
+      },
+      "Name": "7",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "Type(a: any, b: any, c: any): void",
+          "parameters": [
+            {
+              "label": "a: any"
+            },
+            {
+              "label": "b: any"
+            },
+            {
+              "label": "c: any"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 128,
+      "LSPosition": {
+        "line": 3,
+        "character": 34
+      },
+      "Name": "8",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "Type(a: any, b: any, c: any): void",
+          "parameters": [
+            {
+              "label": "a: any"
+            },
+            {
+              "label": "b: any"
+            },
+            {
+              "label": "c: any"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 132,
+      "LSPosition": {
+        "line": 3,
+        "character": 38
+      },
+      "Name": "9",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "Type(a: any, b: any, c: any): void",
+          "parameters": [
+            {
+              "label": "a: any"
+            },
+            {
+              "label": "b: any"
+            },
+            {
+              "label": "c: any"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 133,
+      "LSPosition": {
+        "line": 3,
+        "character": 39
+      },
+      "Name": "10",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "Type(a: any, b: any, c: any): void",
+          "parameters": [
+            {
+              "label": "a: any"
+            },
+            {
+              "label": "b: any"
+            },
+            {
+              "label": "c: any"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 138,
+      "LSPosition": {
+        "line": 3,
+        "character": 44
+      },
+      "Name": "11",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "Type(a: any, b: any, c: any): void",
+          "parameters": [
+            {
+              "label": "a: any"
+            },
+            {
+              "label": "b: any"
+            },
+            {
+              "label": "c: any"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 139,
+      "LSPosition": {
+        "line": 3,
+        "character": 45
+      },
+      "Name": "12",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "Type(a: any, b: any, c: any): void",
+          "parameters": [
+            {
+              "label": "a: any"
+            },
+            {
+              "label": "b: any"
+            },
+            {
+              "label": "c: any"
+            }
+          ]
+        }
+      ],
+      "activeSignature": 0,
+      "activeParameter": 2
+    }
+  }
+]
