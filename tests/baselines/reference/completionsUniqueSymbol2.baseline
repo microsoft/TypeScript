@@ -56,7 +56,7 @@
           "name": "a",
           "kind": "const",
           "kindModifiers": "",
-          "sortText": "11",
+          "sortText": "15",
           "insertText": "[a]",
           "replacementSpan": {
             "start": 344,
@@ -210,7 +210,7 @@
           "name": "b",
           "kind": "const",
           "kindModifiers": "",
-          "sortText": "11",
+          "sortText": "15",
           "insertText": "[b]",
           "replacementSpan": {
             "start": 344,

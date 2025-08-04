@@ -272,6 +272,8 @@ import {
     ResolvedModuleFull,
     ResolvedModuleWithFailedLookupLocations,
     ResolvedProjectReference,
+    ResolvedRefAndOutputDts,
+    ResolvedRefAndSource,
     ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
     resolveLibrary,
     resolveModuleName,
@@ -291,7 +293,6 @@ import {
     SourceFile,
     sourceFileAffectingCompilerOptions,
     sourceFileMayBeEmitted,
-    SourceOfProjectReferenceRedirect,
     startsWith,
     Statement,
     StringLiteral,
@@ -1715,8 +1716,9 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
     // A parallel array to projectReferences storing the results of reading in the referenced tsconfig files
     let resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined;
     let projectReferenceRedirects: Map<Path, ResolvedProjectReference | false> | undefined;
-    let mapFromFileToProjectReferenceRedirects: Map<Path, Path> | undefined;
-    let mapFromToProjectReferenceRedirectSource: Map<Path, SourceOfProjectReferenceRedirect> | undefined;
+
+    let mapSourceFileToResolvedRef: Map<Path, ResolvedRefAndOutputDts> | undefined;
+    let mapOutputFileToResolvedRef: Map<Path, ResolvedRefAndSource> | undefined;
 
     const useSourceOfProjectReferenceRedirect = !!host.useSourceOfProjectReferenceRedirect?.() &&
         !options.disableSourceOfProjectReferenceRedirect;
@@ -1726,7 +1728,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         useSourceOfProjectReferenceRedirect,
         toPath,
         getResolvedProjectReferences,
-        getSourceOfProjectReferenceRedirect,
+        getRedirectFromOutput,
         forEachResolvedProjectReference,
     });
     const readFile = host.readFile.bind(host) as typeof host.readFile;
@@ -1933,12 +1935,11 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         getConfigFileParsingDiagnostics,
         getProjectReferences,
         getResolvedProjectReferences,
-        getProjectReferenceRedirect,
-        getResolvedProjectReferenceToRedirect,
+        getRedirectFromSourceFile,
         getResolvedProjectReferenceByPath,
         forEachResolvedProjectReference,
         isSourceOfProjectReferenceRedirect,
-        getRedirectReferenceForResolutionFromSourceOfProject,
+        getRedirectFromOutput,
         getCompilerOptionsForFile,
         getDefaultResolutionModeForFile,
         getEmitModuleFormatOfFile,
@@ -2106,12 +2107,12 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
     }
 
     function getRedirectReferenceForResolution(file: SourceFile) {
-        const redirect = getResolvedProjectReferenceToRedirect(file.originalFileName);
-        if (redirect || !isDeclarationFileName(file.originalFileName)) return redirect;
+        const redirect = getRedirectFromSourceFile(file.originalFileName);
+        if (redirect || !isDeclarationFileName(file.originalFileName)) return redirect?.resolvedRef;
 
         // The originalFileName could not be actual source file name if file found was d.ts from referecned project
         // So in this case try to look up if this is output from referenced project, if it is use the redirected project in that case
-        const resultFromDts = getRedirectReferenceForResolutionFromSourceOfProject(file.path);
+        const resultFromDts = getRedirectFromOutput(file.path)?.resolvedRef;
         if (resultFromDts) return resultFromDts;
 
         // If preserveSymlinks is true, module resolution wont jump the symlink
@@ -2120,19 +2121,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         // file is from node_modules to avoid having to run real path on all file paths
         if (!host.realpath || !options.preserveSymlinks || !file.originalFileName.includes(nodeModulesPathPart)) return undefined;
         const realDeclarationPath = toPath(host.realpath(file.originalFileName));
-        return realDeclarationPath === file.path ? undefined : getRedirectReferenceForResolutionFromSourceOfProject(realDeclarationPath);
-    }
-
-    function getRedirectReferenceForResolutionFromSourceOfProject(filePath: Path) {
-        const source = getSourceOfProjectReferenceRedirect(filePath);
-        if (isString(source)) return getResolvedProjectReferenceToRedirect(source);
-        if (!source) return undefined;
-        // Output of .d.ts file so return resolved ref that matches the out file name
-        return forEachResolvedProjectReference(resolvedRef => {
-            const out = resolvedRef.commandLine.options.outFile;
-            if (!out) return undefined;
-            return toPath(out) === filePath ? resolvedRef : undefined;
-        });
+        return realDeclarationPath === file.path ? undefined : getRedirectFromOutput(realDeclarationPath)?.resolvedRef;
     }
 
     function compareDefaultLibFiles(a: SourceFile, b: SourceFile) {
@@ -2621,8 +2610,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             getSourceFileByPath: program.getSourceFileByPath,
             getSourceFiles: program.getSourceFiles,
             isSourceFileFromExternalLibrary,
-            getResolvedProjectReferenceToRedirect,
-            getProjectReferenceRedirect,
+            getRedirectFromSourceFile,
             isSourceOfProjectReferenceRedirect,
             getSymlinkCache,
             writeFile: writeFileCallback || writeFile,
@@ -3493,9 +3481,9 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             const sourceFile = getSourceFile(fileName);
             if (fail) {
                 if (!sourceFile) {
-                    const redirect = getProjectReferenceRedirect(fileName);
-                    if (redirect) {
-                        fail(Diagnostics.Output_file_0_has_not_been_built_from_source_file_1, redirect, fileName);
+                    const redirect = getRedirectFromSourceFile(fileName);
+                    if (redirect?.outputDts) {
+                        fail(Diagnostics.Output_file_0_has_not_been_built_from_source_file_1, redirect.outputDts, fileName);
                     }
                     else {
                         fail(Diagnostics.File_0_not_found, fileName);
@@ -3586,7 +3574,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
     function findSourceFileWorker(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, reason: FileIncludeReason, packageId: PackageId | undefined): SourceFile | undefined {
         const path = toPath(fileName);
         if (useSourceOfProjectReferenceRedirect) {
-            let source = getSourceOfProjectReferenceRedirect(path);
+            let source = getRedirectFromOutput(path);
             // If preserveSymlinks is true, module resolution wont jump the symlink
             // but the resolved real path may be the .d.ts from project reference
             // Note:: Currently we try the real path only if the
@@ -3599,12 +3587,10 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
                 fileName.includes(nodeModulesPathPart)
             ) {
                 const realPath = toPath(host.realpath(fileName));
-                if (realPath !== path) source = getSourceOfProjectReferenceRedirect(realPath);
+                if (realPath !== path) source = getRedirectFromOutput(realPath);
             }
-            if (source) {
-                const file = isString(source) ?
-                    findSourceFile(source, isDefaultLib, ignoreNoDefaultLib, reason, packageId) :
-                    undefined;
+            if (source?.source) {
+                const file = findSourceFile(source.source, isDefaultLib, ignoreNoDefaultLib, reason, packageId);
                 if (file) addFileToFilesByName(file, path, fileName, /*redirectedPath*/ undefined);
                 return file;
             }
@@ -3619,7 +3605,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
                 const checkedName = file.fileName;
                 const isRedirect = toPath(checkedName) !== toPath(fileName);
                 if (isRedirect) {
-                    fileName = getProjectReferenceRedirect(fileName) || fileName;
+                    fileName = getRedirectFromSourceFile(fileName)?.outputDts || fileName;
                 }
                 // Check if it differs only in drive letters its ok to ignore that error:
                 const checkedAbsolutePath = getNormalizedAbsolutePathWithoutRoot(checkedName, currentDirectory);
@@ -3657,20 +3643,19 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
 
         let redirectedPath: Path | undefined;
         if (!useSourceOfProjectReferenceRedirect) {
-            const redirectProject = getProjectReferenceRedirectProject(fileName);
-            if (redirectProject) {
-                if (redirectProject.commandLine.options.outFile) {
+            const redirectProject = getRedirectFromSourceFile(fileName);
+            if (redirectProject?.outputDts) {
+                if (redirectProject.resolvedRef.commandLine.options.outFile) {
                     // Shouldnt create many to 1 mapping file in --out scenario
                     return undefined;
                 }
-                const redirect = getProjectReferenceOutputName(redirectProject, fileName);
-                fileName = redirect;
+                fileName = redirectProject.outputDts;
                 // Once we start redirecting to a file, we can potentially come back to it
                 // via a back-reference from another file in the .d.ts folder. If that happens we'll
                 // end up trying to add it to the program *again* because we were tracking it via its
                 // original (un-redirected) name. So we have to map both the original path and the redirected path
                 // to the source file we're about to find/create
-                redirectedPath = toPath(redirect);
+                redirectedPath = toPath(redirectProject.outputDts);
             }
         }
 
@@ -3774,45 +3759,11 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         else missingFileNames.set(path, fileName);
     }
 
-    function getProjectReferenceRedirect(fileName: string): string | undefined {
-        const referencedProject = getProjectReferenceRedirectProject(fileName);
-        return referencedProject && getProjectReferenceOutputName(referencedProject, fileName);
-    }
-
-    function getProjectReferenceRedirectProject(fileName: string) {
-        // Ignore dts or any json files
-        if (!resolvedProjectReferences || !resolvedProjectReferences.length || isDeclarationFileName(fileName) || fileExtensionIs(fileName, Extension.Json)) {
-            return undefined;
-        }
-
-        // If this file is produced by a referenced project, we need to rewrite it to
-        // look in the output folder of the referenced project rather than the input
-        return getResolvedProjectReferenceToRedirect(fileName);
-    }
-
-    function getProjectReferenceOutputName(referencedProject: ResolvedProjectReference, fileName: string) {
-        const out = referencedProject.commandLine.options.outFile;
-        return out ?
-            changeExtension(out, Extension.Dts) :
-            getOutputDeclarationFileName(fileName, referencedProject.commandLine, !host.useCaseSensitiveFileNames());
-    }
-
     /**
      * Get the referenced project if the file is input file from that reference project
      */
-    function getResolvedProjectReferenceToRedirect(fileName: string) {
-        if (mapFromFileToProjectReferenceRedirects === undefined) {
-            mapFromFileToProjectReferenceRedirects = new Map();
-            forEachResolvedProjectReference(referencedProject => {
-                // not input file from the referenced project, ignore
-                if (toPath(options.configFilePath!) !== referencedProject.sourceFile.path) {
-                    referencedProject.commandLine.fileNames.forEach(f => mapFromFileToProjectReferenceRedirects!.set(toPath(f), referencedProject.sourceFile.path));
-                }
-            });
-        }
-
-        const referencedProjectPath = mapFromFileToProjectReferenceRedirects.get(toPath(fileName));
-        return referencedProjectPath && getResolvedProjectReferenceByPath(referencedProjectPath);
+    function getRedirectFromSourceFile(fileName: string) {
+        return mapSourceFileToResolvedRef?.get(toPath(fileName));
     }
 
     function forEachResolvedProjectReference<T>(
@@ -3821,33 +3772,12 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         return ts_forEachResolvedProjectReference(resolvedProjectReferences, cb);
     }
 
-    function getSourceOfProjectReferenceRedirect(path: Path) {
-        if (!isDeclarationFileName(path)) return undefined;
-        if (mapFromToProjectReferenceRedirectSource === undefined) {
-            mapFromToProjectReferenceRedirectSource = new Map();
-            forEachResolvedProjectReference(resolvedRef => {
-                const out = resolvedRef.commandLine.options.outFile;
-                if (out) {
-                    // Dont know which source file it means so return true?
-                    const outputDts = changeExtension(out, Extension.Dts);
-                    mapFromToProjectReferenceRedirectSource!.set(toPath(outputDts), true);
-                }
-                else {
-                    const getCommonSourceDirectory = memoize(() => getCommonSourceDirectoryOfConfig(resolvedRef.commandLine, !host.useCaseSensitiveFileNames()));
-                    forEach(resolvedRef.commandLine.fileNames, fileName => {
-                        if (!isDeclarationFileName(fileName) && !fileExtensionIs(fileName, Extension.Json)) {
-                            const outputDts = getOutputDeclarationFileName(fileName, resolvedRef.commandLine, !host.useCaseSensitiveFileNames(), getCommonSourceDirectory);
-                            mapFromToProjectReferenceRedirectSource!.set(toPath(outputDts), fileName);
-                        }
-                    });
-                }
-            });
-        }
-        return mapFromToProjectReferenceRedirectSource.get(path);
+    function getRedirectFromOutput(path: Path) {
+        return mapOutputFileToResolvedRef?.get(path);
     }
 
     function isSourceOfProjectReferenceRedirect(fileName: string) {
-        return useSourceOfProjectReferenceRedirect && !!getResolvedProjectReferenceToRedirect(fileName);
+        return useSourceOfProjectReferenceRedirect && !!getRedirectFromSourceFile(fileName);
     }
 
     function getResolvedProjectReferenceByPath(projectReferencePath: Path): ResolvedProjectReference | undefined {
@@ -4034,7 +3964,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
 
                 const isFromNodeModulesSearch = resolution.isExternalLibraryImport;
                 // If this is js file source of project reference, dont treat it as js file but as d.ts
-                const isJsFile = !resolutionExtensionIsTSOrJson(resolution.extension) && !getProjectReferenceRedirectProject(resolution.resolvedFileName);
+                const isJsFile = !resolutionExtensionIsTSOrJson(resolution.extension) && !getRedirectFromSourceFile(resolution.resolvedFileName);
                 const isJsFileFromNodeModules = isFromNodeModulesSearch && isJsFile && (!resolution.originalPath || pathContainsNodeModules(resolution.resolvedFileName));
                 const resolvedFileName = resolution.resolvedFileName;
 
@@ -4143,9 +4073,36 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
 
         const resolvedRef: ResolvedProjectReference = { commandLine, sourceFile };
         projectReferenceRedirects.set(sourceFilePath, resolvedRef);
+        if (options.configFile !== sourceFile) {
+            mapSourceFileToResolvedRef ??= new Map();
+            mapOutputFileToResolvedRef ??= new Map();
+            let outDts: string;
+            if (commandLine.options.outFile) {
+                outDts = changeExtension(commandLine.options.outFile, Extension.Dts);
+                mapOutputFileToResolvedRef?.set(toPath(outDts), { resolvedRef });
+            }
+            const getCommonSourceDirectory = memoize(() => getCommonSourceDirectoryOfConfig(resolvedRef.commandLine, !host.useCaseSensitiveFileNames()));
+            commandLine.fileNames.forEach(fileName => {
+                if (isDeclarationFileName(fileName)) return;
+                const path = toPath(fileName);
+                let outputDts;
+                if (!fileExtensionIs(fileName, Extension.Json)) {
+                    if (!commandLine.options.outFile) {
+                        outputDts = getOutputDeclarationFileName(fileName, resolvedRef.commandLine, !host.useCaseSensitiveFileNames(), getCommonSourceDirectory);
+                        mapOutputFileToResolvedRef!.set(toPath(outputDts), { resolvedRef, source: fileName });
+                    }
+                    else {
+                        outputDts = outDts;
+                    }
+                }
+                mapSourceFileToResolvedRef!.set(path, { resolvedRef, outputDts });
+            });
+        }
+
         if (commandLine.projectReferences) {
             resolvedRef.references = commandLine.projectReferences.map(parseProjectReferenceConfigFile);
         }
+
         return resolvedRef;
     }
 
@@ -4894,7 +4851,7 @@ interface HostForUseSourceOfProjectReferenceRedirect {
     useSourceOfProjectReferenceRedirect: boolean;
     toPath(fileName: string): Path;
     getResolvedProjectReferences(): readonly (ResolvedProjectReference | undefined)[] | undefined;
-    getSourceOfProjectReferenceRedirect(path: Path): SourceOfProjectReferenceRedirect | undefined;
+    getRedirectFromOutput(path: Path): ResolvedRefAndSource | undefined;
     forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined): T | undefined;
 }
 
@@ -4981,9 +4938,9 @@ function updateHostForUseSourceOfProjectReferenceRedirect(host: HostForUseSource
     }
 
     function fileExistsIfProjectReferenceDts(file: string) {
-        const source = host.getSourceOfProjectReferenceRedirect(host.toPath(file));
+        const source = host.getRedirectFromOutput(host.toPath(file));
         return source !== undefined ?
-            isString(source) ? originalFileExists.call(host.compilerHost, source) as boolean : true :
+            isString(source.source) ? originalFileExists.call(host.compilerHost, source.source) as boolean : true :
             undefined;
     }
 
@@ -5029,8 +4986,8 @@ function updateHostForUseSourceOfProjectReferenceRedirect(host: HostForUseSource
 
     function fileOrDirectoryExistsUsingSource(fileOrDirectory: string, isFile: boolean): boolean {
         const fileOrDirectoryExistsUsingSource = isFile ?
-            (file: string) => fileExistsIfProjectReferenceDts(file) :
-            (dir: string) => directoryExistsIfProjectReferenceDeclDir(dir);
+            fileExistsIfProjectReferenceDts :
+            directoryExistsIfProjectReferenceDeclDir;
         // Check current directory or file
         const result = fileOrDirectoryExistsUsingSource(fileOrDirectory);
         if (result !== undefined) return result;
