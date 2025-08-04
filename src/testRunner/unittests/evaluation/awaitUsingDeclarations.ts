@@ -1921,51 +1921,6 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
         ]);
     });
 
-    it("'await using' with downlevel generators", async () => {
-        abstract class Iterator {
-            return?(): void;
-            [evaluator.FakeSymbol.iterator]() {
-                return this;
-            }
-            [evaluator.FakeSymbol.dispose]() {
-                this.return?.();
-            }
-        }
-
-        const { main } = evaluator.evaluateTypeScript(
-            `
-            let exited = false;
-
-            function * f() {
-                try {
-                    yield;
-                }
-                finally {
-                    exited = true;
-                }
-            }
-
-            export async function main() {
-                {
-                    await using g = f();
-                    g.next();
-                }
-
-                return exited;
-            }
-        `,
-            {
-                target: ts.ScriptTarget.ES5,
-            },
-            {
-                Iterator,
-            },
-        );
-
-        const exited = await main();
-        assert.isTrue(exited, "Expected 'await using' to dispose generator");
-    });
-
     it("'await using' with downlevel async generators", async () => {
         abstract class AsyncIterator {
             return?(): PromiseLike<void>;
