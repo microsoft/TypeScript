@@ -5,12 +5,16 @@ inputs:
   go-version:
     description: Go version range to set up.
     default: '>=1.24.0'
-  cache-name:
-    description: Name of scoped cache for this set up.
-    default: 'cache'
+  create:
+    description: Create the cache
+    default: 'false'
+  lint-cache:
+    description: Restore the golangci-lint cache
+    default: 'false'
 
 runs:
   using: composite
+
   steps:
     - name: Install Go
       id: install-go
@@ -19,18 +23,101 @@ runs:
         go-version: ${{ inputs.go-version }}
         cache: false
 
-    # There is more code downloaded and built than is covered by '**/go.sum',
-    # so give each job its own cache to try and not end up sharing the wrong
-    # cache between jobs, and hash the Herebyfile and golancgi-lint version.
+    # Avoid hardcoding the cache keys more than once.
+    - name: Get cache info
+      shell: bash
+      id: cache-info
+      env:
+        MODULES_KEY: go-modules-${{ runner.os }}-${{ steps.install-go.outputs.go-version }}-${{ hashFiles('**/go.sum', '**/Herebyfile.mjs', '**/.custom-gcl.yml', '**/.dprint.jsonc') }}
+        LINT_KEY: golangci-lint-${{ runner.os }}-${{ steps.install-go.outputs.go-version }}-${{ hashFiles('**/go.sum', '**/Herebyfile.mjs', '**/.custom-gcl.yml', '**/.dprint.jsonc') }}
+        BUILD_KEY: go-build-cache-${{ runner.os }}-${{ steps.install-go.outputs.go-version }}
+      run: |
+        echo "modules-key=$MODULES_KEY" >> $GITHUB_OUTPUT
+        echo "lint-key=$LINT_KEY" >> $GITHUB_OUTPUT
+        echo "build-key=$BUILD_KEY" >> $GITHUB_OUTPUT
+        echo "GOLANGCI_LINT_CACHE=$RUNNER_TEMP/golangci-lint-cache" >> $GITHUB_ENV
 
-    - name: Go cache
-      uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+    - if: ${{ inputs.create != 'true' }}
+      name: Restore Go modules
+      uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
       with:
-        key: ts-setup-go-${{ runner.os }}-${{ steps.install-go.outputs.go-version }}-${{ hashFiles('**/go.sum', '**/Herebyfile.mjs', '**/.custom-gcl.yml') }}-${{ github.workflow }}-${{ inputs.cache-name }}
-        restore-keys: |
-          ts-setup-go-${{ runner.os }}-${{ steps.install-go.outputs.go-version }}-${{ hashFiles('**/go.sum', '**/Herebyfile.mjs', '**/.custom-gcl.yml') }}-${{ github.workflow }}-
+        key: unused-key-${{ github.run_id }}
+        restore-keys: ${{ steps.cache-info.outputs.modules-key }}-
         path: |
           ~/go/pkg/mod
+
+    - if: ${{ inputs.create != 'true' }}
+      name: Restore Go build cache
+      uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+      with:
+        key: unused-key-${{ github.run_id }}
+        restore-keys: ${{ steps.cache-info.outputs.build-key }}-
+        path: |
           ~/.cache/go-build
           ~/Library/Caches/go-build
           ~/AppData/Local/go-build
+
+    - if: ${{ inputs.create != 'true' && inputs.lint-cache == 'true' }}
+      name: Restore golangci-lint cache
+      uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+      with:
+        key: unused-key-${{ github.run_id }}
+        restore-keys: ${{ steps.cache-info.outputs.lint-key }}-
+        path: ${{ env.GOLANGCI_LINT_CACHE }}
+
+    - name: Set mtimes
+      shell: bash
+      run: |
+        find . -type f ! -path ./.git/\*\* | go run github.com/slsyy/mtimehash/cmd/mtimehash@v1.0.0 || true
+        find . -type d ! -path ./.git/\*\* -exec touch -d '1970-01-01T00:00:01Z' {} + || true
+
+    # All steps below are only run if the cache is being created.
+
+    - if: ${{ inputs.create == 'true' }}
+      shell: bash
+      run: npm ci
+
+    - if: ${{ inputs.create == 'true' }}
+      shell: bash
+      run: npx hereby build
+
+    - if: ${{ inputs.create == 'true' }}
+      shell: bash
+      run: npx hereby test
+
+    - if: ${{ inputs.create == 'true' }}
+      shell: bash
+      run: npx hereby lint
+
+    - if: ${{ inputs.create == 'true' }}
+      shell: bash
+      run: npx hereby lint --noembed
+
+    - if: ${{ inputs.create == 'true' }}
+      shell: bash
+      run: npx dprint check
+
+    - if: ${{ inputs.create == 'true' }}
+      name: Save Go modules
+      uses: actions/cache/save@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+      with:
+        key: ${{ steps.cache-info.outputs.modules-key }}
+        path: |
+          ~/go/pkg/mod
+
+    - if: ${{ inputs.create == 'true' }}
+      name: Save Go build cache
+      uses: actions/cache/save@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+      with:
+        key: ${{ steps.cache-info.outputs.build-key }}-${{ github.run_id }}
+        path: |
+          ~/.cache/go-build
+          ~/Library/Caches/go-build
+          ~/AppData/Local/go-build
+
+    - if: ${{ inputs.create == 'true' }}
+      name: Save golangci-lint cache
+      uses: actions/cache/save@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+      with:
+        key: ${{ steps.cache-info.outputs.lint-key }}-${{ github.run_id }}
+        path: ${{ env.GOLANGCI_LINT_CACHE }}
