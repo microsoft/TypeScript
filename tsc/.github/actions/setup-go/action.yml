@@ -28,8 +28,8 @@ runs:
       shell: bash
       id: cache-info
       env:
-        MODULES_KEY: go-modules-${{ runner.os }}-${{ steps.install-go.outputs.go-version }}-${{ hashFiles('**/go.sum', '**/Herebyfile.mjs', '**/.custom-gcl.yml', '**/.dprint.jsonc') }}
-        LINT_KEY: golangci-lint-${{ runner.os }}-${{ steps.install-go.outputs.go-version }}-${{ hashFiles('**/go.sum', '**/Herebyfile.mjs', '**/.custom-gcl.yml', '**/.dprint.jsonc') }}
+        MODULES_KEY: go-modules-${{ runner.os }}-${{ steps.install-go.outputs.go-version }}-${{ hashFiles('**/go.sum', '**/.custom-gcl.yml') }}
+        LINT_KEY: golangci-lint-${{ runner.os }}-${{ steps.install-go.outputs.go-version }}-${{ hashFiles('**/go.sum', '**/.custom-gcl.yml') }}
         BUILD_KEY: go-build-cache-${{ runner.os }}-${{ steps.install-go.outputs.go-version }}
       run: |
         echo "modules-key=$MODULES_KEY" >> $GITHUB_OUTPUT
@@ -41,8 +41,7 @@ runs:
       name: Restore Go modules
       uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
       with:
-        key: unused-key-${{ github.run_id }}
-        restore-keys: ${{ steps.cache-info.outputs.modules-key }}-
+        key: ${{ steps.cache-info.outputs.modules-key }}
         path: |
           ~/go/pkg/mod
 
@@ -76,6 +75,13 @@ runs:
     - if: ${{ inputs.create == 'true' }}
       shell: bash
       run: npm ci
+
+    - if: ${{ inputs.create == 'true' }}
+      shell: bash
+      run: |
+        go mod download
+        cd _tools
+        go mod download
 
     - if: ${{ inputs.create == 'true' }}
       shell: bash
