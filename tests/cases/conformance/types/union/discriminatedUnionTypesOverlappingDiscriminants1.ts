@@ -79,3 +79,59 @@ const target10: Target = {
   meal: `vegetable_${vegetable}`,
   audience: "earth",
 };
+
+const typedNonVegetableWithInitializer: "cow" | "pig" = "cow";
+
+// error
+const target11: Target = {
+  audience: "earth",
+  meal: `vegetable_${typedNonVegetableWithInitializer}`,
+};
+
+// error
+const target12: Target = {
+  meal: `vegetable_${typedNonVegetableWithInitializer}`,
+  audience: "earth",
+};
+
+const typedCowWithInitializer: "cow" = "cow";
+
+// error
+const target13: Target = {
+  audience: "earth",
+  meal: `vegetable_${typedCowWithInitializer}`,
+};
+
+// error
+const target14: Target = {
+  meal: `vegetable_${typedCowWithInitializer}`,
+  audience: "earth",
+};
+
+const cowInitializer = "cow";
+
+// error
+const target15: Target = {
+  audience: "earth",
+  meal: `vegetable_${cowInitializer}`,
+};
+
+// error
+const target16: Target = {
+  meal: `vegetable_${cowInitializer}`,
+  audience: "earth",
+};
+
+declare const nonVegetable: "cow" | "pig";
+
+// error
+const target17: Target = {
+  audience: "earth",
+  meal: `vegetable_${nonVegetable}`,
+};
+
+// error
+const target18: Target = {
+  meal: `vegetable_${nonVegetable}`,
+  audience: "earth",
+};

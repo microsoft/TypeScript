@@ -286,3 +286,209 @@ const target10: Target = {
 
 };
 
+const typedNonVegetableWithInitializer: "cow" | "pig" = "cow";
+>typedNonVegetableWithInitializer : "cow" | "pig"
+>                                 : ^^^^^^^^^^^^^
+>"cow" : "cow"
+>      : ^^^^^
+
+// error
+const target11: Target = {
+>target11 : Target
+>         : ^^^^^^
+>{  audience: "earth",  meal: `vegetable_${typedNonVegetableWithInitializer}`,} : { audience: "earth"; meal: "vegetable_cow"; }
+>                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  audience: "earth",
+>audience : "earth"
+>         : ^^^^^^^
+>"earth" : "earth"
+>        : ^^^^^^^
+
+  meal: `vegetable_${typedNonVegetableWithInitializer}`,
+>meal : "vegetable_cow"
+>     : ^^^^^^^^^^^^^^^
+>`vegetable_${typedNonVegetableWithInitializer}` : "vegetable_cow"
+>                                                : ^^^^^^^^^^^^^^^
+>typedNonVegetableWithInitializer : "cow"
+>                                 : ^^^^^
+
+};
+
+// error
+const target12: Target = {
+>target12 : Target
+>         : ^^^^^^
+>{  meal: `vegetable_${typedNonVegetableWithInitializer}`,  audience: "earth",} : { meal: string; audience: "earth"; }
+>                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  meal: `vegetable_${typedNonVegetableWithInitializer}`,
+>meal : string
+>     : ^^^^^^
+>`vegetable_${typedNonVegetableWithInitializer}` : string
+>                                                : ^^^^^^
+>typedNonVegetableWithInitializer : "cow"
+>                                 : ^^^^^
+
+  audience: "earth",
+>audience : "earth"
+>         : ^^^^^^^
+>"earth" : "earth"
+>        : ^^^^^^^
+
+};
+
+const typedCowWithInitializer: "cow" = "cow";
+>typedCowWithInitializer : "cow"
+>                        : ^^^^^
+>"cow" : "cow"
+>      : ^^^^^
+
+// error
+const target13: Target = {
+>target13 : Target
+>         : ^^^^^^
+>{  audience: "earth",  meal: `vegetable_${typedCowWithInitializer}`,} : { audience: "earth"; meal: "vegetable_cow"; }
+>                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  audience: "earth",
+>audience : "earth"
+>         : ^^^^^^^
+>"earth" : "earth"
+>        : ^^^^^^^
+
+  meal: `vegetable_${typedCowWithInitializer}`,
+>meal : "vegetable_cow"
+>     : ^^^^^^^^^^^^^^^
+>`vegetable_${typedCowWithInitializer}` : "vegetable_cow"
+>                                       : ^^^^^^^^^^^^^^^
+>typedCowWithInitializer : "cow"
+>                        : ^^^^^
+
+};
+
+// error
+const target14: Target = {
+>target14 : Target
+>         : ^^^^^^
+>{  meal: `vegetable_${typedCowWithInitializer}`,  audience: "earth",} : { meal: string; audience: "earth"; }
+>                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  meal: `vegetable_${typedCowWithInitializer}`,
+>meal : string
+>     : ^^^^^^
+>`vegetable_${typedCowWithInitializer}` : string
+>                                       : ^^^^^^
+>typedCowWithInitializer : "cow"
+>                        : ^^^^^
+
+  audience: "earth",
+>audience : "earth"
+>         : ^^^^^^^
+>"earth" : "earth"
+>        : ^^^^^^^
+
+};
+
+const cowInitializer = "cow";
+>cowInitializer : "cow"
+>               : ^^^^^
+>"cow" : "cow"
+>      : ^^^^^
+
+// error
+const target15: Target = {
+>target15 : Target
+>         : ^^^^^^
+>{  audience: "earth",  meal: `vegetable_${cowInitializer}`,} : { audience: "earth"; meal: "vegetable_cow"; }
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  audience: "earth",
+>audience : "earth"
+>         : ^^^^^^^
+>"earth" : "earth"
+>        : ^^^^^^^
+
+  meal: `vegetable_${cowInitializer}`,
+>meal : "vegetable_cow"
+>     : ^^^^^^^^^^^^^^^
+>`vegetable_${cowInitializer}` : "vegetable_cow"
+>                              : ^^^^^^^^^^^^^^^
+>cowInitializer : "cow"
+>               : ^^^^^
+
+};
+
+// error
+const target16: Target = {
+>target16 : Target
+>         : ^^^^^^
+>{  meal: `vegetable_${cowInitializer}`,  audience: "earth",} : { meal: string; audience: "earth"; }
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  meal: `vegetable_${cowInitializer}`,
+>meal : string
+>     : ^^^^^^
+>`vegetable_${cowInitializer}` : "vegetable_cow"
+>                              : ^^^^^^^^^^^^^^^
+>cowInitializer : "cow"
+>               : ^^^^^
+
+  audience: "earth",
+>audience : "earth"
+>         : ^^^^^^^
+>"earth" : "earth"
+>        : ^^^^^^^
+
+};
+
+declare const nonVegetable: "cow" | "pig";
+>nonVegetable : "cow" | "pig"
+>             : ^^^^^^^^^^^^^
+
+// error
+const target17: Target = {
+>target17 : Target
+>         : ^^^^^^
+>{  audience: "earth",  meal: `vegetable_${nonVegetable}`,} : { audience: "earth"; meal: "vegetable_cow" | "vegetable_pig"; }
+>                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  audience: "earth",
+>audience : "earth"
+>         : ^^^^^^^
+>"earth" : "earth"
+>        : ^^^^^^^
+
+  meal: `vegetable_${nonVegetable}`,
+>meal : "vegetable_cow" | "vegetable_pig"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>`vegetable_${nonVegetable}` : "vegetable_cow" | "vegetable_pig"
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>nonVegetable : "cow" | "pig"
+>             : ^^^^^^^^^^^^^
+
+};
+
+// error
+const target18: Target = {
+>target18 : Target
+>         : ^^^^^^
+>{  meal: `vegetable_${nonVegetable}`,  audience: "earth",} : { meal: string; audience: "earth"; }
+>                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  meal: `vegetable_${nonVegetable}`,
+>meal : string
+>     : ^^^^^^
+>`vegetable_${nonVegetable}` : string
+>                            : ^^^^^^
+>nonVegetable : "cow" | "pig"
+>             : ^^^^^^^^^^^^^
+
+  audience: "earth",
+>audience : "earth"
+>         : ^^^^^^^
+>"earth" : "earth"
+>        : ^^^^^^^
+
+};
+
