@@ -40,7 +40,7 @@ type Identity<T> = { [K in keyof T]: T[K] };
 declare function fnBad<T extends Array<Box<string>>>(...args: T): Test<Identity<UnboxArray<T>>>;
 >fnBad : Symbol(fnBad, Decl(homomorphicMappedTypeNesting.ts, 10, 44))
 >T : Symbol(T, Decl(homomorphicMappedTypeNesting.ts, 12, 23))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Box : Symbol(Box, Decl(homomorphicMappedTypeNesting.ts, 0, 0))
 >args : Symbol(args, Decl(homomorphicMappedTypeNesting.ts, 12, 53))
 >T : Symbol(T, Decl(homomorphicMappedTypeNesting.ts, 12, 23))

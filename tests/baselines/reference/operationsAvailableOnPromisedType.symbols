@@ -9,28 +9,28 @@ async function fn(
 
     b: Promise<number>,
 >b : Symbol(b, Decl(operationsAvailableOnPromisedType.ts, 1, 14))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     c: Promise<string[]>,
 >c : Symbol(c, Decl(operationsAvailableOnPromisedType.ts, 2, 23))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     d: Promise<{ prop: string }>,
 >d : Symbol(d, Decl(operationsAvailableOnPromisedType.ts, 3, 25))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >prop : Symbol(prop, Decl(operationsAvailableOnPromisedType.ts, 4, 16))
 
     e: Promise<() => void>,
 >e : Symbol(e, Decl(operationsAvailableOnPromisedType.ts, 4, 33))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     f: Promise<() => void> | (() => void),
 >f : Symbol(f, Decl(operationsAvailableOnPromisedType.ts, 5, 27))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     g: Promise<{ new(): any }>
 >g : Symbol(g, Decl(operationsAvailableOnPromisedType.ts, 6, 42))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 ) {
     // All errors

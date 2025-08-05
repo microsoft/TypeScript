@@ -368,9 +368,9 @@ export function keys<K extends string, V>(obj: Record<K, V>): K[] {
 >K : Symbol(K, Decl(literalTypeWidening.ts, 118, 21))
 
   return Object.keys(obj) as K[]
->Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >obj : Symbol(obj, Decl(literalTypeWidening.ts, 118, 42))
 >K : Symbol(K, Decl(literalTypeWidening.ts, 118, 21))
 }

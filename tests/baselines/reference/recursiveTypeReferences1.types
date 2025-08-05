@@ -1,5 +1,8 @@
 //// [tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypeReferences1.ts] ////
 
+=== Performance Stats ===
+Type Count: 1,000
+
 === recursiveTypeReferences1.ts ===
 type ValueOrArray<T> = T | Array<ValueOrArray<T>>;
 >ValueOrArray : ValueOrArray<T>
