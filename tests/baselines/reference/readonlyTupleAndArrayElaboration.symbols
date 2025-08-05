@@ -15,7 +15,7 @@ function distanceFromOrigin([x, y]: [number, number]) {
 
     return Math.sqrt(x ** 2 + y ** 2);
 >Math.sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(readonlyTupleAndArrayElaboration.ts, 5, 29))
 >y : Symbol(y, Decl(readonlyTupleAndArrayElaboration.ts, 5, 31))
@@ -36,7 +36,7 @@ arryFn(point);
 declare function arryFn2(x: Array<number>): void;
 >arryFn2 : Symbol(arryFn2, Decl(readonlyTupleAndArrayElaboration.ts, 12, 14))
 >x : Symbol(x, Decl(readonlyTupleAndArrayElaboration.ts, 14, 25))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 arryFn2(point);
 >arryFn2 : Symbol(arryFn2, Decl(readonlyTupleAndArrayElaboration.ts, 12, 14))
@@ -51,7 +51,7 @@ declare const b: Readonly<number[]>;
 
 declare const c: ReadonlyArray<number>;
 >c : Symbol(c, Decl(readonlyTupleAndArrayElaboration.ts, 19, 13))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 arryFn2(a);
 >arryFn2 : Symbol(arryFn2, Decl(readonlyTupleAndArrayElaboration.ts, 12, 14))

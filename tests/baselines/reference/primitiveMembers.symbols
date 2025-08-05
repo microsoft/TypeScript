@@ -41,7 +41,7 @@ var o: Object = {}
 
 var f: Function = (x: string) => x.length;
 >f : Symbol(f, Decl(primitiveMembers.ts, 14, 3))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >x : Symbol(x, Decl(primitiveMembers.ts, 14, 19))
 >x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(primitiveMembers.ts, 14, 19))
@@ -49,7 +49,7 @@ var f: Function = (x: string) => x.length;
 
 var r2: RegExp = /./g;
 >r2 : Symbol(r2, Decl(primitiveMembers.ts, 15, 3))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 var n2: Number = 34;
 >n2 : Symbol(n2, Decl(primitiveMembers.ts, 16, 3))
@@ -57,7 +57,7 @@ var n2: Number = 34;
 
 var s: String = "yo";
 >s : Symbol(s, Decl(primitiveMembers.ts, 17, 3))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
 
 var b: Boolean = true;
 >b : Symbol(b, Decl(primitiveMembers.ts, 18, 3))
