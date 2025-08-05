@@ -29,12 +29,30 @@ f("/*2*/`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "Option 1",
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "Option 1",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
 				},
 				&lsproto.CompletionItem{
 					Label: "Option 2",
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "Option 2",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
 				},
 				&lsproto.CompletionItem{
 					Label: "Option 3",
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "Option 3",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
 				},
 			},
 		},
@@ -49,12 +67,30 @@ f("/*2*/`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "Option 1",
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "Option 1",
+							Range:   f.Ranges()[1].LSRange,
+						},
+					},
 				},
 				&lsproto.CompletionItem{
 					Label: "Option 2",
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "Option 2",
+							Range:   f.Ranges()[1].LSRange,
+						},
+					},
 				},
 				&lsproto.CompletionItem{
 					Label: "Option 3",
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "Option 3",
+							Range:   f.Ranges()[1].LSRange,
+						},
+					},
 				},
 			},
 		},

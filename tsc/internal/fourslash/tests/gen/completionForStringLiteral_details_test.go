@@ -57,6 +57,12 @@ o["[|/*prop*/|]"];`
 					Label:  "a",
 					Detail: PtrTo("a"),
 					Kind:   PtrTo(lsproto.CompletionItemKindConstant),
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "a",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
 				},
 			},
 		},
@@ -79,6 +85,12 @@ o["[|/*prop*/|]"];`
 						},
 					},
 					Kind: PtrTo(lsproto.CompletionItemKindMethod),
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "m",
+							Range:   f.Ranges()[1].LSRange,
+						},
+					},
 				},
 				&lsproto.CompletionItem{
 					Label:  "x",
@@ -90,6 +102,12 @@ o["[|/*prop*/|]"];`
 						},
 					},
 					Kind: PtrTo(lsproto.CompletionItemKindField),
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "x",
+							Range:   f.Ranges()[1].LSRange,
+						},
+					},
 				},
 			},
 		},

@@ -11,7 +11,7 @@ import (
 
 func TestCompletionInfoWithExplicitTypeArguments(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface I { x: number; y: number; }
 
@@ -48,9 +48,21 @@ g<I>("[|/*g*/|]");`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "x",
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "x",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
 				},
 				&lsproto.CompletionItem{
 					Label: "y",
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "y",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
 				},
 			},
 		},

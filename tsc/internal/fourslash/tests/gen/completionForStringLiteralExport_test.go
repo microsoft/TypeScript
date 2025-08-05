@@ -63,6 +63,12 @@ export var x = 9;`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "some-module",
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "some-module",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
 				},
 			},
 		},

@@ -27,7 +27,7 @@ const product = {
     /*3*/
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyQuickInfoAt(t, "1", "(property) high-top: boolean", "(property) high-top: boolean")
+	f.VerifyQuickInfoAt(t, "1", "(property) high-top: boolean", "some-comments")
 	f.VerifyQuickInfoAt(t, "2", "type Product = {\n    title: string;\n    \"high-top\": boolean;\n}", "")
 	f.VerifyCompletions(t, []string{"3"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

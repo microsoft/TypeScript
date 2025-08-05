@@ -11,7 +11,7 @@ import (
 
 func TestCompletionForStringLiteralFromSignature(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `declare function f(a: "x"): void;
 declare function f(a: string): void;
@@ -27,6 +27,12 @@ f("[|/**/|]");`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "x",
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "x",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
 				},
 			},
 		},

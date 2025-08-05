@@ -53,5 +53,5 @@ const options: EntriesOptions[] = [
   },
 ];`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyQuickInfoAt(t, "1", "(property) Entries.output?: string", "(property) Entries.output?: string")
+	f.VerifyQuickInfoAt(t, "1", "(property) Entries.output?: string", "Output info...")
 }

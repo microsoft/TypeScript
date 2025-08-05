@@ -33,6 +33,12 @@ foo[|./**/|]`
 				&lsproto.CompletionItem{
 					Label:      "\"a name's all good but it's better with more\"",
 					InsertText: PtrTo("['\"a name\\'s all good but it\\'s better with more\"']"),
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "\"a name's all good but it's better with more\"",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
 				},
 			},
 		},

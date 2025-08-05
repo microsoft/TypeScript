@@ -11,7 +11,7 @@ import (
 
 func TestCompletionForStringLiteral3(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `declare function f(a: "A", b: number): void;
 declare function f(a: "B", b: number): void;
@@ -32,12 +32,30 @@ f("/*2*/`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "A",
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "A",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
 				},
 				&lsproto.CompletionItem{
 					Label: "B",
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "B",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
 				},
 				&lsproto.CompletionItem{
 					Label: "C",
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "C",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
 				},
 			},
 		},

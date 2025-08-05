@@ -48,8 +48,8 @@ function test2(a: string) {}`
 	f.VerifyQuickInfoAt(t, "2", "", "")
 	f.VerifyQuickInfoAt(t, "3", "", "")
 	f.VerifyQuickInfoAt(t, "4", "type SomeObj = {\n    bar: string;\n}", "")
-	f.VerifyQuickInfoAt(t, "5", "(parameter) stuff: {\n    quantity: number;\n}", "(parameter) stuff: {\n    quantity: number;\n}")
-	f.VerifyQuickInfoAt(t, "6", "(parameter) stuff: {\n    quantity: number;\n}", "(parameter) stuff: {\n    quantity: number;\n}")
+	f.VerifyQuickInfoAt(t, "5", "(parameter) stuff: {\n    quantity: number;\n}", "Stuff to do stuff with")
+	f.VerifyQuickInfoAt(t, "6", "(parameter) stuff: {\n    quantity: number;\n}", "Stuff to do stuff with")
 	f.VerifyQuickInfoAt(t, "7", "function doStuffWithStuff(stuff: {\n    quantity: number;\n}): void", "")
 	f.VerifyQuickInfoAt(t, "8", "", "")
 }

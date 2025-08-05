@@ -223,5 +223,5 @@ func TestJsdocTypedefTag(t *testing.T) {
 			},
 		},
 	})
-	f.VerifyQuickInfoAt(t, "AnimalType", "type Animal = {\n    animalName: string;\n    animalAge: number;\n}", "type Animal = {\n    animalName: string;\n    animalAge: number;\n}")
+	f.VerifyQuickInfoAt(t, "AnimalType", "type Animal = {\n    animalName: string;\n    animalAge: number;\n}", "- think Giraffes")
 }

@@ -21,5 +21,5 @@ function aliasExample(e: AliasExample) {
     console.log(e./*alias*/anything);
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyQuickInfoAt(t, "alias", "(index) AliasExample[string | `any${string}`]: string", "(index) AliasExample[string | `any${string}`]: string")
+	f.VerifyQuickInfoAt(t, "alias", "(index) AliasExample[string | `any${string}`]: string", "Something generic\nSomething else")
 }

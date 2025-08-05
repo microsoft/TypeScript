@@ -39,6 +39,12 @@ i[|./**/|];`
 				&lsproto.CompletionItem{
 					Label:      "M",
 					InsertText: PtrTo("[M]"),
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "M",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
 				},
 			},
 		},

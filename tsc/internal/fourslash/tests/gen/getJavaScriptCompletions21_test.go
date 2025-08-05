@@ -11,7 +11,7 @@ import (
 
 func TestGetJavaScriptCompletions21(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @allowNonTsExtensions: true
 // @Filename: file.js
@@ -31,6 +31,12 @@ new Prv()['[|/**/|]'];`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "notSoPrivate",
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "notSoPrivate",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
 				},
 			},
 		},

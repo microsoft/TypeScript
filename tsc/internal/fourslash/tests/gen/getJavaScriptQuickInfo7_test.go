@@ -27,5 +27,5 @@ function a1(p) {
 
 x - /**/a1()`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyQuickInfoAt(t, "", "function a1(p: any): number", "function a1(p: any): number")
+	f.VerifyQuickInfoAt(t, "", "function a1(p: any): number", "This is a very cool function that is very nice.")
 }

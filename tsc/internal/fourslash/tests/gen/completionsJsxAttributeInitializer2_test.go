@@ -38,6 +38,12 @@ const foo = 0;
 					InsertText: PtrTo("{foo}"),
 					Detail:     PtrTo("const foo: 0"),
 					Kind:       PtrTo(lsproto.CompletionItemKindVariable),
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "foo",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
 				},
 			},
 		},

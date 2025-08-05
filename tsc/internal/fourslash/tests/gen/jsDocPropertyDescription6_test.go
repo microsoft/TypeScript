@@ -24,5 +24,5 @@ function literal1Example(e: Literal1Example) {
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	f.VerifyQuickInfoAt(t, "literal1", "(index) Literal1Example[`prefix${string}`]: string | number", "")
 	f.VerifyQuickInfoAt(t, "literal2", "any", "")
-	f.VerifyQuickInfoAt(t, "literal3", "(index) Literal1Example[`prefix${string}` | `prefix${number}`]: number", "(index) Literal1Example[`prefix${string}` | `prefix${number}`]: number")
+	f.VerifyQuickInfoAt(t, "literal3", "(index) Literal1Example[`prefix${string}` | `prefix${number}`]: number", "Something else")
 }

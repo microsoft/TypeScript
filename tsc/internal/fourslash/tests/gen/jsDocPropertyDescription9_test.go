@@ -23,7 +23,7 @@ function literalClass(e: typeof LiteralClass) {
     console.log(e./*literal3Class*/prefix0);
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyQuickInfoAt(t, "literal1Class", "(index) LiteralClass[`prefix${string}`]: any", "(index) LiteralClass[`prefix${string}`]: any")
+	f.VerifyQuickInfoAt(t, "literal1Class", "(index) LiteralClass[`prefix${string}`]: any", "Something generic")
 	f.VerifyQuickInfoAt(t, "literal2Class", "any", "")
-	f.VerifyQuickInfoAt(t, "literal3Class", "(index) LiteralClass[`prefix${string}` | `prefix${number}`]: any", "(index) LiteralClass[`prefix${string}` | `prefix${number}`]: any")
+	f.VerifyQuickInfoAt(t, "literal3Class", "(index) LiteralClass[`prefix${string}` | `prefix${number}`]: any", "Something generic\nSomething else")
 }

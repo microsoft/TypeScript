@@ -25,5 +25,5 @@ function f(t) {}
 import f from "./a"
 /**/f`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyQuickInfoAt(t, "", "(alias) function f(t: string): void\nimport f", "(alias) function f(t: string): void\nimport f")
+	f.VerifyQuickInfoAt(t, "", "(alias) function f(t: string): void\nimport f", "Run this function")
 }

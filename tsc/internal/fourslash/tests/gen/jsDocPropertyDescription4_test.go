@@ -19,5 +19,5 @@ function multipleExample(e: MultipleExample) {
     console.log(e./*multiple*/anything);
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyQuickInfoAt(t, "multiple", "(index) MultipleExample[string | number | symbol]: string", "(index) MultipleExample[string | number | symbol]: string")
+	f.VerifyQuickInfoAt(t, "multiple", "(index) MultipleExample[string | number | symbol]: string", "Something generic")
 }

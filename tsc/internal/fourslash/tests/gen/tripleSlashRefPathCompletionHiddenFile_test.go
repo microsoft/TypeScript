@@ -45,6 +45,12 @@ func TestTripleSlashRefPathCompletionHiddenFile(t *testing.T) {
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "f.ts",
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "f.ts",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
 				},
 			},
 		},

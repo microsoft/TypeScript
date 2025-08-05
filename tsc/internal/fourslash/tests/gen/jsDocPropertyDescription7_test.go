@@ -19,5 +19,5 @@ function stringClass(e: typeof StringClass) {
     console.log(e./*stringClass*/anything);
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyQuickInfoAt(t, "stringClass", "(index) StringClass[string]: any", "(index) StringClass[string]: any")
+	f.VerifyQuickInfoAt(t, "stringClass", "(index) StringClass[string]: any", "Something generic")
 }

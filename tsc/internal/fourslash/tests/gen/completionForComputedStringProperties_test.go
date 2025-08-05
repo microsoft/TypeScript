@@ -35,6 +35,12 @@ a[|./**/|]`
 				&lsproto.CompletionItem{
 					Label:      "p2",
 					InsertText: PtrTo("[p2]"),
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "p2",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
 				},
 			},
 		},

@@ -11,7 +11,7 @@ import (
 
 func TestCompletionForStringLiteral15(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `let x: { [_ in "foo"]: string } = {
     "[|/**/|]"
@@ -27,6 +27,12 @@ func TestCompletionForStringLiteral15(t *testing.T) {
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "foo",
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "foo",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
 				},
 			},
 		},

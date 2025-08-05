@@ -11,7 +11,7 @@ import (
 
 func TestCompletionsKeyof(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface A { a: number; };
 interface B { a: number; b: number; };
@@ -30,6 +30,12 @@ g("[|/*g*/|]");`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "a",
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "a",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
 				},
 			},
 		},
@@ -44,9 +50,21 @@ g("[|/*g*/|]");`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "a",
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "a",
+							Range:   f.Ranges()[1].LSRange,
+						},
+					},
 				},
 				&lsproto.CompletionItem{
 					Label: "b",
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "b",
+							Range:   f.Ranges()[1].LSRange,
+						},
+					},
 				},
 			},
 		},

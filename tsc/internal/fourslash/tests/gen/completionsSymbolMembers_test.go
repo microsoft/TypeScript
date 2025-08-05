@@ -35,6 +35,12 @@ j[|./*j*/|];`
 				&lsproto.CompletionItem{
 					Label:      "s",
 					InsertText: PtrTo("[s]"),
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "s",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
 				},
 			},
 		},
@@ -50,6 +56,12 @@ j[|./*j*/|];`
 				&lsproto.CompletionItem{
 					Label:      "N",
 					InsertText: PtrTo("[N]"),
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "N",
+							Range:   f.Ranges()[1].LSRange,
+						},
+					},
 				},
 			},
 		},

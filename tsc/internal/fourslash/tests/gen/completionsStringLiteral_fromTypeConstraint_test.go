@@ -11,7 +11,7 @@ import (
 
 func TestCompletionsStringLiteral_fromTypeConstraint(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface Foo { foo: string; bar: string; }
 type T = Pick<Foo, "[|/**/|]">;`
@@ -26,9 +26,21 @@ type T = Pick<Foo, "[|/**/|]">;`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "bar",
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "bar",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
 				},
 				&lsproto.CompletionItem{
 					Label: "foo",
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "foo",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
 				},
 			},
 		},

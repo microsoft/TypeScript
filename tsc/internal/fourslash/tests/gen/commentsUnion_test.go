@@ -14,5 +14,5 @@ func TestCommentsUnion(t *testing.T) {
 	const content = `var a: Array<string> | Array<number>;
 a./*1*/length`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyQuickInfoAt(t, "1", "(property) Array<T>.length: number", "(property) Array<T>.length: number")
+	f.VerifyQuickInfoAt(t, "1", "(property) Array<T>.length: number", "Gets or sets the length of the array. This is a number one higher than the highest index in the array.")
 }

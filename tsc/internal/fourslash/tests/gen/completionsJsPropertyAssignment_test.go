@@ -11,7 +11,7 @@ import (
 
 func TestCompletionsJsPropertyAssignment(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @allowJs: true
 // @Filename: /a.js
@@ -29,9 +29,21 @@ x.p = "[|/**/|]";`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "x",
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "x",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
 				},
 				&lsproto.CompletionItem{
 					Label: "y",
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "y",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
 				},
 			},
 		},

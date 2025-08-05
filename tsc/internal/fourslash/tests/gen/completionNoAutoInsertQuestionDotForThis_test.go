@@ -41,6 +41,12 @@ class Address {
 					Label:      "postal code",
 					InsertText: PtrTo("[\"postal code\"]"),
 					Detail:     PtrTo("(property) Address[\"postal code\"]: string"),
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "postal code",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
 				},
 			},
 		},

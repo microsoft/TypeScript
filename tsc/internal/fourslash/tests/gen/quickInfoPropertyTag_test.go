@@ -22,5 +22,5 @@ func TestQuickInfoPropertyTag(t *testing.T) {
 /** @type {I} */
 const obj = { /**/x: 10 };`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyQuickInfoAt(t, "", "(property) x: number", "(property) x: number")
+	f.VerifyQuickInfoAt(t, "", "(property) x: number", "Doc\nMore doc")
 }

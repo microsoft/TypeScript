@@ -21,6 +21,6 @@ class C {
     }
 }`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	f.VerifyQuickInfoAt(t, "write", "(property) C.x: any", "(property) C.x: any")
-	f.VerifyQuickInfoAt(t, "read", "(property) C.x: number", "(property) C.x: number")
+	f.VerifyQuickInfoAt(t, "write", "(property) C.x: any", "Doc")
+	f.VerifyQuickInfoAt(t, "read", "(property) C.x: number", "Doc")
 }
