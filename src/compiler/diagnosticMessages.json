@@ -8519,5 +8519,9 @@
     "'{0}' is not a valid meta-property for keyword 'import'. Did you mean 'meta' or 'defer'?": {
         "category": "Error",
         "code": 18061
+    },
+    "Comparison of string literals is not allowed.": {
+        "category": "Error",
+        "code": 18062
     }
 }
