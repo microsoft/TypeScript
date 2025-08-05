@@ -302,7 +302,7 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
         );
         const symbol = info.symbol || cachedSymbol || Debug.checkDefined(
             exportKind === ExportKind.ExportEquals
-                ? checker.resolveExternalModuleSymbol(moduleSymbol)
+                ? moduleSymbol
                 : checker.tryGetMemberInModuleExportsAndProperties(unescapeLeadingUnderscores(info.symbolTableKey), moduleSymbol),
             `Could not find symbol '${info.symbolName}' by key '${info.symbolTableKey}' in module ${moduleSymbol.name}`,
         );
@@ -604,14 +604,11 @@ export function getDefaultLikeExportInfo(moduleSymbol: Symbol, checker: TypeChec
     symbol: Symbol;
     exportKind: ExportKind;
 } | undefined {
-    const exportEquals = checker.resolveExternalModuleSymbol(moduleSymbol);
-    if (exportEquals !== moduleSymbol) {
-        const defaultExport = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, exportEquals);
-        if (defaultExport) return { symbol: defaultExport, exportKind: ExportKind.Default };
-        return { symbol: exportEquals, exportKind: ExportKind.ExportEquals };
-    }
     const defaultExport = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, moduleSymbol);
     if (defaultExport) return { symbol: defaultExport, exportKind: ExportKind.Default };
+    if (moduleSymbol.exports?.has(InternalSymbolName.ExportEquals)) {
+        return { symbol: moduleSymbol.exports.get(InternalSymbolName.ExportEquals)!, exportKind: ExportKind.ExportEquals };
+    }
 }
 
 function isImportableSymbol(symbol: Symbol, checker: TypeChecker) {
