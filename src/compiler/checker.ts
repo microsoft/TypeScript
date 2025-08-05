@@ -41206,7 +41206,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getTemplateLiteralType(texts, types);
         }
         const contextualType = getContextualType(node, /*contextFlags*/ undefined) || unknownType;
-        if (contextualType === contextFreeType ? every(types, isPatternLiteralPlaceholderType) : someType(contextualType, isTemplateLiteralContextualType)) {
+        if (contextualType === contextFreeType ? every(types, t => isLiteralType(t) || isPatternLiteralPlaceholderType(t)) : someType(contextualType, isTemplateLiteralContextualType)) {
             return getTemplateLiteralType(texts, types);
         }
         return stringType;
