@@ -41202,14 +41202,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (typeof evaluated === "string") {
             return getFreshTypeOfLiteralType(getStringLiteralType(evaluated));
         }
-        if (isConstContext(node) || isTemplateLiteralContext(node) || someType(getContextualType(node, /*contextFlags*/ undefined) || unknownType, isTemplateLiteralContextualType)) {
+        if (isConstContext(node) || isTemplateLiteralContext(node)) {
+            return getTemplateLiteralType(texts, types);
+        }
+        const contextualType = getContextualType(node, /*contextFlags*/ undefined) || unknownType;
+        if (contextualType === contextFreeType ? every(types, isPatternLiteralPlaceholderType) : someType(contextualType, isTemplateLiteralContextualType)) {
             return getTemplateLiteralType(texts, types);
         }
         return stringType;
     }
 
     function isTemplateLiteralContextualType(type: Type): boolean {
-        return type === contextFreeType || !!(type.flags & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral) ||
+        return !!(type.flags & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral) ||
             type.flags & TypeFlags.InstantiableNonPrimitive && maybeTypeOfKind(getBaseConstraintOfType(type) || unknownType, TypeFlags.StringLike));
     }
 
