@@ -4801,6 +4801,8 @@ function getAssignmentTarget(node: Node): AssignmentTarget | undefined {
             case SyntaxKind.ArrayLiteralExpression:
             case SyntaxKind.SpreadElement:
             case SyntaxKind.NonNullExpression:
+            case SyntaxKind.TypeAssertionExpression:
+            case SyntaxKind.AsExpression:
                 node = parent;
                 break;
             case SyntaxKind.SpreadAssignment:
