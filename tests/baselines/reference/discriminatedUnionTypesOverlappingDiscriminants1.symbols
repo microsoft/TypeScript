@@ -1,0 +1,314 @@
+//// [tests/cases/conformance/types/union/discriminatedUnionTypesOverlappingDiscriminants1.ts] ////
+
+=== discriminatedUnionTypesOverlappingDiscriminants1.ts ===
+// https://github.com/microsoft/TypeScript/issues/57231
+
+type Food = "apple" | "orange";
+>Food : Symbol(Food, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 0, 0))
+
+type Vegetable = "spinach" | "carrot";
+>Vegetable : Symbol(Vegetable, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 2, 31))
+
+type Other = "milk" | "water";
+>Other : Symbol(Other, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 3, 38))
+
+type Custom = "air" | "soil";
+>Custom : Symbol(Custom, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 4, 30))
+
+type Target =
+>Target : Symbol(Target, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 5, 29))
+
+  | {
+      audience: "earth";
+>audience : Symbol(audience, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 8, 5))
+
+      meal:
+>meal : Symbol(meal, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 9, 24))
+
+        | Custom
+>Custom : Symbol(Custom, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 4, 30))
+
+        | `fruit_${Food}`
+>Food : Symbol(Food, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 0, 0))
+
+        | `vegetable_${Vegetable}`
+>Vegetable : Symbol(Vegetable, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 2, 31))
+
+        | `other_${Other}`;
+>Other : Symbol(Other, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 3, 38))
+    }
+  | {
+      audience: "mars" | "jupiter";
+>audience : Symbol(audience, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 16, 5))
+
+      meal: string;
+>meal : Symbol(meal, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 17, 35))
+
+    };
+
+const target1: Target = {
+>target1 : Symbol(target1, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 21, 5))
+>Target : Symbol(Target, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 5, 29))
+
+  audience: "earth",
+>audience : Symbol(audience, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 21, 25))
+
+  meal: `vegetable_carrot`,
+>meal : Symbol(meal, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 22, 20))
+
+};
+
+const target2: Target = {
+>target2 : Symbol(target2, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 26, 5))
+>Target : Symbol(Target, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 5, 29))
+
+  meal: `vegetable_carrot`,
+>meal : Symbol(meal, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 26, 25))
+
+  audience: "earth",
+>audience : Symbol(audience, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 27, 27))
+
+};
+
+const typedVegetableWithInitializer: Vegetable = 'carrot';
+>typedVegetableWithInitializer : Symbol(typedVegetableWithInitializer, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 31, 5))
+>Vegetable : Symbol(Vegetable, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 2, 31))
+
+const target3: Target = {
+>target3 : Symbol(target3, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 33, 5))
+>Target : Symbol(Target, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 5, 29))
+
+  audience: "earth",
+>audience : Symbol(audience, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 33, 25))
+
+  meal: `vegetable_${typedVegetableWithInitializer}`,
+>meal : Symbol(meal, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 34, 20))
+>typedVegetableWithInitializer : Symbol(typedVegetableWithInitializer, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 31, 5))
+
+};
+
+const target4: Target = {
+>target4 : Symbol(target4, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 38, 5))
+>Target : Symbol(Target, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 5, 29))
+
+  meal: `vegetable_${typedVegetableWithInitializer}`,
+>meal : Symbol(meal, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 38, 25))
+>typedVegetableWithInitializer : Symbol(typedVegetableWithInitializer, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 31, 5))
+
+  audience: "earth",
+>audience : Symbol(audience, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 39, 53))
+
+};
+
+const typedCarrotWithInitializer: "carrot" = 'carrot';
+>typedCarrotWithInitializer : Symbol(typedCarrotWithInitializer, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 43, 5))
+
+const target5: Target = {
+>target5 : Symbol(target5, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 45, 5))
+>Target : Symbol(Target, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 5, 29))
+
+  audience: "earth",
+>audience : Symbol(audience, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 45, 25))
+
+  meal: `vegetable_${typedCarrotWithInitializer}`,
+>meal : Symbol(meal, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 46, 20))
+>typedCarrotWithInitializer : Symbol(typedCarrotWithInitializer, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 43, 5))
+
+};
+
+const target6: Target = {
+>target6 : Symbol(target6, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 50, 5))
+>Target : Symbol(Target, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 5, 29))
+
+  meal: `vegetable_${typedCarrotWithInitializer}`,
+>meal : Symbol(meal, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 50, 25))
+>typedCarrotWithInitializer : Symbol(typedCarrotWithInitializer, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 43, 5))
+
+  audience: "earth",
+>audience : Symbol(audience, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 51, 50))
+
+};
+
+const carrotInitializer = 'carrot';
+>carrotInitializer : Symbol(carrotInitializer, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 55, 5))
+
+const target7: Target = {
+>target7 : Symbol(target7, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 57, 5))
+>Target : Symbol(Target, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 5, 29))
+
+  audience: "earth",
+>audience : Symbol(audience, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 57, 25))
+
+  meal: `vegetable_${carrotInitializer}`,
+>meal : Symbol(meal, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 58, 20))
+>carrotInitializer : Symbol(carrotInitializer, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 55, 5))
+
+};
+
+const target8: Target = {
+>target8 : Symbol(target8, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 62, 5))
+>Target : Symbol(Target, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 5, 29))
+
+  meal: `vegetable_${carrotInitializer}`,
+>meal : Symbol(meal, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 62, 25))
+>carrotInitializer : Symbol(carrotInitializer, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 55, 5))
+
+  audience: "earth",
+>audience : Symbol(audience, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 63, 41))
+
+};
+
+declare const vegetable: Vegetable;
+>vegetable : Symbol(vegetable, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 67, 13))
+>Vegetable : Symbol(Vegetable, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 2, 31))
+
+const target9: Target = {
+>target9 : Symbol(target9, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 69, 5))
+>Target : Symbol(Target, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 5, 29))
+
+  audience: "earth",
+>audience : Symbol(audience, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 69, 25))
+
+  meal: `vegetable_${vegetable}`,
+>meal : Symbol(meal, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 70, 20))
+>vegetable : Symbol(vegetable, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 67, 13))
+
+};
+
+const target10: Target = {
+>target10 : Symbol(target10, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 74, 5))
+>Target : Symbol(Target, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 5, 29))
+
+  meal: `vegetable_${vegetable}`,
+>meal : Symbol(meal, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 74, 26))
+>vegetable : Symbol(vegetable, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 67, 13))
+
+  audience: "earth",
+>audience : Symbol(audience, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 75, 33))
+
+};
+
+const typedNonVegetableWithInitializer: "cow" | "pig" = "cow";
+>typedNonVegetableWithInitializer : Symbol(typedNonVegetableWithInitializer, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 79, 5))
+
+// error
+const target11: Target = {
+>target11 : Symbol(target11, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 82, 5))
+>Target : Symbol(Target, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 5, 29))
+
+  audience: "earth",
+>audience : Symbol(audience, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 82, 26))
+
+  meal: `vegetable_${typedNonVegetableWithInitializer}`,
+>meal : Symbol(meal, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 83, 20))
+>typedNonVegetableWithInitializer : Symbol(typedNonVegetableWithInitializer, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 79, 5))
+
+};
+
+// error
+const target12: Target = {
+>target12 : Symbol(target12, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 88, 5))
+>Target : Symbol(Target, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 5, 29))
+
+  meal: `vegetable_${typedNonVegetableWithInitializer}`,
+>meal : Symbol(meal, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 88, 26))
+>typedNonVegetableWithInitializer : Symbol(typedNonVegetableWithInitializer, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 79, 5))
+
+  audience: "earth",
+>audience : Symbol(audience, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 89, 56))
+
+};
+
+const typedCowWithInitializer: "cow" = "cow";
+>typedCowWithInitializer : Symbol(typedCowWithInitializer, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 93, 5))
+
+// error
+const target13: Target = {
+>target13 : Symbol(target13, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 96, 5))
+>Target : Symbol(Target, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 5, 29))
+
+  audience: "earth",
+>audience : Symbol(audience, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 96, 26))
+
+  meal: `vegetable_${typedCowWithInitializer}`,
+>meal : Symbol(meal, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 97, 20))
+>typedCowWithInitializer : Symbol(typedCowWithInitializer, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 93, 5))
+
+};
+
+// error
+const target14: Target = {
+>target14 : Symbol(target14, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 102, 5))
+>Target : Symbol(Target, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 5, 29))
+
+  meal: `vegetable_${typedCowWithInitializer}`,
+>meal : Symbol(meal, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 102, 26))
+>typedCowWithInitializer : Symbol(typedCowWithInitializer, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 93, 5))
+
+  audience: "earth",
+>audience : Symbol(audience, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 103, 47))
+
+};
+
+const cowInitializer = "cow";
+>cowInitializer : Symbol(cowInitializer, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 107, 5))
+
+// error
+const target15: Target = {
+>target15 : Symbol(target15, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 110, 5))
+>Target : Symbol(Target, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 5, 29))
+
+  audience: "earth",
+>audience : Symbol(audience, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 110, 26))
+
+  meal: `vegetable_${cowInitializer}`,
+>meal : Symbol(meal, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 111, 20))
+>cowInitializer : Symbol(cowInitializer, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 107, 5))
+
+};
+
+// error
+const target16: Target = {
+>target16 : Symbol(target16, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 116, 5))
+>Target : Symbol(Target, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 5, 29))
+
+  meal: `vegetable_${cowInitializer}`,
+>meal : Symbol(meal, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 116, 26))
+>cowInitializer : Symbol(cowInitializer, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 107, 5))
+
+  audience: "earth",
+>audience : Symbol(audience, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 117, 38))
+
+};
+
+declare const nonVegetable: "cow" | "pig";
+>nonVegetable : Symbol(nonVegetable, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 121, 13))
+
+// error
+const target17: Target = {
+>target17 : Symbol(target17, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 124, 5))
+>Target : Symbol(Target, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 5, 29))
+
+  audience: "earth",
+>audience : Symbol(audience, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 124, 26))
+
+  meal: `vegetable_${nonVegetable}`,
+>meal : Symbol(meal, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 125, 20))
+>nonVegetable : Symbol(nonVegetable, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 121, 13))
+
+};
+
+// error
+const target18: Target = {
+>target18 : Symbol(target18, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 130, 5))
+>Target : Symbol(Target, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 5, 29))
+
+  meal: `vegetable_${nonVegetable}`,
+>meal : Symbol(meal, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 130, 26))
+>nonVegetable : Symbol(nonVegetable, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 121, 13))
+
+  audience: "earth",
+>audience : Symbol(audience, Decl(discriminatedUnionTypesOverlappingDiscriminants1.ts, 131, 36))
+
+};
+
