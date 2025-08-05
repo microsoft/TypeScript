@@ -1,0 +1,100 @@
+//// [tests/cases/conformance/types/literal/templateLiteralTypes9.ts] ////
+
+=== templateLiteralTypes9.ts ===
+type Target =
+>Target : Target
+>       : ^^^^^^
+
+  | { type: `${string}_FOO`; cb: (arg: number) => void }
+>type : `${string}_FOO`
+>     : ^^^^^^^^^^^^^^^
+>cb : (arg: number) => void
+>   : ^   ^^      ^^^^^    
+>arg : number
+>    : ^^^^^^
+
+  | { type: `${string}_BAR`; cb: (arg: string) => void };
+>type : `${string}_BAR`
+>     : ^^^^^^^^^^^^^^^
+>cb : (arg: string) => void
+>   : ^   ^^      ^^^^^    
+>arg : string
+>    : ^^^^^^
+
+declare const str: string;
+>str : string
+>    : ^^^^^^
+
+const obj1: Target = {
+>obj1 : Target
+>     : ^^^^^^
+>{  type: `${str}_FOO`,  cb: (arg) => {},} : { type: `${string}_FOO`; cb: (arg: number) => void; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^
+
+  type: `${str}_FOO`,
+>type : `${string}_FOO`
+>     : ^^^^^^^^^^^^^^^
+>`${str}_FOO` : `${string}_FOO`
+>             : ^^^^^^^^^^^^^^^
+>str : string
+>    : ^^^^^^
+
+  cb: (arg) => {},
+>cb : (arg: number) => void
+>   : ^   ^^^^^^^^^^^^^^^^^
+>(arg) => {} : (arg: number) => void
+>            : ^   ^^^^^^^^^^^^^^^^^
+>arg : number
+>    : ^^^^^^
+
+};
+
+const obj2: Target = {
+>obj2 : Target
+>     : ^^^^^^
+>{  type: `${str}_BAR`,  cb: (arg) => {},} : { type: `${string}_BAR`; cb: (arg: string) => void; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^
+
+  type: `${str}_BAR`,
+>type : `${string}_BAR`
+>     : ^^^^^^^^^^^^^^^
+>`${str}_BAR` : `${string}_BAR`
+>             : ^^^^^^^^^^^^^^^
+>str : string
+>    : ^^^^^^
+
+  cb: (arg) => {},
+>cb : (arg: string) => void
+>   : ^   ^^^^^^^^^^^^^^^^^
+>(arg) => {} : (arg: string) => void
+>            : ^   ^^^^^^^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+
+};
+
+// error
+const obj3: Target = {
+>obj3 : Target
+>     : ^^^^^^
+>{  type: `${str}_BAZ`,  cb: (arg) => {},} : { type: `${string}_BAZ`; cb: (arg: any) => void; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^
+
+  type: `${str}_BAZ`,
+>type : `${string}_BAZ`
+>     : ^^^^^^^^^^^^^^^
+>`${str}_BAZ` : `${string}_BAZ`
+>             : ^^^^^^^^^^^^^^^
+>str : string
+>    : ^^^^^^
+
+  cb: (arg) => {},
+>cb : (arg: any) => void
+>   : ^   ^^^^^^^^^^^^^^
+>(arg) => {} : (arg: any) => void
+>            : ^   ^^^^^^^^^^^^^^
+>arg : any
+>    : ^^^
+
+};
+
