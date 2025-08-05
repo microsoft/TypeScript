@@ -12026,7 +12026,7 @@ export function isSideEffectImport(node: Node): boolean {
     return !!ancestor && !ancestor.importClause;
 }
 
-// require('module').builtinModules.filter(x => !x.startsWith('_'))
+// require('module').builtinModules.filter(x => !x.match(/^(?:_|node:)/))
 const unprefixedNodeCoreModulesList = [
     "assert",
     "assert/strict",
@@ -12069,7 +12069,6 @@ const unprefixedNodeCoreModulesList = [
     "stream/web",
     "string_decoder",
     "sys",
-    "test/mock_loader",
     "timers",
     "timers/promises",
     "tls",
@@ -12088,11 +12087,10 @@ const unprefixedNodeCoreModulesList = [
 /** @internal */
 export const unprefixedNodeCoreModules: Set<string> = new Set(unprefixedNodeCoreModulesList);
 
-// await fetch('https://nodejs.org/docs/latest/api/all.json').then(r => r.text()).then(t =>
-//   new Set(t.match(/(?<=')node:.+?(?=')/g))
-//     .difference(new Set(require('module').builtinModules.map(x => `node:${x}`))))
+// require('module').builtinModules.filter(x => x.startsWith('node:'))
 /** @internal */
 export const exclusivelyPrefixedNodeCoreModules: Set<string> = new Set([
+    "node:quic",
     "node:sea",
     "node:sqlite",
     "node:test",

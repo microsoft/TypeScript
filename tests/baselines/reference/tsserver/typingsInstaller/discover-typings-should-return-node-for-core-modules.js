@@ -1342,38 +1342,6 @@ ts.JsTyping.discoverTypings::
         "enable": true
       },
       "unresolvedImports": [
-        "test/mock_loader",
-        "somename"
-      ],
-      "typesRegistry": {},
-      "compilerOptions": {}
-    }
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
-TI:: [hh:mm:ss:mss] Finished typings discovery:
-    {
-      "cachedTypingPaths": [],
-      "newTypingNames": [
-        "node",
-        "somename"
-      ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
-    }
-
-ts.JsTyping.discoverTypings::
-    {
-      "fileNames": [
-        "/home/src/projects/project/app.js"
-      ],
-      "projectRootPath": "/home/src/projects/project",
-      "safeList": {},
-      "packageNameToTypingLocation": {},
-      "typeAcquisition": {
-        "enable": true
-      },
-      "unresolvedImports": [
         "timers",
         "somename"
       ],
@@ -3102,38 +3070,6 @@ ts.JsTyping.discoverTypings::
         "enable": true
       },
       "unresolvedImports": [
-        "node:test/mock_loader",
-        "somename"
-      ],
-      "typesRegistry": {},
-      "compilerOptions": {}
-    }
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
-TI:: [hh:mm:ss:mss] Finished typings discovery:
-    {
-      "cachedTypingPaths": [],
-      "newTypingNames": [
-        "node",
-        "somename"
-      ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
-    }
-
-ts.JsTyping.discoverTypings::
-    {
-      "fileNames": [
-        "/home/src/projects/project/app.js"
-      ],
-      "projectRootPath": "/home/src/projects/project",
-      "safeList": {},
-      "packageNameToTypingLocation": {},
-      "typeAcquisition": {
-        "enable": true
-      },
-      "unresolvedImports": [
         "node:timers",
         "somename"
       ],
@@ -3519,6 +3455,38 @@ ts.JsTyping.discoverTypings::
       },
       "unresolvedImports": [
         "node:zlib",
+        "somename"
+      ],
+      "typesRegistry": {},
+      "compilerOptions": {}
+    }
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "node",
+        "somename"
+      ],
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
+    }
+
+ts.JsTyping.discoverTypings::
+    {
+      "fileNames": [
+        "/home/src/projects/project/app.js"
+      ],
+      "projectRootPath": "/home/src/projects/project",
+      "safeList": {},
+      "packageNameToTypingLocation": {},
+      "typeAcquisition": {
+        "enable": true
+      },
+      "unresolvedImports": [
+        "node:quic",
         "somename"
       ],
       "typesRegistry": {},
