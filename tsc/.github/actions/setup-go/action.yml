@@ -93,6 +93,10 @@ runs:
 
     - if: ${{ inputs.create == 'true' }}
       shell: bash
+      run: npx hereby test --coverage
+
+    - if: ${{ inputs.create == 'true' }}
+      shell: bash
       run: npx hereby lint
 
     - if: ${{ inputs.create == 'true' }}
