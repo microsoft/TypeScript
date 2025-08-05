@@ -14,6 +14,7 @@ interface A {
 
 
 //// [app.d.ts]
+/// <reference types="lib" preserve="true" />
 interface A {
     x: $;
 }

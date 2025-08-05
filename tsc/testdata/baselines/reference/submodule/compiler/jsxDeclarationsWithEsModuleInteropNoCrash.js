@@ -25,23 +25,8 @@ export default Foo;
 
 
 //// [jsxDeclarationsWithEsModuleInteropNoCrash.d.ts]
+/// <reference path="..react16.d.ts" preserve="true" />
 declare function Foo({ bar }: {
     bar: any;
 }): JSX.Element;
 export default Foo;
-
-
-//// [DtsFileErrors]
-
-
-jsxDeclarationsWithEsModuleInteropNoCrash.d.ts(3,5): error TS2503: Cannot find namespace 'JSX'.
-
-
-==== jsxDeclarationsWithEsModuleInteropNoCrash.d.ts (1 errors) ====
-    declare function Foo({ bar }: {
-        bar: any;
-    }): JSX.Element;
-        ~~~
-!!! error TS2503: Cannot find namespace 'JSX'.
-    export default Foo;
-    

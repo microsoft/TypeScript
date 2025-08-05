@@ -64,9 +64,11 @@ export default [obj1, obj2.default];
 
 
 //// [uses.d.ts]
+/// <reference types="pkg" preserve="true" />
 declare const _default: ImportInterface;
 export default _default;
 //// [uses.d.ts]
+/// <reference types="pkg" preserve="true" />
 declare const _default: RequireInterface;
 export default _default;
 //// [index.d.ts]
@@ -111,6 +113,7 @@ out/index.d.ts(1,52): error TS2304: Cannot find name 'RequireInterface'.
         function getInterR(): RequireInterface;
     }
 ==== out/sub1/uses.d.ts (0 errors) ====
+    /// <reference types="pkg" preserve="true" />
     declare const _default: ImportInterface;
     export default _default;
     
@@ -120,6 +123,7 @@ out/index.d.ts(1,52): error TS2304: Cannot find name 'RequireInterface'.
         "type": "module"
     }
 ==== out/sub2/uses.d.ts (0 errors) ====
+    /// <reference types="pkg" preserve="true" />
     declare const _default: RequireInterface;
     export default _default;
     

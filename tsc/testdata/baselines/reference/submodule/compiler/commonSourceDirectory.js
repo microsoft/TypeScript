@@ -25,4 +25,5 @@ foo_1.x + bar_1.y;
 //# sourceMappingURL=../myMapRoot/index.js.map
 
 //// [/app/bin/index.d.ts]
+/// <reference path="../../types/bar.d.ts" preserve="true" />
 export {};

@@ -19,6 +19,7 @@ interface A {
 
 
 //// [app.d.ts]
+/// <reference types="lib" preserve="true" />
 interface A {
     x: () => $;
 }
@@ -27,10 +28,11 @@ interface A {
 //// [DtsFileErrors]
 
 
-/app.d.ts(2,14): error TS2581: Cannot find name '$'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery`.
+/app.d.ts(3,14): error TS2581: Cannot find name '$'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery`.
 
 
 ==== /app.d.ts (1 errors) ====
+    /// <reference types="lib" preserve="true" />
     interface A {
         x: () => $;
                  ~

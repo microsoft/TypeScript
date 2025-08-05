@@ -13,8 +13,7 @@
  exports.default = uses_js_1.default;
 
 
- //// [uses.d.ts]
--/// <reference types="pkg" preserve="true" />
+@@= skipped -13, +10 lines =@@
  declare const _default: RequireInterface;
  export default _default;
  //// [index.d.ts]
@@ -58,6 +57,7 @@
 +        function getInterR(): RequireInterface;
 +    }
 +==== out/uses.d.ts (0 errors) ====
++    /// <reference types="pkg" preserve="true" />
 +    declare const _default: RequireInterface;
 +    export default _default;
 +    

@@ -4403,6 +4403,9 @@ func (p *Printer) emitSourceFile(node *ast.SourceFile) {
 		p.emitShebangIfNeeded(node)
 		index = p.emitPrologueDirectives(node.Statements)
 		p.emitHelpers(node.AsNode())
+		if node.IsDeclarationFile {
+			p.emitTripleSlashDirectives(node)
+		}
 	}
 
 	// !!! Emit triple-slash directives
@@ -4418,6 +4421,23 @@ func (p *Printer) emitSourceFile(node *ast.SourceFile) {
 	p.emitDetachedCommentsAfterStatementList(node.AsNode(), node.Statements.Loc, state)
 	p.currentSourceFile = savedCurrentSourceFile
 	p.commentsDisabled = savedCommentsDisabled
+}
+
+func (p *Printer) emitTripleSlashDirectives(node *ast.SourceFile) {
+	p.emitDirective("path", node.ReferencedFiles)
+	p.emitDirective("types", node.TypeReferenceDirectives)
+	p.emitDirective("lib", node.LibReferenceDirectives)
+}
+
+func (p *Printer) emitDirective(kind string, refs []*ast.FileReference) {
+	for _, ref := range refs {
+		var resolutionMode string
+		if ref.ResolutionMode != core.ResolutionModeNone {
+			resolutionMode = fmt.Sprintf(`resolution-mode="%s" `, core.IfElse(ref.ResolutionMode == core.ResolutionModeESM, "import", "require"))
+		}
+		p.writeComment(fmt.Sprintf("/// <reference %s=\"%s\" %s%s/>", kind, ref.FileName, resolutionMode, core.IfElse(ref.Preserve, `preserve="true" `, "")))
+		p.writeLine()
+	}
 }
 
 //

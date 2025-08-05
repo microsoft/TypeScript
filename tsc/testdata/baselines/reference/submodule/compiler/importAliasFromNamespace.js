@@ -65,6 +65,7 @@ declare namespace My.Internal {
     }
 }
 //// [usage.d.ts]
+/// <reference path="internal.d.ts" preserve="true" />
 declare namespace SomeOther.Thing {
     class Foo {
         private _which;

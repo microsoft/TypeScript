@@ -1,10 +1,9 @@
 --- old.jsxDeclarationsWithEsModuleInteropNoCrash.js
 +++ new.jsxDeclarationsWithEsModuleInteropNoCrash.js
-@@= skipped -24, +24 lines =@@
-
+@@= skipped -25, +25 lines =@@
 
  //// [jsxDeclarationsWithEsModuleInteropNoCrash.d.ts]
--/// <reference path="..react16.d.ts" preserve="true" />
+ /// <reference path="..react16.d.ts" preserve="true" />
 -export default Foo;
  declare function Foo({ bar }: {
      bar: any;
@@ -22,19 +21,3 @@
 -}
 -import PropTypes from 'prop-types';
 +export default Foo;
-+
-+
-+//// [DtsFileErrors]
-+
-+
-+jsxDeclarationsWithEsModuleInteropNoCrash.d.ts(3,5): error TS2503: Cannot find namespace 'JSX'.
-+
-+
-+==== jsxDeclarationsWithEsModuleInteropNoCrash.d.ts (1 errors) ====
-+    declare function Foo({ bar }: {
-+        bar: any;
-+    }): JSX.Element;
-+        ~~~
-+!!! error TS2503: Cannot find namespace 'JSX'.
-+    export default Foo;
-+    

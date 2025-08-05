@@ -41,6 +41,7 @@ exports.default = uses_js_1.default;
 
 
 //// [uses.d.ts]
+/// <reference types="pkg" preserve="true" />
 declare const _default: RequireInterface;
 export default _default;
 //// [index.d.ts]
@@ -82,6 +83,7 @@ out/index.d.ts(1,25): error TS2304: Cannot find name 'RequireInterface'.
         function getInterR(): RequireInterface;
     }
 ==== out/uses.d.ts (0 errors) ====
+    /// <reference types="pkg" preserve="true" />
     declare const _default: RequireInterface;
     export default _default;
     

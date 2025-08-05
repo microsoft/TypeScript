@@ -184,6 +184,7 @@ exports.default = Tree;
 
 
 //// [jsDeclarationsReactComponents1.d.ts]
+/// <reference path="../..react16.d.ts" preserve="true" />
 import PropTypes from "prop-types";
 declare const TabbedShowLayout: {
     ({}: {}): JSX.Element;
@@ -229,79 +230,3 @@ declare function Tree({ allowDropOnRoot }: {
     allowDropOnRoot: any;
 }): JSX.Element;
 export default Tree;
-
-
-//// [DtsFileErrors]
-
-
-out/jsDeclarationsReactComponents1.d.ts(1,23): error TS2307: Cannot find module 'prop-types' or its corresponding type declarations.
-out/jsDeclarationsReactComponents1.d.ts(3,15): error TS2503: Cannot find namespace 'JSX'.
-out/jsDeclarationsReactComponents2.d.ts(1,19): error TS2307: Cannot find module 'react' or its corresponding type declarations.
-out/jsDeclarationsReactComponents3.d.ts(10,7): error TS2503: Cannot find namespace 'JSX'.
-out/jsDeclarationsReactComponents4.d.ts(4,9): error TS2503: Cannot find namespace 'JSX'.
-out/jsDeclarationsReactComponents5.d.ts(3,5): error TS2503: Cannot find namespace 'JSX'.
-
-
-==== out/jsDeclarationsReactComponents1.d.ts (2 errors) ====
-    import PropTypes from "prop-types";
-                          ~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'prop-types' or its corresponding type declarations.
-    declare const TabbedShowLayout: {
-        ({}: {}): JSX.Element;
-                  ~~~
-!!! error TS2503: Cannot find namespace 'JSX'.
-        propTypes: {
-            version: PropTypes.Requireable<number>;
-        };
-        defaultProps: {
-            tabs: undefined;
-        };
-    };
-    export default TabbedShowLayout;
-    
-==== out/jsDeclarationsReactComponents2.d.ts (1 errors) ====
-    import React from "react";
-                      ~~~~~~~
-!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
-    /**
-     * @type {React.SFC}
-     */
-    declare const TabbedShowLayout: React.SFC;
-    export default TabbedShowLayout;
-    
-==== out/jsDeclarationsReactComponents3.d.ts (1 errors) ====
-    /**
-     * @type {{defaultProps: {tabs: string}} & ((props?: {elem: string}) => JSX.Element)}
-     */
-    declare const TabbedShowLayout: {
-        defaultProps: {
-            tabs: string;
-        };
-    } & ((props?: {
-        elem: string;
-    }) => JSX.Element);
-          ~~~
-!!! error TS2503: Cannot find namespace 'JSX'.
-    export default TabbedShowLayout;
-    
-==== out/jsDeclarationsReactComponents4.d.ts (1 errors) ====
-    declare const TabbedShowLayout: {
-        (prop: {
-            className: string;
-        }): JSX.Element;
-            ~~~
-!!! error TS2503: Cannot find namespace 'JSX'.
-        defaultProps: {
-            tabs: string;
-        };
-    };
-    export default TabbedShowLayout;
-    
-==== out/jsDeclarationsReactComponents5.d.ts (1 errors) ====
-    declare function Tree({ allowDropOnRoot }: {
-        allowDropOnRoot: any;
-    }): JSX.Element;
-        ~~~
-!!! error TS2503: Cannot find namespace 'JSX'.
-    export default Tree;
-    

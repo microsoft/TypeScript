@@ -1,10 +1,6 @@
 --- old.nodeModulesTripleSlashReferenceModeDeclarationEmit6(module=nodenext).js
 +++ new.nodeModulesTripleSlashReferenceModeDeclarationEmit6(module=nodenext).js
-@@= skipped -43, +43 lines =@@
-
-
- //// [uses.d.ts]
--/// <reference types="pkg" preserve="true" />
+@@= skipped -47, +47 lines =@@
  declare const _default: RequireInterface;
  export default _default;
  //// [index.d.ts]
@@ -48,6 +44,7 @@
 +        function getInterR(): RequireInterface;
 +    }
 +==== out/uses.d.ts (0 errors) ====
++    /// <reference types="pkg" preserve="true" />
 +    declare const _default: RequireInterface;
 +    export default _default;
 +    
