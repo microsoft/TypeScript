@@ -73,16 +73,8 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/p
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/app/dist/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/utils/dist/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces 0 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces 0 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/app/node_modules/utils 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/app/node_modules/utils 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 0 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 0 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/utils/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/utils/dist/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/utils/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/app/dist/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/app/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
@@ -271,12 +263,6 @@ watchedFiles::
 /home/src/workspaces/project/tsconfig.json: *new*
   {"pollingInterval":2000}
 
-watchedDirectories::
-/home/src/workspaces: *new*
-  {}
-/home/src/workspaces/project: *new*
-  {}
-
 watchedDirectoriesRecursive::
 /home/src/workspaces/node_modules: *new*
   {}
@@ -289,10 +275,6 @@ watchedDirectoriesRecursive::
   {}
 /home/src/workspaces/project/node_modules/@types: *new*
   {}
-  {}
-/home/src/workspaces/project/packages: *new*
-  {}
-/home/src/workspaces/project/packages/app/node_modules/utils: *new*
   {}
 
 Projects::
@@ -404,12 +386,6 @@ watchedFiles *deleted*::
 /home/src/workspaces/project/script.ts:
   {"pollingInterval":500}
 
-watchedDirectories::
-/home/src/workspaces:
-  {}
-/home/src/workspaces/project:
-  {}
-
 watchedDirectoriesRecursive::
 /home/src/workspaces/node_modules:
   {}
@@ -422,10 +398,6 @@ watchedDirectoriesRecursive::
   {}
 /home/src/workspaces/project/node_modules/@types:
   {}
-  {}
-/home/src/workspaces/project/packages:
-  {}
-/home/src/workspaces/project/packages/app/node_modules/utils:
   {}
 
 Projects::
@@ -655,12 +627,6 @@ watchedFiles::
 /home/src/workspaces/project/tsconfig.json:
   {"pollingInterval":2000}
 
-watchedDirectories::
-/home/src/workspaces:
-  {}
-/home/src/workspaces/project:
-  {}
-
 watchedDirectoriesRecursive::
 /home/src/workspaces/node_modules:
   {}
@@ -674,11 +640,7 @@ watchedDirectoriesRecursive::
 /home/src/workspaces/project/node_modules/@types:
   {}
   {}
-/home/src/workspaces/project/packages:
-  {}
 /home/src/workspaces/project/packages/app/node_modules: *new*
-  {}
-/home/src/workspaces/project/packages/app/node_modules/utils:
   {}
 
 Projects::
