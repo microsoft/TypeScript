@@ -1,0 +1,110 @@
+//// [tests/cases/compiler/excessPropertyCheckSpreadFunctionParam.ts] ////
+
+=== excessPropertyCheckSpreadFunctionParam.ts ===
+type Params = {
+>Params : Symbol(Params, Decl(excessPropertyCheckSpreadFunctionParam.ts, 0, 0))
+
+    a?: any;
+>a : Symbol(a, Decl(excessPropertyCheckSpreadFunctionParam.ts, 0, 15))
+
+    b?: any;
+>b : Symbol(b, Decl(excessPropertyCheckSpreadFunctionParam.ts, 1, 12))
+}
+  
+function f(params: Params) {
+>f : Symbol(f, Decl(excessPropertyCheckSpreadFunctionParam.ts, 3, 1))
+>params : Symbol(params, Decl(excessPropertyCheckSpreadFunctionParam.ts, 5, 11))
+>Params : Symbol(Params, Decl(excessPropertyCheckSpreadFunctionParam.ts, 0, 0))
+
+    return;
+}
+
+const objWithAllowedKeys = { a: 2 }
+>objWithAllowedKeys : Symbol(objWithAllowedKeys, Decl(excessPropertyCheckSpreadFunctionParam.ts, 9, 5))
+>a : Symbol(a, Decl(excessPropertyCheckSpreadFunctionParam.ts, 9, 28))
+
+const objWithForbiddenKeys = { c: 2 }
+>objWithForbiddenKeys : Symbol(objWithForbiddenKeys, Decl(excessPropertyCheckSpreadFunctionParam.ts, 10, 5))
+>c : Symbol(c, Decl(excessPropertyCheckSpreadFunctionParam.ts, 10, 30))
+
+const objWithNoKeys = {}
+>objWithNoKeys : Symbol(objWithNoKeys, Decl(excessPropertyCheckSpreadFunctionParam.ts, 11, 5))
+
+const a = 2;
+>a : Symbol(a, Decl(excessPropertyCheckSpreadFunctionParam.ts, 12, 5))
+
+const c = 2;
+>c : Symbol(c, Decl(excessPropertyCheckSpreadFunctionParam.ts, 13, 5))
+
+f({ ...objWithAllowedKeys })
+>f : Symbol(f, Decl(excessPropertyCheckSpreadFunctionParam.ts, 3, 1))
+>objWithAllowedKeys : Symbol(objWithAllowedKeys, Decl(excessPropertyCheckSpreadFunctionParam.ts, 9, 5))
+
+f({ ...objWithForbiddenKeys })
+>f : Symbol(f, Decl(excessPropertyCheckSpreadFunctionParam.ts, 3, 1))
+>objWithForbiddenKeys : Symbol(objWithForbiddenKeys, Decl(excessPropertyCheckSpreadFunctionParam.ts, 10, 5))
+
+f({ ...objWithAllowedKeys, ...objWithForbiddenKeys })
+>f : Symbol(f, Decl(excessPropertyCheckSpreadFunctionParam.ts, 3, 1))
+>objWithAllowedKeys : Symbol(objWithAllowedKeys, Decl(excessPropertyCheckSpreadFunctionParam.ts, 9, 5))
+>objWithForbiddenKeys : Symbol(objWithForbiddenKeys, Decl(excessPropertyCheckSpreadFunctionParam.ts, 10, 5))
+
+f({ ...{ a: 2 }, ...{ c: 2 } })
+>f : Symbol(f, Decl(excessPropertyCheckSpreadFunctionParam.ts, 3, 1))
+>a : Symbol(a, Decl(excessPropertyCheckSpreadFunctionParam.ts, 19, 8))
+>c : Symbol(c, Decl(excessPropertyCheckSpreadFunctionParam.ts, 19, 21))
+
+f({ ...{ a: 2, c: 2 } })
+>f : Symbol(f, Decl(excessPropertyCheckSpreadFunctionParam.ts, 3, 1))
+>a : Symbol(a, Decl(excessPropertyCheckSpreadFunctionParam.ts, 20, 8))
+>c : Symbol(c, Decl(excessPropertyCheckSpreadFunctionParam.ts, 20, 14))
+
+f({ ...{ c: 2 }, ...{ b: 2 } })
+>f : Symbol(f, Decl(excessPropertyCheckSpreadFunctionParam.ts, 3, 1))
+>c : Symbol(c, Decl(excessPropertyCheckSpreadFunctionParam.ts, 21, 8))
+>b : Symbol(b, Decl(excessPropertyCheckSpreadFunctionParam.ts, 21, 21))
+
+f({ ...{ a: 2 }, ...objWithForbiddenKeys })
+>f : Symbol(f, Decl(excessPropertyCheckSpreadFunctionParam.ts, 3, 1))
+>a : Symbol(a, Decl(excessPropertyCheckSpreadFunctionParam.ts, 23, 8))
+>objWithForbiddenKeys : Symbol(objWithForbiddenKeys, Decl(excessPropertyCheckSpreadFunctionParam.ts, 10, 5))
+
+f({ ...{ c: 2 }, ...objWithAllowedKeys })
+>f : Symbol(f, Decl(excessPropertyCheckSpreadFunctionParam.ts, 3, 1))
+>c : Symbol(c, Decl(excessPropertyCheckSpreadFunctionParam.ts, 25, 8))
+>objWithAllowedKeys : Symbol(objWithAllowedKeys, Decl(excessPropertyCheckSpreadFunctionParam.ts, 9, 5))
+
+f({ ...{ c: 2 }, ...objWithForbiddenKeys })
+>f : Symbol(f, Decl(excessPropertyCheckSpreadFunctionParam.ts, 3, 1))
+>c : Symbol(c, Decl(excessPropertyCheckSpreadFunctionParam.ts, 26, 8))
+>objWithForbiddenKeys : Symbol(objWithForbiddenKeys, Decl(excessPropertyCheckSpreadFunctionParam.ts, 10, 5))
+
+f({ ...{ c: 2 }, ...objWithNoKeys })
+>f : Symbol(f, Decl(excessPropertyCheckSpreadFunctionParam.ts, 3, 1))
+>c : Symbol(c, Decl(excessPropertyCheckSpreadFunctionParam.ts, 27, 8))
+>objWithNoKeys : Symbol(objWithNoKeys, Decl(excessPropertyCheckSpreadFunctionParam.ts, 11, 5))
+
+f({ ...{...{ c: 2 }, ...objWithNoKeys } })
+>f : Symbol(f, Decl(excessPropertyCheckSpreadFunctionParam.ts, 3, 1))
+>c : Symbol(c, Decl(excessPropertyCheckSpreadFunctionParam.ts, 29, 12))
+>objWithNoKeys : Symbol(objWithNoKeys, Decl(excessPropertyCheckSpreadFunctionParam.ts, 11, 5))
+
+f({ a, ...{ c: 2 } })
+>f : Symbol(f, Decl(excessPropertyCheckSpreadFunctionParam.ts, 3, 1))
+>a : Symbol(a, Decl(excessPropertyCheckSpreadFunctionParam.ts, 31, 3))
+>c : Symbol(c, Decl(excessPropertyCheckSpreadFunctionParam.ts, 31, 11))
+
+f({ a, ...{ c } })
+>f : Symbol(f, Decl(excessPropertyCheckSpreadFunctionParam.ts, 3, 1))
+>a : Symbol(a, Decl(excessPropertyCheckSpreadFunctionParam.ts, 32, 3))
+>c : Symbol(c, Decl(excessPropertyCheckSpreadFunctionParam.ts, 32, 11))
+
+f({ ...{ c }, ...objWithAllowedKeys })
+>f : Symbol(f, Decl(excessPropertyCheckSpreadFunctionParam.ts, 3, 1))
+>c : Symbol(c, Decl(excessPropertyCheckSpreadFunctionParam.ts, 33, 8))
+>objWithAllowedKeys : Symbol(objWithAllowedKeys, Decl(excessPropertyCheckSpreadFunctionParam.ts, 9, 5))
+
+
+
+
+
