@@ -417,12 +417,10 @@ TI:: [hh:mm:ss:mss] Got install request
         "include": [],
         "exclude": []
       },
-      "unresolvedImports": [],
       "projectRootPath": "/home/src/projects/project",
       "kind": "discover"
     }
 TI:: [hh:mm:ss:mss] Explicitly included types: []
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
@@ -454,7 +452,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "maxNodeModuleJsDepth": 2
       },
       "typings": [],
-      "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*
@@ -480,7 +477,6 @@ Info seq  [hh:mm:ss:mss] event:
           "maxNodeModuleJsDepth": 2
         },
         "typings": [],
-        "unresolvedImports": [],
         "kind": "action::set"
       }
     }
@@ -532,7 +528,8 @@ Projects::
 ScriptInfos::
 /home/src/Library/Caches/typescript/node_modules/node/index.d.ts *new*
     version: Text-1
-    containingProjects: 0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /home/src/projects/project/app.js (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -576,7 +573,8 @@ After request
 ScriptInfos::
 /home/src/Library/Caches/typescript/node_modules/node/index.d.ts
     version: Text-1
-    containingProjects: 0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /home/src/projects/project/app.js (Open) *changed*
     version: SVC-1-1 *changed*
     containingProjects: 1
@@ -598,14 +596,6 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/Library/Caches/typescript/node_modules/node/index.d.ts Text-1 "\ndeclare module \"net\" {\n    export type n = number;\n}\ndeclare module \"stream\" {\n    export type s = string;\n}"
 	/home/src/projects/project/app.js SVC-1-1 "// @ts-check\n\nconst net = require(\"net\");\nconst stream = require(\"s tream\");"
-
-
-	../../tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
-	../../Library/Caches/typescript/node_modules/node/index.d.ts
-	  Imported via "net" from file 'app.js'
-	app.js
-	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: [hh:mm:ss:mss] Got install request
@@ -741,20 +731,6 @@ Projects::
     projectProgramVersion: 3 *changed*
     dirty: false *changed*
 
-ScriptInfos::
-/home/src/Library/Caches/typescript/node_modules/node/index.d.ts *changed*
-    version: Text-1
-    containingProjects: 1 *changed*
-        /dev/null/inferredProject1* *new*
-/home/src/projects/project/app.js (Open)
-    version: SVC-1-1
-    containingProjects: 1
-        /dev/null/inferredProject1* *default*
-/home/src/tslibs/TS/Lib/lib.d.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
-
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -815,107 +791,6 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	/home/src/projects/project/app.js SVC-1-2 "// @ts-check\n\nconst bar = require(\"bar\");const net = require(\"net\");\nconst stream = require(\"s tream\");"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-TI:: [hh:mm:ss:mss] Got install request
-    {
-      "projectName": "/dev/null/inferredProject1*",
-      "fileNames": [
-        "/home/src/tslibs/TS/Lib/lib.d.ts",
-        "/home/src/projects/project/app.js"
-      ],
-      "compilerOptions": {
-        "target": 1,
-        "jsx": 1,
-        "allowNonTsExtensions": true,
-        "allowJs": true,
-        "noEmitForJsFiles": true,
-        "maxNodeModuleJsDepth": 2
-      },
-      "typeAcquisition": {
-        "enable": true,
-        "include": [],
-        "exclude": []
-      },
-      "unresolvedImports": [
-        "bar",
-        "s tream"
-      ],
-      "projectRootPath": "/home/src/projects/project",
-      "kind": "discover"
-    }
-TI:: [hh:mm:ss:mss] Explicitly included types: []
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["bar","s tream"]
-TI:: [hh:mm:ss:mss] Finished typings discovery:
-    {
-      "cachedTypingPaths": [],
-      "newTypingNames": [
-        "bar",
-        "s tream"
-      ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
-    }
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "kind": "action::watchTypingLocations",
-      "projectName": "/dev/null/inferredProject1*"
-    }
-TI:: [hh:mm:ss:mss] Installing typings ["bar","s tream"]
-TI:: [hh:mm:ss:mss] 'bar':: Entry for package 'bar' does not exist in local types registry - skipping...
-TI:: [hh:mm:ss:mss] 's tream':: 's tream' is in missingTypingsSet - skipping...
-TI:: [hh:mm:ss:mss] All typings are known to be missing or invalid - no need to install more typings
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "projectName": "/dev/null/inferredProject1*",
-      "typeAcquisition": {
-        "enable": true,
-        "include": [],
-        "exclude": []
-      },
-      "compilerOptions": {
-        "target": 1,
-        "jsx": 1,
-        "allowNonTsExtensions": true,
-        "allowJs": true,
-        "noEmitForJsFiles": true,
-        "maxNodeModuleJsDepth": 2
-      },
-      "typings": [],
-      "unresolvedImports": [
-        "bar",
-        "s tream"
-      ],
-      "kind": "action::set"
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "setTypings",
-      "body": {
-        "projectName": "/dev/null/inferredProject1*",
-        "typeAcquisition": {
-          "enable": true,
-          "include": [],
-          "exclude": []
-        },
-        "compilerOptions": {
-          "target": 1,
-          "jsx": 1,
-          "allowNonTsExtensions": true,
-          "allowJs": true,
-          "noEmitForJsFiles": true,
-          "maxNodeModuleJsDepth": 2
-        },
-        "typings": [],
-        "unresolvedImports": [
-          "bar",
-          "s tream"
-        ],
-        "kind": "action::set"
-      }
-    }
 After program update
 
 Projects::

@@ -8078,6 +8078,8 @@ export interface ResolvedModuleWithFailedLookupLocations {
      * have been resolvable under different module resolution settings.
      */
     alternateResult?: string;
+    /** @internal */
+    globalCacheResolution?: ResolvedModuleWithFailedLookupLocations | false;
 }
 
 export interface ResolvedTypeReferenceDirective {
