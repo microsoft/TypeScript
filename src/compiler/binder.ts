@@ -1014,6 +1014,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             const saveExceptionTarget = currentExceptionTarget;
             const saveActiveLabelList = activeLabelList;
             const saveHasExplicitReturn = hasExplicitReturn;
+            const saveSeenThisKeyword = seenThisKeyword;
             const isImmediatelyInvoked = (
                 containerFlags & ContainerFlags.IsFunctionExpression &&
                 !hasSyntacticModifier(node, ModifierFlags.Async) &&
@@ -1036,19 +1037,22 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             currentContinueTarget = undefined;
             activeLabelList = undefined;
             hasExplicitReturn = false;
+            seenThisKeyword = false;
             bindChildren(node);
-            // Reset all reachability check related flags on node (for incremental scenarios)
-            node.flags &= ~NodeFlags.ReachabilityAndEmitFlags;
+            // Reset all reachability check related flags and contains this on node (for incremental scenarios)
+            node.flags &= ~(NodeFlags.ReachabilityAndEmitFlags | NodeFlags.ContainsThis);
             if (!(currentFlow.flags & FlowFlags.Unreachable) && containerFlags & ContainerFlags.IsFunctionLike && nodeIsPresent((node as FunctionLikeDeclaration | ClassStaticBlockDeclaration).body)) {
                 node.flags |= NodeFlags.HasImplicitReturn;
                 if (hasExplicitReturn) node.flags |= NodeFlags.HasExplicitReturn;
                 (node as FunctionLikeDeclaration | ClassStaticBlockDeclaration).endFlowNode = currentFlow;
             }
+            if (seenThisKeyword) {
+                node.flags |= NodeFlags.ContainsThis;    
+            }
             if (node.kind === SyntaxKind.SourceFile) {
                 node.flags |= emitFlags;
                 (node as SourceFile).endFlowNode = currentFlow;
             }
-
             if (currentReturnTarget) {
                 addAntecedent(currentReturnTarget, currentFlow);
                 currentFlow = finishFlowLabel(currentReturnTarget);
@@ -1065,12 +1069,15 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             currentExceptionTarget = saveExceptionTarget;
             activeLabelList = saveActiveLabelList;
             hasExplicitReturn = saveHasExplicitReturn;
+            seenThisKeyword = isImmediatelyInvoked ? saveSeenThisKeyword || seenThisKeyword : saveSeenThisKeyword;
         }
         else if (containerFlags & ContainerFlags.IsInterface) {
+            const saveSeenThisKeyword = seenThisKeyword;
             seenThisKeyword = false;
             bindChildren(node);
             Debug.assertNotNode(node, isIdentifier); // ContainsThis cannot overlap with HasExtendedUnicodeEscape on Identifier
             node.flags = seenThisKeyword ? node.flags | NodeFlags.ContainsThis : node.flags & ~NodeFlags.ContainsThis;
+            seenThisKeyword = saveSeenThisKeyword;
         }
         else {
             bindChildren(node);
@@ -2873,6 +2880,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 }
                 // falls through
             case SyntaxKind.ThisKeyword:
+                if (node.kind === SyntaxKind.ThisKeyword) {
+                    seenThisKeyword = true;
+                }
                 // TODO: Why use `isExpression` here? both Identifier and ThisKeyword are expressions.
                 if (currentFlow && (isExpression(node) || parent.kind === SyntaxKind.ShorthandPropertyAssignment)) {
                     (node as Identifier | ThisExpression).flowNode = currentFlow;
@@ -3941,6 +3951,8 @@ export function getContainerFlags(node: Node): ContainerFlags {
             // falls through
         case SyntaxKind.Constructor:
         case SyntaxKind.FunctionDeclaration:
+        case SyntaxKind.ClassStaticBlockDeclaration:
+            return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike;
         case SyntaxKind.MethodSignature:
         case SyntaxKind.CallSignature:
         case SyntaxKind.JSDocSignature:
@@ -3948,8 +3960,7 @@ export function getContainerFlags(node: Node): ContainerFlags {
         case SyntaxKind.FunctionType:
         case SyntaxKind.ConstructSignature:
         case SyntaxKind.ConstructorType:
-        case SyntaxKind.ClassStaticBlockDeclaration:
-            return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike;
+            return ContainerFlags.IsContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike;
 
         case SyntaxKind.JSDocImportTag:
             // treat as a container to prevent using an enclosing effective host, ensuring import bindings are scoped correctly

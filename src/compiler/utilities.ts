@@ -2864,19 +2864,24 @@ export function forEachReturnStatement<T>(body: Block | Statement, visitor: (stm
     }
 }
 
+// Warning: This has the same semantics as the forEach family of functions,
+//          in that traversal terminates in the event that 'visitor' supplies a truthy value.
 /** @internal */
-export function forEachYieldExpression(body: Block, visitor: (expr: YieldExpression) => void): void {
+export function forEachYieldExpression<T>(body: Block, visitor: (expr: YieldExpression) => T): T | undefined {
     return traverse(body);
 
-    function traverse(node: Node): void {
+    function traverse(node: Node): T | undefined {
         switch (node.kind) {
             case SyntaxKind.YieldExpression:
-                visitor(node as YieldExpression);
-                const operand = (node as YieldExpression).expression;
-                if (operand) {
-                    traverse(operand);
+                const value = visitor(node as YieldExpression);
+                if (value) {
+                    return value;
                 }
-                return;
+                const operand = (node as YieldExpression).expression;
+                if (!operand) {
+                    return;
+                }
+                return traverse(operand);
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.ModuleDeclaration:
@@ -2889,14 +2894,13 @@ export function forEachYieldExpression(body: Block, visitor: (expr: YieldExpress
                     if (node.name && node.name.kind === SyntaxKind.ComputedPropertyName) {
                         // Note that we will not include methods/accessors of a class because they would require
                         // first descending into the class. This is by design.
-                        traverse(node.name.expression);
-                        return;
+                        return traverse(node.name.expression);;
                     }
                 }
                 else if (!isPartOfTypeNode(node)) {
                     // This is the general case, which should include mostly expressions and statements.
                     // Also includes NodeArrays.
-                    forEachChild(node, traverse);
+                    return forEachChild(node, traverse);
                 }
         }
     }
@@ -10825,7 +10829,7 @@ export function hasContextSensitiveParameters(node: FunctionLikeDeclaration): bo
             // an implicit 'this' parameter which is subject to contextual typing.
             const parameter = firstOrUndefined(node.parameters);
             if (!(parameter && parameterIsThisKeyword(parameter))) {
-                return true;
+                return !!(node.flags & NodeFlags.ContainsThis);
             }
         }
     }

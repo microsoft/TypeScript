@@ -117,8 +117,8 @@ export const Nothing2: Strategy<State> = strategy("Nothing", function*(state: St
 export const Nothing3: Strategy<State> = strategy("Nothing", function* (state: State) {
 >Nothing3 : Strategy<State>
 >         : ^^^^^^^^^^^^^^^
->strategy("Nothing", function* (state: State) {    yield ;    return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.}) : (a: State) => IterableIterator<State, void>
->                                                                                                                                                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>strategy("Nothing", function* (state: State) {    yield ;    return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.}) : (a: any) => IterableIterator<any, void>
+>                                                                                                                                                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined, void>) => (a: T) => IterableIterator<T | undefined, void>
 >         : ^ ^^^^^^^^^              ^^         ^^      ^^   ^^                                               ^^^^^                                               
 >"Nothing" : "Nothing"
