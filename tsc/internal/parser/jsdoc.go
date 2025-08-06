@@ -83,9 +83,7 @@ func (p *Parser) parseJSDocTypeExpression(mayOmitBraces bool) *ast.Node {
 		p.parseExpectedJSDoc(ast.KindCloseBraceToken)
 	}
 
-	result := p.factory.NewJSDocTypeExpression(t)
-	p.finishNode(result, pos)
-	return result
+	return p.finishNode(p.factory.NewJSDocTypeExpression(t), pos)
 }
 
 func (p *Parser) parseJSDocNameReference() *ast.Node {
@@ -96,16 +94,13 @@ func (p *Parser) parseJSDocNameReference() *ast.Node {
 	for p.token == ast.KindPrivateIdentifier {
 		p.scanner.ReScanHashToken() // rescan #id as # id
 		p.nextTokenJSDoc()          // then skip the #
-		entityName = p.factory.NewQualifiedName(entityName, p.parseIdentifier())
-		p.finishNode(entityName, p2)
+		entityName = p.finishNode(p.factory.NewQualifiedName(entityName, p.parseIdentifier()), p2)
 	}
 	if hasBrace {
 		p.parseExpectedJSDoc(ast.KindCloseBraceToken)
 	}
 
-	result := p.factory.NewJSDocNameReference(entityName)
-	p.finishNode(result, pos)
-	return result
+	return p.finishNode(p.factory.NewJSDocNameReference(entityName), pos)
 }
 
 // Pass end=-1 to parse the text to the end
@@ -258,8 +253,7 @@ loop:
 				if linkEnd == start {
 					comments = removeLeadingNewlines(comments)
 				}
-				jsdocText := p.factory.NewJSDocText(p.stringSlicePool.Clone(comments))
-				p.finishNodeWithEnd(jsdocText, linkEnd, commentEnd)
+				jsdocText := p.finishNodeWithEnd(p.factory.NewJSDocText(p.stringSlicePool.Clone(comments)), linkEnd, commentEnd)
 				commentParts = append(commentParts, jsdocText, link)
 				comments = comments[:0]
 				linkEnd = p.scanner.TokenEnd()
@@ -287,8 +281,7 @@ loop:
 
 	if len(comments) > 0 {
 		comments[len(comments)-1] = strings.TrimRightFunc(comments[len(comments)-1], unicode.IsSpace)
-		jsdocText := p.factory.NewJSDocText(p.stringSlicePool.Clone(comments))
-		p.finishNodeWithEnd(jsdocText, linkEnd, commentsPos)
+		jsdocText := p.finishNodeWithEnd(p.factory.NewJSDocText(p.stringSlicePool.Clone(comments)), linkEnd, commentsPos)
 		commentParts = append(commentParts, jsdocText)
 	}
 
@@ -305,8 +298,7 @@ loop:
 		p.newNodeList(core.NewTextRange(start, commentsPos), commentParts),
 		tagsNodeList,
 	)
-	p.finishNodeWithEnd(jsdocComment, fullStart, end)
-	return jsdocComment
+	return p.finishNodeWithEnd(jsdocComment, fullStart, end)
 }
 
 func removeLeadingNewlines(comments []string) []string {
@@ -532,14 +524,13 @@ loop:
 			linkStart := p.scanner.TokenEnd() - 1
 			link := p.parseJSDocLink(linkStart)
 			if link != nil {
-				text := p.factory.NewJSDocText(p.stringSlicePool.Clone(comments))
 				var commentStart int
 				if linkEnd > -1 {
 					commentStart = linkEnd
 				} else {
 					commentStart = commentsPos
 				}
-				p.finishNodeWithEnd(text, commentStart, commentEnd)
+				text := p.finishNodeWithEnd(p.factory.NewJSDocText(p.stringSlicePool.Clone(comments)), commentStart, commentEnd)
 				parts = append(parts, text)
 				parts = append(parts, link)
 				comments = comments[:0]
@@ -593,8 +584,7 @@ loop:
 		} else {
 			commentStart = commentsPos
 		}
-		text := p.factory.NewJSDocText(p.stringSlicePool.Clone(comments))
-		p.finishNode(text, commentStart)
+		text := p.finishNode(p.factory.NewJSDocText(p.stringSlicePool.Clone(comments)), commentStart)
 		parts = append(parts, text)
 	}
 
@@ -631,8 +621,7 @@ func (p *Parser) parseJSDocLink(start int) *ast.Node {
 	default:
 		create = p.factory.NewJSDocLinkPlain(name, text)
 	}
-	p.finishNodeWithEnd(create, start, p.scanner.TokenEnd())
-	return create
+	return p.finishNodeWithEnd(create, start, p.scanner.TokenEnd())
 }
 
 func (p *Parser) parseJSDocLinkName() *ast.Node {
@@ -647,15 +636,13 @@ func (p *Parser) parseJSDocLinkName() *ast.Node {
 			} else {
 				right = p.parseIdentifierName()
 			}
-			name = p.factory.NewQualifiedName(name, right)
-			p.finishNode(name, pos)
+			name = p.finishNode(p.factory.NewQualifiedName(name, right), pos)
 		}
 
 		for p.token == ast.KindPrivateIdentifier {
 			p.scanner.ReScanHashToken()
 			p.nextTokenJSDoc()
-			name = p.factory.NewQualifiedName(name, p.parseIdentifier())
-			p.finishNode(name, pos)
+			name = p.finishNode(p.factory.NewQualifiedName(name, p.parseIdentifier()), pos)
 		}
 		return name
 	}
@@ -678,9 +665,7 @@ func isJSDocLinkTag(kind string) bool {
 }
 
 func (p *Parser) parseUnknownTag(start int, tagName *ast.IdentifierNode, indent int, indentText string) *ast.Node {
-	tag := p.factory.NewJSDocUnknownTag(tagName, p.parseTrailingTagComments(start, p.nodePos(), indent, indentText))
-	p.finishNode(tag, start)
-	return tag
+	return p.finishNode(p.factory.NewJSDocUnknownTag(tagName, p.parseTrailingTagComments(start, p.nodePos(), indent, indentText)), start)
 }
 
 func (p *Parser) tryParseTypeExpression() *ast.Node {
@@ -757,8 +742,7 @@ func (p *Parser) parseParameterOrPropertyTag(start int, tagName *ast.IdentifierN
 	} else {
 		result = p.factory.NewJSDocParameterTag(tagName, name, isBracketed, typeExpression, isNameFirst, comment)
 	}
-	p.finishNode(result, start)
-	return result
+	return p.finishNode(result, start)
 }
 
 func (p *Parser) parseNestedTypeLiteral(typeExpression *ast.Node, name *ast.EntityName, target propertyLikeParse, indent int) *ast.Node {
@@ -779,11 +763,8 @@ func (p *Parser) parseNestedTypeLiteral(typeExpression *ast.Node, name *ast.Enti
 			}
 		}
 		if children != nil {
-			literal := p.factory.NewJSDocTypeLiteral(children, typeExpression.Type().Kind == ast.KindArrayType)
-			p.finishNode(literal, pos)
-			result := p.factory.NewJSDocTypeExpression(literal)
-			p.finishNode(result, pos)
-			return result
+			literal := p.finishNode(p.factory.NewJSDocTypeLiteral(children, typeExpression.Type().Kind == ast.KindArrayType), pos)
+			return p.finishNode(p.factory.NewJSDocTypeExpression(literal), pos)
 		}
 	}
 	return nil
@@ -795,9 +776,7 @@ func (p *Parser) parseReturnTag(previousTags []*ast.Node, start int, tagName *as
 	}
 
 	typeExpression := p.tryParseTypeExpression()
-	result := p.factory.NewJSDocReturnTag(tagName, typeExpression, p.parseTrailingTagComments(start, p.nodePos(), indent, indentText))
-	p.finishNode(result, start)
-	return result
+	return p.finishNode(p.factory.NewJSDocReturnTag(tagName, typeExpression, p.parseTrailingTagComments(start, p.nodePos(), indent, indentText)), start)
 }
 
 // pass indent=-1 to skip parsing trailing comments (as when a type tag is nested in a typedef)
@@ -811,9 +790,7 @@ func (p *Parser) parseTypeTag(previousTags []*ast.Node, start int, tagName *ast.
 	if indent != -1 {
 		comments = p.parseTrailingTagComments(start, p.nodePos(), indent, indentText)
 	}
-	result := p.factory.NewJSDocTypeTag(tagName, typeExpression, comments)
-	p.finishNode(result, start)
-	return result
+	return p.finishNode(p.factory.NewJSDocTypeTag(tagName, typeExpression, comments), start)
 }
 
 func (p *Parser) parseSeeTag(start int, tagName *ast.IdentifierNode, indent int, indentText string) *ast.Node {
@@ -825,31 +802,23 @@ func (p *Parser) parseSeeTag(start int, tagName *ast.IdentifierNode, indent int,
 		nameExpression = p.parseJSDocNameReference()
 	}
 	comments := p.parseTrailingTagComments(start, p.nodePos(), indent, indentText)
-	result := p.factory.NewJSDocSeeTag(tagName, nameExpression, comments)
-	p.finishNode(result, start)
-	return result
+	return p.finishNode(p.factory.NewJSDocSeeTag(tagName, nameExpression, comments), start)
 }
 
 func (p *Parser) parseImplementsTag(start int, tagName *ast.IdentifierNode, margin int, indentText string) *ast.Node {
 	className := p.parseExpressionWithTypeArgumentsForAugments()
-	result := p.factory.NewJSDocImplementsTag(tagName, className, p.parseTrailingTagComments(start, p.nodePos(), margin, indentText))
-	p.finishNode(result, start)
-	return result
+	return p.finishNode(p.factory.NewJSDocImplementsTag(tagName, className, p.parseTrailingTagComments(start, p.nodePos(), margin, indentText)), start)
 }
 
 func (p *Parser) parseAugmentsTag(start int, tagName *ast.IdentifierNode, margin int, indentText string) *ast.Node {
 	className := p.parseExpressionWithTypeArgumentsForAugments()
-	result := p.factory.NewJSDocAugmentsTag(tagName, className, p.parseTrailingTagComments(start, p.nodePos(), margin, indentText))
-	p.finishNode(result, start)
-	return result
+	return p.finishNode(p.factory.NewJSDocAugmentsTag(tagName, className, p.parseTrailingTagComments(start, p.nodePos(), margin, indentText)), start)
 }
 
 func (p *Parser) parseSatisfiesTag(start int, tagName *ast.IdentifierNode, margin int, indentText string) *ast.Node {
 	typeExpression := p.parseJSDocTypeExpression(false)
 	comments := p.parseTrailingTagComments(start, p.nodePos(), margin, indentText)
-	result := p.factory.NewJSDocSatisfiesTag(tagName, typeExpression, comments)
-	p.finishNode(result, start)
-	return result
+	return p.finishNode(p.factory.NewJSDocSatisfiesTag(tagName, typeExpression, comments), start)
 }
 
 func (p *Parser) parseImportTag(start int, tagName *ast.IdentifierNode, margin int, indentText string) *ast.Node {
@@ -865,9 +834,7 @@ func (p *Parser) parseImportTag(start int, tagName *ast.IdentifierNode, margin i
 	attributes := p.tryParseImportAttributes()
 
 	comments := p.parseTrailingTagComments(start, p.nodePos(), margin, indentText)
-	result := p.factory.NewJSDocImportTag(tagName, importClause, moduleSpecifier, attributes, comments)
-	p.finishNode(result, start)
-	return result
+	return p.finishNode(p.factory.NewJSDocImportTag(tagName, importClause, moduleSpecifier, attributes, comments), start)
 }
 
 func (p *Parser) parseExpressionWithTypeArgumentsForAugments() *ast.Node {
@@ -877,14 +844,12 @@ func (p *Parser) parseExpressionWithTypeArgumentsForAugments() *ast.Node {
 	p.scanner.SetSkipJSDocLeadingAsterisks(true)
 	typeArguments := p.parseTypeArguments()
 	p.scanner.SetSkipJSDocLeadingAsterisks(false)
-	node := p.factory.NewExpressionWithTypeArguments(expression, typeArguments)
-	res := node
-	p.finishNode(node, pos)
+	node := p.finishNode(p.factory.NewExpressionWithTypeArguments(expression, typeArguments), pos)
 	if usedBrace {
 		p.skipWhitespace()
 		p.parseExpected(ast.KindCloseBraceToken)
 	}
-	return res
+	return node
 }
 
 func (p *Parser) parsePropertyAccessEntityNameExpression() *ast.Node {
@@ -892,24 +857,20 @@ func (p *Parser) parsePropertyAccessEntityNameExpression() *ast.Node {
 	node := p.parseJSDocIdentifierName(nil)
 	for p.parseOptional(ast.KindDotToken) {
 		name := p.parseJSDocIdentifierName(nil)
-		node = p.factory.NewPropertyAccessExpression(node, nil, name, ast.NodeFlagsNone)
-		p.finishNode(node, pos)
+		node = p.finishNode(p.factory.NewPropertyAccessExpression(node, nil, name, ast.NodeFlagsNone), pos)
 	}
 	return node
 }
 
 func (p *Parser) parseSimpleTag(start int, createTag func(tagName *ast.IdentifierNode, comment *ast.NodeList) *ast.Node, tagName *ast.IdentifierNode, margin int, indentText string) *ast.Node {
-	tag := createTag(tagName, p.parseTrailingTagComments(start, p.nodePos(), margin, indentText))
-	p.finishNode(tag, start)
-	return tag
+	return p.finishNode(createTag(tagName, p.parseTrailingTagComments(start, p.nodePos(), margin, indentText)), start)
 }
 
 func (p *Parser) parseThisTag(start int, tagName *ast.IdentifierNode, margin int, indentText string) *ast.Node {
 	typeExpression := p.parseJSDocTypeExpression(true)
 	p.skipWhitespace()
 	result := p.factory.NewJSDocThisTag(tagName, typeExpression, p.parseTrailingTagComments(start, p.nodePos(), margin, indentText))
-	p.finishNode(result, start)
-	return result
+	return p.finishNode(result, start)
 }
 
 func (p *Parser) parseTypedefTag(start int, tagName *ast.IdentifierNode, indent int, indentText string) *ast.Node {
@@ -957,8 +918,7 @@ func (p *Parser) parseTypedefTag(start int, tagName *ast.IdentifierNode, indent 
 			if childTypeTag != nil && childTypeTag.TypeExpression != nil && !isObjectOrObjectArrayTypeReference(childTypeTag.TypeExpression.Type()) {
 				typeExpression = childTypeTag.TypeExpression
 			} else {
-				p.finishNode(jsdocTypeLiteral, start)
-				typeExpression = jsdocTypeLiteral
+				typeExpression = p.finishNode(jsdocTypeLiteral, start)
 			}
 		}
 	}
@@ -982,8 +942,7 @@ func (p *Parser) parseTypedefTag(start int, tagName *ast.IdentifierNode, indent 
 		comment = p.parseTrailingTagComments(start, end, indent, indentText)
 	}
 
-	typedefTag := p.factory.NewJSDocTypedefTag(tagName, typeExpression, fullName, comment)
-	p.finishNodeWithEnd(typedefTag, start, end)
+	typedefTag := p.finishNodeWithEnd(p.factory.NewJSDocTypedefTag(tagName, typeExpression, fullName, comment), start, end)
 	if typeExpression != nil {
 		typeExpression.Parent = typedefTag // forcibly overwrite parent potentially set by inner type expression parse
 	}
@@ -1023,9 +982,7 @@ func (p *Parser) parseJSDocSignature(start int, indent int) *ast.Node {
 	if returnTag == nil {
 		p.rewind(state)
 	}
-	result := p.factory.NewJSDocSignature(nil, parameters, returnTag)
-	p.finishNode(result, start)
-	return result
+	return p.finishNode(p.factory.NewJSDocSignature(nil, parameters, returnTag), start)
 }
 
 func (p *Parser) parseCallbackTag(start int, tagName *ast.IdentifierNode, indent int, indentText string) *ast.Node {
@@ -1042,9 +999,7 @@ func (p *Parser) parseCallbackTag(start int, tagName *ast.IdentifierNode, indent
 	} else {
 		end = typeExpression.End()
 	}
-	result := p.factory.NewJSDocCallbackTag(tagName, typeExpression, fullName, comment)
-	p.finishNodeWithEnd(result, start, end)
-	return result
+	return p.finishNodeWithEnd(p.factory.NewJSDocCallbackTag(tagName, typeExpression, fullName, comment), start, end)
 }
 
 func (p *Parser) parseOverloadTag(start int, tagName *ast.IdentifierNode, indent int, indentText string) *ast.Node {
@@ -1060,9 +1015,7 @@ func (p *Parser) parseOverloadTag(start int, tagName *ast.IdentifierNode, indent
 	} else {
 		end = typeExpression.End()
 	}
-	result := p.factory.NewJSDocOverloadTag(tagName, typeExpression, comment)
-	p.finishNodeWithEnd(result, start, end)
-	return result
+	return p.finishNodeWithEnd(p.factory.NewJSDocOverloadTag(tagName, typeExpression, comment), start, end)
 }
 
 func textsEqual(a *ast.EntityName, b *ast.EntityName) bool {
@@ -1168,9 +1121,7 @@ func (p *Parser) parseTemplateTagTypeParameter() *ast.Node {
 	if ast.NodeIsMissing(name) {
 		return nil
 	}
-	result := p.factory.NewTypeParameterDeclaration(modifiers, name, nil /*constraint*/, defaultType)
-	p.finishNode(result, typeParameterPos)
-	return result
+	return p.finishNode(p.factory.NewTypeParameterDeclaration(modifiers, name, nil /*constraint*/, defaultType), typeParameterPos)
 }
 
 func (p *Parser) parseTemplateTagTypeParameters() *ast.TypeParameterList {
@@ -1204,8 +1155,7 @@ func (p *Parser) parseTemplateTag(start int, tagName *ast.IdentifierNode, indent
 	}
 	typeParameters := p.parseTemplateTagTypeParameters()
 	result := p.factory.NewJSDocTemplateTag(tagName, constraint, typeParameters, p.parseTrailingTagComments(start, p.nodePos(), indent, indentText))
-	p.finishNode(result, start)
-	return result
+	return p.finishNode(result, start)
 }
 
 func (p *Parser) parseOptionalJsdoc(t ast.Kind) bool {
@@ -1230,8 +1180,7 @@ func (p *Parser) parseJSDocEntityName() *ast.EntityName {
 			p.parseExpected(ast.KindCloseBracketToken)
 		}
 		pos := entity.Pos()
-		entity = p.factory.NewQualifiedName(entity, name)
-		p.finishNode(entity, pos)
+		entity = p.finishNode(p.factory.NewQualifiedName(entity, name), pos)
 	}
 	return entity
 }
@@ -1245,16 +1194,12 @@ func (p *Parser) parseJSDocIdentifierName(diagnosticMessage *diagnostics.Message
 		} else {
 			p.parseErrorAtCurrentToken(diagnostics.Identifier_expected)
 		}
-		result := p.newIdentifier("")
-		p.finishNode(result, p.nodePos())
-		return result
+		return p.finishNode(p.newIdentifier(""), p.nodePos())
 	}
 	pos := p.scanner.TokenStart()
 	end := p.scanner.TokenEnd()
 	text := p.scanner.TokenValue()
 	p.internIdentifier(text)
 	p.nextTokenJSDoc()
-	result := p.newIdentifier(text)
-	p.finishNodeWithEnd(result, pos, end)
-	return result
+	return p.finishNodeWithEnd(p.newIdentifier(text), pos, end)
 }
