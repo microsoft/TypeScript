@@ -68,10 +68,11 @@ indexSignatures1.ts(277,7): error TS2322: Type '"&"' is not assignable to type '
 indexSignatures1.ts(281,35): error TS2353: Object literal may only specify known properties, and ''someKey'' does not exist in type 'PseudoDeclaration'.
 indexSignatures1.ts(286,7): error TS2322: Type '"two"' is not assignable to type '`/${string}`'.
 indexSignatures1.ts(289,7): error TS2322: Type 'number' is not assignable to type 'PathsObject'.
+indexSignatures1.ts(311,43): error TS2353: Object literal may only specify known properties, and '[sym]' does not exist in type '{ [key: string]: string; }'.
 indexSignatures1.ts(312,43): error TS2353: Object literal may only specify known properties, and '[sym]' does not exist in type '{ [key: number]: string; }'.
 
 
-==== indexSignatures1.ts (52 errors) ====
+==== indexSignatures1.ts (53 errors) ====
     // Symbol index signature checking
     
     const sym = Symbol();
@@ -503,7 +504,9 @@ indexSignatures1.ts(312,43): error TS2353: Object literal may only specify known
     const aa: AA = { [sym]: '123' };
     
     const obj1: { [key: symbol]: string } = { [sym]: 'hello '};
-    const obj2: { [key: string]: string } = { [sym]: 'hello '};  // Permitted for backwards compatibility
+    const obj2: { [key: string]: string } = { [sym]: 'hello '};  // Error
+                                              ~~~~~
+!!! error TS2353: Object literal may only specify known properties, and '[sym]' does not exist in type '{ [key: string]: string; }'.
     const obj3: { [key: number]: string } = { [sym]: 'hello '};  // Error
                                               ~~~~~
 !!! error TS2353: Object literal may only specify known properties, and '[sym]' does not exist in type '{ [key: number]: string; }'.
