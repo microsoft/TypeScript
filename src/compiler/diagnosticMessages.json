@@ -8520,7 +8520,7 @@
         "category": "Error",
         "code": 18061
     },
-    "Comparison of string literals is not allowed.": {
+    "Cannot compare strings": {
         "category": "Error",
         "code": 18062
     }

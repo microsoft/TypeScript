@@ -40792,6 +40792,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (checkForDisallowedESSymbolOperand(operator)) {
                     leftType = getBaseTypeOfLiteralTypeForComparison(checkNonNullType(leftType, left));
                     rightType = getBaseTypeOfLiteralTypeForComparison(checkNonNullType(rightType, right));
+                    if (leftType.flags === TypeFlags.String && rightType.flags === TypeFlags.String) {
+                        error(errorNode, Diagnostics.Cannot_compare_strings);
+                    }
                     reportOperatorErrorUnless((left, right) => {
                         if (isTypeAny(left) || isTypeAny(right)) {
                             return true;
