@@ -40405,9 +40405,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 setLastResult(state, checkDestructuringAssignment(node.left, checkExpression(node.right, checkMode), checkMode, node.right.kind === SyntaxKind.ThisKeyword));
                 return state;
             }
-            else if (isStringLiteral(node.left) && isStringLiteral(node.right) && operator !== SyntaxKind.EqualsToken) {
-                error(node, Diagnostics.Comparison_of_string_literals_is_not_allowed);
-            }
 
             return state;
         }
