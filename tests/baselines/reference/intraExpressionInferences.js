@@ -332,6 +332,27 @@ const distantRes = distant({
   consumer: (val) => {},
 });
 
+// https://github.com/microsoft/TypeScript/issues/62220
+
+declare function testAsConst<T, D>(arg: {
+  input: D;
+  produce: (arg: D) => T;
+  consume: (arg: T) => number;
+}): D;
+
+const testAsConstResult1 = testAsConst({
+  input: 100,
+  produce: (arg) => arg.toString(),
+  consume: (arg) => arg.length,
+} as const);
+
+// included for comparison with the above
+const testAsConstResult2 = testAsConst({
+  input: 100,
+  produce: (arg) => arg.toString(),
+  consume: (arg) => arg.length,
+});
+
 
 //// [intraExpressionInferences.js]
 "use strict";
@@ -518,6 +539,17 @@ var distantRes = distant({
     },
     consumer: function (val) { },
 });
+var testAsConstResult1 = testAsConst({
+    input: 100,
+    produce: function (arg) { return arg.toString(); },
+    consume: function (arg) { return arg.length; },
+});
+// included for comparison with the above
+var testAsConstResult2 = testAsConst({
+    input: 100,
+    produce: function (arg) { return arg.toString(); },
+    consume: function (arg) { return arg.length; },
+});
 
 
 //// [intraExpressionInferences.d.ts]
@@ -648,3 +680,10 @@ declare function distant<T>(args: {
     consumer: (val: T) => unknown;
 }): T;
 declare const distantRes: number;
+declare function testAsConst<T, D>(arg: {
+    input: D;
+    produce: (arg: D) => T;
+    consume: (arg: T) => number;
+}): D;
+declare const testAsConstResult1: 100;
+declare const testAsConstResult2: number;

@@ -1743,3 +1743,128 @@ const distantRes = distant({
 
 });
 
+// https://github.com/microsoft/TypeScript/issues/62220
+
+declare function testAsConst<T, D>(arg: {
+>testAsConst : <T, D>(arg: { input: D; produce: (arg: D) => T; consume: (arg: T) => number; }) => D
+>            : ^ ^^ ^^   ^^                                                                  ^^^^^ 
+>arg : { input: D; produce: (arg: D) => T; consume: (arg: T) => number; }
+>    : ^^^^^^^^^ ^^^^^^^^^^^             ^^^^^^^^^^^                  ^^^
+
+  input: D;
+>input : D
+>      : ^
+
+  produce: (arg: D) => T;
+>produce : (arg: D) => T
+>        : ^   ^^ ^^^^^ 
+>arg : D
+>    : ^
+
+  consume: (arg: T) => number;
+>consume : (arg: T) => number
+>        : ^   ^^ ^^^^^      
+>arg : T
+>    : ^
+
+}): D;
+
+const testAsConstResult1 = testAsConst({
+>testAsConstResult1 : 100
+>                   : ^^^
+>testAsConst({  input: 100,  produce: (arg) => arg.toString(),  consume: (arg) => arg.length,} as const) : 100
+>                                                                                                        : ^^^
+>testAsConst : <T, D>(arg: { input: D; produce: (arg: D) => T; consume: (arg: T) => number; }) => D
+>            : ^ ^^ ^^   ^^                                                                  ^^^^^ 
+>{  input: 100,  produce: (arg) => arg.toString(),  consume: (arg) => arg.length,} as const : { readonly input: 100; readonly produce: (arg: 100) => string; readonly consume: (arg: string) => number; }
+>                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^
+>{  input: 100,  produce: (arg) => arg.toString(),  consume: (arg) => arg.length,} : { readonly input: 100; readonly produce: (arg: 100) => string; readonly consume: (arg: string) => number; }
+>                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^
+
+  input: 100,
+>input : 100
+>      : ^^^
+>100 : 100
+>    : ^^^
+
+  produce: (arg) => arg.toString(),
+>produce : (arg: 100) => string
+>        : ^   ^^^^^^^^^^^^^^^^
+>(arg) => arg.toString() : (arg: 100) => string
+>                        : ^   ^^^^^^^^^^^^^^^^
+>arg : 100
+>    : ^^^
+>arg.toString() : string
+>               : ^^^^^^
+>arg.toString : (radix?: number) => string
+>             : ^     ^^^      ^^^^^      
+>arg : 100
+>    : ^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
+
+  consume: (arg) => arg.length,
+>consume : (arg: string) => number
+>        : ^   ^^^^^^^^^^^^^^^^^^^
+>(arg) => arg.length : (arg: string) => number
+>                    : ^   ^^^^^^^^^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+>arg.length : number
+>           : ^^^^^^
+>arg : string
+>    : ^^^^^^
+>length : number
+>       : ^^^^^^
+
+} as const);
+
+// included for comparison with the above
+const testAsConstResult2 = testAsConst({
+>testAsConstResult2 : number
+>                   : ^^^^^^
+>testAsConst({  input: 100,  produce: (arg) => arg.toString(),  consume: (arg) => arg.length,}) : number
+>                                                                                               : ^^^^^^
+>testAsConst : <T, D>(arg: { input: D; produce: (arg: D) => T; consume: (arg: T) => number; }) => D
+>            : ^ ^^ ^^   ^^                                                                  ^^^^^ 
+>{  input: 100,  produce: (arg) => arg.toString(),  consume: (arg) => arg.length,} : { input: number; produce: (arg: number) => string; consume: (arg: string) => number; }
+>                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^
+
+  input: 100,
+>input : number
+>      : ^^^^^^
+>100 : 100
+>    : ^^^
+
+  produce: (arg) => arg.toString(),
+>produce : (arg: number) => string
+>        : ^   ^^^^^^^^^^^^^^^^^^^
+>(arg) => arg.toString() : (arg: number) => string
+>                        : ^   ^^^^^^^^^^^^^^^^^^^
+>arg : number
+>    : ^^^^^^
+>arg.toString() : string
+>               : ^^^^^^
+>arg.toString : (radix?: number) => string
+>             : ^     ^^^      ^^^^^      
+>arg : number
+>    : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
+
+  consume: (arg) => arg.length,
+>consume : (arg: string) => number
+>        : ^   ^^^^^^^^^^^^^^^^^^^
+>(arg) => arg.length : (arg: string) => number
+>                    : ^   ^^^^^^^^^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+>arg.length : number
+>           : ^^^^^^
+>arg : string
+>    : ^^^^^^
+>length : number
+>       : ^^^^^^
+
+});
+
