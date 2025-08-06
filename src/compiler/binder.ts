@@ -1039,7 +1039,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             hasExplicitReturn = false;
             seenThisKeyword = false;
             bindChildren(node);
-            // Reset all reachability check related flags and contains this on node (for incremental scenarios)
+            // Reset flags (for incremental scenarios)
             node.flags &= ~(NodeFlags.ReachabilityAndEmitFlags | NodeFlags.ContainsThis);
             if (!(currentFlow.flags & FlowFlags.Unreachable) && containerFlags & ContainerFlags.IsFunctionLike && nodeIsPresent((node as FunctionLikeDeclaration | ClassStaticBlockDeclaration).body)) {
                 node.flags |= NodeFlags.HasImplicitReturn;
@@ -3964,7 +3964,7 @@ export function getContainerFlags(node: Node): ContainerFlags {
 
         case SyntaxKind.JSDocImportTag:
             // treat as a container to prevent using an enclosing effective host, ensuring import bindings are scoped correctly
-            return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals;
+            return ContainerFlags.IsContainer | ContainerFlags.HasLocals;
 
         case SyntaxKind.FunctionExpression:
         case SyntaxKind.ArrowFunction:
@@ -3972,8 +3972,6 @@ export function getContainerFlags(node: Node): ContainerFlags {
 
         case SyntaxKind.ModuleBlock:
             return ContainerFlags.IsControlFlowContainer;
-        case SyntaxKind.PropertyDeclaration:
-            return (node as PropertyDeclaration).initializer ? ContainerFlags.IsControlFlowContainer : 0;
 
         case SyntaxKind.CatchClause:
         case SyntaxKind.ForStatement:
