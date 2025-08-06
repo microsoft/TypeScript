@@ -1,10 +1,9 @@
 index.js(16,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 index.js(19,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 index.js(22,12): error TS2315: Type 'Object' is not generic.
-index.js(22,18): error TS8020: JSDoc types can only be used inside documentation comments.
 
 
-==== index.js (4 errors) ====
+==== index.js (3 errors) ====
     /** @type {?} */
     export const a = null;
     
@@ -35,7 +34,5 @@ index.js(22,18): error TS8020: JSDoc types can only be used inside documentation
     /** @type {Object.<string, number>} */
                ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2315: Type 'Object' is not generic.
-                     ~
-!!! error TS8020: JSDoc types can only be used inside documentation comments.
     export const h = null;
     

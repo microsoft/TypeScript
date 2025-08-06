@@ -2,11 +2,10 @@
 +++ new.jsDeclarationsMissingTypeParameters.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
-+file.js(12,19): error TS8020: JSDoc types can only be used inside documentation comments.
 +file.js(12,20): error TS1099: Type argument list cannot be empty.
 +
 +
-+==== file.js (2 errors) ====
++==== file.js (1 errors) ====
 +    /**
 +      * @param {Array=} y desc
 +      */
@@ -19,8 +18,6 @@
 +    
 +    /**
 +     * @return {(Array.<> | null)} list of devices
-+                      ~
-+!!! error TS8020: JSDoc types can only be used inside documentation comments.
 +                       ~~
 +!!! error TS1099: Type argument list cannot be empty.
 +     */

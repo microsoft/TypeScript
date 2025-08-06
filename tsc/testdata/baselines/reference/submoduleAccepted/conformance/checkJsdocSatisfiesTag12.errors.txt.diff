@@ -3,7 +3,6 @@
 @@= skipped -0, +0 lines =@@
  /a.js(24,20): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'T1'.
 +/a.js(29,14): error TS2741: Property 'a' is missing in type '{}' but required in type 'T1'.
-+/a.js(32,21): error TS8020: JSDoc types can only be used inside documentation comments.
  /a.js(44,25): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'T2'.
 -/a.js(51,6): error TS1360: Type 'number' does not satisfy the expected type 'string'.
 -
@@ -12,11 +11,11 @@
 +/a.js(51,42): error TS1360: Type 'number' does not satisfy the expected type 'string'.
 +
 +
-+==== /a.js (5 errors) ====
++==== /a.js (4 errors) ====
      /**
       * @typedef {Object} T1
       * @property {number} a
-@@= skipped -34, +36 lines =@@
+@@= skipped -34, +35 lines =@@
       * @satisfies {T1}
       */
      const t3 = {};
@@ -26,12 +25,7 @@
      
      /**
       * @satisfies {Array.<number, number>}
-+                        ~
-+!!! error TS8020: JSDoc types can only be used inside documentation comments.
-      */
-     const t4 = [1, 2];
-     
-@@= skipped -24, +29 lines =@@
+@@= skipped -24, +27 lines =@@
      const t7 = { a: "a" };
      
      /** @satisfies {string} */ const t8 = (1);

@@ -1,5 +1,4 @@
 first.js(21,19): error TS2507: Type '{ (numberOxen: number): void; circle: (wagons: any) => any; }' is not a constructor function type.
-first.js(27,21): error TS8020: JSDoc types can only be used inside documentation comments.
 first.js(44,4): error TS2339: Property 'numberOxen' does not exist on type 'Sql'.
 first.js(47,24): error TS2507: Type '(numberEaten: number) => void' is not a constructor function type.
 generic.js(9,23): error TS2507: Type '<T>(flavour: T) => void' is not a constructor function type.
@@ -12,7 +11,7 @@ second.ts(14,25): error TS2507: Type '{ (numberOxen: number): void; circle: (wag
 second.ts(26,3): error TS2339: Property 'numberOxen' does not exist on type 'Conestoga'.
 
 
-==== first.js (4 errors) ====
+==== first.js (3 errors) ====
     /**
      * @constructor
      * @param {number} numberOxen
@@ -42,8 +41,6 @@ second.ts(26,3): error TS2339: Property 'numberOxen' does not exist on type 'Con
         }
         /**
          * @param {Array.<string>} files
-                        ~
-!!! error TS8020: JSDoc types can only be used inside documentation comments.
          * @param {"csv" | "json" | "xmlolololol"} format
          * This is not assignable, so should have a type error
          */

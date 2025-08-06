@@ -6,7 +6,6 @@
 -  Type '(files: string[], format: "csv" | "json" | "xmlolololol") => void' is not assignable to type '(supplies?: any[]) => void'.
 -    Target signature provides too few arguments. Expected 2 or more, but got 1.
 +first.js(21,19): error TS2507: Type '{ (numberOxen: number): void; circle: (wagons: any) => any; }' is not a constructor function type.
-+first.js(27,21): error TS8020: JSDoc types can only be used inside documentation comments.
 +first.js(44,4): error TS2339: Property 'numberOxen' does not exist on type 'Sql'.
  first.js(47,24): error TS2507: Type '(numberEaten: number) => void' is not a constructor function type.
 -generic.js(19,19): error TS2554: Expected 1 arguments, but got 0.
@@ -24,18 +23,12 @@
 -        Type 'Wagon[]' is not assignable to type '(typeof Wagon)[]'.
 -          Property 'circle' is missing in type 'Wagon' but required in type 'typeof Wagon'.
 -second.ts(17,15): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
--
--
--==== first.js (3 errors) ====
 +second.ts(14,25): error TS2507: Type '{ (numberOxen: number): void; circle: (wagons: any) => any; }' is not a constructor function type.
 +second.ts(26,3): error TS2339: Property 'numberOxen' does not exist on type 'Conestoga'.
-+
-+
-+==== first.js (4 errors) ====
-     /**
-      * @constructor
-      * @param {number} numberOxen
-@@= skipped -36, +33 lines =@@
+
+
+ ==== first.js (3 errors) ====
+@@= skipped -36, +32 lines =@@
      }
      // ok
      class Sql extends Wagon {
@@ -49,10 +42,7 @@
              this.foonly = 12
          }
          /**
-          * @param {Array.<string>} files
-+                        ~
-+!!! error TS8020: JSDoc types can only be used inside documentation comments.
-          * @param {"csv" | "json" | "xmlolololol"} format
+@@= skipped -13, +12 lines =@@
           * This is not assignable, so should have a type error
           */
          load(files, format) {
@@ -63,7 +53,7 @@
              if (format === "xmlolololol") {
                  throw new Error("please do not use XML. It was a joke.");
              }
-@@= skipped -30, +27 lines =@@
+@@= skipped -17, +13 lines =@@
      }
      var db = new Sql();
      db.numberOxen = db.foonly
