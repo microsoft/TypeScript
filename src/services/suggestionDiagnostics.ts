@@ -25,7 +25,6 @@ import {
     getFunctionFlags,
     hasInitializer,
     hasPropertyAccessExpressionWithName,
-    hasSyntacticModifier,
     Identifier,
     importFromModuleSpecifier,
     isAsyncFunction,
@@ -37,7 +36,6 @@ import {
     isFunctionExpression,
     isFunctionLike,
     isIdentifier,
-    isImportEqualsDeclaration,
     isPropertyAccessExpression,
     isRequireCall,
     isReturnStatement,
@@ -46,7 +44,6 @@ import {
     isVariableDeclaration,
     isVariableStatement,
     MethodDeclaration,
-    ModifierFlags,
     ModuleKind,
     Node,
     NodeFlags,
@@ -88,7 +85,6 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
     if (getAllowSyntheticDefaultImports(program.getCompilerOptions())) {
         for (const moduleSpecifier of sourceFile.imports) {
             const importNode = importFromModuleSpecifier(moduleSpecifier);
-            if (isImportEqualsDeclaration(importNode) && hasSyntacticModifier(importNode, ModifierFlags.Export)) continue;
             const name = importNameForConvertToDefaultImport(importNode);
             if (!name) continue;
             const module = program.getResolvedModuleFromModuleSpecifier(moduleSpecifier, sourceFile)?.resolvedModule;
