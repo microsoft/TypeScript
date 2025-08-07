@@ -25,44 +25,6 @@ type projectReferenceFileMapper struct {
 	realpathDtsToSource collections.SyncMap[tspath.Path, *tsoptions.SourceAndProjectReference]
 }
 
-func (mapper *projectReferenceFileMapper) init(loader *fileLoader, rootTasks []*projectReferenceParseTask) {
-	totalReferences := loader.projectReferenceParseTasks.tasksByFileName.Size() + 1
-	mapper.loader = loader
-	mapper.configToProjectReference = make(map[tspath.Path]*tsoptions.ParsedCommandLine, totalReferences)
-	mapper.referencesInConfigFile = make(map[tspath.Path][]tspath.Path, totalReferences)
-	mapper.sourceToOutput = make(map[tspath.Path]*tsoptions.OutputDtsAndProjectReference)
-	mapper.outputDtsToSource = make(map[tspath.Path]*tsoptions.SourceAndProjectReference)
-	mapper.referencesInConfigFile[mapper.opts.Config.ConfigFile.SourceFile.Path()] = loader.projectReferenceParseTasks.collect(
-		loader,
-		rootTasks,
-		func(task *projectReferenceParseTask, referencesInConfig []tspath.Path) {
-			path := loader.toPath(task.configName)
-			mapper.configToProjectReference[path] = task.resolved
-			if task.resolved == nil || mapper.opts.Config.ConfigFile == task.resolved.ConfigFile {
-				return
-			}
-			mapper.referencesInConfigFile[path] = referencesInConfig
-			for key, value := range task.resolved.SourceToOutput() {
-				mapper.sourceToOutput[key] = value
-			}
-			for key, value := range task.resolved.OutputDtsToSource() {
-				mapper.outputDtsToSource[key] = value
-			}
-			if mapper.opts.canUseProjectReferenceSource() {
-				declDir := task.resolved.CompilerOptions().DeclarationDir
-				if declDir == "" {
-					declDir = task.resolved.CompilerOptions().OutDir
-				}
-				if declDir != "" {
-					loader.dtsDirectories.Add(loader.toPath(declDir))
-				}
-			}
-		})
-	if mapper.opts.canUseProjectReferenceSource() && len(loader.projectReferenceFileMapper.outputDtsToSource) != 0 {
-		mapper.host = newProjectReferenceDtsFakingHost(loader)
-	}
-}
-
 func (mapper *projectReferenceFileMapper) getParseFileRedirect(file ast.HasFileName) string {
 	if mapper.opts.canUseProjectReferenceSource() {
 		// Map to source file from project reference

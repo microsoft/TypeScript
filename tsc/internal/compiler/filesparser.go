@@ -1,7 +1,11 @@
 package compiler
 
 import (
+	"math"
+	"sync"
+
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/module"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
@@ -120,30 +124,99 @@ func (t *parseTask) addSubTask(ref resolvedRef, isLib bool) {
 	t.subTasks = append(t.subTasks, subTask)
 }
 
-func (t *parseTask) getSubTasks() []*parseTask {
-	return t.subTasks
+type filesParser struct {
+	wg              core.WorkGroup
+	tasksByFileName collections.SyncMap[string, *queuedParseTask]
+	maxDepth        int
 }
 
-func (t *parseTask) shouldIncreaseDepth() bool {
-	return t.increaseDepth
+type queuedParseTask struct {
+	task                *parseTask
+	mu                  sync.Mutex
+	lowestDepth         int
+	fromExternalLibrary bool
 }
 
-func (t *parseTask) shouldElideOnDepth() bool {
-	return t.elideOnDepth
+func (w *filesParser) parse(loader *fileLoader, tasks []*parseTask) {
+	w.start(loader, tasks, 0, false)
+	w.wg.RunAndWait()
 }
 
-func (t *parseTask) isLoaded() bool {
-	return t.loaded
+func (w *filesParser) start(loader *fileLoader, tasks []*parseTask, depth int, isFromExternalLibrary bool) {
+	for i, task := range tasks {
+		taskIsFromExternalLibrary := isFromExternalLibrary || task.fromExternalLibrary
+		newTask := &queuedParseTask{task: task, lowestDepth: math.MaxInt}
+		loadedTask, loaded := w.tasksByFileName.LoadOrStore(task.FileName(), newTask)
+		task = loadedTask.task
+		if loaded {
+			tasks[i] = task
+			// Add in the loaded task's external-ness.
+			taskIsFromExternalLibrary = taskIsFromExternalLibrary || task.fromExternalLibrary
+		}
+
+		w.wg.Queue(func() {
+			loadedTask.mu.Lock()
+			defer loadedTask.mu.Unlock()
+
+			startSubtasks := false
+
+			currentDepth := depth
+			if task.increaseDepth {
+				currentDepth++
+			}
+			if currentDepth < loadedTask.lowestDepth {
+				// If we're seeing this task at a lower depth than before,
+				// reprocess its subtasks to ensure they are loaded.
+				loadedTask.lowestDepth = currentDepth
+				startSubtasks = true
+			}
+
+			if !task.root && taskIsFromExternalLibrary && !loadedTask.fromExternalLibrary {
+				// If we're seeing this task now as an external library,
+				// reprocess its subtasks to ensure they are also marked as external.
+				loadedTask.fromExternalLibrary = true
+				startSubtasks = true
+			}
+
+			if task.elideOnDepth && currentDepth > w.maxDepth {
+				return
+			}
+
+			if !task.loaded {
+				task.load(loader)
+			}
+
+			if startSubtasks {
+				w.start(loader, task.subTasks, loadedTask.lowestDepth, loadedTask.fromExternalLibrary)
+			}
+		})
+	}
 }
 
-func (t *parseTask) isRoot() bool {
-	return t.root
+func (w *filesParser) collect(loader *fileLoader, tasks []*parseTask, iterate func(*parseTask)) []tspath.Path {
+	// Mark all tasks we saw as external after the fact.
+	w.tasksByFileName.Range(func(key string, value *queuedParseTask) bool {
+		if value.fromExternalLibrary {
+			value.task.fromExternalLibrary = true
+		}
+		return true
+	})
+	return w.collectWorker(loader, tasks, iterate, collections.Set[*parseTask]{})
 }
 
-func (t *parseTask) isFromExternalLibrary() bool {
-	return t.fromExternalLibrary
-}
-
-func (t *parseTask) markFromExternalLibrary() {
-	t.fromExternalLibrary = true
+func (w *filesParser) collectWorker(loader *fileLoader, tasks []*parseTask, iterate func(*parseTask), seen collections.Set[*parseTask]) []tspath.Path {
+	var results []tspath.Path
+	for _, task := range tasks {
+		// ensure we only walk each task once
+		if !task.loaded || seen.Has(task) {
+			continue
+		}
+		seen.Add(task)
+		if subTasks := task.subTasks; len(subTasks) > 0 {
+			w.collectWorker(loader, subTasks, iterate, seen)
+		}
+		iterate(task)
+		results = append(results, loader.toPath(task.FileName()))
+	}
+	return results
 }
