@@ -291,6 +291,11 @@ function getKeyFromNode(exp: FunctionLikeDeclaration) {
 
 function canBeConvertedToClass(node: Node, checker: TypeChecker): boolean {
     if (isFunctionExpression(node)) {
+        // Generator functions cannot be converted to classes
+        if (getFunctionFlags(node) & FunctionFlags.Generator) {
+            return false;
+        }
+
         if (isVariableDeclaration(node.parent) && node.symbol.members?.size) {
             return true;
         }
@@ -300,6 +305,11 @@ function canBeConvertedToClass(node: Node, checker: TypeChecker): boolean {
     }
 
     if (isFunctionDeclaration(node)) {
+        // Generator functions cannot be converted to classes
+        if (getFunctionFlags(node) & FunctionFlags.Generator) {
+            return false;
+        }
+
         return !!node.symbol.members?.size;
     }
 
