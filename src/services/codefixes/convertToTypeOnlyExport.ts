@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     addToSeen,
     CodeFixContextBase,
     contains,
@@ -17,12 +22,7 @@ import {
     textChanges,
     TextSpan,
     tryCast,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const errorCodes = [Diagnostics.Re_exporting_a_type_when_0_is_enabled_requires_using_export_type.code];
 const fixId = "convertToTypeOnlyExport";
@@ -36,7 +36,7 @@ registerCodeFix({
     },
     fixIds: [fixId],
     getAllCodeActions: function getAllCodeActionsToConvertToTypeOnlyExport(context) {
-        const fixedExportDeclarations = new Map<number, true>();
+        const fixedExportDeclarations = new Set<number>();
         return codeFixAll(context, errorCodes, (changes, diag) => {
             const exportSpecifier = getExportSpecifierForDiagnosticSpan(diag, context.sourceFile);
             if (exportSpecifier && addToSeen(fixedExportDeclarations, getNodeId(exportSpecifier.parent.parent))) {

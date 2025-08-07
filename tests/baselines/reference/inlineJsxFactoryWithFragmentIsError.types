@@ -41,7 +41,7 @@ import * as React from "./renderer";
 /** @jsx dom */
 import { dom } from "./renderer";
 >dom : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 
 <><h></h></>
 ><><h></h></> : any

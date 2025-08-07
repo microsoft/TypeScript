@@ -67,22 +67,22 @@ module M {
             v.subscribe(f);
 >v.subscribe(f) : any
 >v.subscribe : (callback: (newValue: A<T>) => void) => any
->            : ^        ^^^        ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^        ^^^        ^^^^^^^^^^^    ^^^^^   
 >v : I<A<T>>
 >  : ^^^^^^^
 >subscribe : (callback: (newValue: A<T>) => void) => any
->          : ^        ^^^        ^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^        ^^^^^^^^^^^    ^^^^^   
 >f : (newValue: A<T>) => void
 >  : ^        ^^    ^^^^^^^^^
 
             v.subscribe((newValue: A<T>) => { });
 >v.subscribe((newValue: A<T>) => { }) : any
 >v.subscribe : (callback: (newValue: A<T>) => void) => any
->            : ^        ^^^        ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^        ^^^        ^^^^^^^^^^^    ^^^^^   
 >v : I<A<T>>
 >  : ^^^^^^^
 >subscribe : (callback: (newValue: A<T>) => void) => any
->          : ^        ^^^        ^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^        ^^^^^^^^^^^    ^^^^^   
 >(newValue: A<T>) => { } : (newValue: A<T>) => void
 >                        : ^        ^^    ^^^^^^^^^
 >newValue : A<T>

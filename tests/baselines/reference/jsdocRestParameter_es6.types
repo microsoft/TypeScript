@@ -4,7 +4,7 @@
 /** @param {...number} a */
 function f(...a) {
 >f : (...a: number[]) => void
->  : ^^^^ ^^      ^^^^^^^^^^^
+>  : ^^^^ ^^        ^^^^^^^^^
 >a : number[]
 >  : ^^^^^^^^
 

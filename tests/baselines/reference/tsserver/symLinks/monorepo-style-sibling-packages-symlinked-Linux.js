@@ -1,5 +1,7 @@
-currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
 //// [/home/src/projects/project/packages/package1/package.json] Inode:: 7
 {
@@ -67,7 +69,8 @@ type MyBarType = BarType;
 
 
 //// [/home/src/projects/project/node_modules/package1] symlink(/home/src/projects/project/packages/package1) Inode:: 17
-//// [/a/lib/lib.es2016.full.d.ts] Inode:: 20
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 24
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -93,18 +96,8 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/packages/package2/src/index.ts ProjectRootPath: undefined:: Result: /home/src/projects/project/packages/package2/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /home/src/projects/project/packages/package2/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/projects/project/packages/package2/tsconfig.json, currentDirectory: /home/src/projects/project/packages/package2
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/tsconfig.json 2000 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/home/src/projects/project/packages/package2/tsconfig.json",
-        "reason": "Creating possible configured project for /home/src/projects/project/packages/package2/src/index.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/packages/package2/tsconfig.json : {
  "rootNames": [
   "/home/src/projects/project/packages/package2/src/index.ts"
@@ -123,11 +116,19 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/packages/package2/ts
   "configFilePath": "/home/src/projects/project/packages/package2/tsconfig.json"
  }
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/home/src/projects/project/packages/package2/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/projects/project/packages/package2/src/index.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2 1 undefined Config: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2 1 undefined Config: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/packages/package2/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package2/src/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/packages/package2/package.json'.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'package1' from '/home/src/projects/project/packages/package2/src/index.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module 'package1' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -197,10 +198,7 @@ Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skip
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] ======== Module name 'package1' was not resolved. ========
-Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2016.full.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/src 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/src 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
@@ -214,8 +212,6 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/package.json 2000 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/src/package.json 2000 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/package.json 2000 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Type roots
@@ -227,11 +223,11 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/packages/package2/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/package2/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/a/lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/project/packages/package2/src/index.ts SVC-1-0 "import { FooType, BarType } from \"package1\"\ntype MyFooType = FooType;\ntype MyBarType = BarType;\n"
 
 
-	../../../../../../a/lib/lib.es2016.full.d.ts
+	../../../../tslibs/TS/Lib/lib.es2016.full.d.ts
 	  Default library for target 'es2016'
 	src/index.ts
 	  Matched by default include pattern '**/*'
@@ -319,9 +315,18 @@ Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/packages/package2
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/packages/package2/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
+//// [/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts] *Lib* Inode:: 34
+
 
 PolledWatches::
 /home/src/projects/node_modules: *new*
@@ -338,12 +343,8 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/project/packages/package2/node_modules/@types: *new*
   {"pollingInterval":500}
-/home/src/projects/project/packages/package2/src/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
-/a/lib/lib.es2016.full.d.ts: *new*
-  {"inode":20}
 /home/src/projects/project/node_modules: *new*
   {"inode":16}
 /home/src/projects/project/node_modules/package1: *new*
@@ -362,21 +363,24 @@ FsWatches::
   {"inode":14}
 /home/src/projects/project/packages/package2/tsconfig.json: *new*
   {"inode":13}
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts: *new*
+  {"inode":34}
 
 Projects::
 /home/src/projects/project/packages/package2/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
-/a/lib/lib.es2016.full.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project/packages/package2/tsconfig.json
 /home/src/projects/project/packages/package2/src/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /home/src/projects/project/packages/package2/tsconfig.json *default*
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/packages/package2/tsconfig.json
 
 Before request
 
@@ -391,10 +395,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 2,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -499,27 +499,51 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 2
+        "request_seq": 2,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/home/src/projects/project/packages/package2/src/index.ts"
+            }
+          ]
+        }
       }
     }
 After running Immedidate callback:: count: 0
 
+Build dependencies
 Before running Timeout callback:: count: 1
-3: timerToUpdateChildWatches
-//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 22
+7: timerToUpdateChildWatches
+//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 125
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 23
+//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 126
 export type FooType = "foo";
 export type BarType = "bar";
 
 
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] Inode:: 127
+{"root":["./src/index.ts"],"version":"FakeTSVersion"}
+
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 128
+{
+  "root": [
+    "./src/index.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 53
+}
+
 
 Timeout callback:: count: 1
-3: timerToUpdateChildWatches *new*
+7: timerToUpdateChildWatches *new*
 
+Host is moving to new time
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
@@ -543,12 +567,8 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/project/packages/package2/node_modules/@types:
   {"pollingInterval":500}
-/home/src/projects/project/packages/package2/src/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
-/a/lib/lib.es2016.full.d.ts:
-  {"inode":20}
 /home/src/projects/project/node_modules:
   {"inode":16}
 /home/src/projects/project/node_modules/package1:
@@ -556,7 +576,7 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist: *new*
-  {"inode":21}
+  {"inode":124}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -569,12 +589,14 @@ FsWatches::
   {"inode":14}
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
+  {"inode":34}
 
 Timeout callback:: count: 1
-5: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation *new*
+9: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation *new*
 
 Before running Timeout callback:: count: 1
-5: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation
+9: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/packages/package2/tsconfig.json
@@ -582,28 +604,22 @@ Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
 
 Timeout callback:: count: 2
-6: /home/src/projects/project/packages/package2/tsconfig.json *new*
-7: *ensureProjectForOpenFiles* *new*
+10: /home/src/projects/project/packages/package2/tsconfig.json *new*
+11: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /home/src/projects/project/packages/package2/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 Before running Timeout callback:: count: 2
-6: /home/src/projects/project/packages/package2/tsconfig.json
-7: *ensureProjectForOpenFiles*
+10: /home/src/projects/project/packages/package2/tsconfig.json
+11: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/packages/package2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/packages/package2/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package2/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package2/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package2/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package2/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'package1' from '/home/src/projects/project/packages/package2/src/index.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module 'package1' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -626,24 +642,18 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package1/
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'peerDependencies' field.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/project/node_modules/package1/dist/index.d.ts', result '/home/src/projects/project/packages/package1/dist/index.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'package1' was successfully resolved to '/home/src/projects/project/packages/package1/dist/index.d.ts' with Package ID 'package1/dist/index.d.ts@1.0.0'. ========
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package1/dist/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/packages/package1/package.json'.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/dist/package.json 2000 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/packages/package2/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/package2/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/project/packages/package1/dist/index.d.ts Text-1 "export type FooType = \"foo\";\nexport type BarType = \"bar\";\n"
 	/home/src/projects/project/packages/package2/src/index.ts SVC-1-0 "import { FooType, BarType } from \"package1\"\ntype MyFooType = FooType;\ntype MyBarType = BarType;\n"
 
 
-	../../../../../../a/lib/lib.es2016.full.d.ts
+	../../../../tslibs/TS/Lib/lib.es2016.full.d.ts
 	  Default library for target 'es2016'
 	../package1/dist/index.d.ts
 	  Imported via "package1" from file 'src/index.ts' with packageId 'package1/dist/index.d.ts@1.0.0'
@@ -691,22 +701,16 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/project/packages/node_modules/@types:
   {"pollingInterval":500}
-/home/src/projects/project/packages/package1/dist/package.json: *new*
-  {"pollingInterval":2000}
 /home/src/projects/project/packages/package2/node_modules:
   {"pollingInterval":500}
 /home/src/projects/project/packages/package2/node_modules/@types:
   {"pollingInterval":500}
-/home/src/projects/project/packages/package2/src/package.json:
-  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /home/src/projects/node_modules:
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.es2016.full.d.ts:
-  {"inode":20}
 /home/src/projects/project/node_modules:
   {"inode":16}
 /home/src/projects/project/node_modules/package1:
@@ -714,9 +718,9 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist:
-  {"inode":21}
+  {"inode":124}
 /home/src/projects/project/packages/package1/dist/index.d.ts: *new*
-  {"inode":23}
+  {"inode":126}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -729,18 +733,17 @@ FsWatches::
   {"inode":14}
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
+  {"inode":34}
 
 Projects::
 /home/src/projects/project/packages/package2/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
-/a/lib/lib.es2016.full.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project/packages/package2/tsconfig.json
 /home/src/projects/project/packages/package1/dist/index.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -749,6 +752,10 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /home/src/projects/project/packages/package2/tsconfig.json *default*
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/packages/package2/tsconfig.json
 
 Before request
 
@@ -764,17 +771,13 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 1
-8: checkOne *new*
+12: checkOne *new*
 
 Before running Timeout callback:: count: 1
-8: checkOne
+12: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -857,19 +860,30 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 3
+        "request_seq": 3,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/home/src/projects/project/packages/package2/src/index.ts"
+            }
+          ]
+        }
       }
     }
 After running Immedidate callback:: count: 0
 
+Clean dependencies build
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/packages/package1/dist/index.d.ts 2:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/packages/package2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/packages/package1/dist/index.d.ts 2:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 500 undefined WatchType: Closed Script info
 Before running Timeout callback:: count: 3
-9: /home/src/projects/project/packages/package2/tsconfig.json
-10: *ensureProjectForOpenFiles*
-14: timerToUpdateChildWatches
+13: /home/src/projects/project/packages/package2/tsconfig.json
+14: *ensureProjectForOpenFiles*
+18: timerToUpdateChildWatches
 //// [/home/src/projects/project/packages/package1/dist/index.js] deleted
 //// [/home/src/projects/project/packages/package1/dist/index.d.ts] deleted
 
@@ -886,18 +900,12 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/project/packages/package1/dist/index.d.ts: *new*
   {"pollingInterval":500}
-/home/src/projects/project/packages/package1/dist/package.json:
-  {"pollingInterval":2000}
 /home/src/projects/project/packages/package2/node_modules:
   {"pollingInterval":500}
 /home/src/projects/project/packages/package2/node_modules/@types:
   {"pollingInterval":500}
-/home/src/projects/project/packages/package2/src/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
-/a/lib/lib.es2016.full.d.ts:
-  {"inode":20}
 /home/src/projects/project/node_modules:
   {"inode":16}
 /home/src/projects/project/node_modules/package1:
@@ -916,17 +924,19 @@ FsWatches::
   {"inode":14}
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
+  {"inode":34}
 
 FsWatches *deleted*::
 /home/src/projects/project/packages/package1/dist:
-  {"inode":21}
+  {"inode":124}
 /home/src/projects/project/packages/package1/dist/index.d.ts:
-  {"inode":23}
+  {"inode":126}
 
 Timeout callback:: count: 3
-9: /home/src/projects/project/packages/package2/tsconfig.json *new*
-10: *ensureProjectForOpenFiles* *new*
-14: timerToUpdateChildWatches *new*
+13: /home/src/projects/project/packages/package2/tsconfig.json *new*
+14: *ensureProjectForOpenFiles* *new*
+18: timerToUpdateChildWatches *new*
 
 Projects::
 /home/src/projects/project/packages/package2/tsconfig.json (Configured) *changed*
@@ -935,10 +945,6 @@ Projects::
     dirty: true *changed*
 
 ScriptInfos::
-/a/lib/lib.es2016.full.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project/packages/package2/tsconfig.json
 /home/src/projects/project/packages/package1/dist/index.d.ts *changed*
     version: Text-1
     pendingReloadFromDisk: true *changed*
@@ -949,16 +955,13 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /home/src/projects/project/packages/package2/tsconfig.json *default*
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/packages/package2/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/packages/package2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/packages/package2/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package1/dist/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package1/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package2/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package2/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'package1' from '/home/src/projects/project/packages/package2/src/index.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module 'package1' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -1027,20 +1030,16 @@ Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skip
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] ======== Module name 'package1' was not resolved. ========
-Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package1/dist/package.json 2000 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/packages/package2/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/package2/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/a/lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/project/packages/package2/src/index.ts SVC-1-0 "import { FooType, BarType } from \"package1\"\ntype MyFooType = FooType;\ntype MyBarType = BarType;\n"
 
 
-	../../../../../../a/lib/lib.es2016.full.d.ts
+	../../../../tslibs/TS/Lib/lib.es2016.full.d.ts
 	  Default library for target 'es2016'
 	src/index.ts
 	  Matched by default include pattern '**/*'
@@ -1100,18 +1099,12 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/project/packages/package2/node_modules/@types:
   {"pollingInterval":500}
-/home/src/projects/project/packages/package2/src/package.json:
-  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /home/src/projects/project/packages/package1/dist:
   {"pollingInterval":500}
-/home/src/projects/project/packages/package1/dist/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
-/a/lib/lib.es2016.full.d.ts:
-  {"inode":20}
 /home/src/projects/project/node_modules:
   {"inode":16}
 /home/src/projects/project/node_modules/package1:
@@ -1130,9 +1123,11 @@ FsWatches::
   {"inode":14}
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
+  {"inode":34}
 
 Timeout callback:: count: 1
-16: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation *new*
+20: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation *new*
 
 Projects::
 /home/src/projects/project/packages/package2/tsconfig.json (Configured) *changed*
@@ -1141,7 +1136,7 @@ Projects::
     dirty: false *changed*
 
 Before running Timeout callback:: count: 1
-16: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation
+20: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/packages/package2/tsconfig.json
@@ -1149,8 +1144,8 @@ Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
 
 Timeout callback:: count: 2
-17: /home/src/projects/project/packages/package2/tsconfig.json *new*
-18: *ensureProjectForOpenFiles* *new*
+21: /home/src/projects/project/packages/package2/tsconfig.json *new*
+22: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /home/src/projects/project/packages/package2/tsconfig.json (Configured) *changed*
@@ -1159,18 +1154,11 @@ Projects::
     dirty: true *changed*
 
 Before running Timeout callback:: count: 2
-17: /home/src/projects/project/packages/package2/tsconfig.json
-18: *ensureProjectForOpenFiles*
+21: /home/src/projects/project/packages/package2/tsconfig.json
+22: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/packages/package2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/packages/package2/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package2/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package2/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package2/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package2/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'package1' from '/home/src/projects/project/packages/package2/src/index.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module 'package1' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -1240,13 +1228,10 @@ Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skip
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] ======== Module name 'package1' was not resolved. ========
-Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/packages/package2/tsconfig.json projectStateVersion: 4 projectProgramVersion: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/package2/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/a/lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/project/packages/package2/src/index.ts SVC-1-0 "import { FooType, BarType } from \"package1\"\ntype MyFooType = FooType;\ntype MyBarType = BarType;\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -1301,17 +1286,13 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 4,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 1
-19: checkOne *new*
+23: checkOne *new*
 
 Before running Timeout callback:: count: 1
-19: checkOne
+23: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -1408,23 +1389,36 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 4
+        "request_seq": 4,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/home/src/projects/project/packages/package2/src/index.ts"
+            }
+          ]
+        }
       }
     }
 After running Immedidate callback:: count: 0
 
+Build dependencies
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/packages/package1/dist/index.d.ts 0:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/packages/package1/dist/index.d.ts 0:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/packages/package1/dist/index.d.ts 0:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/packages/package1/dist/index.d.ts 0:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 500 undefined WatchType: Closed Script info
 Before running Timeout callback:: count: 1
-21: timerToUpdateChildWatches
-//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 25
+25: timerToUpdateChildWatches
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents Inode:: 127
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 128
+//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 130
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 26
+//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 131
 export type FooType = "foo";
 export type BarType = "bar";
 
@@ -1445,16 +1439,12 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/project/packages/package2/node_modules/@types:
   {"pollingInterval":500}
-/home/src/projects/project/packages/package2/src/package.json:
-  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /home/src/projects/project/packages/package1/dist/index.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.es2016.full.d.ts:
-  {"inode":20}
 /home/src/projects/project/node_modules:
   {"inode":16}
 /home/src/projects/project/node_modules/package1:
@@ -1462,7 +1452,7 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist/index.d.ts: *new*
-  {"inode":26}
+  {"inode":131}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -1475,15 +1465,13 @@ FsWatches::
   {"inode":14}
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
+  {"inode":34}
 
 Timeout callback:: count: 1
-21: timerToUpdateChildWatches *new*
+25: timerToUpdateChildWatches *new*
 
 ScriptInfos::
-/a/lib/lib.es2016.full.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project/packages/package2/tsconfig.json
 /home/src/projects/project/packages/package1/dist/index.d.ts *changed*
     version: Text-1
     pendingReloadFromDisk: true
@@ -1493,6 +1481,10 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /home/src/projects/project/packages/package2/tsconfig.json *default*
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/packages/package2/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation
@@ -1517,12 +1509,8 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/project/packages/package2/node_modules/@types:
   {"pollingInterval":500}
-/home/src/projects/project/packages/package2/src/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
-/a/lib/lib.es2016.full.d.ts:
-  {"inode":20}
 /home/src/projects/project/node_modules:
   {"inode":16}
 /home/src/projects/project/node_modules/package1:
@@ -1530,9 +1518,9 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist: *new*
-  {"inode":24}
+  {"inode":129}
 /home/src/projects/project/packages/package1/dist/index.d.ts:
-  {"inode":26}
+  {"inode":131}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -1545,12 +1533,14 @@ FsWatches::
   {"inode":14}
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
+  {"inode":34}
 
 Timeout callback:: count: 1
-23: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation *new*
+27: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation *new*
 
 Before running Timeout callback:: count: 1
-23: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation
+27: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/packages/package2/tsconfig.json
@@ -1558,8 +1548,8 @@ Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
 
 Timeout callback:: count: 2
-24: /home/src/projects/project/packages/package2/tsconfig.json *new*
-25: *ensureProjectForOpenFiles* *new*
+28: /home/src/projects/project/packages/package2/tsconfig.json *new*
+29: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /home/src/projects/project/packages/package2/tsconfig.json (Configured) *changed*
@@ -1568,18 +1558,11 @@ Projects::
     dirty: true *changed*
 
 Before running Timeout callback:: count: 2
-24: /home/src/projects/project/packages/package2/tsconfig.json
-25: *ensureProjectForOpenFiles*
+28: /home/src/projects/project/packages/package2/tsconfig.json
+29: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/packages/package2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/packages/package2/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package2/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package2/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package2/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package2/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'package1' from '/home/src/projects/project/packages/package2/src/index.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module 'package1' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -1602,23 +1585,17 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package1/
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'peerDependencies' field.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/project/node_modules/package1/dist/index.d.ts', result '/home/src/projects/project/packages/package1/dist/index.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'package1' was successfully resolved to '/home/src/projects/project/packages/package1/dist/index.d.ts' with Package ID 'package1/dist/index.d.ts@1.0.0'. ========
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package1/dist/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package1/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/dist/package.json 2000 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/packages/package2/tsconfig.json projectStateVersion: 5 projectProgramVersion: 4 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/package2/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/project/packages/package1/dist/index.d.ts Text-1 "export type FooType = \"foo\";\nexport type BarType = \"bar\";\n"
 	/home/src/projects/project/packages/package2/src/index.ts SVC-1-0 "import { FooType, BarType } from \"package1\"\ntype MyFooType = FooType;\ntype MyBarType = BarType;\n"
 
 
-	../../../../../../a/lib/lib.es2016.full.d.ts
+	../../../../tslibs/TS/Lib/lib.es2016.full.d.ts
 	  Default library for target 'es2016'
 	../package1/dist/index.d.ts
 	  Imported via "package1" from file 'src/index.ts' with packageId 'package1/dist/index.d.ts@1.0.0'
@@ -1666,22 +1643,16 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/project/packages/node_modules/@types:
   {"pollingInterval":500}
-/home/src/projects/project/packages/package1/dist/package.json: *new*
-  {"pollingInterval":2000}
 /home/src/projects/project/packages/package2/node_modules:
   {"pollingInterval":500}
 /home/src/projects/project/packages/package2/node_modules/@types:
   {"pollingInterval":500}
-/home/src/projects/project/packages/package2/src/package.json:
-  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /home/src/projects/node_modules:
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.es2016.full.d.ts:
-  {"inode":20}
 /home/src/projects/project/node_modules:
   {"inode":16}
 /home/src/projects/project/node_modules/package1:
@@ -1689,9 +1660,9 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist:
-  {"inode":24}
+  {"inode":129}
 /home/src/projects/project/packages/package1/dist/index.d.ts:
-  {"inode":26}
+  {"inode":131}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -1704,6 +1675,8 @@ FsWatches::
   {"inode":14}
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
+  {"inode":34}
 
 Projects::
 /home/src/projects/project/packages/package2/tsconfig.json (Configured) *changed*
@@ -1712,10 +1685,6 @@ Projects::
     dirty: false *changed*
 
 ScriptInfos::
-/a/lib/lib.es2016.full.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project/packages/package2/tsconfig.json
 /home/src/projects/project/packages/package1/dist/index.d.ts *changed*
     version: Text-1
     pendingReloadFromDisk: false *changed*
@@ -1725,6 +1694,10 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /home/src/projects/project/packages/package2/tsconfig.json *default*
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/packages/package2/tsconfig.json
 
 Before request
 
@@ -1740,17 +1713,13 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 5,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 1
-26: checkOne *new*
+30: checkOne *new*
 
 Before running Timeout callback:: count: 1
-26: checkOne
+30: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -1833,7 +1802,17 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 5
+        "request_seq": 5,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/home/src/projects/project/packages/package2/src/index.ts"
+            }
+          ]
+        }
       }
     }
 After running Immedidate callback:: count: 0

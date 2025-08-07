@@ -1,0 +1,149 @@
+//// [tests/cases/compiler/iterableTReturnTNext.ts] ////
+
+=== iterableTReturnTNext.ts ===
+declare const map: Map<string, number>;
+>map : Symbol(map, Decl(iterableTReturnTNext.ts, 0, 13))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+declare const set: Set<number>;
+>set : Symbol(set, Decl(iterableTReturnTNext.ts, 1, 13))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+
+// based on:
+// - https://github.com/apollographql/apollo-client/blob/8740f198805a99e01136617c4055d611b92cc231/src/react/hooks/__tests__/useMutation.test.tsx#L2328
+// - https://github.com/continuedev/continue/blob/046bca088a833f8b3620412ff64e4b6f41fbb959/extensions/vscode/src/autocomplete/lsp.ts#L60
+const r1: number = map.values().next().value; // error when strictBuiltinIteratorReturn is true as result is potentially `{ done: true, value: undefined }`
+>r1 : Symbol(r1, Decl(iterableTReturnTNext.ts, 6, 5))
+>map.values().next().value : Symbol(value, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>map.values().next : Symbol(Iterator.next, Decl(lib.es2015.iterable.d.ts, --, --))
+>map.values : Symbol(Map.values, Decl(lib.es2015.iterable.d.ts, --, --))
+>map : Symbol(map, Decl(iterableTReturnTNext.ts, 0, 13))
+>values : Symbol(Map.values, Decl(lib.es2015.iterable.d.ts, --, --))
+>next : Symbol(Iterator.next, Decl(lib.es2015.iterable.d.ts, --, --))
+>value : Symbol(value, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+
+// based on: https://github.com/gcanti/fp-ts/blob/89a772e95e414acee679f42f56527606f7b61f30/src/Map.ts#L246
+interface Next<A> {
+>Next : Symbol(Next, Decl(iterableTReturnTNext.ts, 6, 45))
+>A : Symbol(A, Decl(iterableTReturnTNext.ts, 9, 15))
+
+    readonly done?: boolean
+>done : Symbol(Next.done, Decl(iterableTReturnTNext.ts, 9, 19))
+
+    readonly value: A
+>value : Symbol(Next.value, Decl(iterableTReturnTNext.ts, 10, 27))
+>A : Symbol(A, Decl(iterableTReturnTNext.ts, 9, 15))
+}
+const r2: Next<number> = map.values().next(); // error when strictBuiltinIteratorReturn is true as result is potentially `{ done: true, value: undefined }`
+>r2 : Symbol(r2, Decl(iterableTReturnTNext.ts, 13, 5))
+>Next : Symbol(Next, Decl(iterableTReturnTNext.ts, 6, 45))
+>map.values().next : Symbol(Iterator.next, Decl(lib.es2015.iterable.d.ts, --, --))
+>map.values : Symbol(Map.values, Decl(lib.es2015.iterable.d.ts, --, --))
+>map : Symbol(map, Decl(iterableTReturnTNext.ts, 0, 13))
+>values : Symbol(Map.values, Decl(lib.es2015.iterable.d.ts, --, --))
+>next : Symbol(Iterator.next, Decl(lib.es2015.iterable.d.ts, --, --))
+
+// based on: https://github.com/graphql/graphql-js/blob/e15c3ec4dc21d9fd1df34fe9798cadf3bf02c6ea/src/execution/__tests__/mapAsyncIterable-test.ts#L175
+async function* source() { yield 1; yield 2; yield 3; }
+>source : Symbol(source, Decl(iterableTReturnTNext.ts, 13, 45))
+
+const doubles = source();
+>doubles : Symbol(doubles, Decl(iterableTReturnTNext.ts, 17, 5))
+>source : Symbol(source, Decl(iterableTReturnTNext.ts, 13, 45))
+
+doubles.return();
+>doubles.return : Symbol(AsyncGenerator.return, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+>doubles : Symbol(doubles, Decl(iterableTReturnTNext.ts, 17, 5))
+>return : Symbol(AsyncGenerator.return, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+
+// based on: https://github.com/backstage/backstage/blob/85d9346ef11c1c20e4405102b4f5d93afb1292c1/packages/core-app-api/src/routing/RouteTracker.tsx#L62
+const r3: number | undefined = set.values().next().value;
+>r3 : Symbol(r3, Decl(iterableTReturnTNext.ts, 21, 5))
+>set.values().next().value : Symbol(value, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>set.values().next : Symbol(Iterator.next, Decl(lib.es2015.iterable.d.ts, --, --))
+>set.values : Symbol(Set.values, Decl(lib.es2015.iterable.d.ts, --, --))
+>set : Symbol(set, Decl(iterableTReturnTNext.ts, 1, 13))
+>values : Symbol(Set.values, Decl(lib.es2015.iterable.d.ts, --, --))
+>next : Symbol(Iterator.next, Decl(lib.es2015.iterable.d.ts, --, --))
+>value : Symbol(value, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+
+// based on: https://github.com/microsoft/TypeScript/blob/15f67e0b482faf9f6a3ab9965f3c11196bf3e99b/src/harness/compilerImpl.ts#L77
+class MyMap implements Map<string, number> {
+>MyMap : Symbol(MyMap, Decl(iterableTReturnTNext.ts, 21, 57))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    declare private _keys: string[];
+>_keys : Symbol(MyMap._keys, Decl(iterableTReturnTNext.ts, 24, 44))
+
+    declare private _values: number[];
+>_values : Symbol(MyMap._values, Decl(iterableTReturnTNext.ts, 25, 36))
+
+    declare size: number;
+>size : Symbol(MyMap.size, Decl(iterableTReturnTNext.ts, 26, 38))
+
+    declare [Symbol.toStringTag]: string;
+>[Symbol.toStringTag] : Symbol(MyMap[Symbol.toStringTag], Decl(iterableTReturnTNext.ts, 27, 25))
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    clear(): void { }
+>clear : Symbol(MyMap.clear, Decl(iterableTReturnTNext.ts, 28, 41))
+
+    delete(key: string): boolean { return false; }
+>delete : Symbol(MyMap.delete, Decl(iterableTReturnTNext.ts, 30, 21))
+>key : Symbol(key, Decl(iterableTReturnTNext.ts, 31, 11))
+
+    forEach(callbackfn: (value: number, key: string, map: Map<string, number>) => void, thisArg?: any): void { }
+>forEach : Symbol(MyMap.forEach, Decl(iterableTReturnTNext.ts, 31, 50))
+>callbackfn : Symbol(callbackfn, Decl(iterableTReturnTNext.ts, 32, 12))
+>value : Symbol(value, Decl(iterableTReturnTNext.ts, 32, 25))
+>key : Symbol(key, Decl(iterableTReturnTNext.ts, 32, 39))
+>map : Symbol(map, Decl(iterableTReturnTNext.ts, 32, 52))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>thisArg : Symbol(thisArg, Decl(iterableTReturnTNext.ts, 32, 87))
+
+    get(key: string): number | undefined { return undefined; }
+>get : Symbol(MyMap.get, Decl(iterableTReturnTNext.ts, 32, 112))
+>key : Symbol(key, Decl(iterableTReturnTNext.ts, 33, 8))
+>undefined : Symbol(undefined)
+
+    has(key: string): boolean { return false; }
+>has : Symbol(MyMap.has, Decl(iterableTReturnTNext.ts, 33, 62))
+>key : Symbol(key, Decl(iterableTReturnTNext.ts, 34, 8))
+
+    set(key: string, value: number): this { return this; }
+>set : Symbol(MyMap.set, Decl(iterableTReturnTNext.ts, 34, 47))
+>key : Symbol(key, Decl(iterableTReturnTNext.ts, 35, 8))
+>value : Symbol(value, Decl(iterableTReturnTNext.ts, 35, 20))
+>this : Symbol(MyMap, Decl(iterableTReturnTNext.ts, 21, 57))
+
+    entries(): MapIterator<[string, number]> { throw new Error("Method not implemented."); }
+>entries : Symbol(MyMap.entries, Decl(iterableTReturnTNext.ts, 35, 58))
+>MapIterator : Symbol(MapIterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+    keys(): MapIterator<string> { throw new Error("Method not implemented."); }
+>keys : Symbol(MyMap.keys, Decl(iterableTReturnTNext.ts, 36, 92))
+>MapIterator : Symbol(MapIterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+    [Symbol.iterator](): MapIterator<[string, number]> { throw new Error("Method not implemented."); }
+>[Symbol.iterator] : Symbol(MyMap[Symbol.iterator], Decl(iterableTReturnTNext.ts, 37, 79))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>MapIterator : Symbol(MapIterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+    // error when strictBuiltinIteratorReturn is true because values() has implicit `void` return, which isn't assignable to `undefined`
+    * values() {
+>values : Symbol(MyMap.values, Decl(iterableTReturnTNext.ts, 38, 102))
+
+        yield* this._values;
+>this._values : Symbol(MyMap._values, Decl(iterableTReturnTNext.ts, 25, 36))
+>this : Symbol(MyMap, Decl(iterableTReturnTNext.ts, 21, 57))
+>_values : Symbol(MyMap._values, Decl(iterableTReturnTNext.ts, 25, 36))
+    }
+}
+

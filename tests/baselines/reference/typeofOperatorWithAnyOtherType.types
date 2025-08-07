@@ -127,7 +127,7 @@ var ResultIsString5 = typeof obj;
 >typeof obj : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : () => {}
->    : ^^^^^^^^
+>    : ^^^^^^  
 
 var ResultIsString6 = typeof obj1;
 >ResultIsString6 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -217,7 +217,7 @@ var ResultIsString14 = typeof foo();
 >foo() : any
 >      : ^^^
 >foo : () => any
->    : ^^^^^^^^^
+>    : ^^^^^^   
 
 var ResultIsString15 = typeof A.foo();
 >ResultIsString15 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -416,7 +416,7 @@ r: typeof foo;
 >typeof foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : () => any
->    : ^^^^^^^^^
+>    : ^^^^^^   
 
 z: typeof objA.a;
 >z : any

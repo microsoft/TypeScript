@@ -25,7 +25,7 @@ interface Animal {
 
 function clonePet(pet: Animal, fullCopy?: boolean) {
 >clonePet : (pet: Animal, fullCopy?: boolean) => { name: string; kind: string; age?: number | undefined; location?: string | undefined; owner?: object | undefined; }
->         : ^   ^^      ^^        ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^   ^^      ^^        ^^^       ^^^^^^^^^^^^^      ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pet : Animal
 >    : ^^^^^^
 >fullCopy : boolean | undefined
@@ -33,7 +33,7 @@ function clonePet(pet: Animal, fullCopy?: boolean) {
 
     return {
 >{        name: pet.name,        kind: pet.kind,        ...(fullCopy && pet),    } : { name: string; kind: string; age?: number | undefined; location?: string | undefined; owner?: object | undefined; }
->                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                  : ^^^^^^^^      ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         name: pet.name,
 >name : string
@@ -77,14 +77,14 @@ interface Animal2 {
 >      : ^^^^^^^^^^^^^^^^^^
 }
 function billOwner(pet: Animal2) {
->billOwner : (pet: Animal2) => { paid: boolean; name?: string | undefined; owner?: string | undefined; }
->          : ^   ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>billOwner : (pet: Animal2) => { paid: boolean; name?: string | undefined; owner?: string; }
+>          : ^   ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >pet : Animal2
 >    : ^^^^^^^
 
     return {
->{        ...(pet.owner && pet),        paid: false    } : { paid: boolean; name?: string | undefined; owner?: string | undefined; }
->                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{        ...(pet.owner && pet),        paid: false    } : { paid: boolean; name?: string | undefined; owner?: string; }
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 
         ...(pet.owner && pet),
 >(pet.owner && pet) : "" | Animal2 | undefined

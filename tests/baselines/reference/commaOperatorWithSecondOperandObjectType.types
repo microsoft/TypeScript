@@ -179,11 +179,11 @@ STRING.toLowerCase(), new CLASS()
 >STRING.toLowerCase() : string
 >                     : ^^^^^^
 >STRING.toLowerCase : () => string
->                   : ^^^^^^^^^^^^
+>                   : ^^^^^^      
 >STRING : string
 >       : ^^^^^^
 >toLowerCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >new CLASS() : CLASS
 >            : ^^^^^
 >CLASS : typeof CLASS
@@ -270,11 +270,11 @@ var resultIsObject11 = (STRING.toLowerCase(), new CLASS());
 >STRING.toLowerCase() : string
 >                     : ^^^^^^
 >STRING.toLowerCase : () => string
->                   : ^^^^^^^^^^^^
+>                   : ^^^^^^      
 >STRING : string
 >       : ^^^^^^
 >toLowerCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >new CLASS() : CLASS
 >            : ^^^^^
 >CLASS : typeof CLASS

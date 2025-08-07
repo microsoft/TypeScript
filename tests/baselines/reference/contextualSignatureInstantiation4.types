@@ -25,7 +25,7 @@ const banana1 = fruitFactory1(Banana) // Banana<any>
 >fruitFactory1(Banana) : Banana<any>
 >                      : ^^^^^^^^^^^
 >fruitFactory1 : <TFruit>(Fruit: new (...args: any[]) => TFruit) => TFruit
->              : ^      ^^     ^^                              ^^^^^^^^^^^
+>              : ^      ^^     ^^                              ^^^^^      
 >Banana : typeof Banana
 >       : ^^^^^^^^^^^^^
 
@@ -45,7 +45,7 @@ const banana2 = fruitFactory2(Banana) // Banana<any>
 >fruitFactory2(Banana) : Banana<any>
 >                      : ^^^^^^^^^^^
 >fruitFactory2 : <TFruit>(Fruit: new (a: string, ...args: any[]) => TFruit) => TFruit
->              : ^      ^^     ^^                                         ^^^^^^^^^^^
+>              : ^      ^^     ^^                                         ^^^^^      
 >Banana : typeof Banana
 >       : ^^^^^^^^^^^^^
 
@@ -67,7 +67,7 @@ const banana3 = fruitFactory3(Banana) // Banana<"foo">
 >fruitFactory3(Banana) : Banana<"foo">
 >                      : ^^^^^^^^^^^^^
 >fruitFactory3 : <TFruit>(Fruit: new (a: string, s: "foo", ...args: any[]) => TFruit) => TFruit
->              : ^      ^^     ^^                                                   ^^^^^^^^^^^
+>              : ^      ^^     ^^                                                   ^^^^^      
 >Banana : typeof Banana
 >       : ^^^^^^^^^^^^^
 
@@ -87,7 +87,7 @@ const banana4 = fruitFactory4(Banana) // Banana<"foo">
 >fruitFactory4(Banana) : Banana<"foo">
 >                      : ^^^^^^^^^^^^^
 >fruitFactory4 : <TFruit>(Fruit: new (a: string, ...args: "foo"[]) => TFruit) => TFruit
->              : ^      ^^     ^^                                           ^^^^^^^^^^^
+>              : ^      ^^     ^^                                           ^^^^^      
 >Banana : typeof Banana
 >       : ^^^^^^^^^^^^^
 
@@ -105,7 +105,7 @@ const banana5 = fruitFactory5(Banana) // Banana<"foo">
 >fruitFactory5(Banana) : Banana<"foo">
 >                      : ^^^^^^^^^^^^^
 >fruitFactory5 : <TFruit>(Fruit: new (...args: "foo"[]) => TFruit) => TFruit
->              : ^      ^^     ^^                                ^^^^^^^^^^^
+>              : ^      ^^     ^^                                ^^^^^      
 >Banana : typeof Banana
 >       : ^^^^^^^^^^^^^
 

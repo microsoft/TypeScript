@@ -31,11 +31,11 @@ module.exports = /** @type {FooFun} */(void 0);
 >module.exports = /** @type {FooFun} */(void 0) : (foo: Foo) => string
 >                                               : ^   ^^   ^^^^^      
 >module.exports : (foo: Foo) => string
->               : ^   ^^   ^^^^^^^^^^^
+>               : ^   ^^   ^^^^^      
 >module : { exports: (foo: Foo) => string; }
->       : ^^^^^^^^^^^^   ^^   ^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^   ^^   ^^^^^      ^^^
 >exports : (foo: Foo) => string
->        : ^   ^^   ^^^^^^^^^^^
+>        : ^   ^^   ^^^^^      
 >(void 0) : FooFun
 >         : ^^^^^^
 >void 0 : undefined

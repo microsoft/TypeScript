@@ -32,7 +32,7 @@ export var p0: Promise<typeof Zero> = import(getPath());
 >getPath() : string
 >          : ^^^^^^
 >getPath : () => string
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
 
 export var p1: Promise<typeof Zero> = import("./0");
 >p1 : Promise<typeof Zero>

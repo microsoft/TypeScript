@@ -144,11 +144,11 @@ class DerivedComments extends Object {
 >console.log() : void
 >              : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 
         // c3
         super(); // c4
@@ -193,11 +193,11 @@ class DerivedCommentsInvalidThis extends Object {
 >console.log() : void
 >              : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 
         // c3
         super(); // c4
@@ -240,11 +240,11 @@ class DerivedInConditional extends Object {
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 
             ? super(1)
 >super(1) : void
@@ -281,11 +281,11 @@ class DerivedInIf extends Object {
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 
             super(1);
 >super(1) : void
@@ -356,11 +356,11 @@ class DerivedInConditionalWithProperties extends Object {
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 
             super(1);
 >super(1) : void

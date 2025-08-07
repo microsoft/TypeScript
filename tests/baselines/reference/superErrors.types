@@ -144,11 +144,11 @@ class RegisteredUser extends User {
 >super.sayHello() : void
 >                 : ^^^^
 >super.sayHello : () => void
->               : ^^^^^^^^^^
+>               : ^^^^^^    
 >super : User
 >      : ^^^^
 >sayHello : () => void
->         : ^^^^^^^^^^
+>         : ^^^^^^    
 
         // super call in a lambda in an inner function in a method
         function inner() {

@@ -6,8 +6,8 @@ class A<T>{
 >  : ^^^^
  
  foo(): A{
->foo : () => any
->    : ^^^^^^^^^
+>foo : () => A
+>    : ^^^^^^ 
 
   return null;
  }

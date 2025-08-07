@@ -9,7 +9,7 @@ declare function foo(...args: any[]): any;
 
 @foo
 >foo : (...args: any[]) => any
->    : ^^^^    ^^     ^^^^^^^^
+>    : ^^^^    ^^     ^^^^^   
 
 export default class D {
 >D : D

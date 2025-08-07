@@ -3,7 +3,7 @@
 === intersectionWithUnionConstraint.ts ===
 function f1<T extends string | number, U extends string | number>(x: T & U) {
 >f1 : <T extends string | number, U extends string | number>(x: T & U) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^^^^^^^^
+>   : ^ ^^^^^^^^^               ^^ ^^^^^^^^^               ^^ ^^     ^^^^^^^^^
 >x : T & U
 >  : ^^^^^
 
@@ -17,7 +17,7 @@ function f1<T extends string | number, U extends string | number>(x: T & U) {
 
 function f2<T extends string | number | undefined, U extends string | null | undefined>(x: T & U) {
 >f2 : <T extends string | number | undefined, U extends string | null | undefined>(x: T & U) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^^^^^^^^
+>   : ^ ^^^^^^^^^                           ^^ ^^^^^^^^^                         ^^ ^^     ^^^^^^^^^
 >x : T & U
 >  : ^^^^^
 
@@ -64,7 +64,7 @@ type T1 = (string | number | undefined) & (string | null | undefined);  // strin
 
 function f3<T extends string | number | undefined>(x: T & (number | object | undefined)) {
 >f3 : <T extends string | number | undefined>(x: T & (number | object | undefined)) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^                                 ^^^^^^^^^
+>   : ^ ^^^^^^^^^                           ^^ ^^                                 ^^^^^^^^^
 >x : (T & undefined) | (T & number)
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -77,7 +77,7 @@ function f3<T extends string | number | undefined>(x: T & (number | object | und
 
 function f4<T extends string | number>(x: T & (number | object)) {
 >f4 : <T extends string | number>(x: T & (number | object)) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^                     ^^^^^^^^^
+>   : ^ ^^^^^^^^^               ^^ ^^                     ^^^^^^^^^
 >x : T & number
 >  : ^^^^^^^^^^
 
@@ -90,7 +90,7 @@ function f4<T extends string | number>(x: T & (number | object)) {
 
 function f5<T, U extends keyof T>(x: keyof T & U) {
 >f5 : <T, U extends keyof T>(x: keyof T & U) => void
->   : ^ ^^ ^^^^^^^^^^^^^^^^^^ ^^           ^^^^^^^^^
+>   : ^ ^^ ^^^^^^^^^       ^^ ^^           ^^^^^^^^^
 >x : keyof T & U
 >  : ^^^^^^^^^^^
 

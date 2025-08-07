@@ -31,7 +31,7 @@ numOrDate = unionOfDifferentReturnType(10);
 >unionOfDifferentReturnType(10) : number | Date
 >                               : ^^^^^^^^^^^^^
 >unionOfDifferentReturnType : ((a: number) => number) | ((a: number) => Date)
->                           : ^^ ^^      ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
+>                           : ^^ ^^      ^^^^^      ^^^^^^ ^^      ^^^^^    ^
 >10 : 10
 >   : ^^
 
@@ -43,7 +43,7 @@ strOrBoolean = unionOfDifferentReturnType("hello"); // error
 >unionOfDifferentReturnType("hello") : number | Date
 >                                    : ^^^^^^^^^^^^^
 >unionOfDifferentReturnType : ((a: number) => number) | ((a: number) => Date)
->                           : ^^ ^^      ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
+>                           : ^^ ^^      ^^^^^      ^^^^^^ ^^      ^^^^^    ^
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -51,7 +51,7 @@ unionOfDifferentReturnType1(true); // error in type of parameter
 >unionOfDifferentReturnType1(true) : (number | Date) & (string | boolean)
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >unionOfDifferentReturnType1 : { (a: number): number; (a: string): string; } | { (a: number): Date; (a: string): boolean; }
->                            : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^ ^^      ^^^^^^^^^^^^^
+>                            : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^^^^^^^ ^^      ^^^    ^^^ ^^      ^^^       ^^^
 >true : true
 >     : ^^^^
 
@@ -75,7 +75,7 @@ numOrDate = unionOfDifferentReturnType1(10);
 >unionOfDifferentReturnType1(10) : number | Date
 >                                : ^^^^^^^^^^^^^
 >unionOfDifferentReturnType1 : { (a: number): number; (a: string): string; } | { (a: number): Date; (a: string): boolean; }
->                            : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^ ^^      ^^^^^^^^^^^^^
+>                            : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^^^^^^^ ^^      ^^^    ^^^ ^^      ^^^       ^^^
 >10 : 10
 >   : ^^
 
@@ -87,7 +87,7 @@ strOrBoolean = unionOfDifferentReturnType1("hello");
 >unionOfDifferentReturnType1("hello") : string | boolean
 >                                     : ^^^^^^^^^^^^^^^^
 >unionOfDifferentReturnType1 : { (a: number): number; (a: string): string; } | { (a: number): Date; (a: string): boolean; }
->                            : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^ ^^      ^^^^^^^^^^^^^
+>                            : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^^^^^^^ ^^      ^^^    ^^^ ^^      ^^^       ^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -95,7 +95,7 @@ unionOfDifferentReturnType1(true); // error in type of parameter
 >unionOfDifferentReturnType1(true) : (number | Date) & (string | boolean)
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >unionOfDifferentReturnType1 : { (a: number): number; (a: string): string; } | { (a: number): Date; (a: string): boolean; }
->                            : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^ ^^      ^^^^^^^^^^^^^
+>                            : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^^^^^^^ ^^      ^^^    ^^^ ^^      ^^^       ^^^
 >true : true
 >     : ^^^^
 
@@ -103,7 +103,7 @@ unionOfDifferentReturnType1(); // error missing parameter
 >unionOfDifferentReturnType1() : (number | Date) & (string | boolean)
 >                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >unionOfDifferentReturnType1 : { (a: number): number; (a: string): string; } | { (a: number): Date; (a: string): boolean; }
->                            : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^ ^^      ^^^^^^^^^^^^^
+>                            : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^^^^^^^ ^^      ^^^    ^^^ ^^      ^^^       ^^^
 
 var unionOfDifferentParameterTypes: { (a: number): number; } | { (a: string): Date; };
 >unionOfDifferentParameterTypes : ((a: number) => number) | ((a: string) => Date)
@@ -117,7 +117,7 @@ unionOfDifferentParameterTypes(10);// error - no call signatures
 >unionOfDifferentParameterTypes(10) : number | Date
 >                                   : ^^^^^^^^^^^^^
 >unionOfDifferentParameterTypes : ((a: number) => number) | ((a: string) => Date)
->                               : ^^ ^^      ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
+>                               : ^^ ^^      ^^^^^      ^^^^^^ ^^      ^^^^^    ^
 >10 : 10
 >   : ^^
 
@@ -125,7 +125,7 @@ unionOfDifferentParameterTypes("hello");// error - no call signatures
 >unionOfDifferentParameterTypes("hello") : number | Date
 >                                        : ^^^^^^^^^^^^^
 >unionOfDifferentParameterTypes : ((a: number) => number) | ((a: string) => Date)
->                               : ^^ ^^      ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
+>                               : ^^ ^^      ^^^^^      ^^^^^^ ^^      ^^^^^    ^
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -133,7 +133,7 @@ unionOfDifferentParameterTypes();// error - no call signatures
 >unionOfDifferentParameterTypes() : number | Date
 >                                 : ^^^^^^^^^^^^^
 >unionOfDifferentParameterTypes : ((a: number) => number) | ((a: string) => Date)
->                               : ^^ ^^      ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
+>                               : ^^ ^^      ^^^^^      ^^^^^^ ^^      ^^^^^    ^
 
 var unionOfDifferentNumberOfSignatures: { (a: number): number; } | { (a: number): Date; (a: string): boolean; };
 >unionOfDifferentNumberOfSignatures : ((a: number) => number) | { (a: number): Date; (a: string): boolean; }
@@ -149,13 +149,13 @@ unionOfDifferentNumberOfSignatures(); // error - no call signatures
 >unionOfDifferentNumberOfSignatures() : number | Date
 >                                     : ^^^^^^^^^^^^^
 >unionOfDifferentNumberOfSignatures : ((a: number) => number) | { (a: number): Date; (a: string): boolean; }
->                                   : ^^ ^^      ^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^ ^^      ^^^^^^^^^^^^^
+>                                   : ^^ ^^      ^^^^^      ^^^^^^^ ^^      ^^^    ^^^ ^^      ^^^       ^^^
 
 unionOfDifferentNumberOfSignatures(10); // error - no call signatures
 >unionOfDifferentNumberOfSignatures(10) : number | Date
 >                                       : ^^^^^^^^^^^^^
 >unionOfDifferentNumberOfSignatures : ((a: number) => number) | { (a: number): Date; (a: string): boolean; }
->                                   : ^^ ^^      ^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^ ^^      ^^^^^^^^^^^^^
+>                                   : ^^ ^^      ^^^^^      ^^^^^^^ ^^      ^^^    ^^^ ^^      ^^^       ^^^
 >10 : 10
 >   : ^^
 
@@ -163,7 +163,7 @@ unionOfDifferentNumberOfSignatures("hello"); // error - no call signatures
 >unionOfDifferentNumberOfSignatures("hello") : number | Date
 >                                            : ^^^^^^^^^^^^^
 >unionOfDifferentNumberOfSignatures : ((a: number) => number) | { (a: number): Date; (a: string): boolean; }
->                                   : ^^ ^^      ^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^ ^^      ^^^^^^^^^^^^^
+>                                   : ^^ ^^      ^^^^^      ^^^^^^^ ^^      ^^^    ^^^ ^^      ^^^       ^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -181,13 +181,13 @@ unionWithDifferentParameterCount();// needs more args
 >unionWithDifferentParameterCount() : string | number
 >                                   : ^^^^^^^^^^^^^^^
 >unionWithDifferentParameterCount : ((a: string) => string) | ((a: string, b: number) => number)
->                                 : ^^ ^^      ^^^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^^^^
+>                                 : ^^ ^^      ^^^^^      ^^^^^^ ^^      ^^ ^^      ^^^^^      ^
 
 unionWithDifferentParameterCount("hello");// needs more args
 >unionWithDifferentParameterCount("hello") : string | number
 >                                          : ^^^^^^^^^^^^^^^
 >unionWithDifferentParameterCount : ((a: string) => string) | ((a: string, b: number) => number)
->                                 : ^^ ^^      ^^^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^^^^
+>                                 : ^^ ^^      ^^^^^      ^^^^^^ ^^      ^^ ^^      ^^^^^      ^
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -195,7 +195,7 @@ unionWithDifferentParameterCount("hello", 10);// OK
 >unionWithDifferentParameterCount("hello", 10) : string | number
 >                                              : ^^^^^^^^^^^^^^^
 >unionWithDifferentParameterCount : ((a: string) => string) | ((a: string, b: number) => number)
->                                 : ^^ ^^      ^^^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^^^^
+>                                 : ^^ ^^      ^^^^^      ^^^^^^ ^^      ^^ ^^      ^^^^^      ^
 >"hello" : "hello"
 >        : ^^^^^^^
 >10 : 10
@@ -221,7 +221,7 @@ strOrNum = unionWithOptionalParameter1('hello');
 >unionWithOptionalParameter1('hello') : string | number
 >                                     : ^^^^^^^^^^^^^^^
 >unionWithOptionalParameter1 : ((a: string, b?: number) => string) | ((a: string, b?: number) => number)
->                            : ^^ ^^      ^^ ^^^      ^^^^^^^^^^^^^^^^^ ^^      ^^ ^^^      ^^^^^^^^^^^^
+>                            : ^^ ^^      ^^ ^^^      ^^^^^      ^^^^^^ ^^      ^^ ^^^      ^^^^^      ^
 >'hello' : "hello"
 >        : ^^^^^^^
 
@@ -233,7 +233,7 @@ strOrNum = unionWithOptionalParameter1('hello', 10);
 >unionWithOptionalParameter1('hello', 10) : string | number
 >                                         : ^^^^^^^^^^^^^^^
 >unionWithOptionalParameter1 : ((a: string, b?: number) => string) | ((a: string, b?: number) => number)
->                            : ^^ ^^      ^^ ^^^      ^^^^^^^^^^^^^^^^^ ^^      ^^ ^^^      ^^^^^^^^^^^^
+>                            : ^^ ^^      ^^ ^^^      ^^^^^      ^^^^^^ ^^      ^^ ^^^      ^^^^^      ^
 >'hello' : "hello"
 >        : ^^^^^^^
 >10 : 10
@@ -247,7 +247,7 @@ strOrNum = unionWithOptionalParameter1('hello', "hello"); // error in parameter 
 >unionWithOptionalParameter1('hello', "hello") : string | number
 >                                              : ^^^^^^^^^^^^^^^
 >unionWithOptionalParameter1 : ((a: string, b?: number) => string) | ((a: string, b?: number) => number)
->                            : ^^ ^^      ^^ ^^^      ^^^^^^^^^^^^^^^^^ ^^      ^^ ^^^      ^^^^^^^^^^^^
+>                            : ^^ ^^      ^^ ^^^      ^^^^^      ^^^^^^ ^^      ^^ ^^^      ^^^^^      ^
 >'hello' : "hello"
 >        : ^^^^^^^
 >"hello" : "hello"
@@ -261,7 +261,7 @@ strOrNum = unionWithOptionalParameter1(); // error
 >unionWithOptionalParameter1() : string | number
 >                              : ^^^^^^^^^^^^^^^
 >unionWithOptionalParameter1 : ((a: string, b?: number) => string) | ((a: string, b?: number) => number)
->                            : ^^ ^^      ^^ ^^^      ^^^^^^^^^^^^^^^^^ ^^      ^^ ^^^      ^^^^^^^^^^^^
+>                            : ^^ ^^      ^^ ^^^      ^^^^^      ^^^^^^ ^^      ^^ ^^^      ^^^^^      ^
 
 var unionWithOptionalParameter2: { (a: string, b?: number): string; } | { (a: string, b: number): number };
 >unionWithOptionalParameter2 : ((a: string, b?: number) => string) | ((a: string, b: number) => number)
@@ -283,7 +283,7 @@ strOrNum = unionWithOptionalParameter2('hello'); // error no call signature
 >unionWithOptionalParameter2('hello') : string | number
 >                                     : ^^^^^^^^^^^^^^^
 >unionWithOptionalParameter2 : ((a: string, b?: number) => string) | ((a: string, b: number) => number)
->                            : ^^ ^^      ^^ ^^^      ^^^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^^^^
+>                            : ^^ ^^      ^^ ^^^      ^^^^^      ^^^^^^ ^^      ^^ ^^      ^^^^^      ^
 >'hello' : "hello"
 >        : ^^^^^^^
 
@@ -295,7 +295,7 @@ strOrNum = unionWithOptionalParameter2('hello', 10); // error no call signature
 >unionWithOptionalParameter2('hello', 10) : string | number
 >                                         : ^^^^^^^^^^^^^^^
 >unionWithOptionalParameter2 : ((a: string, b?: number) => string) | ((a: string, b: number) => number)
->                            : ^^ ^^      ^^ ^^^      ^^^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^^^^
+>                            : ^^ ^^      ^^ ^^^      ^^^^^      ^^^^^^ ^^      ^^ ^^      ^^^^^      ^
 >'hello' : "hello"
 >        : ^^^^^^^
 >10 : 10
@@ -309,7 +309,7 @@ strOrNum = unionWithOptionalParameter2('hello', "hello"); // error no call signa
 >unionWithOptionalParameter2('hello', "hello") : string | number
 >                                              : ^^^^^^^^^^^^^^^
 >unionWithOptionalParameter2 : ((a: string, b?: number) => string) | ((a: string, b: number) => number)
->                            : ^^ ^^      ^^ ^^^      ^^^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^^^^
+>                            : ^^ ^^      ^^ ^^^      ^^^^^      ^^^^^^ ^^      ^^ ^^      ^^^^^      ^
 >'hello' : "hello"
 >        : ^^^^^^^
 >"hello" : "hello"
@@ -323,7 +323,7 @@ strOrNum = unionWithOptionalParameter2(); // error no call signature
 >unionWithOptionalParameter2() : string | number
 >                              : ^^^^^^^^^^^^^^^
 >unionWithOptionalParameter2 : ((a: string, b?: number) => string) | ((a: string, b: number) => number)
->                            : ^^ ^^      ^^ ^^^      ^^^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^^^^
+>                            : ^^ ^^      ^^ ^^^      ^^^^^      ^^^^^^ ^^      ^^ ^^      ^^^^^      ^
 
 var unionWithOptionalParameter3: { (a: string, b?: number): string; } | { (a: string): number; };
 >unionWithOptionalParameter3 : ((a: string, b?: number) => string) | ((a: string) => number)
@@ -343,7 +343,7 @@ strOrNum = unionWithOptionalParameter3('hello');
 >unionWithOptionalParameter3('hello') : string | number
 >                                     : ^^^^^^^^^^^^^^^
 >unionWithOptionalParameter3 : ((a: string, b?: number) => string) | ((a: string) => number)
->                            : ^^ ^^      ^^ ^^^      ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>                            : ^^ ^^      ^^ ^^^      ^^^^^      ^^^^^^ ^^      ^^^^^      ^
 >'hello' : "hello"
 >        : ^^^^^^^
 
@@ -355,7 +355,7 @@ strOrNum = unionWithOptionalParameter3('hello', 10); // ok
 >unionWithOptionalParameter3('hello', 10) : string | number
 >                                         : ^^^^^^^^^^^^^^^
 >unionWithOptionalParameter3 : ((a: string, b?: number) => string) | ((a: string) => number)
->                            : ^^ ^^      ^^ ^^^      ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>                            : ^^ ^^      ^^ ^^^      ^^^^^      ^^^^^^ ^^      ^^^^^      ^
 >'hello' : "hello"
 >        : ^^^^^^^
 >10 : 10
@@ -369,7 +369,7 @@ strOrNum = unionWithOptionalParameter3('hello', "hello"); // wrong argument type
 >unionWithOptionalParameter3('hello', "hello") : string | number
 >                                              : ^^^^^^^^^^^^^^^
 >unionWithOptionalParameter3 : ((a: string, b?: number) => string) | ((a: string) => number)
->                            : ^^ ^^      ^^ ^^^      ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>                            : ^^ ^^      ^^ ^^^      ^^^^^      ^^^^^^ ^^      ^^^^^      ^
 >'hello' : "hello"
 >        : ^^^^^^^
 >"hello" : "hello"
@@ -383,7 +383,7 @@ strOrNum = unionWithOptionalParameter3(); // needs more args
 >unionWithOptionalParameter3() : string | number
 >                              : ^^^^^^^^^^^^^^^
 >unionWithOptionalParameter3 : ((a: string, b?: number) => string) | ((a: string) => number)
->                            : ^^ ^^      ^^ ^^^      ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>                            : ^^ ^^      ^^ ^^^      ^^^^^      ^^^^^^ ^^      ^^^^^      ^
 
 var unionWithRestParameter1: { (a: string, ...b: number[]): string; } | { (a: string, ...b: number[]): number };
 >unionWithRestParameter1 : ((a: string, ...b: number[]) => string) | ((a: string, ...b: number[]) => number)
@@ -405,7 +405,7 @@ strOrNum = unionWithRestParameter1('hello');
 >unionWithRestParameter1('hello') : string | number
 >                                 : ^^^^^^^^^^^^^^^
 >unionWithRestParameter1 : ((a: string, ...b: number[]) => string) | ((a: string, ...b: number[]) => number)
->                        : ^^ ^^      ^^^^^ ^^        ^^^^^^^^^^^^^^^^^ ^^      ^^^^^ ^^        ^^^^^^^^^^^^
+>                        : ^^ ^^      ^^^^^ ^^        ^^^^^      ^^^^^^ ^^      ^^^^^ ^^        ^^^^^      ^
 >'hello' : "hello"
 >        : ^^^^^^^
 
@@ -417,7 +417,7 @@ strOrNum = unionWithRestParameter1('hello', 10);
 >unionWithRestParameter1('hello', 10) : string | number
 >                                     : ^^^^^^^^^^^^^^^
 >unionWithRestParameter1 : ((a: string, ...b: number[]) => string) | ((a: string, ...b: number[]) => number)
->                        : ^^ ^^      ^^^^^ ^^        ^^^^^^^^^^^^^^^^^ ^^      ^^^^^ ^^        ^^^^^^^^^^^^
+>                        : ^^ ^^      ^^^^^ ^^        ^^^^^      ^^^^^^ ^^      ^^^^^ ^^        ^^^^^      ^
 >'hello' : "hello"
 >        : ^^^^^^^
 >10 : 10
@@ -431,7 +431,7 @@ strOrNum = unionWithRestParameter1('hello', 10, 11);
 >unionWithRestParameter1('hello', 10, 11) : string | number
 >                                         : ^^^^^^^^^^^^^^^
 >unionWithRestParameter1 : ((a: string, ...b: number[]) => string) | ((a: string, ...b: number[]) => number)
->                        : ^^ ^^      ^^^^^ ^^        ^^^^^^^^^^^^^^^^^ ^^      ^^^^^ ^^        ^^^^^^^^^^^^
+>                        : ^^ ^^      ^^^^^ ^^        ^^^^^      ^^^^^^ ^^      ^^^^^ ^^        ^^^^^      ^
 >'hello' : "hello"
 >        : ^^^^^^^
 >10 : 10
@@ -447,7 +447,7 @@ strOrNum = unionWithRestParameter1('hello', "hello"); // error in parameter type
 >unionWithRestParameter1('hello', "hello") : string | number
 >                                          : ^^^^^^^^^^^^^^^
 >unionWithRestParameter1 : ((a: string, ...b: number[]) => string) | ((a: string, ...b: number[]) => number)
->                        : ^^ ^^      ^^^^^ ^^        ^^^^^^^^^^^^^^^^^ ^^      ^^^^^ ^^        ^^^^^^^^^^^^
+>                        : ^^ ^^      ^^^^^ ^^        ^^^^^      ^^^^^^ ^^      ^^^^^ ^^        ^^^^^      ^
 >'hello' : "hello"
 >        : ^^^^^^^
 >"hello" : "hello"
@@ -461,7 +461,7 @@ strOrNum = unionWithRestParameter1(); // error
 >unionWithRestParameter1() : string | number
 >                          : ^^^^^^^^^^^^^^^
 >unionWithRestParameter1 : ((a: string, ...b: number[]) => string) | ((a: string, ...b: number[]) => number)
->                        : ^^ ^^      ^^^^^ ^^        ^^^^^^^^^^^^^^^^^ ^^      ^^^^^ ^^        ^^^^^^^^^^^^
+>                        : ^^ ^^      ^^^^^ ^^        ^^^^^      ^^^^^^ ^^      ^^^^^ ^^        ^^^^^      ^
 
 var unionWithRestParameter2: { (a: string, ...b: number[]): string; } | { (a: string, b: number): number };
 >unionWithRestParameter2 : ((a: string, ...b: number[]) => string) | ((a: string, b: number) => number)
@@ -483,7 +483,7 @@ strOrNum = unionWithRestParameter2('hello'); // error no call signature
 >unionWithRestParameter2('hello') : string | number
 >                                 : ^^^^^^^^^^^^^^^
 >unionWithRestParameter2 : ((a: string, ...b: number[]) => string) | ((a: string, b: number) => number)
->                        : ^^ ^^      ^^^^^ ^^        ^^^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^^^^
+>                        : ^^ ^^      ^^^^^ ^^        ^^^^^      ^^^^^^ ^^      ^^ ^^      ^^^^^      ^
 >'hello' : "hello"
 >        : ^^^^^^^
 
@@ -495,7 +495,7 @@ strOrNum = unionWithRestParameter2('hello', 10); // error no call signature
 >unionWithRestParameter2('hello', 10) : string | number
 >                                     : ^^^^^^^^^^^^^^^
 >unionWithRestParameter2 : ((a: string, ...b: number[]) => string) | ((a: string, b: number) => number)
->                        : ^^ ^^      ^^^^^ ^^        ^^^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^^^^
+>                        : ^^ ^^      ^^^^^ ^^        ^^^^^      ^^^^^^ ^^      ^^ ^^      ^^^^^      ^
 >'hello' : "hello"
 >        : ^^^^^^^
 >10 : 10
@@ -509,7 +509,7 @@ strOrNum = unionWithRestParameter2('hello', 10, 11); // error no call signature
 >unionWithRestParameter2('hello', 10, 11) : string | number
 >                                         : ^^^^^^^^^^^^^^^
 >unionWithRestParameter2 : ((a: string, ...b: number[]) => string) | ((a: string, b: number) => number)
->                        : ^^ ^^      ^^^^^ ^^        ^^^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^^^^
+>                        : ^^ ^^      ^^^^^ ^^        ^^^^^      ^^^^^^ ^^      ^^ ^^      ^^^^^      ^
 >'hello' : "hello"
 >        : ^^^^^^^
 >10 : 10
@@ -525,7 +525,7 @@ strOrNum = unionWithRestParameter2('hello', "hello"); // error no call signature
 >unionWithRestParameter2('hello', "hello") : string | number
 >                                          : ^^^^^^^^^^^^^^^
 >unionWithRestParameter2 : ((a: string, ...b: number[]) => string) | ((a: string, b: number) => number)
->                        : ^^ ^^      ^^^^^ ^^        ^^^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^^^^
+>                        : ^^ ^^      ^^^^^ ^^        ^^^^^      ^^^^^^ ^^      ^^ ^^      ^^^^^      ^
 >'hello' : "hello"
 >        : ^^^^^^^
 >"hello" : "hello"
@@ -539,7 +539,7 @@ strOrNum = unionWithRestParameter2(); // error no call signature
 >unionWithRestParameter2() : string | number
 >                          : ^^^^^^^^^^^^^^^
 >unionWithRestParameter2 : ((a: string, ...b: number[]) => string) | ((a: string, b: number) => number)
->                        : ^^ ^^      ^^^^^ ^^        ^^^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^^^^
+>                        : ^^ ^^      ^^^^^ ^^        ^^^^^      ^^^^^^ ^^      ^^ ^^      ^^^^^      ^
 
 var unionWithRestParameter3: { (a: string, ...b: number[]): string; } | { (a: string): number };
 >unionWithRestParameter3 : ((a: string, ...b: number[]) => string) | ((a: string) => number)
@@ -559,7 +559,7 @@ strOrNum = unionWithRestParameter3('hello');
 >unionWithRestParameter3('hello') : string | number
 >                                 : ^^^^^^^^^^^^^^^
 >unionWithRestParameter3 : ((a: string, ...b: number[]) => string) | ((a: string) => number)
->                        : ^^ ^^      ^^^^^ ^^        ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>                        : ^^ ^^      ^^^^^ ^^        ^^^^^      ^^^^^^ ^^      ^^^^^      ^
 >'hello' : "hello"
 >        : ^^^^^^^
 
@@ -571,7 +571,7 @@ strOrNum = unionWithRestParameter3('hello', 10); // error no call signature
 >unionWithRestParameter3('hello', 10) : string | number
 >                                     : ^^^^^^^^^^^^^^^
 >unionWithRestParameter3 : ((a: string, ...b: number[]) => string) | ((a: string) => number)
->                        : ^^ ^^      ^^^^^ ^^        ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>                        : ^^ ^^      ^^^^^ ^^        ^^^^^      ^^^^^^ ^^      ^^^^^      ^
 >'hello' : "hello"
 >        : ^^^^^^^
 >10 : 10
@@ -585,7 +585,7 @@ strOrNum = unionWithRestParameter3('hello', 10, 11); // error no call signature
 >unionWithRestParameter3('hello', 10, 11) : string | number
 >                                         : ^^^^^^^^^^^^^^^
 >unionWithRestParameter3 : ((a: string, ...b: number[]) => string) | ((a: string) => number)
->                        : ^^ ^^      ^^^^^ ^^        ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>                        : ^^ ^^      ^^^^^ ^^        ^^^^^      ^^^^^^ ^^      ^^^^^      ^
 >'hello' : "hello"
 >        : ^^^^^^^
 >10 : 10
@@ -601,7 +601,7 @@ strOrNum = unionWithRestParameter3('hello', "hello"); // wrong argument type
 >unionWithRestParameter3('hello', "hello") : string | number
 >                                          : ^^^^^^^^^^^^^^^
 >unionWithRestParameter3 : ((a: string, ...b: number[]) => string) | ((a: string) => number)
->                        : ^^ ^^      ^^^^^ ^^        ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>                        : ^^ ^^      ^^^^^ ^^        ^^^^^      ^^^^^^ ^^      ^^^^^      ^
 >'hello' : "hello"
 >        : ^^^^^^^
 >"hello" : "hello"
@@ -615,7 +615,7 @@ strOrNum = unionWithRestParameter3(); // error no call signature
 >unionWithRestParameter3() : string | number
 >                          : ^^^^^^^^^^^^^^^
 >unionWithRestParameter3 : ((a: string, ...b: number[]) => string) | ((a: string) => number)
->                        : ^^ ^^      ^^^^^ ^^        ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>                        : ^^ ^^      ^^^^^ ^^        ^^^^^      ^^^^^^ ^^      ^^^^^      ^
 
 var unionWithRestParameter4: { (...a: string[]): string; } | { (a: string, b: string): number; };
 >unionWithRestParameter4 : ((...a: string[]) => string) | ((a: string, b: string) => number)
@@ -635,7 +635,7 @@ strOrNum = unionWithRestParameter4("hello"); // error supplied parameters do not
 >unionWithRestParameter4("hello") : string | number
 >                                 : ^^^^^^^^^^^^^^^
 >unionWithRestParameter4 : ((...a: string[]) => string) | ((a: string, b: string) => number)
->                        : ^^^^^ ^^        ^^^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^^^^
+>                        : ^^^^^ ^^        ^^^^^      ^^^^^^ ^^      ^^ ^^      ^^^^^      ^
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -647,7 +647,7 @@ strOrNum = unionWithRestParameter4("hello", "world");
 >unionWithRestParameter4("hello", "world") : string | number
 >                                          : ^^^^^^^^^^^^^^^
 >unionWithRestParameter4 : ((...a: string[]) => string) | ((a: string, b: string) => number)
->                        : ^^^^^ ^^        ^^^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^^^^
+>                        : ^^^^^ ^^        ^^^^^      ^^^^^^ ^^      ^^ ^^      ^^^^^      ^
 >"hello" : "hello"
 >        : ^^^^^^^
 >"world" : "world"

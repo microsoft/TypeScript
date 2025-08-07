@@ -25,7 +25,7 @@ const x = identity(
      */
     param => param
 >param => param : (param: number) => number | undefined
->               : ^     ^^      ^^^^^      ^^^^^^^^^^^^
+>               : ^     ^^      ^^^^^         ^^^^^^^^^
 >param : number
 >      : ^^^^^^
 >param : number

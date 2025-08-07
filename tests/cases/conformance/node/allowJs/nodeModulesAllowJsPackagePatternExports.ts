@@ -1,4 +1,4 @@
-// @module: node16,nodenext
+// @module: node16,node18,node20,nodenext
 // @declaration: true
 // @allowJs: true
 // @checkJs: true
@@ -55,7 +55,7 @@ export { type };
 {
     "name": "package",
     "private": true,
-    "type": "module",
+    "type": "module"
 }
 // @filename: node_modules/inner/package.json
 {

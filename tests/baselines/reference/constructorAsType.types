@@ -23,9 +23,9 @@ var Person2:{new() : {name:string;};};
 
 Person = Person2;
 >Person = Person2 : new () => { name: string; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^^^^^                 
 >Person : new () => { name: string; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^                 
 >Person2 : new () => { name: string; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^                 
 

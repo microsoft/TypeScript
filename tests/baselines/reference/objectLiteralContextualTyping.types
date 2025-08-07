@@ -18,13 +18,13 @@ interface Item {
 
 declare function foo(item: Item): string;
 >foo : { (item: Item): string; (item: any): number; }
->    : ^^^    ^^    ^^^      ^^^    ^^   ^^^^^^^^^^^^
+>    : ^^^    ^^    ^^^      ^^^    ^^   ^^^      ^^^
 >item : Item
 >     : ^^^^
 
 declare function foo(item: any): number;
 >foo : { (item: Item): string; (item: any): number; }
->    : ^^^    ^^    ^^^^^^^^^^^^    ^^   ^^^      ^^^
+>    : ^^^    ^^    ^^^      ^^^    ^^   ^^^      ^^^
 >item : any
 >     : ^^^
 
@@ -34,7 +34,7 @@ var x = foo({ name: "Sprocket" });
 >foo({ name: "Sprocket" }) : string
 >                          : ^^^^^^
 >foo : { (item: Item): string; (item: any): number; }
->    : ^^^    ^^    ^^^^^^^^^^^^    ^^   ^^^^^^^^^^^^
+>    : ^^^    ^^    ^^^      ^^^    ^^   ^^^      ^^^
 >{ name: "Sprocket" } : { name: string; }
 >                     : ^^^^^^^^^^^^^^^^^
 >name : string
@@ -52,7 +52,7 @@ var y = foo({ name: "Sprocket", description: "Bumpy wheel" });
 >foo({ name: "Sprocket", description: "Bumpy wheel" }) : string
 >                                                      : ^^^^^^
 >foo : { (item: Item): string; (item: any): number; }
->    : ^^^    ^^    ^^^^^^^^^^^^    ^^   ^^^^^^^^^^^^
+>    : ^^^    ^^    ^^^      ^^^    ^^   ^^^      ^^^
 >{ name: "Sprocket", description: "Bumpy wheel" } : { name: string; description: string; }
 >                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
@@ -74,7 +74,7 @@ var z = foo({ name: "Sprocket", description: false });
 >foo({ name: "Sprocket", description: false }) : number
 >                                              : ^^^^^^
 >foo : { (item: Item): string; (item: any): number; }
->    : ^^^    ^^    ^^^^^^^^^^^^    ^^   ^^^^^^^^^^^^
+>    : ^^^    ^^    ^^^      ^^^    ^^   ^^^      ^^^
 >{ name: "Sprocket", description: false } : { name: string; description: boolean; }
 >                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
@@ -96,7 +96,7 @@ var w = foo({ a: 10 });
 >foo({ a: 10 }) : number
 >               : ^^^^^^
 >foo : { (item: Item): string; (item: any): number; }
->    : ^^^    ^^    ^^^^^^^^^^^^    ^^   ^^^^^^^^^^^^
+>    : ^^^    ^^    ^^^      ^^^    ^^   ^^^      ^^^
 >{ a: 10 } : { a: number; }
 >          : ^^^^^^^^^^^^^^
 >a : number
@@ -122,7 +122,7 @@ var b = bar({});
 >bar({}) : unknown
 >        : ^^^^^^^
 >bar : <T>(param: { x?: T; }) => T
->    : ^ ^^     ^^          ^^^^^^
+>    : ^ ^^     ^^          ^^^^^ 
 >{} : {}
 >   : ^^
 

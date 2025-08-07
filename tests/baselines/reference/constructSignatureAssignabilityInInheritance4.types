@@ -71,7 +71,7 @@ interface A { // T
 
     a6: new <T extends Base>(x: (arg: T) => Derived) => T;
 >a6 : new <T extends Base>(x: (arg: T) => Derived) => T
->   : ^^^^^ ^^^^^^^^^^^^^^^ ^^                   ^^^^^ 
+>   : ^^^^^ ^^^^^^^^^    ^^ ^^                   ^^^^^ 
 >x : (arg: T) => Derived
 >  : ^   ^^ ^^^^^       
 >arg : T
@@ -103,7 +103,7 @@ interface A { // T
 
     a16: new <T extends Base>(x: { a: T; b: T }) => T[];
 >a16 : new <T extends Base>(x: { a: T; b: T; }) => T[]
->    : ^^^^^ ^^^^^^^^^^^^^^^ ^^               ^^^^^   
+>    : ^^^^^ ^^^^^^^^^    ^^ ^^               ^^^^^   
 >x : { a: T; b: T; }
 >  : ^^^^^ ^^^^^ ^^^
 >a : T
@@ -113,7 +113,7 @@ interface A { // T
 
     a17: {
 >a17 : { new <T extends Base>(x: T): T[]; new <U extends Derived>(x: U): U[]; }
->    : ^^^^^^^ ^^^^^^^^^^^^^^^ ^^ ^^^   ^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^ ^^^   ^^^
+>    : ^^^^^^^ ^^^^^^^^^    ^^ ^^ ^^^   ^^^^^^^ ^^^^^^^^^       ^^ ^^ ^^^   ^^^
 
         new <T extends Base>(x: T): T[];
 >x : T
@@ -126,7 +126,7 @@ interface A { // T
     };
     a18: {
 >a18 : { new <T extends Derived>(x: T): number[]; new <U extends Base>(x: U): number[]; }
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^ ^^^        ^^^^^^^ ^^^^^^^^^^^^^^^ ^^ ^^^        ^^^
+>    : ^^^^^^^ ^^^^^^^^^       ^^ ^^ ^^^        ^^^^^^^ ^^^^^^^^^    ^^ ^^ ^^^        ^^^
 
         new <T extends Derived>(x: T): number[];
 >x : T
@@ -139,7 +139,7 @@ interface A { // T
     };
     a19: {
 >a19 : { new <T extends Derived>(x: new (a: T) => T): T[]; new <U extends Base>(x: new (a: U) => U): U[]; }
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^               ^^^   ^^^^^^^ ^^^^^^^^^^^^^^^ ^^               ^^^   ^^^
+>    : ^^^^^^^ ^^^^^^^^^       ^^ ^^               ^^^   ^^^^^^^ ^^^^^^^^^    ^^ ^^               ^^^   ^^^
 
         new <T extends Derived>(x: new (a: T) => T): T[];
 >x : new (a: T) => T
@@ -160,7 +160,7 @@ interface A { // T
 
         new (x: {
 >x : { new <T extends Derived>(a: T): T; new <U extends Base>(a: U): U; }
->  : ^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^^^^^ ^^^^^^^^^^^^^^^ ^^ ^^^ ^^^
+>  : ^^^^^^^ ^^^^^^^^^       ^^ ^^ ^^^ ^^^^^^^ ^^^^^^^^^    ^^ ^^ ^^^ ^^^
 
             new <T extends Derived>(a: T): T;
 >a : T
@@ -173,7 +173,7 @@ interface A { // T
         }): any[];
         new (x: {
 >x : { new <T extends Base>(a: T): T; new <U extends Derived2>(a: U): U; }
->  : ^^^^^^^ ^^^^^^^^^^^^^^^ ^^ ^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^
+>  : ^^^^^^^ ^^^^^^^^^    ^^ ^^ ^^^ ^^^^^^^ ^^^^^^^^^        ^^ ^^ ^^^ ^^^
 
             new <T extends Base>(a: T): T;
 >a : T
@@ -226,7 +226,7 @@ interface I extends A {
 
     a6: new <T extends Base, U extends Derived>(x: (arg: T) => U) => T; // ok, same as a5 but with object type hierarchy
 >a6 : new <T extends Base, U extends Derived>(x: (arg: T) => U) => T
->   : ^^^^^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^             ^^^^^ 
+>   : ^^^^^ ^^^^^^^^^    ^^ ^^^^^^^^^       ^^ ^^             ^^^^^ 
 >x : (arg: T) => U
 >  : ^   ^^ ^^^^^ 
 >arg : T
@@ -268,19 +268,19 @@ interface I extends A {
 
     a17: new <T extends Base>(x: T) => T[]; // ok, more general parameter type
 >a17 : new <T extends Base>(x: T) => T[]
->    : ^^^^^ ^^^^^^^^^^^^^^^ ^^ ^^^^^   
+>    : ^^^^^ ^^^^^^^^^    ^^ ^^ ^^^^^   
 >x : T
 >  : ^
 
     a18: new <T extends Base>(x: T) => number[]; // ok, more general parameter type
 >a18 : new <T extends Base>(x: T) => number[]
->    : ^^^^^ ^^^^^^^^^^^^^^^ ^^ ^^^^^        
+>    : ^^^^^ ^^^^^^^^^    ^^ ^^ ^^^^^        
 >x : T
 >  : ^
 
     a19: new <T extends Base>(x: new (a: T) => T) => T[]; // ok
 >a19 : new <T extends Base>(x: new (a: T) => T) => T[]
->    : ^^^^^ ^^^^^^^^^^^^^^^ ^^               ^^^^^   
+>    : ^^^^^ ^^^^^^^^^    ^^ ^^               ^^^^^   
 >x : new (a: T) => T
 >  : ^^^^^ ^^ ^^^^^ 
 >a : T
@@ -290,7 +290,7 @@ interface I extends A {
 >a20 : new (x: new <T extends Base>(a: T) => T) => any[]
 >    : ^^^^^ ^^                               ^^^^^     
 >x : new <T extends Base>(a: T) => T
->  : ^^^^^ ^^^^^^^^^^^^^^^ ^^ ^^^^^ 
+>  : ^^^^^ ^^^^^^^^^    ^^ ^^ ^^^^^ 
 >a : T
 >  : ^
 }

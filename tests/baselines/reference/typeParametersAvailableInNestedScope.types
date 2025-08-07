@@ -74,11 +74,11 @@ c.data = c.x(null);
 >c.x(null) : number
 >          : ^^^^^^
 >c.x : <U>(a: U) => number
->    : ^^^^ ^^^^^^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^^^^^^
 >c : C<number>
 >  : ^^^^^^^^^
 >x : <U>(a: U) => number
->  : ^^^^ ^^^^^^^^^^^^^^
+>  : ^ ^^ ^^^^^^^^^^^^^^
 
 c.data = c.foo();
 >c.data = c.foo() : number

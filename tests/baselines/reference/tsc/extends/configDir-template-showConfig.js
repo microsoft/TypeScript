@@ -1,18 +1,5 @@
-currentDirectory:: /home/src/projects/myproject useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/myproject useCaseSensitiveFileNames:: false
 Input::
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-
 //// [/home/src/projects/configs/first/tsconfig.json]
 {
   "extends": "../second/tsconfig.json",
@@ -53,22 +40,6 @@ interface Array<T> { length: number; [n: number]: T; }
   }
 }
 
-//// [/home/src/projects/myproject/main.ts]
-// some comment
-export const y = 10;
-import { x } from "@myscope/sometype";
-
-
-//// [/home/src/projects/myproject/root2/other/sometype2/index.d.ts]
-export const k = 10;
-
-
-//// [/home/src/projects/myproject/src/secondary.ts]
-// some comment
-export const z = 10;
-import { k } from "other/sometype2";
-
-
 //// [/home/src/projects/myproject/tsconfig.json]
 {
   "extends": "../configs/first/tsconfig.json",
@@ -79,11 +50,27 @@ import { k } from "other/sometype2";
   }
 }
 
+//// [/home/src/projects/myproject/main.ts]
+// some comment
+export const y = 10;
+import { x } from "@myscope/sometype";
+
+
+//// [/home/src/projects/myproject/src/secondary.ts]
+// some comment
+export const z = 10;
+import { k } from "other/sometype2";
+
+
 //// [/home/src/projects/myproject/types/sometype.ts]
 export const x = 10;
 
 
-//// [/lib/lib.d.ts]
+//// [/home/src/projects/myproject/root2/other/sometype2/index.d.ts]
+export const k = 10;
+
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -99,9 +86,8 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-
+/home/src/tslibs/TS/Lib/tsc.js --showConfig
 Output::
-/lib/tsc -p /home/src/projects/myproject --showConfig
 {
     "compilerOptions": {
         "declarationDir": "./decls",
@@ -140,6 +126,7 @@ Output::
         "/home/src/projects/myproject/decls"
     ]
 }
+
+
+
 exitCode:: ExitStatus.Success
-
-

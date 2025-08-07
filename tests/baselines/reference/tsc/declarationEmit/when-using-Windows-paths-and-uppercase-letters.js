@@ -1,4 +1,4 @@
-currentDirectory:: D:\Work\pkg1 useCaseSensitiveFileNames: false
+currentDirectory:: D:\Work\pkg1 useCaseSensitiveFileNames:: false
 Input::
 //// [D:/Work/pkg1/package.json]
 {
@@ -78,7 +78,7 @@ export interface MyType<T = any> extends Function {
 }
 
 
-//// [D:/a/lib/lib.d.ts]
+//// [D:/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -90,40 +90,20 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-D:/a/lib/tsc.js -p D:\Work\pkg1 --explainFiles
+D:\home\src\tslibs\TS\Lib\tsc.js -p D:\Work\pkg1 --explainFiles
 Output::
-[91merror[0m[90m TS2318: [0mCannot find global type 'Array'.
+[96msrc/utils/index.ts[0m:[93m8[0m:[93m12[0m - [91merror[0m[90m TS2352: [0mConversion of type 'typeof PartialClassType' to type 'MyReturnType' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Cannot assign an abstract constructor type to a non-abstract constructor type.
 
-[91merror[0m[90m TS2318: [0mCannot find global type 'Boolean'.
+[7m8[0m     return PartialClassType as MyReturnType;
+[7m [0m [91m           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
-[91merror[0m[90m TS2318: [0mCannot find global type 'Function'.
-
-[91merror[0m[90m TS2318: [0mCannot find global type 'IArguments'.
-
-[91merror[0m[90m TS2318: [0mCannot find global type 'Number'.
-
-[91merror[0m[90m TS2318: [0mCannot find global type 'Object'.
-
-[91merror[0m[90m TS2318: [0mCannot find global type 'RegExp'.
-
-[91merror[0m[90m TS2318: [0mCannot find global type 'String'.
-
-[91merror[0m[90m TS6053: [0mFile 'D:/a/lib/lib.es2017.full.d.ts' not found.
-  The file is in the program because:
-    Default library for target 'es2017'
-
-  [96mtsconfig.json[0m:[93m10[0m:[93m15[0m
-    [7m10[0m     "target": "es2017",
-    [7m  [0m [96m              ~~~~~~~~[0m
-    File is default library for target specified here.
-
-[96msrc/utils/type-helpers.ts[0m:[93m5[0m:[93m42[0m - [91merror[0m[90m TS4022: [0m'extends' clause of exported interface 'MyType' has or is using private name 'Function'.
-
-[7m5[0m export interface MyType<T = any> extends Function {
-[7m [0m [91m                                         ~~~~~~~~[0m
-
+../../home/src/tslibs/TS/Lib/lib.es2017.full.d.ts
+  Default library for target 'es2017'
 src/utils/type-helpers.ts
   Imported via './type-helpers' from file 'src/utils/index.ts'
   Matched by include pattern 'src' in 'tsconfig.json'
@@ -133,9 +113,11 @@ src/utils/index.ts
 src/main.ts
   Matched by include pattern 'src' in 'tsconfig.json'
 
-Found 10 errors in the same file, starting at: src/utils/type-helpers.ts[90m:5[0m
+Found 1 error in src/utils/index.ts[90m:8[0m
 
 
+
+//// [D:/home/src/tslibs/TS/Lib/lib.es2017.full.d.ts] *Lib*
 
 //// [D:/Work/pkg1/dist/utils/type-helpers.js.map]
 {"version":3,"file":"type-helpers.js","sourceRoot":"","sources":["../../src/utils/type-helpers.ts"],"names":[],"mappings":""}
@@ -144,6 +126,15 @@ Found 10 errors in the same file, starting at: src/utils/type-helpers.ts[90m:5
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 //# sourceMappingURL=type-helpers.js.map
+
+//// [D:/Work/pkg1/dist/utils/type-helpers.d.ts]
+export type MyReturnType = {
+    new (...args: any[]): any;
+};
+export interface MyType<T = any> extends Function {
+    new (...args: any[]): T;
+}
+
 
 //// [D:/Work/pkg1/dist/utils/index.js.map]
 {"version":3,"file":"index.js","sourceRoot":"","sources":["../../src/utils/index.ts"],"names":[],"mappings":";;AAEA,kCAMC;AAND,SAAgB,WAAW,CAAI,QAAmB;IAC9C,MAAe,gBAAgB;QAC3B,gBAAe,CAAC;KACnB;IAED,OAAO,gBAAgC,CAAC;AAC5C,CAAC"}
@@ -189,40 +180,4 @@ export {};
 
 
 
-Program root files: [
-  "D:/Work/pkg1/src/main.ts",
-  "D:/Work/pkg1/src/utils/index.ts",
-  "D:/Work/pkg1/src/utils/type-helpers.ts"
-]
-Program options: {
-  "module": 1,
-  "declaration": true,
-  "removeComments": true,
-  "emitDecoratorMetadata": true,
-  "experimentalDecorators": true,
-  "strictPropertyInitialization": false,
-  "allowSyntheticDefaultImports": true,
-  "target": 4,
-  "sourceMap": true,
-  "esModuleInterop": true,
-  "outDir": "D:/Work/pkg1/dist",
-  "baseUrl": "D:/Work/pkg1",
-  "skipLibCheck": true,
-  "strictNullChecks": false,
-  "noImplicitAny": false,
-  "strictBindCallApply": false,
-  "forceConsistentCasingInFileNames": false,
-  "noFallthroughCasesInSwitch": false,
-  "moduleResolution": 2,
-  "resolveJsonModule": true,
-  "project": "D:/Work/pkg1",
-  "explainFiles": true,
-  "configFilePath": "D:/Work/pkg1/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-D:/Work/pkg1/src/utils/type-helpers.ts
-D:/Work/pkg1/src/utils/index.ts
-D:/Work/pkg1/src/main.ts
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

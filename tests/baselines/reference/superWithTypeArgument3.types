@@ -37,10 +37,10 @@ class D<T> extends C<T> {
 >super.bar<T>(null) : void
 >                   : ^^^^
 >super.bar : <U>(x: U) => void
->          : ^^^^ ^^^^^^^^^^^^
+>          : ^ ^^ ^^^^^^^^^^^^
 >super : C<T>
 >      : ^^^^
 >bar : <U>(x: U) => void
->    : ^^^^ ^^^^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^^^^
     }
 }

@@ -27,7 +27,7 @@ foo("", { [Symbol.unscopables]: s => s.length });
 >foo("", { [Symbol.unscopables]: s => s.length }) : number
 >                                                 : ^^^^^^
 >foo : <T, U>(p1: T, p2: I<T, U>) => U
->    : ^ ^^ ^^  ^^ ^^  ^^       ^^^^^^
+>    : ^ ^^ ^^  ^^ ^^  ^^       ^^^^^ 
 >"" : ""
 >   : ^^
 >{ [Symbol.unscopables]: s => s.length } : { [Symbol.unscopables]: (s: string) => number; }

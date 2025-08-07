@@ -94,19 +94,19 @@ let c = new C();
 
 c.explicitVoid = c.explicitThis; // error, 'void' is missing everything
 >c.explicitVoid = c.explicitThis : (this: C, m: number) => number
->                                : ^    ^^^^^ ^^      ^^^^^^^^^^^
+>                                : ^    ^^^^^ ^^      ^^^^^      
 >c.explicitVoid : (this: void, m: number) => number
->               : ^    ^^    ^^ ^^      ^^^^^^^^^^^
+>               : ^    ^^    ^^ ^^      ^^^^^      
 >c : C
 >  : ^
 >explicitVoid : (this: void, m: number) => number
->             : ^    ^^    ^^ ^^      ^^^^^^^^^^^
+>             : ^    ^^    ^^ ^^      ^^^^^      
 >c.explicitThis : (this: C, m: number) => number
->               : ^    ^^^^^ ^^      ^^^^^^^^^^^
+>               : ^    ^^^^^ ^^      ^^^^^      
 >c : C
 >  : ^
 >explicitThis : (this: C, m: number) => number
->             : ^    ^^^^^ ^^      ^^^^^^^^^^^
+>             : ^    ^^^^^ ^^      ^^^^^      
 
 let o = {
 >o : { n: number; explicitThis: (m: number) => any; implicitThis(m: number): number; }
@@ -138,7 +138,7 @@ let o = {
 >this.n : number
 >       : ^^^^^^
 >this : { n: number; explicitThis: (m: number) => any; implicitThis(m: number): number; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^      ^^^
 >n : number
 >  : ^^^^^^
 >length : any
@@ -158,7 +158,7 @@ let i: I = o;
 >i : I
 >  : ^
 >o : { n: number; explicitThis: (m: number) => any; implicitThis(m: number): number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^      ^^^
 
 let o2: I = {
 >o2 : I
@@ -200,13 +200,13 @@ let o2: I = {
 }
 let x = i.explicitThis;
 >x : (this: I, m: number) => number
->  : ^    ^^^^^ ^^      ^^^^^^^^^^^
+>  : ^    ^^^^^ ^^      ^^^^^      
 >i.explicitThis : (this: I, m: number) => number
->               : ^    ^^^^^ ^^      ^^^^^^^^^^^
+>               : ^    ^^^^^ ^^      ^^^^^      
 >i : I
 >  : ^
 >explicitThis : (this: I, m: number) => number
->             : ^    ^^^^^ ^^      ^^^^^^^^^^^
+>             : ^    ^^^^^ ^^      ^^^^^      
 
 let n = x(12); // callee:void doesn't match this:I
 >n : number
@@ -214,7 +214,7 @@ let n = x(12); // callee:void doesn't match this:I
 >x(12) : number
 >      : ^^^^^^
 >x : (this: I, m: number) => number
->  : ^    ^^^^^ ^^      ^^^^^^^^^^^
+>  : ^    ^^^^^ ^^      ^^^^^      
 >12 : 12
 >   : ^^
 
@@ -224,13 +224,13 @@ let u: Unused;
 
 let y = u.implicitNoThis;
 >y : (m: number) => number
->  : ^ ^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^      
 >u.implicitNoThis : (m: number) => number
->                 : ^ ^^      ^^^^^^^^^^^
+>                 : ^ ^^      ^^^^^      
 >u : Unused
 >  : ^^^^^^
 >implicitNoThis : (m: number) => number
->               : ^ ^^      ^^^^^^^^^^^
+>               : ^ ^^      ^^^^^      
 
 n = y(12); // ok, callee:void matches this:any
 >n = y(12) : number
@@ -240,83 +240,83 @@ n = y(12); // ok, callee:void matches this:any
 >y(12) : number
 >      : ^^^^^^
 >y : (m: number) => number
->  : ^ ^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^      
 >12 : 12
 >   : ^^
 
 c.explicitVoid = c.implicitThis // ok, implicitThis(this:any)
 >c.explicitVoid = c.implicitThis : (m: number) => number
->                                : ^ ^^      ^^^^^^^^^^^
+>                                : ^ ^^      ^^^^^      
 >c.explicitVoid : (this: void, m: number) => number
->               : ^    ^^    ^^ ^^      ^^^^^^^^^^^
+>               : ^    ^^    ^^ ^^      ^^^^^      
 >c : C
 >  : ^
 >explicitVoid : (this: void, m: number) => number
->             : ^    ^^    ^^ ^^      ^^^^^^^^^^^
+>             : ^    ^^    ^^ ^^      ^^^^^      
 >c.implicitThis : (m: number) => number
->               : ^ ^^      ^^^^^^^^^^^
+>               : ^ ^^      ^^^^^      
 >c : C
 >  : ^
 >implicitThis : (m: number) => number
->             : ^ ^^      ^^^^^^^^^^^
+>             : ^ ^^      ^^^^^      
 
 o.implicitThis = c.implicitThis; // ok, implicitThis(this:any)
 >o.implicitThis = c.implicitThis : (m: number) => number
->                                : ^ ^^      ^^^^^^^^^^^
+>                                : ^ ^^      ^^^^^      
 >o.implicitThis : (m: number) => number
->               : ^ ^^      ^^^^^^^^^^^
+>               : ^ ^^      ^^^^^      
 >o : { n: number; explicitThis: (m: number) => any; implicitThis(m: number): number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^      ^^^
 >implicitThis : (m: number) => number
->             : ^ ^^      ^^^^^^^^^^^
+>             : ^ ^^      ^^^^^      
 >c.implicitThis : (m: number) => number
->               : ^ ^^      ^^^^^^^^^^^
+>               : ^ ^^      ^^^^^      
 >c : C
 >  : ^
 >implicitThis : (m: number) => number
->             : ^ ^^      ^^^^^^^^^^^
+>             : ^ ^^      ^^^^^      
 
 o.implicitThis = c.explicitThis; // ok, implicitThis(this:any) is assignable to explicitThis(this: this)
 >o.implicitThis = c.explicitThis : (this: C, m: number) => number
->                                : ^    ^^^^^ ^^      ^^^^^^^^^^^
+>                                : ^    ^^^^^ ^^      ^^^^^      
 >o.implicitThis : (m: number) => number
->               : ^ ^^      ^^^^^^^^^^^
+>               : ^ ^^      ^^^^^      
 >o : { n: number; explicitThis: (m: number) => any; implicitThis(m: number): number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^      ^^^
 >implicitThis : (m: number) => number
->             : ^ ^^      ^^^^^^^^^^^
+>             : ^ ^^      ^^^^^      
 >c.explicitThis : (this: C, m: number) => number
->               : ^    ^^^^^ ^^      ^^^^^^^^^^^
+>               : ^    ^^^^^ ^^      ^^^^^      
 >c : C
 >  : ^
 >explicitThis : (this: C, m: number) => number
->             : ^    ^^^^^ ^^      ^^^^^^^^^^^
+>             : ^    ^^^^^ ^^      ^^^^^      
 
 o.implicitThis = i.explicitThis;
 >o.implicitThis = i.explicitThis : (this: I, m: number) => number
->                                : ^    ^^^^^ ^^      ^^^^^^^^^^^
+>                                : ^    ^^^^^ ^^      ^^^^^      
 >o.implicitThis : (m: number) => number
->               : ^ ^^      ^^^^^^^^^^^
+>               : ^ ^^      ^^^^^      
 >o : { n: number; explicitThis: (m: number) => any; implicitThis(m: number): number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^      ^^^
 >implicitThis : (m: number) => number
->             : ^ ^^      ^^^^^^^^^^^
+>             : ^ ^^      ^^^^^      
 >i.explicitThis : (this: I, m: number) => number
->               : ^    ^^^^^ ^^      ^^^^^^^^^^^
+>               : ^    ^^^^^ ^^      ^^^^^      
 >i : I
 >  : ^
 >explicitThis : (this: I, m: number) => number
->             : ^    ^^^^^ ^^      ^^^^^^^^^^^
+>             : ^    ^^^^^ ^^      ^^^^^      
 
 i.explicitThis = function(m) {
 >i.explicitThis = function(m) {     return this.n.length;  // error, this.n: number} : (this: I, m: number) => any
 >                                                                                    : ^    ^^^^^ ^^^^^^^^^^^^^^^^
 >i.explicitThis : (this: I, m: number) => number
->               : ^    ^^^^^ ^^      ^^^^^^^^^^^
+>               : ^    ^^^^^ ^^      ^^^^^      
 >i : I
 >  : ^
 >explicitThis : (this: I, m: number) => number
->             : ^    ^^^^^ ^^      ^^^^^^^^^^^
+>             : ^    ^^^^^ ^^      ^^^^^      
 >function(m) {     return this.n.length;  // error, this.n: number} : (this: I, m: number) => any
 >                                                                   : ^    ^^^^^ ^^^^^^^^^^^^^^^^
 >m : number

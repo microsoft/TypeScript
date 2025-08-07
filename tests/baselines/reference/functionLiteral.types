@@ -26,7 +26,7 @@ var y: { (x: string): string; };
 
 var y: (x: string) => string;
 >y : (x: string) => string
->  : ^ ^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^      
 >x : string
 >  : ^^^^^^
 
@@ -50,7 +50,7 @@ var z: { new (x: number): number; };
 
 var z: new (x: number) => number;
 >z : new (x: number) => number
->  : ^^^^^ ^^      ^^^^^^^^^^^
+>  : ^^^^^ ^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 

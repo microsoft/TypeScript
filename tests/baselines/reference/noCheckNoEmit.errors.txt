@@ -1,9 +1,0 @@
-error TS5053: Option 'emitDeclarationOnly' cannot be specified with option 'noEmit'.
-error TS5053: Option 'noCheck' cannot be specified with option 'noEmit'.
-
-
-!!! error TS5053: Option 'emitDeclarationOnly' cannot be specified with option 'noEmit'.
-!!! error TS5053: Option 'noCheck' cannot be specified with option 'noEmit'.
-==== noCheckNoEmit.ts (0 errors) ====
-    export const a: number = "not ok";
-    

@@ -66,20 +66,16 @@ derivedClassParameterProperties.ts(81,9): error TS17009: 'super' must be called 
         a = 1;
         b: number;
         constructor(y: string) {
-        ~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
+!!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
             this.a = 3;
-    ~~~~~~~~~~~~~~~~~~~
             ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
             this.b = 3;
-    ~~~~~~~~~~~~~~~~~~~
             ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
             super();
-    ~~~~~~~~~~~~~~~~
         }
-    ~~~~~
-!!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
     }
     
     class Derived8 extends Base {
@@ -99,20 +95,16 @@ derivedClassParameterProperties.ts(81,9): error TS17009: 'super' must be called 
         a = 1;
         b: number;
         constructor(y: string) {
-        ~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
+!!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
             this.a = 3;
-    ~~~~~~~~~~~~~~~~~~~
             ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
             this.b = 3;
-    ~~~~~~~~~~~~~~~~~~~
             ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
             super();
-    ~~~~~~~~~~~~~~~~
         }
-    ~~~~~
-!!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
     }
     
     class Derived10<T> extends Base2<T> {

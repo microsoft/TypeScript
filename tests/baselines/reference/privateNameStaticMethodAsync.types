@@ -14,12 +14,12 @@ const C = class {
 >                          : ^^^^^^
 >Promise.resolve(42) : Promise<number>
 >                    : ^^^^^^^^^^^^^^^
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >42 : 42
 >   : ^^
 
@@ -54,16 +54,16 @@ const C = class {
 >                         : ^^^^^^^^^^^^^
 >this.#baz().next() : IteratorResult<number, void>
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->this.#baz().next : (...args: [] | [unknown]) => IteratorResult<number, void>
->                 : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.#baz().next : (...[value]: [] | [unknown]) => IteratorResult<number, void>
+>                 : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.#baz() : Generator<number, void, unknown>
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.#baz : () => Generator<number, void, unknown>
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : typeof C
 >     : ^^^^^^^^
->next : (...args: [] | [unknown]) => IteratorResult<number, void>
->     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>next : (...[value]: [] | [unknown]) => IteratorResult<number, void>
+>     : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : number | void
 >      : ^^^^^^^^^^^^^
 >0 : 0
@@ -80,16 +80,16 @@ const C = class {
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.#qux().next() : Promise<IteratorResult<number, void>>
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->this.#qux().next : (...args: [] | [unknown]) => Promise<IteratorResult<number, void>>
->                 : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.#qux().next : (...[value]: [] | [unknown]) => Promise<IteratorResult<number, void>>
+>                 : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.#qux() : AsyncGenerator<number, void, unknown>
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.#qux : () => AsyncGenerator<number, void, unknown>
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : typeof C
 >     : ^^^^^^^^
->next : (...args: [] | [unknown]) => Promise<IteratorResult<number, void>>
->     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>next : (...[value]: [] | [unknown]) => Promise<IteratorResult<number, void>>
+>     : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : number | void
 >      : ^^^^^^^^^^^^^
 >0 : 0
@@ -116,12 +116,12 @@ const C = class {
 >                          : ^^^^^^
 >Promise.resolve(42) : Promise<number>
 >                    : ^^^^^^^^^^^^^^^
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >42 : 42
 >   : ^^
     }

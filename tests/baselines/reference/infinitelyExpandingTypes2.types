@@ -23,11 +23,11 @@ function f(p: Foo<number>) {
 >console.log(p) : void
 >               : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >p : Foo<number>
 >  : ^^^^^^^^^^^
 }

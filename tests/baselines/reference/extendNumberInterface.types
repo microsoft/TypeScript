@@ -25,11 +25,11 @@ var a: string = x.doStuff();
 >x.doStuff() : string
 >            : ^^^^^^
 >x.doStuff : () => string
->          : ^^^^^^^^^^^^
+>          : ^^^^^^      
 >x : number
 >  : ^^^^^^
 >doStuff : () => string
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
 
 var b: string = x.doOtherStuff('hm');
 >b : string
@@ -37,11 +37,11 @@ var b: string = x.doOtherStuff('hm');
 >x.doOtherStuff('hm') : "hm"
 >                     : ^^^^
 >x.doOtherStuff : <T>(x: T) => T
->               : ^ ^^ ^^ ^^^^^^
+>               : ^ ^^ ^^ ^^^^^ 
 >x : number
 >  : ^^^^^^
 >doOtherStuff : <T>(x: T) => T
->             : ^ ^^ ^^ ^^^^^^
+>             : ^ ^^ ^^ ^^^^^ 
 >'hm' : "hm"
 >     : ^^^^
 
@@ -51,7 +51,7 @@ var c: string = x['doStuff']();
 >x['doStuff']() : string
 >               : ^^^^^^
 >x['doStuff'] : () => string
->             : ^^^^^^^^^^^^
+>             : ^^^^^^      
 >x : number
 >  : ^^^^^^
 >'doStuff' : "doStuff"
@@ -63,7 +63,7 @@ var d: string = x['doOtherStuff']('hm');
 >x['doOtherStuff']('hm') : "hm"
 >                        : ^^^^
 >x['doOtherStuff'] : <T>(x: T) => T
->                  : ^ ^^ ^^ ^^^^^^
+>                  : ^ ^^ ^^ ^^^^^ 
 >x : number
 >  : ^^^^^^
 >'doOtherStuff' : "doOtherStuff"

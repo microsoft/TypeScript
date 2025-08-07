@@ -30,12 +30,12 @@ declare var a: A;
 >  : ^
 
 ab = {...a, y: (null as any as string | undefined)}; // Should be allowed, since `y` is missing on `A`
->ab = {...a, y: (null as any as string | undefined)} : { y: string | undefined; unused?: string | undefined; x: string; }
->                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ab = {...a, y: (null as any as string | undefined)} : { y: string | undefined; unused?: string; x: string; }
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >ab : A | B
 >   : ^^^^^
->{...a, y: (null as any as string | undefined)} : { y: string | undefined; unused?: string | undefined; x: string; }
->                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{...a, y: (null as any as string | undefined)} : { y: string | undefined; unused?: string; x: string; }
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >a : A
 >  : ^
 >y : string | undefined

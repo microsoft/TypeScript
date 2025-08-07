@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/myproject/index.ts]
 const fn = (a: string, b: string) => b;
@@ -10,7 +10,7 @@ const fn = (a: string, b: string) => b;
   }
 }
 
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -22,9 +22,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -b -w
+/home/src/tslibs/TS/Lib/tsc.js -b -w
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -38,22 +40,23 @@ Output::
 
 
 
+//// [/user/username/projects/myproject/index.js]
+var fn = function (a, b) { return b; };
 
-PolledWatches::
-/a/lib/package.json: *new*
-  {"pollingInterval":2000}
-/a/package.json: *new*
-  {"pollingInterval":2000}
-/package.json: *new*
-  {"pollingInterval":2000}
-/user/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/package.json: *new*
-  {"pollingInterval":2000}
+
+//// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
+{"root":["./index.ts"],"errors":true,"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./index.ts"
+  ],
+  "errors": true,
+  "version": "FakeTSVersion",
+  "size": 63
+}
+
 
 FsWatches::
 /user/username/projects/myproject/index.ts: *new*
@@ -71,19 +74,20 @@ Program root files: [
 Program options: {
   "noUnusedParameters": true,
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/index.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /user/username/projects/myproject/index.ts (used version)
 
 exitCode:: ExitStatus.undefined
@@ -105,6 +109,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToBuildInvalidatedProject
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -114,9 +119,18 @@ Output::
 
 
 
-//// [/user/username/projects/myproject/index.js]
-var fn = function (a, b) { return b; };
+//// [/user/username/projects/myproject/index.js] file changed its modified time
+//// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
+{"root":["./index.ts"],"version":"FakeTSVersion"}
 
+//// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./index.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 49
+}
 
 
 
@@ -126,15 +140,16 @@ Program root files: [
 Program options: {
   "noUnusedParameters": false,
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/index.ts
 
 No shapes updated in the builder::

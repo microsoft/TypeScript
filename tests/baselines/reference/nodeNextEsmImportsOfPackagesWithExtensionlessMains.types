@@ -20,11 +20,11 @@ export function getAddress(): string {
 >ip.address() : string
 >             : ^^^^^^
 >ip.address : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >ip : typeof ip
 >   : ^^^^^^^^^
 >address : () => string
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
 }
 === node_modules/@types/ip/index.d.ts ===
 export function address(): string;

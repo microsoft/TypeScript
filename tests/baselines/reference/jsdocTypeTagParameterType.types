@@ -4,9 +4,9 @@
 /** @type {function(string): void} */
 const f = (value) => {
 >f : (arg0: string) => void
->  : ^^^^^^^      ^^^^^^^^^
+>  : ^^^^^^^      ^^^^^    
 >(value) => {    value = 1 // should error} : (value: string) => void
->                                           : ^     ^^^^^^^^^^^^^^^^^
+>                                           : ^     ^^^^^^^^^^^^^    
 >value : string
 >      : ^^^^^^
 

@@ -25,7 +25,7 @@ expect(fooFn<number>``);
 >expect(fooFn<number>``) : void
 >                        : ^^^^
 >expect : (x: Promise<number>) => void
->       : ^ ^^               ^^^^^^^^^
+>       : ^ ^^               ^^^^^    
 >fooFn<number>`` : Promise<number>
 >                : ^^^^^^^^^^^^^^^
 >fooFn : IFooFn

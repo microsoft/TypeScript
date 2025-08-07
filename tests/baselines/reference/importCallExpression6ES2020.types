@@ -38,7 +38,7 @@ const specify = bar() ? "./0" : undefined;
 >bar() : boolean
 >      : ^^^^^^^
 >bar : () => boolean
->    : ^^^^^^^^^^^^^
+>    : ^^^^^^       
 >"./0" : "./0"
 >      : ^^^^^
 >undefined : undefined
@@ -70,7 +70,7 @@ let myModule2 = import(bar() ? "./1" : null);
 >bar() : boolean
 >      : ^^^^^^^
 >bar : () => boolean
->    : ^^^^^^^^^^^^^
+>    : ^^^^^^       
 >"./1" : "./1"
 >      : ^^^^^
 

@@ -35,7 +35,6 @@ import {
     normalizeSlashes,
     orderedRemoveItem,
     Path,
-    perfLogger,
     PollingWatchKind,
     resolveJSModule,
     some,
@@ -46,7 +45,7 @@ import {
     WatchFileKind,
     WatchOptions,
     writeFileEnsuringDirectories,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 declare function clearTimeout(handle: any): void;
@@ -72,7 +71,7 @@ export function generateDjb2Hash(data: string): string {
  *
  * @internal
  */
-export function setStackTraceLimit() {
+export function setStackTraceLimit(): void {
     if ((Error as any).stackTraceLimit < 100) { // Also tests that we won't set the property if it doesn't exist.
         (Error as any).stackTraceLimit = 100;
     }
@@ -105,10 +104,10 @@ export type HostWatchFile = (fileName: string, callback: FileWatcherCallback, po
 export type HostWatchDirectory = (fileName: string, callback: DirectoryWatcherCallback, recursive: boolean, options: WatchOptions | undefined) => FileWatcher;
 
 /** @internal */
-export const missingFileModifiedTime = new Date(0); // Any subsequent modification will occur after this time
+export const missingFileModifiedTime: Date = new Date(0); // Any subsequent modification will occur after this time
 
 /** @internal */
-export function getModifiedTime(host: { getModifiedTime: NonNullable<System["getModifiedTime"]>; }, fileName: string) {
+export function getModifiedTime(host: { getModifiedTime: NonNullable<System["getModifiedTime"]>; }, fileName: string): Date {
     return host.getModifiedTime(fileName) || missingFileModifiedTime;
 }
 
@@ -129,7 +128,7 @@ function createPollingIntervalBasedLevels(levels: Levels) {
 const defaultChunkLevels: Levels = { Low: 32, Medium: 64, High: 256 };
 let pollingChunkSize = createPollingIntervalBasedLevels(defaultChunkLevels);
 /** @internal */
-export let unchangedPollThresholds = createPollingIntervalBasedLevels(defaultChunkLevels);
+export let unchangedPollThresholds: { [K in PollingInterval]: number; } = createPollingIntervalBasedLevels(defaultChunkLevels);
 
 function setCustomPollingValues(system: System) {
     if (!system.getEnvironmentVariable) {
@@ -551,7 +550,7 @@ function onWatchedFileStat(watchedFile: WatchedFile, modifiedTime: Date): boolea
 }
 
 /** @internal */
-export function getFileWatcherEventKind(oldTime: number, newTime: number) {
+export function getFileWatcherEventKind(oldTime: number, newTime: number): FileWatcherEventKind {
     return oldTime === 0
         ? FileWatcherEventKind.Created
         : newTime === 0
@@ -560,17 +559,17 @@ export function getFileWatcherEventKind(oldTime: number, newTime: number) {
 }
 
 /** @internal */
-export const ignoredPaths = ["/node_modules/.", "/.git", "/.#"];
+export const ignoredPaths: readonly string[] = ["/node_modules/.", "/.git", "/.#"];
 
 let curSysLog: (s: string) => void = noop;
 
 /** @internal */
-export function sysLog(s: string) {
+export function sysLog(s: string): void {
     return curSysLog(s);
 }
 
 /** @internal */
-export function setSysLog(logger: typeof sysLog) {
+export function setSysLog(logger: typeof sysLog): void {
     curSysLog = logger;
 }
 
@@ -1376,7 +1375,7 @@ export function createSystemWatchFunctions({
  *
  * @internal
  */
-export function patchWriteFileEnsuringDirectory(sys: System) {
+export function patchWriteFileEnsuringDirectory(sys: System): void {
     // patch writefile to create folder before writing the file
     const originalWriteFile = sys.writeFile;
     sys.writeFile = (path, data, writeBom) =>
@@ -1410,6 +1409,7 @@ export interface System {
      */
     watchFile?(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: WatchOptions): FileWatcher;
     watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher;
+    /**@internal */ preferNonRecursiveWatch?: boolean;
     resolvePath(path: string): string;
     fileExists(path: string): boolean;
     directoryExists(path: string): boolean;
@@ -1466,7 +1466,7 @@ export let sys: System = (() => {
     const byteOrderMarkIndicator = "\uFEFF";
 
     function getNodeSystem(): System {
-        const nativePattern = /^native |^\([^)]+\)$|^(internal[\\/]|[a-zA-Z0-9_\s]+(\.js)?$)/;
+        const nativePattern = /^native |^\([^)]+\)$|^(?:internal[\\/]|[\w\s]+(?:\.js)?$)/;
         const _fs: typeof import("fs") = require("fs");
         const _path: typeof import("path") = require("path");
         const _os = require("os");
@@ -1483,6 +1483,8 @@ export let sys: System = (() => {
 
         const isMacOs = process.platform === "darwin";
         const isLinuxOrMacOs = process.platform === "linux" || isMacOs;
+
+        const statSyncOptions = { throwIfNoEntry: false } as const;
 
         const platform: string = _os.platform();
         const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
@@ -1535,6 +1537,7 @@ export let sys: System = (() => {
             writeFile,
             watchFile,
             watchDirectory,
+            preferNonRecursiveWatch: !fsSupportsRecursiveFsWatch,
             resolvePath: path => _path.resolve(path),
             fileExists,
             directoryExists,
@@ -1575,13 +1578,10 @@ export let sys: System = (() => {
                 return process.memoryUsage().heapUsed;
             },
             getFileSize(path) {
-                try {
-                    const stat = statSync(path);
-                    if (stat?.isFile()) {
-                        return stat.size;
-                    }
+                const stat = statSync(path);
+                if (stat?.isFile()) {
+                    return stat.size;
                 }
-                catch { /*ignore*/ }
                 return 0;
             },
             exit(exitCode?: number): void {
@@ -1591,7 +1591,7 @@ export let sys: System = (() => {
             disableCPUProfiler,
             cpuProfilingEnabled: () => !!activeSession || contains(process.execArgv, "--cpu-prof") || contains(process.execArgv, "--prof"),
             realpath,
-            debugMode: !!process.env.NODE_INSPECTOR_IPC || !!process.env.VSCODE_INSPECTOR_OPTIONS || some(process.execArgv, arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)) || !!(process as any).recordreplay,
+            debugMode: !!process.env.NODE_INSPECTOR_IPC || !!process.env.VSCODE_INSPECTOR_OPTIONS || some(process.execArgv, arg => /^--(?:inspect|debug)(?:-brk)?(?:=\d+)?$/i.test(arg)) || !!(process as any).recordreplay,
             tryEnableSourceMapsForHost() {
                 try {
                     (require("source-map-support") as typeof import("source-map-support")).install();
@@ -1603,7 +1603,7 @@ export let sys: System = (() => {
             setTimeout,
             clearTimeout,
             clearScreen: () => {
-                process.stdout.write("\x1Bc");
+                process.stdout.write("\x1B[2J\x1B[3J\x1B[H");
             },
             setBlocking: () => {
                 const handle = (process.stdout as any)?._handle as { setBlocking?: (value: boolean) => void; };
@@ -1625,14 +1625,17 @@ export let sys: System = (() => {
         };
         return nodeSystem;
 
-        /**
-         * `throwIfNoEntry` was added so recently that it's not in the node types.
-         * This helper encapsulates the mitigating usage of `any`.
-         * See https://github.com/nodejs/node/pull/33716
-         */
+        /** Calls fs.statSync, returning undefined if any errors are thrown */
         function statSync(path: string): import("fs").Stats | undefined {
-            // throwIfNoEntry will be ignored by older versions of node
-            return (_fs as any).statSync(path, { throwIfNoEntry: false });
+            // throwIfNoEntry is available in Node 14.17 and above, which matches our supported range.
+            try {
+                return _fs.statSync(path, statSyncOptions);
+            }
+            catch {
+                // This should never happen as we are passing throwIfNoEntry: false,
+                // but guard against this just in case (e.g. a polyfill doesn't check this flag).
+                return undefined;
+            }
         }
 
         /**
@@ -1692,13 +1695,8 @@ export let sys: System = (() => {
                 const s = activeSession;
                 activeSession.post("Profiler.stop", (err, { profile }) => {
                     if (!err) {
-                        try {
-                            if (statSync(profilePath)?.isDirectory()) {
-                                profilePath = _path.join(profilePath, `${(new Date()).toISOString().replace(/:/g, "-")}+P${process.pid}.cpuprofile`);
-                            }
-                        }
-                        catch {
-                            // do nothing and ignore fallible fs operation
+                        if (statSync(profilePath)?.isDirectory()) {
+                            profilePath = _path.join(profilePath, `${(new Date()).toISOString().replace(/:/g, "-")}+P${process.pid}.cpuprofile`);
                         }
                         try {
                             _fs.mkdirSync(_path.dirname(profilePath), { recursive: true });
@@ -1786,12 +1784,12 @@ export let sys: System = (() => {
             );
         }
 
-        function readFileWorker(fileName: string, _encoding?: string): string | undefined {
+        function readFile(fileName: string, _encoding?: string): string | undefined {
             let buffer: Buffer;
             try {
                 buffer = _fs.readFileSync(fileName);
             }
-            catch (e) {
+            catch {
                 return undefined;
             }
             let len = buffer.length;
@@ -1818,15 +1816,7 @@ export let sys: System = (() => {
             return buffer.toString("utf8");
         }
 
-        function readFile(fileName: string, _encoding?: string): string | undefined {
-            perfLogger?.logStartReadFile(fileName);
-            const file = readFileWorker(fileName, _encoding);
-            perfLogger?.logStopReadFile();
-            return file;
-        }
-
         function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
-            perfLogger?.logEvent("WriteFile: " + fileName);
             // If a BOM is required, emit one
             if (writeByteOrderMark) {
                 data = byteOrderMarkIndicator + data;
@@ -1846,7 +1836,6 @@ export let sys: System = (() => {
         }
 
         function getAccessibleFileSystemEntries(path: string): FileSystemEntries {
-            perfLogger?.logEvent("ReadDir: " + (path || "."));
             try {
                 const entries = _fs.readdirSync(path || ".", { withFileTypes: true });
                 const files: string[] = [];
@@ -1865,13 +1854,8 @@ export let sys: System = (() => {
                     if (typeof dirent === "string" || dirent.isSymbolicLink()) {
                         const name = combinePaths(path, entry);
 
-                        try {
-                            stat = statSync(name);
-                            if (!stat) {
-                                continue;
-                            }
-                        }
-                        catch (e) {
+                        stat = statSync(name);
+                        if (!stat) {
                             continue;
                         }
                     }
@@ -1890,7 +1874,7 @@ export let sys: System = (() => {
                 directories.sort();
                 return { files, directories };
             }
-            catch (e) {
+            catch {
                 return emptyFileSystemEntries;
             }
         }
@@ -1900,30 +1884,17 @@ export let sys: System = (() => {
         }
 
         function fileSystemEntryExists(path: string, entryKind: FileSystemEntryKind): boolean {
-            // Since the error thrown by fs.statSync isn't used, we can avoid collecting a stack trace to improve
-            // the CPU time performance.
-            const originalStackTraceLimit = Error.stackTraceLimit;
-            Error.stackTraceLimit = 0;
-
-            try {
-                const stat = statSync(path);
-                if (!stat) {
-                    return false;
-                }
-                switch (entryKind) {
-                    case FileSystemEntryKind.File:
-                        return stat.isFile();
-                    case FileSystemEntryKind.Directory:
-                        return stat.isDirectory();
-                    default:
-                        return false;
-                }
-            }
-            catch (e) {
+            const stat = statSync(path);
+            if (!stat) {
                 return false;
             }
-            finally {
-                Error.stackTraceLimit = originalStackTraceLimit;
+            switch (entryKind) {
+                case FileSystemEntryKind.File:
+                    return stat.isFile();
+                case FileSystemEntryKind.Directory:
+                    return stat.isDirectory();
+                default:
+                    return false;
             }
         }
 
@@ -1953,26 +1924,14 @@ export let sys: System = (() => {
         }
 
         function getModifiedTime(path: string) {
-            // Since the error thrown by fs.statSync isn't used, we can avoid collecting a stack trace to improve
-            // the CPU time performance.
-            const originalStackTraceLimit = Error.stackTraceLimit;
-            Error.stackTraceLimit = 0;
-            try {
-                return statSync(path)?.mtime;
-            }
-            catch (e) {
-                return undefined;
-            }
-            finally {
-                Error.stackTraceLimit = originalStackTraceLimit;
-            }
+            return statSync(path)?.mtime;
         }
 
         function setModifiedTime(path: string, time: Date) {
             try {
                 _fs.utimesSync(path, time, time);
             }
-            catch (e) {
+            catch {
                 return;
             }
         }
@@ -1981,7 +1940,7 @@ export let sys: System = (() => {
             try {
                 return _fs.unlinkSync(path);
             }
-            catch (e) {
+            catch {
                 return;
             }
         }
@@ -2004,8 +1963,8 @@ export let sys: System = (() => {
     return sys!;
 })();
 
-/** @internal */
-export function setSys(s: System) {
+/** @internal @knipignore */
+export function setSys(s: System): void {
     sys = s;
 }
 

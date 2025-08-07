@@ -28,7 +28,7 @@ class Foo extends NextType<Foo> {
 >Foo : Foo
 >    : ^^^
 >NextType : NextType<Foo, { test: true; }>
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^^^^^^^^^^^    ^^^^
 
     someProp: {
 >someProp : { test: true; }
@@ -54,11 +54,11 @@ foo.bar.test
 >foo.bar.test : true
 >             : ^^^^
 >foo.bar : { test: true; }
->        : ^^^^^^^^^^^^^^^
+>        : ^^^^^^^^    ^^^
 >foo : Foo
 >    : ^^^
 >bar : { test: true; }
->    : ^^^^^^^^^^^^^^^
+>    : ^^^^^^^^    ^^^
 >test : true
 >     : ^^^^
 

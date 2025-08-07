@@ -5,7 +5,7 @@
 
 function function1<T extends 'a' | 'b'>(key: T) {
 >function1 : <T extends "a" | "b">(key: T) => void
->          : ^ ^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^
+>          : ^ ^^^^^^^^^         ^^   ^^ ^^^^^^^^^
 >key : T
 >    : ^
 
@@ -21,11 +21,11 @@ function function1<T extends 'a' | 'b'>(key: T) {
 >key.toLowerCase() : string
 >                  : ^^^^^^
 >key.toLowerCase : () => string
->                : ^^^^^^^^^^^^
+>                : ^^^^^^      
 >key : "a"
 >    : ^^^
 >toLowerCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 
       break;
     default:
@@ -33,11 +33,11 @@ function function1<T extends 'a' | 'b'>(key: T) {
 >key.toLowerCase() : string
 >                  : ^^^^^^
 >key.toLowerCase : () => string
->                : ^^^^^^^^^^^^
+>                : ^^^^^^      
 >key : "b"
 >    : ^^^
 >toLowerCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 
       break;
   }

@@ -1,4 +1,10 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    findAncestorMatchingSpan,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     BinaryExpression,
     createTextSpan,
     DiagnosticMessageChain,
@@ -14,13 +20,7 @@ import {
     SyntaxKind,
     textChanges,
     TextSpan,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    findAncestorMatchingSpan,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "fixNaNEquality";
 const errorCodes = [

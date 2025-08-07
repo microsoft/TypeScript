@@ -9,7 +9,7 @@ for (const [key, entry] of new FormData()) {
 >new FormData() : FormData
 >               : ^^^^^^^^
 >FormData : { new (): FormData; prototype: FormData; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^        ^^^^^^^^^^^^^        ^^^
 
     entry;
 >entry : FormDataEntryValue

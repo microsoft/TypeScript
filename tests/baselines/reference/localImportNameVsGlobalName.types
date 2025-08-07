@@ -40,7 +40,7 @@ module App {
 >foo(Key.UP) : void
 >            : ^^^^
 >foo : (key: Key) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >Key.UP : Key.UP
 >       : ^^^^^^
 >Key : typeof Key
@@ -52,7 +52,7 @@ module App {
 >foo(Key.DOWN) : void
 >              : ^^^^
 >foo : (key: Key) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >Key.DOWN : Key.DOWN
 >         : ^^^^^^^^
 >Key : typeof Key
@@ -64,7 +64,7 @@ module App {
 >foo(Key.LEFT) : void
 >              : ^^^^
 >foo : (key: Key) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >Key.LEFT : Key.LEFT
 >         : ^^^^^^^^
 >Key : typeof Key

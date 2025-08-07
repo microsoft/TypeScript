@@ -65,7 +65,7 @@ module M {
     // Implicit-'any' errors for x1, y2, x3, and y3.
     function m_f8(x1, y1: number): any;
 >m_f8 : { (x1: any, y1: number): any; (x2: string, y2: any): any; }
->     : ^^^  ^^^^^^^  ^^      ^^^   ^^^  ^^      ^^  ^^^^^^^^^^^^^^
+>     : ^^^  ^^^^^^^  ^^      ^^^   ^^^  ^^      ^^  ^^^^^^^^   ^^^
 >x1 : any
 >   : ^^^
 >y1 : number
@@ -73,7 +73,7 @@ module M {
 
     function m_f8(x2: string, y2): any;
 >m_f8 : { (x1: any, y1: number): any; (x2: string, y2: any): any; }
->     : ^^^  ^^^^^^^  ^^      ^^^^^^^^^  ^^      ^^  ^^^^^^^^   ^^^
+>     : ^^^  ^^^^^^^  ^^      ^^^   ^^^  ^^      ^^  ^^^^^^^^   ^^^
 >x2 : string
 >   : ^^^^^^
 >y2 : any
@@ -81,7 +81,7 @@ module M {
 
     function m_f8(x3, y3): any { }
 >m_f8 : { (x1: any, y1: number): any; (x2: string, y2: any): any; }
->     : ^^^  ^^^^^^^  ^^      ^^^^^^^^^  ^^      ^^  ^^^^^^^^^^^^^^
+>     : ^^^  ^^^^^^^  ^^      ^^^   ^^^  ^^      ^^  ^^^^^^^^   ^^^
 >x3 : any
 >   : ^^^
 >y3 : any

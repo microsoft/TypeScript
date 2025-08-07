@@ -13,7 +13,7 @@ let gg = f() ?? 'foo'
 >f() : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
 >f : () => string | undefined
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^                  
 >'foo' : "foo"
 >      : ^^^^^
 

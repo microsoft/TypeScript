@@ -55,11 +55,11 @@ class B extends A {
 >super.foo(a) : boolean
 >             : ^^^^^^^
 >super.foo : (a: string | number) => boolean
->          : ^ ^^               ^^^^^^^^^^^^
+>          : ^ ^^               ^^^^^       
 >super : A
 >      : ^
 >foo : (a: string | number) => boolean
->    : ^ ^^               ^^^^^^^^^^^^
+>    : ^ ^^               ^^^^^       
 >a : string | number
 >  : ^^^^^^^^^^^^^^^
     }

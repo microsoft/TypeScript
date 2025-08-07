@@ -119,11 +119,11 @@ if (!(a instanceof b)) {
 >console.log(a.length) : void
 >                      : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >a.length : 1 | 2
 >         : ^^^^^
 >a : A | B

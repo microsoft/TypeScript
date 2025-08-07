@@ -25,9 +25,9 @@ var {a, ...rest1 } = union;
 >a : string | number
 >  : ^^^^^^^^^^^^^^^
 >rest1 : { c: boolean; } | { b: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^       ^^^^^^^^^^^      ^^^
 >union : { a: number; c: boolean; } | { a: string; b: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^       ^^^^^^^^^^^      ^^^^^      ^^^
 
 
 var undefinedUnion: { n: number } | undefined;
@@ -46,7 +46,7 @@ var {n, ...rest2 } = undefinedUnion;
 >rest2 : {}
 >      : ^^
 >undefinedUnion : { n: number; }
->               : ^^^^^^^^^^^^^^
+>               : ^^^^^      ^^^
 
 
 var nullUnion: { n: number } | null;
@@ -65,5 +65,5 @@ var {n, ...rest3 } = nullUnion;
 >rest3 : {}
 >      : ^^
 >nullUnion : { n: number; }
->          : ^^^^^^^^^^^^^^
+>          : ^^^^^      ^^^
 

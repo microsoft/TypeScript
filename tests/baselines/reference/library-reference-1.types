@@ -6,11 +6,11 @@ $.foo();
 >$.foo() : void
 >        : ^^^^
 >$.foo : () => void
->      : ^^^^^^^^^^
+>      : ^^^^^^    
 >$ : { foo(): void; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^    ^^^
 >foo : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 
 === /src/types/jquery/index.d.ts ===
 declare var $: { foo(): void };

@@ -356,11 +356,11 @@ export class BarCorrectlyFails extends Foo {
 >this.bar() : number
 >           : ^^^^^^
 >this.bar : () => number
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >this : this
 >     : ^^^^
 >bar : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
             super(value);
 >super(value) : void
@@ -416,11 +416,11 @@ export class BarIncorrectlyWorks extends Foo {
 >this.bar() : number
 >           : ^^^^^^
 >this.bar : () => number
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >this : this
 >     : ^^^^
 >bar : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
             super(value);
 >super(value) : void

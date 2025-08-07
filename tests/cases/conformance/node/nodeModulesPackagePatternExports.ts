@@ -1,4 +1,4 @@
-// @module: node16,nodenext
+// @module: node16,node18,node20,nodenext
 // @declaration: true
 // @outDir: out
 // @filename: index.ts
@@ -53,7 +53,7 @@ export { type };
 {
     "name": "package",
     "private": true,
-    "type": "module",
+    "type": "module"
 }
 // @filename: node_modules/inner/package.json
 {

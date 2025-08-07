@@ -2,7 +2,6 @@
 
 === Performance Stats ===
 Type Count: 2,500
-Instantiation count: 2,500
 
 === a.ts ===
 export const texts: string[] = [];
@@ -17,11 +16,11 @@ texts.push(100);
 >texts.push(100) : number
 >                : ^^^^^^
 >texts.push : (...items: string[]) => number
->           : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^     ^^^^^^^^^^^^^^^      
 >texts : string[]
 >      : ^^^^^^^^
 >push : (...items: string[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^      
 >100 : 100
 >    : ^^^
 
@@ -31,11 +30,11 @@ texts.push(100);
 >texts.push(100) : number
 >                : ^^^^^^
 >texts.push : (...items: string[]) => number
->           : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^     ^^^^^^^^^^^^^^^      
 >texts : string[]
 >      : ^^^^^^^^
 >push : (...items: string[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^      
 >100 : 100
 >    : ^^^
 
@@ -45,11 +44,11 @@ texts.push("100");
 >texts.push("100") : number
 >                  : ^^^^^^
 >texts.push : (...items: string[]) => number
->           : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^     ^^^^^^^^^^^^^^^      
 >texts : string[]
 >      : ^^^^^^^^
 >push : (...items: string[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^      
 >"100" : "100"
 >      : ^^^^^
 

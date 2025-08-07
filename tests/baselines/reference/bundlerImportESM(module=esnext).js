@@ -19,5 +19,4 @@ export var esm = 0;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 //// [still-not-cjs.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

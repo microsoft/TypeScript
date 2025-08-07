@@ -1,0 +1,40 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/awaitUsingDeclarationsWithAsyncIteratorObject.ts] ////
+
+=== awaitUsingDeclarationsWithAsyncIteratorObject.ts ===
+declare const ai: AsyncIterator<string, undefined>;
+>ai : AsyncIterator<string, undefined, any>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare const aio: AsyncIteratorObject<string, undefined, unknown>;
+>aio : AsyncIteratorObject<string, undefined, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare const ag: AsyncGenerator<string, void>;
+>ag : AsyncGenerator<string, void, any>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+async function f() {
+>f : () => Promise<void>
+>  : ^^^^^^^^^^^^^^^^^^^
+
+    // should pass
+    await using it0 = aio;
+>it0 : AsyncIteratorObject<string, undefined, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>aio : AsyncIteratorObject<string, undefined, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    await using it1 = ag;
+>it1 : AsyncGenerator<string, void, any>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ag : AsyncGenerator<string, void, any>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    // should fail
+    await using it2 = ai;
+>it2 : AsyncIterator<string, undefined, any>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ai : AsyncIterator<string, undefined, any>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+

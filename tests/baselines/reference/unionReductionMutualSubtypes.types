@@ -33,27 +33,27 @@ function run(options: { something?(b?: string): void }) {
 
     const something = options.something ?? val.something;
 >something : (b?: string) => void
->          : ^ ^^^      ^^^^^^^^^
+>          : ^ ^^^      ^^^^^    
 >options.something ?? val.something : (b?: string) => void
->                                   : ^ ^^^      ^^^^^^^^^
+>                                   : ^ ^^^      ^^^^^    
 >options.something : ((b?: string) => void) | undefined
->                  : ^^ ^^^      ^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^ ^^^      ^^^^^    ^^^^^^^^^^^^^
 >options : { something?(b?: string): void; }
->        : ^^^^^^^^^^^^^ ^^^      ^^^^^^^^^^
+>        : ^^^^^^^^^^^^^ ^^^      ^^^    ^^^
 >something : ((b?: string) => void) | undefined
->          : ^^ ^^^      ^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^ ^^^      ^^^^^    ^^^^^^^^^^^^^
 >val.something : () => void
->              : ^^^^^^^^^^
+>              : ^^^^^^    
 >val : ReturnVal
 >    : ^^^^^^^^^
 >something : () => void
->          : ^^^^^^^^^^
+>          : ^^^^^^    
 
     something('');
 >something('') : void
 >              : ^^^^
 >something : (b?: string) => void
->          : ^ ^^^      ^^^^^^^^^
+>          : ^ ^^^      ^^^^^    
 >'' : ""
 >   : ^^
 }

@@ -14,15 +14,15 @@ use(x.toExponential());
 >use(x.toExponential()) : void
 >                       : ^^^^
 >use : (a: any) => void
->    : ^ ^^   ^^^^^^^^^
+>    : ^ ^^   ^^^^^    
 >x.toExponential() : string
 >                  : ^^^^^^
 >x.toExponential : (fractionDigits?: number) => string
->                : ^              ^^^      ^^^^^^^^^^^
+>                : ^              ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
->              : ^              ^^^      ^^^^^^^^^^^
+>              : ^              ^^^      ^^^^^      
 
 === c:/root/folder2/file2.ts ===
 import {x as a} from "./file3"  // found with baseurl

@@ -1,0 +1,16 @@
+checkingObjectWithThisInNamePositionNoCrash.ts(2,5): error TS7023: 'doit' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+checkingObjectWithThisInNamePositionNoCrash.ts(4,19): error TS2339: Property 'a' does not exist on type '{ doit(): { [x: number]: string; }; }'.
+
+
+==== checkingObjectWithThisInNamePositionNoCrash.ts (2 errors) ====
+    export const thing = {
+        doit() {
+        ~~~~
+!!! error TS7023: 'doit' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+            return {
+                [this.a]: "", // should refer to the outer object with the doit method, notably not present
+                      ~
+!!! error TS2339: Property 'a' does not exist on type '{ doit(): { [x: number]: string; }; }'.
+            }
+        }
+    }

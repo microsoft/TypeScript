@@ -38,12 +38,12 @@ export function h(): void;
 === reacty.tsx ===
 import {createElement, Fragment} from "./react";
 >createElement : () => void
->              : ^^^^^^^^^^
+>              : ^^^^^^    
 >Fragment : () => void
->         : ^^^^^^^^^^
+>         : ^^^^^^    
 
 <><span></span></>
-><><span></span></> : error
+><><span></span></> : any
 ><span></span> : error
 >span : any
 >     : ^^^
@@ -57,12 +57,12 @@ import {createElement, Fragment} from "./react";
  */
 import {h, Frag} from "./preact";
 >h : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 >Frag : () => void
->     : ^^^^^^^^^^
+>     : ^^^^^^    
 
 <><div></div></>
-><><div></div></> : error
+><><div></div></> : any
 ><div></div> : error
 >div : any
 >    : ^^^
@@ -76,10 +76,10 @@ import {h, Frag} from "./preact";
  */
 import {h} from "./snabbdom";
 >h : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 
 <><div></div></>
-><><div></div></> : error
+><><div></div></> : any
 ><div></div> : error
 >div : any
 >    : ^^^
@@ -91,14 +91,14 @@ import {h} from "./snabbdom";
 /* @jsxFrag Fragment */
 import {h} from "./preact";
 >h : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 
 import {Fragment} from "./react";
 >Fragment : () => void
->         : ^^^^^^^^^^
+>         : ^^^^^^    
 
 <><span></span></>
-><><span></span></> : error
+><><span></span></> : any
 ><span></span> : error
 >span : any
 >     : ^^^

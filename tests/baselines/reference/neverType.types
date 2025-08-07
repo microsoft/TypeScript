@@ -39,7 +39,7 @@ function fail() {
 >error("Something failed") : never
 >                          : ^^^^^
 >error : (message: string) => never
->      : ^       ^^      ^^^^^^^^^^
+>      : ^       ^^      ^^^^^     
 >"Something failed" : "Something failed"
 >                   : ^^^^^^^^^^^^^^^^^^
 }
@@ -119,7 +119,7 @@ function move1(direction: "up" | "down") {
 >error("Should never get here") : never
 >                               : ^^^^^
 >error : (message: string) => never
->      : ^       ^^      ^^^^^^^^^^
+>      : ^       ^^      ^^^^^     
 >"Should never get here" : "Should never get here"
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^
 }
@@ -160,7 +160,7 @@ function move2(direction: "up" | "down") {
 >error("Should never get here") : never
 >                               : ^^^^^
 >error : (message: string) => never
->      : ^       ^^      ^^^^^^^^^^
+>      : ^       ^^      ^^^^^     
 >"Should never get here" : "Should never get here"
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^
 }
@@ -179,7 +179,7 @@ function check<T>(x: T | undefined) {
 >error("Undefined value") : never
 >                         : ^^^^^
 >error : (message: string) => never
->      : ^       ^^      ^^^^^^^^^^
+>      : ^       ^^      ^^^^^     
 >"Undefined value" : "Undefined value"
 >                  : ^^^^^^^^^^^^^^^^^
 }
@@ -287,7 +287,7 @@ function test(cb: () => string) {
 >cb() : string
 >     : ^^^^^^
 >cb : () => string
->   : ^^^^^^^^^^^^
+>   : ^^^^^^      
 
     return s;
 >s : string
@@ -302,7 +302,7 @@ let errorCallback = () => error("Error callback");
 >error("Error callback") : never
 >                        : ^^^^^
 >error : (message: string) => never
->      : ^       ^^      ^^^^^^^^^^
+>      : ^       ^^      ^^^^^     
 >"Error callback" : "Error callback"
 >                 : ^^^^^^^^^^^^^^^^
 

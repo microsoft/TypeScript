@@ -46,9 +46,9 @@ class Derived extends Base {
 
 const Printable = <T extends Constructor<Base>>(superClass: T) => class extends superClass {
 >Printable : <T extends Constructor<Base>>(superClass: T) => { new (...args: any[]): (Anonymous class); prototype: Printable<any>.(Anonymous class); message: string; } & T
->          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^                 ^^          ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><T extends Constructor<Base>>(superClass: T) => class extends superClass {    static message = "hello";    print() {        const output = this.x + "," + this.y;    }} : <T extends Constructor<Base>>(superClass: T) => { new (...args: any[]): (Anonymous class); prototype: Printable<any>.(Anonymous class); message: string; } & T
->                                                                                                                                                                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                        : ^ ^^^^^^^^^                 ^^          ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >superClass : T
 >           : ^
 >class extends superClass {    static message = "hello";    print() {        const output = this.x + "," + this.y;    }} : { new (...args: any[]): (Anonymous class); prototype: Printable<any>.(Anonymous class); message: string; } & T
@@ -92,7 +92,7 @@ const Printable = <T extends Constructor<Base>>(superClass: T) => class extends 
 
 function Tagged<T extends Constructor<{}>>(superClass: T) {
 >Tagged : <T extends Constructor<{}>>(superClass: T) => { new (...args: any[]): C; prototype: Tagged<any>.C; } & T
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^               ^^          ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >superClass : T
 >           : ^
 
@@ -143,7 +143,7 @@ const Thing1 = Tagged(Derived);
 >Tagged(Derived) : { new (...args: any[]): Tagged<typeof Derived>.C; prototype: Tagged<any>.C; } & typeof Derived
 >                : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Tagged : <T extends Constructor<{}>>(superClass: T) => { new (...args: any[]): C; prototype: Tagged<any>.C; } & T
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^               ^^          ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Derived : typeof Derived
 >        : ^^^^^^^^^^^^^^
 
@@ -153,11 +153,11 @@ const Thing2 = Tagged(Printable(Derived));
 >Tagged(Printable(Derived)) : { new (...args: any[]): Tagged<{ new (...args: any[]): Printable<typeof Derived>.(Anonymous class); prototype: Printable<any>.(Anonymous class); message: string; } & typeof Derived>.C; prototype: Tagged<any>.C; } & { new (...args: any[]): Printable<typeof Derived>.(Anonymous class); prototype: Printable<any>.(Anonymous class); message: string; } & typeof Derived
 >                           : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Tagged : <T extends Constructor<{}>>(superClass: T) => { new (...args: any[]): C; prototype: Tagged<any>.C; } & T
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^               ^^          ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Printable(Derived) : { new (...args: any[]): Printable<typeof Derived>.(Anonymous class); prototype: Printable<any>.(Anonymous class); message: string; } & typeof Derived
 >                   : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Printable : <T extends Constructor<Base>>(superClass: T) => { new (...args: any[]): (Anonymous class); prototype: Printable<any>.(Anonymous class); message: string; } & T
->          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^                 ^^          ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Derived : typeof Derived
 >        : ^^^^^^^^^^^^^^
 
@@ -303,9 +303,9 @@ class Thing3 extends Thing2 {
 
 const Timestamped = <CT extends Constructor<object>>(Base: CT) => {
 >Timestamped : <CT extends Constructor<object>>(Base: CT) => { new (...args: any[]): (Anonymous class); prototype: Timestamped<any>.(Anonymous class); } & CT
->            : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^  ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^  ^^^^^^^^^                   ^^    ^^  ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><CT extends Constructor<object>>(Base: CT) => {    return class extends Base {        timestamp = new Date();    };} : <CT extends Constructor<object>>(Base: CT) => { new (...args: any[]): (Anonymous class); prototype: Timestamped<any>.(Anonymous class); } & CT
->                                                                                                                     : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^  ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                     : ^  ^^^^^^^^^                   ^^    ^^  ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : CT
 >     : ^^
 

@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     AnyImportSyntax,
     Diagnostics,
     Expression,
@@ -14,12 +19,7 @@ import {
     SourceFile,
     textChanges,
     UserPreferences,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "useDefaultImport";
 const errorCodes = [Diagnostics.Import_may_be_converted_to_a_default_import.code];

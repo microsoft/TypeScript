@@ -30,7 +30,7 @@ const FooComponent = (props: { foo: "A" | "B" | "C" }) => <span>{props.foo}</spa
 >props.foo : "A" | "B" | "C"
 >          : ^^^^^^^^^^^^^^^
 >props : { foo: "A" | "B" | "C"; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^               ^^^
 >foo : "A" | "B" | "C"
 >    : ^^^^^^^^^^^^^^^
 >span : any

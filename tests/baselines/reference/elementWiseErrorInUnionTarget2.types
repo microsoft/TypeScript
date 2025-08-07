@@ -31,7 +31,7 @@ type MachineConfig<TActors extends ProvidedActor> = {
 
 declare function setup<TActors extends ProvidedActor>(): {
 >setup : <TActors extends ProvidedActor>() => { createMachine: (config: MachineConfig<TActors>) => void; }
->      : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                            
+>      : ^       ^^^^^^^^^             ^^^^^^^                                                            
 
   createMachine: (config: MachineConfig<TActors>) => void;
 >createMachine : (config: MachineConfig<TActors>) => void
@@ -45,17 +45,17 @@ setup<{ src: "fetchUser"; input: string }>().createMachine({
 >setup<{ src: "fetchUser"; input: string }>().createMachine({  invoke: {    src: "fetchUser",    input: 10,  },}) : void
 >                                                                                                                 : ^^^^
 >setup<{ src: "fetchUser"; input: string }>().createMachine : (config: MachineConfig<{ src: "fetchUser"; input: string; }>) => void
->                                                           : ^      ^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^      ^^^^^^^^^^^^^
+>                                                           : ^      ^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^      ^^^^^^^^^    
 >setup<{ src: "fetchUser"; input: string }>() : { createMachine: (config: MachineConfig<{ src: "fetchUser"; input: string; }>) => void; }
->                                             : ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^      ^^^^^^^^^^^^^^^^
+>                                             : ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^      ^^^^^^^^^    ^^^
 >setup : <TActors extends ProvidedActor>() => { createMachine: (config: MachineConfig<TActors>) => void; }
->      : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^                      ^^^^^^^^^^^^
+>      : ^       ^^^^^^^^^             ^^^^^^^                                                            
 >src : "fetchUser"
 >    : ^^^^^^^^^^^
 >input : string
 >      : ^^^^^^
 >createMachine : (config: MachineConfig<{ src: "fetchUser"; input: string; }>) => void
->              : ^      ^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^      ^^^^^^^^^^^^^
+>              : ^      ^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^      ^^^^^^^^^    
 >{  invoke: {    src: "fetchUser",    input: 10,  },} : { invoke: { src: "fetchUser"; input: number; }; }
 >                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

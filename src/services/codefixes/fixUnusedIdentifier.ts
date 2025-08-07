@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     ArrayBindingPattern,
     CancellationToken,
     cast,
@@ -59,12 +64,7 @@ import {
     TypeChecker,
     VariableDeclaration,
     VariableDeclarationList,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixName = "unusedIdentifier";
 const fixIdPrefix = "unusedIdentifier_prefix";
@@ -199,6 +199,9 @@ registerCodeFix({
                     }
                     else if (canDeleteEntireVariableStatement(sourceFile, token)) {
                         deleteEntireVariableStatement(changes, sourceFile, token.parent as VariableDeclarationList);
+                    }
+                    else if (isIdentifier(token) && isFunctionDeclaration(token.parent)) {
+                        deleteFunctionLikeDeclaration(changes, sourceFile, token.parent as FunctionLikeDeclaration);
                     }
                     else {
                         tryDeleteDeclaration(sourceFile, token, changes, checker, sourceFiles, program, cancellationToken, /*isFixAll*/ true);

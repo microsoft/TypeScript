@@ -86,6 +86,6 @@ interface Foo {
 
 function foo<T extends Foo | T["hello"]>() {
 >foo : <T>() => void
->    : ^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^
 }
 

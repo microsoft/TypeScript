@@ -7,7 +7,7 @@ namespace Test1 {
 
     function foo<T extends { abc: number }>(x: T) {
 >foo : <T extends { abc: number; }>(x: T) => void
->    : ^ ^^^^^^^^^^^^^^^^      ^^^^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^                ^^ ^^ ^^^^^^^^^
 >abc : number
 >    : ^^^^^^
 >x : T

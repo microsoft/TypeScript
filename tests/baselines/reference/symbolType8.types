@@ -7,11 +7,11 @@ var s = Symbol.for("compare");
 >Symbol.for("compare") : symbol
 >                      : ^^^^^^
 >Symbol.for : (key: string) => symbol
->           : ^   ^^      ^^^^^^^^^^^
+>           : ^   ^^      ^^^^^      
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >for : (key: string) => symbol
->    : ^   ^^      ^^^^^^^^^^^
+>    : ^   ^^      ^^^^^      
 >"compare" : "compare"
 >          : ^^^^^^^^^
 

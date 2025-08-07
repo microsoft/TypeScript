@@ -160,7 +160,7 @@ var ResultIsString9 = typeof foo();
 >foo() : number
 >      : ^^^^^^
 >foo : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 var ResultIsString10 = typeof A.foo();
 >ResultIsString10 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -244,7 +244,7 @@ typeof foo();
 >foo() : number
 >      : ^^^^^^
 >foo : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 typeof objA.a;
 >typeof objA.a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -315,7 +315,7 @@ r: typeof foo;
 >typeof foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 var y = { a: 1, b: 2 };
 >y : { a: number; b: number; }

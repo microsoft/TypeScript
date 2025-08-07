@@ -1,0 +1,44 @@
+/a.js(8,5): error TS2322: Type '1' is not assignable to type '"module"'.
+/a.js(15,5): error TS2322: Type '1' is not assignable to type '"script"'.
+
+
+==== /node_modules/@types/foo/package.json (0 errors) ====
+    {
+        "name": "@types/foo",
+        "version": "1.0.0",
+        "exports": {
+            ".": {
+                "import": "./index.d.mts",
+                "require": "./index.d.cts"
+            }
+        }
+    }
+    
+==== /node_modules/@types/foo/index.d.mts (0 errors) ====
+    export declare const Import: "module";
+    
+==== /node_modules/@types/foo/index.d.cts (0 errors) ====
+    export declare const Require: "script";
+    
+==== /a.js (2 errors) ====
+    /** @import { Import } from 'foo' with { 'resolution-mode': 'import' } */
+    /** @import { Require } from 'foo' with { 'resolution-mode': 'require' } */
+    
+    /**
+     * @returns { Import }
+     */
+    export function f1() {
+        return 1;
+        ~~~~~~
+!!! error TS2322: Type '1' is not assignable to type '"module"'.
+    }
+    
+    /**
+     * @returns { Require }
+     */
+    export function f2() {
+        return 1;
+        ~~~~~~
+!!! error TS2322: Type '1' is not assignable to type '"script"'.
+    }
+    

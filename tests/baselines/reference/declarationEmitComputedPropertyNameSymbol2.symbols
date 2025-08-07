@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/declarationEmitComputedPropertyNameSymbol2.ts] ////
+
+=== type.ts ===
+namespace Foo {
+>Foo : Symbol(Foo, Decl(type.ts, 0, 0))
+
+  export const sym = Symbol();
+>sym : Symbol(sym, Decl(type.ts, 1, 14))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+}
+export type Type = { x?: { [Foo.sym]: 0 } };
+>Type : Symbol(Type, Decl(type.ts, 2, 1))
+>x : Symbol(x, Decl(type.ts, 3, 20))
+>[Foo.sym] : Symbol([Foo.sym], Decl(type.ts, 3, 26))
+>Foo.sym : Symbol(Foo.sym, Decl(type.ts, 1, 14))
+>Foo : Symbol(Foo, Decl(type.ts, 0, 0))
+>sym : Symbol(Foo.sym, Decl(type.ts, 1, 14))
+
+=== index.ts ===
+import { type Type } from "./type";
+>Type : Symbol(Type, Decl(index.ts, 0, 8))
+
+export const foo = { ...({} as Type) };
+>foo : Symbol(foo, Decl(index.ts, 2, 12))
+>Type : Symbol(Type, Decl(index.ts, 0, 8))
+

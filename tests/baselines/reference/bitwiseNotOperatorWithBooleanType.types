@@ -110,7 +110,7 @@ var ResultIsNumber6 = ~foo();
 >foo() : boolean
 >      : ^^^^^^^
 >foo : () => boolean
->    : ^^^^^^^^^^^^^
+>    : ^^^^^^       
 
 var ResultIsNumber7 = ~A.foo();
 >ResultIsNumber7 : number
@@ -156,7 +156,7 @@ var ResultIsNumber8 = ~~BOOLEAN;
 >foo() : boolean
 >      : ^^^^^^^
 >foo : () => boolean
->    : ^^^^^^^^^^^^^
+>    : ^^^^^^       
 
 ~true, false;
 >~true, false : false

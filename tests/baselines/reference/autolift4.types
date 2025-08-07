@@ -20,11 +20,11 @@ class Point {
 >Math.sqrt(this.x*this.x + this.y*this.y) : number
 >                                         : ^^^^^^
 >Math.sqrt : (x: number) => number
->          : ^ ^^      ^^^^^^^^^^^
+>          : ^ ^^      ^^^^^      
 >Math : Math
 >     : ^^^^
 >sqrt : (x: number) => number
->     : ^ ^^      ^^^^^^^^^^^
+>     : ^ ^^      ^^^^^      
 >this.x*this.x + this.y*this.y : number
 >                              : ^^^^^^
 >this.x*this.x : number
@@ -104,11 +104,11 @@ class Point3D extends Point {
 >Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.m) : number
 >                                                         : ^^^^^^
 >Math.sqrt : (x: number) => number
->          : ^ ^^      ^^^^^^^^^^^
+>          : ^ ^^      ^^^^^      
 >Math : Math
 >     : ^^^^
 >sqrt : (x: number) => number
->     : ^ ^^      ^^^^^^^^^^^
+>     : ^ ^^      ^^^^^      
 >this.x*this.x + this.y*this.y + this.z*this.m : number
 >                                              : ^^^^^^
 >this.x*this.x + this.y*this.y : number

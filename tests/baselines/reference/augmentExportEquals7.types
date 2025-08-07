@@ -8,12 +8,12 @@ declare var lib: () => void;
 declare namespace lib {}
 export = lib;
 >lib : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 
 === /node_modules/@types/lib-extender/index.d.ts ===
 import * as lib from "lib";
 >lib : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 
 declare module "lib" {
 >"lib" : typeof import("lib")

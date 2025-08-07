@@ -80,7 +80,7 @@ pli(
 >pli(    reads,    ...gun,    tr,    fun,    ...gz,    writes) : Promise<void>
 >                                                              : ^^^^^^^^^^^^^
 >pli : { (s1: R, s2: RW, s3: RW, s4: RW, s5: W): Promise<void>; (streams: ReadonlyArray<R | W | RW>): Promise<void>; (s1: R, s2: RW | W, ...streams: Array<RW | W>): Promise<void>; }
->    : ^^^  ^^ ^^  ^^  ^^  ^^  ^^  ^^  ^^  ^^ ^^^^^^^^^^^^^^^^^^^       ^^                         ^^^^^^^^^^^^^^^^^^^  ^^ ^^  ^^      ^^^^^       ^^             ^^^^^^^^^^^^^^^^^^^
+>    : ^^^  ^^ ^^  ^^  ^^  ^^  ^^  ^^  ^^  ^^ ^^^             ^^^       ^^                         ^^^             ^^^  ^^ ^^  ^^      ^^^^^       ^^             ^^^             ^^^
 
     reads,
 >reads : R
@@ -98,7 +98,7 @@ pli(
 
     fun,
 >fun : (inp: any) => AsyncGenerator<string, void, unknown>
->    : ^   ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^   ^^^^^                                     
 
     ...gz,
 >...gz : RW
@@ -128,7 +128,7 @@ test(...anys)
 >test(...anys) : string | undefined
 >              : ^^^^^^^^^^^^^^^^^^
 >test : (x: any, y: () => string) => string | undefined
->     : ^ ^^   ^^ ^^            ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^   ^^ ^^            ^^^^^                  
 >...anys : any
 >        : ^^^
 >anys : any[]
@@ -138,7 +138,7 @@ pli(...[reads, writes, writes] as const)
 >pli(...[reads, writes, writes] as const) : Promise<void>
 >                                         : ^^^^^^^^^^^^^
 >pli : { (s1: R, s2: RW, s3: RW, s4: RW, s5: W): Promise<void>; (streams: ReadonlyArray<R | W | RW>): Promise<void>; (s1: R, s2: RW | W, ...streams: Array<RW | W>): Promise<void>; }
->    : ^^^  ^^ ^^  ^^  ^^  ^^  ^^  ^^  ^^  ^^ ^^^^^^^^^^^^^^^^^^^       ^^                         ^^^^^^^^^^^^^^^^^^^  ^^ ^^  ^^      ^^^^^       ^^             ^^^^^^^^^^^^^^^^^^^
+>    : ^^^  ^^ ^^  ^^  ^^  ^^  ^^  ^^  ^^  ^^ ^^^             ^^^       ^^                         ^^^             ^^^  ^^ ^^  ^^      ^^^^^       ^^             ^^^             ^^^
 >...[reads, writes, writes] as const : R | W
 >                                    : ^^^^^
 >[reads, writes, writes] as const : readonly [R, W, W]

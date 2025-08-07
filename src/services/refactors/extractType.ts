@@ -67,12 +67,12 @@ import {
     TypeElement,
     TypeNode,
     TypeParameterDeclaration,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 import {
     isRefactorErrorInfo,
     RefactorErrorInfo,
     registerRefactor,
-} from "../_namespaces/ts.refactor";
+} from "../_namespaces/ts.refactor.js";
 
 const refactorName = "Extract type";
 
@@ -247,7 +247,7 @@ function flattenTypeLiteralNodeReference(checker: TypeChecker, selection: TypeNo
     }
     if (isIntersectionTypeNode(selection)) {
         const result: TypeElement[] = [];
-        const seen = new Map<string, true>();
+        const seen = new Set<string>();
         for (const type of selection.types) {
             const flattenedTypeMembers = flattenTypeLiteralNodeReference(checker, type);
             if (!flattenedTypeMembers || !flattenedTypeMembers.every(type => type.name && addToSeen(seen, getNameFromPropertyName(type.name) as string))) {

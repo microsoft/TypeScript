@@ -39,15 +39,15 @@ let y = x.getCountAsString().toLowerCase();
 >x.getCountAsString().toLowerCase() : string
 >                                   : ^^^^^^
 >x.getCountAsString().toLowerCase : () => string
->                                 : ^^^^^^^^^^^^
+>                                 : ^^^^^^      
 >x.getCountAsString() : string
 >                     : ^^^^^^
 >x.getCountAsString : () => string
->                   : ^^^^^^^^^^^^
+>                   : ^^^^^^      
 >x : number[]
 >  : ^^^^^^^^
 >getCountAsString : () => string
->                 : ^^^^^^^^^^^^
+>                 : ^^^^^^      
 >toLowerCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 
