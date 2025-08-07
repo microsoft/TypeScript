@@ -290,5 +290,265 @@ server.route({
   },
 });
 
+interface Container<V> {
+>Container : Symbol(Container, Decl(intraExpressionInferencesNestedGenericCall1.ts, 104, 3))
+>V : Symbol(V, Decl(intraExpressionInferencesNestedGenericCall1.ts, 106, 20))
+
+  v: V;
+>v : Symbol(Container.v, Decl(intraExpressionInferencesNestedGenericCall1.ts, 106, 24))
+>V : Symbol(V, Decl(intraExpressionInferencesNestedGenericCall1.ts, 106, 20))
+}
+
+declare function makeWith<Key, Value>(options: {
+>makeWith : Symbol(makeWith, Decl(intraExpressionInferencesNestedGenericCall1.ts, 108, 1))
+>Key : Symbol(Key, Decl(intraExpressionInferencesNestedGenericCall1.ts, 110, 26))
+>Value : Symbol(Value, Decl(intraExpressionInferencesNestedGenericCall1.ts, 110, 30))
+>options : Symbol(options, Decl(intraExpressionInferencesNestedGenericCall1.ts, 110, 38))
+
+  readonly lookup: (key: Key) => Value;
+>lookup : Symbol(lookup, Decl(intraExpressionInferencesNestedGenericCall1.ts, 110, 48))
+>key : Symbol(key, Decl(intraExpressionInferencesNestedGenericCall1.ts, 111, 20))
+>Key : Symbol(Key, Decl(intraExpressionInferencesNestedGenericCall1.ts, 110, 26))
+>Value : Symbol(Value, Decl(intraExpressionInferencesNestedGenericCall1.ts, 110, 30))
+
+  readonly timeToLive: (exit: Container<Value>) => number;
+>timeToLive : Symbol(timeToLive, Decl(intraExpressionInferencesNestedGenericCall1.ts, 111, 39))
+>exit : Symbol(exit, Decl(intraExpressionInferencesNestedGenericCall1.ts, 112, 24))
+>Container : Symbol(Container, Decl(intraExpressionInferencesNestedGenericCall1.ts, 104, 3))
+>Value : Symbol(Value, Decl(intraExpressionInferencesNestedGenericCall1.ts, 110, 30))
+
+}): [Key, Value];
+>Key : Symbol(Key, Decl(intraExpressionInferencesNestedGenericCall1.ts, 110, 26))
+>Value : Symbol(Value, Decl(intraExpressionInferencesNestedGenericCall1.ts, 110, 30))
+
+declare function fn<A, R>(fn: (arg: A) => R): (arg: A) => R;
+>fn : Symbol(fn, Decl(intraExpressionInferencesNestedGenericCall1.ts, 113, 17))
+>A : Symbol(A, Decl(intraExpressionInferencesNestedGenericCall1.ts, 115, 20))
+>R : Symbol(R, Decl(intraExpressionInferencesNestedGenericCall1.ts, 115, 22))
+>fn : Symbol(fn, Decl(intraExpressionInferencesNestedGenericCall1.ts, 115, 26))
+>arg : Symbol(arg, Decl(intraExpressionInferencesNestedGenericCall1.ts, 115, 31))
+>A : Symbol(A, Decl(intraExpressionInferencesNestedGenericCall1.ts, 115, 20))
+>R : Symbol(R, Decl(intraExpressionInferencesNestedGenericCall1.ts, 115, 22))
+>arg : Symbol(arg, Decl(intraExpressionInferencesNestedGenericCall1.ts, 115, 47))
+>A : Symbol(A, Decl(intraExpressionInferencesNestedGenericCall1.ts, 115, 20))
+>R : Symbol(R, Decl(intraExpressionInferencesNestedGenericCall1.ts, 115, 22))
+
+const result1 = makeWith({
+>result1 : Symbol(result1, Decl(intraExpressionInferencesNestedGenericCall1.ts, 117, 5))
+>makeWith : Symbol(makeWith, Decl(intraExpressionInferencesNestedGenericCall1.ts, 108, 1))
+
+  lookup: fn((key: string) => key),
+>lookup : Symbol(lookup, Decl(intraExpressionInferencesNestedGenericCall1.ts, 117, 26))
+>fn : Symbol(fn, Decl(intraExpressionInferencesNestedGenericCall1.ts, 113, 17))
+>key : Symbol(key, Decl(intraExpressionInferencesNestedGenericCall1.ts, 118, 14))
+>key : Symbol(key, Decl(intraExpressionInferencesNestedGenericCall1.ts, 118, 14))
+
+  timeToLive: () => 10,
+>timeToLive : Symbol(timeToLive, Decl(intraExpressionInferencesNestedGenericCall1.ts, 118, 35))
+
+});
+
+const result2 = makeWith({
+>result2 : Symbol(result2, Decl(intraExpressionInferencesNestedGenericCall1.ts, 122, 5))
+>makeWith : Symbol(makeWith, Decl(intraExpressionInferencesNestedGenericCall1.ts, 108, 1))
+
+  lookup: fn((key: string) => key),
+>lookup : Symbol(lookup, Decl(intraExpressionInferencesNestedGenericCall1.ts, 122, 26))
+>fn : Symbol(fn, Decl(intraExpressionInferencesNestedGenericCall1.ts, 113, 17))
+>key : Symbol(key, Decl(intraExpressionInferencesNestedGenericCall1.ts, 123, 14))
+>key : Symbol(key, Decl(intraExpressionInferencesNestedGenericCall1.ts, 123, 14))
+
+  timeToLive: (exit) => exit.v.length,
+>timeToLive : Symbol(timeToLive, Decl(intraExpressionInferencesNestedGenericCall1.ts, 123, 35))
+>exit : Symbol(exit, Decl(intraExpressionInferencesNestedGenericCall1.ts, 124, 15))
+>exit.v.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>exit.v : Symbol(Container.v, Decl(intraExpressionInferencesNestedGenericCall1.ts, 106, 24))
+>exit : Symbol(exit, Decl(intraExpressionInferencesNestedGenericCall1.ts, 124, 15))
+>v : Symbol(Container.v, Decl(intraExpressionInferencesNestedGenericCall1.ts, 106, 24))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+});
+
+// https://github.com/microsoft/TypeScript/issues/53776
+function deferQuery<TData>({}: {
+>deferQuery : Symbol(deferQuery, Decl(intraExpressionInferencesNestedGenericCall1.ts, 125, 3))
+>TData : Symbol(TData, Decl(intraExpressionInferencesNestedGenericCall1.ts, 128, 20))
+
+  queryFn: () => Promise<TData>;
+>queryFn : Symbol(queryFn, Decl(intraExpressionInferencesNestedGenericCall1.ts, 128, 32))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>TData : Symbol(TData, Decl(intraExpressionInferencesNestedGenericCall1.ts, 128, 20))
+
+  onSuccess: (data: TData) => void;
+>onSuccess : Symbol(onSuccess, Decl(intraExpressionInferencesNestedGenericCall1.ts, 129, 32))
+>data : Symbol(data, Decl(intraExpressionInferencesNestedGenericCall1.ts, 130, 14))
+>TData : Symbol(TData, Decl(intraExpressionInferencesNestedGenericCall1.ts, 128, 20))
+
+}) {}
+
+export function decorate<TParams extends unknown[], TResult>(
+>decorate : Symbol(decorate, Decl(intraExpressionInferencesNestedGenericCall1.ts, 131, 5))
+>TParams : Symbol(TParams, Decl(intraExpressionInferencesNestedGenericCall1.ts, 133, 25))
+>TResult : Symbol(TResult, Decl(intraExpressionInferencesNestedGenericCall1.ts, 133, 51))
+
+  func: (...params: TParams) => Promise<TResult>,
+>func : Symbol(func, Decl(intraExpressionInferencesNestedGenericCall1.ts, 133, 61))
+>params : Symbol(params, Decl(intraExpressionInferencesNestedGenericCall1.ts, 134, 9))
+>TParams : Symbol(TParams, Decl(intraExpressionInferencesNestedGenericCall1.ts, 133, 25))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>TResult : Symbol(TResult, Decl(intraExpressionInferencesNestedGenericCall1.ts, 133, 51))
+
+  ...params: TParams
+>params : Symbol(params, Decl(intraExpressionInferencesNestedGenericCall1.ts, 134, 49))
+>TParams : Symbol(TParams, Decl(intraExpressionInferencesNestedGenericCall1.ts, 133, 25))
+
+): () => Promise<TResult> {
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>TResult : Symbol(TResult, Decl(intraExpressionInferencesNestedGenericCall1.ts, 133, 51))
+
+  return () => {
+    return func(...params);
+>func : Symbol(func, Decl(intraExpressionInferencesNestedGenericCall1.ts, 133, 61))
+>params : Symbol(params, Decl(intraExpressionInferencesNestedGenericCall1.ts, 134, 49))
+
+  };
+}
+
+type ArbitraryData = {
+>ArbitraryData : Symbol(ArbitraryData, Decl(intraExpressionInferencesNestedGenericCall1.ts, 140, 1))
+
+  property: string;
+>property : Symbol(property, Decl(intraExpressionInferencesNestedGenericCall1.ts, 142, 22))
+
+};
+
+export function getArbitraryData(_id: number): Promise<ArbitraryData[]> {
+>getArbitraryData : Symbol(getArbitraryData, Decl(intraExpressionInferencesNestedGenericCall1.ts, 144, 2))
+>_id : Symbol(_id, Decl(intraExpressionInferencesNestedGenericCall1.ts, 146, 33))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>ArbitraryData : Symbol(ArbitraryData, Decl(intraExpressionInferencesNestedGenericCall1.ts, 140, 1))
+
+  return Promise.resolve([{ property: "123" }]);
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>property : Symbol(property, Decl(intraExpressionInferencesNestedGenericCall1.ts, 147, 27))
+}
+
+deferQuery({
+>deferQuery : Symbol(deferQuery, Decl(intraExpressionInferencesNestedGenericCall1.ts, 125, 3))
+
+  queryFn: decorate(getArbitraryData, 10),
+>queryFn : Symbol(queryFn, Decl(intraExpressionInferencesNestedGenericCall1.ts, 150, 12))
+>decorate : Symbol(decorate, Decl(intraExpressionInferencesNestedGenericCall1.ts, 131, 5))
+>getArbitraryData : Symbol(getArbitraryData, Decl(intraExpressionInferencesNestedGenericCall1.ts, 144, 2))
+
+  onSuccess(data) {
+>onSuccess : Symbol(onSuccess, Decl(intraExpressionInferencesNestedGenericCall1.ts, 151, 42))
+>data : Symbol(data, Decl(intraExpressionInferencesNestedGenericCall1.ts, 152, 12))
+
+    data.forEach((item) => {});
+>data.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>data : Symbol(data, Decl(intraExpressionInferencesNestedGenericCall1.ts, 152, 12))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>item : Symbol(item, Decl(intraExpressionInferencesNestedGenericCall1.ts, 153, 18))
+
+  },
+});
+
+const getData = decorate(getArbitraryData, 10);
+>getData : Symbol(getData, Decl(intraExpressionInferencesNestedGenericCall1.ts, 157, 5))
+>decorate : Symbol(decorate, Decl(intraExpressionInferencesNestedGenericCall1.ts, 131, 5))
+>getArbitraryData : Symbol(getArbitraryData, Decl(intraExpressionInferencesNestedGenericCall1.ts, 144, 2))
+
+deferQuery({
+>deferQuery : Symbol(deferQuery, Decl(intraExpressionInferencesNestedGenericCall1.ts, 125, 3))
+
+  queryFn: getData,
+>queryFn : Symbol(queryFn, Decl(intraExpressionInferencesNestedGenericCall1.ts, 158, 12))
+>getData : Symbol(getData, Decl(intraExpressionInferencesNestedGenericCall1.ts, 157, 5))
+
+  onSuccess(data) {
+>onSuccess : Symbol(onSuccess, Decl(intraExpressionInferencesNestedGenericCall1.ts, 159, 19))
+>data : Symbol(data, Decl(intraExpressionInferencesNestedGenericCall1.ts, 160, 12))
+
+    data.forEach((item) => {});
+>data.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>data : Symbol(data, Decl(intraExpressionInferencesNestedGenericCall1.ts, 160, 12))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>item : Symbol(item, Decl(intraExpressionInferencesNestedGenericCall1.ts, 161, 18))
+
+  },
+});
+
+// https://github.com/microsoft/TypeScript/issues/52114
+export type ActionReducer<State> = (state: State | undefined) => State;
+>ActionReducer : Symbol(ActionReducer, Decl(intraExpressionInferencesNestedGenericCall1.ts, 163, 3))
+>State : Symbol(State, Decl(intraExpressionInferencesNestedGenericCall1.ts, 166, 26))
+>state : Symbol(state, Decl(intraExpressionInferencesNestedGenericCall1.ts, 166, 36))
+>State : Symbol(State, Decl(intraExpressionInferencesNestedGenericCall1.ts, 166, 26))
+>State : Symbol(State, Decl(intraExpressionInferencesNestedGenericCall1.ts, 166, 26))
+
+export function createReducer<State>(
+>createReducer : Symbol(createReducer, Decl(intraExpressionInferencesNestedGenericCall1.ts, 166, 71))
+>State : Symbol(State, Decl(intraExpressionInferencesNestedGenericCall1.ts, 168, 30))
+
+  initialState: State,
+>initialState : Symbol(initialState, Decl(intraExpressionInferencesNestedGenericCall1.ts, 168, 37))
+>State : Symbol(State, Decl(intraExpressionInferencesNestedGenericCall1.ts, 168, 30))
+
+): ActionReducer<State> {
+>ActionReducer : Symbol(ActionReducer, Decl(intraExpressionInferencesNestedGenericCall1.ts, 163, 3))
+>State : Symbol(State, Decl(intraExpressionInferencesNestedGenericCall1.ts, 168, 30))
+
+  return {} as any;
+}
+
+export function createFeature<State>(config: {
+>createFeature : Symbol(createFeature, Decl(intraExpressionInferencesNestedGenericCall1.ts, 172, 1))
+>State : Symbol(State, Decl(intraExpressionInferencesNestedGenericCall1.ts, 174, 30))
+>config : Symbol(config, Decl(intraExpressionInferencesNestedGenericCall1.ts, 174, 37))
+
+  reducer: ActionReducer<State>;
+>reducer : Symbol(reducer, Decl(intraExpressionInferencesNestedGenericCall1.ts, 174, 46))
+>ActionReducer : Symbol(ActionReducer, Decl(intraExpressionInferencesNestedGenericCall1.ts, 163, 3))
+>State : Symbol(State, Decl(intraExpressionInferencesNestedGenericCall1.ts, 174, 30))
+
+  selectors: (state: State) => unknown;
+>selectors : Symbol(selectors, Decl(intraExpressionInferencesNestedGenericCall1.ts, 175, 32))
+>state : Symbol(state, Decl(intraExpressionInferencesNestedGenericCall1.ts, 176, 14))
+>State : Symbol(State, Decl(intraExpressionInferencesNestedGenericCall1.ts, 174, 30))
+
+}) {}
+
+createFeature({
+>createFeature : Symbol(createFeature, Decl(intraExpressionInferencesNestedGenericCall1.ts, 172, 1))
+
+  reducer: createReducer(""),
+>reducer : Symbol(reducer, Decl(intraExpressionInferencesNestedGenericCall1.ts, 179, 15))
+>createReducer : Symbol(createReducer, Decl(intraExpressionInferencesNestedGenericCall1.ts, 166, 71))
+
+  selectors: (state) => ({}),
+>selectors : Symbol(selectors, Decl(intraExpressionInferencesNestedGenericCall1.ts, 180, 29))
+>state : Symbol(state, Decl(intraExpressionInferencesNestedGenericCall1.ts, 181, 14))
+
+});
+
+const reducer = createReducer(true);
+>reducer : Symbol(reducer, Decl(intraExpressionInferencesNestedGenericCall1.ts, 184, 5))
+>createReducer : Symbol(createReducer, Decl(intraExpressionInferencesNestedGenericCall1.ts, 166, 71))
+
+createFeature({
+>createFeature : Symbol(createFeature, Decl(intraExpressionInferencesNestedGenericCall1.ts, 172, 1))
+
+  reducer,
+>reducer : Symbol(reducer, Decl(intraExpressionInferencesNestedGenericCall1.ts, 185, 15))
+
+  selectors: (state) => ({}),
+>selectors : Symbol(selectors, Decl(intraExpressionInferencesNestedGenericCall1.ts, 186, 10))
+>state : Symbol(state, Decl(intraExpressionInferencesNestedGenericCall1.ts, 187, 14))
+
+});
+
 export {};
 

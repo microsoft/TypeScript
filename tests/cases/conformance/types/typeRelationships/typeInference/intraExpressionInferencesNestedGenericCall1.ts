@@ -108,4 +108,88 @@ server.route({
   },
 });
 
+interface Container<V> {
+  v: V;
+}
+
+declare function makeWith<Key, Value>(options: {
+  readonly lookup: (key: Key) => Value;
+  readonly timeToLive: (exit: Container<Value>) => number;
+}): [Key, Value];
+
+declare function fn<A, R>(fn: (arg: A) => R): (arg: A) => R;
+
+const result1 = makeWith({
+  lookup: fn((key: string) => key),
+  timeToLive: () => 10,
+});
+
+const result2 = makeWith({
+  lookup: fn((key: string) => key),
+  timeToLive: (exit) => exit.v.length,
+});
+
+// https://github.com/microsoft/TypeScript/issues/53776
+function deferQuery<TData>({}: {
+  queryFn: () => Promise<TData>;
+  onSuccess: (data: TData) => void;
+}) {}
+
+export function decorate<TParams extends unknown[], TResult>(
+  func: (...params: TParams) => Promise<TResult>,
+  ...params: TParams
+): () => Promise<TResult> {
+  return () => {
+    return func(...params);
+  };
+}
+
+type ArbitraryData = {
+  property: string;
+};
+
+export function getArbitraryData(_id: number): Promise<ArbitraryData[]> {
+  return Promise.resolve([{ property: "123" }]);
+}
+
+deferQuery({
+  queryFn: decorate(getArbitraryData, 10),
+  onSuccess(data) {
+    data.forEach((item) => {});
+  },
+});
+
+const getData = decorate(getArbitraryData, 10);
+deferQuery({
+  queryFn: getData,
+  onSuccess(data) {
+    data.forEach((item) => {});
+  },
+});
+
+// https://github.com/microsoft/TypeScript/issues/52114
+export type ActionReducer<State> = (state: State | undefined) => State;
+
+export function createReducer<State>(
+  initialState: State,
+): ActionReducer<State> {
+  return {} as any;
+}
+
+export function createFeature<State>(config: {
+  reducer: ActionReducer<State>;
+  selectors: (state: State) => unknown;
+}) {}
+
+createFeature({
+  reducer: createReducer(""),
+  selectors: (state) => ({}),
+});
+
+const reducer = createReducer(true);
+createFeature({
+  reducer,
+  selectors: (state) => ({}),
+});
+
 export {};
