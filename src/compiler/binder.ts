@@ -1069,7 +1069,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             currentExceptionTarget = saveExceptionTarget;
             activeLabelList = saveActiveLabelList;
             hasExplicitReturn = saveHasExplicitReturn;
-            seenThisKeyword = isImmediatelyInvoked ? saveSeenThisKeyword || seenThisKeyword : saveSeenThisKeyword;
+            seenThisKeyword = node.kind === SyntaxKind.ArrowFunction ? saveSeenThisKeyword || seenThisKeyword : saveSeenThisKeyword;
         }
         else if (containerFlags & ContainerFlags.IsInterface) {
             const saveSeenThisKeyword = seenThisKeyword;
