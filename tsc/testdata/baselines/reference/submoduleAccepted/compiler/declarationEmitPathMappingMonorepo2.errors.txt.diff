@@ -4,7 +4,7 @@
 -<no content>
 +packages/lab/src/index.ts(1,31): error TS2307: Cannot find module '@ts-bug/core/utils' or its corresponding type declarations.
 +packages/lab/tsconfig.json(5,9): error TS5102: Option 'baseUrl' has been removed. Please remove it from your configuration.
-+  Use '"paths": {"*": "./../*"}' instead.
++  Use '"paths": {"*": ["./../*"]}' instead.
 +
 +
 +==== packages/lab/tsconfig.json (1 errors) ====
@@ -15,7 +15,7 @@
 +            "baseUrl": "../",
 +            ~~~~~~~~~
 +!!! error TS5102: Option 'baseUrl' has been removed. Please remove it from your configuration.
-+!!! error TS5102:   Use '"paths": {"*": "./../*"}' instead.
++!!! error TS5102:   Use '"paths": {"*": ["./../*"]}' instead.
 +            "paths": {
 +                "@ts-bug/core": ["./core/src"],
 +                "@ts-bug/core/*": ["./core/src/*"],

@@ -2,7 +2,7 @@
 +++ new.pathMappingBasedModuleResolution2_node.errors.txt
 @@= skipped -0, +0 lines =@@
 +root/tsconfig.json(3,9): error TS5102: Option 'baseUrl' has been removed. Please remove it from your configuration.
-+  Use '"paths": {"*": "./src/*"}' instead.
++  Use '"paths": {"*": ["./src/*"]}' instead.
  root/tsconfig.json(5,13): error TS5061: Pattern '*1*' can have at most one '*' character.
  root/tsconfig.json(5,22): error TS5062: Substitution '*2*' in pattern '*1*' can have at most one '*' character.
 -
@@ -17,7 +17,7 @@
              "baseUrl": "./src",
 +            ~~~~~~~~~
 +!!! error TS5102: Option 'baseUrl' has been removed. Please remove it from your configuration.
-+!!! error TS5102:   Use '"paths": {"*": "./src/*"}' instead.
++!!! error TS5102:   Use '"paths": {"*": ["./src/*"]}' instead.
              "paths": {
                  "*1*": [ "*2*" ]
                  ~~~~~

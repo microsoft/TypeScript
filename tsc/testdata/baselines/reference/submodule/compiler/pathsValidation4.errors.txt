@@ -1,5 +1,5 @@
 tsconfig.json(4,9): error TS5102: Option 'baseUrl' has been removed. Please remove it from your configuration.
-  Use '"paths": {"*": "./src/*"}' instead.
+  Use '"paths": {"*": ["./src/*"]}' instead.
 tsconfig.json(6,11): error TS5061: Pattern '@interface/**/*' can have at most one '*' character.
 tsconfig.json(7,11): error TS5061: Pattern '@service/**/*' can have at most one '*' character.
 tsconfig.json(7,29): error TS5062: Substitution './src/service/**/*' in pattern '@service/**/*' can have at most one '*' character.
@@ -13,7 +13,7 @@ tsconfig.json(8,29): error TS5090: Non-relative paths are not allowed. Did you f
             "baseUrl": "./src",
             ~~~~~~~~~
 !!! error TS5102: Option 'baseUrl' has been removed. Please remove it from your configuration.
-!!! error TS5102:   Use '"paths": {"*": "./src/*"}' instead.
+!!! error TS5102:   Use '"paths": {"*": ["./src/*"]}' instead.
             "paths": {
               "@interface/**/*" : ["./src/interface/*"],
               ~~~~~~~~~~~~~~~~~

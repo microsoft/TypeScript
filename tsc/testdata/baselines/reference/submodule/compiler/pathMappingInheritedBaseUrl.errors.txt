@@ -1,6 +1,6 @@
 /project/index.ts(1,20): error TS2307: Cannot find module 'p1' or its corresponding type declarations.
 /project/tsconfig.json(3,3): error TS5102: Option 'baseUrl' has been removed. Please remove it from your configuration.
-  Use '"paths": {"*": "../other/*"}' instead.
+  Use '"paths": {"*": ["../other/*"]}' instead.
 
 
 ==== /project/tsconfig.json (1 errors) ====
@@ -9,7 +9,7 @@
       "compilerOptions": {
       ~~~~~~~~~~~~~~~~~
 !!! error TS5102: Option 'baseUrl' has been removed. Please remove it from your configuration.
-!!! error TS5102:   Use '"paths": {"*": "../other/*"}' instead.
+!!! error TS5102:   Use '"paths": {"*": ["../other/*"]}' instead.
         "module": "commonjs",
         "paths": {
           "p1": ["./lib/p1"]

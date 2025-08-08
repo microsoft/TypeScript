@@ -3,7 +3,7 @@
 @@= skipped -0, +0 lines =@@
 -<no content>
 +c:/root/tsconfig.json(3,9): error TS5102: Option 'baseUrl' has been removed. Please remove it from your configuration.
-+  Use '"paths": {"*": "./*"}' instead.
++  Use '"paths": {"*": ["./*"]}' instead.
 +c:/root/tsconfig.json(6,17): error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
 +c:/root/tsconfig.json(7,17): error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
 +c:/root/tsconfig.json(10,21): error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
@@ -15,7 +15,7 @@
 +            "baseUrl": ".",
 +            ~~~~~~~~~
 +!!! error TS5102: Option 'baseUrl' has been removed. Please remove it from your configuration.
-+!!! error TS5102:   Use '"paths": {"*": "./*"}' instead.
++!!! error TS5102:   Use '"paths": {"*": ["./*"]}' instead.
 +                "paths": {
 +                "*": [
 +                    "*",

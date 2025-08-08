@@ -3,7 +3,7 @@
 @@= skipped -0, +0 lines =@@
 -<no content>
 +/root/tsconfig.json(3,9): error TS5102: Option 'baseUrl' has been removed. Please remove it from your configuration.
-+  Use '"paths": {"*": "./*"}' instead.
++  Use '"paths": {"*": ["./*"]}' instead.
 +
 +
 +==== /root/tsconfig.json (1 errors) ====
@@ -12,7 +12,7 @@
 +            "baseUrl": ".",
 +            ~~~~~~~~~
 +!!! error TS5102: Option 'baseUrl' has been removed. Please remove it from your configuration.
-+!!! error TS5102:   Use '"paths": {"*": "./*"}' instead.
++!!! error TS5102:   Use '"paths": {"*": ["./*"]}' instead.
 +            "paths": {
 +                "/*": ["./src/*"]
 +            },

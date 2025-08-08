@@ -4,7 +4,7 @@
 -<no content>
 +c:/root/folder1/file1.ts(1,17): error TS2307: Cannot find module 'folder2/file2' or its corresponding type declarations.
 +c:/root/tsconfig.json(3,9): error TS5102: Option 'baseUrl' has been removed. Please remove it from your configuration.
-+  Use '"paths": {"*": "./*"}' instead.
++  Use '"paths": {"*": ["./*"]}' instead.
 +
 +
 +==== c:/root/tsconfig.json (1 errors) ====
@@ -13,7 +13,7 @@
 +            "baseUrl": "."
 +            ~~~~~~~~~
 +!!! error TS5102: Option 'baseUrl' has been removed. Please remove it from your configuration.
-+!!! error TS5102:   Use '"paths": {"*": "./*"}' instead.
++!!! error TS5102:   Use '"paths": {"*": ["./*"]}' instead.
 +        }
 +    }
 +    

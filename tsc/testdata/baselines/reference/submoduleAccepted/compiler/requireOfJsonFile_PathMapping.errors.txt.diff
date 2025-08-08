@@ -3,7 +3,7 @@
 @@= skipped -0, +0 lines =@@
 -<no content>
 +/tsconfig.json(3,9): error TS5102: Option 'baseUrl' has been removed. Please remove it from your configuration.
-+  Use '"paths": {"*": "./*"}' instead.
++  Use '"paths": {"*": ["./*"]}' instead.
 +/tsconfig.json(5,19): error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
 +/tsconfig.json(5,37): error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
 +
@@ -14,7 +14,7 @@
 +            "baseUrl": ".",
 +            ~~~~~~~~~
 +!!! error TS5102: Option 'baseUrl' has been removed. Please remove it from your configuration.
-+!!! error TS5102:   Use '"paths": {"*": "./*"}' instead.
++!!! error TS5102:   Use '"paths": {"*": ["./*"]}' instead.
 +            "paths": {
 +                "*": ["node_modules/*", "src/types"]
 +                      ~~~~~~~~~~~~~~~~

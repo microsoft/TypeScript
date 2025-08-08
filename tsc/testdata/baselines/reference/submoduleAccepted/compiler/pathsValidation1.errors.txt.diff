@@ -2,7 +2,7 @@
 +++ new.pathsValidation1.errors.txt
 @@= skipped -0, +0 lines =@@
 +tsconfig.json(3,9): error TS5102: Option 'baseUrl' has been removed. Please remove it from your configuration.
-+  Use '"paths": {"*": "./*"}' instead.
++  Use '"paths": {"*": ["./*"]}' instead.
  tsconfig.json(5,18): error TS5063: Substitutions for pattern '*' should be an array.
 
 
@@ -13,7 +13,7 @@
              "baseUrl": ".",
 +            ~~~~~~~~~
 +!!! error TS5102: Option 'baseUrl' has been removed. Please remove it from your configuration.
-+!!! error TS5102:   Use '"paths": {"*": "./*"}' instead.
++!!! error TS5102:   Use '"paths": {"*": ["./*"]}' instead.
              "paths": {
                  "*": "*"
                       ~~~
