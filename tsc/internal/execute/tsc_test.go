@@ -11,9 +11,9 @@ func TestTscCommandline(t *testing.T) {
 	testCases := []*tscInput{
 		{
 			subScenario: "show help with ExitStatus.DiagnosticsPresent_OutputsSkipped",
-			// , {
-			// 	environmentVariables: new Map([["TS_TEST_TERMINAL_WIDTH", "120"]]),
-			// }),
+			env: map[string]string{
+				"TS_TEST_TERMINAL_WIDTH": "120",
+			},
 			commandLineArgs: nil,
 		},
 		{
@@ -22,17 +22,9 @@ func TestTscCommandline(t *testing.T) {
 		},
 		{
 			subScenario: "does not add color when NO_COLOR is set",
-			// , {
-			// 		environmentVariables: new Map([["NO_COLOR", "true"]]),
-			// 	}),
-			commandLineArgs: nil,
-		},
-		{
-			subScenario: "does not add color when NO_COLOR is set",
-			// , {
-			// 	environmentVariables: new Map([["NO_COLOR", "true"]]),
-			// }
-			// ),
+			env: map[string]string{
+				"NO_COLOR": "true",
+			},
 			commandLineArgs: nil,
 		},
 		{

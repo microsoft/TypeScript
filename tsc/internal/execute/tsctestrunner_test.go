@@ -34,6 +34,7 @@ type tscInput struct {
 	files           FileMap
 	cwd             string
 	edits           []*testTscEdit
+	env             map[string]string
 }
 
 func (test *tscInput) executeCommand(sys *testSys, baselineBuilder *strings.Builder, commandLineArgs []string) execute.CommandLineResult {
@@ -64,7 +65,7 @@ func (test *tscInput) run(t *testing.T, scenario string) {
 		t.Parallel()
 		// initial test tsc compile
 		baselineBuilder := &strings.Builder{}
-		sys := newTestSys(test.files, test.cwd)
+		sys := newTestSys(test.files, test.cwd, test.env)
 		fmt.Fprint(
 			baselineBuilder,
 			"currentDirectory::",
@@ -101,7 +102,7 @@ func (test *tscInput) run(t *testing.T, scenario string) {
 			})
 			wg.Queue(func() {
 				// Compute build with all the edits
-				nonIncrementalSys = newTestSys(test.files, test.cwd)
+				nonIncrementalSys = newTestSys(test.files, test.cwd, test.env)
 				for i := range index + 1 {
 					if test.edits[i].edit != nil {
 						test.edits[i].edit(nonIncrementalSys)

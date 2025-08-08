@@ -13,6 +13,9 @@ type System interface {
 	FS() vfs.FS
 	DefaultLibraryPath() string
 	GetCurrentDirectory() string
+	WriteOutputIsTTY() bool
+	GetWidthOfTerminal() int
+	GetEnvironmentVariable(name string) string
 
 	Now() time.Time
 	SinceStart() time.Duration

@@ -29,6 +29,10 @@ func (t Tristate) IsFalseOrUnknown() bool {
 	return t == TSFalse || t == TSUnknown
 }
 
+func (t Tristate) IsUnknown() bool {
+	return t == TSUnknown
+}
+
 func (t Tristate) DefaultIfUnknown(value Tristate) Tristate {
 	if t == TSUnknown {
 		return value

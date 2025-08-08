@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
 	"github.com/microsoft/typescript-go/internal/vfs/osvfs"
+	"golang.org/x/term"
 )
 
 type osSys struct {
@@ -48,6 +49,19 @@ func (s *osSys) Writer() io.Writer {
 func (s *osSys) EndWrite() {
 	// do nothing, this is needed in the interface for testing
 	// todo: revisit if improving tsc/build/watch unittest baselines
+}
+
+func (s *osSys) WriteOutputIsTTY() bool {
+	return term.IsTerminal(int(os.Stdout.Fd()))
+}
+
+func (s *osSys) GetWidthOfTerminal() int {
+	width, _, _ := term.GetSize(int(os.Stdout.Fd()))
+	return width
+}
+
+func (s *osSys) GetEnvironmentVariable(name string) string {
+	return os.Getenv(name)
 }
 
 func newSystem() *osSys {
