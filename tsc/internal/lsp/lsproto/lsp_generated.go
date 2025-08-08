@@ -20993,7 +20993,7 @@ type FoldingRangeResponse = FoldingRangesOrNull
 var TextDocumentFoldingRangeInfo = RequestInfo[*FoldingRangeParams, FoldingRangeResponse]{Method: MethodTextDocumentFoldingRange}
 
 // Response type for `workspace/foldingRange/refresh`
-type FoldingRangeRefreshResponse = any
+type FoldingRangeRefreshResponse = Null
 
 // Type mapping info for `workspace/foldingRange/refresh`
 var WorkspaceFoldingRangeRefreshInfo = RequestInfo[any, FoldingRangeRefreshResponse]{Method: MethodWorkspaceFoldingRangeRefresh}
@@ -21011,7 +21011,7 @@ type SelectionRangeResponse = SelectionRangesOrNull
 var TextDocumentSelectionRangeInfo = RequestInfo[*SelectionRangeParams, SelectionRangeResponse]{Method: MethodTextDocumentSelectionRange}
 
 // Response type for `window/workDoneProgress/create`
-type WorkDoneProgressCreateResponse = any
+type WorkDoneProgressCreateResponse = Null
 
 // Type mapping info for `window/workDoneProgress/create`
 var WindowWorkDoneProgressCreateInfo = RequestInfo[*WorkDoneProgressCreateParams, WorkDoneProgressCreateResponse]{Method: MethodWindowWorkDoneProgressCreate}
@@ -21053,7 +21053,7 @@ type SemanticTokensRangeResponse = SemanticTokensOrNull
 var TextDocumentSemanticTokensRangeInfo = RequestInfo[*SemanticTokensRangeParams, SemanticTokensRangeResponse]{Method: MethodTextDocumentSemanticTokensRange}
 
 // Response type for `workspace/semanticTokens/refresh`
-type SemanticTokensRefreshResponse = any
+type SemanticTokensRefreshResponse = Null
 
 // Type mapping info for `workspace/semanticTokens/refresh`
 var WorkspaceSemanticTokensRefreshInfo = RequestInfo[any, SemanticTokensRefreshResponse]{Method: MethodWorkspaceSemanticTokensRefresh}
@@ -21119,7 +21119,7 @@ type InlineValueResponse = InlineValuesOrNull
 var TextDocumentInlineValueInfo = RequestInfo[*InlineValueParams, InlineValueResponse]{Method: MethodTextDocumentInlineValue}
 
 // Response type for `workspace/inlineValue/refresh`
-type InlineValueRefreshResponse = any
+type InlineValueRefreshResponse = Null
 
 // Type mapping info for `workspace/inlineValue/refresh`
 var WorkspaceInlineValueRefreshInfo = RequestInfo[any, InlineValueRefreshResponse]{Method: MethodWorkspaceInlineValueRefresh}
@@ -21137,7 +21137,7 @@ type InlayHintResolveResponse = *InlayHint
 var InlayHintResolveInfo = RequestInfo[*InlayHint, InlayHintResolveResponse]{Method: MethodInlayHintResolve}
 
 // Response type for `workspace/inlayHint/refresh`
-type InlayHintRefreshResponse = any
+type InlayHintRefreshResponse = Null
 
 // Type mapping info for `workspace/inlayHint/refresh`
 var WorkspaceInlayHintRefreshInfo = RequestInfo[any, InlayHintRefreshResponse]{Method: MethodWorkspaceInlayHintRefresh}
@@ -21155,7 +21155,7 @@ type WorkspaceDiagnosticResponse = *WorkspaceDiagnosticReport
 var WorkspaceDiagnosticInfo = RequestInfo[*WorkspaceDiagnosticParams, WorkspaceDiagnosticResponse]{Method: MethodWorkspaceDiagnostic}
 
 // Response type for `workspace/diagnostic/refresh`
-type DiagnosticRefreshResponse = any
+type DiagnosticRefreshResponse = Null
 
 // Type mapping info for `workspace/diagnostic/refresh`
 var WorkspaceDiagnosticRefreshInfo = RequestInfo[any, DiagnosticRefreshResponse]{Method: MethodWorkspaceDiagnosticRefresh}
@@ -21173,19 +21173,19 @@ type TextDocumentContentResponse = *TextDocumentContentResult
 var WorkspaceTextDocumentContentInfo = RequestInfo[*TextDocumentContentParams, TextDocumentContentResponse]{Method: MethodWorkspaceTextDocumentContent}
 
 // Response type for `workspace/textDocumentContent/refresh`
-type TextDocumentContentRefreshResponse = any
+type TextDocumentContentRefreshResponse = Null
 
 // Type mapping info for `workspace/textDocumentContent/refresh`
 var WorkspaceTextDocumentContentRefreshInfo = RequestInfo[*TextDocumentContentRefreshParams, TextDocumentContentRefreshResponse]{Method: MethodWorkspaceTextDocumentContentRefresh}
 
 // Response type for `client/registerCapability`
-type RegistrationResponse = any
+type RegistrationResponse = Null
 
 // Type mapping info for `client/registerCapability`
 var ClientRegisterCapabilityInfo = RequestInfo[*RegistrationParams, RegistrationResponse]{Method: MethodClientRegisterCapability}
 
 // Response type for `client/unregisterCapability`
-type UnregistrationResponse = any
+type UnregistrationResponse = Null
 
 // Type mapping info for `client/unregisterCapability`
 var ClientUnregisterCapabilityInfo = RequestInfo[*UnregistrationParams, UnregistrationResponse]{Method: MethodClientUnregisterCapability}
@@ -21197,7 +21197,7 @@ type InitializeResponse = *InitializeResult
 var InitializeInfo = RequestInfo[*InitializeParams, InitializeResponse]{Method: MethodInitialize}
 
 // Response type for `shutdown`
-type ShutdownResponse = any
+type ShutdownResponse = Null
 
 // Type mapping info for `shutdown`
 var ShutdownInfo = RequestInfo[any, ShutdownResponse]{Method: MethodShutdown}
@@ -21299,7 +21299,7 @@ type CodeLensResolveResponse = *CodeLens
 var CodeLensResolveInfo = RequestInfo[*CodeLens, CodeLensResolveResponse]{Method: MethodCodeLensResolve}
 
 // Response type for `workspace/codeLens/refresh`
-type CodeLensRefreshResponse = any
+type CodeLensRefreshResponse = Null
 
 // Type mapping info for `workspace/codeLens/refresh`
 var WorkspaceCodeLensRefreshInfo = RequestInfo[any, CodeLensRefreshResponse]{Method: MethodWorkspaceCodeLensRefresh}
