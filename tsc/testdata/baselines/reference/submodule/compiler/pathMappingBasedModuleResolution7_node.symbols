@@ -25,6 +25,27 @@ use(y.toFixed());
 export let x: number;
 >x : Symbol(x, Decl(index.d.ts, 0, 10))
 
+=== c:/root/generated/src/project/file2.ts ===
+import {a} from "module1";
+>a : Symbol(a, Decl(file2.ts, 0, 8))
+
+import {b} from "templates/module2";
+>b : Symbol(b, Decl(file2.ts, 1, 8))
+
+import {x as c} from "../file3";
+>x : Symbol(x, Decl(index.d.ts, 0, 10))
+>c : Symbol(c, Decl(file2.ts, 2, 8))
+
+export let x = a + b + c;
+>x : Symbol(x, Decl(file2.ts, 3, 10))
+>a : Symbol(a, Decl(file2.ts, 0, 8))
+>b : Symbol(b, Decl(file2.ts, 1, 8))
+>c : Symbol(c, Decl(file2.ts, 2, 8))
+
+=== c:/shared/module1/index.d.ts ===
+export let a: number
+>a : Symbol(a, Decl(index.d.ts, 0, 10))
+
 === c:/node_modules/module3.d.ts ===
 export let y: number;
 >y : Symbol(y, Decl(module3.d.ts, 0, 10))

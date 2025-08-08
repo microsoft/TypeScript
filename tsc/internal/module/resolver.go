@@ -1081,7 +1081,16 @@ func (r *resolutionState) getOriginalAndResolvedFileName(fileName string) (strin
 }
 
 func (r *resolutionState) tryLoadModuleUsingOptionalResolutionSettings() *resolved {
-	return r.tryLoadModuleUsingPathsIfEligible()
+	if resolved := r.tryLoadModuleUsingPathsIfEligible(); !resolved.shouldContinueSearching() {
+		return resolved
+	}
+
+	if !tspath.IsExternalModuleNameRelative(r.name) {
+		// No more tryLoadModuleUsingBaseUrl.
+		return continueSearching()
+	} else {
+		return r.tryLoadModuleUsingRootDirs()
+	}
 }
 
 func (r *resolutionState) tryLoadModuleUsingPathsIfEligible() *resolved {
@@ -1131,6 +1140,82 @@ func (r *resolutionState) tryLoadModuleUsingPaths(extensions extensions, moduleN
 			if resolved := loader(extensions, candidate, onlyRecordFailures || !r.resolver.host.FS().DirectoryExists(tspath.GetDirectoryPath(candidate))); !resolved.shouldContinueSearching() {
 				return resolved
 			}
+		}
+	}
+	return continueSearching()
+}
+
+func (r *resolutionState) tryLoadModuleUsingRootDirs() *resolved {
+	if len(r.compilerOptions.RootDirs) == 0 {
+		return continueSearching()
+	}
+
+	if r.resolver.traceEnabled() {
+		r.resolver.host.Trace(diagnostics.X_rootDirs_option_is_set_using_it_to_resolve_relative_module_name_0.Format(r.name))
+	}
+
+	candidate := tspath.NormalizePath(tspath.CombinePaths(r.containingDirectory, r.name))
+
+	var matchedRootDir string
+	var matchedNormalizedPrefix string
+	for _, rootDir := range r.compilerOptions.RootDirs {
+		// rootDirs are expected to be absolute
+		// in case of tsconfig.json this will happen automatically - compiler will expand relative names
+		// using location of tsconfig.json as base location
+		normalizedRoot := tspath.NormalizePath(rootDir)
+		if !strings.HasSuffix(normalizedRoot, "/") {
+			normalizedRoot += "/"
+		}
+		isLongestMatchingPrefix := strings.HasPrefix(candidate, normalizedRoot) &&
+			(matchedNormalizedPrefix == "" || len(matchedNormalizedPrefix) < len(normalizedRoot))
+
+		if r.resolver.traceEnabled() {
+			r.resolver.host.Trace(diagnostics.Checking_if_0_is_the_longest_matching_prefix_for_1_2.Format(normalizedRoot, candidate, isLongestMatchingPrefix))
+		}
+
+		if isLongestMatchingPrefix {
+			matchedNormalizedPrefix = normalizedRoot
+			matchedRootDir = rootDir
+		}
+	}
+
+	if matchedNormalizedPrefix != "" {
+		if r.resolver.traceEnabled() {
+			r.resolver.host.Trace(diagnostics.Longest_matching_prefix_for_0_is_1.Format(candidate, matchedNormalizedPrefix))
+		}
+		suffix := candidate[len(matchedNormalizedPrefix):]
+
+		// first - try to load from a initial location
+		if r.resolver.traceEnabled() {
+			r.resolver.host.Trace(diagnostics.Loading_0_from_the_root_dir_1_candidate_location_2.Format(suffix, matchedNormalizedPrefix, candidate))
+		}
+		loader := func(extensions extensions, candidate string, onlyRecordFailures bool) *resolved {
+			return r.nodeLoadModuleByRelativeName(extensions, candidate, onlyRecordFailures, true /*considerPackageJson*/)
+		}
+		if resolvedFileName := loader(r.extensions, candidate, !r.resolver.host.FS().DirectoryExists(r.containingDirectory)); !resolvedFileName.shouldContinueSearching() {
+			return resolvedFileName
+		}
+
+		if r.resolver.traceEnabled() {
+			r.resolver.host.Trace(diagnostics.Trying_other_entries_in_rootDirs.Format())
+		}
+		// then try to resolve using remaining entries in rootDirs
+		for _, rootDir := range r.compilerOptions.RootDirs {
+			if rootDir == matchedRootDir {
+				// skip the initially matched entry
+				continue
+			}
+			candidate := tspath.CombinePaths(tspath.NormalizePath(rootDir), suffix)
+			if r.resolver.traceEnabled() {
+				r.resolver.host.Trace(diagnostics.Loading_0_from_the_root_dir_1_candidate_location_2.Format(suffix, rootDir, candidate))
+			}
+			baseDirectory := tspath.GetDirectoryPath(candidate)
+			if resolvedFileName := loader(r.extensions, candidate, !r.resolver.host.FS().DirectoryExists(baseDirectory)); !resolvedFileName.shouldContinueSearching() {
+				return resolvedFileName
+			}
+		}
+		if r.resolver.traceEnabled() {
+			r.resolver.host.Trace(diagnostics.Module_resolution_using_rootDirs_has_failed.Format())
 		}
 	}
 	return continueSearching()

@@ -28,6 +28,14 @@ use(y.toFixed());
 export let x: number;
 
 
+//// [file2.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+const module1_1 = require("module1");
+const module2_1 = require("templates/module2");
+const file3_1 = require("../file3");
+exports.x = module1_1.a + module2_1.b + file3_1.x;
 //// [file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

@@ -1,4 +1,4 @@
-c:/root/src/file1.ts(1,17): error TS2307: Cannot find module './project/file2' or its corresponding type declarations.
+c:/root/generated/src/project/file2.ts(2,17): error TS2307: Cannot find module 'templates/module2' or its corresponding type declarations.
 c:/root/src/tsconfig.json(3,9): error TS5102: Option 'baseUrl' has been removed. Please remove it from your configuration.
   Use '"paths": {"*": ["./../*"]}' instead.
 c:/root/src/tsconfig.json(6,17): error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
@@ -32,10 +32,8 @@ c:/root/src/tsconfig.json(10,17): error TS5090: Non-relative paths are not allow
         }
     }
     
-==== c:/root/src/file1.ts (1 errors) ====
+==== c:/root/src/file1.ts (0 errors) ====
     import {x} from "./project/file2";
-                    ~~~~~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module './project/file2' or its corresponding type declarations.
     import {y} from "module3";
     
     declare function use(x: string);
@@ -45,9 +43,11 @@ c:/root/src/tsconfig.json(10,17): error TS5090: Non-relative paths are not allow
 ==== c:/root/src/file3/index.d.ts (0 errors) ====
     export let x: number;
     
-==== c:/root/generated/src/project/file2.ts (0 errors) ====
+==== c:/root/generated/src/project/file2.ts (1 errors) ====
     import {a} from "module1";
     import {b} from "templates/module2";
+                    ~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'templates/module2' or its corresponding type declarations.
     import {x as c} from "../file3";
     export let x = a + b + c;
     
