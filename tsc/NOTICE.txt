@@ -221,6 +221,36 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 ---------------------------------------------------------
 
+github.com/go-json-experiment/json v0.0.0-20250725192818-e39067aee2d2 - BSD-3-Clause
+
+
+Copyright 2010 The Go Authors
+Copyright 2011 The Go Authors
+Copyright 2016 The Go Authors
+Copyright 2018 The Go Authors
+Copyright 2020 The Go Authors
+Copyright 2021 The Go Authors
+Copyright 2022 The Go Authors
+Copyright 2023 The Go Authors
+Copyright 2024 The Go Authors
+Copyright (c) 2020 The Go Authors
+
+Copyright (c) <year> <owner> . All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+   1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+   2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+   3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+---------------------------------------------------------
+
+---------------------------------------------------------
+
 golang.org/x/sync v0.16.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
 
 
@@ -236,7 +266,7 @@ BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
 
 ---------------------------------------------------------
 
-golang.org/x/sys v0.34.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
+golang.org/x/sys v0.35.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
 
 
 Copyright 2009 The Go Authors
@@ -257,6 +287,21 @@ Copyright 2023 The Go Authors
 Copyright 2024 The Go Authors
 Copyright 2025 The Go Authors
 Copyright 2009,2010 The Go Authors
+
+BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
+
+---------------------------------------------------------
+
+---------------------------------------------------------
+
+golang.org/x/term v0.34.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
+
+
+Copyright 2009 The Go Authors
+Copyright 2011 The Go Authors
+Copyright 2013 The Go Authors
+Copyright 2019 The Go Authors
+Copyright 2021 The Go Authors
 
 BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
 
