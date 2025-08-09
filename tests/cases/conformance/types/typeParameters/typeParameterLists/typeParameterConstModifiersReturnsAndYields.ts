@@ -62,3 +62,52 @@ const FileRouter = UploadThingServerHelper({
     },
   },
 });
+
+function outer1<const T>(cb: () => T) {
+  function inner1<const U>(cb2: () => U) {
+    return [cb(), cb2()];
+  }
+  return inner1;
+}
+const nestedResult1 = outer1(() => 1)(() => "foo");
+
+function outer2<T>(cb: () => T) {
+  function inner2<const U>(cb2: () => U) {
+    return [cb(), cb2()];
+  }
+  return inner2;
+}
+const nestedResult2 = outer2(() => 1)(() => "foo");
+
+function outer3<const T>(cb: () => T) {
+  function inner3<U>(cb2: () => U) {
+    return [cb(), cb2()];
+  }
+  return inner3;
+}
+const nestedResult3 = outer3(() => 1)(() => "foo");
+
+declare function overloaded1<const T>(cb: () => T): T;
+declare function overloaded1<const T, const U>(cb: () => T, cb2: () => U): [T, U];
+const overloadA = overloaded1(() => 42);
+const overloadB = overloaded1(() => "hi", () => true);
+
+declare function overloaded2<T>(cb: () => T): T;
+declare function overloaded2<T, const U>(cb: () => T, cb2: () => U): [T, U];
+const overloadC = overloaded2(() => 42);
+const overloadD = overloaded2(() => "hi", () => true);
+
+declare function overloaded3<const T>(cb: () => T): T;
+declare function overloaded3<const T, U>(cb: () => T, cb2: () => U): [T, U];
+const overloadE = overloaded3(() => 42);
+const overloadF = overloaded3(() => "hi", () => true);
+
+declare function overloaded4<const T>(cb: () => T): T;
+declare function overloaded4<T, U>(cb: () => T, cb2: () => U): [T, U];
+const overloadG = overloaded4(() => 42);
+const overloadH = overloaded4(() => "hi", () => true);
+
+declare function overloaded5<T>(cb: () => T): T;
+declare function overloaded5<const T, U>(cb: () => T, cb2: () => U): [T, U];
+const overloadI = overloaded5(() => 42);
+const overloadJ = overloaded5(() => "hi", () => true);
