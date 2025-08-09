@@ -6,6 +6,7 @@ declare var dec: any;
 
 class A {}
 >A : A
+>  : ^
 
 // https://github.com/Microsoft/TypeScript/issues/16417
 @dec
@@ -13,24 +14,36 @@ class A {}
 
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     static x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     static y = B.x;
 >y : number
+>  : ^^^^^^
 >B.x : number
+>    : ^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     m() {
 >m : () => number
+>  : ^^^^^^^^^^^^
 
         return B.x;
 >B.x : number
+>    : ^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 >x : number
+>  : ^^^^^^
     }
 }

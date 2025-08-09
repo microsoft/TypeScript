@@ -1,0 +1,101 @@
+//// [tests/cases/compiler/errorOnEnumReferenceInCondition.ts] ////
+
+=== errorOnEnumReferenceInCondition.ts ===
+enum Nums {
+>Nums : Symbol(Nums, Decl(errorOnEnumReferenceInCondition.ts, 0, 0))
+
+    Zero = 0,
+>Zero : Symbol(Nums.Zero, Decl(errorOnEnumReferenceInCondition.ts, 0, 11))
+
+    One = 1,
+>One : Symbol(Nums.One, Decl(errorOnEnumReferenceInCondition.ts, 1, 13))
+}
+
+const a = Nums.Zero ? "a" : "b";
+>a : Symbol(a, Decl(errorOnEnumReferenceInCondition.ts, 5, 5))
+>Nums.Zero : Symbol(Nums.Zero, Decl(errorOnEnumReferenceInCondition.ts, 0, 11))
+>Nums : Symbol(Nums, Decl(errorOnEnumReferenceInCondition.ts, 0, 0))
+>Zero : Symbol(Nums.Zero, Decl(errorOnEnumReferenceInCondition.ts, 0, 11))
+
+const b = Nums.One ? "a" : "b";
+>b : Symbol(b, Decl(errorOnEnumReferenceInCondition.ts, 6, 5))
+>Nums.One : Symbol(Nums.One, Decl(errorOnEnumReferenceInCondition.ts, 1, 13))
+>Nums : Symbol(Nums, Decl(errorOnEnumReferenceInCondition.ts, 0, 0))
+>One : Symbol(Nums.One, Decl(errorOnEnumReferenceInCondition.ts, 1, 13))
+
+if (Nums.Zero) {
+>Nums.Zero : Symbol(Nums.Zero, Decl(errorOnEnumReferenceInCondition.ts, 0, 11))
+>Nums : Symbol(Nums, Decl(errorOnEnumReferenceInCondition.ts, 0, 0))
+>Zero : Symbol(Nums.Zero, Decl(errorOnEnumReferenceInCondition.ts, 0, 11))
+
+    Nums;
+>Nums : Symbol(Nums, Decl(errorOnEnumReferenceInCondition.ts, 0, 0))
+}
+else {
+    Nums;
+>Nums : Symbol(Nums, Decl(errorOnEnumReferenceInCondition.ts, 0, 0))
+}
+
+
+if (Nums.One) {
+>Nums.One : Symbol(Nums.One, Decl(errorOnEnumReferenceInCondition.ts, 1, 13))
+>Nums : Symbol(Nums, Decl(errorOnEnumReferenceInCondition.ts, 0, 0))
+>One : Symbol(Nums.One, Decl(errorOnEnumReferenceInCondition.ts, 1, 13))
+
+    Nums;
+>Nums : Symbol(Nums, Decl(errorOnEnumReferenceInCondition.ts, 0, 0))
+}
+else {
+    Nums;
+>Nums : Symbol(Nums, Decl(errorOnEnumReferenceInCondition.ts, 0, 0))
+}
+
+
+enum Strs {
+>Strs : Symbol(Strs, Decl(errorOnEnumReferenceInCondition.ts, 21, 1))
+
+    Empty = "",
+>Empty : Symbol(Strs.Empty, Decl(errorOnEnumReferenceInCondition.ts, 24, 11))
+
+    A = "A",
+>A : Symbol(Strs.A, Decl(errorOnEnumReferenceInCondition.ts, 25, 15))
+}
+
+const c = Strs.Empty ? "a" : "b";
+>c : Symbol(c, Decl(errorOnEnumReferenceInCondition.ts, 29, 5))
+>Strs.Empty : Symbol(Strs.Empty, Decl(errorOnEnumReferenceInCondition.ts, 24, 11))
+>Strs : Symbol(Strs, Decl(errorOnEnumReferenceInCondition.ts, 21, 1))
+>Empty : Symbol(Strs.Empty, Decl(errorOnEnumReferenceInCondition.ts, 24, 11))
+
+const d = Strs.A ? "a" : "b";
+>d : Symbol(d, Decl(errorOnEnumReferenceInCondition.ts, 30, 5))
+>Strs.A : Symbol(Strs.A, Decl(errorOnEnumReferenceInCondition.ts, 25, 15))
+>Strs : Symbol(Strs, Decl(errorOnEnumReferenceInCondition.ts, 21, 1))
+>A : Symbol(Strs.A, Decl(errorOnEnumReferenceInCondition.ts, 25, 15))
+
+if (Strs.Empty) {
+>Strs.Empty : Symbol(Strs.Empty, Decl(errorOnEnumReferenceInCondition.ts, 24, 11))
+>Strs : Symbol(Strs, Decl(errorOnEnumReferenceInCondition.ts, 21, 1))
+>Empty : Symbol(Strs.Empty, Decl(errorOnEnumReferenceInCondition.ts, 24, 11))
+
+    Strs;
+>Strs : Symbol(Strs, Decl(errorOnEnumReferenceInCondition.ts, 21, 1))
+}
+else {
+    Strs;
+>Strs : Symbol(Strs, Decl(errorOnEnumReferenceInCondition.ts, 21, 1))
+}
+
+
+if (Strs.A) {
+>Strs.A : Symbol(Strs.A, Decl(errorOnEnumReferenceInCondition.ts, 25, 15))
+>Strs : Symbol(Strs, Decl(errorOnEnumReferenceInCondition.ts, 21, 1))
+>A : Symbol(Strs.A, Decl(errorOnEnumReferenceInCondition.ts, 25, 15))
+
+    Strs;
+>Strs : Symbol(Strs, Decl(errorOnEnumReferenceInCondition.ts, 21, 1))
+}
+else {
+    Strs;
+>Strs : Symbol(Strs, Decl(errorOnEnumReferenceInCondition.ts, 21, 1))
+}

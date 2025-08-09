@@ -1,7 +1,7 @@
 /* Generated file to emulate the ts namespace. */
 
-export * from "../../compiler/_namespaces/ts";
-import * as JsTyping from "./ts.JsTyping";
+export * from "../../compiler/_namespaces/ts.js";
+import * as JsTyping from "./ts.JsTyping.js";
 export { JsTyping };
-import * as server from "./ts.server";
+import * as server from "./ts.server.js";
 export { server };

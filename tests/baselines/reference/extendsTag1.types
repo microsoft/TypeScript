@@ -7,5 +7,7 @@
  */
 class My extends Set {}
 >My : My<T>
+>   : ^^^^^
 >Set : Set<T>
+>    : ^^^^^^
 

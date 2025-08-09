@@ -1,0 +1,79 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/server/quickinfoVerbosityServer.ts ===
+// type FooType = string | number
+// const foo: FooType = 1
+//       ^^^
+// | ----------------------------------------------------------------------
+// | const foo: string | number
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^^^
+// | ----------------------------------------------------------------------
+// | const foo: FooType
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/server/quickinfoVerbosityServer.ts",
+      "position": 40,
+      "name": "a"
+    },
+    "item": {
+      "kind": "const",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 37,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "kind": "text",
+          "text": "const foo: FooType"
+        }
+      ],
+      "documentation": [
+        {
+          "kind": "text",
+          "text": ""
+        }
+      ],
+      "tags": [],
+      "canIncreaseVerbosityLevel": true,
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/server/quickinfoVerbosityServer.ts",
+      "position": 40,
+      "name": "a"
+    },
+    "item": {
+      "kind": "const",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 37,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "kind": "text",
+          "text": "const foo: string | number"
+        }
+      ],
+      "documentation": [
+        {
+          "kind": "text",
+          "text": ""
+        }
+      ],
+      "tags": [],
+      "canIncreaseVerbosityLevel": false,
+      "verbosityLevel": 1
+    }
+  }
+]

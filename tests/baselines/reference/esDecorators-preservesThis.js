@@ -26,7 +26,7 @@ class C {
 class D extends DecoratorProvider {
     m() {
         class C {
-            @super.decorate
+            @(super.decorate)
             method1() { }
 
             @(super["decorate"])
@@ -41,6 +41,13 @@ class D extends DecoratorProvider {
 
 //// [esDecorators-preservesThis.js]
 // https://github.com/microsoft/TypeScript/issues/53752
+var __runInitializers = (this && this.__runInitializers) || function (thisArg, initializers, value) {
+    var useValue = arguments.length > 2;
+    for (var i = 0; i < initializers.length; i++) {
+        value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
+    }
+    return useValue ? value : void 0;
+};
 var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, decorators, contextIn, initializers, extraInitializers) {
     function accept(f) { if (f !== void 0 && typeof f !== "function") throw new TypeError("Function expected"); return f; }
     var kind = contextIn.kind, key = kind === "getter" ? "get" : kind === "setter" ? "set" : "value";
@@ -67,13 +74,6 @@ var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, 
     }
     if (target) Object.defineProperty(target, contextIn.name, descriptor);
     done = true;
-};
-var __runInitializers = (this && this.__runInitializers) || function (thisArg, initializers, value) {
-    var useValue = arguments.length > 2;
-    for (var i = 0; i < initializers.length; i++) {
-        value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
-    }
-    return useValue ? value : void 0;
 };
 // preserve `this` for access
 let C = (() => {
@@ -114,7 +114,7 @@ class D extends DecoratorProvider {
             return class C {
                 static {
                     const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
-                    _method1_decorators = [super.decorate.bind(_outerThis)];
+                    _method1_decorators = [(super.decorate.bind(_outerThis))];
                     _method2_decorators = [(super["decorate"].bind(_outerThis))];
                     _method3_decorators = [((super.decorate.bind(_outerThis)))];
                     __esDecorate(this, null, _method1_decorators, { kind: "method", name: "method1", static: false, private: false, access: { has: obj => "method1" in obj, get: obj => obj.method1 }, metadata: _metadata }, null, _instanceExtraInitializers);

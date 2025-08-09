@@ -3,12 +3,15 @@
 === typedefOnSemicolonClassElement.js ===
 export class Preferences {
 >Preferences : Preferences
+>            : ^^^^^^^^^^^
 
   /** @typedef {string} A */
   ;
   /** @type {A} */
   a = 'ok'
 >a : string
+>  : ^^^^^^
 >'ok' : "ok"
+>     : ^^^^
 }
 

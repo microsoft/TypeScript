@@ -8,7 +8,7 @@ Issues that ask questions answered in the FAQ will be closed without elaboration
 
 ## 2. Search for Duplicates
 
-[Search the existing issues](https://github.com/Microsoft/TypeScript/search?type=Issues) before logging a new one.
+[Search the existing issues in GitHub](https://github.com/Microsoft/TypeScript/search?type=Issues) or by the query `site:github.com/microsoft/TypeScript <your keywords>` in your favorite search engine before logging a new one. Search engines generally list more relevant and accurate results at the top than the GitHub searching feature.
 
 Some search tips:
  * *Don't* restrict your search to only open issues. An issue with a title similar to yours may have been closed as a duplicate of one with a less-findable title.
@@ -49,7 +49,7 @@ In general, things we find useful when reviewing suggestions are:
 
 ## What You'll Need
 
-0. [A bug or feature you want to work on](https://github.com/microsoft/TypeScript/labels/help%20wanted)!
+0. [A bug or feature you want to work on](https://github.com/microsoft/TypeScript/issues?q=is%3Aissue%20label%3A%22Help%20Wanted%22)!
 1. [A GitHub account](https://github.com/join).
 2. A copy of the TypeScript code. See the next steps for instructions.
 3. [Node](https://nodejs.org), which runs JavaScript locally. Current or LTS will both work.

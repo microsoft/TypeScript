@@ -1,0 +1,141 @@
+unreachableDeclarations.ts(4,17): error TS2450: Enum 'EnumA' used before its declaration.
+unreachableDeclarations.ts(14,5): error TS7027: Unreachable code detected.
+unreachableDeclarations.ts(21,17): error TS2450: Enum 'EnumA' used before its declaration.
+unreachableDeclarations.ts(29,5): error TS7027: Unreachable code detected.
+unreachableDeclarations.ts(43,5): error TS7027: Unreachable code detected.
+unreachableDeclarations.ts(49,17): error TS2449: Class 'ClassA' used before its declaration.
+unreachableDeclarations.ts(57,5): error TS7027: Unreachable code detected.
+unreachableDeclarations.ts(63,14): error TS2450: Enum 'Bar' used before its declaration.
+unreachableDeclarations.ts(64,14): error TS2448: Block-scoped variable 'blah' used before its declaration.
+unreachableDeclarations.ts(64,14): error TS2454: Variable 'blah' is used before being assigned.
+unreachableDeclarations.ts(65,18): error TS2449: Class 'Foo' used before its declaration.
+unreachableDeclarations.ts(78,2): error TS7027: Unreachable code detected.
+unreachableDeclarations.ts(84,2): error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
+
+
+==== unreachableDeclarations.ts (13 errors) ====
+    function func1() {
+        aFunc();
+    
+        console.log(EnumA.Value);
+                    ~~~~~
+!!! error TS2450: Enum 'EnumA' used before its declaration.
+!!! related TS2728 unreachableDeclarations.ts:14:10: 'EnumA' is declared here.
+        console.log(EnumB.Value);
+    
+        return;
+    
+        function aFunc() {
+            console.log(EnumA.Value);
+            console.log(EnumB.Value);
+        }
+    
+        enum EnumA { Value }
+        ~~~~~~~~~~~~~~~~~~~~
+        const enum EnumB { Value }
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7027: Unreachable code detected.
+    }
+    
+    function func2() {
+        aFunc();
+    
+        console.log(EnumA.Value);
+                    ~~~~~
+!!! error TS2450: Enum 'EnumA' used before its declaration.
+!!! related TS2728 unreachableDeclarations.ts:29:10: 'EnumA' is declared here.
+    
+        return;
+    
+        function aFunc() {
+            console.log(EnumA.Value);
+        }
+    
+        enum EnumA { Value }
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS7027: Unreachable code detected.
+    }
+    
+    function func3() {
+        aFunc();
+    
+        console.log(EnumB.Value);
+    
+        return;
+    
+        function aFunc() {
+            console.log(EnumB.Value);
+        }
+    
+        const enum EnumB { Value }
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7027: Unreachable code detected.
+    }
+    
+    function func4() {
+        aFunc();
+    
+        console.log(ClassA.Value);
+                    ~~~~~~
+!!! error TS2449: Class 'ClassA' used before its declaration.
+!!! related TS2728 unreachableDeclarations.ts:57:11: 'ClassA' is declared here.
+    
+        return;
+    
+        function aFunc() {
+            console.log(ClassA.Value);
+        }
+    
+        class ClassA { static Value = 1234; }
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7027: Unreachable code detected.
+    }
+    
+    function func5() {
+    	aFunc();
+    
+    	console.log(Bar.A);
+    	            ~~~
+!!! error TS2450: Enum 'Bar' used before its declaration.
+!!! related TS2728 unreachableDeclarations.ts:80:7: 'Bar' is declared here.
+    	console.log(blah.prop);
+    	            ~~~~
+!!! error TS2448: Block-scoped variable 'blah' used before its declaration.
+!!! related TS2728 unreachableDeclarations.ts:78:8: 'blah' is declared here.
+    	            ~~~~
+!!! error TS2454: Variable 'blah' is used before being assigned.
+    	console.log(new Foo())
+    	                ~~~
+!!! error TS2449: Class 'Foo' used before its declaration.
+!!! related TS2728 unreachableDeclarations.ts:82:8: 'Foo' is declared here.
+    	console.log(Baz.value);
+    
+    
+    	return;
+    
+    	function aFunc() {
+    		console.log(Bar.A);
+    		console.log(blah.prop);
+    		console.log(new Foo())
+    		console.log(Baz.value);
+    	}
+    
+    	const blah = { prop: 1234 };
+    	~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+    
+    	enum Bar { A }
+    ~~~~~~~~~~~~~~~
+    
+    
+    	class Foo { x = 1234 }
+    ~~~~~~~~~~~~~~~~~~~~~~~
+    
+    
+    	namespace Baz { export const value = 1234 }
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7027: Unreachable code detected.
+    	~~~~~~~~~
+!!! error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
+    }
+    

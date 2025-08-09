@@ -1,0 +1,130 @@
+//// [tests/cases/conformance/node/nodeModulesImportAttributesTypeModeDeclarationEmitErrors.ts] ////
+
+=== /node_modules/pkg/import.d.ts ===
+export interface ImportInterface {}
+>ImportInterface : Symbol(ImportInterface, Decl(import.d.ts, 0, 0))
+
+=== /node_modules/pkg/require.d.ts ===
+export interface RequireInterface {}
+>RequireInterface : Symbol(RequireInterface, Decl(require.d.ts, 0, 0))
+
+=== /index.ts ===
+export type LocalInterface =
+>LocalInterface : Symbol(LocalInterface, Decl(index.ts, 0, 0))
+
+    & import("pkg", { with: {"resolution-mode": "foobar"} }).RequireInterface
+>RequireInterface : Symbol(RequireInterface, Decl(require.d.ts, 0, 0))
+
+    & import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface;
+>ImportInterface : Symbol(ImportInterface, Decl(import.d.ts, 0, 0))
+
+export const a = (null as any as import("pkg", { with: {"resolution-mode": "foobar"} }).RequireInterface);
+>a : Symbol(a, Decl(index.ts, 4, 12))
+>RequireInterface : Symbol(RequireInterface, Decl(require.d.ts, 0, 0))
+
+export const b = (null as any as import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface);
+>b : Symbol(b, Decl(index.ts, 5, 12))
+>ImportInterface : Symbol(ImportInterface, Decl(import.d.ts, 0, 0))
+
+=== /other.ts ===
+// missing with:
+export type LocalInterface =
+>LocalInterface : Symbol(LocalInterface, Decl(other.ts, 0, 0))
+
+    & import("pkg", {"resolution-mode": "require"}).RequireInterface
+    & import("pkg", {"resolution-mode": "import"}).ImportInterface;
+>"pkg" : Symbol("/node_modules/pkg/import", Decl(import.d.ts, 0, 0))
+>"resolution-mode" : Symbol("resolution-mode", Decl(other.ts, 3, 21))
+
+export const a = (null as any as import("pkg", {"resolution-mode": "require"}).RequireInterface);
+>a : Symbol(a, Decl(other.ts, 5, 12))
+
+export const b = (null as any as import("pkg", {"resolution-mode": "import"}).ImportInterface);
+>b : Symbol(b, Decl(other.ts, 6, 12))
+
+=== /other2.ts ===
+// wrong attribute key
+export type LocalInterface =
+>LocalInterface : Symbol(LocalInterface, Decl(other2.ts, 0, 0))
+
+    & import("pkg", { with: {"bad": "require"} }).RequireInterface
+>RequireInterface : Symbol(RequireInterface, Decl(require.d.ts, 0, 0))
+
+    & import("pkg", { with: {"bad": "import"} }).ImportInterface;
+
+export const a = (null as any as import("pkg", { with: {"bad": "require"} }).RequireInterface);
+>a : Symbol(a, Decl(other2.ts, 5, 12))
+>RequireInterface : Symbol(RequireInterface, Decl(require.d.ts, 0, 0))
+
+export const b = (null as any as import("pkg", { with: {"bad": "import"} }).ImportInterface);
+>b : Symbol(b, Decl(other2.ts, 6, 12))
+
+=== /other3.ts ===
+// Array instead of object-y thing
+export type LocalInterface =
+>LocalInterface : Symbol(LocalInterface, Decl(other3.ts, 0, 0))
+
+    & import("pkg", [ {"resolution-mode": "require"} ]).RequireInterface
+>"resolution-mode" : Symbol("resolution-mode", Decl(other3.ts, 2, 23))
+
+    & import("pkg", [ {"resolution-mode": "import"} ]).ImportInterface;
+>"pkg" : Symbol("/node_modules/pkg/import", Decl(import.d.ts, 0, 0))
+>"resolution-mode" : Symbol("resolution-mode", Decl(other3.ts, 3, 23))
+
+export const a = (null as any as import("pkg", [ {"resolution-mode": "require"} ]).RequireInterface);
+>a : Symbol(a, Decl(other3.ts, 5, 12))
+>"resolution-mode" : Symbol("resolution-mode", Decl(other3.ts, 5, 50))
+
+export const b = (null as any as import("pkg", [ {"resolution-mode": "import"} ]).ImportInterface);
+>b : Symbol(b, Decl(other3.ts, 6, 12))
+>"resolution-mode" : Symbol("resolution-mode", Decl(other3.ts, 6, 50))
+
+=== /other4.ts ===
+// Indirected attribute objecty-thing - not allowed
+type Attribute1 = { with: {"resolution-mode": "require"} };
+>Attribute1 : Symbol(Attribute1, Decl(other4.ts, 0, 0), Decl(other4.ts, 8, 46))
+>with : Symbol(with, Decl(other4.ts, 1, 19))
+>"resolution-mode" : Symbol("resolution-mode", Decl(other4.ts, 1, 27))
+
+type Attribute2 = { with: {"resolution-mode": "import"} };
+>Attribute2 : Symbol(Attribute2, Decl(other4.ts, 1, 59), Decl(other4.ts, 9, 46))
+>with : Symbol(with, Decl(other4.ts, 2, 19))
+>"resolution-mode" : Symbol("resolution-mode", Decl(other4.ts, 2, 27))
+
+export type LocalInterface =
+>LocalInterface : Symbol(LocalInterface, Decl(other4.ts, 2, 58))
+
+    & import("pkg", Attribute1).RequireInterface
+>Attribute1 : Symbol(Attribute1, Decl(other4.ts, 8, 46))
+>RequireInterface : Symbol(RequireInterface, Decl(other4.ts, 8, 59))
+
+    & import("pkg", Attribute2).ImportInterface;
+>"pkg" : Symbol("/node_modules/pkg/import", Decl(import.d.ts, 0, 0))
+>Attribute2 : Symbol(Attribute2, Decl(other4.ts, 9, 46))
+
+export const a = (null as any as import("pkg", Attribute1).RequireInterface);
+>a : Symbol(a, Decl(other4.ts, 8, 12))
+>Attribute1 : Symbol(Attribute1, Decl(other4.ts, 8, 46))
+>RequireInterface : Symbol(RequireInterface, Decl(other4.ts, 8, 59))
+
+export const b = (null as any as import("pkg", Attribute2).ImportInterface);
+>b : Symbol(b, Decl(other4.ts, 9, 12))
+>Attribute2 : Symbol(Attribute2, Decl(other4.ts, 9, 46))
+>ImportInterface : Symbol(ImportInterface, Decl(other4.ts, 9, 59))
+
+=== /other5.ts ===
+export type LocalInterface =
+>LocalInterface : Symbol(LocalInterface, Decl(other5.ts, 0, 0))
+
+    & import("pkg", { with: {} }).RequireInterface
+>RequireInterface : Symbol(RequireInterface, Decl(require.d.ts, 0, 0))
+
+    & import("pkg", { with: {} }).ImportInterface;
+
+export const a = (null as any as import("pkg", { with: {} }).RequireInterface);
+>a : Symbol(a, Decl(other5.ts, 4, 12))
+>RequireInterface : Symbol(RequireInterface, Decl(require.d.ts, 0, 0))
+
+export const b = (null as any as import("pkg", { with: {} }).ImportInterface);
+>b : Symbol(b, Decl(other5.ts, 5, 12))
+

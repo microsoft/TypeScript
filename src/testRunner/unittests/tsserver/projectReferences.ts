@@ -1,30 +1,33 @@
-import * as ts from "../../_namespaces/ts";
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    solutionBuildWithBaseline,
-} from "../helpers/solutionBuilder";
+import * as ts from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { solutionBuildWithBaseline } from "../helpers/solutionBuilder.js";
 import {
     baselineTsserverLogs,
+    closeFilesForSession,
     createHostWithSolutionBuild,
     openFilesForSession,
+    projectInfoForSession,
     protocolFileLocationFromSubstring,
     protocolLocationFromSubstring,
     TestSession,
     verifyGetErrRequest,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
-    libFile,
     SymLink,
-} from "../helpers/virtualFileSystemWithWatch";
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: with project references and tsbuild", () => {
+function logDefaultProjectAndDefaultConfiguredProject(session: TestSession, file: File) {
+    const info = session.getProjectService().getScriptInfo(file.path);
+    if (info) {
+        const projectInfo = projectInfoForSession(session, file);
+        return session.getProjectService().findProject(projectInfo.configFileName);
+    }
+}
+
+describe("unittests:: tsserver:: with projectReferences:: and tsbuild", () => {
     describe("with container project", () => {
         function setup(tempFile?: File) {
             const containerLibConfig: File = {
@@ -53,14 +56,13 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
                 path: "/user/username/projects/container/exec/tsconfig.json",
                 content: jsonToReadableText({
                     compilerOptions: {
-                        ignoreDeprecations: "5.0",
                         outFile: "../built/local/exec.js",
                     },
                     files: [
                         "index.ts",
                     ],
                     references: [
-                        { path: "../lib", prepend: true },
+                        { path: "../lib" },
                     ],
                 }),
             };
@@ -78,7 +80,6 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
                 path: "/user/username/projects/container/compositeExec/tsconfig.json",
                 content: jsonToReadableText({
                     compilerOptions: {
-                        ignoreDeprecations: "5.0",
                         outFile: "../built/local/compositeExec.js",
                         composite: true,
                         declarationMap: true,
@@ -87,7 +88,7 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
                         "index.ts",
                     ],
                     references: [
-                        { path: "../lib", prepend: true },
+                        { path: "../lib" },
                     ],
                 }),
             };
@@ -112,7 +113,7 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
                     ],
                 }),
             };
-            const files = [libFile, containerLibConfig, containerLibIndex, containerExecConfig, containerExecIndex, containerCompositeExecConfig, containerCompositeExecIndex, containerConfig];
+            const files = [containerLibConfig, containerLibIndex, containerExecConfig, containerExecIndex, containerCompositeExecConfig, containerCompositeExecIndex, containerConfig];
             if (tempFile) files.push(tempFile);
             const host = createHostWithSolutionBuild(files, [containerConfig.path]);
             const session = new TestSession(host);
@@ -121,12 +122,16 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
 
         it("does not error on container only project", () => {
             const { files, session, containerConfig } = setup();
-            const service = session.getProjectService();
-            service.openExternalProjects([{
-                projectFileName: "/user/username/projects/container/container",
-                rootFiles: files.map(f => ({ fileName: f.path })),
-                options: {},
-            }]);
+            session.executeCommandSeq<ts.server.protocol.OpenExternalProjectsRequest>({
+                command: ts.server.protocol.CommandTypes.OpenExternalProjects,
+                arguments: {
+                    projects: [{
+                        projectFileName: "/user/username/projects/container/container",
+                        rootFiles: files.map(f => ({ fileName: f.path })),
+                        options: {},
+                    }],
+                },
+            });
             files.forEach(f => {
                 const args: ts.server.protocol.FileRequestArgs = {
                     file: f.path,
@@ -141,7 +146,7 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
                     arguments: args,
                 });
             });
-            const containerProject = service.configuredProjects.get(containerConfig.path)!;
+            const containerProject = session.getProjectService().configuredProjects.get(containerConfig.path)!;
             session.executeCommandSeq<ts.server.protocol.CompilerOptionsDiagnosticsRequest>({
                 command: ts.server.protocol.CommandTypes.CompilerOptionsDiagnosticsFull,
                 arguments: { projectFileName: containerProject.projectName },
@@ -168,7 +173,6 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
             };
             const { session, containerCompositeExecIndex } = setup(tempFile);
             openFilesForSession([containerCompositeExecIndex], session);
-            const service = session.getProjectService();
 
             // Open temp file and verify all projects alive
             openFilesForSession([tempFile], session);
@@ -184,12 +188,11 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
             });
 
             // Open temp file and verify all projects alive
-            service.closeClientFile(tempFile.path);
+            closeFilesForSession([tempFile], session);
             openFilesForSession([tempFile], session);
 
             // Close all files and open temp file, only inferred project should be alive
-            service.closeClientFile(containerCompositeExecIndex.path);
-            service.closeClientFile(tempFile.path);
+            closeFilesForSession([containerCompositeExecIndex, tempFile], session);
             openFilesForSession([tempFile], session);
             baselineTsserverLogs("projectReferences", `ancestor and project ref management`, session);
         });
@@ -253,7 +256,7 @@ function foo() {
 `,
             };
             const host = createHostWithSolutionBuild(
-                [commonConfig, keyboardTs, keyboardTestTs, srcConfig, terminalTs, libFile],
+                [commonConfig, keyboardTs, keyboardTestTs, srcConfig, terminalTs],
                 [srcConfig.path],
             );
             const session = new TestSession(host);
@@ -325,8 +328,8 @@ function foo() {
             path: `/user/username/projects/myproject/compositec/c.ts`,
             content: aTs.content,
         };
-        const files = [libFile, aTs, a2Ts, configA, bDts, bTs, configB, cTs, configC];
-        const host = createServerHost(files);
+        const files = [aTs, a2Ts, configA, bDts, bTs, configB, cTs, configC];
+        const host = TestServerHost.createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([aTs], session);
 
@@ -344,6 +347,35 @@ function foo() {
         assert.isTrue(projectA.dirty);
         projectA.updateGraph();
         baselineTsserverLogs("projectReferences", "reusing d.ts files from composite and non composite projects", session);
+    });
+
+    it("referencing const enum from referenced project with preserveConstEnums", () => {
+        const projectLocation = `/user/username/projects/project`;
+        const utilsIndex: File = {
+            path: `${projectLocation}/src/utils/index.ts`,
+            content: "export const enum E { A = 1 }",
+        };
+        const utilsDeclaration: File = {
+            path: `${projectLocation}/src/utils/index.d.ts`,
+            content: "export declare const enum E { A = 1 }",
+        };
+        const utilsConfig: File = {
+            path: `${projectLocation}/src/utils/tsconfig.json`,
+            content: jsonToReadableText({ compilerOptions: { composite: true, declaration: true, preserveConstEnums: true } }),
+        };
+        const projectIndex: File = {
+            path: `${projectLocation}/src/project/index.ts`,
+            content: `import { E } from "../utils"; E.A;`,
+        };
+        const projectConfig: File = {
+            path: `${projectLocation}/src/project/tsconfig.json`,
+            content: jsonToReadableText({ compilerOptions: { isolatedModules: true }, references: [{ path: "../utils" }] }),
+        };
+        const host = TestServerHost.createServerHost([utilsIndex, utilsDeclaration, utilsConfig, projectIndex, projectConfig]);
+        const session = new TestSession(host);
+        openFilesForSession([projectIndex], session);
+        verifyGetErrRequest({ session, files: [projectIndex] });
+        baselineTsserverLogs("projectReferences", `referencing const enum from referenced project with preserveConstEnums`, session);
     });
 
     describe("when references are monorepo like with symlinks", () => {
@@ -379,10 +411,10 @@ function foo() {
         function verifySession(scenario: string, { bPackageJson, aTest, bFoo, bBar, bSymlink }: Packages, alreadyBuilt: boolean, extraOptions: ts.CompilerOptions) {
             const aConfig = config("A", extraOptions, ["../B"]);
             const bConfig = config("B", extraOptions);
-            const files = [libFile, bPackageJson, aConfig, bConfig, aTest, bFoo, bBar, bSymlink];
+            const files = [bPackageJson, aConfig, bConfig, aTest, bFoo, bBar, bSymlink];
             const host = alreadyBuilt ?
                 createHostWithSolutionBuild(files, [aConfig.path]) :
-                createServerHost(files);
+                TestServerHost.createServerHost(files);
 
             // Create symlink in node module
             const session = new TestSession(host);
@@ -543,14 +575,14 @@ testCompositeFunction('why hello there', 42);`,
             path: `/user/username/projects/myproject/node_modules/emit-composite`,
             symLink: `/user/username/projects/myproject/packages/emit-composite`,
         };
-        const host = createServerHost([libFile, compositeConfig, compositePackageJson, compositeIndex, compositeTestModule, consumerConfig, consumerIndex, symlink], { useCaseSensitiveFileNames: true });
+        const host = TestServerHost.createServerHost([compositeConfig, compositePackageJson, compositeIndex, compositeTestModule, consumerConfig, consumerIndex, symlink], { useCaseSensitiveFileNames: true });
         const session = new TestSession(host);
         openFilesForSession([consumerIndex], session);
         verifyGetErrRequest({ session, files: [consumerIndex] });
         baselineTsserverLogs("projectReferences", `when the referenced projects have allowJs and emitDeclarationOnly`, session);
     });
 
-    it("when finding local reference doesnt load ancestor/sibling projects", () => {
+    it("when finding local reference doesnt load ancestor sibling projects", () => {
         const solutionLocation = "/user/username/projects/solution";
         const solution: File = {
             path: `${solutionLocation}/tsconfig.json`,
@@ -612,8 +644,8 @@ testCompositeFunction('why hello there', 42);`,
                 }`,
         };
 
-        const files = [libFile, solution, compilerConfig, typesFile, programFile, servicesConfig, servicesFile, libFile];
-        const host = createServerHost(files);
+        const files = [solution, compilerConfig, typesFile, programFile, servicesConfig, servicesFile];
+        const host = TestServerHost.createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([programFile], session);
 
@@ -630,7 +662,7 @@ testCompositeFunction('why hello there', 42);`,
             command: ts.server.protocol.CommandTypes.References,
             arguments: protocolFileLocationFromSubstring(programFile, "getSourceFiles"),
         });
-        baselineTsserverLogs("projectReferences", `finding local reference doesnt load ancestor/sibling projects`, session);
+        baselineTsserverLogs("projectReferences", "finding local reference doesnt load ancestor sibling projects", session);
     });
 
     it("when finding references in overlapping projects", () => {
@@ -732,8 +764,8 @@ testCompositeFunction('why hello there', 42);`,
                 `,
         };
 
-        const files = [libFile, solutionConfig, aConfig, aFile, bConfig, bFile, cConfig, cFile, dConfig, dFile, libFile];
-        const host = createServerHost(files);
+        const files = [solutionConfig, aConfig, aFile, bConfig, bFile, cConfig, cFile, dConfig, dFile];
+        const host = TestServerHost.createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([bFile], session);
 
@@ -807,7 +839,7 @@ ${usage}`,
                     path: `${solutionLocation}/shared/src/index.ts`,
                     content: definition,
                 };
-                const host = createServerHost([libFile, solution, libFile, apiConfig, apiFile, appConfig, appFile, sharedConfig, sharedFile]);
+                const host = TestServerHost.createServerHost([solution, apiConfig, apiFile, appConfig, appFile, sharedConfig, sharedFile]);
                 const session = new TestSession(host);
                 openFilesForSession([apiFile], session);
 
@@ -923,8 +955,8 @@ export const foo = local;`,
                 }`,
         };
 
-        const files = [libFile, solution, compilerConfig, typesFile, programFile, servicesConfig, servicesFile, libFile];
-        const host = createServerHost(files);
+        const files = [solution, compilerConfig, typesFile, programFile, servicesConfig, servicesFile];
+        const host = TestServerHost.createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([programFile], session);
 
@@ -1003,7 +1035,7 @@ export function bar() {}`,
         };
         const tsconfigSrcPath = `/user/username/projects/myproject/tsconfig-src.json`;
         const tsconfigPath = `/user/username/projects/myproject/tsconfig.json`;
-        const dummyFilePath = "/dummy/dummy.ts";
+        const dummyFilePath = "/user/username/workspaces/dummy/dummy.ts";
         function setup({ solutionFiles, solutionOptions, configRefs, additionalFiles }: Setup) {
             const tsconfigSrc: File = {
                 path: tsconfigSrcPath,
@@ -1028,12 +1060,11 @@ export function bar() {}`,
                 path: dummyFilePath,
                 content: "let a = 10;",
             };
-            const host = createServerHost([
+            const host = TestServerHost.createServerHost([
                 tsconfigSrc,
                 tsconfig,
                 main,
                 helper,
-                libFile,
                 dummyFile,
                 mainDts,
                 mainDtsMap,
@@ -1044,54 +1075,65 @@ export function bar() {}`,
                 ...additionalFiles,
             ]);
             const session = new TestSession(host);
-            const service = session.getProjectService();
-            service.openClientFile(main.path);
-            return { session, service, host };
+            openFilesForSession([main], session);
+            return { session, host };
         }
 
         function verifySolutionScenario(input: Setup) {
-            const { session, service } = setup(input);
-
-            const info = service.getScriptInfoForPath(main.path as ts.Path)!;
-            session.logger.startGroup();
-            session.logger.info(`getDefaultProject for ${main.path}: ${info.getDefaultProject().projectName}`);
-            session.logger.info(`findDefaultConfiguredProject for ${main.path}: ${service.findDefaultConfiguredProject(info)!.projectName}`);
-            session.logger.endGroup();
+            const { session, host } = setup(input);
+            const defaultProject = logDefaultProjectAndDefaultConfiguredProject(session, main);
 
             // Verify errors
             verifyGetErrRequest({ session, files: [main] });
 
             // Verify collection of script infos
-            service.openClientFile(dummyFilePath);
+            openFilesForSession([dummyFilePath], session);
 
-            service.closeClientFile(main.path);
-            service.closeClientFile(dummyFilePath);
-            service.openClientFile(dummyFilePath);
+            closeFilesForSession([main, dummyFilePath], session);
+            openFilesForSession([dummyFilePath, main], session);
 
-            service.openClientFile(main.path);
-            service.closeClientFile(dummyFilePath);
-            service.openClientFile(dummyFilePath);
+            closeFilesForSession([dummyFilePath], session);
+            openFilesForSession([dummyFilePath], session);
+
+            // Verify that tsconfig can be deleted and watched
+            if (ts.server.isConfiguredProject(defaultProject!)) {
+                closeFilesForSession([dummyFilePath], session);
+                const config = defaultProject.projectName;
+                const content = host.readFile(config)!;
+                host.deleteFile(config);
+                host.runQueuedTimeoutCallbacks();
+
+                host.writeFile(config, content);
+                host.runQueuedTimeoutCallbacks();
+
+                host.deleteFile(config);
+                openFilesForSession([dummyFilePath], session);
+
+                host.writeFile(config, content);
+                host.runQueuedTimeoutCallbacks();
+            }
 
             // Verify Reload projects
-            service.reloadProjects();
+            session.executeCommandSeq<ts.server.protocol.ReloadProjectsRequest>({
+                command: ts.server.protocol.CommandTypes.ReloadProjects,
+            });
 
             // Find all refs
             session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
                 command: ts.server.protocol.CommandTypes.References,
                 arguments: protocolFileLocationFromSubstring(main, "foo", { index: 1 }),
-            }).response as ts.server.protocol.ReferencesResponseBody;
+            });
 
-            service.closeClientFile(main.path);
-            service.closeClientFile(dummyFilePath);
+            closeFilesForSession([main, dummyFilePath], session);
 
             // Verify when declaration map references the file
-            service.openClientFile(fileResolvingToMainDts.path);
+            openFilesForSession([fileResolvingToMainDts], session);
 
             // Find all refs from dts include
             session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
                 command: ts.server.protocol.CommandTypes.References,
                 arguments: protocolFileLocationFromSubstring(fileResolvingToMainDts, "foo"),
-            }).response as ts.server.protocol.ReferencesResponseBody;
+            });
             baselineTsserverLogs("projectReferences", input.scenario, session);
         }
 
@@ -1117,25 +1159,19 @@ export function bar() {}`,
         }
 
         function verifyDisableReferencedProjectLoad(input: Setup) {
-            const { session, service } = setup(input);
-
-            const info = service.getScriptInfoForPath(main.path as ts.Path)!;
-            session.logger.startGroup();
-            session.logger.info(`getDefaultProject for ${main.path}: ${info.getDefaultProject().projectName}`);
-            session.logger.info(`findDefaultConfiguredProject for ${main.path}: ${service.findDefaultConfiguredProject(info)?.projectName}`);
-            session.logger.endGroup();
+            const { session } = setup(input);
+            logDefaultProjectAndDefaultConfiguredProject(session, main);
 
             // Verify collection of script infos
-            service.openClientFile(dummyFilePath);
+            openFilesForSession([dummyFilePath], session);
 
-            service.closeClientFile(main.path);
-            service.closeClientFile(dummyFilePath);
-            service.openClientFile(dummyFilePath);
-
-            service.openClientFile(main.path);
+            closeFilesForSession([main, dummyFilePath], session);
+            openFilesForSession([dummyFilePath, main], session);
 
             // Verify Reload projects
-            service.reloadProjects();
+            session.executeCommandSeq<ts.server.protocol.ReloadProjectsRequest>({
+                command: ts.server.protocol.CommandTypes.ReloadProjects,
+            });
             baselineTsserverLogs("projectReferences", input.scenario, session);
         }
 
@@ -1319,7 +1355,7 @@ bar;`,
                 path: `/user/username/projects/myproject/projects/project2/class2.ts`,
                 content: `class class2 {}`,
             };
-            const host = createServerHost([config1, class1, class1Dts, config2, class2, libFile]);
+            const host = TestServerHost.createServerHost([config1, class1, class1Dts, config2, class2]);
             const session = new TestSession(host);
             openFilesForSession([class2], session);
             return { host, session, class1 };
@@ -1469,8 +1505,8 @@ bar;`,
                 path: `/user/username/projects/myproject/node_modules/shared`,
                 symLink: `/user/username/projects/myproject/shared`,
             };
-            const files = [solnConfig, sharedConfig, sharedIndex, sharedPackage, appConfig, appBar, appIndex, sharedSymlink, libFile];
-            const host = createServerHost(files);
+            const files = [solnConfig, sharedConfig, sharedIndex, sharedPackage, appConfig, appBar, appIndex, sharedSymlink];
+            const host = TestServerHost.createServerHost(files);
             if (built) {
                 solutionBuildWithBaseline(host, [solnConfig.path]);
                 host.clearOutput();
@@ -1530,8 +1566,7 @@ bar;`,
         const [indirectNoCoreRefFile, indirectNoCoreRefConfig] = getPackageAndFile("indirectNoCoreRef", ["noCoreRef2"]);
         const [noCoreRef2File, noCoreRef2Config] = getPackageAndFile("noCoreRef2");
 
-        const host = createServerHost([
-            libFile,
+        const host = TestServerHost.createServerHost([
             mainFile,
             mainConfig,
             coreFile,
@@ -1647,7 +1682,7 @@ const b: B = new B();`,
                     }),
                 };
 
-                const host = createServerHost([configA, indexA, configB, indexB, helperB, dtsB, ...(dtsMapPresent ? [dtsMapB] : [])]);
+                const host = TestServerHost.createServerHost([configA, indexA, configB, indexB, helperB, dtsB, ...(dtsMapPresent ? [dtsMapB] : [])]);
                 const session = new TestSession(host);
                 openFilesForSession([indexA, ...(projectAlreadyLoaded ? [helperB] : [])], session);
 
@@ -1688,5 +1723,260 @@ const b: B = new B();`,
             baselineDisableReferencedProjectLoad(false,       false,   false,   false); // Loaded     | Via redirect | index.ts, helper.ts |
         }
         /* eslint-enable local/argument-trivia */
+    });
+
+    describe("when file is not part of first config tree found", () => {
+        it("finds default project", () => {
+            const { session, appDemo, baseline, verifyProjectManagement } = setup();
+            verifyGetErrRequest({
+                files: [appDemo],
+                session,
+            });
+            verifyProjectManagement(); // Should not remove projects for file
+            closeFilesForSession([appDemo], session);
+            verifyProjectManagement(); // Should remove projects for file
+            baseline("finds default project");
+        });
+
+        // Changes to app Config
+        verifyAppConfigNotComposite();
+
+        // Changes to solution Config
+        verifySolutionConfigWithoutReferenceToDemo();
+        verifySolutionConfigDelete();
+
+        // Demo config
+        verfiyDemoConfigChange();
+
+        it("reload projects", () => {
+            const { session, baseline } = setup();
+            session.executeCommandSeq<ts.server.protocol.ReloadProjectsRequest>({
+                command: ts.server.protocol.CommandTypes.ReloadProjects,
+            });
+            baseline("reload projects");
+        });
+
+        function setup() {
+            const appDemo: File = {
+                path: "/home/src/projects/project/app/Component-demos.ts",
+                content: dedent`
+                import * as helpers from 'demos/helpers';
+                export const demo = () => {
+                    helpers;
+                }
+            `,
+            };
+            const app: File = {
+                path: "/home/src/projects/project/app/Component.ts",
+                content: dedent`
+                export const Component = () => {}
+            `,
+            };
+            const appConfig: File = {
+                path: "/home/src/projects/project/app/tsconfig.json",
+                content: jsonToReadableText({
+                    compilerOptions: {
+                        composite: true,
+                        outDir: "../app-dist/",
+                    },
+                    include: ["**/*"],
+                    exclude: ["**/*-demos.*"],
+                }),
+            };
+            const demoHelpers: File = {
+                path: "/home/src/projects/project/demos/helpers.ts",
+                content: dedent`
+                export const foo = 1;
+            `,
+            };
+            const demoConfig: File = {
+                path: "/home/src/projects/project/demos/tsconfig.json",
+                content: jsonToReadableText({
+                    compilerOptions: {
+                        composite: true,
+                        rootDir: "../",
+                        outDir: "../demos-dist/",
+                        paths: {
+                            "demos/*": ["./*"],
+                        },
+                    },
+                    include: [
+                        "**/*",
+                        "../app/**/*-demos.*",
+                    ],
+                }),
+            };
+            const solutionConfig: File = {
+                path: "/home/src/projects/project/tsconfig.json",
+                content: jsonToReadableText({
+                    compilerOptions: {
+                        outDir: "./dist/",
+                    },
+                    references: [
+                        { path: "./demos/tsconfig.json" },
+                        { path: "./app/tsconfig.json" },
+                    ],
+                }),
+            };
+            const randomTs: File = {
+                path: "/home/src/projects/random/random.ts",
+                content: "export let a = 10;",
+            };
+            const randomConfig: File = {
+                path: "/home/src/projects/random/tsconfig.json",
+                content: "{ }",
+            };
+            const host = TestServerHost.createServerHost([appDemo, app, appConfig, demoHelpers, demoConfig, solutionConfig, randomTs, randomConfig]);
+            const session = new TestSession(host);
+            openFilesForSession([appDemo], session);
+            return {
+                host,
+                session,
+                appDemo,
+                configs: { appConfig, demoConfig, solutionConfig },
+                verifyProjectManagement,
+                baseline,
+            };
+
+            function verifyProjectManagement() {
+                logDefaultProjectAndDefaultConfiguredProject(session, appDemo);
+                openFilesForSession([randomTs], session); // Verify Project management
+                closeFilesForSession([randomTs], session);
+                logDefaultProjectAndDefaultConfiguredProject(session, appDemo);
+            }
+
+            function baseline(scenario: string) {
+                baselineTsserverLogs(
+                    "projectReferences",
+                    `when file is not part of first config tree found ${scenario}`,
+                    session,
+                );
+            }
+        }
+
+        function verifyAppConfigNotComposite() {
+            // Not composite
+            verifyConfigChange("appConfig not composite", ({ appConfig }) => ({
+                config: appConfig,
+                change: appConfig.content.replace(`"composite": true,`, ""),
+            }));
+        }
+
+        function verifySolutionConfigWithoutReferenceToDemo() {
+            // Not referencing demos
+            verifyConfigChange("solutionConfig without reference to demo", ({ solutionConfig }) => ({
+                config: solutionConfig,
+                change: jsonToReadableText({
+                    compilerOptions: {
+                        outDir: "./dist/",
+                    },
+                    references: [
+                        { path: "./app/tsconfig.json" },
+                    ],
+                }),
+            }));
+        }
+
+        function verifySolutionConfigDelete() {
+            // Delete solution file
+            verifyConfigChange("solutionConfig delete", ({ solutionConfig }) => ({
+                config: solutionConfig,
+                change: undefined,
+            }));
+        }
+
+        function verfiyDemoConfigChange() {
+            // Make some errors in demo::
+            verifyConfigChange("demoConfig change", ({ demoConfig }) => ({
+                config: demoConfig,
+                change: demoConfig.content.replace(`"../app/**/*-demos.*"`, ""),
+            }));
+        }
+
+        function verifyConfigChange(
+            scenario: string,
+            configAndChange: (configs: ReturnType<typeof setup>["configs"]) => { config: File; change: string | undefined; },
+        ) {
+            verifyConfigChangeWorker(scenario, /*fileOpenBeforeRevert*/ true, configAndChange);
+            verifyConfigChangeWorker(scenario, /*fileOpenBeforeRevert*/ false, configAndChange);
+        }
+
+        function verifyConfigChangeWorker(
+            scenario: string,
+            fileOpenBeforeRevert: boolean,
+            configAndChange: (configs: ReturnType<typeof setup>["configs"]) => { config: File; change: string | undefined; },
+        ) {
+            it(`${scenario}${fileOpenBeforeRevert ? " with file open before revert" : ""}`, () => {
+                const { host, session, appDemo, configs, verifyProjectManagement, baseline } = setup();
+                const { config, change } = configAndChange(configs);
+
+                if (change !== undefined) host.writeFile(config.path, change);
+                else host.deleteFile(config.path);
+                host.runQueuedTimeoutCallbacks();
+
+                if (fileOpenBeforeRevert) verifyProjectManagement();
+                else logDefaultProjectAndDefaultConfiguredProject(session, appDemo);
+
+                // Revert
+                host.writeFile(config.path, config.content);
+                host.runQueuedTimeoutCallbacks();
+
+                if (!fileOpenBeforeRevert) verifyProjectManagement();
+                else logDefaultProjectAndDefaultConfiguredProject(session, appDemo);
+
+                baseline(`${scenario}${fileOpenBeforeRevert ? " with file open before revert" : ""}`);
+            });
+        }
+    });
+
+    it("with dts file next to ts file", () => {
+        const indexDts: File = {
+            path: "/home/src/projects/project/src/index.d.ts",
+            content: dedent`
+                declare global {
+                    interface Window {
+                        electron: ElectronAPI
+                        api: unknown
+                    }
+                }
+            `,
+        };
+        const host = TestServerHost.createServerHost({
+            [indexDts.path]: indexDts.content,
+            "/home/src/projects/project/src/index.ts": dedent`
+                const api = {}
+            `,
+            "/home/src/projects/project/tsconfig.json": jsonToReadableText({
+                include: [
+                    "src/*.d.ts",
+                ],
+                references: [{ path: "./tsconfig.node.json" }],
+            }),
+            "/home/src/projects/project/tsconfig.node.json": jsonToReadableText({
+                include: ["src/**/*"],
+                compilerOptions: {
+                    composite: true,
+                },
+            }),
+        });
+        const session = new TestSession(host);
+        openFilesForSession([{ file: indexDts, projectRootPath: "/home/src/projects/project" }], session);
+        session.executeCommandSeq<ts.server.protocol.DocumentHighlightsRequest>({
+            command: ts.server.protocol.CommandTypes.DocumentHighlights,
+            arguments: {
+                ...protocolFileLocationFromSubstring(indexDts, "global"),
+                filesToSearch: ["/home/src/projects/project/src/index.d.ts"],
+            },
+        });
+        session.executeCommandSeq<ts.server.protocol.EncodedSemanticClassificationsRequest>({
+            command: ts.server.protocol.CommandTypes.EncodedSemanticClassificationsFull,
+            arguments: {
+                file: indexDts.path,
+                start: 0,
+                length: indexDts.content.length,
+                format: "2020",
+            },
+        });
+        baselineTsserverLogs("projectReferences", "with dts file next to ts file", session);
     });
 });

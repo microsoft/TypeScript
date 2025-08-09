@@ -1,16 +1,16 @@
-import * as compiler from "./_namespaces/compiler";
-import * as fakes from "./_namespaces/fakes";
-import * as Harness from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
-import * as vfs from "./_namespaces/vfs";
-import * as vpath from "./_namespaces/vpath";
+import * as compiler from "./_namespaces/compiler.js";
+import * as fakes from "./_namespaces/fakes.js";
+import * as Harness from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
+import * as vfs from "./_namespaces/vfs.js";
+import * as vpath from "./_namespaces/vpath.js";
 
 const sourceFile = vpath.combine(vfs.srcFolder, "source.ts");
 const sourceFileJs = vpath.combine(vfs.srcFolder, "source.js");
 
 // Define a custom "Symbol" constructor to attach missing built-in symbols without
 // modifying the global "Symbol" constructor
-const FakeSymbol: SymbolConstructor = ((description?: string) => Symbol(description)) as any;
+export const FakeSymbol: SymbolConstructor = ((description?: string) => Symbol(description)) as any;
 (FakeSymbol as any).prototype = Symbol.prototype;
 for (const key of Object.getOwnPropertyNames(Symbol)) {
     Object.defineProperty(FakeSymbol, key, Object.getOwnPropertyDescriptor(Symbol, key)!);
@@ -33,7 +33,7 @@ for (const symbolName of symbolNames) {
     }
 }
 
-export function evaluateTypeScript(source: string | { files: vfs.FileSet; rootFiles: string[]; main: string; }, options?: ts.CompilerOptions, globals?: Record<string, any>) {
+export function evaluateTypeScript(source: string | { files: vfs.FileSet; rootFiles: string[]; main: string; }, options?: ts.CompilerOptions, globals?: Record<string, any>): any {
     if (typeof source === "string") source = { files: { [sourceFile]: source }, rootFiles: [sourceFile], main: sourceFile };
     const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { files: source.files });
     const compilerOptions: ts.CompilerOptions = {
@@ -62,7 +62,7 @@ export function evaluateTypeScript(source: string | { files: vfs.FileSet; rootFi
     return loader.import(output.file);
 }
 
-export function evaluateJavaScript(sourceText: string, globals?: Record<string, any>, sourceFile = sourceFileJs) {
+export function evaluateJavaScript(sourceText: string, globals?: Record<string, any>, sourceFile: string = sourceFileJs): any {
     globals = { Symbol: FakeSymbol, ...globals };
     const fs = new vfs.FileSystem(/*ignoreCase*/ false, { files: { [sourceFile]: sourceText } });
     return new CommonJsLoader(fs, globals).import(sourceFile);
@@ -253,7 +253,7 @@ class SystemLoader extends Loader<SystemModule> {
     protected createModule(file: string): SystemModule {
         return {
             file,
-            // eslint-disable-next-line no-null/no-null
+            // eslint-disable-next-line no-restricted-syntax
             exports: Object.create(/*o*/ null),
             dependencies: [],
             dependers: [],

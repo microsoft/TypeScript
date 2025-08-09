@@ -18,7 +18,7 @@ verify.syntacticClassificationsAre(
             c.jsxText(`
     some jsx text
 `),
-        c.punctuation("<"), c.punctuation("/"), c.jsxCloseTagName("div.name"), c.punctuation(">"), c.punctuation(";"),
+        c.punctuation("</"), c.jsxCloseTagName("div.name"), c.punctuation(">"), c.punctuation(";"),
     c.keyword("let"), c.identifier("y"), c.operator("="),
         c.punctuation("<"), 
             c.jsxSelfClosingTagName("element.name"), 

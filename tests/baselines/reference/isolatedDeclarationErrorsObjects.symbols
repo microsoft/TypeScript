@@ -1,0 +1,218 @@
+//// [tests/cases/compiler/isolatedDeclarationErrorsObjects.ts] ////
+
+=== isolatedDeclarationErrorsObjects.ts ===
+export let o = {
+>o : Symbol(o, Decl(isolatedDeclarationErrorsObjects.ts, 0, 10))
+
+    a: 1,
+>a : Symbol(a, Decl(isolatedDeclarationErrorsObjects.ts, 0, 16))
+
+    b: ""
+>b : Symbol(b, Decl(isolatedDeclarationErrorsObjects.ts, 1, 9))
+}
+
+export let oBad = {
+>oBad : Symbol(oBad, Decl(isolatedDeclarationErrorsObjects.ts, 5, 10))
+
+    a: Math.random(),
+>a : Symbol(a, Decl(isolatedDeclarationErrorsObjects.ts, 5, 19))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.float16.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+}
+export const V = 1;
+>V : Symbol(V, Decl(isolatedDeclarationErrorsObjects.ts, 8, 12))
+
+export let oBad2 = {
+>oBad2 : Symbol(oBad2, Decl(isolatedDeclarationErrorsObjects.ts, 9, 10))
+
+    a: {
+>a : Symbol(a, Decl(isolatedDeclarationErrorsObjects.ts, 9, 20))
+
+        b: Math.random(),
+>b : Symbol(b, Decl(isolatedDeclarationErrorsObjects.ts, 10, 8))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.float16.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    },
+    c: {
+>c : Symbol(c, Decl(isolatedDeclarationErrorsObjects.ts, 12, 6))
+
+        d: 1,
+>d : Symbol(d, Decl(isolatedDeclarationErrorsObjects.ts, 13, 8))
+
+        e: V,
+>e : Symbol(e, Decl(isolatedDeclarationErrorsObjects.ts, 14, 13))
+>V : Symbol(V, Decl(isolatedDeclarationErrorsObjects.ts, 8, 12))
+    }
+}
+
+export let oWithMethods = {
+>oWithMethods : Symbol(oWithMethods, Decl(isolatedDeclarationErrorsObjects.ts, 19, 10))
+
+    method() { },
+>method : Symbol(method, Decl(isolatedDeclarationErrorsObjects.ts, 19, 27))
+
+    okMethod(): void { },
+>okMethod : Symbol(okMethod, Decl(isolatedDeclarationErrorsObjects.ts, 20, 17))
+
+    a: 1,
+>a : Symbol(a, Decl(isolatedDeclarationErrorsObjects.ts, 21, 25))
+
+    bad() { },
+>bad : Symbol(bad, Decl(isolatedDeclarationErrorsObjects.ts, 22, 9))
+
+    e: V,
+>e : Symbol(e, Decl(isolatedDeclarationErrorsObjects.ts, 23, 14))
+>V : Symbol(V, Decl(isolatedDeclarationErrorsObjects.ts, 8, 12))
+}
+export let oWithMethodsNested = {
+>oWithMethodsNested : Symbol(oWithMethodsNested, Decl(isolatedDeclarationErrorsObjects.ts, 26, 10))
+
+    foo: {
+>foo : Symbol(foo, Decl(isolatedDeclarationErrorsObjects.ts, 26, 33))
+
+        method() { },
+>method : Symbol(method, Decl(isolatedDeclarationErrorsObjects.ts, 27, 10))
+
+        a: 1,
+>a : Symbol(a, Decl(isolatedDeclarationErrorsObjects.ts, 28, 21))
+
+        okMethod(): void { },
+>okMethod : Symbol(okMethod, Decl(isolatedDeclarationErrorsObjects.ts, 29, 13))
+
+        bad() { }
+>bad : Symbol(bad, Decl(isolatedDeclarationErrorsObjects.ts, 30, 29))
+    }
+}
+
+
+
+export let oWithAccessor = {
+>oWithAccessor : Symbol(oWithAccessor, Decl(isolatedDeclarationErrorsObjects.ts, 37, 10))
+
+    get singleGetterBad() { return 0 },
+>singleGetterBad : Symbol(singleGetterBad, Decl(isolatedDeclarationErrorsObjects.ts, 37, 28))
+
+    set singleSetterBad(value) { },
+>singleSetterBad : Symbol(singleSetterBad, Decl(isolatedDeclarationErrorsObjects.ts, 38, 39))
+>value : Symbol(value, Decl(isolatedDeclarationErrorsObjects.ts, 39, 24))
+
+    get getSetBad() { return 0 },
+>getSetBad : Symbol(getSetBad, Decl(isolatedDeclarationErrorsObjects.ts, 39, 35), Decl(isolatedDeclarationErrorsObjects.ts, 41, 33))
+
+    set getSetBad(value) { },
+>getSetBad : Symbol(getSetBad, Decl(isolatedDeclarationErrorsObjects.ts, 39, 35), Decl(isolatedDeclarationErrorsObjects.ts, 41, 33))
+>value : Symbol(value, Decl(isolatedDeclarationErrorsObjects.ts, 42, 18))
+
+    get getSetOk(): number { return 0 },
+>getSetOk : Symbol(getSetOk, Decl(isolatedDeclarationErrorsObjects.ts, 42, 29), Decl(isolatedDeclarationErrorsObjects.ts, 44, 40))
+
+    set getSetOk(value) { },
+>getSetOk : Symbol(getSetOk, Decl(isolatedDeclarationErrorsObjects.ts, 42, 29), Decl(isolatedDeclarationErrorsObjects.ts, 44, 40))
+>value : Symbol(value, Decl(isolatedDeclarationErrorsObjects.ts, 45, 17))
+
+    get getSetOk2() { return 0 },
+>getSetOk2 : Symbol(getSetOk2, Decl(isolatedDeclarationErrorsObjects.ts, 45, 28), Decl(isolatedDeclarationErrorsObjects.ts, 47, 33))
+
+    set getSetOk2(value: number) { },
+>getSetOk2 : Symbol(getSetOk2, Decl(isolatedDeclarationErrorsObjects.ts, 45, 28), Decl(isolatedDeclarationErrorsObjects.ts, 47, 33))
+>value : Symbol(value, Decl(isolatedDeclarationErrorsObjects.ts, 48, 18))
+    
+    get getSetOk3(): number { return 0 },
+>getSetOk3 : Symbol(getSetOk3, Decl(isolatedDeclarationErrorsObjects.ts, 48, 37), Decl(isolatedDeclarationErrorsObjects.ts, 50, 41))
+
+    set getSetOk3(value: number) { },
+>getSetOk3 : Symbol(getSetOk3, Decl(isolatedDeclarationErrorsObjects.ts, 48, 37), Decl(isolatedDeclarationErrorsObjects.ts, 50, 41))
+>value : Symbol(value, Decl(isolatedDeclarationErrorsObjects.ts, 51, 18))
+}
+
+function prop<T>(v: T): T { return v }
+>prop : Symbol(prop, Decl(isolatedDeclarationErrorsObjects.ts, 52, 1))
+>T : Symbol(T, Decl(isolatedDeclarationErrorsObjects.ts, 54, 14))
+>v : Symbol(v, Decl(isolatedDeclarationErrorsObjects.ts, 54, 17))
+>T : Symbol(T, Decl(isolatedDeclarationErrorsObjects.ts, 54, 14))
+>T : Symbol(T, Decl(isolatedDeclarationErrorsObjects.ts, 54, 14))
+>v : Symbol(v, Decl(isolatedDeclarationErrorsObjects.ts, 54, 17))
+
+const s: unique symbol = Symbol();
+>s : Symbol(s, Decl(isolatedDeclarationErrorsObjects.ts, 56, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+const str: string = "";
+>str : Symbol(str, Decl(isolatedDeclarationErrorsObjects.ts, 57, 5))
+
+enum E {
+>E : Symbol(E, Decl(isolatedDeclarationErrorsObjects.ts, 57, 23))
+
+    V = 10,
+>V : Symbol(E.V, Decl(isolatedDeclarationErrorsObjects.ts, 58, 8))
+}
+export const oWithComputedProperties = {
+>oWithComputedProperties : Symbol(oWithComputedProperties, Decl(isolatedDeclarationErrorsObjects.ts, 61, 12))
+
+    [1]: 1,
+>[1] : Symbol([1], Decl(isolatedDeclarationErrorsObjects.ts, 61, 40))
+>1 : Symbol([1], Decl(isolatedDeclarationErrorsObjects.ts, 61, 40))
+
+    [1 + 3]: 1,
+>[1 + 3] : Symbol([1 + 3], Decl(isolatedDeclarationErrorsObjects.ts, 62, 11))
+
+    [prop(2)]: 2,
+>[prop(2)] : Symbol([prop(2)], Decl(isolatedDeclarationErrorsObjects.ts, 63, 15))
+>prop : Symbol(prop, Decl(isolatedDeclarationErrorsObjects.ts, 52, 1))
+
+    [s]: 1,
+>[s] : Symbol([s], Decl(isolatedDeclarationErrorsObjects.ts, 64, 17))
+>s : Symbol(s, Decl(isolatedDeclarationErrorsObjects.ts, 56, 5))
+
+    [E.V]: 1,
+>[E.V] : Symbol([E.V], Decl(isolatedDeclarationErrorsObjects.ts, 65, 11))
+>E.V : Symbol(E.V, Decl(isolatedDeclarationErrorsObjects.ts, 58, 8))
+>E : Symbol(E, Decl(isolatedDeclarationErrorsObjects.ts, 57, 23))
+>V : Symbol(E.V, Decl(isolatedDeclarationErrorsObjects.ts, 58, 8))
+
+    [str]: 0,
+>[str] : Symbol([str], Decl(isolatedDeclarationErrorsObjects.ts, 66, 13))
+>str : Symbol(str, Decl(isolatedDeclarationErrorsObjects.ts, 57, 5))
+}
+
+const part = { a: 1 };
+>part : Symbol(part, Decl(isolatedDeclarationErrorsObjects.ts, 70, 5))
+>a : Symbol(a, Decl(isolatedDeclarationErrorsObjects.ts, 70, 14))
+
+export const oWithSpread = {
+>oWithSpread : Symbol(oWithSpread, Decl(isolatedDeclarationErrorsObjects.ts, 72, 12))
+
+    b: 1,
+>b : Symbol(b, Decl(isolatedDeclarationErrorsObjects.ts, 72, 28))
+
+    ...part,
+>part : Symbol(part, Decl(isolatedDeclarationErrorsObjects.ts, 70, 5))
+
+    c: 1,
+>c : Symbol(c, Decl(isolatedDeclarationErrorsObjects.ts, 74, 12))
+
+    part,
+>part : Symbol(part, Decl(isolatedDeclarationErrorsObjects.ts, 75, 9))
+}
+
+
+export const oWithSpread2 = {
+>oWithSpread2 : Symbol(oWithSpread2, Decl(isolatedDeclarationErrorsObjects.ts, 80, 12))
+
+    b: 1,
+>b : Symbol(b, Decl(isolatedDeclarationErrorsObjects.ts, 80, 29))
+
+    nested: {
+>nested : Symbol(nested, Decl(isolatedDeclarationErrorsObjects.ts, 81, 9))
+
+        ...part,
+>part : Symbol(part, Decl(isolatedDeclarationErrorsObjects.ts, 70, 5))
+
+    },
+    c: 1,
+>c : Symbol(c, Decl(isolatedDeclarationErrorsObjects.ts, 84, 6))
+}
+

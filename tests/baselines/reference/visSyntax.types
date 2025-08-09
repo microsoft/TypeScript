@@ -3,9 +3,11 @@
 === visSyntax.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export class C {
 >C : C
+>  : ^
     }
 
     export interface I {
@@ -14,6 +16,8 @@ module M {
 
     export var x=10;
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 }
 

@@ -17,7 +17,6 @@
                 "kind": "Identifier",
                 "pos": 6,
                 "end": 7,
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "a"
             }

@@ -3,8 +3,13 @@
 === destructuringTypeAssertionsES5_4.ts ===
 var { x } = <any><any>foo();
 >x : any
+>  : ^^^
 ><any><any>foo() : any
+>                : ^^^
 ><any>foo() : any
+>           : ^^^
 >foo() : any
+>      : ^^^
 >foo : any
+>    : ^^^
 

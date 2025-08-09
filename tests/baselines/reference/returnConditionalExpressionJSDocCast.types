@@ -1,0 +1,66 @@
+//// [tests/cases/compiler/returnConditionalExpressionJSDocCast.ts] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 2,500
+
+=== file.js ===
+// Don't peek into conditional return expression if it's wrapped in a cast
+/** @type {Map<string, string>} */
+const sources = new Map();
+>sources : Map<string, string>
+>        : ^^^^^^^^^^^^^^^^^^^
+>new Map() : Map<any, any>
+>          : ^^^^^^^^^^^^^
+>Map : MapConstructor
+>    : ^^^^^^^^^^^^^^
+
+/**
+
+ * @param {string=} type the type of source that should be generated
+ * @returns {String}
+ */
+function source(type = "javascript") {
+>source : (type?: string | undefined) => string
+>       : ^    ^^^         ^^^^^^^^^^^^^^^^^^^^
+>type : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+>"javascript" : "javascript"
+>             : ^^^^^^^^^^^^
+
+    return /** @type {String} */ (
+>(        type            ? sources.get(type)            : sources.get("some other thing")    ) : string
+>                                                                                               : ^^^^^^
+
+        type
+>type            ? sources.get(type)            : sources.get("some other thing") : string | undefined
+>                                                                                 : ^^^^^^^^^^^^^^^^^^
+>type : string
+>     : ^^^^^^
+
+            ? sources.get(type)
+>sources.get(type) : string | undefined
+>                  : ^^^^^^^^^^^^^^^^^^
+>sources.get : (key: string) => string | undefined
+>            : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>sources : Map<string, string>
+>        : ^^^^^^^^^^^^^^^^^^^
+>get : (key: string) => string | undefined
+>    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : string
+>     : ^^^^^^
+
+            : sources.get("some other thing")
+>sources.get("some other thing") : string | undefined
+>                                : ^^^^^^^^^^^^^^^^^^
+>sources.get : (key: string) => string | undefined
+>            : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>sources : Map<string, string>
+>        : ^^^^^^^^^^^^^^^^^^^
+>get : (key: string) => string | undefined
+>    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"some other thing" : "some other thing"
+>                   : ^^^^^^^^^^^^^^^^^^
+
+    );
+}

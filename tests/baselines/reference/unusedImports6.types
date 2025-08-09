@@ -3,24 +3,29 @@
 === file1.ts ===
 export class Calculator {
 >Calculator : Calculator
+>           : ^^^^^^^^^^
 
     handleChar() {}
 >handleChar : () => void
+>           : ^^^^^^^^^^
 }
 
 export function test() {
 >test : () => void
+>     : ^^^^^^^^^^
 
 }
 
 export default function test2() {
 >test2 : () => void
+>      : ^^^^^^^^^^
 
 }
 
 === file2.ts ===
 import d from "./file1"
 >d : () => void
+>  : ^^^^^^^^^^
 
 
 

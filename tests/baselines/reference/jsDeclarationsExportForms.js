@@ -71,9 +71,8 @@ exports.Foo = Foo;
 //// [func.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.func = void 0;
-function func() { }
 exports.func = func;
+function func() { }
 //// [bar.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {

@@ -1,36 +1,38 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
-//// [/lib.d.ts]
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 lib.d.ts-Text
 
-//// [/lib.decorators.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.decorators.d.ts]
 lib.decorators.d.ts-Text
 
-//// [/lib.decorators.legacy.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts]
 lib.decorators.legacy.d.ts-Text
 
-//// [/main.ts]
+//// [/home/src/workspaces/project/main.ts]
 
 
-//// [/node_modules/pkg/a/a1.d.ts]
+//// [/home/src/workspaces/project/node_modules/pkg/a/a1.d.ts]
 export const a1: number;
 
-//// [/node_modules/pkg/b/b1.d.ts]
+//// [/home/src/workspaces/project/node_modules/pkg/b/b1.d.ts]
 export const b1: number;
 
-//// [/node_modules/pkg/b/b2.d.mts]
+//// [/home/src/workspaces/project/node_modules/pkg/b/b2.d.mts]
 export const NOT_REACHABLE: number;
 
-//// [/node_modules/pkg/c/c1.d.ts]
+//// [/home/src/workspaces/project/node_modules/pkg/c/c1.d.ts]
 export const c1: number;
 
-//// [/node_modules/pkg/c/subfolder/c2.d.mts]
+//// [/home/src/workspaces/project/node_modules/pkg/c/subfolder/c2.d.mts]
 export const c2: number;
 
-//// [/node_modules/pkg/d/d1.d.mts]
+//// [/home/src/workspaces/project/node_modules/pkg/d/d1.d.mts]
 export const d1: number;
 
-//// [/node_modules/pkg/package.json]
+//// [/home/src/workspaces/project/node_modules/pkg/package.json]
 {
     "name": "pkg",
     "version": "1.0.0",
@@ -44,7 +46,7 @@ export const d1: number;
     }
 }
 
-//// [/package.json]
+//// [/home/src/workspaces/project/package.json]
 {
     "type": "module",
     "dependencies": {
@@ -52,7 +54,7 @@ export const d1: number;
     }
 }
 
-//// [/tsconfig.json]
+//// [/home/src/workspaces/project/tsconfig.json]
 {
     "compilerOptions": {
         "module": "nodenext"
@@ -65,31 +67,49 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 0,
       "type": "request",
       "arguments": {
-        "file": "/node_modules/pkg/package.json"
+        "file": "/home/src/workspaces/project/node_modules/pkg/package.json"
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /node_modules/pkg
-Info seq  [hh:mm:ss:mss] For info: /node_modules/pkg/package.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/node_modules/pkg/package.json ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: /home/src/workspaces/project/node_modules/pkg
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/pkg/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/pkg/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/pkg/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/pkg/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/pkg/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/pkg/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
-	/lib.d.ts Text-1 lib.d.ts-Text
-	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
-	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/node_modules/pkg/package.json SVC-1-0 "{\n    \"name\": \"pkg\",\n    \"version\": \"1.0.0\",\n    \"exports\": {\n        \"./*\": \"./a/*.js\",\n        \"./b/*.js\": \"./b/*.js\",\n        \"./c/*\": \"./c/*\",\n        \"./d/*\": {\n            \"import\": \"./d/*.mjs\"\n        }\n    }\n}"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
+	/home/src/workspaces/project/node_modules/pkg/package.json SVC-1-0 "{\n    \"name\": \"pkg\",\n    \"version\": \"1.0.0\",\n    \"exports\": {\n        \"./*\": \"./a/*.js\",\n        \"./b/*.js\": \"./b/*.js\",\n        \"./c/*\": \"./c/*\",\n        \"./d/*\": {\n            \"import\": \"./d/*.mjs\"\n        }\n    }\n}"
 
 
-	../../lib.d.ts
+	../../../../tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
-	../../lib.decorators.d.ts
-	  Library referenced via 'decorators' from file '../../lib.d.ts'
-	../../lib.decorators.legacy.d.ts
-	  Library referenced via 'decorators.legacy' from file '../../lib.d.ts'
+	../../../../tslibs/TS/Lib/lib.decorators.d.ts
+	  Library referenced via 'decorators' from file '../../../../tslibs/TS/Lib/lib.d.ts'
+	../../../../tslibs/TS/Lib/lib.decorators.legacy.d.ts
+	  Library referenced via 'decorators.legacy' from file '../../../../tslibs/TS/Lib/lib.d.ts'
 	package.json
 	  Root file specified for compilation
 
@@ -99,96 +119,149 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /node_modules/pkg/package.json ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/node_modules/pkg/package.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 0,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
-/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/lib.decorators.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts: *new*
   {"pollingInterval":500}
-/lib.decorators.legacy.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts: *new*
   {"pollingInterval":500}
+/home/src/workspaces/project/node_modules/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/pkg/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/pkg/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/tsconfig.json: *new*
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+/home/src/workspaces/node_modules: *new*
+  {}
+/home/src/workspaces/node_modules/@types: *new*
+  {}
+/home/src/workspaces/project/node_modules: *new*
+  {}
+/home/src/workspaces/project/node_modules/@types: *new*
+  {}
+/home/src/workspaces/project/node_modules/node_modules/@types: *new*
+  {}
+/home/src/workspaces/project/node_modules/pkg/node_modules: *new*
+  {}
+/home/src/workspaces/project/node_modules/pkg/node_modules/@types: *new*
+  {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/home/src/tslibs/TS/Lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/node_modules/pkg/package.json (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 1,
       "type": "request",
       "arguments": {
-        "file": "/main.ts"
+        "file": "/home/src/workspaces/project/main.ts"
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /main.ts :: Config file name: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/main.ts ProjectRootPath: undefined:: Result: /home/src/workspaces/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/workspaces/project/tsconfig.json, currentDirectory: /home/src/workspaces/project
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/tsconfig.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/tsconfig.json : {
+ "rootNames": [
+  "/home/src/workspaces/project/main.ts"
+ ],
+ "options": {
+  "module": 199,
+  "configFilePath": "/home/src/workspaces/project/tsconfig.json"
+ }
+}
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/tsconfig.json",
-        "reason": "Creating possible configured project for /main.ts to open"
+        "projectName": "/home/src/workspaces/project/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/workspaces/project/main.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
- "rootNames": [
-  "/lib.d.ts",
-  "/lib.decorators.d.ts",
-  "/lib.decorators.legacy.d.ts",
-  "/main.ts"
- ],
- "options": {
-  "module": 199,
-  "configFilePath": "/tsconfig.json"
- }
-}
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (4)
-	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
-	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/lib.d.ts Text-1 lib.d.ts-Text
-	/main.ts SVC-1-0 ""
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 1 undefined Config: /home/src/workspaces/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 1 undefined Config: /home/src/workspaces/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.esnext.full.d.ts 500 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+	/home/src/workspaces/project/main.ts SVC-1-0 ""
 
 
-	lib.decorators.d.ts
-	  Library referenced via 'decorators' from file 'lib.d.ts'
-	  Matched by default include pattern '**/*'
-	lib.decorators.legacy.d.ts
-	  Library referenced via 'decorators.legacy' from file 'lib.d.ts'
-	  Matched by default include pattern '**/*'
-	lib.d.ts
-	  Matched by default include pattern '**/*'
 	main.ts
 	  Matched by default include pattern '**/*'
 	  File is ECMAScript module because 'package.json' has field "type" with value "module"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /package.json 250 undefined WatchType: package.json file
-Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 5 root files in 1 dependencies in * ms
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/pkg/a/a1.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/pkg/b/b1.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/pkg/c/c1.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/pkg/c/subfolder/c2.d.mts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/pkg/d/d1.d.mts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/package.json 250 undefined WatchType: package.json file
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 6 root files in 1 dependencies 0 referenced projects in * ms
+Info seq  [hh:mm:ss:mss] Creating AutoImportProviderProject: /dev/null/autoImportProviderProject1*, currentDirectory: /home/src/workspaces/project
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/pkg/a/a1.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/pkg/b/b1.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/pkg/b/b2.d.mts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/pkg/c/c1.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/pkg/c/subfolder/c2.d.mts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/pkg/d/d1.d.mts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/pkg/a/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/pkg/b/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/pkg/c/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/pkg/a/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/pkg/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/pkg/b/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/pkg/c/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info seq  [hh:mm:ss:mss] 	Files (5)
-	/node_modules/pkg/a/a1.d.ts Text-1 "export const a1: number;"
-	/node_modules/pkg/b/b1.d.ts Text-1 "export const b1: number;"
-	/node_modules/pkg/c/c1.d.ts Text-1 "export const c1: number;"
-	/node_modules/pkg/c/subfolder/c2.d.mts Text-1 "export const c2: number;"
-	/node_modules/pkg/d/d1.d.mts Text-1 "export const d1: number;"
+Info seq  [hh:mm:ss:mss] 	Files (6)
+	/home/src/workspaces/project/node_modules/pkg/a/a1.d.ts Text-1 "export const a1: number;"
+	/home/src/workspaces/project/node_modules/pkg/b/b1.d.ts Text-1 "export const b1: number;"
+	/home/src/workspaces/project/node_modules/pkg/b/b2.d.mts Text-1 "export const NOT_REACHABLE: number;"
+	/home/src/workspaces/project/node_modules/pkg/c/c1.d.ts Text-1 "export const c1: number;"
+	/home/src/workspaces/project/node_modules/pkg/c/subfolder/c2.d.mts Text-1 "export const c2: number;"
+	/home/src/workspaces/project/node_modules/pkg/d/d1.d.mts Text-1 "export const d1: number;"
 
 
 	node_modules/pkg/a/a1.d.ts
@@ -197,6 +270,8 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	node_modules/pkg/b/b1.d.ts
 	  Root file specified for compilation
 	  File is CommonJS module because 'node_modules/pkg/package.json' does not have field "type"
+	node_modules/pkg/b/b2.d.mts
+	  Root file specified for compilation
 	node_modules/pkg/c/c1.d.ts
 	  Root file specified for compilation
 	  File is CommonJS module because 'node_modules/pkg/package.json' does not have field "type"
@@ -212,7 +287,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/tsconfig.json"
+        "projectName": "/home/src/workspaces/project/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -221,17 +296,63 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/main.ts",
-        "configFile": "/tsconfig.json",
-        "diagnostics": []
+        "triggerFile": "/home/src/workspaces/project/main.ts",
+        "configFile": "/home/src/workspaces/project/tsconfig.json",
+        "diagnostics": [
+          {
+            "text": "File '/home/src/tslibs/TS/Lib/lib.esnext.full.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'esnext'",
+            "code": 6053,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Array'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Boolean'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Function'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'IArguments'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Number'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Object'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'RegExp'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'String'.",
+            "code": 2318,
+            "category": "error"
+          }
+        ]
       }
     }
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (4)
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info seq  [hh:mm:ss:mss] 	Files (5)
+Info seq  [hh:mm:ss:mss] 	Files (6)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -239,42 +360,143 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /node_modules/pkg/package.json ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/node_modules/pkg/package.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] 	FileName: /main.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/main.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspaces/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *,
+        "createAutoImportProviderProgramDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
-/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {"pollingInterval":500}
-/lib.decorators.d.ts:
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts:
   {"pollingInterval":500}
-/lib.decorators.legacy.d.ts:
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
   {"pollingInterval":500}
-/node_modules/pkg/a/a1.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.esnext.full.d.ts: *new*
   {"pollingInterval":500}
-/node_modules/pkg/a/package.json: *new*
+/home/src/workspaces/project/node_modules/jsconfig.json:
   {"pollingInterval":2000}
-/node_modules/pkg/b/b1.d.ts: *new*
+/home/src/workspaces/project/node_modules/pkg/a/a1.d.ts: *new*
   {"pollingInterval":500}
-/node_modules/pkg/b/package.json: *new*
+/home/src/workspaces/project/node_modules/pkg/a/package.json: *new*
   {"pollingInterval":2000}
-/node_modules/pkg/c/c1.d.ts: *new*
+/home/src/workspaces/project/node_modules/pkg/b/b1.d.ts: *new*
   {"pollingInterval":500}
-/node_modules/pkg/c/package.json: *new*
+/home/src/workspaces/project/node_modules/pkg/b/b2.d.mts: *new*
+  {"pollingInterval":500}
+/home/src/workspaces/project/node_modules/pkg/b/package.json: *new*
   {"pollingInterval":2000}
-/node_modules/pkg/c/subfolder/c2.d.mts: *new*
+/home/src/workspaces/project/node_modules/pkg/c/c1.d.ts: *new*
   {"pollingInterval":500}
-/node_modules/pkg/d/d1.d.mts: *new*
+/home/src/workspaces/project/node_modules/pkg/c/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/pkg/c/subfolder/c2.d.mts: *new*
   {"pollingInterval":500}
-/package.json: *new*
+/home/src/workspaces/project/node_modules/pkg/d/d1.d.mts: *new*
+  {"pollingInterval":500}
+/home/src/workspaces/project/node_modules/pkg/jsconfig.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/pkg/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/pkg/tsconfig.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/tsconfig.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/package.json: *new*
+  {"pollingInterval":2000}
   {"pollingInterval":250}
-/tsconfig.json: *new*
+/home/src/workspaces/project/tsconfig.json: *new*
   {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
-: *new*
+/home/src/workspaces/node_modules:
   {}
+/home/src/workspaces/node_modules/@types:
+  {}
+  {} *new*
+/home/src/workspaces/project: *new*
+  {}
+/home/src/workspaces/project/node_modules:
+  {}
+/home/src/workspaces/project/node_modules/@types:
+  {}
+  {} *new*
+/home/src/workspaces/project/node_modules/node_modules/@types:
+  {}
+/home/src/workspaces/project/node_modules/pkg/node_modules:
+  {}
+/home/src/workspaces/project/node_modules/pkg/node_modules/@types:
+  {}
+
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/home/src/workspaces/project/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+
+ScriptInfos::
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/main.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/pkg/a/a1.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/home/src/workspaces/project/node_modules/pkg/b/b1.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/home/src/workspaces/project/node_modules/pkg/b/b2.d.mts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/home/src/workspaces/project/node_modules/pkg/c/c1.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/home/src/workspaces/project/node_modules/pkg/c/subfolder/c2.d.mts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/home/src/workspaces/project/node_modules/pkg/d/d1.d.mts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/home/src/workspaces/project/node_modules/pkg/package.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -296,12 +518,26 @@ Info seq  [hh:mm:ss:mss] response:
       "request_seq": 2,
       "success": true
     }
+After Request
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/home/src/workspaces/project/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 3,
       "type": "request",
       "arguments": {
-        "file": "/main.ts",
+        "file": "/home/src/workspaces/project/main.ts",
         "line": 1,
         "offset": 1
       },
@@ -310,12 +546,16 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 6 root files in 1 dependencies 0 referenced projects in * ms
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Same program as before
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] forEachExternalModuleToImportFrom autoImportProvider: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 5 module specifiers, plus 0 ambient and 0 from cache
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 5 module specifiers, plus 0 ambient and 1 from cache
 Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
@@ -327,6 +567,9 @@ Info seq  [hh:mm:ss:mss] response:
       "command": "completionInfo",
       "request_seq": 3,
       "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      },
       "body": {
         "flags": 9,
         "isGlobalCompletion": true,
@@ -343,18 +586,6 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "any",
             "kind": "keyword",
             "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "ArrayBuffer",
-            "kind": "var",
-            "kindModifiers": "declare",
             "sortText": "15"
           },
           {
@@ -394,12 +625,6 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
-            "name": "Boolean",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
             "name": "break",
             "kind": "keyword",
             "kindModifiers": "",
@@ -436,18 +661,6 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
-            "name": "DataView",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "Date",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
             "name": "debugger",
             "kind": "keyword",
             "kindModifiers": "",
@@ -457,18 +670,6 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "declare",
             "kind": "keyword",
             "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "decodeURI",
-            "kind": "function",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "decodeURIComponent",
-            "kind": "function",
-            "kindModifiers": "declare",
             "sortText": "15"
           },
           {
@@ -496,39 +697,9 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
-            "name": "encodeURI",
-            "kind": "function",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "encodeURIComponent",
-            "kind": "function",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
             "name": "enum",
             "kind": "keyword",
             "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "Error",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "eval",
-            "kind": "function",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "EvalError",
-            "kind": "var",
-            "kindModifiers": "declare",
             "sortText": "15"
           },
           {
@@ -556,18 +727,6 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
-            "name": "Float32Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "Float64Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
             "name": "for",
             "kind": "keyword",
             "kindModifiers": "",
@@ -577,12 +736,6 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "function",
             "kind": "keyword",
             "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "Function",
-            "kind": "var",
-            "kindModifiers": "declare",
             "sortText": "15"
           },
           {
@@ -622,63 +775,15 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
-            "name": "Infinity",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
             "name": "instanceof",
             "kind": "keyword",
             "kindModifiers": "",
             "sortText": "15"
           },
           {
-            "name": "Int16Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "Int32Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "Int8Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
             "name": "interface",
             "kind": "keyword",
             "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "Intl",
-            "kind": "module",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "isFinite",
-            "kind": "function",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "isNaN",
-            "kind": "function",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "JSON",
-            "kind": "var",
-            "kindModifiers": "declare",
             "sortText": "15"
           },
           {
@@ -694,12 +799,6 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
-            "name": "Math",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
             "name": "module",
             "kind": "keyword",
             "kindModifiers": "",
@@ -709,12 +808,6 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "namespace",
             "kind": "keyword",
             "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "NaN",
-            "kind": "var",
-            "kindModifiers": "declare",
             "sortText": "15"
           },
           {
@@ -742,21 +835,9 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
-            "name": "Number",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
             "name": "object",
             "kind": "keyword",
             "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "Object",
-            "kind": "var",
-            "kindModifiers": "declare",
             "sortText": "15"
           },
           {
@@ -766,39 +847,9 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
-            "name": "parseFloat",
-            "kind": "function",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "parseInt",
-            "kind": "function",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "RangeError",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
             "name": "readonly",
             "kind": "keyword",
             "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "ReferenceError",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "RegExp",
-            "kind": "var",
-            "kindModifiers": "declare",
             "sortText": "15"
           },
           {
@@ -820,12 +871,6 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
-            "name": "String",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
             "name": "super",
             "kind": "keyword",
             "kindModifiers": "",
@@ -841,12 +886,6 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "symbol",
             "kind": "keyword",
             "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "SyntaxError",
-            "kind": "var",
-            "kindModifiers": "declare",
             "sortText": "15"
           },
           {
@@ -880,39 +919,9 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
-            "name": "TypeError",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
             "name": "typeof",
             "kind": "keyword",
             "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "Uint16Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "Uint32Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "Uint8Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "Uint8ClampedArray",
-            "kind": "var",
-            "kindModifiers": "declare",
             "sortText": "15"
           },
           {
@@ -934,9 +943,9 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
-            "name": "URIError",
-            "kind": "var",
-            "kindModifiers": "declare",
+            "name": "using",
+            "kind": "keyword",
+            "kindModifiers": "",
             "sortText": "15"
           },
           {
@@ -974,8 +983,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "pkg/a1",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "pkg/a1",
@@ -987,7 +996,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "a1",
               "exportMapKey": "2 * a1 ",
               "moduleSpecifier": "pkg/a1",
-              "fileName": "/node_modules/pkg/a/a1.d.ts",
+              "fileName": "/home/src/workspaces/project/node_modules/pkg/a/a1.d.ts",
               "isPackageJsonImport": true
             }
           },
@@ -996,8 +1005,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "pkg/b/b1.js",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "pkg/b/b1.js",
@@ -1009,7 +1018,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "b1",
               "exportMapKey": "2 * b1 ",
               "moduleSpecifier": "pkg/b/b1.js",
-              "fileName": "/node_modules/pkg/b/b1.d.ts",
+              "fileName": "/home/src/workspaces/project/node_modules/pkg/b/b1.d.ts",
               "isPackageJsonImport": true
             }
           },
@@ -1018,8 +1027,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "pkg/c/c1.js",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "pkg/c/c1.js",
@@ -1031,7 +1040,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "c1",
               "exportMapKey": "2 * c1 ",
               "moduleSpecifier": "pkg/c/c1.js",
-              "fileName": "/node_modules/pkg/c/c1.d.ts",
+              "fileName": "/home/src/workspaces/project/node_modules/pkg/c/c1.d.ts",
               "isPackageJsonImport": true
             }
           },
@@ -1040,8 +1049,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "pkg/c/subfolder/c2.mjs",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "pkg/c/subfolder/c2.mjs",
@@ -1053,7 +1062,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "c2",
               "exportMapKey": "2 * c2 ",
               "moduleSpecifier": "pkg/c/subfolder/c2.mjs",
-              "fileName": "/node_modules/pkg/c/subfolder/c2.d.mts",
+              "fileName": "/home/src/workspaces/project/node_modules/pkg/c/subfolder/c2.d.mts",
               "isPackageJsonImport": true
             }
           },
@@ -1062,8 +1071,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "pkg/d/d1",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "pkg/d/d1",
@@ -1075,56 +1084,92 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "d1",
               "exportMapKey": "2 * d1 ",
               "moduleSpecifier": "pkg/d/d1",
-              "fileName": "/node_modules/pkg/d/d1.d.mts",
+              "fileName": "/home/src/workspaces/project/node_modules/pkg/d/d1.d.mts",
               "isPackageJsonImport": true
             }
-          },
-          {
-            "name": "escape",
-            "kind": "function",
-            "kindModifiers": "deprecated,declare",
-            "sortText": "z15"
-          },
-          {
-            "name": "unescape",
-            "kind": "function",
-            "kindModifiers": "deprecated,declare",
-            "sortText": "z15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
 After Request
 watchedFiles::
-/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {"pollingInterval":500}
-/lib.decorators.d.ts:
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts:
   {"pollingInterval":500}
-/lib.decorators.legacy.d.ts:
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
   {"pollingInterval":500}
-/node_modules/pkg/a/a1.d.ts:
+/home/src/tslibs/TS/Lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
-/node_modules/pkg/a/package.json:
+/home/src/workspaces/project/node_modules/jsconfig.json:
   {"pollingInterval":2000}
-/node_modules/pkg/b/b1.d.ts:
+/home/src/workspaces/project/node_modules/pkg/a/a1.d.ts:
   {"pollingInterval":500}
-/node_modules/pkg/b/package.json:
+/home/src/workspaces/project/node_modules/pkg/a/package.json:
   {"pollingInterval":2000}
-/node_modules/pkg/c/c1.d.ts:
+/home/src/workspaces/project/node_modules/pkg/b/b1.d.ts:
   {"pollingInterval":500}
-/node_modules/pkg/c/package.json:
+/home/src/workspaces/project/node_modules/pkg/b/b2.d.mts:
+  {"pollingInterval":500}
+/home/src/workspaces/project/node_modules/pkg/b/package.json:
   {"pollingInterval":2000}
-/node_modules/pkg/c/subfolder/c2.d.mts:
+/home/src/workspaces/project/node_modules/pkg/c/c1.d.ts:
   {"pollingInterval":500}
-/node_modules/pkg/d/d1.d.mts:
+/home/src/workspaces/project/node_modules/pkg/c/package.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/pkg/c/subfolder/c2.d.mts:
   {"pollingInterval":500}
-/package.json:
+/home/src/workspaces/project/node_modules/pkg/d/d1.d.mts:
+  {"pollingInterval":500}
+/home/src/workspaces/project/node_modules/pkg/jsconfig.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/pkg/package.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/pkg/tsconfig.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/tsconfig.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/package.json:
+  {"pollingInterval":2000}
   {"pollingInterval":250}
-/tsconfig.json:
+/home/src/workspaces/project/tsconfig.json:
   {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
-:
+/home/src/workspaces/node_modules:
   {}
-/node_modules: *new*
+/home/src/workspaces/node_modules/@types:
   {}
+  {}
+/home/src/workspaces/project:
+  {}
+/home/src/workspaces/project/node_modules:
+  {}
+  {} *new*
+/home/src/workspaces/project/node_modules/@types:
+  {}
+  {}
+/home/src/workspaces/project/node_modules/node_modules/@types:
+  {}
+/home/src/workspaces/project/node_modules/pkg/node_modules:
+  {}
+/home/src/workspaces/project/node_modules/pkg/node_modules/@types:
+  {}
+
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/home/src/workspaces/project/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*

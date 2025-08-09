@@ -23,7 +23,7 @@ CompilerOptions::
     ".ios",
     ""
   ],
-  "configFilePath": "tsconfig.json"
+  "configFilePath": "/apath/tsconfig.json"
 }
 Errors::
 

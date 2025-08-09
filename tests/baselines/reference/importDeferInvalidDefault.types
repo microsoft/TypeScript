@@ -1,0 +1,31 @@
+//// [tests/cases/conformance/importDefer/importDeferInvalidDefault.ts] ////
+
+=== a.ts ===
+export default function foo() {
+>foo : () => void
+>    : ^^^^^^^^^^
+
+    console.log("foo from a");
+>console.log("foo from a") : void
+>                          : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"foo from a" : "foo from a"
+>             : ^^^^^^^^^^^^
+}
+
+=== b.ts ===
+import defer foo from "a";
+>foo : () => void
+>    : ^^^^^^^^^^
+
+foo();
+>foo() : void
+>      : ^^^^
+>foo : () => void
+>    : ^^^^^^^^^^
+

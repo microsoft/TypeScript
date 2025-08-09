@@ -3,16 +3,24 @@
 === parserComputedPropertyName34.ts ===
 enum E {
 >E : E
+>  : ^
 
     // no ASI, comma expected
     [e] = id++,
 >[e] : E
+>    : ^
 >e : any
+>  : ^^^
 >id++ : number
+>     : ^^^^^^
 >id : any
+>   : ^^^
 
     [e2] = 1
 >[e2] : E
+>     : ^
 >e2 : any
+>   : ^^^
 >1 : 1
+>  : ^
 }

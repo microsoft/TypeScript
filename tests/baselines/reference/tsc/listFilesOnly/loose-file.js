@@ -1,6 +1,9 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/project useCaseSensitiveFileNames:: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/workspaces/project/test.ts]
+export const x = 1;
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -15,15 +18,12 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/src/test.ts]
-export const x = 1;
 
-
-
+/home/src/tslibs/TS/Lib/tsc.js test.ts --listFilesOnly
 Output::
-/lib/tsc /src/test.ts --listFilesOnly
-/lib/lib.d.ts
-/src/test.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+test.ts
+
+
+
 exitCode:: ExitStatus.Success
-
-

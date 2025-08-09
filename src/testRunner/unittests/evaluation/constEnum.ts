@@ -1,4 +1,4 @@
-import * as evaluator from "../../_namespaces/evaluator";
+import * as evaluator from "../../_namespaces/evaluator.js";
 
 describe("unittests:: evaluation:: constEnum", () => {
     it("correct order of operations for inlined negative numbers", async () => {

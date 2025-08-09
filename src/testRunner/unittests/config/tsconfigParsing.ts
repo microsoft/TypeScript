@@ -1,13 +1,9 @@
-import * as fakes from "../../_namespaces/fakes";
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
-import * as vfs from "../../_namespaces/vfs";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    baselineParseConfig,
-} from "./helpers";
+import * as fakes from "../../_namespaces/fakes.js";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
+import * as vfs from "../../_namespaces/vfs.js";
+import { jsonToReadableText } from "../helpers.js";
+import { baselineParseConfig } from "./helpers.js";
 
 describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () => {
     function formatErrors(errors: readonly ts.Diagnostic[]) {
@@ -36,7 +32,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
         jsonText: string;
         configFileName: string;
         basePath: string;
-        allFileList: string[];
+        allFileList: string[] | vfs.FileSet;
     }
 
     function baselinedParsed(subScenario: string, scenario: () => VerifyConfig[], skipJson?: true) {
@@ -46,7 +42,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             input: () =>
                 scenario().map(({ jsonText, configFileName, basePath, allFileList }) => ({
                     createHost: () => {
-                        const files = allFileList.reduce((files, value) => (files[value] = "", files), {} as vfs.FileSet);
+                        const files = ts.isArray(allFileList) ? allFileList.reduce((files, value) => (files[value] = "", files), {} as vfs.FileSet) : allFileList;
                         files[ts.combinePaths(basePath, configFileName)] = jsonText;
                         return new fakes.ParseConfigHost(
                             new vfs.FileSystem(
@@ -215,6 +211,38 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
         ];
     });
 
+    baselinedParsed("with outDir from base tsconfig", () => {
+        const tsconfigWithoutConfigDir = jsonToReadableText({
+            extends: "./tsconfigWithoutConfigDir.json",
+        });
+        const tsconfigWithConfigDir = jsonToReadableText({
+            extends: "./tsconfigWithConfigDir.json",
+        });
+        const basePath = "/";
+        return [
+            {
+                jsonText: tsconfigWithoutConfigDir,
+                configFileName: "tsconfig.json",
+                basePath,
+                allFileList: {
+                    "/tsconfigWithoutConfigDir.json": jsonToReadableText({ compilerOptions: { outDir: "bin" } }),
+                    "/bin/a.ts": "",
+                    "/b.ts": "",
+                },
+            },
+            {
+                jsonText: tsconfigWithConfigDir,
+                configFileName: "tsconfig.json",
+                basePath,
+                allFileList: {
+                    "/tsconfigWithConfigDir.json": jsonToReadableText({ compilerOptions: { outDir: "${configDir}/bin" } }), // eslint-disable-line no-template-curly-in-string
+                    "/bin/a.ts": "",
+                    "/b.ts": "",
+                },
+            },
+        ];
+    });
+
     baselinedParsed("implicitly exclude common package folders", () => [{
         jsonText: `{}`,
         configFileName: "tsconfig.json",
@@ -245,7 +273,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
                 "files": []
             }`,
         configFileName: "/apath/tsconfig.json",
-        basePath: "tests/cases/unittests",
+        basePath: "/apath",
         allFileList: ["/apath/a.ts"],
     }]);
 
@@ -255,7 +283,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
                 "references": []
             }`,
         configFileName: "/apath/tsconfig.json",
-        basePath: "tests/cases/unittests",
+        basePath: "/apath",
         allFileList: ["/apath/a.ts"],
     }]);
 
@@ -265,7 +293,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
                 "references": [{ "path": "/apath" }]
             }`,
         configFileName: "/apath/tsconfig.json",
-        basePath: "tests/cases/unittests",
+        basePath: "/apath",
         allFileList: ["/apath/a.ts"],
     }]);
 
@@ -273,7 +301,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
         jsonText: `{
             }`,
         configFileName: "/apath/tsconfig.json",
-        basePath: "tests/cases/unittests",
+        basePath: "/apath",
         allFileList: ["/apath/a.js"],
     }]);
 
@@ -284,7 +312,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
                 }
             }`,
         configFileName: "/apath/tsconfig.json",
-        basePath: "tests/cases/unittests",
+        basePath: "/apath",
         allFileList: [],
     }]);
 
@@ -305,7 +333,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
                 "include": ["**/*"]
             }`,
         configFileName: "/apath/tsconfig.json",
-        basePath: "tests/cases/unittests",
+        basePath: "/apath",
         allFileList: ["/apath/a.ts"],
     }]);
 
@@ -318,7 +346,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
               }
             }`,
         configFileName: "/apath/tsconfig.json",
-        basePath: "tests/cases/unittests",
+        basePath: "/apath",
         allFileList: ["/apath/a.ts"],
     }], /*skipJson*/ true);
 
@@ -332,7 +360,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             }],
         }),
         configFileName: "/apath/tsconfig.json",
-        basePath: "tests/cases/unittests",
+        basePath: "/apath",
         allFileList: ["/apath/a.ts"],
     }]);
 
@@ -343,7 +371,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             ],
         }),
         configFileName: "/apath/tsconfig.json",
-        basePath: "tests/cases/unittests",
+        basePath: "/apath",
         allFileList: ["/apath/a.ts"],
     }]);
 
@@ -354,7 +382,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             },
         }),
         configFileName: "/apath/tsconfig.json",
-        basePath: "tests/cases/unittests",
+        basePath: "/apath",
         allFileList: ["/apath/a.ts"],
     }]);
 
@@ -396,6 +424,6 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
         jsonText: jsonToReadableText({
             include: ["./", "./**/*.json"],
         }),
-        basePath: "/foo",
+        basePath: "/foo.bar",
     }]);
 });

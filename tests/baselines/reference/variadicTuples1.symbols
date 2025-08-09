@@ -1416,3 +1416,6 @@ type ToStringLength2<T extends any[]> = `${[...T]['length']}`;
 >T : Symbol(T, Decl(variadicTuples1.ts, 419, 21))
 >T : Symbol(T, Decl(variadicTuples1.ts, 419, 21))
 
+type AnyArr = [...any];
+>AnyArr : Symbol(AnyArr, Decl(variadicTuples1.ts, 419, 62))
+

@@ -3,8 +3,11 @@
 === ambientEnumElementInitializer4.ts ===
 declare enum E {
 >E : E
+>  : ^
 
  e = 0xA
 >e : E.e
+>  : ^^^
 >0xA : 10
+>    : ^^
 }

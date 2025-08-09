@@ -3,7 +3,7 @@ JsFile: out.js
 mapUrl: out.js.map
 sourceRoot: 
 sources: a.ts,b.ts
-sourcesContent: ["var a = 0;\nconsole.log(a);\n","var b = 0;\nconsole.log(b);"]
+sourcesContent: ["var a = 0;\nconsole.log(a);\n","var b = 0;\nconsole.log(b);\n"]
 ===================================================================
 -------------------------------------------------------------------
 emittedFile:out.js

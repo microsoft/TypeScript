@@ -4,12 +4,15 @@
 // Regression test for #325
 module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     class C {
 >C : C
+>  : ^
 
         constructor(public d: {}) { }
 >d : {}
+>  : ^^
     }
 }
 

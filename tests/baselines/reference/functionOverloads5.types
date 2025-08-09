@@ -3,12 +3,16 @@
 === functionOverloads5.ts ===
 class baz { 
 >baz : baz
+>    : ^^^
 
   public foo();
 >foo : () => any
+>    : ^^^^^^^^^
 
   private foo(bar?:any){ }
 >foo : () => any
+>    : ^^^^^^^^^
 >bar : any
+>    : ^^^
 }
 

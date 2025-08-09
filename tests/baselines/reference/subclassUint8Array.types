@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/subclassUint8Array.ts] ////
+
+=== subclassUint8Array.ts ===
+class CustomBuffer extends Uint8Array {
+>CustomBuffer : CustomBuffer
+>             : ^^^^^^^^^^^^
+>Uint8Array : Uint8Array<ArrayBuffer>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
+}
+

@@ -1,0 +1,47 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionSwitchCase6.ts ===
+// export default { /*GOTO DEF*/[|{| textSpan: true |}case|] };
+// default;
+// case 42;
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "case",
+    "containerName": "__object",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionSwitchCase6.ts ===
+// [|export default { case };
+// /*GOTO DEF*/default;
+// case 42;|]
+
+  // === Details ===
+  [
+   {
+    "kind": "module",
+    "name": "\"/tests/cases/fourslash/goToDefinitionSwitchCase6\"",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionSwitchCase6.ts ===
+// export default { case };
+// default;
+// /*GOTO DEF*/case 42;

@@ -1,0 +1,61 @@
+//// [tests/cases/compiler/isolatedDeclarationErrorsClassesExpressions.ts] ////
+
+=== isolatedDeclarationErrorsClassesExpressions.ts ===
+export const cls = class {
+>cls : typeof cls
+>    : ^^^^^^^^^^
+>class {    foo: string = "";} : typeof cls
+>                              : ^^^^^^^^^^
+
+    foo: string = "";
+>foo : string
+>    : ^^^^^^
+>"" : ""
+>   : ^^
+}
+
+
+function id<T extends new (...a: any[]) => any>(cls: T) {
+>id : <T extends new (...a: any[]) => any>(cls: T) => T
+>   : ^ ^^^^^^^^^                        ^^   ^^ ^^^^^^
+>a : any[]
+>  : ^^^^^
+>cls : T
+>    : ^
+
+    return cls;
+>cls : T
+>    : ^
+}
+
+
+export class Base {
+>Base : Base
+>     : ^^^^
+
+}
+
+export class Mix extends id(Base) {
+>Mix : Mix
+>    : ^^^
+>id(Base) : Base
+>         : ^^^^
+>id : <T extends new (...a: any[]) => any>(cls: T) => T
+>   : ^ ^^^^^^^^^                        ^^   ^^ ^^^^^^
+>Base : typeof Base
+>     : ^^^^^^^^^^^
+
+}
+
+export const classes = [class {}, class{}] as const
+>classes : readonly [typeof (Anonymous class), typeof (Anonymous class)]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[class {}, class{}] as const : readonly [typeof (Anonymous class), typeof (Anonymous class)]
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[class {}, class{}] : readonly [typeof (Anonymous class), typeof (Anonymous class)]
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>class {} : typeof (Anonymous class)
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>class{} : typeof (Anonymous class)
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^
+
