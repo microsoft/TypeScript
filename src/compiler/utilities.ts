@@ -2894,7 +2894,7 @@ export function forEachYieldExpression<T>(body: Block, visitor: (expr: YieldExpr
                     if (node.name && node.name.kind === SyntaxKind.ComputedPropertyName) {
                         // Note that we will not include methods/accessors of a class because they would require
                         // first descending into the class. This is by design.
-                        return traverse(node.name.expression);;
+                        return traverse(node.name.expression);
                     }
                 }
                 else if (!isPartOfTypeNode(node)) {

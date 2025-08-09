@@ -1047,7 +1047,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 (node as FunctionLikeDeclaration | ClassStaticBlockDeclaration).endFlowNode = currentFlow;
             }
             if (seenThisKeyword) {
-                node.flags |= NodeFlags.ContainsThis;    
+                node.flags |= NodeFlags.ContainsThis;
             }
             if (node.kind === SyntaxKind.SourceFile) {
                 node.flags |= emitFlags;

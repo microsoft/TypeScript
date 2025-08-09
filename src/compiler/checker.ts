@@ -21135,7 +21135,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const { initializer } = node as JsxAttribute;
                 return !!initializer && isContextSensitive(initializer);
             }
-            case SyntaxKind.JsxExpression: 
+            case SyntaxKind.JsxExpression:
             case SyntaxKind.YieldExpression: {
                 // It is possible to that node.expression is undefined (e.g <div x={} />)
                 const { expression } = node as JsxExpression | YieldExpression;
