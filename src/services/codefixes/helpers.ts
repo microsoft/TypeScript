@@ -225,6 +225,8 @@ export function addNewNodeForMemberSymbol(
     switch (kind) {
         case SyntaxKind.PropertySignature:
         case SyntaxKind.PropertyDeclaration:
+        case SyntaxKind.PropertyAssignment:
+        case SyntaxKind.ShorthandPropertyAssignment:
             let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, flags, InternalNodeBuilderFlags.AllowUnresolvedNames, getNoopSymbolTrackerWithResolver(context));
             if (importAdder) {
                 const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
