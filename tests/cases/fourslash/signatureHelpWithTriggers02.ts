@@ -1,5 +1,7 @@
 /// <reference path="fourslash.ts" />
-
+//
+// @strict: true
+//
 ////declare function foo<T>(x: T, y: T): T;
 ////declare function bar<U>(x: U, y: U): U;
 ////

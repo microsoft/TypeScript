@@ -1,0 +1,235 @@
+//// [tests/cases/compiler/nestedInference.ts] ////
+
+=== nestedInference.ts ===
+// repro from #52864
+
+const matcher = Symbol("@ts-pattern/matcher");
+>matcher : Symbol(matcher, Decl(nestedInference.ts, 2, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+type MatcherProtocol<input> = {
+>MatcherProtocol : Symbol(MatcherProtocol, Decl(nestedInference.ts, 2, 46))
+>input : Symbol(input, Decl(nestedInference.ts, 4, 21))
+
+  match: <I>(value: I | input) => void;
+>match : Symbol(match, Decl(nestedInference.ts, 4, 31))
+>I : Symbol(I, Decl(nestedInference.ts, 5, 10))
+>value : Symbol(value, Decl(nestedInference.ts, 5, 13))
+>I : Symbol(I, Decl(nestedInference.ts, 5, 10))
+>input : Symbol(input, Decl(nestedInference.ts, 4, 21))
+
+};
+
+interface Matcher<input> {
+>Matcher : Symbol(Matcher, Decl(nestedInference.ts, 6, 2))
+>input : Symbol(input, Decl(nestedInference.ts, 8, 18))
+
+  [matcher](): MatcherProtocol<input>;
+>[matcher] : Symbol(Matcher[matcher], Decl(nestedInference.ts, 8, 26))
+>matcher : Symbol(matcher, Decl(nestedInference.ts, 2, 5))
+>MatcherProtocol : Symbol(MatcherProtocol, Decl(nestedInference.ts, 2, 46))
+>input : Symbol(input, Decl(nestedInference.ts, 8, 18))
+}
+
+type Pattern<a> =
+>Pattern : Symbol(Pattern, Decl(nestedInference.ts, 10, 1))
+>a : Symbol(a, Decl(nestedInference.ts, 12, 13))
+
+  | Matcher<a>
+>Matcher : Symbol(Matcher, Decl(nestedInference.ts, 6, 2))
+>a : Symbol(a, Decl(nestedInference.ts, 12, 13))
+
+  | (a extends readonly [any, ...any]
+>a : Symbol(a, Decl(nestedInference.ts, 12, 13))
+
+      ? { readonly [index in keyof a]: Pattern<a[index]> }
+>index : Symbol(index, Decl(nestedInference.ts, 15, 20))
+>a : Symbol(a, Decl(nestedInference.ts, 12, 13))
+>Pattern : Symbol(Pattern, Decl(nestedInference.ts, 10, 1))
+>a : Symbol(a, Decl(nestedInference.ts, 12, 13))
+>index : Symbol(index, Decl(nestedInference.ts, 15, 20))
+
+      : a extends object
+>a : Symbol(a, Decl(nestedInference.ts, 12, 13))
+
+      ? { readonly [k in keyof a]: Pattern<a[k]> }
+>k : Symbol(k, Decl(nestedInference.ts, 17, 20))
+>a : Symbol(a, Decl(nestedInference.ts, 12, 13))
+>Pattern : Symbol(Pattern, Decl(nestedInference.ts, 10, 1))
+>a : Symbol(a, Decl(nestedInference.ts, 12, 13))
+>k : Symbol(k, Decl(nestedInference.ts, 17, 20))
+
+      : a);
+>a : Symbol(a, Decl(nestedInference.ts, 12, 13))
+
+type Match<i> = {
+>Match : Symbol(Match, Decl(nestedInference.ts, 18, 11))
+>i : Symbol(i, Decl(nestedInference.ts, 20, 11))
+
+  with<p extends Pattern<i>>(pattern: p): void;
+>with : Symbol(with, Decl(nestedInference.ts, 20, 17))
+>p : Symbol(p, Decl(nestedInference.ts, 21, 7))
+>Pattern : Symbol(Pattern, Decl(nestedInference.ts, 10, 1))
+>i : Symbol(i, Decl(nestedInference.ts, 20, 11))
+>pattern : Symbol(pattern, Decl(nestedInference.ts, 21, 29))
+>p : Symbol(p, Decl(nestedInference.ts, 21, 7))
+
+};
+
+declare function match<input>(value: input): Match<input>;
+>match : Symbol(match, Decl(nestedInference.ts, 22, 2))
+>input : Symbol(input, Decl(nestedInference.ts, 24, 23))
+>value : Symbol(value, Decl(nestedInference.ts, 24, 30))
+>input : Symbol(input, Decl(nestedInference.ts, 24, 23))
+>Match : Symbol(Match, Decl(nestedInference.ts, 18, 11))
+>input : Symbol(input, Decl(nestedInference.ts, 24, 23))
+
+declare function union<input, ps extends [Pattern<input>, ...Pattern<input>[]]>(
+>union : Symbol(union, Decl(nestedInference.ts, 24, 58))
+>input : Symbol(input, Decl(nestedInference.ts, 25, 23))
+>ps : Symbol(ps, Decl(nestedInference.ts, 25, 29))
+>Pattern : Symbol(Pattern, Decl(nestedInference.ts, 10, 1))
+>input : Symbol(input, Decl(nestedInference.ts, 25, 23))
+>Pattern : Symbol(Pattern, Decl(nestedInference.ts, 10, 1))
+>input : Symbol(input, Decl(nestedInference.ts, 25, 23))
+
+  ...patterns: ps
+>patterns : Symbol(patterns, Decl(nestedInference.ts, 25, 80))
+>ps : Symbol(ps, Decl(nestedInference.ts, 25, 29))
+
+): Matcher<input>;
+>Matcher : Symbol(Matcher, Decl(nestedInference.ts, 6, 2))
+>input : Symbol(input, Decl(nestedInference.ts, 25, 23))
+
+declare function when<input, p extends (value: input) => unknown>(
+>when : Symbol(when, Decl(nestedInference.ts, 27, 18))
+>input : Symbol(input, Decl(nestedInference.ts, 28, 22))
+>p : Symbol(p, Decl(nestedInference.ts, 28, 28))
+>value : Symbol(value, Decl(nestedInference.ts, 28, 40))
+>input : Symbol(input, Decl(nestedInference.ts, 28, 22))
+
+  predicate: p
+>predicate : Symbol(predicate, Decl(nestedInference.ts, 28, 66))
+>p : Symbol(p, Decl(nestedInference.ts, 28, 28))
+
+): Matcher<input>;
+>Matcher : Symbol(Matcher, Decl(nestedInference.ts, 6, 2))
+>input : Symbol(input, Decl(nestedInference.ts, 28, 22))
+
+match<"a" | "b">("a").with(union("a"));
+>match<"a" | "b">("a").with : Symbol(with, Decl(nestedInference.ts, 20, 17))
+>match : Symbol(match, Decl(nestedInference.ts, 22, 2))
+>with : Symbol(with, Decl(nestedInference.ts, 20, 17))
+>union : Symbol(union, Decl(nestedInference.ts, 24, 58))
+
+match<"a" | "b">("a")
+>match<"a" | "b">("a")  .with : Symbol(with, Decl(nestedInference.ts, 20, 17))
+>match : Symbol(match, Decl(nestedInference.ts, 22, 2))
+
+  .with(union("this is wrong")); // error
+>with : Symbol(with, Decl(nestedInference.ts, 20, 17))
+>union : Symbol(union, Decl(nestedInference.ts, 24, 58))
+
+match<"a" | "b">("a").with(
+>match<"a" | "b">("a").with : Symbol(with, Decl(nestedInference.ts, 20, 17))
+>match : Symbol(match, Decl(nestedInference.ts, 22, 2))
+>with : Symbol(with, Decl(nestedInference.ts, 20, 17))
+
+  when((x) => {
+>when : Symbol(when, Decl(nestedInference.ts, 27, 18))
+>x : Symbol(x, Decl(nestedInference.ts, 38, 8))
+
+    let a: "a" | "b" = x; // OK
+>a : Symbol(a, Decl(nestedInference.ts, 39, 7))
+>x : Symbol(x, Decl(nestedInference.ts, 38, 8))
+
+    return a;
+>a : Symbol(a, Decl(nestedInference.ts, 39, 7))
+
+  })
+);
+
+match<{ type: "a" | "b" }>({ type: "a" }).with({
+>match<{ type: "a" | "b" }>({ type: "a" }).with : Symbol(with, Decl(nestedInference.ts, 20, 17))
+>match : Symbol(match, Decl(nestedInference.ts, 22, 2))
+>type : Symbol(type, Decl(nestedInference.ts, 44, 7))
+>type : Symbol(type, Decl(nestedInference.ts, 44, 28))
+>with : Symbol(with, Decl(nestedInference.ts, 20, 17))
+
+  type: union("a"),
+>type : Symbol(type, Decl(nestedInference.ts, 44, 48))
+>union : Symbol(union, Decl(nestedInference.ts, 24, 58))
+
+});
+
+match<{ type: "a" | "b" }>({ type: "a" }).with({
+>match<{ type: "a" | "b" }>({ type: "a" }).with : Symbol(with, Decl(nestedInference.ts, 20, 17))
+>match : Symbol(match, Decl(nestedInference.ts, 22, 2))
+>type : Symbol(type, Decl(nestedInference.ts, 48, 7))
+>type : Symbol(type, Decl(nestedInference.ts, 48, 28))
+>with : Symbol(with, Decl(nestedInference.ts, 20, 17))
+
+  type: union("this is wrong"), // error
+>type : Symbol(type, Decl(nestedInference.ts, 48, 48))
+>union : Symbol(union, Decl(nestedInference.ts, 24, 58))
+
+});
+
+match<{ type: "a" | "b" }>({ type: "a" }).with({
+>match<{ type: "a" | "b" }>({ type: "a" }).with : Symbol(with, Decl(nestedInference.ts, 20, 17))
+>match : Symbol(match, Decl(nestedInference.ts, 22, 2))
+>type : Symbol(type, Decl(nestedInference.ts, 52, 7))
+>type : Symbol(type, Decl(nestedInference.ts, 52, 28))
+>with : Symbol(with, Decl(nestedInference.ts, 20, 17))
+
+  type: when((x) => {
+>type : Symbol(type, Decl(nestedInference.ts, 52, 48))
+>when : Symbol(when, Decl(nestedInference.ts, 27, 18))
+>x : Symbol(x, Decl(nestedInference.ts, 53, 14))
+
+    let a: "a" | "b" = x; // OK
+>a : Symbol(a, Decl(nestedInference.ts, 54, 7))
+>x : Symbol(x, Decl(nestedInference.ts, 53, 14))
+
+    return a;
+>a : Symbol(a, Decl(nestedInference.ts, 54, 7))
+
+  }),
+});
+
+// https://github.com/microsoft/TypeScript/issues/57978
+interface Action<Value> {
+>Action : Symbol(Action, Decl(nestedInference.ts, 57, 3))
+>Value : Symbol(Value, Decl(nestedInference.ts, 60, 17))
+
+  _run(input: Value): Value;
+>_run : Symbol(Action._run, Decl(nestedInference.ts, 60, 25))
+>input : Symbol(input, Decl(nestedInference.ts, 61, 7))
+>Value : Symbol(Value, Decl(nestedInference.ts, 60, 17))
+>Value : Symbol(Value, Decl(nestedInference.ts, 60, 17))
+}
+
+declare function minLength<Value extends string | any[]>(min: number): Action<Value>
+>minLength : Symbol(minLength, Decl(nestedInference.ts, 62, 1))
+>Value : Symbol(Value, Decl(nestedInference.ts, 64, 27))
+>min : Symbol(min, Decl(nestedInference.ts, 64, 57))
+>Action : Symbol(Action, Decl(nestedInference.ts, 57, 3))
+>Value : Symbol(Value, Decl(nestedInference.ts, 64, 27))
+
+declare function pipe1<TAction1 extends Action<string>>(
+>pipe1 : Symbol(pipe1, Decl(nestedInference.ts, 64, 84))
+>TAction1 : Symbol(TAction1, Decl(nestedInference.ts, 66, 23))
+>Action : Symbol(Action, Decl(nestedInference.ts, 57, 3))
+
+  action1: TAction1,
+>action1 : Symbol(action1, Decl(nestedInference.ts, 66, 56))
+>TAction1 : Symbol(TAction1, Decl(nestedInference.ts, 66, 23))
+
+): (input: string) => string;
+>input : Symbol(input, Decl(nestedInference.ts, 68, 4))
+
+const Schema1 = pipe1(minLength(1));
+>Schema1 : Symbol(Schema1, Decl(nestedInference.ts, 70, 5))
+>pipe1 : Symbol(pipe1, Decl(nestedInference.ts, 64, 84))
+>minLength : Symbol(minLength, Decl(nestedInference.ts, 62, 1))
+
