@@ -1,10 +1,13 @@
+equalityStrictNulls.ts(37,22): error TS2870: This binary expression is never nullish. Are you missing parentheses?
+equalityStrictNulls.ts(39,22): error TS2870: This binary expression is never nullish. Are you missing parentheses?
+equalityStrictNulls.ts(41,9): error TS2870: This binary expression is never nullish. Are you missing parentheses?
 equalityStrictNulls.ts(59,13): error TS18050: The value 'undefined' cannot be used here.
 equalityStrictNulls.ts(61,13): error TS18050: The value 'undefined' cannot be used here.
 equalityStrictNulls.ts(63,14): error TS18050: The value 'undefined' cannot be used here.
 equalityStrictNulls.ts(65,14): error TS18050: The value 'undefined' cannot be used here.
 
 
-==== equalityStrictNulls.ts (4 errors) ====
+==== equalityStrictNulls.ts (7 errors) ====
     function f1(x: string) {
         if (x == undefined) {
         }
@@ -42,10 +45,16 @@ equalityStrictNulls.ts(65,14): error TS18050: The value 'undefined' cannot be us
     
     function f2() {
         if (undefined == undefined) {
+                         ~~~~~~~~~
+!!! error TS2870: This binary expression is never nullish. Are you missing parentheses?
         }
         if (undefined == null) {
+                         ~~~~
+!!! error TS2870: This binary expression is never nullish. Are you missing parentheses?
         }
         if (null == undefined) {
+            ~~~~
+!!! error TS2870: This binary expression is never nullish. Are you missing parentheses?
         }
         if (null == null) {
         }
