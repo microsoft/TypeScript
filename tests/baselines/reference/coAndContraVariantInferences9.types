@@ -1,0 +1,306 @@
+//// [tests/cases/compiler/coAndContraVariantInferences9.ts] ////
+
+=== coAndContraVariantInferences9.ts ===
+// https://github.com/microsoft/TypeScript/issues/59656
+
+interface Observable<T> {
+  pipe<A>(op: OperatorFunction<T, A>): Observable<A>;
+>pipe : <A>(op: OperatorFunction<T, A>) => Observable<A>
+>     : ^ ^^  ^^                      ^^^^^             
+>op : OperatorFunction<T, A>
+>   : ^^^^^^^^^^^^^^^^^^^^^^
+}
+interface UnaryFunction<T, R> {
+  (source: T): R;
+>source : T
+>       : ^
+}
+interface OperatorFunction<T, R>
+  extends UnaryFunction<Observable<T>, Observable<R>> {}
+interface MonoTypeOperatorFunction<T> extends OperatorFunction<T, T> {}
+declare function tap<T>(next: (value: T) => void): MonoTypeOperatorFunction<T>;
+>tap : <T>(next: (value: T) => void) => MonoTypeOperatorFunction<T>
+>    : ^ ^^    ^^                  ^^^^^                           
+>next : (value: T) => void
+>     : ^     ^^ ^^^^^    
+>value : T
+>      : ^
+
+declare const obs1: Observable<{
+>obs1 : Observable<{ prop?: string; }>
+>     : ^^^^^^^^^^^^^^^^^^^^      ^^^^
+
+  prop?: string;
+>prop : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+
+}>;
+function test1(): Observable<{}> {
+>test1 : () => Observable<{}>
+>      : ^^^^^^              
+
+  return obs1.pipe(tap((arg) => {}));
+>obs1.pipe(tap((arg) => {})) : Observable<{ prop?: string; }>
+>                            : ^^^^^^^^^^^^^^^^^^^^      ^^^^
+>obs1.pipe : <A>(op: OperatorFunction<{ prop?: string; }, A>) => Observable<A>
+>          : ^ ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
+>obs1 : Observable<{ prop?: string; }>
+>     : ^^^^^^^^^^^^^^^^^^^^      ^^^^
+>pipe : <A>(op: OperatorFunction<{ prop?: string; }, A>) => Observable<A>
+>     : ^ ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
+>tap((arg) => {}) : MonoTypeOperatorFunction<{ prop?: string; }>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
+>tap : <T>(next: (value: T) => void) => MonoTypeOperatorFunction<T>
+>    : ^ ^^    ^^                  ^^^^^                           
+>(arg) => {} : (arg: { prop?: string; }) => void
+>            : ^   ^^^^^^^^^^^      ^^^^^^^^^^^^
+>arg : { prop?: string; }
+>    : ^^^^^^^^^      ^^^
+}
+
+declare const obs2: Observable<{
+>obs2 : Observable<{ prop: string; }>
+>     : ^^^^^^^^^^^^^^^^^^^      ^^^^
+
+  prop: string;
+>prop : string
+>     : ^^^^^^
+
+}>;
+function test2(): Observable<{}> {
+>test2 : () => Observable<{}>
+>      : ^^^^^^              
+
+  return obs2.pipe(tap((arg) => {}));
+>obs2.pipe(tap((arg) => {})) : Observable<{ prop: string; }>
+>                            : ^^^^^^^^^^^^^^^^^^^      ^^^^
+>obs2.pipe : <A>(op: OperatorFunction<{ prop: string; }, A>) => Observable<A>
+>          : ^ ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
+>obs2 : Observable<{ prop: string; }>
+>     : ^^^^^^^^^^^^^^^^^^^      ^^^^
+>pipe : <A>(op: OperatorFunction<{ prop: string; }, A>) => Observable<A>
+>     : ^ ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
+>tap((arg) => {}) : MonoTypeOperatorFunction<{ prop: string; }>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
+>tap : <T>(next: (value: T) => void) => MonoTypeOperatorFunction<T>
+>    : ^ ^^    ^^                  ^^^^^                           
+>(arg) => {} : (arg: { prop: string; }) => void
+>            : ^   ^^^^^^^^^^      ^^^^^^^^^^^^
+>arg : { prop: string; }
+>    : ^^^^^^^^      ^^^
+}
+
+declare const obs3: Observable<{
+>obs3 : Observable<{ prop: string; prop2?: number; }>
+>     : ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^
+
+  prop: string;
+>prop : string
+>     : ^^^^^^
+
+  prop2?: number;
+>prop2 : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+
+}>;
+function test3(): Observable<{}> {
+>test3 : () => Observable<{}>
+>      : ^^^^^^              
+
+  return obs3.pipe(tap((arg) => {}));
+>obs3.pipe(tap((arg) => {})) : Observable<{ prop: string; prop2?: number; }>
+>                            : ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^
+>obs3.pipe : <A>(op: OperatorFunction<{ prop: string; prop2?: number; }, A>) => Observable<A>
+>          : ^ ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
+>obs3 : Observable<{ prop: string; prop2?: number; }>
+>     : ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^
+>pipe : <A>(op: OperatorFunction<{ prop: string; prop2?: number; }, A>) => Observable<A>
+>     : ^ ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
+>tap((arg) => {}) : MonoTypeOperatorFunction<{ prop: string; prop2?: number; }>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^
+>tap : <T>(next: (value: T) => void) => MonoTypeOperatorFunction<T>
+>    : ^ ^^    ^^                  ^^^^^                           
+>(arg) => {} : (arg: { prop: string; prop2?: number; }) => void
+>            : ^   ^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^
+>arg : { prop: string; prop2?: number; }
+>    : ^^^^^^^^      ^^^^^^^^^^      ^^^
+}
+
+declare const obs4: Observable<{
+>obs4 : Observable<{ prop?: string; prop2?: number; }>
+>     : ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^
+
+  prop?: string;
+>prop : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+
+  prop2?: number;
+>prop2 : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+
+}>;
+function test4(): Observable<{ prop?: string }> {
+>test4 : () => Observable<{ prop?: string; }>
+>      : ^^^^^^                              
+>prop : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+
+  return obs4.pipe(tap((arg) => {}));
+>obs4.pipe(tap((arg) => {})) : Observable<{ prop?: string; prop2?: number; }>
+>                            : ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^
+>obs4.pipe : <A>(op: OperatorFunction<{ prop?: string; prop2?: number; }, A>) => Observable<A>
+>          : ^ ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
+>obs4 : Observable<{ prop?: string; prop2?: number; }>
+>     : ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^
+>pipe : <A>(op: OperatorFunction<{ prop?: string; prop2?: number; }, A>) => Observable<A>
+>     : ^ ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
+>tap((arg) => {}) : MonoTypeOperatorFunction<{ prop?: string; prop2?: number; }>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^
+>tap : <T>(next: (value: T) => void) => MonoTypeOperatorFunction<T>
+>    : ^ ^^    ^^                  ^^^^^                           
+>(arg) => {} : (arg: { prop?: string; prop2?: number; }) => void
+>            : ^   ^^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^
+>arg : { prop?: string; prop2?: number; }
+>    : ^^^^^^^^^      ^^^^^^^^^^      ^^^
+}
+
+declare const obs5: Observable<{
+>obs5 : Observable<{ prop: string; prop2?: number; }>
+>     : ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^
+
+  prop: string;
+>prop : string
+>     : ^^^^^^
+
+  prop2?: number;
+>prop2 : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+
+}>;
+function test5(): Observable<{ prop: string }> {
+>test5 : () => Observable<{ prop: string; }>
+>      : ^^^^^^                             
+>prop : string
+>     : ^^^^^^
+
+  return obs5.pipe(tap((arg) => {}));
+>obs5.pipe(tap((arg) => {})) : Observable<{ prop: string; prop2?: number; }>
+>                            : ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^
+>obs5.pipe : <A>(op: OperatorFunction<{ prop: string; prop2?: number; }, A>) => Observable<A>
+>          : ^ ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
+>obs5 : Observable<{ prop: string; prop2?: number; }>
+>     : ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^
+>pipe : <A>(op: OperatorFunction<{ prop: string; prop2?: number; }, A>) => Observable<A>
+>     : ^ ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
+>tap((arg) => {}) : MonoTypeOperatorFunction<{ prop: string; prop2?: number; }>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^
+>tap : <T>(next: (value: T) => void) => MonoTypeOperatorFunction<T>
+>    : ^ ^^    ^^                  ^^^^^                           
+>(arg) => {} : (arg: { prop: string; prop2?: number; }) => void
+>            : ^   ^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^
+>arg : { prop: string; prop2?: number; }
+>    : ^^^^^^^^      ^^^^^^^^^^      ^^^
+}
+
+declare const obs6: Observable<{
+>obs6 : Observable<{ prop: string; prop2?: number; }>
+>     : ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^
+
+  prop: string;
+>prop : string
+>     : ^^^^^^
+
+  prop2?: number;
+>prop2 : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+
+}>;
+function test6(): Observable<{ prop2?: number }> {
+>test6 : () => Observable<{ prop2?: number; }>
+>      : ^^^^^^                               
+>prop2 : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+
+  return obs6.pipe(tap((arg) => {}));
+>obs6.pipe(tap((arg) => {})) : Observable<{ prop: string; prop2?: number; }>
+>                            : ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^
+>obs6.pipe : <A>(op: OperatorFunction<{ prop: string; prop2?: number; }, A>) => Observable<A>
+>          : ^ ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
+>obs6 : Observable<{ prop: string; prop2?: number; }>
+>     : ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^
+>pipe : <A>(op: OperatorFunction<{ prop: string; prop2?: number; }, A>) => Observable<A>
+>     : ^ ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
+>tap((arg) => {}) : MonoTypeOperatorFunction<{ prop: string; prop2?: number; }>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^
+>tap : <T>(next: (value: T) => void) => MonoTypeOperatorFunction<T>
+>    : ^ ^^    ^^                  ^^^^^                           
+>(arg) => {} : (arg: { prop: string; prop2?: number; }) => void
+>            : ^   ^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^
+>arg : { prop: string; prop2?: number; }
+>    : ^^^^^^^^      ^^^^^^^^^^      ^^^
+}
+
+declare const obs7: Observable<{
+>obs7 : Observable<{ prop?: string; }>
+>     : ^^^^^^^^^^^^^^^^^^^^      ^^^^
+
+  prop?: string;
+>prop : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+
+}>;
+function test7(): Observable<any> {
+>test7 : () => Observable<any>
+>      : ^^^^^^               
+
+  return obs7.pipe(tap((arg) => {}));
+>obs7.pipe(tap((arg) => {})) : Observable<{ prop?: string; }>
+>                            : ^^^^^^^^^^^^^^^^^^^^      ^^^^
+>obs7.pipe : <A>(op: OperatorFunction<{ prop?: string; }, A>) => Observable<A>
+>          : ^ ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
+>obs7 : Observable<{ prop?: string; }>
+>     : ^^^^^^^^^^^^^^^^^^^^      ^^^^
+>pipe : <A>(op: OperatorFunction<{ prop?: string; }, A>) => Observable<A>
+>     : ^ ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
+>tap((arg) => {}) : MonoTypeOperatorFunction<{ prop?: string; }>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
+>tap : <T>(next: (value: T) => void) => MonoTypeOperatorFunction<T>
+>    : ^ ^^    ^^                  ^^^^^                           
+>(arg) => {} : (arg: { prop?: string; }) => void
+>            : ^   ^^^^^^^^^^^      ^^^^^^^^^^^^
+>arg : { prop?: string; }
+>    : ^^^^^^^^^      ^^^
+}
+
+declare const obs8: Observable<{
+>obs8 : Observable<{ prop?: string; }>
+>     : ^^^^^^^^^^^^^^^^^^^^      ^^^^
+
+  prop?: string;
+>prop : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+
+}>;
+function test8(): Observable<unknown> {
+>test8 : () => Observable<unknown>
+>      : ^^^^^^                   
+
+  return obs8.pipe(tap((arg) => {}));
+>obs8.pipe(tap((arg) => {})) : Observable<{ prop?: string; }>
+>                            : ^^^^^^^^^^^^^^^^^^^^      ^^^^
+>obs8.pipe : <A>(op: OperatorFunction<{ prop?: string; }, A>) => Observable<A>
+>          : ^ ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
+>obs8 : Observable<{ prop?: string; }>
+>     : ^^^^^^^^^^^^^^^^^^^^      ^^^^
+>pipe : <A>(op: OperatorFunction<{ prop?: string; }, A>) => Observable<A>
+>     : ^ ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
+>tap((arg) => {}) : MonoTypeOperatorFunction<{ prop?: string; }>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
+>tap : <T>(next: (value: T) => void) => MonoTypeOperatorFunction<T>
+>    : ^ ^^    ^^                  ^^^^^                           
+>(arg) => {} : (arg: { prop?: string; }) => void
+>            : ^   ^^^^^^^^^^^      ^^^^^^^^^^^^
+>arg : { prop?: string; }
+>    : ^^^^^^^^^      ^^^
+}
+
