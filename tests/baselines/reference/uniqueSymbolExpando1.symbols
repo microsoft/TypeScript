@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/uniqueSymbolExpando1.ts] ////
+
+=== uniqueSymbolExpando1.ts ===
+// https://github.com/microsoft/TypeScript/issues/61214
+
+const TestSymbol: unique symbol = Symbol();
+>TestSymbol : Symbol(TestSymbol, Decl(uniqueSymbolExpando1.ts, 2, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+const c = () => {
+>c : Symbol(c, Decl(uniqueSymbolExpando1.ts, 4, 5), Decl(uniqueSymbolExpando1.ts, 6, 2), Decl(uniqueSymbolExpando1.ts, 7, 26))
+
+  return "Hello, world!";
+};
+c["testProp"] = ["Hello"];
+>c : Symbol(c, Decl(uniqueSymbolExpando1.ts, 4, 5), Decl(uniqueSymbolExpando1.ts, 6, 2), Decl(uniqueSymbolExpando1.ts, 7, 26))
+>"testProp" : Symbol(c["testProp"], Decl(uniqueSymbolExpando1.ts, 6, 2))
+
+c[TestSymbol] = ["Hello"];
+>c : Symbol(c, Decl(uniqueSymbolExpando1.ts, 4, 5), Decl(uniqueSymbolExpando1.ts, 6, 2), Decl(uniqueSymbolExpando1.ts, 7, 26))
+>TestSymbol : Symbol(TestSymbol, Decl(uniqueSymbolExpando1.ts, 2, 5))
+
