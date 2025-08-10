@@ -1,4 +1,4 @@
-classWithStaticFieldInParameterBindingPattern.2.ts(3,20): error TS2373: Parameter '{ [class extends C { static x = 1 }.x]: b = "" }' cannot reference identifier 'C' declared after it.
+classWithStaticFieldInParameterBindingPattern.2.ts(3,20): error TS2373: Parameter 'b' cannot reference identifier 'C' declared after it.
 classWithStaticFieldInParameterBindingPattern.2.ts(6,57): error TS2373: Parameter 'd' cannot reference identifier 'x' declared after it.
 
 
@@ -7,7 +7,7 @@ classWithStaticFieldInParameterBindingPattern.2.ts(6,57): error TS2373: Paramete
     class C {}
     (({ [class extends C { static x = 1 }.x]: b = "" }) => { var C; })();
                        ~
-!!! error TS2373: Parameter '{ [class extends C { static x = 1 }.x]: b = "" }' cannot reference identifier 'C' declared after it.
+!!! error TS2373: Parameter 'b' cannot reference identifier 'C' declared after it.
     
     const x = "";
     (({ [class extends C { static x = 1 }.x]: b = "" }, d = x) => { var x; })();
