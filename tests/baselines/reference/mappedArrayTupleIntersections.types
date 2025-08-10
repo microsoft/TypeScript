@@ -1,5 +1,9 @@
 //// [tests/cases/compiler/mappedArrayTupleIntersections.ts] ////
 
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 1,000 -> 2,500
+
 === mappedArrayTupleIntersections.ts ===
 type Box<T> = { value: T };
 >Box : Box<T>
@@ -49,4 +53,65 @@ type Hmm<T extends any[]> = T extends number[] ?
 type X = Hmm<[3, 4, 5]>;
 >X : [1, 1, 1]
 >  : ^^^^^^^^^
+
+type MustHaveFooBar<T extends { foo: unknown; bar: unknown }> = T;
+>MustHaveFooBar : T
+>               : ^
+>foo : unknown
+>    : ^^^^^^^
+>bar : unknown
+>    : ^^^^^^^
+
+type Hmm2<T> = T extends { foo: string }[]
+>Hmm2 : Hmm2<T>
+>     : ^^^^^^^
+>foo : string
+>    : ^^^^^^
+
+  ? T extends { bar: number }[]
+>bar : number
+>    : ^^^^^^
+
+    ? MustBeArray<{ [I in keyof T]: MustHaveFooBar<T[I]> }>
+    : never
+  : never;
+
+type Y = Hmm2<[{ foo: string; bar: number }]>;
+>Y : [{ foo: string; bar: number; }]
+>  : ^^^^^^^^      ^^^^^^^      ^^^^
+>foo : string
+>    : ^^^^^^
+>bar : number
+>    : ^^^^^^
+
+type MustHaveFoo<T extends { foo: unknown }> = T;
+>MustHaveFoo : T
+>            : ^
+>foo : unknown
+>    : ^^^^^^^
+
+type Hmm3<T extends { foo: string }[]> = T extends { bar: string }
+>Hmm3 : Hmm3<T>
+>     : ^^^^^^^
+>foo : string
+>    : ^^^^^^
+>bar : string
+>    : ^^^^^^
+
+  ? MustBeArray<{ [I in keyof T]: MustHaveFoo<T[I]> }>
+  : never;
+
+type Z1 = Hmm3<[{ foo: string }]>;
+>Z1 : never
+>   : ^^^^^
+>foo : string
+>    : ^^^^^^
+
+type Z2 = Hmm3<[{ foo: string }] & { bar: string }>;
+>Z2 : { [x: number]: { foo: string; }; 0: { foo: string; }; length: 1; toString: () => string; toLocaleString: () => string; pop: () => { foo: string; } | undefined; push: (...items: { foo: string; }[]) => number; concat: { (...items: ConcatArray<{ foo: string; }>[]): { foo: string; }[]; (...items: ({ foo: string; } | ConcatArray<{ foo: string; }>)[]): { foo: string; }[]; }; join: (separator?: string) => string; reverse: () => { foo: string; }[]; shift: () => { foo: string; } | undefined; slice: (start?: number, end?: number) => { foo: string; }[]; sort: (compareFn?: ((a: { foo: string; }, b: { foo: string; }) => number) | undefined) => [{ foo: string; }] & { bar: string; }; splice: { (start: number, deleteCount?: number): { foo: string; }[]; (start: number, deleteCount: number, ...items: { foo: string; }[]): { foo: string; }[]; }; unshift: (...items: { foo: string; }[]) => number; indexOf: (searchElement: { foo: string; }, fromIndex?: number) => number; lastIndexOf: (searchElement: { foo: string; }, fromIndex?: number) => number; every: { <S extends { foo: string; }>(predicate: (value: { foo: string; }, index: number, array: { foo: string; }[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: { foo: string; }, index: number, array: { foo: string; }[]) => unknown, thisArg?: any): boolean; }; some: (predicate: (value: { foo: string; }, index: number, array: { foo: string; }[]) => unknown, thisArg?: any) => boolean; forEach: (callbackfn: (value: { foo: string; }, index: number, array: { foo: string; }[]) => void, thisArg?: any) => void; map: <U>(callbackfn: (value: { foo: string; }, index: number, array: { foo: string; }[]) => U, thisArg?: any) => U[]; filter: { <S extends { foo: string; }>(predicate: (value: { foo: string; }, index: number, array: { foo: string; }[]) => value is S, thisArg?: any): S[]; (predicate: (value: { foo: string; }, index: number, array: { foo: string; }[]) => unknown, thisArg?: any): { foo: string; }[]; }; reduce: { (callbackfn: (previousValue: { foo: string; }, currentValue: { foo: string; }, currentIndex: number, array: { foo: string; }[]) => { foo: string; }): { foo: string; }; (callbackfn: (previousValue: { foo: string; }, currentValue: { foo: string; }, currentIndex: number, array: { foo: string; }[]) => { foo: string; }, initialValue: { foo: string; }): { foo: string; }; <U>(callbackfn: (previousValue: U, currentValue: { foo: string; }, currentIndex: number, array: { foo: string; }[]) => U, initialValue: U): U; }; reduceRight: { (callbackfn: (previousValue: { foo: string; }, currentValue: { foo: string; }, currentIndex: number, array: { foo: string; }[]) => { foo: string; }): { foo: string; }; (callbackfn: (previousValue: { foo: string; }, currentValue: { foo: string; }, currentIndex: number, array: { foo: string; }[]) => { foo: string; }, initialValue: { foo: string; }): { foo: string; }; <U>(callbackfn: (previousValue: U, currentValue: { foo: string; }, currentIndex: number, array: { foo: string; }[]) => U, initialValue: U): U; }; bar: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^     ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^         ^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^      ^^   ^^^      ^^^^^^^^^^^^      ^^^^^^^^^^^^^^         ^^^^^ ^^^^^^^^^      ^^^^^ ^^^^^^^^^      ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^     ^^      ^^           ^^^      ^^^^^^^^^^      ^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^      ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^             ^^^^^^^^^      ^^^^^         ^^^      ^^^^^      ^^^^^^^^^^^^^^^^             ^^^^^^^^^      ^^^^^         ^^^      ^^^^^      ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^      ^^^^^         ^^^     ^^^^^^^^^      ^^^^^     ^^      ^^     ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^^      ^^^^^     ^^      ^^     ^^^^^^^^^      ^^^^^^^^^^       ^^       ^^^   ^^^       ^^^^^^^^^^^^         ^^^     ^^^^^^^^^      ^^^^^     ^^      ^^     ^^^^^^^^^      ^^^^^^^^^^       ^^       ^^^   ^^^^^       ^^^^^^^^^^^^          ^^^     ^^^^^^^^^      ^^^^^     ^^      ^^     ^^^^^^^^^      ^^^^^^^^^^    ^^       ^^^   ^^^^^    ^^^^^^^^ ^^          ^^^     ^^^^^^^^^      ^^^^^     ^^      ^^     ^^^^^^^^^      ^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^      ^^^^^         ^^^     ^^^^^^^^^      ^^^^^     ^^      ^^     ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^      ^^^^^     ^^      ^^     ^^^^^^^^^      ^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^^^      ^^^^^            ^^^^^^^^^      ^^^^^            ^^      ^^     ^^^^^^^^^      ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^^^          ^^^             ^^^^^^^^^      ^^^^^            ^^^^^^^^^      ^^^^^            ^^      ^^     ^^^^^^^^^      ^^^^^^^^^^^^^^^^^      ^^^^^            ^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^^^ ^^          ^^^             ^^^^^            ^^^^^^^^^      ^^^^^            ^^      ^^     ^^^^^^^^^      ^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^^^      ^^^^^            ^^^^^^^^^      ^^^^^            ^^      ^^     ^^^^^^^^^      ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^^^          ^^^             ^^^^^^^^^      ^^^^^            ^^^^^^^^^      ^^^^^            ^^      ^^     ^^^^^^^^^      ^^^^^^^^^^^^^^^^^      ^^^^^            ^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^^^ ^^          ^^^             ^^^^^            ^^^^^^^^^      ^^^^^            ^^      ^^     ^^^^^^^^^      ^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^      ^^^
+>foo : string
+>    : ^^^^^^
+>bar : string
+>    : ^^^^^^
 
