@@ -107,28 +107,24 @@ exports.CKind = CKind;
 
 
 //// [declarationNoDanglingGenerics.d.ts]
-declare const AKind_base: {
+export declare class AKind extends ({} as {
     new (): {
         readonly kind: "A";
     };
     readonly THE_KIND: "A";
-};
-export declare class AKind extends AKind_base {
+}) {
 }
-declare const BKind_base: {
+export declare class BKind extends ({} as {
     new (): {
         readonly kind: "B";
     };
     readonly THE_KIND: "B";
-};
-export declare class BKind extends BKind_base {
+}) {
 }
-declare const CKind_base: {
+export declare class CKind extends ({} as {
     new (): {
         readonly kind: "C";
     };
     readonly THE_KIND: "C";
-};
-export declare class CKind extends CKind_base {
+}) {
 }
-export {};
