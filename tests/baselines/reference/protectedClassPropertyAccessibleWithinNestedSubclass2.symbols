@@ -1,0 +1,72 @@
+//// [tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass2.ts] ////
+
+=== protectedClassPropertyAccessibleWithinNestedSubclass2.ts ===
+// https://github.com/microsoft/TypeScript/issues/59989
+
+export class Foo {
+>Foo : Symbol(Foo, Decl(protectedClassPropertyAccessibleWithinNestedSubclass2.ts, 0, 0))
+
+  protected thisIsProtected = 1;
+>thisIsProtected : Symbol(Foo.thisIsProtected, Decl(protectedClassPropertyAccessibleWithinNestedSubclass2.ts, 2, 18))
+
+  private thisIsPrivate = 1;
+>thisIsPrivate : Symbol(Foo.thisIsPrivate, Decl(protectedClassPropertyAccessibleWithinNestedSubclass2.ts, 3, 32))
+
+  bar(): Foo {
+>bar : Symbol(Foo.bar, Decl(protectedClassPropertyAccessibleWithinNestedSubclass2.ts, 4, 28))
+>Foo : Symbol(Foo, Decl(protectedClassPropertyAccessibleWithinNestedSubclass2.ts, 0, 0))
+
+    const that = this;
+>that : Symbol(that, Decl(protectedClassPropertyAccessibleWithinNestedSubclass2.ts, 7, 9))
+>this : Symbol(Foo, Decl(protectedClassPropertyAccessibleWithinNestedSubclass2.ts, 0, 0))
+
+    return new (class extends Foo {
+>Foo : Symbol(Foo, Decl(protectedClassPropertyAccessibleWithinNestedSubclass2.ts, 0, 0))
+
+      something() {
+>something : Symbol((Anonymous class).something, Decl(protectedClassPropertyAccessibleWithinNestedSubclass2.ts, 9, 35))
+
+        return that.thisIsPrivate + that.thisIsProtected; // ok
+>that.thisIsPrivate : Symbol(Foo.thisIsPrivate, Decl(protectedClassPropertyAccessibleWithinNestedSubclass2.ts, 3, 32))
+>that : Symbol(that, Decl(protectedClassPropertyAccessibleWithinNestedSubclass2.ts, 7, 9))
+>thisIsPrivate : Symbol(Foo.thisIsPrivate, Decl(protectedClassPropertyAccessibleWithinNestedSubclass2.ts, 3, 32))
+>that.thisIsProtected : Symbol(Foo.thisIsProtected, Decl(protectedClassPropertyAccessibleWithinNestedSubclass2.ts, 2, 18))
+>that : Symbol(that, Decl(protectedClassPropertyAccessibleWithinNestedSubclass2.ts, 7, 9))
+>thisIsProtected : Symbol(Foo.thisIsProtected, Decl(protectedClassPropertyAccessibleWithinNestedSubclass2.ts, 2, 18))
+      }
+    })();
+  }
+}
+
+export class Foo2 {
+>Foo2 : Symbol(Foo2, Decl(protectedClassPropertyAccessibleWithinNestedSubclass2.ts, 15, 1))
+
+  protected thisIsProtected = 1;
+>thisIsProtected : Symbol(Foo2.thisIsProtected, Decl(protectedClassPropertyAccessibleWithinNestedSubclass2.ts, 17, 19))
+
+  private thisIsPrivate = 1;
+>thisIsPrivate : Symbol(Foo2.thisIsPrivate, Decl(protectedClassPropertyAccessibleWithinNestedSubclass2.ts, 18, 32))
+
+  bar() {
+>bar : Symbol(Foo2.bar, Decl(protectedClassPropertyAccessibleWithinNestedSubclass2.ts, 19, 28))
+
+    const that = this;
+>that : Symbol(that, Decl(protectedClassPropertyAccessibleWithinNestedSubclass2.ts, 22, 9))
+>this : Symbol(Foo2, Decl(protectedClassPropertyAccessibleWithinNestedSubclass2.ts, 15, 1))
+
+    return new (class {
+      something() {
+>something : Symbol((Anonymous class).something, Decl(protectedClassPropertyAccessibleWithinNestedSubclass2.ts, 24, 23))
+
+        return that.thisIsPrivate + that.thisIsProtected; // ok
+>that.thisIsPrivate : Symbol(Foo2.thisIsPrivate, Decl(protectedClassPropertyAccessibleWithinNestedSubclass2.ts, 18, 32))
+>that : Symbol(that, Decl(protectedClassPropertyAccessibleWithinNestedSubclass2.ts, 22, 9))
+>thisIsPrivate : Symbol(Foo2.thisIsPrivate, Decl(protectedClassPropertyAccessibleWithinNestedSubclass2.ts, 18, 32))
+>that.thisIsProtected : Symbol(Foo2.thisIsProtected, Decl(protectedClassPropertyAccessibleWithinNestedSubclass2.ts, 17, 19))
+>that : Symbol(that, Decl(protectedClassPropertyAccessibleWithinNestedSubclass2.ts, 22, 9))
+>thisIsProtected : Symbol(Foo2.thisIsProtected, Decl(protectedClassPropertyAccessibleWithinNestedSubclass2.ts, 17, 19))
+      }
+    })();
+  }
+}
+
