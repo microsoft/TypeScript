@@ -297,14 +297,14 @@ interface String {
     concat(...strings: string[]): string;
 
     /**
-      * Returns the position of the first occurrence of a substring. 
+      * Returns the position of the first occurrence of a substring, or -1 if it is not present.
       * @param searchString The substring to search for in the string
       * @param position The index at which to begin searching the String object. If omitted, search starts at the beginning of the string.
       */
     indexOf(searchString: string, position?: number): number;
 
     /**
-      * Returns the last occurrence of a substring in the string.
+      * Returns the last occurrence of a substring in the string, or -1 if it is not present.
       * @param searchString The substring to search for.
       * @param position The index at which to begin searching. If omitted, the search begins at the end of the string.
       */
@@ -1143,7 +1143,8 @@ declare var Array: {
     <T>(...items: T[]): T[];
     isArray(arg: any): boolean;
     prototype: Array<any>;
-}
+}
+
 
 //// [1.0lib-noErrors.js]
 /* *****************************************************************************
