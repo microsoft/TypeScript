@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/nonGenericIndexedAccessInConditionalTrueBranch1.ts] ////
+
+=== nonGenericIndexedAccessInConditionalTrueBranch1.ts ===
+// https://github.com/microsoft/TypeScript/issues/57109
+
+type A = {
+>A : A
+>  : ^
+
+  k: symbol;
+>k : symbol
+>  : ^^^^^^
+
+};
+
+type B = "k" extends keyof A ? A["k"] : never;
+>B : symbol
+>  : ^^^^^^
+
+type C = {
+>C : C
+>  : ^
+
+  k: symbol;
+>k : symbol
+>  : ^^^^^^
+
+  other: boolean;
+>other : boolean
+>      : ^^^^^^^
+
+};
+
+type D = "k" extends keyof C ? C["k"] : never;
+>D : symbol
+>  : ^^^^^^
+
+type E = "k" extends keyof C ? C["k" | "other"] : never;
+>E : boolean | symbol
+>  : ^^^^^^^^^^^^^^^^
+
