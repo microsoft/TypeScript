@@ -1,0 +1,87 @@
+//// [tests/cases/compiler/contextualSignatureInstantiation5.ts] ////
+
+=== contextualSignatureInstantiation5.ts ===
+// https://github.com/microsoft/TypeScript/issues/60552
+
+declare function fooooooo<
+>fooooooo : Symbol(fooooooo, Decl(contextualSignatureInstantiation5.ts, 0, 0))
+
+  T,
+>T : Symbol(T, Decl(contextualSignatureInstantiation5.ts, 2, 26))
+
+  Result extends ArrayLike<unknown>,
+>Result : Symbol(Result, Decl(contextualSignatureInstantiation5.ts, 3, 4))
+>ArrayLike : Symbol(ArrayLike, Decl(lib.es5.d.ts, --, --))
+
+  Extra extends readonly unknown[],
+>Extra : Symbol(Extra, Decl(contextualSignatureInstantiation5.ts, 4, 36))
+
+>(
+  input: T,
+>input : Symbol(input, Decl(contextualSignatureInstantiation5.ts, 6, 2))
+>T : Symbol(T, Decl(contextualSignatureInstantiation5.ts, 2, 26))
+
+  callback: (input: T, prev: Result, ...extra: Extra) => Result,
+>callback : Symbol(callback, Decl(contextualSignatureInstantiation5.ts, 7, 11))
+>input : Symbol(input, Decl(contextualSignatureInstantiation5.ts, 8, 13))
+>T : Symbol(T, Decl(contextualSignatureInstantiation5.ts, 2, 26))
+>prev : Symbol(prev, Decl(contextualSignatureInstantiation5.ts, 8, 22))
+>Result : Symbol(Result, Decl(contextualSignatureInstantiation5.ts, 3, 4))
+>extra : Symbol(extra, Decl(contextualSignatureInstantiation5.ts, 8, 36))
+>Extra : Symbol(Extra, Decl(contextualSignatureInstantiation5.ts, 4, 36))
+>Result : Symbol(Result, Decl(contextualSignatureInstantiation5.ts, 3, 4))
+
+  extra: Extra,
+>extra : Symbol(extra, Decl(contextualSignatureInstantiation5.ts, 8, 64))
+>Extra : Symbol(Extra, Decl(contextualSignatureInstantiation5.ts, 4, 36))
+
+): Result;
+>Result : Symbol(Result, Decl(contextualSignatureInstantiation5.ts, 3, 4))
+
+declare function baaaaaar<T, Result extends ArrayLike<unknown>>(
+>baaaaaar : Symbol(baaaaaar, Decl(contextualSignatureInstantiation5.ts, 10, 10))
+>T : Symbol(T, Decl(contextualSignatureInstantiation5.ts, 12, 26))
+>Result : Symbol(Result, Decl(contextualSignatureInstantiation5.ts, 12, 28))
+>ArrayLike : Symbol(ArrayLike, Decl(lib.es5.d.ts, --, --))
+
+  input: T,
+>input : Symbol(input, Decl(contextualSignatureInstantiation5.ts, 12, 64))
+>T : Symbol(T, Decl(contextualSignatureInstantiation5.ts, 12, 26))
+
+  callback: (input: T, prev: Result) => Result,
+>callback : Symbol(callback, Decl(contextualSignatureInstantiation5.ts, 13, 11))
+>input : Symbol(input, Decl(contextualSignatureInstantiation5.ts, 14, 13))
+>T : Symbol(T, Decl(contextualSignatureInstantiation5.ts, 12, 26))
+>prev : Symbol(prev, Decl(contextualSignatureInstantiation5.ts, 14, 22))
+>Result : Symbol(Result, Decl(contextualSignatureInstantiation5.ts, 12, 28))
+>Result : Symbol(Result, Decl(contextualSignatureInstantiation5.ts, 12, 28))
+
+): Result;
+>Result : Symbol(Result, Decl(contextualSignatureInstantiation5.ts, 12, 28))
+
+declare function callback<T>(input: T, prev: string[]): string[];
+>callback : Symbol(callback, Decl(contextualSignatureInstantiation5.ts, 15, 10))
+>T : Symbol(T, Decl(contextualSignatureInstantiation5.ts, 17, 26))
+>input : Symbol(input, Decl(contextualSignatureInstantiation5.ts, 17, 29))
+>T : Symbol(T, Decl(contextualSignatureInstantiation5.ts, 17, 26))
+>prev : Symbol(prev, Decl(contextualSignatureInstantiation5.ts, 17, 38))
+
+export function example<T>(input: T) {
+>example : Symbol(example, Decl(contextualSignatureInstantiation5.ts, 17, 65))
+>T : Symbol(T, Decl(contextualSignatureInstantiation5.ts, 19, 24))
+>input : Symbol(input, Decl(contextualSignatureInstantiation5.ts, 19, 27))
+>T : Symbol(T, Decl(contextualSignatureInstantiation5.ts, 19, 24))
+
+  const result1 = fooooooo(input, callback, []); // ok
+>result1 : Symbol(result1, Decl(contextualSignatureInstantiation5.ts, 20, 7))
+>fooooooo : Symbol(fooooooo, Decl(contextualSignatureInstantiation5.ts, 0, 0))
+>input : Symbol(input, Decl(contextualSignatureInstantiation5.ts, 19, 27))
+>callback : Symbol(callback, Decl(contextualSignatureInstantiation5.ts, 15, 10))
+
+  const result2 = baaaaaar(input, callback); // ok
+>result2 : Symbol(result2, Decl(contextualSignatureInstantiation5.ts, 21, 7))
+>baaaaaar : Symbol(baaaaaar, Decl(contextualSignatureInstantiation5.ts, 10, 10))
+>input : Symbol(input, Decl(contextualSignatureInstantiation5.ts, 19, 27))
+>callback : Symbol(callback, Decl(contextualSignatureInstantiation5.ts, 15, 10))
+}
+
