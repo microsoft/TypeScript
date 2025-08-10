@@ -26,3 +26,10 @@ const breaks = convert(
 breaks.state.a
 breaks.state.z
 breaks.foo()
+
+declare function inner<T1, t2>(t1: T1, t2: t2): T1 | t2;
+declare function outer<T1, T2>(m: T1 | T2): [T1, T2];
+
+const outerResult = outer(
+    inner({ a: 12 }, { foo() { return true } })
+);
