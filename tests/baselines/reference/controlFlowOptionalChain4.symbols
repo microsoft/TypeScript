@@ -1,0 +1,102 @@
+//// [tests/cases/conformance/controlFlow/controlFlowOptionalChain4.ts] ////
+
+=== controlFlowOptionalChain4.ts ===
+declare class Base {
+>Base : Symbol(Base, Decl(controlFlowOptionalChain4.ts, 0, 0))
+
+  IsA(): this is A;
+>IsA : Symbol(Base.IsA, Decl(controlFlowOptionalChain4.ts, 0, 20))
+>A : Symbol(A, Decl(controlFlowOptionalChain4.ts, 3, 1))
+
+  IsB(): this is B;
+>IsB : Symbol(Base.IsB, Decl(controlFlowOptionalChain4.ts, 1, 19))
+>B : Symbol(B, Decl(controlFlowOptionalChain4.ts, 6, 1))
+}
+declare class A extends Base {
+>A : Symbol(A, Decl(controlFlowOptionalChain4.ts, 3, 1))
+>Base : Symbol(Base, Decl(controlFlowOptionalChain4.ts, 0, 0))
+
+  _a: true;
+>_a : Symbol(A._a, Decl(controlFlowOptionalChain4.ts, 4, 30))
+}
+declare class B extends Base {
+>B : Symbol(B, Decl(controlFlowOptionalChain4.ts, 6, 1))
+>Base : Symbol(Base, Decl(controlFlowOptionalChain4.ts, 0, 0))
+
+  _b: true;
+>_b : Symbol(B._b, Decl(controlFlowOptionalChain4.ts, 7, 30))
+}
+
+declare const obj: A | B | undefined;
+>obj : Symbol(obj, Decl(controlFlowOptionalChain4.ts, 11, 13))
+>A : Symbol(A, Decl(controlFlowOptionalChain4.ts, 3, 1))
+>B : Symbol(B, Decl(controlFlowOptionalChain4.ts, 6, 1))
+
+function test1() {
+>test1 : Symbol(test1, Decl(controlFlowOptionalChain4.ts, 11, 37))
+
+  if (!obj?.IsA()) {
+>obj?.IsA : Symbol(Base.IsA, Decl(controlFlowOptionalChain4.ts, 0, 20), Decl(controlFlowOptionalChain4.ts, 0, 20))
+>obj : Symbol(obj, Decl(controlFlowOptionalChain4.ts, 11, 13))
+>IsA : Symbol(Base.IsA, Decl(controlFlowOptionalChain4.ts, 0, 20), Decl(controlFlowOptionalChain4.ts, 0, 20))
+
+    obj; // B | undefined
+>obj : Symbol(obj, Decl(controlFlowOptionalChain4.ts, 11, 13))
+
+    return;
+  }
+  obj; // A
+>obj : Symbol(obj, Decl(controlFlowOptionalChain4.ts, 11, 13))
+}
+
+function test2() {
+>test2 : Symbol(test2, Decl(controlFlowOptionalChain4.ts, 19, 1))
+
+  if (obj?.IsA() === false) {
+>obj?.IsA : Symbol(Base.IsA, Decl(controlFlowOptionalChain4.ts, 0, 20), Decl(controlFlowOptionalChain4.ts, 0, 20))
+>obj : Symbol(obj, Decl(controlFlowOptionalChain4.ts, 11, 13))
+>IsA : Symbol(Base.IsA, Decl(controlFlowOptionalChain4.ts, 0, 20), Decl(controlFlowOptionalChain4.ts, 0, 20))
+
+    obj; // B
+>obj : Symbol(obj, Decl(controlFlowOptionalChain4.ts, 11, 13))
+
+    return;
+  }
+  obj; // A | undefined
+>obj : Symbol(obj, Decl(controlFlowOptionalChain4.ts, 11, 13))
+}
+
+function test3() {
+>test3 : Symbol(test3, Decl(controlFlowOptionalChain4.ts, 27, 1))
+
+  if (obj?.IsA()) {
+>obj?.IsA : Symbol(Base.IsA, Decl(controlFlowOptionalChain4.ts, 0, 20), Decl(controlFlowOptionalChain4.ts, 0, 20))
+>obj : Symbol(obj, Decl(controlFlowOptionalChain4.ts, 11, 13))
+>IsA : Symbol(Base.IsA, Decl(controlFlowOptionalChain4.ts, 0, 20), Decl(controlFlowOptionalChain4.ts, 0, 20))
+
+    obj; // A
+>obj : Symbol(obj, Decl(controlFlowOptionalChain4.ts, 11, 13))
+
+    return;
+  }
+  obj; // B | undefined
+>obj : Symbol(obj, Decl(controlFlowOptionalChain4.ts, 11, 13))
+}
+
+function test4() {
+>test4 : Symbol(test4, Decl(controlFlowOptionalChain4.ts, 35, 1))
+
+  if (obj?.IsA() === true) {
+>obj?.IsA : Symbol(Base.IsA, Decl(controlFlowOptionalChain4.ts, 0, 20), Decl(controlFlowOptionalChain4.ts, 0, 20))
+>obj : Symbol(obj, Decl(controlFlowOptionalChain4.ts, 11, 13))
+>IsA : Symbol(Base.IsA, Decl(controlFlowOptionalChain4.ts, 0, 20), Decl(controlFlowOptionalChain4.ts, 0, 20))
+
+    obj; // A
+>obj : Symbol(obj, Decl(controlFlowOptionalChain4.ts, 11, 13))
+
+    return;
+  }
+  obj; // B | undefined
+>obj : Symbol(obj, Decl(controlFlowOptionalChain4.ts, 11, 13))
+}
+
