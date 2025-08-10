@@ -174,6 +174,16 @@ declare const g3: {
 type T50<U extends string> = typeof g3<U>;  // (a: U) => U
 type T51<U extends number> = typeof g3<U, any>;  // (b: U) => U
 
+// repro #47607#issuecomment-1331744280
+
+type DivElement = { type: 'div' }
+interface ElementMap { div: DivElement }
+
+declare function foo<T extends keyof ElementMap>(arg: T): ElementMap[T];
+declare function foo<T extends DivElement>(arg: T): T;
+
+type DivFromMap = typeof foo<"div">;
+
 
 //// [instantiationExpressions.js]
 "use strict";
@@ -382,3 +392,12 @@ declare const g3: {
 };
 type T50<U extends string> = typeof g3<U>;
 type T51<U extends number> = typeof g3<U, any>;
+type DivElement = {
+    type: 'div';
+};
+interface ElementMap {
+    div: DivElement;
+}
+declare function foo<T extends keyof ElementMap>(arg: T): ElementMap[T];
+declare function foo<T extends DivElement>(arg: T): T;
+type DivFromMap = typeof foo<"div">;
