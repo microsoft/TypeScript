@@ -1,0 +1,98 @@
+//// [tests/cases/compiler/mappedTypeGenericIndexedAccess2.ts] ////
+
+=== mappedTypeGenericIndexedAccess2.ts ===
+// https://github.com/microsoft/TypeScript/issues/60675
+
+type EventPayloads = {
+>EventPayloads : Symbol(EventPayloads, Decl(mappedTypeGenericIndexedAccess2.ts, 0, 0))
+
+  completeSprint: {
+>completeSprint : Symbol(completeSprint, Decl(mappedTypeGenericIndexedAccess2.ts, 2, 22))
+
+    automationId: string;
+>automationId : Symbol(automationId, Decl(mappedTypeGenericIndexedAccess2.ts, 3, 19))
+
+    spaceId: string;
+>spaceId : Symbol(spaceId, Decl(mappedTypeGenericIndexedAccess2.ts, 4, 25))
+
+  };
+  sendMessage: {
+>sendMessage : Symbol(sendMessage, Decl(mappedTypeGenericIndexedAccess2.ts, 6, 4))
+
+    message: string;
+>message : Symbol(message, Decl(mappedTypeGenericIndexedAccess2.ts, 7, 16))
+
+  };
+};
+
+type CompletedEvent<T extends keyof EventPayloads> = {
+>CompletedEvent : Symbol(CompletedEvent, Decl(mappedTypeGenericIndexedAccess2.ts, 10, 2))
+>T : Symbol(T, Decl(mappedTypeGenericIndexedAccess2.ts, 12, 20))
+>EventPayloads : Symbol(EventPayloads, Decl(mappedTypeGenericIndexedAccess2.ts, 0, 0))
+
+  [E in T]: {
+>E : Symbol(E, Decl(mappedTypeGenericIndexedAccess2.ts, 13, 3))
+>T : Symbol(T, Decl(mappedTypeGenericIndexedAccess2.ts, 12, 20))
+
+    type: E;
+>type : Symbol(type, Decl(mappedTypeGenericIndexedAccess2.ts, 13, 13))
+>E : Symbol(E, Decl(mappedTypeGenericIndexedAccess2.ts, 13, 3))
+
+    payload: EventPayloads[E];
+>payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess2.ts, 14, 12))
+>EventPayloads : Symbol(EventPayloads, Decl(mappedTypeGenericIndexedAccess2.ts, 0, 0))
+>E : Symbol(E, Decl(mappedTypeGenericIndexedAccess2.ts, 13, 3))
+
+    appName: string;
+>appName : Symbol(appName, Decl(mappedTypeGenericIndexedAccess2.ts, 15, 30))
+
+  };
+}[T];
+>T : Symbol(T, Decl(mappedTypeGenericIndexedAccess2.ts, 12, 20))
+
+function overwriteAppName<T extends keyof EventPayloads>(
+>overwriteAppName : Symbol(overwriteAppName, Decl(mappedTypeGenericIndexedAccess2.ts, 18, 5))
+>T : Symbol(T, Decl(mappedTypeGenericIndexedAccess2.ts, 20, 26))
+>EventPayloads : Symbol(EventPayloads, Decl(mappedTypeGenericIndexedAccess2.ts, 0, 0))
+
+  scheduled: CompletedEvent<T>,
+>scheduled : Symbol(scheduled, Decl(mappedTypeGenericIndexedAccess2.ts, 20, 57))
+>CompletedEvent : Symbol(CompletedEvent, Decl(mappedTypeGenericIndexedAccess2.ts, 10, 2))
+>T : Symbol(T, Decl(mappedTypeGenericIndexedAccess2.ts, 20, 26))
+
+): CompletedEvent<T> {
+>CompletedEvent : Symbol(CompletedEvent, Decl(mappedTypeGenericIndexedAccess2.ts, 10, 2))
+>T : Symbol(T, Decl(mappedTypeGenericIndexedAccess2.ts, 20, 26))
+
+  const { appName, ...rest } = scheduled;
+>appName : Symbol(appName, Decl(mappedTypeGenericIndexedAccess2.ts, 23, 9))
+>rest : Symbol(rest, Decl(mappedTypeGenericIndexedAccess2.ts, 23, 18))
+>scheduled : Symbol(scheduled, Decl(mappedTypeGenericIndexedAccess2.ts, 20, 57))
+
+  scheduled.payload = rest.payload // ok
+>scheduled.payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess2.ts, 14, 12))
+>scheduled : Symbol(scheduled, Decl(mappedTypeGenericIndexedAccess2.ts, 20, 57))
+>payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess2.ts, 14, 12))
+>rest.payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess2.ts, 14, 12))
+>rest : Symbol(rest, Decl(mappedTypeGenericIndexedAccess2.ts, 23, 18))
+>payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess2.ts, 14, 12))
+
+  rest.payload = scheduled.payload // ok
+>rest.payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess2.ts, 14, 12))
+>rest : Symbol(rest, Decl(mappedTypeGenericIndexedAccess2.ts, 23, 18))
+>payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess2.ts, 14, 12))
+>scheduled.payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess2.ts, 14, 12))
+>scheduled : Symbol(scheduled, Decl(mappedTypeGenericIndexedAccess2.ts, 20, 57))
+>payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess2.ts, 14, 12))
+
+  // ok
+  return {
+    ...rest,
+>rest : Symbol(rest, Decl(mappedTypeGenericIndexedAccess2.ts, 23, 18))
+
+    appName: "test",
+>appName : Symbol(appName, Decl(mappedTypeGenericIndexedAccess2.ts, 30, 12))
+
+  };
+}
+
