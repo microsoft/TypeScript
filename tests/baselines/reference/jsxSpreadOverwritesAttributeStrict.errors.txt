@@ -56,3 +56,24 @@ file.tsx(22,23): error TS2783: 'd' is specified more than once, so this usage wi
 !!! error TS2783: 'd' is specified more than once, so this usage will be overwritten.
 !!! related TS2785 file.tsx:22:40: This spread always overwrites this property.
     
+    // https://github.com/microsoft/TypeScript/issues/60343
+    
+    function Component60343(props: any) {
+      return <div></div>;
+    }
+    
+    function Test60343({ shouldOverride }: { shouldOverride: boolean }) {
+      return (
+        <Component60343
+          a={false}
+          b={false} // no error
+          c={false}
+          {...(shouldOverride
+            ? {
+                b: true,
+              }
+            : {})}
+        />
+      );
+    }
+    
