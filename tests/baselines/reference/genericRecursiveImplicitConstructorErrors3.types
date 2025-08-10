@@ -31,8 +31,8 @@ module TypeScript {
 >           : ^^^^^^^^^^^^^^^^^^^
 
         public type: PullTypeSymbol = null;
->type : any
->     : ^^^
+>type : TypeScript.PullTypeSymbol<any, any, any>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     export class PullTypeSymbol <A,B,C>extends PullSymbol {
 >PullTypeSymbol : PullTypeSymbol<A, B, C>
@@ -41,14 +41,14 @@ module TypeScript {
 >           : ^^^^^^^^^^^^^^^^^
 
         private _elementType: PullTypeSymbol = null;
->_elementType : any
->             : ^^^
+>_elementType : TypeScript.PullTypeSymbol<any, any, any>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         public toString<A,B,C>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean) {
 >toString : <A, B, C>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean) => any
 >         : ^ ^^ ^^ ^^           ^^^          ^^                   ^^^       ^^^^^^^^
->scopeSymbol : any
->            : ^^^
+>scopeSymbol : TypeScript.PullSymbol<any, any, any>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >useConstraintInName : boolean
 >                    : ^^^^^^^
 
@@ -59,16 +59,16 @@ module TypeScript {
 >                                                                  : ^^^
 >this.getScopedNameEx(scopeSymbol, useConstraintInName).toString : any
 >                                                                : ^^^
->this.getScopedNameEx(scopeSymbol, useConstraintInName) : any
->                                                       : ^^^
->this.getScopedNameEx : <A_1, B_1, C_1>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => any
->                     : ^^^^^^^^^^^^^^^^           ^^^          ^^                   ^^^       ^^                 ^^^       ^^                      ^^^       ^^^^^^^^
+>this.getScopedNameEx(scopeSymbol, useConstraintInName) : TypeScript.MemberName<any, any, any>
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.getScopedNameEx : <A_1, B_1, C_1>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => TypeScript.MemberName<any, any, any>
+>                     : ^^^^^^^^^^^^^^^^           ^^^          ^^                   ^^^       ^^                 ^^^       ^^                      ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
->getScopedNameEx : <A_1, B_1, C_1>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => any
->                : ^^^^^^^^^^^^^^^^           ^^^          ^^                   ^^^       ^^                 ^^^       ^^                      ^^^       ^^^^^^^^
->scopeSymbol : any
->            : ^^^
+>getScopedNameEx : <A_1, B_1, C_1>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => TypeScript.MemberName<any, any, any>
+>                : ^^^^^^^^^^^^^^^^           ^^^          ^^                   ^^^       ^^                 ^^^       ^^                      ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>scopeSymbol : TypeScript.PullSymbol<any, any, any>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >useConstraintInName : boolean
 >                    : ^^^^^^^
 >toString : any
@@ -79,10 +79,10 @@ module TypeScript {
 >  : ^^^
         }
         public getScopedNameEx<A,B,C>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) {
->getScopedNameEx : <A, B, C>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => any
->                : ^ ^^ ^^ ^^           ^^^          ^^                   ^^^       ^^                 ^^^       ^^                      ^^^       ^^^^^^^^
->scopeSymbol : any
->            : ^^^
+>getScopedNameEx : <A, B, C>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => TypeScript.MemberName<any, any, any>
+>                : ^ ^^ ^^ ^^           ^^^          ^^                   ^^^       ^^                 ^^^       ^^                      ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>scopeSymbol : TypeScript.PullSymbol<any, any, any>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >useConstraintInName : boolean
 >                    : ^^^^^^^
 >getPrettyTypeName : boolean
@@ -105,12 +105,12 @@ module TypeScript {
 >                  : ^^^
 >this._elementType ?                (this._elementType.isArray() || this._elementType.isNamedTypeSymbol() ?                this._elementType.getScopedNameEx(scopeSymbol, false, getPrettyTypeName, getTypeParamMarkerInfo) :                this._elementType.getMemberTypeNameEx(false, scopeSymbol, getPrettyTypeName)) : 1 : any
 >                                                                                                                                                                                                                                                                                                                              : ^^^
->this._elementType : any
->                  : ^^^
+>this._elementType : TypeScript.PullTypeSymbol<any, any, any>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
->_elementType : any
->             : ^^^
+>_elementType : TypeScript.PullTypeSymbol<any, any, any>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
                 (this._elementType.isArray() || this._elementType.isNamedTypeSymbol() ?
 >(this._elementType.isArray() || this._elementType.isNamedTypeSymbol() ?                this._elementType.getScopedNameEx(scopeSymbol, false, getPrettyTypeName, getTypeParamMarkerInfo) :                this._elementType.getMemberTypeNameEx(false, scopeSymbol, getPrettyTypeName)) : any
@@ -123,24 +123,24 @@ module TypeScript {
 >                            : ^^^
 >this._elementType.isArray : any
 >                          : ^^^
->this._elementType : any
->                  : ^^^
+>this._elementType : TypeScript.PullTypeSymbol<any, any, any>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
->_elementType : any
->             : ^^^
+>_elementType : TypeScript.PullTypeSymbol<any, any, any>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isArray : any
 >        : ^^^
 >this._elementType.isNamedTypeSymbol() : any
 >                                      : ^^^
 >this._elementType.isNamedTypeSymbol : any
 >                                    : ^^^
->this._elementType : any
->                  : ^^^
+>this._elementType : TypeScript.PullTypeSymbol<any, any, any>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
->_elementType : any
->             : ^^^
+>_elementType : TypeScript.PullTypeSymbol<any, any, any>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isNamedTypeSymbol : any
 >                  : ^^^
 
@@ -149,16 +149,16 @@ module TypeScript {
 >                                                                                                 : ^^^
 >this._elementType.getScopedNameEx : any
 >                                  : ^^^
->this._elementType : any
->                  : ^^^
+>this._elementType : TypeScript.PullTypeSymbol<any, any, any>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
->_elementType : any
->             : ^^^
+>_elementType : TypeScript.PullTypeSymbol<any, any, any>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getScopedNameEx : any
 >                : ^^^
->scopeSymbol : any
->            : ^^^
+>scopeSymbol : TypeScript.PullSymbol<any, any, any>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >false : false
 >      : ^^^^^
 >getPrettyTypeName : boolean
@@ -171,26 +171,26 @@ module TypeScript {
 >                                                                             : ^^^
 >this._elementType.getMemberTypeNameEx : any
 >                                      : ^^^
->this._elementType : any
->                  : ^^^
+>this._elementType : TypeScript.PullTypeSymbol<any, any, any>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
->_elementType : any
->             : ^^^
+>_elementType : TypeScript.PullTypeSymbol<any, any, any>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getMemberTypeNameEx : any
 >                    : ^^^
 >false : false
 >      : ^^^^^
->scopeSymbol : any
->            : ^^^
+>scopeSymbol : TypeScript.PullSymbol<any, any, any>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getPrettyTypeName : boolean
 >                  : ^^^^^^^
 >1 : 1
 >  : ^
 
                 return MemberName.create(elementMemberName, "", "[]");
->MemberName.create(elementMemberName, "", "[]") : any
->                                               : ^^^
+>MemberName.create(elementMemberName, "", "[]") : TypeScript.MemberName<any, any, any>
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >MemberName.create : <A_1, B_1, C_1>(arg1: any, arg2?: any, arg3?: any) => MemberName
 >                  : ^^^^^^^^^^^^^^^^    ^^   ^^    ^^^   ^^    ^^^   ^^^^^          
 >MemberName : typeof MemberName
