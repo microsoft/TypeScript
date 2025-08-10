@@ -73,7 +73,7 @@ conditionalTypes1.ts(160,5): error TS2322: Type 'T' is not assignable to type 'Z
   Type 'string | number' is not assignable to type 'ZeroOf<T>'.
     Type 'string' is not assignable to type 'ZeroOf<T>'.
 conditionalTypes1.ts(263,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'z' must be of type 'T1', but here has type 'Foo<T & U>'.
-conditionalTypes1.ts(288,43): error TS2322: Type 'T95<U>' is not assignable to type 'T94<U>'.
+conditionalTypes1.ts(288,33): error TS2322: Type 'T95<U>' is not assignable to type 'T94<U>'.
   Type 'number | boolean' is not assignable to type 'T94<U>'.
     Type 'number' is not assignable to type 'T94<U>'.
       Type 'boolean' is not assignable to type 'true'.
@@ -465,7 +465,7 @@ conditionalTypes1.ts(288,43): error TS2322: Type 'T95<U>' is not assignable to t
     type T95<T> = T extends string ? boolean : number;
     const f44 = <U>(value: T94<U>): T95<U> => value;
     const f45 = <U>(value: T95<U>): T94<U> => value;  // Error
-                                              ~~~~~
+                                    ~~~~~~
 !!! error TS2322: Type 'T95<U>' is not assignable to type 'T94<U>'.
 !!! error TS2322:   Type 'number | boolean' is not assignable to type 'T94<U>'.
 !!! error TS2322:     Type 'number' is not assignable to type 'T94<U>'.
