@@ -1,0 +1,127 @@
+//// [tests/cases/conformance/es6/destructuring/bindingPatternWithNullableInitializer1.ts] ////
+
+=== bindingPatternWithNullableInitializer1.ts ===
+// https://github.com/microsoft/TypeScript/issues/60119
+
+interface T {
+  a?: unknown;
+>a : unknown
+>  : ^^^^^^^
+
+  b?: unknown;
+>b : unknown
+>  : ^^^^^^^
+
+  c?: unknown;
+>c : unknown
+>  : ^^^^^^^
+}
+
+function f1<L extends keyof T>(k: L, t: T | undefined) {
+>f1 : <L extends keyof T>(k: L, t: T | undefined) => void
+>   : ^ ^^^^^^^^^       ^^ ^^ ^^ ^^             ^^^^^^^^^
+>k : L
+>  : ^
+>t : T | undefined
+>  : ^^^^^^^^^^^^^
+
+  const { [k]: v } = t;
+>k : L
+>  : ^
+>v : (T | undefined)[L]
+>  : ^^^^^^^^^^^^^^^^^^
+>t : T | undefined
+>  : ^^^^^^^^^^^^^
+}
+
+function f2<L extends keyof T>(k: L, t: T | null) {
+>f2 : <L extends keyof T>(k: L, t: T | null) => void
+>   : ^ ^^^^^^^^^       ^^ ^^ ^^ ^^        ^^^^^^^^^
+>k : L
+>  : ^
+>t : T | null
+>  : ^^^^^^^^
+
+  const { [k]: v } = t;
+>k : L
+>  : ^
+>v : (T | null)[L]
+>  : ^^^^^^^^^^^^^
+>t : T | null
+>  : ^^^^^^^^
+}
+
+function f3<L extends keyof T>(k: L, t: T | null | undefined) {
+>f3 : <L extends keyof T>(k: L, t: T | null | undefined) => void
+>   : ^ ^^^^^^^^^       ^^ ^^ ^^ ^^                    ^^^^^^^^^
+>k : L
+>  : ^
+>t : T | null | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^
+
+  const { [k]: v } = t;
+>k : L
+>  : ^
+>v : (T | null | undefined)[L]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>t : T | null | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^
+}
+
+function f4<L extends keyof T>(k: L, t: { f: T | undefined }) {
+>f4 : <L extends keyof T>(k: L, t: { f: T | undefined; }) => void
+>   : ^ ^^^^^^^^^       ^^ ^^ ^^ ^^                     ^^^^^^^^^
+>k : L
+>  : ^
+>t : { f: T | undefined; }
+>  : ^^^^^             ^^^
+>f : T | undefined
+>  : ^^^^^^^^^^^^^
+
+  const { f: { [k]: v } } = t;
+>f : any
+>  : ^^^
+>k : L
+>  : ^
+>v : (T | undefined)[L]
+>  : ^^^^^^^^^^^^^^^^^^
+>t : { f: T | undefined; }
+>  : ^^^^^             ^^^
+}
+
+// https://github.com/microsoft/TypeScript/issues/60179
+
+const input: {
+>input : { a?: { b?: { c: string; }; }; }
+>      : ^^^^^^                       ^^^
+
+  a?: { b?: { c: string } };
+>a : { b?: { c: string; }; } | undefined
+>  : ^^^^^^              ^^^^^^^^^^^^^^^
+>b : { c: string; } | undefined
+>  : ^^^^^      ^^^^^^^^^^^^^^^
+>c : string
+>  : ^^^^^^
+
+} = { a: undefined };
+>{ a: undefined } : { a: undefined; }
+>                 : ^^^^^^^^^^^^^^^^^
+>a : undefined
+>  : ^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+const { ...b } = input.a?.b;
+>b : { c: string; }
+>  : ^^^^^      ^^^
+>input.a?.b : { c: string; } | undefined
+>           : ^^^^^      ^^^^^^^^^^^^^^^
+>input.a : { b?: { c: string; }; } | undefined
+>        : ^^^^^^              ^^^^^^^^^^^^^^^
+>input : { a?: { b?: { c: string; }; }; }
+>      : ^^^^^^                       ^^^
+>a : { b?: { c: string; }; } | undefined
+>  : ^^^^^^              ^^^^^^^^^^^^^^^
+>b : { c: string; } | undefined
+>  : ^^^^^      ^^^^^^^^^^^^^^^
+
