@@ -1,0 +1,165 @@
+//// [tests/cases/compiler/classOptionalFieldReturnTypeInference1.ts] ////
+
+=== classOptionalFieldReturnTypeInference1.ts ===
+declare abstract class BasePrompt {
+>BasePrompt : Symbol(BasePrompt, Decl(classOptionalFieldReturnTypeInference1.ts, 0, 0))
+
+  choice<Choice extends string, Result extends any = Choice>(
+>choice : Symbol(BasePrompt.choice, Decl(classOptionalFieldReturnTypeInference1.ts, 0, 35))
+>Choice : Symbol(Choice, Decl(classOptionalFieldReturnTypeInference1.ts, 1, 9))
+>Result : Symbol(Result, Decl(classOptionalFieldReturnTypeInference1.ts, 1, 31))
+>Choice : Symbol(Choice, Decl(classOptionalFieldReturnTypeInference1.ts, 1, 9))
+
+    title: string,
+>title : Symbol(title, Decl(classOptionalFieldReturnTypeInference1.ts, 1, 61))
+
+    choices: readonly Choice[],
+>choices : Symbol(choices, Decl(classOptionalFieldReturnTypeInference1.ts, 2, 18))
+>Choice : Symbol(Choice, Decl(classOptionalFieldReturnTypeInference1.ts, 1, 9))
+
+  ): Promise<Result>;
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Result : Symbol(Result, Decl(classOptionalFieldReturnTypeInference1.ts, 1, 31))
+}
+
+type MiddlewareNode = {
+>MiddlewareNode : Symbol(MiddlewareNode, Decl(classOptionalFieldReturnTypeInference1.ts, 5, 1))
+
+  name?: string;
+>name : Symbol(name, Decl(classOptionalFieldReturnTypeInference1.ts, 7, 23))
+
+};
+
+declare class Codemods {
+>Codemods : Symbol(Codemods, Decl(classOptionalFieldReturnTypeInference1.ts, 9, 2))
+
+  registerMiddleware(
+>registerMiddleware : Symbol(Codemods.registerMiddleware, Decl(classOptionalFieldReturnTypeInference1.ts, 11, 24))
+
+    stack: "server" | "router" | "named",
+>stack : Symbol(stack, Decl(classOptionalFieldReturnTypeInference1.ts, 12, 21))
+
+    middleware: MiddlewareNode[],
+>middleware : Symbol(middleware, Decl(classOptionalFieldReturnTypeInference1.ts, 13, 41))
+>MiddlewareNode : Symbol(MiddlewareNode, Decl(classOptionalFieldReturnTypeInference1.ts, 5, 1))
+
+  ): Promise<void>;
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+}
+
+declare class BaseCommand {
+>BaseCommand : Symbol(BaseCommand, Decl(classOptionalFieldReturnTypeInference1.ts, 16, 1))
+
+  prompt: BasePrompt;
+>prompt : Symbol(BaseCommand.prompt, Decl(classOptionalFieldReturnTypeInference1.ts, 18, 27))
+>BasePrompt : Symbol(BasePrompt, Decl(classOptionalFieldReturnTypeInference1.ts, 0, 0))
+
+  createCodemods(): Promise<Codemods>;
+>createCodemods : Symbol(BaseCommand.createCodemods, Decl(classOptionalFieldReturnTypeInference1.ts, 19, 21))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Codemods : Symbol(Codemods, Decl(classOptionalFieldReturnTypeInference1.ts, 9, 2))
+}
+
+export default class MakeMiddleware extends BaseCommand {
+>MakeMiddleware : Symbol(MakeMiddleware, Decl(classOptionalFieldReturnTypeInference1.ts, 21, 1))
+>BaseCommand : Symbol(BaseCommand, Decl(classOptionalFieldReturnTypeInference1.ts, 16, 1))
+
+  declare name: string;
+>name : Symbol(MakeMiddleware.name, Decl(classOptionalFieldReturnTypeInference1.ts, 23, 57))
+
+  declare stack?: "server" | "named" | "router";
+>stack : Symbol(MakeMiddleware.stack, Decl(classOptionalFieldReturnTypeInference1.ts, 24, 23))
+
+
+  async run() {
+>run : Symbol(MakeMiddleware.run, Decl(classOptionalFieldReturnTypeInference1.ts, 26, 48))
+
+    const stackChoices = ["server", "router", "named"];
+>stackChoices : Symbol(stackChoices, Decl(classOptionalFieldReturnTypeInference1.ts, 30, 9))
+
+    if (!this.stack) {
+>this.stack : Symbol(MakeMiddleware.stack, Decl(classOptionalFieldReturnTypeInference1.ts, 24, 23))
+>this : Symbol(MakeMiddleware, Decl(classOptionalFieldReturnTypeInference1.ts, 21, 1))
+>stack : Symbol(MakeMiddleware.stack, Decl(classOptionalFieldReturnTypeInference1.ts, 24, 23))
+
+      this.stack = await this.prompt.choice(
+>this.stack : Symbol(MakeMiddleware.stack, Decl(classOptionalFieldReturnTypeInference1.ts, 24, 23))
+>this : Symbol(MakeMiddleware, Decl(classOptionalFieldReturnTypeInference1.ts, 21, 1))
+>stack : Symbol(MakeMiddleware.stack, Decl(classOptionalFieldReturnTypeInference1.ts, 24, 23))
+>this.prompt.choice : Symbol(BasePrompt.choice, Decl(classOptionalFieldReturnTypeInference1.ts, 0, 35))
+>this.prompt : Symbol(BaseCommand.prompt, Decl(classOptionalFieldReturnTypeInference1.ts, 18, 27))
+>this : Symbol(MakeMiddleware, Decl(classOptionalFieldReturnTypeInference1.ts, 21, 1))
+>prompt : Symbol(BaseCommand.prompt, Decl(classOptionalFieldReturnTypeInference1.ts, 18, 27))
+>choice : Symbol(BasePrompt.choice, Decl(classOptionalFieldReturnTypeInference1.ts, 0, 35))
+
+        "Under which stack you want to register the middleware?",
+        stackChoices,
+>stackChoices : Symbol(stackChoices, Decl(classOptionalFieldReturnTypeInference1.ts, 30, 9))
+
+      );
+    }
+
+    if (!stackChoices.includes(this.stack)) {
+>stackChoices.includes : Symbol(Array.includes, Decl(lib.es2016.array.include.d.ts, --, --))
+>stackChoices : Symbol(stackChoices, Decl(classOptionalFieldReturnTypeInference1.ts, 30, 9))
+>includes : Symbol(Array.includes, Decl(lib.es2016.array.include.d.ts, --, --))
+>this.stack : Symbol(MakeMiddleware.stack, Decl(classOptionalFieldReturnTypeInference1.ts, 24, 23))
+>this : Symbol(MakeMiddleware, Decl(classOptionalFieldReturnTypeInference1.ts, 21, 1))
+>stack : Symbol(MakeMiddleware.stack, Decl(classOptionalFieldReturnTypeInference1.ts, 24, 23))
+
+      return;
+    }
+
+    const codemods = await this.createCodemods();
+>codemods : Symbol(codemods, Decl(classOptionalFieldReturnTypeInference1.ts, 43, 9))
+>this.createCodemods : Symbol(BaseCommand.createCodemods, Decl(classOptionalFieldReturnTypeInference1.ts, 19, 21))
+>this : Symbol(MakeMiddleware, Decl(classOptionalFieldReturnTypeInference1.ts, 21, 1))
+>createCodemods : Symbol(BaseCommand.createCodemods, Decl(classOptionalFieldReturnTypeInference1.ts, 19, 21))
+
+    await codemods.registerMiddleware(this.stack, [
+>codemods.registerMiddleware : Symbol(Codemods.registerMiddleware, Decl(classOptionalFieldReturnTypeInference1.ts, 11, 24))
+>codemods : Symbol(codemods, Decl(classOptionalFieldReturnTypeInference1.ts, 43, 9))
+>registerMiddleware : Symbol(Codemods.registerMiddleware, Decl(classOptionalFieldReturnTypeInference1.ts, 11, 24))
+>this.stack : Symbol(MakeMiddleware.stack, Decl(classOptionalFieldReturnTypeInference1.ts, 24, 23))
+>this : Symbol(MakeMiddleware, Decl(classOptionalFieldReturnTypeInference1.ts, 21, 1))
+>stack : Symbol(MakeMiddleware.stack, Decl(classOptionalFieldReturnTypeInference1.ts, 24, 23))
+      {
+        name: this.name,
+>name : Symbol(name, Decl(classOptionalFieldReturnTypeInference1.ts, 46, 7))
+>this.name : Symbol(MakeMiddleware.name, Decl(classOptionalFieldReturnTypeInference1.ts, 23, 57))
+>this : Symbol(MakeMiddleware, Decl(classOptionalFieldReturnTypeInference1.ts, 21, 1))
+>name : Symbol(MakeMiddleware.name, Decl(classOptionalFieldReturnTypeInference1.ts, 23, 57))
+
+      },
+    ]);
+  }
+}
+
+declare function dom$<T extends HTMLElement>(description: string): T;
+>dom$ : Symbol(dom$, Decl(classOptionalFieldReturnTypeInference1.ts, 51, 1))
+>T : Symbol(T, Decl(classOptionalFieldReturnTypeInference1.ts, 53, 22))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>description : Symbol(description, Decl(classOptionalFieldReturnTypeInference1.ts, 53, 45))
+>T : Symbol(T, Decl(classOptionalFieldReturnTypeInference1.ts, 53, 22))
+
+export abstract class PeekViewWidget {
+>PeekViewWidget : Symbol(PeekViewWidget, Decl(classOptionalFieldReturnTypeInference1.ts, 53, 69))
+
+  protected _titleElement?: HTMLDivElement;
+>_titleElement : Symbol(PeekViewWidget._titleElement, Decl(classOptionalFieldReturnTypeInference1.ts, 55, 38))
+>HTMLDivElement : Symbol(HTMLDivElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+  protected _fillHead(container: HTMLElement, noCloseAction?: boolean): void {
+>_fillHead : Symbol(PeekViewWidget._fillHead, Decl(classOptionalFieldReturnTypeInference1.ts, 56, 43))
+>container : Symbol(container, Decl(classOptionalFieldReturnTypeInference1.ts, 58, 22))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>noCloseAction : Symbol(noCloseAction, Decl(classOptionalFieldReturnTypeInference1.ts, 58, 45))
+
+    this._titleElement = dom$(".peekview-title");
+>this._titleElement : Symbol(PeekViewWidget._titleElement, Decl(classOptionalFieldReturnTypeInference1.ts, 55, 38))
+>this : Symbol(PeekViewWidget, Decl(classOptionalFieldReturnTypeInference1.ts, 53, 69))
+>_titleElement : Symbol(PeekViewWidget._titleElement, Decl(classOptionalFieldReturnTypeInference1.ts, 55, 38))
+>dom$ : Symbol(dom$, Decl(classOptionalFieldReturnTypeInference1.ts, 51, 1))
+  }
+}
+
