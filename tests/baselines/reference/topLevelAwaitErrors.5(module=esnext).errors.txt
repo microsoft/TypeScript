@@ -1,10 +1,10 @@
-topLevelAwaitErrors.5.ts(2,14): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
+topLevelAwaitErrors.5.ts(2,14): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
 
 
 ==== topLevelAwaitErrors.5.ts (1 errors) ====
     // await in exported class name should fail
     export class await {
                  ~~~~~
-!!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
+!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
     }
     
