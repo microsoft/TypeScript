@@ -268,6 +268,12 @@ function funcInferredReturnType(obj: { method(p: typeof s): void }) {
     return obj;
 }
 
+// https://github.com/microsoft/TypeScript/issues/61070
+const bar = Symbol('bar') satisfies symbol;
+let bar2 = Symbol('bar2') satisfies symbol;
+
+const testErrorMessage1 = Symbol() as string;
+
 
 //// [uniqueSymbols.js]
 // declarations with call initializer
@@ -458,3 +464,7 @@ const ce0 = class {
 function funcInferredReturnType(obj) {
     return obj;
 }
+// https://github.com/microsoft/TypeScript/issues/61070
+const bar = Symbol('bar');
+let bar2 = Symbol('bar2');
+const testErrorMessage1 = Symbol();
