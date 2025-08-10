@@ -1,0 +1,128 @@
+//// [tests/cases/compiler/expandoFunctionBlockShadowing2.ts] ////
+
+=== src/index.js ===
+export function X() {}
+>X : () => void
+>  : ^^^^^^^^^^
+
+if (Math.random()) {
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+  /** @type {{ test?: any }} */
+  const X = {};
+>X : { test?: any; }
+>  : ^^^^^^^^^   ^^^
+>{} : {}
+>   : ^^
+
+  Object.defineProperty(X, "test", { value: 1 });
+>Object.defineProperty(X, "test", { value: 1 }) : { test?: any; }
+>                                               : ^^^^^^^^^   ^^^
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
+>X : { test?: any; }
+>  : ^^^^^^^^^   ^^^
+>"test" : "test"
+>       : ^^^^^^
+>{ value: 1 } : { value: number; }
+>             : ^^^^^^^^^^^^^^^^^^
+>value : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+}
+
+export function Y() {}
+>Y : typeof Y
+>  : ^^^^^^^^
+
+Object.defineProperty(Y, "test", { value: "foo" });
+>Object.defineProperty(Y, "test", { value: "foo" }) : typeof Y
+>                                                   : ^^^^^^^^
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
+>Y : typeof Y
+>  : ^^^^^^^^
+>"test" : "test"
+>       : ^^^^^^
+>{ value: "foo" } : { value: string; }
+>                 : ^^^^^^^^^^^^^^^^^^
+>value : string
+>      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+const aliasTopY = Y;
+>aliasTopY : typeof Y
+>          : ^^^^^^^^
+>Y : typeof Y
+>  : ^^^^^^^^
+
+if (Math.random()) {
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+  const Y = function Y() {}
+>Y : { (): void; readonly test: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function Y() {} : { (): void; readonly test: number; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Y : { (): void; readonly test: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  Object.defineProperty(Y, "test", { value: 42 });
+>Object.defineProperty(Y, "test", { value: 42 }) : { (): void; readonly test: number; }
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
+>Y : { (): void; readonly test: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"test" : "test"
+>       : ^^^^^^
+>{ value: 42 } : { value: number; }
+>              : ^^^^^^^^^^^^^^^^^^
+>value : number
+>      : ^^^^^^
+>42 : 42
+>   : ^^
+
+  /** @type {{ (): void; test: string }} */
+  const topYcheck = aliasTopY;
+>topYcheck : { (): void; test: string; }
+>          : ^^^^^^    ^^^^^^^^      ^^^
+>aliasTopY : typeof import("src/index").Y
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  /** @type {{ (): void; test: number }} */
+  const blockYcheck = Y;
+>blockYcheck : { (): void; test: number; }
+>            : ^^^^^^    ^^^^^^^^      ^^^
+>Y : { (): void; readonly test: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
