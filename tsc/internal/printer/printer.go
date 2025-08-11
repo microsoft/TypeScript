@@ -45,7 +45,7 @@ type PrinterOptions struct {
 	OmitBraceSourceMapPositions bool
 	// ExtendedDiagnostics           bool
 	OnlyPrintJSDocStyle bool
-	// NeverAsciiEscape              bool
+	NeverAsciiEscape    bool
 	// StripInternal                 bool
 	PreserveSourceNewlines bool
 	// TerminateUnterminatedLiterals bool
@@ -974,7 +974,11 @@ func (p *Printer) emitTokenNodeEx(node *ast.TokenNode, flags tokenEmitFlags) {
 //	SyntaxKindTemplateMiddle
 //	SyntaxKindTemplateTail
 func (p *Printer) emitLiteral(node *ast.LiteralLikeNode, flags getLiteralTextFlags) {
-	// !!! Printer option to control whether to escape non-ASCII characters
+	// Add NeverAsciiEscape flag if the printer option is set
+	if p.Options.NeverAsciiEscape {
+		flags |= getLiteralTextFlagsNeverAsciiEscape
+	}
+
 	text := p.getLiteralTextOfNode(node, nil /*sourceFile*/, flags)
 
 	// !!! Printer option to control source map emit, which causes us to use a different write method on the
