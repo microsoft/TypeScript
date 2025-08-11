@@ -5,6 +5,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/printer"
+	"github.com/microsoft/typescript-go/internal/scanner"
 )
 
 func IsGeneratedIdentifier(emitContext *printer.EmitContext, name *ast.IdentifierNode) bool {
@@ -244,4 +245,21 @@ func IsSimpleCopiableExpression(expression *ast.Expression) bool {
 		ast.IsNumericLiteral(expression) ||
 		ast.IsKeywordKind(expression.Kind) ||
 		ast.IsIdentifier(expression)
+}
+
+func IsOriginalNodeSingleLine(emitContext *printer.EmitContext, node *ast.Node) bool {
+	if node == nil {
+		return false
+	}
+	original := emitContext.MostOriginal(node)
+	if original == nil {
+		return false
+	}
+	source := ast.GetSourceFileOfNode(original)
+	if source == nil {
+		return false
+	}
+	startLine, _ := scanner.GetLineAndCharacterOfPosition(source, original.Loc.Pos())
+	endLine, _ := scanner.GetLineAndCharacterOfPosition(source, original.Loc.End())
+	return startLine == endLine
 }

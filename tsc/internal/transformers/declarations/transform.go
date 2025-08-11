@@ -10,7 +10,6 @@ import (
 	"github.com/microsoft/typescript-go/internal/modulespecifiers"
 	"github.com/microsoft/typescript-go/internal/nodebuilder"
 	"github.com/microsoft/typescript-go/internal/printer"
-	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/transformers"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
@@ -468,9 +467,7 @@ func (tx *DeclarationTransformer) visitDeclarationSubtree(input *ast.Node) *ast.
 	case ast.KindTupleType:
 		result = tx.Visitor().VisitEachChild(input)
 		if result != nil {
-			startLine, _ := scanner.GetLineAndCharacterOfPosition(tx.state.currentSourceFile, input.Loc.Pos())
-			endLine, _ := scanner.GetLineAndCharacterOfPosition(tx.state.currentSourceFile, input.Loc.End())
-			if startLine == endLine {
+			if transformers.IsOriginalNodeSingleLine(tx.EmitContext(), input) {
 				tx.EmitContext().AddEmitFlags(result, printer.EFSingleLine)
 			}
 		}
