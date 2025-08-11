@@ -32612,7 +32612,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (inferenceContext && contextFlags! & ContextFlags.Signature && some(inferenceContext.inferences, hasInferenceCandidatesOrDefault)) {
                 // For contextual signatures we incorporate all inferences made so far, e.g. from return
                 // types as well as arguments to the left in a function call.
-                return instantiateInstantiableTypes(contextualType, inferenceContext.nonFixingMapper);
+                const type = instantiateInstantiableTypes(contextualType, inferenceContext.nonFixingMapper);
+                if (!(type.flags & TypeFlags.AnyOrUnknown)) {
+                    return type;
+                }
             }
             if (inferenceContext?.returnMapper) {
                 // For other purposes (e.g. determining whether to produce literal types) we only
