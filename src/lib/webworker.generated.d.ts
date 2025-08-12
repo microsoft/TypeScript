@@ -2703,6 +2703,8 @@ declare var CountQueuingStrategy: {
     new(init: QueuingStrategyInit): CountQueuingStrategy;
 };
 
+declare type UUID = `${string}-${string}-${string}-${string}-${string}`;
+
 /**
  * The **`Crypto`** interface represents basic cryptography features available in the current context.
  *
