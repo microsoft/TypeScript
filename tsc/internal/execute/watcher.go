@@ -42,7 +42,7 @@ func createWatcher(sys System, configParseResult *tsoptions.ParsedCommandLine, r
 }
 
 func (w *Watcher) start() {
-	w.host = compiler.NewCompilerHost(w.sys.GetCurrentDirectory(), w.sys.FS(), w.sys.DefaultLibraryPath(), nil)
+	w.host = compiler.NewCompilerHost(w.sys.GetCurrentDirectory(), w.sys.FS(), w.sys.DefaultLibraryPath(), nil, getTraceFromSys(w.sys))
 	w.program = incremental.ReadBuildInfoProgram(w.options, incremental.NewBuildInfoReader(w.host), w.host)
 
 	if !w.testing {
@@ -109,7 +109,7 @@ func (w *Watcher) hasErrorsInTsConfig() bool {
 			w.configModified = true
 		}
 		w.options = configParseResult
-		w.host = compiler.NewCompilerHost(w.sys.GetCurrentDirectory(), w.sys.FS(), w.sys.DefaultLibraryPath(), &extendedConfigCache)
+		w.host = compiler.NewCompilerHost(w.sys.GetCurrentDirectory(), w.sys.FS(), w.sys.DefaultLibraryPath(), &extendedConfigCache, getTraceFromSys(w.sys))
 	}
 	return false
 }

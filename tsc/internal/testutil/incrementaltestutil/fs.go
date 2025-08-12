@@ -6,11 +6,10 @@ import (
 	"github.com/go-json-experiment/json"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/incremental"
+	"github.com/microsoft/typescript-go/internal/testutil/harnessutil"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
 )
-
-var fakeTsVersion = "FakeTSVersion"
 
 type FsHandlingBuildInfo struct {
 	vfs.FS
@@ -24,7 +23,7 @@ func (f *FsHandlingBuildInfo) ReadFile(path string) (contents string, ok bool) {
 		// read buildinfo and modify version
 		var buildInfo incremental.BuildInfo
 		err := json.Unmarshal([]byte(contents), &buildInfo)
-		if err == nil && buildInfo.Version == fakeTsVersion {
+		if err == nil && buildInfo.Version == harnessutil.FakeTSVersion {
 			buildInfo.Version = core.Version()
 			newContents, err := json.Marshal(&buildInfo)
 			if err != nil {
@@ -41,8 +40,8 @@ func (f *FsHandlingBuildInfo) WriteFile(path string, data string, writeByteOrder
 		var buildInfo incremental.BuildInfo
 		if err := json.Unmarshal([]byte(data), &buildInfo); err == nil {
 			if buildInfo.Version == core.Version() {
-				// Change it to fakeTsVersion
-				buildInfo.Version = fakeTsVersion
+				// Change it to harnessutil.FakeTSVersion
+				buildInfo.Version = harnessutil.FakeTSVersion
 				newData, err := json.Marshal(&buildInfo)
 				if err != nil {
 					return fmt.Errorf("testFs.WriteFile: failed to marshal build info after fixing version: %w", err)

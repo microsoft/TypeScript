@@ -34,6 +34,8 @@ import (
 // Posix-style path to additional test libraries
 const testLibFolder = "/.lib"
 
+const FakeTSVersion = "FakeTSVersion"
+
 type TestFile struct {
 	UnitName string
 	Content  string
@@ -221,6 +223,7 @@ func CompileFilesEx(
 		Errors:     errors,
 	}, harnessOptions)
 	result.Symlinks = symlinks
+	result.Trace = host.tracer.string()
 	result.Repeat = func(testConfig TestConfiguration) *CompilationResult {
 		newHarnessOptions := *harnessOptions
 		newCompilerOptions := compilerOptions.Clone()
@@ -471,6 +474,7 @@ func getOptionValue(t *testing.T, option *tsoptions.CommandLineOption, value str
 
 type cachedCompilerHost struct {
 	compiler.CompilerHost
+	tracer *tracer
 }
 
 var sourceFileCache collections.SyncMap[SourceFileCacheKey, *ast.SourceFile]
@@ -511,9 +515,75 @@ func (h *cachedCompilerHost) GetSourceFile(opts ast.SourceFileParseOptions) *ast
 	return result
 }
 
-func createCompilerHost(fs vfs.FS, defaultLibraryPath string, currentDirectory string) compiler.CompilerHost {
+type tracer struct {
+	fs               vfs.FS
+	currentDirectory string
+	packageJsonCache map[tspath.Path]bool
+	builder          strings.Builder
+}
+
+func (t *tracer) trace(msg string) {
+	fmt.Fprintln(&t.builder, t.sanitizeTrace(msg))
+}
+
+func (t *tracer) sanitizeTrace(msg string) string {
+	// Version
+	if str := strings.Replace(msg, "'"+core.Version()+"'", "'"+FakeTSVersion+"'", 1); str != msg {
+		return str
+	}
+	// caching of fs in trace to be replaces with non caching version
+	if str := strings.TrimSuffix(msg, "' does not exist according to earlier cached lookups."); str != msg {
+		file := strings.TrimPrefix(str, "File '")
+		filePath := tspath.ToPath(file, t.currentDirectory, t.fs.UseCaseSensitiveFileNames())
+		if _, has := t.packageJsonCache[filePath]; has {
+			return msg
+		} else {
+			t.packageJsonCache[filePath] = false
+			return fmt.Sprintf("File '%s' does not exist.", file)
+		}
+	}
+	if str := strings.TrimSuffix(msg, "' does not exist."); str != msg {
+		file := strings.TrimPrefix(str, "File '")
+		filePath := tspath.ToPath(file, t.currentDirectory, t.fs.UseCaseSensitiveFileNames())
+		if _, has := t.packageJsonCache[filePath]; !has {
+			t.packageJsonCache[filePath] = false
+			return msg
+		} else {
+			return fmt.Sprintf("File '%s' does not exist according to earlier cached lookups.", file)
+		}
+	}
+	if str := strings.TrimSuffix(msg, "' exists according to earlier cached lookups."); str != msg {
+		file := strings.TrimPrefix(str, "File '")
+		filePath := tspath.ToPath(file, t.currentDirectory, t.fs.UseCaseSensitiveFileNames())
+		if _, has := t.packageJsonCache[filePath]; has {
+			return msg
+		} else {
+			t.packageJsonCache[filePath] = true
+			return fmt.Sprintf("Found 'package.json' at '%s'.", file)
+		}
+	}
+	if str := strings.TrimPrefix(msg, "Found 'package.json' at '"); str != msg {
+		file := strings.TrimSuffix(str, "'.")
+		filePath := tspath.ToPath(file, t.currentDirectory, t.fs.UseCaseSensitiveFileNames())
+		if _, has := t.packageJsonCache[filePath]; !has {
+			t.packageJsonCache[filePath] = true
+			return msg
+		} else {
+			return fmt.Sprintf("File '%s' exists according to earlier cached lookups.", file)
+		}
+	}
+	return msg
+}
+
+func (t *tracer) string() string {
+	return t.builder.String()
+}
+
+func createCompilerHost(fs vfs.FS, defaultLibraryPath string, currentDirectory string) *cachedCompilerHost {
+	tracer := tracer{fs: fs, currentDirectory: currentDirectory, packageJsonCache: make(map[tspath.Path]bool)}
 	return &cachedCompilerHost{
-		CompilerHost: compiler.NewCompilerHost(currentDirectory, fs, defaultLibraryPath, nil),
+		CompilerHost: compiler.NewCompilerHost(currentDirectory, fs, defaultLibraryPath, nil, tracer.trace),
+		tracer:       &tracer,
 	}
 }
 
@@ -609,6 +679,7 @@ type CompilationResult struct {
 	outputs          []*TestFile
 	inputs           []*TestFile
 	inputsAndOutputs collections.OrderedMap[string, *CompilationOutput]
+	Trace            string
 }
 
 type CompilationOutput struct {

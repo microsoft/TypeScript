@@ -1,0 +1,79 @@
+======== Resolving module '@scoped/typescache' from '/a.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/package.json' does not exist.
+Loading module '@scoped/typescache' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'scoped__typescache'
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name '@scoped/typescache' was not resolved. ========
+======== Resolving module '@mangled/typescache' from '/a.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module '@mangled/typescache' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'mangled__typescache'
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name '@mangled/typescache' was not resolved. ========
+======== Resolving module '@scoped/nodemodulescache' from '/a.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module '@scoped/nodemodulescache' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'scoped__nodemodulescache'
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name '@scoped/nodemodulescache' was not resolved. ========
+======== Resolving module '@mangled/nodemodulescache' from '/a.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module '@mangled/nodemodulescache' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'mangled__nodemodulescache'
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name '@mangled/nodemodulescache' was not resolved. ========
+======== Resolving module '@scoped/attypescache' from '/a.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module '@scoped/attypescache' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'scoped__attypescache'
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name '@scoped/attypescache' was not resolved. ========
+======== Resolving module '@mangled/attypescache' from '/a.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module '@mangled/attypescache' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'mangled__attypescache'
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name '@mangled/attypescache' was not resolved. ========
+======== Resolving type reference directive 'dummy', containing file '/__inferred type names__.ts', root directory '/a/types,/a/node_modules,/a/node_modules/@types'. ========
+Resolving with primary search path '/a/types, /a/node_modules, /a/node_modules/@types'.
+File '/a/types/dummy.d.ts' does not exist.
+File '/a/types/dummy/package.json' does not exist.
+File '/a/types/dummy/index.d.ts' exists - use it as a name resolution result.
+Resolving real path for '/a/types/dummy/index.d.ts', result '/a/types/dummy/index.d.ts'.
+======== Type reference directive 'dummy' was successfully resolved to '/a/types/dummy/index.d.ts', primary: true. ========

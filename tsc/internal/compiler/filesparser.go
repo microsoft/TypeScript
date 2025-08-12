@@ -25,7 +25,9 @@ type parseTask struct {
 
 	metadata                     ast.SourceFileMetaData
 	resolutionsInFile            module.ModeAwareCache[*module.ResolvedModule]
+	resolutionsTrace             []string
 	typeResolutionsInFile        module.ModeAwareCache[*module.ResolvedTypeReferenceDirective]
+	typeResolutionsTrace         []string
 	resolutionDiagnostics        []*ast.Diagnostic
 	importHelpersImportSpecifier *ast.Node
 	jsxRuntimeImportSpecifier    *jsxRuntimeImportSpecifier
@@ -99,8 +101,9 @@ func (t *parseTask) redirect(loader *fileLoader, fileName string) {
 }
 
 func (t *parseTask) loadAutomaticTypeDirectives(loader *fileLoader) {
-	toParseTypeRefs, typeResolutionsInFile := loader.resolveAutomaticTypeDirectives(t.normalizedFilePath)
+	toParseTypeRefs, typeResolutionsInFile, typeResolutionsTrace := loader.resolveAutomaticTypeDirectives(t.normalizedFilePath)
 	t.typeResolutionsInFile = typeResolutionsInFile
+	t.typeResolutionsTrace = typeResolutionsTrace
 	for _, typeResolution := range toParseTypeRefs {
 		t.addSubTask(typeResolution, nil)
 	}
@@ -194,7 +197,7 @@ func (w *filesParser) start(loader *fileLoader, tasks []*parseTask, depth int, i
 	}
 }
 
-func (w *filesParser) collect(loader *fileLoader, tasks []*parseTask, iterate func(*parseTask)) []tspath.Path {
+func (w *filesParser) collect(loader *fileLoader, tasks []*parseTask, iterate func(*parseTask)) {
 	// Mark all tasks we saw as external after the fact.
 	w.tasksByFileName.Range(func(key string, value *queuedParseTask) bool {
 		if value.fromExternalLibrary {
@@ -202,22 +205,24 @@ func (w *filesParser) collect(loader *fileLoader, tasks []*parseTask, iterate fu
 		}
 		return true
 	})
-	return w.collectWorker(loader, tasks, iterate, collections.Set[*parseTask]{})
+	w.collectWorker(loader, tasks, iterate, collections.Set[*parseTask]{})
 }
 
-func (w *filesParser) collectWorker(loader *fileLoader, tasks []*parseTask, iterate func(*parseTask), seen collections.Set[*parseTask]) []tspath.Path {
-	var results []tspath.Path
+func (w *filesParser) collectWorker(loader *fileLoader, tasks []*parseTask, iterate func(*parseTask), seen collections.Set[*parseTask]) {
 	for _, task := range tasks {
 		// ensure we only walk each task once
-		if !task.loaded || seen.Has(task) {
+		if !task.loaded || !seen.AddIfAbsent(task) {
 			continue
 		}
-		seen.Add(task)
+		for _, trace := range task.typeResolutionsTrace {
+			loader.opts.Host.Trace(trace)
+		}
+		for _, trace := range task.resolutionsTrace {
+			loader.opts.Host.Trace(trace)
+		}
 		if subTasks := task.subTasks; len(subTasks) > 0 {
 			w.collectWorker(loader, subTasks, iterate, seen)
 		}
 		iterate(task)
-		results = append(results, loader.toPath(task.FileName()))
 	}
-	return results
 }

@@ -1,0 +1,39 @@
+======== Resolving module 'ph' from '/a/b/node_modules/@types/node/ph.d.ts'. ========
+Explicitly specified module resolution kind: 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/a/b/node_modules/@types/node/package.json' does not exist.
+File '/a/b/node_modules/@types/package.json' does not exist.
+File '/a/b/node_modules/package.json' does not exist.
+File '/a/b/package.json' does not exist.
+File '/a/package.json' does not exist.
+File '/package.json' does not exist.
+Loading module 'ph' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/a/b/node_modules/@types/node/node_modules' does not exist, skipping all lookups in it.
+Directory '/a/b/node_modules/@types/node/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/a/b/node_modules/@types/node_modules' does not exist, skipping all lookups in it.
+Directory '/a/b/node_modules/@types/node_modules/@types' does not exist, skipping all lookups in it.
+File '/a/b/node_modules/ph.ts' does not exist.
+File '/a/b/node_modules/ph.tsx' does not exist.
+File '/a/b/node_modules/ph.d.ts' does not exist.
+File '/a/b/node_modules/@types/ph.d.ts' does not exist.
+Directory '/a/node_modules' does not exist, skipping all lookups in it.
+Directory '/a/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules/@types' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
+Directory '/a/b/node_modules/@types/node/node_modules' does not exist, skipping all lookups in it.
+Directory '/a/b/node_modules/@types/node_modules' does not exist, skipping all lookups in it.
+File '/a/b/node_modules/ph.js' does not exist.
+File '/a/b/node_modules/ph.jsx' does not exist.
+Directory '/a/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name 'ph' was not resolved. ========
+======== Resolving module 'node:ph' from '/a/b/main.ts'. ========
+Explicitly specified module resolution kind: 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/a/b/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Skipping module 'node:ph' that looks like an absolute URI, target file types: TypeScript, JavaScript, Declaration, JSON.
+======== Module name 'node:ph' was not resolved. ========

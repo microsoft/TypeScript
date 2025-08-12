@@ -30,6 +30,7 @@ type compilerHost struct {
 	defaultLibraryPath      string
 	extendedConfigCache     *collections.SyncMap[tspath.Path, *tsoptions.ExtendedConfigCacheEntry]
 	extendedConfigCacheOnce sync.Once
+	trace                   func(msg string)
 }
 
 func NewCachedFSCompilerHost(
@@ -37,8 +38,9 @@ func NewCachedFSCompilerHost(
 	fs vfs.FS,
 	defaultLibraryPath string,
 	extendedConfigCache *collections.SyncMap[tspath.Path, *tsoptions.ExtendedConfigCacheEntry],
+	trace func(msg string),
 ) CompilerHost {
-	return NewCompilerHost(currentDirectory, cachedvfs.From(fs), defaultLibraryPath, extendedConfigCache)
+	return NewCompilerHost(currentDirectory, cachedvfs.From(fs), defaultLibraryPath, extendedConfigCache, trace)
 }
 
 func NewCompilerHost(
@@ -46,12 +48,17 @@ func NewCompilerHost(
 	fs vfs.FS,
 	defaultLibraryPath string,
 	extendedConfigCache *collections.SyncMap[tspath.Path, *tsoptions.ExtendedConfigCacheEntry],
+	trace func(msg string),
 ) CompilerHost {
+	if trace == nil {
+		trace = func(msg string) {}
+	}
 	return &compilerHost{
 		currentDirectory:    currentDirectory,
 		fs:                  fs,
 		defaultLibraryPath:  defaultLibraryPath,
 		extendedConfigCache: extendedConfigCache,
+		trace:               trace,
 	}
 }
 
@@ -68,7 +75,7 @@ func (h *compilerHost) GetCurrentDirectory() string {
 }
 
 func (h *compilerHost) Trace(msg string) {
-	//!!! TODO: implement
+	h.trace(msg)
 }
 
 func (h *compilerHost) GetSourceFile(opts ast.SourceFileParseOptions) *ast.SourceFile {

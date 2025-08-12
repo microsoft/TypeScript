@@ -1,0 +1,29 @@
+======== Resolving module '@typescript/lib-dom' from '/somepath/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/somepath/package.json' does not exist.
+File '/package.json' does not exist.
+Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+File '/somepath/node_modules/@typescript/lib-dom/package.json' does not exist.
+File '/somepath/node_modules/@typescript/lib-dom.ts' does not exist.
+File '/somepath/node_modules/@typescript/lib-dom.tsx' does not exist.
+File '/somepath/node_modules/@typescript/lib-dom.d.ts' does not exist.
+File '/somepath/node_modules/@typescript/lib-dom/index.ts' does not exist.
+File '/somepath/node_modules/@typescript/lib-dom/index.tsx' does not exist.
+File '/somepath/node_modules/@typescript/lib-dom/index.d.ts' exists - use it as a name resolution result.
+Resolving real path for '/somepath/node_modules/@typescript/lib-dom/index.d.ts', result '/somepath/node_modules/@typescript/lib-dom/index.d.ts'.
+======== Module name '@typescript/lib-dom' was successfully resolved to '/somepath/node_modules/@typescript/lib-dom/index.d.ts'. ========
+======== Resolving module '@typescript/lib-dom/iterable' from '/somepath/__lib_node_modules_lookup_lib.dom.iterable.d.ts__.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/somepath/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module '@typescript/lib-dom/iterable' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+File '/somepath/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
+File '/somepath/node_modules/@typescript/lib-dom/iterable.ts' does not exist.
+File '/somepath/node_modules/@typescript/lib-dom/iterable.tsx' does not exist.
+File '/somepath/node_modules/@typescript/lib-dom/iterable.d.ts' exists - use it as a name resolution result.
+Resolving real path for '/somepath/node_modules/@typescript/lib-dom/iterable.d.ts', result '/somepath/node_modules/@typescript/lib-dom/iterable.d.ts'.
+======== Module name '@typescript/lib-dom/iterable' was successfully resolved to '/somepath/node_modules/@typescript/lib-dom/iterable.d.ts'. ========

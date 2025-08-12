@@ -192,6 +192,7 @@ func (r *CompilerBaselineRunner) runSingleConfigTest(t *testing.T, testName stri
 	compilerTest.verifySourceMapOutput(t, r.testSuitName, r.isSubmodule)
 	compilerTest.verifySourceMapRecord(t, r.testSuitName, r.isSubmodule)
 	compilerTest.verifyTypesAndSymbols(t, r.testSuitName, r.isSubmodule)
+	compilerTest.verifyModuleResolution(t, r.testSuitName, r.isSubmodule)
 	// !!! Verify all baselines
 
 	compilerTest.verifyUnionOrdering(t)
@@ -508,6 +509,21 @@ func (c *compilerTest) verifyTypesAndSymbols(t *testing.T, suiteName string, isS
 		false,
 		len(c.result.Diagnostics) > 0,
 	)
+}
+
+func (c *compilerTest) verifyModuleResolution(t *testing.T, suiteName string, isSubmodule bool) {
+	if !c.options.TraceResolution.IsTrue() {
+		return
+	}
+
+	t.Run("module resolution", func(t *testing.T) {
+		defer testutil.RecoverAndFail(t, "Panic on creating module resolution baseline for test "+c.filename)
+		tsbaseline.DoModuleResolutionBaseline(t, c.configuredName, c.result.Trace, baseline.Options{
+			Subfolder:       suiteName,
+			IsSubmodule:     isSubmodule,
+			SkipDiffWithOld: true,
+		})
+	})
 }
 
 func createHarnessTestFile(unit *testUnit, currentDirectory string) *harnessutil.TestFile {

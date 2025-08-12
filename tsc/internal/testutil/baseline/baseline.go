@@ -23,6 +23,7 @@ type Options struct {
 	IsSubmodule         bool
 	IsSubmoduleAccepted bool
 	DiffFixupOld        func(string) string
+	SkipDiffWithOld     bool
 }
 
 const NoContent = "<no content>"
@@ -42,7 +43,7 @@ func Run(t *testing.T, fileName string, actual string, opts Options) {
 		writeComparison(t, actual, localPath, referencePath, false)
 	}
 
-	if !opts.IsSubmodule {
+	if !opts.IsSubmodule || opts.SkipDiffWithOld {
 		// Not a submodule, no diffs.
 		return
 	}

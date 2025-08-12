@@ -1,0 +1,35 @@
+======== Resolving module '@typescript/lib-dom' from '/.src/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/.src/package.json' does not exist.
+File '/package.json' does not exist.
+Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/.src/node_modules' does not exist, skipping all lookups in it.
+Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom'
+File '/node_modules/@typescript/lib-dom/package.json' does not exist.
+File '/node_modules/@typescript/lib-dom.ts' does not exist.
+File '/node_modules/@typescript/lib-dom.tsx' does not exist.
+File '/node_modules/@typescript/lib-dom.d.ts' does not exist.
+File '/node_modules/@typescript/lib-dom/index.ts' does not exist.
+File '/node_modules/@typescript/lib-dom/index.tsx' does not exist.
+File '/node_modules/@typescript/lib-dom/index.d.ts' exists - use it as a name resolution result.
+Resolving real path for '/node_modules/@typescript/lib-dom/index.d.ts', result '/node_modules/@typescript/lib-dom/index.d.ts'.
+======== Module name '@typescript/lib-dom' was successfully resolved to '/node_modules/@typescript/lib-dom/index.d.ts'. ========
+======== Resolving module '@typescript/lib-dom/iterable' from '/.src/__lib_node_modules_lookup_lib.dom.iterable.d.ts__.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/.src/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module '@typescript/lib-dom/iterable' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/.src/node_modules' does not exist, skipping all lookups in it.
+Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom/iterable'
+File '/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/@typescript/lib-dom/iterable.ts' does not exist.
+File '/node_modules/@typescript/lib-dom/iterable.tsx' does not exist.
+File '/node_modules/@typescript/lib-dom/iterable.d.ts' exists - use it as a name resolution result.
+Resolving real path for '/node_modules/@typescript/lib-dom/iterable.d.ts', result '/node_modules/@typescript/lib-dom/iterable.d.ts'.
+======== Module name '@typescript/lib-dom/iterable' was successfully resolved to '/node_modules/@typescript/lib-dom/iterable.d.ts'. ========

@@ -15,6 +15,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/execute"
 	"github.com/microsoft/typescript-go/internal/incremental"
+	"github.com/microsoft/typescript-go/internal/testutil/harnessutil"
 	"github.com/microsoft/typescript-go/internal/testutil/incrementaltestutil"
 	"github.com/microsoft/typescript-go/internal/testutil/stringtestutil"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
@@ -184,7 +185,7 @@ func (s *testSys) EndWrite() {
 	// todo: revisit if improving tsc/build/watch unittest baselines
 	output := s.currentWrite.String()
 	s.currentWrite.Reset()
-	output = sanitizeSysOutput(output, "Version "+core.Version(), "Version FakeTSVersion\n")
+	output = sanitizeSysOutput(output, "Version "+core.Version(), "Version "+harnessutil.FakeTSVersion+"\n")
 	output = sanitizeSysOutput(output, "build starting at ", "")
 	output = sanitizeSysOutput(output, "build finished in ", "")
 	s.output = append(s.output, output)

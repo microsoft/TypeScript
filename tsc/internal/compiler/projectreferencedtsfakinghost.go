@@ -41,11 +41,6 @@ func (h *projectReferenceDtsFakingHost) GetCurrentDirectory() string {
 	return h.host.GetCurrentDirectory()
 }
 
-// Trace implements module.ResolutionHost.
-func (h *projectReferenceDtsFakingHost) Trace(msg string) {
-	h.host.Trace(msg)
-}
-
 type projectReferenceDtsFakingVfs struct {
 	projectReferenceFileMapper *projectReferenceFileMapper
 	dtsDirectories             collections.Set[tspath.Path]

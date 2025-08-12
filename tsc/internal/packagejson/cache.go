@@ -14,42 +14,33 @@ var typeScriptVersion = semver.MustParse(core.Version())
 
 type PackageJson struct {
 	Fields
-	versionPaths VersionPaths
-	once         sync.Once
+	versionPaths  VersionPaths
+	versionTraces []string
+	once          sync.Once
 }
 
 func (p *PackageJson) GetVersionPaths(trace func(string)) VersionPaths {
 	p.once.Do(func() {
 		if p.Fields.TypesVersions.Type == JSONValueTypeNotPresent {
-			if trace != nil {
-				trace(diagnostics.X_package_json_does_not_have_a_0_field.Format("typesVersions"))
-			}
+			p.versionTraces = append(p.versionTraces, diagnostics.X_package_json_does_not_have_a_0_field.Format("typesVersions"))
 			return
 		}
 		if p.Fields.TypesVersions.Type != JSONValueTypeObject {
-			if trace != nil {
-				trace(diagnostics.Expected_type_of_0_field_in_package_json_to_be_1_got_2.Format("typesVersions", "object", p.Fields.TypesVersions.Type.String()))
-			}
+			p.versionTraces = append(p.versionTraces, diagnostics.Expected_type_of_0_field_in_package_json_to_be_1_got_2.Format("typesVersions", "object", p.Fields.TypesVersions.Type.String()))
 			return
 		}
 
-		if trace != nil {
-			trace(diagnostics.X_package_json_has_a_typesVersions_field_with_version_specific_path_mappings.Format("typesVersions"))
-		}
+		p.versionTraces = append(p.versionTraces, diagnostics.X_package_json_has_a_typesVersions_field_with_version_specific_path_mappings.Format("typesVersions"))
 
 		for key, value := range p.Fields.TypesVersions.AsObject().Entries() {
 			keyRange, ok := semver.TryParseVersionRange(key)
 			if !ok {
-				if trace != nil {
-					trace(diagnostics.X_package_json_has_a_typesVersions_entry_0_that_is_not_a_valid_semver_range.Format(key))
-				}
+				p.versionTraces = append(p.versionTraces, diagnostics.X_package_json_has_a_typesVersions_entry_0_that_is_not_a_valid_semver_range.Format(key))
 				continue
 			}
 			if keyRange.Test(&typeScriptVersion) {
 				if value.Type != JSONValueTypeObject {
-					if trace != nil {
-						trace(diagnostics.Expected_type_of_0_field_in_package_json_to_be_1_got_2.Format("typesVersions['"+key+"']", "object", value.Type.String()))
-					}
+					p.versionTraces = append(p.versionTraces, diagnostics.Expected_type_of_0_field_in_package_json_to_be_1_got_2.Format("typesVersions['"+key+"']", "object", value.Type.String()))
 					return
 				}
 				p.versionPaths = VersionPaths{
@@ -60,10 +51,13 @@ func (p *PackageJson) GetVersionPaths(trace func(string)) VersionPaths {
 			}
 		}
 
-		if trace != nil {
-			trace(diagnostics.X_package_json_does_not_have_a_typesVersions_entry_that_matches_version_0.Format(core.VersionMajorMinor()))
-		}
+		p.versionTraces = append(p.versionTraces, diagnostics.X_package_json_does_not_have_a_typesVersions_entry_that_matches_version_0.Format(core.VersionMajorMinor()))
 	})
+	if trace != nil {
+		for _, msg := range p.versionTraces {
+			trace(msg)
+		}
+	}
 	return p.versionPaths
 }
 

@@ -14,7 +14,6 @@ import (
 type ResolutionHost interface {
 	FS() vfs.FS
 	GetCurrentDirectory() string
-	Trace(msg string)
 }
 
 type ModeAwareCacheKey struct {

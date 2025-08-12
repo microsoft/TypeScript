@@ -15,6 +15,12 @@ import (
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
+type libResolution struct {
+	libraryName string
+	resolution  *module.ResolvedModule
+	trace       []string
+}
+
 type LibFile struct {
 	Name     string
 	path     string
@@ -41,7 +47,7 @@ type fileLoader struct {
 	dtsDirectories             collections.Set[tspath.Path]
 
 	pathForLibFileCache       collections.SyncMap[string, *LibFile]
-	pathForLibFileResolutions collections.SyncMap[tspath.Path, module.ModeAwareCache[*module.ResolvedModule]]
+	pathForLibFileResolutions collections.SyncMap[tspath.Path, *libResolution]
 }
 
 type processedFiles struct {
@@ -208,15 +214,20 @@ func processAllProgramFiles(
 		}
 	}
 
-	loader.pathForLibFileResolutions.Range(func(key tspath.Path, value module.ModeAwareCache[*module.ResolvedModule]) bool {
-		resolvedModules[key] = value
-		for _, resolvedModule := range value {
-			for _, diag := range resolvedModule.ResolutionDiagnostics {
-				fileLoadDiagnostics.Add(diag)
-			}
+	keys := slices.Collect(loader.pathForLibFileResolutions.Keys())
+	slices.Sort(keys)
+	for _, key := range keys {
+		value, _ := loader.pathForLibFileResolutions.Load(key)
+		resolvedModules[key] = module.ModeAwareCache[*module.ResolvedModule]{
+			module.ModeAwareCacheKey{Name: value.libraryName, Mode: core.ModuleKindCommonJS}: value.resolution,
 		}
-		return true
-	})
+		for _, trace := range value.trace {
+			opts.Host.Trace(trace)
+		}
+		for _, diag := range value.resolution.ResolutionDiagnostics {
+			fileLoadDiagnostics.Add(diag)
+		}
+	}
 
 	return processedFiles{
 		resolver:                             loader.resolver,
@@ -261,6 +272,7 @@ func (p *fileLoader) addAutomaticTypeDirectiveTasks() {
 func (p *fileLoader) resolveAutomaticTypeDirectives(containingFileName string) (
 	toParse []resolvedRef,
 	typeResolutionsInFile module.ModeAwareCache[*module.ResolvedTypeReferenceDirective],
+	typeResolutionsTrace []string,
 ) {
 	automaticTypeDirectiveNames := module.GetAutomaticTypeDirectiveNames(p.opts.Config.CompilerOptions(), p.opts.Host)
 	if len(automaticTypeDirectiveNames) != 0 {
@@ -268,8 +280,9 @@ func (p *fileLoader) resolveAutomaticTypeDirectives(containingFileName string) (
 		typeResolutionsInFile = make(module.ModeAwareCache[*module.ResolvedTypeReferenceDirective], len(automaticTypeDirectiveNames))
 		for _, name := range automaticTypeDirectiveNames {
 			resolutionMode := core.ModuleKindNodeNext
-			resolved := p.resolver.ResolveTypeReferenceDirective(name, containingFileName, resolutionMode, nil)
+			resolved, trace := p.resolver.ResolveTypeReferenceDirective(name, containingFileName, resolutionMode, nil)
 			typeResolutionsInFile[module.ModeAwareCacheKey{Name: name, Mode: resolutionMode}] = resolved
+			typeResolutionsTrace = append(typeResolutionsTrace, trace...)
 			if resolved.IsResolved() {
 				toParse = append(toParse, resolvedRef{
 					fileName:      resolved.ResolvedFileName,
@@ -279,7 +292,7 @@ func (p *fileLoader) resolveAutomaticTypeDirectives(containingFileName string) (
 			}
 		}
 	}
-	return toParse, typeResolutionsInFile
+	return toParse, typeResolutionsInFile, typeResolutionsTrace
 }
 
 func (p *fileLoader) addProjectReferenceTasks(singleThreaded bool) {
@@ -399,11 +412,13 @@ func (p *fileLoader) resolveTypeReferenceDirectives(t *parseTask) {
 	meta := t.metadata
 
 	typeResolutionsInFile := make(module.ModeAwareCache[*module.ResolvedTypeReferenceDirective], len(file.TypeReferenceDirectives))
+	var typeResolutionsTrace []string
 	for _, ref := range file.TypeReferenceDirectives {
 		redirect := p.projectReferenceFileMapper.getRedirectForResolution(file)
 		resolutionMode := getModeForTypeReferenceDirectiveInFile(ref, file, meta, module.GetCompilerOptionsWithRedirect(p.opts.Config.CompilerOptions(), redirect))
-		resolved := p.resolver.ResolveTypeReferenceDirective(ref.FileName, file.FileName(), resolutionMode, redirect)
+		resolved, trace := p.resolver.ResolveTypeReferenceDirective(ref.FileName, file.FileName(), resolutionMode, redirect)
 		typeResolutionsInFile[module.ModeAwareCacheKey{Name: ref.FileName, Mode: resolutionMode}] = resolved
+		typeResolutionsTrace = append(typeResolutionsTrace, trace...)
 
 		if resolved.IsResolved() {
 			t.addSubTask(resolvedRef{
@@ -416,6 +431,7 @@ func (p *fileLoader) resolveTypeReferenceDirectives(t *parseTask) {
 	}
 
 	t.typeResolutionsInFile = typeResolutionsInFile
+	t.typeResolutionsTrace = typeResolutionsTrace
 }
 
 const externalHelpersModuleNameText = "tslib" // TODO(jakebailey): dedupe
@@ -461,6 +477,7 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 
 	if len(moduleNames) != 0 {
 		resolutionsInFile := make(module.ModeAwareCache[*module.ResolvedModule], len(moduleNames))
+		var resolutionsTrace []string
 
 		for index, entry := range moduleNames {
 			moduleName := entry.Text()
@@ -469,8 +486,9 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 			}
 
 			mode := getModeForUsageLocation(file.FileName(), meta, entry, optionsForFile)
-			resolvedModule := p.resolver.ResolveModuleName(moduleName, file.FileName(), mode, redirect)
+			resolvedModule, trace := p.resolver.ResolveModuleName(moduleName, file.FileName(), mode, redirect)
 			resolutionsInFile[module.ModeAwareCacheKey{Name: moduleName, Mode: mode}] = resolvedModule
+			resolutionsTrace = append(resolutionsTrace, trace...)
 
 			if !resolvedModule.IsResolved() {
 				continue
@@ -507,6 +525,7 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 		}
 
 		t.resolutionsInFile = resolutionsInFile
+		t.resolutionsTrace = resolutionsTrace
 	}
 }
 
@@ -533,12 +552,14 @@ func (p *fileLoader) pathForLibFile(name string) *LibFile {
 	if p.opts.Config.CompilerOptions().LibReplacement.IsTrue() {
 		libraryName := getLibraryNameFromLibFileName(name)
 		resolveFrom := getInferredLibraryNameResolveFrom(p.opts.Config.CompilerOptions(), p.opts.Host.GetCurrentDirectory(), name)
-		resolution := p.resolver.ResolveModuleName(libraryName, resolveFrom, core.ModuleKindCommonJS, nil)
+		resolution, trace := p.resolver.ResolveModuleName(libraryName, resolveFrom, core.ModuleKindCommonJS, nil)
 		if resolution.IsResolved() {
 			path = resolution.ResolvedFileName
 			replaced = true
-			p.pathForLibFileResolutions.LoadOrStore(p.toPath(resolveFrom), module.ModeAwareCache[*module.ResolvedModule]{
-				module.ModeAwareCacheKey{Name: libraryName, Mode: core.ModuleKindCommonJS}: resolution,
+			p.pathForLibFileResolutions.LoadOrStore(p.toPath(resolveFrom), &libResolution{
+				libraryName: libraryName,
+				resolution:  resolution,
+				trace:       trace,
 			})
 		}
 	}

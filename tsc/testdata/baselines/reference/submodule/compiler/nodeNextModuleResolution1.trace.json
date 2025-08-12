@@ -1,0 +1,24 @@
+======== Resolving module 'foo' from '/a/b/c/d/e/app.ts'. ========
+Explicitly specified module resolution kind: 'NodeNext'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
+Found 'package.json' at '/a/b/c/d/e/package.json'.
+Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/a/b/c/d/e/node_modules' does not exist, skipping all lookups in it.
+Directory '/a/b/c/d/e/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/a/b/c/d/node_modules' does not exist, skipping all lookups in it.
+Directory '/a/b/c/d/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/a/b/c/node_modules' does not exist, skipping all lookups in it.
+Directory '/a/b/c/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/a/b/node_modules' does not exist, skipping all lookups in it.
+Directory '/a/b/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/a/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules/@types' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+Directory '/a/b/c/d/e/node_modules' does not exist, skipping all lookups in it.
+Directory '/a/b/c/d/node_modules' does not exist, skipping all lookups in it.
+Directory '/a/b/c/node_modules' does not exist, skipping all lookups in it.
+Directory '/a/b/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name 'foo' was not resolved. ========

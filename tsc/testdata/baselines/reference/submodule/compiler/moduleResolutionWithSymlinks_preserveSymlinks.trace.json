@@ -1,0 +1,47 @@
+======== Resolving type reference directive 'linked', containing file '/app/app.ts', root directory '/.src/node_modules/@types,/node_modules/@types'. ========
+Resolving with primary search path '/.src/node_modules/@types, /node_modules/@types'.
+Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/node_modules/@types' does not exist, skipping all lookups in it.
+Looking up in 'node_modules' folder, initial location '/app'.
+Searching all ancestor node_modules directories for preferred extensions: Declaration.
+File '/app/node_modules/linked.d.ts' does not exist.
+Directory '/app/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules/@types' does not exist, skipping all lookups in it.
+======== Type reference directive 'linked' was not resolved. ========
+======== Resolving module 'linked' from '/app/app.ts'. ========
+Explicitly specified module resolution kind: 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/app/package.json' does not exist.
+File '/package.json' does not exist.
+Loading module 'linked' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+File '/app/node_modules/linked.ts' does not exist.
+File '/app/node_modules/linked.tsx' does not exist.
+File '/app/node_modules/linked.d.ts' does not exist according to earlier cached lookups.
+Directory '/app/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules/@types' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
+File '/app/node_modules/linked.js' does not exist.
+File '/app/node_modules/linked.jsx' does not exist.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name 'linked' was not resolved. ========
+======== Resolving module 'linked2' from '/app/app.ts'. ========
+Explicitly specified module resolution kind: 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/app/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module 'linked2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+File '/app/node_modules/linked2.ts' does not exist.
+File '/app/node_modules/linked2.tsx' does not exist.
+File '/app/node_modules/linked2.d.ts' does not exist.
+Directory '/app/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules/@types' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
+File '/app/node_modules/linked2.js' does not exist.
+File '/app/node_modules/linked2.jsx' does not exist.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name 'linked2' was not resolved. ========
