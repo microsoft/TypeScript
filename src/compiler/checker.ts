@@ -37002,9 +37002,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // use the resolvingSignature singleton to indicate that we deferred processing. This result will be
         // propagated out and eventually turned into silentNeverType (a type that is assignable to anything and
         // from which we never make inferences).
-        if (checkMode & CheckMode.SkipGenericFunctions && !node.typeArguments && callSignatures.some(isGenericFunctionReturningFunction)) {
-            skippedGenericFunction(node, checkMode);
-            return resolvingSignature;
+        if (checkMode & CheckMode.SkipGenericFunctions && !node.typeArguments) {
+            const args = getEffectiveCallArguments(node);
+            if (some(callSignatures, candidate => hasCorrectArity(node, args, candidate) && isGenericFunctionReturningFunction(candidate))) {
+                skippedGenericFunction(node, checkMode);
+                return resolvingSignature;
+            }
         }
         // If the function is explicitly marked with `@class`, then it must be constructed.
         if (callSignatures.some(sig => isInJSFile(sig.declaration) && !!getJSDocClassTag(sig.declaration!))) {
