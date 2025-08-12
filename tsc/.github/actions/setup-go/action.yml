@@ -89,7 +89,12 @@ runs:
 
     - if: ${{ inputs.create == 'true' }}
       shell: bash
+      id: setup-go-test
       run: npx hereby test
+
+    - if: ${{ failure() && inputs.create == 'true' && steps.setup-go-test.conclusion == 'failure' }}
+      shell: bash
+      run: git diff --diff-filter=AM --no-index ./testdata/baselines/reference ./testdata/baselines/local
 
     - if: ${{ inputs.create == 'true' }}
       shell: bash
