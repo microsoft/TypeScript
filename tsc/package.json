@@ -15,7 +15,7 @@
         "hereby": "^1.11.0",
         "p-limit": "^6.2.0",
         "picocolors": "^1.1.1",
-        "typescript": "^5.8.3",
+        "typescript": "^5.9.2",
         "which": "^5.0.0"
     },
     "scripts": {

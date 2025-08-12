@@ -46,6 +46,6 @@
     },
     "dependencies": {
         "@typescript/ast": "1.0.0",
-        "@typescript/libsyncrpc": "github:microsoft/libsyncrpc#8cdae454cc482536c5844bef83b796f95464da85"
+        "@typescript/libsyncrpc": "github:microsoft/libsyncrpc#1580683e84cc177abdbbe83cf34f40605b7349f7"
     }
 }
