@@ -5,5 +5,5 @@
 //     [|(props: P, context?: any): string;|]
 // }
 // 
-// const Thing: FC = (props) => <div></div>;
+// const [|Thing|]: FC = (props) => <div></div>;
 // const HelloWorld = () => </*GO TO DEFINITION*/Thing />;

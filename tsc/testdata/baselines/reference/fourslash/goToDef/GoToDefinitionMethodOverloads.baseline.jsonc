@@ -90,8 +90,8 @@
 // === /goToDefinitionMethodOverloads.ts ===
 
 // class MethodOverload {
-//     static /*GO TO DEFINITION*/method();
-//     static method(foo: string);
+//     static /*GO TO DEFINITION*/[|method|]();
+//     static [|method|](foo: string);
 //     static [|method|](foo?: any) { }
 //     public method(): any;
 //     public method(foo: string);
@@ -108,8 +108,8 @@
 //     static method();
 //     static method(foo: string);
 //     static method(foo?: any) { }
-//     public /*GO TO DEFINITION*/method(): any;
-//     public method(foo: string);
+//     public /*GO TO DEFINITION*/[|method|](): any;
+//     public [|method|](foo: string);
 //     public [|method|](foo?: any) { return "foo" }
 // }
 // // static method

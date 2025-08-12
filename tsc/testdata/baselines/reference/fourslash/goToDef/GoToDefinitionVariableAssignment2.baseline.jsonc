@@ -2,6 +2,6 @@
 // === /foo.ts ===
 
 // const Bar;
-// const Foo = [|Bar|] = function () {}
+// const [|Foo|] = [|Bar|] = function () {}
 // Foo.prototype.bar = function() {}
 // new Foo/*GO TO DEFINITION*/();

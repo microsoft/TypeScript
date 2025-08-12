@@ -1,7 +1,7 @@
 // === goToDefinition ===
 // === /goToDefinitionConstructorOfClassExpression01.ts ===
 
-// var x = class C {
+// var x = class [|C|] {
 //     [|constructor() {
 //         var other = new /*GO TO DEFINITION*/C;
 //     }|]
@@ -16,10 +16,11 @@
 // === goToDefinition ===
 // === /goToDefinitionConstructorOfClassExpression01.ts ===
 
-// --- (line: 4) skipped ---
+// --- (line: 3) skipped ---
+//     }
 // }
 // 
-// var y = class C extends x {
+// var y = class [|C|] extends x {
 //     [|constructor() {
 //         super();
 //         var other = new /*GO TO DEFINITION*/C;
@@ -42,12 +43,12 @@
 // }
 // 
 // var y = class C extends x {
-// // --- (line: 8) skipped ---
-
-
-// --- (line: 11) skipped ---
+//     constructor() {
+//         super();
+//         var other = new C;
+//     }
 // }
-// var z = class C extends x {
+// var z = class [|C|] extends x {
 //     m() {
 //         return new /*GO TO DEFINITION*/C;
 //     }
@@ -76,7 +77,7 @@
 // === goToDefinition ===
 // === /goToDefinitionConstructorOfClassExpression01.ts ===
 
-// var x = class C {
+// var [|x|] = class C {
 //     [|constructor() {
 //         var other = new C;
 //     }|]
@@ -100,10 +101,11 @@
 // === goToDefinition ===
 // === /goToDefinitionConstructorOfClassExpression01.ts ===
 
-// --- (line: 4) skipped ---
+// --- (line: 3) skipped ---
+//     }
 // }
 // 
-// var y = class C extends x {
+// var [|y|] = class C extends x {
 //     [|constructor() {
 //         super();
 //         var other = new C;
@@ -133,10 +135,17 @@
 // }
 // 
 // var y = class C extends x {
-// // --- (line: 8) skipped ---
-
-
-// --- (line: 18) skipped ---
+//     constructor() {
+//         super();
+//         var other = new C;
+//     }
+// }
+// var [|z|] = class C extends x {
+//     m() {
+//         return new C;
+//     }
+// }
+// 
 // var x1 = new C();
 // var x2 = new x();
 // var y1 = new y();

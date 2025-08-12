@@ -43,8 +43,8 @@
 // === goToDefinition ===
 // === /goToDefinitionFunctionOverloads.ts ===
 
-// function /*GO TO DEFINITION*/functionOverload(value: number);
-// function functionOverload(value: string);
+// function /*GO TO DEFINITION*/[|functionOverload|](value: number);
+// function [|functionOverload|](value: string);
 // function [|functionOverload|]() {}
 // 
 // functionOverload(123);

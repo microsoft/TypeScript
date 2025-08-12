@@ -5,7 +5,7 @@
 //     [|constructor() {}|]
 //     x() {}
 // }
-// class B extends A {}
+// class [|B|] extends A {}
 // class C extends B {
 //     constructor() {
 //         /*GO TO DEFINITION*/super();

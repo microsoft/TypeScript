@@ -2,8 +2,8 @@
 // === /goToDefinitionFunctionOverloadsInClass.ts ===
 
 // class clsInOverload {
-//     static fnOverload();
-//     static /*GO TO DEFINITION*/fnOverload(foo: string);
+//     static [|fnOverload|]();
+//     static /*GO TO DEFINITION*/[|fnOverload|](foo: string);
 //     static [|fnOverload|](foo: any) { }
 //     public fnOverload(): any;
 //     public fnOverload(foo: string);
@@ -20,8 +20,8 @@
 //     static fnOverload();
 //     static fnOverload(foo: string);
 //     static fnOverload(foo: any) { }
-//     public /*GO TO DEFINITION*/fnOverload(): any;
-//     public fnOverload(foo: string);
+//     public /*GO TO DEFINITION*/[|fnOverload|](): any;
+//     public [|fnOverload|](foo: string);
 //     public [|fnOverload|](foo: any) { return "foo" }
 // 
 //     constructor() { }

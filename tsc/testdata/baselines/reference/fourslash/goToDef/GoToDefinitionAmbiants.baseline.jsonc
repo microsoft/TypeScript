@@ -43,7 +43,7 @@
 
 // declare var ambientVar;
 // declare function ambientFunction();
-// declare class ambientClass {
+// declare class [|ambientClass|] {
 //     [|constructor();|]
 //     static method();
 //     public method();

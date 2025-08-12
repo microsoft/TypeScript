@@ -1,7 +1,7 @@
 // === goToDefinition ===
 // === /a.js ===
 
-// module.exports = function [|f|]() {}
+// [|module.exports = function f() {}|][|f|]() {}
 
 
 // === /b.js ===
@@ -15,7 +15,7 @@
 // === goToDefinition ===
 // === /a.js ===
 
-// module.exports = function [|f|]() {}
+// [|module.exports = function f() {}|][|f|]() {}
 
 
 // === /bar.ts ===

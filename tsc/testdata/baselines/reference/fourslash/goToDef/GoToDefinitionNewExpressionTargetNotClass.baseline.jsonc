@@ -3,7 +3,7 @@
 
 // class C2 {
 // }
-// let I: {
+// let [|I|]: {
 //     [|new(): C2;|]
 // };
 // new /*GO TO DEFINITION*/I();

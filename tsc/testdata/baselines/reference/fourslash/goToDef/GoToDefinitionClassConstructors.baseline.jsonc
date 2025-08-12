@@ -5,8 +5,10 @@
 //     [|constructor(protected readonly cArg: string) {}|]
 // }
 // 
-// export class Derived extends Base {
-// // --- (line: 6) skipped ---
+// export class [|Derived|] extends Base {
+//     readonly email = this.cArg.getByLabel('Email')
+//     readonly password =  this.cArg.getByLabel('Password')
+// }
 
 
 // === /main.ts ===
@@ -18,6 +20,16 @@
 
 
 // === goToDefinition ===
+// === /defInSameFile.ts ===
+
+// import { Base } from './definitions'
+// class [|SameFile|] extends Base {
+//     readonly name: string = 'SameFile'
+// }
+// const SameFile = new /*GO TO DEFINITION*/SameFile(cArg)
+// const wrapper = new Base(cArg)
+
+
 // === /definitions.ts ===
 
 // export class Base {
@@ -28,23 +40,13 @@
 // // --- (line: 6) skipped ---
 
 
-// === /defInSameFile.ts ===
-
-// import { Base } from './definitions'
-// class SameFile extends Base {
-//     readonly name: string = 'SameFile'
-// }
-// const SameFile = new /*GO TO DEFINITION*/SameFile(cArg)
-// const wrapper = new Base(cArg)
-
-
 
 
 // === goToDefinition ===
 // === /hasConstructor.ts ===
 
 // import { Base } from './definitions'
-// class HasConstructor extends Base {
+// class [|HasConstructor|] extends Base {
 //     [|constructor() {}|]
 //     readonly name: string = '';
 // }
@@ -56,7 +58,7 @@
 // === goToDefinition ===
 // === /definitions.ts ===
 
-// export class Base {
+// export class [|Base|] {
 //     [|constructor(protected readonly cArg: string) {}|]
 // }
 // 

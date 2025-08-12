@@ -2,6 +2,7 @@ package ls
 
 import (
 	"context"
+	"slices"
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/astnav"
@@ -46,42 +47,14 @@ func (l *LanguageService) ProvideDefinition(ctx context.Context, documentURI lsp
 		}
 	}
 
-	if calledDeclaration := tryGetSignatureDeclaration(c, node); calledDeclaration != nil {
-		return l.createLocationsFromDeclarations([]*ast.Node{calledDeclaration}), nil
+	declarations := getDeclarationsFromLocation(c, node)
+	calledDeclaration := tryGetSignatureDeclaration(c, node)
+	if calledDeclaration != nil {
+		// If we can resolve a call signature, remove all function-like declarations and add that signature.
+		nonFunctionDeclarations := core.Filter(slices.Clip(declarations), func(node *ast.Node) bool { return !ast.IsFunctionLike(node) })
+		declarations = append(nonFunctionDeclarations, calledDeclaration)
 	}
-
-	if ast.IsIdentifier(node) && ast.IsShorthandPropertyAssignment(node.Parent) {
-		return l.createLocationsFromDeclarations(c.GetResolvedSymbol(node).Declarations), nil
-	}
-
-	node = getDeclarationNameForKeyword(node)
-
-	if symbol := c.GetSymbolAtLocation(node); symbol != nil {
-		if symbol.Flags&ast.SymbolFlagsClass != 0 && symbol.Flags&(ast.SymbolFlagsFunction|ast.SymbolFlagsVariable) == 0 && node.Kind == ast.KindConstructorKeyword {
-			if constructor := symbol.Members[ast.InternalSymbolNameConstructor]; constructor != nil {
-				symbol = constructor
-			}
-		}
-		if symbol.Flags&ast.SymbolFlagsAlias != 0 {
-			if resolved, ok := c.ResolveAlias(symbol); ok {
-				symbol = resolved
-			}
-		}
-		if symbol.Flags&(ast.SymbolFlagsProperty|ast.SymbolFlagsMethod|ast.SymbolFlagsAccessor) != 0 && symbol.Parent != nil && symbol.Parent.Flags&ast.SymbolFlagsObjectLiteral != 0 {
-			if objectLiteral := core.FirstOrNil(symbol.Parent.Declarations); objectLiteral != nil {
-				if declarations := c.GetContextualDeclarationsForObjectLiteralElement(objectLiteral, symbol.Name); len(declarations) != 0 {
-					return l.createLocationsFromDeclarations(declarations), nil
-				}
-			}
-		}
-		return l.createLocationsFromDeclarations(symbol.Declarations), nil
-	}
-
-	if indexInfos := c.GetIndexSignaturesAtLocation(node); len(indexInfos) != 0 {
-		return l.createLocationsFromDeclarations(indexInfos), nil
-	}
-
-	return lsproto.LocationOrLocationsOrDefinitionLinksOrNull{}, nil
+	return l.createLocationsFromDeclarations(declarations), nil
 }
 
 func (l *LanguageService) ProvideTypeDefinition(ctx context.Context, documentURI lsproto.DocumentUri, position lsproto.Position) (lsproto.DefinitionResponse, error) {
@@ -127,17 +100,14 @@ func getDeclarationNameForKeyword(node *ast.Node) *ast.Node {
 }
 
 func (l *LanguageService) createLocationsFromDeclarations(declarations []*ast.Node) lsproto.DefinitionResponse {
-	someHaveBody := core.Some(declarations, func(node *ast.Node) bool { return node.Body() != nil })
 	locations := make([]lsproto.Location, 0, len(declarations))
 	for _, decl := range declarations {
-		if !someHaveBody || decl.Body() != nil {
-			file := ast.GetSourceFileOfNode(decl)
-			name := core.OrElse(ast.GetNameOfDeclaration(decl), decl)
-			locations = append(locations, lsproto.Location{
-				Uri:   FileNameToDocumentURI(file.FileName()),
-				Range: *l.createLspRangeFromNode(name, file),
-			})
-		}
+		file := ast.GetSourceFileOfNode(decl)
+		name := core.OrElse(ast.GetNameOfDeclaration(decl), decl)
+		locations = core.AppendIfUnique(locations, lsproto.Location{
+			Uri:   FileNameToDocumentURI(file.FileName()),
+			Range: *l.createLspRangeFromNode(name, file),
+		})
 	}
 	return lsproto.LocationOrLocationsOrDefinitionLinksOrNull{Locations: &locations}
 }
@@ -151,7 +121,38 @@ func (l *LanguageService) createLocationFromFileAndRange(file *ast.SourceFile, t
 	}
 }
 
-/** Returns a CallLikeExpression where `node` is the target being invoked. */
+func getDeclarationsFromLocation(c *checker.Checker, node *ast.Node) []*ast.Node {
+	if ast.IsIdentifier(node) && ast.IsShorthandPropertyAssignment(node.Parent) {
+		return c.GetResolvedSymbol(node).Declarations
+	}
+	node = getDeclarationNameForKeyword(node)
+	if symbol := c.GetSymbolAtLocation(node); symbol != nil {
+		if symbol.Flags&ast.SymbolFlagsClass != 0 && symbol.Flags&(ast.SymbolFlagsFunction|ast.SymbolFlagsVariable) == 0 && node.Kind == ast.KindConstructorKeyword {
+			if constructor := symbol.Members[ast.InternalSymbolNameConstructor]; constructor != nil {
+				symbol = constructor
+			}
+		}
+		if symbol.Flags&ast.SymbolFlagsAlias != 0 {
+			if resolved, ok := c.ResolveAlias(symbol); ok {
+				symbol = resolved
+			}
+		}
+		if symbol.Flags&(ast.SymbolFlagsProperty|ast.SymbolFlagsMethod|ast.SymbolFlagsAccessor) != 0 && symbol.Parent != nil && symbol.Parent.Flags&ast.SymbolFlagsObjectLiteral != 0 {
+			if objectLiteral := core.FirstOrNil(symbol.Parent.Declarations); objectLiteral != nil {
+				if declarations := c.GetContextualDeclarationsForObjectLiteralElement(objectLiteral, symbol.Name); len(declarations) != 0 {
+					return declarations
+				}
+			}
+		}
+		return symbol.Declarations
+	}
+	if indexInfos := c.GetIndexSignaturesAtLocation(node); len(indexInfos) != 0 {
+		return indexInfos
+	}
+	return nil
+}
+
+// Returns a CallLikeExpression where `node` is the target being invoked.
 func getAncestorCallLikeExpression(node *ast.Node) *ast.Node {
 	target := ast.FindAncestor(node, func(n *ast.Node) bool {
 		return !isRightSideOfPropertyAccess(n)
