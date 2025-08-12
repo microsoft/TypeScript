@@ -1879,11 +1879,11 @@ function createCompletionEntry(
                     // Check if the union contains string-like types that users would typically provide as strings
                     // This handles cases like Preact's Signalish<string | undefined> = string | undefined | SignalLike<string | undefined>
                     const hasStringLikeTypes = some(unionType.types, type => !!(type.flags & TypeFlags.StringLike));
-                    const hasNonObjectTypes = some(unionType.types, type => !!(type.flags & (TypeFlags.StringLike | TypeFlags.Undefined | TypeFlags.Null)));
+                    const hasPrimitiveTypes = some(unionType.types, type => !!(type.flags & (TypeFlags.StringLike | TypeFlags.Undefined | TypeFlags.Null)));
 
-                    // If the union has string-like types and at least some primitive types (not just objects),
-                    // prefer quotes since users commonly want to provide string values
-                    if (hasStringLikeTypes && hasNonObjectTypes) {
+                    // If the union has string-like types and contains primitive types (string, undefined, null),
+                    // prefer quotes since users commonly want to provide string values rather than complex objects
+                    if (hasStringLikeTypes && hasPrimitiveTypes) {
                         shouldUseQuotes = true;
                     }
                 }
