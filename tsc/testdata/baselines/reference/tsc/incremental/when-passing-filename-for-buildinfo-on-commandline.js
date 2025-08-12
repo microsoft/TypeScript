@@ -17,6 +17,10 @@ export const x = 10;
 tsgo --incremental --tsBuildInfoFile .tsbuildinfo --explainFiles
 ExitStatus:: Success
 Output::
+../../tslibs/TS/Lib/lib.d.ts
+   Default library for target 'ES5'
+src/main.ts
+   Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
 //// [/home/src/tslibs/TS/Lib/lib.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -94,6 +98,10 @@ Edit [0]:: no change
 tsgo --incremental --tsBuildInfoFile .tsbuildinfo --explainFiles
 ExitStatus:: Success
 Output::
+../../tslibs/TS/Lib/lib.d.ts
+   Default library for target 'ES5'
+src/main.ts
+   Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
 
 SemanticDiagnostics::
 Signatures::

@@ -74,6 +74,10 @@ func (host *emitHost) GetPackageJsonInfo(pkgJsonPath string) modulespecifiers.Pa
 	return host.program.GetPackageJsonInfo(pkgJsonPath)
 }
 
+func (host *emitHost) GetSourceOfProjectReferenceIfOutputIncluded(file ast.HasFileName) string {
+	return host.program.GetSourceOfProjectReferenceIfOutputIncluded(file)
+}
+
 func (host *emitHost) GetOutputAndProjectReference(path tspath.Path) *tsoptions.OutputDtsAndProjectReference {
 	return host.program.GetOutputAndProjectReference(path)
 }

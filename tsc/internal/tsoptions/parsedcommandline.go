@@ -270,10 +270,26 @@ func (p *ParsedCommandLine) MatchesFileName(fileName string) bool {
 		return false
 	}
 
-	return p.ConfigFile.configFileSpecs.matchesInclude(fileName, p.comparePathsOptions)
+	return p.ConfigFile.configFileSpecs.getMatchedIncludeSpec(fileName, p.comparePathsOptions) != ""
 }
 
-func ReloadFileNamesOfParsedCommandLine(p *ParsedCommandLine, fs vfs.FS) *ParsedCommandLine {
+func (p *ParsedCommandLine) GetMatchedFileSpec(fileName string) string {
+	return p.ConfigFile.configFileSpecs.getMatchedFileSpec(fileName, p.comparePathsOptions)
+}
+
+func (p *ParsedCommandLine) GetMatchedIncludeSpec(fileName string) (string, bool) {
+	if len(p.ConfigFile.configFileSpecs.validatedIncludeSpecs) == 0 {
+		return "", false
+	}
+
+	if p.ConfigFile.configFileSpecs.isDefaultIncludeSpec {
+		return p.ConfigFile.configFileSpecs.validatedIncludeSpecs[0], true
+	}
+
+	return p.ConfigFile.configFileSpecs.getMatchedIncludeSpec(fileName, p.comparePathsOptions), false
+}
+
+func (p *ParsedCommandLine) ReloadFileNamesOfParsedCommandLine(fs vfs.FS) *ParsedCommandLine {
 	parsedConfig := *p.ParsedConfig
 	parsedConfig.FileNames = getFileNamesFromConfigSpecs(
 		*p.ConfigFile.configFileSpecs,

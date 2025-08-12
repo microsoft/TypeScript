@@ -106,6 +106,14 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 [7m3[0m     "compilerOptions": {
 [7m [0m [91m    ~~~~~~~~~~~~~~~~~[0m
 
+../../tslibs/TS/Lib/lib.d.ts
+   Default library for target 'ES5'
+types/sometype.ts
+   Imported via @myscope/sometype from file 'main.ts'
+main.ts
+   Part of 'files' list in tsconfig.json
+src/secondary.ts
+   Matched by include pattern '${configDir}/src' in 'tsconfig.json'
 
 Found 2 errors in the same file, starting at: tsconfig.json[90m:3[0m
 

@@ -88,7 +88,7 @@ func (w *Watcher) DoCycle() {
 func (w *Watcher) compileAndEmit() {
 	// !!! output/error reporting is currently the same as non-watch mode
 	// diagnostics, emitResult, exitStatus :=
-	emitFilesAndReportErrors(w.sys, w.program, w.reportDiagnostic)
+	emitFilesAndReportErrors(w.sys, w.program, w.program.GetProgram(), w.reportDiagnostic)
 }
 
 func (w *Watcher) hasErrorsInTsConfig() bool {

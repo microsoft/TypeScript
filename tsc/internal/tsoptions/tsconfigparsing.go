@@ -15,7 +15,6 @@ import (
 	"github.com/microsoft/typescript-go/internal/jsnum"
 	"github.com/microsoft/typescript-go/internal/module"
 	"github.com/microsoft/typescript-go/internal/parser"
-	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
 )
@@ -91,11 +90,13 @@ type configFileSpecs struct {
 	// Present to report errors (user specified specs), validatedIncludeSpecs are used for file name matching
 	includeSpecs any
 	// Present to report errors (user specified specs), validatedExcludeSpecs are used for file name matching
-	excludeSpecs          any
-	validatedFilesSpec    []string
-	validatedIncludeSpecs []string
-	validatedExcludeSpecs []string
-	isDefaultIncludeSpec  bool
+	excludeSpecs                            any
+	validatedFilesSpec                      []string
+	validatedIncludeSpecs                   []string
+	validatedExcludeSpecs                   []string
+	validatedFilesSpecBeforeSubstitution    []string
+	validatedIncludeSpecsBeforeSubstitution []string
+	isDefaultIncludeSpec                    bool
 }
 
 func (c *configFileSpecs) matchesExclude(fileName string, comparePathsOptions tspath.ComparePathsOptions) bool {
@@ -115,20 +116,33 @@ func (c *configFileSpecs) matchesExclude(fileName string, comparePathsOptions ts
 	return false
 }
 
-func (c *configFileSpecs) matchesInclude(fileName string, comparePathsOptions tspath.ComparePathsOptions) bool {
+func (c *configFileSpecs) getMatchedIncludeSpec(fileName string, comparePathsOptions tspath.ComparePathsOptions) string {
 	if len(c.validatedIncludeSpecs) == 0 {
-		return false
+		return ""
 	}
-	for _, spec := range c.validatedIncludeSpecs {
+	for index, spec := range c.validatedIncludeSpecs {
 		includePattern := vfs.GetPatternFromSpec(spec, comparePathsOptions.CurrentDirectory, "files")
 		if includePattern != "" {
 			includeRegex := vfs.GetRegexFromPattern(includePattern, comparePathsOptions.UseCaseSensitiveFileNames)
 			if match, err := includeRegex.MatchString(fileName); err == nil && match {
-				return true
+				return c.validatedIncludeSpecsBeforeSubstitution[index]
 			}
 		}
 	}
-	return false
+	return ""
+}
+
+func (c *configFileSpecs) getMatchedFileSpec(fileName string, comparePathsOptions tspath.ComparePathsOptions) string {
+	if len(c.validatedFilesSpec) == 0 {
+		return ""
+	}
+	filePath := tspath.ToPath(fileName, comparePathsOptions.CurrentDirectory, comparePathsOptions.UseCaseSensitiveFileNames)
+	for index, spec := range c.validatedFilesSpec {
+		if tspath.ToPath(spec, comparePathsOptions.CurrentDirectory, comparePathsOptions.UseCaseSensitiveFileNames) == filePath {
+			return c.validatedFilesSpecBeforeSubstitution[index]
+		}
+	}
+	return ""
 }
 
 type FileExtensionInfo struct {
@@ -208,7 +222,7 @@ func parseOwnConfigOfJsonSourceFile(
 				propertySetErrors = append(propertySetErrors, err...)
 			} else if option == nil {
 				if keyText == "excludes" {
-					propertySetErrors = append(propertySetErrors, CreateDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, propertyAssignment.Name(), diagnostics.Unknown_option_excludes_Did_you_mean_exclude))
+					propertySetErrors = append(propertySetErrors, CreateDiagnosticForNodeInSourceFile(sourceFile, propertyAssignment.Name(), diagnostics.Unknown_option_excludes_Did_you_mean_exclude))
 				}
 				if core.Find(OptionsDeclarations, func(option *CommandLineOption) bool { return option.Name == keyText }) != nil {
 					rootCompilerOptions = append(rootCompilerOptions, propertyAssignment.Name())
@@ -1171,7 +1185,7 @@ func parseJsonConfigFileContentWorker(
 				}
 				diagnosticMessage := diagnostics.The_files_list_in_config_file_0_is_empty
 				nodeValue := ForEachTsConfigPropArray(sourceFile.SourceFile, "files", func(property *ast.PropertyAssignment) *ast.Node { return property.Initializer })
-				errors = append(errors, ast.NewDiagnostic(sourceFile.SourceFile, core.NewTextRange(scanner.SkipTrivia(sourceFile.SourceFile.Text(), nodeValue.Pos()), nodeValue.End()), diagnosticMessage, fileName))
+				errors = append(errors, CreateDiagnosticForNodeInSourceFile(sourceFile.SourceFile, nodeValue, diagnosticMessage, fileName))
 			} else {
 				errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.The_files_list_in_config_file_0_is_empty, configFileName))
 			}
@@ -1199,31 +1213,39 @@ func parseJsonConfigFileContentWorker(
 		isDefaultIncludeSpec = true
 	}
 	var validatedIncludeSpecs []string
+	var validatedIncludeSpecsBeforeSubstitution []string
 	var validatedExcludeSpecs []string
 	var validatedFilesSpec []string
+	var validatedFilesSpecBeforeSubstitution []string
 	// The exclude spec list is converted into a regular expression, which allows us to quickly
 	// test whether a file or directory should be excluded before recursively traversing the
 	// file system.
 	if includeSpecs.sliceValue != nil {
 		var err []*ast.Diagnostic
-		validatedIncludeSpecs, err = validateSpecs(includeSpecs.sliceValue, true /*disallowTrailingRecursion*/, tsconfigToSourceFile(sourceFile), "include")
+		validatedIncludeSpecsBeforeSubstitution, err = validateSpecs(includeSpecs.sliceValue, true /*disallowTrailingRecursion*/, tsconfigToSourceFile(sourceFile), "include")
 		errors = append(errors, err...)
-		substituteStringArrayWithConfigDirTemplate(validatedIncludeSpecs, basePathForFileNames)
+		if validatedIncludeSpecs = getSubstitutedStringArrayWithConfigDirTemplate(validatedIncludeSpecsBeforeSubstitution, basePathForFileNames); validatedIncludeSpecs == nil {
+			validatedIncludeSpecs = validatedIncludeSpecsBeforeSubstitution
+		}
 	}
 	if excludeSpecs.sliceValue != nil {
 		var err []*ast.Diagnostic
 		validatedExcludeSpecs, err = validateSpecs(excludeSpecs.sliceValue, false /*disallowTrailingRecursion*/, tsconfigToSourceFile(sourceFile), "exclude")
 		errors = append(errors, err...)
-		substituteStringArrayWithConfigDirTemplate(validatedExcludeSpecs, basePathForFileNames)
+		if validatedExcludeSpecsWithSubstitution := getSubstitutedStringArrayWithConfigDirTemplate(validatedExcludeSpecs, basePathForFileNames); validatedExcludeSpecsWithSubstitution != nil {
+			validatedExcludeSpecs = validatedExcludeSpecsWithSubstitution
+		}
 	}
 	if fileSpecs.sliceValue != nil {
 		fileSpecs := core.Filter(fileSpecs.sliceValue, func(spec any) bool { return reflect.TypeOf(spec).Kind() == reflect.String })
 		for _, spec := range fileSpecs {
 			if spec, ok := spec.(string); ok {
-				validatedFilesSpec = append(validatedFilesSpec, spec)
+				validatedFilesSpecBeforeSubstitution = append(validatedFilesSpecBeforeSubstitution, spec)
 			}
 		}
-		substituteStringArrayWithConfigDirTemplate(validatedFilesSpec, basePathForFileNames)
+		if validatedFilesSpec = getSubstitutedStringArrayWithConfigDirTemplate(validatedFilesSpecBeforeSubstitution, basePathForFileNames); validatedFilesSpec == nil {
+			validatedFilesSpec = validatedFilesSpecBeforeSubstitution
+		}
 	}
 	configFileSpecs := configFileSpecs{
 		fileSpecs.sliceValue,
@@ -1232,6 +1254,8 @@ func parseJsonConfigFileContentWorker(
 		validatedFilesSpec,
 		validatedIncludeSpecs,
 		validatedExcludeSpecs,
+		validatedFilesSpecBeforeSubstitution,
+		validatedIncludeSpecsBeforeSubstitution,
 		isDefaultIncludeSpec,
 	}
 
@@ -1311,7 +1335,7 @@ func shouldReportNoInputFiles(fileNames []string, canJsonReportNoInputFiles bool
 
 func validateSpecs(specs any, disallowTrailingRecursion bool, jsonSourceFile *ast.SourceFile, specKey string) ([]string, []*ast.Diagnostic) {
 	createDiagnostic := func(message *diagnostics.Message, spec string) *ast.Diagnostic {
-		element := getTsConfigPropArrayElementValue(jsonSourceFile, specKey, spec)
+		element := GetTsConfigPropArrayElementValue(jsonSourceFile, specKey, spec)
 		return CreateDiagnosticForNodeInSourceFileOrCompilerDiagnostic(jsonSourceFile, element.AsNode(), message, spec)
 	}
 	var errors []*ast.Diagnostic
@@ -1377,15 +1401,11 @@ func invalidDotDotAfterRecursiveWildcard(s string) bool {
 //	\/?$        # matches an optional trailing directory separator at the end of the string.
 const invalidTrailingRecursionPattern = `(?:^|\/)\*\*\/?$`
 
-func getTsConfigPropArrayElementValue(tsConfigSourceFile *ast.SourceFile, propKey string, elementValue string) *ast.StringLiteral {
+func GetTsConfigPropArrayElementValue(tsConfigSourceFile *ast.SourceFile, propKey string, elementValue string) *ast.StringLiteral {
+	callback := GetCallbackForFindingPropertyAssignmentByValue(elementValue)
 	return ForEachTsConfigPropArray(tsConfigSourceFile, propKey, func(property *ast.PropertyAssignment) *ast.StringLiteral {
-		if ast.IsArrayLiteralExpression(property.Initializer) {
-			value := core.Find(property.Initializer.AsArrayLiteralExpression().Elements.Nodes, func(element *ast.Node) bool {
-				return ast.IsStringLiteral(element) && element.AsStringLiteral().Text == elementValue
-			})
-			if value != nil {
-				return value.AsStringLiteral()
-			}
+		if value := callback(property); value != nil {
+			return value.AsStringLiteral()
 		}
 		return nil
 	})
@@ -1396,6 +1416,33 @@ func ForEachTsConfigPropArray[T any](tsConfigSourceFile *ast.SourceFile, propKey
 		return ForEachPropertyAssignment(getTsConfigObjectLiteralExpression(tsConfigSourceFile), propKey, callback)
 	}
 	return nil
+}
+
+func CreateDiagnosticAtReferenceSyntax(config *ParsedCommandLine, index int, message *diagnostics.Message, args ...any) *ast.Diagnostic {
+	return ForEachTsConfigPropArray(config.ConfigFile.SourceFile, "references", func(property *ast.PropertyAssignment) *ast.Diagnostic {
+		if ast.IsArrayLiteralExpression(property.Initializer) {
+			value := property.Initializer.AsArrayLiteralExpression().Elements.Nodes
+			if len(value) > index {
+				return CreateDiagnosticForNodeInSourceFile(config.ConfigFile.SourceFile, value[index], message, args...)
+			}
+		}
+		return nil
+	})
+}
+
+func GetCallbackForFindingPropertyAssignmentByValue(value string) func(property *ast.PropertyAssignment) *ast.Node {
+	return func(property *ast.PropertyAssignment) *ast.Node {
+		if ast.IsArrayLiteralExpression(property.Initializer) {
+			return core.Find(property.Initializer.AsArrayLiteralExpression().Elements.Nodes, func(element *ast.Node) bool {
+				return ast.IsStringLiteral(element) && element.AsStringLiteral().Text == value
+			})
+		}
+		return nil
+	}
+}
+
+func GetOptionsSyntaxByArrayElementValue(objectLiteral *ast.ObjectLiteralExpression, propKey string, elementValue string) *ast.Node {
+	return ForEachPropertyAssignment(objectLiteral, propKey, GetCallbackForFindingPropertyAssignmentByValue(elementValue))
 }
 
 func ForEachPropertyAssignment[T any](objectLiteral *ast.ObjectLiteralExpression, key string, callback func(property *ast.PropertyAssignment) *T, key2 ...string) *T {
@@ -1426,12 +1473,20 @@ func getSubstitutedPathWithConfigDirTemplate(value string, basePath string) stri
 	return tspath.GetNormalizedAbsolutePath(strings.Replace(value, configDirTemplate, "./", 1), basePath)
 }
 
-func substituteStringArrayWithConfigDirTemplate(list []string, basePath string) {
+func getSubstitutedStringArrayWithConfigDirTemplate(list []string, basePath string) []string {
+	var result []string
 	for i, element := range list {
 		if startsWithConfigDirTemplate(element) {
-			list[i] = getSubstitutedPathWithConfigDirTemplate(element, basePath)
+			if result == nil {
+				result = slices.Clone(list)
+			}
+			result[i] = getSubstitutedPathWithConfigDirTemplate(element, basePath)
 		}
 	}
+	if result != nil {
+		return result
+	}
+	return nil
 }
 
 func handleOptionConfigDirTemplateSubstitution(compilerOptions *core.CompilerOptions, basePath string) {
@@ -1441,13 +1496,18 @@ func handleOptionConfigDirTemplateSubstitution(compilerOptions *core.CompilerOpt
 
 	// !!! don't hardcode this; use options declarations?
 
-	for v := range compilerOptions.Paths.Values() {
-		substituteStringArrayWithConfigDirTemplate(v, basePath)
+	for k, v := range compilerOptions.Paths.Entries() {
+		if substitution := getSubstitutedStringArrayWithConfigDirTemplate(v, basePath); substitution != nil {
+			compilerOptions.Paths.Set(k, substitution)
+		}
 	}
 
-	substituteStringArrayWithConfigDirTemplate(compilerOptions.RootDirs, basePath)
-	substituteStringArrayWithConfigDirTemplate(compilerOptions.TypeRoots, basePath)
-
+	if rootDirs := getSubstitutedStringArrayWithConfigDirTemplate(compilerOptions.RootDirs, basePath); rootDirs != nil {
+		compilerOptions.RootDirs = rootDirs
+	}
+	if typeRoots := getSubstitutedStringArrayWithConfigDirTemplate(compilerOptions.TypeRoots, basePath); typeRoots != nil {
+		compilerOptions.TypeRoots = typeRoots
+	}
 	if startsWithConfigDirTemplate(compilerOptions.GenerateCpuProfile) {
 		compilerOptions.GenerateCpuProfile = getSubstitutedPathWithConfigDirTemplate(compilerOptions.GenerateCpuProfile, basePath)
 	}

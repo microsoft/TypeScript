@@ -47,7 +47,7 @@ func (tx *JSXTransformer) getCurrentFileNameExpression() *ast.Node {
 		}),
 		nil,
 		nil,
-		tx.Factory().NewStringLiteral(tx.currentSourceFile.OriginalFileName()),
+		tx.Factory().NewStringLiteral(tx.currentSourceFile.FileName()),
 	)
 	tx.filenameDeclaration = d
 	return d.AsVariableDeclaration().Name()

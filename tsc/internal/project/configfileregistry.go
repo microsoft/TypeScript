@@ -101,7 +101,7 @@ func (c *ConfigFileRegistry) acquireConfig(fileName string, path tspath.Path, pr
 	}
 	switch entry.pendingReload {
 	case PendingReloadFileNames:
-		entry.commandLine = tsoptions.ReloadFileNamesOfParsedCommandLine(entry.commandLine, c.Host.FS())
+		entry.commandLine = entry.commandLine.ReloadFileNamesOfParsedCommandLine(c.Host.FS())
 	case PendingReloadFull:
 		oldCommandLine := entry.commandLine
 		entry.commandLine, _ = tsoptions.GetParsedCommandLineOfConfigFilePath(fileName, path, nil, c.Host, &c.ExtendedConfigCache)

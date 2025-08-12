@@ -17,11 +17,11 @@ type parseTask struct {
 	path                        tspath.Path
 	file                        *ast.SourceFile
 	libFile                     *LibFile
-	isRedirected                bool
+	redirectedParseTask         *parseTask
 	subTasks                    []*parseTask
 	loaded                      bool
 	isForAutomaticTypeDirective bool
-	root                        bool
+	includeReason               *fileIncludeReason
 
 	metadata                     ast.SourceFileMetaData
 	resolutionsInFile            module.ModeAwareCache[*module.ResolvedModule]
@@ -37,6 +37,9 @@ type parseTask struct {
 	// Track if this file is from an external library (node_modules)
 	// This mirrors the TypeScript currentNodeModulesDepth > 0 check
 	fromExternalLibrary bool
+
+	loadedTask        *parseTask
+	allIncludeReasons []*fileIncludeReason
 }
 
 func (t *parseTask) FileName() string {
@@ -45,6 +48,11 @@ func (t *parseTask) FileName() string {
 
 func (t *parseTask) Path() tspath.Path {
 	return t.path
+}
+
+func (t *parseTask) isRoot() bool {
+	// Intentionally not checking t.includeReason != nil to ensure we can catch cases for missing include reason
+	return !t.isForAutomaticTypeDirective && (t.includeReason.kind == fileIncludeKindRootFile || t.includeReason.kind == fileIncludeKindLibFile)
 }
 
 func (t *parseTask) load(loader *fileLoader) {
@@ -74,8 +82,8 @@ func (t *parseTask) load(loader *fileLoader) {
 	t.file = file
 	t.subTasks = make([]*parseTask, 0, len(file.ReferencedFiles)+len(file.Imports())+len(file.ModuleAugmentations))
 
-	for _, ref := range file.ReferencedFiles {
-		resolvedPath := loader.resolveTripleslashPathReference(ref.FileName, file.FileName())
+	for index, ref := range file.ReferencedFiles {
+		resolvedPath := loader.resolveTripleslashPathReference(ref.FileName, file.FileName(), index)
 		t.addSubTask(resolvedPath, nil)
 	}
 
@@ -83,10 +91,25 @@ func (t *parseTask) load(loader *fileLoader) {
 	loader.resolveTypeReferenceDirectives(t)
 
 	if compilerOptions.NoLib != core.TSTrue {
-		for _, lib := range file.LibReferenceDirectives {
+		for index, lib := range file.LibReferenceDirectives {
+			includeReason := &fileIncludeReason{
+				kind: fileIncludeKindLibReferenceDirective,
+				data: &referencedFileData{
+					file:  t.path,
+					index: index,
+				},
+			}
 			if name, ok := tsoptions.GetLibFileName(lib.FileName); ok {
 				libFile := loader.pathForLibFile(name)
-				t.addSubTask(resolvedRef{fileName: libFile.path}, libFile)
+				t.addSubTask(resolvedRef{
+					fileName:      libFile.path,
+					includeReason: includeReason,
+				}, libFile)
+			} else {
+				loader.includeProcessor.addProcessingDiagnostic(&processingDiagnostic{
+					kind: processingDiagnosticKindUnknownReference,
+					data: includeReason,
+				})
 			}
 		}
 	}
@@ -95,9 +118,14 @@ func (t *parseTask) load(loader *fileLoader) {
 }
 
 func (t *parseTask) redirect(loader *fileLoader, fileName string) {
-	t.isRedirected = true
+	t.redirectedParseTask = &parseTask{
+		normalizedFilePath:  tspath.NormalizePath(fileName),
+		libFile:             t.libFile,
+		fromExternalLibrary: t.fromExternalLibrary,
+		includeReason:       t.includeReason,
+	}
 	// increaseDepth and elideOnDepth are not copied to redirects, otherwise their depth would be double counted.
-	t.subTasks = []*parseTask{{normalizedFilePath: tspath.NormalizePath(fileName), libFile: t.libFile, fromExternalLibrary: t.fromExternalLibrary}}
+	t.subTasks = []*parseTask{t.redirectedParseTask}
 }
 
 func (t *parseTask) loadAutomaticTypeDirectives(loader *fileLoader) {
@@ -114,6 +142,7 @@ type resolvedRef struct {
 	increaseDepth         bool
 	elideOnDepth          bool
 	isFromExternalLibrary bool
+	includeReason         *fileIncludeReason
 }
 
 func (t *parseTask) addSubTask(ref resolvedRef, libFile *LibFile) {
@@ -124,6 +153,7 @@ func (t *parseTask) addSubTask(ref resolvedRef, libFile *LibFile) {
 		increaseDepth:       ref.increaseDepth,
 		elideOnDepth:        ref.elideOnDepth,
 		fromExternalLibrary: ref.isFromExternalLibrary,
+		includeReason:       ref.includeReason,
 	}
 	t.subTasks = append(t.subTasks, subTask)
 }
@@ -153,7 +183,7 @@ func (w *filesParser) start(loader *fileLoader, tasks []*parseTask, depth int, i
 		loadedTask, loaded := w.tasksByFileName.LoadOrStore(task.FileName(), newTask)
 		task = loadedTask.task
 		if loaded {
-			tasks[i] = task
+			tasks[i].loadedTask = task
 			// Add in the loaded task's external-ness.
 			taskIsFromExternalLibrary = taskIsFromExternalLibrary || task.fromExternalLibrary
 		}
@@ -175,7 +205,7 @@ func (w *filesParser) start(loader *fileLoader, tasks []*parseTask, depth int, i
 				startSubtasks = true
 			}
 
-			if !task.root && taskIsFromExternalLibrary && !loadedTask.fromExternalLibrary {
+			if !task.isRoot() && taskIsFromExternalLibrary && !loadedTask.fromExternalLibrary {
 				// If we're seeing this task now as an external library,
 				// reprocess its subtasks to ensure they are also marked as external.
 				loadedTask.fromExternalLibrary = true
@@ -210,6 +240,17 @@ func (w *filesParser) collect(loader *fileLoader, tasks []*parseTask, iterate fu
 
 func (w *filesParser) collectWorker(loader *fileLoader, tasks []*parseTask, iterate func(*parseTask), seen collections.Set[*parseTask]) {
 	for _, task := range tasks {
+		if task.redirectedParseTask == nil {
+			includeReason := task.includeReason
+			if task.loadedTask != nil {
+				task = task.loadedTask
+			}
+			if existing, ok := loader.includeProcessor.fileIncludeReasons[task.path]; ok {
+				loader.includeProcessor.fileIncludeReasons[task.path] = append(existing, includeReason)
+			} else {
+				loader.includeProcessor.fileIncludeReasons[task.path] = []*fileIncludeReason{includeReason}
+			}
+		}
 		// ensure we only walk each task once
 		if !task.loaded || !seen.AddIfAbsent(task) {
 			continue

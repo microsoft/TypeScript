@@ -10374,10 +10374,6 @@ func (node *SourceFile) Path() tspath.Path {
 	return node.parseOptions.Path
 }
 
-func (node *SourceFile) OriginalFileName() string {
-	return node.FileName() // !!! redirect source files
-}
-
 func (node *SourceFile) Imports() []*LiteralLikeNode {
 	return node.imports
 }
