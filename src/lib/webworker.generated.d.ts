@@ -2728,7 +2728,7 @@ interface Crypto {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Crypto/randomUUID)
      */
-    randomUUID(): `${string}-${string}-${string}-${string}-${string}`;
+    randomUUID(): UUID;
 }
 
 declare var Crypto: {

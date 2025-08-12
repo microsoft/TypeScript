@@ -8403,6 +8403,8 @@ declare var CredentialsContainer: {
     new(): CredentialsContainer;
 };
 
+declare type UUID = `${string}-${string}-${string}-${string}-${string}`;
+
 /**
  * The **`Crypto`** interface represents basic cryptography features available in the current context.
  *
@@ -8428,7 +8430,7 @@ interface Crypto {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Crypto/randomUUID)
      */
-    randomUUID(): `${string}-${string}-${string}-${string}-${string}`;
+    randomUUID(): UUID;
 }
 
 declare var Crypto: {
