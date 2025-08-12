@@ -39212,7 +39212,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const nextTypes: Type[] = [];
         const isAsync = (getFunctionFlags(func) & FunctionFlags.Async) !== 0;
         forEachYieldExpression(func.body as Block, yieldExpression => {
-            const yieldExpressionType = yieldExpression.expression ? checkExpression(yieldExpression.expression, checkMode) : undefinedWideningType;
+            const yieldExpressionType = yieldExpression.expression ? checkExpression(yieldExpression.expression, checkMode && checkMode & ~CheckMode.SkipGenericFunctions) : undefinedWideningType;
             pushIfUnique(yieldTypes, getYieldedTypeOfYieldExpression(yieldExpression, yieldExpressionType, anyType, isAsync));
             let nextType: Type | undefined;
             if (yieldExpression.asteriskToken) {
