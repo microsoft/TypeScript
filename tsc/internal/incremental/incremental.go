@@ -36,7 +36,7 @@ func NewBuildInfoReader(
 	return &buildInfoReader{host: host}
 }
 
-func ReadBuildInfoProgram(config *tsoptions.ParsedCommandLine, reader BuildInfoReader) *Program {
+func ReadBuildInfoProgram(config *tsoptions.ParsedCommandLine, reader BuildInfoReader, host compiler.CompilerHost) *Program {
 	buildInfoFileName := config.GetBuildInfoFileName()
 	if buildInfoFileName == "" {
 		return nil
@@ -50,7 +50,7 @@ func ReadBuildInfoProgram(config *tsoptions.ParsedCommandLine, reader BuildInfoR
 
 	// Convert to information that can be used to create incremental program
 	incrementalProgram := &Program{
-		snapshot: buildInfoToSnapshot(buildInfo, buildInfoFileName, config),
+		snapshot: buildInfoToSnapshot(buildInfo, buildInfoFileName, config, host),
 	}
 	return incrementalProgram
 }

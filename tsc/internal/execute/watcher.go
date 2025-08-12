@@ -43,7 +43,7 @@ func createWatcher(sys System, configParseResult *tsoptions.ParsedCommandLine, r
 
 func (w *Watcher) start() {
 	w.host = compiler.NewCompilerHost(w.sys.GetCurrentDirectory(), w.sys.FS(), w.sys.DefaultLibraryPath(), nil)
-	w.program = incremental.ReadBuildInfoProgram(w.options, incremental.NewBuildInfoReader(w.host))
+	w.program = incremental.ReadBuildInfoProgram(w.options, incremental.NewBuildInfoReader(w.host), w.host)
 
 	if !w.testing {
 		watchInterval := 1000 * time.Millisecond

@@ -1,13 +1,16 @@
 package incremental
 
 import (
+	"strings"
+
 	"github.com/microsoft/typescript-go/internal/collections"
+	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
-func buildInfoToSnapshot(buildInfo *BuildInfo, buildInfoFileName string, config *tsoptions.ParsedCommandLine) *snapshot {
+func buildInfoToSnapshot(buildInfo *BuildInfo, buildInfoFileName string, config *tsoptions.ParsedCommandLine, host compiler.CompilerHost) *snapshot {
 	to := &toSnapshot{
 		buildInfo:          buildInfo,
 		buildInfoDirectory: tspath.GetDirectoryPath(tspath.GetNormalizedAbsolutePath(buildInfoFileName, config.GetCurrentDirectory())),
@@ -15,6 +18,9 @@ func buildInfoToSnapshot(buildInfo *BuildInfo, buildInfoFileName string, config 
 		filePathSet:        make([]*collections.Set[tspath.Path], 0, len(buildInfo.FileIdsList)),
 	}
 	to.filePaths = core.Map(buildInfo.FileNames, func(fileName string) tspath.Path {
+		if !strings.HasPrefix(fileName, ".") {
+			return tspath.ToPath(tspath.CombinePaths(host.DefaultLibraryPath(), fileName), host.GetCurrentDirectory(), host.FS().UseCaseSensitiveFileNames())
+		}
 		return tspath.ToPath(fileName, to.buildInfoDirectory, config.UseCaseSensitiveFileNames())
 	})
 	to.filePathSet = core.Map(buildInfo.FileIdsList, func(fileIdList []BuildInfoFileId) *collections.Set[tspath.Path] {

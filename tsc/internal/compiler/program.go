@@ -1233,7 +1233,15 @@ func (p *Program) GetDefaultResolutionModeForFile(sourceFile ast.HasFileName) co
 }
 
 func (p *Program) IsSourceFileDefaultLibrary(path tspath.Path) bool {
-	return p.libFiles.Has(path)
+	_, ok := p.libFiles[path]
+	return ok
+}
+
+func (p *Program) GetDefaultLibFile(path tspath.Path) *LibFile {
+	if libFile, ok := p.libFiles[path]; ok {
+		return libFile
+	}
+	return nil
 }
 
 func (p *Program) CommonSourceDirectory() string {
