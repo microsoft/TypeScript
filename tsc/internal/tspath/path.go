@@ -470,28 +470,73 @@ func simpleNormalizePath(path string) (string, bool) {
 	return "", false
 }
 
+// hasRelativePathSegment reports whether p contains ".", "..", "./", "../", "/.", "/..", "//", "/./", or "/../".
 func hasRelativePathSegment(p string) bool {
+	n := len(p)
+	if n == 0 {
+		return false
+	}
+
 	if p == "." || p == ".." {
 		return true
 	}
 
-	if strings.HasPrefix(p, "./") || strings.HasPrefix(p, "../") {
-		return true
+	// Leading "./" OR "../"
+	if p[0] == '.' {
+		if n >= 2 && p[1] == '/' {
+			return true
+		}
+		// Leading "../"
+		if n >= 3 && p[1] == '.' && p[2] == '/' {
+			return true
+		}
+	}
+	// Trailing "/." OR "/.."
+	if p[n-1] == '.' {
+		if n >= 2 && p[n-2] == '/' {
+			return true
+		}
+		if n >= 3 && p[n-2] == '.' && p[n-3] == '/' {
+			return true
+		}
 	}
 
-	if strings.HasSuffix(p, "/.") || strings.HasSuffix(p, "/..") {
-		return true
+	// Now look for any `//` or `/./` or `/../`
+
+	prevSlash := false
+	segLen := 0   // length of current segment since last slash
+	dotCount := 0 // consecutive dots at start of the current segment; -1 => not only dots
+
+	for i := range n {
+		c := p[i]
+		if c == '/' {
+			// "//"
+			if prevSlash {
+				return true
+			}
+			// "/./" or "/../"
+			if (segLen == 1 && dotCount == 1) || (segLen == 2 && dotCount == 2) {
+				return true
+			}
+			prevSlash = true
+			segLen = 0
+			dotCount = 0
+			continue
+		}
+
+		if c == '.' {
+			if dotCount >= 0 {
+				dotCount++
+			}
+		} else {
+			dotCount = -1
+		}
+		segLen++
+		prevSlash = false
 	}
 
-	if strings.Contains(p, "//") {
-		return true
-	}
-
-	if strings.Contains(p, "/./") || strings.Contains(p, "/../") {
-		return true
-	}
-
-	return false
+	// Trailing "/." or "/.."
+	return (segLen == 1 && dotCount == 1) || (segLen == 2 && dotCount == 2)
 }
 
 func NormalizePath(path string) string {
