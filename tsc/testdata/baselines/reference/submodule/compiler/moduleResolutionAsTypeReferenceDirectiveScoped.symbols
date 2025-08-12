@@ -19,3 +19,7 @@ import { atTypesCache } from "@scoped/attypescache";
 import { mangledAtTypesCache } from "@mangled/attypescache";
 >mangledAtTypesCache : Symbol(mangledAtTypesCache, Decl(a.ts, 5, 8))
 
+=== /a/types/dummy/index.d.ts ===
+export const dummy: number;
+>dummy : Symbol(dummy, Decl(index.d.ts, 0, 12))
+

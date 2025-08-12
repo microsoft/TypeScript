@@ -25,6 +25,10 @@ export const bar = Cls.bar();
 >Cls : typeof Cls
 >bar : () => Lib
 
+=== /types/lib/index.d.ts ===
+interface Lib { x }
+>x : any
+
 === /main.ts ===
 export class Cls {
 >Cls : Cls

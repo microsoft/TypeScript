@@ -23,5 +23,5 @@ export = _;
 
 === /index.ts ===
 import _ from "lodash";
->_ : "index"
+>_ : "webpack"
 

@@ -282,57 +282,53 @@ func (p *commandLineParser) parseOptionValue(
 	return i
 }
 
-func (p *commandLineParser) parseListTypeOption(opt *CommandLineOption, value string) ([]string, []*ast.Diagnostic) {
+func (p *commandLineParser) parseListTypeOption(opt *CommandLineOption, value string) ([]any, []*ast.Diagnostic) {
 	return ParseListTypeOption(opt, value)
 }
 
-func ParseListTypeOption(opt *CommandLineOption, value string) ([]string, []*ast.Diagnostic) {
+func ParseListTypeOption(opt *CommandLineOption, value string) ([]any, []*ast.Diagnostic) {
 	value = strings.TrimSpace(value)
 	var errors []*ast.Diagnostic
 	if strings.HasPrefix(value, "-") {
-		return []string{}, errors
+		return []any{}, errors
 	}
 	if opt.Kind == "listOrElement" && !strings.ContainsRune(value, ',') {
 		val, err := validateJsonOptionValue(opt, value, nil, nil)
 		if err != nil {
-			return []string{}, err
+			return []any{}, err
 		}
-		return []string{val.(string)}, errors
+		return []any{val.(string)}, errors
 	}
 	if value == "" {
-		return []string{}, errors
+		return []any{}, errors
 	}
 	values := strings.Split(value, ",")
 	switch opt.Elements().Kind {
 	case "string":
-		elements := core.Filter(core.Map(values, func(v string) string {
+		elements := core.MapFiltered(values, func(v string) (any, bool) {
 			val, err := validateJsonOptionValue(opt.Elements(), v, nil, nil)
 			if s, ok := val.(string); ok && len(err) == 0 && s != "" {
-				return s
+				return s, true
 			}
 			errors = append(errors, err...)
-			return ""
-		}), isDefined)
+			return "", false
+		})
 		return elements, errors
 	case "boolean", "object", "number":
 		// do nothing: only string and enum/object types currently allowed as list entries
 		// 				!!! we don't actually have number list options, so I didn't implement number list parsing
 		panic("List of " + opt.Elements().Kind + " is not yet supported.")
 	default:
-		result := core.Filter(core.Map(values, func(v string) string {
+		result := core.MapFiltered(values, func(v string) (any, bool) {
 			val, err := convertJsonOptionOfEnumType(opt.Elements(), strings.TrimFunc(v, stringutil.IsWhiteSpaceLike), nil, nil)
 			if s, ok := val.(string); ok && len(err) == 0 && s != "" {
-				return s
+				return s, true
 			}
 			errors = append(errors, err...)
-			return ""
-		}), isDefined)
+			return "", false
+		})
 		return result, errors
 	}
-}
-
-func isDefined(s string) bool {
-	return s != ""
 }
 
 func convertJsonOptionOfEnumType(

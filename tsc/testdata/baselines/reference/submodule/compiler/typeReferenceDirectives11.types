@@ -9,6 +9,10 @@ export const bar = foo();
 >foo() : Lib
 >foo : () => Lib
 
+=== /types/lib/index.d.ts ===
+interface Lib { x }
+>x : any
+
 === /mod1.ts ===
 export function foo(): Lib { return {x: 1} }
 >foo : () => Lib

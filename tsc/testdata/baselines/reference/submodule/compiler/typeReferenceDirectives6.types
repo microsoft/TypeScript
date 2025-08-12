@@ -18,3 +18,8 @@ declare let $: { x: number }
 >$ : { x: number; }
 >x : number
     
+=== /types/lib/index.d.ts ===
+interface $ { x }
+>x : any
+
+

@@ -3,8 +3,14 @@
 === /src/consumer.ts ===
 /// <reference types="jquery" />
 $.foo();
->$.foo() : any
->$.foo : any
->$ : any
->foo : any
+>$.foo() : void
+>$.foo : () => void
+>$ : { foo(): void; }
+>foo : () => void
+
+=== /src/types/jquery/index.d.ts ===
+declare var $: { foo(): void };
+>$ : { foo(): void; }
+>foo : () => void
+
 

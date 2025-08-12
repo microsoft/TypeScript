@@ -1,6 +1,4 @@
 error TS5102: Option 'outFile' has been removed. Please remove it from your configuration.
-/mod1.ts(8,16): error TS2304: Cannot find name 'Lib'.
-/mod1.ts(11,25): error TS2304: Cannot find name 'Lib'.
 
 
 !!! error TS5102: Option 'outFile' has been removed. Please remove it from your configuration.
@@ -20,7 +18,7 @@ error TS5102: Option 'outFile' has been removed. Please remove it from your conf
         x
     }
     
-==== /mod1.ts (2 errors) ====
+==== /mod1.ts (0 errors) ====
     /// <reference types="lib" />
     
     import {Cls} from "./main";
@@ -29,13 +27,9 @@ error TS5102: Option 'outFile' has been removed. Please remove it from your conf
     declare module "./main" {
         interface Cls {
             foo(): Lib;
-                   ~~~
-!!! error TS2304: Cannot find name 'Lib'.
         }
         namespace Cls {
             function bar(): Lib;
-                            ~~~
-!!! error TS2304: Cannot find name 'Lib'.
         }
     }
     

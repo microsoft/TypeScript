@@ -564,16 +564,18 @@ func convertToOptionsWithAbsolutePaths(optionsBase *collections.OrderedMap[strin
 
 func ConvertOptionToAbsolutePath(o string, v any, optionMap CommandLineOptionNameMap, cwd string) (any, bool) {
 	option := optionMap.Get(o)
-	if option == nil || !option.IsFilePath {
+	if option == nil {
 		return nil, false
 	}
 	if option.Kind == "list" {
-		if arr, ok := v.([]string); ok {
-			return core.Map(arr, func(item string) string {
-				return tspath.GetNormalizedAbsolutePath(item, cwd)
-			}), true
+		if option.Elements().IsFilePath {
+			if arr, ok := v.([]string); ok {
+				return core.Map(arr, func(item string) string {
+					return tspath.GetNormalizedAbsolutePath(item, cwd)
+				}), true
+			}
 		}
-	} else {
+	} else if option.IsFilePath {
 		return tspath.GetNormalizedAbsolutePath(v.(string), cwd), true
 	}
 	return nil, false

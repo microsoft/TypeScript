@@ -91,15 +91,16 @@ func (t *toBuildInfo) toFileIdListId(set *collections.Set[tspath.Path]) BuildInf
 }
 
 func (t *toBuildInfo) toRelativeToBuildInfoCompilerOptionValue(option *tsoptions.CommandLineOption, v any) any {
-	if !option.IsFilePath {
-		return v
-	}
 	if option.Kind == "list" {
-		if arr, ok := v.([]string); ok {
-			return core.Map(arr, t.relativeToBuildInfo)
+		if option.Elements().IsFilePath {
+			if arr, ok := v.([]string); ok {
+				return core.Map(arr, t.relativeToBuildInfo)
+			}
 		}
-	} else if str, ok := v.(string); ok && str != "" {
-		return t.relativeToBuildInfo(v.(string))
+	} else if option.IsFilePath {
+		if str, ok := v.(string); ok && str != "" {
+			return t.relativeToBuildInfo(v.(string))
+		}
 	}
 	return v
 }

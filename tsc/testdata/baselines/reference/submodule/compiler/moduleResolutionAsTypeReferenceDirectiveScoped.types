@@ -19,3 +19,7 @@ import { atTypesCache } from "@scoped/attypescache";
 import { mangledAtTypesCache } from "@mangled/attypescache";
 >mangledAtTypesCache : any
 
+=== /a/types/dummy/index.d.ts ===
+export const dummy: number;
+>dummy : number
+

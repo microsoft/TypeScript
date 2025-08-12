@@ -1,5 +1,4 @@
 error TS5102: Option 'outFile' has been removed. Please remove it from your configuration.
-/mod1.ts(1,24): error TS2304: Cannot find name 'Lib'.
 
 
 !!! error TS5102: Option 'outFile' has been removed. Please remove it from your configuration.
@@ -10,8 +9,6 @@ error TS5102: Option 'outFile' has been removed. Please remove it from your conf
 ==== /types/lib/index.d.ts (0 errors) ====
     interface Lib { x }
     
-==== /mod1.ts (1 errors) ====
+==== /mod1.ts (0 errors) ====
     export function foo(): Lib { return {x: 1} }
-                           ~~~
-!!! error TS2304: Cannot find name 'Lib'.
     

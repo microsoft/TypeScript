@@ -1,13 +1,9 @@
 --- old.moduleResolutionAsTypeReferenceDirectiveScoped.symbols
 +++ new.moduleResolutionAsTypeReferenceDirectiveScoped.symbols
-@@= skipped -18, +18 lines =@@
- import { mangledAtTypesCache } from "@mangled/attypescache";
- >mangledAtTypesCache : Symbol(mangledAtTypesCache, Decl(a.ts, 5, 8))
+@@= skipped -22, +22 lines =@@
+ export const dummy: number;
+ >dummy : Symbol(dummy, Decl(index.d.ts, 0, 12))
 
--=== /a/types/dummy/index.d.ts ===
--export const dummy: number;
-->dummy : Symbol(dummy, Decl(index.d.ts, 0, 12))
--
 -=== /a/types/@scoped/typescache/index.d.ts ===
 -export const typesCache: number;
 ->typesCache : Symbol(typesCache, Decl(index.d.ts, 0, 12))

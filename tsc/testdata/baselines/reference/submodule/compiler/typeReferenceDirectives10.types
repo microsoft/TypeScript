@@ -14,3 +14,8 @@ export interface A {
 export interface $ { x }
 >x : any
 
+=== /types/lib/index.d.ts ===
+declare let $: { x: number }
+>$ : { x: number; }
+>x : number
+
