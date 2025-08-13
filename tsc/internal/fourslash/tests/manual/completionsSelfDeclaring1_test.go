@@ -10,20 +10,23 @@ import (
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
 
-func TestCompletionsWithDeprecatedTag4(t *testing.T) {
+func TestCompletionsSelfDeclaring1(t *testing.T) {
 	t.Parallel()
 
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @noLib: true
-f({
-    a/**/
-    xyz: ` + "`" + `` + "`" + `,
-});
-declare function f(options: {
-    /** @deprecated abc */
-    abc?: number,
-    xyz?: string
-}): void;`
+	const content = `interface Test {
+  keyPath?: string;
+  autoIncrement?: boolean;
+}
+
+function test<T extends Record<string, Test>>(opt: T) { }
+
+test({
+  a: {
+    keyPath: '',
+    [|a|]/**/
+  }
+})`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
@@ -34,11 +37,16 @@ declare function f(options: {
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
-					Label:      "abc?",
-					InsertText: PtrTo("abc"),
-					FilterText: PtrTo("abc"),
-					Kind:       PtrTo(lsproto.CompletionItemKindField),
-					SortText:   PtrTo(string(ls.DeprecateSortText(ls.SortTextOptionalMember))),
+					Label:      "autoIncrement?",
+					FilterText: PtrTo("autoIncrement"),
+					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						InsertReplaceEdit: &lsproto.InsertReplaceEdit{
+							NewText: "autoIncrement",
+							Insert:  f.Ranges()[0].LSRange,
+							Replace: f.Ranges()[0].LSRange,
+						},
+					},
 				},
 			},
 		},

@@ -149,10 +149,7 @@ class Foo8 {
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &DefaultCommitCharacters,
-			EditRange: &fourslash.EditRange{
-				Insert:  f.Ranges()[3],
-				Replace: f.Ranges()[3],
-			},
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
@@ -161,7 +158,13 @@ class Foo8 {
 					Kind:       PtrTo(lsproto.CompletionItemKindField),
 					SortText:   PtrTo(string(ls.SortTextSuggestedClassMembers)),
 					FilterText: PtrTo("bar"),
-					InsertText: PtrTo("this.#bar"),
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						InsertReplaceEdit: &lsproto.InsertReplaceEdit{
+							NewText: "this.#bar",
+							Insert:  f.Ranges()[3].LSRange,
+							Replace: f.Ranges()[3].LSRange,
+						},
+					},
 				},
 			},
 		},
@@ -187,18 +190,21 @@ class Foo8 {
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &DefaultCommitCharacters,
-			EditRange: &fourslash.EditRange{
-				Insert:  f.Ranges()[4],
-				Replace: f.Ranges()[4],
-			},
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
-					Label:      "#bar",
-					Kind:       PtrTo(lsproto.CompletionItemKindField),
-					SortText:   PtrTo(string(ls.SortTextSuggestedClassMembers)),
-					InsertText: PtrTo("this.#bar"),
+					Label:    "#bar",
+					Kind:     PtrTo(lsproto.CompletionItemKindField),
+					SortText: PtrTo(string(ls.SortTextSuggestedClassMembers)),
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						InsertReplaceEdit: &lsproto.InsertReplaceEdit{
+							NewText: "this.#bar",
+							Insert:  f.Ranges()[4].LSRange,
+							Replace: f.Ranges()[4].LSRange,
+						},
+					},
 				},
 			},
 		},
@@ -207,18 +213,21 @@ class Foo8 {
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &DefaultCommitCharacters,
-			EditRange: &fourslash.EditRange{
-				Insert:  f.Ranges()[5],
-				Replace: f.Ranges()[5],
-			},
+			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
-					Label:      "#bar",
-					Kind:       PtrTo(lsproto.CompletionItemKindField),
-					SortText:   PtrTo(string(ls.SortTextSuggestedClassMembers)),
-					InsertText: PtrTo("this.#bar"),
+					Label:    "#bar",
+					Kind:     PtrTo(lsproto.CompletionItemKindField),
+					SortText: PtrTo(string(ls.SortTextSuggestedClassMembers)),
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						InsertReplaceEdit: &lsproto.InsertReplaceEdit{
+							NewText: "this.#bar",
+							Insert:  f.Ranges()[5].LSRange,
+							Replace: f.Ranges()[5].LSRange,
+						},
+					},
 				},
 			},
 		},

@@ -10,16 +10,20 @@ import (
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
 
-func TestCompletionsAtIncompleteObjectLiteralProperty(t *testing.T) {
+func TestCompletionsWithDeprecatedTag4(t *testing.T) {
 	t.Parallel()
 
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @noLib: true
 f({
-    a/**/
+    [|a|]/**/
     xyz: ` + "`" + `` + "`" + `,
 });
-declare function f(options: { abc?: number, xyz?: string }): void;`
+declare function f(options: {
+    /** @deprecated abc */
+    abc?: number,
+    xyz?: string
+}): void;`
 	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
@@ -31,10 +35,16 @@ declare function f(options: { abc?: number, xyz?: string }): void;`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "abc?",
-					InsertText: PtrTo("abc"),
 					FilterText: PtrTo("abc"),
 					Kind:       PtrTo(lsproto.CompletionItemKindField),
-					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
+					SortText:   PtrTo(string(ls.DeprecateSortText(ls.SortTextOptionalMember))),
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						InsertReplaceEdit: &lsproto.InsertReplaceEdit{
+							NewText: "abc",
+							Insert:  f.Ranges()[0].LSRange,
+							Replace: f.Ranges()[0].LSRange,
+						},
+					},
 				},
 			},
 		},

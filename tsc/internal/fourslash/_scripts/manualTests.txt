@@ -1,1 +1,4 @@
 completionListInClosedFunction05
+completionsAtIncompleteObjectLiteralProperty
+completionsSelfDeclaring1
+completionsWithDeprecatedTag4
