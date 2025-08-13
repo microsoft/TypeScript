@@ -1669,21 +1669,17 @@ func (r *resolutionState) getPackageJsonInfo(packageDirectory string, onlyRecord
 				Fields: packageJsonContent,
 			},
 		}
-		if !r.resolver.packageJsonInfoCache.IsReadonly {
-			r.resolver.packageJsonInfoCache.Set(packageJsonPath, result)
-		}
+		result = r.resolver.packageJsonInfoCache.Set(packageJsonPath, result)
 		r.affectingLocations = append(r.affectingLocations, packageJsonPath)
 		return result
 	} else {
 		if directoryExists && r.tracer != nil {
 			r.tracer.write(diagnostics.File_0_does_not_exist.Format(packageJsonPath))
 		}
-		if !r.resolver.packageJsonInfoCache.IsReadonly {
-			r.resolver.packageJsonInfoCache.Set(packageJsonPath, &packagejson.InfoCacheEntry{
-				PackageDirectory: packageDirectory,
-				DirectoryExists:  directoryExists,
-			})
-		}
+		_ = r.resolver.packageJsonInfoCache.Set(packageJsonPath, &packagejson.InfoCacheEntry{
+			PackageDirectory: packageDirectory,
+			DirectoryExists:  directoryExists,
+		})
 		r.failedLookupLocations = append(r.failedLookupLocations, packageJsonPath)
 	}
 	return nil
