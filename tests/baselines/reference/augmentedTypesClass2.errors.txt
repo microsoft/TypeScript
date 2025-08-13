@@ -1,5 +1,5 @@
-augmentedTypesClass2.ts(16,7): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-augmentedTypesClass2.ts(21,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+augmentedTypesClass2.ts(16,7): error TS2567: Enum declarations can only merge with namespace declarations.
+augmentedTypesClass2.ts(21,6): error TS2567: Enum declarations can only merge with namespace declarations.
 
 
 ==== augmentedTypesClass2.ts (2 errors) ====
@@ -20,14 +20,14 @@ augmentedTypesClass2.ts(21,6): error TS2567: Enum declarations can only merge wi
     // class then enum 
     class c33 {
           ~~~
-!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
         foo() {
             return 1;
         }
     }
     enum c33 { One };
          ~~~
-!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
     
     // class then import
     class c44 {

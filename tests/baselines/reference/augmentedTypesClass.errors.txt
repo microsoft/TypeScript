@@ -1,7 +1,7 @@
 augmentedTypesClass.ts(2,7): error TS2300: Duplicate identifier 'c1'.
 augmentedTypesClass.ts(3,5): error TS2300: Duplicate identifier 'c1'.
-augmentedTypesClass.ts(6,7): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-augmentedTypesClass.ts(7,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+augmentedTypesClass.ts(6,7): error TS2567: Enum declarations can only merge with namespace declarations.
+augmentedTypesClass.ts(7,6): error TS2567: Enum declarations can only merge with namespace declarations.
 
 
 ==== augmentedTypesClass.ts (4 errors) ====
@@ -16,7 +16,7 @@ augmentedTypesClass.ts(7,6): error TS2567: Enum declarations can only merge with
     //// class then enum
     class c4 { public foo() { } }
           ~~
-!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
     enum c4 { One } // error
          ~~
-!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+!!! error TS2567: Enum declarations can only merge with namespace declarations.

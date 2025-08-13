@@ -1,3 +1,5 @@
+enumAssignmentCompat3.ts(40,17): error TS2567: Enum declarations can only merge with namespace declarations.
+enumAssignmentCompat3.ts(43,17): error TS2567: Enum declarations can only merge with namespace declarations.
 enumAssignmentCompat3.ts(68,1): error TS2322: Type 'Abcd.E' is not assignable to type 'First.E'.
   Property 'd' is missing in type 'First.E'.
 enumAssignmentCompat3.ts(70,1): error TS2322: Type 'Cd.E' is not assignable to type 'First.E'.
@@ -14,13 +16,11 @@ enumAssignmentCompat3.ts(78,1): error TS2322: Type 'First.E' is not assignable t
   Each declaration of 'E.c' differs in its value, where '3' was expected but '2' was given.
 enumAssignmentCompat3.ts(82,1): error TS2322: Type 'Const.E' is not assignable to type 'First.E'.
 enumAssignmentCompat3.ts(83,1): error TS2322: Type 'First.E' is not assignable to type 'Const.E'.
-enumAssignmentCompat3.ts(86,1): error TS2322: Type 'Merged.E' is not assignable to type 'First.E'.
-  Each declaration of 'E.c' differs in its value, where '2' was expected but '3' was given.
-enumAssignmentCompat3.ts(87,1): error TS2322: Type 'First.E' is not assignable to type 'Merged.E'.
-  Each declaration of 'E.c' differs in its value, where '3' was expected but '2' was given.
+enumAssignmentCompat3.ts(87,1): error TS2322: Type 'E.a | E.b' is not assignable to type 'E'.
+  Type 'E.a' is not assignable to type 'E'.
 
 
-==== enumAssignmentCompat3.ts (12 errors) ====
+==== enumAssignmentCompat3.ts (13 errors) ====
     namespace First {
         export enum E {
             a, b, c,
@@ -61,9 +61,13 @@ enumAssignmentCompat3.ts(87,1): error TS2322: Type 'First.E' is not assignable t
     }
     namespace Merged {
         export enum E {
+                    ~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
             a, b, 
         }
         export enum E {
+                    ~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
             c = 3, d,
         }
     }
@@ -133,12 +137,9 @@ enumAssignmentCompat3.ts(87,1): error TS2322: Type 'First.E' is not assignable t
     
     // merged enums compare all their members
     abc = merged; // missing 'd'
-    ~~~
-!!! error TS2322: Type 'Merged.E' is not assignable to type 'First.E'.
-!!! error TS2322:   Each declaration of 'E.c' differs in its value, where '2' was expected but '3' was given.
     merged = abc; // bad - value of 'c' differs between these enums
     ~~~~~~
-!!! error TS2322: Type 'First.E' is not assignable to type 'Merged.E'.
-!!! error TS2322:   Each declaration of 'E.c' differs in its value, where '3' was expected but '2' was given.
+!!! error TS2322: Type 'E.a | E.b' is not assignable to type 'E'.
+!!! error TS2322:   Type 'E.a' is not assignable to type 'E'.
     abc = merged2; // ok
     merged2 = abc; // ok

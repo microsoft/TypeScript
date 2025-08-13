@@ -33,10 +33,10 @@ module M {
 >  : ^^^^^^^^
 
     export enum E1 { B = 'foo'.length }
->E1 : E1
->   : ^^
->B : E1.B
->  : ^^^^
+>E1 : M.E1
+>   : ^^^^
+>B : M.E1.B
+>  : ^^^^^^
 >'foo'.length : number
 >             : ^^^^^^
 >'foo' : "foo"
@@ -45,10 +45,10 @@ module M {
 >       : ^^^^^^
 
     export enum E2 { B = 'foo'.length }
->E2 : E2
->   : ^^
->B : E2.B
->  : ^^^^
+>E2 : M.E2
+>   : ^^^^
+>B : M.E2.B
+>  : ^^^^^^
 >'foo'.length : number
 >             : ^^^^^^
 >'foo' : "foo"
@@ -57,34 +57,34 @@ module M {
 >       : ^^^^^^
 
     export enum E3 { C }
->E3 : E3
->   : ^^
->C : E3.A
->  : ^^^^
+>E3 : M.E3
+>   : ^^^^
+>C : M.E3.C
+>  : ^^^^^^
 }
 module M {
 >M : typeof M
 >  : ^^^^^^^^
 
     export enum E1 { C }
->E1 : E1
->   : ^^
->C : E1.A
->  : ^^^^
+>E1 : M.E1
+>   : ^^^^
+>C : M.E1.C
+>  : ^^^^^^
 
     export enum E2 { A = 0 }
->E2 : E2
->   : ^^
->A : E2.C
->  : ^^^^
+>E2 : M.E2
+>   : ^^^^
+>A : M.E2.A
+>  : ^^^^^^
 >0 : 0
 >  : ^
 
     export enum E3 { B = 'foo'.length }
->E3 : E3
->   : ^^
->B : E3.B
->  : ^^^^
+>E3 : M.E3
+>   : ^^^^
+>B : M.E3.B
+>  : ^^^^^^
 >'foo'.length : number
 >             : ^^^^^^
 >'foo' : "foo"
@@ -111,20 +111,20 @@ module M1 {
 >   : ^^^^^^^^^
 
     export enum E1 { B }
->E1 : E1
->   : ^^
->B : E1.A
->  : ^^^^
+>E1 : M1.E1
+>   : ^^^^^
+>B : M1.E1.B
+>  : ^^^^^^^
 }
 module M1 {
 >M1 : typeof M1
 >   : ^^^^^^^^^
 
     export enum E1 { C }
->E1 : E1
->   : ^^
->C : E1.A
->  : ^^^^
+>E1 : M1.E1
+>   : ^^^^^
+>C : M1.E1.C
+>  : ^^^^^^^
 }
 
 
@@ -144,10 +144,10 @@ module M2 {
 >   : ^^^^^^^^^
 
     export enum E1 { B = 0 }
->E1 : E1
->   : ^^
->B : E1.A
->  : ^^^^
+>E1 : M2.E1
+>   : ^^^^^
+>B : M2.E1.B
+>  : ^^^^^^^
 >0 : 0
 >  : ^
 }
@@ -156,10 +156,10 @@ module M2 {
 >   : ^^^^^^^^^
 
     export enum E1 { C }
->E1 : E1
->   : ^^
->C : E1.A
->  : ^^^^
+>E1 : M2.E1
+>   : ^^^^^
+>C : M2.E1.C
+>  : ^^^^^^^
 }
 
 
