@@ -5,7 +5,7 @@ import "github.com/microsoft/typescript-go/internal/stringutil"
 
 //go:generate go run generate.go -output ./diagnostics_generated.go
 //go:generate go tool golang.org/x/tools/cmd/stringer -type=Category -output=stringer_generated.go
-//go:generate go tool mvdan.cc/gofumpt -lang=go1.24 -w diagnostics_generated.go stringer_generated.go
+//go:generate go tool mvdan.cc/gofumpt -lang=go1.25 -w diagnostics_generated.go stringer_generated.go
 
 type Category int32
 

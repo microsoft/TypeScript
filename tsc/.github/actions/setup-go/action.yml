@@ -4,7 +4,7 @@ description: Setup Go
 inputs:
   go-version:
     description: Go version range to set up.
-    default: '>=1.24.0'
+    default: '>=1.25.0'
   create:
     description: Create the cache
     default: 'false'

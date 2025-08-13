@@ -28,12 +28,7 @@ jobs:
           - windows-latest
           - macos-latest
         go-version:
-          - '>=1.24.0'
-
-        include:
-          # Temporary for the Copilot setup steps
-          - os: ubuntu-latest
-            go-version: '>=1.25.0-rc.1'
+          - '>=1.25.0'
 
     runs-on: ${{ matrix.os }}
 

@@ -23,8 +23,6 @@ jobs:
       - uses: dtolnay/rust-toolchain@fcf085fcb4b4b8f63f96906cd713eb52181b5ea4 # stable
       - uses: ./.github/actions/setup-go
         with:
-          # Updated to 1.25.0-rc.1 to improve compilation time
-          go-version: '>=1.25.0-rc.1'
           lint-cache: 'true'
       - run: npm i -g @playwright/mcp@0.0.28
       - run: npm ci

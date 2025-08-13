@@ -1,7 +1,7 @@
 package ast
 
 //go:generate go tool golang.org/x/tools/cmd/stringer -type=Kind -output=kind_stringer_generated.go
-//go:generate go tool mvdan.cc/gofumpt -lang=go1.24 -w kind_stringer_generated.go
+//go:generate go tool mvdan.cc/gofumpt -lang=go1.25 -w kind_stringer_generated.go
 
 type Kind int16
 

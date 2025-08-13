@@ -19,7 +19,7 @@ import (
 )
 
 //go:generate go tool github.com/matryer/moq -stub -fmt goimports -pkg projecttestutil -out clientmock_generated.go ../../project Client
-//go:generate go tool mvdan.cc/gofumpt -lang=go1.24 -w clientmock_generated.go
+//go:generate go tool mvdan.cc/gofumpt -lang=go1.25 -w clientmock_generated.go
 
 type TestTypingsInstallerOptions struct {
 	TypesRegistry         []string

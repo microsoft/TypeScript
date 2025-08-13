@@ -10,7 +10,7 @@ import (
 )
 
 //go:generate go tool golang.org/x/tools/cmd/stringer -type=SignatureKind -output=stringer_generated.go
-//go:generate go tool mvdan.cc/gofumpt -lang=go1.24 -w stringer_generated.go
+//go:generate go tool mvdan.cc/gofumpt -lang=go1.25 -w stringer_generated.go
 
 // ParseFlags
 

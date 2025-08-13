@@ -5,7 +5,7 @@ import (
 )
 
 //go:generate go tool github.com/matryer/moq -fmt goimports -out vfsmock/mock_generated.go -pkg vfsmock . FS
-//go:generate go tool mvdan.cc/gofumpt -lang=go1.24 -w vfsmock/mock_generated.go
+//go:generate go tool mvdan.cc/gofumpt -lang=go1.25 -w vfsmock/mock_generated.go
 
 // FS is a file system abstraction.
 type FS interface {
