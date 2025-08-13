@@ -421,6 +421,7 @@ import {
     hasSyntacticModifier,
     hasSyntacticModifiers,
     hasType,
+    hasTypeArguments,
     HeritageClause,
     hostGetCanonicalFileName,
     Identifier,
@@ -42706,10 +42707,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getTypeArgumentConstraint(node: TypeNode): Type | undefined {
         let typeArgumentPosition;
-        if (
-            "typeArguments" in node.parent && // eslint-disable-line local/no-in-operator
-            Array.isArray(node.parent.typeArguments)
-        ) {
+        if (hasTypeArguments(node.parent) && Array.isArray(node.parent.typeArguments)) {
             typeArgumentPosition = node.parent.typeArguments.indexOf(node);
         }
 
