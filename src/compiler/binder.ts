@@ -3491,8 +3491,14 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         let excludes = SymbolFlags.None;
         // Method-like
         if (isFunctionLikeDeclaration(getAssignedExpandoInitializer(declaration)!)) {
-            includes = SymbolFlags.Method;
-            excludes = SymbolFlags.MethodExcludes;
+            if (isPrototypeProperty) {
+                includes = SymbolFlags.Method;
+                excludes = SymbolFlags.MethodExcludes;
+            }
+            else {
+                includes = SymbolFlags.Method | SymbolFlags.Property;
+                excludes = SymbolFlags.PropertyExcludes;
+            }
         }
         // Maybe accessor-like
         else if (isCallExpression(declaration) && isBindableObjectDefinePropertyCall(declaration)) {
