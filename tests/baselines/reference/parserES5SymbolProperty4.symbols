@@ -6,4 +6,5 @@ declare class C {
 
     [Symbol.isRegExp]: string;
 >[Symbol.isRegExp] : Symbol(C[Symbol.isRegExp], Decl(parserES5SymbolProperty4.ts, 0, 17))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }

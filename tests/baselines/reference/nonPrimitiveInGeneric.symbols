@@ -85,20 +85,20 @@ function bound3<T extends {}>(t: T) {
 }
 
 interface Proxy<T extends object> {}
->Proxy : Symbol(Proxy, Decl(nonPrimitiveInGeneric.ts, 29, 1))
+>Proxy : Symbol(Proxy, Decl(lib.es2015.proxy.d.ts, --, --), Decl(nonPrimitiveInGeneric.ts, 29, 1))
 >T : Symbol(T, Decl(nonPrimitiveInGeneric.ts, 31, 16))
 
 var x: Proxy<number>; // error
 >x : Symbol(x, Decl(nonPrimitiveInGeneric.ts, 33, 3))
->Proxy : Symbol(Proxy, Decl(nonPrimitiveInGeneric.ts, 29, 1))
+>Proxy : Symbol(Proxy, Decl(lib.es2015.proxy.d.ts, --, --), Decl(nonPrimitiveInGeneric.ts, 29, 1))
 
 var y: Proxy<null>; // ok
 >y : Symbol(y, Decl(nonPrimitiveInGeneric.ts, 34, 3))
->Proxy : Symbol(Proxy, Decl(nonPrimitiveInGeneric.ts, 29, 1))
+>Proxy : Symbol(Proxy, Decl(lib.es2015.proxy.d.ts, --, --), Decl(nonPrimitiveInGeneric.ts, 29, 1))
 
 var z: Proxy<undefined> ; // ok
 >z : Symbol(z, Decl(nonPrimitiveInGeneric.ts, 35, 3))
->Proxy : Symbol(Proxy, Decl(nonPrimitiveInGeneric.ts, 29, 1))
+>Proxy : Symbol(Proxy, Decl(lib.es2015.proxy.d.ts, --, --), Decl(nonPrimitiveInGeneric.ts, 29, 1))
 
 
 interface Blah {
@@ -110,6 +110,6 @@ interface Blah {
 
 var u: Proxy<Blah>; // ok
 >u : Symbol(u, Decl(nonPrimitiveInGeneric.ts, 42, 3))
->Proxy : Symbol(Proxy, Decl(nonPrimitiveInGeneric.ts, 29, 1))
+>Proxy : Symbol(Proxy, Decl(lib.es2015.proxy.d.ts, --, --), Decl(nonPrimitiveInGeneric.ts, 29, 1))
 >Blah : Symbol(Blah, Decl(nonPrimitiveInGeneric.ts, 35, 25))
 

@@ -1,0 +1,41 @@
+recursiveComplicatedClasses.ts(9,7): error TS2300: Duplicate identifier 'Symbol'.
+recursiveComplicatedClasses.ts(13,27): error TS2345: Argument of type 'TypeSymbol' is not assignable to parameter of type 'Symbol'.
+  Type 'InferenceSymbol' is missing the following properties from type 'Symbol': [Symbol.toPrimitive], [Symbol.toStringTag]
+recursiveComplicatedClasses.ts(17,31): error TS2507: Type 'SymbolConstructor' is not a constructor function type.
+
+
+==== recursiveComplicatedClasses.ts (3 errors) ====
+    class Signature {
+        public parameters: ParameterSymbol[] = null;
+    }
+    
+    function aEnclosesB(a: Symbol) {
+        return true;
+    }
+    
+    class Symbol {
+          ~~~~~~
+!!! error TS2300: Duplicate identifier 'Symbol'.
+!!! related TS6203 lib.es5.d.ts:--:--: 'Symbol' was also declared here.
+!!! related TS6204 lib.es2015.symbol.d.ts:--:--: and here.
+!!! related TS6204 lib.es2015.symbol.wellknown.d.ts:--:--: and here.
+        public bound: boolean;
+        public visible() {
+            var b: TypeSymbol;
+            return aEnclosesB(b);
+                              ~
+!!! error TS2345: Argument of type 'TypeSymbol' is not assignable to parameter of type 'Symbol'.
+!!! error TS2345:   Type 'InferenceSymbol' is missing the following properties from type 'Symbol': [Symbol.toPrimitive], [Symbol.toStringTag]
+        }
+    
+    }
+    class InferenceSymbol extends Symbol {
+                                  ~~~~~~
+!!! error TS2507: Type 'SymbolConstructor' is not a constructor function type.
+    }
+    
+    class ParameterSymbol extends InferenceSymbol {
+    }
+    
+    class TypeSymbol extends InferenceSymbol {
+    }

@@ -8,12 +8,12 @@ class C {
     [Symbol.iterator]() { }
 >[Symbol.iterator] : () => void
 >                  : ^^^^^^^^^^
->Symbol.iterator : any
->                : ^^^
->Symbol : any
->       : ^^^
->iterator : any
->         : ^^^
+>Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 }
 
 (new C)[Symbol.iterator]
@@ -25,10 +25,10 @@ class C {
 >      : ^
 >C : typeof C
 >  : ^^^^^^^^
->Symbol.iterator : any
->                : ^^^
->Symbol : any
->       : ^^^
->iterator : any
->         : ^^^
+>Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 

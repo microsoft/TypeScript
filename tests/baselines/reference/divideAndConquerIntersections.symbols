@@ -290,7 +290,7 @@ type Middleware<U extends Update> = (ctx: U) => unknown | Promise<unknown>;
 >Update : Symbol(Update, Decl(divideAndConquerIntersections.ts, 20, 20))
 >ctx : Symbol(ctx, Decl(divideAndConquerIntersections.ts, 88, 37))
 >U : Symbol(U, Decl(divideAndConquerIntersections.ts, 88, 16))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 class EventHub<U extends Update> {
 >EventHub : Symbol(EventHub, Decl(divideAndConquerIntersections.ts, 88, 75))
@@ -300,7 +300,7 @@ class EventHub<U extends Update> {
     use(...middleware: Array<Middleware<U>>): EventHub<U> {
 >use : Symbol(EventHub.use, Decl(divideAndConquerIntersections.ts, 89, 34))
 >middleware : Symbol(middleware, Decl(divideAndConquerIntersections.ts, 90, 8))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Middleware : Symbol(Middleware, Decl(divideAndConquerIntersections.ts, 86, 27))
 >U : Symbol(U, Decl(divideAndConquerIntersections.ts, 89, 15))
 >EventHub : Symbol(EventHub, Decl(divideAndConquerIntersections.ts, 88, 75))
@@ -329,7 +329,7 @@ class EventHub<U extends Update> {
 
         ...middleware: Array<Middleware<Filter<U, Q>>>
 >middleware : Symbol(middleware, Decl(divideAndConquerIntersections.ts, 95, 24))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Middleware : Symbol(Middleware, Decl(divideAndConquerIntersections.ts, 86, 27))
 >Filter : Symbol(Filter, Decl(divideAndConquerIntersections.ts, 58, 58))
 >U : Symbol(U, Decl(divideAndConquerIntersections.ts, 89, 15))
