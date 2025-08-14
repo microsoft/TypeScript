@@ -18,9 +18,12 @@ import (
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/format"
 	"github.com/microsoft/typescript-go/internal/jsnum"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/lsutil"
+	"github.com/microsoft/typescript-go/internal/nodebuilder"
+	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/stringutil"
 	"golang.org/x/text/collate"
@@ -70,7 +73,7 @@ func ensureItemData(fileName string, pos int, list *lsproto.CompletionList) *lsp
 	return list
 }
 
-// *completionDataData | *completionDataKeyword
+// *completionDataData | *completionDataKeyword | *completionDataJSDocTagName | *completionDataJSDocTag | *completionDataJSDocParameterName
 type completionData = any
 
 type completionDataData struct {
@@ -104,6 +107,14 @@ type completionDataData struct {
 type completionDataKeyword struct {
 	keywordCompletions      []*lsproto.CompletionItem
 	isNewIdentifierLocation bool
+}
+
+type completionDataJSDocTagName struct{}
+
+type completionDataJSDocTag struct{}
+
+type completionDataJSDocParameterName struct {
+	tag *ast.JSDocParameterTag
 }
 
 type importStatementCompletionInfo struct {
@@ -383,13 +394,46 @@ func (l *LanguageService) getCompletionsAtPosition(
 			data.isNewIdentifierLocation,
 			optionalReplacementSpan,
 		)
-	// !!! jsdoc completion data cases
+	case *completionDataJSDocTagName:
+		// If the current position is a jsDoc tag name, only tag names should be provided for completion
+		items := getJSDocTagNameCompletions()
+		items = append(items, getJSDocParameterCompletions(
+			clientOptions,
+			file,
+			position,
+			checker,
+			compilerOptions,
+			preferences,
+			/*tagNameOnly*/ true,
+		)...)
+		return l.jsDocCompletionInfo(clientOptions, position, file, items)
+	case *completionDataJSDocTag:
+		// If the current position is a jsDoc tag, only tags should be provided for completion
+		items := getJSDocTagCompletions()
+		items = append(items, getJSDocParameterCompletions(
+			clientOptions,
+			file,
+			position,
+			checker,
+			compilerOptions,
+			preferences,
+			/*tagNameOnly*/ false,
+		)...)
+		return l.jsDocCompletionInfo(clientOptions, position, file, items)
+	case *completionDataJSDocParameterName:
+		return l.jsDocCompletionInfo(clientOptions, position, file, getJSDocParameterNameCompletions(data.tag))
 	default:
 		panic("getCompletionData() returned unexpected type: " + fmt.Sprintf("%T", data))
 	}
 }
 
-func getCompletionData(program *compiler.Program, typeChecker *checker.Checker, file *ast.SourceFile, position int, preferences *UserPreferences) completionData {
+func getCompletionData(
+	program *compiler.Program,
+	typeChecker *checker.Checker,
+	file *ast.SourceFile,
+	position int,
+	preferences *UserPreferences,
+) completionData {
 	inCheckedFile := isCheckedFile(file, program.Options())
 
 	currentToken := astnav.GetTokenAtPosition(file, position)
@@ -400,8 +444,77 @@ func getCompletionData(program *compiler.Program, typeChecker *checker.Checker, 
 	insideJsDocImportTag := false
 	isInSnippetScope := false
 	if insideComment != nil {
-		// !!! jsdoc
-		return nil
+		if hasDocComment(file, position) {
+			if file.Text()[position] == '@' {
+				// The current position is next to the '@' sign, when no tag name being provided yet.
+				// Provide a full list of tag names
+				return &completionDataJSDocTagName{}
+			} else {
+				// When completion is requested without "@", we will have check to make sure that
+				// there are no comments prefix the request position. We will only allow "*" and space.
+				// e.g
+				//   /** |c| /*
+				//
+				//   /**
+				//     |c|
+				//    */
+				//
+				//   /**
+				//    * |c|
+				//    */
+				//
+				//   /**
+				//    *         |c|
+				//    */
+				lineStart := format.GetLineStartPositionForPosition(position, file)
+				noCommentPrefix := true
+				for _, r := range file.Text()[lineStart:position] {
+					if !(stringutil.IsWhiteSpaceSingleLine(r) || r == '*' || r == '/' || r == '(' || r == ')' || r == '|') {
+						noCommentPrefix = false
+						break
+					}
+				}
+				if noCommentPrefix {
+					return &completionDataJSDocTag{}
+				}
+			}
+		}
+
+		// Completion should work inside certain JSDoc tags. For example:
+		//     /** @type {number | string} */
+		// Completion should work in the brackets
+		if tag := getJSDocTagAtPosition(currentToken, position); tag != nil {
+			if tag.TagName().Pos() <= position && position <= tag.TagName().End() {
+				return &completionDataJSDocTagName{}
+			}
+			if ast.IsJSDocImportTag(tag) {
+				insideJsDocImportTag = true
+			} else {
+				if typeExpression := tryGetTypeExpressionFromTag(tag); typeExpression != nil {
+					currentToken = astnav.GetTokenAtPosition(file, position)
+					if currentToken == nil ||
+						(!ast.IsDeclarationName(currentToken) &&
+							(currentToken.Parent.Kind != ast.KindJSDocPropertyTag ||
+								currentToken.Parent.Name() != currentToken)) {
+						// Use as type location if inside tag's type expression
+						insideJSDocTagTypeExpression = isCurrentlyEditingNode(typeExpression, file, position)
+					}
+				}
+				if !insideJSDocTagTypeExpression &&
+					ast.IsJSDocParameterTag(tag) &&
+					(ast.NodeIsMissing(tag.Name()) || tag.Name().Pos() <= position && position <= tag.Name().End()) {
+					return &completionDataJSDocParameterName{
+						tag: tag.AsJSDocParameterOrPropertyTag(),
+					}
+				}
+			}
+		}
+
+		if !insideJSDocTagTypeExpression && !insideJsDocImportTag {
+			// Proceed if the current position is in JSDoc tag expression; otherwise it is a normal
+			// comment or the plain text part of a JSDoc comment, so no completion should be available
+			return nil
+		}
 	}
 
 	// The decision to provide completion depends on the contextToken, which is determined through the previousToken.
@@ -4693,14 +4806,24 @@ func (l *LanguageService) getCompletionItemDetails(
 	)
 	switch {
 	case symbolCompletion.request != nil:
-		request := symbolCompletion.request
-		// !!! JSDoc completions
-		if core.Some(request.keywordCompletions, func(c *lsproto.CompletionItem) bool {
-			return c.Label == itemData.Name
-		}) {
+		request := *symbolCompletion.request
+		switch request := request.(type) {
+		case *completionDataJSDocTagName:
 			return createSimpleDetails(item, itemData.Name)
+		case *completionDataJSDocTag:
+			return createSimpleDetails(item, itemData.Name)
+		case *completionDataJSDocParameterName:
+			return createSimpleDetails(item, itemData.Name)
+		case *completionDataKeyword:
+			if core.Some(request.keywordCompletions, func(c *lsproto.CompletionItem) bool {
+				return c.Label == itemData.Name
+			}) {
+				return createSimpleDetails(item, itemData.Name)
+			}
+			return item
+		default:
+			panic(fmt.Sprintf("Unexpected completion data type: %T", request))
 		}
-		return nil
 	case symbolCompletion.symbol != nil:
 		symbolDetails := symbolCompletion.symbol
 		actions := getCompletionItemActions(symbolDetails.symbol)
@@ -4724,13 +4847,13 @@ func (l *LanguageService) getCompletionItemDetails(
 		}) {
 			return createSimpleDetails(item, itemData.Name)
 		}
-		return nil
+		return item
 	}
 }
 
 type detailsData struct {
 	symbol  *symbolDetails
-	request *completionDataKeyword
+	request *completionData
 	literal *literalValue
 	cases   *struct{}
 }
@@ -4769,9 +4892,9 @@ func getSymbolCompletionFromItemData(
 		return detailsData{}
 	}
 
-	if completionData, ok := completionData.(*completionDataKeyword); ok {
+	if _, ok := completionData.(*completionDataData); !ok {
 		return detailsData{
-			request: completionData,
+			request: &completionData,
 		}
 	}
 
@@ -4873,4 +4996,626 @@ func createCompletionDetailsForSymbol(
 // !!! snippets
 func getCompletionItemActions(symbol *ast.Symbol) []codeAction {
 	return nil
+}
+
+func hasDocComment(file *ast.SourceFile, position int) bool {
+	token := astnav.GetTokenAtPosition(file, position)
+	return ast.FindAncestor(token, (*ast.Node).IsJSDoc) != nil
+}
+
+// Get the corresponding JSDocTag node if the position is in a JSDoc comment
+func getJSDocTagAtPosition(node *ast.Node, position int) *ast.JSDocTag {
+	return ast.FindAncestorOrQuit(node, func(n *ast.Node) ast.FindAncestorResult {
+		if ast.IsJSDocTag(n) && n.Loc.ContainsInclusive(position) {
+			return ast.FindAncestorTrue
+		}
+		if n.IsJSDoc() {
+			return ast.FindAncestorQuit
+		}
+		return ast.FindAncestorFalse
+	})
+}
+
+func tryGetTypeExpressionFromTag(tag *ast.JSDocTag) *ast.Node {
+	if isTagWithTypeExpression(tag) {
+		var typeExpression *ast.Node
+		if ast.IsJSDocTemplateTag(tag) {
+			typeExpression = tag.AsJSDocTemplateTag().Constraint
+		} else {
+			typeExpression = tag.TypeExpression()
+		}
+		if typeExpression != nil && typeExpression.Kind == ast.KindJSDocTypeExpression {
+			return typeExpression
+		}
+	}
+	if ast.IsJSDocAugmentsTag(tag) || ast.IsJSDocImplementsTag(tag) {
+		return tag.ClassName()
+	}
+	return nil
+}
+
+func isTagWithTypeExpression(tag *ast.JSDocTag) bool {
+	switch tag.Kind {
+	case ast.KindJSDocParameterTag, ast.KindJSDocPropertyTag, ast.KindJSDocReturnTag, ast.KindJSDocTypeTag,
+		ast.KindJSDocTypedefTag, ast.KindJSDocSatisfiesTag:
+		return true
+	case ast.KindJSDocTemplateTag:
+		return tag.AsJSDocTemplateTag().Constraint != nil
+	default:
+		return false
+	}
+}
+
+func (l *LanguageService) jsDocCompletionInfo(
+	clientOptions *lsproto.CompletionClientCapabilities,
+	position int,
+	file *ast.SourceFile,
+	items []*lsproto.CompletionItem,
+) *lsproto.CompletionList {
+	defaultCommitCharacters := getDefaultCommitCharacters(false /*isNewIdentifierLocation*/)
+	itemDefaults := l.setItemDefaults(
+		clientOptions,
+		position,
+		file,
+		items,
+		&defaultCommitCharacters,
+		nil, /*optionalReplacementSpan*/
+	)
+	return &lsproto.CompletionList{
+		IsIncomplete: false,
+		ItemDefaults: itemDefaults,
+		Items:        items,
+	}
+}
+
+var jsDocTagNames = []string{
+	"abstract",
+	"access",
+	"alias",
+	"argument",
+	"async",
+	"augments",
+	"author",
+	"borrows",
+	"callback",
+	"class",
+	"classdesc",
+	"constant",
+	"constructor",
+	"constructs",
+	"copyright",
+	"default",
+	"deprecated",
+	"description",
+	"emits",
+	"enum",
+	"event",
+	"example",
+	"exports",
+	"extends",
+	"external",
+	"field",
+	"file",
+	"fileoverview",
+	"fires",
+	"function",
+	"generator",
+	"global",
+	"hideconstructor",
+	"host",
+	"ignore",
+	"implements",
+	"import",
+	"inheritdoc",
+	"inner",
+	"instance",
+	"interface",
+	"kind",
+	"lends",
+	"license",
+	"link",
+	"linkcode",
+	"linkplain",
+	"listens",
+	"member",
+	"memberof",
+	"method",
+	"mixes",
+	"module",
+	"name",
+	"namespace",
+	"overload",
+	"override",
+	"package",
+	"param",
+	"private",
+	"prop",
+	"property",
+	"protected",
+	"public",
+	"readonly",
+	"requires",
+	"returns",
+	"satisfies",
+	"see",
+	"since",
+	"static",
+	"summary",
+	"template",
+	"this",
+	"throws",
+	"todo",
+	"tutorial",
+	"type",
+	"typedef",
+	"var",
+	"variation",
+	"version",
+	"virtual",
+	"yields",
+}
+
+var jsDocTagNameCompletionItems = sync.OnceValue(func() []*lsproto.CompletionItem {
+	items := make([]*lsproto.CompletionItem, 0, len(jsDocTagNames))
+	for _, tagName := range jsDocTagNames {
+		item := &lsproto.CompletionItem{
+			Label:    tagName,
+			Kind:     ptrTo(lsproto.CompletionItemKindKeyword),
+			SortText: ptrTo(string(SortTextLocationPriority)),
+		}
+		items = append(items, item)
+	}
+	return items
+})
+
+var jsDocTagCompletionItems = sync.OnceValue(func() []*lsproto.CompletionItem {
+	items := make([]*lsproto.CompletionItem, 0, len(jsDocTagNames))
+	for _, tagName := range jsDocTagNames {
+		item := &lsproto.CompletionItem{
+			Label:    "@" + tagName,
+			Kind:     ptrTo(lsproto.CompletionItemKindKeyword),
+			SortText: ptrTo(string(SortTextLocationPriority)),
+		}
+		items = append(items, item)
+	}
+	return items
+})
+
+func getJSDocTagNameCompletions() []*lsproto.CompletionItem {
+	return cloneItems(jsDocTagNameCompletionItems())
+}
+
+func getJSDocTagCompletions() []*lsproto.CompletionItem {
+	return cloneItems(jsDocTagCompletionItems())
+}
+
+func getJSDocParameterCompletions(
+	clientOptions *lsproto.CompletionClientCapabilities,
+	file *ast.SourceFile,
+	position int,
+	typeChecker *checker.Checker,
+	options *core.CompilerOptions,
+	preferences *UserPreferences,
+	tagNameOnly bool,
+) []*lsproto.CompletionItem {
+	currentToken := astnav.GetTokenAtPosition(file, position)
+	if !ast.IsJSDocTag(currentToken) && !currentToken.IsJSDoc() {
+		return nil
+	}
+	var jsDoc *ast.JSDocNode
+	if currentToken.IsJSDoc() {
+		jsDoc = currentToken
+	} else {
+		jsDoc = currentToken.Parent
+	}
+	if !jsDoc.IsJSDoc() {
+		return nil
+	}
+	fun := jsDoc.Parent
+	if !ast.IsFunctionLike(fun) {
+		return nil
+	}
+
+	isJS := ast.IsSourceFileJS(file)
+	// isSnippet := clientSupportsItemSnippet(clientOptions)
+	isSnippet := false // !!! need snippet printer
+	paramTagCount := 0
+	var tags []*ast.JSDocTag
+	if jsDoc.AsJSDoc().Tags != nil {
+		tags = jsDoc.AsJSDoc().Tags.Nodes
+	}
+	for _, tag := range tags {
+		if ast.IsJSDocParameterTag(tag) &&
+			astnav.GetStartOfNode(tag, file, false /*includeJSDoc*/) < position &&
+			ast.IsIdentifier(tag.Name()) {
+			paramTagCount++
+		}
+	}
+	paramIndex := -1
+	return core.MapNonNil(fun.Parameters(), func(param *ast.ParameterDeclarationNode) *lsproto.CompletionItem {
+		paramIndex++
+		if paramIndex < paramTagCount {
+			// This parameter is already annotated.
+			return nil
+		}
+		if ast.IsIdentifier(param.Name()) { // Named parameter
+			tabstopCounter := 1
+			paramName := param.Name().Text()
+			displayText := getJSDocParamAnnotation(
+				paramName,
+				param.Initializer(),
+				param.AsParameterDeclaration().DotDotDotToken,
+				isJS,
+				/*isObject*/ false,
+				/*isSnippet*/ false,
+				typeChecker,
+				options,
+				preferences,
+				&tabstopCounter,
+			)
+			var snippetText string
+			if isSnippet {
+				snippetText = getJSDocParamAnnotation(
+					paramName,
+					param.Initializer(),
+					param.AsParameterDeclaration().DotDotDotToken,
+					isJS,
+					/*isObject*/ false,
+					/*isSnippet*/ true,
+					typeChecker,
+					options,
+					preferences,
+					&tabstopCounter,
+				)
+			}
+			if tagNameOnly { // Remove `@`
+				displayText = displayText[1:]
+				if snippetText != "" {
+					snippetText = snippetText[1:]
+				}
+			}
+
+			return &lsproto.CompletionItem{
+				Label:            displayText,
+				Kind:             ptrTo(lsproto.CompletionItemKindVariable),
+				SortText:         ptrTo(string(SortTextLocationPriority)),
+				InsertText:       strPtrTo(snippetText),
+				InsertTextFormat: core.IfElse(isSnippet, ptrTo(lsproto.InsertTextFormatSnippet), nil),
+			}
+		} else if paramIndex == paramTagCount {
+			// Destructuring parameter; do it positionally
+			paramPath := fmt.Sprintf("param%d", paramIndex)
+			displayTextResult := generateJSDocParamTagsForDestructuring(
+				paramPath,
+				param.Name(),
+				param.Initializer(),
+				param.AsParameterDeclaration().DotDotDotToken,
+				isJS,
+				/*isSnippet*/ false,
+				typeChecker,
+				options,
+				preferences,
+			)
+			var snippetText string
+			if isSnippet {
+				snippetTextResult := generateJSDocParamTagsForDestructuring(
+					paramPath,
+					param.Name(),
+					param.Initializer(),
+					param.AsParameterDeclaration().DotDotDotToken,
+					isJS,
+					/*isSnippet*/ true,
+					typeChecker,
+					options,
+					preferences,
+				)
+				snippetText = strings.Join(snippetTextResult, options.NewLine.GetNewLineCharacter()+"* ")
+			}
+			displayText := strings.Join(displayTextResult, options.NewLine.GetNewLineCharacter()+"* ")
+			if tagNameOnly { // Remove `@`
+				displayText = strings.TrimPrefix(displayText, "@")
+				snippetText = strings.TrimPrefix(snippetText, "@")
+			}
+			return &lsproto.CompletionItem{
+				Label:            displayText,
+				Kind:             ptrTo(lsproto.CompletionItemKindVariable),
+				SortText:         ptrTo(string(SortTextLocationPriority)),
+				InsertText:       strPtrTo(snippetText),
+				InsertTextFormat: core.IfElse(isSnippet, ptrTo(lsproto.InsertTextFormatSnippet), nil),
+			}
+		}
+		return nil
+	})
+}
+
+func getJSDocParamAnnotation(
+	paramName string,
+	initializer *ast.Expression,
+	dotDotDotToken *ast.TokenNode,
+	isJS bool,
+	isObject bool,
+	isSnippet bool,
+	typeChecker *checker.Checker,
+	options *core.CompilerOptions,
+	preferences *UserPreferences,
+	tabstopCounter *int,
+) string {
+	if isSnippet {
+		// !!! Debug.assertIsDefined(tabstopCounter);
+	}
+	if initializer != nil {
+		paramName = getJSDocParamNameWithInitializer(paramName, initializer)
+	}
+	if isSnippet {
+		paramName = escapeSnippetText(paramName)
+	}
+	if isJS {
+		t := "*"
+		if isObject {
+			// !!! Debug.assert(!dotDotDotToken, `Cannot annotate a rest parameter with type 'object'.`);
+			t = "object"
+		} else {
+			if initializer != nil {
+				inferredType := typeChecker.GetTypeAtLocation(initializer.Parent)
+				if inferredType.Flags()&(checker.TypeFlagsAny|checker.TypeFlagsVoid) == 0 {
+					file := ast.GetSourceFileOfNode(initializer)
+					quotePreference := getQuotePreference(file, preferences)
+					builderFlags := core.IfElse(
+						quotePreference == quotePreferenceSingle,
+						nodebuilder.FlagsUseSingleQuotesForStringLiteralType,
+						nodebuilder.FlagsNone,
+					)
+					typeNode := typeChecker.TypeToTypeNode(inferredType, ast.FindAncestor(initializer, ast.IsFunctionLike), builderFlags)
+					if typeNode != nil {
+						emitContext := printer.NewEmitContext()
+						// !!! snippet p
+						p := printer.NewPrinter(printer.PrinterOptions{
+							RemoveComments: true,
+							// !!!
+							// Module: options.Module,
+							// ModuleResolution: options.ModuleResolution,
+							// Target: options.Target,
+						}, printer.PrintHandlers{}, emitContext)
+						emitContext.SetEmitFlags(typeNode, printer.EFSingleLine)
+						t = p.Emit(typeNode, file)
+					}
+				}
+			}
+			if isSnippet && t == "*" {
+				tabstop := *tabstopCounter
+				*tabstopCounter++
+				t = fmt.Sprintf("${%d:%s}", tabstop, t)
+			}
+		}
+		dotDotDot := core.IfElse(!isObject && dotDotDotToken != nil, "...", "")
+		var description string
+		if isSnippet {
+			tabstop := *tabstopCounter
+			*tabstopCounter++
+			description = fmt.Sprintf("${%d}", tabstop)
+		}
+		return fmt.Sprintf("@param {%s%s} %s %s", dotDotDot, t, paramName, description)
+	} else {
+		var description string
+		if isSnippet {
+			tabstop := *tabstopCounter
+			*tabstopCounter++
+			description = fmt.Sprintf("${%d}", tabstop)
+		}
+		return fmt.Sprintf("@param %s %s", paramName, description)
+	}
+}
+
+func getJSDocParamNameWithInitializer(paramName string, initializer *ast.Expression) string {
+	initializerText := strings.TrimSpace(scanner.GetTextOfNode(initializer))
+	if strings.Contains(initializerText, "\n") || len(initializerText) > 80 {
+		return fmt.Sprintf("[%s]", paramName)
+	}
+	return fmt.Sprintf("[%s=%s]", paramName, initializerText)
+}
+
+func generateJSDocParamTagsForDestructuring(
+	path string,
+	pattern *ast.BindingPatternNode,
+	initializer *ast.Expression,
+	dotDotDotToken *ast.TokenNode,
+	isJS bool,
+	isSnippet bool,
+	typeChecker *checker.Checker,
+	options *core.CompilerOptions,
+	preferences *UserPreferences,
+) []string {
+	tabstopCounter := 1
+	if !isJS {
+		return []string{getJSDocParamAnnotation(
+			path,
+			initializer,
+			dotDotDotToken,
+			isJS,
+			/*isObject*/ false,
+			isSnippet,
+			typeChecker,
+			options,
+			preferences,
+			&tabstopCounter,
+		)}
+	}
+	return jsDocParamPatternWorker(
+		path,
+		pattern,
+		initializer,
+		dotDotDotToken,
+		isJS,
+		isSnippet,
+		typeChecker,
+		options,
+		preferences,
+		&tabstopCounter,
+	)
+}
+
+func jsDocParamPatternWorker(
+	path string,
+	pattern *ast.BindingPatternNode,
+	initializer *ast.Expression,
+	dotDotDotToken *ast.TokenNode,
+	isJS bool,
+	isSnippet bool,
+	typeChecker *checker.Checker,
+	options *core.CompilerOptions,
+	preferences *UserPreferences,
+	counter *int,
+) []string {
+	if ast.IsObjectBindingPattern(pattern) && dotDotDotToken == nil {
+		childCounter := *counter
+		rootParam := getJSDocParamAnnotation(
+			path,
+			initializer,
+			dotDotDotToken,
+			isJS,
+			/*isObject*/ true,
+			isSnippet,
+			typeChecker,
+			options,
+			preferences,
+			&childCounter,
+		)
+		var childTags []string
+		for _, element := range pattern.Elements() {
+			elementTags := jsDocParamElementWorker(
+				path,
+				element,
+				initializer,
+				dotDotDotToken,
+				isJS,
+				isSnippet,
+				typeChecker,
+				options,
+				preferences,
+				&childCounter,
+			)
+			if len(elementTags) == 0 {
+				childTags = nil
+				break
+			}
+			childTags = append(childTags, elementTags...)
+		}
+		if len(childTags) > 0 {
+			*counter = childCounter
+			return append([]string{rootParam}, childTags...)
+		}
+	}
+	return []string{
+		getJSDocParamAnnotation(
+			path,
+			initializer,
+			dotDotDotToken,
+			isJS,
+			/*isObject*/ false,
+			isSnippet,
+			typeChecker,
+			options,
+			preferences,
+			counter,
+		),
+	}
+}
+
+// Assumes binding element is inside object binding pattern.
+// We can't deeply annotate an array binding pattern.
+func jsDocParamElementWorker(
+	path string,
+	element *ast.BindingElementNode,
+	initializer *ast.Expression,
+	dotDotDotToken *ast.TokenNode,
+	isJS bool,
+	isSnippet bool,
+	typeChecker *checker.Checker,
+	options *core.CompilerOptions,
+	preferences *UserPreferences,
+	counter *int,
+) []string {
+	if ast.IsIdentifier(element.Name()) { // `{ b }` or `{ b: newB }`
+		var propertyName string
+		if element.PropertyName() != nil {
+			propertyName, _ = ast.TryGetTextOfPropertyName(element.PropertyName())
+		} else {
+			propertyName = element.Name().Text()
+		}
+		if propertyName == "" {
+			return nil
+		}
+		paramName := fmt.Sprintf("%s.%s", path, propertyName)
+		return []string{
+			getJSDocParamAnnotation(
+				paramName,
+				element.Initializer(),
+				element.AsBindingElement().DotDotDotToken,
+				isJS,
+				/*isObject*/ false,
+				isSnippet,
+				typeChecker,
+				options,
+				preferences,
+				counter,
+			),
+		}
+	} else if element.PropertyName() != nil { // `{ b: {...} }` or `{ b: [...] }`
+		propertyName, _ := ast.TryGetTextOfPropertyName(element.PropertyName())
+		if propertyName == "" {
+			return nil
+		}
+		return jsDocParamPatternWorker(
+			fmt.Sprintf("%s.%s", path, propertyName),
+			element.Name(),
+			element.Initializer(),
+			element.AsBindingElement().DotDotDotToken,
+			isJS,
+			isSnippet,
+			typeChecker,
+			options,
+			preferences,
+			counter,
+		)
+	}
+	return nil
+}
+
+func getJSDocParameterNameCompletions(tag *ast.JSDocParameterTag) []*lsproto.CompletionItem {
+	if !ast.IsIdentifier(tag.Name()) {
+		return nil
+	}
+	nameThusFar := tag.Name().Text()
+	jsDoc := tag.Parent
+	fn := jsDoc.Parent
+	if !ast.IsFunctionLike(fn) {
+		return nil
+	}
+
+	var tags []*ast.JSDocTag
+	if jsDoc.AsJSDoc().Tags != nil {
+		tags = jsDoc.AsJSDoc().Tags.Nodes
+	}
+
+	return core.MapNonNil(fn.Parameters(), func(param *ast.ParameterDeclarationNode) *lsproto.CompletionItem {
+		if !ast.IsIdentifier(param.Name()) {
+			return nil
+		}
+
+		name := param.Name().Text()
+		if core.Some(tags, func(t *ast.JSDocTag) bool {
+			return t != tag.AsNode() &&
+				ast.IsJSDocParameterTag(t) &&
+				ast.IsIdentifier(t.Name()) &&
+				t.Name().Text() == name
+		}) || nameThusFar != "" && !strings.HasPrefix(name, nameThusFar) {
+			return nil
+		}
+
+		return &lsproto.CompletionItem{
+			Label:    name,
+			Kind:     ptrTo(lsproto.CompletionItemKindVariable),
+			SortText: ptrTo(string(SortTextLocationPriority)),
+		}
+	})
 }

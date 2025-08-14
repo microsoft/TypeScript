@@ -75,7 +75,7 @@ func getCloseTokenForOpenToken(kind ast.Kind) ast.Kind {
 	return ast.KindUnknown
 }
 
-func getLineStartPositionForPosition(position int, sourceFile *ast.SourceFile) int {
+func GetLineStartPositionForPosition(position int, sourceFile *ast.SourceFile) int {
 	lineStarts := scanner.GetLineStarts(sourceFile)
 	line, _ := scanner.GetLineAndCharacterOfPosition(sourceFile, position)
 	return int(lineStarts[line])

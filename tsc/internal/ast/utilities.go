@@ -2103,16 +2103,6 @@ func TryGetTextOfPropertyName(name *Node) (string, bool) {
 	return "", false
 }
 
-// True if node is of a JSDoc kind that may contain comment text.
-func IsJSDocCommentContainingNode(node *Node) bool {
-	return node.Kind == KindJSDoc ||
-		node.Kind == KindJSDocText ||
-		node.Kind == KindJSDocTypeLiteral ||
-		node.Kind == KindJSDocSignature ||
-		IsJSDocLinkLike(node) ||
-		IsJSDocTag(node)
-}
-
 func IsJSDocNode(node *Node) bool {
 	return node.Kind >= KindFirstJSDocNode && node.Kind <= KindLastJSDocNode
 }
@@ -3017,13 +3007,27 @@ func IsTypeKeywordToken(node *Node) bool {
 	return node.Kind == KindTypeKeyword
 }
 
-// If node is a single comment JSDoc, we do not visit the comment node list.
-func IsJSDocSingleCommentNodeList(parent *Node, nodeList *NodeList) bool {
-	return IsJSDocSingleCommentNode(parent) && nodeList == parent.AsJSDoc().Comment
+// See `IsJSDocSingleCommentNode`.
+func IsJSDocSingleCommentNodeList(nodeList *NodeList) bool {
+	if nodeList == nil || len(nodeList.Nodes) == 0 {
+		return false
+	}
+	parent := nodeList.Nodes[0].Parent
+	return IsJSDocSingleCommentNode(parent) && nodeList == parent.CommentList()
 }
 
+// See `IsJSDocSingleCommentNode`.
+func IsJSDocSingleCommentNodeComment(node *Node) bool {
+	if node == nil || node.Parent == nil {
+		return false
+	}
+	return IsJSDocSingleCommentNode(node.Parent) && node == node.Parent.CommentList().Nodes[0]
+}
+
+// In Strada, if a JSDoc node has a single comment, that comment is represented as a string property
+// as a simplification, and therefore that comment is not visited by `forEachChild`.
 func IsJSDocSingleCommentNode(node *Node) bool {
-	return node.Kind == KindJSDoc && node.AsJSDoc().Comment != nil && len(node.AsJSDoc().Comment.Nodes) == 1
+	return hasComment(node.Kind) && node.CommentList() != nil && len(node.CommentList().Nodes) == 1
 }
 
 func IsValidTypeOnlyAliasUseSite(useSite *Node) bool {
@@ -3634,4 +3638,19 @@ func GetSemanticJsxChildren(children []*JsxChild) []*JsxChild {
 			return true
 		}
 	})
+}
+
+// Returns true if the node kind has a comment property.
+func hasComment(kind Kind) bool {
+	switch kind {
+	case KindJSDoc, KindJSDocTag, KindJSDocAugmentsTag, KindJSDocImplementsTag,
+		KindJSDocDeprecatedTag, KindJSDocPublicTag, KindJSDocPrivateTag, KindJSDocProtectedTag,
+		KindJSDocReadonlyTag, KindJSDocOverrideTag, KindJSDocCallbackTag, KindJSDocOverloadTag,
+		KindJSDocParameterTag, KindJSDocPropertyTag, KindJSDocReturnTag, KindJSDocThisTag,
+		KindJSDocTypeTag, KindJSDocTemplateTag, KindJSDocTypedefTag, KindJSDocSeeTag,
+		KindJSDocSatisfiesTag, KindJSDocImportTag:
+		return true
+	default:
+		return false
+	}
 }

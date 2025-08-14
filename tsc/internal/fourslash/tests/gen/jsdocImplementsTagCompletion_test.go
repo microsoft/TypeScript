@@ -10,7 +10,7 @@ import (
 
 func TestJsdocImplementsTagCompletion(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `/** @implements {/**/} */
 class A {}`

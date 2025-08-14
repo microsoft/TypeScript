@@ -438,6 +438,9 @@ func probablyUsesSemicolons(file *ast.SourceFile) bool {
 
 	var visit func(node *ast.Node) bool
 	visit = func(node *ast.Node) bool {
+		if node.Flags&ast.NodeFlagsReparsed != 0 {
+			return false
+		}
 		if lsutil.SyntaxRequiresTrailingSemicolonOrASI(node.Kind) {
 			lastToken := lsutil.GetLastToken(node, file)
 			if lastToken != nil && lastToken.Kind == ast.KindSemicolonToken {
@@ -1614,18 +1617,7 @@ func findContainingList(node *ast.Node, file *ast.SourceFile) *ast.NodeList {
 		}
 		return nodes
 	}
-	nodeVisitor := ast.NewNodeVisitor(core.Identity, nil, ast.NodeVisitorHooks{
-		VisitNode:  visitNode,
-		VisitToken: visitNode,
-		VisitNodes: visitNodes,
-		VisitModifiers: func(modifiers *ast.ModifierList, visitor *ast.NodeVisitor) *ast.ModifierList {
-			if modifiers != nil {
-				visitNodes(&modifiers.NodeList, visitor)
-			}
-			return modifiers
-		},
-	})
-	astnav.VisitEachChildAndJSDoc(node.Parent, file, nodeVisitor)
+	astnav.VisitEachChildAndJSDoc(node.Parent, file, visitNode, visitNodes)
 	return list
 }
 

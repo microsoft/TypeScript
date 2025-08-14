@@ -897,6 +897,7 @@ func (n *Node) IsTypeOnly() bool {
 	return false
 }
 
+// If updating this function, also update `hasComment`.
 func (n *Node) CommentList() *NodeList {
 	switch n.Kind {
 	case KindJSDoc:
@@ -1033,6 +1034,8 @@ func (n *Node) ElementList() *NodeList {
 		return n.AsNamedImports().Elements
 	case KindNamedExports:
 		return n.AsNamedExports().Elements
+	case KindObjectBindingPattern, KindArrayBindingPattern:
+		return n.AsBindingPattern().Elements
 	}
 
 	panic("Unhandled case in Node.ElementList: " + n.Kind.String())
@@ -1058,6 +1061,32 @@ func (n *Node) QuestionDotToken() *Node {
 		return n.AsTaggedTemplateExpression().QuestionDotToken
 	}
 	panic("Unhandled case in Node.QuestionDotToken: " + n.Kind.String())
+}
+
+func (n *Node) TypeExpression() *Node {
+	switch n.Kind {
+	case KindJSDocPropertyTag, KindJSDocParameterTag:
+		return n.AsJSDocParameterOrPropertyTag().TypeExpression
+	case KindJSDocReturnTag:
+		return n.AsJSDocReturnTag().TypeExpression
+	case KindJSDocTypeTag:
+		return n.AsJSDocTypeTag().TypeExpression
+	case KindJSDocTypedefTag:
+		return n.AsJSDocTypedefTag().TypeExpression
+	case KindJSDocSatisfiesTag:
+		return n.AsJSDocSatisfiesTag().TypeExpression
+	}
+	panic("Unhandled case in Node.TypeExpression: " + n.Kind.String())
+}
+
+func (n *Node) ClassName() *Node {
+	switch n.Kind {
+	case KindJSDocAugmentsTag:
+		return n.AsJSDocAugmentsTag().ClassName
+	case KindJSDocImplementsTag:
+		return n.AsJSDocImplementsTag().ClassName
+	}
+	panic("Unhandled case in Node.ClassName: " + n.Kind.String())
 }
 
 // Determines if `n` contains `descendant` by walking up the `Parent` pointers from `descendant`. This method panics if
@@ -2049,6 +2078,8 @@ type (
 	NamedExportsNode                = Node
 	UnionType                       = Node
 	LiteralType                     = Node
+	JSDocNode                       = Node
+	BindingPatternNode              = Node
 )
 
 type (
@@ -9535,6 +9566,10 @@ func (node *JSDocTemplateTag) Clone(f NodeFactoryCoercible) *Node {
 	return cloneNode(f.AsNodeFactory().NewJSDocTemplateTag(node.TagName, node.Constraint, node.TypeParameters, node.Comment), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
+func IsJSDocTemplateTag(n *Node) bool {
+	return n.Kind == KindJSDocTemplateTag
+}
+
 // JSDocParameterOrPropertyTag
 type JSDocParameterOrPropertyTag struct {
 	JSDocTagBase
@@ -9599,6 +9634,10 @@ func (node *JSDocParameterOrPropertyTag) Clone(f NodeFactoryCoercible) *Node {
 }
 
 func (node *JSDocParameterOrPropertyTag) Name() *EntityName { return node.name }
+
+func IsJSDocParameterTag(node *Node) bool {
+	return node.Kind == KindJSDocParameterTag
+}
 
 // JSDocReturnTag
 type JSDocReturnTag struct {
@@ -9891,6 +9930,10 @@ func (node *JSDocImplementsTag) VisitEachChild(v *NodeVisitor) *Node {
 
 func (node *JSDocImplementsTag) Clone(f NodeFactoryCoercible) *Node {
 	return cloneNode(f.AsNodeFactory().NewJSDocImplementsTag(node.TagName, node.ClassName, node.Comment), node.AsNode(), f.AsNodeFactory().hooks)
+}
+
+func IsJSDocImplementsTag(node *Node) bool {
+	return node.Kind == KindJSDocImplementsTag
 }
 
 // JSDocAugmentsTag

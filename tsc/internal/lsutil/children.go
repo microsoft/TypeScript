@@ -10,7 +10,7 @@ import (
 // Replaces last(node.getChildren(sourceFile))
 func GetLastChild(node *ast.Node, sourceFile *ast.SourceFile) *ast.Node {
 	lastChildNode := GetLastVisitedChild(node, sourceFile)
-	if ast.IsJSDocSingleCommentNode(node) {
+	if ast.IsJSDocSingleCommentNode(node) && lastChildNode == nil {
 		return nil
 	}
 	var tokenStartPos int
@@ -67,7 +67,7 @@ func GetLastVisitedChild(node *ast.Node, sourceFile *ast.SourceFile) *ast.Node {
 		return n
 	}
 	visitNodeList := func(nodeList *ast.NodeList, _ *ast.NodeVisitor) *ast.NodeList {
-		if nodeList != nil && len(nodeList.Nodes) > 0 && !ast.IsJSDocSingleCommentNodeList(node, nodeList) {
+		if nodeList != nil && len(nodeList.Nodes) > 0 {
 			for i := len(nodeList.Nodes) - 1; i >= 0; i-- {
 				if nodeList.Nodes[i].Flags&ast.NodeFlagsReparsed == 0 {
 					lastChild = nodeList.Nodes[i]
@@ -78,19 +78,7 @@ func GetLastVisitedChild(node *ast.Node, sourceFile *ast.SourceFile) *ast.Node {
 		return nodeList
 	}
 
-	nodeVisitor := ast.NewNodeVisitor(core.Identity, nil, ast.NodeVisitorHooks{
-		VisitNode:  visitNode,
-		VisitToken: visitNode,
-		VisitNodes: visitNodeList,
-		VisitModifiers: func(modifiers *ast.ModifierList, visitor *ast.NodeVisitor) *ast.ModifierList {
-			if modifiers != nil {
-				visitNodeList(&modifiers.NodeList, visitor)
-			}
-			return modifiers
-		},
-	})
-
-	astnav.VisitEachChildAndJSDoc(node, sourceFile, nodeVisitor)
+	astnav.VisitEachChildAndJSDoc(node, sourceFile, visitNode, visitNodeList)
 	return lastChild
 }
 
