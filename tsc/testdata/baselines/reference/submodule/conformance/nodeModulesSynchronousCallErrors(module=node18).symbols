@@ -20,9 +20,11 @@ export async function f() {
 
     const mod3 = await import ("../index.js");
 >mod3 : Symbol(mod3, Decl(index.ts, 6, 9))
+>"../index.js" : Symbol("index", Decl(index.ts, 0, 0))
 
     const mod4 = await import ("./index.js");
 >mod4 : Symbol(mod4, Decl(index.ts, 7, 9))
+>"./index.js" : Symbol("subfolder/index", Decl(index.ts, 0, 0))
 
     h();
 >h : Symbol(h, Decl(index.ts, 1, 8))
@@ -47,9 +49,11 @@ export async function h() {
 
     const mod3 = await import ("./index.js");
 >mod3 : Symbol(mod3, Decl(index.ts, 6, 9))
+>"./index.js" : Symbol("index", Decl(index.ts, 0, 0))
 
     const mod4 = await import ("./subfolder/index.js");
 >mod4 : Symbol(mod4, Decl(index.ts, 7, 9))
+>"./subfolder/index.js" : Symbol("subfolder/index", Decl(index.ts, 0, 0))
 
     f();
 >f : Symbol(f, Decl(index.ts, 3, 8))

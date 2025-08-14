@@ -21,8 +21,3 @@
  >value : Symbol(value, Decl(2.ts, 1, 11))
 
          let b = new value.B();
-@@= skipped -17, +17 lines =@@
-
- foo(import("./0"));
- >foo : Symbol(foo, Decl(2.ts, 0, 0))
-->"./0" : Symbol("0", Decl(0.ts, 0, 0))

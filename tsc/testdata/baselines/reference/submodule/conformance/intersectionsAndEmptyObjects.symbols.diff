@@ -11,11 +11,3 @@
 +>assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
  >d1 : Symbol(d1, Decl(intersectionsAndEmptyObjects.ts, 30, 77))
  >d2 : Symbol(d2, Decl(intersectionsAndEmptyObjects.ts, 31, 9))
-
-@@= skipped -156, +156 lines =@@
-
- mock(import('./ex'))
- >mock : Symbol(mock, Decl(intersectionsAndEmptyObjects.ts, 80, 52))
-->'./ex' : Symbol("ex", Decl(ex.d.ts, 0, 0))
-
- === ex.d.ts ===

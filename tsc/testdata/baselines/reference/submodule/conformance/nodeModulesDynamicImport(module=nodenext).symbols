@@ -7,6 +7,7 @@ export async function main() {
 
     const { readFile } = await import("fs");
 >readFile : Symbol(readFile, Decl(index.ts, 2, 11))
+>"fs" : Symbol("fs", Decl(types.d.ts, 0, 0))
 }
 === index.ts ===
 // esm format file
@@ -15,6 +16,7 @@ export async function main() {
 
     const { readFile } = await import("fs");
 >readFile : Symbol(readFile, Decl(index.ts, 2, 11))
+>"fs" : Symbol("fs", Decl(types.d.ts, 0, 0))
 }
 === types.d.ts ===
 declare module "fs";

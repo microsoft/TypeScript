@@ -6,6 +6,7 @@ export async function fn() {
 
     const req = await import('./test') // ONE
 >req : Symbol(req, Decl(test.ts, 1, 9))
+>'./test' : Symbol("test", Decl(test.ts, 0, 0))
 }
 
 export class cl1 {
@@ -16,6 +17,7 @@ export class cl1 {
 
         const req = await import('./test') // TWO
 >req : Symbol(req, Decl(test.ts, 6, 13))
+>'./test' : Symbol("test", Decl(test.ts, 0, 0))
     }
 }
 
@@ -27,6 +29,7 @@ export const obj = {
 
         const req = await import('./test') // THREE
 >req : Symbol(req, Decl(test.ts, 12, 13))
+>'./test' : Symbol("test", Decl(test.ts, 0, 0))
     }
 }
 
@@ -41,6 +44,7 @@ export class cl2 {
 
             const req = await import('./test') // FOUR
 >req : Symbol(req, Decl(test.ts, 19, 17))
+>'./test' : Symbol("test", Decl(test.ts, 0, 0))
         }
     }
 }
@@ -50,5 +54,6 @@ export const l = async () => {
 
     const req = await import('./test') // FIVE
 >req : Symbol(req, Decl(test.ts, 25, 9))
+>'./test' : Symbol("test", Decl(test.ts, 0, 0))
 }
 

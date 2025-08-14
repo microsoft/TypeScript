@@ -28,6 +28,7 @@ export default (suit: Suit, rank: Rank) => ({suit, rank});
 export let lazyCard = () => import('./Card').then(a => a.default);
 >lazyCard : Symbol(lazyCard, Decl(index.ts, 0, 10))
 >import('./Card').then : Symbol(then, Decl(lib.es5.d.ts, --, --))
+>'./Card' : Symbol("Card", Decl(Card.ts, 0, 0))
 >then : Symbol(then, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(index.ts, 0, 50))
 >a.default : Symbol(default, Decl(Card.ts, 0, 37))

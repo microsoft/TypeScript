@@ -24,12 +24,14 @@ class C {
 
     private myModule = import("./0");
 >myModule : Symbol(myModule, Decl(2.ts, 1, 9))
+>"./0" : Symbol("0", Decl(0.ts, 0, 0))
 
     method() {
 >method : Symbol(method, Decl(2.ts, 2, 37))
 
         const loadAsync = import("./0");
 >loadAsync : Symbol(loadAsync, Decl(2.ts, 4, 13))
+>"./0" : Symbol("0", Decl(0.ts, 0, 0))
 
         this.myModule.then(Zero => {
 >this.myModule.then : Symbol(then, Decl(lib.es5.d.ts, --, --))
@@ -54,6 +56,7 @@ class C {
 
             let one = await import("./1");
 >one : Symbol(one, Decl(2.ts, 9, 15))
+>"./1" : Symbol("1", Decl(1.ts, 0, 0))
 
             console.log(one.backup());
 >console : Symbol(console, Decl(2.ts, 0, 11))

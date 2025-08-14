@@ -7,4 +7,5 @@ export function foo() { return "foo"; }
 === 1.ts ===
 var p1 = import("./0");
 >p1 : Symbol(p1, Decl(1.ts, 0, 3))
+>"./0" : Symbol("0", Decl(0.ts, 0, 0))
 

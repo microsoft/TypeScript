@@ -1,13 +1,6 @@
 --- old.importCallExpressionAsyncES5CJS.symbols
 +++ new.importCallExpressionAsyncES5CJS.symbols
-@@= skipped -5, +5 lines =@@
-
-     const req = await import('./test') // ONE
- >req : Symbol(req, Decl(test.ts, 1, 9))
-->'./test' : Symbol("test", Decl(test.ts, 0, 0))
- }
-
- export class cl1 {
+@@= skipped -12, +12 lines =@@
  >cl1 : Symbol(cl1, Decl(test.ts, 2, 1))
 
      public async m() {
@@ -16,19 +9,7 @@
 
          const req = await import('./test') // TWO
  >req : Symbol(req, Decl(test.ts, 6, 13))
-->'./test' : Symbol("test", Decl(test.ts, 0, 0))
-     }
- }
-
-@@= skipped -23, +21 lines =@@
-
-         const req = await import('./test') // THREE
- >req : Symbol(req, Decl(test.ts, 12, 13))
-->'./test' : Symbol("test", Decl(test.ts, 0, 0))
-     }
- }
-
-@@= skipped -8, +7 lines =@@
+@@= skipped -24, +24 lines =@@
  >cl2 : Symbol(cl2, Decl(test.ts, 14, 1))
 
      public p = {
@@ -37,16 +18,3 @@
 
          m: async () => {
  >m : Symbol(m, Decl(test.ts, 17, 16))
-
-             const req = await import('./test') // FOUR
- >req : Symbol(req, Decl(test.ts, 19, 17))
-->'./test' : Symbol("test", Decl(test.ts, 0, 0))
-         }
-     }
- }
-@@= skipped -17, +16 lines =@@
-
-     const req = await import('./test') // FIVE
- >req : Symbol(req, Decl(test.ts, 25, 9))
-->'./test' : Symbol("test", Decl(test.ts, 0, 0))
- }

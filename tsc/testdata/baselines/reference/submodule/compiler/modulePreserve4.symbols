@@ -53,6 +53,7 @@ const a2 = require("./a"); // Error in TS
 
 const a3 = await import("./a"); // { x: 0 }
 >a3 : Symbol(a3, Decl(main1.ts, 3, 5))
+>"./a" : Symbol("/a", Decl(a.js, 0, 0))
 
 a3.x;
 >a3.x : Symbol(x, Decl(a.js, 0, 12))
@@ -72,6 +73,7 @@ b2.default;
 
 const b3 = await import("./b"); // { default: 0 }
 >b3 : Symbol(b3, Decl(main1.ts, 9, 5))
+>"./b" : Symbol("/b", Decl(b.ts, 0, 0))
 
 b3.default;
 >b3.default : Symbol(default, Decl(b.ts, 0, 0))
@@ -103,6 +105,7 @@ d2.default(); // Error
 
 const d3 = await import("./d"); // { default: [Function: default] }
 >d3 : Symbol(d3, Decl(main1.ts, 19, 5))
+>"./d" : Symbol("/d", Decl(d.ts, 0, 0))
 
 d3.default();
 >d3.default : Symbol(default)

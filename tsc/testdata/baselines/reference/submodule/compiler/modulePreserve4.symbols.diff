@@ -26,10 +26,11 @@
  const a3 = await import("./a"); // { x: 0 }
  >a3 : Symbol(a3, Decl(main1.ts, 3, 5))
 ->"./a" : Symbol(a1, Decl(a.js, 0, 0))
++>"./a" : Symbol("/a", Decl(a.js, 0, 0))
 
  a3.x;
  >a3.x : Symbol(x, Decl(a.js, 0, 12))
-@@= skipped -14, +13 lines =@@
+@@= skipped -14, +14 lines =@@
  >b2 : Symbol(b2, Decl(main1.ts, 6, 21))
 
  b2.default;
@@ -42,6 +43,7 @@
  const b3 = await import("./b"); // { default: 0 }
  >b3 : Symbol(b3, Decl(main1.ts, 9, 5))
 ->"./b" : Symbol(b2, Decl(b.ts, 0, 0))
++>"./b" : Symbol("/b", Decl(b.ts, 0, 0))
 
  b3.default;
 ->b3.default : Symbol(b1, Decl(b.ts, 0, 0))
@@ -52,15 +54,7 @@
 
  import c1 from "./c"; // { default: [Function: default] }
  >c1 : Symbol(c1, Decl(main1.ts, 12, 6))
-@@= skipped -38, +37 lines =@@
-
- const d3 = await import("./d"); // { default: [Function: default] }
- >d3 : Symbol(d3, Decl(main1.ts, 19, 5))
-->"./d" : Symbol("/d", Decl(d.ts, 0, 0))
-
- d3.default();
- >d3.default : Symbol(default)
-@@= skipped -20, +19 lines =@@
+@@= skipped -58, +58 lines =@@
  >f2 : Symbol(f2, Decl(main1.ts, 24, 25))
 
  f2.default;

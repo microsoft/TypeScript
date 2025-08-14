@@ -274,6 +274,7 @@ declare function mock<M>(_: Promise<M>): {} & M;
 
 mock(import('./ex'))
 >mock : Symbol(mock, Decl(intersectionsAndEmptyObjects.ts, 80, 52))
+>'./ex' : Symbol("ex", Decl(ex.d.ts, 0, 0))
 
 === ex.d.ts ===
 
