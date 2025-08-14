@@ -1,0 +1,63 @@
+//// [tests/cases/conformance/controlFlow/controlFlowInferFromExpressionsReturningBoolean2.ts] ////
+
+=== controlFlowInferFromExpressionsReturningBoolean2.ts ===
+// https://github.com/microsoft/TypeScript/issues/62279
+
+export function assertCondition<T>(condition: T): asserts condition {
+>assertCondition : Symbol(assertCondition, Decl(controlFlowInferFromExpressionsReturningBoolean2.ts, 0, 0))
+>T : Symbol(T, Decl(controlFlowInferFromExpressionsReturningBoolean2.ts, 2, 32))
+>condition : Symbol(condition, Decl(controlFlowInferFromExpressionsReturningBoolean2.ts, 2, 35))
+>T : Symbol(T, Decl(controlFlowInferFromExpressionsReturningBoolean2.ts, 2, 32))
+>condition : Symbol(condition, Decl(controlFlowInferFromExpressionsReturningBoolean2.ts, 2, 35))
+
+  if (!condition) {
+>condition : Symbol(condition, Decl(controlFlowInferFromExpressionsReturningBoolean2.ts, 2, 35))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+  }
+}
+
+type ValidType = "A" | "B";
+>ValidType : Symbol(ValidType, Decl(controlFlowInferFromExpressionsReturningBoolean2.ts, 6, 1))
+
+declare const status: ValidType;
+>status : Symbol(status, Decl(controlFlowInferFromExpressionsReturningBoolean2.ts, 10, 13))
+>ValidType : Symbol(ValidType, Decl(controlFlowInferFromExpressionsReturningBoolean2.ts, 6, 1))
+
+function test1() {
+>test1 : Symbol(test1, Decl(controlFlowInferFromExpressionsReturningBoolean2.ts, 10, 32))
+
+  assertCondition(status !== "B");
+>assertCondition : Symbol(assertCondition, Decl(controlFlowInferFromExpressionsReturningBoolean2.ts, 0, 0))
+>status : Symbol(status, Decl(controlFlowInferFromExpressionsReturningBoolean2.ts, 10, 13))
+
+  const status2 = status;
+>status2 : Symbol(status2, Decl(controlFlowInferFromExpressionsReturningBoolean2.ts, 14, 7))
+>status : Symbol(status, Decl(controlFlowInferFromExpressionsReturningBoolean2.ts, 10, 13))
+
+  assertCondition(status2 === "A");
+>assertCondition : Symbol(assertCondition, Decl(controlFlowInferFromExpressionsReturningBoolean2.ts, 0, 0))
+>status2 : Symbol(status2, Decl(controlFlowInferFromExpressionsReturningBoolean2.ts, 14, 7))
+}
+
+function test2() {
+>test2 : Symbol(test2, Decl(controlFlowInferFromExpressionsReturningBoolean2.ts, 16, 1))
+
+  assertCondition(status !== "B");
+>assertCondition : Symbol(assertCondition, Decl(controlFlowInferFromExpressionsReturningBoolean2.ts, 0, 0))
+>status : Symbol(status, Decl(controlFlowInferFromExpressionsReturningBoolean2.ts, 10, 13))
+
+  for (const _ of [1, 2]) {
+>_ : Symbol(_, Decl(controlFlowInferFromExpressionsReturningBoolean2.ts, 20, 12))
+
+    const status2 = status;
+>status2 : Symbol(status2, Decl(controlFlowInferFromExpressionsReturningBoolean2.ts, 21, 9))
+>status : Symbol(status, Decl(controlFlowInferFromExpressionsReturningBoolean2.ts, 10, 13))
+
+    assertCondition(status2 === "A");
+>assertCondition : Symbol(assertCondition, Decl(controlFlowInferFromExpressionsReturningBoolean2.ts, 0, 0))
+>status2 : Symbol(status2, Decl(controlFlowInferFromExpressionsReturningBoolean2.ts, 21, 9))
+  }
+}
+
