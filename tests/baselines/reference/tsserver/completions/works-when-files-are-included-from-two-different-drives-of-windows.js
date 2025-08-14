@@ -148,20 +148,11 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: e:/solution/myproject/
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: e:/solution/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/solution/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: e:/solution/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/solution/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: e:/solution/myproject/node_modules/@types/prop-types/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: e:/solution/myproject/node_modules/@types/react/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: e:/solution/myproject/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/solution/myproject/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: e:/solution/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/solution/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/typescript/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/typescript/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: e:/solution/myproject/node_modules/react-router-dom/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/typescript/node_modules/@types/react-router-dom/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/typescript/node_modules/@types/react/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/typescript/node_modules/@types/react-router-dom/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: e:/solution/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/solution/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: e:/solution/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -203,16 +194,12 @@ e:/solution/myproject/jsconfig.json: *new*
   {"pollingInterval":2000}
 e:/solution/myproject/src/jsconfig.json: *new*
   {"pollingInterval":2000}
-e:/solution/myproject/src/node_modules: *new*
-  {"pollingInterval":500}
 e:/solution/myproject/src/node_modules/@types: *new*
   {"pollingInterval":500}
 e:/solution/myproject/src/tsconfig.json: *new*
   {"pollingInterval":2000}
 e:/solution/myproject/tsconfig.json: *new*
   {"pollingInterval":2000}
-e:/solution/node_modules: *new*
-  {"pollingInterval":500}
 e:/solution/node_modules/@types: *new*
   {"pollingInterval":500}
 
@@ -227,12 +214,8 @@ e:/solution/myproject/node_modules/@types/prop-types/package.json: *new*
   {}
 e:/solution/myproject/node_modules/@types/react/package.json: *new*
   {}
-e:/solution/myproject/node_modules/react-router-dom/package.json: *new*
-  {}
 
 FsWatchesRecursive::
-c:/typescript/node_modules: *new*
-  {}
 e:/solution/myproject/node_modules: *new*
   {}
 e:/solution/myproject/node_modules/@types: *new*
@@ -402,7 +385,7 @@ e:/solution/myproject/src/bower_components: *new*
   {"pollingInterval":500}
 e:/solution/myproject/src/jsconfig.json:
   {"pollingInterval":2000}
-e:/solution/myproject/src/node_modules:
+e:/solution/myproject/src/node_modules: *new*
   {"pollingInterval":500}
 e:/solution/myproject/src/node_modules/@types:
   {"pollingInterval":500}
@@ -410,8 +393,6 @@ e:/solution/myproject/src/tsconfig.json:
   {"pollingInterval":2000}
 e:/solution/myproject/tsconfig.json:
   {"pollingInterval":2000}
-e:/solution/node_modules:
-  {"pollingInterval":500}
 e:/solution/node_modules/@types:
   {"pollingInterval":500}
 
@@ -426,14 +407,10 @@ e:/solution/myproject/node_modules/@types/prop-types/package.json:
   {}
 e:/solution/myproject/node_modules/@types/react/package.json:
   {}
-e:/solution/myproject/node_modules/react-router-dom/package.json:
-  {}
 e:/solution/myproject/package.json: *new*
   {}
 
 FsWatchesRecursive::
-c:/typescript/node_modules:
-  {}
 e:/solution/myproject/node_modules:
   {}
 e:/solution/myproject/node_modules/@types:
