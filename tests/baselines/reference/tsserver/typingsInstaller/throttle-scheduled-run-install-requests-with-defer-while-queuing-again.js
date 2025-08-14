@@ -123,7 +123,6 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Scheduling throttled operation:
         "exclude": [],
         "enable": true
       },
-      "unresolvedImports": [],
       "projectRootPath": "/user/username/projects/app",
       "kind": "discover"
     }
@@ -279,7 +278,6 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Scheduling throttled operation:
         "exclude": [],
         "enable": true
       },
-      "unresolvedImports": [],
       "projectRootPath": "/user/username/projects/app",
       "kind": "discover"
     }
@@ -433,7 +431,6 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Scheduling throttled operation:
         "exclude": [],
         "enable": true
       },
-      "unresolvedImports": [],
       "projectRootPath": "/user/username/projects/app",
       "kind": "discover"
     }
@@ -551,7 +548,6 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Sending request:
         "exclude": [],
         "enable": true
       },
-      "unresolvedImports": [],
       "projectRootPath": "/user/username/projects/app",
       "kind": "discover"
     }
@@ -665,14 +661,12 @@ TI:: [hh:mm:ss:mss] Got install request
         "exclude": [],
         "enable": true
       },
-      "unresolvedImports": [],
       "projectRootPath": "/user/username/projects/app",
       "kind": "discover"
     }
 TI:: [hh:mm:ss:mss] Loaded safelist from types map file '/home/src/tslibs/TS/Lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: ["jquery","commander"]
 TI:: [hh:mm:ss:mss] Inferred typings from file names: ["commander"]
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
@@ -814,7 +808,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts",
         "/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts"
       ],
-      "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] TIAdapter:: Received response:
@@ -838,7 +831,6 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Received response:
         "/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts",
         "/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts"
       ],
-      "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] TIAdapter:: Scheduling request for: /user/username/projects/app/test2.csproj
@@ -868,7 +860,6 @@ Info seq  [hh:mm:ss:mss] event:
           "/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts",
           "/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts"
         ],
-        "unresolvedImports": [],
         "kind": "action::set"
       }
     }
@@ -954,7 +945,6 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Sending request:
         "exclude": [],
         "enable": true
       },
-      "unresolvedImports": [],
       "projectRootPath": "/user/username/projects/app",
       "kind": "discover"
     }
@@ -979,12 +969,10 @@ TI:: [hh:mm:ss:mss] Got install request
         "exclude": [],
         "enable": true
       },
-      "unresolvedImports": [],
       "projectRootPath": "/user/username/projects/app",
       "kind": "discover"
     }
 TI:: [hh:mm:ss:mss] Explicitly included types: ["grunt","gulp"]
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
@@ -1096,7 +1084,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "/home/src/Library/Caches/typescript/node_modules/@types/grunt/index.d.ts",
         "/home/src/Library/Caches/typescript/node_modules/@types/gulp/index.d.ts"
       ],
-      "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] TIAdapter:: Received response:
@@ -1120,7 +1107,6 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Received response:
         "/home/src/Library/Caches/typescript/node_modules/@types/grunt/index.d.ts",
         "/home/src/Library/Caches/typescript/node_modules/@types/gulp/index.d.ts"
       ],
-      "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] TIAdapter:: Scheduling request for: /user/username/projects/app/test3.csproj
@@ -1150,7 +1136,6 @@ Info seq  [hh:mm:ss:mss] event:
           "/home/src/Library/Caches/typescript/node_modules/@types/grunt/index.d.ts",
           "/home/src/Library/Caches/typescript/node_modules/@types/gulp/index.d.ts"
         ],
-        "unresolvedImports": [],
         "kind": "action::set"
       }
     }
@@ -1240,7 +1225,6 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Sending request:
         "exclude": [],
         "enable": true
       },
-      "unresolvedImports": [],
       "projectRootPath": "/user/username/projects/app",
       "kind": "discover"
     }
@@ -1266,13 +1250,11 @@ TI:: [hh:mm:ss:mss] Got install request
         "exclude": [],
         "enable": true
       },
-      "unresolvedImports": [],
       "projectRootPath": "/user/username/projects/app",
       "kind": "discover"
     }
 TI:: [hh:mm:ss:mss] Explicitly included types: ["cordova","lodash"]
 TI:: [hh:mm:ss:mss] Inferred typings from file names: ["lodash"]
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
@@ -1394,7 +1376,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "/home/src/Library/Caches/typescript/node_modules/@types/cordova/index.d.ts",
         "/home/src/Library/Caches/typescript/node_modules/@types/lodash/index.d.ts"
       ],
-      "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] TIAdapter:: Received response:
@@ -1418,7 +1399,6 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Received response:
         "/home/src/Library/Caches/typescript/node_modules/@types/cordova/index.d.ts",
         "/home/src/Library/Caches/typescript/node_modules/@types/lodash/index.d.ts"
       ],
-      "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/app/test3.csproj
@@ -1447,7 +1427,6 @@ Info seq  [hh:mm:ss:mss] event:
           "/home/src/Library/Caches/typescript/node_modules/@types/cordova/index.d.ts",
           "/home/src/Library/Caches/typescript/node_modules/@types/lodash/index.d.ts"
         ],
-        "unresolvedImports": [],
         "kind": "action::set"
       }
     }
