@@ -583,7 +583,9 @@ func ToFileNameLowerCase(fileName string) string {
 
 	ascii := true
 	needsLower := false
-	for _, c := range []byte(fileName) {
+	fileNameLen := len(fileName)
+	for i := range fileNameLen {
+		c := fileName[i]
 		if c >= 0x80 {
 			ascii = false
 			break
@@ -596,8 +598,9 @@ func ToFileNameLowerCase(fileName string) string {
 		if !needsLower {
 			return fileName
 		}
-		b := make([]byte, len(fileName))
-		for i, c := range []byte(fileName) {
+		b := make([]byte, fileNameLen)
+		for i := range fileNameLen {
+			c := fileName[i]
 			if 'A' <= c && c <= 'Z' {
 				c += 'a' - 'A' // +32
 			}
