@@ -604,12 +604,12 @@ export function keys<K extends string, V>(obj: Record<K, V>): K[] {
 >                        : ^^^
 >Object.keys(obj) : string[]
 >                 : ^^^^^^^^
->Object.keys : (o: object) => string[]
->            : ^ ^^      ^^^^^        
+>Object.keys : { (o: object): string[]; (o: {}): string[]; }
+>            : ^^^ ^^      ^^^        ^^^ ^^  ^^^        ^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
->keys : (o: object) => string[]
->     : ^ ^^      ^^^^^        
+>keys : { (o: object): string[]; (o: {}): string[]; }
+>     : ^^^ ^^      ^^^        ^^^ ^^  ^^^        ^^^
 >obj : Record<K, V>
 >    : ^^^^^^^^^^^^
 }

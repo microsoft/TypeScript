@@ -1,9 +1,9 @@
 //// [tests/cases/conformance/types/members/duplicateNumericIndexers.ts] ////
 
 === Performance Stats ===
-Assignability cache: 2,500
+Assignability cache: 5,000
 Type Count: 10,000
-Instantiation count: 2,500
+Instantiation count: 5,000
 
 === duplicateNumericIndexers.ts ===
 // it is an error to have duplicate index signatures of the same kind in a type

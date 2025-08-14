@@ -31,7 +31,7 @@ cbThing(type => {
         time: Date.now(),
 >time : Symbol(time, Decl(usage.js, 12, 22))
 >Date.now : Symbol(DateConstructor.now, Decl(lib.es5.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >now : Symbol(DateConstructor.now, Decl(lib.es5.d.ts, --, --))
 
         type,
