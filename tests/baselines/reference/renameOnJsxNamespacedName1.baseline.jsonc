@@ -1,0 +1,42 @@
+// === findRenameLocations ===
+// === /types.d.ts ===
+// declare namespace JSX {
+//   interface IntrinsicElements {
+//     'my-el': {
+//       <|'[|prop:fooRENAME|]': string;|>
+//     };
+//   }
+// }
+
+// === /a.tsx ===
+// <my-el /*RENAME*/<|[|prop:fooRENAME|]="bar"|> />
+
+
+
+// === findRenameLocations ===
+// === /types.d.ts ===
+// declare namespace JSX {
+//   interface IntrinsicElements {
+//     'my-el': {
+//       <|'[|prop:fooRENAME|]': string;|>
+//     };
+//   }
+// }
+
+// === /a.tsx ===
+// <my-el <|[|prop:/*RENAME*/fooRENAME|]="bar"|> />
+
+
+
+// === findRenameLocations ===
+// === /types.d.ts ===
+// declare namespace JSX {
+//   interface IntrinsicElements {
+//     'my-el': {
+//       <|'[|prop:fooRENAME|]/*RENAME*/': string;|>
+//     };
+//   }
+// }
+
+// === /a.tsx ===
+// <my-el <|[|prop:fooRENAME|]="bar"|> />
