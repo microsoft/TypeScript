@@ -1,0 +1,114 @@
+//// [tests/cases/conformance/controlFlow/controlFlowInferFromExpressionsReturningBoolean2.ts] ////
+
+=== controlFlowInferFromExpressionsReturningBoolean2.ts ===
+// https://github.com/microsoft/TypeScript/issues/62279
+
+export function assertCondition<T>(condition: T): asserts condition {
+>assertCondition : <T>(condition: T) => asserts condition
+>                : ^ ^^         ^^ ^^^^^                 
+>condition : T
+>          : ^
+
+  if (!condition) {
+>!condition : boolean
+>           : ^^^^^^^
+>condition : T
+>          : ^
+
+    throw new Error();
+>new Error() : Error
+>            : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+  }
+}
+
+type ValidType = "A" | "B";
+>ValidType : ValidType
+>          : ^^^^^^^^^
+
+declare const status: ValidType;
+>status : ValidType
+>       : ^^^^^^^^^
+
+function test1() {
+>test1 : () => void
+>      : ^^^^^^^^^^
+
+  assertCondition(status !== "B");
+>assertCondition(status !== "B") : void
+>                                : ^^^^
+>assertCondition : <T>(condition: T) => asserts condition
+>                : ^ ^^         ^^ ^^^^^                 
+>status !== "B" : boolean
+>               : ^^^^^^^
+>status : ValidType
+>       : ^^^^^^^^^
+>"B" : "B"
+>    : ^^^
+
+  const status2 = status;
+>status2 : "A"
+>        : ^^^
+>status : "A"
+>       : ^^^
+
+  assertCondition(status2 === "A");
+>assertCondition(status2 === "A") : void
+>                                 : ^^^^
+>assertCondition : <T>(condition: T) => asserts condition
+>                : ^ ^^         ^^ ^^^^^                 
+>status2 === "A" : boolean
+>                : ^^^^^^^
+>status2 : "A"
+>        : ^^^
+>"A" : "A"
+>    : ^^^
+}
+
+function test2() {
+>test2 : () => void
+>      : ^^^^^^^^^^
+
+  assertCondition(status !== "B");
+>assertCondition(status !== "B") : void
+>                                : ^^^^
+>assertCondition : <T>(condition: T) => asserts condition
+>                : ^ ^^         ^^ ^^^^^                 
+>status !== "B" : boolean
+>               : ^^^^^^^
+>status : ValidType
+>       : ^^^^^^^^^
+>"B" : "B"
+>    : ^^^
+
+  for (const _ of [1, 2]) {
+>_ : number
+>  : ^^^^^^
+>[1, 2] : number[]
+>       : ^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+
+    const status2 = status;
+>status2 : "A"
+>        : ^^^
+>status : "A"
+>       : ^^^
+
+    assertCondition(status2 === "A");
+>assertCondition(status2 === "A") : void
+>                                 : ^^^^
+>assertCondition : <T>(condition: T) => asserts condition
+>                : ^ ^^         ^^ ^^^^^                 
+>status2 === "A" : boolean
+>                : ^^^^^^^
+>status2 : "A"
+>        : ^^^
+>"A" : "A"
+>    : ^^^
+  }
+}
+
