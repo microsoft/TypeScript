@@ -1627,3 +1627,37 @@ func getLeadingCommentRangesOfNode(node *ast.Node, file *ast.SourceFile) iter.Se
 	}
 	return scanner.GetLeadingCommentRanges(&ast.NodeFactory{}, file.Text(), node.Pos())
 }
+
+// Equivalent to Strada's `node.getChildren()` for non-JSDoc nodes.
+func getChildrenFromNonJSDocNode(node *ast.Node, sourceFile *ast.SourceFile) []*ast.Node {
+	var childNodes []*ast.Node
+	node.ForEachChild(func(child *ast.Node) bool {
+		childNodes = append(childNodes, child)
+		return false
+	})
+	var children []*ast.Node
+	pos := node.Pos()
+	for _, child := range childNodes {
+		scanner := scanner.GetScannerForSourceFile(sourceFile, pos)
+		for pos < child.Pos() {
+			token := scanner.Token()
+			tokenFullStart := scanner.TokenFullStart()
+			tokenEnd := scanner.TokenEnd()
+			children = append(children, sourceFile.GetOrCreateToken(token, tokenFullStart, tokenEnd, node))
+			pos = tokenEnd
+			scanner.Scan()
+		}
+		children = append(children, child)
+		pos = child.End()
+	}
+	scanner := scanner.GetScannerForSourceFile(sourceFile, pos)
+	for pos < node.End() {
+		token := scanner.Token()
+		tokenFullStart := scanner.TokenFullStart()
+		tokenEnd := scanner.TokenEnd()
+		children = append(children, sourceFile.GetOrCreateToken(token, tokenFullStart, tokenEnd, node))
+		pos = tokenEnd
+		scanner.Scan()
+	}
+	return children
+}

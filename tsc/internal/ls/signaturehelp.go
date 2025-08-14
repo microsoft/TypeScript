@@ -597,19 +597,14 @@ func getCandidateOrTypeInfo(info *argumentListInfo, c *checker.Checker, sourceFi
 	return nil // return Debug.assertNever(invocation);
 }
 
-func isSyntacticOwner(startingToken *ast.Node, node *ast.Node, sourceFile *ast.SourceFile) bool { // !!! not tested
+func isSyntacticOwner(startingToken *ast.Node, node *ast.CallLikeExpression, sourceFile *ast.SourceFile) bool { // !!! not tested
 	if !ast.IsCallOrNewExpression(node) {
 		return false
 	}
-	invocationChildren := getTokensFromNode(node, sourceFile)
+	invocationChildren := getChildrenFromNonJSDocNode(node, sourceFile)
 	switch startingToken.Kind {
-	case ast.KindOpenParenToken:
+	case ast.KindOpenParenToken, ast.KindCommaToken:
 		return containsNode(invocationChildren, startingToken)
-	case ast.KindCommaToken:
-		return containsNode(invocationChildren, startingToken)
-		// !!!
-		// const containingList = findContainingList(startingToken);
-		// return !!containingList && contains(invocationChildren, containingList);
 	case ast.KindLessThanToken:
 		return containsPrecedingToken(startingToken, sourceFile, node.AsCallExpression().Expression)
 	default:
@@ -1077,25 +1072,6 @@ func countBinaryExpressionParameters(b *ast.BinaryExpression) int {
 		return countBinaryExpressionParameters(b.Left.AsBinaryExpression()) + 1
 	}
 	return 2
-}
-
-func getTokensFromNode(node *ast.Node, sourceFile *ast.SourceFile) []*ast.Node {
-	if node == nil {
-		return nil
-	}
-	var children []*ast.Node
-	current := node
-	left := node.Pos()
-	scanner := scanner.GetScannerForSourceFile(sourceFile, left)
-	for left < current.End() {
-		token := scanner.Token()
-		tokenFullStart := scanner.TokenFullStart()
-		tokenEnd := scanner.TokenEnd()
-		children = append(children, sourceFile.GetOrCreateToken(token, tokenFullStart, tokenEnd, current))
-		left = tokenEnd
-		scanner.Scan()
-	}
-	return children
 }
 
 func getTokenFromNodeList(nodeList *ast.NodeList, nodeListParent *ast.Node, sourceFile *ast.SourceFile) []*ast.Node {
