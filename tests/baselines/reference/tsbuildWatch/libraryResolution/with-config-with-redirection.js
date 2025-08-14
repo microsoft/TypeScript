@@ -29,7 +29,8 @@ export const x = "type1";
       "es5",
       "dom"
     ],
-    "traceResolution": true
+    "traceResolution": true,
+    "libReplacement": true
   }
 }
 
@@ -50,7 +51,8 @@ export const y = 10
       "es5",
       "dom"
     ],
-    "traceResolution": true
+    "traceResolution": true,
+    "libReplacement": true
   }
 }
 
@@ -68,7 +70,8 @@ export const z = 10
       "es5",
       "dom"
     ],
-    "traceResolution": true
+    "traceResolution": true,
+    "libReplacement": true
   }
 }
 
@@ -87,7 +90,8 @@ export const z = 10
       "dom",
       "webworker"
     ],
-    "traceResolution": true
+    "traceResolution": true,
+    "libReplacement": true
   }
 }
 
@@ -976,6 +980,7 @@ Program options: {
     "lib.dom.d.ts"
   ],
   "traceResolution": true,
+  "libReplacement": true,
   "watch": true,
   "explainFiles": true,
   "extendedDiagnostics": true,
@@ -1030,6 +1035,7 @@ Program options: {
     "lib.dom.d.ts"
   ],
   "traceResolution": true,
+  "libReplacement": true,
   "watch": true,
   "explainFiles": true,
   "extendedDiagnostics": true,
@@ -1066,6 +1072,7 @@ Program options: {
     "lib.dom.d.ts"
   ],
   "traceResolution": true,
+  "libReplacement": true,
   "watch": true,
   "explainFiles": true,
   "extendedDiagnostics": true,
@@ -1103,6 +1110,7 @@ Program options: {
     "lib.webworker.d.ts"
   ],
   "traceResolution": true,
+  "libReplacement": true,
   "watch": true,
   "explainFiles": true,
   "extendedDiagnostics": true,

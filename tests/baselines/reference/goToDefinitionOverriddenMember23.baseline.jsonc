@@ -1,0 +1,21 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionOverriddenMember23.ts ===
+// --- (line: 4) skipped ---
+// }
+// 
+// export class B extends A {
+//   <|static /*GOTO DEF*/override [|[prop]|]() {}|>
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "[prop]",
+    "containerName": "B",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
