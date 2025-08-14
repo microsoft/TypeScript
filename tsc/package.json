@@ -19,7 +19,6 @@
         "which": "^5.0.0"
     },
     "scripts": {
-        "postinstall": "hereby postinstall",
         "build": "hereby build",
         "build:watch": "hereby build:watch",
         "build:watch:debug": "hereby build:watch --debug",

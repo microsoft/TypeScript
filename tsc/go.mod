@@ -28,3 +28,12 @@ tool (
 	golang.org/x/tools/cmd/stringer
 	mvdan.cc/gofumpt
 )
+
+ignore (
+	./_extension
+	./_packages
+	./_submodules
+	./built
+	./coverage
+	node_modules
+)

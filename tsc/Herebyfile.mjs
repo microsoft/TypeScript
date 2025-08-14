@@ -477,16 +477,6 @@ export const checkFormat = task({
     },
 });
 
-export const postinstall = task({
-    name: "postinstall",
-    hiddenFromTaskList: true,
-    run: () => {
-        // Ensure the go command doesn't waste time looking into node_modules.
-        // Remove once https://github.com/golang/go/issues/42965 is fixed.
-        fs.writeFileSync(path.join(__dirname, "node_modules", "go.mod"), `module example.org/ignoreme\n`);
-    },
-});
-
 /**
  * @param {string} localBaseline Path to the local copy of the baselines
  * @param {string} refBaseline Path to the reference copy of the baselines
