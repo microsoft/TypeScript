@@ -21,7 +21,7 @@ File '/node_modules/acorn-walk/dist/walk.d.ts' exists - use it as a name resolut
 Resolved under condition 'default'.
 Exiting conditional exports.
 Resolving real path for '/node_modules/acorn-walk/dist/walk.d.ts', result '/node_modules/acorn-walk/dist/walk.d.ts'.
-======== Module name 'acorn-walk' was successfully resolved to '/node_modules/acorn-walk/dist/walk.d.ts' with Package ID 'acorn-walk@8.2.0'. ========
+======== Module name 'acorn-walk' was successfully resolved to '/node_modules/acorn-walk/dist/walk.d.ts' with Package ID 'acorn-walk/dist/walk.d.ts@8.2.0'. ========
 ======== Resolving module 'acorn-walk' from '/index.ts'. ========
 Explicitly specified module resolution kind: 'Bundler'.
 Resolving in CJS mode with conditions 'import', 'types'.
@@ -47,4 +47,4 @@ File '/node_modules/acorn-walk/dist/walk.d.ts' exists - use it as a name resolut
 Resolved under condition 'default'.
 Exiting conditional exports.
 Resolving real path for '/node_modules/acorn-walk/dist/walk.d.ts', result '/node_modules/acorn-walk/dist/walk.d.ts'.
-======== Module name 'acorn-walk' was successfully resolved to '/node_modules/acorn-walk/dist/walk.d.ts' with Package ID 'acorn-walk@8.2.0'. ========
+======== Module name 'acorn-walk' was successfully resolved to '/node_modules/acorn-walk/dist/walk.d.ts' with Package ID 'acorn-walk/dist/walk.d.ts@8.2.0'. ========

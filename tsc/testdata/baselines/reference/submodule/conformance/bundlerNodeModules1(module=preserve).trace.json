@@ -16,7 +16,7 @@ File '/node_modules/dual/index.d.ts' exists - use it as a name resolution result
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolving real path for '/node_modules/dual/index.d.ts', result '/node_modules/dual/index.d.ts'.
-======== Module name 'dual' was successfully resolved to '/node_modules/dual/index.d.ts' with Package ID 'dual@1.0.0'. ========
+======== Module name 'dual' was successfully resolved to '/node_modules/dual/index.d.ts' with Package ID 'dual/index.d.ts@1.0.0'. ========
 ======== Resolving module 'dual' from '/main.mts'. ========
 Explicitly specified module resolution kind: 'Bundler'.
 Resolving in CJS mode with conditions 'import', 'types'.
@@ -35,7 +35,7 @@ File '/node_modules/dual/index.d.ts' exists - use it as a name resolution result
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolving real path for '/node_modules/dual/index.d.ts', result '/node_modules/dual/index.d.ts'.
-======== Module name 'dual' was successfully resolved to '/node_modules/dual/index.d.ts' with Package ID 'dual@1.0.0'. ========
+======== Module name 'dual' was successfully resolved to '/node_modules/dual/index.d.ts' with Package ID 'dual/index.d.ts@1.0.0'. ========
 ======== Resolving module 'dual' from '/main.cts'. ========
 Explicitly specified module resolution kind: 'Bundler'.
 Resolving in CJS mode with conditions 'require', 'types'.
@@ -54,4 +54,4 @@ File '/node_modules/dual/index.d.cts' exists - use it as a name resolution resul
 Resolved under condition 'require'.
 Exiting conditional exports.
 Resolving real path for '/node_modules/dual/index.d.cts', result '/node_modules/dual/index.d.cts'.
-======== Module name 'dual' was successfully resolved to '/node_modules/dual/index.d.cts' with Package ID 'dual@1.0.0'. ========
+======== Module name 'dual' was successfully resolved to '/node_modules/dual/index.d.cts' with Package ID 'dual/index.d.cts@1.0.0'. ========

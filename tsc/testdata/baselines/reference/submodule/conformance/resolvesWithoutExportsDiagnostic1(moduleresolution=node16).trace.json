@@ -36,7 +36,7 @@ File '/node_modules/foo/package.json' exists according to earlier cached lookups
 File '/node_modules/foo/index.d.ts' exists - use it as a name resolution result.
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/node_modules/foo/index.d.ts', result '/node_modules/foo/index.d.ts'.
-======== Module name 'foo' was successfully resolved to '/node_modules/foo/index.mjs' with Package ID 'foo@1.0.0'. ========
+======== Module name 'foo' was successfully resolved to '/node_modules/foo/index.mjs' with Package ID 'foo/index.mjs@1.0.0'. ========
 ======== Resolving module 'bar' from '/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -97,7 +97,7 @@ File '/node_modules/@types/bar/package.json' exists according to earlier cached 
 File '/node_modules/@types/bar/index.d.ts' exists - use it as a name resolution result.
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/node_modules/@types/bar/index.d.ts', result '/node_modules/@types/bar/index.d.ts'.
-======== Module name 'bar' was successfully resolved to '/node_modules/bar/index.mjs' with Package ID 'bar@1.0.0'. ========
+======== Module name 'bar' was successfully resolved to '/node_modules/bar/index.mjs' with Package ID 'bar/index.mjs@1.0.0'. ========
 ======== Resolving type reference directive 'bar', containing file '/.src/__inferred type names__.ts', root directory '/.src/node_modules/@types,/node_modules/@types'. ========
 Resolving with primary search path '/.src/node_modules/@types, /node_modules/@types'.
 Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.

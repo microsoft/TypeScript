@@ -12,4 +12,4 @@ File '/node_modules/pkg/definitely-not-index.tsx' does not exist.
 File '/node_modules/pkg/definitely-not-index.d.ts' exists - use it as a name resolution result.
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/node_modules/pkg/definitely-not-index.d.ts', result '/node_modules/pkg/definitely-not-index.d.ts'.
-======== Module name 'pkg' was successfully resolved to '/node_modules/pkg/definitely-not-index.d.ts' with Package ID 'pkg@1.0.0'. ========
+======== Module name 'pkg' was successfully resolved to '/node_modules/pkg/definitely-not-index.d.ts' with Package ID 'pkg/definitely-not-index.d.ts@1.0.0'. ========

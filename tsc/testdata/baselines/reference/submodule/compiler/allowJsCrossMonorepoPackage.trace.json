@@ -46,7 +46,7 @@ File '/node_modules/shared.ts' does not exist according to earlier cached lookup
 File '/node_modules/shared.tsx' does not exist according to earlier cached lookups.
 File '/node_modules/shared.d.ts' does not exist according to earlier cached lookups.
 Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-======== Module name 'shared' was successfully resolved to '/packages/shared/index.js' with Package ID 'shared@1.0.0'. ========
+======== Module name 'shared' was successfully resolved to '/packages/shared/index.js' with Package ID 'shared/index.js@1.0.0'. ========
 ======== Resolving module './utils.js' from '/packages/shared/index.js'. ========
 Explicitly specified module resolution kind: 'Bundler'.
 Resolving in CJS mode with conditions 'import', 'types'.

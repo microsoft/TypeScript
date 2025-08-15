@@ -47,4 +47,4 @@ File '/.src/node_modules/ext/other.tsx' does not exist according to earlier cach
 File '/.src/node_modules/ext/other.d.ts' exists - use it as a name resolution result.
 File '/.src/node_modules/ext/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'peerDependencies' field.
-======== Module name '../other' was successfully resolved to '/.src/node_modules/ext/other.d.ts' with Package ID 'ext@1.0.0'. ========
+======== Module name '../other' was successfully resolved to '/.src/node_modules/ext/other.d.ts' with Package ID 'ext/other.d.ts@1.0.0'. ========

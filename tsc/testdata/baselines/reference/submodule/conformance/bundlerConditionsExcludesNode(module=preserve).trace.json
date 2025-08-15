@@ -17,4 +17,4 @@ File '/node_modules/conditions/index.web.d.ts' exists - use it as a name resolut
 Resolved under condition 'default'.
 Exiting conditional exports.
 Resolving real path for '/node_modules/conditions/index.web.d.ts', result '/node_modules/conditions/index.web.d.ts'.
-======== Module name 'conditions' was successfully resolved to '/node_modules/conditions/index.web.d.ts' with Package ID 'conditions@1.0.0'. ========
+======== Module name 'conditions' was successfully resolved to '/node_modules/conditions/index.web.d.ts' with Package ID 'conditions/index.web.d.ts@1.0.0'. ========

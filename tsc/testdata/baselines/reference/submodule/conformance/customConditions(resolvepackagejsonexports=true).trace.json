@@ -17,4 +17,4 @@ File '/node_modules/lodash/webpack.d.ts' exists - use it as a name resolution re
 Resolved under condition 'webpack'.
 Exiting conditional exports.
 Resolving real path for '/node_modules/lodash/webpack.d.ts', result '/node_modules/lodash/webpack.d.ts'.
-======== Module name 'lodash' was successfully resolved to '/node_modules/lodash/webpack.d.ts' with Package ID 'lodash@1.0.0'. ========
+======== Module name 'lodash' was successfully resolved to '/node_modules/lodash/webpack.d.ts' with Package ID 'lodash/webpack.d.ts@1.0.0'. ========

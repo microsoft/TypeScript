@@ -17,7 +17,7 @@ File '/node_modules/pkg/index.d.ts' exists - use it as a name resolution result.
 Resolved under condition 'require'.
 Exiting conditional exports.
 Resolving real path for '/node_modules/pkg/index.d.ts', result '/node_modules/pkg/index.d.ts'.
-======== Module name 'pkg' was successfully resolved to '/node_modules/pkg/index.d.ts' with Package ID 'pkg@1.0.0'. ========
+======== Module name 'pkg' was successfully resolved to '/node_modules/pkg/index.d.ts' with Package ID 'pkg/index.d.ts@1.0.0'. ========
 ======== Resolving module 'pkg' from '/index.ts'. ========
 Explicitly specified module resolution kind: 'Bundler'.
 Resolving in CJS mode with conditions 'import', 'types'.
@@ -35,4 +35,4 @@ File '/node_modules/pkg/index.d.mts' exists - use it as a name resolution result
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolving real path for '/node_modules/pkg/index.d.mts', result '/node_modules/pkg/index.d.mts'.
-======== Module name 'pkg' was successfully resolved to '/node_modules/pkg/index.d.mts' with Package ID 'pkg@1.0.0'. ========
+======== Module name 'pkg' was successfully resolved to '/node_modules/pkg/index.d.mts' with Package ID 'pkg/index.d.mts@1.0.0'. ========
