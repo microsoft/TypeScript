@@ -7,7 +7,7 @@ class Base {
 >Base : Symbol(Base, Decl(derivedClassParameterProperties.ts, 0, 0))
 
     x: string;
->x : Symbol(x, Decl(derivedClassParameterProperties.ts, 2, 12))
+>x : Symbol(Base.x, Decl(derivedClassParameterProperties.ts, 2, 12))
 }
 
 class Derived extends Base {
@@ -30,7 +30,7 @@ class Derived2 extends Base {
 >Base : Symbol(Base, Decl(derivedClassParameterProperties.ts, 0, 0))
 
     constructor(public y: string) {
->y : Symbol(y, Decl(derivedClassParameterProperties.ts, 14, 16))
+>y : Symbol(Derived2.y, Decl(derivedClassParameterProperties.ts, 14, 16))
 
         var a = 1;
 >a : Symbol(a, Decl(derivedClassParameterProperties.ts, 15, 11))
@@ -45,7 +45,7 @@ class Derived3 extends Base {
 >Base : Symbol(Base, Decl(derivedClassParameterProperties.ts, 0, 0))
 
     constructor(public y: string) {
->y : Symbol(y, Decl(derivedClassParameterProperties.ts, 21, 16))
+>y : Symbol(Derived3.y, Decl(derivedClassParameterProperties.ts, 21, 16))
 
         super();
 >super : Symbol(Base, Decl(derivedClassParameterProperties.ts, 0, 0))
@@ -60,7 +60,7 @@ class Derived4 extends Base {
 >Base : Symbol(Base, Decl(derivedClassParameterProperties.ts, 0, 0))
 
     a = 1;
->a : Symbol(a, Decl(derivedClassParameterProperties.ts, 27, 29))
+>a : Symbol(Derived4.a, Decl(derivedClassParameterProperties.ts, 27, 29))
 
     constructor(y: string) {
 >y : Symbol(y, Decl(derivedClassParameterProperties.ts, 29, 16))
@@ -78,7 +78,7 @@ class Derived5 extends Base {
 >Base : Symbol(Base, Decl(derivedClassParameterProperties.ts, 0, 0))
 
     a = 1;
->a : Symbol(a, Decl(derivedClassParameterProperties.ts, 35, 29))
+>a : Symbol(Derived5.a, Decl(derivedClassParameterProperties.ts, 35, 29))
 
     constructor(y: string) {
 >y : Symbol(y, Decl(derivedClassParameterProperties.ts, 37, 16))
@@ -96,15 +96,15 @@ class Derived6 extends Base {
 >Base : Symbol(Base, Decl(derivedClassParameterProperties.ts, 0, 0))
 
     a: number;
->a : Symbol(a, Decl(derivedClassParameterProperties.ts, 43, 29))
+>a : Symbol(Derived6.a, Decl(derivedClassParameterProperties.ts, 43, 29))
 
     constructor(y: string) {
 >y : Symbol(y, Decl(derivedClassParameterProperties.ts, 45, 16))
 
         this.a = 1;
->this.a : Symbol(a, Decl(derivedClassParameterProperties.ts, 43, 29))
+>this.a : Symbol(Derived6.a, Decl(derivedClassParameterProperties.ts, 43, 29))
 >this : Symbol(Derived6, Decl(derivedClassParameterProperties.ts, 41, 1))
->a : Symbol(a, Decl(derivedClassParameterProperties.ts, 43, 29))
+>a : Symbol(Derived6.a, Decl(derivedClassParameterProperties.ts, 43, 29))
 
         var b = 2;
 >b : Symbol(b, Decl(derivedClassParameterProperties.ts, 47, 11))
@@ -119,23 +119,23 @@ class Derived7 extends Base {
 >Base : Symbol(Base, Decl(derivedClassParameterProperties.ts, 0, 0))
 
     a = 1;
->a : Symbol(a, Decl(derivedClassParameterProperties.ts, 52, 29))
+>a : Symbol(Derived7.a, Decl(derivedClassParameterProperties.ts, 52, 29))
 
     b: number;
->b : Symbol(b, Decl(derivedClassParameterProperties.ts, 53, 10))
+>b : Symbol(Derived7.b, Decl(derivedClassParameterProperties.ts, 53, 10))
 
     constructor(y: string) {
 >y : Symbol(y, Decl(derivedClassParameterProperties.ts, 55, 16))
 
         this.a = 3;
->this.a : Symbol(a, Decl(derivedClassParameterProperties.ts, 52, 29))
+>this.a : Symbol(Derived7.a, Decl(derivedClassParameterProperties.ts, 52, 29))
 >this : Symbol(Derived7, Decl(derivedClassParameterProperties.ts, 50, 1))
->a : Symbol(a, Decl(derivedClassParameterProperties.ts, 52, 29))
+>a : Symbol(Derived7.a, Decl(derivedClassParameterProperties.ts, 52, 29))
 
         this.b = 3;
->this.b : Symbol(b, Decl(derivedClassParameterProperties.ts, 53, 10))
+>this.b : Symbol(Derived7.b, Decl(derivedClassParameterProperties.ts, 53, 10))
 >this : Symbol(Derived7, Decl(derivedClassParameterProperties.ts, 50, 1))
->b : Symbol(b, Decl(derivedClassParameterProperties.ts, 53, 10))
+>b : Symbol(Derived7.b, Decl(derivedClassParameterProperties.ts, 53, 10))
 
         super();
 >super : Symbol(Base, Decl(derivedClassParameterProperties.ts, 0, 0))
@@ -147,10 +147,10 @@ class Derived8 extends Base {
 >Base : Symbol(Base, Decl(derivedClassParameterProperties.ts, 0, 0))
 
     a = 1;
->a : Symbol(a, Decl(derivedClassParameterProperties.ts, 62, 29))
+>a : Symbol(Derived8.a, Decl(derivedClassParameterProperties.ts, 62, 29))
 
     b: number;
->b : Symbol(b, Decl(derivedClassParameterProperties.ts, 63, 10))
+>b : Symbol(Derived8.b, Decl(derivedClassParameterProperties.ts, 63, 10))
 
     constructor(y: string) {
 >y : Symbol(y, Decl(derivedClassParameterProperties.ts, 65, 16))
@@ -159,14 +159,14 @@ class Derived8 extends Base {
 >super : Symbol(Base, Decl(derivedClassParameterProperties.ts, 0, 0))
 
         this.a = 3;
->this.a : Symbol(a, Decl(derivedClassParameterProperties.ts, 62, 29))
+>this.a : Symbol(Derived8.a, Decl(derivedClassParameterProperties.ts, 62, 29))
 >this : Symbol(Derived8, Decl(derivedClassParameterProperties.ts, 60, 1))
->a : Symbol(a, Decl(derivedClassParameterProperties.ts, 62, 29))
+>a : Symbol(Derived8.a, Decl(derivedClassParameterProperties.ts, 62, 29))
 
         this.b = 3;        
->this.b : Symbol(b, Decl(derivedClassParameterProperties.ts, 63, 10))
+>this.b : Symbol(Derived8.b, Decl(derivedClassParameterProperties.ts, 63, 10))
 >this : Symbol(Derived8, Decl(derivedClassParameterProperties.ts, 60, 1))
->b : Symbol(b, Decl(derivedClassParameterProperties.ts, 63, 10))
+>b : Symbol(Derived8.b, Decl(derivedClassParameterProperties.ts, 63, 10))
     }
 }
 
@@ -174,7 +174,7 @@ class Derived8 extends Base {
 class Base2<T> { x: T; }
 >Base2 : Symbol(Base2, Decl(derivedClassParameterProperties.ts, 70, 1))
 >T : Symbol(T, Decl(derivedClassParameterProperties.ts, 73, 12))
->x : Symbol(x, Decl(derivedClassParameterProperties.ts, 73, 16))
+>x : Symbol(Base2.x, Decl(derivedClassParameterProperties.ts, 73, 16))
 >T : Symbol(T, Decl(derivedClassParameterProperties.ts, 73, 12))
 
 class Derived9<T> extends Base2<T> {
@@ -184,23 +184,23 @@ class Derived9<T> extends Base2<T> {
 >T : Symbol(T, Decl(derivedClassParameterProperties.ts, 75, 15))
 
     a = 1;
->a : Symbol(a, Decl(derivedClassParameterProperties.ts, 75, 36))
+>a : Symbol(Derived9.a, Decl(derivedClassParameterProperties.ts, 75, 36))
 
     b: number;
->b : Symbol(b, Decl(derivedClassParameterProperties.ts, 76, 10))
+>b : Symbol(Derived9.b, Decl(derivedClassParameterProperties.ts, 76, 10))
 
     constructor(y: string) {
 >y : Symbol(y, Decl(derivedClassParameterProperties.ts, 78, 16))
 
         this.a = 3;
->this.a : Symbol(a, Decl(derivedClassParameterProperties.ts, 75, 36))
+>this.a : Symbol(Derived9.a, Decl(derivedClassParameterProperties.ts, 75, 36))
 >this : Symbol(Derived9, Decl(derivedClassParameterProperties.ts, 73, 24))
->a : Symbol(a, Decl(derivedClassParameterProperties.ts, 75, 36))
+>a : Symbol(Derived9.a, Decl(derivedClassParameterProperties.ts, 75, 36))
 
         this.b = 3;
->this.b : Symbol(b, Decl(derivedClassParameterProperties.ts, 76, 10))
+>this.b : Symbol(Derived9.b, Decl(derivedClassParameterProperties.ts, 76, 10))
 >this : Symbol(Derived9, Decl(derivedClassParameterProperties.ts, 73, 24))
->b : Symbol(b, Decl(derivedClassParameterProperties.ts, 76, 10))
+>b : Symbol(Derived9.b, Decl(derivedClassParameterProperties.ts, 76, 10))
 
         super();
 >super : Symbol(Base2, Decl(derivedClassParameterProperties.ts, 70, 1))
@@ -214,10 +214,10 @@ class Derived10<T> extends Base2<T> {
 >T : Symbol(T, Decl(derivedClassParameterProperties.ts, 85, 16))
 
     a = 1;
->a : Symbol(a, Decl(derivedClassParameterProperties.ts, 85, 37))
+>a : Symbol(Derived10.a, Decl(derivedClassParameterProperties.ts, 85, 37))
 
     b: number;
->b : Symbol(b, Decl(derivedClassParameterProperties.ts, 86, 10))
+>b : Symbol(Derived10.b, Decl(derivedClassParameterProperties.ts, 86, 10))
 
     constructor(y: string) {
 >y : Symbol(y, Decl(derivedClassParameterProperties.ts, 88, 16))
@@ -226,13 +226,13 @@ class Derived10<T> extends Base2<T> {
 >super : Symbol(Base2, Decl(derivedClassParameterProperties.ts, 70, 1))
 
         this.a = 3;
->this.a : Symbol(a, Decl(derivedClassParameterProperties.ts, 85, 37))
+>this.a : Symbol(Derived10.a, Decl(derivedClassParameterProperties.ts, 85, 37))
 >this : Symbol(Derived10, Decl(derivedClassParameterProperties.ts, 83, 1))
->a : Symbol(a, Decl(derivedClassParameterProperties.ts, 85, 37))
+>a : Symbol(Derived10.a, Decl(derivedClassParameterProperties.ts, 85, 37))
 
         this.b = 3;
->this.b : Symbol(b, Decl(derivedClassParameterProperties.ts, 86, 10))
+>this.b : Symbol(Derived10.b, Decl(derivedClassParameterProperties.ts, 86, 10))
 >this : Symbol(Derived10, Decl(derivedClassParameterProperties.ts, 83, 1))
->b : Symbol(b, Decl(derivedClassParameterProperties.ts, 86, 10))
+>b : Symbol(Derived10.b, Decl(derivedClassParameterProperties.ts, 86, 10))
     }
 }

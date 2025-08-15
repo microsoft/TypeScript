@@ -5,7 +5,7 @@ class C {
 >C : Symbol(C, Decl(typeOfThisInStaticMembers2.ts, 0, 0))
 
     static foo = this; // ok
->foo : Symbol(foo, Decl(typeOfThisInStaticMembers2.ts, 0, 9))
+>foo : Symbol(C.foo, Decl(typeOfThisInStaticMembers2.ts, 0, 9))
 >this : Symbol(C, Decl(typeOfThisInStaticMembers2.ts, 0, 0))
 }
 
@@ -14,6 +14,6 @@ class C2<T> {
 >T : Symbol(T, Decl(typeOfThisInStaticMembers2.ts, 4, 9))
 
     static foo = this; // ok
->foo : Symbol(foo, Decl(typeOfThisInStaticMembers2.ts, 4, 13))
+>foo : Symbol(C2.foo, Decl(typeOfThisInStaticMembers2.ts, 4, 13))
 >this : Symbol(C2, Decl(typeOfThisInStaticMembers2.ts, 2, 1))
 }

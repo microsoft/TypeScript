@@ -33,11 +33,11 @@ interface X1<
 
 > {
   tee: T;
->tee : Symbol(tee, Decl(inferTypeConstraintInstantiationCircularity.ts, 11, 3))
+>tee : Symbol(X1.tee, Decl(inferTypeConstraintInstantiationCircularity.ts, 11, 3))
 >T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 8, 13))
 
   output: Output;
->output : Symbol(output, Decl(inferTypeConstraintInstantiationCircularity.ts, 12, 9))
+>output : Symbol(X1.output, Decl(inferTypeConstraintInstantiationCircularity.ts, 12, 9))
 >Output : Symbol(Output, Decl(inferTypeConstraintInstantiationCircularity.ts, 9, 17))
 }
 
@@ -63,11 +63,11 @@ interface X2<
 
 > {
   tee: T;
->tee : Symbol(tee, Decl(inferTypeConstraintInstantiationCircularity.ts, 23, 3))
+>tee : Symbol(X2.tee, Decl(inferTypeConstraintInstantiationCircularity.ts, 23, 3))
 >T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 20, 13))
 
   output: Output;
->output : Symbol(output, Decl(inferTypeConstraintInstantiationCircularity.ts, 24, 9))
+>output : Symbol(X2.output, Decl(inferTypeConstraintInstantiationCircularity.ts, 24, 9))
 >Output : Symbol(Output, Decl(inferTypeConstraintInstantiationCircularity.ts, 21, 17))
 }
 
@@ -150,7 +150,7 @@ interface ZodType<Output> {
 >Output : Symbol(Output, Decl(inferTypeConstraintInstantiationCircularity.ts, 50, 18))
 
   _type: Output;
->_type : Symbol(_type, Decl(inferTypeConstraintInstantiationCircularity.ts, 50, 27))
+>_type : Symbol(ZodType._type, Decl(inferTypeConstraintInstantiationCircularity.ts, 50, 27))
 >Output : Symbol(Output, Decl(inferTypeConstraintInstantiationCircularity.ts, 50, 18))
 }
 
@@ -186,7 +186,7 @@ interface ZodObject<
 >Output : Symbol(Output, Decl(inferTypeConstraintInstantiationCircularity.ts, 55, 24))
 
   readonly _shape: T;
->_shape : Symbol(_shape, Decl(inferTypeConstraintInstantiationCircularity.ts, 63, 27))
+>_shape : Symbol(ZodObject._shape, Decl(inferTypeConstraintInstantiationCircularity.ts, 63, 27))
 >T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 54, 20))
 }
 

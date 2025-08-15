@@ -14,9 +14,9 @@ module.exports = class Thing {
 >p : Symbol(p, Decl(index.js, 4, 16))
 
         this.t = 12 + p;
->this.t : Symbol(t, Decl(index.js, 4, 20))
+>this.t : Symbol(Thing.t, Decl(index.js, 4, 20))
 >this : Symbol(Thing, Decl(index.js, 0, 16))
->t : Symbol(t, Decl(index.js, 4, 20))
+>t : Symbol(Thing.t, Decl(index.js, 4, 20))
 >p : Symbol(p, Decl(index.js, 4, 16))
     }
 }

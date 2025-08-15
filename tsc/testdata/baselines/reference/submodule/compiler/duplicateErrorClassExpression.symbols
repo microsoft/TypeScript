@@ -19,19 +19,19 @@ interface ABase {
 >ABase : Symbol(ABase, Decl(duplicateErrorClassExpression.ts, 5, 1))
 
     a: string;
->a : Symbol(a, Decl(duplicateErrorClassExpression.ts, 6, 17))
+>a : Symbol(ABase.a, Decl(duplicateErrorClassExpression.ts, 6, 17))
 }
 interface ADerived {
 >ADerived : Symbol(ADerived, Decl(duplicateErrorClassExpression.ts, 8, 1))
 
     b: string;
->b : Symbol(b, Decl(duplicateErrorClassExpression.ts, 9, 20))
+>b : Symbol(ADerived.b, Decl(duplicateErrorClassExpression.ts, 9, 20))
 }
 class Base {
 >Base : Symbol(Base, Decl(duplicateErrorClassExpression.ts, 11, 1))
 
     foo!: ComplicatedTypeBase;
->foo : Symbol(foo, Decl(duplicateErrorClassExpression.ts, 12, 12))
+>foo : Symbol(Base.foo, Decl(duplicateErrorClassExpression.ts, 12, 12))
 >ComplicatedTypeBase : Symbol(ComplicatedTypeBase, Decl(duplicateErrorClassExpression.ts, 0, 0))
 }
 const x = class Derived extends Base {
@@ -40,7 +40,7 @@ const x = class Derived extends Base {
 >Base : Symbol(Base, Decl(duplicateErrorClassExpression.ts, 11, 1))
 
     foo!: ComplicatedTypeDerived;
->foo : Symbol(foo, Decl(duplicateErrorClassExpression.ts, 15, 38))
+>foo : Symbol(Derived.foo, Decl(duplicateErrorClassExpression.ts, 15, 38))
 >ComplicatedTypeDerived : Symbol(ComplicatedTypeDerived, Decl(duplicateErrorClassExpression.ts, 2, 1))
 }
 let obj: { 3: string } = { 3: "three" };

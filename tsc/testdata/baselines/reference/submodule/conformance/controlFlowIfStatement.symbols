@@ -84,9 +84,9 @@ function c<T>(data: string | T): T {
 >data : Symbol(data, Decl(controlFlowIfStatement.ts, 36, 14))
 
         return JSON.parse(data);
->JSON.parse : Symbol(parse, Decl(lib.es5.d.ts, --, --))
+>JSON.parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --))
 >JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->parse : Symbol(parse, Decl(lib.es5.d.ts, --, --))
+>parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --))
 >data : Symbol(data, Decl(controlFlowIfStatement.ts, 36, 14))
     }
     else {
@@ -117,7 +117,7 @@ interface I<T> {
 >T : Symbol(T, Decl(controlFlowIfStatement.ts, 53, 12))
 
   p: T;
->p : Symbol(p, Decl(controlFlowIfStatement.ts, 53, 16))
+>p : Symbol(I.p, Decl(controlFlowIfStatement.ts, 53, 16))
 >T : Symbol(T, Decl(controlFlowIfStatement.ts, 53, 12))
 }
 function e(x: I<"A" | "B">) {
@@ -126,15 +126,15 @@ function e(x: I<"A" | "B">) {
 >I : Symbol(I, Decl(controlFlowIfStatement.ts, 51, 1))
 
     if (x.p === "A") {
->x.p : Symbol(p, Decl(controlFlowIfStatement.ts, 53, 16))
+>x.p : Symbol(I.p, Decl(controlFlowIfStatement.ts, 53, 16))
 >x : Symbol(x, Decl(controlFlowIfStatement.ts, 56, 11))
->p : Symbol(p, Decl(controlFlowIfStatement.ts, 53, 16))
+>p : Symbol(I.p, Decl(controlFlowIfStatement.ts, 53, 16))
 
         let a: "A" = (null as unknown as typeof x.p)
 >a : Symbol(a, Decl(controlFlowIfStatement.ts, 58, 11))
->x.p : Symbol(p, Decl(controlFlowIfStatement.ts, 53, 16))
+>x.p : Symbol(I.p, Decl(controlFlowIfStatement.ts, 53, 16))
 >x : Symbol(x, Decl(controlFlowIfStatement.ts, 56, 11))
->p : Symbol(p, Decl(controlFlowIfStatement.ts, 53, 16))
+>p : Symbol(I.p, Decl(controlFlowIfStatement.ts, 53, 16))
     }
 }
 

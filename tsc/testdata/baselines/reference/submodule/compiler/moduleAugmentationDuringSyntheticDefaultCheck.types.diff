@@ -10,7 +10,7 @@
  === node_modules/moment/index.d.ts ===
  declare function moment(): moment.Moment;
 ->moment : () => moment.Moment
-+>moment : () => import("moment").Moment
++>moment : () => import("node_modules/moment/index.d.ts").Moment
  >moment : any
 
  declare namespace moment {
@@ -19,7 +19,7 @@
  }
  export = moment;
 ->moment : () => moment.Moment
-+>moment : () => import("moment").Moment
++>moment : () => import("node_modules/moment/index.d.ts").Moment
 
  === node_modules/moment-timezone/index.d.ts ===
  import * as moment from 'moment';

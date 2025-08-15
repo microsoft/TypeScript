@@ -6,9 +6,9 @@ import file1 = require('./externalModuleRefernceResolutionOrderInImportDeclarati
 >file1 : Symbol(file1, Decl(externalModuleRefernceResolutionOrderInImportDeclaration_file3.ts, 0, 0))
 
 file1.foo();
->file1.foo : Symbol(foo, Decl(externalModuleRefernceResolutionOrderInImportDeclaration_file1.ts, 0, 0))
+>file1.foo : Symbol(file1.foo, Decl(externalModuleRefernceResolutionOrderInImportDeclaration_file1.ts, 0, 0))
 >file1 : Symbol(file1, Decl(externalModuleRefernceResolutionOrderInImportDeclaration_file3.ts, 0, 0))
->foo : Symbol(foo, Decl(externalModuleRefernceResolutionOrderInImportDeclaration_file1.ts, 0, 0))
+>foo : Symbol(file1.foo, Decl(externalModuleRefernceResolutionOrderInImportDeclaration_file1.ts, 0, 0))
 
 file1.bar();
 >file1 : Symbol(file1, Decl(externalModuleRefernceResolutionOrderInImportDeclaration_file3.ts, 0, 0))

@@ -10,12 +10,12 @@ class C {
 
     /** @type {Foo} */
     foo(a, b) {}
->foo : Symbol(foo, Decl(test.js, 4, 9))
+>foo : Symbol(C.foo, Decl(test.js, 4, 9))
 >a : Symbol(a, Decl(test.js, 6, 8))
 >b : Symbol(b, Decl(test.js, 6, 10))
 
     /** @type {(optional?) => void} */
     methodWithOptionalParameters() {}
->methodWithOptionalParameters : Symbol(methodWithOptionalParameters, Decl(test.js, 6, 16))
+>methodWithOptionalParameters : Symbol(C.methodWithOptionalParameters, Decl(test.js, 6, 16))
 }
 

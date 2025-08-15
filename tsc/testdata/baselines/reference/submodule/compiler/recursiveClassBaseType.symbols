@@ -30,7 +30,7 @@ abstract class Base1 {
 >Base1 : Symbol(Base1, Decl(recursiveClassBaseType.ts, 6, 49))
 
     abstract root(): Derived1;
->root : Symbol(root, Decl(recursiveClassBaseType.ts, 10, 22))
+>root : Symbol(Base1.root, Decl(recursiveClassBaseType.ts, 10, 22))
 >Derived1 : Symbol(Derived1, Decl(recursiveClassBaseType.ts, 12, 1))
 }
 
@@ -39,7 +39,7 @@ class Derived1 extends class extends Base1 {
 >Base1 : Symbol(Base1, Decl(recursiveClassBaseType.ts, 6, 49))
 
     root() {
->root : Symbol(root, Decl(recursiveClassBaseType.ts, 14, 44))
+>root : Symbol((Anonymous class).root, Decl(recursiveClassBaseType.ts, 14, 44))
 
         return undefined as any;
 >undefined : Symbol(undefined)

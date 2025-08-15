@@ -5,7 +5,7 @@
 
      export module c {
 ->c : typeof m.c
-+>c : typeof import("./declFileImportChainInExportAssignment")
++>c : typeof import("declFileImportChainInExportAssignment")
 
          export class c {
  >c : c

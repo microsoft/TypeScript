@@ -13,7 +13,7 @@ class C {
 >C : Symbol(C, Decl(constructorParameterShadowsOuterScopes.ts, 5, 10))
 
     b = x; // error, evaluated in scope of constructor, cannot reference x
->b : Symbol(b, Decl(constructorParameterShadowsOuterScopes.ts, 6, 9))
+>b : Symbol(C.b, Decl(constructorParameterShadowsOuterScopes.ts, 6, 9))
 >x : Symbol(x, Decl(constructorParameterShadowsOuterScopes.ts, 5, 3))
 
     constructor(x: string) {
@@ -31,7 +31,7 @@ class D {
 >D : Symbol(D, Decl(constructorParameterShadowsOuterScopes.ts, 13, 10))
 
     b = y; // error, evaluated in scope of constructor, cannot reference y
->b : Symbol(b, Decl(constructorParameterShadowsOuterScopes.ts, 14, 9))
+>b : Symbol(D.b, Decl(constructorParameterShadowsOuterScopes.ts, 14, 9))
 >y : Symbol(y, Decl(constructorParameterShadowsOuterScopes.ts, 13, 3))
 
     constructor(x: string) {

@@ -5,16 +5,16 @@ export interface TypeLambda {
 >TypeLambda : Symbol(TypeLambda, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 0, 0))
 
     readonly In: unknown
->In : Symbol(In, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 0, 29))
+>In : Symbol(TypeLambda.In, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 0, 29))
 
     readonly Out2: unknown
->Out2 : Symbol(Out2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 1, 24))
+>Out2 : Symbol(TypeLambda.Out2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 1, 24))
 
     readonly Out1: unknown
->Out1 : Symbol(Out1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 2, 26))
+>Out1 : Symbol(TypeLambda.Out1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 2, 26))
 
     readonly Target: unknown
->Target : Symbol(Target, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 3, 26))
+>Target : Symbol(TypeLambda.Target, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 3, 26))
 }
 export namespace Types {
 >Types : Symbol(Types, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 5, 1))
@@ -48,7 +48,7 @@ export interface TypeClass<F extends TypeLambda> {
 >TypeLambda : Symbol(TypeLambda, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 0, 0))
 
     readonly [URI]?: F
->[URI] : Symbol([URI], Decl(declarationEmitHigherOrderRetainedGenerics.ts, 13, 50))
+>[URI] : Symbol(TypeClass[URI], Decl(declarationEmitHigherOrderRetainedGenerics.ts, 13, 50))
 >URI : Symbol(URI, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 12, 20))
 >F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 13, 27))
 }
@@ -61,7 +61,7 @@ export interface Invariant<F extends TypeLambda> extends TypeClass<F> {
 >F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 17, 27))
 
     readonly imap: {
->imap : Symbol(imap, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 17, 71))
+>imap : Symbol(Invariant.imap, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 17, 71))
 
         <A, B>(
 >A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 19, 9))
@@ -143,7 +143,7 @@ export interface Covariant<F extends TypeLambda> extends Invariant<F> {
 >F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 31, 27))
 
     readonly map: {
->map : Symbol(map, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 31, 71))
+>map : Symbol(Covariant.map, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 31, 71))
 
         <A, B>(f: (a: A) => B): <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
 >A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 33, 9))
@@ -237,25 +237,25 @@ export type Kind<F extends TypeLambda, In, Out2, Out1, Target> = F extends {
         readonly In: Types.Contravariant<In>
 >In : Symbol(In, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 48, 21))
 >Types : Symbol(Types, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 5, 1))
->Contravariant : Symbol(Contravariant, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 8, 46))
+>Contravariant : Symbol(Types.Contravariant, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 8, 46))
 >In : Symbol(In, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 39, 38))
 
         readonly Out2: Types.Covariant<Out2>
 >Out2 : Symbol(Out2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 49, 44))
 >Types : Symbol(Types, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 5, 1))
->Covariant : Symbol(Covariant, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 7, 42))
+>Covariant : Symbol(Types.Covariant, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 7, 42))
 >Out2 : Symbol(Out2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 39, 42))
 
         readonly Out1: Types.Covariant<Out1>
 >Out1 : Symbol(Out1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 50, 44))
 >Types : Symbol(Types, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 5, 1))
->Covariant : Symbol(Covariant, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 7, 42))
+>Covariant : Symbol(Types.Covariant, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 7, 42))
 >Out1 : Symbol(Out1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 39, 48))
 
         readonly Target: Types.Invariant<Target>
 >Target : Symbol(Target, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 51, 44))
 >Types : Symbol(Types, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 5, 1))
->Invariant : Symbol(Invariant, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 6, 24))
+>Invariant : Symbol(Types.Invariant, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 6, 24))
 >Target : Symbol(Target, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 39, 54))
     }
 
@@ -267,7 +267,7 @@ export interface SemiProduct<F extends TypeLambda> extends Invariant<F> {
 >F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 55, 29))
 
     readonly product: <R1, O1, E1, A, R2, O2, E2, B>(
->product : Symbol(product, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 55, 73))
+>product : Symbol(SemiProduct.product, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 55, 73))
 >R1 : Symbol(R1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 23))
 >O1 : Symbol(O1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 26))
 >E1 : Symbol(E1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 30))
@@ -308,7 +308,7 @@ export interface SemiProduct<F extends TypeLambda> extends Invariant<F> {
 >B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 49))
 
     readonly productMany: <R, O, E, A>(
->productMany : Symbol(productMany, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 59, 51))
+>productMany : Symbol(SemiProduct.productMany, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 59, 51))
 >R : Symbol(R, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 27))
 >O : Symbol(O, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 29))
 >E : Symbol(E, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 32))
@@ -565,12 +565,12 @@ export const zipWith = <F extends TypeLambda>(F: SemiApplicative<F>): {
 >E1 : Symbol(E1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 16))
 >E2 : Symbol(E2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 31))
 >C : Symbol(C, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 38))
->F.map : Symbol(map, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 31, 71))
+>F.map : Symbol(Covariant.map, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 31, 71))
 >F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 24), Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 46))
->map : Symbol(map, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 31, 71))
->F.product : Symbol(product, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 55, 73))
+>map : Symbol(Covariant.map, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 31, 71))
+>F.product : Symbol(SemiProduct.product, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 55, 73))
 >F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 24), Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 46))
->product : Symbol(product, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 55, 73))
+>product : Symbol(SemiProduct.product, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 55, 73))
 >self : Symbol(self, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 42))
 >that : Symbol(that, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 96, 41))
 >a : Symbol(a, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 99, 83))

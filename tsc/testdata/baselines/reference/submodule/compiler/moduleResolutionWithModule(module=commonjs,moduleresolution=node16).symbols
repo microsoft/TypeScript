@@ -9,7 +9,7 @@ import * as p from "pkg";
 >p : Symbol(p, Decl(index.ts, 0, 6))
 
 p.thing();
->p.thing : Symbol(thing, Decl(entrypoint.d.ts, 0, 0))
+>p.thing : Symbol(p.thing, Decl(entrypoint.d.ts, 0, 0))
 >p : Symbol(p, Decl(index.ts, 0, 6))
->thing : Symbol(thing, Decl(entrypoint.d.ts, 0, 0))
+>thing : Symbol(p.thing, Decl(entrypoint.d.ts, 0, 0))
 

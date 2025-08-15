@@ -19,7 +19,7 @@ interface Derived extends Base {
 >Base : Symbol(Base, Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 0, 0))
 
     1: { y: number } // error
->1 : Symbol(1, Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 5, 32))
+>1 : Symbol(Derived[1], Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 5, 32))
 >y : Symbol(y, Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 6, 8))
 }
 
@@ -28,7 +28,7 @@ interface Derived2 extends Base {
 >Base : Symbol(Base, Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 0, 0))
 
     '1': { y: number } // error
->'1' : Symbol('1', Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 9, 33))
+>'1' : Symbol(Derived2["1"], Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 9, 33))
 >y : Symbol(y, Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 10, 10))
 }
 
@@ -37,7 +37,7 @@ interface Derived3 extends Base {
 >Base : Symbol(Base, Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 0, 0))
 
     foo: { y: number } // error
->foo : Symbol(foo, Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 13, 33))
+>foo : Symbol(Derived3.foo, Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 13, 33))
 >y : Symbol(y, Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 14, 10))
 }
 
@@ -46,7 +46,7 @@ interface Derived4 extends Base {
 >Base : Symbol(Base, Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 0, 0))
 
     foo(): { x: number } // error
->foo : Symbol(foo, Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 17, 33))
+>foo : Symbol(Derived4.foo, Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 17, 33))
 >x : Symbol(x, Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 18, 12))
 }
 
@@ -56,7 +56,7 @@ interface Derived5 extends Base {
 >Base : Symbol(Base, Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 0, 0))
 
     1: { x: number } // error
->1 : Symbol(1, Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 22, 33), Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 26, 33))
+>1 : Symbol(Derived5[1], Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 22, 33), Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 26, 33))
 >x : Symbol(x, Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 23, 8))
 }
 
@@ -65,6 +65,6 @@ interface Derived5 extends Base {
 >Base : Symbol(Base, Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 0, 0))
 
     '1': { x: number } // error
->'1' : Symbol(1, Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 22, 33), Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 26, 33))
+>'1' : Symbol(Derived5[1], Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 22, 33), Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 26, 33))
 >x : Symbol(x, Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 27, 10))
 }

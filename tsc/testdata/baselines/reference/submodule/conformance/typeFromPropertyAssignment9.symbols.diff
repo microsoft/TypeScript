@@ -122,10 +122,8 @@
 +>my : Symbol(my, Decl(a.js, 0, 3))
 
      m() { return 101; }
-->m : Symbol(type.m, Decl(a.js, 23, 27))
-+>m : Symbol(m, Decl(a.js, 23, 27))
- }
-
+ >m : Symbol(type.m, Decl(a.js, 23, 27))
+@@= skipped -13, +9 lines =@@
 
  // global-ish prefixes
  var min = window.min || {};

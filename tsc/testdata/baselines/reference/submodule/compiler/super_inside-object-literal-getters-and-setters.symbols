@@ -33,14 +33,14 @@ module ObjectLiteral {
 
 class F { public test(): string { return ""; } }
 >F : Symbol(F, Decl(super_inside-object-literal-getters-and-setters.ts, 13, 1))
->test : Symbol(test, Decl(super_inside-object-literal-getters-and-setters.ts, 15, 9))
+>test : Symbol(F.test, Decl(super_inside-object-literal-getters-and-setters.ts, 15, 9))
 
 class SuperObjectTest extends F {
 >SuperObjectTest : Symbol(SuperObjectTest, Decl(super_inside-object-literal-getters-and-setters.ts, 15, 48))
 >F : Symbol(F, Decl(super_inside-object-literal-getters-and-setters.ts, 13, 1))
 
     public testing() {
->testing : Symbol(testing, Decl(super_inside-object-literal-getters-and-setters.ts, 16, 33))
+>testing : Symbol(SuperObjectTest.testing, Decl(super_inside-object-literal-getters-and-setters.ts, 16, 33))
 
         var test = {
 >test : Symbol(test, Decl(super_inside-object-literal-getters-and-setters.ts, 18, 11))

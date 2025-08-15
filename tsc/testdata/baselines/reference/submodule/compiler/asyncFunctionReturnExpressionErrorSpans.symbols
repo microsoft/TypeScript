@@ -5,7 +5,7 @@ interface Foo {
 >Foo : Symbol(Foo, Decl(asyncFunctionReturnExpressionErrorSpans.ts, 0, 0))
 
     bar: {
->bar : Symbol(bar, Decl(asyncFunctionReturnExpressionErrorSpans.ts, 0, 15))
+>bar : Symbol(Foo.bar, Decl(asyncFunctionReturnExpressionErrorSpans.ts, 0, 15))
 
         baz: {
 >baz : Symbol(baz, Decl(asyncFunctionReturnExpressionErrorSpans.ts, 1, 10))

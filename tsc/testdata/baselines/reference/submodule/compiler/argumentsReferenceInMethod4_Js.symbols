@@ -8,7 +8,7 @@ class A {
 	 * @param {object} [foo={}]
 	 */
 	m(foo = {}) {
->m : Symbol(m, Decl(a.js, 0, 9))
+>m : Symbol(A.m, Decl(a.js, 0, 9))
 >foo : Symbol(foo, Decl(a.js, 4, 3))
 
 		const key = "bar";
@@ -18,9 +18,9 @@ class A {
 		 * @type object
 		 */
 		this.foo = foo;
->this.foo : Symbol(foo, Decl(a.js, 5, 20))
+>this.foo : Symbol(A.foo, Decl(a.js, 5, 20))
 >this : Symbol(A, Decl(a.js, 0, 0))
->foo : Symbol(foo, Decl(a.js, 5, 20))
+>foo : Symbol(A.foo, Decl(a.js, 5, 20))
 >foo : Symbol(foo, Decl(a.js, 4, 3))
 
 		/**
@@ -28,26 +28,26 @@ class A {
 		 */
 		const arguments = this.arguments;
 >arguments : Symbol(arguments, Decl(a.js, 15, 7))
->this.arguments : Symbol(arguments, Decl(a.js, 31, 2))
+>this.arguments : Symbol(A.arguments, Decl(a.js, 31, 2))
 >this : Symbol(A, Decl(a.js, 0, 0))
->arguments : Symbol(arguments, Decl(a.js, 31, 2))
+>arguments : Symbol(A.arguments, Decl(a.js, 31, 2))
 
 		/**
 		 * @type object
 		 */
 		this.bar = arguments.bar;
->this.bar : Symbol(bar, Decl(a.js, 15, 35))
+>this.bar : Symbol(A.bar, Decl(a.js, 15, 35))
 >this : Symbol(A, Decl(a.js, 0, 0))
->bar : Symbol(bar, Decl(a.js, 15, 35))
+>bar : Symbol(A.bar, Decl(a.js, 15, 35))
 >arguments : Symbol(arguments, Decl(a.js, 15, 7))
 
 		/**
 		 * @type object
 		 */
 		this.baz = arguments[key];
->this.baz : Symbol(baz, Decl(a.js, 20, 27))
+>this.baz : Symbol(A.baz, Decl(a.js, 20, 27))
 >this : Symbol(A, Decl(a.js, 0, 0))
->baz : Symbol(baz, Decl(a.js, 20, 27))
+>baz : Symbol(A.baz, Decl(a.js, 20, 27))
 >arguments : Symbol(arguments, Decl(a.js, 15, 7))
 >key : Symbol(key, Decl(a.js, 5, 7))
 
@@ -55,14 +55,14 @@ class A {
 		 * @type object
 		 */
 		this.options = arguments;
->this.options : Symbol(options, Decl(a.js, 25, 28))
+>this.options : Symbol(A.options, Decl(a.js, 25, 28))
 >this : Symbol(A, Decl(a.js, 0, 0))
->options : Symbol(options, Decl(a.js, 25, 28))
+>options : Symbol(A.options, Decl(a.js, 25, 28))
 >arguments : Symbol(arguments, Decl(a.js, 15, 7))
 	}
 
 	get arguments() {
->arguments : Symbol(arguments, Decl(a.js, 31, 2))
+>arguments : Symbol(A.arguments, Decl(a.js, 31, 2))
 
 		return { bar: {} };
 >bar : Symbol(bar, Decl(a.js, 34, 10))

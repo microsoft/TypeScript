@@ -24,7 +24,7 @@ import { ns } from './c';
 >ns : Symbol(ns, Decl(e.ts, 0, 8))
 
 ns.A;
->ns.A : Symbol(A, Decl(a.ts, 0, 0))
+>ns.A : Symbol(ns.A, Decl(a.ts, 0, 0))
 >ns : Symbol(ns, Decl(e.ts, 0, 8))
->A : Symbol(A, Decl(a.ts, 0, 0))
+>A : Symbol(ns.A, Decl(a.ts, 0, 0))
 

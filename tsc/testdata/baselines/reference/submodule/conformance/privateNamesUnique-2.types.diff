@@ -1,20 +1,15 @@
 --- old.privateNamesUnique-2.types
 +++ new.privateNamesUnique-2.types
-@@= skipped -8, +8 lines =@@
+@@= skipped -7, +7 lines =@@
+ >#x : any
 
      copy(other: import("./b").Foo) {
- >copy : (other: import("./b").Foo) => void
-->other : import("b").Foo
-+>other : import("./b").Foo
+->copy : (other: import("./b").Foo) => void
++>copy : (other: import("b").Foo) => void
+ >other : import("b").Foo
 
          other.#x; // error
- >other.#x : any
-->other : import("b").Foo
-+>other : import("./b").Foo
-     }
- }
-     
-@@= skipped -37, +37 lines =@@
+@@= skipped -38, +38 lines =@@
 
  a.copy(b); // error
  >a.copy(b) : void

@@ -35,13 +35,13 @@ export class C {
     }
 
     method(details: number, message: string, ...args: any[]): void;
->method : Symbol(method, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 9, 5), Decl(unusedLocalsAndParametersOverloadSignatures.ts, 11, 67))
+>method : Symbol(C.method, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 9, 5), Decl(unusedLocalsAndParametersOverloadSignatures.ts, 11, 67))
 >details : Symbol(details, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 11, 11))
 >message : Symbol(message, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 11, 27))
 >args : Symbol(args, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 11, 44))
 
     method(details: number, message: string): any {
->method : Symbol(method, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 9, 5), Decl(unusedLocalsAndParametersOverloadSignatures.ts, 11, 67))
+>method : Symbol(C.method, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 9, 5), Decl(unusedLocalsAndParametersOverloadSignatures.ts, 11, 67))
 >details : Symbol(details, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 12, 11))
 >message : Symbol(message, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 12, 27))
 

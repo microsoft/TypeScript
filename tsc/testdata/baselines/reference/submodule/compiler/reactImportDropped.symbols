@@ -38,9 +38,9 @@ declare global {
 
 === src/components/TabBar.js ===
 export default React.createClass({
->React.createClass : Symbol(createClass, Decl(react.d.ts, 3, 25))
+>React.createClass : Symbol(React.createClass, Decl(react.d.ts, 3, 25))
 >React : Symbol(React, Decl(react.d.ts, 0, 15))
->createClass : Symbol(createClass, Decl(react.d.ts, 3, 25))
+>createClass : Symbol(React.createClass, Decl(react.d.ts, 3, 25))
 
   render() {
 >render : Symbol(render, Decl(TabBar.js, 0, 34))

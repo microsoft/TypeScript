@@ -40,9 +40,9 @@
 ->exports : { on(s: string): void; x: number; y: 2; }
 +>npmlog : EE
 +>module.exports = new EE() : EE
-+>module.exports : typeof import("./npmlog")
-+>module : { "\"npmlog\"": typeof import("./npmlog"); }
-+>exports : typeof import("./npmlog")
++>module.exports : typeof import("npmlog")
++>module : { "\"npmlog\"": typeof import("npmlog"); }
++>exports : typeof import("npmlog")
  >new EE() : EE
  >EE : typeof EE
 
@@ -63,9 +63,9 @@
 ->on : (s: string) => void
 +>module.exports.on('hi') : any
 +>module.exports.on : any
-+>module.exports : typeof import("./npmlog")
-+>module : { "\"npmlog\"": typeof import("./npmlog"); }
-+>exports : typeof import("./npmlog")
++>module.exports : typeof import("npmlog")
++>module : { "\"npmlog\"": typeof import("npmlog"); }
++>exports : typeof import("npmlog")
 +>on : any
  >'hi' : "hi"
 
@@ -85,9 +85,9 @@
 ->module.exports : { on(s: string): void; x: number; y: 2; }
 ->module : { exports: { on(s: string): void; x: number; y: 2; }; }
 ->exports : { on(s: string): void; x: number; y: 2; }
-+>module.exports : typeof import("./npmlog")
-+>module : { "\"npmlog\"": typeof import("./npmlog"); }
-+>exports : typeof import("./npmlog")
++>module.exports : typeof import("npmlog")
++>module : { "\"npmlog\"": typeof import("npmlog"); }
++>exports : typeof import("npmlog")
  >y : 2
  >2 : 2
 
@@ -106,7 +106,7 @@
 ->exports : { on(s: string): void; x: number; y: 2; }
 ->x : number
 +>module.exports.x : any
-+>module.exports : typeof import("./npmlog")
-+>module : { "\"npmlog\"": typeof import("./npmlog"); }
-+>exports : typeof import("./npmlog")
++>module.exports : typeof import("npmlog")
++>module : { "\"npmlog\"": typeof import("npmlog"); }
++>exports : typeof import("npmlog")
 +>x : any

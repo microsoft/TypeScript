@@ -30,16 +30,16 @@ class C implements Function {
 >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     prototype = null;
->prototype : Symbol(prototype, Decl(untypedFunctionCallsWithTypeParameters1.ts, 9, 29))
+>prototype : Symbol(C.prototype, Decl(untypedFunctionCallsWithTypeParameters1.ts, 9, 29))
 
     length = 1;
->length : Symbol(length, Decl(untypedFunctionCallsWithTypeParameters1.ts, 10, 21))
+>length : Symbol(C.length, Decl(untypedFunctionCallsWithTypeParameters1.ts, 10, 21))
 
     arguments = null;
->arguments : Symbol(arguments, Decl(untypedFunctionCallsWithTypeParameters1.ts, 11, 15))
+>arguments : Symbol(C.arguments, Decl(untypedFunctionCallsWithTypeParameters1.ts, 11, 15))
 
     caller = () => { };
->caller : Symbol(caller, Decl(untypedFunctionCallsWithTypeParameters1.ts, 12, 21))
+>caller : Symbol(C.caller, Decl(untypedFunctionCallsWithTypeParameters1.ts, 12, 21))
 }
 
 var c2: C;

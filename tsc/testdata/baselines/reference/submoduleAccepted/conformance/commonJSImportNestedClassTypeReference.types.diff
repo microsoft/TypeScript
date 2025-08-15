@@ -1,15 +1,6 @@
 --- old.commonJSImportNestedClassTypeReference.types
 +++ new.commonJSImportNestedClassTypeReference.types
-@@= skipped -2, +2 lines =@@
- === main.js ===
- const { K } = require("./mod1");
- >K : typeof K
-->require("./mod1") : typeof import("mod1")
-+>require("./mod1") : typeof import("./mod1")
- >require : any
- >"./mod1" : "./mod1"
-
-@@= skipped -10, +10 lines =@@
+@@= skipped -12, +12 lines =@@
  >k : K
 
      k.values()
@@ -46,11 +37,8 @@
  >K : typeof K
      }
  }
- exports.K = NS.K;
- >exports.K = NS.K : typeof K
- >exports.K : typeof K
-->exports : typeof import("mod1")
-+>exports : typeof import("./mod1")
+@@= skipped -10, +10 lines =@@
+ >exports : typeof import("mod1")
  >K : typeof K
  >NS.K : typeof K
 ->NS : typeof NS

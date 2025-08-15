@@ -14,15 +14,17 @@ type SymbolTrackerImpl struct {
 }
 
 func NewSymbolTrackerImpl(context *NodeBuilderContext, tracker nodebuilder.SymbolTracker, tchost Host) *SymbolTrackerImpl {
-	var inner nodebuilder.SymbolTracker
 	if tracker != nil {
-		inner = tracker.GetInnerSymbolTracker()
-		if inner == nil {
-			inner = tracker
+		for {
+			t, ok := tracker.(*SymbolTrackerImpl)
+			if !ok {
+				break
+			}
+			tracker = t.inner
 		}
 	}
 
-	return &SymbolTrackerImpl{context, inner, false, tchost}
+	return &SymbolTrackerImpl{context, tracker, false, tchost}
 }
 
 func (this *SymbolTrackerImpl) GetModuleSpecifierGenerationHost() modulespecifiers.ModuleSpecifierGenerationHost {
@@ -30,10 +32,6 @@ func (this *SymbolTrackerImpl) GetModuleSpecifierGenerationHost() modulespecifie
 		return this.tchost
 	}
 	return this.inner.GetModuleSpecifierGenerationHost()
-}
-
-func (this *SymbolTrackerImpl) GetInnerSymbolTracker() nodebuilder.SymbolTracker {
-	return this.inner
 }
 
 func (this *SymbolTrackerImpl) TrackSymbol(symbol *ast.Symbol, enclosingDeclaration *ast.Node, meaning ast.SymbolFlags) bool {

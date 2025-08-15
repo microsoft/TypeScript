@@ -11,7 +11,7 @@ import defaultBinding, * as nameSpaceBinding  from "./server";
 
 export var x = new nameSpaceBinding.a();
 >x : Symbol(x, Decl(client.ts, 1, 10))
->nameSpaceBinding.a : Symbol(a, Decl(server.ts, 0, 0))
+>nameSpaceBinding.a : Symbol(nameSpaceBinding.a, Decl(server.ts, 0, 0))
 >nameSpaceBinding : Symbol(nameSpaceBinding, Decl(client.ts, 0, 22))
->a : Symbol(a, Decl(server.ts, 0, 0))
+>a : Symbol(nameSpaceBinding.a, Decl(server.ts, 0, 0))
 

@@ -22,7 +22,7 @@ interface Foo<T> {
 >T : Symbol(T, Decl(conditionalEqualityTestingNullability.ts, 5, 14))
 
     x : () => T
->x : Symbol(x, Decl(conditionalEqualityTestingNullability.ts, 5, 18))
+>x : Symbol(Foo.x, Decl(conditionalEqualityTestingNullability.ts, 5, 18))
 >T : Symbol(T, Decl(conditionalEqualityTestingNullability.ts, 5, 14))
 }
 

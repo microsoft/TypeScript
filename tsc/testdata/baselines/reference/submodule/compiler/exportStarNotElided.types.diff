@@ -1,8 +1,0 @@
---- old.exportStarNotElided.types
-+++ new.exportStarNotElided.types
-@@= skipped -28, +28 lines =@@
- export * from "./register";
- export * from "./data1";
- export * as aliased from "./data1";
-->aliased : typeof import("data1")
-+>aliased : typeof import("./data1")

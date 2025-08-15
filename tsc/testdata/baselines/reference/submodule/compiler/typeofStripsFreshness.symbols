@@ -6,7 +6,7 @@ interface Collection<T> {
 >T : Symbol(T, Decl(typeofStripsFreshness.ts, 0, 21))
 
     elems: T[];
->elems : Symbol(elems, Decl(typeofStripsFreshness.ts, 0, 25))
+>elems : Symbol(Collection.elems, Decl(typeofStripsFreshness.ts, 0, 25))
 >T : Symbol(T, Decl(typeofStripsFreshness.ts, 0, 21))
 }
 interface CollectionStatic {

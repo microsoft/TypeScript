@@ -5,7 +5,7 @@ class foo {
 >foo : Symbol(foo, Decl(constructorArgsErrors2.ts, 0, 0))
 
     constructor (public static a: number) {
->a : Symbol(a, Decl(constructorArgsErrors2.ts, 1, 17))
+>a : Symbol(foo.a, Decl(constructorArgsErrors2.ts, 1, 17))
     }
 }
 

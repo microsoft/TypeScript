@@ -31,9 +31,9 @@ class SomeBase {
 
     constructor() {
         this.p = 42;
->this.p : Symbol(p, Decl(b.js, 15, 19))
+>this.p : Symbol(SomeBase.p, Decl(b.js, 15, 19))
 >this : Symbol(SomeBase, Decl(b.js, 12, 33))
->p : Symbol(p, Decl(b.js, 15, 19))
+>p : Symbol(SomeBase.p, Decl(b.js, 15, 19))
     }
 }
 class SomeDerived extends SomeBase {
@@ -45,9 +45,9 @@ class SomeDerived extends SomeBase {
 >super : Symbol(SomeBase, Decl(b.js, 12, 33))
 
         this.x = 42;
->this.x : Symbol(x, Decl(b.js, 21, 16))
+>this.x : Symbol(SomeDerived.x, Decl(b.js, 21, 16))
 >this : Symbol(SomeDerived, Decl(b.js, 18, 1))
->x : Symbol(x, Decl(b.js, 21, 16))
+>x : Symbol(SomeDerived.x, Decl(b.js, 21, 16))
     }
 }
 class SomeOther {
@@ -55,9 +55,9 @@ class SomeOther {
 
     constructor() {
         this.q = 42;
->this.q : Symbol(q, Decl(b.js, 26, 19))
+>this.q : Symbol(SomeOther.q, Decl(b.js, 26, 19))
 >this : Symbol(SomeOther, Decl(b.js, 24, 1))
->q : Symbol(q, Decl(b.js, 26, 19))
+>q : Symbol(SomeOther.q, Decl(b.js, 26, 19))
     }
 }
 

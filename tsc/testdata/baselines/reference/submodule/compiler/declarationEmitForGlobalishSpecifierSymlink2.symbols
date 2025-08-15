@@ -9,7 +9,7 @@ export enum A {
 >A : Symbol(A, Decl(impl.d.ts, 0, 26))
 
     Val
->Val : Symbol(Val, Decl(impl.d.ts, 1, 15))
+>Val : Symbol(A.Val, Decl(impl.d.ts, 1, 15))
 }
 === /cache/typescript-fsa/index.d.ts ===
 

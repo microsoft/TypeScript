@@ -7,7 +7,7 @@ interface Pet {
 >Pet : Symbol(Pet, Decl(narrowingConstrainedTypeParameter.ts, 0, 0))
 
     name: string;
->name : Symbol(name, Decl(narrowingConstrainedTypeParameter.ts, 2, 15))
+>name : Symbol(Pet.name, Decl(narrowingConstrainedTypeParameter.ts, 2, 15))
 }
 
 function isPet(pet: any): pet is Pet {

@@ -5,10 +5,10 @@
  const o: Foo = a.o;
  >o : Foo
 ->a.o : Foo
-+>a.o : import("a/node_modules/foo/Foo").default
++>a.o : import("/node_modules/a/node_modules/foo/Foo").default
  >a : typeof a
 ->o : Foo
-+>o : import("a/node_modules/foo/Foo").default
++>o : import("/node_modules/a/node_modules/foo/Foo").default
 
  === /node_modules/a/index.d.ts ===
  import Foo from "foo/Foo";

@@ -31,22 +31,22 @@ interface Array<T> {
     // 4 methods will run out of memory if this-types are not instantiated
     // correctly for tuple types that are type parameter constraints
     map<U>(arg: this): void;
->map : Symbol(map, Decl(lib.es5.d.ts, --, --), Decl(thisInTupleTypeParameterConstraints.ts, 10, 20))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(thisInTupleTypeParameterConstraints.ts, 10, 20))
 >U : Symbol(U, Decl(thisInTupleTypeParameterConstraints.ts, 13, 8))
 >arg : Symbol(arg, Decl(thisInTupleTypeParameterConstraints.ts, 13, 11))
 
     reduceRight<U>(arg: this): void;
->reduceRight : Symbol(reduceRight, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(thisInTupleTypeParameterConstraints.ts, 13, 28))
+>reduceRight : Symbol(Array.reduceRight, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(thisInTupleTypeParameterConstraints.ts, 13, 28))
 >U : Symbol(U, Decl(thisInTupleTypeParameterConstraints.ts, 14, 16))
 >arg : Symbol(arg, Decl(thisInTupleTypeParameterConstraints.ts, 14, 19))
 
     reduce<U>(arg: this): void;
->reduce : Symbol(reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(thisInTupleTypeParameterConstraints.ts, 14, 36))
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(thisInTupleTypeParameterConstraints.ts, 14, 36))
 >U : Symbol(U, Decl(thisInTupleTypeParameterConstraints.ts, 15, 11))
 >arg : Symbol(arg, Decl(thisInTupleTypeParameterConstraints.ts, 15, 14))
 
     reduce2<U>(arg: this): void;
->reduce2 : Symbol(reduce2, Decl(thisInTupleTypeParameterConstraints.ts, 15, 31))
+>reduce2 : Symbol(Array.reduce2, Decl(thisInTupleTypeParameterConstraints.ts, 15, 31))
 >U : Symbol(U, Decl(thisInTupleTypeParameterConstraints.ts, 16, 12))
 >arg : Symbol(arg, Decl(thisInTupleTypeParameterConstraints.ts, 16, 15))
 }

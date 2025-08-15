@@ -8,13 +8,13 @@ namespace JSX {
 >IntrinsicElements : Symbol(IntrinsicElements, Decl(contextuallyTypedStringLiteralsInJsxAttributes01.tsx, 0, 15))
 
         span: {};
->span : Symbol(span, Decl(contextuallyTypedStringLiteralsInJsxAttributes01.tsx, 1, 40))
+>span : Symbol(IntrinsicElements.span, Decl(contextuallyTypedStringLiteralsInJsxAttributes01.tsx, 1, 40))
     }
     export interface Element {
 >Element : Symbol(Element, Decl(contextuallyTypedStringLiteralsInJsxAttributes01.tsx, 3, 5))
 
 		something?: any;
->something : Symbol(something, Decl(contextuallyTypedStringLiteralsInJsxAttributes01.tsx, 4, 30))
+>something : Symbol(Element.something, Decl(contextuallyTypedStringLiteralsInJsxAttributes01.tsx, 4, 30))
     }
 }
 
@@ -22,11 +22,11 @@ const FooComponent = (props: { foo: "A" | "B" | "C" }) => <span>{props.foo}</spa
 >FooComponent : Symbol(FooComponent, Decl(contextuallyTypedStringLiteralsInJsxAttributes01.tsx, 9, 5))
 >props : Symbol(props, Decl(contextuallyTypedStringLiteralsInJsxAttributes01.tsx, 9, 22))
 >foo : Symbol(foo, Decl(contextuallyTypedStringLiteralsInJsxAttributes01.tsx, 9, 30))
->span : Symbol(span, Decl(contextuallyTypedStringLiteralsInJsxAttributes01.tsx, 1, 40))
+>span : Symbol(JSX.IntrinsicElements.span, Decl(contextuallyTypedStringLiteralsInJsxAttributes01.tsx, 1, 40))
 >props.foo : Symbol(foo, Decl(contextuallyTypedStringLiteralsInJsxAttributes01.tsx, 9, 30))
 >props : Symbol(props, Decl(contextuallyTypedStringLiteralsInJsxAttributes01.tsx, 9, 22))
 >foo : Symbol(foo, Decl(contextuallyTypedStringLiteralsInJsxAttributes01.tsx, 9, 30))
->span : Symbol(span, Decl(contextuallyTypedStringLiteralsInJsxAttributes01.tsx, 1, 40))
+>span : Symbol(JSX.IntrinsicElements.span, Decl(contextuallyTypedStringLiteralsInJsxAttributes01.tsx, 1, 40))
 
 <FooComponent foo={"A"} />;
 >FooComponent : Symbol(FooComponent, Decl(contextuallyTypedStringLiteralsInJsxAttributes01.tsx, 9, 5))

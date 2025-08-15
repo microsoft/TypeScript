@@ -5,7 +5,7 @@ interface Window {
 >Window : Symbol(Window, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 0, 0))
 
     someMethod();
->someMethod : Symbol(someMethod, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 0, 18))
+>someMethod : Symbol(Window.someMethod, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 0, 18))
 }
 
 module M {
@@ -82,11 +82,11 @@ module M2 {
     type t111 = m3.public1;
 >t111 : Symbol(t111, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 34, 30))
 >m3 : Symbol(m3, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 24, 5))
->public1 : Symbol(public1, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 25, 15))
+>public1 : Symbol(m3.public1, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 25, 15))
 
     export type t112 = m3.public1; // error
 >t112 : Symbol(t112, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 36, 27))
 >m3 : Symbol(m3, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 24, 5))
->public1 : Symbol(public1, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 25, 15))
+>public1 : Symbol(m3.public1, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 25, 15))
 }
 

@@ -6,13 +6,13 @@ declare const y: never[] | string[];
 
 export const yThen = y.map(item => item.length);
 >yThen : Symbol(yThen, Decl(one.ts, 1, 12))
->y.map : Symbol(map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>y.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >y : Symbol(y, Decl(one.ts, 0, 13))
->map : Symbol(map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >item : Symbol(item, Decl(one.ts, 1, 27))
->item.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>item.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >item : Symbol(item, Decl(one.ts, 1, 27))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
 === two.ts ===
 declare const y: number[][] | string[];
@@ -20,9 +20,9 @@ declare const y: number[][] | string[];
 
 export const yThen = y.map(item => item.length);
 >yThen : Symbol(yThen, Decl(two.ts, 1, 12))
->y.map : Symbol(map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>y.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >y : Symbol(y, Decl(two.ts, 0, 13))
->map : Symbol(map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >item : Symbol(item, Decl(two.ts, 1, 27))
 >item.length : Symbol(length, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >item : Symbol(item, Decl(two.ts, 1, 27))
@@ -133,9 +133,9 @@ export function series<T>(tasks: Task<T>[], callback: Callback<T[]>): void {
                     // must use postfix-!, since `error` and `result` don't have a
                     // causal relationship when the overloads are combined
                     results.push(result!)
->results.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>results.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >results : Symbol(results, Decl(three.ts, 23, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >result : Symbol(result, Decl(three.ts, 30, 24))
 
                     next()
@@ -174,16 +174,16 @@ series([
 >error : Symbol(error, Decl(three.ts, 49, 4))
 
         console.error(error)
->console.error : Symbol(error, Decl(lib.dom.d.ts, --, --))
+>console.error : Symbol(Console.error, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->error : Symbol(error, Decl(lib.dom.d.ts, --, --))
+>error : Symbol(Console.error, Decl(lib.dom.d.ts, --, --))
 >error : Symbol(error, Decl(three.ts, 49, 4))
 
     } else {
         console.log(results)
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >results : Symbol(results, Decl(three.ts, 49, 10))
     }
 })

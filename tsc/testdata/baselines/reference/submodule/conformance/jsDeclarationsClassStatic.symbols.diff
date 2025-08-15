@@ -8,28 +8,17 @@
 +>Handler : Symbol(Handler, Decl(source.js, 0, 0))
 
  	static get OPTIONS() {
-->OPTIONS : Symbol(Handler.OPTIONS, Decl(source.js, 0, 15))
-+>OPTIONS : Symbol(OPTIONS, Decl(source.js, 0, 15))
-
- 		return 1;
- 	}
-
- 	process() {
-->process : Symbol(Handler.process, Decl(source.js, 3, 2))
-+>process : Symbol(process, Decl(source.js, 3, 2))
- 	}
+ >OPTIONS : Symbol(Handler.OPTIONS, Decl(source.js, 0, 15))
+@@= skipped -14, +14 lines =@@
  }
  Handler.statische = function() { }
-->Handler.statische : Symbol(Handler.statische, Decl(source.js, 7, 1))
+ >Handler.statische : Symbol(Handler.statische, Decl(source.js, 7, 1))
 ->Handler : Symbol(Handler, Decl(source.js, 0, 0), Decl(source.js, 7, 1))
-->statische : Symbol(Handler.statische, Decl(source.js, 7, 1))
-+>Handler.statische : Symbol(statische, Decl(source.js, 7, 1))
 +>Handler : Symbol(Handler, Decl(source.js, 0, 0))
-+>statische : Symbol(statische, Decl(source.js, 7, 1))
+ >statische : Symbol(Handler.statische, Decl(source.js, 7, 1))
 
  const Strings = {
- >Strings : Symbol(Strings, Decl(source.js, 9, 5))
-@@= skipped -28, +28 lines =@@
+@@= skipped -14, +14 lines =@@
  }
 
  module.exports = Handler;

@@ -15,7 +15,7 @@ module Foo1 {
 >Bar : Symbol(Bar, Decl(moduleAndInterfaceWithSameName.ts, 0, 13), Decl(moduleAndInterfaceWithSameName.ts, 3, 5))
 
         y: string;
->y : Symbol(y, Decl(moduleAndInterfaceWithSameName.ts, 5, 26))
+>y : Symbol(Bar.y, Decl(moduleAndInterfaceWithSameName.ts, 5, 26))
     }
 }
 
@@ -33,7 +33,7 @@ module Foo2 {
 >Bar : Symbol(Bar, Decl(moduleAndInterfaceWithSameName.ts, 13, 5))
 
         y: string;
->y : Symbol(y, Decl(moduleAndInterfaceWithSameName.ts, 15, 26))
+>y : Symbol(Foo2.Bar.y, Decl(moduleAndInterfaceWithSameName.ts, 15, 26))
     }
 }
 
@@ -55,6 +55,6 @@ module Foo3 {
 >Bar : Symbol(Bar, Decl(moduleAndInterfaceWithSameName.ts, 22, 13), Decl(moduleAndInterfaceWithSameName.ts, 25, 5))
 
         y: string;
->y : Symbol(y, Decl(moduleAndInterfaceWithSameName.ts, 27, 19))
+>y : Symbol(Bar.y, Decl(moduleAndInterfaceWithSameName.ts, 27, 19))
     }
 }

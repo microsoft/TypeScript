@@ -13,13 +13,13 @@ var n = 'baz';
 >n : Symbol(n, Decl(f2.ts, 3, 3))
 
 stuff.x = 0;
->stuff.x : Symbol(x, Decl(f1.ts, 0, 10))
+>stuff.x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
->x : Symbol(x, Decl(f1.ts, 0, 10))
+>x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 
 stuff['x'] = 1;
 >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
->'x' : Symbol(x, Decl(f1.ts, 0, 10))
+>'x' : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 
 stuff.blah = 2;
 >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
@@ -29,13 +29,13 @@ stuff[n] = 3;
 >n : Symbol(n, Decl(f2.ts, 3, 3))
 
 stuff.x++;
->stuff.x : Symbol(x, Decl(f1.ts, 0, 10))
+>stuff.x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
->x : Symbol(x, Decl(f1.ts, 0, 10))
+>x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 
 stuff['x']++;
 >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
->'x' : Symbol(x, Decl(f1.ts, 0, 10))
+>'x' : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 
 stuff['blah']++;
 >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
@@ -45,13 +45,13 @@ stuff[n]++;
 >n : Symbol(n, Decl(f2.ts, 3, 3))
 
 (stuff.x) = 0;
->stuff.x : Symbol(x, Decl(f1.ts, 0, 10))
+>stuff.x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
->x : Symbol(x, Decl(f1.ts, 0, 10))
+>x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 
 (stuff['x']) = 1;
 >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
->'x' : Symbol(x, Decl(f1.ts, 0, 10))
+>'x' : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 
 (stuff.blah) = 2;
 >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
@@ -61,13 +61,13 @@ stuff[n]++;
 >n : Symbol(n, Decl(f2.ts, 3, 3))
 
 (stuff.x)++;
->stuff.x : Symbol(x, Decl(f1.ts, 0, 10))
+>stuff.x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
->x : Symbol(x, Decl(f1.ts, 0, 10))
+>x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 
 (stuff['x'])++;
 >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
->'x' : Symbol(x, Decl(f1.ts, 0, 10))
+>'x' : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 
 (stuff['blah'])++;
 >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
@@ -77,22 +77,22 @@ stuff[n]++;
 >n : Symbol(n, Decl(f2.ts, 3, 3))
 
 for (stuff.x in []) {}
->stuff.x : Symbol(x, Decl(f1.ts, 0, 10))
+>stuff.x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
->x : Symbol(x, Decl(f1.ts, 0, 10))
+>x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 
 for (stuff.x of []) {}
->stuff.x : Symbol(x, Decl(f1.ts, 0, 10))
+>stuff.x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
->x : Symbol(x, Decl(f1.ts, 0, 10))
+>x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 
 for (stuff['x'] in []) {}
 >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
->'x' : Symbol(x, Decl(f1.ts, 0, 10))
+>'x' : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 
 for (stuff['x'] of []) {}
 >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
->'x' : Symbol(x, Decl(f1.ts, 0, 10))
+>'x' : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 
 for (stuff.blah in []) {}
 >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
@@ -109,22 +109,22 @@ for (stuff[n] of []) {}
 >n : Symbol(n, Decl(f2.ts, 3, 3))
 
 for ((stuff.x) in []) {}
->stuff.x : Symbol(x, Decl(f1.ts, 0, 10))
+>stuff.x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
->x : Symbol(x, Decl(f1.ts, 0, 10))
+>x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 
 for ((stuff.x) of []) {}
->stuff.x : Symbol(x, Decl(f1.ts, 0, 10))
+>stuff.x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
->x : Symbol(x, Decl(f1.ts, 0, 10))
+>x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 
 for ((stuff['x']) in []) {}
 >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
->'x' : Symbol(x, Decl(f1.ts, 0, 10))
+>'x' : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 
 for ((stuff['x']) of []) {}
 >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
->'x' : Symbol(x, Decl(f1.ts, 0, 10))
+>'x' : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 
 for ((stuff.blah) in []) {}
 >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))

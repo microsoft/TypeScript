@@ -7,10 +7,10 @@ interface IFoo {
 >IFoo : Symbol(IFoo, Decl(noImplicitAnyInCastExpression.ts, 0, 0))
 
     a: number;
->a : Symbol(a, Decl(noImplicitAnyInCastExpression.ts, 2, 16))
+>a : Symbol(IFoo.a, Decl(noImplicitAnyInCastExpression.ts, 2, 16))
 
     b: string;
->b : Symbol(b, Decl(noImplicitAnyInCastExpression.ts, 3, 14))
+>b : Symbol(IFoo.b, Decl(noImplicitAnyInCastExpression.ts, 3, 14))
 }
 
 // Expr type not assignable to target type

@@ -24,7 +24,7 @@ class Foo2 extends Base {
 >Base : Symbol(Base, Decl(thisInSuperCall.ts, 0, 0))
 
     public p = 0;
->p : Symbol(p, Decl(thisInSuperCall.ts, 10, 25))
+>p : Symbol(Foo2.p, Decl(thisInSuperCall.ts, 10, 25))
 
     constructor() {
         super(this); // error
@@ -38,7 +38,7 @@ class Foo3 extends Base {
 >Base : Symbol(Base, Decl(thisInSuperCall.ts, 0, 0))
 
     constructor(public p) {
->p : Symbol(p, Decl(thisInSuperCall.ts, 18, 16))
+>p : Symbol(Foo3.p, Decl(thisInSuperCall.ts, 18, 16))
 
         super(this); // error
 >super : Symbol(Base, Decl(thisInSuperCall.ts, 0, 0))

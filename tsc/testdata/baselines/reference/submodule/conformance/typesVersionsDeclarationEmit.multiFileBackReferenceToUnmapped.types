@@ -2,21 +2,21 @@
 
 === main.ts ===
 import { fa } from "ext";
->fa : () => import("ext").A2
+>fa : () => import("node_modules/ext/other").A2
 
 import { fa as fa2 } from "ext/other";
->fa : () => import("ext").A2
->fa2 : () => import("ext").A2
+>fa : () => import("node_modules/ext/other").A2
+>fa2 : () => import("node_modules/ext/other").A2
 
 export const va = fa();
->va : import("ext").A2
->fa() : import("ext").A2
->fa : () => import("ext").A2
+>va : import("node_modules/ext/other").A2
+>fa() : import("node_modules/ext/other").A2
+>fa : () => import("node_modules/ext/other").A2
 
 export const va2 = fa2();
->va2 : import("ext").A2
->fa2() : import("ext").A2
->fa2 : () => import("ext").A2
+>va2 : import("node_modules/ext/other").A2
+>fa2() : import("node_modules/ext/other").A2
+>fa2 : () => import("node_modules/ext/other").A2
 
 === node_modules/ext/other.d.ts ===
 export interface A2 {}

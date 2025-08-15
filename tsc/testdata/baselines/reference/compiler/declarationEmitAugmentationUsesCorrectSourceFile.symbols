@@ -18,7 +18,7 @@ declare namespace knex {
 >knex : Symbol(knex, Decl(index.d.ts, 10, 32), Decl(index.ts, 0, 14))
 
   export { Knex };
->Knex : Symbol(Knex, Decl(index.d.ts, 13, 10))
+>Knex : Symbol(knex.Knex, Decl(index.d.ts, 13, 10))
 }
 
 declare namespace Knex {
@@ -28,7 +28,7 @@ declare namespace Knex {
 >Interface : Symbol(Interface, Decl(index.d.ts, 16, 24))
 
     method(): ShouldJustBeAny;
->method : Symbol(method, Decl(index.d.ts, 17, 23))
+>method : Symbol(Interface.method, Decl(index.d.ts, 17, 23))
 >ShouldJustBeAny : Symbol(ShouldJustBeAny, Decl(index.d.ts, 0, 0))
   }
 }

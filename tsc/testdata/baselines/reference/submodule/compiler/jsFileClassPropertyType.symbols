@@ -6,15 +6,15 @@ class C {
 
   constructor () {
       this.p = 0;
->this.p : Symbol(p, Decl(foo.js, 1, 18))
+>this.p : Symbol(C.p, Decl(foo.js, 1, 18))
 >this : Symbol(C, Decl(foo.js, 0, 0))
->p : Symbol(p, Decl(foo.js, 1, 18))
+>p : Symbol(C.p, Decl(foo.js, 1, 18))
   }
 }
 
 === bar.ts ===
 (new C()).p = "string";
->(new C()).p : Symbol(p, Decl(foo.js, 1, 18))
+>(new C()).p : Symbol(C.p, Decl(foo.js, 1, 18))
 >C : Symbol(C, Decl(foo.js, 0, 0))
->p : Symbol(p, Decl(foo.js, 1, 18))
+>p : Symbol(C.p, Decl(foo.js, 1, 18))
 

@@ -2,8 +2,8 @@
 
 === /a.ts ===
 const foo = import("./b");
->foo : Promise<typeof import("./b")>
->import("./b") : Promise<typeof import("./b")>
+>foo : Promise<typeof import("/b")>
+>import("./b") : Promise<typeof import("/b")>
 >"./b" : "./b"
 
 === /b.js ===

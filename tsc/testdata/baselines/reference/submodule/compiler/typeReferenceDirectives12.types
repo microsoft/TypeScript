@@ -54,7 +54,7 @@ Cls.prototype.foo = function() { return undefined; }
 >undefined : undefined
 
 declare module "./main" {
->"./main" : typeof import("./main")
+>"./main" : typeof import("/main")
 
     interface Cls {
         foo(): Lib;

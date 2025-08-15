@@ -7,11 +7,11 @@ class C<T> {
 >T : Symbol(T, Decl(staticMembersUsingClassTypeParameter.ts, 1, 8))
 
     static x: T;
->x : Symbol(x, Decl(staticMembersUsingClassTypeParameter.ts, 1, 12))
+>x : Symbol(C.x, Decl(staticMembersUsingClassTypeParameter.ts, 1, 12))
 >T : Symbol(T)
 
     static f(x: T) {}
->f : Symbol(f, Decl(staticMembersUsingClassTypeParameter.ts, 2, 16))
+>f : Symbol(C.f, Decl(staticMembersUsingClassTypeParameter.ts, 2, 16))
 >x : Symbol(x, Decl(staticMembersUsingClassTypeParameter.ts, 3, 13))
 >T : Symbol(T)
 }
@@ -22,11 +22,11 @@ class C2<T, U> {
 >U : Symbol(U, Decl(staticMembersUsingClassTypeParameter.ts, 6, 11))
 
     static x: U;
->x : Symbol(x, Decl(staticMembersUsingClassTypeParameter.ts, 6, 16))
+>x : Symbol(C2.x, Decl(staticMembersUsingClassTypeParameter.ts, 6, 16))
 >U : Symbol(U)
 
     static f(x: U) { }
->f : Symbol(f, Decl(staticMembersUsingClassTypeParameter.ts, 7, 16))
+>f : Symbol(C2.f, Decl(staticMembersUsingClassTypeParameter.ts, 7, 16))
 >x : Symbol(x, Decl(staticMembersUsingClassTypeParameter.ts, 8, 13))
 >U : Symbol(U)
 }
@@ -37,11 +37,11 @@ class C3<T extends Date> {
 >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
     static x: T;
->x : Symbol(x, Decl(staticMembersUsingClassTypeParameter.ts, 11, 26))
+>x : Symbol(C3.x, Decl(staticMembersUsingClassTypeParameter.ts, 11, 26))
 >T : Symbol(T)
 
     static f(x: T) { }
->f : Symbol(f, Decl(staticMembersUsingClassTypeParameter.ts, 12, 16))
+>f : Symbol(C3.f, Decl(staticMembersUsingClassTypeParameter.ts, 12, 16))
 >x : Symbol(x, Decl(staticMembersUsingClassTypeParameter.ts, 13, 13))
 >T : Symbol(T)
 }

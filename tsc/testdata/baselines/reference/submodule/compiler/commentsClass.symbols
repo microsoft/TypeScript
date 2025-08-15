@@ -50,7 +50,7 @@ class c5 {
 >c5 : Symbol(c5, Decl(commentsClass.ts, 19, 14))
 
     static s1: number;
->s1 : Symbol(s1, Decl(commentsClass.ts, 21, 10))
+>s1 : Symbol(c5.s1, Decl(commentsClass.ts, 21, 10))
 }
 var i5 = new c5();
 >i5 : Symbol(i5, Decl(commentsClass.ts, 24, 3))
@@ -66,7 +66,7 @@ class c6 { /// class with statics and constructor2
 
     /// s1 comment
     static s1: number; /// s1 comment2
->s1 : Symbol(s1, Decl(commentsClass.ts, 28, 10))
+>s1 : Symbol(c6.s1, Decl(commentsClass.ts, 28, 10))
 
     /// constructor comment
     constructor() { /// constructor comment2
@@ -86,7 +86,7 @@ class c7 {
 
     // s1 comment
     static s1: number;
->s1 : Symbol(s1, Decl(commentsClass.ts, 39, 10))
+>s1 : Symbol(c7.s1, Decl(commentsClass.ts, 39, 10))
 
     // constructor comment
     constructor() {
@@ -107,7 +107,7 @@ class c8 {
 
     /** s1 comment */
     static s1: number; /** s1 comment2 */
->s1 : Symbol(s1, Decl(commentsClass.ts, 51, 10))
+>s1 : Symbol(c8.s1, Decl(commentsClass.ts, 51, 10))
 
     /** constructor comment 
     */

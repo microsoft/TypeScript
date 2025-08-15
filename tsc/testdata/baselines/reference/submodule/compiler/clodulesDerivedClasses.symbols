@@ -5,7 +5,7 @@ class Shape {
 >Shape : Symbol(Shape, Decl(clodulesDerivedClasses.ts, 0, 0), Decl(clodulesDerivedClasses.ts, 2, 1))
 
     id: number;
->id : Symbol(id, Decl(clodulesDerivedClasses.ts, 0, 13))
+>id : Symbol(Shape.id, Decl(clodulesDerivedClasses.ts, 0, 13))
 }
 
 module Shape.Utils {
@@ -22,7 +22,7 @@ class Path extends Shape {
 >Shape : Symbol(Shape, Decl(clodulesDerivedClasses.ts, 0, 0), Decl(clodulesDerivedClasses.ts, 2, 1))
 
     name: string;
->name : Symbol(name, Decl(clodulesDerivedClasses.ts, 8, 26))
+>name : Symbol(Path.name, Decl(clodulesDerivedClasses.ts, 8, 26))
 
 }
 

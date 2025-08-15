@@ -118,9 +118,9 @@ const intersectDictionaries = <F1 extends Dictionary, F2 extends Dictionary>(
 ): F1 & F2 => Object.assign({}, d1, d2);
 >F1 : Symbol(F1, Decl(intersectionsAndEmptyObjects.ts, 30, 31))
 >F2 : Symbol(F2, Decl(intersectionsAndEmptyObjects.ts, 30, 53))
->Object.assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >d1 : Symbol(d1, Decl(intersectionsAndEmptyObjects.ts, 30, 77))
 >d2 : Symbol(d2, Decl(intersectionsAndEmptyObjects.ts, 31, 9))
 

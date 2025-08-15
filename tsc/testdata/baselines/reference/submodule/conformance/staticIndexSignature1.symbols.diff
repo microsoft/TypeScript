@@ -5,10 +5,10 @@
 
  C.bar = 2;
 ->C.bar : Symbol(C.__index, Decl(staticIndexSignature1.ts, 0, 9))
-+>C.bar : Symbol(__index, Decl(staticIndexSignature1.ts, 0, 9))
++>C.bar : Symbol(C[__index], Decl(staticIndexSignature1.ts, 0, 9))
  >C : Symbol(C, Decl(staticIndexSignature1.ts, 0, 0))
 ->bar : Symbol(C.__index, Decl(staticIndexSignature1.ts, 0, 9))
-+>bar : Symbol(__index, Decl(staticIndexSignature1.ts, 0, 9))
++>bar : Symbol(C[__index], Decl(staticIndexSignature1.ts, 0, 9))
 
  const foo = C["foo"]
  >foo : Symbol(foo, Decl(staticIndexSignature1.ts, 7, 5))

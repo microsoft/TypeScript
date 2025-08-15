@@ -290,13 +290,13 @@ interface Item {
 >Item : Symbol(Item, Decl(conditionalTypes1.ts, 75, 1))
 
     id: number;
->id : Symbol(id, Decl(conditionalTypes1.ts, 77, 16))
+>id : Symbol(Item.id, Decl(conditionalTypes1.ts, 77, 16))
 
     name: string;
->name : Symbol(name, Decl(conditionalTypes1.ts, 78, 15))
+>name : Symbol(Item.name, Decl(conditionalTypes1.ts, 78, 15))
 
     subitems: string[];
->subitems : Symbol(subitems, Decl(conditionalTypes1.ts, 79, 17))
+>subitems : Symbol(Item.subitems, Decl(conditionalTypes1.ts, 79, 17))
 }
 
 type KOItem = KnockedOutObj<Item>;
@@ -308,17 +308,17 @@ interface Part {
 >Part : Symbol(Part, Decl(conditionalTypes1.ts, 83, 34))
 
     id: number;
->id : Symbol(id, Decl(conditionalTypes1.ts, 85, 16))
+>id : Symbol(Part.id, Decl(conditionalTypes1.ts, 85, 16))
 
     name: string;
->name : Symbol(name, Decl(conditionalTypes1.ts, 86, 15))
+>name : Symbol(Part.name, Decl(conditionalTypes1.ts, 86, 15))
 
     subparts: Part[];
->subparts : Symbol(subparts, Decl(conditionalTypes1.ts, 87, 17))
+>subparts : Symbol(Part.subparts, Decl(conditionalTypes1.ts, 87, 17))
 >Part : Symbol(Part, Decl(conditionalTypes1.ts, 83, 34))
 
     updatePart(newName: string): void;
->updatePart : Symbol(updatePart, Decl(conditionalTypes1.ts, 88, 21))
+>updatePart : Symbol(Part.updatePart, Decl(conditionalTypes1.ts, 88, 21))
 >newName : Symbol(newName, Decl(conditionalTypes1.ts, 89, 15))
 }
 
@@ -1220,17 +1220,17 @@ interface A {
 >A : Symbol(A, Decl(conditionalTypes1.ts, 307, 45))
 
     a: 'a';
->a : Symbol(a, Decl(conditionalTypes1.ts, 308, 13))
+>a : Symbol(A.a, Decl(conditionalTypes1.ts, 308, 13))
 }
 interface B1 extends A {
 >B1 : Symbol(B1, Decl(conditionalTypes1.ts, 310, 1))
 >A : Symbol(A, Decl(conditionalTypes1.ts, 307, 45))
 
     b: 'b';
->b : Symbol(b, Decl(conditionalTypes1.ts, 311, 24))
+>b : Symbol(B1.b, Decl(conditionalTypes1.ts, 311, 24))
 
     c: OldDiff<keyof this, keyof A>;
->c : Symbol(c, Decl(conditionalTypes1.ts, 312, 11))
+>c : Symbol(B1.c, Decl(conditionalTypes1.ts, 312, 11))
 >OldDiff : Symbol(OldDiff, Decl(conditionalTypes1.ts, 298, 1))
 >A : Symbol(A, Decl(conditionalTypes1.ts, 307, 45))
 }
@@ -1239,10 +1239,10 @@ interface B2 extends A {
 >A : Symbol(A, Decl(conditionalTypes1.ts, 307, 45))
 
     b: 'b';
->b : Symbol(b, Decl(conditionalTypes1.ts, 315, 24))
+>b : Symbol(B2.b, Decl(conditionalTypes1.ts, 315, 24))
 
     c: NewDiff<keyof this, keyof A>;
->c : Symbol(c, Decl(conditionalTypes1.ts, 316, 11))
+>c : Symbol(B2.c, Decl(conditionalTypes1.ts, 316, 11))
 >NewDiff : Symbol(NewDiff, Decl(conditionalTypes1.ts, 306, 5))
 >A : Symbol(A, Decl(conditionalTypes1.ts, 307, 45))
 }
@@ -1286,11 +1286,11 @@ type Test2 = NonFooKeys2<{foo: 1, bar: 2, baz: 3}>;  // "bar" | "baz"
 
 interface Foo2 { foo: string; }
 >Foo2 : Symbol(Foo2, Decl(conditionalTypes1.ts, 328, 51))
->foo : Symbol(foo, Decl(conditionalTypes1.ts, 332, 16))
+>foo : Symbol(Foo2.foo, Decl(conditionalTypes1.ts, 332, 16))
 
 interface Bar2 { bar: string; }
 >Bar2 : Symbol(Bar2, Decl(conditionalTypes1.ts, 332, 31))
->bar : Symbol(bar, Decl(conditionalTypes1.ts, 333, 16))
+>bar : Symbol(Bar2.bar, Decl(conditionalTypes1.ts, 333, 16))
 
 type FooBar = Foo2 | Bar2;
 >FooBar : Symbol(FooBar, Decl(conditionalTypes1.ts, 333, 31))

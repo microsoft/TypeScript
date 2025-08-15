@@ -20,5 +20,5 @@ import EnumA = Enum.A;
 >A : Enum.A
 
 export type EnumA = [string] | [string, number];
->EnumA : import("./alias").EnumA
+>EnumA : import("alias").EnumA
 

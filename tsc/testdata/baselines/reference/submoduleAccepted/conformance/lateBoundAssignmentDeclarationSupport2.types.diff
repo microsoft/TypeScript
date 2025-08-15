@@ -7,9 +7,9 @@
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-+>module.exports : typeof import("./lateBoundAssignmentDeclarationSupport2")
-+>module : { "\"lateBoundAssignmentDeclarationSupport2\"": typeof import("./lateBoundAssignmentDeclarationSupport2"); }
-+>exports : typeof import("./lateBoundAssignmentDeclarationSupport2")
++>module.exports : typeof import("lateBoundAssignmentDeclarationSupport2")
++>module : { "\"lateBoundAssignmentDeclarationSupport2\"": typeof import("lateBoundAssignmentDeclarationSupport2"); }
++>exports : typeof import("lateBoundAssignmentDeclarationSupport2")
  >_sym : unique symbol
  >"ok" : "ok"
 
@@ -19,9 +19,9 @@
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-+>module.exports : typeof import("./lateBoundAssignmentDeclarationSupport2")
-+>module : { "\"lateBoundAssignmentDeclarationSupport2\"": typeof import("./lateBoundAssignmentDeclarationSupport2"); }
-+>exports : typeof import("./lateBoundAssignmentDeclarationSupport2")
++>module.exports : typeof import("lateBoundAssignmentDeclarationSupport2")
++>module : { "\"lateBoundAssignmentDeclarationSupport2\"": typeof import("lateBoundAssignmentDeclarationSupport2"); }
++>exports : typeof import("lateBoundAssignmentDeclarationSupport2")
  >_str : "my-fake-sym"
  >"ok" : "ok"
 
@@ -31,8 +31,8 @@
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-+>module.exports : typeof import("./lateBoundAssignmentDeclarationSupport2")
-+>module : { "\"lateBoundAssignmentDeclarationSupport2\"": typeof import("./lateBoundAssignmentDeclarationSupport2"); }
-+>exports : typeof import("./lateBoundAssignmentDeclarationSupport2")
++>module.exports : typeof import("lateBoundAssignmentDeclarationSupport2")
++>module : { "\"lateBoundAssignmentDeclarationSupport2\"": typeof import("lateBoundAssignmentDeclarationSupport2"); }
++>exports : typeof import("lateBoundAssignmentDeclarationSupport2")
  >S : unique symbol
  >_sym : unique symbol

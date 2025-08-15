@@ -5,8 +5,8 @@ enum E {
 >E : Symbol(E, Decl(parserEnumDeclaration1.ts, 0, 0))
 
   Foo = 1,
->Foo : Symbol(Foo, Decl(parserEnumDeclaration1.ts, 0, 8))
+>Foo : Symbol(E.Foo, Decl(parserEnumDeclaration1.ts, 0, 8))
 
   Bar
->Bar : Symbol(Bar, Decl(parserEnumDeclaration1.ts, 1, 10))
+>Bar : Symbol(E.Bar, Decl(parserEnumDeclaration1.ts, 1, 10))
 }

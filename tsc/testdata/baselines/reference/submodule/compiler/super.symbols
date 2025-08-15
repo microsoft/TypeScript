@@ -9,13 +9,13 @@ class Base {
 >x : Symbol(x, Decl(super.ts, 2, 11))
     }
     public foo() {
->foo : Symbol(foo, Decl(super.ts, 3, 5))
+>foo : Symbol(Base.foo, Decl(super.ts, 3, 5))
 
         return "base";
     }
 
     public bar() {
->bar : Symbol(bar, Decl(super.ts, 6, 5))
+>bar : Symbol(Base.bar, Decl(super.ts, 6, 5))
 
         return "basebar";
     }
@@ -26,15 +26,15 @@ class Sub1 extends Base {
 >Base : Symbol(Base, Decl(super.ts, 0, 0))
 
     public foo() {
->foo : Symbol(foo, Decl(super.ts, 13, 25))
+>foo : Symbol(Sub1.foo, Decl(super.ts, 13, 25))
 
         return "sub1" + super.foo() + super.bar();
->super.foo : Symbol(foo, Decl(super.ts, 3, 5))
+>super.foo : Symbol(Base.foo, Decl(super.ts, 3, 5))
 >super : Symbol(Base, Decl(super.ts, 0, 0))
->foo : Symbol(foo, Decl(super.ts, 3, 5))
->super.bar : Symbol(bar, Decl(super.ts, 6, 5))
+>foo : Symbol(Base.foo, Decl(super.ts, 3, 5))
+>super.bar : Symbol(Base.bar, Decl(super.ts, 6, 5))
 >super : Symbol(Base, Decl(super.ts, 0, 0))
->bar : Symbol(bar, Decl(super.ts, 6, 5))
+>bar : Symbol(Base.bar, Decl(super.ts, 6, 5))
     }
 }
 
@@ -44,12 +44,12 @@ class SubSub1 extends Sub1 {
 >Sub1 : Symbol(Sub1, Decl(super.ts, 11, 1))
 
     public foo() {
->foo : Symbol(foo, Decl(super.ts, 20, 28))
+>foo : Symbol(SubSub1.foo, Decl(super.ts, 20, 28))
 
         return "subsub1" + super.foo();
->super.foo : Symbol(foo, Decl(super.ts, 13, 25))
+>super.foo : Symbol(Sub1.foo, Decl(super.ts, 13, 25))
 >super : Symbol(Sub1, Decl(super.ts, 11, 1))
->foo : Symbol(foo, Decl(super.ts, 13, 25))
+>foo : Symbol(Sub1.foo, Decl(super.ts, 13, 25))
     }
 }
 
@@ -57,7 +57,7 @@ class Base2 {
 >Base2 : Symbol(Base2, Decl(super.ts, 24, 1))
 
     public foo() {
->foo : Symbol(foo, Decl(super.ts, 26, 13))
+>foo : Symbol(Base2.foo, Decl(super.ts, 26, 13))
 
         super.foo();
     }
@@ -72,11 +72,11 @@ var ss = new SubSub1();
 >SubSub1 : Symbol(SubSub1, Decl(super.ts, 17, 1))
 
 s.foo() + ss.foo();
->s.foo : Symbol(foo, Decl(super.ts, 13, 25))
+>s.foo : Symbol(Sub1.foo, Decl(super.ts, 13, 25))
 >s : Symbol(s, Decl(super.ts, 32, 3))
->foo : Symbol(foo, Decl(super.ts, 13, 25))
->ss.foo : Symbol(foo, Decl(super.ts, 20, 28))
+>foo : Symbol(Sub1.foo, Decl(super.ts, 13, 25))
+>ss.foo : Symbol(SubSub1.foo, Decl(super.ts, 20, 28))
 >ss : Symbol(ss, Decl(super.ts, 33, 3))
->foo : Symbol(foo, Decl(super.ts, 20, 28))
+>foo : Symbol(SubSub1.foo, Decl(super.ts, 20, 28))
 
 

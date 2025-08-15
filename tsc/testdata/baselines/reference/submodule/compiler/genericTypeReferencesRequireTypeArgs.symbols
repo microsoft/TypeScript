@@ -6,7 +6,7 @@ class C<T> {
 >T : Symbol(T, Decl(genericTypeReferencesRequireTypeArgs.ts, 0, 8))
 
    foo(): T { return null }
->foo : Symbol(foo, Decl(genericTypeReferencesRequireTypeArgs.ts, 0, 12))
+>foo : Symbol(C.foo, Decl(genericTypeReferencesRequireTypeArgs.ts, 0, 12))
 >T : Symbol(T, Decl(genericTypeReferencesRequireTypeArgs.ts, 0, 8))
 }
 interface I<T> {
@@ -14,7 +14,7 @@ interface I<T> {
 >T : Symbol(T, Decl(genericTypeReferencesRequireTypeArgs.ts, 3, 12))
 
    bar(): T;
->bar : Symbol(bar, Decl(genericTypeReferencesRequireTypeArgs.ts, 3, 16))
+>bar : Symbol(I.bar, Decl(genericTypeReferencesRequireTypeArgs.ts, 3, 16))
 >T : Symbol(T, Decl(genericTypeReferencesRequireTypeArgs.ts, 3, 12))
 }
 var c1: C; // error

@@ -450,15 +450,15 @@ func (b *nodeBuilderImpl) symbolToNode(symbol *ast.Symbol, meaning ast.SymbolFla
 			if name != nil && ast.IsComputedPropertyName(name) {
 				return name
 			}
-			if b.ch.valueSymbolLinks.Has(symbol) {
-				nameType := b.ch.valueSymbolLinks.Get(symbol).nameType
-				if nameType != nil && nameType.flags&(TypeFlagsEnumLiteral|TypeFlagsUniqueESSymbol) != 0 {
-					oldEnclosing := b.ctx.enclosingDeclaration
-					b.ctx.enclosingDeclaration = nameType.symbol.ValueDeclaration
-					result := b.f.NewComputedPropertyName(b.symbolToExpression(nameType.symbol, meaning))
-					b.ctx.enclosingDeclaration = oldEnclosing
-					return result
-				}
+		}
+		if b.ch.valueSymbolLinks.Has(symbol) {
+			nameType := b.ch.valueSymbolLinks.Get(symbol).nameType
+			if nameType != nil && nameType.flags&(TypeFlagsEnumLiteral|TypeFlagsUniqueESSymbol) != 0 {
+				oldEnclosing := b.ctx.enclosingDeclaration
+				b.ctx.enclosingDeclaration = nameType.symbol.ValueDeclaration
+				result := b.f.NewComputedPropertyName(b.symbolToExpression(nameType.symbol, meaning))
+				b.ctx.enclosingDeclaration = oldEnclosing
+				return result
 			}
 		}
 	}
@@ -972,7 +972,7 @@ type sortedSymbolNamePair struct {
 func (b *nodeBuilderImpl) getSymbolChain(symbol *ast.Symbol, meaning ast.SymbolFlags, endOfChain bool, yieldModuleSymbol bool) []*ast.Symbol {
 	accessibleSymbolChain := b.ch.getAccessibleSymbolChain(symbol, b.ctx.enclosingDeclaration, meaning, b.ctx.flags&nodebuilder.FlagsUseOnlyExternalAliasing != 0)
 	qualifierMeaning := meaning
-	if len(accessibleSymbolChain) > 0 {
+	if len(accessibleSymbolChain) > 1 {
 		qualifierMeaning = getQualifiedLeftMeaning(meaning)
 	}
 	if len(accessibleSymbolChain) == 0 ||

@@ -6,10 +6,10 @@ class Cls {
 >Cls : Symbol(Cls, Decl(index1.js, 0, 0))
 
     x = 12;
->x : Symbol(x, Decl(index1.js, 1, 11))
+>x : Symbol(Cls.x, Decl(index1.js, 1, 11))
 
     static y = "ok"
->y : Symbol(y, Decl(index1.js, 2, 11))
+>y : Symbol(Cls.y, Decl(index1.js, 2, 11))
 }
 export default Cls;
 >Cls : Symbol(Cls, Decl(index1.js, 0, 0))

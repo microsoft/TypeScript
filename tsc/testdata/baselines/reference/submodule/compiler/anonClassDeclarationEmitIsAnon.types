@@ -43,7 +43,7 @@ export function Timestamped<TBase extends Constructor>(Base: TBase) {
 === index.ts ===
 import { wrapClass, Timestamped } from "./wrapClass";
 >wrapClass : (param: any) => typeof Wrapped
->Timestamped : <TBase extends import("./wrapClass").Constructor<{}>>(Base: TBase) => { new (...args: any[]): (Anonymous class); prototype: Timestamped.(Anonymous class); } & TBase
+>Timestamped : <TBase extends import("wrapClass").Constructor<{}>>(Base: TBase) => { new (...args: any[]): (Anonymous class); prototype: Timestamped.(Anonymous class); } & TBase
 
 export default wrapClass(0);
 >wrapClass(0) : typeof Wrapped
@@ -63,7 +63,7 @@ export class User {
 export class TimestampedUser extends Timestamped(User) {
 >TimestampedUser : TimestampedUser
 >Timestamped(User) : Timestamped.(Anonymous class) & User
->Timestamped : <TBase extends import("./wrapClass").Constructor<{}>>(Base: TBase) => { new (...args: any[]): (Anonymous class); prototype: Timestamped.(Anonymous class); } & TBase
+>Timestamped : <TBase extends import("wrapClass").Constructor<{}>>(Base: TBase) => { new (...args: any[]): (Anonymous class); prototype: Timestamped.(Anonymous class); } & TBase
 >User : typeof User
 
     constructor() {

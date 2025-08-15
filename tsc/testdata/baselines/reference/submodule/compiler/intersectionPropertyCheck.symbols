@@ -43,7 +43,7 @@ interface Test {
 >Test : Symbol(Test, Decl(intersectionPropertyCheck.ts, 7, 1))
 
   readonly hi?: string[]
->hi : Symbol(hi, Decl(intersectionPropertyCheck.ts, 11, 16))
+>hi : Symbol(Test.hi, Decl(intersectionPropertyCheck.ts, 11, 16))
 }
 
 function test<T extends object>(value: T): Test {

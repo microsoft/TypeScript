@@ -8,40 +8,40 @@ export class publicClassWithWithPrivateParmeterTypes {
 >publicClassWithWithPrivateParmeterTypes : publicClassWithWithPrivateParmeterTypes
 
     static myPublicStaticMethod() { // Error
->myPublicStaticMethod : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>myPublicStaticMethod : () => import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 
         return exporter.createExportedWidget1();
->exporter.createExportedWidget1() : import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>createExportedWidget1 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
     }
     private static myPrivateStaticMethod() {
->myPrivateStaticMethod : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>myPrivateStaticMethod : () => import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 
         return exporter.createExportedWidget1();;
->exporter.createExportedWidget1() : import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>createExportedWidget1 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
     }
     myPublicMethod() { // Error
->myPublicMethod : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>myPublicMethod : () => import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 
         return exporter.createExportedWidget1();;
->exporter.createExportedWidget1() : import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>createExportedWidget1 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
     }
     private myPrivateMethod() {
->myPrivateMethod : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>myPrivateMethod : () => import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 
         return exporter.createExportedWidget1();;
->exporter.createExportedWidget1() : import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>createExportedWidget1 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
     }
     static myPublicStaticMethod1() { // Error
 >myPublicStaticMethod1 : () => import("GlobalWidgets").Widget3
@@ -85,40 +85,40 @@ class privateClassWithWithPrivateParmeterTypes {
 >privateClassWithWithPrivateParmeterTypes : privateClassWithWithPrivateParmeterTypes
 
     static myPublicStaticMethod() { 
->myPublicStaticMethod : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>myPublicStaticMethod : () => import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 
         return exporter.createExportedWidget1();
->exporter.createExportedWidget1() : import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>createExportedWidget1 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
     }
     private static myPrivateStaticMethod() {
->myPrivateStaticMethod : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>myPrivateStaticMethod : () => import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 
         return exporter.createExportedWidget1();;
->exporter.createExportedWidget1() : import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>createExportedWidget1 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
     }
     myPublicMethod() { 
->myPublicMethod : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>myPublicMethod : () => import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 
         return exporter.createExportedWidget1();;
->exporter.createExportedWidget1() : import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>createExportedWidget1 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
     }
     private myPrivateMethod() {
->myPrivateMethod : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>myPrivateMethod : () => import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 
         return exporter.createExportedWidget1();;
->exporter.createExportedWidget1() : import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>createExportedWidget1 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
     }
     static myPublicStaticMethod1() { 
 >myPublicStaticMethod1 : () => import("GlobalWidgets").Widget3
@@ -159,22 +159,22 @@ class privateClassWithWithPrivateParmeterTypes {
 }
 
 export function publicFunctionWithPrivateParmeterTypes() { // Error
->publicFunctionWithPrivateParmeterTypes : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>publicFunctionWithPrivateParmeterTypes : () => import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 
     return exporter.createExportedWidget1();
->exporter.createExportedWidget1() : import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>createExportedWidget1 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 }
 function privateFunctionWithPrivateParmeterTypes()   {
->privateFunctionWithPrivateParmeterTypes : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>privateFunctionWithPrivateParmeterTypes : () => import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 
     return exporter.createExportedWidget1();
->exporter.createExportedWidget1() : import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>createExportedWidget1 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 }
 export function publicFunctionWithPrivateParmeterTypes1() { // Error
 >publicFunctionWithPrivateParmeterTypes1 : () => import("GlobalWidgets").Widget3
@@ -199,22 +199,22 @@ export class publicClassWithPrivateModuleReturnTypes {
 >publicClassWithPrivateModuleReturnTypes : publicClassWithPrivateModuleReturnTypes
 
     static myPublicStaticMethod() { // Error
->myPublicStaticMethod : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>myPublicStaticMethod : () => import("privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
 
         return exporter.createExportedWidget2();
->exporter.createExportedWidget2() : import("./privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
->exporter.createExportedWidget2 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2() : import("privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
 >exporter : typeof exporter
->createExportedWidget2 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>createExportedWidget2 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
     }
     myPublicMethod() { // Error
->myPublicMethod : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>myPublicMethod : () => import("privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
 
         return exporter.createExportedWidget2();
->exporter.createExportedWidget2() : import("./privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
->exporter.createExportedWidget2 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2() : import("privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
 >exporter : typeof exporter
->createExportedWidget2 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>createExportedWidget2 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
     }
     static myPublicStaticMethod1() { // Error
 >myPublicStaticMethod1 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
@@ -236,13 +236,13 @@ export class publicClassWithPrivateModuleReturnTypes {
     }
 }
 export function publicFunctionWithPrivateModuleReturnTypes() { // Error
->publicFunctionWithPrivateModuleReturnTypes : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>publicFunctionWithPrivateModuleReturnTypes : () => import("privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
 
     return exporter.createExportedWidget2();
->exporter.createExportedWidget2() : import("./privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
->exporter.createExportedWidget2 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2() : import("privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
 >exporter : typeof exporter
->createExportedWidget2 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>createExportedWidget2 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
 }
 export function publicFunctionWithPrivateModuleReturnTypes1() { // Error
 >publicFunctionWithPrivateModuleReturnTypes1 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
@@ -258,22 +258,22 @@ class privateClassWithPrivateModuleReturnTypes {
 >privateClassWithPrivateModuleReturnTypes : privateClassWithPrivateModuleReturnTypes
 
     static myPublicStaticMethod() { 
->myPublicStaticMethod : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>myPublicStaticMethod : () => import("privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
 
         return exporter.createExportedWidget2();
->exporter.createExportedWidget2() : import("./privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
->exporter.createExportedWidget2 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2() : import("privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
 >exporter : typeof exporter
->createExportedWidget2 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>createExportedWidget2 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
     }
     myPublicMethod() { 
->myPublicMethod : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>myPublicMethod : () => import("privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
 
         return exporter.createExportedWidget2();
->exporter.createExportedWidget2() : import("./privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
->exporter.createExportedWidget2 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2() : import("privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
 >exporter : typeof exporter
->createExportedWidget2 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>createExportedWidget2 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
     }
     static myPublicStaticMethod1() { // Error
 >myPublicStaticMethod1 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
@@ -295,13 +295,13 @@ class privateClassWithPrivateModuleReturnTypes {
     }
 }
 function privateFunctionWithPrivateModuleReturnTypes() { 
->privateFunctionWithPrivateModuleReturnTypes : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>privateFunctionWithPrivateModuleReturnTypes : () => import("privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
 
     return exporter.createExportedWidget2();
->exporter.createExportedWidget2() : import("./privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
->exporter.createExportedWidget2 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2() : import("privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
 >exporter : typeof exporter
->createExportedWidget2 : () => import("./privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>createExportedWidget2 : () => import("privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
 }
 function privateFunctionWithPrivateModuleReturnTypes1() {
 >privateFunctionWithPrivateModuleReturnTypes1 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4

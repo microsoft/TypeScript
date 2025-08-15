@@ -6,18 +6,18 @@
  declare function Foo(opts?: Foo.Whatever): void;
 ->Foo : { (opts?: Foo.Whatever): void; (cb: Function, opts?: Foo.Whatever): void; }
 ->opts : Foo.Whatever
-+>Foo : { (opts?: import("./file").Whatever): void; (cb: Function, opts?: import("./file").Whatever): void; }
-+>opts : import("./file").Whatever
++>Foo : { (opts?: import("file").Whatever): void; (cb: Function, opts?: import("file").Whatever): void; }
++>opts : import("file").Whatever
  >Foo : any
 
  declare function Foo(cb: Function, opts?: Foo.Whatever): void;
 ->Foo : { (opts?: Foo.Whatever): void; (cb: Function, opts?: Foo.Whatever): void; }
-+>Foo : { (opts?: import("./file").Whatever): void; (cb: Function, opts?: import("./file").Whatever): void; }
++>Foo : { (opts?: import("file").Whatever): void; (cb: Function, opts?: import("file").Whatever): void; }
  >cb : Function
 ->opts : Foo.Whatever
-+>opts : import("./file").Whatever
++>opts : import("file").Whatever
  >Foo : any
 
  export = Foo;
 ->Foo : { (opts?: Foo.Whatever): void; (cb: Function, opts?: Foo.Whatever): void; }
-+>Foo : { (opts?: import("./file").Whatever): void; (cb: Function, opts?: import("./file").Whatever): void; }
++>Foo : { (opts?: import("file").Whatever): void; (cb: Function, opts?: import("file").Whatever): void; }

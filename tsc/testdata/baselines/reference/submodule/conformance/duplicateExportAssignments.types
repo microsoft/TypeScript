@@ -31,7 +31,7 @@ export = y;
 
 === foo3.ts ===
 module x {
->x : typeof import("./foo3")
+>x : typeof import("foo3")
 
 	export var x = 10;
 >x : number

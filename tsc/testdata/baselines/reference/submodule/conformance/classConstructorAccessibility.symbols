@@ -5,21 +5,21 @@ class C {
 >C : Symbol(C, Decl(classConstructorAccessibility.ts, 0, 0))
 
     public constructor(public x: number) { }
->x : Symbol(x, Decl(classConstructorAccessibility.ts, 1, 23))
+>x : Symbol(C.x, Decl(classConstructorAccessibility.ts, 1, 23))
 }
 
 class D {
 >D : Symbol(D, Decl(classConstructorAccessibility.ts, 2, 1))
 
     private constructor(public x: number) { }
->x : Symbol(x, Decl(classConstructorAccessibility.ts, 5, 24))
+>x : Symbol(D.x, Decl(classConstructorAccessibility.ts, 5, 24))
 }
 
 class E {
 >E : Symbol(E, Decl(classConstructorAccessibility.ts, 6, 1))
 
     protected constructor(public x: number) { }
->x : Symbol(x, Decl(classConstructorAccessibility.ts, 9, 26))
+>x : Symbol(E.x, Decl(classConstructorAccessibility.ts, 9, 26))
 }
 
 var c = new C(1);
@@ -42,7 +42,7 @@ module Generic {
 >T : Symbol(T, Decl(classConstructorAccessibility.ts, 17, 12))
 
         public constructor(public x: T) { }
->x : Symbol(x, Decl(classConstructorAccessibility.ts, 18, 27))
+>x : Symbol(C.x, Decl(classConstructorAccessibility.ts, 18, 27))
 >T : Symbol(T, Decl(classConstructorAccessibility.ts, 17, 12))
     }
 
@@ -51,7 +51,7 @@ module Generic {
 >T : Symbol(T, Decl(classConstructorAccessibility.ts, 21, 12))
 
         private constructor(public x: T) { }
->x : Symbol(x, Decl(classConstructorAccessibility.ts, 22, 28))
+>x : Symbol(D.x, Decl(classConstructorAccessibility.ts, 22, 28))
 >T : Symbol(T, Decl(classConstructorAccessibility.ts, 21, 12))
     }
 
@@ -60,7 +60,7 @@ module Generic {
 >T : Symbol(T, Decl(classConstructorAccessibility.ts, 25, 12))
 
         protected constructor(public x: T) { }
->x : Symbol(x, Decl(classConstructorAccessibility.ts, 26, 30))
+>x : Symbol(E.x, Decl(classConstructorAccessibility.ts, 26, 30))
 >T : Symbol(T, Decl(classConstructorAccessibility.ts, 25, 12))
     }
 

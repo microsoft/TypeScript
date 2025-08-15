@@ -8,7 +8,7 @@ class Foo {
 >Foo : Symbol(Foo, Decl(collisionSuperAndLocalVarInAccessors.ts, 0, 16))
 
     get prop1(): number {
->prop1 : Symbol(prop1, Decl(collisionSuperAndLocalVarInAccessors.ts, 1, 11), Decl(collisionSuperAndLocalVarInAccessors.ts, 5, 5))
+>prop1 : Symbol(Foo.prop1, Decl(collisionSuperAndLocalVarInAccessors.ts, 1, 11), Decl(collisionSuperAndLocalVarInAccessors.ts, 5, 5))
 
         var _super = 10; // No error
 >_super : Symbol(_super, Decl(collisionSuperAndLocalVarInAccessors.ts, 3, 11))
@@ -16,7 +16,7 @@ class Foo {
         return 10;
     }
     set prop1(val: number) {
->prop1 : Symbol(prop1, Decl(collisionSuperAndLocalVarInAccessors.ts, 1, 11), Decl(collisionSuperAndLocalVarInAccessors.ts, 5, 5))
+>prop1 : Symbol(Foo.prop1, Decl(collisionSuperAndLocalVarInAccessors.ts, 1, 11), Decl(collisionSuperAndLocalVarInAccessors.ts, 5, 5))
 >val : Symbol(val, Decl(collisionSuperAndLocalVarInAccessors.ts, 6, 14))
 
         var _super = 10; // No error
@@ -28,7 +28,7 @@ class b extends Foo {
 >Foo : Symbol(Foo, Decl(collisionSuperAndLocalVarInAccessors.ts, 0, 16))
 
     get prop2(): number {
->prop2 : Symbol(prop2, Decl(collisionSuperAndLocalVarInAccessors.ts, 10, 21), Decl(collisionSuperAndLocalVarInAccessors.ts, 14, 5))
+>prop2 : Symbol(b.prop2, Decl(collisionSuperAndLocalVarInAccessors.ts, 10, 21), Decl(collisionSuperAndLocalVarInAccessors.ts, 14, 5))
 
         var _super = 10; // Should be error
 >_super : Symbol(_super, Decl(collisionSuperAndLocalVarInAccessors.ts, 12, 11))
@@ -36,7 +36,7 @@ class b extends Foo {
         return 10;
     }
     set prop2(val: number) {
->prop2 : Symbol(prop2, Decl(collisionSuperAndLocalVarInAccessors.ts, 10, 21), Decl(collisionSuperAndLocalVarInAccessors.ts, 14, 5))
+>prop2 : Symbol(b.prop2, Decl(collisionSuperAndLocalVarInAccessors.ts, 10, 21), Decl(collisionSuperAndLocalVarInAccessors.ts, 14, 5))
 >val : Symbol(val, Decl(collisionSuperAndLocalVarInAccessors.ts, 15, 14))
 
         var _super = 10; // Should be error
@@ -48,7 +48,7 @@ class c extends Foo {
 >Foo : Symbol(Foo, Decl(collisionSuperAndLocalVarInAccessors.ts, 0, 16))
 
     get prop2(): number {
->prop2 : Symbol(prop2, Decl(collisionSuperAndLocalVarInAccessors.ts, 19, 21), Decl(collisionSuperAndLocalVarInAccessors.ts, 25, 5))
+>prop2 : Symbol(c.prop2, Decl(collisionSuperAndLocalVarInAccessors.ts, 19, 21), Decl(collisionSuperAndLocalVarInAccessors.ts, 25, 5))
 
         var x = () => {
 >x : Symbol(x, Decl(collisionSuperAndLocalVarInAccessors.ts, 21, 11))
@@ -59,7 +59,7 @@ class c extends Foo {
         return 10;
     }
     set prop2(val: number) {
->prop2 : Symbol(prop2, Decl(collisionSuperAndLocalVarInAccessors.ts, 19, 21), Decl(collisionSuperAndLocalVarInAccessors.ts, 25, 5))
+>prop2 : Symbol(c.prop2, Decl(collisionSuperAndLocalVarInAccessors.ts, 19, 21), Decl(collisionSuperAndLocalVarInAccessors.ts, 25, 5))
 >val : Symbol(val, Decl(collisionSuperAndLocalVarInAccessors.ts, 26, 14))
 
         var x = () => {

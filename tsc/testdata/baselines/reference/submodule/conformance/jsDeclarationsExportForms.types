@@ -85,9 +85,9 @@ const ns = require("./cls");
 module.exports.ns = ns;
 >module.exports.ns = ns : typeof ns
 >module.exports.ns : typeof ns
->module.exports : typeof import("./cjs3")
->module : { "\"cjs3\"": typeof import("./cjs3"); }
->exports : typeof import("./cjs3")
+>module.exports : typeof import("cjs3")
+>module : { "\"cjs3\"": typeof import("cjs3"); }
+>exports : typeof import("cjs3")
 >ns : typeof ns
 >ns : typeof ns
 
@@ -101,9 +101,9 @@ const ns = require("./cls");
 module.exports.names = ns;
 >module.exports.names = ns : typeof ns
 >module.exports.names : typeof ns
->module.exports : typeof import("./cjs4")
->module : { "\"cjs4\"": typeof import("./cjs4"); }
->exports : typeof import("./cjs4")
+>module.exports : typeof import("cjs4")
+>module : { "\"cjs4\"": typeof import("cjs4"); }
+>exports : typeof import("cjs4")
 >names : typeof ns
 >ns : typeof ns
 

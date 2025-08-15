@@ -5,7 +5,7 @@ interface I {
 >I : Symbol(I, Decl(objectTypeHidingMembersOfObjectAssignmentCompat.ts, 0, 0))
 
     toString(): void;
->toString : Symbol(toString, Decl(objectTypeHidingMembersOfObjectAssignmentCompat.ts, 0, 13))
+>toString : Symbol(I.toString, Decl(objectTypeHidingMembersOfObjectAssignmentCompat.ts, 0, 13))
 }
 
 var i: I;
@@ -28,7 +28,7 @@ class C {
 >C : Symbol(C, Decl(objectTypeHidingMembersOfObjectAssignmentCompat.ts, 7, 6))
 
     toString(): void { }
->toString : Symbol(toString, Decl(objectTypeHidingMembersOfObjectAssignmentCompat.ts, 9, 9))
+>toString : Symbol(C.toString, Decl(objectTypeHidingMembersOfObjectAssignmentCompat.ts, 9, 9))
 }
 var c: C;
 >c : Symbol(c, Decl(objectTypeHidingMembersOfObjectAssignmentCompat.ts, 12, 3))

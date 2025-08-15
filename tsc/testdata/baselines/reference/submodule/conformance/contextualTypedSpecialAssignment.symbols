@@ -49,9 +49,9 @@ class Thing {
     constructor() {
         /** @type {DoneStatus} */
         this.s = {
->this.s : Symbol(s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
+>this.s : Symbol(Thing.s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
 >this : Symbol(Thing, Decl(test.js, 17, 4))
->s : Symbol(s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
+>s : Symbol(Thing.s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
 
             status: 'done',
 >status : Symbol(status, Decl(test.js, 24, 18))
@@ -63,12 +63,12 @@ class Thing {
     }
 
     fail() {
->fail : Symbol(fail, Decl(test.js, 28, 5))
+>fail : Symbol(Thing.fail, Decl(test.js, 28, 5))
 
         this.s = {
->this.s : Symbol(s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
+>this.s : Symbol(Thing.s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
 >this : Symbol(Thing, Decl(test.js, 17, 4))
->s : Symbol(s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
+>s : Symbol(Thing.s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
 
             status: 'done',
 >status : Symbol(status, Decl(test.js, 31, 18))
@@ -125,9 +125,9 @@ module.exports.y
 // prototype-property assignment
 /** @type {DoneStatus} */
 Thing.prototype.x = {
->Thing.prototype : Symbol(prototype)
+>Thing.prototype : Symbol(Thing.prototype)
 >Thing : Symbol(Thing, Decl(test.js, 17, 4))
->prototype : Symbol(prototype)
+>prototype : Symbol(Thing.prototype)
 
     status: 'done',
 >status : Symbol(status, Decl(test.js, 56, 21))
@@ -137,9 +137,9 @@ Thing.prototype.x = {
 >n : Symbol(n, Decl(test.js, 58, 6))
 }
 Thing.prototype.x
->Thing.prototype : Symbol(prototype)
+>Thing.prototype : Symbol(Thing.prototype)
 >Thing : Symbol(Thing, Decl(test.js, 17, 4))
->prototype : Symbol(prototype)
+>prototype : Symbol(Thing.prototype)
 
 // prototype assignment
 function F() {
@@ -147,9 +147,9 @@ function F() {
 }
 /** @type {DoneStatus} */
 F.prototype = {
->F.prototype : Symbol(prototype, Decl(test.js, 64, 1))
+>F.prototype : Symbol(F.prototype, Decl(test.js, 64, 1))
 >F : Symbol(F, Decl(test.js, 60, 17))
->prototype : Symbol(prototype, Decl(test.js, 64, 1))
+>prototype : Symbol(F.prototype, Decl(test.js, 64, 1))
 
     status: "done",
 >status : Symbol(status, Decl(test.js, 66, 15))

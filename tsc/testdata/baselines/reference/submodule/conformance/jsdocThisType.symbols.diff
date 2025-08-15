@@ -1,15 +1,6 @@
 --- old.jsdocThisType.symbols
 +++ new.jsdocThisType.symbols
-@@= skipped -4, +4 lines =@@
- >Foo : Symbol(Foo, Decl(types.d.ts, 0, 0))
-
-     foo: () => void;
-->foo : Symbol(Foo.foo, Decl(types.d.ts, 0, 22))
-+>foo : Symbol(foo, Decl(types.d.ts, 0, 22))
- }
-
- export type M = (this: Foo) => void;
-@@= skipped -46, +46 lines =@@
+@@= skipped -50, +50 lines =@@
  >f5 : Symbol(f5, Decl(a.js, 21, 12))
 
      this.test();

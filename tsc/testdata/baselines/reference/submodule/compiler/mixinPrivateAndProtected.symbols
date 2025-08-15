@@ -13,13 +13,13 @@ class A {
 >A : Symbol(A, Decl(mixinPrivateAndProtected.ts, 2, 47))
 
     public pb: number = 2;
->pb : Symbol(pb, Decl(mixinPrivateAndProtected.ts, 4, 9))
+>pb : Symbol(A.pb, Decl(mixinPrivateAndProtected.ts, 4, 9))
 
     protected ptd: number = 1;
->ptd : Symbol(ptd, Decl(mixinPrivateAndProtected.ts, 5, 26))
+>ptd : Symbol(A.ptd, Decl(mixinPrivateAndProtected.ts, 5, 26))
 
     private pvt: number = 0;
->pvt : Symbol(pvt, Decl(mixinPrivateAndProtected.ts, 6, 30))
+>pvt : Symbol(A.pvt, Decl(mixinPrivateAndProtected.ts, 6, 30))
 }
 
 function mixB<T extends Constructor<{}>>(Cls: T) {
@@ -33,10 +33,10 @@ function mixB<T extends Constructor<{}>>(Cls: T) {
 >Cls : Symbol(Cls, Decl(mixinPrivateAndProtected.ts, 10, 41))
 
         protected ptd: number = 10;
->ptd : Symbol(ptd, Decl(mixinPrivateAndProtected.ts, 11, 30))
+>ptd : Symbol((Anonymous class).ptd, Decl(mixinPrivateAndProtected.ts, 11, 30))
 
         private pvt: number = 0;
->pvt : Symbol(pvt, Decl(mixinPrivateAndProtected.ts, 12, 35))
+>pvt : Symbol((Anonymous class).pvt, Decl(mixinPrivateAndProtected.ts, 12, 35))
 
     };
 }
@@ -53,7 +53,7 @@ function mixB2<T extends Constructor<A>>(Cls: T) {
 >Cls : Symbol(Cls, Decl(mixinPrivateAndProtected.ts, 17, 41))
 
         protected ptd: number = 10;
->ptd : Symbol(ptd, Decl(mixinPrivateAndProtected.ts, 18, 30))
+>ptd : Symbol((Anonymous class).ptd, Decl(mixinPrivateAndProtected.ts, 18, 30))
 
     };
 }
@@ -80,10 +80,10 @@ function mixC<T extends Constructor<{}>>(Cls: T) {
 >Cls : Symbol(Cls, Decl(mixinPrivateAndProtected.ts, 27, 41))
 
         protected ptd: number = 100;
->ptd : Symbol(ptd, Decl(mixinPrivateAndProtected.ts, 28, 30))
+>ptd : Symbol((Anonymous class).ptd, Decl(mixinPrivateAndProtected.ts, 28, 30))
 
         private pvt: number = 0;
->pvt : Symbol(pvt, Decl(mixinPrivateAndProtected.ts, 29, 36))
+>pvt : Symbol((Anonymous class).pvt, Decl(mixinPrivateAndProtected.ts, 29, 36))
 
     };
 }
@@ -117,25 +117,25 @@ const
 >AB2C : Symbol(AB2C, Decl(mixinPrivateAndProtected.ts, 34, 5))
 
 a.pb.toFixed();
->a.pb.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
->a.pb : Symbol(pb, Decl(mixinPrivateAndProtected.ts, 4, 9))
+>a.pb.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>a.pb : Symbol(A.pb, Decl(mixinPrivateAndProtected.ts, 4, 9))
 >a : Symbol(a, Decl(mixinPrivateAndProtected.ts, 38, 5))
->pb : Symbol(pb, Decl(mixinPrivateAndProtected.ts, 4, 9))
->toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+>pb : Symbol(A.pb, Decl(mixinPrivateAndProtected.ts, 4, 9))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
 a.ptd.toFixed();    // Error
->a.ptd.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
->a.ptd : Symbol(ptd, Decl(mixinPrivateAndProtected.ts, 5, 26))
+>a.ptd.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>a.ptd : Symbol(A.ptd, Decl(mixinPrivateAndProtected.ts, 5, 26))
 >a : Symbol(a, Decl(mixinPrivateAndProtected.ts, 38, 5))
->ptd : Symbol(ptd, Decl(mixinPrivateAndProtected.ts, 5, 26))
->toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+>ptd : Symbol(A.ptd, Decl(mixinPrivateAndProtected.ts, 5, 26))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
 a.pvt.toFixed();    // Error
->a.pvt.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
->a.pvt : Symbol(pvt, Decl(mixinPrivateAndProtected.ts, 6, 30))
+>a.pvt.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>a.pvt : Symbol(A.pvt, Decl(mixinPrivateAndProtected.ts, 6, 30))
 >a : Symbol(a, Decl(mixinPrivateAndProtected.ts, 38, 5))
->pvt : Symbol(pvt, Decl(mixinPrivateAndProtected.ts, 6, 30))
->toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+>pvt : Symbol(A.pvt, Decl(mixinPrivateAndProtected.ts, 6, 30))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
 ab.pb.toFixed();
 >ab : Symbol(ab, Decl(mixinPrivateAndProtected.ts, 39, 16))
@@ -170,10 +170,10 @@ class Person {
 >Person : Symbol(Person, Decl(mixinPrivateAndProtected.ts, 58, 19))
 
 	constructor(public name: string) {}
->name : Symbol(name, Decl(mixinPrivateAndProtected.ts, 63, 13))
+>name : Symbol(Person.name, Decl(mixinPrivateAndProtected.ts, 63, 13))
 
 	protected myProtectedFunction() {
->myProtectedFunction : Symbol(myProtectedFunction, Decl(mixinPrivateAndProtected.ts, 63, 36))
+>myProtectedFunction : Symbol(Person.myProtectedFunction, Decl(mixinPrivateAndProtected.ts, 63, 36))
 
 		// do something
 	}
@@ -199,12 +199,12 @@ function PersonMixin<T extends Constructor<Person>>(Base: T) {
 		}
 
 		myProtectedFunction() {
->myProtectedFunction : Symbol(myProtectedFunction, Decl(mixinPrivateAndProtected.ts, 74, 3))
+>myProtectedFunction : Symbol((Anonymous class).myProtectedFunction, Decl(mixinPrivateAndProtected.ts, 74, 3))
 
 			super.myProtectedFunction();
->super.myProtectedFunction : Symbol(myProtectedFunction, Decl(mixinPrivateAndProtected.ts, 63, 36))
+>super.myProtectedFunction : Symbol(Person.myProtectedFunction, Decl(mixinPrivateAndProtected.ts, 63, 36))
 >super : Symbol(Person, Decl(mixinPrivateAndProtected.ts, 58, 19))
->myProtectedFunction : Symbol(myProtectedFunction, Decl(mixinPrivateAndProtected.ts, 63, 36))
+>myProtectedFunction : Symbol(Person.myProtectedFunction, Decl(mixinPrivateAndProtected.ts, 63, 36))
 
 			// do more things
 		}
@@ -217,10 +217,10 @@ class Customer extends PersonMixin(Person) {
 >Person : Symbol(Person, Decl(mixinPrivateAndProtected.ts, 58, 19))
 
 	accountBalance: number;
->accountBalance : Symbol(accountBalance, Decl(mixinPrivateAndProtected.ts, 83, 44))
+>accountBalance : Symbol(Customer.accountBalance, Decl(mixinPrivateAndProtected.ts, 83, 44))
 
     f() {
->f : Symbol(f, Decl(mixinPrivateAndProtected.ts, 84, 24))
+>f : Symbol(Customer.f, Decl(mixinPrivateAndProtected.ts, 84, 24))
     }
 }
 

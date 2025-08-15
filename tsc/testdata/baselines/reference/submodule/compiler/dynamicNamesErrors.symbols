@@ -11,18 +11,18 @@ interface T0 {
 >T0 : Symbol(T0, Decl(dynamicNamesErrors.ts, 1, 13))
 
     [c0]: number;
->[c0] : Symbol(1, Decl(dynamicNamesErrors.ts, 4, 17), Decl(dynamicNamesErrors.ts, 3, 14))
+>[c0] : Symbol(T0[1], Decl(dynamicNamesErrors.ts, 4, 17), Decl(dynamicNamesErrors.ts, 3, 14))
 >c0 : Symbol(c0, Decl(dynamicNamesErrors.ts, 0, 5))
 
     1: number;
->1 : Symbol(1, Decl(dynamicNamesErrors.ts, 4, 17), Decl(dynamicNamesErrors.ts, 3, 14))
+>1 : Symbol(T0[1], Decl(dynamicNamesErrors.ts, 4, 17), Decl(dynamicNamesErrors.ts, 3, 14))
 }
 
 interface T1 {
 >T1 : Symbol(T1, Decl(dynamicNamesErrors.ts, 6, 1))
 
     [c0]: number;
->[c0] : Symbol([c0], Decl(dynamicNamesErrors.ts, 8, 14))
+>[c0] : Symbol(T1[c0], Decl(dynamicNamesErrors.ts, 8, 14))
 >c0 : Symbol(c0, Decl(dynamicNamesErrors.ts, 0, 5))
 }
 
@@ -30,7 +30,7 @@ interface T2 {
 >T2 : Symbol(T2, Decl(dynamicNamesErrors.ts, 10, 1))
 
     [c0]: string;
->[c0] : Symbol([c0], Decl(dynamicNamesErrors.ts, 12, 14))
+>[c0] : Symbol(T2[c0], Decl(dynamicNamesErrors.ts, 12, 14))
 >c0 : Symbol(c0, Decl(dynamicNamesErrors.ts, 0, 5))
 }
 
@@ -38,11 +38,11 @@ interface T3 {
 >T3 : Symbol(T3, Decl(dynamicNamesErrors.ts, 14, 1))
 
     [c0]: number;
->[c0] : Symbol([c0], Decl(dynamicNamesErrors.ts, 16, 14), Decl(dynamicNamesErrors.ts, 17, 17))
+>[c0] : Symbol(T3[c0], Decl(dynamicNamesErrors.ts, 16, 14), Decl(dynamicNamesErrors.ts, 17, 17))
 >c0 : Symbol(c0, Decl(dynamicNamesErrors.ts, 0, 5))
 
     [c1]: string;
->[c1] : Symbol([c0], Decl(dynamicNamesErrors.ts, 16, 14), Decl(dynamicNamesErrors.ts, 17, 17))
+>[c1] : Symbol(T3[c0], Decl(dynamicNamesErrors.ts, 16, 14), Decl(dynamicNamesErrors.ts, 17, 17))
 >c1 : Symbol(c1, Decl(dynamicNamesErrors.ts, 1, 5))
 }
 
@@ -82,11 +82,11 @@ export interface InterfaceMemberVisibility {
 >InterfaceMemberVisibility : Symbol(InterfaceMemberVisibility, Decl(dynamicNamesErrors.ts, 29, 19))
 
     [x]: number;
->[x] : Symbol([x], Decl(dynamicNamesErrors.ts, 31, 44))
+>[x] : Symbol(InterfaceMemberVisibility[x], Decl(dynamicNamesErrors.ts, 31, 44))
 >x : Symbol(x, Decl(dynamicNamesErrors.ts, 26, 5))
 
     [y](): number;
->[y] : Symbol([y], Decl(dynamicNamesErrors.ts, 32, 16))
+>[y] : Symbol(InterfaceMemberVisibility[y], Decl(dynamicNamesErrors.ts, 32, 16))
 >y : Symbol(y, Decl(dynamicNamesErrors.ts, 27, 5))
 }
 
@@ -94,36 +94,36 @@ export class ClassMemberVisibility {
 >ClassMemberVisibility : Symbol(ClassMemberVisibility, Decl(dynamicNamesErrors.ts, 34, 1))
 
     static [x]: number;
->[x] : Symbol([x], Decl(dynamicNamesErrors.ts, 36, 36))
+>[x] : Symbol(ClassMemberVisibility[x], Decl(dynamicNamesErrors.ts, 36, 36))
 >x : Symbol(x, Decl(dynamicNamesErrors.ts, 26, 5))
 
     static [y](): number { return 0; }
->[y] : Symbol([y], Decl(dynamicNamesErrors.ts, 37, 23))
+>[y] : Symbol(ClassMemberVisibility[y], Decl(dynamicNamesErrors.ts, 37, 23))
 >y : Symbol(y, Decl(dynamicNamesErrors.ts, 27, 5))
 
     static get [z](): number { return 0; }
->[z] : Symbol([z], Decl(dynamicNamesErrors.ts, 38, 38))
+>[z] : Symbol(ClassMemberVisibility[z], Decl(dynamicNamesErrors.ts, 38, 38))
 >z : Symbol(z, Decl(dynamicNamesErrors.ts, 28, 5))
 
     static set [w](value: number) { }
->[w] : Symbol([w], Decl(dynamicNamesErrors.ts, 39, 42))
+>[w] : Symbol(ClassMemberVisibility[w], Decl(dynamicNamesErrors.ts, 39, 42))
 >w : Symbol(w, Decl(dynamicNamesErrors.ts, 29, 5))
 >value : Symbol(value, Decl(dynamicNamesErrors.ts, 40, 19))
 
     [x]: number;
->[x] : Symbol([x], Decl(dynamicNamesErrors.ts, 40, 37))
+>[x] : Symbol(ClassMemberVisibility[x], Decl(dynamicNamesErrors.ts, 40, 37))
 >x : Symbol(x, Decl(dynamicNamesErrors.ts, 26, 5))
 
     [y](): number { return 0; }
->[y] : Symbol([y], Decl(dynamicNamesErrors.ts, 42, 16))
+>[y] : Symbol(ClassMemberVisibility[y], Decl(dynamicNamesErrors.ts, 42, 16))
 >y : Symbol(y, Decl(dynamicNamesErrors.ts, 27, 5))
 
     get [z](): number { return 0; }
->[z] : Symbol([z], Decl(dynamicNamesErrors.ts, 43, 31))
+>[z] : Symbol(ClassMemberVisibility[z], Decl(dynamicNamesErrors.ts, 43, 31))
 >z : Symbol(z, Decl(dynamicNamesErrors.ts, 28, 5))
 
     set [w](value: number) { }
->[w] : Symbol([w], Decl(dynamicNamesErrors.ts, 44, 35))
+>[w] : Symbol(ClassMemberVisibility[w], Decl(dynamicNamesErrors.ts, 44, 35))
 >w : Symbol(w, Decl(dynamicNamesErrors.ts, 29, 5))
 >value : Symbol(value, Decl(dynamicNamesErrors.ts, 45, 12))
 }

@@ -16,9 +16,9 @@ var y = new Outer.Inner()
 >Inner : Symbol(Inner, Decl(def.js, 0, 14))
 
 y.name
->y.name : Symbol(name, Decl(def.js, 1, 21))
+>y.name : Symbol(Inner.name, Decl(def.js, 1, 21))
 >y : Symbol(y, Decl(usage.js, 4, 3))
->name : Symbol(name, Decl(def.js, 1, 21))
+>name : Symbol(Inner.name, Decl(def.js, 1, 21))
 
 /** @type {Outer.Inner} should be instance type, not static type */
 var x;
@@ -37,7 +37,7 @@ Outer.Inner = class {
 >Inner : Symbol(Inner, Decl(def.js, 0, 14))
 
   name() {
->name : Symbol(name, Decl(def.js, 1, 21))
+>name : Symbol(Inner.name, Decl(def.js, 1, 21))
 
     return 'hi'
   }

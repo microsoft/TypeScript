@@ -39,7 +39,7 @@ class C {
 >C : Symbol(C, Decl(callSignaturesWithParameterInitializers.ts, 11, 9))
 
     foo(x = 1) { }
->foo : Symbol(foo, Decl(callSignaturesWithParameterInitializers.ts, 13, 9))
+>foo : Symbol(C.foo, Decl(callSignaturesWithParameterInitializers.ts, 13, 9))
 >x : Symbol(x, Decl(callSignaturesWithParameterInitializers.ts, 14, 8))
 }
 
@@ -48,14 +48,14 @@ var c: C;
 >C : Symbol(C, Decl(callSignaturesWithParameterInitializers.ts, 11, 9))
 
 c.foo();
->c.foo : Symbol(foo, Decl(callSignaturesWithParameterInitializers.ts, 13, 9))
+>c.foo : Symbol(C.foo, Decl(callSignaturesWithParameterInitializers.ts, 13, 9))
 >c : Symbol(c, Decl(callSignaturesWithParameterInitializers.ts, 17, 3))
->foo : Symbol(foo, Decl(callSignaturesWithParameterInitializers.ts, 13, 9))
+>foo : Symbol(C.foo, Decl(callSignaturesWithParameterInitializers.ts, 13, 9))
 
 c.foo(1);
->c.foo : Symbol(foo, Decl(callSignaturesWithParameterInitializers.ts, 13, 9))
+>c.foo : Symbol(C.foo, Decl(callSignaturesWithParameterInitializers.ts, 13, 9))
 >c : Symbol(c, Decl(callSignaturesWithParameterInitializers.ts, 17, 3))
->foo : Symbol(foo, Decl(callSignaturesWithParameterInitializers.ts, 13, 9))
+>foo : Symbol(C.foo, Decl(callSignaturesWithParameterInitializers.ts, 13, 9))
 
 // these are errors
 interface I {
@@ -65,7 +65,7 @@ interface I {
 >x : Symbol(x, Decl(callSignaturesWithParameterInitializers.ts, 23, 5))
 
     foo(x: number, y = 1);
->foo : Symbol(foo, Decl(callSignaturesWithParameterInitializers.ts, 23, 12))
+>foo : Symbol(I.foo, Decl(callSignaturesWithParameterInitializers.ts, 23, 12))
 >x : Symbol(x, Decl(callSignaturesWithParameterInitializers.ts, 24, 8))
 >y : Symbol(y, Decl(callSignaturesWithParameterInitializers.ts, 24, 18))
 }
@@ -81,14 +81,14 @@ i(1);
 >i : Symbol(i, Decl(callSignaturesWithParameterInitializers.ts, 27, 3))
 
 i.foo(1);
->i.foo : Symbol(foo, Decl(callSignaturesWithParameterInitializers.ts, 23, 12))
+>i.foo : Symbol(I.foo, Decl(callSignaturesWithParameterInitializers.ts, 23, 12))
 >i : Symbol(i, Decl(callSignaturesWithParameterInitializers.ts, 27, 3))
->foo : Symbol(foo, Decl(callSignaturesWithParameterInitializers.ts, 23, 12))
+>foo : Symbol(I.foo, Decl(callSignaturesWithParameterInitializers.ts, 23, 12))
 
 i.foo(1, 2);
->i.foo : Symbol(foo, Decl(callSignaturesWithParameterInitializers.ts, 23, 12))
+>i.foo : Symbol(I.foo, Decl(callSignaturesWithParameterInitializers.ts, 23, 12))
 >i : Symbol(i, Decl(callSignaturesWithParameterInitializers.ts, 27, 3))
->foo : Symbol(foo, Decl(callSignaturesWithParameterInitializers.ts, 23, 12))
+>foo : Symbol(I.foo, Decl(callSignaturesWithParameterInitializers.ts, 23, 12))
 
 // these are errors
 var a: {

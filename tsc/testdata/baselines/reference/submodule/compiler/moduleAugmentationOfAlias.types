@@ -8,7 +8,7 @@ export default I;
 === /b.ts ===
 export {};
 declare module './a' {
->'./a' : typeof import("./a")
+>'./a' : typeof import("/a")
 
     export default interface I { x: number; }
 >x : number

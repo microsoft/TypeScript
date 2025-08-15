@@ -7,9 +7,9 @@ function Installer () {
     this.args = 0
 }
 Installer.prototype.loadArgMetadata = function (next) {
->Installer.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Installer.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >Installer : Symbol(Installer, Decl(npm-install.js, 0, 0))
->prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >next : Symbol(next, Decl(npm-install.js, 3, 48))
 
     // ArrowFunction isn't treated as a this-container

@@ -5,10 +5,10 @@ class A {
 >A : Symbol(A, Decl(duplicateIdentifierDifferentSpelling.ts, 0, 0))
 
   0b11 = '';
->0b11 : Symbol(0b11, Decl(duplicateIdentifierDifferentSpelling.ts, 0, 9), Decl(duplicateIdentifierDifferentSpelling.ts, 1, 12))
+>0b11 : Symbol(A[0b11], Decl(duplicateIdentifierDifferentSpelling.ts, 0, 9), Decl(duplicateIdentifierDifferentSpelling.ts, 1, 12))
 
   3 = '';
->3 : Symbol(0b11, Decl(duplicateIdentifierDifferentSpelling.ts, 0, 9), Decl(duplicateIdentifierDifferentSpelling.ts, 1, 12))
+>3 : Symbol(A[0b11], Decl(duplicateIdentifierDifferentSpelling.ts, 0, 9), Decl(duplicateIdentifierDifferentSpelling.ts, 1, 12))
 }
 
 var X = { 0b11: '', 3: '' };

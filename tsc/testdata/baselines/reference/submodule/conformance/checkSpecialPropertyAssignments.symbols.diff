@@ -16,8 +16,4 @@
 +>B : Symbol(B, Decl(bug24252.js, 0, 11))
 
      m() {
-->m : Symbol(B.m, Decl(bug24252.js, 1, 13))
-+>m : Symbol(m, Decl(bug24252.js, 1, 13))
-
-         /** @type {string[]} */
-         var x = [];
+ >m : Symbol(B.m, Decl(bug24252.js, 1, 13))

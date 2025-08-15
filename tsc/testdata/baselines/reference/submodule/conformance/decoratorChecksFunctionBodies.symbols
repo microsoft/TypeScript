@@ -27,7 +27,7 @@ class A {
 
     })
     m() {
->m : Symbol(m, Decl(decoratorChecksFunctionBodies.ts, 4, 9))
+>m : Symbol(A.m, Decl(decoratorChecksFunctionBodies.ts, 4, 9))
 
     }
 }

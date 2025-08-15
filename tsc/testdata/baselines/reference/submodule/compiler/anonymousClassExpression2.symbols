@@ -9,7 +9,7 @@ while (0) {
 >A : Symbol(A, Decl(anonymousClassExpression2.ts, 3, 11))
 
         methodA() {
->methodA : Symbol(methodA, Decl(anonymousClassExpression2.ts, 4, 13))
+>methodA : Symbol(A.methodA, Decl(anonymousClassExpression2.ts, 4, 13))
 
             this; //note: a this reference of some kind is required to trigger the bug
 >this : Symbol(A, Decl(anonymousClassExpression2.ts, 3, 11))
@@ -20,15 +20,15 @@ while (0) {
 >B : Symbol(B, Decl(anonymousClassExpression2.ts, 8, 5))
 
         methodB() {
->methodB : Symbol(methodB, Decl(anonymousClassExpression2.ts, 10, 13))
+>methodB : Symbol(B.methodB, Decl(anonymousClassExpression2.ts, 10, 13))
 
             this.methodA; // error
 >this : Symbol(B, Decl(anonymousClassExpression2.ts, 8, 5))
 
             this.methodB; // ok
->this.methodB : Symbol(methodB, Decl(anonymousClassExpression2.ts, 10, 13))
+>this.methodB : Symbol(B.methodB, Decl(anonymousClassExpression2.ts, 10, 13))
 >this : Symbol(B, Decl(anonymousClassExpression2.ts, 8, 5))
->methodB : Symbol(methodB, Decl(anonymousClassExpression2.ts, 10, 13))
+>methodB : Symbol(B.methodB, Decl(anonymousClassExpression2.ts, 10, 13))
         }
     }
 }

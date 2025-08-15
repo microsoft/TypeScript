@@ -15,10 +15,10 @@ interface B {
 >B : Symbol(B, Decl(privateNameAndPropertySignature.ts, 3, 1))
 
     #foo: string;
->#foo : Symbol(#foo, Decl(privateNameAndPropertySignature.ts, 5, 13))
+>#foo : Symbol(B.#foo, Decl(privateNameAndPropertySignature.ts, 5, 13))
 
     #bar(): string;
->#bar : Symbol(#bar, Decl(privateNameAndPropertySignature.ts, 6, 17))
+>#bar : Symbol(B.#bar, Decl(privateNameAndPropertySignature.ts, 6, 17))
 }
 
 declare const x: {

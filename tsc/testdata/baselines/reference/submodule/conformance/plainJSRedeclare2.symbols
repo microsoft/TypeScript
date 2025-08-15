@@ -8,7 +8,7 @@ var orbitol = 1 + false
 >orbitol : Symbol(orbitol, Decl(plainJSRedeclare.js, 1, 3))
 
 orbitol.toExponential()
->orbitol.toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+>orbitol.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 >orbitol : Symbol(orbitol, Decl(plainJSRedeclare.js, 0, 5))
->toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 

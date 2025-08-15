@@ -18,7 +18,7 @@ class SubClass extends Class {
 >Class : Symbol(Class, Decl(destructuringParameterDeclaration5.ts, 2, 15))
 
     foo: boolean;
->foo : Symbol(foo, Decl(destructuringParameterDeclaration5.ts, 7, 30))
+>foo : Symbol(SubClass.foo, Decl(destructuringParameterDeclaration5.ts, 7, 30))
 
     constructor() { super(); }
 >super : Symbol(Class, Decl(destructuringParameterDeclaration5.ts, 2, 15))
@@ -29,7 +29,7 @@ class D implements F {
 >F : Symbol(F, Decl(destructuringParameterDeclaration5.ts, 0, 0))
 
     foo: boolean
->foo : Symbol(foo, Decl(destructuringParameterDeclaration5.ts, 12, 22))
+>foo : Symbol(D.foo, Decl(destructuringParameterDeclaration5.ts, 12, 22))
 
     constructor() { }
 }
@@ -39,7 +39,7 @@ class SubD extends D {
 >D : Symbol(D, Decl(destructuringParameterDeclaration5.ts, 10, 1))
 
     bar: number
->bar : Symbol(bar, Decl(destructuringParameterDeclaration5.ts, 17, 22))
+>bar : Symbol(SubD.bar, Decl(destructuringParameterDeclaration5.ts, 17, 22))
 
     constructor() {
         super();

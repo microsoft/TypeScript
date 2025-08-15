@@ -13,7 +13,7 @@ class B extends A {
 >A : Symbol(A, Decl(override21.ts, 0, 21))
 
     override [foo]() { }
->[foo] : Symbol([foo], Decl(override21.ts, 3, 19))
+>[foo] : Symbol(B[foo], Decl(override21.ts, 3, 19))
 >foo : Symbol(foo, Decl(override21.ts, 0, 5))
 }
 

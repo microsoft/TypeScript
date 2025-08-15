@@ -19,7 +19,7 @@ const y : C = { s: '' }
 === a.d.ts ===
 import '.'
 declare module '.' {
->'.' : typeof import(".")
+>'.' : typeof import("index")
 
   type Row2 = { a: string }
 >Row2 : Row2
@@ -32,7 +32,7 @@ declare module '.' {
  
 === index.d.ts ===
 export type {Row2} from './common';
->Row2 : import("./common").Row2
+>Row2 : import("common").Row2
  
 === common.d.ts ===
 export interface Row2 { b: string }

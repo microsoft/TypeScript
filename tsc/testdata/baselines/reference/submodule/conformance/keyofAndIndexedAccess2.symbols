@@ -289,7 +289,7 @@ export interface Entity {
 >Entity : Symbol(Entity, Decl(keyofAndIndexedAccess2.ts, 68, 1))
 
     id: number | string;
->id : Symbol(id, Decl(keyofAndIndexedAccess2.ts, 72, 25))
+>id : Symbol(Entity.id, Decl(keyofAndIndexedAccess2.ts, 72, 25))
 }
 
 export type IdOf<E extends Entity> = E['id'];
@@ -304,12 +304,12 @@ export interface EntityState<E extends Entity> {
 >Entity : Symbol(Entity, Decl(keyofAndIndexedAccess2.ts, 68, 1))
 
     ids: IdOf<E>[];
->ids : Symbol(ids, Decl(keyofAndIndexedAccess2.ts, 78, 48))
+>ids : Symbol(EntityState.ids, Decl(keyofAndIndexedAccess2.ts, 78, 48))
 >IdOf : Symbol(IdOf, Decl(keyofAndIndexedAccess2.ts, 74, 1))
 >E : Symbol(E, Decl(keyofAndIndexedAccess2.ts, 78, 29))
 
     entities: { [key: string]: E, [key: number]: E };
->entities : Symbol(entities, Decl(keyofAndIndexedAccess2.ts, 79, 19))
+>entities : Symbol(EntityState.entities, Decl(keyofAndIndexedAccess2.ts, 79, 19))
 >key : Symbol(key, Decl(keyofAndIndexedAccess2.ts, 80, 17))
 >E : Symbol(E, Decl(keyofAndIndexedAccess2.ts, 78, 29))
 >key : Symbol(key, Decl(keyofAndIndexedAccess2.ts, 80, 35))
@@ -332,9 +332,9 @@ export function getAllEntities<E extends Entity>(state: EntityState<E>): E[] {
 >state : Symbol(state, Decl(keyofAndIndexedAccess2.ts, 84, 49))
 
     return ids.map(id => entities[id]);
->ids.map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+>ids.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >ids : Symbol(ids, Decl(keyofAndIndexedAccess2.ts, 85, 11))
->map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >id : Symbol(id, Decl(keyofAndIndexedAccess2.ts, 86, 19))
 >entities : Symbol(entities, Decl(keyofAndIndexedAccess2.ts, 85, 16))
 >id : Symbol(id, Decl(keyofAndIndexedAccess2.ts, 86, 19))
@@ -358,9 +358,9 @@ export function getEntity<E extends Entity>(id: IdOf<E>, state: EntityState<E>):
 >state : Symbol(state, Decl(keyofAndIndexedAccess2.ts, 89, 56))
 
     if (!ids.includes(id)) {
->ids.includes : Symbol(includes, Decl(lib.es2016.array.include.d.ts, --, --))
+>ids.includes : Symbol(Array.includes, Decl(lib.es2016.array.include.d.ts, --, --))
 >ids : Symbol(ids, Decl(keyofAndIndexedAccess2.ts, 90, 11))
->includes : Symbol(includes, Decl(lib.es2016.array.include.d.ts, --, --))
+>includes : Symbol(Array.includes, Decl(lib.es2016.array.include.d.ts, --, --))
 >id : Symbol(id, Decl(keyofAndIndexedAccess2.ts, 89, 44))
 
         return undefined;
@@ -378,10 +378,10 @@ interface Type {
 >Type : Symbol(Type, Decl(keyofAndIndexedAccess2.ts, 97, 1))
 
     a: 123;
->a : Symbol(a, Decl(keyofAndIndexedAccess2.ts, 101, 16))
+>a : Symbol(Type.a, Decl(keyofAndIndexedAccess2.ts, 101, 16))
 
     b: "some string";
->b : Symbol(b, Decl(keyofAndIndexedAccess2.ts, 102, 11))
+>b : Symbol(Type.b, Decl(keyofAndIndexedAccess2.ts, 102, 11))
 }
 
 function get123<K extends keyof Type>(): Type[K] {

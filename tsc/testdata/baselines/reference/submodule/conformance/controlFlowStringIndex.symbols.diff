@@ -11,18 +11,15 @@
 +>foo : Symbol(__index, Decl(controlFlowStringIndex.ts, 1, 25))
 
      value.foo.toExponential()
-->value.foo.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+ >value.foo.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 ->value.foo : Symbol(A.__index, Decl(controlFlowStringIndex.ts, 1, 25))
-+>value.foo.toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
 +>value.foo : Symbol(__index, Decl(controlFlowStringIndex.ts, 1, 25))
  >value : Symbol(value, Decl(controlFlowStringIndex.ts, 4, 13))
 ->foo : Symbol(A.__index, Decl(controlFlowStringIndex.ts, 1, 25))
-->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 +>foo : Symbol(__index, Decl(controlFlowStringIndex.ts, 1, 25))
-+>toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ >toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 
      value.other // should still be number | null
- >value.other : Symbol(other, Decl(controlFlowStringIndex.ts, 0, 10))
 @@= skipped -17, +17 lines =@@
  >other : Symbol(other, Decl(controlFlowStringIndex.ts, 0, 10))
 

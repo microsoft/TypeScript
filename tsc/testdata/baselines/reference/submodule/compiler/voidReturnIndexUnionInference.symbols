@@ -37,11 +37,11 @@ interface Props {
 >Props : Symbol(Props, Decl(voidReturnIndexUnionInference.ts, 10, 1))
 
     onFoo?(value: string): boolean;
->onFoo : Symbol(onFoo, Decl(voidReturnIndexUnionInference.ts, 12, 17))
+>onFoo : Symbol(Props.onFoo, Decl(voidReturnIndexUnionInference.ts, 12, 17))
 >value : Symbol(value, Decl(voidReturnIndexUnionInference.ts, 13, 11))
 
     onBar?(value: string): void;
->onBar : Symbol(onBar, Decl(voidReturnIndexUnionInference.ts, 13, 35))
+>onBar : Symbol(Props.onBar, Decl(voidReturnIndexUnionInference.ts, 13, 35))
 >value : Symbol(value, Decl(voidReturnIndexUnionInference.ts, 14, 11))
 }
 

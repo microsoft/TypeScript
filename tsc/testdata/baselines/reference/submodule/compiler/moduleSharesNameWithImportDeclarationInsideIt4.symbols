@@ -27,7 +27,7 @@ module A.M {
 >bar : Symbol(bar, Decl(moduleSharesNameWithImportDeclarationInsideIt4.ts, 7, 19))
     }
     M.bar(); // Should call Z.M.bar
->M.bar : Symbol(bar, Decl(moduleSharesNameWithImportDeclarationInsideIt4.ts, 0, 12))
+>M.bar : Symbol(M.bar, Decl(moduleSharesNameWithImportDeclarationInsideIt4.ts, 0, 12))
 >M : Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt4.ts, 5, 12), Decl(moduleSharesNameWithImportDeclarationInsideIt4.ts, 6, 19))
->bar : Symbol(bar, Decl(moduleSharesNameWithImportDeclarationInsideIt4.ts, 0, 12))
+>bar : Symbol(M.bar, Decl(moduleSharesNameWithImportDeclarationInsideIt4.ts, 0, 12))
 }

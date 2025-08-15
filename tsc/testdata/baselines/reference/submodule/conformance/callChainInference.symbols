@@ -7,7 +7,7 @@ interface Y {
 >Y : Symbol(Y, Decl(callChainInference.ts, 0, 0))
 
     foo<T>(this: T, arg: keyof T): void;
->foo : Symbol(foo, Decl(callChainInference.ts, 2, 13))
+>foo : Symbol(Y.foo, Decl(callChainInference.ts, 2, 13))
 >T : Symbol(T, Decl(callChainInference.ts, 3, 8))
 >this : Symbol(this, Decl(callChainInference.ts, 3, 11))
 >T : Symbol(T, Decl(callChainInference.ts, 3, 8))
@@ -15,10 +15,10 @@ interface Y {
 >T : Symbol(T, Decl(callChainInference.ts, 3, 8))
 
     a: number;
->a : Symbol(a, Decl(callChainInference.ts, 3, 40))
+>a : Symbol(Y.a, Decl(callChainInference.ts, 3, 40))
 
     b: string;
->b : Symbol(b, Decl(callChainInference.ts, 4, 14))
+>b : Symbol(Y.b, Decl(callChainInference.ts, 4, 14))
 }
 
 declare const value: Y | undefined;
@@ -29,13 +29,13 @@ if (value) {
 >value : Symbol(value, Decl(callChainInference.ts, 8, 13))
 
     value?.foo("a");
->value?.foo : Symbol(foo, Decl(callChainInference.ts, 2, 13))
+>value?.foo : Symbol(Y.foo, Decl(callChainInference.ts, 2, 13))
 >value : Symbol(value, Decl(callChainInference.ts, 8, 13))
->foo : Symbol(foo, Decl(callChainInference.ts, 2, 13))
+>foo : Symbol(Y.foo, Decl(callChainInference.ts, 2, 13))
 }
 
 value?.foo("a");
->value?.foo : Symbol(foo, Decl(callChainInference.ts, 2, 13))
+>value?.foo : Symbol(Y.foo, Decl(callChainInference.ts, 2, 13))
 >value : Symbol(value, Decl(callChainInference.ts, 8, 13))
->foo : Symbol(foo, Decl(callChainInference.ts, 2, 13))
+>foo : Symbol(Y.foo, Decl(callChainInference.ts, 2, 13))
 

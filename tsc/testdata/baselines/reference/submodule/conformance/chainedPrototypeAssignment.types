@@ -73,14 +73,14 @@ var B = function B() {
 exports.A = A
 >exports.A = A : { (): void; prototype: { m(n: number): number; }; }
 >exports.A : { (): void; prototype: { m(n: number): number; }; }
->exports : typeof import("./mod")
+>exports : typeof import("mod")
 >A : { (): void; prototype: { m(n: number): number; }; }
 >A : { (): void; prototype: { m(n: number): number; }; }
 
 exports.B = B
 >exports.B = B : { (): void; prototype: { m(n: number): number; }; }
 >exports.B : { (): void; prototype: { m(n: number): number; }; }
->exports : typeof import("./mod")
+>exports : typeof import("mod")
 >B : { (): void; prototype: { m(n: number): number; }; }
 >B : { (): void; prototype: { m(n: number): number; }; }
 

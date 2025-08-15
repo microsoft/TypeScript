@@ -8,13 +8,13 @@ class C {
      * @param {any} a
      */
     foo(a) {
->foo : Symbol(foo, Decl(a.js, 0, 9))
+>foo : Symbol(C.foo, Decl(a.js, 0, 9))
 >a : Symbol(a, Decl(a.js, 4, 8))
 
         this.constructor = a;
->this.constructor : Symbol(constructor, Decl(a.js, 4, 12))
+>this.constructor : Symbol(C.constructor, Decl(a.js, 4, 12))
 >this : Symbol(C, Decl(a.js, 0, 0))
->constructor : Symbol(constructor, Decl(a.js, 4, 12))
+>constructor : Symbol(C.constructor, Decl(a.js, 4, 12))
 >a : Symbol(a, Decl(a.js, 4, 8))
     }
 }

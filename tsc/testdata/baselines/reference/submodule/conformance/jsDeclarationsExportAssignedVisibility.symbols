@@ -11,9 +11,9 @@ class Container {
 
     constructor() {
         this.usage = new Obj();
->this.usage : Symbol(usage, Decl(index.js, 3, 19))
+>this.usage : Symbol(Container.usage, Decl(index.js, 3, 19))
 >this : Symbol(Container, Decl(index.js, 0, 29))
->usage : Symbol(usage, Decl(index.js, 3, 19))
+>usage : Symbol(Container.usage, Decl(index.js, 3, 19))
 >Obj : Symbol(Obj, Decl(index.js, 0, 5))
     }
 }
@@ -33,8 +33,8 @@ module.exports = class Obj {
 
     constructor() {
         this.x = 12;
->this.x : Symbol(x, Decl(obj.js, 1, 19))
+>this.x : Symbol(Obj.x, Decl(obj.js, 1, 19))
 >this : Symbol(Obj, Decl(obj.js, 0, 16))
->x : Symbol(x, Decl(obj.js, 1, 19))
+>x : Symbol(Obj.x, Decl(obj.js, 1, 19))
     }
 }

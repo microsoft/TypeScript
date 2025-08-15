@@ -5,14 +5,14 @@ class C {
 >C : Symbol(C, Decl(genericCallWithObjectTypeArgs.ts, 0, 0))
 
     private x: string;
->x : Symbol(x, Decl(genericCallWithObjectTypeArgs.ts, 0, 9))
+>x : Symbol(C.x, Decl(genericCallWithObjectTypeArgs.ts, 0, 9))
 }
 
 class D {
 >D : Symbol(D, Decl(genericCallWithObjectTypeArgs.ts, 2, 1))
 
     private x: string;
->x : Symbol(x, Decl(genericCallWithObjectTypeArgs.ts, 4, 9))
+>x : Symbol(D.x, Decl(genericCallWithObjectTypeArgs.ts, 4, 9))
 }
 
 class X<T> {
@@ -20,7 +20,7 @@ class X<T> {
 >T : Symbol(T, Decl(genericCallWithObjectTypeArgs.ts, 8, 8))
 
     x: T;
->x : Symbol(x, Decl(genericCallWithObjectTypeArgs.ts, 8, 12))
+>x : Symbol(X.x, Decl(genericCallWithObjectTypeArgs.ts, 8, 12))
 >T : Symbol(T, Decl(genericCallWithObjectTypeArgs.ts, 8, 8))
 }
 

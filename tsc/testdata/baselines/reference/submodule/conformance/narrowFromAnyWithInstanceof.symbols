@@ -37,9 +37,9 @@ if (x instanceof Error) { // 'any' is narrowed to types other than 'Function'/'O
 >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     x.message;
->x.message : Symbol(message, Decl(lib.es5.d.ts, --, --))
+>x.message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(narrowFromAnyWithInstanceof.ts, 0, 11))
->message : Symbol(message, Decl(lib.es5.d.ts, --, --))
+>message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
 
     x.mesage;
 >x : Symbol(x, Decl(narrowFromAnyWithInstanceof.ts, 0, 11))
@@ -50,9 +50,9 @@ if (x instanceof Date) {
 >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
     x.getDate();
->x.getDate : Symbol(getDate, Decl(lib.es5.d.ts, --, --))
+>x.getDate : Symbol(Date.getDate, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(narrowFromAnyWithInstanceof.ts, 0, 11))
->getDate : Symbol(getDate, Decl(lib.es5.d.ts, --, --))
+>getDate : Symbol(Date.getDate, Decl(lib.es5.d.ts, --, --))
 
     x.getHuors();
 >x : Symbol(x, Decl(narrowFromAnyWithInstanceof.ts, 0, 11))

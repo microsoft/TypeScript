@@ -13,7 +13,7 @@ export class Test<T> {
     }
 
     public test(): T {
->test : Symbol(test, Decl(declarationEmitTypeParamMergedWithPrivate.ts, 3, 5))
+>test : Symbol(Test.test, Decl(declarationEmitTypeParamMergedWithPrivate.ts, 3, 5))
 >T : Symbol(T, Decl(declarationEmitTypeParamMergedWithPrivate.ts, 0, 18), Decl(declarationEmitTypeParamMergedWithPrivate.ts, 0, 22))
 
         return null as any;

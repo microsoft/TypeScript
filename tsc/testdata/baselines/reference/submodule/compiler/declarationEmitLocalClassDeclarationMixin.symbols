@@ -19,7 +19,7 @@ function mixin<B extends Constructor<{}>>(Base: B) {
 >Base : Symbol(Base, Decl(declarationEmitLocalClassDeclarationMixin.ts, 2, 42))
 
         bar = 2;
->bar : Symbol(bar, Decl(declarationEmitLocalClassDeclarationMixin.ts, 3, 37))
+>bar : Symbol(PrivateMixed.bar, Decl(declarationEmitLocalClassDeclarationMixin.ts, 3, 37))
     }
     return PrivateMixed;
 >PrivateMixed : Symbol(PrivateMixed, Decl(declarationEmitLocalClassDeclarationMixin.ts, 2, 52))
@@ -29,7 +29,7 @@ export class Unmixed {
 >Unmixed : Symbol(Unmixed, Decl(declarationEmitLocalClassDeclarationMixin.ts, 7, 1))
 
     foo = 1;
->foo : Symbol(foo, Decl(declarationEmitLocalClassDeclarationMixin.ts, 9, 22))
+>foo : Symbol(Unmixed.foo, Decl(declarationEmitLocalClassDeclarationMixin.ts, 9, 22))
 }
 
 export const Mixed = mixin(Unmixed);
@@ -49,12 +49,12 @@ function Filter<C extends Constructor<{}>>(ctor: C) {
 >ctor : Symbol(ctor, Decl(declarationEmitLocalClassDeclarationMixin.ts, 15, 43))
 
         abstract match(path: string): boolean;
->match : Symbol(match, Decl(declarationEmitLocalClassDeclarationMixin.ts, 16, 45))
+>match : Symbol(FilterMixin.match, Decl(declarationEmitLocalClassDeclarationMixin.ts, 16, 45))
 >path : Symbol(path, Decl(declarationEmitLocalClassDeclarationMixin.ts, 17, 23))
 
         // other concrete methods, fields, constructor
         thing = 12;
->thing : Symbol(thing, Decl(declarationEmitLocalClassDeclarationMixin.ts, 17, 46))
+>thing : Symbol(FilterMixin.thing, Decl(declarationEmitLocalClassDeclarationMixin.ts, 17, 46))
     }
     return FilterMixin;
 >FilterMixin : Symbol(FilterMixin, Decl(declarationEmitLocalClassDeclarationMixin.ts, 15, 53))
@@ -66,7 +66,7 @@ export class FilteredThing extends Filter(Unmixed) {
 >Unmixed : Symbol(Unmixed, Decl(declarationEmitLocalClassDeclarationMixin.ts, 7, 1))
 
     match(path: string) {
->match : Symbol(match, Decl(declarationEmitLocalClassDeclarationMixin.ts, 24, 52))
+>match : Symbol(FilteredThing.match, Decl(declarationEmitLocalClassDeclarationMixin.ts, 24, 52))
 >path : Symbol(path, Decl(declarationEmitLocalClassDeclarationMixin.ts, 25, 10))
 
         return false;

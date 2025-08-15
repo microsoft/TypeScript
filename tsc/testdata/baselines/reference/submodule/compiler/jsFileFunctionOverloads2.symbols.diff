@@ -18,23 +18,3 @@
  >array : Symbol(array, Decl(jsFileFunctionOverloads2.js, 44, 17))
  >iterable : Symbol(iterable, Decl(jsFileFunctionOverloads2.js, 44, 23))
  >identity : Symbol(identity, Decl(jsFileFunctionOverloads2.js, 26, 5))
-@@= skipped -12, +12 lines =@@
-   for (let i = 0; i < array.length; i += 1) {
- >i : Symbol(i, Decl(jsFileFunctionOverloads2.js, 47, 10))
- >i : Symbol(i, Decl(jsFileFunctionOverloads2.js, 47, 10))
-->array.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
-+>array.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- >array : Symbol(array, Decl(jsFileFunctionOverloads2.js, 44, 17))
-->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
-+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- >i : Symbol(i, Decl(jsFileFunctionOverloads2.js, 47, 10))
-
-     result.push(.../** @type {unknown[]} */(iterable(array[i])));
-->result.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
-+>result.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
- >result : Symbol(result, Decl(jsFileFunctionOverloads2.js, 46, 7))
-->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
-+>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
- >iterable : Symbol(iterable, Decl(jsFileFunctionOverloads2.js, 44, 23))
- >array : Symbol(array, Decl(jsFileFunctionOverloads2.js, 44, 17))
- >i : Symbol(i, Decl(jsFileFunctionOverloads2.js, 47, 10))

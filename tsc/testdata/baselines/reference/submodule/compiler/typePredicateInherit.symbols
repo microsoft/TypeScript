@@ -5,16 +5,16 @@ interface A {
 >A : Symbol(A, Decl(typePredicateInherit.ts, 0, 0))
 
   method1(): this is {
->method1 : Symbol(method1, Decl(typePredicateInherit.ts, 0, 13))
+>method1 : Symbol(A.method1, Decl(typePredicateInherit.ts, 0, 13))
 
     a: 1
 >a : Symbol(a, Decl(typePredicateInherit.ts, 1, 22))
   }
   method2(): boolean;
->method2 : Symbol(method2, Decl(typePredicateInherit.ts, 3, 3))
+>method2 : Symbol(A.method2, Decl(typePredicateInherit.ts, 3, 3))
 
   method3(): this is {
->method3 : Symbol(method3, Decl(typePredicateInherit.ts, 4, 21))
+>method3 : Symbol(A.method3, Decl(typePredicateInherit.ts, 4, 21))
 
     a: 1
 >a : Symbol(a, Decl(typePredicateInherit.ts, 5, 22))
@@ -26,13 +26,13 @@ class B implements A {
 >A : Symbol(A, Decl(typePredicateInherit.ts, 0, 0))
 
   method1() { }      // should error
->method1 : Symbol(method1, Decl(typePredicateInherit.ts, 9, 22))
+>method1 : Symbol(B.method1, Decl(typePredicateInherit.ts, 9, 22))
 
   method2() { }   // should error
->method2 : Symbol(method2, Decl(typePredicateInherit.ts, 10, 15))
+>method2 : Symbol(B.method2, Decl(typePredicateInherit.ts, 10, 15))
 
   method3() {   // should error
->method3 : Symbol(method3, Decl(typePredicateInherit.ts, 12, 15))
+>method3 : Symbol(B.method3, Decl(typePredicateInherit.ts, 12, 15))
 
     return true
   }
@@ -42,7 +42,7 @@ class C {
 >C : Symbol(C, Decl(typePredicateInherit.ts, 17, 1))
 
   method1(): this is {
->method1 : Symbol(method1, Decl(typePredicateInherit.ts, 19, 9))
+>method1 : Symbol(C.method1, Decl(typePredicateInherit.ts, 19, 9))
 
     a: 1
 >a : Symbol(a, Decl(typePredicateInherit.ts, 20, 22))
@@ -52,7 +52,7 @@ class C {
   }
 
   method2(): this is {
->method2 : Symbol(method2, Decl(typePredicateInherit.ts, 24, 3))
+>method2 : Symbol(C.method2, Decl(typePredicateInherit.ts, 24, 3))
 
     a: 1
 >a : Symbol(a, Decl(typePredicateInherit.ts, 26, 22))
@@ -62,7 +62,7 @@ class C {
   }
 
   method3(): this is {
->method3 : Symbol(method3, Decl(typePredicateInherit.ts, 30, 3))
+>method3 : Symbol(C.method3, Decl(typePredicateInherit.ts, 30, 3))
 
     a: 1
 >a : Symbol(a, Decl(typePredicateInherit.ts, 32, 22))
@@ -77,11 +77,11 @@ class D extends C {
 >C : Symbol(C, Decl(typePredicateInherit.ts, 17, 1))
 
   method1(): void {   // should error
->method1 : Symbol(method1, Decl(typePredicateInherit.ts, 39, 19))
+>method1 : Symbol(D.method1, Decl(typePredicateInherit.ts, 39, 19))
   }
 
   method2(): this is {  // should ok
->method2 : Symbol(method2, Decl(typePredicateInherit.ts, 41, 3))
+>method2 : Symbol(D.method2, Decl(typePredicateInherit.ts, 41, 3))
 
     a: 1
 >a : Symbol(a, Decl(typePredicateInherit.ts, 43, 22))
@@ -91,7 +91,7 @@ class D extends C {
   }
 
   method3(): boolean {  // should error
->method3 : Symbol(method3, Decl(typePredicateInherit.ts, 47, 3))
+>method3 : Symbol(D.method3, Decl(typePredicateInherit.ts, 47, 3))
 
     return true;
   }

@@ -5,7 +5,7 @@ class C {
 >C : Symbol(C, Decl(parserSetAccessorWithTypeAnnotation1.ts, 0, 0))
 
    set foo(v): number {
->foo : Symbol(foo, Decl(parserSetAccessorWithTypeAnnotation1.ts, 0, 9))
+>foo : Symbol(C.foo, Decl(parserSetAccessorWithTypeAnnotation1.ts, 0, 9))
 >v : Symbol(v, Decl(parserSetAccessorWithTypeAnnotation1.ts, 1, 11))
    }
 }

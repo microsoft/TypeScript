@@ -1,37 +1,24 @@
 --- old.duplicatePackage.types
 +++ new.duplicatePackage.types
-@@= skipped -1, +1 lines =@@
-
- === /src/a.ts ===
- import { a } from "a";
-->a : (x: import("/node_modules/a/node_modules/x/index").default) => void
-+>a : (x: import("a/node_modules/x").default) => void
+@@= skipped -4, +4 lines =@@
+ >a : (x: import("/node_modules/a/node_modules/x/index").default) => void
 
  import { b } from "b";
 ->b : import("/node_modules/a/node_modules/x/index").default
 +>b : X
 
  import { c } from "c";
-->c : import("/node_modules/c/node_modules/x/index").default
-+>c : import("c/node_modules/x").default
-
+ >c : import("/node_modules/c/node_modules/x/index").default
+@@= skipped -8, +8 lines =@@
  a(b); // Works
  >a(b) : void
-->a : (x: import("/node_modules/a/node_modules/x/index").default) => void
+ >a : (x: import("/node_modules/a/node_modules/x/index").default) => void
 ->b : import("/node_modules/a/node_modules/x/index").default
-+>a : (x: import("a/node_modules/x").default) => void
 +>b : X
 
  a(c); // Error, these are from different versions of the library.
  >a(c) : void
-->a : (x: import("/node_modules/a/node_modules/x/index").default) => void
-->c : import("/node_modules/c/node_modules/x/index").default
-+>a : (x: import("a/node_modules/x").default) => void
-+>c : import("c/node_modules/x").default
-
- === /node_modules/a/index.d.ts ===
- import X from "x";
-@@= skipped -36, +36 lines =@@
+@@= skipped -25, +25 lines =@@
 
  === /node_modules/b/index.d.ts ===
  import X from "x";

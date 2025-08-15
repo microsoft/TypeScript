@@ -6,8 +6,8 @@
  <><span></span></>
 ->span : Symbol(JSX.IntrinsicElements.__index, Decl(react.d.ts, 2, 37))
 ->span : Symbol(JSX.IntrinsicElements.__index, Decl(react.d.ts, 2, 37))
-+>span : Symbol(__index, Decl(react.d.ts, 2, 37))
-+>span : Symbol(__index, Decl(react.d.ts, 2, 37))
++>span : Symbol(JSX.IntrinsicElements[__index], Decl(react.d.ts, 2, 37))
++>span : Symbol(JSX.IntrinsicElements[__index], Decl(react.d.ts, 2, 37))
 
  === preacty.tsx ===
  /**
@@ -17,8 +17,8 @@
  <><div></div></>
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(react.d.ts, 2, 37))
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(react.d.ts, 2, 37))
-+>div : Symbol(__index, Decl(react.d.ts, 2, 37))
-+>div : Symbol(__index, Decl(react.d.ts, 2, 37))
++>div : Symbol(JSX.IntrinsicElements[__index], Decl(react.d.ts, 2, 37))
++>div : Symbol(JSX.IntrinsicElements[__index], Decl(react.d.ts, 2, 37))
 
  === snabbdomy.tsx ===
  /**
@@ -28,8 +28,8 @@
  <><div></div></>
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(react.d.ts, 2, 37))
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(react.d.ts, 2, 37))
-+>div : Symbol(__index, Decl(react.d.ts, 2, 37))
-+>div : Symbol(__index, Decl(react.d.ts, 2, 37))
++>div : Symbol(JSX.IntrinsicElements[__index], Decl(react.d.ts, 2, 37))
++>div : Symbol(JSX.IntrinsicElements[__index], Decl(react.d.ts, 2, 37))
 
  === mix-n-match.tsx ===
  /* @jsx h */
@@ -39,5 +39,5 @@
  <><span></span></>
 ->span : Symbol(JSX.IntrinsicElements.__index, Decl(react.d.ts, 2, 37))
 ->span : Symbol(JSX.IntrinsicElements.__index, Decl(react.d.ts, 2, 37))
-+>span : Symbol(__index, Decl(react.d.ts, 2, 37))
-+>span : Symbol(__index, Decl(react.d.ts, 2, 37))
++>span : Symbol(JSX.IntrinsicElements[__index], Decl(react.d.ts, 2, 37))
++>span : Symbol(JSX.IntrinsicElements[__index], Decl(react.d.ts, 2, 37))

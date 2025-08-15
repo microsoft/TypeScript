@@ -93,9 +93,9 @@ new someGenerics2a<string>((n: string) => n);
 new someGenerics2a<string>((n) => n.substr(0));
 >someGenerics2a : Symbol(someGenerics2a, Decl(typeArgumentInferenceConstructSignatures.ts, 25, 36), Decl(typeArgumentInferenceConstructSignatures.ts, 31, 3))
 >n : Symbol(n, Decl(typeArgumentInferenceConstructSignatures.ts, 34, 28))
->n.substr : Symbol(substr, Decl(lib.es5.d.ts, --, --))
+>n.substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
 >n : Symbol(n, Decl(typeArgumentInferenceConstructSignatures.ts, 34, 28))
->substr : Symbol(substr, Decl(lib.es5.d.ts, --, --))
+>substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
 
 interface someGenerics2b {
 >someGenerics2b : Symbol(someGenerics2b, Decl(typeArgumentInferenceConstructSignatures.ts, 34, 47), Decl(typeArgumentInferenceConstructSignatures.ts, 39, 3))
@@ -129,9 +129,9 @@ new someGenerics2b<string, number>((n, t) => n.substr(t * t));
 >someGenerics2b : Symbol(someGenerics2b, Decl(typeArgumentInferenceConstructSignatures.ts, 34, 47), Decl(typeArgumentInferenceConstructSignatures.ts, 39, 3))
 >n : Symbol(n, Decl(typeArgumentInferenceConstructSignatures.ts, 42, 36))
 >t : Symbol(t, Decl(typeArgumentInferenceConstructSignatures.ts, 42, 38))
->n.substr : Symbol(substr, Decl(lib.es5.d.ts, --, --))
+>n.substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
 >n : Symbol(n, Decl(typeArgumentInferenceConstructSignatures.ts, 42, 36))
->substr : Symbol(substr, Decl(lib.es5.d.ts, --, --))
+>substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
 >t : Symbol(t, Decl(typeArgumentInferenceConstructSignatures.ts, 42, 38))
 >t : Symbol(t, Decl(typeArgumentInferenceConstructSignatures.ts, 42, 38))
 
@@ -395,19 +395,19 @@ interface A91 {
 >A91 : Symbol(A91, Decl(typeArgumentInferenceConstructSignatures.ts, 108, 37))
 
     x: number;
->x : Symbol(x, Decl(typeArgumentInferenceConstructSignatures.ts, 111, 15))
+>x : Symbol(A91.x, Decl(typeArgumentInferenceConstructSignatures.ts, 111, 15))
 
     y?: string;
->y : Symbol(y, Decl(typeArgumentInferenceConstructSignatures.ts, 112, 14))
+>y : Symbol(A91.y, Decl(typeArgumentInferenceConstructSignatures.ts, 112, 14))
 }
 interface A92 {
 >A92 : Symbol(A92, Decl(typeArgumentInferenceConstructSignatures.ts, 114, 1))
 
     x: number;
->x : Symbol(x, Decl(typeArgumentInferenceConstructSignatures.ts, 115, 15))
+>x : Symbol(A92.x, Decl(typeArgumentInferenceConstructSignatures.ts, 115, 15))
 
     z?: Window;
->z : Symbol(z, Decl(typeArgumentInferenceConstructSignatures.ts, 116, 14))
+>z : Symbol(A92.z, Decl(typeArgumentInferenceConstructSignatures.ts, 116, 14))
 >Window : Symbol(Window, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 }
 var a9e = new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });

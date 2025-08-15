@@ -228,7 +228,7 @@ declare function mock<M>(_: Promise<M>): {} & M;
 mock(import('./ex'))
 >mock(import('./ex')) : {}
 >mock : <M>(_: Promise<M>) => {} & M
->import('./ex') : Promise<{ default: typeof import("./ex"); }>
+>import('./ex') : Promise<{ default: typeof import("ex"); }>
 >'./ex' : "./ex"
 
 === ex.d.ts ===

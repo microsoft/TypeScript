@@ -1,27 +1,6 @@
 --- old.lateBoundAssignmentDeclarationSupport2.symbols
 +++ new.lateBoundAssignmentDeclarationSupport2.symbols
-@@= skipped -3, +3 lines =@@
- const x = require("./lateBoundAssignmentDeclarationSupport2.js");
- >x : Symbol(x, Decl(usage.js, 0, 5))
- >require : Symbol(require)
-->"./lateBoundAssignmentDeclarationSupport2.js" : Symbol(x, Decl(lateBoundAssignmentDeclarationSupport2.js, 0, 0))
-+>"./lateBoundAssignmentDeclarationSupport2.js" : Symbol("lateBoundAssignmentDeclarationSupport2", Decl(lateBoundAssignmentDeclarationSupport2.js, 0, 0))
-
- const y = x["my-fake-sym"];
- >y : Symbol(y, Decl(usage.js, 1, 5))
-@@= skipped -9, +9 lines =@@
- const z = x[x.S];
- >z : Symbol(z, Decl(usage.js, 2, 5))
- >x : Symbol(x, Decl(usage.js, 0, 5))
-->x.S : Symbol(x.S, Decl(lateBoundAssignmentDeclarationSupport2.js, 5, 28))
-+>x.S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport2.js, 5, 28))
- >x : Symbol(x, Decl(usage.js, 0, 5))
-->S : Symbol(x.S, Decl(lateBoundAssignmentDeclarationSupport2.js, 5, 28))
-+>S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport2.js, 5, 28))
-
- === lateBoundAssignmentDeclarationSupport2.js ===
- // currently unsupported
-@@= skipped -14, +14 lines =@@
+@@= skipped -26, +26 lines =@@
  >_str : Symbol(_str, Decl(lateBoundAssignmentDeclarationSupport2.js, 2, 5))
 
  module.exports[_sym] = "ok";

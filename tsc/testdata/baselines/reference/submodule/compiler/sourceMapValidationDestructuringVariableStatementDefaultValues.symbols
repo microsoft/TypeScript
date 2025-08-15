@@ -5,10 +5,10 @@ interface Robot {
 >Robot : Symbol(Robot, Decl(sourceMapValidationDestructuringVariableStatementDefaultValues.ts, 0, 0))
 
     name: string;
->name : Symbol(name, Decl(sourceMapValidationDestructuringVariableStatementDefaultValues.ts, 0, 17))
+>name : Symbol(Robot.name, Decl(sourceMapValidationDestructuringVariableStatementDefaultValues.ts, 0, 17))
 
     skill: string;
->skill : Symbol(skill, Decl(sourceMapValidationDestructuringVariableStatementDefaultValues.ts, 1, 17))
+>skill : Symbol(Robot.skill, Decl(sourceMapValidationDestructuringVariableStatementDefaultValues.ts, 1, 17))
 }
 declare var console: {
 >console : Symbol(console, Decl(sourceMapValidationDestructuringVariableStatementDefaultValues.ts, 4, 11))
@@ -33,14 +33,14 @@ var robotB: Robot = { name: "trimmer", skill: "trimming" };
 >skill : Symbol(skill, Decl(sourceMapValidationDestructuringVariableStatementDefaultValues.ts, 9, 38))
 
 var { name: nameA = "<NoName>" } = robotA;
->name : Symbol(name, Decl(sourceMapValidationDestructuringVariableStatementDefaultValues.ts, 0, 17))
+>name : Symbol(Robot.name, Decl(sourceMapValidationDestructuringVariableStatementDefaultValues.ts, 0, 17))
 >nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringVariableStatementDefaultValues.ts, 10, 5))
 >robotA : Symbol(robotA, Decl(sourceMapValidationDestructuringVariableStatementDefaultValues.ts, 8, 3))
 
 var { name: nameB = "<NoName>", skill: skillB = "<skillUnspecified>" } = robotB;
->name : Symbol(name, Decl(sourceMapValidationDestructuringVariableStatementDefaultValues.ts, 0, 17))
+>name : Symbol(Robot.name, Decl(sourceMapValidationDestructuringVariableStatementDefaultValues.ts, 0, 17))
 >nameB : Symbol(nameB, Decl(sourceMapValidationDestructuringVariableStatementDefaultValues.ts, 11, 5))
->skill : Symbol(skill, Decl(sourceMapValidationDestructuringVariableStatementDefaultValues.ts, 1, 17))
+>skill : Symbol(Robot.skill, Decl(sourceMapValidationDestructuringVariableStatementDefaultValues.ts, 1, 17))
 >skillB : Symbol(skillB, Decl(sourceMapValidationDestructuringVariableStatementDefaultValues.ts, 11, 31))
 >robotB : Symbol(robotB, Decl(sourceMapValidationDestructuringVariableStatementDefaultValues.ts, 9, 3))
 

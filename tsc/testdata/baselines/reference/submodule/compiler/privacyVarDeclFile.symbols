@@ -13,7 +13,7 @@ export interface publicInterfaceWithPrivatePropertyTypes {
 >publicInterfaceWithPrivatePropertyTypes : Symbol(publicInterfaceWithPrivatePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 4, 1))
 
     myProperty: privateClass;  // Error
->myProperty : Symbol(myProperty, Decl(privacyVarDeclFile_externalModule.ts, 6, 58))
+>myProperty : Symbol(publicInterfaceWithPrivatePropertyTypes.myProperty, Decl(privacyVarDeclFile_externalModule.ts, 6, 58))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_externalModule.ts, 0, 0))
 }
 
@@ -21,7 +21,7 @@ export interface publicInterfaceWithPublicPropertyTypes {
 >publicInterfaceWithPublicPropertyTypes : Symbol(publicInterfaceWithPublicPropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 8, 1))
 
     myProperty: publicClass;
->myProperty : Symbol(myProperty, Decl(privacyVarDeclFile_externalModule.ts, 10, 57))
+>myProperty : Symbol(publicInterfaceWithPublicPropertyTypes.myProperty, Decl(privacyVarDeclFile_externalModule.ts, 10, 57))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 1, 1))
 }
 
@@ -29,7 +29,7 @@ interface privateInterfaceWithPrivatePropertyTypes {
 >privateInterfaceWithPrivatePropertyTypes : Symbol(privateInterfaceWithPrivatePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 12, 1))
 
     myProperty: privateClass;
->myProperty : Symbol(myProperty, Decl(privacyVarDeclFile_externalModule.ts, 14, 52))
+>myProperty : Symbol(privateInterfaceWithPrivatePropertyTypes.myProperty, Decl(privacyVarDeclFile_externalModule.ts, 14, 52))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_externalModule.ts, 0, 0))
 }
 
@@ -37,7 +37,7 @@ interface privateInterfaceWithPublicPropertyTypes {
 >privateInterfaceWithPublicPropertyTypes : Symbol(privateInterfaceWithPublicPropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 16, 1))
 
     myProperty: publicClass;
->myProperty : Symbol(myProperty, Decl(privacyVarDeclFile_externalModule.ts, 18, 51))
+>myProperty : Symbol(privateInterfaceWithPublicPropertyTypes.myProperty, Decl(privacyVarDeclFile_externalModule.ts, 18, 51))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 1, 1))
 }
 
@@ -45,19 +45,19 @@ export class publicClassWithWithPrivatePropertyTypes {
 >publicClassWithWithPrivatePropertyTypes : Symbol(publicClassWithWithPrivatePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 20, 1))
 
     static myPublicStaticProperty: privateClass; // Error
->myPublicStaticProperty : Symbol(myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 22, 54))
+>myPublicStaticProperty : Symbol(publicClassWithWithPrivatePropertyTypes.myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 22, 54))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_externalModule.ts, 0, 0))
 
     private static myPrivateStaticProperty: privateClass;
->myPrivateStaticProperty : Symbol(myPrivateStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 23, 48))
+>myPrivateStaticProperty : Symbol(publicClassWithWithPrivatePropertyTypes.myPrivateStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 23, 48))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_externalModule.ts, 0, 0))
 
     myPublicProperty: privateClass; // Error
->myPublicProperty : Symbol(myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 24, 57))
+>myPublicProperty : Symbol(publicClassWithWithPrivatePropertyTypes.myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 24, 57))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_externalModule.ts, 0, 0))
 
     private myPrivateProperty: privateClass;
->myPrivateProperty : Symbol(myPrivateProperty, Decl(privacyVarDeclFile_externalModule.ts, 25, 35))
+>myPrivateProperty : Symbol(publicClassWithWithPrivatePropertyTypes.myPrivateProperty, Decl(privacyVarDeclFile_externalModule.ts, 25, 35))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_externalModule.ts, 0, 0))
 }
 
@@ -65,19 +65,19 @@ export class publicClassWithWithPublicPropertyTypes {
 >publicClassWithWithPublicPropertyTypes : Symbol(publicClassWithWithPublicPropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 27, 1))
 
     static myPublicStaticProperty: publicClass;
->myPublicStaticProperty : Symbol(myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 29, 53))
+>myPublicStaticProperty : Symbol(publicClassWithWithPublicPropertyTypes.myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 29, 53))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 1, 1))
 
     private static myPrivateStaticProperty: publicClass;
->myPrivateStaticProperty : Symbol(myPrivateStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 30, 47))
+>myPrivateStaticProperty : Symbol(publicClassWithWithPublicPropertyTypes.myPrivateStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 30, 47))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 1, 1))
 
     myPublicProperty: publicClass;
->myPublicProperty : Symbol(myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 31, 56))
+>myPublicProperty : Symbol(publicClassWithWithPublicPropertyTypes.myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 31, 56))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 1, 1))
 
     private myPrivateProperty: publicClass;
->myPrivateProperty : Symbol(myPrivateProperty, Decl(privacyVarDeclFile_externalModule.ts, 32, 34))
+>myPrivateProperty : Symbol(publicClassWithWithPublicPropertyTypes.myPrivateProperty, Decl(privacyVarDeclFile_externalModule.ts, 32, 34))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 1, 1))
 }
 
@@ -85,19 +85,19 @@ class privateClassWithWithPrivatePropertyTypes {
 >privateClassWithWithPrivatePropertyTypes : Symbol(privateClassWithWithPrivatePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 34, 1))
 
     static myPublicStaticProperty: privateClass;
->myPublicStaticProperty : Symbol(myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 36, 48))
+>myPublicStaticProperty : Symbol(privateClassWithWithPrivatePropertyTypes.myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 36, 48))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_externalModule.ts, 0, 0))
 
     private static myPrivateStaticProperty: privateClass;
->myPrivateStaticProperty : Symbol(myPrivateStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 37, 48))
+>myPrivateStaticProperty : Symbol(privateClassWithWithPrivatePropertyTypes.myPrivateStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 37, 48))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_externalModule.ts, 0, 0))
 
     myPublicProperty: privateClass;
->myPublicProperty : Symbol(myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 38, 57))
+>myPublicProperty : Symbol(privateClassWithWithPrivatePropertyTypes.myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 38, 57))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_externalModule.ts, 0, 0))
 
     private myPrivateProperty: privateClass;
->myPrivateProperty : Symbol(myPrivateProperty, Decl(privacyVarDeclFile_externalModule.ts, 39, 35))
+>myPrivateProperty : Symbol(privateClassWithWithPrivatePropertyTypes.myPrivateProperty, Decl(privacyVarDeclFile_externalModule.ts, 39, 35))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_externalModule.ts, 0, 0))
 }
 
@@ -105,19 +105,19 @@ class privateClassWithWithPublicPropertyTypes {
 >privateClassWithWithPublicPropertyTypes : Symbol(privateClassWithWithPublicPropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 41, 1))
 
     static myPublicStaticProperty: publicClass;
->myPublicStaticProperty : Symbol(myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 43, 47))
+>myPublicStaticProperty : Symbol(privateClassWithWithPublicPropertyTypes.myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 43, 47))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 1, 1))
 
     private static myPrivateStaticProperty: publicClass;
->myPrivateStaticProperty : Symbol(myPrivateStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 44, 47))
+>myPrivateStaticProperty : Symbol(privateClassWithWithPublicPropertyTypes.myPrivateStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 44, 47))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 1, 1))
 
     myPublicProperty: publicClass;
->myPublicProperty : Symbol(myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 45, 56))
+>myPublicProperty : Symbol(privateClassWithWithPublicPropertyTypes.myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 45, 56))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 1, 1))
 
     private myPrivateProperty: publicClass;
->myPrivateProperty : Symbol(myPrivateProperty, Decl(privacyVarDeclFile_externalModule.ts, 46, 34))
+>myPrivateProperty : Symbol(privateClassWithWithPublicPropertyTypes.myPrivateProperty, Decl(privacyVarDeclFile_externalModule.ts, 46, 34))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 1, 1))
 }
 
@@ -157,63 +157,63 @@ export interface publicInterfaceWithPrivateModulePropertyTypes {
 >publicInterfaceWithPrivateModulePropertyTypes : Symbol(publicInterfaceWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 58, 66))
 
     myProperty: privateModule.publicClass; // Error
->myProperty : Symbol(myProperty, Decl(privacyVarDeclFile_externalModule.ts, 60, 64))
+>myProperty : Symbol(publicInterfaceWithPrivateModulePropertyTypes.myProperty, Decl(privacyVarDeclFile_externalModule.ts, 60, 64))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_externalModule.ts, 160, 1))
->publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
+>publicClass : Symbol(privateModule.publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
 }
 export class publicClassWithPrivateModulePropertyTypes {
 >publicClassWithPrivateModulePropertyTypes : Symbol(publicClassWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 62, 1))
 
     static myPublicStaticProperty: privateModule.publicClass; // Error
->myPublicStaticProperty : Symbol(myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 63, 56))
+>myPublicStaticProperty : Symbol(publicClassWithPrivateModulePropertyTypes.myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 63, 56))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_externalModule.ts, 160, 1))
->publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
+>publicClass : Symbol(privateModule.publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
 
     myPublicProperty: privateModule.publicClass; // Error
->myPublicProperty : Symbol(myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 64, 61))
+>myPublicProperty : Symbol(publicClassWithPrivateModulePropertyTypes.myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 64, 61))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_externalModule.ts, 160, 1))
->publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
+>publicClass : Symbol(privateModule.publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
 }
 export var publicVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
 >publicVarWithPrivateModulePropertyTypes : Symbol(publicVarWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 67, 10))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_externalModule.ts, 160, 1))
->publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
+>publicClass : Symbol(privateModule.publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
 
 export declare var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
 >publicAmbientVarWithPrivateModulePropertyTypes : Symbol(publicAmbientVarWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 68, 18))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_externalModule.ts, 160, 1))
->publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
+>publicClass : Symbol(privateModule.publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
 
 interface privateInterfaceWithPrivateModulePropertyTypes {
 >privateInterfaceWithPrivateModulePropertyTypes : Symbol(privateInterfaceWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 68, 93))
 
     myProperty: privateModule.publicClass;
->myProperty : Symbol(myProperty, Decl(privacyVarDeclFile_externalModule.ts, 70, 58))
+>myProperty : Symbol(privateInterfaceWithPrivateModulePropertyTypes.myProperty, Decl(privacyVarDeclFile_externalModule.ts, 70, 58))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_externalModule.ts, 160, 1))
->publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
+>publicClass : Symbol(privateModule.publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
 }
 class privateClassWithPrivateModulePropertyTypes {
 >privateClassWithPrivateModulePropertyTypes : Symbol(privateClassWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 72, 1))
 
     static myPublicStaticProperty: privateModule.publicClass;
->myPublicStaticProperty : Symbol(myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 73, 50))
+>myPublicStaticProperty : Symbol(privateClassWithPrivateModulePropertyTypes.myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 73, 50))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_externalModule.ts, 160, 1))
->publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
+>publicClass : Symbol(privateModule.publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
 
     myPublicProperty: privateModule.publicClass;
->myPublicProperty : Symbol(myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 74, 61))
+>myPublicProperty : Symbol(privateClassWithPrivateModulePropertyTypes.myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 74, 61))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_externalModule.ts, 160, 1))
->publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
+>publicClass : Symbol(privateModule.publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
 }
 var privateVarWithPrivateModulePropertyTypes: privateModule.publicClass;
 >privateVarWithPrivateModulePropertyTypes : Symbol(privateVarWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 77, 3))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_externalModule.ts, 160, 1))
->publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
+>publicClass : Symbol(privateModule.publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
 
 declare var privateAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
 >privateAmbientVarWithPrivateModulePropertyTypes : Symbol(privateAmbientVarWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 78, 11))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_externalModule.ts, 160, 1))
->publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
+>publicClass : Symbol(privateModule.publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
 
 export module publicModule {
 >publicModule : Symbol(publicModule, Decl(privacyVarDeclFile_externalModule.ts, 78, 87))
@@ -230,7 +230,7 @@ export module publicModule {
 >publicInterfaceWithPrivatePropertyTypes : Symbol(publicInterfaceWithPrivatePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 85, 5))
 
         myProperty: privateClass;  // Error
->myProperty : Symbol(myProperty, Decl(privacyVarDeclFile_externalModule.ts, 87, 62))
+>myProperty : Symbol(publicInterfaceWithPrivatePropertyTypes.myProperty, Decl(privacyVarDeclFile_externalModule.ts, 87, 62))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_externalModule.ts, 80, 28))
     }
 
@@ -238,7 +238,7 @@ export module publicModule {
 >publicInterfaceWithPublicPropertyTypes : Symbol(publicInterfaceWithPublicPropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 89, 5))
 
         myProperty: publicClass;
->myProperty : Symbol(myProperty, Decl(privacyVarDeclFile_externalModule.ts, 91, 61))
+>myProperty : Symbol(publicInterfaceWithPublicPropertyTypes.myProperty, Decl(privacyVarDeclFile_externalModule.ts, 91, 61))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 82, 5))
     }
 
@@ -246,7 +246,7 @@ export module publicModule {
 >privateInterfaceWithPrivatePropertyTypes : Symbol(privateInterfaceWithPrivatePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 93, 5))
 
         myProperty: privateClass;
->myProperty : Symbol(myProperty, Decl(privacyVarDeclFile_externalModule.ts, 95, 56))
+>myProperty : Symbol(privateInterfaceWithPrivatePropertyTypes.myProperty, Decl(privacyVarDeclFile_externalModule.ts, 95, 56))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_externalModule.ts, 80, 28))
     }
 
@@ -254,7 +254,7 @@ export module publicModule {
 >privateInterfaceWithPublicPropertyTypes : Symbol(privateInterfaceWithPublicPropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 97, 5))
 
         myProperty: publicClass;
->myProperty : Symbol(myProperty, Decl(privacyVarDeclFile_externalModule.ts, 99, 55))
+>myProperty : Symbol(privateInterfaceWithPublicPropertyTypes.myProperty, Decl(privacyVarDeclFile_externalModule.ts, 99, 55))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 82, 5))
     }
 
@@ -262,19 +262,19 @@ export module publicModule {
 >publicClassWithWithPrivatePropertyTypes : Symbol(publicClassWithWithPrivatePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 101, 5))
 
         static myPublicStaticProperty: privateClass; // Error
->myPublicStaticProperty : Symbol(myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 103, 58))
+>myPublicStaticProperty : Symbol(publicClassWithWithPrivatePropertyTypes.myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 103, 58))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_externalModule.ts, 80, 28))
 
         private static myPrivateStaticProperty: privateClass;
->myPrivateStaticProperty : Symbol(myPrivateStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 104, 52))
+>myPrivateStaticProperty : Symbol(publicClassWithWithPrivatePropertyTypes.myPrivateStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 104, 52))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_externalModule.ts, 80, 28))
 
         myPublicProperty: privateClass; // Error
->myPublicProperty : Symbol(myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 105, 61))
+>myPublicProperty : Symbol(publicClassWithWithPrivatePropertyTypes.myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 105, 61))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_externalModule.ts, 80, 28))
 
         private myPrivateProperty: privateClass;
->myPrivateProperty : Symbol(myPrivateProperty, Decl(privacyVarDeclFile_externalModule.ts, 106, 39))
+>myPrivateProperty : Symbol(publicClassWithWithPrivatePropertyTypes.myPrivateProperty, Decl(privacyVarDeclFile_externalModule.ts, 106, 39))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_externalModule.ts, 80, 28))
     }
 
@@ -282,19 +282,19 @@ export module publicModule {
 >publicClassWithWithPublicPropertyTypes : Symbol(publicClassWithWithPublicPropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 108, 5))
 
         static myPublicStaticProperty: publicClass;
->myPublicStaticProperty : Symbol(myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 110, 57))
+>myPublicStaticProperty : Symbol(publicClassWithWithPublicPropertyTypes.myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 110, 57))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 82, 5))
 
         private static myPrivateStaticProperty: publicClass;
->myPrivateStaticProperty : Symbol(myPrivateStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 111, 51))
+>myPrivateStaticProperty : Symbol(publicClassWithWithPublicPropertyTypes.myPrivateStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 111, 51))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 82, 5))
 
         myPublicProperty: publicClass;
->myPublicProperty : Symbol(myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 112, 60))
+>myPublicProperty : Symbol(publicClassWithWithPublicPropertyTypes.myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 112, 60))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 82, 5))
 
         private myPrivateProperty: publicClass;
->myPrivateProperty : Symbol(myPrivateProperty, Decl(privacyVarDeclFile_externalModule.ts, 113, 38))
+>myPrivateProperty : Symbol(publicClassWithWithPublicPropertyTypes.myPrivateProperty, Decl(privacyVarDeclFile_externalModule.ts, 113, 38))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 82, 5))
     }
 
@@ -302,19 +302,19 @@ export module publicModule {
 >privateClassWithWithPrivatePropertyTypes : Symbol(privateClassWithWithPrivatePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 115, 5))
 
         static myPublicStaticProperty: privateClass;
->myPublicStaticProperty : Symbol(myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 117, 52))
+>myPublicStaticProperty : Symbol(privateClassWithWithPrivatePropertyTypes.myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 117, 52))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_externalModule.ts, 80, 28))
 
         private static myPrivateStaticProperty: privateClass;
->myPrivateStaticProperty : Symbol(myPrivateStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 118, 52))
+>myPrivateStaticProperty : Symbol(privateClassWithWithPrivatePropertyTypes.myPrivateStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 118, 52))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_externalModule.ts, 80, 28))
 
         myPublicProperty: privateClass;
->myPublicProperty : Symbol(myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 119, 61))
+>myPublicProperty : Symbol(privateClassWithWithPrivatePropertyTypes.myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 119, 61))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_externalModule.ts, 80, 28))
 
         private myPrivateProperty: privateClass;
->myPrivateProperty : Symbol(myPrivateProperty, Decl(privacyVarDeclFile_externalModule.ts, 120, 39))
+>myPrivateProperty : Symbol(privateClassWithWithPrivatePropertyTypes.myPrivateProperty, Decl(privacyVarDeclFile_externalModule.ts, 120, 39))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_externalModule.ts, 80, 28))
     }
 
@@ -322,19 +322,19 @@ export module publicModule {
 >privateClassWithWithPublicPropertyTypes : Symbol(privateClassWithWithPublicPropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 122, 5))
 
         static myPublicStaticProperty: publicClass;
->myPublicStaticProperty : Symbol(myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 124, 51))
+>myPublicStaticProperty : Symbol(privateClassWithWithPublicPropertyTypes.myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 124, 51))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 82, 5))
 
         private static myPrivateStaticProperty: publicClass;
->myPrivateStaticProperty : Symbol(myPrivateStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 125, 51))
+>myPrivateStaticProperty : Symbol(privateClassWithWithPublicPropertyTypes.myPrivateStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 125, 51))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 82, 5))
 
         myPublicProperty: publicClass;
->myPublicProperty : Symbol(myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 126, 60))
+>myPublicProperty : Symbol(privateClassWithWithPublicPropertyTypes.myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 126, 60))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 82, 5))
 
         private myPrivateProperty: publicClass;
->myPrivateProperty : Symbol(myPrivateProperty, Decl(privacyVarDeclFile_externalModule.ts, 127, 38))
+>myPrivateProperty : Symbol(privateClassWithWithPublicPropertyTypes.myPrivateProperty, Decl(privacyVarDeclFile_externalModule.ts, 127, 38))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 82, 5))
     }
 
@@ -374,63 +374,63 @@ export module publicModule {
 >publicInterfaceWithPrivateModulePropertyTypes : Symbol(publicInterfaceWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 139, 70))
 
         myProperty: privateModule.publicClass; // Error
->myProperty : Symbol(myProperty, Decl(privacyVarDeclFile_externalModule.ts, 141, 68))
+>myProperty : Symbol(publicInterfaceWithPrivateModulePropertyTypes.myProperty, Decl(privacyVarDeclFile_externalModule.ts, 141, 68))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_externalModule.ts, 160, 1))
->publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
+>publicClass : Symbol(privateModule.publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
     }
     export class publicClassWithPrivateModulePropertyTypes {
 >publicClassWithPrivateModulePropertyTypes : Symbol(publicClassWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 143, 5))
 
         static myPublicStaticProperty: privateModule.publicClass; // Error
->myPublicStaticProperty : Symbol(myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 144, 60))
+>myPublicStaticProperty : Symbol(publicClassWithPrivateModulePropertyTypes.myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 144, 60))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_externalModule.ts, 160, 1))
->publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
+>publicClass : Symbol(privateModule.publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
 
         myPublicProperty: privateModule.publicClass; // Error
->myPublicProperty : Symbol(myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 145, 65))
+>myPublicProperty : Symbol(publicClassWithPrivateModulePropertyTypes.myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 145, 65))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_externalModule.ts, 160, 1))
->publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
+>publicClass : Symbol(privateModule.publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
     }
     export var publicVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
 >publicVarWithPrivateModulePropertyTypes : Symbol(publicVarWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 148, 14))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_externalModule.ts, 160, 1))
->publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
+>publicClass : Symbol(privateModule.publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
 
     export declare var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
 >publicAmbientVarWithPrivateModulePropertyTypes : Symbol(publicAmbientVarWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 149, 22))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_externalModule.ts, 160, 1))
->publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
+>publicClass : Symbol(privateModule.publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
 
     interface privateInterfaceWithPrivateModulePropertyTypes {
 >privateInterfaceWithPrivateModulePropertyTypes : Symbol(privateInterfaceWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 149, 97))
 
         myProperty: privateModule.publicClass;
->myProperty : Symbol(myProperty, Decl(privacyVarDeclFile_externalModule.ts, 151, 62))
+>myProperty : Symbol(privateInterfaceWithPrivateModulePropertyTypes.myProperty, Decl(privacyVarDeclFile_externalModule.ts, 151, 62))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_externalModule.ts, 160, 1))
->publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
+>publicClass : Symbol(privateModule.publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
     }
     class privateClassWithPrivateModulePropertyTypes {
 >privateClassWithPrivateModulePropertyTypes : Symbol(privateClassWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 153, 5))
 
         static myPublicStaticProperty: privateModule.publicClass;
->myPublicStaticProperty : Symbol(myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 154, 54))
+>myPublicStaticProperty : Symbol(privateClassWithPrivateModulePropertyTypes.myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 154, 54))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_externalModule.ts, 160, 1))
->publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
+>publicClass : Symbol(privateModule.publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
 
         myPublicProperty: privateModule.publicClass;
->myPublicProperty : Symbol(myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 155, 65))
+>myPublicProperty : Symbol(privateClassWithPrivateModulePropertyTypes.myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 155, 65))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_externalModule.ts, 160, 1))
->publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
+>publicClass : Symbol(privateModule.publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
     }
     var privateVarWithPrivateModulePropertyTypes: privateModule.publicClass;
 >privateVarWithPrivateModulePropertyTypes : Symbol(privateVarWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 158, 7))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_externalModule.ts, 160, 1))
->publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
+>publicClass : Symbol(privateModule.publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
 
     declare var privateAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
 >privateAmbientVarWithPrivateModulePropertyTypes : Symbol(privateAmbientVarWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 159, 15))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_externalModule.ts, 160, 1))
->publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
+>publicClass : Symbol(privateModule.publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
 }
 
 module privateModule {
@@ -448,7 +448,7 @@ module privateModule {
 >publicInterfaceWithPrivatePropertyTypes : Symbol(publicInterfaceWithPrivatePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 167, 5))
 
         myProperty: privateClass;  
->myProperty : Symbol(myProperty, Decl(privacyVarDeclFile_externalModule.ts, 169, 62))
+>myProperty : Symbol(publicInterfaceWithPrivatePropertyTypes.myProperty, Decl(privacyVarDeclFile_externalModule.ts, 169, 62))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_externalModule.ts, 162, 22))
     }
 
@@ -456,7 +456,7 @@ module privateModule {
 >publicInterfaceWithPublicPropertyTypes : Symbol(publicInterfaceWithPublicPropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 171, 5))
 
         myProperty: publicClass;
->myProperty : Symbol(myProperty, Decl(privacyVarDeclFile_externalModule.ts, 173, 61))
+>myProperty : Symbol(publicInterfaceWithPublicPropertyTypes.myProperty, Decl(privacyVarDeclFile_externalModule.ts, 173, 61))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
     }
 
@@ -464,7 +464,7 @@ module privateModule {
 >privateInterfaceWithPrivatePropertyTypes : Symbol(privateInterfaceWithPrivatePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 175, 5))
 
         myProperty: privateClass;
->myProperty : Symbol(myProperty, Decl(privacyVarDeclFile_externalModule.ts, 177, 56))
+>myProperty : Symbol(privateInterfaceWithPrivatePropertyTypes.myProperty, Decl(privacyVarDeclFile_externalModule.ts, 177, 56))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_externalModule.ts, 162, 22))
     }
 
@@ -472,7 +472,7 @@ module privateModule {
 >privateInterfaceWithPublicPropertyTypes : Symbol(privateInterfaceWithPublicPropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 179, 5))
 
         myProperty: publicClass;
->myProperty : Symbol(myProperty, Decl(privacyVarDeclFile_externalModule.ts, 181, 55))
+>myProperty : Symbol(privateInterfaceWithPublicPropertyTypes.myProperty, Decl(privacyVarDeclFile_externalModule.ts, 181, 55))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
     }
 
@@ -480,19 +480,19 @@ module privateModule {
 >publicClassWithWithPrivatePropertyTypes : Symbol(publicClassWithWithPrivatePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 183, 5))
 
         static myPublicStaticProperty: privateClass; 
->myPublicStaticProperty : Symbol(myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 185, 58))
+>myPublicStaticProperty : Symbol(publicClassWithWithPrivatePropertyTypes.myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 185, 58))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_externalModule.ts, 162, 22))
 
         private static myPrivateStaticProperty: privateClass;
->myPrivateStaticProperty : Symbol(myPrivateStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 186, 52))
+>myPrivateStaticProperty : Symbol(publicClassWithWithPrivatePropertyTypes.myPrivateStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 186, 52))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_externalModule.ts, 162, 22))
 
         myPublicProperty: privateClass; 
->myPublicProperty : Symbol(myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 187, 61))
+>myPublicProperty : Symbol(publicClassWithWithPrivatePropertyTypes.myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 187, 61))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_externalModule.ts, 162, 22))
 
         private myPrivateProperty: privateClass;
->myPrivateProperty : Symbol(myPrivateProperty, Decl(privacyVarDeclFile_externalModule.ts, 188, 39))
+>myPrivateProperty : Symbol(publicClassWithWithPrivatePropertyTypes.myPrivateProperty, Decl(privacyVarDeclFile_externalModule.ts, 188, 39))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_externalModule.ts, 162, 22))
     }
 
@@ -500,19 +500,19 @@ module privateModule {
 >publicClassWithWithPublicPropertyTypes : Symbol(publicClassWithWithPublicPropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 190, 5))
 
         static myPublicStaticProperty: publicClass;
->myPublicStaticProperty : Symbol(myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 192, 57))
+>myPublicStaticProperty : Symbol(publicClassWithWithPublicPropertyTypes.myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 192, 57))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
 
         private static myPrivateStaticProperty: publicClass;
->myPrivateStaticProperty : Symbol(myPrivateStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 193, 51))
+>myPrivateStaticProperty : Symbol(publicClassWithWithPublicPropertyTypes.myPrivateStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 193, 51))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
 
         myPublicProperty: publicClass;
->myPublicProperty : Symbol(myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 194, 60))
+>myPublicProperty : Symbol(publicClassWithWithPublicPropertyTypes.myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 194, 60))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
 
         private myPrivateProperty: publicClass;
->myPrivateProperty : Symbol(myPrivateProperty, Decl(privacyVarDeclFile_externalModule.ts, 195, 38))
+>myPrivateProperty : Symbol(publicClassWithWithPublicPropertyTypes.myPrivateProperty, Decl(privacyVarDeclFile_externalModule.ts, 195, 38))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
     }
 
@@ -520,19 +520,19 @@ module privateModule {
 >privateClassWithWithPrivatePropertyTypes : Symbol(privateClassWithWithPrivatePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 197, 5))
 
         static myPublicStaticProperty: privateClass;
->myPublicStaticProperty : Symbol(myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 199, 52))
+>myPublicStaticProperty : Symbol(privateClassWithWithPrivatePropertyTypes.myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 199, 52))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_externalModule.ts, 162, 22))
 
         private static myPrivateStaticProperty: privateClass;
->myPrivateStaticProperty : Symbol(myPrivateStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 200, 52))
+>myPrivateStaticProperty : Symbol(privateClassWithWithPrivatePropertyTypes.myPrivateStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 200, 52))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_externalModule.ts, 162, 22))
 
         myPublicProperty: privateClass;
->myPublicProperty : Symbol(myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 201, 61))
+>myPublicProperty : Symbol(privateClassWithWithPrivatePropertyTypes.myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 201, 61))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_externalModule.ts, 162, 22))
 
         private myPrivateProperty: privateClass;
->myPrivateProperty : Symbol(myPrivateProperty, Decl(privacyVarDeclFile_externalModule.ts, 202, 39))
+>myPrivateProperty : Symbol(privateClassWithWithPrivatePropertyTypes.myPrivateProperty, Decl(privacyVarDeclFile_externalModule.ts, 202, 39))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_externalModule.ts, 162, 22))
     }
 
@@ -540,19 +540,19 @@ module privateModule {
 >privateClassWithWithPublicPropertyTypes : Symbol(privateClassWithWithPublicPropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 204, 5))
 
         static myPublicStaticProperty: publicClass;
->myPublicStaticProperty : Symbol(myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 206, 51))
+>myPublicStaticProperty : Symbol(privateClassWithWithPublicPropertyTypes.myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 206, 51))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
 
         private static myPrivateStaticProperty: publicClass;
->myPrivateStaticProperty : Symbol(myPrivateStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 207, 51))
+>myPrivateStaticProperty : Symbol(privateClassWithWithPublicPropertyTypes.myPrivateStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 207, 51))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
 
         myPublicProperty: publicClass;
->myPublicProperty : Symbol(myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 208, 60))
+>myPublicProperty : Symbol(privateClassWithWithPublicPropertyTypes.myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 208, 60))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
 
         private myPrivateProperty: publicClass;
->myPrivateProperty : Symbol(myPrivateProperty, Decl(privacyVarDeclFile_externalModule.ts, 209, 38))
+>myPrivateProperty : Symbol(privateClassWithWithPublicPropertyTypes.myPrivateProperty, Decl(privacyVarDeclFile_externalModule.ts, 209, 38))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
     }
 
@@ -592,7 +592,7 @@ module privateModule {
 >publicInterfaceWithPrivateModulePropertyTypes : Symbol(publicInterfaceWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 221, 70))
 
         myProperty: privateModule.publicClass; 
->myProperty : Symbol(myProperty, Decl(privacyVarDeclFile_externalModule.ts, 223, 68))
+>myProperty : Symbol(publicInterfaceWithPrivateModulePropertyTypes.myProperty, Decl(privacyVarDeclFile_externalModule.ts, 223, 68))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_externalModule.ts, 160, 1))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
     }
@@ -600,12 +600,12 @@ module privateModule {
 >publicClassWithPrivateModulePropertyTypes : Symbol(publicClassWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 225, 5))
 
         static myPublicStaticProperty: privateModule.publicClass; 
->myPublicStaticProperty : Symbol(myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 226, 60))
+>myPublicStaticProperty : Symbol(publicClassWithPrivateModulePropertyTypes.myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 226, 60))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_externalModule.ts, 160, 1))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
 
         myPublicProperty: privateModule.publicClass; 
->myPublicProperty : Symbol(myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 227, 65))
+>myPublicProperty : Symbol(publicClassWithPrivateModulePropertyTypes.myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 227, 65))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_externalModule.ts, 160, 1))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
     }
@@ -623,7 +623,7 @@ module privateModule {
 >privateInterfaceWithPrivateModulePropertyTypes : Symbol(privateInterfaceWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 231, 97))
 
         myProperty: privateModule.publicClass;
->myProperty : Symbol(myProperty, Decl(privacyVarDeclFile_externalModule.ts, 233, 62))
+>myProperty : Symbol(privateInterfaceWithPrivateModulePropertyTypes.myProperty, Decl(privacyVarDeclFile_externalModule.ts, 233, 62))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_externalModule.ts, 160, 1))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
     }
@@ -631,12 +631,12 @@ module privateModule {
 >privateClassWithPrivateModulePropertyTypes : Symbol(privateClassWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_externalModule.ts, 235, 5))
 
         static myPublicStaticProperty: privateModule.publicClass;
->myPublicStaticProperty : Symbol(myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 236, 54))
+>myPublicStaticProperty : Symbol(privateClassWithPrivateModulePropertyTypes.myPublicStaticProperty, Decl(privacyVarDeclFile_externalModule.ts, 236, 54))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_externalModule.ts, 160, 1))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
 
         myPublicProperty: privateModule.publicClass;
->myPublicProperty : Symbol(myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 237, 65))
+>myPublicProperty : Symbol(privateClassWithPrivateModulePropertyTypes.myPublicProperty, Decl(privacyVarDeclFile_externalModule.ts, 237, 65))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_externalModule.ts, 160, 1))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_externalModule.ts, 164, 5))
     }
@@ -659,26 +659,26 @@ interface publicInterfaceWithPublicPropertyTypesInGlobal {
 >publicInterfaceWithPublicPropertyTypesInGlobal : Symbol(publicInterfaceWithPublicPropertyTypesInGlobal, Decl(privacyVarDeclFile_GlobalFile.ts, 1, 1))
 
     myProperty: publicClassInGlobal;
->myProperty : Symbol(myProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 2, 58))
+>myProperty : Symbol(publicInterfaceWithPublicPropertyTypesInGlobal.myProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 2, 58))
 >publicClassInGlobal : Symbol(publicClassInGlobal, Decl(privacyVarDeclFile_GlobalFile.ts, 0, 0))
 }
 class publicClassWithWithPublicPropertyTypesInGlobal {
 >publicClassWithWithPublicPropertyTypesInGlobal : Symbol(publicClassWithWithPublicPropertyTypesInGlobal, Decl(privacyVarDeclFile_GlobalFile.ts, 4, 1))
 
     static myPublicStaticProperty: publicClassInGlobal;
->myPublicStaticProperty : Symbol(myPublicStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 5, 54))
+>myPublicStaticProperty : Symbol(publicClassWithWithPublicPropertyTypesInGlobal.myPublicStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 5, 54))
 >publicClassInGlobal : Symbol(publicClassInGlobal, Decl(privacyVarDeclFile_GlobalFile.ts, 0, 0))
 
     private static myPrivateStaticProperty: publicClassInGlobal;
->myPrivateStaticProperty : Symbol(myPrivateStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 6, 55))
+>myPrivateStaticProperty : Symbol(publicClassWithWithPublicPropertyTypesInGlobal.myPrivateStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 6, 55))
 >publicClassInGlobal : Symbol(publicClassInGlobal, Decl(privacyVarDeclFile_GlobalFile.ts, 0, 0))
 
     myPublicProperty: publicClassInGlobal;
->myPublicProperty : Symbol(myPublicProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 7, 64))
+>myPublicProperty : Symbol(publicClassWithWithPublicPropertyTypesInGlobal.myPublicProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 7, 64))
 >publicClassInGlobal : Symbol(publicClassInGlobal, Decl(privacyVarDeclFile_GlobalFile.ts, 0, 0))
 
     private myPrivateProperty: publicClassInGlobal;
->myPrivateProperty : Symbol(myPrivateProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 8, 42))
+>myPrivateProperty : Symbol(publicClassWithWithPublicPropertyTypesInGlobal.myPrivateProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 8, 42))
 >publicClassInGlobal : Symbol(publicClassInGlobal, Decl(privacyVarDeclFile_GlobalFile.ts, 0, 0))
 }
 var publicVarWithPublicPropertyTypesInGlobal: publicClassInGlobal;
@@ -715,7 +715,7 @@ module publicModuleInGlobal {
 >publicInterfaceWithPrivatePropertyTypes : Symbol(publicInterfaceWithPrivatePropertyTypes, Decl(privacyVarDeclFile_GlobalFile.ts, 26, 9))
 
             myProperty: privateClass;
->myProperty : Symbol(myProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 28, 66))
+>myProperty : Symbol(publicInterfaceWithPrivatePropertyTypes.myProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 28, 66))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_GlobalFile.ts, 21, 26))
         }
 
@@ -723,7 +723,7 @@ module publicModuleInGlobal {
 >publicInterfaceWithPublicPropertyTypes : Symbol(publicInterfaceWithPublicPropertyTypes, Decl(privacyVarDeclFile_GlobalFile.ts, 30, 9))
 
             myProperty: publicClass;
->myProperty : Symbol(myProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 32, 65))
+>myProperty : Symbol(publicInterfaceWithPublicPropertyTypes.myProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 32, 65))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
         }
 
@@ -731,7 +731,7 @@ module publicModuleInGlobal {
 >privateInterfaceWithPrivatePropertyTypes : Symbol(privateInterfaceWithPrivatePropertyTypes, Decl(privacyVarDeclFile_GlobalFile.ts, 34, 9))
 
             myProperty: privateClass;
->myProperty : Symbol(myProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 36, 60))
+>myProperty : Symbol(privateInterfaceWithPrivatePropertyTypes.myProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 36, 60))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_GlobalFile.ts, 21, 26))
         }
 
@@ -739,7 +739,7 @@ module publicModuleInGlobal {
 >privateInterfaceWithPublicPropertyTypes : Symbol(privateInterfaceWithPublicPropertyTypes, Decl(privacyVarDeclFile_GlobalFile.ts, 38, 9))
 
             myProperty: publicClass;
->myProperty : Symbol(myProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 40, 59))
+>myProperty : Symbol(privateInterfaceWithPublicPropertyTypes.myProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 40, 59))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
         }
 
@@ -747,19 +747,19 @@ module publicModuleInGlobal {
 >publicClassWithWithPrivatePropertyTypes : Symbol(publicClassWithWithPrivatePropertyTypes, Decl(privacyVarDeclFile_GlobalFile.ts, 42, 9))
 
             static myPublicStaticProperty: privateClass;
->myPublicStaticProperty : Symbol(myPublicStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 44, 62))
+>myPublicStaticProperty : Symbol(publicClassWithWithPrivatePropertyTypes.myPublicStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 44, 62))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_GlobalFile.ts, 21, 26))
 
             private static myPrivateStaticProperty: privateClass;
->myPrivateStaticProperty : Symbol(myPrivateStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 45, 56))
+>myPrivateStaticProperty : Symbol(publicClassWithWithPrivatePropertyTypes.myPrivateStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 45, 56))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_GlobalFile.ts, 21, 26))
 
             myPublicProperty: privateClass;
->myPublicProperty : Symbol(myPublicProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 46, 65))
+>myPublicProperty : Symbol(publicClassWithWithPrivatePropertyTypes.myPublicProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 46, 65))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_GlobalFile.ts, 21, 26))
 
             private myPrivateProperty: privateClass;
->myPrivateProperty : Symbol(myPrivateProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 47, 43))
+>myPrivateProperty : Symbol(publicClassWithWithPrivatePropertyTypes.myPrivateProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 47, 43))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_GlobalFile.ts, 21, 26))
         }
 
@@ -767,19 +767,19 @@ module publicModuleInGlobal {
 >publicClassWithWithPublicPropertyTypes : Symbol(publicClassWithWithPublicPropertyTypes, Decl(privacyVarDeclFile_GlobalFile.ts, 49, 9))
 
             static myPublicStaticProperty: publicClass;
->myPublicStaticProperty : Symbol(myPublicStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 51, 61))
+>myPublicStaticProperty : Symbol(publicClassWithWithPublicPropertyTypes.myPublicStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 51, 61))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
 
             private static myPrivateStaticProperty: publicClass;
->myPrivateStaticProperty : Symbol(myPrivateStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 52, 55))
+>myPrivateStaticProperty : Symbol(publicClassWithWithPublicPropertyTypes.myPrivateStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 52, 55))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
 
             myPublicProperty: publicClass;
->myPublicProperty : Symbol(myPublicProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 53, 64))
+>myPublicProperty : Symbol(publicClassWithWithPublicPropertyTypes.myPublicProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 53, 64))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
 
             private myPrivateProperty: publicClass;
->myPrivateProperty : Symbol(myPrivateProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 54, 42))
+>myPrivateProperty : Symbol(publicClassWithWithPublicPropertyTypes.myPrivateProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 54, 42))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
         }
 
@@ -787,19 +787,19 @@ module publicModuleInGlobal {
 >privateClassWithWithPrivatePropertyTypes : Symbol(privateClassWithWithPrivatePropertyTypes, Decl(privacyVarDeclFile_GlobalFile.ts, 56, 9))
 
             static myPublicStaticProperty: privateClass;
->myPublicStaticProperty : Symbol(myPublicStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 58, 56))
+>myPublicStaticProperty : Symbol(privateClassWithWithPrivatePropertyTypes.myPublicStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 58, 56))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_GlobalFile.ts, 21, 26))
 
             private static myPrivateStaticProperty: privateClass;
->myPrivateStaticProperty : Symbol(myPrivateStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 59, 56))
+>myPrivateStaticProperty : Symbol(privateClassWithWithPrivatePropertyTypes.myPrivateStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 59, 56))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_GlobalFile.ts, 21, 26))
 
             myPublicProperty: privateClass;
->myPublicProperty : Symbol(myPublicProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 60, 65))
+>myPublicProperty : Symbol(privateClassWithWithPrivatePropertyTypes.myPublicProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 60, 65))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_GlobalFile.ts, 21, 26))
 
             private myPrivateProperty: privateClass;
->myPrivateProperty : Symbol(myPrivateProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 61, 43))
+>myPrivateProperty : Symbol(privateClassWithWithPrivatePropertyTypes.myPrivateProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 61, 43))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_GlobalFile.ts, 21, 26))
         }
 
@@ -807,19 +807,19 @@ module publicModuleInGlobal {
 >privateClassWithWithPublicPropertyTypes : Symbol(privateClassWithWithPublicPropertyTypes, Decl(privacyVarDeclFile_GlobalFile.ts, 63, 9))
 
             static myPublicStaticProperty: publicClass;
->myPublicStaticProperty : Symbol(myPublicStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 65, 55))
+>myPublicStaticProperty : Symbol(privateClassWithWithPublicPropertyTypes.myPublicStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 65, 55))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
 
             private static myPrivateStaticProperty: publicClass;
->myPrivateStaticProperty : Symbol(myPrivateStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 66, 55))
+>myPrivateStaticProperty : Symbol(privateClassWithWithPublicPropertyTypes.myPrivateStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 66, 55))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
 
             myPublicProperty: publicClass;
->myPublicProperty : Symbol(myPublicProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 67, 64))
+>myPublicProperty : Symbol(privateClassWithWithPublicPropertyTypes.myPublicProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 67, 64))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
 
             private myPrivateProperty: publicClass;
->myPrivateProperty : Symbol(myPrivateProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 68, 42))
+>myPrivateProperty : Symbol(privateClassWithWithPublicPropertyTypes.myPrivateProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 68, 42))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
         }
 
@@ -859,7 +859,7 @@ module publicModuleInGlobal {
 >publicInterfaceWithPrivateModulePropertyTypes : Symbol(publicInterfaceWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_GlobalFile.ts, 80, 74))
 
             myProperty: privateModule.publicClass;
->myProperty : Symbol(myProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 82, 72))
+>myProperty : Symbol(publicInterfaceWithPrivateModulePropertyTypes.myProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 82, 72))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_GlobalFile.ts, 19, 5))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
         }
@@ -867,12 +867,12 @@ module publicModuleInGlobal {
 >publicClassWithPrivateModulePropertyTypes : Symbol(publicClassWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_GlobalFile.ts, 84, 9))
 
             static myPublicStaticProperty: privateModule.publicClass;
->myPublicStaticProperty : Symbol(myPublicStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 85, 64))
+>myPublicStaticProperty : Symbol(publicClassWithPrivateModulePropertyTypes.myPublicStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 85, 64))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_GlobalFile.ts, 19, 5))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
 
             myPublicProperty: privateModule.publicClass;
->myPublicProperty : Symbol(myPublicProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 86, 69))
+>myPublicProperty : Symbol(publicClassWithPrivateModulePropertyTypes.myPublicProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 86, 69))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_GlobalFile.ts, 19, 5))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
         }
@@ -890,7 +890,7 @@ module publicModuleInGlobal {
 >privateInterfaceWithPrivateModulePropertyTypes : Symbol(privateInterfaceWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_GlobalFile.ts, 90, 101))
 
             myProperty: privateModule.publicClass;
->myProperty : Symbol(myProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 92, 66))
+>myProperty : Symbol(privateInterfaceWithPrivateModulePropertyTypes.myProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 92, 66))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_GlobalFile.ts, 19, 5))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
         }
@@ -898,12 +898,12 @@ module publicModuleInGlobal {
 >privateClassWithPrivateModulePropertyTypes : Symbol(privateClassWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_GlobalFile.ts, 94, 9))
 
             static myPublicStaticProperty: privateModule.publicClass;
->myPublicStaticProperty : Symbol(myPublicStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 95, 58))
+>myPublicStaticProperty : Symbol(privateClassWithPrivateModulePropertyTypes.myPublicStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 95, 58))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_GlobalFile.ts, 19, 5))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
 
             myPublicProperty: privateModule.publicClass;
->myPublicProperty : Symbol(myPublicProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 96, 69))
+>myPublicProperty : Symbol(privateClassWithPrivateModulePropertyTypes.myPublicProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 96, 69))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_GlobalFile.ts, 19, 5))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
         }
@@ -922,7 +922,7 @@ module publicModuleInGlobal {
 >publicInterfaceWithPrivatePropertyTypes : Symbol(publicInterfaceWithPrivatePropertyTypes, Decl(privacyVarDeclFile_GlobalFile.ts, 101, 5))
 
         myProperty: privateClass;  // Error
->myProperty : Symbol(myProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 103, 62))
+>myProperty : Symbol(publicInterfaceWithPrivatePropertyTypes.myProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 103, 62))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_GlobalFile.ts, 14, 29))
     }
 
@@ -930,7 +930,7 @@ module publicModuleInGlobal {
 >publicInterfaceWithPublicPropertyTypes : Symbol(publicInterfaceWithPublicPropertyTypes, Decl(privacyVarDeclFile_GlobalFile.ts, 105, 5))
 
         myProperty: publicClass;
->myProperty : Symbol(myProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 107, 61))
+>myProperty : Symbol(publicInterfaceWithPublicPropertyTypes.myProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 107, 61))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 16, 5))
     }
 
@@ -938,7 +938,7 @@ module publicModuleInGlobal {
 >privateInterfaceWithPrivatePropertyTypes : Symbol(privateInterfaceWithPrivatePropertyTypes, Decl(privacyVarDeclFile_GlobalFile.ts, 109, 5))
 
         myProperty: privateClass;
->myProperty : Symbol(myProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 111, 56))
+>myProperty : Symbol(privateInterfaceWithPrivatePropertyTypes.myProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 111, 56))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_GlobalFile.ts, 14, 29))
     }
 
@@ -946,7 +946,7 @@ module publicModuleInGlobal {
 >privateInterfaceWithPublicPropertyTypes : Symbol(privateInterfaceWithPublicPropertyTypes, Decl(privacyVarDeclFile_GlobalFile.ts, 113, 5))
 
         myProperty: publicClass;
->myProperty : Symbol(myProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 115, 55))
+>myProperty : Symbol(privateInterfaceWithPublicPropertyTypes.myProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 115, 55))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 16, 5))
     }
 
@@ -954,19 +954,19 @@ module publicModuleInGlobal {
 >publicClassWithWithPrivatePropertyTypes : Symbol(publicClassWithWithPrivatePropertyTypes, Decl(privacyVarDeclFile_GlobalFile.ts, 117, 5))
 
         static myPublicStaticProperty: privateClass; // Error
->myPublicStaticProperty : Symbol(myPublicStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 119, 58))
+>myPublicStaticProperty : Symbol(publicClassWithWithPrivatePropertyTypes.myPublicStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 119, 58))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_GlobalFile.ts, 14, 29))
 
         private static myPrivateStaticProperty: privateClass;
->myPrivateStaticProperty : Symbol(myPrivateStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 120, 52))
+>myPrivateStaticProperty : Symbol(publicClassWithWithPrivatePropertyTypes.myPrivateStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 120, 52))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_GlobalFile.ts, 14, 29))
 
         myPublicProperty: privateClass; // Error
->myPublicProperty : Symbol(myPublicProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 121, 61))
+>myPublicProperty : Symbol(publicClassWithWithPrivatePropertyTypes.myPublicProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 121, 61))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_GlobalFile.ts, 14, 29))
 
         private myPrivateProperty: privateClass;
->myPrivateProperty : Symbol(myPrivateProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 122, 39))
+>myPrivateProperty : Symbol(publicClassWithWithPrivatePropertyTypes.myPrivateProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 122, 39))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_GlobalFile.ts, 14, 29))
     }
 
@@ -974,19 +974,19 @@ module publicModuleInGlobal {
 >publicClassWithWithPublicPropertyTypes : Symbol(publicClassWithWithPublicPropertyTypes, Decl(privacyVarDeclFile_GlobalFile.ts, 124, 5))
 
         static myPublicStaticProperty: publicClass;
->myPublicStaticProperty : Symbol(myPublicStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 126, 57))
+>myPublicStaticProperty : Symbol(publicClassWithWithPublicPropertyTypes.myPublicStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 126, 57))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 16, 5))
 
         private static myPrivateStaticProperty: publicClass;
->myPrivateStaticProperty : Symbol(myPrivateStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 127, 51))
+>myPrivateStaticProperty : Symbol(publicClassWithWithPublicPropertyTypes.myPrivateStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 127, 51))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 16, 5))
 
         myPublicProperty: publicClass;
->myPublicProperty : Symbol(myPublicProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 128, 60))
+>myPublicProperty : Symbol(publicClassWithWithPublicPropertyTypes.myPublicProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 128, 60))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 16, 5))
 
         private myPrivateProperty: publicClass;
->myPrivateProperty : Symbol(myPrivateProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 129, 38))
+>myPrivateProperty : Symbol(publicClassWithWithPublicPropertyTypes.myPrivateProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 129, 38))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 16, 5))
     }
 
@@ -994,19 +994,19 @@ module publicModuleInGlobal {
 >privateClassWithWithPrivatePropertyTypes : Symbol(privateClassWithWithPrivatePropertyTypes, Decl(privacyVarDeclFile_GlobalFile.ts, 131, 5))
 
         static myPublicStaticProperty: privateClass;
->myPublicStaticProperty : Symbol(myPublicStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 133, 52))
+>myPublicStaticProperty : Symbol(privateClassWithWithPrivatePropertyTypes.myPublicStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 133, 52))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_GlobalFile.ts, 14, 29))
 
         private static myPrivateStaticProperty: privateClass;
->myPrivateStaticProperty : Symbol(myPrivateStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 134, 52))
+>myPrivateStaticProperty : Symbol(privateClassWithWithPrivatePropertyTypes.myPrivateStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 134, 52))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_GlobalFile.ts, 14, 29))
 
         myPublicProperty: privateClass;
->myPublicProperty : Symbol(myPublicProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 135, 61))
+>myPublicProperty : Symbol(privateClassWithWithPrivatePropertyTypes.myPublicProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 135, 61))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_GlobalFile.ts, 14, 29))
 
         private myPrivateProperty: privateClass;
->myPrivateProperty : Symbol(myPrivateProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 136, 39))
+>myPrivateProperty : Symbol(privateClassWithWithPrivatePropertyTypes.myPrivateProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 136, 39))
 >privateClass : Symbol(privateClass, Decl(privacyVarDeclFile_GlobalFile.ts, 14, 29))
     }
 
@@ -1014,19 +1014,19 @@ module publicModuleInGlobal {
 >privateClassWithWithPublicPropertyTypes : Symbol(privateClassWithWithPublicPropertyTypes, Decl(privacyVarDeclFile_GlobalFile.ts, 138, 5))
 
         static myPublicStaticProperty: publicClass;
->myPublicStaticProperty : Symbol(myPublicStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 140, 51))
+>myPublicStaticProperty : Symbol(privateClassWithWithPublicPropertyTypes.myPublicStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 140, 51))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 16, 5))
 
         private static myPrivateStaticProperty: publicClass;
->myPrivateStaticProperty : Symbol(myPrivateStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 141, 51))
+>myPrivateStaticProperty : Symbol(privateClassWithWithPublicPropertyTypes.myPrivateStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 141, 51))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 16, 5))
 
         myPublicProperty: publicClass;
->myPublicProperty : Symbol(myPublicProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 142, 60))
+>myPublicProperty : Symbol(privateClassWithWithPublicPropertyTypes.myPublicProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 142, 60))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 16, 5))
 
         private myPrivateProperty: publicClass;
->myPrivateProperty : Symbol(myPrivateProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 143, 38))
+>myPrivateProperty : Symbol(privateClassWithWithPublicPropertyTypes.myPrivateProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 143, 38))
 >publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 16, 5))
     }
 
@@ -1066,61 +1066,61 @@ module publicModuleInGlobal {
 >publicInterfaceWithPrivateModulePropertyTypes : Symbol(publicInterfaceWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_GlobalFile.ts, 155, 70))
 
         myProperty: privateModule.publicClass; // Error
->myProperty : Symbol(myProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 157, 68))
+>myProperty : Symbol(publicInterfaceWithPrivateModulePropertyTypes.myProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 157, 68))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_GlobalFile.ts, 19, 5))
->publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
+>publicClass : Symbol(privateModule.publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
     }
     export class publicClassWithPrivateModulePropertyTypes {
 >publicClassWithPrivateModulePropertyTypes : Symbol(publicClassWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_GlobalFile.ts, 159, 5))
 
         static myPublicStaticProperty: privateModule.publicClass; // Error
->myPublicStaticProperty : Symbol(myPublicStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 160, 60))
+>myPublicStaticProperty : Symbol(publicClassWithPrivateModulePropertyTypes.myPublicStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 160, 60))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_GlobalFile.ts, 19, 5))
->publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
+>publicClass : Symbol(privateModule.publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
 
         myPublicProperty: privateModule.publicClass; // Error
->myPublicProperty : Symbol(myPublicProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 161, 65))
+>myPublicProperty : Symbol(publicClassWithPrivateModulePropertyTypes.myPublicProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 161, 65))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_GlobalFile.ts, 19, 5))
->publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
+>publicClass : Symbol(privateModule.publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
     }
     export var publicVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
 >publicVarWithPrivateModulePropertyTypes : Symbol(publicVarWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_GlobalFile.ts, 164, 14))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_GlobalFile.ts, 19, 5))
->publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
+>publicClass : Symbol(privateModule.publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
 
     export declare var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
 >publicAmbientVarWithPrivateModulePropertyTypes : Symbol(publicAmbientVarWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_GlobalFile.ts, 165, 22))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_GlobalFile.ts, 19, 5))
->publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
+>publicClass : Symbol(privateModule.publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
 
     interface privateInterfaceWithPrivateModulePropertyTypes {
 >privateInterfaceWithPrivateModulePropertyTypes : Symbol(privateInterfaceWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_GlobalFile.ts, 165, 97))
 
         myProperty: privateModule.publicClass;
->myProperty : Symbol(myProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 167, 62))
+>myProperty : Symbol(privateInterfaceWithPrivateModulePropertyTypes.myProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 167, 62))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_GlobalFile.ts, 19, 5))
->publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
+>publicClass : Symbol(privateModule.publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
     }
     class privateClassWithPrivateModulePropertyTypes {
 >privateClassWithPrivateModulePropertyTypes : Symbol(privateClassWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_GlobalFile.ts, 169, 5))
 
         static myPublicStaticProperty: privateModule.publicClass;
->myPublicStaticProperty : Symbol(myPublicStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 170, 54))
+>myPublicStaticProperty : Symbol(privateClassWithPrivateModulePropertyTypes.myPublicStaticProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 170, 54))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_GlobalFile.ts, 19, 5))
->publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
+>publicClass : Symbol(privateModule.publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
 
         myPublicProperty: privateModule.publicClass;
->myPublicProperty : Symbol(myPublicProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 171, 65))
+>myPublicProperty : Symbol(privateClassWithPrivateModulePropertyTypes.myPublicProperty, Decl(privacyVarDeclFile_GlobalFile.ts, 171, 65))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_GlobalFile.ts, 19, 5))
->publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
+>publicClass : Symbol(privateModule.publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
     }
     var privateVarWithPrivateModulePropertyTypes: privateModule.publicClass;
 >privateVarWithPrivateModulePropertyTypes : Symbol(privateVarWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_GlobalFile.ts, 174, 7))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_GlobalFile.ts, 19, 5))
->publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
+>publicClass : Symbol(privateModule.publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
 
     declare var privateAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
 >privateAmbientVarWithPrivateModulePropertyTypes : Symbol(privateAmbientVarWithPrivateModulePropertyTypes, Decl(privacyVarDeclFile_GlobalFile.ts, 175, 15))
 >privateModule : Symbol(privateModule, Decl(privacyVarDeclFile_GlobalFile.ts, 19, 5))
->publicClass : Symbol(publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
+>publicClass : Symbol(privateModule.publicClass, Decl(privacyVarDeclFile_GlobalFile.ts, 23, 9))
 }

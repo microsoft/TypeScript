@@ -10,7 +10,7 @@ class B extends A {
 >A : Symbol(A, Decl(staticPropSuper.ts, 0, 0))
 
     public static s: number = 9;
->s : Symbol(s, Decl(staticPropSuper.ts, 3, 19))
+>s : Symbol(B.s, Decl(staticPropSuper.ts, 3, 19))
 
     constructor() {
         var x = 1; // should not error
@@ -26,7 +26,7 @@ class C extends A {
 >A : Symbol(A, Decl(staticPropSuper.ts, 0, 0))
 
     public p: number = 10;
->p : Symbol(p, Decl(staticPropSuper.ts, 12, 19))
+>p : Symbol(C.p, Decl(staticPropSuper.ts, 12, 19))
 
     constructor() {
         var x = 1; // should error
@@ -39,7 +39,7 @@ class D extends A {
 >A : Symbol(A, Decl(staticPropSuper.ts, 0, 0))
 
     private p: number = 11;
->p : Symbol(p, Decl(staticPropSuper.ts, 20, 19))
+>p : Symbol(D.p, Decl(staticPropSuper.ts, 20, 19))
 
     constructor() {
         var x = 1; // should error
@@ -52,7 +52,7 @@ class E extends A {
 >A : Symbol(A, Decl(staticPropSuper.ts, 0, 0))
 
     p: number = 12;
->p : Symbol(p, Decl(staticPropSuper.ts, 28, 19))
+>p : Symbol(E.p, Decl(staticPropSuper.ts, 28, 19))
 
     constructor() {
         var x = 1; // should error

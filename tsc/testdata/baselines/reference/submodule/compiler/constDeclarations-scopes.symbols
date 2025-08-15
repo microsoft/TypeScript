@@ -228,7 +228,7 @@ class C {
     }
 
     method() {
->method : Symbol(method, Decl(constDeclarations-scopes.ts, 116, 5))
+>method : Symbol(C.method, Decl(constDeclarations-scopes.ts, 116, 5))
 
         const c = 0;
 >c : Symbol(c, Decl(constDeclarations-scopes.ts, 119, 13))
@@ -239,7 +239,7 @@ class C {
     }
 
     get v() {
->v : Symbol(v, Decl(constDeclarations-scopes.ts, 121, 5), Decl(constDeclarations-scopes.ts, 127, 5))
+>v : Symbol(C.v, Decl(constDeclarations-scopes.ts, 121, 5), Decl(constDeclarations-scopes.ts, 127, 5))
 
         const c = 0;
 >c : Symbol(c, Decl(constDeclarations-scopes.ts, 124, 13))
@@ -253,7 +253,7 @@ class C {
     }
 
     set v(value) {
->v : Symbol(v, Decl(constDeclarations-scopes.ts, 121, 5), Decl(constDeclarations-scopes.ts, 127, 5))
+>v : Symbol(C.v, Decl(constDeclarations-scopes.ts, 121, 5), Decl(constDeclarations-scopes.ts, 127, 5))
 >value : Symbol(value, Decl(constDeclarations-scopes.ts, 129, 10))
 
         const c = 0;

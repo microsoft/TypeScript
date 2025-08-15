@@ -6,9 +6,9 @@ var /*1*/x = function foo() {
 >foo : Symbol(foo, Decl(a.js, 0, 12))
 }
 x.a = function bar() {
->x.a : Symbol(a, Decl(a.js, 1, 1))
+>x.a : Symbol(foo.a, Decl(a.js, 1, 1))
 >x : Symbol(x, Decl(a.js, 0, 3), Decl(b.ts, 0, 3))
->a : Symbol(a, Decl(a.js, 1, 1))
+>a : Symbol(foo.a, Decl(a.js, 1, 1))
 >bar : Symbol(bar, Decl(a.js, 2, 5))
 }
 === b.ts ===

@@ -105,11 +105,3 @@
 
  === /index.tsx ===
  export const Comp = () => <div></div>;
-->Comp : () => import("/node_modules/preact/index").JSXInternal.Element
-->() => <div></div> : () => import("/node_modules/preact/index").JSXInternal.Element
--><div></div> : import("/node_modules/preact/index").JSXInternal.Element
-+>Comp : () => import("preact").JSXInternal.Element
-+>() => <div></div> : () => import("preact").JSXInternal.Element
-+><div></div> : import("preact").JSXInternal.Element
- >div : any
- >div : any

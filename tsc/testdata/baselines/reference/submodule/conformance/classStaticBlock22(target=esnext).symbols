@@ -37,10 +37,10 @@ class C {
 >D : Symbol(D, Decl(classStaticBlock22.ts, 21, 10))
 
       await = 1; // legal
->await : Symbol(await, Decl(classStaticBlock22.ts, 22, 13))
+>await : Symbol(D.await, Decl(classStaticBlock22.ts, 22, 13))
 
       x = await; // legal (initializers have an implicit function boundary)
->x : Symbol(x, Decl(classStaticBlock22.ts, 23, 16))
+>x : Symbol(D.x, Decl(classStaticBlock22.ts, 23, 16))
 >await : Symbol(await, Decl(classStaticBlock22.ts, 0, 3))
 
     };
@@ -70,11 +70,11 @@ class C {
 >await : Symbol(await, Decl(classStaticBlock22.ts, 0, 3))
 
       method() { await; }
->method : Symbol(method, Decl(classStaticBlock22.ts, 42, 30))
+>method : Symbol(E.method, Decl(classStaticBlock22.ts, 42, 30))
 >await : Symbol(await, Decl(classStaticBlock22.ts, 0, 3))
 
       get accessor() {
->accessor : Symbol(accessor, Decl(classStaticBlock22.ts, 43, 25), Decl(classStaticBlock22.ts, 47, 7))
+>accessor : Symbol(E.accessor, Decl(classStaticBlock22.ts, 43, 25), Decl(classStaticBlock22.ts, 47, 7))
 
         await;
 >await : Symbol(await, Decl(classStaticBlock22.ts, 0, 3))
@@ -82,18 +82,18 @@ class C {
         return 1;
       }
       set accessor(v: any) {
->accessor : Symbol(accessor, Decl(classStaticBlock22.ts, 43, 25), Decl(classStaticBlock22.ts, 47, 7))
+>accessor : Symbol(E.accessor, Decl(classStaticBlock22.ts, 43, 25), Decl(classStaticBlock22.ts, 47, 7))
 >v : Symbol(v, Decl(classStaticBlock22.ts, 48, 19))
 
         await;
 >await : Symbol(await, Decl(classStaticBlock22.ts, 0, 3))
       }
       propLambda = () => { await; }
->propLambda : Symbol(propLambda, Decl(classStaticBlock22.ts, 50, 7))
+>propLambda : Symbol(E.propLambda, Decl(classStaticBlock22.ts, 50, 7))
 >await : Symbol(await, Decl(classStaticBlock22.ts, 0, 3))
 
       propFunc = function () { await; }
->propFunc : Symbol(propFunc, Decl(classStaticBlock22.ts, 51, 35))
+>propFunc : Symbol(E.propFunc, Decl(classStaticBlock22.ts, 51, 35))
 >await : Symbol(await, Decl(classStaticBlock22.ts, 0, 3))
     }
   }
@@ -102,11 +102,11 @@ class C {
 >S : Symbol(S, Decl(classStaticBlock22.ts, 55, 10))
 
       static method() { await; }
->method : Symbol(method, Decl(classStaticBlock22.ts, 56, 13))
+>method : Symbol(S.method, Decl(classStaticBlock22.ts, 56, 13))
 >await : Symbol(await, Decl(classStaticBlock22.ts, 0, 3))
 
       static get accessor() {
->accessor : Symbol(accessor, Decl(classStaticBlock22.ts, 57, 32), Decl(classStaticBlock22.ts, 61, 7))
+>accessor : Symbol(S.accessor, Decl(classStaticBlock22.ts, 57, 32), Decl(classStaticBlock22.ts, 61, 7))
 
         await;
 >await : Symbol(await, Decl(classStaticBlock22.ts, 0, 3))
@@ -114,18 +114,18 @@ class C {
         return 1;
       }
       static set accessor(v: any) {
->accessor : Symbol(accessor, Decl(classStaticBlock22.ts, 57, 32), Decl(classStaticBlock22.ts, 61, 7))
+>accessor : Symbol(S.accessor, Decl(classStaticBlock22.ts, 57, 32), Decl(classStaticBlock22.ts, 61, 7))
 >v : Symbol(v, Decl(classStaticBlock22.ts, 62, 26))
 
         await;
 >await : Symbol(await, Decl(classStaticBlock22.ts, 0, 3))
       }
       static propLambda = () => { await; }
->propLambda : Symbol(propLambda, Decl(classStaticBlock22.ts, 64, 7))
+>propLambda : Symbol(S.propLambda, Decl(classStaticBlock22.ts, 64, 7))
 >await : Symbol(await, Decl(classStaticBlock22.ts, 0, 3))
 
       static propFunc = function () { await; }
->propFunc : Symbol(propFunc, Decl(classStaticBlock22.ts, 65, 42))
+>propFunc : Symbol(S.propFunc, Decl(classStaticBlock22.ts, 65, 42))
 >await : Symbol(await, Decl(classStaticBlock22.ts, 0, 3))
     }
   }

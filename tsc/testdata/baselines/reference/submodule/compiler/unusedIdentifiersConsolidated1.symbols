@@ -15,16 +15,16 @@ class Dummy<usedtypeparameter, unusedtypeparameter> {
 >unusedtypeparameter : Symbol(unusedtypeparameter, Decl(unusedIdentifiersConsolidated1.ts, 4, 30))
 
     private unusedprivatevariable: string;
->unusedprivatevariable : Symbol(unusedprivatevariable, Decl(unusedIdentifiersConsolidated1.ts, 4, 53))
+>unusedprivatevariable : Symbol(Dummy.unusedprivatevariable, Decl(unusedIdentifiersConsolidated1.ts, 4, 53))
 
     private greeting: string;
->greeting : Symbol(greeting, Decl(unusedIdentifiersConsolidated1.ts, 5, 42))
+>greeting : Symbol(Dummy.greeting, Decl(unusedIdentifiersConsolidated1.ts, 5, 42))
 
     public unusedpublicvariable: string;
->unusedpublicvariable : Symbol(unusedpublicvariable, Decl(unusedIdentifiersConsolidated1.ts, 6, 29))
+>unusedpublicvariable : Symbol(Dummy.unusedpublicvariable, Decl(unusedIdentifiersConsolidated1.ts, 6, 29))
 
     public typedvariable: usedtypeparameter;
->typedvariable : Symbol(typedvariable, Decl(unusedIdentifiersConsolidated1.ts, 7, 40))
+>typedvariable : Symbol(Dummy.typedvariable, Decl(unusedIdentifiersConsolidated1.ts, 7, 40))
 >usedtypeparameter : Symbol(usedtypeparameter, Decl(unusedIdentifiersConsolidated1.ts, 4, 12))
 
     constructor(message: string) {
@@ -34,30 +34,30 @@ class Dummy<usedtypeparameter, unusedtypeparameter> {
 >unused2 : Symbol(unused2, Decl(unusedIdentifiersConsolidated1.ts, 11, 11))
 
         this.greeting = "Dummy Message";
->this.greeting : Symbol(greeting, Decl(unusedIdentifiersConsolidated1.ts, 5, 42))
+>this.greeting : Symbol(Dummy.greeting, Decl(unusedIdentifiersConsolidated1.ts, 5, 42))
 >this : Symbol(Dummy, Decl(unusedIdentifiersConsolidated1.ts, 2, 1))
->greeting : Symbol(greeting, Decl(unusedIdentifiersConsolidated1.ts, 5, 42))
+>greeting : Symbol(Dummy.greeting, Decl(unusedIdentifiersConsolidated1.ts, 5, 42))
     }
 
     public greeter(person: string) {
->greeter : Symbol(greeter, Decl(unusedIdentifiersConsolidated1.ts, 13, 5))
+>greeter : Symbol(Dummy.greeter, Decl(unusedIdentifiersConsolidated1.ts, 13, 5))
 >person : Symbol(person, Decl(unusedIdentifiersConsolidated1.ts, 15, 19))
 
         var unused = 20;
 >unused : Symbol(unused, Decl(unusedIdentifiersConsolidated1.ts, 16, 11))
 
         this.usedPrivateFunction();
->this.usedPrivateFunction : Symbol(usedPrivateFunction, Decl(unusedIdentifiersConsolidated1.ts, 18, 5))
+>this.usedPrivateFunction : Symbol(Dummy.usedPrivateFunction, Decl(unusedIdentifiersConsolidated1.ts, 18, 5))
 >this : Symbol(Dummy, Decl(unusedIdentifiersConsolidated1.ts, 2, 1))
->usedPrivateFunction : Symbol(usedPrivateFunction, Decl(unusedIdentifiersConsolidated1.ts, 18, 5))
+>usedPrivateFunction : Symbol(Dummy.usedPrivateFunction, Decl(unusedIdentifiersConsolidated1.ts, 18, 5))
     }
 
     private usedPrivateFunction() {
->usedPrivateFunction : Symbol(usedPrivateFunction, Decl(unusedIdentifiersConsolidated1.ts, 18, 5))
+>usedPrivateFunction : Symbol(Dummy.usedPrivateFunction, Decl(unusedIdentifiersConsolidated1.ts, 18, 5))
     }
 
     private unUsedPrivateFunction() {
->unUsedPrivateFunction : Symbol(unUsedPrivateFunction, Decl(unusedIdentifiersConsolidated1.ts, 21, 5))
+>unUsedPrivateFunction : Symbol(Dummy.unUsedPrivateFunction, Decl(unusedIdentifiersConsolidated1.ts, 21, 5))
     }
 }
 
@@ -74,7 +74,7 @@ namespace Validation {
 >StringValidator : Symbol(StringValidator, Decl(unusedIdentifiersConsolidated1.ts, 30, 22))
 
         isAcceptable(s: string): boolean;
->isAcceptable : Symbol(isAcceptable, Decl(unusedIdentifiersConsolidated1.ts, 31, 38))
+>isAcceptable : Symbol(StringValidator.isAcceptable, Decl(unusedIdentifiersConsolidated1.ts, 31, 38))
 >s : Symbol(s, Decl(unusedIdentifiersConsolidated1.ts, 32, 21))
     }
 
@@ -89,18 +89,18 @@ namespace Validation {
 >StringValidator : Symbol(StringValidator, Decl(unusedIdentifiersConsolidated1.ts, 30, 22))
 
         isAcceptable(s2: string) {
->isAcceptable : Symbol(isAcceptable, Decl(unusedIdentifiersConsolidated1.ts, 38, 66))
+>isAcceptable : Symbol(LettersOnlyValidator.isAcceptable, Decl(unusedIdentifiersConsolidated1.ts, 38, 66))
 >s2 : Symbol(s2, Decl(unusedIdentifiersConsolidated1.ts, 39, 21))
 
             return lettersRegexp.test(s2);
->lettersRegexp.test : Symbol(test, Decl(lib.es5.d.ts, --, --))
+>lettersRegexp.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
 >lettersRegexp : Symbol(lettersRegexp, Decl(unusedIdentifiersConsolidated1.ts, 35, 9))
->test : Symbol(test, Decl(lib.es5.d.ts, --, --))
+>test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
 >s2 : Symbol(s2, Decl(unusedIdentifiersConsolidated1.ts, 39, 21))
         }
 
         private unUsedPrivateFunction() {
->unUsedPrivateFunction : Symbol(unUsedPrivateFunction, Decl(unusedIdentifiersConsolidated1.ts, 41, 9))
+>unUsedPrivateFunction : Symbol(LettersOnlyValidator.unUsedPrivateFunction, Decl(unusedIdentifiersConsolidated1.ts, 41, 9))
         }
     }
 
@@ -109,13 +109,13 @@ namespace Validation {
 >StringValidator : Symbol(StringValidator, Decl(unusedIdentifiersConsolidated1.ts, 30, 22))
 
         isAcceptable(s3: string) {
->isAcceptable : Symbol(isAcceptable, Decl(unusedIdentifiersConsolidated1.ts, 47, 62))
+>isAcceptable : Symbol(ZipCodeValidator.isAcceptable, Decl(unusedIdentifiersConsolidated1.ts, 47, 62))
 >s3 : Symbol(s3, Decl(unusedIdentifiersConsolidated1.ts, 48, 21))
 
             return s3.length === 5;
->s3.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>s3.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >s3 : Symbol(s3, Decl(unusedIdentifiersConsolidated1.ts, 48, 21))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
         }
     }
 
@@ -127,7 +127,7 @@ namespace Validation {
 >usedLocallyInterface2 : Symbol(usedLocallyInterface2, Decl(unusedIdentifiersConsolidated1.ts, 54, 5))
 
         someFunction(s1: string): void;
->someFunction : Symbol(someFunction, Decl(unusedIdentifiersConsolidated1.ts, 56, 37))
+>someFunction : Symbol(usedLocallyInterface2.someFunction, Decl(unusedIdentifiersConsolidated1.ts, 56, 37))
 >s1 : Symbol(s1, Decl(unusedIdentifiersConsolidated1.ts, 57, 21))
     }
 

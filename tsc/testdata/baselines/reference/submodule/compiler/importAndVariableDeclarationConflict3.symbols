@@ -11,10 +11,10 @@ module m {
 import x = m.m;
 >x : Symbol(x, Decl(importAndVariableDeclarationConflict3.ts, 2, 1))
 >m : Symbol(m, Decl(importAndVariableDeclarationConflict3.ts, 0, 0))
->m : Symbol(m, Decl(importAndVariableDeclarationConflict3.ts, 1, 12))
+>m : Symbol(x, Decl(importAndVariableDeclarationConflict3.ts, 1, 12))
 
 import x = m.m;
 >x : Symbol(x, Decl(importAndVariableDeclarationConflict3.ts, 4, 15))
 >m : Symbol(m, Decl(importAndVariableDeclarationConflict3.ts, 0, 0))
->m : Symbol(m, Decl(importAndVariableDeclarationConflict3.ts, 1, 12))
+>m : Symbol(x, Decl(importAndVariableDeclarationConflict3.ts, 1, 12))
 

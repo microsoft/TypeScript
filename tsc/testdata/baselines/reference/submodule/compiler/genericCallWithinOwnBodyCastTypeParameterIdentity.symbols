@@ -6,7 +6,7 @@ interface Thenable<Value> {
 >Value : Symbol(Value, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 0, 19))
 
     then<V>(
->then : Symbol(then, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 0, 27))
+>then : Symbol(Thenable.then, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 0, 27))
 >V : Symbol(V, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 1, 9))
 
         onFulfilled: (value: Value) => V | Thenable<V>,

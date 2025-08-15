@@ -93,9 +93,9 @@ function uniqueID_54790(
   for (let i = 1; i < Number.MAX_VALUE; i++) {
 >i : Symbol(i, Decl(controlFlowInOperator.ts, 39, 10))
 >i : Symbol(i, Decl(controlFlowInOperator.ts, 39, 10))
->Number.MAX_VALUE : Symbol(MAX_VALUE, Decl(lib.es5.d.ts, --, --))
+>Number.MAX_VALUE : Symbol(NumberConstructor.MAX_VALUE, Decl(lib.es5.d.ts, --, --))
 >Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->MAX_VALUE : Symbol(MAX_VALUE, Decl(lib.es5.d.ts, --, --))
+>MAX_VALUE : Symbol(NumberConstructor.MAX_VALUE, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(controlFlowInOperator.ts, 39, 10))
 
     const newID = `${id}-${i}`;

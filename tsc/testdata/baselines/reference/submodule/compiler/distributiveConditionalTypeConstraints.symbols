@@ -125,16 +125,16 @@ function f20<T extends string>(x: Foo<T>) {
 
 interface A { foo(): void; }
 >A : Symbol(A, Decl(distributiveConditionalTypeConstraints.ts, 38, 1))
->foo : Symbol(foo, Decl(distributiveConditionalTypeConstraints.ts, 42, 13))
+>foo : Symbol(A.foo, Decl(distributiveConditionalTypeConstraints.ts, 42, 13))
 
 interface B { bar(): void; }
 >B : Symbol(B, Decl(distributiveConditionalTypeConstraints.ts, 42, 28))
->bar : Symbol(bar, Decl(distributiveConditionalTypeConstraints.ts, 43, 13))
+>bar : Symbol(B.bar, Decl(distributiveConditionalTypeConstraints.ts, 43, 13))
 
 interface C { foo(): void, bar(): void }
 >C : Symbol(C, Decl(distributiveConditionalTypeConstraints.ts, 43, 28))
->foo : Symbol(foo, Decl(distributiveConditionalTypeConstraints.ts, 44, 13))
->bar : Symbol(bar, Decl(distributiveConditionalTypeConstraints.ts, 44, 26))
+>foo : Symbol(C.foo, Decl(distributiveConditionalTypeConstraints.ts, 44, 13))
+>bar : Symbol(C.bar, Decl(distributiveConditionalTypeConstraints.ts, 44, 26))
 
 function test1<T extends A>(y: T extends B ? number : string) {
 >test1 : Symbol(test1, Decl(distributiveConditionalTypeConstraints.ts, 44, 40))

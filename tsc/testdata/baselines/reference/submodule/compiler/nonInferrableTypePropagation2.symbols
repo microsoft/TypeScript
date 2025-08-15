@@ -15,10 +15,10 @@ interface Left<E> {
 >E : Symbol(E, Decl(nonInferrableTypePropagation2.ts, 4, 15))
 
     readonly _tag: 'Left'
->_tag : Symbol(_tag, Decl(nonInferrableTypePropagation2.ts, 4, 19))
+>_tag : Symbol(Left._tag, Decl(nonInferrableTypePropagation2.ts, 4, 19))
 
     readonly left: E
->left : Symbol(left, Decl(nonInferrableTypePropagation2.ts, 5, 25))
+>left : Symbol(Left.left, Decl(nonInferrableTypePropagation2.ts, 5, 25))
 >E : Symbol(E, Decl(nonInferrableTypePropagation2.ts, 4, 15))
 }
   
@@ -27,10 +27,10 @@ interface Right<A> {
 >A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 9, 16))
 
     readonly _tag: 'Right'
->_tag : Symbol(_tag, Decl(nonInferrableTypePropagation2.ts, 9, 20))
+>_tag : Symbol(Right._tag, Decl(nonInferrableTypePropagation2.ts, 9, 20))
 
     readonly right: A
->right : Symbol(right, Decl(nonInferrableTypePropagation2.ts, 10, 26))
+>right : Symbol(Right.right, Decl(nonInferrableTypePropagation2.ts, 10, 26))
 >A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 9, 16))
 }
 

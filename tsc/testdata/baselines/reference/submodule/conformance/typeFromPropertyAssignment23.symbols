@@ -6,12 +6,12 @@ class B {
 
     constructor () {
         this.n = 1
->this.n : Symbol(n, Decl(a.js, 1, 20))
+>this.n : Symbol(B.n, Decl(a.js, 1, 20))
 >this : Symbol(B, Decl(a.js, 0, 0))
->n : Symbol(n, Decl(a.js, 1, 20))
+>n : Symbol(B.n, Decl(a.js, 1, 20))
     }
     foo() {
->foo : Symbol(foo, Decl(a.js, 3, 5))
+>foo : Symbol(B.foo, Decl(a.js, 3, 5))
     }
 }
 
@@ -21,11 +21,11 @@ class C extends B { }
 
 // this override should be fine (even if it's a little odd)
 C.prototype.foo = function() {
->C.prototype.foo : Symbol(foo, Decl(a.js, 3, 5))
->C.prototype : Symbol(prototype)
+>C.prototype.foo : Symbol(B.foo, Decl(a.js, 3, 5))
+>C.prototype : Symbol(C.prototype)
 >C : Symbol(C, Decl(a.js, 6, 1))
->prototype : Symbol(prototype)
->foo : Symbol(foo, Decl(a.js, 3, 5))
+>prototype : Symbol(C.prototype)
+>foo : Symbol(B.foo, Decl(a.js, 3, 5))
 }
 
 class D extends B { }
@@ -33,11 +33,11 @@ class D extends B { }
 >B : Symbol(B, Decl(a.js, 0, 0))
 
 D.prototype.foo = () =>  {
->D.prototype.foo : Symbol(foo, Decl(a.js, 3, 5))
->D.prototype : Symbol(prototype)
+>D.prototype.foo : Symbol(B.foo, Decl(a.js, 3, 5))
+>D.prototype : Symbol(D.prototype)
 >D : Symbol(D, Decl(a.js, 12, 1))
->prototype : Symbol(prototype)
->foo : Symbol(foo, Decl(a.js, 3, 5))
+>prototype : Symbol(D.prototype)
+>foo : Symbol(B.foo, Decl(a.js, 3, 5))
 
     this.n = 'not checked, so no error'
 >this : Symbol(globalThis)
@@ -48,27 +48,27 @@ class Module {
 >Module : Symbol(Module, Decl(a.js, 17, 1))
 }
 Module.prototype.identifier = undefined
->Module.prototype : Symbol(prototype)
+>Module.prototype : Symbol(Module.prototype)
 >Module : Symbol(Module, Decl(a.js, 17, 1))
->prototype : Symbol(prototype)
+>prototype : Symbol(Module.prototype)
 >undefined : Symbol(undefined)
 
 Module.prototype.size = null
->Module.prototype : Symbol(prototype)
+>Module.prototype : Symbol(Module.prototype)
 >Module : Symbol(Module, Decl(a.js, 17, 1))
->prototype : Symbol(prototype)
+>prototype : Symbol(Module.prototype)
 
 class NormalModule extends Module {
 >NormalModule : Symbol(NormalModule, Decl(a.js, 23, 28))
 >Module : Symbol(Module, Decl(a.js, 17, 1))
 
     identifier() {
->identifier : Symbol(identifier, Decl(a.js, 25, 35))
+>identifier : Symbol(NormalModule.identifier, Decl(a.js, 25, 35))
 
         return 'normal'
     }
     size() {
->size : Symbol(size, Decl(a.js, 28, 5))
+>size : Symbol(NormalModule.size, Decl(a.js, 28, 5))
 
         return 0
     }

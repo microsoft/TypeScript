@@ -163,27 +163,27 @@ class NotReferencedClass {
 >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
 	}
 	set x({ name: alias }: Named) {
->x : Symbol(x, Decl(declarationEmitBindingPatternsUnused.ts, 55, 2))
+>x : Symbol(NotReferencedClass.x, Decl(declarationEmitBindingPatternsUnused.ts, 55, 2))
 >name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
 >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 56, 8))
 >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
 
         console.log(alias);
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 56, 8))
     }
 	m({ name: alias }: Named) {
->m : Symbol(m, Decl(declarationEmitBindingPatternsUnused.ts, 58, 5))
+>m : Symbol(NotReferencedClass.m, Decl(declarationEmitBindingPatternsUnused.ts, 58, 5))
 >name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
 >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 59, 4))
 >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
 
         console.log(alias);
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 59, 4))
     }
 }
@@ -197,33 +197,33 @@ class ReferencedInCodeClas {
 >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
 
 		console.log(alias);
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 65, 14))
 	}
 	set x({ name: alias }: Named) {
->x : Symbol(x, Decl(declarationEmitBindingPatternsUnused.ts, 67, 2))
+>x : Symbol(ReferencedInCodeClas.x, Decl(declarationEmitBindingPatternsUnused.ts, 67, 2))
 >name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
 >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 68, 8))
 >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
 
         console.log(alias);
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 68, 8))
     }
 	m({ name: alias }: Named) {
->m : Symbol(m, Decl(declarationEmitBindingPatternsUnused.ts, 70, 5))
+>m : Symbol(ReferencedInCodeClas.m, Decl(declarationEmitBindingPatternsUnused.ts, 70, 5))
 >name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
 >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 71, 4))
 >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
 
         console.log(alias);
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 71, 4))
     }
 }
@@ -239,13 +239,13 @@ class ReferencedInSignartureClass {
 >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 77, 14))
 
 		console.log(alias);
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 77, 14))
 	}
 	set x({ name: alias }: Named & { o: typeof alias }) {
->x : Symbol(x, Decl(declarationEmitBindingPatternsUnused.ts, 79, 2))
+>x : Symbol(ReferencedInSignartureClass.x, Decl(declarationEmitBindingPatternsUnused.ts, 79, 2))
 >name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
 >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 80, 8))
 >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
@@ -254,7 +254,7 @@ class ReferencedInSignartureClass {
         
     }
 	mReturnType({ name: alias }: Named): typeof alias {
->mReturnType : Symbol(mReturnType, Decl(declarationEmitBindingPatternsUnused.ts, 82, 5))
+>mReturnType : Symbol(ReferencedInSignartureClass.mReturnType, Decl(declarationEmitBindingPatternsUnused.ts, 82, 5))
 >name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
 >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 83, 14))
 >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
@@ -263,7 +263,7 @@ class ReferencedInSignartureClass {
         return null!
     }
 	mRerturnTypeNested({ name: alias }: Named): NonNullable<typeof alias> {
->mRerturnTypeNested : Symbol(mRerturnTypeNested, Decl(declarationEmitBindingPatternsUnused.ts, 85, 5))
+>mRerturnTypeNested : Symbol(ReferencedInSignartureClass.mRerturnTypeNested, Decl(declarationEmitBindingPatternsUnused.ts, 85, 5))
 >name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
 >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 86, 21))
 >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
@@ -273,7 +273,7 @@ class ReferencedInSignartureClass {
         return null!
     }
     mParameter({ name: alias }: Named, p: typeof alias) {
->mParameter : Symbol(mParameter, Decl(declarationEmitBindingPatternsUnused.ts, 88, 5))
+>mParameter : Symbol(ReferencedInSignartureClass.mParameter, Decl(declarationEmitBindingPatternsUnused.ts, 88, 5))
 >name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
 >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 89, 16))
 >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
@@ -341,13 +341,13 @@ interface NotReferencedInterface {
 >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
 
 	set x({ name: alias }: Named);
->x : Symbol(x, Decl(declarationEmitBindingPatternsUnused.ts, 105, 35))
+>x : Symbol(NotReferencedInterface.x, Decl(declarationEmitBindingPatternsUnused.ts, 105, 35))
 >name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
 >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 106, 8))
 >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
 
 	m({ name: alias }: Named);
->m : Symbol(m, Decl(declarationEmitBindingPatternsUnused.ts, 106, 31))
+>m : Symbol(NotReferencedInterface.m, Decl(declarationEmitBindingPatternsUnused.ts, 106, 31))
 >name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
 >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 107, 4))
 >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
@@ -383,7 +383,7 @@ interface ReferencedInSignartureInterface {
 >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 115, 7))
 
 	set x({ name: alias }: Named & { o: typeof alias })
->x : Symbol(x, Decl(declarationEmitBindingPatternsUnused.ts, 115, 43))
+>x : Symbol(ReferencedInSignartureInterface.x, Decl(declarationEmitBindingPatternsUnused.ts, 115, 43))
 >name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
 >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 116, 8))
 >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
@@ -391,14 +391,14 @@ interface ReferencedInSignartureInterface {
 >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 116, 8))
 
 	mReturnType({ name: alias }: Named): typeof alias;
->mReturnType : Symbol(mReturnType, Decl(declarationEmitBindingPatternsUnused.ts, 116, 52))
+>mReturnType : Symbol(ReferencedInSignartureInterface.mReturnType, Decl(declarationEmitBindingPatternsUnused.ts, 116, 52))
 >name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
 >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 117, 14))
 >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
 >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 117, 14))
 
 	mRerturnTypeNested({ name: alias }: Named): NonNullable<typeof alias>;
->mRerturnTypeNested : Symbol(mRerturnTypeNested, Decl(declarationEmitBindingPatternsUnused.ts, 117, 51))
+>mRerturnTypeNested : Symbol(ReferencedInSignartureInterface.mRerturnTypeNested, Decl(declarationEmitBindingPatternsUnused.ts, 117, 51))
 >name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
 >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 118, 21))
 >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
@@ -406,7 +406,7 @@ interface ReferencedInSignartureInterface {
 >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 118, 21))
 
     mParameter({ name: alias }: Named, p: typeof alias);
->mParameter : Symbol(mParameter, Decl(declarationEmitBindingPatternsUnused.ts, 118, 71))
+>mParameter : Symbol(ReferencedInSignartureInterface.mParameter, Decl(declarationEmitBindingPatternsUnused.ts, 118, 71))
 >name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
 >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 119, 16))
 >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))

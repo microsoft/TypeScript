@@ -16,14 +16,13 @@
 
  B.prototype.m = function() { this.x = 2; }
 ->B.prototype : Symbol(B.m, Decl(index.js, 3, 37))
-+>B.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
++>B.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
  >B : Symbol(B, Decl(index.js, 3, 5))
-->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+ >prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 ->m : Symbol(B.m, Decl(index.js, 3, 37))
 ->this.x : Symbol(B.x, Decl(index.js, 4, 28))
 ->this : Symbol(B, Decl(index.js, 3, 9))
 ->x : Symbol(B.x, Decl(index.js, 4, 28))
-+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
 
  const b = new B();
  >b : Symbol(b, Decl(index.js, 5, 5))

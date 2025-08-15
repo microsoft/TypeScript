@@ -10,11 +10,11 @@ export interface Things<P, T> {
 >T : Symbol(T, Decl(this.ts, 1, 26))
 
     p: P;
->p : Symbol(p, Decl(this.ts, 1, 31))
+>p : Symbol(Things.p, Decl(this.ts, 1, 31))
 >P : Symbol(P, Decl(this.ts, 1, 24))
 
     t: T;
->t : Symbol(t, Decl(this.ts, 2, 9))
+>t : Symbol(Things.t, Decl(this.ts, 2, 9))
 >T : Symbol(T, Decl(this.ts, 1, 26))
 }
 export function make<P, CTor>(x: { new (): CTor & {props: P} }): Things<P, CTor> {
@@ -37,10 +37,10 @@ export interface Props {
 }
 
 export default class MyComponent {
->MyComponent : Symbol(MyComponent, Decl(this.ts, 10, 1))
+>MyComponent : Symbol(me.default, Decl(this.ts, 10, 1))
 
     props: Props;
->props : Symbol(props, Decl(this.ts, 12, 34))
+>props : Symbol(me.default.props, Decl(this.ts, 12, 34))
 >Props : Symbol(Props, Decl(this.ts, 7, 1))
 }
 export namespace Something {
@@ -52,7 +52,7 @@ export namespace Something {
     export const create = make(me.default);
 >create : Symbol(create, Decl(this.ts, 17, 16))
 >make : Symbol(make, Decl(this.ts, 4, 1))
->me.default : Symbol(MyComponent, Decl(this.ts, 10, 1))
+>me.default : Symbol(me.default, Decl(this.ts, 10, 1))
 >me : Symbol(me, Decl(this.ts, 0, 6))
->default : Symbol(MyComponent, Decl(this.ts, 10, 1))
+>default : Symbol(me.default, Decl(this.ts, 10, 1))
 }

@@ -5,7 +5,7 @@ interface Runnable {
 >Runnable : Symbol(Runnable, Decl(stringLiteralsWithEqualityChecks03.ts, 0, 0))
 
     isRunning: boolean;
->isRunning : Symbol(isRunning, Decl(stringLiteralsWithEqualityChecks03.ts, 0, 20))
+>isRunning : Symbol(Runnable.isRunning, Decl(stringLiteralsWithEqualityChecks03.ts, 0, 20))
 }
 
 interface Refrigerator extends Runnable {
@@ -13,7 +13,7 @@ interface Refrigerator extends Runnable {
 >Runnable : Symbol(Runnable, Decl(stringLiteralsWithEqualityChecks03.ts, 0, 0))
 
     makesFoodGoBrrr: boolean;
->makesFoodGoBrrr : Symbol(makesFoodGoBrrr, Decl(stringLiteralsWithEqualityChecks03.ts, 4, 41))
+>makesFoodGoBrrr : Symbol(Refrigerator.makesFoodGoBrrr, Decl(stringLiteralsWithEqualityChecks03.ts, 4, 41))
 }
 
 let x: string;

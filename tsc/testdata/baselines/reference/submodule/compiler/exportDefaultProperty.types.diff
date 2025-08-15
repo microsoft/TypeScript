@@ -5,10 +5,10 @@
  }
  export default A.B;
 ->A.B : typeof A.B
-+>A.B : typeof import("./a").default
++>A.B : typeof import("a").default
  >A : typeof A
 ->B : typeof A.B
-+>B : typeof import("./a").default
++>B : typeof import("a").default
 
  === b.ts ===
  export default "foo".length;

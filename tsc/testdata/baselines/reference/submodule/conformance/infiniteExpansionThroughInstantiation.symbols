@@ -8,16 +8,16 @@ interface List<T> {
 >T : Symbol(T, Decl(infiniteExpansionThroughInstantiation.ts, 2, 15))
 
     data: T;
->data : Symbol(data, Decl(infiniteExpansionThroughInstantiation.ts, 2, 19))
+>data : Symbol(List.data, Decl(infiniteExpansionThroughInstantiation.ts, 2, 19))
 >T : Symbol(T, Decl(infiniteExpansionThroughInstantiation.ts, 2, 15))
 
     next: List<T>;
->next : Symbol(next, Decl(infiniteExpansionThroughInstantiation.ts, 3, 12))
+>next : Symbol(List.next, Decl(infiniteExpansionThroughInstantiation.ts, 3, 12))
 >List : Symbol(List, Decl(infiniteExpansionThroughInstantiation.ts, 0, 0))
 >T : Symbol(T, Decl(infiniteExpansionThroughInstantiation.ts, 2, 15))
 
     owner: OwnerList<T>;
->owner : Symbol(owner, Decl(infiniteExpansionThroughInstantiation.ts, 4, 18))
+>owner : Symbol(List.owner, Decl(infiniteExpansionThroughInstantiation.ts, 4, 18))
 >OwnerList : Symbol(OwnerList, Decl(infiniteExpansionThroughInstantiation.ts, 6, 1))
 >T : Symbol(T, Decl(infiniteExpansionThroughInstantiation.ts, 2, 15))
 }
@@ -31,7 +31,7 @@ interface OwnerList<U> extends List<List<U>> {
 >U : Symbol(U, Decl(infiniteExpansionThroughInstantiation.ts, 9, 20))
 
     name: string;
->name : Symbol(name, Decl(infiniteExpansionThroughInstantiation.ts, 9, 46))
+>name : Symbol(OwnerList.name, Decl(infiniteExpansionThroughInstantiation.ts, 9, 46))
 }
 
 var list: List<string>;

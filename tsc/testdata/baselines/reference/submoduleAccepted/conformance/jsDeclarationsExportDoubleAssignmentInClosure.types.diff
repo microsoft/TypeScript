@@ -46,7 +46,7 @@
  >exports.methods = m : () => void
  >exports.methods : any
 ->exports : any
-+>exports : typeof import(".")
++>exports : typeof import("index")
  >methods : any
  >m : () => void
  }

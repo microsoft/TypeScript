@@ -5,5 +5,5 @@ enum E {
 >E : Symbol(E, Decl(enumWithQuotedElementName1.ts, 0, 0))
 
    'fo"o',
->'fo"o' : Symbol('fo"o', Decl(enumWithQuotedElementName1.ts, 0, 8))
+>'fo"o' : Symbol(E['fo"o'], Decl(enumWithQuotedElementName1.ts, 0, 8))
 }

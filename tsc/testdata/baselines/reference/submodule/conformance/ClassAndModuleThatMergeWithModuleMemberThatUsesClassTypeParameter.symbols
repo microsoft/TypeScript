@@ -8,10 +8,10 @@ class clodule1<T>{
 >T : Symbol(T, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 2, 15))
 
     id: string;
->id : Symbol(id, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 2, 18))
+>id : Symbol(clodule1.id, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 2, 18))
 
     value: T;
->value : Symbol(value, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 4, 15))
+>value : Symbol(clodule1.value, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 4, 15))
 >T : Symbol(T, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 2, 15))
 }
 
@@ -29,10 +29,10 @@ class clodule2<T>{
 >T : Symbol(T, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 12, 15))
 
     id: string;
->id : Symbol(id, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 12, 18))
+>id : Symbol(clodule2.id, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 12, 18))
 
     value: T;
->value : Symbol(value, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 14, 15))
+>value : Symbol(clodule2.value, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 14, 15))
 >T : Symbol(T, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 12, 15))
 }
 
@@ -49,10 +49,10 @@ module clodule2 {
 >T : Symbol(T)
 
         id: string;
->id : Symbol(id, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 21, 25))
+>id : Symbol(D.id, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 21, 25))
 
         value: U;
->value : Symbol(value, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 22, 19))
+>value : Symbol(D.value, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 22, 19))
 >U : Symbol(U, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 21, 12))
     }
 }
@@ -62,10 +62,10 @@ class clodule3<T>{
 >T : Symbol(T, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 27, 15))
 
     id: string;
->id : Symbol(id, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 27, 18))
+>id : Symbol(clodule3.id, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 27, 18))
 
     value: T;
->value : Symbol(value, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 29, 15))
+>value : Symbol(clodule3.value, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 29, 15))
 >T : Symbol(T, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 27, 15))
 }
 
@@ -82,10 +82,10 @@ class clodule4<T>{
 >T : Symbol(T, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 37, 15))
 
     id: string;
->id : Symbol(id, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 37, 18))
+>id : Symbol(clodule4.id, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 37, 18))
 
     value: T;
->value : Symbol(value, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 39, 15))
+>value : Symbol(clodule4.value, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 39, 15))
 >T : Symbol(T, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 37, 15))
 }
 
@@ -96,7 +96,7 @@ module clodule4 {
 >D : Symbol(D, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 43, 17))
 
         name: T;
->name : Symbol(name, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 44, 13))
+>name : Symbol(D.name, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 44, 13))
 >T : Symbol(T)
     }
 }

@@ -8,7 +8,7 @@ class Foo {
 >Foo : Symbol(Foo, Decl(superSymbolIndexedAccess5.ts, 0, 16))
 
     [symbol]() {
->[symbol] : Symbol([symbol], Decl(superSymbolIndexedAccess5.ts, 2, 11))
+>[symbol] : Symbol(Foo[symbol], Decl(superSymbolIndexedAccess5.ts, 2, 11))
 >symbol : Symbol(symbol, Decl(superSymbolIndexedAccess5.ts, 0, 3))
 
         return 0;
@@ -20,7 +20,7 @@ class Bar extends Foo {
 >Foo : Symbol(Foo, Decl(superSymbolIndexedAccess5.ts, 0, 16))
 
     [symbol]() {
->[symbol] : Symbol([symbol], Decl(superSymbolIndexedAccess5.ts, 8, 23))
+>[symbol] : Symbol(Bar[symbol], Decl(superSymbolIndexedAccess5.ts, 8, 23))
 >symbol : Symbol(symbol, Decl(superSymbolIndexedAccess5.ts, 0, 3))
 
         return super[symbol]();

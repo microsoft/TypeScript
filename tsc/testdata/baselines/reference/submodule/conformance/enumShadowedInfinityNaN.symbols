@@ -11,7 +11,7 @@
 >En : Symbol(En, Decl(enumShadowedInfinityNaN.ts, 3, 20))
 
     X = Infinity
->X : Symbol(X, Decl(enumShadowedInfinityNaN.ts, 4, 11))
+>X : Symbol(En.X, Decl(enumShadowedInfinityNaN.ts, 4, 11))
 >Infinity : Symbol(Infinity, Decl(enumShadowedInfinityNaN.ts, 3, 5))
   }
 }
@@ -24,7 +24,7 @@
 >En : Symbol(En, Decl(enumShadowedInfinityNaN.ts, 10, 15))
 
     X = NaN
->X : Symbol(X, Decl(enumShadowedInfinityNaN.ts, 11, 11))
+>X : Symbol(En.X, Decl(enumShadowedInfinityNaN.ts, 11, 11))
 >NaN : Symbol(NaN, Decl(enumShadowedInfinityNaN.ts, 10, 5))
   }
 }

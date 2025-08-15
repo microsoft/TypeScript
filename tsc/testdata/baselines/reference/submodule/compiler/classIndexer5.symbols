@@ -8,9 +8,9 @@ class Foo {
 >key : Symbol(key, Decl(classIndexer5.ts, 1, 5))
 
     #a: boolean;
->#a : Symbol(#a, Decl(classIndexer5.ts, 1, 26))
+>#a : Symbol(Foo.#a, Decl(classIndexer5.ts, 1, 26))
 
     #b = false;
->#b : Symbol(#b, Decl(classIndexer5.ts, 3, 16))
+>#b : Symbol(Foo.#b, Decl(classIndexer5.ts, 3, 16))
 }
 

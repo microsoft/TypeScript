@@ -8,7 +8,7 @@ interface i1 {
 >i1 : Symbol(i1, Decl(interfaceImplementation8.ts, 0, 0))
 
     name: string;
->name : Symbol(name, Decl(interfaceImplementation8.ts, 3, 14))
+>name : Symbol(i1.name, Decl(interfaceImplementation8.ts, 3, 14))
 }
 
 class C1 implements i1 {
@@ -16,7 +16,7 @@ class C1 implements i1 {
 >i1 : Symbol(i1, Decl(interfaceImplementation8.ts, 0, 0))
 
     public name:string;
->name : Symbol(name, Decl(interfaceImplementation8.ts, 7, 24))
+>name : Symbol(C1.name, Decl(interfaceImplementation8.ts, 7, 24))
 }
 
 class C2 implements i1 {
@@ -24,14 +24,14 @@ class C2 implements i1 {
 >i1 : Symbol(i1, Decl(interfaceImplementation8.ts, 0, 0))
 
     private name:string;
->name : Symbol(name, Decl(interfaceImplementation8.ts, 11, 24))
+>name : Symbol(C2.name, Decl(interfaceImplementation8.ts, 11, 24))
 }
 
 class C3 {
 >C3 : Symbol(C3, Decl(interfaceImplementation8.ts, 13, 1))
 
     private name:any;
->name : Symbol(name, Decl(interfaceImplementation8.ts, 15, 10))
+>name : Symbol(C3.name, Decl(interfaceImplementation8.ts, 15, 10))
 }
 
 class C4 extends C1 implements i1{ }
@@ -57,17 +57,17 @@ interface i2 {
 >i2 : Symbol(i2, Decl(interfaceImplementation8.ts, 21, 36))
 
     name: string;
->name : Symbol(name, Decl(interfaceImplementation8.ts, 27, 14))
+>name : Symbol(i2.name, Decl(interfaceImplementation8.ts, 27, 14))
 
     age: number;
->age : Symbol(age, Decl(interfaceImplementation8.ts, 28, 17))
+>age : Symbol(i2.age, Decl(interfaceImplementation8.ts, 28, 17))
 }
 
 class C7 {
 >C7 : Symbol(C7, Decl(interfaceImplementation8.ts, 30, 1))
 
     public name:string;
->name : Symbol(name, Decl(interfaceImplementation8.ts, 32, 10))
+>name : Symbol(C7.name, Decl(interfaceImplementation8.ts, 32, 10))
 }
 
 class C8 extends C7 implements i2{
@@ -76,6 +76,6 @@ class C8 extends C7 implements i2{
 >i2 : Symbol(i2, Decl(interfaceImplementation8.ts, 21, 36))
 
     public age:number;
->age : Symbol(age, Decl(interfaceImplementation8.ts, 36, 34))
+>age : Symbol(C8.age, Decl(interfaceImplementation8.ts, 36, 34))
 }
 

@@ -6,7 +6,7 @@ declare class Box<T> {
 >T : Symbol(T, Decl(instanceofOnInstantiationExpression.ts, 0, 18))
 
     value: T;
->value : Symbol(value, Decl(instanceofOnInstantiationExpression.ts, 0, 22))
+>value : Symbol(Box.value, Decl(instanceofOnInstantiationExpression.ts, 0, 22))
 >T : Symbol(T, Decl(instanceofOnInstantiationExpression.ts, 0, 18))
 }
 

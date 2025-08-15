@@ -6,5 +6,5 @@ export class A {
 
     @test
     b: import('./b').B
->b : Symbol(b, Decl(metadataImportType.ts, 0, 16))
+>b : Symbol(A.b, Decl(metadataImportType.ts, 0, 16))
 }

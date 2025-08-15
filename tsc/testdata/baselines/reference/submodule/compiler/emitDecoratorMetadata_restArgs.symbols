@@ -22,7 +22,7 @@ class A {
 >MyMethodDecorator : Symbol(MyMethodDecorator, Decl(emitDecoratorMetadata_restArgs.ts, 1, 13))
 
     method(...args) {}
->method : Symbol(method, Decl(emitDecoratorMetadata_restArgs.ts, 5, 27))
+>method : Symbol(A.method, Decl(emitDecoratorMetadata_restArgs.ts, 5, 27))
 >args : Symbol(args, Decl(emitDecoratorMetadata_restArgs.ts, 7, 11))
 }
 
@@ -39,7 +39,7 @@ class B {
 >MyMethodDecorator : Symbol(MyMethodDecorator, Decl(emitDecoratorMetadata_restArgs.ts, 1, 13))
 
     method(this: this, ...args: string[]) {}
->method : Symbol(method, Decl(emitDecoratorMetadata_restArgs.ts, 12, 37))
+>method : Symbol(B.method, Decl(emitDecoratorMetadata_restArgs.ts, 12, 37))
 >this : Symbol(this, Decl(emitDecoratorMetadata_restArgs.ts, 14, 11))
 >args : Symbol(args, Decl(emitDecoratorMetadata_restArgs.ts, 14, 22))
 }

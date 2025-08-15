@@ -11,7 +11,7 @@ declare module JSX {
 >IntrinsicElements : Symbol(IntrinsicElements, Decl(tsxDynamicTagName2.tsx, 1, 22))
 
         div: any
->div : Symbol(div, Decl(tsxDynamicTagName2.tsx, 2, 30))
+>div : Symbol(IntrinsicElements.div, Decl(tsxDynamicTagName2.tsx, 2, 30))
 	}
 }
 

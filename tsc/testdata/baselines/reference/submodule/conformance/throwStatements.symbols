@@ -7,7 +7,7 @@ interface I {
 >I : Symbol(I, Decl(throwStatements.ts, 0, 0))
 
     id: number;
->id : Symbol(id, Decl(throwStatements.ts, 2, 13))
+>id : Symbol(I.id, Decl(throwStatements.ts, 2, 13))
 }
 
 class C implements I {
@@ -15,7 +15,7 @@ class C implements I {
 >I : Symbol(I, Decl(throwStatements.ts, 0, 0))
 
     id: number;
->id : Symbol(id, Decl(throwStatements.ts, 6, 22))
+>id : Symbol(C.id, Decl(throwStatements.ts, 6, 22))
 }
 
 class D<T>{
@@ -23,16 +23,16 @@ class D<T>{
 >T : Symbol(T, Decl(throwStatements.ts, 10, 8))
 
     source: T;
->source : Symbol(source, Decl(throwStatements.ts, 10, 11))
+>source : Symbol(D.source, Decl(throwStatements.ts, 10, 11))
 >T : Symbol(T, Decl(throwStatements.ts, 10, 8))
 
     recurse: D<T>;
->recurse : Symbol(recurse, Decl(throwStatements.ts, 11, 14))
+>recurse : Symbol(D.recurse, Decl(throwStatements.ts, 11, 14))
 >D : Symbol(D, Decl(throwStatements.ts, 8, 1))
 >T : Symbol(T, Decl(throwStatements.ts, 10, 8))
 
     wrapped: D<D<T>>
->wrapped : Symbol(wrapped, Decl(throwStatements.ts, 12, 18))
+>wrapped : Symbol(D.wrapped, Decl(throwStatements.ts, 12, 18))
 >D : Symbol(D, Decl(throwStatements.ts, 8, 1))
 >D : Symbol(D, Decl(throwStatements.ts, 8, 1))
 >T : Symbol(T, Decl(throwStatements.ts, 10, 8))
@@ -49,15 +49,15 @@ module M {
 >A : Symbol(A, Decl(throwStatements.ts, 18, 10))
 
         name: string;
->name : Symbol(name, Decl(throwStatements.ts, 19, 20))
+>name : Symbol(A.name, Decl(throwStatements.ts, 19, 20))
     }
 
     export function F2(x: number): string { return x.toString(); }
 >F2 : Symbol(F2, Decl(throwStatements.ts, 21, 5))
 >x : Symbol(x, Decl(throwStatements.ts, 23, 23))
->x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(throwStatements.ts, 23, 23))
->toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 }
 
 var aNumber = 9.9;
@@ -159,18 +159,18 @@ throw typeof M;
 
 var aClassInModule = new M.A();
 >aClassInModule : Symbol(aClassInModule, Decl(throwStatements.ts, 59, 3))
->M.A : Symbol(A, Decl(throwStatements.ts, 18, 10))
+>M.A : Symbol(M.A, Decl(throwStatements.ts, 18, 10))
 >M : Symbol(M, Decl(throwStatements.ts, 16, 44))
->A : Symbol(A, Decl(throwStatements.ts, 18, 10))
+>A : Symbol(M.A, Decl(throwStatements.ts, 18, 10))
 
 throw aClassInModule;
 >aClassInModule : Symbol(aClassInModule, Decl(throwStatements.ts, 59, 3))
 
 var aFunctionInModule = M.F2;
 >aFunctionInModule : Symbol(aFunctionInModule, Decl(throwStatements.ts, 61, 3))
->M.F2 : Symbol(F2, Decl(throwStatements.ts, 21, 5))
+>M.F2 : Symbol(M.F2, Decl(throwStatements.ts, 21, 5))
 >M : Symbol(M, Decl(throwStatements.ts, 16, 44))
->F2 : Symbol(F2, Decl(throwStatements.ts, 21, 5))
+>F2 : Symbol(M.F2, Decl(throwStatements.ts, 21, 5))
 
 throw aFunctionInModule;
 >aFunctionInModule : Symbol(aFunctionInModule, Decl(throwStatements.ts, 61, 3))

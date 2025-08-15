@@ -38,7 +38,7 @@ function f(default: number) {}
 
 class C { m(null: string) {} }
 >C : Symbol(C, Decl(reservedWords2.ts, 10, 30))
->m : Symbol(m, Decl(reservedWords2.ts, 11, 9))
+>m : Symbol(C.m, Decl(reservedWords2.ts, 11, 9))
 > : Symbol((Missing), Decl(reservedWords2.ts, 11, 12))
 >string : Symbol(string, Decl(reservedWords2.ts, 11, 17))
 

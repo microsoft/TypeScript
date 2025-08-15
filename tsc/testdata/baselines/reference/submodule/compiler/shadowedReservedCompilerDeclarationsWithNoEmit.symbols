@@ -15,7 +15,7 @@ class C extends Base {
     }
 
     foo() {
->foo : Symbol(foo, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 5, 5))
+>foo : Symbol(C.foo, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 5, 5))
 
         let _this = this;
 >_this : Symbol(_this, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 8, 11))
@@ -29,7 +29,7 @@ class C extends Base {
     }
 
     bar() {
->bar : Symbol(bar, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 13, 5))
+>bar : Symbol(C.bar, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 13, 5))
 
         let _super = this;
 >_super : Symbol(_super, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 16, 11))

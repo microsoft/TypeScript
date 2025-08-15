@@ -12,9 +12,9 @@ export = foo;
 
 === index.ts ===
 import("./foo").then(f => {
->import("./foo").then : Symbol(then, Decl(lib.es5.d.ts, --, --))
+>import("./foo").then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
 >"./foo" : Symbol("foo", Decl(foo.d.ts, 0, 0))
->then : Symbol(then, Decl(lib.es5.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
 >f : Symbol(f, Decl(index.ts, 0, 21))
 
     f.default;

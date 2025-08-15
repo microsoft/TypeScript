@@ -5,42 +5,7 @@
 
      constructor(x: MyClass.Bar);
 ->x : MyClass.Bar
-+>x : import("./externs").Bar
++>x : import("externs").Bar
  >MyClass : any
  }
  declare global {
-@@= skipped -19, +19 lines =@@
-  */
-
- let a = /** @type {Foo} */(/** @type {*} */(undefined)); 
-->a : import("externs")
-->(/** @type {*} */(undefined)) : import("externs")
-+>a : import("./externs")
-+>(/** @type {*} */(undefined)) : import("./externs")
- >(undefined) : any
- >undefined : undefined
-
- a = new Foo({doer: Foo.Bar});
-->a = new Foo({doer: Foo.Bar}) : import("externs")
-->a : import("externs")
-->new Foo({doer: Foo.Bar}) : import("externs")
-->Foo : typeof import("externs")
-+>a = new Foo({doer: Foo.Bar}) : import("./externs")
-+>a : import("./externs")
-+>new Foo({doer: Foo.Bar}) : import("./externs")
-+>Foo : typeof import("./externs")
- >{doer: Foo.Bar} : { doer: (x: string, y?: number) => void; }
- >doer : (x: string, y?: number) => void
- >Foo.Bar : (x: string, y?: number) => void
-->Foo : typeof import("externs")
-+>Foo : typeof import("./externs")
- >Bar : (x: string, y?: number) => void
-
- const q = /** @type {import("./externs").Bar} */({ doer: q => q });
-->q : import("externs").Bar
-->({ doer: q => q }) : import("externs").Bar
-+>q : import("./externs").Bar
-+>({ doer: q => q }) : import("./externs").Bar
- >{ doer: q => q } : { doer: (q: string) => string; }
- >doer : (q: string) => string
- >q => q : (q: string) => string

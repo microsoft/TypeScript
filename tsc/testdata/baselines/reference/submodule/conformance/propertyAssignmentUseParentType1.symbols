@@ -6,16 +6,16 @@ interface N {
 
     (): boolean
     num: 123;
->num : Symbol(num, Decl(propertyAssignmentUseParentType1.ts, 1, 15))
+>num : Symbol(N.num, Decl(propertyAssignmentUseParentType1.ts, 1, 15))
 }
 export const interfaced: N = () => true;
 >interfaced : Symbol(interfaced, Decl(propertyAssignmentUseParentType1.ts, 4, 12))
 >N : Symbol(N, Decl(propertyAssignmentUseParentType1.ts, 0, 0))
 
 interfaced.num = 123;
->interfaced.num : Symbol(num, Decl(propertyAssignmentUseParentType1.ts, 1, 15))
+>interfaced.num : Symbol(N.num, Decl(propertyAssignmentUseParentType1.ts, 1, 15))
 >interfaced : Symbol(interfaced, Decl(propertyAssignmentUseParentType1.ts, 4, 12))
->num : Symbol(num, Decl(propertyAssignmentUseParentType1.ts, 1, 15))
+>num : Symbol(N.num, Decl(propertyAssignmentUseParentType1.ts, 1, 15))
 
 export const inlined: { (): boolean; nun: 456 } = () => true;
 >inlined : Symbol(inlined, Decl(propertyAssignmentUseParentType1.ts, 7, 12))
@@ -31,7 +31,7 @@ export const ignoreJsdoc = () => true;
 
 /** @type {string} make sure to ignore jsdoc! */
 ignoreJsdoc.extra = 111
->ignoreJsdoc.extra : Symbol(extra, Decl(propertyAssignmentUseParentType1.ts, 10, 38))
+>ignoreJsdoc.extra : Symbol(ignoreJsdoc.extra, Decl(propertyAssignmentUseParentType1.ts, 10, 38))
 >ignoreJsdoc : Symbol(ignoreJsdoc, Decl(propertyAssignmentUseParentType1.ts, 10, 12))
->extra : Symbol(extra, Decl(propertyAssignmentUseParentType1.ts, 10, 38))
+>extra : Symbol(ignoreJsdoc.extra, Decl(propertyAssignmentUseParentType1.ts, 10, 38))
 

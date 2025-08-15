@@ -15,5 +15,5 @@ module Bar {
 
     import F = Foo;
 >F : Symbol(F, Decl(reboundIdentifierOnImportAlias.ts, 4, 16))
->Foo : Symbol(Foo, Decl(reboundIdentifierOnImportAlias.ts, 0, 0))
+>Foo : Symbol(F, Decl(reboundIdentifierOnImportAlias.ts, 0, 0))
 }

@@ -41,10 +41,10 @@ interface TestInterface {
 >TestInterface : Symbol(TestInterface, Decl(objectRestBindingContextualInference.ts, 12, 2))
 
   name: string;
->name : Symbol(name, Decl(objectRestBindingContextualInference.ts, 14, 25))
+>name : Symbol(TestInterface.name, Decl(objectRestBindingContextualInference.ts, 14, 25))
 
   image: string;
->image : Symbol(image, Decl(objectRestBindingContextualInference.ts, 15, 15))
+>image : Symbol(TestInterface.image, Decl(objectRestBindingContextualInference.ts, 15, 15))
 }
 
 declare function setupImages<R extends ImageHolder<K>, K extends string>(

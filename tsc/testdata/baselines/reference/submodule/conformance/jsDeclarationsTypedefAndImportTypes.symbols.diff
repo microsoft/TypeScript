@@ -1,15 +1,6 @@
 --- old.jsDeclarationsTypedefAndImportTypes.symbols
 +++ new.jsDeclarationsTypedefAndImportTypes.symbols
-@@= skipped -9, +9 lines =@@
-
-     constructor() {}
-     item = 3;
-->item : Symbol(Conn.item, Decl(conn.js, 5, 20))
-+>item : Symbol(item, Decl(conn.js, 5, 20))
-
-     method() {}
-->method : Symbol(Conn.method, Decl(conn.js, 6, 13))
-+>method : Symbol(method, Decl(conn.js, 6, 13))
+@@= skipped -16, +16 lines =@@
  }
 
  module.exports = Conn;
@@ -22,29 +13,7 @@
  >Conn : Symbol(Conn, Decl(conn.js, 0, 0))
 
  === usage.js ===
-@@= skipped -27, +27 lines =@@
- >c : Symbol(c, Decl(usage.js, 8, 16))
-
-         this.connItem = c.item;
-->this.connItem : Symbol(Wrap.connItem, Decl(usage.js, 8, 20))
-+>this.connItem : Symbol(connItem, Decl(usage.js, 8, 20))
- >this : Symbol(Wrap, Decl(usage.js, 0, 0))
-->connItem : Symbol(Wrap.connItem, Decl(usage.js, 8, 20))
-->c.item : Symbol(Conn.item, Decl(conn.js, 5, 20))
-+>connItem : Symbol(connItem, Decl(usage.js, 8, 20))
-+>c.item : Symbol(item, Decl(conn.js, 5, 20))
- >c : Symbol(c, Decl(usage.js, 8, 16))
-->item : Symbol(Conn.item, Decl(conn.js, 5, 20))
-+>item : Symbol(item, Decl(conn.js, 5, 20))
-
-         /** @type {import("./conn").Whatever} */
-         this.another = "";
-->this.another : Symbol(Wrap.another, Decl(usage.js, 9, 31))
-+>this.another : Symbol(another, Decl(usage.js, 9, 31))
- >this : Symbol(Wrap, Decl(usage.js, 0, 0))
-->another : Symbol(Wrap.another, Decl(usage.js, 9, 31))
-+>another : Symbol(another, Decl(usage.js, 9, 31))
-     }
+@@= skipped -36, +36 lines =@@
  }
 
  module.exports = {

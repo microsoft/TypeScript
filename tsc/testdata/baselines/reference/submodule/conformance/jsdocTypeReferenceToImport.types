@@ -2,26 +2,26 @@
 
 === jsdocTypeReferenceToImport.js ===
 const C = require('./ex').C;
->C : typeof import("./ex").C
->require('./ex').C : typeof import("./ex").C
->require('./ex') : typeof import("./ex")
+>C : typeof import("ex").C
+>require('./ex').C : typeof import("ex").C
+>require('./ex') : typeof import("ex")
 >require : any
 >'./ex' : "./ex"
->C : typeof import("./ex").C
+>C : typeof import("ex").C
 
 const D = require('./ex')?.C;
->D : typeof import("./ex").C
->require('./ex')?.C : typeof import("./ex").C
->require('./ex') : typeof import("./ex")
+>D : typeof import("ex").C
+>require('./ex')?.C : typeof import("ex").C
+>require('./ex') : typeof import("ex")
 >require : any
 >'./ex' : "./ex"
->C : typeof import("./ex").C
+>C : typeof import("ex").C
 
 /** @type {C} c */
 var c = new C()
 >c : C
->new C() : import("./ex").C
->C : typeof import("./ex").C
+>new C() : import("ex").C
+>C : typeof import("ex").C
 
 c.start
 >c.start : any
@@ -36,8 +36,8 @@ c.end
 /** @type {D} c */
 var d = new D()
 >d : D
->new D() : import("./ex").C
->D : typeof import("./ex").C
+>new D() : import("ex").C
+>D : typeof import("ex").C
 
 d.start
 >d.start : any

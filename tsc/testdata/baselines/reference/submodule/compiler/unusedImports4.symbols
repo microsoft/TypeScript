@@ -5,7 +5,7 @@ export class Calculator {
 >Calculator : Symbol(Calculator, Decl(file1.ts, 0, 0))
 
     handleChar() {}
->handleChar : Symbol(handleChar, Decl(file1.ts, 0, 25))
+>handleChar : Symbol(Calculator.handleChar, Decl(file1.ts, 0, 25))
 }
 
 export function test() {
@@ -29,9 +29,9 @@ var x = new Calculator();
 >Calculator : Symbol(Calculator, Decl(file2.ts, 0, 8))
 
 x.handleChar();
->x.handleChar : Symbol(handleChar, Decl(file1.ts, 0, 25))
+>x.handleChar : Symbol(Calculator.handleChar, Decl(file1.ts, 0, 25))
 >x : Symbol(x, Decl(file2.ts, 2, 3))
->handleChar : Symbol(handleChar, Decl(file1.ts, 0, 25))
+>handleChar : Symbol(Calculator.handleChar, Decl(file1.ts, 0, 25))
 
 test2();
 >test2 : Symbol(test2, Decl(file2.ts, 0, 25))

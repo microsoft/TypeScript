@@ -56,12 +56,12 @@ enum E {
 >E : Symbol(E, Decl(arrowFunctionContexts.ts, 25, 36))
 
     x = () => 4, // Error expected
->x : Symbol(x, Decl(arrowFunctionContexts.ts, 28, 8))
+>x : Symbol(E.x, Decl(arrowFunctionContexts.ts, 28, 8))
 
     y = (() => this).length // error, can't use this in enum
->y : Symbol(y, Decl(arrowFunctionContexts.ts, 29, 16))
->(() => this).length : Symbol(length, Decl(lib.es5.d.ts, --, --))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>y : Symbol(E.y, Decl(arrowFunctionContexts.ts, 29, 16))
+>(() => this).length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
 }
 
 // Arrow function as module variable initializer
@@ -137,12 +137,12 @@ module M2 {
 >E : Symbol(E, Decl(arrowFunctionContexts.ts, 66, 40))
 
         x = () => 4, // Error expected
->x : Symbol(x, Decl(arrowFunctionContexts.ts, 69, 12))
+>x : Symbol(E.x, Decl(arrowFunctionContexts.ts, 69, 12))
 
         y = (() => this).length
->y : Symbol(y, Decl(arrowFunctionContexts.ts, 70, 20))
->(() => this).length : Symbol(length, Decl(lib.es5.d.ts, --, --))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>y : Symbol(E.y, Decl(arrowFunctionContexts.ts, 70, 20))
+>(() => this).length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
     }
 
     // Arrow function as module variable initializer

@@ -3,7 +3,7 @@
 === /bar.js ===
 const { a } = require("./foo");
 >a : number | null
->require("./foo") : typeof import("./foo")
+>require("./foo") : typeof import("/foo")
 >require : any
 >"./foo" : "./foo"
 

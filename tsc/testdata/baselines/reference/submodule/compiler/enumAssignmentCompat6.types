@@ -203,12 +203,12 @@ export let x: DiagnosticCategory;
 
         x = y;
 >x = y : DiagnosticCategory
->x : import("./f").DiagnosticCategory
+>x : import("f").DiagnosticCategory
 >y : DiagnosticCategory
 
         y = x;
->y = x : import("./f").DiagnosticCategory
+>y = x : import("f").DiagnosticCategory
 >y : DiagnosticCategory
->x : import("./f").DiagnosticCategory
+>x : import("f").DiagnosticCategory
     }
 })()

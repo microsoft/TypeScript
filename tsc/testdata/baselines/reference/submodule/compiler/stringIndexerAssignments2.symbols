@@ -8,24 +8,24 @@ class C1 {
 >index : Symbol(index, Decl(stringIndexerAssignments2.ts, 1, 5))
 
     one: string;
->one : Symbol(one, Decl(stringIndexerAssignments2.ts, 1, 27))
+>one : Symbol(C1.one, Decl(stringIndexerAssignments2.ts, 1, 27))
 }
 
 class C2 {
 >C2 : Symbol(C2, Decl(stringIndexerAssignments2.ts, 3, 1))
 
     one: string;
->one : Symbol(one, Decl(stringIndexerAssignments2.ts, 5, 10))
+>one : Symbol(C2.one, Decl(stringIndexerAssignments2.ts, 5, 10))
 }
 
 class C3 {
 >C3 : Symbol(C3, Decl(stringIndexerAssignments2.ts, 7, 1))
 
     one: number;
->one : Symbol(one, Decl(stringIndexerAssignments2.ts, 9, 10))
+>one : Symbol(C3.one, Decl(stringIndexerAssignments2.ts, 9, 10))
 
     two: string;
->two : Symbol(two, Decl(stringIndexerAssignments2.ts, 10, 16))
+>two : Symbol(C3.two, Decl(stringIndexerAssignments2.ts, 10, 16))
 }
 
 var x: C1;

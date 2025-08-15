@@ -5,13 +5,13 @@ class X {
 >X : Symbol(X, Decl(baseTypePrivateMemberClash.ts, 0, 0))
 
     private m: number;
->m : Symbol(m, Decl(baseTypePrivateMemberClash.ts, 0, 9))
+>m : Symbol(X.m, Decl(baseTypePrivateMemberClash.ts, 0, 9))
 }
 class Y {
 >Y : Symbol(Y, Decl(baseTypePrivateMemberClash.ts, 2, 1))
 
     private m: string;
->m : Symbol(m, Decl(baseTypePrivateMemberClash.ts, 3, 9))
+>m : Symbol(Y.m, Decl(baseTypePrivateMemberClash.ts, 3, 9))
 }
 
 interface Z extends X, Y { }

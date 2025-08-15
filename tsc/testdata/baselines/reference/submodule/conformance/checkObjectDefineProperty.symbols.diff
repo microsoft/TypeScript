@@ -74,77 +74,64 @@
 +>x : Symbol(x, Decl(index.js, 0, 5))
 
  Object.defineProperty(x, "name", { value: "Charles", writable: true });
-->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+ >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
-->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+ >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 ->x : Symbol(x, Decl(index.js, 0, 5), Decl(index.js, 1, 22), Decl(index.js, 2, 22), Decl(index.js, 3, 22), Decl(index.js, 4, 22) ... and 2 more)
 ->"name" : Symbol(x.name, Decl(index.js, 0, 13))
-+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
 +>x : Symbol(x, Decl(index.js, 0, 5))
  >value : Symbol(value, Decl(index.js, 1, 34))
  >writable : Symbol(writable, Decl(index.js, 1, 52))
 
- Object.defineProperty(x, "middleInit", { value: "H" });
-->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+@@= skipped -81, +54 lines =@@
+ >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
-->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+ >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 ->x : Symbol(x, Decl(index.js, 0, 5), Decl(index.js, 1, 22), Decl(index.js, 2, 22), Decl(index.js, 3, 22), Decl(index.js, 4, 22) ... and 2 more)
 ->"middleInit" : Symbol(x.middleInit, Decl(index.js, 1, 71))
-+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
 +>x : Symbol(x, Decl(index.js, 0, 5))
  >value : Symbol(value, Decl(index.js, 2, 40))
 
  Object.defineProperty(x, "lastName", { value: "Smith", writable: false });
-->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+ >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
-->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+ >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 ->x : Symbol(x, Decl(index.js, 0, 5), Decl(index.js, 1, 22), Decl(index.js, 2, 22), Decl(index.js, 3, 22), Decl(index.js, 4, 22) ... and 2 more)
 ->"lastName" : Symbol(x.lastName, Decl(index.js, 2, 55))
-+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
 +>x : Symbol(x, Decl(index.js, 0, 5))
  >value : Symbol(value, Decl(index.js, 3, 38))
  >writable : Symbol(writable, Decl(index.js, 3, 54))
 
- Object.defineProperty(x, "zip", { get() { return 98122 }, set(_) { /*ignore*/ } });
-->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+@@= skipped -17, +15 lines =@@
+ >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
-->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+ >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 ->x : Symbol(x, Decl(index.js, 0, 5), Decl(index.js, 1, 22), Decl(index.js, 2, 22), Decl(index.js, 3, 22), Decl(index.js, 4, 22) ... and 2 more)
 ->"zip" : Symbol(x.zip, Decl(index.js, 3, 74))
-+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
 +>x : Symbol(x, Decl(index.js, 0, 5))
  >get : Symbol(get, Decl(index.js, 4, 33))
  >set : Symbol(set, Decl(index.js, 4, 57))
  >_ : Symbol(_, Decl(index.js, 4, 62))
-
- Object.defineProperty(x, "houseNumber", { get() { return 21.75 } });
-->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+@@= skipped -10, +9 lines =@@
+ >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
-->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+ >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 ->x : Symbol(x, Decl(index.js, 0, 5), Decl(index.js, 1, 22), Decl(index.js, 2, 22), Decl(index.js, 3, 22), Decl(index.js, 4, 22) ... and 2 more)
 ->"houseNumber" : Symbol(x.houseNumber, Decl(index.js, 4, 83))
-+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
 +>x : Symbol(x, Decl(index.js, 0, 5))
  >get : Symbol(get, Decl(index.js, 5, 41))
 
  Object.defineProperty(x, "zipStr", {
-->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+ >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
-->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+ >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 ->x : Symbol(x, Decl(index.js, 0, 5), Decl(index.js, 1, 22), Decl(index.js, 2, 22), Decl(index.js, 3, 22), Decl(index.js, 4, 22) ... and 2 more)
 ->"zipStr" : Symbol(x.zipStr, Decl(index.js, 5, 68))
-+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
 +>x : Symbol(x, Decl(index.js, 0, 5))
 
      /** @param {string} str */
      set(str) {
-@@= skipped -125, +93 lines =@@
+@@= skipped -17, +15 lines =@@
  >str : Symbol(str, Decl(index.js, 8, 8))
 
          this.zip = Number(str) 

@@ -7,7 +7,7 @@ class A {
 >A : Symbol(A, Decl(stringIndexerConstrainsPropertyDeclarations2.ts, 0, 0))
 
     foo(): string { return ''; }
->foo : Symbol(foo, Decl(stringIndexerConstrainsPropertyDeclarations2.ts, 2, 9))
+>foo : Symbol(A.foo, Decl(stringIndexerConstrainsPropertyDeclarations2.ts, 2, 9))
 }
 
 class B extends A {
@@ -15,7 +15,7 @@ class B extends A {
 >A : Symbol(A, Decl(stringIndexerConstrainsPropertyDeclarations2.ts, 0, 0))
 
     bar(): string { return ''; }
->bar : Symbol(bar, Decl(stringIndexerConstrainsPropertyDeclarations2.ts, 6, 19))
+>bar : Symbol(B.bar, Decl(stringIndexerConstrainsPropertyDeclarations2.ts, 6, 19))
 }
 
 class Foo {
@@ -26,18 +26,18 @@ class Foo {
 >A : Symbol(A, Decl(stringIndexerConstrainsPropertyDeclarations2.ts, 0, 0))
 
     a: A; // ok
->a : Symbol(a, Decl(stringIndexerConstrainsPropertyDeclarations2.ts, 11, 19))
+>a : Symbol(Foo.a, Decl(stringIndexerConstrainsPropertyDeclarations2.ts, 11, 19))
 >A : Symbol(A, Decl(stringIndexerConstrainsPropertyDeclarations2.ts, 0, 0))
 
     b: B; // ok
->b : Symbol(b, Decl(stringIndexerConstrainsPropertyDeclarations2.ts, 12, 9))
+>b : Symbol(Foo.b, Decl(stringIndexerConstrainsPropertyDeclarations2.ts, 12, 9))
 >B : Symbol(B, Decl(stringIndexerConstrainsPropertyDeclarations2.ts, 4, 1))
 
     c: number; // error
->c : Symbol(c, Decl(stringIndexerConstrainsPropertyDeclarations2.ts, 13, 9))
+>c : Symbol(Foo.c, Decl(stringIndexerConstrainsPropertyDeclarations2.ts, 13, 9))
 
     d: string; // error
->d : Symbol(d, Decl(stringIndexerConstrainsPropertyDeclarations2.ts, 14, 14))
+>d : Symbol(Foo.d, Decl(stringIndexerConstrainsPropertyDeclarations2.ts, 14, 14))
 }
 
 interface Foo2 {
@@ -48,18 +48,18 @@ interface Foo2 {
 >A : Symbol(A, Decl(stringIndexerConstrainsPropertyDeclarations2.ts, 0, 0))
 
     a: A; // ok
->a : Symbol(a, Decl(stringIndexerConstrainsPropertyDeclarations2.ts, 19, 19))
+>a : Symbol(Foo2.a, Decl(stringIndexerConstrainsPropertyDeclarations2.ts, 19, 19))
 >A : Symbol(A, Decl(stringIndexerConstrainsPropertyDeclarations2.ts, 0, 0))
 
     b: B; // ok
->b : Symbol(b, Decl(stringIndexerConstrainsPropertyDeclarations2.ts, 20, 9))
+>b : Symbol(Foo2.b, Decl(stringIndexerConstrainsPropertyDeclarations2.ts, 20, 9))
 >B : Symbol(B, Decl(stringIndexerConstrainsPropertyDeclarations2.ts, 4, 1))
 
     c: number; // error
->c : Symbol(c, Decl(stringIndexerConstrainsPropertyDeclarations2.ts, 21, 9))
+>c : Symbol(Foo2.c, Decl(stringIndexerConstrainsPropertyDeclarations2.ts, 21, 9))
 
     d: string; // error
->d : Symbol(d, Decl(stringIndexerConstrainsPropertyDeclarations2.ts, 22, 14))
+>d : Symbol(Foo2.d, Decl(stringIndexerConstrainsPropertyDeclarations2.ts, 22, 14))
 }
 
 var a: {

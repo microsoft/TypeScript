@@ -9,9 +9,9 @@ var Validator = function VFunc() {
 };
 
 Validator.prototype.num = 12
->Validator.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Validator.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >Validator : Symbol(Validator, Decl(jsdocConstructorFunctionTypeReference.js, 0, 3))
->prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 
 /**
  * @param {Validator} state

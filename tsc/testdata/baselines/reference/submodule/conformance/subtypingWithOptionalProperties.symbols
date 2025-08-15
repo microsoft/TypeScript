@@ -29,9 +29,9 @@ r.s && r.s.toFixed(); // would blow up at runtime
 >r.s : Symbol(s, Decl(subtypingWithOptionalProperties.ts, 4, 12))
 >r : Symbol(r, Decl(subtypingWithOptionalProperties.ts, 8, 3))
 >s : Symbol(s, Decl(subtypingWithOptionalProperties.ts, 4, 12))
->r.s.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+>r.s.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 >r.s : Symbol(s, Decl(subtypingWithOptionalProperties.ts, 4, 12))
 >r : Symbol(r, Decl(subtypingWithOptionalProperties.ts, 8, 3))
 >s : Symbol(s, Decl(subtypingWithOptionalProperties.ts, 4, 12))
->toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 

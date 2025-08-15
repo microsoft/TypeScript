@@ -6,9 +6,9 @@ import connect = require('./exportEqualMemberMissing_0');
 >connect : Symbol(connect, Decl(exportEqualMemberMissing_1.ts, 0, 0))
 
 connect().use(connect.static('foo')); // Error	1	The property 'static' does not exist on value of type ''.
->connect().use : Symbol(use, Decl(exportEqualMemberMissing_0.ts, 4, 36))
+>connect().use : Symbol(connect.connectExport.use, Decl(exportEqualMemberMissing_0.ts, 4, 36))
 >connect : Symbol(connect, Decl(exportEqualMemberMissing_1.ts, 0, 0))
->use : Symbol(use, Decl(exportEqualMemberMissing_0.ts, 4, 36))
+>use : Symbol(connect.connectExport.use, Decl(exportEqualMemberMissing_0.ts, 4, 36))
 >connect : Symbol(connect, Decl(exportEqualMemberMissing_1.ts, 0, 0))
 
 === exportEqualMemberMissing_0.ts ===
@@ -27,7 +27,7 @@ module server {
 >connectExport : Symbol(connectExport, Decl(exportEqualMemberMissing_0.ts, 3, 5))
 
         use: (mod: connectModule) => connectExport;
->use : Symbol(use, Decl(exportEqualMemberMissing_0.ts, 4, 36))
+>use : Symbol(connectExport.use, Decl(exportEqualMemberMissing_0.ts, 4, 36))
 >mod : Symbol(mod, Decl(exportEqualMemberMissing_0.ts, 5, 14))
 >connectModule : Symbol(connectModule, Decl(exportEqualMemberMissing_0.ts, 0, 15))
 >connectExport : Symbol(connectExport, Decl(exportEqualMemberMissing_0.ts, 3, 5))
@@ -38,7 +38,7 @@ var server: {
 
     (): server.connectExport;
 >server : Symbol(server, Decl(exportEqualMemberMissing_0.ts, 0, 0), Decl(exportEqualMemberMissing_0.ts, 8, 3))
->connectExport : Symbol(connectExport, Decl(exportEqualMemberMissing_0.ts, 3, 5))
+>connectExport : Symbol(server.connectExport, Decl(exportEqualMemberMissing_0.ts, 3, 5))
 
     foo: Date;
 >foo : Symbol(foo, Decl(exportEqualMemberMissing_0.ts, 9, 29))

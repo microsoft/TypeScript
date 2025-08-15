@@ -11,7 +11,7 @@ import { ios } from "./foo.js";
 exports.__esModule = true;
 >exports.__esModule = true : true
 >exports.__esModule : true
->exports : typeof import("./foo.ios")
+>exports : typeof import("/foo.ios")
 >__esModule : true
 >true : true
 
@@ -21,7 +21,7 @@ function ios() {}
 exports.ios = ios;
 >exports.ios = ios : () => void
 >exports.ios : () => void
->exports : typeof import("./foo.ios")
+>exports : typeof import("/foo.ios")
 >ios : () => void
 >ios : () => void
 
@@ -32,7 +32,7 @@ exports.ios = ios;
 exports.__esModule = true;
 >exports.__esModule = true : true
 >exports.__esModule : true
->exports : typeof import("./foo")
+>exports : typeof import("/foo")
 >__esModule : true
 >true : true
 
@@ -42,7 +42,7 @@ function base() {}
 exports.base = base;
 >exports.base = base : () => void
 >exports.base : () => void
->exports : typeof import("./foo")
+>exports : typeof import("/foo")
 >base : () => void
 >base : () => void
 

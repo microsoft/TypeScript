@@ -6,7 +6,7 @@ interface IFoo<T> {
 >T : Symbol(T, Decl(genericSpecializations3.ts, 0, 15))
 
     foo(x: T): T;
->foo : Symbol(foo, Decl(genericSpecializations3.ts, 0, 19))
+>foo : Symbol(IFoo.foo, Decl(genericSpecializations3.ts, 0, 19))
 >x : Symbol(x, Decl(genericSpecializations3.ts, 1, 8))
 >T : Symbol(T, Decl(genericSpecializations3.ts, 0, 15))
 >T : Symbol(T, Decl(genericSpecializations3.ts, 0, 15))
@@ -17,16 +17,16 @@ var iFoo: IFoo<number>;
 >IFoo : Symbol(IFoo, Decl(genericSpecializations3.ts, 0, 0))
 
 iFoo.foo(1);
->iFoo.foo : Symbol(foo, Decl(genericSpecializations3.ts, 0, 19))
+>iFoo.foo : Symbol(IFoo.foo, Decl(genericSpecializations3.ts, 0, 19))
 >iFoo : Symbol(iFoo, Decl(genericSpecializations3.ts, 4, 3))
->foo : Symbol(foo, Decl(genericSpecializations3.ts, 0, 19))
+>foo : Symbol(IFoo.foo, Decl(genericSpecializations3.ts, 0, 19))
 
 class IntFooBad implements IFoo<number> { // error
 >IntFooBad : Symbol(IntFooBad, Decl(genericSpecializations3.ts, 5, 12))
 >IFoo : Symbol(IFoo, Decl(genericSpecializations3.ts, 0, 0))
 
     foo(x: string): string { return null; }
->foo : Symbol(foo, Decl(genericSpecializations3.ts, 7, 41))
+>foo : Symbol(IntFooBad.foo, Decl(genericSpecializations3.ts, 7, 41))
 >x : Symbol(x, Decl(genericSpecializations3.ts, 8, 8))
 }
 
@@ -39,7 +39,7 @@ class IntFoo implements IFoo<number> {
 >IFoo : Symbol(IFoo, Decl(genericSpecializations3.ts, 0, 0))
 
     foo(x: number): number { return null; }
->foo : Symbol(foo, Decl(genericSpecializations3.ts, 13, 38))
+>foo : Symbol(IntFoo.foo, Decl(genericSpecializations3.ts, 13, 38))
 >x : Symbol(x, Decl(genericSpecializations3.ts, 14, 8))
 }
 
@@ -52,7 +52,7 @@ class StringFoo2 implements IFoo<string> {
 >IFoo : Symbol(IFoo, Decl(genericSpecializations3.ts, 0, 0))
 
     foo(x: string): string { return null; }
->foo : Symbol(foo, Decl(genericSpecializations3.ts, 19, 42))
+>foo : Symbol(StringFoo2.foo, Decl(genericSpecializations3.ts, 19, 42))
 >x : Symbol(x, Decl(genericSpecializations3.ts, 20, 8))
 }
 
@@ -61,9 +61,9 @@ var stringFoo2: StringFoo2;
 >StringFoo2 : Symbol(StringFoo2, Decl(genericSpecializations3.ts, 17, 19))
 
 stringFoo2.foo("hm");
->stringFoo2.foo : Symbol(foo, Decl(genericSpecializations3.ts, 19, 42))
+>stringFoo2.foo : Symbol(StringFoo2.foo, Decl(genericSpecializations3.ts, 19, 42))
 >stringFoo2 : Symbol(stringFoo2, Decl(genericSpecializations3.ts, 23, 3))
->foo : Symbol(foo, Decl(genericSpecializations3.ts, 19, 42))
+>foo : Symbol(StringFoo2.foo, Decl(genericSpecializations3.ts, 19, 42))
 
 
 intFoo = stringFoo2; // error
@@ -80,7 +80,7 @@ class StringFoo3 implements IFoo<string> { // error
 >IFoo : Symbol(IFoo, Decl(genericSpecializations3.ts, 0, 0))
 
     foo<T>(x: T): T { return null; }
->foo : Symbol(foo, Decl(genericSpecializations3.ts, 31, 42))
+>foo : Symbol(StringFoo3.foo, Decl(genericSpecializations3.ts, 31, 42))
 >T : Symbol(T, Decl(genericSpecializations3.ts, 32, 8))
 >x : Symbol(x, Decl(genericSpecializations3.ts, 32, 11))
 >T : Symbol(T, Decl(genericSpecializations3.ts, 32, 8))

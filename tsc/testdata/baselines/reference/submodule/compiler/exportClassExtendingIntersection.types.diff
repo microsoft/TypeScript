@@ -9,38 +9,3 @@
  >base : MyBaseClass<any>
 
          mixinProperty: string;
-@@= skipped -12, +12 lines =@@
- >MyBaseClass : typeof MyBaseClass
-
- import { MyMixin } from './MixinClass';
-->MyMixin : <T extends import("BaseClass").Constructor<MyBaseClass<any>>>(base: T) => T & import("BaseClass").Constructor<MyMixin>
-+>MyMixin : <T extends import("./BaseClass").Constructor<MyBaseClass<any>>>(base: T) => T & import("./BaseClass").Constructor<MyMixin>
-
- export class MyExtendedClass extends MyMixin(MyBaseClass)<string> {
- >MyExtendedClass : MyExtendedClass
- >MyMixin(MyBaseClass) : MyBaseClass<string> & MyMixin
-->MyMixin : <T extends import("BaseClass").Constructor<MyBaseClass<any>>>(base: T) => T & import("BaseClass").Constructor<MyMixin>
-+>MyMixin : <T extends import("./BaseClass").Constructor<MyBaseClass<any>>>(base: T) => T & import("./BaseClass").Constructor<MyMixin>
- >MyBaseClass : typeof MyBaseClass
-
-     extendedClassProperty: number;
-@@= skipped -16, +16 lines =@@
- >MyExtendedClass : typeof MyExtendedClass
-
- import { MyMixin } from './MixinClass';
-->MyMixin : <T extends import("BaseClass").Constructor<import("BaseClass").MyBaseClass<any>>>(base: T) => T & import("BaseClass").Constructor<MyMixin>
-+>MyMixin : <T extends import("./BaseClass").Constructor<import("./BaseClass").MyBaseClass<any>>>(base: T) => T & import("./BaseClass").Constructor<MyMixin>
-
- const myExtendedClass = new MyExtendedClass('string');
- >myExtendedClass : MyExtendedClass
-@@= skipped -9, +9 lines =@@
- >'string' : "string"
-
- const AnotherMixedClass = MyMixin(MyExtendedClass);
-->AnotherMixedClass : typeof MyExtendedClass & import("BaseClass").Constructor<MyMixin>
-->MyMixin(MyExtendedClass) : typeof MyExtendedClass & import("BaseClass").Constructor<MyMixin>
-->MyMixin : <T extends import("BaseClass").Constructor<import("BaseClass").MyBaseClass<any>>>(base: T) => T & import("BaseClass").Constructor<MyMixin>
-+>AnotherMixedClass : typeof MyExtendedClass & import("./BaseClass").Constructor<MyMixin>
-+>MyMixin(MyExtendedClass) : typeof MyExtendedClass & import("./BaseClass").Constructor<MyMixin>
-+>MyMixin : <T extends import("./BaseClass").Constructor<import("./BaseClass").MyBaseClass<any>>>(base: T) => T & import("./BaseClass").Constructor<MyMixin>
- >MyExtendedClass : typeof MyExtendedClass

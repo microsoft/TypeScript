@@ -6,7 +6,7 @@ class C {
 
 <<<<<<< HEAD
     v = 1;
->v : Symbol(v, Decl(conflictMarkerTrivia1.ts, 0, 9))
+>v : Symbol(C.v, Decl(conflictMarkerTrivia1.ts, 0, 9))
 
 =======
     v = 2;

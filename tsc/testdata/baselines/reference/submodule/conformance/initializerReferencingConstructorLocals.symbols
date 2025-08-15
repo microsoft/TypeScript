@@ -7,17 +7,17 @@ class C {
 >C : Symbol(C, Decl(initializerReferencingConstructorLocals.ts, 0, 0))
 
     a = z; // error
->a : Symbol(a, Decl(initializerReferencingConstructorLocals.ts, 2, 9))
+>a : Symbol(C.a, Decl(initializerReferencingConstructorLocals.ts, 2, 9))
 
     b: typeof z; // error
->b : Symbol(b, Decl(initializerReferencingConstructorLocals.ts, 3, 10))
+>b : Symbol(C.b, Decl(initializerReferencingConstructorLocals.ts, 3, 10))
 
     c = this.z; // error
->c : Symbol(c, Decl(initializerReferencingConstructorLocals.ts, 4, 16))
+>c : Symbol(C.c, Decl(initializerReferencingConstructorLocals.ts, 4, 16))
 >this : Symbol(C, Decl(initializerReferencingConstructorLocals.ts, 0, 0))
 
     d: typeof this.z; // error
->d : Symbol(d, Decl(initializerReferencingConstructorLocals.ts, 5, 15))
+>d : Symbol(C.d, Decl(initializerReferencingConstructorLocals.ts, 5, 15))
 >this : Symbol(C, Decl(initializerReferencingConstructorLocals.ts, 0, 0))
 
     constructor(x) {
@@ -32,17 +32,17 @@ class D<T> {
 >T : Symbol(T, Decl(initializerReferencingConstructorLocals.ts, 12, 8))
 
     a = z; // error
->a : Symbol(a, Decl(initializerReferencingConstructorLocals.ts, 12, 12))
+>a : Symbol(D.a, Decl(initializerReferencingConstructorLocals.ts, 12, 12))
 
     b: typeof z; // error
->b : Symbol(b, Decl(initializerReferencingConstructorLocals.ts, 13, 10))
+>b : Symbol(D.b, Decl(initializerReferencingConstructorLocals.ts, 13, 10))
 
     c = this.z; // error
->c : Symbol(c, Decl(initializerReferencingConstructorLocals.ts, 14, 16))
+>c : Symbol(D.c, Decl(initializerReferencingConstructorLocals.ts, 14, 16))
 >this : Symbol(D, Decl(initializerReferencingConstructorLocals.ts, 10, 1))
 
     d: typeof this.z; // error
->d : Symbol(d, Decl(initializerReferencingConstructorLocals.ts, 15, 15))
+>d : Symbol(D.d, Decl(initializerReferencingConstructorLocals.ts, 15, 15))
 >this : Symbol(D, Decl(initializerReferencingConstructorLocals.ts, 10, 1))
 
     constructor(x: T) {

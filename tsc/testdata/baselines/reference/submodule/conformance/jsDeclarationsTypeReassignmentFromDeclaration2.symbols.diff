@@ -16,12 +16,3 @@
  >items : Symbol(items, Decl(index.js, 0, 5))
 
  === some-mod.d.ts ===
-@@= skipped -13, +12 lines =@@
- >Item : Symbol(Item, Decl(some-mod.d.ts, 0, 0))
-
-     x: string;
-->x : Symbol(Item.x, Decl(some-mod.d.ts, 0, 16))
-+>x : Symbol(x, Decl(some-mod.d.ts, 0, 16))
- }
- declare function getItems(): Item[];
- >getItems : Symbol(getItems, Decl(some-mod.d.ts, 2, 1))

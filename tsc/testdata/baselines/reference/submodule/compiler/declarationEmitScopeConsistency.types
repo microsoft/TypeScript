@@ -13,12 +13,12 @@ export const f = (x: A) => x as A;
 
 === b.ts ===
 import { f } from "./a";
->f : (x: import("./a").A) => import("./a").A
+>f : (x: import("a").A) => import("a").A
 
 export interface A { other: number }
 >other : number
 
 export const g = f;
->g : (x: import("./a").A) => import("./a").A
->f : (x: import("./a").A) => import("./a").A
+>g : (x: import("a").A) => import("a").A
+>f : (x: import("a").A) => import("a").A
 

@@ -30,9 +30,9 @@ export class Aleph {
          * Field is always null
          */
         this.field = b;
->this.field : Symbol(field, Decl(source.js, 16, 23))
+>this.field : Symbol(Aleph.field, Decl(source.js, 16, 23))
 >this : Symbol(Aleph, Decl(source.js, 5, 28))
->field : Symbol(field, Decl(source.js, 16, 23))
+>field : Symbol(Aleph.field, Decl(source.js, 16, 23))
 >b : Symbol(b, Decl(source.js, 16, 18))
     }
 
@@ -41,7 +41,7 @@ export class Aleph {
      * @returns {void}
      */
     doIt() {}
->doIt : Symbol(doIt, Decl(source.js, 21, 5))
+>doIt : Symbol(Aleph.doIt, Decl(source.js, 21, 5))
 }
 
 /**

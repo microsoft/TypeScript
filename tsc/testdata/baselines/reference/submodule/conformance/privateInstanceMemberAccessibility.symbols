@@ -5,7 +5,7 @@ class Base {
 >Base : Symbol(Base, Decl(privateInstanceMemberAccessibility.ts, 0, 0))
 
     private foo: string;
->foo : Symbol(foo, Decl(privateInstanceMemberAccessibility.ts, 0, 12))
+>foo : Symbol(Base.foo, Decl(privateInstanceMemberAccessibility.ts, 0, 12))
 }
 
 class Derived extends Base {
@@ -13,23 +13,23 @@ class Derived extends Base {
 >Base : Symbol(Base, Decl(privateInstanceMemberAccessibility.ts, 0, 0))
 
     x = super.foo; // error
->x : Symbol(x, Decl(privateInstanceMemberAccessibility.ts, 4, 28))
->super.foo : Symbol(foo, Decl(privateInstanceMemberAccessibility.ts, 0, 12))
+>x : Symbol(Derived.x, Decl(privateInstanceMemberAccessibility.ts, 4, 28))
+>super.foo : Symbol(Base.foo, Decl(privateInstanceMemberAccessibility.ts, 0, 12))
 >super : Symbol(Base, Decl(privateInstanceMemberAccessibility.ts, 0, 0))
->foo : Symbol(foo, Decl(privateInstanceMemberAccessibility.ts, 0, 12))
+>foo : Symbol(Base.foo, Decl(privateInstanceMemberAccessibility.ts, 0, 12))
 
     y() {
->y : Symbol(y, Decl(privateInstanceMemberAccessibility.ts, 5, 18))
+>y : Symbol(Derived.y, Decl(privateInstanceMemberAccessibility.ts, 5, 18))
 
         return super.foo; // error
->super.foo : Symbol(foo, Decl(privateInstanceMemberAccessibility.ts, 0, 12))
+>super.foo : Symbol(Base.foo, Decl(privateInstanceMemberAccessibility.ts, 0, 12))
 >super : Symbol(Base, Decl(privateInstanceMemberAccessibility.ts, 0, 0))
->foo : Symbol(foo, Decl(privateInstanceMemberAccessibility.ts, 0, 12))
+>foo : Symbol(Base.foo, Decl(privateInstanceMemberAccessibility.ts, 0, 12))
     }
     z: typeof super.foo; // error
->z : Symbol(z, Decl(privateInstanceMemberAccessibility.ts, 8, 5))
+>z : Symbol(Derived.z, Decl(privateInstanceMemberAccessibility.ts, 8, 5))
 
     a: this.foo; // error
->a : Symbol(a, Decl(privateInstanceMemberAccessibility.ts, 9, 24))
->foo : Symbol(foo, Decl(privateInstanceMemberAccessibility.ts, 11, 12))
+>a : Symbol(Derived.a, Decl(privateInstanceMemberAccessibility.ts, 9, 24))
+>foo : Symbol(Derived.foo, Decl(privateInstanceMemberAccessibility.ts, 11, 12))
 }

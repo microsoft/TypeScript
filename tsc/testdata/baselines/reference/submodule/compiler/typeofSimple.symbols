@@ -15,7 +15,7 @@ var v3: string = v2; // Not assignment compatible
 interface I<T> { x: T; }
 >I : Symbol(I, Decl(typeofSimple.ts, 2, 20))
 >T : Symbol(T, Decl(typeofSimple.ts, 4, 12))
->x : Symbol(x, Decl(typeofSimple.ts, 4, 16))
+>x : Symbol(I.x, Decl(typeofSimple.ts, 4, 16))
 >T : Symbol(T, Decl(typeofSimple.ts, 4, 12))
 
 interface J { }

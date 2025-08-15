@@ -6,7 +6,7 @@ export class A<T = any> {
 >T : Symbol(T, Decl(declarationEmitShadowing.ts, 0, 15))
 
   public readonly ShadowedButDoesNotRequireRenaming = <T>(): T => {
->ShadowedButDoesNotRequireRenaming : Symbol(ShadowedButDoesNotRequireRenaming, Decl(declarationEmitShadowing.ts, 0, 25))
+>ShadowedButDoesNotRequireRenaming : Symbol(A.ShadowedButDoesNotRequireRenaming, Decl(declarationEmitShadowing.ts, 0, 25))
 >T : Symbol(T, Decl(declarationEmitShadowing.ts, 1, 55))
 >T : Symbol(T, Decl(declarationEmitShadowing.ts, 1, 55))
 

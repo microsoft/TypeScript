@@ -6,7 +6,7 @@ export class A {}
 
 === /b.ts ===
 export type { A } from './a';
->A : import("./a").A
+>A : import("/a").A
 
 === /c.ts ===
 import { A } from './b';

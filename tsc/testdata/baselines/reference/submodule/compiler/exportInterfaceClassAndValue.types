@@ -6,7 +6,7 @@ export const foo = 1
 >1 : 1
 
 export declare class foo {}
->foo : import("./exportInterfaceClassAndValue").foo
+>foo : import("exportInterfaceClassAndValue").foo
 
 export interface foo {}
 

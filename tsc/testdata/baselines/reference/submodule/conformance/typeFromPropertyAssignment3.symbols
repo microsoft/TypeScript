@@ -8,16 +8,16 @@ var Outer = function O() {
     this.y = 2
 }
 Outer.Inner = class I {
->Outer.Inner : Symbol(Inner, Decl(a.js, 2, 1))
+>Outer.Inner : Symbol(O.Inner, Decl(a.js, 2, 1))
 >Outer : Symbol(Outer, Decl(a.js, 0, 3))
->Inner : Symbol(Inner, Decl(a.js, 2, 1))
+>Inner : Symbol(O.Inner, Decl(a.js, 2, 1))
 >I : Symbol(I, Decl(a.js, 3, 13))
 
     constructor() {
         this.x = 1
->this.x : Symbol(x, Decl(a.js, 4, 19))
+>this.x : Symbol(I.x, Decl(a.js, 4, 19))
 >this : Symbol(I, Decl(a.js, 3, 13))
->x : Symbol(x, Decl(a.js, 4, 19))
+>x : Symbol(I.x, Decl(a.js, 4, 19))
     }
 }
 /** @type {Outer} */

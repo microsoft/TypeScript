@@ -90,7 +90,7 @@ class A {
 >A : Symbol(A, Decl(downlevelLetConst16.ts, 29, 1))
 
     m1() {
->m1 : Symbol(m1, Decl(downlevelLetConst16.ts, 31, 9))
+>m1 : Symbol(A.m1, Decl(downlevelLetConst16.ts, 31, 9))
 
         let x = 1;
 >x : Symbol(x, Decl(downlevelLetConst16.ts, 33, 11))
@@ -116,7 +116,7 @@ class A {
 >z : Symbol(z, Decl(downlevelLetConst16.ts, 37, 13))
     }
     m2() {
->m2 : Symbol(m2, Decl(downlevelLetConst16.ts, 39, 5))
+>m2 : Symbol(A.m2, Decl(downlevelLetConst16.ts, 39, 5))
         {
             let x = 1;
 >x : Symbol(x, Decl(downlevelLetConst16.ts, 42, 15))
@@ -152,7 +152,7 @@ class B {
 >B : Symbol(B, Decl(downlevelLetConst16.ts, 52, 1))
 
     m1() {
->m1 : Symbol(m1, Decl(downlevelLetConst16.ts, 54, 9))
+>m1 : Symbol(B.m1, Decl(downlevelLetConst16.ts, 54, 9))
 
         const x = 1;
 >x : Symbol(x, Decl(downlevelLetConst16.ts, 56, 13))
@@ -179,7 +179,7 @@ class B {
 
     }
     m2() {
->m2 : Symbol(m2, Decl(downlevelLetConst16.ts, 63, 5))
+>m2 : Symbol(B.m2, Decl(downlevelLetConst16.ts, 63, 5))
         {
             const x = 1;
 >x : Symbol(x, Decl(downlevelLetConst16.ts, 66, 17))

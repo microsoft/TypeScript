@@ -6,18 +6,18 @@ class A {
 
     static {
         A.doSomething(); // should not error
->A.doSomething : Symbol(doSomething, Decl(classStaticBlockUseBeforeDef3.ts, 3, 5))
+>A.doSomething : Symbol(A.doSomething, Decl(classStaticBlockUseBeforeDef3.ts, 3, 5))
 >A : Symbol(A, Decl(classStaticBlockUseBeforeDef3.ts, 0, 0))
->doSomething : Symbol(doSomething, Decl(classStaticBlockUseBeforeDef3.ts, 3, 5))
+>doSomething : Symbol(A.doSomething, Decl(classStaticBlockUseBeforeDef3.ts, 3, 5))
     }
 
     static doSomething() {
->doSomething : Symbol(doSomething, Decl(classStaticBlockUseBeforeDef3.ts, 3, 5))
+>doSomething : Symbol(A.doSomething, Decl(classStaticBlockUseBeforeDef3.ts, 3, 5))
 
        console.log("gotcha!");
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
     }
 }
 
@@ -27,9 +27,9 @@ class Baz {
 
     static {
         console.log(FOO);   // should error
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >FOO : Symbol(FOO, Decl(classStaticBlockUseBeforeDef3.ts, 17, 5))
     }
 }
@@ -42,9 +42,9 @@ class Bar {
 
     static {
         console.log(FOO); // should not error
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >FOO : Symbol(FOO, Decl(classStaticBlockUseBeforeDef3.ts, 17, 5))
     }
 }
@@ -64,10 +64,10 @@ class CFA {
     }
 
     static t = 1;
->t : Symbol(t, Decl(classStaticBlockUseBeforeDef3.ts, 30, 5))
+>t : Symbol(CFA.t, Decl(classStaticBlockUseBeforeDef3.ts, 30, 5))
 
     static doSomething() {}
->doSomething : Symbol(doSomething, Decl(classStaticBlockUseBeforeDef3.ts, 32, 17))
+>doSomething : Symbol(CFA.doSomething, Decl(classStaticBlockUseBeforeDef3.ts, 32, 17))
 
     static {
         u;  // should be "BAR"

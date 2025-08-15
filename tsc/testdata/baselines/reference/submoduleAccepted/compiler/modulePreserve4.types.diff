@@ -10,22 +10,14 @@
 ->exports : any
 ->y : any
 +>module.exports.y : 0
-+>module.exports : typeof import("./a")
-+>module : { "\"/a\"": typeof import("./a"); }
-+>exports : typeof import("./a")
++>module.exports : typeof import("/a")
++>module : { "\"/a\"": typeof import("/a"); }
++>exports : typeof import("/a")
 +>y : 0
  >0 : 0
 
  === /b.ts ===
-@@= skipped -37, +37 lines =@@
- exports.default = 0;
- >exports.default = 0 : 0
- >exports.default : 0
-->exports : typeof import("/g")
-+>exports : typeof import("./g")
- >default : 0
- >0 : 0
-
+@@= skipped -44, +44 lines =@@
  === /main1.ts ===
  import { x, y } from "./a"; // No y
  >x : 0
@@ -34,7 +26,7 @@
 
  import a1 = require("./a"); // { x: 0 }
  >a1 : typeof a1
-@@= skipped -108, +108 lines =@@
+@@= skipped -101, +101 lines =@@
  >default : 0
 
  import g1 from "./g"; // { default: 0 }
@@ -98,20 +90,5 @@
 ->require("./g") : typeof g1
 +>g2 : typeof g2
 +>require("./g") : typeof g2
- >require : any
- >"./g" : "./g"
-
- === /main4.cjs ===
- exports.x = require("./g");
-->exports.x = require("./g") : typeof import("/g")
-->exports.x : typeof import("/g")
-->exports : typeof import("/main4")
-->x : typeof import("/g")
-->require("./g") : typeof import("/g")
-+>exports.x = require("./g") : typeof import("./g")
-+>exports.x : typeof import("./g")
-+>exports : typeof import("./main4.cjs")
-+>x : typeof import("./g")
-+>require("./g") : typeof import("./g")
  >require : any
  >"./g" : "./g"

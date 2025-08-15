@@ -9,7 +9,7 @@ declare const Named: 0;
 
 === two.d.ts ===
 export * as default from "./three";
->default : typeof import("./three")
+>default : typeof import("three")
 
 === one.ts ===
 import ns from "./two";

@@ -8,10 +8,10 @@ module A {
 >Point : Symbol(Point, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 0, 10))
 
         x: number;
->x : Symbol(x, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 1, 28))
+>x : Symbol(Point.x, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 1, 28))
 
         y: number;
->y : Symbol(y, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 2, 18))
+>y : Symbol(Point.y, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 2, 18))
     }
 
     interface Point3d extends Point {
@@ -19,7 +19,7 @@ module A {
 >Point : Symbol(Point, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 0, 10))
 
         z: number;
->z : Symbol(z, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 6, 37))
+>z : Symbol(Point3d.z, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 6, 37))
     }
 }
 
@@ -30,12 +30,12 @@ module B {
 >Line : Symbol(Line, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 11, 10))
 
         constructor(public start: A.Point, public end: A.Point) { }
->start : Symbol(start, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 13, 20))
+>start : Symbol(Line.start, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 13, 20))
 >A : Symbol(A, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 0, 0))
->Point : Symbol(Point, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 0, 10))
->end : Symbol(end, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 13, 42))
+>Point : Symbol(A.Point, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 0, 10))
+>end : Symbol(Line.end, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 13, 42))
 >A : Symbol(A, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 0, 0))
->Point : Symbol(Point, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 0, 10))
+>Point : Symbol(A.Point, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 0, 10))
     }
 }
 
@@ -44,16 +44,16 @@ module Geometry {
 
     export import Points = A;
 >Points : Symbol(Points, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 17, 17))
->A : Symbol(A, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 0, 0))
+>A : Symbol(Points, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 0, 0))
 
     import Lines = B;
 >Lines : Symbol(Lines, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 18, 29))
->B : Symbol(B, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 9, 1))
+>B : Symbol(Lines, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 9, 1))
 
     export var Origin: Points.Point = { x: 0, y: 0 };
 >Origin : Symbol(Origin, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 21, 14))
 >Points : Symbol(Points, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 17, 17))
->Point : Symbol(Point, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 0, 10))
+>Point : Symbol(Points.Point, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 0, 10))
 >x : Symbol(x, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 21, 39))
 >y : Symbol(y, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 21, 45))
 
@@ -61,10 +61,10 @@ module Geometry {
     export var Unit: Lines.Line = new Lines.Line(Origin, { x: 1, y: 0 });
 >Unit : Symbol(Unit, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 24, 14))
 >Lines : Symbol(Lines, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 18, 29))
->Line : Symbol(Line, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 11, 10))
->Lines.Line : Symbol(Line, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 11, 10))
+>Line : Symbol(Lines.Line, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 11, 10))
+>Lines.Line : Symbol(Lines.Line, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 11, 10))
 >Lines : Symbol(Lines, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 18, 29))
->Line : Symbol(Line, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 11, 10))
+>Line : Symbol(Lines.Line, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 11, 10))
 >Origin : Symbol(Origin, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 21, 14))
 >x : Symbol(x, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 24, 58))
 >y : Symbol(y, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 24, 64))
@@ -79,14 +79,14 @@ var p: { x: number; y: number };
 var p: Geometry.Points.Point;
 >p : Symbol(p, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 28, 3), Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 29, 3), Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 30, 3))
 >Geometry : Symbol(Geometry, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 15, 1))
->Points : Symbol(Points, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 17, 17))
->Point : Symbol(Point, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 0, 10))
+>Points : Symbol(Geometry.Points, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 17, 17))
+>Point : Symbol(A.Point, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 0, 10))
 
 var p = Geometry.Origin;
 >p : Symbol(p, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 28, 3), Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 29, 3), Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 30, 3))
->Geometry.Origin : Symbol(Origin, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 21, 14))
+>Geometry.Origin : Symbol(Geometry.Origin, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 21, 14))
 >Geometry : Symbol(Geometry, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 15, 1))
->Origin : Symbol(Origin, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 21, 14))
+>Origin : Symbol(Geometry.Origin, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 21, 14))
 
 var line: { start: { x: number; y: number }; end: { x: number; y: number; } };
 >line : Symbol(line, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 32, 3), Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 33, 3), Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 36, 3))
@@ -99,9 +99,9 @@ var line: { start: { x: number; y: number }; end: { x: number; y: number; } };
 
 var line = Geometry.Unit;
 >line : Symbol(line, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 32, 3), Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 33, 3), Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 36, 3))
->Geometry.Unit : Symbol(Unit, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 24, 14))
+>Geometry.Unit : Symbol(Geometry.Unit, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 24, 14))
 >Geometry : Symbol(Geometry, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 15, 1))
->Unit : Symbol(Unit, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 24, 14))
+>Unit : Symbol(Geometry.Unit, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 24, 14))
 
 // not expected to work since non are exported
 var line = Geometry.Lines.Line;

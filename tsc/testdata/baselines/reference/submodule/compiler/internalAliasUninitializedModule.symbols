@@ -11,7 +11,7 @@ module a {
 >I : Symbol(I, Decl(internalAliasUninitializedModule.ts, 1, 21))
 
             foo();
->foo : Symbol(foo, Decl(internalAliasUninitializedModule.ts, 2, 28))
+>foo : Symbol(I.foo, Decl(internalAliasUninitializedModule.ts, 2, 28))
         }
     }
 }
@@ -27,10 +27,10 @@ module c {
     export var x: b.I;
 >x : Symbol(x, Decl(internalAliasUninitializedModule.ts, 10, 14))
 >b : Symbol(b, Decl(internalAliasUninitializedModule.ts, 8, 10))
->I : Symbol(I, Decl(internalAliasUninitializedModule.ts, 1, 21))
+>I : Symbol(b.I, Decl(internalAliasUninitializedModule.ts, 1, 21))
 
     x.foo();
->x.foo : Symbol(foo, Decl(internalAliasUninitializedModule.ts, 2, 28))
+>x.foo : Symbol(b.I.foo, Decl(internalAliasUninitializedModule.ts, 2, 28))
 >x : Symbol(x, Decl(internalAliasUninitializedModule.ts, 10, 14))
->foo : Symbol(foo, Decl(internalAliasUninitializedModule.ts, 2, 28))
+>foo : Symbol(b.I.foo, Decl(internalAliasUninitializedModule.ts, 2, 28))
 }

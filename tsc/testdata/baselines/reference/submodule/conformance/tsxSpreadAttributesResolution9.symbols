@@ -8,25 +8,25 @@ interface OptionProp {
 >OptionProp : Symbol(OptionProp, Decl(file.tsx, 0, 32))
 
     x?: 2
->x : Symbol(x, Decl(file.tsx, 2, 22))
+>x : Symbol(OptionProp.x, Decl(file.tsx, 2, 22))
 
     y?: boolean
->y : Symbol(y, Decl(file.tsx, 3, 9))
+>y : Symbol(OptionProp.y, Decl(file.tsx, 3, 9))
 }
 
 class Opt extends React.Component<OptionProp, {}> {
 >Opt : Symbol(Opt, Decl(file.tsx, 5, 1))
->React.Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+>React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+>Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >OptionProp : Symbol(OptionProp, Decl(file.tsx, 0, 32))
 
     render() {
->render : Symbol(render, Decl(file.tsx, 7, 51))
+>render : Symbol(Opt.render, Decl(file.tsx, 7, 51))
 
         return <div>Hello</div>;
->div : Symbol(div, Decl(react.d.ts, 2400, 45))
->div : Symbol(div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
     }
 }
 

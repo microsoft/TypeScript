@@ -5,7 +5,7 @@ export interface Bar {
 >Bar : Symbol(Bar, Decl(interfaces.d.ts, 0, 0))
 
     prop: string
->prop : Symbol(prop, Decl(interfaces.d.ts, 0, 22))
+>prop : Symbol(Bar.prop, Decl(interfaces.d.ts, 0, 22))
 }
 
 === usage.js ===

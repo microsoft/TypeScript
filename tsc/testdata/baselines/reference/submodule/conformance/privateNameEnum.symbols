@@ -5,6 +5,6 @@ enum E {
 >E : Symbol(E, Decl(privateNameEnum.ts, 0, 0))
 
     #x
->#x : Symbol(#x, Decl(privateNameEnum.ts, 0, 8))
+>#x : Symbol(E.#x, Decl(privateNameEnum.ts, 0, 8))
 }
 

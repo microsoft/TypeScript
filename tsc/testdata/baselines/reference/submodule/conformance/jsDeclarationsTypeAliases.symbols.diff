@@ -1,11 +1,7 @@
 --- old.jsDeclarationsTypeAliases.symbols
 +++ new.jsDeclarationsTypeAliases.symbols
-@@= skipped -48, +48 lines =@@
- >ExportedThing : Symbol(ExportedThing, Decl(mixed.js, 9, 1))
-
-     z = "ok"
-->z : Symbol(ExportedThing.z, Decl(mixed.js, 10, 21))
-+>z : Symbol(z, Decl(mixed.js, 10, 21))
+@@= skipped -51, +51 lines =@@
+ >z : Symbol(ExportedThing.z, Decl(mixed.js, 10, 21))
  }
  module.exports = {
 ->module.exports : Symbol(module.exports, Decl(mixed.js, 0, 0))
@@ -17,10 +13,3 @@
 
      doTheThing,
  >doTheThing : Symbol(doTheThing, Decl(mixed.js, 13, 18))
-@@= skipped -18, +18 lines =@@
- >LocalThing : Symbol(LocalThing, Decl(mixed.js, 16, 2))
-
-     y = "ok"
-->y : Symbol(LocalThing.y, Decl(mixed.js, 17, 18))
-+>y : Symbol(y, Decl(mixed.js, 17, 18))
- }

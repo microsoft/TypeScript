@@ -8,7 +8,7 @@ module Y {
 
     public class A { s: string }
 >A : Symbol(A, Decl(invalidModuleWithStatementsOfEveryKind.ts, 2, 10))
->s : Symbol(s, Decl(invalidModuleWithStatementsOfEveryKind.ts, 3, 20))
+>s : Symbol(A.s, Decl(invalidModuleWithStatementsOfEveryKind.ts, 3, 20))
 
     public class BB<T> extends A {
 >BB : Symbol(BB, Decl(invalidModuleWithStatementsOfEveryKind.ts, 3, 32))
@@ -16,7 +16,7 @@ module Y {
 >A : Symbol(A, Decl(invalidModuleWithStatementsOfEveryKind.ts, 2, 10))
 
         id: number;
->id : Symbol(id, Decl(invalidModuleWithStatementsOfEveryKind.ts, 5, 34))
+>id : Symbol(BB.id, Decl(invalidModuleWithStatementsOfEveryKind.ts, 5, 34))
     }
 }
 
@@ -26,18 +26,18 @@ module Y2 {
     public class AA<T> { s: T }
 >AA : Symbol(AA, Decl(invalidModuleWithStatementsOfEveryKind.ts, 10, 11))
 >T : Symbol(T, Decl(invalidModuleWithStatementsOfEveryKind.ts, 11, 20))
->s : Symbol(s, Decl(invalidModuleWithStatementsOfEveryKind.ts, 11, 24))
+>s : Symbol(AA.s, Decl(invalidModuleWithStatementsOfEveryKind.ts, 11, 24))
 >T : Symbol(T, Decl(invalidModuleWithStatementsOfEveryKind.ts, 11, 20))
 
     public interface I { id: number }
 >I : Symbol(I, Decl(invalidModuleWithStatementsOfEveryKind.ts, 11, 31))
->id : Symbol(id, Decl(invalidModuleWithStatementsOfEveryKind.ts, 12, 24))
+>id : Symbol(I.id, Decl(invalidModuleWithStatementsOfEveryKind.ts, 12, 24))
 
     public class B extends AA<string> implements I { id: number }
 >B : Symbol(B, Decl(invalidModuleWithStatementsOfEveryKind.ts, 12, 37))
 >AA : Symbol(AA, Decl(invalidModuleWithStatementsOfEveryKind.ts, 10, 11))
 >I : Symbol(I, Decl(invalidModuleWithStatementsOfEveryKind.ts, 11, 31))
->id : Symbol(id, Decl(invalidModuleWithStatementsOfEveryKind.ts, 14, 52))
+>id : Symbol(B.id, Decl(invalidModuleWithStatementsOfEveryKind.ts, 14, 52))
 }
 
 module Y3 {
@@ -48,7 +48,7 @@ module Y3 {
 
         class A { s: string }
 >A : Symbol(A, Decl(invalidModuleWithStatementsOfEveryKind.ts, 18, 26))
->s : Symbol(s, Decl(invalidModuleWithStatementsOfEveryKind.ts, 19, 17))
+>s : Symbol(A.s, Decl(invalidModuleWithStatementsOfEveryKind.ts, 19, 17))
     }
 }
 
@@ -57,8 +57,8 @@ module Y4 {
 
     public enum Color { Blue, Red }
 >Color : Symbol(Color, Decl(invalidModuleWithStatementsOfEveryKind.ts, 23, 11))
->Blue : Symbol(Blue, Decl(invalidModuleWithStatementsOfEveryKind.ts, 24, 23))
->Red : Symbol(Red, Decl(invalidModuleWithStatementsOfEveryKind.ts, 24, 29))
+>Blue : Symbol(Color.Blue, Decl(invalidModuleWithStatementsOfEveryKind.ts, 24, 23))
+>Red : Symbol(Color.Red, Decl(invalidModuleWithStatementsOfEveryKind.ts, 24, 29))
 }
 
 module YY {
@@ -66,7 +66,7 @@ module YY {
 
     private class A { s: string }
 >A : Symbol(A, Decl(invalidModuleWithStatementsOfEveryKind.ts, 27, 11))
->s : Symbol(s, Decl(invalidModuleWithStatementsOfEveryKind.ts, 28, 21))
+>s : Symbol(A.s, Decl(invalidModuleWithStatementsOfEveryKind.ts, 28, 21))
 
     private class BB<T> extends A {
 >BB : Symbol(BB, Decl(invalidModuleWithStatementsOfEveryKind.ts, 28, 33))
@@ -74,7 +74,7 @@ module YY {
 >A : Symbol(A, Decl(invalidModuleWithStatementsOfEveryKind.ts, 27, 11))
 
         id: number;
->id : Symbol(id, Decl(invalidModuleWithStatementsOfEveryKind.ts, 30, 35))
+>id : Symbol(BB.id, Decl(invalidModuleWithStatementsOfEveryKind.ts, 30, 35))
     }
 }
 
@@ -84,18 +84,18 @@ module YY2 {
     private class AA<T> { s: T }
 >AA : Symbol(AA, Decl(invalidModuleWithStatementsOfEveryKind.ts, 35, 12))
 >T : Symbol(T, Decl(invalidModuleWithStatementsOfEveryKind.ts, 36, 21))
->s : Symbol(s, Decl(invalidModuleWithStatementsOfEveryKind.ts, 36, 25))
+>s : Symbol(AA.s, Decl(invalidModuleWithStatementsOfEveryKind.ts, 36, 25))
 >T : Symbol(T, Decl(invalidModuleWithStatementsOfEveryKind.ts, 36, 21))
 
     private interface I { id: number }
 >I : Symbol(I, Decl(invalidModuleWithStatementsOfEveryKind.ts, 36, 32))
->id : Symbol(id, Decl(invalidModuleWithStatementsOfEveryKind.ts, 37, 25))
+>id : Symbol(I.id, Decl(invalidModuleWithStatementsOfEveryKind.ts, 37, 25))
 
     private class B extends AA<string> implements I { id: number }
 >B : Symbol(B, Decl(invalidModuleWithStatementsOfEveryKind.ts, 37, 38))
 >AA : Symbol(AA, Decl(invalidModuleWithStatementsOfEveryKind.ts, 35, 12))
 >I : Symbol(I, Decl(invalidModuleWithStatementsOfEveryKind.ts, 36, 32))
->id : Symbol(id, Decl(invalidModuleWithStatementsOfEveryKind.ts, 39, 53))
+>id : Symbol(B.id, Decl(invalidModuleWithStatementsOfEveryKind.ts, 39, 53))
 }
 
 module YY3 {
@@ -106,7 +106,7 @@ module YY3 {
 
         class A { s: string }
 >A : Symbol(A, Decl(invalidModuleWithStatementsOfEveryKind.ts, 43, 27))
->s : Symbol(s, Decl(invalidModuleWithStatementsOfEveryKind.ts, 44, 17))
+>s : Symbol(A.s, Decl(invalidModuleWithStatementsOfEveryKind.ts, 44, 17))
     }
 }
 
@@ -115,8 +115,8 @@ module YY4 {
 
     private enum Color { Blue, Red }
 >Color : Symbol(Color, Decl(invalidModuleWithStatementsOfEveryKind.ts, 48, 12))
->Blue : Symbol(Blue, Decl(invalidModuleWithStatementsOfEveryKind.ts, 49, 24))
->Red : Symbol(Red, Decl(invalidModuleWithStatementsOfEveryKind.ts, 49, 30))
+>Blue : Symbol(Color.Blue, Decl(invalidModuleWithStatementsOfEveryKind.ts, 49, 24))
+>Red : Symbol(Color.Red, Decl(invalidModuleWithStatementsOfEveryKind.ts, 49, 30))
 }
 
 
@@ -125,7 +125,7 @@ module YYY {
 
     static class A { s: string }
 >A : Symbol(A, Decl(invalidModuleWithStatementsOfEveryKind.ts, 53, 12))
->s : Symbol(s, Decl(invalidModuleWithStatementsOfEveryKind.ts, 54, 20))
+>s : Symbol(A.s, Decl(invalidModuleWithStatementsOfEveryKind.ts, 54, 20))
 
     static class BB<T> extends A {
 >BB : Symbol(BB, Decl(invalidModuleWithStatementsOfEveryKind.ts, 54, 32))
@@ -133,7 +133,7 @@ module YYY {
 >A : Symbol(A, Decl(invalidModuleWithStatementsOfEveryKind.ts, 53, 12))
 
         id: number;
->id : Symbol(id, Decl(invalidModuleWithStatementsOfEveryKind.ts, 56, 34))
+>id : Symbol(BB.id, Decl(invalidModuleWithStatementsOfEveryKind.ts, 56, 34))
     }
 }
 
@@ -143,18 +143,18 @@ module YYY2 {
     static class AA<T> { s: T }
 >AA : Symbol(AA, Decl(invalidModuleWithStatementsOfEveryKind.ts, 61, 13))
 >T : Symbol(T, Decl(invalidModuleWithStatementsOfEveryKind.ts, 62, 20))
->s : Symbol(s, Decl(invalidModuleWithStatementsOfEveryKind.ts, 62, 24))
+>s : Symbol(AA.s, Decl(invalidModuleWithStatementsOfEveryKind.ts, 62, 24))
 >T : Symbol(T, Decl(invalidModuleWithStatementsOfEveryKind.ts, 62, 20))
 
     static interface I { id: number }
 >I : Symbol(I, Decl(invalidModuleWithStatementsOfEveryKind.ts, 62, 31))
->id : Symbol(id, Decl(invalidModuleWithStatementsOfEveryKind.ts, 63, 24))
+>id : Symbol(I.id, Decl(invalidModuleWithStatementsOfEveryKind.ts, 63, 24))
 
     static class B extends AA<string> implements I { id: number }
 >B : Symbol(B, Decl(invalidModuleWithStatementsOfEveryKind.ts, 63, 37))
 >AA : Symbol(AA, Decl(invalidModuleWithStatementsOfEveryKind.ts, 61, 13))
 >I : Symbol(I, Decl(invalidModuleWithStatementsOfEveryKind.ts, 62, 31))
->id : Symbol(id, Decl(invalidModuleWithStatementsOfEveryKind.ts, 65, 52))
+>id : Symbol(B.id, Decl(invalidModuleWithStatementsOfEveryKind.ts, 65, 52))
 }
 
 module YYY3 {
@@ -165,7 +165,7 @@ module YYY3 {
 
         class A { s: string }
 >A : Symbol(A, Decl(invalidModuleWithStatementsOfEveryKind.ts, 69, 26))
->s : Symbol(s, Decl(invalidModuleWithStatementsOfEveryKind.ts, 70, 17))
+>s : Symbol(A.s, Decl(invalidModuleWithStatementsOfEveryKind.ts, 70, 17))
     }
 }
 
@@ -174,7 +174,7 @@ module YYY4 {
 
     static enum Color { Blue, Red }
 >Color : Symbol(Color, Decl(invalidModuleWithStatementsOfEveryKind.ts, 74, 13))
->Blue : Symbol(Blue, Decl(invalidModuleWithStatementsOfEveryKind.ts, 75, 23))
->Red : Symbol(Red, Decl(invalidModuleWithStatementsOfEveryKind.ts, 75, 29))
+>Blue : Symbol(Color.Blue, Decl(invalidModuleWithStatementsOfEveryKind.ts, 75, 23))
+>Red : Symbol(Color.Red, Decl(invalidModuleWithStatementsOfEveryKind.ts, 75, 29))
 }
 

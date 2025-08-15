@@ -29,13 +29,11 @@
  >Default : Symbol(Default, Decl(jsFileESModuleWithEnumTag.js, 3, 12))
 
  Object.defineProperty(ChangeDetectionStrategy, "aField", {value: 42});
-->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+ >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
-->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+ >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 ->ChangeDetectionStrategy : Symbol(ChangeDetectionStrategy, Decl(jsFileESModuleWithEnumTag.js, 2, 5), Decl(jsFileESModuleWithEnumTag.js, 5, 2), Decl(jsFileESModuleWithEnumTag.js, 6, 67), Decl(jsFileESModuleWithEnumTag.js, 8, 22), Decl(jsFileESModuleWithEnumTag.js, 8, 70) ... and 1 more)
 ->"aField" : Symbol(ChangeDetectionStrategy.aField, Decl(jsFileESModuleWithEnumTag.js, 7, 69))
-+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
 +>ChangeDetectionStrategy : Symbol(ChangeDetectionStrategy, Decl(jsFileESModuleWithEnumTag.js, 2, 5))
  >value : Symbol(value, Decl(jsFileESModuleWithEnumTag.js, 8, 58))
 

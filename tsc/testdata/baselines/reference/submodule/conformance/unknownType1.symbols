@@ -405,13 +405,13 @@ class C1 {
 >C1 : Symbol(C1, Decl(unknownType1.ts, 156, 1))
 
     a: string;  // Error
->a : Symbol(a, Decl(unknownType1.ts, 160, 10))
+>a : Symbol(C1.a, Decl(unknownType1.ts, 160, 10))
 
     b: unknown;
->b : Symbol(b, Decl(unknownType1.ts, 161, 14))
+>b : Symbol(C1.b, Decl(unknownType1.ts, 161, 14))
 
     c: any;
->c : Symbol(c, Decl(unknownType1.ts, 162, 15))
+>c : Symbol(C1.c, Decl(unknownType1.ts, 162, 15))
 }
 
 // Type parameter with explicit 'unknown' constraint not assignable to '{}'

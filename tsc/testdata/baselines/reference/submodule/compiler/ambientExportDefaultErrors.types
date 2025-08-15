@@ -15,7 +15,7 @@ export default 2 + 2;
 >2 : 2
 
 export as namespace Foo;
->Foo : typeof import("./foo")
+>Foo : typeof import("foo")
 
 === foo2.d.ts ===
 export = 2 + 2;

@@ -6,7 +6,7 @@ class NonPublicClass {
 >NonPublicClass : Symbol(NonPublicClass, Decl(asiPublicPrivateProtected.ts, 0, 6))
 
     public s() {
->s : Symbol(s, Decl(asiPublicPrivateProtected.ts, 1, 22))
+>s : Symbol(NonPublicClass.s, Decl(asiPublicPrivateProtected.ts, 1, 22))
     }
 }
 
@@ -14,10 +14,10 @@ class NonPublicClass2 {
 >NonPublicClass2 : Symbol(NonPublicClass2, Decl(asiPublicPrivateProtected.ts, 4, 1))
 
     public
->public : Symbol(public, Decl(asiPublicPrivateProtected.ts, 6, 23))
+>public : Symbol(NonPublicClass2.public, Decl(asiPublicPrivateProtected.ts, 6, 23))
 
     private nonPublicFunction() {
->nonPublicFunction : Symbol(nonPublicFunction, Decl(asiPublicPrivateProtected.ts, 7, 10))
+>nonPublicFunction : Symbol(NonPublicClass2.nonPublicFunction, Decl(asiPublicPrivateProtected.ts, 7, 10))
     }
 }
 private
@@ -25,7 +25,7 @@ class NonPrivateClass {
 >NonPrivateClass : Symbol(NonPrivateClass, Decl(asiPublicPrivateProtected.ts, 11, 7))
 
     private s() {
->s : Symbol(s, Decl(asiPublicPrivateProtected.ts, 12, 23))
+>s : Symbol(NonPrivateClass.s, Decl(asiPublicPrivateProtected.ts, 12, 23))
     }
 }
 
@@ -33,10 +33,10 @@ class NonPrivateClass2 {
 >NonPrivateClass2 : Symbol(NonPrivateClass2, Decl(asiPublicPrivateProtected.ts, 15, 1))
 
     private
->private : Symbol(private, Decl(asiPublicPrivateProtected.ts, 17, 24))
+>private : Symbol(NonPrivateClass2.private, Decl(asiPublicPrivateProtected.ts, 17, 24))
 
     public nonPrivateFunction() {
->nonPrivateFunction : Symbol(nonPrivateFunction, Decl(asiPublicPrivateProtected.ts, 18, 11))
+>nonPrivateFunction : Symbol(NonPrivateClass2.nonPrivateFunction, Decl(asiPublicPrivateProtected.ts, 18, 11))
     }
 }
 protected
@@ -44,7 +44,7 @@ class NonProtectedClass {
 >NonProtectedClass : Symbol(NonProtectedClass, Decl(asiPublicPrivateProtected.ts, 22, 9))
 
   protected s() {
->s : Symbol(s, Decl(asiPublicPrivateProtected.ts, 23, 25))
+>s : Symbol(NonProtectedClass.s, Decl(asiPublicPrivateProtected.ts, 23, 25))
   }
 }
 
@@ -52,10 +52,10 @@ class NonProtectedClass2 {
 >NonProtectedClass2 : Symbol(NonProtectedClass2, Decl(asiPublicPrivateProtected.ts, 26, 1))
 
     protected
->protected : Symbol(protected, Decl(asiPublicPrivateProtected.ts, 28, 26))
+>protected : Symbol(NonProtectedClass2.protected, Decl(asiPublicPrivateProtected.ts, 28, 26))
 
     public nonProtectedFunction() {
->nonProtectedFunction : Symbol(nonProtectedFunction, Decl(asiPublicPrivateProtected.ts, 29, 13))
+>nonProtectedFunction : Symbol(NonProtectedClass2.nonProtectedFunction, Decl(asiPublicPrivateProtected.ts, 29, 13))
     }
 }
 
@@ -63,12 +63,12 @@ class ClassWithThreeMembers {
 >ClassWithThreeMembers : Symbol(ClassWithThreeMembers, Decl(asiPublicPrivateProtected.ts, 32, 1))
 
     public
->public : Symbol(public, Decl(asiPublicPrivateProtected.ts, 34, 29))
+>public : Symbol(ClassWithThreeMembers.public, Decl(asiPublicPrivateProtected.ts, 34, 29))
 
     private
->private : Symbol(private, Decl(asiPublicPrivateProtected.ts, 35, 10))
+>private : Symbol(ClassWithThreeMembers.private, Decl(asiPublicPrivateProtected.ts, 35, 10))
 
     protected
->protected : Symbol(protected, Decl(asiPublicPrivateProtected.ts, 36, 11))
+>protected : Symbol(ClassWithThreeMembers.protected, Decl(asiPublicPrivateProtected.ts, 36, 11))
 }
 

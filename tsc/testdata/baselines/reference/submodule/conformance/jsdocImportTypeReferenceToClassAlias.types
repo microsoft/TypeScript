@@ -10,9 +10,9 @@ class C {
 module.exports.C = C
 >module.exports.C = C : typeof C
 >module.exports.C : typeof C
->module.exports : typeof import("./mod1")
->module : { "\"mod1\"": typeof import("./mod1"); }
->exports : typeof import("./mod1")
+>module.exports : typeof import("mod1")
+>module : { "\"mod1\"": typeof import("mod1"); }
+>exports : typeof import("mod1")
 >C : typeof C
 >C : typeof C
 

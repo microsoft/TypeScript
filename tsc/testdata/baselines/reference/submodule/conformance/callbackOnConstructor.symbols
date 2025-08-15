@@ -5,7 +5,7 @@ export class Preferences {
 >Preferences : Symbol(Preferences, Decl(callbackOnConstructor.js, 0, 0))
 
   assignability = "no"
->assignability : Symbol(assignability, Decl(callbackOnConstructor.js, 0, 26))
+>assignability : Symbol(Preferences.assignability, Decl(callbackOnConstructor.js, 0, 26))
 
   /**
    * @callback ValueGetter_2

@@ -48,9 +48,9 @@ export function appendToOptionalArray<
 >array : Symbol(array, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 14, 7))
 
     array.push(value);
->array.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>array.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >array : Symbol(array, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 14, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 11, 9))
 
   } else {

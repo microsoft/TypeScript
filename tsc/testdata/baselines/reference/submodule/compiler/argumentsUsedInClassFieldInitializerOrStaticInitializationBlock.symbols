@@ -8,7 +8,7 @@ function A() {
 >T : Symbol(T, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 1, 8))
 
      a = arguments
->a : Symbol(a, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 1, 18))
+>a : Symbol(T.a, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 1, 18))
 >arguments : Symbol(arguments)
   }
 }
@@ -20,7 +20,7 @@ function A1() {
 >T : Symbol(T, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 7, 12))
 
      a = arguments
->a : Symbol(a, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 7, 22))
+>a : Symbol(T.a, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 7, 22))
 >arguments : Symbol(arguments)
   }
 }
@@ -32,7 +32,7 @@ function B() {
 >T : Symbol(T, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 13, 8))
 
      a = { b: arguments }
->a : Symbol(a, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 13, 18))
+>a : Symbol(T.a, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 13, 18))
 >b : Symbol(b, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 14, 10))
 >arguments : Symbol(arguments)
   }
@@ -45,7 +45,7 @@ function B1() {
 >T : Symbol(T, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 19, 12))
 
      a = { b: arguments }
->a : Symbol(a, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 19, 22))
+>a : Symbol(T.a, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 19, 22))
 >b : Symbol(b, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 20, 10))
 >arguments : Symbol(arguments)
   }
@@ -58,7 +58,7 @@ function C() {
 >T : Symbol(T, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 25, 8))
 
      a = function () { arguments }
->a : Symbol(a, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 25, 18))
+>a : Symbol(T.a, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 25, 18))
 >arguments : Symbol(arguments)
   }
 }

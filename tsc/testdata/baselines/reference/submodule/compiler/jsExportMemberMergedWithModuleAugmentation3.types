@@ -4,18 +4,18 @@
 module.exports.x = 1;
 >module.exports.x = 1 : 1
 >module.exports.x : any
->module.exports : typeof import("./y.js")
->module : { "export=": typeof import("./y.js"); }
->exports : typeof import("./y.js")
+>module.exports : typeof import("/y")
+>module : { "export=": typeof import("/y"); }
+>exports : typeof import("/y")
 >x : any
 >1 : 1
 
 module.exports = require("./y.js");
->module.exports = require("./y.js") : typeof import("./y.js")
->module.exports : typeof import("./y.js")
->module : { "export=": typeof import("./y.js"); }
->exports : typeof import("./y.js")
->require("./y.js") : typeof import("./y.js")
+>module.exports = require("./y.js") : typeof import("/y")
+>module.exports : typeof import("/y")
+>module : { "export=": typeof import("/y"); }
+>exports : typeof import("/y")
+>require("./y.js") : typeof import("/y")
 >require : any
 >"./y.js" : "./y.js"
 

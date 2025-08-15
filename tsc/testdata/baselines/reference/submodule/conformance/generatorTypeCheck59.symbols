@@ -9,7 +9,7 @@ function* g() {
 
         @(yield "")
         m() { }
->m : Symbol(m, Decl(generatorTypeCheck59.ts, 1, 13))
+>m : Symbol(C.m, Decl(generatorTypeCheck59.ts, 1, 13))
 
     };
 }

@@ -12,11 +12,10 @@
 
  Validator.prototype.num = 12
 ->Validator.prototype : Symbol(Validator.num, Decl(jsdocConstructorFunctionTypeReference.js, 2, 2))
-+>Validator.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
++>Validator.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
  >Validator : Symbol(Validator, Decl(jsdocConstructorFunctionTypeReference.js, 0, 3))
-->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+ >prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 ->num : Symbol(Validator.num, Decl(jsdocConstructorFunctionTypeReference.js, 2, 2))
-+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
 
  /**
   * @param {Validator} state

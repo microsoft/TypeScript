@@ -14,7 +14,7 @@ export type LocalInterface =
 
     & import("pkg", { assert: {1234, "resolution-mode": "import"} }).ImportInterface;
 >import("pkg", { assert: {1234, "resolution-mode": "import"} }).ImportInterface : any
->import("pkg", { assert: {1234, "resolution-mode": "import"} }) : Promise<{ default: typeof import("./node_modules/pkg/import"); }>
+>import("pkg", { assert: {1234, "resolution-mode": "import"} }) : Promise<{ default: typeof import("/node_modules/pkg/import"); }>
 >"pkg" : "pkg"
 >{ assert: {1234, "resolution-mode": "import"} } : { assert: { 1234: any; "resolution-mode": string; }; }
 >assert : { 1234: any; "resolution-mode": string; }

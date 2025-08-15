@@ -2,9 +2,9 @@
 
 === a.js ===
 OOOrder.prototype.m = function () {
->OOOrder.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>OOOrder.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >OOOrder : Symbol(OOOrder, Decl(a.js, 2, 1))
->prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 
     this.p = 1
 }

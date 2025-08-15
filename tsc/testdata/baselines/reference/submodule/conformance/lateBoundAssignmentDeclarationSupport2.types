@@ -35,27 +35,27 @@ const _str = "my-fake-sym";
 module.exports[_sym] = "ok";
 >module.exports[_sym] = "ok" : "ok"
 >module.exports[_sym] : any
->module.exports : typeof import("./lateBoundAssignmentDeclarationSupport2")
->module : { "\"lateBoundAssignmentDeclarationSupport2\"": typeof import("./lateBoundAssignmentDeclarationSupport2"); }
->exports : typeof import("./lateBoundAssignmentDeclarationSupport2")
+>module.exports : typeof import("lateBoundAssignmentDeclarationSupport2")
+>module : { "\"lateBoundAssignmentDeclarationSupport2\"": typeof import("lateBoundAssignmentDeclarationSupport2"); }
+>exports : typeof import("lateBoundAssignmentDeclarationSupport2")
 >_sym : unique symbol
 >"ok" : "ok"
 
 module.exports[_str] = "ok";
 >module.exports[_str] = "ok" : "ok"
 >module.exports[_str] : any
->module.exports : typeof import("./lateBoundAssignmentDeclarationSupport2")
->module : { "\"lateBoundAssignmentDeclarationSupport2\"": typeof import("./lateBoundAssignmentDeclarationSupport2"); }
->exports : typeof import("./lateBoundAssignmentDeclarationSupport2")
+>module.exports : typeof import("lateBoundAssignmentDeclarationSupport2")
+>module : { "\"lateBoundAssignmentDeclarationSupport2\"": typeof import("lateBoundAssignmentDeclarationSupport2"); }
+>exports : typeof import("lateBoundAssignmentDeclarationSupport2")
 >_str : "my-fake-sym"
 >"ok" : "ok"
 
 module.exports.S = _sym;
 >module.exports.S = _sym : unique symbol
 >module.exports.S : unique symbol
->module.exports : typeof import("./lateBoundAssignmentDeclarationSupport2")
->module : { "\"lateBoundAssignmentDeclarationSupport2\"": typeof import("./lateBoundAssignmentDeclarationSupport2"); }
->exports : typeof import("./lateBoundAssignmentDeclarationSupport2")
+>module.exports : typeof import("lateBoundAssignmentDeclarationSupport2")
+>module : { "\"lateBoundAssignmentDeclarationSupport2\"": typeof import("lateBoundAssignmentDeclarationSupport2"); }
+>exports : typeof import("lateBoundAssignmentDeclarationSupport2")
 >S : unique symbol
 >_sym : unique symbol
 

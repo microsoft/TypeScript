@@ -12,10 +12,10 @@
 
 === b.ts ===
 import A from './a'
->A : import("./a").NumberLike[]
+>A : import("a").NumberLike[]
 
 A[0]
->A[0] : import("./a").NumberLike
->A : import("./a").NumberLike[]
+>A[0] : import("a").NumberLike
+>A : import("a").NumberLike[]
 >0 : 0
 

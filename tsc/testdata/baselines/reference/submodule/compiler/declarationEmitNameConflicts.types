@@ -92,10 +92,10 @@ export module M.P {
 >g : () => void
 
     export var d = M.d; // emitted incorrectly as typeof im
->d : typeof import("./declarationEmit_nameConflicts_1")
->M.d : typeof import("./declarationEmit_nameConflicts_1")
+>d : typeof import("declarationEmit_nameConflicts_1")
+>M.d : typeof import("declarationEmit_nameConflicts_1")
 >M : typeof M
->d : typeof import("./declarationEmit_nameConflicts_1")
+>d : typeof import("declarationEmit_nameConflicts_1")
 }
 
 export module M.Q {

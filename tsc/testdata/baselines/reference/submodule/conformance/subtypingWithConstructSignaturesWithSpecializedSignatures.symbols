@@ -82,7 +82,7 @@ module MemberWithCallSignature {
 
         // M's
         a: {
->a : Symbol(a, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 38, 20))
+>a : Symbol(Base.a, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 38, 20))
 
             new (x: 'a'): void;
 >x : Symbol(x, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 41, 17))
@@ -91,7 +91,7 @@ module MemberWithCallSignature {
 >x : Symbol(x, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 42, 17))
         }
         a2: {
->a2 : Symbol(a2, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 43, 9))
+>a2 : Symbol(Base.a2, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 43, 9))
 
             new (x: 'a', y: number): void;
 >x : Symbol(x, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 45, 17))
@@ -102,7 +102,7 @@ module MemberWithCallSignature {
 >y : Symbol(y, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 46, 27))
         }
         a3: new <T>(x: T) => void;
->a3 : Symbol(a3, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 47, 9))
+>a3 : Symbol(Base.a3, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 47, 9))
 >T : Symbol(T, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 48, 17))
 >x : Symbol(x, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 48, 20))
 >T : Symbol(T, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 48, 17))
@@ -115,16 +115,16 @@ module MemberWithCallSignature {
 
         // N's
         a: new (x: string) => number; // ok because base returns void
->a : Symbol(a, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 52, 30))
+>a : Symbol(I.a, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 52, 30))
 >x : Symbol(x, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 54, 16))
 
         a2: new  (x: string, y: number) => boolean; // ok because base returns void
->a2 : Symbol(a2, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 54, 37))
+>a2 : Symbol(I.a2, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 54, 37))
 >x : Symbol(x, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 55, 18))
 >y : Symbol(y, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 55, 28))
 
         a3: new <T>(x: T) => string; // ok because base returns void
->a3 : Symbol(a3, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 55, 51))
+>a3 : Symbol(I.a3, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 55, 51))
 >T : Symbol(T, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 56, 17))
 >x : Symbol(x, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 56, 20))
 >T : Symbol(T, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 56, 17))
@@ -135,7 +135,7 @@ module MemberWithCallSignature {
 
         // M's
         a: {
->a : Symbol(a, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 59, 21))
+>a : Symbol(Base2.a, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 59, 21))
 
             new (x: 'a'): number;
 >x : Symbol(x, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 62, 17))
@@ -144,7 +144,7 @@ module MemberWithCallSignature {
 >x : Symbol(x, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 63, 17))
         }
         a2: new <T>(x: T) => T;
->a2 : Symbol(a2, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 64, 9))
+>a2 : Symbol(Base2.a2, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 64, 9))
 >T : Symbol(T, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 65, 17))
 >x : Symbol(x, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 65, 20))
 >T : Symbol(T, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 65, 17))
@@ -158,7 +158,7 @@ module MemberWithCallSignature {
 
         // N's
         a: new (x: string) => string; // error because base returns non-void;
->a : Symbol(a, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 69, 32))
+>a : Symbol(I2.a, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 69, 32))
 >x : Symbol(x, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 71, 16))
     }
 
@@ -169,7 +169,7 @@ module MemberWithCallSignature {
 
         // N's
         a2: new <T>(x: T) => string; // error because base returns non-void;
->a2 : Symbol(a2, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 75, 32))
+>a2 : Symbol(I3.a2, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 75, 32))
 >T : Symbol(T, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 77, 17))
 >x : Symbol(x, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 77, 20))
 >T : Symbol(T, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 77, 17))

@@ -6,7 +6,7 @@ declare class Class<T> {
 >T : Symbol(T, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash2.ts, 0, 20))
 
   x: T;
->x : Symbol(x, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash2.ts, 0, 24))
+>x : Symbol(Class.x, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash2.ts, 0, 24))
 >T : Symbol(T, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash2.ts, 0, 20))
 }
 

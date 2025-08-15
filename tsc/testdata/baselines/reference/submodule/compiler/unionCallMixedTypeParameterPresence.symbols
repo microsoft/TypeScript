@@ -8,7 +8,7 @@ interface Err<T> {
 >T : Symbol(T, Decl(unionCallMixedTypeParameterPresence.ts, 2, 14))
 
   f<U>(a: (err: T) => U): Err<U>;
->f : Symbol(f, Decl(unionCallMixedTypeParameterPresence.ts, 2, 18))
+>f : Symbol(Err.f, Decl(unionCallMixedTypeParameterPresence.ts, 2, 18))
 >U : Symbol(U, Decl(unionCallMixedTypeParameterPresence.ts, 3, 4))
 >a : Symbol(a, Decl(unionCallMixedTypeParameterPresence.ts, 3, 7))
 >err : Symbol(err, Decl(unionCallMixedTypeParameterPresence.ts, 3, 11))
@@ -22,7 +22,7 @@ interface Ok<T> {
 >T : Symbol(T, Decl(unionCallMixedTypeParameterPresence.ts, 5, 13))
 
   f(a: (err: T) => unknown): Err<T>;
->f : Symbol(f, Decl(unionCallMixedTypeParameterPresence.ts, 5, 17))
+>f : Symbol(Ok.f, Decl(unionCallMixedTypeParameterPresence.ts, 5, 17))
 >a : Symbol(a, Decl(unionCallMixedTypeParameterPresence.ts, 6, 4))
 >err : Symbol(err, Decl(unionCallMixedTypeParameterPresence.ts, 6, 8))
 >T : Symbol(T, Decl(unionCallMixedTypeParameterPresence.ts, 5, 13))

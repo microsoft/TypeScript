@@ -5,15 +5,15 @@
 exports.formatters = {}
 >exports.formatters = {} : {}
 >exports.formatters : {}
->exports : typeof import("./mod")
+>exports : typeof import("mod")
 >formatters : {}
 >{} : {}
 
 === first.js ===
 exports = require('./mod')
->exports = require('./mod') : typeof import("./mod")
+>exports = require('./mod') : typeof import("mod")
 >exports : any
->require('./mod') : typeof import("./mod")
+>require('./mod') : typeof import("mod")
 >require : any
 >'./mod' : "./mod"
 
@@ -21,7 +21,7 @@ exports.formatters.j = function (v) {
 >exports.formatters.j = function (v) {    return v} : (v: any) => any
 >exports.formatters.j : any
 >exports.formatters : any
->exports : typeof import("./first")
+>exports : typeof import("first")
 >formatters : any
 >j : any
 >function (v) {    return v} : (v: any) => any
@@ -32,9 +32,9 @@ exports.formatters.j = function (v) {
 }
 === second.js ===
 exports = require('./mod')
->exports = require('./mod') : typeof import("./mod")
+>exports = require('./mod') : typeof import("mod")
 >exports : any
->require('./mod') : typeof import("./mod")
+>require('./mod') : typeof import("mod")
 >require : any
 >'./mod' : "./mod"
 
@@ -42,7 +42,7 @@ exports.formatters.o = function (v) {
 >exports.formatters.o = function (v) {    return v} : (v: any) => any
 >exports.formatters.o : any
 >exports.formatters : any
->exports : typeof import("./second")
+>exports : typeof import("second")
 >formatters : any
 >o : any
 >function (v) {    return v} : (v: any) => any

@@ -15,9 +15,9 @@ class Foo {
 >x : Symbol(x, Decl(templateTagOnClasses.js, 8, 17))
 
         this.a = x
->this.a : Symbol(a, Decl(templateTagOnClasses.js, 8, 21))
+>this.a : Symbol(Foo.a, Decl(templateTagOnClasses.js, 8, 21))
 >this : Symbol(Foo, Decl(templateTagOnClasses.js, 0, 0))
->a : Symbol(a, Decl(templateTagOnClasses.js, 8, 21))
+>a : Symbol(Foo.a, Decl(templateTagOnClasses.js, 8, 21))
 >x : Symbol(x, Decl(templateTagOnClasses.js, 8, 17))
     }
     /**
@@ -28,7 +28,7 @@ class Foo {
      * @return {T}
      */
     foo(x, y, alpha) {
->foo : Symbol(foo, Decl(templateTagOnClasses.js, 10, 5))
+>foo : Symbol(Foo.foo, Decl(templateTagOnClasses.js, 10, 5))
 >x : Symbol(x, Decl(templateTagOnClasses.js, 18, 8))
 >y : Symbol(y, Decl(templateTagOnClasses.js, 18, 10))
 >alpha : Symbol(alpha, Decl(templateTagOnClasses.js, 18, 13))
@@ -48,10 +48,10 @@ var g = new Foo(false)
 >Foo : Symbol(Foo, Decl(templateTagOnClasses.js, 0, 0))
 
 f.a = g.a
->f.a : Symbol(a, Decl(templateTagOnClasses.js, 8, 21))
+>f.a : Symbol(Foo.a, Decl(templateTagOnClasses.js, 8, 21))
 >f : Symbol(f, Decl(templateTagOnClasses.js, 22, 3))
->a : Symbol(a, Decl(templateTagOnClasses.js, 8, 21))
->g.a : Symbol(a, Decl(templateTagOnClasses.js, 8, 21))
+>a : Symbol(Foo.a, Decl(templateTagOnClasses.js, 8, 21))
+>g.a : Symbol(Foo.a, Decl(templateTagOnClasses.js, 8, 21))
 >g : Symbol(g, Decl(templateTagOnClasses.js, 23, 3))
->a : Symbol(a, Decl(templateTagOnClasses.js, 8, 21))
+>a : Symbol(Foo.a, Decl(templateTagOnClasses.js, 8, 21))
 

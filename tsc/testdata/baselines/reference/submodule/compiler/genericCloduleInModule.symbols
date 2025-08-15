@@ -9,10 +9,10 @@ module A {
 >T : Symbol(T, Decl(genericCloduleInModule.ts, 1, 19))
 
         foo() { }
->foo : Symbol(foo, Decl(genericCloduleInModule.ts, 1, 23))
+>foo : Symbol(B.foo, Decl(genericCloduleInModule.ts, 1, 23))
 
         static bar() { }
->bar : Symbol(bar, Decl(genericCloduleInModule.ts, 2, 17))
+>bar : Symbol(B.bar, Decl(genericCloduleInModule.ts, 2, 17))
     }
     export module B {
 >B : Symbol(B, Decl(genericCloduleInModule.ts, 0, 10), Decl(genericCloduleInModule.ts, 4, 5))
@@ -25,10 +25,10 @@ module A {
 var b: A.B<number>;
 >b : Symbol(b, Decl(genericCloduleInModule.ts, 10, 3))
 >A : Symbol(A, Decl(genericCloduleInModule.ts, 0, 0))
->B : Symbol(B, Decl(genericCloduleInModule.ts, 0, 10), Decl(genericCloduleInModule.ts, 4, 5))
+>B : Symbol(A.B, Decl(genericCloduleInModule.ts, 0, 10), Decl(genericCloduleInModule.ts, 4, 5))
 
 b.foo();
->b.foo : Symbol(foo, Decl(genericCloduleInModule.ts, 1, 23))
+>b.foo : Symbol(A.B.foo, Decl(genericCloduleInModule.ts, 1, 23))
 >b : Symbol(b, Decl(genericCloduleInModule.ts, 10, 3))
->foo : Symbol(foo, Decl(genericCloduleInModule.ts, 1, 23))
+>foo : Symbol(A.B.foo, Decl(genericCloduleInModule.ts, 1, 23))
 

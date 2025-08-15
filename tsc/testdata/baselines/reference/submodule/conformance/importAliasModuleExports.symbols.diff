@@ -1,11 +1,7 @@
 --- old.importAliasModuleExports.symbols
 +++ new.importAliasModuleExports.symbols
-@@= skipped -4, +4 lines =@@
- >Alias : Symbol(Alias, Decl(mod1.js, 0, 0))
-
-     bar() { return 1 }
-->bar : Symbol(Alias.bar, Decl(mod1.js, 0, 13))
-+>bar : Symbol(bar, Decl(mod1.js, 0, 13))
+@@= skipped -7, +7 lines =@@
+ >bar : Symbol(Alias.bar, Decl(mod1.js, 0, 13))
  }
  module.exports = Alias;
 ->module.exports : Symbol(module.exports, Decl(mod1.js, 0, 0))
@@ -17,43 +13,11 @@
  >Alias : Symbol(Alias, Decl(mod1.js, 0, 0))
 
  === main.js ===
-@@= skipped -13, +13 lines =@@
+@@= skipped -18, +18 lines =@@
+ >A.prototype : Symbol(A.prototype)
  >A : Symbol(A, Decl(main.js, 0, 6))
-
- A.prototype.foo = 0
-->A.prototype : Symbol(A.prototype)
-+>A.prototype : Symbol(prototype)
- >A : Symbol(A, Decl(main.js, 0, 6))
-->prototype : Symbol(A.prototype)
-+>prototype : Symbol(prototype)
-
- A.prototype.func = function() { this._func = 0; }
-->A.prototype : Symbol(A.prototype)
-+>A.prototype : Symbol(prototype)
- >A : Symbol(A, Decl(main.js, 0, 6))
-->prototype : Symbol(A.prototype)
+ >prototype : Symbol(A.prototype)
 ->this : Symbol(A, Decl(mod1.js, 0, 0))
-+>prototype : Symbol(prototype)
 
  Object.defineProperty(A.prototype, "def", { value: 0 });
-->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
- >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
-->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-->A.prototype : Symbol(A.prototype)
-+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
-+>A.prototype : Symbol(prototype)
- >A : Symbol(A, Decl(main.js, 0, 6))
-->prototype : Symbol(A.prototype)
-+>prototype : Symbol(prototype)
- >value : Symbol(value, Decl(main.js, 3, 43))
-
- new A().bar
-->new A().bar : Symbol(A.bar, Decl(mod1.js, 0, 13))
-+>new A().bar : Symbol(bar, Decl(mod1.js, 0, 13))
- >A : Symbol(A, Decl(main.js, 0, 6))
-->bar : Symbol(A.bar, Decl(mod1.js, 0, 13))
-+>bar : Symbol(bar, Decl(mod1.js, 0, 13))
-
- new A().foo
- >A : Symbol(A, Decl(main.js, 0, 6))
+ >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))

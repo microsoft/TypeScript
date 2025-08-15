@@ -1,25 +1,14 @@
 --- old.jsDocDeclarationEmitDoesNotUseNodeModulesPathWithoutError.types
 +++ new.jsDocDeclarationEmitDoesNotUseNodeModulesPathWithoutError.types
-@@= skipped -1, +1 lines =@@
-
- === node_modules/@lion/ajax/dist-types/src/index.d.ts ===
- export type LionRequestInit = import('../types/types.js').LionRequestInit;
-->LionRequestInit : import("node_modules/@lion/ajax/dist-types/types/types").LionRequestInit
-+>LionRequestInit : import("../types/types.js").LionRequestInit
-
- === node_modules/@lion/ajax/dist-types/types/types.d.ts ===
- export interface LionRequestInit {
-@@= skipped -19, +19 lines =@@
+@@= skipped -20, +20 lines =@@
       * @param {LionRequestInit} [init]
       */
      case5_unexpectedlyResolvesPathToNodeModules(init) {}
 ->case5_unexpectedlyResolvesPathToNodeModules : (init?: LionRequestInit) => void
-->init : import("node_modules/@lion/ajax/dist-types/types/types").LionRequestInit | undefined
-+>case5_unexpectedlyResolvesPathToNodeModules : (init?: import("./node_modules/@lion/ajax/dist-types/types/types.js").LionRequestInit | undefined) => void
-+>init : import("./node_modules/@lion/ajax/dist-types/types/types.js").LionRequestInit | undefined
++>case5_unexpectedlyResolvesPathToNodeModules : (init?: import("node_modules/@lion/ajax/dist-types/types/types").LionRequestInit | undefined) => void
+ >init : import("node_modules/@lion/ajax/dist-types/types/types").LionRequestInit | undefined
  }
 
- /**
 @@= skipped -9, +9 lines =@@
   */
  // @ts-expect-error

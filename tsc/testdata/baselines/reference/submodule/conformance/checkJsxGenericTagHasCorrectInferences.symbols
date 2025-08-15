@@ -9,11 +9,11 @@ interface BaseProps<T> {
 >T : Symbol(T, Decl(file.tsx, 1, 20))
 
   initialValues: T;
->initialValues : Symbol(initialValues, Decl(file.tsx, 1, 24))
+>initialValues : Symbol(BaseProps.initialValues, Decl(file.tsx, 1, 24))
 >T : Symbol(T, Decl(file.tsx, 1, 20))
 
   nextValues: (cur: T) => T;
->nextValues : Symbol(nextValues, Decl(file.tsx, 2, 19))
+>nextValues : Symbol(BaseProps.nextValues, Decl(file.tsx, 2, 19))
 >cur : Symbol(cur, Decl(file.tsx, 3, 15))
 >T : Symbol(T, Decl(file.tsx, 1, 20))
 >T : Symbol(T, Decl(file.tsx, 1, 20))
@@ -22,15 +22,15 @@ declare class GenericComponent<Props = {}, Values = object> extends React.Compon
 >GenericComponent : Symbol(GenericComponent, Decl(file.tsx, 4, 1))
 >Props : Symbol(Props, Decl(file.tsx, 5, 31))
 >Values : Symbol(Values, Decl(file.tsx, 5, 42))
->React.Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+>React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >React : Symbol(React, Decl(file.tsx, 0, 6))
->Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+>Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >Props : Symbol(Props, Decl(file.tsx, 5, 31))
 >BaseProps : Symbol(BaseProps, Decl(file.tsx, 0, 31))
 >Values : Symbol(Values, Decl(file.tsx, 5, 42))
 
   iv: Values;
->iv : Symbol(iv, Decl(file.tsx, 5, 116))
+>iv : Symbol(GenericComponent.iv, Decl(file.tsx, 5, 116))
 >Values : Symbol(Values, Decl(file.tsx, 5, 42))
 }
 

@@ -6,11 +6,11 @@
      export var d = M.d; // emitted incorrectly as typeof im
 ->d : typeof M.d
 ->M.d : typeof M.d
-+>d : typeof import("./declarationEmit_nameConflicts_1")
-+>M.d : typeof import("./declarationEmit_nameConflicts_1")
++>d : typeof import("declarationEmit_nameConflicts_1")
++>M.d : typeof import("declarationEmit_nameConflicts_1")
  >M : typeof M
 ->d : typeof M.d
-+>d : typeof import("./declarationEmit_nameConflicts_1")
++>d : typeof import("declarationEmit_nameConflicts_1")
  }
 
  export module M.Q {

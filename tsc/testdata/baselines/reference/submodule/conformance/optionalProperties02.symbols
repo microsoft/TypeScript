@@ -5,10 +5,10 @@ interface Foo {
 >Foo : Symbol(Foo, Decl(optionalProperties02.ts, 0, 0))
 
     a?: string;
->a : Symbol(a, Decl(optionalProperties02.ts, 0, 15))
+>a : Symbol(Foo.a, Decl(optionalProperties02.ts, 0, 15))
 
     b: string;
->b : Symbol(b, Decl(optionalProperties02.ts, 1, 15))
+>b : Symbol(Foo.b, Decl(optionalProperties02.ts, 1, 15))
 }
 
 <Foo>{ a: undefined };

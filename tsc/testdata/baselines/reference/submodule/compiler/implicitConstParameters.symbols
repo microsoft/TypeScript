@@ -18,9 +18,9 @@ function fn(x: number | string) {
 
       doSomething(() => x.toFixed());
 >doSomething : Symbol(doSomething, Decl(implicitConstParameters.ts, 0, 0))
->x.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+>x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(implicitConstParameters.ts, 4, 12))
->toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
   }
 }
 
@@ -35,9 +35,9 @@ function f1(x: string | undefined) {
     }
     doSomething(() => x.length);
 >doSomething : Symbol(doSomething, Decl(implicitConstParameters.ts, 0, 0))
->x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(implicitConstParameters.ts, 10, 12))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 }
 
 function f2(x: string | undefined) {
@@ -52,9 +52,9 @@ function f2(x: string | undefined) {
 
             doSomething(() => x.length);
 >doSomething : Symbol(doSomething, Decl(implicitConstParameters.ts, 0, 0))
->x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(implicitConstParameters.ts, 17, 12))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
         });
     }
@@ -75,9 +75,9 @@ function f3(x: string | undefined) {
 
             doSomething(() => x.length);
 >doSomething : Symbol(doSomething, Decl(implicitConstParameters.ts, 0, 0))
->x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(implicitConstParameters.ts, 25, 12))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
         }
     }
 }
@@ -94,9 +94,9 @@ function f4(x: string | undefined) {
 
         doSomething(() => x.length);
 >doSomething : Symbol(doSomething, Decl(implicitConstParameters.ts, 0, 0))
->x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(implicitConstParameters.ts, 34, 12))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
     }
 }
 
@@ -109,9 +109,9 @@ function f5(x: string | undefined) {
 
         doSomething(() => x.length);
 >doSomething : Symbol(doSomething, Decl(implicitConstParameters.ts, 0, 0))
->x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(implicitConstParameters.ts, 41, 12))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
     }
     x = "abc";  // causes x to be considered non-const
 >x : Symbol(x, Decl(implicitConstParameters.ts, 41, 12))
@@ -131,8 +131,8 @@ function f6(x: string | undefined) {
 
         doSomething(() => y.length);
 >doSomething : Symbol(doSomething, Decl(implicitConstParameters.ts, 0, 0))
->y.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>y.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >y : Symbol(y, Decl(implicitConstParameters.ts, 50, 9))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
     }
 }

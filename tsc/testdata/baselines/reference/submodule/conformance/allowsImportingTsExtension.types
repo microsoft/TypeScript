@@ -21,8 +21,8 @@ type __A = import("./a.ts").A; // ok
 >__A : A
 
 const aPromise = import("./a.ts"); // error
->aPromise : Promise<typeof import("./a.ts")>
->import("./a.ts") : Promise<typeof import("./a.ts")>
+>aPromise : Promise<typeof import("a")>
+>import("./a.ts") : Promise<typeof import("a")>
 >"./a.ts" : "./a.ts"
 
 === c.ts ===
@@ -38,7 +38,7 @@ type __A = import("./a.d.ts").A; // ok
 >__A : A
 
 const aPromise = import("./a.d.ts"); // error
->aPromise : Promise<typeof import("./a.d.ts")>
->import("./a.d.ts") : Promise<typeof import("./a.d.ts")>
+>aPromise : Promise<typeof import("a")>
+>import("./a.d.ts") : Promise<typeof import("a")>
 >"./a.d.ts" : "./a.d.ts"
 

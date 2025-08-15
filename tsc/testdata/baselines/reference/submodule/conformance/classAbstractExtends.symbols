@@ -5,7 +5,7 @@ class A {
 >A : Symbol(A, Decl(classAbstractExtends.ts, 0, 0))
 
     foo() {}
->foo : Symbol(foo, Decl(classAbstractExtends.ts, 0, 9))
+>foo : Symbol(A.foo, Decl(classAbstractExtends.ts, 0, 9))
 }
 
 abstract class B extends A {
@@ -13,7 +13,7 @@ abstract class B extends A {
 >A : Symbol(A, Decl(classAbstractExtends.ts, 0, 0))
 
     abstract bar();
->bar : Symbol(bar, Decl(classAbstractExtends.ts, 4, 28))
+>bar : Symbol(B.bar, Decl(classAbstractExtends.ts, 4, 28))
 }
 
 class C extends B { }
@@ -29,5 +29,5 @@ class E extends B {
 >B : Symbol(B, Decl(classAbstractExtends.ts, 2, 1))
 
     bar() {}
->bar : Symbol(bar, Decl(classAbstractExtends.ts, 12, 19))
+>bar : Symbol(E.bar, Decl(classAbstractExtends.ts, 12, 19))
 }

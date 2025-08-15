@@ -1,22 +1,15 @@
 --- old.declarationEmitCrossFileCopiedGeneratedImportType.types
 +++ new.declarationEmitCrossFileCopiedGeneratedImportType.types
-@@= skipped -21, +21 lines =@@
+@@= skipped -17, +17 lines =@@
+
+ === projC/index.d.ts ===
+ export declare const e: {
+->e : { f: (foo: import("../projA").Foo) => boolean; }
++>e : { f: (foo: import("projA/index").Foo) => boolean; }
 
      f: (foo: import("../projA").Foo) => boolean;
- >f : (foo: import("../projA").Foo) => boolean
-->foo : import("projA/index").Foo
-+>foo : import("../projA").Foo
+->f : (foo: import("../projA").Foo) => boolean
++>f : (foo: import("projA/index").Foo) => boolean
+ >foo : import("projA/index").Foo
 
  };
- === projD/index.ts ===
- import {e} from "../projC";
-->e : { f: (foo: import("projA/index").Foo) => boolean; }
-+>e : { f: (foo: import("../projA").Foo) => boolean; }
-
- export const d = {e};
-->d : { e: { f: (foo: import("projA/index").Foo) => boolean; }; }
-->{e} : { e: { f: (foo: import("projA/index").Foo) => boolean; }; }
-->e : { f: (foo: import("projA/index").Foo) => boolean; }
-+>d : { e: { f: (foo: import("../projA").Foo) => boolean; }; }
-+>{e} : { e: { f: (foo: import("../projA").Foo) => boolean; }; }
-+>e : { f: (foo: import("../projA").Foo) => boolean; }

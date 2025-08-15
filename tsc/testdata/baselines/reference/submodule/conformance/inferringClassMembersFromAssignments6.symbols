@@ -14,16 +14,16 @@ function Foonly() {
 >self : Symbol(self, Decl(inferringClassMembersFromAssignments6.js, 1, 7))
 
         console.log(self.x)
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >self : Symbol(self, Decl(inferringClassMembersFromAssignments6.js, 1, 7))
     }
 }
 Foonly.prototype.mreal = function() {
->Foonly.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Foonly.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >Foonly : Symbol(Foonly, Decl(inferringClassMembersFromAssignments6.js, 0, 0))
->prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 
     var self = this
 >self : Symbol(self, Decl(inferringClassMembersFromAssignments6.js, 8, 7))

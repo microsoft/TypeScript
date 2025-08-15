@@ -63,9 +63,9 @@ declare const User: ObjectTypeComposer<any, any>;
 
 User.addResolver({
 >User.addResolver({  type: User, // `User as any` fix the problem}) : ObjectTypeComposer<any, any>
->User.addResolver : <TResolverSource>(opts: { type?: import("./graphql-compose").Thunk<import("./graphql-compose").ComposeOutputTypeDefinition>; }) => ObjectTypeComposer<any, any>
+>User.addResolver : <TResolverSource>(opts: { type?: import("graphql-compose").Thunk<import("graphql-compose").ComposeOutputTypeDefinition>; }) => ObjectTypeComposer<any, any>
 >User : ObjectTypeComposer<any, any>
->addResolver : <TResolverSource>(opts: { type?: import("./graphql-compose").Thunk<import("./graphql-compose").ComposeOutputTypeDefinition>; }) => ObjectTypeComposer<any, any>
+>addResolver : <TResolverSource>(opts: { type?: import("graphql-compose").Thunk<import("graphql-compose").ComposeOutputTypeDefinition>; }) => ObjectTypeComposer<any, any>
 >{  type: User, // `User as any` fix the problem} : { type: ObjectTypeComposer<any, any>; }
 
   type: User, // `User as any` fix the problem

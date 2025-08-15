@@ -1,8 +1,0 @@
---- old.exportAsNamespace.d.types
-+++ new.exportAsNamespace.d.types
-@@= skipped -6, +6 lines =@@
- >X : any
-
- export as namespace N
-->N : typeof import("exportAsNamespace")
-+>N : typeof import("./exportAsNamespace")

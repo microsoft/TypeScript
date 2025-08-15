@@ -7,9 +7,9 @@
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-+>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
-+>exports : typeof import(".")
++>module.exports : typeof import("index")
++>module : { "\"index\"": typeof import("index"); }
++>exports : typeof import("index")
  >a : () => void
  >function a() {} : () => void
  >a : () => void
@@ -25,9 +25,9 @@
 ->b : { (): void; cat: string; }
 +>module.exports.b = function b() {} : () => void
 +>module.exports.b : () => void
-+>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
-+>exports : typeof import(".")
++>module.exports : typeof import("index")
++>module : { "\"index\"": typeof import("index"); }
++>exports : typeof import("index")
 +>b : () => void
 +>function b() {} : () => void
 +>b : () => void
@@ -43,9 +43,9 @@
 ->cat : string
 +>module.exports.b.cat : any
 +>module.exports.b : () => void
-+>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
-+>exports : typeof import(".")
++>module.exports : typeof import("index")
++>module : { "\"index\"": typeof import("index"); }
++>exports : typeof import("index")
 +>b : () => void
 +>cat : any
  >"cat" : "cat"
@@ -61,9 +61,9 @@
 ->c : { (): void; Cls: typeof Cls; }
 +>module.exports.c = function c() {} : () => void
 +>module.exports.c : () => void
-+>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
-+>exports : typeof import(".")
++>module.exports : typeof import("index")
++>module : { "\"index\"": typeof import("index"); }
++>exports : typeof import("index")
 +>c : () => void
 +>function c() {} : () => void
 +>c : () => void
@@ -79,9 +79,9 @@
 ->Cls : typeof Cls
 +>module.exports.c.Cls : any
 +>module.exports.c : () => void
-+>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
-+>exports : typeof import(".")
++>module.exports : typeof import("index")
++>module : { "\"index\"": typeof import("index"); }
++>exports : typeof import("index")
 +>c : () => void
 +>Cls : any
  >class {} : typeof Cls
@@ -103,9 +103,9 @@
 ->b : number
 +>module.exports.d = function d(a, b) { return /** @type {*} */(null); } : (a: any, b: any) => any
 +>module.exports.d : (a: any, b: any) => any
-+>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
-+>exports : typeof import(".")
++>module.exports : typeof import("index")
++>module : { "\"index\"": typeof import("index"); }
++>exports : typeof import("index")
 +>d : (a: any, b: any) => any
 +>function d(a, b) { return /** @type {*} */(null); } : (a: any, b: any) => any
 +>d : (a: any, b: any) => any
@@ -130,9 +130,9 @@
 ->b : U
 +>module.exports.e = function e(a, b) { return /** @type {*} */(null); } : (a: any, b: any) => any
 +>module.exports.e : (a: any, b: any) => any
-+>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
-+>exports : typeof import(".")
++>module.exports : typeof import("index")
++>module : { "\"index\"": typeof import("index"); }
++>exports : typeof import("index")
 +>e : (a: any, b: any) => any
 +>function e(a, b) { return /** @type {*} */(null); } : (a: any, b: any) => any
 +>e : (a: any, b: any) => any
@@ -156,9 +156,9 @@
 ->a : T
 +>module.exports.f = function f(a) {    return a;} : (a: any) => any
 +>module.exports.f : (a: any) => any
-+>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
-+>exports : typeof import(".")
++>module.exports : typeof import("index")
++>module : { "\"index\"": typeof import("index"); }
++>exports : typeof import("index")
 +>f : (a: any) => any
 +>function f(a) {    return a;} : (a: any) => any
 +>f : (a: any) => any
@@ -185,15 +185,15 @@
 +>module.exports.f.self = module.exports.f : (a: any) => any
 +>module.exports.f.self : any
 +>module.exports.f : (a: any) => any
-+>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
-+>exports : typeof import(".")
++>module.exports : typeof import("index")
++>module : { "\"index\"": typeof import("index"); }
++>exports : typeof import("index")
 +>f : (a: any) => any
 +>self : any
 +>module.exports.f : (a: any) => any
-+>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
-+>exports : typeof import(".")
++>module.exports : typeof import("index")
++>module : { "\"index\"": typeof import("index"); }
++>exports : typeof import("index")
 +>f : (a: any) => any
 
  /**
@@ -233,9 +233,9 @@
 ->g : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
 +>module.exports.g = g : (a: { x: string; }, b: { y: any; }) => any
 +>module.exports.g : (a: { x: string; }, b: { y: any; }) => any
-+>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
-+>exports : typeof import(".")
++>module.exports : typeof import("index")
++>module : { "\"index\"": typeof import("index"); }
++>exports : typeof import("index")
 +>g : (a: { x: string; }, b: { y: any; }) => any
 +>g : (a: { x: string; }, b: { y: any; }) => any
 
@@ -276,9 +276,9 @@
 ->hh : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
 +>module.exports.h = hh : (a: { x: string; }, b: { y: any; }) => any
 +>module.exports.h : (a: { x: string; }, b: { y: any; }) => any
-+>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
-+>exports : typeof import(".")
++>module.exports : typeof import("index")
++>module : { "\"index\"": typeof import("index"); }
++>exports : typeof import("index")
 +>h : (a: { x: string; }, b: { y: any; }) => any
 +>hh : (a: { x: string; }, b: { y: any; }) => any
 
@@ -288,9 +288,9 @@
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-+>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
-+>exports : typeof import(".")
++>module.exports : typeof import("index")
++>module : { "\"index\"": typeof import("index"); }
++>exports : typeof import("index")
  >i : () => void
  >function i() {} : () => void
  >i : () => void
@@ -301,17 +301,17 @@
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-+>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
-+>exports : typeof import(".")
++>module.exports : typeof import("index")
++>module : { "\"index\"": typeof import("index"); }
++>exports : typeof import("index")
  >ii : () => void
  >module.exports.i : () => void
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-+>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
-+>exports : typeof import(".")
++>module.exports : typeof import("index")
++>module : { "\"index\"": typeof import("index"); }
++>exports : typeof import("index")
  >i : () => void
 
  // note that this last one doesn't make much sense in cjs, since exports aren't hoisted bindings
@@ -321,17 +321,17 @@
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-+>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
-+>exports : typeof import(".")
++>module.exports : typeof import("index")
++>module : { "\"index\"": typeof import("index"); }
++>exports : typeof import("index")
  >jj : () => void
  >module.exports.j : () => void
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-+>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
-+>exports : typeof import(".")
++>module.exports : typeof import("index")
++>module : { "\"index\"": typeof import("index"); }
++>exports : typeof import("index")
  >j : () => void
 
  module.exports.j = function j() {}
@@ -340,9 +340,9 @@
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-+>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
-+>exports : typeof import(".")
++>module.exports : typeof import("index")
++>module : { "\"index\"": typeof import("index"); }
++>exports : typeof import("index")
  >j : () => void
  >function j() {} : () => void
  >j : () => void

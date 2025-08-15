@@ -9,7 +9,7 @@ function C() {
 
 === other.js ===
 C.prototype.foo = function() { return this.a }
->C.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>C.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >C : Symbol(C, Decl(prototypePropertyAssignmentMergeAcrossFiles.js, 0, 0))
->prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 

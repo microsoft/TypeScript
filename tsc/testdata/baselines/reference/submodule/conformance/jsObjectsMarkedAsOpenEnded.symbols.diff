@@ -17,26 +17,14 @@
 
  class C {
  >C : Symbol(C, Decl(a.js, 1, 15))
-
-     initializedMember = {};
-->initializedMember : Symbol(C.initializedMember, Decl(a.js, 3, 9))
-+>initializedMember : Symbol(initializedMember, Decl(a.js, 3, 9))
-
-     constructor() {
-         this.member = {};
-->this.member : Symbol(C.member, Decl(a.js, 5, 19))
-+>this.member : Symbol(member, Decl(a.js, 5, 19))
- >this : Symbol(C, Decl(a.js, 1, 15))
-->member : Symbol(C.member, Decl(a.js, 5, 19))
-+>member : Symbol(member, Decl(a.js, 5, 19))
+@@= skipped -20, +20 lines =@@
+ >member : Symbol(C.member, Decl(a.js, 5, 19))
 
          this.member.a = 0;
-->this.member : Symbol(C.member, Decl(a.js, 5, 19))
 +>this.member.a : Symbol(a, Decl(a.js, 6, 25))
-+>this.member : Symbol(member, Decl(a.js, 5, 19))
+ >this.member : Symbol(C.member, Decl(a.js, 5, 19))
  >this : Symbol(C, Decl(a.js, 1, 15))
-->member : Symbol(C.member, Decl(a.js, 5, 19))
-+>member : Symbol(member, Decl(a.js, 5, 19))
+ >member : Symbol(C.member, Decl(a.js, 5, 19))
 +>a : Symbol(a, Decl(a.js, 6, 25))
      }
  }
@@ -47,7 +35,7 @@
 
      property: {}
  >property : Symbol(property, Decl(a.js, 11, 11))
-@@= skipped -36, +38 lines =@@
+@@= skipped -16, +18 lines =@@
 
  obj.property.a = 0;
  >obj.property : Symbol(property, Decl(a.js, 11, 11))
@@ -68,20 +56,15 @@
 +>a : Symbol(a, Decl(a.js, 0, 18))
 
  (new C()).member.a = 1;
-->(new C()).member : Symbol(C.member, Decl(a.js, 5, 19))
 +>(new C()).member.a : Symbol(a, Decl(a.js, 6, 25))
-+>(new C()).member : Symbol(member, Decl(a.js, 5, 19))
+ >(new C()).member : Symbol(C.member, Decl(a.js, 5, 19))
  >C : Symbol(C, Decl(a.js, 1, 15))
-->member : Symbol(C.member, Decl(a.js, 5, 19))
-+>member : Symbol(member, Decl(a.js, 5, 19))
+ >member : Symbol(C.member, Decl(a.js, 5, 19))
 +>a : Symbol(a, Decl(a.js, 6, 25))
 
  (new C()).initializedMember.a = 1;
-->(new C()).initializedMember : Symbol(C.initializedMember, Decl(a.js, 3, 9))
-+>(new C()).initializedMember : Symbol(initializedMember, Decl(a.js, 3, 9))
- >C : Symbol(C, Decl(a.js, 1, 15))
-->initializedMember : Symbol(C.initializedMember, Decl(a.js, 3, 9))
-+>initializedMember : Symbol(initializedMember, Decl(a.js, 3, 9))
+ >(new C()).initializedMember : Symbol(C.initializedMember, Decl(a.js, 3, 9))
+@@= skipped -16, +18 lines =@@
 
  obj.property.a = 1;
  >obj.property : Symbol(property, Decl(a.js, 11, 11))

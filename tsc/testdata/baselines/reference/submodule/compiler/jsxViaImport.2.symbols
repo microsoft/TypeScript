@@ -7,12 +7,12 @@ import BaseComponent from 'BaseComponent';
 
 class TestComponent extends React.Component<any, {}> {
 >TestComponent : Symbol(TestComponent, Decl(consumer.tsx, 1, 42))
->React.Component : Symbol(Component, Decl(component.d.ts, 3, 22))
+>React.Component : Symbol(React.Component, Decl(component.d.ts, 3, 22))
 >React : Symbol(React, Decl(component.d.ts, 2, 1))
->Component : Symbol(Component, Decl(component.d.ts, 3, 22))
+>Component : Symbol(React.Component, Decl(component.d.ts, 3, 22))
 
     render() {
->render : Symbol(render, Decl(consumer.tsx, 2, 54))
+>render : Symbol(TestComponent.render, Decl(consumer.tsx, 2, 54))
 
         return <BaseComponent />;
 >BaseComponent : Symbol(BaseComponent, Decl(consumer.tsx, 1, 6))
@@ -25,7 +25,7 @@ declare module JSX {
 
   interface ElementAttributesProperty { props; }
 >ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(component.d.ts, 0, 20))
->props : Symbol(props, Decl(component.d.ts, 1, 39))
+>props : Symbol(ElementAttributesProperty.props, Decl(component.d.ts, 1, 39))
 }
 declare module React {
 >React : Symbol(React, Decl(component.d.ts, 2, 1))
@@ -39,9 +39,9 @@ declare module "BaseComponent" {
 >"BaseComponent" : Symbol("BaseComponent", Decl(component.d.ts, 5, 1))
 
     export default class extends React.Component<any, {}> {
->React.Component : Symbol(Component, Decl(component.d.ts, 3, 22))
+>React.Component : Symbol(React.Component, Decl(component.d.ts, 3, 22))
 >React : Symbol(React, Decl(component.d.ts, 2, 1))
->Component : Symbol(Component, Decl(component.d.ts, 3, 22))
+>Component : Symbol(React.Component, Decl(component.d.ts, 3, 22))
     }
 }
 

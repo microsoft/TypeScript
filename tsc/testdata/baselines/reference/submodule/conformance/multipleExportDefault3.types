@@ -11,6 +11,6 @@ export default {
 };
 
 export default class C { }
->C : import("./multipleExportDefault3").default
+>C : import("multipleExportDefault3").default
 
 

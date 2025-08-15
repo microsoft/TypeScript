@@ -8,9 +8,9 @@ class YaddaBase {
 
     constructor() {
         this.roots = "hi";
->this.roots : Symbol(roots, Decl(index.js, 3, 19))
+>this.roots : Symbol(YaddaBase.roots, Decl(index.js, 3, 19))
 >this : Symbol(YaddaBase, Decl(index.js, 0, 0))
->roots : Symbol(roots, Decl(index.js, 3, 19))
+>roots : Symbol(YaddaBase.roots, Decl(index.js, 3, 19))
 
         /** @type number */
         this.justProp;
@@ -21,17 +21,17 @@ class YaddaBase {
 >this : Symbol(YaddaBase, Decl(index.js, 0, 0))
 
         this.b()
->this.b : Symbol(b, Decl(index.js, 11, 5))
+>this.b : Symbol(YaddaBase.b, Decl(index.js, 11, 5))
 >this : Symbol(YaddaBase, Decl(index.js, 0, 0))
->b : Symbol(b, Decl(index.js, 11, 5))
+>b : Symbol(YaddaBase.b, Decl(index.js, 11, 5))
     }
     accessor b = () => {
->b : Symbol(b, Decl(index.js, 11, 5))
+>b : Symbol(YaddaBase.b, Decl(index.js, 11, 5))
 
         this.foo = 10
->this.foo : Symbol(foo, Decl(index.js, 12, 24))
+>this.foo : Symbol(YaddaBase.foo, Decl(index.js, 12, 24))
 >this : Symbol(YaddaBase, Decl(index.js, 0, 0))
->foo : Symbol(foo, Decl(index.js, 12, 24))
+>foo : Symbol(YaddaBase.foo, Decl(index.js, 12, 24))
     }
 }
 
@@ -40,29 +40,29 @@ class DerivedYadda extends YaddaBase {
 >YaddaBase : Symbol(YaddaBase, Decl(index.js, 0, 0))
 
     get rootTests() {
->rootTests : Symbol(rootTests, Decl(index.js, 17, 38))
+>rootTests : Symbol(DerivedYadda.rootTests, Decl(index.js, 17, 38))
 
         return super.roots;
->super.roots : Symbol(roots, Decl(index.js, 3, 19))
+>super.roots : Symbol(YaddaBase.roots, Decl(index.js, 3, 19))
 >super : Symbol(YaddaBase, Decl(index.js, 0, 0))
->roots : Symbol(roots, Decl(index.js, 3, 19))
+>roots : Symbol(YaddaBase.roots, Decl(index.js, 3, 19))
     }
     get fooTests() {
->fooTests : Symbol(fooTests, Decl(index.js, 20, 5))
+>fooTests : Symbol(DerivedYadda.fooTests, Decl(index.js, 20, 5))
 
         return super.foo;
->super.foo : Symbol(foo, Decl(index.js, 12, 24))
+>super.foo : Symbol(YaddaBase.foo, Decl(index.js, 12, 24))
 >super : Symbol(YaddaBase, Decl(index.js, 0, 0))
->foo : Symbol(foo, Decl(index.js, 12, 24))
+>foo : Symbol(YaddaBase.foo, Decl(index.js, 12, 24))
     }
     get justPropTests() {
->justPropTests : Symbol(justPropTests, Decl(index.js, 23, 5))
+>justPropTests : Symbol(DerivedYadda.justPropTests, Decl(index.js, 23, 5))
 
         return super.justProp;
 >super : Symbol(YaddaBase, Decl(index.js, 0, 0))
     }
     get literalElementAccessTests() {
->literalElementAccessTests : Symbol(literalElementAccessTests, Decl(index.js, 26, 5))
+>literalElementAccessTests : Symbol(DerivedYadda.literalElementAccessTests, Decl(index.js, 26, 5))
 
         return super.literalElementAccess;
 >super : Symbol(YaddaBase, Decl(index.js, 0, 0))

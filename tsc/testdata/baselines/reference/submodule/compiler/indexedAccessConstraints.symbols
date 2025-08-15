@@ -36,9 +36,9 @@ export function methodFnLength<T extends {}, K extends keyof T>(obj: T, methodKe
         return 0;
     }
     return fn.length;
->fn.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>fn.length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
 >fn : Symbol(fn, Decl(indexedAccessConstraints.ts, 7, 9))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
 }
 
 // Repro from #54837

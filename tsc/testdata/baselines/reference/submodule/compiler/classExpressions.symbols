@@ -10,12 +10,12 @@ let x = class B implements A {
 >A : Symbol(A, Decl(classExpressions.ts, 0, 0))
 
     prop: number;
->prop : Symbol(prop, Decl(classExpressions.ts, 1, 30))
+>prop : Symbol(B.prop, Decl(classExpressions.ts, 1, 30))
 
     onStart(): void {
->onStart : Symbol(onStart, Decl(classExpressions.ts, 2, 17))
+>onStart : Symbol(B.onStart, Decl(classExpressions.ts, 2, 17))
     }
     func = () => {
->func : Symbol(func, Decl(classExpressions.ts, 4, 5))
+>func : Symbol(B.func, Decl(classExpressions.ts, 4, 5))
     }
 };

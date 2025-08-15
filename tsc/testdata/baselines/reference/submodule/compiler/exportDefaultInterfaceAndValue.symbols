@@ -3,7 +3,7 @@
 === exportDefaultInterfaceAndValue.ts ===
 export default interface A { a: string; }
 >A : Symbol(A, Decl(exportDefaultInterfaceAndValue.ts, 0, 41), Decl(exportDefaultInterfaceAndValue.ts, 0, 0))
->a : Symbol(a, Decl(exportDefaultInterfaceAndValue.ts, 0, 28))
+>a : Symbol(A.a, Decl(exportDefaultInterfaceAndValue.ts, 0, 28))
 
 export default function() { return 1; }
 declare var x: A;

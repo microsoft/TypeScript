@@ -12,10 +12,10 @@ class A {
 >A : Symbol(A, Decl(deleteOperatorWithBooleanType.ts, 3, 40))
 
     public a: boolean;
->a : Symbol(a, Decl(deleteOperatorWithBooleanType.ts, 5, 9))
+>a : Symbol(A.a, Decl(deleteOperatorWithBooleanType.ts, 5, 9))
 
     static foo() { return false; }
->foo : Symbol(foo, Decl(deleteOperatorWithBooleanType.ts, 6, 22))
+>foo : Symbol(A.foo, Decl(deleteOperatorWithBooleanType.ts, 6, 22))
 }
 module M {
 >M : Symbol(M, Decl(deleteOperatorWithBooleanType.ts, 8, 1))
@@ -45,15 +45,15 @@ var ResultIsBoolean3 = delete { x: true, y: false };
 // boolean type expressions
 var ResultIsBoolean4 = delete objA.a;
 >ResultIsBoolean4 : Symbol(ResultIsBoolean4, Decl(deleteOperatorWithBooleanType.ts, 23, 3))
->objA.a : Symbol(a, Decl(deleteOperatorWithBooleanType.ts, 5, 9))
+>objA.a : Symbol(A.a, Decl(deleteOperatorWithBooleanType.ts, 5, 9))
 >objA : Symbol(objA, Decl(deleteOperatorWithBooleanType.ts, 13, 3))
->a : Symbol(a, Decl(deleteOperatorWithBooleanType.ts, 5, 9))
+>a : Symbol(A.a, Decl(deleteOperatorWithBooleanType.ts, 5, 9))
 
 var ResultIsBoolean5 = delete M.n;
 >ResultIsBoolean5 : Symbol(ResultIsBoolean5, Decl(deleteOperatorWithBooleanType.ts, 24, 3))
->M.n : Symbol(n, Decl(deleteOperatorWithBooleanType.ts, 10, 14))
+>M.n : Symbol(M.n, Decl(deleteOperatorWithBooleanType.ts, 10, 14))
 >M : Symbol(M, Decl(deleteOperatorWithBooleanType.ts, 8, 1))
->n : Symbol(n, Decl(deleteOperatorWithBooleanType.ts, 10, 14))
+>n : Symbol(M.n, Decl(deleteOperatorWithBooleanType.ts, 10, 14))
 
 var ResultIsBoolean6 = delete foo();
 >ResultIsBoolean6 : Symbol(ResultIsBoolean6, Decl(deleteOperatorWithBooleanType.ts, 25, 3))
@@ -61,9 +61,9 @@ var ResultIsBoolean6 = delete foo();
 
 var ResultIsBoolean7 = delete A.foo();
 >ResultIsBoolean7 : Symbol(ResultIsBoolean7, Decl(deleteOperatorWithBooleanType.ts, 26, 3))
->A.foo : Symbol(foo, Decl(deleteOperatorWithBooleanType.ts, 6, 22))
+>A.foo : Symbol(A.foo, Decl(deleteOperatorWithBooleanType.ts, 6, 22))
 >A : Symbol(A, Decl(deleteOperatorWithBooleanType.ts, 3, 40))
->foo : Symbol(foo, Decl(deleteOperatorWithBooleanType.ts, 6, 22))
+>foo : Symbol(A.foo, Decl(deleteOperatorWithBooleanType.ts, 6, 22))
 
 // multiple delete  operator
 var ResultIsBoolean8 = delete delete BOOLEAN;
@@ -80,12 +80,12 @@ delete foo();
 
 delete true, false;
 delete objA.a;
->objA.a : Symbol(a, Decl(deleteOperatorWithBooleanType.ts, 5, 9))
+>objA.a : Symbol(A.a, Decl(deleteOperatorWithBooleanType.ts, 5, 9))
 >objA : Symbol(objA, Decl(deleteOperatorWithBooleanType.ts, 13, 3))
->a : Symbol(a, Decl(deleteOperatorWithBooleanType.ts, 5, 9))
+>a : Symbol(A.a, Decl(deleteOperatorWithBooleanType.ts, 5, 9))
 
 delete M.n;
->M.n : Symbol(n, Decl(deleteOperatorWithBooleanType.ts, 10, 14))
+>M.n : Symbol(M.n, Decl(deleteOperatorWithBooleanType.ts, 10, 14))
 >M : Symbol(M, Decl(deleteOperatorWithBooleanType.ts, 8, 1))
->n : Symbol(n, Decl(deleteOperatorWithBooleanType.ts, 10, 14))
+>n : Symbol(M.n, Decl(deleteOperatorWithBooleanType.ts, 10, 14))
 

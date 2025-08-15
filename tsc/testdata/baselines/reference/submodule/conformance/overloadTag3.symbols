@@ -17,7 +17,7 @@ export class Foo {
      * @param {T} value
      */
     bar(value) { }
->bar : Symbol(bar, Decl(a.js, 8, 21))
+>bar : Symbol(Foo.bar, Decl(a.js, 8, 21))
 >value : Symbol(value, Decl(a.js, 13, 8))
 }
 

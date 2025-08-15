@@ -4,19 +4,19 @@
 var ex = require('./ex')
 >ex : Symbol(ex, Decl(use.js, 0, 3))
 >require : Symbol(require)
->'./ex' : Symbol("ex", Decl(ex.d.ts, 0, 0))
+>'./ex' : Symbol(ex, Decl(ex.d.ts, 0, 0))
 
 // values work
 var crunch = new ex.Crunch(1);
 >crunch : Symbol(crunch, Decl(use.js, 3, 3))
->ex.Crunch : Symbol(Crunch, Decl(ex.d.ts, 0, 33))
+>ex.Crunch : Symbol(ex.Crunch, Decl(ex.d.ts, 0, 33))
 >ex : Symbol(ex, Decl(use.js, 0, 3))
->Crunch : Symbol(Crunch, Decl(ex.d.ts, 0, 33))
+>Crunch : Symbol(ex.Crunch, Decl(ex.d.ts, 0, 33))
 
 crunch.n
->crunch.n : Symbol(n, Decl(ex.d.ts, 1, 21))
+>crunch.n : Symbol(ex.Crunch.n, Decl(ex.d.ts, 1, 21))
 >crunch : Symbol(crunch, Decl(use.js, 3, 3))
->n : Symbol(n, Decl(ex.d.ts, 1, 21))
+>n : Symbol(ex.Crunch.n, Decl(ex.d.ts, 1, 21))
 
 
 // types work
@@ -35,9 +35,9 @@ function f(greatest, wrap) {
 >day : Symbol(day, Decl(ex.d.ts, 0, 24))
 
     wrap.n
->wrap.n : Symbol(n, Decl(ex.d.ts, 1, 21))
+>wrap.n : Symbol(ex.Crunch.n, Decl(ex.d.ts, 1, 21))
 >wrap : Symbol(wrap, Decl(use.js, 12, 20))
->n : Symbol(n, Decl(ex.d.ts, 1, 21))
+>n : Symbol(ex.Crunch.n, Decl(ex.d.ts, 1, 21))
 }
 
 === ex.d.ts ===
@@ -49,10 +49,10 @@ export class Crunch {
 >Crunch : Symbol(Crunch, Decl(ex.d.ts, 0, 33))
 
     n: number
->n : Symbol(n, Decl(ex.d.ts, 1, 21))
+>n : Symbol(Crunch.n, Decl(ex.d.ts, 1, 21))
 
     m(): number
->m : Symbol(m, Decl(ex.d.ts, 2, 13))
+>m : Symbol(Crunch.m, Decl(ex.d.ts, 2, 13))
 
     constructor(n: number)
 >n : Symbol(n, Decl(ex.d.ts, 4, 16))

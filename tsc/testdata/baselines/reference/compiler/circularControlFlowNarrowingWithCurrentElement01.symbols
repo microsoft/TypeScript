@@ -5,11 +5,11 @@ class A {
 >A : Symbol(A, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 0, 0))
 
   next: A | null = null;
->next : Symbol(next, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 0, 9))
+>next : Symbol(A.next, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 0, 9))
 >A : Symbol(A, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 0, 0))
 
   constructor(readonly children: (A | null)[]) {}
->children : Symbol(children, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 3, 14))
+>children : Symbol(A.children, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 3, 14))
 >A : Symbol(A, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 0, 0))
 }
 
@@ -33,15 +33,15 @@ function getNodes(): A[] {
 >firstChild : Symbol(firstChild, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 12, 7))
 
     if (out.length) {
->out.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>out.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >out : Symbol(out, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 7, 7))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
       current = current.next;
 >current : Symbol(current, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 9, 5))
->current.next : Symbol(next, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 0, 9))
+>current.next : Symbol(A.next, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 0, 9))
 >current : Symbol(current, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 9, 5))
->next : Symbol(next, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 0, 9))
+>next : Symbol(A.next, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 0, 9))
 
       continue;
     }
@@ -49,18 +49,18 @@ function getNodes(): A[] {
     for (let i = 0; i < current.children.length; i++) {
 >i : Symbol(i, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 19, 12))
 >i : Symbol(i, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 19, 12))
->current.children.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
->current.children : Symbol(children, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 3, 14))
+>current.children.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>current.children : Symbol(A.children, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 3, 14))
 >current : Symbol(current, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 9, 5))
->children : Symbol(children, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 3, 14))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>children : Symbol(A.children, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 3, 14))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 19, 12))
 
       const child = current.children[i];
 >child : Symbol(child, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 20, 11))
->current.children : Symbol(children, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 3, 14))
+>current.children : Symbol(A.children, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 3, 14))
 >current : Symbol(current, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 9, 5))
->children : Symbol(children, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 3, 14))
+>children : Symbol(A.children, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 3, 14))
 >i : Symbol(i, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 19, 12))
 
       if (child) {
@@ -74,30 +74,30 @@ function getNodes(): A[] {
 >child : Symbol(child, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 20, 11))
 
           firstChild.next = current.next;
->firstChild.next : Symbol(next, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 0, 9))
+>firstChild.next : Symbol(A.next, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 0, 9))
 >firstChild : Symbol(firstChild, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 12, 7))
->next : Symbol(next, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 0, 9))
->current.next : Symbol(next, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 0, 9))
+>next : Symbol(A.next, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 0, 9))
+>current.next : Symbol(A.next, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 0, 9))
 >current : Symbol(current, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 9, 5))
->next : Symbol(next, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 0, 9))
+>next : Symbol(A.next, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 0, 9))
         }
 
         child.next = current.next;
->child.next : Symbol(next, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 0, 9))
+>child.next : Symbol(A.next, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 0, 9))
 >child : Symbol(child, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 20, 11))
->next : Symbol(next, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 0, 9))
->current.next : Symbol(next, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 0, 9))
+>next : Symbol(A.next, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 0, 9))
+>current.next : Symbol(A.next, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 0, 9))
 >current : Symbol(current, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 9, 5))
->next : Symbol(next, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 0, 9))
+>next : Symbol(A.next, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 0, 9))
       }
     }
 
     current = firstChild || current.next;
 >current : Symbol(current, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 9, 5))
 >firstChild : Symbol(firstChild, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 12, 7))
->current.next : Symbol(next, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 0, 9))
+>current.next : Symbol(A.next, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 0, 9))
 >current : Symbol(current, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 9, 5))
->next : Symbol(next, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 0, 9))
+>next : Symbol(A.next, Decl(circularControlFlowNarrowingWithCurrentElement01.ts, 0, 9))
   }
 
   return out;

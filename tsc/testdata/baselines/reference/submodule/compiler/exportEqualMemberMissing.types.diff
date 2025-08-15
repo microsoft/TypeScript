@@ -5,7 +5,7 @@
  }
  var server: {
 ->server : { (): server.connectExport; foo: Date; }
-+>server : { (): import("./exportEqualMemberMissing_0").connectExport; foo: Date; }
++>server : { (): import("exportEqualMemberMissing_0").connectExport; foo: Date; }
 
      (): server.connectExport;
  >server : any
@@ -14,4 +14,4 @@
  };
  export = server;
 ->server : { (): server.connectExport; foo: Date; }
-+>server : { (): import("./exportEqualMemberMissing_0").connectExport; foo: Date; }
++>server : { (): import("exportEqualMemberMissing_0").connectExport; foo: Date; }

@@ -78,9 +78,9 @@ if (isError(x)) {
 >x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))
 
     x.message;
->x.message : Symbol(message, Decl(lib.es5.d.ts, --, --))
+>x.message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))
->message : Symbol(message, Decl(lib.es5.d.ts, --, --))
+>message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
 
     x.mesage;
 >x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))
@@ -91,9 +91,9 @@ if (isDate(x)) {
 >x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))
 
     x.getDate();
->x.getDate : Symbol(getDate, Decl(lib.es5.d.ts, --, --))
+>x.getDate : Symbol(Date.getDate, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))
->getDate : Symbol(getDate, Decl(lib.es5.d.ts, --, --))
+>getDate : Symbol(Date.getDate, Decl(lib.es5.d.ts, --, --))
 
     x.getHuors();
 >x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))

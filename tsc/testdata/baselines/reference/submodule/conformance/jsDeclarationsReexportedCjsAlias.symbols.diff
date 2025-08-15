@@ -13,15 +13,7 @@
 
      SomeClass,
  >SomeClass : Symbol(SomeClass, Decl(main.js, 2, 18))
-@@= skipped -27, +27 lines =@@
- >SomeClass : Symbol(SomeClass, Decl(lib.js, 5, 1))
-
-     a() {
-->a : Symbol(SomeClass.a, Decl(lib.js, 7, 17))
-+>a : Symbol(a, Decl(lib.js, 7, 17))
-
-         return 1;
-     }
+@@= skipped -34, +34 lines =@@
  }
 
  module.exports = {

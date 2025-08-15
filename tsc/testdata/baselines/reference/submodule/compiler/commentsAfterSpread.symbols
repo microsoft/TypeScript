@@ -68,9 +68,9 @@ function e (.../* comment e */args) {
 >args : Symbol(args, Decl(commentsAfterSpread.ts, 30, 12))
 
   return args.length;
->args.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>args.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >args : Symbol(args, Decl(commentsAfterSpread.ts, 30, 12))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 }
 
 function f (
@@ -84,9 +84,9 @@ function f (
 
 ) {
   return rest.length;
->rest.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>rest.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >rest : Symbol(rest, Decl(commentsAfterSpread.ts, 36, 8))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 }
 
 function g (
@@ -109,17 +109,17 @@ function g (
 
   ]
   return rest.length;
->rest.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>rest.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >rest : Symbol(rest, Decl(commentsAfterSpread.ts, 43, 8))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 }
 
 const h = (.../* comment h */args) => args.length;
 >h : Symbol(h, Decl(commentsAfterSpread.ts, 53, 5))
 >args : Symbol(args, Decl(commentsAfterSpread.ts, 53, 11))
->args.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>args.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >args : Symbol(args, Decl(commentsAfterSpread.ts, 53, 11))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
 const i = (
 >i : Symbol(i, Decl(commentsAfterSpread.ts, 55, 5))
@@ -129,9 +129,9 @@ const i = (
 >rest : Symbol(rest, Decl(commentsAfterSpread.ts, 56, 8))
 
 ) => rest.length;
->rest.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>rest.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >rest : Symbol(rest, Decl(commentsAfterSpread.ts, 56, 8))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
 const j = (
 >j : Symbol(j, Decl(commentsAfterSpread.ts, 59, 5))
@@ -144,9 +144,9 @@ const j = (
 >rest : Symbol(rest, Decl(commentsAfterSpread.ts, 60, 8))
 
 ) => rest.length;
->rest.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>rest.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >rest : Symbol(rest, Decl(commentsAfterSpread.ts, 60, 8))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
 function k ({
 >k : Symbol(k, Decl(commentsAfterSpread.ts, 63, 17))

@@ -5,7 +5,7 @@ interface MyInterface {
 >MyInterface : Symbol(MyInterface, Decl(derivedTypeCallingBaseImplWithOptionalParams.ts, 0, 0))
 
     myMethod(...myList: any[]);
->myMethod : Symbol(myMethod, Decl(derivedTypeCallingBaseImplWithOptionalParams.ts, 0, 23))
+>myMethod : Symbol(MyInterface.myMethod, Decl(derivedTypeCallingBaseImplWithOptionalParams.ts, 0, 23))
 >myList : Symbol(myList, Decl(derivedTypeCallingBaseImplWithOptionalParams.ts, 1, 13))
 }
 class MyClass implements MyInterface {
@@ -13,7 +13,7 @@ class MyClass implements MyInterface {
 >MyInterface : Symbol(MyInterface, Decl(derivedTypeCallingBaseImplWithOptionalParams.ts, 0, 0))
 
     myMethod(myList: any[]) { // valid
->myMethod : Symbol(myMethod, Decl(derivedTypeCallingBaseImplWithOptionalParams.ts, 3, 38))
+>myMethod : Symbol(MyClass.myMethod, Decl(derivedTypeCallingBaseImplWithOptionalParams.ts, 3, 38))
 >myList : Symbol(myList, Decl(derivedTypeCallingBaseImplWithOptionalParams.ts, 4, 13))
     }
 }
@@ -24,9 +24,9 @@ var x: MyInterface = new MyClass();
 >MyClass : Symbol(MyClass, Decl(derivedTypeCallingBaseImplWithOptionalParams.ts, 2, 1))
 
 x.myMethod(); // should be valid, but MyClass has no implementation to handle it.
->x.myMethod : Symbol(myMethod, Decl(derivedTypeCallingBaseImplWithOptionalParams.ts, 0, 23))
+>x.myMethod : Symbol(MyInterface.myMethod, Decl(derivedTypeCallingBaseImplWithOptionalParams.ts, 0, 23))
 >x : Symbol(x, Decl(derivedTypeCallingBaseImplWithOptionalParams.ts, 8, 3))
->myMethod : Symbol(myMethod, Decl(derivedTypeCallingBaseImplWithOptionalParams.ts, 0, 23))
+>myMethod : Symbol(MyInterface.myMethod, Decl(derivedTypeCallingBaseImplWithOptionalParams.ts, 0, 23))
 
 var y: MyClass = new MyClass();
 >y : Symbol(y, Decl(derivedTypeCallingBaseImplWithOptionalParams.ts, 11, 3))
@@ -34,7 +34,7 @@ var y: MyClass = new MyClass();
 >MyClass : Symbol(MyClass, Decl(derivedTypeCallingBaseImplWithOptionalParams.ts, 2, 1))
 
 y.myMethod(); // error
->y.myMethod : Symbol(myMethod, Decl(derivedTypeCallingBaseImplWithOptionalParams.ts, 3, 38))
+>y.myMethod : Symbol(MyClass.myMethod, Decl(derivedTypeCallingBaseImplWithOptionalParams.ts, 3, 38))
 >y : Symbol(y, Decl(derivedTypeCallingBaseImplWithOptionalParams.ts, 11, 3))
->myMethod : Symbol(myMethod, Decl(derivedTypeCallingBaseImplWithOptionalParams.ts, 3, 38))
+>myMethod : Symbol(MyClass.myMethod, Decl(derivedTypeCallingBaseImplWithOptionalParams.ts, 3, 38))
 

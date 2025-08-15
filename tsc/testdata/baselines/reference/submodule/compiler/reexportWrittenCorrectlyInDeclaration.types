@@ -10,10 +10,10 @@ export class ThingB { }
 
 === Things.ts ===
 export {ThingA} from "./ThingA";
->ThingA : typeof import("./ThingA").ThingA
+>ThingA : typeof import("ThingA").ThingA
 
 export {ThingB} from "./ThingB";
->ThingB : typeof import("./ThingB").ThingB
+>ThingB : typeof import("ThingB").ThingB
 
 === Test.ts ===
 import * as things from "./Things";

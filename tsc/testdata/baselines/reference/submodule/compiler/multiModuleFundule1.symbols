@@ -28,7 +28,7 @@ var r2 = new C(2); // using void returning function as constructor
 
 var r3 = C.foo();
 >r3 : Symbol(r3, Decl(multiModuleFundule1.ts, 11, 3))
->C.foo : Symbol(foo, Decl(multiModuleFundule1.ts, 5, 10))
+>C.foo : Symbol(C.foo, Decl(multiModuleFundule1.ts, 5, 10))
 >C : Symbol(C, Decl(multiModuleFundule1.ts, 0, 0), Decl(multiModuleFundule1.ts, 0, 25), Decl(multiModuleFundule1.ts, 4, 1))
->foo : Symbol(foo, Decl(multiModuleFundule1.ts, 5, 10))
+>foo : Symbol(C.foo, Decl(multiModuleFundule1.ts, 5, 10))
 

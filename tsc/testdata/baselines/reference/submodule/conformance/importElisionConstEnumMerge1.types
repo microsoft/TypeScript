@@ -22,10 +22,10 @@ export { Enum };
 
 === index.ts ===
 import { Enum } from "./merge";
->Enum : typeof import("./enum").Enum
+>Enum : typeof import("enum").Enum
 
 Enum.One;
->Enum.One : import("./enum").Enum
->Enum : typeof import("./enum").Enum
->One : import("./enum").Enum
+>Enum.One : import("enum").Enum
+>Enum : typeof import("enum").Enum
+>One : import("enum").Enum
 

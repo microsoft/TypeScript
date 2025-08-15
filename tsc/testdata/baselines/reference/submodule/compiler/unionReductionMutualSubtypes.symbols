@@ -7,7 +7,7 @@ interface ReturnVal {
 >ReturnVal : Symbol(ReturnVal, Decl(unionReductionMutualSubtypes.ts, 0, 0))
 
     something(): void;
->something : Symbol(something, Decl(unionReductionMutualSubtypes.ts, 2, 21))
+>something : Symbol(ReturnVal.something, Decl(unionReductionMutualSubtypes.ts, 2, 21))
 }
 
 const k: ReturnVal = { something() { } }
@@ -30,9 +30,9 @@ function run(options: { something?(b?: string): void }) {
 >options.something : Symbol(something, Decl(unionReductionMutualSubtypes.ts, 9, 23))
 >options : Symbol(options, Decl(unionReductionMutualSubtypes.ts, 9, 13))
 >something : Symbol(something, Decl(unionReductionMutualSubtypes.ts, 9, 23))
->val.something : Symbol(something, Decl(unionReductionMutualSubtypes.ts, 2, 21))
+>val.something : Symbol(ReturnVal.something, Decl(unionReductionMutualSubtypes.ts, 2, 21))
 >val : Symbol(val, Decl(unionReductionMutualSubtypes.ts, 8, 13))
->something : Symbol(something, Decl(unionReductionMutualSubtypes.ts, 2, 21))
+>something : Symbol(ReturnVal.something, Decl(unionReductionMutualSubtypes.ts, 2, 21))
 
     something('');
 >something : Symbol(something, Decl(unionReductionMutualSubtypes.ts, 10, 9))

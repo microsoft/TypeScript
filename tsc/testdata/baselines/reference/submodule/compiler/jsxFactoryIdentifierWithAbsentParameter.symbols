@@ -16,7 +16,7 @@ export class AppComponent {
 >AppComponent : Symbol(AppComponent, Decl(test.tsx, 4, 1))
 
     render() {
->render : Symbol(render, Decl(test.tsx, 6, 27))
+>render : Symbol(AppComponent.render, Decl(test.tsx, 6, 27))
 
         return <div />;
     }

@@ -5,7 +5,7 @@ class C {
 >C : Symbol(C, Decl(inheritedModuleMembersForClodule.ts, 0, 0))
 
     static foo(): string {
->foo : Symbol(foo, Decl(inheritedModuleMembersForClodule.ts, 0, 9))
+>foo : Symbol(C.foo, Decl(inheritedModuleMembersForClodule.ts, 0, 9))
 
         return "123";
     }
@@ -31,12 +31,12 @@ class E extends D {
 >D : Symbol(D, Decl(inheritedModuleMembersForClodule.ts, 4, 1), Decl(inheritedModuleMembersForClodule.ts, 7, 1))
 
     static bar() {
->bar : Symbol(bar, Decl(inheritedModuleMembersForClodule.ts, 15, 19))
+>bar : Symbol(E.bar, Decl(inheritedModuleMembersForClodule.ts, 15, 19))
 
         return this.foo();
->this.foo : Symbol(foo, Decl(inheritedModuleMembersForClodule.ts, 9, 10))
+>this.foo : Symbol(D.foo, Decl(inheritedModuleMembersForClodule.ts, 9, 10))
 >this : Symbol(E, Decl(inheritedModuleMembersForClodule.ts, 13, 1))
->foo : Symbol(foo, Decl(inheritedModuleMembersForClodule.ts, 9, 10))
+>foo : Symbol(D.foo, Decl(inheritedModuleMembersForClodule.ts, 9, 10))
     }
 }
 

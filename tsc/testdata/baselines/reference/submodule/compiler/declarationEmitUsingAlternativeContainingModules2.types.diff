@@ -1,22 +1,6 @@
 --- old.declarationEmitUsingAlternativeContainingModules2.types
 +++ new.declarationEmitUsingAlternativeContainingModules2.types
-@@= skipped -303, +303 lines =@@
- export { b as UseQueryReturnType, u as useQuery } from './useQuery-CPqkvEsh.js';
- >b : any
- >UseQueryReturnType : any
-->u : <TQueryFnData = unknown, TError = Error, TData = TQueryFnData, TQueryKey extends readonly unknown[] = readonly unknown[]>(options: { retry?: (number | boolean | ((failureCount: number, error: TError) => boolean)) | undefined; queryFn?: ((context: { queryKey: TQueryKey; }) => TQueryFnData | Promise<TQueryFnData>) | undefined; queryKey?: TQueryKey | undefined; initialData?: TQueryFnData | undefined; initialDataUpdatedAt?: number | (() => number | undefined) | undefined; enabled?: boolean | undefined; refetchInterval?: number | undefined; select?: ((data: TQueryFnData) => TData) | undefined; } & { initialData?: undefined; }) => import("node_modules/@tanstack/vue-query/build/modern/useQuery-CPqkvEsh").b<TData, TError>
-->useQuery : <TQueryFnData = unknown, TError = Error, TData = TQueryFnData, TQueryKey extends readonly unknown[] = readonly unknown[]>(options: { retry?: (number | boolean | ((failureCount: number, error: TError) => boolean)) | undefined; queryFn?: ((context: { queryKey: TQueryKey; }) => TQueryFnData | Promise<TQueryFnData>) | undefined; queryKey?: TQueryKey | undefined; initialData?: TQueryFnData | undefined; initialDataUpdatedAt?: number | (() => number | undefined) | undefined; enabled?: boolean | undefined; refetchInterval?: number | undefined; select?: ((data: TQueryFnData) => TData) | undefined; } & { initialData?: undefined; }) => import("node_modules/@tanstack/vue-query/build/modern/useQuery-CPqkvEsh").b<TData, TError>
-+>u : <TQueryFnData = unknown, TError = Error, TData = TQueryFnData, TQueryKey extends readonly unknown[] = readonly unknown[]>(options: { retry?: (number | boolean | ((failureCount: number, error: TError) => boolean)) | undefined; queryFn?: ((context: { queryKey: TQueryKey; }) => TQueryFnData | Promise<TQueryFnData>) | undefined; queryKey?: TQueryKey | undefined; initialData?: TQueryFnData | undefined; initialDataUpdatedAt?: number | (() => number | undefined) | undefined; enabled?: boolean | undefined; refetchInterval?: number | undefined; select?: ((data: TQueryFnData) => TData) | undefined; } & { initialData?: undefined; }) => import("./useQuery-CPqkvEsh.js").b<TData, TError>
-+>useQuery : <TQueryFnData = unknown, TError = Error, TData = TQueryFnData, TQueryKey extends readonly unknown[] = readonly unknown[]>(options: { retry?: (number | boolean | ((failureCount: number, error: TError) => boolean)) | undefined; queryFn?: ((context: { queryKey: TQueryKey; }) => TQueryFnData | Promise<TQueryFnData>) | undefined; queryKey?: TQueryKey | undefined; initialData?: TQueryFnData | undefined; initialDataUpdatedAt?: number | (() => number | undefined) | undefined; enabled?: boolean | undefined; refetchInterval?: number | undefined; select?: ((data: TQueryFnData) => TData) | undefined; } & { initialData?: undefined; }) => import("./useQuery-CPqkvEsh.js").b<TData, TError>
-
- === src/index.mts ===
- import { useQuery } from '@tanstack/vue-query'
-->useQuery : <TQueryFnData = unknown, TError = Error, TData = TQueryFnData, TQueryKey extends readonly unknown[] = readonly unknown[]>(options: { retry?: (number | boolean | ((failureCount: number, error: TError) => boolean)) | undefined; queryFn?: ((context: { queryKey: TQueryKey; }) => TQueryFnData | Promise<TQueryFnData>) | undefined; queryKey?: TQueryKey | undefined; initialData?: TQueryFnData | undefined; initialDataUpdatedAt?: number | (() => number | undefined) | undefined; enabled?: boolean | undefined; refetchInterval?: number | undefined; select?: ((data: TQueryFnData) => TData) | undefined; } & { initialData?: undefined; }) => import("node_modules/@tanstack/vue-query/build/modern/useQuery-CPqkvEsh").b<TData, TError>
-+>useQuery : <TQueryFnData = unknown, TError = Error, TData = TQueryFnData, TQueryKey extends readonly unknown[] = readonly unknown[]>(options: { retry?: (number | boolean | ((failureCount: number, error: TError) => boolean)) | undefined; queryFn?: ((context: { queryKey: TQueryKey; }) => TQueryFnData | Promise<TQueryFnData>) | undefined; queryKey?: TQueryKey | undefined; initialData?: TQueryFnData | undefined; initialDataUpdatedAt?: number | (() => number | undefined) | undefined; enabled?: boolean | undefined; refetchInterval?: number | undefined; select?: ((data: TQueryFnData) => TData) | undefined; } & { initialData?: undefined; }) => import("@tanstack/vue-query").UseQueryReturnType<TData, TError>
-
- const baseUrl = 'https://api.publicapis.org/'
- >baseUrl : "https://api.publicapis.org/"
-@@= skipped -50, +50 lines =@@
+@@= skipped -353, +353 lines =@@
  >fetch(baseUrl + 'entries')      .then((res) => res.json()) : Promise<any>
  >fetch(baseUrl + 'entries')      .then : <TResult1 = Response, TResult2 = never>(onfulfilled?: ((value: Response) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
  >fetch(baseUrl + 'entries') : Promise<Response>
@@ -25,24 +9,7 @@
  >baseUrl + 'entries' : string
  >baseUrl : "https://api.publicapis.org/"
  >'entries' : "entries"
-@@= skipped -57, +57 lines =@@
- }
-
- export const useEntries = () => {
-->useEntries : () => import("node_modules/@tanstack/vue-query/build/modern/useQuery-CPqkvEsh").b<IEntry[], Error>
-->() => {  return useQuery({    queryKey: entryKeys.list(),    queryFn: testApi.getEntries,    select: (data) => data.slice(0, 10)  })} : () => import("node_modules/@tanstack/vue-query/build/modern/useQuery-CPqkvEsh").b<IEntry[], Error>
-+>useEntries : () => import("@tanstack/vue-query").UseQueryReturnType<IEntry[], Error>
-+>() => {  return useQuery({    queryKey: entryKeys.list(),    queryFn: testApi.getEntries,    select: (data) => data.slice(0, 10)  })} : () => import("@tanstack/vue-query").UseQueryReturnType<IEntry[], Error>
-
-   return useQuery({
-->useQuery({    queryKey: entryKeys.list(),    queryFn: testApi.getEntries,    select: (data) => data.slice(0, 10)  }) : import("node_modules/@tanstack/vue-query/build/modern/useQuery-CPqkvEsh").b<IEntry[], Error>
-->useQuery : <TQueryFnData = unknown, TError = Error, TData = TQueryFnData, TQueryKey extends readonly unknown[] = readonly unknown[]>(options: { retry?: (number | boolean | ((failureCount: number, error: TError) => boolean)) | undefined; queryFn?: ((context: { queryKey: TQueryKey; }) => TQueryFnData | Promise<TQueryFnData>) | undefined; queryKey?: TQueryKey | undefined; initialData?: TQueryFnData | undefined; initialDataUpdatedAt?: number | (() => number | undefined) | undefined; enabled?: boolean | undefined; refetchInterval?: number | undefined; select?: ((data: TQueryFnData) => TData) | undefined; } & { initialData?: undefined; }) => import("node_modules/@tanstack/vue-query/build/modern/useQuery-CPqkvEsh").b<TData, TError>
-+>useQuery({    queryKey: entryKeys.list(),    queryFn: testApi.getEntries,    select: (data) => data.slice(0, 10)  }) : import("@tanstack/vue-query").UseQueryReturnType<IEntry[], Error>
-+>useQuery : <TQueryFnData = unknown, TError = Error, TData = TQueryFnData, TQueryKey extends readonly unknown[] = readonly unknown[]>(options: { retry?: (number | boolean | ((failureCount: number, error: TError) => boolean)) | undefined; queryFn?: ((context: { queryKey: TQueryKey; }) => TQueryFnData | Promise<TQueryFnData>) | undefined; queryKey?: TQueryKey | undefined; initialData?: TQueryFnData | undefined; initialDataUpdatedAt?: number | (() => number | undefined) | undefined; enabled?: boolean | undefined; refetchInterval?: number | undefined; select?: ((data: TQueryFnData) => TData) | undefined; } & { initialData?: undefined; }) => import("@tanstack/vue-query").UseQueryReturnType<TData, TError>
- >{    queryKey: entryKeys.list(),    queryFn: testApi.getEntries,    select: (data) => data.slice(0, 10)  } : { queryKey: readonly ["entries", "list"]; queryFn: () => Promise<IEntry[]>; select: (data: IEntry[]) => IEntry[]; }
-
-     queryKey: entryKeys.list(),
-@@= skipped -26, +26 lines =@@
+@@= skipped -83, +83 lines =@@
  >(data) => data.slice(0, 10) : (data: IEntry[]) => IEntry[]
  >data : IEntry[]
  >data.slice(0, 10) : IEntry[]

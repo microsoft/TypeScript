@@ -11,9 +11,9 @@ Outer.Inner = class {
     constructor() {
         /** @type {number} */
         this.y = 12
->this.y : Symbol(y, Decl(a.js, 1, 19))
+>this.y : Symbol(Inner.y, Decl(a.js, 1, 19))
 >this : Symbol(Inner, Decl(a.js, 0, 13))
->y : Symbol(y, Decl(a.js, 1, 19))
+>y : Symbol(Inner.y, Decl(a.js, 1, 19))
     }
 }
 

@@ -16,8 +16,7 @@
  >I : Symbol(I, Decl(a.js, 0, 13))
 
      messages() { return [] }
-->messages : Symbol(I.messages, Decl(a.js, 0, 23))
-+>messages : Symbol(messages, Decl(a.js, 0, 23))
+@@= skipped -14, +12 lines =@@
  }
  /** @type {!Outer.Inner} */
  Outer.i

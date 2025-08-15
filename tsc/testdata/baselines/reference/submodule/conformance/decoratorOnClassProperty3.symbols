@@ -10,7 +10,7 @@ class C {
 >C : Symbol(C, Decl(decoratorOnClassProperty3.ts, 0, 61))
 
     public @dec prop;
->public : Symbol(public, Decl(decoratorOnClassProperty3.ts, 2, 9))
+>public : Symbol(C.public, Decl(decoratorOnClassProperty3.ts, 2, 9))
 >dec : Symbol(dec, Decl(decoratorOnClassProperty3.ts, 0, 0))
->prop : Symbol(prop, Decl(decoratorOnClassProperty3.ts, 3, 10))
+>prop : Symbol(C.prop, Decl(decoratorOnClassProperty3.ts, 3, 10))
 }

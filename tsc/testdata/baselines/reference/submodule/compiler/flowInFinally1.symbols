@@ -6,7 +6,7 @@ class A {
 
   constructor() { }
   method() { }
->method : Symbol(method, Decl(flowInFinally1.ts, 1, 19))
+>method : Symbol(A.method, Decl(flowInFinally1.ts, 1, 19))
 }
 
 let a: A | null = null;
@@ -23,8 +23,8 @@ try {
 >a : Symbol(a, Decl(flowInFinally1.ts, 5, 3))
 
     a.method();
->a.method : Symbol(method, Decl(flowInFinally1.ts, 1, 19))
+>a.method : Symbol(A.method, Decl(flowInFinally1.ts, 1, 19))
 >a : Symbol(a, Decl(flowInFinally1.ts, 5, 3))
->method : Symbol(method, Decl(flowInFinally1.ts, 1, 19))
+>method : Symbol(A.method, Decl(flowInFinally1.ts, 1, 19))
   }
 }

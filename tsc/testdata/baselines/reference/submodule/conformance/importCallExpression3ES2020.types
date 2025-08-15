@@ -15,12 +15,12 @@ async function foo() {
 
     class C extends (await import("./0")).B {}
 >C : C
->(await import("./0")).B : import("./0").B
->(await import("./0")) : typeof import("./0")
->await import("./0") : typeof import("./0")
->import("./0") : Promise<typeof import("./0")>
+>(await import("./0")).B : import("0").B
+>(await import("./0")) : typeof import("0")
+>await import("./0") : typeof import("0")
+>import("./0") : Promise<typeof import("0")>
 >"./0" : "./0"
->B : typeof import("./0").B
+>B : typeof import("0").B
 
     var c = new C();
 >c : C

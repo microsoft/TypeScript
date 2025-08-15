@@ -1,28 +1,6 @@
 --- old.importHelpersInAmbientContext.symbols
 +++ new.importHelpersInAmbientContext.symbols
-@@= skipped -33, +33 lines =@@
- >Foo : Symbol(Foo, Decl(a.d.ts, 12, 1))
-
-     a: number; b: string;
-->a : Symbol(Foo.a, Decl(a.d.ts, 16, 15))
-->b : Symbol(Foo.b, Decl(a.d.ts, 17, 14))
-+>a : Symbol(a, Decl(a.d.ts, 16, 15))
-+>b : Symbol(b, Decl(a.d.ts, 17, 14))
- }
- export var { a, ...x } : Foo;
- >a : Symbol(a, Decl(a.d.ts, 19, 12))
-@@= skipped -44, +44 lines =@@
- >Foo : Symbol(Foo, Decl(b.ts, 12, 2))
-
- 		a: number; b: string;
-->a : Symbol(Foo.a, Decl(b.ts, 16, 16))
-->b : Symbol(Foo.b, Decl(b.ts, 17, 12))
-+>a : Symbol(a, Decl(b.ts, 16, 16))
-+>b : Symbol(b, Decl(b.ts, 17, 12))
- 	}
- 	export var { a, ...x } : Foo;
- >a : Symbol(a, Decl(b.ts, 19, 13))
-@@= skipped -11, +11 lines =@@
+@@= skipped -88, +88 lines =@@
 
  === tslib.d.ts ===
  export declare function __extends(d: Function, b: Function): void;

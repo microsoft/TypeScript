@@ -20,7 +20,7 @@ class Foo {
 >Foo : Symbol(Foo, Decl(assignmentCompatInterfaceWithStringIndexSignature.ts, 6, 1))
 
     public Boz(): void { }
->Boz : Symbol(Boz, Decl(assignmentCompatInterfaceWithStringIndexSignature.ts, 8, 11))
+>Boz : Symbol(Foo.Boz, Decl(assignmentCompatInterfaceWithStringIndexSignature.ts, 8, 11))
 }
 
 function Biz(map: IHandlerMap) { }

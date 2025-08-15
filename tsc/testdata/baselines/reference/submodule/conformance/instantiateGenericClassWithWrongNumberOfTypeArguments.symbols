@@ -9,7 +9,7 @@ class C<T> {
 >T : Symbol(T, Decl(instantiateGenericClassWithWrongNumberOfTypeArguments.ts, 3, 8))
 
     x: T;
->x : Symbol(x, Decl(instantiateGenericClassWithWrongNumberOfTypeArguments.ts, 3, 12))
+>x : Symbol(C.x, Decl(instantiateGenericClassWithWrongNumberOfTypeArguments.ts, 3, 12))
 >T : Symbol(T, Decl(instantiateGenericClassWithWrongNumberOfTypeArguments.ts, 3, 8))
 }
 
@@ -23,11 +23,11 @@ class D<T, U> {
 >U : Symbol(U, Decl(instantiateGenericClassWithWrongNumberOfTypeArguments.ts, 9, 10))
 
     x: T
->x : Symbol(x, Decl(instantiateGenericClassWithWrongNumberOfTypeArguments.ts, 9, 15))
+>x : Symbol(D.x, Decl(instantiateGenericClassWithWrongNumberOfTypeArguments.ts, 9, 15))
 >T : Symbol(T, Decl(instantiateGenericClassWithWrongNumberOfTypeArguments.ts, 9, 8))
 
     y: U
->y : Symbol(y, Decl(instantiateGenericClassWithWrongNumberOfTypeArguments.ts, 10, 8))
+>y : Symbol(D.y, Decl(instantiateGenericClassWithWrongNumberOfTypeArguments.ts, 10, 8))
 >U : Symbol(U, Decl(instantiateGenericClassWithWrongNumberOfTypeArguments.ts, 9, 10))
 }
 

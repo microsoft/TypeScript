@@ -10,7 +10,7 @@ export class Foo {
      * @param {{ prop: string | undefined }} baz Baz.
      */
     set bar({ prop = 'foo' }) {}
->bar : Symbol(bar, Decl(foo.js, 0, 18))
+>bar : Symbol(Foo.bar, Decl(foo.js, 0, 18))
 >prop : Symbol(prop, Decl(foo.js, 6, 13))
 }
 

@@ -10,8 +10,8 @@ var x = undefined as number;
 
 var y = (null as string).length;
 >y : Symbol(y, Decl(asOperator1.ts, 2, 3))
->(null as string).length : Symbol(length, Decl(lib.es5.d.ts, --, --))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>(null as string).length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
 var z = Date as any as string;
 >z : Symbol(z, Decl(asOperator1.ts, 3, 3))

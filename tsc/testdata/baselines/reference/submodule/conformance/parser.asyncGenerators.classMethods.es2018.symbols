@@ -5,7 +5,7 @@ class C1 {
 >C1 : Symbol(C1, Decl(methodIsOk.ts, 0, 0))
 
     async * f() {
->f : Symbol(f, Decl(methodIsOk.ts, 0, 10))
+>f : Symbol(C1.f, Decl(methodIsOk.ts, 0, 10))
     }
 }
 === awaitMethodNameIsOk.ts ===
@@ -13,7 +13,7 @@ class C2 {
 >C2 : Symbol(C2, Decl(awaitMethodNameIsOk.ts, 0, 0))
 
     async * await() {
->await : Symbol(await, Decl(awaitMethodNameIsOk.ts, 0, 10))
+>await : Symbol(C2.await, Decl(awaitMethodNameIsOk.ts, 0, 10))
     }
 }
 === yieldMethodNameIsOk.ts ===
@@ -21,7 +21,7 @@ class C3 {
 >C3 : Symbol(C3, Decl(yieldMethodNameIsOk.ts, 0, 0))
 
     async * yield() {
->yield : Symbol(yield, Decl(yieldMethodNameIsOk.ts, 0, 10))
+>yield : Symbol(C3.yield, Decl(yieldMethodNameIsOk.ts, 0, 10))
     }
 }
 === awaitParameterIsError.ts ===
@@ -29,7 +29,7 @@ class C4 {
 >C4 : Symbol(C4, Decl(awaitParameterIsError.ts, 0, 0))
 
     async * f(await) {
->f : Symbol(f, Decl(awaitParameterIsError.ts, 0, 10))
+>f : Symbol(C4.f, Decl(awaitParameterIsError.ts, 0, 10))
 >await : Symbol(await, Decl(awaitParameterIsError.ts, 1, 14))
     }
 }
@@ -38,7 +38,7 @@ class C5 {
 >C5 : Symbol(C5, Decl(yieldParameterIsError.ts, 0, 0))
 
     async * f(yield) {
->f : Symbol(f, Decl(yieldParameterIsError.ts, 0, 10))
+>f : Symbol(C5.f, Decl(yieldParameterIsError.ts, 0, 10))
 >yield : Symbol(yield, Decl(yieldParameterIsError.ts, 1, 14))
     }
 }
@@ -47,7 +47,7 @@ class C6 {
 >C6 : Symbol(C6, Decl(awaitInParameterInitializerIsError.ts, 0, 0))
 
     async * f(a = await 1) {
->f : Symbol(f, Decl(awaitInParameterInitializerIsError.ts, 0, 10))
+>f : Symbol(C6.f, Decl(awaitInParameterInitializerIsError.ts, 0, 10))
 >a : Symbol(a, Decl(awaitInParameterInitializerIsError.ts, 1, 14))
     }
 }
@@ -56,7 +56,7 @@ class C7 {
 >C7 : Symbol(C7, Decl(yieldInParameterInitializerIsError.ts, 0, 0))
 
     async * f(a = yield) {
->f : Symbol(f, Decl(yieldInParameterInitializerIsError.ts, 0, 10))
+>f : Symbol(C7.f, Decl(yieldInParameterInitializerIsError.ts, 0, 10))
 >a : Symbol(a, Decl(yieldInParameterInitializerIsError.ts, 1, 14))
     }
 }
@@ -65,7 +65,7 @@ class C8 {
 >C8 : Symbol(C8, Decl(nestedAsyncGeneratorIsOk.ts, 0, 0))
 
     async * f() {
->f : Symbol(f, Decl(nestedAsyncGeneratorIsOk.ts, 0, 10))
+>f : Symbol(C8.f, Decl(nestedAsyncGeneratorIsOk.ts, 0, 10))
 
         async function * g() {
 >g : Symbol(g, Decl(nestedAsyncGeneratorIsOk.ts, 1, 17))
@@ -77,7 +77,7 @@ class C9 {
 >C9 : Symbol(C9, Decl(nestedFunctionDeclarationNamedYieldIsError.ts, 0, 0))
 
     async * f() {
->f : Symbol(f, Decl(nestedFunctionDeclarationNamedYieldIsError.ts, 0, 10))
+>f : Symbol(C9.f, Decl(nestedFunctionDeclarationNamedYieldIsError.ts, 0, 10))
 
         function yield() {
 >yield : Symbol(yield, Decl(nestedFunctionDeclarationNamedYieldIsError.ts, 1, 17))
@@ -89,7 +89,7 @@ class C10 {
 >C10 : Symbol(C10, Decl(nestedFunctionExpressionNamedYieldIsError.ts, 0, 0))
 
     async * f() {
->f : Symbol(f, Decl(nestedFunctionExpressionNamedYieldIsError.ts, 0, 11))
+>f : Symbol(C10.f, Decl(nestedFunctionExpressionNamedYieldIsError.ts, 0, 11))
 
         const x = function yield() {
 >x : Symbol(x, Decl(nestedFunctionExpressionNamedYieldIsError.ts, 2, 13))
@@ -103,7 +103,7 @@ class C11 {
 >C11 : Symbol(C11, Decl(nestedFunctionDeclarationNamedAwaitIsError.ts, 0, 0))
 
     async * f() {
->f : Symbol(f, Decl(nestedFunctionDeclarationNamedAwaitIsError.ts, 0, 11))
+>f : Symbol(C11.f, Decl(nestedFunctionDeclarationNamedAwaitIsError.ts, 0, 11))
 
         function await() {
 >await : Symbol(await, Decl(nestedFunctionDeclarationNamedAwaitIsError.ts, 1, 17))
@@ -115,7 +115,7 @@ class C12 {
 >C12 : Symbol(C12, Decl(nestedFunctionExpressionNamedAwaitIsError.ts, 0, 0))
 
     async * f() {
->f : Symbol(f, Decl(nestedFunctionExpressionNamedAwaitIsError.ts, 0, 11))
+>f : Symbol(C12.f, Decl(nestedFunctionExpressionNamedAwaitIsError.ts, 0, 11))
 
         const x = function await() {
 >x : Symbol(x, Decl(nestedFunctionExpressionNamedAwaitIsError.ts, 2, 13))
@@ -129,7 +129,7 @@ class C13 {
 >C13 : Symbol(C13, Decl(yieldIsOk.ts, 0, 0))
 
     async * f() {
->f : Symbol(f, Decl(yieldIsOk.ts, 0, 11))
+>f : Symbol(C13.f, Decl(yieldIsOk.ts, 0, 11))
 
         yield;
     }
@@ -139,7 +139,7 @@ class C14 {
 >C14 : Symbol(C14, Decl(yieldWithValueIsOk.ts, 0, 0))
 
     async * f() {
->f : Symbol(f, Decl(yieldWithValueIsOk.ts, 0, 11))
+>f : Symbol(C14.f, Decl(yieldWithValueIsOk.ts, 0, 11))
 
         yield 1;
     }
@@ -149,7 +149,7 @@ class C15 {
 >C15 : Symbol(C15, Decl(yieldStarMissingValueIsError.ts, 0, 0))
 
     async * f() {
->f : Symbol(f, Decl(yieldStarMissingValueIsError.ts, 0, 11))
+>f : Symbol(C15.f, Decl(yieldStarMissingValueIsError.ts, 0, 11))
 
         yield *;
     }
@@ -159,7 +159,7 @@ class C16 {
 >C16 : Symbol(C16, Decl(yieldStarWithValueIsOk.ts, 0, 0))
 
     async * f() {
->f : Symbol(f, Decl(yieldStarWithValueIsOk.ts, 0, 11))
+>f : Symbol(C16.f, Decl(yieldStarWithValueIsOk.ts, 0, 11))
 
         yield * [];
     }
@@ -169,7 +169,7 @@ class C17 {
 >C17 : Symbol(C17, Decl(awaitWithValueIsOk.ts, 0, 0))
 
     async * f() {
->f : Symbol(f, Decl(awaitWithValueIsOk.ts, 0, 11))
+>f : Symbol(C17.f, Decl(awaitWithValueIsOk.ts, 0, 11))
 
         await 1;
     }
@@ -179,7 +179,7 @@ class C18 {
 >C18 : Symbol(C18, Decl(awaitMissingValueIsError.ts, 0, 0))
 
     async * f() {
->f : Symbol(f, Decl(awaitMissingValueIsError.ts, 0, 11))
+>f : Symbol(C18.f, Decl(awaitMissingValueIsError.ts, 0, 11))
 
         await;
     }
@@ -192,7 +192,7 @@ class C19 {
 >C19 : Symbol(C19, Decl(awaitAsTypeIsOk.ts, 0, 18))
 
     async * f() {
->f : Symbol(f, Decl(awaitAsTypeIsOk.ts, 1, 11))
+>f : Symbol(C19.f, Decl(awaitAsTypeIsOk.ts, 1, 11))
 
         let x: await;
 >x : Symbol(x, Decl(awaitAsTypeIsOk.ts, 3, 11))
@@ -207,7 +207,7 @@ class C20 {
 >C20 : Symbol(C20, Decl(yieldAsTypeIsStrictError.ts, 0, 18))
 
     async * f() {
->f : Symbol(f, Decl(yieldAsTypeIsStrictError.ts, 1, 11))
+>f : Symbol(C20.f, Decl(yieldAsTypeIsStrictError.ts, 1, 11))
 
         let x: yield;
 >x : Symbol(x, Decl(yieldAsTypeIsStrictError.ts, 3, 11))
@@ -219,7 +219,7 @@ class C21 {
 >C21 : Symbol(C21, Decl(yieldInClassComputedPropertyIsError.ts, 0, 0))
 
     async * [yield]() {
->[yield] : Symbol([yield], Decl(yieldInClassComputedPropertyIsError.ts, 0, 11))
+>[yield] : Symbol(C21[yield], Decl(yieldInClassComputedPropertyIsError.ts, 0, 11))
     }
 }
 === yieldInNestedComputedPropertyIsOk.ts ===
@@ -227,7 +227,7 @@ class C22 {
 >C22 : Symbol(C22, Decl(yieldInNestedComputedPropertyIsOk.ts, 0, 0))
 
     async * f() {
->f : Symbol(f, Decl(yieldInNestedComputedPropertyIsOk.ts, 0, 11))
+>f : Symbol(C22.f, Decl(yieldInNestedComputedPropertyIsOk.ts, 0, 11))
 
         const x = { [yield]: 1 };
 >x : Symbol(x, Decl(yieldInNestedComputedPropertyIsOk.ts, 2, 13))
@@ -239,8 +239,8 @@ class C23 {
 >C23 : Symbol(C23, Decl(asyncGeneratorGetAccessorIsError.ts, 0, 0))
 
     async * get x() {
->get : Symbol(get, Decl(asyncGeneratorGetAccessorIsError.ts, 0, 11))
->x : Symbol(x, Decl(asyncGeneratorGetAccessorIsError.ts, 1, 15))
+>get : Symbol(C23.get, Decl(asyncGeneratorGetAccessorIsError.ts, 0, 11))
+>x : Symbol(C23.x, Decl(asyncGeneratorGetAccessorIsError.ts, 1, 15))
 
         return 1;
     }
@@ -250,8 +250,8 @@ class C24 {
 >C24 : Symbol(C24, Decl(asyncGeneratorSetAccessorIsError.ts, 0, 0))
 
     async * set x(value: number) {
->set : Symbol(set, Decl(asyncGeneratorSetAccessorIsError.ts, 0, 11))
->x : Symbol(x, Decl(asyncGeneratorSetAccessorIsError.ts, 1, 15))
+>set : Symbol(C24.set, Decl(asyncGeneratorSetAccessorIsError.ts, 0, 11))
+>x : Symbol(C24.x, Decl(asyncGeneratorSetAccessorIsError.ts, 1, 15))
 >value : Symbol(value, Decl(asyncGeneratorSetAccessorIsError.ts, 1, 18))
     }
 }
@@ -260,7 +260,7 @@ class C25 {
 >C25 : Symbol(C25, Decl(asyncGeneratorPropertyIsError.ts, 0, 0))
 
     async * x = 1;
->x : Symbol(x, Decl(asyncGeneratorPropertyIsError.ts, 0, 11))
->1 : Symbol(1, Decl(asyncGeneratorPropertyIsError.ts, 1, 15))
+>x : Symbol(C25.x, Decl(asyncGeneratorPropertyIsError.ts, 0, 11))
+>1 : Symbol(C25[1], Decl(asyncGeneratorPropertyIsError.ts, 1, 15))
 }
 

@@ -6,13 +6,13 @@ interface fnSigs {
 
     //functions signatures can be optional
     fn(): void;
->fn : Symbol(fn, Decl(optionalPropertiesSyntax.ts, 0, 18), Decl(optionalPropertiesSyntax.ts, 2, 15))
+>fn : Symbol(fnSigs.fn, Decl(optionalPropertiesSyntax.ts, 0, 18), Decl(optionalPropertiesSyntax.ts, 2, 15))
 
     fn?(): void; //err
->fn : Symbol(fn, Decl(optionalPropertiesSyntax.ts, 0, 18), Decl(optionalPropertiesSyntax.ts, 2, 15))
+>fn : Symbol(fnSigs.fn, Decl(optionalPropertiesSyntax.ts, 0, 18), Decl(optionalPropertiesSyntax.ts, 2, 15))
 
     fn2?(): void;
->fn2 : Symbol(fn2, Decl(optionalPropertiesSyntax.ts, 3, 16))
+>fn2 : Symbol(fnSigs.fn2, Decl(optionalPropertiesSyntax.ts, 3, 16))
 }
 
 interface callSig {
@@ -21,7 +21,7 @@ interface callSig {
     //Call signatures can't be optional
     (): any;
     ()?: any; //err
->any : Symbol(any, Decl(optionalPropertiesSyntax.ts, 10, 8))
+>any : Symbol(callSig.any, Decl(optionalPropertiesSyntax.ts, 10, 8))
 
     ?(): any; //err
 }
@@ -32,10 +32,10 @@ interface constructSig {
     //Construct signatures can't be optional
     new (): any;
     new ()?: any; //err
->any : Symbol(any, Decl(optionalPropertiesSyntax.ts, 17, 12))
+>any : Symbol(constructSig.any, Decl(optionalPropertiesSyntax.ts, 17, 12))
 
     new ?(): any; //err
->new : Symbol(new, Decl(optionalPropertiesSyntax.ts, 17, 17))
+>new : Symbol(constructSig.new, Decl(optionalPropertiesSyntax.ts, 17, 17))
 }
 
 interface propertySig {
@@ -43,13 +43,13 @@ interface propertySig {
 
     //Property signatures can be optional
     prop: any;
->prop : Symbol(prop, Decl(optionalPropertiesSyntax.ts, 21, 23), Decl(optionalPropertiesSyntax.ts, 23, 14))
+>prop : Symbol(propertySig.prop, Decl(optionalPropertiesSyntax.ts, 21, 23), Decl(optionalPropertiesSyntax.ts, 23, 14))
 
     prop?: any;
->prop : Symbol(prop, Decl(optionalPropertiesSyntax.ts, 21, 23), Decl(optionalPropertiesSyntax.ts, 23, 14))
+>prop : Symbol(propertySig.prop, Decl(optionalPropertiesSyntax.ts, 21, 23), Decl(optionalPropertiesSyntax.ts, 23, 14))
 
     prop2?: any;
->prop2 : Symbol(prop2, Decl(optionalPropertiesSyntax.ts, 24, 15))
+>prop2 : Symbol(propertySig.prop2, Decl(optionalPropertiesSyntax.ts, 24, 15))
 }
 
 interface indexSig {
@@ -61,7 +61,7 @@ interface indexSig {
 
     [idx: number]?: any; //err
 >idx : Symbol(idx, Decl(optionalPropertiesSyntax.ts, 31, 5))
->any : Symbol(any, Decl(optionalPropertiesSyntax.ts, 31, 19))
+>any : Symbol(indexSig.any, Decl(optionalPropertiesSyntax.ts, 31, 19))
 
     ? [idx: number]: any; //err
 >idx : Symbol(idx, Decl(optionalPropertiesSyntax.ts, 32, 7))

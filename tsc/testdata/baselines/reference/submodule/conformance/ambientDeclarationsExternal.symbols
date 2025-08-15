@@ -12,9 +12,9 @@ import imp3 = require('equ2');
 
 var n = imp3.x;
 >n : Symbol(n, Decl(consumer.ts, 6, 3), Decl(consumer.ts, 7, 3))
->imp3.x : Symbol(x, Decl(decls.ts, 7, 7))
+>imp3.x : Symbol(imp3.x, Decl(decls.ts, 7, 7))
 >imp3 : Symbol(imp3, Decl(consumer.ts, 1, 29))
->x : Symbol(x, Decl(decls.ts, 7, 7))
+>x : Symbol(imp3.x, Decl(decls.ts, 7, 7))
 
 var n: number;
 >n : Symbol(n, Decl(consumer.ts, 6, 3), Decl(consumer.ts, 7, 3))

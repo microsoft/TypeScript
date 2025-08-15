@@ -6,7 +6,7 @@ export interface Scalar {
 
 	(): string;
 	value: number;
->value : Symbol(value, Decl(scalar.ts, 1, 12))
+>value : Symbol(Scalar.value, Decl(scalar.ts, 1, 12))
 }
 
 export function scalar(value: string): Scalar {

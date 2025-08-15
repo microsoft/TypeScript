@@ -5,10 +5,10 @@ export enum Foo {
 >Foo : Symbol(Foo, Decl(fakeInfinity3.ts, 0, 0))
 
     A = 1e999,
->A : Symbol(A, Decl(fakeInfinity3.ts, 0, 17))
+>A : Symbol(Foo.A, Decl(fakeInfinity3.ts, 0, 17))
 
     B = -1e999,
->B : Symbol(B, Decl(fakeInfinity3.ts, 1, 14))
+>B : Symbol(Foo.B, Decl(fakeInfinity3.ts, 1, 14))
 }
 
 namespace X {
@@ -31,9 +31,9 @@ namespace X {
 
 export const m = X.f();
 >m : Symbol(m, Decl(fakeInfinity3.ts, 14, 12))
->X.f : Symbol(f, Decl(fakeInfinity3.ts, 7, 19))
+>X.f : Symbol(X.f, Decl(fakeInfinity3.ts, 7, 19))
 >X : Symbol(X, Decl(fakeInfinity3.ts, 3, 1))
->f : Symbol(f, Decl(fakeInfinity3.ts, 7, 19))
+>f : Symbol(X.f, Decl(fakeInfinity3.ts, 7, 19))
 
 export const Infinity = "oops";
 >Infinity : Symbol(Infinity, Decl(fakeInfinity3.ts, 16, 12))

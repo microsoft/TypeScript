@@ -13,7 +13,7 @@ import * as _three from './three';
 >_three : typeof _three
 
 export as namespace THREE;
->THREE : typeof import("./global")
+>THREE : typeof import("global")
 
 declare global {
 >global : typeof global
@@ -25,6 +25,6 @@ declare global {
 
 === test.ts ===
 const m = THREE
->m : typeof import("./three")
->THREE : typeof import("./three")
+>m : typeof import("three")
+>THREE : typeof import("three")
 

@@ -27,9 +27,9 @@ function C1() {
  * @returns {number}
  */
 C1.prototype.method = function (x, y) {
->C1.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>C1.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >C1 : Symbol(C1, Decl(jsDeclarationsClassMethod.js, 0, 0))
->prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(jsDeclarationsClassMethod.js, 18, 32))
 >y : Symbol(y, Decl(jsDeclarationsClassMethod.js, 18, 34))
 
@@ -45,9 +45,9 @@ C1.prototype.method = function (x, y) {
  * @returns {number}
  */
 C1.staticProp = function (x, y) {
->C1.staticProp : Symbol(staticProp, Decl(jsDeclarationsClassMethod.js, 20, 1))
+>C1.staticProp : Symbol(C1.staticProp, Decl(jsDeclarationsClassMethod.js, 20, 1))
 >C1 : Symbol(C1, Decl(jsDeclarationsClassMethod.js, 0, 0))
->staticProp : Symbol(staticProp, Decl(jsDeclarationsClassMethod.js, 20, 1))
+>staticProp : Symbol(C1.staticProp, Decl(jsDeclarationsClassMethod.js, 20, 1))
 >x : Symbol(x, Decl(jsDeclarationsClassMethod.js, 28, 26))
 >y : Symbol(y, Decl(jsDeclarationsClassMethod.js, 28, 28))
 
@@ -66,7 +66,7 @@ class C2 {
      * @returns {number}
      */
     method1(x, y) {
->method1 : Symbol(method1, Decl(jsDeclarationsClassMethod.js, 32, 10))
+>method1 : Symbol(C2.method1, Decl(jsDeclarationsClassMethod.js, 32, 10))
 >x : Symbol(x, Decl(jsDeclarationsClassMethod.js, 39, 12))
 >y : Symbol(y, Decl(jsDeclarationsClassMethod.js, 39, 14))
 
@@ -83,9 +83,9 @@ class C2 {
  * @returns {number}
  */
 C2.prototype.method2 = function (x, y) {
->C2.prototype : Symbol(prototype)
+>C2.prototype : Symbol(C2.prototype)
 >C2 : Symbol(C2, Decl(jsDeclarationsClassMethod.js, 30, 1))
->prototype : Symbol(prototype)
+>prototype : Symbol(C2.prototype)
 >x : Symbol(x, Decl(jsDeclarationsClassMethod.js, 50, 33))
 >y : Symbol(y, Decl(jsDeclarationsClassMethod.js, 50, 35))
 
@@ -101,9 +101,9 @@ C2.prototype.method2 = function (x, y) {
  * @returns {number}
  */
 C2.staticProp = function (x, y) {
->C2.staticProp : Symbol(staticProp, Decl(jsDeclarationsClassMethod.js, 52, 1))
+>C2.staticProp : Symbol(C2.staticProp, Decl(jsDeclarationsClassMethod.js, 52, 1))
 >C2 : Symbol(C2, Decl(jsDeclarationsClassMethod.js, 30, 1))
->staticProp : Symbol(staticProp, Decl(jsDeclarationsClassMethod.js, 52, 1))
+>staticProp : Symbol(C2.staticProp, Decl(jsDeclarationsClassMethod.js, 52, 1))
 >x : Symbol(x, Decl(jsDeclarationsClassMethod.js, 60, 26))
 >y : Symbol(y, Decl(jsDeclarationsClassMethod.js, 60, 28))
 

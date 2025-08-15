@@ -24,21 +24,16 @@
  >y : Symbol(y, Decl(source.js, 4, 24))
  }
 
-@@= skipped -24, +18 lines =@@
- >p : Symbol(p, Decl(referencer.js, 5, 26))
-
-     return Math.sqrt(p.x ** 2 + p.y ** 2);
-->Math.sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
-+>Math.sqrt : Symbol(sqrt, Decl(lib.es5.d.ts, --, --))
+@@= skipped -27, +21 lines =@@
+ >Math.sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
  >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
-->sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+ >sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
 ->p.x : Symbol(Point.x, Decl(source.js, 7, 5))
 ->p : Symbol(p, Decl(referencer.js, 5, 26))
 ->x : Symbol(Point.x, Decl(source.js, 7, 5))
 ->p.y : Symbol(Point.y, Decl(source.js, 8, 15))
 ->p : Symbol(p, Decl(referencer.js, 5, 26))
 ->y : Symbol(Point.y, Decl(source.js, 8, 15))
-+>sqrt : Symbol(sqrt, Decl(lib.es5.d.ts, --, --))
 +>p : Symbol(p, Decl(referencer.js, 5, 26))
 +>p : Symbol(p, Decl(referencer.js, 5, 26))
  }

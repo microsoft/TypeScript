@@ -11,10 +11,10 @@ declare module JSX {
 >IntrinsicElements : Symbol(IntrinsicElements, Decl(tsxDynamicTagName4.tsx, 1, 22))
 
 		div: any
->div : Symbol(div, Decl(tsxDynamicTagName4.tsx, 2, 30))
+>div : Symbol(IntrinsicElements.div, Decl(tsxDynamicTagName4.tsx, 2, 30))
 
 		h1: any
->h1 : Symbol(h1, Decl(tsxDynamicTagName4.tsx, 3, 10))
+>h1 : Symbol(IntrinsicElements.h1, Decl(tsxDynamicTagName4.tsx, 3, 10))
 	}
 }
 

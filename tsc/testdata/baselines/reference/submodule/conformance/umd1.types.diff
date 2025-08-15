@@ -1,8 +1,0 @@
---- old.umd1.types
-+++ new.umd1.types
-@@= skipped -29, +29 lines =@@
- >x : number
-
- export as namespace Foo;
-->Foo : typeof import("foo")
-+>Foo : typeof import("./foo")

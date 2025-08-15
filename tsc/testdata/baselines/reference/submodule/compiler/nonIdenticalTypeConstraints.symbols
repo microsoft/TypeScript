@@ -5,13 +5,13 @@ class Different {
 >Different : Symbol(Different, Decl(nonIdenticalTypeConstraints.ts, 0, 0))
 
     a: number;
->a : Symbol(a, Decl(nonIdenticalTypeConstraints.ts, 0, 17))
+>a : Symbol(Different.a, Decl(nonIdenticalTypeConstraints.ts, 0, 17))
 
     b: string;
->b : Symbol(b, Decl(nonIdenticalTypeConstraints.ts, 1, 14))
+>b : Symbol(Different.b, Decl(nonIdenticalTypeConstraints.ts, 1, 14))
 
     c: boolean;
->c : Symbol(c, Decl(nonIdenticalTypeConstraints.ts, 2, 14))
+>c : Symbol(Different.c, Decl(nonIdenticalTypeConstraints.ts, 2, 14))
 }
 
 class Foo<T extends Function> {
@@ -20,7 +20,7 @@ class Foo<T extends Function> {
 >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     n: T;
->n : Symbol(n, Decl(nonIdenticalTypeConstraints.ts, 6, 31))
+>n : Symbol(Foo.n, Decl(nonIdenticalTypeConstraints.ts, 6, 31))
 >T : Symbol(T, Decl(nonIdenticalTypeConstraints.ts, 6, 10), Decl(nonIdenticalTypeConstraints.ts, 9, 14))
 }
 interface Foo<T extends Different> {
@@ -29,7 +29,7 @@ interface Foo<T extends Different> {
 >Different : Symbol(Different, Decl(nonIdenticalTypeConstraints.ts, 0, 0))
 
     y: T;
->y : Symbol(y, Decl(nonIdenticalTypeConstraints.ts, 9, 36))
+>y : Symbol(Foo.y, Decl(nonIdenticalTypeConstraints.ts, 9, 36))
 >T : Symbol(T, Decl(nonIdenticalTypeConstraints.ts, 6, 10), Decl(nonIdenticalTypeConstraints.ts, 9, 14))
 }
 interface Qux<T extends Different> {
@@ -38,7 +38,7 @@ interface Qux<T extends Different> {
 >Different : Symbol(Different, Decl(nonIdenticalTypeConstraints.ts, 0, 0))
 
     y: T;
->y : Symbol(y, Decl(nonIdenticalTypeConstraints.ts, 12, 36))
+>y : Symbol(Qux.y, Decl(nonIdenticalTypeConstraints.ts, 12, 36))
 >T : Symbol(T, Decl(nonIdenticalTypeConstraints.ts, 12, 14), Decl(nonIdenticalTypeConstraints.ts, 15, 10))
 }
 class Qux<T extends Function> {
@@ -47,7 +47,7 @@ class Qux<T extends Function> {
 >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     n: T;
->n : Symbol(n, Decl(nonIdenticalTypeConstraints.ts, 15, 31))
+>n : Symbol(Qux.n, Decl(nonIdenticalTypeConstraints.ts, 15, 31))
 >T : Symbol(T, Decl(nonIdenticalTypeConstraints.ts, 12, 14), Decl(nonIdenticalTypeConstraints.ts, 15, 10))
 }
 
@@ -57,7 +57,7 @@ class Bar<T extends Function> {
 >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     n: T;
->n : Symbol(n, Decl(nonIdenticalTypeConstraints.ts, 19, 31))
+>n : Symbol(Bar.n, Decl(nonIdenticalTypeConstraints.ts, 19, 31))
 >T : Symbol(T, Decl(nonIdenticalTypeConstraints.ts, 19, 10), Decl(nonIdenticalTypeConstraints.ts, 22, 14))
 }
 interface Bar<T extends Function> {
@@ -66,7 +66,7 @@ interface Bar<T extends Function> {
 >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     y: T;
->y : Symbol(y, Decl(nonIdenticalTypeConstraints.ts, 22, 35))
+>y : Symbol(Bar.y, Decl(nonIdenticalTypeConstraints.ts, 22, 35))
 >T : Symbol(T, Decl(nonIdenticalTypeConstraints.ts, 19, 10), Decl(nonIdenticalTypeConstraints.ts, 22, 14))
 }
 interface Baz<T extends Function> {
@@ -75,7 +75,7 @@ interface Baz<T extends Function> {
 >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     y: T;
->y : Symbol(y, Decl(nonIdenticalTypeConstraints.ts, 25, 35))
+>y : Symbol(Baz.y, Decl(nonIdenticalTypeConstraints.ts, 25, 35))
 >T : Symbol(T, Decl(nonIdenticalTypeConstraints.ts, 25, 14), Decl(nonIdenticalTypeConstraints.ts, 28, 10))
 }
 class Baz<T extends Function> {
@@ -84,7 +84,7 @@ class Baz<T extends Function> {
 >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     n: T;
->n : Symbol(n, Decl(nonIdenticalTypeConstraints.ts, 28, 31))
+>n : Symbol(Baz.n, Decl(nonIdenticalTypeConstraints.ts, 28, 31))
 >T : Symbol(T, Decl(nonIdenticalTypeConstraints.ts, 25, 14), Decl(nonIdenticalTypeConstraints.ts, 28, 10))
 }
 
@@ -93,7 +93,7 @@ class Quux<T> {
 >T : Symbol(T, Decl(nonIdenticalTypeConstraints.ts, 32, 11))
 
     n: T;
->n : Symbol(n, Decl(nonIdenticalTypeConstraints.ts, 32, 15))
+>n : Symbol(Quux.n, Decl(nonIdenticalTypeConstraints.ts, 32, 15))
 >T : Symbol(T, Decl(nonIdenticalTypeConstraints.ts, 32, 11))
 }
 interface Quux<U> {
@@ -101,6 +101,6 @@ interface Quux<U> {
 >U : Symbol(U, Decl(nonIdenticalTypeConstraints.ts, 35, 15))
 
     m: U;
->m : Symbol(m, Decl(nonIdenticalTypeConstraints.ts, 35, 19))
+>m : Symbol(Quux.m, Decl(nonIdenticalTypeConstraints.ts, 35, 19))
 >U : Symbol(U, Decl(nonIdenticalTypeConstraints.ts, 35, 15))
 }

@@ -7,7 +7,7 @@ export function foo() { return "foo"; }
 
 === 1.ts ===
 var p1 = import("./0");
->p1 : Promise<typeof import("./0")>
->import("./0") : Promise<typeof import("./0")>
+>p1 : Promise<typeof import("0")>
+>import("./0") : Promise<typeof import("0")>
 >"./0" : "./0"
 

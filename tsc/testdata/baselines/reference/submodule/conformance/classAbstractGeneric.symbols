@@ -6,15 +6,15 @@ abstract class A<T> {
 >T : Symbol(T, Decl(classAbstractGeneric.ts, 0, 17))
 
     t: T;
->t : Symbol(t, Decl(classAbstractGeneric.ts, 0, 21))
+>t : Symbol(A.t, Decl(classAbstractGeneric.ts, 0, 21))
 >T : Symbol(T, Decl(classAbstractGeneric.ts, 0, 17))
     
     abstract foo(): T;
->foo : Symbol(foo, Decl(classAbstractGeneric.ts, 1, 9))
+>foo : Symbol(A.foo, Decl(classAbstractGeneric.ts, 1, 9))
 >T : Symbol(T, Decl(classAbstractGeneric.ts, 0, 17))
 
     abstract bar(t: T);
->bar : Symbol(bar, Decl(classAbstractGeneric.ts, 3, 22))
+>bar : Symbol(A.bar, Decl(classAbstractGeneric.ts, 3, 22))
 >t : Symbol(t, Decl(classAbstractGeneric.ts, 4, 17))
 >T : Symbol(T, Decl(classAbstractGeneric.ts, 0, 17))
 }
@@ -42,10 +42,10 @@ class E<T> extends A<T> { // error -- doesn't implement bar
 >T : Symbol(T, Decl(classAbstractGeneric.ts, 13, 8))
 
     foo() { return this.t; }
->foo : Symbol(foo, Decl(classAbstractGeneric.ts, 13, 25))
->this.t : Symbol(t, Decl(classAbstractGeneric.ts, 0, 21))
+>foo : Symbol(E.foo, Decl(classAbstractGeneric.ts, 13, 25))
+>this.t : Symbol(A.t, Decl(classAbstractGeneric.ts, 0, 21))
 >this : Symbol(E, Decl(classAbstractGeneric.ts, 11, 28))
->t : Symbol(t, Decl(classAbstractGeneric.ts, 0, 21))
+>t : Symbol(A.t, Decl(classAbstractGeneric.ts, 0, 21))
 }
 
 class F<T> extends A<T> { // error -- doesn't implement foo
@@ -55,7 +55,7 @@ class F<T> extends A<T> { // error -- doesn't implement foo
 >T : Symbol(T, Decl(classAbstractGeneric.ts, 17, 8))
 
     bar(t : T) {}
->bar : Symbol(bar, Decl(classAbstractGeneric.ts, 17, 25))
+>bar : Symbol(F.bar, Decl(classAbstractGeneric.ts, 17, 25))
 >t : Symbol(t, Decl(classAbstractGeneric.ts, 18, 8))
 >T : Symbol(T, Decl(classAbstractGeneric.ts, 17, 8))
 }
@@ -67,13 +67,13 @@ class G<T> extends A<T> {
 >T : Symbol(T, Decl(classAbstractGeneric.ts, 21, 8))
 
     foo() { return this.t; }
->foo : Symbol(foo, Decl(classAbstractGeneric.ts, 21, 25))
->this.t : Symbol(t, Decl(classAbstractGeneric.ts, 0, 21))
+>foo : Symbol(G.foo, Decl(classAbstractGeneric.ts, 21, 25))
+>this.t : Symbol(A.t, Decl(classAbstractGeneric.ts, 0, 21))
 >this : Symbol(G, Decl(classAbstractGeneric.ts, 19, 1))
->t : Symbol(t, Decl(classAbstractGeneric.ts, 0, 21))
+>t : Symbol(A.t, Decl(classAbstractGeneric.ts, 0, 21))
 
     bar(t: T) { }
->bar : Symbol(bar, Decl(classAbstractGeneric.ts, 22, 28))
+>bar : Symbol(G.bar, Decl(classAbstractGeneric.ts, 22, 28))
 >t : Symbol(t, Decl(classAbstractGeneric.ts, 23, 8))
 >T : Symbol(T, Decl(classAbstractGeneric.ts, 21, 8))
 }

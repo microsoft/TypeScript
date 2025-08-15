@@ -30,9 +30,9 @@ const MyComponent2 = () => null;
  * @type {MyComponentProps}
  */
 MyComponent2.defaultProps = {
->MyComponent2.defaultProps : Symbol(defaultProps, Decl(input.js, 15, 32))
+>MyComponent2.defaultProps : Symbol(MyComponent2.defaultProps, Decl(input.js, 15, 32))
 >MyComponent2 : Symbol(MyComponent2, Decl(input.js, 15, 5))
->defaultProps : Symbol(defaultProps, Decl(input.js, 15, 32))
+>defaultProps : Symbol(MyComponent2.defaultProps, Decl(input.js, 15, 32))
 
     color: "red"
 >color : Symbol(color, Decl(input.js, 20, 29))

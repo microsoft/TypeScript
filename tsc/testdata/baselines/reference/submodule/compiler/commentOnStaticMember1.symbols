@@ -6,6 +6,6 @@ class Greeter {
 
     //Hello World
     static foo(){
->foo : Symbol(foo, Decl(commentOnStaticMember1.ts, 0, 15))
+>foo : Symbol(Greeter.foo, Decl(commentOnStaticMember1.ts, 0, 15))
     }
 }

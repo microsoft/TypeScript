@@ -11,17 +11,17 @@ let render = new Render();
 >Render : Symbol(Render, Decl(test.js, 0, 7))
 
 render.addRectangle();
->render.addRectangle : Symbol(addRectangle, Decl(index.js, 9, 5))
+>render.addRectangle : Symbol(Render.addRectangle, Decl(index.js, 9, 5))
 >render : Symbol(render, Decl(test.js, 1, 3))
->addRectangle : Symbol(addRectangle, Decl(index.js, 9, 5))
+>addRectangle : Symbol(Render.addRectangle, Decl(index.js, 9, 5))
 
 console.log("Objects", render.objects);
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
->render.objects : Symbol(objects, Decl(index.js, 3, 19))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>render.objects : Symbol(Render.objects, Decl(index.js, 3, 19))
 >render : Symbol(render, Decl(test.js, 1, 3))
->objects : Symbol(objects, Decl(index.js, 3, 19))
+>objects : Symbol(Render.objects, Decl(index.js, 3, 19))
 
 === rectangle.js ===
 class Rectangle {
@@ -29,9 +29,9 @@ class Rectangle {
 
     constructor() {
         console.log("I'm a rectangle!");
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
     }
 }
 
@@ -56,9 +56,9 @@ class Render {
          * @type {Rectangle[]}
          */
         this.objects = [];
->this.objects : Symbol(objects, Decl(index.js, 3, 19))
+>this.objects : Symbol(Render.objects, Decl(index.js, 3, 19))
 >this : Symbol(Render, Decl(index.js, 0, 43))
->objects : Symbol(objects, Decl(index.js, 3, 19))
+>objects : Symbol(Render.objects, Decl(index.js, 3, 19))
     }
     /**
      * Adds a rectangle
@@ -66,18 +66,18 @@ class Render {
      * @returns {Rectangle} the rect
      */
     addRectangle() {
->addRectangle : Symbol(addRectangle, Decl(index.js, 9, 5))
+>addRectangle : Symbol(Render.addRectangle, Decl(index.js, 9, 5))
 
         const obj = new Rectangle();
 >obj : Symbol(obj, Decl(index.js, 16, 13))
 >Rectangle : Symbol(Rectangle, Decl(index.js, 0, 7))
 
         this.objects.push(obj);
->this.objects.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
->this.objects : Symbol(objects, Decl(index.js, 3, 19))
+>this.objects.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>this.objects : Symbol(Render.objects, Decl(index.js, 3, 19))
 >this : Symbol(Render, Decl(index.js, 0, 43))
->objects : Symbol(objects, Decl(index.js, 3, 19))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>objects : Symbol(Render.objects, Decl(index.js, 3, 19))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >obj : Symbol(obj, Decl(index.js, 16, 13))
 
         return obj;

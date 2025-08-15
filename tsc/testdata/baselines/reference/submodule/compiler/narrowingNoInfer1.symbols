@@ -35,9 +35,9 @@ function map<A, B>(items: readonly A[], f: (a: NoInfer<A>) => B) {
 >B : Symbol(B, Decl(narrowingNoInfer1.ts, 9, 15))
 
   return items.map(f);
->items.map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+>items.map : Symbol(ReadonlyArray.map, Decl(lib.es5.d.ts, --, --))
 >items : Symbol(items, Decl(narrowingNoInfer1.ts, 9, 19))
->map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(ReadonlyArray.map, Decl(lib.es5.d.ts, --, --))
 >f : Symbol(f, Decl(narrowingNoInfer1.ts, 9, 39))
 }
 

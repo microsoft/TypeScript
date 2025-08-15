@@ -6,7 +6,7 @@ class C<T> {
 >T : Symbol(T, Decl(superWithTypeArgument2.ts, 0, 8))
 
     foo: T;
->foo : Symbol(foo, Decl(superWithTypeArgument2.ts, 0, 12))
+>foo : Symbol(C.foo, Decl(superWithTypeArgument2.ts, 0, 12))
 >T : Symbol(T, Decl(superWithTypeArgument2.ts, 0, 8))
 }
 

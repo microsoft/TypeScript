@@ -6,7 +6,7 @@ interface Covariant<T> {
 >T : Symbol(T, Decl(conditionalTypes2.ts, 0, 20))
 
     foo: T extends string ? T : number;
->foo : Symbol(foo, Decl(conditionalTypes2.ts, 0, 24))
+>foo : Symbol(Covariant.foo, Decl(conditionalTypes2.ts, 0, 24))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 0, 20))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 0, 20))
 }
@@ -16,7 +16,7 @@ interface Contravariant<T> {
 >T : Symbol(T, Decl(conditionalTypes2.ts, 4, 24))
 
     foo: T extends string ? keyof T : number;
->foo : Symbol(foo, Decl(conditionalTypes2.ts, 4, 28))
+>foo : Symbol(Contravariant.foo, Decl(conditionalTypes2.ts, 4, 28))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 4, 24))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 4, 24))
 }
@@ -26,7 +26,7 @@ interface Invariant<T> {
 >T : Symbol(T, Decl(conditionalTypes2.ts, 8, 20))
 
     foo: T extends string ? keyof T : T;
->foo : Symbol(foo, Decl(conditionalTypes2.ts, 8, 24))
+>foo : Symbol(Invariant.foo, Decl(conditionalTypes2.ts, 8, 24))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 8, 20))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 8, 20))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 8, 20))
@@ -279,7 +279,7 @@ class Opt<T> {
 >T : Symbol(T, Decl(conditionalTypes2.ts, 79, 10))
 
     toVector(): Vector<T> {
->toVector : Symbol(toVector, Decl(conditionalTypes2.ts, 79, 14))
+>toVector : Symbol(Opt.toVector, Decl(conditionalTypes2.ts, 79, 14))
 >Vector : Symbol(Vector, Decl(conditionalTypes2.ts, 87, 1))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 79, 10))
 
@@ -293,7 +293,7 @@ interface Seq<T> {
 >T : Symbol(T, Decl(conditionalTypes2.ts, 85, 14))
 
     tail(): Opt<Seq<T>>;
->tail : Symbol(tail, Decl(conditionalTypes2.ts, 85, 18))
+>tail : Symbol(Seq.tail, Decl(conditionalTypes2.ts, 85, 18))
 >Opt : Symbol(Opt, Decl(conditionalTypes2.ts, 75, 1))
 >Seq : Symbol(Seq, Decl(conditionalTypes2.ts, 83, 1))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 85, 14))
@@ -306,7 +306,7 @@ class Vector<T> implements Seq<T> {
 >T : Symbol(T, Decl(conditionalTypes2.ts, 89, 13))
 
     tail(): Opt<Vector<T>> {
->tail : Symbol(tail, Decl(conditionalTypes2.ts, 89, 35))
+>tail : Symbol(Vector.tail, Decl(conditionalTypes2.ts, 89, 35))
 >Opt : Symbol(Opt, Decl(conditionalTypes2.ts, 75, 1))
 >Vector : Symbol(Vector, Decl(conditionalTypes2.ts, 87, 1))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 89, 13))
@@ -315,7 +315,7 @@ class Vector<T> implements Seq<T> {
 >undefined : Symbol(undefined)
     }
     partition2<U extends T>(predicate:(v:T)=>v is U): [Vector<U>,Vector<Exclude<T, U>>];
->partition2 : Symbol(partition2, Decl(conditionalTypes2.ts, 92, 5), Decl(conditionalTypes2.ts, 93, 88), Decl(conditionalTypes2.ts, 94, 64))
+>partition2 : Symbol(Vector.partition2, Decl(conditionalTypes2.ts, 92, 5), Decl(conditionalTypes2.ts, 93, 88), Decl(conditionalTypes2.ts, 94, 64))
 >U : Symbol(U, Decl(conditionalTypes2.ts, 93, 15))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 89, 13))
 >predicate : Symbol(predicate, Decl(conditionalTypes2.ts, 93, 28))
@@ -331,7 +331,7 @@ class Vector<T> implements Seq<T> {
 >U : Symbol(U, Decl(conditionalTypes2.ts, 93, 15))
 
     partition2(predicate:(x:T)=>boolean): [Vector<T>,Vector<T>];
->partition2 : Symbol(partition2, Decl(conditionalTypes2.ts, 92, 5), Decl(conditionalTypes2.ts, 93, 88), Decl(conditionalTypes2.ts, 94, 64))
+>partition2 : Symbol(Vector.partition2, Decl(conditionalTypes2.ts, 92, 5), Decl(conditionalTypes2.ts, 93, 88), Decl(conditionalTypes2.ts, 94, 64))
 >predicate : Symbol(predicate, Decl(conditionalTypes2.ts, 94, 15))
 >x : Symbol(x, Decl(conditionalTypes2.ts, 94, 26))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 89, 13))
@@ -341,7 +341,7 @@ class Vector<T> implements Seq<T> {
 >T : Symbol(T, Decl(conditionalTypes2.ts, 89, 13))
 
     partition2<U extends T>(predicate:(v:T)=>boolean): [Vector<U>,Vector<any>] {
->partition2 : Symbol(partition2, Decl(conditionalTypes2.ts, 92, 5), Decl(conditionalTypes2.ts, 93, 88), Decl(conditionalTypes2.ts, 94, 64))
+>partition2 : Symbol(Vector.partition2, Decl(conditionalTypes2.ts, 92, 5), Decl(conditionalTypes2.ts, 93, 88), Decl(conditionalTypes2.ts, 94, 64))
 >U : Symbol(U, Decl(conditionalTypes2.ts, 95, 15))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 89, 13))
 >predicate : Symbol(predicate, Decl(conditionalTypes2.ts, 95, 28))
@@ -361,7 +361,7 @@ interface A1<T> {
 >T : Symbol(T, Decl(conditionalTypes2.ts, 100, 13))
 
     bat: B1<A1<T>>;
->bat : Symbol(bat, Decl(conditionalTypes2.ts, 100, 17))
+>bat : Symbol(A1.bat, Decl(conditionalTypes2.ts, 100, 17))
 >B1 : Symbol(B1, Decl(conditionalTypes2.ts, 102, 1))
 >A1 : Symbol(A1, Decl(conditionalTypes2.ts, 98, 1))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 100, 13))
@@ -374,13 +374,13 @@ interface B1<T> extends A1<T> {
 >T : Symbol(T, Decl(conditionalTypes2.ts, 104, 13))
 
     bat: B1<B1<T>>;
->bat : Symbol(bat, Decl(conditionalTypes2.ts, 104, 31))
+>bat : Symbol(B1.bat, Decl(conditionalTypes2.ts, 104, 31))
 >B1 : Symbol(B1, Decl(conditionalTypes2.ts, 102, 1))
 >B1 : Symbol(B1, Decl(conditionalTypes2.ts, 102, 1))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 104, 13))
 
     boom: T extends any ? true : true
->boom : Symbol(boom, Decl(conditionalTypes2.ts, 105, 19))
+>boom : Symbol(B1.boom, Decl(conditionalTypes2.ts, 105, 19))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 104, 13))
 }
 
@@ -753,7 +753,7 @@ interface IRecord {
 >IRecord : Symbol(IRecord, Decl(conditionalTypes2.ts, 209, 79))
 
 	readonly Id: string;
->Id : Symbol(Id, Decl(conditionalTypes2.ts, 211, 19))
+>Id : Symbol(IRecord.Id, Decl(conditionalTypes2.ts, 211, 19))
 }
 
 declare type IRecordResponse<T extends IRecord> = IResponse<T> & {

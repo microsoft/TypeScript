@@ -6,5 +6,5 @@ class Foo3 {
 
   // Doesn't work, but should
   constructor (public ...args: string[]) { }
->args : Symbol(args, Decl(parser509668.ts, 2, 15))
+>args : Symbol(Foo3.args, Decl(parser509668.ts, 2, 15))
 }

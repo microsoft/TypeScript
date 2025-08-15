@@ -5,7 +5,7 @@ class C {
 >C : Symbol(C, Decl(optionalParameterProperty.ts, 0, 0))
 
     p: number;
->p : Symbol(p, Decl(optionalParameterProperty.ts, 0, 9))
+>p : Symbol(C.p, Decl(optionalParameterProperty.ts, 0, 9))
 }
 
 class D extends C { 
@@ -13,7 +13,7 @@ class D extends C {
 >C : Symbol(C, Decl(optionalParameterProperty.ts, 0, 0))
 
     constructor(public p?: number) {
->p : Symbol(p, Decl(optionalParameterProperty.ts, 5, 16))
+>p : Symbol(D.p, Decl(optionalParameterProperty.ts, 5, 16))
 
         super();
 >super : Symbol(C, Decl(optionalParameterProperty.ts, 0, 0))

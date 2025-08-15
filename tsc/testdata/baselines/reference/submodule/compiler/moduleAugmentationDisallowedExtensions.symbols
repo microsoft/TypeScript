@@ -43,7 +43,7 @@ declare module "./observable" {
 
     interface A { x }
 >A : Symbol(A, Decl(x.ts, 8, 118))
->x : Symbol(x, Decl(x.ts, 9, 17))
+>x : Symbol(A.x, Decl(x.ts, 9, 17))
 
     namespace N {
 >N : Symbol(N, Decl(x.ts, 9, 21))
@@ -85,7 +85,7 @@ export declare class Observable<T> {
 >T : Symbol(T, Decl(observable.ts, 0, 32))
 
     filter(pred: (e:T) => boolean): Observable<T>;
->filter : Symbol(filter, Decl(observable.ts, 0, 36))
+>filter : Symbol(Observable.filter, Decl(observable.ts, 0, 36))
 >pred : Symbol(pred, Decl(observable.ts, 1, 11))
 >e : Symbol(e, Decl(observable.ts, 1, 18))
 >T : Symbol(T, Decl(observable.ts, 0, 32))

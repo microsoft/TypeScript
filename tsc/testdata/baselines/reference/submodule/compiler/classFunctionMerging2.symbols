@@ -8,7 +8,7 @@ declare abstract class A {
 >p : Symbol(p, Decl(classFunctionMerging2.ts, 1, 16))
 
     a: number;
->a : Symbol(a, Decl(classFunctionMerging2.ts, 1, 27))
+>a : Symbol(A.a, Decl(classFunctionMerging2.ts, 1, 27))
 }
 
 declare function B(p: string): B;
@@ -24,7 +24,7 @@ declare class B extends A {
 >p : Symbol(p, Decl(classFunctionMerging2.ts, 7, 16))
 
     b: number;
->b : Symbol(b, Decl(classFunctionMerging2.ts, 7, 27))
+>b : Symbol(B.b, Decl(classFunctionMerging2.ts, 7, 27))
 }
 
 let b = new B("Hey")
@@ -32,10 +32,10 @@ let b = new B("Hey")
 >B : Symbol(B, Decl(classFunctionMerging2.ts, 3, 1), Decl(classFunctionMerging2.ts, 5, 33))
 
 console.log(b.a)
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
->b.a : Symbol(a, Decl(classFunctionMerging2.ts, 1, 27))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>b.a : Symbol(A.a, Decl(classFunctionMerging2.ts, 1, 27))
 >b : Symbol(b, Decl(classFunctionMerging2.ts, 11, 3))
->a : Symbol(a, Decl(classFunctionMerging2.ts, 1, 27))
+>a : Symbol(A.a, Decl(classFunctionMerging2.ts, 1, 27))
 

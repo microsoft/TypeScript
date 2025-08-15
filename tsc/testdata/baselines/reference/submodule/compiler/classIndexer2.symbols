@@ -8,10 +8,10 @@ class C123 {
 >s : Symbol(s, Decl(classIndexer2.ts, 1, 5))
 
     x: number;
->x : Symbol(x, Decl(classIndexer2.ts, 1, 24))
+>x : Symbol(C123.x, Decl(classIndexer2.ts, 1, 24))
 
     y: string;
->y : Symbol(y, Decl(classIndexer2.ts, 2, 14))
+>y : Symbol(C123.y, Decl(classIndexer2.ts, 2, 14))
 
     constructor() {
     }

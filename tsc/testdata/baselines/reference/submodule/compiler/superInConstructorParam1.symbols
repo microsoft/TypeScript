@@ -5,7 +5,7 @@ class B {
 >B : Symbol(B, Decl(superInConstructorParam1.ts, 0, 0))
 
   public foo(): number {
->foo : Symbol(foo, Decl(superInConstructorParam1.ts, 0, 9))
+>foo : Symbol(B.foo, Decl(superInConstructorParam1.ts, 0, 9))
 
     return 0;
   }

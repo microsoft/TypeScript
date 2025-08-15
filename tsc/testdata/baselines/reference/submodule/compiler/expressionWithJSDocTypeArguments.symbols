@@ -14,7 +14,7 @@ function foo<T>(x: T): T { return x }
 class Bar<T> { constructor(public x: T) { } }
 >Bar : Symbol(Bar, Decl(expressionWithJSDocTypeArguments.ts, 2, 37))
 >T : Symbol(T, Decl(expressionWithJSDocTypeArguments.ts, 4, 10))
->x : Symbol(x, Decl(expressionWithJSDocTypeArguments.ts, 4, 27))
+>x : Symbol(Bar.x, Decl(expressionWithJSDocTypeArguments.ts, 4, 27))
 >T : Symbol(T, Decl(expressionWithJSDocTypeArguments.ts, 4, 10))
 
 // Errors expected on all of the following

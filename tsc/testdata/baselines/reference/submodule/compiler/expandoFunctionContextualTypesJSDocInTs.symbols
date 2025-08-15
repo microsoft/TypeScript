@@ -7,7 +7,7 @@ export function Foo() { }
 // This comment should have no effect; this is a TS file.
 /** @type {never} */
 Foo.bar = () => { };
->Foo.bar : Symbol(bar, Decl(expandoFunctionContextualTypesJSDocInTs.ts, 0, 25))
+>Foo.bar : Symbol(Foo.bar, Decl(expandoFunctionContextualTypesJSDocInTs.ts, 0, 25))
 >Foo : Symbol(Foo, Decl(expandoFunctionContextualTypesJSDocInTs.ts, 0, 0))
->bar : Symbol(bar, Decl(expandoFunctionContextualTypesJSDocInTs.ts, 0, 25))
+>bar : Symbol(Foo.bar, Decl(expandoFunctionContextualTypesJSDocInTs.ts, 0, 25))
 

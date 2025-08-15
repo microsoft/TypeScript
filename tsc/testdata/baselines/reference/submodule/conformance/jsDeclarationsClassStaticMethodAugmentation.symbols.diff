@@ -9,7 +9,7 @@
 
      static method() { }
 ->method : Symbol(Clazz.method, Decl(source.js, 0, 20), Decl(source.js, 4, 6))
-+>method : Symbol(method, Decl(source.js, 0, 20))
++>method : Symbol(Clazz.method, Decl(source.js, 0, 20))
  }
 
  Clazz.method.prop = 5;
@@ -18,6 +18,6 @@
 ->Clazz : Symbol(Clazz, Decl(source.js, 0, 0), Decl(source.js, 2, 1))
 ->method : Symbol(Clazz.method, Decl(source.js, 0, 20), Decl(source.js, 4, 6))
 ->prop : Symbol(Clazz.method.prop, Decl(source.js, 2, 1))
-+>Clazz.method : Symbol(method, Decl(source.js, 0, 20))
++>Clazz.method : Symbol(Clazz.method, Decl(source.js, 0, 20))
 +>Clazz : Symbol(Clazz, Decl(source.js, 0, 0))
-+>method : Symbol(method, Decl(source.js, 0, 20))
++>method : Symbol(Clazz.method, Decl(source.js, 0, 20))

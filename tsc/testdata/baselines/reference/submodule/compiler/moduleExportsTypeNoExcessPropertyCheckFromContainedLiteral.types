@@ -8,16 +8,16 @@ const eslintReact = require('./eslint-plugin-react.js');
 >'./eslint-plugin-react.js' : "./eslint-plugin-react.js"
 
 const tseslint = require('./typescript-eslint.js');
->tseslint : { config: (...configs: import("./typescript-eslint.js").Config[]) => void; }
->require('./typescript-eslint.js') : { config: (...configs: import("./typescript-eslint.js").Config[]) => void; }
+>tseslint : { config: (...configs: import("typescript-eslint").Config[]) => void; }
+>require('./typescript-eslint.js') : { config: (...configs: import("typescript-eslint").Config[]) => void; }
 >require : any
 >'./typescript-eslint.js' : "./typescript-eslint.js"
 
 tseslint.config(eslintReact)
 >tseslint.config(eslintReact) : void
->tseslint.config : (...configs: import("./typescript-eslint.js").Config[]) => void
->tseslint : { config: (...configs: import("./typescript-eslint.js").Config[]) => void; }
->config : (...configs: import("./typescript-eslint.js").Config[]) => void
+>tseslint.config : (...configs: import("typescript-eslint").Config[]) => void
+>tseslint : { config: (...configs: import("typescript-eslint").Config[]) => void; }
+>config : (...configs: import("typescript-eslint").Config[]) => void
 >eslintReact : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { "no-unsafe": boolean; }; }; }; }
 
 === eslint-plugin-react.js ===

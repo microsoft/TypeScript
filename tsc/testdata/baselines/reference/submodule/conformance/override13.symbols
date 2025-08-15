@@ -5,10 +5,10 @@ class Foo {
 >Foo : Symbol(Foo, Decl(override13.ts, 0, 0))
 
     property = 1
->property : Symbol(property, Decl(override13.ts, 0, 11))
+>property : Symbol(Foo.property, Decl(override13.ts, 0, 11))
 
     static staticProperty = 2
->staticProperty : Symbol(staticProperty, Decl(override13.ts, 1, 16))
+>staticProperty : Symbol(Foo.staticProperty, Decl(override13.ts, 1, 16))
 }
 
 class SubFoo extends Foo {
@@ -16,10 +16,10 @@ class SubFoo extends Foo {
 >Foo : Symbol(Foo, Decl(override13.ts, 0, 0))
 
     property = 42;
->property : Symbol(property, Decl(override13.ts, 5, 26))
+>property : Symbol(SubFoo.property, Decl(override13.ts, 5, 26))
 
     staticProperty = 42;
->staticProperty : Symbol(staticProperty, Decl(override13.ts, 6, 18))
+>staticProperty : Symbol(SubFoo.staticProperty, Decl(override13.ts, 6, 18))
 }
 
 class StaticSubFoo extends Foo {
@@ -27,10 +27,10 @@ class StaticSubFoo extends Foo {
 >Foo : Symbol(Foo, Decl(override13.ts, 0, 0))
 
     static property = 42;
->property : Symbol(property, Decl(override13.ts, 10, 32))
+>property : Symbol(StaticSubFoo.property, Decl(override13.ts, 10, 32))
 
     static staticProperty = 42;
->staticProperty : Symbol(staticProperty, Decl(override13.ts, 11, 25))
+>staticProperty : Symbol(StaticSubFoo.staticProperty, Decl(override13.ts, 11, 25))
 }
 
 class Intermediate extends Foo {}
@@ -42,10 +42,10 @@ class Derived extends Intermediate {
 >Intermediate : Symbol(Intermediate, Decl(override13.ts, 13, 1))
 
     property = 42;
->property : Symbol(property, Decl(override13.ts, 17, 36))
+>property : Symbol(Derived.property, Decl(override13.ts, 17, 36))
 
     staticProperty = 42;
->staticProperty : Symbol(staticProperty, Decl(override13.ts, 18, 18))
+>staticProperty : Symbol(Derived.staticProperty, Decl(override13.ts, 18, 18))
 }
 
 class StaticDerived extends Intermediate {
@@ -53,8 +53,8 @@ class StaticDerived extends Intermediate {
 >Intermediate : Symbol(Intermediate, Decl(override13.ts, 13, 1))
 
     static property = 42;
->property : Symbol(property, Decl(override13.ts, 22, 42))
+>property : Symbol(StaticDerived.property, Decl(override13.ts, 22, 42))
 
     static staticProperty = 42;
->staticProperty : Symbol(staticProperty, Decl(override13.ts, 23, 25))
+>staticProperty : Symbol(StaticDerived.staticProperty, Decl(override13.ts, 23, 25))
 }

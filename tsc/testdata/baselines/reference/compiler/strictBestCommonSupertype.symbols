@@ -8,7 +8,7 @@ class Store<T = object> {
 >T : Symbol(T, Decl(strictBestCommonSupertype.ts, 2, 12))
 
     select<K>(mapFn: (state: T) => K) {};
->select : Symbol(select, Decl(strictBestCommonSupertype.ts, 2, 25))
+>select : Symbol(Store.select, Decl(strictBestCommonSupertype.ts, 2, 25))
 >K : Symbol(K, Decl(strictBestCommonSupertype.ts, 3, 11))
 >mapFn : Symbol(mapFn, Decl(strictBestCommonSupertype.ts, 3, 14))
 >state : Symbol(state, Decl(strictBestCommonSupertype.ts, 3, 22))
@@ -58,7 +58,7 @@ interface AbstractType<T> extends Function {
 >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     prototype: T;
->prototype : Symbol(prototype, Decl(strictBestCommonSupertype.ts, 18, 44))
+>prototype : Symbol(AbstractType.prototype, Decl(strictBestCommonSupertype.ts, 18, 44))
 >T : Symbol(T, Decl(strictBestCommonSupertype.ts, 18, 23))
 }
 

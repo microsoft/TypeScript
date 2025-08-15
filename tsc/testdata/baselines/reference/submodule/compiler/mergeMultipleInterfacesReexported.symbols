@@ -21,7 +21,7 @@ export interface EventList {
 >EventList : Symbol(EventList, Decl(eventList.ts, 0, 0), Decl(foo.ts, 0, 26), Decl(bar.ts, 0, 26))
 
     p0: [];
->p0 : Symbol(p0, Decl(eventList.ts, 0, 28))
+>p0 : Symbol(EventList.p0, Decl(eventList.ts, 0, 28))
 }
 
 === foo.ts ===
@@ -32,7 +32,7 @@ declare module './index' {
 >EventList : Symbol(EventList, Decl(eventList.ts, 0, 0), Decl(foo.ts, 0, 26), Decl(bar.ts, 0, 26))
 
         p1: []
->p1 : Symbol(p1, Decl(foo.ts, 1, 25))
+>p1 : Symbol(EventList.p1, Decl(foo.ts, 1, 25))
     }
 }
 export {};
@@ -46,7 +46,7 @@ declare module './index' {
 >EventList : Symbol(EventList, Decl(eventList.ts, 0, 0), Decl(foo.ts, 0, 26), Decl(bar.ts, 0, 26))
 
         p2: []
->p2 : Symbol(p2, Decl(bar.ts, 1, 25))
+>p2 : Symbol(EventList.p2, Decl(bar.ts, 1, 25))
     }
 }
 export {};

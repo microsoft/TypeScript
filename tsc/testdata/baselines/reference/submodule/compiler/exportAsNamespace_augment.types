@@ -2,7 +2,7 @@
 
 === /a.d.ts ===
 export as namespace a;
->a : typeof import("./a")
+>a : typeof import("/a")
 
 export const x = 0;
 >x : 0

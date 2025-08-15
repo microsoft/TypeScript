@@ -5,19 +5,17 @@
  exports.equal = myAssert.equal
  >exports.equal = myAssert.equal : any
 ->exports.equal : error
-->exports : typeof import("app")
 +>exports.equal : any
-+>exports : typeof import("./app")
+ >exports : typeof import("app")
  >equal : any
  >myAssert.equal : any
- >myAssert : any
+@@= skipped -8, +8 lines =@@
  >equal : any
 
  exports.equal()
 ->exports.equal() : error
 ->exports.equal : error
-->exports : typeof import("app")
 +>exports.equal() : any
 +>exports.equal : any
-+>exports : typeof import("./app")
+ >exports : typeof import("app")
  >equal : any

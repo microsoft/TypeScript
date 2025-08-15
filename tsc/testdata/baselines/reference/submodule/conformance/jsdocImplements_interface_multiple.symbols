@@ -5,13 +5,13 @@ interface Drawable {
 >Drawable : Symbol(Drawable, Decl(defs.d.ts, 0, 0))
 
     draw(): number;
->draw : Symbol(draw, Decl(defs.d.ts, 0, 20))
+>draw : Symbol(Drawable.draw, Decl(defs.d.ts, 0, 20))
 }
 interface Sizable {
 >Sizable : Symbol(Sizable, Decl(defs.d.ts, 2, 1))
 
     size(): number;
->size : Symbol(size, Decl(defs.d.ts, 3, 19))
+>size : Symbol(Sizable.size, Decl(defs.d.ts, 3, 19))
 }
 === /a.js ===
 /** 
@@ -22,12 +22,12 @@ class Square {
 >Square : Symbol(Square, Decl(a.js, 0, 0))
 
     draw() {
->draw : Symbol(draw, Decl(a.js, 4, 14))
+>draw : Symbol(Square.draw, Decl(a.js, 4, 14))
 
         return 0;
     }
     size() {
->size : Symbol(size, Decl(a.js, 7, 5))
+>size : Symbol(Square.size, Decl(a.js, 7, 5))
 
         return 0;
     }
@@ -40,7 +40,7 @@ class BadSquare {
 >BadSquare : Symbol(BadSquare, Decl(a.js, 11, 1))
 
     size() {
->size : Symbol(size, Decl(a.js, 16, 17))
+>size : Symbol(BadSquare.size, Decl(a.js, 16, 17))
 
         return 0;
     }

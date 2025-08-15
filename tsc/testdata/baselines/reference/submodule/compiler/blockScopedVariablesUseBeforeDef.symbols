@@ -41,7 +41,7 @@ function foo3() {
 >X : Symbol(X, Decl(blockScopedVariablesUseBeforeDef.ts, 15, 17))
 
         m() { return x;}
->m : Symbol(m, Decl(blockScopedVariablesUseBeforeDef.ts, 16, 13))
+>m : Symbol(X.m, Decl(blockScopedVariablesUseBeforeDef.ts, 16, 13))
 >x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 19, 7))
     }
     let x;
@@ -55,7 +55,7 @@ function foo4() {
 >y : Symbol(y, Decl(blockScopedVariablesUseBeforeDef.ts, 23, 7))
 
         m() { return x; }
->m : Symbol(m, Decl(blockScopedVariablesUseBeforeDef.ts, 23, 19))
+>m : Symbol(y.m, Decl(blockScopedVariablesUseBeforeDef.ts, 23, 19))
 >x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 26, 7))
 
     };
@@ -95,7 +95,7 @@ function foo7() {
 >A : Symbol(A, Decl(blockScopedVariablesUseBeforeDef.ts, 41, 17))
 
         a = x;
->a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 42, 13))
+>a : Symbol(A.a, Decl(blockScopedVariablesUseBeforeDef.ts, 42, 13))
 >x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 45, 7))
     }
     let x;
@@ -109,7 +109,7 @@ function foo8() {
 >y : Symbol(y, Decl(blockScopedVariablesUseBeforeDef.ts, 49, 7))
 
         a = x;
->a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 49, 19))
+>a : Symbol(y.a, Decl(blockScopedVariablesUseBeforeDef.ts, 49, 19))
 >x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 52, 7))
     }
     let x;
@@ -123,7 +123,7 @@ function foo9() {
 >y : Symbol(y, Decl(blockScopedVariablesUseBeforeDef.ts, 56, 7))
 
         static a = x;
->a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 56, 19))
+>a : Symbol(y.a, Decl(blockScopedVariablesUseBeforeDef.ts, 56, 19))
 >x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 59, 7))
     }
     let x;
@@ -137,7 +137,7 @@ function foo10() {
 >A : Symbol(A, Decl(blockScopedVariablesUseBeforeDef.ts, 62, 18))
 
         static a = x;
->a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 63, 13))
+>a : Symbol(A.a, Decl(blockScopedVariablesUseBeforeDef.ts, 63, 13))
 >x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 66, 7))
     }
     let x;
@@ -154,7 +154,7 @@ function foo11() {
 >y : Symbol(y, Decl(blockScopedVariablesUseBeforeDef.ts, 71, 11))
 
             static a = x;
->a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 71, 23))
+>a : Symbol(y.a, Decl(blockScopedVariablesUseBeforeDef.ts, 71, 23))
 >x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 75, 7))
         }
     }
@@ -172,13 +172,13 @@ function foo12() {
 >y : Symbol(y, Decl(blockScopedVariablesUseBeforeDef.ts, 80, 11))
 
             a;
->a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 80, 23))
+>a : Symbol(y.a, Decl(blockScopedVariablesUseBeforeDef.ts, 80, 23))
 
             constructor() {
                 this.a = x;
->this.a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 80, 23))
+>this.a : Symbol(y.a, Decl(blockScopedVariablesUseBeforeDef.ts, 80, 23))
 >this : Symbol(y, Decl(blockScopedVariablesUseBeforeDef.ts, 80, 15))
->a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 80, 23))
+>a : Symbol(y.a, Decl(blockScopedVariablesUseBeforeDef.ts, 80, 23))
 >x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 87, 7))
             }
         }
@@ -228,15 +228,15 @@ function foo15() {
 
     ] = ((): [number, number] => {
         (() => console.log(a))();  // should error
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 106, 11))
 
         console.log(a);            // should error
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 106, 11))
 
         const b = () => a;         // should be ok

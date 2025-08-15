@@ -52,11 +52,11 @@ interface Action<TName extends string,TPayload> {
 >TPayload : Symbol(TPayload, Decl(coAndContraVariantInferences.ts, 15, 38))
 
     name: TName,
->name : Symbol(name, Decl(coAndContraVariantInferences.ts, 15, 49))
+>name : Symbol(Action.name, Decl(coAndContraVariantInferences.ts, 15, 49))
 >TName : Symbol(TName, Decl(coAndContraVariantInferences.ts, 15, 17))
 
     payload: TPayload
->payload : Symbol(payload, Decl(coAndContraVariantInferences.ts, 16, 16))
+>payload : Symbol(Action.payload, Decl(coAndContraVariantInferences.ts, 16, 16))
 >TPayload : Symbol(TPayload, Decl(coAndContraVariantInferences.ts, 15, 38))
 }
 
@@ -99,9 +99,9 @@ const printFn = (action: typeof actionA | typeof actionB)=> console.log(action);
 >action : Symbol(action, Decl(coAndContraVariantInferences.ts, 30, 17))
 >actionA : Symbol(actionA, Decl(coAndContraVariantInferences.ts, 20, 5))
 >actionB : Symbol(actionB, Decl(coAndContraVariantInferences.ts, 21, 5))
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >action : Symbol(action, Decl(coAndContraVariantInferences.ts, 30, 17))
 
 call(actionA, printFn);

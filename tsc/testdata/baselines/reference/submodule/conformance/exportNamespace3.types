@@ -6,11 +6,11 @@ export class A {}
 
 === b.ts ===
 export type { A } from './a';
->A : import("./a").A
+>A : import("a").A
 
 === c.ts ===
 export * as a from './b';
->a : typeof import("./b")
+>a : typeof import("b")
 
 === d.ts ===
 import { a } from './c';

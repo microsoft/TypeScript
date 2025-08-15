@@ -8,7 +8,7 @@ class A {
 >f : Symbol(f, Decl(superPropertyAccessInSuperCall01.ts, 1, 13))
 	}
 	public blah(): string { return ""; }
->blah : Symbol(blah, Decl(superPropertyAccessInSuperCall01.ts, 2, 2))
+>blah : Symbol(A.blah, Decl(superPropertyAccessInSuperCall01.ts, 2, 2))
 }
 
 class B extends A {
@@ -18,8 +18,8 @@ class B extends A {
 	constructor() {
 		super(super.blah())
 >super : Symbol(A, Decl(superPropertyAccessInSuperCall01.ts, 0, 0))
->super.blah : Symbol(blah, Decl(superPropertyAccessInSuperCall01.ts, 2, 2))
+>super.blah : Symbol(A.blah, Decl(superPropertyAccessInSuperCall01.ts, 2, 2))
 >super : Symbol(A, Decl(superPropertyAccessInSuperCall01.ts, 0, 0))
->blah : Symbol(blah, Decl(superPropertyAccessInSuperCall01.ts, 2, 2))
+>blah : Symbol(A.blah, Decl(superPropertyAccessInSuperCall01.ts, 2, 2))
 	}
 }

@@ -5,7 +5,7 @@ class C {
 >C : Symbol(C, Decl(mod1.js, 0, 0))
 
     s() { }
->s : Symbol(s, Decl(mod1.js, 0, 9))
+>s : Symbol(C.s, Decl(mod1.js, 0, 9))
 }
 module.exports.C = C
 >module.exports.C : Symbol(C, Decl(mod1.js, 2, 1))

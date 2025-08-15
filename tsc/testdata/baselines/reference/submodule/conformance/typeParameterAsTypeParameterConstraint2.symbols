@@ -27,7 +27,7 @@ interface NumberVariant extends Number {
 >Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     x: number;
->x : Symbol(x, Decl(typeParameterAsTypeParameterConstraint2.ts, 8, 40))
+>x : Symbol(NumberVariant.x, Decl(typeParameterAsTypeParameterConstraint2.ts, 8, 40))
 }
 var n: NumberVariant;
 >n : Symbol(n, Decl(typeParameterAsTypeParameterConstraint2.ts, 11, 3))

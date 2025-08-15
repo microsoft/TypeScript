@@ -7,7 +7,7 @@ const {
 >grey : {}
 
 } = require('./mod1');
->require('./mod1') : typeof import("./mod1")
+>require('./mod1') : typeof import("mod1")
 >require : any
 >'./mod1' : "./mod1"
 
@@ -30,9 +30,9 @@ const chalk = {
 module.exports.chalk = chalk
 >module.exports.chalk = chalk : { grey: {}; }
 >module.exports.chalk : { grey: {}; }
->module.exports : typeof import("./mod1")
->module : { "\"mod1\"": typeof import("./mod1"); }
->exports : typeof import("./mod1")
+>module.exports : typeof import("mod1")
+>module : { "\"mod1\"": typeof import("mod1"); }
+>exports : typeof import("mod1")
 >chalk : { grey: {}; }
 >chalk : { grey: {}; }
 

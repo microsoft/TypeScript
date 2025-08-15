@@ -6,6 +6,6 @@ class foo<T> {
 >T : Symbol(T, Decl(typeParametersInStaticProperties.ts, 0, 10))
 
     static P: T;
->P : Symbol(P, Decl(typeParametersInStaticProperties.ts, 0, 14))
+>P : Symbol(foo.P, Decl(typeParametersInStaticProperties.ts, 0, 14))
 >T : Symbol(T)
 } 

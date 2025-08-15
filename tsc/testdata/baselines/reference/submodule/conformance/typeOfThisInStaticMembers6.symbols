@@ -5,7 +5,7 @@ class C {
 >C : Symbol(C, Decl(typeOfThisInStaticMembers6.ts, 0, 0))
 
     static f = 1
->f : Symbol(f, Decl(typeOfThisInStaticMembers6.ts, 0, 9))
+>f : Symbol(C.f, Decl(typeOfThisInStaticMembers6.ts, 0, 9))
 }
 
 class D extends C {
@@ -13,6 +13,6 @@ class D extends C {
 >C : Symbol(C, Decl(typeOfThisInStaticMembers6.ts, 0, 0))
 
     static c = super();
->c : Symbol(c, Decl(typeOfThisInStaticMembers6.ts, 4, 19))
+>c : Symbol(D.c, Decl(typeOfThisInStaticMembers6.ts, 4, 19))
 }
 

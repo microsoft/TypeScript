@@ -6,7 +6,7 @@ interface Comparable<T> {
 >T : Symbol(T, Decl(genericAssignmentCompatWithInterfaces1.ts, 0, 21))
 
    compareTo(other: T): number;
->compareTo : Symbol(compareTo, Decl(genericAssignmentCompatWithInterfaces1.ts, 0, 25))
+>compareTo : Symbol(Comparable.compareTo, Decl(genericAssignmentCompatWithInterfaces1.ts, 0, 25))
 >other : Symbol(other, Decl(genericAssignmentCompatWithInterfaces1.ts, 1, 13))
 >T : Symbol(T, Decl(genericAssignmentCompatWithInterfaces1.ts, 0, 21))
 }
@@ -15,7 +15,7 @@ interface I<T> {
 >T : Symbol(T, Decl(genericAssignmentCompatWithInterfaces1.ts, 3, 12))
 
     x: Comparable<T>;
->x : Symbol(x, Decl(genericAssignmentCompatWithInterfaces1.ts, 3, 16))
+>x : Symbol(I.x, Decl(genericAssignmentCompatWithInterfaces1.ts, 3, 16))
 >Comparable : Symbol(Comparable, Decl(genericAssignmentCompatWithInterfaces1.ts, 0, 0))
 >T : Symbol(T, Decl(genericAssignmentCompatWithInterfaces1.ts, 3, 12))
 }
@@ -24,7 +24,7 @@ interface K<T> {
 >T : Symbol(T, Decl(genericAssignmentCompatWithInterfaces1.ts, 6, 12))
 
    x: A<T>;
->x : Symbol(x, Decl(genericAssignmentCompatWithInterfaces1.ts, 6, 16))
+>x : Symbol(K.x, Decl(genericAssignmentCompatWithInterfaces1.ts, 6, 16))
 >A : Symbol(A, Decl(genericAssignmentCompatWithInterfaces1.ts, 8, 1))
 >T : Symbol(T, Decl(genericAssignmentCompatWithInterfaces1.ts, 6, 12))
 }
@@ -33,7 +33,7 @@ class A<T> implements Comparable<T> { compareTo(other: T) { return 1; } }
 >T : Symbol(T, Decl(genericAssignmentCompatWithInterfaces1.ts, 9, 8))
 >Comparable : Symbol(Comparable, Decl(genericAssignmentCompatWithInterfaces1.ts, 0, 0))
 >T : Symbol(T, Decl(genericAssignmentCompatWithInterfaces1.ts, 9, 8))
->compareTo : Symbol(compareTo, Decl(genericAssignmentCompatWithInterfaces1.ts, 9, 37))
+>compareTo : Symbol(A.compareTo, Decl(genericAssignmentCompatWithInterfaces1.ts, 9, 37))
 >other : Symbol(other, Decl(genericAssignmentCompatWithInterfaces1.ts, 9, 48))
 >T : Symbol(T, Decl(genericAssignmentCompatWithInterfaces1.ts, 9, 8))
 

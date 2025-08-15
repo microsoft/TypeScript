@@ -8,7 +8,7 @@ module NonGeneric {
 >C : Symbol(C, Decl(constructorHasPrototypeProperty.ts, 0, 19))
 
         foo: string;
->foo : Symbol(foo, Decl(constructorHasPrototypeProperty.ts, 1, 13))
+>foo : Symbol(C.foo, Decl(constructorHasPrototypeProperty.ts, 1, 13))
     }
 
     class D extends C {
@@ -16,30 +16,30 @@ module NonGeneric {
 >C : Symbol(C, Decl(constructorHasPrototypeProperty.ts, 0, 19))
 
         bar: string;
->bar : Symbol(bar, Decl(constructorHasPrototypeProperty.ts, 5, 23))
+>bar : Symbol(D.bar, Decl(constructorHasPrototypeProperty.ts, 5, 23))
     }
 
     var r = C.prototype;
 >r : Symbol(r, Decl(constructorHasPrototypeProperty.ts, 9, 7))
->C.prototype : Symbol(prototype)
+>C.prototype : Symbol(C.prototype)
 >C : Symbol(C, Decl(constructorHasPrototypeProperty.ts, 0, 19))
->prototype : Symbol(prototype)
+>prototype : Symbol(C.prototype)
 
     r.foo;
->r.foo : Symbol(foo, Decl(constructorHasPrototypeProperty.ts, 1, 13))
+>r.foo : Symbol(C.foo, Decl(constructorHasPrototypeProperty.ts, 1, 13))
 >r : Symbol(r, Decl(constructorHasPrototypeProperty.ts, 9, 7))
->foo : Symbol(foo, Decl(constructorHasPrototypeProperty.ts, 1, 13))
+>foo : Symbol(C.foo, Decl(constructorHasPrototypeProperty.ts, 1, 13))
 
     var r2 = D.prototype;
 >r2 : Symbol(r2, Decl(constructorHasPrototypeProperty.ts, 11, 7))
->D.prototype : Symbol(prototype)
+>D.prototype : Symbol(D.prototype)
 >D : Symbol(D, Decl(constructorHasPrototypeProperty.ts, 3, 5))
->prototype : Symbol(prototype)
+>prototype : Symbol(D.prototype)
 
     r2.bar;
->r2.bar : Symbol(bar, Decl(constructorHasPrototypeProperty.ts, 5, 23))
+>r2.bar : Symbol(D.bar, Decl(constructorHasPrototypeProperty.ts, 5, 23))
 >r2 : Symbol(r2, Decl(constructorHasPrototypeProperty.ts, 11, 7))
->bar : Symbol(bar, Decl(constructorHasPrototypeProperty.ts, 5, 23))
+>bar : Symbol(D.bar, Decl(constructorHasPrototypeProperty.ts, 5, 23))
 }
 
 module Generic {
@@ -51,11 +51,11 @@ module Generic {
 >U : Symbol(U, Decl(constructorHasPrototypeProperty.ts, 16, 14))
 
         foo: T;
->foo : Symbol(foo, Decl(constructorHasPrototypeProperty.ts, 16, 18))
+>foo : Symbol(C.foo, Decl(constructorHasPrototypeProperty.ts, 16, 18))
 >T : Symbol(T, Decl(constructorHasPrototypeProperty.ts, 16, 12))
 
         bar: U;
->bar : Symbol(bar, Decl(constructorHasPrototypeProperty.ts, 17, 15))
+>bar : Symbol(C.bar, Decl(constructorHasPrototypeProperty.ts, 17, 15))
 >U : Symbol(U, Decl(constructorHasPrototypeProperty.ts, 16, 14))
     }
 
@@ -68,35 +68,35 @@ module Generic {
 >U : Symbol(U, Decl(constructorHasPrototypeProperty.ts, 21, 14))
 
         baz: T;
->baz : Symbol(baz, Decl(constructorHasPrototypeProperty.ts, 21, 33))
+>baz : Symbol(D.baz, Decl(constructorHasPrototypeProperty.ts, 21, 33))
 >T : Symbol(T, Decl(constructorHasPrototypeProperty.ts, 21, 12))
 
         bing: U;
->bing : Symbol(bing, Decl(constructorHasPrototypeProperty.ts, 22, 15))
+>bing : Symbol(D.bing, Decl(constructorHasPrototypeProperty.ts, 22, 15))
 >U : Symbol(U, Decl(constructorHasPrototypeProperty.ts, 21, 14))
     }
 
     var r = C.prototype; // C<any, any>
 >r : Symbol(r, Decl(constructorHasPrototypeProperty.ts, 26, 7))
->C.prototype : Symbol(prototype)
+>C.prototype : Symbol(C.prototype)
 >C : Symbol(C, Decl(constructorHasPrototypeProperty.ts, 15, 16))
->prototype : Symbol(prototype)
+>prototype : Symbol(C.prototype)
 
     var ra = r.foo; // any
 >ra : Symbol(ra, Decl(constructorHasPrototypeProperty.ts, 27, 7))
->r.foo : Symbol(foo, Decl(constructorHasPrototypeProperty.ts, 16, 18))
+>r.foo : Symbol(C.foo, Decl(constructorHasPrototypeProperty.ts, 16, 18))
 >r : Symbol(r, Decl(constructorHasPrototypeProperty.ts, 26, 7))
->foo : Symbol(foo, Decl(constructorHasPrototypeProperty.ts, 16, 18))
+>foo : Symbol(C.foo, Decl(constructorHasPrototypeProperty.ts, 16, 18))
 
     var r2 = D.prototype; // D<any, any>
 >r2 : Symbol(r2, Decl(constructorHasPrototypeProperty.ts, 28, 7))
->D.prototype : Symbol(prototype)
+>D.prototype : Symbol(D.prototype)
 >D : Symbol(D, Decl(constructorHasPrototypeProperty.ts, 19, 5))
->prototype : Symbol(prototype)
+>prototype : Symbol(D.prototype)
 
     var rb = r2.baz; // any
 >rb : Symbol(rb, Decl(constructorHasPrototypeProperty.ts, 29, 7))
->r2.baz : Symbol(baz, Decl(constructorHasPrototypeProperty.ts, 21, 33))
+>r2.baz : Symbol(D.baz, Decl(constructorHasPrototypeProperty.ts, 21, 33))
 >r2 : Symbol(r2, Decl(constructorHasPrototypeProperty.ts, 28, 7))
->baz : Symbol(baz, Decl(constructorHasPrototypeProperty.ts, 21, 33))
+>baz : Symbol(D.baz, Decl(constructorHasPrototypeProperty.ts, 21, 33))
 }

@@ -8,7 +8,7 @@ interface X<A> {
 >A : Symbol(A, Decl(instantiatedTypeAliasDisplay.ts, 2, 12))
 
     a: A;
->a : Symbol(a, Decl(instantiatedTypeAliasDisplay.ts, 2, 16))
+>a : Symbol(X.a, Decl(instantiatedTypeAliasDisplay.ts, 2, 16))
 >A : Symbol(A, Decl(instantiatedTypeAliasDisplay.ts, 2, 12))
 }
 interface Y<B> {
@@ -16,7 +16,7 @@ interface Y<B> {
 >B : Symbol(B, Decl(instantiatedTypeAliasDisplay.ts, 5, 12))
 
     b: B;
->b : Symbol(b, Decl(instantiatedTypeAliasDisplay.ts, 5, 16))
+>b : Symbol(Y.b, Decl(instantiatedTypeAliasDisplay.ts, 5, 16))
 >B : Symbol(B, Decl(instantiatedTypeAliasDisplay.ts, 5, 12))
 }
 type Z<A, B> = X<A> | Y<B>;

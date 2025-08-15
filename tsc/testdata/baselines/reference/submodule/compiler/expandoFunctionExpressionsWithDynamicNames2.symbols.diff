@@ -1,11 +1,6 @@
 --- old.expandoFunctionExpressionsWithDynamicNames2.symbols
 +++ new.expandoFunctionExpressionsWithDynamicNames2.symbols
-@@= skipped -9, +9 lines =@@
-
-   (): void;
-   [mySymbol]: true;
-->[mySymbol] : Symbol(Foo[mySymbol], Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 2, 11))
-+>[mySymbol] : Symbol([mySymbol], Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 2, 11))
+@@= skipped -13, +13 lines =@@
  >mySymbol : Symbol(mySymbol, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 0, 5))
  }
  const foo: Foo = () => {};
@@ -19,15 +14,7 @@
  >mySymbol : Symbol(mySymbol, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 0, 5))
 
  interface Bar {
-@@= skipped -16, +16 lines =@@
-
-   (): void;
-   test: true;
-->test : Symbol(Bar.test, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 9, 11))
-+>test : Symbol(test, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 9, 11))
- }
- const t = "test" as const;
- >t : Symbol(t, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 12, 5))
+@@= skipped -19, +19 lines =@@
  >const : Symbol(const)
 
  const bar: Bar = () => {};

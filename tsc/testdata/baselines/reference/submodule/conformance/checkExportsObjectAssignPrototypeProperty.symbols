@@ -65,59 +65,59 @@ function Person(name) {
 >name : Symbol(name, Decl(mod1.js, 4, 16))
 }
 Person.prototype.describe = function () {
->Person.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Person.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >Person : Symbol(Person, Decl(mod1.js, 0, 0))
->prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 
     return "Person called " + this.name;
 };
 Object.defineProperty(Person.prototype, "thing", { value: 42, writable: true });
->Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
->Person.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Person.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >Person : Symbol(Person, Decl(mod1.js, 0, 0))
->prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(mod1.js, 10, 50))
 >writable : Symbol(writable, Decl(mod1.js, 10, 61))
 
 Object.defineProperty(Person.prototype, "readonlyProp", { value: "Smith", writable: false });
->Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
->Person.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Person.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >Person : Symbol(Person, Decl(mod1.js, 0, 0))
->prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(mod1.js, 11, 57))
 >writable : Symbol(writable, Decl(mod1.js, 11, 73))
 
 Object.defineProperty(Person.prototype, "rwAccessors", { get() { return 98122 }, set(_) { /*ignore*/ } });
->Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
->Person.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Person.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >Person : Symbol(Person, Decl(mod1.js, 0, 0))
->prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >get : Symbol(get, Decl(mod1.js, 12, 56))
 >set : Symbol(set, Decl(mod1.js, 12, 80))
 >_ : Symbol(_, Decl(mod1.js, 12, 85))
 
 Object.defineProperty(Person.prototype, "readonlyAccessor", { get() { return 21.75 } });
->Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
->Person.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Person.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >Person : Symbol(Person, Decl(mod1.js, 0, 0))
->prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >get : Symbol(get, Decl(mod1.js, 13, 61))
 
 Object.defineProperty(Person.prototype, "setonlyAccessor", {
->Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
->Person.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Person.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >Person : Symbol(Person, Decl(mod1.js, 0, 0))
->prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 
     /** @param {string} str */
     set(str) {

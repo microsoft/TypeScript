@@ -10,16 +10,7 @@
  }
 
  === mod1.js ===
-@@= skipped -10, +8 lines =@@
- >K : Symbol(K, Decl(mod1.js, 0, 0))
-
-     values() {
-->values : Symbol(K.values, Decl(mod1.js, 0, 9))
-+>values : Symbol(values, Decl(mod1.js, 0, 9))
-
-         return new K()
- >K : Symbol(K, Decl(mod1.js, 0, 0))
-@@= skipped -8, +8 lines =@@
+@@= skipped -18, +16 lines =@@
  }
  exports.K = K;
  >exports.K : Symbol(K, Decl(mod1.js, 4, 1))

@@ -8,27 +8,22 @@
 +>b : Symbol(b, Decl(index.js, 0, 22))
 
  b.cat = "cat";
-->b.cat : Symbol(b.cat, Decl(index.js, 2, 22))
+ >b.cat : Symbol(b.cat, Decl(index.js, 2, 22))
 ->b : Symbol(b, Decl(index.js, 0, 22), Decl(index.js, 2, 22))
-->cat : Symbol(b.cat, Decl(index.js, 2, 22))
-+>b.cat : Symbol(cat, Decl(index.js, 2, 22))
 +>b : Symbol(b, Decl(index.js, 0, 22))
-+>cat : Symbol(cat, Decl(index.js, 2, 22))
+ >cat : Symbol(b.cat, Decl(index.js, 2, 22))
 
  export function c() {}
 ->c : Symbol(c, Decl(index.js, 3, 14), Decl(index.js, 5, 22))
 +>c : Symbol(c, Decl(index.js, 3, 14))
 
  c.Cls = class {}
-->c.Cls : Symbol(c.Cls, Decl(index.js, 5, 22))
+ >c.Cls : Symbol(c.Cls, Decl(index.js, 5, 22))
 ->c : Symbol(c, Decl(index.js, 3, 14), Decl(index.js, 5, 22))
-->Cls : Symbol(c.Cls, Decl(index.js, 5, 22))
-+>c.Cls : Symbol(Cls, Decl(index.js, 5, 22))
 +>c : Symbol(c, Decl(index.js, 3, 14))
-+>Cls : Symbol(Cls, Decl(index.js, 5, 22))
+ >Cls : Symbol(c.Cls, Decl(index.js, 5, 22))
 
  /**
-  * @param {number} a
 @@= skipped -41, +41 lines =@@
   * @param {T} a
   */
@@ -38,16 +33,14 @@
  >a : Symbol(a, Decl(index.js, 27, 18))
 
      return a;
- >a : Symbol(a, Decl(index.js, 27, 18))
+@@= skipped -8, +8 lines =@@
  }
  f.self = f;
-->f.self : Symbol(f.self, Decl(index.js, 29, 1))
+ >f.self : Symbol(f.self, Decl(index.js, 29, 1))
 ->f : Symbol(f, Decl(index.js, 21, 58), Decl(index.js, 29, 1))
-->self : Symbol(f.self, Decl(index.js, 29, 1))
-->f : Symbol(f, Decl(index.js, 21, 58), Decl(index.js, 29, 1))
-+>f.self : Symbol(self, Decl(index.js, 29, 1))
 +>f : Symbol(f, Decl(index.js, 21, 58))
-+>self : Symbol(self, Decl(index.js, 29, 1))
+ >self : Symbol(f.self, Decl(index.js, 29, 1))
+->f : Symbol(f, Decl(index.js, 21, 58), Decl(index.js, 29, 1))
 +>f : Symbol(f, Decl(index.js, 21, 58))
 
  /**

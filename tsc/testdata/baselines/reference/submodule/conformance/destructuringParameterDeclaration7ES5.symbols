@@ -5,10 +5,10 @@ interface ISomething {
 >ISomething : Symbol(ISomething, Decl(destructuringParameterDeclaration7ES5.ts, 0, 0))
 
     foo: string,
->foo : Symbol(foo, Decl(destructuringParameterDeclaration7ES5.ts, 0, 22))
+>foo : Symbol(ISomething.foo, Decl(destructuringParameterDeclaration7ES5.ts, 0, 22))
 
     bar: string
->bar : Symbol(bar, Decl(destructuringParameterDeclaration7ES5.ts, 1, 16))
+>bar : Symbol(ISomething.bar, Decl(destructuringParameterDeclaration7ES5.ts, 1, 16))
 }
 
 function foo({}, {foo, bar}: ISomething) {}

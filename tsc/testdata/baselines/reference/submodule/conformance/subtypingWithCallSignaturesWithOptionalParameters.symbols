@@ -7,23 +7,23 @@ interface Base {
 >Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 0, 0))
 
     a: () => number;
->a : Symbol(a, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 2, 16))
+>a : Symbol(Base.a, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 2, 16))
 
     a2: (x?: number) => number;
->a2 : Symbol(a2, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 3, 20))
+>a2 : Symbol(Base.a2, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 3, 20))
 >x : Symbol(x, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 4, 9))
 
     a3: (x: number) => number;
->a3 : Symbol(a3, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 4, 31))
+>a3 : Symbol(Base.a3, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 4, 31))
 >x : Symbol(x, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 5, 9))
 
     a4: (x: number, y?: number) => number;
->a4 : Symbol(a4, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 5, 30))
+>a4 : Symbol(Base.a4, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 5, 30))
 >x : Symbol(x, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 6, 9))
 >y : Symbol(y, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 6, 19))
 
     a5: (x?: number, y?: number) => number;
->a5 : Symbol(a5, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 6, 42))
+>a5 : Symbol(Base.a5, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 6, 42))
 >x : Symbol(x, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 7, 9))
 >y : Symbol(y, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 7, 20))
 }
@@ -33,7 +33,7 @@ interface I1 extends Base {
 >Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 0, 0))
 
     a: () => number; // ok, same number of required params
->a : Symbol(a, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 10, 27))
+>a : Symbol(I1.a, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 10, 27))
 }
 
 interface I2 extends Base {
@@ -41,7 +41,7 @@ interface I2 extends Base {
 >Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 0, 0))
 
     a: (x?: number) => number; // ok, same number of required params
->a : Symbol(a, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 14, 27))
+>a : Symbol(I2.a, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 14, 27))
 >x : Symbol(x, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 15, 8))
 }
 
@@ -50,7 +50,7 @@ interface I3 extends Base {
 >Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 0, 0))
 
     a: (x: number) => number; // error, too many required params
->a : Symbol(a, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 18, 27))
+>a : Symbol(I3.a, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 18, 27))
 >x : Symbol(x, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 19, 8))
 }
 
@@ -60,7 +60,7 @@ interface I4 extends Base {
 >Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 0, 0))
 
     a2: () => number; // ok, same number of required params
->a2 : Symbol(a2, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 23, 27))
+>a2 : Symbol(I4.a2, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 23, 27))
 }
 
 interface I5 extends Base {
@@ -68,7 +68,7 @@ interface I5 extends Base {
 >Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 0, 0))
 
     a2: (x?: number) => number; // ok, same number of required params
->a2 : Symbol(a2, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 27, 27))
+>a2 : Symbol(I5.a2, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 27, 27))
 >x : Symbol(x, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 28, 9))
 }
 
@@ -77,7 +77,7 @@ interface I6 extends Base {
 >Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 0, 0))
 
     a2: (x: number) => number; // ok, same number of params
->a2 : Symbol(a2, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 31, 27))
+>a2 : Symbol(I6.a2, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 31, 27))
 >x : Symbol(x, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 32, 9))
 }
 
@@ -87,7 +87,7 @@ interface I7 extends Base {
 >Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 0, 0))
 
     a3: () => number; // ok, fewer required params
->a3 : Symbol(a3, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 36, 27))
+>a3 : Symbol(I7.a3, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 36, 27))
 }
 
 interface I8 extends Base {
@@ -95,7 +95,7 @@ interface I8 extends Base {
 >Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 0, 0))
 
     a3: (x?: number) => number; // ok, fewer required params
->a3 : Symbol(a3, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 40, 27))
+>a3 : Symbol(I8.a3, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 40, 27))
 >x : Symbol(x, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 41, 9))
 }
 
@@ -104,7 +104,7 @@ interface I9 extends Base {
 >Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 0, 0))
 
     a3: (x: number) => number; // ok, same number of required params
->a3 : Symbol(a3, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 44, 27))
+>a3 : Symbol(I9.a3, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 44, 27))
 >x : Symbol(x, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 45, 9))
 }
 
@@ -113,7 +113,7 @@ interface I10 extends Base {
 >Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 0, 0))
 
     a3: (x: number, y: number) => number;  // error, too many required params
->a3 : Symbol(a3, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 48, 28))
+>a3 : Symbol(I10.a3, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 48, 28))
 >x : Symbol(x, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 49, 9))
 >y : Symbol(y, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 49, 19))
 }
@@ -124,7 +124,7 @@ interface I11 extends Base {
 >Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 0, 0))
 
     a4: () => number; // ok, fewer required params
->a4 : Symbol(a4, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 53, 28))
+>a4 : Symbol(I11.a4, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 53, 28))
 }
 
 interface I12 extends Base {
@@ -132,7 +132,7 @@ interface I12 extends Base {
 >Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 0, 0))
 
     a4: (x?: number, y?: number) => number; // ok, fewer required params
->a4 : Symbol(a4, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 57, 28))
+>a4 : Symbol(I12.a4, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 57, 28))
 >x : Symbol(x, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 58, 9))
 >y : Symbol(y, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 58, 20))
 }
@@ -142,7 +142,7 @@ interface I13 extends Base {
 >Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 0, 0))
 
     a4: (x: number) => number; // ok, same number of required params
->a4 : Symbol(a4, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 61, 28))
+>a4 : Symbol(I13.a4, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 61, 28))
 >x : Symbol(x, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 62, 9))
 }
 
@@ -151,7 +151,7 @@ interface I14 extends Base {
 >Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 0, 0))
 
     a4: (x: number, y: number) => number;  // ok, same number of params
->a4 : Symbol(a4, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 65, 28))
+>a4 : Symbol(I14.a4, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 65, 28))
 >x : Symbol(x, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 66, 9))
 >y : Symbol(y, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 66, 19))
 }
@@ -162,7 +162,7 @@ interface I15 extends Base {
 >Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 0, 0))
 
     a5: () => number; // ok, fewer required params
->a5 : Symbol(a5, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 70, 28))
+>a5 : Symbol(I15.a5, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 70, 28))
 }
 
 interface I16 extends Base {
@@ -170,7 +170,7 @@ interface I16 extends Base {
 >Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 0, 0))
 
     a5: (x?: number, y?: number) => number; // ok, fewer required params
->a5 : Symbol(a5, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 74, 28))
+>a5 : Symbol(I16.a5, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 74, 28))
 >x : Symbol(x, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 75, 9))
 >y : Symbol(y, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 75, 20))
 }
@@ -180,7 +180,7 @@ interface I17 extends Base {
 >Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 0, 0))
 
     a5: (x: number) => number; // ok, all present params match
->a5 : Symbol(a5, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 78, 28))
+>a5 : Symbol(I17.a5, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 78, 28))
 >x : Symbol(x, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 79, 9))
 }
 
@@ -189,7 +189,7 @@ interface I18 extends Base {
 >Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 0, 0))
 
     a5: (x: number, y: number) => number;  // ok, same number of params
->a5 : Symbol(a5, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 82, 28))
+>a5 : Symbol(I18.a5, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 82, 28))
 >x : Symbol(x, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 83, 9))
 >y : Symbol(y, Decl(subtypingWithCallSignaturesWithOptionalParameters.ts, 83, 19))
 }

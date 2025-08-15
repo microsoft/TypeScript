@@ -1,21 +1,13 @@
 --- old.assignmentToVoidZero2.types
 +++ new.assignmentToVoidZero2.types
-@@= skipped -3, +3 lines =@@
- exports.j = 1;
- >exports.j = 1 : 1
- >exports.j : 1
-->exports : typeof import("assignmentToVoidZero2")
-+>exports : typeof import("./assignmentToVoidZero2")
- >j : 1
- >1 : 1
+@@= skipped -9, +9 lines =@@
 
  exports.k = void 0;
  >exports.k = void 0 : undefined
 ->exports.k : any
-->exports : typeof import("assignmentToVoidZero2")
-->k : any
 +>exports.k : undefined
-+>exports : typeof import("./assignmentToVoidZero2")
+ >exports : typeof import("assignmentToVoidZero2")
+->k : any
 +>k : undefined
  >void 0 : undefined
  >0 : 0
@@ -42,7 +34,7 @@
  >y : any
  >void 0 : undefined
  >0 : 0
-@@= skipped -34, +34 lines =@@
+@@= skipped -28, +28 lines =@@
  o.x + o.y
  >o.x + o.y : any
  >o.x : number

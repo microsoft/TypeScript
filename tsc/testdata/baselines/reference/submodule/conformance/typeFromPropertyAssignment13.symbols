@@ -10,11 +10,11 @@ Outer.Inner = function() {}
 >Inner : Symbol(Inner, Decl(module.js, 0, 14))
 
 Outer.Inner.prototype = {
->Outer.Inner.prototype : Symbol(prototype, Decl(module.js, 1, 27))
+>Outer.Inner.prototype : Symbol(Inner.prototype, Decl(module.js, 1, 27))
 >Outer.Inner : Symbol(Inner, Decl(module.js, 0, 14))
 >Outer : Symbol(Outer, Decl(module.js, 0, 3))
 >Inner : Symbol(Inner, Decl(module.js, 0, 14))
->prototype : Symbol(prototype, Decl(module.js, 1, 27))
+>prototype : Symbol(Inner.prototype, Decl(module.js, 1, 27))
 
     m() { },
 >m : Symbol(m, Decl(module.js, 2, 25))
@@ -24,19 +24,19 @@ Outer.Inner.prototype = {
 }
 // incremental assignments still work
 Outer.Inner.prototype.j = 2
->Outer.Inner.prototype : Symbol(prototype, Decl(module.js, 1, 27))
+>Outer.Inner.prototype : Symbol(Inner.prototype, Decl(module.js, 1, 27))
 >Outer.Inner : Symbol(Inner, Decl(module.js, 0, 14))
 >Outer : Symbol(Outer, Decl(module.js, 0, 3))
 >Inner : Symbol(Inner, Decl(module.js, 0, 14))
->prototype : Symbol(prototype, Decl(module.js, 1, 27))
+>prototype : Symbol(Inner.prototype, Decl(module.js, 1, 27))
 
 /** @type {string} */
 Outer.Inner.prototype.k;
->Outer.Inner.prototype : Symbol(prototype, Decl(module.js, 1, 27))
+>Outer.Inner.prototype : Symbol(Inner.prototype, Decl(module.js, 1, 27))
 >Outer.Inner : Symbol(Inner, Decl(module.js, 0, 14))
 >Outer : Symbol(Outer, Decl(module.js, 0, 3))
 >Inner : Symbol(Inner, Decl(module.js, 0, 14))
->prototype : Symbol(prototype, Decl(module.js, 1, 27))
+>prototype : Symbol(Inner.prototype, Decl(module.js, 1, 27))
 
 var inner = new Outer.Inner()
 >inner : Symbol(inner, Decl(module.js, 10, 3))

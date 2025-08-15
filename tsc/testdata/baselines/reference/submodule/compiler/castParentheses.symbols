@@ -5,7 +5,7 @@ class a {
 >a : Symbol(a, Decl(castParentheses.ts, 0, 0))
 
     static b: any;
->b : Symbol(b, Decl(castParentheses.ts, 0, 9))
+>b : Symbol(a.b, Decl(castParentheses.ts, 0, 9))
 }
 
 var b = (<any>a);
@@ -18,15 +18,15 @@ var b = (<any>a).b;
 
 var b = (<any>a.b).c;
 >b : Symbol(b, Decl(castParentheses.ts, 4, 3), Decl(castParentheses.ts, 5, 3), Decl(castParentheses.ts, 6, 3), Decl(castParentheses.ts, 7, 3), Decl(castParentheses.ts, 8, 3) ... and 2 more)
->a.b : Symbol(b, Decl(castParentheses.ts, 0, 9))
+>a.b : Symbol(a.b, Decl(castParentheses.ts, 0, 9))
 >a : Symbol(a, Decl(castParentheses.ts, 0, 0))
->b : Symbol(b, Decl(castParentheses.ts, 0, 9))
+>b : Symbol(a.b, Decl(castParentheses.ts, 0, 9))
 
 var b = (<any>a.b()).c;
 >b : Symbol(b, Decl(castParentheses.ts, 4, 3), Decl(castParentheses.ts, 5, 3), Decl(castParentheses.ts, 6, 3), Decl(castParentheses.ts, 7, 3), Decl(castParentheses.ts, 8, 3) ... and 2 more)
->a.b : Symbol(b, Decl(castParentheses.ts, 0, 9))
+>a.b : Symbol(a.b, Decl(castParentheses.ts, 0, 9))
 >a : Symbol(a, Decl(castParentheses.ts, 0, 0))
->b : Symbol(b, Decl(castParentheses.ts, 0, 9))
+>b : Symbol(a.b, Decl(castParentheses.ts, 0, 9))
 
 var b = (<any>new a);
 >b : Symbol(b, Decl(castParentheses.ts, 4, 3), Decl(castParentheses.ts, 5, 3), Decl(castParentheses.ts, 6, 3), Decl(castParentheses.ts, 7, 3), Decl(castParentheses.ts, 8, 3) ... and 2 more)
@@ -34,9 +34,9 @@ var b = (<any>new a);
 
 var b = (<any>new a.b);
 >b : Symbol(b, Decl(castParentheses.ts, 4, 3), Decl(castParentheses.ts, 5, 3), Decl(castParentheses.ts, 6, 3), Decl(castParentheses.ts, 7, 3), Decl(castParentheses.ts, 8, 3) ... and 2 more)
->a.b : Symbol(b, Decl(castParentheses.ts, 0, 9))
+>a.b : Symbol(a.b, Decl(castParentheses.ts, 0, 9))
 >a : Symbol(a, Decl(castParentheses.ts, 0, 0))
->b : Symbol(b, Decl(castParentheses.ts, 0, 9))
+>b : Symbol(a.b, Decl(castParentheses.ts, 0, 9))
 
 var b = (<any>new a).b 
 >b : Symbol(b, Decl(castParentheses.ts, 4, 3), Decl(castParentheses.ts, 5, 3), Decl(castParentheses.ts, 6, 3), Decl(castParentheses.ts, 7, 3), Decl(castParentheses.ts, 8, 3) ... and 2 more)

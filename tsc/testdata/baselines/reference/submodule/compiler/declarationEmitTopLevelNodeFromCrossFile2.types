@@ -2,11 +2,11 @@
 
 === a.ts ===
 import { boxedBox } from "./boxedBox";
->boxedBox : import("./box").Box<{ boxed: import("./box").Box<number>; }>
+>boxedBox : import("box").Box<{ boxed: import("box").Box<number>; }>
 
 export const _ = boxedBox;
->_ : import("./box").Box<{ boxed: import("./box").Box<number>; }>
->boxedBox : import("./box").Box<{ boxed: import("./box").Box<number>; }>
+>_ : import("box").Box<{ boxed: import("box").Box<number>; }>
+>boxedBox : import("box").Box<{ boxed: import("box").Box<number>; }>
 
 // At index 83
 /**
@@ -15,10 +15,10 @@ export const _ = boxedBox;
 
 === boxedBox.d.ts ===
 export declare const boxedBox: import("./box").Box<{
->boxedBox : import("./box").Box<{ boxed: import("./box").Box<number>; }>
+>boxedBox : import("box").Box<{ boxed: import("box").Box<number>; }>
 
     boxed: import("./box").Box<number>;
->boxed : import("./box").Box<number>
+>boxed : import("box").Box<number>
 
 }>;                        // ^This is index 83 in this file
 

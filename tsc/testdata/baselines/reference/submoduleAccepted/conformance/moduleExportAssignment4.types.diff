@@ -5,7 +5,7 @@
  >exports.default = { m: 1, a: 1 } : { m: number; a: number; }
  >exports.default : any
 ->exports : any
-+>exports : typeof import("./async")
++>exports : typeof import("async")
  >default : any
  >{ m: 1, a: 1 } : { m: number; a: number; }
  >m : number
@@ -22,5 +22,5 @@
  >exports : any
  >exports['default'] : any
 ->exports : any
-+>exports : typeof import("./async")
++>exports : typeof import("async")
  >'default' : "default"

@@ -3,5 +3,5 @@
 === exportDefaultClassWithStaticPropertyAssignmentsInES6.ts ===
 export default class {
     static z: string = "Foo";
->z : Symbol(z, Decl(exportDefaultClassWithStaticPropertyAssignmentsInES6.ts, 0, 22))
+>z : Symbol(default.z, Decl(exportDefaultClassWithStaticPropertyAssignmentsInES6.ts, 0, 22))
 }

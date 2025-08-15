@@ -64,5 +64,5 @@ export = T;
 
 === /reExportValueAsTypeOnly.ts ===
 export type { C } from "./exportValue";
->C : import("./exportValue").C
+>C : import("/exportValue").C
 

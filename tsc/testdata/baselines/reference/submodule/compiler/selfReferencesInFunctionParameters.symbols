@@ -24,11 +24,11 @@ class C {
     }
      
     bar(a = "", b: string = b.toString()) {
->bar : Symbol(bar, Decl(selfReferencesInFunctionParameters.ts, 8, 5))
+>bar : Symbol(C.bar, Decl(selfReferencesInFunctionParameters.ts, 8, 5))
 >a : Symbol(a, Decl(selfReferencesInFunctionParameters.ts, 10, 8))
 >b : Symbol(b, Decl(selfReferencesInFunctionParameters.ts, 10, 15))
->b.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>b.toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
 >b : Symbol(b, Decl(selfReferencesInFunctionParameters.ts, 10, 15))
->toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
     }
 }

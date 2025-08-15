@@ -25,7 +25,7 @@ class Parameter<T4> {
 >T4 : Symbol(T4, Decl(baseTypeWrappingInstantiationChain.ts, 8, 16))
 
     method(t: T4) { }
->method : Symbol(method, Decl(baseTypeWrappingInstantiationChain.ts, 8, 21))
+>method : Symbol(Parameter.method, Decl(baseTypeWrappingInstantiationChain.ts, 8, 21))
 >t : Symbol(t, Decl(baseTypeWrappingInstantiationChain.ts, 9, 11))
 >T4 : Symbol(T4, Decl(baseTypeWrappingInstantiationChain.ts, 8, 16))
 }
@@ -35,7 +35,7 @@ class Wrapper<T5> {
 >T5 : Symbol(T5, Decl(baseTypeWrappingInstantiationChain.ts, 12, 14))
 
     property: T5;
->property : Symbol(property, Decl(baseTypeWrappingInstantiationChain.ts, 12, 19))
+>property : Symbol(Wrapper.property, Decl(baseTypeWrappingInstantiationChain.ts, 12, 19))
 >T5 : Symbol(T5, Decl(baseTypeWrappingInstantiationChain.ts, 12, 14))
 }
 
@@ -46,7 +46,7 @@ class C<T1> extends CBase<T1> {
 >T1 : Symbol(T1, Decl(baseTypeWrappingInstantiationChain.ts, 16, 8))
 
     public works() {
->works : Symbol(works, Decl(baseTypeWrappingInstantiationChain.ts, 16, 31))
+>works : Symbol(C.works, Decl(baseTypeWrappingInstantiationChain.ts, 16, 31))
 
         new CBaseBase<Wrapper<T1>>(this);
 >CBaseBase : Symbol(CBaseBase, Decl(baseTypeWrappingInstantiationChain.ts, 0, 0))
@@ -55,7 +55,7 @@ class C<T1> extends CBase<T1> {
 >this : Symbol(C, Decl(baseTypeWrappingInstantiationChain.ts, 14, 1))
     }
     public alsoWorks() {
->alsoWorks : Symbol(alsoWorks, Decl(baseTypeWrappingInstantiationChain.ts, 19, 5))
+>alsoWorks : Symbol(C.alsoWorks, Decl(baseTypeWrappingInstantiationChain.ts, 19, 5))
 
         new CBase<T1>(this); // Should not error, parameter is of type Parameter<Wrapper<T1>>
 >CBase : Symbol(CBase, Decl(baseTypeWrappingInstantiationChain.ts, 2, 1))
@@ -64,7 +64,7 @@ class C<T1> extends CBase<T1> {
     }
 
     public method(t: Wrapper<T1>) { }
->method : Symbol(method, Decl(baseTypeWrappingInstantiationChain.ts, 22, 5))
+>method : Symbol(C.method, Decl(baseTypeWrappingInstantiationChain.ts, 22, 5))
 >t : Symbol(t, Decl(baseTypeWrappingInstantiationChain.ts, 24, 18))
 >Wrapper : Symbol(Wrapper, Decl(baseTypeWrappingInstantiationChain.ts, 10, 1))
 >T1 : Symbol(T1, Decl(baseTypeWrappingInstantiationChain.ts, 16, 8))

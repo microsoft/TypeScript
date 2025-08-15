@@ -12,5 +12,5 @@ export { b } from "./b";
 >b : number
 
 export { default } from "./b";
->default : typeof import("./b")
+>default : typeof import("b")
 

@@ -260,7 +260,7 @@ interface IValue {
 >IValue : Symbol(IValue, Decl(excessPropertyCheckWithUnions.ts, 85, 2))
 
   value: string
->value : Symbol(value, Decl(excessPropertyCheckWithUnions.ts, 89, 18))
+>value : Symbol(IValue.value, Decl(excessPropertyCheckWithUnions.ts, 89, 18))
 }
 
 interface StringKeys {
@@ -316,14 +316,14 @@ interface I1 {
 >I1 : Symbol(I1, Decl(excessPropertyCheckWithUnions.ts, 111, 73))
 
     prop1: string;
->prop1 : Symbol(prop1, Decl(excessPropertyCheckWithUnions.ts, 115, 14))
+>prop1 : Symbol(I1.prop1, Decl(excessPropertyCheckWithUnions.ts, 115, 14))
 }
 
 interface I2 {
 >I2 : Symbol(I2, Decl(excessPropertyCheckWithUnions.ts, 117, 1))
 
     prop2: string;
->prop2 : Symbol(prop2, Decl(excessPropertyCheckWithUnions.ts, 119, 14))
+>prop2 : Symbol(I2.prop2, Decl(excessPropertyCheckWithUnions.ts, 119, 14))
 }
 
 interface I3 extends Record<string, string> {

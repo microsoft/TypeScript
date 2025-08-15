@@ -1,15 +1,6 @@
 --- old.commonJSImportExportedClassExpression.types
 +++ new.commonJSImportExportedClassExpression.types
-@@= skipped -2, +2 lines =@@
- === main.js ===
- const { K } = require("./mod1");
- >K : typeof K
-->require("./mod1") : typeof import("mod1")
-+>require("./mod1") : typeof import("./mod1")
- >require : any
- >"./mod1" : "./mod1"
-
-@@= skipped -10, +10 lines =@@
+@@= skipped -12, +12 lines =@@
  >k : K
 
      k.values()
@@ -23,11 +14,3 @@
  }
 
  === mod1.js ===
- exports.K = class K {
- >exports.K = class K {    values() {    }} : typeof K
- >exports.K : typeof K
-->exports : typeof import("mod1")
-+>exports : typeof import("./mod1")
- >K : typeof K
- >class K {    values() {    }} : typeof K
- >K : typeof K

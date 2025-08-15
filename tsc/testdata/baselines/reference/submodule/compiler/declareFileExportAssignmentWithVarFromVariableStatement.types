@@ -23,21 +23,21 @@ module m2 {
 var x = 10, m2: {
 >x : number
 >10 : 10
->m2 : { (): import("./declareFileExportAssignmentWithVarFromVariableStatement").connectExport; test1: import("./declareFileExportAssignmentWithVarFromVariableStatement").connectModule; test2(): import("./declareFileExportAssignmentWithVarFromVariableStatement").connectModule; }
+>m2 : { (): import("declareFileExportAssignmentWithVarFromVariableStatement").connectExport; test1: import("declareFileExportAssignmentWithVarFromVariableStatement").connectModule; test2(): import("declareFileExportAssignmentWithVarFromVariableStatement").connectModule; }
 
     (): m2.connectExport;
 >m2 : any
 
     test1: m2.connectModule;
->test1 : import("./declareFileExportAssignmentWithVarFromVariableStatement").connectModule
+>test1 : import("declareFileExportAssignmentWithVarFromVariableStatement").connectModule
 >m2 : any
 
     test2(): m2.connectModule;
->test2 : () => import("./declareFileExportAssignmentWithVarFromVariableStatement").connectModule
+>test2 : () => import("declareFileExportAssignmentWithVarFromVariableStatement").connectModule
 >m2 : any
 
 };
 
 export = m2;
->m2 : { (): import("./declareFileExportAssignmentWithVarFromVariableStatement").connectExport; test1: import("./declareFileExportAssignmentWithVarFromVariableStatement").connectModule; test2(): import("./declareFileExportAssignmentWithVarFromVariableStatement").connectModule; }
+>m2 : { (): import("declareFileExportAssignmentWithVarFromVariableStatement").connectExport; test1: import("declareFileExportAssignmentWithVarFromVariableStatement").connectModule; test2(): import("declareFileExportAssignmentWithVarFromVariableStatement").connectModule; }
 

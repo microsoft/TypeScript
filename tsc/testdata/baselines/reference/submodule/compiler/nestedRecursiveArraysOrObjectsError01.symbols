@@ -15,7 +15,7 @@ interface StyleBase {
 >StyleBase : Symbol(StyleBase, Decl(nestedRecursiveArraysOrObjectsError01.ts, 1, 44))
 
     foo: string;
->foo : Symbol(foo, Decl(nestedRecursiveArraysOrObjectsError01.ts, 2, 21))
+>foo : Symbol(StyleBase.foo, Decl(nestedRecursiveArraysOrObjectsError01.ts, 2, 21))
 }
 
 const blah: Style = [

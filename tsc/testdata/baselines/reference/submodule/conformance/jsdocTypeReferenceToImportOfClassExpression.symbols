@@ -15,7 +15,7 @@ module.exports = class MC {
 >MC : Symbol(MC, Decl(MC.js, 4, 16))
 
   watch() {
->watch : Symbol(watch, Decl(MC.js, 4, 27))
+>watch : Symbol(MC.watch, Decl(MC.js, 4, 27))
 
     return new MW(this);
 >MW : Symbol(MW, Decl(MC.js, 0, 5))
@@ -36,9 +36,9 @@ class MW {
 >compiler : Symbol(compiler, Decl(MW.js, 6, 14))
 
     this.compiler = compiler;
->this.compiler : Symbol(compiler, Decl(MW.js, 6, 25))
+>this.compiler : Symbol(MW.compiler, Decl(MW.js, 6, 25))
 >this : Symbol(MW, Decl(MW.js, 0, 0))
->compiler : Symbol(compiler, Decl(MW.js, 6, 25))
+>compiler : Symbol(MW.compiler, Decl(MW.js, 6, 25))
 >compiler : Symbol(compiler, Decl(MW.js, 6, 14))
   }
 }

@@ -3,7 +3,7 @@
 === supplement.d.ts ===
 export { };
 declare module "./argument.js" {
->"./argument.js" : typeof import("./argument")
+>"./argument.js" : typeof import("argument")
 
     interface Argument {
         idlType: any;

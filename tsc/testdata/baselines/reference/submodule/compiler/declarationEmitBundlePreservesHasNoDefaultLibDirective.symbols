@@ -6,7 +6,7 @@ class Foo {
 >Foo : Symbol(Foo, Decl(extensions.ts, 0, 0))
 
     public: string;
->public : Symbol(public, Decl(extensions.ts, 1, 11))
+>public : Symbol(Foo.public, Decl(extensions.ts, 1, 11))
 }
 === core.ts ===
 interface Array<T> {}

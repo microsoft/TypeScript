@@ -3,7 +3,7 @@
 === file2.js ===
 const {myTypes} = require('./file.js');
 >myTypes : any
->require('./file.js') : typeof import("./file.js")
+>require('./file.js') : typeof import("file")
 >require : any
 >'./file.js' : "./file.js"
 
@@ -82,7 +82,7 @@ const myTypes = {
 exports.myTypes = myTypes;
 >exports.myTypes = myTypes : any
 >exports.myTypes : any
->exports : typeof import("./file")
+>exports : typeof import("file")
 >myTypes : any
 >myTypes : any
 

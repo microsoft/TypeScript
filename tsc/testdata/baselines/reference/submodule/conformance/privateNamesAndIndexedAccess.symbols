@@ -5,10 +5,10 @@ class C {
 >C : Symbol(C, Decl(privateNamesAndIndexedAccess.ts, 0, 0))
 
     foo = 3;
->foo : Symbol(foo, Decl(privateNamesAndIndexedAccess.ts, 0, 9))
+>foo : Symbol(C.foo, Decl(privateNamesAndIndexedAccess.ts, 0, 9))
 
     #bar = 3;
->#bar : Symbol(#bar, Decl(privateNamesAndIndexedAccess.ts, 1, 12))
+>#bar : Symbol(C.#bar, Decl(privateNamesAndIndexedAccess.ts, 1, 12))
 
     constructor () {
         const ok: C["foo"] = 3;

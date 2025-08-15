@@ -33,7 +33,7 @@ export class B {
 >decorator : Symbol(decorator, Decl(decoratorMetadataOnInferredType.ts, 6, 1))
 
     x = new A();
->x : Symbol(x, Decl(decoratorMetadataOnInferredType.ts, 11, 16))
+>x : Symbol(B.x, Decl(decoratorMetadataOnInferredType.ts, 11, 16))
 >A : Symbol(A, Decl(decoratorMetadataOnInferredType.ts, 2, 2))
 }
 

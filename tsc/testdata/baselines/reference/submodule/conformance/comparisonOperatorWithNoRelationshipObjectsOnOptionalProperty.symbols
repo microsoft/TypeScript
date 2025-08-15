@@ -5,14 +5,14 @@ interface A1 {
 >A1 : Symbol(A1, Decl(comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts, 0, 0))
 
     b?: number;
->b : Symbol(b, Decl(comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts, 0, 14))
+>b : Symbol(A1.b, Decl(comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts, 0, 14))
 }
 
 interface B1 {
 >B1 : Symbol(B1, Decl(comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts, 2, 1))
 
     b?: string;
->b : Symbol(b, Decl(comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts, 4, 14))
+>b : Symbol(B1.b, Decl(comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts, 4, 14))
 }
 
 var a: A1;

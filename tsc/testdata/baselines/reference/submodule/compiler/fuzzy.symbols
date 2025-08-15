@@ -8,15 +8,15 @@ module M {
 >I : Symbol(I, Decl(fuzzy.ts, 0, 10))
 
         works:()=>R;
->works : Symbol(works, Decl(fuzzy.ts, 1, 24))
+>works : Symbol(I.works, Decl(fuzzy.ts, 1, 24))
 >R : Symbol(R, Decl(fuzzy.ts, 5, 5))
 
         alsoWorks:()=>R;
->alsoWorks : Symbol(alsoWorks, Decl(fuzzy.ts, 2, 20))
+>alsoWorks : Symbol(I.alsoWorks, Decl(fuzzy.ts, 2, 20))
 >R : Symbol(R, Decl(fuzzy.ts, 5, 5))
 
         doesntWork:()=>R;
->doesntWork : Symbol(doesntWork, Decl(fuzzy.ts, 3, 24))
+>doesntWork : Symbol(I.doesntWork, Decl(fuzzy.ts, 3, 24))
 >R : Symbol(R, Decl(fuzzy.ts, 5, 5))
     }
 
@@ -24,10 +24,10 @@ module M {
 >R : Symbol(R, Decl(fuzzy.ts, 5, 5))
 
         anything:number;
->anything : Symbol(anything, Decl(fuzzy.ts, 7, 24))
+>anything : Symbol(R.anything, Decl(fuzzy.ts, 7, 24))
 
         oneI:I;
->oneI : Symbol(oneI, Decl(fuzzy.ts, 8, 24))
+>oneI : Symbol(R.oneI, Decl(fuzzy.ts, 8, 24))
 >I : Symbol(I, Decl(fuzzy.ts, 0, 10))
     }
 
@@ -36,10 +36,10 @@ module M {
 >I : Symbol(I, Decl(fuzzy.ts, 0, 10))
 
         constructor(public x:number) {
->x : Symbol(x, Decl(fuzzy.ts, 13, 20))
+>x : Symbol(C.x, Decl(fuzzy.ts, 13, 20))
         }
         works():R {
->works : Symbol(works, Decl(fuzzy.ts, 14, 9))
+>works : Symbol(C.works, Decl(fuzzy.ts, 14, 9))
 >R : Symbol(R, Decl(fuzzy.ts, 5, 5))
 
             return <R>({ anything: 1 });
@@ -48,7 +48,7 @@ module M {
         }
 
         doesntWork():R {
->doesntWork : Symbol(doesntWork, Decl(fuzzy.ts, 17, 9))
+>doesntWork : Symbol(C.doesntWork, Decl(fuzzy.ts, 17, 9))
 >R : Symbol(R, Decl(fuzzy.ts, 5, 5))
 
             return { anything:1, oneI:this };
@@ -58,7 +58,7 @@ module M {
         }
 
         worksToo():R {
->worksToo : Symbol(worksToo, Decl(fuzzy.ts, 21, 9))
+>worksToo : Symbol(C.worksToo, Decl(fuzzy.ts, 21, 9))
 >R : Symbol(R, Decl(fuzzy.ts, 5, 5))
 
             return <R>({ oneI: this });

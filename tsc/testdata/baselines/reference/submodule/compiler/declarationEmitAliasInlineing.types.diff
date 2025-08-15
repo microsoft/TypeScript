@@ -27,7 +27,7 @@
 
  import {fnExp} from './aExp'
 ->fnExp : (v: import("aExp").O["prop"], p: Omit<import("aExp").O, "prop">, key: keyof import("aExp").O, p2: Omit<import("aExp").O, keyof import("aExp").I>) => void
-+>fnExp : (v: string, p: Omit<import("./aExp").O, "prop">, key: keyof import("./aExp").O, p2: Omit<import("./aExp").O, "prop">) => void
++>fnExp : (v: string, p: Omit<import("aExp").O, "prop">, key: keyof import("aExp").O, p2: Omit<import("aExp").O, "prop">) => void
 
  export const f = fn;
  >f : (v: string, p: Omit<{ prop: string; prop2: string; }, "prop">, key: keyof { prop: string; prop2: string; }, p2: Omit<{ prop: string; prop2: string; }, "prop">) => void
@@ -36,5 +36,5 @@
  export const fExp = fnExp;
 ->fExp : (v: import("aExp").O["prop"], p: Omit<import("aExp").O, "prop">, key: keyof import("aExp").O, p2: Omit<import("aExp").O, keyof import("aExp").I>) => void
 ->fnExp : (v: import("aExp").O["prop"], p: Omit<import("aExp").O, "prop">, key: keyof import("aExp").O, p2: Omit<import("aExp").O, keyof import("aExp").I>) => void
-+>fExp : (v: string, p: Omit<import("./aExp").O, "prop">, key: keyof import("./aExp").O, p2: Omit<import("./aExp").O, "prop">) => void
-+>fnExp : (v: string, p: Omit<import("./aExp").O, "prop">, key: keyof import("./aExp").O, p2: Omit<import("./aExp").O, "prop">) => void
++>fExp : (v: string, p: Omit<import("aExp").O, "prop">, key: keyof import("aExp").O, p2: Omit<import("aExp").O, "prop">) => void
++>fnExp : (v: string, p: Omit<import("aExp").O, "prop">, key: keyof import("aExp").O, p2: Omit<import("aExp").O, "prop">) => void

@@ -31,12 +31,12 @@
 ->A : Symbol(A, Decl(a.js, 0, 0), Decl(a.js, 8, 1), Decl(a.js, 10, 5))
 ->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 ->z : Symbol(A.z, Decl(a.js, 6, 15))
-+>A.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
++>A.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 +>A : Symbol(A, Decl(a.js, 0, 0))
-+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
-+>A.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
++>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
++>A.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 +>A : Symbol(A, Decl(a.js, 0, 0))
-+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
++>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
  >f : Symbol(f, Decl(a.js, 6, 31))
  >n : Symbol(n, Decl(a.js, 6, 43))
 
@@ -48,18 +48,14 @@
  }
  /** @param {number} m */
  A.s = A.t = function g(m) {
-->A.s : Symbol(A.s, Decl(a.js, 8, 1))
+ >A.s : Symbol(A.s, Decl(a.js, 8, 1))
 ->A : Symbol(A, Decl(a.js, 0, 0), Decl(a.js, 8, 1), Decl(a.js, 10, 5))
-->s : Symbol(A.s, Decl(a.js, 8, 1))
-->A.t : Symbol(A.t, Decl(a.js, 10, 5))
++>A : Symbol(A, Decl(a.js, 0, 0))
+ >s : Symbol(A.s, Decl(a.js, 8, 1))
+ >A.t : Symbol(A.t, Decl(a.js, 10, 5))
 ->A : Symbol(A, Decl(a.js, 0, 0), Decl(a.js, 8, 1), Decl(a.js, 10, 5))
-->t : Symbol(A.t, Decl(a.js, 10, 5))
-+>A.s : Symbol(s, Decl(a.js, 8, 1))
 +>A : Symbol(A, Decl(a.js, 0, 0))
-+>s : Symbol(s, Decl(a.js, 8, 1))
-+>A.t : Symbol(t, Decl(a.js, 10, 5))
-+>A : Symbol(A, Decl(a.js, 0, 0))
-+>t : Symbol(t, Decl(a.js, 10, 5))
+ >t : Symbol(A.t, Decl(a.js, 10, 5))
  >g : Symbol(g, Decl(a.js, 10, 11))
  >m : Symbol(m, Decl(a.js, 10, 23))
 
@@ -86,20 +82,16 @@
 +>a : Symbol(a, Decl(a.js, 13, 3))
 
  A.s('still no') // error
-->A.s : Symbol(A.s, Decl(a.js, 8, 1))
+ >A.s : Symbol(A.s, Decl(a.js, 8, 1))
 ->A : Symbol(A, Decl(a.js, 0, 0), Decl(a.js, 8, 1), Decl(a.js, 10, 5))
-->s : Symbol(A.s, Decl(a.js, 8, 1))
-+>A.s : Symbol(s, Decl(a.js, 8, 1))
 +>A : Symbol(A, Decl(a.js, 0, 0))
-+>s : Symbol(s, Decl(a.js, 8, 1))
+ >s : Symbol(A.s, Decl(a.js, 8, 1))
 
  A.t('not here either') // error
-->A.t : Symbol(A.t, Decl(a.js, 10, 5))
+ >A.t : Symbol(A.t, Decl(a.js, 10, 5))
 ->A : Symbol(A, Decl(a.js, 0, 0), Decl(a.js, 8, 1), Decl(a.js, 10, 5))
-->t : Symbol(A.t, Decl(a.js, 10, 5))
-+>A.t : Symbol(t, Decl(a.js, 10, 5))
 +>A : Symbol(A, Decl(a.js, 0, 0))
-+>t : Symbol(t, Decl(a.js, 10, 5))
+ >t : Symbol(A.t, Decl(a.js, 10, 5))
 
  a.first = 10 // error: '10' isn't assignable to '1'
 ->a.first : Symbol(A.first, Decl(a.js, 1, 14))

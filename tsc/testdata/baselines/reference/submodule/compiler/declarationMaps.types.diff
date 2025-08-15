@@ -5,23 +5,23 @@
 
  var m2: {
 ->m2 : { (): m2.connectExport; test1: m2.connectModule; test2(): m2.connectModule; }
-+>m2 : { (): import("./declarationMaps").connectExport; test1: import("./declarationMaps").connectModule; test2(): import("./declarationMaps").connectModule; }
++>m2 : { (): import("declarationMaps").connectExport; test1: import("declarationMaps").connectModule; test2(): import("declarationMaps").connectModule; }
 
      (): m2.connectExport;
  >m2 : any
 
      test1: m2.connectModule;
 ->test1 : m2.connectModule
-+>test1 : import("./declarationMaps").connectModule
++>test1 : import("declarationMaps").connectModule
  >m2 : any
 
      test2(): m2.connectModule;
 ->test2 : () => m2.connectModule
-+>test2 : () => import("./declarationMaps").connectModule
++>test2 : () => import("declarationMaps").connectModule
  >m2 : any
 
  };
 
  export = m2;
 ->m2 : { (): m2.connectExport; test1: m2.connectModule; test2(): m2.connectModule; }
-+>m2 : { (): import("./declarationMaps").connectExport; test1: import("./declarationMaps").connectModule; test2(): import("./declarationMaps").connectModule; }
++>m2 : { (): import("declarationMaps").connectExport; test1: import("declarationMaps").connectModule; test2(): import("declarationMaps").connectModule; }

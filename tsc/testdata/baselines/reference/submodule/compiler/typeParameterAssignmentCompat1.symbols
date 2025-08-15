@@ -6,7 +6,7 @@ interface Foo<T> {
 >T : Symbol(T, Decl(typeParameterAssignmentCompat1.ts, 0, 14))
 
     frobble(value: T): T;
->frobble : Symbol(frobble, Decl(typeParameterAssignmentCompat1.ts, 0, 18))
+>frobble : Symbol(Foo.frobble, Decl(typeParameterAssignmentCompat1.ts, 0, 18))
 >value : Symbol(value, Decl(typeParameterAssignmentCompat1.ts, 1, 12))
 >T : Symbol(T, Decl(typeParameterAssignmentCompat1.ts, 0, 14))
 >T : Symbol(T, Decl(typeParameterAssignmentCompat1.ts, 0, 14))
@@ -42,7 +42,7 @@ class C<T> {
 >T : Symbol(T, Decl(typeParameterAssignmentCompat1.ts, 11, 8))
 
     f<U>(): Foo<U> {
->f : Symbol(f, Decl(typeParameterAssignmentCompat1.ts, 11, 12))
+>f : Symbol(C.f, Decl(typeParameterAssignmentCompat1.ts, 11, 12))
 >U : Symbol(U, Decl(typeParameterAssignmentCompat1.ts, 12, 6))
 >Foo : Symbol(Foo, Decl(typeParameterAssignmentCompat1.ts, 0, 0))
 >U : Symbol(U, Decl(typeParameterAssignmentCompat1.ts, 12, 6))

@@ -17,7 +17,7 @@ class A {
 		 */
 		this["arguments"] = foo;
 >this : Symbol(A, Decl(a.js, 0, 0))
->"arguments" : Symbol("arguments", Decl(a.js, 6, 24))
+>"arguments" : Symbol(A["arguments"], Decl(a.js, 6, 24))
 >foo : Symbol(foo, Decl(a.js, 6, 13))
 	}
 }

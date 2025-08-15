@@ -11,8 +11,8 @@ export type { A as B };
 
 === /b.ts ===
 export type { B as C } from './a';
->B : typeof import("./a").B
->C : import("./a").B
+>B : typeof import("/a").B
+>C : import("/a").B
 
 === /c.ts ===
 import type { C as D } from './b';

@@ -8,7 +8,7 @@ interface TestNull {
 
   (): void;
   readonly prop: null;
->prop : Symbol(prop, Decl(expandoFunctionNullishProperty.ts, 3, 11))
+>prop : Symbol(TestNull.prop, Decl(expandoFunctionNullishProperty.ts, 3, 11))
 }
 
 export function testNull(): TestNull {
@@ -19,9 +19,9 @@ export function testNull(): TestNull {
 >inner : Symbol(inner, Decl(expandoFunctionNullishProperty.ts, 7, 38))
 
   inner.prop = null;
->inner.prop : Symbol(prop, Decl(expandoFunctionNullishProperty.ts, 8, 21))
+>inner.prop : Symbol(inner.prop, Decl(expandoFunctionNullishProperty.ts, 8, 21))
 >inner : Symbol(inner, Decl(expandoFunctionNullishProperty.ts, 7, 38))
->prop : Symbol(prop, Decl(expandoFunctionNullishProperty.ts, 8, 21))
+>prop : Symbol(inner.prop, Decl(expandoFunctionNullishProperty.ts, 8, 21))
 
   return inner;
 >inner : Symbol(inner, Decl(expandoFunctionNullishProperty.ts, 7, 38))
@@ -32,7 +32,7 @@ interface TestNull2 {
 
   (): void;
   prop: string | null;
->prop : Symbol(prop, Decl(expandoFunctionNullishProperty.ts, 14, 11))
+>prop : Symbol(TestNull2.prop, Decl(expandoFunctionNullishProperty.ts, 14, 11))
 }
 
 export function testNull2(): TestNull2 {
@@ -43,9 +43,9 @@ export function testNull2(): TestNull2 {
 >inner : Symbol(inner, Decl(expandoFunctionNullishProperty.ts, 18, 40))
 
   inner.prop = null;
->inner.prop : Symbol(prop, Decl(expandoFunctionNullishProperty.ts, 19, 21))
+>inner.prop : Symbol(inner.prop, Decl(expandoFunctionNullishProperty.ts, 19, 21))
 >inner : Symbol(inner, Decl(expandoFunctionNullishProperty.ts, 18, 40))
->prop : Symbol(prop, Decl(expandoFunctionNullishProperty.ts, 19, 21))
+>prop : Symbol(inner.prop, Decl(expandoFunctionNullishProperty.ts, 19, 21))
 
   return inner;
 >inner : Symbol(inner, Decl(expandoFunctionNullishProperty.ts, 18, 40))
@@ -56,7 +56,7 @@ interface TestUndefined {
 
   (): void;
   readonly prop: undefined;
->prop : Symbol(prop, Decl(expandoFunctionNullishProperty.ts, 25, 11))
+>prop : Symbol(TestUndefined.prop, Decl(expandoFunctionNullishProperty.ts, 25, 11))
 }
 
 export function testUndefined(): TestUndefined {
@@ -67,9 +67,9 @@ export function testUndefined(): TestUndefined {
 >inner : Symbol(inner, Decl(expandoFunctionNullishProperty.ts, 29, 48))
 
   inner.prop = undefined;
->inner.prop : Symbol(prop, Decl(expandoFunctionNullishProperty.ts, 30, 21))
+>inner.prop : Symbol(inner.prop, Decl(expandoFunctionNullishProperty.ts, 30, 21))
 >inner : Symbol(inner, Decl(expandoFunctionNullishProperty.ts, 29, 48))
->prop : Symbol(prop, Decl(expandoFunctionNullishProperty.ts, 30, 21))
+>prop : Symbol(inner.prop, Decl(expandoFunctionNullishProperty.ts, 30, 21))
 >undefined : Symbol(undefined)
 
   return inner;

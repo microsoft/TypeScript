@@ -32,7 +32,7 @@ import { Foo } from "unknown";
 export interface I<T> { x: Foo<T>; }
 >I : Symbol(I, Decl(interface.ts, 0, 30))
 >T : Symbol(T, Decl(interface.ts, 1, 19))
->x : Symbol(x, Decl(interface.ts, 1, 23))
+>x : Symbol(I.x, Decl(interface.ts, 1, 23))
 >Foo : Symbol(Foo, Decl(interface.ts, 0, 8))
 >T : Symbol(T, Decl(interface.ts, 1, 19))
 
@@ -87,7 +87,7 @@ export class C extends A<B> {
 >B : Symbol(B, Decl(super.ts, 0, 11))
 
     m() {
->m : Symbol(m, Decl(super.ts, 4, 29))
+>m : Symbol(C.m, Decl(super.ts, 4, 29))
 
         super.m<T>(1);
 >T : Symbol(T, Decl(super.ts, 0, 31))

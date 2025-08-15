@@ -1,0 +1,11 @@
+--- old.expandoFunctionSymbolPropertyJs.types
++++ new.expandoFunctionSymbolPropertyJs.types
+@@= skipped -20, +20 lines =@@
+  * @returns {import("./types").TestSymb}
+  */
+ export function test() {
+->test : () => import("./types").TestSymb
++>test : () => import("/types").TestSymb
+
+   function inner() {}
+ >inner : { (): void; [symb]: boolean; }

@@ -23,9 +23,9 @@ function withFew<a, r>(values: a[], haveFew: (values: a[]) => r, haveNone: (reas
 >r : Symbol(r, Decl(subtypeRelationForNever.ts, 1, 19))
 
     return values.length > 0 ? haveFew(values) : haveNone('No values.');
->values.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>values.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >values : Symbol(values, Decl(subtypeRelationForNever.ts, 1, 23))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >haveFew : Symbol(haveFew, Decl(subtypeRelationForNever.ts, 1, 35))
 >values : Symbol(values, Decl(subtypeRelationForNever.ts, 1, 23))
 >haveNone : Symbol(haveNone, Decl(subtypeRelationForNever.ts, 1, 64))

@@ -13,7 +13,7 @@ const A: A = "a";
 >A : Symbol(A, Decl(b.ts, 0, 13), Decl(b.ts, 1, 5))
 
 A.toUpperCase();
->A.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+>A.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
 >A : Symbol(A, Decl(b.ts, 0, 13), Decl(b.ts, 1, 5))
->toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
 

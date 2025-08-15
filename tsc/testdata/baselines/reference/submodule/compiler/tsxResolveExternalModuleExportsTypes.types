@@ -2,14 +2,14 @@
 
 === /node_modules/@types/a/index.d.ts ===
 declare var a: a.Foo;
->a : import("a").Foo
+>a : import("/node_modules/@types/a/index.d.ts").Foo
 >a : any
 
 declare namespace a {
     interface Foo {}
 }
 export = a;
->a : import("a").Foo
+>a : import("/node_modules/@types/a/index.d.ts").Foo
 
 === /node_modules/@types/b/index.d.ts ===
 import * as a from 'a';

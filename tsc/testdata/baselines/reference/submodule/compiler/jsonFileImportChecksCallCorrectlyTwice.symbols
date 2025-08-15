@@ -8,7 +8,7 @@ interface Foo {
 >Foo : Symbol(Foo, Decl(index.ts, 0, 31))
 
   str: string;
->str : Symbol(str, Decl(index.ts, 2, 15))
+>str : Symbol(Foo.str, Decl(index.ts, 2, 15))
 }
 
 fn(data.foo);

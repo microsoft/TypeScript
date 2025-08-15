@@ -1,38 +1,6 @@
 --- old.jsdocImportType.symbols
 +++ new.jsdocImportType.symbols
-@@= skipped -7, +7 lines =@@
- >c : Symbol(c, Decl(use.js, 3, 3))
-
- c.chunk;
-->c.chunk : Symbol(D.chunk, Decl(mod1.js, 2, 19))
-+>c.chunk : Symbol(chunk, Decl(mod1.js, 2, 19))
- >c : Symbol(c, Decl(use.js, 3, 3))
-->chunk : Symbol(D.chunk, Decl(mod1.js, 2, 19))
-+>chunk : Symbol(chunk, Decl(mod1.js, 2, 19))
-
- const D = require("./mod1");
- >D : Symbol(D, Decl(use.js, 6, 5))
-@@= skipped -14, +14 lines =@@
- >d : Symbol(d, Decl(use.js, 8, 3))
-
- d.chunk;
-->d.chunk : Symbol(D.chunk, Decl(mod1.js, 2, 19))
-+>d.chunk : Symbol(chunk, Decl(mod1.js, 2, 19))
- >d : Symbol(d, Decl(use.js, 8, 3))
-->chunk : Symbol(D.chunk, Decl(mod1.js, 2, 19))
-+>chunk : Symbol(chunk, Decl(mod1.js, 2, 19))
-
- === types.d.ts ===
- declare function require(name: string): any;
-@@= skipped -23, +23 lines =@@
-
-     constructor() {
-         this.chunk = 1;
-->this.chunk : Symbol(Chunk.chunk, Decl(mod1.js, 2, 19))
-+>this.chunk : Symbol(chunk, Decl(mod1.js, 2, 19))
- >this : Symbol(Chunk, Decl(mod1.js, 0, 0))
-->chunk : Symbol(Chunk.chunk, Decl(mod1.js, 2, 19))
-+>chunk : Symbol(chunk, Decl(mod1.js, 2, 19))
+@@= skipped -50, +50 lines =@@
      }
  }
  module.exports = Chunk;

@@ -14,6 +14,6 @@
  >exports.foo = bar : any
  >exports.foo : any
 ->exports : any
-+>exports : typeof import("./bug27025")
++>exports : typeof import("bug27025")
  >foo : any
  >bar : any

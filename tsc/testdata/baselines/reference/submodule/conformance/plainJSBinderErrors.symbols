@@ -25,10 +25,10 @@ class C {
 >C : Symbol(C, Decl(plainJSBinderErrors.js, 9, 1))
 
     #constructor = 5
->#constructor : Symbol(#constructor, Decl(plainJSBinderErrors.js, 10, 9))
+>#constructor : Symbol(C.#constructor, Decl(plainJSBinderErrors.js, 10, 9))
 
     deleted() {
->deleted : Symbol(deleted, Decl(plainJSBinderErrors.js, 11, 20))
+>deleted : Symbol(C.deleted, Decl(plainJSBinderErrors.js, 11, 20))
 
         function container(f) {
 >container : Symbol(container, Decl(plainJSBinderErrors.js, 12, 15))
@@ -47,7 +47,7 @@ class C {
 >container : Symbol(container, Decl(plainJSBinderErrors.js, 12, 15))
     }
     evalArguments() {
->evalArguments : Symbol(evalArguments, Decl(plainJSBinderErrors.js, 19, 5))
+>evalArguments : Symbol(C.evalArguments, Decl(plainJSBinderErrors.js, 19, 5))
 
         const eval = 7
 >eval : Symbol(eval, Decl(plainJSBinderErrors.js, 21, 13))
@@ -56,7 +56,7 @@ class C {
 >arguments : Symbol(arguments, Decl(plainJSBinderErrors.js, 22, 13))
     }
     withOctal() {
->withOctal : Symbol(withOctal, Decl(plainJSBinderErrors.js, 23, 5))
+>withOctal : Symbol(C.withOctal, Decl(plainJSBinderErrors.js, 23, 5))
 
         const redundant = 0o10
 >redundant : Symbol(redundant, Decl(plainJSBinderErrors.js, 25, 13))
@@ -68,7 +68,7 @@ class C {
         }
     }
     label() {
->label : Symbol(label, Decl(plainJSBinderErrors.js, 29, 5))
+>label : Symbol(C.label, Decl(plainJSBinderErrors.js, 29, 5))
 
         for(;;) {
             label: var x = 1

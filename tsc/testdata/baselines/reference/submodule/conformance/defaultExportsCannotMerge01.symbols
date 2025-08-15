@@ -11,10 +11,10 @@ export interface Decl {
 >Decl : Symbol(Decl, Decl(m1.ts, 2, 1), Decl(m1.ts, 7, 1))
 
     p1: number;
->p1 : Symbol(p1, Decl(m1.ts, 4, 23))
+>p1 : Symbol(Decl.p1, Decl(m1.ts, 4, 23))
 
     p2: number;
->p2 : Symbol(p2, Decl(m1.ts, 5, 15))
+>p2 : Symbol(Decl.p2, Decl(m1.ts, 5, 15))
 }
 
 export namespace Decl {
@@ -45,7 +45,7 @@ var x: Entity;
 var y: Entity.I;
 >y : Symbol(y, Decl(m2.ts, 5, 3))
 >Entity : Symbol(Entity, Decl(m2.ts, 0, 6))
->I : Symbol(I)
+>I : Symbol(Entity.I)
 
 Entity.x;
 >Entity : Symbol(Entity, Decl(m2.ts, 0, 6))

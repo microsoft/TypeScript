@@ -5,7 +5,7 @@ class Model {
 >Model : Symbol(Model, Decl(relatedViaDiscriminatedTypeNoError.ts, 0, 0))
 
     constructor(public flag: boolean) {}
->flag : Symbol(flag, Decl(relatedViaDiscriminatedTypeNoError.ts, 1, 16))
+>flag : Symbol(Model.flag, Decl(relatedViaDiscriminatedTypeNoError.ts, 1, 16))
 }
 
 type DiscriminatedUnion = { flag: true } | { flag: false };
@@ -19,7 +19,7 @@ class A<T extends DiscriminatedUnion> {
 >DiscriminatedUnion : Symbol(DiscriminatedUnion, Decl(relatedViaDiscriminatedTypeNoError.ts, 2, 1))
 
     constructor(public model: T) { }
->model : Symbol(model, Decl(relatedViaDiscriminatedTypeNoError.ts, 6, 16))
+>model : Symbol(A.model, Decl(relatedViaDiscriminatedTypeNoError.ts, 6, 16))
 >T : Symbol(T, Decl(relatedViaDiscriminatedTypeNoError.ts, 5, 8))
 }
 

@@ -12,7 +12,7 @@ interface TestSymb {
 
   (): void;
   readonly [symb]: boolean;
->[symb] : Symbol([symb], Decl(expandoFunctionSymbolProperty.ts, 5, 11))
+>[symb] : Symbol(TestSymb[symb], Decl(expandoFunctionSymbolProperty.ts, 5, 11))
 >symb : Symbol(symb, Decl(expandoFunctionSymbolProperty.ts, 2, 5))
 }
 

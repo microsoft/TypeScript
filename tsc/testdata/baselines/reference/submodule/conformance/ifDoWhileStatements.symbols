@@ -5,7 +5,7 @@ interface I {
 >I : Symbol(I, Decl(ifDoWhileStatements.ts, 0, 0))
 
     id: number;
->id : Symbol(id, Decl(ifDoWhileStatements.ts, 0, 13))
+>id : Symbol(I.id, Decl(ifDoWhileStatements.ts, 0, 13))
 }
 
 class C implements I {
@@ -13,10 +13,10 @@ class C implements I {
 >I : Symbol(I, Decl(ifDoWhileStatements.ts, 0, 0))
 
     id: number;
->id : Symbol(id, Decl(ifDoWhileStatements.ts, 4, 22))
+>id : Symbol(C.id, Decl(ifDoWhileStatements.ts, 4, 22))
 
     name: string;
->name : Symbol(name, Decl(ifDoWhileStatements.ts, 5, 15))
+>name : Symbol(C.name, Decl(ifDoWhileStatements.ts, 5, 15))
 }
 
 class C2 extends C {
@@ -24,7 +24,7 @@ class C2 extends C {
 >C : Symbol(C, Decl(ifDoWhileStatements.ts, 2, 1))
 
     valid: boolean;
->valid : Symbol(valid, Decl(ifDoWhileStatements.ts, 9, 20))
+>valid : Symbol(C2.valid, Decl(ifDoWhileStatements.ts, 9, 20))
 }
 
 class D<T>{
@@ -32,16 +32,16 @@ class D<T>{
 >T : Symbol(T, Decl(ifDoWhileStatements.ts, 13, 8))
 
     source: T;
->source : Symbol(source, Decl(ifDoWhileStatements.ts, 13, 11))
+>source : Symbol(D.source, Decl(ifDoWhileStatements.ts, 13, 11))
 >T : Symbol(T, Decl(ifDoWhileStatements.ts, 13, 8))
 
     recurse: D<T>;
->recurse : Symbol(recurse, Decl(ifDoWhileStatements.ts, 14, 14))
+>recurse : Symbol(D.recurse, Decl(ifDoWhileStatements.ts, 14, 14))
 >D : Symbol(D, Decl(ifDoWhileStatements.ts, 11, 1))
 >T : Symbol(T, Decl(ifDoWhileStatements.ts, 13, 8))
 
     wrapped: D<D<T>>
->wrapped : Symbol(wrapped, Decl(ifDoWhileStatements.ts, 15, 18))
+>wrapped : Symbol(D.wrapped, Decl(ifDoWhileStatements.ts, 15, 18))
 >D : Symbol(D, Decl(ifDoWhileStatements.ts, 11, 1))
 >D : Symbol(D, Decl(ifDoWhileStatements.ts, 11, 1))
 >T : Symbol(T, Decl(ifDoWhileStatements.ts, 13, 8))
@@ -63,15 +63,15 @@ module M {
 >A : Symbol(A, Decl(ifDoWhileStatements.ts, 22, 10))
 
         name: string;
->name : Symbol(name, Decl(ifDoWhileStatements.ts, 23, 20))
+>name : Symbol(A.name, Decl(ifDoWhileStatements.ts, 23, 20))
     }
 
     export function F2(x: number): string { return x.toString(); }
 >F2 : Symbol(F2, Decl(ifDoWhileStatements.ts, 25, 5))
 >x : Symbol(x, Decl(ifDoWhileStatements.ts, 27, 23))
->x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(ifDoWhileStatements.ts, 27, 23))
->toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 }
 
 module N {
@@ -81,15 +81,15 @@ module N {
 >A : Symbol(A, Decl(ifDoWhileStatements.ts, 30, 10))
 
         id: number;
->id : Symbol(id, Decl(ifDoWhileStatements.ts, 31, 20))
+>id : Symbol(A.id, Decl(ifDoWhileStatements.ts, 31, 20))
     }
 
     export function F2(x: number): string { return x.toString(); }
 >F2 : Symbol(F2, Decl(ifDoWhileStatements.ts, 33, 5))
 >x : Symbol(x, Decl(ifDoWhileStatements.ts, 35, 23))
->x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(ifDoWhileStatements.ts, 35, 23))
->toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 }
 
 // literals

@@ -93,9 +93,9 @@ const testObjectConstructorGetOwnPropertySymbols = Object.getOwnPropertySymbols(
 
 const testObjectConstructorKeys = Object.keys({});
 >testObjectConstructorKeys : Symbol(testObjectConstructorKeys, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 29, 5))
->Object.keys : Symbol(keys, Decl(lib.es5.d.ts, --, --))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->keys : Symbol(keys, Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
 
 const testObjectConstructorIs = Object.is({}, {});
 >testObjectConstructorIs : Symbol(testObjectConstructorIs, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 30, 5))

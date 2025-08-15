@@ -5,12 +5,12 @@ class Base {
 >Base : Symbol(Base, Decl(derivedClassFunctionOverridesBaseClassAccessor.ts, 0, 0))
 
     get x() {
->x : Symbol(x, Decl(derivedClassFunctionOverridesBaseClassAccessor.ts, 0, 12), Decl(derivedClassFunctionOverridesBaseClassAccessor.ts, 3, 5))
+>x : Symbol(Base.x, Decl(derivedClassFunctionOverridesBaseClassAccessor.ts, 0, 12), Decl(derivedClassFunctionOverridesBaseClassAccessor.ts, 3, 5))
 
         return 1;
     }
     set x(v) {
->x : Symbol(x, Decl(derivedClassFunctionOverridesBaseClassAccessor.ts, 0, 12), Decl(derivedClassFunctionOverridesBaseClassAccessor.ts, 3, 5))
+>x : Symbol(Base.x, Decl(derivedClassFunctionOverridesBaseClassAccessor.ts, 0, 12), Decl(derivedClassFunctionOverridesBaseClassAccessor.ts, 3, 5))
 >v : Symbol(v, Decl(derivedClassFunctionOverridesBaseClassAccessor.ts, 4, 10))
     }
 }
@@ -21,7 +21,7 @@ class Derived extends Base {
 >Base : Symbol(Base, Decl(derivedClassFunctionOverridesBaseClassAccessor.ts, 0, 0))
 
     x() {
->x : Symbol(x, Decl(derivedClassFunctionOverridesBaseClassAccessor.ts, 9, 28))
+>x : Symbol(Derived.x, Decl(derivedClassFunctionOverridesBaseClassAccessor.ts, 9, 28))
 
         return 1;
     }

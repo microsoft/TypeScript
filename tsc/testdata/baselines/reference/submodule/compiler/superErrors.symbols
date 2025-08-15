@@ -19,10 +19,10 @@ class User {
 >User : Symbol(User, Decl(superErrors.ts, 5, 1))
 
     name: string = "Bob";
->name : Symbol(name, Decl(superErrors.ts, 7, 12))
+>name : Symbol(User.name, Decl(superErrors.ts, 7, 12))
 
     sayHello(): void {
->sayHello : Symbol(sayHello, Decl(superErrors.ts, 8, 25))
+>sayHello : Symbol(User.sayHello, Decl(superErrors.ts, 8, 25))
 
         //console.log("Hello, " + this.name);
     }
@@ -33,7 +33,7 @@ class RegisteredUser extends User {
 >User : Symbol(User, Decl(superErrors.ts, 5, 1))
 
     name: string = "Frank";
->name : Symbol(name, Decl(superErrors.ts, 14, 35))
+>name : Symbol(RegisteredUser.name, Decl(superErrors.ts, 14, 35))
 
     constructor() {
         super();
@@ -58,13 +58,13 @@ class RegisteredUser extends User {
         (function() { return () => super; })();
     }
     sayHello(): void {
->sayHello : Symbol(sayHello, Decl(superErrors.ts, 31, 5))
+>sayHello : Symbol(RegisteredUser.sayHello, Decl(superErrors.ts, 31, 5))
 
         // super call in a method
         super.sayHello();
->super.sayHello : Symbol(sayHello, Decl(superErrors.ts, 8, 25))
+>super.sayHello : Symbol(User.sayHello, Decl(superErrors.ts, 8, 25))
 >super : Symbol(User, Decl(superErrors.ts, 5, 1))
->sayHello : Symbol(sayHello, Decl(superErrors.ts, 8, 25))
+>sayHello : Symbol(User.sayHello, Decl(superErrors.ts, 8, 25))
 
         // super call in a lambda in an inner function in a method
         function inner() {
@@ -78,7 +78,7 @@ class RegisteredUser extends User {
         (function() { return () => super; })();
     }
     static staticFunction(): void {
->staticFunction : Symbol(staticFunction, Decl(superErrors.ts, 43, 5))
+>staticFunction : Symbol(RegisteredUser.staticFunction, Decl(superErrors.ts, 43, 5))
 
         // super in static functions
         var s = super;

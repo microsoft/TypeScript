@@ -19,9 +19,9 @@ export type Page<P = NonNullable<unknown>> = ComponentType<P> & {
 >getLayout : Symbol(getLayout, Decl(expandoContextualTypes.tsx, 6, 65))
 >component : Symbol(component, Decl(expandoContextualTypes.tsx, 7, 17))
 >JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
->Element : Symbol(Element, Decl(react16.d.ts, 2494, 23))
+>Element : Symbol(JSX.Element, Decl(react16.d.ts, 2494, 23))
 >JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
->Element : Symbol(Element, Decl(react16.d.ts, 2494, 23))
+>Element : Symbol(JSX.Element, Decl(react16.d.ts, 2494, 23))
 }
 
 export const FooPage: Page = () => {
@@ -30,14 +30,14 @@ export const FooPage: Page = () => {
 
     return (
         <div>
->div : Symbol(div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 
             <p>Foo</p>
->p : Symbol(p, Decl(react16.d.ts, 2593, 102))
->p : Symbol(p, Decl(react16.d.ts, 2593, 102))
+>p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2593, 102))
+>p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2593, 102))
 
         </div>
->div : Symbol(div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 
     )
 };

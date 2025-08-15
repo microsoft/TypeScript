@@ -5,9 +5,9 @@
  // OK
  <div />;
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
-+>div : Symbol(__index, Decl(file.tsx, 2, 30))
++>div : Symbol(JSX.IntrinsicElements[__index], Decl(file.tsx, 2, 30))
 
  // OK
  <span />;
 ->span : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
-+>span : Symbol(__index, Decl(file.tsx, 2, 30))
++>span : Symbol(JSX.IntrinsicElements[__index], Decl(file.tsx, 2, 30))

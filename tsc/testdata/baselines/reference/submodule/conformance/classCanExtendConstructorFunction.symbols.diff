@@ -16,12 +16,10 @@
  }
  /** @param {Wagon[]=} wagons */
  Wagon.circle = function (wagons) {
-->Wagon.circle : Symbol(Wagon.circle, Decl(first.js, 6, 1))
+ >Wagon.circle : Symbol(Wagon.circle, Decl(first.js, 6, 1))
 ->Wagon : Symbol(Wagon, Decl(first.js, 0, 0), Decl(first.js, 6, 1))
-->circle : Symbol(Wagon.circle, Decl(first.js, 6, 1))
-+>Wagon.circle : Symbol(circle, Decl(first.js, 6, 1))
 +>Wagon : Symbol(Wagon, Decl(first.js, 0, 0))
-+>circle : Symbol(circle, Decl(first.js, 6, 1))
+ >circle : Symbol(Wagon.circle, Decl(first.js, 6, 1))
  >wagons : Symbol(wagons, Decl(first.js, 8, 25))
 
      return wagons ? wagons.length : 3.14;
@@ -34,27 +32,25 @@
  Wagon.prototype.load = function (supplies) {
 ->Wagon.prototype : Symbol(Wagon.load, Decl(first.js, 10, 1))
 ->Wagon : Symbol(Wagon, Decl(first.js, 0, 0), Decl(first.js, 6, 1))
-->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
-->load : Symbol(Wagon.load, Decl(first.js, 10, 1))
-+>Wagon.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
++>Wagon.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 +>Wagon : Symbol(Wagon, Decl(first.js, 0, 0))
-+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+ >prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+->load : Symbol(Wagon.load, Decl(first.js, 10, 1))
  >supplies : Symbol(supplies, Decl(first.js, 12, 33))
  }
  /** @param {*[]=} supplies - Yep, still a great type */
  Wagon.prototype.weight = supplies => supplies ? supplies.length : -1
 ->Wagon.prototype : Symbol(Wagon.weight, Decl(first.js, 13, 1))
 ->Wagon : Symbol(Wagon, Decl(first.js, 0, 0), Decl(first.js, 6, 1))
-->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
++>Wagon.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
++>Wagon : Symbol(Wagon, Decl(first.js, 0, 0))
+ >prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 ->weight : Symbol(Wagon.weight, Decl(first.js, 13, 1))
 ->supplies : Symbol(supplies, Decl(first.js, 15, 24))
 ->supplies : Symbol(supplies, Decl(first.js, 15, 24))
 ->supplies.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 ->supplies : Symbol(supplies, Decl(first.js, 15, 24))
 ->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
-+>Wagon.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
-+>Wagon : Symbol(Wagon, Decl(first.js, 0, 0))
-+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
 +>supplies : Symbol(supplies, Decl(first.js, 15, 24))
 +>supplies : Symbol(supplies, Decl(first.js, 15, 24))
 +>supplies : Symbol(supplies, Decl(first.js, 15, 24))
@@ -62,11 +58,10 @@
  Wagon.prototype.speed = function () {
 ->Wagon.prototype : Symbol(Wagon.speed, Decl(first.js, 15, 68))
 ->Wagon : Symbol(Wagon, Decl(first.js, 0, 0), Decl(first.js, 6, 1))
-->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
-->speed : Symbol(Wagon.speed, Decl(first.js, 15, 68))
-+>Wagon.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
++>Wagon.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 +>Wagon : Symbol(Wagon, Decl(first.js, 0, 0))
-+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+ >prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+->speed : Symbol(Wagon.speed, Decl(first.js, 15, 68))
 
      return this.numberOxen / this.weight()
 ->this.numberOxen : Symbol(Wagon.numberOxen, Decl(first.js, 4, 28))
@@ -87,24 +82,9 @@
 ->super : Symbol(Wagon, Decl(first.js, 0, 0), Decl(first.js, 6, 1))
 -
          this.foonly = 12
-->this.foonly : Symbol(Sql.foonly, Decl(first.js, 22, 16))
-+>this.foonly : Symbol(foonly, Decl(first.js, 22, 16))
+ >this.foonly : Symbol(Sql.foonly, Decl(first.js, 22, 16))
  >this : Symbol(Sql, Decl(first.js, 18, 1))
-->foonly : Symbol(Sql.foonly, Decl(first.js, 22, 16))
-+>foonly : Symbol(foonly, Decl(first.js, 22, 16))
-     }
-     /**
-      * @param {Array.<string>} files
-@@= skipped -76, +58 lines =@@
-      * This is not assignable, so should have a type error
-      */
-     load(files, format) {
-->load : Symbol(Sql.load, Decl(first.js, 24, 5))
-+>load : Symbol(load, Decl(first.js, 24, 5))
- >files : Symbol(files, Decl(first.js, 30, 9))
- >format : Symbol(format, Decl(first.js, 30, 15))
-
-@@= skipped -12, +12 lines =@@
+@@= skipped -88, +70 lines =@@
          }
          else {
              super.speed() // run faster
@@ -131,16 +111,13 @@
 ->db.numberOxen : Symbol(Wagon.numberOxen, Decl(first.js, 4, 28))
 ->db : Symbol(db, Decl(first.js, 42, 3), Decl(first.js, 42, 19))
 ->numberOxen : Symbol(Wagon.numberOxen, Decl(first.js, 4, 28))
-->db.foonly : Symbol(Sql.foonly, Decl(first.js, 22, 16))
++>db : Symbol(db, Decl(first.js, 42, 3))
+ >db.foonly : Symbol(Sql.foonly, Decl(first.js, 22, 16))
 ->db : Symbol(db, Decl(first.js, 42, 3), Decl(first.js, 42, 19))
-->foonly : Symbol(Sql.foonly, Decl(first.js, 22, 16))
 +>db : Symbol(db, Decl(first.js, 42, 3))
-+>db.foonly : Symbol(foonly, Decl(first.js, 22, 16))
-+>db : Symbol(db, Decl(first.js, 42, 3))
-+>foonly : Symbol(foonly, Decl(first.js, 22, 16))
+ >foonly : Symbol(Sql.foonly, Decl(first.js, 22, 16))
 
  // error, can't extend a TS constructor function
- class Drakkhen extends Dragon {
 @@= skipped -56, +46 lines =@@
  // ok
  class Conestoga extends Wagon {
@@ -149,8 +126,7 @@
 +>Wagon : Symbol(Wagon, Decl(first.js, 0, 0))
 
      constructor(public drunkOO: true) {
-->drunkOO : Symbol(Conestoga.drunkOO, Decl(second.ts, 14, 16))
-+>drunkOO : Symbol(drunkOO, Decl(second.ts, 14, 16))
+ >drunkOO : Symbol(Conestoga.drunkOO, Decl(second.ts, 14, 16))
 
          // error: wrong type
          super('nope');
@@ -158,30 +134,15 @@
      }
      // should error since others is not optional
      static circle(others: (typeof Wagon)[]) {
-->circle : Symbol(Conestoga.circle, Decl(second.ts, 17, 5))
-+>circle : Symbol(circle, Decl(second.ts, 17, 5))
+ >circle : Symbol(Conestoga.circle, Decl(second.ts, 17, 5))
  >others : Symbol(others, Decl(second.ts, 19, 18))
 ->Wagon : Symbol(Wagon, Decl(first.js, 0, 0), Decl(first.js, 6, 1))
 +>Wagon : Symbol(Wagon, Decl(first.js, 0, 0))
 
          return others.length
-->others.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
-+>others.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- >others : Symbol(others, Decl(second.ts, 19, 18))
-->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
-+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
-     }
- }
- var c = new Conestoga(true);
-@@= skipped -26, +25 lines =@@
- >Conestoga : Symbol(Conestoga, Decl(second.ts, 11, 1))
-
- c.drunkOO
-->c.drunkOO : Symbol(Conestoga.drunkOO, Decl(second.ts, 14, 16))
-+>c.drunkOO : Symbol(drunkOO, Decl(second.ts, 14, 16))
- >c : Symbol(c, Decl(second.ts, 23, 3))
-->drunkOO : Symbol(Conestoga.drunkOO, Decl(second.ts, 14, 16))
-+>drunkOO : Symbol(drunkOO, Decl(second.ts, 14, 16))
+ >others.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+@@= skipped -31, +30 lines =@@
+ >drunkOO : Symbol(Conestoga.drunkOO, Decl(second.ts, 14, 16))
 
  c.numberOxen
 ->c.numberOxen : Symbol(Wagon.numberOxen, Decl(first.js, 4, 28))
@@ -190,7 +151,7 @@
 
  === generic.js ===
  /**
-@@= skipped -19, +17 lines =@@
+@@= skipped -14, +12 lines =@@
  >flavour : Symbol(flavour, Decl(generic.js, 4, 14))
 
      this.flavour = flavour
@@ -200,12 +161,8 @@
  >flavour : Symbol(flavour, Decl(generic.js, 4, 14))
  }
  /** @extends {Soup<{ claim: "ignorant" | "malicious" }>} */
-@@= skipped -11, +8 lines =@@
- >Soup : Symbol(Soup, Decl(generic.js, 0, 0))
-
-     log() {
-->log : Symbol(Chowder.log, Decl(generic.js, 8, 28))
-+>log : Symbol(log, Decl(generic.js, 8, 28))
+@@= skipped -14, +11 lines =@@
+ >log : Symbol(Chowder.log, Decl(generic.js, 8, 28))
 
          return this.flavour
 ->this.flavour : Symbol(Soup.flavour, Decl(generic.js, 4, 24))
@@ -214,7 +171,7 @@
      }
  }
 
-@@= skipped -14, +12 lines =@@
+@@= skipped -11, +9 lines =@@
  >Soup : Symbol(Soup, Decl(generic.js, 0, 0))
 
  soup.flavour

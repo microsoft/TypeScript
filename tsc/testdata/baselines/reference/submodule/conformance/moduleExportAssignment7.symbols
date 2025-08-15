@@ -3,11 +3,11 @@
 === mod.js ===
 class Thing  { x = 1 }
 >Thing : Symbol(Thing, Decl(mod.js, 0, 0))
->x : Symbol(x, Decl(mod.js, 0, 14))
+>x : Symbol(Thing.x, Decl(mod.js, 0, 14))
 
 class AnotherThing { y = 2  }
 >AnotherThing : Symbol(AnotherThing, Decl(mod.js, 0, 22))
->y : Symbol(y, Decl(mod.js, 1, 20))
+>y : Symbol(AnotherThing.y, Decl(mod.js, 1, 20))
 
 function foo() { return 3 }
 >foo : Symbol(foo, Decl(mod.js, 1, 29))
@@ -90,19 +90,19 @@ function jsvalues(a, b, c, d, e, f, g) {
 >g : Symbol(g, Decl(main.js, 22, 35))
 
     return a.length + b.length + c() + d() + e() + f() + g.length
->a.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>a.length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(main.js, 22, 18))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
->b.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+>b.length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
 >b : Symbol(b, Decl(main.js, 22, 20))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
 >c : Symbol(c, Decl(main.js, 22, 23))
 >d : Symbol(d, Decl(main.js, 22, 26))
 >e : Symbol(e, Decl(main.js, 22, 29))
 >f : Symbol(f, Decl(main.js, 22, 32))
->g.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>g.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >g : Symbol(g, Decl(main.js, 22, 35))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 }
 
 === index.ts ===
@@ -173,18 +173,18 @@ function values(
 
 ) {
     return a.length + b.length + c() + d() + e() + f() + g.length
->a.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>a.length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(index.ts, 12, 16))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
->b.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+>b.length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
 >b : Symbol(b, Decl(index.ts, 13, 36))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
 >c : Symbol(c, Decl(index.ts, 14, 43))
 >d : Symbol(d, Decl(index.ts, 15, 34))
 >e : Symbol(e, Decl(index.ts, 16, 34))
 >f : Symbol(f, Decl(index.ts, 17, 34))
->g.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>g.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >g : Symbol(g, Decl(index.ts, 18, 34))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 }
 

@@ -50,7 +50,7 @@ interface Fooer {
 >Fooer : Symbol(Fooer, Decl(subtypeReductionWithAnyFunctionType.ts, 17, 36))
 
     foo: (v: string) => string;
->foo : Symbol(foo, Decl(subtypeReductionWithAnyFunctionType.ts, 18, 17))
+>foo : Symbol(Fooer.foo, Decl(subtypeReductionWithAnyFunctionType.ts, 18, 17))
 >v : Symbol(v, Decl(subtypeReductionWithAnyFunctionType.ts, 19, 10))
 }
 function f() {

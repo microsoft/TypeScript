@@ -22,10 +22,10 @@ class Classe {
 >Classe : Symbol(Classe, Decl(spellingUncheckedJS.js, 10, 1))
 
     non = 'oui'
->non : Symbol(non, Decl(spellingUncheckedJS.js, 11, 14))
+>non : Symbol(Classe.non, Decl(spellingUncheckedJS.js, 11, 14))
 
     methode() {
->methode : Symbol(methode, Decl(spellingUncheckedJS.js, 12, 15))
+>methode : Symbol(Classe.methode, Decl(spellingUncheckedJS.js, 12, 15))
 
         // no error on 'this' references
         return this.none
@@ -37,7 +37,7 @@ class Derivee extends Classe {
 >Classe : Symbol(Classe, Decl(spellingUncheckedJS.js, 10, 1))
 
     methode() {
->methode : Symbol(methode, Decl(spellingUncheckedJS.js, 18, 30))
+>methode : Symbol(Derivee.methode, Decl(spellingUncheckedJS.js, 18, 30))
 
         // no error on 'super' references
         return super.none
@@ -70,9 +70,9 @@ new Date().getGMTDate() // OK, from another file
 // No suggestions for globals from other files
 const atoc = setIntegral(() => console.log('ok'), 500)
 >atoc : Symbol(atoc, Decl(spellingUncheckedJS.js, 36, 5))
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 
 AudioBuffin // etc
 Jimmy

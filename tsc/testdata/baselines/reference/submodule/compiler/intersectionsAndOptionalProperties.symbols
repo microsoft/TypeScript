@@ -30,10 +30,10 @@ interface To {
 >To : Symbol(To, Decl(intersectionsAndOptionalProperties.ts, 5, 6))
 
     field?: number;
->field : Symbol(field, Decl(intersectionsAndOptionalProperties.ts, 9, 14))
+>field : Symbol(To.field, Decl(intersectionsAndOptionalProperties.ts, 9, 14))
 
     anotherField: string;
->anotherField : Symbol(anotherField, Decl(intersectionsAndOptionalProperties.ts, 10, 19))
+>anotherField : Symbol(To.anotherField, Decl(intersectionsAndOptionalProperties.ts, 10, 19))
 }
 
 type From =  { field: null } & Omit<To, 'field'>;
@@ -56,9 +56,9 @@ function foo(v: From) {
 >v : Symbol(v, Decl(intersectionsAndOptionalProperties.ts, 16, 13))
 
     x.field = v.field; // Error
->x.field : Symbol(field, Decl(intersectionsAndOptionalProperties.ts, 9, 14))
+>x.field : Symbol(To.field, Decl(intersectionsAndOptionalProperties.ts, 9, 14))
 >x : Symbol(x, Decl(intersectionsAndOptionalProperties.ts, 17, 7))
->field : Symbol(field, Decl(intersectionsAndOptionalProperties.ts, 9, 14))
+>field : Symbol(To.field, Decl(intersectionsAndOptionalProperties.ts, 9, 14))
 >v.field : Symbol(field, Decl(intersectionsAndOptionalProperties.ts, 14, 14))
 >v : Symbol(v, Decl(intersectionsAndOptionalProperties.ts, 16, 13))
 >field : Symbol(field, Decl(intersectionsAndOptionalProperties.ts, 14, 14))

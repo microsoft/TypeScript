@@ -5,7 +5,7 @@ class A {
 >A : Symbol(A, Decl(classAbstractOverrideWithAbstract.ts, 0, 0))
 
     foo() {}
->foo : Symbol(foo, Decl(classAbstractOverrideWithAbstract.ts, 0, 9))
+>foo : Symbol(A.foo, Decl(classAbstractOverrideWithAbstract.ts, 0, 9))
 }
 
 abstract class B extends A {
@@ -13,17 +13,17 @@ abstract class B extends A {
 >A : Symbol(A, Decl(classAbstractOverrideWithAbstract.ts, 0, 0))
 
     abstract foo();
->foo : Symbol(foo, Decl(classAbstractOverrideWithAbstract.ts, 4, 28))
+>foo : Symbol(B.foo, Decl(classAbstractOverrideWithAbstract.ts, 4, 28))
 }
 
 abstract class AA {
 >AA : Symbol(AA, Decl(classAbstractOverrideWithAbstract.ts, 6, 1))
 
     foo() {}
->foo : Symbol(foo, Decl(classAbstractOverrideWithAbstract.ts, 8, 19))
+>foo : Symbol(AA.foo, Decl(classAbstractOverrideWithAbstract.ts, 8, 19))
 
     abstract bar();
->bar : Symbol(bar, Decl(classAbstractOverrideWithAbstract.ts, 9, 12))
+>bar : Symbol(AA.bar, Decl(classAbstractOverrideWithAbstract.ts, 9, 12))
 }
 
 abstract class BB extends AA {
@@ -31,10 +31,10 @@ abstract class BB extends AA {
 >AA : Symbol(AA, Decl(classAbstractOverrideWithAbstract.ts, 6, 1))
 
     abstract foo();
->foo : Symbol(foo, Decl(classAbstractOverrideWithAbstract.ts, 13, 30))
+>foo : Symbol(BB.foo, Decl(classAbstractOverrideWithAbstract.ts, 13, 30))
 
     bar () {}
->bar : Symbol(bar, Decl(classAbstractOverrideWithAbstract.ts, 14, 19))
+>bar : Symbol(BB.bar, Decl(classAbstractOverrideWithAbstract.ts, 14, 19))
 }
 
 class CC extends BB {} // error
@@ -46,5 +46,5 @@ class DD extends BB {
 >BB : Symbol(BB, Decl(classAbstractOverrideWithAbstract.ts, 11, 1))
 
     foo() {}
->foo : Symbol(foo, Decl(classAbstractOverrideWithAbstract.ts, 20, 21))
+>foo : Symbol(DD.foo, Decl(classAbstractOverrideWithAbstract.ts, 20, 21))
 }

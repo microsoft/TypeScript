@@ -29,7 +29,7 @@ const helper = function<T>(t: T[]) {
 
     helper(t.slice(1));
 >helper : Symbol(helper, Decl(controlFlowOuterVariable.ts, 9, 5))
->t.slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+>t.slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
 >t : Symbol(t, Decl(controlFlowOuterVariable.ts, 9, 27))
->slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+>slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
 }

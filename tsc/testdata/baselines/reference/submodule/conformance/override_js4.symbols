@@ -5,7 +5,7 @@ class A {
 >A : Symbol(A, Decl(a.js, 0, 0))
 
     doSomething() {}
->doSomething : Symbol(doSomething, Decl(a.js, 0, 9))
+>doSomething : Symbol(A.doSomething, Decl(a.js, 0, 9))
 }
 
 class B extends A {
@@ -14,6 +14,6 @@ class B extends A {
 
     /** @override  */
     doSomethang() {}
->doSomethang : Symbol(doSomethang, Decl(a.js, 4, 19))
+>doSomethang : Symbol(B.doSomethang, Decl(a.js, 4, 19))
 }
 

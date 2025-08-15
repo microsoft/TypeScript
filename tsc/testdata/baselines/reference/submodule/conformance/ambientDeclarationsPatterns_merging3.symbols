@@ -6,7 +6,7 @@ declare module "*.foo" {
 
   export interface OhNo { star: string }
 >OhNo : Symbol(OhNo, Decl(types.ts, 0, 24))
->star : Symbol(star, Decl(types.ts, 1, 25))
+>star : Symbol(OhNo.star, Decl(types.ts, 1, 25))
 }
 
 === test.ts ===
@@ -15,7 +15,7 @@ declare module "a.foo" {
 
   export interface OhNo { a: string }
 >OhNo : Symbol(OhNo, Decl(test.ts, 0, 24), Decl(types.ts, 0, 24))
->a : Symbol(a, Decl(test.ts, 1, 25))
+>a : Symbol(OhNo.a, Decl(test.ts, 1, 25))
 }
 import { OhNo } from "b.foo"
 >OhNo : Symbol(OhNo, Decl(test.ts, 3, 8))

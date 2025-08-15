@@ -5,6 +5,6 @@ class A {
 >A : Symbol(A, Decl(a.js, 0, 0))
 
   foo();
->foo : Symbol(foo, Decl(a.js, 0, 9))
+>foo : Symbol(A.foo, Decl(a.js, 0, 9))
 }
 

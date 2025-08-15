@@ -5,6 +5,6 @@ class C {
 >C : Symbol(C, Decl(asyncGetter_es5.ts, 0, 0))
 
   async get foo() {
->foo : Symbol(foo, Decl(asyncGetter_es5.ts, 0, 9))
+>foo : Symbol(C.foo, Decl(asyncGetter_es5.ts, 0, 9))
   }
 }

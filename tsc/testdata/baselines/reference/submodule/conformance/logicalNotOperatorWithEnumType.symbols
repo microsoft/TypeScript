@@ -5,9 +5,9 @@
 
 enum ENUM { A, B, C };
 >ENUM : Symbol(ENUM, Decl(logicalNotOperatorWithEnumType.ts, 0, 0))
->A : Symbol(A, Decl(logicalNotOperatorWithEnumType.ts, 2, 11))
->B : Symbol(B, Decl(logicalNotOperatorWithEnumType.ts, 2, 14))
->C : Symbol(C, Decl(logicalNotOperatorWithEnumType.ts, 2, 17))
+>A : Symbol(ENUM.A, Decl(logicalNotOperatorWithEnumType.ts, 2, 11))
+>B : Symbol(ENUM.B, Decl(logicalNotOperatorWithEnumType.ts, 2, 14))
+>C : Symbol(ENUM.C, Decl(logicalNotOperatorWithEnumType.ts, 2, 17))
 
 enum ENUM1 { };
 >ENUM1 : Symbol(ENUM1, Decl(logicalNotOperatorWithEnumType.ts, 2, 22))
@@ -21,15 +21,15 @@ var ResultIsBoolean1 = !ENUM;
 var ResultIsBoolean2 = !ENUM["B"];
 >ResultIsBoolean2 : Symbol(ResultIsBoolean2, Decl(logicalNotOperatorWithEnumType.ts, 9, 3))
 >ENUM : Symbol(ENUM, Decl(logicalNotOperatorWithEnumType.ts, 0, 0))
->"B" : Symbol(B, Decl(logicalNotOperatorWithEnumType.ts, 2, 14))
+>"B" : Symbol(ENUM.B, Decl(logicalNotOperatorWithEnumType.ts, 2, 14))
 
 var ResultIsBoolean3 = !(ENUM.B + ENUM["C"]);
 >ResultIsBoolean3 : Symbol(ResultIsBoolean3, Decl(logicalNotOperatorWithEnumType.ts, 10, 3))
->ENUM.B : Symbol(B, Decl(logicalNotOperatorWithEnumType.ts, 2, 14))
+>ENUM.B : Symbol(ENUM.B, Decl(logicalNotOperatorWithEnumType.ts, 2, 14))
 >ENUM : Symbol(ENUM, Decl(logicalNotOperatorWithEnumType.ts, 0, 0))
->B : Symbol(B, Decl(logicalNotOperatorWithEnumType.ts, 2, 14))
+>B : Symbol(ENUM.B, Decl(logicalNotOperatorWithEnumType.ts, 2, 14))
 >ENUM : Symbol(ENUM, Decl(logicalNotOperatorWithEnumType.ts, 0, 0))
->"C" : Symbol(C, Decl(logicalNotOperatorWithEnumType.ts, 2, 17))
+>"C" : Symbol(ENUM.C, Decl(logicalNotOperatorWithEnumType.ts, 2, 17))
 
 // multiple ! operators
 var ResultIsBoolean4 = !!ENUM;
@@ -39,10 +39,10 @@ var ResultIsBoolean4 = !!ENUM;
 var ResultIsBoolean5 = !!!(ENUM["B"] + ENUM.C);
 >ResultIsBoolean5 : Symbol(ResultIsBoolean5, Decl(logicalNotOperatorWithEnumType.ts, 14, 3))
 >ENUM : Symbol(ENUM, Decl(logicalNotOperatorWithEnumType.ts, 0, 0))
->"B" : Symbol(B, Decl(logicalNotOperatorWithEnumType.ts, 2, 14))
->ENUM.C : Symbol(C, Decl(logicalNotOperatorWithEnumType.ts, 2, 17))
+>"B" : Symbol(ENUM.B, Decl(logicalNotOperatorWithEnumType.ts, 2, 14))
+>ENUM.C : Symbol(ENUM.C, Decl(logicalNotOperatorWithEnumType.ts, 2, 17))
 >ENUM : Symbol(ENUM, Decl(logicalNotOperatorWithEnumType.ts, 0, 0))
->C : Symbol(C, Decl(logicalNotOperatorWithEnumType.ts, 2, 17))
+>C : Symbol(ENUM.C, Decl(logicalNotOperatorWithEnumType.ts, 2, 17))
 
 // miss assignment operators
 !ENUM;
@@ -52,9 +52,9 @@ var ResultIsBoolean5 = !!!(ENUM["B"] + ENUM.C);
 >ENUM1 : Symbol(ENUM1, Decl(logicalNotOperatorWithEnumType.ts, 2, 22))
 
 !ENUM.B;
->ENUM.B : Symbol(B, Decl(logicalNotOperatorWithEnumType.ts, 2, 14))
+>ENUM.B : Symbol(ENUM.B, Decl(logicalNotOperatorWithEnumType.ts, 2, 14))
 >ENUM : Symbol(ENUM, Decl(logicalNotOperatorWithEnumType.ts, 0, 0))
->B : Symbol(B, Decl(logicalNotOperatorWithEnumType.ts, 2, 14))
+>B : Symbol(ENUM.B, Decl(logicalNotOperatorWithEnumType.ts, 2, 14))
 
 !ENUM, ENUM1;
 >ENUM : Symbol(ENUM, Decl(logicalNotOperatorWithEnumType.ts, 0, 0))

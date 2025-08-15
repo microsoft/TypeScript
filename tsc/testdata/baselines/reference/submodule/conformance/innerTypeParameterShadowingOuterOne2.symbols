@@ -10,7 +10,7 @@ class C<T extends Date> {
 >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
     g<T extends Number>() {
->g : Symbol(g, Decl(innerTypeParameterShadowingOuterOne2.ts, 3, 25))
+>g : Symbol(C.g, Decl(innerTypeParameterShadowingOuterOne2.ts, 3, 25))
 >T : Symbol(T, Decl(innerTypeParameterShadowingOuterOne2.ts, 4, 6))
 >Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
@@ -19,22 +19,22 @@ class C<T extends Date> {
 >T : Symbol(T, Decl(innerTypeParameterShadowingOuterOne2.ts, 4, 6))
 
         x.toFixed();
->x.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+>x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(innerTypeParameterShadowingOuterOne2.ts, 5, 11))
->toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
     }
 
     h() {
->h : Symbol(h, Decl(innerTypeParameterShadowingOuterOne2.ts, 7, 5))
+>h : Symbol(C.h, Decl(innerTypeParameterShadowingOuterOne2.ts, 7, 5))
 
         var x: T;
 >x : Symbol(x, Decl(innerTypeParameterShadowingOuterOne2.ts, 10, 11))
 >T : Symbol(T, Decl(innerTypeParameterShadowingOuterOne2.ts, 3, 8))
 
         x.getDate();
->x.getDate : Symbol(getDate, Decl(lib.es5.d.ts, --, --))
+>x.getDate : Symbol(Date.getDate, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(innerTypeParameterShadowingOuterOne2.ts, 10, 11))
->getDate : Symbol(getDate, Decl(lib.es5.d.ts, --, --))
+>getDate : Symbol(Date.getDate, Decl(lib.es5.d.ts, --, --))
     }
 }
 
@@ -46,7 +46,7 @@ class C2<T extends Date, U extends Date> {
 >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
     g<T extends Number, U extends Number>() {
->g : Symbol(g, Decl(innerTypeParameterShadowingOuterOne2.ts, 15, 42))
+>g : Symbol(C2.g, Decl(innerTypeParameterShadowingOuterOne2.ts, 15, 42))
 >T : Symbol(T, Decl(innerTypeParameterShadowingOuterOne2.ts, 16, 6))
 >Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >U : Symbol(U, Decl(innerTypeParameterShadowingOuterOne2.ts, 16, 23))
@@ -57,22 +57,22 @@ class C2<T extends Date, U extends Date> {
 >U : Symbol(U, Decl(innerTypeParameterShadowingOuterOne2.ts, 16, 23))
 
         x.toFixed();
->x.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+>x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(innerTypeParameterShadowingOuterOne2.ts, 17, 11))
->toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
     }
 
     h() {
->h : Symbol(h, Decl(innerTypeParameterShadowingOuterOne2.ts, 19, 5))
+>h : Symbol(C2.h, Decl(innerTypeParameterShadowingOuterOne2.ts, 19, 5))
 
         var x: U;
 >x : Symbol(x, Decl(innerTypeParameterShadowingOuterOne2.ts, 22, 11))
 >U : Symbol(U, Decl(innerTypeParameterShadowingOuterOne2.ts, 15, 24))
 
         x.getDate();
->x.getDate : Symbol(getDate, Decl(lib.es5.d.ts, --, --))
+>x.getDate : Symbol(Date.getDate, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(innerTypeParameterShadowingOuterOne2.ts, 22, 11))
->getDate : Symbol(getDate, Decl(lib.es5.d.ts, --, --))
+>getDate : Symbol(Date.getDate, Decl(lib.es5.d.ts, --, --))
     }
 }
 //class C2<T extends Date, U extends T> {

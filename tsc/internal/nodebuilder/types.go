@@ -9,7 +9,6 @@ import (
 // TODO: previously all symboltracker methods were optional, but now they're required.
 type SymbolTracker interface {
 	GetModuleSpecifierGenerationHost() modulespecifiers.ModuleSpecifierGenerationHost
-	GetInnerSymbolTracker() SymbolTracker
 
 	TrackSymbol(symbol *ast.Symbol, enclosingDeclaration *ast.Node, meaning ast.SymbolFlags) bool
 	ReportInaccessibleThisError()

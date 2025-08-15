@@ -10,9 +10,9 @@ function C(x) {
 >x : Symbol(x, Decl(a.js, 1, 11))
 }
 C.prototype.m = function() {
->C.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>C.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >C : Symbol(C, Decl(a.js, 0, 0))
->prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 
     this.y = 12
 }

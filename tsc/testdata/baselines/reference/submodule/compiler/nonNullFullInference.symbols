@@ -55,9 +55,9 @@ function testNonNullInferenceWithArrays(numbers: number[]) {
         }
 
         arr.push(n);
->arr.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>arr.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >arr : Symbol(arr, Decl(nonNullFullInference.ts, 19, 9))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >n : Symbol(n, Decl(nonNullFullInference.ts, 21, 14))
 
         result = arr;

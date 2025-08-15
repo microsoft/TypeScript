@@ -19,5 +19,5 @@ export module M {
     export var w: v.I; // Gets emitted as C.I, which is the wrong interface
 >w : Symbol(w, Decl(declarationEmitNameConflictsWithAlias.ts, 4, 14))
 >v : Symbol(v, Decl(declarationEmitNameConflictsWithAlias.ts, 0, 42))
->I : Symbol(I, Decl(declarationEmitNameConflictsWithAlias.ts, 0, 17))
+>I : Symbol(v.I, Decl(declarationEmitNameConflictsWithAlias.ts, 0, 17))
 }

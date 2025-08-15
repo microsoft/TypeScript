@@ -2,10 +2,10 @@
 
 === errors.d.ts ===
 export = createHttpError;
->createHttpError : import("./errors").NamedConstructors
+>createHttpError : import("errors").NamedConstructors
 
 declare const createHttpError: createHttpError.NamedConstructors;
->createHttpError : import("./errors").NamedConstructors
+>createHttpError : import("errors").NamedConstructors
 >createHttpError : any
 
 declare namespace createHttpError {

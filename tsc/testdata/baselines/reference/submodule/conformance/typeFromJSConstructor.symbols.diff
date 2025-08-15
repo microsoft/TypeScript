@@ -39,11 +39,10 @@
  }
  Installer.prototype.first = function () {
 ->Installer.prototype : Symbol(Installer.first, Decl(a.js, 11, 1))
-+>Installer.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
++>Installer.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
  >Installer : Symbol(Installer, Decl(a.js, 0, 0))
-->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+ >prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 ->first : Symbol(Installer.first, Decl(a.js, 11, 1))
-+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
 
      this.arg = 'hi' // error
 ->this.arg : Symbol(Installer.arg, Decl(a.js, 0, 23), Decl(a.js, 12, 41), Decl(a.js, 19, 42))
@@ -73,11 +72,10 @@
  }
  Installer.prototype.second = function () {
 ->Installer.prototype : Symbol(Installer.second, Decl(a.js, 18, 1))
-+>Installer.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
++>Installer.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
  >Installer : Symbol(Installer, Decl(a.js, 0, 0))
-->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+ >prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 ->second : Symbol(Installer.second, Decl(a.js, 18, 1))
-+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
 
      this.arg = false // error
 ->this.arg : Symbol(Installer.arg, Decl(a.js, 0, 23), Decl(a.js, 12, 41), Decl(a.js, 19, 42))

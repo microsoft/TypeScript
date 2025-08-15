@@ -1,24 +1,6 @@
 --- old.importHelpers.symbols
 +++ new.importHelpers.symbols
-@@= skipped -17, +17 lines =@@
- >C : Symbol(C, Decl(external.ts, 3, 21))
-
-     method(@dec x: number) {
-->method : Symbol(C.method, Decl(external.ts, 6, 9))
-+>method : Symbol(method, Decl(external.ts, 6, 9))
- >dec : Symbol(dec, Decl(external.ts, 3, 11))
- >x : Symbol(x, Decl(external.ts, 7, 11))
-     }
-@@= skipped -38, +38 lines =@@
- >C : Symbol(C, Decl(script.ts, 3, 21))
-
-     method(@dec x: number) {
-->method : Symbol(C.method, Decl(script.ts, 6, 9))
-+>method : Symbol(method, Decl(script.ts, 6, 9))
- >dec : Symbol(dec, Decl(script.ts, 3, 11))
- >x : Symbol(x, Decl(script.ts, 7, 11))
-     }
-@@= skipped -22, +22 lines =@@
+@@= skipped -77, +77 lines =@@
 
  === tslib.d.ts ===
  export declare function __extends(d: Function, b: Function): void;

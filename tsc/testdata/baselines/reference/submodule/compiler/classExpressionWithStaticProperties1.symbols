@@ -6,18 +6,18 @@ var v = class C {
 >C : Symbol(C, Decl(classExpressionWithStaticProperties1.ts, 0, 7))
 
     static a = 1;
->a : Symbol(a, Decl(classExpressionWithStaticProperties1.ts, 0, 17))
+>a : Symbol(C.a, Decl(classExpressionWithStaticProperties1.ts, 0, 17))
 
     static b = 2;
->b : Symbol(b, Decl(classExpressionWithStaticProperties1.ts, 1, 17))
+>b : Symbol(C.b, Decl(classExpressionWithStaticProperties1.ts, 1, 17))
 
     static c = C.a + C.b;
->c : Symbol(c, Decl(classExpressionWithStaticProperties1.ts, 2, 17))
->C.a : Symbol(a, Decl(classExpressionWithStaticProperties1.ts, 0, 17))
+>c : Symbol(C.c, Decl(classExpressionWithStaticProperties1.ts, 2, 17))
+>C.a : Symbol(C.a, Decl(classExpressionWithStaticProperties1.ts, 0, 17))
 >C : Symbol(C, Decl(classExpressionWithStaticProperties1.ts, 0, 7))
->a : Symbol(a, Decl(classExpressionWithStaticProperties1.ts, 0, 17))
->C.b : Symbol(b, Decl(classExpressionWithStaticProperties1.ts, 1, 17))
+>a : Symbol(C.a, Decl(classExpressionWithStaticProperties1.ts, 0, 17))
+>C.b : Symbol(C.b, Decl(classExpressionWithStaticProperties1.ts, 1, 17))
 >C : Symbol(C, Decl(classExpressionWithStaticProperties1.ts, 0, 7))
->b : Symbol(b, Decl(classExpressionWithStaticProperties1.ts, 1, 17))
+>b : Symbol(C.b, Decl(classExpressionWithStaticProperties1.ts, 1, 17))
 
 };

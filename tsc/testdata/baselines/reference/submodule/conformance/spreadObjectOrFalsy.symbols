@@ -94,7 +94,7 @@ interface DatafulFoo<T> {
 >T : Symbol(T, Decl(spreadObjectOrFalsy.ts, 35, 21))
 
     data: T;
->data : Symbol(data, Decl(spreadObjectOrFalsy.ts, 35, 25))
+>data : Symbol(DatafulFoo.data, Decl(spreadObjectOrFalsy.ts, 35, 25))
 >T : Symbol(T, Decl(spreadObjectOrFalsy.ts, 35, 21))
 }
 
@@ -103,26 +103,26 @@ class Foo<T extends string> {
 >T : Symbol(T, Decl(spreadObjectOrFalsy.ts, 39, 10))
 
     data: T | undefined;
->data : Symbol(data, Decl(spreadObjectOrFalsy.ts, 39, 29))
+>data : Symbol(Foo.data, Decl(spreadObjectOrFalsy.ts, 39, 29))
 >T : Symbol(T, Decl(spreadObjectOrFalsy.ts, 39, 10))
 
     bar() {
->bar : Symbol(bar, Decl(spreadObjectOrFalsy.ts, 40, 24))
+>bar : Symbol(Foo.bar, Decl(spreadObjectOrFalsy.ts, 40, 24))
 
         if (this.hasData()) {
->this.hasData : Symbol(hasData, Decl(spreadObjectOrFalsy.ts, 45, 5))
+>this.hasData : Symbol(Foo.hasData, Decl(spreadObjectOrFalsy.ts, 45, 5))
 >this : Symbol(Foo, Decl(spreadObjectOrFalsy.ts, 37, 1))
->hasData : Symbol(hasData, Decl(spreadObjectOrFalsy.ts, 45, 5))
+>hasData : Symbol(Foo.hasData, Decl(spreadObjectOrFalsy.ts, 45, 5))
 
             this.data.toLocaleLowerCase();
->this.data.toLocaleLowerCase : Symbol(toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
+>this.data.toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
 >this.data : Symbol(data, Decl(spreadObjectOrFalsy.ts, 39, 29), Decl(spreadObjectOrFalsy.ts, 35, 25))
 >data : Symbol(data, Decl(spreadObjectOrFalsy.ts, 39, 29), Decl(spreadObjectOrFalsy.ts, 35, 25))
->toLocaleLowerCase : Symbol(toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
+>toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
         }
     }
     hasData(): this is DatafulFoo<T> {
->hasData : Symbol(hasData, Decl(spreadObjectOrFalsy.ts, 45, 5))
+>hasData : Symbol(Foo.hasData, Decl(spreadObjectOrFalsy.ts, 45, 5))
 >DatafulFoo : Symbol(DatafulFoo, Decl(spreadObjectOrFalsy.ts, 31, 1))
 >T : Symbol(T, Decl(spreadObjectOrFalsy.ts, 39, 10))
 

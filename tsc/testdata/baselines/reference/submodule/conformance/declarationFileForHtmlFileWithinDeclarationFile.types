@@ -24,7 +24,7 @@ export class HTML5Element extends HTMLElement {
 
 === file.d.ts ===
 export * as mod from "./component.html";
->mod : typeof import("./component.html")
+>mod : typeof import("component.d.html")
 
 === main.ts ===
 import { mod } from "./file.js";

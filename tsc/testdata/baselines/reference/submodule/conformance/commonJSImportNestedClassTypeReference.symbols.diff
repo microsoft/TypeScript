@@ -21,8 +21,7 @@
  >K : Symbol(K, Decl(mod1.js, 0, 11))
 
      values() {
-->values : Symbol(K.values, Decl(mod1.js, 1, 13))
-+>values : Symbol(values, Decl(mod1.js, 1, 13))
+@@= skipped -19, +17 lines =@@
 
          return new NS.K()
  >NS.K : Symbol(K, Decl(mod1.js, 0, 11))

@@ -6,7 +6,7 @@ class C {
 
 <<<<<<< HEAD
     v = 1;
->v : Symbol(v, Decl(conflictMarkerDiff3Trivia1.ts, 0, 9))
+>v : Symbol(C.v, Decl(conflictMarkerDiff3Trivia1.ts, 0, 9))
 
 ||||||| merged common ancestors
     v = 3;

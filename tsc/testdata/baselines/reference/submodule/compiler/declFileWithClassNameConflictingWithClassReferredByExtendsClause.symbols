@@ -10,7 +10,7 @@ declare module A.B.Base {
 >W : Symbol(W, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 0, 25))
 
         id: number;
->id : Symbol(id, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 1, 20))
+>id : Symbol(W.id, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 1, 20))
     }
 }
 module X.Y.base {
@@ -20,16 +20,16 @@ module X.Y.base {
 
     export class W extends A.B.Base.W {
 >W : Symbol(W, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 5, 17))
->A.B.Base.W : Symbol(W, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 0, 25))
->A.B.Base : Symbol(Base, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 0, 19))
->A.B : Symbol(B, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 0, 17))
+>A.B.Base.W : Symbol(A.B.Base.W, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 0, 25))
+>A.B.Base : Symbol(A.B.Base, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 0, 19))
+>A.B : Symbol(A.B, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 0, 17))
 >A : Symbol(A, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 0, 0))
->B : Symbol(B, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 0, 17))
->Base : Symbol(Base, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 0, 19))
->W : Symbol(W, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 0, 25))
+>B : Symbol(A.B, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 0, 17))
+>Base : Symbol(A.B.Base, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 0, 19))
+>W : Symbol(A.B.Base.W, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 0, 25))
 
         name: string;
->name : Symbol(name, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 7, 39))
+>name : Symbol(W.name, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 7, 39))
     }
 }
 
@@ -51,7 +51,7 @@ module X.Y.base.Z {
 >W : Symbol(W, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 5, 17))
 
         value: boolean;
->value : Symbol(value, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 14, 47))
+>value : Symbol(W.value, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 14, 47))
     }
 }
 

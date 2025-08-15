@@ -7,9 +7,9 @@
 ->module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
 ->module : Symbol(export=, Decl(index.js, 0, 36))
 ->exports : Symbol(export=, Decl(index.js, 0, 36))
-+>module.exports : Symbol(export=, Decl(package.json, 0, 0))
++>module.exports : Symbol(j, Decl(package.json, 0, 0))
 +>module : Symbol(module.exports)
-+>exports : Symbol(export=, Decl(package.json, 0, 0))
++>exports : Symbol(j, Decl(package.json, 0, 0))
  >j : Symbol(j, Decl(index.js, 0, 5))
 
  === package.json ===

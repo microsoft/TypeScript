@@ -1,9 +1,0 @@
---- old.es5ExportDefaultClassDeclaration.symbols
-+++ new.es5ExportDefaultClassDeclaration.symbols
-@@= skipped -4, +4 lines =@@
- >C : Symbol(C, Decl(es5ExportDefaultClassDeclaration.ts, 0, 0))
-
-     method() { }
-->method : Symbol(C.method, Decl(es5ExportDefaultClassDeclaration.ts, 0, 24))
-+>method : Symbol(method, Decl(es5ExportDefaultClassDeclaration.ts, 0, 24))
- }

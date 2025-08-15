@@ -18,7 +18,7 @@ namespace Validation {
 >c3 : Symbol(c3, Decl(unusedClassesinNamespace5.ts, 7, 5))
 
         public x: c1;
->x : Symbol(x, Decl(unusedClassesinNamespace5.ts, 9, 14))
+>x : Symbol(c3.x, Decl(unusedClassesinNamespace5.ts, 9, 14))
 >c1 : Symbol(c1, Decl(unusedClassesinNamespace5.ts, 0, 22))
     }
 }

@@ -21,7 +21,7 @@ class A<T,U> {
     }
 
     f(x: T, y: U) {
->f : Symbol(f, Decl(genericTypeAssertions6.ts, 4, 5))
+>f : Symbol(A.f, Decl(genericTypeAssertions6.ts, 4, 5))
 >x : Symbol(x, Decl(genericTypeAssertions6.ts, 6, 6))
 >T : Symbol(T, Decl(genericTypeAssertions6.ts, 0, 8))
 >y : Symbol(y, Decl(genericTypeAssertions6.ts, 6, 11))
@@ -50,7 +50,7 @@ class B<T extends Date, U extends Date> extends A<T, U> {
 >U : Symbol(U, Decl(genericTypeAssertions6.ts, 12, 23))
 
     g(x: T) {
->g : Symbol(g, Decl(genericTypeAssertions6.ts, 12, 57))
+>g : Symbol(B.g, Decl(genericTypeAssertions6.ts, 12, 57))
 >x : Symbol(x, Decl(genericTypeAssertions6.ts, 13, 6))
 >T : Symbol(T, Decl(genericTypeAssertions6.ts, 12, 8))
 

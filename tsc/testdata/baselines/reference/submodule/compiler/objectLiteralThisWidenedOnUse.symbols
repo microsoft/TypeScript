@@ -3,7 +3,7 @@
 === objectLiteralThisWidenedOnUse.ts ===
 interface Foo { bar: boolean; }
 >Foo : Symbol(Foo, Decl(objectLiteralThisWidenedOnUse.ts, 0, 0))
->bar : Symbol(bar, Decl(objectLiteralThisWidenedOnUse.ts, 0, 15))
+>bar : Symbol(Foo.bar, Decl(objectLiteralThisWidenedOnUse.ts, 0, 15))
 
 var GlobalIns = {
 >GlobalIns : Symbol(GlobalIns, Decl(objectLiteralThisWidenedOnUse.ts, 2, 3))
@@ -34,8 +34,8 @@ var GlobalIns = {
 
     return !!foo && !!foo.bar;
 >foo : Symbol(foo, Decl(objectLiteralThisWidenedOnUse.ts, 9, 14))
->foo.bar : Symbol(bar, Decl(objectLiteralThisWidenedOnUse.ts, 0, 15))
+>foo.bar : Symbol(Foo.bar, Decl(objectLiteralThisWidenedOnUse.ts, 0, 15))
 >foo : Symbol(foo, Decl(objectLiteralThisWidenedOnUse.ts, 9, 14))
->bar : Symbol(bar, Decl(objectLiteralThisWidenedOnUse.ts, 0, 15))
+>bar : Symbol(Foo.bar, Decl(objectLiteralThisWidenedOnUse.ts, 0, 15))
   }
 };

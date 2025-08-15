@@ -70,7 +70,7 @@ class Foo {
 >Foo : Symbol(Foo, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 33, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 37, 1))
 
     static x: number;
->x : Symbol(x, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 35, 11))
+>x : Symbol(Foo.x, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 35, 11))
 }
 
 module Foo {

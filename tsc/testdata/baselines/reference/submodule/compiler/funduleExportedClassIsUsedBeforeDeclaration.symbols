@@ -6,12 +6,12 @@ interface A {   // interface before module declaration
 
     (): B.C;    // uses defined below class in module
 >B : Symbol(B, Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 2, 1), Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 3, 26))
->C : Symbol(C, Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 4, 18))
+>C : Symbol(B.C, Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 4, 18))
 }
 declare function B(): B.C;  // function merged with module
 >B : Symbol(B, Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 2, 1), Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 3, 26))
 >B : Symbol(B, Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 2, 1), Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 3, 26))
->C : Symbol(C, Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 4, 18))
+>C : Symbol(B.C, Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 4, 18))
 
 declare module B {
 >B : Symbol(B, Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 2, 1), Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 3, 26))
@@ -21,7 +21,7 @@ declare module B {
     }
 }
 new B.C(); 
->B.C : Symbol(C, Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 4, 18))
+>B.C : Symbol(B.C, Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 4, 18))
 >B : Symbol(B, Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 2, 1), Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 3, 26))
->C : Symbol(C, Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 4, 18))
+>C : Symbol(B.C, Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 4, 18))
 

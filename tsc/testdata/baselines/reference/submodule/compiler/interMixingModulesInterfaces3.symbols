@@ -19,15 +19,15 @@ module A {
 >B : Symbol(B, Decl(interMixingModulesInterfaces3.ts, 6, 5))
 
         name: string;
->name : Symbol(name, Decl(interMixingModulesInterfaces3.ts, 8, 24))
+>name : Symbol(A.B.name, Decl(interMixingModulesInterfaces3.ts, 8, 24))
 
         value: number;
->value : Symbol(value, Decl(interMixingModulesInterfaces3.ts, 9, 21))
+>value : Symbol(A.B.value, Decl(interMixingModulesInterfaces3.ts, 9, 21))
     }
 }
 
 var x: A.B = null;
 >x : Symbol(x, Decl(interMixingModulesInterfaces3.ts, 14, 3))
 >A : Symbol(A, Decl(interMixingModulesInterfaces3.ts, 0, 0))
->B : Symbol(B, Decl(interMixingModulesInterfaces3.ts, 6, 5))
+>B : Symbol(A.B, Decl(interMixingModulesInterfaces3.ts, 6, 5))
 

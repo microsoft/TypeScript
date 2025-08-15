@@ -1,20 +1,6 @@
 --- old.moduleExportAssignment7.symbols
 +++ new.moduleExportAssignment7.symbols
-@@= skipped -2, +2 lines =@@
- === mod.js ===
- class Thing  { x = 1 }
- >Thing : Symbol(Thing, Decl(mod.js, 0, 0))
-->x : Symbol(Thing.x, Decl(mod.js, 0, 14))
-+>x : Symbol(x, Decl(mod.js, 0, 14))
-
- class AnotherThing { y = 2  }
- >AnotherThing : Symbol(AnotherThing, Decl(mod.js, 0, 22))
-->y : Symbol(AnotherThing.y, Decl(mod.js, 1, 20))
-+>y : Symbol(y, Decl(mod.js, 1, 20))
-
- function foo() { return 3 }
- >foo : Symbol(foo, Decl(mod.js, 1, 29))
-@@= skipped -14, +14 lines =@@
+@@= skipped -16, +16 lines =@@
 
  /** @typedef {() => number} buz */
  module.exports = {
@@ -45,33 +31,7 @@
  }
 
  /**
-@@= skipped -35, +29 lines =@@
- >g : Symbol(g, Decl(main.js, 22, 35))
-
-     return a.length + b.length + c() + d() + e() + f() + g.length
-->a.length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
-+>a.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- >a : Symbol(a, Decl(main.js, 22, 18))
-->length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
-->b.length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
-+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
-+>b.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- >b : Symbol(b, Decl(main.js, 22, 20))
-->length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
-+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- >c : Symbol(c, Decl(main.js, 22, 23))
- >d : Symbol(d, Decl(main.js, 22, 26))
- >e : Symbol(e, Decl(main.js, 22, 29))
- >f : Symbol(f, Decl(main.js, 22, 32))
-->g.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
-+>g.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- >g : Symbol(g, Decl(main.js, 22, 35))
-->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
-+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- }
-
- === index.ts ===
-@@= skipped -36, +36 lines =@@
+@@= skipped -71, +65 lines =@@
 
      f: import('./mod').buz,
  >f : Symbol(f, Decl(index.ts, 5, 27))
@@ -79,27 +39,3 @@
 
      g: import('./mod').literal,
  >g : Symbol(g, Decl(index.ts, 6, 27))
-@@= skipped -48, +47 lines =@@
-
- ) {
-     return a.length + b.length + c() + d() + e() + f() + g.length
-->a.length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
-+>a.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- >a : Symbol(a, Decl(index.ts, 12, 16))
-->length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
-->b.length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
-+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
-+>b.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- >b : Symbol(b, Decl(index.ts, 13, 36))
-->length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
-+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- >c : Symbol(c, Decl(index.ts, 14, 43))
- >d : Symbol(d, Decl(index.ts, 15, 34))
- >e : Symbol(e, Decl(index.ts, 16, 34))
- >f : Symbol(f, Decl(index.ts, 17, 34))
-->g.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
-+>g.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- >g : Symbol(g, Decl(index.ts, 18, 34))
-->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
-+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- }

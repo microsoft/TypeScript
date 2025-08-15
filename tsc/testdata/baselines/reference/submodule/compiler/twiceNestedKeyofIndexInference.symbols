@@ -101,7 +101,7 @@ interface State {
 >State : Symbol(State, Decl(twiceNestedKeyofIndexInference.ts, 12, 130))
 
     a: {
->a : Symbol(a, Decl(twiceNestedKeyofIndexInference.ts, 15, 17))
+>a : Symbol(State.a, Decl(twiceNestedKeyofIndexInference.ts, 15, 17))
 
         b: string;
 >b : Symbol(b, Decl(twiceNestedKeyofIndexInference.ts, 16, 8))
@@ -111,7 +111,7 @@ interface State {
 
     };
     d: boolean;
->d : Symbol(d, Decl(twiceNestedKeyofIndexInference.ts, 19, 6))
+>d : Symbol(State.d, Decl(twiceNestedKeyofIndexInference.ts, 19, 6))
 }
 
 const state: State = {

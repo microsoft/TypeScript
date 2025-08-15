@@ -377,9 +377,9 @@ function exhaustiveChecks(x: number | string | L | R): string {
 >x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 137, 26))
 
         case 'number': return x.toString(2);
->x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 137, 26))
->toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 
         case 'string': return x;
 >x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 137, 26))
@@ -406,9 +406,9 @@ function exhaustiveChecksGenerics<T extends L | R | number | string>(x: T): stri
 >x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 146, 69))
 
         case 'number': return x.toString(2);
->x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 146, 69))
->toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 
         case 'string': return x;
 >x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 146, 69))

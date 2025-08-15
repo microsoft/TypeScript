@@ -7,7 +7,7 @@ interface Type {
 >Type : Symbol(Type, Decl(typePredicateInLoop.ts, 0, 0))
 
   type: number;
->type : Symbol(type, Decl(typePredicateInLoop.ts, 2, 16))
+>type : Symbol(Type.type, Decl(typePredicateInLoop.ts, 2, 16))
 }
 
 interface TypeExt extends Type {
@@ -15,7 +15,7 @@ interface TypeExt extends Type {
 >Type : Symbol(Type, Decl(typePredicateInLoop.ts, 0, 0))
 
   arr: Type[];
->arr : Symbol(arr, Decl(typePredicateInLoop.ts, 6, 32))
+>arr : Symbol(TypeExt.arr, Decl(typePredicateInLoop.ts, 6, 32))
 >Type : Symbol(Type, Decl(typePredicateInLoop.ts, 0, 0))
 }
 
@@ -25,9 +25,9 @@ const guard = (arg: Type): arg is TypeExt => arg.type === 1;
 >Type : Symbol(Type, Decl(typePredicateInLoop.ts, 0, 0))
 >arg : Symbol(arg, Decl(typePredicateInLoop.ts, 10, 15))
 >TypeExt : Symbol(TypeExt, Decl(typePredicateInLoop.ts, 4, 1))
->arg.type : Symbol(type, Decl(typePredicateInLoop.ts, 2, 16))
+>arg.type : Symbol(Type.type, Decl(typePredicateInLoop.ts, 2, 16))
 >arg : Symbol(arg, Decl(typePredicateInLoop.ts, 10, 15))
->type : Symbol(type, Decl(typePredicateInLoop.ts, 2, 16))
+>type : Symbol(Type.type, Decl(typePredicateInLoop.ts, 2, 16))
 
 const otherFunc = (arg1: Type, arg2: TypeExt): void => {};
 >otherFunc : Symbol(otherFunc, Decl(typePredicateInLoop.ts, 11, 5))
@@ -47,9 +47,9 @@ export function y(arg: Type): void {
 
     for (const ITEM of arg.arr) {
 >ITEM : Symbol(ITEM, Decl(typePredicateInLoop.ts, 15, 14))
->arg.arr : Symbol(arr, Decl(typePredicateInLoop.ts, 6, 32))
+>arg.arr : Symbol(TypeExt.arr, Decl(typePredicateInLoop.ts, 6, 32))
 >arg : Symbol(arg, Decl(typePredicateInLoop.ts, 13, 18))
->arr : Symbol(arr, Decl(typePredicateInLoop.ts, 6, 32))
+>arr : Symbol(TypeExt.arr, Decl(typePredicateInLoop.ts, 6, 32))
 
       if (otherFunc(ITEM, arg)) {
 >otherFunc : Symbol(otherFunc, Decl(typePredicateInLoop.ts, 11, 5))

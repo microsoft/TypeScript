@@ -5,5 +5,5 @@ interface I {
 >I : Symbol(I, Decl(parserPropertySignature6.ts, 0, 0))
 
   "F"?;
->"F" : Symbol("F", Decl(parserPropertySignature6.ts, 0, 13))
+>"F" : Symbol(I["F"], Decl(parserPropertySignature6.ts, 0, 13))
 }

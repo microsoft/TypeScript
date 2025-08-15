@@ -6,17 +6,17 @@ class C<T> {
 >T : Symbol(T, Decl(typeofClassWithPrivates.ts, 0, 8))
 
     private a: number;
->a : Symbol(a, Decl(typeofClassWithPrivates.ts, 0, 12))
+>a : Symbol(C.a, Decl(typeofClassWithPrivates.ts, 0, 12))
 
     private static b: number;
->b : Symbol(b, Decl(typeofClassWithPrivates.ts, 1, 22))
+>b : Symbol(C.b, Decl(typeofClassWithPrivates.ts, 1, 22))
 
     x: T;
->x : Symbol(x, Decl(typeofClassWithPrivates.ts, 2, 29))
+>x : Symbol(C.x, Decl(typeofClassWithPrivates.ts, 2, 29))
 >T : Symbol(T, Decl(typeofClassWithPrivates.ts, 0, 8))
 
     static y: T;
->y : Symbol(y, Decl(typeofClassWithPrivates.ts, 3, 9))
+>y : Symbol(C.y, Decl(typeofClassWithPrivates.ts, 3, 9))
 >T : Symbol(T)
 }
 

@@ -5,7 +5,7 @@
  === /node_modules/foo/index.d.ts ===
  export = foo;
 ->foo : typeof import("/node_modules/foo/index.d.ts")
-+>foo : typeof import("foo")
++>foo : typeof import("/a.ts")
 
  declare namespace foo {
      export type T = number;

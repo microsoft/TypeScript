@@ -20,7 +20,7 @@ module A{
 
     // expected error
     export class Point {
->Point : Point
+>Point : A.Point
 
         origin: number;
 >origin : number
@@ -54,7 +54,7 @@ module X {
 
             // expected error
             export class Line {
->Line : Line
+>Line : Z.Line
 
                 name: string;
 >name : string

@@ -11,15 +11,15 @@ declare module "OuterModule" {
 >SubModule : Symbol(SubModule, Decl(ambientExternalModuleWithRelativeExternalImportDeclaration.ts, 1, 39))
 
         public static StaticVar: number;
->StaticVar : Symbol(StaticVar, Decl(ambientExternalModuleWithRelativeExternalImportDeclaration.ts, 2, 21))
+>StaticVar : Symbol(SubModule.StaticVar, Decl(ambientExternalModuleWithRelativeExternalImportDeclaration.ts, 2, 21))
 
         public InstanceVar: number;
->InstanceVar : Symbol(InstanceVar, Decl(ambientExternalModuleWithRelativeExternalImportDeclaration.ts, 3, 40))
+>InstanceVar : Symbol(SubModule.InstanceVar, Decl(ambientExternalModuleWithRelativeExternalImportDeclaration.ts, 3, 40))
 
         public x: m2.c;
->x : Symbol(x, Decl(ambientExternalModuleWithRelativeExternalImportDeclaration.ts, 4, 35))
+>x : Symbol(SubModule.x, Decl(ambientExternalModuleWithRelativeExternalImportDeclaration.ts, 4, 35))
 >m2 : Symbol(m2, Decl(ambientExternalModuleWithRelativeExternalImportDeclaration.ts, 0, 30))
->c : Symbol(c)
+>c : Symbol(m2.c)
 
         constructor();
     }

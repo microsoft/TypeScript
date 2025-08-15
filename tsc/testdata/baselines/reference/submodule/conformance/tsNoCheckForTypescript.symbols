@@ -10,7 +10,7 @@ export interface Aleph {
 >Aleph : Symbol(Aleph, Decl(file.ts, 2, 24))
 
     q: number;
->q : Symbol(q, Decl(file.ts, 4, 24))
+>q : Symbol(Aleph.q, Decl(file.ts, 4, 24))
 }
 
 export class Bet implements Aleph {
@@ -18,6 +18,6 @@ export class Bet implements Aleph {
 >Aleph : Symbol(Aleph, Decl(file.ts, 2, 24))
 
     q: string = "lol" // And so will this implements error
->q : Symbol(q, Decl(file.ts, 8, 35))
+>q : Symbol(Bet.q, Decl(file.ts, 8, 35))
 }
 

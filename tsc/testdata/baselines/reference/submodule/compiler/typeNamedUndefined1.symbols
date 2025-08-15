@@ -25,7 +25,7 @@ export function x(p: ns.undefined) { // undefined from the namespace
 >x : Symbol(x, Decl(typeNamedUndefined1.ts, 6, 1))
 >p : Symbol(p, Decl(typeNamedUndefined1.ts, 8, 18))
 >ns : Symbol(ns, Decl(typeNamedUndefined1.ts, 0, 0))
->undefined : Symbol(undefined, Decl(typeNamedUndefined1.ts, 1, 23))
+>undefined : Symbol(ns.undefined, Decl(typeNamedUndefined1.ts, 1, 23))
 
     return p;
 >p : Symbol(p, Decl(typeNamedUndefined1.ts, 8, 18))

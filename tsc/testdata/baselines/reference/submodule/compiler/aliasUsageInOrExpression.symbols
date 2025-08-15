@@ -11,10 +11,10 @@ interface IHasVisualizationModel {
 >IHasVisualizationModel : Symbol(IHasVisualizationModel, Decl(aliasUsageInOrExpression_main.ts, 1, 63))
 
     VisualizationModel: typeof Backbone.Model;
->VisualizationModel : Symbol(VisualizationModel, Decl(aliasUsageInOrExpression_main.ts, 2, 34))
->Backbone.Model : Symbol(Model, Decl(aliasUsageInOrExpression_backbone.ts, 0, 0))
+>VisualizationModel : Symbol(IHasVisualizationModel.VisualizationModel, Decl(aliasUsageInOrExpression_main.ts, 2, 34))
+>Backbone.Model : Symbol(Backbone.Model, Decl(aliasUsageInOrExpression_backbone.ts, 0, 0))
 >Backbone : Symbol(Backbone, Decl(aliasUsageInOrExpression_main.ts, 0, 0))
->Model : Symbol(Model, Decl(aliasUsageInOrExpression_backbone.ts, 0, 0))
+>Model : Symbol(Backbone.Model, Decl(aliasUsageInOrExpression_backbone.ts, 0, 0))
 }
 var i: IHasVisualizationModel;
 >i : Symbol(i, Decl(aliasUsageInOrExpression_main.ts, 5, 3))
@@ -60,7 +60,7 @@ export class Model {
 >Model : Symbol(Model, Decl(aliasUsageInOrExpression_backbone.ts, 0, 0))
 
     public someData: string;
->someData : Symbol(someData, Decl(aliasUsageInOrExpression_backbone.ts, 0, 20))
+>someData : Symbol(Model.someData, Decl(aliasUsageInOrExpression_backbone.ts, 0, 20))
 }
 
 === aliasUsageInOrExpression_moduleA.ts ===
@@ -69,9 +69,9 @@ import Backbone = require("./aliasUsageInOrExpression_backbone");
 
 export class VisualizationModel extends Backbone.Model {
 >VisualizationModel : Symbol(VisualizationModel, Decl(aliasUsageInOrExpression_moduleA.ts, 0, 65))
->Backbone.Model : Symbol(Model, Decl(aliasUsageInOrExpression_backbone.ts, 0, 0))
+>Backbone.Model : Symbol(Backbone.Model, Decl(aliasUsageInOrExpression_backbone.ts, 0, 0))
 >Backbone : Symbol(Backbone, Decl(aliasUsageInOrExpression_moduleA.ts, 0, 0))
->Model : Symbol(Model, Decl(aliasUsageInOrExpression_backbone.ts, 0, 0))
+>Model : Symbol(Backbone.Model, Decl(aliasUsageInOrExpression_backbone.ts, 0, 0))
 
     // interesting stuff here
 }

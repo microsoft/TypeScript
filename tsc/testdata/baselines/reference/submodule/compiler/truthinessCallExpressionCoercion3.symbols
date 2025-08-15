@@ -6,7 +6,7 @@ interface I {
 >I : Symbol(I, Decl(truthinessCallExpressionCoercion3.ts, 0, 0))
 
     always(): void
->always : Symbol(always, Decl(truthinessCallExpressionCoercion3.ts, 1, 13))
+>always : Symbol(I.always, Decl(truthinessCallExpressionCoercion3.ts, 1, 13))
 }
 
 function f(result: unknown) {
@@ -14,10 +14,10 @@ function f(result: unknown) {
 >result : Symbol(result, Decl(truthinessCallExpressionCoercion3.ts, 5, 11))
 
     if ((result as I).always) {
->(result as I).always : Symbol(always, Decl(truthinessCallExpressionCoercion3.ts, 1, 13))
+>(result as I).always : Symbol(I.always, Decl(truthinessCallExpressionCoercion3.ts, 1, 13))
 >result : Symbol(result, Decl(truthinessCallExpressionCoercion3.ts, 5, 11))
 >I : Symbol(I, Decl(truthinessCallExpressionCoercion3.ts, 0, 0))
->always : Symbol(always, Decl(truthinessCallExpressionCoercion3.ts, 1, 13))
+>always : Symbol(I.always, Decl(truthinessCallExpressionCoercion3.ts, 1, 13))
 
         return result
 >result : Symbol(result, Decl(truthinessCallExpressionCoercion3.ts, 5, 11))
@@ -28,10 +28,10 @@ function g(result: unknown) {
 >result : Symbol(result, Decl(truthinessCallExpressionCoercion3.ts, 10, 11))
 
     if (((result as I)).always) {
->((result as I)).always : Symbol(always, Decl(truthinessCallExpressionCoercion3.ts, 1, 13))
+>((result as I)).always : Symbol(I.always, Decl(truthinessCallExpressionCoercion3.ts, 1, 13))
 >result : Symbol(result, Decl(truthinessCallExpressionCoercion3.ts, 10, 11))
 >I : Symbol(I, Decl(truthinessCallExpressionCoercion3.ts, 0, 0))
->always : Symbol(always, Decl(truthinessCallExpressionCoercion3.ts, 1, 13))
+>always : Symbol(I.always, Decl(truthinessCallExpressionCoercion3.ts, 1, 13))
 
         return result
 >result : Symbol(result, Decl(truthinessCallExpressionCoercion3.ts, 10, 11))

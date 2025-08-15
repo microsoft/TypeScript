@@ -8,7 +8,7 @@ interface Window {
 >Window : Symbol(Window, Decl(sourceMap-StringLiteralWithNewLine.ts, 1, 1))
 
     document: Document;
->document : Symbol(document, Decl(sourceMap-StringLiteralWithNewLine.ts, 2, 18))
+>document : Symbol(Window.document, Decl(sourceMap-StringLiteralWithNewLine.ts, 2, 18))
 >Document : Symbol(Document, Decl(sourceMap-StringLiteralWithNewLine.ts, 0, 0))
 }
 declare var window: Window;
@@ -27,7 +27,7 @@ module Foo {
 isn't this a lot of fun";
     var z = window.document;
 >z : Symbol(z, Decl(sourceMap-StringLiteralWithNewLine.ts, 11, 7))
->window.document : Symbol(document, Decl(sourceMap-StringLiteralWithNewLine.ts, 2, 18))
+>window.document : Symbol(Window.document, Decl(sourceMap-StringLiteralWithNewLine.ts, 2, 18))
 >window : Symbol(window, Decl(sourceMap-StringLiteralWithNewLine.ts, 5, 11))
->document : Symbol(document, Decl(sourceMap-StringLiteralWithNewLine.ts, 2, 18))
+>document : Symbol(Window.document, Decl(sourceMap-StringLiteralWithNewLine.ts, 2, 18))
 }

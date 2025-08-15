@@ -23,9 +23,9 @@
 ->A : typeof A
 +>module.exports.A = {} : {}
 +>module.exports.A : {}
-+>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
-+>exports : typeof import(".")
++>module.exports : typeof import("index")
++>module : { "\"index\"": typeof import("index"); }
++>exports : typeof import("index")
 +>A : {}
  >{} : {}
 
@@ -42,9 +42,9 @@
 +>module.exports.A.B = {    thing: new Something()} : { thing: import("fs").Something; }
 +>module.exports.A.B : any
 +>module.exports.A : {}
-+>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
-+>exports : typeof import(".")
++>module.exports : typeof import("index")
++>module : { "\"index\"": typeof import("index"); }
++>exports : typeof import("index")
 +>A : {}
 +>B : any
 +>{    thing: new Something()} : { thing: import("fs").Something; }

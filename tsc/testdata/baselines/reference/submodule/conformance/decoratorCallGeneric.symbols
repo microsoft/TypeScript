@@ -6,11 +6,11 @@ interface I<T> {
 >T : Symbol(T, Decl(decoratorCallGeneric.ts, 0, 12))
 
     prototype: T,
->prototype : Symbol(prototype, Decl(decoratorCallGeneric.ts, 0, 16))
+>prototype : Symbol(I.prototype, Decl(decoratorCallGeneric.ts, 0, 16))
 >T : Symbol(T, Decl(decoratorCallGeneric.ts, 0, 12))
 
     m: () => T
->m : Symbol(m, Decl(decoratorCallGeneric.ts, 1, 17))
+>m : Symbol(I.m, Decl(decoratorCallGeneric.ts, 1, 17))
 >T : Symbol(T, Decl(decoratorCallGeneric.ts, 0, 12))
 }
 function dec<T>(c: I<T>) { }
@@ -27,9 +27,9 @@ class C {
 >C : Symbol(C, Decl(decoratorCallGeneric.ts, 4, 28))
 
     _brand: any;
->_brand : Symbol(_brand, Decl(decoratorCallGeneric.ts, 7, 9))
+>_brand : Symbol(C._brand, Decl(decoratorCallGeneric.ts, 7, 9))
 
     static m() {}
->m : Symbol(m, Decl(decoratorCallGeneric.ts, 8, 16))
+>m : Symbol(C.m, Decl(decoratorCallGeneric.ts, 8, 16))
 }
 

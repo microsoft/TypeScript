@@ -8,9 +8,9 @@ declare const foo: unknown[];
 
 const bar = foo.flatMap(bar => bar as Foo);
 >bar : Symbol(bar, Decl(flatArrayNoExcessiveStackDepth.ts, 3, 5))
->foo.flatMap : Symbol(flatMap, Decl(lib.es2019.array.d.ts, --, --))
+>foo.flatMap : Symbol(Array.flatMap, Decl(lib.es2019.array.d.ts, --, --))
 >foo : Symbol(foo, Decl(flatArrayNoExcessiveStackDepth.ts, 2, 13))
->flatMap : Symbol(flatMap, Decl(lib.es2019.array.d.ts, --, --))
+>flatMap : Symbol(Array.flatMap, Decl(lib.es2019.array.d.ts, --, --))
 >bar : Symbol(bar, Decl(flatArrayNoExcessiveStackDepth.ts, 3, 24))
 >bar : Symbol(bar, Decl(flatArrayNoExcessiveStackDepth.ts, 3, 24))
 >Foo : Symbol(Foo, Decl(flatArrayNoExcessiveStackDepth.ts, 3, 43))
@@ -33,9 +33,9 @@ const repro_43249 = (value: unknown) => {
     }
     const match = value.match(/anything/) || [];
 >match : Symbol(match, Decl(flatArrayNoExcessiveStackDepth.ts, 13, 9))
->value.match : Symbol(match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >value : Symbol(value, Decl(flatArrayNoExcessiveStackDepth.ts, 9, 21))
->match : Symbol(match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     const [, extracted] = match;
 >extracted : Symbol(extracted, Decl(flatArrayNoExcessiveStackDepth.ts, 14, 12))

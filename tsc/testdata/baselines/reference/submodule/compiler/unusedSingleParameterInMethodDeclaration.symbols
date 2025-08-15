@@ -5,7 +5,7 @@ class Dummy {
 >Dummy : Symbol(Dummy, Decl(unusedSingleParameterInMethodDeclaration.ts, 0, 0))
 
     public greeter(person: string) {
->greeter : Symbol(greeter, Decl(unusedSingleParameterInMethodDeclaration.ts, 0, 13))
+>greeter : Symbol(Dummy.greeter, Decl(unusedSingleParameterInMethodDeclaration.ts, 0, 13))
 >person : Symbol(person, Decl(unusedSingleParameterInMethodDeclaration.ts, 1, 19))
 
         var unused = 20;

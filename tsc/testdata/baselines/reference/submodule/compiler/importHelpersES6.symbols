@@ -9,19 +9,19 @@ declare var dec: any;
 >A : Symbol(A, Decl(a.ts, 0, 21))
 
     #x: number = 1;
->#x : Symbol(#x, Decl(a.ts, 1, 21))
+>#x : Symbol(A.#x, Decl(a.ts, 1, 21))
 
     async f() { this.#x = await this.#x; }
->f : Symbol(f, Decl(a.ts, 2, 19))
->this.#x : Symbol(#x, Decl(a.ts, 1, 21))
+>f : Symbol(A.f, Decl(a.ts, 2, 19))
+>this.#x : Symbol(A.#x, Decl(a.ts, 1, 21))
 >this : Symbol(A, Decl(a.ts, 0, 21))
->this.#x : Symbol(#x, Decl(a.ts, 1, 21))
+>this.#x : Symbol(A.#x, Decl(a.ts, 1, 21))
 >this : Symbol(A, Decl(a.ts, 0, 21))
 
     g(u) { return #x in u; }
->g : Symbol(g, Decl(a.ts, 3, 42))
+>g : Symbol(A.g, Decl(a.ts, 3, 42))
 >u : Symbol(u, Decl(a.ts, 4, 6))
->#x : Symbol(#x, Decl(a.ts, 1, 21))
+>#x : Symbol(A.#x, Decl(a.ts, 1, 21))
 >u : Symbol(u, Decl(a.ts, 4, 6))
 }
 

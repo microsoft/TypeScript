@@ -3,7 +3,7 @@
 === /node_modules/@typescript/lib-dom/index.d.ts ===
 interface ABC { abc: string }
 >ABC : Symbol(ABC, Decl(index.d.ts, 0, 0))
->abc : Symbol(abc, Decl(index.d.ts, 0, 15))
+>abc : Symbol(ABC.abc, Decl(index.d.ts, 0, 15))
 
 === index.ts ===
 /// <reference lib="dom" />

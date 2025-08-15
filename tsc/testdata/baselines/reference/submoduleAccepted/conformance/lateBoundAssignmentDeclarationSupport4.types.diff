@@ -87,9 +87,9 @@
 ->F : typeof F
 +>module.exports.F = F : () => void
 +>module.exports.F : () => void
-+>module.exports : typeof import("./lateBoundAssignmentDeclarationSupport4")
-+>module : { "\"lateBoundAssignmentDeclarationSupport4\"": typeof import("./lateBoundAssignmentDeclarationSupport4"); }
-+>exports : typeof import("./lateBoundAssignmentDeclarationSupport4")
++>module.exports : typeof import("lateBoundAssignmentDeclarationSupport4")
++>module : { "\"lateBoundAssignmentDeclarationSupport4\"": typeof import("lateBoundAssignmentDeclarationSupport4"); }
++>exports : typeof import("lateBoundAssignmentDeclarationSupport4")
 +>F : () => void
 +>F : () => void
 
@@ -99,8 +99,8 @@
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-+>module.exports : typeof import("./lateBoundAssignmentDeclarationSupport4")
-+>module : { "\"lateBoundAssignmentDeclarationSupport4\"": typeof import("./lateBoundAssignmentDeclarationSupport4"); }
-+>exports : typeof import("./lateBoundAssignmentDeclarationSupport4")
++>module.exports : typeof import("lateBoundAssignmentDeclarationSupport4")
++>module : { "\"lateBoundAssignmentDeclarationSupport4\"": typeof import("lateBoundAssignmentDeclarationSupport4"); }
++>exports : typeof import("lateBoundAssignmentDeclarationSupport4")
  >S : unique symbol
  >_sym : unique symbol

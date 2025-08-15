@@ -6,7 +6,7 @@ class Foo {
 >Foo : Symbol(Foo, Decl(declarationEmitPreservesHasNoDefaultLibDirective.ts, 0, 0))
 
     public: string;
->public : Symbol(public, Decl(declarationEmitPreservesHasNoDefaultLibDirective.ts, 1, 11))
+>public : Symbol(Foo.public, Decl(declarationEmitPreservesHasNoDefaultLibDirective.ts, 1, 11))
 }
 interface Array<T> {}
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(declarationEmitPreservesHasNoDefaultLibDirective.ts, 3, 1))

@@ -5,9 +5,9 @@ import { bar } from "./indirect.js";
 >bar : Symbol(bar, Decl(main.ts, 0, 8))
 
 console.log(await bar());
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >bar : Symbol(bar, Decl(main.ts, 0, 8))
 
 === /src/subpath.ts ===

@@ -9,69 +9,35 @@
  >a : TemplateStringsArray
  }
 
-@@= skipped -12, +12 lines =@@
-
- === index.ts ===
- import styled from "styled-components";
-->styled : import("node_modules/styled-components/index").StyledInterface
-+>styled : import("styled-components").StyledInterface
-
+@@= skipped -17, +17 lines =@@
  const A = styled.div``;
-->A : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
-->styled.div`` : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
+ >A : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
+ >styled.div`` : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
 ->styled.div : (a: TemplateStringsArray) => import("node_modules/styled-components/index").StyledComponent<"div">
-->styled : import("node_modules/styled-components/index").StyledInterface
++>styled.div : (a: TemplateStringsArray) => import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
+ >styled : import("node_modules/styled-components/index").StyledInterface
 ->div : (a: TemplateStringsArray) => import("node_modules/styled-components/index").StyledComponent<"div">
-+>A : import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>
-+>styled.div`` : import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>
-+>styled.div : (a: TemplateStringsArray) => import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>
-+>styled : import("styled-components").StyledInterface
-+>div : (a: TemplateStringsArray) => import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>
++>div : (a: TemplateStringsArray) => import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
  >`` : ""
 
  const B = styled.div``;
-->B : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
-->styled.div`` : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
+ >B : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
+ >styled.div`` : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
 ->styled.div : (a: TemplateStringsArray) => import("node_modules/styled-components/index").StyledComponent<"div">
-->styled : import("node_modules/styled-components/index").StyledInterface
++>styled.div : (a: TemplateStringsArray) => import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
+ >styled : import("node_modules/styled-components/index").StyledInterface
 ->div : (a: TemplateStringsArray) => import("node_modules/styled-components/index").StyledComponent<"div">
-+>B : import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>
-+>styled.div`` : import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>
-+>styled.div : (a: TemplateStringsArray) => import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>
-+>styled : import("styled-components").StyledInterface
-+>div : (a: TemplateStringsArray) => import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>
++>div : (a: TemplateStringsArray) => import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
  >`` : ""
 
  export const C = styled.div``;
-->C : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
-->styled.div`` : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
+ >C : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
+ >styled.div`` : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
 ->styled.div : (a: TemplateStringsArray) => import("node_modules/styled-components/index").StyledComponent<"div">
-->styled : import("node_modules/styled-components/index").StyledInterface
++>styled.div : (a: TemplateStringsArray) => import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
+ >styled : import("node_modules/styled-components/index").StyledInterface
 ->div : (a: TemplateStringsArray) => import("node_modules/styled-components/index").StyledComponent<"div">
-+>C : import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>
-+>styled.div`` : import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>
-+>styled.div : (a: TemplateStringsArray) => import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>
-+>styled : import("styled-components").StyledInterface
-+>div : (a: TemplateStringsArray) => import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>
++>div : (a: TemplateStringsArray) => import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
  >`` : ""
 
  export default Object.assign(A, {
-->Object.assign(A, {    B,    C}) : string & import("node_modules/styled-components/index").StyledComponentBase<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never> & import("node_modules/styled-components/node_modules/hoist-non-react-statics/index").NonReactStatics<"div"> & { B: import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>; C: import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>; }
-+>Object.assign(A, {    B,    C}) : string & import("styled-components").StyledComponentBase<"div", import("styled-components").DefaultTheme, {}, never> & import("styled-components/node_modules/hoist-non-react-statics").NonReactStatics<"div"> & { B: import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>; C: import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>; }
- >Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
- >Object : ObjectConstructor
- >assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
-->A : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
-->{    B,    C} : { B: import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>; C: import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>; }
-+>A : import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>
-+>{    B,    C} : { B: import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>; C: import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>; }
-
-     B,
-->B : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
-+>B : import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>
-
-     C
-->C : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
-+>C : import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>
-
- });

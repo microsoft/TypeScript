@@ -5,7 +5,7 @@ import { ParentThing } from './parent';
 >ParentThing : typeof ParentThing
 
 declare module './parent' {
->'./parent' : typeof import("./parent")
+>'./parent' : typeof import("parent")
 
     interface ParentThing {
         add: (a: number, b: number) => number;

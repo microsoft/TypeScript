@@ -6,7 +6,7 @@ interface Base extends Derived2 { // error
 >Derived2 : Symbol(Derived2, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 6, 1))
 
     x: string;
->x : Symbol(x, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 0, 33))
+>x : Symbol(Base.x, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 0, 33))
 }
 
 interface Derived extends Base {
@@ -14,7 +14,7 @@ interface Derived extends Base {
 >Base : Symbol(Base, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 0, 0))
 
     y: string;
->y : Symbol(y, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 4, 32))
+>y : Symbol(Derived.y, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 4, 32))
 }
 
 interface Derived2 extends Derived {
@@ -22,7 +22,7 @@ interface Derived2 extends Derived {
 >Derived : Symbol(Derived, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 2, 1))
 
     z: string;
->z : Symbol(z, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 8, 36))
+>z : Symbol(Derived2.z, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 8, 36))
 }
 
 module Generic {
@@ -35,7 +35,7 @@ module Generic {
 >T : Symbol(T, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 13, 19))
 
         x: string;
->x : Symbol(x, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 13, 43))
+>x : Symbol(Base.x, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 13, 43))
     }
 
     interface Derived<T> extends Base<T> {
@@ -45,7 +45,7 @@ module Generic {
 >T : Symbol(T, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 17, 22))
 
         y: string;
->y : Symbol(y, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 17, 42))
+>y : Symbol(Derived.y, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 17, 42))
     }
 
     interface Derived2<T> extends Derived<T> {
@@ -55,6 +55,6 @@ module Generic {
 >T : Symbol(T, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 21, 23))
 
         z: string;
->z : Symbol(z, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 21, 46))
+>z : Symbol(Derived2.z, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 21, 46))
     }
 }

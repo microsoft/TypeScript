@@ -32,7 +32,7 @@ type GlobalOk2 = globalThis.namespaceModule.typ
 >GlobalOk2 : Symbol(GlobalOk2, Decl(globalThisAmbientModules.ts, 8, 51))
 >globalThis : Symbol(globalThis)
 >namespaceModule : Symbol(namespaceModule, Decl(globalThisAmbientModules.ts, 4, 44))
->typ : Symbol(typ, Decl(globalThisAmbientModules.ts, 5, 27))
+>typ : Symbol(namespaceModule.typ, Decl(globalThisAmbientModules.ts, 5, 27))
 
 const bad1: (typeof globalThis)["\"ambientModule\""] = 'ambientModule'
 >bad1 : Symbol(bad1, Decl(globalThisAmbientModules.ts, 10, 5))

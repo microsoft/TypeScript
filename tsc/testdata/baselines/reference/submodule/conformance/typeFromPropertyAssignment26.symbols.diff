@@ -15,11 +15,7 @@
 
      constructor() {
          this.treeOutline = 12
-->this.treeOutline : Symbol(TreeElement.treeOutline, Decl(bug24730.js, 2, 19))
-+>this.treeOutline : Symbol(treeOutline, Decl(bug24730.js, 2, 19))
- >this : Symbol(TreeElement, Decl(bug24730.js, 1, 16))
-->treeOutline : Symbol(TreeElement.treeOutline, Decl(bug24730.js, 2, 19))
-+>treeOutline : Symbol(treeOutline, Decl(bug24730.js, 2, 19))
+@@= skipped -15, +13 lines =@@
      }
  };
  UI.context = new UI.TreeElement()
@@ -40,10 +36,8 @@
 +>UI : Symbol(UI, Decl(bug24730.js, 0, 3))
 
      onpopulate() {
-->onpopulate : Symbol(C.onpopulate, Decl(bug24730.js, 8, 32))
-+>onpopulate : Symbol(onpopulate, Decl(bug24730.js, 8, 32))
-
-         this.doesNotExist
+ >onpopulate : Symbol(C.onpopulate, Decl(bug24730.js, 8, 32))
+@@= skipped -20, +14 lines =@@
  >this : Symbol(C, Decl(bug24730.js, 6, 33))
 
          this.treeOutline.doesntExistEither()

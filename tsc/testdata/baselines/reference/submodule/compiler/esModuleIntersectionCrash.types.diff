@@ -5,11 +5,11 @@
  === mod.d.ts ===
  export = modObj;
 ->modObj : modObj.A & modObj.B
-+>modObj : import("./mod").A & import("./mod").B
++>modObj : import("mod").A & import("mod").B
 
  declare const modObj: modObj.A & modObj.B;
 ->modObj : modObj.A & modObj.B
-+>modObj : import("./mod").A & import("./mod").B
++>modObj : import("mod").A & import("mod").B
  >modObj : any
  >modObj : any
 

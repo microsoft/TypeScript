@@ -22,17 +22,17 @@ function ff() {
 >x : Symbol(x, Decl(controlFlowIteration.ts, 3, 7))
 
                 x.length;
->x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowIteration.ts, 3, 7))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
             }
             if (x) {
 >x : Symbol(x, Decl(controlFlowIteration.ts, 3, 7))
 
                 x.length;
->x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowIteration.ts, 3, 7))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
             }
         }
     }

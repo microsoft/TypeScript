@@ -25,9 +25,7 @@
  >version : Symbol(version, Decl(bug24754.js, 3, 35))
 
  webpack.WebpackOptionsDefaulter = 1111;
-->webpack.WebpackOptionsDefaulter : Symbol(webpack.WebpackOptionsDefaulter, Decl(bug24754.js, 4, 23))
+ >webpack.WebpackOptionsDefaulter : Symbol(webpack.WebpackOptionsDefaulter, Decl(bug24754.js, 4, 23))
 ->webpack : Symbol(webpack, Decl(bug24754.js, 1, 5), Decl(bug24754.js, 4, 23))
-->WebpackOptionsDefaulter : Symbol(webpack.WebpackOptionsDefaulter, Decl(bug24754.js, 4, 23))
-+>webpack.WebpackOptionsDefaulter : Symbol(WebpackOptionsDefaulter, Decl(bug24754.js, 4, 23))
 +>webpack : Symbol(webpack, Decl(bug24754.js, 1, 5))
-+>WebpackOptionsDefaulter : Symbol(WebpackOptionsDefaulter, Decl(bug24754.js, 4, 23))
+ >WebpackOptionsDefaulter : Symbol(webpack.WebpackOptionsDefaulter, Decl(bug24754.js, 4, 23))

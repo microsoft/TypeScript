@@ -36,7 +36,7 @@ class Wrap {
      * @param {Conn} c
      */
     constructor(c) {
->c : import("./conn")
+>c : import("conn")
 
         this.connItem = c.item;
 >this.connItem = c.item : number
@@ -44,7 +44,7 @@ class Wrap {
 >this : this
 >connItem : any
 >c.item : number
->c : import("./conn")
+>c : import("conn")
 >item : number
 
         /** @type {import("./conn").Whatever} */

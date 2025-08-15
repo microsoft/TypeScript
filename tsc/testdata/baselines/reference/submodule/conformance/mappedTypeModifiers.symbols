@@ -371,9 +371,9 @@ function f1(x: Partial<Foo>) {
 >prop : Symbol(prop, Decl(mappedTypeModifiers.ts, 76, 12))
 
     (x["other"] || 0).toFixed();
->(x["other"] || 0).toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+>(x["other"] || 0).toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(mappedTypeModifiers.ts, 78, 12))
->toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 }
 
 function f2(x: Readonly<Foo>) {
@@ -388,9 +388,9 @@ function f2(x: Readonly<Foo>) {
 >prop : Symbol(prop, Decl(mappedTypeModifiers.ts, 76, 12))
 
     x["other"].toFixed();
->x["other"].toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+>x["other"].toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(mappedTypeModifiers.ts, 83, 12))
->toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 }
 
 function f3(x: Boxified<Foo>) {
@@ -405,11 +405,11 @@ function f3(x: Boxified<Foo>) {
 >prop : Symbol(prop, Decl(mappedTypeModifiers.ts, 76, 12))
 
     x["other"].x.toFixed();
->x["other"].x.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+>x["other"].x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 >x["other"].x : Symbol(x, Decl(mappedTypeModifiers.ts, 37, 38))
 >x : Symbol(x, Decl(mappedTypeModifiers.ts, 88, 12))
 >x : Symbol(x, Decl(mappedTypeModifiers.ts, 37, 38))
->toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 }
 
 function f4(x: { [P in keyof Foo]: Foo[P] }) {
@@ -426,8 +426,8 @@ function f4(x: { [P in keyof Foo]: Foo[P] }) {
 >prop : Symbol(prop, Decl(mappedTypeModifiers.ts, 76, 12))
 
     x["other"].toFixed();
->x["other"].toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+>x["other"].toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(mappedTypeModifiers.ts, 93, 12))
->toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 }
 

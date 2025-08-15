@@ -49,48 +49,48 @@ const x = {};
 >x : Symbol(x, Decl(index.js, 0, 5))
 
 Object.defineProperty(x, "name", { value: "Charles", writable: true });
->Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(index.js, 0, 5))
 >value : Symbol(value, Decl(index.js, 1, 34))
 >writable : Symbol(writable, Decl(index.js, 1, 52))
 
 Object.defineProperty(x, "middleInit", { value: "H" });
->Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(index.js, 0, 5))
 >value : Symbol(value, Decl(index.js, 2, 40))
 
 Object.defineProperty(x, "lastName", { value: "Smith", writable: false });
->Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(index.js, 0, 5))
 >value : Symbol(value, Decl(index.js, 3, 38))
 >writable : Symbol(writable, Decl(index.js, 3, 54))
 
 Object.defineProperty(x, "zip", { get() { return 98122 }, set(_) { /*ignore*/ } });
->Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(index.js, 0, 5))
 >get : Symbol(get, Decl(index.js, 4, 33))
 >set : Symbol(set, Decl(index.js, 4, 57))
 >_ : Symbol(_, Decl(index.js, 4, 62))
 
 Object.defineProperty(x, "houseNumber", { get() { return 21.75 } });
->Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(index.js, 0, 5))
 >get : Symbol(get, Decl(index.js, 5, 41))
 
 Object.defineProperty(x, "zipStr", {
->Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(index.js, 0, 5))
 
     /** @param {string} str */

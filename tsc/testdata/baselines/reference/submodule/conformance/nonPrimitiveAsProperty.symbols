@@ -5,7 +5,7 @@ interface WithNonPrimitive {
 >WithNonPrimitive : Symbol(WithNonPrimitive, Decl(nonPrimitiveAsProperty.ts, 0, 0))
 
     foo: object
->foo : Symbol(foo, Decl(nonPrimitiveAsProperty.ts, 0, 28))
+>foo : Symbol(WithNonPrimitive.foo, Decl(nonPrimitiveAsProperty.ts, 0, 28))
 }
 
 var a: WithNonPrimitive = { foo: {bar: "bar"} };

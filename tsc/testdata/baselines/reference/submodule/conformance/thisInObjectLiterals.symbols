@@ -5,10 +5,10 @@ class MyClass {
 >MyClass : Symbol(MyClass, Decl(thisInObjectLiterals.ts, 0, 0))
 
     t: number;
->t : Symbol(t, Decl(thisInObjectLiterals.ts, 0, 15))
+>t : Symbol(MyClass.t, Decl(thisInObjectLiterals.ts, 0, 15))
 
     fn() {
->fn : Symbol(fn, Decl(thisInObjectLiterals.ts, 1, 14))
+>fn : Symbol(MyClass.fn, Decl(thisInObjectLiterals.ts, 1, 14))
 
         type ContainingThis = this;
 >ContainingThis : Symbol(ContainingThis, Decl(thisInObjectLiterals.ts, 3, 10))
@@ -19,9 +19,9 @@ class MyClass {
 >x : Symbol(x, Decl(thisInObjectLiterals.ts, 6, 17))
 >this : Symbol(MyClass, Decl(thisInObjectLiterals.ts, 0, 0))
 >y : Symbol(y, Decl(thisInObjectLiterals.ts, 6, 26))
->this.t : Symbol(t, Decl(thisInObjectLiterals.ts, 0, 15))
+>this.t : Symbol(MyClass.t, Decl(thisInObjectLiterals.ts, 0, 15))
 >this : Symbol(MyClass, Decl(thisInObjectLiterals.ts, 0, 0))
->t : Symbol(t, Decl(thisInObjectLiterals.ts, 0, 15))
+>t : Symbol(MyClass.t, Decl(thisInObjectLiterals.ts, 0, 15))
 
         var t: { x: ContainingThis; y: number };
 >t : Symbol(t, Decl(thisInObjectLiterals.ts, 6, 11), Decl(thisInObjectLiterals.ts, 7, 11))

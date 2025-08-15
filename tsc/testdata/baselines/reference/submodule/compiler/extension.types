@@ -27,7 +27,7 @@ declare module M {
 
     export extension class C {
 >extension : any
->C : C
+>C : M.C
 
         public pe:string;
 >pe : string

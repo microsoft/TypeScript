@@ -3,7 +3,7 @@
 === contextuallyTypeAsyncFunctionAwaitOperand.ts ===
 interface Obj { key: "value"; }
 >Obj : Symbol(Obj, Decl(contextuallyTypeAsyncFunctionAwaitOperand.ts, 0, 0))
->key : Symbol(key, Decl(contextuallyTypeAsyncFunctionAwaitOperand.ts, 0, 15))
+>key : Symbol(Obj.key, Decl(contextuallyTypeAsyncFunctionAwaitOperand.ts, 0, 15))
 
 async function fn1(): Promise<Obj> {
 >fn1 : Symbol(fn1, Decl(contextuallyTypeAsyncFunctionAwaitOperand.ts, 0, 31))

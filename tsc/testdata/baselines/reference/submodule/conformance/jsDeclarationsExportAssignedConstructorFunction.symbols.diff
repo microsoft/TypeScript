@@ -28,13 +28,13 @@
 ->exports : Symbol(module.exports, Decl(jsDeclarationsExportAssignedConstructorFunction.js, 0, 0))
 ->MyClass : Symbol(MyClass, Decl(jsDeclarationsExportAssignedConstructorFunction.js, 0, 0), Decl(jsDeclarationsExportAssignedConstructorFunction.js, 4, 15))
 ->prototype : Symbol(MyClass.prototype, Decl(jsDeclarationsExportAssignedConstructorFunction.js, 3, 1))
-+>module.exports.MyClass.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
++>module.exports.MyClass.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 +>module.exports.MyClass : Symbol(MyClass, Decl(jsDeclarationsExportAssignedConstructorFunction.js, 0, 0))
 +>module.exports : Symbol("jsDeclarationsExportAssignedConstructorFunction", Decl(jsDeclarationsExportAssignedConstructorFunction.js, 0, 0))
 +>module : Symbol(module.exports)
 +>exports : Symbol("jsDeclarationsExportAssignedConstructorFunction", Decl(jsDeclarationsExportAssignedConstructorFunction.js, 0, 0))
 +>MyClass : Symbol(MyClass, Decl(jsDeclarationsExportAssignedConstructorFunction.js, 0, 0))
-+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
++>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 
      a: function() {
  >a : Symbol(a, Decl(jsDeclarationsExportAssignedConstructorFunction.js, 4, 36))

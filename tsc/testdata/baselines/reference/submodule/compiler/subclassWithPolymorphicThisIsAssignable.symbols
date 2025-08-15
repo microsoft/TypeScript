@@ -6,7 +6,7 @@ interface Document {
 >Document : Symbol(Document, Decl(subclassWithPolymorphicThisIsAssignable.ts, 0, 0))
 
     increment(): this;
->increment : Symbol(increment, Decl(subclassWithPolymorphicThisIsAssignable.ts, 1, 20))
+>increment : Symbol(Document.increment, Decl(subclassWithPolymorphicThisIsAssignable.ts, 1, 20))
 }
 
 /* our custom model extends the mongoose document */
@@ -22,14 +22,14 @@ export class Example<Z extends CustomDocument> {
     constructor() {
         // types of increment not compatible??
         this.test<Z>();
->this.test : Symbol(test, Decl(subclassWithPolymorphicThisIsAssignable.ts, 12, 5))
+>this.test : Symbol(Example.test, Decl(subclassWithPolymorphicThisIsAssignable.ts, 12, 5))
 >this : Symbol(Example, Decl(subclassWithPolymorphicThisIsAssignable.ts, 6, 45))
->test : Symbol(test, Decl(subclassWithPolymorphicThisIsAssignable.ts, 12, 5))
+>test : Symbol(Example.test, Decl(subclassWithPolymorphicThisIsAssignable.ts, 12, 5))
 >Z : Symbol(Z, Decl(subclassWithPolymorphicThisIsAssignable.ts, 8, 21))
     }
 
     public test<Z extends Document>() { }
->test : Symbol(test, Decl(subclassWithPolymorphicThisIsAssignable.ts, 12, 5))
+>test : Symbol(Example.test, Decl(subclassWithPolymorphicThisIsAssignable.ts, 12, 5))
 >Z : Symbol(Z, Decl(subclassWithPolymorphicThisIsAssignable.ts, 14, 16))
 >Document : Symbol(Document, Decl(subclassWithPolymorphicThisIsAssignable.ts, 0, 0))
 }

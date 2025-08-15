@@ -6,23 +6,23 @@ var v = class C {
 >C : Symbol(C, Decl(classExpressionWithStaticPropertiesES62.ts, 0, 7))
 
     static a = 1;
->a : Symbol(a, Decl(classExpressionWithStaticPropertiesES62.ts, 0, 17))
+>a : Symbol(C.a, Decl(classExpressionWithStaticPropertiesES62.ts, 0, 17))
 
     static b
->b : Symbol(b, Decl(classExpressionWithStaticPropertiesES62.ts, 1, 17))
+>b : Symbol(C.b, Decl(classExpressionWithStaticPropertiesES62.ts, 1, 17))
 
     static c = {
->c : Symbol(c, Decl(classExpressionWithStaticPropertiesES62.ts, 2, 12))
+>c : Symbol(C.c, Decl(classExpressionWithStaticPropertiesES62.ts, 2, 12))
 
         x: "hi"
 >x : Symbol(x, Decl(classExpressionWithStaticPropertiesES62.ts, 3, 16))
     }
     static d = C.c.x + " world";
->d : Symbol(d, Decl(classExpressionWithStaticPropertiesES62.ts, 5, 5))
+>d : Symbol(C.d, Decl(classExpressionWithStaticPropertiesES62.ts, 5, 5))
 >C.c.x : Symbol(x, Decl(classExpressionWithStaticPropertiesES62.ts, 3, 16))
->C.c : Symbol(c, Decl(classExpressionWithStaticPropertiesES62.ts, 2, 12))
+>C.c : Symbol(C.c, Decl(classExpressionWithStaticPropertiesES62.ts, 2, 12))
 >C : Symbol(C, Decl(classExpressionWithStaticPropertiesES62.ts, 0, 7))
->c : Symbol(c, Decl(classExpressionWithStaticPropertiesES62.ts, 2, 12))
+>c : Symbol(C.c, Decl(classExpressionWithStaticPropertiesES62.ts, 2, 12))
 >x : Symbol(x, Decl(classExpressionWithStaticPropertiesES62.ts, 3, 16))
 
  };

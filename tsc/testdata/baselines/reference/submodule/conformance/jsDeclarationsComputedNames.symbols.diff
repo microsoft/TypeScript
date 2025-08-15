@@ -11,17 +11,3 @@
  >exports : Symbol(export=, Decl(index.js, 1, 26))
 
      [TopLevelSym](x = 12) {
-@@= skipped -40, +40 lines =@@
- >MyClass : Symbol(MyClass, Decl(index2.js, 1, 26))
-
-     static [TopLevelSym] = 12;
-->[TopLevelSym] : Symbol(MyClass[TopLevelSym], Decl(index2.js, 3, 22))
-+>[TopLevelSym] : Symbol([TopLevelSym], Decl(index2.js, 3, 22))
- >TopLevelSym : Symbol(TopLevelSym, Decl(index2.js, 0, 5))
-
-     [InnerSym] = "ok";
-->[InnerSym] : Symbol(MyClass[InnerSym], Decl(index2.js, 4, 30))
-+>[InnerSym] : Symbol([InnerSym], Decl(index2.js, 4, 30))
- >InnerSym : Symbol(InnerSym, Decl(index2.js, 1, 5))
-
-     /**

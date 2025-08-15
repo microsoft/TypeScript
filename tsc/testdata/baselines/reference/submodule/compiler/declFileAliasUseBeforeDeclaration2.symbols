@@ -18,5 +18,5 @@ declare module "test" {
     import E = A.C;
 >E : Symbol(E, Decl(declFileAliasUseBeforeDeclaration2.ts, 6, 5))
 >A : Symbol(A, Decl(declFileAliasUseBeforeDeclaration2.ts, 0, 23))
->C : Symbol(C, Decl(declFileAliasUseBeforeDeclaration2.ts, 1, 14))
+>C : Symbol(E, Decl(declFileAliasUseBeforeDeclaration2.ts, 1, 14))
 }

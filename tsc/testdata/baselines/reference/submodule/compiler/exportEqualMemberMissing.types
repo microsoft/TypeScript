@@ -32,7 +32,7 @@ module server {
     }
 }
 var server: {
->server : { (): import("./exportEqualMemberMissing_0").connectExport; foo: Date; }
+>server : { (): import("exportEqualMemberMissing_0").connectExport; foo: Date; }
 
     (): server.connectExport;
 >server : any
@@ -42,5 +42,5 @@ var server: {
 
 };
 export = server;
->server : { (): import("./exportEqualMemberMissing_0").connectExport; foo: Date; }
+>server : { (): import("exportEqualMemberMissing_0").connectExport; foo: Date; }
 

@@ -249,7 +249,7 @@ class C {
     }
 
     method() {
->method : Symbol(method, Decl(letDeclarations-scopes.ts, 126, 5))
+>method : Symbol(C.method, Decl(letDeclarations-scopes.ts, 126, 5))
 
         let l = 0;
 >l : Symbol(l, Decl(letDeclarations-scopes.ts, 129, 11))
@@ -260,7 +260,7 @@ class C {
     }
 
     get v() {
->v : Symbol(v, Decl(letDeclarations-scopes.ts, 131, 5), Decl(letDeclarations-scopes.ts, 137, 5))
+>v : Symbol(C.v, Decl(letDeclarations-scopes.ts, 131, 5), Decl(letDeclarations-scopes.ts, 137, 5))
 
         let l = 0;
 >l : Symbol(l, Decl(letDeclarations-scopes.ts, 134, 11))
@@ -274,7 +274,7 @@ class C {
     }
 
     set v(value) {
->v : Symbol(v, Decl(letDeclarations-scopes.ts, 131, 5), Decl(letDeclarations-scopes.ts, 137, 5))
+>v : Symbol(C.v, Decl(letDeclarations-scopes.ts, 131, 5), Decl(letDeclarations-scopes.ts, 137, 5))
 >value : Symbol(value, Decl(letDeclarations-scopes.ts, 139, 10))
 
         let l = 0;

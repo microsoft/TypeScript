@@ -15,9 +15,9 @@ function Multimap() {
 };
 
 Multimap.prototype = {
->Multimap.prototype : Symbol(prototype, Decl(a.js, 9, 2))
+>Multimap.prototype : Symbol(Multimap.prototype, Decl(a.js, 9, 2))
 >Multimap : Symbol(Multimap, Decl(a.js, 0, 0))
->prototype : Symbol(prototype, Decl(a.js, 9, 2))
+>prototype : Symbol(Multimap.prototype, Decl(a.js, 9, 2))
 
     /**
      * @param {K} key the key ok
@@ -47,9 +47,9 @@ var Multimap2 = function() {
 };
 
 Multimap2.prototype = {
->Multimap2.prototype : Symbol(prototype, Decl(a.js, 30, 2))
+>Multimap2.prototype : Symbol(Multimap2.prototype, Decl(a.js, 30, 2))
 >Multimap2 : Symbol(Multimap2, Decl(a.js, 27, 3))
->prototype : Symbol(prototype, Decl(a.js, 30, 2))
+>prototype : Symbol(Multimap2.prototype, Decl(a.js, 30, 2))
 
     /**
      * @param {K} key the key ok
@@ -86,11 +86,11 @@ Ns.Multimap3 = function() {
 };
 
 Ns.Multimap3.prototype = {
->Ns.Multimap3.prototype : Symbol(prototype, Decl(a.js, 52, 2))
+>Ns.Multimap3.prototype : Symbol(Multimap3.prototype, Decl(a.js, 52, 2))
 >Ns.Multimap3 : Symbol(Multimap3, Decl(a.js, 42, 12))
 >Ns : Symbol(Ns, Decl(a.js, 42, 3))
 >Multimap3 : Symbol(Multimap3, Decl(a.js, 42, 12))
->prototype : Symbol(prototype, Decl(a.js, 52, 2))
+>prototype : Symbol(Multimap3.prototype, Decl(a.js, 52, 2))
 
     /**
      * @param {K} key the key ok

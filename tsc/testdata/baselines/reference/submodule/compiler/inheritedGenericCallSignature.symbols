@@ -25,7 +25,7 @@ interface I2<T> extends I1<T[]> {
 >T : Symbol(T, Decl(inheritedGenericCallSignature.ts, 11, 13))
 
     b: T;
->b : Symbol(b, Decl(inheritedGenericCallSignature.ts, 11, 33))
+>b : Symbol(I2.b, Decl(inheritedGenericCallSignature.ts, 11, 33))
 >T : Symbol(T, Decl(inheritedGenericCallSignature.ts, 11, 13))
 
 }
@@ -45,7 +45,7 @@ var y = x(undefined);
 >undefined : Symbol(undefined)
 
 y.length;  // should not error
->y.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>y.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >y : Symbol(y, Decl(inheritedGenericCallSignature.ts, 23, 3))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 

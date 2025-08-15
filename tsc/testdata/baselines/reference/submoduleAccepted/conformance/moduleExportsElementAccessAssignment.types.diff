@@ -23,43 +23,16 @@
 
  mod1.default;
  >mod1.default : { x: string; }
-@@= skipped -20, +20 lines =@@
- exports.a = { x: "x" };
- >exports.a = { x: "x" } : { x: string; }
- >exports.a : { x: string; }
-->exports : typeof import("mod1")
-+>exports : typeof import("./mod1")
- >a : { x: string; }
- >{ x: "x" } : { x: string; }
- >x : string
-@@= skipped -9, +9 lines =@@
- exports["b"] = { x: "x" };
- >exports["b"] = { x: "x" } : { x: string; }
- >exports["b"] : { x: string; }
-->exports : typeof import("mod1")
-+>exports : typeof import("./mod1")
- >"b" : "b"
- >{ x: "x" } : { x: string; }
- >x : string
-@@= skipped -9, +9 lines =@@
- exports["default"] = { x: "x" };
- >exports["default"] = { x: "x" } : { x: string; }
- >exports["default"] : { x: string; }
-->exports : typeof import("mod1")
-+>exports : typeof import("./mod1")
- >"default" : "default"
- >{ x: "x" } : { x: string; }
- >x : string
-@@= skipped -9, +9 lines =@@
+@@= skipped -47, +47 lines =@@
  module.exports["c"] = { x: "x" };
  >module.exports["c"] = { x: "x" } : { x: string; }
  >module.exports["c"] : { x: string; }
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-+>module.exports : typeof import("./mod1")
-+>module : { "\"mod1\"": typeof import("./mod1"); }
-+>exports : typeof import("./mod1")
++>module.exports : typeof import("mod1")
++>module : { "\"mod1\"": typeof import("mod1"); }
++>exports : typeof import("mod1")
  >"c" : "c"
  >{ x: "x" } : { x: string; }
  >x : string
@@ -72,8 +45,8 @@
 ->module : { exports: typeof module.exports; }
 +>module["exports"]["d"] = {} : {}
 +>module["exports"]["d"] : {}
-+>module["exports"] : typeof import("./mod1")
-+>module : { "\"mod1\"": typeof import("./mod1"); }
++>module["exports"] : typeof import("mod1")
++>module : { "\"mod1\"": typeof import("mod1"); }
  >"exports" : "exports"
  >"d" : "d"
  >{} : {}
@@ -86,8 +59,8 @@
 ->module : { exports: typeof module.exports; }
 +>module["exports"]["d"].e : any
 +>module["exports"]["d"] : {}
-+>module["exports"] : typeof import("./mod1")
-+>module : { "\"mod1\"": typeof import("./mod1"); }
++>module["exports"] : typeof import("mod1")
++>module : { "\"mod1\"": typeof import("mod1"); }
  >"exports" : "exports"
  >"d" : "d"
 ->e : number

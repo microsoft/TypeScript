@@ -21,7 +21,7 @@ class Foo3 {
 >Foo3 : Symbol(Foo3, Decl(collisionThisExpressionAndPropertyNameAsConstuctorParameter.ts, 6, 1))
 
     constructor(private _this: number) { // Error
->_this : Symbol(_this, Decl(collisionThisExpressionAndPropertyNameAsConstuctorParameter.ts, 9, 16))
+>_this : Symbol(Foo3._this, Decl(collisionThisExpressionAndPropertyNameAsConstuctorParameter.ts, 9, 16))
 
         var lambda = () => {
 >lambda : Symbol(lambda, Decl(collisionThisExpressionAndPropertyNameAsConstuctorParameter.ts, 10, 11))
@@ -65,7 +65,7 @@ class Foo5 {
 >_this : Symbol(_this, Decl(collisionThisExpressionAndPropertyNameAsConstuctorParameter.ts, 28, 16))
 
     constructor(private _this: any) { // Error
->_this : Symbol(_this, Decl(collisionThisExpressionAndPropertyNameAsConstuctorParameter.ts, 29, 16))
+>_this : Symbol(Foo5._this, Decl(collisionThisExpressionAndPropertyNameAsConstuctorParameter.ts, 29, 16))
 
         var lambda = () => {
 >lambda : Symbol(lambda, Decl(collisionThisExpressionAndPropertyNameAsConstuctorParameter.ts, 30, 11))

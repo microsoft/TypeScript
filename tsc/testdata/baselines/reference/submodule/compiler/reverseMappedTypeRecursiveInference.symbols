@@ -36,9 +36,9 @@ function test<V>(value: Foo<V>): V {
 >V : Symbol(V, Decl(reverseMappedTypeRecursiveInference.ts, 8, 14))
 
   console.log(value);
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >value : Symbol(value, Decl(reverseMappedTypeRecursiveInference.ts, 8, 17))
 
   return undefined as any;

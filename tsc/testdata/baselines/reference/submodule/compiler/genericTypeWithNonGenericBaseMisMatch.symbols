@@ -5,7 +5,7 @@ interface I {
 >I : Symbol(I, Decl(genericTypeWithNonGenericBaseMisMatch.ts, 0, 0))
 
 	f: (a: { a: number }) => void
->f : Symbol(f, Decl(genericTypeWithNonGenericBaseMisMatch.ts, 0, 13))
+>f : Symbol(I.f, Decl(genericTypeWithNonGenericBaseMisMatch.ts, 0, 13))
 >a : Symbol(a, Decl(genericTypeWithNonGenericBaseMisMatch.ts, 1, 5))
 >a : Symbol(a, Decl(genericTypeWithNonGenericBaseMisMatch.ts, 1, 9))
 }
@@ -16,7 +16,7 @@ class X<T extends { a: string }> implements I {
 >I : Symbol(I, Decl(genericTypeWithNonGenericBaseMisMatch.ts, 0, 0))
 
 	f(a: T): void { }
->f : Symbol(f, Decl(genericTypeWithNonGenericBaseMisMatch.ts, 3, 47))
+>f : Symbol(X.f, Decl(genericTypeWithNonGenericBaseMisMatch.ts, 3, 47))
 >a : Symbol(a, Decl(genericTypeWithNonGenericBaseMisMatch.ts, 4, 3))
 >T : Symbol(T, Decl(genericTypeWithNonGenericBaseMisMatch.ts, 3, 8))
 }

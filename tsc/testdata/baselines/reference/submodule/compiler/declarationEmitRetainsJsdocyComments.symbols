@@ -36,7 +36,7 @@ export class Foo {
      * @param s  
      */
     bar(s: number) {
->bar : Symbol(bar, Decl(declarationEmitRetainsJsdocyComments.ts, 19, 18))
+>bar : Symbol(Foo.bar, Decl(declarationEmitRetainsJsdocyComments.ts, 19, 18))
 >s : Symbol(s, Decl(declarationEmitRetainsJsdocyComments.ts, 24, 8))
     }
 }
@@ -60,7 +60,7 @@ declare global {
         * comment6
         */
         someMethod(collection: any[]): boolean;
->someMethod : Symbol(someMethod, Decl(declarationEmitRetainsJsdocyComments.ts, 36, 23))
+>someMethod : Symbol(ExtFunc.someMethod, Decl(declarationEmitRetainsJsdocyComments.ts, 36, 23))
 >collection : Symbol(collection, Decl(declarationEmitRetainsJsdocyComments.ts, 40, 19))
     }
 }

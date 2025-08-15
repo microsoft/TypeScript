@@ -58,7 +58,7 @@ class BaseClass<V> {
 >V : Symbol(V, Decl(inferTypeParameterConstraints.ts, 20, 16))
 
   protected fake(): V {
->fake : Symbol(fake, Decl(inferTypeParameterConstraints.ts, 20, 20))
+>fake : Symbol(BaseClass.fake, Decl(inferTypeParameterConstraints.ts, 20, 20))
 >V : Symbol(V, Decl(inferTypeParameterConstraints.ts, 20, 16))
 
     throw new Error("");
@@ -73,7 +73,7 @@ class Klass<V> extends BaseClass<V> {
 >V : Symbol(V, Decl(inferTypeParameterConstraints.ts, 26, 12))
 
   child = true;
->child : Symbol(child, Decl(inferTypeParameterConstraints.ts, 26, 37))
+>child : Symbol(Klass.child, Decl(inferTypeParameterConstraints.ts, 26, 37))
 }
 
 type Constructor<V, P extends BaseClass<V>> = new () => P;
@@ -105,7 +105,7 @@ declare let m: U;
 >U : Symbol(U, Decl(inferTypeParameterConstraints.ts, 31, 69))
 
 m.child; // ok
->m.child : Symbol(child, Decl(inferTypeParameterConstraints.ts, 26, 37))
+>m.child : Symbol(Klass.child, Decl(inferTypeParameterConstraints.ts, 26, 37))
 >m : Symbol(m, Decl(inferTypeParameterConstraints.ts, 35, 11))
->child : Symbol(child, Decl(inferTypeParameterConstraints.ts, 26, 37))
+>child : Symbol(Klass.child, Decl(inferTypeParameterConstraints.ts, 26, 37))
 

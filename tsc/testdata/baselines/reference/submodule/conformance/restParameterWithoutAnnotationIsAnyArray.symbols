@@ -21,7 +21,7 @@ class C {
 >C : Symbol(C, Decl(restParameterWithoutAnnotationIsAnyArray.ts, 4, 28))
 
     foo(...x) { }
->foo : Symbol(foo, Decl(restParameterWithoutAnnotationIsAnyArray.ts, 6, 9))
+>foo : Symbol(C.foo, Decl(restParameterWithoutAnnotationIsAnyArray.ts, 6, 9))
 >x : Symbol(x, Decl(restParameterWithoutAnnotationIsAnyArray.ts, 7, 8))
 }
 
@@ -32,7 +32,7 @@ interface I {
 >x : Symbol(x, Decl(restParameterWithoutAnnotationIsAnyArray.ts, 11, 5))
 
     foo(...x, ...y);
->foo : Symbol(foo, Decl(restParameterWithoutAnnotationIsAnyArray.ts, 11, 11))
+>foo : Symbol(I.foo, Decl(restParameterWithoutAnnotationIsAnyArray.ts, 11, 11))
 >x : Symbol(x, Decl(restParameterWithoutAnnotationIsAnyArray.ts, 12, 8))
 >y : Symbol(y, Decl(restParameterWithoutAnnotationIsAnyArray.ts, 12, 13))
 }

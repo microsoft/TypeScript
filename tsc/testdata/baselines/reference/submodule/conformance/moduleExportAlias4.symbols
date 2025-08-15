@@ -8,14 +8,14 @@ var wat = require('./bug24024')
 >'./bug24024' : Symbol("bug24024", Decl(bug24024.js, 0, 0))
 
 module.exports = class C {}
->module.exports : Symbol(C, Decl(bug24024.js, 2, 16))
+>module.exports : Symbol(wat, Decl(bug24024.js, 2, 16))
 >module : Symbol(module.exports)
->exports : Symbol(C, Decl(bug24024.js, 2, 16))
+>exports : Symbol(wat, Decl(bug24024.js, 2, 16))
 >C : Symbol(C, Decl(bug24024.js, 2, 16))
 
 module.exports.D = class D { }
->module.exports : Symbol(C, Decl(bug24024.js, 2, 16))
+>module.exports : Symbol(wat, Decl(bug24024.js, 2, 16))
 >module : Symbol(module.exports)
->exports : Symbol(C, Decl(bug24024.js, 2, 16))
+>exports : Symbol(wat, Decl(bug24024.js, 2, 16))
 >D : Symbol(D, Decl(bug24024.js, 3, 18))
 

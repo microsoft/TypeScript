@@ -6,7 +6,7 @@ interface A<T> {
 >T : Symbol(T, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 0, 12), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 4, 12))
 
     x: T;
->x : Symbol(x, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 0, 16))
+>x : Symbol(A.x, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 0, 16))
 >T : Symbol(T, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 0, 12), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 4, 12))
 }
 
@@ -16,7 +16,7 @@ interface A<T, U> { // error
 >U : Symbol(U, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 4, 14))
 
     y: T;
->y : Symbol(y, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 4, 19))
+>y : Symbol(A.y, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 4, 19))
 >T : Symbol(T, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 0, 12), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 4, 12))
 }
 
@@ -28,7 +28,7 @@ module M {
 >T : Symbol(T, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 9, 16), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 13, 16))
 
         x: T;
->x : Symbol(x, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 9, 20))
+>x : Symbol(A.x, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 9, 20))
 >T : Symbol(T, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 9, 16), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 13, 16))
     }
 
@@ -38,7 +38,7 @@ module M {
 >U : Symbol(U, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 13, 18))
 
         y: T;
->y : Symbol(y, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 13, 23))
+>y : Symbol(A.y, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 13, 23))
 >T : Symbol(T, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 9, 16), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 13, 16))
     }
 }
@@ -51,7 +51,7 @@ module M2 {
 >T : Symbol(T, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 19, 16))
 
         x: T;
->x : Symbol(x, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 19, 20))
+>x : Symbol(A.x, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 19, 20))
 >T : Symbol(T, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 19, 16))
     }
 }
@@ -65,7 +65,7 @@ module M2 {
 >U : Symbol(U, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 25, 18))
 
         y: T;
->y : Symbol(y, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 25, 23))
+>y : Symbol(A.y, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 25, 23))
 >T : Symbol(T, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 25, 16))
     }
 }
@@ -78,7 +78,7 @@ module M3 {
 >T : Symbol(T, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 31, 23), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 37, 23))
 
         x: T;
->x : Symbol(x, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 31, 27))
+>x : Symbol(A.x, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 31, 27))
 >T : Symbol(T, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 31, 23), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 37, 23))
     }
 }
@@ -92,7 +92,7 @@ module M3 {
 >U : Symbol(U, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 37, 25))
 
         y: T;
->y : Symbol(y, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 37, 30))
+>y : Symbol(A.y, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 37, 30))
 >T : Symbol(T, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 31, 23), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 37, 23))
     }
 }

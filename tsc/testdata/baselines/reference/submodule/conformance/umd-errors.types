@@ -20,16 +20,16 @@ export var p;
 >p : any
 
 static export as namespace oo1;
->oo1 : typeof import("./err3")
+>oo1 : typeof import("err3")
 
 declare export as namespace oo2;
->oo2 : typeof import("./err3")
+>oo2 : typeof import("err3")
 
 public export as namespace oo3;
->oo3 : typeof import("./err3")
+>oo3 : typeof import("err3")
 
 const export as namespace oo4;
->oo4 : typeof import("./err3")
+>oo4 : typeof import("err3")
 
 === err4.d.ts ===
 // Illegal, must be at top-level

@@ -5,5 +5,5 @@ interface I {
 >I : Symbol(I, Decl(parserPropertySignature8.ts, 0, 0))
 
   "H"?:any;
->"H" : Symbol("H", Decl(parserPropertySignature8.ts, 0, 13))
+>"H" : Symbol(I["H"], Decl(parserPropertySignature8.ts, 0, 13))
 }

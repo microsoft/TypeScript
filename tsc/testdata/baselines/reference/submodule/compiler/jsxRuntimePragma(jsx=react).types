@@ -102,14 +102,14 @@ export const selfClosing = <img src="./image.png" />;
 
 === index.ts ===
 export * as one from "./one.js";
->one : typeof import("./one.js")
+>one : typeof import("one")
 
 export * as two from "./two.js";
->two : typeof import("./two.js")
+>two : typeof import("two")
 
 export * as three from "./three.js";
->three : typeof import("./three.js")
+>three : typeof import("three")
 
 export * as four from "./four.js";
->four : typeof import("./four.js")
+>four : typeof import("four")
 

@@ -8,9 +8,9 @@ export const x = 0;
 module.exports.y = 0; // Error
 >module.exports.y = 0 : 0
 >module.exports.y : 0
->module.exports : typeof import("./a")
->module : { "\"/a\"": typeof import("./a"); }
->exports : typeof import("./a")
+>module.exports : typeof import("/a")
+>module : { "\"/a\"": typeof import("/a"); }
+>exports : typeof import("/a")
 >y : 0
 >0 : 0
 
@@ -44,7 +44,7 @@ export default 0;
 exports.default = 0;
 >exports.default = 0 : 0
 >exports.default : 0
->exports : typeof import("./g")
+>exports : typeof import("/g")
 >default : 0
 >0 : 0
 
@@ -299,11 +299,11 @@ const g2 = require("./g"); // { default: 0 }
 
 === /main4.cjs ===
 exports.x = require("./g");
->exports.x = require("./g") : typeof import("./g")
->exports.x : typeof import("./g")
->exports : typeof import("./main4.cjs")
->x : typeof import("./g")
->require("./g") : typeof import("./g")
+>exports.x = require("./g") : typeof import("/g")
+>exports.x : typeof import("/g")
+>exports : typeof import("/main4")
+>x : typeof import("/g")
+>require("./g") : typeof import("/g")
 >require : any
 >"./g" : "./g"
 

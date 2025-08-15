@@ -5,15 +5,15 @@
 
 class C1 { item: string }
 >C1 : Symbol(C1, Decl(instanceofWithStructurallyIdenticalTypes.ts, 0, 0))
->item : Symbol(item, Decl(instanceofWithStructurallyIdenticalTypes.ts, 2, 10))
+>item : Symbol(C1.item, Decl(instanceofWithStructurallyIdenticalTypes.ts, 2, 10))
 
 class C2 { item: string[] }
 >C2 : Symbol(C2, Decl(instanceofWithStructurallyIdenticalTypes.ts, 2, 25))
->item : Symbol(item, Decl(instanceofWithStructurallyIdenticalTypes.ts, 3, 10))
+>item : Symbol(C2.item, Decl(instanceofWithStructurallyIdenticalTypes.ts, 3, 10))
 
 class C3 { item: string }
 >C3 : Symbol(C3, Decl(instanceofWithStructurallyIdenticalTypes.ts, 3, 27))
->item : Symbol(item, Decl(instanceofWithStructurallyIdenticalTypes.ts, 4, 10))
+>item : Symbol(C3.item, Decl(instanceofWithStructurallyIdenticalTypes.ts, 4, 10))
 
 function foo1(x: C1 | C2 | C3): string {
 >foo1 : Symbol(foo1, Decl(instanceofWithStructurallyIdenticalTypes.ts, 4, 25))
@@ -27,27 +27,27 @@ function foo1(x: C1 | C2 | C3): string {
 >C1 : Symbol(C1, Decl(instanceofWithStructurallyIdenticalTypes.ts, 0, 0))
 
         return x.item;
->x.item : Symbol(item, Decl(instanceofWithStructurallyIdenticalTypes.ts, 2, 10))
+>x.item : Symbol(C1.item, Decl(instanceofWithStructurallyIdenticalTypes.ts, 2, 10))
 >x : Symbol(x, Decl(instanceofWithStructurallyIdenticalTypes.ts, 6, 14))
->item : Symbol(item, Decl(instanceofWithStructurallyIdenticalTypes.ts, 2, 10))
+>item : Symbol(C1.item, Decl(instanceofWithStructurallyIdenticalTypes.ts, 2, 10))
     }
     else if (x instanceof C2) {
 >x : Symbol(x, Decl(instanceofWithStructurallyIdenticalTypes.ts, 6, 14))
 >C2 : Symbol(C2, Decl(instanceofWithStructurallyIdenticalTypes.ts, 2, 25))
 
         return x.item[0];
->x.item : Symbol(item, Decl(instanceofWithStructurallyIdenticalTypes.ts, 3, 10))
+>x.item : Symbol(C2.item, Decl(instanceofWithStructurallyIdenticalTypes.ts, 3, 10))
 >x : Symbol(x, Decl(instanceofWithStructurallyIdenticalTypes.ts, 6, 14))
->item : Symbol(item, Decl(instanceofWithStructurallyIdenticalTypes.ts, 3, 10))
+>item : Symbol(C2.item, Decl(instanceofWithStructurallyIdenticalTypes.ts, 3, 10))
     }
     else if (x instanceof C3) {
 >x : Symbol(x, Decl(instanceofWithStructurallyIdenticalTypes.ts, 6, 14))
 >C3 : Symbol(C3, Decl(instanceofWithStructurallyIdenticalTypes.ts, 3, 27))
 
         return x.item;
->x.item : Symbol(item, Decl(instanceofWithStructurallyIdenticalTypes.ts, 4, 10))
+>x.item : Symbol(C3.item, Decl(instanceofWithStructurallyIdenticalTypes.ts, 4, 10))
 >x : Symbol(x, Decl(instanceofWithStructurallyIdenticalTypes.ts, 6, 14))
->item : Symbol(item, Decl(instanceofWithStructurallyIdenticalTypes.ts, 4, 10))
+>item : Symbol(C3.item, Decl(instanceofWithStructurallyIdenticalTypes.ts, 4, 10))
     }
     return "error";
 }
@@ -106,9 +106,9 @@ function foo2(x: C1 | C2 | C3): string {
 >x : Symbol(x, Decl(instanceofWithStructurallyIdenticalTypes.ts, 23, 14))
 
         return x.item[0];
->x.item : Symbol(item, Decl(instanceofWithStructurallyIdenticalTypes.ts, 3, 10))
+>x.item : Symbol(C2.item, Decl(instanceofWithStructurallyIdenticalTypes.ts, 3, 10))
 >x : Symbol(x, Decl(instanceofWithStructurallyIdenticalTypes.ts, 23, 14))
->item : Symbol(item, Decl(instanceofWithStructurallyIdenticalTypes.ts, 3, 10))
+>item : Symbol(C2.item, Decl(instanceofWithStructurallyIdenticalTypes.ts, 3, 10))
     }
     else if (isC3(x)) {
 >isC3 : Symbol(isC3, Decl(instanceofWithStructurallyIdenticalTypes.ts, 20, 66))
@@ -124,7 +124,7 @@ function foo2(x: C1 | C2 | C3): string {
 
 class A { a: string }
 >A : Symbol(A, Decl(instanceofWithStructurallyIdenticalTypes.ts, 34, 1))
->a : Symbol(a, Decl(instanceofWithStructurallyIdenticalTypes.ts, 38, 9))
+>a : Symbol(A.a, Decl(instanceofWithStructurallyIdenticalTypes.ts, 38, 9))
 
 class A1 extends A { }
 >A1 : Symbol(A1, Decl(instanceofWithStructurallyIdenticalTypes.ts, 38, 21))
@@ -132,12 +132,12 @@ class A1 extends A { }
 
 class A2 { a: string }
 >A2 : Symbol(A2, Decl(instanceofWithStructurallyIdenticalTypes.ts, 39, 22))
->a : Symbol(a, Decl(instanceofWithStructurallyIdenticalTypes.ts, 40, 10))
+>a : Symbol(A2.a, Decl(instanceofWithStructurallyIdenticalTypes.ts, 40, 10))
 
 class B extends A { b: string }
 >B : Symbol(B, Decl(instanceofWithStructurallyIdenticalTypes.ts, 40, 22))
 >A : Symbol(A, Decl(instanceofWithStructurallyIdenticalTypes.ts, 34, 1))
->b : Symbol(b, Decl(instanceofWithStructurallyIdenticalTypes.ts, 41, 19))
+>b : Symbol(B.b, Decl(instanceofWithStructurallyIdenticalTypes.ts, 41, 19))
 
 function goo(x: A) {
 >goo : Symbol(goo, Decl(instanceofWithStructurallyIdenticalTypes.ts, 41, 31))

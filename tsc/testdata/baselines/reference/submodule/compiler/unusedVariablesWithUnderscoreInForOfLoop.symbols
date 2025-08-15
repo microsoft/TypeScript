@@ -9,9 +9,9 @@ function t1() {
 >b : Symbol(b, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 1, 19))
 
         console.log(b);
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >b : Symbol(b, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 1, 19))
     }
 
@@ -20,9 +20,9 @@ function t1() {
 >_b : Symbol(_b, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 5, 18))
 
         console.log(a);
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >a : Symbol(a, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 5, 16))
     }
 

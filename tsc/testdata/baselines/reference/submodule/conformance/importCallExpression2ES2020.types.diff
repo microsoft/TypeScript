@@ -1,9 +1,0 @@
---- old.importCallExpression2ES2020.types
-+++ new.importCallExpression2ES2020.types
-@@= skipped -40, +40 lines =@@
- foo(import("./0"));
- >foo(import("./0")) : void
- >foo : (x: Promise<any>) => void
-->import("./0") : Promise<typeof import("0")>
-+>import("./0") : Promise<typeof import("./0")>
- >"./0" : "./0"

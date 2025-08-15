@@ -7,7 +7,7 @@ class BugExhibition<T> {
 >T : Symbol(T, Decl(methodContainingLocalFunction.ts, 1, 20))
 
     public exhibitBug() {
->exhibitBug : Symbol(exhibitBug, Decl(methodContainingLocalFunction.ts, 1, 24))
+>exhibitBug : Symbol(BugExhibition.exhibitBug, Decl(methodContainingLocalFunction.ts, 1, 24))
 
         function localFunction() { }
 >localFunction : Symbol(localFunction, Decl(methodContainingLocalFunction.ts, 2, 25))
@@ -26,7 +26,7 @@ class BugExhibition2<T> {
 >T : Symbol(T, Decl(methodContainingLocalFunction.ts, 9, 21))
 
     private static get exhibitBug() {
->exhibitBug : Symbol(exhibitBug, Decl(methodContainingLocalFunction.ts, 9, 25))
+>exhibitBug : Symbol(BugExhibition2.exhibitBug, Decl(methodContainingLocalFunction.ts, 9, 25))
 
         function localFunction() { }
 >localFunction : Symbol(localFunction, Decl(methodContainingLocalFunction.ts, 10, 37))
@@ -47,7 +47,7 @@ class BugExhibition3<T> {
 >T : Symbol(T, Decl(methodContainingLocalFunction.ts, 18, 21))
 
     public exhibitBug() {
->exhibitBug : Symbol(exhibitBug, Decl(methodContainingLocalFunction.ts, 18, 25))
+>exhibitBug : Symbol(BugExhibition3.exhibitBug, Decl(methodContainingLocalFunction.ts, 18, 25))
 
         function localGenericFunction<U>(u?: U) { }
 >localGenericFunction : Symbol(localGenericFunction, Decl(methodContainingLocalFunction.ts, 19, 25))
@@ -68,7 +68,7 @@ class C {
 >C : Symbol(C, Decl(methodContainingLocalFunction.ts, 24, 1))
 
     exhibit() {
->exhibit : Symbol(exhibit, Decl(methodContainingLocalFunction.ts, 26, 9))
+>exhibit : Symbol(C.exhibit, Decl(methodContainingLocalFunction.ts, 26, 9))
 
         var funcExpr = <U>(u?: U) => { };
 >funcExpr : Symbol(funcExpr, Decl(methodContainingLocalFunction.ts, 28, 11))
@@ -107,7 +107,7 @@ enum E {
 >E : Symbol(E, Decl(methodContainingLocalFunction.ts, 40, 1))
 
     A = (() => {
->A : Symbol(A, Decl(methodContainingLocalFunction.ts, 42, 8))
+>A : Symbol(E.A, Decl(methodContainingLocalFunction.ts, 42, 8))
 
         function localFunction() { }
 >localFunction : Symbol(localFunction, Decl(methodContainingLocalFunction.ts, 43, 16))

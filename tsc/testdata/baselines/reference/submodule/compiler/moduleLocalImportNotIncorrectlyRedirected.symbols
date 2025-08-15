@@ -19,5 +19,5 @@ export declare enum Position {
 >Position : Symbol(Position, Decl(index.d.ts, 0, 0))
 
     top,
->top : Symbol(top, Decl(index.d.ts, 0, 30))
+>top : Symbol(Position.top, Decl(index.d.ts, 0, 30))
 }

@@ -31,10 +31,10 @@ interface I {
 >I : Symbol(I, Decl(null.ts, 12, 1))
 
     x:any;
->x : Symbol(x, Decl(null.ts, 13, 13))
+>x : Symbol(I.x, Decl(null.ts, 13, 13))
 
     y:number;
->y : Symbol(y, Decl(null.ts, 14, 10))
+>y : Symbol(I.y, Decl(null.ts, 14, 10))
 }
 var w:I={x:null,y:3};
 >w : Symbol(w, Decl(null.ts, 17, 3))

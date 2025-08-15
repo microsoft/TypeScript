@@ -17,7 +17,7 @@ try {
 >Foo : Symbol(Foo, Decl(a.ts, 4, 5))
 
         public static func(): Foo {
->func : Symbol(func, Decl(a.ts, 6, 15))
+>func : Symbol(Foo.func, Decl(a.ts, 6, 15))
 >Foo : Symbol(Foo, Decl(a.ts, 4, 5))
 
             return new Foo();
@@ -25,9 +25,9 @@ try {
         }
     }
     Foo.func();
->Foo.func : Symbol(func, Decl(a.ts, 6, 15))
+>Foo.func : Symbol(Foo.func, Decl(a.ts, 6, 15))
 >Foo : Symbol(Foo, Decl(a.ts, 4, 5))
->func : Symbol(func, Decl(a.ts, 6, 15))
+>func : Symbol(Foo.func, Decl(a.ts, 6, 15))
 }
 catch (e) {}
 >e : Symbol(e, Decl(a.ts, 13, 7))

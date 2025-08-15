@@ -10,7 +10,7 @@ class C {
 >C : Symbol(C, Decl(instanceMemberWithComputedPropertyName2.ts, 2, 12))
 
     [x]: string;
->[x] : Symbol([x], Decl(instanceMemberWithComputedPropertyName2.ts, 3, 9))
+>[x] : Symbol(C[x], Decl(instanceMemberWithComputedPropertyName2.ts, 3, 9))
 >x : Symbol(x, Decl(instanceMemberWithComputedPropertyName2.ts, 2, 5))
 }
 

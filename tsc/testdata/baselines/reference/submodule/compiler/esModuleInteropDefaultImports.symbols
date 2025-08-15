@@ -19,23 +19,23 @@ import a from "./a";
 >a : Symbol(a, Decl(b.ts, 0, 6))
 
 import { default as b } from "./a";
->default : Symbol(mod, Decl(a.ts, 0, 30))
+>default : Symbol(self.default, Decl(a.ts, 0, 30))
 >b : Symbol(b, Decl(b.ts, 1, 8))
 
 import c, { default as d } from "./a";
 >c : Symbol(c, Decl(b.ts, 2, 6))
->default : Symbol(mod, Decl(a.ts, 0, 30))
+>default : Symbol(self.default, Decl(a.ts, 0, 30))
 >d : Symbol(d, Decl(b.ts, 2, 11))
 
 import * as self from "./b";
 >self : Symbol(self, Decl(b.ts, 3, 6))
 
 export { default } from "./a";
->default : Symbol(default, Decl(b.ts, 4, 8))
+>default : Symbol(self.default, Decl(b.ts, 4, 8))
 
 export { default as def } from "./a";
->default : Symbol(mod, Decl(a.ts, 0, 30))
->def : Symbol(def, Decl(b.ts, 5, 8))
+>default : Symbol(self.default, Decl(a.ts, 0, 30))
+>def : Symbol(self.def, Decl(b.ts, 5, 8))
 
 a === b;
 >a : Symbol(a, Decl(b.ts, 0, 6))
@@ -51,17 +51,17 @@ c === d;
 
 d === self.default;
 >d : Symbol(d, Decl(b.ts, 2, 11))
->self.default : Symbol(default, Decl(b.ts, 4, 8))
+>self.default : Symbol(self.default, Decl(b.ts, 4, 8))
 >self : Symbol(self, Decl(b.ts, 3, 6))
->default : Symbol(default, Decl(b.ts, 4, 8))
+>default : Symbol(self.default, Decl(b.ts, 4, 8))
 
 self.default === self.def;
->self.default : Symbol(default, Decl(b.ts, 4, 8))
+>self.default : Symbol(self.default, Decl(b.ts, 4, 8))
 >self : Symbol(self, Decl(b.ts, 3, 6))
->default : Symbol(default, Decl(b.ts, 4, 8))
->self.def : Symbol(def, Decl(b.ts, 5, 8))
+>default : Symbol(self.default, Decl(b.ts, 4, 8))
+>self.def : Symbol(self.def, Decl(b.ts, 5, 8))
 >self : Symbol(self, Decl(b.ts, 3, 6))
->def : Symbol(def, Decl(b.ts, 5, 8))
+>def : Symbol(self.def, Decl(b.ts, 5, 8))
 
 // should all fail
 a();
@@ -77,47 +77,47 @@ d();
 >d : Symbol(d, Decl(b.ts, 2, 11))
 
 self.default();
->self.default : Symbol(default, Decl(b.ts, 4, 8))
+>self.default : Symbol(self.default, Decl(b.ts, 4, 8))
 >self : Symbol(self, Decl(b.ts, 3, 6))
->default : Symbol(default, Decl(b.ts, 4, 8))
+>default : Symbol(self.default, Decl(b.ts, 4, 8))
 
 self.def();
->self.def : Symbol(def, Decl(b.ts, 5, 8))
+>self.def : Symbol(self.def, Decl(b.ts, 5, 8))
 >self : Symbol(self, Decl(b.ts, 3, 6))
->def : Symbol(def, Decl(b.ts, 5, 8))
+>def : Symbol(self.def, Decl(b.ts, 5, 8))
 
 // should all work
 a.default();
->a.default : Symbol(fun, Decl(mod.ts, 0, 29))
+>a.default : Symbol(a.default, Decl(mod.ts, 0, 29))
 >a : Symbol(a, Decl(b.ts, 0, 6))
->default : Symbol(fun, Decl(mod.ts, 0, 29))
+>default : Symbol(a.default, Decl(mod.ts, 0, 29))
 
 b.default();
->b.default : Symbol(fun, Decl(mod.ts, 0, 29))
+>b.default : Symbol(a.default, Decl(mod.ts, 0, 29))
 >b : Symbol(b, Decl(b.ts, 1, 8))
->default : Symbol(fun, Decl(mod.ts, 0, 29))
+>default : Symbol(a.default, Decl(mod.ts, 0, 29))
 
 c.default();
->c.default : Symbol(fun, Decl(mod.ts, 0, 29))
+>c.default : Symbol(a.default, Decl(mod.ts, 0, 29))
 >c : Symbol(c, Decl(b.ts, 2, 6))
->default : Symbol(fun, Decl(mod.ts, 0, 29))
+>default : Symbol(a.default, Decl(mod.ts, 0, 29))
 
 d.default();
->d.default : Symbol(fun, Decl(mod.ts, 0, 29))
+>d.default : Symbol(a.default, Decl(mod.ts, 0, 29))
 >d : Symbol(d, Decl(b.ts, 2, 11))
->default : Symbol(fun, Decl(mod.ts, 0, 29))
+>default : Symbol(a.default, Decl(mod.ts, 0, 29))
 
 self.default.default();
->self.default.default : Symbol(fun, Decl(mod.ts, 0, 29))
->self.default : Symbol(default, Decl(b.ts, 4, 8))
+>self.default.default : Symbol(a.default, Decl(mod.ts, 0, 29))
+>self.default : Symbol(self.default, Decl(b.ts, 4, 8))
 >self : Symbol(self, Decl(b.ts, 3, 6))
->default : Symbol(default, Decl(b.ts, 4, 8))
->default : Symbol(fun, Decl(mod.ts, 0, 29))
+>default : Symbol(self.default, Decl(b.ts, 4, 8))
+>default : Symbol(a.default, Decl(mod.ts, 0, 29))
 
 self.def.default();
->self.def.default : Symbol(fun, Decl(mod.ts, 0, 29))
->self.def : Symbol(def, Decl(b.ts, 5, 8))
+>self.def.default : Symbol(a.default, Decl(mod.ts, 0, 29))
+>self.def : Symbol(self.def, Decl(b.ts, 5, 8))
 >self : Symbol(self, Decl(b.ts, 3, 6))
->def : Symbol(def, Decl(b.ts, 5, 8))
->default : Symbol(fun, Decl(mod.ts, 0, 29))
+>def : Symbol(self.def, Decl(b.ts, 5, 8))
+>default : Symbol(a.default, Decl(mod.ts, 0, 29))
 

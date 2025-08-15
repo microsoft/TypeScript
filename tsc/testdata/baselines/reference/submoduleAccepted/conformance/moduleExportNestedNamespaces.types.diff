@@ -12,9 +12,9 @@
 ->n : typeof n
 +>module.exports.n = {} : {}
 +>module.exports.n : {}
-+>module.exports : typeof import("./mod")
-+>module : { "\"mod\"": typeof import("./mod"); }
-+>exports : typeof import("./mod")
++>module.exports : typeof import("mod")
++>module : { "\"mod\"": typeof import("mod"); }
++>exports : typeof import("mod")
 +>n : {}
  >{} : {}
 
@@ -32,9 +32,9 @@
 +>module.exports.n.K = function C() {    this.x = 10;} : () => void
 +>module.exports.n.K : any
 +>module.exports.n : {}
-+>module.exports : typeof import("./mod")
-+>module : { "\"mod\"": typeof import("./mod"); }
-+>exports : typeof import("./mod")
++>module.exports : typeof import("mod")
++>module : { "\"mod\"": typeof import("mod"); }
++>exports : typeof import("mod")
 +>n : {}
 +>K : any
 +>function C() {    this.x = 10;} : () => void
@@ -54,9 +54,9 @@
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-+>module.exports : typeof import("./mod")
-+>module : { "\"mod\"": typeof import("./mod"); }
-+>exports : typeof import("./mod")
++>module.exports : typeof import("mod")
++>module : { "\"mod\"": typeof import("mod"); }
++>exports : typeof import("mod")
  >Classic : typeof Classic
  >class {    constructor() {        this.p = 1    }} : typeof Classic
 

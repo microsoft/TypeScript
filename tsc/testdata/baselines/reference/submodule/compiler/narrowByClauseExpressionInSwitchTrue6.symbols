@@ -5,30 +5,30 @@ interface A {
 >A : Symbol(A, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 0))
 
     kind: "a";
->kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13))
+>kind : Symbol(A.kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13))
 
     aProps: string;
->aProps : Symbol(aProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 1, 14))
+>aProps : Symbol(A.aProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 1, 14))
 }
 
 interface B {
 >B : Symbol(B, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 3, 1))
 
     kind: "b";
->kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13))
+>kind : Symbol(B.kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13))
 
     bProps: string;
->bProps : Symbol(bProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 6, 14))
+>bProps : Symbol(B.bProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 6, 14))
 }
 
 interface C {
 >C : Symbol(C, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 8, 1))
 
     kind: "c";
->kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
+>kind : Symbol(C.kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
 
     cProps: string;
->cProps : Symbol(cProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 11, 14))
+>cProps : Symbol(C.cProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 11, 14))
 }
 
 
@@ -55,9 +55,9 @@ function isA(x: MyType) {
 >kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
 
             x.aProps;
->x.aProps : Symbol(aProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 1, 14))
+>x.aProps : Symbol(A.aProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 1, 14))
 >x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
->aProps : Symbol(aProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 1, 14))
+>aProps : Symbol(A.aProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 1, 14))
 
             break;
         case x.kind === "b":
@@ -66,9 +66,9 @@ function isA(x: MyType) {
 >kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
 
             x.bProps;
->x.bProps : Symbol(bProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 6, 14))
+>x.bProps : Symbol(B.bProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 6, 14))
 >x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
->bProps : Symbol(bProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 6, 14))
+>bProps : Symbol(B.bProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 6, 14))
 
             break;
         case x.kind === "c":
@@ -77,9 +77,9 @@ function isA(x: MyType) {
 >kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
 
             x.cProps;
->x.cProps : Symbol(cProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 11, 14))
+>x.cProps : Symbol(C.cProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 11, 14))
 >x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
->cProps : Symbol(cProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 11, 14))
+>cProps : Symbol(C.cProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 11, 14))
 
             break;
     }
@@ -96,9 +96,9 @@ function isA(x: MyType) {
 >kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
 
             x.aProps;
->x.aProps : Symbol(aProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 1, 14))
+>x.aProps : Symbol(A.aProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 1, 14))
 >x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
->aProps : Symbol(aProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 1, 14))
+>aProps : Symbol(A.aProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 1, 14))
 
             break;
         }
@@ -108,9 +108,9 @@ function isA(x: MyType) {
 >kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
 
             x.bProps;
->x.bProps : Symbol(bProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 6, 14))
+>x.bProps : Symbol(B.bProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 6, 14))
 >x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
->bProps : Symbol(bProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 6, 14))
+>bProps : Symbol(B.bProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 6, 14))
 
             break;
         }
@@ -120,9 +120,9 @@ function isA(x: MyType) {
 >kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
 
             x.cProps;
->x.cProps : Symbol(cProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 11, 14))
+>x.cProps : Symbol(C.cProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 11, 14))
 >x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
->cProps : Symbol(cProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 11, 14))
+>cProps : Symbol(C.cProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 11, 14))
 
             break;
         }
@@ -131,9 +131,9 @@ function isA(x: MyType) {
     switch (true) {
         default:
             x.aProps;
->x.aProps : Symbol(aProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 1, 14))
+>x.aProps : Symbol(A.aProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 1, 14))
 >x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
->aProps : Symbol(aProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 1, 14))
+>aProps : Symbol(A.aProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 1, 14))
 
             break;
         case x.kind === "b":
@@ -142,9 +142,9 @@ function isA(x: MyType) {
 >kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
 
             x.bProps;
->x.bProps : Symbol(bProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 6, 14))
+>x.bProps : Symbol(B.bProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 6, 14))
 >x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
->bProps : Symbol(bProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 6, 14))
+>bProps : Symbol(B.bProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 6, 14))
 
             break;
         case x.kind === "c":
@@ -153,9 +153,9 @@ function isA(x: MyType) {
 >kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
 
             x.cProps;
->x.cProps : Symbol(cProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 11, 14))
+>x.cProps : Symbol(C.cProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 11, 14))
 >x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
->cProps : Symbol(cProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 11, 14))
+>cProps : Symbol(C.cProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 11, 14))
 
             break;
     }
@@ -172,9 +172,9 @@ function isA(x: MyType) {
 >kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
 
             x.aProps;
->x.aProps : Symbol(aProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 1, 14))
+>x.aProps : Symbol(A.aProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 1, 14))
 >x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
->aProps : Symbol(aProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 1, 14))
+>aProps : Symbol(A.aProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 1, 14))
 
             // fallthrough
         case x.kind === "b":

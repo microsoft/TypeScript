@@ -18,8 +18,8 @@ module my.data {
 >my : Symbol(my, Decl(mergedModuleDeclarationCodeGen2.ts, 4, 18))
 
         foo.buz();
->foo.buz : Symbol(buz, Decl(mergedModuleDeclarationCodeGen2.ts, 0, 20))
+>foo.buz : Symbol(foo.buz, Decl(mergedModuleDeclarationCodeGen2.ts, 0, 20))
 >foo : Symbol(foo, Decl(mergedModuleDeclarationCodeGen2.ts, 0, 15))
->buz : Symbol(buz, Decl(mergedModuleDeclarationCodeGen2.ts, 0, 20))
+>buz : Symbol(foo.buz, Decl(mergedModuleDeclarationCodeGen2.ts, 0, 20))
     }
 }

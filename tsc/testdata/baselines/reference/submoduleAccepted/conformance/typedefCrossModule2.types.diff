@@ -38,7 +38,7 @@
 ->exports : { Bar: typeof Bar; Baz: typeof Baz; Quid: 2; Quack?: undefined; } | { Bar: typeof Bar; Baz?: undefined; Quid: 2; Quack: number; }
 ->Bar : typeof Bar
 +>exports.Bar : any
-+>exports : typeof import("./mod1")
++>exports : typeof import("mod1")
 +>Bar : any
  >class { } : typeof Bar
 
@@ -63,7 +63,7 @@
 ->exports : { Bar: typeof Bar; Baz: typeof Baz; Quid: 2; Quack?: undefined; } | { Bar: typeof Bar; Baz?: undefined; Quid: 2; Quack: number; }
 ->Quid : 2
 +>exports.Quid : any
-+>exports : typeof import("./mod1")
++>exports : typeof import("mod1")
 +>Quid : any
  >2 : 2
 

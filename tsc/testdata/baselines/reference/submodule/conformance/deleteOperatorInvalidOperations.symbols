@@ -19,7 +19,7 @@ class testADelx {
 >testADelx : Symbol(testADelx, Decl(deleteOperatorInvalidOperations.ts, 7, 23))
 
     constructor(public s: () => {}) {
->s : Symbol(s, Decl(deleteOperatorInvalidOperations.ts, 11, 16))
+>s : Symbol(testADelx.s, Decl(deleteOperatorInvalidOperations.ts, 11, 16))
 
         delete s;      //expect error
 >s : Symbol(s, Decl(deleteOperatorInvalidOperations.ts, 11, 16))

@@ -318,7 +318,7 @@ const x = 1;
 >x : Symbol(x, Decl(index.js, 85, 5))
 
 export {x};
->x : Symbol(x, Decl(index.js, 86, 8))
+>x : Symbol(m1.x, Decl(index.js, 86, 8))
 
 === index.cjs ===
 // ESM-format imports below should issue errors
@@ -567,7 +567,7 @@ const x = 1;
 >x : Symbol(x, Decl(index.cjs, 86, 5))
 
 export {x};
->x : Symbol(x, Decl(index.cjs, 87, 8))
+>x : Symbol(m3.x, Decl(index.cjs, 87, 8))
 
 === index.mjs ===
 import * as m1 from "./index.js";
@@ -815,5 +815,5 @@ const x = 1;
 >x : Symbol(x, Decl(index.mjs, 86, 5))
 
 export {x};
->x : Symbol(x, Decl(index.mjs, 87, 8))
+>x : Symbol(m2.x, Decl(index.mjs, 87, 8))
 

@@ -121,7 +121,7 @@ interface I11 {
 >I11 : Symbol(I11, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 32, 2))
 
     commonMethodDifferentReturnType(a: string, b: number): string;
->commonMethodDifferentReturnType : Symbol(commonMethodDifferentReturnType, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 33, 15))
+>commonMethodDifferentReturnType : Symbol(I11.commonMethodDifferentReturnType, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 33, 15))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 34, 36))
 >b : Symbol(b, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 34, 46))
 }
@@ -129,7 +129,7 @@ interface I21 {
 >I21 : Symbol(I21, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 35, 1))
 
     commonMethodDifferentReturnType(a: string, b: number): number;
->commonMethodDifferentReturnType : Symbol(commonMethodDifferentReturnType, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 36, 15))
+>commonMethodDifferentReturnType : Symbol(I21.commonMethodDifferentReturnType, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 36, 15))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 37, 36))
 >b : Symbol(b, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 37, 46))
 }
@@ -165,9 +165,9 @@ var i11Ori21: I11 | I21 = { // Like i1
 
         var z = a.charAt(b);
 >z : Symbol(z, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 45, 11))
->a.charAt : Symbol(charAt, Decl(lib.es5.d.ts, --, --))
+>a.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 44, 38))
->charAt : Symbol(charAt, Decl(lib.es5.d.ts, --, --))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 >b : Symbol(b, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 44, 40))
 
         return z;
@@ -187,9 +187,9 @@ var i11Ori21: I11 | I21 = { // Like i2
 
         var z = a.charCodeAt(b);
 >z : Symbol(z, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 51, 11))
->a.charCodeAt : Symbol(charCodeAt, Decl(lib.es5.d.ts, --, --))
+>a.charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 50, 38))
->charCodeAt : Symbol(charCodeAt, Decl(lib.es5.d.ts, --, --))
+>charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
 >b : Symbol(b, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 50, 40))
 
         return z;

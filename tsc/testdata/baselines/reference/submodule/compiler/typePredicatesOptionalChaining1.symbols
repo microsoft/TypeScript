@@ -41,9 +41,9 @@ function title(str: string) {
 >str : Symbol(str, Decl(typePredicatesOptionalChaining1.ts, 13, 15))
 
   return str.length > 0 ? "Dear " + str : "Dear nobody";
->str.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>str.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >str : Symbol(str, Decl(typePredicatesOptionalChaining1.ts, 13, 15))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >str : Symbol(str, Decl(typePredicatesOptionalChaining1.ts, 13, 15))
 }
 

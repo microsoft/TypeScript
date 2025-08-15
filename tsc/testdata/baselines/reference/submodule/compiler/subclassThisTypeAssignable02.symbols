@@ -10,7 +10,7 @@ interface Lifecycle<Attrs, State extends Lifecycle<Attrs, State>> {
 >State : Symbol(State, Decl(tile1.ts, 0, 26))
 
 	oninit?(vnode: Vnode<Attrs, State>): number;
->oninit : Symbol(oninit, Decl(tile1.ts, 0, 67))
+>oninit : Symbol(Lifecycle.oninit, Decl(tile1.ts, 0, 67))
 >vnode : Symbol(vnode, Decl(tile1.ts, 1, 9))
 >Vnode : Symbol(Vnode, Decl(tile1.ts, 3, 1))
 >Attrs : Symbol(Attrs, Decl(tile1.ts, 0, 20))
@@ -29,7 +29,7 @@ interface Vnode<Attrs, State extends Lifecycle<Attrs, State>> {
 >State : Symbol(State, Decl(tile1.ts, 5, 22))
 
 	tag: Component<Attrs, State>;
->tag : Symbol(tag, Decl(tile1.ts, 5, 63))
+>tag : Symbol(Vnode.tag, Decl(tile1.ts, 5, 63))
 >Component : Symbol(Component, Decl(tile1.ts, 7, 1))
 >Attrs : Symbol(Attrs, Decl(tile1.ts, 5, 16))
 >State : Symbol(State, Decl(tile1.ts, 5, 22))
@@ -44,7 +44,7 @@ interface Component<Attrs, State extends Lifecycle<Attrs, State>> {
 >State : Symbol(State, Decl(tile1.ts, 9, 26))
 
 	view(this: State, vnode: Vnode<Attrs, State>): number;
->view : Symbol(view, Decl(tile1.ts, 9, 67))
+>view : Symbol(Component.view, Decl(tile1.ts, 9, 67))
 >this : Symbol(this, Decl(tile1.ts, 10, 6))
 >State : Symbol(State, Decl(tile1.ts, 9, 26))
 >vnode : Symbol(vnode, Decl(tile1.ts, 10, 18))
@@ -62,13 +62,13 @@ interface ClassComponent<A> extends Lifecycle<A, ClassComponent<A>> {
 >A : Symbol(A, Decl(tile1.ts, 13, 25))
 
 	oninit?(vnode: Vnode<A, this>): number;
->oninit : Symbol(oninit, Decl(tile1.ts, 13, 69))
+>oninit : Symbol(ClassComponent.oninit, Decl(tile1.ts, 13, 69))
 >vnode : Symbol(vnode, Decl(tile1.ts, 14, 9))
 >Vnode : Symbol(Vnode, Decl(tile1.ts, 3, 1))
 >A : Symbol(A, Decl(tile1.ts, 13, 25))
 
 	view(vnode: Vnode<A, this>): number;
->view : Symbol(view, Decl(tile1.ts, 14, 40))
+>view : Symbol(ClassComponent.view, Decl(tile1.ts, 14, 40))
 >vnode : Symbol(vnode, Decl(tile1.ts, 15, 6))
 >Vnode : Symbol(Vnode, Decl(tile1.ts, 3, 1))
 >A : Symbol(A, Decl(tile1.ts, 13, 25))
@@ -76,7 +76,7 @@ interface ClassComponent<A> extends Lifecycle<A, ClassComponent<A>> {
 
 interface MyAttrs { id: number }
 >MyAttrs : Symbol(MyAttrs, Decl(tile1.ts, 16, 1))
->id : Symbol(id, Decl(tile1.ts, 18, 19))
+>id : Symbol(MyAttrs.id, Decl(tile1.ts, 18, 19))
 
 class C implements ClassComponent<MyAttrs> {
 >C : Symbol(C, Decl(tile1.ts, 18, 32))
@@ -84,7 +84,7 @@ class C implements ClassComponent<MyAttrs> {
 >MyAttrs : Symbol(MyAttrs, Decl(tile1.ts, 16, 1))
 
 	view(v: Vnode<MyAttrs, C>) { return 0; }
->view : Symbol(view, Decl(tile1.ts, 19, 44))
+>view : Symbol(C.view, Decl(tile1.ts, 19, 44))
 >v : Symbol(v, Decl(tile1.ts, 20, 6))
 >Vnode : Symbol(Vnode, Decl(tile1.ts, 3, 1))
 >MyAttrs : Symbol(MyAttrs, Decl(tile1.ts, 16, 1))

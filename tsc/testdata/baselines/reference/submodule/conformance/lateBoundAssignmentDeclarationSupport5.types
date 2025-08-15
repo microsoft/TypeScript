@@ -79,18 +79,18 @@ const _z = inst[_sym];
 module.exports.F = F;
 >module.exports.F = F : { (): void; prototype: { [_sym]: string; "my-fake-sym": string; }; }
 >module.exports.F : { (): void; prototype: { [_sym]: string; "my-fake-sym": string; }; }
->module.exports : typeof import("./lateBoundAssignmentDeclarationSupport5")
->module : { "\"lateBoundAssignmentDeclarationSupport5\"": typeof import("./lateBoundAssignmentDeclarationSupport5"); }
->exports : typeof import("./lateBoundAssignmentDeclarationSupport5")
+>module.exports : typeof import("lateBoundAssignmentDeclarationSupport5")
+>module : { "\"lateBoundAssignmentDeclarationSupport5\"": typeof import("lateBoundAssignmentDeclarationSupport5"); }
+>exports : typeof import("lateBoundAssignmentDeclarationSupport5")
 >F : { (): void; prototype: { [_sym]: string; "my-fake-sym": string; }; }
 >F : { (): void; prototype: { [_sym]: string; "my-fake-sym": string; }; }
 
 module.exports.S = _sym;
 >module.exports.S = _sym : unique symbol
 >module.exports.S : unique symbol
->module.exports : typeof import("./lateBoundAssignmentDeclarationSupport5")
->module : { "\"lateBoundAssignmentDeclarationSupport5\"": typeof import("./lateBoundAssignmentDeclarationSupport5"); }
->exports : typeof import("./lateBoundAssignmentDeclarationSupport5")
+>module.exports : typeof import("lateBoundAssignmentDeclarationSupport5")
+>module : { "\"lateBoundAssignmentDeclarationSupport5\"": typeof import("lateBoundAssignmentDeclarationSupport5"); }
+>exports : typeof import("lateBoundAssignmentDeclarationSupport5")
 >S : unique symbol
 >_sym : unique symbol
 

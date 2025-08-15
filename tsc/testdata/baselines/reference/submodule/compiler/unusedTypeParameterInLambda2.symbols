@@ -5,7 +5,7 @@ class A {
 >A : Symbol(A, Decl(unusedTypeParameterInLambda2.ts, 0, 0))
 
     public f1() {
->f1 : Symbol(f1, Decl(unusedTypeParameterInLambda2.ts, 0, 9))
+>f1 : Symbol(A.f1, Decl(unusedTypeParameterInLambda2.ts, 0, 9))
 
         return <T, X>() => {
 >T : Symbol(T, Decl(unusedTypeParameterInLambda2.ts, 2, 16))

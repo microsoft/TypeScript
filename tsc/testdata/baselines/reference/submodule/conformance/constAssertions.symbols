@@ -394,10 +394,10 @@ interface Foo54374 {
 >Foo54374 : Symbol(Foo54374, Decl(constAssertions.ts, 107, 33))
 
   a: 1;
->a : Symbol(a, Decl(constAssertions.ts, 110, 20))
+>a : Symbol(Foo54374.a, Decl(constAssertions.ts, 110, 20))
 
   b: 2;
->b : Symbol(b, Decl(constAssertions.ts, 111, 7))
+>b : Symbol(Foo54374.b, Decl(constAssertions.ts, 111, 7))
 }
 
 const fooConst54374: Foo54374 = {

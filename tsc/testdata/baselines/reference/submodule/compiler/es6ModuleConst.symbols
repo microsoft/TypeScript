@@ -60,9 +60,9 @@ module m2 {
 
     const n = m1.k;
 >n : Symbol(n, Decl(es6ModuleConst.ts, 13, 9))
->m1.k : Symbol(k, Decl(es6ModuleConst.ts, 5, 16))
+>m1.k : Symbol(m1.k, Decl(es6ModuleConst.ts, 5, 16))
 >m1 : Symbol(m1, Decl(es6ModuleConst.ts, 3, 27))
->k : Symbol(k, Decl(es6ModuleConst.ts, 5, 16))
+>k : Symbol(m1.k, Decl(es6ModuleConst.ts, 5, 16))
 
     const o: string = n, p = k;
 >o : Symbol(o, Decl(es6ModuleConst.ts, 14, 9))

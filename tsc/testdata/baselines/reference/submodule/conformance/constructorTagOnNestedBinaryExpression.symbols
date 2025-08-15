@@ -7,9 +7,9 @@ a = b = function c () {
 >c : Symbol(c, Decl(constructorTagOnNestedBinaryExpression.js, 2, 7))
 
     console.log(this)
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 
 };
 

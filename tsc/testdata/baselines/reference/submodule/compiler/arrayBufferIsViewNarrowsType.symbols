@@ -6,9 +6,9 @@ var obj: Object;
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 if (ArrayBuffer.isView(obj)) {
->ArrayBuffer.isView : Symbol(isView, Decl(lib.es5.d.ts, --, --))
+>ArrayBuffer.isView : Symbol(ArrayBufferConstructor.isView, Decl(lib.es5.d.ts, --, --))
 >ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->isView : Symbol(isView, Decl(lib.es5.d.ts, --, --))
+>isView : Symbol(ArrayBufferConstructor.isView, Decl(lib.es5.d.ts, --, --))
 >obj : Symbol(obj, Decl(arrayBufferIsViewNarrowsType.ts, 0, 3))
 
     // isView should be a guard that narrows type to ArrayBufferView.

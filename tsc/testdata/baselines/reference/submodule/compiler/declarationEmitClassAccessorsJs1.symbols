@@ -10,7 +10,7 @@ export class VFile {
    * @returns {string}
    */
   get path() {
->path : Symbol(path, Decl(index.js, 2, 20), Decl(index.js, 8, 3))
+>path : Symbol(VFile.path, Decl(index.js, 2, 20), Decl(index.js, 8, 3))
 
     return ''
   }
@@ -19,7 +19,7 @@ export class VFile {
    * @param {URL | string} path
    */
   set path(path) {
->path : Symbol(path, Decl(index.js, 2, 20), Decl(index.js, 8, 3))
+>path : Symbol(VFile.path, Decl(index.js, 2, 20), Decl(index.js, 8, 3))
 >path : Symbol(path, Decl(index.js, 13, 11))
   }
 }

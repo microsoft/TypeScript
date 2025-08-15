@@ -21,7 +21,7 @@ class CLASS {
 >CLASS : Symbol(CLASS, Decl(commaOperatorWithSecondOperandObjectType.ts, 4, 19))
 
     num: number;
->num : Symbol(num, Decl(commaOperatorWithSecondOperandObjectType.ts, 6, 13))
+>num : Symbol(CLASS.num, Decl(commaOperatorWithSecondOperandObjectType.ts, 6, 13))
 }
 
 //The second operand type is Object
@@ -87,9 +87,9 @@ true, {}
 >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
 STRING.toLowerCase(), new CLASS()
->STRING.toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
+>STRING.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 >STRING : Symbol(STRING, Decl(commaOperatorWithSecondOperandObjectType.ts, 3, 3))
->toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 >CLASS : Symbol(CLASS, Decl(commaOperatorWithSecondOperandObjectType.ts, 4, 19))
 
 var resultIsObject6 = (null, OBJECT);
@@ -116,8 +116,8 @@ var resultIsObject10 = ("string", new Date());
 
 var resultIsObject11 = (STRING.toLowerCase(), new CLASS());
 >resultIsObject11 : Symbol(resultIsObject11, Decl(commaOperatorWithSecondOperandObjectType.ts, 37, 3))
->STRING.toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
+>STRING.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 >STRING : Symbol(STRING, Decl(commaOperatorWithSecondOperandObjectType.ts, 3, 3))
->toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 >CLASS : Symbol(CLASS, Decl(commaOperatorWithSecondOperandObjectType.ts, 4, 19))
 

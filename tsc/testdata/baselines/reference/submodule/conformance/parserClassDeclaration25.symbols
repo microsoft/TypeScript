@@ -6,11 +6,11 @@ interface IList<T> {
 >T : Symbol(T, Decl(parserClassDeclaration25.ts, 0, 16))
 
     data(): T;
->data : Symbol(data, Decl(parserClassDeclaration25.ts, 0, 20))
+>data : Symbol(IList.data, Decl(parserClassDeclaration25.ts, 0, 20))
 >T : Symbol(T, Decl(parserClassDeclaration25.ts, 0, 16))
 
     next(): string;
->next : Symbol(next, Decl(parserClassDeclaration25.ts, 1, 14))
+>next : Symbol(IList.next, Decl(parserClassDeclaration25.ts, 1, 14))
 }
 class List<U> implements IList<U> {
 >List : Symbol(List, Decl(parserClassDeclaration25.ts, 3, 1))
@@ -19,10 +19,10 @@ class List<U> implements IList<U> {
 >U : Symbol(U, Decl(parserClassDeclaration25.ts, 4, 11))
 
     data(): U;
->data : Symbol(data, Decl(parserClassDeclaration25.ts, 4, 35))
+>data : Symbol(List.data, Decl(parserClassDeclaration25.ts, 4, 35))
 >U : Symbol(U, Decl(parserClassDeclaration25.ts, 4, 11))
 
     next(): string;
->next : Symbol(next, Decl(parserClassDeclaration25.ts, 5, 14))
+>next : Symbol(List.next, Decl(parserClassDeclaration25.ts, 5, 14))
 }
 

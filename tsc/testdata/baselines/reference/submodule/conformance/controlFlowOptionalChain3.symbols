@@ -12,7 +12,7 @@ interface Foo {
 >Foo : Symbol(Foo, Decl(controlFlowOptionalChain3.tsx, 4, 26))
 
   bar: boolean;
->bar : Symbol(bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
+>bar : Symbol(Foo.bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
 }
 
 function test1(foo: Foo | undefined) {
@@ -21,9 +21,9 @@ function test1(foo: Foo | undefined) {
 >Foo : Symbol(Foo, Decl(controlFlowOptionalChain3.tsx, 4, 26))
 
   if (foo?.bar === false) {
->foo?.bar : Symbol(bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
+>foo?.bar : Symbol(Foo.bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
 >foo : Symbol(foo, Decl(controlFlowOptionalChain3.tsx, 10, 15))
->bar : Symbol(bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
+>bar : Symbol(Foo.bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
 
     foo;
 >foo : Symbol(foo, Decl(controlFlowOptionalChain3.tsx, 10, 15))
@@ -38,9 +38,9 @@ function test2(foo: Foo | undefined) {
 >Foo : Symbol(Foo, Decl(controlFlowOptionalChain3.tsx, 4, 26))
 
   if (foo?.bar === false) {
->foo?.bar : Symbol(bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
+>foo?.bar : Symbol(Foo.bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
 >foo : Symbol(foo, Decl(controlFlowOptionalChain3.tsx, 17, 15))
->bar : Symbol(bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
+>bar : Symbol(Foo.bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
 
     foo;
 >foo : Symbol(foo, Decl(controlFlowOptionalChain3.tsx, 17, 15))
@@ -59,20 +59,20 @@ function Test3({ foo }: { foo: Foo | undefined }) {
 
   return (
     <div>
->div : Symbol(div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 
       {foo?.bar === false && "foo"}
->foo?.bar : Symbol(bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
+>foo?.bar : Symbol(Foo.bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
 >foo : Symbol(foo, Decl(controlFlowOptionalChain3.tsx, 25, 16))
->bar : Symbol(bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
+>bar : Symbol(Foo.bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
 
       {foo.bar ? "true" : "false"}
->foo.bar : Symbol(bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
+>foo.bar : Symbol(Foo.bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
 >foo : Symbol(foo, Decl(controlFlowOptionalChain3.tsx, 25, 16))
->bar : Symbol(bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
+>bar : Symbol(Foo.bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
 
     </div>
->div : Symbol(div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 
   );
 }

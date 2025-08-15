@@ -51,7 +51,7 @@ interface SelectProps<T, K> {
 >K : Symbol(K, Decl(inferFromBindingPattern.ts, 17, 24))
 
   selector?: (obj: T) => K;
->selector : Symbol(selector, Decl(inferFromBindingPattern.ts, 17, 29))
+>selector : Symbol(SelectProps.selector, Decl(inferFromBindingPattern.ts, 17, 29))
 >obj : Symbol(obj, Decl(inferFromBindingPattern.ts, 18, 14))
 >T : Symbol(T, Decl(inferFromBindingPattern.ts, 17, 22))
 >K : Symbol(K, Decl(inferFromBindingPattern.ts, 17, 24))
@@ -68,10 +68,10 @@ interface Person {
 >Person : Symbol(Person, Decl(inferFromBindingPattern.ts, 21, 33))
 
   name: string;
->name : Symbol(name, Decl(inferFromBindingPattern.ts, 23, 18))
+>name : Symbol(Person.name, Decl(inferFromBindingPattern.ts, 23, 18))
 
   surname: string;
->surname : Symbol(surname, Decl(inferFromBindingPattern.ts, 24, 15))
+>surname : Symbol(Person.surname, Decl(inferFromBindingPattern.ts, 24, 15))
 }
 
 declare function selectJohn<K = Person>(props?: SelectProps<Person, K>): SelectResult<Person, K>;

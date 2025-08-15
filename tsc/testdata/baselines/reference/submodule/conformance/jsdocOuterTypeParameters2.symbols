@@ -15,10 +15,10 @@ const PropertyAccessors = dedupingMixin(() => {
 >Bar : Symbol(Bar, Decl(jsdocOuterTypeParameters1.js, 4, 47))
 
     static bar() { this.prototype.foo(); }
->bar : Symbol(bar, Decl(jsdocOuterTypeParameters1.js, 5, 13))
->this.prototype : Symbol(prototype)
+>bar : Symbol(Bar.bar, Decl(jsdocOuterTypeParameters1.js, 5, 13))
+>this.prototype : Symbol(Bar.prototype)
 >this : Symbol(Bar, Decl(jsdocOuterTypeParameters1.js, 4, 47))
->prototype : Symbol(prototype)
+>prototype : Symbol(Bar.prototype)
   }
 });
 

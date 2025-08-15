@@ -83,11 +83,10 @@
  }
  Person.prototype.describe = function () {
 ->Person.prototype : Symbol(Person.describe, Decl(mod1.js, 6, 1))
-+>Person.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
++>Person.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
  >Person : Symbol(Person, Decl(mod1.js, 0, 0))
-->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+ >prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 ->describe : Symbol(Person.describe, Decl(mod1.js, 6, 1))
-+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
 
      return "Person called " + this.name;
 ->this.name : Symbol(Person.name, Decl(mod1.js, 4, 23))
@@ -96,81 +95,48 @@
 -
  };
  Object.defineProperty(Person.prototype, "thing", { value: 42, writable: true });
-->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
- >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
-->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-->Person.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
-+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
-+>Person.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+ >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+@@= skipped -24, +16 lines =@@
+ >Person.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
  >Person : Symbol(Person, Decl(mod1.js, 0, 0))
-->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+ >prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 ->"thing" : Symbol(Person.thing, Decl(mod1.js, 9, 2))
-+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
  >value : Symbol(value, Decl(mod1.js, 10, 50))
  >writable : Symbol(writable, Decl(mod1.js, 10, 61))
 
- Object.defineProperty(Person.prototype, "readonlyProp", { value: "Smith", writable: false });
-->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
- >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
-->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-->Person.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
-+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
-+>Person.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+@@= skipped -11, +10 lines =@@
+ >Person.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
  >Person : Symbol(Person, Decl(mod1.js, 0, 0))
-->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+ >prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 ->"readonlyProp" : Symbol(Person.readonlyProp, Decl(mod1.js, 10, 80))
-+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
  >value : Symbol(value, Decl(mod1.js, 11, 57))
  >writable : Symbol(writable, Decl(mod1.js, 11, 73))
 
- Object.defineProperty(Person.prototype, "rwAccessors", { get() { return 98122 }, set(_) { /*ignore*/ } });
-->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
- >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
-->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-->Person.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
-+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
-+>Person.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+@@= skipped -11, +10 lines =@@
+ >Person.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
  >Person : Symbol(Person, Decl(mod1.js, 0, 0))
-->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+ >prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 ->"rwAccessors" : Symbol(Person.rwAccessors, Decl(mod1.js, 11, 93))
-+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
  >get : Symbol(get, Decl(mod1.js, 12, 56))
  >set : Symbol(set, Decl(mod1.js, 12, 80))
  >_ : Symbol(_, Decl(mod1.js, 12, 85))
-
- Object.defineProperty(Person.prototype, "readonlyAccessor", { get() { return 21.75 } });
-->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
- >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
-->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-->Person.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
-+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
-+>Person.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+@@= skipped -12, +11 lines =@@
+ >Person.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
  >Person : Symbol(Person, Decl(mod1.js, 0, 0))
-->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+ >prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 ->"readonlyAccessor" : Symbol(Person.readonlyAccessor, Decl(mod1.js, 12, 106))
-+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
  >get : Symbol(get, Decl(mod1.js, 13, 61))
 
  Object.defineProperty(Person.prototype, "setonlyAccessor", {
-->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
- >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
-->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-->Person.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
-+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
-+>Person.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+@@= skipped -10, +9 lines =@@
+ >Person.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
  >Person : Symbol(Person, Decl(mod1.js, 0, 0))
-->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+ >prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 ->"setonlyAccessor" : Symbol(Person.setonlyAccessor, Decl(mod1.js, 13, 88))
-+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
 
      /** @param {string} str */
      set(str) {
-@@= skipped -76, +63 lines =@@
+@@= skipped -8, +7 lines =@@
  >str : Symbol(str, Decl(mod1.js, 16, 8))
 
          this.rwAccessors = Number(str)

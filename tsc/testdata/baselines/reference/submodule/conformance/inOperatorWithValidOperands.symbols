@@ -105,11 +105,11 @@ function unionCase2<T>(t: T | object) {
 
 interface X { x: number }
 >X : Symbol(X, Decl(inOperatorWithValidOperands.ts, 34, 1))
->x : Symbol(x, Decl(inOperatorWithValidOperands.ts, 36, 13))
+>x : Symbol(X.x, Decl(inOperatorWithValidOperands.ts, 36, 13))
 
 interface Y { y: number }
 >Y : Symbol(Y, Decl(inOperatorWithValidOperands.ts, 36, 25))
->y : Symbol(y, Decl(inOperatorWithValidOperands.ts, 37, 13))
+>y : Symbol(Y.y, Decl(inOperatorWithValidOperands.ts, 37, 13))
 
 var c1: X | Y;
 >c1 : Symbol(c1, Decl(inOperatorWithValidOperands.ts, 39, 3))

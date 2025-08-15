@@ -23,7 +23,7 @@ declare module 'moo' {
 >p : Symbol(p, Decl(declFileImportedTypeUseInTypeArgPosition.ts, 8, 14))
 >List : Symbol(List, Decl(declFileImportedTypeUseInTypeArgPosition.ts, 0, 0))
 >x : Symbol(x, Decl(declFileImportedTypeUseInTypeArgPosition.ts, 6, 22))
->Foo : Symbol(Foo, Decl(declFileImportedTypeUseInTypeArgPosition.ts, 1, 23))
+>Foo : Symbol(x.Foo, Decl(declFileImportedTypeUseInTypeArgPosition.ts, 1, 23))
 }
 
 

@@ -29,9 +29,9 @@ function b() {
 >x : Symbol(x, Decl(controlFlowForStatement.ts, 8, 7))
 >cond : Symbol(cond, Decl(controlFlowForStatement.ts, 0, 3))
 >x : Symbol(x, Decl(controlFlowForStatement.ts, 8, 7))
->x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowForStatement.ts, 8, 7))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
         x; // number
 >x : Symbol(x, Decl(controlFlowForStatement.ts, 8, 7))
@@ -49,9 +49,9 @@ function c() {
     for (x = 5; x = x.toExponential(); x = 5) {
 >x : Symbol(x, Decl(controlFlowForStatement.ts, 15, 7))
 >x : Symbol(x, Decl(controlFlowForStatement.ts, 15, 7))
->x.toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+>x.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowForStatement.ts, 15, 7))
->toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowForStatement.ts, 15, 7))
 
         x; // string

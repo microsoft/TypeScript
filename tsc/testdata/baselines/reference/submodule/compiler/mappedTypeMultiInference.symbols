@@ -5,7 +5,7 @@ interface Style {
 >Style : Symbol(Style, Decl(mappedTypeMultiInference.ts, 0, 0))
 
     flashy: any;
->flashy : Symbol(flashy, Decl(mappedTypeMultiInference.ts, 0, 17))
+>flashy : Symbol(Style.flashy, Decl(mappedTypeMultiInference.ts, 0, 17))
 }
 
 declare function mergeStyleSets<K extends string>(

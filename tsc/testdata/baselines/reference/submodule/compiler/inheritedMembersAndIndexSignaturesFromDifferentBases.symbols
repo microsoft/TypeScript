@@ -31,7 +31,7 @@ interface C {
 >C : Symbol(C, Decl(inheritedMembersAndIndexSignaturesFromDifferentBases.ts, 11, 1))
 
     m: {};
->m : Symbol(m, Decl(inheritedMembersAndIndexSignaturesFromDifferentBases.ts, 12, 13))
+>m : Symbol(C.m, Decl(inheritedMembersAndIndexSignaturesFromDifferentBases.ts, 12, 13))
 }
 
 interface D extends A, B, C { } // error because m is not a subtype of {a;}
@@ -44,7 +44,7 @@ interface E {
 >E : Symbol(E, Decl(inheritedMembersAndIndexSignaturesFromDifferentBases.ts, 16, 31))
 
     0: {};
->0 : Symbol(0, Decl(inheritedMembersAndIndexSignaturesFromDifferentBases.ts, 18, 13))
+>0 : Symbol(E[0], Decl(inheritedMembersAndIndexSignaturesFromDifferentBases.ts, 18, 13))
 }
 
 interface F extends A, B, E { } // error because 0 is not a subtype of {a; b;}

@@ -14,12 +14,12 @@ declare module "react" {
 >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.decorators.d.ts, --, --))
 
         "ns:thing"?: string;
->"ns:thing" : Symbol("ns:thing", Decl(jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx, 4, 40))
+>"ns:thing" : Symbol(Attributes["ns:thing"], Decl(jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx, 4, 40))
     }
 }
 
 export const tag = <div ns:thing="a"/>
 >tag : Symbol(tag, Decl(jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx, 9, 12))
->div : Symbol(div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 >ns:thing : Symbol(ns:thing, Decl(jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx, 9, 23))
 

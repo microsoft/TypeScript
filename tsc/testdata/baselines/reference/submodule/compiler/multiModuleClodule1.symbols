@@ -8,13 +8,13 @@ class C {
 >x : Symbol(x, Decl(multiModuleClodule1.ts, 1, 16))
 
     foo() { }
->foo : Symbol(foo, Decl(multiModuleClodule1.ts, 1, 30))
+>foo : Symbol(C.foo, Decl(multiModuleClodule1.ts, 1, 30))
 
     bar() { }
->bar : Symbol(bar, Decl(multiModuleClodule1.ts, 2, 13))
+>bar : Symbol(C.bar, Decl(multiModuleClodule1.ts, 2, 13))
 
     static boo() { }
->boo : Symbol(boo, Decl(multiModuleClodule1.ts, 3, 13))
+>boo : Symbol(C.boo, Decl(multiModuleClodule1.ts, 3, 13))
 }
 
 module C {
@@ -39,15 +39,15 @@ module C {
 var c = new C(C.x);
 >c : Symbol(c, Decl(multiModuleClodule1.ts, 16, 3))
 >C : Symbol(C, Decl(multiModuleClodule1.ts, 0, 0), Decl(multiModuleClodule1.ts, 5, 1), Decl(multiModuleClodule1.ts, 10, 1))
->C.x : Symbol(x, Decl(multiModuleClodule1.ts, 8, 14))
+>C.x : Symbol(C.x, Decl(multiModuleClodule1.ts, 8, 14))
 >C : Symbol(C, Decl(multiModuleClodule1.ts, 0, 0), Decl(multiModuleClodule1.ts, 5, 1), Decl(multiModuleClodule1.ts, 10, 1))
->x : Symbol(x, Decl(multiModuleClodule1.ts, 8, 14))
+>x : Symbol(C.x, Decl(multiModuleClodule1.ts, 8, 14))
 
 c.foo = C.foo;
->c.foo : Symbol(foo, Decl(multiModuleClodule1.ts, 1, 30))
+>c.foo : Symbol(C.foo, Decl(multiModuleClodule1.ts, 1, 30))
 >c : Symbol(c, Decl(multiModuleClodule1.ts, 16, 3))
->foo : Symbol(foo, Decl(multiModuleClodule1.ts, 1, 30))
->C.foo : Symbol(foo, Decl(multiModuleClodule1.ts, 11, 10))
+>foo : Symbol(C.foo, Decl(multiModuleClodule1.ts, 1, 30))
+>C.foo : Symbol(C.foo, Decl(multiModuleClodule1.ts, 11, 10))
 >C : Symbol(C, Decl(multiModuleClodule1.ts, 0, 0), Decl(multiModuleClodule1.ts, 5, 1), Decl(multiModuleClodule1.ts, 10, 1))
->foo : Symbol(foo, Decl(multiModuleClodule1.ts, 11, 10))
+>foo : Symbol(C.foo, Decl(multiModuleClodule1.ts, 11, 10))
 

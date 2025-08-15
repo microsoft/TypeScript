@@ -9,9 +9,9 @@ declare namespace app {
 }
 
 app.foo.bar = (function () {
->app.foo : Symbol(foo, Decl(contextualReturnTypeOfIIFE2.ts, 0, 23))
+>app.foo : Symbol(app.foo, Decl(contextualReturnTypeOfIIFE2.ts, 0, 23))
 >app : Symbol(app, Decl(contextualReturnTypeOfIIFE2.ts, 0, 0))
->foo : Symbol(foo, Decl(contextualReturnTypeOfIIFE2.ts, 0, 23))
+>foo : Symbol(app.foo, Decl(contextualReturnTypeOfIIFE2.ts, 0, 23))
 
   const someFun = (arg: number) => {};
 >someFun : Symbol(someFun, Decl(contextualReturnTypeOfIIFE2.ts, 5, 7))
@@ -23,7 +23,7 @@ app.foo.bar = (function () {
 })();
 
 app.foo.bar.someFun(1);
->app.foo : Symbol(foo, Decl(contextualReturnTypeOfIIFE2.ts, 0, 23))
+>app.foo : Symbol(app.foo, Decl(contextualReturnTypeOfIIFE2.ts, 0, 23))
 >app : Symbol(app, Decl(contextualReturnTypeOfIIFE2.ts, 0, 0))
->foo : Symbol(foo, Decl(contextualReturnTypeOfIIFE2.ts, 0, 23))
+>foo : Symbol(app.foo, Decl(contextualReturnTypeOfIIFE2.ts, 0, 23))
 

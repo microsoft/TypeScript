@@ -5,23 +5,23 @@ const C = class {
 >C : Symbol(C, Decl(privateNameSetterNoGetter.ts, 0, 5))
 
     set #x(x) {}
->#x : Symbol(#x, Decl(privateNameSetterNoGetter.ts, 0, 17))
+>#x : Symbol(C.#x, Decl(privateNameSetterNoGetter.ts, 0, 17))
 >x : Symbol(x, Decl(privateNameSetterNoGetter.ts, 1, 11))
 
     m() {
->m : Symbol(m, Decl(privateNameSetterNoGetter.ts, 1, 16))
+>m : Symbol(C.m, Decl(privateNameSetterNoGetter.ts, 1, 16))
 
         this.#x += 2; // Error
->this.#x : Symbol(#x, Decl(privateNameSetterNoGetter.ts, 0, 17))
+>this.#x : Symbol(C.#x, Decl(privateNameSetterNoGetter.ts, 0, 17))
 >this : Symbol(C, Decl(privateNameSetterNoGetter.ts, 0, 9))
     }
 }
 
 console.log(new C().m());
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
->new C().m : Symbol(m, Decl(privateNameSetterNoGetter.ts, 1, 16))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>new C().m : Symbol(C.m, Decl(privateNameSetterNoGetter.ts, 1, 16))
 >C : Symbol(C, Decl(privateNameSetterNoGetter.ts, 0, 5))
->m : Symbol(m, Decl(privateNameSetterNoGetter.ts, 1, 16))
+>m : Symbol(C.m, Decl(privateNameSetterNoGetter.ts, 1, 16))
 

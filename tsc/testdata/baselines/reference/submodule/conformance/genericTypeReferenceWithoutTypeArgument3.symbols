@@ -9,7 +9,7 @@ declare class C<T> {
 >T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument3.ts, 3, 16))
 
     foo: T;
->foo : Symbol(foo, Decl(genericTypeReferenceWithoutTypeArgument3.ts, 3, 20))
+>foo : Symbol(C.foo, Decl(genericTypeReferenceWithoutTypeArgument3.ts, 3, 20))
 >T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument3.ts, 3, 16))
 }
 
@@ -50,7 +50,7 @@ declare module M {
     export class E<T> { foo: T }
 >E : Symbol(E, Decl(genericTypeReferenceWithoutTypeArgument3.ts, 17, 18))
 >T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument3.ts, 18, 19))
->foo : Symbol(foo, Decl(genericTypeReferenceWithoutTypeArgument3.ts, 18, 23))
+>foo : Symbol(E.foo, Decl(genericTypeReferenceWithoutTypeArgument3.ts, 18, 23))
 >T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument3.ts, 18, 19))
 }
 
@@ -62,7 +62,7 @@ declare class D3<T extends M.E> { }
 >D3 : Symbol(D3, Decl(genericTypeReferenceWithoutTypeArgument3.ts, 21, 32))
 >T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument3.ts, 22, 17))
 >M : Symbol(M, Decl(genericTypeReferenceWithoutTypeArgument3.ts, 15, 28))
->E : Symbol(E, Decl(genericTypeReferenceWithoutTypeArgument3.ts, 17, 18))
+>E : Symbol(M.E, Decl(genericTypeReferenceWithoutTypeArgument3.ts, 17, 18))
 
 declare function h<T extends C>(x: T);
 >h : Symbol(h, Decl(genericTypeReferenceWithoutTypeArgument3.ts, 22, 35))
@@ -75,7 +75,7 @@ declare function i<T extends M.E>(x: T);
 >i : Symbol(i, Decl(genericTypeReferenceWithoutTypeArgument3.ts, 24, 38))
 >T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument3.ts, 25, 19))
 >M : Symbol(M, Decl(genericTypeReferenceWithoutTypeArgument3.ts, 15, 28))
->E : Symbol(E, Decl(genericTypeReferenceWithoutTypeArgument3.ts, 17, 18))
+>E : Symbol(M.E, Decl(genericTypeReferenceWithoutTypeArgument3.ts, 17, 18))
 >x : Symbol(x, Decl(genericTypeReferenceWithoutTypeArgument3.ts, 25, 34))
 >T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument3.ts, 25, 19))
 

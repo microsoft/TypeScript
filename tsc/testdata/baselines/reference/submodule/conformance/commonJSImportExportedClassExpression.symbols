@@ -23,7 +23,7 @@ exports.K = class K {
 >K : Symbol(K, Decl(mod1.js, 0, 11))
 
     values() {
->values : Symbol(values, Decl(mod1.js, 0, 21))
+>values : Symbol(K.values, Decl(mod1.js, 0, 21))
     }
 };
 

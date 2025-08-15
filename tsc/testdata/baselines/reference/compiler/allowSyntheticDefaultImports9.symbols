@@ -9,16 +9,16 @@ export function bar();
 
 === a.ts ===
 import { default as Foo } from "./b";
->default : Symbol("b", Decl(b.d.ts, 0, 0))
+>default : Symbol(Foo, Decl(b.d.ts, 0, 0))
 >Foo : Symbol(Foo, Decl(a.ts, 0, 8))
 
 Foo.bar();
->Foo.bar : Symbol(bar, Decl(b.d.ts, 0, 22))
+>Foo.bar : Symbol(Foo.bar, Decl(b.d.ts, 0, 22))
 >Foo : Symbol(Foo, Decl(a.ts, 0, 8))
->bar : Symbol(bar, Decl(b.d.ts, 0, 22))
+>bar : Symbol(Foo.bar, Decl(b.d.ts, 0, 22))
 
 Foo.foo();
->Foo.foo : Symbol(foo, Decl(b.d.ts, 0, 0))
+>Foo.foo : Symbol(Foo.foo, Decl(b.d.ts, 0, 0))
 >Foo : Symbol(Foo, Decl(a.ts, 0, 8))
->foo : Symbol(foo, Decl(b.d.ts, 0, 0))
+>foo : Symbol(Foo.foo, Decl(b.d.ts, 0, 0))
 

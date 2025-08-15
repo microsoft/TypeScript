@@ -61,15 +61,15 @@ export class Foo {
 
   constructor() {
     console.log(Foo.#test());
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
->Foo.#test : Symbol(#test, Decl(index.mts, 3, 3))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>Foo.#test : Symbol(Foo.#test, Decl(index.mts, 3, 3))
 >Foo : Symbol(Foo, Decl(index.mts, 0, 0))
   }
 
   static #test() {
->#test : Symbol(#test, Decl(index.mts, 3, 3))
+>#test : Symbol(Foo.#test, Decl(index.mts, 3, 3))
 
     return 'success';
   }

@@ -9,7 +9,7 @@ class Component {
 >Component : Symbol(Component, Decl(commentsOnJSXExpressionsArePreserved.tsx, 1, 16))
 
     render() {
->render : Symbol(render, Decl(commentsOnJSXExpressionsArePreserved.tsx, 2, 17))
+>render : Symbol(Component.render, Decl(commentsOnJSXExpressionsArePreserved.tsx, 2, 17))
 
         return <div>
             {/* missing */}

@@ -15,7 +15,7 @@ function fn(value: Promise<number>): any {
 >Class : Symbol(Class, Decl(decoratorOnClassMethodParameter3.ts, 2, 42))
 
     async method(@dec(await value) arg: number) {}
->method : Symbol(method, Decl(decoratorOnClassMethodParameter3.ts, 3, 15))
+>method : Symbol(Class.method, Decl(decoratorOnClassMethodParameter3.ts, 3, 15))
 >dec : Symbol(dec, Decl(decoratorOnClassMethodParameter3.ts, 0, 0))
 >value : Symbol(value, Decl(decoratorOnClassMethodParameter3.ts, 2, 12))
 >arg : Symbol(arg, Decl(decoratorOnClassMethodParameter3.ts, 4, 17))

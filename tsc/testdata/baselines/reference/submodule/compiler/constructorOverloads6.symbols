@@ -15,7 +15,7 @@ declare class FooBase {
 
     }
 	bar1():void;
->bar1 : Symbol(bar1, Decl(constructorOverloads6.ts, 5, 5))
+>bar1 : Symbol(FooBase.bar1, Decl(constructorOverloads6.ts, 5, 5))
 }
 
  declare class Foo extends FooBase {
@@ -33,7 +33,7 @@ declare class FooBase {
 >y : Symbol(y, Decl(constructorOverloads6.ts, 12, 23))
 
     bar1():void;
->bar1 : Symbol(bar1, Decl(constructorOverloads6.ts, 12, 32))
+>bar1 : Symbol(Foo.bar1, Decl(constructorOverloads6.ts, 12, 32))
 }
 
 var f1 = new Foo("hey");
@@ -57,7 +57,7 @@ var f4 = new Foo([f1,f2,f3]);
 >f3 : Symbol(f3, Decl(constructorOverloads6.ts, 19, 3))
 
 f1.bar1();
->f1.bar1 : Symbol(bar1, Decl(constructorOverloads6.ts, 12, 32))
+>f1.bar1 : Symbol(Foo.bar1, Decl(constructorOverloads6.ts, 12, 32))
 >f1 : Symbol(f1, Decl(constructorOverloads6.ts, 17, 3))
->bar1 : Symbol(bar1, Decl(constructorOverloads6.ts, 12, 32))
+>bar1 : Symbol(Foo.bar1, Decl(constructorOverloads6.ts, 12, 32))
 

@@ -6,7 +6,7 @@ module Baz { export var x = "hello"; }
 >x : Symbol(x, Decl(moduleCodeGenTest3.ts, 0, 23))
 
 Baz.x = "goodbye";
->Baz.x : Symbol(x, Decl(moduleCodeGenTest3.ts, 0, 23))
+>Baz.x : Symbol(Baz.x, Decl(moduleCodeGenTest3.ts, 0, 23))
 >Baz : Symbol(Baz, Decl(moduleCodeGenTest3.ts, 0, 0))
->x : Symbol(x, Decl(moduleCodeGenTest3.ts, 0, 23))
+>x : Symbol(Baz.x, Decl(moduleCodeGenTest3.ts, 0, 23))
 

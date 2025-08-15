@@ -64,7 +64,7 @@ my.predicate.type = class {
 >my : Symbol(my, Decl(a.js, 0, 3))
 
     m() { return 101; }
->m : Symbol(m, Decl(a.js, 23, 27))
+>m : Symbol(type.m, Decl(a.js, 23, 27))
 }
 
 

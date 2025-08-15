@@ -1,9 +1,0 @@
---- old.nodeModuleReexportFromDottedPath.types
-+++ new.nodeModuleReexportFromDottedPath.types
-@@= skipped -32, +32 lines =@@
- >PrismaClient : typeof PrismaClient
-
- export default new EnhancedPrisma();
-->new EnhancedPrisma() : PrismaClient<import("/node_modules/.prisma/client/index").PrismaClientOptions>
-+>new EnhancedPrisma() : PrismaClient<import(".prisma").PrismaClientOptions>
- >EnhancedPrisma : typeof PrismaClient & { enhanced: unknown; }

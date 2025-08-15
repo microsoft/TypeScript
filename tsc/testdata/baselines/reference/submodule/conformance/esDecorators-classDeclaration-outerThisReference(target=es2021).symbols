@@ -20,7 +20,7 @@ class A {
 >this : Symbol(globalThis)
 
     b = 2;
->b : Symbol(b, Decl(esDecorators-classDeclaration-outerThisReference.ts, 6, 9))
+>b : Symbol(A.b, Decl(esDecorators-classDeclaration-outerThisReference.ts, 6, 9))
 }
 
 // `this` should point to the outer `this`, and maintain the correct evaluation order with respect to computed
@@ -35,7 +35,7 @@ class B {
 
     // @ts-ignore
     [f(this)] = 1;
->[f(this)] : Symbol([f(this)], Decl(esDecorators-classDeclaration-outerThisReference.ts, 15, 9))
+>[f(this)] : Symbol(B[f(this)], Decl(esDecorators-classDeclaration-outerThisReference.ts, 15, 9))
 >f : Symbol(f, Decl(esDecorators-classDeclaration-outerThisReference.ts, 2, 11))
 >this : Symbol(B, Decl(esDecorators-classDeclaration-outerThisReference.ts, 9, 1))
 
@@ -44,11 +44,11 @@ class B {
 >this : Symbol(globalThis)
 
     b = 2;
->b : Symbol(b, Decl(esDecorators-classDeclaration-outerThisReference.ts, 17, 18))
+>b : Symbol(B.b, Decl(esDecorators-classDeclaration-outerThisReference.ts, 17, 18))
 
     // @ts-ignore
     [f(this)] = 3;
->[f(this)] : Symbol([f(this)], Decl(esDecorators-classDeclaration-outerThisReference.ts, 20, 10))
+>[f(this)] : Symbol(B[f(this)], Decl(esDecorators-classDeclaration-outerThisReference.ts, 20, 10))
 >f : Symbol(f, Decl(esDecorators-classDeclaration-outerThisReference.ts, 2, 11))
 >this : Symbol(B, Decl(esDecorators-classDeclaration-outerThisReference.ts, 9, 1))
 }
@@ -63,16 +63,16 @@ class C {
 >C : Symbol(C, Decl(esDecorators-classDeclaration-outerThisReference.ts, 24, 1))
 
     #a = 1;
->#a : Symbol(#a, Decl(esDecorators-classDeclaration-outerThisReference.ts, 29, 9))
+>#a : Symbol(C.#a, Decl(esDecorators-classDeclaration-outerThisReference.ts, 29, 9))
 
     @dec(this, (x: C) => x.#a)
 >dec : Symbol(dec, Decl(esDecorators-classDeclaration-outerThisReference.ts, 0, 11))
 >this : Symbol(globalThis)
 >x : Symbol(x, Decl(esDecorators-classDeclaration-outerThisReference.ts, 32, 16))
 >C : Symbol(C, Decl(esDecorators-classDeclaration-outerThisReference.ts, 24, 1))
->x.#a : Symbol(#a, Decl(esDecorators-classDeclaration-outerThisReference.ts, 29, 9))
+>x.#a : Symbol(C.#a, Decl(esDecorators-classDeclaration-outerThisReference.ts, 29, 9))
 >x : Symbol(x, Decl(esDecorators-classDeclaration-outerThisReference.ts, 32, 16))
 
     b = 2;
->b : Symbol(b, Decl(esDecorators-classDeclaration-outerThisReference.ts, 30, 11))
+>b : Symbol(C.b, Decl(esDecorators-classDeclaration-outerThisReference.ts, 30, 11))
 }

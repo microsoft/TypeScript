@@ -5,7 +5,7 @@
 
  a.foo = 'baz';
 ->a.foo : Symbol(Test.__index, Decl(propertyAccessOfReadonlyIndexSignature.ts, 0, 16))
-+>a.foo : Symbol(__index, Decl(propertyAccessOfReadonlyIndexSignature.ts, 0, 16))
++>a.foo : Symbol(Test[__index], Decl(propertyAccessOfReadonlyIndexSignature.ts, 0, 16))
  >a : Symbol(a, Decl(propertyAccessOfReadonlyIndexSignature.ts, 4, 11))
 ->foo : Symbol(Test.__index, Decl(propertyAccessOfReadonlyIndexSignature.ts, 0, 16))
-+>foo : Symbol(__index, Decl(propertyAccessOfReadonlyIndexSignature.ts, 0, 16))
++>foo : Symbol(Test[__index], Decl(propertyAccessOfReadonlyIndexSignature.ts, 0, 16))

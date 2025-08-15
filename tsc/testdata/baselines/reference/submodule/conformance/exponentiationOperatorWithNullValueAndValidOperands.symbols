@@ -8,10 +8,10 @@ enum E {
 >E : Symbol(E, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 0, 0))
 
     a,
->a : Symbol(a, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 3, 8))
+>a : Symbol(E.a, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 3, 8))
 
     b
->b : Symbol(b, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 4, 6))
+>b : Symbol(E.b, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 4, 6))
 }
 
 var a: any;
@@ -34,9 +34,9 @@ var r3 = null ** 1;
 
 var r4 = null ** E.a;
 >r4 : Symbol(r4, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 15, 3))
->E.a : Symbol(a, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 3, 8))
+>E.a : Symbol(E.a, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 3, 8))
 >E : Symbol(E, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 0, 0))
->a : Symbol(a, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 3, 8))
+>a : Symbol(E.a, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 3, 8))
 
 var r5 = a ** null;
 >r5 : Symbol(r5, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 16, 3))
@@ -51,7 +51,7 @@ var r7 = 0 ** null;
 
 var r8 = E.b ** null;
 >r8 : Symbol(r8, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 19, 3))
->E.b : Symbol(b, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 4, 6))
+>E.b : Symbol(E.b, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 4, 6))
 >E : Symbol(E, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 0, 0))
->b : Symbol(b, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 4, 6))
+>b : Symbol(E.b, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 4, 6))
 

@@ -8,10 +8,10 @@ module A {
 >Point : Symbol(Point, Decl(TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts, 0, 10))
 
         x: number;
->x : Symbol(x, Decl(TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts, 1, 24))
+>x : Symbol(Point.x, Decl(TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts, 1, 24))
 
         y: number;
->y : Symbol(y, Decl(TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts, 2, 18))
+>y : Symbol(Point.y, Decl(TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts, 2, 18))
     }
 }
 
@@ -23,10 +23,10 @@ module A{
 >Point : Symbol(Point, Decl(TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts, 7, 9))
 
         origin: number;
->origin : Symbol(origin, Decl(TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts, 9, 24))
+>origin : Symbol(Point.origin, Decl(TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts, 9, 24))
 
         angle: number;
->angle : Symbol(angle, Decl(TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts, 10, 23))
+>angle : Symbol(Point.angle, Decl(TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts, 10, 23))
     }
 }
 
@@ -39,7 +39,7 @@ module X.Y.Z {
 >Line : Symbol(Line, Decl(TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts, 15, 14))
 
         length: number;
->length : Symbol(length, Decl(TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts, 16, 23))
+>length : Symbol(Line.length, Decl(TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts, 16, 23))
     }
 }
 
@@ -57,7 +57,7 @@ module X {
 >Line : Symbol(Line, Decl(TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts, 23, 25))
 
                 name: string;
->name : Symbol(name, Decl(TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts, 25, 31))
+>name : Symbol(Line.name, Decl(TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts, 25, 31))
             }
         }
     }

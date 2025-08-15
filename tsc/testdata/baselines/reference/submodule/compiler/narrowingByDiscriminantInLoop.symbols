@@ -12,14 +12,14 @@ interface IDLTypeDescription {
 >IDLTypeDescription : Symbol(IDLTypeDescription, Decl(narrowingByDiscriminantInLoop.ts, 2, 63))
 
     origin: string;
->origin : Symbol(origin, Decl(narrowingByDiscriminantInLoop.ts, 4, 30))
+>origin : Symbol(IDLTypeDescription.origin, Decl(narrowingByDiscriminantInLoop.ts, 4, 30))
 }
 
 interface InterfaceType {
 >InterfaceType : Symbol(InterfaceType, Decl(narrowingByDiscriminantInLoop.ts, 6, 1))
 
     members: IDLMemberTypes[];
->members : Symbol(members, Decl(narrowingByDiscriminantInLoop.ts, 8, 25))
+>members : Symbol(InterfaceType.members, Decl(narrowingByDiscriminantInLoop.ts, 8, 25))
 >IDLMemberTypes : Symbol(IDLMemberTypes, Decl(narrowingByDiscriminantInLoop.ts, 0, 0))
 }
 
@@ -27,10 +27,10 @@ interface OperationMemberType {
 >OperationMemberType : Symbol(OperationMemberType, Decl(narrowingByDiscriminantInLoop.ts, 10, 1))
 
     type: "operation";
->type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
+>type : Symbol(OperationMemberType.type, Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
 
     idlType: IDLTypeDescription;
->idlType : Symbol(idlType, Decl(narrowingByDiscriminantInLoop.ts, 13, 22))
+>idlType : Symbol(OperationMemberType.idlType, Decl(narrowingByDiscriminantInLoop.ts, 13, 22))
 >IDLTypeDescription : Symbol(IDLTypeDescription, Decl(narrowingByDiscriminantInLoop.ts, 2, 63))
 }
 
@@ -38,10 +38,10 @@ interface ConstantMemberType {
 >ConstantMemberType : Symbol(ConstantMemberType, Decl(narrowingByDiscriminantInLoop.ts, 15, 1))
 
     type: "const";
->type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 17, 30))
+>type : Symbol(ConstantMemberType.type, Decl(narrowingByDiscriminantInLoop.ts, 17, 30))
 
     idlType: string;
->idlType : Symbol(idlType, Decl(narrowingByDiscriminantInLoop.ts, 18, 18))
+>idlType : Symbol(ConstantMemberType.idlType, Decl(narrowingByDiscriminantInLoop.ts, 18, 18))
 }
 
 function insertInterface(callbackType: InterfaceType) {
@@ -51,9 +51,9 @@ function insertInterface(callbackType: InterfaceType) {
 
     for (const memberType of callbackType.members) {
 >memberType : Symbol(memberType, Decl(narrowingByDiscriminantInLoop.ts, 23, 14))
->callbackType.members : Symbol(members, Decl(narrowingByDiscriminantInLoop.ts, 8, 25))
+>callbackType.members : Symbol(InterfaceType.members, Decl(narrowingByDiscriminantInLoop.ts, 8, 25))
 >callbackType : Symbol(callbackType, Decl(narrowingByDiscriminantInLoop.ts, 22, 25))
->members : Symbol(members, Decl(narrowingByDiscriminantInLoop.ts, 8, 25))
+>members : Symbol(InterfaceType.members, Decl(narrowingByDiscriminantInLoop.ts, 8, 25))
 
         if (memberType.type === "const") {
 >memberType.type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 17, 30), Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
@@ -61,26 +61,26 @@ function insertInterface(callbackType: InterfaceType) {
 >type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 17, 30), Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
 
             memberType.idlType;  // string
->memberType.idlType : Symbol(idlType, Decl(narrowingByDiscriminantInLoop.ts, 18, 18))
+>memberType.idlType : Symbol(ConstantMemberType.idlType, Decl(narrowingByDiscriminantInLoop.ts, 18, 18))
 >memberType : Symbol(memberType, Decl(narrowingByDiscriminantInLoop.ts, 23, 14))
->idlType : Symbol(idlType, Decl(narrowingByDiscriminantInLoop.ts, 18, 18))
+>idlType : Symbol(ConstantMemberType.idlType, Decl(narrowingByDiscriminantInLoop.ts, 18, 18))
         }
         else if (memberType.type === "operation") {
->memberType.type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
+>memberType.type : Symbol(OperationMemberType.type, Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
 >memberType : Symbol(memberType, Decl(narrowingByDiscriminantInLoop.ts, 23, 14))
->type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
+>type : Symbol(OperationMemberType.type, Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
 
             memberType.idlType.origin;  // string
->memberType.idlType.origin : Symbol(origin, Decl(narrowingByDiscriminantInLoop.ts, 4, 30))
->memberType.idlType : Symbol(idlType, Decl(narrowingByDiscriminantInLoop.ts, 13, 22))
+>memberType.idlType.origin : Symbol(IDLTypeDescription.origin, Decl(narrowingByDiscriminantInLoop.ts, 4, 30))
+>memberType.idlType : Symbol(OperationMemberType.idlType, Decl(narrowingByDiscriminantInLoop.ts, 13, 22))
 >memberType : Symbol(memberType, Decl(narrowingByDiscriminantInLoop.ts, 23, 14))
->idlType : Symbol(idlType, Decl(narrowingByDiscriminantInLoop.ts, 13, 22))
->origin : Symbol(origin, Decl(narrowingByDiscriminantInLoop.ts, 4, 30))
+>idlType : Symbol(OperationMemberType.idlType, Decl(narrowingByDiscriminantInLoop.ts, 13, 22))
+>origin : Symbol(IDLTypeDescription.origin, Decl(narrowingByDiscriminantInLoop.ts, 4, 30))
 
             (memberType.idlType as IDLTypeDescription);
->memberType.idlType : Symbol(idlType, Decl(narrowingByDiscriminantInLoop.ts, 13, 22))
+>memberType.idlType : Symbol(OperationMemberType.idlType, Decl(narrowingByDiscriminantInLoop.ts, 13, 22))
 >memberType : Symbol(memberType, Decl(narrowingByDiscriminantInLoop.ts, 23, 14))
->idlType : Symbol(idlType, Decl(narrowingByDiscriminantInLoop.ts, 13, 22))
+>idlType : Symbol(OperationMemberType.idlType, Decl(narrowingByDiscriminantInLoop.ts, 13, 22))
 >IDLTypeDescription : Symbol(IDLTypeDescription, Decl(narrowingByDiscriminantInLoop.ts, 2, 63))
         }
     }
@@ -93,9 +93,9 @@ function insertInterface2(callbackType: InterfaceType) {
 
     for (const memberType of callbackType.members) {
 >memberType : Symbol(memberType, Decl(narrowingByDiscriminantInLoop.ts, 35, 14))
->callbackType.members : Symbol(members, Decl(narrowingByDiscriminantInLoop.ts, 8, 25))
+>callbackType.members : Symbol(InterfaceType.members, Decl(narrowingByDiscriminantInLoop.ts, 8, 25))
 >callbackType : Symbol(callbackType, Decl(narrowingByDiscriminantInLoop.ts, 34, 26))
->members : Symbol(members, Decl(narrowingByDiscriminantInLoop.ts, 8, 25))
+>members : Symbol(InterfaceType.members, Decl(narrowingByDiscriminantInLoop.ts, 8, 25))
 
         if (memberType.type === "operation") {
 >memberType.type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 17, 30), Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
@@ -103,11 +103,11 @@ function insertInterface2(callbackType: InterfaceType) {
 >type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 17, 30), Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
 
             memberType.idlType.origin;  // string
->memberType.idlType.origin : Symbol(origin, Decl(narrowingByDiscriminantInLoop.ts, 4, 30))
->memberType.idlType : Symbol(idlType, Decl(narrowingByDiscriminantInLoop.ts, 13, 22))
+>memberType.idlType.origin : Symbol(IDLTypeDescription.origin, Decl(narrowingByDiscriminantInLoop.ts, 4, 30))
+>memberType.idlType : Symbol(OperationMemberType.idlType, Decl(narrowingByDiscriminantInLoop.ts, 13, 22))
 >memberType : Symbol(memberType, Decl(narrowingByDiscriminantInLoop.ts, 35, 14))
->idlType : Symbol(idlType, Decl(narrowingByDiscriminantInLoop.ts, 13, 22))
->origin : Symbol(origin, Decl(narrowingByDiscriminantInLoop.ts, 4, 30))
+>idlType : Symbol(OperationMemberType.idlType, Decl(narrowingByDiscriminantInLoop.ts, 13, 22))
+>origin : Symbol(IDLTypeDescription.origin, Decl(narrowingByDiscriminantInLoop.ts, 4, 30))
         }
     }
 }
@@ -123,21 +123,21 @@ function foo(memberType: IDLMemberTypes) {
 >type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 17, 30), Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
 
         memberType.idlType;  // string
->memberType.idlType : Symbol(idlType, Decl(narrowingByDiscriminantInLoop.ts, 18, 18))
+>memberType.idlType : Symbol(ConstantMemberType.idlType, Decl(narrowingByDiscriminantInLoop.ts, 18, 18))
 >memberType : Symbol(memberType, Decl(narrowingByDiscriminantInLoop.ts, 42, 13))
->idlType : Symbol(idlType, Decl(narrowingByDiscriminantInLoop.ts, 18, 18))
+>idlType : Symbol(ConstantMemberType.idlType, Decl(narrowingByDiscriminantInLoop.ts, 18, 18))
     }
     else if (memberType.type === "operation") {
->memberType.type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
+>memberType.type : Symbol(OperationMemberType.type, Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
 >memberType : Symbol(memberType, Decl(narrowingByDiscriminantInLoop.ts, 42, 13))
->type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
+>type : Symbol(OperationMemberType.type, Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
 
         memberType.idlType.origin;  // string
->memberType.idlType.origin : Symbol(origin, Decl(narrowingByDiscriminantInLoop.ts, 4, 30))
->memberType.idlType : Symbol(idlType, Decl(narrowingByDiscriminantInLoop.ts, 13, 22))
+>memberType.idlType.origin : Symbol(IDLTypeDescription.origin, Decl(narrowingByDiscriminantInLoop.ts, 4, 30))
+>memberType.idlType : Symbol(OperationMemberType.idlType, Decl(narrowingByDiscriminantInLoop.ts, 13, 22))
 >memberType : Symbol(memberType, Decl(narrowingByDiscriminantInLoop.ts, 42, 13))
->idlType : Symbol(idlType, Decl(narrowingByDiscriminantInLoop.ts, 13, 22))
->origin : Symbol(origin, Decl(narrowingByDiscriminantInLoop.ts, 4, 30))
+>idlType : Symbol(OperationMemberType.idlType, Decl(narrowingByDiscriminantInLoop.ts, 13, 22))
+>origin : Symbol(IDLTypeDescription.origin, Decl(narrowingByDiscriminantInLoop.ts, 4, 30))
     }
 }
 
@@ -147,10 +147,10 @@ interface A {
 >A : Symbol(A, Decl(narrowingByDiscriminantInLoop.ts, 49, 1))
 
     kind: true;
->kind : Symbol(kind, Decl(narrowingByDiscriminantInLoop.ts, 53, 13))
+>kind : Symbol(A.kind, Decl(narrowingByDiscriminantInLoop.ts, 53, 13))
 
     prop: { a: string; };
->prop : Symbol(prop, Decl(narrowingByDiscriminantInLoop.ts, 54, 15))
+>prop : Symbol(A.prop, Decl(narrowingByDiscriminantInLoop.ts, 54, 15))
 >a : Symbol(a, Decl(narrowingByDiscriminantInLoop.ts, 55, 11))
 }
 
@@ -158,10 +158,10 @@ interface B {
 >B : Symbol(B, Decl(narrowingByDiscriminantInLoop.ts, 56, 1))
 
     kind: false;
->kind : Symbol(kind, Decl(narrowingByDiscriminantInLoop.ts, 58, 13))
+>kind : Symbol(B.kind, Decl(narrowingByDiscriminantInLoop.ts, 58, 13))
 
     prop: { b: string; }
->prop : Symbol(prop, Decl(narrowingByDiscriminantInLoop.ts, 59, 16))
+>prop : Symbol(B.prop, Decl(narrowingByDiscriminantInLoop.ts, 59, 16))
 >b : Symbol(b, Decl(narrowingByDiscriminantInLoop.ts, 60, 11))
 }
 
@@ -184,9 +184,9 @@ function f1(x: A | B) {
 
             x.prop.a;
 >x.prop.a : Symbol(a, Decl(narrowingByDiscriminantInLoop.ts, 55, 11))
->x.prop : Symbol(prop, Decl(narrowingByDiscriminantInLoop.ts, 54, 15))
+>x.prop : Symbol(A.prop, Decl(narrowingByDiscriminantInLoop.ts, 54, 15))
 >x : Symbol(x, Decl(narrowingByDiscriminantInLoop.ts, 63, 12))
->prop : Symbol(prop, Decl(narrowingByDiscriminantInLoop.ts, 54, 15))
+>prop : Symbol(A.prop, Decl(narrowingByDiscriminantInLoop.ts, 54, 15))
 >a : Symbol(a, Decl(narrowingByDiscriminantInLoop.ts, 55, 11))
         }
         if (x.kind === false) {
@@ -196,9 +196,9 @@ function f1(x: A | B) {
 
             x.prop.b;
 >x.prop.b : Symbol(b, Decl(narrowingByDiscriminantInLoop.ts, 60, 11))
->x.prop : Symbol(prop, Decl(narrowingByDiscriminantInLoop.ts, 59, 16))
+>x.prop : Symbol(B.prop, Decl(narrowingByDiscriminantInLoop.ts, 59, 16))
 >x : Symbol(x, Decl(narrowingByDiscriminantInLoop.ts, 63, 12))
->prop : Symbol(prop, Decl(narrowingByDiscriminantInLoop.ts, 59, 16))
+>prop : Symbol(B.prop, Decl(narrowingByDiscriminantInLoop.ts, 59, 16))
 >b : Symbol(b, Decl(narrowingByDiscriminantInLoop.ts, 60, 11))
         }
     }
@@ -218,9 +218,9 @@ function f2(x: A | B) {
 
             x.prop.a;
 >x.prop.a : Symbol(a, Decl(narrowingByDiscriminantInLoop.ts, 55, 11))
->x.prop : Symbol(prop, Decl(narrowingByDiscriminantInLoop.ts, 54, 15))
+>x.prop : Symbol(A.prop, Decl(narrowingByDiscriminantInLoop.ts, 54, 15))
 >x : Symbol(x, Decl(narrowingByDiscriminantInLoop.ts, 75, 12))
->prop : Symbol(prop, Decl(narrowingByDiscriminantInLoop.ts, 54, 15))
+>prop : Symbol(A.prop, Decl(narrowingByDiscriminantInLoop.ts, 54, 15))
 >a : Symbol(a, Decl(narrowingByDiscriminantInLoop.ts, 55, 11))
         }
         if (!x.kind) {
@@ -230,9 +230,9 @@ function f2(x: A | B) {
 
             x.prop.b;
 >x.prop.b : Symbol(b, Decl(narrowingByDiscriminantInLoop.ts, 60, 11))
->x.prop : Symbol(prop, Decl(narrowingByDiscriminantInLoop.ts, 59, 16))
+>x.prop : Symbol(B.prop, Decl(narrowingByDiscriminantInLoop.ts, 59, 16))
 >x : Symbol(x, Decl(narrowingByDiscriminantInLoop.ts, 75, 12))
->prop : Symbol(prop, Decl(narrowingByDiscriminantInLoop.ts, 59, 16))
+>prop : Symbol(B.prop, Decl(narrowingByDiscriminantInLoop.ts, 59, 16))
 >b : Symbol(b, Decl(narrowingByDiscriminantInLoop.ts, 60, 11))
         }
     }

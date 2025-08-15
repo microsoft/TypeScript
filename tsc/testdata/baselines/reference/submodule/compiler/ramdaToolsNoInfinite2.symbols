@@ -91,7 +91,7 @@ declare module "Object/Keys" {
 >"Object/Keys" : Symbol("Object/Keys", Decl(ramdaToolsNoInfinite2.ts, 21, 1))
 
     import { Keys as UKeys } from "Union/Keys";
->Keys : Symbol(Keys, Decl(ramdaToolsNoInfinite2.ts, 96, 34))
+>Keys : Symbol(UKeys, Decl(ramdaToolsNoInfinite2.ts, 96, 34))
 >UKeys : Symbol(UKeys, Decl(ramdaToolsNoInfinite2.ts, 23, 12))
 
     export type Keys<O extends object> = UKeys<O>;
@@ -372,7 +372,7 @@ declare module "List/Keys" {
 >List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 112, 12))
 
     import { Keys as UKeys } from "Union/Keys";
->Keys : Symbol(Keys, Decl(ramdaToolsNoInfinite2.ts, 96, 34))
+>Keys : Symbol(UKeys, Decl(ramdaToolsNoInfinite2.ts, 96, 34))
 >UKeys : Symbol(UKeys, Decl(ramdaToolsNoInfinite2.ts, 113, 12))
 
     export type Keys<L extends List> = Exclude<UKeys<L>, keyof any[]> | number;
@@ -581,7 +581,7 @@ declare module "Object/NonNullable" {
 >MergeFlat : Symbol(MergeFlat, Decl(ramdaToolsNoInfinite2.ts, 164, 12))
 
     import { NonNullable as UNonNullable } from "Union/NonNullable";
->NonNullable : Symbol(NonNullable, Decl(ramdaToolsNoInfinite2.ts, 137, 40))
+>NonNullable : Symbol(UNonNullable, Decl(ramdaToolsNoInfinite2.ts, 137, 40))
 >UNonNullable : Symbol(UNonNullable, Decl(ramdaToolsNoInfinite2.ts, 165, 12))
 
     import { Depth } from "Object/_Internal";
@@ -1666,7 +1666,7 @@ declare module "List/NonNullable" {
 >Depth : Symbol(Depth, Decl(ramdaToolsNoInfinite2.ts, 488, 12))
 
     import { NonNullable as ONonNullable } from "Object/NonNullable";
->NonNullable : Symbol(NonNullable, Decl(ramdaToolsNoInfinite2.ts, 183, 13))
+>NonNullable : Symbol(ONonNullable, Decl(ramdaToolsNoInfinite2.ts, 183, 13))
 >ONonNullable : Symbol(ONonNullable, Decl(ramdaToolsNoInfinite2.ts, 489, 12))
 
     import { ListOf } from "Object/ListOf";

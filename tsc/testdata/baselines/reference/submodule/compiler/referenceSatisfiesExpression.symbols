@@ -44,9 +44,9 @@ for ((g satisfies number) of [10]) {
 >g : Symbol(g, Decl(referenceSatisfiesExpression.ts, 16, 3))
 
   console.log(g)
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >g : Symbol(g, Decl(referenceSatisfiesExpression.ts, 16, 3))
 }
 
@@ -58,9 +58,9 @@ for ((x satisfies string) in { a: 10 }) {
 >a : Symbol(a, Decl(referenceSatisfiesExpression.ts, 22, 30))
 
   console.log(x)
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >x : Symbol(x, Decl(referenceSatisfiesExpression.ts, 21, 3))
 }
 

@@ -14,15 +14,15 @@ export type LocalInterface =
     & import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface;
 
 export const a = (null as any as import("pkg", { assert: {"resolution-mode": "foobar"} }).RequireInterface);
->a : import("pkg").RequireInterface
->(null as any as import("pkg", { assert: {"resolution-mode": "foobar"} }).RequireInterface) : import("pkg").RequireInterface
->null as any as import("pkg", { assert: {"resolution-mode": "foobar"} }).RequireInterface : import("pkg").RequireInterface
+>a : import("/node_modules/pkg/require").RequireInterface
+>(null as any as import("pkg", { assert: {"resolution-mode": "foobar"} }).RequireInterface) : import("/node_modules/pkg/require").RequireInterface
+>null as any as import("pkg", { assert: {"resolution-mode": "foobar"} }).RequireInterface : import("/node_modules/pkg/require").RequireInterface
 >null as any : any
 
 export const b = (null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface);
->b : import("./node_modules/pkg/import").ImportInterface
->(null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface) : import("./node_modules/pkg/import").ImportInterface
->null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface : import("./node_modules/pkg/import").ImportInterface
+>b : import("/node_modules/pkg/import").ImportInterface
+>(null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface) : import("/node_modules/pkg/import").ImportInterface
+>null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface : import("/node_modules/pkg/import").ImportInterface
 >null as any : any
 
 === /other.ts ===
@@ -38,7 +38,7 @@ export type LocalInterface =
 
     & import("pkg", {"resolution-mode": "import"}).ImportInterface;
 >import("pkg", {"resolution-mode": "import"}).ImportInterface : any
->import("pkg", {"resolution-mode": "import"}) : Promise<typeof import("./node_modules/pkg/import")>
+>import("pkg", {"resolution-mode": "import"}) : Promise<typeof import("/node_modules/pkg/import")>
 >"pkg" : "pkg"
 >{"resolution-mode": "import"} : { "resolution-mode": string; }
 >"resolution-mode" : string
@@ -72,9 +72,9 @@ export type LocalInterface =
     & import("pkg", { assert: {"bad": "import"} }).ImportInterface;
 
 export const a = (null as any as import("pkg", { assert: {"bad": "require"} }).RequireInterface);
->a : import("pkg").RequireInterface
->(null as any as import("pkg", { assert: {"bad": "require"} }).RequireInterface) : import("pkg").RequireInterface
->null as any as import("pkg", { assert: {"bad": "require"} }).RequireInterface : import("pkg").RequireInterface
+>a : import("/node_modules/pkg/require").RequireInterface
+>(null as any as import("pkg", { assert: {"bad": "require"} }).RequireInterface) : import("/node_modules/pkg/require").RequireInterface
+>null as any as import("pkg", { assert: {"bad": "require"} }).RequireInterface : import("/node_modules/pkg/require").RequireInterface
 >null as any : any
 
 export const b = (null as any as import("pkg", { assert: {"bad": "import"} }).ImportInterface);
@@ -95,7 +95,7 @@ export type LocalInterface =
 
     & import("pkg", [ {"resolution-mode": "import"} ]).ImportInterface;
 >import("pkg", [ {"resolution-mode": "import"} ]).ImportInterface : any
->import("pkg", [ {"resolution-mode": "import"} ]) : Promise<typeof import("./node_modules/pkg/import")>
+>import("pkg", [ {"resolution-mode": "import"} ]) : Promise<typeof import("/node_modules/pkg/import")>
 >"pkg" : "pkg"
 >[ {"resolution-mode": "import"} ] : { "resolution-mode": string; }[]
 >{"resolution-mode": "import"} : { "resolution-mode": string; }
@@ -143,7 +143,7 @@ export type LocalInterface =
 
     & import("pkg", Asserts2).ImportInterface;
 >import("pkg", Asserts2).ImportInterface : any
->import("pkg", Asserts2) : Promise<typeof import("./node_modules/pkg/import")>
+>import("pkg", Asserts2) : Promise<typeof import("/node_modules/pkg/import")>
 >"pkg" : "pkg"
 >Asserts2 : any
 >ImportInterface : any
@@ -172,9 +172,9 @@ export type LocalInterface =
     & import("pkg", { assert: {} }).ImportInterface;
 
 export const a = (null as any as import("pkg", { assert: {} }).RequireInterface);
->a : import("pkg").RequireInterface
->(null as any as import("pkg", { assert: {} }).RequireInterface) : import("pkg").RequireInterface
->null as any as import("pkg", { assert: {} }).RequireInterface : import("pkg").RequireInterface
+>a : import("/node_modules/pkg/require").RequireInterface
+>(null as any as import("pkg", { assert: {} }).RequireInterface) : import("/node_modules/pkg/require").RequireInterface
+>null as any as import("pkg", { assert: {} }).RequireInterface : import("/node_modules/pkg/require").RequireInterface
 >null as any : any
 
 export const b = (null as any as import("pkg", { assert: {} }).ImportInterface);

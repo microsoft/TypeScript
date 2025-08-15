@@ -50,11 +50,11 @@ export class MyClass {
 >MyClass : Symbol(MyClass, Decl(index2.js, 1, 26))
 
     static [TopLevelSym] = 12;
->[TopLevelSym] : Symbol([TopLevelSym], Decl(index2.js, 3, 22))
+>[TopLevelSym] : Symbol(MyClass[TopLevelSym], Decl(index2.js, 3, 22))
 >TopLevelSym : Symbol(TopLevelSym, Decl(index2.js, 0, 5))
 
     [InnerSym] = "ok";
->[InnerSym] : Symbol([InnerSym], Decl(index2.js, 4, 30))
+>[InnerSym] : Symbol(MyClass[InnerSym], Decl(index2.js, 4, 30))
 >InnerSym : Symbol(InnerSym, Decl(index2.js, 1, 5))
 
     /**

@@ -5,14 +5,14 @@ export interface UnionAltA {
 >UnionAltA : Symbol(UnionAltA, Decl(discriminatedUnionWithIndexSignature.ts, 0, 0))
 
     type?: 'text';
->type : Symbol(type, Decl(discriminatedUnionWithIndexSignature.ts, 0, 28))
+>type : Symbol(UnionAltA.type, Decl(discriminatedUnionWithIndexSignature.ts, 0, 28))
 }
 
 export interface UnionAltB {
 >UnionAltB : Symbol(UnionAltB, Decl(discriminatedUnionWithIndexSignature.ts, 2, 1))
 
     type?: 'image' | 'video' | 'document';
->type : Symbol(type, Decl(discriminatedUnionWithIndexSignature.ts, 4, 28))
+>type : Symbol(UnionAltB.type, Decl(discriminatedUnionWithIndexSignature.ts, 4, 28))
 }
 
 export type ValueUnion = UnionAltA | UnionAltB;

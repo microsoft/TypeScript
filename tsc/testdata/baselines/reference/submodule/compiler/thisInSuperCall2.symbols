@@ -13,7 +13,7 @@ class Foo extends Base {
 >Base : Symbol(Base, Decl(thisInSuperCall2.ts, 0, 0))
 
     public x: number;
->x : Symbol(x, Decl(thisInSuperCall2.ts, 4, 24))
+>x : Symbol(Foo.x, Decl(thisInSuperCall2.ts, 4, 24))
 
     constructor() {
         super(this); // error: "super" has to be called before "this" accessing
@@ -28,7 +28,7 @@ class Foo2 extends Base {
 >Base : Symbol(Base, Decl(thisInSuperCall2.ts, 0, 0))
 
     public x: number = 0;
->x : Symbol(x, Decl(thisInSuperCall2.ts, 12, 25))
+>x : Symbol(Foo2.x, Decl(thisInSuperCall2.ts, 12, 25))
 
     constructor() {
         super(this); // error

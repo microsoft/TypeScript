@@ -10,23 +10,23 @@
 exports.bigOak = 1
 >exports.bigOak = 1 : 1
 >exports.bigOak : 1
->exports : typeof import("./Eloquent")
+>exports : typeof import("Eloquent")
 >bigOak : 1
 >1 : 1
 
 exports.everywhere = 2
 >exports.everywhere = 2 : 2
 >exports.everywhere : 2
->exports : typeof import("./Eloquent")
+>exports : typeof import("Eloquent")
 >everywhere : 2
 >2 : 2
 
 module.exports = exports
->module.exports = exports : typeof import("./Eloquent")
->module.exports : typeof import("./Eloquent")
->module : { "\"Eloquent\"": typeof import("./Eloquent"); }
->exports : typeof import("./Eloquent")
->exports : typeof import("./Eloquent")
+>module.exports = exports : typeof import("Eloquent")
+>module.exports : typeof import("Eloquent")
+>module : { "\"Eloquent\"": typeof import("Eloquent"); }
+>exports : typeof import("Eloquent")
+>exports : typeof import("Eloquent")
 
 })()
 

@@ -15,22 +15,22 @@ Ns.Two = function() {};
 >Two : Symbol(Two, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 1, 23))
 
 Ns.One.prototype = {
->Ns.One.prototype : Symbol(prototype, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 2, 23))
+>Ns.One.prototype : Symbol(One.prototype, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 2, 23))
 >Ns.One : Symbol(One, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 0, 11))
 >Ns : Symbol(Ns, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 0, 3))
 >One : Symbol(One, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 0, 11))
->prototype : Symbol(prototype, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 2, 23))
+>prototype : Symbol(One.prototype, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 2, 23))
 
   ok() {},
 >ok : Symbol(ok, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 4, 20))
 
 };
 Ns.Two.prototype = {
->Ns.Two.prototype : Symbol(prototype, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 6, 2))
+>Ns.Two.prototype : Symbol(Two.prototype, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 6, 2))
 >Ns.Two : Symbol(Two, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 1, 23))
 >Ns : Symbol(Ns, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 0, 3))
 >Two : Symbol(Two, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 1, 23))
->prototype : Symbol(prototype, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 6, 2))
+>prototype : Symbol(Two.prototype, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 6, 2))
 }
 
 === other.js ===

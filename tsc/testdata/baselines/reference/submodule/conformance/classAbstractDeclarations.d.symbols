@@ -11,7 +11,7 @@ declare abstract class AA {
 >AA : Symbol(AA, Decl(classAbstractDeclarations.d.ts, 2, 1))
 
     abstract foo();
->foo : Symbol(foo, Decl(classAbstractDeclarations.d.ts, 4, 27))
+>foo : Symbol(AA.foo, Decl(classAbstractDeclarations.d.ts, 4, 27))
 }
 
 declare abstract class BB extends AA {}

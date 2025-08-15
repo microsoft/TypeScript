@@ -12,8 +12,8 @@ const g: OrGen = function* () {
 
     return (num) => console.log(num);
 >num : Symbol(num, Decl(contextualTypeOnYield2.ts, 2, 12))
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >num : Symbol(num, Decl(contextualTypeOnYield2.ts, 2, 12))
 }

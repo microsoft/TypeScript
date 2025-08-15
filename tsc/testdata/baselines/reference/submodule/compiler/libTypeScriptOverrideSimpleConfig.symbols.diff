@@ -1,8 +1,0 @@
---- old.libTypeScriptOverrideSimpleConfig.symbols
-+++ new.libTypeScriptOverrideSimpleConfig.symbols
-@@= skipped -13, +13 lines =@@
- === /somepath/node_modules/@typescript/lib-dom/index.d.ts ===
- interface ABC { abc: string }
- >ABC : Symbol(ABC, Decl(index.d.ts, 0, 0))
-->abc : Symbol(ABC.abc, Decl(index.d.ts, 0, 15))
-+>abc : Symbol(abc, Decl(index.d.ts, 0, 15))

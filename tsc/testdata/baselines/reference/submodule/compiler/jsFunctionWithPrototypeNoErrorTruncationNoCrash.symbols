@@ -8,9 +8,9 @@ function Color(obj) {
     this.example = true
 };
 Color.prototype = {
->Color.prototype : Symbol(prototype, Decl(index.js, 2, 2))
+>Color.prototype : Symbol(Color.prototype, Decl(index.js, 2, 2))
 >Color : Symbol(Color, Decl(index.js, 0, 0))
->prototype : Symbol(prototype, Decl(index.js, 2, 2))
+>prototype : Symbol(Color.prototype, Decl(index.js, 2, 2))
 
 	negate: function () {return this;},
 >negate : Symbol(negate, Decl(index.js, 3, 19))

@@ -9,7 +9,7 @@ export function wrapClass(param: any) {
 >Wrapped : Symbol(Wrapped, Decl(wrapClass.ts, 1, 10))
 
         foo() {
->foo : Symbol(foo, Decl(wrapClass.ts, 1, 26))
+>foo : Symbol(Wrapped.foo, Decl(wrapClass.ts, 1, 26))
 
             return param;
 >param : Symbol(param, Decl(wrapClass.ts, 0, 26))
@@ -34,10 +34,10 @@ export function Timestamped<TBase extends Constructor>(Base: TBase) {
 >Base : Symbol(Base, Decl(wrapClass.ts, 10, 55))
 
         timestamp = Date.now();
->timestamp : Symbol(timestamp, Decl(wrapClass.ts, 11, 31))
->Date.now : Symbol(now, Decl(lib.es5.d.ts, --, --))
+>timestamp : Symbol((Anonymous class).timestamp, Decl(wrapClass.ts, 11, 31))
+>Date.now : Symbol(DateConstructor.now, Decl(lib.es5.d.ts, --, --))
 >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
->now : Symbol(now, Decl(lib.es5.d.ts, --, --))
+>now : Symbol(DateConstructor.now, Decl(lib.es5.d.ts, --, --))
 
     };
 }
@@ -55,7 +55,7 @@ export class User {
 >User : Symbol(User, Decl(index.ts, 2, 28))
 
     name = '';
->name : Symbol(name, Decl(index.ts, 5, 19))
+>name : Symbol(User.name, Decl(index.ts, 5, 19))
 }
 
 // User that is Timestamped

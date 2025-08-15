@@ -10,9 +10,9 @@ import * as a from "a";
 const o: Foo = a.o;
 >o : Symbol(o, Decl(index.ts, 3, 5))
 >Foo : Symbol(Foo, Decl(index.ts, 0, 6))
->a.o : Symbol(o, Decl(index.d.ts, 1, 12))
+>a.o : Symbol(a.o, Decl(index.d.ts, 1, 12))
 >a : Symbol(a, Decl(index.ts, 1, 6))
->o : Symbol(o, Decl(index.d.ts, 1, 12))
+>o : Symbol(a.o, Decl(index.d.ts, 1, 12))
 
 === /node_modules/a/index.d.ts ===
 import Foo from "foo/Foo";
@@ -27,7 +27,7 @@ export default class Foo {
 >Foo : Symbol(Foo, Decl(Foo.d.ts, 0, 0))
 
     protected source: boolean;
->source : Symbol(source, Decl(Foo.d.ts, 0, 26))
+>source : Symbol(Foo.source, Decl(Foo.d.ts, 0, 26))
 }
 
 === /node_modules/foo/Foo.d.ts ===
@@ -35,6 +35,6 @@ export default class Foo {
 >Foo : Symbol(Foo, Decl(Foo.d.ts, 0, 0))
 
     protected source: boolean;
->source : Symbol(source, Decl(Foo.d.ts, 0, 26))
+>source : Symbol(Foo.source, Decl(Foo.d.ts, 0, 26))
 }
 

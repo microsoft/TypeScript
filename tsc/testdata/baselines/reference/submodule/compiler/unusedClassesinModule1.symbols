@@ -8,7 +8,7 @@ module A {
 >Calculator : Symbol(Calculator, Decl(unusedClassesinModule1.ts, 0, 10))
 
         public handelChar() {
->handelChar : Symbol(handelChar, Decl(unusedClassesinModule1.ts, 1, 22))
+>handelChar : Symbol(Calculator.handelChar, Decl(unusedClassesinModule1.ts, 1, 22))
         }
     }
 }

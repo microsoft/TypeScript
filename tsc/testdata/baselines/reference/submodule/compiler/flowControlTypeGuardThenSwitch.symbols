@@ -5,17 +5,17 @@ enum Kind {
 >Kind : Symbol(Kind, Decl(flowControlTypeGuardThenSwitch.ts, 0, 0))
 
     A,
->A : Symbol(A, Decl(flowControlTypeGuardThenSwitch.ts, 0, 11))
+>A : Symbol(Kind.A, Decl(flowControlTypeGuardThenSwitch.ts, 0, 11))
 
     B,
->B : Symbol(B, Decl(flowControlTypeGuardThenSwitch.ts, 1, 6))
+>B : Symbol(Kind.B, Decl(flowControlTypeGuardThenSwitch.ts, 1, 6))
 }
 
 interface Base {
 >Base : Symbol(Base, Decl(flowControlTypeGuardThenSwitch.ts, 3, 1))
 
     kind: Kind;
->kind : Symbol(kind, Decl(flowControlTypeGuardThenSwitch.ts, 5, 16))
+>kind : Symbol(Base.kind, Decl(flowControlTypeGuardThenSwitch.ts, 5, 16))
 >Kind : Symbol(Kind, Decl(flowControlTypeGuardThenSwitch.ts, 0, 0))
 }
 
@@ -24,12 +24,12 @@ interface A extends Base {
 >Base : Symbol(Base, Decl(flowControlTypeGuardThenSwitch.ts, 3, 1))
 
     kind: Kind.A;
->kind : Symbol(kind, Decl(flowControlTypeGuardThenSwitch.ts, 9, 26))
+>kind : Symbol(A.kind, Decl(flowControlTypeGuardThenSwitch.ts, 9, 26))
 >Kind : Symbol(Kind, Decl(flowControlTypeGuardThenSwitch.ts, 0, 0))
->A : Symbol(A, Decl(flowControlTypeGuardThenSwitch.ts, 0, 11))
+>A : Symbol(Kind.A, Decl(flowControlTypeGuardThenSwitch.ts, 0, 11))
 
     yar: any;
->yar : Symbol(yar, Decl(flowControlTypeGuardThenSwitch.ts, 10, 17))
+>yar : Symbol(A.yar, Decl(flowControlTypeGuardThenSwitch.ts, 10, 17))
 }
 
 interface B extends Base {
@@ -37,12 +37,12 @@ interface B extends Base {
 >Base : Symbol(Base, Decl(flowControlTypeGuardThenSwitch.ts, 3, 1))
 
     kind: Kind.B;
->kind : Symbol(kind, Decl(flowControlTypeGuardThenSwitch.ts, 14, 26))
+>kind : Symbol(B.kind, Decl(flowControlTypeGuardThenSwitch.ts, 14, 26))
 >Kind : Symbol(Kind, Decl(flowControlTypeGuardThenSwitch.ts, 0, 0))
->B : Symbol(B, Decl(flowControlTypeGuardThenSwitch.ts, 1, 6))
+>B : Symbol(Kind.B, Decl(flowControlTypeGuardThenSwitch.ts, 1, 6))
 
     gar: any;
->gar : Symbol(gar, Decl(flowControlTypeGuardThenSwitch.ts, 15, 17))
+>gar : Symbol(B.gar, Decl(flowControlTypeGuardThenSwitch.ts, 15, 17))
 }
 
 type Both = A | B;
@@ -75,9 +75,9 @@ if (isBoth(foo)) {
 >kind : Symbol(kind, Decl(flowControlTypeGuardThenSwitch.ts, 9, 26), Decl(flowControlTypeGuardThenSwitch.ts, 14, 26))
 
         case Kind.A:
->Kind.A : Symbol(A, Decl(flowControlTypeGuardThenSwitch.ts, 0, 11))
+>Kind.A : Symbol(Kind.A, Decl(flowControlTypeGuardThenSwitch.ts, 0, 11))
 >Kind : Symbol(Kind, Decl(flowControlTypeGuardThenSwitch.ts, 0, 0))
->A : Symbol(A, Decl(flowControlTypeGuardThenSwitch.ts, 0, 11))
+>A : Symbol(Kind.A, Decl(flowControlTypeGuardThenSwitch.ts, 0, 11))
 
             const myA: A = foo; // Should not be an error
 >myA : Symbol(myA, Decl(flowControlTypeGuardThenSwitch.ts, 28, 17))
@@ -86,9 +86,9 @@ if (isBoth(foo)) {
 
             break;
         case Kind.B:
->Kind.B : Symbol(B, Decl(flowControlTypeGuardThenSwitch.ts, 1, 6))
+>Kind.B : Symbol(Kind.B, Decl(flowControlTypeGuardThenSwitch.ts, 1, 6))
 >Kind : Symbol(Kind, Decl(flowControlTypeGuardThenSwitch.ts, 0, 0))
->B : Symbol(B, Decl(flowControlTypeGuardThenSwitch.ts, 1, 6))
+>B : Symbol(Kind.B, Decl(flowControlTypeGuardThenSwitch.ts, 1, 6))
 
             const myB: B = foo;
 >myB : Symbol(myB, Decl(flowControlTypeGuardThenSwitch.ts, 31, 17))

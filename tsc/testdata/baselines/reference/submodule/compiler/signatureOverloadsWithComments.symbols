@@ -14,7 +14,7 @@ function Foo() {
          * comment 1
          */
         foo(bar: string): void;
->foo : Symbol(foo, Decl(signatureOverloadsWithComments.ts, 4, 22), Decl(signatureOverloadsWithComments.ts, 8, 31), Decl(signatureOverloadsWithComments.ts, 14, 22))
+>foo : Symbol(Bar.foo, Decl(signatureOverloadsWithComments.ts, 4, 22), Decl(signatureOverloadsWithComments.ts, 8, 31), Decl(signatureOverloadsWithComments.ts, 14, 22))
 >bar : Symbol(bar, Decl(signatureOverloadsWithComments.ts, 8, 12))
 
         /**
@@ -23,10 +23,10 @@ function Foo() {
          * comment 2
          */
         foo(): string;
->foo : Symbol(foo, Decl(signatureOverloadsWithComments.ts, 4, 22), Decl(signatureOverloadsWithComments.ts, 8, 31), Decl(signatureOverloadsWithComments.ts, 14, 22))
+>foo : Symbol(Bar.foo, Decl(signatureOverloadsWithComments.ts, 4, 22), Decl(signatureOverloadsWithComments.ts, 8, 31), Decl(signatureOverloadsWithComments.ts, 14, 22))
 
         foo(bar?: string): string | void {
->foo : Symbol(foo, Decl(signatureOverloadsWithComments.ts, 4, 22), Decl(signatureOverloadsWithComments.ts, 8, 31), Decl(signatureOverloadsWithComments.ts, 14, 22))
+>foo : Symbol(Bar.foo, Decl(signatureOverloadsWithComments.ts, 4, 22), Decl(signatureOverloadsWithComments.ts, 8, 31), Decl(signatureOverloadsWithComments.ts, 14, 22))
 >bar : Symbol(bar, Decl(signatureOverloadsWithComments.ts, 15, 12))
 
             return 'hi'

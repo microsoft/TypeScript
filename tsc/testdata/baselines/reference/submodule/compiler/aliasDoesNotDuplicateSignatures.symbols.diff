@@ -1,11 +1,14 @@
 --- old.aliasDoesNotDuplicateSignatures.symbols
 +++ new.aliasDoesNotDuplicateSignatures.symbols
-@@= skipped -11, +11 lines =@@
+@@= skipped -23, +23 lines =@@
+ // Assign an incorrect type here to see the type of 'f'.
+ let x1: string = demoNS.f;
+ >x1 : Symbol(x1, Decl(user.ts, 2, 3))
+->demoNS.f : Symbol(f, Decl(demo.d.ts, 0, 26))
++>demoNS.f : Symbol(demoNS.f, Decl(demo.d.ts, 0, 26))
+ >demoNS : Symbol(demoNS, Decl(demo.d.ts, 0, 0))
+->f : Symbol(f, Decl(demo.d.ts, 0, 26))
++>f : Symbol(demoNS.f, Decl(demo.d.ts, 0, 26))
 
-     import alias = demoNS;
- >alias : Symbol(alias, Decl(demo.d.ts, 3, 29))
-->demoNS : Symbol(alias, Decl(demo.d.ts, 0, 0))
-+>demoNS : Symbol(demoNS, Decl(demo.d.ts, 0, 0))
-
-     export = alias;
- >alias : Symbol(alias, Decl(demo.d.ts, 3, 29))
+ let x2: string = f;
+ >x2 : Symbol(x2, Decl(user.ts, 3, 3))

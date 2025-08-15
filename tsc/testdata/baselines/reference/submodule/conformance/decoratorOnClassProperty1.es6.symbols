@@ -9,5 +9,5 @@ declare function dec(target: any, propertyKey: string): void;
 export default class {
     @dec prop;
 >dec : Symbol(dec, Decl(decoratorOnClassProperty1.es6.ts, 0, 0))
->prop : Symbol(prop, Decl(decoratorOnClassProperty1.es6.ts, 2, 22))
+>prop : Symbol(default.prop, Decl(decoratorOnClassProperty1.es6.ts, 2, 22))
 }

@@ -5,9 +5,8 @@
  === test.js ===
  const { apply } = require('./moduleExportAliasDuplicateAlias')
 ->apply : () => void
-->require('./moduleExportAliasDuplicateAlias') : typeof import("moduleExportAliasDuplicateAlias")
 +>apply : undefined
-+>require('./moduleExportAliasDuplicateAlias') : typeof import("./moduleExportAliasDuplicateAlias")
+ >require('./moduleExportAliasDuplicateAlias') : typeof import("moduleExportAliasDuplicateAlias")
  >require : any
  >'./moduleExportAliasDuplicateAlias' : "./moduleExportAliasDuplicateAlias"
 
@@ -21,38 +20,29 @@
  exports.apply = undefined;
  >exports.apply = undefined : undefined
 ->exports.apply : any
-->exports : typeof import("moduleExportAliasDuplicateAlias")
-->apply : any
 +>exports.apply : undefined
-+>exports : typeof import("./moduleExportAliasDuplicateAlias")
+ >exports : typeof import("moduleExportAliasDuplicateAlias")
+->apply : any
 +>apply : undefined
  >undefined : undefined
 
  function a() { }
-@@= skipped -23, +23 lines =@@
- exports.apply()
- >exports.apply() : any
- >exports.apply : undefined
-->exports : typeof import("moduleExportAliasDuplicateAlias")
-+>exports : typeof import("./moduleExportAliasDuplicateAlias")
- >apply : undefined
+@@= skipped -28, +28 lines =@@
 
  exports.apply = a;
  >exports.apply = a : () => void
 ->exports.apply : any
-->exports : typeof import("moduleExportAliasDuplicateAlias")
-->apply : any
 +>exports.apply : undefined
-+>exports : typeof import("./moduleExportAliasDuplicateAlias")
+ >exports : typeof import("moduleExportAliasDuplicateAlias")
+->apply : any
 +>apply : undefined
  >a : () => void
 
  exports.apply()
 ->exports.apply() : void
 ->exports.apply : () => void
-->exports : typeof import("moduleExportAliasDuplicateAlias")
-->apply : () => void
 +>exports.apply() : any
 +>exports.apply : undefined
-+>exports : typeof import("./moduleExportAliasDuplicateAlias")
+ >exports : typeof import("moduleExportAliasDuplicateAlias")
+->apply : () => void
 +>apply : undefined

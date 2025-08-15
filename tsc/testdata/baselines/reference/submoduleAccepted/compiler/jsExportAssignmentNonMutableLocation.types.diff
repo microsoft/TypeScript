@@ -21,12 +21,11 @@
  exports.customSymbol2 = Symbol("custom");
 ->exports.customSymbol2 = Symbol("custom") : unique symbol
 ->exports.customSymbol2 : unique symbol
-->exports : typeof import("file")
-->customSymbol2 : unique symbol
-->Symbol("custom") : unique symbol
 +>exports.customSymbol2 = Symbol("custom") : symbol
 +>exports.customSymbol2 : any
-+>exports : typeof import("./file")
+ >exports : typeof import("file")
+->customSymbol2 : unique symbol
+->Symbol("custom") : unique symbol
 +>customSymbol2 : any
 +>Symbol("custom") : symbol
  >Symbol : SymbolConstructor

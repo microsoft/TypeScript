@@ -15,25 +15,25 @@ class A {
 	 * @param {object} [foo={}]
 	 */
 	m(foo = {}) {
->m : Symbol(m, Decl(a.js, 4, 9))
+>m : Symbol(A.m, Decl(a.js, 4, 9))
 >foo : Symbol(foo, Decl(a.js, 8, 3))
 
 		/**
 		 * @type object
 		 */
 		this.foo = foo;
->this.foo : Symbol(foo, Decl(a.js, 8, 14))
+>this.foo : Symbol(A.foo, Decl(a.js, 8, 14))
 >this : Symbol(A, Decl(a.js, 2, 1))
->foo : Symbol(foo, Decl(a.js, 8, 14))
+>foo : Symbol(A.foo, Decl(a.js, 8, 14))
 >foo : Symbol(foo, Decl(a.js, 8, 3))
 
 		/**
 		 * @type object
 		 */
 		this.bar = bar.arguments;
->this.bar : Symbol(bar, Decl(a.js, 12, 17))
+>this.bar : Symbol(A.bar, Decl(a.js, 12, 17))
 >this : Symbol(A, Decl(a.js, 2, 1))
->bar : Symbol(bar, Decl(a.js, 12, 17))
+>bar : Symbol(A.bar, Decl(a.js, 12, 17))
 >bar.arguments : Symbol(arguments, Decl(a.js, 0, 13))
 >bar : Symbol(bar, Decl(a.js, 0, 5))
 >arguments : Symbol(arguments, Decl(a.js, 0, 13))

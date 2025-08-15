@@ -9,7 +9,7 @@ function Multimap4() {
 
 Multimap4["prototype"] = {
 >Multimap4 : Symbol(Multimap4, Decl(a.js, 0, 0))
->"prototype" : Symbol("prototype", Decl(a.js, 2, 2))
+>"prototype" : Symbol(Multimap4["prototype"], Decl(a.js, 2, 2))
 
   /**
    * @param {string} key
@@ -26,15 +26,15 @@ Multimap4["prototype"] = {
 
 Multimap4["prototype"]["add-on"] = function() {};
 >Multimap4 : Symbol(Multimap4, Decl(a.js, 0, 0))
->"prototype" : Symbol("prototype", Decl(a.js, 2, 2))
+>"prototype" : Symbol(Multimap4["prototype"], Decl(a.js, 2, 2))
 
 Multimap4["prototype"]["addon"] = function() {};
 >Multimap4 : Symbol(Multimap4, Decl(a.js, 0, 0))
->"prototype" : Symbol("prototype", Decl(a.js, 2, 2))
+>"prototype" : Symbol(Multimap4["prototype"], Decl(a.js, 2, 2))
 
 Multimap4["prototype"]["__underscores__"] = function() {};
 >Multimap4 : Symbol(Multimap4, Decl(a.js, 0, 0))
->"prototype" : Symbol("prototype", Decl(a.js, 2, 2))
+>"prototype" : Symbol(Multimap4["prototype"], Decl(a.js, 2, 2))
 
 const map4 = new Multimap4();
 >map4 : Symbol(map4, Decl(a.js, 18, 5))

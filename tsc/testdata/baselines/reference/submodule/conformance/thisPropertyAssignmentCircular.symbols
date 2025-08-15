@@ -6,30 +6,30 @@ export class Foo {
 
     constructor() {
         this.foo = "Hello";
->this.foo : Symbol(foo, Decl(thisPropertyAssignmentCircular.js, 1, 19), Decl(thisPropertyAssignmentCircular.js, 4, 14))
+>this.foo : Symbol(Foo.foo, Decl(thisPropertyAssignmentCircular.js, 1, 19), Decl(thisPropertyAssignmentCircular.js, 4, 14))
 >this : Symbol(Foo, Decl(thisPropertyAssignmentCircular.js, 0, 0))
->foo : Symbol(foo, Decl(thisPropertyAssignmentCircular.js, 1, 19), Decl(thisPropertyAssignmentCircular.js, 4, 14))
+>foo : Symbol(Foo.foo, Decl(thisPropertyAssignmentCircular.js, 1, 19), Decl(thisPropertyAssignmentCircular.js, 4, 14))
     }
     slicey() {
->slicey : Symbol(slicey, Decl(thisPropertyAssignmentCircular.js, 3, 5))
+>slicey : Symbol(Foo.slicey, Decl(thisPropertyAssignmentCircular.js, 3, 5))
 
         this.foo = this.foo.slice();
->this.foo : Symbol(foo, Decl(thisPropertyAssignmentCircular.js, 1, 19), Decl(thisPropertyAssignmentCircular.js, 4, 14))
+>this.foo : Symbol(Foo.foo, Decl(thisPropertyAssignmentCircular.js, 1, 19), Decl(thisPropertyAssignmentCircular.js, 4, 14))
 >this : Symbol(Foo, Decl(thisPropertyAssignmentCircular.js, 0, 0))
->foo : Symbol(foo, Decl(thisPropertyAssignmentCircular.js, 1, 19), Decl(thisPropertyAssignmentCircular.js, 4, 14))
->this.foo.slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
->this.foo : Symbol(foo, Decl(thisPropertyAssignmentCircular.js, 1, 19), Decl(thisPropertyAssignmentCircular.js, 4, 14))
+>foo : Symbol(Foo.foo, Decl(thisPropertyAssignmentCircular.js, 1, 19), Decl(thisPropertyAssignmentCircular.js, 4, 14))
+>this.foo.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+>this.foo : Symbol(Foo.foo, Decl(thisPropertyAssignmentCircular.js, 1, 19), Decl(thisPropertyAssignmentCircular.js, 4, 14))
 >this : Symbol(Foo, Decl(thisPropertyAssignmentCircular.js, 0, 0))
->foo : Symbol(foo, Decl(thisPropertyAssignmentCircular.js, 1, 19), Decl(thisPropertyAssignmentCircular.js, 4, 14))
->slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(Foo.foo, Decl(thisPropertyAssignmentCircular.js, 1, 19), Decl(thisPropertyAssignmentCircular.js, 4, 14))
+>slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
     }
     m() {
->m : Symbol(m, Decl(thisPropertyAssignmentCircular.js, 6, 5))
+>m : Symbol(Foo.m, Decl(thisPropertyAssignmentCircular.js, 6, 5))
 
         this.foo
->this.foo : Symbol(foo, Decl(thisPropertyAssignmentCircular.js, 1, 19), Decl(thisPropertyAssignmentCircular.js, 4, 14))
+>this.foo : Symbol(Foo.foo, Decl(thisPropertyAssignmentCircular.js, 1, 19), Decl(thisPropertyAssignmentCircular.js, 4, 14))
 >this : Symbol(Foo, Decl(thisPropertyAssignmentCircular.js, 0, 0))
->foo : Symbol(foo, Decl(thisPropertyAssignmentCircular.js, 1, 19), Decl(thisPropertyAssignmentCircular.js, 4, 14))
+>foo : Symbol(Foo.foo, Decl(thisPropertyAssignmentCircular.js, 1, 19), Decl(thisPropertyAssignmentCircular.js, 4, 14))
     }
 }
 

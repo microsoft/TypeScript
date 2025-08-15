@@ -8,14 +8,14 @@ function foo(x?: object) {
 >x : Symbol(x, Decl(objectSubtypeReduction.ts, 2, 13))
 
     return Object.entries(x || {})
->Object.entries(x || {})        .sort : Symbol(sort, Decl(lib.es5.d.ts, --, --))
->Object.entries : Symbol(entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object.entries(x || {})        .sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
+>Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->entries : Symbol(entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
 >x : Symbol(x, Decl(objectSubtypeReduction.ts, 2, 13))
 
         .sort(([k1, v1], [k2, v2]) => v1.name.localeCompare(v2.name));
->sort : Symbol(sort, Decl(lib.es5.d.ts, --, --))
+>sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
 >k1 : Symbol(k1, Decl(objectSubtypeReduction.ts, 4, 16))
 >v1 : Symbol(v1, Decl(objectSubtypeReduction.ts, 4, 19))
 >k2 : Symbol(k2, Decl(objectSubtypeReduction.ts, 4, 26))

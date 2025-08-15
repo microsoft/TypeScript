@@ -18,19 +18,19 @@ export declare const f: (foo: Foo) => boolean;
 
 === projC/index.d.ts ===
 export declare const e: {
->e : { f: (foo: import("../projA").Foo) => boolean; }
+>e : { f: (foo: import("projA/index").Foo) => boolean; }
 
     f: (foo: import("../projA").Foo) => boolean;
->f : (foo: import("../projA").Foo) => boolean
->foo : import("../projA").Foo
+>f : (foo: import("projA/index").Foo) => boolean
+>foo : import("projA/index").Foo
 
 };
 === projD/index.ts ===
 import {e} from "../projC";
->e : { f: (foo: import("../projA").Foo) => boolean; }
+>e : { f: (foo: import("projA/index").Foo) => boolean; }
 
 export const d = {e};
->d : { e: { f: (foo: import("../projA").Foo) => boolean; }; }
->{e} : { e: { f: (foo: import("../projA").Foo) => boolean; }; }
->e : { f: (foo: import("../projA").Foo) => boolean; }
+>d : { e: { f: (foo: import("projA/index").Foo) => boolean; }; }
+>{e} : { e: { f: (foo: import("projA/index").Foo) => boolean; }; }
+>e : { f: (foo: import("projA/index").Foo) => boolean; }
 

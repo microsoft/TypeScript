@@ -24,7 +24,7 @@ export default class Foo {
 >Foo : Symbol(Foo, Decl(index3.js, 0, 0))
 
     a = /** @type {Foo} */(null);
->a : Symbol(a, Decl(index3.js, 0, 26))
+>a : Symbol(Foo.a, Decl(index3.js, 0, 26))
 
 };
 export const X = Foo;
@@ -44,7 +44,7 @@ class Bar extends Fab {
 >Fab : Symbol(Fab, Decl(index4.js, 0, 6))
 
     x = /** @type {Bar} */(null);
->x : Symbol(x, Decl(index4.js, 1, 23))
+>x : Symbol(Bar.x, Decl(index4.js, 1, 23))
 }
 export default Bar;
 >Bar : Symbol(Bar, Decl(index4.js, 0, 27))

@@ -27,9 +27,9 @@ function f1(s: Set<string> | Set<number>) {
 >s : Symbol(s, Decl(controlFlowInstanceof.ts, 2, 12))
 
     s.add(42);
->s.add : Symbol(add, Decl(lib.es2015.collection.d.ts, --, --))
+>s.add : Symbol(Set.add, Decl(lib.es2015.collection.d.ts, --, --))
 >s : Symbol(s, Decl(controlFlowInstanceof.ts, 2, 12))
->add : Symbol(add, Decl(lib.es2015.collection.d.ts, --, --))
+>add : Symbol(Set.add, Decl(lib.es2015.collection.d.ts, --, --))
 }
 
 function f2(s: Set<string> | Set<number>) {
@@ -56,9 +56,9 @@ function f2(s: Set<string> | Set<number>) {
 >s : Symbol(s, Decl(controlFlowInstanceof.ts, 12, 12))
 
     s.add(42);
->s.add : Symbol(add, Decl(lib.es2015.collection.d.ts, --, --))
+>s.add : Symbol(Set.add, Decl(lib.es2015.collection.d.ts, --, --))
 >s : Symbol(s, Decl(controlFlowInstanceof.ts, 12, 12))
->add : Symbol(add, Decl(lib.es2015.collection.d.ts, --, --))
+>add : Symbol(Set.add, Decl(lib.es2015.collection.d.ts, --, --))
 }
 
 function f3(s: Set<string> | Set<number>) {
@@ -113,17 +113,17 @@ function f4(s: Set<string> | Set<number>) {
 
 class A { a: string }
 >A : Symbol(A, Decl(controlFlowInstanceof.ts, 41, 1))
->a : Symbol(a, Decl(controlFlowInstanceof.ts, 45, 9))
+>a : Symbol(A.a, Decl(controlFlowInstanceof.ts, 45, 9))
 
 class B extends A { b: string }
 >B : Symbol(B, Decl(controlFlowInstanceof.ts, 45, 21))
 >A : Symbol(A, Decl(controlFlowInstanceof.ts, 41, 1))
->b : Symbol(b, Decl(controlFlowInstanceof.ts, 46, 19))
+>b : Symbol(B.b, Decl(controlFlowInstanceof.ts, 46, 19))
 
 class C extends A { c: string }
 >C : Symbol(C, Decl(controlFlowInstanceof.ts, 46, 31))
 >A : Symbol(A, Decl(controlFlowInstanceof.ts, 41, 1))
->c : Symbol(c, Decl(controlFlowInstanceof.ts, 47, 19))
+>c : Symbol(C.c, Decl(controlFlowInstanceof.ts, 47, 19))
 
 function foo(x: A | undefined) {
 >foo : Symbol(foo, Decl(controlFlowInstanceof.ts, 47, 31))
@@ -201,14 +201,14 @@ interface X {
 >X : Symbol(X, Decl(controlFlowInstanceof.ts, 77, 1))
 
     x?: string;
->x : Symbol(x, Decl(controlFlowInstanceof.ts, 82, 13))
+>x : Symbol(X.x, Decl(controlFlowInstanceof.ts, 82, 13))
 }
 
 class Y {
 >Y : Symbol(Y, Decl(controlFlowInstanceof.ts, 84, 1))
 
     y: string;
->y : Symbol(y, Decl(controlFlowInstanceof.ts, 86, 9))
+>y : Symbol(Y.y, Decl(controlFlowInstanceof.ts, 86, 9))
 }
 
 function goo(x: X) {
@@ -224,9 +224,9 @@ function goo(x: X) {
 >Y : Symbol(Y, Decl(controlFlowInstanceof.ts, 84, 1))
 
         x.y;
->x.y : Symbol(y, Decl(controlFlowInstanceof.ts, 86, 9))
+>x.y : Symbol(Y.y, Decl(controlFlowInstanceof.ts, 86, 9))
 >x : Symbol(x, Decl(controlFlowInstanceof.ts, 90, 13))
->y : Symbol(y, Decl(controlFlowInstanceof.ts, 86, 9))
+>y : Symbol(Y.y, Decl(controlFlowInstanceof.ts, 86, 9))
     }
     x;
 >x : Symbol(x, Decl(controlFlowInstanceof.ts, 90, 13))

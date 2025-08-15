@@ -6,5 +6,5 @@ class C {
 
    constructor();
    foo() { }
->foo : Symbol(foo, Decl(ClassDeclaration11.ts, 1, 17))
+>foo : Symbol(C.foo, Decl(ClassDeclaration11.ts, 1, 17))
 }

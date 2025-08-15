@@ -19,7 +19,7 @@ export module c {
     import b = a.foo;
 >b : Symbol(b, Decl(internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts, 6, 17))
 >a : Symbol(a, Decl(internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts, 0, 0))
->foo : Symbol(foo, Decl(internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts, 0, 17))
+>foo : Symbol(b, Decl(internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts, 0, 17))
 
     var bVal = b(10);
 >bVal : Symbol(bVal, Decl(internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts, 8, 7))

@@ -33,7 +33,7 @@ class Foo { } // should error
 exports.Bar = class { }
 >exports.Bar = class { } : typeof Bar
 >exports.Bar : any
->exports : typeof import("./mod1")
+>exports : typeof import("mod1")
 >Bar : any
 >class { } : typeof Bar
 
@@ -61,7 +61,7 @@ var Qux = 2;
 exports.Quid = 2;
 >exports.Quid = 2 : 2
 >exports.Quid : any
->exports : typeof import("./mod1")
+>exports : typeof import("mod1")
 >Quid : any
 >2 : 2
 

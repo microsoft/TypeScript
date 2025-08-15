@@ -7,11 +7,11 @@ interface Element {
 >Element : Symbol(Element, Decl(divergentAccessorsTypes6.ts, 0, 10))
 
     get style(): CSSStyleDeclaration;
->style : Symbol(style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
+>style : Symbol(Element.style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
 >CSSStyleDeclaration : Symbol(CSSStyleDeclaration, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 
     set style(cssText: string);
->style : Symbol(style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
+>style : Symbol(Element.style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
 >cssText : Symbol(cssText, Decl(divergentAccessorsTypes6.ts, 4, 14))
 }
 
@@ -20,24 +20,24 @@ declare const element: Element;
 >Element : Symbol(Element, Decl(divergentAccessorsTypes6.ts, 0, 10))
 
 element.style = "color: red";
->element.style : Symbol(style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
+>element.style : Symbol(Element.style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
 >element : Symbol(element, Decl(divergentAccessorsTypes6.ts, 7, 13))
->style : Symbol(style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
+>style : Symbol(Element.style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
 
 element.style.animationTimingFunction;
->element.style.animationTimingFunction : Symbol(animationTimingFunction, Decl(lib.dom.d.ts, --, --))
->element.style : Symbol(style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
+>element.style.animationTimingFunction : Symbol(CSSStyleDeclaration.animationTimingFunction, Decl(lib.dom.d.ts, --, --))
+>element.style : Symbol(Element.style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
 >element : Symbol(element, Decl(divergentAccessorsTypes6.ts, 7, 13))
->style : Symbol(style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
->animationTimingFunction : Symbol(animationTimingFunction, Decl(lib.dom.d.ts, --, --))
+>style : Symbol(Element.style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
+>animationTimingFunction : Symbol(CSSStyleDeclaration.animationTimingFunction, Decl(lib.dom.d.ts, --, --))
 
 element.style = element.style; // error
->element.style : Symbol(style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
+>element.style : Symbol(Element.style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
 >element : Symbol(element, Decl(divergentAccessorsTypes6.ts, 7, 13))
->style : Symbol(style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
->element.style : Symbol(style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
+>style : Symbol(Element.style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
+>element.style : Symbol(Element.style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
 >element : Symbol(element, Decl(divergentAccessorsTypes6.ts, 7, 13))
->style : Symbol(style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
+>style : Symbol(Element.style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
 
 // Now that we don't check for getter/setter assignability, we should
 // ensure the setter annotation is actually checked even if it's never observed.
@@ -51,10 +51,10 @@ interface I1 {
 >I1 : Symbol(I1, Decl(divergentAccessorsTypes6.ts, 15, 31))
 
     get x(): number;
->x : Symbol(x, Decl(divergentAccessorsTypes6.ts, 16, 14), Decl(divergentAccessorsTypes6.ts, 17, 20))
+>x : Symbol(I1.x, Decl(divergentAccessorsTypes6.ts, 16, 14), Decl(divergentAccessorsTypes6.ts, 17, 20))
 
     set x(value: Fail<string>);
->x : Symbol(x, Decl(divergentAccessorsTypes6.ts, 16, 14), Decl(divergentAccessorsTypes6.ts, 17, 20))
+>x : Symbol(I1.x, Decl(divergentAccessorsTypes6.ts, 16, 14), Decl(divergentAccessorsTypes6.ts, 17, 20))
 >value : Symbol(value, Decl(divergentAccessorsTypes6.ts, 18, 10))
 >Fail : Symbol(Fail, Decl(divergentAccessorsTypes6.ts, 10, 30))
 }

@@ -10,10 +10,10 @@ class Conn {
 
     constructor() {}
     item = 3;
->item : Symbol(item, Decl(conn.js, 5, 20))
+>item : Symbol(Conn.item, Decl(conn.js, 5, 20))
 
     method() {}
->method : Symbol(method, Decl(conn.js, 6, 13))
+>method : Symbol(Conn.method, Decl(conn.js, 6, 13))
 }
 
 module.exports = Conn;
@@ -37,18 +37,18 @@ class Wrap {
 >c : Symbol(c, Decl(usage.js, 8, 16))
 
         this.connItem = c.item;
->this.connItem : Symbol(connItem, Decl(usage.js, 8, 20))
+>this.connItem : Symbol(Wrap.connItem, Decl(usage.js, 8, 20))
 >this : Symbol(Wrap, Decl(usage.js, 0, 0))
->connItem : Symbol(connItem, Decl(usage.js, 8, 20))
->c.item : Symbol(item, Decl(conn.js, 5, 20))
+>connItem : Symbol(Wrap.connItem, Decl(usage.js, 8, 20))
+>c.item : Symbol(Conn.item, Decl(conn.js, 5, 20))
 >c : Symbol(c, Decl(usage.js, 8, 16))
->item : Symbol(item, Decl(conn.js, 5, 20))
+>item : Symbol(Conn.item, Decl(conn.js, 5, 20))
 
         /** @type {import("./conn").Whatever} */
         this.another = "";
->this.another : Symbol(another, Decl(usage.js, 9, 31))
+>this.another : Symbol(Wrap.another, Decl(usage.js, 9, 31))
 >this : Symbol(Wrap, Decl(usage.js, 0, 0))
->another : Symbol(another, Decl(usage.js, 9, 31))
+>another : Symbol(Wrap.another, Decl(usage.js, 9, 31))
     }
 }
 

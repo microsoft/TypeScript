@@ -8,15 +8,13 @@
 +>foo : Symbol(foo, Decl(file.js, 0, 0))
 
  foo.bar = 12;
-->foo.bar : Symbol(foo.bar, Decl(file.js, 0, 24))
+ >foo.bar : Symbol(foo.bar, Decl(file.js, 0, 24))
 ->foo : Symbol(foo, Decl(file.js, 0, 0), Decl(file.js, 0, 24), Decl(file.js, 2, 26), Decl(file.js, 4, 28), Decl(file.js, 6, 36) ... and 1 more)
-->bar : Symbol(foo.bar, Decl(file.js, 0, 24))
-+>foo.bar : Symbol(bar, Decl(file.js, 0, 24))
 +>foo : Symbol(foo, Decl(file.js, 0, 0))
-+>bar : Symbol(bar, Decl(file.js, 0, 24))
+ >bar : Symbol(foo.bar, Decl(file.js, 0, 24))
 
  const _private = Symbol();
- >_private : Symbol(_private, Decl(file.js, 2, 5))
+@@= skipped -12, +12 lines =@@
  >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
  foo[_private] = "ok";

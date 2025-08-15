@@ -19,10 +19,10 @@ class Foo {
 
     }
     bar1() {  /*WScript.Echo("bar1");*/ }
->bar1 : Symbol(bar1, Decl(constructorOverloads1.ts, 8, 5))
+>bar1 : Symbol(Foo.bar1, Decl(constructorOverloads1.ts, 8, 5))
 
     bar2() {  /*WScript.Echo("bar1");*/ }
->bar2 : Symbol(bar2, Decl(constructorOverloads1.ts, 9, 41))
+>bar2 : Symbol(Foo.bar2, Decl(constructorOverloads1.ts, 9, 41))
 }
 
 var f1 = new Foo("hey");
@@ -46,12 +46,12 @@ var f4 = new Foo([f1,f2,f3]);
 >f3 : Symbol(f3, Decl(constructorOverloads1.ts, 15, 3))
 
 f1.bar1();
->f1.bar1 : Symbol(bar1, Decl(constructorOverloads1.ts, 8, 5))
+>f1.bar1 : Symbol(Foo.bar1, Decl(constructorOverloads1.ts, 8, 5))
 >f1 : Symbol(f1, Decl(constructorOverloads1.ts, 13, 3))
->bar1 : Symbol(bar1, Decl(constructorOverloads1.ts, 8, 5))
+>bar1 : Symbol(Foo.bar1, Decl(constructorOverloads1.ts, 8, 5))
 
 f1.bar2();
->f1.bar2 : Symbol(bar2, Decl(constructorOverloads1.ts, 9, 41))
+>f1.bar2 : Symbol(Foo.bar2, Decl(constructorOverloads1.ts, 9, 41))
 >f1 : Symbol(f1, Decl(constructorOverloads1.ts, 13, 3))
->bar2 : Symbol(bar2, Decl(constructorOverloads1.ts, 9, 41))
+>bar2 : Symbol(Foo.bar2, Decl(constructorOverloads1.ts, 9, 41))
 

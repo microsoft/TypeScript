@@ -8,14 +8,8 @@
 +>Point : Symbol(Point, Decl(declarationEmitExpandoWithGenericConstraint.ts, 0, 0), Decl(declarationEmitExpandoWithGenericConstraint.ts, 10, 12))
 
      readonly x: number;
-->x : Symbol(Point.x, Decl(declarationEmitExpandoWithGenericConstraint.ts, 0, 24))
-+>x : Symbol(x, Decl(declarationEmitExpandoWithGenericConstraint.ts, 0, 24))
-
-     readonly y: number;
-->y : Symbol(Point.y, Decl(declarationEmitExpandoWithGenericConstraint.ts, 1, 23))
-+>y : Symbol(y, Decl(declarationEmitExpandoWithGenericConstraint.ts, 1, 23))
- }
-
+ >x : Symbol(Point.x, Decl(declarationEmitExpandoWithGenericConstraint.ts, 0, 24))
+@@= skipped -12, +12 lines =@@
  export interface Rect<p extends Point> {
  >Rect : Symbol(Rect, Decl(declarationEmitExpandoWithGenericConstraint.ts, 3, 1), Decl(declarationEmitExpandoWithGenericConstraint.ts, 11, 12))
  >p : Symbol(p, Decl(declarationEmitExpandoWithGenericConstraint.ts, 5, 22))
@@ -23,14 +17,8 @@
 +>Point : Symbol(Point, Decl(declarationEmitExpandoWithGenericConstraint.ts, 0, 0), Decl(declarationEmitExpandoWithGenericConstraint.ts, 10, 12))
 
      readonly a: p;
-->a : Symbol(Rect.a, Decl(declarationEmitExpandoWithGenericConstraint.ts, 5, 40))
-+>a : Symbol(a, Decl(declarationEmitExpandoWithGenericConstraint.ts, 5, 40))
- >p : Symbol(p, Decl(declarationEmitExpandoWithGenericConstraint.ts, 5, 22))
-
-     readonly b: p;
-->b : Symbol(Rect.b, Decl(declarationEmitExpandoWithGenericConstraint.ts, 6, 18))
-+>b : Symbol(b, Decl(declarationEmitExpandoWithGenericConstraint.ts, 6, 18))
- >p : Symbol(p, Decl(declarationEmitExpandoWithGenericConstraint.ts, 5, 22))
+ >a : Symbol(Rect.a, Decl(declarationEmitExpandoWithGenericConstraint.ts, 5, 40))
+@@= skipped -12, +12 lines =@@
  }
 
  export const Point = (x: number, y: number): Point => ({ x, y });
@@ -51,17 +39,14 @@
  >a : Symbol(a, Decl(declarationEmitExpandoWithGenericConstraint.ts, 11, 38))
  >p : Symbol(p, Decl(declarationEmitExpandoWithGenericConstraint.ts, 11, 21))
  >b : Symbol(b, Decl(declarationEmitExpandoWithGenericConstraint.ts, 11, 43))
-@@= skipped -45, +45 lines =@@
- >b : Symbol(b, Decl(declarationEmitExpandoWithGenericConstraint.ts, 11, 67))
+@@= skipped -22, +22 lines =@@
 
  Point.zero = (): Point => Point(0, 0);
-->Point.zero : Symbol(Point.zero, Decl(declarationEmitExpandoWithGenericConstraint.ts, 11, 73))
+ >Point.zero : Symbol(Point.zero, Decl(declarationEmitExpandoWithGenericConstraint.ts, 11, 73))
 ->Point : Symbol(Point, Decl(declarationEmitExpandoWithGenericConstraint.ts, 0, 0), Decl(declarationEmitExpandoWithGenericConstraint.ts, 10, 12), Decl(declarationEmitExpandoWithGenericConstraint.ts, 11, 73))
-->zero : Symbol(Point.zero, Decl(declarationEmitExpandoWithGenericConstraint.ts, 11, 73))
-->Point : Symbol(Point, Decl(declarationEmitExpandoWithGenericConstraint.ts, 0, 0), Decl(declarationEmitExpandoWithGenericConstraint.ts, 10, 12), Decl(declarationEmitExpandoWithGenericConstraint.ts, 11, 73))
-->Point : Symbol(Point, Decl(declarationEmitExpandoWithGenericConstraint.ts, 0, 0), Decl(declarationEmitExpandoWithGenericConstraint.ts, 10, 12), Decl(declarationEmitExpandoWithGenericConstraint.ts, 11, 73))
-+>Point.zero : Symbol(zero, Decl(declarationEmitExpandoWithGenericConstraint.ts, 11, 73))
 +>Point : Symbol(Point, Decl(declarationEmitExpandoWithGenericConstraint.ts, 0, 0), Decl(declarationEmitExpandoWithGenericConstraint.ts, 10, 12))
-+>zero : Symbol(zero, Decl(declarationEmitExpandoWithGenericConstraint.ts, 11, 73))
+ >zero : Symbol(Point.zero, Decl(declarationEmitExpandoWithGenericConstraint.ts, 11, 73))
+->Point : Symbol(Point, Decl(declarationEmitExpandoWithGenericConstraint.ts, 0, 0), Decl(declarationEmitExpandoWithGenericConstraint.ts, 10, 12), Decl(declarationEmitExpandoWithGenericConstraint.ts, 11, 73))
+->Point : Symbol(Point, Decl(declarationEmitExpandoWithGenericConstraint.ts, 0, 0), Decl(declarationEmitExpandoWithGenericConstraint.ts, 10, 12), Decl(declarationEmitExpandoWithGenericConstraint.ts, 11, 73))
 +>Point : Symbol(Point, Decl(declarationEmitExpandoWithGenericConstraint.ts, 0, 0), Decl(declarationEmitExpandoWithGenericConstraint.ts, 10, 12))
 +>Point : Symbol(Point, Decl(declarationEmitExpandoWithGenericConstraint.ts, 0, 0), Decl(declarationEmitExpandoWithGenericConstraint.ts, 10, 12))

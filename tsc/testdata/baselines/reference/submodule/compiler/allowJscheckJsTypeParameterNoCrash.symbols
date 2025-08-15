@@ -6,7 +6,7 @@ interface ComponentOptions<V> {
 >V : Symbol(V, Decl(func.ts, 0, 27))
 
     watch: Record<string, WatchHandler<any>>;
->watch : Symbol(watch, Decl(func.ts, 0, 31))
+>watch : Symbol(ComponentOptions.watch, Decl(func.ts, 0, 31))
 >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
 >WatchHandler : Symbol(WatchHandler, Decl(func.ts, 2, 1))
 }

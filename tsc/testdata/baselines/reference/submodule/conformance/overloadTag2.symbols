@@ -5,10 +5,10 @@ export class Foo {
 >Foo : Symbol(Foo, Decl(overloadTag2.js, 0, 0))
 
     #a = true ? 1 : "1"
->#a : Symbol(#a, Decl(overloadTag2.js, 0, 18))
+>#a : Symbol(Foo.#a, Decl(overloadTag2.js, 0, 18))
 
     #b
->#b : Symbol(#b, Decl(overloadTag2.js, 1, 23))
+>#b : Symbol(Foo.#b, Decl(overloadTag2.js, 1, 23))
 
     /**
      * Should not have an implicit any error, because constructor's return type is always implicit
@@ -35,12 +35,12 @@ export class Foo {
 >b : Symbol(b, Decl(overloadTag2.js, 24, 18))
 
         this.#a = a
->this.#a : Symbol(#a, Decl(overloadTag2.js, 0, 18))
+>this.#a : Symbol(Foo.#a, Decl(overloadTag2.js, 0, 18))
 >this : Symbol(Foo, Decl(overloadTag2.js, 0, 0))
 >a : Symbol(a, Decl(overloadTag2.js, 24, 16))
 
         this.#b = b
->this.#b : Symbol(#b, Decl(overloadTag2.js, 1, 23))
+>this.#b : Symbol(Foo.#b, Decl(overloadTag2.js, 1, 23))
 >this : Symbol(Foo, Decl(overloadTag2.js, 0, 0))
 >b : Symbol(b, Decl(overloadTag2.js, 24, 18))
     }

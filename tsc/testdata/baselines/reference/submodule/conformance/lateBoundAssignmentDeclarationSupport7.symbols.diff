@@ -1,40 +1,15 @@
 --- old.lateBoundAssignmentDeclarationSupport7.symbols
 +++ new.lateBoundAssignmentDeclarationSupport7.symbols
-@@= skipped -3, +3 lines =@@
- const x = require("./lateBoundAssignmentDeclarationSupport7.js");
+@@= skipped -10, +10 lines =@@
+ >x.F : Symbol(x.F, Decl(lateBoundAssignmentDeclarationSupport7.js, 6, 15))
  >x : Symbol(x, Decl(usage.js, 0, 5))
- >require : Symbol(require)
-->"./lateBoundAssignmentDeclarationSupport7.js" : Symbol(x, Decl(lateBoundAssignmentDeclarationSupport7.js, 0, 0))
-+>"./lateBoundAssignmentDeclarationSupport7.js" : Symbol("lateBoundAssignmentDeclarationSupport7", Decl(lateBoundAssignmentDeclarationSupport7.js, 0, 0))
-
- const y = x.F["my-fake-sym"];
- >y : Symbol(y, Decl(usage.js, 1, 5))
-->x.F : Symbol(x.F, Decl(lateBoundAssignmentDeclarationSupport7.js, 6, 15))
-+>x.F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport7.js, 6, 15))
- >x : Symbol(x, Decl(usage.js, 0, 5))
-->F : Symbol(x.F, Decl(lateBoundAssignmentDeclarationSupport7.js, 6, 15))
+ >F : Symbol(x.F, Decl(lateBoundAssignmentDeclarationSupport7.js, 6, 15))
 ->"my-fake-sym" : Symbol(x.F.F[_str], Decl(lateBoundAssignmentDeclarationSupport7.js, 5, 15))
-+>F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport7.js, 6, 15))
-+>"my-fake-sym" : Symbol(F[_str], Decl(lateBoundAssignmentDeclarationSupport7.js, 5, 15))
++>"my-fake-sym" : Symbol(F[F[_str]], Decl(lateBoundAssignmentDeclarationSupport7.js, 5, 15))
 
  const z = x.F[x.S];
  >z : Symbol(z, Decl(usage.js, 2, 5))
-->x.F : Symbol(x.F, Decl(lateBoundAssignmentDeclarationSupport7.js, 6, 15))
-->x : Symbol(x, Decl(usage.js, 0, 5))
-->F : Symbol(x.F, Decl(lateBoundAssignmentDeclarationSupport7.js, 6, 15))
-->x.S : Symbol(x.S, Decl(lateBoundAssignmentDeclarationSupport7.js, 7, 21))
-->x : Symbol(x, Decl(usage.js, 0, 5))
-->S : Symbol(x.S, Decl(lateBoundAssignmentDeclarationSupport7.js, 7, 21))
-+>x.F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport7.js, 6, 15))
-+>x : Symbol(x, Decl(usage.js, 0, 5))
-+>F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport7.js, 6, 15))
-+>x.S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport7.js, 7, 21))
-+>x : Symbol(x, Decl(usage.js, 0, 5))
-+>S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport7.js, 7, 21))
-
- === lateBoundAssignmentDeclarationSupport7.js ===
- const _sym = Symbol();
-@@= skipped -27, +27 lines =@@
+@@= skipped -20, +20 lines =@@
  >_str : Symbol(_str, Decl(lateBoundAssignmentDeclarationSupport7.js, 1, 5))
 
  function F() {

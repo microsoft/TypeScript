@@ -112,13 +112,13 @@ foo("hello", "world");
 
 enum E { a, b }
 >E : Symbol(E, Decl(destructuringParameterDeclaration3ES6.ts, 35, 22))
->a : Symbol(a, Decl(destructuringParameterDeclaration3ES6.ts, 37, 8))
->b : Symbol(b, Decl(destructuringParameterDeclaration3ES6.ts, 37, 11))
+>a : Symbol(E.a, Decl(destructuringParameterDeclaration3ES6.ts, 37, 8))
+>b : Symbol(E.b, Decl(destructuringParameterDeclaration3ES6.ts, 37, 11))
 
 const enum E1 { a, b }
 >E1 : Symbol(E1, Decl(destructuringParameterDeclaration3ES6.ts, 37, 15))
->a : Symbol(a, Decl(destructuringParameterDeclaration3ES6.ts, 38, 15))
->b : Symbol(b, Decl(destructuringParameterDeclaration3ES6.ts, 38, 18))
+>a : Symbol(E1.a, Decl(destructuringParameterDeclaration3ES6.ts, 38, 15))
+>b : Symbol(E1.b, Decl(destructuringParameterDeclaration3ES6.ts, 38, 18))
 
 function foo1<T extends Number>(...a: T[]) { }
 >foo1 : Symbol(foo1, Decl(destructuringParameterDeclaration3ES6.ts, 38, 22))
@@ -129,18 +129,18 @@ function foo1<T extends Number>(...a: T[]) { }
 
 foo1(1, 2, 3, E.a);
 >foo1 : Symbol(foo1, Decl(destructuringParameterDeclaration3ES6.ts, 38, 22))
->E.a : Symbol(a, Decl(destructuringParameterDeclaration3ES6.ts, 37, 8))
+>E.a : Symbol(E.a, Decl(destructuringParameterDeclaration3ES6.ts, 37, 8))
 >E : Symbol(E, Decl(destructuringParameterDeclaration3ES6.ts, 35, 22))
->a : Symbol(a, Decl(destructuringParameterDeclaration3ES6.ts, 37, 8))
+>a : Symbol(E.a, Decl(destructuringParameterDeclaration3ES6.ts, 37, 8))
 
 foo1(1, 2, 3, E1.a, E.b);
 >foo1 : Symbol(foo1, Decl(destructuringParameterDeclaration3ES6.ts, 38, 22))
->E1.a : Symbol(a, Decl(destructuringParameterDeclaration3ES6.ts, 38, 15))
+>E1.a : Symbol(E1.a, Decl(destructuringParameterDeclaration3ES6.ts, 38, 15))
 >E1 : Symbol(E1, Decl(destructuringParameterDeclaration3ES6.ts, 37, 15))
->a : Symbol(a, Decl(destructuringParameterDeclaration3ES6.ts, 38, 15))
->E.b : Symbol(b, Decl(destructuringParameterDeclaration3ES6.ts, 37, 11))
+>a : Symbol(E1.a, Decl(destructuringParameterDeclaration3ES6.ts, 38, 15))
+>E.b : Symbol(E.b, Decl(destructuringParameterDeclaration3ES6.ts, 37, 11))
 >E : Symbol(E, Decl(destructuringParameterDeclaration3ES6.ts, 35, 22))
->b : Symbol(b, Decl(destructuringParameterDeclaration3ES6.ts, 37, 11))
+>b : Symbol(E.b, Decl(destructuringParameterDeclaration3ES6.ts, 37, 11))
 
 
 

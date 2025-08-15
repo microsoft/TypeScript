@@ -5,10 +5,10 @@ interface Robot {
 >Robot : Symbol(Robot, Decl(sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.ts, 0, 0))
 
     name?: string;
->name : Symbol(name, Decl(sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.ts, 0, 17))
+>name : Symbol(Robot.name, Decl(sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.ts, 0, 17))
 
     skill?: string;
->skill : Symbol(skill, Decl(sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.ts, 1, 18))
+>skill : Symbol(Robot.skill, Decl(sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.ts, 1, 18))
 }
 declare var console: {
 >console : Symbol(console, Decl(sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.ts, 4, 11))
@@ -28,7 +28,7 @@ var robotA: Robot = { name: "mower", skill: "mowing" };
 
 function foo1({ name: nameA = "<NoName>" }: Robot = { }) {
 >foo1 : Symbol(foo1, Decl(sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.ts, 8, 55))
->name : Symbol(name, Decl(sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.ts, 0, 17))
+>name : Symbol(Robot.name, Decl(sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.ts, 0, 17))
 >nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.ts, 10, 15))
 >Robot : Symbol(Robot, Decl(sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.ts, 0, 0))
 
@@ -40,9 +40,9 @@ function foo1({ name: nameA = "<NoName>" }: Robot = { }) {
 }
 function foo2({ name: nameB = "<NoName>", skill: skillB = "noSkill" }: Robot = {}) {
 >foo2 : Symbol(foo2, Decl(sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.ts, 12, 1))
->name : Symbol(name, Decl(sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.ts, 0, 17))
+>name : Symbol(Robot.name, Decl(sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.ts, 0, 17))
 >nameB : Symbol(nameB, Decl(sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.ts, 13, 15))
->skill : Symbol(skill, Decl(sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.ts, 1, 18))
+>skill : Symbol(Robot.skill, Decl(sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.ts, 1, 18))
 >skillB : Symbol(skillB, Decl(sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.ts, 13, 41))
 >Robot : Symbol(Robot, Decl(sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.ts, 0, 0))
 

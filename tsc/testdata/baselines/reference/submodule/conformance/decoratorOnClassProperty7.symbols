@@ -13,5 +13,5 @@ class C {
 
     @dec prop;
 >dec : Symbol(dec, Decl(decoratorOnClassProperty7.ts, 0, 0))
->prop : Symbol(prop, Decl(decoratorOnClassProperty7.ts, 2, 9))
+>prop : Symbol(C.prop, Decl(decoratorOnClassProperty7.ts, 2, 9))
 }

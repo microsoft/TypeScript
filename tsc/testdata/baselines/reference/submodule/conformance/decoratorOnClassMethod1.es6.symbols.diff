@@ -1,9 +1,0 @@
---- old.decoratorOnClassMethod1.es6.symbols
-+++ new.decoratorOnClassMethod1.es6.symbols
-@@= skipped -14, +14 lines =@@
- export default class {
-     @dec method() {}
- >dec : Symbol(dec, Decl(decoratorOnClassMethod1.es6.ts, 0, 0))
-->method : Symbol(default.method, Decl(decoratorOnClassMethod1.es6.ts, 2, 22))
-+>method : Symbol(method, Decl(decoratorOnClassMethod1.es6.ts, 2, 22))
- }

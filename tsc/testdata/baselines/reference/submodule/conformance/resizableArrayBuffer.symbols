@@ -7,7 +7,7 @@ const buffer = new ArrayBuffer(8, { maxByteLength: 16 });
 >maxByteLength : Symbol(maxByteLength, Decl(resizableArrayBuffer.ts, 0, 35))
 
 buffer.resizable;
->buffer.resizable : Symbol(resizable, Decl(lib.es2024.arraybuffer.d.ts, --, --))
+>buffer.resizable : Symbol(ArrayBuffer.resizable, Decl(lib.es2024.arraybuffer.d.ts, --, --))
 >buffer : Symbol(buffer, Decl(resizableArrayBuffer.ts, 0, 5))
->resizable : Symbol(resizable, Decl(lib.es2024.arraybuffer.d.ts, --, --))
+>resizable : Symbol(ArrayBuffer.resizable, Decl(lib.es2024.arraybuffer.d.ts, --, --))
 

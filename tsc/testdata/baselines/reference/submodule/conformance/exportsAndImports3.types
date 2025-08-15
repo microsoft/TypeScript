@@ -75,16 +75,16 @@ export { v1 as v, f1 as f, C1 as C, I1 as I, E1 as E, D1 as D, M1 as M, N1 as N,
 >v : number
 >f1 : () => void
 >f : () => void
->C1 : typeof import("./t1").C
->C : typeof import("./t1").C
+>C1 : typeof import("t1").C
+>C : typeof import("t1").C
 >I1 : any
 >I : any
->E1 : typeof import("./t1").E
->E : typeof import("./t1").E
->D1 : typeof import("./t1").D
->D : typeof import("./t1").D
->M1 : typeof import("./t1").M
->M : typeof import("./t1").M
+>E1 : typeof import("t1").E
+>E : typeof import("t1").E
+>D1 : typeof import("t1").D
+>D : typeof import("t1").D
+>M1 : typeof import("t1").M
+>M : typeof import("t1").M
 >N1 : any
 >N : any
 >T1 : any

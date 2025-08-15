@@ -25,14 +25,14 @@ export interface Foo {
 >Foo : Symbol(Foo, Decl(other.d.ts, 0, 0))
 
     bar: number;
->bar : Symbol(bar, Decl(other.d.ts, 0, 22))
+>bar : Symbol(Foo.bar, Decl(other.d.ts, 0, 22))
 }
 
 export default interface Bar {
 >Bar : Symbol(Bar, Decl(other.d.ts, 2, 1))
 
     foo: number;
->foo : Symbol(foo, Decl(other.d.ts, 4, 30))
+>foo : Symbol(Bar.foo, Decl(other.d.ts, 4, 30))
 }
 
 === other.js ===
@@ -40,13 +40,13 @@ export class Foo {
 >Foo : Symbol(Foo, Decl(other.js, 0, 0))
 
     bar = 2.4;
->bar : Symbol(bar, Decl(other.js, 0, 18))
+>bar : Symbol(Foo.bar, Decl(other.js, 0, 18))
 }
 
 export default class Bar {
 >Bar : Symbol(Bar, Decl(other.js, 2, 1))
 
     foo = 1.2;
->foo : Symbol(foo, Decl(other.js, 4, 26))
+>foo : Symbol(Bar.foo, Decl(other.js, 4, 26))
 }
 

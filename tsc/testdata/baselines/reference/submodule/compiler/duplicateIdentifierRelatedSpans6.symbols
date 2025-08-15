@@ -10,13 +10,13 @@ declare module "someMod" {
 >TopLevel : Symbol(TopLevel, Decl(file2.ts, 2, 26))
 
         duplicate1(): number;
->duplicate1 : Symbol(duplicate1, Decl(file2.ts, 3, 31))
+>duplicate1 : Symbol(TopLevel.duplicate1, Decl(file2.ts, 3, 31))
 
         duplicate2(): number;
->duplicate2 : Symbol(duplicate2, Decl(file2.ts, 4, 29))
+>duplicate2 : Symbol(TopLevel.duplicate2, Decl(file2.ts, 4, 29))
 
         duplicate3(): number;
->duplicate3 : Symbol(duplicate3, Decl(file2.ts, 5, 29))
+>duplicate3 : Symbol(TopLevel.duplicate3, Decl(file2.ts, 5, 29))
     }
 }
 export {};

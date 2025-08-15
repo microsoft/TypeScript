@@ -5,11 +5,11 @@ class B {
 >B : Symbol(B, Decl(a.js, 0, 0))
 
     foo (v) {}
->foo : Symbol(foo, Decl(a.js, 0, 9))
+>foo : Symbol(B.foo, Decl(a.js, 0, 9))
 >v : Symbol(v, Decl(a.js, 1, 9))
 
     fooo (v) {}
->fooo : Symbol(fooo, Decl(a.js, 1, 14))
+>fooo : Symbol(B.fooo, Decl(a.js, 1, 14))
 >v : Symbol(v, Decl(a.js, 2, 10))
 }
 
@@ -18,17 +18,17 @@ class D extends B {
 >B : Symbol(B, Decl(a.js, 0, 0))
 
     foo (v) {}
->foo : Symbol(foo, Decl(a.js, 5, 19))
+>foo : Symbol(D.foo, Decl(a.js, 5, 19))
 >v : Symbol(v, Decl(a.js, 6, 9))
 
     /** @override */
     fooo (v) {}
->fooo : Symbol(fooo, Decl(a.js, 6, 14))
+>fooo : Symbol(D.fooo, Decl(a.js, 6, 14))
 >v : Symbol(v, Decl(a.js, 8, 10))
 
     /** @override */
     bar(v) {}
->bar : Symbol(bar, Decl(a.js, 8, 15))
+>bar : Symbol(D.bar, Decl(a.js, 8, 15))
 >v : Symbol(v, Decl(a.js, 10, 8))
 }
 
@@ -36,15 +36,15 @@ class C {
 >C : Symbol(C, Decl(a.js, 11, 1))
 
     foo () {}
->foo : Symbol(foo, Decl(a.js, 13, 9))
+>foo : Symbol(C.foo, Decl(a.js, 13, 9))
 
     /** @override */
     fooo (v) {}
->fooo : Symbol(fooo, Decl(a.js, 14, 13))
+>fooo : Symbol(C.fooo, Decl(a.js, 14, 13))
 >v : Symbol(v, Decl(a.js, 16, 10))
 
     /** @override */
     bar(v) {}
->bar : Symbol(bar, Decl(a.js, 16, 15))
+>bar : Symbol(C.bar, Decl(a.js, 16, 15))
 >v : Symbol(v, Decl(a.js, 18, 8))
 }

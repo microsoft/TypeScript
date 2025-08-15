@@ -13,17 +13,17 @@ export class C {
 >C : Symbol(C, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty7.ts, 2, 1))
 
     [Foo.key]: string;
->[Foo.key] : Symbol([Foo.key], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty7.ts, 4, 16))
->Foo.key : Symbol(key, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty7.ts, 1, 16))
+>[Foo.key] : Symbol(C[Foo.key], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty7.ts, 4, 16))
+>Foo.key : Symbol(Foo.key, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty7.ts, 1, 16))
 >Foo : Symbol(Foo, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty7.ts, 0, 0))
->key : Symbol(key, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty7.ts, 1, 16))
+>key : Symbol(Foo.key, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty7.ts, 1, 16))
 
     constructor() {
         this[Foo.key] = "hello";
 >this : Symbol(C, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty7.ts, 2, 1))
->Foo.key : Symbol(key, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty7.ts, 1, 16))
+>Foo.key : Symbol(Foo.key, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty7.ts, 1, 16))
 >Foo : Symbol(Foo, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty7.ts, 0, 0))
->key : Symbol(key, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty7.ts, 1, 16))
+>key : Symbol(Foo.key, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty7.ts, 1, 16))
     }
 }
 

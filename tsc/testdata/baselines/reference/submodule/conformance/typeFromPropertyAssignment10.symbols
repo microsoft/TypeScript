@@ -29,9 +29,9 @@ Outer.app.Inner = class {
     constructor() {
         /** @type {number} */
         this.y = 12;
->this.y : Symbol(y, Decl(someview.js, 7, 19))
+>this.y : Symbol(Inner.y, Decl(someview.js, 7, 19))
 >this : Symbol(Inner, Decl(someview.js, 6, 17))
->y : Symbol(y, Decl(someview.js, 7, 19))
+>y : Symbol(Inner.y, Decl(someview.js, 7, 19))
     }
 }
 var example = new Outer.app.Inner();

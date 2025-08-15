@@ -7,30 +7,30 @@ interface A1 {
 >A1 : Symbol(A1, Decl(partiallyDiscriminantedUnions.ts, 0, 0))
 
     type: 'a';
->type : Symbol(type, Decl(partiallyDiscriminantedUnions.ts, 2, 14))
+>type : Symbol(A1.type, Decl(partiallyDiscriminantedUnions.ts, 2, 14))
 
     subtype: 1;
->subtype : Symbol(subtype, Decl(partiallyDiscriminantedUnions.ts, 3, 14))
+>subtype : Symbol(A1.subtype, Decl(partiallyDiscriminantedUnions.ts, 3, 14))
 }
 
 interface A2 {
 >A2 : Symbol(A2, Decl(partiallyDiscriminantedUnions.ts, 5, 1))
 
     type: 'a';
->type : Symbol(type, Decl(partiallyDiscriminantedUnions.ts, 7, 14))
+>type : Symbol(A2.type, Decl(partiallyDiscriminantedUnions.ts, 7, 14))
 
     subtype: 2;
->subtype : Symbol(subtype, Decl(partiallyDiscriminantedUnions.ts, 8, 14))
+>subtype : Symbol(A2.subtype, Decl(partiallyDiscriminantedUnions.ts, 8, 14))
 
     foo: number;
->foo : Symbol(foo, Decl(partiallyDiscriminantedUnions.ts, 9, 15))
+>foo : Symbol(A2.foo, Decl(partiallyDiscriminantedUnions.ts, 9, 15))
 }
 
 interface B {
 >B : Symbol(B, Decl(partiallyDiscriminantedUnions.ts, 11, 1))
 
     type: 'b';
->type : Symbol(type, Decl(partiallyDiscriminantedUnions.ts, 13, 13))
+>type : Symbol(B.type, Decl(partiallyDiscriminantedUnions.ts, 13, 13))
 }
 
 type AB = A1 | A2 | B;
@@ -55,9 +55,9 @@ if (ab.type === 'a') {
 >subtype : Symbol(subtype, Decl(partiallyDiscriminantedUnions.ts, 3, 14), Decl(partiallyDiscriminantedUnions.ts, 8, 14))
 
         ab.foo;
->ab.foo : Symbol(foo, Decl(partiallyDiscriminantedUnions.ts, 9, 15))
+>ab.foo : Symbol(A2.foo, Decl(partiallyDiscriminantedUnions.ts, 9, 15))
 >ab : Symbol(ab, Decl(partiallyDiscriminantedUnions.ts, 19, 5))
->foo : Symbol(foo, Decl(partiallyDiscriminantedUnions.ts, 9, 15))
+>foo : Symbol(A2.foo, Decl(partiallyDiscriminantedUnions.ts, 9, 15))
     }
 }
 
@@ -65,11 +65,11 @@ if (ab.type === 'a') {
 
 class Square { kind: "square"; }
 >Square : Symbol(Square, Decl(partiallyDiscriminantedUnions.ts, 25, 1))
->kind : Symbol(kind, Decl(partiallyDiscriminantedUnions.ts, 29, 14))
+>kind : Symbol(Square.kind, Decl(partiallyDiscriminantedUnions.ts, 29, 14))
 
 class Circle { kind: "circle"; }
 >Circle : Symbol(Circle, Decl(partiallyDiscriminantedUnions.ts, 29, 32))
->kind : Symbol(kind, Decl(partiallyDiscriminantedUnions.ts, 30, 14))
+>kind : Symbol(Circle.kind, Decl(partiallyDiscriminantedUnions.ts, 30, 14))
 
 type Shape = Circle | Square;
 >Shape : Symbol(Shape, Decl(partiallyDiscriminantedUnions.ts, 30, 32))
@@ -90,9 +90,9 @@ function isShape(s : Shapes): s is Shape {
 >Shape : Symbol(Shape, Decl(partiallyDiscriminantedUnions.ts, 30, 32))
 
     return !Array.isArray(s);
->Array.isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
 >s : Symbol(s, Decl(partiallyDiscriminantedUnions.ts, 35, 17))
 }
 

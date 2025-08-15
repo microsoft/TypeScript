@@ -3,7 +3,7 @@
 === foo.ts ===
 /// <reference path="types.d.ts" />
 declare function foo(): any;
->foo : typeof import("./types")
+>foo : typeof import("types")
 
 === types.d.ts ===
 declare function foo(props: any): any;
@@ -14,5 +14,5 @@ export default foo;
 >foo : (props: any) => any
 
 export as namespace foo;
->foo : typeof import("./types")
+>foo : typeof import("types")
 

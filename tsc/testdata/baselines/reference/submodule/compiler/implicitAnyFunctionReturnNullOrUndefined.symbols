@@ -13,13 +13,13 @@ class C {
 >C : Symbol(C, Decl(implicitAnyFunctionReturnNullOrUndefined.ts, 2, 55))
 
     nullWidenFuncOfC() {  // error at "nullWidenFuncOfC"
->nullWidenFuncOfC : Symbol(nullWidenFuncOfC, Decl(implicitAnyFunctionReturnNullOrUndefined.ts, 4, 9))
+>nullWidenFuncOfC : Symbol(C.nullWidenFuncOfC, Decl(implicitAnyFunctionReturnNullOrUndefined.ts, 4, 9))
 
         return null;
     }
 
     underfinedWidenFuncOfC() {  // error at "underfinedWidenFuncOfC"
->underfinedWidenFuncOfC : Symbol(underfinedWidenFuncOfC, Decl(implicitAnyFunctionReturnNullOrUndefined.ts, 7, 5))
+>underfinedWidenFuncOfC : Symbol(C.underfinedWidenFuncOfC, Decl(implicitAnyFunctionReturnNullOrUndefined.ts, 7, 5))
 
         return undefined;
 >undefined : Symbol(undefined)

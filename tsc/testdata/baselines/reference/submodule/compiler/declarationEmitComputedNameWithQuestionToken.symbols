@@ -13,7 +13,7 @@ export class WithData {
 >WithData : Symbol(WithData, Decl(declarationEmitComputedNameWithQuestionToken.ts, 1, 58))
 
     [dataSomething]?() {
->[dataSomething] : Symbol([dataSomething], Decl(declarationEmitComputedNameWithQuestionToken.ts, 3, 23))
+>[dataSomething] : Symbol(WithData[dataSomething], Decl(declarationEmitComputedNameWithQuestionToken.ts, 3, 23))
 >dataSomething : Symbol(dataSomething, Decl(declarationEmitComputedNameWithQuestionToken.ts, 1, 12))
 
         return "something";

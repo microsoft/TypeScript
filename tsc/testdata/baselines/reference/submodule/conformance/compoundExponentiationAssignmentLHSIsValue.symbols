@@ -15,14 +15,14 @@ class C {
 >value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
     }
     foo() {
->foo : Symbol(foo, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 7, 5))
+>foo : Symbol(C.foo, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 7, 5))
 
         this **= value;
 >this : Symbol(C, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 15))
 >value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
     }
     static sfoo() {
->sfoo : Symbol(sfoo, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 10, 5))
+>sfoo : Symbol(C.sfoo, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 10, 5))
 
         this **= value;
 >this : Symbol(C, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 15))
@@ -107,7 +107,7 @@ class Derived extends C {
     }
 
     foo() {
->foo : Symbol(foo, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 52, 5))
+>foo : Symbol(Derived.foo, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 52, 5))
 
         super **= value;
 >super : Symbol(C, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 15))
@@ -115,7 +115,7 @@ class Derived extends C {
     }
 
     static sfoo() {
->sfoo : Symbol(sfoo, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 56, 5))
+>sfoo : Symbol(Derived.sfoo, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 56, 5))
 
         super **= value;
 >super : Symbol(C, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 15))

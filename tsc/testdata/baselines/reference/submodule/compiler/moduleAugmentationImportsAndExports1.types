@@ -30,7 +30,7 @@ A.prototype.foo = function () { return undefined; }
 >undefined : undefined
 
 declare module "./f1" {
->"./f1" : typeof import("./f1")
+>"./f1" : typeof import("f1")
 
     interface A {
         foo(): B;
@@ -50,9 +50,9 @@ let a: A;
 let b = a.foo().n;
 >b : number
 >a.foo().n : number
->a.foo() : import("./f2").B
->a.foo : () => import("./f2").B
+>a.foo() : import("f2").B
+>a.foo : () => import("f2").B
 >a : A
->foo : () => import("./f2").B
+>foo : () => import("f2").B
 >n : number
 

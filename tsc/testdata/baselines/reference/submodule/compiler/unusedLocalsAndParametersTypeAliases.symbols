@@ -9,7 +9,7 @@ export interface I1 {
 >I1 : Symbol(I1, Decl(unusedLocalsAndParametersTypeAliases.ts, 1, 27))
 
     getHandler: handler1;
->getHandler : Symbol(getHandler, Decl(unusedLocalsAndParametersTypeAliases.ts, 2, 21))
+>getHandler : Symbol(I1.getHandler, Decl(unusedLocalsAndParametersTypeAliases.ts, 2, 21))
 >handler1 : Symbol(handler1, Decl(unusedLocalsAndParametersTypeAliases.ts, 0, 0))
 }
 
@@ -27,7 +27,7 @@ export interface I3<T extends handler3> {
 >handler3 : Symbol(handler3, Decl(unusedLocalsAndParametersTypeAliases.ts, 7, 34))
 
     getHandler: T;
->getHandler : Symbol(getHandler, Decl(unusedLocalsAndParametersTypeAliases.ts, 11, 41))
+>getHandler : Symbol(I3.getHandler, Decl(unusedLocalsAndParametersTypeAliases.ts, 11, 41))
 >T : Symbol(T, Decl(unusedLocalsAndParametersTypeAliases.ts, 11, 20))
 }
 

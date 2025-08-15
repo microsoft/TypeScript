@@ -5,7 +5,7 @@ export default interface Foo {
 >Foo : Symbol(Foo, Decl(types.ts, 0, 0))
 
     a: number;
->a : Symbol(a, Decl(types.ts, 0, 30))
+>a : Symbol(Foo.a, Decl(types.ts, 0, 30))
 }
 
 === /foo.js ===

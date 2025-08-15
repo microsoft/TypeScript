@@ -8,12 +8,12 @@ function f() {
 >C : Symbol(C, Decl(modifierOnClassDeclarationMemberInFunction.ts, 0, 14))
 
         public baz = 1;
->baz : Symbol(baz, Decl(modifierOnClassDeclarationMemberInFunction.ts, 1, 13))
+>baz : Symbol(C.baz, Decl(modifierOnClassDeclarationMemberInFunction.ts, 1, 13))
 
         static foo() { }
->foo : Symbol(foo, Decl(modifierOnClassDeclarationMemberInFunction.ts, 2, 23))
+>foo : Symbol(C.foo, Decl(modifierOnClassDeclarationMemberInFunction.ts, 2, 23))
 
         public bar() { }
->bar : Symbol(bar, Decl(modifierOnClassDeclarationMemberInFunction.ts, 3, 24))
+>bar : Symbol(C.bar, Decl(modifierOnClassDeclarationMemberInFunction.ts, 3, 24))
     }
 }

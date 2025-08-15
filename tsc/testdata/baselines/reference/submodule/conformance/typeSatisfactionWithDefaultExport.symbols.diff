@@ -8,10 +8,7 @@
  interface Foo {
  >Foo : Symbol(Foo, Decl(a.ts, 0, 0))
 
-     a: number;
-->a : Symbol(Foo.a, Decl(a.ts, 0, 15))
-+>a : Symbol(a, Decl(a.ts, 0, 15))
- }
+@@= skipped -9, +9 lines =@@
  export default {} satisfies Foo;
  >Foo : Symbol(Foo, Decl(a.ts, 0, 0))
 
@@ -19,10 +16,3 @@
 +=== b.ts ===
  interface Foo {
  >Foo : Symbol(Foo, Decl(b.ts, 0, 0))
-
-     a: number;
-->a : Symbol(Foo.a, Decl(b.ts, 0, 15))
-+>a : Symbol(a, Decl(b.ts, 0, 15))
- }
- export default { a: 1 } satisfies Foo;
- >a : Symbol(a, Decl(b.ts, 3, 16))

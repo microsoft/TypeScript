@@ -5,7 +5,7 @@ class C {
 >C : Symbol(C, Decl(instanceofOperatorWithInvalidOperands.ts, 0, 0))
 
     foo() { }
->foo : Symbol(foo, Decl(instanceofOperatorWithInvalidOperands.ts, 0, 9))
+>foo : Symbol(C.foo, Decl(instanceofOperatorWithInvalidOperands.ts, 0, 9))
 }
 
 var x: any;

@@ -20,7 +20,7 @@ export const Ctor: CtorConstructor;
 
 === node_modules/mod/index.d.ts ===
 import { Ctor } from "./ctor";
->Ctor : import("./ctor").CtorConstructor
+>Ctor : import("node_modules/mod/ctor").CtorConstructor
 
 export default Ctor;
 >Ctor : Ctor
@@ -30,17 +30,17 @@ import * as ns from "mod";
 >ns : typeof ns
 
 const Ctor = ns.default;
->Ctor : import("mod").CtorConstructor
->ns.default : import("mod").CtorConstructor
+>Ctor : import("node_modules/mod/ctor").CtorConstructor
+>ns.default : import("node_modules/mod/ctor").CtorConstructor
 >ns : typeof ns
->default : import("mod").CtorConstructor
+>default : import("node_modules/mod/ctor").CtorConstructor
 
 export const MyComp = Ctor.extends({foo: "bar"});
->MyComp : import("mod").ExtendedCtor<import("mod").Ctor>
->Ctor.extends({foo: "bar"}) : import("mod").ExtendedCtor<import("mod").Ctor>
->Ctor.extends : <T>(x: T) => import("mod").ExtendedCtor<T extends unknown ? import("mod").Ctor : undefined>
->Ctor : import("mod").CtorConstructor
->extends : <T>(x: T) => import("mod").ExtendedCtor<T extends unknown ? import("mod").Ctor : undefined>
+>MyComp : import("node_modules/mod/ctor").ExtendedCtor<import("node_modules/mod/ctor").Ctor>
+>Ctor.extends({foo: "bar"}) : import("node_modules/mod/ctor").ExtendedCtor<import("node_modules/mod/ctor").Ctor>
+>Ctor.extends : <T>(x: T) => import("node_modules/mod/ctor").ExtendedCtor<T extends unknown ? import("node_modules/mod/ctor").Ctor : undefined>
+>Ctor : import("node_modules/mod/ctor").CtorConstructor
+>extends : <T>(x: T) => import("node_modules/mod/ctor").ExtendedCtor<T extends unknown ? import("node_modules/mod/ctor").Ctor : undefined>
 >{foo: "bar"} : { foo: string; }
 >foo : string
 >"bar" : "bar"

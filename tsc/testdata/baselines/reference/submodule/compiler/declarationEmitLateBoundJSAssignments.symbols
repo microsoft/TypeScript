@@ -5,9 +5,9 @@ export function foo() {}
 >foo : Symbol(foo, Decl(file.js, 0, 0))
 
 foo.bar = 12;
->foo.bar : Symbol(bar, Decl(file.js, 0, 24))
+>foo.bar : Symbol(foo.bar, Decl(file.js, 0, 24))
 >foo : Symbol(foo, Decl(file.js, 0, 0))
->bar : Symbol(bar, Decl(file.js, 0, 24))
+>bar : Symbol(foo.bar, Decl(file.js, 0, 24))
 
 const _private = Symbol();
 >_private : Symbol(_private, Decl(file.js, 2, 5))

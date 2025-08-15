@@ -5,7 +5,7 @@ class Base {
 >Base : Symbol(Base, Decl(interfaceWithPropertyThatIsPrivateInBaseType.ts, 0, 0))
 
     private x: number;
->x : Symbol(x, Decl(interfaceWithPropertyThatIsPrivateInBaseType.ts, 0, 12))
+>x : Symbol(Base.x, Decl(interfaceWithPropertyThatIsPrivateInBaseType.ts, 0, 12))
 }
 
 interface Foo extends Base { // error
@@ -13,7 +13,7 @@ interface Foo extends Base { // error
 >Base : Symbol(Base, Decl(interfaceWithPropertyThatIsPrivateInBaseType.ts, 0, 0))
 
     x: number;
->x : Symbol(x, Decl(interfaceWithPropertyThatIsPrivateInBaseType.ts, 4, 28))
+>x : Symbol(Foo.x, Decl(interfaceWithPropertyThatIsPrivateInBaseType.ts, 4, 28))
 }
 
 class Base2<T> {
@@ -21,7 +21,7 @@ class Base2<T> {
 >T : Symbol(T, Decl(interfaceWithPropertyThatIsPrivateInBaseType.ts, 8, 12))
 
     private x: T;
->x : Symbol(x, Decl(interfaceWithPropertyThatIsPrivateInBaseType.ts, 8, 16))
+>x : Symbol(Base2.x, Decl(interfaceWithPropertyThatIsPrivateInBaseType.ts, 8, 16))
 >T : Symbol(T, Decl(interfaceWithPropertyThatIsPrivateInBaseType.ts, 8, 12))
 }
 
@@ -32,5 +32,5 @@ interface Foo2<T> extends Base2<T> { // error
 >T : Symbol(T, Decl(interfaceWithPropertyThatIsPrivateInBaseType.ts, 12, 15))
 
     x: number;
->x : Symbol(x, Decl(interfaceWithPropertyThatIsPrivateInBaseType.ts, 12, 36))
+>x : Symbol(Foo2.x, Decl(interfaceWithPropertyThatIsPrivateInBaseType.ts, 12, 36))
 }

@@ -5,7 +5,7 @@ export class SomeClass {
 >SomeClass : Symbol(SomeClass, Decl(auxiliry.ts, 0, 0))
 
     field: string;
->field : Symbol(field, Decl(auxiliry.ts, 0, 24))
+>field : Symbol(SomeClass.field, Decl(auxiliry.ts, 0, 24))
 }
 
 === test.ts ===
@@ -24,6 +24,6 @@ export class ClassA {
 
     @annotation() array: SomeClass | null | string;
 >annotation : Symbol(annotation, Decl(test.ts, 0, 39))
->array : Symbol(array, Decl(test.ts, 4, 21))
+>array : Symbol(ClassA.array, Decl(test.ts, 4, 21))
 >SomeClass : Symbol(SomeClass, Decl(test.ts, 0, 8))
 }

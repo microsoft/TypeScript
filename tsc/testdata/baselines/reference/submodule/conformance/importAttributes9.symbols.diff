@@ -12,22 +12,3 @@
 +=== b.ts ===
  declare global {
  >global : Symbol(global, Decl(b.ts, 0, 0))
-
-@@= skipped -11, +11 lines =@@
- >ImportAttributes : Symbol(ImportAttributes, Decl(lib.es5.d.ts, --, --), Decl(b.ts, 0, 16))
-
-         type: "json"
-->type : Symbol(ImportAttributes.type, Decl(b.ts, 1, 33))
-+>type : Symbol(type, Decl(b.ts, 1, 33))
-     }
- }
-
-@@= skipped -14, +14 lines =@@
- >f : Symbol(f, Decl(b.ts, 7, 8))
-
-     await import("./a", {
-->"./a" : Symbol(ns, Decl(a.ts, 0, 0))
-+>"./a" : Symbol("a", Decl(a.ts, 0, 0))
-
-         with: {
- >with : Symbol(with, Decl(b.ts, 10, 25))

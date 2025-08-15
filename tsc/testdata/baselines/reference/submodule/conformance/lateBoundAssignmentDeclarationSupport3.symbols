@@ -4,7 +4,7 @@
 const x = require("./lateBoundAssignmentDeclarationSupport3.js");
 >x : Symbol(x, Decl(usage.js, 0, 5))
 >require : Symbol(require)
->"./lateBoundAssignmentDeclarationSupport3.js" : Symbol("lateBoundAssignmentDeclarationSupport3", Decl(lateBoundAssignmentDeclarationSupport3.js, 0, 0))
+>"./lateBoundAssignmentDeclarationSupport3.js" : Symbol(x, Decl(lateBoundAssignmentDeclarationSupport3.js, 0, 0))
 
 const y = x["my-fake-sym"];
 >y : Symbol(y, Decl(usage.js, 1, 5))
@@ -13,9 +13,9 @@ const y = x["my-fake-sym"];
 const z = x[x.S];
 >z : Symbol(z, Decl(usage.js, 2, 5))
 >x : Symbol(x, Decl(usage.js, 0, 5))
->x.S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport3.js, 5, 61))
+>x.S : Symbol(x.S, Decl(lateBoundAssignmentDeclarationSupport3.js, 5, 61))
 >x : Symbol(x, Decl(usage.js, 0, 5))
->S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport3.js, 5, 61))
+>S : Symbol(x.S, Decl(lateBoundAssignmentDeclarationSupport3.js, 5, 61))
 
 === lateBoundAssignmentDeclarationSupport3.js ===
 // currently unsupported
@@ -27,9 +27,9 @@ const _str = "my-fake-sym";
 >_str : Symbol(_str, Decl(lateBoundAssignmentDeclarationSupport3.js, 2, 5))
 
 Object.defineProperty(module.exports, _sym, { value: "ok" });
->Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >module.exports : Symbol("lateBoundAssignmentDeclarationSupport3", Decl(lateBoundAssignmentDeclarationSupport3.js, 0, 0))
 >module : Symbol(module.exports)
 >exports : Symbol("lateBoundAssignmentDeclarationSupport3", Decl(lateBoundAssignmentDeclarationSupport3.js, 0, 0))
@@ -37,9 +37,9 @@ Object.defineProperty(module.exports, _sym, { value: "ok" });
 >value : Symbol(value, Decl(lateBoundAssignmentDeclarationSupport3.js, 4, 45))
 
 Object.defineProperty(module.exports, _str, { value: "ok" });
->Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >module.exports : Symbol("lateBoundAssignmentDeclarationSupport3", Decl(lateBoundAssignmentDeclarationSupport3.js, 0, 0))
 >module : Symbol(module.exports)
 >exports : Symbol("lateBoundAssignmentDeclarationSupport3", Decl(lateBoundAssignmentDeclarationSupport3.js, 0, 0))

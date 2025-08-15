@@ -9,7 +9,7 @@ export class M<T> {
 >T : Symbol(T, Decl(index.js, 3, 15))
 
     field: T;
->field : Symbol(field, Decl(index.js, 3, 19))
+>field : Symbol(M.field, Decl(index.js, 3, 19))
 >T : Symbol(T, Decl(index.js, 3, 15))
 }
 
@@ -20,7 +20,7 @@ export class N<U> extends M<U> {
 >U : Symbol(U, Decl(index.js, 7, 15))
 
     other: U;
->other : Symbol(other, Decl(index.js, 7, 32))
+>other : Symbol(N.other, Decl(index.js, 7, 32))
 >U : Symbol(U, Decl(index.js, 7, 15))
 }
 

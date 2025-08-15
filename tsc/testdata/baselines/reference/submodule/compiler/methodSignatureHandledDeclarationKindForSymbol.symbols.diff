@@ -5,7 +5,7 @@
 
      bold(): string;
 ->bold : Symbol(Foo.bold, Decl(methodSignatureHandledDeclarationKindForSymbol.ts, 0, 15), Decl(methodSignatureHandledDeclarationKindForSymbol.ts, 4, 15))
-+>bold : Symbol(bold, Decl(methodSignatureHandledDeclarationKindForSymbol.ts, 0, 15))
++>bold : Symbol(Foo.bold, Decl(methodSignatureHandledDeclarationKindForSymbol.ts, 0, 15))
  }
 
  interface Foo {
@@ -13,6 +13,6 @@
 
      bold: string;
 ->bold : Symbol(Foo.bold, Decl(methodSignatureHandledDeclarationKindForSymbol.ts, 0, 15), Decl(methodSignatureHandledDeclarationKindForSymbol.ts, 4, 15))
-+>bold : Symbol(bold, Decl(methodSignatureHandledDeclarationKindForSymbol.ts, 4, 15))
++>bold : Symbol(Foo.bold, Decl(methodSignatureHandledDeclarationKindForSymbol.ts, 4, 15))
  }
 

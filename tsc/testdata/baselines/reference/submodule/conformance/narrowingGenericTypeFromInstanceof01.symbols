@@ -6,7 +6,7 @@ class A<T> {
 >T : Symbol(T, Decl(narrowingGenericTypeFromInstanceof01.ts, 0, 8))
 
     constructor(private a: string) { }
->a : Symbol(a, Decl(narrowingGenericTypeFromInstanceof01.ts, 1, 16))
+>a : Symbol(A.a, Decl(narrowingGenericTypeFromInstanceof01.ts, 1, 16))
 }
 
 class B<T> {

@@ -80,18 +80,18 @@ const _z = inst[_sym];
 module.exports.F = F;
 >module.exports.F = F : () => void
 >module.exports.F : () => void
->module.exports : typeof import("./lateBoundAssignmentDeclarationSupport4")
->module : { "\"lateBoundAssignmentDeclarationSupport4\"": typeof import("./lateBoundAssignmentDeclarationSupport4"); }
->exports : typeof import("./lateBoundAssignmentDeclarationSupport4")
+>module.exports : typeof import("lateBoundAssignmentDeclarationSupport4")
+>module : { "\"lateBoundAssignmentDeclarationSupport4\"": typeof import("lateBoundAssignmentDeclarationSupport4"); }
+>exports : typeof import("lateBoundAssignmentDeclarationSupport4")
 >F : () => void
 >F : () => void
 
 module.exports.S = _sym;
 >module.exports.S = _sym : unique symbol
 >module.exports.S : unique symbol
->module.exports : typeof import("./lateBoundAssignmentDeclarationSupport4")
->module : { "\"lateBoundAssignmentDeclarationSupport4\"": typeof import("./lateBoundAssignmentDeclarationSupport4"); }
->exports : typeof import("./lateBoundAssignmentDeclarationSupport4")
+>module.exports : typeof import("lateBoundAssignmentDeclarationSupport4")
+>module : { "\"lateBoundAssignmentDeclarationSupport4\"": typeof import("lateBoundAssignmentDeclarationSupport4"); }
+>exports : typeof import("lateBoundAssignmentDeclarationSupport4")
 >S : unique symbol
 >_sym : unique symbol
 

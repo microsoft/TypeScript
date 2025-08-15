@@ -25,7 +25,7 @@ interface ITestProps {
 >ITestProps : Symbol(ITestProps, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 6, 1))
 
   ariaLabel?: string;
->ariaLabel : Symbol(ariaLabel, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 8, 22))
+>ariaLabel : Symbol(ITestProps.ariaLabel, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 8, 22))
 }
  
 interface NestedProp<TProps> {
@@ -33,7 +33,7 @@ interface NestedProp<TProps> {
 >TProps : Symbol(TProps, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 12, 21))
 
   props: TProps;
->props : Symbol(props, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 12, 30))
+>props : Symbol(NestedProp.props, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 12, 30))
 >TProps : Symbol(TProps, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 12, 21))
 }
  
@@ -41,7 +41,7 @@ interface TestProps {
 >TestProps : Symbol(TestProps, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 14, 1))
 
   icon: NestedProp<ITestProps>;
->icon : Symbol(icon, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 16, 21))
+>icon : Symbol(TestProps.icon, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 16, 21))
 >NestedProp : Symbol(NestedProp, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 10, 1))
 >ITestProps : Symbol(ITestProps, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 6, 1))
 }

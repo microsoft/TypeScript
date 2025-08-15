@@ -10,9 +10,9 @@ export function test(fn) {
 >args : Symbol(args, Decl(index.js, 1, 29))
 
   Object.defineProperty(composed, 'name', {
->Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >composed : Symbol(composed, Decl(index.js, 1, 7))
 
     value: composed.fn + '_test'

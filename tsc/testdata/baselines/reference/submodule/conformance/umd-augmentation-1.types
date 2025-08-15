@@ -48,7 +48,7 @@ var t = p.x;
 
 === node_modules/math2d/index.d.ts ===
 export as namespace Math2d;
->Math2d : typeof import("math2d")
+>Math2d : typeof import("node_modules/math2d/index")
 
 export interface Point {
 	x: number;

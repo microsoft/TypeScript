@@ -8,6 +8,6 @@ export class Preferences {
   ;
   /** @type {A} */
   a = 'ok'
->a : Symbol(a, Decl(typedefOnSemicolonClassElement.js, 2, 3))
+>a : Symbol(Preferences.a, Decl(typedefOnSemicolonClassElement.js, 2, 3))
 }
 

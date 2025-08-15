@@ -19,7 +19,7 @@ class Foo {
 >Foo : Symbol(Foo, Decl(spreadObjectNoCircular1.ts, 4, 21))
 
   get foo() {
->foo : Symbol(foo, Decl(spreadObjectNoCircular1.ts, 6, 11))
+>foo : Symbol(Foo.foo, Decl(spreadObjectNoCircular1.ts, 6, 11))
 
     return {
       content: this as Foo | Box,

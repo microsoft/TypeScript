@@ -10,9 +10,9 @@ function f1() {
 >s : Symbol(s, Decl(typeInterfaceDeclarationsInBlockStatements1.ts, 3, 11))
 
   console.log("" as s);
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >s : Symbol(s, Decl(typeInterfaceDeclarationsInBlockStatements1.ts, 3, 11))
 }
 
@@ -24,9 +24,9 @@ function f2() {
 >s : Symbol(s, Decl(typeInterfaceDeclarationsInBlockStatements1.ts, 8, 13))
   }
   console.log("" as s);
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >s : Symbol(s)
 }
 
@@ -38,12 +38,12 @@ function f3() {
 >s : Symbol(s, Decl(typeInterfaceDeclarationsInBlockStatements1.ts, 15, 11))
 
       length: number;
->length : Symbol(length, Decl(typeInterfaceDeclarationsInBlockStatements1.ts, 16, 17))
+>length : Symbol(s.length, Decl(typeInterfaceDeclarationsInBlockStatements1.ts, 16, 17))
     }
   console.log("" as s);
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >s : Symbol(s, Decl(typeInterfaceDeclarationsInBlockStatements1.ts, 15, 11))
 }
 
@@ -55,13 +55,13 @@ function f4() {
 >s : Symbol(s, Decl(typeInterfaceDeclarationsInBlockStatements1.ts, 23, 13))
 
       length: number;
->length : Symbol(length, Decl(typeInterfaceDeclarationsInBlockStatements1.ts, 24, 17))
+>length : Symbol(s.length, Decl(typeInterfaceDeclarationsInBlockStatements1.ts, 24, 17))
     }
   }
   console.log("" as s);
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >s : Symbol(s)
 }
 

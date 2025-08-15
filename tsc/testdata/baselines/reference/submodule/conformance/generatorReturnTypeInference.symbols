@@ -75,9 +75,9 @@ function* g103() { // Generator<never, 1 | 2, unknown>
 >g103 : Symbol(g103, Decl(generatorReturnTypeInference.ts, 40, 1))
 
     if (Math.random()) return 1;
->Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.float16.d.ts, --, --))
->random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
     return 2;
 }
@@ -172,15 +172,15 @@ function* g305() { // Generator<1 | 2, "a" | "b", unknown>
 >g305 : Symbol(g305, Decl(generatorReturnTypeInference.ts, 94, 1))
 
     if (Math.random()) yield 1;
->Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.float16.d.ts, --, --))
->random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
     yield 2;
     if (Math.random()) return "a";
->Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.float16.d.ts, --, --))
->random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
     return "b";
 }

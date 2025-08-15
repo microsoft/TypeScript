@@ -14,9 +14,9 @@ export enum Animals {
 >Animals : Symbol(Animals, Decl(c.ts, 0, 0))
 
 	Cat,
->Cat : Symbol(Cat, Decl(c.ts, 0, 21))
+>Cat : Symbol(Animals.Cat, Decl(c.ts, 0, 21))
 
 	Dog
->Dog : Symbol(Dog, Decl(c.ts, 1, 5))
+>Dog : Symbol(Animals.Dog, Decl(c.ts, 1, 5))
 
 };

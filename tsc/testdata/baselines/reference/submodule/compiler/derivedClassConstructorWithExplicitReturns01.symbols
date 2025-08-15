@@ -5,10 +5,10 @@ class C {
 >C : Symbol(C, Decl(derivedClassConstructorWithExplicitReturns01.ts, 0, 0))
 
     cProp = 10;
->cProp : Symbol(cProp, Decl(derivedClassConstructorWithExplicitReturns01.ts, 0, 9))
+>cProp : Symbol(C.cProp, Decl(derivedClassConstructorWithExplicitReturns01.ts, 0, 9))
 
     foo() { return "this never gets used."; }
->foo : Symbol(foo, Decl(derivedClassConstructorWithExplicitReturns01.ts, 1, 15))
+>foo : Symbol(C.foo, Decl(derivedClassConstructorWithExplicitReturns01.ts, 1, 15))
 
     constructor(value: number) {
 >value : Symbol(value, Decl(derivedClassConstructorWithExplicitReturns01.ts, 5, 16))
@@ -32,7 +32,7 @@ class D extends C {
 >C : Symbol(C, Decl(derivedClassConstructorWithExplicitReturns01.ts, 0, 0))
 
     dProp = () => this;
->dProp : Symbol(dProp, Decl(derivedClassConstructorWithExplicitReturns01.ts, 15, 19))
+>dProp : Symbol(D.dProp, Decl(derivedClassConstructorWithExplicitReturns01.ts, 15, 19))
 >this : Symbol(D, Decl(derivedClassConstructorWithExplicitReturns01.ts, 13, 1))
 
     constructor(a = 100) {
@@ -43,9 +43,9 @@ class D extends C {
 >a : Symbol(a, Decl(derivedClassConstructorWithExplicitReturns01.ts, 18, 16))
 
         if (Math.random() < 0.5) {
->Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
             "You win!"
             return {

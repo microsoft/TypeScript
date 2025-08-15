@@ -62,9 +62,9 @@ function f4(obj: Record<string, string>) {
 >obj : Symbol(obj, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 24, 12))
 
     if (obj.hasOwnProperty("test")) {
->obj.hasOwnProperty : Symbol(hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>obj.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
 >obj : Symbol(obj, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 24, 12))
->hasOwnProperty : Symbol(hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
 
         obj.test;  // string
 >obj : Symbol(obj, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 24, 12))

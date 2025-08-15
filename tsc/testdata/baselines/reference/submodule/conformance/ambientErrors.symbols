@@ -46,7 +46,7 @@ declare enum E1 {
 >E1 : Symbol(E1, Decl(ambientErrors.ts, 19, 27))
 
     y = 4.23
->y : Symbol(y, Decl(ambientErrors.ts, 22, 17))
+>y : Symbol(E1.y, Decl(ambientErrors.ts, 22, 17))
 }
 
 // Ambient enum with computer member
@@ -54,9 +54,9 @@ declare enum E2 {
 >E2 : Symbol(E2, Decl(ambientErrors.ts, 24, 1))
 
     x = 'foo'.length
->x : Symbol(x, Decl(ambientErrors.ts, 27, 17))
->'foo'.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(E2.x, Decl(ambientErrors.ts, 27, 17))
+>'foo'.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 }
 
 // Ambient module with initializers for values, bodies for functions / classes
@@ -73,17 +73,17 @@ declare module M1 {
 >C : Symbol(C, Decl(ambientErrors.ts, 34, 21))
 
         static x = 3;
->x : Symbol(x, Decl(ambientErrors.ts, 35, 13))
+>x : Symbol(C.x, Decl(ambientErrors.ts, 35, 13))
 
         y = 4;
->y : Symbol(y, Decl(ambientErrors.ts, 36, 21))
+>y : Symbol(C.y, Decl(ambientErrors.ts, 36, 21))
 
         constructor() { }
         fn() { }
->fn : Symbol(fn, Decl(ambientErrors.ts, 38, 25))
+>fn : Symbol(C.fn, Decl(ambientErrors.ts, 38, 25))
 
         static sfn() { }
->sfn : Symbol(sfn, Decl(ambientErrors.ts, 39, 16))
+>sfn : Symbol(C.sfn, Decl(ambientErrors.ts, 39, 16))
     }
 }
 

@@ -54,7 +54,7 @@ module A4 {
 
         const enum E { X }
 >E : Symbol(E, Decl(reachabilityChecks1.ts, 29, 14))
->X : Symbol(X, Decl(reachabilityChecks1.ts, 30, 22))
+>X : Symbol(E.X, Decl(reachabilityChecks1.ts, 30, 22))
     }
 }
 
@@ -102,7 +102,7 @@ function f3() {
 >E : Symbol(E, Decl(reachabilityChecks1.ts, 58, 19))
 
         X = 1
->X : Symbol(X, Decl(reachabilityChecks1.ts, 59, 12))
+>X : Symbol(E.X, Decl(reachabilityChecks1.ts, 59, 12))
     }
 }
 
@@ -117,7 +117,7 @@ function f4() {
 >E : Symbol(E, Decl(reachabilityChecks1.ts, 67, 5))
 
         X = 1
->X : Symbol(X, Decl(reachabilityChecks1.ts, 68, 18))
+>X : Symbol(E.X, Decl(reachabilityChecks1.ts, 68, 18))
     }
 }
 

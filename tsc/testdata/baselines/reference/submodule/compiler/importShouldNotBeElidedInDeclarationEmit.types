@@ -2,7 +2,7 @@
 
 === node_modules/umd.d.ts ===
 export as namespace UMD;
->UMD : typeof import("umd.d.ts")
+>UMD : typeof import("node_modules/umd")
 
 export type Thing = {
 >Thing : Thing
@@ -16,10 +16,10 @@ export declare function makeThing(): Thing;
 
 === index.ts ===
 import { makeThing } from "umd";
->makeThing : () => import("umd").Thing
+>makeThing : () => import("node_modules/umd").Thing
 
 export const thing = makeThing();
->thing : import("umd").Thing
->makeThing() : import("umd").Thing
->makeThing : () => import("umd").Thing
+>thing : import("node_modules/umd").Thing
+>makeThing() : import("node_modules/umd").Thing
+>makeThing : () => import("node_modules/umd").Thing
 

@@ -2,7 +2,7 @@
 
 === module_augmentUninstantiatedModule2.ts ===
 declare var ng: ng.IAngularStatic;
->ng : import("./module_augmentUninstantiatedModule2").IAngularStatic
+>ng : import("module_augmentUninstantiatedModule2").IAngularStatic
 >ng : any
 
 declare module ng {
@@ -19,6 +19,6 @@ declare module ng {
 }
 
 export = ng;
->ng : import("./module_augmentUninstantiatedModule2").IAngularStatic
+>ng : import("module_augmentUninstantiatedModule2").IAngularStatic
 
 

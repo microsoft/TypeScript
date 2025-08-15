@@ -36,7 +36,7 @@ var v2: D<X<T>, Y<Z<T>>> = null;
 var v3: E.F<X<T>, Y<Z<T>>>;
 >v3 : Symbol(v3, Decl(parserGenericsInTypeContexts2.ts, 5, 3))
 >E : Symbol(E)
->F : Symbol(F)
+>F : Symbol(E.F)
 >X : Symbol(X)
 >T : Symbol(T)
 >Y : Symbol(Y)
@@ -46,8 +46,8 @@ var v3: E.F<X<T>, Y<Z<T>>>;
 var v4: G.H.I<X<T>, Y<Z<T>>>;
 >v4 : Symbol(v4, Decl(parserGenericsInTypeContexts2.ts, 6, 3))
 >G : Symbol(G)
->H : Symbol(H)
->I : Symbol(I)
+>H : Symbol(G.H)
+>I : Symbol(G.H.I)
 >X : Symbol(X)
 >T : Symbol(T)
 >Y : Symbol(Y)

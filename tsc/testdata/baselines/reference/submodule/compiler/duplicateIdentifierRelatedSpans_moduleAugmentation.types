@@ -9,7 +9,7 @@ export const x = 0;
 export {};
 
 declare module "./a" {
->"./a" : typeof import("./a")
+>"./a" : typeof import("/dir/a")
 
     export const x = 0;
 >x : 0
@@ -17,7 +17,7 @@ declare module "./a" {
 }
 
 declare module "../dir/a" {
->"../dir/a" : typeof import("./a")
+>"../dir/a" : typeof import("/dir/a")
 
     export const x = 0;
 >x : 0

@@ -34,19 +34,19 @@ import * as React from "./renderer";
 >React : Symbol(React, Decl(otherreacty.tsx, 1, 6))
 
 <h></h>
->h : Symbol(__index, Decl(renderer.d.ts, 2, 37))
->h : Symbol(__index, Decl(renderer.d.ts, 2, 37))
+>h : Symbol(JSX.IntrinsicElements[__index], Decl(renderer.d.ts, 2, 37))
+>h : Symbol(JSX.IntrinsicElements[__index], Decl(renderer.d.ts, 2, 37))
 
 === other.tsx ===
 /** @jsx h */
 import { dom as h } from "./renderer"
->dom : Symbol(dom, Decl(renderer.d.ts, 6, 1))
+>dom : Symbol(h, Decl(renderer.d.ts, 6, 1))
 >h : Symbol(h, Decl(other.tsx, 1, 8))
 
 export const prerendered = <h></h>;
 >prerendered : Symbol(prerendered, Decl(other.tsx, 2, 12))
->h : Symbol(__index, Decl(renderer.d.ts, 2, 37))
->h : Symbol(__index, Decl(renderer.d.ts, 2, 37))
+>h : Symbol(JSX.IntrinsicElements[__index], Decl(renderer.d.ts, 2, 37))
+>h : Symbol(JSX.IntrinsicElements[__index], Decl(renderer.d.ts, 2, 37))
 
 === othernoalias.tsx ===
 /** @jsx otherdom */
@@ -55,8 +55,8 @@ import { otherdom } from "./renderer"
 
 export const prerendered2 = <h></h>;
 >prerendered2 : Symbol(prerendered2, Decl(othernoalias.tsx, 2, 12))
->h : Symbol(__index, Decl(renderer.d.ts, 2, 37))
->h : Symbol(__index, Decl(renderer.d.ts, 2, 37))
+>h : Symbol(JSX.IntrinsicElements[__index], Decl(renderer.d.ts, 2, 37))
+>h : Symbol(JSX.IntrinsicElements[__index], Decl(renderer.d.ts, 2, 37))
 
 === reacty.tsx ===
 import React from "./renderer"
@@ -64,8 +64,8 @@ import React from "./renderer"
 
 export const prerendered3 = <h></h>;
 >prerendered3 : Symbol(prerendered3, Decl(reacty.tsx, 1, 12))
->h : Symbol(__index, Decl(renderer.d.ts, 2, 37))
->h : Symbol(__index, Decl(renderer.d.ts, 2, 37))
+>h : Symbol(JSX.IntrinsicElements[__index], Decl(renderer.d.ts, 2, 37))
+>h : Symbol(JSX.IntrinsicElements[__index], Decl(renderer.d.ts, 2, 37))
 
 === index.tsx ===
 /** @jsx dom */
@@ -73,8 +73,8 @@ import { dom } from "./renderer"
 >dom : Symbol(dom, Decl(index.tsx, 1, 8))
 
 <h></h>
->h : Symbol(__index, Decl(renderer.d.ts, 2, 37))
->h : Symbol(__index, Decl(renderer.d.ts, 2, 37))
+>h : Symbol(JSX.IntrinsicElements[__index], Decl(renderer.d.ts, 2, 37))
+>h : Symbol(JSX.IntrinsicElements[__index], Decl(renderer.d.ts, 2, 37))
 
 export * from "./other";
 export * from "./othernoalias";

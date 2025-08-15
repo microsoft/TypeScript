@@ -60,7 +60,7 @@ interface A<T> {
 >T : Symbol(T, Decl(intersectionTypeInference.ts, 13, 12))
 
     a: T;
->a : Symbol(a, Decl(intersectionTypeInference.ts, 13, 16))
+>a : Symbol(A.a, Decl(intersectionTypeInference.ts, 13, 16))
 >T : Symbol(T, Decl(intersectionTypeInference.ts, 13, 12))
 }
 
@@ -69,7 +69,7 @@ interface B<U> {
 >U : Symbol(U, Decl(intersectionTypeInference.ts, 17, 12))
 
     b: U;
->b : Symbol(b, Decl(intersectionTypeInference.ts, 17, 16))
+>b : Symbol(B.b, Decl(intersectionTypeInference.ts, 17, 16))
 >U : Symbol(U, Decl(intersectionTypeInference.ts, 17, 12))
 }
 

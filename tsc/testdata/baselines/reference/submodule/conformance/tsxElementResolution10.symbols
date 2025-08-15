@@ -11,7 +11,7 @@ declare module JSX {
 >ElementClass : Symbol(ElementClass, Decl(file.tsx, 1, 22))
 
 		render: any;
->render : Symbol(render, Decl(file.tsx, 2, 25))
+>render : Symbol(ElementClass.render, Decl(file.tsx, 2, 25))
 	}
 	interface IntrinsicElements { }
 >IntrinsicElements : Symbol(IntrinsicElements, Decl(file.tsx, 4, 2))

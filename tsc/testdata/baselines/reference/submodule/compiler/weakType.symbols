@@ -5,10 +5,10 @@ interface Settings {
 >Settings : Symbol(Settings, Decl(weakType.ts, 0, 0))
 
     timeout?: number;
->timeout : Symbol(timeout, Decl(weakType.ts, 0, 20))
+>timeout : Symbol(Settings.timeout, Decl(weakType.ts, 0, 20))
 
     onError?(): void;
->onError : Symbol(onError, Decl(weakType.ts, 1, 21))
+>onError : Symbol(Settings.onError, Decl(weakType.ts, 1, 21))
 }
 
 function getDefaultSettings() {
@@ -71,10 +71,10 @@ interface InsertOptions {
 >InsertOptions : Symbol(InsertOptions, Decl(weakType.ts, 25, 63))
 
     prefix?: string
->prefix : Symbol(prefix, Decl(weakType.ts, 26, 25))
+>prefix : Symbol(InsertOptions.prefix, Decl(weakType.ts, 26, 25))
 
     suffix?: string
->suffix : Symbol(suffix, Decl(weakType.ts, 27, 19))
+>suffix : Symbol(InsertOptions.suffix, Decl(weakType.ts, 27, 19))
 }
 type ChangeOptions = ConfigurableStartEnd & InsertOptions;
 >ChangeOptions : Symbol(ChangeOptions, Decl(weakType.ts, 29, 1))
@@ -95,15 +95,15 @@ function del(options: ConfigurableStartEnd = {},
 >ChangeOptions : Symbol(ChangeOptions, Decl(weakType.ts, 29, 1))
 
     changes.push(options);
->changes.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>changes.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >changes : Symbol(changes, Decl(weakType.ts, 34, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(weakType.ts, 32, 13))
 
     changes.push(error);
->changes.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>changes.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >changes : Symbol(changes, Decl(weakType.ts, 34, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >error : Symbol(error, Decl(weakType.ts, 32, 48))
 }
 
@@ -122,7 +122,7 @@ interface Ctor {
 >K : Symbol(K, Decl(weakType.ts, 37, 1))
 
     n?: number
->n : Symbol(n, Decl(weakType.ts, 44, 22))
+>n : Symbol(Ctor.n, Decl(weakType.ts, 44, 22))
 }
 let ctor: Ctor = K
 >ctor : Symbol(ctor, Decl(weakType.ts, 47, 3))

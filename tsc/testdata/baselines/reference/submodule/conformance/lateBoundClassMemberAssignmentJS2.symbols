@@ -14,7 +14,7 @@ export class MyClass {
     }
 
     method() {
->method : Symbol(method, Decl(lateBoundClassMemberAssignmentJS2.js, 4, 5))
+>method : Symbol(MyClass.method, Decl(lateBoundClassMemberAssignmentJS2.js, 4, 5))
 
         this[_sym] = "yep";
 >this : Symbol(MyClass, Decl(lateBoundClassMemberAssignmentJS2.js, 0, 27))

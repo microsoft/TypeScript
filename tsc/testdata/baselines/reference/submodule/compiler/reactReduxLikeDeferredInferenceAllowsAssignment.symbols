@@ -16,7 +16,7 @@ declare class Component<P> {
 >context : Symbol(context, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 2, 23))
 
   readonly props: Readonly<P> & Readonly<{ children?: {} }>;
->props : Symbol(props, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 2, 39))
+>props : Symbol(Component.props, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 2, 39))
 >Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >P : Symbol(P, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 0, 24))
 >Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
@@ -34,17 +34,17 @@ interface ComponentClass<P = {}> {
 >P : Symbol(P, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 5, 25))
 
   propTypes?: WeakValidationMap<P>;
->propTypes : Symbol(propTypes, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 6, 46))
+>propTypes : Symbol(ComponentClass.propTypes, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 6, 46))
 >WeakValidationMap : Symbol(WeakValidationMap, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 28, 1))
 >P : Symbol(P, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 5, 25))
 
   defaultProps?: Partial<P>;
->defaultProps : Symbol(defaultProps, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 7, 35))
+>defaultProps : Symbol(ComponentClass.defaultProps, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 7, 35))
 >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >P : Symbol(P, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 5, 25))
 
   displayName?: string;
->displayName : Symbol(displayName, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 8, 28))
+>displayName : Symbol(ComponentClass.displayName, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 8, 28))
 }
 interface FunctionComponent<P = {}> {
 >FunctionComponent : Symbol(FunctionComponent, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 10, 1))
@@ -57,17 +57,17 @@ interface FunctionComponent<P = {}> {
 >context : Symbol(context, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 12, 32))
 
   propTypes?: WeakValidationMap<P>;
->propTypes : Symbol(propTypes, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 12, 59))
+>propTypes : Symbol(FunctionComponent.propTypes, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 12, 59))
 >WeakValidationMap : Symbol(WeakValidationMap, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 28, 1))
 >P : Symbol(P, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 11, 28))
 
   defaultProps?: Partial<P>;
->defaultProps : Symbol(defaultProps, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 13, 35))
+>defaultProps : Symbol(FunctionComponent.defaultProps, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 13, 35))
 >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >P : Symbol(P, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 11, 28))
 
   displayName?: string;
->displayName : Symbol(displayName, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 14, 28))
+>displayName : Symbol(FunctionComponent.displayName, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 14, 28))
 }
 
 declare const nominalTypeHack: unique symbol;
@@ -97,7 +97,7 @@ interface Validator<T> {
 >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
   [nominalTypeHack]?: T;
->[nominalTypeHack] : Symbol([nominalTypeHack], Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 26, 18))
+>[nominalTypeHack] : Symbol(Validator[nominalTypeHack], Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 26, 18))
 >nominalTypeHack : Symbol(nominalTypeHack, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 18, 13))
 >T : Symbol(T, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 19, 20))
 }
@@ -385,7 +385,7 @@ interface Action<T = any> {
 >T : Symbol(T, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 111, 17))
 
   type: T;
->type : Symbol(type, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 111, 27))
+>type : Symbol(Action.type, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 111, 27))
 >T : Symbol(T, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 111, 17))
 }
 interface AnyAction extends Action {
@@ -429,18 +429,18 @@ interface OwnProps {
 >OwnProps : Symbol(OwnProps, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 127, 2))
 
   foo: string;
->foo : Symbol(foo, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 128, 20))
+>foo : Symbol(OwnProps.foo, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 128, 20))
 }
 interface TestComponentProps extends OwnProps {
 >TestComponentProps : Symbol(TestComponentProps, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 130, 1))
 >OwnProps : Symbol(OwnProps, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 127, 2))
 
   simpleAction: typeof simpleAction;
->simpleAction : Symbol(simpleAction, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 131, 47))
+>simpleAction : Symbol(TestComponentProps.simpleAction, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 131, 47))
 >simpleAction : Symbol(simpleAction, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 118, 5))
 
   thunkAction(param1: number, param2: string): Promise<string>;
->thunkAction : Symbol(thunkAction, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 132, 36))
+>thunkAction : Symbol(TestComponentProps.thunkAction, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 132, 36))
 >param1 : Symbol(param1, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 133, 14))
 >param2 : Symbol(param2, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 133, 29))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))

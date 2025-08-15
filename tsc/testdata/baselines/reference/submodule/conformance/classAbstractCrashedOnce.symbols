@@ -5,7 +5,7 @@ abstract class foo {
 >foo : Symbol(foo, Decl(classAbstractCrashedOnce.ts, 0, 0))
 
     protected abstract test();
->test : Symbol(test, Decl(classAbstractCrashedOnce.ts, 0, 20))
+>test : Symbol(foo.test, Decl(classAbstractCrashedOnce.ts, 0, 20))
 }
 
 class bar extends foo {
@@ -13,7 +13,7 @@ class bar extends foo {
 >foo : Symbol(foo, Decl(classAbstractCrashedOnce.ts, 0, 0))
 
     test() {
->test : Symbol(test, Decl(classAbstractCrashedOnce.ts, 4, 23))
+>test : Symbol(bar.test, Decl(classAbstractCrashedOnce.ts, 4, 23))
 
         this.
 >this : Symbol(bar, Decl(classAbstractCrashedOnce.ts, 2, 1))

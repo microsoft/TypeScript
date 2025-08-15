@@ -11,5 +11,5 @@ class D extends C extends C {
 >C : Symbol(C, Decl(extendsClauseAlreadySeen.ts, 0, 0))
 
     baz() { }
->baz : Symbol(baz, Decl(extendsClauseAlreadySeen.ts, 3, 29))
+>baz : Symbol(D.baz, Decl(extendsClauseAlreadySeen.ts, 3, 29))
 }

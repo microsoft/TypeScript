@@ -46,13 +46,13 @@ interface StrNum {
 >StrNum : Symbol(StrNum, Decl(extractInferenceImprovement.ts, 9, 19))
 
     first: string;
->first : Symbol(first, Decl(extractInferenceImprovement.ts, 10, 18))
+>first : Symbol(StrNum.first, Decl(extractInferenceImprovement.ts, 10, 18))
 
     second: number;
->second : Symbol(second, Decl(extractInferenceImprovement.ts, 11, 18))
+>second : Symbol(StrNum.second, Decl(extractInferenceImprovement.ts, 11, 18))
 
     [s]: string;
->[s] : Symbol([s], Decl(extractInferenceImprovement.ts, 12, 19))
+>[s] : Symbol(StrNum[s], Decl(extractInferenceImprovement.ts, 12, 19))
 >s : Symbol(s, Decl(extractInferenceImprovement.ts, 9, 5))
 }
 const obj: StrNum = {} as any;

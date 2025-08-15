@@ -6,7 +6,7 @@ declare class TableClass<S = any> {
 >S : Symbol(S, Decl(instanceofTypeAliasToGenericClass.ts, 0, 25))
 
     _field: S;
->_field : Symbol(_field, Decl(instanceofTypeAliasToGenericClass.ts, 0, 35))
+>_field : Symbol(TableClass._field, Decl(instanceofTypeAliasToGenericClass.ts, 0, 35))
 >S : Symbol(S, Decl(instanceofTypeAliasToGenericClass.ts, 0, 25))
 }
 

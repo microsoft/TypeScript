@@ -44,11 +44,11 @@ export interface IData {
 >IData : Symbol(IData, Decl(declarationEmitComputedPropertyName1.ts, 13, 5))
 
   ["a_b_c"]: string;
->["a_b_c"] : Symbol(["a_b_c"], Decl(declarationEmitComputedPropertyName1.ts, 15, 24))
->"a_b_c" : Symbol(["a_b_c"], Decl(declarationEmitComputedPropertyName1.ts, 15, 24))
+>["a_b_c"] : Symbol(IData["a_b_c"], Decl(declarationEmitComputedPropertyName1.ts, 15, 24))
+>"a_b_c" : Symbol(IData["a_b_c"], Decl(declarationEmitComputedPropertyName1.ts, 15, 24))
 
   nested: {
->nested : Symbol(nested, Decl(declarationEmitComputedPropertyName1.ts, 16, 20))
+>nested : Symbol(IData.nested, Decl(declarationEmitComputedPropertyName1.ts, 16, 20))
 
     ["d_e_f"]: string;
 >["d_e_f"] : Symbol(["d_e_f"], Decl(declarationEmitComputedPropertyName1.ts, 17, 11))

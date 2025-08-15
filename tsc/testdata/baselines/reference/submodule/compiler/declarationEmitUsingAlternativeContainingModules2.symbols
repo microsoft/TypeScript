@@ -118,27 +118,27 @@ interface QueryOptions<
 
 > {
   retry?: RetryValue<TError>;
->retry : Symbol(retry, Decl(useQuery-CPqkvEsh.d.ts, 40, 3))
+>retry : Symbol(QueryOptions.retry, Decl(useQuery-CPqkvEsh.d.ts, 40, 3))
 >RetryValue : Symbol(RetryValue, Decl(useQuery-CPqkvEsh.d.ts, 13, 13))
 >TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 35, 25))
 
   queryFn?: QueryFunction<TQueryFnData, TQueryKey, TPageParam>;
->queryFn : Symbol(queryFn, Decl(useQuery-CPqkvEsh.d.ts, 41, 29))
+>queryFn : Symbol(QueryOptions.queryFn, Decl(useQuery-CPqkvEsh.d.ts, 41, 29))
 >QueryFunction : Symbol(QueryFunction, Decl(useQuery-CPqkvEsh.d.ts, 26, 6))
 >TQueryFnData : Symbol(TQueryFnData, Decl(useQuery-CPqkvEsh.d.ts, 34, 23))
 >TQueryKey : Symbol(TQueryKey, Decl(useQuery-CPqkvEsh.d.ts, 37, 23))
 >TPageParam : Symbol(TPageParam, Decl(useQuery-CPqkvEsh.d.ts, 38, 40))
 
   queryKey?: TQueryKey;
->queryKey : Symbol(queryKey, Decl(useQuery-CPqkvEsh.d.ts, 42, 63))
+>queryKey : Symbol(QueryOptions.queryKey, Decl(useQuery-CPqkvEsh.d.ts, 42, 63))
 >TQueryKey : Symbol(TQueryKey, Decl(useQuery-CPqkvEsh.d.ts, 37, 23))
 
   initialData?: TData;
->initialData : Symbol(initialData, Decl(useQuery-CPqkvEsh.d.ts, 43, 23))
+>initialData : Symbol(QueryOptions.initialData, Decl(useQuery-CPqkvEsh.d.ts, 43, 23))
 >TData : Symbol(TData, Decl(useQuery-CPqkvEsh.d.ts, 36, 24))
 
   initialDataUpdatedAt?: number | (() => number | undefined);
->initialDataUpdatedAt : Symbol(initialDataUpdatedAt, Decl(useQuery-CPqkvEsh.d.ts, 44, 22))
+>initialDataUpdatedAt : Symbol(QueryOptions.initialDataUpdatedAt, Decl(useQuery-CPqkvEsh.d.ts, 44, 22))
 }
 
 interface QueryObserverOptions<
@@ -187,13 +187,13 @@ interface QueryObserverOptions<
 
   > {
   enabled?: boolean;
->enabled : Symbol(enabled, Decl(useQuery-CPqkvEsh.d.ts, 61, 5))
+>enabled : Symbol(QueryObserverOptions.enabled, Decl(useQuery-CPqkvEsh.d.ts, 61, 5))
 
   refetchInterval?: number;
->refetchInterval : Symbol(refetchInterval, Decl(useQuery-CPqkvEsh.d.ts, 62, 20))
+>refetchInterval : Symbol(QueryObserverOptions.refetchInterval, Decl(useQuery-CPqkvEsh.d.ts, 62, 20))
 
   select?: (data: TQueryData) => TData;
->select : Symbol(select, Decl(useQuery-CPqkvEsh.d.ts, 63, 27))
+>select : Symbol(QueryObserverOptions.select, Decl(useQuery-CPqkvEsh.d.ts, 63, 27))
 >data : Symbol(data, Decl(useQuery-CPqkvEsh.d.ts, 64, 12))
 >TQueryData : Symbol(TQueryData, Decl(useQuery-CPqkvEsh.d.ts, 51, 23))
 >TData : Symbol(TData, Decl(useQuery-CPqkvEsh.d.ts, 50, 24))
@@ -304,70 +304,70 @@ interface QueryObserverBaseResult<TData = unknown, TError = DefaultError> {
 >DefaultError : Symbol(DefaultError, Decl(useQuery-CPqkvEsh.d.ts, 2, 21))
 
   data: TData | undefined;
->data : Symbol(data, Decl(useQuery-CPqkvEsh.d.ts, 98, 75))
+>data : Symbol(QueryObserverBaseResult.data, Decl(useQuery-CPqkvEsh.d.ts, 98, 75))
 >TData : Symbol(TData, Decl(useQuery-CPqkvEsh.d.ts, 98, 34))
 
   dataUpdatedAt: number;
->dataUpdatedAt : Symbol(dataUpdatedAt, Decl(useQuery-CPqkvEsh.d.ts, 99, 26))
+>dataUpdatedAt : Symbol(QueryObserverBaseResult.dataUpdatedAt, Decl(useQuery-CPqkvEsh.d.ts, 99, 26))
 
   error: TError | null;
->error : Symbol(error, Decl(useQuery-CPqkvEsh.d.ts, 100, 24))
+>error : Symbol(QueryObserverBaseResult.error, Decl(useQuery-CPqkvEsh.d.ts, 100, 24))
 >TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 98, 50))
 
   errorUpdatedAt: number;
->errorUpdatedAt : Symbol(errorUpdatedAt, Decl(useQuery-CPqkvEsh.d.ts, 101, 23))
+>errorUpdatedAt : Symbol(QueryObserverBaseResult.errorUpdatedAt, Decl(useQuery-CPqkvEsh.d.ts, 101, 23))
 
   failureCount: number;
->failureCount : Symbol(failureCount, Decl(useQuery-CPqkvEsh.d.ts, 102, 25))
+>failureCount : Symbol(QueryObserverBaseResult.failureCount, Decl(useQuery-CPqkvEsh.d.ts, 102, 25))
 
   failureReason: TError | null;
->failureReason : Symbol(failureReason, Decl(useQuery-CPqkvEsh.d.ts, 103, 23))
+>failureReason : Symbol(QueryObserverBaseResult.failureReason, Decl(useQuery-CPqkvEsh.d.ts, 103, 23))
 >TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 98, 50))
 
   errorUpdateCount: number;
->errorUpdateCount : Symbol(errorUpdateCount, Decl(useQuery-CPqkvEsh.d.ts, 104, 31))
+>errorUpdateCount : Symbol(QueryObserverBaseResult.errorUpdateCount, Decl(useQuery-CPqkvEsh.d.ts, 104, 31))
 
   isError: boolean;
->isError : Symbol(isError, Decl(useQuery-CPqkvEsh.d.ts, 105, 27))
+>isError : Symbol(QueryObserverBaseResult.isError, Decl(useQuery-CPqkvEsh.d.ts, 105, 27))
 
   isFetched: boolean;
->isFetched : Symbol(isFetched, Decl(useQuery-CPqkvEsh.d.ts, 106, 19))
+>isFetched : Symbol(QueryObserverBaseResult.isFetched, Decl(useQuery-CPqkvEsh.d.ts, 106, 19))
 
   isFetchedAfterMount: boolean;
->isFetchedAfterMount : Symbol(isFetchedAfterMount, Decl(useQuery-CPqkvEsh.d.ts, 107, 21))
+>isFetchedAfterMount : Symbol(QueryObserverBaseResult.isFetchedAfterMount, Decl(useQuery-CPqkvEsh.d.ts, 107, 21))
 
   isFetching: boolean;
->isFetching : Symbol(isFetching, Decl(useQuery-CPqkvEsh.d.ts, 108, 31))
+>isFetching : Symbol(QueryObserverBaseResult.isFetching, Decl(useQuery-CPqkvEsh.d.ts, 108, 31))
 
   isLoading: boolean;
->isLoading : Symbol(isLoading, Decl(useQuery-CPqkvEsh.d.ts, 109, 22))
+>isLoading : Symbol(QueryObserverBaseResult.isLoading, Decl(useQuery-CPqkvEsh.d.ts, 109, 22))
 
   isPending: boolean;
->isPending : Symbol(isPending, Decl(useQuery-CPqkvEsh.d.ts, 110, 21))
+>isPending : Symbol(QueryObserverBaseResult.isPending, Decl(useQuery-CPqkvEsh.d.ts, 110, 21))
 
   isLoadingError: boolean;
->isLoadingError : Symbol(isLoadingError, Decl(useQuery-CPqkvEsh.d.ts, 111, 21))
+>isLoadingError : Symbol(QueryObserverBaseResult.isLoadingError, Decl(useQuery-CPqkvEsh.d.ts, 111, 21))
 
   isInitialLoading: boolean;
->isInitialLoading : Symbol(isInitialLoading, Decl(useQuery-CPqkvEsh.d.ts, 112, 26))
+>isInitialLoading : Symbol(QueryObserverBaseResult.isInitialLoading, Decl(useQuery-CPqkvEsh.d.ts, 112, 26))
 
   isPaused: boolean;
->isPaused : Symbol(isPaused, Decl(useQuery-CPqkvEsh.d.ts, 113, 28))
+>isPaused : Symbol(QueryObserverBaseResult.isPaused, Decl(useQuery-CPqkvEsh.d.ts, 113, 28))
 
   isPlaceholderData: boolean;
->isPlaceholderData : Symbol(isPlaceholderData, Decl(useQuery-CPqkvEsh.d.ts, 114, 20))
+>isPlaceholderData : Symbol(QueryObserverBaseResult.isPlaceholderData, Decl(useQuery-CPqkvEsh.d.ts, 114, 20))
 
   isRefetchError: boolean;
->isRefetchError : Symbol(isRefetchError, Decl(useQuery-CPqkvEsh.d.ts, 115, 29))
+>isRefetchError : Symbol(QueryObserverBaseResult.isRefetchError, Decl(useQuery-CPqkvEsh.d.ts, 115, 29))
 
   isRefetching: boolean;
->isRefetching : Symbol(isRefetching, Decl(useQuery-CPqkvEsh.d.ts, 116, 26))
+>isRefetching : Symbol(QueryObserverBaseResult.isRefetching, Decl(useQuery-CPqkvEsh.d.ts, 116, 26))
 
   isStale: boolean;
->isStale : Symbol(isStale, Decl(useQuery-CPqkvEsh.d.ts, 117, 24))
+>isStale : Symbol(QueryObserverBaseResult.isStale, Decl(useQuery-CPqkvEsh.d.ts, 117, 24))
 
   isSuccess: boolean;
->isSuccess : Symbol(isSuccess, Decl(useQuery-CPqkvEsh.d.ts, 118, 19))
+>isSuccess : Symbol(QueryObserverBaseResult.isSuccess, Decl(useQuery-CPqkvEsh.d.ts, 118, 19))
 }
 
 interface QueryObserverSuccessResult<TData = unknown, TError = DefaultError>
@@ -382,29 +382,29 @@ interface QueryObserverSuccessResult<TData = unknown, TError = DefaultError>
 >TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 122, 53))
 
   data: TData;
->data : Symbol(data, Decl(useQuery-CPqkvEsh.d.ts, 123, 50))
+>data : Symbol(QueryObserverSuccessResult.data, Decl(useQuery-CPqkvEsh.d.ts, 123, 50))
 >TData : Symbol(TData, Decl(useQuery-CPqkvEsh.d.ts, 122, 37))
 
   error: null;
->error : Symbol(error, Decl(useQuery-CPqkvEsh.d.ts, 124, 14))
+>error : Symbol(QueryObserverSuccessResult.error, Decl(useQuery-CPqkvEsh.d.ts, 124, 14))
 
   isError: false;
->isError : Symbol(isError, Decl(useQuery-CPqkvEsh.d.ts, 125, 14))
+>isError : Symbol(QueryObserverSuccessResult.isError, Decl(useQuery-CPqkvEsh.d.ts, 125, 14))
 
   isPending: false;
->isPending : Symbol(isPending, Decl(useQuery-CPqkvEsh.d.ts, 126, 17))
+>isPending : Symbol(QueryObserverSuccessResult.isPending, Decl(useQuery-CPqkvEsh.d.ts, 126, 17))
 
   isLoadingError: false;
->isLoadingError : Symbol(isLoadingError, Decl(useQuery-CPqkvEsh.d.ts, 127, 19))
+>isLoadingError : Symbol(QueryObserverSuccessResult.isLoadingError, Decl(useQuery-CPqkvEsh.d.ts, 127, 19))
 
   isRefetchError: false;
->isRefetchError : Symbol(isRefetchError, Decl(useQuery-CPqkvEsh.d.ts, 128, 24))
+>isRefetchError : Symbol(QueryObserverSuccessResult.isRefetchError, Decl(useQuery-CPqkvEsh.d.ts, 128, 24))
 
   isSuccess: true;
->isSuccess : Symbol(isSuccess, Decl(useQuery-CPqkvEsh.d.ts, 129, 24))
+>isSuccess : Symbol(QueryObserverSuccessResult.isSuccess, Decl(useQuery-CPqkvEsh.d.ts, 129, 24))
 
   status: "success";
->status : Symbol(status, Decl(useQuery-CPqkvEsh.d.ts, 130, 18))
+>status : Symbol(QueryObserverSuccessResult.status, Decl(useQuery-CPqkvEsh.d.ts, 130, 18))
 }
 
 type DefinedQueryObserverResult<
@@ -554,25 +554,25 @@ interface IEntry {
 >IEntry : Symbol(IEntry, Decl(index.mts, 2, 45))
 
   API: string
->API : Symbol(API, Decl(index.mts, 4, 18))
+>API : Symbol(IEntry.API, Decl(index.mts, 4, 18))
 
   Description: string
->Description : Symbol(Description, Decl(index.mts, 5, 13))
+>Description : Symbol(IEntry.Description, Decl(index.mts, 5, 13))
 
   Auth: string
->Auth : Symbol(Auth, Decl(index.mts, 6, 21))
+>Auth : Symbol(IEntry.Auth, Decl(index.mts, 6, 21))
 
   HTTPS: boolean
->HTTPS : Symbol(HTTPS, Decl(index.mts, 7, 14))
+>HTTPS : Symbol(IEntry.HTTPS, Decl(index.mts, 7, 14))
 
   Cors: string
->Cors : Symbol(Cors, Decl(index.mts, 8, 16))
+>Cors : Symbol(IEntry.Cors, Decl(index.mts, 8, 16))
 
   Link: string
->Link : Symbol(Link, Decl(index.mts, 9, 14))
+>Link : Symbol(IEntry.Link, Decl(index.mts, 9, 14))
 
   Category: string
->Category : Symbol(Category, Decl(index.mts, 10, 14))
+>Category : Symbol(IEntry.Category, Decl(index.mts, 10, 14))
 }
 
 const testApi = {
@@ -584,30 +584,30 @@ const testApi = {
 >IEntry : Symbol(IEntry, Decl(index.mts, 2, 45))
 
     return fetch(baseUrl + 'entries')
->fetch(baseUrl + 'entries')      .then((res) => res.json())      .then((data) => data.entries)      .catch : Symbol(catch, Decl(lib.es5.d.ts, --, --))
->fetch(baseUrl + 'entries')      .then((res) => res.json())      .then : Symbol(then, Decl(lib.es5.d.ts, --, --))
->fetch(baseUrl + 'entries')      .then : Symbol(then, Decl(lib.es5.d.ts, --, --))
+>fetch(baseUrl + 'entries')      .then((res) => res.json())      .then((data) => data.entries)      .catch : Symbol(Promise.catch, Decl(lib.es5.d.ts, --, --))
+>fetch(baseUrl + 'entries')      .then((res) => res.json())      .then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>fetch(baseUrl + 'entries')      .then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
 >fetch : Symbol(fetch, Decl(lib.dom.d.ts, --, --))
 >baseUrl : Symbol(baseUrl, Decl(index.mts, 2, 5))
 
       .then((res) => res.json())
->then : Symbol(then, Decl(lib.es5.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
 >res : Symbol(res, Decl(index.mts, 17, 13))
->res.json : Symbol(json, Decl(lib.dom.d.ts, --, --))
+>res.json : Symbol(Body.json, Decl(lib.dom.d.ts, --, --))
 >res : Symbol(res, Decl(index.mts, 17, 13))
->json : Symbol(json, Decl(lib.dom.d.ts, --, --))
+>json : Symbol(Body.json, Decl(lib.dom.d.ts, --, --))
 
       .then((data) => data.entries)
->then : Symbol(then, Decl(lib.es5.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
 >data : Symbol(data, Decl(index.mts, 18, 13))
 >data : Symbol(data, Decl(index.mts, 18, 13))
 
       .catch((err) => console.log(err))
->catch : Symbol(catch, Decl(lib.es5.d.ts, --, --))
+>catch : Symbol(Promise.catch, Decl(lib.es5.d.ts, --, --))
 >err : Symbol(err, Decl(index.mts, 19, 14))
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >err : Symbol(err, Decl(index.mts, 19, 14))
   }
 }
@@ -648,9 +648,9 @@ export const useEntries = () => {
     select: (data) => data.slice(0, 10)
 >select : Symbol(select, Decl(index.mts, 31, 32))
 >data : Symbol(data, Decl(index.mts, 32, 13))
->data.slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+>data.slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
 >data : Symbol(data, Decl(index.mts, 32, 13))
->slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+>slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
 
   })
 }

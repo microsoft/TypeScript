@@ -19,7 +19,7 @@ class C {
 >C : Symbol(C, Decl(constructorParameterShadowsOuterScopes2.ts, 11, 10))
 
     b = x; // ok
->b : Symbol(b, Decl(constructorParameterShadowsOuterScopes2.ts, 12, 9))
+>b : Symbol(C.b, Decl(constructorParameterShadowsOuterScopes2.ts, 12, 9))
 >x : Symbol(x, Decl(constructorParameterShadowsOuterScopes2.ts, 11, 3))
 
     constructor(x: string) {
@@ -34,7 +34,7 @@ class D {
 >D : Symbol(D, Decl(constructorParameterShadowsOuterScopes2.ts, 18, 10))
 
     b = y; // ok
->b : Symbol(b, Decl(constructorParameterShadowsOuterScopes2.ts, 19, 9))
+>b : Symbol(D.b, Decl(constructorParameterShadowsOuterScopes2.ts, 19, 9))
 >y : Symbol(y, Decl(constructorParameterShadowsOuterScopes2.ts, 18, 3))
 
     constructor(x: string) {
@@ -49,7 +49,7 @@ class E {
 >E : Symbol(E, Decl(constructorParameterShadowsOuterScopes2.ts, 24, 1))
 
     b = z; // not ok
->b : Symbol(b, Decl(constructorParameterShadowsOuterScopes2.ts, 26, 9))
+>b : Symbol(E.b, Decl(constructorParameterShadowsOuterScopes2.ts, 26, 9))
 
     constructor(z: string) {
 >z : Symbol(z, Decl(constructorParameterShadowsOuterScopes2.ts, 28, 16))

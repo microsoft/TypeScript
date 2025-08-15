@@ -6,7 +6,7 @@ export class A {}
 
 === /b.ts ===
 export type * as ns from "./a";
->ns : typeof import("./a")
+>ns : typeof import("/a")
 
 === /c.ts ===
 import { ns } from "./b";

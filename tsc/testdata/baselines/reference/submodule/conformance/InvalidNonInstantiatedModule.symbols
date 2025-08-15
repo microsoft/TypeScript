@@ -6,8 +6,8 @@ module M {
 
     export interface Point { x: number; y: number }
 >Point : Symbol(Point, Decl(InvalidNonInstantiatedModule.ts, 0, 10))
->x : Symbol(x, Decl(InvalidNonInstantiatedModule.ts, 1, 28))
->y : Symbol(y, Decl(InvalidNonInstantiatedModule.ts, 1, 39))
+>x : Symbol(Point.x, Decl(InvalidNonInstantiatedModule.ts, 1, 28))
+>y : Symbol(Point.y, Decl(InvalidNonInstantiatedModule.ts, 1, 39))
 }
 
 var m = M; // Error, not instantiated can not be used as var

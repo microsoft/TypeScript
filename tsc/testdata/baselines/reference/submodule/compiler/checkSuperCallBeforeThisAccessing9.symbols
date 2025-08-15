@@ -13,9 +13,9 @@ class Derived {
 >this : Symbol(Derived, Decl(noSuperInJSDocExtends.js, 0, 15))
 
         this.x = 10;
->this.x : Symbol(x, Decl(noSuperInJSDocExtends.js, 4, 13))
+>this.x : Symbol(Derived.x, Decl(noSuperInJSDocExtends.js, 4, 13))
 >this : Symbol(Derived, Decl(noSuperInJSDocExtends.js, 0, 15))
->x : Symbol(x, Decl(noSuperInJSDocExtends.js, 4, 13))
+>x : Symbol(Derived.x, Decl(noSuperInJSDocExtends.js, 4, 13))
 
         var that = this;
 >that : Symbol(that, Decl(noSuperInJSDocExtends.js, 6, 11))

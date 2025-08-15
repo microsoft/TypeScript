@@ -6,7 +6,7 @@ function Foo() {}
 
 Foo[`b`] = function () {};
 >Foo : Symbol(Foo, Decl(indexTypeNoSubstitutionTemplateLiteral.ts, 0, 0))
->`b` : Symbol(`b`, Decl(indexTypeNoSubstitutionTemplateLiteral.ts, 0, 17))
+>`b` : Symbol(Foo[`b`], Decl(indexTypeNoSubstitutionTemplateLiteral.ts, 0, 17))
 
 type Test = keyof typeof Foo;
 >Test : Symbol(Test, Decl(indexTypeNoSubstitutionTemplateLiteral.ts, 1, 26))

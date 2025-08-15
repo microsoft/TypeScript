@@ -12,11 +12,11 @@ for (const row of ['1', '2', '3', '4', '5']) {
 >RowClass : Symbol(RowClass, Decl(classInConvertedLoopES5.ts, 1, 46))
 
     row = row;
->row : Symbol(row, Decl(classInConvertedLoopES5.ts, 2, 18))
+>row : Symbol(RowClass.row, Decl(classInConvertedLoopES5.ts, 2, 18))
 >row : Symbol(row, Decl(classInConvertedLoopES5.ts, 1, 10))
 
     static factory = () => new RowClass();
->factory : Symbol(factory, Decl(classInConvertedLoopES5.ts, 3, 14))
+>factory : Symbol(RowClass.factory, Decl(classInConvertedLoopES5.ts, 3, 14))
 >RowClass : Symbol(RowClass, Decl(classInConvertedLoopES5.ts, 1, 46))
   }
 

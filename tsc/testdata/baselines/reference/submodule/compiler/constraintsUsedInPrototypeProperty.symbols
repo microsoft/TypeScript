@@ -8,7 +8,7 @@ class Foo<T extends number, U, V extends string> { }
 >V : Symbol(V, Decl(constraintsUsedInPrototypeProperty.ts, 0, 30))
 
 Foo.prototype; // Foo<any, any, any>
->Foo.prototype : Symbol(prototype)
+>Foo.prototype : Symbol(Foo.prototype)
 >Foo : Symbol(Foo, Decl(constraintsUsedInPrototypeProperty.ts, 0, 0))
->prototype : Symbol(prototype)
+>prototype : Symbol(Foo.prototype)
 

@@ -10,7 +10,7 @@ export interface TestSymb {
 
   (): void;
   readonly [symb]: boolean;
->[symb] : Symbol([symb], Decl(types.ts, 3, 11))
+>[symb] : Symbol(TestSymb[symb], Decl(types.ts, 3, 11))
 >symb : Symbol(symb, Decl(types.ts, 0, 12))
 }
 

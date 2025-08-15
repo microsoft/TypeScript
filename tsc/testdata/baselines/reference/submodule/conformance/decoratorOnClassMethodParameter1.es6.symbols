@@ -10,7 +10,7 @@ declare function dec(target: Object, propertyKey: string | symbol, parameterInde
 
 export default class {
     method(@dec p: number) {}
->method : Symbol(method, Decl(decoratorOnClassMethodParameter1.es6.ts, 2, 22))
+>method : Symbol(default.method, Decl(decoratorOnClassMethodParameter1.es6.ts, 2, 22))
 >dec : Symbol(dec, Decl(decoratorOnClassMethodParameter1.es6.ts, 0, 0))
 >p : Symbol(p, Decl(decoratorOnClassMethodParameter1.es6.ts, 3, 11))
 }

@@ -8,10 +8,10 @@ interface MyProps {
 >MyProps : Symbol(MyProps, Decl(my-component.tsx, 0, 30))
 
     x: string;
->x : Symbol(x, Decl(my-component.tsx, 2, 19))
+>x : Symbol(MyProps.x, Decl(my-component.tsx, 2, 19))
 
     y: MyInnerProps;
->y : Symbol(y, Decl(my-component.tsx, 3, 14))
+>y : Symbol(MyProps.y, Decl(my-component.tsx, 3, 14))
 >MyInnerProps : Symbol(MyInnerProps, Decl(my-component.tsx, 5, 1))
 }
 
@@ -19,7 +19,7 @@ interface MyInnerProps {
 >MyInnerProps : Symbol(MyInnerProps, Decl(my-component.tsx, 5, 1))
 
     value: string;
->value : Symbol(value, Decl(my-component.tsx, 7, 24))
+>value : Symbol(MyInnerProps.value, Decl(my-component.tsx, 7, 24))
 }
 
 export function MyComponent(_props: MyProps) {
@@ -28,8 +28,8 @@ export function MyComponent(_props: MyProps) {
 >MyProps : Symbol(MyProps, Decl(my-component.tsx, 0, 30))
 
     return <span>my component</span>;
->span : Symbol(span, Decl(react.d.ts, 2461, 51))
->span : Symbol(span, Decl(react.d.ts, 2461, 51))
+>span : Symbol(JSX.IntrinsicElements.span, Decl(react.d.ts, 2461, 51))
+>span : Symbol(JSX.IntrinsicElements.span, Decl(react.d.ts, 2461, 51))
 }
 
 === file1.tsx ===

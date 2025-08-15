@@ -9,7 +9,7 @@ class A extends B {
 >B : Symbol(B, Decl(privateNameBadSuper.ts, 0, 0))
 
   #x;
->#x : Symbol(#x, Decl(privateNameBadSuper.ts, 1, 19))
+>#x : Symbol(A.#x, Decl(privateNameBadSuper.ts, 1, 19))
 
   constructor() {
     this;

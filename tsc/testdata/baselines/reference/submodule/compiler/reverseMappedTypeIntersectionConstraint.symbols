@@ -138,10 +138,10 @@ interface Stuff {
 >Stuff : Symbol(Stuff, Decl(reverseMappedTypeIntersectionConstraint.ts, 45, 8))
 
     field: number;
->field : Symbol(field, Decl(reverseMappedTypeIntersectionConstraint.ts, 49, 17))
+>field : Symbol(Stuff.field, Decl(reverseMappedTypeIntersectionConstraint.ts, 49, 17))
 
     anotherField: string;
->anotherField : Symbol(anotherField, Decl(reverseMappedTypeIntersectionConstraint.ts, 50, 18))
+>anotherField : Symbol(Stuff.anotherField, Decl(reverseMappedTypeIntersectionConstraint.ts, 50, 18))
 }
 
 function doStuffWithStuff<T extends Stuff>(s: { [K in keyof T & keyof Stuff]: T[K] } ): T {
@@ -157,9 +157,9 @@ function doStuffWithStuff<T extends Stuff>(s: { [K in keyof T & keyof Stuff]: T[
 >T : Symbol(T, Decl(reverseMappedTypeIntersectionConstraint.ts, 54, 26))
 
     if(Math.random() > 0.5) {
->Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
       return s as T
 >s : Symbol(s, Decl(reverseMappedTypeIntersectionConstraint.ts, 54, 43))
@@ -190,9 +190,9 @@ function doStuffWithStuffArr<T extends Stuff>(arr: { [K in keyof T & keyof Stuff
 >T : Symbol(T, Decl(reverseMappedTypeIntersectionConstraint.ts, 64, 29))
 
     if(Math.random() > 0.5) {
->Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
       return arr as T[]
 >arr : Symbol(arr, Decl(reverseMappedTypeIntersectionConstraint.ts, 64, 46))
@@ -296,10 +296,10 @@ interface WithNestedProp {
 >WithNestedProp : Symbol(WithNestedProp, Decl(reverseMappedTypeIntersectionConstraint.ts, 99, 30))
 
   prop: string;
->prop : Symbol(prop, Decl(reverseMappedTypeIntersectionConstraint.ts, 103, 26))
+>prop : Symbol(WithNestedProp.prop, Decl(reverseMappedTypeIntersectionConstraint.ts, 103, 26))
 
   nested: {
->nested : Symbol(nested, Decl(reverseMappedTypeIntersectionConstraint.ts, 104, 15))
+>nested : Symbol(WithNestedProp.nested, Decl(reverseMappedTypeIntersectionConstraint.ts, 104, 15))
 
     prop: string;
 >prop : Symbol(prop, Decl(reverseMappedTypeIntersectionConstraint.ts, 105, 11))
@@ -349,10 +349,10 @@ interface ProvidedActor {
 >ProvidedActor : Symbol(ProvidedActor, Decl(reverseMappedTypeIntersectionConstraint.ts, 118, 96))
 
   src: string;
->src : Symbol(src, Decl(reverseMappedTypeIntersectionConstraint.ts, 120, 25))
+>src : Symbol(ProvidedActor.src, Decl(reverseMappedTypeIntersectionConstraint.ts, 120, 25))
 
   logic: () => Promise<unknown>;
->logic : Symbol(logic, Decl(reverseMappedTypeIntersectionConstraint.ts, 121, 14))
+>logic : Symbol(ProvidedActor.logic, Decl(reverseMappedTypeIntersectionConstraint.ts, 121, 14))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
 }
 
@@ -376,7 +376,7 @@ interface MachineConfig<TActor extends ProvidedActor> {
 >ProvidedActor : Symbol(ProvidedActor, Decl(reverseMappedTypeIntersectionConstraint.ts, 118, 96))
 
   types?: {
->types : Symbol(types, Decl(reverseMappedTypeIntersectionConstraint.ts, 131, 55))
+>types : Symbol(MachineConfig.types, Decl(reverseMappedTypeIntersectionConstraint.ts, 131, 55))
 
     actors?: TActor;
 >actors : Symbol(actors, Decl(reverseMappedTypeIntersectionConstraint.ts, 132, 11))
@@ -384,7 +384,7 @@ interface MachineConfig<TActor extends ProvidedActor> {
 
   };
   invoke: IsLiteralString<TActor["src"]> extends true
->invoke : Symbol(invoke, Decl(reverseMappedTypeIntersectionConstraint.ts, 134, 4))
+>invoke : Symbol(MachineConfig.invoke, Decl(reverseMappedTypeIntersectionConstraint.ts, 134, 4))
 >IsLiteralString : Symbol(IsLiteralString, Decl(reverseMappedTypeIntersectionConstraint.ts, 112, 79))
 >TActor : Symbol(TActor, Decl(reverseMappedTypeIntersectionConstraint.ts, 131, 24))
 

@@ -8,17 +8,17 @@ module M {
 >I : Symbol(I, Decl(thisBinding.ts, 0, 10))
 
 	z;
->z : Symbol(z, Decl(thisBinding.ts, 1, 24))
+>z : Symbol(I.z, Decl(thisBinding.ts, 1, 24))
     }
 
     export class C {
 >C : Symbol(C, Decl(thisBinding.ts, 3, 5))
 
 	public x=0;
->x : Symbol(x, Decl(thisBinding.ts, 5, 20))
+>x : Symbol(C.x, Decl(thisBinding.ts, 5, 20))
 
 	f(x:I) {
->f : Symbol(f, Decl(thisBinding.ts, 6, 12))
+>f : Symbol(C.f, Decl(thisBinding.ts, 6, 12))
 >x : Symbol(x, Decl(thisBinding.ts, 7, 3))
 >I : Symbol(I, Decl(thisBinding.ts, 0, 10))
 
@@ -26,18 +26,18 @@ module M {
 >x : Symbol(x, Decl(thisBinding.ts, 7, 3))
 
 	    x.z;  // ok 
->x.z : Symbol(z, Decl(thisBinding.ts, 1, 24))
+>x.z : Symbol(I.z, Decl(thisBinding.ts, 1, 24))
 >x : Symbol(x, Decl(thisBinding.ts, 7, 3))
->z : Symbol(z, Decl(thisBinding.ts, 1, 24))
+>z : Symbol(I.z, Decl(thisBinding.ts, 1, 24))
 	}
     constructor() {
 	({z:10,f:this.f}).f(<I>({}));
 >({z:10,f:this.f}).f : Symbol(f, Decl(thisBinding.ts, 12, 8))
 >z : Symbol(z, Decl(thisBinding.ts, 12, 3))
 >f : Symbol(f, Decl(thisBinding.ts, 12, 8))
->this.f : Symbol(f, Decl(thisBinding.ts, 6, 12))
+>this.f : Symbol(C.f, Decl(thisBinding.ts, 6, 12))
 >this : Symbol(C, Decl(thisBinding.ts, 3, 5))
->f : Symbol(f, Decl(thisBinding.ts, 6, 12))
+>f : Symbol(C.f, Decl(thisBinding.ts, 6, 12))
 >f : Symbol(f, Decl(thisBinding.ts, 12, 8))
 >I : Symbol(I, Decl(thisBinding.ts, 0, 10))
     }
@@ -48,7 +48,7 @@ class C {
 >C : Symbol(C, Decl(thisBinding.ts, 15, 1))
 
     f(x: number) {
->f : Symbol(f, Decl(thisBinding.ts, 17, 9))
+>f : Symbol(C.f, Decl(thisBinding.ts, 17, 9))
 >x : Symbol(x, Decl(thisBinding.ts, 18, 6))
     }
 }

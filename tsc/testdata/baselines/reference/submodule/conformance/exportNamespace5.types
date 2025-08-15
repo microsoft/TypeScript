@@ -13,7 +13,7 @@ export class X {}
 === /b.ts ===
 export type * from "./a";
 export { X } from "./a";
->X : typeof import("./a").X
+>X : typeof import("/a").X
 
 === /c.ts ===
 import { A, B as C, X } from "./b";

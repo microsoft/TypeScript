@@ -9,9 +9,9 @@ function t1() {
 >b1 : Symbol(b1, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 1, 15))
 
     console.log(b1);
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >b1 : Symbol(b1, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 1, 15))
 
     const [a2, _b2] = [1, 2];
@@ -19,9 +19,9 @@ function t1() {
 >_b2 : Symbol(_b2, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 4, 14))
 
     console.log(a2);
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >a2 : Symbol(a2, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 4, 11))
 
     const [_a3, _b3] = [1, 2];
@@ -56,9 +56,9 @@ function t3() {
 >_e1 : Symbol(_e1, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 17, 32))
 
     console.log(c1, d1);
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >c1 : Symbol(c1, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 17, 22))
 >d1 : Symbol(d1, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 17, 28))
 
@@ -88,9 +88,9 @@ function t4() {
 >b1 : Symbol(b1, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 26, 36))
 
     console.log(b1);
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >b1 : Symbol(b1, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 26, 20))
 
     const { a2, b2: _b2 } = { a2: 1, b2: 1 };
@@ -101,9 +101,9 @@ function t4() {
 >b2 : Symbol(b2, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 29, 36))
 
     console.log(a2);
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >a2 : Symbol(a2, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 29, 11))
 
     const { a3: _a3, b3: _b3 } = { a3: 1, b3: 1 };
@@ -178,9 +178,9 @@ function t6() {
 >d1 : Symbol(d1, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 52, 58))
 
     console.log(b112, c1);
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >b112 : Symbol(b112, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 46, 28))
 >c1 : Symbol(c1, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 49, 10))
 

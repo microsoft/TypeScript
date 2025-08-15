@@ -14,9 +14,9 @@ const SomeConstructor2 = function Named() {
 
 };
 SomeConstructor2.staticMember = "str";
->SomeConstructor2.staticMember : Symbol(staticMember, Decl(file.js, 5, 2))
+>SomeConstructor2.staticMember : Symbol(Named.staticMember, Decl(file.js, 5, 2))
 >SomeConstructor2 : Symbol(SomeConstructor2, Decl(file.js, 4, 5))
->staticMember : Symbol(staticMember, Decl(file.js, 5, 2))
+>staticMember : Symbol(Named.staticMember, Decl(file.js, 5, 2))
 
 const SomeConstructor3 = function Named() {
 >SomeConstructor3 : Symbol(SomeConstructor3, Decl(file.js, 8, 5))
@@ -25,9 +25,9 @@ const SomeConstructor3 = function Named() {
 	this.x = 1;
 };
 SomeConstructor3.staticMember = "str";
->SomeConstructor3.staticMember : Symbol(staticMember, Decl(file.js, 10, 2))
+>SomeConstructor3.staticMember : Symbol(Named.staticMember, Decl(file.js, 10, 2))
 >SomeConstructor3 : Symbol(SomeConstructor3, Decl(file.js, 8, 5))
->staticMember : Symbol(staticMember, Decl(file.js, 10, 2))
+>staticMember : Symbol(Named.staticMember, Decl(file.js, 10, 2))
 
 const SelfReference = function Named() {
 >SelfReference : Symbol(SelfReference, Decl(file.js, 13, 5))
@@ -40,7 +40,7 @@ const SelfReference = function Named() {
     this.x = 1;
 }
 SelfReference.staticMember = "str";
->SelfReference.staticMember : Symbol(staticMember, Decl(file.js, 16, 1))
+>SelfReference.staticMember : Symbol(Named.staticMember, Decl(file.js, 16, 1))
 >SelfReference : Symbol(SelfReference, Decl(file.js, 13, 5))
->staticMember : Symbol(staticMember, Decl(file.js, 16, 1))
+>staticMember : Symbol(Named.staticMember, Decl(file.js, 16, 1))
 

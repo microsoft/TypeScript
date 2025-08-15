@@ -5,10 +5,10 @@ declare class B {
 >B : Symbol(B, Decl(override3.ts, 0, 0))
 
     foo(): void
->foo : Symbol(foo, Decl(override3.ts, 0, 17))
+>foo : Symbol(B.foo, Decl(override3.ts, 0, 17))
 
     bar(): void
->bar : Symbol(bar, Decl(override3.ts, 1, 15))
+>bar : Symbol(B.bar, Decl(override3.ts, 1, 15))
 }
 
 declare class D extends B {
@@ -16,10 +16,10 @@ declare class D extends B {
 >B : Symbol(B, Decl(override3.ts, 0, 0))
 
     foo (): void;
->foo : Symbol(foo, Decl(override3.ts, 5, 27))
+>foo : Symbol(D.foo, Decl(override3.ts, 5, 27))
 
     override bar (): void;
->bar : Symbol(bar, Decl(override3.ts, 6, 17))
+>bar : Symbol(D.bar, Decl(override3.ts, 6, 17))
 }
 
 class DB extends B {
@@ -27,10 +27,10 @@ class DB extends B {
 >B : Symbol(B, Decl(override3.ts, 0, 0))
 
     override foo(): void {}
->foo : Symbol(foo, Decl(override3.ts, 10, 20))
+>foo : Symbol(DB.foo, Decl(override3.ts, 10, 20))
 
     override bar(): void {}
->bar : Symbol(bar, Decl(override3.ts, 11, 27))
+>bar : Symbol(DB.bar, Decl(override3.ts, 11, 27))
 }
 
 class DD extends D {
@@ -38,10 +38,10 @@ class DD extends D {
 >D : Symbol(D, Decl(override3.ts, 3, 1))
 
     override foo(): void {}
->foo : Symbol(foo, Decl(override3.ts, 15, 20))
+>foo : Symbol(DD.foo, Decl(override3.ts, 15, 20))
 
     override bar(): void {}
->bar : Symbol(bar, Decl(override3.ts, 16, 27))
+>bar : Symbol(DD.bar, Decl(override3.ts, 16, 27))
 }
 
 class EB extends D {
@@ -49,9 +49,9 @@ class EB extends D {
 >D : Symbol(D, Decl(override3.ts, 3, 1))
 
     foo(): void {}
->foo : Symbol(foo, Decl(override3.ts, 20, 20))
+>foo : Symbol(EB.foo, Decl(override3.ts, 20, 20))
 
     override bar(): void {}
->bar : Symbol(bar, Decl(override3.ts, 21, 18))
+>bar : Symbol(EB.bar, Decl(override3.ts, 21, 18))
 }
 

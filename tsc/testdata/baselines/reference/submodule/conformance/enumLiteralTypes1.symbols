@@ -3,32 +3,32 @@
 === enumLiteralTypes1.ts ===
 const enum Choice { Unknown, Yes, No };
 >Choice : Symbol(Choice, Decl(enumLiteralTypes1.ts, 0, 0))
->Unknown : Symbol(Unknown, Decl(enumLiteralTypes1.ts, 0, 19))
->Yes : Symbol(Yes, Decl(enumLiteralTypes1.ts, 0, 28))
->No : Symbol(No, Decl(enumLiteralTypes1.ts, 0, 33))
+>Unknown : Symbol(Choice.Unknown, Decl(enumLiteralTypes1.ts, 0, 19))
+>Yes : Symbol(Choice.Yes, Decl(enumLiteralTypes1.ts, 0, 28))
+>No : Symbol(Choice.No, Decl(enumLiteralTypes1.ts, 0, 33))
 
 type YesNo = Choice.Yes | Choice.No;
 >YesNo : Symbol(YesNo, Decl(enumLiteralTypes1.ts, 0, 39))
 >Choice : Symbol(Choice, Decl(enumLiteralTypes1.ts, 0, 0))
->Yes : Symbol(Yes, Decl(enumLiteralTypes1.ts, 0, 28))
+>Yes : Symbol(Choice.Yes, Decl(enumLiteralTypes1.ts, 0, 28))
 >Choice : Symbol(Choice, Decl(enumLiteralTypes1.ts, 0, 0))
->No : Symbol(No, Decl(enumLiteralTypes1.ts, 0, 33))
+>No : Symbol(Choice.No, Decl(enumLiteralTypes1.ts, 0, 33))
 
 type NoYes = Choice.No | Choice.Yes;
 >NoYes : Symbol(NoYes, Decl(enumLiteralTypes1.ts, 2, 36))
 >Choice : Symbol(Choice, Decl(enumLiteralTypes1.ts, 0, 0))
->No : Symbol(No, Decl(enumLiteralTypes1.ts, 0, 33))
+>No : Symbol(Choice.No, Decl(enumLiteralTypes1.ts, 0, 33))
 >Choice : Symbol(Choice, Decl(enumLiteralTypes1.ts, 0, 0))
->Yes : Symbol(Yes, Decl(enumLiteralTypes1.ts, 0, 28))
+>Yes : Symbol(Choice.Yes, Decl(enumLiteralTypes1.ts, 0, 28))
 
 type UnknownYesNo = Choice.Unknown | Choice.Yes | Choice.No;
 >UnknownYesNo : Symbol(UnknownYesNo, Decl(enumLiteralTypes1.ts, 3, 36))
 >Choice : Symbol(Choice, Decl(enumLiteralTypes1.ts, 0, 0))
->Unknown : Symbol(Unknown, Decl(enumLiteralTypes1.ts, 0, 19))
+>Unknown : Symbol(Choice.Unknown, Decl(enumLiteralTypes1.ts, 0, 19))
 >Choice : Symbol(Choice, Decl(enumLiteralTypes1.ts, 0, 0))
->Yes : Symbol(Yes, Decl(enumLiteralTypes1.ts, 0, 28))
+>Yes : Symbol(Choice.Yes, Decl(enumLiteralTypes1.ts, 0, 28))
 >Choice : Symbol(Choice, Decl(enumLiteralTypes1.ts, 0, 0))
->No : Symbol(No, Decl(enumLiteralTypes1.ts, 0, 33))
+>No : Symbol(Choice.No, Decl(enumLiteralTypes1.ts, 0, 33))
 
 function f1() {
 >f1 : Symbol(f1, Decl(enumLiteralTypes1.ts, 4, 60))
@@ -44,16 +44,16 @@ function f1() {
     var a: Choice.Yes | Choice.No;
 >a : Symbol(a, Decl(enumLiteralTypes1.ts, 7, 7), Decl(enumLiteralTypes1.ts, 8, 7), Decl(enumLiteralTypes1.ts, 9, 7), Decl(enumLiteralTypes1.ts, 10, 7))
 >Choice : Symbol(Choice, Decl(enumLiteralTypes1.ts, 0, 0))
->Yes : Symbol(Yes, Decl(enumLiteralTypes1.ts, 0, 28))
+>Yes : Symbol(Choice.Yes, Decl(enumLiteralTypes1.ts, 0, 28))
 >Choice : Symbol(Choice, Decl(enumLiteralTypes1.ts, 0, 0))
->No : Symbol(No, Decl(enumLiteralTypes1.ts, 0, 33))
+>No : Symbol(Choice.No, Decl(enumLiteralTypes1.ts, 0, 33))
 
     var a: Choice.No | Choice.Yes;
 >a : Symbol(a, Decl(enumLiteralTypes1.ts, 7, 7), Decl(enumLiteralTypes1.ts, 8, 7), Decl(enumLiteralTypes1.ts, 9, 7), Decl(enumLiteralTypes1.ts, 10, 7))
 >Choice : Symbol(Choice, Decl(enumLiteralTypes1.ts, 0, 0))
->No : Symbol(No, Decl(enumLiteralTypes1.ts, 0, 33))
+>No : Symbol(Choice.No, Decl(enumLiteralTypes1.ts, 0, 33))
 >Choice : Symbol(Choice, Decl(enumLiteralTypes1.ts, 0, 0))
->Yes : Symbol(Yes, Decl(enumLiteralTypes1.ts, 0, 28))
+>Yes : Symbol(Choice.Yes, Decl(enumLiteralTypes1.ts, 0, 28))
 }
 
 function f2(a: YesNo, b: UnknownYesNo, c: Choice) {
@@ -82,7 +82,7 @@ function f3(a: Choice.Yes, b: YesNo) {
 >f3 : Symbol(f3, Decl(enumLiteralTypes1.ts, 17, 1))
 >a : Symbol(a, Decl(enumLiteralTypes1.ts, 19, 12))
 >Choice : Symbol(Choice, Decl(enumLiteralTypes1.ts, 0, 0))
->Yes : Symbol(Yes, Decl(enumLiteralTypes1.ts, 0, 28))
+>Yes : Symbol(Choice.Yes, Decl(enumLiteralTypes1.ts, 0, 28))
 >b : Symbol(b, Decl(enumLiteralTypes1.ts, 19, 26))
 >YesNo : Symbol(YesNo, Decl(enumLiteralTypes1.ts, 0, 39))
 
@@ -183,7 +183,7 @@ function f4(a: Choice.Yes, b: YesNo) {
 >f4 : Symbol(f4, Decl(enumLiteralTypes1.ts, 39, 1))
 >a : Symbol(a, Decl(enumLiteralTypes1.ts, 41, 12))
 >Choice : Symbol(Choice, Decl(enumLiteralTypes1.ts, 0, 0))
->Yes : Symbol(Yes, Decl(enumLiteralTypes1.ts, 0, 28))
+>Yes : Symbol(Choice.Yes, Decl(enumLiteralTypes1.ts, 0, 28))
 >b : Symbol(b, Decl(enumLiteralTypes1.ts, 41, 26))
 >YesNo : Symbol(YesNo, Decl(enumLiteralTypes1.ts, 0, 39))
 
@@ -198,13 +198,13 @@ declare function g(x: Choice.Yes): string;
 >g : Symbol(g, Decl(enumLiteralTypes1.ts, 44, 1), Decl(enumLiteralTypes1.ts, 46, 42), Decl(enumLiteralTypes1.ts, 47, 42))
 >x : Symbol(x, Decl(enumLiteralTypes1.ts, 46, 19))
 >Choice : Symbol(Choice, Decl(enumLiteralTypes1.ts, 0, 0))
->Yes : Symbol(Yes, Decl(enumLiteralTypes1.ts, 0, 28))
+>Yes : Symbol(Choice.Yes, Decl(enumLiteralTypes1.ts, 0, 28))
 
 declare function g(x: Choice.No): boolean;
 >g : Symbol(g, Decl(enumLiteralTypes1.ts, 44, 1), Decl(enumLiteralTypes1.ts, 46, 42), Decl(enumLiteralTypes1.ts, 47, 42))
 >x : Symbol(x, Decl(enumLiteralTypes1.ts, 47, 19))
 >Choice : Symbol(Choice, Decl(enumLiteralTypes1.ts, 0, 0))
->No : Symbol(No, Decl(enumLiteralTypes1.ts, 0, 33))
+>No : Symbol(Choice.No, Decl(enumLiteralTypes1.ts, 0, 33))
 
 declare function g(x: Choice): number;
 >g : Symbol(g, Decl(enumLiteralTypes1.ts, 44, 1), Decl(enumLiteralTypes1.ts, 46, 42), Decl(enumLiteralTypes1.ts, 47, 42))
@@ -223,16 +223,16 @@ function f5(a: YesNo, b: UnknownYesNo, c: Choice) {
     var z1 = g(Choice.Yes);
 >z1 : Symbol(z1, Decl(enumLiteralTypes1.ts, 51, 7))
 >g : Symbol(g, Decl(enumLiteralTypes1.ts, 44, 1), Decl(enumLiteralTypes1.ts, 46, 42), Decl(enumLiteralTypes1.ts, 47, 42))
->Choice.Yes : Symbol(Yes, Decl(enumLiteralTypes1.ts, 0, 28))
+>Choice.Yes : Symbol(Choice.Yes, Decl(enumLiteralTypes1.ts, 0, 28))
 >Choice : Symbol(Choice, Decl(enumLiteralTypes1.ts, 0, 0))
->Yes : Symbol(Yes, Decl(enumLiteralTypes1.ts, 0, 28))
+>Yes : Symbol(Choice.Yes, Decl(enumLiteralTypes1.ts, 0, 28))
 
     var z2 = g(Choice.No);
 >z2 : Symbol(z2, Decl(enumLiteralTypes1.ts, 52, 7))
 >g : Symbol(g, Decl(enumLiteralTypes1.ts, 44, 1), Decl(enumLiteralTypes1.ts, 46, 42), Decl(enumLiteralTypes1.ts, 47, 42))
->Choice.No : Symbol(No, Decl(enumLiteralTypes1.ts, 0, 33))
+>Choice.No : Symbol(Choice.No, Decl(enumLiteralTypes1.ts, 0, 33))
 >Choice : Symbol(Choice, Decl(enumLiteralTypes1.ts, 0, 0))
->No : Symbol(No, Decl(enumLiteralTypes1.ts, 0, 33))
+>No : Symbol(Choice.No, Decl(enumLiteralTypes1.ts, 0, 33))
 
     var z3 = g(a);
 >z3 : Symbol(z3, Decl(enumLiteralTypes1.ts, 53, 7))
@@ -267,14 +267,14 @@ function f10(x: YesNo) {
 >x : Symbol(x, Decl(enumLiteralTypes1.ts, 62, 13))
 
         case Choice.Yes: return "true";
->Choice.Yes : Symbol(Yes, Decl(enumLiteralTypes1.ts, 0, 28))
+>Choice.Yes : Symbol(Choice.Yes, Decl(enumLiteralTypes1.ts, 0, 28))
 >Choice : Symbol(Choice, Decl(enumLiteralTypes1.ts, 0, 0))
->Yes : Symbol(Yes, Decl(enumLiteralTypes1.ts, 0, 28))
+>Yes : Symbol(Choice.Yes, Decl(enumLiteralTypes1.ts, 0, 28))
 
         case Choice.No: return "false";
->Choice.No : Symbol(No, Decl(enumLiteralTypes1.ts, 0, 33))
+>Choice.No : Symbol(Choice.No, Decl(enumLiteralTypes1.ts, 0, 33))
 >Choice : Symbol(Choice, Decl(enumLiteralTypes1.ts, 0, 0))
->No : Symbol(No, Decl(enumLiteralTypes1.ts, 0, 33))
+>No : Symbol(Choice.No, Decl(enumLiteralTypes1.ts, 0, 33))
     }
 }
 
@@ -287,14 +287,14 @@ function f11(x: YesNo) {
 >x : Symbol(x, Decl(enumLiteralTypes1.ts, 69, 13))
 
         case Choice.Yes: return "true";
->Choice.Yes : Symbol(Yes, Decl(enumLiteralTypes1.ts, 0, 28))
+>Choice.Yes : Symbol(Choice.Yes, Decl(enumLiteralTypes1.ts, 0, 28))
 >Choice : Symbol(Choice, Decl(enumLiteralTypes1.ts, 0, 0))
->Yes : Symbol(Yes, Decl(enumLiteralTypes1.ts, 0, 28))
+>Yes : Symbol(Choice.Yes, Decl(enumLiteralTypes1.ts, 0, 28))
 
         case Choice.No: return "false";
->Choice.No : Symbol(No, Decl(enumLiteralTypes1.ts, 0, 33))
+>Choice.No : Symbol(Choice.No, Decl(enumLiteralTypes1.ts, 0, 33))
 >Choice : Symbol(Choice, Decl(enumLiteralTypes1.ts, 0, 0))
->No : Symbol(No, Decl(enumLiteralTypes1.ts, 0, 33))
+>No : Symbol(Choice.No, Decl(enumLiteralTypes1.ts, 0, 33))
     }
     return assertNever(x);
 >assertNever : Symbol(assertNever, Decl(enumLiteralTypes1.ts, 56, 1))
@@ -325,9 +325,9 @@ function f13(x: UnknownYesNo) {
 
     if (x === Choice.Yes) {
 >x : Symbol(x, Decl(enumLiteralTypes1.ts, 86, 13))
->Choice.Yes : Symbol(Yes, Decl(enumLiteralTypes1.ts, 0, 28))
+>Choice.Yes : Symbol(Choice.Yes, Decl(enumLiteralTypes1.ts, 0, 28))
 >Choice : Symbol(Choice, Decl(enumLiteralTypes1.ts, 0, 0))
->Yes : Symbol(Yes, Decl(enumLiteralTypes1.ts, 0, 28))
+>Yes : Symbol(Choice.Yes, Decl(enumLiteralTypes1.ts, 0, 28))
 
         x;
 >x : Symbol(x, Decl(enumLiteralTypes1.ts, 86, 13))
@@ -344,13 +344,13 @@ type Item =
     { kind: Choice.Yes, a: string } |
 >kind : Symbol(kind, Decl(enumLiteralTypes1.ts, 96, 5))
 >Choice : Symbol(Choice, Decl(enumLiteralTypes1.ts, 0, 0))
->Yes : Symbol(Yes, Decl(enumLiteralTypes1.ts, 0, 28))
+>Yes : Symbol(Choice.Yes, Decl(enumLiteralTypes1.ts, 0, 28))
 >a : Symbol(a, Decl(enumLiteralTypes1.ts, 96, 23))
 
     { kind: Choice.No, b: string };
 >kind : Symbol(kind, Decl(enumLiteralTypes1.ts, 97, 5))
 >Choice : Symbol(Choice, Decl(enumLiteralTypes1.ts, 0, 0))
->No : Symbol(No, Decl(enumLiteralTypes1.ts, 0, 33))
+>No : Symbol(Choice.No, Decl(enumLiteralTypes1.ts, 0, 33))
 >b : Symbol(b, Decl(enumLiteralTypes1.ts, 97, 22))
 
 function f20(x: Item) {
@@ -364,17 +364,17 @@ function f20(x: Item) {
 >kind : Symbol(kind, Decl(enumLiteralTypes1.ts, 96, 5), Decl(enumLiteralTypes1.ts, 97, 5))
 
         case Choice.Yes: return x.a;
->Choice.Yes : Symbol(Yes, Decl(enumLiteralTypes1.ts, 0, 28))
+>Choice.Yes : Symbol(Choice.Yes, Decl(enumLiteralTypes1.ts, 0, 28))
 >Choice : Symbol(Choice, Decl(enumLiteralTypes1.ts, 0, 0))
->Yes : Symbol(Yes, Decl(enumLiteralTypes1.ts, 0, 28))
+>Yes : Symbol(Choice.Yes, Decl(enumLiteralTypes1.ts, 0, 28))
 >x.a : Symbol(a, Decl(enumLiteralTypes1.ts, 96, 23))
 >x : Symbol(x, Decl(enumLiteralTypes1.ts, 99, 13))
 >a : Symbol(a, Decl(enumLiteralTypes1.ts, 96, 23))
 
         case Choice.No: return x.b;
->Choice.No : Symbol(No, Decl(enumLiteralTypes1.ts, 0, 33))
+>Choice.No : Symbol(Choice.No, Decl(enumLiteralTypes1.ts, 0, 33))
 >Choice : Symbol(Choice, Decl(enumLiteralTypes1.ts, 0, 0))
->No : Symbol(No, Decl(enumLiteralTypes1.ts, 0, 33))
+>No : Symbol(Choice.No, Decl(enumLiteralTypes1.ts, 0, 33))
 >x.b : Symbol(b, Decl(enumLiteralTypes1.ts, 97, 22))
 >x : Symbol(x, Decl(enumLiteralTypes1.ts, 99, 13))
 >b : Symbol(b, Decl(enumLiteralTypes1.ts, 97, 22))
@@ -392,17 +392,17 @@ function f21(x: Item) {
 >kind : Symbol(kind, Decl(enumLiteralTypes1.ts, 96, 5), Decl(enumLiteralTypes1.ts, 97, 5))
 
         case Choice.Yes: return x.a;
->Choice.Yes : Symbol(Yes, Decl(enumLiteralTypes1.ts, 0, 28))
+>Choice.Yes : Symbol(Choice.Yes, Decl(enumLiteralTypes1.ts, 0, 28))
 >Choice : Symbol(Choice, Decl(enumLiteralTypes1.ts, 0, 0))
->Yes : Symbol(Yes, Decl(enumLiteralTypes1.ts, 0, 28))
+>Yes : Symbol(Choice.Yes, Decl(enumLiteralTypes1.ts, 0, 28))
 >x.a : Symbol(a, Decl(enumLiteralTypes1.ts, 96, 23))
 >x : Symbol(x, Decl(enumLiteralTypes1.ts, 106, 13))
 >a : Symbol(a, Decl(enumLiteralTypes1.ts, 96, 23))
 
         case Choice.No: return x.b;
->Choice.No : Symbol(No, Decl(enumLiteralTypes1.ts, 0, 33))
+>Choice.No : Symbol(Choice.No, Decl(enumLiteralTypes1.ts, 0, 33))
 >Choice : Symbol(Choice, Decl(enumLiteralTypes1.ts, 0, 0))
->No : Symbol(No, Decl(enumLiteralTypes1.ts, 0, 33))
+>No : Symbol(Choice.No, Decl(enumLiteralTypes1.ts, 0, 33))
 >x.b : Symbol(b, Decl(enumLiteralTypes1.ts, 97, 22))
 >x : Symbol(x, Decl(enumLiteralTypes1.ts, 106, 13))
 >b : Symbol(b, Decl(enumLiteralTypes1.ts, 97, 22))

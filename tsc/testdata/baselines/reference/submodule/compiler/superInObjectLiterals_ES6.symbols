@@ -50,7 +50,7 @@ class A {
 >A : Symbol(A, Decl(superInObjectLiterals_ES6.ts, 24, 2))
 
     method() { }
->method : Symbol(method, Decl(superInObjectLiterals_ES6.ts, 26, 9))
+>method : Symbol(A.method, Decl(superInObjectLiterals_ES6.ts, 26, 9))
 }
 
 class B extends A {
@@ -58,7 +58,7 @@ class B extends A {
 >A : Symbol(A, Decl(superInObjectLiterals_ES6.ts, 24, 2))
 
     f() {
->f : Symbol(f, Decl(superInObjectLiterals_ES6.ts, 30, 19))
+>f : Symbol(B.f, Decl(superInObjectLiterals_ES6.ts, 30, 19))
 
         var obj = {
 >obj : Symbol(obj, Decl(superInObjectLiterals_ES6.ts, 32, 11))
@@ -102,9 +102,9 @@ class B extends A {
 >p3 : Symbol(p3, Decl(superInObjectLiterals_ES6.ts, 52, 14))
 
                 super.method();
->super.method : Symbol(method, Decl(superInObjectLiterals_ES6.ts, 26, 9))
+>super.method : Symbol(A.method, Decl(superInObjectLiterals_ES6.ts, 26, 9))
 >super : Symbol(A, Decl(superInObjectLiterals_ES6.ts, 24, 2))
->method : Symbol(method, Decl(superInObjectLiterals_ES6.ts, 26, 9))
+>method : Symbol(A.method, Decl(superInObjectLiterals_ES6.ts, 26, 9))
             }
         };
     }

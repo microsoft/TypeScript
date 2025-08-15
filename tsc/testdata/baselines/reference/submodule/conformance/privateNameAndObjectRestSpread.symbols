@@ -5,13 +5,13 @@ class C {
 >C : Symbol(C, Decl(privateNameAndObjectRestSpread.ts, 0, 0))
 
     #prop = 1;
->#prop : Symbol(#prop, Decl(privateNameAndObjectRestSpread.ts, 0, 9))
+>#prop : Symbol(C.#prop, Decl(privateNameAndObjectRestSpread.ts, 0, 9))
 
     static #propStatic = 1;
->#propStatic : Symbol(#propStatic, Decl(privateNameAndObjectRestSpread.ts, 1, 14))
+>#propStatic : Symbol(C.#propStatic, Decl(privateNameAndObjectRestSpread.ts, 1, 14))
 
     method(other: C) {
->method : Symbol(method, Decl(privateNameAndObjectRestSpread.ts, 2, 27))
+>method : Symbol(C.method, Decl(privateNameAndObjectRestSpread.ts, 2, 27))
 >other : Symbol(other, Decl(privateNameAndObjectRestSpread.ts, 4, 11))
 >C : Symbol(C, Decl(privateNameAndObjectRestSpread.ts, 0, 0))
 

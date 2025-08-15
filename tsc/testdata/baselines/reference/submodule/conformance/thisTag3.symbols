@@ -13,7 +13,7 @@ class C {
      * @param {string} a
      */
     p = (a) => this.fn("" + a);
->p : Symbol(p, Decl(a.js, 4, 9))
+>p : Symbol(C.p, Decl(a.js, 4, 9))
 >a : Symbol(a, Decl(a.js, 9, 9))
 >this : Symbol(C, Decl(a.js, 0, 0))
 >a : Symbol(a, Decl(a.js, 9, 9))

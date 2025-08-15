@@ -6,7 +6,7 @@ class Base<T> {
 >T : Symbol(T, Decl(classIsSubtypeOfBaseType.ts, 0, 11))
 
     foo: T;
->foo : Symbol(foo, Decl(classIsSubtypeOfBaseType.ts, 0, 15))
+>foo : Symbol(Base.foo, Decl(classIsSubtypeOfBaseType.ts, 0, 15))
 >T : Symbol(T, Decl(classIsSubtypeOfBaseType.ts, 0, 11))
 }
 
@@ -16,7 +16,7 @@ class Derived extends Base<{ bar: string; }> {
 >bar : Symbol(bar, Decl(classIsSubtypeOfBaseType.ts, 4, 28))
 
     foo: {
->foo : Symbol(foo, Decl(classIsSubtypeOfBaseType.ts, 4, 46))
+>foo : Symbol(Derived.foo, Decl(classIsSubtypeOfBaseType.ts, 4, 46))
 
         bar: string; baz: number; // ok
 >bar : Symbol(bar, Decl(classIsSubtypeOfBaseType.ts, 5, 10))
@@ -30,7 +30,7 @@ class Derived2 extends Base<{ bar: string; }> {
 >bar : Symbol(bar, Decl(classIsSubtypeOfBaseType.ts, 10, 29))
 
     foo: {
->foo : Symbol(foo, Decl(classIsSubtypeOfBaseType.ts, 10, 47))
+>foo : Symbol(Derived2.foo, Decl(classIsSubtypeOfBaseType.ts, 10, 47))
 
         bar?: string; // error
 >bar : Symbol(bar, Decl(classIsSubtypeOfBaseType.ts, 11, 10))

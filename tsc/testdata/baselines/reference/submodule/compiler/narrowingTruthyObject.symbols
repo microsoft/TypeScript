@@ -10,27 +10,27 @@ function foo(x: unknown, b: boolean) {
 >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
 
         x.toString();
->x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
->toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
     }
     if (typeof x === 'object' && x) {
 >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
 >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
 
         x.toString();
->x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
->toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
     }
     if (x && typeof x === 'object') {
 >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
 >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
 
         x.toString();
->x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
->toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
     }
     if (b && x && typeof x === 'object') {
 >b : Symbol(b, Decl(narrowingTruthyObject.ts, 0, 24))
@@ -38,9 +38,9 @@ function foo(x: unknown, b: boolean) {
 >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
 
         x.toString();
->x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
->toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
     }
     if (x && b && typeof x === 'object') {
 >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
@@ -48,9 +48,9 @@ function foo(x: unknown, b: boolean) {
 >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
 
         x.toString();
->x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
->toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
     }
     if (x && b && b && typeof x === 'object') {
 >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
@@ -59,9 +59,9 @@ function foo(x: unknown, b: boolean) {
 >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
 
         x.toString();
->x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
->toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
     }
     if (b && b && x && b && b && typeof x === 'object') {
 >b : Symbol(b, Decl(narrowingTruthyObject.ts, 0, 24))
@@ -72,9 +72,9 @@ function foo(x: unknown, b: boolean) {
 >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
 
         x.toString();
->x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
->toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
     }
 }
 
@@ -87,8 +87,8 @@ function f1(x: unknown): any {
     return x && typeof x === 'object' && x.hasOwnProperty('x');
 >x : Symbol(x, Decl(narrowingTruthyObject.ts, 26, 12))
 >x : Symbol(x, Decl(narrowingTruthyObject.ts, 26, 12))
->x.hasOwnProperty : Symbol(hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>x.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(narrowingTruthyObject.ts, 26, 12))
->hasOwnProperty : Symbol(hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
 }
 

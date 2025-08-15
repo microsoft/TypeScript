@@ -8,13 +8,13 @@ class Foo {
 >Foo : Symbol(Foo, Decl(decoratorOnClassMethod15.ts, 0, 27))
 
     private prop = 1
->prop : Symbol(prop, Decl(decoratorOnClassMethod15.ts, 2, 11))
+>prop : Symbol(Foo.prop, Decl(decoratorOnClassMethod15.ts, 2, 11))
 
     @decorator
 >decorator : Symbol(decorator, Decl(decoratorOnClassMethod15.ts, 0, 11))
 
     foo() {
->foo : Symbol(foo, Decl(decoratorOnClassMethod15.ts, 3, 20))
+>foo : Symbol(Foo.foo, Decl(decoratorOnClassMethod15.ts, 3, 20))
 
         return 0;
     }

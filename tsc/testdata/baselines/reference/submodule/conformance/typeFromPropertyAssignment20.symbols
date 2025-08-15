@@ -16,9 +16,9 @@
         }
 
         Async.prototype.disableTrampolineIfNecessary = function dtin(b) {
->Async.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Async.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >Async : Symbol(Async, Decl(bluebird.js, 1, 23))
->prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >dtin : Symbol(dtin, Decl(bluebird.js, 6, 54))
 >b : Symbol(b, Decl(bluebird.js, 6, 69))
 

@@ -3,17 +3,17 @@
 === typeParameterExtendingUnion1.ts ===
 class Animal { run() { } }
 >Animal : Symbol(Animal, Decl(typeParameterExtendingUnion1.ts, 0, 0))
->run : Symbol(run, Decl(typeParameterExtendingUnion1.ts, 0, 14))
+>run : Symbol(Animal.run, Decl(typeParameterExtendingUnion1.ts, 0, 14))
 
 class Cat extends Animal { meow }
 >Cat : Symbol(Cat, Decl(typeParameterExtendingUnion1.ts, 0, 26))
 >Animal : Symbol(Animal, Decl(typeParameterExtendingUnion1.ts, 0, 0))
->meow : Symbol(meow, Decl(typeParameterExtendingUnion1.ts, 1, 26))
+>meow : Symbol(Cat.meow, Decl(typeParameterExtendingUnion1.ts, 1, 26))
 
 class Dog extends Animal { woof }
 >Dog : Symbol(Dog, Decl(typeParameterExtendingUnion1.ts, 1, 33))
 >Animal : Symbol(Animal, Decl(typeParameterExtendingUnion1.ts, 0, 0))
->woof : Symbol(woof, Decl(typeParameterExtendingUnion1.ts, 2, 26))
+>woof : Symbol(Dog.woof, Decl(typeParameterExtendingUnion1.ts, 2, 26))
 
 function run(a: Animal) {
 >run : Symbol(run, Decl(typeParameterExtendingUnion1.ts, 2, 33))
@@ -21,9 +21,9 @@ function run(a: Animal) {
 >Animal : Symbol(Animal, Decl(typeParameterExtendingUnion1.ts, 0, 0))
 
     a.run();
->a.run : Symbol(run, Decl(typeParameterExtendingUnion1.ts, 0, 14))
+>a.run : Symbol(Animal.run, Decl(typeParameterExtendingUnion1.ts, 0, 14))
 >a : Symbol(a, Decl(typeParameterExtendingUnion1.ts, 4, 13))
->run : Symbol(run, Decl(typeParameterExtendingUnion1.ts, 0, 14))
+>run : Symbol(Animal.run, Decl(typeParameterExtendingUnion1.ts, 0, 14))
 }
 
 function f<T extends Cat | Dog>(a: T) {
@@ -35,9 +35,9 @@ function f<T extends Cat | Dog>(a: T) {
 >T : Symbol(T, Decl(typeParameterExtendingUnion1.ts, 8, 11))
 
     a.run();
->a.run : Symbol(run, Decl(typeParameterExtendingUnion1.ts, 0, 14), Decl(typeParameterExtendingUnion1.ts, 0, 14))
+>a.run : Symbol(Animal.run, Decl(typeParameterExtendingUnion1.ts, 0, 14), Decl(typeParameterExtendingUnion1.ts, 0, 14))
 >a : Symbol(a, Decl(typeParameterExtendingUnion1.ts, 8, 32))
->run : Symbol(run, Decl(typeParameterExtendingUnion1.ts, 0, 14), Decl(typeParameterExtendingUnion1.ts, 0, 14))
+>run : Symbol(Animal.run, Decl(typeParameterExtendingUnion1.ts, 0, 14), Decl(typeParameterExtendingUnion1.ts, 0, 14))
 
     run(a);
 >run : Symbol(run, Decl(typeParameterExtendingUnion1.ts, 2, 33))

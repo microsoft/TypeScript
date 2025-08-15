@@ -3,8 +3,8 @@
 === mappedTypeNotMistakenlyHomomorphic.ts ===
 enum ABC { A, B }
 >ABC : Symbol(ABC, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 0, 0))
->A : Symbol(A, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 0, 10))
->B : Symbol(B, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 0, 13))
+>A : Symbol(ABC.A, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 0, 10))
+>B : Symbol(ABC.B, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 0, 13))
 
 type Gen<T extends ABC> = { v: T; } & (
 >Gen : Symbol(Gen, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 0, 17))
@@ -16,7 +16,7 @@ type Gen<T extends ABC> = { v: T; } & (
     v: ABC.A,
 >v : Symbol(v, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 3, 3))
 >ABC : Symbol(ABC, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 0, 0))
->A : Symbol(A, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 0, 10))
+>A : Symbol(ABC.A, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 0, 10))
 
     a: string,
 >a : Symbol(a, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 4, 13))
@@ -25,7 +25,7 @@ type Gen<T extends ABC> = { v: T; } & (
     v: ABC.B,
 >v : Symbol(v, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 6, 7))
 >ABC : Symbol(ABC, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 0, 0))
->B : Symbol(B, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 0, 13))
+>B : Symbol(ABC.B, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 0, 13))
 
     b: string,
 >b : Symbol(b, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 7, 13))
@@ -55,7 +55,7 @@ const gen2TypeA: Gen2<ABC.A> = { v:  "I am A", a: "" };
 >gen2TypeA : Symbol(gen2TypeA, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 23, 5))
 >Gen2 : Symbol(Gen2, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 10, 1))
 >ABC : Symbol(ABC, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 0, 0))
->A : Symbol(A, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 0, 10))
+>A : Symbol(ABC.A, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 0, 10))
 >v : Symbol(v, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 23, 32))
 >a : Symbol(a, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 23, 46))
 
@@ -63,7 +63,7 @@ const gen2TypeB: Gen2<ABC.B> = { v:  "I am B", b: "" };
 >gen2TypeB : Symbol(gen2TypeB, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 24, 5))
 >Gen2 : Symbol(Gen2, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 10, 1))
 >ABC : Symbol(ABC, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 0, 0))
->B : Symbol(B, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 0, 13))
+>B : Symbol(ABC.B, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 0, 13))
 >v : Symbol(v, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 24, 32))
 >b : Symbol(b, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 24, 46))
 
@@ -72,20 +72,20 @@ type K = keyof Gen2<ABC.A>;
 >K : Symbol(K, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 24, 55))
 >Gen2 : Symbol(Gen2, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 10, 1))
 >ABC : Symbol(ABC, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 0, 0))
->A : Symbol(A, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 0, 10))
+>A : Symbol(ABC.A, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 0, 10))
 
 // :(
 declare let a: Gen2<ABC.A>;
 >a : Symbol(a, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 30, 11))
 >Gen2 : Symbol(Gen2, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 10, 1))
 >ABC : Symbol(ABC, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 0, 0))
->A : Symbol(A, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 0, 10))
+>A : Symbol(ABC.A, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 0, 10))
 
 declare let b: Gen2<ABC.B>;
 >b : Symbol(b, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 31, 11))
 >Gen2 : Symbol(Gen2, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 10, 1))
 >ABC : Symbol(ABC, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 0, 0))
->B : Symbol(B, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 0, 13))
+>B : Symbol(ABC.B, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 0, 13))
 
 a = b;
 >a : Symbol(a, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 30, 11))

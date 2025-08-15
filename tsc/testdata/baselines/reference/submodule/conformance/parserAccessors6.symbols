@@ -5,6 +5,6 @@ declare class C {
 >C : Symbol(C, Decl(parserAccessors6.ts, 0, 0))
 
   set foo(v) { }
->foo : Symbol(foo, Decl(parserAccessors6.ts, 0, 17))
+>foo : Symbol(C.foo, Decl(parserAccessors6.ts, 0, 17))
 >v : Symbol(v, Decl(parserAccessors6.ts, 1, 10))
 }

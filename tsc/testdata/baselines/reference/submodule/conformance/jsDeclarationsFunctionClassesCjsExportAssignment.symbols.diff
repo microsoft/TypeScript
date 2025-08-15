@@ -64,15 +64,12 @@
  >input : Symbol(input, Decl(context.js, 31, 17))
  }
  Context.prototype = {
-->Context.prototype : Symbol(Context.prototype, Decl(context.js, 36, 1))
+ >Context.prototype : Symbol(Context.prototype, Decl(context.js, 36, 1))
 ->Context : Symbol(Context, Decl(context.js, 0, 0), Decl(context.js, 36, 1))
-->prototype : Symbol(Context.prototype, Decl(context.js, 36, 1))
-+>Context.prototype : Symbol(prototype, Decl(context.js, 36, 1))
 +>Context : Symbol(Context, Decl(context.js, 0, 0))
-+>prototype : Symbol(prototype, Decl(context.js, 36, 1))
+ >prototype : Symbol(Context.prototype, Decl(context.js, 36, 1))
 
      /**
-      * @param {Input} input
 @@= skipped -38, +33 lines =@@
      }
  }

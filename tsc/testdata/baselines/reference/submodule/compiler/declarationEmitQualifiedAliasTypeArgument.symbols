@@ -6,7 +6,7 @@ export interface INode<T> {
 >T : Symbol(T, Decl(bbb.d.ts, 0, 23))
 
     data: T;
->data : Symbol(data, Decl(bbb.d.ts, 0, 27))
+>data : Symbol(INode.data, Decl(bbb.d.ts, 0, 27))
 >T : Symbol(T, Decl(bbb.d.ts, 0, 23))
 }
 
@@ -27,10 +27,10 @@ export enum E {
 >E : Symbol(E, Decl(lib.d.ts, --, --))
 
     A = "a",
->A : Symbol(A, Decl(lib.d.ts, --, --))
+>A : Symbol(E.A, Decl(lib.d.ts, --, --))
 
     B = "b"
->B : Symbol(B, Decl(lib.d.ts, --, --))
+>B : Symbol(E.B, Decl(lib.d.ts, --, --))
 }
 
 export type T = G<E>;
@@ -42,7 +42,7 @@ export type Q = G<E.A>;
 >Q : Symbol(Q, Decl(lib.d.ts, --, --))
 >G : Symbol(G, Decl(lib.d.ts, --, --))
 >E : Symbol(E, Decl(lib.d.ts, --, --))
->A : Symbol(A, Decl(lib.d.ts, --, --))
+>A : Symbol(E.A, Decl(lib.d.ts, --, --))
 
 === index.ts ===
 import { T, Q } from "./lib";

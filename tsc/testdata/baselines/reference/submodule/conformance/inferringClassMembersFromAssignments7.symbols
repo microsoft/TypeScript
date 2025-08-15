@@ -16,14 +16,14 @@ class C {
 >self : Symbol(self, Decl(inferringClassMembersFromAssignments7.js, 2, 11))
 
             console.log(self.x)
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >self : Symbol(self, Decl(inferringClassMembersFromAssignments7.js, 2, 11))
         }
     }
     mreal() {
->mreal : Symbol(mreal, Decl(inferringClassMembersFromAssignments7.js, 7, 5))
+>mreal : Symbol(C.mreal, Decl(inferringClassMembersFromAssignments7.js, 7, 5))
 
         var self = this
 >self : Symbol(self, Decl(inferringClassMembersFromAssignments7.js, 9, 11))

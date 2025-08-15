@@ -19,7 +19,7 @@ class C {
 >D : Symbol(D, Decl(classStaticBlock26.ts, 10, 12))
 
             [await] = 1; // illegal (computed property names are evaluated outside of a class body
->[await] : Symbol([await], Decl(classStaticBlock26.ts, 11, 17))
+>[await] : Symbol(D[await], Decl(classStaticBlock26.ts, 11, 17))
 
         };
     }

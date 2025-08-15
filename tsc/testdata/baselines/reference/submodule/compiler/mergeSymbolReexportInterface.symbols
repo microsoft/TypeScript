@@ -36,5 +36,5 @@ export type {Row2} from './common';
 === common.d.ts ===
 export interface Row2 { b: string }
 >Row2 : Symbol(Row2, Decl(common.d.ts, 0, 0))
->b : Symbol(b, Decl(common.d.ts, 0, 23))
+>b : Symbol(Row2.b, Decl(common.d.ts, 0, 23))
 

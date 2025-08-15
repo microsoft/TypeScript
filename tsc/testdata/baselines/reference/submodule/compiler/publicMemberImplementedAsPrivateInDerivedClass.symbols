@@ -5,13 +5,13 @@ interface Qux {
 >Qux : Symbol(Qux, Decl(publicMemberImplementedAsPrivateInDerivedClass.ts, 0, 0))
 
  Bar: number;
->Bar : Symbol(Bar, Decl(publicMemberImplementedAsPrivateInDerivedClass.ts, 0, 15))
+>Bar : Symbol(Qux.Bar, Decl(publicMemberImplementedAsPrivateInDerivedClass.ts, 0, 15))
 }
 class Foo implements Qux {
 >Foo : Symbol(Foo, Decl(publicMemberImplementedAsPrivateInDerivedClass.ts, 2, 1))
 >Qux : Symbol(Qux, Decl(publicMemberImplementedAsPrivateInDerivedClass.ts, 0, 0))
 
  private Bar: number;
->Bar : Symbol(Bar, Decl(publicMemberImplementedAsPrivateInDerivedClass.ts, 3, 26))
+>Bar : Symbol(Foo.Bar, Decl(publicMemberImplementedAsPrivateInDerivedClass.ts, 3, 26))
 }
 

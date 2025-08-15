@@ -6,7 +6,7 @@ export default class Schema {}
 
 === reexporter.d.ts ===
 export { default } from "./schema";
->default : typeof import("./schema").default
+>default : typeof import("schema").default
 
 === usage.ts ===
 import Base from "./reexporter";

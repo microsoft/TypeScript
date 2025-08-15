@@ -10,7 +10,7 @@ Outer.Inner = class I {
 >I : Symbol(I, Decl(a.js, 0, 13))
 
     messages() { return [] }
->messages : Symbol(messages, Decl(a.js, 0, 23))
+>messages : Symbol(I.messages, Decl(a.js, 0, 23))
 }
 /** @type {!Outer.Inner} */
 Outer.i

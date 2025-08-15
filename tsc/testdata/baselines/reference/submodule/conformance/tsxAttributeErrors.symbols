@@ -11,7 +11,7 @@ declare namespace JSX {
 >IntrinsicElements : Symbol(IntrinsicElements, Decl(tsxAttributeErrors.tsx, 1, 22))
 
 		div: {
->div : Symbol(div, Decl(tsxAttributeErrors.tsx, 2, 30))
+>div : Symbol(IntrinsicElements.div, Decl(tsxAttributeErrors.tsx, 2, 30))
 
 			text?: string;
 >text : Symbol(text, Decl(tsxAttributeErrors.tsx, 3, 8))
@@ -21,18 +21,18 @@ declare namespace JSX {
 		}
 
 		span: any;
->span : Symbol(span, Decl(tsxAttributeErrors.tsx, 6, 3))
+>span : Symbol(IntrinsicElements.span, Decl(tsxAttributeErrors.tsx, 6, 3))
 	}
 }
 
 // Error, number is not assignable to string
 <div text={42} />;
->div : Symbol(div, Decl(tsxAttributeErrors.tsx, 2, 30))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxAttributeErrors.tsx, 2, 30))
 >text : Symbol(text, Decl(tsxAttributeErrors.tsx, 13, 4))
 
 // Error, string is not assignable to number
 <div width={'foo'} />;
->div : Symbol(div, Decl(tsxAttributeErrors.tsx, 2, 30))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxAttributeErrors.tsx, 2, 30))
 >width : Symbol(width, Decl(tsxAttributeErrors.tsx, 16, 4))
 
 // Error, number is not assignable to string
@@ -41,12 +41,12 @@ var attribs = { text: 100 };
 >text : Symbol(text, Decl(tsxAttributeErrors.tsx, 19, 15))
 
 <div {...attribs} />;
->div : Symbol(div, Decl(tsxAttributeErrors.tsx, 2, 30))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxAttributeErrors.tsx, 2, 30))
 >attribs : Symbol(attribs, Decl(tsxAttributeErrors.tsx, 19, 3))
 
 // No errors here
 <span foo='bar' bar={'foo'} />;
->span : Symbol(span, Decl(tsxAttributeErrors.tsx, 6, 3))
+>span : Symbol(JSX.IntrinsicElements.span, Decl(tsxAttributeErrors.tsx, 6, 3))
 >foo : Symbol(foo, Decl(tsxAttributeErrors.tsx, 23, 5))
 >bar : Symbol(bar, Decl(tsxAttributeErrors.tsx, 23, 15))
 

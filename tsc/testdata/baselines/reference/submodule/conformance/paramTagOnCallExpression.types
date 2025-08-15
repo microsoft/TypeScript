@@ -11,7 +11,7 @@ declare function factory(type: string): {};
 exports.inherits = factory('inherits')
 >exports.inherits = factory('inherits') : {}
 >exports.inherits : {}
->exports : typeof import("./a")
+>exports : typeof import("a")
 >inherits : {}
 >factory('inherits') : {}
 >factory : (type: string) => {}

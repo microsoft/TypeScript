@@ -6,7 +6,7 @@ interface Comparable<T> {
 >T : Symbol(T, Decl(maxConstraints.ts, 0, 21))
 
     compareTo(other: T): number;
->compareTo : Symbol(compareTo, Decl(maxConstraints.ts, 0, 25))
+>compareTo : Symbol(Comparable.compareTo, Decl(maxConstraints.ts, 0, 25))
 >other : Symbol(other, Decl(maxConstraints.ts, 1, 14))
 >T : Symbol(T, Decl(maxConstraints.ts, 0, 21))
 }
@@ -28,9 +28,9 @@ var max2: Comparer = (x, y) => { return (x.compareTo(y) > 0) ? x : y };
 >Comparer : Symbol(Comparer, Decl(maxConstraints.ts, 2, 1))
 >x : Symbol(x, Decl(maxConstraints.ts, 6, 22))
 >y : Symbol(y, Decl(maxConstraints.ts, 6, 24))
->x.compareTo : Symbol(compareTo, Decl(maxConstraints.ts, 0, 25))
+>x.compareTo : Symbol(Comparable.compareTo, Decl(maxConstraints.ts, 0, 25))
 >x : Symbol(x, Decl(maxConstraints.ts, 6, 22))
->compareTo : Symbol(compareTo, Decl(maxConstraints.ts, 0, 25))
+>compareTo : Symbol(Comparable.compareTo, Decl(maxConstraints.ts, 0, 25))
 >y : Symbol(y, Decl(maxConstraints.ts, 6, 24))
 >x : Symbol(x, Decl(maxConstraints.ts, 6, 22))
 >y : Symbol(y, Decl(maxConstraints.ts, 6, 24))

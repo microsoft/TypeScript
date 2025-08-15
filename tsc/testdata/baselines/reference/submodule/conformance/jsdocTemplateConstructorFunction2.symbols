@@ -20,9 +20,9 @@ function Zet(t) {
  * @param {T} o.nested
  */
 Zet.prototype.add = function(v, o) {
->Zet.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Zet.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >Zet : Symbol(Zet, Decl(templateTagWithNestedTypeLiteral.js, 0, 0))
->prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >v : Symbol(v, Decl(templateTagWithNestedTypeLiteral.js, 14, 29))
 >o : Symbol(o, Decl(templateTagWithNestedTypeLiteral.js, 14, 31))
 

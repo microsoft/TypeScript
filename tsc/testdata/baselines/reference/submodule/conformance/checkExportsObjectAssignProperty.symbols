@@ -93,37 +93,37 @@ m2.setonlyAccessor = 0;
 
 === mod1.js ===
 Object.defineProperty(exports, "thing", { value: 42, writable: true });
->Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(mod1.js, 0, 41))
 >writable : Symbol(writable, Decl(mod1.js, 0, 52))
 
 Object.defineProperty(exports, "readonlyProp", { value: "Smith", writable: false });
->Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(mod1.js, 1, 48))
 >writable : Symbol(writable, Decl(mod1.js, 1, 64))
 
 Object.defineProperty(exports, "rwAccessors", { get() { return 98122 }, set(_) { /*ignore*/ } });
->Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >get : Symbol(get, Decl(mod1.js, 2, 47))
 >set : Symbol(set, Decl(mod1.js, 2, 71))
 >_ : Symbol(_, Decl(mod1.js, 2, 76))
 
 Object.defineProperty(exports, "readonlyAccessor", { get() { return 21.75 } });
->Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >get : Symbol(get, Decl(mod1.js, 3, 52))
 
 Object.defineProperty(exports, "setonlyAccessor", {
->Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 
     /** @param {string} str */
     set(str) {
@@ -138,37 +138,37 @@ Object.defineProperty(exports, "setonlyAccessor", {
 
 === mod2.js ===
 Object.defineProperty(module.exports, "thing", { value: "yes", writable: true });
->Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(mod2.js, 0, 48))
 >writable : Symbol(writable, Decl(mod2.js, 0, 62))
 
 Object.defineProperty(module.exports, "readonlyProp", { value: "Smith", writable: false });
->Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(mod2.js, 1, 55))
 >writable : Symbol(writable, Decl(mod2.js, 1, 71))
 
 Object.defineProperty(module.exports, "rwAccessors", { get() { return 98122 }, set(_) { /*ignore*/ } });
->Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >get : Symbol(get, Decl(mod2.js, 2, 54))
 >set : Symbol(set, Decl(mod2.js, 2, 78))
 >_ : Symbol(_, Decl(mod2.js, 2, 83))
 
 Object.defineProperty(module.exports, "readonlyAccessor", { get() { return 21.75 } });
->Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >get : Symbol(get, Decl(mod2.js, 3, 59))
 
 Object.defineProperty(module.exports, "setonlyAccessor", {
->Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 
     /** @param {string} str */
     set(str) {

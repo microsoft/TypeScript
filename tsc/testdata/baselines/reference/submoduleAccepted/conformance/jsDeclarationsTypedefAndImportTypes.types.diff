@@ -9,23 +9,7 @@
  >exports : typeof Conn
  >Conn : typeof Conn
 
-@@= skipped -16, +16 lines =@@
-      * @param {Conn} c
-      */
-     constructor(c) {
-->c : import("conn")
-+>c : import("./conn")
-
-         this.connItem = c.item;
- >this.connItem = c.item : number
-@@= skipped -8, +8 lines =@@
- >this : this
- >connItem : any
- >c.item : number
-->c : import("conn")
-+>c : import("./conn")
- >item : number
-
+@@= skipped -30, +30 lines =@@
          /** @type {import("./conn").Whatever} */
          this.another = "";
  >this.another = "" : ""

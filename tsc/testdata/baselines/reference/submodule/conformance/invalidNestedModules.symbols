@@ -10,10 +10,10 @@ module A.B.C {
 >Point : Symbol(Point, Decl(invalidNestedModules.ts, 0, 14))
 
         x: number;
->x : Symbol(x, Decl(invalidNestedModules.ts, 1, 24))
+>x : Symbol(Point.x, Decl(invalidNestedModules.ts, 1, 24))
 
         y: number;
->y : Symbol(y, Decl(invalidNestedModules.ts, 2, 18))
+>y : Symbol(Point.y, Decl(invalidNestedModules.ts, 2, 18))
     }
 }
 
@@ -27,7 +27,7 @@ module A {
 >C : Symbol(C, Decl(invalidNestedModules.ts, 0, 11), Decl(invalidNestedModules.ts, 8, 21))
 
             name: string;
->name : Symbol(name, Decl(invalidNestedModules.ts, 9, 24))
+>name : Symbol(C.name, Decl(invalidNestedModules.ts, 9, 24))
         }
     }
 }
@@ -40,8 +40,8 @@ module M2.X {
 >Point : Symbol(Point, Decl(invalidNestedModules.ts, 15, 13))
 
         x: number; y: number;
->x : Symbol(x, Decl(invalidNestedModules.ts, 16, 24))
->y : Symbol(y, Decl(invalidNestedModules.ts, 17, 18))
+>x : Symbol(Point.x, Decl(invalidNestedModules.ts, 16, 24))
+>y : Symbol(Point.y, Decl(invalidNestedModules.ts, 17, 18))
     }
 }
 

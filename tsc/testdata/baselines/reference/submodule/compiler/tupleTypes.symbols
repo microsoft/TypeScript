@@ -58,9 +58,9 @@ var tf: [string, (x: string) => number] = ["hello", x => x.length];
 >tf : Symbol(tf, Decl(tupleTypes.ts, 19, 3))
 >x : Symbol(x, Decl(tupleTypes.ts, 19, 18))
 >x : Symbol(x, Decl(tupleTypes.ts, 19, 51))
->x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(tupleTypes.ts, 19, 51))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
 declare function ff<T, U>(a: T, b: [T, (x: T) => U]): U;
 >ff : Symbol(ff, Decl(tupleTypes.ts, 19, 67))
@@ -79,9 +79,9 @@ var ff1 = ff("hello", ["foo", x => x.length]);
 >ff1 : Symbol(ff1, Decl(tupleTypes.ts, 22, 3), Decl(tupleTypes.ts, 23, 3))
 >ff : Symbol(ff, Decl(tupleTypes.ts, 19, 67))
 >x : Symbol(x, Decl(tupleTypes.ts, 22, 29))
->x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(tupleTypes.ts, 22, 29))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
 var ff1: number;
 >ff1 : Symbol(ff1, Decl(tupleTypes.ts, 22, 3), Decl(tupleTypes.ts, 23, 3))
@@ -219,9 +219,9 @@ declare const b3: readonly number[];
 >b3 : Symbol(b3, Decl(tupleTypes.ts, 61, 13))
 
 b3.length = 0; // Error
->b3.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>b3.length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
 >b3 : Symbol(b3, Decl(tupleTypes.ts, 61, 13))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
 
 declare const b4: [number?];
 >b4 : Symbol(b4, Decl(tupleTypes.ts, 63, 13))

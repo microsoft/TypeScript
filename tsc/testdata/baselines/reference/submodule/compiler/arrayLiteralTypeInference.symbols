@@ -5,7 +5,7 @@ class Action {
 >Action : Symbol(Action, Decl(arrayLiteralTypeInference.ts, 0, 0))
 
     id: number;
->id : Symbol(id, Decl(arrayLiteralTypeInference.ts, 0, 14))
+>id : Symbol(Action.id, Decl(arrayLiteralTypeInference.ts, 0, 14))
 }
 
 class ActionA extends Action {
@@ -13,7 +13,7 @@ class ActionA extends Action {
 >Action : Symbol(Action, Decl(arrayLiteralTypeInference.ts, 0, 0))
 
     value: string;
->value : Symbol(value, Decl(arrayLiteralTypeInference.ts, 4, 30))
+>value : Symbol(ActionA.value, Decl(arrayLiteralTypeInference.ts, 4, 30))
 }
 
 class ActionB extends Action {
@@ -21,7 +21,7 @@ class ActionB extends Action {
 >Action : Symbol(Action, Decl(arrayLiteralTypeInference.ts, 0, 0))
 
     trueNess: boolean;
->trueNess : Symbol(trueNess, Decl(arrayLiteralTypeInference.ts, 8, 30))
+>trueNess : Symbol(ActionB.trueNess, Decl(arrayLiteralTypeInference.ts, 8, 30))
 }
 
 var x1: Action[] = [

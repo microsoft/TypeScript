@@ -57,7 +57,7 @@ if (!isNullish(value4)) {
 
 declare class A { foo: string; }
 >A : Symbol(A, Decl(narrowUnknownByTypePredicate.ts, 21, 1))
->foo : Symbol(foo, Decl(narrowUnknownByTypePredicate.ts, 23, 17))
+>foo : Symbol(A.foo, Decl(narrowUnknownByTypePredicate.ts, 23, 17))
 
 declare function isA(value: unknown): value is A;
 >isA : Symbol(isA, Decl(narrowUnknownByTypePredicate.ts, 23, 32))

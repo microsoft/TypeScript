@@ -5,5 +5,5 @@ abstract class c {
 >c : Symbol(c, Decl(a.js, 0, 0))
 
     abstract x;
->x : Symbol(x, Decl(a.js, 0, 18))
+>x : Symbol(c.x, Decl(a.js, 0, 18))
 }

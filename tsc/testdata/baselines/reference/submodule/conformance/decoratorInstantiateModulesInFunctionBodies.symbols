@@ -29,7 +29,7 @@ class Wat {
 >test : Symbol(test, Decl(b.ts, 0, 8))
 
     static whatever() {
->whatever : Symbol(whatever, Decl(b.ts, 8, 11))
+>whatever : Symbol(Wat.whatever, Decl(b.ts, 8, 11))
 
         // ...
     }

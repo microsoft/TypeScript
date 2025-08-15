@@ -103,9 +103,9 @@ function good9({ a }) {
 >a : Symbol(a, Decl(0.js, 57, 16))
 
     console.log(arguments, a);
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >arguments : Symbol(arguments)
 >a : Symbol(a, Decl(0.js, 57, 16))
 }

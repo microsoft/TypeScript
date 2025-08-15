@@ -6,18 +6,18 @@ var Outer = class O {
 >O : Symbol(O, Decl(a.js, 0, 11))
 
     m(x, y) { }
->m : Symbol(m, Decl(a.js, 0, 21))
+>m : Symbol(O.m, Decl(a.js, 0, 21))
 >x : Symbol(x, Decl(a.js, 1, 6))
 >y : Symbol(y, Decl(a.js, 1, 8))
 }
 Outer.Inner = class I {
->Outer.Inner : Symbol(Inner, Decl(a.js, 2, 1))
+>Outer.Inner : Symbol(O.Inner, Decl(a.js, 2, 1))
 >Outer : Symbol(Outer, Decl(a.js, 0, 3))
->Inner : Symbol(Inner, Decl(a.js, 2, 1))
+>Inner : Symbol(O.Inner, Decl(a.js, 2, 1))
 >I : Symbol(I, Decl(a.js, 3, 13))
 
     n(a, b) { }
->n : Symbol(n, Decl(a.js, 3, 23))
+>n : Symbol(I.n, Decl(a.js, 3, 23))
 >a : Symbol(a, Decl(a.js, 4, 6))
 >b : Symbol(b, Decl(a.js, 4, 8))
 

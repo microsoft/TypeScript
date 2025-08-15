@@ -20,7 +20,7 @@ export class C {
 >C : Symbol(C, Decl(typeofAnExportedType.ts, 3, 24))
 
     foo: string;
->foo : Symbol(foo, Decl(typeofAnExportedType.ts, 4, 16))
+>foo : Symbol(C.foo, Decl(typeofAnExportedType.ts, 4, 16))
 }
 export var c: C;
 >c : Symbol(c, Decl(typeofAnExportedType.ts, 7, 10))
@@ -46,7 +46,7 @@ export interface I {
 >I : Symbol(I, Decl(typeofAnExportedType.ts, 12, 26))
 
     foo: string;
->foo : Symbol(foo, Decl(typeofAnExportedType.ts, 14, 20))
+>foo : Symbol(I.foo, Decl(typeofAnExportedType.ts, 14, 20))
 }
 export var i: I;
 >i : Symbol(i, Decl(typeofAnExportedType.ts, 17, 10))
@@ -74,7 +74,7 @@ export module M {
 >C : Symbol(C, Decl(typeofAnExportedType.ts, 23, 24))
 
         foo: string;
->foo : Symbol(foo, Decl(typeofAnExportedType.ts, 24, 20))
+>foo : Symbol(C.foo, Decl(typeofAnExportedType.ts, 24, 20))
     }
 }
 export var r6: typeof M;
@@ -83,9 +83,9 @@ export var r6: typeof M;
 
 export var r7: typeof M.foo;
 >r7 : Symbol(r7, Decl(typeofAnExportedType.ts, 29, 10))
->M.foo : Symbol(foo, Decl(typeofAnExportedType.ts, 23, 14))
+>M.foo : Symbol(Z.foo, Decl(typeofAnExportedType.ts, 23, 14))
 >M : Symbol(M, Decl(typeofAnExportedType.ts, 20, 25))
->foo : Symbol(foo, Decl(typeofAnExportedType.ts, 23, 14))
+>foo : Symbol(Z.foo, Decl(typeofAnExportedType.ts, 23, 14))
 
 export import Z = M;
 >Z : Symbol(Z, Decl(typeofAnExportedType.ts, 29, 28))
@@ -97,15 +97,15 @@ export var r8: typeof Z;
 
 export var r9: typeof Z.foo;
 >r9 : Symbol(r9, Decl(typeofAnExportedType.ts, 33, 10))
->Z.foo : Symbol(foo, Decl(typeofAnExportedType.ts, 23, 14))
+>Z.foo : Symbol(Z.foo, Decl(typeofAnExportedType.ts, 23, 14))
 >Z : Symbol(Z, Decl(typeofAnExportedType.ts, 29, 28))
->foo : Symbol(foo, Decl(typeofAnExportedType.ts, 23, 14))
+>foo : Symbol(Z.foo, Decl(typeofAnExportedType.ts, 23, 14))
 
 export enum E {
 >E : Symbol(E, Decl(typeofAnExportedType.ts, 33, 28))
 
     A
->A : Symbol(A, Decl(typeofAnExportedType.ts, 35, 15))
+>A : Symbol(E.A, Decl(typeofAnExportedType.ts, 35, 15))
 }
 export var r10: typeof E;
 >r10 : Symbol(r10, Decl(typeofAnExportedType.ts, 38, 10))
@@ -113,9 +113,9 @@ export var r10: typeof E;
 
 export var r11: typeof E.A;
 >r11 : Symbol(r11, Decl(typeofAnExportedType.ts, 39, 10))
->E.A : Symbol(A, Decl(typeofAnExportedType.ts, 35, 15))
+>E.A : Symbol(E.A, Decl(typeofAnExportedType.ts, 35, 15))
 >E : Symbol(E, Decl(typeofAnExportedType.ts, 33, 28))
->A : Symbol(A, Decl(typeofAnExportedType.ts, 35, 15))
+>A : Symbol(E.A, Decl(typeofAnExportedType.ts, 35, 15))
 
 export var r12: typeof r12;
 >r12 : Symbol(r12, Decl(typeofAnExportedType.ts, 41, 10))
@@ -134,7 +134,7 @@ export module foo {
 >C : Symbol(C, Decl(typeofAnExportedType.ts, 45, 21))
 
         foo: string;
->foo : Symbol(foo, Decl(typeofAnExportedType.ts, 46, 20))
+>foo : Symbol(C.foo, Decl(typeofAnExportedType.ts, 46, 20))
     }
 }
 export var r13: typeof foo;

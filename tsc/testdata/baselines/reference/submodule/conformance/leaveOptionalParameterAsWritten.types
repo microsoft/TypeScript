@@ -27,12 +27,12 @@ declare global {
 
 === c.ts ===
 type Foo = teams.calling.Foo;
->Foo : import("./a").Foo
+>Foo : import("a").Foo
 >teams : any
 >calling : any
 
 export const bar = (p?: Foo) => {}
->bar : (p?: import("./a").Foo | undefined) => void
->(p?: Foo) => {} : (p?: import("./a").Foo | undefined) => void
->p : import("./a").Foo | undefined
+>bar : (p?: import("a").Foo | undefined) => void
+>(p?: Foo) => {} : (p?: import("a").Foo | undefined) => void
+>p : import("a").Foo | undefined
 

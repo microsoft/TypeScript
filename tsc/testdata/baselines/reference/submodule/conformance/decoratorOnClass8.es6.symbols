@@ -13,5 +13,5 @@ declare function dec<T>(target: T): T;
 
 export default class {
     static y = 1;
->y : Symbol(y, Decl(decoratorOnClass8.es6.ts, 3, 22))
+>y : Symbol(default.y, Decl(decoratorOnClass8.es6.ts, 3, 22))
 }

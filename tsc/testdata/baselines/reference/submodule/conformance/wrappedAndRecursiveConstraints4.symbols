@@ -11,7 +11,7 @@ class C<T extends { length: number }> {
 >T : Symbol(T, Decl(wrappedAndRecursiveConstraints4.ts, 0, 8))
 
     foo<U extends T>(x: U) {
->foo : Symbol(foo, Decl(wrappedAndRecursiveConstraints4.ts, 1, 25))
+>foo : Symbol(C.foo, Decl(wrappedAndRecursiveConstraints4.ts, 1, 25))
 >U : Symbol(U, Decl(wrappedAndRecursiveConstraints4.ts, 2, 8))
 >T : Symbol(T, Decl(wrappedAndRecursiveConstraints4.ts, 0, 8))
 >x : Symbol(x, Decl(wrappedAndRecursiveConstraints4.ts, 2, 21))
@@ -39,9 +39,9 @@ var c = new C({ length: 2 });
 
 var r = c.foo('');
 >r : Symbol(r, Decl(wrappedAndRecursiveConstraints4.ts, 11, 3))
->c.foo : Symbol(foo, Decl(wrappedAndRecursiveConstraints4.ts, 1, 25))
+>c.foo : Symbol(C.foo, Decl(wrappedAndRecursiveConstraints4.ts, 1, 25))
 >c : Symbol(c, Decl(wrappedAndRecursiveConstraints4.ts, 10, 3))
->foo : Symbol(foo, Decl(wrappedAndRecursiveConstraints4.ts, 1, 25))
+>foo : Symbol(C.foo, Decl(wrappedAndRecursiveConstraints4.ts, 1, 25))
 
 var r2 = r({ length: 3, charAt: (x: number) => { '' } }); // error
 >r2 : Symbol(r2, Decl(wrappedAndRecursiveConstraints4.ts, 12, 3))

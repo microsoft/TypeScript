@@ -10,24 +10,7 @@
 
  use(y.toFixed());
  >use : Symbol(use, Decl(file1.ts, 1, 26))
-->y.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
-+>y.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
- >y : Symbol(y, Decl(file1.ts, 1, 8))
-->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
-+>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
-
- === c:/root/src/file3/index.d.ts ===
- export let x: number;
-@@= skipped -22, +20 lines =@@
- >b : Symbol(b, Decl(file2.ts, 1, 8))
-
- import {x as c} from "../file3";
-->x : Symbol(c, Decl(index.d.ts, 0, 10))
-+>x : Symbol(x, Decl(index.d.ts, 0, 10))
- >c : Symbol(c, Decl(file2.ts, 2, 8))
-
- export let x = a + b + c;
-@@= skipped -12, +12 lines =@@
+@@= skipped -34, +32 lines =@@
  === c:/shared/module1/index.d.ts ===
  export let a: number
  >a : Symbol(a, Decl(index.d.ts, 0, 10))

@@ -63,11 +63,11 @@ export { v, f, C, I, E, D, M, N, T, a };
 export { v, f, C, I, E, D, M, N, T, a } from "./t1";
 >v : number
 >f : () => void
->C : typeof import("./t1").C
+>C : typeof import("t1").C
 >I : any
->E : typeof import("./t1").E
->D : typeof import("./t1").D
->M : typeof import("./t1").M
+>E : typeof import("t1").E
+>D : typeof import("t1").D
+>M : typeof import("t1").M
 >N : any
 >T : any
 >a : any

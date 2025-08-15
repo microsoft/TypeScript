@@ -1,15 +1,6 @@
 --- old.expressionWithJSDocTypeArguments.symbols
 +++ new.expressionWithJSDocTypeArguments.symbols
-@@= skipped -13, +13 lines =@@
- class Bar<T> { constructor(public x: T) { } }
- >Bar : Symbol(Bar, Decl(expressionWithJSDocTypeArguments.ts, 2, 37))
- >T : Symbol(T, Decl(expressionWithJSDocTypeArguments.ts, 4, 10))
-->x : Symbol(Bar.x, Decl(expressionWithJSDocTypeArguments.ts, 4, 27))
-+>x : Symbol(x, Decl(expressionWithJSDocTypeArguments.ts, 4, 27))
- >T : Symbol(T, Decl(expressionWithJSDocTypeArguments.ts, 4, 10))
-
- // Errors expected on all of the following
-@@= skipped -8, +8 lines =@@
+@@= skipped -21, +21 lines =@@
  const WhatFoo = foo<?>;
  >WhatFoo : Symbol(WhatFoo, Decl(expressionWithJSDocTypeArguments.ts, 8, 5))
  >foo : Symbol(foo, Decl(expressionWithJSDocTypeArguments.ts, 0, 0))

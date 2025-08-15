@@ -22,12 +22,12 @@ interface IDirectivePrePost<TScope> {
 >TScope : Symbol(TScope, Decl(errorsWithInvokablesInUnions01.ts, 8, 28))
 
     pre?: IDirectiveLinkFn<TScope>;
->pre : Symbol(pre, Decl(errorsWithInvokablesInUnions01.ts, 8, 37))
+>pre : Symbol(IDirectivePrePost.pre, Decl(errorsWithInvokablesInUnions01.ts, 8, 37))
 >IDirectiveLinkFn : Symbol(IDirectiveLinkFn, Decl(errorsWithInvokablesInUnions01.ts, 2, 1))
 >TScope : Symbol(TScope, Decl(errorsWithInvokablesInUnions01.ts, 8, 28))
 
     post?: IDirectiveLinkFn<TScope>;
->post : Symbol(post, Decl(errorsWithInvokablesInUnions01.ts, 9, 35))
+>post : Symbol(IDirectivePrePost.post, Decl(errorsWithInvokablesInUnions01.ts, 9, 35))
 >IDirectiveLinkFn : Symbol(IDirectiveLinkFn, Decl(errorsWithInvokablesInUnions01.ts, 2, 1))
 >TScope : Symbol(TScope, Decl(errorsWithInvokablesInUnions01.ts, 8, 28))
 }
@@ -46,6 +46,6 @@ export let ctor: IDirectiveLinkFn<number> | ConstructableA | IDirectivePrePost<n
 >IDirectivePrePost : Symbol(IDirectivePrePost, Decl(errorsWithInvokablesInUnions01.ts, 6, 1))
 
     someUnaccountedProp: any;
->someUnaccountedProp : Symbol(someUnaccountedProp, Decl(errorsWithInvokablesInUnions01.ts, 15, 96))
+>someUnaccountedProp : Symbol(ctor.someUnaccountedProp, Decl(errorsWithInvokablesInUnions01.ts, 15, 96))
 }
 

@@ -5,7 +5,7 @@ interface Greeter {
 >Greeter : Symbol(Greeter, Decl(declarationEmitForDefaultExportClassExtendingExpression01.ts, 0, 0))
 
     getGreeting(): string;
->getGreeting : Symbol(getGreeting, Decl(declarationEmitForDefaultExportClassExtendingExpression01.ts, 0, 19))
+>getGreeting : Symbol(Greeter.getGreeting, Decl(declarationEmitForDefaultExportClassExtendingExpression01.ts, 0, 19))
 }
 
 interface GreeterConstructor {
@@ -19,7 +19,7 @@ class A {
 >A : Symbol(A, Decl(declarationEmitForDefaultExportClassExtendingExpression01.ts, 6, 1))
 
     getGreeting() {
->getGreeting : Symbol(getGreeting, Decl(declarationEmitForDefaultExportClassExtendingExpression01.ts, 8, 9))
+>getGreeting : Symbol(A.getGreeting, Decl(declarationEmitForDefaultExportClassExtendingExpression01.ts, 8, 9))
 
         return 'hello';
     }

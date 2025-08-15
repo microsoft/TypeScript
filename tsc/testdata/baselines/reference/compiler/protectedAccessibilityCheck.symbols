@@ -17,7 +17,7 @@ class A extends B {
 >B : Symbol(B, Decl(protectedAccessibilityCheck.ts, 2, 1))
 
   f() {
->f : Symbol(f, Decl(protectedAccessibilityCheck.ts, 6, 19))
+>f : Symbol(A.f, Decl(protectedAccessibilityCheck.ts, 6, 19))
 
     new A();
 >A : Symbol(A, Decl(protectedAccessibilityCheck.ts, 4, 29))

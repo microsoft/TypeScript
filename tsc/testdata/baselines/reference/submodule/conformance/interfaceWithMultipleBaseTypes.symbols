@@ -7,7 +7,7 @@ interface Base1 {
 >Base1 : Symbol(Base1, Decl(interfaceWithMultipleBaseTypes.ts, 0, 0))
 
     x: {
->x : Symbol(x, Decl(interfaceWithMultipleBaseTypes.ts, 2, 17))
+>x : Symbol(Base1.x, Decl(interfaceWithMultipleBaseTypes.ts, 2, 17))
 
         a: string;
 >a : Symbol(a, Decl(interfaceWithMultipleBaseTypes.ts, 3, 8))
@@ -18,7 +18,7 @@ interface Base2 {
 >Base2 : Symbol(Base2, Decl(interfaceWithMultipleBaseTypes.ts, 6, 1))
 
     x: {
->x : Symbol(x, Decl(interfaceWithMultipleBaseTypes.ts, 8, 17))
+>x : Symbol(Base2.x, Decl(interfaceWithMultipleBaseTypes.ts, 8, 17))
 
         b: string;
 >b : Symbol(b, Decl(interfaceWithMultipleBaseTypes.ts, 9, 8))
@@ -31,7 +31,7 @@ interface Derived extends Base1, Base2 {
 >Base2 : Symbol(Base2, Decl(interfaceWithMultipleBaseTypes.ts, 6, 1))
 
     x: {
->x : Symbol(x, Decl(interfaceWithMultipleBaseTypes.ts, 14, 40))
+>x : Symbol(Derived.x, Decl(interfaceWithMultipleBaseTypes.ts, 14, 40))
 
         a: string; b: string;
 >a : Symbol(a, Decl(interfaceWithMultipleBaseTypes.ts, 15, 8))
@@ -45,7 +45,7 @@ interface Derived2 extends Base1, Base2 { // error
 >Base2 : Symbol(Base2, Decl(interfaceWithMultipleBaseTypes.ts, 6, 1))
 
     x: {
->x : Symbol(x, Decl(interfaceWithMultipleBaseTypes.ts, 20, 41))
+>x : Symbol(Derived2.x, Decl(interfaceWithMultipleBaseTypes.ts, 20, 41))
 
         a: string; b: number;
 >a : Symbol(a, Decl(interfaceWithMultipleBaseTypes.ts, 21, 8))
@@ -61,7 +61,7 @@ module Generic {
 >T : Symbol(T, Decl(interfaceWithMultipleBaseTypes.ts, 27, 20))
 
         x: {
->x : Symbol(x, Decl(interfaceWithMultipleBaseTypes.ts, 27, 24))
+>x : Symbol(Base1.x, Decl(interfaceWithMultipleBaseTypes.ts, 27, 24))
 
             a: T;
 >a : Symbol(a, Decl(interfaceWithMultipleBaseTypes.ts, 28, 12))
@@ -74,7 +74,7 @@ module Generic {
 >T : Symbol(T, Decl(interfaceWithMultipleBaseTypes.ts, 33, 20))
 
         x: {
->x : Symbol(x, Decl(interfaceWithMultipleBaseTypes.ts, 33, 24))
+>x : Symbol(Base2.x, Decl(interfaceWithMultipleBaseTypes.ts, 33, 24))
 
             b: T;
 >b : Symbol(b, Decl(interfaceWithMultipleBaseTypes.ts, 34, 12))
@@ -89,7 +89,7 @@ module Generic {
 >Base2 : Symbol(Base2, Decl(interfaceWithMultipleBaseTypes.ts, 31, 5))
 
         x: {
->x : Symbol(x, Decl(interfaceWithMultipleBaseTypes.ts, 39, 63))
+>x : Symbol(Derived.x, Decl(interfaceWithMultipleBaseTypes.ts, 39, 63))
 
             a: string; b: number;
 >a : Symbol(a, Decl(interfaceWithMultipleBaseTypes.ts, 40, 12))
@@ -107,7 +107,7 @@ module Generic {
 >U : Symbol(U, Decl(interfaceWithMultipleBaseTypes.ts, 45, 25))
 
         x: {
->x : Symbol(x, Decl(interfaceWithMultipleBaseTypes.ts, 45, 57))
+>x : Symbol(Derived2.x, Decl(interfaceWithMultipleBaseTypes.ts, 45, 57))
 
             a: T; b: U;
 >a : Symbol(a, Decl(interfaceWithMultipleBaseTypes.ts, 46, 12))
@@ -130,7 +130,7 @@ module Generic {
 >Base2 : Symbol(Base2, Decl(interfaceWithMultipleBaseTypes.ts, 31, 5))
 
         x: {
->x : Symbol(x, Decl(interfaceWithMultipleBaseTypes.ts, 53, 64))
+>x : Symbol(Derived4.x, Decl(interfaceWithMultipleBaseTypes.ts, 53, 64))
 
             a: T; b: T;
 >a : Symbol(a, Decl(interfaceWithMultipleBaseTypes.ts, 54, 12))
@@ -149,7 +149,7 @@ module Generic {
 >T : Symbol(T, Decl(interfaceWithMultipleBaseTypes.ts, 59, 23))
 
         x: T;
->x : Symbol(x, Decl(interfaceWithMultipleBaseTypes.ts, 59, 54))
+>x : Symbol(Derived5.x, Decl(interfaceWithMultipleBaseTypes.ts, 59, 54))
 >T : Symbol(T, Decl(interfaceWithMultipleBaseTypes.ts, 59, 23))
     }
 }

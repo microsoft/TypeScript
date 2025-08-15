@@ -6,5 +6,5 @@ export type A = {};
 
 === /b.ts ===
 export type { A } from './a'; // should not error, but would without `type`
->A : import("./a").A
+>A : import("/a").A
 

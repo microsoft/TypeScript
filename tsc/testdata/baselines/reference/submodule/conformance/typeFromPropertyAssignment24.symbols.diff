@@ -25,14 +25,8 @@
 +>Inner : Symbol(Inner, Decl(def.js, 0, 14))
 
  y.name
-->y.name : Symbol(Inner.name, Decl(def.js, 1, 21))
-+>y.name : Symbol(name, Decl(def.js, 1, 21))
- >y : Symbol(y, Decl(usage.js, 4, 3))
-->name : Symbol(Inner.name, Decl(def.js, 1, 21))
-+>name : Symbol(name, Decl(def.js, 1, 21))
-
- /** @type {Outer.Inner} should be instance type, not static type */
- var x;
+ >y.name : Symbol(Inner.name, Decl(def.js, 1, 21))
+@@= skipped -24, +22 lines =@@
  >x : Symbol(x, Decl(usage.js, 7, 3))
 
  x.name
@@ -54,8 +48,4 @@
 +>Inner : Symbol(Inner, Decl(def.js, 0, 14))
 
    name() {
-->name : Symbol(Inner.name, Decl(def.js, 1, 21))
-+>name : Symbol(name, Decl(def.js, 1, 21))
-
-     return 'hi'
-   }
+ >name : Symbol(Inner.name, Decl(def.js, 1, 21))

@@ -34,7 +34,7 @@ module m2 {
 >C : Symbol(C, Decl(multivar.ts, 8, 11))
 
         constructor (public b) {
->b : Symbol(b, Decl(multivar.ts, 11, 21))
+>b : Symbol(C.b, Decl(multivar.ts, 11, 21))
         }
     }
 
@@ -42,7 +42,7 @@ module m2 {
 >C2 : Symbol(C2, Decl(multivar.ts, 13, 5))
 
         constructor (public b) {
->b : Symbol(b, Decl(multivar.ts, 16, 21))
+>b : Symbol(C2.b, Decl(multivar.ts, 16, 21))
         }
     }
     var m;

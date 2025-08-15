@@ -39,9 +39,9 @@ declare module "nestNamespaceModule" {
 >c : Symbol(c, Decl(events.d.ts, 13, 24))
     }
     export = a1.a2;
->a1.a2 : Symbol(a2, Decl(events.d.ts, 9, 17), Decl(events.d.ts, 13, 17))
+>a1.a2 : Symbol(a1.a2, Decl(events.d.ts, 9, 17), Decl(events.d.ts, 13, 17))
 >a1 : Symbol(a1, Decl(events.d.ts, 8, 38), Decl(events.d.ts, 11, 5))
->a2 : Symbol(a2, Decl(events.d.ts, 9, 17), Decl(events.d.ts, 13, 17))
+>a2 : Symbol(a1.a2, Decl(events.d.ts, 9, 17), Decl(events.d.ts, 13, 17))
 }
 declare module "renameModule" {
 >"renameModule" : Symbol("renameModule", Decl(events.d.ts, 17, 1))
@@ -56,7 +56,7 @@ declare module "renameModule" {
     import d = a.b;
 >d : Symbol(d, Decl(events.d.ts, 21, 5))
 >a : Symbol(a, Decl(events.d.ts, 18, 31))
->b : Symbol(b, Decl(events.d.ts, 19, 16))
+>b : Symbol(d, Decl(events.d.ts, 19, 16))
 
     export = d;
 >d : Symbol(d, Decl(events.d.ts, 21, 5))
@@ -80,9 +80,9 @@ export class Foo extends EventEmitter {
 
 export class Foo2 extends n3.c {
 >Foo2 : Symbol(Foo2, Decl(b.js, 5, 1))
->n3.c : Symbol(c, Decl(events.d.ts, 13, 24))
+>n3.c : Symbol(n3.c, Decl(events.d.ts, 13, 24))
 >n3 : Symbol(n3, Decl(b.js, 1, 8))
->c : Symbol(c, Decl(events.d.ts, 13, 24))
+>c : Symbol(n3.c, Decl(events.d.ts, 13, 24))
 }
 
 export class Foo3 extends d {

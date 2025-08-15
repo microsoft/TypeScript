@@ -39,9 +39,9 @@ export const updateIfChanged = <T>(t: T) => {
 >set : Symbol(set, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 8, 13))
 >newU : Symbol(newU, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 8, 21))
 >U : Symbol(U, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 20))
->Object.is : Symbol(is, Decl(lib.es2015.core.d.ts, --, --))
+>Object.is : Symbol(ObjectConstructor.is, Decl(lib.es2015.core.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->is : Symbol(is, Decl(lib.es2015.core.d.ts, --, --))
+>is : Symbol(ObjectConstructor.is, Decl(lib.es2015.core.d.ts, --, --))
 >u : Symbol(u, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 23))
 >newU : Symbol(newU, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 8, 21))
 >t : Symbol(t, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 6, 35))
@@ -49,9 +49,9 @@ export const updateIfChanged = <T>(t: T) => {
 >newU : Symbol(newU, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 8, 21))
 
         return Object.assign(
->Object.assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
             <K extends Key<U>>(key: K) =>
 >K : Symbol(K, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 10, 13))
@@ -78,12 +78,12 @@ export const updateIfChanged = <T>(t: T) => {
 
                     return update(Object.assign(Array.isArray(u) ? [] : {}, u, { [key]: v }));
 >update : Symbol(update, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 28))
->Object.assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
->Array.isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
 >u : Symbol(u, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 23))
 >u : Symbol(u, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 23))
 >[key] : Symbol([key], Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 12, 80))

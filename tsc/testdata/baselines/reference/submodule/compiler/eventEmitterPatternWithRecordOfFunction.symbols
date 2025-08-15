@@ -5,7 +5,7 @@ interface A {
 >A : Symbol(A, Decl(eventEmitterPatternWithRecordOfFunction.ts, 0, 0))
 
     emit(event: string, ...args: any[]): boolean;
->emit : Symbol(emit, Decl(eventEmitterPatternWithRecordOfFunction.ts, 0, 13))
+>emit : Symbol(A.emit, Decl(eventEmitterPatternWithRecordOfFunction.ts, 0, 13))
 >event : Symbol(event, Decl(eventEmitterPatternWithRecordOfFunction.ts, 1, 9))
 >args : Symbol(args, Decl(eventEmitterPatternWithRecordOfFunction.ts, 1, 23))
 }
@@ -30,7 +30,7 @@ interface B<M extends EventMap> extends A {
 >A : Symbol(A, Decl(eventEmitterPatternWithRecordOfFunction.ts, 0, 0))
 
     emit<Event extends keyof M>(event: Event, ...args: Args<M[Event]>): boolean;
->emit : Symbol(emit, Decl(eventEmitterPatternWithRecordOfFunction.ts, 8, 43))
+>emit : Symbol(B.emit, Decl(eventEmitterPatternWithRecordOfFunction.ts, 8, 43))
 >Event : Symbol(Event, Decl(eventEmitterPatternWithRecordOfFunction.ts, 9, 9))
 >M : Symbol(M, Decl(eventEmitterPatternWithRecordOfFunction.ts, 8, 12))
 >event : Symbol(event, Decl(eventEmitterPatternWithRecordOfFunction.ts, 9, 32))

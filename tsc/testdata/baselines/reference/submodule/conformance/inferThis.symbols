@@ -10,7 +10,7 @@ export class C {
      * @return {T}
      */
     static a() {
->a : Symbol(a, Decl(a.js, 0, 16))
+>a : Symbol(C.a, Decl(a.js, 0, 16))
 
         return this;
 >this : Symbol((Missing), Decl(a.js, 3, 8))
@@ -22,7 +22,7 @@ export class C {
      * @return {T}
      */
     b() {
->b : Symbol(b, Decl(a.js, 8, 5))
+>b : Symbol(C.b, Decl(a.js, 8, 5))
 
         return this;
 >this : Symbol((Missing), Decl(a.js, 12, 8))
@@ -31,9 +31,9 @@ export class C {
 
 const a = C.a();
 >a : Symbol(a, Decl(a.js, 20, 5))
->C.a : Symbol(a, Decl(a.js, 0, 16))
+>C.a : Symbol(C.a, Decl(a.js, 0, 16))
 >C : Symbol(C, Decl(a.js, 0, 0))
->a : Symbol(a, Decl(a.js, 0, 16))
+>a : Symbol(C.a, Decl(a.js, 0, 16))
 
 a; // typeof C
 >a : Symbol(a, Decl(a.js, 20, 5))
@@ -44,9 +44,9 @@ const c = new C();
 
 const b = c.b();
 >b : Symbol(b, Decl(a.js, 24, 5))
->c.b : Symbol(b, Decl(a.js, 8, 5))
+>c.b : Symbol(C.b, Decl(a.js, 8, 5))
 >c : Symbol(c, Decl(a.js, 23, 5))
->b : Symbol(b, Decl(a.js, 8, 5))
+>b : Symbol(C.b, Decl(a.js, 8, 5))
 
 b; // C
 >b : Symbol(b, Decl(a.js, 24, 5))

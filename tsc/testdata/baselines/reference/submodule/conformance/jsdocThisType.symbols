@@ -5,7 +5,7 @@ export interface Foo {
 >Foo : Symbol(Foo, Decl(types.d.ts, 0, 0))
 
     foo: () => void;
->foo : Symbol(foo, Decl(types.d.ts, 0, 22))
+>foo : Symbol(Foo.foo, Decl(types.d.ts, 0, 22))
 }
 
 export type M = (this: Foo) => void;

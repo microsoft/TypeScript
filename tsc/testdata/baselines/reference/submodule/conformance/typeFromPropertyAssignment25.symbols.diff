@@ -15,11 +15,7 @@
 
      constructor() {
          this.i = 1
-->this.i : Symbol(I.i, Decl(bug24703.js, 2, 19))
-+>this.i : Symbol(i, Decl(bug24703.js, 2, 19))
- >this : Symbol(I, Decl(bug24703.js, 1, 10))
-->i : Symbol(I.i, Decl(bug24703.js, 2, 19))
-+>i : Symbol(i, Decl(bug24703.js, 2, 19))
+@@= skipped -15, +13 lines =@@
      }
  }
  Common.O = class extends Common.I {
@@ -37,12 +33,9 @@
 ->super : Symbol(I, Decl(bug24703.js, 1, 10))
 -
          this.o = 2
-->this.o : Symbol(O.o, Decl(bug24703.js, 8, 15))
-+>this.o : Symbol(o, Decl(bug24703.js, 8, 15))
+ >this.o : Symbol(O.o, Decl(bug24703.js, 8, 15))
  >this : Symbol(O, Decl(bug24703.js, 6, 10))
-->o : Symbol(O.o, Decl(bug24703.js, 8, 15))
-+>o : Symbol(o, Decl(bug24703.js, 8, 15))
-     }
+@@= skipped -19, +13 lines =@@
  }
  var o = new Common.O()
  >o : Symbol(o, Decl(bug24703.js, 12, 3))

@@ -5,7 +5,7 @@ interface Foo {
 >Foo : Symbol(Foo, Decl(addMoreOverloadsToBaseSignature.ts, 0, 0))
 
     f(): string;
->f : Symbol(f, Decl(addMoreOverloadsToBaseSignature.ts, 0, 15))
+>f : Symbol(Foo.f, Decl(addMoreOverloadsToBaseSignature.ts, 0, 15))
 }
 
 interface Bar extends Foo {
@@ -13,7 +13,7 @@ interface Bar extends Foo {
 >Foo : Symbol(Foo, Decl(addMoreOverloadsToBaseSignature.ts, 0, 0))
 
     f(key: string): string;
->f : Symbol(f, Decl(addMoreOverloadsToBaseSignature.ts, 4, 27))
+>f : Symbol(Bar.f, Decl(addMoreOverloadsToBaseSignature.ts, 4, 27))
 >key : Symbol(key, Decl(addMoreOverloadsToBaseSignature.ts, 5, 6))
 }
 

@@ -14497,7 +14497,9 @@ func (c *Checker) resolveExternalModule(location *ast.Node, moduleReference stri
 		if ancestor == nil {
 			ancestor = ast.FindAncestor(location, ast.IsImportEqualsDeclaration)
 			if ancestor != nil {
-				contextSpecifier = ancestor.AsImportEqualsDeclaration().ModuleReference.AsExternalModuleReference().Expression
+				if moduleRefrence := ancestor.AsImportEqualsDeclaration().ModuleReference; moduleRefrence.Kind == ast.KindExternalModuleReference {
+					contextSpecifier = moduleRefrence.AsExternalModuleReference().Expression
+				}
 			}
 		}
 	}

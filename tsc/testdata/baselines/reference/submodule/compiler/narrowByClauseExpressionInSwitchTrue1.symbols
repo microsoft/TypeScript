@@ -94,9 +94,9 @@ switch (true) {
 >x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue1.ts, 31, 3))
 
     x.trim();
->x.trim : Symbol(trim, Decl(lib.es5.d.ts, --, --))
+>x.trim : Symbol(String.trim, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue1.ts, 31, 3))
->trim : Symbol(trim, Decl(lib.es5.d.ts, --, --))
+>trim : Symbol(String.trim, Decl(lib.es5.d.ts, --, --))
 }
 
 type SomeType = { type: "SomeType" };

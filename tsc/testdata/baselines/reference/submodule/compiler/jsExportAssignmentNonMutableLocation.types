@@ -23,7 +23,7 @@ module.exports = {
 exports.customSymbol2 = Symbol("custom");
 >exports.customSymbol2 = Symbol("custom") : symbol
 >exports.customSymbol2 : any
->exports : typeof import("./file")
+>exports : typeof import("file")
 >customSymbol2 : any
 >Symbol("custom") : symbol
 >Symbol : SymbolConstructor

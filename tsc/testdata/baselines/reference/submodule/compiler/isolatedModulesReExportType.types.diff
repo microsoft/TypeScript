@@ -1,8 +1,0 @@
---- old.isolatedModulesReExportType.types
-+++ new.isolatedModulesReExportType.types
-@@= skipped -63, +63 lines =@@
-
- === /reExportValueAsTypeOnly.ts ===
- export type { C } from "./exportValue";
-->C : import("/exportValue").C
-+>C : import("./exportValue").C

@@ -6,8 +6,8 @@
  <><div></div></>
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
-+>div : Symbol(__index, Decl(renderer.d.ts, 2, 37))
-+>div : Symbol(__index, Decl(renderer.d.ts, 2, 37))
++>div : Symbol(JSX.IntrinsicElements[__index], Decl(renderer.d.ts, 2, 37))
++>div : Symbol(JSX.IntrinsicElements[__index], Decl(renderer.d.ts, 2, 37))
 
  === snabbdomy.tsx ===
  /* @jsx jsx */
@@ -17,8 +17,8 @@
  <><span></span></>
 ->span : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 ->span : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
-+>span : Symbol(__index, Decl(renderer.d.ts, 2, 37))
-+>span : Symbol(__index, Decl(renderer.d.ts, 2, 37))
++>span : Symbol(JSX.IntrinsicElements[__index], Decl(renderer.d.ts, 2, 37))
++>span : Symbol(JSX.IntrinsicElements[__index], Decl(renderer.d.ts, 2, 37))
 
  === preacty-only-fragment.tsx ===
  /**
@@ -28,8 +28,8 @@
  <div></div>
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
-+>div : Symbol(__index, Decl(renderer.d.ts, 2, 37))
-+>div : Symbol(__index, Decl(renderer.d.ts, 2, 37))
++>div : Symbol(JSX.IntrinsicElements[__index], Decl(renderer.d.ts, 2, 37))
++>div : Symbol(JSX.IntrinsicElements[__index], Decl(renderer.d.ts, 2, 37))
 
  === snabbdomy-no-fragment.tsx ===
  /* @jsx jsx */
@@ -39,8 +39,8 @@
  <div></div>
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
-+>div : Symbol(__index, Decl(renderer.d.ts, 2, 37))
-+>div : Symbol(__index, Decl(renderer.d.ts, 2, 37))
++>div : Symbol(JSX.IntrinsicElements[__index], Decl(renderer.d.ts, 2, 37))
++>div : Symbol(JSX.IntrinsicElements[__index], Decl(renderer.d.ts, 2, 37))
 
  === preacty-only-component.tsx ===
  /**

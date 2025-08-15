@@ -30,7 +30,7 @@ export declare class Box<T> {
 >T : Symbol(T, Decl(box.d.ts, 0, 25))
 
     value: T;
->value : Symbol(value, Decl(box.d.ts, 0, 29))
+>value : Symbol(Box.value, Decl(box.d.ts, 0, 29))
 >T : Symbol(T, Decl(box.d.ts, 0, 25))
 
     constructor(value: T);

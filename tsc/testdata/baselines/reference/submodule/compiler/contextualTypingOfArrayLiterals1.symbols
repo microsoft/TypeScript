@@ -19,7 +19,7 @@ var r2 = x3[1];
 >x3 : Symbol(x3, Decl(contextualTypingOfArrayLiterals1.ts, 4, 3))
 
 r2.getDate(); 
->r2.getDate : Symbol(getDate, Decl(lib.es5.d.ts, --, --))
+>r2.getDate : Symbol(Date.getDate, Decl(lib.es5.d.ts, --, --))
 >r2 : Symbol(r2, Decl(contextualTypingOfArrayLiterals1.ts, 5, 3))
->getDate : Symbol(getDate, Decl(lib.es5.d.ts, --, --))
+>getDate : Symbol(Date.getDate, Decl(lib.es5.d.ts, --, --))
 

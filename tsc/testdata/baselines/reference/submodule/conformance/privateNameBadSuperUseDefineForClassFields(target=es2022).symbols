@@ -9,7 +9,7 @@ class A extends B {
 >B : Symbol(B, Decl(privateNameBadSuperUseDefineForClassFields.ts, 0, 0))
 
   #x;
->#x : Symbol(#x, Decl(privateNameBadSuperUseDefineForClassFields.ts, 1, 19))
+>#x : Symbol(A.#x, Decl(privateNameBadSuperUseDefineForClassFields.ts, 1, 19))
 
   constructor() {
     this;

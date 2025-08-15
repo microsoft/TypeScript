@@ -9,8 +9,8 @@ function foo<T>(arr: T[], depth: number) {
 >depth : Symbol(depth, Decl(arrayFlatNoCrashInference.ts, 0, 25))
 
     return arr.flat(depth);
->arr.flat : Symbol(flat, Decl(lib.es2019.array.d.ts, --, --))
+>arr.flat : Symbol(Array.flat, Decl(lib.es2019.array.d.ts, --, --))
 >arr : Symbol(arr, Decl(arrayFlatNoCrashInference.ts, 0, 16))
->flat : Symbol(flat, Decl(lib.es2019.array.d.ts, --, --))
+>flat : Symbol(Array.flat, Decl(lib.es2019.array.d.ts, --, --))
 >depth : Symbol(depth, Decl(arrayFlatNoCrashInference.ts, 0, 25))
 }

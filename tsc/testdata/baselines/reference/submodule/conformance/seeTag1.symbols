@@ -5,7 +5,7 @@ interface Foo {
 >Foo : Symbol(Foo, Decl(seeTag1.ts, 0, 0))
 
     foo: string
->foo : Symbol(foo, Decl(seeTag1.ts, 0, 15))
+>foo : Symbol(Foo.foo, Decl(seeTag1.ts, 0, 15))
 }
 
 namespace NS {
@@ -15,7 +15,7 @@ namespace NS {
 >Bar : Symbol(Bar, Decl(seeTag1.ts, 4, 14))
 
         baz: Foo
->baz : Symbol(baz, Decl(seeTag1.ts, 5, 26))
+>baz : Symbol(Bar.baz, Decl(seeTag1.ts, 5, 26))
 >Foo : Symbol(Foo, Decl(seeTag1.ts, 0, 0))
     }
 }

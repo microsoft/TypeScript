@@ -29,19 +29,19 @@ enum NotLegalEnum {
 >NotLegalEnum : Symbol(NotLegalEnum, Decl(index.d.ts, 8, 1))
 
     B = 1
->B : Symbol(B, Decl(index.d.ts, 10, 19))
+>B : Symbol(NoGoodAlias, Decl(index.d.ts, 10, 19))
 }
 
 import NoGoodAlias = NotLegalEnum.B;
 >NoGoodAlias : Symbol(NoGoodAlias, Decl(index.d.ts, 12, 1))
 >NotLegalEnum : Symbol(NotLegalEnum, Decl(index.d.ts, 8, 1))
->B : Symbol(B, Decl(index.d.ts, 10, 19))
+>B : Symbol(NoGoodAlias, Decl(index.d.ts, 10, 19))
 
 const enum NotLegalConstEnum {
 >NotLegalConstEnum : Symbol(NotLegalConstEnum, Decl(index.d.ts, 14, 36))
 
     C = 2
->C : Symbol(C, Decl(index.d.ts, 16, 30))
+>C : Symbol(NotLegalConstEnum.C, Decl(index.d.ts, 16, 30))
 }
 
 // No errors after this point
@@ -72,7 +72,7 @@ declare enum LegalEnum {
 >LegalEnum : Symbol(LegalEnum, Decl(index.d.ts, 31, 1))
 
     A = 1
->A : Symbol(A, Decl(index.d.ts, 33, 24))
+>A : Symbol(LegalEnum.A, Decl(index.d.ts, 33, 24))
 }
 
 declare namespace AmbientStuff {
@@ -88,13 +88,13 @@ declare namespace AmbientStuff {
 >EnumInAmbientContext : Symbol(EnumInAmbientContext, Decl(index.d.ts, 40, 5))
 
         B = 1
->B : Symbol(B, Decl(index.d.ts, 41, 31))
+>B : Symbol(FineAlias, Decl(index.d.ts, 41, 31))
     }
 
     import FineAlias = EnumInAmbientContext.B;
 >FineAlias : Symbol(FineAlias, Decl(index.d.ts, 43, 5))
 >EnumInAmbientContext : Symbol(EnumInAmbientContext, Decl(index.d.ts, 40, 5))
->B : Symbol(B, Decl(index.d.ts, 41, 31))
+>B : Symbol(FineAlias, Decl(index.d.ts, 41, 31))
 }
 
 === commonjs.d.cts ===

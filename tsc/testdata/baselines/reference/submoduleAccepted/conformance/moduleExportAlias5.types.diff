@@ -13,15 +13,15 @@
 +>exports = module.exports = webpack : { (): void; WebpackOptionsDefaulter: number; }
 +>exports : any
 +>module.exports = webpack : { (): void; WebpackOptionsDefaulter: number; }
-+>module.exports : typeof import("./bug24754")
-+>module : { "\"bug24754\"": typeof import("./bug24754"); }
-+>exports : typeof import("./bug24754")
++>module.exports : typeof import("bug24754")
++>module : { "\"bug24754\"": typeof import("bug24754"); }
++>exports : typeof import("bug24754")
  >webpack : { (): void; WebpackOptionsDefaulter: number; }
 
  exports.version = 1001;
  >exports.version = 1001 : 1001
  >exports.version : 1001
 ->exports : { (): void; version: 1001; WebpackOptionsDefaulter: number; }
-+>exports : typeof import("./bug24754")
++>exports : typeof import("bug24754")
  >version : 1001
  >1001 : 1001

@@ -5,7 +5,7 @@ export const cls = class {
 >cls : Symbol(cls, Decl(isolatedDeclarationErrorsClassesExpressions.ts, 0, 12))
 
     foo: string = "";
->foo : Symbol(foo, Decl(isolatedDeclarationErrorsClassesExpressions.ts, 0, 26))
+>foo : Symbol(cls.foo, Decl(isolatedDeclarationErrorsClassesExpressions.ts, 0, 26))
 }
 
 

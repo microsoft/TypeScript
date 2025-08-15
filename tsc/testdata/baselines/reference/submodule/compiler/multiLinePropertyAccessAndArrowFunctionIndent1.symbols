@@ -15,7 +15,7 @@ return this.edit(role)
             .then((data: ng.IHttpPromiseCallbackArg<Role>) => data.data));
 >data : Symbol(data, Decl(multiLinePropertyAccessAndArrowFunctionIndent1.ts, 3, 19))
 >ng : Symbol(ng)
->IHttpPromiseCallbackArg : Symbol(IHttpPromiseCallbackArg)
+>IHttpPromiseCallbackArg : Symbol(ng.IHttpPromiseCallbackArg)
 >Role : Symbol(Role)
 >data : Symbol(data, Decl(multiLinePropertyAccessAndArrowFunctionIndent1.ts, 3, 19))
 

@@ -5,7 +5,7 @@ class User {
 >User : Symbol(User, Decl(emitThisInSuperMethodCall.ts, 0, 0))
 
     sayHello() {
->sayHello : Symbol(sayHello, Decl(emitThisInSuperMethodCall.ts, 0, 12))
+>sayHello : Symbol(User.sayHello, Decl(emitThisInSuperMethodCall.ts, 0, 12))
     }
 }
 
@@ -14,7 +14,7 @@ class RegisteredUser extends User {
 >User : Symbol(User, Decl(emitThisInSuperMethodCall.ts, 0, 0))
 
     f() {
->f : Symbol(f, Decl(emitThisInSuperMethodCall.ts, 5, 35))
+>f : Symbol(RegisteredUser.f, Decl(emitThisInSuperMethodCall.ts, 5, 35))
 
         () => {
             function inner() {
@@ -25,7 +25,7 @@ class RegisteredUser extends User {
         };
     }
     g() {
->g : Symbol(g, Decl(emitThisInSuperMethodCall.ts, 12, 5))
+>g : Symbol(RegisteredUser.g, Decl(emitThisInSuperMethodCall.ts, 12, 5))
 
         function inner() {
 >inner : Symbol(inner, Decl(emitThisInSuperMethodCall.ts, 13, 9))
@@ -36,7 +36,7 @@ class RegisteredUser extends User {
         }
     }
     h() {
->h : Symbol(h, Decl(emitThisInSuperMethodCall.ts, 19, 5))
+>h : Symbol(RegisteredUser.h, Decl(emitThisInSuperMethodCall.ts, 19, 5))
 
         function inner() {
 >inner : Symbol(inner, Decl(emitThisInSuperMethodCall.ts, 20, 9))

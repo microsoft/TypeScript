@@ -12,7 +12,7 @@ declare module "foo" {
 >C : Symbol(C, Decl(es5ExportDefaultClassDeclaration4.ts, 1, 25))
 
         method(): C;
->method : Symbol(method, Decl(es5ExportDefaultClassDeclaration4.ts, 3, 28))
+>method : Symbol(C.method, Decl(es5ExportDefaultClassDeclaration4.ts, 3, 28))
 >C : Symbol(C, Decl(es5ExportDefaultClassDeclaration4.ts, 1, 25))
     }
 

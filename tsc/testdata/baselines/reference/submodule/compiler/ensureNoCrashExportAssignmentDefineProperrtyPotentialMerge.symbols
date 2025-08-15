@@ -12,9 +12,9 @@ module.exports = 12;
 >exports : Symbol(export=, Decl(index.js, 0, 38))
 
 Object.defineProperty(module, "exports", { value: "oh no" });
->Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(index.js, 2, 42))
 
 === namespacey.js ===
@@ -44,9 +44,9 @@ B.NS = require("./namespacey");
 >require : Symbol(require)
 
 Object.defineProperty(B, "NS", { value: "why though", writable: true });
->Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >B : Symbol(B, Decl(namespacer.js, 0, 5))
 >value : Symbol(value, Decl(namespacer.js, 2, 32))
 >writable : Symbol(writable, Decl(namespacer.js, 2, 53))

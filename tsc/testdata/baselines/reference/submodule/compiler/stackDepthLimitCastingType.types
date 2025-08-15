@@ -38,7 +38,7 @@ export {
 
 };
 export as namespace Backbone;
->Backbone : typeof import("backbone")
+>Backbone : typeof import("node_modules/backbone/index")
 
 === node_modules/backbone-fetch-cache/index.d.ts ===
 import * as Backbone from "backbone";
@@ -55,7 +55,7 @@ declare module "backbone" {
 }
 export {};
 export as namespace BackboneFetchCache;
->BackboneFetchCache : typeof import("backbone-fetch-cache")
+>BackboneFetchCache : typeof import("node_modules/backbone-fetch-cache/index")
 
 === index.ts ===
 import * as Backbone from "backbone";

@@ -5,7 +5,7 @@ class C {
 >C : Symbol(C, Decl(conflictMarkerDiff3Trivia2.ts, 0, 0))
 
   foo() {
->foo : Symbol(foo, Decl(conflictMarkerDiff3Trivia2.ts, 0, 9))
+>foo : Symbol(C.foo, Decl(conflictMarkerDiff3Trivia2.ts, 0, 9))
 
 <<<<<<< B
      a();
@@ -19,6 +19,6 @@ class C {
 >>>>>>> A
 
   public bar() { }
->bar : Symbol(bar, Decl(conflictMarkerDiff3Trivia2.ts, 4, 3))
+>bar : Symbol(C.bar, Decl(conflictMarkerDiff3Trivia2.ts, 4, 3))
 }
 

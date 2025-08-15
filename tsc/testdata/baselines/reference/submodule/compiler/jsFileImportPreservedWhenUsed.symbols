@@ -17,7 +17,7 @@ interface LoDashStatic {
 >LoDashStatic : Symbol(LoDashStatic, Decl(dash.d.ts, 0, 117))
 
     mapValues<T extends object, TResult>(obj: T | null | undefined, callback: ObjectIterator<T, TResult>): { [P in keyof T]: TResult };
->mapValues : Symbol(mapValues, Decl(dash.d.ts, 2, 24))
+>mapValues : Symbol(LoDashStatic.mapValues, Decl(dash.d.ts, 2, 24))
 >T : Symbol(T, Decl(dash.d.ts, 3, 14))
 >TResult : Symbol(TResult, Decl(dash.d.ts, 3, 31))
 >obj : Symbol(obj, Decl(dash.d.ts, 3, 41))
@@ -56,7 +56,7 @@ export class Test {
      * @param {object} vm
      */
     test(obj, vm) {
->test : Symbol(test, Decl(index.js, 3, 19))
+>test : Symbol(Test.test, Decl(index.js, 3, 19))
 >obj : Symbol(obj, Decl(index.js, 8, 9))
 >vm : Symbol(vm, Decl(index.js, 8, 13))
 
@@ -65,9 +65,9 @@ export class Test {
 
         vm.objects = _.mapValues(
 >vm : Symbol(vm, Decl(index.js, 8, 13))
->_.mapValues : Symbol(mapValues, Decl(dash.d.ts, 2, 24))
+>_.mapValues : Symbol(LoDashStatic.mapValues, Decl(dash.d.ts, 2, 24))
 >_ : Symbol(_, Decl(index.js, 0, 6))
->mapValues : Symbol(mapValues, Decl(dash.d.ts, 2, 24))
+>mapValues : Symbol(LoDashStatic.mapValues, Decl(dash.d.ts, 2, 24))
 
             obj,
 >obj : Symbol(obj, Decl(index.js, 8, 9))

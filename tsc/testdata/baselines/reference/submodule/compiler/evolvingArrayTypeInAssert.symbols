@@ -15,9 +15,9 @@ function yadda() {
 >out : Symbol(out, Decl(evolvingArrayTypeInAssert.ts, 3, 7))
 
     out.push(100)
->out.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>out.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >out : Symbol(out, Decl(evolvingArrayTypeInAssert.ts, 3, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
     unsafeCast<any>(out);
 >unsafeCast : Symbol(unsafeCast, Decl(evolvingArrayTypeInAssert.ts, 0, 0))

@@ -1,9 +1,0 @@
---- old.multipleDefaultExports03.types
-+++ new.multipleDefaultExports03.types
-@@= skipped -5, +5 lines =@@
- }
-
- export default class C {
-->C : import("multipleDefaultExports03").default
-+>C : import("./multipleDefaultExports03").default
- }

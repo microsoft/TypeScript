@@ -21,15 +21,15 @@ function source(type = "javascript") {
 >type : Symbol(type, Decl(file.js, 8, 16))
 
             ? sources.get(type)
->sources.get : Symbol(get, Decl(lib.es2015.collection.d.ts, --, --))
+>sources.get : Symbol(Map.get, Decl(lib.es2015.collection.d.ts, --, --))
 >sources : Symbol(sources, Decl(file.js, 2, 5))
->get : Symbol(get, Decl(lib.es2015.collection.d.ts, --, --))
+>get : Symbol(Map.get, Decl(lib.es2015.collection.d.ts, --, --))
 >type : Symbol(type, Decl(file.js, 8, 16))
 
             : sources.get("some other thing")
->sources.get : Symbol(get, Decl(lib.es2015.collection.d.ts, --, --))
+>sources.get : Symbol(Map.get, Decl(lib.es2015.collection.d.ts, --, --))
 >sources : Symbol(sources, Decl(file.js, 2, 5))
->get : Symbol(get, Decl(lib.es2015.collection.d.ts, --, --))
+>get : Symbol(Map.get, Decl(lib.es2015.collection.d.ts, --, --))
 
     );
 }

@@ -9,7 +9,7 @@ declare class Bar<O> {
 >O : Symbol(O, Decl(computedPropertyNameAndTypeParameterConflict.ts, 1, 18))
 
     [O]: number;
->[O] : Symbol([O], Decl(computedPropertyNameAndTypeParameterConflict.ts, 1, 22))
+>[O] : Symbol(Bar[O], Decl(computedPropertyNameAndTypeParameterConflict.ts, 1, 22))
 >O : Symbol(O, Decl(computedPropertyNameAndTypeParameterConflict.ts, 0, 13))
 }
 

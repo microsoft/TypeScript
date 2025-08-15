@@ -12,24 +12,7 @@
 
  var t = p.x;
  >t : number
-@@= skipped -12, +12 lines =@@
-
- === node_modules/math2d/index.d.ts ===
- export as namespace Math2d;
-->Math2d : typeof import("node_modules/math2d/index.d.ts")
-+>Math2d : typeof import("math2d")
-
- export = M2D;
-->M2D : typeof import("node_modules/math2d/index.d.ts")
-+>M2D : typeof import("math2d")
-
- declare namespace M2D {
-->M2D : typeof import("node_modules/math2d/index.d.ts")
-+>M2D : typeof import("math2d")
-
- 	interface Point {
- 		x: number;
-@@= skipped -53, +53 lines =@@
+@@= skipped -65, +65 lines =@@
  	// Add a method to the class
  	interface Vector {
  		reverse(): Math2d.Point;

@@ -32,7 +32,7 @@ export default class X {
 >X : Symbol(X, Decl(index.d.ts, 0, 0))
 
     private x: number;
->x : Symbol(x, Decl(index.d.ts, 0, 24))
+>x : Symbol(X.x, Decl(index.d.ts, 0, 24))
 }
 
 === /node_modules/b/index.d.ts ===
@@ -60,6 +60,6 @@ export default class X {
 >X : Symbol(X, Decl(index.d.ts, 0, 0))
 
     private x: number;
->x : Symbol(x, Decl(index.d.ts, 0, 24))
+>x : Symbol(X.x, Decl(index.d.ts, 0, 24))
 }
 

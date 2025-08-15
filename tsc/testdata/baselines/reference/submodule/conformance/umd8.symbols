@@ -10,14 +10,14 @@ let y: Foo; // OK in type position
 >Foo : Symbol(Foo, Decl(foo.d.ts, 6, 15))
 
 y.foo();
->y.foo : Symbol(foo, Decl(foo.d.ts, 0, 21))
+>y.foo : Symbol(ff.foo, Decl(foo.d.ts, 0, 21))
 >y : Symbol(y, Decl(a.ts, 3, 3))
->foo : Symbol(foo, Decl(foo.d.ts, 0, 21))
+>foo : Symbol(ff.foo, Decl(foo.d.ts, 0, 21))
 
 let z: Foo.SubThing; // OK in ns position
 >z : Symbol(z, Decl(a.ts, 5, 3))
 >Foo : Symbol(Foo, Decl(foo.d.ts, 6, 15))
->SubThing : Symbol(SubThing, Decl(foo.d.ts, 3, 25))
+>SubThing : Symbol(ff.SubThing, Decl(foo.d.ts, 3, 25))
 
 let x: any = Foo; // Not OK in value position
 >x : Symbol(x, Decl(a.ts, 6, 3))
@@ -28,7 +28,7 @@ declare class Thing {
 >Thing : Symbol(Thing, Decl(foo.d.ts, 0, 0), Decl(foo.d.ts, 2, 1))
 
 	foo(): number;
->foo : Symbol(foo, Decl(foo.d.ts, 0, 21))
+>foo : Symbol(Thing.foo, Decl(foo.d.ts, 0, 21))
 }
 declare namespace Thing {
 >Thing : Symbol(Thing, Decl(foo.d.ts, 0, 0), Decl(foo.d.ts, 2, 1))

@@ -8,7 +8,7 @@ export default function someFunc() {
 }
 
 someFunc.someProp = 'yo';
->someFunc.someProp : Symbol(someProp, Decl(exportDefaultNamespace.ts, 2, 1))
+>someFunc.someProp : Symbol(someFunc.someProp, Decl(exportDefaultNamespace.ts, 2, 1))
 >someFunc : Symbol(someFunc, Decl(exportDefaultNamespace.ts, 0, 0))
->someProp : Symbol(someProp, Decl(exportDefaultNamespace.ts, 2, 1))
+>someProp : Symbol(someFunc.someProp, Decl(exportDefaultNamespace.ts, 2, 1))
 

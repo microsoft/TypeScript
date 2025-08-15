@@ -3,7 +3,7 @@
 === /node_modules/acorn-walk/dist/walk.d.ts ===
 export {};
 declare module 'acorn-walk' {
->'acorn-walk' : typeof import("acorn-walk")
+>'acorn-walk' : typeof import("/node_modules/acorn-walk/dist/walk")
 
   export function simple(node: any, visitors: any, base?: any, state?: any): any;
 >simple : (node: any, visitors: any, base?: any, state?: any) => any

@@ -18,11 +18,11 @@ module X.A.B.C {
 
     export class W implements A.C.Z { // This can refer to it as A.C.Z
 >W : Symbol(W, Decl(declFileWithInternalModuleNameConflictsInExtendsClause2.ts, 4, 16))
->A.C.Z : Symbol(Z, Decl(declFileWithInternalModuleNameConflictsInExtendsClause2.ts, 0, 14))
+>A.C.Z : Symbol(A.C.Z, Decl(declFileWithInternalModuleNameConflictsInExtendsClause2.ts, 0, 14))
 >A.C : Symbol(C, Decl(declFileWithInternalModuleNameConflictsInExtendsClause2.ts, 0, 11))
 >A : Symbol(A, Decl(declFileWithInternalModuleNameConflictsInExtendsClause2.ts, 0, 9), Decl(declFileWithInternalModuleNameConflictsInExtendsClause2.ts, 4, 9), Decl(declFileWithInternalModuleNameConflictsInExtendsClause2.ts, 9, 9))
 >C : Symbol(C, Decl(declFileWithInternalModuleNameConflictsInExtendsClause2.ts, 0, 11))
->Z : Symbol(Z, Decl(declFileWithInternalModuleNameConflictsInExtendsClause2.ts, 0, 14))
+>Z : Symbol(A.C.Z, Decl(declFileWithInternalModuleNameConflictsInExtendsClause2.ts, 0, 14))
     }
 }
 

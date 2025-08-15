@@ -3,7 +3,7 @@
 === test.js ===
 const { apply } = require('./moduleExportAliasDuplicateAlias')
 >apply : undefined
->require('./moduleExportAliasDuplicateAlias') : typeof import("./moduleExportAliasDuplicateAlias")
+>require('./moduleExportAliasDuplicateAlias') : typeof import("moduleExportAliasDuplicateAlias")
 >require : any
 >'./moduleExportAliasDuplicateAlias' : "./moduleExportAliasDuplicateAlias"
 
@@ -15,7 +15,7 @@ apply()
 exports.apply = undefined;
 >exports.apply = undefined : undefined
 >exports.apply : undefined
->exports : typeof import("./moduleExportAliasDuplicateAlias")
+>exports : typeof import("moduleExportAliasDuplicateAlias")
 >apply : undefined
 >undefined : undefined
 
@@ -25,19 +25,19 @@ function a() { }
 exports.apply()
 >exports.apply() : any
 >exports.apply : undefined
->exports : typeof import("./moduleExportAliasDuplicateAlias")
+>exports : typeof import("moduleExportAliasDuplicateAlias")
 >apply : undefined
 
 exports.apply = a;
 >exports.apply = a : () => void
 >exports.apply : undefined
->exports : typeof import("./moduleExportAliasDuplicateAlias")
+>exports : typeof import("moduleExportAliasDuplicateAlias")
 >apply : undefined
 >a : () => void
 
 exports.apply()
 >exports.apply() : any
 >exports.apply : undefined
->exports : typeof import("./moduleExportAliasDuplicateAlias")
+>exports : typeof import("moduleExportAliasDuplicateAlias")
 >apply : undefined
 

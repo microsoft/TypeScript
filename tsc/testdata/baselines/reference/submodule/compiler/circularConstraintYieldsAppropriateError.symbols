@@ -7,7 +7,7 @@ class BaseType<T> {
 >T : Symbol(T, Decl(circularConstraintYieldsAppropriateError.ts, 1, 15))
 
     bar: T
->bar : Symbol(bar, Decl(circularConstraintYieldsAppropriateError.ts, 1, 19))
+>bar : Symbol(BaseType.bar, Decl(circularConstraintYieldsAppropriateError.ts, 1, 19))
 >T : Symbol(T, Decl(circularConstraintYieldsAppropriateError.ts, 1, 15))
 }
 
@@ -21,7 +21,7 @@ class NextType<C extends { someProp: any }, T = C['someProp']> extends BaseType<
 >T : Symbol(T, Decl(circularConstraintYieldsAppropriateError.ts, 5, 43))
 
     baz: string;
->baz : Symbol(baz, Decl(circularConstraintYieldsAppropriateError.ts, 5, 84))
+>baz : Symbol(NextType.baz, Decl(circularConstraintYieldsAppropriateError.ts, 5, 84))
 }
 
 class Foo extends NextType<Foo> {
@@ -30,7 +30,7 @@ class Foo extends NextType<Foo> {
 >Foo : Symbol(Foo, Decl(circularConstraintYieldsAppropriateError.ts, 7, 1))
 
     someProp: {
->someProp : Symbol(someProp, Decl(circularConstraintYieldsAppropriateError.ts, 9, 33))
+>someProp : Symbol(Foo.someProp, Decl(circularConstraintYieldsAppropriateError.ts, 9, 33))
 
         test: true
 >test : Symbol(test, Decl(circularConstraintYieldsAppropriateError.ts, 10, 15))

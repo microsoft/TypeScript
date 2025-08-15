@@ -55,9 +55,9 @@
 ->F : typeof F
 +>module.exports.F = F : { (): void; [_sym]: string; "my-fake-sym": string; }
 +>module.exports.F : { (): void; [_sym]: string; "my-fake-sym": string; }
-+>module.exports : typeof import("./lateBoundAssignmentDeclarationSupport7")
-+>module : { "\"lateBoundAssignmentDeclarationSupport7\"": typeof import("./lateBoundAssignmentDeclarationSupport7"); }
-+>exports : typeof import("./lateBoundAssignmentDeclarationSupport7")
++>module.exports : typeof import("lateBoundAssignmentDeclarationSupport7")
++>module : { "\"lateBoundAssignmentDeclarationSupport7\"": typeof import("lateBoundAssignmentDeclarationSupport7"); }
++>exports : typeof import("lateBoundAssignmentDeclarationSupport7")
 +>F : { (): void; [_sym]: string; "my-fake-sym": string; }
 +>F : { (): void; [_sym]: string; "my-fake-sym": string; }
 
@@ -67,8 +67,8 @@
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-+>module.exports : typeof import("./lateBoundAssignmentDeclarationSupport7")
-+>module : { "\"lateBoundAssignmentDeclarationSupport7\"": typeof import("./lateBoundAssignmentDeclarationSupport7"); }
-+>exports : typeof import("./lateBoundAssignmentDeclarationSupport7")
++>module.exports : typeof import("lateBoundAssignmentDeclarationSupport7")
++>module : { "\"lateBoundAssignmentDeclarationSupport7\"": typeof import("lateBoundAssignmentDeclarationSupport7"); }
++>exports : typeof import("lateBoundAssignmentDeclarationSupport7")
  >S : unique symbol
  >_sym : unique symbol

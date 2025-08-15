@@ -1,31 +1,14 @@
 --- old.jsEnumTagOnObjectFrozen.symbols
 +++ new.jsEnumTagOnObjectFrozen.symbols
-@@= skipped -29, +29 lines =@@
-
-         time: Date.now(),
- >time : Symbol(time, Decl(usage.js, 12, 22))
-->Date.now : Symbol(DateConstructor.now, Decl(lib.es5.d.ts, --, --))
-+>Date.now : Symbol(now, Decl(lib.es5.d.ts, --, --))
- >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
-->now : Symbol(DateConstructor.now, Decl(lib.es5.d.ts, --, --))
-+>now : Symbol(now, Decl(lib.es5.d.ts, --, --))
-
-         type,
- >type : Symbol(type, Decl(usage.js, 13, 25))
-@@= skipped -13, +13 lines =@@
+@@= skipped -42, +42 lines =@@
  === index.js ===
  /** @enum {string} */
  const Thing = Object.freeze({
 ->Thing : Symbol(Thing, Decl(index.js, 1, 5), Decl(index.js, 0, 4))
-->Object.freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 +>Thing : Symbol(Thing, Decl(index.js, 1, 5))
-+>Object.freeze : Symbol(freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >Object.freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
-->freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
-+>freeze : Symbol(freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
-
-     a: "thing",
- >a : Symbol(a, Decl(index.js, 1, 29))
+ >freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 @@= skipped -15, +15 lines =@@
 
  exports.Thing = Thing;

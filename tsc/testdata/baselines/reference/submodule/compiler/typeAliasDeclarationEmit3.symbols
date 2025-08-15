@@ -13,9 +13,9 @@ function f1(): void {
 >foo : Symbol(foo, Decl(typeAliasDeclarationEmit3.ts, 1, 31))
 
         console.log('f1');
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 }
 
 function f2(): void {
@@ -26,9 +26,9 @@ function f2(): void {
 >foo : Symbol(foo, Decl(typeAliasDeclarationEmit3.ts, 7, 16))
 
         console.log('f2');
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 }
 
 function f3(): void {
@@ -39,8 +39,8 @@ function f3(): void {
 >foo : Symbol(foo, Decl(typeAliasDeclarationEmit3.ts, 13, 13))
 
         console.log('f3');
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 }
 

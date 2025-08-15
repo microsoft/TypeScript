@@ -7,6 +7,6 @@ enum Bar {
 >Bar : Symbol(Bar, Decl(parserInterfaceKeywordInEnum1.ts, 0, 13))
 
     interface,
->interface : Symbol(interface, Decl(parserInterfaceKeywordInEnum1.ts, 2, 10))
+>interface : Symbol(Bar.interface, Decl(parserInterfaceKeywordInEnum1.ts, 2, 10))
 }
 

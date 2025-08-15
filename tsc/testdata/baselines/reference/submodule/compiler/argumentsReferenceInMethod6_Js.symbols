@@ -5,15 +5,15 @@ class A {
 >A : Symbol(A, Decl(a.js, 0, 0))
 
 	m() {
->m : Symbol(m, Decl(a.js, 0, 9))
+>m : Symbol(A.m, Decl(a.js, 0, 9))
 
 		/**
 		 * @type object
 		 */
 		this.foo = arguments;
->this.foo : Symbol(foo, Decl(a.js, 1, 6))
+>this.foo : Symbol(A.foo, Decl(a.js, 1, 6))
 >this : Symbol(A, Decl(a.js, 0, 0))
->foo : Symbol(foo, Decl(a.js, 1, 6))
+>foo : Symbol(A.foo, Decl(a.js, 1, 6))
 >arguments : Symbol(arguments)
 	}
 }

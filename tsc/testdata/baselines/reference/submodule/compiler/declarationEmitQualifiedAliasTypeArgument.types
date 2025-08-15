@@ -38,15 +38,15 @@ import { T, Q } from "./lib";
 >Q : any
 
 import { create } from "./bbb";
->create : <T>() => () => import("./bbb").INode<T>
+>create : <T>() => () => import("bbb").INode<T>
 
 export const fun = create<T>();
->fun : () => import("./bbb").INode<T>
->create<T>() : () => import("./bbb").INode<T>
->create : <T>() => () => import("./bbb").INode<T>
+>fun : () => import("bbb").INode<T>
+>create<T>() : () => import("bbb").INode<T>
+>create : <T>() => () => import("bbb").INode<T>
 
 export const fun2 = create<Q>();
->fun2 : () => import("./bbb").INode<Q>
->create<Q>() : () => import("./bbb").INode<Q>
->create : <T>() => () => import("./bbb").INode<T>
+>fun2 : () => import("bbb").INode<Q>
+>create<Q>() : () => import("bbb").INode<Q>
+>create : <T>() => () => import("bbb").INode<T>
 

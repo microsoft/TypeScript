@@ -28,14 +28,14 @@ export interface NodeList {
 >NodeList : Symbol(NodeList, Decl(controlFlowBinaryOrExpression.ts, 8, 2))
 
     length: number;
->length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 10, 27))
+>length : Symbol(NodeList.length, Decl(controlFlowBinaryOrExpression.ts, 10, 27))
 }
 
 export interface HTMLCollection {
 >HTMLCollection : Symbol(HTMLCollection, Decl(controlFlowBinaryOrExpression.ts, 12, 1))
 
     length: number;
->length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 14, 33))
+>length : Symbol(HTMLCollection.length, Decl(controlFlowBinaryOrExpression.ts, 14, 33))
 }
 
 declare function isNodeList(sourceObj: any): sourceObj is NodeList;
@@ -88,8 +88,8 @@ if (isNodeList(sourceObj) || isHTMLCollection(sourceObj)) {
 >sourceObj : Symbol(sourceObj, Decl(controlFlowBinaryOrExpression.ts, 23, 3))
 
     sourceObj.length;
->sourceObj.length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 14, 33))
+>sourceObj.length : Symbol(HTMLCollection.length, Decl(controlFlowBinaryOrExpression.ts, 14, 33))
 >sourceObj : Symbol(sourceObj, Decl(controlFlowBinaryOrExpression.ts, 23, 3))
->length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 14, 33))
+>length : Symbol(HTMLCollection.length, Decl(controlFlowBinaryOrExpression.ts, 14, 33))
 }
 

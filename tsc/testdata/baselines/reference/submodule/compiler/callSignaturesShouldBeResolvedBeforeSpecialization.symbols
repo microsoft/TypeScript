@@ -10,7 +10,7 @@ interface I1<T> {
 >T : Symbol(T, Decl(callSignaturesShouldBeResolvedBeforeSpecialization.ts, 0, 13))
 
     field1: I1<boolean>;
->field1 : Symbol(field1, Decl(callSignaturesShouldBeResolvedBeforeSpecialization.ts, 1, 21))
+>field1 : Symbol(I1.field1, Decl(callSignaturesShouldBeResolvedBeforeSpecialization.ts, 1, 21))
 >I1 : Symbol(I1, Decl(callSignaturesShouldBeResolvedBeforeSpecialization.ts, 0, 0))
 }
 

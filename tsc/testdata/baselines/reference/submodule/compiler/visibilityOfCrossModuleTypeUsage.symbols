@@ -8,18 +8,18 @@ function run(configuration: commands.IConfiguration) {
 >run : Symbol(run, Decl(visibilityOfCrossModuleTypeUsage_fs.ts, 0, 73))
 >configuration : Symbol(configuration, Decl(visibilityOfCrossModuleTypeUsage_fs.ts, 1, 13))
 >commands : Symbol(commands, Decl(visibilityOfCrossModuleTypeUsage_fs.ts, 0, 0))
->IConfiguration : Symbol(IConfiguration, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 1, 69))
+>IConfiguration : Symbol(commands.IConfiguration, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 1, 69))
 
     var absoluteWorkspacePath = configuration.workspace.toAbsolutePath(configuration.server);
 >absoluteWorkspacePath : Symbol(absoluteWorkspacePath, Decl(visibilityOfCrossModuleTypeUsage_fs.ts, 2, 7))
->configuration.workspace.toAbsolutePath : Symbol(toAbsolutePath, Decl(visibilityOfCrossModuleTypeUsage_server.ts, 3, 29))
->configuration.workspace : Symbol(workspace, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 3, 33))
+>configuration.workspace.toAbsolutePath : Symbol(IWorkspace.toAbsolutePath, Decl(visibilityOfCrossModuleTypeUsage_server.ts, 3, 29))
+>configuration.workspace : Symbol(commands.IConfiguration.workspace, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 3, 33))
 >configuration : Symbol(configuration, Decl(visibilityOfCrossModuleTypeUsage_fs.ts, 1, 13))
->workspace : Symbol(workspace, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 3, 33))
->toAbsolutePath : Symbol(toAbsolutePath, Decl(visibilityOfCrossModuleTypeUsage_server.ts, 3, 29))
->configuration.server : Symbol(server, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 4, 33))
+>workspace : Symbol(commands.IConfiguration.workspace, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 3, 33))
+>toAbsolutePath : Symbol(IWorkspace.toAbsolutePath, Decl(visibilityOfCrossModuleTypeUsage_server.ts, 3, 29))
+>configuration.server : Symbol(commands.IConfiguration.server, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 4, 33))
 >configuration : Symbol(configuration, Decl(visibilityOfCrossModuleTypeUsage_fs.ts, 1, 13))
->server : Symbol(server, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 4, 33))
+>server : Symbol(commands.IConfiguration.server, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 4, 33))
 }
 === visibilityOfCrossModuleTypeUsage_commands.ts ===
 import fs = require('./visibilityOfCrossModuleTypeUsage_fs');
@@ -32,14 +32,14 @@ export interface IConfiguration {
 >IConfiguration : Symbol(IConfiguration, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 1, 69))
 
     workspace: server.IWorkspace;
->workspace : Symbol(workspace, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 3, 33))
+>workspace : Symbol(IConfiguration.workspace, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 3, 33))
 >server : Symbol(server, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 0, 61))
->IWorkspace : Symbol(IWorkspace, Decl(visibilityOfCrossModuleTypeUsage_server.ts, 1, 1))
+>IWorkspace : Symbol(server.IWorkspace, Decl(visibilityOfCrossModuleTypeUsage_server.ts, 1, 1))
 
     server?: server.IServer;
->server : Symbol(server, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 4, 33))
+>server : Symbol(IConfiguration.server, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 4, 33))
 >server : Symbol(server, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 0, 61))
->IServer : Symbol(IServer, Decl(visibilityOfCrossModuleTypeUsage_server.ts, 0, 0))
+>IServer : Symbol(server.IServer, Decl(visibilityOfCrossModuleTypeUsage_server.ts, 0, 0))
 }
 
 === visibilityOfCrossModuleTypeUsage_server.ts ===
@@ -51,7 +51,7 @@ export interface IWorkspace {
 >IWorkspace : Symbol(IWorkspace, Decl(visibilityOfCrossModuleTypeUsage_server.ts, 1, 1))
 
     toAbsolutePath(server: IServer, workspaceRelativePath?: string): string;
->toAbsolutePath : Symbol(toAbsolutePath, Decl(visibilityOfCrossModuleTypeUsage_server.ts, 3, 29))
+>toAbsolutePath : Symbol(IWorkspace.toAbsolutePath, Decl(visibilityOfCrossModuleTypeUsage_server.ts, 3, 29))
 >server : Symbol(server, Decl(visibilityOfCrossModuleTypeUsage_server.ts, 4, 19))
 >IServer : Symbol(IServer, Decl(visibilityOfCrossModuleTypeUsage_server.ts, 0, 0))
 >workspaceRelativePath : Symbol(workspaceRelativePath, Decl(visibilityOfCrossModuleTypeUsage_server.ts, 4, 35))

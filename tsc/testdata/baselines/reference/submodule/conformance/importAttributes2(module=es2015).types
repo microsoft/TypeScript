@@ -22,7 +22,7 @@ export * from './0' with { type: "json" }
 >type : any
 
 export * as ns from './0' with { type: "json" }
->ns : typeof import("./0")
+>ns : typeof import("0")
 >type : any
 
 === 2.ts ===

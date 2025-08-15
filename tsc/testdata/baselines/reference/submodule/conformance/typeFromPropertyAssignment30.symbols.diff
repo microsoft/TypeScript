@@ -1,11 +1,6 @@
 --- old.typeFromPropertyAssignment30.symbols
 +++ new.typeFromPropertyAssignment30.symbols
-@@= skipped -5, +5 lines =@@
-
-     (): number;
-     p?: { [s: string]: number };
-->p : Symbol(Combo.p, Decl(typeFromPropertyAssignment30.ts, 1, 15))
-+>p : Symbol(p, Decl(typeFromPropertyAssignment30.ts, 1, 15))
+@@= skipped -9, +9 lines =@@
  >s : Symbol(s, Decl(typeFromPropertyAssignment30.ts, 2, 11))
  }
  const c: Combo = () => 1
@@ -15,10 +10,8 @@
 
  // should not be an expando object, but contextually typed by Combo.p
  c.p = {}
-->c.p : Symbol(Combo.p, Decl(typeFromPropertyAssignment30.ts, 1, 15))
+ >c.p : Symbol(Combo.p, Decl(typeFromPropertyAssignment30.ts, 1, 15))
 ->c : Symbol(c, Decl(typeFromPropertyAssignment30.ts, 4, 5), Decl(typeFromPropertyAssignment30.ts, 4, 24))
-->p : Symbol(Combo.p, Decl(typeFromPropertyAssignment30.ts, 1, 15))
-+>c.p : Symbol(p, Decl(typeFromPropertyAssignment30.ts, 1, 15))
 +>c : Symbol(c, Decl(typeFromPropertyAssignment30.ts, 4, 5))
-+>p : Symbol(p, Decl(typeFromPropertyAssignment30.ts, 1, 15))
+ >p : Symbol(Combo.p, Decl(typeFromPropertyAssignment30.ts, 1, 15))
 

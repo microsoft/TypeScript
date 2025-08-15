@@ -9,7 +9,7 @@ interface I<T> {
 >T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 3, 12))
 
     foo: T;
->foo : Symbol(foo, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 3, 16))
+>foo : Symbol(I.foo, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 3, 16))
 >T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 3, 12))
 }
 
@@ -75,7 +75,7 @@ module M {
     export interface E<T> { foo: T }
 >E : Symbol(E, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 24, 10))
 >T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 25, 23))
->foo : Symbol(foo, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 25, 27))
+>foo : Symbol(E.foo, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 25, 27))
 >T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 25, 23))
 }
 
@@ -87,7 +87,7 @@ interface D3<T extends M.E> { }
 >D3 : Symbol(D3, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 28, 24))
 >T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 29, 13))
 >M : Symbol(M, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 22, 24))
->E : Symbol(E, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 24, 10))
+>E : Symbol(M.E, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 24, 10))
 
 interface I2 extends M.C { }
 >I2 : Symbol(I2, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 29, 31))
@@ -104,7 +104,7 @@ function i<T extends M.E>(x: T) { }
 >i : Symbol(i, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 32, 33))
 >T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 33, 11))
 >M : Symbol(M, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 22, 24))
->E : Symbol(E, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 24, 10))
+>E : Symbol(M.E, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 24, 10))
 >x : Symbol(x, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 33, 26))
 >T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 33, 11))
 
@@ -115,5 +115,5 @@ var j = <C>null;
 var k = <M.E>null;
 >k : Symbol(k, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 36, 3))
 >M : Symbol(M, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 22, 24))
->E : Symbol(E, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 24, 10))
+>E : Symbol(M.E, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 24, 10))
 

@@ -11,9 +11,9 @@ module.exports = function () {};
 exports.blah = exports.someProp;
 >exports.blah = exports.someProp : any
 >exports.blah : any
->exports : typeof import("./bar")
+>exports : typeof import("bar")
 >blah : any
 >exports.someProp : any
->exports : typeof import("./bar")
+>exports : typeof import("bar")
 >someProp : any
 

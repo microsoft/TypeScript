@@ -5,7 +5,7 @@ export interface StrategicState {
 >StrategicState : Symbol(StrategicState, Decl(generatorTypeCheck63.ts, 0, 0))
 
     lastStrategyApplied?: string;
->lastStrategyApplied : Symbol(lastStrategyApplied, Decl(generatorTypeCheck63.ts, 0, 33))
+>lastStrategyApplied : Symbol(StrategicState.lastStrategyApplied, Decl(generatorTypeCheck63.ts, 0, 33))
 }
 
 export function strategy<T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined, void>): (a: T) => IterableIterator<T | undefined, void> {
@@ -35,9 +35,9 @@ export function strategy<T extends StrategicState>(stratName: string, gen: (a: T
 >next : Symbol(next, Decl(generatorTypeCheck63.ts, 6, 18))
 
                 next.lastStrategyApplied = stratName;
->next.lastStrategyApplied : Symbol(lastStrategyApplied, Decl(generatorTypeCheck63.ts, 0, 33))
+>next.lastStrategyApplied : Symbol(StrategicState.lastStrategyApplied, Decl(generatorTypeCheck63.ts, 0, 33))
 >next : Symbol(next, Decl(generatorTypeCheck63.ts, 6, 18))
->lastStrategyApplied : Symbol(lastStrategyApplied, Decl(generatorTypeCheck63.ts, 0, 33))
+>lastStrategyApplied : Symbol(StrategicState.lastStrategyApplied, Decl(generatorTypeCheck63.ts, 0, 33))
 >stratName : Symbol(stratName, Decl(generatorTypeCheck63.ts, 4, 51))
             }
             yield next;
@@ -62,7 +62,7 @@ export interface State extends StrategicState {
 >StrategicState : Symbol(StrategicState, Decl(generatorTypeCheck63.ts, 0, 0))
 
     foo: number;
->foo : Symbol(foo, Decl(generatorTypeCheck63.ts, 19, 47))
+>foo : Symbol(State.foo, Decl(generatorTypeCheck63.ts, 19, 47))
 }
 
 export const Nothing: Strategy<State> = strategy("Nothing", function* (state: State) {

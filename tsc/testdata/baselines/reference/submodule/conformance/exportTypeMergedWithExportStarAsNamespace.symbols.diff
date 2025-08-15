@@ -1,9 +1,0 @@
---- old.exportTypeMergedWithExportStarAsNamespace.symbols
-+++ new.exportTypeMergedWithExportStarAsNamespace.symbols
-@@= skipped -47, +47 lines =@@
- >Something : Symbol(Something, Decl(prelude.ts, 1, 6), Decl(prelude.ts, 1, 40))
- >A : Symbol(A, Decl(prelude.ts, 2, 22))
- >S : Symbol(S, Decl(prelude.ts, 0, 6))
-->Something : Symbol(S.Something, Decl(Something.ts, 0, 0))
-+>Something : Symbol(Something, Decl(Something.ts, 0, 0))
- >A : Symbol(A, Decl(prelude.ts, 2, 22))

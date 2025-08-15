@@ -5,16 +5,16 @@ class Base {
 >Base : Symbol(Base, Decl(Foo.js, 0, 0))
 
   static foo = "";
->foo : Symbol(foo, Decl(Foo.js, 0, 12))
+>foo : Symbol(Base.foo, Decl(Foo.js, 0, 12))
 }
 export class Foo extends Base {}
 >Foo : Symbol(Foo, Decl(Foo.js, 2, 1))
 >Base : Symbol(Base, Decl(Foo.js, 0, 0))
 
 Foo.foo = "foo";
->Foo.foo : Symbol(foo, Decl(Foo.js, 3, 32))
+>Foo.foo : Symbol(Foo.foo, Decl(Foo.js, 3, 32))
 >Foo : Symbol(Foo, Decl(Foo.js, 2, 1))
->foo : Symbol(foo, Decl(Foo.js, 3, 32))
+>foo : Symbol(Foo.foo, Decl(Foo.js, 3, 32))
 
 === Bar.ts ===
 import { Foo } from "./Foo.js";
@@ -25,7 +25,7 @@ class Bar extends Foo {}
 >Foo : Symbol(Foo, Decl(Bar.ts, 0, 8))
 
 Bar.foo = "foo";
->Bar.foo : Symbol(foo, Decl(Foo.js, 3, 32))
+>Bar.foo : Symbol(Foo.foo, Decl(Foo.js, 3, 32))
 >Bar : Symbol(Bar, Decl(Bar.ts, 0, 31))
->foo : Symbol(foo, Decl(Foo.js, 3, 32))
+>foo : Symbol(Foo.foo, Decl(Foo.js, 3, 32))
 

@@ -63,20 +63,20 @@ enum E {
 >E : Symbol(E, Decl(assignEveryTypeToAny.ts, 23, 7))
 
     A
->A : Symbol(A, Decl(assignEveryTypeToAny.ts, 25, 8))
+>A : Symbol(E.A, Decl(assignEveryTypeToAny.ts, 25, 8))
 }
 
 x = E.A;
 >x : Symbol(x, Decl(assignEveryTypeToAny.ts, 2, 3))
->E.A : Symbol(A, Decl(assignEveryTypeToAny.ts, 25, 8))
+>E.A : Symbol(E.A, Decl(assignEveryTypeToAny.ts, 25, 8))
 >E : Symbol(E, Decl(assignEveryTypeToAny.ts, 23, 7))
->A : Symbol(A, Decl(assignEveryTypeToAny.ts, 25, 8))
+>A : Symbol(E.A, Decl(assignEveryTypeToAny.ts, 25, 8))
 
 var f = E.A;
 >f : Symbol(f, Decl(assignEveryTypeToAny.ts, 30, 3))
->E.A : Symbol(A, Decl(assignEveryTypeToAny.ts, 25, 8))
+>E.A : Symbol(E.A, Decl(assignEveryTypeToAny.ts, 25, 8))
 >E : Symbol(E, Decl(assignEveryTypeToAny.ts, 23, 7))
->A : Symbol(A, Decl(assignEveryTypeToAny.ts, 25, 8))
+>A : Symbol(E.A, Decl(assignEveryTypeToAny.ts, 25, 8))
 
 x = f;
 >x : Symbol(x, Decl(assignEveryTypeToAny.ts, 2, 3))
@@ -86,7 +86,7 @@ interface I {
 >I : Symbol(I, Decl(assignEveryTypeToAny.ts, 31, 6))
 
     foo: string;
->foo : Symbol(foo, Decl(assignEveryTypeToAny.ts, 33, 13))
+>foo : Symbol(I.foo, Decl(assignEveryTypeToAny.ts, 33, 13))
 }
 
 var g: I;
@@ -101,7 +101,7 @@ class C {
 >C : Symbol(C, Decl(assignEveryTypeToAny.ts, 38, 6))
 
     bar: string;
->bar : Symbol(bar, Decl(assignEveryTypeToAny.ts, 40, 9))
+>bar : Symbol(C.bar, Decl(assignEveryTypeToAny.ts, 40, 9))
 }
 
 var h: C;

@@ -5,7 +5,7 @@ class Message {
 >Message : Symbol(Message, Decl(TypeGuardWithArrayUnion.ts, 0, 0))
 
     value: string;
->value : Symbol(value, Decl(TypeGuardWithArrayUnion.ts, 0, 15))
+>value : Symbol(Message.value, Decl(TypeGuardWithArrayUnion.ts, 0, 15))
 }
 
 function saySize(message: Message | Message[]) {
@@ -19,9 +19,9 @@ function saySize(message: Message | Message[]) {
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
         return message.length;  // Should have type Message[] here
->message.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>message.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >message : Symbol(message, Decl(TypeGuardWithArrayUnion.ts, 4, 17))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
     }
 }
 

@@ -59,74 +59,51 @@
 
  === mod1.js ===
  const obj = { value: 42, writable: true };
-@@= skipped -21, +15 lines =@@
- >writable : Symbol(writable, Decl(mod1.js, 0, 24))
-
- Object.defineProperty(exports, "thing", obj);
-->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+@@= skipped -24, +18 lines =@@
+ >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
-->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+ >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 ->exports : Symbol("mod1", Decl(mod1.js, 0, 0))
 ->"thing" : Symbol(thing, Decl(mod1.js, 0, 42))
-+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
  >obj : Symbol(obj, Decl(mod1.js, 0, 5))
 
  /**
 @@= skipped -14, +12 lines =@@
- >str : Symbol(str, Decl(mod1.js, 6, 3))
-
- Object.defineProperty(exports, str, { value: 42, writable: true });
-->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+ >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
-->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+ >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 ->exports : Symbol("mod1", Decl(mod1.js, 0, 0))
-+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
  >str : Symbol(str, Decl(mod1.js, 6, 3))
  >value : Symbol(value, Decl(mod1.js, 7, 37))
  >writable : Symbol(writable, Decl(mod1.js, 7, 48))
 @@= skipped -12, +11 lines =@@
- >propName : Symbol(propName, Decl(mod1.js, 9, 5))
-
- Object.defineProperty(exports, propName, { value: 42, writable: true });
-->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+ >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
-->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+ >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 ->exports : Symbol("mod1", Decl(mod1.js, 0, 0))
-+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
  >propName : Symbol(propName, Decl(mod1.js, 9, 5))
  >value : Symbol(value, Decl(mod1.js, 10, 42))
  >writable : Symbol(writable, Decl(mod1.js, 10, 53))
-
-
- Object.defineProperty(exports, "bad1", { });
-->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+@@= skipped -10, +9 lines =@@
+ >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
-->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+ >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 ->exports : Symbol("mod1", Decl(mod1.js, 0, 0))
 ->"bad1" : Symbol(bad1, Decl(mod1.js, 10, 72))
-+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
 
  Object.defineProperty(exports, "bad2", { get() { return 12 }, value: "no" });
-->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+ >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
-->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+ >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 ->exports : Symbol("mod1", Decl(mod1.js, 0, 0))
 ->"bad2" : Symbol(bad2, Decl(mod1.js, 13, 44))
-+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
  >get : Symbol(get, Decl(mod1.js, 14, 40))
  >value : Symbol(value, Decl(mod1.js, 14, 61))
 
- Object.defineProperty(exports, "bad3", { writable: true });
-->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+@@= skipped -16, +12 lines =@@
+ >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
-->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+ >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 ->exports : Symbol("mod1", Decl(mod1.js, 0, 0))
 ->"bad3" : Symbol(bad3, Decl(mod1.js, 14, 77))
-+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
  >writable : Symbol(writable, Decl(mod1.js, 15, 40))

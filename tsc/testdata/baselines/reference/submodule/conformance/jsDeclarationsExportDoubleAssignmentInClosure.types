@@ -40,7 +40,7 @@ function foo() {
     exports.methods = m;
 >exports.methods = m : () => void
 >exports.methods : any
->exports : typeof import(".")
+>exports : typeof import("index")
 >methods : any
 >m : () => void
 }

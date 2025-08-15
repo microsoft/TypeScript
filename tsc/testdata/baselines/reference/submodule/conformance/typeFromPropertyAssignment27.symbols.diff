@@ -11,12 +11,10 @@
 +>C : Symbol(C, Decl(a.js, 0, 0))
 
  C.prototype = { q: 2 };
-->C.prototype : Symbol(C.prototype, Decl(a.js, 1, 28))
+ >C.prototype : Symbol(C.prototype, Decl(a.js, 1, 28))
 ->C : Symbol(C, Decl(a.js, 0, 0), Decl(a.js, 1, 28))
-->prototype : Symbol(C.prototype, Decl(a.js, 1, 28))
-+>C.prototype : Symbol(prototype, Decl(a.js, 1, 28))
 +>C : Symbol(C, Decl(a.js, 0, 0))
-+>prototype : Symbol(prototype, Decl(a.js, 1, 28))
+ >prototype : Symbol(C.prototype, Decl(a.js, 1, 28))
  >q : Symbol(q, Decl(a.js, 2, 15))
 
  const c = new C()

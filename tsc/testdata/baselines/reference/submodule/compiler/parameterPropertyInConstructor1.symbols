@@ -8,7 +8,7 @@ declare module mod {
 >Customers : Symbol(Customers, Decl(parameterPropertyInConstructor1.ts, 0, 20))
 
     constructor(public names: string);
->names : Symbol(names, Decl(parameterPropertyInConstructor1.ts, 2, 16))
+>names : Symbol(Customers.names, Decl(parameterPropertyInConstructor1.ts, 2, 16))
   }
 }
 

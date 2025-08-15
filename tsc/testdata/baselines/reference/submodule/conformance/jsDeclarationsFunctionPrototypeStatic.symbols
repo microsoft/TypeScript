@@ -11,19 +11,19 @@ function MyClass() {}
 >MyClass : Symbol(MyClass, Decl(source.js, 0, 25))
 
 MyClass.staticMethod = function() {}
->MyClass.staticMethod : Symbol(staticMethod, Decl(source.js, 2, 21))
+>MyClass.staticMethod : Symbol(MyClass.staticMethod, Decl(source.js, 2, 21))
 >MyClass : Symbol(MyClass, Decl(source.js, 0, 25))
->staticMethod : Symbol(staticMethod, Decl(source.js, 2, 21))
+>staticMethod : Symbol(MyClass.staticMethod, Decl(source.js, 2, 21))
 
 MyClass.prototype.method = function() {}
->MyClass.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>MyClass.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >MyClass : Symbol(MyClass, Decl(source.js, 0, 25))
->prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 
 MyClass.staticProperty = 123;
->MyClass.staticProperty : Symbol(staticProperty, Decl(source.js, 4, 40))
+>MyClass.staticProperty : Symbol(MyClass.staticProperty, Decl(source.js, 4, 40))
 >MyClass : Symbol(MyClass, Decl(source.js, 0, 25))
->staticProperty : Symbol(staticProperty, Decl(source.js, 4, 40))
+>staticProperty : Symbol(MyClass.staticProperty, Decl(source.js, 4, 40))
 
 /**
  * Callback to be invoked when test execution is complete.

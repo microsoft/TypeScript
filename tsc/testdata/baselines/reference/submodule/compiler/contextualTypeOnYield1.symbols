@@ -12,8 +12,8 @@ const f: FuncOrGeneratorFunc = function*() {
 
   yield (num) => console.log(num); // `num` should be inferred to have type `number`.
 >num : Symbol(num, Decl(contextualTypeOnYield1.ts, 3, 9))
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >num : Symbol(num, Decl(contextualTypeOnYield1.ts, 3, 9))
 }

@@ -6,7 +6,7 @@ export class WithDefault {
 >WithDefault : Symbol(WithDefault, Decl(parameterPropertyWithDefaultValueExtended.ts, 0, 0))
 
   constructor(readonly timestamp = new Date()) {}
->timestamp : Symbol(timestamp, Decl(parameterPropertyWithDefaultValueExtended.ts, 2, 14))
+>timestamp : Symbol(WithDefault.timestamp, Decl(parameterPropertyWithDefaultValueExtended.ts, 2, 14))
 >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }
 
@@ -15,7 +15,7 @@ export class WithoutDefault {
 >WithoutDefault : Symbol(WithoutDefault, Decl(parameterPropertyWithDefaultValueExtended.ts, 3, 1))
 
   constructor(readonly timestamp?: Date) {}
->timestamp : Symbol(timestamp, Decl(parameterPropertyWithDefaultValueExtended.ts, 7, 14))
+>timestamp : Symbol(WithoutDefault.timestamp, Decl(parameterPropertyWithDefaultValueExtended.ts, 7, 14))
 >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }
 
@@ -24,7 +24,7 @@ export class ExplicitUndefined {
 >ExplicitUndefined : Symbol(ExplicitUndefined, Decl(parameterPropertyWithDefaultValueExtended.ts, 8, 1))
 
   constructor(readonly timestamp: Date | undefined = new Date()) {}
->timestamp : Symbol(timestamp, Decl(parameterPropertyWithDefaultValueExtended.ts, 12, 14))
+>timestamp : Symbol(ExplicitUndefined.timestamp, Decl(parameterPropertyWithDefaultValueExtended.ts, 12, 14))
 >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }
@@ -34,7 +34,7 @@ export class PrivateWithDefault {
 >PrivateWithDefault : Symbol(PrivateWithDefault, Decl(parameterPropertyWithDefaultValueExtended.ts, 13, 1))
 
   constructor(private timestamp = new Date()) {}
->timestamp : Symbol(timestamp, Decl(parameterPropertyWithDefaultValueExtended.ts, 17, 14))
+>timestamp : Symbol(PrivateWithDefault.timestamp, Decl(parameterPropertyWithDefaultValueExtended.ts, 17, 14))
 >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }
 
@@ -43,6 +43,6 @@ export class PublicWithDefault {
 >PublicWithDefault : Symbol(PublicWithDefault, Decl(parameterPropertyWithDefaultValueExtended.ts, 18, 1))
 
   constructor(public timestamp = new Date()) {}
->timestamp : Symbol(timestamp, Decl(parameterPropertyWithDefaultValueExtended.ts, 22, 14))
+>timestamp : Symbol(PublicWithDefault.timestamp, Decl(parameterPropertyWithDefaultValueExtended.ts, 22, 14))
 >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }

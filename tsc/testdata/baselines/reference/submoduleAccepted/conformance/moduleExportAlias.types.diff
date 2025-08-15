@@ -169,29 +169,23 @@
 
 
  === b.js ===
- var exportsAlias = exports;
-->exportsAlias : typeof import("b")
-->exports : typeof import("b")
-+>exportsAlias : typeof import("./b")
-+>exports : typeof import("./b")
+@@= skipped -110, +110 lines =@@
 
  exportsAlias.func1 = function () { };
  >exportsAlias.func1 = function () { } : () => void
 ->exportsAlias.func1 : () => void
-->exportsAlias : typeof import("b")
-->func1 : () => void
 +>exportsAlias.func1 : any
-+>exportsAlias : typeof import("./b")
+ >exportsAlias : typeof import("b")
+->func1 : () => void
 +>func1 : any
  >function () { } : () => void
 
  exports.func2 = function () { };
  >exports.func2 = function () { } : () => void
 ->exports.func2 : () => void
-->exports : typeof import("b")
-->func2 : () => void
 +>exports.func2 : any
-+>exports : typeof import("./b")
+ >exports : typeof import("b")
+->func2 : () => void
 +>func2 : any
  >function () { } : () => void
 
@@ -259,13 +253,12 @@
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-->exports : typeof import("b")
-+>multipleDeclarationAlias2 : typeof import("./b")
-+>module.exports = exports : typeof import("./b")
++>multipleDeclarationAlias2 : typeof import("b")
++>module.exports = exports : typeof import("b")
 +>module.exports : {}
 +>module : { "export=": {}; }
 +>exports : {}
-+>exports : typeof import("./b")
+ >exports : typeof import("b")
 
  multipleDeclarationAlias2.func6 = function () { };
  >multipleDeclarationAlias2.func6 = function () { } : () => void
@@ -273,29 +266,19 @@
 ->multipleDeclarationAlias2 : typeof module.exports
 ->func6 : () => void
 +>multipleDeclarationAlias2.func6 : any
-+>multipleDeclarationAlias2 : typeof import("./b")
++>multipleDeclarationAlias2 : typeof import("b")
 +>func6 : any
  >function () { } : () => void
 
  var someOtherVariable;
- >someOtherVariable : any
-
- var multipleDeclarationAlias3 = someOtherVariable = exports;
-->multipleDeclarationAlias3 : typeof import("b")
-->someOtherVariable = exports : typeof import("b")
-+>multipleDeclarationAlias3 : typeof import("./b")
-+>someOtherVariable = exports : typeof import("./b")
- >someOtherVariable : any
-->exports : typeof import("b")
-+>exports : typeof import("./b")
+@@= skipped -75, +75 lines =@@
 
  multipleDeclarationAlias3.func7 = function () { };
  >multipleDeclarationAlias3.func7 = function () { } : () => void
 ->multipleDeclarationAlias3.func7 : () => void
-->multipleDeclarationAlias3 : typeof import("b")
-->func7 : () => void
 +>multipleDeclarationAlias3.func7 : any
-+>multipleDeclarationAlias3 : typeof import("./b")
+ >multipleDeclarationAlias3 : typeof import("b")
+->func7 : () => void
 +>func7 : any
  >function () { } : () => void
 
@@ -443,7 +426,7 @@
 +exports.func11 = function () { };
 +>exports.func11 = function () { } : () => void
 +>exports.func11 : any
-+>exports : typeof import("./b")
++>exports : typeof import("b")
 +>func11 : any
 +>function () { } : () => void
 +
@@ -470,7 +453,7 @@
 +exports.func11 = function () { };
 +>exports.func11 = function () { } : () => void
 +>exports.func11 : any
-+>exports : typeof import("./b")
++>exports : typeof import("b")
 +>func11 : any
 +>function () { } : () => void
 +
@@ -501,10 +484,9 @@
  exports.func13 = function () { };
  >exports.func13 = function () { } : () => void
 ->exports.func13 : () => void
-->exports : typeof import("b")
-->func13 : () => void
 +>exports.func13 : any
-+>exports : typeof import("./b")
+ >exports : typeof import("b")
+->func13 : () => void
 +>func13 : any
  >function () { } : () => void
 
@@ -540,10 +522,9 @@
  exports.func15 = function () { };
  >exports.func15 = function () { } : () => void
 ->exports.func15 : () => void
-->exports : typeof import("b")
-->func15 : () => void
 +>exports.func15 : any
-+>exports : typeof import("./b")
+ >exports : typeof import("b")
+->func15 : () => void
 +>func15 : any
  >function () { } : () => void
 
@@ -578,10 +559,9 @@
  exports.func17 = function () { };
  >exports.func17 = function () { } : () => void
 ->exports.func17 : () => void
-->exports : typeof import("b")
-->func17 : () => void
 +>exports.func17 : any
-+>exports : typeof import("./b")
+ >exports : typeof import("b")
+->func17 : () => void
 +>func17 : any
  >function () { } : () => void
 
@@ -613,10 +593,9 @@
  exports.func19 = function () { };
  >exports.func19 = function () { } : () => void
 ->exports.func19 : () => void
-->exports : typeof import("b")
-->func19 : () => void
 +>exports.func19 : any
-+>exports : typeof import("./b")
+ >exports : typeof import("b")
+->func19 : () => void
 +>func19 : any
  >function () { } : () => void
 

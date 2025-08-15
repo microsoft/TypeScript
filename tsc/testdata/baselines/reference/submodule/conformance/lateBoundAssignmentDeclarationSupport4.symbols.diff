@@ -1,55 +1,6 @@
 --- old.lateBoundAssignmentDeclarationSupport4.symbols
 +++ new.lateBoundAssignmentDeclarationSupport4.symbols
-@@= skipped -3, +3 lines =@@
- const x = require("./lateBoundAssignmentDeclarationSupport4.js");
- >x : Symbol(x, Decl(usage.js, 0, 5))
- >require : Symbol(require)
-->"./lateBoundAssignmentDeclarationSupport4.js" : Symbol(x, Decl(lateBoundAssignmentDeclarationSupport4.js, 0, 0))
-+>"./lateBoundAssignmentDeclarationSupport4.js" : Symbol("lateBoundAssignmentDeclarationSupport4", Decl(lateBoundAssignmentDeclarationSupport4.js, 0, 0))
-
- const inst =  new x.F();
- >inst : Symbol(inst, Decl(usage.js, 1, 5))
-->x.F : Symbol(x.F, Decl(lateBoundAssignmentDeclarationSupport4.js, 10, 22))
-+>x.F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport4.js, 10, 22))
- >x : Symbol(x, Decl(usage.js, 0, 5))
-->F : Symbol(x.F, Decl(lateBoundAssignmentDeclarationSupport4.js, 10, 22))
-+>F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport4.js, 10, 22))
-
- const y = inst["my-fake-sym"];
- >y : Symbol(y, Decl(usage.js, 2, 5))
-@@= skipped -15, +15 lines =@@
- const z = inst[x.S];
- >z : Symbol(z, Decl(usage.js, 3, 5))
- >inst : Symbol(inst, Decl(usage.js, 1, 5))
-->x.S : Symbol(x.S, Decl(lateBoundAssignmentDeclarationSupport4.js, 11, 21))
-+>x.S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport4.js, 11, 21))
- >x : Symbol(x, Decl(usage.js, 0, 5))
-->S : Symbol(x.S, Decl(lateBoundAssignmentDeclarationSupport4.js, 11, 21))
-+>S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport4.js, 11, 21))
-
- === lateBoundAssignmentDeclarationSupport4.js ===
- // currently unsupported
-@@= skipped -17, +17 lines =@@
- >F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport4.js, 2, 27))
- }
- F.prototype[_sym] = "ok";
-->F.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
-+>F.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
- >F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport4.js, 2, 27))
-->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
-+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
- >_sym : Symbol(_sym, Decl(lateBoundAssignmentDeclarationSupport4.js, 1, 5))
-
- F.prototype[_str] = "ok";
-->F.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
-+>F.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
- >F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport4.js, 2, 27))
-->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
-+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
- >_str : Symbol(_str, Decl(lateBoundAssignmentDeclarationSupport4.js, 2, 5))
-
- const inst =  new F();
-@@= skipped -27, +27 lines =@@
+@@= skipped -62, +62 lines =@@
 
  module.exports.F = F;
  >module.exports.F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport4.js, 10, 22))

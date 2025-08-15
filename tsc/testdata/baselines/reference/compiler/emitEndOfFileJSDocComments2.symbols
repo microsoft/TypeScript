@@ -14,9 +14,9 @@ function test(param) {
 
 	// Comment inside function
 	return param.length;
->param.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>param.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >param : Symbol(param, Decl(emitEndOfFileJSDocComments2.js, 7, 14))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
 	/** @typedef {number} B2 */
 }

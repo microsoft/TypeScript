@@ -8,9 +8,9 @@ enum ENUM { };
 
 enum ENUM1 { A, B, "" };
 >ENUM1 : Symbol(ENUM1, Decl(typeofOperatorWithEnumType.ts, 2, 14))
->A : Symbol(A, Decl(typeofOperatorWithEnumType.ts, 3, 12))
->B : Symbol(B, Decl(typeofOperatorWithEnumType.ts, 3, 15))
->"" : Symbol("", Decl(typeofOperatorWithEnumType.ts, 3, 18))
+>A : Symbol(ENUM1.A, Decl(typeofOperatorWithEnumType.ts, 3, 12))
+>B : Symbol(ENUM1.B, Decl(typeofOperatorWithEnumType.ts, 3, 15))
+>"" : Symbol(ENUM1[""], Decl(typeofOperatorWithEnumType.ts, 3, 18))
 
 // enum type var
 var ResultIsString1 = typeof ENUM;
@@ -25,13 +25,13 @@ var ResultIsString2 = typeof ENUM1;
 var ResultIsString3 = typeof ENUM1["A"];
 >ResultIsString3 : Symbol(ResultIsString3, Decl(typeofOperatorWithEnumType.ts, 10, 3))
 >ENUM1 : Symbol(ENUM1, Decl(typeofOperatorWithEnumType.ts, 2, 14))
->"A" : Symbol(A, Decl(typeofOperatorWithEnumType.ts, 3, 12))
+>"A" : Symbol(ENUM1.A, Decl(typeofOperatorWithEnumType.ts, 3, 12))
 
 var ResultIsString4 = typeof (ENUM[0] + ENUM1["B"]);
 >ResultIsString4 : Symbol(ResultIsString4, Decl(typeofOperatorWithEnumType.ts, 11, 3))
 >ENUM : Symbol(ENUM, Decl(typeofOperatorWithEnumType.ts, 0, 0))
 >ENUM1 : Symbol(ENUM1, Decl(typeofOperatorWithEnumType.ts, 2, 14))
->"B" : Symbol(B, Decl(typeofOperatorWithEnumType.ts, 3, 15))
+>"B" : Symbol(ENUM1.B, Decl(typeofOperatorWithEnumType.ts, 3, 15))
 
 // multiple typeof  operators
 var ResultIsString5 = typeof typeof ENUM;
@@ -41,9 +41,9 @@ var ResultIsString5 = typeof typeof ENUM;
 var ResultIsString6 = typeof typeof typeof (ENUM[0] + ENUM1.B);
 >ResultIsString6 : Symbol(ResultIsString6, Decl(typeofOperatorWithEnumType.ts, 15, 3))
 >ENUM : Symbol(ENUM, Decl(typeofOperatorWithEnumType.ts, 0, 0))
->ENUM1.B : Symbol(B, Decl(typeofOperatorWithEnumType.ts, 3, 15))
+>ENUM1.B : Symbol(ENUM1.B, Decl(typeofOperatorWithEnumType.ts, 3, 15))
 >ENUM1 : Symbol(ENUM1, Decl(typeofOperatorWithEnumType.ts, 2, 14))
->B : Symbol(B, Decl(typeofOperatorWithEnumType.ts, 3, 15))
+>B : Symbol(ENUM1.B, Decl(typeofOperatorWithEnumType.ts, 3, 15))
 
 // miss assignment operators
 typeof ENUM;
@@ -54,7 +54,7 @@ typeof ENUM1;
 
 typeof ENUM1["B"];
 >ENUM1 : Symbol(ENUM1, Decl(typeofOperatorWithEnumType.ts, 2, 14))
->"B" : Symbol(B, Decl(typeofOperatorWithEnumType.ts, 3, 15))
+>"B" : Symbol(ENUM1.B, Decl(typeofOperatorWithEnumType.ts, 3, 15))
 
 typeof ENUM, ENUM1;
 >ENUM : Symbol(ENUM, Decl(typeofOperatorWithEnumType.ts, 0, 0))

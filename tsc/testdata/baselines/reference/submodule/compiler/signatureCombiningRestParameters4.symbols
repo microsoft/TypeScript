@@ -6,21 +6,21 @@ declare class Node<Options = any> {
 >Options : Symbol(Options, Decl(signatureCombiningRestParameters4.ts, 0, 19))
 
   type: string;
->type : Symbol(type, Decl(signatureCombiningRestParameters4.ts, 0, 35))
+>type : Symbol(Node.type, Decl(signatureCombiningRestParameters4.ts, 0, 35))
 
   name: string;
->name : Symbol(name, Decl(signatureCombiningRestParameters4.ts, 1, 15))
+>name : Symbol(Node.name, Decl(signatureCombiningRestParameters4.ts, 1, 15))
 
   parent: Node | null;
->parent : Symbol(parent, Decl(signatureCombiningRestParameters4.ts, 2, 15))
+>parent : Symbol(Node.parent, Decl(signatureCombiningRestParameters4.ts, 2, 15))
 >Node : Symbol(Node, Decl(signatureCombiningRestParameters4.ts, 0, 0))
 
   child: Node | null;
->child : Symbol(child, Decl(signatureCombiningRestParameters4.ts, 3, 22))
+>child : Symbol(Node.child, Decl(signatureCombiningRestParameters4.ts, 3, 22))
 >Node : Symbol(Node, Decl(signatureCombiningRestParameters4.ts, 0, 0))
 
   options: Options;
->options : Symbol(options, Decl(signatureCombiningRestParameters4.ts, 4, 21))
+>options : Symbol(Node.options, Decl(signatureCombiningRestParameters4.ts, 4, 21))
 >Options : Symbol(Options, Decl(signatureCombiningRestParameters4.ts, 0, 19))
 }
 
@@ -29,7 +29,7 @@ interface NodeConfig<Options = any> {
 >Options : Symbol(Options, Decl(signatureCombiningRestParameters4.ts, 8, 21))
 
   extendMarkSchema?:
->extendMarkSchema : Symbol(extendMarkSchema, Decl(signatureCombiningRestParameters4.ts, 8, 37))
+>extendMarkSchema : Symbol(NodeConfig.extendMarkSchema, Decl(signatureCombiningRestParameters4.ts, 8, 37))
 
     | ((
         this: {
@@ -58,11 +58,11 @@ declare class Mark<Options = any> {
 >Options : Symbol(Options, Decl(signatureCombiningRestParameters4.ts, 20, 19))
 
   options: Options;
->options : Symbol(options, Decl(signatureCombiningRestParameters4.ts, 20, 35))
+>options : Symbol(Mark.options, Decl(signatureCombiningRestParameters4.ts, 20, 35))
 >Options : Symbol(Options, Decl(signatureCombiningRestParameters4.ts, 20, 19))
 
   config: MarkConfig;
->config : Symbol(config, Decl(signatureCombiningRestParameters4.ts, 21, 19))
+>config : Symbol(Mark.config, Decl(signatureCombiningRestParameters4.ts, 21, 19))
 >MarkConfig : Symbol(MarkConfig, Decl(signatureCombiningRestParameters4.ts, 23, 1))
 }
 
@@ -71,7 +71,7 @@ interface MarkConfig<Options = any> {
 >Options : Symbol(Options, Decl(signatureCombiningRestParameters4.ts, 25, 21))
 
   extendMarkSchema?:
->extendMarkSchema : Symbol(extendMarkSchema, Decl(signatureCombiningRestParameters4.ts, 25, 37))
+>extendMarkSchema : Symbol(MarkConfig.extendMarkSchema, Decl(signatureCombiningRestParameters4.ts, 25, 37))
 
     | ((
         this: {

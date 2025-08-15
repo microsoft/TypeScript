@@ -31,13 +31,13 @@ export = pick;
 === node_modules/@types/lodash/index.d.ts ===
 /// <reference path="./object.d.ts" />
 export = _;
->_ : import("lodash").LoDashStatic
+>_ : import("node_modules/@types/lodash/index.d.ts").LoDashStatic
 
 export as namespace _;
->_ : import("lodash").LoDashStatic
+>_ : import("node_modules/@types/lodash/index.d.ts").LoDashStatic
 
 declare const _: _.LoDashStatic;
->_ : import("lodash").LoDashStatic
+>_ : import("node_modules/@types/lodash/index.d.ts").LoDashStatic
 >_ : any
 
 declare namespace _ {

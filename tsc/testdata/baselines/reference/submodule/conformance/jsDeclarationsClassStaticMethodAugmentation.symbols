@@ -5,11 +5,11 @@ export class Clazz {
 >Clazz : Symbol(Clazz, Decl(source.js, 0, 0))
 
     static method() { }
->method : Symbol(method, Decl(source.js, 0, 20))
+>method : Symbol(Clazz.method, Decl(source.js, 0, 20))
 }
 
 Clazz.method.prop = 5;
->Clazz.method : Symbol(method, Decl(source.js, 0, 20))
+>Clazz.method : Symbol(Clazz.method, Decl(source.js, 0, 20))
 >Clazz : Symbol(Clazz, Decl(source.js, 0, 0))
->method : Symbol(method, Decl(source.js, 0, 20))
+>method : Symbol(Clazz.method, Decl(source.js, 0, 20))
 

@@ -6,8 +6,8 @@
  <h></h>
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
-+>h : Symbol(__index, Decl(renderer.d.ts, 2, 37))
-+>h : Symbol(__index, Decl(renderer.d.ts, 2, 37))
++>h : Symbol(JSX.IntrinsicElements[__index], Decl(renderer.d.ts, 2, 37))
++>h : Symbol(JSX.IntrinsicElements[__index], Decl(renderer.d.ts, 2, 37))
 
  === index.tsx ===
  import { p } from "./renderer";
@@ -16,5 +16,5 @@
  <h></h>
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
-+>h : Symbol(__index, Decl(renderer.d.ts, 2, 37))
-+>h : Symbol(__index, Decl(renderer.d.ts, 2, 37))
++>h : Symbol(JSX.IntrinsicElements[__index], Decl(renderer.d.ts, 2, 37))
++>h : Symbol(JSX.IntrinsicElements[__index], Decl(renderer.d.ts, 2, 37))

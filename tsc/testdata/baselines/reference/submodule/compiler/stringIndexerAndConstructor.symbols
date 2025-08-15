@@ -9,7 +9,7 @@ class C {
 
     constructor() { }
     static v() { }
->v : Symbol(v, Decl(stringIndexerAndConstructor.ts, 2, 21))
+>v : Symbol(C.v, Decl(stringIndexerAndConstructor.ts, 2, 21))
 }
 
 interface I {
@@ -21,8 +21,8 @@ interface I {
     (): boolean;
     new (): boolean;
     "": string;
->"" : Symbol("", Decl(stringIndexerAndConstructor.ts, 9, 20))
+>"" : Symbol(I[""], Decl(stringIndexerAndConstructor.ts, 9, 20))
 
     d: string;
->d : Symbol(d, Decl(stringIndexerAndConstructor.ts, 10, 15))
+>d : Symbol(I.d, Decl(stringIndexerAndConstructor.ts, 10, 15))
 }

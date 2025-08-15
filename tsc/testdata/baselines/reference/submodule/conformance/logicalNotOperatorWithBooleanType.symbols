@@ -12,10 +12,10 @@ class A {
 >A : Symbol(A, Decl(logicalNotOperatorWithBooleanType.ts, 3, 40))
 
     public a: boolean;
->a : Symbol(a, Decl(logicalNotOperatorWithBooleanType.ts, 5, 9))
+>a : Symbol(A.a, Decl(logicalNotOperatorWithBooleanType.ts, 5, 9))
 
     static foo() { return false; }
->foo : Symbol(foo, Decl(logicalNotOperatorWithBooleanType.ts, 6, 22))
+>foo : Symbol(A.foo, Decl(logicalNotOperatorWithBooleanType.ts, 6, 22))
 }
 module M {
 >M : Symbol(M, Decl(logicalNotOperatorWithBooleanType.ts, 8, 1))
@@ -45,15 +45,15 @@ var ResultIsBoolean3 = !{ x: true, y: false };
 // boolean type expressions
 var ResultIsBoolean4 = !objA.a;
 >ResultIsBoolean4 : Symbol(ResultIsBoolean4, Decl(logicalNotOperatorWithBooleanType.ts, 23, 3))
->objA.a : Symbol(a, Decl(logicalNotOperatorWithBooleanType.ts, 5, 9))
+>objA.a : Symbol(A.a, Decl(logicalNotOperatorWithBooleanType.ts, 5, 9))
 >objA : Symbol(objA, Decl(logicalNotOperatorWithBooleanType.ts, 13, 3))
->a : Symbol(a, Decl(logicalNotOperatorWithBooleanType.ts, 5, 9))
+>a : Symbol(A.a, Decl(logicalNotOperatorWithBooleanType.ts, 5, 9))
 
 var ResultIsBoolean5 = !M.n;
 >ResultIsBoolean5 : Symbol(ResultIsBoolean5, Decl(logicalNotOperatorWithBooleanType.ts, 24, 3))
->M.n : Symbol(n, Decl(logicalNotOperatorWithBooleanType.ts, 10, 14))
+>M.n : Symbol(M.n, Decl(logicalNotOperatorWithBooleanType.ts, 10, 14))
 >M : Symbol(M, Decl(logicalNotOperatorWithBooleanType.ts, 8, 1))
->n : Symbol(n, Decl(logicalNotOperatorWithBooleanType.ts, 10, 14))
+>n : Symbol(M.n, Decl(logicalNotOperatorWithBooleanType.ts, 10, 14))
 
 var ResultIsBoolean6 = !foo();
 >ResultIsBoolean6 : Symbol(ResultIsBoolean6, Decl(logicalNotOperatorWithBooleanType.ts, 25, 3))
@@ -61,9 +61,9 @@ var ResultIsBoolean6 = !foo();
 
 var ResultIsBoolean7 = !A.foo();
 >ResultIsBoolean7 : Symbol(ResultIsBoolean7, Decl(logicalNotOperatorWithBooleanType.ts, 26, 3))
->A.foo : Symbol(foo, Decl(logicalNotOperatorWithBooleanType.ts, 6, 22))
+>A.foo : Symbol(A.foo, Decl(logicalNotOperatorWithBooleanType.ts, 6, 22))
 >A : Symbol(A, Decl(logicalNotOperatorWithBooleanType.ts, 3, 40))
->foo : Symbol(foo, Decl(logicalNotOperatorWithBooleanType.ts, 6, 22))
+>foo : Symbol(A.foo, Decl(logicalNotOperatorWithBooleanType.ts, 6, 22))
 
 // multiple ! operators
 var ResultIsBoolean = !!BOOLEAN;
@@ -80,12 +80,12 @@ var ResultIsBoolean = !!BOOLEAN;
 
 !true, false;
 !objA.a;
->objA.a : Symbol(a, Decl(logicalNotOperatorWithBooleanType.ts, 5, 9))
+>objA.a : Symbol(A.a, Decl(logicalNotOperatorWithBooleanType.ts, 5, 9))
 >objA : Symbol(objA, Decl(logicalNotOperatorWithBooleanType.ts, 13, 3))
->a : Symbol(a, Decl(logicalNotOperatorWithBooleanType.ts, 5, 9))
+>a : Symbol(A.a, Decl(logicalNotOperatorWithBooleanType.ts, 5, 9))
 
 !M.n;
->M.n : Symbol(n, Decl(logicalNotOperatorWithBooleanType.ts, 10, 14))
+>M.n : Symbol(M.n, Decl(logicalNotOperatorWithBooleanType.ts, 10, 14))
 >M : Symbol(M, Decl(logicalNotOperatorWithBooleanType.ts, 8, 1))
->n : Symbol(n, Decl(logicalNotOperatorWithBooleanType.ts, 10, 14))
+>n : Symbol(M.n, Decl(logicalNotOperatorWithBooleanType.ts, 10, 14))
 

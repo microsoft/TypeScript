@@ -14,7 +14,7 @@ class D<T> {
 >T : Symbol(T, Decl(superCallInConstructorWithNoBaseType.ts, 6, 8))
 
     public constructor(public x: T) {
->x : Symbol(x, Decl(superCallInConstructorWithNoBaseType.ts, 7, 23))
+>x : Symbol(D.x, Decl(superCallInConstructorWithNoBaseType.ts, 7, 23))
 >T : Symbol(T, Decl(superCallInConstructorWithNoBaseType.ts, 6, 8))
 
         super(); // error

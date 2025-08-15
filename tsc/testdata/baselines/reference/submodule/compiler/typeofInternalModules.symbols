@@ -21,26 +21,26 @@ module Outer {
 import importInst = Outer.instantiated;
 >importInst : Symbol(importInst, Decl(typeofInternalModules.ts, 7, 1))
 >Outer : Symbol(Outer, Decl(typeofInternalModules.ts, 0, 0))
->instantiated : Symbol(instantiated, Decl(typeofInternalModules.ts, 0, 14))
+>instantiated : Symbol(importInst, Decl(typeofInternalModules.ts, 0, 14))
 
 import importUninst = Outer.uninstantiated;
 >importUninst : Symbol(importUninst, Decl(typeofInternalModules.ts, 9, 39))
 >Outer : Symbol(Outer, Decl(typeofInternalModules.ts, 0, 0))
->uninstantiated : Symbol(uninstantiated, Decl(typeofInternalModules.ts, 3, 5))
+>uninstantiated : Symbol(importUninst, Decl(typeofInternalModules.ts, 3, 5))
 
 var x1: typeof importInst.C = importInst.C;
 >x1 : Symbol(x1, Decl(typeofInternalModules.ts, 12, 3))
->importInst.C : Symbol(C, Decl(typeofInternalModules.ts, 1, 32))
+>importInst.C : Symbol(importInst.C, Decl(typeofInternalModules.ts, 1, 32))
 >importInst : Symbol(importInst, Decl(typeofInternalModules.ts, 7, 1))
->C : Symbol(C, Decl(typeofInternalModules.ts, 1, 32))
->importInst.C : Symbol(C, Decl(typeofInternalModules.ts, 1, 32))
+>C : Symbol(importInst.C, Decl(typeofInternalModules.ts, 1, 32))
+>importInst.C : Symbol(importInst.C, Decl(typeofInternalModules.ts, 1, 32))
 >importInst : Symbol(importInst, Decl(typeofInternalModules.ts, 7, 1))
->C : Symbol(C, Decl(typeofInternalModules.ts, 1, 32))
+>C : Symbol(importInst.C, Decl(typeofInternalModules.ts, 1, 32))
 
 var x2: importInst.C = new x1();
 >x2 : Symbol(x2, Decl(typeofInternalModules.ts, 13, 3))
 >importInst : Symbol(importInst, Decl(typeofInternalModules.ts, 7, 1))
->C : Symbol(C, Decl(typeofInternalModules.ts, 1, 32))
+>C : Symbol(importInst.C, Decl(typeofInternalModules.ts, 1, 32))
 >x1 : Symbol(x1, Decl(typeofInternalModules.ts, 12, 3))
 
 var x3: typeof importUninst.P; // Error again
@@ -61,9 +61,9 @@ x5 = Outer;
 
 x5 = Outer.instantiated;
 >x5 : Symbol(x5, Decl(typeofInternalModules.ts, 17, 3))
->Outer.instantiated : Symbol(instantiated, Decl(typeofInternalModules.ts, 0, 14))
+>Outer.instantiated : Symbol(importInst, Decl(typeofInternalModules.ts, 0, 14))
 >Outer : Symbol(Outer, Decl(typeofInternalModules.ts, 0, 0))
->instantiated : Symbol(instantiated, Decl(typeofInternalModules.ts, 0, 14))
+>instantiated : Symbol(importInst, Decl(typeofInternalModules.ts, 0, 14))
 
 var x6: typeof importUninst;
 >x6 : Symbol(x6, Decl(typeofInternalModules.ts, 20, 3))

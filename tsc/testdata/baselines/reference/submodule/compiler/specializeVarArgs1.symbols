@@ -16,7 +16,7 @@ interface ObservableArray<T> extends Observable<T[]>
 {
 
     push(...values: T[]);
->push : Symbol(push, Decl(specializeVarArgs1.ts, 6, 1))
+>push : Symbol(ObservableArray.push, Decl(specializeVarArgs1.ts, 6, 1))
 >values : Symbol(values, Decl(specializeVarArgs1.ts, 8, 9))
 >T : Symbol(T, Decl(specializeVarArgs1.ts, 4, 26))
 
@@ -37,7 +37,7 @@ var a =  observableArray<string>();
 >observableArray : Symbol(observableArray, Decl(specializeVarArgs1.ts, 10, 1))
 
 a.push('Some Value');
->a.push : Symbol(push, Decl(specializeVarArgs1.ts, 6, 1))
+>a.push : Symbol(ObservableArray.push, Decl(specializeVarArgs1.ts, 6, 1))
 >a : Symbol(a, Decl(specializeVarArgs1.ts, 18, 3))
->push : Symbol(push, Decl(specializeVarArgs1.ts, 6, 1))
+>push : Symbol(ObservableArray.push, Decl(specializeVarArgs1.ts, 6, 1))
 

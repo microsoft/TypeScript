@@ -1,15 +1,6 @@
 --- old.jsDeclarationsTypeReferences2.types
 +++ new.jsDeclarationsTypeReferences2.types
-@@= skipped -4, +4 lines =@@
- >a : number
- >m : number
- >require("./something").o : { a: number; m: number; }
-->require("./something") : typeof import("something")
-+>require("./something") : typeof import("./something")
- >require : any
- >"./something" : "./something"
- >o : { a: number; m: number; }
-@@= skipped -12, +12 lines =@@
+@@= skipped -16, +16 lines =@@
  >m : number
 
  module.exports = {

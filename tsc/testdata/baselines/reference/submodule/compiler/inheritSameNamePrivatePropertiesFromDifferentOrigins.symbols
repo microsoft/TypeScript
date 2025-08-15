@@ -5,14 +5,14 @@ class C {
 >C : Symbol(C, Decl(inheritSameNamePrivatePropertiesFromDifferentOrigins.ts, 0, 0))
 
     private x: number;
->x : Symbol(x, Decl(inheritSameNamePrivatePropertiesFromDifferentOrigins.ts, 0, 9))
+>x : Symbol(C.x, Decl(inheritSameNamePrivatePropertiesFromDifferentOrigins.ts, 0, 9))
 }
 
 class C2 {
 >C2 : Symbol(C2, Decl(inheritSameNamePrivatePropertiesFromDifferentOrigins.ts, 2, 1))
 
     private x: number;
->x : Symbol(x, Decl(inheritSameNamePrivatePropertiesFromDifferentOrigins.ts, 4, 10))
+>x : Symbol(C2.x, Decl(inheritSameNamePrivatePropertiesFromDifferentOrigins.ts, 4, 10))
 }
 
 interface A extends C, C2 { // error
@@ -21,5 +21,5 @@ interface A extends C, C2 { // error
 >C2 : Symbol(C2, Decl(inheritSameNamePrivatePropertiesFromDifferentOrigins.ts, 2, 1))
 
     y: string;
->y : Symbol(y, Decl(inheritSameNamePrivatePropertiesFromDifferentOrigins.ts, 8, 27))
+>y : Symbol(A.y, Decl(inheritSameNamePrivatePropertiesFromDifferentOrigins.ts, 8, 27))
 }

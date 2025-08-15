@@ -5,7 +5,7 @@ class A {
 >A : Symbol(A, Decl(genericStaticAnyTypeFunction.ts, 0, 0))
 
     static one<T>(source: T, value: number): T {
->one : Symbol(one, Decl(genericStaticAnyTypeFunction.ts, 0, 9))
+>one : Symbol(A.one, Decl(genericStaticAnyTypeFunction.ts, 0, 9))
 >T : Symbol(T, Decl(genericStaticAnyTypeFunction.ts, 2, 15))
 >source : Symbol(source, Decl(genericStaticAnyTypeFunction.ts, 2, 18))
 >T : Symbol(T, Decl(genericStaticAnyTypeFunction.ts, 2, 15))
@@ -17,19 +17,19 @@ class A {
 
     }
     static goo() { return 0; }
->goo : Symbol(goo, Decl(genericStaticAnyTypeFunction.ts, 6, 5))
+>goo : Symbol(A.goo, Decl(genericStaticAnyTypeFunction.ts, 6, 5))
 
     static two<T>(source: T): T {
->two : Symbol(two, Decl(genericStaticAnyTypeFunction.ts, 7, 30))
+>two : Symbol(A.two, Decl(genericStaticAnyTypeFunction.ts, 7, 30))
 >T : Symbol(T, Decl(genericStaticAnyTypeFunction.ts, 9, 15))
 >source : Symbol(source, Decl(genericStaticAnyTypeFunction.ts, 9, 18))
 >T : Symbol(T, Decl(genericStaticAnyTypeFunction.ts, 9, 15))
 >T : Symbol(T, Decl(genericStaticAnyTypeFunction.ts, 9, 15))
 
         return this.one<T>(source, 42); // should not error
->this.one : Symbol(one, Decl(genericStaticAnyTypeFunction.ts, 0, 9))
+>this.one : Symbol(A.one, Decl(genericStaticAnyTypeFunction.ts, 0, 9))
 >this : Symbol(A, Decl(genericStaticAnyTypeFunction.ts, 0, 0))
->one : Symbol(one, Decl(genericStaticAnyTypeFunction.ts, 0, 9))
+>one : Symbol(A.one, Decl(genericStaticAnyTypeFunction.ts, 0, 9))
 >T : Symbol(T, Decl(genericStaticAnyTypeFunction.ts, 9, 15))
 >source : Symbol(source, Decl(genericStaticAnyTypeFunction.ts, 9, 18))
 

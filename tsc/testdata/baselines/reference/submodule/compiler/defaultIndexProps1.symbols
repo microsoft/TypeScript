@@ -5,7 +5,7 @@ class Foo {
 >Foo : Symbol(Foo, Decl(defaultIndexProps1.ts, 0, 0))
 
 	public v = "Yo";
->v : Symbol(v, Decl(defaultIndexProps1.ts, 0, 11))
+>v : Symbol(Foo.v, Decl(defaultIndexProps1.ts, 0, 11))
 }
 
 var f = new Foo();
@@ -15,7 +15,7 @@ var f = new Foo();
 var q = f["v"];
 >q : Symbol(q, Decl(defaultIndexProps1.ts, 6, 3))
 >f : Symbol(f, Decl(defaultIndexProps1.ts, 4, 3))
->"v" : Symbol(v, Decl(defaultIndexProps1.ts, 0, 11))
+>"v" : Symbol(Foo.v, Decl(defaultIndexProps1.ts, 0, 11))
 
 var o = {v:"Yo2"};
 >o : Symbol(o, Decl(defaultIndexProps1.ts, 8, 3))

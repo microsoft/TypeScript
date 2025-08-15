@@ -6,7 +6,7 @@ class Abcde {
 
   /** @type {string} */
   x;
->x : Symbol(x, Decl(test.js, 0, 13))
+>x : Symbol(Abcde.x, Decl(test.js, 0, 13))
 }
 
 module.exports = {
@@ -28,13 +28,13 @@ declare module "./test" {
 
   interface Abcde { b: string }
 >Abcde : Symbol(Abcde, Decl(index.ts, 2, 25))
->b : Symbol(b, Decl(index.ts, 3, 19))
+>b : Symbol(Abcde.b, Decl(index.ts, 3, 19))
 }
 
 new Abcde().x;
->new Abcde().x : Symbol(x, Decl(test.js, 0, 13))
+>new Abcde().x : Symbol(Abcde.x, Decl(test.js, 0, 13))
 >Abcde : Symbol(Abcde, Decl(index.ts, 0, 8))
->x : Symbol(x, Decl(test.js, 0, 13))
+>x : Symbol(Abcde.x, Decl(test.js, 0, 13))
 
 // Bug: the type meaning from /test.js does not
 // propagate through the object literal export.

@@ -5,13 +5,13 @@
  }
  declare function thing(x: any): thing.ParsedArgs;
 ->thing : (x: any) => thing.ParsedArgs
-+>thing : (x: any) => import("minimist").ParsedArgs
++>thing : (x: any) => import("/node_modules/@types/minimist/minimist").ParsedArgs
  >x : any
  >thing : any
 
  export = thing;
 ->thing : (x: any) => thing.ParsedArgs
-+>thing : (x: any) => import("minimist").ParsedArgs
++>thing : (x: any) => import("/node_modules/@types/minimist/minimist").ParsedArgs
 
  === /node_modules/@types/process/process.d.ts ===
  declare const thing: any;

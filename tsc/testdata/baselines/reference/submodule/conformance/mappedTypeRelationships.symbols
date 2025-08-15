@@ -843,14 +843,14 @@ interface SettingsTypes {
 >SettingsTypes : Symbol(SettingsTypes, Decl(mappedTypeRelationships.ts, 190, 1))
 
   audio: {
->audio : Symbol(audio, Decl(mappedTypeRelationships.ts, 193, 25))
+>audio : Symbol(SettingsTypes.audio, Decl(mappedTypeRelationships.ts, 193, 25))
 
     volume: string;
 >volume : Symbol(volume, Decl(mappedTypeRelationships.ts, 194, 10))
 
   };
   video: {
->video : Symbol(video, Decl(mappedTypeRelationships.ts, 196, 4))
+>video : Symbol(SettingsTypes.video, Decl(mappedTypeRelationships.ts, 196, 4))
 
     resolution: string;
 >resolution : Symbol(resolution, Decl(mappedTypeRelationships.ts, 197, 10))
@@ -864,7 +864,7 @@ interface Settings<Params extends { [K in keyof Params]?: string }> {
 >Params : Symbol(Params, Decl(mappedTypeRelationships.ts, 201, 19))
 
   config: Params;
->config : Symbol(config, Decl(mappedTypeRelationships.ts, 201, 69))
+>config : Symbol(Settings.config, Decl(mappedTypeRelationships.ts, 201, 69))
 >Params : Symbol(Params, Decl(mappedTypeRelationships.ts, 201, 19))
 }
 type ConcreteSettingsResult1 = Settings<SettingsTypes["audio"]>;

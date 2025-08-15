@@ -11,13 +11,13 @@ declare module JSX {
 >IntrinsicElements : Symbol(IntrinsicElements, Decl(file.tsx, 1, 22))
 
 		div: any
->div : Symbol(div, Decl(file.tsx, 2, 30))
+>div : Symbol(IntrinsicElements.div, Decl(file.tsx, 2, 30))
 	}
 }
 
 // OK
 <div />;
->div : Symbol(div, Decl(file.tsx, 2, 30))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(file.tsx, 2, 30))
 
 // Fail
 <span />;

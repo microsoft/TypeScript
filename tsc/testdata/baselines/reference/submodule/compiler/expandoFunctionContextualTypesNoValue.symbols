@@ -9,7 +9,7 @@ export function Foo() { }
 >Foo : Symbol(Foo, Decl(expandoFunctionContextualTypesNoValue.ts, 1, 23))
 
 Foo.bar = () => { };
->Foo.bar : Symbol(bar, Decl(expandoFunctionContextualTypesNoValue.ts, 3, 25))
+>Foo.bar : Symbol(Foo.bar, Decl(expandoFunctionContextualTypesNoValue.ts, 3, 25))
 >Foo : Symbol(Foo, Decl(expandoFunctionContextualTypesNoValue.ts, 1, 23), Decl(expandoFunctionContextualTypesNoValue.ts, 1, 6))
->bar : Symbol(bar, Decl(expandoFunctionContextualTypesNoValue.ts, 3, 25))
+>bar : Symbol(Foo.bar, Decl(expandoFunctionContextualTypesNoValue.ts, 3, 25))
 

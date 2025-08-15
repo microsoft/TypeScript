@@ -9,9 +9,8 @@
 
  decl["B"] = 'foo'
 ->decl : Symbol(decl, Decl(declarationEmitLateBoundAssignments2.ts, 6, 21), Decl(declarationEmitLateBoundAssignments2.ts, 8, 25))
-->"B" : Symbol(decl["B"], Decl(declarationEmitLateBoundAssignments2.ts, 8, 25))
 +>decl : Symbol(decl, Decl(declarationEmitLateBoundAssignments2.ts, 6, 20))
-+>"B" : Symbol("B", Decl(declarationEmitLateBoundAssignments2.ts, 8, 25))
+ >"B" : Symbol(decl["B"], Decl(declarationEmitLateBoundAssignments2.ts, 8, 25))
 
  export function decl2() {}
 ->decl2 : Symbol(decl2, Decl(declarationEmitLateBoundAssignments2.ts, 9, 17), Decl(declarationEmitLateBoundAssignments2.ts, 11, 26))
@@ -28,9 +27,8 @@
 
  decl3[77] = 0
 ->decl3 : Symbol(decl3, Decl(declarationEmitLateBoundAssignments2.ts, 12, 12), Decl(declarationEmitLateBoundAssignments2.ts, 14, 26))
-->77 : Symbol(decl3[77], Decl(declarationEmitLateBoundAssignments2.ts, 14, 26))
 +>decl3 : Symbol(decl3, Decl(declarationEmitLateBoundAssignments2.ts, 12, 12))
-+>77 : Symbol(77, Decl(declarationEmitLateBoundAssignments2.ts, 14, 26))
+ >77 : Symbol(decl3[77], Decl(declarationEmitLateBoundAssignments2.ts, 14, 26))
 
  export function decl4() {}
 ->decl4 : Symbol(decl4, Decl(declarationEmitLateBoundAssignments2.ts, 15, 13), Decl(declarationEmitLateBoundAssignments2.ts, 17, 26))
@@ -47,9 +45,8 @@
 
  decl5["101"] = 0
 ->decl5 : Symbol(decl5, Decl(declarationEmitLateBoundAssignments2.ts, 18, 14), Decl(declarationEmitLateBoundAssignments2.ts, 20, 26))
-->"101" : Symbol(decl5["101"], Decl(declarationEmitLateBoundAssignments2.ts, 20, 26))
 +>decl5 : Symbol(decl5, Decl(declarationEmitLateBoundAssignments2.ts, 18, 14))
-+>"101" : Symbol("101", Decl(declarationEmitLateBoundAssignments2.ts, 20, 26))
+ >"101" : Symbol(decl5["101"], Decl(declarationEmitLateBoundAssignments2.ts, 20, 26))
 
  export function decl6() {}
 ->decl6 : Symbol(decl6, Decl(declarationEmitLateBoundAssignments2.ts, 21, 16), Decl(declarationEmitLateBoundAssignments2.ts, 23, 26))
@@ -66,9 +63,8 @@
 
  decl7["qwe rty"] = 0
 ->decl7 : Symbol(decl7, Decl(declarationEmitLateBoundAssignments2.ts, 24, 17), Decl(declarationEmitLateBoundAssignments2.ts, 26, 26))
-->"qwe rty" : Symbol(decl7["qwe rty"], Decl(declarationEmitLateBoundAssignments2.ts, 26, 26))
 +>decl7 : Symbol(decl7, Decl(declarationEmitLateBoundAssignments2.ts, 24, 17))
-+>"qwe rty" : Symbol("qwe rty", Decl(declarationEmitLateBoundAssignments2.ts, 26, 26))
+ >"qwe rty" : Symbol(decl7["qwe rty"], Decl(declarationEmitLateBoundAssignments2.ts, 26, 26))
 
  export function decl8() {}
 ->decl8 : Symbol(decl8, Decl(declarationEmitLateBoundAssignments2.ts, 27, 20), Decl(declarationEmitLateBoundAssignments2.ts, 29, 26))
@@ -85,9 +81,8 @@
 
  decl9["🤪"] = 0
 ->decl9 : Symbol(decl9, Decl(declarationEmitLateBoundAssignments2.ts, 30, 25), Decl(declarationEmitLateBoundAssignments2.ts, 32, 26))
-->"🤪" : Symbol(decl9["\uD83E\uDD2A"], Decl(declarationEmitLateBoundAssignments2.ts, 32, 26))
 +>decl9 : Symbol(decl9, Decl(declarationEmitLateBoundAssignments2.ts, 30, 25))
-+>"🤪" : Symbol("🤪", Decl(declarationEmitLateBoundAssignments2.ts, 32, 26))
+ >"🤪" : Symbol(decl9["\uD83E\uDD2A"], Decl(declarationEmitLateBoundAssignments2.ts, 32, 26))
 
  export function decl10() {}
 ->decl10 : Symbol(decl10, Decl(declarationEmitLateBoundAssignments2.ts, 33, 15), Decl(declarationEmitLateBoundAssignments2.ts, 35, 27))
@@ -104,9 +99,8 @@
 
  arrow["B"] = 'bar'
 ->arrow : Symbol(arrow, Decl(declarationEmitLateBoundAssignments2.ts, 38, 12), Decl(declarationEmitLateBoundAssignments2.ts, 38, 29))
-->"B" : Symbol(arrow["B"], Decl(declarationEmitLateBoundAssignments2.ts, 38, 29))
 +>arrow : Symbol(arrow, Decl(declarationEmitLateBoundAssignments2.ts, 38, 12))
-+>"B" : Symbol("B", Decl(declarationEmitLateBoundAssignments2.ts, 38, 29))
+ >"B" : Symbol(arrow["B"], Decl(declarationEmitLateBoundAssignments2.ts, 38, 29))
 
  export const arrow2 = () => {}
 ->arrow2 : Symbol(arrow2, Decl(declarationEmitLateBoundAssignments2.ts, 41, 12), Decl(declarationEmitLateBoundAssignments2.ts, 41, 30))
@@ -123,9 +117,8 @@
 
  arrow3[77] = 0
 ->arrow3 : Symbol(arrow3, Decl(declarationEmitLateBoundAssignments2.ts, 44, 12), Decl(declarationEmitLateBoundAssignments2.ts, 44, 30))
-->77 : Symbol(arrow3[77], Decl(declarationEmitLateBoundAssignments2.ts, 44, 30))
 +>arrow3 : Symbol(arrow3, Decl(declarationEmitLateBoundAssignments2.ts, 44, 12))
-+>77 : Symbol(77, Decl(declarationEmitLateBoundAssignments2.ts, 44, 30))
+ >77 : Symbol(arrow3[77], Decl(declarationEmitLateBoundAssignments2.ts, 44, 30))
 
  export const arrow4 = () => {}
 ->arrow4 : Symbol(arrow4, Decl(declarationEmitLateBoundAssignments2.ts, 47, 12), Decl(declarationEmitLateBoundAssignments2.ts, 47, 30))
@@ -142,9 +135,8 @@
 
  arrow5["101"] = 0
 ->arrow5 : Symbol(arrow5, Decl(declarationEmitLateBoundAssignments2.ts, 50, 12), Decl(declarationEmitLateBoundAssignments2.ts, 50, 30))
-->"101" : Symbol(arrow5["101"], Decl(declarationEmitLateBoundAssignments2.ts, 50, 30))
 +>arrow5 : Symbol(arrow5, Decl(declarationEmitLateBoundAssignments2.ts, 50, 12))
-+>"101" : Symbol("101", Decl(declarationEmitLateBoundAssignments2.ts, 50, 30))
+ >"101" : Symbol(arrow5["101"], Decl(declarationEmitLateBoundAssignments2.ts, 50, 30))
 
  export const arrow6 = () => {}
 ->arrow6 : Symbol(arrow6, Decl(declarationEmitLateBoundAssignments2.ts, 53, 12), Decl(declarationEmitLateBoundAssignments2.ts, 53, 30))
@@ -161,9 +153,8 @@
 
  arrow7["qwe rty"] = 0
 ->arrow7 : Symbol(arrow7, Decl(declarationEmitLateBoundAssignments2.ts, 56, 12), Decl(declarationEmitLateBoundAssignments2.ts, 56, 30))
-->"qwe rty" : Symbol(arrow7["qwe rty"], Decl(declarationEmitLateBoundAssignments2.ts, 56, 30))
 +>arrow7 : Symbol(arrow7, Decl(declarationEmitLateBoundAssignments2.ts, 56, 12))
-+>"qwe rty" : Symbol("qwe rty", Decl(declarationEmitLateBoundAssignments2.ts, 56, 30))
+ >"qwe rty" : Symbol(arrow7["qwe rty"], Decl(declarationEmitLateBoundAssignments2.ts, 56, 30))
 
  export const arrow8 = () => {}
 ->arrow8 : Symbol(arrow8, Decl(declarationEmitLateBoundAssignments2.ts, 59, 12), Decl(declarationEmitLateBoundAssignments2.ts, 59, 30))
@@ -180,9 +171,8 @@
 
  arrow9["🤪"] = 0
 ->arrow9 : Symbol(arrow9, Decl(declarationEmitLateBoundAssignments2.ts, 62, 12), Decl(declarationEmitLateBoundAssignments2.ts, 62, 30))
-->"🤪" : Symbol(arrow9["\uD83E\uDD2A"], Decl(declarationEmitLateBoundAssignments2.ts, 62, 30))
 +>arrow9 : Symbol(arrow9, Decl(declarationEmitLateBoundAssignments2.ts, 62, 12))
-+>"🤪" : Symbol("🤪", Decl(declarationEmitLateBoundAssignments2.ts, 62, 30))
+ >"🤪" : Symbol(arrow9["\uD83E\uDD2A"], Decl(declarationEmitLateBoundAssignments2.ts, 62, 30))
 
  export const arrow10 = () => {}
 ->arrow10 : Symbol(arrow10, Decl(declarationEmitLateBoundAssignments2.ts, 65, 12), Decl(declarationEmitLateBoundAssignments2.ts, 65, 31))

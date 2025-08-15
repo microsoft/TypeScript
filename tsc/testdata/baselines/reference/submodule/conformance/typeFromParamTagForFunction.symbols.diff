@@ -32,15 +32,6 @@
  >B : Symbol(B, Decl(b-ext.js, 0, 0))
 
      constructor() {
-         this.x = 1;
-->this.x : Symbol(B.x, Decl(b-ext.js, 1, 19))
-+>this.x : Symbol(x, Decl(b-ext.js, 1, 19))
- >this : Symbol(B, Decl(b-ext.js, 0, 11))
-->x : Symbol(B.x, Decl(b-ext.js, 1, 19))
-+>x : Symbol(x, Decl(b-ext.js, 1, 19))
-     }
- };
-
 @@= skipped -28, +26 lines =@@
  function b(p) { p.x; }
  >b : Symbol(b, Decl(b.js, 0, 33))
@@ -90,30 +81,7 @@
 
  === e-ext.js ===
  export class E {
-@@= skipped -10, +8 lines =@@
-
-     constructor() {
-         this.x = 1;
-->this.x : Symbol(E.x, Decl(e-ext.js, 1, 19))
-+>this.x : Symbol(x, Decl(e-ext.js, 1, 19))
- >this : Symbol(E, Decl(e-ext.js, 0, 0))
-->x : Symbol(E.x, Decl(e-ext.js, 1, 19))
-+>x : Symbol(x, Decl(e-ext.js, 1, 19))
-     }
- }
-
-@@= skipped -16, +16 lines =@@
- function e(p) { p.x; }
- >e : Symbol(e, Decl(e.js, 0, 33))
- >p : Symbol(p, Decl(e.js, 3, 11))
-->p.x : Symbol(E.x, Decl(e-ext.js, 1, 19))
-+>p.x : Symbol(x, Decl(e-ext.js, 1, 19))
- >p : Symbol(p, Decl(e.js, 3, 11))
-->x : Symbol(E.x, Decl(e-ext.js, 1, 19))
-+>x : Symbol(x, Decl(e-ext.js, 1, 19))
-
- === f.js ===
- var F = function () {
+@@= skipped -35, +33 lines =@@
  >F : Symbol(F, Decl(f.js, 0, 3))
 
      this.x = 1;
@@ -151,24 +119,3 @@
 
  === h.js ===
  class H {
-@@= skipped -47, +36 lines =@@
-
-     constructor() {
-         this.x = 1;
-->this.x : Symbol(H.x, Decl(h.js, 1, 19))
-+>this.x : Symbol(x, Decl(h.js, 1, 19))
- >this : Symbol(H, Decl(h.js, 0, 0))
-->x : Symbol(H.x, Decl(h.js, 1, 19))
-+>x : Symbol(x, Decl(h.js, 1, 19))
-     }
- }
-
-@@= skipped -10, +10 lines =@@
- function h(p) { p.x; }
- >h : Symbol(h, Decl(h.js, 4, 1))
- >p : Symbol(p, Decl(h.js, 7, 11))
-->p.x : Symbol(H.x, Decl(h.js, 1, 19))
-+>p.x : Symbol(x, Decl(h.js, 1, 19))
- >p : Symbol(p, Decl(h.js, 7, 11))
-->x : Symbol(H.x, Decl(h.js, 1, 19))
-+>x : Symbol(x, Decl(h.js, 1, 19))

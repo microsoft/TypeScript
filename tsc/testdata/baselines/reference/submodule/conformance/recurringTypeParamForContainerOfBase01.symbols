@@ -8,7 +8,7 @@ interface BoxOfFoo<T extends Foo<T>> {
 >T : Symbol(T, Decl(recurringTypeParamForContainerOfBase01.ts, 0, 19))
 
     item: T
->item : Symbol(item, Decl(recurringTypeParamForContainerOfBase01.ts, 0, 38))
+>item : Symbol(BoxOfFoo.item, Decl(recurringTypeParamForContainerOfBase01.ts, 0, 38))
 >T : Symbol(T, Decl(recurringTypeParamForContainerOfBase01.ts, 0, 19))
 }
 
@@ -19,7 +19,7 @@ interface Foo<T extends Foo<T>> {
 >T : Symbol(T, Decl(recurringTypeParamForContainerOfBase01.ts, 4, 14))
 
     self: T;
->self : Symbol(self, Decl(recurringTypeParamForContainerOfBase01.ts, 4, 33))
+>self : Symbol(Foo.self, Decl(recurringTypeParamForContainerOfBase01.ts, 4, 33))
 >T : Symbol(T, Decl(recurringTypeParamForContainerOfBase01.ts, 4, 14))
 }
 
@@ -32,7 +32,7 @@ interface Bar<T extends Bar<T>> extends Foo<T> {
 >T : Symbol(T, Decl(recurringTypeParamForContainerOfBase01.ts, 8, 14))
 
     other: BoxOfFoo<T>;
->other : Symbol(other, Decl(recurringTypeParamForContainerOfBase01.ts, 8, 48))
+>other : Symbol(Bar.other, Decl(recurringTypeParamForContainerOfBase01.ts, 8, 48))
 >BoxOfFoo : Symbol(BoxOfFoo, Decl(recurringTypeParamForContainerOfBase01.ts, 0, 0))
 >T : Symbol(T, Decl(recurringTypeParamForContainerOfBase01.ts, 8, 14))
 }

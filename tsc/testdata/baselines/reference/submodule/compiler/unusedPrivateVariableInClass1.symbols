@@ -5,5 +5,5 @@ class greeter {
 >greeter : Symbol(greeter, Decl(unusedPrivateVariableInClass1.ts, 0, 0))
 
     private x: string;
->x : Symbol(x, Decl(unusedPrivateVariableInClass1.ts, 0, 15))
+>x : Symbol(greeter.x, Decl(unusedPrivateVariableInClass1.ts, 0, 15))
 }

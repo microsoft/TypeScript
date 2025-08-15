@@ -101,7 +101,7 @@ interface Shape<Value> {
 >Value : Symbol(Value, Decl(varianceReferences.ts, 33, 16))
 
   value: Value;
->value : Symbol(value, Decl(varianceReferences.ts, 33, 24))
+>value : Symbol(Shape.value, Decl(varianceReferences.ts, 33, 24))
 >Value : Symbol(Value, Decl(varianceReferences.ts, 33, 16))
 }
 
@@ -132,7 +132,7 @@ interface Level3of3Shape<Value> {
 >Value : Symbol(Value, Decl(varianceReferences.ts, 45, 25))
 
   value: Value;
->value : Symbol(value, Decl(varianceReferences.ts, 45, 33))
+>value : Symbol(Level3of3Shape.value, Decl(varianceReferences.ts, 45, 33))
 >Value : Symbol(Value, Decl(varianceReferences.ts, 45, 25))
 }
 

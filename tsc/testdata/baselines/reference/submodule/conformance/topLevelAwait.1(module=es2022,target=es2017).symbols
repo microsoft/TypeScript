@@ -42,23 +42,23 @@ class C1 {
 >C1 : Symbol(C1, Decl(index.ts, 16, 18))
 
     await() {}
->await : Symbol(await, Decl(index.ts, 19, 10))
+>await : Symbol(C1.await, Decl(index.ts, 19, 10))
 }
 class C2 {
 >C2 : Symbol(C2, Decl(index.ts, 21, 1))
 
     get await() { return 1; }
->await : Symbol(await, Decl(index.ts, 22, 10), Decl(index.ts, 23, 29))
+>await : Symbol(C2.await, Decl(index.ts, 22, 10), Decl(index.ts, 23, 29))
 
     set await(value) { }
->await : Symbol(await, Decl(index.ts, 22, 10), Decl(index.ts, 23, 29))
+>await : Symbol(C2.await, Decl(index.ts, 22, 10), Decl(index.ts, 23, 29))
 >value : Symbol(value, Decl(index.ts, 24, 14))
 }
 class C3 {
 >C3 : Symbol(C3, Decl(index.ts, 25, 1))
 
     await = 1;
->await : Symbol(await, Decl(index.ts, 26, 10))
+>await : Symbol(C3.await, Decl(index.ts, 26, 10))
 }
 ({
     await() {}
@@ -82,11 +82,11 @@ class C3 {
 
 // property access name should be ok
 C1.prototype.await;
->C1.prototype.await : Symbol(await, Decl(index.ts, 19, 10))
->C1.prototype : Symbol(prototype)
+>C1.prototype.await : Symbol(C1.await, Decl(index.ts, 19, 10))
+>C1.prototype : Symbol(C1.prototype)
 >C1 : Symbol(C1, Decl(index.ts, 16, 18))
->prototype : Symbol(prototype)
->await : Symbol(await, Decl(index.ts, 19, 10))
+>prototype : Symbol(C1.prototype)
+>await : Symbol(C1.await, Decl(index.ts, 19, 10))
 
 // await in decorators
 declare const dec: any;
@@ -131,9 +131,9 @@ export { _await as await };
 // for-await-of
 const arr = [Promise.resolve()];
 >arr : Symbol(arr, Decl(other.ts, 6, 5))
->Promise.resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 for await (const item of arr) {
 >item : Symbol(item, Decl(other.ts, 8, 16))

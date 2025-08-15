@@ -5,17 +5,17 @@ interface User {
 >User : Symbol(User, Decl(mappedTypeCircularReferenceInAccessor.ts, 0, 0))
 
   firstName: string,
->firstName : Symbol(firstName, Decl(mappedTypeCircularReferenceInAccessor.ts, 0, 16))
+>firstName : Symbol(User.firstName, Decl(mappedTypeCircularReferenceInAccessor.ts, 0, 16))
 
   level: number,
->level : Symbol(level, Decl(mappedTypeCircularReferenceInAccessor.ts, 1, 20))
+>level : Symbol(User.level, Decl(mappedTypeCircularReferenceInAccessor.ts, 1, 20))
 
   get bestFriend(): User
->bestFriend : Symbol(bestFriend, Decl(mappedTypeCircularReferenceInAccessor.ts, 2, 16), Decl(mappedTypeCircularReferenceInAccessor.ts, 3, 24))
+>bestFriend : Symbol(User.bestFriend, Decl(mappedTypeCircularReferenceInAccessor.ts, 2, 16), Decl(mappedTypeCircularReferenceInAccessor.ts, 3, 24))
 >User : Symbol(User, Decl(mappedTypeCircularReferenceInAccessor.ts, 0, 0))
 
   set bestFriend(user: SerializablePartial<User>)
->bestFriend : Symbol(bestFriend, Decl(mappedTypeCircularReferenceInAccessor.ts, 2, 16), Decl(mappedTypeCircularReferenceInAccessor.ts, 3, 24))
+>bestFriend : Symbol(User.bestFriend, Decl(mappedTypeCircularReferenceInAccessor.ts, 2, 16), Decl(mappedTypeCircularReferenceInAccessor.ts, 3, 24))
 >user : Symbol(user, Decl(mappedTypeCircularReferenceInAccessor.ts, 4, 17))
 >SerializablePartial : Symbol(SerializablePartial, Decl(mappedTypeCircularReferenceInAccessor.ts, 7, 137))
 >User : Symbol(User, Decl(mappedTypeCircularReferenceInAccessor.ts, 0, 0))

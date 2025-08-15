@@ -18,7 +18,7 @@
      * @type {A}
      */
     value;
->value : Symbol(value, Decl(a.js, 10, 11))
+>value : Symbol(C1.value, Decl(a.js, 10, 11))
 }
 
 class C2 extends C1 {
@@ -29,7 +29,7 @@ class C2 extends C1 {
      * @type {A}
      */
     value;
->value : Symbol(value, Decl(a.js, 17, 21))
+>value : Symbol(C2.value, Decl(a.js, 17, 21))
 }
 
 class C3 extends C1 {
@@ -40,6 +40,6 @@ class C3 extends C1 {
      * @type {A & B}
      */
     value;
->value : Symbol(value, Decl(a.js, 24, 21))
+>value : Symbol(C3.value, Decl(a.js, 24, 21))
 }
 

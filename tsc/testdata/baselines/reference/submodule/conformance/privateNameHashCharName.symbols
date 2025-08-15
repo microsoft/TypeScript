@@ -7,13 +7,13 @@ class C {
 >C : Symbol(C, Decl(privateNameHashCharName.ts, 0, 1))
 
     #
-># : Symbol(#, Decl(privateNameHashCharName.ts, 2, 9))
+># : Symbol(C[#], Decl(privateNameHashCharName.ts, 2, 9))
 
     m() {
->m : Symbol(m, Decl(privateNameHashCharName.ts, 3, 5))
+>m : Symbol(C.m, Decl(privateNameHashCharName.ts, 3, 5))
 
         this.#
->this.# : Symbol(#, Decl(privateNameHashCharName.ts, 2, 9))
+>this.# : Symbol(C[#], Decl(privateNameHashCharName.ts, 2, 9))
 >this : Symbol(C, Decl(privateNameHashCharName.ts, 0, 1))
     }
 }

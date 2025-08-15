@@ -6,6 +6,6 @@ class A {
 
     /** @type {boolean} some number value */
     #foo = 3 // Error because not assignable to boolean
->#foo : Symbol(#foo, Decl(jsdocPrivateName1.js, 0, 9))
+>#foo : Symbol(A.#foo, Decl(jsdocPrivateName1.js, 0, 9))
 }
 

@@ -11,7 +11,7 @@ declare function extractIndexer<T>(p: { [n: number]: T }): T;
 
 enum E { x }
 >E : Symbol(E, Decl(computedPropertyNames48_ES5.ts, 0, 61))
->x : Symbol(x, Decl(computedPropertyNames48_ES5.ts, 2, 8))
+>x : Symbol(E.x, Decl(computedPropertyNames48_ES5.ts, 2, 8))
 
 var a: any;
 >a : Symbol(a, Decl(computedPropertyNames48_ES5.ts, 4, 3))
@@ -30,9 +30,9 @@ extractIndexer({
 
     [E.x]: ""
 >[E.x] : Symbol([E.x], Decl(computedPropertyNames48_ES5.ts, 10, 16))
->E.x : Symbol(x, Decl(computedPropertyNames48_ES5.ts, 2, 8))
+>E.x : Symbol(E.x, Decl(computedPropertyNames48_ES5.ts, 2, 8))
 >E : Symbol(E, Decl(computedPropertyNames48_ES5.ts, 0, 61))
->x : Symbol(x, Decl(computedPropertyNames48_ES5.ts, 2, 8))
+>x : Symbol(E.x, Decl(computedPropertyNames48_ES5.ts, 2, 8))
 
 }); // Should return string
 

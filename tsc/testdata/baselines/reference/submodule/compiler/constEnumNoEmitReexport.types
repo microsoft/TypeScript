@@ -27,12 +27,12 @@ export default MyConstEnum;
 
 === ReExportDefault.ts ===
 export { MyConstEnum as default } from './ConstEnum';
->MyConstEnum : typeof import("./ConstEnum").MyConstEnum
->default : typeof import("./ConstEnum").MyConstEnum
+>MyConstEnum : typeof import("ConstEnum").MyConstEnum
+>default : typeof import("ConstEnum").MyConstEnum
 
 === ReExport.ts ===
 export { MyConstEnum } from './ConstEnum';
->MyConstEnum : typeof import("./ConstEnum").MyConstEnum
+>MyConstEnum : typeof import("ConstEnum").MyConstEnum
 
 === Usage1.ts ===
 import MyConstEnum1 from './ImportExportDefault';

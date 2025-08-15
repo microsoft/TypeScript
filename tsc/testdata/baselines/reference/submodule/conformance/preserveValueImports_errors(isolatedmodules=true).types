@@ -49,17 +49,17 @@ export { A as AA } from "./a";
 >AA : any
 
 export { B as BB } from "./b";
->B : typeof import("./b").B
->BB : typeof import("./b").B
+>B : typeof import("b").B
+>BB : typeof import("b").B
 
 === d.fixed.ts ===
 export type { A as AA } from "./a";
 >A : any
->AA : import("./a").A
+>AA : import("a").A
 
 export type { B as BB } from "./b";
->B : typeof import("./b").B
->BB : import("./b").B
+>B : typeof import("b").B
+>BB : import("b").B
 
 === e.ts ===
 import { AA, BB } from "./d";

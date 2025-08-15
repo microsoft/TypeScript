@@ -1,9 +1,0 @@
---- old.jsdocImplementsTag.symbols
-+++ new.jsdocImplementsTag.symbols
-@@= skipped -11, +11 lines =@@
- >B : Symbol(B, Decl(a.js, 0, 0))
-
-     foo = ''
-->foo : Symbol(B.foo, Decl(a.js, 7, 9))
-+>foo : Symbol(foo, Decl(a.js, 7, 9))
- }

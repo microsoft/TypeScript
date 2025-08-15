@@ -8,7 +8,7 @@ class c {
      * @param {string} [`foo]
      */
     method(foo) {
->method : Symbol(method, Decl(jsdocParameterParsingInvalidName.ts, 0, 9))
+>method : Symbol(c.method, Decl(jsdocParameterParsingInvalidName.ts, 0, 9))
 >foo : Symbol(foo, Decl(jsdocParameterParsingInvalidName.ts, 4, 11))
     }
 }

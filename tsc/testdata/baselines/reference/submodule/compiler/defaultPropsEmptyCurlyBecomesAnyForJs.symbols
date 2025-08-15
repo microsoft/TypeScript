@@ -7,11 +7,11 @@ export class Foo<T = {}, U = {}> {
 >U : Symbol(U, Decl(library.d.ts, 0, 24))
 
     props: T;
->props : Symbol(props, Decl(library.d.ts, 0, 34))
+>props : Symbol(Foo.props, Decl(library.d.ts, 0, 34))
 >T : Symbol(T, Decl(library.d.ts, 0, 17))
 
     state: U;
->state : Symbol(state, Decl(library.d.ts, 1, 13))
+>state : Symbol(Foo.state, Decl(library.d.ts, 1, 13))
 >U : Symbol(U, Decl(library.d.ts, 0, 24))
 
     constructor(props: T, state: U);
@@ -30,7 +30,7 @@ export class MyFoo extends Foo {
 >Foo : Symbol(Foo, Decl(component.js, 0, 8))
 
     member;
->member : Symbol(member, Decl(component.js, 1, 32))
+>member : Symbol(MyFoo.member, Decl(component.js, 1, 32))
 }
 
 === typed_component.ts ===
@@ -50,23 +50,23 @@ export class TypedFoo extends MyFoo {
 >undefined : Symbol(undefined)
 
         this.props.x;
->this.props : Symbol(props, Decl(library.d.ts, 0, 34))
+>this.props : Symbol(Foo.props, Decl(library.d.ts, 0, 34))
 >this : Symbol(TypedFoo, Decl(typed_component.ts, 0, 36))
->props : Symbol(props, Decl(library.d.ts, 0, 34))
+>props : Symbol(Foo.props, Decl(library.d.ts, 0, 34))
 
         this.props.y;
->this.props : Symbol(props, Decl(library.d.ts, 0, 34))
+>this.props : Symbol(Foo.props, Decl(library.d.ts, 0, 34))
 >this : Symbol(TypedFoo, Decl(typed_component.ts, 0, 36))
->props : Symbol(props, Decl(library.d.ts, 0, 34))
+>props : Symbol(Foo.props, Decl(library.d.ts, 0, 34))
 
         this.state.value;
->this.state : Symbol(state, Decl(library.d.ts, 1, 13))
+>this.state : Symbol(Foo.state, Decl(library.d.ts, 1, 13))
 >this : Symbol(TypedFoo, Decl(typed_component.ts, 0, 36))
->state : Symbol(state, Decl(library.d.ts, 1, 13))
+>state : Symbol(Foo.state, Decl(library.d.ts, 1, 13))
 
         this.member;
->this.member : Symbol(member, Decl(component.js, 1, 32))
+>this.member : Symbol(MyFoo.member, Decl(component.js, 1, 32))
 >this : Symbol(TypedFoo, Decl(typed_component.ts, 0, 36))
->member : Symbol(member, Decl(component.js, 1, 32))
+>member : Symbol(MyFoo.member, Decl(component.js, 1, 32))
     }
 }

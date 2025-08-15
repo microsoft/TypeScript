@@ -6,14 +6,14 @@ export function a() {}
 
 === index.ts ===
 export const x = add(import("./sub"));
->x : typeof import("./sub")
->add(import("./sub")) : typeof import("./sub")
+>x : typeof import("sub")
+>add(import("./sub")) : typeof import("sub")
 >add : <T>(x: Promise<T>) => T
->import("./sub") : Promise<typeof import("./sub")>
+>import("./sub") : Promise<typeof import("sub")>
 >"./sub" : "./sub"
 
 export * as Q from "./sub";
->Q : typeof import("./sub")
+>Q : typeof import("sub")
 
 declare function add<T>(x: Promise<T>): T;
 >add : <T>(x: Promise<T>) => T

@@ -1,15 +1,6 @@
 --- old.umd-augmentation-2.types
 +++ new.umd-augmentation-2.types
-@@= skipped -45, +45 lines =@@
-
- === node_modules/math2d/index.d.ts ===
- export as namespace Math2d;
-->Math2d : typeof import("node_modules/math2d/index")
-+>Math2d : typeof import("math2d")
-
- export interface Point {
- 	x: number;
-@@= skipped -44, +44 lines =@@
+@@= skipped -89, +89 lines =@@
  	// Add a method to the class
  	interface Vector {
  		reverse(): Math2d.Point;

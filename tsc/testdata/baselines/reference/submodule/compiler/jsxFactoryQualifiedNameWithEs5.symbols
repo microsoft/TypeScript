@@ -15,7 +15,7 @@ class Component {
 >Component : Symbol(Component, Decl(index.tsx, 3, 41))
 
     renderCallback() {
->renderCallback : Symbol(renderCallback, Decl(index.tsx, 5, 17))
+>renderCallback : Symbol(Component.renderCallback, Decl(index.tsx, 5, 17))
 
         return <div>test</div>;
     }

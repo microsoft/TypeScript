@@ -11,11 +11,11 @@ let x: Observable;
 >Observable : Symbol(Observable, Decl(main.ts, 2, 8))
 
 x.foo().x;
->x.foo().x : Symbol(x, Decl(O.d.ts, 5, 15))
->x.foo : Symbol(foo, Decl(O.d.ts, 11, 30))
+>x.foo().x : Symbol(Cls.x, Decl(O.d.ts, 5, 15))
+>x.foo : Symbol(Observable.foo, Decl(O.d.ts, 11, 30))
 >x : Symbol(x, Decl(main.ts, 3, 3))
->foo : Symbol(foo, Decl(O.d.ts, 11, 30))
->x : Symbol(x, Decl(O.d.ts, 5, 15))
+>foo : Symbol(Observable.foo, Decl(O.d.ts, 11, 30))
+>x : Symbol(Cls.x, Decl(O.d.ts, 5, 15))
 
 === O.d.ts ===
 declare module "Observable" {
@@ -30,7 +30,7 @@ declare module "M" {
 
     class Cls { x: number }
 >Cls : Symbol(Cls, Decl(O.d.ts, 4, 20))
->x : Symbol(x, Decl(O.d.ts, 5, 15))
+>x : Symbol(Cls.x, Decl(O.d.ts, 5, 15))
 }
 
 declare module "Map" {
@@ -46,7 +46,7 @@ declare module "Map" {
 >Observable : Symbol(Observable, Decl(O.d.ts, 0, 29), Decl(O.d.ts, 10, 25))
 
             foo(): Cls;
->foo : Symbol(foo, Decl(O.d.ts, 11, 30))
+>foo : Symbol(Observable.foo, Decl(O.d.ts, 11, 30))
 >Cls : Symbol(Cls, Decl(O.d.ts, 9, 12))
         }
     }

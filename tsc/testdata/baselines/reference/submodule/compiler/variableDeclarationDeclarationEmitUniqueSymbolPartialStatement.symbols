@@ -10,7 +10,7 @@ export class Foo {
 >Foo : Symbol(Foo, Decl(variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.ts, 0, 33))
 
     [key] = value;
->[key] : Symbol([key], Decl(variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.ts, 2, 18))
+>[key] : Symbol(Foo[key], Decl(variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.ts, 2, 18))
 >key : Symbol(key, Decl(variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.ts, 0, 5))
 >value : Symbol(value, Decl(variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.ts, 0, 21))
 }

@@ -5,10 +5,10 @@ enum E {
 >E : Symbol(E, Decl(validEnumAssignments.ts, 0, 0))
 
     A,
->A : Symbol(A, Decl(validEnumAssignments.ts, 0, 8))
+>A : Symbol(E.A, Decl(validEnumAssignments.ts, 0, 8))
 
     B
->B : Symbol(B, Decl(validEnumAssignments.ts, 1, 6))
+>B : Symbol(E.B, Decl(validEnumAssignments.ts, 1, 6))
 }
 
 var n: number;
@@ -27,9 +27,9 @@ n = e;
 
 n = E.A;
 >n : Symbol(n, Decl(validEnumAssignments.ts, 5, 3))
->E.A : Symbol(A, Decl(validEnumAssignments.ts, 0, 8))
+>E.A : Symbol(E.A, Decl(validEnumAssignments.ts, 0, 8))
 >E : Symbol(E, Decl(validEnumAssignments.ts, 0, 0))
->A : Symbol(A, Decl(validEnumAssignments.ts, 0, 8))
+>A : Symbol(E.A, Decl(validEnumAssignments.ts, 0, 8))
 
 a = n;
 >a : Symbol(a, Decl(validEnumAssignments.ts, 6, 3))
@@ -41,9 +41,9 @@ a = e;
 
 a = E.A;
 >a : Symbol(a, Decl(validEnumAssignments.ts, 6, 3))
->E.A : Symbol(A, Decl(validEnumAssignments.ts, 0, 8))
+>E.A : Symbol(E.A, Decl(validEnumAssignments.ts, 0, 8))
 >E : Symbol(E, Decl(validEnumAssignments.ts, 0, 0))
->A : Symbol(A, Decl(validEnumAssignments.ts, 0, 8))
+>A : Symbol(E.A, Decl(validEnumAssignments.ts, 0, 8))
 
 e = e;
 >e : Symbol(e, Decl(validEnumAssignments.ts, 7, 3))
@@ -51,15 +51,15 @@ e = e;
 
 e = E.A;
 >e : Symbol(e, Decl(validEnumAssignments.ts, 7, 3))
->E.A : Symbol(A, Decl(validEnumAssignments.ts, 0, 8))
+>E.A : Symbol(E.A, Decl(validEnumAssignments.ts, 0, 8))
 >E : Symbol(E, Decl(validEnumAssignments.ts, 0, 0))
->A : Symbol(A, Decl(validEnumAssignments.ts, 0, 8))
+>A : Symbol(E.A, Decl(validEnumAssignments.ts, 0, 8))
 
 e = E.B;
 >e : Symbol(e, Decl(validEnumAssignments.ts, 7, 3))
->E.B : Symbol(B, Decl(validEnumAssignments.ts, 1, 6))
+>E.B : Symbol(E.B, Decl(validEnumAssignments.ts, 1, 6))
 >E : Symbol(E, Decl(validEnumAssignments.ts, 0, 0))
->B : Symbol(B, Decl(validEnumAssignments.ts, 1, 6))
+>B : Symbol(E.B, Decl(validEnumAssignments.ts, 1, 6))
 
 e = n;
 >e : Symbol(e, Decl(validEnumAssignments.ts, 7, 3))

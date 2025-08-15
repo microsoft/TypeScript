@@ -11,16 +11,16 @@ module M {
 >c : Symbol(c, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 1, 21))
 
         private y;
->y : Symbol(y, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 2, 13))
+>y : Symbol(c.y, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 2, 13))
 
         set Z(M) {
->Z : Symbol(Z, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 3, 18))
+>Z : Symbol(c.Z, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 3, 18))
 >M : Symbol(M, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 4, 14))
 
             this.y = x;
->this.y : Symbol(y, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 2, 13))
+>this.y : Symbol(c.y, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 2, 13))
 >this : Symbol(c, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 1, 21))
->y : Symbol(y, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 2, 13))
+>y : Symbol(c.y, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 2, 13))
 >x : Symbol(x, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 1, 14))
         }
     }
@@ -33,19 +33,19 @@ module M {
 >d : Symbol(d, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 10, 10))
 
         private y;
->y : Symbol(y, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 11, 13))
+>y : Symbol(d.y, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 11, 13))
 
         set Z(p) {
->Z : Symbol(Z, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 12, 18))
+>Z : Symbol(d.Z, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 12, 18))
 >p : Symbol(p, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 13, 14))
 
             var M = 10;
 >M : Symbol(M, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 14, 15))
 
             this.y = x;
->this.y : Symbol(y, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 11, 13))
+>this.y : Symbol(d.y, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 11, 13))
 >this : Symbol(d, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 10, 10))
->y : Symbol(y, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 11, 13))
+>y : Symbol(d.y, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 11, 13))
 >x : Symbol(x, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 1, 14))
         }
     }
@@ -58,16 +58,16 @@ module M { // Shouldnt be _M
 >e : Symbol(e, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 20, 10))
 
         private y;
->y : Symbol(y, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 21, 13))
+>y : Symbol(e.y, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 21, 13))
 
         set M(p) {
->M : Symbol(M, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 22, 18))
+>M : Symbol(e.M, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 22, 18))
 >p : Symbol(p, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 23, 14))
 
             this.y = x;
->this.y : Symbol(y, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 21, 13))
+>this.y : Symbol(e.y, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 21, 13))
 >this : Symbol(e, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 20, 10))
->y : Symbol(y, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 21, 13))
+>y : Symbol(e.y, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 21, 13))
 >x : Symbol(x, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 1, 14))
         }
     }
@@ -80,7 +80,7 @@ module M {
 >f : Symbol(f, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 29, 10))
 
         get Z() {
->Z : Symbol(Z, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 30, 13))
+>Z : Symbol(f.Z, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 30, 13))
 
             var M = 10;
 >M : Symbol(M, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 32, 15))
@@ -98,7 +98,7 @@ module M { // Shouldnt be _M
 >e : Symbol(e, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 38, 10))
 
         get M() {
->M : Symbol(M, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 39, 13))
+>M : Symbol(e.M, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 39, 13))
 
             return x;
 >x : Symbol(x, Decl(collisionCodeGenModuleWithAccessorChildren.ts, 1, 14))

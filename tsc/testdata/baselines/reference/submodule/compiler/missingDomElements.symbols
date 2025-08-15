@@ -33,7 +33,7 @@ interface Node {
 >Node : Symbol(Node, Decl(missingDomElements.ts, 10, 28))
 
     actuallyNotTheSame: number;    
->actuallyNotTheSame : Symbol(actuallyNotTheSame, Decl(missingDomElements.ts, 11, 16))
+>actuallyNotTheSame : Symbol(Node.actuallyNotTheSame, Decl(missingDomElements.ts, 11, 16))
 
 };
 

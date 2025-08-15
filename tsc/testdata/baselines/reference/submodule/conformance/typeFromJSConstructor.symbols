@@ -18,9 +18,9 @@ function Installer () {
     this.twices = null
 }
 Installer.prototype.first = function () {
->Installer.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Installer.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >Installer : Symbol(Installer, Decl(a.js, 0, 0))
->prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 
     this.arg = 'hi' // error
     this.unknown = 'hi' // ok
@@ -31,9 +31,9 @@ Installer.prototype.first = function () {
     this.twice = 'hi' // ok
 }
 Installer.prototype.second = function () {
->Installer.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Installer.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >Installer : Symbol(Installer, Decl(a.js, 0, 0))
->prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 
     this.arg = false // error
     this.unknown = false // ok

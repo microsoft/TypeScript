@@ -8,7 +8,7 @@ export declare class ObservableArray<T> implements Array<T> { // MS.Entertainmen
 >T : Symbol(T, Decl(genericArrayExtenstions.ts, 0, 37))
 
 concat<U extends T[]>(...items: U[]): T[];
->concat : Symbol(concat, Decl(genericArrayExtenstions.ts, 0, 61), Decl(genericArrayExtenstions.ts, 1, 42))
+>concat : Symbol(ObservableArray.concat, Decl(genericArrayExtenstions.ts, 0, 61), Decl(genericArrayExtenstions.ts, 1, 42))
 >U : Symbol(U, Decl(genericArrayExtenstions.ts, 1, 7))
 >T : Symbol(T, Decl(genericArrayExtenstions.ts, 0, 37))
 >items : Symbol(items, Decl(genericArrayExtenstions.ts, 1, 22))
@@ -16,7 +16,7 @@ concat<U extends T[]>(...items: U[]): T[];
 >T : Symbol(T, Decl(genericArrayExtenstions.ts, 0, 37))
 
 concat(...items: T[]): T[];
->concat : Symbol(concat, Decl(genericArrayExtenstions.ts, 0, 61), Decl(genericArrayExtenstions.ts, 1, 42))
+>concat : Symbol(ObservableArray.concat, Decl(genericArrayExtenstions.ts, 0, 61), Decl(genericArrayExtenstions.ts, 1, 42))
 >items : Symbol(items, Decl(genericArrayExtenstions.ts, 2, 7))
 >T : Symbol(T, Decl(genericArrayExtenstions.ts, 0, 37))
 >T : Symbol(T, Decl(genericArrayExtenstions.ts, 0, 37))

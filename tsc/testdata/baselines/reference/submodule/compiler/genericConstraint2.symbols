@@ -6,7 +6,7 @@ interface Comparable<T> {
 >T : Symbol(T, Decl(genericConstraint2.ts, 0, 21))
 
     comparer(other: T): number;
->comparer : Symbol(comparer, Decl(genericConstraint2.ts, 0, 25))
+>comparer : Symbol(Comparable.comparer, Decl(genericConstraint2.ts, 0, 25))
 >other : Symbol(other, Decl(genericConstraint2.ts, 1, 13))
 >T : Symbol(T, Decl(genericConstraint2.ts, 0, 21))
 }
@@ -29,9 +29,9 @@ function compare<T extends Comparable<T>>(x: T, y: T): number {
 >y : Symbol(y, Decl(genericConstraint2.ts, 4, 47))
 
     return x.comparer(y);
->x.comparer : Symbol(comparer, Decl(genericConstraint2.ts, 0, 25))
+>x.comparer : Symbol(Comparable.comparer, Decl(genericConstraint2.ts, 0, 25))
 >x : Symbol(x, Decl(genericConstraint2.ts, 4, 42))
->comparer : Symbol(comparer, Decl(genericConstraint2.ts, 0, 25))
+>comparer : Symbol(Comparable.comparer, Decl(genericConstraint2.ts, 0, 25))
 >y : Symbol(y, Decl(genericConstraint2.ts, 4, 47))
 }
 
@@ -40,10 +40,10 @@ class ComparableString implements Comparable<string>{
 >Comparable : Symbol(Comparable, Decl(genericConstraint2.ts, 0, 0))
 
     constructor(public currentValue: string) { }
->currentValue : Symbol(currentValue, Decl(genericConstraint2.ts, 11, 16))
+>currentValue : Symbol(ComparableString.currentValue, Decl(genericConstraint2.ts, 11, 16))
 
     localeCompare(other) {
->localeCompare : Symbol(localeCompare, Decl(genericConstraint2.ts, 11, 48))
+>localeCompare : Symbol(ComparableString.localeCompare, Decl(genericConstraint2.ts, 11, 48))
 >other : Symbol(other, Decl(genericConstraint2.ts, 13, 18))
 
         return 0;

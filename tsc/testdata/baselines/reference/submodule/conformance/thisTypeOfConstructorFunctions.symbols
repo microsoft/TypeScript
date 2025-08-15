@@ -20,9 +20,9 @@ function Cp(t) {
 }
 
 Cp.prototype = {
->Cp.prototype : Symbol(prototype, Decl(thisTypeOfConstructorFunctions.js, 11, 1))
+>Cp.prototype : Symbol(Cp.prototype, Decl(thisTypeOfConstructorFunctions.js, 11, 1))
 >Cp : Symbol(Cp, Decl(thisTypeOfConstructorFunctions.js, 0, 0))
->prototype : Symbol(prototype, Decl(thisTypeOfConstructorFunctions.js, 11, 1))
+>prototype : Symbol(Cp.prototype, Decl(thisTypeOfConstructorFunctions.js, 11, 1))
 
     /** @return {this} */
     m4() {
@@ -46,9 +46,9 @@ function Cpp(t) {
 }
 /** @return {this} */
 Cpp.prototype.m2 = function () {
->Cpp.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Cpp.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >Cpp : Symbol(Cpp, Decl(thisTypeOfConstructorFunctions.js, 18, 1))
->prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 
     this.z = this.y; return this
 }

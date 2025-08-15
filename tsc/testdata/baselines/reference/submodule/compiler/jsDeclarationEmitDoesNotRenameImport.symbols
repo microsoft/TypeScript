@@ -44,9 +44,9 @@ class X extends Test {
 >test : Symbol(test, Decl(index.js, 4, 3))
 
             this.test = new options.test();
->this.test : Symbol(test, Decl(index.js, 13, 27))
+>this.test : Symbol(X.test, Decl(index.js, 13, 27))
 >this : Symbol(X, Decl(index.js, 0, 33))
->test : Symbol(test, Decl(index.js, 13, 27))
+>test : Symbol(X.test, Decl(index.js, 13, 27))
 >options.test : Symbol(test, Decl(index.js, 4, 3))
 >options : Symbol(options, Decl(index.js, 11, 16))
 >test : Symbol(test, Decl(index.js, 4, 3))

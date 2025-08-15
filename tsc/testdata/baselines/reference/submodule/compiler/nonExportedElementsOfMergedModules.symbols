@@ -6,7 +6,7 @@ module One {
 
     enum A { X }
 >A : Symbol(A, Decl(nonExportedElementsOfMergedModules.ts, 0, 12))
->X : Symbol(X, Decl(nonExportedElementsOfMergedModules.ts, 1, 12))
+>X : Symbol(A.X, Decl(nonExportedElementsOfMergedModules.ts, 1, 12))
 
     module B {
 >B : Symbol(B, Decl(nonExportedElementsOfMergedModules.ts, 1, 16))
@@ -21,7 +21,7 @@ module One {
 
     enum A { Y }
 >A : Symbol(A, Decl(nonExportedElementsOfMergedModules.ts, 7, 12))
->Y : Symbol(Y, Decl(nonExportedElementsOfMergedModules.ts, 8, 12))
+>Y : Symbol(A.Y, Decl(nonExportedElementsOfMergedModules.ts, 8, 12))
 
     module B {
 >B : Symbol(B, Decl(nonExportedElementsOfMergedModules.ts, 8, 16))
@@ -33,8 +33,8 @@ module One {
 >B : Symbol(B, Decl(nonExportedElementsOfMergedModules.ts, 8, 16))
 
     B.y;
->B.y : Symbol(y, Decl(nonExportedElementsOfMergedModules.ts, 10, 18))
+>B.y : Symbol(B.y, Decl(nonExportedElementsOfMergedModules.ts, 10, 18))
 >B : Symbol(B, Decl(nonExportedElementsOfMergedModules.ts, 8, 16))
->y : Symbol(y, Decl(nonExportedElementsOfMergedModules.ts, 10, 18))
+>y : Symbol(B.y, Decl(nonExportedElementsOfMergedModules.ts, 10, 18))
 }
 

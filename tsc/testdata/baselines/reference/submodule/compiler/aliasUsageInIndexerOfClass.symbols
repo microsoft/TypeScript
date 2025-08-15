@@ -11,10 +11,10 @@ interface IHasVisualizationModel {
 >IHasVisualizationModel : Symbol(IHasVisualizationModel, Decl(aliasUsageInIndexerOfClass_main.ts, 1, 65))
 
     VisualizationModel: typeof Backbone.Model;
->VisualizationModel : Symbol(VisualizationModel, Decl(aliasUsageInIndexerOfClass_main.ts, 2, 34))
->Backbone.Model : Symbol(Model, Decl(aliasUsageInIndexerOfClass_backbone.ts, 0, 0))
+>VisualizationModel : Symbol(IHasVisualizationModel.VisualizationModel, Decl(aliasUsageInIndexerOfClass_main.ts, 2, 34))
+>Backbone.Model : Symbol(Backbone.Model, Decl(aliasUsageInIndexerOfClass_backbone.ts, 0, 0))
 >Backbone : Symbol(Backbone, Decl(aliasUsageInIndexerOfClass_main.ts, 0, 0))
->Model : Symbol(Model, Decl(aliasUsageInIndexerOfClass_backbone.ts, 0, 0))
+>Model : Symbol(Backbone.Model, Decl(aliasUsageInIndexerOfClass_backbone.ts, 0, 0))
 }
 class N {
 >N : Symbol(N, Decl(aliasUsageInIndexerOfClass_main.ts, 4, 1))
@@ -24,7 +24,7 @@ class N {
 >IHasVisualizationModel : Symbol(IHasVisualizationModel, Decl(aliasUsageInIndexerOfClass_main.ts, 1, 65))
 
     x = moduleA;
->x : Symbol(x, Decl(aliasUsageInIndexerOfClass_main.ts, 6, 41))
+>x : Symbol(N.x, Decl(aliasUsageInIndexerOfClass_main.ts, 6, 41))
 >moduleA : Symbol(moduleA, Decl(aliasUsageInIndexerOfClass_main.ts, 0, 67))
 }
 class N2 {
@@ -35,7 +35,7 @@ class N2 {
 >moduleA : Symbol(moduleA, Decl(aliasUsageInIndexerOfClass_main.ts, 0, 67))
 
     x: IHasVisualizationModel;
->x : Symbol(x, Decl(aliasUsageInIndexerOfClass_main.ts, 10, 33))
+>x : Symbol(N2.x, Decl(aliasUsageInIndexerOfClass_main.ts, 10, 33))
 >IHasVisualizationModel : Symbol(IHasVisualizationModel, Decl(aliasUsageInIndexerOfClass_main.ts, 1, 65))
 }
 === aliasUsageInIndexerOfClass_backbone.ts ===
@@ -43,7 +43,7 @@ export class Model {
 >Model : Symbol(Model, Decl(aliasUsageInIndexerOfClass_backbone.ts, 0, 0))
 
     public someData: string;
->someData : Symbol(someData, Decl(aliasUsageInIndexerOfClass_backbone.ts, 0, 20))
+>someData : Symbol(Model.someData, Decl(aliasUsageInIndexerOfClass_backbone.ts, 0, 20))
 }
 
 === aliasUsageInIndexerOfClass_moduleA.ts ===
@@ -52,9 +52,9 @@ import Backbone = require("./aliasUsageInIndexerOfClass_backbone");
 
 export class VisualizationModel extends Backbone.Model {
 >VisualizationModel : Symbol(VisualizationModel, Decl(aliasUsageInIndexerOfClass_moduleA.ts, 0, 67))
->Backbone.Model : Symbol(Model, Decl(aliasUsageInIndexerOfClass_backbone.ts, 0, 0))
+>Backbone.Model : Symbol(Backbone.Model, Decl(aliasUsageInIndexerOfClass_backbone.ts, 0, 0))
 >Backbone : Symbol(Backbone, Decl(aliasUsageInIndexerOfClass_moduleA.ts, 0, 0))
->Model : Symbol(Model, Decl(aliasUsageInIndexerOfClass_backbone.ts, 0, 0))
+>Model : Symbol(Backbone.Model, Decl(aliasUsageInIndexerOfClass_backbone.ts, 0, 0))
 
     // interesting stuff here
 }

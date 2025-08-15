@@ -10,7 +10,7 @@ interface Props {
 >Props : Symbol(Props, Decl(tsxStatelessComponentDefaultProps.tsx, 2, 26))
 
     text: string;
->text : Symbol(text, Decl(tsxStatelessComponentDefaultProps.tsx, 3, 17))
+>text : Symbol(Props.text, Decl(tsxStatelessComponentDefaultProps.tsx, 3, 17))
 }
 
 function BackButton(_props: Props) {
@@ -19,12 +19,12 @@ function BackButton(_props: Props) {
 >Props : Symbol(Props, Decl(tsxStatelessComponentDefaultProps.tsx, 2, 26))
 
     return <div />
->div : Symbol(div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 }
 BackButton.defaultProps = {
->BackButton.defaultProps : Symbol(defaultProps, Decl(tsxStatelessComponentDefaultProps.tsx, 9, 1))
+>BackButton.defaultProps : Symbol(BackButton.defaultProps, Decl(tsxStatelessComponentDefaultProps.tsx, 9, 1))
 >BackButton : Symbol(BackButton, Decl(tsxStatelessComponentDefaultProps.tsx, 5, 1))
->defaultProps : Symbol(defaultProps, Decl(tsxStatelessComponentDefaultProps.tsx, 9, 1))
+>defaultProps : Symbol(BackButton.defaultProps, Decl(tsxStatelessComponentDefaultProps.tsx, 9, 1))
 
     text: 'Go Back',
 >text : Symbol(text, Decl(tsxStatelessComponentDefaultProps.tsx, 10, 27))

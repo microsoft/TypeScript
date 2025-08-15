@@ -9,7 +9,7 @@ export class ExportedClass1 {
 >ExportedClass1 : Symbol(ExportedClass1, Decl(declarationEmitClassPrivateConstructor2.ts, 1, 1))
 
     private constructor(public data: PrivateInterface) { }
->data : Symbol(data, Decl(declarationEmitClassPrivateConstructor2.ts, 4, 24))
+>data : Symbol(ExportedClass1.data, Decl(declarationEmitClassPrivateConstructor2.ts, 4, 24))
 >PrivateInterface : Symbol(PrivateInterface, Decl(declarationEmitClassPrivateConstructor2.ts, 0, 0))
 }
 

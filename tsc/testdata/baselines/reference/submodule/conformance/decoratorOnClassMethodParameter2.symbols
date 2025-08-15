@@ -12,7 +12,7 @@ class C {
 >C : Symbol(C, Decl(decoratorOnClassMethodParameter2.ts, 0, 97))
 
     method(this: C, @dec p: number) {}
->method : Symbol(method, Decl(decoratorOnClassMethodParameter2.ts, 2, 9))
+>method : Symbol(C.method, Decl(decoratorOnClassMethodParameter2.ts, 2, 9))
 >this : Symbol(this, Decl(decoratorOnClassMethodParameter2.ts, 3, 11))
 >C : Symbol(C, Decl(decoratorOnClassMethodParameter2.ts, 0, 97))
 >dec : Symbol(dec, Decl(decoratorOnClassMethodParameter2.ts, 0, 0))

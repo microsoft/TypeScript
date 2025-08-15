@@ -6,7 +6,7 @@ enum E {
 
     // No ASI
     [e] = 0
->[e] : Symbol([e], Decl(parserComputedPropertyName26.ts, 0, 8))
+>[e] : Symbol(E[e], Decl(parserComputedPropertyName26.ts, 0, 8))
 
     [e2] = 1
 }

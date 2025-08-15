@@ -57,7 +57,7 @@ const fp = { l10ns: {} } as FlatpickrFn;
 >{} : {}
 
 export default fp.l10ns;
->fp.l10ns : { ar?: import("./locale").CustomLocale; bg?: import("./locale").CustomLocale; } & { default: import("./locale").Locale; }
+>fp.l10ns : { ar?: import("locale").CustomLocale; bg?: import("locale").CustomLocale; } & { default: import("locale").Locale; }
 >fp : FlatpickrFn
->l10ns : { ar?: import("./locale").CustomLocale; bg?: import("./locale").CustomLocale; } & { default: import("./locale").Locale; }
+>l10ns : { ar?: import("locale").CustomLocale; bg?: import("locale").CustomLocale; } & { default: import("locale").Locale; }
 

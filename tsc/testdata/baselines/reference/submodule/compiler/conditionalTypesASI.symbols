@@ -7,9 +7,9 @@ interface JSONSchema4 {
 >JSONSchema4 : Symbol(JSONSchema4, Decl(conditionalTypesASI.ts, 0, 0))
 
   a?: number
->a : Symbol(a, Decl(conditionalTypesASI.ts, 2, 23))
+>a : Symbol(JSONSchema4.a, Decl(conditionalTypesASI.ts, 2, 23))
 
   extends?: string | string[]
->extends : Symbol(extends, Decl(conditionalTypesASI.ts, 3, 12))
+>extends : Symbol(JSONSchema4.extends, Decl(conditionalTypesASI.ts, 3, 12))
 }
 

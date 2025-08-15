@@ -3,7 +3,7 @@
 === missingFunctionImplementation2_a.ts ===
 export {};
 declare module "./missingFunctionImplementation2_b" {
->"./missingFunctionImplementation2_b" : typeof import("./missingFunctionImplementation2_b")
+>"./missingFunctionImplementation2_b" : typeof import("missingFunctionImplementation2_b")
 
   export function f(a, b): void;
 >f : { (a?: any, b?: any): any; (a: any, b: any): void; }

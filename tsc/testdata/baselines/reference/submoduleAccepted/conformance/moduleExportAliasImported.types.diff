@@ -8,7 +8,7 @@
 ->exports : typeof alias
 ->version : 1
 +>exports.version : any
-+>exports : typeof import("./bug28014")
++>exports : typeof import("bug28014")
 +>version : any
  >1 : 1
 

@@ -5,7 +5,7 @@ declare global {
 >global : typeof global
 
     const React: typeof import("./module");
->React : typeof import("./module")
+>React : typeof import("module")
 }
 
 export { };
@@ -28,7 +28,7 @@ declare namespace React {
 export { };
 React.createRef;
 >React.createRef : () => any
->React : typeof import("./module")
+>React : typeof import("module")
 >createRef : () => any
 
 === emits.ts ===
@@ -41,6 +41,6 @@ console.log("hello");
 
 React.createRef;
 >React.createRef : () => any
->React : typeof import("./module")
+>React : typeof import("module")
 >createRef : () => any
 

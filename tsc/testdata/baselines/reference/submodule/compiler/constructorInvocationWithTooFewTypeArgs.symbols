@@ -7,11 +7,11 @@ class D<T, U> {
 >U : Symbol(U, Decl(constructorInvocationWithTooFewTypeArgs.ts, 0, 10))
 
    x: T
->x : Symbol(x, Decl(constructorInvocationWithTooFewTypeArgs.ts, 0, 15))
+>x : Symbol(D.x, Decl(constructorInvocationWithTooFewTypeArgs.ts, 0, 15))
 >T : Symbol(T, Decl(constructorInvocationWithTooFewTypeArgs.ts, 0, 8))
 
    y: U
->y : Symbol(y, Decl(constructorInvocationWithTooFewTypeArgs.ts, 2, 7))
+>y : Symbol(D.y, Decl(constructorInvocationWithTooFewTypeArgs.ts, 2, 7))
 >U : Symbol(U, Decl(constructorInvocationWithTooFewTypeArgs.ts, 0, 10))
 
 }

@@ -15,5 +15,5 @@ declare function dec<T>(target: any, propertyKey: string, descriptor: TypedPrope
 export default class {
     @dec get accessor() { return 1; }
 >dec : Symbol(dec, Decl(decoratorOnClassAccessor1.es6.ts, 0, 0))
->accessor : Symbol(accessor, Decl(decoratorOnClassAccessor1.es6.ts, 2, 22))
+>accessor : Symbol(default.accessor, Decl(decoratorOnClassAccessor1.es6.ts, 2, 22))
 }

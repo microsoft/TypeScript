@@ -5,6 +5,6 @@ export class SomeClass {
 >SomeClass : Symbol(SomeClass, Decl(parameterPropertyWithDefaultValue.ts, 0, 0))
 
   constructor(readonly timestamp = new Date()) {}
->timestamp : Symbol(timestamp, Decl(parameterPropertyWithDefaultValue.ts, 1, 14))
+>timestamp : Symbol(SomeClass.timestamp, Decl(parameterPropertyWithDefaultValue.ts, 1, 14))
 >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }

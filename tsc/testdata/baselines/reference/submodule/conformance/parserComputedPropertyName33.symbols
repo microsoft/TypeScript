@@ -6,7 +6,7 @@ class C {
 
     // No ASI
     [e] = 0
->[e] : Symbol([e], Decl(parserComputedPropertyName33.ts, 0, 9))
+>[e] : Symbol(C[e], Decl(parserComputedPropertyName33.ts, 0, 9))
 
     [e2]() { }
 }

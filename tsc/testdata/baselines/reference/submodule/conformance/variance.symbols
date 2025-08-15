@@ -10,7 +10,7 @@ interface Foo<T> {
 >T : Symbol(T, Decl(variance.ts, 4, 14))
 
   prop: T extends unknown ? true : false;
->prop : Symbol(prop, Decl(variance.ts, 4, 18))
+>prop : Symbol(Foo.prop, Decl(variance.ts, 4, 18))
 >T : Symbol(T, Decl(variance.ts, 4, 14))
 }
 
@@ -42,23 +42,23 @@ class Bar<T extends string> {
 >T : Symbol(T, Decl(variance.ts, 16, 10))
 
   private static instance: Bar<string>[] = [];
->instance : Symbol(instance, Decl(variance.ts, 16, 29))
+>instance : Symbol(Bar.instance, Decl(variance.ts, 16, 29))
 >Bar : Symbol(Bar, Decl(variance.ts, 11, 25))
 
   cast(_name: ([T] extends [string] ? string : string)) { }
->cast : Symbol(cast, Decl(variance.ts, 17, 46))
+>cast : Symbol(Bar.cast, Decl(variance.ts, 17, 46))
 >_name : Symbol(_name, Decl(variance.ts, 19, 7))
 >T : Symbol(T, Decl(variance.ts, 16, 10))
   
   pushThis() {
->pushThis : Symbol(pushThis, Decl(variance.ts, 19, 59))
+>pushThis : Symbol(Bar.pushThis, Decl(variance.ts, 19, 59))
 
     Bar.instance.push(this);
->Bar.instance.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
->Bar.instance : Symbol(instance, Decl(variance.ts, 16, 29))
+>Bar.instance.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>Bar.instance : Symbol(Bar.instance, Decl(variance.ts, 16, 29))
 >Bar : Symbol(Bar, Decl(variance.ts, 11, 25))
->instance : Symbol(instance, Decl(variance.ts, 16, 29))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>instance : Symbol(Bar.instance, Decl(variance.ts, 16, 29))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >this : Symbol(Bar, Decl(variance.ts, 11, 25))
   }
 }

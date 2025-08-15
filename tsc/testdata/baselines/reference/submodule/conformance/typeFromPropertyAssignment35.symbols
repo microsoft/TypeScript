@@ -22,9 +22,9 @@ Emu.D = class {
 
     constructor() {
         this._model = 1
->this._model : Symbol(_model, Decl(bug26877.js, 7, 19))
+>this._model : Symbol(D._model, Decl(bug26877.js, 7, 19))
 >this : Symbol(D, Decl(bug26877.js, 6, 7))
->_model : Symbol(_model, Decl(bug26877.js, 7, 19))
+>_model : Symbol(D._model, Decl(bug26877.js, 7, 19))
     }
 }
 

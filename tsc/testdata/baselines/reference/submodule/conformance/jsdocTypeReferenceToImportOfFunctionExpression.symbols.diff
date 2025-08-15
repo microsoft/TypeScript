@@ -11,17 +11,7 @@
  >exports : Symbol(export=, Decl(MC.js, 0, 27))
  >MC : Symbol(MC, Decl(MC.js, 5, 16))
 
-@@= skipped -28, +28 lines =@@
- >compiler : Symbol(compiler, Decl(MW.js, 6, 14))
-
-     this.compiler = compiler;
-->this.compiler : Symbol(MW.compiler, Decl(MW.js, 6, 25))
-+>this.compiler : Symbol(compiler, Decl(MW.js, 6, 25))
- >this : Symbol(MW, Decl(MW.js, 0, 0))
-->compiler : Symbol(MW.compiler, Decl(MW.js, 6, 25))
-+>compiler : Symbol(compiler, Decl(MW.js, 6, 25))
- >compiler : Symbol(compiler, Decl(MW.js, 6, 14))
-   }
+@@= skipped -36, +36 lines =@@
  }
 
  module.exports = MW;

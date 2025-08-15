@@ -11,10 +11,10 @@ interface IHasVisualizationModel {
 >IHasVisualizationModel : Symbol(IHasVisualizationModel, Decl(aliasUsageInObjectLiteral_main.ts, 1, 64))
 
     VisualizationModel: typeof Backbone.Model;
->VisualizationModel : Symbol(VisualizationModel, Decl(aliasUsageInObjectLiteral_main.ts, 2, 34))
->Backbone.Model : Symbol(Model, Decl(aliasUsageInObjectLiteral_backbone.ts, 0, 0))
+>VisualizationModel : Symbol(IHasVisualizationModel.VisualizationModel, Decl(aliasUsageInObjectLiteral_main.ts, 2, 34))
+>Backbone.Model : Symbol(Backbone.Model, Decl(aliasUsageInObjectLiteral_backbone.ts, 0, 0))
 >Backbone : Symbol(Backbone, Decl(aliasUsageInObjectLiteral_main.ts, 0, 0))
->Model : Symbol(Model, Decl(aliasUsageInObjectLiteral_backbone.ts, 0, 0))
+>Model : Symbol(Backbone.Model, Decl(aliasUsageInObjectLiteral_backbone.ts, 0, 0))
 }
 var a: { x: typeof moduleA } = { x: moduleA };
 >a : Symbol(a, Decl(aliasUsageInObjectLiteral_main.ts, 5, 3))
@@ -44,7 +44,7 @@ export class Model {
 >Model : Symbol(Model, Decl(aliasUsageInObjectLiteral_backbone.ts, 0, 0))
 
     public someData: string;
->someData : Symbol(someData, Decl(aliasUsageInObjectLiteral_backbone.ts, 0, 20))
+>someData : Symbol(Model.someData, Decl(aliasUsageInObjectLiteral_backbone.ts, 0, 20))
 }
 
 === aliasUsageInObjectLiteral_moduleA.ts ===
@@ -53,9 +53,9 @@ import Backbone = require("./aliasUsageInObjectLiteral_backbone");
 
 export class VisualizationModel extends Backbone.Model {
 >VisualizationModel : Symbol(VisualizationModel, Decl(aliasUsageInObjectLiteral_moduleA.ts, 0, 66))
->Backbone.Model : Symbol(Model, Decl(aliasUsageInObjectLiteral_backbone.ts, 0, 0))
+>Backbone.Model : Symbol(Backbone.Model, Decl(aliasUsageInObjectLiteral_backbone.ts, 0, 0))
 >Backbone : Symbol(Backbone, Decl(aliasUsageInObjectLiteral_moduleA.ts, 0, 0))
->Model : Symbol(Model, Decl(aliasUsageInObjectLiteral_backbone.ts, 0, 0))
+>Model : Symbol(Backbone.Model, Decl(aliasUsageInObjectLiteral_backbone.ts, 0, 0))
 
     // interesting stuff here
 }

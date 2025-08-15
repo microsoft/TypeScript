@@ -23,7 +23,7 @@ declare module 'react' { // augment
 }
 export interface StyledOtherComponentList {
     "div": React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
->"div" : import("react").DetailedHTMLProps<import("react").HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+>"div" : import("node_modules/react/index").DetailedHTMLProps<import("node_modules/react/index").HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 >React : any
 >React : any
 }
@@ -39,24 +39,24 @@ import {StyledOtherComponent, StyledOtherComponentList} from "create-emotion-sty
 >StyledOtherComponentList : any
 
 export default function styled(tag: string): (o: object) => StyledOtherComponent<{}, StyledOtherComponentList["div"], any>;
->styled : (tag: string) => (o: object) => StyledOtherComponent<{}, import("react").DetailedHTMLProps<import("react").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
+>styled : (tag: string) => (o: object) => StyledOtherComponent<{}, import("node_modules/react/index").DetailedHTMLProps<import("node_modules/react/index").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
 >tag : string
 >o : object
 
 === index.ts ===
 import styled from "react-emotion"
->styled : (tag: string) => (o: object) => import("create-emotion-styled").StyledOtherComponent<{}, import("react").DetailedHTMLProps<import("react").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
+>styled : (tag: string) => (o: object) => import("node_modules/create-emotion-styled/index").StyledOtherComponent<{}, import("node_modules/react/index").DetailedHTMLProps<import("node_modules/react/index").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
 
 const Form = styled('div')({ color: "red" })
->Form : import("create-emotion-styled").StyledOtherComponent<{}, import("react").DetailedHTMLProps<import("react").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
->styled('div')({ color: "red" }) : import("create-emotion-styled").StyledOtherComponent<{}, import("react").DetailedHTMLProps<import("react").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
->styled('div') : (o: object) => import("create-emotion-styled").StyledOtherComponent<{}, import("react").DetailedHTMLProps<import("react").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
->styled : (tag: string) => (o: object) => import("create-emotion-styled").StyledOtherComponent<{}, import("react").DetailedHTMLProps<import("react").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
+>Form : import("node_modules/create-emotion-styled/index").StyledOtherComponent<{}, import("node_modules/react/index").DetailedHTMLProps<import("node_modules/react/index").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
+>styled('div')({ color: "red" }) : import("node_modules/create-emotion-styled/index").StyledOtherComponent<{}, import("node_modules/react/index").DetailedHTMLProps<import("node_modules/react/index").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
+>styled('div') : (o: object) => import("node_modules/create-emotion-styled/index").StyledOtherComponent<{}, import("node_modules/react/index").DetailedHTMLProps<import("node_modules/react/index").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
+>styled : (tag: string) => (o: object) => import("node_modules/create-emotion-styled/index").StyledOtherComponent<{}, import("node_modules/react/index").DetailedHTMLProps<import("node_modules/react/index").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
 >'div' : "div"
 >{ color: "red" } : { color: string; }
 >color : string
 >"red" : "red"
 
 export default Form
->Form : import("create-emotion-styled").StyledOtherComponent<{}, import("react").DetailedHTMLProps<import("react").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
+>Form : import("node_modules/create-emotion-styled/index").StyledOtherComponent<{}, import("node_modules/react/index").DetailedHTMLProps<import("node_modules/react/index").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
 

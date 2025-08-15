@@ -277,7 +277,6 @@ TestMemberListInReopenedEnum
 TestMemberListInWithBlock
 TestMemberListOfExportedClass
 TestMemberListOnContextualThis
-TestModuleReexportedIntoGlobalQuickInfo
 TestNgProxy1
 TestNoQuickInfoForLabel
 TestNoQuickInfoInWhitespace
@@ -364,7 +363,6 @@ TestQuickInfoFromContextualType
 TestQuickInfoFunctionKeyword
 TestQuickInfoGenerics
 TestQuickInfoGetterSetter
-TestQuickInfoImportNonunicodePath
 TestQuickInfoInInvalidIndexSignature
 TestQuickInfoInJsdocInTsFile1
 TestQuickInfoInOptionalChain

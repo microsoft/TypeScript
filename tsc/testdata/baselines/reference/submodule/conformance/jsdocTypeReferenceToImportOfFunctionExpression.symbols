@@ -38,9 +38,9 @@ class MW {
 >compiler : Symbol(compiler, Decl(MW.js, 6, 14))
 
     this.compiler = compiler;
->this.compiler : Symbol(compiler, Decl(MW.js, 6, 25))
+>this.compiler : Symbol(MW.compiler, Decl(MW.js, 6, 25))
 >this : Symbol(MW, Decl(MW.js, 0, 0))
->compiler : Symbol(compiler, Decl(MW.js, 6, 25))
+>compiler : Symbol(MW.compiler, Decl(MW.js, 6, 25))
 >compiler : Symbol(compiler, Decl(MW.js, 6, 14))
   }
 }

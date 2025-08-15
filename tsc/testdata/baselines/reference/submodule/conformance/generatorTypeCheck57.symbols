@@ -8,7 +8,7 @@ function* g() {
 >C : Symbol(C, Decl(generatorTypeCheck57.ts, 0, 15))
 
         x = yield 0;
->x : Symbol(x, Decl(generatorTypeCheck57.ts, 1, 13))
+>x : Symbol(C.x, Decl(generatorTypeCheck57.ts, 1, 13))
 
     };
 }

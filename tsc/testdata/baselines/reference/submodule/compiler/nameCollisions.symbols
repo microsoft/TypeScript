@@ -14,7 +14,7 @@ module T {
 >Bar : Symbol(Bar, Decl(nameCollisions.ts, 3, 14))
 
             test: number;
->test : Symbol(test, Decl(nameCollisions.ts, 4, 26))
+>test : Symbol(Bar.test, Decl(nameCollisions.ts, 4, 26))
         }
     }
 

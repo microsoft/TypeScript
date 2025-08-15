@@ -198,10 +198,10 @@ interface Bounds {
 >Bounds : Symbol(Bounds, Decl(mappedTypeConstraints2.ts, 50, 71))
 
     min: number;
->min : Symbol(min, Decl(mappedTypeConstraints2.ts, 54, 18))
+>min : Symbol(Bounds.min, Decl(mappedTypeConstraints2.ts, 54, 18))
 
     max: number;
->max : Symbol(max, Decl(mappedTypeConstraints2.ts, 55, 16))
+>max : Symbol(Bounds.max, Decl(mappedTypeConstraints2.ts, 55, 16))
 }
 
 type NumericBoundsOf<T> = {
@@ -229,9 +229,9 @@ function validate<T extends object>(obj: T, bounds: NumericBoundsOf<T>) {
     for (const [key, val] of Object.entries(obj)) {
 >key : Symbol(key, Decl(mappedTypeConstraints2.ts, 64, 16))
 >val : Symbol(val, Decl(mappedTypeConstraints2.ts, 64, 20))
->Object.entries : Symbol(entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->entries : Symbol(entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
 >obj : Symbol(obj, Decl(mappedTypeConstraints2.ts, 63, 36))
 
         const boundsForKey = bounds[key as keyof NumericBoundsOf<T>];

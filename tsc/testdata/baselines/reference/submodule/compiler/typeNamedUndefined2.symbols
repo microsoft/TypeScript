@@ -29,8 +29,8 @@ export function x(p: ns.undefined.undefined) {
 >x : Symbol(x, Decl(typeNamedUndefined2.ts, 8, 1))
 >p : Symbol(p, Decl(typeNamedUndefined2.ts, 10, 18))
 >ns : Symbol(ns, Decl(typeNamedUndefined2.ts, 0, 0))
->undefined : Symbol(undefined, Decl(typeNamedUndefined2.ts, 0, 21))
->undefined : Symbol(undefined, Decl(typeNamedUndefined2.ts, 2, 34))
+>undefined : Symbol(ns.undefined, Decl(typeNamedUndefined2.ts, 0, 21))
+>undefined : Symbol(ns.undefined.undefined, Decl(typeNamedUndefined2.ts, 2, 34))
 
     return p;
 >p : Symbol(p, Decl(typeNamedUndefined2.ts, 10, 18))

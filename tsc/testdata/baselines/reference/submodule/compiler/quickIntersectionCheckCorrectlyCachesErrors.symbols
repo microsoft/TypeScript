@@ -11,7 +11,7 @@ interface F<P> {
 >children : Symbol(children, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 1, 17))
 
     propTypes: { [K in keyof P]: null extends P ? K : K };
->propTypes : Symbol(propTypes, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 1, 46))
+>propTypes : Symbol(F.propTypes, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 1, 46))
 >K : Symbol(K, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 2, 18))
 >P : Symbol(P, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 0, 12))
 >P : Symbol(P, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 0, 12))
@@ -35,7 +35,7 @@ export function wu<CP extends { o: object }>(CC: F<CP>) {
 >WU : Symbol(WU, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 5, 57))
 
         m() {
->m : Symbol(m, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 6, 14))
+>m : Symbol(WU.m, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 6, 14))
 
             g(CC)
 >g : Symbol(g, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 3, 1))

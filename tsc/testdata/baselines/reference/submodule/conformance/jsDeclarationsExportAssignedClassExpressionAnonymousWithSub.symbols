@@ -13,9 +13,9 @@ module.exports = class {
 >p : Symbol(p, Decl(index.js, 4, 16))
 
         this.t = 12 + p;
->this.t : Symbol(t, Decl(index.js, 4, 20))
+>this.t : Symbol(exports.t, Decl(index.js, 4, 20))
 >this : Symbol(exports, Decl(index.js, 0, 16))
->t : Symbol(t, Decl(index.js, 4, 20))
+>t : Symbol(exports.t, Decl(index.js, 4, 20))
 >p : Symbol(p, Decl(index.js, 4, 16))
     }
 }
@@ -26,9 +26,9 @@ module.exports.Sub = class {
 
     constructor() {
         this.instance = new module.exports(10);
->this.instance : Symbol(instance, Decl(index.js, 9, 19))
+>this.instance : Symbol(Sub.instance, Decl(index.js, 9, 19))
 >this : Symbol(Sub, Decl(index.js, 8, 20))
->instance : Symbol(instance, Decl(index.js, 9, 19))
+>instance : Symbol(Sub.instance, Decl(index.js, 9, 19))
 >module.exports : Symbol((Anonymous class), Decl(index.js, 0, 16))
 >module : Symbol(module.exports)
 >exports : Symbol((Anonymous class), Decl(index.js, 0, 16))

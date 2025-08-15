@@ -66,9 +66,9 @@ function Cp(t) {
 >t : Symbol(t, Decl(propertiesOfGenericConstructorFunctions.js, 32, 12))
 }
 Cp.prototype = {
->Cp.prototype : Symbol(prototype, Decl(propertiesOfGenericConstructorFunctions.js, 35, 1))
+>Cp.prototype : Symbol(Cp.prototype, Decl(propertiesOfGenericConstructorFunctions.js, 35, 1))
 >Cp : Symbol(Cp, Decl(propertiesOfGenericConstructorFunctions.js, 25, 23))
->prototype : Symbol(prototype, Decl(propertiesOfGenericConstructorFunctions.js, 35, 1))
+>prototype : Symbol(Cp.prototype, Decl(propertiesOfGenericConstructorFunctions.js, 35, 1))
 
     m1() { return this.x },
 >m1 : Symbol(m1, Decl(propertiesOfGenericConstructorFunctions.js, 36, 16))

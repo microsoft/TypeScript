@@ -1,18 +1,15 @@
 --- old.moduleExportAlias2.symbols
 +++ new.moduleExportAlias2.symbols
-@@= skipped -8, +8 lines =@@
+@@= skipped -4, +4 lines =@@
+ const C = require("./semver")
+ >C : Symbol(C, Decl(index.js, 1, 5))
+ >require : Symbol(require, Decl(node.d.ts, 0, 0))
+->"./semver" : Symbol("semver", Decl(semver.js, 0, 0))
++>"./semver" : Symbol(C, Decl(semver.js, 0, 0))
 
  var two = C.f(1)
  >two : Symbol(two, Decl(index.js, 2, 3))
-->C.f : Symbol(C.f, Decl(semver.js, 1, 28))
-+>C.f : Symbol(f, Decl(semver.js, 1, 28))
- >C : Symbol(C, Decl(index.js, 1, 5))
-->f : Symbol(C.f, Decl(semver.js, 1, 28))
-+>f : Symbol(f, Decl(semver.js, 1, 28))
-
- var c = new C
- >c : Symbol(c, Decl(index.js, 3, 3))
-@@= skipped -24, +24 lines =@@
+@@= skipped -28, +28 lines =@@
  /// <reference path='node.d.ts' />
  exports = module.exports = C
  >exports : Symbol("semver", Decl(semver.js, 0, 0))

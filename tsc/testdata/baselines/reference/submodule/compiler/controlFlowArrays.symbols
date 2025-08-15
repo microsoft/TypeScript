@@ -30,19 +30,19 @@ function f2() {
 >x : Symbol(x, Decl(controlFlowArrays.ts, 11, 7))
 
     x.push(5);
->x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 11, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
     x.push("hello");
->x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 11, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
     x.push(true);
->x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 11, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
     return x;  // (string | number | boolean)[]
 >x : Symbol(x, Decl(controlFlowArrays.ts, 11, 7))
@@ -58,9 +58,9 @@ function f3() {
 >x : Symbol(x, Decl(controlFlowArrays.ts, 19, 7))
 
     x.push(5, "hello");
->x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 19, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
     return x;  // (string | number)[]
 >x : Symbol(x, Decl(controlFlowArrays.ts, 19, 7))
@@ -76,15 +76,15 @@ function f4() {
 >cond : Symbol(cond, Decl(controlFlowArrays.ts, 0, 0))
 
         x.push(5);
->x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 26, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
     }
     else {
         x.push("hello");
->x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 26, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
     }
     return x;  // (string | number)[]
 >x : Symbol(x, Decl(controlFlowArrays.ts, 26, 7))
@@ -103,18 +103,18 @@ function f5() {
 >x : Symbol(x, Decl(controlFlowArrays.ts, 37, 7))
 
         x.push(5);
->x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 37, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
     }
     else {
         x = [];
 >x : Symbol(x, Decl(controlFlowArrays.ts, 37, 7))
 
         x.push("hello");
->x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 37, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
     }
     return x;  // (string | number)[]
 >x : Symbol(x, Decl(controlFlowArrays.ts, 37, 7))
@@ -137,9 +137,9 @@ function f6() {
 >x : Symbol(x, Decl(controlFlowArrays.ts, 50, 7))
 
         x.push("hello");
->x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 50, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
     }
     return x;  // number | string[]
 >x : Symbol(x, Decl(controlFlowArrays.ts, 50, 7))
@@ -161,9 +161,9 @@ function f7() {
 >cond : Symbol(cond, Decl(controlFlowArrays.ts, 0, 0))
 
             x.push("hello");
->x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 62, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
         }
     }
     return x;  // string[] | null
@@ -177,27 +177,27 @@ function f8() {
 >x : Symbol(x, Decl(controlFlowArrays.ts, 73, 7))
 
     x.push(5);
->x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 73, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
     if (cond()) return x;  // number[]
 >cond : Symbol(cond, Decl(controlFlowArrays.ts, 0, 0))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 73, 7))
 
     x.push("hello");
->x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 73, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
     if (cond()) return x;  // (string | number)[]
 >cond : Symbol(cond, Decl(controlFlowArrays.ts, 0, 0))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 73, 7))
 
     x.push(true);
->x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 73, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
     return x;  // (string | number | boolean)[]
 >x : Symbol(x, Decl(controlFlowArrays.ts, 73, 7))
@@ -213,18 +213,18 @@ function f9() {
 >cond : Symbol(cond, Decl(controlFlowArrays.ts, 0, 0))
 
         x.push(5);
->x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 83, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
         return x;  // number[]
 >x : Symbol(x, Decl(controlFlowArrays.ts, 83, 7))
     }
     else {
         x.push("hello");
->x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 83, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
         return x;  // string[]
 >x : Symbol(x, Decl(controlFlowArrays.ts, 83, 7))
@@ -241,18 +241,18 @@ function f10() {
 >cond : Symbol(cond, Decl(controlFlowArrays.ts, 0, 0))
 
         x.push(true);
->x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 95, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
         x;  // boolean[]
 >x : Symbol(x, Decl(controlFlowArrays.ts, 95, 7))
     }
     else {
         x.push(5);
->x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 95, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
         x;  // number[]
 >x : Symbol(x, Decl(controlFlowArrays.ts, 95, 7))
@@ -261,17 +261,17 @@ function f10() {
 >cond : Symbol(cond, Decl(controlFlowArrays.ts, 0, 0))
 
             x.push("hello");
->x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 95, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
         }
         x;  // (string | number)[]
 >x : Symbol(x, Decl(controlFlowArrays.ts, 95, 7))
     }
     x.push(99);
->x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 95, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
     return x;  // (string | number | boolean)[]
 >x : Symbol(x, Decl(controlFlowArrays.ts, 95, 7))
@@ -284,14 +284,14 @@ function f11() {
 >x : Symbol(x, Decl(controlFlowArrays.ts, 113, 7))
 
     if (x.length === 0) {  // x.length ok on implicit any[]
->x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 113, 7))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
         x.push("hello");
->x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 113, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
     }
     return x;
 >x : Symbol(x, Decl(controlFlowArrays.ts, 113, 7))
@@ -307,14 +307,14 @@ function f12() {
 >x : Symbol(x, Decl(controlFlowArrays.ts, 121, 7))
 
     if (x.length === 0) {  // x.length ok on implicit any[]
->x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 121, 7))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
         x.push("hello");
->x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 121, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
     }
     return x;
 >x : Symbol(x, Decl(controlFlowArrays.ts, 121, 7))
@@ -327,19 +327,19 @@ function f13() {
 >x : Symbol(x, Decl(controlFlowArrays.ts, 130, 7))
 
     x.push(5);
->x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 130, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
     x.push("hello");
->x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 130, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
     x.push(true);
->x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 130, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
     return x;  // (string | number | boolean)[]
 >x : Symbol(x, Decl(controlFlowArrays.ts, 130, 7))
@@ -352,19 +352,19 @@ function f14() {
 >x : Symbol(x, Decl(controlFlowArrays.ts, 138, 9))
 
     x.push(5);
->x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 138, 9))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
     x.push("hello");
->x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 138, 9))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
     x.push(true);
->x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 138, 9))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
     return x;  // (string | number | boolean)[]
 >x : Symbol(x, Decl(controlFlowArrays.ts, 138, 9))
@@ -383,9 +383,9 @@ function f15() {
 >cond : Symbol(cond, Decl(controlFlowArrays.ts, 0, 0))
 
         x.push("hello");
->x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 146, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
     }
     return x;  // string[]
 >x : Symbol(x, Decl(controlFlowArrays.ts, 146, 7))
@@ -401,18 +401,18 @@ function f16() {
 >y : Symbol(y, Decl(controlFlowArrays.ts, 156, 7))
 
     (x = [], x).push(5);
->(x = [], x).push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>(x = [], x).push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 155, 7))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 155, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
     (x.push("hello"), x).push(true);
->(x.push("hello"), x).push : Symbol(push, Decl(lib.es5.d.ts, --, --))
->x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>(x.push("hello"), x).push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 155, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 155, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
     ((x))[3] = { a: 1 };
 >x : Symbol(x, Decl(controlFlowArrays.ts, 155, 7))
@@ -429,19 +429,19 @@ function f17() {
 >x : Symbol(x, Decl(controlFlowArrays.ts, 164, 7))
 
     x.unshift(5);
->x.unshift : Symbol(unshift, Decl(lib.es5.d.ts, --, --))
+>x.unshift : Symbol(Array.unshift, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 164, 7))
->unshift : Symbol(unshift, Decl(lib.es5.d.ts, --, --))
+>unshift : Symbol(Array.unshift, Decl(lib.es5.d.ts, --, --))
 
     x.unshift("hello");
->x.unshift : Symbol(unshift, Decl(lib.es5.d.ts, --, --))
+>x.unshift : Symbol(Array.unshift, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 164, 7))
->unshift : Symbol(unshift, Decl(lib.es5.d.ts, --, --))
+>unshift : Symbol(Array.unshift, Decl(lib.es5.d.ts, --, --))
 
     x.unshift(true);
->x.unshift : Symbol(unshift, Decl(lib.es5.d.ts, --, --))
+>x.unshift : Symbol(Array.unshift, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 164, 7))
->unshift : Symbol(unshift, Decl(lib.es5.d.ts, --, --))
+>unshift : Symbol(Array.unshift, Decl(lib.es5.d.ts, --, --))
 
     return x;  // (string | number | boolean)[]
 >x : Symbol(x, Decl(controlFlowArrays.ts, 164, 7))
@@ -454,14 +454,14 @@ function f18() {
 >x : Symbol(x, Decl(controlFlowArrays.ts, 172, 7))
 
     x.push(5);
->x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 172, 7))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
     x.unshift("hello");
->x.unshift : Symbol(unshift, Decl(lib.es5.d.ts, --, --))
+>x.unshift : Symbol(Array.unshift, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 172, 7))
->unshift : Symbol(unshift, Decl(lib.es5.d.ts, --, --))
+>unshift : Symbol(Array.unshift, Decl(lib.es5.d.ts, --, --))
 
     x[2] = true;
 >x : Symbol(x, Decl(controlFlowArrays.ts, 172, 7))
@@ -481,9 +481,9 @@ let arr = []
 >arr : Symbol(arr, Decl(controlFlowArrays.ts, 183, 3))
 
 arr.push({ val: 1, bar: 2 });
->arr.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>arr.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >arr : Symbol(arr, Decl(controlFlowArrays.ts, 183, 3))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(controlFlowArrays.ts, 184, 10))
 >bar : Symbol(bar, Decl(controlFlowArrays.ts, 184, 18))
 

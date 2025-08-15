@@ -6,12 +6,11 @@
  exports.A = function () {
 ->exports.A = function () {    this.x = 1;} : typeof A
 ->exports.A : typeof A
-->exports : typeof import("a-ext")
-->A : typeof A
-->function () {    this.x = 1;} : typeof A
 +>exports.A = function () {    this.x = 1;} : () => void
 +>exports.A : () => void
-+>exports : typeof import("./a-ext")
+ >exports : typeof import("a-ext")
+->A : typeof A
+->function () {    this.x = 1;} : typeof A
 +>A : () => void
 +>function () {    this.x = 1;} : () => void
 
@@ -28,12 +27,10 @@
  === a.js ===
  const { A } = require("./a-ext");
 ->A : typeof A
-->require("./a-ext") : typeof import("a-ext")
 +>A : () => void
-+>require("./a-ext") : typeof import("./a-ext")
+ >require("./a-ext") : typeof import("a-ext")
  >require : (id: string) => any
  >"./a-ext" : "./a-ext"
-
 @@= skipped -9, +9 lines =@@
  function a(p) { p.x; }
  >a : (p: A) => void
@@ -46,23 +43,7 @@
 
  === b-ext.js ===
  exports.B = class {
- >exports.B = class {    constructor() {        this.x = 1;    }} : typeof B
- >exports.B : typeof B
-->exports : typeof import("b-ext")
-+>exports : typeof import("./b-ext")
- >B : typeof B
- >class {    constructor() {        this.x = 1;    }} : typeof B
-
-@@= skipped -25, +25 lines =@@
- === b.js ===
- const { B } = require("./b-ext");
- >B : typeof B
-->require("./b-ext") : typeof import("b-ext")
-+>require("./b-ext") : typeof import("./b-ext")
- >require : (id: string) => any
- >"./b-ext" : "./b-ext"
-
-@@= skipped -8, +8 lines =@@
+@@= skipped -33, +33 lines =@@
  function b(p) { p.x; }
  >b : (p: B) => void
  >p : B
@@ -89,12 +70,10 @@
  === c.js ===
  const { C } = require("./c-ext");
 ->C : typeof C
-->require("./c-ext") : typeof import("c-ext")
 +>C : () => void
-+>require("./c-ext") : typeof import("./c-ext")
+ >require("./c-ext") : typeof import("c-ext")
  >require : (id: string) => any
  >"./c-ext" : "./c-ext"
-
 @@= skipped -27, +27 lines =@@
  function c(p) { p.x; }
  >c : (p: C) => void
@@ -125,12 +104,10 @@
  === d.js ===
  const { D } = require("./d-ext");
 ->D : typeof D
-->require("./d-ext") : typeof import("d-ext")
 +>D : () => void
-+>require("./d-ext") : typeof import("./d-ext")
+ >require("./d-ext") : typeof import("d-ext")
  >require : (id: string) => any
  >"./d-ext" : "./d-ext"
-
 @@= skipped -9, +9 lines =@@
  function d(p) { p.x; }
  >d : (p: D) => void
@@ -143,16 +120,7 @@
 
  === e-ext.js ===
  export class E {
-@@= skipped -21, +21 lines =@@
- === e.js ===
- const { E } = require("./e-ext");
- >E : typeof E
-->require("./e-ext") : typeof import("e-ext")
-+>require("./e-ext") : typeof import("./e-ext")
- >require : (id: string) => any
- >"./e-ext" : "./e-ext"
-
-@@= skipped -14, +14 lines =@@
+@@= skipped -35, +35 lines =@@
 
  === f.js ===
  var F = function () {

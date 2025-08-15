@@ -17,5 +17,5 @@ window.localStorage
 === /somepath/node_modules/@typescript/lib-dom/iterable.d.ts ===
 interface DOMIterable { abc: string }
 >DOMIterable : Symbol(DOMIterable, Decl(iterable.d.ts, 0, 0))
->abc : Symbol(abc, Decl(iterable.d.ts, 0, 23))
+>abc : Symbol(DOMIterable.abc, Decl(iterable.d.ts, 0, 23))
 

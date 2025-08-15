@@ -6,7 +6,7 @@ class MyClassErr {
 
     // No parameter properties
     constructor(public foo: string) { }
->foo : Symbol(foo, Decl(index.ts, 2, 16))
+>foo : Symbol(MyClassErr.foo, Decl(index.ts, 2, 16))
 }
 
 namespace IllegalBecauseInstantiated {
@@ -40,19 +40,19 @@ enum NotLegalEnum {
 >NotLegalEnum : Symbol(NotLegalEnum, Decl(index.ts, 19, 1))
 
     B = 1
->B : Symbol(B, Decl(index.ts, 21, 19))
+>B : Symbol(NoGoodAlias, Decl(index.ts, 21, 19))
 }
 
 import NoGoodAlias = NotLegalEnum.B;
 >NoGoodAlias : Symbol(NoGoodAlias, Decl(index.ts, 23, 1))
 >NotLegalEnum : Symbol(NotLegalEnum, Decl(index.ts, 19, 1))
->B : Symbol(B, Decl(index.ts, 21, 19))
+>B : Symbol(NoGoodAlias, Decl(index.ts, 21, 19))
 
 const enum NotLegalConstEnum {
 >NotLegalConstEnum : Symbol(NotLegalConstEnum, Decl(index.ts, 25, 36))
 
     C = 2
->C : Symbol(C, Decl(index.ts, 27, 30))
+>C : Symbol(NotLegalConstEnum.C, Decl(index.ts, 27, 30))
 }
 
 // No errors after this point
@@ -93,7 +93,7 @@ declare enum LegalEnum {
 >LegalEnum : Symbol(LegalEnum, Decl(index.ts, 48, 1))
 
     A = 1
->A : Symbol(A, Decl(index.ts, 50, 24))
+>A : Symbol(LegalEnum.A, Decl(index.ts, 50, 24))
 }
 
 declare namespace AmbientStuff {
@@ -109,13 +109,13 @@ declare namespace AmbientStuff {
 >EnumInAmbientContext : Symbol(EnumInAmbientContext, Decl(index.ts, 57, 5))
 
         B = 1
->B : Symbol(B, Decl(index.ts, 58, 31))
+>B : Symbol(FineAlias, Decl(index.ts, 58, 31))
     }
 
     import FineAlias = EnumInAmbientContext.B;
 >FineAlias : Symbol(FineAlias, Decl(index.ts, 60, 5))
 >EnumInAmbientContext : Symbol(EnumInAmbientContext, Decl(index.ts, 57, 5))
->B : Symbol(B, Decl(index.ts, 58, 31))
+>B : Symbol(FineAlias, Decl(index.ts, 58, 31))
 }
 
 // Not erasable

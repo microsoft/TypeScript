@@ -16,12 +16,3 @@
 +=== b.ts ===
  import { type MyList } from './a';
  >MyList : Symbol(MyList, Decl(b.ts, 0, 8))
-
-@@= skipped -12, +12 lines =@@
-
-   @Decorator myList?: MyList;
- >Decorator : Symbol(Decorator, Decl(b.ts, 2, 11))
-->myList : Symbol(Foo.myList, Decl(b.ts, 4, 11))
-+>myList : Symbol(myList, Decl(b.ts, 4, 11))
- >MyList : Symbol(MyList, Decl(b.ts, 0, 8))
- }

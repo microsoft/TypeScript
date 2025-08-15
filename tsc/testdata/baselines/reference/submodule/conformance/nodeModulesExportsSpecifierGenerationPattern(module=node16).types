@@ -6,19 +6,19 @@ import { Thing } from "inner/other";
 >Thing : any
 
 export const a = (await import("inner/index.js")).x();
->a : import("inner/other.js").Thing
->(await import("inner/index.js")).x() : import("inner/other.js").Thing
->(await import("inner/index.js")).x : () => import("inner/other.js").Thing
->(await import("inner/index.js")) : typeof import("inner/index.js")
->await import("inner/index.js") : typeof import("inner/index.js")
->import("inner/index.js") : Promise<typeof import("inner/index.js")>
+>a : import("node_modules/inner/other").Thing
+>(await import("inner/index.js")).x() : import("node_modules/inner/other").Thing
+>(await import("inner/index.js")).x : () => import("node_modules/inner/other").Thing
+>(await import("inner/index.js")) : typeof import("node_modules/inner/index")
+>await import("inner/index.js") : typeof import("node_modules/inner/index")
+>import("inner/index.js") : Promise<typeof import("node_modules/inner/index")>
 >"inner/index.js" : "inner/index.js"
->x : () => import("inner/other.js").Thing
+>x : () => import("node_modules/inner/other").Thing
 
 === node_modules/inner/index.d.ts ===
 // esm format file
 export { x } from "./other.js";
->x : () => import("./other.js").Thing
+>x : () => import("node_modules/inner/other").Thing
 
 === node_modules/inner/other.d.ts ===
 // esm format file

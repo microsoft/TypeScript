@@ -5,7 +5,7 @@
  }
  var Foo: new () => Foo.A<Foo<string>>;
 ->Foo : new () => Foo.A<Foo<string>>
-+>Foo : new () => import("./privacyCheckExportAssignmentOnExportedGenericInterface1").A<Foo<string>>
++>Foo : new () => import("privacyCheckExportAssignmentOnExportedGenericInterface1").A<Foo<string>>
  >Foo : any
 
  export = Foo;

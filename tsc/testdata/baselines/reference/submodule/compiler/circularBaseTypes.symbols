@@ -43,6 +43,6 @@ interface Y extends X<Y> {
 >Y : Symbol(Y, Decl(circularBaseTypes.ts, 12, 55))
 
   a: "";
->a : Symbol(a, Decl(circularBaseTypes.ts, 13, 26))
+>a : Symbol(Y.a, Decl(circularBaseTypes.ts, 13, 26))
 }
 

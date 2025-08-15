@@ -5,7 +5,7 @@ declare const require: any;
 >require : any
 
 const a: typeof import('./other') = null as any
->a : typeof import("./other")
+>a : typeof import("/other")
 >null as any : any
 
 function foo() {

@@ -8,5 +8,5 @@ interface I5<T> extends I5<T> {
 >T : Symbol(T, Decl(recursiveInheritanceGeneric.ts, 0, 13))
 
     foo():void;
->foo : Symbol(foo, Decl(recursiveInheritanceGeneric.ts, 0, 31))
+>foo : Symbol(I5.foo, Decl(recursiveInheritanceGeneric.ts, 0, 31))
 }  

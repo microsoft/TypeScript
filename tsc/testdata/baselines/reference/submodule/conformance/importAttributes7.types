@@ -26,8 +26,8 @@ export async function f() {
 >f : () => Promise<void>
 
     const a = import("./a", {
->a : Promise<typeof import("./a")>
->import("./a", {        with: { a: "a", "b": "b" },    }) : Promise<typeof import("./a")>
+>a : Promise<typeof import("/a")>
+>import("./a", {        with: { a: "a", "b": "b" },    }) : Promise<typeof import("/a")>
 >"./a" : "./a"
 >{        with: { a: "a", "b": "b" },    } : { with: { a: string; b: string; }; }
 
@@ -41,6 +41,6 @@ export async function f() {
 
     });
     a;
->a : Promise<typeof import("./a")>
+>a : Promise<typeof import("/a")>
 }
 

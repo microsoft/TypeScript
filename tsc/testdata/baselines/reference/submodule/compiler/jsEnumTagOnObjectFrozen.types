@@ -5,7 +5,7 @@ const { Thing, useThing, cbThing } = require("./index");
 >Thing : Readonly<{ a: "thing"; b: "chill"; }>
 >useThing : (x: Thing) => void
 >cbThing : (x: (x: Thing) => void) => void
->require("./index") : typeof import("./index")
+>require("./index") : typeof import("index")
 >require : any
 >"./index" : "./index"
 
@@ -69,7 +69,7 @@ const Thing = Object.freeze({
 exports.Thing = Thing;
 >exports.Thing = Thing : Readonly<{ a: "thing"; b: "chill"; }>
 >exports.Thing : Readonly<{ a: "thing"; b: "chill"; }>
->exports : typeof import(".")
+>exports : typeof import("index")
 >Thing : Readonly<{ a: "thing"; b: "chill"; }>
 >Thing : Readonly<{ a: "thing"; b: "chill"; }>
 
@@ -83,7 +83,7 @@ function useThing(x) {}
 exports.useThing = useThing;
 >exports.useThing = useThing : (x: Thing) => void
 >exports.useThing : (x: Thing) => void
->exports : typeof import(".")
+>exports : typeof import("index")
 >useThing : (x: Thing) => void
 >useThing : (x: Thing) => void
 
@@ -97,7 +97,7 @@ function cbThing(x) {}
 exports.cbThing = cbThing;
 >exports.cbThing = cbThing : (x: (x: Thing) => void) => void
 >exports.cbThing : (x: (x: Thing) => void) => void
->exports : typeof import(".")
+>exports : typeof import("index")
 >cbThing : (x: (x: Thing) => void) => void
 >cbThing : (x: (x: Thing) => void) => void
 

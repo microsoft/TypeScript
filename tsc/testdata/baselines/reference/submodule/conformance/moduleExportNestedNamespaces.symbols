@@ -27,9 +27,9 @@ module.exports.Classic = class {
 
     constructor() {
         this.p = 1
->this.p : Symbol(p, Decl(mod.js, 5, 19))
+>this.p : Symbol(Classic.p, Decl(mod.js, 5, 19))
 >this : Symbol(Classic, Decl(mod.js, 4, 24))
->p : Symbol(p, Decl(mod.js, 5, 19))
+>p : Symbol(Classic.p, Decl(mod.js, 5, 19))
     }
 }
 
@@ -39,18 +39,18 @@ import * as s from './mod'
 
 var k = new s.n.K()
 >k : Symbol(k, Decl(use.js, 2, 3))
->s.n : Symbol(n, Decl(mod.js, 0, 0))
+>s.n : Symbol(s.n, Decl(mod.js, 0, 0))
 >s : Symbol(s, Decl(use.js, 0, 6))
->n : Symbol(n, Decl(mod.js, 0, 0))
+>n : Symbol(s.n, Decl(mod.js, 0, 0))
 
 k.x
 >k : Symbol(k, Decl(use.js, 2, 3))
 
 var classic = new s.Classic()
 >classic : Symbol(classic, Decl(use.js, 4, 3))
->s.Classic : Symbol(Classic, Decl(mod.js, 3, 1))
+>s.Classic : Symbol(s.Classic, Decl(mod.js, 3, 1))
 >s : Symbol(s, Decl(use.js, 0, 6))
->Classic : Symbol(Classic, Decl(mod.js, 3, 1))
+>Classic : Symbol(s.Classic, Decl(mod.js, 3, 1))
 
 
 /** @param {s.n.K} c

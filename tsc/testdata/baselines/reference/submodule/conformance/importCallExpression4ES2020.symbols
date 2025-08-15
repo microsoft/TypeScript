@@ -5,7 +5,7 @@ export class B {
 >B : Symbol(B, Decl(0.ts, 0, 0))
 
     print() { return "I am B"}
->print : Symbol(print, Decl(0.ts, 0, 16))
+>print : Symbol(B.print, Decl(0.ts, 0, 16))
 }
 
 export function foo() { return "foo" }
@@ -23,22 +23,22 @@ class C {
 >C : Symbol(C, Decl(2.ts, 0, 25))
 
     private myModule = import("./0");
->myModule : Symbol(myModule, Decl(2.ts, 1, 9))
+>myModule : Symbol(C.myModule, Decl(2.ts, 1, 9))
 >"./0" : Symbol("0", Decl(0.ts, 0, 0))
 
     method() {
->method : Symbol(method, Decl(2.ts, 2, 37))
+>method : Symbol(C.method, Decl(2.ts, 2, 37))
 
         const loadAsync = import ("./0");
 >loadAsync : Symbol(loadAsync, Decl(2.ts, 4, 13))
 >"./0" : Symbol("0", Decl(0.ts, 0, 0))
 
         this.myModule.then(Zero => {
->this.myModule.then : Symbol(then, Decl(lib.es5.d.ts, --, --))
->this.myModule : Symbol(myModule, Decl(2.ts, 1, 9))
+>this.myModule.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>this.myModule : Symbol(C.myModule, Decl(2.ts, 1, 9))
 >this : Symbol(C, Decl(2.ts, 0, 25))
->myModule : Symbol(myModule, Decl(2.ts, 1, 9))
->then : Symbol(then, Decl(lib.es5.d.ts, --, --))
+>myModule : Symbol(C.myModule, Decl(2.ts, 1, 9))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
 >Zero : Symbol(Zero, Decl(2.ts, 5, 27))
 
             console.log(Zero.foo());

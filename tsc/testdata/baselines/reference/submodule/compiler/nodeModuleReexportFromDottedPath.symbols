@@ -5,7 +5,7 @@ export interface PrismaClientOptions {
 >PrismaClientOptions : Symbol(PrismaClientOptions, Decl(index.d.ts, 0, 0))
 
   rejectOnNotFound?: any;
->rejectOnNotFound : Symbol(rejectOnNotFound, Decl(index.d.ts, 0, 38))
+>rejectOnNotFound : Symbol(PrismaClientOptions.rejectOnNotFound, Decl(index.d.ts, 0, 38))
 }
 
 export class PrismaClient<T extends PrismaClientOptions = PrismaClientOptions> {
@@ -15,7 +15,7 @@ export class PrismaClient<T extends PrismaClientOptions = PrismaClientOptions> {
 >PrismaClientOptions : Symbol(PrismaClientOptions, Decl(index.d.ts, 0, 0))
 
   private fetcher;
->fetcher : Symbol(fetcher, Decl(index.d.ts, 4, 80))
+>fetcher : Symbol(PrismaClient.fetcher, Decl(index.d.ts, 4, 80))
 }
 
 === /node_modules/@prisma/client/index.d.ts ===

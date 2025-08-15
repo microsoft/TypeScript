@@ -5,10 +5,10 @@ interface IProps {
 >IProps : Symbol(IProps, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 0, 0))
 
     iconProp?: string;
->iconProp : Symbol(iconProp, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 0, 18))
+>iconProp : Symbol(IProps.iconProp, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 0, 18))
 
     nestedProp?: {
->nestedProp : Symbol(nestedProp, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 1, 22))
+>nestedProp : Symbol(IProps.nestedProp, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 1, 22))
 
         testBool?: boolean;
 >testBool : Symbol(testBool, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 2, 18))
@@ -19,7 +19,7 @@ interface INestedProps {
 >INestedProps : Symbol(INestedProps, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 5, 1))
 
     nestedProps?: IProps;
->nestedProps : Symbol(nestedProps, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 7, 24))
+>nestedProps : Symbol(INestedProps.nestedProps, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 7, 24))
 >IProps : Symbol(IProps, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 0, 0))
 }
 

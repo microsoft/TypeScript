@@ -18,10 +18,10 @@ declare module "m" {
     export function foo(): X.foo;
 >foo : Symbol(foo, Decl(exportSpecifierReferencingOuterDeclaration3.ts, 3, 17))
 >X : Symbol(X, Decl(exportSpecifierReferencingOuterDeclaration3.ts, 1, 20))
->foo : Symbol(foo, Decl(exportSpecifierReferencingOuterDeclaration3.ts, 2, 14))
+>foo : Symbol(X.foo, Decl(exportSpecifierReferencingOuterDeclaration3.ts, 2, 14))
 
     export function bar(): X.bar; // error
 >bar : Symbol(bar, Decl(exportSpecifierReferencingOuterDeclaration3.ts, 4, 33))
 >X : Symbol(X, Decl(exportSpecifierReferencingOuterDeclaration3.ts, 1, 20))
->bar : Symbol(bar)
+>bar : Symbol(X.bar)
 }

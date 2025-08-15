@@ -1,27 +1,6 @@
 --- old.privateNameStaticEmitHelpers.symbols
 +++ new.privateNameStaticEmitHelpers.symbols
-@@= skipped -4, +4 lines =@@
- >S : Symbol(S, Decl(main.ts, 0, 0))
-
-     static #a = 1;
-->#a : Symbol(S.#a, Decl(main.ts, 0, 16))
-+>#a : Symbol(#a, Decl(main.ts, 0, 16))
-
-     static #b() { this.#a = 42; }
-->#b : Symbol(S.#b, Decl(main.ts, 1, 18))
-->this.#a : Symbol(S.#a, Decl(main.ts, 0, 16))
-+>#b : Symbol(#b, Decl(main.ts, 1, 18))
-+>this.#a : Symbol(#a, Decl(main.ts, 0, 16))
- >this : Symbol(S, Decl(main.ts, 0, 0))
-
-     static get #c() { return S.#b(); }
-->#c : Symbol(S.#c, Decl(main.ts, 2, 33))
-->S.#b : Symbol(S.#b, Decl(main.ts, 1, 18))
-+>#c : Symbol(#c, Decl(main.ts, 2, 33))
-+>S.#b : Symbol(#b, Decl(main.ts, 1, 18))
- >S : Symbol(S, Decl(main.ts, 0, 0))
- }
-
+@@= skipped -20, +20 lines =@@
  === tslib.d.ts ===
  // these are pre-TS4.3 versions of emit helpers, which only supported private instance fields
  export declare function __classPrivateFieldGet<T extends object, V>(receiver: T, state: any): V;

@@ -16,5 +16,5 @@ interface Foo {
 >s : Symbol(s, Decl(functionAndInterfaceWithSeparateErrors.ts, 4, 5))
 
     prop: number;
->prop : Symbol(prop, Decl(functionAndInterfaceWithSeparateErrors.ts, 4, 24))
+>prop : Symbol(Foo.prop, Decl(functionAndInterfaceWithSeparateErrors.ts, 4, 24))
 }

@@ -9,8 +9,7 @@
 
    /** @type {string} */
    x;
-->x : Symbol(Abcde.x, Decl(test.js, 0, 13))
-+>x : Symbol(x, Decl(test.js, 0, 13))
+@@= skipped -8, +8 lines =@@
  }
 
  module.exports = {
@@ -23,7 +22,7 @@
 
    Abcde
  >Abcde : Symbol(Abcde, Decl(test.js, 5, 18))
-@@= skipped -22, +22 lines =@@
+@@= skipped -14, +14 lines =@@
  >Abcde : Symbol(Abcde, Decl(index.ts, 0, 8))
 
  declare module "./test" {
@@ -32,19 +31,11 @@
 
    interface Abcde { b: string }
 ->Abcde : Symbol(Abcde, Decl(test.js, 0, 0), Decl(index.ts, 2, 25))
-->b : Symbol(Abcde.b, Decl(index.ts, 3, 19))
 +>Abcde : Symbol(Abcde, Decl(index.ts, 2, 25))
-+>b : Symbol(b, Decl(index.ts, 3, 19))
+ >b : Symbol(Abcde.b, Decl(index.ts, 3, 19))
  }
 
- new Abcde().x;
-->new Abcde().x : Symbol(Abcde.x, Decl(test.js, 0, 13))
-+>new Abcde().x : Symbol(x, Decl(test.js, 0, 13))
- >Abcde : Symbol(Abcde, Decl(index.ts, 0, 8))
-->x : Symbol(Abcde.x, Decl(test.js, 0, 13))
-+>x : Symbol(x, Decl(test.js, 0, 13))
-
- // Bug: the type meaning from /test.js does not
+@@= skipped -16, +16 lines =@@
  // propagate through the object literal export.
  const x: Abcde = { b: "" };
  >x : Symbol(x, Decl(index.ts, 10, 5))

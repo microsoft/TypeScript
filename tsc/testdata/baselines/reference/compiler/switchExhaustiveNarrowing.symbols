@@ -5,14 +5,14 @@ interface ClientSource {
 >ClientSource : Symbol(ClientSource, Decl(switchExhaustiveNarrowing.ts, 0, 0))
 
   type: "client";
->type : Symbol(type, Decl(switchExhaustiveNarrowing.ts, 0, 24))
+>type : Symbol(ClientSource.type, Decl(switchExhaustiveNarrowing.ts, 0, 24))
 }
 
 interface ServiceSource {
 >ServiceSource : Symbol(ServiceSource, Decl(switchExhaustiveNarrowing.ts, 2, 1))
 
   type: "service";
->type : Symbol(type, Decl(switchExhaustiveNarrowing.ts, 4, 25))
+>type : Symbol(ServiceSource.type, Decl(switchExhaustiveNarrowing.ts, 4, 25))
 }
 
 function isDisplaySource(source: ClientSource | ServiceSource | undefined): boolean {

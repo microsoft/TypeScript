@@ -6,9 +6,9 @@ function A() { }
 >A : Symbol(A, Decl(privateNameJsBadAssignment.js, 0, 18))
 
 A.prototype.#no = 2;         // Error (outside class body)
->A.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>A.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >A : Symbol(A, Decl(privateNameJsBadAssignment.js, 0, 18))
->prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 
 class B {}
 >B : Symbol(B, Decl(privateNameJsBadAssignment.js, 2, 20))
@@ -20,7 +20,7 @@ class C {
 >C : Symbol(C, Decl(privateNameJsBadAssignment.js, 5, 11))
 
     #bar = 6;
->#bar : Symbol(#bar, Decl(privateNameJsBadAssignment.js, 7, 9))
+>#bar : Symbol(C.#bar, Decl(privateNameJsBadAssignment.js, 7, 9))
 
     constructor () {
         this.#foo = 3;       // Error (undeclared)

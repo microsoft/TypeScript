@@ -170,9 +170,9 @@ const funcs: Funcs = {
     sfoo: x => x.length,  // x: string
 >sfoo : Symbol(sfoo, Decl(indexSignatures1.ts, 61, 22))
 >x : Symbol(x, Decl(indexSignatures1.ts, 62, 9))
->x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(indexSignatures1.ts, 62, 9))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
     nfoo: x => x * 2,     // n: number
 >nfoo : Symbol(nfoo, Decl(indexSignatures1.ts, 62, 24))
@@ -704,9 +704,9 @@ plugins[system][SomeSytePlugin] = () => console.log('awsome');
 >plugins : Symbol(plugins, Decl(indexSignatures1.ts, 236, 5))
 >system : Symbol(system, Decl(indexSignatures1.ts, 229, 5))
 >SomeSytePlugin : Symbol(SomeSytePlugin, Decl(indexSignatures1.ts, 230, 5))
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 
 plugins[system][SomeSytePlugin]();
 >plugins : Symbol(plugins, Decl(indexSignatures1.ts, 236, 5))
@@ -882,10 +882,10 @@ interface AA {
 >AA : Symbol(AA, Decl(indexSignatures1.ts, 297, 16))
 
     a?: string;
->a : Symbol(a, Decl(indexSignatures1.ts, 301, 14))
+>a : Symbol(AA.a, Decl(indexSignatures1.ts, 301, 14))
 
     b?: number;
->b : Symbol(b, Decl(indexSignatures1.ts, 302, 15))
+>b : Symbol(AA.b, Decl(indexSignatures1.ts, 302, 15))
 
     [key: symbol]: string;
 >key : Symbol(key, Decl(indexSignatures1.ts, 304, 5))

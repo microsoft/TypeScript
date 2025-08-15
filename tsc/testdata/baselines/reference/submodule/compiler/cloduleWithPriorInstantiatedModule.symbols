@@ -9,7 +9,7 @@ module Moclodule {
 >Someinterface : Symbol(Someinterface, Decl(cloduleWithPriorInstantiatedModule.ts, 1, 18))
 
         foo(): void;
->foo : Symbol(foo, Decl(cloduleWithPriorInstantiatedModule.ts, 2, 36))
+>foo : Symbol(Someinterface.foo, Decl(cloduleWithPriorInstantiatedModule.ts, 2, 36))
     }
     var x = 10;
 >x : Symbol(x, Decl(cloduleWithPriorInstantiatedModule.ts, 5, 7))

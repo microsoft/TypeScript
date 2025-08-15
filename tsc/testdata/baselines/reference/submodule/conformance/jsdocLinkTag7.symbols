@@ -15,12 +15,12 @@ class Foo {
      * {@linkplain this.#c}
      */
     a() { }
->a : Symbol(a, Decl(a.js, 0, 11))
+>a : Symbol(Foo.a, Decl(a.js, 0, 11))
 
     b() { }
->b : Symbol(b, Decl(a.js, 11, 11))
+>b : Symbol(Foo.b, Decl(a.js, 11, 11))
 
     #c() { }
->#c : Symbol(#c, Decl(a.js, 12, 11))
+>#c : Symbol(Foo.#c, Decl(a.js, 12, 11))
 }
 

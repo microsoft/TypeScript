@@ -9,7 +9,7 @@ class Vector {
 >Vector : Symbol(Vector, Decl(thisInArrowFunctionInStaticInitializer1.ts, 0, 19))
 
  static foo = () => {
->foo : Symbol(foo, Decl(thisInArrowFunctionInStaticInitializer1.ts, 2, 14))
+>foo : Symbol(Vector.foo, Decl(thisInArrowFunctionInStaticInitializer1.ts, 2, 14))
 
   // 'this' should be allowed in a static initializer.
   log(this);

@@ -1,9 +1,0 @@
---- old.importCallExpressionInCJS3.types
-+++ new.importCallExpressionInCJS3.types
-@@= skipped -41, +41 lines =@@
- foo(import("./0"));
- >foo(import("./0")) : void
- >foo : (x: Promise<any>) => void
-->import("./0") : Promise<typeof import("0")>
-+>import("./0") : Promise<typeof import("./0")>
- >"./0" : "./0"

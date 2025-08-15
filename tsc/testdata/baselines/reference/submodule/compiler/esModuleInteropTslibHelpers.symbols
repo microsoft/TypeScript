@@ -26,7 +26,7 @@ export class Foo2 { }
 
 === file3.ts ===
 import {default as resolve} from "path";
->default : Symbol("path", Decl(refs.d.ts, 0, 0))
+>default : Symbol(resolve, Decl(refs.d.ts, 0, 0))
 >resolve : Symbol(resolve, Decl(file3.ts, 0, 8))
 
 resolve("", "../");
@@ -38,7 +38,7 @@ export class Foo3 { }
 === file4.ts ===
 import {Bar, default as resolve} from "path";
 >Bar : Symbol(Bar, Decl(file4.ts, 0, 8))
->default : Symbol("path", Decl(refs.d.ts, 0, 0))
+>default : Symbol(Bar, Decl(refs.d.ts, 0, 0))
 >resolve : Symbol(resolve, Decl(file4.ts, 0, 12))
 
 resolve("", "../");

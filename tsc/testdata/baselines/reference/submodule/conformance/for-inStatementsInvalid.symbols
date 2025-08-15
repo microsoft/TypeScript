@@ -85,19 +85,19 @@ class A {
 >A : Symbol(A, Decl(for-inStatementsInvalid.ts, 24, 67))
 
     biz() : number{
->biz : Symbol(biz, Decl(for-inStatementsInvalid.ts, 26, 9))
+>biz : Symbol(A.biz, Decl(for-inStatementsInvalid.ts, 26, 9))
 
         for (var x in this.biz()) { }
 >x : Symbol(x, Decl(for-inStatementsInvalid.ts, 28, 16), Decl(for-inStatementsInvalid.ts, 29, 16), Decl(for-inStatementsInvalid.ts, 30, 16))
->this.biz : Symbol(biz, Decl(for-inStatementsInvalid.ts, 26, 9))
+>this.biz : Symbol(A.biz, Decl(for-inStatementsInvalid.ts, 26, 9))
 >this : Symbol(A, Decl(for-inStatementsInvalid.ts, 24, 67))
->biz : Symbol(biz, Decl(for-inStatementsInvalid.ts, 26, 9))
+>biz : Symbol(A.biz, Decl(for-inStatementsInvalid.ts, 26, 9))
 
         for (var x in this.biz) { }
 >x : Symbol(x, Decl(for-inStatementsInvalid.ts, 28, 16), Decl(for-inStatementsInvalid.ts, 29, 16), Decl(for-inStatementsInvalid.ts, 30, 16))
->this.biz : Symbol(biz, Decl(for-inStatementsInvalid.ts, 26, 9))
+>this.biz : Symbol(A.biz, Decl(for-inStatementsInvalid.ts, 26, 9))
 >this : Symbol(A, Decl(for-inStatementsInvalid.ts, 24, 67))
->biz : Symbol(biz, Decl(for-inStatementsInvalid.ts, 26, 9))
+>biz : Symbol(A.biz, Decl(for-inStatementsInvalid.ts, 26, 9))
 
         for (var x in this) { }
 >x : Symbol(x, Decl(for-inStatementsInvalid.ts, 28, 16), Decl(for-inStatementsInvalid.ts, 29, 16), Decl(for-inStatementsInvalid.ts, 30, 16))
@@ -107,7 +107,7 @@ class A {
     }
 
     static baz() : number {
->baz : Symbol(baz, Decl(for-inStatementsInvalid.ts, 32, 5))
+>baz : Symbol(A.baz, Decl(for-inStatementsInvalid.ts, 32, 5))
 
         for (var x in this) { }
 >x : Symbol(x, Decl(for-inStatementsInvalid.ts, 35, 16), Decl(for-inStatementsInvalid.ts, 36, 16), Decl(for-inStatementsInvalid.ts, 37, 16))
@@ -115,15 +115,15 @@ class A {
 
         for (var x in this.baz) { }
 >x : Symbol(x, Decl(for-inStatementsInvalid.ts, 35, 16), Decl(for-inStatementsInvalid.ts, 36, 16), Decl(for-inStatementsInvalid.ts, 37, 16))
->this.baz : Symbol(baz, Decl(for-inStatementsInvalid.ts, 32, 5))
+>this.baz : Symbol(A.baz, Decl(for-inStatementsInvalid.ts, 32, 5))
 >this : Symbol(A, Decl(for-inStatementsInvalid.ts, 24, 67))
->baz : Symbol(baz, Decl(for-inStatementsInvalid.ts, 32, 5))
+>baz : Symbol(A.baz, Decl(for-inStatementsInvalid.ts, 32, 5))
 
         for (var x in this.baz()) { }
 >x : Symbol(x, Decl(for-inStatementsInvalid.ts, 35, 16), Decl(for-inStatementsInvalid.ts, 36, 16), Decl(for-inStatementsInvalid.ts, 37, 16))
->this.baz : Symbol(baz, Decl(for-inStatementsInvalid.ts, 32, 5))
+>this.baz : Symbol(A.baz, Decl(for-inStatementsInvalid.ts, 32, 5))
 >this : Symbol(A, Decl(for-inStatementsInvalid.ts, 24, 67))
->baz : Symbol(baz, Decl(for-inStatementsInvalid.ts, 32, 5))
+>baz : Symbol(A.baz, Decl(for-inStatementsInvalid.ts, 32, 5))
 
         return null;
     }
@@ -134,19 +134,19 @@ class B extends A {
 >A : Symbol(A, Decl(for-inStatementsInvalid.ts, 24, 67))
 
     boz() {
->boz : Symbol(boz, Decl(for-inStatementsInvalid.ts, 43, 19))
+>boz : Symbol(B.boz, Decl(for-inStatementsInvalid.ts, 43, 19))
 
         for (var x in this.biz()) { }
 >x : Symbol(x, Decl(for-inStatementsInvalid.ts, 45, 16), Decl(for-inStatementsInvalid.ts, 46, 16), Decl(for-inStatementsInvalid.ts, 47, 16), Decl(for-inStatementsInvalid.ts, 49, 16), Decl(for-inStatementsInvalid.ts, 50, 16))
->this.biz : Symbol(biz, Decl(for-inStatementsInvalid.ts, 26, 9))
+>this.biz : Symbol(A.biz, Decl(for-inStatementsInvalid.ts, 26, 9))
 >this : Symbol(B, Decl(for-inStatementsInvalid.ts, 41, 1))
->biz : Symbol(biz, Decl(for-inStatementsInvalid.ts, 26, 9))
+>biz : Symbol(A.biz, Decl(for-inStatementsInvalid.ts, 26, 9))
 
         for (var x in this.biz) { }
 >x : Symbol(x, Decl(for-inStatementsInvalid.ts, 45, 16), Decl(for-inStatementsInvalid.ts, 46, 16), Decl(for-inStatementsInvalid.ts, 47, 16), Decl(for-inStatementsInvalid.ts, 49, 16), Decl(for-inStatementsInvalid.ts, 50, 16))
->this.biz : Symbol(biz, Decl(for-inStatementsInvalid.ts, 26, 9))
+>this.biz : Symbol(A.biz, Decl(for-inStatementsInvalid.ts, 26, 9))
 >this : Symbol(B, Decl(for-inStatementsInvalid.ts, 41, 1))
->biz : Symbol(biz, Decl(for-inStatementsInvalid.ts, 26, 9))
+>biz : Symbol(A.biz, Decl(for-inStatementsInvalid.ts, 26, 9))
 
         for (var x in this) { }
 >x : Symbol(x, Decl(for-inStatementsInvalid.ts, 45, 16), Decl(for-inStatementsInvalid.ts, 46, 16), Decl(for-inStatementsInvalid.ts, 47, 16), Decl(for-inStatementsInvalid.ts, 49, 16), Decl(for-inStatementsInvalid.ts, 50, 16))
@@ -154,15 +154,15 @@ class B extends A {
 
         for (var x in super.biz) { }
 >x : Symbol(x, Decl(for-inStatementsInvalid.ts, 45, 16), Decl(for-inStatementsInvalid.ts, 46, 16), Decl(for-inStatementsInvalid.ts, 47, 16), Decl(for-inStatementsInvalid.ts, 49, 16), Decl(for-inStatementsInvalid.ts, 50, 16))
->super.biz : Symbol(biz, Decl(for-inStatementsInvalid.ts, 26, 9))
+>super.biz : Symbol(A.biz, Decl(for-inStatementsInvalid.ts, 26, 9))
 >super : Symbol(A, Decl(for-inStatementsInvalid.ts, 24, 67))
->biz : Symbol(biz, Decl(for-inStatementsInvalid.ts, 26, 9))
+>biz : Symbol(A.biz, Decl(for-inStatementsInvalid.ts, 26, 9))
 
         for (var x in super.biz()) { }
 >x : Symbol(x, Decl(for-inStatementsInvalid.ts, 45, 16), Decl(for-inStatementsInvalid.ts, 46, 16), Decl(for-inStatementsInvalid.ts, 47, 16), Decl(for-inStatementsInvalid.ts, 49, 16), Decl(for-inStatementsInvalid.ts, 50, 16))
->super.biz : Symbol(biz, Decl(for-inStatementsInvalid.ts, 26, 9))
+>super.biz : Symbol(A.biz, Decl(for-inStatementsInvalid.ts, 26, 9))
 >super : Symbol(A, Decl(for-inStatementsInvalid.ts, 24, 67))
->biz : Symbol(biz, Decl(for-inStatementsInvalid.ts, 26, 9))
+>biz : Symbol(A.biz, Decl(for-inStatementsInvalid.ts, 26, 9))
 
         return null;
     }
@@ -172,7 +172,7 @@ interface I {
 >I : Symbol(I, Decl(for-inStatementsInvalid.ts, 53, 1))
 
     id: number;
->id : Symbol(id, Decl(for-inStatementsInvalid.ts, 55, 13))
+>id : Symbol(I.id, Decl(for-inStatementsInvalid.ts, 55, 13))
 
     [idx: number]: number;
 >idx : Symbol(idx, Decl(for-inStatementsInvalid.ts, 57, 5))

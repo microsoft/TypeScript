@@ -16,9 +16,9 @@ const getStringGetter = (key) => {
 
   return () => {
     return /** @type {string} */ (cache.get(key))
->cache.get : Symbol(get, Decl(lib.es2015.collection.d.ts, --, --))
+>cache.get : Symbol(Map.get, Decl(lib.es2015.collection.d.ts, --, --))
 >cache : Symbol(cache, Decl(index.js, 1, 5))
->get : Symbol(get, Decl(lib.es2015.collection.d.ts, --, --))
+>get : Symbol(Map.get, Decl(lib.es2015.collection.d.ts, --, --))
 >key : Symbol(key, Decl(index.js, 7, 25))
   }
 }

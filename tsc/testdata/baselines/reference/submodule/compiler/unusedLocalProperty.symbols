@@ -10,11 +10,11 @@ class Animal {
 >Animal : Symbol(Animal, Decl(unusedLocalProperty.ts, 0, 45))
 
     constructor(private species: string) {
->species : Symbol(species, Decl(unusedLocalProperty.ts, 2, 16))
+>species : Symbol(Animal.species, Decl(unusedLocalProperty.ts, 2, 16))
     }
 
     printSpecies() {
->printSpecies : Symbol(printSpecies, Decl(unusedLocalProperty.ts, 3, 5))
+>printSpecies : Symbol(Animal.printSpecies, Decl(unusedLocalProperty.ts, 3, 5))
 
         let { species } = this;
 >species : Symbol(species, Decl(unusedLocalProperty.ts, 6, 13))

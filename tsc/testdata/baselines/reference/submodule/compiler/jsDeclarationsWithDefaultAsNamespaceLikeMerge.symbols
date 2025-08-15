@@ -29,7 +29,7 @@ interface NamespacedMappers {
 >NamespacedMappers : Symbol(NamespacedMappers, Decl(helper.d.ts, 4, 1))
 
     mapState: Mapper<Computed>;
->mapState : Symbol(mapState, Decl(helper.d.ts, 5, 29))
+>mapState : Symbol(NamespacedMappers.mapState, Decl(helper.d.ts, 5, 29))
 >Mapper : Symbol(Mapper, Decl(helper.d.ts, 0, 26))
 >Computed : Symbol(Computed, Decl(helper.d.ts, 0, 0))
 }

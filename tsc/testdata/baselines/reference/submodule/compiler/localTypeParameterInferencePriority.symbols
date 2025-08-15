@@ -25,12 +25,12 @@ class Table<S extends Schema>  {
 >Schema : Symbol(Schema, Decl(localTypeParameterInferencePriority.ts, 2, 10))
 
     __schema!: S;
->__schema : Symbol(__schema, Decl(localTypeParameterInferencePriority.ts, 6, 32))
+>__schema : Symbol(Table.__schema, Decl(localTypeParameterInferencePriority.ts, 6, 32))
 >S : Symbol(S, Decl(localTypeParameterInferencePriority.ts, 6, 12))
 
     // Removing this line, removes the error 
     getRows<C extends keyof S>(): Array<UnrollOnHover<Pick<S, C>>> {
->getRows : Symbol(getRows, Decl(localTypeParameterInferencePriority.ts, 7, 17))
+>getRows : Symbol(Table.getRows, Decl(localTypeParameterInferencePriority.ts, 7, 17))
 >C : Symbol(C, Decl(localTypeParameterInferencePriority.ts, 10, 12))
 >S : Symbol(S, Decl(localTypeParameterInferencePriority.ts, 6, 12))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

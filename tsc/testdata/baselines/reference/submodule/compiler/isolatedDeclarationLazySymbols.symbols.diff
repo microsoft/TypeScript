@@ -24,11 +24,3 @@
  >o.prop.inner : Symbol(inner, Decl(isolatedDeclarationLazySymbols.ts, 6, 11))
  >o.prop : Symbol(prop, Decl(isolatedDeclarationLazySymbols.ts, 5, 24))
  >o : Symbol(o, Decl(isolatedDeclarationLazySymbols.ts, 4, 5))
-@@= skipped -16, +16 lines =@@
- >Foo : Symbol(Foo, Decl(isolatedDeclarationLazySymbols.ts, 12, 24))
-
-     [o["prop.inner"]] ="A"
-->[o["prop.inner"]] : Symbol(Foo[o["prop.inner"]], Decl(isolatedDeclarationLazySymbols.ts, 14, 18))
-+>[o["prop.inner"]] : Symbol([o["prop.inner"]], Decl(isolatedDeclarationLazySymbols.ts, 14, 18))
- >o : Symbol(o, Decl(isolatedDeclarationLazySymbols.ts, 4, 5))
- >"prop.inner" : Symbol(["prop.inner"], Decl(isolatedDeclarationLazySymbols.ts, 4, 11))

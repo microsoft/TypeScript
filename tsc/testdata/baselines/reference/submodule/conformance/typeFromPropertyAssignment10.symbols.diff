@@ -43,13 +43,7 @@
 
      constructor() {
          /** @type {number} */
-         this.y = 12;
-->this.y : Symbol(Inner.y, Decl(someview.js, 7, 19))
-+>this.y : Symbol(y, Decl(someview.js, 7, 19))
- >this : Symbol(Inner, Decl(someview.js, 6, 17))
-->y : Symbol(Inner.y, Decl(someview.js, 7, 19))
-+>y : Symbol(y, Decl(someview.js, 7, 19))
-     }
+@@= skipped -16, +12 lines =@@
  }
  var example = new Outer.app.Inner();
  >example : Symbol(example, Decl(someview.js, 12, 3))
@@ -76,7 +70,7 @@
  >k : Symbol(k, Decl(someview.js, 15, 32))
 
      return k ** k;
-@@= skipped -42, +28 lines =@@
+@@= skipped -26, +16 lines =@@
  }
  === application.js ===
  Outer.app.Application = (function () {

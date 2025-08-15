@@ -7,25 +7,25 @@ interface A {
 >A : Symbol(A, Decl(exhaustiveSwitchStatementsGeneric1.ts, 0, 0))
 
   type: "a";
->type : Symbol(type, Decl(exhaustiveSwitchStatementsGeneric1.ts, 2, 13))
+>type : Symbol(A.type, Decl(exhaustiveSwitchStatementsGeneric1.ts, 2, 13))
 }
 
 interface B {
 >B : Symbol(B, Decl(exhaustiveSwitchStatementsGeneric1.ts, 4, 1))
 
   type: "b";
->type : Symbol(type, Decl(exhaustiveSwitchStatementsGeneric1.ts, 6, 13))
+>type : Symbol(B.type, Decl(exhaustiveSwitchStatementsGeneric1.ts, 6, 13))
 }
 
 interface Types {
 >Types : Symbol(Types, Decl(exhaustiveSwitchStatementsGeneric1.ts, 8, 1))
 
   a: A;
->a : Symbol(a, Decl(exhaustiveSwitchStatementsGeneric1.ts, 10, 17))
+>a : Symbol(Types.a, Decl(exhaustiveSwitchStatementsGeneric1.ts, 10, 17))
 >A : Symbol(A, Decl(exhaustiveSwitchStatementsGeneric1.ts, 0, 0))
 
   b: B;
->b : Symbol(b, Decl(exhaustiveSwitchStatementsGeneric1.ts, 11, 7))
+>b : Symbol(Types.b, Decl(exhaustiveSwitchStatementsGeneric1.ts, 11, 7))
 >B : Symbol(B, Decl(exhaustiveSwitchStatementsGeneric1.ts, 4, 1))
 }
 

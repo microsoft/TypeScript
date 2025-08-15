@@ -58,11 +58,11 @@
 ->n : number
 +>exports.f = exports.g = function fg(n) {    return n + 1} : (n: any) => any
 +>exports.f : (n: any) => any
-+>exports : typeof import("./mod")
++>exports : typeof import("mod")
 +>f : (n: any) => any
 +>exports.g = function fg(n) {    return n + 1} : (n: any) => any
 +>exports.g : any
-+>exports : typeof import("./mod")
++>exports : typeof import("mod")
 +>g : any
 +>function fg(n) {    return n + 1} : (n: any) => any
 +>fg : (n: any) => any
@@ -94,15 +94,15 @@
 ->mom : string
 +>module.exports.h = module.exports.i = function hi(mom) {    return `hi, ${mom}!`;} : (mom: any) => string
 +>module.exports.h : (mom: any) => string
-+>module.exports : typeof import("./mod")
-+>module : { "\"mod\"": typeof import("./mod"); }
-+>exports : typeof import("./mod")
++>module.exports : typeof import("mod")
++>module : { "\"mod\"": typeof import("mod"); }
++>exports : typeof import("mod")
 +>h : (mom: any) => string
 +>module.exports.i = function hi(mom) {    return `hi, ${mom}!`;} : (mom: any) => string
 +>module.exports.i : any
-+>module.exports : typeof import("./mod")
-+>module : { "\"mod\"": typeof import("./mod"); }
-+>exports : typeof import("./mod")
++>module.exports : typeof import("mod")
++>module : { "\"mod\"": typeof import("mod"); }
++>exports : typeof import("mod")
 +>i : any
 +>function hi(mom) {    return `hi, ${mom}!`;} : (mom: any) => string
 +>hi : (mom: any) => string

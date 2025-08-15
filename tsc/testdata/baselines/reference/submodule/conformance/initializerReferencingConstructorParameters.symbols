@@ -7,10 +7,10 @@ class C {
 >C : Symbol(C, Decl(initializerReferencingConstructorParameters.ts, 0, 0))
 
     a = x; // error
->a : Symbol(a, Decl(initializerReferencingConstructorParameters.ts, 2, 9))
+>a : Symbol(C.a, Decl(initializerReferencingConstructorParameters.ts, 2, 9))
 
     b: typeof x; // error
->b : Symbol(b, Decl(initializerReferencingConstructorParameters.ts, 3, 10))
+>b : Symbol(C.b, Decl(initializerReferencingConstructorParameters.ts, 3, 10))
 
     constructor(x) { }
 >x : Symbol(x, Decl(initializerReferencingConstructorParameters.ts, 5, 16))
@@ -20,32 +20,32 @@ class D {
 >D : Symbol(D, Decl(initializerReferencingConstructorParameters.ts, 6, 1))
 
     a = x; // error
->a : Symbol(a, Decl(initializerReferencingConstructorParameters.ts, 8, 9))
+>a : Symbol(D.a, Decl(initializerReferencingConstructorParameters.ts, 8, 9))
 
     b: typeof x; // error
->b : Symbol(b, Decl(initializerReferencingConstructorParameters.ts, 9, 10))
+>b : Symbol(D.b, Decl(initializerReferencingConstructorParameters.ts, 9, 10))
 
     constructor(public x) { }
->x : Symbol(x, Decl(initializerReferencingConstructorParameters.ts, 11, 16))
+>x : Symbol(D.x, Decl(initializerReferencingConstructorParameters.ts, 11, 16))
 }
 
 class E {
 >E : Symbol(E, Decl(initializerReferencingConstructorParameters.ts, 12, 1))
 
     a = this.x; // ok
->a : Symbol(a, Decl(initializerReferencingConstructorParameters.ts, 14, 9))
->this.x : Symbol(x, Decl(initializerReferencingConstructorParameters.ts, 17, 16))
+>a : Symbol(E.a, Decl(initializerReferencingConstructorParameters.ts, 14, 9))
+>this.x : Symbol(E.x, Decl(initializerReferencingConstructorParameters.ts, 17, 16))
 >this : Symbol(E, Decl(initializerReferencingConstructorParameters.ts, 12, 1))
->x : Symbol(x, Decl(initializerReferencingConstructorParameters.ts, 17, 16))
+>x : Symbol(E.x, Decl(initializerReferencingConstructorParameters.ts, 17, 16))
 
     b: typeof this.x; // ok
->b : Symbol(b, Decl(initializerReferencingConstructorParameters.ts, 15, 15))
->this.x : Symbol(x, Decl(initializerReferencingConstructorParameters.ts, 17, 16))
+>b : Symbol(E.b, Decl(initializerReferencingConstructorParameters.ts, 15, 15))
+>this.x : Symbol(E.x, Decl(initializerReferencingConstructorParameters.ts, 17, 16))
 >this : Symbol(E, Decl(initializerReferencingConstructorParameters.ts, 12, 1))
->x : Symbol(x, Decl(initializerReferencingConstructorParameters.ts, 17, 16))
+>x : Symbol(E.x, Decl(initializerReferencingConstructorParameters.ts, 17, 16))
 
     constructor(public x) { }
->x : Symbol(x, Decl(initializerReferencingConstructorParameters.ts, 17, 16))
+>x : Symbol(E.x, Decl(initializerReferencingConstructorParameters.ts, 17, 16))
 }
 
 class F<T> {
@@ -53,15 +53,15 @@ class F<T> {
 >T : Symbol(T, Decl(initializerReferencingConstructorParameters.ts, 20, 8))
 
     a = this.x; // ok
->a : Symbol(a, Decl(initializerReferencingConstructorParameters.ts, 20, 12))
->this.x : Symbol(x, Decl(initializerReferencingConstructorParameters.ts, 23, 16))
+>a : Symbol(F.a, Decl(initializerReferencingConstructorParameters.ts, 20, 12))
+>this.x : Symbol(F.x, Decl(initializerReferencingConstructorParameters.ts, 23, 16))
 >this : Symbol(F, Decl(initializerReferencingConstructorParameters.ts, 18, 1))
->x : Symbol(x, Decl(initializerReferencingConstructorParameters.ts, 23, 16))
+>x : Symbol(F.x, Decl(initializerReferencingConstructorParameters.ts, 23, 16))
 
     b = x; // error
->b : Symbol(b, Decl(initializerReferencingConstructorParameters.ts, 21, 15))
+>b : Symbol(F.b, Decl(initializerReferencingConstructorParameters.ts, 21, 15))
 
     constructor(public x: T) { }
->x : Symbol(x, Decl(initializerReferencingConstructorParameters.ts, 23, 16))
+>x : Symbol(F.x, Decl(initializerReferencingConstructorParameters.ts, 23, 16))
 >T : Symbol(T, Decl(initializerReferencingConstructorParameters.ts, 20, 8))
 }

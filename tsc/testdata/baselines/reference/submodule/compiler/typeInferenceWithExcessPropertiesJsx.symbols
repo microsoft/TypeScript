@@ -55,7 +55,7 @@ declare function T<Entry extends TranslationEntry>(
 
 ): JSX.Element;
 >JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
->Element : Symbol(Element, Decl(react16.d.ts, 2494, 23))
+>Element : Symbol(JSX.Element, Decl(react16.d.ts, 2494, 23))
 
 <T getTranslationEntry={(allTranslations) => allTranslations.a} args="a" />
 >T : Symbol(T, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 15, 8))

@@ -6,11 +6,11 @@ interface IndexedWithThis {
 
     // this is a workaround for React
     init?: (this: this) => void;
->init : Symbol(init, Decl(thisTypeInFunctions2.ts, 0, 27))
+>init : Symbol(IndexedWithThis.init, Decl(thisTypeInFunctions2.ts, 0, 27))
 >this : Symbol(this, Decl(thisTypeInFunctions2.ts, 2, 12))
 
     willDestroy?: (this: any) => void;
->willDestroy : Symbol(willDestroy, Decl(thisTypeInFunctions2.ts, 2, 32))
+>willDestroy : Symbol(IndexedWithThis.willDestroy, Decl(thisTypeInFunctions2.ts, 2, 32))
 >this : Symbol(this, Decl(thisTypeInFunctions2.ts, 3, 19))
 
     [propName: string]: number | string | boolean | symbol | undefined | null | {} | ((this: any, ...args:any[]) => any);
@@ -23,10 +23,10 @@ interface IndexedWithoutThis {
 
     // this is what React would like to write (and what they write today)
     init?: () => void;
->init : Symbol(init, Decl(thisTypeInFunctions2.ts, 6, 30))
+>init : Symbol(IndexedWithoutThis.init, Decl(thisTypeInFunctions2.ts, 6, 30))
 
     willDestroy?: () => void;
->willDestroy : Symbol(willDestroy, Decl(thisTypeInFunctions2.ts, 8, 22))
+>willDestroy : Symbol(IndexedWithoutThis.willDestroy, Decl(thisTypeInFunctions2.ts, 8, 22))
 
     [propName: string]: any;
 >propName : Symbol(propName, Decl(thisTypeInFunctions2.ts, 10, 5))
@@ -35,11 +35,11 @@ interface SimpleInterface {
 >SimpleInterface : Symbol(SimpleInterface, Decl(thisTypeInFunctions2.ts, 11, 1))
 
     foo(n: string);
->foo : Symbol(foo, Decl(thisTypeInFunctions2.ts, 12, 27))
+>foo : Symbol(SimpleInterface.foo, Decl(thisTypeInFunctions2.ts, 12, 27))
 >n : Symbol(n, Decl(thisTypeInFunctions2.ts, 13, 8))
 
     bar(): number;
->bar : Symbol(bar, Decl(thisTypeInFunctions2.ts, 13, 19))
+>bar : Symbol(SimpleInterface.bar, Decl(thisTypeInFunctions2.ts, 13, 19))
 }
 declare function extend1(args: IndexedWithThis): void;
 >extend1 : Symbol(extend1, Decl(thisTypeInFunctions2.ts, 15, 1))
@@ -67,9 +67,9 @@ extend1({
 
         // this.mine
         this.willDestroy
->this.willDestroy : Symbol(willDestroy, Decl(thisTypeInFunctions2.ts, 2, 32))
+>this.willDestroy : Symbol(IndexedWithThis.willDestroy, Decl(thisTypeInFunctions2.ts, 2, 32))
 >this : Symbol(this, Decl(thisTypeInFunctions2.ts, 2, 12))
->willDestroy : Symbol(willDestroy, Decl(thisTypeInFunctions2.ts, 2, 32))
+>willDestroy : Symbol(IndexedWithThis.willDestroy, Decl(thisTypeInFunctions2.ts, 2, 32))
 
     },
     mine: 12,
@@ -95,9 +95,9 @@ extend2({
 >this : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
 
         this.mine
->this.mine : Symbol(__index, Decl(thisTypeInFunctions2.ts, 9, 29))
+>this.mine : Symbol(IndexedWithoutThis[__index], Decl(thisTypeInFunctions2.ts, 9, 29))
 >this : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
->mine : Symbol(__index, Decl(thisTypeInFunctions2.ts, 9, 29))
+>mine : Symbol(IndexedWithoutThis[__index], Decl(thisTypeInFunctions2.ts, 9, 29))
 
     },
     mine: 13,
@@ -110,9 +110,9 @@ extend2({
 >this : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
 
         this.mine
->this.mine : Symbol(__index, Decl(thisTypeInFunctions2.ts, 9, 29))
+>this.mine : Symbol(IndexedWithoutThis[__index], Decl(thisTypeInFunctions2.ts, 9, 29))
 >this : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
->mine : Symbol(__index, Decl(thisTypeInFunctions2.ts, 9, 29))
+>mine : Symbol(IndexedWithoutThis[__index], Decl(thisTypeInFunctions2.ts, 9, 29))
     }
 });
 
@@ -124,12 +124,12 @@ simple({
 >n : Symbol(n, Decl(thisTypeInFunctions2.ts, 45, 8))
 
         return n.length + this.bar();
->n.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>n.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >n : Symbol(n, Decl(thisTypeInFunctions2.ts, 45, 8))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
->this.bar : Symbol(bar, Decl(thisTypeInFunctions2.ts, 13, 19))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>this.bar : Symbol(SimpleInterface.bar, Decl(thisTypeInFunctions2.ts, 13, 19))
 >this : Symbol(SimpleInterface, Decl(thisTypeInFunctions2.ts, 11, 1))
->bar : Symbol(bar, Decl(thisTypeInFunctions2.ts, 13, 19))
+>bar : Symbol(SimpleInterface.bar, Decl(thisTypeInFunctions2.ts, 13, 19))
 
     },
     bar() {

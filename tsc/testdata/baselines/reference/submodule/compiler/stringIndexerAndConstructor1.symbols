@@ -8,5 +8,5 @@ interface I {
 >s : Symbol(s, Decl(stringIndexerAndConstructor1.ts, 1, 5))
 
     "": string;
->"" : Symbol("", Decl(stringIndexerAndConstructor1.ts, 1, 24))
+>"" : Symbol(I[""], Decl(stringIndexerAndConstructor1.ts, 1, 24))
 }

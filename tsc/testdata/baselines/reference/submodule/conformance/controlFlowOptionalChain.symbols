@@ -24,9 +24,9 @@ o?.[a = 1];
 >a : Symbol(a, Decl(controlFlowOptionalChain.ts, 7, 3))
 
 a.toString();
->a.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>a.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(controlFlowOptionalChain.ts, 7, 3))
->toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 
 let b: number;
 >b : Symbol(b, Decl(controlFlowOptionalChain.ts, 11, 3))
@@ -36,9 +36,9 @@ o?.x[b = 1];
 >b : Symbol(b, Decl(controlFlowOptionalChain.ts, 11, 3))
 
 b.toString();
->b.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>b.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >b : Symbol(b, Decl(controlFlowOptionalChain.ts, 11, 3))
->toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 
 let c: number;
 >c : Symbol(c, Decl(controlFlowOptionalChain.ts, 15, 3))
@@ -48,9 +48,9 @@ o?.(c = 1)
 >c : Symbol(c, Decl(controlFlowOptionalChain.ts, 15, 3))
 
 c.toString();
->c.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>c.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >c : Symbol(c, Decl(controlFlowOptionalChain.ts, 15, 3))
->toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 
 let d: number;
 >d : Symbol(d, Decl(controlFlowOptionalChain.ts, 19, 3))
@@ -60,9 +60,9 @@ o?.x(d = 1);
 >d : Symbol(d, Decl(controlFlowOptionalChain.ts, 19, 3))
 
 d.toString();
->d.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>d.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >d : Symbol(d, Decl(controlFlowOptionalChain.ts, 19, 3))
->toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 
 // type predicates
 declare const f: undefined | ((x: any) => x is number);
@@ -482,7 +482,7 @@ interface Base {
 >Base : Symbol(Base, Decl(controlFlowOptionalChain.ts, 111, 11))
 
     f(): this is Derived;
->f : Symbol(f, Decl(controlFlowOptionalChain.ts, 113, 16))
+>f : Symbol(Base.f, Decl(controlFlowOptionalChain.ts, 113, 16))
 >Derived : Symbol(Derived, Decl(controlFlowOptionalChain.ts, 115, 1))
 }
 
@@ -491,7 +491,7 @@ interface Derived extends Base {
 >Base : Symbol(Base, Decl(controlFlowOptionalChain.ts, 111, 11))
 
     x: number;
->x : Symbol(x, Decl(controlFlowOptionalChain.ts, 117, 32))
+>x : Symbol(Derived.x, Decl(controlFlowOptionalChain.ts, 117, 32))
 }
 
 declare const o6: Base | undefined;
@@ -499,44 +499,44 @@ declare const o6: Base | undefined;
 >Base : Symbol(Base, Decl(controlFlowOptionalChain.ts, 111, 11))
 
 if (o6?.f()) {
->o6?.f : Symbol(f, Decl(controlFlowOptionalChain.ts, 113, 16))
+>o6?.f : Symbol(Base.f, Decl(controlFlowOptionalChain.ts, 113, 16))
 >o6 : Symbol(o6, Decl(controlFlowOptionalChain.ts, 121, 13))
->f : Symbol(f, Decl(controlFlowOptionalChain.ts, 113, 16))
+>f : Symbol(Base.f, Decl(controlFlowOptionalChain.ts, 113, 16))
 
     o6; // Derived
 >o6 : Symbol(o6, Decl(controlFlowOptionalChain.ts, 121, 13))
 
     o6.f;
->o6.f : Symbol(f, Decl(controlFlowOptionalChain.ts, 113, 16))
+>o6.f : Symbol(Base.f, Decl(controlFlowOptionalChain.ts, 113, 16))
 >o6 : Symbol(o6, Decl(controlFlowOptionalChain.ts, 121, 13))
->f : Symbol(f, Decl(controlFlowOptionalChain.ts, 113, 16))
+>f : Symbol(Base.f, Decl(controlFlowOptionalChain.ts, 113, 16))
 }
 else {
     o6;
 >o6 : Symbol(o6, Decl(controlFlowOptionalChain.ts, 121, 13))
 
     o6?.f;
->o6?.f : Symbol(f, Decl(controlFlowOptionalChain.ts, 113, 16))
+>o6?.f : Symbol(Base.f, Decl(controlFlowOptionalChain.ts, 113, 16))
 >o6 : Symbol(o6, Decl(controlFlowOptionalChain.ts, 121, 13))
->f : Symbol(f, Decl(controlFlowOptionalChain.ts, 113, 16))
+>f : Symbol(Base.f, Decl(controlFlowOptionalChain.ts, 113, 16))
 
     o6.f;
->o6.f : Symbol(f, Decl(controlFlowOptionalChain.ts, 113, 16))
+>o6.f : Symbol(Base.f, Decl(controlFlowOptionalChain.ts, 113, 16))
 >o6 : Symbol(o6, Decl(controlFlowOptionalChain.ts, 121, 13))
->f : Symbol(f, Decl(controlFlowOptionalChain.ts, 113, 16))
+>f : Symbol(Base.f, Decl(controlFlowOptionalChain.ts, 113, 16))
 }
 o6;
 >o6 : Symbol(o6, Decl(controlFlowOptionalChain.ts, 121, 13))
 
 o6?.f;
->o6?.f : Symbol(f, Decl(controlFlowOptionalChain.ts, 113, 16))
+>o6?.f : Symbol(Base.f, Decl(controlFlowOptionalChain.ts, 113, 16))
 >o6 : Symbol(o6, Decl(controlFlowOptionalChain.ts, 121, 13))
->f : Symbol(f, Decl(controlFlowOptionalChain.ts, 113, 16))
+>f : Symbol(Base.f, Decl(controlFlowOptionalChain.ts, 113, 16))
 
 o6.f;
->o6.f : Symbol(f, Decl(controlFlowOptionalChain.ts, 113, 16))
+>o6.f : Symbol(Base.f, Decl(controlFlowOptionalChain.ts, 113, 16))
 >o6 : Symbol(o6, Decl(controlFlowOptionalChain.ts, 121, 13))
->f : Symbol(f, Decl(controlFlowOptionalChain.ts, 113, 16))
+>f : Symbol(Base.f, Decl(controlFlowOptionalChain.ts, 113, 16))
 
 // asserts
 declare const isDefined: <T>(value: T) => asserts value is NonNullable<T>;
@@ -1679,9 +1679,9 @@ function getArea(shape?: Shape) {
 
         case 'circle':
             return Math.PI * shape.radius ** 2
->Math.PI : Symbol(PI, Decl(lib.es5.d.ts, --, --))
+>Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
 >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->PI : Symbol(PI, Decl(lib.es5.d.ts, --, --))
+>PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
 >shape.radius : Symbol(radius, Decl(controlFlowOptionalChain.ts, 526, 23))
 >shape : Symbol(shape, Decl(controlFlowOptionalChain.ts, 528, 17))
 >radius : Symbol(radius, Decl(controlFlowOptionalChain.ts, 526, 23))
@@ -1747,7 +1747,7 @@ interface SomeObject {
 >SomeObject : Symbol(SomeObject, Decl(controlFlowOptionalChain.ts, 553, 1))
 
     someProperty: unknown;
->someProperty : Symbol(someProperty, Decl(controlFlowOptionalChain.ts, 557, 22))
+>someProperty : Symbol(SomeObject.someProperty, Decl(controlFlowOptionalChain.ts, 557, 22))
 }
 
 let lastSomeProperty: unknown | undefined;
@@ -1759,30 +1759,30 @@ function someFunction(someOptionalObject: SomeObject | undefined): void {
 >SomeObject : Symbol(SomeObject, Decl(controlFlowOptionalChain.ts, 553, 1))
 
     if (someOptionalObject?.someProperty !== lastSomeProperty) {
->someOptionalObject?.someProperty : Symbol(someProperty, Decl(controlFlowOptionalChain.ts, 557, 22))
+>someOptionalObject?.someProperty : Symbol(SomeObject.someProperty, Decl(controlFlowOptionalChain.ts, 557, 22))
 >someOptionalObject : Symbol(someOptionalObject, Decl(controlFlowOptionalChain.ts, 563, 22))
->someProperty : Symbol(someProperty, Decl(controlFlowOptionalChain.ts, 557, 22))
+>someProperty : Symbol(SomeObject.someProperty, Decl(controlFlowOptionalChain.ts, 557, 22))
 >lastSomeProperty : Symbol(lastSomeProperty, Decl(controlFlowOptionalChain.ts, 561, 3))
 
         console.log(someOptionalObject);
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >someOptionalObject : Symbol(someOptionalObject, Decl(controlFlowOptionalChain.ts, 563, 22))
 
         console.log(someOptionalObject.someProperty);  // Error
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
->someOptionalObject.someProperty : Symbol(someProperty, Decl(controlFlowOptionalChain.ts, 557, 22))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>someOptionalObject.someProperty : Symbol(SomeObject.someProperty, Decl(controlFlowOptionalChain.ts, 557, 22))
 >someOptionalObject : Symbol(someOptionalObject, Decl(controlFlowOptionalChain.ts, 563, 22))
->someProperty : Symbol(someProperty, Decl(controlFlowOptionalChain.ts, 557, 22))
+>someProperty : Symbol(SomeObject.someProperty, Decl(controlFlowOptionalChain.ts, 557, 22))
 
         lastSomeProperty = someOptionalObject?.someProperty;
 >lastSomeProperty : Symbol(lastSomeProperty, Decl(controlFlowOptionalChain.ts, 561, 3))
->someOptionalObject?.someProperty : Symbol(someProperty, Decl(controlFlowOptionalChain.ts, 557, 22))
+>someOptionalObject?.someProperty : Symbol(SomeObject.someProperty, Decl(controlFlowOptionalChain.ts, 557, 22))
 >someOptionalObject : Symbol(someOptionalObject, Decl(controlFlowOptionalChain.ts, 563, 22))
->someProperty : Symbol(someProperty, Decl(controlFlowOptionalChain.ts, 557, 22))
+>someProperty : Symbol(SomeObject.someProperty, Decl(controlFlowOptionalChain.ts, 557, 22))
     }
 }
 
@@ -1828,9 +1828,9 @@ while (arr[i]?.tag === "left") {
 >tag : Symbol(tag, Decl(controlFlowOptionalChain.ts, 581, 20))
 
         console.log("I should ALSO be reachable");
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
     }
 }
 

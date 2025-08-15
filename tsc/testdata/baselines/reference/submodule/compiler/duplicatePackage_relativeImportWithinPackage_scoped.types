@@ -2,15 +2,15 @@
 
 === /index.ts ===
 import { use } from "@foo/bar/use";
->use : (o: import("@foo/bar").C) => void
+>use : (o: import("/node_modules/@foo/bar/index").C) => void
 
 import { o } from "a";
->o : import("a/node_modules/@foo/bar").C
+>o : import("/node_modules/a/node_modules/@foo/bar/index").C
 
 use(o);
 >use(o) : void
->use : (o: import("@foo/bar").C) => void
->o : import("a/node_modules/@foo/bar").C
+>use : (o: import("/node_modules/@foo/bar/index").C) => void
+>o : import("/node_modules/a/node_modules/@foo/bar/index").C
 
 === /node_modules/a/node_modules/@foo/bar/index.d.ts ===
 export class C {

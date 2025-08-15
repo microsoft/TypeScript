@@ -31,12 +31,12 @@ module multiM {
     }
 }
 new multiM.b();
->multiM.b : Symbol(b, Decl(commentsMultiModuleSingleFile.ts, 1, 15))
+>multiM.b : Symbol(multiM.b, Decl(commentsMultiModuleSingleFile.ts, 1, 15))
 >multiM : Symbol(multiM, Decl(commentsMultiModuleSingleFile.ts, 0, 0), Decl(commentsMultiModuleSingleFile.ts, 9, 1))
->b : Symbol(b, Decl(commentsMultiModuleSingleFile.ts, 1, 15))
+>b : Symbol(multiM.b, Decl(commentsMultiModuleSingleFile.ts, 1, 15))
 
 new multiM.c();
->multiM.c : Symbol(c, Decl(commentsMultiModuleSingleFile.ts, 12, 15))
+>multiM.c : Symbol(multiM.c, Decl(commentsMultiModuleSingleFile.ts, 12, 15))
 >multiM : Symbol(multiM, Decl(commentsMultiModuleSingleFile.ts, 0, 0), Decl(commentsMultiModuleSingleFile.ts, 9, 1))
->c : Symbol(c, Decl(commentsMultiModuleSingleFile.ts, 12, 15))
+>c : Symbol(multiM.c, Decl(commentsMultiModuleSingleFile.ts, 12, 15))
 

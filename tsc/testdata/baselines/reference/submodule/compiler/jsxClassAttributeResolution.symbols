@@ -15,7 +15,7 @@ interface IntrinsicClassAttributesAlias<T> {
 >T : Symbol(T, Decl(index.d.ts, 0, 40))
 
     ref: T
->ref : Symbol(ref, Decl(index.d.ts, 0, 44))
+>ref : Symbol(IntrinsicClassAttributesAlias.ref, Decl(index.d.ts, 0, 44))
 >T : Symbol(T, Decl(index.d.ts, 0, 40))
 }
 declare namespace JSX {

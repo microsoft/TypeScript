@@ -8,13 +8,13 @@ namespace JSX {
 >Element : Symbol(Element, Decl(jsxComponentTypeErrors.tsx, 0, 15))
 
     type: 'element';
->type : Symbol(type, Decl(jsxComponentTypeErrors.tsx, 1, 28))
+>type : Symbol(Element.type, Decl(jsxComponentTypeErrors.tsx, 1, 28))
   }
   export interface ElementClass {
 >ElementClass : Symbol(ElementClass, Decl(jsxComponentTypeErrors.tsx, 3, 3))
 
     type: 'element-class';
->type : Symbol(type, Decl(jsxComponentTypeErrors.tsx, 4, 33))
+>type : Symbol(ElementClass.type, Decl(jsxComponentTypeErrors.tsx, 4, 33))
   }
 }
 
@@ -31,9 +31,9 @@ function FunctionComponent<T extends string>({type}: {type?: T}) {
   }
 }
 FunctionComponent.useThis = function() {
->FunctionComponent.useThis : Symbol(useThis, Decl(jsxComponentTypeErrors.tsx, 13, 1))
+>FunctionComponent.useThis : Symbol(FunctionComponent.useThis, Decl(jsxComponentTypeErrors.tsx, 13, 1))
 >FunctionComponent : Symbol(FunctionComponent, Decl(jsxComponentTypeErrors.tsx, 7, 1))
->useThis : Symbol(useThis, Decl(jsxComponentTypeErrors.tsx, 13, 1))
+>useThis : Symbol(FunctionComponent.useThis, Decl(jsxComponentTypeErrors.tsx, 13, 1))
 
   return <this type="foo" />;
 >this : Symbol(FunctionComponent, Decl(jsxComponentTypeErrors.tsx, 7, 1))
@@ -44,14 +44,14 @@ class ClassComponent {
 >ClassComponent : Symbol(ClassComponent, Decl(jsxComponentTypeErrors.tsx, 16, 1))
 
   type = 'string';
->type : Symbol(type, Decl(jsxComponentTypeErrors.tsx, 18, 22))
+>type : Symbol(ClassComponent.type, Decl(jsxComponentTypeErrors.tsx, 18, 22))
 }
 
 const MixedComponent = Math.random() ? FunctionComponent : ClassComponent;
 >MixedComponent : Symbol(MixedComponent, Decl(jsxComponentTypeErrors.tsx, 22, 5))
->Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 >FunctionComponent : Symbol(FunctionComponent, Decl(jsxComponentTypeErrors.tsx, 7, 1))
 >ClassComponent : Symbol(ClassComponent, Decl(jsxComponentTypeErrors.tsx, 16, 1))
 

@@ -1,14 +1,8 @@
 --- old.checkingObjectDefinePropertyOnFunctionNonexistentPropertyNoCrash1.symbols
 +++ new.checkingObjectDefinePropertyOnFunctionNonexistentPropertyNoCrash1.symbols
-@@= skipped -9, +9 lines =@@
- >args : Symbol(args, Decl(index.js, 1, 29))
-
-   Object.defineProperty(composed, 'name', {
-->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+@@= skipped -13, +13 lines =@@
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
-->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+ >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
  >composed : Symbol(composed, Decl(index.js, 1, 7))
 ->'name' : Symbol(composed.name, Decl(index.js, 1, 41))
 

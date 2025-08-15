@@ -7,7 +7,7 @@ class C {
 >C : Symbol(C, Decl(derivedClassTransitivity.ts, 0, 0))
 
     foo(x: number) { }
->foo : Symbol(foo, Decl(derivedClassTransitivity.ts, 2, 9))
+>foo : Symbol(C.foo, Decl(derivedClassTransitivity.ts, 2, 9))
 >x : Symbol(x, Decl(derivedClassTransitivity.ts, 3, 8))
 }
 
@@ -16,7 +16,7 @@ class D extends C {
 >C : Symbol(C, Decl(derivedClassTransitivity.ts, 0, 0))
 
     foo() { } // ok to drop parameters
->foo : Symbol(foo, Decl(derivedClassTransitivity.ts, 6, 19))
+>foo : Symbol(D.foo, Decl(derivedClassTransitivity.ts, 6, 19))
 }
 
 class E extends D {
@@ -24,7 +24,7 @@ class E extends D {
 >D : Symbol(D, Decl(derivedClassTransitivity.ts, 4, 1))
 
     foo(x?: string) { } // ok to add optional parameters
->foo : Symbol(foo, Decl(derivedClassTransitivity.ts, 10, 19))
+>foo : Symbol(E.foo, Decl(derivedClassTransitivity.ts, 10, 19))
 >x : Symbol(x, Decl(derivedClassTransitivity.ts, 11, 8))
 }
 
@@ -46,13 +46,13 @@ c = e;
 
 var r = c.foo(1);
 >r : Symbol(r, Decl(derivedClassTransitivity.ts, 18, 3))
->c.foo : Symbol(foo, Decl(derivedClassTransitivity.ts, 2, 9))
+>c.foo : Symbol(C.foo, Decl(derivedClassTransitivity.ts, 2, 9))
 >c : Symbol(c, Decl(derivedClassTransitivity.ts, 14, 3))
->foo : Symbol(foo, Decl(derivedClassTransitivity.ts, 2, 9))
+>foo : Symbol(C.foo, Decl(derivedClassTransitivity.ts, 2, 9))
 
 var r2 = e.foo('');
 >r2 : Symbol(r2, Decl(derivedClassTransitivity.ts, 19, 3))
->e.foo : Symbol(foo, Decl(derivedClassTransitivity.ts, 10, 19))
+>e.foo : Symbol(E.foo, Decl(derivedClassTransitivity.ts, 10, 19))
 >e : Symbol(e, Decl(derivedClassTransitivity.ts, 16, 3))
->foo : Symbol(foo, Decl(derivedClassTransitivity.ts, 10, 19))
+>foo : Symbol(E.foo, Decl(derivedClassTransitivity.ts, 10, 19))
 

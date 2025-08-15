@@ -5,14 +5,14 @@ class A {
 >A : A
 
     foo() {
->foo : () => import("./es5ExportEqualsDts").B
+>foo : () => import("es5ExportEqualsDts").B
 
         var aVal: A.B;
->aVal : import("./es5ExportEqualsDts").B
+>aVal : import("es5ExportEqualsDts").B
 >A : any
 
         return aVal;
->aVal : import("./es5ExportEqualsDts").B
+>aVal : import("es5ExportEqualsDts").B
     }
 }
 

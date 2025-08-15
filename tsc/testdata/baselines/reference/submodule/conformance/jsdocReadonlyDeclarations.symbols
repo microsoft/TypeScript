@@ -6,16 +6,16 @@ class C {
 
     /** @readonly */
     x = 6
->x : Symbol(x, Decl(jsdocReadonlyDeclarations.js, 0, 9))
+>x : Symbol(C.x, Decl(jsdocReadonlyDeclarations.js, 0, 9))
 
     /** @readonly */
     constructor(n) {
 >n : Symbol(n, Decl(jsdocReadonlyDeclarations.js, 4, 16))
 
         this.x = n
->this.x : Symbol(x, Decl(jsdocReadonlyDeclarations.js, 0, 9))
+>this.x : Symbol(C.x, Decl(jsdocReadonlyDeclarations.js, 0, 9))
 >this : Symbol(C, Decl(jsdocReadonlyDeclarations.js, 0, 0))
->x : Symbol(x, Decl(jsdocReadonlyDeclarations.js, 0, 9))
+>x : Symbol(C.x, Decl(jsdocReadonlyDeclarations.js, 0, 9))
 >n : Symbol(n, Decl(jsdocReadonlyDeclarations.js, 4, 16))
 
         /**
@@ -23,16 +23,16 @@ class C {
          * @type {number}
          */
         this.y = n
->this.y : Symbol(y, Decl(jsdocReadonlyDeclarations.js, 5, 18))
+>this.y : Symbol(C.y, Decl(jsdocReadonlyDeclarations.js, 5, 18))
 >this : Symbol(C, Decl(jsdocReadonlyDeclarations.js, 0, 0))
->y : Symbol(y, Decl(jsdocReadonlyDeclarations.js, 5, 18))
+>y : Symbol(C.y, Decl(jsdocReadonlyDeclarations.js, 5, 18))
 >n : Symbol(n, Decl(jsdocReadonlyDeclarations.js, 4, 16))
     }
 }
 new C().x
->new C().x : Symbol(x, Decl(jsdocReadonlyDeclarations.js, 0, 9))
+>new C().x : Symbol(C.x, Decl(jsdocReadonlyDeclarations.js, 0, 9))
 >C : Symbol(C, Decl(jsdocReadonlyDeclarations.js, 0, 0))
->x : Symbol(x, Decl(jsdocReadonlyDeclarations.js, 0, 9))
+>x : Symbol(C.x, Decl(jsdocReadonlyDeclarations.js, 0, 9))
 
 function F() {
 >F : Symbol(F, Decl(jsdocReadonlyDeclarations.js, 13, 9))

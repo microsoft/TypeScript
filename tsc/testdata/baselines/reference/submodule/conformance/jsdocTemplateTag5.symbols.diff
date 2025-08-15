@@ -16,15 +16,12 @@
  };
 
  Multimap.prototype = {
-->Multimap.prototype : Symbol(Multimap.prototype, Decl(a.js, 9, 2))
+ >Multimap.prototype : Symbol(Multimap.prototype, Decl(a.js, 9, 2))
 ->Multimap : Symbol(Multimap, Decl(a.js, 0, 0), Decl(a.js, 9, 2))
-->prototype : Symbol(Multimap.prototype, Decl(a.js, 9, 2))
-+>Multimap.prototype : Symbol(prototype, Decl(a.js, 9, 2))
 +>Multimap : Symbol(Multimap, Decl(a.js, 0, 0))
-+>prototype : Symbol(prototype, Decl(a.js, 9, 2))
+ >prototype : Symbol(Multimap.prototype, Decl(a.js, 9, 2))
 
      /**
-      * @param {K} key the key ok
 @@= skipped -24, +20 lines =@@
  >key : Symbol(key, Decl(a.js, 16, 8))
 
@@ -52,15 +49,12 @@
  };
 
  Multimap2.prototype = {
-->Multimap2.prototype : Symbol(Multimap2.prototype, Decl(a.js, 30, 2))
+ >Multimap2.prototype : Symbol(Multimap2.prototype, Decl(a.js, 30, 2))
 ->Multimap2 : Symbol(Multimap2, Decl(a.js, 27, 3), Decl(a.js, 30, 2))
-->prototype : Symbol(Multimap2.prototype, Decl(a.js, 30, 2))
-+>Multimap2.prototype : Symbol(prototype, Decl(a.js, 30, 2))
 +>Multimap2 : Symbol(Multimap2, Decl(a.js, 27, 3))
-+>prototype : Symbol(prototype, Decl(a.js, 30, 2))
+ >prototype : Symbol(Multimap2.prototype, Decl(a.js, 30, 2))
 
      /**
-      * @param {K} key the key ok
 @@= skipped -24, +20 lines =@@
  >key : Symbol(key, Decl(a.js, 37, 18))
 
@@ -105,11 +99,11 @@
 ->Ns : Symbol(Ns, Decl(a.js, 42, 3), Decl(a.js, 42, 12), Decl(a.js, 52, 2))
 ->Multimap3 : Symbol(Ns.Multimap3, Decl(a.js, 42, 12), Decl(a.js, 54, 3))
 ->prototype : Symbol(Ns.Multimap3.prototype, Decl(a.js, 52, 2))
-+>Ns.Multimap3.prototype : Symbol(prototype, Decl(a.js, 52, 2))
++>Ns.Multimap3.prototype : Symbol(Multimap3.prototype, Decl(a.js, 52, 2))
 +>Ns.Multimap3 : Symbol(Multimap3, Decl(a.js, 42, 12))
 +>Ns : Symbol(Ns, Decl(a.js, 42, 3))
 +>Multimap3 : Symbol(Multimap3, Decl(a.js, 42, 12))
-+>prototype : Symbol(prototype, Decl(a.js, 52, 2))
++>prototype : Symbol(Multimap3.prototype, Decl(a.js, 52, 2))
 
      /**
       * @param {K} key the key ok

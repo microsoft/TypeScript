@@ -12,8 +12,8 @@
 ->ASC : Symbol(Order.ASC, Decl(lovefield-ts.d.ts, 2, 23), Decl(enums.js, 1, 18))
 ->DESC : Symbol(Order.DESC, Decl(lovefield-ts.d.ts, 2, 28), Decl(enums.js, 0, 13))
 +>Order : Symbol(Order, Decl(lovefield-ts.d.ts, 1, 22))
-+>ASC : Symbol(ASC, Decl(lovefield-ts.d.ts, 2, 23))
-+>DESC : Symbol(DESC, Decl(lovefield-ts.d.ts, 2, 28))
++>ASC : Symbol(Order.ASC, Decl(lovefield-ts.d.ts, 2, 23))
++>DESC : Symbol(Order.DESC, Decl(lovefield-ts.d.ts, 2, 28))
  }
 
  === enums.js ===
@@ -21,9 +21,9 @@
 ->lf.Order : Symbol(lf.Order, Decl(lovefield-ts.d.ts, 1, 22), Decl(enums.js, 0, 0), Decl(enums.js, 1, 3), Decl(enums.js, 2, 3))
 ->lf : Symbol(lf, Decl(lovefield-ts.d.ts, 0, 0), Decl(enums.js, 0, 0), Decl(enums.js, 0, 13), Decl(enums.js, 1, 18))
 ->Order : Symbol(lf.Order, Decl(lovefield-ts.d.ts, 1, 22), Decl(enums.js, 0, 0), Decl(enums.js, 1, 3), Decl(enums.js, 2, 3))
-+>lf.Order : Symbol(Order, Decl(lovefield-ts.d.ts, 1, 22))
++>lf.Order : Symbol(lf.Order, Decl(lovefield-ts.d.ts, 1, 22))
 +>lf : Symbol(lf, Decl(lovefield-ts.d.ts, 0, 0))
-+>Order : Symbol(Order, Decl(lovefield-ts.d.ts, 1, 22))
++>Order : Symbol(lf.Order, Decl(lovefield-ts.d.ts, 1, 22))
 
  lf.Order.DESC = 0;
 ->lf.Order.DESC : Symbol(lf.Order.DESC, Decl(lovefield-ts.d.ts, 2, 28), Decl(enums.js, 0, 13))
@@ -31,11 +31,11 @@
 ->lf : Symbol(lf, Decl(lovefield-ts.d.ts, 0, 0), Decl(enums.js, 0, 0), Decl(enums.js, 0, 13), Decl(enums.js, 1, 18))
 ->Order : Symbol(lf.Order, Decl(lovefield-ts.d.ts, 1, 22), Decl(enums.js, 0, 0), Decl(enums.js, 1, 3), Decl(enums.js, 2, 3))
 ->DESC : Symbol(lf.Order.DESC, Decl(lovefield-ts.d.ts, 2, 28), Decl(enums.js, 0, 13))
-+>lf.Order.DESC : Symbol(DESC, Decl(lovefield-ts.d.ts, 2, 28))
-+>lf.Order : Symbol(Order, Decl(lovefield-ts.d.ts, 1, 22))
++>lf.Order.DESC : Symbol(lf.Order.DESC, Decl(lovefield-ts.d.ts, 2, 28))
++>lf.Order : Symbol(lf.Order, Decl(lovefield-ts.d.ts, 1, 22))
 +>lf : Symbol(lf, Decl(lovefield-ts.d.ts, 0, 0))
-+>Order : Symbol(Order, Decl(lovefield-ts.d.ts, 1, 22))
-+>DESC : Symbol(DESC, Decl(lovefield-ts.d.ts, 2, 28))
++>Order : Symbol(lf.Order, Decl(lovefield-ts.d.ts, 1, 22))
++>DESC : Symbol(lf.Order.DESC, Decl(lovefield-ts.d.ts, 2, 28))
 
  lf.Order.ASC = 1;
 ->lf.Order.ASC : Symbol(lf.Order.ASC, Decl(lovefield-ts.d.ts, 2, 23), Decl(enums.js, 1, 18))
@@ -43,8 +43,8 @@
 ->lf : Symbol(lf, Decl(lovefield-ts.d.ts, 0, 0), Decl(enums.js, 0, 0), Decl(enums.js, 0, 13), Decl(enums.js, 1, 18))
 ->Order : Symbol(lf.Order, Decl(lovefield-ts.d.ts, 1, 22), Decl(enums.js, 0, 0), Decl(enums.js, 1, 3), Decl(enums.js, 2, 3))
 ->ASC : Symbol(lf.Order.ASC, Decl(lovefield-ts.d.ts, 2, 23), Decl(enums.js, 1, 18))
-+>lf.Order.ASC : Symbol(ASC, Decl(lovefield-ts.d.ts, 2, 23))
-+>lf.Order : Symbol(Order, Decl(lovefield-ts.d.ts, 1, 22))
++>lf.Order.ASC : Symbol(lf.Order.ASC, Decl(lovefield-ts.d.ts, 2, 23))
++>lf.Order : Symbol(lf.Order, Decl(lovefield-ts.d.ts, 1, 22))
 +>lf : Symbol(lf, Decl(lovefield-ts.d.ts, 0, 0))
-+>Order : Symbol(Order, Decl(lovefield-ts.d.ts, 1, 22))
-+>ASC : Symbol(ASC, Decl(lovefield-ts.d.ts, 2, 23))
++>Order : Symbol(lf.Order, Decl(lovefield-ts.d.ts, 1, 22))
++>ASC : Symbol(lf.Order.ASC, Decl(lovefield-ts.d.ts, 2, 23))

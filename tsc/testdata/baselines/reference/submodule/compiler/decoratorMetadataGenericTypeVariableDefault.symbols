@@ -7,7 +7,7 @@ export class C<TypeVariable = string> {
 
   @Decorate
   member: TypeVariable;
->member : Symbol(member, Decl(decoratorMetadataGenericTypeVariableDefault.ts, 0, 39))
+>member : Symbol(C.member, Decl(decoratorMetadataGenericTypeVariableDefault.ts, 0, 39))
 >TypeVariable : Symbol(TypeVariable, Decl(decoratorMetadataGenericTypeVariableDefault.ts, 0, 15))
 }
 

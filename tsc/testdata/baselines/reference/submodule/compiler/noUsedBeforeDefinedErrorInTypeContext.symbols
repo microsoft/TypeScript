@@ -8,7 +8,7 @@ interface IThing<T> {
 >T : Symbol(T, Decl(noUsedBeforeDefinedErrorInTypeContext.ts, 2, 17))
 
     owner: T;
->owner : Symbol(owner, Decl(noUsedBeforeDefinedErrorInTypeContext.ts, 2, 21))
+>owner : Symbol(IThing.owner, Decl(noUsedBeforeDefinedErrorInTypeContext.ts, 2, 21))
 >T : Symbol(T, Decl(noUsedBeforeDefinedErrorInTypeContext.ts, 2, 17))
 }
 

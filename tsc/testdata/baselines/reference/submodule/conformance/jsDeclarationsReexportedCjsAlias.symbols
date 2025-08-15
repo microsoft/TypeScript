@@ -36,7 +36,7 @@ class SomeClass {
 >SomeClass : Symbol(SomeClass, Decl(lib.js, 5, 1))
 
     a() {
->a : Symbol(a, Decl(lib.js, 7, 17))
+>a : Symbol(SomeClass.a, Decl(lib.js, 7, 17))
 
         return 1;
     }

@@ -20,6 +20,6 @@ export default MyConstEnum;
 
 === ReExport.ts ===
 export { MyConstEnum as default } from './ConstEnum';
->MyConstEnum : typeof import("./ConstEnum").MyConstEnum
->default : typeof import("./ConstEnum").MyConstEnum
+>MyConstEnum : typeof import("ConstEnum").MyConstEnum
+>default : typeof import("ConstEnum").MyConstEnum
 

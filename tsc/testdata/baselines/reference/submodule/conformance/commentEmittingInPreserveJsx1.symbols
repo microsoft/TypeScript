@@ -5,14 +5,14 @@ import React = require('react');
 >React : Symbol(React, Decl(file.tsx, 0, 0))
 
 <div>
->div : Symbol(div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 
     // Not Comment
 </div>;
->div : Symbol(div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 
 <div>
->div : Symbol(div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 
     // Not Comment
     {
@@ -20,10 +20,10 @@ import React = require('react');
     }
     // Another not Comment
 </div>;
->div : Symbol(div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 
 <div>
->div : Symbol(div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 
     // Not Comment
     {
@@ -32,10 +32,10 @@ import React = require('react');
     }
     // Another not Comment
 </div>;
->div : Symbol(div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 
 <div>
->div : Symbol(div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 
     /* Not Comment */
     {
@@ -43,5 +43,5 @@ import React = require('react');
         "Hi"
     }
 </div>;
->div : Symbol(div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 

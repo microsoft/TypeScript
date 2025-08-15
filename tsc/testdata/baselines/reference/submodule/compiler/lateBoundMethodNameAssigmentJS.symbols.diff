@@ -4,15 +4,9 @@
          this[_symbol] = this[_symbol].bind(this);
  >this : Symbol(MyClass, Decl(lateBoundMethodNameAssigmentJS.js, 0, 31))
  >_symbol : Symbol(_symbol, Decl(lateBoundMethodNameAssigmentJS.js, 0, 5))
-+>this[_symbol].bind : Symbol(bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>this[_symbol].bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >this : Symbol(MyClass, Decl(lateBoundMethodNameAssigmentJS.js, 0, 31))
  >_symbol : Symbol(_symbol, Decl(lateBoundMethodNameAssigmentJS.js, 0, 5))
-+>bind : Symbol(bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >this : Symbol(MyClass, Decl(lateBoundMethodNameAssigmentJS.js, 0, 31))
      }
-
-     async [_symbol]() { }
-->[_symbol] : Symbol(MyClass[_symbol], Decl(lateBoundMethodNameAssigmentJS.js, 4, 5))
-+>[_symbol] : Symbol([_symbol], Decl(lateBoundMethodNameAssigmentJS.js, 4, 5))
- >_symbol : Symbol(_symbol, Decl(lateBoundMethodNameAssigmentJS.js, 0, 5))
- }

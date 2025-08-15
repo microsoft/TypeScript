@@ -8,17 +8,17 @@ declare namespace JSX {
 >IntrinsicElements : Symbol(IntrinsicElements, Decl(checkJsxNamespaceNamesQuestionableForms.tsx, 0, 23))
 
         'this:b': any;
->'this:b' : Symbol('this:b', Decl(checkJsxNamespaceNamesQuestionableForms.tsx, 1, 33))
+>'this:b' : Symbol(IntrinsicElements["this:b"], Decl(checkJsxNamespaceNamesQuestionableForms.tsx, 1, 33))
 
         'b:c': {
->'b:c' : Symbol('b:c', Decl(checkJsxNamespaceNamesQuestionableForms.tsx, 2, 22))
+>'b:c' : Symbol(IntrinsicElements["b:c"], Decl(checkJsxNamespaceNamesQuestionableForms.tsx, 2, 22))
 
             x: any
 >x : Symbol(x, Decl(checkJsxNamespaceNamesQuestionableForms.tsx, 3, 16))
 
         };
         'a:b': any;
->'a:b' : Symbol('a:b', Decl(checkJsxNamespaceNamesQuestionableForms.tsx, 5, 10))
+>'a:b' : Symbol(IntrinsicElements["a:b"], Decl(checkJsxNamespaceNamesQuestionableForms.tsx, 5, 10))
     }
 }
 

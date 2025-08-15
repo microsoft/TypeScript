@@ -15,12 +15,12 @@ class A {
 >dec : Symbol(dec, Decl(privateNamesAndDecorators.ts, 0, 0))
 
     #foo = 1;
->#foo : Symbol(#foo, Decl(privateNamesAndDecorators.ts, 2, 9))
+>#foo : Symbol(A.#foo, Decl(privateNamesAndDecorators.ts, 2, 9))
 
     @dec                // Error
 >dec : Symbol(dec, Decl(privateNamesAndDecorators.ts, 0, 0))
 
     #bar(): void { }
->#bar : Symbol(#bar, Decl(privateNamesAndDecorators.ts, 4, 13))
+>#bar : Symbol(A.#bar, Decl(privateNamesAndDecorators.ts, 4, 13))
 }
 

@@ -44,35 +44,7 @@
 
 
  // this-property assignment
-@@= skipped -12, +12 lines =@@
-     constructor() {
-         /** @type {DoneStatus} */
-         this.s = {
-->this.s : Symbol(Thing.s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
-+>this.s : Symbol(s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
- >this : Symbol(Thing, Decl(test.js, 17, 4))
-->s : Symbol(Thing.s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
-+>s : Symbol(s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
-
-             status: 'done',
- >status : Symbol(status, Decl(test.js, 24, 18))
-@@= skipped -14, +14 lines =@@
-     }
-
-     fail() {
-->fail : Symbol(Thing.fail, Decl(test.js, 28, 5))
-+>fail : Symbol(fail, Decl(test.js, 28, 5))
-
-         this.s = {
-->this.s : Symbol(Thing.s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
-+>this.s : Symbol(s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
- >this : Symbol(Thing, Decl(test.js, 17, 4))
-->s : Symbol(Thing.s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
-+>s : Symbol(s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
-
-             status: 'done',
- >status : Symbol(status, Decl(test.js, 31, 18))
-@@= skipped -22, +22 lines =@@
+@@= skipped -48, +48 lines =@@
  /** @type {DoneStatus} */
  exports.x = {
  >exports.x : Symbol(x, Decl(test.js, 36, 1))
@@ -111,11 +83,10 @@
  Thing.prototype.x = {
 ->Thing.prototype.x : Symbol(Thing.x, Decl(test.js, 52, 16))
 ->Thing.prototype : Symbol(Thing.x, Decl(test.js, 52, 16))
-+>Thing.prototype : Symbol(prototype)
++>Thing.prototype : Symbol(Thing.prototype)
  >Thing : Symbol(Thing, Decl(test.js, 17, 4))
-->prototype : Symbol(Thing.prototype)
+ >prototype : Symbol(Thing.prototype)
 ->x : Symbol(Thing.x, Decl(test.js, 52, 16))
-+>prototype : Symbol(prototype)
 
      status: 'done',
  >status : Symbol(status, Decl(test.js, 56, 21))
@@ -124,12 +95,10 @@
  }
  Thing.prototype.x
 ->Thing.prototype.x : Symbol(Thing.x, Decl(test.js, 52, 16))
-->Thing.prototype : Symbol(Thing.prototype)
-+>Thing.prototype : Symbol(prototype)
+ >Thing.prototype : Symbol(Thing.prototype)
  >Thing : Symbol(Thing, Decl(test.js, 17, 4))
-->prototype : Symbol(Thing.prototype)
+ >prototype : Symbol(Thing.prototype)
 ->x : Symbol(Thing.x, Decl(test.js, 52, 16))
-+>prototype : Symbol(prototype)
 
  // prototype assignment
  function F() {
@@ -138,15 +107,12 @@
  }
  /** @type {DoneStatus} */
  F.prototype = {
-->F.prototype : Symbol(F.prototype, Decl(test.js, 64, 1))
+ >F.prototype : Symbol(F.prototype, Decl(test.js, 64, 1))
 ->F : Symbol(F, Decl(test.js, 60, 17), Decl(test.js, 64, 1))
-->prototype : Symbol(F.prototype, Decl(test.js, 64, 1))
-+>F.prototype : Symbol(prototype, Decl(test.js, 64, 1))
 +>F : Symbol(F, Decl(test.js, 60, 17))
-+>prototype : Symbol(prototype, Decl(test.js, 64, 1))
+ >prototype : Symbol(F.prototype, Decl(test.js, 64, 1))
 
      status: "done",
- >status : Symbol(status, Decl(test.js, 66, 15))
 @@= skipped -28, +26 lines =@@
  // module.exports assignment
  /** @type {{ status: 'done', m(n: number): void }} */

@@ -20,9 +20,9 @@ function Cls(t) {
  * @return {V}
  */
 Cls.prototype.topLevelComment = function (t, v) {
->Cls.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Cls.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >Cls : Symbol(Cls, Decl(constructorFunctionMethodTypeParameters.js, 0, 0))
->prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >t : Symbol(t, Decl(constructorFunctionMethodTypeParameters.js, 14, 42))
 >v : Symbol(v, Decl(constructorFunctionMethodTypeParameters.js, 14, 44))
 
@@ -32,9 +32,9 @@ Cls.prototype.topLevelComment = function (t, v) {
 };
 
 Cls.prototype.nestedComment =
->Cls.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Cls.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >Cls : Symbol(Cls, Decl(constructorFunctionMethodTypeParameters.js, 0, 0))
->prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 
     /**
      * @template {string} U

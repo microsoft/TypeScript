@@ -8,7 +8,7 @@ interface Base<T> {
 >T : Symbol(T, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 2, 15))
 
     value: T;
->value : Symbol(value, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 2, 19))
+>value : Symbol(Base.value, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 2, 19))
 >T : Symbol(T, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 2, 15))
 }
 
@@ -17,10 +17,10 @@ interface Int extends Base<number> {
 >Base : Symbol(Base, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 0, 0))
 
     type: "integer";
->type : Symbol(type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 6, 36))
+>type : Symbol(Int.type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 6, 36))
 
     multipleOf?: number;
->multipleOf : Symbol(multipleOf, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 7, 20))
+>multipleOf : Symbol(Int.multipleOf, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 7, 20))
 }
 
 interface Float extends Base<number> {
@@ -28,7 +28,7 @@ interface Float extends Base<number> {
 >Base : Symbol(Base, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 0, 0))
 
     type: "number";
->type : Symbol(type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 11, 38))
+>type : Symbol(Float.type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 11, 38))
 }
 
 interface Str extends Base<string> {
@@ -36,10 +36,10 @@ interface Str extends Base<string> {
 >Base : Symbol(Base, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 0, 0))
 
     type: "string";
->type : Symbol(type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 15, 36))
+>type : Symbol(Str.type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 15, 36))
 
     format?: string;
->format : Symbol(format, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 16, 19))
+>format : Symbol(Str.format, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 16, 19))
 }
 
 interface Bool extends Base<boolean> {
@@ -47,7 +47,7 @@ interface Bool extends Base<boolean> {
 >Base : Symbol(Base, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 0, 0))
 
     type: "boolean";
->type : Symbol(type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 20, 38))
+>type : Symbol(Bool.type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 20, 38))
 }
 
 type Primitive = Int | Float | Str | Bool;
@@ -149,28 +149,28 @@ interface Common {
 >Common : Symbol(Common, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 58, 2))
 
     type: "A" | "B" | "C" | "D";
->type : Symbol(type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 62, 18))
+>type : Symbol(Common.type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 62, 18))
 
     n: number;
->n : Symbol(n, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 63, 32))
+>n : Symbol(Common.n, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 63, 32))
 }
 interface A {
 >A : Symbol(A, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 65, 1))
 
     type: "A";
->type : Symbol(type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 66, 13))
+>type : Symbol(A.type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 66, 13))
 
     a?: number;
->a : Symbol(a, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 67, 14))
+>a : Symbol(A.a, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 67, 14))
 }
 interface B {
 >B : Symbol(B, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 69, 1))
 
     type: "B";
->type : Symbol(type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 70, 13))
+>type : Symbol(B.type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 70, 13))
 
     b?: number;
->b : Symbol(b, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 71, 14))
+>b : Symbol(B.b, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 71, 14))
 }
 
 type CommonWithOverlappingOptionals = Common | (Common & A) | (Common & B);

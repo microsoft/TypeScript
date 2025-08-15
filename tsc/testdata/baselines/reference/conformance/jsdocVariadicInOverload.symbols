@@ -41,7 +41,7 @@ export class Processor {
    *   Current processor.
    */
   use(value, ...parameters) {
->use : Symbol(use, Decl(typeTagForMultipleVariableDeclarations.js, 16, 6), Decl(typeTagForMultipleVariableDeclarations.js, 23, 6), Decl(typeTagForMultipleVariableDeclarations.js, 14, 24))
+>use : Symbol(Processor.use, Decl(typeTagForMultipleVariableDeclarations.js, 16, 6), Decl(typeTagForMultipleVariableDeclarations.js, 23, 6), Decl(typeTagForMultipleVariableDeclarations.js, 14, 24))
 >value : Symbol(value, Decl(typeTagForMultipleVariableDeclarations.js, 35, 6))
 >parameters : Symbol(parameters, Decl(typeTagForMultipleVariableDeclarations.js, 35, 12))
 
@@ -59,9 +59,9 @@ var x = 1, y = 2, z = 3;
 >z : Symbol(z, Decl(typeTagForMultipleVariableDeclarations.js, 40, 17))
 
 p.use(x, y, z);
->p.use : Symbol(use, Decl(typeTagForMultipleVariableDeclarations.js, 16, 6), Decl(typeTagForMultipleVariableDeclarations.js, 23, 6), Decl(typeTagForMultipleVariableDeclarations.js, 14, 24))
+>p.use : Symbol(Processor.use, Decl(typeTagForMultipleVariableDeclarations.js, 16, 6), Decl(typeTagForMultipleVariableDeclarations.js, 23, 6), Decl(typeTagForMultipleVariableDeclarations.js, 14, 24))
 >p : Symbol(p, Decl(typeTagForMultipleVariableDeclarations.js, 39, 3))
->use : Symbol(use, Decl(typeTagForMultipleVariableDeclarations.js, 16, 6), Decl(typeTagForMultipleVariableDeclarations.js, 23, 6), Decl(typeTagForMultipleVariableDeclarations.js, 14, 24))
+>use : Symbol(Processor.use, Decl(typeTagForMultipleVariableDeclarations.js, 16, 6), Decl(typeTagForMultipleVariableDeclarations.js, 23, 6), Decl(typeTagForMultipleVariableDeclarations.js, 14, 24))
 >x : Symbol(x, Decl(typeTagForMultipleVariableDeclarations.js, 40, 3))
 >y : Symbol(y, Decl(typeTagForMultipleVariableDeclarations.js, 40, 10))
 >z : Symbol(z, Decl(typeTagForMultipleVariableDeclarations.js, 40, 17))

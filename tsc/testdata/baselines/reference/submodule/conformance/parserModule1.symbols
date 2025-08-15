@@ -11,7 +11,7 @@
 >IDiagnosticWriter : Symbol(IDiagnosticWriter, Decl(parserModule1.ts, 1, 33))
 
             Alert(output: string): void;
->Alert : Symbol(Alert, Decl(parserModule1.ts, 2, 44))
+>Alert : Symbol(IDiagnosticWriter.Alert, Decl(parserModule1.ts, 2, 44))
 >output : Symbol(output, Decl(parserModule1.ts, 3, 18))
         }
 
@@ -30,9 +30,9 @@
 >diagnosticWriter : Symbol(diagnosticWriter, Decl(parserModule1.ts, 6, 18))
 
                 diagnosticWriter.Alert(output);
->diagnosticWriter.Alert : Symbol(Alert, Decl(parserModule1.ts, 2, 44))
+>diagnosticWriter.Alert : Symbol(IDiagnosticWriter.Alert, Decl(parserModule1.ts, 2, 44))
 >diagnosticWriter : Symbol(diagnosticWriter, Decl(parserModule1.ts, 6, 18))
->Alert : Symbol(Alert, Decl(parserModule1.ts, 2, 44))
+>Alert : Symbol(IDiagnosticWriter.Alert, Decl(parserModule1.ts, 2, 44))
 >output : Symbol(output, Decl(parserModule1.ts, 10, 30))
             }
         }

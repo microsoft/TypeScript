@@ -15,11 +15,10 @@
   */
  Cls.prototype.topLevelComment = function (t, v) {
 ->Cls.prototype : Symbol(Cls.topLevelComment, Decl(constructorFunctionMethodTypeParameters.js, 6, 1))
-+>Cls.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
++>Cls.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
  >Cls : Symbol(Cls, Decl(constructorFunctionMethodTypeParameters.js, 0, 0))
-->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+ >prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 ->topLevelComment : Symbol(Cls.topLevelComment, Decl(constructorFunctionMethodTypeParameters.js, 6, 1))
-+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
  >t : Symbol(t, Decl(constructorFunctionMethodTypeParameters.js, 14, 42))
  >v : Symbol(v, Decl(constructorFunctionMethodTypeParameters.js, 14, 44))
 
@@ -28,11 +27,10 @@
 
  Cls.prototype.nestedComment =
 ->Cls.prototype : Symbol(Cls.nestedComment, Decl(constructorFunctionMethodTypeParameters.js, 16, 2))
-+>Cls.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
++>Cls.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
  >Cls : Symbol(Cls, Decl(constructorFunctionMethodTypeParameters.js, 0, 0))
-->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+ >prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 ->nestedComment : Symbol(Cls.nestedComment, Decl(constructorFunctionMethodTypeParameters.js, 16, 2))
-+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
 
      /**
       * @template {string} U

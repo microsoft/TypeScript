@@ -9,7 +9,7 @@ interface Props {
 >Props : Symbol(Props, Decl(index.tsx, 1, 31))
 
   children: (x: number) => string;
->children : Symbol(children, Decl(index.tsx, 3, 17))
+>children : Symbol(Props.children, Decl(index.tsx, 3, 17))
 >x : Symbol(x, Decl(index.tsx, 4, 13))
 }
 
@@ -62,7 +62,7 @@ interface PropsArr {
 >PropsArr : Symbol(PropsArr, Decl(index.tsx, 25, 7))
 
   children: ((x: number) => string)[];
->children : Symbol(children, Decl(index.tsx, 27, 20))
+>children : Symbol(PropsArr.children, Decl(index.tsx, 27, 20))
 >x : Symbol(x, Decl(index.tsx, 28, 14))
 }
 
@@ -119,7 +119,7 @@ interface PropsMixed {
 >PropsMixed : Symbol(PropsMixed, Decl(index.tsx, 51, 32))
 
   children: Cb | Cb[];
->children : Symbol(children, Decl(index.tsx, 52, 22))
+>children : Symbol(PropsMixed.children, Decl(index.tsx, 52, 22))
 >Cb : Symbol(Cb, Decl(index.tsx, 49, 8))
 >Cb : Symbol(Cb, Decl(index.tsx, 49, 8))
 }

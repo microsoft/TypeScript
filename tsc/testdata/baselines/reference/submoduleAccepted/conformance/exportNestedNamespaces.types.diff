@@ -6,11 +6,10 @@
  exports.n = {};
 ->exports.n = {} : typeof n
 ->exports.n : typeof n
-->exports : typeof import("mod")
-->n : typeof n
 +>exports.n = {} : {}
 +>exports.n : {}
-+>exports : typeof import("./mod")
+ >exports : typeof import("mod")
+->n : typeof n
 +>n : {}
  >{} : {}
 
@@ -18,14 +17,13 @@
 ->exports.n.K = function () {    this.x = 10;} : typeof K
 ->exports.n.K : typeof K
 ->exports.n : typeof n
-->exports : typeof import("mod")
-->n : typeof n
-->K : typeof K
-->function () {    this.x = 10;} : typeof K
 +>exports.n.K = function () {    this.x = 10;} : () => void
 +>exports.n.K : any
 +>exports.n : {}
-+>exports : typeof import("./mod")
+ >exports : typeof import("mod")
+->n : typeof n
+->K : typeof K
+->function () {    this.x = 10;} : typeof K
 +>n : {}
 +>K : any
 +>function () {    this.x = 10;} : () => void
@@ -38,14 +36,6 @@
  >x : any
  >10 : 10
  }
- exports.Classic = class {
- >exports.Classic = class {    constructor() {        this.p = 1    }} : typeof Classic
- >exports.Classic : typeof Classic
-->exports : typeof import("mod")
-+>exports : typeof import("./mod")
- >Classic : typeof Classic
- >class {    constructor() {        this.p = 1    }} : typeof Classic
-
 @@= skipped -44, +44 lines =@@
  >s : typeof s
 

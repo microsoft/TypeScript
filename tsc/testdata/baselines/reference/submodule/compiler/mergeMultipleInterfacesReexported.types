@@ -23,7 +23,7 @@ export interface EventList {
 
 === foo.ts ===
 declare module './index' {
->'./index' : typeof import(".")
+>'./index' : typeof import("index")
 
     interface EventList {
         p1: []
@@ -35,7 +35,7 @@ export {};
 
 === bar.ts ===
 declare module './index' {
->'./index' : typeof import(".")
+>'./index' : typeof import("index")
 
     interface EventList {
         p2: []

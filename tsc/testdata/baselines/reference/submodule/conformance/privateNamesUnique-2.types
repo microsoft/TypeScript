@@ -8,12 +8,12 @@ export class Foo {
 >#x : any
 
     copy(other: import("./b").Foo) {
->copy : (other: import("./b").Foo) => void
->other : import("./b").Foo
+>copy : (other: import("b").Foo) => void
+>other : import("b").Foo
 
         other.#x; // error
 >other.#x : any
->other : import("./b").Foo
+>other : import("b").Foo
     }
 }
     

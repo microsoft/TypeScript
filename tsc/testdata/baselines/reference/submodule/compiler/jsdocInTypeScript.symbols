@@ -11,13 +11,13 @@ class T {
 >T : Symbol(T, Decl(jsdocInTypeScript.ts, 2, 19))
 
     prop: number;
->prop : Symbol(prop, Decl(jsdocInTypeScript.ts, 4, 9))
+>prop : Symbol(T.prop, Decl(jsdocInTypeScript.ts, 4, 9))
 }
 
 x.prop;
->x.prop : Symbol(prop, Decl(jsdocInTypeScript.ts, 4, 9))
+>x.prop : Symbol(T.prop, Decl(jsdocInTypeScript.ts, 4, 9))
 >x : Symbol(x, Decl(jsdocInTypeScript.ts, 2, 13))
->prop : Symbol(prop, Decl(jsdocInTypeScript.ts, 4, 9))
+>prop : Symbol(T.prop, Decl(jsdocInTypeScript.ts, 4, 9))
 
 // Just to be sure that @property has no impact either.
 /**

@@ -9,7 +9,7 @@ export interface Interface {
 >Interface : Symbol(Interface, Decl(bug.ts, 0, 30))
 
   readonly [SYMBOL]: string; // remove readonly and @showEmit to see the expected error
->[SYMBOL] : Symbol([SYMBOL], Decl(bug.ts, 2, 28))
+>[SYMBOL] : Symbol(Interface[SYMBOL], Decl(bug.ts, 2, 28))
 >SYMBOL : Symbol(SYMBOL, Decl(bug.ts, 0, 12))
 }
 

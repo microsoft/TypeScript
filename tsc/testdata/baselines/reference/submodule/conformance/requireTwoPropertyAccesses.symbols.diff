@@ -8,13 +8,7 @@
  >x : Symbol(x, Decl(mod.js, 0, 18))
  >y : Symbol(y, Decl(mod.js, 1, 8))
 
- console.log(value)
-->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
-+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
- >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
-->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
-+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
- >value : Symbol(value, Decl(requireTwoPropertyAccesses.js, 0, 5))
+@@= skipped -12, +11 lines =@@
 
  === mod.js ===
  module.exports = {

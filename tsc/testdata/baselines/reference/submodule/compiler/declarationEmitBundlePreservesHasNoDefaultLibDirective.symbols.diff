@@ -1,11 +1,6 @@
 --- old.declarationEmitBundlePreservesHasNoDefaultLibDirective.symbols
 +++ new.declarationEmitBundlePreservesHasNoDefaultLibDirective.symbols
-@@= skipped -5, +5 lines =@@
- >Foo : Symbol(Foo, Decl(extensions.ts, 0, 0))
-
-     public: string;
-->public : Symbol(Foo.public, Decl(extensions.ts, 1, 11))
-+>public : Symbol(public, Decl(extensions.ts, 1, 11))
+@@= skipped -9, +9 lines =@@
  }
  === core.ts ===
  interface Array<T> {}

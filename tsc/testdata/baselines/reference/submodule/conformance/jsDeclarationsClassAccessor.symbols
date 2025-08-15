@@ -9,10 +9,10 @@ declare module "./argument.js" {
 >Argument : Symbol(Argument, Decl(argument.js, 0, 33), Decl(supplement.d.ts, 1, 32))
 
         idlType: any;
->idlType : Symbol(idlType, Decl(supplement.d.ts, 2, 24))
+>idlType : Symbol(Argument.idlType, Decl(supplement.d.ts, 2, 24))
 
         default: null;
->default : Symbol(default, Decl(supplement.d.ts, 3, 21))
+>default : Symbol(Argument.default, Decl(supplement.d.ts, 3, 21))
     }
 }
 === base.js ===
@@ -22,7 +22,7 @@ export class Base {
     constructor() { }
 
     toJSON() {
->toJSON : Symbol(toJSON, Decl(base.js, 1, 21))
+>toJSON : Symbol(Base.toJSON, Decl(base.js, 1, 21))
 
         const json = { type: undefined, name: undefined, inheritance: undefined };
 >json : Symbol(json, Decl(base.js, 4, 13))
@@ -49,14 +49,14 @@ export class Argument extends Base {
      * @param {*} tokeniser
      */
     static parse(tokeniser) {
->parse : Symbol(parse, Decl(argument.js, 1, 36))
+>parse : Symbol(Argument.parse, Decl(argument.js, 1, 36))
 >tokeniser : Symbol(tokeniser, Decl(argument.js, 5, 17))
 
         return;
     }
 
     get type() {
->type : Symbol(type, Decl(argument.js, 7, 5))
+>type : Symbol(Argument.type, Decl(argument.js, 7, 5))
 
         return "argument";
     }
@@ -65,6 +65,6 @@ export class Argument extends Base {
      * @param {*} defs
      */
     *validate(defs) { }
->validate : Symbol(validate, Decl(argument.js, 11, 5))
+>validate : Symbol(Argument.validate, Decl(argument.js, 11, 5))
 >defs : Symbol(defs, Decl(argument.js, 16, 14))
 }

@@ -4,13 +4,13 @@
 exports.x = 0;
 >exports.x = 0 : 0
 >exports.x : 0
->exports : typeof import("./a")
+>exports : typeof import("/a")
 >x : 0
 >0 : 0
 
 exports.x;
 >exports.x : 0
->exports : typeof import("./a")
+>exports : typeof import("/a")
 >x : 0
 
 // Works nested
@@ -19,7 +19,7 @@ exports.x;
     exports.Cls = function() {
 >exports.Cls = function() {        this.x = 0;    } : () => void
 >exports.Cls : () => void
->exports : typeof import("./a")
+>exports : typeof import("/a")
 >Cls : () => void
 >function() {        this.x = 0;    } : () => void
 
@@ -36,6 +36,6 @@ const instance = new exports.Cls();
 >instance : any
 >new exports.Cls() : any
 >exports.Cls : () => void
->exports : typeof import("./a")
+>exports : typeof import("/a")
 >Cls : () => void
 

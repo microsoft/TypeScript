@@ -15,15 +15,15 @@ export interface T0 {
 >T0 : Symbol(T0, Decl(module.ts, 2, 27))
 
     [c0]: number;
->[c0] : Symbol([c0], Decl(module.ts, 3, 21))
+>[c0] : Symbol(T0[c0], Decl(module.ts, 3, 21))
 >c0 : Symbol(c0, Decl(module.ts, 0, 12))
 
     [c1]: string;
->[c1] : Symbol([c1], Decl(module.ts, 4, 17))
+>[c1] : Symbol(T0[c1], Decl(module.ts, 4, 17))
 >c1 : Symbol(c1, Decl(module.ts, 1, 12))
 
     [s0]: boolean;
->[s0] : Symbol([s0], Decl(module.ts, 5, 17))
+>[s0] : Symbol(T0[s0], Decl(module.ts, 5, 17))
 >s0 : Symbol(s0, Decl(module.ts, 2, 12))
 }
 export declare class T1 implements T2 {
@@ -31,15 +31,15 @@ export declare class T1 implements T2 {
 >T2 : Symbol(T2, Decl(module.ts, 12, 1))
 
     [c0]: number;
->[c0] : Symbol([c0], Decl(module.ts, 8, 39))
+>[c0] : Symbol(T1[c0], Decl(module.ts, 8, 39))
 >c0 : Symbol(c0, Decl(module.ts, 0, 12))
 
     [c1]: string;
->[c1] : Symbol([c1], Decl(module.ts, 9, 17))
+>[c1] : Symbol(T1[c1], Decl(module.ts, 9, 17))
 >c1 : Symbol(c1, Decl(module.ts, 1, 12))
 
     [s0]: boolean;
->[s0] : Symbol([s0], Decl(module.ts, 10, 17))
+>[s0] : Symbol(T1[s0], Decl(module.ts, 10, 17))
 >s0 : Symbol(s0, Decl(module.ts, 2, 12))
 }
 export declare class T2 extends T1 {
@@ -94,19 +94,19 @@ namespace N {
 >T4 : Symbol(T4, Decl(main.ts, 6, 36))
 
         [N.c2]: number;
->[N.c2] : Symbol([N.c2], Decl(main.ts, 8, 25))
+>[N.c2] : Symbol(T4[N.c2], Decl(main.ts, 8, 25))
 >N.c2 : Symbol(c2, Decl(main.ts, 4, 16))
 >N : Symbol(N, Decl(main.ts, 1, 30))
 >c2 : Symbol(c2, Decl(main.ts, 4, 16))
 
         [N.c3]: string;
->[N.c3] : Symbol([N.c3], Decl(main.ts, 9, 23))
+>[N.c3] : Symbol(T4[N.c3], Decl(main.ts, 9, 23))
 >N.c3 : Symbol(c3, Decl(main.ts, 5, 16))
 >N : Symbol(N, Decl(main.ts, 1, 30))
 >c3 : Symbol(c3, Decl(main.ts, 5, 16))
 
         [N.s1]: boolean;
->[N.s1] : Symbol([N.s1], Decl(main.ts, 10, 23))
+>[N.s1] : Symbol(T4[N.s1], Decl(main.ts, 10, 23))
 >N.s1 : Symbol(s1, Decl(main.ts, 6, 16))
 >N : Symbol(N, Decl(main.ts, 1, 30))
 >s1 : Symbol(s1, Decl(main.ts, 6, 16))
@@ -116,19 +116,19 @@ namespace N {
 >T4 : Symbol(T4, Decl(main.ts, 6, 36))
 
         [N.c2]: number;
->[N.c2] : Symbol([N.c2], Decl(main.ts, 13, 43))
+>[N.c2] : Symbol(T5[N.c2], Decl(main.ts, 13, 43))
 >N.c2 : Symbol(c2, Decl(main.ts, 4, 16))
 >N : Symbol(N, Decl(main.ts, 1, 30))
 >c2 : Symbol(c2, Decl(main.ts, 4, 16))
 
         [N.c3]: string;
->[N.c3] : Symbol([N.c3], Decl(main.ts, 14, 23))
+>[N.c3] : Symbol(T5[N.c3], Decl(main.ts, 14, 23))
 >N.c3 : Symbol(c3, Decl(main.ts, 5, 16))
 >N : Symbol(N, Decl(main.ts, 1, 30))
 >c3 : Symbol(c3, Decl(main.ts, 5, 16))
 
         [N.s1]: boolean;
->[N.s1] : Symbol([N.s1], Decl(main.ts, 15, 23))
+>[N.s1] : Symbol(T5[N.s1], Decl(main.ts, 15, 23))
 >N.s1 : Symbol(s1, Decl(main.ts, 6, 16))
 >N : Symbol(N, Decl(main.ts, 1, 30))
 >s1 : Symbol(s1, Decl(main.ts, 6, 16))
@@ -176,15 +176,15 @@ interface T8 {
 >T8 : Symbol(T8, Decl(main.ts, 29, 32))
 
     [c4]: number;
->[c4] : Symbol([c4], Decl(main.ts, 31, 14))
+>[c4] : Symbol(T8[c4], Decl(main.ts, 31, 14))
 >c4 : Symbol(c4, Decl(main.ts, 27, 12))
 
     [c5]: string;
->[c5] : Symbol([c5], Decl(main.ts, 32, 17))
+>[c5] : Symbol(T8[c5], Decl(main.ts, 32, 17))
 >c5 : Symbol(c5, Decl(main.ts, 28, 12))
 
     [s2]: boolean;
->[s2] : Symbol([s2], Decl(main.ts, 33, 17))
+>[s2] : Symbol(T8[s2], Decl(main.ts, 33, 17))
 >s2 : Symbol(s2, Decl(main.ts, 29, 12))
 }
 declare class T9 implements T8 {
@@ -192,15 +192,15 @@ declare class T9 implements T8 {
 >T8 : Symbol(T8, Decl(main.ts, 29, 32))
 
     [c4]: number;
->[c4] : Symbol([c4], Decl(main.ts, 36, 32))
+>[c4] : Symbol(T9[c4], Decl(main.ts, 36, 32))
 >c4 : Symbol(c4, Decl(main.ts, 27, 12))
 
     [c5]: string;
->[c5] : Symbol([c5], Decl(main.ts, 37, 17))
+>[c5] : Symbol(T9[c5], Decl(main.ts, 37, 17))
 >c5 : Symbol(c5, Decl(main.ts, 28, 12))
 
     [s2]: boolean;
->[s2] : Symbol([s2], Decl(main.ts, 38, 17))
+>[s2] : Symbol(T9[s2], Decl(main.ts, 38, 17))
 >s2 : Symbol(s2, Decl(main.ts, 29, 12))
 }
 declare class T10 extends T9 {
@@ -228,13 +228,13 @@ interface T12 {
 >T12 : Symbol(T12, Decl(main.ts, 47, 2))
 
     a: number;
->a : Symbol(a, Decl(main.ts, 49, 15))
+>a : Symbol(T12.a, Decl(main.ts, 49, 15))
 
     1: string;
->1 : Symbol(1, Decl(main.ts, 50, 14))
+>1 : Symbol(T12[1], Decl(main.ts, 50, 14))
 
     [s2]: boolean;
->[s2] : Symbol([s2], Decl(main.ts, 51, 14))
+>[s2] : Symbol(T12[s2], Decl(main.ts, 51, 14))
 >s2 : Symbol(s2, Decl(main.ts, 29, 12))
 }
 declare class T13 implements T2 {
@@ -242,13 +242,13 @@ declare class T13 implements T2 {
 >T2 : Symbol(T2, Decl(main.ts, 0, 28))
 
     a: number;
->a : Symbol(a, Decl(main.ts, 54, 33))
+>a : Symbol(T13.a, Decl(main.ts, 54, 33))
 
     1: string;
->1 : Symbol(1, Decl(main.ts, 55, 14))
+>1 : Symbol(T13[1], Decl(main.ts, 55, 14))
 
     [s2]: boolean;
->[s2] : Symbol([s2], Decl(main.ts, 56, 14))
+>[s2] : Symbol(T13[s2], Decl(main.ts, 56, 14))
 >s2 : Symbol(s2, Decl(main.ts, 29, 12))
 }
 declare class T14 extends T13 {
@@ -274,13 +274,13 @@ declare class C {
 >C : Symbol(C, Decl(main.ts, 65, 2))
 
     static a: number;
->a : Symbol(a, Decl(main.ts, 67, 17))
+>a : Symbol(C.a, Decl(main.ts, 67, 17))
 
     static 1: string;
->1 : Symbol(1, Decl(main.ts, 68, 21))
+>1 : Symbol(C[1], Decl(main.ts, 68, 21))
 
     static [s2]: boolean;
->[s2] : Symbol([s2], Decl(main.ts, 69, 21))
+>[s2] : Symbol(C[s2], Decl(main.ts, 69, 21))
 >s2 : Symbol(s2, Decl(main.ts, 29, 12))
 }
 
@@ -323,22 +323,22 @@ let t3_1: M.T3;
 let t4: N.T4;
 >t4 : Symbol(t4, Decl(main.ts, 81, 3))
 >N : Symbol(N, Decl(main.ts, 1, 30))
->T4 : Symbol(T4, Decl(main.ts, 6, 36))
+>T4 : Symbol(N.T4, Decl(main.ts, 6, 36))
 
 let t5: N.T5;
 >t5 : Symbol(t5, Decl(main.ts, 82, 3))
 >N : Symbol(N, Decl(main.ts, 1, 30))
->T5 : Symbol(T5, Decl(main.ts, 12, 5))
+>T5 : Symbol(N.T5, Decl(main.ts, 12, 5))
 
 let t6: N.T6;
 >t6 : Symbol(t6, Decl(main.ts, 83, 3))
 >N : Symbol(N, Decl(main.ts, 1, 30))
->T6 : Symbol(T6, Decl(main.ts, 17, 5))
+>T6 : Symbol(N.T6, Decl(main.ts, 17, 5))
 
 let t7: N.T7;
 >t7 : Symbol(t7, Decl(main.ts, 84, 3))
 >N : Symbol(N, Decl(main.ts, 1, 30))
->T7 : Symbol(T7, Decl(main.ts, 19, 5))
+>T7 : Symbol(N.T7, Decl(main.ts, 19, 5))
 
 let t8: T8;
 >t8 : Symbol(t8, Decl(main.ts, 85, 3))
@@ -493,23 +493,23 @@ declare const rI: RI<"a">;
 >RI : Symbol(RI, Decl(main.ts, 117, 4))
 
 rI.x
->rI.x : Symbol(x, Decl(main.ts, 118, 35))
+>rI.x : Symbol(RI.x, Decl(main.ts, 118, 35))
 >rI : Symbol(rI, Decl(main.ts, 116, 13))
->x : Symbol(x, Decl(main.ts, 118, 35))
+>x : Symbol(RI.x, Decl(main.ts, 118, 35))
 
 interface RI<T extends "a" | "b"> {
 >RI : Symbol(RI, Decl(main.ts, 117, 4))
 >T : Symbol(T, Decl(main.ts, 118, 13))
 
     x: T;
->x : Symbol(x, Decl(main.ts, 118, 35))
+>x : Symbol(RI.x, Decl(main.ts, 118, 35))
 >T : Symbol(T, Decl(main.ts, 118, 13))
 
     [rI.x]: "b";
->[rI.x] : Symbol([rI.x], Decl(main.ts, 119, 9))
->rI.x : Symbol(x, Decl(main.ts, 118, 35))
+>[rI.x] : Symbol(RI[rI.x], Decl(main.ts, 119, 9))
+>rI.x : Symbol(RI.x, Decl(main.ts, 118, 35))
 >rI : Symbol(rI, Decl(main.ts, 116, 13))
->x : Symbol(x, Decl(main.ts, 118, 35))
+>x : Symbol(RI.x, Decl(main.ts, 118, 35))
 }
 
 declare const rC: RC<"a">;
@@ -517,22 +517,22 @@ declare const rC: RC<"a">;
 >RC : Symbol(RC, Decl(main.ts, 124, 4))
 
 rC.x
->rC.x : Symbol(x, Decl(main.ts, 125, 39))
+>rC.x : Symbol(RC.x, Decl(main.ts, 125, 39))
 >rC : Symbol(rC, Decl(main.ts, 123, 13))
->x : Symbol(x, Decl(main.ts, 125, 39))
+>x : Symbol(RC.x, Decl(main.ts, 125, 39))
 
 declare class RC<T extends "a" | "b"> {
 >RC : Symbol(RC, Decl(main.ts, 124, 4))
 >T : Symbol(T, Decl(main.ts, 125, 17))
 
     x: T;
->x : Symbol(x, Decl(main.ts, 125, 39))
+>x : Symbol(RC.x, Decl(main.ts, 125, 39))
 >T : Symbol(T, Decl(main.ts, 125, 17))
 
     [rC.x]: "b";
->[rC.x] : Symbol([rC.x], Decl(main.ts, 126, 9))
->rC.x : Symbol(x, Decl(main.ts, 125, 39))
+>[rC.x] : Symbol(RC[rC.x], Decl(main.ts, 126, 9))
+>rC.x : Symbol(RC.x, Decl(main.ts, 125, 39))
 >rC : Symbol(rC, Decl(main.ts, 123, 13))
->x : Symbol(x, Decl(main.ts, 125, 39))
+>x : Symbol(RC.x, Decl(main.ts, 125, 39))
 }
 

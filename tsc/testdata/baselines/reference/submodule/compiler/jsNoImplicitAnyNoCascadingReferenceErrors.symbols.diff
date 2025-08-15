@@ -12,7 +12,7 @@
      prop: T;
 ->prop : Symbol(Foo.prop, Decl(somelib.d.ts, --, --))
 ->T : Symbol(T, Decl(somelib.d.ts, --, --))
-+>prop : Symbol(prop, Decl(somelib.d.ts, 0, 29))
++>prop : Symbol(Foo.prop, Decl(somelib.d.ts, 0, 29))
 +>T : Symbol(T, Decl(somelib.d.ts, 0, 25))
  }
  === index.js ===
@@ -26,9 +26,9 @@
 
          this.prop.alpha = 12;
 ->this.prop : Symbol(Foo.prop, Decl(somelib.d.ts, --, --))
-+>this.prop : Symbol(prop, Decl(somelib.d.ts, 0, 29))
++>this.prop : Symbol(Foo.prop, Decl(somelib.d.ts, 0, 29))
  >this : Symbol(MyFoo, Decl(index.js, 0, 30))
 ->prop : Symbol(Foo.prop, Decl(somelib.d.ts, --, --))
-+>prop : Symbol(prop, Decl(somelib.d.ts, 0, 29))
++>prop : Symbol(Foo.prop, Decl(somelib.d.ts, 0, 29))
      }
  }

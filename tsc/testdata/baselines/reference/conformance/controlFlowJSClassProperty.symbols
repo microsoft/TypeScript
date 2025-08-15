@@ -5,7 +5,7 @@ export class C {
 >C : Symbol(C, Decl(controlFlowJSClassProperty.js, 0, 0))
 
   name = "CompileDiagnostic";
->name : Symbol(name, Decl(controlFlowJSClassProperty.js, 0, 16))
+>name : Symbol(C.name, Decl(controlFlowJSClassProperty.js, 0, 16))
 
   /**
    * @param {[number, number] | undefined} position
@@ -17,9 +17,9 @@ export class C {
 >position : Symbol(position, Decl(controlFlowJSClassProperty.js, 6, 14))
 
       this.position = position;
->this.position : Symbol(position, Decl(controlFlowJSClassProperty.js, 7, 19))
+>this.position : Symbol(C.position, Decl(controlFlowJSClassProperty.js, 7, 19))
 >this : Symbol(C, Decl(controlFlowJSClassProperty.js, 0, 0))
->position : Symbol(position, Decl(controlFlowJSClassProperty.js, 7, 19))
+>position : Symbol(C.position, Decl(controlFlowJSClassProperty.js, 7, 19))
 >position : Symbol(position, Decl(controlFlowJSClassProperty.js, 6, 14))
     }
   }
@@ -29,7 +29,7 @@ var c = new C([1, 2]);
 >C : Symbol(C, Decl(controlFlowJSClassProperty.js, 0, 0))
 
 c.position;
->c.position : Symbol(position, Decl(controlFlowJSClassProperty.js, 7, 19))
+>c.position : Symbol(C.position, Decl(controlFlowJSClassProperty.js, 7, 19))
 >c : Symbol(c, Decl(controlFlowJSClassProperty.js, 12, 3))
->position : Symbol(position, Decl(controlFlowJSClassProperty.js, 7, 19))
+>position : Symbol(C.position, Decl(controlFlowJSClassProperty.js, 7, 19))
 

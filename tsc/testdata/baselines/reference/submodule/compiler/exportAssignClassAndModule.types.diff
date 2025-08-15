@@ -5,7 +5,7 @@
 
      x: Foo.Bar;
 ->x : Foo.Bar
-+>x : import("./exportAssignClassAndModule_0").Bar
++>x : import("exportAssignClassAndModule_0").Bar
  >Foo : any
  }
  module Foo {

@@ -9,16 +9,13 @@
 
      return new Base();
  >Base : Symbol(Base, Decl(base.js, 0, 0))
-@@= skipped -8, +8 lines =@@
- };
+@@= skipped -9, +9 lines =@@
 
  BaseFactory.Base = Base;
-->BaseFactory.Base : Symbol(BaseFactory.Base, Decl(base.js, 6, 2))
+ >BaseFactory.Base : Symbol(BaseFactory.Base, Decl(base.js, 6, 2))
 ->BaseFactory : Symbol(BaseFactory, Decl(base.js, 4, 5), Decl(base.js, 6, 2))
-->Base : Symbol(BaseFactory.Base, Decl(base.js, 6, 2))
-+>BaseFactory.Base : Symbol(Base, Decl(base.js, 6, 2))
 +>BaseFactory : Symbol(BaseFactory, Decl(base.js, 4, 5))
-+>Base : Symbol(Base, Decl(base.js, 6, 2))
+ >Base : Symbol(BaseFactory.Base, Decl(base.js, 6, 2))
  >Base : Symbol(Base, Decl(base.js, 0, 0))
 
  module.exports = BaseFactory;

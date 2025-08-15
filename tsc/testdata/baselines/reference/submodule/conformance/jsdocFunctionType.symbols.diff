@@ -10,19 +10,7 @@
  >n : Symbol(n, Decl(functions.js, 8, 22))
 
  /**
-@@= skipped -25, +22 lines =@@
- >n : Symbol(n, Decl(functions.js, 20, 16))
-
-         this.length = n;
-->this.length : Symbol(C.length, Decl(functions.js, 20, 20))
-+>this.length : Symbol(length, Decl(functions.js, 20, 20))
- >this : Symbol(C, Decl(functions.js, 16, 1))
-->length : Symbol(C.length, Decl(functions.js, 20, 20))
-+>length : Symbol(length, Decl(functions.js, 20, 20))
- >n : Symbol(n, Decl(functions.js, 20, 16))
-     }
- }
-@@= skipped -17, +17 lines =@@
+@@= skipped -42, +39 lines =@@
  >y : Symbol(y, Decl(functions.js, 25, 3))
 
  z.length;

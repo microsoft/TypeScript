@@ -5,12 +5,12 @@ class a {
 >a : Symbol(a, Decl(inheritanceStaticAccessorOverridingAccessor.ts, 0, 0))
 
     static get x() {
->x : Symbol(x, Decl(inheritanceStaticAccessorOverridingAccessor.ts, 0, 9), Decl(inheritanceStaticAccessorOverridingAccessor.ts, 3, 5))
+>x : Symbol(a.x, Decl(inheritanceStaticAccessorOverridingAccessor.ts, 0, 9), Decl(inheritanceStaticAccessorOverridingAccessor.ts, 3, 5))
 
         return "20";
     }
     static set x(aValue: string) {
->x : Symbol(x, Decl(inheritanceStaticAccessorOverridingAccessor.ts, 0, 9), Decl(inheritanceStaticAccessorOverridingAccessor.ts, 3, 5))
+>x : Symbol(a.x, Decl(inheritanceStaticAccessorOverridingAccessor.ts, 0, 9), Decl(inheritanceStaticAccessorOverridingAccessor.ts, 3, 5))
 >aValue : Symbol(aValue, Decl(inheritanceStaticAccessorOverridingAccessor.ts, 4, 17))
 
     }
@@ -21,12 +21,12 @@ class b extends a {
 >a : Symbol(a, Decl(inheritanceStaticAccessorOverridingAccessor.ts, 0, 0))
 
     static get x() {
->x : Symbol(x, Decl(inheritanceStaticAccessorOverridingAccessor.ts, 9, 19), Decl(inheritanceStaticAccessorOverridingAccessor.ts, 12, 5))
+>x : Symbol(b.x, Decl(inheritanceStaticAccessorOverridingAccessor.ts, 9, 19), Decl(inheritanceStaticAccessorOverridingAccessor.ts, 12, 5))
 
         return "20";
     }
     static set x(aValue: string) {
->x : Symbol(x, Decl(inheritanceStaticAccessorOverridingAccessor.ts, 9, 19), Decl(inheritanceStaticAccessorOverridingAccessor.ts, 12, 5))
+>x : Symbol(b.x, Decl(inheritanceStaticAccessorOverridingAccessor.ts, 9, 19), Decl(inheritanceStaticAccessorOverridingAccessor.ts, 12, 5))
 >aValue : Symbol(aValue, Decl(inheritanceStaticAccessorOverridingAccessor.ts, 13, 17))
 
     }

@@ -35,10 +35,10 @@ interface Input {
 >Input : Symbol(Input, Decl(circularTypeofWithVarOrFunc.ts, 8, 43))
 
   a: number;
->a : Symbol(a, Decl(circularTypeofWithVarOrFunc.ts, 12, 17))
+>a : Symbol(Input.a, Decl(circularTypeofWithVarOrFunc.ts, 12, 17))
 
   b: number;
->b : Symbol(b, Decl(circularTypeofWithVarOrFunc.ts, 13, 12))
+>b : Symbol(Input.b, Decl(circularTypeofWithVarOrFunc.ts, 13, 12))
 }
 
 type R = ReturnType<typeof mul>;
@@ -53,12 +53,12 @@ function mul(input: Input): R {
 >R : Symbol(R, Decl(circularTypeofWithVarOrFunc.ts, 15, 1))
 
   return input.a * input.b;
->input.a : Symbol(a, Decl(circularTypeofWithVarOrFunc.ts, 12, 17))
+>input.a : Symbol(Input.a, Decl(circularTypeofWithVarOrFunc.ts, 12, 17))
 >input : Symbol(input, Decl(circularTypeofWithVarOrFunc.ts, 18, 13))
->a : Symbol(a, Decl(circularTypeofWithVarOrFunc.ts, 12, 17))
->input.b : Symbol(b, Decl(circularTypeofWithVarOrFunc.ts, 13, 12))
+>a : Symbol(Input.a, Decl(circularTypeofWithVarOrFunc.ts, 12, 17))
+>input.b : Symbol(Input.b, Decl(circularTypeofWithVarOrFunc.ts, 13, 12))
 >input : Symbol(input, Decl(circularTypeofWithVarOrFunc.ts, 18, 13))
->b : Symbol(b, Decl(circularTypeofWithVarOrFunc.ts, 13, 12))
+>b : Symbol(Input.b, Decl(circularTypeofWithVarOrFunc.ts, 13, 12))
 }
 
 // Repro from #26104

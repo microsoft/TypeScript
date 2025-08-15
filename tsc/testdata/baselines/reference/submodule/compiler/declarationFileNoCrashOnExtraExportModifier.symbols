@@ -11,13 +11,13 @@ declare class exports {
 >p : Symbol(p, Decl(input.ts, 2, 16))
 
     t: number;
->t : Symbol(t, Decl(input.ts, 2, 27))
+>t : Symbol(exports.t, Decl(input.ts, 2, 27))
 }
 export class Sub {
 >Sub : Symbol(Sub, Decl(input.ts, 4, 1))
 
     instance!: {
->instance : Symbol(instance, Decl(input.ts, 5, 18))
+>instance : Symbol(Sub.instance, Decl(input.ts, 5, 18))
 
         t: number;
 >t : Symbol(t, Decl(input.ts, 6, 16))

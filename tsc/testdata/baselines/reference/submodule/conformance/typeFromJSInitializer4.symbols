@@ -46,13 +46,13 @@ function f(a = null, b = n, l = []) {
 
     // l should be any[]
     l.push(1)
->l.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>l.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >l : Symbol(l, Decl(a.js, 4, 27))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
     l.push('ok')
->l.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>l.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >l : Symbol(l, Decl(a.js, 4, 27))
->push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 }
 

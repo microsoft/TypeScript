@@ -6,8 +6,8 @@ enum E {
 
     // no ASI, comma expected
     [e] = id++,
->[e] : Symbol([e], Decl(parserComputedPropertyName34.ts, 0, 8))
+>[e] : Symbol(E[e], Decl(parserComputedPropertyName34.ts, 0, 8))
 
     [e2] = 1
->[e2] : Symbol([e2], Decl(parserComputedPropertyName34.ts, 2, 15))
+>[e2] : Symbol(E[e2], Decl(parserComputedPropertyName34.ts, 2, 15))
 }

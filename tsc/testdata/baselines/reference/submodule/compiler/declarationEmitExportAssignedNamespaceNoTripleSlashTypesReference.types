@@ -44,18 +44,18 @@ export function getComp(): Component {
 }
 === src/inferred-comp-export.ts ===
 import { getComp } from "./get-comp";
->getComp : () => import("react").Component
+>getComp : () => import("node_modules/@types/react/index").Component
 
 // this shouldn't need any triple-slash references - it should have a direct import to `react` and that's it
 // This issue (#35343) _only_ reproduces in the test harness when the file in question is in a subfolder
 export const obj = {
->obj : { comp: import("react").Component; }
->{    comp: getComp()} : { comp: import("react").Component; }
+>obj : { comp: import("node_modules/@types/react/index").Component; }
+>{    comp: getComp()} : { comp: import("node_modules/@types/react/index").Component; }
 
     comp: getComp()
->comp : import("react").Component
->getComp() : import("react").Component
->getComp : () => import("react").Component
+>comp : import("node_modules/@types/react/index").Component
+>getComp() : import("node_modules/@types/react/index").Component
+>getComp : () => import("node_modules/@types/react/index").Component
 }
 === src/some-other-file.ts ===
 

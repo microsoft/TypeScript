@@ -5,14 +5,14 @@ class A {
 >A : Symbol(A, Decl(privateNamesAndStaticFields.ts, 0, 0))
 
     static #foo: number;
->#foo : Symbol(#foo, Decl(privateNamesAndStaticFields.ts, 0, 9))
+>#foo : Symbol(A.#foo, Decl(privateNamesAndStaticFields.ts, 0, 9))
 
     static #bar: number;
->#bar : Symbol(#bar, Decl(privateNamesAndStaticFields.ts, 1, 24))
+>#bar : Symbol(A.#bar, Decl(privateNamesAndStaticFields.ts, 1, 24))
 
     constructor () {
         A.#foo = 3;
->A.#foo : Symbol(#foo, Decl(privateNamesAndStaticFields.ts, 0, 9))
+>A.#foo : Symbol(A.#foo, Decl(privateNamesAndStaticFields.ts, 0, 9))
 >A : Symbol(A, Decl(privateNamesAndStaticFields.ts, 0, 0))
 
         B.#foo; // Error
@@ -28,14 +28,14 @@ class B extends A {
 >A : Symbol(A, Decl(privateNamesAndStaticFields.ts, 0, 0))
 
     static #foo: string;
->#foo : Symbol(#foo, Decl(privateNamesAndStaticFields.ts, 10, 19))
+>#foo : Symbol(B.#foo, Decl(privateNamesAndStaticFields.ts, 10, 19))
 
     constructor () {
         super();
 >super : Symbol(A, Decl(privateNamesAndStaticFields.ts, 0, 0))
 
         B.#foo = "some string";
->B.#foo : Symbol(#foo, Decl(privateNamesAndStaticFields.ts, 10, 19))
+>B.#foo : Symbol(B.#foo, Decl(privateNamesAndStaticFields.ts, 10, 19))
 >B : Symbol(B, Decl(privateNamesAndStaticFields.ts, 8, 1))
     }
 }

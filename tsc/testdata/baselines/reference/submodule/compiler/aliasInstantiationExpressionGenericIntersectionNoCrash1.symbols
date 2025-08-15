@@ -6,7 +6,7 @@ class ErrImpl<E> {
 >E : Symbol(E, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash1.ts, 0, 14))
 
   e!: E;
->e : Symbol(e, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash1.ts, 0, 18))
+>e : Symbol(ErrImpl.e, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash1.ts, 0, 18))
 >E : Symbol(E, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash1.ts, 0, 14))
 }
 

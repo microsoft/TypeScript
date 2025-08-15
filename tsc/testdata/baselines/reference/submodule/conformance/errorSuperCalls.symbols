@@ -11,20 +11,20 @@ class NoBase {
 
     //super call in class member function with no base type
     fn() {
->fn : Symbol(fn, Decl(errorSuperCalls.ts, 4, 5))
+>fn : Symbol(NoBase.fn, Decl(errorSuperCalls.ts, 4, 5))
 
         super();
     }
 
     //super call in class accessor (get and set) with no base type
     get foo() {
->foo : Symbol(foo, Decl(errorSuperCalls.ts, 9, 5), Decl(errorSuperCalls.ts, 15, 5))
+>foo : Symbol(NoBase.foo, Decl(errorSuperCalls.ts, 9, 5), Decl(errorSuperCalls.ts, 15, 5))
 
         super();
         return null;
     }
     set foo(v) {
->foo : Symbol(foo, Decl(errorSuperCalls.ts, 9, 5), Decl(errorSuperCalls.ts, 15, 5))
+>foo : Symbol(NoBase.foo, Decl(errorSuperCalls.ts, 9, 5), Decl(errorSuperCalls.ts, 15, 5))
 >v : Symbol(v, Decl(errorSuperCalls.ts, 16, 12))
 
         super();
@@ -32,28 +32,28 @@ class NoBase {
 
     //super call in class member initializer with no base type
     p = super();
->p : Symbol(p, Decl(errorSuperCalls.ts, 18, 5))
+>p : Symbol(NoBase.p, Decl(errorSuperCalls.ts, 18, 5))
 
     //super call in static class member function with no base type
     static fn() {
->fn : Symbol(fn, Decl(errorSuperCalls.ts, 21, 16))
+>fn : Symbol(NoBase.fn, Decl(errorSuperCalls.ts, 21, 16))
 
         super();
     }
 
     //super call in static class member initializer with no base type
     static k = super();
->k : Symbol(k, Decl(errorSuperCalls.ts, 26, 5))
+>k : Symbol(NoBase.k, Decl(errorSuperCalls.ts, 26, 5))
 
     //super call in static class accessor (get and set) with no base type
     static get q() {
->q : Symbol(q, Decl(errorSuperCalls.ts, 29, 23), Decl(errorSuperCalls.ts, 35, 5))
+>q : Symbol(NoBase.q, Decl(errorSuperCalls.ts, 29, 23), Decl(errorSuperCalls.ts, 35, 5))
 
         super();
         return null;
     }
     static set q(n) {
->q : Symbol(q, Decl(errorSuperCalls.ts, 29, 23), Decl(errorSuperCalls.ts, 35, 5))
+>q : Symbol(NoBase.q, Decl(errorSuperCalls.ts, 29, 23), Decl(errorSuperCalls.ts, 35, 5))
 >n : Symbol(n, Decl(errorSuperCalls.ts, 36, 17))
 
         super();
@@ -63,7 +63,7 @@ class NoBase {
 class Base<T> { private n: T; }
 >Base : Symbol(Base, Decl(errorSuperCalls.ts, 39, 1))
 >T : Symbol(T, Decl(errorSuperCalls.ts, 41, 11))
->n : Symbol(n, Decl(errorSuperCalls.ts, 41, 15))
+>n : Symbol(Base.n, Decl(errorSuperCalls.ts, 41, 15))
 >T : Symbol(T, Decl(errorSuperCalls.ts, 41, 11))
 
 class Derived<T> extends Base<T> {
@@ -87,7 +87,7 @@ class OtherBase {
 >OtherBase : Symbol(OtherBase, Decl(errorSuperCalls.ts, 48, 1))
 
     private n: string;
->n : Symbol(n, Decl(errorSuperCalls.ts, 51, 17))
+>n : Symbol(OtherBase.n, Decl(errorSuperCalls.ts, 51, 17))
 }
 
 class OtherDerived extends OtherBase {
@@ -96,10 +96,10 @@ class OtherDerived extends OtherBase {
 
     //super call in class member initializer of derived type
     t = super();
->t : Symbol(t, Decl(errorSuperCalls.ts, 55, 38))
+>t : Symbol(OtherDerived.t, Decl(errorSuperCalls.ts, 55, 38))
 
     fn() {
->fn : Symbol(fn, Decl(errorSuperCalls.ts, 57, 16))
+>fn : Symbol(OtherDerived.fn, Decl(errorSuperCalls.ts, 57, 16))
 
         //super call in class member function of derived type
         super();
@@ -107,13 +107,13 @@ class OtherDerived extends OtherBase {
 
     //super call in class accessor (get and set) of derived type
     get foo() {
->foo : Symbol(foo, Decl(errorSuperCalls.ts, 62, 5), Decl(errorSuperCalls.ts, 68, 5))
+>foo : Symbol(OtherDerived.foo, Decl(errorSuperCalls.ts, 62, 5), Decl(errorSuperCalls.ts, 68, 5))
 
         super();
         return null;
     }
     set foo(n) {
->foo : Symbol(foo, Decl(errorSuperCalls.ts, 62, 5), Decl(errorSuperCalls.ts, 68, 5))
+>foo : Symbol(OtherDerived.foo, Decl(errorSuperCalls.ts, 62, 5), Decl(errorSuperCalls.ts, 68, 5))
 >n : Symbol(n, Decl(errorSuperCalls.ts, 69, 12))
 
         super();

@@ -10,7 +10,7 @@ module M {
 >A : Symbol(A, Decl(twoInterfacesDifferentRootModule.ts, 2, 10))
 
         foo: string;
->foo : Symbol(foo, Decl(twoInterfacesDifferentRootModule.ts, 3, 24))
+>foo : Symbol(A.foo, Decl(twoInterfacesDifferentRootModule.ts, 3, 24))
     }
 
     export interface B<T> {
@@ -18,7 +18,7 @@ module M {
 >T : Symbol(T, Decl(twoInterfacesDifferentRootModule.ts, 7, 23))
 
         foo: T;
->foo : Symbol(foo, Decl(twoInterfacesDifferentRootModule.ts, 7, 27))
+>foo : Symbol(B.foo, Decl(twoInterfacesDifferentRootModule.ts, 7, 27))
 >T : Symbol(T, Decl(twoInterfacesDifferentRootModule.ts, 7, 23))
     }
 }
@@ -30,7 +30,7 @@ module M2 {
 >A : Symbol(A, Decl(twoInterfacesDifferentRootModule.ts, 12, 11))
 
         bar: number;
->bar : Symbol(bar, Decl(twoInterfacesDifferentRootModule.ts, 13, 24))
+>bar : Symbol(A.bar, Decl(twoInterfacesDifferentRootModule.ts, 13, 24))
     }
 
     var a: A;
@@ -43,16 +43,16 @@ module M2 {
 
     var r2 = a.bar; 
 >r2 : Symbol(r2, Decl(twoInterfacesDifferentRootModule.ts, 19, 7))
->a.bar : Symbol(bar, Decl(twoInterfacesDifferentRootModule.ts, 13, 24))
+>a.bar : Symbol(A.bar, Decl(twoInterfacesDifferentRootModule.ts, 13, 24))
 >a : Symbol(a, Decl(twoInterfacesDifferentRootModule.ts, 17, 7))
->bar : Symbol(bar, Decl(twoInterfacesDifferentRootModule.ts, 13, 24))
+>bar : Symbol(A.bar, Decl(twoInterfacesDifferentRootModule.ts, 13, 24))
 
     export interface B<T> {
 >B : Symbol(B, Decl(twoInterfacesDifferentRootModule.ts, 19, 19))
 >T : Symbol(T, Decl(twoInterfacesDifferentRootModule.ts, 21, 23))
 
         bar: T;
->bar : Symbol(bar, Decl(twoInterfacesDifferentRootModule.ts, 21, 27))
+>bar : Symbol(B.bar, Decl(twoInterfacesDifferentRootModule.ts, 21, 27))
 >T : Symbol(T, Decl(twoInterfacesDifferentRootModule.ts, 21, 23))
     }
 
@@ -66,7 +66,7 @@ module M2 {
 
     var r4 = b.bar; 
 >r4 : Symbol(r4, Decl(twoInterfacesDifferentRootModule.ts, 27, 7))
->b.bar : Symbol(bar, Decl(twoInterfacesDifferentRootModule.ts, 21, 27))
+>b.bar : Symbol(B.bar, Decl(twoInterfacesDifferentRootModule.ts, 21, 27))
 >b : Symbol(b, Decl(twoInterfacesDifferentRootModule.ts, 25, 7))
->bar : Symbol(bar, Decl(twoInterfacesDifferentRootModule.ts, 21, 27))
+>bar : Symbol(B.bar, Decl(twoInterfacesDifferentRootModule.ts, 21, 27))
 }

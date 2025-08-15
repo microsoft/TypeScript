@@ -13,7 +13,7 @@ class ClassWithNoInitializer extends BaseErrClass {
 >BaseErrClass : Symbol(BaseErrClass, Decl(thisInInvalidContextsExternalModule.ts, 0, 0))
 
     t;
->t : Symbol(t, Decl(thisInInvalidContextsExternalModule.ts, 4, 51))
+>t : Symbol(ClassWithNoInitializer.t, Decl(thisInInvalidContextsExternalModule.ts, 4, 51))
 
     //'this' in optional super call
     constructor() {
@@ -28,7 +28,7 @@ class ClassWithInitializer extends BaseErrClass {
 >BaseErrClass : Symbol(BaseErrClass, Decl(thisInInvalidContextsExternalModule.ts, 0, 0))
 
     t = 4;
->t : Symbol(t, Decl(thisInInvalidContextsExternalModule.ts, 12, 49))
+>t : Symbol(ClassWithInitializer.t, Decl(thisInInvalidContextsExternalModule.ts, 12, 49))
 
     //'this' in required super call
     constructor() {
@@ -70,10 +70,10 @@ enum SomeEnum {
 >SomeEnum : Symbol(SomeEnum, Decl(thisInInvalidContextsExternalModule.ts, 34, 1))
 
     A = this, // Should not be allowed
->A : Symbol(A, Decl(thisInInvalidContextsExternalModule.ts, 37, 15))
+>A : Symbol(SomeEnum.A, Decl(thisInInvalidContextsExternalModule.ts, 37, 15))
 
     B = this.spaaaace // Also should not be allowed
->B : Symbol(B, Decl(thisInInvalidContextsExternalModule.ts, 38, 13))
+>B : Symbol(SomeEnum.B, Decl(thisInInvalidContextsExternalModule.ts, 38, 13))
 }
 
 export = this; // Should be an error

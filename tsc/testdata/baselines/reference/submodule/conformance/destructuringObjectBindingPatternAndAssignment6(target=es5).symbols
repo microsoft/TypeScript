@@ -21,9 +21,9 @@ const { [a]: aVal, [b]: bVal } = (() => {
 
 })();
 console.log(aVal, bVal);
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >aVal : Symbol(aVal, Decl(destructuringObjectBindingPatternAndAssignment6.ts, 3, 7))
 >bVal : Symbol(bVal, Decl(destructuringObjectBindingPatternAndAssignment6.ts, 3, 18))
 

@@ -5,4 +5,4 @@
  const content = <my-element/>;
  >content : Symbol(content, Decl(index.tsx, 2, 5))
 ->my-element : Symbol(MyLib.JSX.IntrinsicElements.__index, Decl(library.ts, 3, 38))
-+>my-element : Symbol(__index, Decl(library.ts, 3, 38))
++>my-element : Symbol(MyLib.JSX.IntrinsicElements[__index], Decl(library.ts, 3, 38))

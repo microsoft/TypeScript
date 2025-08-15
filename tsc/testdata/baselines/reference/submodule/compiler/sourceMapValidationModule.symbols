@@ -24,8 +24,8 @@ module m3 {
 >foo : Symbol(foo, Decl(sourceMapValidationModule.ts, 7, 5))
 
         return m4.x;
->m4.x : Symbol(x, Decl(sourceMapValidationModule.ts, 6, 18))
+>m4.x : Symbol(m4.x, Decl(sourceMapValidationModule.ts, 6, 18))
 >m4 : Symbol(m4, Decl(sourceMapValidationModule.ts, 4, 11))
->x : Symbol(x, Decl(sourceMapValidationModule.ts, 6, 18))
+>x : Symbol(m4.x, Decl(sourceMapValidationModule.ts, 6, 18))
     }
 }

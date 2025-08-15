@@ -12,7 +12,7 @@ export class Foo {
      * @param {string} baz Baz.
      */
     set bar(baz) {}
->bar : Symbol(bar, Decl(foo.js, 2, 18))
+>bar : Symbol(Foo.bar, Decl(foo.js, 2, 18))
 >baz : Symbol(baz, Decl(foo.js, 8, 12))
 }
 

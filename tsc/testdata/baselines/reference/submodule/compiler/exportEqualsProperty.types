@@ -81,9 +81,9 @@ namespace A {
 >0 : 0
 }
 export = A.B;
->A.B : typeof import("./a")
+>A.B : typeof import("a")
 >A : typeof A
->B : typeof import("./a")
+>B : typeof import("a")
 
 === b.ts ===
 export = "foo".length;

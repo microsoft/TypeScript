@@ -5,7 +5,7 @@ abstract class A {
 >A : Symbol(A, Decl(classAbstractUsingAbstractMethod1.ts, 0, 0))
 
     abstract foo() : number;
->foo : Symbol(foo, Decl(classAbstractUsingAbstractMethod1.ts, 0, 18))
+>foo : Symbol(A.foo, Decl(classAbstractUsingAbstractMethod1.ts, 0, 18))
 }
 
 class B extends A {
@@ -13,7 +13,7 @@ class B extends A {
 >A : Symbol(A, Decl(classAbstractUsingAbstractMethod1.ts, 0, 0))
 
     foo() { return 1; }
->foo : Symbol(foo, Decl(classAbstractUsingAbstractMethod1.ts, 4, 19))
+>foo : Symbol(B.foo, Decl(classAbstractUsingAbstractMethod1.ts, 4, 19))
 }
 
 abstract class C extends A  {
@@ -21,7 +21,7 @@ abstract class C extends A  {
 >A : Symbol(A, Decl(classAbstractUsingAbstractMethod1.ts, 0, 0))
 
     abstract foo() : number;
->foo : Symbol(foo, Decl(classAbstractUsingAbstractMethod1.ts, 8, 29))
+>foo : Symbol(C.foo, Decl(classAbstractUsingAbstractMethod1.ts, 8, 29))
 }
 
 var a = new B;
@@ -29,16 +29,16 @@ var a = new B;
 >B : Symbol(B, Decl(classAbstractUsingAbstractMethod1.ts, 2, 1))
 
 a.foo();
->a.foo : Symbol(foo, Decl(classAbstractUsingAbstractMethod1.ts, 4, 19))
+>a.foo : Symbol(B.foo, Decl(classAbstractUsingAbstractMethod1.ts, 4, 19))
 >a : Symbol(a, Decl(classAbstractUsingAbstractMethod1.ts, 12, 3))
->foo : Symbol(foo, Decl(classAbstractUsingAbstractMethod1.ts, 4, 19))
+>foo : Symbol(B.foo, Decl(classAbstractUsingAbstractMethod1.ts, 4, 19))
 
 a = new C; // error, cannot instantiate abstract class.
 >a : Symbol(a, Decl(classAbstractUsingAbstractMethod1.ts, 12, 3))
 >C : Symbol(C, Decl(classAbstractUsingAbstractMethod1.ts, 6, 1))
 
 a.foo();
->a.foo : Symbol(foo, Decl(classAbstractUsingAbstractMethod1.ts, 4, 19))
+>a.foo : Symbol(B.foo, Decl(classAbstractUsingAbstractMethod1.ts, 4, 19))
 >a : Symbol(a, Decl(classAbstractUsingAbstractMethod1.ts, 12, 3))
->foo : Symbol(foo, Decl(classAbstractUsingAbstractMethod1.ts, 4, 19))
+>foo : Symbol(B.foo, Decl(classAbstractUsingAbstractMethod1.ts, 4, 19))
 

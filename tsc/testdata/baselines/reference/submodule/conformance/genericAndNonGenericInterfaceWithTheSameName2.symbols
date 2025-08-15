@@ -11,7 +11,7 @@ module M {
 >T : Symbol(T, Decl(genericAndNonGenericInterfaceWithTheSameName2.ts, 3, 16))
 
         bar: T;
->bar : Symbol(bar, Decl(genericAndNonGenericInterfaceWithTheSameName2.ts, 3, 20))
+>bar : Symbol(A.bar, Decl(genericAndNonGenericInterfaceWithTheSameName2.ts, 3, 20))
 >T : Symbol(T, Decl(genericAndNonGenericInterfaceWithTheSameName2.ts, 3, 16))
     }
 }
@@ -23,7 +23,7 @@ module M2 {
 >A : Symbol(A, Decl(genericAndNonGenericInterfaceWithTheSameName2.ts, 8, 11))
 
         foo: string;
->foo : Symbol(foo, Decl(genericAndNonGenericInterfaceWithTheSameName2.ts, 9, 17))
+>foo : Symbol(A.foo, Decl(genericAndNonGenericInterfaceWithTheSameName2.ts, 9, 17))
     }
 }
 
@@ -38,7 +38,7 @@ module N {
 >T : Symbol(T, Decl(genericAndNonGenericInterfaceWithTheSameName2.ts, 16, 20))
 
             bar: T;
->bar : Symbol(bar, Decl(genericAndNonGenericInterfaceWithTheSameName2.ts, 16, 24))
+>bar : Symbol(A.bar, Decl(genericAndNonGenericInterfaceWithTheSameName2.ts, 16, 24))
 >T : Symbol(T, Decl(genericAndNonGenericInterfaceWithTheSameName2.ts, 16, 20))
         }
     }
@@ -50,7 +50,7 @@ module N {
 >A : Symbol(A, Decl(genericAndNonGenericInterfaceWithTheSameName2.ts, 21, 15))
 
             foo: string;
->foo : Symbol(foo, Decl(genericAndNonGenericInterfaceWithTheSameName2.ts, 22, 21))
+>foo : Symbol(A.foo, Decl(genericAndNonGenericInterfaceWithTheSameName2.ts, 22, 21))
         }
     }
 }

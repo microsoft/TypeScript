@@ -7,11 +7,11 @@ interface Base<T, U> {
 >U : Symbol(U, Decl(classExtendingClassLikeType.ts, 0, 17))
 
     x: T;
->x : Symbol(x, Decl(classExtendingClassLikeType.ts, 0, 22))
+>x : Symbol(Base.x, Decl(classExtendingClassLikeType.ts, 0, 22))
 >T : Symbol(T, Decl(classExtendingClassLikeType.ts, 0, 15))
 
     y: U;
->y : Symbol(y, Decl(classExtendingClassLikeType.ts, 1, 9))
+>y : Symbol(Base.y, Decl(classExtendingClassLikeType.ts, 1, 9))
 >U : Symbol(U, Decl(classExtendingClassLikeType.ts, 0, 17))
 }
 
@@ -71,14 +71,14 @@ class D1 extends getBase() {
 >super : Symbol(BaseConstructor, Decl(classExtendingClassLikeType.ts, 7, 1))
 
         this.x = "x";
->this.x : Symbol(x, Decl(classExtendingClassLikeType.ts, 0, 22))
+>this.x : Symbol(Base.x, Decl(classExtendingClassLikeType.ts, 0, 22))
 >this : Symbol(D1, Decl(classExtendingClassLikeType.ts, 16, 44))
->x : Symbol(x, Decl(classExtendingClassLikeType.ts, 0, 22))
+>x : Symbol(Base.x, Decl(classExtendingClassLikeType.ts, 0, 22))
 
         this.y = "y";
->this.y : Symbol(y, Decl(classExtendingClassLikeType.ts, 1, 9))
+>this.y : Symbol(Base.y, Decl(classExtendingClassLikeType.ts, 1, 9))
 >this : Symbol(D1, Decl(classExtendingClassLikeType.ts, 16, 44))
->y : Symbol(y, Decl(classExtendingClassLikeType.ts, 1, 9))
+>y : Symbol(Base.y, Decl(classExtendingClassLikeType.ts, 1, 9))
     }
 }
 
@@ -94,14 +94,14 @@ class D2 extends getBase() <number> {
 >super : Symbol(BaseConstructor, Decl(classExtendingClassLikeType.ts, 7, 1))
 
         this.x = 1;
->this.x : Symbol(x, Decl(classExtendingClassLikeType.ts, 0, 22))
+>this.x : Symbol(Base.x, Decl(classExtendingClassLikeType.ts, 0, 22))
 >this : Symbol(D2, Decl(classExtendingClassLikeType.ts, 24, 1))
->x : Symbol(x, Decl(classExtendingClassLikeType.ts, 0, 22))
+>x : Symbol(Base.x, Decl(classExtendingClassLikeType.ts, 0, 22))
 
         this.y = 2;
->this.y : Symbol(y, Decl(classExtendingClassLikeType.ts, 1, 9))
+>this.y : Symbol(Base.y, Decl(classExtendingClassLikeType.ts, 1, 9))
 >this : Symbol(D2, Decl(classExtendingClassLikeType.ts, 24, 1))
->y : Symbol(y, Decl(classExtendingClassLikeType.ts, 1, 9))
+>y : Symbol(Base.y, Decl(classExtendingClassLikeType.ts, 1, 9))
     }
 }
 
@@ -114,14 +114,14 @@ class D3 extends getBase() <string, number> {
 >super : Symbol(BaseConstructor, Decl(classExtendingClassLikeType.ts, 7, 1))
 
         this.x = "x";
->this.x : Symbol(x, Decl(classExtendingClassLikeType.ts, 0, 22))
+>this.x : Symbol(Base.x, Decl(classExtendingClassLikeType.ts, 0, 22))
 >this : Symbol(D3, Decl(classExtendingClassLikeType.ts, 33, 1))
->x : Symbol(x, Decl(classExtendingClassLikeType.ts, 0, 22))
+>x : Symbol(Base.x, Decl(classExtendingClassLikeType.ts, 0, 22))
 
         this.y = 2;
->this.y : Symbol(y, Decl(classExtendingClassLikeType.ts, 1, 9))
+>this.y : Symbol(Base.y, Decl(classExtendingClassLikeType.ts, 1, 9))
 >this : Symbol(D3, Decl(classExtendingClassLikeType.ts, 33, 1))
->y : Symbol(y, Decl(classExtendingClassLikeType.ts, 1, 9))
+>y : Symbol(Base.y, Decl(classExtendingClassLikeType.ts, 1, 9))
     }
 }
 

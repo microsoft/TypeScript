@@ -16,18 +16,18 @@ function f(b: boolean) {
 >Foo : Symbol(Foo, Decl(classBlockScoping.ts, 3, 9))
 
       static y = new Foo();
->y : Symbol(y, Decl(classBlockScoping.ts, 3, 21))
+>y : Symbol(Foo.y, Decl(classBlockScoping.ts, 3, 21))
 >Foo : Symbol(Foo, Decl(classBlockScoping.ts, 3, 9))
 
       static x() {
->x : Symbol(x, Decl(classBlockScoping.ts, 4, 27))
+>x : Symbol(Foo.x, Decl(classBlockScoping.ts, 4, 27))
 
         new Foo();
 >Foo : Symbol(Foo, Decl(classBlockScoping.ts, 3, 9))
       }
 
       m() {
->m : Symbol(m, Decl(classBlockScoping.ts, 8, 7))
+>m : Symbol(Foo.m, Decl(classBlockScoping.ts, 8, 7))
 
         new Foo();
 >Foo : Symbol(Foo, Decl(classBlockScoping.ts, 3, 9))
@@ -42,18 +42,18 @@ function f(b: boolean) {
 >Foo : Symbol(Foo, Decl(classBlockScoping.ts, 17, 8))
 
       static y = new Foo();
->y : Symbol(y, Decl(classBlockScoping.ts, 18, 15))
+>y : Symbol(Foo.y, Decl(classBlockScoping.ts, 18, 15))
 >Foo : Symbol(Foo, Decl(classBlockScoping.ts, 17, 8))
 
       static x() {
->x : Symbol(x, Decl(classBlockScoping.ts, 19, 27))
+>x : Symbol(Foo.x, Decl(classBlockScoping.ts, 19, 27))
 
         new Foo();
 >Foo : Symbol(Foo, Decl(classBlockScoping.ts, 17, 8))
       }
 
       m() {
->m : Symbol(m, Decl(classBlockScoping.ts, 23, 7))
+>m : Symbol(Foo.m, Decl(classBlockScoping.ts, 23, 7))
 
         new Foo();
 >Foo : Symbol(Foo, Decl(classBlockScoping.ts, 17, 8))

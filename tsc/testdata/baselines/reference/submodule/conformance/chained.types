@@ -18,8 +18,8 @@ import { Z as Y } from './a';
 >Y : any
 
 export { B as C } from './a';
->B : typeof import("./a").B
->C : typeof import("./a").B
+>B : typeof import("/a").B
+>C : typeof import("/a").B
 
 === /c.ts ===
 import type { C } from './b';

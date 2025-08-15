@@ -7,17 +7,17 @@ class C {
 >C : Symbol(C, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 0, 0))
 
     x: string;
->x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 2, 9))
+>x : Symbol(C.x, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 2, 9))
 }
 
 class D {
 >D : Symbol(D, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 4, 1))
 
     x: string;
->x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 6, 9))
+>x : Symbol(D.x, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 6, 9))
 
     y: string;
->y : Symbol(y, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 7, 14))
+>y : Symbol(D.y, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 7, 14))
 }
 
 function foo<T, U extends T>(t: T, t2: U) {

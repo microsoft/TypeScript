@@ -7,7 +7,7 @@ interface Callable {
 >Callable : Symbol(Callable, Decl(assignmentCompatability_checking-call-member-off-of-function-interface.ts, 0, 0))
 
     call(blah: any); // also works for 'apply'
->call : Symbol(call, Decl(assignmentCompatability_checking-call-member-off-of-function-interface.ts, 2, 20))
+>call : Symbol(Callable.call, Decl(assignmentCompatability_checking-call-member-off-of-function-interface.ts, 2, 20))
 >blah : Symbol(blah, Decl(assignmentCompatability_checking-call-member-off-of-function-interface.ts, 3, 9))
 }
 
