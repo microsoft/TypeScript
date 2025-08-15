@@ -5,9 +5,9 @@ controlFlowGenericTypes.ts(81,11): error TS2339: Property 'foo' does not exist o
 controlFlowGenericTypes.ts(90,44): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
 controlFlowGenericTypes.ts(91,11): error TS2339: Property 'foo' does not exist on type 'MyUnion'.
   Property 'foo' does not exist on type 'AA'.
-controlFlowGenericTypes.ts(156,16): error TS18048: 'obj' is possibly 'undefined'.
-controlFlowGenericTypes.ts(167,9): error TS18048: 'iSpec' is possibly 'undefined'.
-controlFlowGenericTypes.ts(168,9): error TS18048: 'iSpec' is possibly 'undefined'.
+controlFlowGenericTypes.ts(176,16): error TS18049: 'obj' is possibly 'null' or 'undefined'.
+controlFlowGenericTypes.ts(182,16): error TS18049: 'obj' is possibly 'null' or 'undefined'.
+controlFlowGenericTypes.ts(195,9): error TS2536: Type 'keyof PublicSpec' cannot be used to index type 'InternalSpec'.
 
 
 ==== controlFlowGenericTypes.ts (8 errors) ====
@@ -163,25 +163,54 @@ controlFlowGenericTypes.ts(168,9): error TS18048: 'iSpec' is possibly 'undefined
         emittingObject.off(eventName as typeof eventName, 0);
     }
     
-    // In an element access obj[x], we consider obj to be in a constraint position, except when obj is of
-    // a generic type without a nullable constraint and x is a generic type. This is because when both obj
-    // and x are of generic types T and K, we want the resulting type to be T[K].
+    // In an element access obj[key], we consider obj to be in a constraint position, except when
+    // obj and key both have generic types. When obj and key are of generic types T and K, we want
+    // the resulting type to be T[K].
     
     function fx1<T, K extends keyof T>(obj: T, key: K) {
         const x1 = obj[key];
         const x2 = obj && obj[key];
+        const x3 = obj?.[key];
     }
     
     function fx2<T extends Record<keyof T, string>, K extends keyof T>(obj: T, key: K) {
         const x1 = obj[key];
         const x2 = obj && obj[key];
+        const x3 = obj?.[key];
     }
     
     function fx3<T extends Record<keyof T, string> | undefined, K extends keyof T>(obj: T, key: K) {
+        const x1 = obj[key];
+        const x2 = obj && obj[key];
+        const x3 = obj?.[key];
+    }
+    
+    function fx4<T extends unknown, K extends keyof T>(obj: T, key: K) {
+        const x1 = obj[key];
+        const x2 = obj && obj[key];
+        const x3 = obj?.[key];
+    }
+    
+    function fx5<T extends {} | null | undefined, K extends keyof T>(obj: T, key: K) {
+        const x1 = obj[key];
+        const x2 = obj && obj[key];
+        const x3 = obj?.[key];
+    }
+    
+    function fx6<T, K extends keyof T>(obj: T | null | undefined, key: K) {
         const x1 = obj[key];  // Error
                    ~~~
-!!! error TS18048: 'obj' is possibly 'undefined'.
+!!! error TS18049: 'obj' is possibly 'null' or 'undefined'.
         const x2 = obj && obj[key];
+        const x3 = obj?.[key];
+    }
+    
+    function fx7<T, K extends keyof T>(obj: { x: T } | null | undefined, key: K) {
+        const x1 = obj.x[key];  // Error
+                   ~~~
+!!! error TS18049: 'obj' is possibly 'null' or 'undefined'.
+        const x2 = obj && obj.x[key];
+        const x3 = obj?.x[key];
     }
     
     // Repro from #44166
@@ -191,12 +220,10 @@ controlFlowGenericTypes.ts(168,9): error TS18048: 'iSpec' is possibly 'undefined
         InternalSpec extends Record<keyof PublicSpec, any>  | undefined = undefined> {
         m() {
             let iSpec = null! as InternalSpec;
-            iSpec[null! as keyof InternalSpec];  // Error, object possibly undefined
-            ~~~~~
-!!! error TS18048: 'iSpec' is possibly 'undefined'.
-            iSpec[null! as keyof PublicSpec];    // Error, object possibly undefined
-            ~~~~~
-!!! error TS18048: 'iSpec' is possibly 'undefined'.
+            iSpec[null! as keyof InternalSpec];
+            iSpec[null! as keyof PublicSpec];    // Error
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2536: Type 'keyof PublicSpec' cannot be used to index type 'InternalSpec'.
             if (iSpec === undefined) {
                 return;
             }
