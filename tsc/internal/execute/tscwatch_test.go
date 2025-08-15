@@ -69,7 +69,7 @@ func noEmitWatchTestInput(
 			"/home/src/workspaces/project/a.ts":          aText,
 			"/home/src/workspaces/project/tsconfig.json": tsconfigText,
 		},
-		edits: []*testTscEdit{
+		edits: []*tscEdit{
 			newTscEdit("fix error", func(sys *testSys) {
 				sys.writeFileNoError("/home/src/workspaces/project/a.ts", `const a = "hello";`, false)
 			}),
@@ -92,8 +92,8 @@ func noEmitWatchTestInput(
 	}
 }
 
-func newTscEdit(name string, edit func(sys *testSys)) *testTscEdit {
-	return &testTscEdit{name, []string{}, edit, ""}
+func newTscEdit(name string, edit func(sys *testSys)) *tscEdit {
+	return &tscEdit{name, []string{}, edit, ""}
 }
 
 func TestTscNoEmitWatch(t *testing.T) {

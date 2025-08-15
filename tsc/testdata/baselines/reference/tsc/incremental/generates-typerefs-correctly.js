@@ -190,6 +190,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
   "size": 2078
 }
 
+tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
 *refresh*    /home/src/workspaces/project/src/box.ts
@@ -333,6 +334,7 @@ exports.something = 1;
   "size": 2141
 }
 
+tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/workspaces/project/src/bug.js
 Signatures::

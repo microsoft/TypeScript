@@ -5,5 +5,4 @@ Input::
 tsgo --help --all
 ExitStatus:: Success
 Output::
-No output
 

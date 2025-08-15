@@ -141,6 +141,7 @@ export {};
   "size": 2019
 }
 
+tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
 *refresh*    /home/src/workspaces/project/MessageablePerson.ts
@@ -156,6 +157,7 @@ tsgo --incremental
 ExitStatus:: Success
 Output::
 
+tsconfig.json::
 SemanticDiagnostics::
 Signatures::
 
@@ -299,6 +301,7 @@ Errors  Files
   "size": 2702
 }
 
+tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/workspaces/project/MessageablePerson.ts
 *refresh*    /home/src/workspaces/project/main.ts
@@ -336,6 +339,7 @@ Errors  Files
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *rewrite with same content*
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
+tsconfig.json::
 SemanticDiagnostics::
 Signatures::
 
@@ -421,6 +425,7 @@ Output::
   "size": 2019
 }
 
+tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/workspaces/project/MessageablePerson.ts
 *refresh*    /home/src/workspaces/project/main.ts
@@ -435,5 +440,6 @@ tsgo --incremental
 ExitStatus:: Success
 Output::
 
+tsconfig.json::
 SemanticDiagnostics::
 Signatures::

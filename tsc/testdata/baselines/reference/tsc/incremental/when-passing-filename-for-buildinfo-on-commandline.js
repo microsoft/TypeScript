@@ -87,6 +87,7 @@ exports.x = void 0;
 exports.x = 10;
 
 
+tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
 *refresh*    /home/src/workspaces/project/src/main.ts
@@ -103,5 +104,6 @@ Output::
 src/main.ts
    Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
 
+tsconfig.json::
 SemanticDiagnostics::
 Signatures::

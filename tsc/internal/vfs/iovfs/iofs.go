@@ -24,6 +24,11 @@ type WritableFS interface {
 	Remove(path string) error
 }
 
+type FsWithSys interface {
+	vfs.FS
+	FSys() fs.FS
+}
+
 // From creates a new FS from an [fs.FS].
 //
 // For paths like `c:/foo/bar`, fsys will be used as though it's rooted at `/` and the path is `/c:/foo/bar`.
@@ -33,7 +38,7 @@ type WritableFS interface {
 //
 // From does not actually handle case-insensitivity; ensure the passed in [fs.FS]
 // respects case-insensitive file names if needed. Consider using [vfstest.FromMap] for testing.
-func From(fsys fs.FS, useCaseSensitiveFileNames bool) vfs.FS {
+func From(fsys fs.FS, useCaseSensitiveFileNames bool) FsWithSys {
 	var realpath func(path string) (string, error)
 	if fsys, ok := fsys.(RealpathFS); ok {
 		realpath = func(path string) (string, error) {
@@ -107,6 +112,7 @@ func From(fsys fs.FS, useCaseSensitiveFileNames bool) vfs.FS {
 		writeFile:                 writeFile,
 		mkdirAll:                  mkdirAll,
 		remove:                    remove,
+		fsys:                      fsys,
 	}
 }
 
@@ -118,9 +124,10 @@ type ioFS struct {
 	writeFile                 func(path string, content string, writeByteOrderMark bool) error
 	mkdirAll                  func(path string) error
 	remove                    func(path string) error
+	fsys                      fs.FS
 }
 
-var _ vfs.FS = (*ioFS)(nil)
+var _ FsWithSys = (*ioFS)(nil)
 
 func (vfs *ioFS) UseCaseSensitiveFileNames() bool {
 	return vfs.useCaseSensitiveFileNames
@@ -176,4 +183,8 @@ func (vfs *ioFS) WriteFile(path string, content string, writeByteOrderMark bool)
 		return err
 	}
 	return vfs.writeFile(path, content, writeByteOrderMark)
+}
+
+func (vfs *ioFS) FSys() fs.FS {
+	return vfs.fsys
 }

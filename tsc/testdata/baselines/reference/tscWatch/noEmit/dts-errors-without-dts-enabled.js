@@ -13,6 +13,8 @@ const a = class { private p = 10; };
 tsgo -w
 ExitStatus:: Success
 Output::
+build starting at HH:MM:SS AM
+build finished in d.ddds
 //// [/home/src/tslibs/TS/Lib/lib.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -37,6 +39,7 @@ interface Symbol {
 }
 declare const console: { log(msg: any): void; };
 
+tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
 *refresh*    /home/src/workspaces/project/a.ts
@@ -49,7 +52,10 @@ const a = "hello";
 
 
 Output::
+build starting at HH:MM:SS AM
+build finished in d.ddds
 
+tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
 *refresh*    /home/src/workspaces/project/a.ts
@@ -67,10 +73,13 @@ Edit [1]:: emit after fixing error
 
 
 Output::
+build starting at HH:MM:SS AM
+build finished in d.ddds
 //// [/home/src/workspaces/project/a.js] *new* 
 const a = "hello";
 
 
+tsconfig.json::
 SemanticDiagnostics::
 Signatures::
 
@@ -86,7 +95,10 @@ Edit [2]:: no emit run after fixing error
 
 
 Output::
+build starting at HH:MM:SS AM
+build finished in d.ddds
 
+tsconfig.json::
 SemanticDiagnostics::
 Signatures::
 
@@ -97,7 +109,10 @@ const a = class { private p = 10; };
 
 
 Output::
+build starting at HH:MM:SS AM
+build finished in d.ddds
 
+tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
 *refresh*    /home/src/workspaces/project/a.ts
@@ -115,12 +130,15 @@ Edit [4]:: emit when error
 
 
 Output::
+build starting at HH:MM:SS AM
+build finished in d.ddds
 //// [/home/src/workspaces/project/a.js] *modified* 
 const a = class {
     p = 10;
 };
 
 
+tsconfig.json::
 SemanticDiagnostics::
 Signatures::
 
@@ -136,6 +154,9 @@ Edit [5]:: no emit run when error
 
 
 Output::
+build starting at HH:MM:SS AM
+build finished in d.ddds
 
+tsconfig.json::
 SemanticDiagnostics::
 Signatures::

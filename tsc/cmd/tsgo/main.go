@@ -20,6 +20,6 @@ func runMain() int {
 			return runAPI(args[1:])
 		}
 	}
-	result := execute.CommandLine(newSystem(), args, false)
+	result := execute.CommandLine(newSystem(), args, nil)
 	return int(result.Status)
 }

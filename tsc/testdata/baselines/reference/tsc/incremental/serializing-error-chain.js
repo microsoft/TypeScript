@@ -172,6 +172,7 @@ declare const console: { log(msg: any): void; };
   "size": 2098
 }
 
+tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
 *refresh*    /home/src/workspaces/project/index.tsx
@@ -200,5 +201,6 @@ Output::
 Found 1 error in index.tsx[90m:10[0m
 
 
+tsconfig.json::
 SemanticDiagnostics::
 Signatures::

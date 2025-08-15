@@ -46,6 +46,7 @@ tsgo --p project --pretty false
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 project/index.ts(2,10): error TS2748: Cannot access ambient const enums when 'verbatimModuleSyntax' is enabled.
+
 //// [/home/src/tslibs/TS/Lib/lib.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}

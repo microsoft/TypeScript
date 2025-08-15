@@ -13,33 +13,35 @@ import (
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
-type testTscEdit struct {
+type tscEdit struct {
 	caption         string
 	commandLineArgs []string
 	edit            func(*testSys)
 	expectedDiff    string
 }
 
-var noChange = &testTscEdit{
+var noChange = &tscEdit{
 	caption: "no change",
 }
 
-var noChangeOnlyEdit = []*testTscEdit{
+var noChangeOnlyEdit = []*tscEdit{
 	noChange,
 }
 
 type tscInput struct {
-	subScenario     string
-	commandLineArgs []string
-	files           FileMap
-	cwd             string
-	edits           []*testTscEdit
-	env             map[string]string
+	subScenario      string
+	commandLineArgs  []string
+	files            FileMap
+	cwd              string
+	edits            []*tscEdit
+	env              map[string]string
+	ignoreCase       bool
+	windowsStyleRoot string
 }
 
 func (test *tscInput) executeCommand(sys *testSys, baselineBuilder *strings.Builder, commandLineArgs []string) execute.CommandLineResult {
 	fmt.Fprint(baselineBuilder, "tsgo ", strings.Join(commandLineArgs, " "), "\n")
-	result := execute.CommandLine(sys, commandLineArgs, true)
+	result := execute.CommandLine(sys, commandLineArgs, sys)
 	switch result.Status {
 	case execute.ExitStatusSuccess:
 		baselineBuilder.WriteString("ExitStatus:: Success")
@@ -61,11 +63,11 @@ func (test *tscInput) executeCommand(sys *testSys, baselineBuilder *strings.Buil
 
 func (test *tscInput) run(t *testing.T, scenario string) {
 	t.Helper()
-	t.Run(test.subScenario+" tsc baseline", func(t *testing.T) {
+	t.Run(test.subScenario, func(t *testing.T) {
 		t.Parallel()
 		// initial test tsc compile
 		baselineBuilder := &strings.Builder{}
-		sys := newTestSys(test.files, test.cwd, test.env)
+		sys := newTestSys(test)
 		fmt.Fprint(
 			baselineBuilder,
 			"currentDirectory::",
@@ -78,6 +80,7 @@ func (test *tscInput) run(t *testing.T, scenario string) {
 		result := test.executeCommand(sys, baselineBuilder, test.commandLineArgs)
 		sys.serializeState(baselineBuilder)
 		sys.baselineProgram(baselineBuilder, result.IncrementalProgram, result.Watcher)
+		var unexpectedDiff string
 
 		for index, do := range test.edits {
 			sys.clearOutput()
@@ -102,13 +105,13 @@ func (test *tscInput) run(t *testing.T, scenario string) {
 			})
 			wg.Queue(func() {
 				// Compute build with all the edits
-				nonIncrementalSys = newTestSys(test.files, test.cwd, test.env)
+				nonIncrementalSys = newTestSys(test)
 				for i := range index + 1 {
 					if test.edits[i].edit != nil {
 						test.edits[i].edit(nonIncrementalSys)
 					}
 				}
-				execute.CommandLine(nonIncrementalSys, commandLineArgs, true)
+				execute.CommandLine(nonIncrementalSys, commandLineArgs, nonIncrementalSys)
 			})
 			wg.RunAndWait()
 
@@ -116,11 +119,18 @@ func (test *tscInput) run(t *testing.T, scenario string) {
 			if diff != "" {
 				baselineBuilder.WriteString(fmt.Sprintf("\n\nDiff:: %s\n", core.IfElse(do.expectedDiff == "", "!!! Unexpected diff, please review and either fix or write explanation as expectedDiff !!!", do.expectedDiff)))
 				baselineBuilder.WriteString(diff)
+				if do.expectedDiff == "" {
+					unexpectedDiff += fmt.Sprintf("Edit [%d]:: %s\n!!! Unexpected diff, please review and either fix or write explanation as expectedDiff !!!\n%s\n", index, do.caption, diff)
+				}
 			} else if do.expectedDiff != "" {
 				baselineBuilder.WriteString(fmt.Sprintf("\n\nDiff:: %s !!! Diff not found but explanation present, please review and remove the explanation !!!\n", do.expectedDiff))
+				unexpectedDiff += fmt.Sprintf("Edit [%d]:: %s\n!!! Diff not found but explanation present, please review and remove the explanation !!!\n", index, do.caption)
 			}
 		}
 		baseline.Run(t, strings.ReplaceAll(test.subScenario, " ", "-")+".js", baselineBuilder.String(), baseline.Options{Subfolder: filepath.Join(test.getBaselineSubFolder(), scenario)})
+		if unexpectedDiff != "" {
+			t.Errorf("Test %s has unexpected diff %s with incremental build, please review the baseline file", test.subScenario, unexpectedDiff)
+		}
 	})
 }
 
@@ -150,10 +160,10 @@ func getDiffForIncremental(incrementalSys *testSys, nonIncrementalSys *testSys) 
 		}
 	}
 
-	incrementalErrors := strings.Join(incrementalSys.output, "")
-	nonIncrementalErrors := strings.Join(nonIncrementalSys.output, "")
-	if incrementalErrors != nonIncrementalErrors {
-		diffBuilder.WriteString(baseline.DiffText("nonIncremental errors.txt", "incremental errors.txt", nonIncrementalErrors, incrementalErrors))
+	incrementalOutput := incrementalSys.getOutput(true)
+	nonIncrementalOutput := nonIncrementalSys.getOutput(true)
+	if incrementalOutput != nonIncrementalOutput {
+		diffBuilder.WriteString(baseline.DiffText("nonIncremental.output.txt", "incremental.output.txt", nonIncrementalOutput, incrementalOutput))
 	}
 	return diffBuilder.String()
 }
@@ -161,13 +171,21 @@ func getDiffForIncremental(incrementalSys *testSys, nonIncrementalSys *testSys) 
 func (test *tscInput) getBaselineSubFolder() string {
 	commandName := "tsc"
 	if slices.ContainsFunc(test.commandLineArgs, func(arg string) bool {
-		return arg == "--build" || arg == "-b"
+		switch arg {
+		case "-b", "--b", "-build", "--build":
+			return true
+		}
+		return false
 	}) {
 		commandName = "tsbuild"
 	}
 	w := ""
 	if slices.ContainsFunc(test.commandLineArgs, func(arg string) bool {
-		return arg == "--watch" || arg == "-w"
+		switch arg {
+		case "-w", "--w", "-watch", "--watch":
+			return true
+		}
+		return false
 	}) {
 		w = "Watch"
 	}

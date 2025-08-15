@@ -175,6 +175,7 @@ exports.d = b_1.b;
   "size": 1747
 }
 
+tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
 *refresh*    /home/src/workspaces/project/a.ts
@@ -323,6 +324,7 @@ exports.d = b_1.b;
   "size": 1764
 }
 
+tsconfig.json::
 SemanticDiagnostics::
 Signatures::
 
@@ -453,6 +455,7 @@ exports.d = b_1.b;
   "size": 1747
 }
 
+tsconfig.json::
 SemanticDiagnostics::
 Signatures::
 
@@ -463,6 +466,7 @@ tsgo --declaration
 ExitStatus:: Success
 Output::
 
+tsconfig.json::
 SemanticDiagnostics::
 Signatures::
 
@@ -473,6 +477,7 @@ tsgo
 ExitStatus:: Success
 Output::
 
+tsconfig.json::
 SemanticDiagnostics::
 Signatures::
 
@@ -597,6 +602,7 @@ export declare const d = 10;
   "size": 1788
 }
 
+tsconfig.json::
 SemanticDiagnostics::
 Signatures::
 
@@ -711,6 +717,7 @@ export declare const d = 10;
   "size": 1747
 }
 
+tsconfig.json::
 SemanticDiagnostics::
 Signatures::
 
@@ -721,6 +728,7 @@ tsgo --emitDeclarationOnly
 ExitStatus:: Success
 Output::
 
+tsconfig.json::
 SemanticDiagnostics::
 Signatures::
 
@@ -731,6 +739,7 @@ tsgo
 ExitStatus:: Success
 Output::
 
+tsconfig.json::
 SemanticDiagnostics::
 Signatures::
 
@@ -842,6 +851,7 @@ const aLocal = 100;
   "size": 1748
 }
 
+tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/workspaces/project/a.ts
 Signatures::
@@ -854,6 +864,7 @@ tsgo --declaration
 ExitStatus:: Success
 Output::
 
+tsconfig.json::
 SemanticDiagnostics::
 Signatures::
 
@@ -985,6 +996,7 @@ exports.d = b_1.b;
   "size": 1771
 }
 
+tsconfig.json::
 SemanticDiagnostics::
 Signatures::
 
@@ -1121,6 +1133,7 @@ exports.d = b_1.b;
   "size": 1765
 }
 
+tsconfig.json::
 SemanticDiagnostics::
 Signatures::
 
@@ -1274,6 +1287,7 @@ exports.d = b_1.b;
   "size": 1770
 }
 
+tsconfig.json::
 SemanticDiagnostics::
 Signatures::
 
@@ -1410,5 +1424,6 @@ exports.d = b_1.b;
   "size": 1787
 }
 
+tsconfig.json::
 SemanticDiagnostics::
 Signatures::

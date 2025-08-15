@@ -73,6 +73,7 @@ declare const console: { log(msg: any): void; };
   "size": 987
 }
 
+tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
 *refresh*    /home/src/workspaces/project/src/another.d.ts
@@ -86,6 +87,7 @@ tsgo --incremental
 ExitStatus:: Success
 Output::
 
+tsconfig.json::
 SemanticDiagnostics::
 Signatures::
 
@@ -136,6 +138,7 @@ Output::
   "size": 1009
 }
 
+tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/workspaces/project/src/main.d.ts
 Signatures::

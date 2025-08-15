@@ -35,5 +35,6 @@ Found 1 error.
   "size": 85
 }
 
+tsconfig.json::
 SemanticDiagnostics::
 Signatures::

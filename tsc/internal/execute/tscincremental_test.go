@@ -82,7 +82,7 @@ func TestIncremental(t *testing.T) {
                     type InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;`),
 			},
 			commandLineArgs: []string{"--incremental"},
-			edits: []*testTscEdit{
+			edits: []*tscEdit{
 				noChange,
 				{
 					caption: "modify public to protected",
@@ -128,7 +128,7 @@ func TestIncremental(t *testing.T) {
                     type InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;`),
 			},
 			commandLineArgs: []string{"--incremental"},
-			edits: []*testTscEdit{
+			edits: []*tscEdit{
 				noChange,
 				{
 					caption: "modify public to protected",
@@ -187,7 +187,7 @@ func TestIncremental(t *testing.T) {
 				"/home/src/workspaces/project/tsconfig.json":    "{}",
 			},
 			commandLineArgs: []string{"--incremental"},
-			edits: []*testTscEdit{
+			edits: []*tscEdit{
 				noChange,
 				{
 					caption: "modify d.ts file",
@@ -220,7 +220,7 @@ func TestIncremental(t *testing.T) {
 				"/home/src/workspaces/project/tsconfig.tsbuildinfo": "Some random string",
 			},
 			commandLineArgs: []string{"-i"},
-			edits: []*testTscEdit{
+			edits: []*tscEdit{
 				{
 					caption: "tsbuildinfo written has error",
 					edit: func(sys *testSys) {
@@ -250,7 +250,7 @@ func TestIncremental(t *testing.T) {
                 }`),
 			},
 			commandLineArgs: []string{},
-			edits: []*testTscEdit{
+			edits: []*tscEdit{
 				noChange,
 				{
 					caption: "Modify main file",
@@ -362,7 +362,7 @@ func TestIncremental(t *testing.T) {
 				"/home/src/workspaces/project/constants.ts": "export default 1;",
 				"/home/src/workspaces/project/types.d.ts":   `type MagicNumber = typeof import('./constants').default`,
 			},
-			edits: []*testTscEdit{
+			edits: []*tscEdit{
 				{
 					caption: "Modify imports used in global file",
 					edit: func(sys *testSys) {
@@ -388,7 +388,7 @@ func TestIncremental(t *testing.T) {
 				"/home/src/workspaces/project/reexport.ts":  `export { default as ConstantNumber } from "./constants"`,
 				"/home/src/workspaces/project/types.d.ts":   `type MagicNumber = typeof import('./reexport').ConstantNumber`,
 			},
-			edits: []*testTscEdit{
+			edits: []*tscEdit{
 				{
 					caption: "Modify imports used in global file",
 					edit: func(sys *testSys) {
@@ -411,7 +411,7 @@ func TestIncremental(t *testing.T) {
 				"/home/src/workspaces/project/file1.ts": `export class  C { }`,
 				"/home/src/workspaces/project/file2.ts": `export class D { }`,
 			},
-			edits: []*testTscEdit{
+			edits: []*tscEdit{
 				{
 					caption: "delete file with imports",
 					edit: func(sys *testSys) {
@@ -466,7 +466,7 @@ func TestIncremental(t *testing.T) {
                     }
                 `),
 			},
-			edits: []*testTscEdit{
+			edits: []*tscEdit{
 				{
 					caption: "modify js file",
 					edit: func(sys *testSys) {
@@ -501,7 +501,7 @@ func TestIncremental(t *testing.T) {
 				"/home/src/workspaces/project/c.ts": `import { a } from "./a";export const c = a;`,
 				"/home/src/workspaces/project/d.ts": `import { b } from "./b";export const d = b;`,
 			},
-			edits: []*testTscEdit{
+			edits: []*tscEdit{
 				{
 					caption:         "with sourceMap",
 					commandLineArgs: []string{"--sourceMap"},
@@ -582,7 +582,7 @@ func TestIncremental(t *testing.T) {
 				"/home/src/workspaces/project/c.ts": `import { a } from "./a";export const c = a;`,
 				"/home/src/workspaces/project/d.ts": `import { b } from "./b";export const d = b;`,
 			},
-			edits: []*testTscEdit{
+			edits: []*tscEdit{
 				{
 					caption:         "with sourceMap",
 					commandLineArgs: []string{"--sourceMap"},
@@ -671,7 +671,7 @@ func getConstEnumTest(bdsContents string, changeEnumFile string, testSuffix stri
 			`),
 		},
 		commandLineArgs: []string{"-i", `a.ts`, "--tsbuildinfofile", "a.tsbuildinfo"},
-		edits: []*testTscEdit{
+		edits: []*tscEdit{
 			{
 				caption: "change enum value",
 				edit: func(sys *testSys) {

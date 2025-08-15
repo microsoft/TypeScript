@@ -6,7 +6,6 @@ tsgo
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 Version FakeTSVersion
-
 tsc: The TypeScript Compiler - Version FakeTSVersion
 
 [1mCOMMON COMMANDS[22m

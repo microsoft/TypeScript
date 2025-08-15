@@ -19,7 +19,7 @@ type Watcher struct {
 	configFileName   string
 	options          *tsoptions.ParsedCommandLine
 	reportDiagnostic diagnosticReporter
-	testing          bool
+	testing          CommandLineTesting
 
 	host           compiler.CompilerHost
 	program        *incremental.Program
@@ -27,7 +27,7 @@ type Watcher struct {
 	configModified bool
 }
 
-func createWatcher(sys System, configParseResult *tsoptions.ParsedCommandLine, reportDiagnostic diagnosticReporter, testing bool) *Watcher {
+func createWatcher(sys System, configParseResult *tsoptions.ParsedCommandLine, reportDiagnostic diagnosticReporter, testing CommandLineTesting) *Watcher {
 	w := &Watcher{
 		sys:              sys,
 		options:          configParseResult,
@@ -42,10 +42,10 @@ func createWatcher(sys System, configParseResult *tsoptions.ParsedCommandLine, r
 }
 
 func (w *Watcher) start() {
-	w.host = compiler.NewCompilerHost(w.sys.GetCurrentDirectory(), w.sys.FS(), w.sys.DefaultLibraryPath(), nil, getTraceFromSys(w.sys))
+	w.host = compiler.NewCompilerHost(w.sys.GetCurrentDirectory(), w.sys.FS(), w.sys.DefaultLibraryPath(), nil, getTraceFromSys(w.sys, w.testing))
 	w.program = incremental.ReadBuildInfoProgram(w.options, incremental.NewBuildInfoReader(w.host), w.host)
 
-	if !w.testing {
+	if w.testing == nil {
 		watchInterval := 1000 * time.Millisecond
 		if w.options.ParsedConfig.WatchOptions != nil {
 			watchInterval = time.Duration(*w.options.ParsedConfig.WatchOptions.Interval) * time.Millisecond
@@ -72,7 +72,7 @@ func (w *Watcher) DoCycle() {
 		Config:           w.options,
 		Host:             w.host,
 		JSDocParsingMode: ast.JSDocParsingModeParseForTypeErrors,
-	}), w.program, w.testing)
+	}), w.program, w.testing != nil)
 
 	if w.hasBeenModified(w.program.GetProgram()) {
 		fmt.Fprintln(w.sys.Writer(), "build starting at ", w.sys.Now())
@@ -88,13 +88,13 @@ func (w *Watcher) DoCycle() {
 func (w *Watcher) compileAndEmit() {
 	// !!! output/error reporting is currently the same as non-watch mode
 	// diagnostics, emitResult, exitStatus :=
-	emitFilesAndReportErrors(w.sys, w.program, w.program.GetProgram(), w.reportDiagnostic)
+	emitFilesAndReportErrors(w.sys, w.program, w.program.GetProgram(), w.reportDiagnostic, w.testing)
 }
 
 func (w *Watcher) hasErrorsInTsConfig() bool {
 	// only need to check and reparse tsconfig options/update host if we are watching a config file
+	extendedConfigCache := collections.SyncMap[tspath.Path, *tsoptions.ExtendedConfigCacheEntry]{}
 	if w.configFileName != "" {
-		extendedConfigCache := collections.SyncMap[tspath.Path, *tsoptions.ExtendedConfigCacheEntry]{}
 		// !!! need to check that this merges compileroptions correctly. This differs from non-watch, since we allow overriding of previous options
 		configParseResult, errors := tsoptions.GetParsedCommandLineOfConfigFile(w.configFileName, &core.CompilerOptions{}, w.sys, &extendedConfigCache)
 		if len(errors) > 0 {
@@ -109,8 +109,8 @@ func (w *Watcher) hasErrorsInTsConfig() bool {
 			w.configModified = true
 		}
 		w.options = configParseResult
-		w.host = compiler.NewCompilerHost(w.sys.GetCurrentDirectory(), w.sys.FS(), w.sys.DefaultLibraryPath(), &extendedConfigCache, getTraceFromSys(w.sys))
 	}
+	w.host = compiler.NewCompilerHost(w.sys.GetCurrentDirectory(), w.sys.FS(), w.sys.DefaultLibraryPath(), &extendedConfigCache, getTraceFromSys(w.sys, w.testing))
 	return false
 }
 

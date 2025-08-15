@@ -117,6 +117,7 @@ export {};
   "size": 1636
 }
 
+tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
 *refresh*    /home/src/workspaces/project/MessageablePerson.ts
@@ -130,6 +131,7 @@ tsgo --incremental
 ExitStatus:: Success
 Output::
 
+tsconfig.json::
 SemanticDiagnostics::
 Signatures::
 
@@ -234,6 +236,7 @@ Found 1 error in main.ts[90m:3[0m
   "size": 2377
 }
 
+tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/workspaces/project/MessageablePerson.ts
 *refresh*    /home/src/workspaces/project/main.ts
@@ -256,6 +259,7 @@ Output::
 Found 1 error in main.ts[90m:3[0m
 
 
+tsconfig.json::
 SemanticDiagnostics::
 Signatures::
 
@@ -338,6 +342,7 @@ Output::
   "size": 2000
 }
 
+tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/workspaces/project/MessageablePerson.ts
 *refresh*    /home/src/workspaces/project/main.ts
@@ -352,5 +357,6 @@ tsgo --incremental
 ExitStatus:: Success
 Output::
 
+tsconfig.json::
 SemanticDiagnostics::
 Signatures::

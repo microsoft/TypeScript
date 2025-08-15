@@ -46,11 +46,6 @@ func (s *osSys) Writer() io.Writer {
 	return s.writer
 }
 
-func (s *osSys) EndWrite() {
-	// do nothing, this is needed in the interface for testing
-	// todo: revisit if improving tsc/build/watch unittest baselines
-}
-
 func (s *osSys) WriteOutputIsTTY() bool {
 	return term.IsTerminal(int(os.Stdout.Fd()))
 }

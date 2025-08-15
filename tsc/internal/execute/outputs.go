@@ -31,21 +31,18 @@ func getFormatOptsOfSys(sys System) *diagnosticwriter.FormattingOptions {
 
 type diagnosticReporter = func(*ast.Diagnostic)
 
+func quietDiagnosticReporter(diagnostic *ast.Diagnostic) {}
 func createDiagnosticReporter(sys System, options *core.CompilerOptions) diagnosticReporter {
 	if options.Quiet.IsTrue() {
-		return func(diagnostic *ast.Diagnostic) {}
+		return quietDiagnosticReporter
 	}
 
 	formatOpts := getFormatOptsOfSys(sys)
-	if !shouldBePretty(sys, options) {
-		return func(diagnostic *ast.Diagnostic) {
-			diagnosticwriter.WriteFormatDiagnostic(sys.Writer(), diagnostic, formatOpts)
-			sys.EndWrite()
-		}
-	}
+	writeDiagnostic := core.IfElse(shouldBePretty(sys, options), diagnosticwriter.FormatDiagnosticWithColorAndContext, diagnosticwriter.WriteFormatDiagnostic)
+
 	return func(diagnostic *ast.Diagnostic) {
-		diagnosticwriter.FormatDiagnosticsWithColorAndContext(sys.Writer(), []*ast.Diagnostic{diagnostic}, formatOpts)
-		sys.EndWrite()
+		writeDiagnostic(sys.Writer(), diagnostic, formatOpts)
+		fmt.Fprint(sys.Writer(), formatOpts.NewLine)
 	}
 }
 
@@ -132,15 +129,18 @@ func createReportErrorSummary(sys System, options *core.CompilerOptions) func(di
 		formatOpts := getFormatOptsOfSys(sys)
 		return func(diagnostics []*ast.Diagnostic) {
 			diagnosticwriter.WriteErrorSummaryText(sys.Writer(), diagnostics, formatOpts)
-			sys.EndWrite()
 		}
 	}
 	return func(diagnostics []*ast.Diagnostic) {}
 }
 
-func reportStatistics(sys System, program *compiler.Program, result compileAndEmitResult, memStats *runtime.MemStats) {
+func reportStatistics(sys System, program *compiler.Program, result compileAndEmitResult, memStats *runtime.MemStats, testing CommandLineTesting) {
 	var stats table
 
+	if testing != nil {
+		testing.OnStatisticsStart()
+		defer testing.OnStatisticsEnd()
+	}
 	stats.add("Files", len(program.SourceFiles()))
 	stats.add("Lines", program.LineCount())
 	stats.add("Identifiers", program.IdentifierCount())
@@ -175,7 +175,6 @@ func reportStatistics(sys System, program *compiler.Program, result compileAndEm
 
 func printVersion(sys System) {
 	fmt.Fprintln(sys.Writer(), diagnostics.Version_0.Format(core.Version()))
-	sys.EndWrite()
 }
 
 func printHelp(sys System, commandLine *tsoptions.ParsedCommandLine) {
@@ -268,7 +267,6 @@ func printEasyHelp(sys System, simpleOptions []*tsoptions.CommandLineOption) {
 	for _, chunk := range output {
 		fmt.Fprint(sys.Writer(), chunk)
 	}
-	sys.EndWrite()
 }
 
 func generateSectionOptionsOutput(

@@ -153,6 +153,7 @@ function main() { }
   "size": 1895
 }
 
+tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
 *refresh*    /home/src/workspaces/project/src/filePresent.ts
@@ -170,6 +171,7 @@ tsgo
 ExitStatus:: Success
 Output::
 
+tsconfig.json::
 SemanticDiagnostics::
 Signatures::
 
@@ -277,6 +279,7 @@ something();
   "size": 1907
 }
 
+tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/workspaces/project/src/main.ts
 Signatures::
@@ -387,6 +390,7 @@ something();
   "size": 1919
 }
 
+tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/workspaces/project/src/main.ts
 Signatures::
@@ -528,6 +532,7 @@ function foo() { return 20; }
   "size": 2201
 }
 
+tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
 *refresh*    /home/src/workspaces/project/src/newFile.ts
@@ -673,6 +678,7 @@ function something2() { return 20; }
   "size": 2426
 }
 
+tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
 *refresh*    /home/src/workspaces/project/src/fileNotFound.ts
@@ -825,6 +831,7 @@ something();
   "size": 2438
 }
 
+tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/workspaces/project/src/main.ts
 Signatures::

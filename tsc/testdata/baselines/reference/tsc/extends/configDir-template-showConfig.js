@@ -51,5 +51,27 @@ export const x = 10;
 tsgo --showConfig
 ExitStatus:: Success
 Output::
-No output
-
+{
+    "declaration": true,
+    "declarationDir": "/home/src/projects/myproject/decls",
+    "outDir": "/home/src/projects/myproject/outDir",
+    "paths": {
+        "@myscope/*": [
+            "/home/src/projects/myproject/types/*"
+        ],
+        "other/*": [
+            "other/*"
+        ]
+    },
+    "traceResolution": true,
+    "typeRoots": [
+        "/home/src/projects/configs/first/root1",
+        "/home/src/projects/myproject/root2",
+        "/home/src/projects/configs/first/root3"
+    ],
+    "types": [],
+    "baseUrl": "/home/src/projects/myproject",
+    "configFilePath": "/home/src/projects/myproject/tsconfig.json",
+    "pathsBasePath": "/home/src/projects/configs/second",
+    "showConfig": true
+}

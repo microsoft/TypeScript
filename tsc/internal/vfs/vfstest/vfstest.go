@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io/fs"
+	"iter"
 	"maps"
 	"path"
 	"slices"
@@ -17,7 +18,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/vfs/iovfs"
 )
 
-type mapFS struct {
+type MapFS struct {
 	// mu protects m.
 	// A single mutex is sufficient as we only use fstest.Map's Open method.
 	mu sync.RWMutex
@@ -28,11 +29,30 @@ type mapFS struct {
 	useCaseSensitiveFileNames bool
 
 	symlinks map[canonicalPath]canonicalPath
+
+	clock Clock
+}
+
+type Clock interface {
+	Now() time.Time
+	SinceStart() time.Duration
+}
+
+type clockImpl struct {
+	start time.Time
+}
+
+func (c *clockImpl) Now() time.Time {
+	return time.Now()
+}
+
+func (c *clockImpl) SinceStart() time.Duration {
+	return time.Since(c.start)
 }
 
 var (
-	_ iovfs.RealpathFS = (*mapFS)(nil)
-	_ iovfs.WritableFS = (*mapFS)(nil)
+	_ iovfs.RealpathFS = (*MapFS)(nil)
+	_ iovfs.WritableFS = (*MapFS)(nil)
 )
 
 type sys struct {
@@ -47,6 +67,16 @@ type sys struct {
 // without trailing directory separators.
 // The paths must be all POSIX-style or all Windows-style, but not both.
 func FromMap[File any](m map[string]File, useCaseSensitiveFileNames bool) vfs.FS {
+	return FromMapWithClock(m, useCaseSensitiveFileNames, &clockImpl{start: time.Now()})
+}
+
+// FromMapWithClock creates a new [vfs.FS] from a map of paths to file contents.
+// Those file contents may be strings, byte slices, or [fstest.MapFile]s.
+//
+// The paths must be normalized absolute paths according to the tspath package,
+// without trailing directory separators.
+// The paths must be all POSIX-style or all Windows-style, but not both.
+func FromMapWithClock[File any](m map[string]File, useCaseSensitiveFileNames bool, clock Clock) vfs.FS {
 	posix := false
 	windows := false
 
@@ -67,17 +97,23 @@ func FromMap[File any](m map[string]File, useCaseSensitiveFileNames bool) vfs.FS
 	}
 
 	mfs := make(fstest.MapFS, len(m))
-	for p, f := range m {
+	// Sorted creation to ensure times are always guaranteed to be in order.
+	keys := slices.Collect(maps.Keys(m))
+	slices.SortFunc(keys, comparePathsByParts)
+	for _, p := range keys {
+		f := m[p]
 		checkPath(p)
 
 		var file *fstest.MapFile
 		switch f := any(f).(type) {
 		case string:
-			file = &fstest.MapFile{Data: []byte(f)}
+			file = &fstest.MapFile{Data: []byte(f), ModTime: clock.Now()}
 		case []byte:
-			file = &fstest.MapFile{Data: f}
+			file = &fstest.MapFile{Data: f, ModTime: clock.Now()}
 		case *fstest.MapFile:
-			file = f
+			fCopy := *f
+			fCopy.ModTime = clock.Now()
+			file = &fCopy
 		default:
 			panic(fmt.Sprintf("invalid file type %T", f))
 		}
@@ -100,13 +136,17 @@ func FromMap[File any](m map[string]File, useCaseSensitiveFileNames bool) vfs.FS
 		panic("mixed posix and windows paths")
 	}
 
-	return iovfs.From(convertMapFS(mfs, useCaseSensitiveFileNames), useCaseSensitiveFileNames)
+	return iovfs.From(convertMapFS(mfs, useCaseSensitiveFileNames, clock), useCaseSensitiveFileNames)
 }
 
-func convertMapFS(input fstest.MapFS, useCaseSensitiveFileNames bool) *mapFS {
-	m := &mapFS{
+func convertMapFS(input fstest.MapFS, useCaseSensitiveFileNames bool, clock Clock) *MapFS {
+	if clock == nil {
+		clock = &clockImpl{start: time.Now()}
+	}
+	m := &MapFS{
 		m:                         make(fstest.MapFS, len(input)),
 		useCaseSensitiveFileNames: useCaseSensitiveFileNames,
+		clock:                     clock,
 	}
 
 	// Verify that the input is well-formed.
@@ -162,15 +202,15 @@ func comparePathsByParts(a, b string) int {
 
 type canonicalPath string
 
-func (m *mapFS) getCanonicalPath(p string) canonicalPath {
+func (m *MapFS) getCanonicalPath(p string) canonicalPath {
 	return canonicalPath(tspath.GetCanonicalFileName(p, m.useCaseSensitiveFileNames))
 }
 
-func (m *mapFS) open(p canonicalPath) (fs.File, error) {
+func (m *MapFS) open(p canonicalPath) (fs.File, error) {
 	return m.m.Open(string(p))
 }
 
-func (m *mapFS) remove(path string) error {
+func (m *MapFS) remove(path string) error {
 	canonical := m.getCanonicalPath(path)
 	canonicalString := string(canonical)
 	fileInfo := m.m[canonicalString]
@@ -200,7 +240,7 @@ func Symlink(target string) *fstest.MapFile {
 	}
 }
 
-func (m *mapFS) getFollowingSymlinks(p canonicalPath) (*fstest.MapFile, canonicalPath, error) {
+func (m *MapFS) getFollowingSymlinks(p canonicalPath) (*fstest.MapFile, canonicalPath, error) {
 	return m.getFollowingSymlinksWorker(p, "", "")
 }
 
@@ -212,7 +252,7 @@ func (e *brokenSymlinkError) Error() string {
 	return fmt.Sprintf("broken symlink %q -> %q", e.from, e.to)
 }
 
-func (m *mapFS) getFollowingSymlinksWorker(p canonicalPath, symlinkFrom, symlinkTo canonicalPath) (*fstest.MapFile, canonicalPath, error) {
+func (m *MapFS) getFollowingSymlinksWorker(p canonicalPath, symlinkFrom, symlinkTo canonicalPath) (*fstest.MapFile, canonicalPath, error) {
 	if file, ok := m.m[string(p)]; ok && file.Mode&fs.ModeSymlink == 0 {
 		return file, p, nil
 	}
@@ -235,11 +275,11 @@ func (m *mapFS) getFollowingSymlinksWorker(p canonicalPath, symlinkFrom, symlink
 	return nil, p, err
 }
 
-func (m *mapFS) set(p canonicalPath, file *fstest.MapFile) {
+func (m *MapFS) set(p canonicalPath, file *fstest.MapFile) {
 	m.m[string(p)] = file
 }
 
-func (m *mapFS) setEntry(realpath string, canonical canonicalPath, file fstest.MapFile) {
+func (m *MapFS) setEntry(realpath string, canonical canonicalPath, file fstest.MapFile) {
 	if realpath == "" || canonical == "" {
 		panic("empty path")
 	}
@@ -276,7 +316,7 @@ func baseName(p string) string {
 	return file
 }
 
-func (m *mapFS) mkdirAll(p string, perm fs.FileMode) error {
+func (m *MapFS) mkdirAll(p string, perm fs.FileMode) error {
 	if p == "" {
 		panic("empty path")
 	}
@@ -320,7 +360,8 @@ func (m *mapFS) mkdirAll(p string, perm fs.FileMode) error {
 
 	for _, dir := range toCreate {
 		m.setEntry(dir, m.getCanonicalPath(dir), fstest.MapFile{
-			Mode: fs.ModeDir | perm&^umask,
+			Mode:    fs.ModeDir | perm&^umask,
+			ModTime: m.clock.Now(),
 		})
 	}
 
@@ -378,7 +419,7 @@ func (f *readDirFile) ReadDir(n int) ([]fs.DirEntry, error) {
 	return entries, nil
 }
 
-func (m *mapFS) Open(name string) (fs.File, error) {
+func (m *MapFS) Open(name string) (fs.File, error) {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 
@@ -420,7 +461,7 @@ func (m *mapFS) Open(name string) (fs.File, error) {
 	}, nil
 }
 
-func (m *mapFS) Realpath(name string) (string, error) {
+func (m *MapFS) Realpath(name string) (string, error) {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 
@@ -445,14 +486,14 @@ func convertInfo(info fs.FileInfo) (*fileInfo, bool) {
 
 const umask = 0o022
 
-func (m *mapFS) MkdirAll(path string, perm fs.FileMode) error {
+func (m *MapFS) MkdirAll(path string, perm fs.FileMode) error {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
 	return m.mkdirAll(path, perm)
 }
 
-func (m *mapFS) WriteFile(path string, data []byte, perm fs.FileMode) error {
+func (m *MapFS) WriteFile(path string, data []byte, perm fs.FileMode) error {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
@@ -482,18 +523,52 @@ func (m *mapFS) WriteFile(path string, data []byte, perm fs.FileMode) error {
 
 	m.setEntry(path, cp, fstest.MapFile{
 		Data:    data,
-		ModTime: time.Now(),
+		ModTime: m.clock.Now(),
 		Mode:    perm &^ umask,
 	})
 
 	return nil
 }
 
-func (m *mapFS) Remove(path string) error {
+func (m *MapFS) Remove(path string) error {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
 	return m.remove(path)
+}
+
+func (m *MapFS) GetTargetOfSymlink(path string) (string, bool) {
+	path, _ = strings.CutPrefix(path, "/")
+	m.mu.RLock()
+	defer m.mu.RUnlock()
+	canonical := m.getCanonicalPath(path)
+	canonicalString := string(canonical)
+	if fileInfo, ok := m.m[canonicalString]; ok {
+		if fileInfo.Mode&fs.ModeSymlink != 0 {
+			return "/" + string(fileInfo.Data), true
+		}
+	}
+	return "", false
+}
+
+func (m *MapFS) Entries() iter.Seq2[string, *fstest.MapFile] {
+	return func(yield func(string, *fstest.MapFile) bool) {
+		m.mu.RLock()
+		defer m.mu.RUnlock()
+		inputKeys := slices.Collect(maps.Keys(m.m))
+		slices.SortFunc(inputKeys, comparePathsByParts)
+
+		for _, p := range inputKeys {
+			file := m.m[p]
+			path := file.Sys.(*sys).realpath
+			if !tspath.PathIsAbsolute(path) {
+				path = "/" + path
+			}
+			if !yield(path, file) {
+				break
+			}
+		}
+	}
 }
 
 func must[T any](v T, err error) T {
