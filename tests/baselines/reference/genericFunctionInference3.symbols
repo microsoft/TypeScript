@@ -1,0 +1,111 @@
+//// [tests/cases/compiler/genericFunctionInference3.ts] ////
+
+=== genericFunctionInference3.ts ===
+const enum SyntaxKind {
+>SyntaxKind : Symbol(SyntaxKind, Decl(genericFunctionInference3.ts, 0, 0))
+
+  JSDocAllType,
+>JSDocAllType : Symbol(SyntaxKind.JSDocAllType, Decl(genericFunctionInference3.ts, 0, 23))
+
+  JSDocUnknownType,
+>JSDocUnknownType : Symbol(SyntaxKind.JSDocUnknownType, Decl(genericFunctionInference3.ts, 1, 15))
+}
+
+interface Node {
+>Node : Symbol(Node, Decl(genericFunctionInference3.ts, 3, 1))
+
+  readonly kind: SyntaxKind;
+>kind : Symbol(Node.kind, Decl(genericFunctionInference3.ts, 5, 16))
+>SyntaxKind : Symbol(SyntaxKind, Decl(genericFunctionInference3.ts, 0, 0))
+}
+
+interface TypeNode extends Node {
+>TypeNode : Symbol(TypeNode, Decl(genericFunctionInference3.ts, 7, 1))
+>Node : Symbol(Node, Decl(genericFunctionInference3.ts, 3, 1))
+
+  _typeNodeBrand: any;
+>_typeNodeBrand : Symbol(TypeNode._typeNodeBrand, Decl(genericFunctionInference3.ts, 9, 33))
+}
+
+interface JSDocType extends TypeNode {
+>JSDocType : Symbol(JSDocType, Decl(genericFunctionInference3.ts, 11, 1))
+>TypeNode : Symbol(TypeNode, Decl(genericFunctionInference3.ts, 7, 1))
+
+  _jsDocTypeBrand: any;
+>_jsDocTypeBrand : Symbol(JSDocType._jsDocTypeBrand, Decl(genericFunctionInference3.ts, 13, 38))
+}
+
+export interface JSDocAllType extends JSDocType {
+>JSDocAllType : Symbol(JSDocAllType, Decl(genericFunctionInference3.ts, 15, 1))
+>JSDocType : Symbol(JSDocType, Decl(genericFunctionInference3.ts, 11, 1))
+
+  readonly kind: SyntaxKind.JSDocAllType;
+>kind : Symbol(JSDocAllType.kind, Decl(genericFunctionInference3.ts, 17, 49))
+>SyntaxKind : Symbol(SyntaxKind, Decl(genericFunctionInference3.ts, 0, 0))
+>JSDocAllType : Symbol(SyntaxKind.JSDocAllType, Decl(genericFunctionInference3.ts, 0, 23))
+}
+
+export interface JSDocUnknownType extends JSDocType {
+>JSDocUnknownType : Symbol(JSDocUnknownType, Decl(genericFunctionInference3.ts, 19, 1))
+>JSDocType : Symbol(JSDocType, Decl(genericFunctionInference3.ts, 11, 1))
+
+  readonly kind: SyntaxKind.JSDocUnknownType;
+>kind : Symbol(JSDocUnknownType.kind, Decl(genericFunctionInference3.ts, 21, 53))
+>SyntaxKind : Symbol(SyntaxKind, Decl(genericFunctionInference3.ts, 0, 0))
+>JSDocUnknownType : Symbol(SyntaxKind.JSDocUnknownType, Decl(genericFunctionInference3.ts, 1, 15))
+}
+
+type Mutable<T extends object> = { -readonly [K in keyof T]: T[K] };
+>Mutable : Symbol(Mutable, Decl(genericFunctionInference3.ts, 23, 1))
+>T : Symbol(T, Decl(genericFunctionInference3.ts, 25, 13))
+>K : Symbol(K, Decl(genericFunctionInference3.ts, 25, 46))
+>T : Symbol(T, Decl(genericFunctionInference3.ts, 25, 13))
+>T : Symbol(T, Decl(genericFunctionInference3.ts, 25, 13))
+>K : Symbol(K, Decl(genericFunctionInference3.ts, 25, 46))
+
+declare function createJSDocPrimaryTypeWorker<T extends JSDocType>(
+>createJSDocPrimaryTypeWorker : Symbol(createJSDocPrimaryTypeWorker, Decl(genericFunctionInference3.ts, 25, 68))
+>T : Symbol(T, Decl(genericFunctionInference3.ts, 27, 46))
+>JSDocType : Symbol(JSDocType, Decl(genericFunctionInference3.ts, 11, 1))
+
+  kind: T["kind"],
+>kind : Symbol(kind, Decl(genericFunctionInference3.ts, 27, 67))
+>T : Symbol(T, Decl(genericFunctionInference3.ts, 27, 46))
+
+): Mutable<T>;
+>Mutable : Symbol(Mutable, Decl(genericFunctionInference3.ts, 23, 1))
+>T : Symbol(T, Decl(genericFunctionInference3.ts, 27, 46))
+
+declare function memoizeOne<A extends string | number | boolean | undefined, T>(
+>memoizeOne : Symbol(memoizeOne, Decl(genericFunctionInference3.ts, 29, 14))
+>A : Symbol(A, Decl(genericFunctionInference3.ts, 31, 28))
+>T : Symbol(T, Decl(genericFunctionInference3.ts, 31, 76))
+
+  callback: (arg: A) => T,
+>callback : Symbol(callback, Decl(genericFunctionInference3.ts, 31, 80))
+>arg : Symbol(arg, Decl(genericFunctionInference3.ts, 32, 13))
+>A : Symbol(A, Decl(genericFunctionInference3.ts, 31, 28))
+>T : Symbol(T, Decl(genericFunctionInference3.ts, 31, 76))
+
+): (arg: A) => T;
+>arg : Symbol(arg, Decl(genericFunctionInference3.ts, 33, 4))
+>A : Symbol(A, Decl(genericFunctionInference3.ts, 31, 28))
+>T : Symbol(T, Decl(genericFunctionInference3.ts, 31, 76))
+
+export const getJSDocPrimaryTypeCreateFunction = memoizeOne(
+>getJSDocPrimaryTypeCreateFunction : Symbol(getJSDocPrimaryTypeCreateFunction, Decl(genericFunctionInference3.ts, 35, 12))
+>memoizeOne : Symbol(memoizeOne, Decl(genericFunctionInference3.ts, 29, 14))
+
+  <T extends JSDocType>(kind: T["kind"]) =>
+>T : Symbol(T, Decl(genericFunctionInference3.ts, 36, 3))
+>JSDocType : Symbol(JSDocType, Decl(genericFunctionInference3.ts, 11, 1))
+>kind : Symbol(kind, Decl(genericFunctionInference3.ts, 36, 24))
+>T : Symbol(T, Decl(genericFunctionInference3.ts, 36, 3))
+
+    () =>
+      createJSDocPrimaryTypeWorker(kind),
+>createJSDocPrimaryTypeWorker : Symbol(createJSDocPrimaryTypeWorker, Decl(genericFunctionInference3.ts, 25, 68))
+>kind : Symbol(kind, Decl(genericFunctionInference3.ts, 36, 24))
+
+);
+
