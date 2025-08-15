@@ -256,7 +256,7 @@ async function fn10(x) {
     var { z: { x } = y } = y;
 }
 async function fn11(x) {
-    var { ...x } = y;
+    var x = __rest(y, []);
 }
 async function fn12(x) {
     var [x] = y;

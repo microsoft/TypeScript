@@ -2,7 +2,6 @@ package estransforms
 
 import (
 	"github.com/microsoft/typescript-go/internal/ast"
-	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/transformers"
 )
 
@@ -14,7 +13,7 @@ func (ch *esDecoratorTransformer) visit(node *ast.Node) *ast.Node {
 	return node // !!!
 }
 
-func newESDecoratorTransformer(emitContext *printer.EmitContext) *transformers.Transformer {
+func newESDecoratorTransformer(opts *transformers.TransformOptions) *transformers.Transformer {
 	tx := &esDecoratorTransformer{}
-	return tx.NewTransformer(tx.visit, emitContext)
+	return tx.NewTransformer(tx.visit, opts.Context)
 }

@@ -3654,3 +3654,202 @@ func hasComment(kind Kind) bool {
 		return false
 	}
 }
+
+func IsAssignmentPattern(node *Node) bool {
+	return node.Kind == KindArrayLiteralExpression || node.Kind == KindObjectLiteralExpression
+}
+
+func GetElementsOfBindingOrAssignmentPattern(name *Node) []*Node {
+	switch name.Kind {
+	case KindObjectBindingPattern, KindArrayBindingPattern:
+		// `a` in `{a}`
+		// `a` in `[a]`
+		return name.AsBindingPattern().Elements.Nodes
+	case KindArrayLiteralExpression:
+		// `a` in `[a]`
+		return name.AsArrayLiteralExpression().Elements.Nodes
+	case KindObjectLiteralExpression:
+		// `a` in `{a}`
+		return name.AsObjectLiteralExpression().Properties.Nodes
+	}
+	return nil
+}
+
+func IsDeclarationBindingElement(bindingElement *Node) bool {
+	switch bindingElement.Kind {
+	case KindVariableDeclaration, KindParameter, KindBindingElement:
+		return true
+	default:
+		return false
+	}
+}
+
+/**
+ * Gets the name of an BindingOrAssignmentElement.
+ */
+func GetTargetOfBindingOrAssignmentElement(bindingElement *Node) *Node {
+	if IsDeclarationBindingElement(bindingElement) {
+		// `a` in `let { a } = ...`
+		// `a` in `let { a = 1 } = ...`
+		// `b` in `let { a: b } = ...`
+		// `b` in `let { a: b = 1 } = ...`
+		// `a` in `let { ...a } = ...`
+		// `{b}` in `let { a: {b} } = ...`
+		// `{b}` in `let { a: {b} = 1 } = ...`
+		// `[b]` in `let { a: [b] } = ...`
+		// `[b]` in `let { a: [b] = 1 } = ...`
+		// `a` in `let [a] = ...`
+		// `a` in `let [a = 1] = ...`
+		// `a` in `let [...a] = ...`
+		// `{a}` in `let [{a}] = ...`
+		// `{a}` in `let [{a} = 1] = ...`
+		// `[a]` in `let [[a]] = ...`
+		// `[a]` in `let [[a] = 1] = ...`
+		return bindingElement.Name()
+	}
+
+	if IsObjectLiteralElement(bindingElement) {
+		switch bindingElement.Kind {
+		case KindPropertyAssignment:
+			// `b` in `({ a: b } = ...)`
+			// `b` in `({ a: b = 1 } = ...)`
+			// `{b}` in `({ a: {b} } = ...)`
+			// `{b}` in `({ a: {b} = 1 } = ...)`
+			// `[b]` in `({ a: [b] } = ...)`
+			// `[b]` in `({ a: [b] = 1 } = ...)`
+			// `b.c` in `({ a: b.c } = ...)`
+			// `b.c` in `({ a: b.c = 1 } = ...)`
+			// `b[0]` in `({ a: b[0] } = ...)`
+			// `b[0]` in `({ a: b[0] = 1 } = ...)`
+			return GetTargetOfBindingOrAssignmentElement(bindingElement.Initializer())
+		case KindShorthandPropertyAssignment:
+			// `a` in `({ a } = ...)`
+			// `a` in `({ a = 1 } = ...)`
+			return bindingElement.Name()
+		case KindSpreadAssignment:
+			// `a` in `({ ...a } = ...)`
+			return GetTargetOfBindingOrAssignmentElement(bindingElement.AsSpreadAssignment().Expression)
+		}
+
+		// no target
+		return nil
+	}
+
+	if IsAssignmentExpression(bindingElement /*excludeCompoundAssignment*/, true) {
+		// `a` in `[a = 1] = ...`
+		// `{a}` in `[{a} = 1] = ...`
+		// `[a]` in `[[a] = 1] = ...`
+		// `a.b` in `[a.b = 1] = ...`
+		// `a[0]` in `[a[0] = 1] = ...`
+		return GetTargetOfBindingOrAssignmentElement(bindingElement.AsBinaryExpression().Left)
+	}
+
+	if IsSpreadElement(bindingElement) {
+		// `a` in `[...a] = ...`
+		return GetTargetOfBindingOrAssignmentElement(bindingElement.AsSpreadElement().Expression)
+	}
+
+	// `a` in `[a] = ...`
+	// `{a}` in `[{a}] = ...`
+	// `[a]` in `[[a]] = ...`
+	// `a.b` in `[a.b] = ...`
+	// `a[0]` in `[a[0]] = ...`
+	return bindingElement
+}
+
+func TryGetPropertyNameOfBindingOrAssignmentElement(bindingElement *Node) *Node {
+	switch bindingElement.Kind {
+	case KindBindingElement:
+		// `a` in `let { a: b } = ...`
+		// `[a]` in `let { [a]: b } = ...`
+		// `"a"` in `let { "a": b } = ...`
+		// `1` in `let { 1: b } = ...`
+		if bindingElement.AsBindingElement().PropertyName != nil {
+			propertyName := bindingElement.AsBindingElement().PropertyName
+			// if ast.IsPrivateIdentifier(propertyName) {
+			// 	return Debug.failBadSyntaxKind(propertyName) // !!!
+			// }
+			if IsComputedPropertyName(propertyName) && IsStringOrNumericLiteralLike(propertyName.AsComputedPropertyName().Expression) {
+				return propertyName.AsComputedPropertyName().Expression
+			}
+			return propertyName
+		}
+	case KindPropertyAssignment:
+		// `a` in `({ a: b } = ...)`
+		// `[a]` in `({ [a]: b } = ...)`
+		// `"a"` in `({ "a": b } = ...)`
+		// `1` in `({ 1: b } = ...)`
+		if bindingElement.Name() != nil {
+			propertyName := bindingElement.Name()
+			// if ast.IsPrivateIdentifier(propertyName) {
+			// 	return Debug.failBadSyntaxKind(propertyName) // !!!
+			// }
+			if IsComputedPropertyName(propertyName) && IsStringOrNumericLiteralLike(propertyName.AsComputedPropertyName().Expression) {
+				return propertyName.AsComputedPropertyName().Expression
+			}
+			return propertyName
+		}
+	case KindSpreadAssignment:
+		// `a` in `({ ...a } = ...)`
+		// if ast.IsPrivateIdentifier(bindingElement.Name()) {
+		// 	return Debug.failBadSyntaxKind(bindingElement.Name()) // !!!
+		// }
+		return bindingElement.Name()
+	}
+
+	target := GetTargetOfBindingOrAssignmentElement(bindingElement)
+	if target != nil && IsPropertyName(target) {
+		return target
+	}
+	return nil
+}
+
+/**
+ * Walk an AssignmentPattern to determine if it contains object rest (`...`) syntax. We cannot rely on
+ * propagation of `TransformFlags.ContainsObjectRestOrSpread` since it isn't propagated by default in
+ * ObjectLiteralExpression and ArrayLiteralExpression since we do not know whether they belong to an
+ * AssignmentPattern at the time the nodes are parsed.
+ */
+func ContainsObjectRestOrSpread(node *Node) bool {
+	if node.SubtreeFacts()&SubtreeContainsObjectRestOrSpread != 0 {
+		return true
+	}
+	if node.SubtreeFacts()&SubtreeContainsESObjectRestOrSpread != 0 {
+		// check for nested spread assignments, otherwise '{ x: { a, ...b } = foo } = c'
+		// will not be correctly interpreted by the rest/spread transformer
+		for _, element := range GetElementsOfBindingOrAssignmentPattern(node) {
+			target := GetTargetOfBindingOrAssignmentElement(element)
+			if target != nil && IsAssignmentPattern(target) {
+				if target.SubtreeFacts()&SubtreeContainsObjectRestOrSpread != 0 {
+					return true
+				}
+				if target.SubtreeFacts()&SubtreeContainsESObjectRestOrSpread != 0 {
+					if ContainsObjectRestOrSpread(target) {
+						return true
+					}
+				}
+			}
+		}
+	}
+	return false
+}
+
+func IsEmptyObjectLiteral(expression *Node) bool {
+	return expression.Kind == KindObjectLiteralExpression && len(expression.AsObjectLiteralExpression().Properties.Nodes) == 0
+}
+
+func IsEmptyArrayLiteral(expression *Node) bool {
+	return expression.Kind == KindArrayLiteralExpression && len(expression.AsArrayLiteralExpression().Elements.Nodes) == 0
+}
+
+func GetRestIndicatorOfBindingOrAssignmentElement(bindingElement *Node) *Node {
+	switch bindingElement.Kind {
+	case KindParameter:
+		return bindingElement.AsParameterDeclaration().DotDotDotToken
+	case KindBindingElement:
+		return bindingElement.AsBindingElement().DotDotDotToken
+	case KindSpreadElement, KindSpreadAssignment:
+		return bindingElement
+	}
+	return nil
+}

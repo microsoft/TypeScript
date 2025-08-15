@@ -2,6 +2,7 @@ package printer
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/microsoft/typescript-go/internal/ast"
@@ -316,6 +317,14 @@ func (f *NodeFactory) NewFunctionCallCall(target *ast.Expression, thisArg *ast.E
 	return f.NewMethodCall(target, f.NewIdentifier("call"), args)
 }
 
+func (f *NodeFactory) NewArraySliceCall(array *ast.Expression, start int) *ast.Node {
+	var args []*ast.Node
+	if start != 0 {
+		args = append(args, f.NewNumericLiteral(strconv.Itoa(start)))
+	}
+	return f.NewMethodCall(array, f.NewIdentifier("slice"), args)
+}
+
 // Determines whether a node is a parenthesized expression that can be ignored when recreating outer expressions.
 //
 // A parenthesized expression can be ignored when all of the following are true:
@@ -551,7 +560,49 @@ func (f *NodeFactory) NewAssignHelper(attributesSegments []*ast.Expression, scri
 	)
 }
 
-// !!! ES2018 Destructuring Helpers
+// ES2018 Destructuring Helpers
+
+func (f *NodeFactory) NewRestHelper(value *ast.Expression, elements []*ast.Node, computedTempVariables []*ast.Node, location core.TextRange) *ast.Expression {
+	f.emitContext.RequestEmitHelper(restHelper)
+	var propertyNames []*ast.Node
+	computedTempVariableOffset := 0
+	for i, element := range elements {
+		if i == len(elements)-1 {
+			break
+		}
+		propertyName := ast.TryGetPropertyNameOfBindingOrAssignmentElement(element)
+		if propertyName != nil {
+			if ast.IsComputedPropertyName(propertyName) {
+				// Debug.assertIsDefined(computedTempVariables, "Encountered computed property name but 'computedTempVariables' argument was not provided."); // !!!
+				temp := computedTempVariables[computedTempVariableOffset]
+				computedTempVariableOffset++
+				// typeof _tmp === "symbol" ? _tmp : _tmp + ""
+				propertyNames = append(propertyNames, f.NewConditionalExpression(
+					f.NewTypeCheck(temp, "symbol"),
+					f.NewToken(ast.KindQuestionToken),
+					temp,
+					f.NewToken(ast.KindColonToken),
+					f.NewBinaryExpression(nil, temp, nil, f.NewToken(ast.KindPlusToken), f.NewStringLiteral("")),
+				))
+			} else {
+				propertyNames = append(propertyNames, f.NewStringLiteralFromNode(propertyName))
+			}
+		}
+	}
+	propNames := f.NewArrayLiteralExpression(f.NewNodeList(propertyNames), false)
+	propNames.Loc = location
+	return f.NewCallExpression(
+		f.NewUnscopedHelperName("__rest"),
+		nil,
+		nil,
+		f.NewNodeList([]*ast.Node{
+			value,
+			propNames,
+		}),
+		ast.NodeFlagsNone,
+	)
+}
+
 // !!! ES2017 Helpers
 
 // ES2015 Helpers

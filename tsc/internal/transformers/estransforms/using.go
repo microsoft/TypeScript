@@ -19,9 +19,9 @@ type usingDeclarationTransformer struct {
 	exportEqualsBinding  *ast.IdentifierNode
 }
 
-func newUsingDeclarationTransformer(emitContext *printer.EmitContext) *transformers.Transformer {
+func newUsingDeclarationTransformer(opts *transformers.TransformOptions) *transformers.Transformer {
 	tx := &usingDeclarationTransformer{}
-	return tx.NewTransformer(tx.visit, emitContext)
+	return tx.NewTransformer(tx.visit, opts.Context)
 }
 
 type usingKind uint

@@ -8,6 +8,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/testutil/emittestutil"
 	"github.com/microsoft/typescript-go/internal/testutil/parsetestutil"
+	"github.com/microsoft/typescript-go/internal/transformers"
 	"github.com/microsoft/typescript-go/internal/transformers/tstransforms"
 )
 
@@ -237,7 +238,7 @@ var E;
 			binder.BindSourceFile(file)
 			emitContext := printer.NewEmitContext()
 			resolver := binder.NewReferenceResolver(options, binder.ReferenceResolverHooks{})
-			emittestutil.CheckEmit(t, emitContext, tstransforms.NewRuntimeSyntaxTransformer(emitContext, options, resolver).TransformSourceFile(file), rec.output)
+			emittestutil.CheckEmit(t, emitContext, tstransforms.NewRuntimeSyntaxTransformer(&transformers.TransformOptions{CompilerOptions: options, Context: emitContext, Resolver: resolver}).TransformSourceFile(file), rec.output)
 		})
 	}
 }
@@ -415,7 +416,7 @@ func TestNamespaceTransformer(t *testing.T) {
 			binder.BindSourceFile(file)
 			emitContext := printer.NewEmitContext()
 			resolver := binder.NewReferenceResolver(options, binder.ReferenceResolverHooks{})
-			emittestutil.CheckEmit(t, emitContext, tstransforms.NewRuntimeSyntaxTransformer(emitContext, options, resolver).TransformSourceFile(file), rec.output)
+			emittestutil.CheckEmit(t, emitContext, tstransforms.NewRuntimeSyntaxTransformer(&transformers.TransformOptions{CompilerOptions: options, Context: emitContext, Resolver: resolver}).TransformSourceFile(file), rec.output)
 		})
 	}
 }
@@ -451,8 +452,9 @@ func TestParameterPropertyTransformer(t *testing.T) {
 			binder.BindSourceFile(file)
 			emitContext := printer.NewEmitContext()
 			resolver := binder.NewReferenceResolver(options, binder.ReferenceResolverHooks{})
-			file = tstransforms.NewTypeEraserTransformer(emitContext, options).TransformSourceFile(file)
-			file = tstransforms.NewRuntimeSyntaxTransformer(emitContext, options, resolver).TransformSourceFile(file)
+			opts := &transformers.TransformOptions{Context: emitContext, CompilerOptions: options, Resolver: resolver}
+			file = tstransforms.NewTypeEraserTransformer(opts).TransformSourceFile(file)
+			file = tstransforms.NewRuntimeSyntaxTransformer(opts).TransformSourceFile(file)
 			emittestutil.CheckEmit(t, emitContext, file, rec.output)
 		})
 	}

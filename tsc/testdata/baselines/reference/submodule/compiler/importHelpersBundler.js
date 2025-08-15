@@ -44,7 +44,8 @@ export function foo(args: any) {
 
 
 //// [main.js]
+import { __rest } from "tslib";
 export function foo(args) {
-    const { bar, ...extraArgs } = args;
+    const { bar } = args, extraArgs = __rest(args, ["bar"]);
     return extraArgs;
 }

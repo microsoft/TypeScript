@@ -238,6 +238,17 @@ type UC = UA & UB;  // undefined
 
 
 //// [strictOptionalProperties1.js]
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 function f1(obj) {
     let a = obj.a; // string | undefined
     let b = obj.b; // string | undefined
@@ -318,7 +329,7 @@ function f6() {
 }
 const defaultProps = { foo: 'foo' };
 const inputProps = { foo: undefined, bar: 'bar' };
-const completeProps = { ...defaultProps, ...inputProps };
+const completeProps = __assign(__assign({}, defaultProps), inputProps);
 // Example from #13195
 const t1 = [1];
 const t2 = [1, undefined];
@@ -326,7 +337,7 @@ const t3 = [1, "string", undefined];
 const t4 = [1, undefined, undefined];
 // Example from #13195
 const x = { foo: undefined };
-const y = { foo: 123, ...x };
+const y = __assign({ foo: 123 }, x);
 f11(ox1); // string
 f11(ox2); // string | undefined
 f11(ox3); // string

@@ -14,11 +14,13 @@ type ImportElisionTransformer struct {
 	emitResolver      printer.EmitResolver
 }
 
-func NewImportElisionTransformer(emitContext *printer.EmitContext, compilerOptions *core.CompilerOptions, resolver printer.EmitResolver) *transformers.Transformer {
+func NewImportElisionTransformer(opt *transformers.TransformOptions) *transformers.Transformer {
+	compilerOptions := opt.CompilerOptions
+	emitContext := opt.Context
 	if compilerOptions.VerbatimModuleSyntax.IsTrue() {
 		panic("ImportElisionTransformer should not be used with VerbatimModuleSyntax")
 	}
-	tx := &ImportElisionTransformer{compilerOptions: compilerOptions, emitResolver: resolver}
+	tx := &ImportElisionTransformer{compilerOptions: compilerOptions, emitResolver: opt.EmitResolver}
 	return tx.NewTransformer(tx.visit, emitContext)
 }
 

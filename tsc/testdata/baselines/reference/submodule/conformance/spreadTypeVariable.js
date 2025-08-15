@@ -28,21 +28,32 @@ function f6<T>(arg: T) {
 
 
 //// [spreadTypeVariable.js]
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 function f1(arg) {
-    return { ...arg };
+    return __assign({}, arg);
 }
 function f2(arg) {
-    return { ...arg };
+    return __assign({}, arg);
 }
 function f3(arg) {
-    return { ...arg };
+    return __assign({}, arg);
 }
 function f4(arg) {
-    return { ...arg };
+    return __assign({}, arg);
 }
 function f5(arg) {
-    return { ...arg };
+    return __assign({}, arg);
 }
 function f6(arg) {
-    return { ...arg };
+    return __assign({}, arg);
 }

@@ -59,8 +59,8 @@ class C {
     }
 }
 const o = { a: 1 };
-const y = { ...o };
-const { ...x } = y;
+const y = tslib_1.__assign({}, o);
+const x = tslib_1.__rest(y, []);
 //// [script.js]
 class A {
 }

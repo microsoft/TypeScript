@@ -21,7 +21,7 @@ class D {
 
 //// [useBeforeDeclaration_propertyAssignment.js]
 export class C {
-    a = { b: this.b, ...this.c, [this.b]: `${this.c}` };
+    a = Object.assign(Object.assign({ b: this.b }, this.c), { [this.b]: `${this.c}` });
     b = 0;
     c = { c: this.b };
 }
@@ -31,9 +31,7 @@ class D {
     };
     static B = class {
     };
-    static C = {
-        [D.D]: 1,
-        ...{ get [D.D]() { return 0; } } // should be an error
-    };
+    static C = Object.assign({ [D.D]: 1 }, { get [D.D]() { return 0; } } // should be an error
+    );
     static D = '';
 }

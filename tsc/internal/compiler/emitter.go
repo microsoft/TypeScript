@@ -56,11 +56,11 @@ func (e *emitter) getDeclarationTransformers(emitContext *printer.EmitContext, d
 	return []*declarations.DeclarationTransformer{transform}
 }
 
-func getModuleTransformer(emitContext *printer.EmitContext, options *core.CompilerOptions, resolver binder.ReferenceResolver, getEmitModuleFormatOfFile func(file ast.HasFileName) core.ModuleKind) *transformers.Transformer {
-	switch options.GetEmitModuleKind() {
+func getModuleTransformer(opts *transformers.TransformOptions) *transformers.Transformer {
+	switch opts.CompilerOptions.GetEmitModuleKind() {
 	case core.ModuleKindPreserve:
 		// `ESModuleTransformer` contains logic for preserving CJS input syntax in `--module preserve`
-		return moduletransforms.NewESModuleTransformer(emitContext, options, resolver, getEmitModuleFormatOfFile)
+		return moduletransforms.NewESModuleTransformer(opts)
 
 	case core.ModuleKindESNext,
 		core.ModuleKindES2022,
@@ -70,10 +70,10 @@ func getModuleTransformer(emitContext *printer.EmitContext, options *core.Compil
 		core.ModuleKindNode16,
 		core.ModuleKindNodeNext,
 		core.ModuleKindCommonJS:
-		return moduletransforms.NewImpliedModuleTransformer(emitContext, options, resolver, getEmitModuleFormatOfFile)
+		return moduletransforms.NewImpliedModuleTransformer(opts)
 
 	default:
-		return moduletransforms.NewCommonJSModuleTransformer(emitContext, options, resolver, getEmitModuleFormatOfFile)
+		return moduletransforms.NewCommonJSModuleTransformer(opts)
 	}
 }
 
@@ -94,32 +94,40 @@ func getScriptTransformers(emitContext *printer.EmitContext, host printer.EmitHo
 		referenceResolver = binder.NewReferenceResolver(options, binder.ReferenceResolverHooks{})
 	}
 
+	opts := transformers.TransformOptions{
+		Context:                   emitContext,
+		CompilerOptions:           options,
+		Resolver:                  referenceResolver,
+		EmitResolver:              emitResolver,
+		GetEmitModuleFormatOfFile: host.GetEmitModuleFormatOfFile,
+	}
+
 	// transform TypeScript syntax
 	{
 		// erase types
-		tx = append(tx, tstransforms.NewTypeEraserTransformer(emitContext, options))
+		tx = append(tx, tstransforms.NewTypeEraserTransformer(&opts))
 
 		// elide imports
 		if importElisionEnabled {
-			tx = append(tx, tstransforms.NewImportElisionTransformer(emitContext, options, emitResolver))
+			tx = append(tx, tstransforms.NewImportElisionTransformer(&opts))
 		}
 
 		// transform `enum`, `namespace`, and parameter properties
-		tx = append(tx, tstransforms.NewRuntimeSyntaxTransformer(emitContext, options, referenceResolver))
+		tx = append(tx, tstransforms.NewRuntimeSyntaxTransformer(&opts))
 	}
 
 	// !!! transform legacy decorator syntax
 	if options.GetJSXTransformEnabled() {
-		tx = append(tx, jsxtransforms.NewJSXTransformer(emitContext, options, emitResolver))
+		tx = append(tx, jsxtransforms.NewJSXTransformer(&opts))
 	}
 
-	downleveler := estransforms.GetESTransformer(options, emitContext)
+	downleveler := estransforms.GetESTransformer(&opts)
 	if downleveler != nil {
 		tx = append(tx, downleveler)
 	}
 
 	// transform module syntax
-	tx = append(tx, getModuleTransformer(emitContext, options, referenceResolver, host.GetEmitModuleFormatOfFile))
+	tx = append(tx, getModuleTransformer(&opts))
 	return tx
 }
 

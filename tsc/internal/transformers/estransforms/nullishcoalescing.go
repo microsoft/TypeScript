@@ -2,7 +2,6 @@ package estransforms
 
 import (
 	"github.com/microsoft/typescript-go/internal/ast"
-	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/transformers"
 )
 
@@ -44,7 +43,7 @@ func (ch *nullishCoalescingTransformer) visitBinaryExpression(node *ast.BinaryEx
 	}
 }
 
-func newNullishCoalescingTransformer(emitContext *printer.EmitContext) *transformers.Transformer {
+func newNullishCoalescingTransformer(opts *transformers.TransformOptions) *transformers.Transformer {
 	tx := &nullishCoalescingTransformer{}
-	return tx.NewTransformer(tx.visit, emitContext)
+	return tx.NewTransformer(tx.visit, opts.Context)
 }

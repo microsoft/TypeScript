@@ -50,11 +50,13 @@ async function bar() { }
 //// [other.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = require("tslib");
 exports.noop = noop;
 exports.spread = spread;
 async function noop() { }
-function spread({ a, ...rest }) {
-    return { c: "c", ...rest };
+function spread(_a) {
+    var { a } = _a, rest = tslib_1.__rest(_a, ["a"]);
+    return Object.assign({ c: "c" }, rest);
 }
 //// [index.js]
 "use strict";

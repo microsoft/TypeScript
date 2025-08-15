@@ -47,23 +47,34 @@ function g(fields: Fields, partialFields: Partial<Fields>, nearlyPartialFields: 
 
 
 //// [objectSpreadStrictNull.js]
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 function f(definiteBoolean, definiteString, optionalString, optionalNumber, undefinedString, undefinedNumber) {
     // optional
-    let optionalUnionStops = { ...definiteBoolean, ...definiteString, ...optionalNumber };
-    let optionalUnionDuplicates = { ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber };
-    let allOptional = { ...optionalString, ...optionalNumber };
+    let optionalUnionStops = __assign(__assign(__assign({}, definiteBoolean), definiteString), optionalNumber);
+    let optionalUnionDuplicates = __assign(__assign(__assign(__assign({}, definiteBoolean), definiteString), optionalString), optionalNumber);
+    let allOptional = __assign(__assign({}, optionalString), optionalNumber);
     // undefined
-    let undefinedUnionStops = { ...definiteBoolean, ...definiteString, ...undefinedNumber };
-    let undefinedUnionDuplicates = { ...definiteBoolean, ...definiteString, ...undefinedString, ...undefinedNumber };
-    let allUndefined = { ...undefinedString, ...undefinedNumber };
-    let undefinedWithOptionalContinues = { ...definiteBoolean, ...undefinedString, ...optionalNumber };
+    let undefinedUnionStops = __assign(__assign(__assign({}, definiteBoolean), definiteString), undefinedNumber);
+    let undefinedUnionDuplicates = __assign(__assign(__assign(__assign({}, definiteBoolean), definiteString), undefinedString), undefinedNumber);
+    let allUndefined = __assign(__assign({}, undefinedString), undefinedNumber);
+    let undefinedWithOptionalContinues = __assign(__assign(__assign({}, definiteBoolean), undefinedString), optionalNumber);
 }
 const m = { title: "The Matrix", yearReleased: 1999 };
 // should error here because title: undefined is not assignable to string
-const x = { ...m, title: undefined };
+const x = __assign(__assign({}, m), { title: undefined });
 function g(fields, partialFields, nearlyPartialFields) {
     // ok, undefined is stripped from optional properties when spread
-    fields = { ...fields, ...partialFields };
+    fields = __assign(__assign({}, fields), partialFields);
     // error: not optional, undefined remains
-    fields = { ...fields, ...nearlyPartialFields };
+    fields = __assign(__assign({}, fields), nearlyPartialFields);
 }

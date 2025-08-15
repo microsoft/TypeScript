@@ -22,4 +22,4 @@ export declare function __awaiter(thisArg: any, _arguments: any, P: Function, ge
 export class A {
 }
 const o = { a: 1 };
-const y = { ...o };
+const y = Object.assign({}, o);

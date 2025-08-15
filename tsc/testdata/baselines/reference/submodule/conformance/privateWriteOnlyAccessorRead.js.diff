@@ -15,17 +15,13 @@
 -    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
 -    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 -};
--var __rest = (this && this.__rest) || function (s, e) {
--    var t = {};
--    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
--        t[p] = s[p];
--    if (s != null && typeof Object.getOwnPropertySymbols === "function")
--        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
--            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
--                t[p[i]] = s[p[i]];
--        }
--    return t;
--};
+ var __rest = (this && this.__rest) || function (s, e) {
+     var t = {};
+     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+@@= skipped -22, +11 lines =@@
+         }
+     return t;
+ };
 -var _Test_instances, _Test_value_set, _Test_valueRest_set, _Test_valueOne_set, _Test_valueCompound_set;
  class Test {
 -    constructor() {
@@ -37,6 +33,7 @@
 +    set #valueCompound(v) { }
      m() {
 -        var _a, _b, _c, _d;
++        var _a, _b;
          const foo = { bar: 1 };
 -        console.log(__classPrivateFieldGet(this, _Test_instances, "a")); // error
 -        __classPrivateFieldSet(this, _Test_instances, { foo }, "a", _Test_value_set); // ok
@@ -53,11 +50,9 @@
 +        this.#value = { foo }; // ok
 +        this.#value.foo = foo; // error
 +        ({ o: this.#value } = { o: { foo } }); //ok
-+        ({ ...this.#value } = { foo }); //ok
++        (_a = { foo }, this.#value = __rest(_a, [])); //ok
 +        ({ foo: this.#value.foo } = { foo }); //error
-+        ({
-+            foo: { ...this.#value.foo },
-+        } = { foo }); //error
++        (_b = { foo }, this.#value.foo = __rest(_b.foo, [])); //error
 +        let r = { o: this.#value }; //error
 +        [this.#valueOne, ...this.#valueRest] = [1, 2, 3];
          let arr = [

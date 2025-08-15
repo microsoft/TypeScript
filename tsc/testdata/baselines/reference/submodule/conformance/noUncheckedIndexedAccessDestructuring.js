@@ -76,6 +76,17 @@ declare let target_string_arr: string[];
 
 
 //// [noUncheckedIndexedAccessDestructuring.js]
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 // Declaration forms for array destructuring
 // Destructuring from a simple array -> include undefined
 const [s1] = strArray;
@@ -88,7 +99,7 @@ const [, , ...s3] = strArray;
 s3.push(undefined); // Should error, 'undefined' not part of s2's element type
 const { t1 } = strMap;
 t1.toString(); // Should error, t1 possibly undefined
-const { ...t2 } = strMap;
+const t2 = __rest(strMap, []);
 t2.z.toString(); // Should error
 {
     const { x, y, z } = numMapPoint;
@@ -97,13 +108,13 @@ t2.z.toString(); // Should error
     z.toFixed(); // Should error
 }
 {
-    const { x, ...q } = numMapPoint;
+    const { x } = numMapPoint, q = __rest(numMapPoint, ["x"]);
     x.toFixed(); // Should OK
     q.y.toFixed(); // Should OK
     q.z.toFixed(); // Should error
 }
 {
-    const { x, ...q } = numMapPoint;
+    const { x } = numMapPoint, q = __rest(numMapPoint, ["x"]);
     x.
         toFixed(); // Should OK
     q.

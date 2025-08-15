@@ -26,4 +26,4 @@ class A {
 }
 exports.A = A;
 const o = { a: 1 };
-const y = { ...o };
+const y = Object.assign({}, o);

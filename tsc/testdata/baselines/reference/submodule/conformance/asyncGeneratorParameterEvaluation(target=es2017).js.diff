@@ -12,5 +12,5 @@
 -    m(x_1) { const _super = Object.create(null, {
 -        foo: { get: () => super.foo }
 -    }); return __asyncGenerator(this, arguments, function* m_1(x, y = z, _a) { var w = __rest(_a, []); _super.foo.call(this); }); }
-+    async *m(x, y = z, { ...w }) { super.foo(); }
++    async *m(x, y = z, _a) { var w = __rest(_a, []); super.foo(); }
  }

@@ -229,7 +229,7 @@ func (ch *optionalChainTransformer) visitOptionalExpression(node *ast.Node, capt
 	return target
 }
 
-func newOptionalChainTransformer(emitContext *printer.EmitContext) *transformers.Transformer {
+func newOptionalChainTransformer(opts *transformers.TransformOptions) *transformers.Transformer {
 	tx := &optionalChainTransformer{}
-	return tx.NewTransformer(tx.visit, emitContext)
+	return tx.NewTransformer(tx.visit, opts.Context)
 }

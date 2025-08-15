@@ -32,19 +32,35 @@ function f5({ await: _await, ...rest }: P) {
 
 
 //// [declarationEmitKeywordDestructuring.js]
-function f1({ enum: _enum, ...rest }) {
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
+function f1(_a) {
+    var { enum: _enum } = _a, rest = __rest(_a, ["enum"]);
     return rest;
 }
-function f2({ function: _function, ...rest }) {
+function f2(_a) {
+    var { function: _function } = _a, rest = __rest(_a, ["function"]);
     return rest;
 }
-function f3({ abstract: _abstract, ...rest }) {
+function f3(_a) {
+    var { abstract: _abstract } = _a, rest = __rest(_a, ["abstract"]);
     return rest;
 }
-function f4({ async: _async, ...rest }) {
+function f4(_a) {
+    var { async: _async } = _a, rest = __rest(_a, ["async"]);
     return rest;
 }
-function f5({ await: _await, ...rest }) {
+function f5(_a) {
+    var { await: _await } = _a, rest = __rest(_a, ["await"]);
     return rest;
 }
 

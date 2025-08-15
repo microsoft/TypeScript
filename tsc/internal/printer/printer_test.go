@@ -8,6 +8,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/testutil/emittestutil"
 	"github.com/microsoft/typescript-go/internal/testutil/parsetestutil"
+	"github.com/microsoft/typescript-go/internal/transformers"
 	"github.com/microsoft/typescript-go/internal/transformers/tstransforms"
 )
 
@@ -2510,7 +2511,7 @@ func TestPartiallyEmittedExpression(t *testing.T) {
     .expression;`, false /*jsx*/)
 
 	emitContext := printer.NewEmitContext()
-	file = tstransforms.NewTypeEraserTransformer(emitContext, compilerOptions).TransformSourceFile(file)
+	file = tstransforms.NewTypeEraserTransformer(&transformers.TransformOptions{CompilerOptions: compilerOptions, Context: emitContext}).TransformSourceFile(file)
 	emittestutil.CheckEmit(t, emitContext, file.AsSourceFile(), `return container.parent
     .left
     .expression

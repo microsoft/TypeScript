@@ -32,8 +32,10 @@ type RuntimeSyntaxTransformer struct {
 	enumMemberCache                     map[*ast.EnumDeclarationNode]map[string]evaluator.Result
 }
 
-func NewRuntimeSyntaxTransformer(emitContext *printer.EmitContext, compilerOptions *core.CompilerOptions, resolver binder.ReferenceResolver) *transformers.Transformer {
-	tx := &RuntimeSyntaxTransformer{compilerOptions: compilerOptions, resolver: resolver}
+func NewRuntimeSyntaxTransformer(opt *transformers.TransformOptions) *transformers.Transformer {
+	compilerOptions := opt.CompilerOptions
+	emitContext := opt.Context
+	tx := &RuntimeSyntaxTransformer{compilerOptions: compilerOptions, resolver: opt.Resolver}
 	return tx.NewTransformer(tx.visit, emitContext)
 }
 

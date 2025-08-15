@@ -67,7 +67,7 @@ export function T5(a, b, c, d) {
     return React.createElement("div", Object.assign({ className: "T5" }, a, b, { c, d }), "T5");
 }
 export function T6(a, b, c, d) {
-    return React.createElement("div", Object.assign({ className: "T6" }, a, b, { ...c, ...d }), "T6");
+    return React.createElement("div", Object.assign({ className: "T6" }, a, b, Object.assign(Object.assign({}, c), d)), "T6");
 }
 export function T7(a, b, c, d) {
     return React.createElement("div", Object.assign({ className: "T7" }, { __proto__: null, dir: 'rtl' }), "T7");

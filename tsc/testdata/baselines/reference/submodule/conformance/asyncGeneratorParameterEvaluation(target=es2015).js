@@ -16,5 +16,5 @@ class Sub extends Super {
 async function* f1(x, y = z) { }
 async function* f2({ [z]: x }) { }
 class Sub extends Super {
-    async *m(x, y = z, { ...w }) { super.foo(); }
+    async *m(x, y = z, _a) { var w = __rest(_a, []); super.foo(); }
 }

@@ -17,13 +17,10 @@
      return {
 -        resolve: (context, args) => __awaiter(this, void 0, void 0, function* () {
 -            const { objects } = yield { objects: 12 };
--            return Object.assign({}, connectionFromArray(objects, args));
--        })
 +        resolve: async (context, args) => {
 +            const { objects } = await { objects: 12 };
-+            return {
-+                ...connectionFromArray(objects, args)
-+            };
+             return Object.assign({}, connectionFromArray(objects, args));
+-        })
 +        }
      };
  }

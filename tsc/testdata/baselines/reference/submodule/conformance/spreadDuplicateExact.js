@@ -22,14 +22,25 @@ let d2 = { a: 123, ...(t ? d : {}) };  // string | number | undefined
 
 
 //// [spreadDuplicateExact.js]
-let a1 = { a: 123, ...a }; // string (Error)
-let b1 = { a: 123, ...b }; // string | number
-let c1 = { a: 123, ...c }; // string | undefined (Error)
-let d1 = { a: 123, ...d }; // string | number | undefined
-let a2 = { a: 123, ...(t ? a : {}) }; // string | number
-let b2 = { a: 123, ...(t ? b : {}) }; // string | number
-let c2 = { a: 123, ...(t ? c : {}) }; // string | number | undefined
-let d2 = { a: 123, ...(t ? d : {}) }; // string | number | undefined
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+let a1 = __assign({ a: 123 }, a); // string (Error)
+let b1 = __assign({ a: 123 }, b); // string | number
+let c1 = __assign({ a: 123 }, c); // string | undefined (Error)
+let d1 = __assign({ a: 123 }, d); // string | number | undefined
+let a2 = __assign({ a: 123 }, (t ? a : {})); // string | number
+let b2 = __assign({ a: 123 }, (t ? b : {})); // string | number
+let c2 = __assign({ a: 123 }, (t ? c : {})); // string | number | undefined
+let d2 = __assign({ a: 123 }, (t ? d : {})); // string | number | undefined
 
 
 //// [spreadDuplicateExact.d.ts]

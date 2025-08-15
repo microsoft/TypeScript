@@ -785,7 +785,10 @@ func (p *Printer) shouldEmitBlockFunctionBodyOnSingleLine(body *ast.Block) bool 
 }
 
 func (p *Printer) shouldEmitOnNewLine(node *ast.Node, format ListFormat) bool {
-	// !!! if startsOnNewLine := getStartsOnNewLine(node); startsOnNewLine != nil { return *startsOnNewLine }
+	// !!! TODO: enable multiline emit
+	// if p.emitContext.EmitFlags(node)&EFStartOnNewLine != 0 {
+	// 	return true
+	// }
 	return format&LFPreferNewLine != 0
 }
 

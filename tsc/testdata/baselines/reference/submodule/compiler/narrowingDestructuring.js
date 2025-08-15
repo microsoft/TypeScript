@@ -43,6 +43,17 @@ function farr<T extends [number, string, string] | [string, number, number]>(x: 
 
 
 //// [narrowingDestructuring.js]
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 function func(value) {
     if (value.kind === "a") {
         value.a;
@@ -56,18 +67,21 @@ function func(value) {
 function func2(value) {
     if (value.kind === "f") {
         const { f: f1 } = value;
-        const { f: { a, ...spread } } = value;
+        const _a = value.f, { a } = _a, spread = __rest(_a, ["a"]);
         value.f;
     }
     else {
-        const { g: { c, ...spread } } = value;
+        const _b = value.g, { c } = _b, spread = __rest(_b, ["c"]);
         value.g;
     }
 }
 function func3(t) {
     if (t.kind === "a") {
-        const { kind, ...r1 } = t;
-        const r2 = (({ kind, ...rest }) => rest)(t);
+        const { kind } = t, r1 = __rest(t, ["kind"]);
+        const r2 = ((_a) => {
+            var { kind } = _a, rest = __rest(_a, ["kind"]);
+            return rest;
+        })(t);
     }
 }
 function farr(x) {

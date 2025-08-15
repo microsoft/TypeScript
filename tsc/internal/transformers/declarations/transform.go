@@ -60,6 +60,7 @@ type DeclarationTransformer struct {
 	rawLibReferenceDirectives        []*ast.FileReference
 }
 
+// TODO: Convert to transformers.TransformerFactory signature to allow more automatic composition with other transforms
 func NewDeclarationTransformer(host DeclarationEmitHost, context *printer.EmitContext, compilerOptions *core.CompilerOptions, declarationFilePath string, declarationMapPath string) *DeclarationTransformer {
 	resolver := host.GetEmitResolver()
 	state := &SymbolTrackerSharedState{isolatedDeclarations: compilerOptions.IsolatedDeclarations.IsTrue(), resolver: resolver}

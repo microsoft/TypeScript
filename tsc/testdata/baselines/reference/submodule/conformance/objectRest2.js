@@ -21,9 +21,7 @@ function rootConnection(name) {
     return {
         resolve: async (context, args) => {
             const { objects } = await { objects: 12 };
-            return {
-                ...connectionFromArray(objects, args)
-            };
+            return Object.assign({}, connectionFromArray(objects, args));
         }
     };
 }

@@ -29,10 +29,12 @@ type JSXTransformer struct {
 	currentSourceFile *ast.SourceFile
 }
 
-func NewJSXTransformer(emitContext *printer.EmitContext, compilerOptions *core.CompilerOptions, emitResolver printer.EmitResolver) *transformers.Transformer {
+func NewJSXTransformer(opts *transformers.TransformOptions) *transformers.Transformer {
+	compilerOptions := opts.CompilerOptions
+	emitContext := opts.Context
 	tx := &JSXTransformer{
 		compilerOptions: compilerOptions,
-		emitResolver:    emitResolver,
+		emitResolver:    opts.EmitResolver,
 	}
 	return tx.NewTransformer(tx.visit, emitContext)
 }

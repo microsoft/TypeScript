@@ -30,4 +30,4 @@ export class A {
     g(u) { return #x in u; }
 }
 const o = { a: 1 };
-const y = { ...o };
+const y = Object.assign({}, o);

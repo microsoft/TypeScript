@@ -21,16 +21,28 @@ let rest: { b: string }
 
 
 //// [objectRestNegative.js]
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 let o = { a: 1, b: 'no' };
-var { ...mustBeLast, a } = o;
+var { a } = o;
 var b;
 let notAssignable;
-({ b, ...notAssignable } = o);
-function stillMustBeLast({ ...mustBeLast, a }) {
+({ b } = o, notAssignable = __rest(o, ["b"]));
+function stillMustBeLast(_a) {
+    var { a } = _a;
 }
 function generic(t) {
-    let { x, ...rest } = t;
+    let { x } = t, rest = __rest(t, ["x"]);
     return rest;
 }
 let rest;
-({ a, ...rest.b + rest.b } = o);
+({ a } = o, (rest.b + rest.b) = __rest(o, ["a"]));
