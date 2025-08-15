@@ -1,0 +1,28 @@
+elementWiseErrorInUnionTarget1.ts(19,5): error TS2322: Type 'number' is not assignable to type 'string'.
+
+
+==== elementWiseErrorInUnionTarget1.ts (1 errors) ====
+    type SingleOrArray<T> = T | readonly T[];
+    
+    type ProvidedActor = {
+      src: string;
+      input?: unknown;
+    };
+    
+    type MachineConfig<TActors extends ProvidedActor> = {
+      invoke: SingleOrArray<TActors>;
+    };
+    
+    declare function setup<TActors extends ProvidedActor>(): {
+      createMachine: (config: MachineConfig<TActors>) => void;
+    };
+    
+    setup<{ src: "fetchUser"; input: string }>().createMachine({
+      invoke: {
+        src: "fetchUser",
+        input: 10,
+        ~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+      },
+    });
+    
