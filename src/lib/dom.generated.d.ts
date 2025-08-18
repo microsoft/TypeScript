@@ -1113,7 +1113,7 @@ interface MediaTrackCapabilities {
     channelCount?: ULongRange;
     deviceId?: string;
     displaySurface?: string;
-    echoCancellation?: boolean[];
+    echoCancellation?: (boolean|string)[];
     facingMode?: string[];
     frameRate?: DoubleRange;
     groupId?: string;
@@ -1131,7 +1131,7 @@ interface MediaTrackConstraintSet {
     channelCount?: ConstrainULong;
     deviceId?: ConstrainDOMString;
     displaySurface?: ConstrainDOMString;
-    echoCancellation?: ConstrainBoolean;
+    echoCancellation?: ConstrainBoolean|ConstrainDOMString;
     facingMode?: ConstrainDOMString;
     frameRate?: ConstrainDouble;
     groupId?: ConstrainDOMString;
@@ -1153,7 +1153,7 @@ interface MediaTrackSettings {
     channelCount?: number;
     deviceId?: string;
     displaySurface?: string;
-    echoCancellation?: boolean;
+    echoCancellation?: boolean|string;
     facingMode?: string;
     frameRate?: number;
     groupId?: string;
