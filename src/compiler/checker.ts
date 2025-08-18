@@ -2904,7 +2904,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getSymbolLinks(symbol: Symbol): SymbolLinks {
         if (symbol.flags & SymbolFlags.Transient) return (symbol as TransientSymbol).links;
         const id = getSymbolId(symbol);
-        if (sourceFileWithoutResolvedSignatureCaching && symbol.valueDeclaration && getSourceFileOfNode(symbol.valueDeclaration) === sourceFileWithoutResolvedSignatureCaching) {
+        if (sourceFileWithoutResolvedSignatureCaching && symbol.valueDeclaration && (isFunctionExpressionOrArrowFunction(symbol.valueDeclaration) || tryGetRootParameterDeclaration(symbol.valueDeclaration)) && getSourceFileOfNode(symbol.valueDeclaration) === sourceFileWithoutResolvedSignatureCaching) {
             symbolLinksWithoutResolvedSignatureCaching ??= [];
             return symbolLinksWithoutResolvedSignatureCaching[id] ??= new SymbolLinks();
         }
@@ -2913,7 +2913,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getNodeLinks(node: Node): NodeLinks {
         const nodeId = getNodeId(node);
-        if (sourceFileWithoutResolvedSignatureCaching && getSourceFileOfNode(node) === sourceFileWithoutResolvedSignatureCaching) {
+        if (sourceFileWithoutResolvedSignatureCaching && (isCallLikeOrFunctionLikeExpression(node) || tryGetRootParameterDeclaration(node)) && getSourceFileOfNode(node) === sourceFileWithoutResolvedSignatureCaching) {
             nodeLinksWithoutResolvedSignatureCaching ??= [];
             return nodeLinksWithoutResolvedSignatureCaching[nodeId] ??= new (NodeLinks as any)();
         }
