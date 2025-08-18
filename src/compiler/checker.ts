@@ -19584,6 +19584,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (objectType === wildcardType || indexType === wildcardType) {
             return wildcardType;
         }
+        if (isGenericObjectType(objectType)) {
+            const propertyName = getPropertyNameFromIndex(indexType, accessNode);
+            if (propertyName) {
+                if (someType(getApparentType(objectType), t => isNonPublicPropertyOfType(t, propertyName))) {
+                    error(accessNode, Diagnostics.Private_or_protected_member_0_cannot_be_accessed_on_a_type_parameter, unescapeLeadingUnderscores(propertyName));
+                    return errorType;
+                }
+            }
+        }
         objectType = getReducedType(objectType);
         // If the object type has a string index signature and no other members we know that the result will
         // always be the type of that index signature and we can simplify accordingly.
@@ -19646,6 +19655,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 : getUnionType(propTypes, UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
         }
         return getPropertyTypeForIndexType(objectType, apparentObjectType, indexType, indexType, accessNode, accessFlags | AccessFlags.CacheSymbol | AccessFlags.ReportDeprecated);
+
+        function isNonPublicPropertyOfType(type: Type, propertyName: __String): boolean {
+            if (type.flags & TypeFlags.Intersection) {
+                return some((type as IntersectionType).types, t => isNonPublicPropertyOfType(t, propertyName));
+            }
+            const propertySymbol = getPropertyOfType(type, propertyName);
+            return !!(propertySymbol && getDeclarationModifierFlagsFromSymbol(propertySymbol) & ModifierFlags.NonPublicAccessibilityModifier);
+        }
     }
 
     function getTypeFromIndexedAccessTypeNode(node: IndexedAccessTypeNode) {
@@ -42753,16 +42770,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 error(accessNode, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(objectType));
             }
             return type;
-        }
-        if (isGenericObjectType(objectType)) {
-            const propertyName = getPropertyNameFromIndex(indexType, accessNode);
-            if (propertyName) {
-                const propertySymbol = forEachType(getApparentType(objectType), t => getPropertyOfType(t, propertyName));
-                if (propertySymbol && getDeclarationModifierFlagsFromSymbol(propertySymbol) & ModifierFlags.NonPublicAccessibilityModifier) {
-                    error(accessNode, Diagnostics.Private_or_protected_member_0_cannot_be_accessed_on_a_type_parameter, unescapeLeadingUnderscores(propertyName));
-                    return errorType;
-                }
-            }
         }
         error(accessNode, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(indexType), typeToString(objectType));
         return errorType;
