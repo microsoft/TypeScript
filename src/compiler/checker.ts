@@ -19584,7 +19584,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (objectType === wildcardType || indexType === wildcardType) {
             return wildcardType;
         }
-        if (isGenericObjectType(objectType)) {
+        if (accessNode?.kind === SyntaxKind.IndexedAccessType && isGenericObjectType(objectType)) {
             const propertyName = getPropertyNameFromIndex(indexType, accessNode);
             if (propertyName) {
                 if (someType(getApparentType(objectType), t => isNonPublicPropertyOfType(t, propertyName))) {
