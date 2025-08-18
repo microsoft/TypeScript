@@ -24,32 +24,32 @@ type X<T extends A> = [T["a"], (T | B)["a"]];
 >  : ^^^^
 
 type Y<T extends A | B> = T["a"];
->Y : any
->  : ^^^
+>Y : Y<T>
+>  : ^^^^
 
 type Z<T extends A & B> = T["a"];
->Z : any
->  : ^^^
+>Z : Z<T>
+>  : ^^^^
 
 type R<T extends A, T2 extends B> = (T | T2)["a"];
->R : any
->  : ^^^
+>R : R<T, T2>
+>  : ^^^^^^^^
 
 type S<T extends B, T2 extends A> = (T | T2)["a"];
->S : any
->  : ^^^
+>S : S<T, T2>
+>  : ^^^^^^^^
 
 type U<T extends A> = (T & B)["a"];
->U : any
->  : ^^^
+>U : never
+>  : ^^^^^
 
 type V<T extends A, T2 extends B> = (T & T2)["a"];
->V : any
->  : ^^^
+>V : never
+>  : ^^^^^
 
 type W<T extends B, T2 extends A> = (T & T2)["a"];
->W : any
->  : ^^^
+>W : never
+>  : ^^^^^
 
 class C {
 >C : C
@@ -74,32 +74,32 @@ type X2<T extends C> = [T["a"], (T | D)["a"]];
 >   : ^^^^^
 
 type Y2<T extends C | D> = T["a"];
->Y2 : any
->   : ^^^
+>Y2 : Y2<T>
+>   : ^^^^^
 
 type Z2<T extends C & D> = T["a"];
->Z2 : any
->   : ^^^
+>Z2 : Z2<T>
+>   : ^^^^^
 
 type R2<T extends C, T2 extends D> = (T | T2)["a"];
->R2 : any
->   : ^^^
+>R2 : R2<T, T2>
+>   : ^^^^^^^^^
 
 type S2<T extends D, T2 extends C> = (T | T2)["a"];
->S2 : any
->   : ^^^
+>S2 : S2<T, T2>
+>   : ^^^^^^^^^
 
 type U2<T extends C> = (T & D)["a"];
->U2 : any
->   : ^^^
+>U2 : never
+>   : ^^^^^
 
 type V2<T extends C, T2 extends D> = (T & T2)["a"];
->V2 : any
->   : ^^^
+>V2 : never
+>   : ^^^^^
 
 type W2<T extends D, T2 extends C> = (T & T2)["a"];
->W2 : any
->   : ^^^
+>W2 : never
+>   : ^^^^^
 
 class E {
 >E : E
@@ -124,32 +124,32 @@ type X3<T extends E> = [T["a"], (T | F)["a"]];
 >   : ^^^^^
 
 type Y3<T extends E | F> = T["a"];
->Y3 : any
->   : ^^^
+>Y3 : Y3<T>
+>   : ^^^^^
 
 type Z3<T extends E & F> = T["a"];
->Z3 : any
->   : ^^^
+>Z3 : Z3<T>
+>   : ^^^^^
 
 type R3<T extends E, T2 extends F> = (T | T2)["a"];
->R3 : any
->   : ^^^
+>R3 : R3<T, T2>
+>   : ^^^^^^^^^
 
 type S3<T extends F, T2 extends E> = (T | T2)["a"];
->S3 : any
->   : ^^^
+>S3 : S3<T, T2>
+>   : ^^^^^^^^^
 
 type U3<T extends E> = (T & F)["a"];
->U3 : any
->   : ^^^
+>U3 : never
+>   : ^^^^^
 
 type V3<T extends E, T2 extends F> = (T & T2)["a"];
->V3 : any
->   : ^^^
+>V3 : never
+>   : ^^^^^
 
 type W3<T extends F, T2 extends E> = (T & T2)["a"];
->W3 : any
->   : ^^^
+>W3 : never
+>   : ^^^^^
 
 class G {
 >G : G
@@ -174,30 +174,30 @@ type X4<T extends G> = [T["a"], (T | H)["a"]];
 >   : ^^^^^
 
 type Y4<T extends G | H> = T["a"];
->Y4 : any
->   : ^^^
+>Y4 : Y4<T>
+>   : ^^^^^
 
 type Z4<T extends G & H> = T["a"];
->Z4 : any
->   : ^^^
+>Z4 : Z4<T>
+>   : ^^^^^
 
 type R4<T extends G, T2 extends H> = (T | T2)["a"];
->R4 : any
->   : ^^^
+>R4 : R4<T, T2>
+>   : ^^^^^^^^^
 
 type S4<T extends H, T2 extends G> = (T | T2)["a"];
->S4 : any
->   : ^^^
+>S4 : S4<T, T2>
+>   : ^^^^^^^^^
 
 type U4<T extends G> = (T & H)["a"];
->U4 : any
->   : ^^^
+>U4 : U4<T>
+>   : ^^^^^
 
 type V4<T extends G, T2 extends H> = (T & T2)["a"];
->V4 : any
->   : ^^^
+>V4 : V4<T, T2>
+>   : ^^^^^^^^^
 
 type W4<T extends H, T2 extends G> = (T & T2)["a"];
->W4 : any
->   : ^^^
+>W4 : W4<T, T2>
+>   : ^^^^^^^^^
 

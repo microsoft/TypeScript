@@ -19584,15 +19584,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (objectType === wildcardType || indexType === wildcardType) {
             return wildcardType;
         }
-        if (accessNode?.kind === SyntaxKind.IndexedAccessType && isGenericObjectType(objectType)) {
-            const propertyName = getPropertyNameFromIndex(indexType, accessNode);
-            if (propertyName) {
-                if (someType(getApparentType(objectType), t => isNonPublicPropertyOfType(t, propertyName))) {
-                    error(accessNode, Diagnostics.Private_or_protected_member_0_cannot_be_accessed_on_a_type_parameter, unescapeLeadingUnderscores(propertyName));
-                    return errorType;
-                }
-            }
-        }
         objectType = getReducedType(objectType);
         // If the object type has a string index signature and no other members we know that the result will
         // always be the type of that index signature and we can simplify accordingly.
@@ -19655,14 +19646,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 : getUnionType(propTypes, UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
         }
         return getPropertyTypeForIndexType(objectType, apparentObjectType, indexType, indexType, accessNode, accessFlags | AccessFlags.CacheSymbol | AccessFlags.ReportDeprecated);
-
-        function isNonPublicPropertyOfType(type: Type, propertyName: __String): boolean {
-            if (type.flags & TypeFlags.Intersection) {
-                return some((type as IntersectionType).types, t => isNonPublicPropertyOfType(t, propertyName));
-            }
-            const propertySymbol = getPropertyOfType(type, propertyName);
-            return !!(propertySymbol && getDeclarationModifierFlagsFromSymbol(propertySymbol) & ModifierFlags.NonPublicAccessibilityModifier);
-        }
     }
 
     function getTypeFromIndexedAccessTypeNode(node: IndexedAccessTypeNode) {
@@ -42751,12 +42734,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkIndexedAccessIndexType(type: Type, accessNode: IndexedAccessTypeNode | ElementAccessExpression) {
+        if (type.flags & TypeFlags.Never && isIndexedAccessTypeNode(accessNode)) {
+            if (!checkNonPublicPropertyAccess(getTypeFromTypeNode(accessNode.objectType), getTypeFromTypeNode(accessNode.indexType))) {
+                return errorType;
+            }
+            return type;
+        }
         if (!(type.flags & TypeFlags.IndexedAccess)) {
             return type;
         }
         // Check if the index type is assignable to 'keyof T' for the object type.
         const objectType = (type as IndexedAccessType).objectType;
         const indexType = (type as IndexedAccessType).indexType;
+
+        if (!checkNonPublicPropertyAccess(objectType, indexType)) {
+            return errorType;
+        }
+
         // skip index type deferral on remapping mapped types
         const objectIndexType = isGenericMappedType(objectType) && getMappedTypeNameTypeKind(objectType) === MappedTypeNameTypeKind.Remapping
             ? getIndexTypeForMappedType(objectType, IndexFlags.None)
@@ -42773,6 +42767,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         error(accessNode, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(indexType), typeToString(objectType));
         return errorType;
+
+        function checkNonPublicPropertyAccess(objectType: Type, indexType: Type) {
+            const propertyName = getPropertyNameFromIndex(indexType, accessNode);
+            if (propertyName && someType(getApparentType(objectType), t => isNonPublicPropertyOfType(t, propertyName))) {
+                error(accessNode, Diagnostics.Private_or_protected_member_0_cannot_be_accessed_on_a_type_parameter, unescapeLeadingUnderscores(propertyName));
+                return false;
+            }
+            return true;
+        }
+
+        function isNonPublicPropertyOfType(type: Type, propertyName: __String): boolean {
+            if (type.flags & TypeFlags.Intersection) {
+                return some((type as IntersectionType).types, t => isNonPublicPropertyOfType(t, propertyName));
+            }
+            const propertySymbol = getPropertyOfType(type, propertyName);
+            return !!(propertySymbol && getDeclarationModifierFlagsFromSymbol(propertySymbol) & ModifierFlags.NonPublicAccessibilityModifier);
+        }
     }
 
     function checkIndexedAccessType(node: IndexedAccessTypeNode) {
