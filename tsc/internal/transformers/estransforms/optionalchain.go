@@ -2,6 +2,7 @@ package estransforms
 
 import (
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/debug"
 	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/transformers"
 )
@@ -72,7 +73,7 @@ func (ch *optionalChainTransformer) visitPropertyOrElementAccessExpression(node 
 		return ch.visitOptionalExpression(node.AsNode(), captureThisArg, isDelete)
 	}
 	expression := ch.Visitor().VisitNode(node.Expression())
-	// Debug.assertNotNode(expression, isSyntheticReference); // !!!
+	debug.AssertNotNode(expression, ast.IsSyntheticReferenceExpression)
 
 	var thisArg *ast.Expression
 	if captureThisArg {
@@ -127,12 +128,16 @@ type flattenResult struct {
 	chain      []*ast.Node
 }
 
+func isNonNullChain(node *ast.Node) bool {
+	return ast.IsNonNullExpression(node) && node.Flags&ast.NodeFlagsOptionalChain != 0
+}
+
 func flattenChain(chain *ast.Node) flattenResult {
-	// Debug.assertNotNode(chain, isNonNullChain); // !!!
+	debug.AssertNotNode(chain, isNonNullChain)
 	links := []*ast.Node{chain}
 	for !ast.IsTaggedTemplateExpression(chain) && chain.QuestionDotToken() == nil {
 		chain = ast.SkipPartiallyEmittedExpressions(chain.Expression())
-		// Debug.assertNotNode(chain, isNonNullChain); // !!!
+		debug.AssertNotNode(chain, isNonNullChain)
 		links = append([]*ast.Node{chain}, links...)
 	}
 	return flattenResult{chain.Expression(), links}

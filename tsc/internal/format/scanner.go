@@ -5,6 +5,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/debug"
 	"github.com/microsoft/typescript-go/internal/scanner"
 )
 
@@ -169,7 +170,7 @@ func fixTokenKind(tokenInfo tokenInfo, container *ast.Node) tokenInfo {
 }
 
 func (s *formattingScanner) readTokenInfo(n *ast.Node) tokenInfo {
-	// Debug.assert(isOnToken()); // !!!
+	debug.Assert(s.isOnToken())
 
 	// normally scanner returns the smallest available token
 	// check the kind of context node to determine if scanner should have more greedy behavior and consume more text.
@@ -203,7 +204,6 @@ func (s *formattingScanner) readTokenInfo(n *ast.Node) tokenInfo {
 	}
 
 	if s.s.TokenFullStart() != s.savedPos {
-		// Debug.assert(lastTokenInfo !== undefined); // !!!
 		// readTokenInfo was called before but scan action differs - rescan text
 		s.s.ResetTokenState(s.savedPos)
 		s.s.Scan()
@@ -258,14 +258,14 @@ func (s *formattingScanner) getNextToken(n *ast.Node, expectedScanAction scanAct
 		if token == ast.KindGreaterThanToken {
 			s.lastScanAction = actionRescanGreaterThanToken
 			newToken := s.s.ReScanGreaterThanToken()
-			// Debug.assert(n.kind == newToken); // !!!
+			debug.Assert(n.Kind == newToken)
 			return newToken
 		}
 	case actionRescanSlashToken:
 		if startsWithSlashToken(token) {
 			s.lastScanAction = actionRescanSlashToken
 			newToken := s.s.ReScanSlashToken()
-			// Debug.assert(n.kind == newToken); // !!!
+			debug.Assert(n.Kind == newToken)
 			return newToken
 		}
 	case actionRescanTemplateToken:
@@ -285,14 +285,13 @@ func (s *formattingScanner) getNextToken(n *ast.Node, expectedScanAction scanAct
 	case actionScan:
 		break
 	default:
-		// Debug.assertNever(expectedScanAction); !!!
-		panic("unhandled scan action kind")
+		debug.AssertNever(expectedScanAction, "unhandled scan action kind")
 	}
 	return token
 }
 
 func (s *formattingScanner) readEOFTokenRange() TextRangeWithKind {
-	// Debug.assert(isOnEOF()); // !!!
+	debug.Assert(s.isOnEOF())
 	return NewTextRangeWithKind(
 		s.s.TokenFullStart(),
 		s.s.TokenEnd(),

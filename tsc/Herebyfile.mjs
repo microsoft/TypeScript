@@ -189,7 +189,7 @@ export const lib = task({
 function buildTsgo(opts) {
     opts ||= {};
     const out = opts.out ?? "./built/local/";
-    return $({ cancelSignal: opts.abortSignal, env: opts.env })`go build ${goBuildFlags} ${opts.extraFlags ?? []} ${goBuildTags("noembed")} -o ${out} ./cmd/tsgo`;
+    return $({ cancelSignal: opts.abortSignal, env: opts.env })`go build ${goBuildFlags} ${opts.extraFlags ?? []} ${options.debug ? goBuildTags("noembed") : goBuildTags("noembed", "release")} -o ${out} ./cmd/tsgo`;
 }
 
 export const tsgoBuild = task({

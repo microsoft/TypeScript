@@ -260,6 +260,8 @@ func (n *Node) LiteralLikeData() *LiteralLikeBase         { return n.data.Litera
 func (n *Node) TemplateLiteralLikeData() *TemplateLiteralLikeBase {
 	return n.data.TemplateLiteralLikeData()
 }
+func (n *Node) KindString() string { return n.Kind.String() }
+func (n *Node) KindValue() int16   { return int16(n.Kind) }
 
 type mutableNode Node
 

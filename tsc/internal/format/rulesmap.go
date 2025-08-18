@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/debug"
 )
 
 func getRules(context *formattingContext, rules []*ruleImpl) []*ruleImpl {
@@ -31,7 +32,7 @@ func getRules(context *formattingContext, rules []*ruleImpl) []*ruleImpl {
 }
 
 func getRuleBucketIndex(row ast.Kind, column ast.Kind) int {
-	// Debug.assert(row <= SyntaxKind.LastKeyword && column <= SyntaxKind.LastKeyword, "Must compute formatting context from tokens") // !!!
+	debug.Assert(row <= ast.KindLastKeyword && column <= ast.KindLastKeyword, "Must compute formatting context from tokens")
 	return (int(row) * mapRowLength) + int(column)
 }
 
@@ -150,6 +151,6 @@ func getRuleInsertionIndex(indexBitmap int, maskPosition RulesPosition) int {
 
 func increaseInsertionIndex(indexBitmap int, maskPosition RulesPosition) int {
 	value := ((indexBitmap >> maskPosition) & mask) + 1
-	// Debug.assert((value & mask) === value, "Adding more rules into the sub-bucket than allowed. Maximum allowed is 32 rules."); // !!!
+	debug.Assert((value&mask) == value, "Adding more rules into the sub-bucket than allowed. Maximum allowed is 32 rules.")
 	return (indexBitmap & ^(mask << maskPosition)) | (value << maskPosition)
 }

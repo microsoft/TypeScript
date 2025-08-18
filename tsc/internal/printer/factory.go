@@ -7,6 +7,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/debug"
 )
 
 type NodeFactory struct {
@@ -573,7 +574,7 @@ func (f *NodeFactory) NewRestHelper(value *ast.Expression, elements []*ast.Node,
 		propertyName := ast.TryGetPropertyNameOfBindingOrAssignmentElement(element)
 		if propertyName != nil {
 			if ast.IsComputedPropertyName(propertyName) {
-				// Debug.assertIsDefined(computedTempVariables, "Encountered computed property name but 'computedTempVariables' argument was not provided."); // !!!
+				debug.AssertIsDefined(computedTempVariables, "Encountered computed property name but 'computedTempVariables' argument was not provided.")
 				temp := computedTempVariables[computedTempVariableOffset]
 				computedTempVariableOffset++
 				// typeof _tmp === "symbol" ? _tmp : _tmp + ""

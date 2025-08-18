@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/debug"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/jsnum"
 	"github.com/microsoft/typescript-go/internal/module"
@@ -1131,7 +1132,7 @@ func parseJsonConfigFileContentWorker(
 	extraFileExtensions []FileExtensionInfo,
 	extendedConfigCache *collections.SyncMap[tspath.Path, *ExtendedConfigCacheEntry],
 ) *ParsedCommandLine {
-	// Debug.assert((json === undefined && sourceFile !== undefined) || (json !== undefined && sourceFile === undefined));
+	debug.Assert((json == nil && sourceFile != nil) || (json != nil && sourceFile == nil))
 
 	basePathForFileNames := ""
 	if configFileName != "" {

@@ -2,6 +2,7 @@ package ls
 
 import (
 	"context"
+	"fmt"
 	"strings"
 
 	"github.com/microsoft/typescript-go/internal/ast"
@@ -9,6 +10,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/checker"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/debug"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/nodebuilder"
 	"github.com/microsoft/typescript-go/internal/printer"
@@ -246,7 +248,7 @@ func createSignatureHelpItems(candidates []*checker.Signature, resolvedSignature
 		itemSeen = itemSeen + len(item)
 	}
 
-	// Debug.assert(selectedItemIndex !== -1)
+	debug.Assert(selectedItemIndex != -1)
 	flattenedSignatures := []signatureInformation{}
 	for _, item := range items {
 		flattenedSignatures = append(flattenedSignatures, item...)
@@ -576,7 +578,8 @@ func getCandidateOrTypeInfo(info *argumentListInfo, c *checker.Checker, sourceFi
 			},
 		}
 	}
-	return nil // return Debug.assertNever(invocation);
+	debug.AssertNever(info.invocation)
+	return nil
 }
 
 func isSyntacticOwner(startingToken *ast.Node, node *ast.CallLikeExpression, sourceFile *ast.SourceFile) bool { // !!! not tested
@@ -617,7 +620,7 @@ func getContainingArgumentInfo(node *ast.Node, sourceFile *ast.SourceFile, check
 	for n := node; !ast.IsSourceFile(n) && (isManuallyInvoked || !ast.IsBlock(n)); n = n.Parent {
 		// If the node is not a subspan of its parent, this is a big problem.
 		// There have been crashes that might be caused by this violation.
-		// Debug.assert(rangeContainsRange(n.parent, n), "Not a subspan", () => `Child: ${Debug.formatSyntaxKind(n.kind)}, parent: ${Debug.formatSyntaxKind(n.parent.kind)}`);
+		debug.Assert(RangeContainsRange(n.Parent.Loc, n.Loc), fmt.Sprintf("Not a subspan. Child: %s, parent: %s", n.KindString(), n.Parent.KindString()))
 		argumentInfo := getImmediatelyContainingArgumentOrContextualParameterInfo(n, position, sourceFile, checker)
 		if argumentInfo != nil {
 			return argumentInfo
@@ -763,7 +766,7 @@ func getArgumentIndexForTemplatePiece(spanIndex int, node *ast.Node, position in
 	// Example: f  `# abcd $#{#  1 + 1#  }# efghi ${ #"#hello"#  }  #  `
 	//              ^       ^ ^       ^   ^          ^ ^      ^     ^
 	// Case:        1       1 3       2   1          3 2      2     1
-	//Debug.assert(position >= node.getStart(), "Assumed 'position' could not occur before node.");
+	debug.Assert(position >= node.Loc.Pos(), "Assumed 'position' could not occur before node.")
 	if ast.IsTemplateLiteralToken(node) {
 		if isInsideTemplateLiteral(node, position, sourceFile) {
 			return 0
@@ -1117,9 +1120,9 @@ func getArgumentListInfoForTemplate(tagExpression *ast.TaggedTemplateExpression,
 	if !isNoSubstitutionTemplateLiteral(tagExpression.Template) {
 		argumentCount = len(tagExpression.Template.AsTemplateExpression().TemplateSpans.Nodes) + 1
 	}
-	// if (argumentIndex !== 0) {
-	//     Debug.assertLessThan(argumentIndex, argumentCount);
-	// }
+	if argumentIndex != 0 {
+		debug.AssertLessThan(argumentIndex, argumentCount)
+	}
 	return &argumentListInfo{
 		isTypeParameterList: false,
 		invocation:          &invocation{callInvocation: &callInvocation{node: tagExpression.AsNode()}},

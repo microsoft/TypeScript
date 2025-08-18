@@ -8,6 +8,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/debug"
 	"github.com/microsoft/typescript-go/internal/module"
 	"github.com/microsoft/typescript-go/internal/outputpaths"
 	"github.com/microsoft/typescript-go/internal/packagejson"
@@ -592,7 +593,7 @@ func processEnding(
 		// TODO: possible dead code in strada in this branch to do with declaration file name handling
 		return fileName
 	default:
-		// Debug.assertNever(allowedEndings[0]); // !!!
+		debug.AssertNever(allowedEndings[0])
 		return ""
 	}
 }

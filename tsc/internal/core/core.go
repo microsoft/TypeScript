@@ -9,6 +9,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
+	"github.com/microsoft/typescript-go/internal/debug"
 	"github.com/microsoft/typescript-go/internal/jsonutil"
 	"github.com/microsoft/typescript-go/internal/stringutil"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -485,7 +486,7 @@ func GetSpellingSuggestion[T any](name string, candidates []T, getName func(T) s
 			if distance < 0 {
 				continue
 			}
-			// Debug.assert(distance < bestDistance) // Else `levenshteinWithMax` should return undefined
+			debug.Assert(distance < bestDistance) // Else `levenshteinWithMax` should return undefined
 			bestDistance = distance
 			bestCandidate = candidate
 		}

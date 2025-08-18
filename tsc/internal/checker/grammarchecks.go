@@ -8,6 +8,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/binder"
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/debug"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/jsnum"
 	"github.com/microsoft/typescript-go/internal/scanner"
@@ -1264,7 +1265,7 @@ func (c *Checker) checkGrammarForInOrForOfStatement(forInOrOfStatement *ast.ForI
 					diagnostic := createDiagnosticForNode(forInOrOfStatement.AwaitModifier, diagnostics.X_for_await_loops_are_only_allowed_within_async_functions_and_at_the_top_levels_of_modules)
 					containingFunc := getContainingFunction(forInOrOfStatement.AsNode())
 					if containingFunc != nil && containingFunc.Kind != ast.KindConstructor {
-						// Debug.assert((getFunctionFlags(containingFunc)&FunctionFlagsAsync) == 0, "Enclosing function should never be an async function.")
+						debug.Assert((getFunctionFlags(containingFunc)&FunctionFlagsAsync) == 0, "Enclosing function should never be an async function.")
 						if hasAsyncModifier(containingFunc) {
 							panic("Enclosing function should never be an async function.")
 						}
@@ -2100,7 +2101,7 @@ func (c *Checker) checkGrammarStatementInAmbientContext(node *ast.Node) bool {
 		} else {
 			// We must be parented by a statement.  If so, there's no need
 			// to report the error as our parent will have already done it.
-			// Debug.assert(isStatement(node.parent));
+			// debug.Assert(ast.IsStatement(node.Parent)) // !!! commented out in strada - fails if uncommented
 		}
 	}
 	return false

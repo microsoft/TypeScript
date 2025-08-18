@@ -18,6 +18,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/debug"
 	"github.com/microsoft/typescript-go/internal/format"
 	"github.com/microsoft/typescript-go/internal/jsnum"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
@@ -5341,7 +5342,7 @@ func getJSDocParamAnnotation(
 	tabstopCounter *int,
 ) string {
 	if isSnippet {
-		// !!! Debug.assertIsDefined(tabstopCounter);
+		debug.AssertIsDefined(tabstopCounter)
 	}
 	if initializer != nil {
 		paramName = getJSDocParamNameWithInitializer(paramName, initializer)
@@ -5352,7 +5353,7 @@ func getJSDocParamAnnotation(
 	if isJS {
 		t := "*"
 		if isObject {
-			// !!! Debug.assert(!dotDotDotToken, `Cannot annotate a rest parameter with type 'object'.`);
+			debug.AssertNil(dotDotDotToken, `Cannot annotate a rest parameter with type 'object'.`)
 			t = "object"
 		} else {
 			if initializer != nil {

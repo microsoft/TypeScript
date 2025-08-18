@@ -7,6 +7,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/debug"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -602,7 +603,7 @@ func (p *Parser) abortParsingListOrMoveToNextToken(kind ParsingContext) bool {
 func (p *Parser) isInSomeParsingContext() bool {
 	// We should be in at least one parsing context, be it SourceElements while parsing
 	// a SourceFile, or JSDocComment when lazily parsing JSDoc.
-	// Debug.assert(parsingContext, "Missing parsing context")
+	debug.Assert(p.parsingContexts != 0, "Missing parsing context")
 	for kind := ParsingContext(0); kind < PCCount; kind++ {
 		if p.parsingContexts&(1<<kind) != 0 {
 			if p.isListElement(kind, true /*inErrorRecovery*/) || p.isListTerminator(kind) {
@@ -1418,7 +1419,7 @@ func (p *Parser) parseVariableDeclarationList(inForStatementInitializer bool) *a
 	case ast.KindUsingKeyword:
 		flags = ast.NodeFlagsUsing
 	case ast.KindAwaitKeyword:
-		// Debug.assert(isAwaitUsingDeclaration());
+		debug.Assert(p.isAwaitUsingDeclaration())
 		flags = ast.NodeFlagsAwaitUsing
 		p.nextToken()
 	default:
@@ -3577,7 +3578,7 @@ func (p *Parser) parseFunctionOrConstructorType() *ast.TypeNode {
 	hasJSDoc := p.hasPrecedingJSDocComment()
 	modifiers := p.parseModifiersForConstructorType()
 	isConstructorType := p.parseOptional(ast.KindNewKeyword)
-	// Debug.assert(!modifiers || isConstructorType, "Per isStartOfFunctionOrConstructorType, a function type cannot have modifiers.")
+	debug.Assert(modifiers == nil || isConstructorType, "Per isStartOfFunctionOrConstructorType, a function type cannot have modifiers.")
 	typeParameters := p.parseTypeParameters()
 	parameters := p.parseParameters(ParseFlagsType)
 	returnType := p.parseReturnType(ast.KindEqualsGreaterThanToken, false /*isType*/)
@@ -4083,7 +4084,7 @@ func (p *Parser) nextIsParenthesizedArrowFunctionExpression() core.Tristate {
 		// It is definitely not an arrow function
 		return core.TSFalse
 	} else {
-		// !!! Debug.assert(first == KindLessThanToken)
+		debug.Assert(first == ast.KindLessThanToken)
 		// If we have "<" not followed by an identifier,
 		// then this definitely is not an arrow function.
 		if !p.isIdentifier() && p.token != ast.KindConstKeyword {
@@ -4334,7 +4335,7 @@ func (p *Parser) nextIsUnParenthesizedAsyncArrowFunction() bool {
 }
 
 func (p *Parser) parseSimpleArrowFunctionExpression(pos int, identifier *ast.Node, allowReturnTypeInArrowFunction bool, hasJSDoc bool, asyncModifier *ast.ModifierList) *ast.Node {
-	// Debug.assert(token() == ast.KindEqualsGreaterThanToken, "parseSimpleArrowFunctionExpression should only have been called if we had a =>");
+	debug.Assert(p.token == ast.KindEqualsGreaterThanToken, "parseSimpleArrowFunctionExpression should only have been called if we had a =>")
 	parameter := p.finishNode(p.factory.NewParameterDeclaration(nil /*modifiers*/, nil /*dotDotDotToken*/, identifier, nil /*questionToken*/, nil /*typeNode*/, nil /*initializer*/), identifier.Pos())
 	parameters := p.newNodeList(parameter.Loc, []*ast.Node{parameter})
 	equalsGreaterThanToken := p.parseExpectedToken(ast.KindEqualsGreaterThanToken)
@@ -4480,7 +4481,7 @@ func (p *Parser) parseUnaryExpressionOrHigher() *ast.Expression {
 		if simpleUnaryExpression.Kind == ast.KindTypeAssertionExpression {
 			p.parseErrorAt(pos, end, diagnostics.A_type_assertion_expression_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses)
 		} else {
-			// Debug.assert(isKeywordOrPunctuation(unaryOperator))
+			debug.Assert(isKeywordOrPunctuation(unaryOperator))
 			p.parseErrorAt(pos, end, diagnostics.An_unary_expression_with_the_0_operator_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses, scanner.TokenToString(unaryOperator))
 		}
 	}
@@ -4913,7 +4914,7 @@ func (p *Parser) parseAwaitExpression() *ast.Node {
 }
 
 func (p *Parser) parseTypeAssertion() *ast.Node {
-	// !!! Debug.assert(languageVariant !== core.LanguageVariant.JSX, "Type assertions should never be parsed in JSX; they should be parsed as comparisons or JSX elements/fragments.");
+	debug.Assert(p.languageVariant != core.LanguageVariantJSX, "Type assertions should never be parsed in JSX; they should be parsed as comparisons or JSX elements/fragments.")
 	pos := p.nodePos()
 	p.parseExpected(ast.KindLessThanToken)
 	typeNode := p.parseType()
