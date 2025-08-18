@@ -2904,7 +2904,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getSymbolLinks(symbol: Symbol): SymbolLinks {
         if (symbol.flags & SymbolFlags.Transient) return (symbol as TransientSymbol).links;
         const id = getSymbolId(symbol);
-        if (sourceFileWithoutResolvedSignatureCaching && symbol.valueDeclaration && (isFunctionExpressionOrArrowFunction(symbol.valueDeclaration) || tryGetRootParameterDeclaration(symbol.valueDeclaration)) && getSourceFileOfNode(symbol.valueDeclaration) === sourceFileWithoutResolvedSignatureCaching) {
+        if (
+            sourceFileWithoutResolvedSignatureCaching && symbol.valueDeclaration &&
+            (isFunctionExpressionOrArrowFunction(symbol.valueDeclaration) || isMethodDeclaration(symbol.valueDeclaration) || isAccessor(symbol.valueDeclaration) || tryGetRootParameterDeclaration(symbol.valueDeclaration)) &&
+            getSourceFileOfNode(symbol.valueDeclaration) === sourceFileWithoutResolvedSignatureCaching
+        ) {
             symbolLinksWithoutResolvedSignatureCaching ??= [];
             return symbolLinksWithoutResolvedSignatureCaching[id] ??= new SymbolLinks();
         }
