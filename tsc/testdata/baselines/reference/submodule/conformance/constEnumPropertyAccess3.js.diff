@@ -4,15 +4,6 @@
 
 
  //// [constEnumPropertyAccess3.js]
--(-2 /* E.A */).toString();
--(-1 /* E.B */).toString();
--(-3 /* E.C */).toString();
--(-3 /* E.D */).toString();
--(-2 /* E["A"] */).toString();
--(-1 /* E["B"] */).toString();
--(-3 /* E["C"] */).toString();
--(-3 /* E["D"] */).toString();
--(-9 /* E["E"] */).toString();
 +var E;
 +(function (E) {
 +    E[E["A"] = -2] = "A";
@@ -21,12 +12,6 @@
 +    E[E["D"] = -3] = "D";
 +    E[E["E"] = -9] = "E";
 +})(E || (E = {}));
-+E.A.toString();
-+E.B.toString();
-+E.C.toString();
-+E.D.toString();
-+E["A"].toString();
-+E["B"].toString();
-+E["C"].toString();
-+E["D"].toString();
-+E["E"].toString();
+ (-2 /* E.A */).toString();
+ (-1 /* E.B */).toString();
+ (-3 /* E.C */).toString();

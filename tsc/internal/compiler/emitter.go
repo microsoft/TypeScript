@@ -14,6 +14,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/transformers"
 	"github.com/microsoft/typescript-go/internal/transformers/declarations"
 	"github.com/microsoft/typescript-go/internal/transformers/estransforms"
+	"github.com/microsoft/typescript-go/internal/transformers/inliners"
 	"github.com/microsoft/typescript-go/internal/transformers/jsxtransforms"
 	"github.com/microsoft/typescript-go/internal/transformers/moduletransforms"
 	"github.com/microsoft/typescript-go/internal/transformers/tstransforms"
@@ -86,7 +87,7 @@ func getScriptTransformers(emitContext *printer.EmitContext, host printer.EmitHo
 
 	var emitResolver printer.EmitResolver
 	var referenceResolver binder.ReferenceResolver
-	if importElisionEnabled || options.GetJSXTransformEnabled() {
+	if importElisionEnabled || options.GetJSXTransformEnabled() || !options.GetIsolatedModules() { // full emit resolver is needed for import ellision and const enum inlining
 		emitResolver = host.GetEmitResolver()
 		emitResolver.MarkLinkedReferencesRecursively(sourceFile)
 		referenceResolver = emitResolver
@@ -128,6 +129,11 @@ func getScriptTransformers(emitContext *printer.EmitContext, host printer.EmitHo
 
 	// transform module syntax
 	tx = append(tx, getModuleTransformer(&opts))
+
+	// inlining (formerly done via substitutions)
+	if !options.GetIsolatedModules() {
+		tx = append(tx, inliners.NewConstEnumInliningTransformer(&opts))
+	}
 	return tx
 }
 

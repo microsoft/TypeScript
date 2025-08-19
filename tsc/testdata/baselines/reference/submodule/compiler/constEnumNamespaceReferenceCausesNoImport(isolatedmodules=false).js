@@ -35,7 +35,7 @@ function fooFunc() { }
 Object.defineProperty(exports, "__esModule", { value: true });
 function check(x) {
     switch (x) {
-        case Foo.ConstFooEnum.Some:
+        case 0 /* Foo.ConstFooEnum.Some */:
             break;
     }
 }

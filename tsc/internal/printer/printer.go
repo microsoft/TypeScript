@@ -24,7 +24,6 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
-	"github.com/microsoft/typescript-go/internal/jsnum"
 	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/sourcemap"
 	"github.com/microsoft/typescript-go/internal/stringutil"
@@ -630,15 +629,19 @@ func (p *Printer) writeCommentRange(comment ast.CommentRange) {
 	}
 
 	text := p.currentSourceFile.Text()
-	if comment.Kind == ast.KindMultiLineCommentTrivia {
-		lineMap := p.currentSourceFile.LineMap()
+	lineMap := p.currentSourceFile.LineMap()
+	p.writeCommentRangeWorker(text, lineMap, comment.Kind, comment.TextRange)
+}
+
+func (p *Printer) writeCommentRangeWorker(text string, lineMap []core.TextPos, kind ast.Kind, loc core.TextRange) {
+	if kind == ast.KindMultiLineCommentTrivia {
 		indentSize := len(getIndentString(1))
-		firstLine := scanner.ComputeLineOfPosition(lineMap, comment.Pos())
+		firstLine := scanner.ComputeLineOfPosition(lineMap, loc.Pos())
 		lineCount := len(lineMap)
 		firstCommentLineIndent := -1
-		pos := comment.Pos()
+		pos := loc.Pos()
 		currentLine := firstLine
-		for ; pos < comment.End(); currentLine++ {
+		for ; pos < loc.End(); currentLine++ {
 			var nextLineStart int
 			if currentLine+1 == lineCount {
 				nextLineStart = len(text) + 1
@@ -646,10 +649,10 @@ func (p *Printer) writeCommentRange(comment ast.CommentRange) {
 				nextLineStart = int(lineMap[currentLine+1])
 			}
 
-			if pos != comment.Pos() {
+			if pos != loc.Pos() {
 				// If we are not emitting first line, we need to write the spaces to adjust the alignment
 				if firstCommentLineIndent == -1 {
-					firstCommentLineIndent = calculateIndent(text, int(lineMap[firstLine]), comment.Pos())
+					firstCommentLineIndent = calculateIndent(text, int(lineMap[firstLine]), loc.Pos())
 				}
 
 				// These are number of spaces writer is going to write at current indent
@@ -689,11 +692,11 @@ func (p *Printer) writeCommentRange(comment ast.CommentRange) {
 			}
 
 			// Write the comment line text
-			end := min(comment.End(), nextLineStart-1)
+			end := min(loc.End(), nextLineStart-1)
 			currentLineText := strings.TrimSpace(text[pos:end])
 			if len(currentLineText) > 0 {
 				p.writeComment(currentLineText)
-				if end != comment.End() {
+				if end != loc.End() {
 					p.writeLine()
 				}
 			} else {
@@ -705,18 +708,13 @@ func (p *Printer) writeCommentRange(comment ast.CommentRange) {
 		}
 	} else {
 		// Single line comment of style //....
-		p.writeComment(text[comment.Pos():comment.End()])
+		p.writeComment(text[loc.Pos():loc.End()])
 	}
 }
 
 //
 // Custom emit behavior stubs (i.e., from `EmitNode`, `EmitFlags`, etc.)
 //
-
-func (p *Printer) getConstantValue(node *ast.Node) any {
-	// !!! Const-enum inlining (low priority)
-	return nil
-}
 
 func (p *Printer) shouldEmitComments(node *ast.Node) bool {
 	return !p.commentsDisabled &&
@@ -2428,12 +2426,6 @@ func (p *Printer) mayNeedDotDotForPropertyAccess(expression *ast.Expression) boo
 			!strings.Contains(text, scanner.TokenToString(ast.KindDotToken)) &&
 			!strings.Contains(text, "E") &&
 			!strings.Contains(text, "e")
-	} else if ast.IsAccessExpression(expression) {
-		// check if constant enum value is a non-negative integer
-		if constantValue, ok := p.getConstantValue(expression).(jsnum.Number); ok {
-			return !constantValue.IsInf() && constantValue >= 0 && constantValue.Floor() == constantValue
-		}
-		return false
 	}
 	return false
 }
@@ -5017,7 +5009,7 @@ func (p *Printer) emitCommentsBeforeNode(node *ast.Node) *commentState {
 
 	// Emit leading comments
 	p.emitLeadingCommentsOfNode(node, emitFlags, commentRange)
-	p.emitLeadingSyntheticCommentsOfNode(node)
+	p.emitLeadingSyntheticCommentsOfNode(node, emitFlags)
 	if emitFlags&EFNoNestedComments != 0 {
 		p.commentsDisabled = true
 	}
@@ -5043,7 +5035,7 @@ func (p *Printer) emitCommentsAfterNode(node *ast.Node, state *commentState) {
 		p.commentsDisabled = false
 	}
 
-	p.emitTrailingSyntheticCommentsOfNode(node)
+	p.emitTrailingSyntheticCommentsOfNode(node, emitFlags)
 	p.emitTrailingCommentsOfNode(node, emitFlags, commentRange, containerPos, containerEnd, declarationListContainerEnd)
 
 	// !!! Preserve comments from type annotation:
@@ -5182,12 +5174,62 @@ func (p *Printer) emitTrailingCommentsOfNode(node *ast.Node, emitFlags EmitFlags
 	}
 }
 
-func (p *Printer) emitLeadingSyntheticCommentsOfNode(node *ast.Node) {
-	// !!!
+func (p *Printer) emitLeadingSyntheticCommentsOfNode(node *ast.Node, emitFlags EmitFlags) {
+	if emitFlags&EFNoLeadingComments != 0 {
+		return
+	}
+	synth := p.emitContext.GetSyntheticLeadingComments(node)
+	for _, c := range synth {
+		p.emitLeadingSynthesizedComment(c)
+	}
 }
 
-func (p *Printer) emitTrailingSyntheticCommentsOfNode(node *ast.Node) {
-	// !!!
+func (p *Printer) emitLeadingSynthesizedComment(comment SynthesizedComment) {
+	if comment.HasLeadingNewLine || comment.Kind == ast.KindSingleLineCommentTrivia {
+		p.writer.WriteLine()
+	}
+	p.writeSynthesizedComment(comment)
+	if comment.HasTrailingNewLine || comment.Kind == ast.KindSingleLineCommentTrivia {
+		p.writer.WriteLine()
+	} else {
+		p.writer.WriteSpace(" ")
+	}
+}
+
+func (p *Printer) emitTrailingSyntheticCommentsOfNode(node *ast.Node, emitFlags EmitFlags) {
+	if emitFlags&EFNoTrailingComments != 0 {
+		return
+	}
+	synth := p.emitContext.GetSyntheticTrailingComments(node)
+	for _, c := range synth {
+		p.emitTrailingSynthesizedComment(c)
+	}
+}
+
+func (p *Printer) emitTrailingSynthesizedComment(comment SynthesizedComment) {
+	if !p.writer.IsAtStartOfLine() {
+		p.writer.WriteSpace(" ")
+	}
+	p.writeSynthesizedComment(comment)
+	if comment.HasTrailingNewLine {
+		p.writer.WriteLine()
+	}
+}
+
+func formatSynthesizedComment(comment SynthesizedComment) string {
+	if comment.Kind == ast.KindMultiLineCommentTrivia {
+		return "/*" + comment.Text + "*/"
+	}
+	return "//" + comment.Text
+}
+
+func (p *Printer) writeSynthesizedComment(comment SynthesizedComment) {
+	text := formatSynthesizedComment(comment)
+	var lineMap []core.TextPos
+	if comment.Kind == ast.KindMultiLineCommentTrivia {
+		lineMap = core.ComputeLineStarts(text)
+	}
+	p.writeCommentRangeWorker(text, lineMap, comment.Kind, core.NewTextRange(0, len(text)))
 }
 
 func (p *Printer) emitLeadingComments(pos int, elided bool) bool {

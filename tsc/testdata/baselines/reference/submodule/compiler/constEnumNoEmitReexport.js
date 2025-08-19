@@ -53,13 +53,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [Usage1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-ImportExportDefault_1.default.Foo;
-ReExportDefault_1.default.Foo;
+0 /* MyConstEnum1.Foo */;
+0 /* MyConstEnum2.Foo */;
 //// [Usage2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-ImportExport_1.MyConstEnum.Foo;
+0 /* MyConstEnum.Foo */;
 //// [Usage3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-ReExport_1.MyConstEnum.Foo;
+0 /* MyConstEnum.Foo */;

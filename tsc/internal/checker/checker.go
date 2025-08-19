@@ -15087,7 +15087,7 @@ func (c *Checker) resolveEntityName(name *ast.Node, meaning ast.SymbolFlags, ign
 				name.Parent != nil && name.Parent.Kind == ast.KindJSExportAssignment) {
 			c.markSymbolOfAliasDeclarationIfTypeOnly(getAliasDeclarationFromName(name), symbol, nil /*finalTarget*/, true /*overwriteEmpty*/, nil, "")
 		}
-		if symbol.Flags&meaning == 0 && !dontResolveAlias {
+		if symbol.Flags&meaning == 0 && !dontResolveAlias && symbol.Flags&ast.SymbolFlagsAlias != 0 {
 			return c.resolveAlias(symbol)
 		}
 	}

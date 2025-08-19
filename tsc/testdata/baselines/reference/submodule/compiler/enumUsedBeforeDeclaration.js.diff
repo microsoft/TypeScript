@@ -1,14 +1,6 @@
 --- old.enumUsedBeforeDeclaration.js
 +++ new.enumUsedBeforeDeclaration.js
-@@= skipped -9, +9 lines =@@
-
- //// [enumUsedBeforeDeclaration.js]
- const v = Color.Green;
--const v2 = 1 /* ConstColor.Green */;
-+const v2 = ConstColor.Green;
- var Color;
- (function (Color) {
-     Color[Color["Red"] = 0] = "Red";
+@@= skipped -16, +16 lines =@@
      Color[Color["Green"] = 1] = "Green";
      Color[Color["Blue"] = 2] = "Blue";
  })(Color || (Color = {}));

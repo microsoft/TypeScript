@@ -32,7 +32,7 @@ function foo(x) {
     var y = x; // Ok
 }
 foo(5);
-foo(E.A);
+foo(0 /* E.A */);
 class A {
     a;
 }

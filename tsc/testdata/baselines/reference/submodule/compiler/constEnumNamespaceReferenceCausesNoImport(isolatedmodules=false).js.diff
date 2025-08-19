@@ -15,12 +15,3 @@
  ;
  function fooFunc() { }
  //// [index.js]
-@@= skipped -8, +15 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
- function check(x) {
-     switch (x) {
--        case 0 /* Foo.ConstFooEnum.Some */:
-+        case Foo.ConstFooEnum.Some:
-             break;
-     }
- }

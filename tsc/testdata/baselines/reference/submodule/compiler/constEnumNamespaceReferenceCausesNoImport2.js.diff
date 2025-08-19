@@ -9,11 +9,3 @@
  module.exports = Foo.ConstEnumOnlyModule;
  //// [index.js]
  "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- function check(x) {
-     switch (x) {
--        case 0 /* Foo.ConstFooEnum.Some */:
-+        case Foo.ConstFooEnum.Some:
-             break;
-     }
- }

@@ -14,13 +14,6 @@
  class A {
      getA() {
          return {
--            ["123123" /* TestEnum.Test1 */]: '123',
--            ["12312312312" /* TestEnum.Test2 */]: '123',
-+            [TestEnum.Test1]: '123',
-+            [TestEnum.Test2]: '123',
-         };
-     }
- }
 @@= skipped -25, +30 lines =@@
  };
  Object.defineProperty(exports, "__esModule", { value: true });

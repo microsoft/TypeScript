@@ -14,22 +14,7 @@
  var o = {
      1: true
  };
--var a = 1 /* G.A */;
--var a1 = 1 /* G["A"] */;
--var g = o[1 /* G.A */];
-+var a = G.A;
-+var a1 = G["A"];
-+var g = o[G.A];
- class C {
--    [1 /* G.A */]() { }
--    get [2 /* G.B */]() {
-+    [G.A]() { }
-+    get [G.B]() {
-         return true;
-     }
--    set [2 /* G.B */](x) { }
-+    set [G.B](x) { }
- }
+@@= skipped -16, +23 lines =@@
 
 
  //// [constEnumPropertyAccess1.d.ts]

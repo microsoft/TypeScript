@@ -17,6 +17,5 @@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
 -var merge_1 = require("./merge");
--1 /* Enum.One */;
 +const merge_1 = require("./merge");
-+merge_1.Enum.One;
+ 1 /* Enum.One */;

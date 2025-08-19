@@ -48,10 +48,10 @@ var SymbolFlags;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 SyntaxKind.ImportClause;
-SymbolFlags.Type;
+"Type" /* SymbolFlags.Type */;
 let kind;
 let flags;
 //// [c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const flags = a_1.SymbolFlags.Type;
+const flags = "Type" /* SymbolFlags.Type */;

@@ -8,30 +8,7 @@
  function func1() {
      aFunc();
      console.log(EnumA.Value);
--    console.log(0 /* EnumB.Value */);
-+    console.log(EnumB.Value);
-     return;
-     function aFunc() {
-         console.log(EnumA.Value);
--        console.log(0 /* EnumB.Value */);
-+        console.log(EnumB.Value);
-     }
-     let EnumA;
-     (function (EnumA) {
-@@= skipped -33, +32 lines =@@
- }
- function func3() {
-     aFunc();
--    console.log(0 /* EnumB.Value */);
-+    console.log(EnumB.Value);
-     return;
-     function aFunc() {
--        console.log(0 /* EnumB.Value */);
-+        console.log(EnumB.Value);
-     }
-     let EnumB;
-     (function (EnumB) {
-@@= skipped -17, +17 lines =@@
+@@= skipped -50, +49 lines =@@
      function aFunc() {
          console.log(ClassA.Value);
      }

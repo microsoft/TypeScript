@@ -43,8 +43,8 @@ var TestEnum;
 class A {
     getA() {
         return {
-            [TestEnum.Test1]: '123',
-            [TestEnum.Test2]: '123',
+            ["123123" /* TestEnum.Test1 */]: '123',
+            ["12312312312" /* TestEnum.Test2 */]: '123',
         };
     }
 }

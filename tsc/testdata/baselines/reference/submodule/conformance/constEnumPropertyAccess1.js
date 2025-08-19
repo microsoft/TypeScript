@@ -46,15 +46,15 @@ var G;
 var o = {
     1: true
 };
-var a = G.A;
-var a1 = G["A"];
-var g = o[G.A];
+var a = 1 /* G.A */;
+var a1 = 1 /* G["A"] */;
+var g = o[1 /* G.A */];
 class C {
-    [G.A]() { }
-    get [G.B]() {
+    [1 /* G.A */]() { }
+    get [2 /* G.B */]() {
         return true;
     }
-    set [G.B](x) { }
+    set [2 /* G.B */](x) { }
 }
 
 

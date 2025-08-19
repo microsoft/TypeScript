@@ -324,9 +324,9 @@ var NumberLiteralEnum;
 // infer from non-literal enums
 var NonLiteralEnum;
 (function (NonLiteralEnum) {
-    NonLiteralEnum["Zero"] = NumberLiteralEnum.Zero;
+    NonLiteralEnum["Zero"] = 0 /* NumberLiteralEnum.Zero */;
     if (typeof NonLiteralEnum.Zero !== "string") NonLiteralEnum[NonLiteralEnum.Zero] = "Zero";
-    NonLiteralEnum["One"] = NumberLiteralEnum.One;
+    NonLiteralEnum["One"] = 1 /* NumberLiteralEnum.One */;
     if (typeof NonLiteralEnum.One !== "string") NonLiteralEnum[NonLiteralEnum.One] = "One";
 })(NonLiteralEnum || (NonLiteralEnum = {}));
 p.getIndex(0); // ok, 0 is a valid index

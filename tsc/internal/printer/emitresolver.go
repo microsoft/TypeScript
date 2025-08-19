@@ -35,6 +35,9 @@ type EmitResolver interface {
 	GetEffectiveDeclarationFlags(node *ast.Node, flags ast.ModifierFlags) ast.ModifierFlags
 	GetResolutionModeOverride(node *ast.Node) core.ResolutionMode
 
+	// const enum inlining
+	GetConstantValue(node *ast.Node) any
+
 	// JSX Emit
 	GetJsxFactoryEntity(location *ast.Node) *ast.Node
 	GetJsxFragmentFactoryEntity(location *ast.Node) *ast.Node

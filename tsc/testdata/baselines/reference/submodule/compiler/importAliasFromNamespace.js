@@ -47,7 +47,7 @@ var SomeOther;
             _which;
             constructor() {
                 Internal.getThing();
-                Internal.WhichThing.A ? "foo" : "bar";
+                0 /* Internal.WhichThing.A */ ? "foo" : "bar";
             }
         }
         Thing.Foo = Foo;

@@ -21,7 +21,7 @@ var TestType;
 })(TestType || (TestType = {}));
 function f1(f) { }
 function f2(f) { }
-f1(TestType.foo);
-f1(TestType.bar);
+f1(0 /* TestType.foo */);
+f1(1 /* TestType.bar */);
 f2('foo');
 f2('bar');

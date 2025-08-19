@@ -23,6 +23,6 @@ StillEnum.Foo;
 //// [usages.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-ConstEnum_1.MyConstEnum.Foo;
-ImportExport_1.default.Foo;
-ReExport_1.default.Foo;
+0 /* MyConstEnum.Foo */;
+0 /* AlsoEnum.Foo */;
+0 /* StillEnum.Foo */;

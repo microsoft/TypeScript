@@ -29,8 +29,4 @@
 +            _which;
              constructor() {
                  Internal.getThing();
--                0 /* Internal.WhichThing.A */ ? "foo" : "bar";
-+                Internal.WhichThing.A ? "foo" : "bar";
-             }
-         }
-         Thing.Foo = Foo;
+                 0 /* Internal.WhichThing.A */ ? "foo" : "bar";

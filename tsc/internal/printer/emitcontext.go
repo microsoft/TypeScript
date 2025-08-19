@@ -511,6 +511,14 @@ const (
 	hasSourceMapRange
 )
 
+type SynthesizedComment struct {
+	Kind               ast.Kind
+	Loc                core.TextRange
+	HasLeadingNewLine  bool
+	HasTrailingNewLine bool
+	Text               string
+}
+
 type emitNode struct {
 	flags                     emitNodeFlags
 	emitFlags                 EmitFlags
@@ -519,6 +527,8 @@ type emitNode struct {
 	tokenSourceMapRanges      map[ast.Kind]core.TextRange
 	helpers                   []*EmitHelper
 	externalHelpersModuleName *ast.IdentifierNode
+	leadingComments           []SynthesizedComment
+	trailingComments          []SynthesizedComment
 }
 
 // NOTE: This method is not guaranteed to be thread-safe
@@ -916,4 +926,38 @@ func (c *EmitContext) VisitIterationBody(body *ast.Statement, visitor *ast.NodeV
 	}
 
 	return updated
+}
+
+func (c *EmitContext) SetSyntheticLeadingComments(node *ast.Node, comments []SynthesizedComment) *ast.Node {
+	c.emitNodes.Get(node).leadingComments = comments
+	return node
+}
+
+func (c *EmitContext) AddSyntheticLeadingComment(node *ast.Node, kind ast.Kind, text string, hasTrailingNewLine bool) *ast.Node {
+	c.emitNodes.Get(node).leadingComments = append(c.emitNodes.Get(node).leadingComments, SynthesizedComment{Kind: kind, Loc: core.NewTextRange(-1, -1), HasTrailingNewLine: hasTrailingNewLine, Text: text})
+	return node
+}
+
+func (c *EmitContext) GetSyntheticLeadingComments(node *ast.Node) []SynthesizedComment {
+	if c.emitNodes.Has(node) {
+		return c.emitNodes.Get(node).leadingComments
+	}
+	return nil
+}
+
+func (c *EmitContext) SetSyntheticTrailingComments(node *ast.Node, comments []SynthesizedComment) *ast.Node {
+	c.emitNodes.Get(node).trailingComments = comments
+	return node
+}
+
+func (c *EmitContext) AddSyntheticTrailingComment(node *ast.Node, kind ast.Kind, text string, hasTrailingNewLine bool) *ast.Node {
+	c.emitNodes.Get(node).trailingComments = append(c.emitNodes.Get(node).trailingComments, SynthesizedComment{Kind: kind, Loc: core.NewTextRange(-1, -1), HasTrailingNewLine: hasTrailingNewLine, Text: text})
+	return node
+}
+
+func (c *EmitContext) GetSyntheticTrailingComments(node *ast.Node) []SynthesizedComment {
+	if c.emitNodes.Has(node) {
+		return c.emitNodes.Get(node).trailingComments
+	}
+	return nil
 }

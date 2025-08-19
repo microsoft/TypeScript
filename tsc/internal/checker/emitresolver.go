@@ -1025,3 +1025,10 @@ func (r *emitResolver) GetResolutionModeOverride(node *ast.Node) core.Resolution
 	defer r.checkerMu.Unlock()
 	return r.checker.GetResolutionModeOverride(node.AsImportAttributes(), false)
 }
+
+func (r *emitResolver) GetConstantValue(node *ast.Node) any {
+	// node = emitContext.ParseNode(node)
+	r.checkerMu.Lock()
+	defer r.checkerMu.Unlock()
+	return r.checker.GetConstantValue(node)
+}

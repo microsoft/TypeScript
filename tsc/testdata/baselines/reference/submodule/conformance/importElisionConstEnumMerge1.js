@@ -33,4 +33,4 @@ exports.Enum = void 0;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const merge_1 = require("./merge");
-merge_1.Enum.One;
+1 /* Enum.One */;

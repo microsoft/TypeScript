@@ -29,14 +29,14 @@ function foo1() {
     })(E || (E = {}));
 }
 function foo2() {
-    return E.A;
+    return 0 /* E.A */;
     let E;
     (function (E) {
         E[E["A"] = 0] = "A";
     })(E || (E = {}));
 }
 const config = {
-    a: AfterObject.A,
+    a: 2 /* AfterObject.A */,
 };
 var AfterObject;
 (function (AfterObject) {

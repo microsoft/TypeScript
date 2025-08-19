@@ -136,7 +136,7 @@ var color;
     color[color["green"] = 1] = "green";
     color[color["blue"] = 2] = "blue";
 })(color || (color = {}));
-var shade = color.green;
+var shade = 1;
 
 
 //// [commentsdoNotEmitComments.d.ts]
