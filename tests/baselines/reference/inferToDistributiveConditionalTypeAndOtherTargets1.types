@@ -1,0 +1,129 @@
+//// [tests/cases/compiler/inferToDistributiveConditionalTypeAndOtherTargets1.ts] ////
+
+=== inferToDistributiveConditionalTypeAndOtherTargets1.ts ===
+type NonUndefinedGuard<T> = T extends undefined ? never : T;
+>NonUndefinedGuard : NonUndefinedGuard<T>
+>                  : ^^^^^^^^^^^^^^^^^^^^
+
+declare const RefSymbol: unique symbol;
+>RefSymbol : unique symbol
+>          : ^^^^^^^^^^^^^
+
+interface Ref<T = any, S = T> {
+  get value(): T;
+>value : T
+>      : ^
+
+  set value(_: S);
+>value : T
+>      : ^
+>_ : S
+>  : ^
+
+  [RefSymbol]: true;
+>[RefSymbol] : true
+>            : ^^^^
+>RefSymbol : unique symbol
+>          : ^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+}
+
+type MaybeRef<T> = Ref<T> | T;
+>MaybeRef : MaybeRef<T>
+>         : ^^^^^^^^^^^
+
+type MaybeRefDeep<T> = MaybeRef<
+>MaybeRefDeep : MaybeRefDeep<T>
+>             : ^^^^^^^^^^^^^^^
+
+  T extends Function
+    ? T
+    : T extends object
+    ? {
+        [Property in keyof T]: MaybeRefDeep<T[Property]>;
+      }
+    : T
+>;
+
+type QueryFunction<T = unknown> = () => T | Promise<T>;
+>QueryFunction : QueryFunction<T>
+>              : ^^^^^^^^^^^^^^^^
+
+type InitialDataFunction<T> = () => T | undefined;
+>InitialDataFunction : InitialDataFunction<T>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^
+
+interface QueryOptions<TQueryFnData = unknown, TData = TQueryFnData> {
+  queryFn?: QueryFunction<TQueryFnData>;
+>queryFn : QueryFunction<TQueryFnData> | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  initialData?: TData | InitialDataFunction<TData>;
+>initialData : TData | InitialDataFunction<TData> | undefined
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+type UseQueryOptions<TQueryFnData = unknown, TQueryData = TQueryFnData> = {
+>UseQueryOptions : UseQueryOptions<TQueryFnData, TQueryData>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  [Property in keyof QueryOptions<TQueryFnData, TQueryData>]: MaybeRefDeep<
+    QueryOptions<TQueryFnData, TQueryData>[Property]
+  >;
+};
+
+type DefinedInitialQueryOptions<TQueryFnData = unknown> = UseQueryOptions<
+>DefinedInitialQueryOptions : DefinedInitialQueryOptions<TQueryFnData>
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  TQueryFnData,
+  TQueryFnData
+> & {
+  initialData:
+>initialData : NonUndefinedGuard<TQueryFnData> | (() => NonUndefinedGuard<TQueryFnData>)
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                               ^
+
+    | NonUndefinedGuard<TQueryFnData>
+    | (() => NonUndefinedGuard<TQueryFnData>);
+};
+
+declare function queryOptions<TQueryFnData = unknown>(
+>queryOptions : <TQueryFnData = unknown>(options: DefinedInitialQueryOptions<TQueryFnData>) => DefinedInitialQueryOptions<TQueryFnData>
+>             : ^            ^^^^^^^^^^^^       ^^                                        ^^^^^                                        
+
+  options: DefinedInitialQueryOptions<TQueryFnData>,
+>options : DefinedInitialQueryOptions<TQueryFnData>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+): DefinedInitialQueryOptions<TQueryFnData>;
+
+const result = queryOptions({
+>result : DefinedInitialQueryOptions<{ wow: boolean; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>queryOptions({  initialData: () => ({    wow: true,  }),}) : DefinedInitialQueryOptions<{ wow: boolean; }>
+>                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>queryOptions : <TQueryFnData = unknown>(options: DefinedInitialQueryOptions<TQueryFnData>) => DefinedInitialQueryOptions<TQueryFnData>
+>             : ^            ^^^^^^^^^^^^       ^^                                        ^^^^^                                        
+>{  initialData: () => ({    wow: true,  }),} : { initialData: () => { wow: boolean; }; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  initialData: () => ({
+>initialData : () => { wow: boolean; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^
+>() => ({    wow: true,  }) : () => { wow: boolean; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^
+>({    wow: true,  }) : { wow: true; }
+>                     : ^^^^^^^^^^^^^^
+>{    wow: true,  } : { wow: true; }
+>                   : ^^^^^^^^^^^^^^
+
+    wow: true,
+>wow : true
+>    : ^^^^
+>true : true
+>     : ^^^^
+
+  }),
+});
+

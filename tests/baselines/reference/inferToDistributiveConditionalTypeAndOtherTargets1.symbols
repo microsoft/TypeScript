@@ -1,0 +1,170 @@
+//// [tests/cases/compiler/inferToDistributiveConditionalTypeAndOtherTargets1.ts] ////
+
+=== inferToDistributiveConditionalTypeAndOtherTargets1.ts ===
+type NonUndefinedGuard<T> = T extends undefined ? never : T;
+>NonUndefinedGuard : Symbol(NonUndefinedGuard, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 0, 0))
+>T : Symbol(T, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 0, 23))
+>T : Symbol(T, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 0, 23))
+>T : Symbol(T, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 0, 23))
+
+declare const RefSymbol: unique symbol;
+>RefSymbol : Symbol(RefSymbol, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 2, 13))
+
+interface Ref<T = any, S = T> {
+>Ref : Symbol(Ref, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 2, 39))
+>T : Symbol(T, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 4, 14))
+>S : Symbol(S, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 4, 22))
+>T : Symbol(T, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 4, 14))
+
+  get value(): T;
+>value : Symbol(Ref.value, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 4, 31), Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 5, 17))
+>T : Symbol(T, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 4, 14))
+
+  set value(_: S);
+>value : Symbol(Ref.value, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 4, 31), Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 5, 17))
+>_ : Symbol(_, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 6, 12))
+>S : Symbol(S, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 4, 22))
+
+  [RefSymbol]: true;
+>[RefSymbol] : Symbol(Ref[RefSymbol], Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 6, 18))
+>RefSymbol : Symbol(RefSymbol, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 2, 13))
+}
+
+type MaybeRef<T> = Ref<T> | T;
+>MaybeRef : Symbol(MaybeRef, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 8, 1))
+>T : Symbol(T, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 10, 14))
+>Ref : Symbol(Ref, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 2, 39))
+>T : Symbol(T, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 10, 14))
+>T : Symbol(T, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 10, 14))
+
+type MaybeRefDeep<T> = MaybeRef<
+>MaybeRefDeep : Symbol(MaybeRefDeep, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 10, 30))
+>T : Symbol(T, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 12, 18))
+>MaybeRef : Symbol(MaybeRef, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 8, 1))
+
+  T extends Function
+>T : Symbol(T, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 12, 18))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    ? T
+>T : Symbol(T, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 12, 18))
+
+    : T extends object
+>T : Symbol(T, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 12, 18))
+
+    ? {
+        [Property in keyof T]: MaybeRefDeep<T[Property]>;
+>Property : Symbol(Property, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 17, 9))
+>T : Symbol(T, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 12, 18))
+>MaybeRefDeep : Symbol(MaybeRefDeep, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 10, 30))
+>T : Symbol(T, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 12, 18))
+>Property : Symbol(Property, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 17, 9))
+      }
+    : T
+>T : Symbol(T, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 12, 18))
+
+>;
+
+type QueryFunction<T = unknown> = () => T | Promise<T>;
+>QueryFunction : Symbol(QueryFunction, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 20, 2))
+>T : Symbol(T, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 22, 19))
+>T : Symbol(T, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 22, 19))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 22, 19))
+
+type InitialDataFunction<T> = () => T | undefined;
+>InitialDataFunction : Symbol(InitialDataFunction, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 22, 55))
+>T : Symbol(T, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 24, 25))
+>T : Symbol(T, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 24, 25))
+
+interface QueryOptions<TQueryFnData = unknown, TData = TQueryFnData> {
+>QueryOptions : Symbol(QueryOptions, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 24, 50))
+>TQueryFnData : Symbol(TQueryFnData, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 26, 23))
+>TData : Symbol(TData, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 26, 46))
+>TQueryFnData : Symbol(TQueryFnData, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 26, 23))
+
+  queryFn?: QueryFunction<TQueryFnData>;
+>queryFn : Symbol(QueryOptions.queryFn, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 26, 70))
+>QueryFunction : Symbol(QueryFunction, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 20, 2))
+>TQueryFnData : Symbol(TQueryFnData, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 26, 23))
+
+  initialData?: TData | InitialDataFunction<TData>;
+>initialData : Symbol(QueryOptions.initialData, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 27, 40))
+>TData : Symbol(TData, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 26, 46))
+>InitialDataFunction : Symbol(InitialDataFunction, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 22, 55))
+>TData : Symbol(TData, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 26, 46))
+}
+
+type UseQueryOptions<TQueryFnData = unknown, TQueryData = TQueryFnData> = {
+>UseQueryOptions : Symbol(UseQueryOptions, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 29, 1))
+>TQueryFnData : Symbol(TQueryFnData, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 31, 21))
+>TQueryData : Symbol(TQueryData, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 31, 44))
+>TQueryFnData : Symbol(TQueryFnData, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 31, 21))
+
+  [Property in keyof QueryOptions<TQueryFnData, TQueryData>]: MaybeRefDeep<
+>Property : Symbol(Property, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 32, 3))
+>QueryOptions : Symbol(QueryOptions, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 24, 50))
+>TQueryFnData : Symbol(TQueryFnData, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 31, 21))
+>TQueryData : Symbol(TQueryData, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 31, 44))
+>MaybeRefDeep : Symbol(MaybeRefDeep, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 10, 30))
+
+    QueryOptions<TQueryFnData, TQueryData>[Property]
+>QueryOptions : Symbol(QueryOptions, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 24, 50))
+>TQueryFnData : Symbol(TQueryFnData, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 31, 21))
+>TQueryData : Symbol(TQueryData, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 31, 44))
+>Property : Symbol(Property, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 32, 3))
+
+  >;
+};
+
+type DefinedInitialQueryOptions<TQueryFnData = unknown> = UseQueryOptions<
+>DefinedInitialQueryOptions : Symbol(DefinedInitialQueryOptions, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 35, 2))
+>TQueryFnData : Symbol(TQueryFnData, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 37, 32))
+>UseQueryOptions : Symbol(UseQueryOptions, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 29, 1))
+
+  TQueryFnData,
+>TQueryFnData : Symbol(TQueryFnData, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 37, 32))
+
+  TQueryFnData
+>TQueryFnData : Symbol(TQueryFnData, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 37, 32))
+
+> & {
+  initialData:
+>initialData : Symbol(initialData, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 40, 5))
+
+    | NonUndefinedGuard<TQueryFnData>
+>NonUndefinedGuard : Symbol(NonUndefinedGuard, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 0, 0))
+>TQueryFnData : Symbol(TQueryFnData, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 37, 32))
+
+    | (() => NonUndefinedGuard<TQueryFnData>);
+>NonUndefinedGuard : Symbol(NonUndefinedGuard, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 0, 0))
+>TQueryFnData : Symbol(TQueryFnData, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 37, 32))
+
+};
+
+declare function queryOptions<TQueryFnData = unknown>(
+>queryOptions : Symbol(queryOptions, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 44, 2))
+>TQueryFnData : Symbol(TQueryFnData, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 46, 30))
+
+  options: DefinedInitialQueryOptions<TQueryFnData>,
+>options : Symbol(options, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 46, 54))
+>DefinedInitialQueryOptions : Symbol(DefinedInitialQueryOptions, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 35, 2))
+>TQueryFnData : Symbol(TQueryFnData, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 46, 30))
+
+): DefinedInitialQueryOptions<TQueryFnData>;
+>DefinedInitialQueryOptions : Symbol(DefinedInitialQueryOptions, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 35, 2))
+>TQueryFnData : Symbol(TQueryFnData, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 46, 30))
+
+const result = queryOptions({
+>result : Symbol(result, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 50, 5))
+>queryOptions : Symbol(queryOptions, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 44, 2))
+
+  initialData: () => ({
+>initialData : Symbol(initialData, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 50, 29))
+
+    wow: true,
+>wow : Symbol(wow, Decl(inferToDistributiveConditionalTypeAndOtherTargets1.ts, 51, 23))
+
+  }),
+});
+
