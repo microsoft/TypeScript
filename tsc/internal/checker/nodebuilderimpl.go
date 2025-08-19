@@ -2004,11 +2004,12 @@ func (b *nodeBuilderImpl) serializeTypeForDeclaration(declaration *ast.Declarati
 				t = b.ch.errorType
 			}
 		}
-		// !!! TODO: JSDoc, getEmitResolver call is unfortunate layering for the helper - hoist it into checker
-		addUndefinedForParameter := declaration != nil && (ast.IsParameter(declaration) /*|| ast.IsJSDocParameterTag(declaration)*/) && b.ch.GetEmitResolver().requiresAddingImplicitUndefined(declaration, symbol, b.ctx.enclosingDeclaration)
-		if addUndefinedForParameter {
-			t = b.ch.getOptionalType(t, false)
-		}
+	}
+
+	// !!! TODO: JSDoc, getEmitResolver call is unfortunate layering for the helper - hoist it into checker
+	addUndefinedForParameter := declaration != nil && (ast.IsParameter(declaration) /*|| ast.IsJSDocParameterTag(declaration)*/) && b.ch.GetEmitResolver().requiresAddingImplicitUndefined(declaration, symbol, b.ctx.enclosingDeclaration)
+	if addUndefinedForParameter {
+		t = b.ch.getOptionalType(t, false)
 	}
 
 	restoreFlags := b.saveRestoreFlags()

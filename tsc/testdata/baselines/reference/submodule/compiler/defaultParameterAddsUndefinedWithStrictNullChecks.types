@@ -18,7 +18,7 @@ function f(addUndefined1 = "J", addUndefined2?: number) {
 >0 : 0
 }
 function g(addUndefined = "J", addDefined: number) {
->g : (addUndefined: string, addDefined: number) => number
+>g : (addUndefined: string | undefined, addDefined: number) => number
 >addUndefined : string
 >"J" : "J"
 >addDefined : number
@@ -54,16 +54,16 @@ total = g('c', 3) + g(undefined, 4);
 >total : number
 >g('c', 3) + g(undefined, 4) : number
 >g('c', 3) : number
->g : (addUndefined: string, addDefined: number) => number
+>g : (addUndefined: string | undefined, addDefined: number) => number
 >'c' : "c"
 >3 : 3
 >g(undefined, 4) : number
->g : (addUndefined: string, addDefined: number) => number
+>g : (addUndefined: string | undefined, addDefined: number) => number
 >undefined : undefined
 >4 : 4
 
 function foo1(x: string = "string", b: number) {
->foo1 : (x: string, b: number) => void
+>foo1 : (x: string | undefined, b: number) => void
 >x : string
 >"string" : "string"
 >b : number
@@ -75,7 +75,7 @@ function foo1(x: string = "string", b: number) {
 }
 
 function foo2(x = "string", b: number) {
->foo2 : (x: string, b: number) => void
+>foo2 : (x: string | undefined, b: number) => void
 >x : string
 >"string" : "string"
 >b : number
@@ -144,13 +144,13 @@ allowsNull(null); // still allows passing null
 // .d.ts should have `string | undefined` for foo1, foo2, foo3 and foo4
 foo1(undefined, 1);
 >foo1(undefined, 1) : void
->foo1 : (x: string, b: number) => void
+>foo1 : (x: string | undefined, b: number) => void
 >undefined : undefined
 >1 : 1
 
 foo2(undefined, 1);
 >foo2(undefined, 1) : void
->foo2 : (x: string, b: number) => void
+>foo2 : (x: string | undefined, b: number) => void
 >undefined : undefined
 >1 : 1
 

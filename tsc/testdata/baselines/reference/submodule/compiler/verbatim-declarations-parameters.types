@@ -26,7 +26,7 @@ export class Foo {
 }
 
 export function foo1(
->foo1 : (reuseTypeNode: { [x: string]: any; } | undefined, reuseTypeNode2: { [x: string]: any; } | undefined, resolveType: { [x: string]: any; }, requiredParam: number) => void
+>foo1 : (reuseTypeNode: { [x: string]: any; } | undefined, reuseTypeNode2: { [x: string]: any; } | undefined, resolveType: { [x: string]: any; } | undefined, requiredParam: number) => void
 
     // Type node is accurate, preserve
     reuseTypeNode: Map | undefined = {},

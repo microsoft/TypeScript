@@ -30,9 +30,9 @@ export class Bar {
 
 === file2.ts ===
 export function foo(p = (ip = 10, v: number): void => {}): void{
->foo : (p?: (ip: number, v: number) => void) => void
->p : (ip: number, v: number) => void
->(ip = 10, v: number): void => {} : (ip: number, v: number) => void
+>foo : (p?: (ip: number | undefined, v: number) => void) => void
+>p : (ip: number | undefined, v: number) => void
+>(ip = 10, v: number): void => {} : (ip: number | undefined, v: number) => void
 >ip : number
 >10 : 10
 >v : number
@@ -41,9 +41,9 @@ type T = number
 >T : number
 
 export function foo2(p = (ip = 10 as T, v: number): void => {}): void{}
->foo2 : (p?: (ip: number, v: number) => void) => void
->p : (ip: number, v: number) => void
->(ip = 10 as T, v: number): void => {} : (ip: number, v: number) => void
+>foo2 : (p?: (ip: number | undefined, v: number) => void) => void
+>p : (ip: number | undefined, v: number) => void
+>(ip = 10 as T, v: number): void => {} : (ip: number | undefined, v: number) => void
 >ip : number
 >10 as T : number
 >10 : 10
