@@ -1,9 +1,0 @@
---- old.declarationEmitInferredTypeAlias4.js
-+++ new.declarationEmitInferredTypeAlias4.js
-@@= skipped -15, +15 lines =@@
-
- //// [declarationEmitInferredTypeAlias4.d.ts]
- declare function f<A>(): A[] | {
--    x: A[] | /*elided*/ any;
-+    x: A[] | any;
- };

@@ -16,6 +16,6 @@ class C {
 declare class C {
     static D: {
         new (): {};
-        D: any;
+        D: /*elided*/ any;
     };
 }

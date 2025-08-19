@@ -17,16 +17,9 @@
  }
  exports.FooItem = FooItem;
  function WithTags(Base) {
-@@= skipped -33, +33 lines =@@
- };
- export declare var circularReference: {
-     new (): {
--        tags(c: /*elided*/ any): /*elided*/ any;
-+        tags(c: any): any;
-     };
+@@= skipped -38, +38 lines =@@
      getTags(c: {
--        tags(c: /*elided*/ any): /*elided*/ any;
-+        tags(c: any): any;
+         tags(c: /*elided*/ any): /*elided*/ any;
      }): {
 -        tags(c: /*elided*/ any): /*elided*/ any;
 +        tags(c: any): any;

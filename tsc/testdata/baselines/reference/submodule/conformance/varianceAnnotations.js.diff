@@ -99,12 +99,7 @@
  declare let Anon: {
      new <out T>(): {
 -        foo(): InstanceType<(typeof Anon<T>)>;
-+        foo(): any;
++        foo(): /*elided*/ any;
      };
  };
  declare let OuterC: {
-     new <out T>(): {
--        foo(): /*elided*/ any;
-+        foo(): any;
-     };
- };

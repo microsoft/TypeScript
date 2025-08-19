@@ -17,10 +17,3 @@
 
 
  //// [classExpressionInClassStaticDeclarations.d.ts]
- declare class C {
-     static D: {
-         new (): {};
--        D: /*elided*/ any;
-+        D: any;
-     };
- }
