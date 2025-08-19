@@ -2,7 +2,6 @@ package debug
 
 import (
 	"fmt"
-	"runtime"
 )
 
 func Fail(reason string) {
@@ -11,7 +10,7 @@ func Fail(reason string) {
 	} else {
 		reason = "Debug failure. " + reason
 	}
-	runtime.Breakpoint()
+	// runtime.Breakpoint()
 	panic(reason)
 }
 
