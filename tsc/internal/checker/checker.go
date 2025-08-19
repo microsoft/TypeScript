@@ -17776,7 +17776,7 @@ func (c *Checker) addOptionalityEx(t *Type, isProperty bool, isOptional bool) *T
 }
 
 func (c *Checker) getOptionalType(t *Type, isProperty bool) *Type {
-	// debug.Assert(c.strictNullChecks) // TODO: fix bug in isRequiredInitializedParameter
+	debug.Assert(c.strictNullChecks)
 	missingOrUndefined := core.IfElse(isProperty, c.undefinedOrMissingType, c.undefinedType)
 	if t == missingOrUndefined || t.flags&TypeFlagsUnion != 0 && t.Types()[0] == missingOrUndefined {
 		return t

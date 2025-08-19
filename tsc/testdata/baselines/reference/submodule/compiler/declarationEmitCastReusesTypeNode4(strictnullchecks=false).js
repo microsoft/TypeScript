@@ -95,6 +95,4 @@ export default /** @type {P} */ _default;
  * @param {P} x
  * @param {number} b
  */
-export declare function fnWithPartialAnnotationOnDefaultparam(x: {
-    name?: string;
-}, b: number): void;
+export declare function fnWithPartialAnnotationOnDefaultparam(x: P, b: number): void;

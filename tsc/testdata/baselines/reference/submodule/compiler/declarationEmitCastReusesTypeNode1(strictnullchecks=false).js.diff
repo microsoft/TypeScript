@@ -1,12 +1,9 @@
 --- old.declarationEmitCastReusesTypeNode1(strictnullchecks=false).js
 +++ new.declarationEmitCastReusesTypeNode1(strictnullchecks=false).js
-@@= skipped -30, +30 lines =@@
-
-
- //// [declarationEmitCastReusesTypeNode1.d.ts]
--type P = {} & {
--    name: string;
--};
+@@= skipped -33, +33 lines =@@
+ type P = {} & {
+     name: string;
+ };
 -export declare let vLet: P;
 -export declare const vConst: P;
 -export declare function fn(p?: P): void;
@@ -66,8 +63,5 @@
 +    name: string;
 +};
  export default _default;
--export declare function fnWithPartialAnnotationOnDefaultparam(x: P, b: number): void;
 +// allows `undefined` on the input side, thanks to the initializer
-+export declare function fnWithPartialAnnotationOnDefaultparam(x: {
-+    name: string;
-+}, b: number): void;
+ export declare function fnWithPartialAnnotationOnDefaultparam(x: P, b: number): void;

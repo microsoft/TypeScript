@@ -1,9 +1,12 @@
 --- old.declarationEmitCastReusesTypeNode1(strictnullchecks=true).js
 +++ new.declarationEmitCastReusesTypeNode1(strictnullchecks=true).js
-@@= skipped -33, +33 lines =@@
- type P = {} & {
-     name: string;
- };
+@@= skipped -30, +30 lines =@@
+
+
+ //// [declarationEmitCastReusesTypeNode1.d.ts]
+-type P = {} & {
+-    name: string;
+-};
 -export declare let vLet: P;
 -export declare const vConst: P;
 -export declare function fn(p?: P): void;
@@ -19,7 +22,7 @@
 +}): void;
 +export declare function fnWithRequiredDefaultParam(p: {
 +    name: string;
-+}, req: number): void;
++} | undefined, req: number): void;
  export declare class C {
 -    ctorField: P;
 -    field: P;
@@ -47,7 +50,7 @@
 +    }): void;
 +    methodWithRequiredDefault(p: {
 +        name: string;
-+    }, req: number): void;
++    } | undefined, req: number): void;
 +    constructor(ctorField?: {
 +        name: string;
 +    });
@@ -65,4 +68,6 @@
  export default _default;
 -export declare function fnWithPartialAnnotationOnDefaultparam(x: P | undefined, b: number): void;
 +// allows `undefined` on the input side, thanks to the initializer
-+export declare function fnWithPartialAnnotationOnDefaultparam(x: P, b: number): void;
++export declare function fnWithPartialAnnotationOnDefaultparam(x: {
++    name: string;
++} | undefined, b: number): void;

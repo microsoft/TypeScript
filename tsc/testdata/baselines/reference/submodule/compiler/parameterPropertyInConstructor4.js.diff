@@ -8,10 +8,3 @@
      constructor(a = [], b) {
          this.a = a;
      }
-@@= skipped -10, +11 lines =@@
- //// [parameterPropertyInConstructor4.d.ts]
- export declare class C {
-     a: number[];
--    constructor(a: number[] | undefined, b: number);
-+    constructor(a: number[], b: number);
- }

@@ -552,7 +552,7 @@ func (r *emitResolver) isOptionalUninitializedParameterProperty(parameter *ast.N
 }
 
 func (r *emitResolver) isRequiredInitializedParameter(parameter *ast.Node, enclosingDeclaration *ast.Node) bool {
-	if r.checker.strictNullChecks || r.isOptionalParameter(parameter) || /*isJSDocParameterTag(parameter) ||*/ parameter.Initializer() == nil { // !!! TODO: JSDoc Support
+	if !r.checker.strictNullChecks || r.isOptionalParameter(parameter) || /*isJSDocParameterTag(parameter) ||*/ parameter.Initializer() == nil { // !!! TODO: JSDoc Support
 		return false
 	}
 	if ast.HasSyntacticModifier(parameter, ast.ModifierFlagsParameterPropertyModifier) {

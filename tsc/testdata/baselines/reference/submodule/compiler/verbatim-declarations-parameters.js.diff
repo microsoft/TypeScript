@@ -32,5 +32,7 @@
 +// Type node is accurate, preserve
 +reuseTypeNode: Map | undefined, reuseTypeNode2: Exclude<MapOrUndefined, "dummy">, 
 +// Resolve type node, requires adding | undefined
-+resolveType: Map, requiredParam: number): void;
++resolveType: {
++    [x: string]: any;
++} | undefined, requiredParam: number): void;
  export {};

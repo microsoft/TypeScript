@@ -24,7 +24,7 @@
 +export declare function fnWithRequiredDefaultParam(p: {
      name: string;
 -}) | undefined, req: number): void;
-+}, req: number): void;
++} | undefined, req: number): void;
  export declare class C {
 -    ctorField: {} & {
 -        name: string;
@@ -59,7 +59,7 @@
          name: string;
 -    }) | undefined, req: number): void;
 -    constructor(ctorField?: {} & {
-+    }, req: number): void;
++    } | undefined, req: number): void;
 +    constructor(ctorField?: {
          name: string;
      });
@@ -79,7 +79,7 @@
  export default _default;
 -export declare function fnWithPartialAnnotationOnDefaultparam(x: ({} & {
 +// allows `undefined` on the input side, thanks to the initializer
-+export declare function fnWithPartialAnnotationOnDefaultparam(x: {} & {
++export declare function fnWithPartialAnnotationOnDefaultparam(x: {
      name: string;
 -}) | undefined, b: number): void;
-+}, b: number): void;
++} | undefined, b: number): void;

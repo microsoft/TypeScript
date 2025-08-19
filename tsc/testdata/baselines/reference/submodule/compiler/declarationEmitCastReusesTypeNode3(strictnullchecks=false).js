@@ -31,6 +31,9 @@ export function fnWithPartialAnnotationOnDefaultparam(x: P = <P>null!, b: number
 
 
 //// [declarationEmitCastReusesTypeNode3.d.ts]
+type P = {} & {
+    name: string;
+};
 export declare let vLet: {
     name: string;
 };
@@ -77,6 +80,4 @@ declare const _default: {
 };
 export default _default;
 // allows `undefined` on the input side, thanks to the initializer
-export declare function fnWithPartialAnnotationOnDefaultparam(x: {
-    name: string;
-}, b: number): void;
+export declare function fnWithPartialAnnotationOnDefaultparam(x: P, b: number): void;

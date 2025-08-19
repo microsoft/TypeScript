@@ -76,7 +76,6 @@
 -declare const _default: P;
 -export default _default;
 -export type P = {} & {
-+export declare function fnWithPartialAnnotationOnDefaultparam(x: {
-     name?: string;
+-    name?: string;
 -};
-+}, b: number): void;
++export declare function fnWithPartialAnnotationOnDefaultparam(x: P, b: number): void;

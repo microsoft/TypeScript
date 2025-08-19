@@ -57,7 +57,7 @@ export declare function fn(p?: {
 /** @param {number} req */
 export declare function fnWithRequiredDefaultParam(p: {
     name?: string | undefined;
-}, req: number): void;
+} | undefined, req: number): void;
 export declare class C {
     field: {
         name?: string | undefined;
@@ -74,7 +74,7 @@ export declare class C {
     /** @param {number} req */
     methodWithRequiredDefault(p: {
         name?: string | undefined;
-    }, req: number): void;
+    } | undefined, req: number): void;
     constructor(ctorField?: {
         name?: string | undefined;
     });
@@ -95,4 +95,6 @@ export default /** @type {P} */ _default;
  * @param {P} x
  * @param {number} b
  */
-export declare function fnWithPartialAnnotationOnDefaultparam(x: P, b: number): void;
+export declare function fnWithPartialAnnotationOnDefaultparam(x: {
+    name?: string | undefined;
+} | undefined, b: number): void;
