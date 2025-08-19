@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/implicitEmptyObjectType.ts] ////
+
+=== implicitEmptyObjectType.ts ===
+// https://github.com/microsoft/typescript-go/issues/1563
+
+function f() {
+>f : Symbol(f, Decl(implicitEmptyObjectType.ts, 0, 0))
+
+  const v: unknown = "lol";
+>v : Symbol(v, Decl(implicitEmptyObjectType.ts, 3, 7))
+
+  const acceptsRecord = (record: Record<string, string>) => {};
+>acceptsRecord : Symbol(acceptsRecord, Decl(implicitEmptyObjectType.ts, 4, 7))
+>record : Symbol(record, Decl(implicitEmptyObjectType.ts, 4, 25))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+  acceptsRecord(v || {});
+>acceptsRecord : Symbol(acceptsRecord, Decl(implicitEmptyObjectType.ts, 4, 7))
+>v : Symbol(v, Decl(implicitEmptyObjectType.ts, 3, 7))
+}
+

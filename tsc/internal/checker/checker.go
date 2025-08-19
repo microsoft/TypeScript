@@ -25011,6 +25011,9 @@ func (c *Checker) removeSubtypes(types []*Type, hasObjectTypes bool) []*Type {
 							continue
 						}
 					}
+					if (source == c.emptyObjectType || source == c.unknownEmptyObjectType) && target.symbol != nil && c.IsEmptyAnonymousObjectType(target) {
+						continue
+					}
 					if c.isTypeRelatedTo(source, target, c.strictSubtypeRelation) && (c.getTargetType(source).objectFlags&ObjectFlagsClass == 0 ||
 						c.getTargetType(target).objectFlags&ObjectFlagsClass == 0 ||
 						c.isTypeDerivedFrom(source, target)) {
