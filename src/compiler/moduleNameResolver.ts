@@ -2586,26 +2586,7 @@ function loadModuleFromSelfNameReference(extensions: Extensions, moduleName: str
     }
     const trailingParts = parts.slice(nameParts.length);
     const subpath = !length(trailingParts) ? "." : `.${directorySeparator}${trailingParts.join(directorySeparator)}`;
-    // Maybe TODO: splitting extensions into two priorities should be unnecessary, except
-    // https://github.com/microsoft/TypeScript/issues/50762 makes the behavior different.
-    // As long as that bug exists, we need to do two passes here in self-name loading
-    // in order to be consistent with (non-self) library-name loading in
-    // `loadModuleFromNearestNodeModulesDirectoryWorker`, which uses two passes in order
-    // to prioritize `@types` packages higher up the directory tree over untyped
-    // implementation packages. See the selfNameModuleAugmentation.ts test for why this
-    // matters.
-    //
-    // However, there's an exception. If the user has `allowJs` and `declaration`, we need
-    // to ensure that self-name imports of their own package can resolve back to their
-    // input JS files via `tryLoadInputFileForPath` at a higher priority than their output
-    // declaration files, so we need to do a single pass with all extensions for that case.
-    if (getAllowJSCompilerOption(state.compilerOptions) && !pathContainsNodeModules(directory)) {
-        return loadModuleFromExports(scope, extensions, subpath, state, cache, redirectedReference);
-    }
-    const priorityExtensions = extensions & (Extensions.TypeScript | Extensions.Declaration);
-    const secondaryExtensions = extensions & ~(Extensions.TypeScript | Extensions.Declaration);
-    return loadModuleFromExports(scope, priorityExtensions, subpath, state, cache, redirectedReference)
-        || loadModuleFromExports(scope, secondaryExtensions, subpath, state, cache, redirectedReference);
+    return loadModuleFromExports(scope, extensions, subpath, state, cache, redirectedReference);
 }
 
 function loadModuleFromExports(scope: PackageJsonInfo, extensions: Extensions, subpath: string, state: ModuleResolutionState, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined): SearchResult<Resolved> {
