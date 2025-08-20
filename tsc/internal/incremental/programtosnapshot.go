@@ -93,14 +93,14 @@ func (t *toProgramSnapshot) computeProgramFileChanges() {
 			var signature string
 			newReferences := getReferencedFiles(t.program, file)
 			if newReferences != nil {
-				t.snapshot.referencedMap.Store(file.Path(), newReferences)
+				t.snapshot.referencedMap.storeReferences(file.Path(), newReferences)
 			}
 			if t.oldProgram != nil {
 				if oldFileInfo, ok := t.oldProgram.snapshot.fileInfos.Load(file.Path()); ok {
 					signature = oldFileInfo.signature
 					if oldFileInfo.version != version || oldFileInfo.affectsGlobalScope != affectsGlobalScope || oldFileInfo.impliedNodeFormat != impliedNodeFormat {
 						t.snapshot.addFileToChangeSet(file.Path())
-					} else if oldReferences, _ := t.oldProgram.snapshot.referencedMap.GetValues(file.Path()); !newReferences.Equals(oldReferences) {
+					} else if oldReferences, _ := t.oldProgram.snapshot.referencedMap.getReferences(file.Path()); !newReferences.Equals(oldReferences) {
 						// Referenced files changed
 						t.snapshot.addFileToChangeSet(file.Path())
 					} else if newReferences != nil {

@@ -2,7 +2,6 @@ package incremental
 
 import (
 	"context"
-	"iter"
 	"maps"
 	"slices"
 	"sync"
@@ -139,15 +138,6 @@ func (h *affectedFilesHandler) getFilesAffectedBy(path tspath.Path) []*ast.Sourc
 	})
 }
 
-// Gets the files referenced by the the file path
-func (h *affectedFilesHandler) getReferencedByPaths(file tspath.Path) iter.Seq[tspath.Path] {
-	keys, ok := h.program.snapshot.referencedMap.GetKeys(file)
-	if !ok {
-		return func(yield func(tspath.Path) bool) {}
-	}
-	return keys.Keys()
-}
-
 func (h *affectedFilesHandler) forEachFileReferencedBy(file *ast.SourceFile, fn func(currentFile *ast.SourceFile, currentPath tspath.Path) (queueForFile bool, fastReturn bool)) map[tspath.Path]*ast.SourceFile {
 	// Now we need to if each file in the referencedBy list has a shape change as well.
 	// Because if so, its own referencedBy files need to be saved as well to make the
@@ -155,7 +145,7 @@ func (h *affectedFilesHandler) forEachFileReferencedBy(file *ast.SourceFile, fn 
 	seenFileNamesMap := map[tspath.Path]*ast.SourceFile{}
 	// Start with the paths this file was referenced by
 	seenFileNamesMap[file.Path()] = file
-	queue := slices.Collect(h.getReferencedByPaths(file.Path()))
+	queue := slices.Collect(h.program.snapshot.referencedMap.getReferencedBy(file.Path()))
 	for len(queue) > 0 {
 		currentPath := queue[len(queue)-1]
 		queue = queue[:len(queue)-1]
@@ -167,7 +157,7 @@ func (h *affectedFilesHandler) forEachFileReferencedBy(file *ast.SourceFile, fn 
 				return seenFileNamesMap
 			}
 			if queueForFile {
-				for ref := range h.getReferencedByPaths(currentFile.Path()) {
+				for ref := range h.program.snapshot.referencedMap.getReferencedBy(currentFile.Path()) {
 					queue = append(queue, ref)
 				}
 			}
@@ -253,17 +243,13 @@ func (h *affectedFilesHandler) handleDtsMayChangeOfAffectedFile(dtsMayChange dts
 	}
 
 	// Go through files that reference affected file and handle dts emit and semantic diagnostics for them and their references
-	if keys, ok := h.program.snapshot.referencedMap.GetKeys(affectedFile.Path()); ok {
-		for exportedFromPath := range keys.Keys() {
-			if h.handleDtsMayChangeOfGlobalScope(dtsMayChange, exportedFromPath, invalidateJsFiles) {
+	for exportedFromPath := range h.program.snapshot.referencedMap.getReferencedBy(affectedFile.Path()) {
+		if h.handleDtsMayChangeOfGlobalScope(dtsMayChange, exportedFromPath, invalidateJsFiles) {
+			return
+		}
+		for filePath := range h.program.snapshot.referencedMap.getReferencedBy(exportedFromPath) {
+			if h.handleDtsMayChangeOfFileAndExportsOfFile(dtsMayChange, filePath, invalidateJsFiles) {
 				return
-			}
-			if references, ok := h.program.snapshot.referencedMap.GetKeys(exportedFromPath); ok {
-				for filePath := range references.Keys() {
-					if h.handleDtsMayChangeOfFileAndExportsOfFile(dtsMayChange, filePath, invalidateJsFiles) {
-						return
-					}
-				}
 			}
 		}
 	}
@@ -279,11 +265,9 @@ func (h *affectedFilesHandler) handleDtsMayChangeOfFileAndExportsOfFile(dtsMayCh
 	h.handleDtsMayChangeOf(dtsMayChange, filePath, invalidateJsFiles)
 
 	// Remove the diagnostics of files that import this file and handle all its exports too
-	if keys, ok := h.program.snapshot.referencedMap.GetKeys(filePath); ok {
-		for referencingFilePath := range keys.Keys() {
-			if h.handleDtsMayChangeOfFileAndExportsOfFile(dtsMayChange, referencingFilePath, invalidateJsFiles) {
-				return true
-			}
+	for referencingFilePath := range h.program.snapshot.referencedMap.getReferencedBy(filePath) {
+		if h.handleDtsMayChangeOfFileAndExportsOfFile(dtsMayChange, referencingFilePath, invalidateJsFiles) {
+			return true
 		}
 	}
 	return false
