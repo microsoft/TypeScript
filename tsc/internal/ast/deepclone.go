@@ -9,6 +9,9 @@ func getDeepCloneVisitor(f *NodeFactory, syntheticLocation bool) *NodeVisitor {
 		func(node *Node) *Node {
 			visited := visitor.VisitEachChild(node)
 			if visited != node {
+				if syntheticLocation {
+					visited.Loc = core.NewTextRange(-1, -1)
+				}
 				return visited
 			}
 			c := node.Clone(f) // forcibly clone leaf nodes, which will then cascade new nodes/arrays upwards via `update` calls
@@ -26,21 +29,39 @@ func getDeepCloneVisitor(f *NodeFactory, syntheticLocation bool) *NodeVisitor {
 				if nodes == nil {
 					return nil
 				}
-				// force update empty lists
-				if len(nodes.Nodes) == 0 {
-					return nodes.Clone(v.Factory)
+				visited := v.VisitNodes(nodes)
+				var newList *NodeList
+				if visited != nodes {
+					newList = visited
+				} else {
+					newList = nodes.Clone(v.Factory)
 				}
-				return v.VisitNodes(nodes)
+				if syntheticLocation {
+					newList.Loc = core.NewTextRange(-1, -1)
+					if nodes.HasTrailingComma() {
+						newList.Nodes[len(newList.Nodes)-1].Loc = core.NewTextRange(-2, -2)
+					}
+				}
+				return newList
 			},
 			VisitModifiers: func(nodes *ModifierList, v *NodeVisitor) *ModifierList {
 				if nodes == nil {
 					return nil
 				}
-				// force update empty lists
-				if len(nodes.Nodes) == 0 {
-					return nodes.Clone(v.Factory)
+				visited := v.VisitModifiers(nodes)
+				var newList *ModifierList
+				if visited != nodes {
+					newList = visited
+				} else {
+					newList = nodes.Clone(v.Factory)
 				}
-				return v.VisitModifiers(nodes)
+				if syntheticLocation {
+					newList.Loc = core.NewTextRange(-1, -1)
+					if nodes.HasTrailingComma() {
+						newList.Nodes[len(newList.Nodes)-1].Loc = core.NewTextRange(-2, -2)
+					}
+				}
+				return newList
 			},
 		},
 	)

@@ -183,11 +183,11 @@ func (list *NodeList) Pos() int { return list.Loc.Pos() }
 func (list *NodeList) End() int { return list.Loc.End() }
 
 func (list *NodeList) HasTrailingComma() bool {
-	if len(list.Nodes) == 0 || PositionIsSynthesized(list.End()) {
+	if len(list.Nodes) == 0 {
 		return false
 	}
 	last := list.Nodes[len(list.Nodes)-1]
-	return !PositionIsSynthesized(last.End()) && last.End() < list.End()
+	return last.End() < list.End()
 }
 
 func (list *NodeList) Clone(f NodeFactoryCoercible) *NodeList {
