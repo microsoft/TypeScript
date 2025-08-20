@@ -26810,7 +26810,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             inference.priority = combinedPriority;
                         }
                         if (priority === (inference.priority & ~InferencePriority.DistributiveConditional)) {
-                            if (inference.priority !== combinedPriority) {
+                            // "upgrade" the priority (by essentially removing DistributiveConditional bit) of the inference without discarding the collected candidates
+                            if (inference.priority > combinedPriority) {
                                 inference.priority = combinedPriority;
                                 clearCachedInferences(inferences);
                             }
@@ -27181,7 +27182,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function inferToConditionalType(source: Type, target: ConditionalType) {
             const info = target.root.isDistributive ? getInferenceInfoForType(getActualTypeVariable(target.checkType)) : undefined;
             const saveIndividualPriority = info?.individualPriority;
-            if (info && !hasInferenceCandidates(info)) {
+            if (info) {
                 info.individualPriority = (info.individualPriority || InferencePriority.None) | InferencePriority.DistributiveConditional;
             }
             if (source.flags & TypeFlags.Conditional) {
