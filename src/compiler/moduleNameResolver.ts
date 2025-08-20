@@ -2818,6 +2818,7 @@ function getLoadModuleFromTargetExportOrImport(extensions: Extensions, state: Mo
                         }
                         else {
                             traceIfEnabled(state, Diagnostics.Failed_to_resolve_under_condition_0, condition);
+                            return { value: undefined };
                         }
                     }
                     else {
