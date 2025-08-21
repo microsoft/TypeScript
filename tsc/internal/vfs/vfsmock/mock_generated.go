@@ -5,6 +5,7 @@ package vfsmock
 
 import (
 	"sync"
+	"time"
 
 	"github.com/microsoft/typescript-go/internal/vfs"
 )
@@ -19,6 +20,9 @@ var _ vfs.FS = &FSMock{}
 //
 //		// make and configure a mocked vfs.FS
 //		mockedFS := &FSMock{
+//			ChtimesFunc: func(path string, aTime time.Time, mTime time.Time) error {
+//				panic("mock out the Chtimes method")
+//			},
 //			DirectoryExistsFunc: func(path string) bool {
 //				panic("mock out the DirectoryExists method")
 //			},
@@ -56,6 +60,9 @@ var _ vfs.FS = &FSMock{}
 //
 //	}
 type FSMock struct {
+	// ChtimesFunc mocks the Chtimes method.
+	ChtimesFunc func(path string, aTime time.Time, mTime time.Time) error
+
 	// DirectoryExistsFunc mocks the DirectoryExists method.
 	DirectoryExistsFunc func(path string) bool
 
@@ -88,6 +95,15 @@ type FSMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// Chtimes holds details about calls to the Chtimes method.
+		Chtimes []struct {
+			// Path is the path argument value.
+			Path string
+			// ATime is the aTime argument value.
+			ATime time.Time
+			// MTime is the mTime argument value.
+			MTime time.Time
+		}
 		// DirectoryExists holds details about calls to the DirectoryExists method.
 		DirectoryExists []struct {
 			// Path is the path argument value.
@@ -142,6 +158,7 @@ type FSMock struct {
 			WriteByteOrderMark bool
 		}
 	}
+	lockChtimes                   sync.RWMutex
 	lockDirectoryExists           sync.RWMutex
 	lockFileExists                sync.RWMutex
 	lockGetAccessibleEntries      sync.RWMutex
@@ -152,6 +169,46 @@ type FSMock struct {
 	lockUseCaseSensitiveFileNames sync.RWMutex
 	lockWalkDir                   sync.RWMutex
 	lockWriteFile                 sync.RWMutex
+}
+
+// Chtimes calls ChtimesFunc.
+func (mock *FSMock) Chtimes(path string, aTime time.Time, mTime time.Time) error {
+	if mock.ChtimesFunc == nil {
+		panic("FSMock.ChtimesFunc: method is nil but FS.Chtimes was just called")
+	}
+	callInfo := struct {
+		Path  string
+		ATime time.Time
+		MTime time.Time
+	}{
+		Path:  path,
+		ATime: aTime,
+		MTime: mTime,
+	}
+	mock.lockChtimes.Lock()
+	mock.calls.Chtimes = append(mock.calls.Chtimes, callInfo)
+	mock.lockChtimes.Unlock()
+	return mock.ChtimesFunc(path, aTime, mTime)
+}
+
+// ChtimesCalls gets all the calls that were made to Chtimes.
+// Check the length with:
+//
+//	len(mockedFS.ChtimesCalls())
+func (mock *FSMock) ChtimesCalls() []struct {
+	Path  string
+	ATime time.Time
+	MTime time.Time
+} {
+	var calls []struct {
+		Path  string
+		ATime time.Time
+		MTime time.Time
+	}
+	mock.lockChtimes.RLock()
+	calls = mock.calls.Chtimes
+	mock.lockChtimes.RUnlock()
+	return calls
 }
 
 // DirectoryExists calls DirectoryExistsFunc.

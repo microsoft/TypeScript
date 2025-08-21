@@ -1,6 +1,8 @@
 package project
 
 import (
+	"time"
+
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/ls"
@@ -172,5 +174,10 @@ func (fs *compilerFS) WriteFile(path string, data string, writeByteOrderMark boo
 
 // Remove implements vfs.FS.
 func (fs *compilerFS) Remove(path string) error {
+	panic("unimplemented")
+}
+
+// Chtimes implements vfs.FS.
+func (fs *compilerFS) Chtimes(path string, atime time.Time, mtime time.Time) error {
 	panic("unimplemented")
 }

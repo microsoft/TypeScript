@@ -34,6 +34,12 @@ tsc: The TypeScript Compiler - Version FakeTSVersion                            
 
 [1mCOMMAND LINE FLAGS[22m
 
+[94m     --help, -h  [39mPrint this message.
+
+
+[94m    --watch, -w  [39mWatch input files.
+
+
 [94m          --all  [39mShow all compiler options.
 
 
@@ -49,16 +55,52 @@ tsc: The TypeScript Compiler - Version FakeTSVersion                            
 [94m   --showConfig  [39mPrint the final configuration instead of building.
 
 
-[94m     --help, -h  [39mPrint this message.
-
-
-[94m    --watch, -w  [39mWatch input files.
-
-
 [94m    --build, -b  [39mBuild one or more projects and their dependencies, if out of date
 
 
 [1mCOMMON COMPILER OPTIONS[22m
+
+[94m               --pretty  [39mEnable color and formatting in TypeScript's output to make compiler errors easier to read.
+
+                  type:  boolean
+
+               default:  true
+
+
+[94m      --declaration, -d  [39mGenerate .d.ts files from TypeScript and JavaScript files in your project.
+
+                  type:  boolean
+
+               default:  `false`, unless `composite` is set
+
+
+[94m       --declarationMap  [39mCreate sourcemaps for d.ts files.
+
+                  type:  boolean
+
+               default:  false
+
+
+[94m  --emitDeclarationOnly  [39mOnly output d.ts files and not JavaScript files.
+
+                  type:  boolean
+
+               default:  false
+
+
+[94m            --sourceMap  [39mCreate source map files for emitted JavaScript files.
+
+                  type:  boolean
+
+               default:  false
+
+
+[94m               --noEmit  [39mDisable emitting files from a compilation.
+
+                  type:  boolean
+
+               default:  false
+
 
 [94m           --target, -t  [39mSet the JavaScript language version for emitted JavaScript and include compatible library decla
                          rations.
@@ -146,48 +188,6 @@ tsc: The TypeScript Compiler - Version FakeTSVersion                            
 
 [94m      --esModuleInterop  [39mEmit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowS
                          yntheticDefaultImports' for type compatibility.
-
-                  type:  boolean
-
-               default:  false
-
-
-[94m               --pretty  [39mEnable color and formatting in TypeScript's output to make compiler errors easier to read.
-
-                  type:  boolean
-
-               default:  true
-
-
-[94m      --declaration, -d  [39mGenerate .d.ts files from TypeScript and JavaScript files in your project.
-
-                  type:  boolean
-
-               default:  `false`, unless `composite` is set
-
-
-[94m       --declarationMap  [39mCreate sourcemaps for d.ts files.
-
-                  type:  boolean
-
-               default:  false
-
-
-[94m  --emitDeclarationOnly  [39mOnly output d.ts files and not JavaScript files.
-
-                  type:  boolean
-
-               default:  false
-
-
-[94m            --sourceMap  [39mCreate source map files for emitted JavaScript files.
-
-                  type:  boolean
-
-               default:  false
-
-
-[94m               --noEmit  [39mDisable emitting files from a compilation.
 
                   type:  boolean
 

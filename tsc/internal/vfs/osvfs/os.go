@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"time"
 	"unicode"
 
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -169,4 +170,8 @@ func (vfs *osFS) WriteFile(path string, content string, writeByteOrderMark bool)
 func (vfs *osFS) Remove(path string) error {
 	// todo: #701 add retry mechanism?
 	return os.RemoveAll(path)
+}
+
+func (vfs *osFS) Chtimes(path string, aTime time.Time, mTime time.Time) error {
+	return os.Chtimes(path, aTime, mTime)
 }

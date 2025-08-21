@@ -2,6 +2,7 @@ package cachedvfs
 
 import (
 	"sync/atomic"
+	"time"
 
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/vfs"
@@ -116,10 +117,14 @@ func (fsys *FS) Remove(path string) error {
 	return fsys.fs.Remove(path)
 }
 
+func (fsys *FS) Chtimes(path string, aTime time.Time, mTime time.Time) error {
+	return fsys.fs.Chtimes(path, aTime, mTime)
+}
+
 func (fsys *FS) Stat(path string) vfs.FileInfo {
 	if fsys.enabled.Load() {
 		if ret, ok := fsys.statCache.Load(path); ok {
-			return ret.(vfs.FileInfo)
+			return ret
 		}
 	}
 
@@ -141,5 +146,6 @@ func (fsys *FS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
 }
 
 func (fsys *FS) WriteFile(path string, data string, writeByteOrderMark bool) error {
+	// !!! sheetal this needs update to caches or not?
 	return fsys.fs.WriteFile(path, data, writeByteOrderMark)
 }

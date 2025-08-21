@@ -26,7 +26,7 @@ func TestCompilerOptionsDeclaration(t *testing.T) {
 		"noEmitForJsFiles",
 		"pathsBasePath",
 		"suppressOutputPathCheck",
-		"tscBuild",
+		"build",
 	}
 
 	internalOptionsMap := make(map[string]string)

@@ -2276,7 +2276,7 @@ var Unknown_build_option_0 = &Message{code: 5072, category: CategoryError, key: 
 
 var Build_option_0_requires_a_value_of_type_1 = &Message{code: 5073, category: CategoryError, key: "Build_option_0_requires_a_value_of_type_1_5073", text: "Build option '{0}' requires a value of type {1}."}
 
-var Option_incremental_can_only_be_specified_using_tsconfig_emitting_to_single_file_or_when_option_tsBuildInfoFile_is_specified = &Message{code: 5074, category: CategoryError, key: "Option_incremental_can_only_be_specified_using_tsconfig_emitting_to_single_file_or_when_option_tsBui_5074", text: "Option '--incremental' can only be specified using tsconfig, emitting to single file or when option '--tsBuildInfoFile' is specified."}
+var Failed_to_update_timestamp_of_file_0 = &Message{code: 5074, category: CategoryMessage, key: "Failed_to_update_timestamp_of_file_0_5074", text: "Failed to update timestamp of file '{0}'."}
 
 var X_0_is_assignable_to_the_constraint_of_type_1_but_1_could_be_instantiated_with_a_different_subtype_of_constraint_2 = &Message{code: 5075, category: CategoryError, key: "_0_is_assignable_to_the_constraint_of_type_1_but_1_could_be_instantiated_with_a_different_subtype_of_5075", text: "'{0}' is assignable to the constraint of type '{1}', but '{1}' could be instantiated with a different subtype of constraint '{2}'."}
 
@@ -2858,7 +2858,7 @@ var Project_0_is_up_to_date_because_newest_input_1_is_older_than_output_2 = &Mes
 
 var Project_0_is_out_of_date_because_output_file_1_does_not_exist = &Message{code: 6352, category: CategoryMessage, key: "Project_0_is_out_of_date_because_output_file_1_does_not_exist_6352", text: "Project '{0}' is out of date because output file '{1}' does not exist"}
 
-var Project_0_is_out_of_date_because_its_dependency_1_is_out_of_date = &Message{code: 6353, category: CategoryMessage, key: "Project_0_is_out_of_date_because_its_dependency_1_is_out_of_date_6353", text: "Project '{0}' is out of date because its dependency '{1}' is out of date"}
+var Failed_to_delete_file_0 = &Message{code: 6353, category: CategoryMessage, key: "Failed_to_delete_file_0_6353", text: "Failed to delete file '{0}'."}
 
 var Project_0_is_up_to_date_with_d_ts_files_from_its_dependencies = &Message{code: 6354, category: CategoryMessage, key: "Project_0_is_up_to_date_with_d_ts_files_from_its_dependencies_6354", text: "Project '{0}' is up to date with .d.ts files from its dependencies"}
 
@@ -2938,7 +2938,7 @@ var Project_0_is_out_of_date_because_buildinfo_file_1_indicates_that_some_of_the
 
 var Project_0_is_up_to_date_but_needs_to_update_timestamps_of_output_files_that_are_older_than_input_files = &Message{code: 6400, category: CategoryMessage, key: "Project_0_is_up_to_date_but_needs_to_update_timestamps_of_output_files_that_are_older_than_input_fil_6400", text: "Project '{0}' is up to date but needs to update timestamps of output files that are older than input files"}
 
-var Project_0_is_out_of_date_because_there_was_error_reading_file_1 = &Message{code: 6401, category: CategoryMessage, key: "Project_0_is_out_of_date_because_there_was_error_reading_file_1_6401", text: "Project '{0}' is out of date because there was error reading file '{1}'"}
+var Project_0_is_out_of_date_because_config_file_does_not_exist = &Message{code: 6401, category: CategoryMessage, key: "Project_0_is_out_of_date_because_config_file_does_not_exist_6401", text: "Project '{0}' is out of date because config file does not exist."}
 
 var Resolving_in_0_mode_with_conditions_1 = &Message{code: 6402, category: CategoryMessage, key: "Resolving_in_0_mode_with_conditions_1_6402", text: "Resolving in {0} mode with conditions {1}."}
 
@@ -2976,7 +2976,7 @@ var Searching_all_ancestor_node_modules_directories_for_fallback_extensions_Colo
 
 var Project_0_is_out_of_date_because_buildinfo_file_1_indicates_that_program_needs_to_report_errors = &Message{code: 6419, category: CategoryMessage, key: "Project_0_is_out_of_date_because_buildinfo_file_1_indicates_that_program_needs_to_report_errors_6419", text: "Project '{0}' is out of date because buildinfo file '{1}' indicates that program needs to report errors."}
 
-var Project_0_is_out_of_date_because_1 = &Message{code: 6420, category: CategoryMessage, key: "Project_0_is_out_of_date_because_1_6420", text: "Project '{0}' is out of date because {1}."}
+var Project_0_is_out_of_date_because_input_1_does_not_exist = &Message{code: 6420, category: CategoryMessage, key: "Project_0_is_out_of_date_because_input_1_does_not_exist_6420", text: "Project '{0}' is out of date because input '{1}' does not exist."}
 
 var Rewrite_ts_tsx_mts_and_cts_file_extensions_in_relative_import_paths_to_their_JavaScript_equivalent_in_output_files = &Message{code: 6421, category: CategoryMessage, key: "Rewrite_ts_tsx_mts_and_cts_file_extensions_in_relative_import_paths_to_their_JavaScript_equivalent_i_6421", text: "Rewrite '.ts', '.tsx', '.mts', and '.cts' file extensions in relative import paths to their JavaScript equivalent in output files."}
 

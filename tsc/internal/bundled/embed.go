@@ -161,6 +161,13 @@ func (vfs *wrappedFS) Remove(path string) error {
 	return vfs.fs.Remove(path)
 }
 
+func (vfs *wrappedFS) Chtimes(path string, aTime time.Time, mTime time.Time) error {
+	if _, ok := splitPath(path); ok {
+		panic("cannot change times on embedded file system")
+	}
+	return vfs.fs.Chtimes(path, aTime, mTime)
+}
+
 type fileInfo struct {
 	mode fs.FileMode
 	name string

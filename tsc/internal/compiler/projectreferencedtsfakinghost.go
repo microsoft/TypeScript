@@ -2,6 +2,7 @@ package compiler
 
 import (
 	"strings"
+	"time"
 
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
@@ -79,6 +80,11 @@ func (fs *projectReferenceDtsFakingVfs) WriteFile(path string, data string, writ
 
 // Remove implements vfs.FS.
 func (fs *projectReferenceDtsFakingVfs) Remove(path string) error {
+	panic("should not be called by resolver")
+}
+
+// Chtimes implements vfs.FS.
+func (fs *projectReferenceDtsFakingVfs) Chtimes(path string, aTime time.Time, mTime time.Time) error {
 	panic("should not be called by resolver")
 }
 
@@ -197,7 +203,7 @@ func (fs *projectReferenceDtsFakingVfs) fileOrDirectoryExistsUsingSource(fileOrD
 }
 
 func (fs *projectReferenceDtsFakingVfs) fileExistsIfProjectReferenceDts(file string) core.Tristate {
-	source := fs.projectReferenceFileMapper.getSourceAndProjectReference(fs.toPath(file))
+	source := fs.projectReferenceFileMapper.getProjectReferenceFromOutputDts(fs.toPath(file))
 	if source != nil {
 		return core.IfElse(fs.projectReferenceFileMapper.opts.Host.FS().FileExists(source.Source), core.TSTrue, core.TSFalse)
 	}

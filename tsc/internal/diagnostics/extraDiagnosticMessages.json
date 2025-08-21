@@ -22,5 +22,21 @@
     "A JSDoc '@type' tag may not occur with a '@param' or '@returns' tag.": {
         "category": "Error",
         "code": 8040
+    },
+    "Failed to delete file '{0}'.": {
+        "category": "Message",
+        "code": 6353
+    },
+    "Project '{0}' is out of date because config file does not exist.": {
+        "category": "Message",
+        "code": 6401
+    },
+    "Project '{0}' is out of date because input '{1}' does not exist.": {
+        "category": "Message",
+        "code": 6420
+    },
+    "Failed to update timestamp of file '{0}'.": {
+        "category": "Message",
+        "code": 5074
     }
 }

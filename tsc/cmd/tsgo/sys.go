@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/microsoft/typescript-go/internal/bundled"
-	"github.com/microsoft/typescript-go/internal/execute"
+	"github.com/microsoft/typescript-go/internal/execute/tsc"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
 	"github.com/microsoft/typescript-go/internal/vfs/osvfs"
@@ -63,7 +63,7 @@ func newSystem() *osSys {
 	cwd, err := os.Getwd()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error getting current directory: %v\n", err)
-		os.Exit(int(execute.ExitStatusInvalidProject_OutputsSkipped))
+		os.Exit(int(tsc.ExitStatusInvalidProject_OutputsSkipped))
 	}
 
 	return &osSys{

@@ -33,6 +33,12 @@ tsc: The TypeScript Compiler - Version FakeTSVersion
 
 [1mCOMMAND LINE FLAGS[22m
 
+[94m--help, -h[39m
+Print this message.
+
+[94m--watch, -w[39m
+Watch input files.
+
 [94m--all[39m
 Show all compiler options.
 
@@ -48,16 +54,40 @@ Compile the project given the path to its configuration file, or to a folder wit
 [94m--showConfig[39m
 Print the final configuration instead of building.
 
-[94m--help, -h[39m
-Print this message.
-
-[94m--watch, -w[39m
-Watch input files.
-
 [94m--build, -b[39m
 Build one or more projects and their dependencies, if out of date
 
 [1mCOMMON COMPILER OPTIONS[22m
+
+[94m--pretty[39m
+Enable color and formatting in TypeScript's output to make compiler errors easier to read.
+type: boolean
+default: true
+
+[94m--declaration, -d[39m
+Generate .d.ts files from TypeScript and JavaScript files in your project.
+type: boolean
+default: `false`, unless `composite` is set
+
+[94m--declarationMap[39m
+Create sourcemaps for d.ts files.
+type: boolean
+default: false
+
+[94m--emitDeclarationOnly[39m
+Only output d.ts files and not JavaScript files.
+type: boolean
+default: false
+
+[94m--sourceMap[39m
+Create source map files for emitted JavaScript files.
+type: boolean
+default: false
+
+[94m--noEmit[39m
+Disable emitting files from a compilation.
+type: boolean
+default: false
 
 [94m--target, -t[39m
 Set the JavaScript language version for emitted JavaScript and include compatible library declarations.
@@ -110,36 +140,6 @@ Specify type package names to be included without being referenced in a source f
 
 [94m--esModuleInterop[39m
 Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility.
-type: boolean
-default: false
-
-[94m--pretty[39m
-Enable color and formatting in TypeScript's output to make compiler errors easier to read.
-type: boolean
-default: true
-
-[94m--declaration, -d[39m
-Generate .d.ts files from TypeScript and JavaScript files in your project.
-type: boolean
-default: `false`, unless `composite` is set
-
-[94m--declarationMap[39m
-Create sourcemaps for d.ts files.
-type: boolean
-default: false
-
-[94m--emitDeclarationOnly[39m
-Only output d.ts files and not JavaScript files.
-type: boolean
-default: false
-
-[94m--sourceMap[39m
-Create source map files for emitted JavaScript files.
-type: boolean
-default: false
-
-[94m--noEmit[39m
-Disable emitting files from a compilation.
 type: boolean
 default: false
 

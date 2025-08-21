@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/fs"
 	"strings"
+	"time"
 
 	"github.com/microsoft/typescript-go/internal/stringutil"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -22,6 +23,7 @@ type WritableFS interface {
 	MkdirAll(path string, perm fs.FileMode) error
 	// Removes `path` and all its contents. Will return the first error it encounters.
 	Remove(path string) error
+	Chtimes(path string, aTime time.Time, mTime time.Time) error
 }
 
 type FsWithSys interface {
@@ -61,6 +63,7 @@ func From(fsys fs.FS, useCaseSensitiveFileNames bool) FsWithSys {
 	var writeFile func(path string, content string, writeByteOrderMark bool) error
 	var mkdirAll func(path string) error
 	var remove func(path string) error
+	var chtimes func(path string, aTime time.Time, mTime time.Time) error
 	if fsys, ok := fsys.(WritableFS); ok {
 		writeFile = func(path string, content string, writeByteOrderMark bool) error {
 			rest, _ := strings.CutPrefix(path, "/")
@@ -80,6 +83,10 @@ func From(fsys fs.FS, useCaseSensitiveFileNames bool) FsWithSys {
 			rest, _ := strings.CutPrefix(path, "/")
 			return fsys.Remove(rest)
 		}
+		chtimes = func(path string, aTime time.Time, mTime time.Time) error {
+			rest, _ := strings.CutPrefix(path, "/")
+			return fsys.Chtimes(rest, aTime, mTime)
+		}
 	} else {
 		writeFile = func(string, string, bool) error {
 			panic("writeFile not supported")
@@ -89,6 +96,9 @@ func From(fsys fs.FS, useCaseSensitiveFileNames bool) FsWithSys {
 		}
 		remove = func(string) error {
 			panic("remove not supported")
+		}
+		chtimes = func(string, time.Time, time.Time) error {
+			panic("chtimes not supported")
 		}
 	}
 
@@ -112,6 +122,7 @@ func From(fsys fs.FS, useCaseSensitiveFileNames bool) FsWithSys {
 		writeFile:                 writeFile,
 		mkdirAll:                  mkdirAll,
 		remove:                    remove,
+		chtimes:                   chtimes,
 		fsys:                      fsys,
 	}
 }
@@ -124,6 +135,7 @@ type ioFS struct {
 	writeFile                 func(path string, content string, writeByteOrderMark bool) error
 	mkdirAll                  func(path string) error
 	remove                    func(path string) error
+	chtimes                   func(path string, aTime time.Time, mTime time.Time) error
 	fsys                      fs.FS
 }
 
@@ -161,6 +173,11 @@ func (vfs *ioFS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
 func (vfs *ioFS) Remove(path string) error {
 	_ = internal.RootLength(path) // Assert path is rooted
 	return vfs.remove(path)
+}
+
+func (vfs *ioFS) Chtimes(path string, aTime time.Time, mTime time.Time) error {
+	_ = internal.RootLength(path) // Assert path is rooted
+	return vfs.chtimes(path, aTime, mTime)
 }
 
 func (vfs *ioFS) Realpath(path string) string {

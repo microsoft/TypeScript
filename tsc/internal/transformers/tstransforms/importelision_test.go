@@ -81,7 +81,7 @@ func (p *fakeProgram) GetSourceOfProjectReferenceIfOutputIncluded(file ast.HasFi
 	return ""
 }
 
-func (p *fakeProgram) GetOutputAndProjectReference(path tspath.Path) *tsoptions.OutputDtsAndProjectReference {
+func (p *fakeProgram) GetProjectReferenceFromSource(path tspath.Path) *tsoptions.SourceOutputAndProjectReference {
 	return nil
 }
 
@@ -89,7 +89,7 @@ func (p *fakeProgram) IsSourceFromProjectReference(path tspath.Path) bool {
 	return false
 }
 
-func (p *fakeProgram) GetSourceAndProjectReference(path tspath.Path) *tsoptions.SourceAndProjectReference {
+func (p *fakeProgram) GetProjectReferenceFromOutputDts(path tspath.Path) *tsoptions.SourceOutputAndProjectReference {
 	return nil
 }
 

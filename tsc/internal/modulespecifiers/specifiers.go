@@ -203,7 +203,7 @@ func getEachFileNameOfModule(
 	cwd := host.GetCurrentDirectory()
 	importedPath := tspath.ToPath(importedFileName, cwd, host.UseCaseSensitiveFileNames())
 	var referenceRedirect string
-	outputAndReference := host.GetOutputAndProjectReference(importedPath)
+	outputAndReference := host.GetProjectReferenceFromSource(importedPath)
 	if outputAndReference != nil && outputAndReference.OutputDts != "" {
 		referenceRedirect = outputAndReference.OutputDts
 	}

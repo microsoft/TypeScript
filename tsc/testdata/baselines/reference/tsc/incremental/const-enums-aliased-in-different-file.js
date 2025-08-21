@@ -47,10 +47,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 let a = 1 /* A.ONE */;
 
 //// [/home/src/workspaces/project/a.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","fileNames":["lib.d.ts","./worker.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"8a851657dbab1650611535d934e0e8a0-export const enum AWorker {\n    ONE = 1\n}","e1ab01aa60a97dafcae2e9a0fe6467c6-export { AWorker as A } from \"./worker\";","27be335cb83f09e0543d1a6458f51e79-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}","f69fa3d8747995fb7603cfd9c694aa6b-import {A} from \"./c\"\nlet a = A.ONE"],"fileIdsList":[[4],[2],[3]],"options":{"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[5,1],[3,2],[4,3]]}
+{"version":"FakeTSVersion","root":[5],"fileNames":["lib.d.ts","./worker.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"8a851657dbab1650611535d934e0e8a0-export const enum AWorker {\n    ONE = 1\n}","e1ab01aa60a97dafcae2e9a0fe6467c6-export { AWorker as A } from \"./worker\";","27be335cb83f09e0543d1a6458f51e79-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}","f69fa3d8747995fb7603cfd9c694aa6b-import {A} from \"./c\"\nlet a = A.ONE"],"fileIdsList":[[4],[2],[3]],"options":{"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[5,1],[3,2],[4,3]]}
 //// [/home/src/workspaces/project/a.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
+  "root": [
+    {
+      "files": [
+        "./a.ts"
+      ],
+      "original": 5
+    }
+  ],
   "fileNames": [
     "lib.d.ts",
     "./worker.d.ts",
@@ -121,7 +129,7 @@ let a = 1 /* A.ONE */;
       "./b.d.ts"
     ]
   },
-  "size": 1310
+  "size": 1321
 }
 //// [/home/src/workspaces/project/c.js] *new* 
 "use strict";
@@ -153,10 +161,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 let a = 2 /* A.ONE */;
 
 //// [/home/src/workspaces/project/a.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","fileNames":["lib.d.ts","./worker.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"85732ecf91c49f8d8fff8ae96e3c1c8b-export const enum AWorker {\n    ONE = 2\n}","e1ab01aa60a97dafcae2e9a0fe6467c6-export { AWorker as A } from \"./worker\";","27be335cb83f09e0543d1a6458f51e79-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}","f69fa3d8747995fb7603cfd9c694aa6b-import {A} from \"./c\"\nlet a = A.ONE"],"fileIdsList":[[4],[2],[3]],"options":{"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[5,1],[3,2],[4,3]]}
+{"version":"FakeTSVersion","root":[5],"fileNames":["lib.d.ts","./worker.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"85732ecf91c49f8d8fff8ae96e3c1c8b-export const enum AWorker {\n    ONE = 2\n}","e1ab01aa60a97dafcae2e9a0fe6467c6-export { AWorker as A } from \"./worker\";","27be335cb83f09e0543d1a6458f51e79-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}","f69fa3d8747995fb7603cfd9c694aa6b-import {A} from \"./c\"\nlet a = A.ONE"],"fileIdsList":[[4],[2],[3]],"options":{"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[5,1],[3,2],[4,3]]}
 //// [/home/src/workspaces/project/a.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
+  "root": [
+    {
+      "files": [
+        "./a.ts"
+      ],
+      "original": 5
+    }
+  ],
   "fileNames": [
     "lib.d.ts",
     "./worker.d.ts",
@@ -227,7 +243,7 @@ let a = 2 /* A.ONE */;
       "./b.d.ts"
     ]
   },
-  "size": 1310
+  "size": 1321
 }
 //// [/home/src/workspaces/project/c.js] *modified* 
 "use strict";
@@ -262,10 +278,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 let a = 3 /* A.ONE */;
 
 //// [/home/src/workspaces/project/a.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","fileNames":["lib.d.ts","./worker.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"c1b69d4c011b97277dab4f0539048ca5-export const enum AWorker {\n    ONE = 3\n}","e1ab01aa60a97dafcae2e9a0fe6467c6-export { AWorker as A } from \"./worker\";","27be335cb83f09e0543d1a6458f51e79-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}","f69fa3d8747995fb7603cfd9c694aa6b-import {A} from \"./c\"\nlet a = A.ONE"],"fileIdsList":[[4],[2],[3]],"options":{"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[5,1],[3,2],[4,3]]}
+{"version":"FakeTSVersion","root":[5],"fileNames":["lib.d.ts","./worker.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"c1b69d4c011b97277dab4f0539048ca5-export const enum AWorker {\n    ONE = 3\n}","e1ab01aa60a97dafcae2e9a0fe6467c6-export { AWorker as A } from \"./worker\";","27be335cb83f09e0543d1a6458f51e79-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}","f69fa3d8747995fb7603cfd9c694aa6b-import {A} from \"./c\"\nlet a = A.ONE"],"fileIdsList":[[4],[2],[3]],"options":{"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[5,1],[3,2],[4,3]]}
 //// [/home/src/workspaces/project/a.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
+  "root": [
+    {
+      "files": [
+        "./a.ts"
+      ],
+      "original": 5
+    }
+  ],
   "fileNames": [
     "lib.d.ts",
     "./worker.d.ts",
@@ -336,7 +360,7 @@ let a = 3 /* A.ONE */;
       "./b.d.ts"
     ]
   },
-  "size": 1310
+  "size": 1321
 }
 //// [/home/src/workspaces/project/c.js] *modified* 
 "use strict";
@@ -365,10 +389,18 @@ ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.js] *rewrite with same content*
 //// [/home/src/workspaces/project/a.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","fileNames":["lib.d.ts","./worker.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"c1b69d4c011b97277dab4f0539048ca5-export const enum AWorker {\n    ONE = 3\n}","7e628d40719306e63d220f210cef8697-export { AWorker as A } from \"./worker\";export const randomThing = 10;",{"version":"27be335cb83f09e0543d1a6458f51e79-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}","signature":"f6d90ac6a94594899853de488fc81940-import { A } from \"./b\";\nexport { A };\n","impliedNodeFormat":1},{"version":"f69fa3d8747995fb7603cfd9c694aa6b-import {A} from \"./c\"\nlet a = A.ONE","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1}],"fileIdsList":[[4],[2],[3]],"options":{"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[5,1],[3,2],[4,3]]}
+{"version":"FakeTSVersion","root":[5],"fileNames":["lib.d.ts","./worker.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"c1b69d4c011b97277dab4f0539048ca5-export const enum AWorker {\n    ONE = 3\n}","7e628d40719306e63d220f210cef8697-export { AWorker as A } from \"./worker\";export const randomThing = 10;",{"version":"27be335cb83f09e0543d1a6458f51e79-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}","signature":"f6d90ac6a94594899853de488fc81940-import { A } from \"./b\";\nexport { A };\n","impliedNodeFormat":1},{"version":"f69fa3d8747995fb7603cfd9c694aa6b-import {A} from \"./c\"\nlet a = A.ONE","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1}],"fileIdsList":[[4],[2],[3]],"options":{"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[5,1],[3,2],[4,3]]}
 //// [/home/src/workspaces/project/a.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
+  "root": [
+    {
+      "files": [
+        "./a.ts"
+      ],
+      "original": 5
+    }
+  ],
   "fileNames": [
     "lib.d.ts",
     "./worker.d.ts",
@@ -449,7 +481,7 @@ Output::
       "./b.d.ts"
     ]
   },
-  "size": 1559
+  "size": 1570
 }
 //// [/home/src/workspaces/project/c.js] *rewrite with same content*
 
@@ -471,10 +503,18 @@ tsgo -i a.ts --tsbuildinfofile a.tsbuildinfo
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","fileNames":["lib.d.ts","./worker.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"c1b69d4c011b97277dab4f0539048ca5-export const enum AWorker {\n    ONE = 3\n}","85de628566e341d0050fe40f7319973e-export { AWorker as A } from \"./worker\";export const randomThing = 10;export const randomThing2 = 10;",{"version":"27be335cb83f09e0543d1a6458f51e79-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}","signature":"f6d90ac6a94594899853de488fc81940-import { A } from \"./b\";\nexport { A };\n","impliedNodeFormat":1},"f69fa3d8747995fb7603cfd9c694aa6b-import {A} from \"./c\"\nlet a = A.ONE"],"fileIdsList":[[4],[2],[3]],"options":{"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[5,1],[3,2],[4,3]]}
+{"version":"FakeTSVersion","root":[5],"fileNames":["lib.d.ts","./worker.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"c1b69d4c011b97277dab4f0539048ca5-export const enum AWorker {\n    ONE = 3\n}","85de628566e341d0050fe40f7319973e-export { AWorker as A } from \"./worker\";export const randomThing = 10;export const randomThing2 = 10;",{"version":"27be335cb83f09e0543d1a6458f51e79-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}","signature":"f6d90ac6a94594899853de488fc81940-import { A } from \"./b\";\nexport { A };\n","impliedNodeFormat":1},"f69fa3d8747995fb7603cfd9c694aa6b-import {A} from \"./c\"\nlet a = A.ONE"],"fileIdsList":[[4],[2],[3]],"options":{"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[5,1],[3,2],[4,3]]}
 //// [/home/src/workspaces/project/a.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
+  "root": [
+    {
+      "files": [
+        "./a.ts"
+      ],
+      "original": 5
+    }
+  ],
   "fileNames": [
     "lib.d.ts",
     "./worker.d.ts",
@@ -550,7 +590,7 @@ Output::
       "./b.d.ts"
     ]
   },
-  "size": 1496
+  "size": 1507
 }
 //// [/home/src/workspaces/project/c.js] *rewrite with same content*
 

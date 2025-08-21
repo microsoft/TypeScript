@@ -53,7 +53,7 @@ func GetOutputPathsFor(sourceFile *ast.SourceFile, options *core.CompilerOptions
 	if options.EmitDeclarationOnly != core.TSTrue && !isJsonEmittedToSameLocation {
 		paths.jsFilePath = ownOutputFilePath
 		if !ast.IsJsonSourceFile(sourceFile) {
-			paths.sourceMapFilePath = getSourceMapFilePath(paths.jsFilePath, options)
+			paths.sourceMapFilePath = GetSourceMapFilePath(paths.jsFilePath, options)
 		}
 	}
 	if forceDtsEmit || options.GetEmitDeclarations() && !isJsonFile {
@@ -72,6 +72,21 @@ func ForEachEmittedFile(host OutputPathsHost, options *core.CompilerOptions, act
 		}
 	}
 	return false
+}
+
+func GetOutputJSFileName(inputFileName string, options *core.CompilerOptions, host OutputPathsHost) string {
+	if options.EmitDeclarationOnly.IsTrue() {
+		return ""
+	}
+	outputFileName := GetOutputJSFileNameWorker(inputFileName, options, host)
+	if !tspath.FileExtensionIs(outputFileName, tspath.ExtensionJson) ||
+		tspath.ComparePaths(inputFileName, outputFileName, tspath.ComparePathsOptions{
+			CurrentDirectory:          host.GetCurrentDirectory(),
+			UseCaseSensitiveFileNames: host.UseCaseSensitiveFileNames(),
+		}) != 0 {
+		return outputFileName
+	}
+	return ""
 }
 
 func GetOutputJSFileNameWorker(inputFileName string, options *core.CompilerOptions, host OutputPathsHost) string {
@@ -176,7 +191,7 @@ func getOwnEmitOutputFilePath(fileName string, options *core.CompilerOptions, ho
 	return emitOutputFilePathWithoutExtension + extension
 }
 
-func getSourceMapFilePath(jsFilePath string, options *core.CompilerOptions) string {
+func GetSourceMapFilePath(jsFilePath string, options *core.CompilerOptions) string {
 	if options.SourceMap.IsTrue() && !options.InlineSourceMap.IsTrue() {
 		return jsFilePath + ".map"
 	}
@@ -195,7 +210,7 @@ func getDeclarationEmitExtensionForPath(fileName string) string {
 }
 
 func GetBuildInfoFileName(options *core.CompilerOptions, opts tspath.ComparePathsOptions) string {
-	if !options.IsIncremental() && !options.TscBuild.IsTrue() {
+	if !options.IsIncremental() && !options.Build.IsTrue() {
 		return ""
 	}
 	if options.TsBuildInfoFile != "" {

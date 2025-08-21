@@ -18,6 +18,6 @@ type EmitHost interface {
 	WriteFile(fileName string, text string, writeByteOrderMark bool) error
 	GetEmitModuleFormatOfFile(file ast.HasFileName) core.ModuleKind
 	GetEmitResolver() EmitResolver
-	GetOutputAndProjectReference(path tspath.Path) *tsoptions.OutputDtsAndProjectReference
+	GetProjectReferenceFromSource(path tspath.Path) *tsoptions.SourceOutputAndProjectReference
 	IsSourceFileFromExternalLibrary(file *ast.SourceFile) bool
 }

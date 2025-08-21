@@ -43,9 +43,6 @@ type emitter struct {
 }
 
 func (e *emitter) emit() {
-	if e.host.Options().ListEmittedFiles.IsTrue() {
-		e.emitResult.EmittedFiles = []string{}
-	}
 	// !!! tracing
 	e.emitJSFile(e.sourceFile, e.paths.JsFilePath(), e.paths.SourceMapFilePath())
 	e.emitDeclarationFile(e.sourceFile, e.paths.DeclarationFilePath(), e.paths.DeclarationMapPath())
@@ -268,7 +265,7 @@ func (e *emitter) printSourceFile(jsFilePath string, sourceMapFilePath string, s
 			err := e.host.WriteFile(sourceMapFilePath, sourceMap, false /*writeByteOrderMark*/)
 			if err != nil {
 				e.emitterDiagnostics.Add(ast.NewCompilerDiagnostic(diagnostics.Could_not_write_file_0_Colon_1, jsFilePath, err.Error()))
-			} else if e.emitResult.EmittedFiles != nil {
+			} else {
 				e.emitResult.EmittedFiles = append(e.emitResult.EmittedFiles, sourceMapFilePath)
 			}
 		}
@@ -292,7 +289,7 @@ func (e *emitter) printSourceFile(jsFilePath string, sourceMapFilePath string, s
 	}
 	if err != nil {
 		e.emitterDiagnostics.Add(ast.NewCompilerDiagnostic(diagnostics.Could_not_write_file_0_Colon_1, jsFilePath, err.Error()))
-	} else if e.emitResult.EmittedFiles != nil && !skippedDtsWrite {
+	} else if !skippedDtsWrite {
 		e.emitResult.EmittedFiles = append(e.emitResult.EmittedFiles, jsFilePath)
 	}
 
@@ -391,7 +388,7 @@ func (e *emitter) getSourceMappingURL(mapOptions *core.CompilerOptions, sourceMa
 
 type SourceFileMayBeEmittedHost interface {
 	Options() *core.CompilerOptions
-	GetOutputAndProjectReference(path tspath.Path) *tsoptions.OutputDtsAndProjectReference
+	GetProjectReferenceFromSource(path tspath.Path) *tsoptions.SourceOutputAndProjectReference
 	IsSourceFileFromExternalLibrary(file *ast.SourceFile) bool
 	GetCurrentDirectory() string
 	UseCaseSensitiveFileNames() bool
@@ -424,7 +421,7 @@ func sourceFileMayBeEmitted(sourceFile *ast.SourceFile, host SourceFileMayBeEmit
 
 	// Check other conditions for file emit
 	// Source files from referenced projects are not emitted
-	if host.GetOutputAndProjectReference(sourceFile.Path()) != nil {
+	if host.GetProjectReferenceFromSource(sourceFile.Path()) != nil {
 		return false
 	}
 

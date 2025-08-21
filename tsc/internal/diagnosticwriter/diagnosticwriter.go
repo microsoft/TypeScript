@@ -39,7 +39,6 @@ func FormatDiagnosticsWithColorAndContext(output io.Writer, diags []*ast.Diagnos
 	if len(diags) == 0 {
 		return
 	}
-
 	for i, diagnostic := range diags {
 		if i > 0 {
 			fmt.Fprint(output, formatOpts.NewLine)
@@ -385,4 +384,16 @@ func WriteFormatDiagnostic(output io.Writer, diagnostic *ast.Diagnostic, formatO
 	fmt.Fprintf(output, "%s TS%d: ", diagnostic.Category().Name(), diagnostic.Code())
 	WriteFlattenedDiagnosticMessage(output, diagnostic, formatOpts.NewLine)
 	fmt.Fprint(output, formatOpts.NewLine)
+}
+
+func FormatDiagnosticsStatusWithColorAndTime(output io.Writer, time string, diag *ast.Diagnostic, formatOpts *FormattingOptions) {
+	fmt.Fprint(output, "[")
+	writeWithStyleAndReset(output, time, foregroundColorEscapeGrey)
+	fmt.Fprint(output, "] ")
+	WriteFlattenedDiagnosticMessage(output, diag, formatOpts.NewLine)
+}
+
+func FormatDiagnosticsStatusAndTime(output io.Writer, time string, diag *ast.Diagnostic, formatOpts *FormattingOptions) {
+	fmt.Fprint(output, time, " - ")
+	WriteFlattenedDiagnosticMessage(output, diag, formatOpts.NewLine)
 }

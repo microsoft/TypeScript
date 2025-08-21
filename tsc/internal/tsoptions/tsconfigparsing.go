@@ -1285,9 +1285,10 @@ func parseJsonConfigFileContentWorker(
 	}
 
 	getProjectReferences := func(basePath string) []*core.ProjectReference {
-		var projectReferences []*core.ProjectReference = []*core.ProjectReference{}
+		var projectReferences []*core.ProjectReference
 		newReferencesOfRaw := getPropFromRaw("references", func(element any) bool { return reflect.TypeOf(element) == orderedMapType }, "object")
 		if newReferencesOfRaw.sliceValue != nil {
+			projectReferences = []*core.ProjectReference{}
 			for _, reference := range newReferencesOfRaw.sliceValue {
 				for _, ref := range parseProjectReference(reference) {
 					if reflect.TypeOf(ref.Path).Kind() != reflect.String {

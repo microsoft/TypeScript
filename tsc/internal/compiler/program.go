@@ -117,9 +117,9 @@ func (p *Program) GetSourceOfProjectReferenceIfOutputIncluded(file ast.HasFileNa
 	return file.FileName()
 }
 
-// GetOutputAndProjectReference implements checker.Program.
-func (p *Program) GetOutputAndProjectReference(path tspath.Path) *tsoptions.OutputDtsAndProjectReference {
-	return p.projectReferenceFileMapper.getOutputAndProjectReference(path)
+// GetProjectReferenceFromSource implements checker.Program.
+func (p *Program) GetProjectReferenceFromSource(path tspath.Path) *tsoptions.SourceOutputAndProjectReference {
+	return p.projectReferenceFileMapper.getProjectReferenceFromSource(path)
 }
 
 // IsSourceFromProjectReference implements checker.Program.
@@ -127,8 +127,8 @@ func (p *Program) IsSourceFromProjectReference(path tspath.Path) bool {
 	return p.projectReferenceFileMapper.isSourceFromProjectReference(path)
 }
 
-func (p *Program) GetSourceAndProjectReference(path tspath.Path) *tsoptions.SourceAndProjectReference {
-	return p.projectReferenceFileMapper.getSourceAndProjectReference(path)
+func (p *Program) GetProjectReferenceFromOutputDts(path tspath.Path) *tsoptions.SourceOutputAndProjectReference {
+	return p.projectReferenceFileMapper.getProjectReferenceFromOutputDts(path)
 }
 
 func (p *Program) GetResolvedProjectReferenceFor(path tspath.Path) (*tsoptions.ParsedCommandLine, bool) {
@@ -136,7 +136,8 @@ func (p *Program) GetResolvedProjectReferenceFor(path tspath.Path) (*tsoptions.P
 }
 
 func (p *Program) GetRedirectForResolution(file ast.HasFileName) *tsoptions.ParsedCommandLine {
-	return p.projectReferenceFileMapper.getRedirectForResolution(file)
+	redirect, _ := p.projectReferenceFileMapper.getRedirectForResolution(file)
+	return redirect
 }
 
 func (p *Program) GetParseFileRedirect(fileName string) string {
@@ -1316,11 +1317,10 @@ func (p *Program) CommonSourceDirectory() string {
 }
 
 type WriteFileData struct {
-	SourceMapUrlPos  int
-	BuildInfo        any
-	Diagnostics      []*ast.Diagnostic
-	DiffersOnlyInMap bool
-	SkippedDtsWrite  bool
+	SourceMapUrlPos int
+	BuildInfo       any
+	Diagnostics     []*ast.Diagnostic
+	SkippedDtsWrite bool
 }
 
 type EmitOptions struct {
@@ -1412,9 +1412,7 @@ func CombineEmitResults(results []*EmitResult) *EmitResult {
 			result.EmitSkipped = true
 		}
 		result.Diagnostics = append(result.Diagnostics, emitResult.Diagnostics...)
-		if emitResult.EmittedFiles != nil {
-			result.EmittedFiles = append(result.EmittedFiles, emitResult.EmittedFiles...)
-		}
+		result.EmittedFiles = append(result.EmittedFiles, emitResult.EmittedFiles...)
 		if emitResult.SourceMaps != nil {
 			result.SourceMaps = append(result.SourceMaps, emitResult.SourceMaps...)
 		}

@@ -52,7 +52,7 @@ type ModuleSpecifierGenerationHost interface {
 	UseCaseSensitiveFileNames() bool
 	GetCurrentDirectory() string
 
-	GetOutputAndProjectReference(path tspath.Path) *tsoptions.OutputDtsAndProjectReference
+	GetProjectReferenceFromSource(path tspath.Path) *tsoptions.SourceOutputAndProjectReference
 	GetRedirectTargets(path tspath.Path) []string
 	GetSourceOfProjectReferenceIfOutputIncluded(file ast.HasFileName) string
 

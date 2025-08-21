@@ -537,6 +537,20 @@ func (m *MapFS) Remove(path string) error {
 	return m.remove(path)
 }
 
+func (m *MapFS) Chtimes(path string, aTime time.Time, mTime time.Time) error {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	canonical := m.getCanonicalPath(path)
+	canonicalString := string(canonical)
+	fileInfo := m.m[canonicalString]
+	if fileInfo == nil {
+		// file does not exist
+		return fs.ErrNotExist
+	}
+	fileInfo.ModTime = mTime
+	return nil
+}
+
 func (m *MapFS) GetTargetOfSymlink(path string) (string, bool) {
 	path, _ = strings.CutPrefix(path, "/")
 	m.mu.RLock()

@@ -540,7 +540,7 @@ type Program interface {
 	SourceFileMayBeEmitted(sourceFile *ast.SourceFile, forceDtsEmit bool) bool
 	IsSourceFromProjectReference(path tspath.Path) bool
 	IsSourceFileDefaultLibrary(path tspath.Path) bool
-	GetSourceAndProjectReference(path tspath.Path) *tsoptions.SourceAndProjectReference
+	GetProjectReferenceFromOutputDts(path tspath.Path) *tsoptions.SourceOutputAndProjectReference
 	GetRedirectForResolution(file ast.HasFileName) *tsoptions.ParsedCommandLine
 	CommonSourceDirectory() string
 }
@@ -6483,7 +6483,7 @@ func (c *Checker) checkAliasSymbol(node *ast.Node) {
 		}
 		if c.compilerOptions.VerbatimModuleSyntax.IsTrue() && !ast.IsTypeOnlyImportOrExportDeclaration(node) && node.Flags&ast.NodeFlagsAmbient == 0 && targetFlags&ast.SymbolFlagsConstEnum != 0 {
 			constEnumDeclaration := target.ValueDeclaration
-			redirect := c.program.GetSourceAndProjectReference(ast.GetSourceFileOfNode(constEnumDeclaration).Path())
+			redirect := c.program.GetProjectReferenceFromOutputDts(ast.GetSourceFileOfNode(constEnumDeclaration).Path())
 			if constEnumDeclaration.Flags&ast.NodeFlagsAmbient != 0 && (redirect == nil || !redirect.Resolved.CompilerOptions().ShouldPreserveConstEnums()) {
 				c.error(node, diagnostics.Cannot_access_ambient_const_enums_when_0_is_enabled, c.getIsolatedModulesLikeFlagName())
 			}
@@ -7204,7 +7204,7 @@ func (c *Checker) checkConstEnumAccess(node *ast.Node, t *Type) {
 	if c.compilerOptions.IsolatedModules.IsTrue() || c.compilerOptions.VerbatimModuleSyntax.IsTrue() && ok && c.resolveName(node, ast.GetFirstIdentifier(node).Text(), ast.SymbolFlagsAlias, nil, false, true) == nil {
 		debug.Assert(t.symbol.Flags&ast.SymbolFlagsConstEnum != 0)
 		constEnumDeclaration := t.symbol.ValueDeclaration
-		redirect := c.program.GetSourceAndProjectReference(ast.GetSourceFileOfNode(constEnumDeclaration).Path())
+		redirect := c.program.GetProjectReferenceFromOutputDts(ast.GetSourceFileOfNode(constEnumDeclaration).Path())
 		if constEnumDeclaration.Flags&ast.NodeFlagsAmbient != 0 && !ast.IsValidTypeOnlyAliasUseSite(node) && (redirect == nil || !redirect.Resolved.CompilerOptions().ShouldPreserveConstEnums()) {
 			c.error(node, diagnostics.Cannot_access_ambient_const_enums_when_0_is_enabled, c.getIsolatedModulesLikeFlagName())
 		}
@@ -14636,7 +14636,7 @@ func (c *Checker) resolveExternalModule(location *ast.Node, moduleReference stri
 							}
 
 							var message *diagnostics.Message
-							if overrideHost != nil && overrideHost.Kind == ast.KindImportDeclaration && overrideHost.AsImportDeclaration().ImportClause.IsTypeOnly() {
+							if overrideHost != nil && overrideHost.Kind == ast.KindImportDeclaration && overrideHost.AsImportDeclaration().ImportClause != nil && overrideHost.AsImportDeclaration().ImportClause.IsTypeOnly() {
 								message = diagnostics.Type_only_import_of_an_ECMAScript_module_from_a_CommonJS_module_must_have_a_resolution_mode_attribute
 							} else if overrideHost != nil && overrideHost.Kind == ast.KindImportType {
 								message = diagnostics.Type_import_of_an_ECMAScript_module_from_a_CommonJS_module_must_have_a_resolution_mode_attribute
@@ -14689,7 +14689,7 @@ func (c *Checker) resolveExternalModule(location *ast.Node, moduleReference stri
 	if moduleNotFoundError != nil {
 		// See if this was possibly a projectReference redirect
 		if resolvedModule.IsResolved() {
-			redirect := c.program.GetOutputAndProjectReference(tspath.ToPath(resolvedModule.ResolvedFileName, c.program.GetCurrentDirectory(), c.program.UseCaseSensitiveFileNames()))
+			redirect := c.program.GetProjectReferenceFromSource(tspath.ToPath(resolvedModule.ResolvedFileName, c.program.GetCurrentDirectory(), c.program.UseCaseSensitiveFileNames()))
 			if redirect != nil && redirect.OutputDts != "" {
 				c.error(
 					errorNode,

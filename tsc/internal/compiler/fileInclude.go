@@ -8,6 +8,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/module"
+	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
@@ -57,7 +58,11 @@ type referenceFileLocation struct {
 
 func (r *referenceFileLocation) text() string {
 	if r.node != nil {
-		return r.node.Text()
+		if !ast.NodeIsSynthesized(r.node) {
+			return r.file.Text()[scanner.SkipTrivia(r.file.Text(), r.node.Loc.Pos()):r.node.End()]
+		} else {
+			return fmt.Sprintf(`"%s"`, r.node.Text())
+		}
 	} else {
 		return r.file.Text()[r.ref.Pos():r.ref.End()]
 	}

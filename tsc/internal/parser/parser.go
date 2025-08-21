@@ -6380,7 +6380,7 @@ func (p *Parser) processPragmasIntoFields(context *ast.SourceFile) {
 			case typesOk:
 				var parsed core.ResolutionMode
 				if resolutionModeOk {
-					parsed = parseResolutionMode(resolutionMode.Value, types.Pos(), types.End() /*, reportDiagnostic*/)
+					parsed = parseResolutionMode(resolutionMode.Value, resolutionMode.Pos(), resolutionMode.End() /*, reportDiagnostic*/)
 				}
 				context.TypeReferenceDirectives = append(context.TypeReferenceDirectives, &ast.FileReference{
 					TextRange:      types.TextRange,
@@ -6390,13 +6390,13 @@ func (p *Parser) processPragmasIntoFields(context *ast.SourceFile) {
 				})
 			case libOk:
 				context.LibReferenceDirectives = append(context.LibReferenceDirectives, &ast.FileReference{
-					TextRange: types.TextRange,
+					TextRange: lib.TextRange,
 					FileName:  lib.Value,
 					Preserve:  preserveOk && preserve.Value == "true",
 				})
 			case pathOk:
 				context.ReferencedFiles = append(context.ReferencedFiles, &ast.FileReference{
-					TextRange: types.TextRange,
+					TextRange: path.TextRange,
 					FileName:  path.Value,
 					Preserve:  preserveOk && preserve.Value == "true",
 				})

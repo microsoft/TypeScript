@@ -12,7 +12,7 @@ func (s *SyncSet[T]) Has(key T) bool {
 }
 
 func (s *SyncSet[T]) Add(key T) {
-	s.m.Store(key, struct{}{})
+	s.AddIfAbsent(key)
 }
 
 // AddIfAbsent adds the key to the set if it is not already present

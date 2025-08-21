@@ -8,7 +8,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
-var libMap = collections.NewOrderedMapFromList([]collections.MapEntry[string, any]{
+var LibMap = collections.NewOrderedMapFromList([]collections.MapEntry[string, any]{
 	// JavaScript only
 	{Key: "es5", Value: "lib.es5.d.ts"},
 	{Key: "es6", Value: "lib.es2015.d.ts"},
@@ -113,8 +113,8 @@ var libMap = collections.NewOrderedMapFromList([]collections.MapEntry[string, an
 })
 
 var (
-	Libs        = slices.Collect(libMap.Keys())
-	LibFilesSet = collections.NewSetFromItems(core.Map(slices.Collect(libMap.Values()), func(s any) string { return s.(string) })...)
+	Libs        = slices.Collect(LibMap.Keys())
+	LibFilesSet = collections.NewSetFromItems(core.Map(slices.Collect(LibMap.Values()), func(s any) string { return s.(string) })...)
 )
 
 func GetLibFileName(libName string) (string, bool) {
@@ -123,7 +123,7 @@ func GetLibFileName(libName string) (string, bool) {
 	if LibFilesSet.Has(libName) {
 		return libName, true
 	}
-	lib, ok := libMap.Get(libName)
+	lib, ok := LibMap.Get(libName)
 	if !ok {
 		return "", false
 	}

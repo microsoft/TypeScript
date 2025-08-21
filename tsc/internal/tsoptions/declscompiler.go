@@ -10,8 +10,8 @@ import (
 
 var OptionsDeclarations = slices.Concat(commonOptionsWithBuild, optionsForCompiler)
 
-var optionsForCompiler = []*CommandLineOption{
-	//******* commandOptionsWithoutBuild *******
+var commonOptionsWithBuild = []*CommandLineOption{
+	//******* commonOptionsWithBuild *******
 	{
 		Name:                     "help",
 		ShortName:                "h",
@@ -235,8 +235,8 @@ var optionsForCompiler = []*CommandLineOption{
 	},
 }
 
-var commonOptionsWithBuild = []*CommandLineOption{
-	//******* commandOptionsWithoutBuild *******
+var optionsForCompiler = []*CommandLineOption{
+	//******* compilerOptions not common with --build *******
 
 	// CommandLine only options
 	{

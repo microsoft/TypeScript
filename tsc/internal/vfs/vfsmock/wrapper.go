@@ -11,6 +11,7 @@ func Wrap(fs vfs.FS) *FSMock {
 		ReadFileFunc:                  fs.ReadFile,
 		RealpathFunc:                  fs.Realpath,
 		RemoveFunc:                    fs.Remove,
+		ChtimesFunc:                   fs.Chtimes,
 		StatFunc:                      fs.Stat,
 		UseCaseSensitiveFileNamesFunc: fs.UseCaseSensitiveFileNames,
 		WalkDirFunc:                   fs.WalkDir,

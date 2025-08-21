@@ -3,6 +3,7 @@ package harnessutil
 import (
 	"context"
 	"fmt"
+	"io"
 	"io/fs"
 	"maps"
 	"os"
@@ -530,10 +531,14 @@ func NewTracerForBaselining(opts tspath.ComparePathsOptions, builder *strings.Bu
 }
 
 func (t *TracerForBaselining) Trace(msg string) {
-	fmt.Fprintln(t.builder, t.sanitizeTrace(msg))
+	t.TraceWithWriter(t.builder, msg, true)
 }
 
-func (t *TracerForBaselining) sanitizeTrace(msg string) string {
+func (t *TracerForBaselining) TraceWithWriter(w io.Writer, msg string, usePackageJsonCache bool) {
+	fmt.Fprintln(w, t.sanitizeTrace(msg, usePackageJsonCache))
+}
+
+func (t *TracerForBaselining) sanitizeTrace(msg string, usePackageJsonCache bool) string {
 	// Version
 	if str := strings.Replace(msg, "'"+core.Version()+"'", "'"+FakeTSVersion+"'", 1); str != msg {
 		return str
@@ -541,42 +546,48 @@ func (t *TracerForBaselining) sanitizeTrace(msg string) string {
 	// caching of fs in trace to be replaces with non caching version
 	if str := strings.TrimSuffix(msg, "' does not exist according to earlier cached lookups."); str != msg {
 		file := strings.TrimPrefix(str, "File '")
-		filePath := tspath.ToPath(file, t.opts.CurrentDirectory, t.opts.UseCaseSensitiveFileNames)
-		if _, has := t.packageJsonCache[filePath]; has {
-			return msg
-		} else {
-			t.packageJsonCache[filePath] = false
-			return fmt.Sprintf("File '%s' does not exist.", file)
+		if usePackageJsonCache {
+			filePath := tspath.ToPath(file, t.opts.CurrentDirectory, t.opts.UseCaseSensitiveFileNames)
+			if _, has := t.packageJsonCache[filePath]; has {
+				return msg
+			} else {
+				t.packageJsonCache[filePath] = false
+			}
 		}
-	}
-	if str := strings.TrimSuffix(msg, "' does not exist."); str != msg {
-		file := strings.TrimPrefix(str, "File '")
-		filePath := tspath.ToPath(file, t.opts.CurrentDirectory, t.opts.UseCaseSensitiveFileNames)
-		if _, has := t.packageJsonCache[filePath]; !has {
-			t.packageJsonCache[filePath] = false
-			return msg
-		} else {
-			return fmt.Sprintf("File '%s' does not exist according to earlier cached lookups.", file)
-		}
+		return fmt.Sprintf("File '%s' does not exist.", file)
 	}
 	if str := strings.TrimSuffix(msg, "' exists according to earlier cached lookups."); str != msg {
 		file := strings.TrimPrefix(str, "File '")
-		filePath := tspath.ToPath(file, t.opts.CurrentDirectory, t.opts.UseCaseSensitiveFileNames)
-		if _, has := t.packageJsonCache[filePath]; has {
-			return msg
-		} else {
-			t.packageJsonCache[filePath] = true
-			return fmt.Sprintf("Found 'package.json' at '%s'.", file)
+		if usePackageJsonCache {
+			filePath := tspath.ToPath(file, t.opts.CurrentDirectory, t.opts.UseCaseSensitiveFileNames)
+			if _, has := t.packageJsonCache[filePath]; has {
+				return msg
+			} else {
+				t.packageJsonCache[filePath] = true
+			}
 		}
+		return fmt.Sprintf("Found 'package.json' at '%s'.", file)
 	}
-	if str := strings.TrimPrefix(msg, "Found 'package.json' at '"); str != msg {
-		file := strings.TrimSuffix(str, "'.")
-		filePath := tspath.ToPath(file, t.opts.CurrentDirectory, t.opts.UseCaseSensitiveFileNames)
-		if _, has := t.packageJsonCache[filePath]; !has {
-			t.packageJsonCache[filePath] = true
-			return msg
-		} else {
-			return fmt.Sprintf("File '%s' exists according to earlier cached lookups.", file)
+	if usePackageJsonCache {
+		if str := strings.TrimSuffix(msg, "' does not exist."); str != msg {
+			file := strings.TrimPrefix(str, "File '")
+			filePath := tspath.ToPath(file, t.opts.CurrentDirectory, t.opts.UseCaseSensitiveFileNames)
+			if _, has := t.packageJsonCache[filePath]; !has {
+				t.packageJsonCache[filePath] = false
+				return msg
+			} else {
+				return fmt.Sprintf("File '%s' does not exist according to earlier cached lookups.", file)
+			}
+		}
+		if str := strings.TrimPrefix(msg, "Found 'package.json' at '"); str != msg {
+			file := strings.TrimSuffix(str, "'.")
+			filePath := tspath.ToPath(file, t.opts.CurrentDirectory, t.opts.UseCaseSensitiveFileNames)
+			if _, has := t.packageJsonCache[filePath]; !has {
+				t.packageJsonCache[filePath] = true
+				return msg
+			} else {
+				return fmt.Sprintf("File '%s' exists according to earlier cached lookups.", file)
+			}
 		}
 	}
 	return msg

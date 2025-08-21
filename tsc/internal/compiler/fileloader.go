@@ -143,7 +143,10 @@ func processAllProgramFiles(
 
 	filesByPath := make(map[tspath.Path]*ast.SourceFile, totalFileCount)
 	loader.includeProcessor.fileIncludeReasons = make(map[tspath.Path][]*fileIncludeReason, totalFileCount)
-	outputFileToProjectReferenceSource := make(map[tspath.Path]string, totalFileCount)
+	var outputFileToProjectReferenceSource map[tspath.Path]string
+	if !opts.canUseProjectReferenceSource() {
+		outputFileToProjectReferenceSource = make(map[tspath.Path]string, totalFileCount)
+	}
 	resolvedModules := make(map[tspath.Path]module.ModeAwareCache[*module.ResolvedModule], totalFileCount+1)
 	typeResolutionsInFile := make(map[tspath.Path]module.ModeAwareCache[*module.ResolvedTypeReferenceDirective], totalFileCount)
 	sourceFileMetaDatas := make(map[tspath.Path]ast.SourceFileMetaData, totalFileCount)
@@ -454,9 +457,9 @@ func (p *fileLoader) resolveTypeReferenceDirectives(t *parseTask) {
 	typeResolutionsInFile := make(module.ModeAwareCache[*module.ResolvedTypeReferenceDirective], len(file.TypeReferenceDirectives))
 	var typeResolutionsTrace []string
 	for index, ref := range file.TypeReferenceDirectives {
-		redirect := p.projectReferenceFileMapper.getRedirectForResolution(file)
+		redirect, fileName := p.projectReferenceFileMapper.getRedirectForResolution(file)
 		resolutionMode := getModeForTypeReferenceDirectiveInFile(ref, file, meta, module.GetCompilerOptionsWithRedirect(p.opts.Config.CompilerOptions(), redirect))
-		resolved, trace := p.resolver.ResolveTypeReferenceDirective(ref.FileName, file.FileName(), resolutionMode, redirect)
+		resolved, trace := p.resolver.ResolveTypeReferenceDirective(ref.FileName, fileName, resolutionMode, redirect)
 		typeResolutionsInFile[module.ModeAwareCacheKey{Name: ref.FileName, Mode: resolutionMode}] = resolved
 		includeReason := &fileIncludeReason{
 			kind: fileIncludeKindTypeReferenceDirective,
@@ -498,7 +501,7 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 	isJavaScriptFile := ast.IsSourceFileJS(file)
 	isExternalModuleFile := ast.IsExternalModule(file)
 
-	redirect := p.projectReferenceFileMapper.getRedirectForResolution(file)
+	redirect, fileName := p.projectReferenceFileMapper.getRedirectForResolution(file)
 	optionsForFile := module.GetCompilerOptionsWithRedirect(p.opts.Config.CompilerOptions(), redirect)
 	if isJavaScriptFile || (!file.IsDeclarationFile && (optionsForFile.GetIsolatedModules() || isExternalModuleFile)) {
 		if optionsForFile.ImportHelpers.IsTrue() {
@@ -539,7 +542,7 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 			}
 
 			mode := getModeForUsageLocation(file.FileName(), meta, entry, optionsForFile)
-			resolvedModule, trace := p.resolver.ResolveModuleName(moduleName, file.FileName(), mode, redirect)
+			resolvedModule, trace := p.resolver.ResolveModuleName(moduleName, fileName, mode, redirect)
 			resolutionsInFile[module.ModeAwareCacheKey{Name: moduleName, Mode: mode}] = resolvedModule
 			resolutionsTrace = append(resolutionsTrace, trace...)
 
@@ -550,7 +553,7 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 			resolvedFileName := resolvedModule.ResolvedFileName
 			isFromNodeModulesSearch := resolvedModule.IsExternalLibraryImport
 			// Don't treat redirected files as JS files.
-			isJsFile := !tspath.FileExtensionIsOneOf(resolvedFileName, tspath.SupportedTSExtensionsWithJsonFlat) && p.projectReferenceFileMapper.getRedirectForResolution(ast.NewHasFileName(resolvedFileName, p.toPath(resolvedFileName))) == nil
+			isJsFile := !tspath.FileExtensionIsOneOf(resolvedFileName, tspath.SupportedTSExtensionsWithJsonFlat) && p.projectReferenceFileMapper.getRedirectParsedCommandLineForResolution(ast.NewHasFileName(resolvedFileName, p.toPath(resolvedFileName))) == nil
 			isJsFileFromNodeModules := isFromNodeModulesSearch && isJsFile && strings.Contains(resolvedFileName, "/node_modules/")
 
 			// add file to program only if:
@@ -610,19 +613,19 @@ func (p *fileLoader) pathForLibFile(name string) *LibFile {
 
 	path := tspath.CombinePaths(p.defaultLibraryPath, name)
 	replaced := false
-	if p.opts.Config.CompilerOptions().LibReplacement.IsTrue() {
+	if p.opts.Config.CompilerOptions().LibReplacement.IsTrue() && name != "lib.d.ts" {
 		libraryName := getLibraryNameFromLibFileName(name)
 		resolveFrom := getInferredLibraryNameResolveFrom(p.opts.Config.CompilerOptions(), p.opts.Host.GetCurrentDirectory(), name)
 		resolution, trace := p.resolver.ResolveModuleName(libraryName, resolveFrom, core.ModuleKindCommonJS, nil)
 		if resolution.IsResolved() {
 			path = resolution.ResolvedFileName
 			replaced = true
-			p.pathForLibFileResolutions.LoadOrStore(p.toPath(resolveFrom), &libResolution{
-				libraryName: libraryName,
-				resolution:  resolution,
-				trace:       trace,
-			})
 		}
+		p.pathForLibFileResolutions.LoadOrStore(p.toPath(resolveFrom), &libResolution{
+			libraryName: libraryName,
+			resolution:  resolution,
+			trace:       trace,
+		})
 	}
 
 	libPath, _ := p.pathForLibFileCache.LoadOrStore(name, &LibFile{name, path, replaced})

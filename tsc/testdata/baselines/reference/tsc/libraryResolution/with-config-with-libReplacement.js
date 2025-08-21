@@ -1,0 +1,433 @@
+currentDirectory::/home/src/workspace/projects
+useCaseSensitiveFileNames::true
+Input::
+//// [/home/src/tslibs/TS/Lib/lib.dom.d.ts] *new* 
+interface DOMInterface { }
+//// [/home/src/tslibs/TS/Lib/lib.scripthost.d.ts] *new* 
+interface ScriptHostInterface { }
+//// [/home/src/tslibs/TS/Lib/lib.webworker.d.ts] *new* 
+interface WebWorkerInterface { }
+//// [/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts] *new* 
+interface DOMInterface { }
+//// [/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts] *new* 
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+interface SymbolConstructor {
+    (desc?: string | number): symbol;
+    for(name: string): symbol;
+    readonly toStringTag: symbol;
+}
+declare var Symbol: SymbolConstructor;
+interface Symbol {
+    readonly [Symbol.toStringTag]: string;
+}
+declare const console: { log(msg: any): void; };
+//// [/home/src/workspace/projects/node_modules/@typescript/lib-esnext/index.d.ts] *new* 
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+interface SymbolConstructor {
+    (desc?: string | number): symbol;
+    for(name: string): symbol;
+    readonly toStringTag: symbol;
+}
+declare var Symbol: SymbolConstructor;
+interface Symbol {
+    readonly [Symbol.toStringTag]: string;
+}
+declare const console: { log(msg: any): void; };
+//// [/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts] *new* 
+interface ScriptHostInterface { }
+//// [/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts] *new* 
+interface WebWorkerInterface { }
+//// [/home/src/workspace/projects/node_modules/@typescript/unlreated/index.d.ts] *new* 
+export const unrelated = 10;
+//// [/home/src/workspace/projects/project1/core.d.ts] *new* 
+export const core = 10;
+//// [/home/src/workspace/projects/project1/file.ts] *new* 
+export const file = 10;
+//// [/home/src/workspace/projects/project1/file2.ts] *new* 
+/// <reference lib="webworker"/>
+/// <reference lib="scripthost"/>
+/// <reference lib="es5"/>
+//// [/home/src/workspace/projects/project1/index.ts] *new* 
+export const x = "type1";
+//// [/home/src/workspace/projects/project1/tsconfig.json] *new* 
+{
+    "compilerOptions": {
+        "composite": true,
+        "typeRoots": ["./typeroot1"],
+        "lib": ["es5", "dom"],
+        "traceResolution": true,
+        "libReplacement": true
+    }
+}
+//// [/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts] *new* 
+export type TheNum = "type1";
+//// [/home/src/workspace/projects/project1/utils.d.ts] *new* 
+export const y = 10;
+//// [/home/src/workspace/projects/project2/index.ts] *new* 
+export const y = 10
+//// [/home/src/workspace/projects/project2/tsconfig.json] *new* 
+{
+    "compilerOptions": {
+        "composite": true,
+        "lib": ["es5", "dom"],
+        "traceResolution": true,
+        "libReplacement": true
+    }
+}
+//// [/home/src/workspace/projects/project2/utils.d.ts] *new* 
+export const y = 10;
+//// [/home/src/workspace/projects/project3/index.ts] *new* 
+export const z = 10
+//// [/home/src/workspace/projects/project3/tsconfig.json] *new* 
+{
+    "compilerOptions": {
+        "composite": true,
+        "lib": ["es5", "dom"],
+        "traceResolution": true,
+        "libReplacement": true
+    }
+}
+//// [/home/src/workspace/projects/project3/utils.d.ts] *new* 
+export const y = 10;
+//// [/home/src/workspace/projects/project4/index.ts] *new* 
+export const z = 10
+//// [/home/src/workspace/projects/project4/tsconfig.json] *new* 
+{
+    "compilerOptions": {
+        "composite": true,
+        "lib": ["esnext", "dom", "webworker"],
+        "traceResolution": true,
+        "libReplacement": true
+    }
+}
+//// [/home/src/workspace/projects/project4/utils.d.ts] *new* 
+export const y = 10;
+
+tsgo -p project1 --explainFiles
+ExitStatus:: Success
+Output::
+======== Resolving type reference directive 'sometype', containing file '/home/src/workspace/projects/project1/__inferred type names__.ts', root directory '/home/src/workspace/projects/project1/typeroot1'. ========
+Resolving with primary search path '/home/src/workspace/projects/project1/typeroot1'.
+File '/home/src/workspace/projects/project1/typeroot1/sometype.d.ts' does not exist.
+File '/home/src/workspace/projects/project1/typeroot1/sometype/package.json' does not exist.
+File '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts' exists - use it as a name resolution result.
+Resolving real path for '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts', result '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts'.
+======== Type reference directive 'sometype' was successfully resolved to '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts', primary: true. ========
+======== Resolving module '@typescript/lib-dom' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/home/src/workspace/projects/project1/package.json' does not exist.
+File '/home/src/workspace/projects/package.json' does not exist.
+File '/home/src/workspace/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
+File '/package.json' does not exist.
+Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/workspace/projects/project1/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom'
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.ts' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.tsx' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.d.ts' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.ts' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.tsx' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts' exists - use it as a name resolution result.
+Resolving real path for '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts', result '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts'.
+======== Module name '@typescript/lib-dom' was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts'. ========
+======== Resolving module '@typescript/lib-es5' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/home/src/workspace/projects/project1/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module '@typescript/lib-es5' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/workspace/projects/project1/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es5'
+File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-es5.ts' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-es5.tsx' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-es5.d.ts' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.ts' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.tsx' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts' exists - use it as a name resolution result.
+Resolving real path for '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts', result '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'.
+======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
+======== Resolving module '@typescript/lib-scripthost' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/home/src/workspace/projects/project1/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module '@typescript/lib-scripthost' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/workspace/projects/project1/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-scripthost'
+File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/package.json' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost.ts' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost.tsx' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost.d.ts' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.ts' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.tsx' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts' exists - use it as a name resolution result.
+Resolving real path for '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts', result '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts'.
+======== Module name '@typescript/lib-scripthost' was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts'. ========
+======== Resolving module '@typescript/lib-webworker' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/home/src/workspace/projects/project1/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/workspace/projects/project1/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-webworker'
+File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker.ts' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker.tsx' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker.d.ts' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.ts' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.tsx' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts' exists - use it as a name resolution result.
+Resolving real path for '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts', result '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts'.
+======== Module name '@typescript/lib-webworker' was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts'. ========
+node_modules/@typescript/lib-webworker/index.d.ts
+   Library referenced via 'webworker' from file 'project1/file2.ts'
+node_modules/@typescript/lib-scripthost/index.d.ts
+   Library referenced via 'scripthost' from file 'project1/file2.ts'
+node_modules/@typescript/lib-es5/index.d.ts
+   Library referenced via 'es5' from file 'project1/file2.ts'
+   Library 'lib.es5.d.ts' specified in compilerOptions
+node_modules/@typescript/lib-dom/index.d.ts
+   Library 'lib.dom.d.ts' specified in compilerOptions
+project1/core.d.ts
+   Matched by default include pattern '**/*'
+project1/file.ts
+   Matched by default include pattern '**/*'
+project1/file2.ts
+   Matched by default include pattern '**/*'
+project1/index.ts
+   Matched by default include pattern '**/*'
+project1/utils.d.ts
+   Matched by default include pattern '**/*'
+project1/typeroot1/sometype/index.d.ts
+   Matched by default include pattern '**/*'
+   Entry point for implicit type library 'sometype'
+//// [/home/src/workspace/projects/project1/file.d.ts] *new* 
+export declare const file = 10;
+
+//// [/home/src/workspace/projects/project1/file.js] *new* 
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.file = void 0;
+exports.file = 10;
+
+//// [/home/src/workspace/projects/project1/file2.d.ts] *new* 
+
+//// [/home/src/workspace/projects/project1/file2.js] *new* 
+/// <reference lib="webworker"/>
+/// <reference lib="scripthost"/>
+/// <reference lib="es5"/>
+
+//// [/home/src/workspace/projects/project1/index.d.ts] *new* 
+export declare const x = "type1";
+
+//// [/home/src/workspace/projects/project1/index.js] *new* 
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+exports.x = "type1";
+
+//// [/home/src/workspace/projects/project1/tsconfig.tsbuildinfo] *new* 
+{"version":"FakeTSVersion","root":[[5,10]],"fileNames":["../node_modules/@typescript/lib-webworker/index.d.ts","../node_modules/@typescript/lib-scripthost/index.d.ts","../node_modules/@typescript/lib-es5/index.d.ts","../node_modules/@typescript/lib-dom/index.d.ts","./core.d.ts","./file.ts","./file2.ts","./index.ts","./utils.d.ts","./typeroot1/sometype/index.d.ts"],"fileInfos":[{"version":"95c5e18b7871b756fb3bb843e03aa05d-interface WebWorkerInterface { }","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"2fa71959819338965a3c6b2122d95c96-interface ScriptHostInterface { }","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"d9b7428535134fcb21dad91303dc6311-interface DOMInterface { }","affectsGlobalScope":true,"impliedNodeFormat":1},"a1f9b824326bab2c3c8f13eccf69f182-export const core = 10;",{"version":"69c4ea0c9ff13ab7fc078607d9363624-export const file = 10;","signature":"a224c1b0cbd2f5fe611e588db48243cb-export declare const file = 10;\n","impliedNodeFormat":1},{"version":"76f8c505d1aaf1122ce1da0807c21477-/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>","signature":"99aa06d3014798d86001c324468d497f-","impliedNodeFormat":1},{"version":"aeb695aed936d7539a32fc3cd25af558-export const x = \"type1\";","signature":"e2f8d12de2edba256e37cf4a656ac52d-export declare const x = \"type1\";\n","impliedNodeFormat":1},"4e905e76b648aae5f92e8bd5418e19b3-export const y = 10;","6bf5e0a71dae6fccf68b93fbbb73f178-export type TheNum = \"type1\";"],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts"}
+//// [/home/src/workspace/projects/project1/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
+{
+  "version": "FakeTSVersion",
+  "root": [
+    {
+      "files": [
+        "./core.d.ts",
+        "./file.ts",
+        "./file2.ts",
+        "./index.ts",
+        "./utils.d.ts",
+        "./typeroot1/sometype/index.d.ts"
+      ],
+      "original": [
+        5,
+        10
+      ]
+    }
+  ],
+  "fileNames": [
+    "../node_modules/@typescript/lib-webworker/index.d.ts",
+    "../node_modules/@typescript/lib-scripthost/index.d.ts",
+    "../node_modules/@typescript/lib-es5/index.d.ts",
+    "../node_modules/@typescript/lib-dom/index.d.ts",
+    "./core.d.ts",
+    "./file.ts",
+    "./file2.ts",
+    "./index.ts",
+    "./utils.d.ts",
+    "./typeroot1/sometype/index.d.ts"
+  ],
+  "fileInfos": [
+    {
+      "fileName": "../node_modules/@typescript/lib-webworker/index.d.ts",
+      "version": "95c5e18b7871b756fb3bb843e03aa05d-interface WebWorkerInterface { }",
+      "signature": "95c5e18b7871b756fb3bb843e03aa05d-interface WebWorkerInterface { }",
+      "affectsGlobalScope": true,
+      "impliedNodeFormat": "CommonJS",
+      "original": {
+        "version": "95c5e18b7871b756fb3bb843e03aa05d-interface WebWorkerInterface { }",
+        "affectsGlobalScope": true,
+        "impliedNodeFormat": 1
+      }
+    },
+    {
+      "fileName": "../node_modules/@typescript/lib-scripthost/index.d.ts",
+      "version": "2fa71959819338965a3c6b2122d95c96-interface ScriptHostInterface { }",
+      "signature": "2fa71959819338965a3c6b2122d95c96-interface ScriptHostInterface { }",
+      "affectsGlobalScope": true,
+      "impliedNodeFormat": "CommonJS",
+      "original": {
+        "version": "2fa71959819338965a3c6b2122d95c96-interface ScriptHostInterface { }",
+        "affectsGlobalScope": true,
+        "impliedNodeFormat": 1
+      }
+    },
+    {
+      "fileName": "../node_modules/@typescript/lib-es5/index.d.ts",
+      "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true,
+      "impliedNodeFormat": "CommonJS",
+      "original": {
+        "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true,
+        "impliedNodeFormat": 1
+      }
+    },
+    {
+      "fileName": "../node_modules/@typescript/lib-dom/index.d.ts",
+      "version": "d9b7428535134fcb21dad91303dc6311-interface DOMInterface { }",
+      "signature": "d9b7428535134fcb21dad91303dc6311-interface DOMInterface { }",
+      "affectsGlobalScope": true,
+      "impliedNodeFormat": "CommonJS",
+      "original": {
+        "version": "d9b7428535134fcb21dad91303dc6311-interface DOMInterface { }",
+        "affectsGlobalScope": true,
+        "impliedNodeFormat": 1
+      }
+    },
+    {
+      "fileName": "./core.d.ts",
+      "version": "a1f9b824326bab2c3c8f13eccf69f182-export const core = 10;",
+      "signature": "a1f9b824326bab2c3c8f13eccf69f182-export const core = 10;",
+      "impliedNodeFormat": "CommonJS"
+    },
+    {
+      "fileName": "./file.ts",
+      "version": "69c4ea0c9ff13ab7fc078607d9363624-export const file = 10;",
+      "signature": "a224c1b0cbd2f5fe611e588db48243cb-export declare const file = 10;\n",
+      "impliedNodeFormat": "CommonJS",
+      "original": {
+        "version": "69c4ea0c9ff13ab7fc078607d9363624-export const file = 10;",
+        "signature": "a224c1b0cbd2f5fe611e588db48243cb-export declare const file = 10;\n",
+        "impliedNodeFormat": 1
+      }
+    },
+    {
+      "fileName": "./file2.ts",
+      "version": "76f8c505d1aaf1122ce1da0807c21477-/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>",
+      "signature": "99aa06d3014798d86001c324468d497f-",
+      "impliedNodeFormat": "CommonJS",
+      "original": {
+        "version": "76f8c505d1aaf1122ce1da0807c21477-/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>",
+        "signature": "99aa06d3014798d86001c324468d497f-",
+        "impliedNodeFormat": 1
+      }
+    },
+    {
+      "fileName": "./index.ts",
+      "version": "aeb695aed936d7539a32fc3cd25af558-export const x = \"type1\";",
+      "signature": "e2f8d12de2edba256e37cf4a656ac52d-export declare const x = \"type1\";\n",
+      "impliedNodeFormat": "CommonJS",
+      "original": {
+        "version": "aeb695aed936d7539a32fc3cd25af558-export const x = \"type1\";",
+        "signature": "e2f8d12de2edba256e37cf4a656ac52d-export declare const x = \"type1\";\n",
+        "impliedNodeFormat": 1
+      }
+    },
+    {
+      "fileName": "./utils.d.ts",
+      "version": "4e905e76b648aae5f92e8bd5418e19b3-export const y = 10;",
+      "signature": "4e905e76b648aae5f92e8bd5418e19b3-export const y = 10;",
+      "impliedNodeFormat": "CommonJS"
+    },
+    {
+      "fileName": "./typeroot1/sometype/index.d.ts",
+      "version": "6bf5e0a71dae6fccf68b93fbbb73f178-export type TheNum = \"type1\";",
+      "signature": "6bf5e0a71dae6fccf68b93fbbb73f178-export type TheNum = \"type1\";",
+      "impliedNodeFormat": "CommonJS"
+    }
+  ],
+  "options": {
+    "composite": true
+  },
+  "latestChangedDtsFile": "./index.d.ts",
+  "size": 2354
+}
+
+project1/tsconfig.json::
+SemanticDiagnostics::
+*refresh*    /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts
+*refresh*    /home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts
+*refresh*    /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
+*refresh*    /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts
+*refresh*    /home/src/workspace/projects/project1/core.d.ts
+*refresh*    /home/src/workspace/projects/project1/file.ts
+*refresh*    /home/src/workspace/projects/project1/file2.ts
+*refresh*    /home/src/workspace/projects/project1/index.ts
+*refresh*    /home/src/workspace/projects/project1/utils.d.ts
+*refresh*    /home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts
+Signatures::
+(stored at emit) /home/src/workspace/projects/project1/file.ts
+(stored at emit) /home/src/workspace/projects/project1/file2.ts
+(stored at emit) /home/src/workspace/projects/project1/index.ts

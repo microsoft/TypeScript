@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"slices"
 	"strings"
+	"sync"
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/collections"
@@ -77,6 +78,12 @@ type resolutionState struct {
 	failedLookupLocations           []string
 	affectingLocations              []string
 	diagnostics                     []*ast.Diagnostic
+
+	// Similar to whats on resolver but only done if compilerOptions are for project reference redirect
+	// Cached representation for `core.CompilerOptions.paths`.
+	// Doesn't handle other path patterns like in `typesVersions`.
+	parsedPatternsForPathsOnce sync.Once
+	parsedPatternsForPaths     *ParsedPatterns
 }
 
 func newResolutionState(
@@ -1117,6 +1124,16 @@ func (r *resolutionState) tryLoadModuleUsingOptionalResolutionSettings() *resolv
 	}
 }
 
+func (r *resolutionState) getParsedPatternsForPaths() *ParsedPatterns {
+	if r.compilerOptions == r.resolver.compilerOptions {
+		return r.resolver.getParsedPatternsForPaths()
+	}
+	r.parsedPatternsForPathsOnce.Do(func() {
+		r.parsedPatternsForPaths = TryParsePatterns(r.compilerOptions.Paths)
+	})
+	return r.parsedPatternsForPaths
+}
+
 func (r *resolutionState) tryLoadModuleUsingPathsIfEligible() *resolved {
 	if r.compilerOptions.Paths.Size() > 0 && !tspath.PathIsRelative(r.name) {
 		if r.tracer != nil {
@@ -1126,7 +1143,7 @@ func (r *resolutionState) tryLoadModuleUsingPathsIfEligible() *resolved {
 		return continueSearching()
 	}
 	baseDirectory := r.compilerOptions.GetPathsBasePath(r.resolver.host.GetCurrentDirectory())
-	pathPatterns := r.resolver.getParsedPatternsForPaths()
+	pathPatterns := r.getParsedPatternsForPaths()
 	return r.tryLoadModuleUsingPaths(
 		r.extensions,
 		r.name,

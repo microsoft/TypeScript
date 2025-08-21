@@ -26,7 +26,6 @@ type CompilerOptions struct {
 	AllowUnusedLabels                         Tristate                                  `json:"allowUnusedLabels,omitzero"`
 	AssumeChangesOnlyAffectDirectDependencies Tristate                                  `json:"assumeChangesOnlyAffectDirectDependencies,omitzero"`
 	AlwaysStrict                              Tristate                                  `json:"alwaysStrict,omitzero"`
-	Build                                     Tristate                                  `json:"build,omitzero"`
 	CheckJs                                   Tristate                                  `json:"checkJs,omitzero"`
 	CustomConditions                          []string                                  `json:"customConditions,omitzero"`
 	Composite                                 Tristate                                  `json:"composite,omitzero"`
@@ -142,7 +141,7 @@ type CompilerOptions struct {
 	Version             Tristate `json:"version,omitzero"`
 	Watch               Tristate `json:"watch,omitzero"`
 	ShowConfig          Tristate `json:"showConfig,omitzero"`
-	TscBuild            Tristate `json:"tscBuild,omitzero"`
+	Build               Tristate `json:"build,omitzero"`
 	Help                Tristate `json:"help,omitzero"`
 	All                 Tristate `json:"all,omitzero"`
 

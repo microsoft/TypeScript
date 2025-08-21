@@ -8,16 +8,18 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
-	"github.com/microsoft/typescript-go/internal/incremental"
+	"github.com/microsoft/typescript-go/internal/execute/incremental"
+	"github.com/microsoft/typescript-go/internal/execute/tsc"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 )
 
 type Watcher struct {
-	sys              System
-	configFileName   string
-	options          *tsoptions.ParsedCommandLine
-	reportDiagnostic diagnosticReporter
-	testing          CommandLineTesting
+	sys                tsc.System
+	configFileName     string
+	options            *tsoptions.ParsedCommandLine
+	reportDiagnostic   tsc.DiagnosticReporter
+	reportErrorSummary tsc.DiagnosticsReporter
+	testing            tsc.CommandLineTesting
 
 	host           compiler.CompilerHost
 	program        *incremental.Program
@@ -25,12 +27,15 @@ type Watcher struct {
 	configModified bool
 }
 
-func createWatcher(sys System, configParseResult *tsoptions.ParsedCommandLine, reportDiagnostic diagnosticReporter, testing CommandLineTesting) *Watcher {
+var _ tsc.Watcher = (*Watcher)(nil)
+
+func createWatcher(sys tsc.System, configParseResult *tsoptions.ParsedCommandLine, reportDiagnostic tsc.DiagnosticReporter, reportErrorSummary tsc.DiagnosticsReporter, testing tsc.CommandLineTesting) *Watcher {
 	w := &Watcher{
-		sys:              sys,
-		options:          configParseResult,
-		reportDiagnostic: reportDiagnostic,
-		testing:          testing,
+		sys:                sys,
+		options:            configParseResult,
+		reportDiagnostic:   reportDiagnostic,
+		reportErrorSummary: reportErrorSummary,
+		testing:            testing,
 		// reportWatchStatus: createWatchStatusReporter(sys, configParseResult.CompilerOptions().Pretty),
 	}
 	if configParseResult.ConfigFile != nil {
@@ -70,13 +75,13 @@ func (w *Watcher) DoCycle() {
 		Config:           w.options,
 		Host:             w.host,
 		JSDocParsingMode: ast.JSDocParsingModeParseForTypeErrors,
-	}), w.program, w.testing != nil)
+	}), w.program, nil, w.testing != nil)
 
 	if w.hasBeenModified(w.program.GetProgram()) {
-		fmt.Fprintln(w.sys.Writer(), "build starting at ", w.sys.Now())
+		fmt.Fprintln(w.sys.Writer(), "build starting at", w.sys.Now().Format("03:04:05 PM"))
 		timeStart := w.sys.Now()
 		w.compileAndEmit()
-		fmt.Fprintln(w.sys.Writer(), "build finished in ", w.sys.Now().Sub(timeStart))
+		fmt.Fprintf(w.sys.Writer(), "build finished in %.3fs\n", w.sys.Now().Sub(timeStart).Seconds())
 	} else {
 		// print something???
 		// fmt.Fprintln(w.sys.Writer(), "no changes detected at ", w.sys.Now())
@@ -86,12 +91,12 @@ func (w *Watcher) DoCycle() {
 func (w *Watcher) compileAndEmit() {
 	// !!! output/error reporting is currently the same as non-watch mode
 	// diagnostics, emitResult, exitStatus :=
-	emitFilesAndReportErrors(w.sys, w.program, w.program.GetProgram(), w.reportDiagnostic, w.testing)
+	tsc.EmitFilesAndReportErrors(w.sys, w.program, w.program.GetProgram(), w.reportDiagnostic, w.reportErrorSummary, w.sys.Writer(), tsc.CompileTimes{}, w.testing)
 }
 
 func (w *Watcher) hasErrorsInTsConfig() bool {
 	// only need to check and reparse tsconfig options/update host if we are watching a config file
-	extendedConfigCache := &extendedConfigCache{}
+	extendedConfigCache := &tsc.ExtendedConfigCache{}
 	if w.configFileName != "" {
 		// !!! need to check that this merges compileroptions correctly. This differs from non-watch, since we allow overriding of previous options
 		configParseResult, errors := tsoptions.GetParsedCommandLineOfConfigFile(w.configFileName, &core.CompilerOptions{}, w.sys, extendedConfigCache)

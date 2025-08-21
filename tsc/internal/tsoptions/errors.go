@@ -97,6 +97,8 @@ func extraKeyDiagnostics(s string) *diagnostics.Message {
 		return diagnostics.Unknown_watch_option_0
 	case "typeAcquisition":
 		return diagnostics.Unknown_type_acquisition_option_0
+	case "buildOptions":
+		return diagnostics.Unknown_build_option_0
 	default:
 		return nil
 	}
