@@ -1295,8 +1295,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             }
         }
         if (
-            expr.expression.kind === SyntaxKind.PropertyAccessExpression &&
-            containsNarrowableReference((expr.expression as PropertyAccessExpression).expression)
+            (expr.expression.kind === SyntaxKind.PropertyAccessExpression || expr.expression.kind === SyntaxKind.ElementAccessExpression) &&
+            containsNarrowableReference((expr.expression as PropertyAccessExpression | ElementAccessExpression).expression)
         ) {
             return true;
         }
