@@ -1,4 +1,3 @@
-error TS5095: Option 'bundler' can only be used when 'module' is set to 'es2015' or later.
 error TS6504: File '/node_modules/bar/index.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
   The file is in the program because:
     Root file specified for compilation
@@ -17,7 +16,6 @@ error TS6504: File '/node_modules/foo/index.mjs' is a JavaScript file. Did you m
   There are types at '/node_modules/@types/bar/index.d.ts', but this result could not be resolved when respecting package.json "exports". The '@types/bar' library may need to update its package.json or typings.
 
 
-!!! error TS5095: Option 'bundler' can only be used when 'module' is set to 'es2015' or later.
 !!! error TS6504: File '/node_modules/bar/index.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
 !!! error TS6504:   The file is in the program because:
 !!! error TS6504:     Root file specified for compilation

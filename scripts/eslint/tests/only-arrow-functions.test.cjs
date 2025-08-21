@@ -2,10 +2,11 @@ const { RuleTester } = require("./support/RuleTester.cjs");
 const rule = require("../rules/only-arrow-functions.cjs");
 
 const ruleTester = new RuleTester({
-    parserOptions: {
-        warnOnUnsupportedTypeScriptVersion: false,
+    languageOptions: {
+        parserOptions: {
+            warnOnUnsupportedTypeScriptVersion: false,
+        },
     },
-    parser: require.resolve("@typescript-eslint/parser"),
 });
 
 ruleTester.run("only-arrow-functions", rule, {

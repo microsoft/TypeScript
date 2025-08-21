@@ -6,28 +6,37 @@ var symbol: any;
 
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     static [symbol]() {
 >[symbol] : () => number
+>         : ^^^^^^^^^^^^
 >symbol : any
 
         return 0;
 >0 : 0
+>  : ^
     }
 }
 
 class Bar extends Foo {
 >Bar : Bar
+>    : ^^^
 >Foo : Foo
+>    : ^^^
 
     static [symbol]() {
->[symbol] : () => any
+>[symbol] : () => number
+>         : ^^^^^^^^^^^^
 >symbol : any
 
         return super[symbol]();
->super[symbol]() : error
->super[symbol] : error
+>super[symbol]() : number
+>                : ^^^^^^
+>super[symbol] : () => number
+>              : ^^^^^^^^^^^^
 >super : typeof Foo
+>      : ^^^^^^^^^^
 >symbol : any
     }
 }

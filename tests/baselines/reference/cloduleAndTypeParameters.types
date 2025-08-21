@@ -3,7 +3,9 @@
 === cloduleAndTypeParameters.ts ===
 class Foo<T extends Foo.Bar> {
 >Foo : Foo<T>
+>    : ^^^^^^
 >Foo : any
+>    : ^^^
 
   constructor() {
   }
@@ -11,13 +13,16 @@ class Foo<T extends Foo.Bar> {
 
 module Foo {
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
   export interface Bar {
     bar(): void;
 >bar : () => void
+>    : ^^^^^^    
   }
 
   export class Baz {
 >Baz : Baz
+>    : ^^^
   }
 }

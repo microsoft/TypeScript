@@ -5,6 +5,7 @@ debugger;
 
 function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
     debugger;
 

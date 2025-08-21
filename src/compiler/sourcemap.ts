@@ -24,8 +24,8 @@ import {
     sortAndDeduplicate,
     SortedReadonlyArray,
     SourceMapGenerator,
-} from "./_namespaces/ts";
-import * as performance from "./_namespaces/ts.performance";
+} from "./_namespaces/ts.js";
+import * as performance from "./_namespaces/ts.performance.js";
 
 /** @internal */
 export interface SourceMapGeneratorOptions {
@@ -45,7 +45,7 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
     var rawSources: string[] = [];
     var sources: string[] = [];
     var sourceToSourceIndexMap = new Map<string, number>();
-    var sourcesContent: (string | null)[] | undefined;
+    var sourcesContent: (string | null)[] | undefined; // eslint-disable-line no-restricted-syntax
 
     var names: string[] = [];
     var nameToNameIndexMap: Map<string, number> | undefined;
@@ -98,7 +98,7 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
         return sourceIndex;
     }
 
-    /* eslint-disable no-null/no-null */
+    /* eslint-disable no-restricted-syntax */
     function setSourceContent(sourceIndex: number, content: string | null) {
         enter();
         if (content !== null) {
@@ -110,7 +110,7 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
         }
         exit();
     }
-    /* eslint-enable no-null/no-null */
+    /* eslint-enable no-restricted-syntax */
 
     function addName(name: string) {
         enter();
@@ -360,12 +360,12 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
 
 // Sometimes tools can see the following line as a source mapping url comment, so we mangle it a bit (the [M])
 /** @internal */
-export const sourceMapCommentRegExpDontCareLineStart = /\/\/[@#] source[M]appingURL=(.+)\r?\n?$/;
+export const sourceMapCommentRegExpDontCareLineStart: RegExp = /\/\/[@#] source[M]appingURL=(.+)\r?\n?$/; // eslint-disable-line regexp/no-useless-character-class
 /** @internal */
-export const sourceMapCommentRegExp = /^\/\/[@#] source[M]appingURL=(.+)\r?\n?$/;
+export const sourceMapCommentRegExp: RegExp = /^\/\/[@#] source[M]appingURL=(.+)\r?\n?$/; // eslint-disable-line regexp/no-useless-character-class
 
 /** @internal */
-export const whitespaceOrMapCommentRegExp = /^\s*(\/\/[@#] .*)?$/;
+export const whitespaceOrMapCommentRegExp: RegExp = /^\s*(\/\/[@#] .*)?$/;
 
 /** @internal */
 export interface LineInfo {
@@ -386,7 +386,7 @@ export function getLineInfo(text: string, lineStarts: readonly number[]): LineIn
  *
  * @internal
  */
-export function tryGetSourceMappingURL(lineInfo: LineInfo) {
+export function tryGetSourceMappingURL(lineInfo: LineInfo): string | undefined {
     for (let index = lineInfo.getLineCount() - 1; index >= 0; index--) {
         const line = lineInfo.getLineText(index);
         const comment = sourceMapCommentRegExp.exec(line);
@@ -400,13 +400,12 @@ export function tryGetSourceMappingURL(lineInfo: LineInfo) {
     }
 }
 
-/* eslint-disable no-null/no-null */
+/* eslint-disable no-restricted-syntax */
 function isStringOrNull(x: any) {
     return typeof x === "string" || x === null;
 }
 
-/** @internal */
-export function isRawSourceMap(x: any): x is RawSourceMap {
+function isRawSourceMap(x: any): x is RawSourceMap {
     return x !== null
         && typeof x === "object"
         && x.version === 3
@@ -417,10 +416,10 @@ export function isRawSourceMap(x: any): x is RawSourceMap {
         && (x.sourcesContent === undefined || x.sourcesContent === null || isArray(x.sourcesContent) && every(x.sourcesContent, isStringOrNull))
         && (x.names === undefined || x.names === null || isArray(x.names) && every(x.names, isString));
 }
-/* eslint-enable no-null/no-null */
+/* eslint-enable no-restricted-syntax */
 
 /** @internal */
-export function tryParseRawSourceMap(text: string) {
+export function tryParseRawSourceMap(text: string): RawSourceMap | undefined {
     try {
         const parsed = JSON.parse(text);
         if (isRawSourceMap(parsed)) {
@@ -617,7 +616,7 @@ export function decodeMappings(mappings: string): MappingsDecoder {
 }
 
 /** @internal */
-export function sameMapping<T extends Mapping>(left: T, right: T) {
+export function sameMapping<T extends Mapping>(left: T, right: T): boolean {
     return left === right
         || left.generatedLine === right.generatedLine
             && left.generatedCharacter === right.generatedCharacter

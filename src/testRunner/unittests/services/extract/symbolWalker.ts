@@ -1,5 +1,5 @@
-import * as Harness from "../../../_namespaces/Harness";
-import * as ts from "../../../_namespaces/ts";
+import * as Harness from "../../../_namespaces/Harness.js";
+import * as ts from "../../../_namespaces/ts.js";
 
 describe("unittests:: services:: extract:: Symbol Walker", () => {
     function test(description: string, source: string, verifier: (file: ts.SourceFile, checker: ts.TypeChecker) => void) {

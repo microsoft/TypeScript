@@ -1,11 +1,9 @@
 import fs from "fs";
-import glob from "glob";
+import { glob } from "glob";
 import path from "path";
 import url from "url";
 
-import {
-    localizationDirectories,
-} from "./build/localization.mjs";
+import { localizationDirectories } from "./build/localization.mjs";
 
 const __filename = url.fileURLToPath(new URL(import.meta.url));
 const __dirname = path.dirname(__filename);
@@ -50,12 +48,14 @@ async function copyTypesMap() {
 }
 
 async function copyScriptOutputs() {
-    await copyFromBuiltLocal("cancellationToken.js");
     await copyFromBuiltLocal("tsc.js");
+    await copyFromBuiltLocal("_tsc.js");
     await copyFromBuiltLocal("tsserver.js");
+    await copyFromBuiltLocal("_tsserver.js");
     await copyFromBuiltLocal("tsserverlibrary.js");
     await copyFromBuiltLocal("typescript.js");
     await copyFromBuiltLocal("typingsInstaller.js");
+    await copyFromBuiltLocal("_typingsInstaller.js");
     await copyFromBuiltLocal("watchGuard.js");
 }
 

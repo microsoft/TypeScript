@@ -1,0 +1,10 @@
+declarationEmitVarInElidedBlock.ts(4,22): error TS4025: Exported variable 'b' has or is using private name 'a'.
+
+
+==== declarationEmitVarInElidedBlock.ts (1 errors) ====
+    {
+        var a = "";
+    }
+    export let b: typeof a;
+                         ~
+!!! error TS4025: Exported variable 'b' has or is using private name 'a'.

@@ -12,5 +12,6 @@
     window.localStorage
     ~~~~~~
 !!! error TS2304: Cannot find name 'window'.
+    
 ==== /somepath/node_modules/@typescript/lib-dom/index.d.ts (0 errors) ====
     interface ABC { abc: string }

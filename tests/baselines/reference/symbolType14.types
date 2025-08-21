@@ -3,5 +3,7 @@
 === symbolType14.ts ===
 new Symbol();
 >new Symbol() : any
+>             : ^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 

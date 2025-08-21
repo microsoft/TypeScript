@@ -3,4 +3,5 @@
 === parserVariableDeclaration5.ts ===
 var a,
 >a : any
+>  : ^^^
 

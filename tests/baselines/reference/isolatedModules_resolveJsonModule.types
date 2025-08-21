@@ -3,8 +3,10 @@
 === /a.ts ===
 import j = require("./j.json");
 >j : {}
+>  : ^^
 
 === /j.json ===
 {}
 >{} : {}
+>   : ^^
 

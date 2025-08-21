@@ -1,37 +1,32 @@
-import * as ts from "../../_namespaces/ts";
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import * as ts from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     baselineTsserverLogs,
     openFilesForSession,
     protocolFileLocationFromSubstring,
     TestSession,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
-    libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: auxiliaryProject::", () => {
     it("AuxiliaryProject does not remove scrips from InferredProject", () => {
         const aTs: File = {
-            path: "/a.ts",
+            path: "/user/username/projects/project/a.ts",
             content: `import { B } from "./b";`,
         };
         const bDts: File = {
-            path: "/b.d.ts",
+            path: "/user/username/projects/project/b.d.ts",
             content: `export declare class B {}`,
         };
         const bJs: File = {
-            path: "/b.js",
+            path: "/user/username/projects/project/b.js",
             content: `export class B {}`,
         };
-        const host = createServerHost([aTs, bDts, bJs]);
+        const host = TestServerHost.createServerHost([aTs, bDts, bJs]);
         const session = new TestSession(host);
         openFilesForSession([aTs], session);
 
@@ -51,7 +46,7 @@ describe("unittests:: tsserver:: auxiliaryProject::", () => {
         // project should throw.
         const bJsScriptInfo = ts.Debug.checkDefined(session.getProjectService().getScriptInfo(bJs.path));
         assert(bJsScriptInfo.isOrphan());
-        assert(bJsScriptInfo.isContainedByBackgroundProject());
+        assert(ts.server.scriptInfoIsContainedByBackgroundProject(bJsScriptInfo));
         assert.deepEqual(bJsScriptInfo.containingProjects, [auxProject]);
         assert.throws(() => bJsScriptInfo.getDefaultProject());
 
@@ -59,7 +54,7 @@ describe("unittests:: tsserver:: auxiliaryProject::", () => {
         // even though it's still contained by the AuxiliaryProject.
         openFilesForSession([bJs], session);
         assert(!bJsScriptInfo.isOrphan());
-        assert(bJsScriptInfo.isContainedByBackgroundProject());
+        assert(ts.server.scriptInfoIsContainedByBackgroundProject(bJsScriptInfo));
         assert.equal(bJsScriptInfo.getDefaultProject().projectKind, ts.server.ProjectKind.Inferred);
         baselineTsserverLogs("auxiliaryProject", "does not remove scrips from InferredProject", session);
     });
@@ -74,7 +69,7 @@ describe("unittests:: tsserver:: auxiliaryProject::", () => {
                 });
             `,
         };
-        const host = createServerHost({
+        const host = TestServerHost.createServerHost({
             "/user/users/projects/myproject/node_modules/@types/yargs/package.json": jsonToReadableText({
                 name: "@types/yargs",
                 version: "1.0.0",
@@ -100,7 +95,6 @@ describe("unittests:: tsserver:: auxiliaryProject::", () => {
                 export function command(cmd, cb) { cb(Yargs) }
             `,
             [indexFile.path]: indexFile.content,
-            [libFile.path]: libFile.content,
         });
         const session = new TestSession(host);
         openFilesForSession([indexFile], session);
@@ -130,7 +124,7 @@ describe("unittests:: tsserver:: auxiliaryProject::", () => {
                 });
             `,
         };
-        const host = createServerHost({
+        const host = TestServerHost.createServerHost({
             "/user/users/projects/myproject/node_modules/@types/yargs/package.json": jsonToReadableText({
                 name: "@types/yargs",
                 version: "1.0.0",
@@ -159,7 +153,6 @@ describe("unittests:: tsserver:: auxiliaryProject::", () => {
                 import { Yargs } from "yargs/callback";
             `,
             [indexFile.path]: indexFile.content,
-            [libFile.path]: libFile.content,
         });
         const session = new TestSession(host);
         openFilesForSession([indexFile], session);

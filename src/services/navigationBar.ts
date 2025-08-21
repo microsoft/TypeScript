@@ -111,7 +111,7 @@ import {
     TypeElement,
     unescapeLeadingUnderscores,
     VariableDeclaration,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /**
  * Matches all whitespace characters in a string. Eg:
@@ -760,6 +760,7 @@ function isSynthesized(node: Node) {
 // We want to merge own children like `I` in in `module A { interface I {} } module A { interface I {} }`
 // We don't want to merge unrelated children like `m` in `const o = { a: { m() {} }, b: { m() {} } };`
 function isOwnChild(n: Node, parent: NavigationBarNode): boolean {
+    if (n.parent === undefined) return false;
     const par = isModuleBlock(n.parent) ? n.parent.parent : n.parent;
     return par === parent.node || contains(parent.additionalNodes, par);
 }
@@ -1100,5 +1101,5 @@ function cleanText(text: string): string {
     // \r - Carriage Return
     // \u2028 - Line separator
     // \u2029 - Paragraph separator
-    return text.replace(/\\?(\r?\n|\r|\u2028|\u2029)/g, "");
+    return text.replace(/\\?(?:\r?\n|[\r\u2028\u2029])/g, "");
 }

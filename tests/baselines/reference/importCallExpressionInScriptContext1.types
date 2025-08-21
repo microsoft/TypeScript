@@ -3,14 +3,20 @@
 === 0.ts ===
 export function foo() { return "foo"; }
 >foo : () => string
+>    : ^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
 === 1.ts ===
 var p1 = import("./0");
 >p1 : Promise<typeof import("0")>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import("./0") : Promise<typeof import("0")>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"./0" : "./0"
+>      : ^^^^^
 
 function arguments() { } // this is allow as the file doesn't have implicit "use strict"
 >arguments : () => void
+>          : ^^^^^^^^^^
 

@@ -34,7 +34,7 @@ export const x: () => Thing;
 }
 
 //// [index.js]
-export var a = (await import("inner")).x();
+export const a = (await import("inner")).x();
 
 
 //// [index.d.ts]

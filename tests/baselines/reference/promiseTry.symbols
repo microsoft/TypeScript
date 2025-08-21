@@ -1,0 +1,123 @@
+//// [tests/cases/compiler/promiseTry.ts] ////
+
+=== promiseTry.ts ===
+Promise.try(() => {
+>Promise.try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+
+    return "Sync result";
+});
+
+Promise.try(async () => {
+>Promise.try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+
+    return "Async result";
+});
+
+const a = Promise.try(() => "Sync result");
+>a : Symbol(a, Decl(promiseTry.ts, 8, 5))
+>Promise.try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+
+const b = Promise.try(async () => "Async result");
+>b : Symbol(b, Decl(promiseTry.ts, 9, 5))
+>Promise.try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+
+// SINGLE PARAMETER
+Promise.try((foo: string) => "Async result", "foo");
+>Promise.try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+>foo : Symbol(foo, Decl(promiseTry.ts, 12, 13))
+
+Promise.try((foo) => "Async result", "foo");
+>Promise.try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+>foo : Symbol(foo, Decl(promiseTry.ts, 13, 13))
+
+// @ts-expect-error too few parameters
+Promise.try((foo) => "Async result");
+>Promise.try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+>foo : Symbol(foo, Decl(promiseTry.ts, 15, 13))
+
+Promise.try((foo: string | undefined) => "Async result", undefined);
+>Promise.try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+>foo : Symbol(foo, Decl(promiseTry.ts, 16, 13))
+>undefined : Symbol(undefined)
+
+Promise.try((foo: string | undefined) => "Async result", "foo");
+>Promise.try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+>foo : Symbol(foo, Decl(promiseTry.ts, 17, 13))
+
+Promise.try((foo) => "Async result", undefined);
+>Promise.try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+>foo : Symbol(foo, Decl(promiseTry.ts, 18, 13))
+>undefined : Symbol(undefined)
+
+// @ts-expect-error too many parameters
+Promise.try(() => "Async result", "foo");
+>Promise.try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+
+// MULTIPLE PARAMETERS
+Promise.try((foo: string, bar: number) => "Async result", "foo", 42);
+>Promise.try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+>foo : Symbol(foo, Decl(promiseTry.ts, 23, 13))
+>bar : Symbol(bar, Decl(promiseTry.ts, 23, 25))
+
+// @ts-expect-error too many parameters
+Promise.try((foo: string, bar: number) => "Async result", "foo", 42, "baz");
+>Promise.try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+>foo : Symbol(foo, Decl(promiseTry.ts, 25, 13))
+>bar : Symbol(bar, Decl(promiseTry.ts, 25, 25))
+
+// @ts-expect-error too few parameters
+Promise.try((foo: string, bar: number) => "Async result", "foo");
+>Promise.try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+>foo : Symbol(foo, Decl(promiseTry.ts, 27, 13))
+>bar : Symbol(bar, Decl(promiseTry.ts, 27, 25))
+
+Promise.try((foo: string, bar?: number) => "Async result", "foo");
+>Promise.try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+>foo : Symbol(foo, Decl(promiseTry.ts, 28, 13))
+>bar : Symbol(bar, Decl(promiseTry.ts, 28, 25))
+
+Promise.try((foo: string, bar?: number) => "Async result", "foo", undefined);
+>Promise.try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+>foo : Symbol(foo, Decl(promiseTry.ts, 29, 13))
+>bar : Symbol(bar, Decl(promiseTry.ts, 29, 25))
+>undefined : Symbol(undefined)
+
+Promise.try((foo: string, bar?: number) => "Async result", "foo", 42);
+>Promise.try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+>foo : Symbol(foo, Decl(promiseTry.ts, 30, 13))
+>bar : Symbol(bar, Decl(promiseTry.ts, 30, 25))
+

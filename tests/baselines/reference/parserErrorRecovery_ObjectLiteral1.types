@@ -3,9 +3,15 @@
 === parserErrorRecovery_ObjectLiteral1.ts ===
 var v = { a: 1 b: 2 }
 >v : { a: number; b: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 1 b: 2 } : { a: number; b: number; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 

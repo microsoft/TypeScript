@@ -3,4 +3,5 @@
 === exportAmbientClassNameWithObject.ts ===
 export declare class Object {}
 >Object : Object
+>       : ^^^^^^
 

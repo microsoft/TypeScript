@@ -18,6 +18,7 @@ import {
     getDirectoryPath,
     getFallbackOptions,
     getNormalizedAbsolutePath,
+    getRelativePathFromDirectory,
     getRelativePathToDirectoryOrUrl,
     getRootLength,
     getStringComparer,
@@ -34,7 +35,6 @@ import {
     normalizeSlashes,
     orderedRemoveItem,
     Path,
-    perfLogger,
     PollingWatchKind,
     resolveJSModule,
     some,
@@ -45,7 +45,7 @@ import {
     WatchFileKind,
     WatchOptions,
     writeFileEnsuringDirectories,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 declare function clearTimeout(handle: any): void;
@@ -71,7 +71,7 @@ export function generateDjb2Hash(data: string): string {
  *
  * @internal
  */
-export function setStackTraceLimit() {
+export function setStackTraceLimit(): void {
     if ((Error as any).stackTraceLimit < 100) { // Also tests that we won't set the property if it doesn't exist.
         (Error as any).stackTraceLimit = 100;
     }
@@ -104,10 +104,10 @@ export type HostWatchFile = (fileName: string, callback: FileWatcherCallback, po
 export type HostWatchDirectory = (fileName: string, callback: DirectoryWatcherCallback, recursive: boolean, options: WatchOptions | undefined) => FileWatcher;
 
 /** @internal */
-export const missingFileModifiedTime = new Date(0); // Any subsequent modification will occur after this time
+export const missingFileModifiedTime: Date = new Date(0); // Any subsequent modification will occur after this time
 
 /** @internal */
-export function getModifiedTime(host: { getModifiedTime: NonNullable<System["getModifiedTime"]>; }, fileName: string) {
+export function getModifiedTime(host: { getModifiedTime: NonNullable<System["getModifiedTime"]>; }, fileName: string): Date {
     return host.getModifiedTime(fileName) || missingFileModifiedTime;
 }
 
@@ -128,7 +128,7 @@ function createPollingIntervalBasedLevels(levels: Levels) {
 const defaultChunkLevels: Levels = { Low: 32, Medium: 64, High: 256 };
 let pollingChunkSize = createPollingIntervalBasedLevels(defaultChunkLevels);
 /** @internal */
-export let unchangedPollThresholds = createPollingIntervalBasedLevels(defaultChunkLevels);
+export let unchangedPollThresholds: { [K in PollingInterval]: number; } = createPollingIntervalBasedLevels(defaultChunkLevels);
 
 function setCustomPollingValues(system: System) {
     if (!system.getEnvironmentVariable) {
@@ -378,16 +378,24 @@ function createDynamicPriorityPollingWatchFile(host: {
     }
 }
 
-function createUseFsEventsOnParentDirectoryWatchFile(fsWatch: FsWatch, useCaseSensitiveFileNames: boolean): HostWatchFile {
+function createUseFsEventsOnParentDirectoryWatchFile(
+    fsWatch: FsWatch,
+    useCaseSensitiveFileNames: boolean,
+    getModifiedTime: NonNullable<System["getModifiedTime"]>,
+    fsWatchWithTimestamp: boolean | undefined,
+): HostWatchFile {
     // One file can have multiple watchers
     const fileWatcherCallbacks = createMultiMap<string, FileWatcherCallback>();
+    const fileTimestamps = fsWatchWithTimestamp ? new Map<string, Date>() : undefined;
     const dirWatchers = new Map<string, DirectoryWatcher>();
     const toCanonicalName = createGetCanonicalFileName(useCaseSensitiveFileNames);
     return nonPollingWatchFile;
 
     function nonPollingWatchFile(fileName: string, callback: FileWatcherCallback, _pollingInterval: PollingInterval, fallbackOptions: WatchOptions | undefined): FileWatcher {
         const filePath = toCanonicalName(fileName);
-        fileWatcherCallbacks.add(filePath, callback);
+        if (fileWatcherCallbacks.add(filePath, callback).length === 1 && fileTimestamps) {
+            fileTimestamps.set(filePath, getModifiedTime(fileName) || missingFileModifiedTime);
+        }
         const dirPath = getDirectoryPath(filePath) || ".";
         const watcher = dirWatchers.get(dirPath) ||
             createDirectoryWatcher(getDirectoryPath(fileName) || ".", dirPath, fallbackOptions);
@@ -410,15 +418,29 @@ function createUseFsEventsOnParentDirectoryWatchFile(fsWatch: FsWatch, useCaseSe
         const watcher = fsWatch(
             dirName,
             FileSystemEntryKind.Directory,
-            (_eventName: string, relativeFileName, modifiedTime) => {
+            (eventName: string, relativeFileName) => {
                 // When files are deleted from disk, the triggered "rename" event would have a relativefileName of "undefined"
                 if (!isString(relativeFileName)) return;
                 const fileName = getNormalizedAbsolutePath(relativeFileName, dirName);
+                const filePath = toCanonicalName(fileName);
                 // Some applications save a working file via rename operations
-                const callbacks = fileName && fileWatcherCallbacks.get(toCanonicalName(fileName));
+                const callbacks = fileName && fileWatcherCallbacks.get(filePath);
                 if (callbacks) {
+                    let currentModifiedTime;
+                    let eventKind = FileWatcherEventKind.Changed;
+                    if (fileTimestamps) {
+                        const existingTime = fileTimestamps.get(filePath)!;
+                        if (eventName === "change") {
+                            currentModifiedTime = getModifiedTime(fileName) || missingFileModifiedTime;
+                            if (currentModifiedTime.getTime() === existingTime.getTime()) return;
+                        }
+                        currentModifiedTime ||= getModifiedTime(fileName) || missingFileModifiedTime;
+                        fileTimestamps.set(filePath, currentModifiedTime);
+                        if (existingTime === missingFileModifiedTime) eventKind = FileWatcherEventKind.Created;
+                        else if (currentModifiedTime === missingFileModifiedTime) eventKind = FileWatcherEventKind.Deleted;
+                    }
                     for (const fileCallback of callbacks) {
-                        fileCallback(fileName, FileWatcherEventKind.Changed, modifiedTime);
+                        fileCallback(fileName, eventKind, currentModifiedTime);
                     }
                 }
             },
@@ -528,7 +550,7 @@ function onWatchedFileStat(watchedFile: WatchedFile, modifiedTime: Date): boolea
 }
 
 /** @internal */
-export function getFileWatcherEventKind(oldTime: number, newTime: number) {
+export function getFileWatcherEventKind(oldTime: number, newTime: number): FileWatcherEventKind {
     return oldTime === 0
         ? FileWatcherEventKind.Created
         : newTime === 0
@@ -537,17 +559,17 @@ export function getFileWatcherEventKind(oldTime: number, newTime: number) {
 }
 
 /** @internal */
-export const ignoredPaths = ["/node_modules/.", "/.git", "/.#"];
+export const ignoredPaths: readonly string[] = ["/node_modules/.", "/.git", "/.#"];
 
 let curSysLog: (s: string) => void = noop;
 
 /** @internal */
-export function sysLog(s: string) {
+export function sysLog(s: string): void {
     return curSysLog(s);
 }
 
 /** @internal */
-export function setSysLog(logger: typeof sysLog) {
+export function setSysLog(logger: typeof sysLog): void {
     curSysLog = logger;
 }
 
@@ -585,15 +607,17 @@ function createDirectoryWatcherSupportingRecursive({
         watcher: FileWatcher;
         childWatches: ChildWatches;
         refCount: number;
+        targetWatcher: ChildDirectoryWatcher | undefined;
+        links: Set<string> | undefined;
     }
 
-    const cache = new Map<string, HostDirectoryWatcher>();
+    const cache = new Map<Path, HostDirectoryWatcher>();
     const callbackCache = createMultiMap<Path, { dirName: string; callback: DirectoryWatcherCallback; }>();
     const cacheToUpdateChildWatches = new Map<Path, { dirName: string; options: WatchOptions | undefined; fileNames: string[]; }>();
     let timerToUpdateChildWatches: any;
 
     const filePathComparer = getStringComparer(!useCaseSensitiveFileNames);
-    const toCanonicalFilePath = createGetCanonicalFileName(useCaseSensitiveFileNames);
+    const toCanonicalFilePath = createGetCanonicalFileName(useCaseSensitiveFileNames) as (fileName: string) => Path;
 
     return (dirName, callback, recursive, options) =>
         recursive ?
@@ -603,8 +627,13 @@ function createDirectoryWatcherSupportingRecursive({
     /**
      * Create the directory watcher for the dirPath.
      */
-    function createDirectoryWatcher(dirName: string, options: WatchOptions | undefined, callback?: DirectoryWatcherCallback): ChildDirectoryWatcher {
-        const dirPath = toCanonicalFilePath(dirName) as Path;
+    function createDirectoryWatcher(
+        dirName: string,
+        options: WatchOptions | undefined,
+        callback?: DirectoryWatcherCallback,
+        link?: string,
+    ): ChildDirectoryWatcher {
+        const dirPath = toCanonicalFilePath(dirName);
         let directoryWatcher = cache.get(dirPath);
         if (directoryWatcher) {
             directoryWatcher.refCount++;
@@ -618,7 +647,7 @@ function createDirectoryWatcherSupportingRecursive({
 
                         if (options?.synchronousWatchDirectory) {
                             // Call the actual callback
-                            invokeCallbacks(dirPath, fileName);
+                            if (!cache.get(dirPath)?.targetWatcher) invokeCallbacks(dirName, dirPath, fileName);
 
                             // Iterate through existing children and update the watches if needed
                             updateChildWatches(dirName, dirPath, options);
@@ -632,10 +661,14 @@ function createDirectoryWatcherSupportingRecursive({
                 ),
                 refCount: 1,
                 childWatches: emptyArray,
+                targetWatcher: undefined,
+                links: undefined,
             };
             cache.set(dirPath, directoryWatcher);
             updateChildWatches(dirName, dirPath, options);
         }
+
+        if (link) (directoryWatcher.links ??= new Set()).add(link);
 
         const callbackToAdd = callback && { dirName, callback };
         if (callbackToAdd) {
@@ -647,21 +680,24 @@ function createDirectoryWatcherSupportingRecursive({
             close: () => {
                 const directoryWatcher = Debug.checkDefined(cache.get(dirPath));
                 if (callbackToAdd) callbackCache.remove(dirPath, callbackToAdd);
+                if (link) directoryWatcher.links?.delete(link);
                 directoryWatcher.refCount--;
 
                 if (directoryWatcher.refCount) return;
 
                 cache.delete(dirPath);
+                directoryWatcher.links = undefined;
                 closeFileWatcherOf(directoryWatcher);
+                closeTargetWatcher(directoryWatcher);
                 directoryWatcher.childWatches.forEach(closeFileWatcher);
             },
         };
     }
 
     type InvokeMap = Map<Path, string[] | true>;
-    function invokeCallbacks(dirPath: Path, fileName: string): void;
-    function invokeCallbacks(dirPath: Path, invokeMap: InvokeMap, fileNames: string[] | undefined): void;
-    function invokeCallbacks(dirPath: Path, fileNameOrInvokeMap: string | InvokeMap, fileNames?: string[]) {
+    function invokeCallbacks(dirName: string, dirPath: Path, fileName: string): void;
+    function invokeCallbacks(dirName: string, dirPath: Path, invokeMap: InvokeMap, fileNames: string[] | undefined): void;
+    function invokeCallbacks(dirName: string, dirPath: Path, fileNameOrInvokeMap: string | InvokeMap, fileNames?: string[]) {
         let fileName: string | undefined;
         let invokeMap: InvokeMap | undefined;
         if (isString(fileNameOrInvokeMap)) {
@@ -693,6 +729,15 @@ function createDirectoryWatcherSupportingRecursive({
                 }
             }
         });
+        cache.get(dirPath)?.links?.forEach(link => {
+            const toPathInLink = (fileName: string) => combinePaths(link, getRelativePathFromDirectory(dirName, fileName, toCanonicalFilePath));
+            if (invokeMap) {
+                invokeCallbacks(link, toCanonicalFilePath(link), invokeMap, fileNames?.map(toPathInLink));
+            }
+            else {
+                invokeCallbacks(link, toCanonicalFilePath(link), toPathInLink(fileName!));
+            }
+        });
     }
 
     function nonSyncUpdateChildWatches(dirName: string, dirPath: Path, fileName: string, options: WatchOptions | undefined) {
@@ -705,7 +750,8 @@ function createDirectoryWatcherSupportingRecursive({
         }
 
         // Call the actual callbacks and remove child watches
-        invokeCallbacks(dirPath, fileName);
+        invokeCallbacks(dirName, dirPath, fileName);
+        closeTargetWatcher(parentWatcher);
         removeChildWatches(parentWatcher);
     }
 
@@ -738,7 +784,7 @@ function createDirectoryWatcherSupportingRecursive({
             // Because the child refresh is fresh, we would need to invalidate whole root directory being watched
             // to ensure that all the changes are reflected at this time
             const hasChanges = updateChildWatches(dirName, dirPath, options);
-            invokeCallbacks(dirPath, invokeMap, hasChanges ? undefined : fileNames);
+            if (!cache.get(dirPath)?.targetWatcher) invokeCallbacks(dirName, dirPath, invokeMap, hasChanges ? undefined : fileNames);
         }
 
         sysLog(`sysLog:: invokingWatchers:: Elapsed:: ${timestamp() - start}ms:: ${cacheToUpdateChildWatches.size}`);
@@ -770,24 +816,46 @@ function createDirectoryWatcherSupportingRecursive({
         }
     }
 
+    function closeTargetWatcher(watcher: HostDirectoryWatcher | undefined) {
+        if (watcher?.targetWatcher) {
+            watcher.targetWatcher.close();
+            watcher.targetWatcher = undefined;
+        }
+    }
+
     function updateChildWatches(parentDir: string, parentDirPath: Path, options: WatchOptions | undefined) {
         // Iterate through existing children and update the watches if needed
         const parentWatcher = cache.get(parentDirPath);
         if (!parentWatcher) return false;
+        const target = normalizePath(realpath(parentDir));
+        let hasChanges;
         let newChildWatches: ChildDirectoryWatcher[] | undefined;
-        const hasChanges = enumerateInsertsAndDeletes<string, ChildDirectoryWatcher>(
-            fileSystemEntryExists(parentDir, FileSystemEntryKind.Directory) ? mapDefined(getAccessibleSortedChildDirectories(parentDir), child => {
-                const childFullName = getNormalizedAbsolutePath(child, parentDir);
-                // Filter our the symbolic link directories since those arent included in recursive watch
-                // which is same behaviour when recursive: true is passed to fs.watch
-                return !isIgnoredPath(childFullName, options) && filePathComparer(childFullName, normalizePath(realpath(childFullName))) === Comparison.EqualTo ? childFullName : undefined;
-            }) : emptyArray,
-            parentWatcher.childWatches,
-            (child, childWatcher) => filePathComparer(child, childWatcher.dirName),
-            createAndAddChildDirectoryWatcher,
-            closeFileWatcher,
-            addChildDirectoryWatcher,
-        );
+        if (filePathComparer(target, parentDir) === Comparison.EqualTo) {
+            // if (parentWatcher.target) closeFileWatcher
+            hasChanges = enumerateInsertsAndDeletes<string, ChildDirectoryWatcher>(
+                fileSystemEntryExists(parentDir, FileSystemEntryKind.Directory) ? mapDefined(getAccessibleSortedChildDirectories(parentDir), child => {
+                    const childFullName = getNormalizedAbsolutePath(child, parentDir);
+                    // Filter our the symbolic link directories since those arent included in recursive watch
+                    // which is same behaviour when recursive: true is passed to fs.watch
+                    return !isIgnoredPath(childFullName, options) && filePathComparer(childFullName, normalizePath(realpath(childFullName))) === Comparison.EqualTo ? childFullName : undefined;
+                }) : emptyArray,
+                parentWatcher.childWatches,
+                (child, childWatcher) => filePathComparer(child, childWatcher.dirName),
+                createAndAddChildDirectoryWatcher,
+                closeFileWatcher,
+                addChildDirectoryWatcher,
+            );
+        }
+        else if (parentWatcher.targetWatcher && filePathComparer(target, parentWatcher.targetWatcher.dirName) === Comparison.EqualTo) {
+            hasChanges = false;
+            Debug.assert(parentWatcher.childWatches === emptyArray);
+        }
+        else {
+            closeTargetWatcher(parentWatcher);
+            parentWatcher.targetWatcher = createDirectoryWatcher(target, options, /*callback*/ undefined, parentDir);
+            parentWatcher.childWatches.forEach(closeFileWatcher);
+            hasChanges = true;
+        }
         parentWatcher.childWatches = newChildWatches || emptyArray;
         return hasChanges;
 
@@ -820,7 +888,7 @@ function createDirectoryWatcherSupportingRecursive({
 }
 
 /** @internal */
-export type FsWatchCallback = (eventName: "rename" | "change", relativeFileName: string | undefined | null, modifiedTime?: Date) => void;
+export type FsWatchCallback = (eventName: "rename" | "change", relativeFileName: string | undefined | null, modifiedTime?: Date) => void; // eslint-disable-line no-restricted-syntax
 /** @internal */
 export type FsWatch = (fileOrDirectory: string, entryKind: FileSystemEntryKind, callback: FsWatchCallback, recursive: boolean, fallbackPollingInterval: PollingInterval, fallbackOptions: WatchOptions | undefined) => FileWatcher;
 /** @internal */
@@ -974,7 +1042,7 @@ export function createSystemWatchFunctions({
                 );
             case WatchFileKind.UseFsEventsOnParentDirectory:
                 if (!nonPollingWatchFile) {
-                    nonPollingWatchFile = createUseFsEventsOnParentDirectoryWatchFile(fsWatch, useCaseSensitiveFileNames);
+                    nonPollingWatchFile = createUseFsEventsOnParentDirectoryWatchFile(fsWatch, useCaseSensitiveFileNames, getModifiedTime, fsWatchWithTimestamp);
                 }
                 return nonPollingWatchFile(fileName, callback, pollingInterval, getFallbackOptions(options));
             default:
@@ -1191,7 +1259,7 @@ export function createSystemWatchFunctions({
                 return watchPresentFileSystemEntryWithFsWatchFile();
             }
             try {
-                const presentWatcher = (!fsWatchWithTimestamp ? fsWatchWorker : fsWatchWorkerHandlingTimestamp)(
+                const presentWatcher = (entryKind === FileSystemEntryKind.Directory || !fsWatchWithTimestamp ? fsWatchWorker : fsWatchWorkerHandlingTimestamp)(
                     fileOrDirectory,
                     recursive,
                     inodeWatching ?
@@ -1215,7 +1283,7 @@ export function createSystemWatchFunctions({
             }
         }
 
-        function callbackChangingToMissingFileSystemEntry(event: "rename" | "change", relativeName: string | undefined | null) {
+        function callbackChangingToMissingFileSystemEntry(event: "rename" | "change", relativeName: string | undefined | null) { // eslint-disable-line no-restricted-syntax
             // In some scenarios, file save operation fires event with fileName.ext~ instead of fileName.ext
             // To ensure we see the file going missing and coming back up (file delete and then recreated)
             // and watches being updated correctly we are calling back with fileName.ext as well as fileName.ext~
@@ -1307,7 +1375,7 @@ export function createSystemWatchFunctions({
  *
  * @internal
  */
-export function patchWriteFileEnsuringDirectory(sys: System) {
+export function patchWriteFileEnsuringDirectory(sys: System): void {
     // patch writefile to create folder before writing the file
     const originalWriteFile = sys.writeFile;
     sys.writeFile = (path, data, writeBom) =>
@@ -1322,85 +1390,6 @@ export function patchWriteFileEnsuringDirectory(sys: System) {
 }
 
 export type BufferEncoding = "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex";
-
-/** @internal */
-export interface NodeBuffer extends Uint8Array {
-    constructor: any;
-    write(str: string, encoding?: BufferEncoding): number;
-    write(str: string, offset: number, encoding?: BufferEncoding): number;
-    write(str: string, offset: number, length: number, encoding?: BufferEncoding): number;
-    toString(encoding?: string, start?: number, end?: number): string;
-    toJSON(): { type: "Buffer"; data: number[]; };
-    equals(otherBuffer: Uint8Array): boolean;
-    compare(
-        otherBuffer: Uint8Array,
-        targetStart?: number,
-        targetEnd?: number,
-        sourceStart?: number,
-        sourceEnd?: number,
-    ): number;
-    copy(targetBuffer: Uint8Array, targetStart?: number, sourceStart?: number, sourceEnd?: number): number;
-    slice(begin?: number, end?: number): Buffer;
-    subarray(begin?: number, end?: number): Buffer;
-    writeUIntLE(value: number, offset: number, byteLength: number): number;
-    writeUIntBE(value: number, offset: number, byteLength: number): number;
-    writeIntLE(value: number, offset: number, byteLength: number): number;
-    writeIntBE(value: number, offset: number, byteLength: number): number;
-    readUIntLE(offset: number, byteLength: number): number;
-    readUIntBE(offset: number, byteLength: number): number;
-    readIntLE(offset: number, byteLength: number): number;
-    readIntBE(offset: number, byteLength: number): number;
-    readUInt8(offset: number): number;
-    readUInt16LE(offset: number): number;
-    readUInt16BE(offset: number): number;
-    readUInt32LE(offset: number): number;
-    readUInt32BE(offset: number): number;
-    readInt8(offset: number): number;
-    readInt16LE(offset: number): number;
-    readInt16BE(offset: number): number;
-    readInt32LE(offset: number): number;
-    readInt32BE(offset: number): number;
-    readFloatLE(offset: number): number;
-    readFloatBE(offset: number): number;
-    readDoubleLE(offset: number): number;
-    readDoubleBE(offset: number): number;
-    reverse(): this;
-    swap16(): Buffer;
-    swap32(): Buffer;
-    swap64(): Buffer;
-    writeUInt8(value: number, offset: number): number;
-    writeUInt16LE(value: number, offset: number): number;
-    writeUInt16BE(value: number, offset: number): number;
-    writeUInt32LE(value: number, offset: number): number;
-    writeUInt32BE(value: number, offset: number): number;
-    writeInt8(value: number, offset: number): number;
-    writeInt16LE(value: number, offset: number): number;
-    writeInt16BE(value: number, offset: number): number;
-    writeInt32LE(value: number, offset: number): number;
-    writeInt32BE(value: number, offset: number): number;
-    writeFloatLE(value: number, offset: number): number;
-    writeFloatBE(value: number, offset: number): number;
-    writeDoubleLE(value: number, offset: number): number;
-    writeDoubleBE(value: number, offset: number): number;
-    readBigUInt64BE?(offset?: number): bigint;
-    readBigUInt64LE?(offset?: number): bigint;
-    readBigInt64BE?(offset?: number): bigint;
-    readBigInt64LE?(offset?: number): bigint;
-    writeBigInt64BE?(value: bigint, offset?: number): number;
-    writeBigInt64LE?(value: bigint, offset?: number): number;
-    writeBigUInt64BE?(value: bigint, offset?: number): number;
-    writeBigUInt64LE?(value: bigint, offset?: number): number;
-    fill(value: string | Uint8Array | number, offset?: number, end?: number, encoding?: BufferEncoding): this;
-    indexOf(value: string | number | Uint8Array, byteOffset?: number, encoding?: BufferEncoding): number;
-    lastIndexOf(value: string | number | Uint8Array, byteOffset?: number, encoding?: BufferEncoding): number;
-    entries(): IterableIterator<[number, number]>;
-    includes(value: string | number | Buffer, byteOffset?: number, encoding?: BufferEncoding): boolean;
-    keys(): IterableIterator<number>;
-    values(): IterableIterator<number>;
-}
-
-/** @internal */
-export interface Buffer extends NodeBuffer {}
 
 // TODO: GH#18217 Methods on System are often used as if they are certainly defined
 export interface System {
@@ -1420,6 +1409,7 @@ export interface System {
      */
     watchFile?(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: WatchOptions): FileWatcher;
     watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher;
+    /**@internal */ preferNonRecursiveWatch?: boolean;
     resolvePath(path: string): string;
     fileExists(path: string): boolean;
     directoryExists(path: string): boolean;
@@ -1445,6 +1435,7 @@ export interface System {
     realpath?(path: string): string;
     /** @internal */ getEnvironmentVariable(name: string): string;
     /** @internal */ tryEnableSourceMapsForHost?(): void;
+    /** @internal */ getAccessibleFileSystemEntries?(path: string): FileSystemEntries;
     /** @internal */ debugMode?: boolean;
     setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
     clearTimeout?(timeoutId: any): void;
@@ -1452,12 +1443,11 @@ export interface System {
     /** @internal */ setBlocking?(): void;
     base64decode?(input: string): string;
     base64encode?(input: string): string;
-    /** @internal */ bufferFrom?(input: string, encoding?: string): Buffer;
     /** @internal */ require?(baseDir: string, moduleName: string): ModuleImportResult;
 
     // For testing
     /** @internal */ now?(): Date;
-    /** @internal */ storeFilesChangingSignatureDuringEmit?: boolean;
+    /** @internal */ storeSignatureInfo?: boolean;
 }
 
 export interface FileWatcher {
@@ -1476,7 +1466,7 @@ export let sys: System = (() => {
     const byteOrderMarkIndicator = "\uFEFF";
 
     function getNodeSystem(): System {
-        const nativePattern = /^native |^\([^)]+\)$|^(internal[\\/]|[a-zA-Z0-9_\s]+(\.js)?$)/;
+        const nativePattern = /^native |^\([^)]+\)$|^(?:internal[\\/]|[\w\s]+(?:\.js)?$)/;
         const _fs: typeof import("fs") = require("fs");
         const _path: typeof import("path") = require("path");
         const _os = require("os");
@@ -1491,13 +1481,10 @@ export let sys: System = (() => {
         let activeSession: import("inspector").Session | "stopping" | undefined;
         let profilePath = "./profile.cpuprofile";
 
-        const Buffer: {
-            new (input: string, encoding?: string): any;
-            from?(input: string, encoding?: string): any;
-        } = require("buffer").Buffer;
-
         const isMacOs = process.platform === "darwin";
         const isLinuxOrMacOs = process.platform === "linux" || isMacOs;
+
+        const statSyncOptions = { throwIfNoEntry: false } as const;
 
         const platform: string = _os.platform();
         const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
@@ -1550,9 +1537,11 @@ export let sys: System = (() => {
             writeFile,
             watchFile,
             watchDirectory,
+            preferNonRecursiveWatch: !fsSupportsRecursiveFsWatch,
             resolvePath: path => _path.resolve(path),
             fileExists,
             directoryExists,
+            getAccessibleFileSystemEntries,
             createDirectory(directoryName: string) {
                 if (!nodeSystem.directoryExists(directoryName)) {
                     // Wrapped in a try-catch to prevent crashing if we are in a race
@@ -1589,13 +1578,10 @@ export let sys: System = (() => {
                 return process.memoryUsage().heapUsed;
             },
             getFileSize(path) {
-                try {
-                    const stat = statSync(path);
-                    if (stat?.isFile()) {
-                        return stat.size;
-                    }
+                const stat = statSync(path);
+                if (stat?.isFile()) {
+                    return stat.size;
                 }
-                catch { /*ignore*/ }
                 return 0;
             },
             exit(exitCode?: number): void {
@@ -1605,7 +1591,7 @@ export let sys: System = (() => {
             disableCPUProfiler,
             cpuProfilingEnabled: () => !!activeSession || contains(process.execArgv, "--cpu-prof") || contains(process.execArgv, "--prof"),
             realpath,
-            debugMode: !!process.env.NODE_INSPECTOR_IPC || !!process.env.VSCODE_INSPECTOR_OPTIONS || some(process.execArgv, arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)) || !!(process as any).recordreplay,
+            debugMode: !!process.env.NODE_INSPECTOR_IPC || !!process.env.VSCODE_INSPECTOR_OPTIONS || some(process.execArgv, arg => /^--(?:inspect|debug)(?:-brk)?(?:=\d+)?$/i.test(arg)) || !!(process as any).recordreplay,
             tryEnableSourceMapsForHost() {
                 try {
                     (require("source-map-support") as typeof import("source-map-support")).install();
@@ -1617,7 +1603,7 @@ export let sys: System = (() => {
             setTimeout,
             clearTimeout,
             clearScreen: () => {
-                process.stdout.write("\x1Bc");
+                process.stdout.write("\x1B[2J\x1B[3J\x1B[H");
             },
             setBlocking: () => {
                 const handle = (process.stdout as any)?._handle as { setBlocking?: (value: boolean) => void; };
@@ -1625,9 +1611,8 @@ export let sys: System = (() => {
                     handle.setBlocking(true);
                 }
             },
-            bufferFrom,
-            base64decode: input => bufferFrom(input, "base64").toString("utf8"),
-            base64encode: input => bufferFrom(input).toString("base64"),
+            base64decode: input => Buffer.from(input, "base64").toString("utf8"),
+            base64encode: input => Buffer.from(input).toString("base64"),
             require: (baseDir, moduleName) => {
                 try {
                     const modulePath = resolveJSModule(moduleName, baseDir, nodeSystem);
@@ -1640,14 +1625,17 @@ export let sys: System = (() => {
         };
         return nodeSystem;
 
-        /**
-         * `throwIfNoEntry` was added so recently that it's not in the node types.
-         * This helper encapsulates the mitigating usage of `any`.
-         * See https://github.com/nodejs/node/pull/33716
-         */
+        /** Calls fs.statSync, returning undefined if any errors are thrown */
         function statSync(path: string): import("fs").Stats | undefined {
-            // throwIfNoEntry will be ignored by older versions of node
-            return (_fs as any).statSync(path, { throwIfNoEntry: false });
+            // throwIfNoEntry is available in Node 14.17 and above, which matches our supported range.
+            try {
+                return _fs.statSync(path, statSyncOptions);
+            }
+            catch {
+                // This should never happen as we are passing throwIfNoEntry: false,
+                // but guard against this just in case (e.g. a polyfill doesn't check this flag).
+                return undefined;
+            }
         }
 
         /**
@@ -1707,13 +1695,8 @@ export let sys: System = (() => {
                 const s = activeSession;
                 activeSession.post("Profiler.stop", (err, { profile }) => {
                     if (!err) {
-                        try {
-                            if (statSync(profilePath)?.isDirectory()) {
-                                profilePath = _path.join(profilePath, `${(new Date()).toISOString().replace(/:/g, "-")}+P${process.pid}.cpuprofile`);
-                            }
-                        }
-                        catch {
-                            // do nothing and ignore fallible fs operation
+                        if (statSync(profilePath)?.isDirectory()) {
+                            profilePath = _path.join(profilePath, `${(new Date()).toISOString().replace(/:/g, "-")}+P${process.pid}.cpuprofile`);
                         }
                         try {
                             _fs.mkdirSync(_path.dirname(profilePath), { recursive: true });
@@ -1734,13 +1717,6 @@ export let sys: System = (() => {
                 cb();
                 return false;
             }
-        }
-
-        function bufferFrom(input: string, encoding?: string): Buffer {
-            // See https://github.com/Microsoft/TypeScript/issues/25652
-            return Buffer.from && Buffer.from !== Int8Array.from
-                ? Buffer.from(input, encoding)
-                : new Buffer(input, encoding);
         }
 
         function isFileSystemCaseSensitive(): boolean {
@@ -1808,12 +1784,12 @@ export let sys: System = (() => {
             );
         }
 
-        function readFileWorker(fileName: string, _encoding?: string): string | undefined {
+        function readFile(fileName: string, _encoding?: string): string | undefined {
             let buffer: Buffer;
             try {
                 buffer = _fs.readFileSync(fileName);
             }
-            catch (e) {
+            catch {
                 return undefined;
             }
             let len = buffer.length;
@@ -1840,15 +1816,7 @@ export let sys: System = (() => {
             return buffer.toString("utf8");
         }
 
-        function readFile(fileName: string, _encoding?: string): string | undefined {
-            perfLogger?.logStartReadFile(fileName);
-            const file = readFileWorker(fileName, _encoding);
-            perfLogger?.logStopReadFile();
-            return file;
-        }
-
         function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
-            perfLogger?.logEvent("WriteFile: " + fileName);
             // If a BOM is required, emit one
             if (writeByteOrderMark) {
                 data = byteOrderMarkIndicator + data;
@@ -1868,7 +1836,6 @@ export let sys: System = (() => {
         }
 
         function getAccessibleFileSystemEntries(path: string): FileSystemEntries {
-            perfLogger?.logEvent("ReadDir: " + (path || "."));
             try {
                 const entries = _fs.readdirSync(path || ".", { withFileTypes: true });
                 const files: string[] = [];
@@ -1887,13 +1854,8 @@ export let sys: System = (() => {
                     if (typeof dirent === "string" || dirent.isSymbolicLink()) {
                         const name = combinePaths(path, entry);
 
-                        try {
-                            stat = statSync(name);
-                            if (!stat) {
-                                continue;
-                            }
-                        }
-                        catch (e) {
+                        stat = statSync(name);
+                        if (!stat) {
                             continue;
                         }
                     }
@@ -1912,7 +1874,7 @@ export let sys: System = (() => {
                 directories.sort();
                 return { files, directories };
             }
-            catch (e) {
+            catch {
                 return emptyFileSystemEntries;
             }
         }
@@ -1922,30 +1884,17 @@ export let sys: System = (() => {
         }
 
         function fileSystemEntryExists(path: string, entryKind: FileSystemEntryKind): boolean {
-            // Since the error thrown by fs.statSync isn't used, we can avoid collecting a stack trace to improve
-            // the CPU time performance.
-            const originalStackTraceLimit = Error.stackTraceLimit;
-            Error.stackTraceLimit = 0;
-
-            try {
-                const stat = statSync(path);
-                if (!stat) {
-                    return false;
-                }
-                switch (entryKind) {
-                    case FileSystemEntryKind.File:
-                        return stat.isFile();
-                    case FileSystemEntryKind.Directory:
-                        return stat.isDirectory();
-                    default:
-                        return false;
-                }
-            }
-            catch (e) {
+            const stat = statSync(path);
+            if (!stat) {
                 return false;
             }
-            finally {
-                Error.stackTraceLimit = originalStackTraceLimit;
+            switch (entryKind) {
+                case FileSystemEntryKind.File:
+                    return stat.isFile();
+                case FileSystemEntryKind.Directory:
+                    return stat.isDirectory();
+                default:
+                    return false;
             }
         }
 
@@ -1975,26 +1924,14 @@ export let sys: System = (() => {
         }
 
         function getModifiedTime(path: string) {
-            // Since the error thrown by fs.statSync isn't used, we can avoid collecting a stack trace to improve
-            // the CPU time performance.
-            const originalStackTraceLimit = Error.stackTraceLimit;
-            Error.stackTraceLimit = 0;
-            try {
-                return statSync(path)?.mtime;
-            }
-            catch (e) {
-                return undefined;
-            }
-            finally {
-                Error.stackTraceLimit = originalStackTraceLimit;
-            }
+            return statSync(path)?.mtime;
         }
 
         function setModifiedTime(path: string, time: Date) {
             try {
                 _fs.utimesSync(path, time, time);
             }
-            catch (e) {
+            catch {
                 return;
             }
         }
@@ -2003,7 +1940,7 @@ export let sys: System = (() => {
             try {
                 return _fs.unlinkSync(path);
             }
-            catch (e) {
+            catch {
                 return;
             }
         }
@@ -2026,8 +1963,8 @@ export let sys: System = (() => {
     return sys!;
 })();
 
-/** @internal */
-export function setSys(s: System) {
+/** @internal @knipignore */
+export function setSys(s: System): void {
     sys = s;
 }
 

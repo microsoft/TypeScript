@@ -3,5 +3,7 @@
 === parserClassDeclaration3.ts ===
 class C implements A extends B {
 >C : C
+>  : ^
 >B : any
+>  : ^^^
 }

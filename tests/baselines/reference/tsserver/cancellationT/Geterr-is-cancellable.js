@@ -1,57 +1,80 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
-//// [/a/app.ts]
+//// [/home/src/projects/myproject/app.ts]
 let x = 1
 
-//// [/a/tsconfig.json]
+//// [/home/src/projects/myproject/tsconfig.json]
 {
   "compilerOptions": {}
 }
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/a/app.ts"
+        "file": "/home/src/projects/myproject/app.ts"
       },
       "seq": 1,
       "type": "request"
     }
 TestServerCancellationToken:: Cancellation Request id:: 1
-Info seq  [hh:mm:ss:mss] Search path: /a
-Info seq  [hh:mm:ss:mss] For info: /a/app.ts :: Config file name: /a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /a/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/tsconfig.json 2000 undefined Project: /a/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/myproject/app.ts ProjectRootPath: undefined:: Result: /home/src/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/projects/myproject/tsconfig.json, currentDirectory: /home/src/projects/myproject
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/tsconfig.json 2000 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /home/src/projects/myproject/tsconfig.json : {
+ "rootNames": [
+  "/home/src/projects/myproject/app.ts"
+ ],
+ "options": {
+  "configFilePath": "/home/src/projects/myproject/tsconfig.json"
+ }
+}
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/a/tsconfig.json",
-        "reason": "Creating possible configured project for /a/app.ts to open"
+        "projectName": "/home/src/projects/myproject/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/projects/myproject/app.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /a/tsconfig.json : {
- "rootNames": [
-  "/a/app.ts"
- ],
- "options": {
-  "configFilePath": "/a/tsconfig.json"
- }
-}
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a 1 undefined Config: /a/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a 1 undefined Config: /a/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (1)
-	/a/app.ts SVC-1-0 "let x = 1"
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject 1 undefined Config: /home/src/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject 1 undefined Config: /home/src/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/node_modules/@types 1 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/node_modules/@types 1 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/myproject/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/myproject/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/projects/myproject/app.ts SVC-1-0 "let x = 1"
 
 
+	../../tslibs/TS/Lib/lib.d.ts
+	  Default library for target 'es5'
 	app.ts
 	  Matched by default include pattern '**/*'
 
@@ -62,7 +85,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/a/tsconfig.json"
+        "projectName": "/home/src/projects/myproject/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -73,7 +96,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "bcbb3eb9a7f46ab3b8f574ad3733f3e5a7ce50557c14c0c6192f1203aedcacca",
+          "projectId": "c082244e14d80420126a10c084f20f9b41809e79e7f5a330fc4d923f1197daa1",
           "fileStats": {
             "js": 0,
             "jsSize": 0,
@@ -83,8 +106,8 @@ Info seq  [hh:mm:ss:mss] event:
             "tsSize": 9,
             "tsx": 0,
             "tsxSize": 0,
-            "dts": 0,
-            "dtsSize": 0,
+            "dts": 1,
+            "dtsSize": 413,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -112,82 +135,63 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/a/app.ts",
-        "configFile": "/a/tsconfig.json",
-        "diagnostics": [
-          {
-            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
-            "code": 6053,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Array'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Boolean'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Function'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'IArguments'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Number'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Object'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'RegExp'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'String'.",
-            "code": 2318,
-            "category": "error"
-          }
-        ]
+        "triggerFile": "/home/src/projects/myproject/app.ts",
+        "configFile": "/home/src/projects/myproject/tsconfig.json",
+        "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/myproject/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a/app.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /a/tsconfig.json
-TestServerCancellationToken:: resetRequest:: 1 is as expected
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/myproject/app.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
+TestServerCancellationToken:: resetRequest:: 1 is as expected
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/tsconfig.json: *new*
+/home/src/projects/myproject/tsconfig.json: *new*
+  {}
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a: *new*
+/home/src/projects/myproject: *new*
   {}
+
+Projects::
+/home/src/projects/myproject/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: false
+
+ScriptInfos::
+/home/src/projects/myproject/app.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/myproject/tsconfig.json *default*
+/home/src/tslibs/TS/Lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/myproject/tsconfig.json
 
 Before request
 
@@ -196,7 +200,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "geterr",
       "arguments": {
         "files": [
-          "/a/missing"
+          "/home/src/projects/myproject/missing"
         ],
         "delay": 0
       },
@@ -205,10 +209,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 TestServerCancellationToken:: Cancellation Request id:: 2
 TestServerCancellationToken:: resetRequest:: 2 is as expected
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 1
@@ -237,7 +237,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "geterr",
       "arguments": {
         "files": [
-          "/a/app.ts"
+          "/home/src/projects/myproject/app.ts"
         ],
         "delay": 0
       },
@@ -246,10 +246,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 TestServerCancellationToken:: Cancellation Request id:: 3
 TestServerCancellationToken:: resetRequest:: 3 is as expected
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 1
@@ -261,8 +257,9 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "projectInfo",
       "arguments": {
-        "file": "/a/app.ts",
-        "needFileNameList": false
+        "file": "/home/src/projects/myproject/app.ts",
+        "needFileNameList": false,
+        "needDefaultConfiguredProjectInfo": true
       },
       "seq": 4,
       "type": "request"
@@ -272,8 +269,11 @@ TestServerCancellationToken:: resetRequest:: 4 is as expected
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
-        "configFileName": "/a/tsconfig.json",
-        "languageServiceDisabled": false
+        "configFileName": "/home/src/projects/myproject/tsconfig.json",
+        "languageServiceDisabled": false,
+        "configuredProjectInfo": {
+          "defaultProject": "/home/src/projects/myproject/tsconfig.json"
+        }
       },
       "responseRequired": true
     }
@@ -304,7 +304,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "geterr",
       "arguments": {
         "files": [
-          "/a/app.ts"
+          "/home/src/projects/myproject/app.ts"
         ],
         "delay": 0
       },
@@ -313,10 +313,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 TestServerCancellationToken:: Cancellation Request id:: 5
 TestServerCancellationToken:: resetRequest:: 5 is as expected
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 1
@@ -332,7 +328,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "syntaxDiag",
       "body": {
-        "file": "/a/app.ts",
+        "file": "/home/src/projects/myproject/app.ts",
         "diagnostics": []
       }
     }
@@ -354,7 +350,15 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 5
+        "request_seq": 5,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "file": "/home/src/projects/myproject/app.ts"
+            }
+          ]
+        }
       }
     }
 TestServerCancellationToken:: resetRequest:: 5 is as expected
@@ -367,7 +371,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "geterr",
       "arguments": {
         "files": [
-          "/a/app.ts"
+          "/home/src/projects/myproject/app.ts"
         ],
         "delay": 0
       },
@@ -376,10 +380,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 TestServerCancellationToken:: Cancellation Request id:: 6
 TestServerCancellationToken:: resetRequest:: 6 is as expected
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 1
@@ -395,7 +395,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "syntaxDiag",
       "body": {
-        "file": "/a/app.ts",
+        "file": "/home/src/projects/myproject/app.ts",
         "diagnostics": []
       }
     }
@@ -415,7 +415,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "semanticDiag",
       "body": {
-        "file": "/a/app.ts",
+        "file": "/home/src/projects/myproject/app.ts",
         "diagnostics": []
       }
     }
@@ -435,7 +435,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "suggestionDiag",
       "body": {
-        "file": "/a/app.ts",
+        "file": "/home/src/projects/myproject/app.ts",
         "diagnostics": []
       }
     }
@@ -445,7 +445,17 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 6
+        "request_seq": 6,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/home/src/projects/myproject/app.ts"
+            }
+          ]
+        }
       }
     }
 TestServerCancellationToken:: resetRequest:: 6 is as expected
@@ -458,7 +468,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "geterr",
       "arguments": {
         "files": [
-          "/a/app.ts"
+          "/home/src/projects/myproject/app.ts"
         ],
         "delay": 0
       },
@@ -467,10 +477,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 TestServerCancellationToken:: Cancellation Request id:: 7
 TestServerCancellationToken:: resetRequest:: 7 is as expected
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 1
@@ -486,7 +492,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "syntaxDiag",
       "body": {
-        "file": "/a/app.ts",
+        "file": "/home/src/projects/myproject/app.ts",
         "diagnostics": []
       }
     }
@@ -503,7 +509,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "geterr",
       "arguments": {
         "files": [
-          "/a/app.ts"
+          "/home/src/projects/myproject/app.ts"
         ],
         "delay": 0
       },
@@ -517,14 +523,18 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 7
+        "request_seq": 7,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "file": "/home/src/projects/myproject/app.ts"
+            }
+          ]
+        }
       }
     }
 TestServerCancellationToken:: resetRequest:: 8 is as expected
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 1

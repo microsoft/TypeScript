@@ -5,17 +5,26 @@
 interface I {
     [x = '']: string;
 >[x = ''] : string
+>         : ^^^^^^
 >x = '' : ""
+>       : ^^
 >x : any
+>  : ^^^
 >'' : ""
+>   : ^^
 }
 
 class C {
 >C : C
+>  : ^
 
     [x = 0]: string
 >[x = 0] : string
+>        : ^^^^^^
 >x = 0 : 0
+>      : ^
 >x : any
+>  : ^^^
 >0 : 0
+>  : ^
 }

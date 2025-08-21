@@ -6,13 +6,16 @@ declare var Factory: any
 
 class Base {
 >Base : Base
+>     : ^^^^
 
     constructor(c) { }
 >c : any
 }
 class D extends Base {
 >D : D
+>  : ^
 >Base : Base
+>     : ^^^^
 
     private _t;
 >_t : any
@@ -20,26 +23,35 @@ class D extends Base {
     constructor() {
         super(i);
 >super(i) : void
+>         : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
 >i : any
 
         var s = {
 >s : { t: any; }
+>  : ^^^^^^^^^^^
 >{            t: this._t        } : { t: any; }
+>                                 : ^^^^^^^^^^^
 
             t: this._t
 >t : any
 >this._t : any
 >this : this
+>     : ^^^^
 >_t : any
+>   : ^^^
         }
         var i = Factory.create(s);
 >i : any
 >Factory.create(s) : any
 >Factory.create : any
 >Factory : any
+>        : ^^^
 >create : any
+>       : ^^^
 >s : { t: any; }
+>  : ^^^^^^^^^^^
     }
 }
 

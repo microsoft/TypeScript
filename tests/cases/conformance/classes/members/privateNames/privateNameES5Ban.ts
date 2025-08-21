@@ -1,4 +1,4 @@
-// @target: es5, es3
+// @target: es5
 
 class A {
     constructor() {}
