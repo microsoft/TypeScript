@@ -122,6 +122,30 @@ func TestTscCommandline(t *testing.T) {
 			subScenario:     "Parse watch interval option without tsconfig.json",
 			commandLineArgs: []string{"-w", "--watchInterval", "1000"},
 		},
+		{
+			subScenario: "Config with references and empty file and refers to config with noEmit",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`{
+					"files": [],
+					"references": [
+						{
+							"path": "./packages/pkg1"
+						},
+					],
+				}`),
+				"/home/src/workspaces/project/packages/pkg1/tsconfig.json": stringtestutil.Dedent(`{
+					"compilerOptions": {
+						"composite": true,
+						"noEmit": true
+					},
+					"files": [
+						"./index.ts",
+					],
+				}`),
+				"/home/src/workspaces/project/packages/pkg1/index.ts": `export const a = 1;`,
+			},
+			commandLineArgs: []string{"-p", "."},
+		},
 	}
 
 	for _, testCase := range testCases {

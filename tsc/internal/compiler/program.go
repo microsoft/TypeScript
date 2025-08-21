@@ -862,7 +862,7 @@ func (p *Program) verifyProjectReferences() {
 		}
 		refOptions := config.CompilerOptions()
 		if !refOptions.Composite.IsTrue() || refOptions.NoEmit.IsTrue() {
-			if len(config.FileNames()) > 0 {
+			if len(parent.FileNames()) > 0 {
 				if !refOptions.Composite.IsTrue() {
 					createDiagnosticForReference(parent, index, diagnostics.Referenced_project_0_must_have_setting_composite_Colon_true, ref.Path)
 				}
