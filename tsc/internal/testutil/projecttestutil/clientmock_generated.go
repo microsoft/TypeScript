@@ -24,10 +24,10 @@ var _ project.Client = &ClientMock{}
 //			RefreshDiagnosticsFunc: func(ctx context.Context) error {
 //				panic("mock out the RefreshDiagnostics method")
 //			},
-//			UnwatchFilesFunc: func(ctx context.Context, handle project.WatcherHandle) error {
+//			UnwatchFilesFunc: func(ctx context.Context, id project.WatcherID) error {
 //				panic("mock out the UnwatchFiles method")
 //			},
-//			WatchFilesFunc: func(ctx context.Context, watchers []*lsproto.FileSystemWatcher) (project.WatcherHandle, error) {
+//			WatchFilesFunc: func(ctx context.Context, id project.WatcherID, watchers []*lsproto.FileSystemWatcher) error {
 //				panic("mock out the WatchFiles method")
 //			},
 //		}
@@ -41,10 +41,10 @@ type ClientMock struct {
 	RefreshDiagnosticsFunc func(ctx context.Context) error
 
 	// UnwatchFilesFunc mocks the UnwatchFiles method.
-	UnwatchFilesFunc func(ctx context.Context, handle project.WatcherHandle) error
+	UnwatchFilesFunc func(ctx context.Context, id project.WatcherID) error
 
 	// WatchFilesFunc mocks the WatchFiles method.
-	WatchFilesFunc func(ctx context.Context, watchers []*lsproto.FileSystemWatcher) (project.WatcherHandle, error)
+	WatchFilesFunc func(ctx context.Context, id project.WatcherID, watchers []*lsproto.FileSystemWatcher) error
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -57,13 +57,15 @@ type ClientMock struct {
 		UnwatchFiles []struct {
 			// Ctx is the ctx argument value.
 			Ctx context.Context
-			// Handle is the handle argument value.
-			Handle project.WatcherHandle
+			// ID is the id argument value.
+			ID project.WatcherID
 		}
 		// WatchFiles holds details about calls to the WatchFiles method.
 		WatchFiles []struct {
 			// Ctx is the ctx argument value.
 			Ctx context.Context
+			// ID is the id argument value.
+			ID project.WatcherID
 			// Watchers is the watchers argument value.
 			Watchers []*lsproto.FileSystemWatcher
 		}
@@ -107,13 +109,13 @@ func (mock *ClientMock) RefreshDiagnosticsCalls() []struct {
 }
 
 // UnwatchFiles calls UnwatchFilesFunc.
-func (mock *ClientMock) UnwatchFiles(ctx context.Context, handle project.WatcherHandle) error {
+func (mock *ClientMock) UnwatchFiles(ctx context.Context, id project.WatcherID) error {
 	callInfo := struct {
-		Ctx    context.Context
-		Handle project.WatcherHandle
+		Ctx context.Context
+		ID  project.WatcherID
 	}{
-		Ctx:    ctx,
-		Handle: handle,
+		Ctx: ctx,
+		ID:  id,
 	}
 	mock.lockUnwatchFiles.Lock()
 	mock.calls.UnwatchFiles = append(mock.calls.UnwatchFiles, callInfo)
@@ -122,7 +124,7 @@ func (mock *ClientMock) UnwatchFiles(ctx context.Context, handle project.Watcher
 		var errOut error
 		return errOut
 	}
-	return mock.UnwatchFilesFunc(ctx, handle)
+	return mock.UnwatchFilesFunc(ctx, id)
 }
 
 // UnwatchFilesCalls gets all the calls that were made to UnwatchFiles.
@@ -130,12 +132,12 @@ func (mock *ClientMock) UnwatchFiles(ctx context.Context, handle project.Watcher
 //
 //	len(mockedClient.UnwatchFilesCalls())
 func (mock *ClientMock) UnwatchFilesCalls() []struct {
-	Ctx    context.Context
-	Handle project.WatcherHandle
+	Ctx context.Context
+	ID  project.WatcherID
 } {
 	var calls []struct {
-		Ctx    context.Context
-		Handle project.WatcherHandle
+		Ctx context.Context
+		ID  project.WatcherID
 	}
 	mock.lockUnwatchFiles.RLock()
 	calls = mock.calls.UnwatchFiles
@@ -144,25 +146,24 @@ func (mock *ClientMock) UnwatchFilesCalls() []struct {
 }
 
 // WatchFiles calls WatchFilesFunc.
-func (mock *ClientMock) WatchFiles(ctx context.Context, watchers []*lsproto.FileSystemWatcher) (project.WatcherHandle, error) {
+func (mock *ClientMock) WatchFiles(ctx context.Context, id project.WatcherID, watchers []*lsproto.FileSystemWatcher) error {
 	callInfo := struct {
 		Ctx      context.Context
+		ID       project.WatcherID
 		Watchers []*lsproto.FileSystemWatcher
 	}{
 		Ctx:      ctx,
+		ID:       id,
 		Watchers: watchers,
 	}
 	mock.lockWatchFiles.Lock()
 	mock.calls.WatchFiles = append(mock.calls.WatchFiles, callInfo)
 	mock.lockWatchFiles.Unlock()
 	if mock.WatchFilesFunc == nil {
-		var (
-			watcherHandleOut project.WatcherHandle
-			errOut           error
-		)
-		return watcherHandleOut, errOut
+		var errOut error
+		return errOut
 	}
-	return mock.WatchFilesFunc(ctx, watchers)
+	return mock.WatchFilesFunc(ctx, id, watchers)
 }
 
 // WatchFilesCalls gets all the calls that were made to WatchFiles.
@@ -171,10 +172,12 @@ func (mock *ClientMock) WatchFiles(ctx context.Context, watchers []*lsproto.File
 //	len(mockedClient.WatchFilesCalls())
 func (mock *ClientMock) WatchFilesCalls() []struct {
 	Ctx      context.Context
+	ID       project.WatcherID
 	Watchers []*lsproto.FileSystemWatcher
 } {
 	var calls []struct {
 		Ctx      context.Context
+		ID       project.WatcherID
 		Watchers []*lsproto.FileSystemWatcher
 	}
 	mock.lockWatchFiles.RLock()

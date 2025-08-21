@@ -1,277 +1,125 @@
 package project
 
 import (
-	"context"
-	"fmt"
 	"maps"
-	"slices"
-	"sync"
 
-	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
-type ConfigFileEntry struct {
-	mu             sync.RWMutex
-	commandLine    *tsoptions.ParsedCommandLine
-	projects       collections.Set[*Project]
-	infos          collections.Set[*ScriptInfo]
-	pendingReload  PendingReload
-	rootFilesWatch *watchedFiles[[]string]
-}
-
-type ExtendedConfigFileEntry struct {
-	mu          sync.Mutex
-	configFiles collections.Set[tspath.Path]
-}
-
 type ConfigFileRegistry struct {
-	Host                  ProjectHost
-	defaultProjectFinder  *defaultProjectFinder
-	ConfigFiles           collections.SyncMap[tspath.Path, *ConfigFileEntry]
-	ExtendedConfigCache   collections.SyncMap[tspath.Path, *tsoptions.ExtendedConfigCacheEntry]
-	ExtendedConfigsUsedBy collections.SyncMap[tspath.Path, *ExtendedConfigFileEntry]
+	// configs is a map of config file paths to their entries.
+	configs map[tspath.Path]*configFileEntry
+	// configFileNames is a map of open file paths to information
+	// about their ancestor config file names. It is only used as
+	// a cache during
+	configFileNames map[tspath.Path]*configFileNames
 }
 
-func (e *ConfigFileEntry) SetPendingReload(level PendingReload) bool {
-	if e.pendingReload < level {
-		e.pendingReload = level
-		return true
+type configFileEntry struct {
+	pendingReload PendingReload
+	commandLine   *tsoptions.ParsedCommandLine
+	// retainingProjects is the set of projects that have called acquireConfig
+	// without releasing it. A config file entry may be acquired by a project
+	// either because it is the config for that project or because it is the
+	// config for a referenced project.
+	retainingProjects map[tspath.Path]struct{}
+	// retainingOpenFiles is the set of open files that caused this config to
+	// load during project collection building. This config file may or may not
+	// end up being the config for the default project for these files, but
+	// determining the default project loaded this config as a candidate, so
+	// subsequent calls to `projectCollectionBuilder.findDefaultConfiguredProject`
+	// will use this config as part of the search, so it must be retained.
+	retainingOpenFiles map[tspath.Path]struct{}
+	// retainingConfigs is the set of config files that extend this one. This
+	// provides a cheap reverse mapping for a project config's
+	// `commandLine.ExtendedSourceFiles()` that can be used to notify the
+	// extending projects when this config changes. An extended config file may
+	// or may not also be used directly by a project, so it's possible that
+	// when this is set, no other fields will be used.
+	retainingConfigs map[tspath.Path]struct{}
+	// rootFilesWatch is a watch for the root files of this config file.
+	rootFilesWatch *WatchedFiles[[]string]
+}
+
+func newConfigFileEntry(fileName string) *configFileEntry {
+	return &configFileEntry{
+		pendingReload: PendingReloadFull,
+		rootFilesWatch: NewWatchedFiles(
+			"root files for "+fileName,
+			lsproto.WatchKindCreate|lsproto.WatchKindChange|lsproto.WatchKindDelete,
+			core.Identity,
+		),
 	}
-	return false
 }
 
-var _ watchFileHost = (*configFileWatchHost)(nil)
-
-type configFileWatchHost struct {
-	fileName string
-	host     ProjectHost
-}
-
-func (h *configFileWatchHost) Name() string {
-	return h.fileName
-}
-
-func (c *configFileWatchHost) Client() Client {
-	return c.host.Client()
-}
-
-func (c *configFileWatchHost) Log(message string) {
-	c.host.Log(message)
-}
-
-func (c *ConfigFileRegistry) releaseConfig(path tspath.Path, project *Project) {
-	entry, ok := c.ConfigFiles.Load(path)
-	if !ok {
-		return
+func newExtendedConfigFileEntry(extendingConfigPath tspath.Path) *configFileEntry {
+	return &configFileEntry{
+		pendingReload:    PendingReloadFull,
+		retainingConfigs: map[tspath.Path]struct{}{extendingConfigPath: {}},
 	}
-	entry.mu.Lock()
-	defer entry.mu.Unlock()
-	entry.projects.Delete(project)
 }
 
-func (c *ConfigFileRegistry) acquireConfig(fileName string, path tspath.Path, project *Project, info *ScriptInfo) *tsoptions.ParsedCommandLine {
-	entry, ok := c.ConfigFiles.Load(path)
-	if !ok {
-		// Create parsed command line
-		config, _ := tsoptions.GetParsedCommandLineOfConfigFilePath(fileName, path, nil, c.Host, &c.ExtendedConfigCache)
-		var rootFilesWatch *watchedFiles[[]string]
-		client := c.Host.Client()
-		if c.Host.IsWatchEnabled() && client != nil {
-			rootFilesWatch = newWatchedFiles(&configFileWatchHost{fileName: fileName, host: c.Host}, lsproto.WatchKindChange|lsproto.WatchKindCreate|lsproto.WatchKindDelete, core.Identity, "root files")
-		}
-		entry, _ = c.ConfigFiles.LoadOrStore(path, &ConfigFileEntry{
-			commandLine:    config,
-			pendingReload:  PendingReloadFull,
-			rootFilesWatch: rootFilesWatch,
-		})
+func (e *configFileEntry) Clone() *configFileEntry {
+	return &configFileEntry{
+		pendingReload: e.pendingReload,
+		commandLine:   e.commandLine,
+		// !!! eagerly cloning these maps makes everything more convenient,
+		// but it could be avoided if needed.
+		retainingProjects:  maps.Clone(e.retainingProjects),
+		retainingOpenFiles: maps.Clone(e.retainingOpenFiles),
+		retainingConfigs:   maps.Clone(e.retainingConfigs),
+		rootFilesWatch:     e.rootFilesWatch,
 	}
-	entry.mu.Lock()
-	defer entry.mu.Unlock()
-	if project != nil {
-		entry.projects.Add(project)
-	} else if info != nil {
-		entry.infos.Add(info)
-	}
-	if entry.pendingReload == PendingReloadNone {
-		return entry.commandLine
-	}
-	switch entry.pendingReload {
-	case PendingReloadFileNames:
-		entry.commandLine = entry.commandLine.ReloadFileNamesOfParsedCommandLine(c.Host.FS())
-	case PendingReloadFull:
-		oldCommandLine := entry.commandLine
-		entry.commandLine, _ = tsoptions.GetParsedCommandLineOfConfigFilePath(fileName, path, nil, c.Host, &c.ExtendedConfigCache)
-		c.updateExtendedConfigsUsedBy(path, entry, oldCommandLine)
-		c.updateRootFilesWatch(fileName, entry)
-	}
-	entry.pendingReload = PendingReloadNone
-	return entry.commandLine
 }
 
-func (c *ConfigFileRegistry) getConfig(path tspath.Path) *tsoptions.ParsedCommandLine {
-	entry, ok := c.ConfigFiles.Load(path)
-	if ok {
-		entry.mu.RLock()
-		defer entry.mu.RUnlock()
+func (c *ConfigFileRegistry) GetConfig(path tspath.Path) *tsoptions.ParsedCommandLine {
+	if entry, ok := c.configs[path]; ok {
 		return entry.commandLine
 	}
 	return nil
 }
 
-func (c *ConfigFileRegistry) releaseConfigsForInfo(info *ScriptInfo) {
-	c.ConfigFiles.Range(func(path tspath.Path, entry *ConfigFileEntry) bool {
-		entry.mu.Lock()
-		entry.infos.Delete(info)
-		entry.mu.Unlock()
-		return true
-	})
+func (c *ConfigFileRegistry) GetConfigFileName(path tspath.Path) string {
+	if entry, ok := c.configFileNames[path]; ok {
+		return entry.nearestConfigFileName
+	}
+	return ""
 }
 
-func (c *ConfigFileRegistry) updateRootFilesWatch(fileName string, entry *ConfigFileEntry) {
-	if entry.rootFilesWatch == nil {
-		return
+func (c *ConfigFileRegistry) GetAncestorConfigFileName(path tspath.Path, higherThanConfig string) string {
+	if entry, ok := c.configFileNames[path]; ok {
+		return entry.ancestors[higherThanConfig]
 	}
-
-	wildcardGlobs := entry.commandLine.WildcardDirectories()
-	rootFileGlobs := make([]string, 0, len(wildcardGlobs)+1+len(entry.commandLine.ExtendedSourceFiles()))
-	rootFileGlobs = append(rootFileGlobs, fileName)
-	for _, extendedConfig := range entry.commandLine.ExtendedSourceFiles() {
-		rootFileGlobs = append(rootFileGlobs, extendedConfig)
-	}
-	for dir, recursive := range wildcardGlobs {
-		rootFileGlobs = append(rootFileGlobs, fmt.Sprintf("%s/%s", tspath.NormalizePath(dir), core.IfElse(recursive, recursiveFileGlobPattern, fileGlobPattern)))
-	}
-	for _, fileName := range entry.commandLine.LiteralFileNames() {
-		rootFileGlobs = append(rootFileGlobs, fileName)
-	}
-	entry.rootFilesWatch.update(context.Background(), rootFileGlobs)
+	return ""
 }
 
-func (c *ConfigFileRegistry) updateExtendedConfigsUsedBy(path tspath.Path, entry *ConfigFileEntry, oldCommandLine *tsoptions.ParsedCommandLine) {
-	extendedConfigs := entry.commandLine.ExtendedSourceFiles()
-	newConfigs := make([]tspath.Path, 0, len(extendedConfigs))
-	for _, extendedConfig := range extendedConfigs {
-		extendedPath := tspath.ToPath(extendedConfig, c.Host.GetCurrentDirectory(), c.Host.FS().UseCaseSensitiveFileNames())
-		newConfigs = append(newConfigs, extendedPath)
-		extendedEntry, _ := c.ExtendedConfigsUsedBy.LoadOrStore(extendedPath, &ExtendedConfigFileEntry{
-			mu: sync.Mutex{},
-		})
-		extendedEntry.mu.Lock()
-		extendedEntry.configFiles.Add(path)
-		extendedEntry.mu.Unlock()
-	}
-	for _, extendedConfig := range oldCommandLine.ExtendedSourceFiles() {
-		extendedPath := tspath.ToPath(extendedConfig, c.Host.GetCurrentDirectory(), c.Host.FS().UseCaseSensitiveFileNames())
-		if !slices.Contains(newConfigs, extendedPath) {
-			extendedEntry, _ := c.ExtendedConfigsUsedBy.Load(extendedPath)
-			extendedEntry.mu.Lock()
-			extendedEntry.configFiles.Delete(path)
-			if extendedEntry.configFiles.Len() == 0 {
-				c.ExtendedConfigsUsedBy.Delete(extendedPath)
-				c.ExtendedConfigCache.Delete(extendedPath)
-			}
-			extendedEntry.mu.Unlock()
-		}
+// clone creates a shallow copy of the configFileRegistry.
+func (c *ConfigFileRegistry) clone() *ConfigFileRegistry {
+	return &ConfigFileRegistry{
+		configs:         maps.Clone(c.configs),
+		configFileNames: maps.Clone(c.configFileNames),
 	}
 }
 
-func (c *ConfigFileRegistry) onWatchedFilesChanged(path tspath.Path, changeKind lsproto.FileChangeType) (err error, handled bool) {
-	if c.onConfigChange(path, changeKind) {
-		handled = true
-	}
-
-	if entry, loaded := c.ExtendedConfigsUsedBy.Load(path); loaded {
-		entry.mu.Lock()
-		for configFilePath := range entry.configFiles.Keys() {
-			if c.onConfigChange(configFilePath, changeKind) {
-				handled = true
-			}
-		}
-		entry.mu.Unlock()
-	}
-	return err, handled
+type configFileNames struct {
+	// nearestConfigFileName is the file name of the nearest ancestor config file.
+	nearestConfigFileName string
+	// ancestors is a map from one ancestor config file path to the next.
+	// For example, if `/a`, `/a/b`, and `/a/b/c` all contain config files,
+	// the fully loaded map will look like:
+	//		{
+	//			"/a/b/c/tsconfig.json": "/a/b/tsconfig.json",
+	//			"/a/b/tsconfig.json": "/a/tsconfig.json"
+	//		}
+	ancestors map[string]string
 }
 
-func (c *ConfigFileRegistry) onConfigChange(path tspath.Path, changeKind lsproto.FileChangeType) bool {
-	entry, ok := c.ConfigFiles.Load(path)
-	if !ok {
-		return false
-	}
-	entry.mu.Lock()
-	hasSet := entry.SetPendingReload(PendingReloadFull)
-	var infos map[*ScriptInfo]struct{}
-	var projects map[*Project]struct{}
-	if hasSet {
-		infos = maps.Clone(entry.infos.Keys())
-		projects = maps.Clone(entry.projects.Keys())
-	}
-	entry.mu.Unlock()
-	if !hasSet {
-		return false
-	}
-	for info := range infos {
-		delete(c.defaultProjectFinder.configFileForOpenFiles, info.Path())
-		delete(c.defaultProjectFinder.configFilesAncestorForOpenFiles, info.Path())
-	}
-	for project := range projects {
-		if project.configFilePath == path {
-			switch changeKind {
-			case lsproto.FileChangeTypeCreated:
-				fallthrough
-			case lsproto.FileChangeTypeChanged:
-				project.deferredClose = false
-				project.SetPendingReload(PendingReloadFull)
-			case lsproto.FileChangeTypeDeleted:
-				project.deferredClose = true
-			}
-		} else {
-			project.markAsDirty()
-		}
-	}
-	return true
-}
-
-func (c *ConfigFileRegistry) tryInvokeWildCardDirectories(fileName string, path tspath.Path) {
-	configFiles := c.ConfigFiles.ToMap()
-	for configPath, entry := range configFiles {
-		entry.mu.Lock()
-		hasSet := false
-		if entry.commandLine != nil && entry.pendingReload == PendingReloadNone && entry.commandLine.MatchesFileName(fileName) {
-			hasSet = entry.SetPendingReload(PendingReloadFileNames)
-		}
-		var projects map[*Project]struct{}
-		if hasSet {
-			projects = maps.Clone(entry.projects.Keys())
-		}
-		entry.mu.Unlock()
-		if hasSet {
-			for project := range projects {
-				if project.configFilePath == configPath {
-					project.SetPendingReload(PendingReloadFileNames)
-				} else {
-					project.markAsDirty()
-				}
-			}
-		}
-	}
-}
-
-func (c *ConfigFileRegistry) cleanup(toRemoveConfigs map[tspath.Path]*ConfigFileEntry) {
-	for path, entry := range toRemoveConfigs {
-		entry.mu.Lock()
-		if entry.projects.Len() == 0 && entry.infos.Len() == 0 {
-			c.ConfigFiles.Delete(path)
-			commandLine := entry.commandLine
-			entry.commandLine = nil
-			c.updateExtendedConfigsUsedBy(path, entry, commandLine)
-			if entry.rootFilesWatch != nil {
-				entry.rootFilesWatch.update(context.Background(), nil)
-			}
-		}
-		entry.mu.Unlock()
+func (c *configFileNames) Clone() *configFileNames {
+	return &configFileNames{
+		nearestConfigFileName: c.nearestConfigFileName,
+		ancestors:             maps.Clone(c.ancestors),
 	}
 }

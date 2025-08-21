@@ -520,6 +520,14 @@ function generateCode() {
         generateStructFields(structure.name, true);
         writeLine("");
 
+        if (hasTextDocumentURI(structure)) {
+            // Generate TextDocumentURI method
+            writeLine(`func (s *${structure.name}) TextDocumentURI() DocumentUri {`);
+            writeLine(`\treturn s.TextDocument.Uri`);
+            writeLine(`}`);
+            writeLine("");
+        }
+
         // Generate UnmarshalJSONFrom method for structure validation
         const requiredProps = structure.properties?.filter(p => !p.optional) || [];
         if (requiredProps.length > 0) {
@@ -870,6 +878,15 @@ function generateCode() {
     }
 
     return parts.join("");
+}
+
+function hasTextDocumentURI(structure: Structure) {
+    return structure.properties?.some(p =>
+        !p.optional &&
+        p.name === "textDocument" &&
+        p.type.kind === "reference" &&
+        p.type.name === "TextDocumentIdentifier"
+    );
 }
 
 /**

@@ -82,49 +82,6 @@ func LanguageKindToScriptKind(languageID lsproto.LanguageKind) core.ScriptKind {
 	}
 }
 
-func DocumentURIToFileName(uri lsproto.DocumentUri) string {
-	if strings.HasPrefix(string(uri), "file://") {
-		parsed := core.Must(url.Parse(string(uri)))
-		if parsed.Host != "" {
-			return "//" + parsed.Host + parsed.Path
-		}
-		return fixWindowsURIPath(parsed.Path)
-	}
-
-	// Leave all other URIs escaped so we can round-trip them.
-
-	scheme, path, ok := strings.Cut(string(uri), ":")
-	if !ok {
-		panic(fmt.Sprintf("invalid URI: %s", uri))
-	}
-
-	authority := "ts-nul-authority"
-	if rest, ok := strings.CutPrefix(path, "//"); ok {
-		authority, path, ok = strings.Cut(rest, "/")
-		if !ok {
-			panic(fmt.Sprintf("invalid URI: %s", uri))
-		}
-	}
-
-	return "^/" + scheme + "/" + authority + "/" + path
-}
-
-func fixWindowsURIPath(path string) string {
-	if rest, ok := strings.CutPrefix(path, "/"); ok {
-		if volume, rest, ok := splitVolumePath(rest); ok {
-			return volume + rest
-		}
-	}
-	return path
-}
-
-func splitVolumePath(path string) (volume string, rest string, ok bool) {
-	if len(path) >= 2 && tspath.IsVolumeCharacter(path[0]) && path[1] == ':' {
-		return strings.ToLower(path[0:2]), path[2:], true
-	}
-	return "", path, false
-}
-
 // https://github.com/microsoft/vscode-uri/blob/edfdccd976efaf4bb8fdeca87e97c47257721729/src/uri.ts#L455
 var extraEscapeReplacer = strings.NewReplacer(
 	":", "%3A",
@@ -166,7 +123,7 @@ func FileNameToDocumentURI(fileName string) lsproto.DocumentUri {
 		return lsproto.DocumentUri(scheme + "://" + authority + "/" + path)
 	}
 
-	volume, fileName, _ := splitVolumePath(fileName)
+	volume, fileName, _ := tspath.SplitVolumePath(fileName)
 	if volume != "" {
 		volume = "/" + extraEscapeReplacer.Replace(volume)
 	}

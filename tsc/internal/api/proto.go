@@ -131,8 +131,8 @@ func NewProjectResponse(project *project.Project) *ProjectResponse {
 	return &ProjectResponse{
 		Id:              ProjectHandle(project),
 		ConfigFileName:  project.Name(),
-		RootFiles:       project.GetRootFileNames(),
-		CompilerOptions: project.GetCompilerOptions(),
+		RootFiles:       project.CommandLine.FileNames(),
+		CompilerOptions: project.CommandLine.CompilerOptions(),
 	}
 }
 

@@ -41,7 +41,7 @@ func TestDocumentURIToFileName(t *testing.T) {
 	for _, test := range tests {
 		t.Run(string(test.uri), func(t *testing.T) {
 			t.Parallel()
-			assert.Equal(t, ls.DocumentURIToFileName(test.uri), test.fileName)
+			assert.Equal(t, test.uri.FileName(), test.fileName)
 		})
 	}
 }

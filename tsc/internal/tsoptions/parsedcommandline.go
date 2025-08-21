@@ -36,6 +36,23 @@ type ParsedCommandLine struct {
 
 	resolvedProjectReferencePaths     []string
 	resolvedProjectReferencePathsOnce sync.Once
+
+	fileNamesByPath     map[tspath.Path]string // maps file names to their paths, used for quick lookups
+	fileNamesByPathOnce sync.Once
+}
+
+func NewParsedCommandLine(
+	compilerOptions *core.CompilerOptions,
+	rootFileNames []string,
+	comparePathsOptions tspath.ComparePathsOptions,
+) *ParsedCommandLine {
+	return &ParsedCommandLine{
+		ParsedConfig: &core.ParsedOptions{
+			CompilerOptions: compilerOptions,
+			FileNames:       rootFileNames,
+		},
+		comparePathsOptions: comparePathsOptions,
+	}
 }
 
 type SourceAndProjectReference struct {
@@ -158,7 +175,7 @@ func (p *ParsedCommandLine) WildcardDirectories() map[string]bool {
 
 // Normalized file names explicitly specified in `files`
 func (p *ParsedCommandLine) LiteralFileNames() []string {
-	if p.ConfigFile != nil {
+	if p != nil && p.ConfigFile != nil {
 		return p.FileNames()[0:len(p.ConfigFile.configFileSpecs.validatedFilesSpec)]
 	}
 	return nil
@@ -194,6 +211,17 @@ func (p *ParsedCommandLine) TypeAcquisition() *core.TypeAcquisition {
 // All file names matched by files, include, and exclude patterns
 func (p *ParsedCommandLine) FileNames() []string {
 	return p.ParsedConfig.FileNames
+}
+
+func (p *ParsedCommandLine) FileNamesByPath() map[tspath.Path]string {
+	p.fileNamesByPathOnce.Do(func() {
+		p.fileNamesByPath = make(map[tspath.Path]string, len(p.ParsedConfig.FileNames))
+		for _, fileName := range p.ParsedConfig.FileNames {
+			path := tspath.ToPath(fileName, p.GetCurrentDirectory(), p.UseCaseSensitiveFileNames())
+			p.fileNamesByPath[path] = fileName
+		}
+	})
+	return p.fileNamesByPath
 }
 
 func (p *ParsedCommandLine) ProjectReferences() []*core.ProjectReference {

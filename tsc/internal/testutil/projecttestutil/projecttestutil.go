@@ -3,17 +3,17 @@ package projecttestutil
 import (
 	"context"
 	"fmt"
-	"io"
 	"slices"
 	"strings"
 	"sync"
-	"sync/atomic"
+	"testing"
 
 	"github.com/microsoft/typescript-go/internal/bundled"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/project"
-	"github.com/microsoft/typescript-go/internal/tspath"
+	"github.com/microsoft/typescript-go/internal/project/logging"
+	"github.com/microsoft/typescript-go/internal/testutil/baseline"
 	"github.com/microsoft/typescript-go/internal/vfs"
 	"github.com/microsoft/typescript-go/internal/vfs/vfstest"
 )
@@ -21,124 +21,96 @@ import (
 //go:generate go tool github.com/matryer/moq -stub -fmt goimports -pkg projecttestutil -out clientmock_generated.go ../../project Client
 //go:generate go tool mvdan.cc/gofumpt -lang=go1.25 -w clientmock_generated.go
 
-type TestTypingsInstallerOptions struct {
-	TypesRegistry         []string
-	PackageToFile         map[string]string
-	CheckBeforeNpmInstall func(cwd string, npmInstallArgs []string)
-}
-
-type TestTypingsInstaller struct {
-	project.TypingsInstallerOptions
-	TestTypingsInstallerOptions
-}
-
-type ProjectServiceHost struct {
-	fs                 vfs.FS
-	mu                 sync.Mutex
-	defaultLibraryPath string
-	output             strings.Builder
-	logger             *project.Logger
-	ClientMock         *ClientMock
-	TestOptions        *TestTypingsInstallerOptions
-	ServiceOptions     *project.ServiceOptions
-}
+//go:generate go tool github.com/matryer/moq -stub -fmt goimports -pkg projecttestutil -out npmexecutormock_generated.go ../../project/ata NpmExecutor
+//go:generate go tool mvdan.cc/gofumpt -lang=go1.24 -w npmexecutormock_generated.go
 
 const (
 	TestTypingsLocation = "/home/src/Library/Caches/typescript"
-	TestLibLocation     = "/home/src/tslibs/TS/Lib"
 )
 
-// DefaultLibraryPath implements project.ProjectServiceHost.
-func (p *ProjectServiceHost) DefaultLibraryPath() string {
-	return p.defaultLibraryPath
+type TypingsInstallerOptions struct {
+	TypesRegistry []string
+	PackageToFile map[string]string
 }
 
-func (p *ProjectServiceHost) TypingsLocation() string {
-	return TestTypingsLocation
+type SessionUtils struct {
+	fs          vfs.FS
+	client      *ClientMock
+	npmExecutor *NpmExecutorMock
+	tiOptions   *TypingsInstallerOptions
+	logger      logging.LogCollector
 }
 
-// FS implements project.ProjectServiceHost.
-func (p *ProjectServiceHost) FS() vfs.FS {
-	return p.fs
+func (h *SessionUtils) Client() *ClientMock {
+	return h.client
 }
 
-// GetCurrentDirectory implements project.ProjectServiceHost.
-func (p *ProjectServiceHost) GetCurrentDirectory() string {
-	return "/"
+func (h *SessionUtils) NpmExecutor() *NpmExecutorMock {
+	return h.npmExecutor
 }
 
-// Log implements project.ProjectServiceHost.
-func (p *ProjectServiceHost) Log(msg ...any) {
-	p.mu.Lock()
-	defer p.mu.Unlock()
-	fmt.Fprintln(&p.output, msg...)
-}
-
-// Client implements project.ProjectServiceHost.
-func (p *ProjectServiceHost) Client() project.Client {
-	return p.ClientMock
-}
-
-var _ project.ServiceHost = (*ProjectServiceHost)(nil)
-
-func Setup[FileContents any](files map[string]FileContents, testOptions *TestTypingsInstaller) (*project.Service, *ProjectServiceHost) {
-	host := newProjectServiceHost(files)
-	if testOptions != nil {
-		host.TestOptions = &testOptions.TestTypingsInstallerOptions
-	}
-	var throttleLimit int
-	if testOptions != nil && testOptions.ThrottleLimit != 0 {
-		throttleLimit = testOptions.ThrottleLimit
-	} else {
-		throttleLimit = 5
-	}
-	host.ServiceOptions = &project.ServiceOptions{
-		Logger:       host.logger,
-		WatchEnabled: true,
-		TypingsInstallerOptions: project.TypingsInstallerOptions{
-			ThrottleLimit: throttleLimit,
-
-			NpmInstall:    host.NpmInstall,
-			InstallStatus: make(chan project.TypingsInstallerStatus),
-		},
-	}
-	service := project.NewService(host, *host.ServiceOptions)
-	return service, host
-}
-
-func (p *ProjectServiceHost) NpmInstall(cwd string, npmInstallArgs []string) ([]byte, error) {
-	if p.TestOptions == nil {
-		return nil, nil
+func (h *SessionUtils) SetupNpmExecutorForTypingsInstaller() {
+	if h.tiOptions == nil {
+		return
 	}
 
-	lenNpmInstallArgs := len(npmInstallArgs)
-	if lenNpmInstallArgs < 3 {
-		panic(fmt.Sprintf("Unexpected npm install: %s %v", cwd, npmInstallArgs))
-	}
-
-	if lenNpmInstallArgs == 3 && npmInstallArgs[2] == "types-registry@latest" {
-		// Write typings file
-		err := p.FS().WriteFile(tspath.CombinePaths(cwd, "node_modules/types-registry/index.json"), p.createTypesRegistryFileContent(), false)
-		return nil, err
-	}
-
-	if p.TestOptions.CheckBeforeNpmInstall != nil {
-		p.TestOptions.CheckBeforeNpmInstall(cwd, npmInstallArgs)
-	}
-
-	for _, atTypesPackageTs := range npmInstallArgs[2 : lenNpmInstallArgs-2] {
-		// @types/packageName@TsVersionToUse
-		packageName := atTypesPackageTs[7 : len(atTypesPackageTs)-len(project.TsVersionToUse)-1]
-		content, ok := p.TestOptions.PackageToFile[packageName]
-		if !ok {
-			return nil, fmt.Errorf("content not provided for %s", packageName)
+	h.npmExecutor.NpmInstallFunc = func(cwd string, packageNames []string) ([]byte, error) {
+		// packageNames is actually npmInstallArgs due to interface misnaming
+		npmInstallArgs := packageNames
+		lenNpmInstallArgs := len(npmInstallArgs)
+		if lenNpmInstallArgs < 3 {
+			return nil, fmt.Errorf("unexpected npm install: %s %v", cwd, npmInstallArgs)
 		}
-		err := p.FS().WriteFile(tspath.CombinePaths(cwd, "node_modules/@types/"+packageName+"/index.d.ts"), content, false)
-		if err != nil {
+
+		if lenNpmInstallArgs == 3 && npmInstallArgs[2] == "types-registry@latest" {
+			// Write typings file
+			err := h.fs.WriteFile(cwd+"/node_modules/types-registry/index.json", h.createTypesRegistryFileContent(), false)
 			return nil, err
 		}
+
+		// Find the packages: they start at index 2 and continue until we hit a flag starting with --
+		packageEnd := lenNpmInstallArgs
+		for i := 2; i < lenNpmInstallArgs; i++ {
+			if strings.HasPrefix(npmInstallArgs[i], "--") {
+				packageEnd = i
+				break
+			}
+		}
+
+		for _, atTypesPackageTs := range npmInstallArgs[2:packageEnd] {
+			// @types/packageName@TsVersionToUse
+			atTypesPackage := atTypesPackageTs
+			// Remove version suffix
+			if versionIndex := strings.LastIndex(atTypesPackage, "@"); versionIndex > 6 { // "@types/".length is 7, so version @ must be after
+				atTypesPackage = atTypesPackage[:versionIndex]
+			}
+			// Extract package name from @types/packageName
+			packageBaseName := atTypesPackage[7:] // Remove "@types/" prefix
+			content, ok := h.tiOptions.PackageToFile[packageBaseName]
+			if !ok {
+				return nil, fmt.Errorf("content not provided for %s", packageBaseName)
+			}
+			err := h.fs.WriteFile(cwd+"/node_modules/@types/"+packageBaseName+"/index.d.ts", content, false)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return nil, nil
 	}
-	return nil, nil
+}
+
+func (h *SessionUtils) FS() vfs.FS {
+	return h.fs
+}
+
+func (h *SessionUtils) Logs() string {
+	return h.logger.String()
+}
+
+func (h *SessionUtils) BaselineLogs(t *testing.T) {
+	baseline.Run(t, t.Name()+".log", h.Logs(), baseline.Options{
+		Subfolder: "project",
+	})
 }
 
 var (
@@ -183,16 +155,16 @@ func TypesRegistryConfig() map[string]string {
 	return typesRegistryConfig
 }
 
-func (p *ProjectServiceHost) createTypesRegistryFileContent() string {
+func (h *SessionUtils) createTypesRegistryFileContent() string {
 	var builder strings.Builder
 	builder.WriteString("{\n  \"entries\": {")
-	for index, entry := range p.TestOptions.TypesRegistry {
-		appendTypesRegistryConfig(&builder, index, entry)
+	for index, entry := range h.tiOptions.TypesRegistry {
+		h.appendTypesRegistryConfig(&builder, index, entry)
 	}
-	index := len(p.TestOptions.TypesRegistry)
-	for key := range p.TestOptions.PackageToFile {
-		if !slices.Contains(p.TestOptions.TypesRegistry, key) {
-			appendTypesRegistryConfig(&builder, index, key)
+	index := len(h.tiOptions.TypesRegistry)
+	for key := range h.tiOptions.PackageToFile {
+		if !slices.Contains(h.tiOptions.TypesRegistry, key) {
+			h.appendTypesRegistryConfig(&builder, index, key)
 			index++
 		}
 	}
@@ -200,26 +172,61 @@ func (p *ProjectServiceHost) createTypesRegistryFileContent() string {
 	return builder.String()
 }
 
-func appendTypesRegistryConfig(builder *strings.Builder, index int, entry string) {
+func (h *SessionUtils) appendTypesRegistryConfig(builder *strings.Builder, index int, entry string) {
 	if index > 0 {
 		builder.WriteString(",")
 	}
 	builder.WriteString(fmt.Sprintf("\n    \"%s\": {%s\n    }", entry, TypesRegistryConfigText()))
 }
 
-func newProjectServiceHost[FileContents any](files map[string]FileContents) *ProjectServiceHost {
+func Setup(files map[string]any) (*project.Session, *SessionUtils) {
+	return SetupWithTypingsInstaller(files, &TypingsInstallerOptions{})
+}
+
+func SetupWithOptions(files map[string]any, options *project.SessionOptions) (*project.Session, *SessionUtils) {
+	return SetupWithOptionsAndTypingsInstaller(files, options, &TypingsInstallerOptions{})
+}
+
+func SetupWithTypingsInstaller(files map[string]any, tiOptions *TypingsInstallerOptions) (*project.Session, *SessionUtils) {
+	return SetupWithOptionsAndTypingsInstaller(files, nil, tiOptions)
+}
+
+func SetupWithOptionsAndTypingsInstaller(files map[string]any, options *project.SessionOptions, tiOptions *TypingsInstallerOptions) (*project.Session, *SessionUtils) {
 	fs := bundled.WrapFS(vfstest.FromMap(files, false /*useCaseSensitiveFileNames*/))
-	host := &ProjectServiceHost{
-		fs:                 fs,
-		defaultLibraryPath: bundled.LibPath(),
-		ClientMock:         &ClientMock{},
+	clientMock := &ClientMock{}
+	npmExecutorMock := &NpmExecutorMock{}
+	sessionUtils := &SessionUtils{
+		fs:          fs,
+		client:      clientMock,
+		npmExecutor: npmExecutorMock,
+		tiOptions:   tiOptions,
+		logger:      logging.NewTestLogger(),
 	}
-	var watchCount atomic.Uint32
-	host.ClientMock.WatchFilesFunc = func(_ context.Context, _ []*lsproto.FileSystemWatcher) (project.WatcherHandle, error) {
-		return project.WatcherHandle(fmt.Sprintf("#%d", watchCount.Add(1))), nil
+
+	// Configure the npm executor mock to handle typings installation
+	sessionUtils.SetupNpmExecutorForTypingsInstaller()
+
+	// Use provided options or create default ones
+	if options == nil {
+		options = &project.SessionOptions{
+			CurrentDirectory:   "/",
+			DefaultLibraryPath: bundled.LibPath(),
+			TypingsLocation:    TestTypingsLocation,
+			PositionEncoding:   lsproto.PositionEncodingKindUTF8,
+			WatchEnabled:       true,
+			LoggingEnabled:     true,
+		}
 	}
-	host.logger = project.NewLogger([]io.Writer{&host.output}, "", project.LogLevelVerbose)
-	return host
+
+	session := project.NewSession(&project.SessionInit{
+		Options:     options,
+		FS:          fs,
+		Client:      clientMock,
+		NpmExecutor: npmExecutorMock,
+		Logger:      sessionUtils.logger,
+	})
+
+	return session, sessionUtils
 }
 
 func WithRequestID(ctx context.Context) context.Context {

@@ -2,12 +2,61 @@ package lsproto
 
 import (
 	"fmt"
+	"net/url"
+	"strings"
 
 	"github.com/go-json-experiment/json"
 	"github.com/go-json-experiment/json/jsontext"
+	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
 type DocumentUri string // !!!
+
+func (uri DocumentUri) FileName() string {
+	if strings.HasPrefix(string(uri), "file://") {
+		parsed := core.Must(url.Parse(string(uri)))
+		if parsed.Host != "" {
+			return "//" + parsed.Host + parsed.Path
+		}
+		return fixWindowsURIPath(parsed.Path)
+	}
+
+	// Leave all other URIs escaped so we can round-trip them.
+
+	scheme, path, ok := strings.Cut(string(uri), ":")
+	if !ok {
+		panic(fmt.Sprintf("invalid URI: %s", uri))
+	}
+
+	authority := "ts-nul-authority"
+	if rest, ok := strings.CutPrefix(path, "//"); ok {
+		authority, path, ok = strings.Cut(rest, "/")
+		if !ok {
+			panic(fmt.Sprintf("invalid URI: %s", uri))
+		}
+	}
+
+	return "^/" + scheme + "/" + authority + "/" + path
+}
+
+func (uri DocumentUri) Path(useCaseSensitiveFileNames bool) tspath.Path {
+	fileName := uri.FileName()
+	return tspath.ToPath(fileName, "", useCaseSensitiveFileNames)
+}
+
+func fixWindowsURIPath(path string) string {
+	if rest, ok := strings.CutPrefix(path, "/"); ok {
+		if volume, rest, ok := tspath.SplitVolumePath(rest); ok {
+			return volume + rest
+		}
+	}
+	return path
+}
+
+type HasTextDocumentURI interface {
+	TextDocumentURI() DocumentUri
+}
 
 type URI string // !!!
 

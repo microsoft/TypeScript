@@ -28,6 +28,10 @@ type ImplementationParams struct {
 	PartialResultToken *IntegerOrString `json:"partialResultToken,omitzero"`
 }
 
+func (s *ImplementationParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
+}
+
 var _ json.UnmarshalerFrom = (*ImplementationParams)(nil)
 
 func (s *ImplementationParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
@@ -216,6 +220,10 @@ type TypeDefinitionParams struct {
 	// An optional token that a server can use to report partial results (e.g. streaming) to
 	// the client.
 	PartialResultToken *IntegerOrString `json:"partialResultToken,omitzero"`
+}
+
+func (s *TypeDefinitionParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
 }
 
 var _ json.UnmarshalerFrom = (*TypeDefinitionParams)(nil)
@@ -497,6 +505,10 @@ type DocumentColorParams struct {
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 }
 
+func (s *DocumentColorParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
+}
+
 var _ json.UnmarshalerFrom = (*DocumentColorParams)(nil)
 
 func (s *DocumentColorParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
@@ -679,6 +691,10 @@ type ColorPresentationParams struct {
 
 	// The range where the color would be inserted. Serves as a context.
 	Range Range `json:"range"`
+}
+
+func (s *ColorPresentationParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
 }
 
 var _ json.UnmarshalerFrom = (*ColorPresentationParams)(nil)
@@ -872,6 +888,10 @@ type FoldingRangeParams struct {
 
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
+}
+
+func (s *FoldingRangeParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
 }
 
 var _ json.UnmarshalerFrom = (*FoldingRangeParams)(nil)
@@ -1091,6 +1111,10 @@ type DeclarationParams struct {
 	PartialResultToken *IntegerOrString `json:"partialResultToken,omitzero"`
 }
 
+func (s *DeclarationParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
+}
+
 var _ json.UnmarshalerFrom = (*DeclarationParams)(nil)
 
 func (s *DeclarationParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
@@ -1222,6 +1246,10 @@ type SelectionRangeParams struct {
 
 	// The positions inside the text document.
 	Positions []Position `json:"positions"`
+}
+
+func (s *SelectionRangeParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
 }
 
 var _ json.UnmarshalerFrom = (*SelectionRangeParams)(nil)
@@ -1494,6 +1522,10 @@ type CallHierarchyPrepareParams struct {
 
 	// An optional token that a server can use to report work done progress.
 	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitzero"`
+}
+
+func (s *CallHierarchyPrepareParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
 }
 
 var _ json.UnmarshalerFrom = (*CallHierarchyPrepareParams)(nil)
@@ -1993,6 +2025,10 @@ type SemanticTokensParams struct {
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 }
 
+func (s *SemanticTokensParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
+}
+
 var _ json.UnmarshalerFrom = (*SemanticTokensParams)(nil)
 
 func (s *SemanticTokensParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
@@ -2245,6 +2281,10 @@ type SemanticTokensDeltaParams struct {
 	PreviousResultId string `json:"previousResultId"`
 }
 
+func (s *SemanticTokensDeltaParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
+}
+
 var _ json.UnmarshalerFrom = (*SemanticTokensDeltaParams)(nil)
 
 func (s *SemanticTokensDeltaParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
@@ -2412,6 +2452,10 @@ type SemanticTokensRangeParams struct {
 
 	// The range the semantic tokens are requested for.
 	Range Range `json:"range"`
+}
+
+func (s *SemanticTokensRangeParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
 }
 
 var _ json.UnmarshalerFrom = (*SemanticTokensRangeParams)(nil)
@@ -2604,6 +2648,10 @@ type LinkedEditingRangeParams struct {
 
 	// An optional token that a server can use to report work done progress.
 	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitzero"`
+}
+
+func (s *LinkedEditingRangeParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
 }
 
 var _ json.UnmarshalerFrom = (*LinkedEditingRangeParams)(nil)
@@ -3020,6 +3068,10 @@ type MonikerParams struct {
 	PartialResultToken *IntegerOrString `json:"partialResultToken,omitzero"`
 }
 
+func (s *MonikerParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
+}
+
 var _ json.UnmarshalerFrom = (*MonikerParams)(nil)
 
 func (s *MonikerParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
@@ -3222,6 +3274,10 @@ type TypeHierarchyPrepareParams struct {
 
 	// An optional token that a server can use to report work done progress.
 	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitzero"`
+}
+
+func (s *TypeHierarchyPrepareParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
 }
 
 var _ json.UnmarshalerFrom = (*TypeHierarchyPrepareParams)(nil)
@@ -3602,6 +3658,10 @@ type InlineValueParams struct {
 	Context *InlineValueContext `json:"context"`
 }
 
+func (s *InlineValueParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
+}
+
 var _ json.UnmarshalerFrom = (*InlineValueParams)(nil)
 
 func (s *InlineValueParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
@@ -3739,6 +3799,10 @@ type InlayHintParams struct {
 
 	// The document range for which inlay hints should be computed.
 	Range Range `json:"range"`
+}
+
+func (s *InlayHintParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
 }
 
 var _ json.UnmarshalerFrom = (*InlayHintParams)(nil)
@@ -4007,6 +4071,10 @@ type DocumentDiagnosticParams struct {
 
 	// The result id of a previous response if provided.
 	PreviousResultId *string `json:"previousResultId,omitzero"`
+}
+
+func (s *DocumentDiagnosticParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
 }
 
 var _ json.UnmarshalerFrom = (*DocumentDiagnosticParams)(nil)
@@ -4745,6 +4813,10 @@ type InlineCompletionParams struct {
 	// Additional information about the context in which inline completions were
 	// requested.
 	Context *InlineCompletionContext `json:"context"`
+}
+
+func (s *InlineCompletionParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
 }
 
 var _ json.UnmarshalerFrom = (*InlineCompletionParams)(nil)
@@ -5994,6 +6066,10 @@ type DidCloseTextDocumentParams struct {
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 }
 
+func (s *DidCloseTextDocumentParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
+}
+
 var _ json.UnmarshalerFrom = (*DidCloseTextDocumentParams)(nil)
 
 func (s *DidCloseTextDocumentParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
@@ -6041,6 +6117,10 @@ type DidSaveTextDocumentParams struct {
 	// Optional the content when saved. Depends on the includeText value
 	// when the save notification was requested.
 	Text *string `json:"text,omitzero"`
+}
+
+func (s *DidSaveTextDocumentParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
 }
 
 var _ json.UnmarshalerFrom = (*DidSaveTextDocumentParams)(nil)
@@ -6146,6 +6226,10 @@ type WillSaveTextDocumentParams struct {
 
 	// The 'TextDocumentSaveReason'.
 	Reason TextDocumentSaveReason `json:"reason"`
+}
+
+func (s *WillSaveTextDocumentParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
 }
 
 var _ json.UnmarshalerFrom = (*WillSaveTextDocumentParams)(nil)
@@ -6435,6 +6519,10 @@ type CompletionParams struct {
 	// The completion context. This is only available it the client specifies
 	// to send this using the client capability `textDocument.completion.contextSupport === true`
 	Context *CompletionContext `json:"context,omitzero"`
+}
+
+func (s *CompletionParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
 }
 
 var _ json.UnmarshalerFrom = (*CompletionParams)(nil)
@@ -6968,6 +7056,10 @@ type HoverParams struct {
 	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitzero"`
 }
 
+func (s *HoverParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
+}
+
 var _ json.UnmarshalerFrom = (*HoverParams)(nil)
 
 func (s *HoverParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
@@ -7143,6 +7235,10 @@ type SignatureHelpParams struct {
 	//
 	// Since: 3.15.0
 	Context *SignatureHelpContext `json:"context,omitzero"`
+}
+
+func (s *SignatureHelpParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
 }
 
 var _ json.UnmarshalerFrom = (*SignatureHelpParams)(nil)
@@ -7374,6 +7470,10 @@ type DefinitionParams struct {
 	PartialResultToken *IntegerOrString `json:"partialResultToken,omitzero"`
 }
 
+func (s *DefinitionParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
+}
+
 var _ json.UnmarshalerFrom = (*DefinitionParams)(nil)
 
 func (s *DefinitionParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
@@ -7500,6 +7600,10 @@ type ReferenceParams struct {
 	PartialResultToken *IntegerOrString `json:"partialResultToken,omitzero"`
 
 	Context *ReferenceContext `json:"context"`
+}
+
+func (s *ReferenceParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
 }
 
 var _ json.UnmarshalerFrom = (*ReferenceParams)(nil)
@@ -7635,6 +7739,10 @@ type DocumentHighlightParams struct {
 	// An optional token that a server can use to report partial results (e.g. streaming) to
 	// the client.
 	PartialResultToken *IntegerOrString `json:"partialResultToken,omitzero"`
+}
+
+func (s *DocumentHighlightParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
 }
 
 var _ json.UnmarshalerFrom = (*DocumentHighlightParams)(nil)
@@ -7812,6 +7920,10 @@ type DocumentSymbolParams struct {
 
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
+}
+
+func (s *DocumentSymbolParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
 }
 
 var _ json.UnmarshalerFrom = (*DocumentSymbolParams)(nil)
@@ -8170,6 +8282,10 @@ type CodeActionParams struct {
 
 	// Context carrying additional information.
 	Context *CodeActionContext `json:"context"`
+}
+
+func (s *CodeActionParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
 }
 
 var _ json.UnmarshalerFrom = (*CodeActionParams)(nil)
@@ -8744,6 +8860,10 @@ type CodeLensParams struct {
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 }
 
+func (s *CodeLensParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
+}
+
 var _ json.UnmarshalerFrom = (*CodeLensParams)(nil)
 
 func (s *CodeLensParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
@@ -8925,6 +9045,10 @@ type DocumentLinkParams struct {
 
 	// The document to provide document links for.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
+}
+
+func (s *DocumentLinkParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
 }
 
 var _ json.UnmarshalerFrom = (*DocumentLinkParams)(nil)
@@ -9119,6 +9243,10 @@ type DocumentFormattingParams struct {
 	Options *FormattingOptions `json:"options"`
 }
 
+func (s *DocumentFormattingParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
+}
+
 var _ json.UnmarshalerFrom = (*DocumentFormattingParams)(nil)
 
 func (s *DocumentFormattingParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
@@ -9238,6 +9366,10 @@ type DocumentRangeFormattingParams struct {
 
 	// The format options
 	Options *FormattingOptions `json:"options"`
+}
+
+func (s *DocumentRangeFormattingParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
 }
 
 var _ json.UnmarshalerFrom = (*DocumentRangeFormattingParams)(nil)
@@ -9385,6 +9517,10 @@ type DocumentRangesFormattingParams struct {
 	Options *FormattingOptions `json:"options"`
 }
 
+func (s *DocumentRangesFormattingParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
+}
+
 var _ json.UnmarshalerFrom = (*DocumentRangesFormattingParams)(nil)
 
 func (s *DocumentRangesFormattingParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
@@ -9466,6 +9602,10 @@ type DocumentOnTypeFormattingParams struct {
 
 	// The formatting options.
 	Options *FormattingOptions `json:"options"`
+}
+
+func (s *DocumentOnTypeFormattingParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
 }
 
 var _ json.UnmarshalerFrom = (*DocumentOnTypeFormattingParams)(nil)
@@ -9620,6 +9760,10 @@ type RenameParams struct {
 	NewName string `json:"newName"`
 }
 
+func (s *RenameParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
+}
+
 var _ json.UnmarshalerFrom = (*RenameParams)(nil)
 
 func (s *RenameParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
@@ -9753,6 +9897,10 @@ type PrepareRenameParams struct {
 
 	// An optional token that a server can use to report work done progress.
 	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitzero"`
+}
+
+func (s *PrepareRenameParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
 }
 
 var _ json.UnmarshalerFrom = (*PrepareRenameParams)(nil)
@@ -10470,6 +10618,10 @@ type TextDocumentPositionParams struct {
 
 	// The position inside the text document.
 	Position Position `json:"position"`
+}
+
+func (s *TextDocumentPositionParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
 }
 
 var _ json.UnmarshalerFrom = (*TextDocumentPositionParams)(nil)

@@ -2,6 +2,7 @@ package core
 
 import (
 	"iter"
+	"maps"
 	"math"
 	"slices"
 	"sort"
@@ -587,4 +588,40 @@ func ConcatenateSeq[T any](seqs ...iter.Seq[T]) iter.Seq[T] {
 			}
 		}
 	}
+}
+
+func comparableValuesEqual[T comparable](a, b T) bool {
+	return a == b
+}
+
+func DiffMaps[K comparable, V comparable](m1 map[K]V, m2 map[K]V, onAdded func(K, V), onRemoved func(K, V), onChanged func(K, V, V)) {
+	DiffMapsFunc(m1, m2, comparableValuesEqual, onAdded, onRemoved, onChanged)
+}
+
+func DiffMapsFunc[K comparable, V any](m1 map[K]V, m2 map[K]V, equalValues func(V, V) bool, onAdded func(K, V), onRemoved func(K, V), onChanged func(K, V, V)) {
+	for k, v1 := range m1 {
+		if v2, ok := m2[k]; ok {
+			if !equalValues(v1, v2) {
+				onChanged(k, v1, v2)
+			}
+		} else {
+			onRemoved(k, v1)
+		}
+	}
+
+	for k, v2 := range m2 {
+		if _, ok := m1[k]; !ok {
+			onAdded(k, v2)
+		}
+	}
+}
+
+// CopyMapInto is maps.Copy, unless dst is nil, in which case it clones and returns src.
+// Use CopyMapInto anywhere you would use maps.Copy preceded by a nil check and map initialization.
+func CopyMapInto[M1 ~map[K]V, M2 ~map[K]V, K comparable, V any](dst M1, src M2) map[K]V {
+	if dst == nil {
+		return maps.Clone(src)
+	}
+	maps.Copy(dst, src)
+	return dst
 }

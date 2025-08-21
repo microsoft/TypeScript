@@ -80,6 +80,19 @@ func (m *OrderedMap[K, V]) GetOrZero(key K) V {
 	return m.mp[key]
 }
 
+// EntryAt retrieves the key-value pair at the specified index.
+func (m *OrderedMap[K, V]) EntryAt(index int) (K, V, bool) {
+	if index < 0 || index >= len(m.keys) {
+		var zero K
+		var zeroV V
+		return zero, zeroV, false
+	}
+
+	key := m.keys[index]
+	value := m.mp[key]
+	return key, value, true
+}
+
 // Has returns true if the map contains the key.
 func (m *OrderedMap[K, V]) Has(key K) bool {
 	_, ok := m.mp[key]
@@ -278,4 +291,28 @@ func (m *OrderedMap[K, V]) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
 		return err
 	}
 	return nil
+}
+
+func DiffOrderedMaps[K comparable, V comparable](m1 *OrderedMap[K, V], m2 *OrderedMap[K, V], onAdded func(key K, value V), onRemoved func(key K, value V), onModified func(key K, oldValue V, newValue V)) {
+	DiffOrderedMapsFunc(m1, m2, func(a, b V) bool {
+		return a == b
+	}, onAdded, onRemoved, onModified)
+}
+
+func DiffOrderedMapsFunc[K comparable, V any](m1 *OrderedMap[K, V], m2 *OrderedMap[K, V], equalValues func(a, b V) bool, onAdded func(key K, value V), onRemoved func(key K, value V), onModified func(key K, oldValue V, newValue V)) {
+	for k, v1 := range m1.Entries() {
+		if v2, ok := m2.Get(k); ok {
+			if !equalValues(v1, v2) {
+				onModified(k, v1, v2)
+			}
+		} else {
+			onRemoved(k, v1)
+		}
+	}
+
+	for k, v2 := range m2.Entries() {
+		if _, ok := m1.Get(k); !ok {
+			onAdded(k, v2)
+		}
+	}
 }

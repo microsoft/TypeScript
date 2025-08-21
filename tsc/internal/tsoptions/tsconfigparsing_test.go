@@ -1209,3 +1209,114 @@ func BenchmarkParseSrcCompiler(b *testing.B) {
 		)
 	}
 }
+
+// memoCache is a minimal memoizing ExtendedConfigCache used by tests to simulate
+// cache hits across multiple parses of configs that extend a common base.
+type memoCache struct {
+	m map[tspath.Path]*tsoptions.ExtendedConfigCacheEntry
+}
+
+func (mc *memoCache) GetExtendedConfig(fileName string, path tspath.Path, parse func() *tsoptions.ExtendedConfigCacheEntry) *tsoptions.ExtendedConfigCacheEntry {
+	if mc.m == nil {
+		mc.m = make(map[tspath.Path]*tsoptions.ExtendedConfigCacheEntry)
+	}
+	if e, ok := mc.m[path]; ok {
+		return e
+	}
+	e := parse()
+	mc.m[path] = e
+	return e
+}
+
+var _ tsoptions.ExtendedConfigCache = (*memoCache)(nil)
+
+// TestExtendedConfigErrorsAppearOnCacheHit verifies that diagnostics produced while parsing an
+// extended config are still reported when the extended config comes from the cache.
+func TestExtendedConfigErrorsAppearOnCacheHit(t *testing.T) {
+	t.Parallel()
+
+	t.Run("single config parsed twice", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]string{
+			"/tsconfig.json": `{
+  "extends": "./base.json"
+}`,
+			// 'excludes' instead of 'exclude' triggers diagnostic
+			"/base.json": `{
+  "excludes": ["**/*.ts"]
+}`,
+			"/app.ts": "export {}",
+		}
+
+		host := tsoptionstest.NewVFSParseConfigHost(files, "/", true /*useCaseSensitiveFileNames*/)
+
+		parseConfig := func(configFileName string, cache tsoptions.ExtendedConfigCache) *tsoptions.ParsedCommandLine {
+			cfgPath := tspath.ToPath(configFileName, host.GetCurrentDirectory(), host.FS().UseCaseSensitiveFileNames())
+			jsonText, ok := host.FS().ReadFile(configFileName)
+			assert.Assert(t, ok, "missing %s in test fs", configFileName)
+			tsConfigSourceFile := &tsoptions.TsConfigSourceFile{
+				SourceFile: parser.ParseSourceFile(ast.SourceFileParseOptions{FileName: configFileName, Path: cfgPath}, jsonText, core.ScriptKindJSON),
+			}
+			return tsoptions.ParseJsonSourceFileConfigFileContent(
+				tsConfigSourceFile,
+				host,
+				host.GetCurrentDirectory(),
+				nil,
+				configFileName,
+				nil,
+				nil,
+				cache,
+			)
+		}
+
+		cache := &memoCache{}
+		first := parseConfig("/tsconfig.json", cache)
+		assert.Assert(t, len(first.Errors) > 0, "expected diagnostics on first parse, got 0")
+		second := parseConfig("/tsconfig.json", cache)
+		assert.Assert(t, len(second.Errors) > 0, "expected diagnostics on second parse (cache hit), got 0")
+	})
+
+	t.Run("two configs share same base", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]string{
+			"/base.json": `{
+  "excludes": ["**/*.ts"]
+}`,
+			"/projA/tsconfig.json": `{
+  "extends": "../base.json"
+}`,
+			"/projB/tsconfig.json": `{
+  "extends": "../base.json"
+}`,
+			"/projA/app.ts": "export {}",
+			"/projB/app.ts": "export {}",
+		}
+
+		host := tsoptionstest.NewVFSParseConfigHost(files, "/", true /*useCaseSensitiveFileNames*/)
+
+		parseConfig := func(configFileName string, cache tsoptions.ExtendedConfigCache) *tsoptions.ParsedCommandLine {
+			cfgPath := tspath.ToPath(configFileName, host.GetCurrentDirectory(), host.FS().UseCaseSensitiveFileNames())
+			jsonText, ok := host.FS().ReadFile(configFileName)
+			assert.Assert(t, ok, "missing %s in test fs", configFileName)
+			tsConfigSourceFile := &tsoptions.TsConfigSourceFile{
+				SourceFile: parser.ParseSourceFile(ast.SourceFileParseOptions{FileName: configFileName, Path: cfgPath}, jsonText, core.ScriptKindJSON),
+			}
+			return tsoptions.ParseJsonSourceFileConfigFileContent(
+				tsConfigSourceFile,
+				host,
+				host.GetCurrentDirectory(),
+				nil,
+				configFileName,
+				nil,
+				nil,
+				cache,
+			)
+		}
+
+		cache := &memoCache{}
+		first := parseConfig("/projA/tsconfig.json", cache)
+		assert.Assert(t, len(first.Errors) > 0, "expected diagnostics for projA parse, got 0")
+		second := parseConfig("/projB/tsconfig.json", cache)
+		assert.Assert(t, len(second.Errors) > 0, "expected diagnostics for projB parse (cache hit on base), got 0")
+	})
+}

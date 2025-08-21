@@ -1,6 +1,7 @@
 package project_test
 
 import (
+	"context"
 	"fmt"
 	"testing"
 
@@ -24,19 +25,24 @@ func TestProjectReferencesProgram(t *testing.T) {
 	t.Run("program for referenced project", func(t *testing.T) {
 		t.Parallel()
 		files := filesForReferencedProjectProgram(false)
-		service, _ := projecttestutil.Setup(files, nil)
-		assert.Equal(t, len(service.Projects()), 0)
-		service.OpenFile("/user/username/projects/myproject/main/main.ts", files["/user/username/projects/myproject/main/main.ts"].(string), core.ScriptKindTS, "/user/username/projects/myproject")
-		assert.Equal(t, len(service.Projects()), 1)
-		p := service.Projects()[0]
-		assert.Equal(t, p.Kind(), project.KindConfigured)
-		scriptInfo := service.DocumentStore().GetScriptInfoByPath("/user/username/projects/myproject/dependency/fns.ts")
-		assert.Assert(t, scriptInfo != nil)
-		dtsScriptInfo := service.DocumentStore().GetScriptInfoByPath("/user/username/projects/myproject/decls/fns.d.ts")
-		assert.Assert(t, dtsScriptInfo == nil)
-		file := p.CurrentProgram().GetSourceFileByPath(tspath.Path("/user/username/projects/myproject/dependency/fns.ts"))
+		session, _ := projecttestutil.Setup(files)
+		snapshot, release := session.Snapshot()
+		defer release()
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
+
+		uri := lsproto.DocumentUri("file:///user/username/projects/myproject/main/main.ts")
+		session.DidOpenFile(context.Background(), uri, 1, files["/user/username/projects/myproject/main/main.ts"].(string), lsproto.LanguageKindTypeScript)
+
+		snapshot, release = session.Snapshot()
+		defer release()
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
+		projects := snapshot.ProjectCollection.Projects()
+		p := projects[0]
+		assert.Equal(t, p.Kind, project.KindConfigured)
+
+		file := p.Program.GetSourceFileByPath(tspath.Path("/user/username/projects/myproject/dependency/fns.ts"))
 		assert.Assert(t, file != nil)
-		dtsFile := p.CurrentProgram().GetSourceFileByPath(tspath.Path("/user/username/projects/myproject/decls/fns.d.ts"))
+		dtsFile := p.Program.GetSourceFileByPath(tspath.Path("/user/username/projects/myproject/decls/fns.d.ts"))
 		assert.Assert(t, dtsFile == nil)
 	})
 
@@ -50,191 +56,245 @@ func TestProjectReferencesProgram(t *testing.T) {
 			export declare function fn4(): void;
 			export declare function fn5(): void;
 		`
-		service, _ := projecttestutil.Setup(files, nil)
-		assert.Equal(t, len(service.Projects()), 0)
-		service.OpenFile("/user/username/projects/myproject/main/main.ts", files["/user/username/projects/myproject/main/main.ts"].(string), core.ScriptKindTS, "/user/username/projects/myproject")
-		assert.Equal(t, len(service.Projects()), 1)
-		p := service.Projects()[0]
-		assert.Equal(t, p.Kind(), project.KindConfigured)
-		scriptInfo := service.DocumentStore().GetScriptInfoByPath("/user/username/projects/myproject/dependency/fns.ts")
-		assert.Assert(t, scriptInfo == nil)
-		dtsScriptInfo := service.DocumentStore().GetScriptInfoByPath("/user/username/projects/myproject/decls/fns.d.ts")
-		assert.Assert(t, dtsScriptInfo != nil)
-		file := p.CurrentProgram().GetSourceFileByPath(tspath.Path("/user/username/projects/myproject/dependency/fns.ts"))
+		session, _ := projecttestutil.Setup(files)
+		snapshot, release := session.Snapshot()
+		defer release()
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
+
+		uri := lsproto.DocumentUri("file:///user/username/projects/myproject/main/main.ts")
+		session.DidOpenFile(context.Background(), uri, 1, files["/user/username/projects/myproject/main/main.ts"].(string), lsproto.LanguageKindTypeScript)
+
+		snapshot, release = session.Snapshot()
+		defer release()
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
+		projects := snapshot.ProjectCollection.Projects()
+		p := projects[0]
+		assert.Equal(t, p.Kind, project.KindConfigured)
+
+		file := p.Program.GetSourceFileByPath(tspath.Path("/user/username/projects/myproject/dependency/fns.ts"))
 		assert.Assert(t, file == nil)
-		dtsFile := p.CurrentProgram().GetSourceFileByPath(tspath.Path("/user/username/projects/myproject/decls/fns.d.ts"))
+		dtsFile := p.Program.GetSourceFileByPath(tspath.Path("/user/username/projects/myproject/decls/fns.d.ts"))
 		assert.Assert(t, dtsFile != nil)
 	})
 
 	t.Run("references through symlink with index and typings", func(t *testing.T) {
 		t.Parallel()
 		files, aTest, bFoo, bBar := filesForSymlinkReferences(false, "")
-		service, _ := projecttestutil.Setup(files, nil)
-		assert.Equal(t, len(service.Projects()), 0)
-		service.OpenFile(aTest, files[aTest].(string), core.ScriptKindTS, "")
-		assert.Equal(t, len(service.Projects()), 1)
-		p := service.Projects()[0]
-		assert.Equal(t, p.Kind(), project.KindConfigured)
-		fooInfo := service.DocumentStore().GetScriptInfoByPath(serviceToPath(service, bFoo))
-		assert.Assert(t, fooInfo != nil)
-		barInfo := service.DocumentStore().GetScriptInfoByPath(serviceToPath(service, bBar))
-		assert.Assert(t, barInfo != nil)
-		fooFile := p.CurrentProgram().GetSourceFile(bFoo)
+		session, _ := projecttestutil.Setup(files)
+		snapshot, release := session.Snapshot()
+		defer release()
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
+
+		uri := lsproto.DocumentUri("file://" + aTest)
+		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
+
+		snapshot, release = session.Snapshot()
+		defer release()
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
+		projects := snapshot.ProjectCollection.Projects()
+		p := projects[0]
+		assert.Equal(t, p.Kind, project.KindConfigured)
+
+		fooFile := p.Program.GetSourceFile(bFoo)
 		assert.Assert(t, fooFile != nil)
-		barFile := p.CurrentProgram().GetSourceFile(bBar)
+		barFile := p.Program.GetSourceFile(bBar)
 		assert.Assert(t, barFile != nil)
 	})
 
 	t.Run("references through symlink with index and typings with preserveSymlinks", func(t *testing.T) {
 		t.Parallel()
 		files, aTest, bFoo, bBar := filesForSymlinkReferences(true, "")
-		service, _ := projecttestutil.Setup(files, nil)
-		assert.Equal(t, len(service.Projects()), 0)
-		service.OpenFile(aTest, files[aTest].(string), core.ScriptKindTS, "")
-		assert.Equal(t, len(service.Projects()), 1)
-		p := service.Projects()[0]
-		assert.Equal(t, p.Kind(), project.KindConfigured)
-		fooInfo := service.DocumentStore().GetScriptInfoByPath(serviceToPath(service, bFoo))
-		assert.Assert(t, fooInfo != nil)
-		barInfo := service.DocumentStore().GetScriptInfoByPath(serviceToPath(service, bBar))
-		assert.Assert(t, barInfo != nil)
-		fooFile := p.CurrentProgram().GetSourceFile(bFoo)
+		session, _ := projecttestutil.Setup(files)
+		snapshot, release := session.Snapshot()
+		defer release()
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
+
+		uri := lsproto.DocumentUri("file://" + aTest)
+		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
+
+		snapshot, release = session.Snapshot()
+		defer release()
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
+		projects := snapshot.ProjectCollection.Projects()
+		p := projects[0]
+		assert.Equal(t, p.Kind, project.KindConfigured)
+
+		fooFile := p.Program.GetSourceFile(bFoo)
 		assert.Assert(t, fooFile != nil)
-		barFile := p.CurrentProgram().GetSourceFile(bBar)
+		barFile := p.Program.GetSourceFile(bBar)
 		assert.Assert(t, barFile != nil)
 	})
 
 	t.Run("references through symlink with index and typings scoped package", func(t *testing.T) {
 		t.Parallel()
 		files, aTest, bFoo, bBar := filesForSymlinkReferences(false, "@issue/")
-		service, _ := projecttestutil.Setup(files, nil)
-		assert.Equal(t, len(service.Projects()), 0)
-		service.OpenFile(aTest, files[aTest].(string), core.ScriptKindTS, "")
-		assert.Equal(t, len(service.Projects()), 1)
-		p := service.Projects()[0]
-		assert.Equal(t, p.Kind(), project.KindConfigured)
-		fooInfo := service.DocumentStore().GetScriptInfoByPath(serviceToPath(service, bFoo))
-		assert.Assert(t, fooInfo != nil)
-		barInfo := service.DocumentStore().GetScriptInfoByPath(serviceToPath(service, bBar))
-		assert.Assert(t, barInfo != nil)
-		fooFile := p.CurrentProgram().GetSourceFile(bFoo)
+		session, _ := projecttestutil.Setup(files)
+		snapshot, release := session.Snapshot()
+		defer release()
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
+
+		uri := lsproto.DocumentUri("file://" + aTest)
+		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
+
+		snapshot, release = session.Snapshot()
+		defer release()
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
+		projects := snapshot.ProjectCollection.Projects()
+		p := projects[0]
+		assert.Equal(t, p.Kind, project.KindConfigured)
+
+		fooFile := p.Program.GetSourceFile(bFoo)
 		assert.Assert(t, fooFile != nil)
-		barFile := p.CurrentProgram().GetSourceFile(bBar)
+		barFile := p.Program.GetSourceFile(bBar)
 		assert.Assert(t, barFile != nil)
 	})
 
 	t.Run("references through symlink with index and typings with scoped package preserveSymlinks", func(t *testing.T) {
 		t.Parallel()
 		files, aTest, bFoo, bBar := filesForSymlinkReferences(true, "@issue/")
-		service, _ := projecttestutil.Setup(files, nil)
-		assert.Equal(t, len(service.Projects()), 0)
-		service.OpenFile(aTest, files[aTest].(string), core.ScriptKindTS, "")
-		assert.Equal(t, len(service.Projects()), 1)
-		p := service.Projects()[0]
-		assert.Equal(t, p.Kind(), project.KindConfigured)
-		fooInfo := service.DocumentStore().GetScriptInfoByPath(serviceToPath(service, bFoo))
-		assert.Assert(t, fooInfo != nil)
-		barInfo := service.DocumentStore().GetScriptInfoByPath(serviceToPath(service, bBar))
-		assert.Assert(t, barInfo != nil)
-		fooFile := p.CurrentProgram().GetSourceFile(bFoo)
+		session, _ := projecttestutil.Setup(files)
+		snapshot, release := session.Snapshot()
+		defer release()
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
+
+		uri := lsproto.DocumentUri("file://" + aTest)
+		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
+
+		snapshot, release = session.Snapshot()
+		defer release()
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
+		projects := snapshot.ProjectCollection.Projects()
+		p := projects[0]
+		assert.Equal(t, p.Kind, project.KindConfigured)
+
+		fooFile := p.Program.GetSourceFile(bFoo)
 		assert.Assert(t, fooFile != nil)
-		barFile := p.CurrentProgram().GetSourceFile(bBar)
+		barFile := p.Program.GetSourceFile(bBar)
 		assert.Assert(t, barFile != nil)
 	})
 
 	t.Run("references through symlink referencing from subFolder", func(t *testing.T) {
 		t.Parallel()
 		files, aTest, bFoo, bBar := filesForSymlinkReferencesInSubfolder(false, "")
-		service, _ := projecttestutil.Setup(files, nil)
-		assert.Equal(t, len(service.Projects()), 0)
-		service.OpenFile(aTest, files[aTest].(string), core.ScriptKindTS, "")
-		assert.Equal(t, len(service.Projects()), 1)
-		p := service.Projects()[0]
-		assert.Equal(t, p.Kind(), project.KindConfigured)
-		fooInfo := service.DocumentStore().GetScriptInfoByPath(serviceToPath(service, bFoo))
-		assert.Assert(t, fooInfo != nil)
-		barInfo := service.DocumentStore().GetScriptInfoByPath(serviceToPath(service, bBar))
-		assert.Assert(t, barInfo != nil)
-		fooFile := p.CurrentProgram().GetSourceFile(bFoo)
+		session, _ := projecttestutil.Setup(files)
+		snapshot, release := session.Snapshot()
+		defer release()
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
+
+		uri := lsproto.DocumentUri("file://" + aTest)
+		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
+
+		snapshot, release = session.Snapshot()
+		defer release()
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
+		projects := snapshot.ProjectCollection.Projects()
+		p := projects[0]
+		assert.Equal(t, p.Kind, project.KindConfigured)
+
+		fooFile := p.Program.GetSourceFile(bFoo)
 		assert.Assert(t, fooFile != nil)
-		barFile := p.CurrentProgram().GetSourceFile(bBar)
+		barFile := p.Program.GetSourceFile(bBar)
 		assert.Assert(t, barFile != nil)
 	})
 
 	t.Run("references through symlink referencing from subFolder with preserveSymlinks", func(t *testing.T) {
 		t.Parallel()
 		files, aTest, bFoo, bBar := filesForSymlinkReferencesInSubfolder(true, "")
-		service, _ := projecttestutil.Setup(files, nil)
-		assert.Equal(t, len(service.Projects()), 0)
-		service.OpenFile(aTest, files[aTest].(string), core.ScriptKindTS, "")
-		assert.Equal(t, len(service.Projects()), 1)
-		p := service.Projects()[0]
-		assert.Equal(t, p.Kind(), project.KindConfigured)
-		fooInfo := service.DocumentStore().GetScriptInfoByPath(serviceToPath(service, bFoo))
-		assert.Assert(t, fooInfo != nil)
-		barInfo := service.DocumentStore().GetScriptInfoByPath(serviceToPath(service, bBar))
-		assert.Assert(t, barInfo != nil)
-		fooFile := p.CurrentProgram().GetSourceFile(bFoo)
+		session, _ := projecttestutil.Setup(files)
+		snapshot, release := session.Snapshot()
+		defer release()
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
+
+		uri := lsproto.DocumentUri("file://" + aTest)
+		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
+
+		snapshot, release = session.Snapshot()
+		defer release()
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
+		projects := snapshot.ProjectCollection.Projects()
+		p := projects[0]
+		assert.Equal(t, p.Kind, project.KindConfigured)
+
+		fooFile := p.Program.GetSourceFile(bFoo)
 		assert.Assert(t, fooFile != nil)
-		barFile := p.CurrentProgram().GetSourceFile(bBar)
+		barFile := p.Program.GetSourceFile(bBar)
 		assert.Assert(t, barFile != nil)
 	})
 
 	t.Run("references through symlink referencing from subFolder scoped package", func(t *testing.T) {
 		t.Parallel()
 		files, aTest, bFoo, bBar := filesForSymlinkReferencesInSubfolder(false, "@issue/")
-		service, _ := projecttestutil.Setup(files, nil)
-		assert.Equal(t, len(service.Projects()), 0)
-		service.OpenFile(aTest, files[aTest].(string), core.ScriptKindTS, "")
-		assert.Equal(t, len(service.Projects()), 1)
-		p := service.Projects()[0]
-		assert.Equal(t, p.Kind(), project.KindConfigured)
-		fooInfo := service.DocumentStore().GetScriptInfoByPath(serviceToPath(service, bFoo))
-		assert.Assert(t, fooInfo != nil)
-		barInfo := service.DocumentStore().GetScriptInfoByPath(serviceToPath(service, bBar))
-		assert.Assert(t, barInfo != nil)
-		fooFile := p.CurrentProgram().GetSourceFile(bFoo)
+		session, _ := projecttestutil.Setup(files)
+		snapshot, release := session.Snapshot()
+		defer release()
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
+
+		uri := lsproto.DocumentUri("file://" + aTest)
+		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
+
+		snapshot, release = session.Snapshot()
+		defer release()
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
+		projects := snapshot.ProjectCollection.Projects()
+		p := projects[0]
+		assert.Equal(t, p.Kind, project.KindConfigured)
+
+		fooFile := p.Program.GetSourceFile(bFoo)
 		assert.Assert(t, fooFile != nil)
-		barFile := p.CurrentProgram().GetSourceFile(bBar)
+		barFile := p.Program.GetSourceFile(bBar)
 		assert.Assert(t, barFile != nil)
 	})
 
 	t.Run("references through symlink referencing from subFolder with scoped package preserveSymlinks", func(t *testing.T) {
 		t.Parallel()
 		files, aTest, bFoo, bBar := filesForSymlinkReferencesInSubfolder(true, "@issue/")
-		service, _ := projecttestutil.Setup(files, nil)
-		assert.Equal(t, len(service.Projects()), 0)
-		service.OpenFile(aTest, files[aTest].(string), core.ScriptKindTS, "")
-		assert.Equal(t, len(service.Projects()), 1)
-		p := service.Projects()[0]
-		assert.Equal(t, p.Kind(), project.KindConfigured)
-		fooInfo := service.DocumentStore().GetScriptInfoByPath(serviceToPath(service, bFoo))
-		assert.Assert(t, fooInfo != nil)
-		barInfo := service.DocumentStore().GetScriptInfoByPath(serviceToPath(service, bBar))
-		assert.Assert(t, barInfo != nil)
-		fooFile := p.CurrentProgram().GetSourceFile(bFoo)
+		session, _ := projecttestutil.Setup(files)
+		snapshot, release := session.Snapshot()
+		defer release()
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 0)
+
+		uri := lsproto.DocumentUri("file://" + aTest)
+		session.DidOpenFile(context.Background(), uri, 1, files[aTest].(string), lsproto.LanguageKindTypeScript)
+
+		snapshot, release = session.Snapshot()
+		defer release()
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
+		projects := snapshot.ProjectCollection.Projects()
+		p := projects[0]
+		assert.Equal(t, p.Kind, project.KindConfigured)
+
+		fooFile := p.Program.GetSourceFile(bFoo)
 		assert.Assert(t, fooFile != nil)
-		barFile := p.CurrentProgram().GetSourceFile(bBar)
+		barFile := p.Program.GetSourceFile(bBar)
 		assert.Assert(t, barFile != nil)
 	})
 
 	t.Run("when new file is added to referenced project", func(t *testing.T) {
 		t.Parallel()
 		files := filesForReferencedProjectProgram(false)
-		service, host := projecttestutil.Setup(files, nil)
-		service.OpenFile("/user/username/projects/myproject/main/main.ts", files["/user/username/projects/myproject/main/main.ts"].(string), core.ScriptKindTS, "/user/username/projects/myproject")
-		assert.Equal(t, len(service.Projects()), 1)
-		project := service.Projects()[0]
-		programBefore := project.GetProgram()
-		err := host.FS().WriteFile("/user/username/projects/myproject/dependency/fns2.ts", `export const x = 2;`, false)
+		session, utils := projecttestutil.Setup(files)
+		uri := lsproto.DocumentUri("file:///user/username/projects/myproject/main/main.ts")
+		session.DidOpenFile(context.Background(), uri, 1, files["/user/username/projects/myproject/main/main.ts"].(string), lsproto.LanguageKindTypeScript)
+		snapshot, release := session.Snapshot()
+		defer release()
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
+		programBefore := snapshot.ProjectCollection.Projects()[0].Program
+
+		err := utils.FS().WriteFile("/user/username/projects/myproject/dependency/fns2.ts", `export const x = 2;`, false)
 		assert.NilError(t, err)
-		assert.NilError(t, service.OnWatchedFilesChanged(t.Context(), []*lsproto.FileEvent{
+		session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
 			{
-				Type: lsproto.FileChangeTypeChanged,
+				Type: lsproto.FileChangeTypeCreated,
 				Uri:  "file:///user/username/projects/myproject/dependency/fns2.ts",
 			},
-		}))
-		assert.Check(t, project.GetProgram() != programBefore)
+		})
+
+		_, err = session.GetLanguageService(context.Background(), uri)
+		assert.NilError(t, err)
+		snapshot, release = session.Snapshot()
+		defer release()
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
+		assert.Check(t, snapshot.ProjectCollection.Projects()[0].Program != programBefore)
 	})
 }
 

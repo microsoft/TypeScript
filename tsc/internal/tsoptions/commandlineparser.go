@@ -49,22 +49,14 @@ func ParseCommandLine(
 	optionsWithAbsolutePaths := convertToOptionsWithAbsolutePaths(parser.options, CommandLineCompilerOptionsMap, host.GetCurrentDirectory())
 	compilerOptions := convertMapToOptions(optionsWithAbsolutePaths, &compilerOptionsParser{&core.CompilerOptions{}}).CompilerOptions
 	watchOptions := convertMapToOptions(optionsWithAbsolutePaths, &watchOptionsParser{&core.WatchOptions{}}).WatchOptions
-	return &ParsedCommandLine{
-		ParsedConfig: &core.ParsedOptions{
-			CompilerOptions: compilerOptions,
-			WatchOptions:    watchOptions,
-			FileNames:       parser.fileNames,
-		},
-		ConfigFile:    nil,
-		Errors:        parser.errors,
-		Raw:           parser.options, // !!! keep optionsBase incase needed later. todo: figure out if this is still needed
-		CompileOnSave: nil,
-
-		comparePathsOptions: tspath.ComparePathsOptions{
-			UseCaseSensitiveFileNames: host.FS().UseCaseSensitiveFileNames(),
-			CurrentDirectory:          host.GetCurrentDirectory(),
-		},
-	}
+	result := NewParsedCommandLine(compilerOptions, parser.fileNames, tspath.ComparePathsOptions{
+		UseCaseSensitiveFileNames: host.FS().UseCaseSensitiveFileNames(),
+		CurrentDirectory:          host.GetCurrentDirectory(),
+	})
+	result.ParsedConfig.WatchOptions = watchOptions
+	result.Errors = parser.errors
+	result.Raw = parser.options
+	return result
 }
 
 func parseCommandLineWorker(
