@@ -104,10 +104,10 @@ function f2(obj: [number, string] | null[]) {
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
->obj[1] : string | null
->       : ^^^^^^^^^^^^^
->obj : [number, string] | null[]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj[1] : string
+>       : ^^^^^^
+>obj : [number, string]
+>    : ^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -116,8 +116,8 @@ function f2(obj: [number, string] | null[]) {
 >   : ^^^^^^
 >obj[0] : number
 >       : ^^^^^^
->obj : [number, string] | null[]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : [number, string]
+>    : ^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 
@@ -126,8 +126,8 @@ function f2(obj: [number, string] | null[]) {
 >   : ^^^^^^
 >obj[1] : string
 >       : ^^^^^^
->obj : [number, string] | null[]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : [number, string]
+>    : ^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -136,22 +136,22 @@ function f2(obj: [number, string] | null[]) {
 >   : ^^^^^^
 >d1 : string
 >   : ^^^^^^
->obj : [number, string] | null[]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : [number, string]
+>    : ^^^^^^^^^^^^^^^^
 
         ([c0, c1] = obj);
->([c0, c1] = obj) : [number, string] | null[]
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
->[c0, c1] = obj : [number, string] | null[]
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>([c0, c1] = obj) : [number, string]
+>                 : ^^^^^^^^^^^^^^^^
+>[c0, c1] = obj : [number, string]
+>               : ^^^^^^^^^^^^^^^^
 >[c0, c1] : [number, string]
 >         : ^^^^^^^^^^^^^^^^
 >c0 : number
 >   : ^^^^^^
 >c1 : string
 >   : ^^^^^^
->obj : [number, string] | null[]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : [number, string]
+>    : ^^^^^^^^^^^^^^^^
     }
 }
 
