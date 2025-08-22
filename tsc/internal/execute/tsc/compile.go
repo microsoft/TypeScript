@@ -71,5 +71,5 @@ type CompileAndEmitResult struct {
 	Diagnostics []*ast.Diagnostic
 	EmitResult  *compiler.EmitResult
 	Status      ExitStatus
-	times       CompileTimes
+	times       *CompileTimes
 }

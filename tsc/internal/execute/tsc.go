@@ -222,7 +222,7 @@ func tscCompilation(sys tsc.System, commandLine *tsoptions.ParsedCommandLine, te
 			reportDiagnostic,
 			reportErrorSummary,
 			extendedConfigCache,
-			compileTimes,
+			&compileTimes,
 			testing,
 		)
 	}
@@ -232,7 +232,7 @@ func tscCompilation(sys tsc.System, commandLine *tsoptions.ParsedCommandLine, te
 		reportDiagnostic,
 		reportErrorSummary,
 		extendedConfigCache,
-		compileTimes,
+		&compileTimes,
 		testing,
 	)
 }
@@ -261,7 +261,7 @@ func performIncrementalCompilation(
 	reportDiagnostic tsc.DiagnosticReporter,
 	reportErrorSummary tsc.DiagnosticsReporter,
 	extendedConfigCache tsoptions.ExtendedConfigCache,
-	compileTimes tsc.CompileTimes,
+	compileTimes *tsc.CompileTimes,
 	testing tsc.CommandLineTesting,
 ) tsc.CommandLineResult {
 	host := compiler.NewCachedFSCompilerHost(sys.GetCurrentDirectory(), sys.FS(), sys.DefaultLibraryPath(), extendedConfigCache, getTraceFromSys(sys, testing))
@@ -304,7 +304,7 @@ func performCompilation(
 	reportDiagnostic tsc.DiagnosticReporter,
 	reportErrorSummary tsc.DiagnosticsReporter,
 	extendedConfigCache tsoptions.ExtendedConfigCache,
-	compileTimes tsc.CompileTimes,
+	compileTimes *tsc.CompileTimes,
 	testing tsc.CommandLineTesting,
 ) tsc.CommandLineResult {
 	host := compiler.NewCachedFSCompilerHost(sys.GetCurrentDirectory(), sys.FS(), sys.DefaultLibraryPath(), extendedConfigCache, getTraceFromSys(sys, testing))

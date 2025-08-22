@@ -122,7 +122,7 @@ func (t *buildTask) buildProject(orchestrator *Orchestrator, path tspath.Path) {
 			t.reportDiagnostic,
 			tsc.QuietDiagnosticsReporter,
 			&t.builder,
-			compileTimes,
+			&compileTimes,
 			orchestrator.opts.Testing,
 		)
 		t.exitStatus = result.Status

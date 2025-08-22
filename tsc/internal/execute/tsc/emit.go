@@ -30,7 +30,7 @@ func EmitAndReportStatistics(
 	reportDiagnostic DiagnosticReporter,
 	reportErrorSummary DiagnosticsReporter,
 	w io.Writer,
-	compileTimes CompileTimes,
+	compileTimes *CompileTimes,
 	testing CommandLineTesting,
 ) (CompileAndEmitResult, *Statistics) {
 	var statistics *Statistics
@@ -48,7 +48,7 @@ func EmitAndReportStatistics(
 		runtime.GC()
 		runtime.ReadMemStats(&memStats)
 
-		statistics = statisticsFromProgram(program, &compileTimes, &memStats)
+		statistics = statisticsFromProgram(program, compileTimes, &memStats)
 		statistics.Report(w, testing)
 	}
 
@@ -67,7 +67,7 @@ func EmitFilesAndReportErrors(
 	reportDiagnostic DiagnosticReporter,
 	reportErrorSummary DiagnosticsReporter,
 	w io.Writer,
-	compileTimes CompileTimes,
+	compileTimes *CompileTimes,
 	testing CommandLineTesting,
 ) (result CompileAndEmitResult) {
 	result.times = compileTimes
