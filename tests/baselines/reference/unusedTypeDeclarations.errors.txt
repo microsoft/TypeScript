@@ -1,11 +1,14 @@
 unusedTypeDeclarations.ts(1,6): error TS6196: 'T1' is declared but never used.
+unusedTypeDeclarations.ts(2,6): error TS6196: '_T2' is declared but never used.
 
 
-==== unusedTypeDeclarations.ts (1 errors) ====
+==== unusedTypeDeclarations.ts (2 errors) ====
     type T1 = number;  // error
          ~~
 !!! error TS6196: 'T1' is declared but never used.
     type _T2 = number; // ok
+         ~~~
+!!! error TS6196: '_T2' is declared but never used.
     
     export {};
     

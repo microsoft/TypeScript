@@ -1,0 +1,41 @@
+noUnusedLocals_types.ts(4,6): error TS6196: 'UnusedType1' is declared but never used.
+noUnusedLocals_types.ts(5,11): error TS6196: 'UnusedInterface1' is declared but never used.
+noUnusedLocals_types.ts(6,7): error TS6196: 'UnusedClass1' is declared but never used.
+noUnusedLocals_types.ts(9,6): error TS6196: '_UnusedType2' is declared but never used.
+noUnusedLocals_types.ts(10,11): error TS6196: '_UnusedInterface2' is declared but never used.
+noUnusedLocals_types.ts(11,7): error TS6196: '_UnusedClass2' is declared but never used.
+noUnusedLocals_types.ts(15,6): error TS6196: '_Helper' is declared but never used.
+
+
+==== noUnusedLocals_types.ts (7 errors) ====
+    // Test specifically for type declarations with underscore prefix
+    
+    // These should all produce errors (no underscore)
+    type UnusedType1 = string;
+         ~~~~~~~~~~~
+!!! error TS6196: 'UnusedType1' is declared but never used.
+    interface UnusedInterface1 { x: number; }
+              ~~~~~~~~~~~~~~~~
+!!! error TS6196: 'UnusedInterface1' is declared but never used.
+    class UnusedClass1 { }
+          ~~~~~~~~~~~~
+!!! error TS6196: 'UnusedClass1' is declared but never used.
+    
+    // These should NOT produce errors (underscore prefix)
+    type _UnusedType2 = string;
+         ~~~~~~~~~~~~
+!!! error TS6196: '_UnusedType2' is declared but never used.
+    interface _UnusedInterface2 { x: number; }  
+              ~~~~~~~~~~~~~~~~~
+!!! error TS6196: '_UnusedInterface2' is declared but never used.
+    class _UnusedClass2 { }
+          ~~~~~~~~~~~~~
+!!! error TS6196: '_UnusedClass2' is declared but never used.
+    
+    // Mixed usage - only the one without underscore should error
+    type UsedInOther = number;
+    type _Helper = UsedInOther; // _Helper is not an error, but it uses UsedInOther
+         ~~~~~~~
+!!! error TS6196: '_Helper' is declared but never used.
+    
+    export {};

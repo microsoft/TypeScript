@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/noUnusedLocals_types.ts] ////
+
+=== noUnusedLocals_types.ts ===
+// Test specifically for type declarations with underscore prefix
+
+// These should all produce errors (no underscore)
+type UnusedType1 = string;
+>UnusedType1 : Symbol(UnusedType1, Decl(noUnusedLocals_types.ts, 0, 0))
+
+interface UnusedInterface1 { x: number; }
+>UnusedInterface1 : Symbol(UnusedInterface1, Decl(noUnusedLocals_types.ts, 3, 26))
+>x : Symbol(UnusedInterface1.x, Decl(noUnusedLocals_types.ts, 4, 28))
+
+class UnusedClass1 { }
+>UnusedClass1 : Symbol(UnusedClass1, Decl(noUnusedLocals_types.ts, 4, 41))
+
+// These should NOT produce errors (underscore prefix)
+type _UnusedType2 = string;
+>_UnusedType2 : Symbol(_UnusedType2, Decl(noUnusedLocals_types.ts, 5, 22))
+
+interface _UnusedInterface2 { x: number; }  
+>_UnusedInterface2 : Symbol(_UnusedInterface2, Decl(noUnusedLocals_types.ts, 8, 27))
+>x : Symbol(_UnusedInterface2.x, Decl(noUnusedLocals_types.ts, 9, 29))
+
+class _UnusedClass2 { }
+>_UnusedClass2 : Symbol(_UnusedClass2, Decl(noUnusedLocals_types.ts, 9, 42))
+
+// Mixed usage - only the one without underscore should error
+type UsedInOther = number;
+>UsedInOther : Symbol(UsedInOther, Decl(noUnusedLocals_types.ts, 10, 23))
+
+type _Helper = UsedInOther; // _Helper is not an error, but it uses UsedInOther
+>_Helper : Symbol(_Helper, Decl(noUnusedLocals_types.ts, 13, 26))
+>UsedInOther : Symbol(UsedInOther, Decl(noUnusedLocals_types.ts, 10, 23))
+
+export {};

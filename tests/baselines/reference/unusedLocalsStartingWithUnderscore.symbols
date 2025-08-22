@@ -1,25 +1,173 @@
 //// [tests/cases/compiler/unusedLocalsStartingWithUnderscore.ts] ////
 
-=== /a.ts ===
-import * as _ from "./a";
->_ : Symbol(_, Decl(a.ts, 0, 6))
+=== unusedLocalsStartingWithUnderscore.ts ===
+// Variables
+const unusedVar = 1; // error
+>unusedVar : Symbol(unusedVar, Decl(unusedLocalsStartingWithUnderscore.ts, 1, 5))
 
-for (const _ of []) { }
->_ : Symbol(_, Decl(a.ts, 2, 10))
+const _unusedVar = 2; // ok
+>_unusedVar : Symbol(_unusedVar, Decl(unusedLocalsStartingWithUnderscore.ts, 2, 5))
 
-for (const _ in []) { }
->_ : Symbol(_, Decl(a.ts, 4, 10))
+let unusedLet = 3; // error  
+>unusedLet : Symbol(unusedLet, Decl(unusedLocalsStartingWithUnderscore.ts, 4, 3))
 
-namespace _ns {
->_ns : Symbol(_ns, Decl(a.ts, 4, 23))
+let _unusedLet = 4; // ok
+>_unusedLet : Symbol(_unusedLet, Decl(unusedLocalsStartingWithUnderscore.ts, 5, 3))
 
-    let _;
->_ : Symbol(_, Decl(a.ts, 7, 7))
+var unusedVar2 = 5; // error
+>unusedVar2 : Symbol(unusedVar2, Decl(unusedLocalsStartingWithUnderscore.ts, 7, 3))
 
-    for (const _ of []) { }
->_ : Symbol(_, Decl(a.ts, 8, 14))
+var _unusedVar2 = 6; // ok
+>_unusedVar2 : Symbol(_unusedVar2, Decl(unusedLocalsStartingWithUnderscore.ts, 8, 3))
 
-    for (const _ in []) { }
->_ : Symbol(_, Decl(a.ts, 10, 14))
+const { a1, _b1 } = { a1: 1, _b1: 2 }; // error on a1
+>a1 : Symbol(a1, Decl(unusedLocalsStartingWithUnderscore.ts, 10, 7))
+>_b1 : Symbol(_b1, Decl(unusedLocalsStartingWithUnderscore.ts, 10, 11))
+>a1 : Symbol(a1, Decl(unusedLocalsStartingWithUnderscore.ts, 10, 21))
+>_b1 : Symbol(_b1, Decl(unusedLocalsStartingWithUnderscore.ts, 10, 28))
+
+const { _a2, _b2 } = { _a2: 1, _b2: 2 }; // ok
+>_a2 : Symbol(_a2, Decl(unusedLocalsStartingWithUnderscore.ts, 11, 7))
+>_b2 : Symbol(_b2, Decl(unusedLocalsStartingWithUnderscore.ts, 11, 12))
+>_a2 : Symbol(_a2, Decl(unusedLocalsStartingWithUnderscore.ts, 11, 22))
+>_b2 : Symbol(_b2, Decl(unusedLocalsStartingWithUnderscore.ts, 11, 30))
+
+// Functions
+function unusedFunc() { } // error
+>unusedFunc : Symbol(unusedFunc, Decl(unusedLocalsStartingWithUnderscore.ts, 11, 40))
+
+function _unusedFunc() { } // ok
+>_unusedFunc : Symbol(_unusedFunc, Decl(unusedLocalsStartingWithUnderscore.ts, 14, 25))
+
+const unusedArrow = () => { }; // error
+>unusedArrow : Symbol(unusedArrow, Decl(unusedLocalsStartingWithUnderscore.ts, 17, 5))
+
+const _unusedArrow = () => { }; // ok
+>_unusedArrow : Symbol(_unusedArrow, Decl(unusedLocalsStartingWithUnderscore.ts, 18, 5))
+
+// Classes
+class UnusedClass { } // error
+>UnusedClass : Symbol(UnusedClass, Decl(unusedLocalsStartingWithUnderscore.ts, 18, 31))
+
+class _UnusedClass { } // ok
+>_UnusedClass : Symbol(_UnusedClass, Decl(unusedLocalsStartingWithUnderscore.ts, 21, 21))
+
+// Interfaces
+interface UnusedInterface { } // error
+>UnusedInterface : Symbol(UnusedInterface, Decl(unusedLocalsStartingWithUnderscore.ts, 22, 22))
+
+interface _UnusedInterface { } // ok
+>_UnusedInterface : Symbol(_UnusedInterface, Decl(unusedLocalsStartingWithUnderscore.ts, 25, 29))
+
+// Type aliases
+type UnusedType = string; // error
+>UnusedType : Symbol(UnusedType, Decl(unusedLocalsStartingWithUnderscore.ts, 26, 30))
+
+type _UnusedType = string; // ok
+>_UnusedType : Symbol(_UnusedType, Decl(unusedLocalsStartingWithUnderscore.ts, 29, 25))
+
+// Enums
+enum UnusedEnum { A } // error
+>UnusedEnum : Symbol(UnusedEnum, Decl(unusedLocalsStartingWithUnderscore.ts, 30, 26))
+>A : Symbol(UnusedEnum.A, Decl(unusedLocalsStartingWithUnderscore.ts, 33, 17))
+
+enum _UnusedEnum { A } // ok
+>_UnusedEnum : Symbol(_UnusedEnum, Decl(unusedLocalsStartingWithUnderscore.ts, 33, 21))
+>A : Symbol(_UnusedEnum.A, Decl(unusedLocalsStartingWithUnderscore.ts, 34, 18))
+
+// Declarations in for loops
+for (const _x of []) { } // ok
+>_x : Symbol(_x, Decl(unusedLocalsStartingWithUnderscore.ts, 37, 10))
+
+for (const x of []) { } // error
+>x : Symbol(x, Decl(unusedLocalsStartingWithUnderscore.ts, 38, 10))
+
+for (const _x in []) { } // ok
+>_x : Symbol(_x, Decl(unusedLocalsStartingWithUnderscore.ts, 39, 10))
+
+for (const x in []) { } // error
+>x : Symbol(x, Decl(unusedLocalsStartingWithUnderscore.ts, 40, 10))
+
+// Namespaces
+namespace UnusedNamespace { // error
+>UnusedNamespace : Symbol(UnusedNamespace, Decl(unusedLocalsStartingWithUnderscore.ts, 40, 23))
+
+    export const x = 1;
+>x : Symbol(x, Decl(unusedLocalsStartingWithUnderscore.ts, 44, 16))
+}
+namespace _UnusedNamespace { // ok
+>_UnusedNamespace : Symbol(_UnusedNamespace, Decl(unusedLocalsStartingWithUnderscore.ts, 45, 1))
+
+    export const x = 1;
+>x : Symbol(x, Decl(unusedLocalsStartingWithUnderscore.ts, 47, 16))
 }
 
+// Destructuring
+const { a: unusedA } = { a: 1 }; // error
+>a : Symbol(a, Decl(unusedLocalsStartingWithUnderscore.ts, 51, 24))
+>unusedA : Symbol(unusedA, Decl(unusedLocalsStartingWithUnderscore.ts, 51, 7))
+>a : Symbol(a, Decl(unusedLocalsStartingWithUnderscore.ts, 51, 24))
+
+const { b: _unusedB } = { b: 2 }; // ok
+>b : Symbol(b, Decl(unusedLocalsStartingWithUnderscore.ts, 52, 25))
+>_unusedB : Symbol(_unusedB, Decl(unusedLocalsStartingWithUnderscore.ts, 52, 7))
+>b : Symbol(b, Decl(unusedLocalsStartingWithUnderscore.ts, 52, 25))
+
+const [unusedC] = [3]; // error
+>unusedC : Symbol(unusedC, Decl(unusedLocalsStartingWithUnderscore.ts, 53, 7))
+
+const [_unusedD] = [4]; // ok
+>_unusedD : Symbol(_unusedD, Decl(unusedLocalsStartingWithUnderscore.ts, 54, 7))
+
+//
+// The following declarations may _not_ use an underscore to bypass @noUnusedLocals
+//
+
+class TestClass {
+>TestClass : Symbol(TestClass, Decl(unusedLocalsStartingWithUnderscore.ts, 54, 23))
+
+    private unusedMember = 1; // error
+>unusedMember : Symbol(TestClass.unusedMember, Decl(unusedLocalsStartingWithUnderscore.ts, 60, 17))
+
+    private _unusedMember = 2; // still error
+>_unusedMember : Symbol(TestClass._unusedMember, Decl(unusedLocalsStartingWithUnderscore.ts, 61, 29))
+
+    private unusedMethod() { } // error
+>unusedMethod : Symbol(TestClass.unusedMethod, Decl(unusedLocalsStartingWithUnderscore.ts, 62, 30))
+
+    private _unusedMethod() { } // still error
+>_unusedMethod : Symbol(TestClass._unusedMethod, Decl(unusedLocalsStartingWithUnderscore.ts, 64, 30))
+}
+
+enum TestEnum {
+>TestEnum : Symbol(TestEnum, Decl(unusedLocalsStartingWithUnderscore.ts, 66, 1))
+
+    UnusedMember = 1, // error
+>UnusedMember : Symbol(TestEnum.UnusedMember, Decl(unusedLocalsStartingWithUnderscore.ts, 68, 15))
+
+    _UnusedMember = 2, // still error
+>_UnusedMember : Symbol(TestEnum._UnusedMember, Decl(unusedLocalsStartingWithUnderscore.ts, 69, 21))
+}
+
+interface TestInterface {
+>TestInterface : Symbol(TestInterface, Decl(unusedLocalsStartingWithUnderscore.ts, 71, 1))
+
+    unusedProp: number; // error
+>unusedProp : Symbol(TestInterface.unusedProp, Decl(unusedLocalsStartingWithUnderscore.ts, 73, 25))
+
+    _unusedProp: number; // still error
+>_unusedProp : Symbol(TestInterface._unusedProp, Decl(unusedLocalsStartingWithUnderscore.ts, 74, 23))
+}
+
+const obj = {
+>obj : Symbol(obj, Decl(unusedLocalsStartingWithUnderscore.ts, 78, 5))
+
+    unusedProp: 1, // error
+>unusedProp : Symbol(unusedProp, Decl(unusedLocalsStartingWithUnderscore.ts, 78, 13))
+
+    _unusedProp: 2, // still error
+>_unusedProp : Symbol(_unusedProp, Decl(unusedLocalsStartingWithUnderscore.ts, 79, 18))
+
+};
+
+export { };

@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/noUnusedLocals_types.ts] ////
+
+=== noUnusedLocals_types.ts ===
+// Test specifically for type declarations with underscore prefix
+
+// These should all produce errors (no underscore)
+type UnusedType1 = string;
+>UnusedType1 : string
+>            : ^^^^^^
+
+interface UnusedInterface1 { x: number; }
+>x : number
+>  : ^^^^^^
+
+class UnusedClass1 { }
+>UnusedClass1 : UnusedClass1
+>             : ^^^^^^^^^^^^
+
+// These should NOT produce errors (underscore prefix)
+type _UnusedType2 = string;
+>_UnusedType2 : string
+>             : ^^^^^^
+
+interface _UnusedInterface2 { x: number; }  
+>x : number
+>  : ^^^^^^
+
+class _UnusedClass2 { }
+>_UnusedClass2 : _UnusedClass2
+>              : ^^^^^^^^^^^^^
+
+// Mixed usage - only the one without underscore should error
+type UsedInOther = number;
+>UsedInOther : number
+>            : ^^^^^^
+
+type _Helper = UsedInOther; // _Helper is not an error, but it uses UsedInOther
+>_Helper : number
+>        : ^^^^^^
+
+export {};
