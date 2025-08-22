@@ -4370,8 +4370,8 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             createDiagnosticForOptionName(Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "customConditions");
         }
 
-        if (moduleResolution === ModuleResolutionKind.Bundler && !emitModuleKindIsNonNodeESM(moduleKind) && moduleKind !== ModuleKind.Preserve) {
-            createOptionValueDiagnostic("moduleResolution", Diagnostics.Option_0_can_only_be_used_when_module_is_set_to_preserve_or_to_es2015_or_later, "bundler");
+        if (moduleResolution === ModuleResolutionKind.Bundler && !emitModuleKindIsNonNodeESM(moduleKind) && moduleKind !== ModuleKind.Preserve && moduleKind !== ModuleKind.CommonJS) {
+            createOptionValueDiagnostic("moduleResolution", Diagnostics.Option_0_can_only_be_used_when_module_is_set_to_preserve_commonjs_or_es2015_or_later, "bundler");
         }
 
         if (
