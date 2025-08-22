@@ -1,4 +1,4 @@
-// @moduleResolution: node10
+// @moduleResolution: bundler
 // @traceResolution: true
 // @noEmit: true
 // @noTypesAndSymbols: true

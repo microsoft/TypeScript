@@ -1,4 +1,4 @@
-// @moduleResolution: classic, node, node16, nodenext, bundler
+// @moduleResolution: classic, node16, nodenext, bundler
 // @resolvePackageJsonImports: true
 // @resolvePackageJsonExports: true
 // @noTypesAndSymbols: true
