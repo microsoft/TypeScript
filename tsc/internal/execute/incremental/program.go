@@ -30,11 +30,12 @@ type BuildHost interface {
 }
 
 type Program struct {
-	snapshot                   *snapshot
-	program                    *compiler.Program
-	semanticDiagnosticsPerFile *collections.SyncMap[tspath.Path, *diagnosticsOrBuildInfoDiagnosticsWithFileName]
-	updatedSignatureKinds      map[tspath.Path]SignatureUpdateKind
-	host                       BuildHost
+	snapshot *snapshot
+	program  *compiler.Program
+	host     BuildHost
+
+	// Testing data
+	testingData *TestingData
 }
 
 var _ compiler.ProgramLike = (*Program)(nil)
@@ -47,12 +48,14 @@ func NewProgram(program *compiler.Program, oldProgram *Program, buildHost BuildH
 	}
 
 	if testing {
+		incrementalProgram.testingData = &TestingData{}
+		incrementalProgram.testingData.SemanticDiagnosticsPerFile = &incrementalProgram.snapshot.semanticDiagnosticsPerFile
 		if oldProgram != nil {
-			incrementalProgram.semanticDiagnosticsPerFile = &oldProgram.snapshot.semanticDiagnosticsPerFile
+			incrementalProgram.testingData.OldProgramSemanticDiagnosticsPerFile = &oldProgram.snapshot.semanticDiagnosticsPerFile
 		} else {
-			incrementalProgram.semanticDiagnosticsPerFile = &collections.SyncMap[tspath.Path, *diagnosticsOrBuildInfoDiagnosticsWithFileName]{}
+			incrementalProgram.testingData.OldProgramSemanticDiagnosticsPerFile = &collections.SyncMap[tspath.Path, *diagnosticsOrBuildInfoDiagnosticsWithFileName]{}
 		}
-		incrementalProgram.updatedSignatureKinds = make(map[tspath.Path]SignatureUpdateKind)
+		incrementalProgram.testingData.UpdatedSignatureKinds = make(map[tspath.Path]SignatureUpdateKind)
 	}
 	return incrementalProgram
 }
@@ -61,16 +64,10 @@ type TestingData struct {
 	SemanticDiagnosticsPerFile           *collections.SyncMap[tspath.Path, *diagnosticsOrBuildInfoDiagnosticsWithFileName]
 	OldProgramSemanticDiagnosticsPerFile *collections.SyncMap[tspath.Path, *diagnosticsOrBuildInfoDiagnosticsWithFileName]
 	UpdatedSignatureKinds                map[tspath.Path]SignatureUpdateKind
-	ConfigFilePath                       string
 }
 
-func (p *Program) GetTestingData(program *compiler.Program) TestingData {
-	return TestingData{
-		SemanticDiagnosticsPerFile:           &p.snapshot.semanticDiagnosticsPerFile,
-		OldProgramSemanticDiagnosticsPerFile: p.semanticDiagnosticsPerFile,
-		UpdatedSignatureKinds:                p.updatedSignatureKinds,
-		ConfigFilePath:                       p.snapshot.options.ConfigFilePath,
-	}
+func (p *Program) GetTestingData() *TestingData {
+	return p.testingData
 }
 
 func (p *Program) panicIfNoProgram(method string) {
@@ -82,6 +79,11 @@ func (p *Program) panicIfNoProgram(method string) {
 func (p *Program) GetProgram() *compiler.Program {
 	p.panicIfNoProgram("GetProgram")
 	return p.program
+}
+
+func (p *Program) MakeReadonly() {
+	p.program = nil
+	p.testingData = nil
 }
 
 // Options implements compiler.AnyProgram interface.

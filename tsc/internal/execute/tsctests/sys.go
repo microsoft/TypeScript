@@ -140,6 +140,7 @@ type snapshot struct {
 
 type testSys struct {
 	currentWrite              *strings.Builder
+	programBaselines          strings.Builder
 	tracer                    *harnessutil.TracerForBaselining
 	serializedDiff            *snapshot
 	forIncrementalCorrectness bool
@@ -263,55 +264,51 @@ func (s *testSys) GetTrace(w io.Writer) func(str string) {
 	}
 }
 
-func (s *testSys) baselinePrograms(baseline *strings.Builder, programs []*incremental.Program, watcher tsc.Watcher) {
-	if watcher != nil {
-		programs = []*incremental.Program{watcher.GetProgram()}
-	}
-	for index, program := range programs {
-		if index > 0 {
-			baseline.WriteString("\n")
-		}
-		s.baselineProgram(baseline, program)
-	}
-}
-
-func (s *testSys) baselineProgram(baseline *strings.Builder, program *incremental.Program) {
-	if program == nil {
-		return
+func (s *testSys) OnProgram(program *incremental.Program) {
+	if s.programBaselines.Len() != 0 {
+		s.programBaselines.WriteString("\n")
 	}
 
-	testingData := program.GetTestingData(program.GetProgram())
-	if testingData.ConfigFilePath != "" {
-		baseline.WriteString(tspath.GetRelativePathFromDirectory(s.cwd, testingData.ConfigFilePath, tspath.ComparePathsOptions{
+	testingData := program.GetTestingData()
+	if configFilePath := program.Options().ConfigFilePath; configFilePath != "" {
+		s.programBaselines.WriteString(tspath.GetRelativePathFromDirectory(s.cwd, configFilePath, tspath.ComparePathsOptions{
 			UseCaseSensitiveFileNames: s.FS().UseCaseSensitiveFileNames(),
 			CurrentDirectory:          s.GetCurrentDirectory(),
 		}) + "::\n")
 	}
-	baseline.WriteString("SemanticDiagnostics::\n")
+	s.programBaselines.WriteString("SemanticDiagnostics::\n")
 	for _, file := range program.GetProgram().GetSourceFiles() {
 		if diagnostics, ok := testingData.SemanticDiagnosticsPerFile.Load(file.Path()); ok {
 			if oldDiagnostics, ok := testingData.OldProgramSemanticDiagnosticsPerFile.Load(file.Path()); !ok || oldDiagnostics != diagnostics {
-				baseline.WriteString("*refresh*    " + file.FileName() + "\n")
+				s.programBaselines.WriteString("*refresh*    " + file.FileName() + "\n")
 			}
 		} else {
-			baseline.WriteString("*not cached* " + file.FileName() + "\n")
+			s.programBaselines.WriteString("*not cached* " + file.FileName() + "\n")
 		}
 	}
 
 	// Write signature updates
-	baseline.WriteString("Signatures::\n")
+	s.programBaselines.WriteString("Signatures::\n")
 	for _, file := range program.GetProgram().GetSourceFiles() {
 		if kind, ok := testingData.UpdatedSignatureKinds[file.Path()]; ok {
 			switch kind {
 			case incremental.SignatureUpdateKindComputedDts:
-				baseline.WriteString("(computed .d.ts) " + file.FileName() + "\n")
+				s.programBaselines.WriteString("(computed .d.ts) " + file.FileName() + "\n")
 			case incremental.SignatureUpdateKindStoredAtEmit:
-				baseline.WriteString("(stored at emit) " + file.FileName() + "\n")
+				s.programBaselines.WriteString("(stored at emit) " + file.FileName() + "\n")
 			case incremental.SignatureUpdateKindUsedVersion:
-				baseline.WriteString("(used version)   " + file.FileName() + "\n")
+				s.programBaselines.WriteString("(used version)   " + file.FileName() + "\n")
 			}
 		}
 	}
+}
+
+func (s *testSys) baselinePrograms(baseline *strings.Builder) {
+	baseline.WriteString(s.programBaselines.String())
+	s.programBaselines.Reset()
+}
+
+func (s *testSys) baselineProgram(program *incremental.Program) {
 }
 
 func (s *testSys) serializeState(baseline *strings.Builder) {

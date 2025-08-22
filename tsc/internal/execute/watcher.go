@@ -86,6 +86,9 @@ func (w *Watcher) DoCycle() {
 		// print something???
 		// fmt.Fprintln(w.sys.Writer(), "no changes detected at ", w.sys.Now())
 	}
+	if w.testing != nil {
+		w.testing.OnProgram(w.program)
+	}
 }
 
 func (w *Watcher) compileAndEmit() {

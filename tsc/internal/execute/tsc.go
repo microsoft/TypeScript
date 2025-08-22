@@ -290,9 +290,11 @@ func performIncrementalCompilation(
 		compileTimes,
 		testing,
 	)
+	if testing != nil {
+		testing.OnProgram(incrementalProgram)
+	}
 	return tsc.CommandLineResult{
-		Status:             result.Status,
-		IncrementalProgram: []*incremental.Program{incrementalProgram},
+		Status: result.Status,
 	}
 }
 

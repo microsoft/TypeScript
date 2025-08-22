@@ -114,7 +114,10 @@ func (h *host) GetSourceFile(opts ast.SourceFileParseOptions) *ast.SourceFile {
 	}
 
 	file := h.host.GetSourceFile(opts)
-	file, _ = h.sourceFiles.LoadOrStore(opts, file)
+	// Cache dts and json files as they will be reused
+	if file != nil && (tspath.IsDeclarationFileName(file.FileName()) || tspath.FileExtensionIs(file.FileName(), tspath.ExtensionJson)) {
+		file, _ = h.sourceFiles.LoadOrStore(opts, file)
+	}
 	return file
 }
 

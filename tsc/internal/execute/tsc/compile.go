@@ -40,9 +40,8 @@ type Watcher interface {
 }
 
 type CommandLineResult struct {
-	Status             ExitStatus
-	IncrementalProgram []*incremental.Program
-	Watcher            Watcher
+	Status  ExitStatus
+	Watcher Watcher
 }
 
 type CommandLineTesting interface {
@@ -55,6 +54,7 @@ type CommandLineTesting interface {
 	OnBuildStatusReportStart(w io.Writer)
 	OnBuildStatusReportEnd(w io.Writer)
 	GetTrace(w io.Writer) func(msg string)
+	OnProgram(program *incremental.Program)
 }
 
 type CompileTimes struct {

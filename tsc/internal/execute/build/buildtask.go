@@ -70,7 +70,10 @@ func (t *buildTask) report(orchestrator *Orchestrator, configPath tspath.Path, b
 		buildResult.programStats = append(buildResult.programStats, t.statistics)
 	}
 	if t.program != nil {
-		buildResult.result.IncrementalProgram = append(buildResult.result.IncrementalProgram, t.program)
+		if orchestrator.opts.Testing != nil {
+			orchestrator.opts.Testing.OnProgram(t.program)
+		}
+		t.program.MakeReadonly()
 		buildResult.statistics.ProjectsBuilt++
 	}
 	if t.pseudoBuild {
