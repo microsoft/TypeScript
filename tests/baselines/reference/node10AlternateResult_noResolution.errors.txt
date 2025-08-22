@@ -1,5 +1,4 @@
-/index.ts(1,21): error TS2307: Cannot find module 'pkg' or its corresponding type declarations.
-  There are types at '/node_modules/pkg/definitely-not-index.d.ts', but this result could not be resolved under your current 'moduleResolution' setting. Consider updating to 'node16', 'nodenext', or 'bundler'.
+/index.ts(1,10): error TS2305: Module '"pkg"' has no exported member 'pkg'.
 
 
 ==== /node_modules/pkg/package.json (0 errors) ====
@@ -16,7 +15,6 @@
     
 ==== /index.ts (1 errors) ====
     import { pkg } from "pkg";
-                        ~~~~~
-!!! error TS2307: Cannot find module 'pkg' or its corresponding type declarations.
-!!! error TS2307:   There are types at '/node_modules/pkg/definitely-not-index.d.ts', but this result could not be resolved under your current 'moduleResolution' setting. Consider updating to 'node16', 'nodenext', or 'bundler'.
+             ~~~
+!!! error TS2305: Module '"pkg"' has no exported member 'pkg'.
     
