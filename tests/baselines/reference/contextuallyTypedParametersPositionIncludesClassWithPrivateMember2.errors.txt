@@ -1,9 +1,8 @@
-contextuallyTypedParametersPositionIncludesClassWithPrivateMember2.ts(18,8): error TS2345: Argument of type '{ doStuff: (arg: any) => void; }' is not assignable to parameter of type 'Foo'.
-  Property 'foo' is missing in type '{ doStuff: (arg: any) => void; }' but required in type 'Foo'.
-contextuallyTypedParametersPositionIncludesClassWithPrivateMember2.ts(19,13): error TS7006: Parameter 'arg' implicitly has an 'any' type.
+contextuallyTypedParametersPositionIncludesClassWithPrivateMember2.ts(18,8): error TS2345: Argument of type '{ doStuff: (arg: (arg: string) => void) => void; }' is not assignable to parameter of type 'Foo'.
+  Property 'foo' is missing in type '{ doStuff: (arg: (arg: string) => void) => void; }' but required in type 'Foo'.
 
 
-==== contextuallyTypedParametersPositionIncludesClassWithPrivateMember2.ts (2 errors) ====
+==== contextuallyTypedParametersPositionIncludesClassWithPrivateMember2.ts (1 errors) ====
     class Foo {
       private foo = "foo";
       doStuff(cb: (arg: string) => void) {}
@@ -25,12 +24,10 @@ contextuallyTypedParametersPositionIncludesClassWithPrivateMember2.ts(19,13): er
            ~
       doStuff: (arg) => {},
     ~~~~~~~~~~~~~~~~~~~~~~~
-                ~~~
-!!! error TS7006: Parameter 'arg' implicitly has an 'any' type.
     });
     ~
-!!! error TS2345: Argument of type '{ doStuff: (arg: any) => void; }' is not assignable to parameter of type 'Foo'.
-!!! error TS2345:   Property 'foo' is missing in type '{ doStuff: (arg: any) => void; }' but required in type 'Foo'.
+!!! error TS2345: Argument of type '{ doStuff: (arg: (arg: string) => void) => void; }' is not assignable to parameter of type 'Foo'.
+!!! error TS2345:   Property 'foo' is missing in type '{ doStuff: (arg: (arg: string) => void) => void; }' but required in type 'Foo'.
 !!! related TS2728 contextuallyTypedParametersPositionIncludesClassWithPrivateMember2.ts:2:11: 'foo' is declared here.
     
     declare function useIt3(arg: FooLike): void;

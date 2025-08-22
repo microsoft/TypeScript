@@ -24855,7 +24855,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: (readonly [() => Type, __String])[], related: (source: Type, target: Type) => boolean | Ternary) {
         const types = target.types;
-        const include: Ternary[] = types.map(t => t.flags & TypeFlags.Primitive ? Ternary.False : Ternary.True);
+        const include: Ternary[] = types.map(t => {
+            if (t.flags & TypeFlags.Primitive) {
+                return Ternary.False;
+            }
+            if (t.symbol && t.symbol.flags && SymbolFlags.Class && some(getPropertiesOfType(t), p => !!(p.valueDeclaration && isNamedDeclaration(p.valueDeclaration) && (isPrivateIdentifier(p.valueDeclaration.name) || getDeclarationModifierFlagsFromSymbol(p) & ModifierFlags.NonPublicAccessibilityModifier)))) {
+                return Ternary.False;
+            }
+            return Ternary.True;
+        });
         for (const [getDiscriminatingType, propertyName] of discriminators) {
             // If the remaining target types include at least one with a matching discriminant, eliminate those that
             // have non-matching discriminants. This ensures that we ignore erroneous discriminators and gradually
@@ -32577,18 +32585,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         );
     }
 
-    function filterContextualTypeForLiteralExpressionOfObject(node: Node, contextualType: Type) {
-        if (!isLiteralExpressionOfObject(node)) {
-            return contextualType;
-        }
-        return filterType(contextualType, t => {
-            if (!t.symbol || !(t.symbol.flags & SymbolFlags.Class)) {
-                return true;
-            }
-            return every(getPropertiesOfType(t), p => !p.valueDeclaration || !isNamedDeclaration(p.valueDeclaration) || (!isPrivateIdentifier(p.valueDeclaration.name) && !(getDeclarationModifierFlagsFromSymbol(p) & ModifierFlags.NonPublicAccessibilityModifier)));
-        });
-    }
-
     // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
     // be "pushed" onto a node using the contextualType property.
     function getApparentTypeOfContextualType(node: Expression | MethodDeclaration, contextFlags: ContextFlags | undefined): Type | undefined {
@@ -32683,14 +32679,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (index >= 0) {
             return contextualTypes[index];
         }
-        const contextualType = getContextualTypeWorker(node, contextFlags);
-        if (!contextualType) {
-            return undefined;
-        }
-        return filterContextualTypeForLiteralExpressionOfObject(node, contextualType);
-    }
-
-    function getContextualTypeWorker(node: Expression, contextFlags: ContextFlags | undefined): Type | undefined {
         const { parent } = node;
         switch (parent.kind) {
             case SyntaxKind.VariableDeclaration:
@@ -41240,7 +41228,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkExpressionWithContextualType(node: Expression, contextualType: Type, inferenceContext: InferenceContext | undefined, checkMode: CheckMode): Type {
-        contextualType = filterContextualTypeForLiteralExpressionOfObject(node, contextualType);
         const contextNode = getContextNode(node);
         pushContextualType(contextNode, contextualType, /*isCache*/ false);
         pushInferenceContext(contextNode, inferenceContext);

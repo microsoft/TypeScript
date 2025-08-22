@@ -65,16 +65,16 @@ useIt2({
 >                                  : ^^^^
 >useIt2 : (arg: Foo) => void
 >       : ^   ^^   ^^^^^    
->{  doStuff: (arg) => {},} : { doStuff: (arg: any) => void; }
->                          : ^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^
+>{  doStuff: (arg) => {},} : { doStuff: (arg: (arg: string) => void) => void; }
+>                          : ^^^^^^^^^^^^   ^^^   ^^      ^^^^^    ^^^^^^^^^^^^
 
   doStuff: (arg) => {},
->doStuff : (arg: any) => void
->        : ^   ^^^^^^^^^^^^^^
->(arg) => {} : (arg: any) => void
->            : ^   ^^^^^^^^^^^^^^
->arg : any
->    : ^^^
+>doStuff : (arg: (arg: string) => void) => void
+>        : ^   ^^^   ^^      ^^^^^    ^^^^^^^^^
+>(arg) => {} : (arg: (arg: string) => void) => void
+>            : ^   ^^^   ^^      ^^^^^    ^^^^^^^^^
+>arg : (arg: string) => void
+>    : ^   ^^      ^^^^^    
 
 });
 
