@@ -9,17 +9,17 @@ Most of our development takes place in the `internal` directory, and most behavi
 
 Most development on the codebase is in Go.
 Standard Go commands and practices apply, but we primarily use a tool called `hereby` to build, run tests, and other tasks.
-Run `npx hereby --list` to see all available commands.
+Run `npx hereby --tasks` to see all available commands.
 
 ```sh
-npx hereby build  # Build the project
+npx hereby build  # Build the tsgo binary (not required for tests)
 npx hereby test   # Run tests
 npx hereby format # Format the code
 npx hereby lint   # Run linters
 
 # To run a specific compiler test:
-go test -run='TestSubmodule/<test name>' ./internal/testrunner  # For submodule tests in _submodules/TypeScript
-go test -run='TestLocal/<test name>' ./internal/testrunner     # For local tests in testdata/tests/cases
+go test -run='TestSubmodule/<test name>' ./internal/testrunner  # For pre-existing "submodule" tests in _submodules/TypeScript
+go test -run='TestLocal/<test name>' ./internal/testrunner      # For new "local" tests created in testdata/tests/cases
 ```
 
 Always make sure code is formatted, linted, and tested before sending a pull request.

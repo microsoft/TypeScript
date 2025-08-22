@@ -176,6 +176,7 @@ async function generateLibs(out) {
 
 export const lib = task({
     name: "lib",
+    description: "Copies the libs to built/local.",
     run: () => generateLibs(builtLocal),
 });
 
@@ -194,6 +195,7 @@ function buildTsgo(opts) {
 
 export const tsgoBuild = task({
     name: "tsgo:build",
+    description: "Builds the tsgo binary.",
     run: async () => {
         await buildTsgo();
     },
@@ -216,6 +218,7 @@ export const build = task({
 
 export const buildWatch = task({
     name: "build:watch",
+    description: "Builds the tsgo binary and watches for changes.",
     run: async () => {
         await watchDebounced("build:watch", async (paths, abortSignal) => {
             let libsChanged = false;
@@ -263,6 +266,7 @@ export const cleanBuilt = task({
 
 export const generate = task({
     name: "generate",
+    description: "Runs go generate on the project.",
     run: async () => {
         assertTypeScriptCloned();
         await $`go generate ./...`;
@@ -326,6 +330,7 @@ async function runTests() {
 
 export const test = task({
     name: "test",
+    description: "Runs all tests. This is the most typical test task to need.",
     run: runTests,
 });
 
@@ -337,6 +342,7 @@ async function runTestBenchmarks() {
 
 export const testBenchmarks = task({
     name: "test:benchmarks",
+    description: "Runs all benchmarks.",
     run: runTestBenchmarks,
 });
 
@@ -350,11 +356,13 @@ async function runTestAPI() {
 
 export const testTools = task({
     name: "test:tools",
+    description: "Runs all tests in the _tools module.",
     run: runTestTools,
 });
 
 export const buildAPITests = task({
     name: "build:api:test",
+    description: "Builds the @typescript/api tests.",
     run: async () => {
         await $`npm run -w @typescript/api build:test`;
     },
@@ -362,12 +370,14 @@ export const buildAPITests = task({
 
 export const testAPI = task({
     name: "test:api",
+    description: "Runs the @typescript/api tests.",
     dependencies: [tsgo, buildAPITests],
     run: runTestAPI,
 });
 
 export const testAll = task({
     name: "test:all",
+    description: "Runs ALL tests in the repo, including benchmarks, _tools, and the API tests.",
     dependencies: [tsgo, buildAPITests],
     run: async () => {
         // Prevent interleaving by running these directly instead of in parallel.
@@ -435,6 +445,7 @@ const buildCustomLinter = memoize(async () => {
 
 export const lint = task({
     name: "lint",
+    description: "Runs golangci-lint.",
     run: async () => {
         await buildCustomLinter();
 
@@ -455,6 +466,7 @@ export const lint = task({
 
 export const installTools = task({
     name: "install-tools",
+    description: "Installs optional tools for developing within the repo.",
     run: async () => {
         await Promise.all([
             ...[...tools].map(([tool, version]) => $`go install ${tool}${version ? `@${version}` : ""}`),
@@ -465,6 +477,7 @@ export const installTools = task({
 
 export const format = task({
     name: "format",
+    description: "Formats the repo.",
     run: async () => {
         await $`dprint fmt`;
     },
@@ -472,6 +485,7 @@ export const format = task({
 
 export const checkFormat = task({
     name: "check:format",
+    description: "Checks that the repo is formatted.",
     run: async () => {
         await $`dprint check`;
     },
@@ -508,7 +522,7 @@ function baselineAcceptTask(localBaseline, refBaseline) {
 
 export const baselineAccept = task({
     name: "baseline-accept",
-    description: "Makes the most recent test results the new baseline, overwriting the old baseline",
+    description: "Makes the most recent test results the new baseline, overwriting the old baseline.",
     run: baselineAcceptTask("testdata/baselines/local/", "testdata/baselines/reference/"),
 });
 
@@ -728,6 +742,7 @@ const getSignTempDir = memoize(async () => {
 
 const cleanSignTempDirectory = task({
     name: "clean:sign-tmp",
+    hiddenFromTaskList: true,
     run: () => rimraf(builtSignTmp),
 });
 
@@ -1227,6 +1242,7 @@ export const signNativePreviewExtensions = task({
 
 export const nativePreview = task({
     name: "native-preview",
+    hiddenFromTaskList: true,
     dependencies: options.forRelease ? undefined : [packNativePreviewPackages, packNativePreviewExtensions],
     run: options.forRelease ? async () => {
         throw new Error("This task should not be run in release builds.");
@@ -1235,6 +1251,7 @@ export const nativePreview = task({
 
 export const installExtension = task({
     name: "install-extension",
+    hiddenFromTaskList: true,
     dependencies: options.forRelease ? undefined : [packNativePreviewExtensions],
     run: async () => {
         if (options.forRelease) {
