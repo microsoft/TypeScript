@@ -101,8 +101,18 @@ CreatingProgramWith::
   options: {"outDir":"/home/src/projects/b/2/b-impl/b/lib","watch":true,"project":"/home/src/projects/b/2/b-impl/b","extendedDiagnostics":true,"explainFiles":true,"traceResolution":true,"configFilePath":"/home/src/projects/b/2/b-impl/b/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src/index.ts 250 undefined Source file
 ======== Resolving module 'a' from '/home/src/projects/b/2/b-impl/b/src/index.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/home/src/projects/b/2/b-impl/b/src/package.json' does not exist.
+File '/home/src/projects/b/2/b-impl/b/package.json' does not exist.
+File '/home/src/projects/b/2/b-impl/package.json' does not exist.
+File '/home/src/projects/b/2/package.json' does not exist.
+File '/home/src/projects/b/package.json' does not exist.
+File '/home/src/projects/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
+File '/package.json' does not exist.
+Loading module 'a' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/b/2/b-impl/b/src/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/home/src/projects/b/2/b-impl/b/node_modules/a/package.json'.
@@ -125,8 +135,7 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Loading module 'a' from 'node_modules' folder, target file types: JavaScript.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/home/src/projects/b/2/b-impl/b/src/node_modules' does not exist, skipping all lookups in it.
 File '/home/src/projects/b/2/b-impl/b/node_modules/a/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/b/2/b-impl/b/node_modules/a.js' does not exist.
@@ -141,33 +150,18 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Resolution of non-relative name failed; trying with '--moduleResolution bundler' to see if project may need configuration update.
-Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/home/src/projects/b/2/b-impl/b/src/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a/package.json' exists according to earlier cached lookups.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a.ts' does not exist.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a.tsx' does not exist.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a.d.ts' does not exist.
-'package.json' does not have a 'typings' field.
-'package.json' has 'types' field './lib/index.d.ts' that references '/home/src/projects/b/2/b-impl/b/node_modules/a/lib/index.d.ts'.
-Loading module as file / folder, candidate module location '/home/src/projects/b/2/b-impl/b/node_modules/a/lib/index.d.ts', target file types: TypeScript, Declaration.
-File name '/home/src/projects/b/2/b-impl/b/node_modules/a/lib/index.d.ts' has a '.d.ts' extension - stripping it.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a/index.ts' does not exist.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a/index.tsx' does not exist.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a/index.d.ts' does not exist.
-Directory '/home/src/projects/b/2/b-impl/b/node_modules/@types' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/b/2/b-impl/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/b/2/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/b/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'a' was not resolved. ========
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl 0 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2 0 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b 0 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects 0 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Failed Lookup Locations
@@ -180,6 +174,8 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/node_modules 1 undefi
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b 0 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/package.json 2000 undefined File location affecting resolution
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/@types 1 undefined Type roots
@@ -191,6 +187,8 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/node_modules/@types 1
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Type roots
+DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/lib :: WatchInfo: /home/src/projects/b/2/b-impl/b 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/lib :: WatchInfo: /home/src/projects/b/2/b-impl/b 0 undefined Failed Lookup Locations
 [96msrc/index.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module 'a' or its corresponding type declarations.
 
 [7m1[0m import { a } from 'a';
@@ -233,6 +231,8 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/home/src/projects: *new*
+  {"inode":3}
 /home/src/projects/a/1/a-impl/a: *new*
   {"inode":19}
 /home/src/projects/a/1/a-impl/a/node_modules: *new*
@@ -241,6 +241,14 @@ FsWatches::
   {"inode":24}
 /home/src/projects/a/1/a-impl/a/src: *new*
   {"inode":20}
+/home/src/projects/b: *new*
+  {"inode":30}
+/home/src/projects/b/2: *new*
+  {"inode":31}
+/home/src/projects/b/2/b-impl: *new*
+  {"inode":32}
+/home/src/projects/b/2/b-impl/b: *new*
+  {"inode":33}
 /home/src/projects/b/2/b-impl/b/node_modules: *new*
   {"inode":37}
 /home/src/projects/b/2/b-impl/b/node_modules/a: *new*
@@ -457,6 +465,8 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/home/src/projects:
+  {"inode":3}
 /home/src/projects/a/1/a-impl/a:
   {"inode":19}
 /home/src/projects/a/1/a-impl/a/lib: *new*
@@ -467,6 +477,14 @@ FsWatches::
   {"inode":24}
 /home/src/projects/a/1/a-impl/a/src:
   {"inode":20}
+/home/src/projects/b:
+  {"inode":30}
+/home/src/projects/b/2:
+  {"inode":31}
+/home/src/projects/b/2/b-impl:
+  {"inode":32}
+/home/src/projects/b/2/b-impl/b:
+  {"inode":33}
 /home/src/projects/b/2/b-impl/b/node_modules:
   {"inode":37}
 /home/src/projects/b/2/b-impl/b/node_modules/a:
@@ -509,8 +527,18 @@ CreatingProgramWith::
   roots: ["/home/src/projects/b/2/b-impl/b/src/index.ts"]
   options: {"outDir":"/home/src/projects/b/2/b-impl/b/lib","watch":true,"project":"/home/src/projects/b/2/b-impl/b","extendedDiagnostics":true,"explainFiles":true,"traceResolution":true,"configFilePath":"/home/src/projects/b/2/b-impl/b/tsconfig.json"}
 ======== Resolving module 'a' from '/home/src/projects/b/2/b-impl/b/src/index.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/home/src/projects/b/2/b-impl/b/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/b-impl/b/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/b-impl/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module 'a' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/b/2/b-impl/b/src/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/home/src/projects/b/2/b-impl/b/node_modules/a/package.json'.
@@ -526,8 +554,9 @@ Resolving real path for '/home/src/projects/b/2/b-impl/b/node_modules/a/lib/inde
 ======== Module name 'a' was successfully resolved to '/home/src/projects/a/1/a-impl/a/lib/index.d.ts' with Package ID 'a/lib/index.d.ts@1.0.0'. ========
 FileWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/index.d.ts 250 undefined Source file
 ======== Resolving module './a' from '/home/src/projects/a/1/a-impl/a/lib/index.d.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module as file / folder, candidate module location '/home/src/projects/a/1/a-impl/a/lib/a', target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+Loading module as file / folder, candidate module location '/home/src/projects/a/1/a-impl/a/lib/a', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/home/src/projects/a/1/a-impl/a/lib/a.ts' does not exist.
 File '/home/src/projects/a/1/a-impl/a/lib/a.tsx' does not exist.
 File '/home/src/projects/a/1/a-impl/a/lib/a.d.ts' exists - use it as a name resolution result.
@@ -535,8 +564,11 @@ File '/home/src/projects/a/1/a-impl/a/lib/a.d.ts' exists - use it as a name reso
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib 0 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib 0 undefined Failed Lookup Locations
 ======== Resolving module 'c' from '/home/src/projects/a/1/a-impl/a/lib/index.d.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'c' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/home/src/projects/a/1/a-impl/a/lib/package.json' does not exist.
+Found 'package.json' at '/home/src/projects/a/1/a-impl/a/package.json'.
+Loading module 'c' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/a/1/a-impl/a/lib/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/home/src/projects/a/1/a-impl/a/node_modules/c/package.json'.
@@ -553,8 +585,9 @@ Resolving real path for '/home/src/projects/a/1/a-impl/a/node_modules/c/lib/inde
 FileWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/a.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib/index.d.ts 250 undefined Source file
 ======== Resolving module './c' from '/home/src/projects/c/3/c-impl/c/lib/index.d.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module as file / folder, candidate module location '/home/src/projects/c/3/c-impl/c/lib/c', target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+Loading module as file / folder, candidate module location '/home/src/projects/c/3/c-impl/c/lib/c', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/home/src/projects/c/3/c-impl/c/lib/c.ts' does not exist.
 File '/home/src/projects/c/3/c-impl/c/lib/c.tsx' does not exist.
 File '/home/src/projects/c/3/c-impl/c/lib/c.d.ts' exists - use it as a name resolution result.
@@ -620,6 +653,8 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
+/home/src/projects:
+  {"inode":3}
 /home/src/projects/a/1/a-impl/a/lib:
   {"inode":153}
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts: *new*
@@ -630,6 +665,14 @@ FsWatches::
   {"inode":25}
 /home/src/projects/a/1/a-impl/a/package.json:
   {"inode":24}
+/home/src/projects/b:
+  {"inode":30}
+/home/src/projects/b/2:
+  {"inode":31}
+/home/src/projects/b/2/b-impl:
+  {"inode":32}
+/home/src/projects/b/2/b-impl/b:
+  {"inode":33}
 /home/src/projects/b/2/b-impl/b/node_modules:
   {"inode":37}
 /home/src/projects/b/2/b-impl/b/src:
@@ -837,10 +880,20 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/home/src/projects:
+  {"inode":3}
 /home/src/projects/a/1/a-impl/a/node_modules:
   {"inode":25}
 /home/src/projects/a/1/a-impl/a/package.json:
   {"inode":24}
+/home/src/projects/b:
+  {"inode":30}
+/home/src/projects/b/2:
+  {"inode":31}
+/home/src/projects/b/2/b-impl:
+  {"inode":32}
+/home/src/projects/b/2/b-impl/b:
+  {"inode":33}
 /home/src/projects/b/2/b-impl/b/node_modules:
   {"inode":37}
 /home/src/projects/b/2/b-impl/b/src:
@@ -886,8 +939,18 @@ CreatingProgramWith::
   options: {"outDir":"/home/src/projects/b/2/b-impl/b/lib","watch":true,"project":"/home/src/projects/b/2/b-impl/b","extendedDiagnostics":true,"explainFiles":true,"traceResolution":true,"configFilePath":"/home/src/projects/b/2/b-impl/b/tsconfig.json"}
 FileWatcher:: Close:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/a.d.ts 250 undefined Source file
 ======== Resolving module 'a' from '/home/src/projects/b/2/b-impl/b/src/index.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/home/src/projects/b/2/b-impl/b/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/b-impl/b/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/b-impl/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module 'a' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/b/2/b-impl/b/src/node_modules' does not exist, skipping all lookups in it.
 File '/home/src/projects/b/2/b-impl/b/node_modules/a/package.json' exists according to earlier cached lookups.
@@ -909,8 +972,7 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Loading module 'a' from 'node_modules' folder, target file types: JavaScript.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/home/src/projects/b/2/b-impl/b/src/node_modules' does not exist, skipping all lookups in it.
 File '/home/src/projects/b/2/b-impl/b/node_modules/a/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/b/2/b-impl/b/node_modules/a.js' does not exist.
@@ -918,29 +980,6 @@ File '/home/src/projects/b/2/b-impl/b/node_modules/a.jsx' does not exist.
 'package.json' does not have a 'main' field.
 File '/home/src/projects/b/2/b-impl/b/node_modules/a/index.js' does not exist.
 File '/home/src/projects/b/2/b-impl/b/node_modules/a/index.jsx' does not exist.
-Directory '/home/src/projects/b/2/b-impl/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/b/2/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/b/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-Resolution of non-relative name failed; trying with '--moduleResolution bundler' to see if project may need configuration update.
-Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/home/src/projects/b/2/b-impl/b/src/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a/package.json' exists according to earlier cached lookups.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a.ts' does not exist.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a.tsx' does not exist.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a.d.ts' does not exist.
-'package.json' does not have a 'typings' field.
-'package.json' has 'types' field './lib/index.d.ts' that references '/home/src/projects/b/2/b-impl/b/node_modules/a/lib/index.d.ts'.
-Loading module as file / folder, candidate module location '/home/src/projects/b/2/b-impl/b/node_modules/a/lib/index.d.ts', target file types: TypeScript, Declaration.
-File name '/home/src/projects/b/2/b-impl/b/node_modules/a/lib/index.d.ts' has a '.d.ts' extension - stripping it.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a/index.ts' does not exist.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a/index.tsx' does not exist.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a/index.d.ts' does not exist.
-Directory '/home/src/projects/b/2/b-impl/b/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/b/2/b-impl/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/b/2/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/b/node_modules' does not exist, skipping all lookups in it.
@@ -1023,6 +1062,8 @@ PolledWatches *deleted*::
   {"pollingInterval":250}
 
 FsWatches::
+/home/src/projects:
+  {"inode":3}
 /home/src/projects/a/1/a-impl/a: *new*
   {"inode":19}
 /home/src/projects/a/1/a-impl/a/node_modules:
@@ -1031,6 +1072,14 @@ FsWatches::
   {"inode":24}
 /home/src/projects/a/1/a-impl/a/src: *new*
   {"inode":20}
+/home/src/projects/b:
+  {"inode":30}
+/home/src/projects/b/2:
+  {"inode":31}
+/home/src/projects/b/2/b-impl:
+  {"inode":32}
+/home/src/projects/b/2/b-impl/b:
+  {"inode":33}
 /home/src/projects/b/2/b-impl/b/node_modules:
   {"inode":37}
 /home/src/projects/b/2/b-impl/b/node_modules/a: *new*
@@ -1236,6 +1285,8 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/home/src/projects:
+  {"inode":3}
 /home/src/projects/a/1/a-impl/a:
   {"inode":19}
 /home/src/projects/a/1/a-impl/a/lib: *new*
@@ -1246,6 +1297,14 @@ FsWatches::
   {"inode":24}
 /home/src/projects/a/1/a-impl/a/src:
   {"inode":20}
+/home/src/projects/b:
+  {"inode":30}
+/home/src/projects/b/2:
+  {"inode":31}
+/home/src/projects/b/2/b-impl:
+  {"inode":32}
+/home/src/projects/b/2/b-impl/b:
+  {"inode":33}
 /home/src/projects/b/2/b-impl/b/node_modules:
   {"inode":37}
 /home/src/projects/b/2/b-impl/b/node_modules/a:
@@ -1288,8 +1347,18 @@ CreatingProgramWith::
   roots: ["/home/src/projects/b/2/b-impl/b/src/index.ts"]
   options: {"outDir":"/home/src/projects/b/2/b-impl/b/lib","watch":true,"project":"/home/src/projects/b/2/b-impl/b","extendedDiagnostics":true,"explainFiles":true,"traceResolution":true,"configFilePath":"/home/src/projects/b/2/b-impl/b/tsconfig.json"}
 ======== Resolving module 'a' from '/home/src/projects/b/2/b-impl/b/src/index.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/home/src/projects/b/2/b-impl/b/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/b-impl/b/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/b-impl/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module 'a' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/b/2/b-impl/b/src/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/home/src/projects/b/2/b-impl/b/node_modules/a/package.json'.
@@ -1305,8 +1374,9 @@ Resolving real path for '/home/src/projects/b/2/b-impl/b/node_modules/a/lib/inde
 ======== Module name 'a' was successfully resolved to '/home/src/projects/a/1/a-impl/a/lib/index.d.ts' with Package ID 'a/lib/index.d.ts@1.0.0'. ========
 FileWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/index.d.ts 250 undefined Source file
 ======== Resolving module './a' from '/home/src/projects/a/1/a-impl/a/lib/index.d.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module as file / folder, candidate module location '/home/src/projects/a/1/a-impl/a/lib/a', target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+Loading module as file / folder, candidate module location '/home/src/projects/a/1/a-impl/a/lib/a', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/home/src/projects/a/1/a-impl/a/lib/a.ts' does not exist.
 File '/home/src/projects/a/1/a-impl/a/lib/a.tsx' does not exist.
 File '/home/src/projects/a/1/a-impl/a/lib/a.d.ts' exists - use it as a name resolution result.
@@ -1314,8 +1384,11 @@ File '/home/src/projects/a/1/a-impl/a/lib/a.d.ts' exists - use it as a name reso
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib 0 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib 0 undefined Failed Lookup Locations
 ======== Resolving module 'c' from '/home/src/projects/a/1/a-impl/a/lib/index.d.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'c' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/home/src/projects/a/1/a-impl/a/lib/package.json' does not exist.
+File '/home/src/projects/a/1/a-impl/a/package.json' exists according to earlier cached lookups.
+Loading module 'c' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/a/1/a-impl/a/lib/node_modules' does not exist, skipping all lookups in it.
 File '/home/src/projects/a/1/a-impl/a/node_modules/c/package.json' exists according to earlier cached lookups.
@@ -1330,8 +1403,9 @@ Resolving real path for '/home/src/projects/a/1/a-impl/a/node_modules/c/lib/inde
 FileWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/a.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib/index.d.ts 250 undefined Source file
 ======== Resolving module './c' from '/home/src/projects/c/3/c-impl/c/lib/index.d.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module as file / folder, candidate module location '/home/src/projects/c/3/c-impl/c/lib/c', target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+Loading module as file / folder, candidate module location '/home/src/projects/c/3/c-impl/c/lib/c', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/home/src/projects/c/3/c-impl/c/lib/c.ts' does not exist.
 File '/home/src/projects/c/3/c-impl/c/lib/c.tsx' does not exist.
 File '/home/src/projects/c/3/c-impl/c/lib/c.d.ts' exists - use it as a name resolution result.
@@ -1397,6 +1471,8 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
+/home/src/projects:
+  {"inode":3}
 /home/src/projects/a/1/a-impl/a/lib:
   {"inode":169}
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts: *new*
@@ -1407,6 +1483,14 @@ FsWatches::
   {"inode":25}
 /home/src/projects/a/1/a-impl/a/package.json:
   {"inode":24}
+/home/src/projects/b:
+  {"inode":30}
+/home/src/projects/b/2:
+  {"inode":31}
+/home/src/projects/b/2/b-impl:
+  {"inode":32}
+/home/src/projects/b/2/b-impl/b:
+  {"inode":33}
 /home/src/projects/b/2/b-impl/b/node_modules:
   {"inode":37}
 /home/src/projects/b/2/b-impl/b/src:

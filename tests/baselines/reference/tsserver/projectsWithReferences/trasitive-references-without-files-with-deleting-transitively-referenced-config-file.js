@@ -354,21 +354,22 @@ Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/c/tsconfig
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/a/tsconfig.json 2:: WatchInfo: /user/username/projects/myproject/a/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/a/tsconfig.json :: WatchInfo: /user/username/projects/myproject/a 1 undefined Config: /user/username/projects/myproject/a/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Project: /user/username/projects/myproject/a/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/c/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/a/tsconfig.json :: WatchInfo: /user/username/projects/myproject/a 1 undefined Config: /user/username/projects/myproject/a/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/a/tsconfig.json :: WatchInfo: /user/username/projects/myproject/a 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/a/tsconfig.json :: WatchInfo: /user/username/projects/myproject/a 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
 Before running Timeout callback:: count: 3
-1: /user/username/projects/myproject/c/tsconfig.json
-2: *ensureProjectForOpenFiles*
-3: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation
+3: /user/username/projects/myproject/c/tsconfig.json
+4: *ensureProjectForOpenFiles*
+5: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation
 //// [/user/username/projects/myproject/a/tsconfig.json] deleted
 
 Timeout callback:: count: 3
-1: /user/username/projects/myproject/c/tsconfig.json *new*
-2: *ensureProjectForOpenFiles* *new*
-3: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation *new*
+3: /user/username/projects/myproject/c/tsconfig.json *new*
+4: *ensureProjectForOpenFiles* *new*
+5: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation *new*
 
 Projects::
 /user/username/projects/myproject/c/tsconfig.json (Configured) *changed*
@@ -449,7 +450,7 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 Timeout callback:: count: 0
-3: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation *deleted*
+5: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation *deleted*
 
 Projects::
 /user/username/projects/myproject/c/tsconfig.json (Configured) *changed*
@@ -466,9 +467,9 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projec
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/a/tsconfig.json :: WatchInfo: /user/username/projects/myproject/a 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
 Before running Timeout callback:: count: 3
-4: /user/username/projects/myproject/c/tsconfig.json
-5: *ensureProjectForOpenFiles*
-6: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation
+6: /user/username/projects/myproject/c/tsconfig.json
+7: *ensureProjectForOpenFiles*
+8: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation
 //// [/user/username/projects/myproject/a/tsconfig.json]
 {
   "compilerOptions": {
@@ -478,9 +479,9 @@ Before running Timeout callback:: count: 3
 
 
 Timeout callback:: count: 3
-4: /user/username/projects/myproject/c/tsconfig.json *new*
-5: *ensureProjectForOpenFiles* *new*
-6: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation *new*
+6: /user/username/projects/myproject/c/tsconfig.json *new*
+7: *ensureProjectForOpenFiles* *new*
+8: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation *new*
 
 Projects::
 /user/username/projects/myproject/c/tsconfig.json (Configured) *changed*
@@ -555,7 +556,7 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 Timeout callback:: count: 0
-6: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation *deleted*
+8: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation *deleted*
 
 Projects::
 /user/username/projects/myproject/c/tsconfig.json (Configured) *changed*

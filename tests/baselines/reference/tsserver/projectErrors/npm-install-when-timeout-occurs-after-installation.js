@@ -62,10 +62,14 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/pro
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects 0 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects 0 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
@@ -176,6 +180,10 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {}
+/user/username/projects: *new*
+  {}
+/user/username/projects/myproject: *new*
   {}
 /user/username/projects/myproject/tsconfig.json: *new*
   {}
@@ -308,6 +316,9 @@ After running Immedidate callback:: count: 0
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules :: WatchInfo: /user/username/projects/myproject 0 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules :: WatchInfo: /user/username/projects/myproject 0 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
@@ -354,6 +365,10 @@ PolledWatches *deleted*::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {}
+/user/username/projects:
+  {}
+/user/username/projects/myproject:
+  {}
 /user/username/projects/myproject/tsconfig.json:
   {}
 
@@ -366,9 +381,9 @@ FsWatchesRecursive::
   {}
 
 Timeout callback:: count: 3
-6: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation *new*
-7: /user/username/projects/myproject/tsconfig.json *new*
-8: *ensureProjectForOpenFiles* *new*
+7: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation *new*
+8: /user/username/projects/myproject/tsconfig.json *new*
+9: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
@@ -392,18 +407,18 @@ Info seq  [hh:mm:ss:mss] request:
 After request
 
 Timeout callback:: count: 4
-6: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation
-7: /user/username/projects/myproject/tsconfig.json
-8: *ensureProjectForOpenFiles*
-9: checkOne *new*
+7: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation
+8: /user/username/projects/myproject/tsconfig.json
+9: *ensureProjectForOpenFiles*
+10: checkOne *new*
 
 Before running Timeout callback:: count: 4
-6: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation
-7: /user/username/projects/myproject/tsconfig.json
-8: *ensureProjectForOpenFiles*
-9: checkOne
+7: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation
+8: /user/username/projects/myproject/tsconfig.json
+9: *ensureProjectForOpenFiles*
+10: checkOne
 
-Invoking Timeout callback:: timeoutId:: 9:: checkOne
+Invoking Timeout callback:: timeoutId:: 10:: checkOne
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
@@ -426,10 +441,10 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 2
 
 Timeout callback:: count: 2
-6: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation *deleted*
-8: *ensureProjectForOpenFiles* *deleted*
-7: /user/username/projects/myproject/tsconfig.json
-10: *ensureProjectForOpenFiles* *new*
+7: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation *deleted*
+9: *ensureProjectForOpenFiles* *deleted*
+8: /user/username/projects/myproject/tsconfig.json
+11: *ensureProjectForOpenFiles* *new*
 
 Immedidate callback:: count: 1
 3: semanticCheck *new*
@@ -566,16 +581,16 @@ Info seq  [hh:mm:ss:mss] request:
 After request
 
 Timeout callback:: count: 3
-7: /user/username/projects/myproject/tsconfig.json
-10: *ensureProjectForOpenFiles*
-11: checkOne *new*
+8: /user/username/projects/myproject/tsconfig.json
+11: *ensureProjectForOpenFiles*
+12: checkOne *new*
 
 Before running Timeout callback:: count: 3
-7: /user/username/projects/myproject/tsconfig.json
-10: *ensureProjectForOpenFiles*
-11: checkOne
+8: /user/username/projects/myproject/tsconfig.json
+11: *ensureProjectForOpenFiles*
+12: checkOne
 
-Invoking Timeout callback:: timeoutId:: 11:: checkOne
+Invoking Timeout callback:: timeoutId:: 12:: checkOne
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -677,16 +692,16 @@ Info seq  [hh:mm:ss:mss] request:
 After request
 
 Timeout callback:: count: 3
-7: /user/username/projects/myproject/tsconfig.json
-10: *ensureProjectForOpenFiles*
-12: checkOne *new*
+8: /user/username/projects/myproject/tsconfig.json
+11: *ensureProjectForOpenFiles*
+13: checkOne *new*
 
 Before running Timeout callback:: count: 3
-7: /user/username/projects/myproject/tsconfig.json
-10: *ensureProjectForOpenFiles*
-12: checkOne
+8: /user/username/projects/myproject/tsconfig.json
+11: *ensureProjectForOpenFiles*
+13: checkOne
 
-Invoking Timeout callback:: timeoutId:: 12:: checkOne
+Invoking Timeout callback:: timeoutId:: 13:: checkOne
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -826,18 +841,18 @@ Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.j
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/.staging :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Before running Timeout callback:: count: 3
-13: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation
-14: /user/username/projects/myproject/tsconfig.json
-15: *ensureProjectForOpenFiles*
+14: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation
+15: /user/username/projects/myproject/tsconfig.json
+16: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/node_modules/.staging/@angular/cli-c1e44b05/models/analytics.d.ts] deleted
 //// [/user/username/projects/myproject/node_modules/.staging/@angular/core-0963aebf/index.d.ts] deleted
 
 Timeout callback:: count: 3
-7: /user/username/projects/myproject/tsconfig.json *deleted*
-10: *ensureProjectForOpenFiles* *deleted*
-13: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation *new*
-14: /user/username/projects/myproject/tsconfig.json *new*
-15: *ensureProjectForOpenFiles* *new*
+8: /user/username/projects/myproject/tsconfig.json *deleted*
+11: *ensureProjectForOpenFiles* *deleted*
+14: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation *new*
+15: /user/username/projects/myproject/tsconfig.json *new*
+16: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
@@ -852,14 +867,14 @@ Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earli
 After running Timeout callback:: count: 2
 
 Timeout callback:: count: 2
-14: /user/username/projects/myproject/tsconfig.json *deleted*
-15: *ensureProjectForOpenFiles* *deleted*
-16: /user/username/projects/myproject/tsconfig.json *new*
-17: *ensureProjectForOpenFiles* *new*
+15: /user/username/projects/myproject/tsconfig.json *deleted*
+16: *ensureProjectForOpenFiles* *deleted*
+17: /user/username/projects/myproject/tsconfig.json *new*
+18: *ensureProjectForOpenFiles* *new*
 
 Before running Timeout callback:: count: 2
-16: /user/username/projects/myproject/tsconfig.json
-17: *ensureProjectForOpenFiles*
+17: /user/username/projects/myproject/tsconfig.json
+18: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
@@ -942,6 +957,10 @@ PolledWatches *deleted*::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {}
+/user/username/projects:
+  {}
+/user/username/projects/myproject:
+  {}
 /user/username/projects/myproject/tsconfig.json:
   {}
 
@@ -991,10 +1010,10 @@ Info seq  [hh:mm:ss:mss] request:
 After request
 
 Timeout callback:: count: 1
-18: checkOne *new*
+19: checkOne *new*
 
 Before running Timeout callback:: count: 1
-18: checkOne
+19: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {

@@ -343,8 +343,8 @@ Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
-Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 2 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 1 module specifiers, plus 0 ambient and 1 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
@@ -356,7 +356,7 @@ Info seq  [hh:mm:ss:mss] response:
       "request_seq": 3,
       "success": true,
       "body": {
-        "flags": 1,
+        "flags": 9,
         "isGlobalCompletion": true,
         "isMemberCompletion": false,
         "isNewIdentifierLocation": false,
@@ -778,11 +778,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "export",
             "sortText": "16",
-            "source": "/home/src/workspaces/project/someModule",
+            "source": "./someModule",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "./someModule",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "default",
               "exportMapKey": "10 * someModule ",
+              "moduleSpecifier": "./someModule",
               "fileName": "/home/src/workspaces/project/someModule.ts"
             }
           },
@@ -791,11 +798,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "source": "/home/src/workspaces/project/someModule",
+            "source": "./someModule",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "./someModule",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "someModule",
               "exportMapKey": "10 * someModule ",
+              "moduleSpecifier": "./someModule",
               "fileName": "/home/src/workspaces/project/someModule.ts"
             }
           }
@@ -816,356 +830,3 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: false *changed*
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "seq": 4,
-      "type": "request",
-      "arguments": {
-        "file": "/home/src/workspaces/project/index.ts",
-        "line": 1,
-        "offset": 7,
-        "entryNames": [
-          {
-            "name": "someModule",
-            "source": "/home/src/workspaces/project/someModule",
-            "data": {
-              "exportName": "default",
-              "exportMapKey": "10 * someModule ",
-              "fileName": "/home/src/workspaces/project/someModule.ts"
-            }
-          }
-        ]
-      },
-      "command": "completionEntryDetails-full"
-    }
-Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "seq": 0,
-      "type": "response",
-      "command": "completionEntryDetails-full",
-      "request_seq": 4,
-      "success": true,
-      "body": [
-        {
-          "name": "default",
-          "kindModifiers": "export",
-          "kind": "property",
-          "displayParts": [
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "property",
-              "kind": "text"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "default",
-              "kind": "propertyName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "1",
-              "kind": "stringLiteral"
-            }
-          ],
-          "documentation": [],
-          "tags": [],
-          "codeActions": [
-            {
-              "description": "Add import from \"./someModule\"",
-              "changes": [
-                {
-                  "fileName": "/home/src/workspaces/project/index.ts",
-                  "textChanges": [
-                    {
-                      "span": {
-                        "start": 0,
-                        "length": 0
-                      },
-                      "newText": "import someModule from \"./someModule\";\r\n\r\n"
-                    }
-                  ]
-                }
-              ]
-            }
-          ],
-          "source": [
-            {
-              "text": "./someModule",
-              "kind": "text"
-            }
-          ],
-          "sourceDisplay": [
-            {
-              "text": "./someModule",
-              "kind": "text"
-            }
-          ]
-        }
-      ]
-    }
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "seq": 5,
-      "type": "request",
-      "arguments": {
-        "file": "/home/src/workspaces/project/index.ts",
-        "line": 1,
-        "offset": 7,
-        "entryNames": [
-          {
-            "name": "someModule",
-            "source": "/home/src/workspaces/project/someModule",
-            "data": {
-              "exportName": "someModule",
-              "exportMapKey": "10 * someModule ",
-              "fileName": "/home/src/workspaces/project/someModule.ts"
-            }
-          }
-        ]
-      },
-      "command": "completionEntryDetails-full"
-    }
-Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "seq": 0,
-      "type": "response",
-      "command": "completionEntryDetails-full",
-      "request_seq": 5,
-      "success": true,
-      "body": [
-        {
-          "name": "someModule",
-          "kindModifiers": "export",
-          "kind": "const",
-          "displayParts": [
-            {
-              "text": "const",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "someModule",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "0",
-              "kind": "stringLiteral"
-            }
-          ],
-          "documentation": [],
-          "tags": [],
-          "codeActions": [
-            {
-              "description": "Add import from \"./someModule\"",
-              "changes": [
-                {
-                  "fileName": "/home/src/workspaces/project/index.ts",
-                  "textChanges": [
-                    {
-                      "span": {
-                        "start": 0,
-                        "length": 0
-                      },
-                      "newText": "import { someModule } from \"./someModule\";\r\n\r\n"
-                    }
-                  ]
-                }
-              ]
-            }
-          ],
-          "source": [
-            {
-              "text": "./someModule",
-              "kind": "text"
-            }
-          ],
-          "sourceDisplay": [
-            {
-              "text": "./someModule",
-              "kind": "text"
-            }
-          ]
-        }
-      ]
-    }
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "seq": 6,
-      "type": "request",
-      "arguments": {
-        "file": "/home/src/workspaces/project/index.ts",
-        "line": 1,
-        "offset": 7,
-        "entryNames": [
-          {
-            "name": "someModule",
-            "source": "/home/src/workspaces/project/someModule",
-            "data": {
-              "exportName": "default",
-              "fileName": "/home/src/workspaces/project/someModule.ts"
-            }
-          }
-        ]
-      },
-      "command": "completionEntryDetails-full"
-    }
-Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "seq": 0,
-      "type": "response",
-      "command": "completionEntryDetails-full",
-      "request_seq": 6,
-      "success": true,
-      "body": [
-        {
-          "name": "default",
-          "kindModifiers": "export",
-          "kind": "property",
-          "displayParts": [
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "property",
-              "kind": "text"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "default",
-              "kind": "propertyName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "1",
-              "kind": "stringLiteral"
-            }
-          ],
-          "documentation": [],
-          "tags": [],
-          "codeActions": [
-            {
-              "description": "Add import from \"./someModule\"",
-              "changes": [
-                {
-                  "fileName": "/home/src/workspaces/project/index.ts",
-                  "textChanges": [
-                    {
-                      "span": {
-                        "start": 0,
-                        "length": 0
-                      },
-                      "newText": "import someModule from \"./someModule\";\r\n\r\n"
-                    }
-                  ]
-                }
-              ]
-            }
-          ],
-          "source": [
-            {
-              "text": "./someModule",
-              "kind": "text"
-            }
-          ],
-          "sourceDisplay": [
-            {
-              "text": "./someModule",
-              "kind": "text"
-            }
-          ]
-        }
-      ]
-    }
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "seq": 7,
-      "type": "request",
-      "arguments": {
-        "file": "/home/src/workspaces/project/index.ts",
-        "line": 1,
-        "offset": 1,
-        "endLine": 1,
-        "endOffset": 1,
-        "insertString": "import someModule from \"./someModule\";\r\n\r\n"
-      },
-      "command": "change"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "seq": 0,
-      "type": "response",
-      "command": "change",
-      "request_seq": 7,
-      "success": true
-    }
-After Request
-Projects::
-/dev/null/inferredProject1* (Inferred)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-/home/src/workspaces/project/tsconfig.json (Configured) *changed*
-    projectStateVersion: 2 *changed*
-    projectProgramVersion: 1
-    dirty: true *changed*
-    autoImportProviderHost: false
-
-ScriptInfos::
-/home/src/workspaces/project/index.ts (Open) *changed*
-    version: SVC-2-1 *changed*
-    containingProjects: 1
-        /home/src/workspaces/project/tsconfig.json *default*
-/home/src/workspaces/project/someModule.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/workspaces/project/tsconfig.json
-/home/src/workspaces/project/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1* *default*

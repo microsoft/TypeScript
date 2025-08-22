@@ -6958,6 +6958,9 @@ declare namespace ts {
          * Use the new name or consider switching to a modern module resolution target.
          */
         NodeJs = 2,
+        /**
+         * @deprecated
+         */
         Node10 = 2,
         Node16 = 3,
         NodeNext = 99,

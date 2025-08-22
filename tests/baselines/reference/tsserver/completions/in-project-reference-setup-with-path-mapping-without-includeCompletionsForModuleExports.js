@@ -1864,15 +1864,15 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] forEachExternalModuleToImportFrom autoImportProvider: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
-Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 3 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 3 module specifiers, plus 0 ambient and 0 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
-        "flags": 1,
+        "flags": 9,
         "isGlobalCompletion": true,
         "isMemberCompletion": false,
         "isNewIdentifierLocation": false,
@@ -2290,12 +2290,19 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "source": "/user/username/projects/shared/src/index",
+            "source": "shared",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "shared",
+                "kind": "text"
+              }
+            ],
             "isPackageJsonImport": true,
             "data": {
               "exportName": "MyClass",
               "exportMapKey": "7 * MyClass ",
+              "moduleSpecifier": "shared",
               "fileName": "/user/username/projects/shared/src/index.ts",
               "isPackageJsonImport": true
             }
@@ -2305,12 +2312,19 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "source": "/user/username/projects/shared/src/helper",
+            "source": "shared/helper",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "shared/helper",
+                "kind": "text"
+              }
+            ],
             "isPackageJsonImport": true,
             "data": {
               "exportName": "MyHelper",
               "exportMapKey": "8 * MyHelper ",
+              "moduleSpecifier": "shared/helper",
               "fileName": "/user/username/projects/shared/src/helper.ts",
               "isPackageJsonImport": true
             }
@@ -2320,12 +2334,19 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "source": "/user/username/projects/shared/src/other",
+            "source": "shared/other",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "shared/other",
+                "kind": "text"
+              }
+            ],
             "isPackageJsonImport": true,
             "data": {
               "exportName": "OtherClass",
               "exportMapKey": "10 * OtherClass ",
+              "moduleSpecifier": "shared/other",
               "fileName": "/user/username/projects/shared/src/other.ts",
               "isPackageJsonImport": true
             }

@@ -141,6 +141,10 @@ PolledWatches::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
+/users/username/projects: *new*
+  {}
+/users/username/projects/project: *new*
+  {}
 /users/username/projects/project/node_modules/classnames/index.d.ts: *new*
   {}
 /users/username/projects/project/src/index.ts: *new*
@@ -157,6 +161,9 @@ FsWatchesRecursive::
   {}
 /users/username/projects/project/src: *new*
   {}
+
+Timeout callback:: count: 1
+2: timerToInvalidateFailedLookupResolutions *new*
 
 Program root files: [
   "/users/username/projects/project/src/index.ts",
@@ -213,6 +220,10 @@ PolledWatches *deleted*::
 FsWatches *deleted*::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {}
+/users/username/projects:
+  {}
+/users/username/projects/project:
+  {}
 /users/username/projects/project/node_modules/classnames/index.d.ts:
   {}
 /users/username/projects/project/src/index.ts:
@@ -229,6 +240,9 @@ FsWatchesRecursive *deleted*::
   {}
 /users/username/projects/project/src:
   {}
+
+Timeout callback:: count: 0
+2: timerToInvalidateFailedLookupResolutions *deleted*
 
 Output::
 >> Screen clear
@@ -353,6 +367,10 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {}
+/users/username/projects: *new*
+  {}
+/users/username/projects/project: *new*
   {}
 /users/username/projects/project/node_modules/classnames/index.d.ts: *new*
   {}

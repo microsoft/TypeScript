@@ -360,7 +360,8 @@ Projects::
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/package.json :: WatchInfo: /home/src/projects/project 1 undefined Config: /home/src/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/tsconfig.json Detected new package.json: /home/src/projects/project/package.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/package.json 250 undefined WatchType: package.json file
-Info seq  [hh:mm:ss:mss] Project: /home/src/projects/project/tsconfig.json Detected file add/remove of non supported extension: /home/src/projects/project/package.json
+Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/package.json :: WatchInfo: /home/src/projects/project 1 undefined Config: /home/src/projects/project/tsconfig.json WatchType: Wild card directory
 Add package.json
 //// [/home/src/projects/project/package.json]
@@ -403,6 +404,21 @@ FsWatches::
 FsWatchesRecursive::
 /home/src/projects/project:
   {}
+
+Timeout callback:: count: 2
+1: /home/src/projects/project/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: false
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+    noOpenRef: false *changed*
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/package.json 1:: WatchInfo: /home/src/projects/project/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/package.json 1:: WatchInfo: /home/src/projects/project/package.json 250 undefined WatchType: package.json file

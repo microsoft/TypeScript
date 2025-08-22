@@ -169,19 +169,24 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/package.json 250 undefined WatchType: package.json file
-Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 2 root files in 1 dependencies 0 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] Creating AutoImportProviderProject: /dev/null/autoImportProviderProject1*, currentDirectory: /home/src/workspaces/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/dependency/lib/index.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/dependency/lib/lol.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/dependency/lib/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/dependency/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 	/home/src/workspaces/project/node_modules/dependency/lib/index.d.ts Text-1 "export function fooFromIndex(): void;"
+	/home/src/workspaces/project/node_modules/dependency/lib/lol.d.ts Text-1 "export function fooFromLol(): void;"
 
 
 	node_modules/dependency/lib/index.d.ts
+	  Root file specified for compilation
+	  File is ECMAScript module because 'node_modules/dependency/package.json' has field "type" with value "module"
+	node_modules/dependency/lib/lol.d.ts
 	  Root file specified for compilation
 	  File is ECMAScript module because 'node_modules/dependency/package.json' has field "type" with value "module"
 
@@ -195,7 +200,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -224,6 +229,8 @@ watchedFiles::
 /home/src/workspaces/project/jsconfig.json: *new*
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/dependency/lib/index.d.ts: *new*
+  {"pollingInterval":500}
+/home/src/workspaces/project/node_modules/dependency/lib/lol.d.ts: *new*
   {"pollingInterval":500}
 /home/src/workspaces/project/node_modules/dependency/lib/package.json: *new*
   {"pollingInterval":2000}
@@ -285,6 +292,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
+/home/src/workspaces/project/node_modules/dependency/lib/lol.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
 /home/src/workspaces/project/src/foo.ts *new*
     version: Text-1
     containingProjects: 1
@@ -314,7 +325,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -341,6 +352,8 @@ watchedFiles::
 /home/src/workspaces/project/jsconfig.json:
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/dependency/lib/index.d.ts:
+  {"pollingInterval":500}
+/home/src/workspaces/project/node_modules/dependency/lib/lol.d.ts:
   {"pollingInterval":500}
 /home/src/workspaces/project/node_modules/dependency/lib/package.json:
   {"pollingInterval":2000}
@@ -404,6 +417,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
+/home/src/workspaces/project/node_modules/dependency/lib/lol.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
 /home/src/workspaces/project/src/foo.ts (Open) *changed*
     open: true *changed*
     version: Text-1
@@ -463,18 +480,22 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
-Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 2 root files in 1 dependencies 0 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] Creating AutoImportProviderProject: /dev/null/autoImportProviderProject2*, currentDirectory: /home/src/workspaces/project
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject2*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/dependency/lib/package.json 2000 undefined Project: /dev/null/autoImportProviderProject2* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/dependency/package.json 2000 undefined Project: /dev/null/autoImportProviderProject2* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject2*' (AutoImportProvider)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 	/home/src/workspaces/project/node_modules/dependency/lib/index.d.ts Text-1 "export function fooFromIndex(): void;"
+	/home/src/workspaces/project/node_modules/dependency/lib/lol.d.ts Text-1 "export function fooFromLol(): void;"
 
 
 	node_modules/dependency/lib/index.d.ts
+	  Root file specified for compilation
+	  File is ECMAScript module because 'node_modules/dependency/package.json' has field "type" with value "module"
+	node_modules/dependency/lib/lol.d.ts
 	  Root file specified for compilation
 	  File is ECMAScript module because 'node_modules/dependency/package.json' has field "type" with value "module"
 
@@ -484,7 +505,7 @@ Info seq  [hh:mm:ss:mss] forEachExternalModuleToImportFrom autoImportProvider: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 1 module specifiers, plus 0 ambient and 0 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 2 module specifiers, plus 0 ambient and 0 from cache
 Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
@@ -1181,6 +1202,28 @@ Info seq  [hh:mm:ss:mss] response:
             }
           },
           {
+            "name": "fooFromLol",
+            "kind": "function",
+            "kindModifiers": "export,declare",
+            "sortText": "16",
+            "source": "dependency/lol",
+            "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "dependency/lol",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "fooFromLol",
+              "exportMapKey": "10 * fooFromLol ",
+              "moduleSpecifier": "dependency/lol",
+              "fileName": "/home/src/workspaces/project/node_modules/dependency/lib/lol.d.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
             "name": "escape",
             "kind": "function",
             "kindModifiers": "deprecated,declare",
@@ -1211,6 +1254,8 @@ watchedFiles::
 /home/src/workspaces/project/jsconfig.json:
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/dependency/lib/index.d.ts:
+  {"pollingInterval":500}
+/home/src/workspaces/project/node_modules/dependency/lib/lol.d.ts:
   {"pollingInterval":500}
 /home/src/workspaces/project/node_modules/dependency/lib/package.json:
   {"pollingInterval":2000}
@@ -1274,6 +1319,11 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
 /home/src/workspaces/project/node_modules/dependency/lib/index.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /dev/null/autoImportProviderProject1*
+        /dev/null/autoImportProviderProject2* *new*
+/home/src/workspaces/project/node_modules/dependency/lib/lol.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /dev/null/autoImportProviderProject1*

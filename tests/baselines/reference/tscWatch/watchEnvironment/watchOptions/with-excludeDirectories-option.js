@@ -75,6 +75,10 @@ PolledWatches::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
+/user/username/projects: *new*
+  {}
+/user/username/projects/myproject: *new*
+  {}
 /user/username/projects/myproject/node_modules/bar/foo.d.ts: *new*
   {}
 /user/username/projects/myproject/node_modules/bar/index.d.ts: *new*
