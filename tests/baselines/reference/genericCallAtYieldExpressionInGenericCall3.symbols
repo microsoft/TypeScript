@@ -1,0 +1,181 @@
+//// [tests/cases/compiler/genericCallAtYieldExpressionInGenericCall3.ts] ////
+
+=== genericCallAtYieldExpressionInGenericCall3.ts ===
+type ReadonlyRecord<in out K extends string | symbol, out A> = {
+>ReadonlyRecord : Symbol(ReadonlyRecord, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 0, 0))
+>K : Symbol(K, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 0, 20))
+>A : Symbol(A, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 0, 53))
+
+  readonly [P in K]: A;
+>P : Symbol(P, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 1, 12))
+>K : Symbol(K, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 0, 20))
+>A : Symbol(A, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 0, 53))
+
+};
+
+type Success<T> = T extends Micro<infer _A, infer _E, infer _R> ? _A : never;
+>Success : Symbol(Success, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 2, 2))
+>T : Symbol(T, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 4, 13))
+>T : Symbol(T, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 4, 13))
+>Micro : Symbol(Micro, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 8, 1))
+>_A : Symbol(_A, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 4, 39))
+>_E : Symbol(_E, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 4, 49))
+>_R : Symbol(_R, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 4, 59))
+>_A : Symbol(_A, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 4, 39))
+
+interface MicroIterator<T extends Micro<any, any, any>> {
+>MicroIterator : Symbol(MicroIterator, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 4, 77))
+>T : Symbol(T, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 6, 24))
+>Micro : Symbol(Micro, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 8, 1))
+
+  next(...args: ReadonlyArray<any>): IteratorResult<T, Success<T>>;
+>next : Symbol(MicroIterator.next, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 6, 57))
+>args : Symbol(args, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 7, 7))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 3 more)
+>IteratorResult : Symbol(IteratorResult, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 6, 24))
+>Success : Symbol(Success, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 2, 2))
+>T : Symbol(T, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 6, 24))
+}
+
+interface Micro<out A, out E = never, out R = never> {
+>Micro : Symbol(Micro, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 8, 1))
+>A : Symbol(A, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 10, 16))
+>E : Symbol(E, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 10, 22))
+>R : Symbol(R, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 10, 37))
+
+  _A: A;
+>_A : Symbol(Micro._A, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 10, 54))
+>A : Symbol(A, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 10, 16))
+
+  _E: E;
+>_E : Symbol(Micro._E, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 11, 8))
+>E : Symbol(E, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 10, 22))
+
+  _R: R;
+>_R : Symbol(Micro._R, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 12, 8))
+>R : Symbol(R, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 10, 37))
+
+  [Symbol.iterator](): MicroIterator<Micro<A, E, R>>;
+>[Symbol.iterator] : Symbol(Micro[Symbol.iterator], Decl(genericCallAtYieldExpressionInGenericCall3.ts, 13, 8))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>MicroIterator : Symbol(MicroIterator, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 4, 77))
+>Micro : Symbol(Micro, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 8, 1))
+>A : Symbol(A, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 10, 16))
+>E : Symbol(E, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 10, 22))
+>R : Symbol(R, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 10, 37))
+}
+
+declare function runPromise<A, E>(effect: Micro<A, E>): Promise<A>;
+>runPromise : Symbol(runPromise, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 15, 1))
+>A : Symbol(A, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 17, 28))
+>E : Symbol(E, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 17, 30))
+>effect : Symbol(effect, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 17, 34))
+>Micro : Symbol(Micro, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 8, 1))
+>A : Symbol(A, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 17, 28))
+>E : Symbol(E, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 17, 30))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>A : Symbol(A, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 17, 28))
+
+declare function gen<Eff extends Micro<any, any, any>, AEff>(
+>gen : Symbol(gen, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 17, 67))
+>Eff : Symbol(Eff, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 19, 21))
+>Micro : Symbol(Micro, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 8, 1))
+>AEff : Symbol(AEff, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 19, 54))
+
+  body: () => Generator<Eff, AEff, never>,
+>body : Symbol(body, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 19, 61))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>Eff : Symbol(Eff, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 19, 21))
+>AEff : Symbol(AEff, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 19, 54))
+
+): Micro<AEff, any, never>;
+>Micro : Symbol(Micro, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 8, 1))
+>AEff : Symbol(AEff, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 19, 54))
+
+declare const traverse: {
+>traverse : Symbol(traverse, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 23, 13))
+
+  <A, R, O, E, B>(
+>A : Symbol(A, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 24, 3))
+>R : Symbol(R, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 24, 5))
+>O : Symbol(O, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 24, 8))
+>E : Symbol(E, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 24, 11))
+>B : Symbol(B, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 24, 14))
+
+    f: (a: A) => Micro<B, E, O>,
+>f : Symbol(f, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 24, 18))
+>a : Symbol(a, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 25, 8))
+>A : Symbol(A, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 24, 3))
+>Micro : Symbol(Micro, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 8, 1))
+>B : Symbol(B, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 24, 14))
+>E : Symbol(E, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 24, 11))
+>O : Symbol(O, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 24, 8))
+
+  ): (
+    self: ReadonlyRecord<string, A>,
+>self : Symbol(self, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 26, 6))
+>ReadonlyRecord : Symbol(ReadonlyRecord, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 0, 0))
+>A : Symbol(A, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 24, 3))
+
+  ) => Micro<ReadonlyRecord<string, B>, E, O>;
+>Micro : Symbol(Micro, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 8, 1))
+>ReadonlyRecord : Symbol(ReadonlyRecord, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 0, 0))
+>B : Symbol(B, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 24, 14))
+>E : Symbol(E, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 24, 11))
+>O : Symbol(O, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 24, 8))
+
+  <A, O, E, B>(
+>A : Symbol(A, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 29, 3))
+>O : Symbol(O, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 29, 5))
+>E : Symbol(E, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 29, 8))
+>B : Symbol(B, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 29, 11))
+
+    self: ReadonlyRecord<string, A>,
+>self : Symbol(self, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 29, 15))
+>ReadonlyRecord : Symbol(ReadonlyRecord, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 0, 0))
+>A : Symbol(A, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 29, 3))
+
+    f: (a: A) => Micro<B, E, O>,
+>f : Symbol(f, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 30, 36))
+>a : Symbol(a, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 31, 8))
+>A : Symbol(A, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 29, 3))
+>Micro : Symbol(Micro, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 8, 1))
+>B : Symbol(B, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 29, 11))
+>E : Symbol(E, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 29, 8))
+>O : Symbol(O, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 29, 5))
+
+  ): Micro<ReadonlyRecord<string, B>, E, O>;
+>Micro : Symbol(Micro, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 8, 1))
+>ReadonlyRecord : Symbol(ReadonlyRecord, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 0, 0))
+>B : Symbol(B, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 29, 11))
+>E : Symbol(E, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 29, 8))
+>O : Symbol(O, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 29, 5))
+
+};
+
+runPromise(
+>runPromise : Symbol(runPromise, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 15, 1))
+
+  gen(function* () {
+>gen : Symbol(gen, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 17, 67))
+
+    yield* traverse({ a: 1, b: 2 }, (n) =>
+>traverse : Symbol(traverse, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 23, 13))
+>a : Symbol(a, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 37, 21))
+>b : Symbol(b, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 37, 27))
+>n : Symbol(n, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 37, 37))
+
+      gen(function* () {
+>gen : Symbol(gen, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 17, 67))
+
+        return n + 1;
+>n : Symbol(n, Decl(genericCallAtYieldExpressionInGenericCall3.ts, 37, 37))
+
+      }),
+    );
+  }),
+);
+
