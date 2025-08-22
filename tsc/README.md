@@ -21,75 +21,25 @@ To use this, set this in your VS Code settings:
 }
 ```
 
-## How to Build and Run
-
-This repo uses [Go 1.25 or higher](https://go.dev/dl/), [Rust 1.85 or higher](https://www.rust-lang.org/tools/install), [Node.js with npm](https://nodejs.org/), and [`hereby`](https://www.npmjs.com/package/hereby).
-
-For tests and code generation, this repo contains a git submodule to the main TypeScript repo pointing to the commit being ported.
-When cloning, you'll want to clone with submodules:
-
-```sh
-git clone --recurse-submodules https://github.com/microsoft/typescript-go.git
-```
-
-If you have already cloned the repo, you can initialize the submodule with:
-
-```sh
-git submodule update --init --recursive
-```
-
-With the submodule in place and `npm ci`, you can run tasks via `hereby`, similar to the TypeScript repo:
-
-```sh
-hereby build          # Verify that the project builds
-hereby test           # Run all tests
-hereby install-tools  # Install additional tools such as linters
-hereby lint           # Run all linters
-hereby format         # Format all code
-hereby generate       # Generate all Go code (e.g. diagnostics, committed to repo)
-```
-
-Additional tasks are a work in progress.
-
-`hereby` is not required to work on the repo; the regular `go` tooling (e.g., `go build`, `go test ./...`) will work as expected.
-`hereby` tasks are provided as a convenience for those familiar with the TypeScript repo.
-
-### Running `tsgo`
-
-After running `hereby build`, you can run `built/local/tsgo`, which behaves mostly the same as `tsc`.
-
-### Running LSP Prototype
-
-To debug and run the VS Code extension without installing it globally:
-
-* Run VS Code in the repo workspace (`code .`)
-* Copy `.vscode/launch.template.json` to `.vscode/launch.json`
-* <kbd>F5</kbd> (or `Debug: Start Debugging` from the command palette)
-
-This will launch a new VS Code instance which uses the Corsa LS as the backend. If correctly set up, you should see "tsgo" in the status bar when a TypeScript or JavaScript file is open:
-
-![LSP Prototype Screenshot](.github/ls-screenshot.png)
-
-
 ## What Works So Far?
 
 This is still a work in progress and is not yet at full feature parity with TypeScript. Bugs may exist. Please check this list carefully before logging a new issue or assuming an intentional change.
 
 | Feature | Status | Notes |
 |---------|--------|-------|
-| Program creation | done | Same files and module resolution as TS5.8. Not all resolution modes supported yet. |
-| Parsing/scanning | done | Exact same syntax errors as TS5.8 |
-| Commandline and `tsconfig.json` parsing | mostly done | Entry point slightly different for now |
-| Type resolution | done | Same types as TS5.8 |
-| Type checking | done | Same errors, locations, and messages as TS5.8. Types printback in errors may display differently (in progress) |
-| JavaScript-specific inference and JS Doc | not ready | - |
+| Program creation | done | Same files and module resolution as TS 5.8. Not all resolution modes supported yet. |
+| Parsing/scanning | done | Exact same syntax errors as TS 5.8 |
+| Commandline and `tsconfig.json` parsing | mostly done | Missing --help, --init. |
+| Type resolution | done | Same types as TS 5.8. |
+| Type checking | done | Same errors, locations, and messages as TS 5.8. Types printback in errors may display differently. |
+| JavaScript-specific inference and JSDoc | in progress | Mostly complete, but intentionally lacking some features. Declaration emit not complete. |
 | JSX | done | - |
-| Declaration emit | in progress | Most common features are in place, but some edge cases and feature flags are still unhandled |
-| Emit (JS output) | in progress | `target: esnext` well-supported, other targets may have gaps |
-| Watch mode | prototype | Watches files and rebuilds, but no incremental rechecking |
-| Build mode / project references | not ready | - |
-| Incremental build | not ready | - |
-| Language service (LSP) | prototype | Minimal functionality (errors, hover, go to def). More features coming soon |
+| Declaration emit | in progress | Most common features are in place, but some edge cases and feature flags are still unhandled. |
+| Emit (JS output) | in progress | `target: esnext` well-supported, other targets may have gaps. |
+| Watch mode | prototype | Watches files and rebuilds, but no incremental rechecking. Not optimized. |
+| Build mode / project references | done | - |
+| Incremental build | done | - |
+| Language service (LSP) | in progress | Some functionality (errors, hover, go to def, refs, sig help). More features coming soon. |
 | API | not ready | - |
 
 Definitions:
