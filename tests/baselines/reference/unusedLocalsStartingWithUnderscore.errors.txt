@@ -1,27 +1,16 @@
 unusedLocalsStartingWithUnderscore.ts(2,7): error TS6133: 'unusedVar' is declared but its value is never read.
-unusedLocalsStartingWithUnderscore.ts(3,7): error TS6133: '_unusedVar' is declared but its value is never read.
 unusedLocalsStartingWithUnderscore.ts(5,5): error TS6133: 'unusedLet' is declared but its value is never read.
-unusedLocalsStartingWithUnderscore.ts(6,5): error TS6133: '_unusedLet' is declared but its value is never read.
 unusedLocalsStartingWithUnderscore.ts(8,5): error TS6133: 'unusedVar2' is declared but its value is never read.
-unusedLocalsStartingWithUnderscore.ts(9,5): error TS6133: '_unusedVar2' is declared but its value is never read.
-unusedLocalsStartingWithUnderscore.ts(11,7): error TS6198: All destructured elements are unused.
-unusedLocalsStartingWithUnderscore.ts(12,7): error TS6198: All destructured elements are unused.
+unusedLocalsStartingWithUnderscore.ts(11,9): error TS6133: 'a1' is declared but its value is never read.
 unusedLocalsStartingWithUnderscore.ts(15,10): error TS6133: 'unusedFunc' is declared but its value is never read.
-unusedLocalsStartingWithUnderscore.ts(16,10): error TS6133: '_unusedFunc' is declared but its value is never read.
 unusedLocalsStartingWithUnderscore.ts(18,7): error TS6133: 'unusedArrow' is declared but its value is never read.
-unusedLocalsStartingWithUnderscore.ts(19,7): error TS6133: '_unusedArrow' is declared but its value is never read.
 unusedLocalsStartingWithUnderscore.ts(22,7): error TS6196: 'UnusedClass' is declared but never used.
-unusedLocalsStartingWithUnderscore.ts(23,7): error TS6196: '_UnusedClass' is declared but never used.
 unusedLocalsStartingWithUnderscore.ts(26,11): error TS6196: 'UnusedInterface' is declared but never used.
-unusedLocalsStartingWithUnderscore.ts(27,11): error TS6196: '_UnusedInterface' is declared but never used.
 unusedLocalsStartingWithUnderscore.ts(30,6): error TS6196: 'UnusedType' is declared but never used.
-unusedLocalsStartingWithUnderscore.ts(31,6): error TS6196: '_UnusedType' is declared but never used.
 unusedLocalsStartingWithUnderscore.ts(34,6): error TS6196: 'UnusedEnum' is declared but never used.
-unusedLocalsStartingWithUnderscore.ts(35,6): error TS6196: '_UnusedEnum' is declared but never used.
 unusedLocalsStartingWithUnderscore.ts(39,12): error TS6133: 'x' is declared but its value is never read.
 unusedLocalsStartingWithUnderscore.ts(41,12): error TS6133: 'x' is declared but its value is never read.
 unusedLocalsStartingWithUnderscore.ts(44,11): error TS6133: 'UnusedNamespace' is declared but its value is never read.
-unusedLocalsStartingWithUnderscore.ts(47,11): error TS6133: '_UnusedNamespace' is declared but its value is never read.
 unusedLocalsStartingWithUnderscore.ts(52,7): error TS6133: 'unusedA' is declared but its value is never read.
 unusedLocalsStartingWithUnderscore.ts(54,8): error TS6133: 'unusedC' is declared but its value is never read.
 unusedLocalsStartingWithUnderscore.ts(61,7): error TS6196: 'TestClass' is declared but never used.
@@ -34,82 +23,62 @@ unusedLocalsStartingWithUnderscore.ts(74,11): error TS6196: 'TestInterface' is d
 unusedLocalsStartingWithUnderscore.ts(79,7): error TS6133: 'obj' is declared but its value is never read.
 
 
-==== unusedLocalsStartingWithUnderscore.ts (34 errors) ====
+==== unusedLocalsStartingWithUnderscore.ts (23 errors) ====
     // Variables
     const unusedVar = 1; // error
           ~~~~~~~~~
 !!! error TS6133: 'unusedVar' is declared but its value is never read.
     const _unusedVar = 2; // ok
-          ~~~~~~~~~~
-!!! error TS6133: '_unusedVar' is declared but its value is never read.
     
     let unusedLet = 3; // error  
         ~~~~~~~~~
 !!! error TS6133: 'unusedLet' is declared but its value is never read.
     let _unusedLet = 4; // ok
-        ~~~~~~~~~~
-!!! error TS6133: '_unusedLet' is declared but its value is never read.
     
     var unusedVar2 = 5; // error
         ~~~~~~~~~~
 !!! error TS6133: 'unusedVar2' is declared but its value is never read.
     var _unusedVar2 = 6; // ok
-        ~~~~~~~~~~~
-!!! error TS6133: '_unusedVar2' is declared but its value is never read.
     
     const { a1, _b1 } = { a1: 1, _b1: 2 }; // error on a1
-          ~~~~~~~~~~~
-!!! error TS6198: All destructured elements are unused.
+            ~~
+!!! error TS6133: 'a1' is declared but its value is never read.
     const { _a2, _b2 } = { _a2: 1, _b2: 2 }; // ok
-          ~~~~~~~~~~~~
-!!! error TS6198: All destructured elements are unused.
     
     // Functions
     function unusedFunc() { } // error
              ~~~~~~~~~~
 !!! error TS6133: 'unusedFunc' is declared but its value is never read.
     function _unusedFunc() { } // ok
-             ~~~~~~~~~~~
-!!! error TS6133: '_unusedFunc' is declared but its value is never read.
     
     const unusedArrow = () => { }; // error
           ~~~~~~~~~~~
 !!! error TS6133: 'unusedArrow' is declared but its value is never read.
     const _unusedArrow = () => { }; // ok
-          ~~~~~~~~~~~~
-!!! error TS6133: '_unusedArrow' is declared but its value is never read.
     
     // Classes
     class UnusedClass { } // error
           ~~~~~~~~~~~
 !!! error TS6196: 'UnusedClass' is declared but never used.
     class _UnusedClass { } // ok
-          ~~~~~~~~~~~~
-!!! error TS6196: '_UnusedClass' is declared but never used.
     
     // Interfaces
     interface UnusedInterface { } // error
               ~~~~~~~~~~~~~~~
 !!! error TS6196: 'UnusedInterface' is declared but never used.
     interface _UnusedInterface { } // ok
-              ~~~~~~~~~~~~~~~~
-!!! error TS6196: '_UnusedInterface' is declared but never used.
     
     // Type aliases
     type UnusedType = string; // error
          ~~~~~~~~~~
 !!! error TS6196: 'UnusedType' is declared but never used.
     type _UnusedType = string; // ok
-         ~~~~~~~~~~~
-!!! error TS6196: '_UnusedType' is declared but never used.
     
     // Enums
     enum UnusedEnum { A } // error
          ~~~~~~~~~~
 !!! error TS6196: 'UnusedEnum' is declared but never used.
     enum _UnusedEnum { A } // ok
-         ~~~~~~~~~~~
-!!! error TS6196: '_UnusedEnum' is declared but never used.
     
     // Declarations in for loops
     for (const _x of []) { } // ok
@@ -128,8 +97,6 @@ unusedLocalsStartingWithUnderscore.ts(79,7): error TS6133: 'obj' is declared but
         export const x = 1;
     }
     namespace _UnusedNamespace { // ok
-              ~~~~~~~~~~~~~~~~
-!!! error TS6133: '_UnusedNamespace' is declared but its value is never read.
         export const x = 1;
     }
     

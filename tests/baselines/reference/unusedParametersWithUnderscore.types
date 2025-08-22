@@ -20,7 +20,7 @@ function f(a, _b, c, ___, d,e___, _f) {
 >   : ^^^
 }
 
-
+// ok because of underscore prefix
 function f2({_a, __b}) {
 >f2 : ({ _a, __b }: { _a: any; __b: any; }) => void
 >   : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -28,6 +28,16 @@ function f2({_a, __b}) {
 >   : ^^^
 >__b : any
 >    : ^^^
+}
+
+// error
+function f2b({ a, b }) {
+>f2b : ({ a, b }: { a: any; b: any; }) => void
+>    : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : any
+>  : ^^^
+>b : any
+>  : ^^^
 }
 
 function f3([_a, ,__b]) {

@@ -132,9 +132,12 @@ unusedVariablesWithUnderscoreInBindingElement.ts(81,11): error TS6198: All destr
     
     function t7() {
         // error
-        const { _a1, _b1 } = { _a1: 1, _b1: 1 };
-              ~~~~~~~~~~~~
+        const { a0, b0 } = { a0: 1, b0: 1 };
+              ~~~~~~~~~~
 !!! error TS6198: All destructured elements are unused.
+    
+        // ok 
+        const { _a1, _b1 } = { _a1: 1, _b1: 1 };
     
         // ok
         const { a2: _a2, b2: _b2 } = { a2: 1, b2: 1 };
