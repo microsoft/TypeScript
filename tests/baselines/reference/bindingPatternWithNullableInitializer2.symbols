@@ -1,0 +1,65 @@
+//// [tests/cases/conformance/es6/destructuring/bindingPatternWithNullableInitializer2.ts] ////
+
+=== bindingPatternWithNullableInitializer2.ts ===
+export async function focus(
+>focus : Symbol(focus, Decl(bindingPatternWithNullableInitializer2.ts, 0, 0))
+  {
+    emitSynthFocused,
+>emitSynthFocused : Symbol(emitSynthFocused, Decl(bindingPatternWithNullableInitializer2.ts, 1, 3))
+
+  }: {
+    emitSynthFocused: boolean;
+>emitSynthFocused : Symbol(emitSynthFocused, Decl(bindingPatternWithNullableInitializer2.ts, 3, 6))
+
+  } = { emitSynthFocused: true },
+>emitSynthFocused : Symbol(emitSynthFocused, Decl(bindingPatternWithNullableInitializer2.ts, 5, 7))
+
+) {}
+
+export declare function focus2({
+>focus2 : Symbol(focus2, Decl(bindingPatternWithNullableInitializer2.ts, 6, 4))
+
+  emitSynthFocused,
+>emitSynthFocused : Symbol(emitSynthFocused, Decl(bindingPatternWithNullableInitializer2.ts, 8, 32))
+
+}?: {
+  emitSynthFocused: boolean;
+>emitSynthFocused : Symbol(emitSynthFocused, Decl(bindingPatternWithNullableInitializer2.ts, 10, 5))
+
+}): Promise<void>;
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+export class View {
+>View : Symbol(View, Decl(bindingPatternWithNullableInitializer2.ts, 12, 18))
+
+  async focus(
+>focus : Symbol(View.focus, Decl(bindingPatternWithNullableInitializer2.ts, 14, 19))
+    {
+      emitSynthFocused,
+>emitSynthFocused : Symbol(emitSynthFocused, Decl(bindingPatternWithNullableInitializer2.ts, 16, 5))
+
+    }: {
+      emitSynthFocused: boolean;
+>emitSynthFocused : Symbol(emitSynthFocused, Decl(bindingPatternWithNullableInitializer2.ts, 18, 8))
+
+    } = { emitSynthFocused: true },
+>emitSynthFocused : Symbol(emitSynthFocused, Decl(bindingPatternWithNullableInitializer2.ts, 20, 9))
+
+  ) {}
+}
+
+// emit of the above
+export declare class View2 {
+>View2 : Symbol(View2, Decl(bindingPatternWithNullableInitializer2.ts, 22, 1))
+
+  focus({ emitSynthFocused }?: {
+>focus : Symbol(View2.focus, Decl(bindingPatternWithNullableInitializer2.ts, 25, 28))
+>emitSynthFocused : Symbol(emitSynthFocused, Decl(bindingPatternWithNullableInitializer2.ts, 26, 9))
+
+    emitSynthFocused: boolean;
+>emitSynthFocused : Symbol(emitSynthFocused, Decl(bindingPatternWithNullableInitializer2.ts, 26, 32))
+
+  }): Promise<void>;
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+}
+
