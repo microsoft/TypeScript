@@ -44409,21 +44409,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return tryCast(getRootDeclaration(node), isParameter);
     }
 
-    function isValidUnusedLocalDeclaration(declaration: Declaration): boolean {
-        if (isBindingElement(declaration)) {
-            if (isObjectBindingPattern(declaration.parent)) {
-                /**
-                 * ignore starts with underscore names _
-                 * const { a: _a } = { a: 1 }
-                 */
-                return !!(declaration.propertyName && isIdentifierThatStartsWithUnderscore(declaration.name));
-            }
-            return isIdentifierThatStartsWithUnderscore(declaration.name);
-        }
-        return isAmbientModule(declaration) ||
-            (isVariableDeclaration(declaration) && isForInOrOfStatement(declaration.parent.parent) || isImportedDeclaration(declaration)) && isIdentifierThatStartsWithUnderscore(declaration.name!);
-    }
-
     function checkUnusedLocalsAndParameters(nodeWithLocals: HasLocals, addDiagnostic: AddUnusedDiagnostic): void {
         // Ideally we could use the ImportClause directly as a key, but must wait until we have full ES6 maps. So must store key along with value.
         const unusedImports = new Map<string, [ImportClause, ImportedDeclaration[]]>();
@@ -44438,7 +44423,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (local.declarations) {
                 for (const declaration of local.declarations) {
-                    if (isValidUnusedLocalDeclaration(declaration)) {
+                    const name = getNameOfDeclaration(declaration);
+                    if (isAmbientModule(declaration) || name && isIdentifierThatStartsWithUnderscore(name)) {
                         continue;
                     }
 

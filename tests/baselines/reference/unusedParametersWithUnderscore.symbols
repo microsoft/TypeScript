@@ -12,41 +12,48 @@ function f(a, _b, c, ___, d,e___, _f) {
 >_f : Symbol(_f, Decl(unusedParametersWithUnderscore.ts, 0, 33))
 }
 
-
+// ok because of underscore prefix
 function f2({_a, __b}) {
 >f2 : Symbol(f2, Decl(unusedParametersWithUnderscore.ts, 1, 1))
 >_a : Symbol(_a, Decl(unusedParametersWithUnderscore.ts, 4, 13))
 >__b : Symbol(__b, Decl(unusedParametersWithUnderscore.ts, 4, 16))
 }
 
+// error
+function f2b({ a, b }) {
+>f2b : Symbol(f2b, Decl(unusedParametersWithUnderscore.ts, 5, 1))
+>a : Symbol(a, Decl(unusedParametersWithUnderscore.ts, 8, 14))
+>b : Symbol(b, Decl(unusedParametersWithUnderscore.ts, 8, 17))
+}
+
 function f3([_a, ,__b]) {
->f3 : Symbol(f3, Decl(unusedParametersWithUnderscore.ts, 5, 1))
->_a : Symbol(_a, Decl(unusedParametersWithUnderscore.ts, 7, 13))
->__b : Symbol(__b, Decl(unusedParametersWithUnderscore.ts, 7, 18))
+>f3 : Symbol(f3, Decl(unusedParametersWithUnderscore.ts, 9, 1))
+>_a : Symbol(_a, Decl(unusedParametersWithUnderscore.ts, 11, 13))
+>__b : Symbol(__b, Decl(unusedParametersWithUnderscore.ts, 11, 18))
 }
 
 function f4(...arg) {
->f4 : Symbol(f4, Decl(unusedParametersWithUnderscore.ts, 8, 1))
->arg : Symbol(arg, Decl(unusedParametersWithUnderscore.ts, 10, 12))
+>f4 : Symbol(f4, Decl(unusedParametersWithUnderscore.ts, 12, 1))
+>arg : Symbol(arg, Decl(unusedParametersWithUnderscore.ts, 14, 12))
 }
 
 function f5(..._arg) {
->f5 : Symbol(f5, Decl(unusedParametersWithUnderscore.ts, 11, 1))
->_arg : Symbol(_arg, Decl(unusedParametersWithUnderscore.ts, 13, 12))
+>f5 : Symbol(f5, Decl(unusedParametersWithUnderscore.ts, 15, 1))
+>_arg : Symbol(_arg, Decl(unusedParametersWithUnderscore.ts, 17, 12))
 }
 
 function f6(arg?, _arg?) {
->f6 : Symbol(f6, Decl(unusedParametersWithUnderscore.ts, 14, 1))
->arg : Symbol(arg, Decl(unusedParametersWithUnderscore.ts, 16, 12))
->_arg : Symbol(_arg, Decl(unusedParametersWithUnderscore.ts, 16, 17))
+>f6 : Symbol(f6, Decl(unusedParametersWithUnderscore.ts, 18, 1))
+>arg : Symbol(arg, Decl(unusedParametersWithUnderscore.ts, 20, 12))
+>_arg : Symbol(_arg, Decl(unusedParametersWithUnderscore.ts, 20, 17))
 }
 
 var f7 = _ => undefined;
->f7 : Symbol(f7, Decl(unusedParametersWithUnderscore.ts, 19, 3))
->_ : Symbol(_, Decl(unusedParametersWithUnderscore.ts, 19, 8))
+>f7 : Symbol(f7, Decl(unusedParametersWithUnderscore.ts, 23, 3))
+>_ : Symbol(_, Decl(unusedParametersWithUnderscore.ts, 23, 8))
 >undefined : Symbol(undefined)
 
 var f8 = function (_) { };
->f8 : Symbol(f8, Decl(unusedParametersWithUnderscore.ts, 21, 3))
->_ : Symbol(_, Decl(unusedParametersWithUnderscore.ts, 21, 19))
+>f8 : Symbol(f8, Decl(unusedParametersWithUnderscore.ts, 25, 3))
+>_ : Symbol(_, Decl(unusedParametersWithUnderscore.ts, 25, 19))
 
