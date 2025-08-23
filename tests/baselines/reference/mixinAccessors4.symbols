@@ -1,0 +1,49 @@
+//// [tests/cases/conformance/classes/mixinAccessors4.ts] ////
+
+=== mixinAccessors4.ts ===
+// https://github.com/microsoft/TypeScript/issues/44938
+
+class A {
+>A : Symbol(A, Decl(mixinAccessors4.ts, 0, 0))
+
+  constructor(...args: any[]) {}
+>args : Symbol(args, Decl(mixinAccessors4.ts, 3, 14))
+
+  get myName(): string {
+>myName : Symbol(A.myName, Decl(mixinAccessors4.ts, 3, 32))
+
+    return "A";
+  }
+}
+
+function Mixin<T extends typeof A>(Super: T) {
+>Mixin : Symbol(Mixin, Decl(mixinAccessors4.ts, 7, 1))
+>T : Symbol(T, Decl(mixinAccessors4.ts, 9, 15))
+>A : Symbol(A, Decl(mixinAccessors4.ts, 0, 0))
+>Super : Symbol(Super, Decl(mixinAccessors4.ts, 9, 35))
+>T : Symbol(T, Decl(mixinAccessors4.ts, 9, 15))
+
+  return class B extends Super {
+>B : Symbol(B, Decl(mixinAccessors4.ts, 10, 8))
+>Super : Symbol(Super, Decl(mixinAccessors4.ts, 9, 35))
+
+    get myName(): string {
+>myName : Symbol(B.myName, Decl(mixinAccessors4.ts, 10, 32))
+
+      return "B";
+    }
+  };
+}
+
+class C extends Mixin(A) {
+>C : Symbol(C, Decl(mixinAccessors4.ts, 15, 1))
+>Mixin : Symbol(Mixin, Decl(mixinAccessors4.ts, 7, 1))
+>A : Symbol(A, Decl(mixinAccessors4.ts, 0, 0))
+
+  get myName(): string {
+>myName : Symbol(C.myName, Decl(mixinAccessors4.ts, 17, 26))
+
+    return "C";
+  }
+}
+

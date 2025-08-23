@@ -1,4 +1,35 @@
 // === QuickInfo ===
+=== /1.ts ===
+// export {};
+// class Foo<T> {
+//     y: string;
+// }
+// namespace Foo {
+//           ^^^
+// | ----------------------------------------------------------------------
+// | class Foo<T> {
+// |     y: string;
+// | }
+// | namespace Foo {
+// |     let y: number;
+// |     let x: string;
+// |     let w: string;
+// | }
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//           ^^^
+// | ----------------------------------------------------------------------
+// | class Foo<T>
+// | namespace Foo
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     export var y: number = 1;
+//     export var x: string = "hello";
+//     export var w = "world";
+//     var z = 2;
+// }
+
 === /3.ts ===
 // import * as Foo_1 from "./b";
 // export declare namespace ns {
@@ -39,55 +70,6 @@
 // interface Apple {
 //     a: string;
 // }
-
-=== /1.ts ===
-// export {};
-// class Foo<T> {
-//     y: string;
-// }
-// namespace Foo {
-//           ^^^
-// | ----------------------------------------------------------------------
-// | class Foo<T> {
-// |     y: string;
-// | }
-// | namespace Foo {
-// |     let y: number;
-// |     let x: string;
-// |     let w: string;
-// | }
-// | 
-// | (verbosity level: 1)
-// | ----------------------------------------------------------------------
-//           ^^^
-// | ----------------------------------------------------------------------
-// | class Foo<T>
-// | namespace Foo
-// | (verbosity level: 0)
-// | ----------------------------------------------------------------------
-//     export var y: number = 1;
-//     export var x: string = "hello";
-//     export var w = "world";
-//     var z = 2;
-// }
-
-=== /tests/cases/fourslash/foo.ts ===
-// export function foo() { return "foo"; }
-// import("./foo")
-//        ^^^^^^^
-// | ----------------------------------------------------------------------
-// | module "/tests/cases/fourslash/foo" {
-// |     function foo(): string;
-// |     namespace foo { }
-// | }
-// | (verbosity level: 1)
-// | ----------------------------------------------------------------------
-//        ^^^^^^^
-// | ----------------------------------------------------------------------
-// | module "/tests/cases/fourslash/foo"
-// | (verbosity level: 0)
-// | ----------------------------------------------------------------------
-// var x = import("./foo")
 
 === /4.ts ===
 // class Foo<T> {
@@ -136,6 +118,24 @@
 // | ----------------------------------------------------------------------
 //     const bar: number;
 // }
+
+=== /tests/cases/fourslash/foo.ts ===
+// export function foo() { return "foo"; }
+// import("./foo")
+//        ^^^^^^^
+// | ----------------------------------------------------------------------
+// | module "/tests/cases/fourslash/foo" {
+// |     function foo(): string;
+// |     namespace foo { }
+// | }
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//        ^^^^^^^
+// | ----------------------------------------------------------------------
+// | module "/tests/cases/fourslash/foo"
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// var x = import("./foo")
 
 [
   {

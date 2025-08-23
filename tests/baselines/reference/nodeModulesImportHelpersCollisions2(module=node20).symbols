@@ -1,0 +1,24 @@
+//// [tests/cases/conformance/node/nodeModulesImportHelpersCollisions2.ts] ////
+
+=== subfolder/index.ts ===
+// cjs format file
+export * from "fs";
+export * as fs from "fs";
+>fs : Symbol(fs, Decl(index.ts, 2, 6))
+
+=== index.ts ===
+// esm format file
+export * from "fs";
+export * as fs from "fs";
+>fs : Symbol(fs, Decl(index.ts, 2, 6))
+
+=== types.d.ts ===
+declare module "fs";
+>"fs" : Symbol("fs", Decl(types.d.ts, 0, 0))
+
+declare module "tslib" {
+>"tslib" : Symbol("tslib", Decl(types.d.ts, 0, 20))
+
+    export {};
+    // intentionally missing all helpers
+}
