@@ -58,7 +58,7 @@ var d = 'd';
 var Enum;
 (function (Enum) {
     Enum["D"] = "d";
-    Enum[Enum["E"] = 0] = "E";
-    Enum[Enum["Y"] = 1000000] = "Y";
+    Enum[Enum["E"] = A] = "E";
+    Enum[Enum["Y"] = X] = "Y";
     Enum[Enum["Z"] = 0] = "Z";
 })(Enum || (Enum = {}));
