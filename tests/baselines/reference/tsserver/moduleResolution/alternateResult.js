@@ -210,8 +210,6 @@ Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/foo/
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/index.mts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/index.d.mts' does not exist.
 Info seq  [hh:mm:ss:mss] Failed to resolve under condition 'import'.
-Info seq  [hh:mm:ss:mss] Saw non-matching condition 'require'.
-Info seq  [hh:mm:ss:mss] Exiting conditional exports.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
@@ -259,8 +257,6 @@ Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/bar/
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/index.mts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/index.d.mts' does not exist.
 Info seq  [hh:mm:ss:mss] Failed to resolve under condition 'import'.
-Info seq  [hh:mm:ss:mss] Saw non-matching condition 'require'.
-Info seq  [hh:mm:ss:mss] Exiting conditional exports.
 Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/node_modules/@types/bar/package.json'.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Saw non-matching condition 'require'.
@@ -351,8 +347,6 @@ Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/bar2
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/index.mts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/index.d.mts' does not exist.
 Info seq  [hh:mm:ss:mss] Failed to resolve under condition 'import'.
-Info seq  [hh:mm:ss:mss] Saw non-matching condition 'require'.
-Info seq  [hh:mm:ss:mss] Exiting conditional exports.
 Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/node_modules/@types/bar2/package.json'.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'types'.
@@ -807,8 +801,6 @@ Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/bar/
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/index.mts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/index.d.mts' does not exist.
 Info seq  [hh:mm:ss:mss] Failed to resolve under condition 'import'.
-Info seq  [hh:mm:ss:mss] Saw non-matching condition 'require'.
-Info seq  [hh:mm:ss:mss] Exiting conditional exports.
 Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/node_modules/@types/bar/package.json'.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Saw non-matching condition 'require'.
@@ -1162,8 +1154,6 @@ Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/foo/
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/index.mts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/index.d.mts' does not exist.
 Info seq  [hh:mm:ss:mss] Failed to resolve under condition 'import'.
-Info seq  [hh:mm:ss:mss] Saw non-matching condition 'require'.
-Info seq  [hh:mm:ss:mss] Exiting conditional exports.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
@@ -1501,8 +1491,6 @@ Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/bar/
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/index.mts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/index.d.mts' does not exist.
 Info seq  [hh:mm:ss:mss] Failed to resolve under condition 'import'.
-Info seq  [hh:mm:ss:mss] Saw non-matching condition 'require'.
-Info seq  [hh:mm:ss:mss] Exiting conditional exports.
 Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/node_modules/@types/bar/package.json'.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Saw non-matching condition 'require'.
@@ -1846,8 +1834,6 @@ Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/foo/
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/index.mts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/index.d.mts' does not exist.
 Info seq  [hh:mm:ss:mss] Failed to resolve under condition 'import'.
-Info seq  [hh:mm:ss:mss] Saw non-matching condition 'require'.
-Info seq  [hh:mm:ss:mss] Exiting conditional exports.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
@@ -2180,8 +2166,6 @@ Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/bar/
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/index.mts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/index.d.mts' does not exist.
 Info seq  [hh:mm:ss:mss] Failed to resolve under condition 'import'.
-Info seq  [hh:mm:ss:mss] Saw non-matching condition 'require'.
-Info seq  [hh:mm:ss:mss] Exiting conditional exports.
 Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/node_modules/@types/bar/package.json'.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'types'.
@@ -2881,8 +2865,6 @@ Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/bar2
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/index.mts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/index.d.mts' does not exist.
 Info seq  [hh:mm:ss:mss] Failed to resolve under condition 'import'.
-Info seq  [hh:mm:ss:mss] Saw non-matching condition 'require'.
-Info seq  [hh:mm:ss:mss] Exiting conditional exports.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Saw non-matching condition 'require'.
@@ -3301,8 +3283,6 @@ Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/foo2
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/index.mts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/index.d.mts' does not exist.
 Info seq  [hh:mm:ss:mss] Failed to resolve under condition 'import'.
-Info seq  [hh:mm:ss:mss] Saw non-matching condition 'require'.
-Info seq  [hh:mm:ss:mss] Exiting conditional exports.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
@@ -3684,8 +3664,6 @@ Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/bar2
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/index.mts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/index.d.mts' does not exist.
 Info seq  [hh:mm:ss:mss] Failed to resolve under condition 'import'.
-Info seq  [hh:mm:ss:mss] Saw non-matching condition 'require'.
-Info seq  [hh:mm:ss:mss] Exiting conditional exports.
 Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/node_modules/@types/bar2/package.json'.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Saw non-matching condition 'require'.
@@ -4065,8 +4043,6 @@ Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/foo2
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/index.mts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/index.d.mts' does not exist.
 Info seq  [hh:mm:ss:mss] Failed to resolve under condition 'import'.
-Info seq  [hh:mm:ss:mss] Saw non-matching condition 'require'.
-Info seq  [hh:mm:ss:mss] Exiting conditional exports.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
@@ -4430,8 +4406,6 @@ Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/bar2
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/index.mts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/index.d.mts' does not exist.
 Info seq  [hh:mm:ss:mss] Failed to resolve under condition 'import'.
-Info seq  [hh:mm:ss:mss] Saw non-matching condition 'require'.
-Info seq  [hh:mm:ss:mss] Exiting conditional exports.
 Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/node_modules/@types/bar2/package.json'.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Saw non-matching condition 'require'.
@@ -4800,8 +4774,6 @@ Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/foo2
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/index.mts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/index.d.mts' does not exist.
 Info seq  [hh:mm:ss:mss] Failed to resolve under condition 'import'.
-Info seq  [hh:mm:ss:mss] Saw non-matching condition 'require'.
-Info seq  [hh:mm:ss:mss] Exiting conditional exports.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.

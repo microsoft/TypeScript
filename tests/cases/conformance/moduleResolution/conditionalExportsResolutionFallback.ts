@@ -28,7 +28,3 @@ export {};
 
 // @Filename: /index.mts
 import {} from "dep";
-// Should be an untyped resolution to dep/dist/index.mjs,
-// but the first search is only for TS files, and when
-// there's no dist/index.d.mts, it continues looking for
-// matching conditions and resolves via `types`.

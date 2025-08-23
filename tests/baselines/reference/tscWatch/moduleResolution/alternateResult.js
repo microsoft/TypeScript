@@ -182,8 +182,6 @@ File name '/home/src/projects/project/node_modules/foo/index.mjs' has a '.mjs' e
 File '/home/src/projects/project/node_modules/foo/index.mts' does not exist.
 File '/home/src/projects/project/node_modules/foo/index.d.mts' does not exist.
 Failed to resolve under condition 'import'.
-Saw non-matching condition 'require'.
-Exiting conditional exports.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
@@ -231,8 +229,6 @@ File name '/home/src/projects/project/node_modules/bar/index.mjs' has a '.mjs' e
 File '/home/src/projects/project/node_modules/bar/index.mts' does not exist.
 File '/home/src/projects/project/node_modules/bar/index.d.mts' does not exist.
 Failed to resolve under condition 'import'.
-Saw non-matching condition 'require'.
-Exiting conditional exports.
 Found 'package.json' at '/home/src/projects/project/node_modules/@types/bar/package.json'.
 Entering conditional exports.
 Saw non-matching condition 'require'.
@@ -323,8 +319,6 @@ File name '/home/src/projects/project/node_modules/bar2/index.mjs' has a '.mjs' 
 File '/home/src/projects/project/node_modules/bar2/index.mts' does not exist.
 File '/home/src/projects/project/node_modules/bar2/index.d.mts' does not exist.
 Failed to resolve under condition 'import'.
-Saw non-matching condition 'require'.
-Exiting conditional exports.
 Found 'package.json' at '/home/src/projects/project/node_modules/@types/bar2/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'types'.
@@ -623,8 +617,6 @@ File name '/home/src/projects/project/node_modules/bar/index.mjs' has a '.mjs' e
 File '/home/src/projects/project/node_modules/bar/index.mts' does not exist.
 File '/home/src/projects/project/node_modules/bar/index.d.mts' does not exist.
 Failed to resolve under condition 'import'.
-Saw non-matching condition 'require'.
-Exiting conditional exports.
 Found 'package.json' at '/home/src/projects/project/node_modules/@types/bar/package.json'.
 Entering conditional exports.
 Saw non-matching condition 'require'.
@@ -799,8 +791,6 @@ File name '/home/src/projects/project/node_modules/foo/index.mjs' has a '.mjs' e
 File '/home/src/projects/project/node_modules/foo/index.mts' does not exist.
 File '/home/src/projects/project/node_modules/foo/index.d.mts' does not exist.
 Failed to resolve under condition 'import'.
-Saw non-matching condition 'require'.
-Exiting conditional exports.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
@@ -959,8 +949,6 @@ File name '/home/src/projects/project/node_modules/bar/index.mjs' has a '.mjs' e
 File '/home/src/projects/project/node_modules/bar/index.mts' does not exist.
 File '/home/src/projects/project/node_modules/bar/index.d.mts' does not exist.
 Failed to resolve under condition 'import'.
-Saw non-matching condition 'require'.
-Exiting conditional exports.
 Found 'package.json' at '/home/src/projects/project/node_modules/@types/bar/package.json'.
 Entering conditional exports.
 Saw non-matching condition 'require'.
@@ -1125,8 +1113,6 @@ File name '/home/src/projects/project/node_modules/foo/index.mjs' has a '.mjs' e
 File '/home/src/projects/project/node_modules/foo/index.mts' does not exist.
 File '/home/src/projects/project/node_modules/foo/index.d.mts' does not exist.
 Failed to resolve under condition 'import'.
-Saw non-matching condition 'require'.
-Exiting conditional exports.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
@@ -1282,8 +1268,6 @@ File name '/home/src/projects/project/node_modules/bar/index.mjs' has a '.mjs' e
 File '/home/src/projects/project/node_modules/bar/index.mts' does not exist.
 File '/home/src/projects/project/node_modules/bar/index.d.mts' does not exist.
 Failed to resolve under condition 'import'.
-Saw non-matching condition 'require'.
-Exiting conditional exports.
 Found 'package.json' at '/home/src/projects/project/node_modules/@types/bar/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'types'.
@@ -1898,8 +1882,6 @@ File name '/home/src/projects/project/node_modules/bar2/index.mjs' has a '.mjs' 
 File '/home/src/projects/project/node_modules/bar2/index.mts' does not exist.
 File '/home/src/projects/project/node_modules/bar2/index.d.mts' does not exist.
 Failed to resolve under condition 'import'.
-Saw non-matching condition 'require'.
-Exiting conditional exports.
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
 Saw non-matching condition 'require'.
@@ -2244,8 +2226,6 @@ File name '/home/src/projects/project/node_modules/foo2/index.mjs' has a '.mjs' 
 File '/home/src/projects/project/node_modules/foo2/index.mts' does not exist.
 File '/home/src/projects/project/node_modules/foo2/index.d.mts' does not exist.
 Failed to resolve under condition 'import'.
-Saw non-matching condition 'require'.
-Exiting conditional exports.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
@@ -2533,8 +2513,6 @@ File name '/home/src/projects/project/node_modules/bar2/index.mjs' has a '.mjs' 
 File '/home/src/projects/project/node_modules/bar2/index.mts' does not exist.
 File '/home/src/projects/project/node_modules/bar2/index.d.mts' does not exist.
 Failed to resolve under condition 'import'.
-Saw non-matching condition 'require'.
-Exiting conditional exports.
 Found 'package.json' at '/home/src/projects/project/node_modules/@types/bar2/package.json'.
 Entering conditional exports.
 Saw non-matching condition 'require'.
@@ -2709,8 +2687,6 @@ File name '/home/src/projects/project/node_modules/foo2/index.mjs' has a '.mjs' 
 File '/home/src/projects/project/node_modules/foo2/index.mts' does not exist.
 File '/home/src/projects/project/node_modules/foo2/index.d.mts' does not exist.
 Failed to resolve under condition 'import'.
-Saw non-matching condition 'require'.
-Exiting conditional exports.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
@@ -2869,8 +2845,6 @@ File name '/home/src/projects/project/node_modules/bar2/index.mjs' has a '.mjs' 
 File '/home/src/projects/project/node_modules/bar2/index.mts' does not exist.
 File '/home/src/projects/project/node_modules/bar2/index.d.mts' does not exist.
 Failed to resolve under condition 'import'.
-Saw non-matching condition 'require'.
-Exiting conditional exports.
 Found 'package.json' at '/home/src/projects/project/node_modules/@types/bar2/package.json'.
 Entering conditional exports.
 Saw non-matching condition 'require'.
@@ -3035,8 +3009,6 @@ File name '/home/src/projects/project/node_modules/foo2/index.mjs' has a '.mjs' 
 File '/home/src/projects/project/node_modules/foo2/index.mts' does not exist.
 File '/home/src/projects/project/node_modules/foo2/index.d.mts' does not exist.
 Failed to resolve under condition 'import'.
-Saw non-matching condition 'require'.
-Exiting conditional exports.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
