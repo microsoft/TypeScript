@@ -57,26 +57,14 @@ var Foo = /** @class */ (function () {
 string;
 constructor();
 {
-    this.;
-    u;
-    {
-        102;
-        A7;
-    }
-    " world";
+    this.𐊧 = " world";
 }
 methodA();
 {
     return this.𐊧;
 }
 export var _;
-new Foo().;
-u;
-{
-    102;
-    A7;
-}
-+new Foo().methodA();
+new Foo().𐊧 + new Foo().methodA();
 _;
 u;
 {
