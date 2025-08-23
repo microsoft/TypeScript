@@ -21140,6 +21140,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const { expression } = node as JsxExpression;
                 return !!expression && isContextSensitive(expression);
             }
+            case SyntaxKind.AsExpression:
+            case SyntaxKind.TypeAssertionExpression:
+                return isConstTypeReference((node as AsExpression | TypeAssertion).type) && isContextSensitive((node as AsExpression | TypeAssertion).expression);
         }
 
         return false;
