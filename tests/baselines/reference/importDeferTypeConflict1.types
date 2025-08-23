@@ -1,0 +1,39 @@
+//// [tests/cases/conformance/importDefer/importDeferTypeConflict1.ts] ////
+
+=== a.ts ===
+export function foo() {
+>foo : () => void
+>    : ^^^^^^^^^^
+
+  console.log("foo from a");
+>console.log("foo from a") : void
+>                          : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"foo from a" : "foo from a"
+>             : ^^^^^^^^^^^^
+}
+
+=== b.ts ===
+import type defer * as ns1 from "a";
+>defer : any
+>      : ^^^
+> : any
+> : ^^^
+>* as : number
+>     : ^^^^^^
+> : any
+> : ^^^
+>as : any
+>   : ^^^
+>ns1 : any
+>    : ^^^
+>from : any
+>     : ^^^
+>"a" : "a"
+>    : ^^^
+

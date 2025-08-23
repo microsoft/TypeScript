@@ -1,0 +1,14 @@
+/src/bar.mts(2,21): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './foo.js'?
+
+
+==== /src/foo.tsx (0 errors) ====
+    export function foo() {
+        return "";
+    }
+    
+==== /src/bar.mts (1 errors) ====
+    // Extensionless relative path ES import in an ES module
+    import { foo } from "./foo"; // should error, suggest adding ".js"
+                        ~~~~~~~
+!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './foo.js'?
+    

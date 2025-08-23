@@ -1,0 +1,35 @@
+/real-imports.mts(1,19): error TS2307: Cannot find module 'pkg' or its corresponding type declarations.
+
+
+==== /node_modules/pkg/package.json (0 errors) ====
+    {
+      "name": "pkg",
+      "version": "1.0.0",
+      "type": "commonjs",
+      "exports": {
+        "require": "./index.js"
+      }
+    }
+    
+==== /node_modules/pkg/index.d.ts (0 errors) ====
+    export declare const x: number;
+    
+==== /package.json (0 errors) ====
+    {
+      "": "type module is ignored in --module commonjs",
+      "type": "module"
+    }
+    
+==== /requires.ts (0 errors) ====
+    import pkg = require("pkg");
+    pkg.x;
+    
+==== /imports.ts (0 errors) ====
+    import { x } from "pkg";
+    x;
+    
+==== /real-imports.mts (1 errors) ====
+    import { x } from "pkg"; // Error
+                      ~~~~~
+!!! error TS2307: Cannot find module 'pkg' or its corresponding type declarations.
+    
