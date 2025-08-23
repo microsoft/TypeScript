@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/declarationEmitGenericTypeParamerSerialization.ts] ////
+
+=== declarationEmitGenericTypeParamerSerialization.ts ===
+function wrapper<T>(value: T) {
+>wrapper : <T>(value: T) => { m(): T; readonly g: T; }
+>        : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : T
+>      : ^
+
+  return {
+>{      m() { return value; },      get g() { return value; },  } : { m(): T; readonly g: T; }
+>                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      m() { return value; },
+>m : () => T
+>  : ^^^^^^^
+>value : T
+>      : ^
+
+      get g() { return value; },
+>g : T
+>  : ^
+>value : T
+>      : ^
+  }
+}
+
+export const w = wrapper(0)
+>w : { m(): number; readonly g: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>wrapper(0) : { m(): number; readonly g: number; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>wrapper : <T>(value: T) => { m(): T; readonly g: T; }
+>        : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+

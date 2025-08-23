@@ -3,10 +3,10 @@
 === objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts ===
 // errors
 var y = {
->y : { stringLiteral: any; 42: any; readonly e: any; f: any; this: any; super: any; var: any; class: any; typeof: any; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{    "stringLiteral",    42,    get e,    set f,    this,    super,    var,    class,    typeof} : { stringLiteral: any; 42: any; readonly e: any; f: any; this: any; super: any; var: any; class: any; typeof: any; }
->                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : { stringLiteral: any; 42: any; readonly e: void; f: any; this: any; super: any; var: any; class: any; typeof: any; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    "stringLiteral",    42,    get e,    set f,    this,    super,    var,    class,    typeof} : { stringLiteral: any; 42: any; readonly e: void; f: any; this: any; super: any; var: any; class: any; typeof: any; }
+>                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     "stringLiteral",
 >"stringLiteral" : any

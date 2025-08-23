@@ -581,8 +581,11 @@ export interface LanguageService {
      *
      * @param fileName The path to the file
      * @param position A zero-based index of the character where you want the quick info
+     * @param maximumLength Maximum length of a quickinfo text before it is truncated.
      */
-    getQuickInfoAtPosition(fileName: string, position: number): QuickInfo | undefined;
+    getQuickInfoAtPosition(fileName: string, position: number, maximumLength?: number): QuickInfo | undefined;
+    /** @internal */
+    getQuickInfoAtPosition(fileName: string, position: number, maximumLength: number | undefined, verbosityLevel: number | undefined): QuickInfo | undefined;
 
     getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan | undefined;
 
@@ -697,7 +700,6 @@ export interface LanguageService {
     getSupportedCodeFixes(fileName?: string): readonly string[];
 
     /** @internal */ mapCode(fileName: string, contents: string[], focusLocations: TextSpan[][] | undefined, formatOptions: FormatCodeSettings, preferences: UserPreferences): readonly FileTextChanges[];
-    /** @internal */ getImports(fileName: string): readonly string[];
 
     dispose(): void;
     preparePasteEditsForFile(fileName: string, copiedTextRanges: TextRange[]): boolean;
@@ -1325,6 +1327,7 @@ export interface QuickInfo {
     displayParts?: SymbolDisplayPart[];
     documentation?: SymbolDisplayPart[];
     tags?: JSDocTagInfo[];
+    canIncreaseVerbosityLevel?: boolean;
 }
 
 export type RenameInfo = RenameInfoSuccess | RenameInfoFailure;

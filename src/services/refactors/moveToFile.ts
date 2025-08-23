@@ -26,6 +26,7 @@ import {
     emptyArray,
     EnumDeclaration,
     escapeLeadingUnderscores,
+    every,
     ExportDeclaration,
     ExportKind,
     Expression,
@@ -422,7 +423,7 @@ function updateNamespaceLikeImportNode(node: SupportedImport, newNamespaceName: 
         case SyntaxKind.ImportDeclaration:
             return factory.createImportDeclaration(
                 /*modifiers*/ undefined,
-                factory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, factory.createNamespaceImport(newNamespaceId)),
+                factory.createImportClause(/*phaseModifier*/ undefined, /*name*/ undefined, factory.createNamespaceImport(newNamespaceId)),
                 newModuleString,
                 /*attributes*/ undefined,
             );
@@ -644,7 +645,7 @@ function filterImport(i: SupportedImport, moduleSpecifier: StringLiteralLike, ke
             const defaultImport = clause.name && keep(clause.name) ? clause.name : undefined;
             const namedBindings = clause.namedBindings && filterNamedBindings(clause.namedBindings, keep);
             return defaultImport || namedBindings
-                ? factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(clause.isTypeOnly, defaultImport, namedBindings), getSynthesizedDeepClone(moduleSpecifier), /*attributes*/ undefined)
+                ? factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(clause.phaseModifier, defaultImport, namedBindings), getSynthesizedDeepClone(moduleSpecifier), /*attributes*/ undefined)
                 : undefined;
         }
         case SyntaxKind.ImportEqualsDeclaration:
@@ -885,24 +886,23 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
     const unusedImportsFromOldFile = new Set<Symbol>();
     for (const statement of toMove) {
         forEachReference(statement, checker, enclosingRange, (symbol, isValidTypeOnlyUseSite) => {
-            if (!symbol.declarations || isGlobalType(checker, symbol)) {
+            if (!some(symbol.declarations)) {
                 return;
             }
             if (existingTargetLocals.has(skipAlias(symbol, checker))) {
                 unusedImportsFromOldFile.add(symbol);
                 return;
             }
-            for (const decl of symbol.declarations) {
-                if (isInImport(decl)) {
-                    const prevIsTypeOnly = oldImportsNeededByTargetFile.get(symbol);
-                    oldImportsNeededByTargetFile.set(symbol, [
-                        prevIsTypeOnly === undefined ? isValidTypeOnlyUseSite : prevIsTypeOnly && isValidTypeOnlyUseSite,
-                        tryCast(decl, (d): d is codefix.ImportOrRequireAliasDeclaration => isImportSpecifier(d) || isImportClause(d) || isNamespaceImport(d) || isImportEqualsDeclaration(d) || isBindingElement(d) || isVariableDeclaration(d)),
-                    ]);
-                }
-                else if (isTopLevelDeclaration(decl) && sourceFileOfTopLevelDeclaration(decl) === oldFile && !movedSymbols.has(symbol)) {
-                    targetFileImportsFromOldFile.set(symbol, isValidTypeOnlyUseSite);
-                }
+            const importedDeclaration = find(symbol.declarations, isInImport);
+            if (importedDeclaration) {
+                const prevIsTypeOnly = oldImportsNeededByTargetFile.get(symbol);
+                oldImportsNeededByTargetFile.set(symbol, [
+                    prevIsTypeOnly === undefined ? isValidTypeOnlyUseSite : prevIsTypeOnly && isValidTypeOnlyUseSite,
+                    tryCast(importedDeclaration, (d): d is codefix.ImportOrRequireAliasDeclaration => isImportSpecifier(d) || isImportClause(d) || isNamespaceImport(d) || isImportEqualsDeclaration(d) || isBindingElement(d) || isVariableDeclaration(d)),
+                ]);
+            }
+            else if (!movedSymbols.has(symbol) && every(symbol.declarations, decl => isTopLevelDeclaration(decl) && sourceFileOfTopLevelDeclaration(decl) === oldFile)) {
+                targetFileImportsFromOldFile.set(symbol, isValidTypeOnlyUseSite);
             }
         });
     }
@@ -944,10 +944,6 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
             ? jsxNamespaceSymbol
             : undefined;
     }
-}
-
-function isGlobalType(checker: TypeChecker, symbol: Symbol) {
-    return !!checker.resolveName(symbol.name, /*location*/ undefined, SymbolFlags.Type, /*excludeGlobals*/ false);
 }
 
 function makeUniqueFilename(proposedFilename: string, extension: string, inDirectory: string, host: LanguageServiceHost): string {

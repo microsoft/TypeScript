@@ -104,3 +104,242 @@ function C() {
 >          : ^^^^^^^^^^
   }
 }
+
+function D() {
+>D : () => typeof T
+>  : ^^^^^^^^^^^^^^
+
+  return class T {
+>class T {     a = () => arguments  // should error  } : typeof T
+>                                                      : ^^^^^^^^
+>T : typeof T
+>  : ^^^^^^^^
+
+     a = () => arguments  // should error
+>a : () => IArguments
+>  : ^^^^^^^^^^^^^^^^
+>() => arguments : () => IArguments
+>                : ^^^^^^^^^^^^^^^^
+>arguments : IArguments
+>          : ^^^^^^^^^^
+  }
+}
+
+function D1() {
+>D1 : () => typeof T
+>   : ^^^^^^^^^^^^^^
+
+  return class T {
+>class T {    a = () => {      arguments;    // should error      const b = () => {        return arguments;     // should error      }      function f() {        return arguments;      // ok      }    } } : typeof T
+>                                                                                                                                                                                                             : ^^^^^^^^
+>T : typeof T
+>  : ^^^^^^^^
+
+    a = () => {
+>a : () => void
+>  : ^^^^^^^^^^
+>() => {      arguments;    // should error      const b = () => {        return arguments;     // should error      }      function f() {        return arguments;      // ok      }    } : () => void
+>                                                                                                                                                                                          : ^^^^^^^^^^
+
+      arguments;    // should error
+>arguments : IArguments
+>          : ^^^^^^^^^^
+
+      const b = () => {
+>b : () => IArguments
+>  : ^^^^^^^^^^^^^^^^
+>() => {        return arguments;     // should error      } : () => IArguments
+>                                                            : ^^^^^^^^^^^^^^^^
+
+        return arguments;     // should error
+>arguments : IArguments
+>          : ^^^^^^^^^^
+      }
+
+      function f() {
+>f : () => IArguments
+>  : ^^^^^^^^^^^^^^^^
+
+        return arguments;      // ok
+>arguments : IArguments
+>          : ^^^^^^^^^^
+      }
+    }
+ }
+}
+
+function D2() {
+>D2 : () => typeof (Anonymous class)
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  return class {
+>class {    constructor() {      arguments;  // ok    }    get foo() {      return arguments;  // ok    }    set foo(foo: any) {      arguments;  // ok    }    bar() {      arguments;  // ok    }    [Symbol.iterator]() {      arguments;  // ok    }  } : typeof (Anonymous class)
+>                                                                                                                                                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+    constructor() {
+      arguments;  // ok
+>arguments : IArguments
+>          : ^^^^^^^^^^
+    }
+    get foo() {
+>foo : any
+>    : ^^^
+
+      return arguments;  // ok
+>arguments : IArguments
+>          : ^^^^^^^^^^
+    }
+    set foo(foo: any) {
+>foo : any
+>    : ^^^
+>foo : any
+>    : ^^^
+
+      arguments;  // ok
+>arguments : IArguments
+>          : ^^^^^^^^^^
+    }
+    bar() {
+>bar : () => void
+>    : ^^^^^^^^^^
+
+      arguments;  // ok
+>arguments : IArguments
+>          : ^^^^^^^^^^
+    }
+    [Symbol.iterator]() {
+>[Symbol.iterator] : () => void
+>                  : ^^^^^^^^^^
+>Symbol.iterator : any
+>                : ^^^
+>Symbol : any
+>       : ^^^
+>iterator : any
+>         : ^^^
+
+      arguments;  // ok
+>arguments : IArguments
+>          : ^^^^^^^^^^
+    }
+  }
+}
+
+function D3() {
+>D3 : () => typeof T
+>   : ^^^^^^^^^^^^^^
+
+  return class T {
+>class T {    static {      arguments;  // should error      while(1) {        arguments // should error      }    }  } : typeof T
+>                                                                                                                       : ^^^^^^^^
+>T : typeof T
+>  : ^^^^^^^^
+
+    static {
+      arguments;  // should error
+>arguments : any
+>          : ^^^
+
+      while(1) {
+>1 : 1
+>  : ^
+
+        arguments // should error
+>arguments : any
+>          : ^^^
+      }
+    }
+  }
+}
+
+function D4() {
+>D4 : () => typeof T
+>   : ^^^^^^^^^^^^^^
+
+  return class T {
+>class T {    static {      function f() {        arguments;  // ok      }    }  } : typeof T
+>                                                                                  : ^^^^^^^^
+>T : typeof T
+>  : ^^^^^^^^
+
+    static {
+      function f() {
+>f : () => void
+>  : ^^^^^^^^^^
+
+        arguments;  // ok
+>arguments : IArguments
+>          : ^^^^^^^^^^
+      }
+    }
+  }
+}
+
+
+function D5() {
+>D5 : () => typeof T
+>   : ^^^^^^^^^^^^^^
+
+  return class T {
+>class T {     a = (() => { return arguments; })()  // should error  } : typeof T
+>                                                                      : ^^^^^^^^
+>T : typeof T
+>  : ^^^^^^^^
+
+     a = (() => { return arguments; })()  // should error
+>a : IArguments
+>  : ^^^^^^^^^^
+>(() => { return arguments; })() : IArguments
+>                                : ^^^^^^^^^^
+>(() => { return arguments; }) : () => IArguments
+>                              : ^^^^^^^^^^^^^^^^
+>() => { return arguments; } : () => IArguments
+>                            : ^^^^^^^^^^^^^^^^
+>arguments : IArguments
+>          : ^^^^^^^^^^
+  }
+}
+
+function D6() {
+>D6 : () => typeof T
+>   : ^^^^^^^^^^^^^^
+
+  return class T {
+>class T {     a = (x = arguments) => {}    // should error  } : typeof T
+>                                                              : ^^^^^^^^
+>T : typeof T
+>  : ^^^^^^^^
+
+     a = (x = arguments) => {}    // should error
+>a : (x?: IArguments) => void
+>  : ^ ^^^^^^^^^^^^^^^^^^^^^^
+>(x = arguments) => {} : (x?: IArguments) => void
+>                      : ^ ^^^^^^^^^^^^^^^^^^^^^^
+>x : IArguments
+>  : ^^^^^^^^^^
+>arguments : IArguments
+>          : ^^^^^^^^^^
+  }
+}
+
+function D7() {
+>D7 : () => typeof T
+>   : ^^^^^^^^^^^^^^
+
+  return class T {
+>class T {     a(x = arguments){  // ok     }  } : typeof T
+>                                                : ^^^^^^^^
+>T : typeof T
+>  : ^^^^^^^^
+
+     a(x = arguments){  // ok
+>a : (x?: IArguments) => void
+>  : ^ ^^^^^^^^^^^^^^^^^^^^^^
+>x : IArguments
+>  : ^^^^^^^^^^
+>arguments : IArguments
+>          : ^^^^^^^^^^
+
+     }
+  }
+}
+

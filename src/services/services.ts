@@ -2,7 +2,6 @@ import {
     __String,
     ApplicableRefactorInfo,
     ApplyCodeActionCommandResult,
-    arrayFrom,
     AssignmentDeclarationKind,
     BaseType,
     BinaryExpression,
@@ -50,6 +49,7 @@ import {
     Debug,
     Declaration,
     deduplicate,
+    defaultHoverMaximumTruncationLength,
     DefinitionInfo,
     DefinitionInfoAndBoundSpan,
     Diagnostic,
@@ -234,7 +234,6 @@ import {
     Node,
     NodeArray,
     NodeFlags,
-    nodeIsSynthesized,
     noop,
     normalizePath,
     normalizeSpans,
@@ -505,8 +504,9 @@ function createChildren(node: Node, sourceFile: SourceFileLike | undefined): rea
         });
         return children;
     }
-
+    const languageVariant = sourceFile?.languageVariant ?? LanguageVariant.Standard;
     scanner.setText((sourceFile || node.getSourceFile()).text);
+    scanner.setLanguageVariant(languageVariant);
     let pos = node.pos;
     const processNode = (child: Node) => {
         addSyntheticNodes(children, pos, child.pos, node);
@@ -527,6 +527,7 @@ function createChildren(node: Node, sourceFile: SourceFileLike | undefined): rea
     node.forEachChild(processNode, processNodes);
     addSyntheticNodes(children, pos, node.end, node);
     scanner.setText(undefined);
+    scanner.setLanguageVariant(LanguageVariant.Standard);
     return children;
 }
 
@@ -1604,7 +1605,6 @@ const invalidOperationsInPartialSemanticMode: readonly (keyof LanguageService)[]
     "provideInlayHints",
     "getSupportedCodeFixes",
     "getPasteEdits",
-    "getImports",
 ];
 
 const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
@@ -2277,7 +2277,7 @@ export function createLanguageService(
         return Completions.getCompletionEntrySymbol(program, log, getValidSourceFile(fileName), position, { name, source }, host, preferences);
     }
 
-    function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo | undefined {
+    function getQuickInfoAtPosition(fileName: string, position: number, maximumLength?: number, verbosityLevel?: number): QuickInfo | undefined {
         synchronizeHostData();
 
         const sourceFile = getValidSourceFile(fileName);
@@ -2296,13 +2296,27 @@ export function createLanguageService(
                 kind: ScriptElementKind.unknown,
                 kindModifiers: ScriptElementKindModifier.none,
                 textSpan: createTextSpanFromNode(nodeForQuickInfo, sourceFile),
-                displayParts: typeChecker.runWithCancellationToken(cancellationToken, typeChecker => typeToDisplayParts(typeChecker, type, getContainerNode(nodeForQuickInfo))),
+                displayParts: typeChecker.runWithCancellationToken(cancellationToken, typeChecker => typeToDisplayParts(typeChecker, type, getContainerNode(nodeForQuickInfo), /*flags*/ undefined, verbosityLevel)),
                 documentation: type.symbol ? type.symbol.getDocumentationComment(typeChecker) : undefined,
                 tags: type.symbol ? type.symbol.getJsDocTags(typeChecker) : undefined,
             };
         }
 
-        const { symbolKind, displayParts, documentation, tags } = typeChecker.runWithCancellationToken(cancellationToken, typeChecker => SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, getContainerNode(nodeForQuickInfo), nodeForQuickInfo));
+        const { symbolKind, displayParts, documentation, tags, canIncreaseVerbosityLevel } = typeChecker.runWithCancellationToken(
+            cancellationToken,
+            typeChecker =>
+                SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(
+                    typeChecker,
+                    symbol,
+                    sourceFile,
+                    getContainerNode(nodeForQuickInfo),
+                    nodeForQuickInfo,
+                    /*semanticMeaning*/ undefined,
+                    /*alias*/ undefined,
+                    maximumLength ?? defaultHoverMaximumTruncationLength,
+                    verbosityLevel,
+                ),
+        );
         return {
             kind: symbolKind,
             kindModifiers: SymbolDisplay.getSymbolModifiers(typeChecker, symbol),
@@ -2310,6 +2324,7 @@ export function createLanguageService(
             displayParts,
             documentation,
             tags,
+            canIncreaseVerbosityLevel,
         };
     }
 
@@ -3367,18 +3382,6 @@ export function createLanguageService(
         );
     }
 
-    function getImports(fileName: string): readonly string[] {
-        synchronizeHostData();
-        const file = getValidSourceFile(fileName);
-        let imports: Set<string> | undefined;
-        for (const specifier of file.imports) {
-            if (nodeIsSynthesized(specifier)) continue;
-            const name = program.getResolvedModuleFromModuleSpecifier(specifier, file)?.resolvedModule?.resolvedFileName;
-            if (name) (imports ??= new Set()).add(name);
-        }
-        return imports ? arrayFrom(imports) : emptyArray;
-    }
-
     const ls: LanguageService = {
         dispose,
         cleanupSemanticCache,
@@ -3453,7 +3456,6 @@ export function createLanguageService(
         preparePasteEditsForFile,
         getPasteEdits,
         mapCode,
-        getImports,
     };
 
     switch (languageServiceMode) {
@@ -3546,6 +3548,7 @@ function getContainingObjectLiteralElementWorker(node: Node): ObjectLiteralEleme
         // falls through
 
         case SyntaxKind.Identifier:
+        case SyntaxKind.JsxNamespacedName:
             return isObjectLiteralElement(node.parent) &&
                     (node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression || node.parent.parent.kind === SyntaxKind.JsxAttributes) &&
                     node.parent.name === node ? node.parent : undefined;

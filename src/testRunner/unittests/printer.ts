@@ -358,5 +358,70 @@ describe("unittests:: PrinterAPI", () => {
                 ),
                 ts.createSourceFile("source.ts", "", ts.ScriptTarget.ES2015),
             ));
+
+        // https://github.com/microsoft/TypeScript/issues/59150
+        printsCorrectly("template string", {}, printer =>
+            printer.printNode(
+                ts.EmitHint.Unspecified,
+                ts.factory.createNoSubstitutionTemplateLiteral("\n"),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext),
+            ));
+
+        printsCorrectly("binaryBarBarExpressionWithLeftConditionalExpression", {}, printer =>
+            printer.printNode(
+                ts.EmitHint.Unspecified,
+                ts.factory.createExpressionStatement(
+                    ts.factory.createBinaryExpression(
+                        ts.factory.createConditionalExpression(
+                            ts.factory.createIdentifier("a"),
+                            ts.factory.createToken(ts.SyntaxKind.QuestionToken),
+                            ts.factory.createIdentifier("b"),
+                            ts.factory.createToken(ts.SyntaxKind.ColonToken),
+                            ts.factory.createIdentifier("c"),
+                        ),
+                        ts.factory.createToken(ts.SyntaxKind.BarBarToken),
+                        ts.factory.createIdentifier("d"),
+                    ),
+                ),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext),
+            ));
+
+        printsCorrectly("binaryAmpersandAmpersandExpressionWithLeftConditionalExpression", {}, printer =>
+            printer.printNode(
+                ts.EmitHint.Unspecified,
+                ts.factory.createExpressionStatement(
+                    ts.factory.createBinaryExpression(
+                        ts.factory.createConditionalExpression(
+                            ts.factory.createIdentifier("a"),
+                            ts.factory.createToken(ts.SyntaxKind.QuestionToken),
+                            ts.factory.createIdentifier("b"),
+                            ts.factory.createToken(ts.SyntaxKind.ColonToken),
+                            ts.factory.createIdentifier("c"),
+                        ),
+                        ts.factory.createToken(ts.SyntaxKind.AmpersandAmpersandToken),
+                        ts.factory.createIdentifier("d"),
+                    ),
+                ),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext),
+            ));
+
+        printsCorrectly("binaryQuestionQuestionExpressionWithLeftConditionalExpression", {}, printer =>
+            printer.printNode(
+                ts.EmitHint.Unspecified,
+                ts.factory.createExpressionStatement(
+                    ts.factory.createBinaryExpression(
+                        ts.factory.createConditionalExpression(
+                            ts.factory.createIdentifier("a"),
+                            ts.factory.createToken(ts.SyntaxKind.QuestionToken),
+                            ts.factory.createIdentifier("b"),
+                            ts.factory.createToken(ts.SyntaxKind.ColonToken),
+                            ts.factory.createIdentifier("c"),
+                        ),
+                        ts.factory.createToken(ts.SyntaxKind.QuestionQuestionToken),
+                        ts.factory.createIdentifier("d"),
+                    ),
+                ),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext),
+            ));
     });
 });

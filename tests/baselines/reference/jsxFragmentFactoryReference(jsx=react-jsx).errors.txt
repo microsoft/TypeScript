@@ -1,0 +1,12 @@
+jsxFragmentFactoryReference.tsx(3,9): error TS2792: Cannot find module 'react/jsx-runtime'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+
+
+==== jsxFragmentFactoryReference.tsx (1 errors) ====
+    export class LoggedOut {
+        content = () => (
+            <></>
+            ~~
+!!! error TS2792: Cannot find module 'react/jsx-runtime'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+        )
+    }
+    
