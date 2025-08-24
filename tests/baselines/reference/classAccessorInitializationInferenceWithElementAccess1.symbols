@@ -41,3 +41,46 @@ export class Cls {
     }
 }
 
+export class Cls2 {
+>Cls2 : Symbol(Cls2, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 14, 1))
+
+    accessor x;
+>x : Symbol(Cls2.x, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 16, 19))
+
+    accessor y;
+>y : Symbol(Cls2.y, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 17, 15))
+
+    accessor z;
+>z : Symbol(Cls2.z, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 18, 15))
+
+    accessor 0;
+>0 : Symbol(Cls2[0], Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 19, 15))
+
+    constructor(seed: number) {
+>seed : Symbol(seed, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 23, 16))
+
+        (() => {
+            this['x'] = [seed];
+>this : Symbol(Cls2, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 14, 1))
+>'x' : Symbol(Cls2.x, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 16, 19))
+>seed : Symbol(seed, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 23, 16))
+
+            this['y'] = { seed };
+>this : Symbol(Cls2, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 14, 1))
+>'y' : Symbol(Cls2.y, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 17, 15))
+>seed : Symbol(seed, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 26, 25))
+
+            this['z'] = `${seed}`;
+>this : Symbol(Cls2, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 14, 1))
+>'z' : Symbol(Cls2.z, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 18, 15))
+>seed : Symbol(seed, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 23, 16))
+
+            this[0] = [seed];
+>this : Symbol(Cls2, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 14, 1))
+>0 : Symbol(Cls2[0], Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 19, 15))
+>seed : Symbol(seed, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 23, 16))
+
+        })();
+    }
+}
+
