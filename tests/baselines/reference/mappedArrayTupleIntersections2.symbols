@@ -1,0 +1,62 @@
+//// [tests/cases/compiler/mappedArrayTupleIntersections2.ts] ////
+
+=== mappedArrayTupleIntersections2.ts ===
+// https://github.com/microsoft/TypeScript/issues/59849
+
+type IdentitySpread<t extends readonly unknown[]> = [...{ [i in keyof t]: t[i] }];
+>IdentitySpread : Symbol(IdentitySpread, Decl(mappedArrayTupleIntersections2.ts, 0, 0))
+>t : Symbol(t, Decl(mappedArrayTupleIntersections2.ts, 2, 20))
+>i : Symbol(i, Decl(mappedArrayTupleIntersections2.ts, 2, 59))
+>t : Symbol(t, Decl(mappedArrayTupleIntersections2.ts, 2, 20))
+>t : Symbol(t, Decl(mappedArrayTupleIntersections2.ts, 2, 20))
+>i : Symbol(i, Decl(mappedArrayTupleIntersections2.ts, 2, 59))
+
+type Result1 = IdentitySpread<{ name: string } & string[]>;
+>Result1 : Symbol(Result1, Decl(mappedArrayTupleIntersections2.ts, 2, 82))
+>IdentitySpread : Symbol(IdentitySpread, Decl(mappedArrayTupleIntersections2.ts, 0, 0))
+>name : Symbol(name, Decl(mappedArrayTupleIntersections2.ts, 4, 31))
+
+type Result2 = IdentitySpread<(string | number)[] & ['foo', string, 42]>;
+>Result2 : Symbol(Result2, Decl(mappedArrayTupleIntersections2.ts, 4, 59))
+>IdentitySpread : Symbol(IdentitySpread, Decl(mappedArrayTupleIntersections2.ts, 0, 0))
+
+type Result3 = IdentitySpread<[string | boolean, string | symbol, ...number[]] & ['foo', string, 43]>;
+>Result3 : Symbol(Result3, Decl(mappedArrayTupleIntersections2.ts, 5, 73))
+>IdentitySpread : Symbol(IdentitySpread, Decl(mappedArrayTupleIntersections2.ts, 0, 0))
+
+type Result4 = IdentitySpread<[string | boolean, boolean, ...number[]] & ['foo', string, 44]>;
+>Result4 : Symbol(Result4, Decl(mappedArrayTupleIntersections2.ts, 6, 102))
+>IdentitySpread : Symbol(IdentitySpread, Decl(mappedArrayTupleIntersections2.ts, 0, 0))
+
+type Box<T> = { value: T };
+>Box : Symbol(Box, Decl(mappedArrayTupleIntersections2.ts, 7, 94))
+>T : Symbol(T, Decl(mappedArrayTupleIntersections2.ts, 9, 9))
+>value : Symbol(value, Decl(mappedArrayTupleIntersections2.ts, 9, 15))
+>T : Symbol(T, Decl(mappedArrayTupleIntersections2.ts, 9, 9))
+
+type BoxedSpread<t extends readonly unknown[]> = [...{ [i in keyof t]: Box<t[i]> }];
+>BoxedSpread : Symbol(BoxedSpread, Decl(mappedArrayTupleIntersections2.ts, 9, 27))
+>t : Symbol(t, Decl(mappedArrayTupleIntersections2.ts, 10, 17))
+>i : Symbol(i, Decl(mappedArrayTupleIntersections2.ts, 10, 56))
+>t : Symbol(t, Decl(mappedArrayTupleIntersections2.ts, 10, 17))
+>Box : Symbol(Box, Decl(mappedArrayTupleIntersections2.ts, 7, 94))
+>t : Symbol(t, Decl(mappedArrayTupleIntersections2.ts, 10, 17))
+>i : Symbol(i, Decl(mappedArrayTupleIntersections2.ts, 10, 56))
+
+type Result5 = BoxedSpread<{ name: string } & string[]>;
+>Result5 : Symbol(Result5, Decl(mappedArrayTupleIntersections2.ts, 10, 84))
+>BoxedSpread : Symbol(BoxedSpread, Decl(mappedArrayTupleIntersections2.ts, 9, 27))
+>name : Symbol(name, Decl(mappedArrayTupleIntersections2.ts, 12, 28))
+
+type Result6 = BoxedSpread<(string | number)[] & ['foo', string, 42]>;
+>Result6 : Symbol(Result6, Decl(mappedArrayTupleIntersections2.ts, 12, 56))
+>BoxedSpread : Symbol(BoxedSpread, Decl(mappedArrayTupleIntersections2.ts, 9, 27))
+
+type Result7 = BoxedSpread<[string | boolean, string | symbol, ...number[]] & ['foo', string, 43]>;
+>Result7 : Symbol(Result7, Decl(mappedArrayTupleIntersections2.ts, 13, 70))
+>BoxedSpread : Symbol(BoxedSpread, Decl(mappedArrayTupleIntersections2.ts, 9, 27))
+
+type Result8 = BoxedSpread<[string | boolean, boolean, ...number[]] & ['foo', string, 44]>;
+>Result8 : Symbol(Result8, Decl(mappedArrayTupleIntersections2.ts, 14, 99))
+>BoxedSpread : Symbol(BoxedSpread, Decl(mappedArrayTupleIntersections2.ts, 9, 27))
+
