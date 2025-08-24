@@ -1,0 +1,22 @@
+useBeforeDeclaration_destructuring2.ts(4,4): error TS2373: Parameter 'finalItem' cannot reference identifier 'length' declared after it.
+
+
+==== useBeforeDeclaration_destructuring2.ts (1 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/58794
+    
+    export const fn1 = <const T,>({
+      [length - 1]: finalItem,
+       ~~~~~~
+!!! error TS2373: Parameter 'finalItem' cannot reference identifier 'length' declared after it.
+      length,
+    }: readonly T[]): T | undefined => {
+      return finalItem;
+    };
+    
+    export const fn2 = <const T,>({
+      length,
+      [length - 1]: finalItem,
+    }: readonly T[]): T | undefined => {
+      return finalItem;
+    };
+    
