@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/narrowingUnionByUnionCandidate1.ts] ////
+
+=== narrowingUnionByUnionCandidate1.ts ===
+// https://github.com/microsoft/TypeScript/issues/61581
+
+type Result<A, E> =
+>Result : Result<A, E>
+>       : ^^^^^^^^^^^^
+
+  | {
+      readonly _tag: "Ok";
+>_tag : "Ok"
+>     : ^^^^
+
+      readonly value: A;
+>value : A
+>      : ^
+    }
+  | {
+      readonly _tag: "Fail";
+>_tag : "Fail"
+>     : ^^^^^^
+
+      readonly error: E;
+>error : E
+>      : ^
+
+    };
+
+declare const isResult: (u: unknown) => u is Result<any, any>;
+>isResult : (u: unknown) => u is Result<any, any>
+>         : ^ ^^       ^^^^^                     
+>u : unknown
+>  : ^^^^^^^
+
+// return type: Result<A, E> | "ok"
+export const fn = <A, E>(inp: Result<A, E> | string) =>
+>fn : <A, E>(inp: Result<A, E> | string) => Result<A, E> | "ok"
+>   : ^ ^^ ^^   ^^                     ^^^^^^^^^^^^^^^^^^^^^^^^
+><A, E>(inp: Result<A, E> | string) =>  isResult(inp) ? inp : "ok" : <A, E>(inp: Result<A, E> | string) => Result<A, E> | "ok"
+>                                                                  : ^ ^^ ^^   ^^                     ^^^^^^^^^^^^^^^^^^^^^^^^
+>inp : string | Result<A, E>
+>    : ^^^^^^^^^^^^^^^^^^^^^
+
+  isResult(inp) ? inp : "ok";
+>isResult(inp) ? inp : "ok" : Result<A, E> | "ok"
+>                           : ^^^^^^^^^^^^^^^^^^^
+>isResult(inp) : boolean
+>              : ^^^^^^^
+>isResult : (u: unknown) => u is Result<any, any>
+>         : ^ ^^       ^^^^^                     
+>inp : string | Result<A, E>
+>    : ^^^^^^^^^^^^^^^^^^^^^
+>inp : Result<A, E>
+>    : ^^^^^^^^^^^^
+>"ok" : "ok"
+>     : ^^^^
+
