@@ -109,3 +109,145 @@ m.child; // ok
 >m : Symbol(m, Decl(inferTypeParameterConstraints.ts, 35, 11))
 >child : Symbol(Klass.child, Decl(inferTypeParameterConstraints.ts, 26, 37))
 
+// https://github.com/microsoft/TypeScript/issues/60299
+
+type Data = [a: 1, b: 2, ...c: 3[]];
+>Data : Symbol(Data, Decl(inferTypeParameterConstraints.ts, 36, 8))
+
+type TestType1<T extends any[]> = T extends [
+>TestType1 : Symbol(TestType1, Decl(inferTypeParameterConstraints.ts, 40, 36))
+>T : Symbol(T, Decl(inferTypeParameterConstraints.ts, 42, 15))
+>T : Symbol(T, Decl(inferTypeParameterConstraints.ts, 42, 15))
+
+  ...infer R extends [any, any],
+>R : Symbol(R, Decl(inferTypeParameterConstraints.ts, 43, 10))
+
+  ...any[],
+]
+  ? R
+>R : Symbol(R, Decl(inferTypeParameterConstraints.ts, 43, 10))
+
+  : never;
+type test1 = TestType1<Data>;
+>test1 : Symbol(test1, Decl(inferTypeParameterConstraints.ts, 47, 10))
+>TestType1 : Symbol(TestType1, Decl(inferTypeParameterConstraints.ts, 40, 36))
+>Data : Symbol(Data, Decl(inferTypeParameterConstraints.ts, 36, 8))
+
+type TestType2<T extends any[], Mask extends any[] = [any, any]> = T extends [
+>TestType2 : Symbol(TestType2, Decl(inferTypeParameterConstraints.ts, 48, 29))
+>T : Symbol(T, Decl(inferTypeParameterConstraints.ts, 50, 15))
+>Mask : Symbol(Mask, Decl(inferTypeParameterConstraints.ts, 50, 31))
+>T : Symbol(T, Decl(inferTypeParameterConstraints.ts, 50, 15))
+
+  ...infer R extends Mask,
+>R : Symbol(R, Decl(inferTypeParameterConstraints.ts, 51, 10))
+>Mask : Symbol(Mask, Decl(inferTypeParameterConstraints.ts, 50, 31))
+
+  ...any[],
+]
+  ? R
+>R : Symbol(R, Decl(inferTypeParameterConstraints.ts, 51, 10))
+
+  : never;
+type test2 = TestType2<Data>;
+>test2 : Symbol(test2, Decl(inferTypeParameterConstraints.ts, 55, 10))
+>TestType2 : Symbol(TestType2, Decl(inferTypeParameterConstraints.ts, 48, 29))
+>Data : Symbol(Data, Decl(inferTypeParameterConstraints.ts, 36, 8))
+
+type ExcludeRest<T extends any[]> = Inner<T>;
+>ExcludeRest : Symbol(ExcludeRest, Decl(inferTypeParameterConstraints.ts, 56, 29))
+>T : Symbol(T, Decl(inferTypeParameterConstraints.ts, 58, 17))
+>Inner : Symbol(Inner, Decl(inferTypeParameterConstraints.ts, 58, 45))
+>T : Symbol(T, Decl(inferTypeParameterConstraints.ts, 58, 17))
+
+type Inner<
+>Inner : Symbol(Inner, Decl(inferTypeParameterConstraints.ts, 58, 45))
+
+  T extends any[],
+>T : Symbol(T, Decl(inferTypeParameterConstraints.ts, 60, 11))
+
+  Copy extends any[] = T,
+>Copy : Symbol(Copy, Decl(inferTypeParameterConstraints.ts, 61, 18))
+>T : Symbol(T, Decl(inferTypeParameterConstraints.ts, 60, 11))
+
+  Mask extends any[] = [],
+>Mask : Symbol(Mask, Decl(inferTypeParameterConstraints.ts, 62, 25))
+
+> = Copy extends [any, ...infer Rest]
+>Copy : Symbol(Copy, Decl(inferTypeParameterConstraints.ts, 61, 18))
+>Rest : Symbol(Rest, Decl(inferTypeParameterConstraints.ts, 64, 31))
+
+  ? Inner<T, Rest, [...Mask, any]>
+>Inner : Symbol(Inner, Decl(inferTypeParameterConstraints.ts, 58, 45))
+>T : Symbol(T, Decl(inferTypeParameterConstraints.ts, 60, 11))
+>Rest : Symbol(Rest, Decl(inferTypeParameterConstraints.ts, 64, 31))
+>Mask : Symbol(Mask, Decl(inferTypeParameterConstraints.ts, 62, 25))
+
+  : Required<Copy> extends [any, ...infer Rest]
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>Copy : Symbol(Copy, Decl(inferTypeParameterConstraints.ts, 61, 18))
+>Rest : Symbol(Rest, Decl(inferTypeParameterConstraints.ts, 66, 41))
+
+  ? Inner<T, Rest, [...Mask, any?]>
+>Inner : Symbol(Inner, Decl(inferTypeParameterConstraints.ts, 58, 45))
+>T : Symbol(T, Decl(inferTypeParameterConstraints.ts, 60, 11))
+>Rest : Symbol(Rest, Decl(inferTypeParameterConstraints.ts, 66, 41))
+>Mask : Symbol(Mask, Decl(inferTypeParameterConstraints.ts, 62, 25))
+
+  : T extends [...infer Result extends Mask, ...any[]]
+>T : Symbol(T, Decl(inferTypeParameterConstraints.ts, 60, 11))
+>Result : Symbol(Result, Decl(inferTypeParameterConstraints.ts, 68, 23))
+>Mask : Symbol(Mask, Decl(inferTypeParameterConstraints.ts, 62, 25))
+
+  ? Result
+>Result : Symbol(Result, Decl(inferTypeParameterConstraints.ts, 68, 23))
+
+  : never;
+
+type test3 = ExcludeRest<[a: 1, b: 2, c?: 3, ...d: 4[]]>;
+>test3 : Symbol(test3, Decl(inferTypeParameterConstraints.ts, 70, 10))
+>ExcludeRest : Symbol(ExcludeRest, Decl(inferTypeParameterConstraints.ts, 56, 29))
+
+type Interpolable = string | number | bigint | boolean | null | undefined;
+>Interpolable : Symbol(Interpolable, Decl(inferTypeParameterConstraints.ts, 72, 57))
+
+type TestWithInterpolable1<
+>TestWithInterpolable1 : Symbol(TestWithInterpolable1, Decl(inferTypeParameterConstraints.ts, 74, 74))
+
+  T extends string,
+>T : Symbol(T, Decl(inferTypeParameterConstraints.ts, 76, 27))
+
+  TOutput extends Interpolable = number,
+>TOutput : Symbol(TOutput, Decl(inferTypeParameterConstraints.ts, 77, 19))
+>Interpolable : Symbol(Interpolable, Decl(inferTypeParameterConstraints.ts, 72, 57))
+
+> = T extends `${infer R extends TOutput}` ? R : never;
+>T : Symbol(T, Decl(inferTypeParameterConstraints.ts, 76, 27))
+>R : Symbol(R, Decl(inferTypeParameterConstraints.ts, 79, 22))
+>TOutput : Symbol(TOutput, Decl(inferTypeParameterConstraints.ts, 77, 19))
+>R : Symbol(R, Decl(inferTypeParameterConstraints.ts, 79, 22))
+
+type ResultWithInterpolable1 = TestWithInterpolable1<`100`>;
+>ResultWithInterpolable1 : Symbol(ResultWithInterpolable1, Decl(inferTypeParameterConstraints.ts, 79, 55))
+>TestWithInterpolable1 : Symbol(TestWithInterpolable1, Decl(inferTypeParameterConstraints.ts, 74, 74))
+
+type TestWithInterpolable2<
+>TestWithInterpolable2 : Symbol(TestWithInterpolable2, Decl(inferTypeParameterConstraints.ts, 81, 60))
+
+  T extends string,
+>T : Symbol(T, Decl(inferTypeParameterConstraints.ts, 83, 27))
+
+  TOutput extends Interpolable,
+>TOutput : Symbol(TOutput, Decl(inferTypeParameterConstraints.ts, 84, 19))
+>Interpolable : Symbol(Interpolable, Decl(inferTypeParameterConstraints.ts, 72, 57))
+
+> = T extends `${infer R extends TOutput}` ? R : never;
+>T : Symbol(T, Decl(inferTypeParameterConstraints.ts, 83, 27))
+>R : Symbol(R, Decl(inferTypeParameterConstraints.ts, 86, 22))
+>TOutput : Symbol(TOutput, Decl(inferTypeParameterConstraints.ts, 84, 19))
+>R : Symbol(R, Decl(inferTypeParameterConstraints.ts, 86, 22))
+
+type ResultWithInterpolable2 = TestWithInterpolable2<`100`, number>;
+>ResultWithInterpolable2 : Symbol(ResultWithInterpolable2, Decl(inferTypeParameterConstraints.ts, 86, 55))
+>TestWithInterpolable2 : Symbol(TestWithInterpolable2, Decl(inferTypeParameterConstraints.ts, 81, 60))
+
