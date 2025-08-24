@@ -1,0 +1,121 @@
+//// [tests/cases/compiler/abstractConstructorOverloadInstantiation.ts] ////
+
+=== abstractConstructorOverloadInstantiation.ts ===
+declare const concreteConstructor: new () => void;
+>concreteConstructor : new () => void
+>                    : ^^^^^^^^^^    
+
+declare const abstractConstructor: abstract new () => void;
+>abstractConstructor : abstract new () => void
+>                    : ^^^^^^^^^^^^^^^^^^^    
+
+new concreteConstructor(); // should work
+>new concreteConstructor() : void
+>                          : ^^^^
+>concreteConstructor : new () => void
+>                    : ^^^^^^^^^^    
+
+new abstractConstructor(); // should error
+>new abstractConstructor() : any
+>                          : ^^^
+>abstractConstructor : abstract new () => void
+>                    : ^^^^^^^^^^^^^^^^^^^    
+
+type AmbiguousMixedConstructorAbstractFirst =
+>AmbiguousMixedConstructorAbstractFirst : AmbiguousMixedConstructorAbstractFirst
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    & (abstract new () => void)
+    & (new () => void);
+
+type AmbiguousMixedConstructorConcreteFirst =
+>AmbiguousMixedConstructorConcreteFirst : AmbiguousMixedConstructorConcreteFirst
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    & (new () => void)
+    & (abstract new () => void);
+
+declare const ambiguousMixedConstructorAbstractFirst: AmbiguousMixedConstructorAbstractFirst;
+>ambiguousMixedConstructorAbstractFirst : AmbiguousMixedConstructorAbstractFirst
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare const ambiguousMixedConstructorConcreteFirst: AmbiguousMixedConstructorConcreteFirst;
+>ambiguousMixedConstructorConcreteFirst : AmbiguousMixedConstructorConcreteFirst
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+new ambiguousMixedConstructorAbstractFirst(); // should error
+>new ambiguousMixedConstructorAbstractFirst() : any
+>                                             : ^^^
+>ambiguousMixedConstructorAbstractFirst : AmbiguousMixedConstructorAbstractFirst
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+new ambiguousMixedConstructorConcreteFirst(); // should work
+>new ambiguousMixedConstructorConcreteFirst() : void
+>                                             : ^^^^
+>ambiguousMixedConstructorConcreteFirst : AmbiguousMixedConstructorConcreteFirst
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+type DistinctMixedConstructorAbstractFirst =
+>DistinctMixedConstructorAbstractFirst : DistinctMixedConstructorAbstractFirst
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    & (abstract new (arg: "abstract") => void)
+>arg : "abstract"
+>    : ^^^^^^^^^^
+
+    & (new (arg: "concrete") => void);
+>arg : "concrete"
+>    : ^^^^^^^^^^
+
+type DistinctMixedConstructorConcreteFirst =
+>DistinctMixedConstructorConcreteFirst : DistinctMixedConstructorConcreteFirst
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    & (new (arg: "concrete") => void)
+>arg : "concrete"
+>    : ^^^^^^^^^^
+
+    & (abstract new (arg: "abstract") => void);
+>arg : "abstract"
+>    : ^^^^^^^^^^
+
+declare let distinctMixedConstructorAbstractFirst: DistinctMixedConstructorAbstractFirst;
+>distinctMixedConstructorAbstractFirst : DistinctMixedConstructorAbstractFirst
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare let distinctMixedConstructorConcreteFirst: DistinctMixedConstructorConcreteFirst;
+>distinctMixedConstructorConcreteFirst : DistinctMixedConstructorConcreteFirst
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+new distinctMixedConstructorAbstractFirst("abstract"); // should error
+>new distinctMixedConstructorAbstractFirst("abstract") : any
+>                                                      : ^^^
+>distinctMixedConstructorAbstractFirst : DistinctMixedConstructorAbstractFirst
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"abstract" : "abstract"
+>           : ^^^^^^^^^^
+
+new distinctMixedConstructorAbstractFirst("concrete"); // should work
+>new distinctMixedConstructorAbstractFirst("concrete") : void
+>                                                      : ^^^^
+>distinctMixedConstructorAbstractFirst : DistinctMixedConstructorAbstractFirst
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"concrete" : "concrete"
+>           : ^^^^^^^^^^
+
+new distinctMixedConstructorConcreteFirst("abstract"); // should error
+>new distinctMixedConstructorConcreteFirst("abstract") : any
+>                                                      : ^^^
+>distinctMixedConstructorConcreteFirst : DistinctMixedConstructorConcreteFirst
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"abstract" : "abstract"
+>           : ^^^^^^^^^^
+
+new distinctMixedConstructorConcreteFirst("concrete"); // should work
+>new distinctMixedConstructorConcreteFirst("concrete") : void
+>                                                      : ^^^^
+>distinctMixedConstructorConcreteFirst : DistinctMixedConstructorConcreteFirst
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"concrete" : "concrete"
+>           : ^^^^^^^^^^
+

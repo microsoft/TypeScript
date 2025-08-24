@@ -1,0 +1,151 @@
+//// [tests/cases/compiler/abstractConstructorOverloadAssignability.ts] ////
+
+=== abstractConstructorOverloadAssignability.ts ===
+type AbstractConstructor = abstract new (arg: "abstract") => "abstract";
+>AbstractConstructor : AbstractConstructor
+>                    : ^^^^^^^^^^^^^^^^^^^
+>arg : "abstract"
+>    : ^^^^^^^^^^
+
+type ConcreteConstructor = new (arg: "concrete") => "concrete";
+>ConcreteConstructor : ConcreteConstructor
+>                    : ^^^^^^^^^^^^^^^^^^^
+>arg : "concrete"
+>    : ^^^^^^^^^^
+
+type MixedConstructorAbstractFirst =
+>MixedConstructorAbstractFirst : MixedConstructorAbstractFirst
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    & AbstractConstructor
+    & ConcreteConstructor;
+
+type MixedConstructorAbstractLast =
+>MixedConstructorAbstractLast : MixedConstructorAbstractLast
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    & ConcreteConstructor
+    & AbstractConstructor;
+
+declare let mixedConstructorAbstractFirst: MixedConstructorAbstractFirst;
+>mixedConstructorAbstractFirst : MixedConstructorAbstractFirst
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare let mixedConstructorAbstractLast: MixedConstructorAbstractLast;
+>mixedConstructorAbstractLast : MixedConstructorAbstractLast
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+mixedConstructorAbstractFirst = mixedConstructorAbstractLast; // should work
+>mixedConstructorAbstractFirst = mixedConstructorAbstractLast : MixedConstructorAbstractLast
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixedConstructorAbstractFirst : MixedConstructorAbstractFirst
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixedConstructorAbstractLast : MixedConstructorAbstractLast
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+mixedConstructorAbstractLast = mixedConstructorAbstractFirst; // should work
+>mixedConstructorAbstractLast = mixedConstructorAbstractFirst : MixedConstructorAbstractFirst
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixedConstructorAbstractLast : MixedConstructorAbstractLast
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixedConstructorAbstractFirst : MixedConstructorAbstractFirst
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+interface MixedConstructorInterface1 extends AbstractConstructor { // should work
+    new (arg: "concrete"): "concrete";
+>arg : "concrete"
+>    : ^^^^^^^^^^
+}
+
+interface MixedConstructorInterface2 extends AbstractConstructor, ConcreteConstructor { // should work
+
+}
+
+declare let mixedConstructorInterface1: MixedConstructorInterface1;
+>mixedConstructorInterface1 : MixedConstructorInterface1
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare let mixedConstructorInterface2: MixedConstructorInterface2;
+>mixedConstructorInterface2 : MixedConstructorInterface2
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+mixedConstructorInterface2 = mixedConstructorInterface1; // should work
+>mixedConstructorInterface2 = mixedConstructorInterface1 : MixedConstructorInterface1
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixedConstructorInterface2 : MixedConstructorInterface2
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixedConstructorInterface1 : MixedConstructorInterface1
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+mixedConstructorInterface1 = mixedConstructorInterface2; // should work
+>mixedConstructorInterface1 = mixedConstructorInterface2 : MixedConstructorInterface2
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixedConstructorInterface1 : MixedConstructorInterface1
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixedConstructorInterface2 : MixedConstructorInterface2
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+mixedConstructorAbstractFirst = mixedConstructorInterface1; // should work
+>mixedConstructorAbstractFirst = mixedConstructorInterface1 : MixedConstructorInterface1
+>                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixedConstructorAbstractFirst : MixedConstructorAbstractFirst
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixedConstructorInterface1 : MixedConstructorInterface1
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+mixedConstructorInterface1 = mixedConstructorAbstractFirst; // should work
+>mixedConstructorInterface1 = mixedConstructorAbstractFirst : MixedConstructorAbstractFirst
+>                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixedConstructorInterface1 : MixedConstructorInterface1
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixedConstructorAbstractFirst : MixedConstructorAbstractFirst
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+mixedConstructorAbstractLast = mixedConstructorInterface1; // should work
+>mixedConstructorAbstractLast = mixedConstructorInterface1 : MixedConstructorInterface1
+>                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixedConstructorAbstractLast : MixedConstructorAbstractLast
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixedConstructorInterface1 : MixedConstructorInterface1
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+mixedConstructorInterface1 = mixedConstructorAbstractLast; // should work
+>mixedConstructorInterface1 = mixedConstructorAbstractLast : MixedConstructorAbstractLast
+>                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixedConstructorInterface1 : MixedConstructorInterface1
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixedConstructorAbstractLast : MixedConstructorAbstractLast
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+mixedConstructorAbstractFirst = mixedConstructorInterface2; // should work
+>mixedConstructorAbstractFirst = mixedConstructorInterface2 : MixedConstructorInterface2
+>                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixedConstructorAbstractFirst : MixedConstructorAbstractFirst
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixedConstructorInterface2 : MixedConstructorInterface2
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+mixedConstructorInterface2 = mixedConstructorAbstractFirst; // should work
+>mixedConstructorInterface2 = mixedConstructorAbstractFirst : MixedConstructorAbstractFirst
+>                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixedConstructorInterface2 : MixedConstructorInterface2
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixedConstructorAbstractFirst : MixedConstructorAbstractFirst
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+mixedConstructorAbstractLast = mixedConstructorInterface2; // should work
+>mixedConstructorAbstractLast = mixedConstructorInterface2 : MixedConstructorInterface2
+>                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixedConstructorAbstractLast : MixedConstructorAbstractLast
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixedConstructorInterface2 : MixedConstructorInterface2
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+mixedConstructorInterface2 = mixedConstructorAbstractLast; // should work
+>mixedConstructorInterface2 = mixedConstructorAbstractLast : MixedConstructorAbstractLast
+>                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixedConstructorInterface2 : MixedConstructorInterface2
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixedConstructorAbstractLast : MixedConstructorAbstractLast
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+

@@ -1,0 +1,52 @@
+abstractConstructorOverloadInstantiation.ts(5,1): error TS2511: Cannot create an instance of an abstract class.
+abstractConstructorOverloadInstantiation.ts(18,1): error TS2511: Cannot create an instance of an abstract class.
+abstractConstructorOverloadInstantiation.ts(32,1): error TS2511: Cannot create an instance of an abstract class.
+abstractConstructorOverloadInstantiation.ts(35,1): error TS2511: Cannot create an instance of an abstract class.
+
+
+==== abstractConstructorOverloadInstantiation.ts (4 errors) ====
+    declare const concreteConstructor: new () => void;
+    declare const abstractConstructor: abstract new () => void;
+    
+    new concreteConstructor(); // should work
+    new abstractConstructor(); // should error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2511: Cannot create an instance of an abstract class.
+    
+    type AmbiguousMixedConstructorAbstractFirst =
+        & (abstract new () => void)
+        & (new () => void);
+    
+    type AmbiguousMixedConstructorConcreteFirst =
+        & (new () => void)
+        & (abstract new () => void);
+    
+    declare const ambiguousMixedConstructorAbstractFirst: AmbiguousMixedConstructorAbstractFirst;
+    declare const ambiguousMixedConstructorConcreteFirst: AmbiguousMixedConstructorConcreteFirst;
+    
+    new ambiguousMixedConstructorAbstractFirst(); // should error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2511: Cannot create an instance of an abstract class.
+    new ambiguousMixedConstructorConcreteFirst(); // should work
+    
+    type DistinctMixedConstructorAbstractFirst =
+        & (abstract new (arg: "abstract") => void)
+        & (new (arg: "concrete") => void);
+    
+    type DistinctMixedConstructorConcreteFirst =
+        & (new (arg: "concrete") => void)
+        & (abstract new (arg: "abstract") => void);
+    
+    declare let distinctMixedConstructorAbstractFirst: DistinctMixedConstructorAbstractFirst;
+    declare let distinctMixedConstructorConcreteFirst: DistinctMixedConstructorConcreteFirst;
+    
+    new distinctMixedConstructorAbstractFirst("abstract"); // should error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2511: Cannot create an instance of an abstract class.
+    new distinctMixedConstructorAbstractFirst("concrete"); // should work
+    
+    new distinctMixedConstructorConcreteFirst("abstract"); // should error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2511: Cannot create an instance of an abstract class.
+    new distinctMixedConstructorConcreteFirst("concrete"); // should work
+    
