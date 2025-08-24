@@ -18386,6 +18386,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function addTypeToIntersection(typeSet: Map<string, Type>, includes: TypeFlags, type: Type) {
+        if (type === silentNeverType) {
+            return includes;
+        }
         const flags = type.flags;
         if (flags & TypeFlags.Intersection) {
             return addTypesToIntersection(typeSet, includes, (type as IntersectionType).types);
