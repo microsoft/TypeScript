@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/partiallyEmittedExpressionLeftHandSide.ts] ////
+
+=== partiallyEmittedExpressionLeftHandSide.ts ===
+async function testNonNullWithAwait() {
+>testNonNullWithAwait : () => Promise<any>
+>                     : ^^^^^^^^^^^^^^^^^^
+
+    const result = (await null as any)!;
+>result : any
+>(await null as any)! : any
+>(await null as any) : any
+>await null as any : any
+>await null : null
+>           : ^^^^
+
+    return result;
+>result : any
+}
+
+async function testNonNullWithComplexExpression() {
+>testNonNullWithComplexExpression : () => Promise<string>
+>                                 : ^^^^^^^^^^^^^^^^^^^^^
+
+    const obj = { prop: Promise.resolve("test") };
+>obj : { prop: Promise<string>; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ prop: Promise.resolve("test") } : { prop: Promise<string>; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>prop : Promise<string>
+>     : ^^^^^^^^^^^^^^^
+>Promise.resolve("test") : Promise<string>
+>                        : ^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>"test" : "test"
+>       : ^^^^^^
+
+    const result = (await obj.prop as string)!;
+>result : string
+>       : ^^^^^^
+>(await obj.prop as string)! : string
+>                            : ^^^^^^
+>(await obj.prop as string) : string
+>                           : ^^^^^^
+>await obj.prop as string : string
+>                         : ^^^^^^
+>await obj.prop : string
+>               : ^^^^^^
+>obj.prop : Promise<string>
+>         : ^^^^^^^^^^^^^^^
+>obj : { prop: Promise<string>; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>prop : Promise<string>
+>     : ^^^^^^^^^^^^^^^
+
+    return result;
+>result : string
+>       : ^^^^^^
+}
