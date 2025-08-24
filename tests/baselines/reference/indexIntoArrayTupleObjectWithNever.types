@@ -1,0 +1,123 @@
+//// [tests/cases/compiler/indexIntoArrayTupleObjectWithNever.ts] ////
+
+=== indexIntoArrayTupleObjectWithNever.ts ===
+type A = { a: 42 }[never]
+>A : never
+>a : 42
+
+type B = [42][never]
+>B : never
+
+type C = Array<42>[never]
+>C : never
+
+type D = 42[never]
+>D : never
+
+type E = any[never] // any
+>E : any
+
+
+// -----------------------------------------------------------------
+
+type Indexes<T extends readonly any[]> = keyof T & `${number}`
+>Indexes : Indexes<T>
+
+declare namespace IfNoDuplicateElements {
+    export type Duplicate = "Duplicate"
+>Duplicate : "Duplicate"
+
+    export type NotDuplicate = "NotDuplicate"
+>NotDuplicate : "NotDuplicate"
+
+    export type HasDuplicates<T extends readonly any[]> = {
+>HasDuplicates : HasDuplicates<T>
+
+         [K in Indexes<T>]: T[K] extends T[Exclude<Indexes<T>, K>] ? Duplicate : NotDuplicate
+    }[Indexes<T>]
+}
+
+export type IfNoDuplicateElements<
+>IfNoDuplicateElements : IfNoDuplicateElements<T, True, False>
+
+    T extends readonly any[],
+    True = T,
+    False = never
+> = IfNoDuplicateElements.Duplicate extends IfNoDuplicateElements.HasDuplicates<T> ? False : True
+>IfNoDuplicateElements : any
+>IfNoDuplicateElements : any
+
+type T0 = IfNoDuplicateElements<[1], true, false>
+>T0 : true
+>true : true
+>false : false
+
+type T1 = IfNoDuplicateElements<[1,1], true, false>
+>T1 : false
+>true : true
+>false : false
+
+// -----------------------------------------------------------------
+
+type T2 = Record<string, boolean>[never]
+>T2 : never
+
+type T3 = Record<`--${string}`, boolean>[never]
+>T3 : never
+
+
+const obj = {
+>obj : { arr: never[]; }
+>{  arr: [],} : { arr: never[]; }
+
+  arr: [],
+>arr : never[]
+>[] : never[]
+
+};
+
+const objWithIndex: Record<string, boolean> = {};
+>objWithIndex : Record<string, boolean>
+>{} : {}
+
+const el = obj.arr[0];
+>el : never
+>obj.arr[0] : never
+>obj.arr : never[]
+>obj : { arr: never[]; }
+>arr : never[]
+>0 : 0
+
+const result = objWithIndex[el];
+>result : never
+>objWithIndex[el] : never
+>objWithIndex : Record<string, boolean>
+>el : never
+
+function testUnreachableNeverType(smt: number | string) {
+>testUnreachableNeverType : (smt: number | string) => void
+>smt : string | number
+
+  if(typeof smt === "number") {}
+>typeof smt === "number" : boolean
+>typeof smt : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>smt : string | number
+>"number" : "number"
+
+  else if(typeof smt === "string") {}
+>typeof smt === "string" : boolean
+>typeof smt : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>smt : string
+>"string" : "string"
+
+  else {
+    const result = objWithIndex[smt]
+>result : never
+>objWithIndex[smt] : never
+>objWithIndex : Record<string, boolean>
+>smt : never
+  }
+}
+
+// -----------------------------------------------------------------
+
