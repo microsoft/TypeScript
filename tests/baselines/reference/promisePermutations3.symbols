@@ -4,24 +4,24 @@
 // same as promisePermutations but without the same overloads in IPromise<T>
 
 interface Promise<T> {
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
->T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 18))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 2, 18))
 
     then<U>(success?: (value: T) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>;
 >then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >U : Symbol(U, Decl(promisePermutations3.ts, 3, 9))
 >success : Symbol(success, Decl(promisePermutations3.ts, 3, 12))
 >value : Symbol(value, Decl(promisePermutations3.ts, 3, 23))
->T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 18))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 2, 18))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 >U : Symbol(U, Decl(promisePermutations3.ts, 3, 9))
 >error : Symbol(error, Decl(promisePermutations3.ts, 3, 47))
 >error : Symbol(error, Decl(promisePermutations3.ts, 3, 57))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 >U : Symbol(U, Decl(promisePermutations3.ts, 3, 9))
 >progress : Symbol(progress, Decl(promisePermutations3.ts, 3, 83))
 >progress : Symbol(progress, Decl(promisePermutations3.ts, 3, 96))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 >U : Symbol(U, Decl(promisePermutations3.ts, 3, 9))
 
     then<U>(success?: (value: T) => Promise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>;
@@ -29,15 +29,15 @@ interface Promise<T> {
 >U : Symbol(U, Decl(promisePermutations3.ts, 4, 9))
 >success : Symbol(success, Decl(promisePermutations3.ts, 4, 12))
 >value : Symbol(value, Decl(promisePermutations3.ts, 4, 23))
->T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 18))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 2, 18))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 >U : Symbol(U, Decl(promisePermutations3.ts, 4, 9))
 >error : Symbol(error, Decl(promisePermutations3.ts, 4, 47))
 >error : Symbol(error, Decl(promisePermutations3.ts, 4, 57))
 >U : Symbol(U, Decl(promisePermutations3.ts, 4, 9))
 >progress : Symbol(progress, Decl(promisePermutations3.ts, 4, 74))
 >progress : Symbol(progress, Decl(promisePermutations3.ts, 4, 87))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 >U : Symbol(U, Decl(promisePermutations3.ts, 4, 9))
 
     then<U>(success?: (value: T) => U, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>;
@@ -45,15 +45,15 @@ interface Promise<T> {
 >U : Symbol(U, Decl(promisePermutations3.ts, 5, 9))
 >success : Symbol(success, Decl(promisePermutations3.ts, 5, 12))
 >value : Symbol(value, Decl(promisePermutations3.ts, 5, 23))
->T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 18))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 2, 18))
 >U : Symbol(U, Decl(promisePermutations3.ts, 5, 9))
 >error : Symbol(error, Decl(promisePermutations3.ts, 5, 38))
 >error : Symbol(error, Decl(promisePermutations3.ts, 5, 48))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 >U : Symbol(U, Decl(promisePermutations3.ts, 5, 9))
 >progress : Symbol(progress, Decl(promisePermutations3.ts, 5, 74))
 >progress : Symbol(progress, Decl(promisePermutations3.ts, 5, 87))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 >U : Symbol(U, Decl(promisePermutations3.ts, 5, 9))
 
     then<U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>;
@@ -61,14 +61,14 @@ interface Promise<T> {
 >U : Symbol(U, Decl(promisePermutations3.ts, 6, 9))
 >success : Symbol(success, Decl(promisePermutations3.ts, 6, 12))
 >value : Symbol(value, Decl(promisePermutations3.ts, 6, 23))
->T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 18))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 2, 18))
 >U : Symbol(U, Decl(promisePermutations3.ts, 6, 9))
 >error : Symbol(error, Decl(promisePermutations3.ts, 6, 38))
 >error : Symbol(error, Decl(promisePermutations3.ts, 6, 48))
 >U : Symbol(U, Decl(promisePermutations3.ts, 6, 9))
 >progress : Symbol(progress, Decl(promisePermutations3.ts, 6, 65))
 >progress : Symbol(progress, Decl(promisePermutations3.ts, 6, 78))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 >U : Symbol(U, Decl(promisePermutations3.ts, 6, 9))
 
     done<U>(success?: (value: T) => any, error?: (error: any) => any, progress?: (progress: any) => void): void;
@@ -76,7 +76,7 @@ interface Promise<T> {
 >U : Symbol(U, Decl(promisePermutations3.ts, 7, 9))
 >success : Symbol(success, Decl(promisePermutations3.ts, 7, 12))
 >value : Symbol(value, Decl(promisePermutations3.ts, 7, 23))
->T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 18))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 2, 18))
 >error : Symbol(error, Decl(promisePermutations3.ts, 7, 40))
 >error : Symbol(error, Decl(promisePermutations3.ts, 7, 50))
 >progress : Symbol(progress, Decl(promisePermutations3.ts, 7, 69))
@@ -120,7 +120,7 @@ declare function testFunction(): IPromise<number>;
 
 declare function testFunctionP(): Promise<number>;
 >testFunctionP : Symbol(testFunctionP, Decl(promisePermutations3.ts, 15, 50))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 declare function testFunction2(): IPromise<{ x: number }>;
 >testFunction2 : Symbol(testFunction2, Decl(promisePermutations3.ts, 16, 50))
@@ -129,7 +129,7 @@ declare function testFunction2(): IPromise<{ x: number }>;
 
 declare function testFunction2P(): Promise<{ x: number }>;
 >testFunction2P : Symbol(testFunction2P, Decl(promisePermutations3.ts, 17, 58))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 >x : Symbol(x, Decl(promisePermutations3.ts, 18, 44))
 
 declare function testFunction3(x: number): IPromise<number>;
@@ -140,7 +140,7 @@ declare function testFunction3(x: number): IPromise<number>;
 declare function testFunction3P(x: number): Promise<number>;
 >testFunction3P : Symbol(testFunction3P, Decl(promisePermutations3.ts, 19, 60))
 >x : Symbol(x, Decl(promisePermutations3.ts, 20, 32))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 declare function testFunction4(x: number, y?: string): IPromise<string>;
 >testFunction4 : Symbol(testFunction4, Decl(promisePermutations3.ts, 20, 60))
@@ -152,7 +152,7 @@ declare function testFunction4P(x: number, y?: string): Promise<string>;
 >testFunction4P : Symbol(testFunction4P, Decl(promisePermutations3.ts, 21, 72))
 >x : Symbol(x, Decl(promisePermutations3.ts, 22, 32))
 >y : Symbol(y, Decl(promisePermutations3.ts, 22, 42))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 declare function testFunction5(x: number, cb: (a: string) => string): IPromise<string>;
 >testFunction5 : Symbol(testFunction5, Decl(promisePermutations3.ts, 22, 72))
@@ -166,7 +166,7 @@ declare function testFunction5P(x: number, cb: (a: string) => string): Promise<s
 >x : Symbol(x, Decl(promisePermutations3.ts, 24, 32))
 >cb : Symbol(cb, Decl(promisePermutations3.ts, 24, 42))
 >a : Symbol(a, Decl(promisePermutations3.ts, 24, 48))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 declare function testFunction6(x: number, cb: <T>(a: T) => T): IPromise<string>;
 >testFunction6 : Symbol(testFunction6, Decl(promisePermutations3.ts, 24, 87))
@@ -186,7 +186,7 @@ declare function testFunction6P(x: number, cb: <T>(a: T) => T): Promise<string>;
 >a : Symbol(a, Decl(promisePermutations3.ts, 26, 51))
 >T : Symbol(T, Decl(promisePermutations3.ts, 26, 48))
 >T : Symbol(T, Decl(promisePermutations3.ts, 26, 48))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 declare function testFunction7(cb: <T>(a: T) => T): IPromise<string>;
 >testFunction7 : Symbol(testFunction7, Decl(promisePermutations3.ts, 26, 80))
@@ -204,7 +204,7 @@ declare function testFunction7P(cb: <T>(a: T) => T): Promise<string>;
 >a : Symbol(a, Decl(promisePermutations3.ts, 28, 40))
 >T : Symbol(T, Decl(promisePermutations3.ts, 28, 37))
 >T : Symbol(T, Decl(promisePermutations3.ts, 28, 37))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 declare function testFunction8<T>(x: T, cb: (a: T) => T): IPromise<T>;
 >testFunction8 : Symbol(testFunction8, Decl(promisePermutations3.ts, 28, 69))
@@ -227,7 +227,7 @@ declare function testFunction8P<T>(x: T, cb: (a: T) => T): Promise<T>;
 >a : Symbol(a, Decl(promisePermutations3.ts, 30, 46))
 >T : Symbol(T, Decl(promisePermutations3.ts, 30, 32))
 >T : Symbol(T, Decl(promisePermutations3.ts, 30, 32))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 >T : Symbol(T, Decl(promisePermutations3.ts, 30, 32))
 
 declare function testFunction9<T>(x: T, cb: <U>(a: U) => U): IPromise<T>;
@@ -253,7 +253,7 @@ declare function testFunction9P<T>(x: T, cb: <U>(a: U) => U): Promise<T>;
 >a : Symbol(a, Decl(promisePermutations3.ts, 32, 49))
 >U : Symbol(U, Decl(promisePermutations3.ts, 32, 46))
 >U : Symbol(U, Decl(promisePermutations3.ts, 32, 46))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 >T : Symbol(T, Decl(promisePermutations3.ts, 32, 32))
 
 declare function testFunction10<T>(cb: <U>(a: U) => U): IPromise<T>;
@@ -275,7 +275,7 @@ declare function testFunction10P<T>(cb: <U>(a: U) => U): Promise<T>;
 >a : Symbol(a, Decl(promisePermutations3.ts, 34, 44))
 >U : Symbol(U, Decl(promisePermutations3.ts, 34, 41))
 >U : Symbol(U, Decl(promisePermutations3.ts, 34, 41))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 >T : Symbol(T, Decl(promisePermutations3.ts, 34, 33))
 
 declare function testFunction11(x: number): IPromise<number>;
@@ -291,12 +291,12 @@ declare function testFunction11(x: string): IPromise<string>;
 declare function testFunction11P(x: number): Promise<number>;
 >testFunction11P : Symbol(testFunction11P, Decl(promisePermutations3.ts, 37, 61), Decl(promisePermutations3.ts, 38, 61))
 >x : Symbol(x, Decl(promisePermutations3.ts, 38, 33))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 declare function testFunction11P(x: string): Promise<string>;
 >testFunction11P : Symbol(testFunction11P, Decl(promisePermutations3.ts, 37, 61), Decl(promisePermutations3.ts, 38, 61))
 >x : Symbol(x, Decl(promisePermutations3.ts, 39, 33))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 declare function testFunction12<T>(x: T): IPromise<T>;
 >testFunction12 : Symbol(testFunction12, Decl(promisePermutations3.ts, 39, 61), Decl(promisePermutations3.ts, 41, 54))
@@ -331,7 +331,7 @@ declare function testFunction12P<T>(x: T, y: T): Promise<T>;
 >T : Symbol(T, Decl(promisePermutations3.ts, 44, 33))
 >y : Symbol(y, Decl(promisePermutations3.ts, 44, 41))
 >T : Symbol(T, Decl(promisePermutations3.ts, 44, 33))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 >T : Symbol(T, Decl(promisePermutations3.ts, 44, 33))
 
 var r1: IPromise<number>;
@@ -372,7 +372,7 @@ var r1c = r1.then(testFunctionP, testFunctionP, testFunctionP);
 
 var s1: Promise<number>;
 >s1 : Symbol(s1, Decl(promisePermutations3.ts, 50, 3))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 var s1a = s1.then(testFunction, testFunction, testFunction);
 >s1a : Symbol(s1a, Decl(promisePermutations3.ts, 51, 3))
@@ -445,7 +445,7 @@ var r2b = r2.then(testFunction2, testFunction2, testFunction2).then(testFunction
 
 var s2: Promise<{ x: number; }>;
 >s2 : Symbol(s2, Decl(promisePermutations3.ts, 59, 3))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 >x : Symbol(x, Decl(promisePermutations3.ts, 59, 17))
 
 var s2a = s2.then(testFunction2, testFunction2, testFunction2);
@@ -518,7 +518,7 @@ var r3b = r3.then(testFunction3, testFunction3, testFunction3).then(testFunction
 
 var s3: Promise<number>;
 >s3 : Symbol(s3, Decl(promisePermutations3.ts, 68, 3))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 var s3a = s3.then(testFunction3, testFunction3, testFunction3);
 >s3a : Symbol(s3a, Decl(promisePermutations3.ts, 69, 3))
@@ -573,7 +573,7 @@ var sIPromise: (x: any) => IPromise<string>;
 var sPromise: (x: any) => Promise<string>;
 >sPromise : Symbol(sPromise, Decl(promisePermutations3.ts, 76, 3))
 >x : Symbol(x, Decl(promisePermutations3.ts, 76, 15))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 var r4a = r4.then(testFunction4, testFunction4, testFunction4); // error
 >r4a : Symbol(r4a, Decl(promisePermutations3.ts, 77, 3))
@@ -600,7 +600,7 @@ var r4b = r4.then(sIPromise, testFunction4, testFunction4).then(sIPromise, testF
 
 var s4: Promise<string>;
 >s4 : Symbol(s4, Decl(promisePermutations3.ts, 79, 3))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 var s4a = s4.then(testFunction4, testFunction4, testFunction4); // error
 >s4a : Symbol(s4a, Decl(promisePermutations3.ts, 80, 3))
@@ -672,7 +672,7 @@ var r5b = r5.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sI
 
 var s5: Promise<string>;
 >s5 : Symbol(s5, Decl(promisePermutations3.ts, 88, 3))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 var s5a = s5.then(testFunction5, testFunction5, testFunction5); // error
 >s5a : Symbol(s5a, Decl(promisePermutations3.ts, 89, 3))
@@ -744,7 +744,7 @@ var r6b = r6.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sI
 
 var s6: Promise<string>;
 >s6 : Symbol(s6, Decl(promisePermutations3.ts, 97, 3))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 var s6a = s6.then(testFunction6, testFunction6, testFunction6); // error
 >s6a : Symbol(s6a, Decl(promisePermutations3.ts, 98, 3))
@@ -816,7 +816,7 @@ var r7b = r7.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sI
 
 var s7: Promise<string>;
 >s7 : Symbol(s7, Decl(promisePermutations3.ts, 106, 3))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 var s7a = r7.then(testFunction7, testFunction7, testFunction7); // error
 >s7a : Symbol(s7a, Decl(promisePermutations3.ts, 107, 3))
@@ -871,7 +871,7 @@ var nIPromise: (x: any) => IPromise<number>;
 var nPromise: (x: any) => Promise<number>;
 >nPromise : Symbol(nPromise, Decl(promisePermutations3.ts, 114, 3))
 >x : Symbol(x, Decl(promisePermutations3.ts, 114, 15))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 var r8a = r8.then(testFunction8, testFunction8, testFunction8); // error
 >r8a : Symbol(r8a, Decl(promisePermutations3.ts, 115, 3))
@@ -898,7 +898,7 @@ var r8b = r8.then(nIPromise, nIPromise, nIPromise).then(nIPromise, nIPromise, nI
 
 var s8: Promise<number>;
 >s8 : Symbol(s8, Decl(promisePermutations3.ts, 117, 3))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 var s8a = s8.then(testFunction8, testFunction8, testFunction8); // error
 >s8a : Symbol(s8a, Decl(promisePermutations3.ts, 118, 3))
@@ -997,7 +997,7 @@ var r9e = r9.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise,
 
 var s9: Promise<number>;
 >s9 : Symbol(s9, Decl(promisePermutations3.ts, 129, 3))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 var s9a = s9.then(testFunction9, testFunction9, testFunction9); // error
 >s9a : Symbol(s9a, Decl(promisePermutations3.ts, 130, 3))
@@ -1212,7 +1212,7 @@ var r11a = r11.then(testFunction11, testFunction11, testFunction11); // ok
 
 var s11: Promise<number>;
 >s11 : Symbol(s11, Decl(promisePermutations3.ts, 155, 3))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 var s11a = s11.then(testFunction11, testFunction11, testFunction11); // ok
 >s11a : Symbol(s11a, Decl(promisePermutations3.ts, 156, 3))

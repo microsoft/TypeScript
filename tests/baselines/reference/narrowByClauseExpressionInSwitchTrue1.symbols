@@ -112,7 +112,7 @@ declare function isSomeType(x: unknown): x is SomeType;
 function processInput(input: string | RegExp | SomeType) {
 >processInput : Symbol(processInput, Decl(narrowByClauseExpressionInSwitchTrue1.ts, 39, 55))
 >input : Symbol(input, Decl(narrowByClauseExpressionInSwitchTrue1.ts, 41, 22))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >SomeType : Symbol(SomeType, Decl(narrowByClauseExpressionInSwitchTrue1.ts, 36, 1))
 
   switch (true) {
@@ -125,7 +125,7 @@ function processInput(input: string | RegExp | SomeType) {
       break;
     case input instanceof RegExp:
 >input : Symbol(input, Decl(narrowByClauseExpressionInSwitchTrue1.ts, 41, 22))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
       input;
 >input : Symbol(input, Decl(narrowByClauseExpressionInSwitchTrue1.ts, 41, 22))

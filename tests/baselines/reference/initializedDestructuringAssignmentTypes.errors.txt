@@ -1,4 +1,4 @@
-initializedDestructuringAssignmentTypes.ts(3,3): error TS2339: Property 'toFixed' does not exist on type 'string'.
+initializedDestructuringAssignmentTypes.ts(3,3): error TS2551: Property 'toFixed' does not exist on type 'string'. Did you mean 'fixed'?
 
 
 ==== initializedDestructuringAssignmentTypes.ts (1 errors) ====
@@ -6,4 +6,5 @@ initializedDestructuringAssignmentTypes.ts(3,3): error TS2339: Property 'toFixed
     
     a.toFixed()
       ~~~~~~~
-!!! error TS2339: Property 'toFixed' does not exist on type 'string'.
+!!! error TS2551: Property 'toFixed' does not exist on type 'string'. Did you mean 'fixed'?
+!!! related TS2728 lib.es2015.core.d.ts:--:--: 'fixed' is declared here.

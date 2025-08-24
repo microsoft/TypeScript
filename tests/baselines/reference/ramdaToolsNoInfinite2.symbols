@@ -15,7 +15,7 @@ declare module "Any/Kind" {
 >A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 4, 21))
 >Extends : Symbol(Extends, Decl(ramdaToolsNoInfinite2.ts, 1, 12))
 >A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 4, 21))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Extends : Symbol(Extends, Decl(ramdaToolsNoInfinite2.ts, 1, 12))
 >A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 4, 21))
 >List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 2, 12))
@@ -35,7 +35,7 @@ declare module "Any/Compute" {
 >Compute : Symbol(Compute, Decl(ramdaToolsNoInfinite2.ts, 6, 30))
 >A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 7, 24))
 >A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 7, 24))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 7, 24))
 
         [K in keyof A]: A[K];
@@ -1763,7 +1763,7 @@ declare module "List/List" {
     export type List<A = any> = ReadonlyArray<A>;
 >List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 516, 28))
 >A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 518, 21))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 518, 21))
 }
 declare module "Function/Function" {

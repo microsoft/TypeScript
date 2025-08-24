@@ -1,4 +1,3 @@
-error TS2318: Cannot find global type 'IterableIterator'.
 classStaticBlock7.ts(3,9): error TS18037: 'await' expression cannot be used inside a class static block.
 classStaticBlock7.ts(4,9): error TS1163: A 'yield' expression is only allowed in a generator body.
 classStaticBlock7.ts(5,9): error TS18041: A 'return' statement cannot be used inside a class static block.
@@ -7,7 +6,6 @@ classStaticBlock7.ts(24,13): error TS1163: A 'yield' expression is only allowed 
 classStaticBlock7.ts(36,13): error TS18041: A 'return' statement cannot be used inside a class static block.
 
 
-!!! error TS2318: Cannot find global type 'IterableIterator'.
 ==== classStaticBlock7.ts (6 errors) ====
     class C {
         static {
