@@ -1,0 +1,68 @@
+//// [tests/cases/compiler/excessPropertyCheckSpreadSameExcessProperty.ts] ////
+
+=== excessPropertyCheckSpreadSameExcessProperty.ts ===
+type MyObj = { foo: number; bar: number };
+>MyObj : Symbol(MyObj, Decl(excessPropertyCheckSpreadSameExcessProperty.ts, 0, 0))
+>foo : Symbol(foo, Decl(excessPropertyCheckSpreadSameExcessProperty.ts, 0, 14))
+>bar : Symbol(bar, Decl(excessPropertyCheckSpreadSameExcessProperty.ts, 0, 27))
+
+const containsExcessProperty = { bar: 2, excessProperty: "A" };
+>containsExcessProperty : Symbol(containsExcessProperty, Decl(excessPropertyCheckSpreadSameExcessProperty.ts, 2, 5))
+>bar : Symbol(bar, Decl(excessPropertyCheckSpreadSameExcessProperty.ts, 2, 32))
+>excessProperty : Symbol(excessProperty, Decl(excessPropertyCheckSpreadSameExcessProperty.ts, 2, 40))
+
+const a1 : MyObj = {
+>a1 : Symbol(a1, Decl(excessPropertyCheckSpreadSameExcessProperty.ts, 4, 5))
+>MyObj : Symbol(MyObj, Decl(excessPropertyCheckSpreadSameExcessProperty.ts, 0, 0))
+
+    foo: 1,
+>foo : Symbol(foo, Decl(excessPropertyCheckSpreadSameExcessProperty.ts, 4, 20))
+
+    bar: 1, 
+>bar : Symbol(bar, Decl(excessPropertyCheckSpreadSameExcessProperty.ts, 5, 11))
+
+    ...containsExcessProperty,
+>containsExcessProperty : Symbol(containsExcessProperty, Decl(excessPropertyCheckSpreadSameExcessProperty.ts, 2, 5))
+
+    ...{ bar: 2, excessProperty: "A" },
+>bar : Symbol(bar, Decl(excessPropertyCheckSpreadSameExcessProperty.ts, 8, 8))
+>excessProperty : Symbol(excessProperty, Decl(excessPropertyCheckSpreadSameExcessProperty.ts, 8, 16))
+
+};
+
+// no EPC errors because the inline excessProperty will be overwritten
+const a2 : MyObj = {
+>a2 : Symbol(a2, Decl(excessPropertyCheckSpreadSameExcessProperty.ts, 12, 5))
+>MyObj : Symbol(MyObj, Decl(excessPropertyCheckSpreadSameExcessProperty.ts, 0, 0))
+
+    foo: 1,
+>foo : Symbol(foo, Decl(excessPropertyCheckSpreadSameExcessProperty.ts, 12, 20))
+
+    ...{ bar: 2, excessProperty: "A" },
+>bar : Symbol(bar, Decl(excessPropertyCheckSpreadSameExcessProperty.ts, 14, 8))
+>excessProperty : Symbol(excessProperty, Decl(excessPropertyCheckSpreadSameExcessProperty.ts, 14, 16))
+
+    ...containsExcessProperty,
+>containsExcessProperty : Symbol(containsExcessProperty, Decl(excessPropertyCheckSpreadSameExcessProperty.ts, 2, 5))
+
+    bar: 1, 
+>bar : Symbol(bar, Decl(excessPropertyCheckSpreadSameExcessProperty.ts, 15, 30))
+
+};
+
+// no EPC errors because the inline excessProperty will be overwritten
+const a3 : MyObj = {
+>a3 : Symbol(a3, Decl(excessPropertyCheckSpreadSameExcessProperty.ts, 20, 5))
+>MyObj : Symbol(MyObj, Decl(excessPropertyCheckSpreadSameExcessProperty.ts, 0, 0))
+
+    foo: 1,
+>foo : Symbol(foo, Decl(excessPropertyCheckSpreadSameExcessProperty.ts, 20, 20))
+
+    ...{ bar: 2, excessProperty: "A" },
+>bar : Symbol(bar, Decl(excessPropertyCheckSpreadSameExcessProperty.ts, 22, 8))
+>excessProperty : Symbol(excessProperty, Decl(excessPropertyCheckSpreadSameExcessProperty.ts, 22, 16))
+
+    ...containsExcessProperty,
+>containsExcessProperty : Symbol(containsExcessProperty, Decl(excessPropertyCheckSpreadSameExcessProperty.ts, 2, 5))
+
+};
