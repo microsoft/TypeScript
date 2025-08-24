@@ -233,10 +233,6 @@ Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typesc
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts', result '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-webworker' was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts'. ========
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/package.json' does not exist.
@@ -300,8 +296,6 @@ Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/project1/typeroot1/s
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts', result '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Type reference directive 'sometype' was successfully resolved to '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts', primary: true. ========
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/typeroot1 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/typeroot1 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-dom' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -484,8 +478,6 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/workspace/projects/package.json: *new*
   {"pollingInterval":2000}
-/home/src/workspace/projects/project1/node_modules: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/workspace/projects/project1/core.d.ts: *new*
@@ -558,23 +550,18 @@ ScriptInfos::
         /home/src/workspace/projects/project1/tsconfig.json
 
 delete redirect file dom
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Scheduled: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/workspace/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Before running Timeout callback:: count: 3
-1: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation
-2: /home/src/workspace/projects/project1/tsconfig.json
-3: *ensureProjectForOpenFiles*
+Before running Timeout callback:: count: 2
+1: /home/src/workspace/projects/project1/tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts] deleted
 
-Timeout callback:: count: 3
-1: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
-2: /home/src/workspace/projects/project1/tsconfig.json *new*
-3: *ensureProjectForOpenFiles* *new*
+Timeout callback:: count: 2
+1: /home/src/workspace/projects/project1/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /home/src/workspace/projects/project1/tsconfig.json (Configured) *changed*
@@ -627,7 +614,6 @@ ScriptInfos::
     containingProjects: 1
         /home/src/workspace/projects/project1/tsconfig.json
 
-Info seq  [hh:mm:ss:mss] Running: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspace/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json' does not exist according to earlier cached lookups.
@@ -654,7 +640,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/workspace/package.json' does not exist 
 Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
@@ -726,6 +712,10 @@ Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skip
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-dom' was not resolved. ========
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.dom.d.ts 500 undefined WatchType: Closed Script info
@@ -817,7 +807,7 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/workspace/projects/package.json:
   {"pollingInterval":2000}
-/home/src/workspace/projects/project1/node_modules:
+/home/src/workspace/projects/project1/node_modules: *new*
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -908,15 +898,15 @@ Info seq  [hh:mm:ss:mss] Scheduled: /home/src/workspace/projects/project1/tsconf
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/workspace/projects/project1/file.ts 1:: WatchInfo: /home/src/workspace/projects/project1/file.ts 500 undefined WatchType: Closed Script info
 Before running Timeout callback:: count: 2
-4: /home/src/workspace/projects/project1/tsconfig.json
-5: *ensureProjectForOpenFiles*
+3: /home/src/workspace/projects/project1/tsconfig.json
+4: *ensureProjectForOpenFiles*
 //// [/home/src/workspace/projects/project1/file.ts]
 export const file = 10;export const xyz = 10;
 
 
 Timeout callback:: count: 2
-4: /home/src/workspace/projects/project1/tsconfig.json *new*
-5: *ensureProjectForOpenFiles* *new*
+3: /home/src/workspace/projects/project1/tsconfig.json *new*
+4: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /home/src/workspace/projects/project1/tsconfig.json (Configured) *changed*
@@ -1112,13 +1102,13 @@ Info seq  [hh:mm:ss:mss] Scheduled: /home/src/workspace/projects/project1/tsconf
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/project1/core.d.ts :: WatchInfo: /home/src/workspace/projects/project1 1 undefined Config: /home/src/workspace/projects/project1/tsconfig.json WatchType: Wild card directory
 Before running Timeout callback:: count: 2
-8: /home/src/workspace/projects/project1/tsconfig.json
-9: *ensureProjectForOpenFiles*
+7: /home/src/workspace/projects/project1/tsconfig.json
+8: *ensureProjectForOpenFiles*
 //// [/home/src/workspace/projects/project1/core.d.ts] deleted
 
 Timeout callback:: count: 2
-8: /home/src/workspace/projects/project1/tsconfig.json *new*
-9: *ensureProjectForOpenFiles* *new*
+7: /home/src/workspace/projects/project1/tsconfig.json *new*
+8: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /home/src/workspace/projects/project1/tsconfig.json (Configured) *changed*
@@ -1280,19 +1270,19 @@ Projects::
     dirty: false *changed*
 
 write redirect file dom
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Before running Timeout callback:: count: 1
-10: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation
+9: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation
 //// [/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts]
 interface DOMInterface { }
 
 
 Timeout callback:: count: 1
-10: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
+9: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
 
 ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts
@@ -1348,8 +1338,8 @@ Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
 
 Timeout callback:: count: 2
-11: /home/src/workspace/projects/project1/tsconfig.json *new*
-12: *ensureProjectForOpenFiles* *new*
+10: /home/src/workspace/projects/project1/tsconfig.json *new*
+11: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /home/src/workspace/projects/project1/tsconfig.json (Configured) *changed*
@@ -1358,8 +1348,8 @@ Projects::
     dirty: true *changed*
 
 Before running Timeout callback:: count: 2
-11: /home/src/workspace/projects/project1/tsconfig.json
-12: *ensureProjectForOpenFiles*
+10: /home/src/workspace/projects/project1/tsconfig.json
+11: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspace/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json
@@ -1439,6 +1429,10 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json 2000 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/projects/project1/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/projects/project1/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 5 projectProgramVersion: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
@@ -1525,11 +1519,11 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/workspace/projects/package.json:
   {"pollingInterval":2000}
-/home/src/workspace/projects/project1/node_modules:
-  {"pollingInterval":500}
 
 PolledWatches *deleted*::
 /home/src/workspace/node_modules:
+  {"pollingInterval":500}
+/home/src/workspace/projects/project1/node_modules:
   {"pollingInterval":500}
 
 FsWatches::
@@ -1617,8 +1611,8 @@ Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspace/pr
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/workspace/projects/project1/tsconfig.json 1:: WatchInfo: /home/src/workspace/projects/project1/tsconfig.json 2000 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Config file
 Before running Timeout callback:: count: 2
-13: /home/src/workspace/projects/project1/tsconfig.json
-14: *ensureProjectForOpenFiles*
+12: /home/src/workspace/projects/project1/tsconfig.json
+13: *ensureProjectForOpenFiles*
 //// [/home/src/workspace/projects/project1/tsconfig.json]
 {
   "compilerOptions": {
@@ -1638,8 +1632,8 @@ Before running Timeout callback:: count: 2
 
 
 Timeout callback:: count: 2
-13: /home/src/workspace/projects/project1/tsconfig.json *new*
-14: *ensureProjectForOpenFiles* *new*
+12: /home/src/workspace/projects/project1/tsconfig.json *new*
+13: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /home/src/workspace/projects/project1/tsconfig.json (Configured) *changed*
@@ -1810,8 +1804,6 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/workspace/projects/package.json:
   {"pollingInterval":2000}
-/home/src/workspace/projects/project1/node_modules:
-  {"pollingInterval":500}
 /home/src/workspace/projects/project1/typeroot2: *new*
   {"pollingInterval":500}
 
@@ -1855,17 +1847,13 @@ Info seq  [hh:mm:ss:mss] Scheduled: /home/src/workspace/projects/project1/tsconf
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspace/projects/project1/index.ts ProjectRootPath: undefined:: Result: /home/src/workspace/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/workspace/projects/project1/tsconfig.json 1:: WatchInfo: /home/src/workspace/projects/project1/tsconfig.json 2000 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Scheduled: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/workspace/projects/project1/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Before running Timeout callback:: count: 3
-17: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation
-18: /home/src/workspace/projects/project1/tsconfig.json
-19: *ensureProjectForOpenFiles*
+Before running Timeout callback:: count: 2
+16: /home/src/workspace/projects/project1/tsconfig.json
+17: *ensureProjectForOpenFiles*
 //// [/home/src/workspace/projects/project1/tsconfig.json]
 {
   "compilerOptions": {
@@ -1884,10 +1872,9 @@ Before running Timeout callback:: count: 3
 
 //// [/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts] deleted
 
-Timeout callback:: count: 3
-17: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
-18: /home/src/workspace/projects/project1/tsconfig.json *new*
-19: *ensureProjectForOpenFiles* *new*
+Timeout callback:: count: 2
+16: /home/src/workspace/projects/project1/tsconfig.json *new*
+17: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /home/src/workspace/projects/project1/tsconfig.json (Configured) *changed*
@@ -1943,7 +1930,6 @@ ScriptInfos::
     containingProjects: 1
         /home/src/workspace/projects/project1/tsconfig.json
 
-Info seq  [hh:mm:ss:mss] Running: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspace/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -2018,7 +2004,7 @@ Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom' from 'node_modules
 Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom'
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.tsx' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.d.ts' does not exist.
@@ -2048,6 +2034,10 @@ Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skip
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-dom' was not resolved. ========
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json 2000 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: File location affecting resolution
@@ -2158,7 +2148,7 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/workspace/projects/package.json:
   {"pollingInterval":2000}
-/home/src/workspace/projects/project1/node_modules:
+/home/src/workspace/projects/project1/node_modules: *new*
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -2250,23 +2240,23 @@ Before running Timeout callback:: count: 0
 After running Timeout callback:: count: 0
 
 delete redirect file webworker
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Scheduled: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/workspace/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Scheduled: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Before running Timeout callback:: count: 3
+18: /home/src/workspace/projects/project1/tsconfig.json
+19: *ensureProjectForOpenFiles*
 20: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation
-21: /home/src/workspace/projects/project1/tsconfig.json
-22: *ensureProjectForOpenFiles*
 //// [/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts] deleted
 
 Timeout callback:: count: 3
+18: /home/src/workspace/projects/project1/tsconfig.json *new*
+19: *ensureProjectForOpenFiles* *new*
 20: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
-21: /home/src/workspace/projects/project1/tsconfig.json *new*
-22: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /home/src/workspace/projects/project1/tsconfig.json (Configured) *changed*
@@ -2324,7 +2314,6 @@ ScriptInfos::
     containingProjects: 1
         /home/src/workspace/projects/project1/tsconfig.json
 
-Info seq  [hh:mm:ss:mss] Running: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspace/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json' does not exist.
@@ -2508,6 +2497,9 @@ FsWatchesRecursive::
 /home/src/workspace/projects/project1/typeroot1:
   {}
 
+Timeout callback:: count: 0
+20: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation *deleted*
+
 Projects::
 /home/src/workspace/projects/project1/tsconfig.json (Configured) *changed*
     projectStateVersion: 8
@@ -2568,19 +2560,19 @@ ScriptInfos::
         /home/src/workspace/projects/project1/tsconfig.json
 
 write redirect file webworker
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Before running Timeout callback:: count: 1
-23: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation
+21: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation
 //// [/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts]
 interface WebWorkerInterface { }
 
 
 Timeout callback:: count: 1
-23: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
+21: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
 
 ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts
@@ -2641,8 +2633,8 @@ Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
 
 Timeout callback:: count: 2
-24: /home/src/workspace/projects/project1/tsconfig.json *new*
-25: *ensureProjectForOpenFiles* *new*
+22: /home/src/workspace/projects/project1/tsconfig.json *new*
+23: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /home/src/workspace/projects/project1/tsconfig.json (Configured) *changed*
@@ -2651,8 +2643,8 @@ Projects::
     dirty: true *changed*
 
 Before running Timeout callback:: count: 2
-24: /home/src/workspace/projects/project1/tsconfig.json
-25: *ensureProjectForOpenFiles*
+22: /home/src/workspace/projects/project1/tsconfig.json
+23: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspace/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json

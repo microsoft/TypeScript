@@ -157,11 +157,7 @@ export {};
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/A/node_modules: *new*
-  {"pollingInterval":500}
 /user/username/projects/myproject/packages/A/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules/@types: *new*
   {"pollingInterval":500}
@@ -175,8 +171,6 @@ FsWatches::
   {}
 /user/username/projects/myproject/packages/A/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/packages/B/package.json: *new*
-  {}
 /user/username/projects/myproject/packages/B/src/bar/foo.ts: *new*
   {}
 /user/username/projects/myproject/packages/B/src/foo.ts: *new*
@@ -185,8 +179,6 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@issue/b: *new*
-  {}
 /user/username/projects/myproject/packages/A/src: *new*
   {}
 /user/username/projects/myproject/packages/B/src: *new*
