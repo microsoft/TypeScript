@@ -285,6 +285,37 @@ Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typesc
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts', result '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
+Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-es2015' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.es2015.d.ts__.ts'. ========
+Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
+Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-es2015' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-es2015'
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-es2015.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-es2015.tsx' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-es2015.d.ts' does not exist.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/projects/node_modules/@types' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-es2015'
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-es2015'
+Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-es2015'
+Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-es2015'
+Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-es2015'
+Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-es2015' from 'node_modules' folder, target file types: JavaScript.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-es2015.js' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-es2015.jsx' does not exist.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-es2015' was not resolved. ========
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -293,6 +324,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/workspace/package.json' does not exist 
 Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2015.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] ======== Resolving type reference directive 'sometype', containing file '/home/src/workspace/projects/project1/__inferred type names__.ts', root directory '/home/src/workspace/projects/project1/typeroot1'. ========
 Info seq  [hh:mm:ss:mss] Resolving with primary search path '/home/src/workspace/projects/project1/typeroot1'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/project1/typeroot1/sometype.d.ts' does not exist.
@@ -317,6 +349,37 @@ Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typesc
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts', result '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-dom' was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts'. ========
+Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-dom/iterable' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.dom.iterable.d.ts__.ts'. ========
+Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
+Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom/iterable' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.tsx' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.d.ts' does not exist.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/projects/node_modules/@types' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom/iterable' from 'node_modules' folder, target file types: JavaScript.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.js' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.jsx' does not exist.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-dom/iterable' was not resolved. ========
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -325,6 +388,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/workspace/package.json' does not exist 
 Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json 2000 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/package.json 2000 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/package.json 2000 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: File location affecting resolution
@@ -337,7 +401,9 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspa
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/typeroot1 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (10)
+Info seq  [hh:mm:ss:mss] 	Files (12)
+	/home/src/tslibs/TS/Lib/lib.es2015.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts Text-1 "interface WebWorkerInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts Text-1 "interface ScriptHostInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
@@ -350,6 +416,11 @@ Info seq  [hh:mm:ss:mss] 	Files (10)
 	/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts Text-1 "export type TheNum = \"type1\";"
 
 
+	../../../tslibs/TS/Lib/lib.es2015.d.ts
+	  Library referenced via 'es5' from file 'file2.ts'
+	  Library 'lib.es5.d.ts' specified in compilerOptions
+	../../../tslibs/TS/Lib/lib.dom.iterable.d.ts
+	  Library 'lib.dom.d.ts' specified in compilerOptions
 	../node_modules/@typescript/lib-webworker/index.d.ts
 	  Library referenced via 'webworker' from file 'file2.ts'
 	../node_modules/@typescript/lib-scripthost/index.d.ts
@@ -401,8 +472,8 @@ Info seq  [hh:mm:ss:mss] event:
             "tsSize": 142,
             "tsx": 0,
             "tsxSize": 0,
-            "dts": 7,
-            "dtsSize": 576,
+            "dts": 9,
+            "dtsSize": 1402,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -448,7 +519,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspace/projects/project1/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (10)
+Info seq  [hh:mm:ss:mss] 	Files (12)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -466,8 +537,14 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+//// [/home/src/tslibs/TS/Lib/lib.es2015.d.ts] *Lib*
+
+//// [/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts] *Lib*
+
 
 PolledWatches::
+/home/src/workspace/node_modules: *new*
+  {"pollingInterval":500}
 /home/src/workspace/package.json: *new*
   {"pollingInterval":2000}
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json: *new*
@@ -488,6 +565,10 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts: *new*
+  {}
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts: *new*
+  {}
 /home/src/workspace/projects/project1/core.d.ts: *new*
   {}
 /home/src/workspace/projects/project1/file.ts: *new*
@@ -516,6 +597,14 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -584,6 +673,14 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts *changed*
     version: Text-1
     pendingReloadFromDisk: true *changed*
@@ -628,304 +725,40 @@ ScriptInfos::
         /home/src/workspace/projects/project1/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation
-Info seq  [hh:mm:ss:mss] Running: /home/src/workspace/projects/project1/tsconfig.json
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-webworker' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es5' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'sometype' from '/home/src/workspace/projects/project1/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts'.
-Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-dom' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
-Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
-Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom'
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.d.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts' does not exist.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/projects/node_modules/@types' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom'
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom'
-Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom'
-Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom'
-Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom'
-Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: JavaScript.
-Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.js' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.jsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.js' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.jsx' does not exist.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-dom' was not resolved. ========
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.dom.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json 2000 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (10)
-	/home/src/tslibs/TS/Lib/lib.dom.d.ts Text-1 "interface DOMInterface { }"
-	/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts Text-1 "interface WebWorkerInterface { }"
-	/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts Text-1 "interface ScriptHostInterface { }"
-	/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
-	/home/src/workspace/projects/project1/core.d.ts Text-1 "export const core = 10;"
-	/home/src/workspace/projects/project1/file.ts Text-1 "export const file = 10;"
-	/home/src/workspace/projects/project1/file2.ts Text-1 "/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n"
-	/home/src/workspace/projects/project1/index.ts SVC-1-0 "export const x = \"type1\";"
-	/home/src/workspace/projects/project1/utils.d.ts Text-1 "export const y = 10;"
-	/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts Text-1 "export type TheNum = \"type1\";"
+Info seq  [hh:mm:ss:mss] Scheduled: /home/src/workspace/projects/project1/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+After running Timeout callback:: count: 2
 
-
-	../../../tslibs/TS/Lib/lib.dom.d.ts
-	  Library 'lib.dom.d.ts' specified in compilerOptions
-	../node_modules/@typescript/lib-webworker/index.d.ts
-	  Library referenced via 'webworker' from file 'file2.ts'
-	../node_modules/@typescript/lib-scripthost/index.d.ts
-	  Library referenced via 'scripthost' from file 'file2.ts'
-	../node_modules/@typescript/lib-es5/index.d.ts
-	  Library referenced via 'es5' from file 'file2.ts'
-	  Library 'lib.es5.d.ts' specified in compilerOptions
-	core.d.ts
-	  Matched by default include pattern '**/*'
-	file.ts
-	  Matched by default include pattern '**/*'
-	file2.ts
-	  Matched by default include pattern '**/*'
-	index.ts
-	  Matched by default include pattern '**/*'
-	utils.d.ts
-	  Matched by default include pattern '**/*'
-	typeroot1/sometype/index.d.ts
-	  Matched by default include pattern '**/*'
-	  Entry point for implicit type library 'sometype'
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
-Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
-Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (10)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspace/projects/project1/index.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspace/projects/project1/tsconfig.json
-Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
-Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (10)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspace/projects/project1/index.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspace/projects/project1/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background /home/src/workspace/projects/project1/index.ts
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectsUpdatedInBackground",
-      "body": {
-        "openFiles": [
-          "/home/src/workspace/projects/project1/index.ts"
-        ]
-      }
-    }
-After running Timeout callback:: count: 0
-
-PolledWatches::
-/home/src/workspace/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/workspace/package.json:
-  {"pollingInterval":2000}
-/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json:
-  {"pollingInterval":2000}
-/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/package.json:
-  {"pollingInterval":2000}
-/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json:
-  {"pollingInterval":2000}
-/home/src/workspace/projects/node_modules/@typescript/package.json:
-  {"pollingInterval":2000}
-/home/src/workspace/projects/node_modules/package.json:
-  {"pollingInterval":2000}
-/home/src/workspace/projects/package.json:
-  {"pollingInterval":2000}
-/home/src/workspace/projects/project1/node_modules:
-  {"pollingInterval":500}
-
-PolledWatches *deleted*::
-/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json:
-  {"pollingInterval":2000}
-
-FsWatches::
-/home/src/tslibs/TS/Lib/lib.dom.d.ts: *new*
-  {}
-/home/src/workspace/projects/project1/core.d.ts:
-  {}
-/home/src/workspace/projects/project1/file.ts:
-  {}
-/home/src/workspace/projects/project1/file2.ts:
-  {}
-/home/src/workspace/projects/project1/tsconfig.json:
-  {}
-/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts:
-  {}
-/home/src/workspace/projects/project1/utils.d.ts:
-  {}
-
-FsWatchesRecursive::
-/home/src/workspace/projects/node_modules:
-  {}
-/home/src/workspace/projects/project1:
-  {}
-/home/src/workspace/projects/project1/typeroot1:
-  {}
-
-Projects::
-/home/src/workspace/projects/project1/tsconfig.json (Configured) *changed*
-    projectStateVersion: 2
-    projectProgramVersion: 2 *changed*
-    dirty: false *changed*
-    autoImportProviderHost: undefined *changed*
-
-ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.dom.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /home/src/workspace/projects/project1/tsconfig.json
-/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts
-    version: Text-1
-    pendingReloadFromDisk: true
-    deferredDelete: true
-    containingProjects: 0
-/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/workspace/projects/project1/tsconfig.json
-/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/workspace/projects/project1/tsconfig.json
-/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/workspace/projects/project1/tsconfig.json
-/home/src/workspace/projects/project1/core.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/workspace/projects/project1/tsconfig.json
-/home/src/workspace/projects/project1/file.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/workspace/projects/project1/tsconfig.json
-/home/src/workspace/projects/project1/file2.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/workspace/projects/project1/tsconfig.json
-/home/src/workspace/projects/project1/index.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /home/src/workspace/projects/project1/tsconfig.json *default*
-/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/workspace/projects/project1/tsconfig.json
-/home/src/workspace/projects/project1/utils.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/workspace/projects/project1/tsconfig.json
+Timeout callback:: count: 2
+2: /home/src/workspace/projects/project1/tsconfig.json *deleted*
+3: *ensureProjectForOpenFiles* *deleted*
+4: /home/src/workspace/projects/project1/tsconfig.json *new*
+5: *ensureProjectForOpenFiles* *new*
 
 edit file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/workspace/projects/project1/file.ts 1:: WatchInfo: /home/src/workspace/projects/project1/file.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Scheduled: /home/src/workspace/projects/project1/tsconfig.json
-Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Scheduled: /home/src/workspace/projects/project1/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/workspace/projects/project1/file.ts 1:: WatchInfo: /home/src/workspace/projects/project1/file.ts 500 undefined WatchType: Closed Script info
 Before running Timeout callback:: count: 2
-4: /home/src/workspace/projects/project1/tsconfig.json
-5: *ensureProjectForOpenFiles*
+6: /home/src/workspace/projects/project1/tsconfig.json
+7: *ensureProjectForOpenFiles*
 //// [/home/src/workspace/projects/project1/file.ts]
 export const file = 10;export const xyz = 10;
 
 
 Timeout callback:: count: 2
-4: /home/src/workspace/projects/project1/tsconfig.json *new*
-5: *ensureProjectForOpenFiles* *new*
-
-Projects::
-/home/src/workspace/projects/project1/tsconfig.json (Configured) *changed*
-    projectStateVersion: 3 *changed*
-    projectProgramVersion: 2
-    dirty: true *changed*
+4: /home/src/workspace/projects/project1/tsconfig.json *deleted*
+5: *ensureProjectForOpenFiles* *deleted*
+6: /home/src/workspace/projects/project1/tsconfig.json *new*
+7: *ensureProjectForOpenFiles* *new*
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.dom.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/workspace/projects/project1/tsconfig.json
@@ -998,14 +831,118 @@ Info seq  [hh:mm:ss:mss] File '/home/src/workspace/package.json' does not exist 
 Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-webworker' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts'.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts'.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es5' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'.
-Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-dom' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was not resolved.
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es2015' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.es2015.d.ts__.ts' of old program, it was not resolved.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'sometype' from '/home/src/workspace/projects/project1/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts'.
+Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-dom' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
+Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
+Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom'
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.tsx' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.d.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.tsx' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts' does not exist.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/projects/node_modules/@types' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom'
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom'
+Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom'
+Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom'
+Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom'
+Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: JavaScript.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.js' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.jsx' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.js' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.jsx' does not exist.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-dom' was not resolved. ========
+Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-dom/iterable' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.dom.iterable.d.ts__.ts'. ========
+Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
+Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom/iterable' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.tsx' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.d.ts' does not exist.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/projects/node_modules/@types' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom/iterable' from 'node_modules' folder, target file types: JavaScript.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.js' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.jsx' does not exist.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-dom/iterable' was not resolved. ========
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.dom.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json 2000 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (10)
+Info seq  [hh:mm:ss:mss] 	Files (12)
+	/home/src/tslibs/TS/Lib/lib.es2015.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/tslibs/TS/Lib/lib.dom.d.ts Text-1 "interface DOMInterface { }"
+	/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts Text-1 "interface WebWorkerInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts Text-1 "interface ScriptHostInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
@@ -1016,11 +953,40 @@ Info seq  [hh:mm:ss:mss] 	Files (10)
 	/home/src/workspace/projects/project1/utils.d.ts Text-1 "export const y = 10;"
 	/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts Text-1 "export type TheNum = \"type1\";"
 
+
+	../../../tslibs/TS/Lib/lib.es2015.d.ts
+	  Library referenced via 'es5' from file 'file2.ts'
+	  Library 'lib.es5.d.ts' specified in compilerOptions
+	../../../tslibs/TS/Lib/lib.dom.d.ts
+	  Library 'lib.dom.d.ts' specified in compilerOptions
+	../../../tslibs/TS/Lib/lib.dom.iterable.d.ts
+	  Library 'lib.dom.d.ts' specified in compilerOptions
+	../node_modules/@typescript/lib-webworker/index.d.ts
+	  Library referenced via 'webworker' from file 'file2.ts'
+	../node_modules/@typescript/lib-scripthost/index.d.ts
+	  Library referenced via 'scripthost' from file 'file2.ts'
+	../node_modules/@typescript/lib-es5/index.d.ts
+	  Library referenced via 'es5' from file 'file2.ts'
+	  Library 'lib.es5.d.ts' specified in compilerOptions
+	core.d.ts
+	  Matched by default include pattern '**/*'
+	file.ts
+	  Matched by default include pattern '**/*'
+	file2.ts
+	  Matched by default include pattern '**/*'
+	index.ts
+	  Matched by default include pattern '**/*'
+	utils.d.ts
+	  Matched by default include pattern '**/*'
+	typeroot1/sometype/index.d.ts
+	  Matched by default include pattern '**/*'
+	  Entry point for implicit type library 'sometype'
+
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (10)
+Info seq  [hh:mm:ss:mss] 	Files (12)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -1028,7 +994,7 @@ Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspace/projects/project1/index.
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspace/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (10)
+Info seq  [hh:mm:ss:mss] 	Files (12)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -1048,14 +1014,75 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+PolledWatches::
+/home/src/workspace/node_modules:
+  {"pollingInterval":500}
+/home/src/workspace/package.json:
+  {"pollingInterval":2000}
+/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json:
+  {"pollingInterval":2000}
+/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/package.json:
+  {"pollingInterval":2000}
+/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json:
+  {"pollingInterval":2000}
+/home/src/workspace/projects/node_modules/@typescript/package.json:
+  {"pollingInterval":2000}
+/home/src/workspace/projects/node_modules/package.json:
+  {"pollingInterval":2000}
+/home/src/workspace/projects/package.json:
+  {"pollingInterval":2000}
+/home/src/workspace/projects/project1/node_modules:
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.dom.d.ts: *new*
+  {}
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts:
+  {}
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts:
+  {}
+/home/src/workspace/projects/project1/core.d.ts:
+  {}
+/home/src/workspace/projects/project1/file.ts:
+  {}
+/home/src/workspace/projects/project1/file2.ts:
+  {}
+/home/src/workspace/projects/project1/tsconfig.json:
+  {}
+/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts:
+  {}
+/home/src/workspace/projects/project1/utils.d.ts:
+  {}
+
+FsWatchesRecursive::
+/home/src/workspace/projects/node_modules:
+  {}
+/home/src/workspace/projects/project1:
+  {}
+/home/src/workspace/projects/project1/typeroot1:
+  {}
+
 Projects::
 /home/src/workspace/projects/project1/tsconfig.json (Configured) *changed*
-    projectStateVersion: 3
-    projectProgramVersion: 2
+    projectStateVersion: 2
+    projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.dom.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/workspace/projects/project1/tsconfig.json
@@ -1112,22 +1139,30 @@ Info seq  [hh:mm:ss:mss] Scheduled: /home/src/workspace/projects/project1/tsconf
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/project1/core.d.ts :: WatchInfo: /home/src/workspace/projects/project1 1 undefined Config: /home/src/workspace/projects/project1/tsconfig.json WatchType: Wild card directory
 Before running Timeout callback:: count: 2
-8: /home/src/workspace/projects/project1/tsconfig.json
-9: *ensureProjectForOpenFiles*
+10: /home/src/workspace/projects/project1/tsconfig.json
+11: *ensureProjectForOpenFiles*
 //// [/home/src/workspace/projects/project1/core.d.ts] deleted
 
 Timeout callback:: count: 2
-8: /home/src/workspace/projects/project1/tsconfig.json *new*
-9: *ensureProjectForOpenFiles* *new*
+10: /home/src/workspace/projects/project1/tsconfig.json *new*
+11: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /home/src/workspace/projects/project1/tsconfig.json (Configured) *changed*
-    projectStateVersion: 4 *changed*
+    projectStateVersion: 3 *changed*
     projectProgramVersion: 2
     dirty: true *changed*
 
 ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/workspace/projects/project1/tsconfig.json
@@ -1196,6 +1231,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es5' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'.
+Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es2015' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.es2015.d.ts__.ts' of old program, it was not resolved.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -1206,10 +1242,13 @@ Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to e
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'sometype' from '/home/src/workspace/projects/project1/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-dom' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was not resolved.
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 4 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-dom/iterable' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.dom.iterable.d.ts__.ts' of old program, it was not resolved.
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
+	/home/src/tslibs/TS/Lib/lib.es2015.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/tslibs/TS/Lib/lib.dom.d.ts Text-1 "interface DOMInterface { }"
+	/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts Text-1 "interface WebWorkerInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts Text-1 "interface ScriptHostInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
@@ -1220,7 +1259,12 @@ Info seq  [hh:mm:ss:mss] 	Files (9)
 	/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts Text-1 "export type TheNum = \"type1\";"
 
 
+	../../../tslibs/TS/Lib/lib.es2015.d.ts
+	  Library referenced via 'es5' from file 'file2.ts'
+	  Library 'lib.es5.d.ts' specified in compilerOptions
 	../../../tslibs/TS/Lib/lib.dom.d.ts
+	  Library 'lib.dom.d.ts' specified in compilerOptions
+	../../../tslibs/TS/Lib/lib.dom.iterable.d.ts
 	  Library 'lib.dom.d.ts' specified in compilerOptions
 	../node_modules/@typescript/lib-webworker/index.d.ts
 	  Library referenced via 'webworker' from file 'file2.ts'
@@ -1245,7 +1289,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -1253,7 +1297,7 @@ Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspace/projects/project1/index.
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspace/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -1275,7 +1319,7 @@ After running Timeout callback:: count: 0
 
 Projects::
 /home/src/workspace/projects/project1/tsconfig.json (Configured) *changed*
-    projectStateVersion: 4
+    projectStateVersion: 3
     projectProgramVersion: 3 *changed*
     dirty: false *changed*
 
@@ -1286,16 +1330,24 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/s
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Before running Timeout callback:: count: 1
-10: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation
+12: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation
 //// [/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts]
 interface DOMInterface { }
 
 
 Timeout callback:: count: 1
-10: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
+12: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
 
 ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/workspace/projects/project1/tsconfig.json
@@ -1348,18 +1400,18 @@ Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
 
 Timeout callback:: count: 2
-11: /home/src/workspace/projects/project1/tsconfig.json *new*
-12: *ensureProjectForOpenFiles* *new*
+13: /home/src/workspace/projects/project1/tsconfig.json *new*
+14: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /home/src/workspace/projects/project1/tsconfig.json (Configured) *changed*
-    projectStateVersion: 5 *changed*
+    projectStateVersion: 4 *changed*
     projectProgramVersion: 3
     dirty: true *changed*
 
 Before running Timeout callback:: count: 2
-11: /home/src/workspace/projects/project1/tsconfig.json
-12: *ensureProjectForOpenFiles*
+13: /home/src/workspace/projects/project1/tsconfig.json
+14: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspace/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json
@@ -1390,6 +1442,7 @@ Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlie
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-webworker' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es5' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'.
+Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es2015' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.es2015.d.ts__.ts' of old program, it was not resolved.
 Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-dom' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -1430,6 +1483,37 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'sometype' from '/home/src/workspace/projects/project1/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts'.
+Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-dom/iterable' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.dom.iterable.d.ts__.ts'. ========
+Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
+Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom/iterable' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.tsx' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.d.ts' does not exist.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/projects/node_modules/@types' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom/iterable' from 'node_modules' folder, target file types: JavaScript.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.js' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.jsx' does not exist.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-dom/iterable' was not resolved. ========
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -1439,11 +1523,11 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json 2000 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 5 projectProgramVersion: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 4 projectProgramVersion: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
+	/home/src/tslibs/TS/Lib/lib.es2015.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts Text-1 "interface WebWorkerInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts Text-1 "interface ScriptHostInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
@@ -1455,6 +1539,11 @@ Info seq  [hh:mm:ss:mss] 	Files (9)
 	/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts Text-1 "export type TheNum = \"type1\";"
 
 
+	../../../tslibs/TS/Lib/lib.es2015.d.ts
+	  Library referenced via 'es5' from file 'file2.ts'
+	  Library 'lib.es5.d.ts' specified in compilerOptions
+	../../../tslibs/TS/Lib/lib.dom.iterable.d.ts
+	  Library 'lib.dom.d.ts' specified in compilerOptions
 	../node_modules/@typescript/lib-webworker/index.d.ts
 	  Library referenced via 'webworker' from file 'file2.ts'
 	../node_modules/@typescript/lib-scripthost/index.d.ts
@@ -1480,7 +1569,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -1488,7 +1577,7 @@ Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspace/projects/project1/index.
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspace/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -1509,6 +1598,8 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 PolledWatches::
+/home/src/workspace/node_modules:
+  {"pollingInterval":500}
 /home/src/workspace/package.json:
   {"pollingInterval":2000}
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json: *new*
@@ -1528,12 +1619,12 @@ PolledWatches::
 /home/src/workspace/projects/project1/node_modules:
   {"pollingInterval":500}
 
-PolledWatches *deleted*::
-/home/src/workspace/node_modules:
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts:
+  {}
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts:
+  {}
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts:
   {}
 /home/src/workspace/projects/project1/core.d.ts:
   {}
@@ -1558,7 +1649,7 @@ FsWatchesRecursive::
 
 Projects::
 /home/src/workspace/projects/project1/tsconfig.json (Configured) *changed*
-    projectStateVersion: 5
+    projectStateVersion: 4
     projectProgramVersion: 4 *changed*
     dirty: false *changed*
 
@@ -1567,6 +1658,14 @@ ScriptInfos::
     version: Text-1
     containingProjects: 0 *changed*
         /home/src/workspace/projects/project1/tsconfig.json *deleted*
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts *changed*
     version: Text-1
     pendingReloadFromDisk: false *changed*
@@ -1617,8 +1716,8 @@ Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspace/pr
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/workspace/projects/project1/tsconfig.json 1:: WatchInfo: /home/src/workspace/projects/project1/tsconfig.json 2000 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Config file
 Before running Timeout callback:: count: 2
-13: /home/src/workspace/projects/project1/tsconfig.json
-14: *ensureProjectForOpenFiles*
+15: /home/src/workspace/projects/project1/tsconfig.json
+16: *ensureProjectForOpenFiles*
 //// [/home/src/workspace/projects/project1/tsconfig.json]
 {
   "compilerOptions": {
@@ -1638,12 +1737,12 @@ Before running Timeout callback:: count: 2
 
 
 Timeout callback:: count: 2
-13: /home/src/workspace/projects/project1/tsconfig.json *new*
-14: *ensureProjectForOpenFiles* *new*
+15: /home/src/workspace/projects/project1/tsconfig.json *new*
+16: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /home/src/workspace/projects/project1/tsconfig.json (Configured) *changed*
-    projectStateVersion: 6 *changed*
+    projectStateVersion: 5 *changed*
     projectProgramVersion: 4
     dirty: true *changed*
 
@@ -1701,6 +1800,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es5' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'.
+Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es2015' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.es2015.d.ts__.ts' of old program, it was not resolved.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -1717,6 +1817,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/project1/typeroot1/s
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts', result '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Type reference directive 'sometype' was successfully resolved to '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts', primary: true. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-dom' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts'.
+Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-dom/iterable' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.dom.iterable.d.ts__.ts' of old program, it was not resolved.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -1727,9 +1828,11 @@ Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to e
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/typeroot2 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/typeroot2 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 6 projectProgramVersion: 4 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 5 projectProgramVersion: 4 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
+	/home/src/tslibs/TS/Lib/lib.es2015.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts Text-1 "interface WebWorkerInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts Text-1 "interface ScriptHostInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
@@ -1764,7 +1867,7 @@ Info seq  [hh:mm:ss:mss] event:
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -1773,7 +1876,7 @@ Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspace/projects/project1/tscon
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspace/projects/project1/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -1794,6 +1897,8 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 PolledWatches::
+/home/src/workspace/node_modules:
+  {"pollingInterval":500}
 /home/src/workspace/package.json:
   {"pollingInterval":2000}
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json:
@@ -1818,6 +1923,10 @@ PolledWatches::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts:
   {}
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts:
+  {}
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts:
+  {}
 /home/src/workspace/projects/project1/core.d.ts:
   {}
 /home/src/workspace/projects/project1/file.ts:
@@ -1841,7 +1950,7 @@ FsWatchesRecursive::
 
 Projects::
 /home/src/workspace/projects/project1/tsconfig.json (Configured) *changed*
-    projectStateVersion: 6
+    projectStateVersion: 5
     projectProgramVersion: 5 *changed*
     dirty: false *changed*
 
@@ -1863,9 +1972,9 @@ Info seq  [hh:mm:ss:mss] Scheduled: /home/src/workspace/projects/project1/tsconf
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Before running Timeout callback:: count: 3
-17: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation
-18: /home/src/workspace/projects/project1/tsconfig.json
-19: *ensureProjectForOpenFiles*
+19: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation
+20: /home/src/workspace/projects/project1/tsconfig.json
+21: *ensureProjectForOpenFiles*
 //// [/home/src/workspace/projects/project1/tsconfig.json]
 {
   "compilerOptions": {
@@ -1885,13 +1994,13 @@ Before running Timeout callback:: count: 3
 //// [/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts] deleted
 
 Timeout callback:: count: 3
-17: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
-18: /home/src/workspace/projects/project1/tsconfig.json *new*
-19: *ensureProjectForOpenFiles* *new*
+19: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
+20: /home/src/workspace/projects/project1/tsconfig.json *new*
+21: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /home/src/workspace/projects/project1/tsconfig.json (Configured) *changed*
-    projectStateVersion: 7 *changed*
+    projectStateVersion: 6 *changed*
     projectProgramVersion: 5
     dirty: true *changed*
 
@@ -1899,6 +2008,14 @@ ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts
     version: Text-1
     containingProjects: 0
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts *changed*
     version: Text-1
     pendingReloadFromDisk: true *changed*
@@ -1944,6 +2061,20 @@ ScriptInfos::
         /home/src/workspace/projects/project1/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation
+Info seq  [hh:mm:ss:mss] Scheduled: /home/src/workspace/projects/project1/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+After running Timeout callback:: count: 2
+
+Timeout callback:: count: 2
+20: /home/src/workspace/projects/project1/tsconfig.json *deleted*
+21: *ensureProjectForOpenFiles* *deleted*
+22: /home/src/workspace/projects/project1/tsconfig.json *new*
+23: *ensureProjectForOpenFiles* *new*
+
+Before running Timeout callback:: count: 2
+22: /home/src/workspace/projects/project1/tsconfig.json
+23: *ensureProjectForOpenFiles*
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspace/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -1997,6 +2128,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es5' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'.
+Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es2015' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.es2015.d.ts__.ts' of old program, it was not resolved.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -2048,15 +2180,46 @@ Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skip
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-dom' was not resolved. ========
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-dom/iterable' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.dom.iterable.d.ts__.ts'. ========
+Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
+Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom/iterable' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.tsx' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.d.ts' does not exist.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/projects/node_modules/@types' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom/iterable' from 'node_modules' folder, target file types: JavaScript.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.js' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.jsx' does not exist.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-dom/iterable' was not resolved. ========
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json 2000 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/projects/project1/typeroot2 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/projects/project1/typeroot2 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 7 projectProgramVersion: 5 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 6 projectProgramVersion: 5 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
+	/home/src/tslibs/TS/Lib/lib.es2015.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/tslibs/TS/Lib/lib.dom.d.ts Text-1 "interface DOMInterface { }"
+	/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts Text-1 "interface WebWorkerInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts Text-1 "interface ScriptHostInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
@@ -2067,7 +2230,12 @@ Info seq  [hh:mm:ss:mss] 	Files (9)
 	/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts Text-1 "export type TheNum = \"type1\";"
 
 
+	../../../tslibs/TS/Lib/lib.es2015.d.ts
+	  Library referenced via 'es5' from file 'file2.ts'
+	  Library 'lib.es5.d.ts' specified in compilerOptions
 	../../../tslibs/TS/Lib/lib.dom.d.ts
+	  Library 'lib.dom.d.ts' specified in compilerOptions
+	../../../tslibs/TS/Lib/lib.dom.iterable.d.ts
 	  Library 'lib.dom.d.ts' specified in compilerOptions
 	../node_modules/@typescript/lib-webworker/index.d.ts
 	  Library referenced via 'webworker' from file 'file2.ts'
@@ -2112,7 +2280,7 @@ Info seq  [hh:mm:ss:mss] event:
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -2121,7 +2289,7 @@ Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspace/projects/project1/tscon
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspace/projects/project1/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -2142,7 +2310,7 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 PolledWatches::
-/home/src/workspace/node_modules: *new*
+/home/src/workspace/node_modules:
   {"pollingInterval":500}
 /home/src/workspace/package.json:
   {"pollingInterval":2000}
@@ -2170,6 +2338,10 @@ PolledWatches *deleted*::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts:
   {}
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts:
+  {}
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts:
+  {}
 /home/src/workspace/projects/project1/core.d.ts:
   {}
 /home/src/workspace/projects/project1/file.ts:
@@ -2193,7 +2365,7 @@ FsWatchesRecursive::
 
 Projects::
 /home/src/workspace/projects/project1/tsconfig.json (Configured) *changed*
-    projectStateVersion: 7
+    projectStateVersion: 6
     projectProgramVersion: 6 *changed*
     dirty: false *changed*
 
@@ -2202,6 +2374,14 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1 *changed*
         /home/src/workspace/projects/project1/tsconfig.json *new*
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts
     version: Text-1
     pendingReloadFromDisk: true
@@ -2245,10 +2425,6 @@ ScriptInfos::
     containingProjects: 1
         /home/src/workspace/projects/project1/tsconfig.json
 
-Before running Timeout callback:: count: 0
-
-After running Timeout callback:: count: 0
-
 delete redirect file webworker
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation
@@ -2258,24 +2434,32 @@ Info seq  [hh:mm:ss:mss] Scheduled: /home/src/workspace/projects/project1/tsconf
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Before running Timeout callback:: count: 3
-20: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation
-21: /home/src/workspace/projects/project1/tsconfig.json
-22: *ensureProjectForOpenFiles*
+24: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation
+25: /home/src/workspace/projects/project1/tsconfig.json
+26: *ensureProjectForOpenFiles*
 //// [/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts] deleted
 
 Timeout callback:: count: 3
-20: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
-21: /home/src/workspace/projects/project1/tsconfig.json *new*
-22: *ensureProjectForOpenFiles* *new*
+24: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
+25: /home/src/workspace/projects/project1/tsconfig.json *new*
+26: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /home/src/workspace/projects/project1/tsconfig.json (Configured) *changed*
-    projectStateVersion: 8 *changed*
+    projectStateVersion: 7 *changed*
     projectProgramVersion: 6
     dirty: true *changed*
 
 ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/workspace/projects/project1/tsconfig.json
@@ -2382,6 +2566,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es5' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'.
+Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es2015' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.es2015.d.ts__.ts' of old program, it was not resolved.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -2392,11 +2577,14 @@ Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to e
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'sometype' from '/home/src/workspace/projects/project1/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-dom' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was not resolved.
+Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-dom/iterable' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.dom.iterable.d.ts__.ts' of old program, it was not resolved.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json 2000 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 8 projectProgramVersion: 6 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 7 projectProgramVersion: 6 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
+	/home/src/tslibs/TS/Lib/lib.es2015.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/tslibs/TS/Lib/lib.dom.d.ts Text-1 "interface DOMInterface { }"
+	/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/tslibs/TS/Lib/lib.webworker.d.ts Text-1 "interface WebWorkerInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts Text-1 "interface ScriptHostInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
@@ -2407,7 +2595,12 @@ Info seq  [hh:mm:ss:mss] 	Files (9)
 	/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts Text-1 "export type TheNum = \"type1\";"
 
 
+	../../../tslibs/TS/Lib/lib.es2015.d.ts
+	  Library referenced via 'es5' from file 'file2.ts'
+	  Library 'lib.es5.d.ts' specified in compilerOptions
 	../../../tslibs/TS/Lib/lib.dom.d.ts
+	  Library 'lib.dom.d.ts' specified in compilerOptions
+	../../../tslibs/TS/Lib/lib.dom.iterable.d.ts
 	  Library 'lib.dom.d.ts' specified in compilerOptions
 	../../../tslibs/TS/Lib/lib.webworker.d.ts
 	  Library referenced via 'webworker' from file 'file2.ts'
@@ -2432,7 +2625,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -2440,7 +2633,7 @@ Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspace/projects/project1/index.
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspace/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -2485,6 +2678,10 @@ PolledWatches *deleted*::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts:
   {}
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts:
+  {}
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts:
+  {}
 /home/src/tslibs/TS/Lib/lib.webworker.d.ts: *new*
   {}
 /home/src/workspace/projects/project1/core.d.ts:
@@ -2510,12 +2707,20 @@ FsWatchesRecursive::
 
 Projects::
 /home/src/workspace/projects/project1/tsconfig.json (Configured) *changed*
-    projectStateVersion: 8
+    projectStateVersion: 7
     projectProgramVersion: 7 *changed*
     dirty: false *changed*
 
 ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/workspace/projects/project1/tsconfig.json
@@ -2574,16 +2779,24 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/s
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Before running Timeout callback:: count: 1
-23: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation
+27: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation
 //// [/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts]
 interface WebWorkerInterface { }
 
 
 Timeout callback:: count: 1
-23: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
+27: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
 
 ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/workspace/projects/project1/tsconfig.json
@@ -2641,18 +2854,18 @@ Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
 
 Timeout callback:: count: 2
-24: /home/src/workspace/projects/project1/tsconfig.json *new*
-25: *ensureProjectForOpenFiles* *new*
+28: /home/src/workspace/projects/project1/tsconfig.json *new*
+29: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /home/src/workspace/projects/project1/tsconfig.json (Configured) *changed*
-    projectStateVersion: 9 *changed*
+    projectStateVersion: 8 *changed*
     projectProgramVersion: 7
     dirty: true *changed*
 
 Before running Timeout callback:: count: 2
-24: /home/src/workspace/projects/project1/tsconfig.json
-25: *ensureProjectForOpenFiles*
+28: /home/src/workspace/projects/project1/tsconfig.json
+29: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspace/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json
@@ -2705,6 +2918,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es5' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'.
+Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es2015' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.es2015.d.ts__.ts' of old program, it was not resolved.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -2715,11 +2929,14 @@ Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to e
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'sometype' from '/home/src/workspace/projects/project1/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-dom' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was not resolved.
+Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-dom/iterable' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.dom.iterable.d.ts__.ts' of old program, it was not resolved.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json 2000 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 9 projectProgramVersion: 7 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 8 projectProgramVersion: 7 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
+	/home/src/tslibs/TS/Lib/lib.es2015.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/tslibs/TS/Lib/lib.dom.d.ts Text-1 "interface DOMInterface { }"
+	/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts Text-1 "interface WebWorkerInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts Text-1 "interface ScriptHostInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
@@ -2730,7 +2947,12 @@ Info seq  [hh:mm:ss:mss] 	Files (9)
 	/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts Text-1 "export type TheNum = \"type1\";"
 
 
+	../../../tslibs/TS/Lib/lib.es2015.d.ts
+	  Library referenced via 'es5' from file 'file2.ts'
+	  Library 'lib.es5.d.ts' specified in compilerOptions
 	../../../tslibs/TS/Lib/lib.dom.d.ts
+	  Library 'lib.dom.d.ts' specified in compilerOptions
+	../../../tslibs/TS/Lib/lib.dom.iterable.d.ts
 	  Library 'lib.dom.d.ts' specified in compilerOptions
 	../node_modules/@typescript/lib-webworker/index.d.ts
 	  Library referenced via 'webworker' from file 'file2.ts'
@@ -2755,7 +2977,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -2763,7 +2985,7 @@ Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspace/projects/project1/index.
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspace/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (9)
+Info seq  [hh:mm:ss:mss] 	Files (11)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -2806,6 +3028,10 @@ PolledWatches::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts:
   {}
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts:
+  {}
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts:
+  {}
 /home/src/tslibs/TS/Lib/lib.webworker.d.ts:
   {}
 /home/src/workspace/projects/project1/core.d.ts:
@@ -2831,12 +3057,20 @@ FsWatchesRecursive::
 
 Projects::
 /home/src/workspace/projects/project1/tsconfig.json (Configured) *changed*
-    projectStateVersion: 9
+    projectStateVersion: 8
     projectProgramVersion: 8 *changed*
     dirty: false *changed*
 
 ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspace/projects/project1/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/workspace/projects/project1/tsconfig.json

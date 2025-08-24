@@ -17,7 +17,7 @@ inferTypePredicates.ts(113,7): error TS2322: Type 'string | number' is not assig
   Type 'number' is not assignable to type 'string'.
 inferTypePredicates.ts(115,7): error TS2322: Type 'string | number' is not assignable to type 'number'.
   Type 'string' is not assignable to type 'number'.
-inferTypePredicates.ts(133,7): error TS2740: Type '{}' is missing the following properties from type 'Date': toDateString, toTimeString, toLocaleDateString, toLocaleTimeString, and 37 more.
+inferTypePredicates.ts(133,7): error TS2740: Type '{}' is missing the following properties from type 'Date': toDateString, toTimeString, toLocaleDateString, toLocaleTimeString, and 38 more.
 inferTypePredicates.ts(205,7): error TS2741: Property 'z' is missing in type 'C1' but required in type 'C2'.
 
 
@@ -184,7 +184,7 @@ inferTypePredicates.ts(205,7): error TS2741: Property 'z' is missing in type 'C1
     if (flakyIsDate(maybeDate)) {
       let t: Date = maybeDate;  // should error
           ~
-!!! error TS2740: Type '{}' is missing the following properties from type 'Date': toDateString, toTimeString, toLocaleDateString, toLocaleTimeString, and 37 more.
+!!! error TS2740: Type '{}' is missing the following properties from type 'Date': toDateString, toTimeString, toLocaleDateString, toLocaleTimeString, and 38 more.
     } else {
       let t: object = maybeDate;  // should ok
     }

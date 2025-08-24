@@ -199,6 +199,32 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-es5' was not resolved. ========
+======== Resolving module '@typescript/lib-es2015' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.es2015.d.ts__.ts'. ========
+Explicitly specified module resolution kind: 'Node10'.
+Loading module '@typescript/lib-es2015' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-es2015.ts' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-es2015.tsx' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-es2015.d.ts' does not exist.
+Directory '/home/src/workspace/projects/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es2015'
+Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es2015'
+Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es2015'
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es2015'
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es2015'
+Loading module '@typescript/lib-es2015' from 'node_modules' folder, target file types: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-es2015.js' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-es2015.jsx' does not exist.
+Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name '@typescript/lib-es2015' was not resolved. ========
 ======== Resolving module '@typescript/lib-dom' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -225,10 +251,85 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-dom' was not resolved. ========
+======== Resolving module '@typescript/lib-dom/iterable' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.dom.iterable.d.ts__.ts'. ========
+Explicitly specified module resolution kind: 'Node10'.
+Loading module '@typescript/lib-dom/iterable' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/home/src/workspace/projects/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Loading module '@typescript/lib-dom/iterable' from 'node_modules' folder, target file types: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name '@typescript/lib-dom/iterable' was not resolved. ========
+[96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m11[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m11[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m13[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m13[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.es5.d.ts[0m:[93m13[0m:[93m15[0m
+    [7m13[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+
+[96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m11[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m11[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m13[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m13[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.es5.d.ts[0m:[93m13[0m:[93m15[0m
+    [7m13[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+
+[96m../../tslibs/TS/Lib/lib.es5.d.ts[0m:[93m11[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m11[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96m../../tslibs/TS/Lib/lib.es5.d.ts[0m:[93m13[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m13[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m13[0m:[93m15[0m
+    [7m13[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+  [96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m13[0m:[93m15[0m
+    [7m13[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    and here.
+
 ../../tslibs/TS/Lib/lib.es5.d.ts
   Library referenced via 'es5' from file 'project1/file2.ts'
   Library 'lib.es5.d.ts' specified in compilerOptions
+../../tslibs/TS/Lib/lib.es2015.d.ts
+  Library referenced via 'es5' from file 'project1/file2.ts'
+  Library 'lib.es5.d.ts' specified in compilerOptions
 ../../tslibs/TS/Lib/lib.dom.d.ts
+  Library 'lib.dom.d.ts' specified in compilerOptions
+../../tslibs/TS/Lib/lib.dom.iterable.d.ts
   Library 'lib.dom.d.ts' specified in compilerOptions
 ../../tslibs/TS/Lib/lib.webworker.d.ts
   Library referenced via 'webworker' from file 'project1/file2.ts'
@@ -245,8 +346,19 @@ project1/index.ts
 project1/file2.ts
   Root file specified for compilation
 
+Found 6 errors in 3 files.
+
+Errors  Files
+     2  ../../tslibs/TS/Lib/lib.dom.iterable.d.ts[90m:11[0m
+     2  ../../tslibs/TS/Lib/lib.es2015.d.ts[90m:11[0m
+     2  ../../tslibs/TS/Lib/lib.es5.d.ts[90m:11[0m
+
 
 //// [/home/src/tslibs/TS/Lib/lib.es5.d.ts] *Lib*
+
+//// [/home/src/tslibs/TS/Lib/lib.es2015.d.ts] *Lib*
+
+//// [/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts] *Lib*
 
 //// [/home/src/workspace/projects/project1/file.js]
 "use strict";
@@ -287,7 +399,9 @@ Program options: {
 Program structureReused: Not
 Program files::
 /home/src/tslibs/TS/Lib/lib.es5.d.ts
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
 /home/src/tslibs/TS/Lib/lib.dom.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
 /home/src/tslibs/TS/Lib/lib.webworker.d.ts
 /home/src/tslibs/TS/Lib/lib.scripthost.d.ts
 project1/core.d.ts
@@ -296,4 +410,4 @@ project1/file.ts
 project1/index.ts
 project1/file2.ts
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

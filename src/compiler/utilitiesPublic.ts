@@ -325,22 +325,7 @@ export const targetToLibMap: Map<ScriptTarget, string> = new Map([
 
 export function getDefaultLibFileName(options: CompilerOptions): string {
     const target = getEmitScriptTarget(options);
-    switch (target) {
-        case ScriptTarget.ESNext:
-        case ScriptTarget.ES2024:
-        case ScriptTarget.ES2023:
-        case ScriptTarget.ES2022:
-        case ScriptTarget.ES2021:
-        case ScriptTarget.ES2020:
-        case ScriptTarget.ES2019:
-        case ScriptTarget.ES2018:
-        case ScriptTarget.ES2017:
-        case ScriptTarget.ES2016:
-        case ScriptTarget.ES2015:
-            return targetToLibMap.get(target)!;
-        default:
-            return "lib.d.ts";
-    }
+    return targetToLibMap.get(target) ?? "lib.d.ts";
 }
 
 export function textSpanEnd(span: TextSpan): number {

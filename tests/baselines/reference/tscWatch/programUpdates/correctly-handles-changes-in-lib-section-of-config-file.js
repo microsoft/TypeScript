@@ -61,9 +61,41 @@ Output::
 [7m1[0m var x: Promise<string>;
 [7m [0m [91m       ~~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m11[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m11[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m13[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m13[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.es5.d.ts[0m:[93m13[0m:[93m15[0m
+    [7m13[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+
+[96m../../tslibs/TS/Lib/lib.es5.d.ts[0m:[93m11[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m11[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96m../../tslibs/TS/Lib/lib.es5.d.ts[0m:[93m13[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m13[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m13[0m:[93m15[0m
+    [7m13[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+
+[[90mHH:MM:SS AM[0m] Found 5 errors. Watching for file changes.
 
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2015.d.ts] *Lib*
 
 //// [/home/src/projects/project/app.js]
 var x;
@@ -84,6 +116,8 @@ FsWatches::
 /home/src/projects/project/app.ts: *new*
   {}
 /home/src/projects/project/tsconfig.json: *new*
+  {}
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts: *new*
   {}
 /home/src/tslibs/TS/Lib/lib.es5.d.ts: *new*
   {}
@@ -109,15 +143,18 @@ Program options: {
 Program structureReused: Not
 Program files::
 /home/src/tslibs/TS/Lib/lib.es5.d.ts
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
 /home/src/projects/project/app.ts
 
 Semantic diagnostics in builder refreshed for::
 /home/src/tslibs/TS/Lib/lib.es5.d.ts
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
 /home/src/projects/project/app.ts
 
 Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.es5.d.ts (used version)
 /home/src/projects/project/app.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2015.d.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
@@ -151,7 +188,37 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m11[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m11[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m13[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m13[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.es5.d.ts[0m:[93m13[0m:[93m15[0m
+    [7m13[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+
+[96m../../tslibs/TS/Lib/lib.es5.d.ts[0m:[93m11[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m11[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96m../../tslibs/TS/Lib/lib.es5.d.ts[0m:[93m13[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m13[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m13[0m:[93m15[0m
+    [7m13[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+
+[[90mHH:MM:SS AM[0m] Found 4 errors. Watching for file changes.
 
 
 
@@ -171,6 +238,8 @@ FsWatches::
 /home/src/projects/project/app.ts:
   {}
 /home/src/projects/project/tsconfig.json:
+  {}
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts:
   {}
 /home/src/tslibs/TS/Lib/lib.es2015.promise.d.ts: *new*
   {}
@@ -200,11 +269,13 @@ Program options: {
 Program structureReused: SafeModules
 Program files::
 /home/src/tslibs/TS/Lib/lib.es5.d.ts
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
 /home/src/tslibs/TS/Lib/lib.es2015.promise.d.ts
 /home/src/projects/project/app.ts
 
 Semantic diagnostics in builder refreshed for::
 /home/src/tslibs/TS/Lib/lib.es5.d.ts
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
 /home/src/tslibs/TS/Lib/lib.es2015.promise.d.ts
 /home/src/projects/project/app.ts
 

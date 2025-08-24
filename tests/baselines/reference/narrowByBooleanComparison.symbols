@@ -122,7 +122,7 @@ function test3(foo: unknown) {
     if (typeof foo !== 'string' && Array.isArray(foo) === false) {
 >foo : Symbol(foo, Decl(narrowByBooleanComparison.ts, 50, 15))
 >Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
 >foo : Symbol(foo, Decl(narrowByBooleanComparison.ts, 50, 15))
 
@@ -236,7 +236,7 @@ function isFunction(x: unknown): x is Function {
 >isFunction : Symbol(isFunction, Decl(narrowByBooleanComparison.ts, 95, 1))
 >x : Symbol(x, Decl(narrowByBooleanComparison.ts, 98, 20))
 >x : Symbol(x, Decl(narrowByBooleanComparison.ts, 98, 20))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     return typeof x === "function";
 >x : Symbol(x, Decl(narrowByBooleanComparison.ts, 98, 20))

@@ -9,5 +9,5 @@ class C {
 
     [x: number]: RegExp;
 >x : Symbol(x, Decl(numericIndexerConstraint.ts, 2, 5))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }

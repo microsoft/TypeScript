@@ -19,7 +19,7 @@ overloadResolution.ts(85,11): error TS2769: No overload matches this call.
   Overload 2 of 2, '(n: any, m: string): any', gave the following error.
     Argument of type 'boolean' is not assignable to parameter of type 'string'.
 overloadResolution.ts(91,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'n' must be of type 'number', but here has type 'string'.
-overloadResolution.ts(91,22): error TS2339: Property 'toFixed' does not exist on type 'string'.
+overloadResolution.ts(91,22): error TS2551: Property 'toFixed' does not exist on type 'string'. Did you mean 'fixed'?
 
 
 ==== overloadResolution.ts (10 errors) ====
@@ -146,7 +146,8 @@ overloadResolution.ts(91,22): error TS2339: Property 'toFixed' does not exist on
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'n' must be of type 'number', but here has type 'string'.
 !!! related TS6203 overloadResolution.ts:54:5: 'n' was also declared here.
                          ~~~~~~~
-!!! error TS2339: Property 'toFixed' does not exist on type 'string'.
+!!! error TS2551: Property 'toFixed' does not exist on type 'string'. Did you mean 'fixed'?
+!!! related TS2728 lib.es2015.core.d.ts:--:--: 'fixed' is declared here.
     var s = fn5((n) => n.substr(0));
     
     

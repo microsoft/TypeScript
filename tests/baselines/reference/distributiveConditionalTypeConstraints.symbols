@@ -57,7 +57,7 @@ function f3<T extends string[]>(x: IsArray<T>) {
 function f4<T extends Function>(x: IsArray<T>) {
 >f4 : Symbol(f4, Decl(distributiveConditionalTypeConstraints.ts, 15, 1))
 >T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 17, 12))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >x : Symbol(x, Decl(distributiveConditionalTypeConstraints.ts, 17, 32))
 >IsArray : Symbol(IsArray, Decl(distributiveConditionalTypeConstraints.ts, 0, 0))
 >T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 17, 12))

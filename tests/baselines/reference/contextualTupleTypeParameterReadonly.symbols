@@ -4,9 +4,9 @@
 declare function each<T extends ReadonlyArray<any>>(cases: ReadonlyArray<T>): (fn: (...args: T) => any) => void;
 >each : Symbol(each, Decl(contextualTupleTypeParameterReadonly.ts, 0, 0))
 >T : Symbol(T, Decl(contextualTupleTypeParameterReadonly.ts, 0, 22))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >cases : Symbol(cases, Decl(contextualTupleTypeParameterReadonly.ts, 0, 52))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(contextualTupleTypeParameterReadonly.ts, 0, 22))
 >fn : Symbol(fn, Decl(contextualTupleTypeParameterReadonly.ts, 0, 79))
 >args : Symbol(args, Decl(contextualTupleTypeParameterReadonly.ts, 0, 84))
