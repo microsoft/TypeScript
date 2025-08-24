@@ -5455,13 +5455,6 @@ export interface TypeChecker {
     getTypePredicateOfSignature(signature: Signature): TypePredicate | undefined;
     /** @internal */ resolveExternalModuleName(moduleSpecifier: Expression): Symbol | undefined;
     /**
-     * An external module with an 'export =' declaration resolves to the target of the 'export =' declaration,
-     * and an external module with no 'export =' declaration resolves to the module itself.
-     *
-     * @internal
-     */
-    resolveExternalModuleSymbol(symbol: Symbol): Symbol;
-    /**
      * @param node A location where we might consider accessing `this`. Not necessarily a ThisExpression.
      *
      * @internal
