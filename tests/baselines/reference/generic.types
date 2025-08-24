@@ -49,8 +49,8 @@ let c: A<boolean> = {};
 >   : ^^
 
 let d: B = { a: "" };
->d : any
->  : ^^^
+>d : "/a".A<any>
+>  : ^^^^^^^^^^^
 >{ a: "" } : { a: string; }
 >          : ^^^^^^^^^^^^^^
 >a : string
