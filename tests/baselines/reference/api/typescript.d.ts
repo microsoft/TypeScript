@@ -6893,10 +6893,11 @@ declare namespace ts {
         ContravariantConditional = 64,
         ReturnType = 128,
         LiteralKeyof = 256,
-        NoConstraints = 512,
-        AlwaysStrict = 1024,
-        MaxValue = 2048,
-        PriorityImpliesCombination = 416,
+        DistributiveConditional = 512,
+        NoConstraints = 1024,
+        AlwaysStrict = 2048,
+        MaxValue = 4096,
+        PriorityImpliesCombination = 928,
         Circularity = -1,
     }
     interface FileExtensionInfo {
