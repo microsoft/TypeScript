@@ -1,5 +1,8 @@
 //// [tests/cases/compiler/inKeywordTypeguard.ts] ////
 
+=== Performance Stats ===
+Type Count: 1,000
+
 === inKeywordTypeguard.ts ===
 class A { a: string; }
 >A : A
@@ -1710,12 +1713,12 @@ function test1<T extends any[] | Record<string, any>>(obj: T) {
 >                                      : ^^^^^^^
 >Array.isArray(obj) : boolean
 >                   : ^^^^^^^
->Array.isArray : (arg: any) => arg is any[]
->              : ^   ^^   ^^^^^            
+>Array.isArray : { <T_1>(arg: ArrayLike<T_1>): arg is readonly T_1[]; (arg: unknown): arg is any[]; <T_1>(arg: Iterable<T_1>): arg is readonly T_1[]; }
+>              : ^^^^^^^^   ^^              ^^^                     ^^^   ^^       ^^^            ^^^^^^^^   ^^             ^^^                     ^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
->isArray : (arg: any) => arg is any[]
->        : ^   ^^   ^^^^^            
+>isArray : { <T_1>(arg: ArrayLike<T_1>): arg is readonly T_1[]; (arg: unknown): arg is any[]; <T_1>(arg: Iterable<T_1>): arg is readonly T_1[]; }
+>        : ^^^^^^^^   ^^              ^^^                     ^^^   ^^       ^^^            ^^^^^^^^   ^^             ^^^                     ^^^
 >obj : any[] | Record<string, any>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'length' in obj : boolean
@@ -1745,12 +1748,12 @@ function test2<T extends any[] | Record<string, any>>(obj: T) {
     if (Array.isArray(obj)) {
 >Array.isArray(obj) : boolean
 >                   : ^^^^^^^
->Array.isArray : (arg: any) => arg is any[]
->              : ^   ^^   ^^^^^            
+>Array.isArray : { <T_1>(arg: ArrayLike<T_1>): arg is readonly T_1[]; (arg: unknown): arg is any[]; <T_1>(arg: Iterable<T_1>): arg is readonly T_1[]; }
+>              : ^^^^^^^^   ^^              ^^^                     ^^^   ^^       ^^^            ^^^^^^^^   ^^             ^^^                     ^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
->isArray : (arg: any) => arg is any[]
->        : ^   ^^   ^^^^^            
+>isArray : { <T_1>(arg: ArrayLike<T_1>): arg is readonly T_1[]; (arg: unknown): arg is any[]; <T_1>(arg: Iterable<T_1>): arg is readonly T_1[]; }
+>        : ^^^^^^^^   ^^              ^^^                     ^^^   ^^       ^^^            ^^^^^^^^   ^^             ^^^                     ^^^
 >obj : any[] | Record<string, any>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
