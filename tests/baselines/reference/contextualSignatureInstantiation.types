@@ -149,6 +149,46 @@ var b = baz(b, b, g);      // Should be number | string
 >g : <T>(x: T, y: T) => T
 >  : ^ ^^ ^^ ^^ ^^ ^^^^^ 
 
+var one: 1 = 1
+>one : 1
+>    : ^
+>1 : 1
+>  : ^
+
+var num: number = 10;
+>num : number
+>    : ^^^^^^
+>10 : 10
+>   : ^^
+
+var b = bar(one, num, g);  // ok
+>b : string | number
+>  : ^^^^^^^^^^^^^^^
+>bar(one, num, g) : number
+>                 : ^^^^^^
+>bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^  ^^                 ^^^^^ 
+>one : 1
+>    : ^
+>num : number
+>    : ^^^^^^
+>g : <T>(x: T, y: T) => T
+>  : ^ ^^ ^^ ^^ ^^ ^^^^^ 
+
+var b = bar(num, one, g);  // ok
+>b : string | number
+>  : ^^^^^^^^^^^^^^^
+>bar(num, one, g) : number
+>                 : ^^^^^^
+>bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^  ^^                 ^^^^^ 
+>num : number
+>    : ^^^^^^
+>one : 1
+>    : ^
+>g : <T>(x: T, y: T) => T
+>  : ^ ^^ ^^ ^^ ^^ ^^^^^ 
+
 var d: number[] | string[];
 >d : number[] | string[]
 >  : ^^^^^^^^^^^^^^^^^^^
