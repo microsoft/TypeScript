@@ -1,0 +1,285 @@
+//// [tests/cases/compiler/identityRelationIntersectionTypes.ts] ////
+
+=== identityRelationIntersectionTypes.ts ===
+namespace identityRelationIntersectionTypes {
+>identityRelationIntersectionTypes : Symbol(identityRelationIntersectionTypes, Decl(identityRelationIntersectionTypes.ts, 0, 0))
+
+    type Equals<A, B> = (<T>() => T extends B ? 1 : 0) extends (<T>() => T extends A ? 1 : 0) ? true : false;
+>Equals : Symbol(Equals, Decl(identityRelationIntersectionTypes.ts, 0, 45))
+>A : Symbol(A, Decl(identityRelationIntersectionTypes.ts, 1, 16))
+>B : Symbol(B, Decl(identityRelationIntersectionTypes.ts, 1, 18))
+>T : Symbol(T, Decl(identityRelationIntersectionTypes.ts, 1, 26))
+>T : Symbol(T, Decl(identityRelationIntersectionTypes.ts, 1, 26))
+>B : Symbol(B, Decl(identityRelationIntersectionTypes.ts, 1, 18))
+>T : Symbol(T, Decl(identityRelationIntersectionTypes.ts, 1, 65))
+>T : Symbol(T, Decl(identityRelationIntersectionTypes.ts, 1, 65))
+>A : Symbol(A, Decl(identityRelationIntersectionTypes.ts, 1, 16))
+
+    type GoodIntersection = Equals<{a: 1} & {b: 2}, {a: 1; b: 2}>;  // true
+>GoodIntersection : Symbol(GoodIntersection, Decl(identityRelationIntersectionTypes.ts, 1, 109))
+>Equals : Symbol(Equals, Decl(identityRelationIntersectionTypes.ts, 0, 45))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 3, 36))
+>b : Symbol(b, Decl(identityRelationIntersectionTypes.ts, 3, 45))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 3, 53))
+>b : Symbol(b, Decl(identityRelationIntersectionTypes.ts, 3, 58))
+
+    // Interfaces aren't mergeable
+    interface I {i: 3};
+>I : Symbol(I, Decl(identityRelationIntersectionTypes.ts, 3, 66))
+>i : Symbol(I.i, Decl(identityRelationIntersectionTypes.ts, 6, 17))
+
+    type BadIntersection1 = Equals<{a: 1} & I, {a: 1; i: 3}>;  // false
+>BadIntersection1 : Symbol(BadIntersection1, Decl(identityRelationIntersectionTypes.ts, 6, 23))
+>Equals : Symbol(Equals, Decl(identityRelationIntersectionTypes.ts, 0, 45))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 7, 36))
+>I : Symbol(I, Decl(identityRelationIntersectionTypes.ts, 3, 66))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 7, 48))
+>i : Symbol(i, Decl(identityRelationIntersectionTypes.ts, 7, 53))
+
+    // Objects with call or constructor signatures aren't mergeable
+    type BadIntersection2 = Equals<{a: 1} & {b: 2; (): void}, {a: 1; b: 2; (): void}>;  // false
+>BadIntersection2 : Symbol(BadIntersection2, Decl(identityRelationIntersectionTypes.ts, 7, 61))
+>Equals : Symbol(Equals, Decl(identityRelationIntersectionTypes.ts, 0, 45))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 10, 36))
+>b : Symbol(b, Decl(identityRelationIntersectionTypes.ts, 10, 45))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 10, 63))
+>b : Symbol(b, Decl(identityRelationIntersectionTypes.ts, 10, 68))
+
+    type BadIntersection3 = Equals<{a: 1} & {b: 2; new (): void}, {a: 1; b: 2; new (): void}>;  // false
+>BadIntersection3 : Symbol(BadIntersection3, Decl(identityRelationIntersectionTypes.ts, 10, 86))
+>Equals : Symbol(Equals, Decl(identityRelationIntersectionTypes.ts, 0, 45))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 11, 36))
+>b : Symbol(b, Decl(identityRelationIntersectionTypes.ts, 11, 45))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 11, 67))
+>b : Symbol(b, Decl(identityRelationIntersectionTypes.ts, 11, 72))
+
+    // Objects with index signatures aren't mergeable
+    type BadIntersection4 = Equals<{a: 1} & {b: 2; [key: string]: number}, {a: 1; b: 2; [key: string]: number}>;  // false
+>BadIntersection4 : Symbol(BadIntersection4, Decl(identityRelationIntersectionTypes.ts, 11, 94))
+>Equals : Symbol(Equals, Decl(identityRelationIntersectionTypes.ts, 0, 45))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 14, 36))
+>b : Symbol(b, Decl(identityRelationIntersectionTypes.ts, 14, 45))
+>key : Symbol(key, Decl(identityRelationIntersectionTypes.ts, 14, 52))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 14, 76))
+>b : Symbol(b, Decl(identityRelationIntersectionTypes.ts, 14, 81))
+>key : Symbol(key, Decl(identityRelationIntersectionTypes.ts, 14, 89))
+
+    // Shouldn't merge intersection if any constituents aren't mergeable
+    type StillBadIntersection1 = Equals<{a: 1} & {b: 2} & I, {a: 1; b: 2; i: 3}>;  // false
+>StillBadIntersection1 : Symbol(StillBadIntersection1, Decl(identityRelationIntersectionTypes.ts, 14, 112))
+>Equals : Symbol(Equals, Decl(identityRelationIntersectionTypes.ts, 0, 45))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 17, 41))
+>b : Symbol(b, Decl(identityRelationIntersectionTypes.ts, 17, 50))
+>I : Symbol(I, Decl(identityRelationIntersectionTypes.ts, 3, 66))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 17, 62))
+>b : Symbol(b, Decl(identityRelationIntersectionTypes.ts, 17, 67))
+>i : Symbol(i, Decl(identityRelationIntersectionTypes.ts, 17, 73))
+
+    type StillBadIntersection2 = Equals<{a: 1} & {b: 2} & I, {a: 1; b: 2} & I>;  // false
+>StillBadIntersection2 : Symbol(StillBadIntersection2, Decl(identityRelationIntersectionTypes.ts, 17, 81))
+>Equals : Symbol(Equals, Decl(identityRelationIntersectionTypes.ts, 0, 45))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 18, 41))
+>b : Symbol(b, Decl(identityRelationIntersectionTypes.ts, 18, 50))
+>I : Symbol(I, Decl(identityRelationIntersectionTypes.ts, 3, 66))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 18, 62))
+>b : Symbol(b, Decl(identityRelationIntersectionTypes.ts, 18, 67))
+>I : Symbol(I, Decl(identityRelationIntersectionTypes.ts, 3, 66))
+
+    // Parentheses don't matter because intersections are flattened
+    type StillBadIntersection3 = Equals<({a: 1} & {b: 2}) & I, {a: 1; b: 2; i: 3}>;  // false
+>StillBadIntersection3 : Symbol(StillBadIntersection3, Decl(identityRelationIntersectionTypes.ts, 18, 79))
+>Equals : Symbol(Equals, Decl(identityRelationIntersectionTypes.ts, 0, 45))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 21, 42))
+>b : Symbol(b, Decl(identityRelationIntersectionTypes.ts, 21, 51))
+>I : Symbol(I, Decl(identityRelationIntersectionTypes.ts, 3, 66))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 21, 64))
+>b : Symbol(b, Decl(identityRelationIntersectionTypes.ts, 21, 69))
+>i : Symbol(i, Decl(identityRelationIntersectionTypes.ts, 21, 75))
+
+    type StillBadIntersection4 = Equals<({a: 1} & {b: 2}) & I, {a: 1; b: 2} & I>;  // false
+>StillBadIntersection4 : Symbol(StillBadIntersection4, Decl(identityRelationIntersectionTypes.ts, 21, 83))
+>Equals : Symbol(Equals, Decl(identityRelationIntersectionTypes.ts, 0, 45))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 22, 42))
+>b : Symbol(b, Decl(identityRelationIntersectionTypes.ts, 22, 51))
+>I : Symbol(I, Decl(identityRelationIntersectionTypes.ts, 3, 66))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 22, 64))
+>b : Symbol(b, Decl(identityRelationIntersectionTypes.ts, 22, 69))
+>I : Symbol(I, Decl(identityRelationIntersectionTypes.ts, 3, 66))
+
+    // Type aliases also don't prevent flattening
+    type AB = {a: 1} & {b: 2};
+>AB : Symbol(AB, Decl(identityRelationIntersectionTypes.ts, 22, 81))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 25, 15))
+>b : Symbol(b, Decl(identityRelationIntersectionTypes.ts, 25, 24))
+
+    type StillBadIntersection5 = Equals<AB & I, {a: 1; b: 2; i: 3}>;  // false
+>StillBadIntersection5 : Symbol(StillBadIntersection5, Decl(identityRelationIntersectionTypes.ts, 25, 30))
+>Equals : Symbol(Equals, Decl(identityRelationIntersectionTypes.ts, 0, 45))
+>AB : Symbol(AB, Decl(identityRelationIntersectionTypes.ts, 22, 81))
+>I : Symbol(I, Decl(identityRelationIntersectionTypes.ts, 3, 66))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 26, 49))
+>b : Symbol(b, Decl(identityRelationIntersectionTypes.ts, 26, 54))
+>i : Symbol(i, Decl(identityRelationIntersectionTypes.ts, 26, 60))
+
+    type StillBadIntersection6 = Equals<AB & I, {a: 1; b: 2} & I>;  // false
+>StillBadIntersection6 : Symbol(StillBadIntersection6, Decl(identityRelationIntersectionTypes.ts, 26, 68))
+>Equals : Symbol(Equals, Decl(identityRelationIntersectionTypes.ts, 0, 45))
+>AB : Symbol(AB, Decl(identityRelationIntersectionTypes.ts, 22, 81))
+>I : Symbol(I, Decl(identityRelationIntersectionTypes.ts, 3, 66))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 27, 49))
+>b : Symbol(b, Decl(identityRelationIntersectionTypes.ts, 27, 54))
+>I : Symbol(I, Decl(identityRelationIntersectionTypes.ts, 3, 66))
+
+    type GoodDeepIntersection1 = Equals<{a: 0 | 1} & {a: 1 | 2}, {a: 1}>;  // true
+>GoodDeepIntersection1 : Symbol(GoodDeepIntersection1, Decl(identityRelationIntersectionTypes.ts, 27, 66))
+>Equals : Symbol(Equals, Decl(identityRelationIntersectionTypes.ts, 0, 45))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 29, 41))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 29, 54))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 29, 66))
+
+    type GoodDeepIntersection2 = Equals<{a: {x: 1}} & {a: {y: 2}}, {a: {x: 1; y: 2}}>;  // true
+>GoodDeepIntersection2 : Symbol(GoodDeepIntersection2, Decl(identityRelationIntersectionTypes.ts, 29, 73))
+>Equals : Symbol(Equals, Decl(identityRelationIntersectionTypes.ts, 0, 45))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 30, 41))
+>x : Symbol(x, Decl(identityRelationIntersectionTypes.ts, 30, 45))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 30, 55))
+>y : Symbol(y, Decl(identityRelationIntersectionTypes.ts, 30, 59))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 30, 68))
+>x : Symbol(x, Decl(identityRelationIntersectionTypes.ts, 30, 72))
+>y : Symbol(y, Decl(identityRelationIntersectionTypes.ts, 30, 77))
+
+    type GoodShallowBadDeepIntersection1 = Equals<{a: {x: 1}} & {a: {y: 2} & I}, {a: {x: 1; y: 2} & I}>;  // false
+>GoodShallowBadDeepIntersection1 : Symbol(GoodShallowBadDeepIntersection1, Decl(identityRelationIntersectionTypes.ts, 30, 86))
+>Equals : Symbol(Equals, Decl(identityRelationIntersectionTypes.ts, 0, 45))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 32, 51))
+>x : Symbol(x, Decl(identityRelationIntersectionTypes.ts, 32, 55))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 32, 65))
+>y : Symbol(y, Decl(identityRelationIntersectionTypes.ts, 32, 69))
+>I : Symbol(I, Decl(identityRelationIntersectionTypes.ts, 3, 66))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 32, 82))
+>x : Symbol(x, Decl(identityRelationIntersectionTypes.ts, 32, 86))
+>y : Symbol(y, Decl(identityRelationIntersectionTypes.ts, 32, 91))
+>I : Symbol(I, Decl(identityRelationIntersectionTypes.ts, 3, 66))
+
+    type GoodShallowBadDeepIntersection2 = Equals<{a: {x: 1}} & {a: {y: 2} & I}, {a: {x: 1} & {y: 2} & I}>;  // true
+>GoodShallowBadDeepIntersection2 : Symbol(GoodShallowBadDeepIntersection2, Decl(identityRelationIntersectionTypes.ts, 32, 104))
+>Equals : Symbol(Equals, Decl(identityRelationIntersectionTypes.ts, 0, 45))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 33, 51))
+>x : Symbol(x, Decl(identityRelationIntersectionTypes.ts, 33, 55))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 33, 65))
+>y : Symbol(y, Decl(identityRelationIntersectionTypes.ts, 33, 69))
+>I : Symbol(I, Decl(identityRelationIntersectionTypes.ts, 3, 66))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 33, 82))
+>x : Symbol(x, Decl(identityRelationIntersectionTypes.ts, 33, 86))
+>y : Symbol(y, Decl(identityRelationIntersectionTypes.ts, 33, 95))
+>I : Symbol(I, Decl(identityRelationIntersectionTypes.ts, 3, 66))
+
+    // Reduction applies to nested intersections
+    type DeepReduction = Equals<{a: {x: 1}} & {a: {x: 2}}, {a: never}>;  // true
+>DeepReduction : Symbol(DeepReduction, Decl(identityRelationIntersectionTypes.ts, 33, 107))
+>Equals : Symbol(Equals, Decl(identityRelationIntersectionTypes.ts, 0, 45))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 36, 33))
+>x : Symbol(x, Decl(identityRelationIntersectionTypes.ts, 36, 37))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 36, 47))
+>x : Symbol(x, Decl(identityRelationIntersectionTypes.ts, 36, 51))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 36, 60))
+
+    // Intersections are distributed and merged if possible with union constituents
+    type Distributed = Equals<
+>Distributed : Symbol(Distributed, Decl(identityRelationIntersectionTypes.ts, 36, 71))
+>Equals : Symbol(Equals, Decl(identityRelationIntersectionTypes.ts, 0, 45))
+
+        {a: 1} & {b: 2} & ({c: 3} | {d: 4} | I),
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 40, 9))
+>b : Symbol(b, Decl(identityRelationIntersectionTypes.ts, 40, 18))
+>c : Symbol(c, Decl(identityRelationIntersectionTypes.ts, 40, 28))
+>d : Symbol(d, Decl(identityRelationIntersectionTypes.ts, 40, 37))
+>I : Symbol(I, Decl(identityRelationIntersectionTypes.ts, 3, 66))
+
+        {a: 1; b: 2; c: 3} | {a: 1; b: 2; d: 4} | {a: 1} & {b: 2} & I
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 41, 9))
+>b : Symbol(b, Decl(identityRelationIntersectionTypes.ts, 41, 14))
+>c : Symbol(c, Decl(identityRelationIntersectionTypes.ts, 41, 20))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 41, 30))
+>b : Symbol(b, Decl(identityRelationIntersectionTypes.ts, 41, 35))
+>d : Symbol(d, Decl(identityRelationIntersectionTypes.ts, 41, 41))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 41, 51))
+>b : Symbol(b, Decl(identityRelationIntersectionTypes.ts, 41, 60))
+>I : Symbol(I, Decl(identityRelationIntersectionTypes.ts, 3, 66))
+
+    >;  // true
+
+    // Should work with recursive types
+    type R1 = {a: R1; x: 1};
+>R1 : Symbol(R1, Decl(identityRelationIntersectionTypes.ts, 42, 6))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 45, 15))
+>R1 : Symbol(R1, Decl(identityRelationIntersectionTypes.ts, 42, 6))
+>x : Symbol(x, Decl(identityRelationIntersectionTypes.ts, 45, 21))
+
+    type R2 = {a: R2; y: 1};
+>R2 : Symbol(R2, Decl(identityRelationIntersectionTypes.ts, 45, 28))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 46, 15))
+>R2 : Symbol(R2, Decl(identityRelationIntersectionTypes.ts, 45, 28))
+>y : Symbol(y, Decl(identityRelationIntersectionTypes.ts, 46, 21))
+
+    type R = R1 & R2;
+>R : Symbol(R, Decl(identityRelationIntersectionTypes.ts, 46, 28))
+>R1 : Symbol(R1, Decl(identityRelationIntersectionTypes.ts, 42, 6))
+>R2 : Symbol(R2, Decl(identityRelationIntersectionTypes.ts, 45, 28))
+
+    type Recursive1 = Equals<R, {a: R1 & R2; x: 1; y: 1}>;  // true
+>Recursive1 : Symbol(Recursive1, Decl(identityRelationIntersectionTypes.ts, 47, 21))
+>Equals : Symbol(Equals, Decl(identityRelationIntersectionTypes.ts, 0, 45))
+>R : Symbol(R, Decl(identityRelationIntersectionTypes.ts, 46, 28))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 49, 33))
+>R1 : Symbol(R1, Decl(identityRelationIntersectionTypes.ts, 42, 6))
+>R2 : Symbol(R2, Decl(identityRelationIntersectionTypes.ts, 45, 28))
+>x : Symbol(x, Decl(identityRelationIntersectionTypes.ts, 49, 44))
+>y : Symbol(y, Decl(identityRelationIntersectionTypes.ts, 49, 50))
+
+    type Recursive2 = Equals<R, {a: {a: R1 & R2; x: 1; y: 1}; x: 1; y: 1}>;  // true
+>Recursive2 : Symbol(Recursive2, Decl(identityRelationIntersectionTypes.ts, 49, 58))
+>Equals : Symbol(Equals, Decl(identityRelationIntersectionTypes.ts, 0, 45))
+>R : Symbol(R, Decl(identityRelationIntersectionTypes.ts, 46, 28))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 50, 33))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 50, 37))
+>R1 : Symbol(R1, Decl(identityRelationIntersectionTypes.ts, 42, 6))
+>R2 : Symbol(R2, Decl(identityRelationIntersectionTypes.ts, 45, 28))
+>x : Symbol(x, Decl(identityRelationIntersectionTypes.ts, 50, 48))
+>y : Symbol(y, Decl(identityRelationIntersectionTypes.ts, 50, 54))
+>x : Symbol(x, Decl(identityRelationIntersectionTypes.ts, 50, 61))
+>y : Symbol(y, Decl(identityRelationIntersectionTypes.ts, 50, 67))
+
+    type Recursive3 = Equals<R, {a: {a: {a: R1 & R2; x: 1; y: 1}; x: 1; y: 1}; x: 1; y: 1}>;  // true
+>Recursive3 : Symbol(Recursive3, Decl(identityRelationIntersectionTypes.ts, 50, 75))
+>Equals : Symbol(Equals, Decl(identityRelationIntersectionTypes.ts, 0, 45))
+>R : Symbol(R, Decl(identityRelationIntersectionTypes.ts, 46, 28))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 51, 33))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 51, 37))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 51, 41))
+>R1 : Symbol(R1, Decl(identityRelationIntersectionTypes.ts, 42, 6))
+>R2 : Symbol(R2, Decl(identityRelationIntersectionTypes.ts, 45, 28))
+>x : Symbol(x, Decl(identityRelationIntersectionTypes.ts, 51, 52))
+>y : Symbol(y, Decl(identityRelationIntersectionTypes.ts, 51, 58))
+>x : Symbol(x, Decl(identityRelationIntersectionTypes.ts, 51, 65))
+>y : Symbol(y, Decl(identityRelationIntersectionTypes.ts, 51, 71))
+>x : Symbol(x, Decl(identityRelationIntersectionTypes.ts, 51, 78))
+>y : Symbol(y, Decl(identityRelationIntersectionTypes.ts, 51, 84))
+
+    type Recursive4 = Equals<R, {a: {a: {a: R1 & R2; x: 1; y: 0}; x: 1; y: 1}; x: 1; y: 1}>;  // false
+>Recursive4 : Symbol(Recursive4, Decl(identityRelationIntersectionTypes.ts, 51, 92))
+>Equals : Symbol(Equals, Decl(identityRelationIntersectionTypes.ts, 0, 45))
+>R : Symbol(R, Decl(identityRelationIntersectionTypes.ts, 46, 28))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 52, 33))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 52, 37))
+>a : Symbol(a, Decl(identityRelationIntersectionTypes.ts, 52, 41))
+>R1 : Symbol(R1, Decl(identityRelationIntersectionTypes.ts, 42, 6))
+>R2 : Symbol(R2, Decl(identityRelationIntersectionTypes.ts, 45, 28))
+>x : Symbol(x, Decl(identityRelationIntersectionTypes.ts, 52, 52))
+>y : Symbol(y, Decl(identityRelationIntersectionTypes.ts, 52, 58))
+>x : Symbol(x, Decl(identityRelationIntersectionTypes.ts, 52, 65))
+>y : Symbol(y, Decl(identityRelationIntersectionTypes.ts, 52, 71))
+>x : Symbol(x, Decl(identityRelationIntersectionTypes.ts, 52, 78))
+>y : Symbol(y, Decl(identityRelationIntersectionTypes.ts, 52, 84))
+}
+
