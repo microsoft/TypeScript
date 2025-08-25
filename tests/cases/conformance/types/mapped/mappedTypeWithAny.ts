@@ -69,3 +69,11 @@ type Obj61203 = { [k in keyof any]: number };
 declare const obj61203: Obj61203;
 declare const key61203: keyof Obj61203;
 obj61203[key61203]; // ok
+
+
+// https://github.com/microsoft/TypeScript/issues/61203#issuecomment-2703862148
+type A<T> = { [k in keyof T]: 1 };
+declare function iDontKnow<T>(a: T): [ A<T>, keyof T ];
+const something: any = { a: 1, b: 2 };
+const [ o, k ] = iDontKnow(something);
+const v = o[k]; // ok

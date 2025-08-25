@@ -218,3 +218,51 @@ obj61203[key61203]; // ok
 >key61203 : string | number | symbol
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^
 
+
+// https://github.com/microsoft/TypeScript/issues/61203#issuecomment-2703862148
+type A<T> = { [k in keyof T]: 1 };
+>A : A<T>
+>  : ^^^^
+
+declare function iDontKnow<T>(a: T): [ A<T>, keyof T ];
+>iDontKnow : <T>(a: T) => [A<T>, keyof T]
+>          : ^ ^^ ^^ ^^^^^               
+>a : T
+>  : ^
+
+const something: any = { a: 1, b: 2 };
+>something : any
+>          : ^^^
+>{ a: 1, b: 2 } : { a: number; b: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+>b : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+
+const [ o, k ] = iDontKnow(something);
+>o : A<any>
+>  : ^^^^^^
+>k : string | number | symbol
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>iDontKnow(something) : [A<any>, string | number | symbol]
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iDontKnow : <T>(a: T) => [A<T>, keyof T]
+>          : ^ ^^ ^^ ^^^^^               
+>something : any
+>          : ^^^
+
+const v = o[k]; // ok
+>v : 1
+>  : ^
+>o[k] : 1
+>     : ^
+>o : A<any>
+>  : ^^^^^^
+>k : string | number | symbol
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
+
