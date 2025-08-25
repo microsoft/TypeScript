@@ -424,7 +424,9 @@ func (p *Program) GetSuggestionDiagnostics(ctx context.Context, sourceFile *ast.
 }
 
 func (p *Program) GetProgramDiagnostics() []*ast.Diagnostic {
-	return SortAndDeduplicateDiagnostics(slices.Concat(p.programDiagnostics, p.includeProcessor.getDiagnostics(p).GetDiagnostics()))
+	return SortAndDeduplicateDiagnostics(slices.Concat(
+		p.programDiagnostics,
+		p.includeProcessor.getDiagnostics(p).GetGlobalDiagnostics()))
 }
 
 func (p *Program) getSourceFilesToEmit(targetSourceFile *ast.SourceFile, forceDtsEmit bool) []*ast.SourceFile {
@@ -1024,7 +1026,8 @@ func (p *Program) getSemanticDiagnosticsForFileNotFilter(ctx context.Context, so
 		fileChecker, done = p.checkerPool.GetCheckerForFile(ctx, sourceFile)
 		defer done()
 	}
-	diags := slices.Clip(sourceFile.BindDiagnostics())
+	diags := slices.Clip(p.includeProcessor.getDiagnostics(p).GetDiagnosticsForFile(sourceFile.FileName()))
+	diags = append(diags, sourceFile.BindDiagnostics()...)
 	checkers, closeCheckers := p.checkerPool.GetAllCheckers(ctx)
 	defer closeCheckers()
 

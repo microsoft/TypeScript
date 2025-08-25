@@ -556,7 +556,7 @@ func TestBuildDemoProject(t *testing.T) {
 			commandLineArgs: []string{"--b", "--verbose"},
 		},
 		{
-			// !!! sheetal - this has missing errors from strada about files not in rootDir (3) and value is declared but not used (1)
+			// !!! sheetal - this has missing errors from strada about files not in rootDir (3)
 			subScenario: "in bad-ref branch reports the error about files not in rootDir at the import location",
 			files: getBuildDemoFileMap(func(files FileMap) {
 				files["/user/username/projects/demo/core/utilities.ts"] = `import * as A from '../animals'

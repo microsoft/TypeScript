@@ -56,11 +56,10 @@ export {};
 Object.defineProperty(exports, "__esModule", { value: true });
 
 //// [/home/src/workspaces/project/alpha/bin/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","errors":true,"root":[3],"fileNames":["lib.d.ts","../../beta/b.ts","../src/a.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"c7aa180f19a42166d3166e266d7e59ec-export { }","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1},{"version":"48cb0b944bf6ab58a2c0fa2f1d92b81b-import * as b from '../../beta/b'","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./src/a.d.ts"}
+{"version":"FakeTSVersion","root":[3],"fileNames":["lib.d.ts","../../beta/b.ts","../src/a.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"c7aa180f19a42166d3166e266d7e59ec-export { }","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1},{"version":"48cb0b944bf6ab58a2c0fa2f1d92b81b-import * as b from '../../beta/b'","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"pos":19,"end":33,"code":6307,"category":1,"message":"File '/home/src/workspaces/project/beta/b.ts' is not listed within the file list of project '/home/src/workspaces/project/alpha/tsconfig.json'. Projects must list all files or use an 'include' pattern."}]]],"latestChangedDtsFile":"./src/a.d.ts"}
 //// [/home/src/workspaces/project/alpha/bin/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
-  "errors": true,
   "root": [
     {
       "files": [
@@ -125,12 +124,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
     ]
   },
   "semanticDiagnosticsPerFile": [
-    "lib.d.ts",
-    "../../beta/b.ts",
-    "../src/a.ts"
+    [
+      "../src/a.ts",
+      [
+        {
+          "pos": 19,
+          "end": 33,
+          "code": 6307,
+          "category": 1,
+          "message": "File '/home/src/workspaces/project/beta/b.ts' is not listed within the file list of project '/home/src/workspaces/project/alpha/tsconfig.json'. Projects must list all files or use an 'include' pattern."
+        }
+      ]
+    ]
   ],
   "latestChangedDtsFile": "./src/a.d.ts",
-  "size": 1358
+  "size": 1603
 }
 //// [/home/src/workspaces/project/beta/b.d.ts] *new* 
 export {};
@@ -142,9 +150,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 alpha/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.d.ts
-*not cached* /home/src/workspaces/project/beta/b.ts
-*not cached* /home/src/workspaces/project/alpha/src/a.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/workspaces/project/beta/b.ts
+*refresh*    /home/src/workspaces/project/alpha/src/a.ts
 Signatures::
 (stored at emit) /home/src/workspaces/project/beta/b.ts
 (stored at emit) /home/src/workspaces/project/alpha/src/a.ts
