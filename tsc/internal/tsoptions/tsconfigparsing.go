@@ -961,20 +961,22 @@ func getExtendedConfig(
 		cacheEntry = parse()
 	}
 
-	if cacheEntry != nil && len(cacheEntry.errors) > 0 {
+	if len(cacheEntry.errors) > 0 {
 		errors = append(errors, cacheEntry.errors...)
 	}
 
-	if sourceFile != nil {
-		result.extendedSourceFiles.Add(cacheEntry.extendedResult.SourceFile.FileName())
-		for _, extendedSourceFile := range cacheEntry.extendedResult.ExtendedSourceFiles {
-			result.extendedSourceFiles.Add(extendedSourceFile)
+	if cacheEntry.extendedResult != nil {
+		if sourceFile != nil {
+			result.extendedSourceFiles.Add(cacheEntry.extendedResult.SourceFile.FileName())
+			for _, extendedSourceFile := range cacheEntry.extendedResult.ExtendedSourceFiles {
+				result.extendedSourceFiles.Add(extendedSourceFile)
+			}
 		}
-	}
 
-	if len(cacheEntry.extendedResult.SourceFile.Diagnostics()) != 0 {
-		errors = append(errors, cacheEntry.extendedResult.SourceFile.Diagnostics()...)
-		return nil, errors
+		if len(cacheEntry.extendedResult.SourceFile.Diagnostics()) != 0 {
+			errors = append(errors, cacheEntry.extendedResult.SourceFile.Diagnostics()...)
+			return nil, errors
+		}
 	}
 	return cacheEntry.extendedConfig, errors
 }

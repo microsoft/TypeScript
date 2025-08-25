@@ -407,6 +407,38 @@ func TestProjectCollectionBuilder(t *testing.T) {
 		assert.Assert(t, snapshot.ConfigFileRegistry.GetConfig("/home/src/projects/project/tsconfig.json") == nil)
 		assert.Assert(t, snapshot.ConfigFileRegistry.GetConfig("/home/src/projects/project/tsconfig.node.json") == nil)
 	})
+
+	t.Run("#1630", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/project/lib/tsconfig.json": `{
+				"files": ["a.ts"]
+			}`,
+			"/project/lib/a.ts": `export const a = 1;`,
+			"/project/lib/b.ts": `export const b = 1;`,
+			"/project/tsconfig.json": `{
+				"files": [],
+				"references": [{ "path": "./lib" }],
+				"compilerOptions": {
+					"disableReferencedProjectLoad": true
+				}
+			}`,
+			"/project/index.ts": ``,
+		}
+
+		session, _ := projecttestutil.Setup(files)
+
+		// opening b.ts puts /project/lib/tsconfig.json in the config file registry and creates the project,
+		// but the project is ultimately not a match
+		session.DidOpenFile(context.Background(), "file:///project/lib/b.ts", 1, files["/project/lib/b.ts"].(string), lsproto.LanguageKindTypeScript)
+		// opening an unrelated file triggers cleanup of /project/lib/tsconfig.json since no open file is part of that project,
+		// but will keep the config file in the registry since lib/b.ts is still open
+		session.DidOpenFile(context.Background(), "untitled:Untitled-1", 1, "", lsproto.LanguageKindTypeScript)
+		// Opening index.ts searches /project/tsconfig.json and then checks /project/lib/tsconfig.json without opening it.
+		// No early return on config file existence means we try to find an already open project, which returns nil,
+		// triggering a crash.
+		session.DidOpenFile(context.Background(), "file:///project/index.ts", 1, files["/project/index.ts"].(string), lsproto.LanguageKindTypeScript)
+	})
 }
 
 func filesForSolutionConfigFile(solutionRefs []string, compilerOptions string, ownFiles []string) map[string]any {

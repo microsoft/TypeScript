@@ -23,10 +23,14 @@ type extendedConfigCacheEntry struct {
 func (c *extendedConfigCache) Acquire(fh FileHandle, path tspath.Path, parse func() *tsoptions.ExtendedConfigCacheEntry) *tsoptions.ExtendedConfigCacheEntry {
 	entry, loaded := c.loadOrStoreNewLockedEntry(path)
 	defer entry.mu.Unlock()
-	if !loaded || entry.hash != fh.Hash() {
+	var hash xxh3.Uint128
+	if fh != nil {
+		hash = fh.Hash()
+	}
+	if !loaded || entry.hash != hash {
 		// Reparse the config if the hash has changed, or parse for the first time.
 		entry.entry = parse()
-		entry.hash = fh.Hash()
+		entry.hash = hash
 	}
 	return entry.entry
 }

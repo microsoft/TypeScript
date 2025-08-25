@@ -153,4 +153,34 @@ func TestConfigFileChanges(t *testing.T) {
 		defer release()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
 	})
+
+	t.Run("should update project when missing extended config is created", func(t *testing.T) {
+		t.Parallel()
+		// Start with a project whose tsconfig extends a base config that doesn't exist yet
+		missingBaseFiles := map[string]any{}
+		for k, v := range files {
+			if k == "/tsconfig.base.json" {
+				continue
+			}
+			missingBaseFiles[k] = v
+		}
+
+		session, utils := projecttestutil.Setup(missingBaseFiles)
+		session.DidOpenFile(context.Background(), "file:///src/index.ts", 1, missingBaseFiles["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
+
+		// Create the previously-missing base config file that is extended by /src/tsconfig.json
+		err := utils.FS().WriteFile("/tsconfig.base.json", `{"compilerOptions": {"strict": true}}`, false /*writeByteOrderMark*/)
+		assert.NilError(t, err)
+		session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
+			{
+				Uri:  lsproto.DocumentUri("file:///tsconfig.base.json"),
+				Type: lsproto.FileChangeTypeCreated,
+			},
+		})
+
+		// Accessing the language service should trigger project update
+		ls, err := session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/index.ts"))
+		assert.NilError(t, err)
+		assert.Equal(t, ls.GetProgram().Options().Strict, core.TSTrue)
+	})
 }

@@ -515,6 +515,7 @@ func (b *projectCollectionBuilder) findOrCreateDefaultConfiguredProjectWorker(
 			configFilePath := b.toPath(node.configFileName)
 			config := b.configFileRegistryBuilder.findOrAcquireConfigForOpenFile(node.configFileName, configFilePath, path, node.loadKind, node.logger.Fork("Acquiring config for open file"))
 			if config == nil {
+				node.logger.Log("Config file for project does not already exist")
 				return false, false
 			}
 			configs.Store(configFilePath, config)
@@ -535,6 +536,11 @@ func (b *projectCollectionBuilder) findOrCreateDefaultConfiguredProjectWorker(
 			}
 
 			project := b.findOrCreateProject(node.configFileName, configFilePath, node.loadKind, node.logger)
+			if project == nil {
+				node.logger.Log("Project does not already exist")
+				return false, false
+			}
+
 			if node.loadKind == projectLoadKindCreate {
 				// Ensure project is up to date before checking for file inclusion
 				b.updateProgram(project, node.logger)
@@ -720,6 +726,7 @@ func (b *projectCollectionBuilder) updateInferredProjectRoots(rootFileNames []st
 					logger.Log(fmt.Sprintf("Updating inferred project config with %d root files", len(rootFileNames)))
 				}
 				p.CommandLine = newCommandLine
+				p.commandLineWithTypingsFiles = nil
 				p.dirty = true
 				p.dirtyFilePath = ""
 			},
@@ -753,7 +760,10 @@ func (b *projectCollectionBuilder) updateProgram(entry dirty.Value[*Project], lo
 					filesChanged = true
 					return
 				}
-				entry.Change(func(p *Project) { p.CommandLine = commandLine })
+				entry.Change(func(p *Project) {
+					p.CommandLine = commandLine
+					p.commandLineWithTypingsFiles = nil
+				})
 			}
 		}
 		if !updateProgram {
