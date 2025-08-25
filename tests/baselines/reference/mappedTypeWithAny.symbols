@@ -177,3 +177,53 @@ type Evolver<T extends Evolvable<any> = any> = {
 
 };
 
+// https://github.com/microsoft/TypeScript/issues/61203
+type Obj61203 = { [k in keyof any]: number };
+>Obj61203 : Symbol(Obj61203, Decl(mappedTypeWithAny.ts, 61, 2))
+>k : Symbol(k, Decl(mappedTypeWithAny.ts, 64, 19))
+
+declare const obj61203: Obj61203;
+>obj61203 : Symbol(obj61203, Decl(mappedTypeWithAny.ts, 65, 13))
+>Obj61203 : Symbol(Obj61203, Decl(mappedTypeWithAny.ts, 61, 2))
+
+declare const key61203: keyof Obj61203;
+>key61203 : Symbol(key61203, Decl(mappedTypeWithAny.ts, 66, 13))
+>Obj61203 : Symbol(Obj61203, Decl(mappedTypeWithAny.ts, 61, 2))
+
+obj61203[key61203]; // ok
+>obj61203 : Symbol(obj61203, Decl(mappedTypeWithAny.ts, 65, 13))
+>key61203 : Symbol(key61203, Decl(mappedTypeWithAny.ts, 66, 13))
+
+
+// https://github.com/microsoft/TypeScript/issues/61203#issuecomment-2703862148
+type A<T> = { [k in keyof T]: 1 };
+>A : Symbol(A, Decl(mappedTypeWithAny.ts, 67, 19))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 71, 7))
+>k : Symbol(k, Decl(mappedTypeWithAny.ts, 71, 15))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 71, 7))
+
+declare function iDontKnow<T>(a: T): [ A<T>, keyof T ];
+>iDontKnow : Symbol(iDontKnow, Decl(mappedTypeWithAny.ts, 71, 34))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 72, 27))
+>a : Symbol(a, Decl(mappedTypeWithAny.ts, 72, 30))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 72, 27))
+>A : Symbol(A, Decl(mappedTypeWithAny.ts, 67, 19))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 72, 27))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 72, 27))
+
+const something: any = { a: 1, b: 2 };
+>something : Symbol(something, Decl(mappedTypeWithAny.ts, 73, 5))
+>a : Symbol(a, Decl(mappedTypeWithAny.ts, 73, 24))
+>b : Symbol(b, Decl(mappedTypeWithAny.ts, 73, 30))
+
+const [ o, k ] = iDontKnow(something);
+>o : Symbol(o, Decl(mappedTypeWithAny.ts, 74, 7))
+>k : Symbol(k, Decl(mappedTypeWithAny.ts, 74, 10))
+>iDontKnow : Symbol(iDontKnow, Decl(mappedTypeWithAny.ts, 71, 34))
+>something : Symbol(something, Decl(mappedTypeWithAny.ts, 73, 5))
+
+const v = o[k]; // ok
+>v : Symbol(v, Decl(mappedTypeWithAny.ts, 75, 5))
+>o : Symbol(o, Decl(mappedTypeWithAny.ts, 74, 7))
+>k : Symbol(k, Decl(mappedTypeWithAny.ts, 74, 10))
+
