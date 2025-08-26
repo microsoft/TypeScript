@@ -288,7 +288,7 @@ describe("unittests:: tscWatch:: watchEnvironment:: tsc-watch with different pol
             sys: () => {
                 const configFile: File = {
                     path: `/user/username/projects/myproject/tsconfig.json`,
-                    content: "{}",
+                    content: `{ "compilerOptions": { "moduleResolution": "node10" } }`,
                 };
                 const file1: File = {
                     path: `/user/username/projects/myproject/src/file1.ts`,
