@@ -28,6 +28,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/stringutil"
 	"golang.org/x/text/collate"
+	"golang.org/x/text/language"
 )
 
 func (l *LanguageService) ProvideCompletion(
@@ -3094,6 +3095,25 @@ func getCompletionsSymbolKind(kind ScriptElementKind) lsproto.CompletionItemKind
 	}
 }
 
+var collatorCache collections.SyncMap[language.Tag, *sync.Pool]
+
+func getCollator(tag language.Tag) *collate.Collator {
+	pool, ok := collatorCache.Load(tag)
+	if !ok {
+		pool, _ = collatorCache.LoadOrStore(tag, &sync.Pool{
+			New: func() any {
+				return collate.New(tag)
+			},
+		})
+	}
+	return pool.Get().(*collate.Collator)
+}
+
+func putCollator(tag language.Tag, collator *collate.Collator) {
+	pool, _ := collatorCache.Load(tag)
+	pool.Put(collator)
+}
+
 // Editors will use the `sortText` and then fall back to `name` for sorting, but leave ties in response order.
 // So, it's important that we sort those ties in the order we want them displayed if it matters. We don't
 // strictly need to sort by name or SortText here since clients are going to do it anyway, but we have to
@@ -3103,7 +3123,10 @@ func getCompletionsSymbolKind(kind ScriptElementKind) lsproto.CompletionItemKind
 // this made tests really weird, since most fourslash tests don't use the server.
 func getCompareCompletionEntries(ctx context.Context) func(entryInSlice *lsproto.CompletionItem, entryToInsert *lsproto.CompletionItem) int {
 	return func(entryInSlice *lsproto.CompletionItem, entryToInsert *lsproto.CompletionItem) int {
-		compareStrings := collate.New(core.GetLocale(ctx)).CompareString
+		locale := core.GetLocale(ctx)
+		collator := getCollator(locale)
+		defer putCollator(locale, collator)
+		compareStrings := collator.CompareString
 		result := compareStrings(*entryInSlice.SortText, *entryToInsert.SortText)
 		if result == stringutil.ComparisonEqual {
 			result = compareStrings(entryInSlice.Label, entryToInsert.Label)
