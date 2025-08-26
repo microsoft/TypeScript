@@ -338,6 +338,7 @@ import {
     getMembersOfDeclaration,
     getModifiers,
     getModuleInstanceState,
+    getModuleSpecifierOfBareOrAccessedRequire,
     getNameFromImportAttribute,
     getNameFromIndexInfo,
     getNameOfDeclaration,
@@ -1138,7 +1139,6 @@ import {
     WithStatement,
     WriterContextOut,
     YieldExpression,
-    getModuleSpecifierOfBareOrAccessedRequire,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
