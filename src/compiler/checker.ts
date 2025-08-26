@@ -710,6 +710,7 @@ import {
     isPrivateIdentifier,
     isPrivateIdentifierClassElementDeclaration,
     isPrivateIdentifierPropertyAccessExpression,
+    isPrivateIdentifierSymbol,
     isPropertyAccessEntityNameExpression,
     isPropertyAccessExpression,
     isPropertyAccessOrQualifiedName,
@@ -7609,6 +7610,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                         if (getDeclarationModifierFlagsFromSymbol(propertySymbol) & (ModifierFlags.Private | ModifierFlags.Protected) && context.tracker.reportPrivateInBaseOfClassExpression) {
                             context.tracker.reportPrivateInBaseOfClassExpression(unescapeLeadingUnderscores(propertySymbol.escapedName));
+                        }
+                        if (isPrivateIdentifierSymbol(propertySymbol) && context.tracker.reportPrivateInBaseOfClassExpression) {
+                            context.tracker.reportPrivateInBaseOfClassExpression(idText((propertySymbol.valueDeclaration! as NamedDeclaration).name! as PrivateIdentifier));
                         }
                     }
                     if (checkTruncationLength(context) && (i + 2 < properties.length - 1)) {
