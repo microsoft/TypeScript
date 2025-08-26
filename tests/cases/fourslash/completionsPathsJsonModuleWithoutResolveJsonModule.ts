@@ -1,6 +1,7 @@
 /// <reference path="fourslash.ts" />
 
-// @moduleResolution: bundler
+// @resolveJsonModule: false
+
 // @Filename: /project/test.json
 ////not read
 

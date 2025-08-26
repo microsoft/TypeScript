@@ -4,7 +4,7 @@ Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/t
 Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
 //// [/home/src/project/project/tsconfig.json]
-{ "compilerOptions": { "module": "commonjs" } }
+{ "compilerOptions": { "module": "commonjs", "moduleResolution": "node10" } }
 
 //// [/home/src/project/project/index.ts]
 
@@ -1270,6 +1270,7 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/project/project/tsconfig.json : {
  ],
  "options": {
   "module": 1,
+  "moduleResolution": 2,
   "configFilePath": "/home/src/project/project/tsconfig.json"
  }
 }
@@ -2137,7 +2138,8 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "module": "commonjs"
+            "module": "commonjs",
+            "moduleResolution": "node10"
           },
           "typeAcquisition": {
             "enable": false,
@@ -2164,7 +2166,22 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/home/src/project/project/index.ts",
         "configFile": "/home/src/project/project/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "start": {
+              "line": 1,
+              "offset": 66
+            },
+            "end": {
+              "line": 1,
+              "offset": 74
+            },
+            "text": "Option 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5107,
+            "category": "error",
+            "fileName": "/home/src/project/project/tsconfig.json"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] Project '/home/src/project/project/tsconfig.json' (Configured)
@@ -4497,7 +4514,7 @@ Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
-Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 100 module specifiers, plus 100 ambient and 400 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 100 module specifiers, plus 100 ambient and 400 from cache (10000.0% hit rate)
 Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *

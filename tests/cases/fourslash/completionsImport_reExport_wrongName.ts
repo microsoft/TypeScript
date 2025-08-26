@@ -16,7 +16,7 @@ verify.completions({
     includes: [
         {
             name: "x",
-            source: "/a",
+            source: "./a",
             sourceDisplay: "./a",
             text: "const x: 0",
             hasAction: true,
@@ -24,7 +24,7 @@ verify.completions({
         },
         {
             name: "y",
-            source: "/index",
+            source: ".",
             sourceDisplay: ".",
             text: "(alias) const y: 0\nexport y",
             hasAction: true,
@@ -35,7 +35,7 @@ verify.completions({
 });
 verify.applyCodeActionFromCompletion("", {
     name: "x",
-    source: "/a",
+    source: "./a",
     description: `Add import from "./a"`,
     newFileContent: `import { x } from "./a";
 
@@ -43,7 +43,7 @@ verify.applyCodeActionFromCompletion("", {
 });
 verify.applyCodeActionFromCompletion("", {
     name: "y",
-    source: "/index",
+    source: ".",
     description: `Add import from "."`,
     newFileContent: `import { y } from ".";
 import { x } from "./a";

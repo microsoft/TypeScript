@@ -41,7 +41,7 @@ verify.completions({
     {
       name: "Dottie",
       hasAction: true,
-      source: "/node_modules/dottie/dottie",
+      source: "dottie",
       sortText: completion.SortText.AutoImportSuggestions,
     },
   ],

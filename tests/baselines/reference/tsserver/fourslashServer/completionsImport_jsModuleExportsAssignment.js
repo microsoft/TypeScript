@@ -2183,3 +2183,202 @@ Projects::
     projectProgramVersion: 1
     dirty: false *changed*
     autoImportProviderHost: false
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "seq": 10,
+      "type": "request",
+      "arguments": {
+        "file": "/home/src/workspaces/project/index.ts",
+        "line": 1,
+        "offset": 1,
+        "entryNames": [
+          {
+            "name": "defaults",
+            "source": "./third_party/marked/src/defaults",
+            "data": {
+              "exportName": "defaults",
+              "fileName": "/home/src/workspaces/project/third_party/marked/src/defaults.js",
+              "moduleSpecifier": "./third_party/marked/src/defaults"
+            }
+          }
+        ]
+      },
+      "command": "completionEntryDetails-full"
+    }
+Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "completionEntryDetails-full",
+      "request_seq": 10,
+      "success": true,
+      "body": [
+        {
+          "name": "defaults",
+          "kindModifiers": "",
+          "kind": "alias",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "alias",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "parameter",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "defaults",
+              "kind": "aliasName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "any",
+              "kind": "keyword"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "import",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "defaults",
+              "kind": "aliasName"
+            }
+          ],
+          "documentation": [],
+          "tags": [],
+          "codeActions": [
+            {
+              "description": "Add import from \"./third_party/marked/src/defaults\"",
+              "changes": [
+                {
+                  "fileName": "/home/src/workspaces/project/index.ts",
+                  "textChanges": [
+                    {
+                      "span": {
+                        "start": 0,
+                        "length": 0
+                      },
+                      "newText": "import { defaults } from \"./third_party/marked/src/defaults\";\n\n"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "source": [
+            {
+              "text": "./third_party/marked/src/defaults",
+              "kind": "text"
+            }
+          ],
+          "sourceDisplay": [
+            {
+              "text": "./third_party/marked/src/defaults",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "seq": 11,
+      "type": "request",
+      "arguments": {
+        "file": "/home/src/workspaces/project/index.ts",
+        "line": 1,
+        "offset": 1,
+        "endLine": 1,
+        "endOffset": 1,
+        "insertString": "import { defaults } from \"./third_party/marked/src/defaults\";\n\n"
+      },
+      "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 11,
+      "success": true
+    }
+After Request
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/home/src/workspaces/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+    autoImportProviderHost: false
+
+ScriptInfos::
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/index.ts (Open) *changed*
+    version: SVC-2-3 *changed*
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/third_party/marked/src/defaults.js
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
+/home/src/workspaces/project/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*

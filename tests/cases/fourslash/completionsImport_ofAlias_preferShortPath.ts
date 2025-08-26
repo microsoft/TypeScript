@@ -1,9 +1,8 @@
 /// <reference path="fourslash.ts" />
 
 // Test that the completion is for the shortest path, even if that's a re-export.
-// Note that `source` in completionEntries will still be the original exporting path, but we use the re-export in completionDetails.
 
-// @moduleResolution: bundler
+// @moduleResolution: node10
 // @module: commonJs
 // @noLib: true
 
