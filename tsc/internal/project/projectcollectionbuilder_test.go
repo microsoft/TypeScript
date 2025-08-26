@@ -439,6 +439,36 @@ func TestProjectCollectionBuilder(t *testing.T) {
 		// triggering a crash.
 		session.DidOpenFile(context.Background(), "file:///project/index.ts", 1, files["/project/index.ts"].(string), lsproto.LanguageKindTypeScript)
 	})
+
+	t.Run("inferred project root files are in stable order", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/project/a.ts": `export const a = 1;`,
+			"/project/b.ts": `export const b = 1;`,
+			"/project/c.ts": `export const c = 1;`,
+		}
+
+		session, _ := projecttestutil.Setup(files)
+
+		// b, c, a
+		session.DidOpenFile(context.Background(), "file:///project/b.ts", 1, files["/project/b.ts"].(string), lsproto.LanguageKindTypeScript)
+		session.DidOpenFile(context.Background(), "file:///project/c.ts", 1, files["/project/c.ts"].(string), lsproto.LanguageKindTypeScript)
+		session.DidOpenFile(context.Background(), "file:///project/a.ts", 1, files["/project/a.ts"].(string), lsproto.LanguageKindTypeScript)
+
+		snapshot, release := session.Snapshot()
+		defer release()
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
+		inferredProject := snapshot.ProjectCollection.InferredProject()
+		assert.Assert(t, inferredProject != nil)
+		// It's more bookkeeping to maintain order of opening, since any file can move into or out of
+		// the inferred project due to changes in other projects. Order shouldn't matter for correctness,
+		// we just want it to be consistent, in case there are observable type ordering issues.
+		assert.DeepEqual(t, inferredProject.Program.CommandLine().FileNames(), []string{
+			"/project/a.ts",
+			"/project/b.ts",
+			"/project/c.ts",
+		})
+	})
 }
 
 func filesForSolutionConfigFile(solutionRefs []string, compilerOptions string, ownFiles []string) map[string]any {
