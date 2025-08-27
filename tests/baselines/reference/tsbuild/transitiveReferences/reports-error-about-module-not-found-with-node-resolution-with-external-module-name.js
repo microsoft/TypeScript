@@ -86,10 +86,10 @@ declare const console: { log(msg: any): void; };
 Output::
 /home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/transitiveReferences/a.ts
-[96mb.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS2307: [0mCannot find module 'a' or its corresponding type declarations.
+[96mtsconfig.b.json[0m:[93m4[0m:[93m25[0m - [91merror[0m[90m TS5107: [0mOption 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-[7m1[0m import {A} from 'a';
-[7m [0m [91m                ~~~[0m
+[7m4[0m     "moduleResolution": "node"
+[7m [0m [91m                        ~~~~~~[0m
 
 /home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/transitiveReferences/b.ts
@@ -171,7 +171,7 @@ export declare const b: any;
 
 
 //// [/user/username/projects/transitiveReferences/tsconfig.b.tsbuildinfo]
-{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.d.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-17186364832-import {A} from 'a';\nexport const b = new A();","signature":"-5666291609-export declare const b: any;\n"}],"root":[2],"options":{"composite":true},"semanticDiagnosticsPerFile":[[2,[{"start":16,"length":3,"messageText":"Cannot find module 'a' or its corresponding type declarations.","category":1,"code":2307}]]],"latestChangedDtsFile":"./b.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.d.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-17186364832-import {A} from 'a';\nexport const b = new A();","signature":"-5666291609-export declare const b: any;\n"}],"root":[2],"options":{"composite":true},"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./b.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/transitiveReferences/tsconfig.b.tsbuildinfo.readable.baseline.txt]
 {
@@ -209,21 +209,17 @@ export declare const b: any;
   },
   "semanticDiagnosticsPerFile": [
     [
+      "../../../../home/src/tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
       "./b.ts",
-      [
-        {
-          "start": 16,
-          "length": 3,
-          "messageText": "Cannot find module 'a' or its corresponding type declarations.",
-          "category": 1,
-          "code": 2307
-        }
-      ]
+      "not cached or not changed"
     ]
   ],
   "latestChangedDtsFile": "./b.d.ts",
   "version": "FakeTSVersion",
-  "size": 960
+  "size": 830
 }
 
 //// [/user/username/projects/transitiveReferences/c.js]

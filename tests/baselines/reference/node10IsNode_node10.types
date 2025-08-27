@@ -12,10 +12,10 @@ export declare const fancy: "ketchup";
 
 === /main.ts ===
 import { fancy } from "fancy-lib";
->fancy : "feast"
->      : ^^^^^^^
+>fancy : "ketchup"
+>      : ^^^^^^^^^
 
 fancy;
->fancy : "feast"
->      : ^^^^^^^
+>fancy : "ketchup"
+>      : ^^^^^^^^^
 

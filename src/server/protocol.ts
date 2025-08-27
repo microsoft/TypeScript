@@ -3269,6 +3269,7 @@ export const enum ModuleResolutionKind {
     Node = "node",
     /** @deprecated Renamed to `Node10` */
     NodeJs = "node",
+    /** @deprecated */
     Node10 = "node10",
     Node16 = "node16",
     NodeNext = "nodenext",

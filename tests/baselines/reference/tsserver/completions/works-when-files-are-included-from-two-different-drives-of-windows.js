@@ -155,6 +155,9 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: e:/solution/myproject/
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: e:/solution/myproject/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/solution/myproject/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: e:/solution/myproject/src 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/solution/myproject/src 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: e:/solution/myproject/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: e:/solution/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/solution/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/typescript/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
@@ -228,6 +231,10 @@ e:/solution/myproject/node_modules/@types/prop-types/package.json: *new*
 e:/solution/myproject/node_modules/@types/react/package.json: *new*
   {}
 e:/solution/myproject/node_modules/react-router-dom/package.json: *new*
+  {}
+e:/solution/myproject/package.json: *new*
+  {}
+e:/solution/myproject/src: *new*
   {}
 
 FsWatchesRecursive::
@@ -428,7 +435,9 @@ e:/solution/myproject/node_modules/@types/react/package.json:
   {}
 e:/solution/myproject/node_modules/react-router-dom/package.json:
   {}
-e:/solution/myproject/package.json: *new*
+e:/solution/myproject/package.json:
+  {}
+e:/solution/myproject/src:
   {}
 
 FsWatchesRecursive::
@@ -465,7 +474,7 @@ Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: isCompletionListBlocker: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
 Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 1 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
@@ -480,7 +489,7 @@ Info seq  [hh:mm:ss:mss] response:
           {
             "name": "React",
             "kind": "alias",
-            "kindModifiers": "",
+            "kindModifiers": "declare",
             "sortText": "11"
           },
           {
@@ -776,11 +785,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "source": "e:/solution/myproject/node_modules/@types/react/index",
+            "source": "react",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "react",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "Component",
               "exportMapKey": "9 * Component ",
+              "moduleSpecifier": "react",
               "fileName": "e:/solution/myproject/node_modules/@types/react/index.d.ts"
             }
           },

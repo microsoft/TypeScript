@@ -1,6 +1,5 @@
 // @strict: true
 // @module: esnext
-// @moduleResolution: node
 // @target: es2018
 // @filename: global.d.ts
 declare global {

@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 // @module: esnext
-// @moduleResolution: node
+// @moduleResolution: node10
 
 // @Filename: /a/b/impl.ts
 ////export default function foo() {}

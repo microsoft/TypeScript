@@ -10,7 +10,7 @@
 
 verify.applyCodeActionFromCompletion("", {
   name: "a",
-  source: "/a",
+  source: "./a",
   description: `Add import from "./a"`,
   newFileContent: `import { a } from "./a";
 
