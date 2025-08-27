@@ -347,14 +347,14 @@ func runWithoutResolvedSignatureCaching[T any](c *Checker, node *ast.Node, fn fu
 
 func (c *Checker) GetRootSymbols(symbol *ast.Symbol) []*ast.Symbol {
 	roots := c.getImmediateRootSymbols(symbol)
-	if roots != nil {
-		var result []*ast.Symbol
-		for _, root := range roots {
-			result = append(result, c.GetRootSymbols(root)...)
-		}
-		return result
+	if len(roots) == 0 {
+		return []*ast.Symbol{symbol}
 	}
-	return []*ast.Symbol{symbol}
+	var result []*ast.Symbol
+	for _, root := range roots {
+		result = append(result, c.GetRootSymbols(root)...)
+	}
+	return result
 }
 
 func (c *Checker) getImmediateRootSymbols(symbol *ast.Symbol) []*ast.Symbol {
@@ -364,7 +364,8 @@ func (c *Checker) getImmediateRootSymbols(symbol *ast.Symbol) []*ast.Symbol {
 			func(t *Type) *ast.Symbol {
 				return c.getPropertyOfType(t, symbol.Name)
 			})
-	} else if symbol.Flags&ast.SymbolFlagsTransient != 0 {
+	}
+	if symbol.Flags&ast.SymbolFlagsTransient != 0 {
 		if c.spreadLinks.Has(symbol) {
 			leftSpread := c.spreadLinks.Get(symbol).leftSpread
 			rightSpread := c.spreadLinks.Get(symbol).rightSpread
@@ -382,9 +383,7 @@ func (c *Checker) getImmediateRootSymbols(symbol *ast.Symbol) []*ast.Symbol {
 		if target != nil {
 			return []*ast.Symbol{target}
 		}
-		return nil
 	}
-
 	return nil
 }
 
@@ -418,20 +417,16 @@ func (c *Checker) GetExportSpecifierLocalTargetSymbol(node *ast.Node) *ast.Symbo
 		if node.Parent.Parent.AsExportDeclaration().ModuleSpecifier != nil {
 			return c.getExternalModuleMember(node.Parent.Parent, node, false /*dontResolveAlias*/)
 		}
-		name := node.PropertyName()
-		if name == nil {
-			name = node.Name()
-		}
+		name := node.PropertyNameOrName()
 		if name.Kind == ast.KindStringLiteral {
 			// Skip for invalid syntax like this: export { "x" }
 			return nil
 		}
+		return c.resolveEntityName(name, ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace|ast.SymbolFlagsAlias, true /*ignoreErrors*/, false, nil)
 	case ast.KindIdentifier:
-		// do nothing (don't panic)
-	default:
-		panic("Unhandled case in getExportSpecifierLocalTargetSymbol, node should be ExportSpecifier | Identifier")
+		return c.resolveEntityName(node, ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace|ast.SymbolFlagsAlias, true /*ignoreErrors*/, false, nil)
 	}
-	return c.resolveEntityName(node, ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace|ast.SymbolFlagsAlias, true /*ignoreErrors*/, false, nil)
+	panic("Unhandled case in getExportSpecifierLocalTargetSymbol, node should be ExportSpecifier | Identifier")
 }
 
 func (c *Checker) GetShorthandAssignmentValueSymbol(location *ast.Node) *ast.Symbol {
@@ -682,4 +677,123 @@ func (c *Checker) GetFirstTypeArgumentFromKnownType(t *Type) *Type {
 		}
 	}
 	return nil
+}
+
+// Gets all symbols for one property. Does not get symbols for every property.
+func (c *Checker) GetPropertySymbolsFromContextualType(node *ast.Node, contextualType *Type, unionSymbolOk bool) []*ast.Symbol {
+	name := ast.GetTextOfPropertyName(node.Name())
+	if name == "" {
+		return nil
+	}
+	if contextualType.flags&TypeFlagsUnion == 0 {
+		if symbol := c.getPropertyOfType(contextualType, name); symbol != nil {
+			return []*ast.Symbol{symbol}
+		}
+		return nil
+	}
+	filteredTypes := contextualType.Types()
+	if ast.IsObjectLiteralExpression(node.Parent) || ast.IsJsxAttributes(node.Parent) {
+		filteredTypes = core.Filter(filteredTypes, func(t *Type) bool {
+			return !c.IsTypeInvalidDueToUnionDiscriminant(t, node.Parent)
+		})
+	}
+	discriminatedPropertySymbols := core.MapNonNil(filteredTypes, func(t *Type) *ast.Symbol {
+		return c.getPropertyOfType(t, name)
+	})
+	if unionSymbolOk && (len(discriminatedPropertySymbols) == 0 || len(discriminatedPropertySymbols) == len(contextualType.Types())) {
+		if symbol := c.getPropertyOfType(contextualType, name); symbol != nil {
+			return []*ast.Symbol{symbol}
+		}
+	}
+	if len(filteredTypes) == 0 && len(discriminatedPropertySymbols) == 0 {
+		// Bad discriminant -- do again without discriminating
+		return core.MapNonNil(contextualType.Types(), func(t *Type) *ast.Symbol {
+			return c.getPropertyOfType(t, name)
+		})
+	}
+	// by eliminating duplicates we might even end up with a single symbol
+	// that helps with displaying better quick infos on properties of union types
+	return core.Deduplicate(discriminatedPropertySymbols)
+}
+
+// Gets the property symbol corresponding to the property in destructuring assignment
+// 'property1' from
+//
+//	for ( { property1: a } of elems) {
+//	}
+//
+// 'property1' at location 'a' from:
+//
+//	[a] = [ property1, property2 ]
+func (c *Checker) GetPropertySymbolOfDestructuringAssignment(location *ast.Node) *ast.Symbol {
+	if isArrayLiteralOrObjectLiteralDestructuringPattern(location.Parent.Parent) {
+		// Get the type of the object or array literal and then look for property of given name in the type
+		if typeOfObjectLiteral := c.getTypeOfAssignmentPattern(location.Parent.Parent); typeOfObjectLiteral != nil {
+			return c.getPropertyOfType(typeOfObjectLiteral, location.Text())
+		}
+	}
+	return nil
+}
+
+// Gets the type of object literal or array literal of destructuring assignment.
+// { a } from
+//
+//	for ( { a } of elems) {
+//	}
+//
+// [ a ] from
+//
+//	[a] = [ some array ...]
+func (c *Checker) getTypeOfAssignmentPattern(expr *ast.Node) *Type {
+	// If this is from "for of"
+	//     for ( { a } of elems) {
+	//     }
+	if ast.IsForOfStatement(expr.Parent) {
+		iteratedType := c.checkRightHandSideOfForOf(expr.Parent)
+		return c.checkDestructuringAssignment(expr, core.OrElse(iteratedType, c.errorType), CheckModeNormal, false)
+	}
+	// If this is from "for" initializer
+	//     for ({a } = elems[0];.....) { }
+	if ast.IsBinaryExpression(expr.Parent) {
+		iteratedType := c.getTypeOfExpression(expr.Parent.AsBinaryExpression().Right)
+		return c.checkDestructuringAssignment(expr, core.OrElse(iteratedType, c.errorType), CheckModeNormal, false)
+	}
+	// If this is from nested object binding pattern
+	//     for ({ skills: { primary, secondary } } = multiRobot, i = 0; i < 1; i++) {
+	if ast.IsPropertyAssignment(expr.Parent) {
+		node := expr.Parent.Parent
+		typeOfParentObjectLiteral := core.OrElse(c.getTypeOfAssignmentPattern(node), c.errorType)
+		propertyIndex := slices.Index(node.AsObjectLiteralExpression().Properties.Nodes, expr.Parent)
+		return c.checkObjectLiteralDestructuringPropertyAssignment(node, typeOfParentObjectLiteral, propertyIndex, nil, false)
+	}
+	// Array literal assignment - array destructuring pattern
+	node := expr.Parent
+	//    [{ property1: p1, property2 }] = elems;
+	typeOfArrayLiteral := core.OrElse(c.getTypeOfAssignmentPattern(node), c.errorType)
+	elementType := core.OrElse(c.checkIteratedTypeOrElementType(IterationUseDestructuring, typeOfArrayLiteral, c.undefinedType, expr.Parent), c.errorType)
+	return c.checkArrayLiteralDestructuringElementAssignment(node, typeOfArrayLiteral, slices.Index(node.AsArrayLiteralExpression().Elements.Nodes, expr), elementType, CheckModeNormal)
+}
+
+func isArrayLiteralOrObjectLiteralDestructuringPattern(node *ast.Node) bool {
+	if !(ast.IsArrayLiteralExpression(node) || ast.IsObjectLiteralExpression(node)) {
+		return false
+	}
+	parent := node.Parent
+	// [a,b,c] from:
+	// [a, b, c] = someExpression;
+	if ast.IsBinaryExpression(parent) && parent.AsBinaryExpression().Left == node && parent.AsBinaryExpression().OperatorToken.Kind == ast.KindEqualsToken {
+		return true
+	}
+	// [a, b, c] from:
+	// for([a, b, c] of expression)
+	if ast.IsForOfStatement(parent) && parent.Initializer() == node {
+		return true
+	}
+	// {x, a: {a, b, c} } = someExpression
+	if ast.IsPropertyAssignment(parent) {
+		return isArrayLiteralOrObjectLiteralDestructuringPattern(parent.Parent)
+	}
+	// [a, b, c] of
+	// [x, [a, b, c] ] = someExpression
+	return isArrayLiteralOrObjectLiteralDestructuringPattern(parent)
 }

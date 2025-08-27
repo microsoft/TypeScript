@@ -15,6 +15,34 @@
 // new D();
 
 
+// === /b.ts ===
+
+// import { [|C|] } from "./a";
+// new [|C|]();
+
+
+// === /c.ts ===
+
+// import { [|C|] } from "./a";
+// class D extends [|C|] {
+//     constructor() {
+//         super();
+//         super.method();
+//     }
+//     method() { super(); }
+// }
+// class E implements [|C|] {
+//     constructor() { super(); }
+// }
+
+
+// === /d.ts ===
+
+// import * as a from "./a";
+// new a.[|C|]();
+// class d extends a.[|C|] { constructor() { super(); }
+
+
 
 
 // === findAllReferences ===
@@ -34,6 +62,34 @@
 // new D();
 
 
+// === /b.ts ===
+
+// import { [|C|] } from "./a";
+// new [|C|]();
+
+
+// === /c.ts ===
+
+// import { [|C|] } from "./a";
+// class D extends [|C|] {
+//     constructor() {
+//         super();
+//         super.method();
+//     }
+//     method() { super(); }
+// }
+// class E implements [|C|] {
+//     constructor() { super(); }
+// }
+
+
+// === /d.ts ===
+
+// import * as a from "./a";
+// new a.[|C|]();
+// class d extends a.[|C|] { constructor() { super(); }
+
+
 
 
 // === findAllReferences ===
@@ -51,3 +107,31 @@
 // new [|C|]();
 // const D = [|C|];
 // new D();
+
+
+// === /b.ts ===
+
+// import { [|C|] } from "./a";
+// new [|C|]();
+
+
+// === /c.ts ===
+
+// import { [|C|] } from "./a";
+// class D extends [|C|] {
+//     constructor() {
+//         super();
+//         super.method();
+//     }
+//     method() { super(); }
+// }
+// class E implements [|C|] {
+//     constructor() { super(); }
+// }
+
+
+// === /d.ts ===
+
+// import * as a from "./a";
+// new a.[|C|]();
+// class d extends a.[|C|] { constructor() { super(); }

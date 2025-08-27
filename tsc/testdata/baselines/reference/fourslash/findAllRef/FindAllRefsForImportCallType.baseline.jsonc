@@ -2,3 +2,10 @@
 // === /app.ts ===
 
 // export function he/*FIND ALL REFS*/[|hello|]() {};
+
+
+// === /indirect-use.ts ===
+
+// import type { app } from "./re-export";
+// declare const app: app
+// app.[|hello|]();

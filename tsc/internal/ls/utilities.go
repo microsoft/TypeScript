@@ -62,6 +62,14 @@ func IsInString(sourceFile *ast.SourceFile, position int, previousToken *ast.Nod
 	return false
 }
 
+func importFromModuleSpecifier(node *ast.Node) *ast.Node {
+	if result := tryGetImportFromModuleSpecifier(node); result != nil {
+		return result
+	}
+	debug.FailBadSyntaxKind(node.Parent)
+	return nil
+}
+
 func tryGetImportFromModuleSpecifier(node *ast.StringLiteralLike) *ast.Node {
 	switch node.Parent.Kind {
 	case ast.KindImportDeclaration, ast.KindJSImportDeclaration, ast.KindExportDeclaration:
@@ -1341,23 +1349,19 @@ func getAllSuperTypeNodes(node *ast.Node) []*ast.TypeNode {
 }
 
 func getParentSymbolsOfPropertyAccess(location *ast.Node, symbol *ast.Symbol, ch *checker.Checker) []*ast.Symbol {
-	propertyAccessExpression := core.IfElse(isRightSideOfPropertyAccess(location), location.Parent, nil)
-	if propertyAccessExpression == nil {
+	if !isRightSideOfPropertyAccess(location) {
 		return nil
 	}
-
-	lhsType := ch.GetTypeAtLocation(propertyAccessExpression.Expression())
+	lhsType := ch.GetTypeAtLocation(location.Parent.Expression())
 	if lhsType == nil {
 		return nil
 	}
-
 	var possibleSymbols []*checker.Type
-	if lhsType.Flags() != 0 {
+	if lhsType.Flags()&checker.TypeFlagsUnionOrIntersection != 0 {
 		possibleSymbols = lhsType.Types()
 	} else if lhsType.Symbol() != symbol.Parent {
 		possibleSymbols = []*checker.Type{lhsType}
 	}
-
 	return core.MapNonNil(possibleSymbols, func(t *checker.Type) *ast.Symbol {
 		if t.Symbol() != nil && t.Symbol().Flags&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface) != 0 {
 			return t.Symbol()
@@ -1373,7 +1377,7 @@ func getParentSymbolsOfPropertyAccess(location *ast.Node, symbol *ast.Symbol, ch
 //
 //	The value of previousIterationSymbol is undefined when the function is first called.
 func getPropertySymbolsFromBaseTypes(symbol *ast.Symbol, propertyName string, checker *checker.Checker, cb func(base *ast.Symbol) *ast.Symbol) *ast.Symbol {
-	seen := collections.Set[*ast.Symbol]{}
+	var seen collections.Set[*ast.Symbol]
 	var recur func(*ast.Symbol) *ast.Symbol
 	recur = func(symbol *ast.Symbol) *ast.Symbol {
 		// Use `addToSeen` to ensure we don't infinitely recurse in this situation:
@@ -1383,23 +1387,24 @@ func getPropertySymbolsFromBaseTypes(symbol *ast.Symbol, propertyName string, ch
 		if symbol.Flags&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface) == 0 || !seen.AddIfAbsent(symbol) {
 			return nil
 		}
-
-		return core.FirstNonNil(symbol.Declarations, func(declaration *ast.Declaration) *ast.Symbol {
-			return core.FirstNonNil(getAllSuperTypeNodes(declaration), func(typeReference *ast.TypeNode) *ast.Symbol {
-				propertyType := checker.GetTypeAtLocation(typeReference)
-				if propertyType == nil || propertyType.Symbol() == nil {
-					return nil
-				}
-				propertySymbol := checker.GetPropertyOfType(propertyType, propertyName)
-				// Visit the typeReference as well to see if it directly or indirectly uses that property
-				if propertySymbol != nil {
-					if r := core.FirstNonNil(checker.GetRootSymbols(propertySymbol), cb); r != nil {
-						return r
+		for _, declaration := range symbol.Declarations {
+			for _, typeReference := range getAllSuperTypeNodes(declaration) {
+				if propertyType := checker.GetTypeAtLocation(typeReference); propertyType != nil && propertyType.Symbol() != nil {
+					// Visit the typeReference as well to see if it directly or indirectly uses that property
+					if propertySymbol := checker.GetPropertyOfType(propertyType, propertyName); propertySymbol != nil {
+						for _, rootSymbol := range checker.GetRootSymbols(propertySymbol) {
+							if result := cb(rootSymbol); result != nil {
+								return result
+							}
+						}
+					}
+					if result := recur(propertyType.Symbol()); result != nil {
+						return result
 					}
 				}
-				return recur(propertyType.Symbol())
-			})
-		})
+			}
+		}
+		return nil
 	}
 	return recur(symbol)
 }
@@ -1658,4 +1663,39 @@ func getChildrenFromNonJSDocNode(node *ast.Node, sourceFile *ast.SourceFile) []*
 		scanner.Scan()
 	}
 	return children
+}
+
+// Returns the containing object literal property declaration given a possible name node, e.g. "a" in x = { "a": 1 }
+func getContainingObjectLiteralElement(node *ast.Node) *ast.Node {
+	element := getContainingObjectLiteralElementWorker(node)
+	if element != nil && (ast.IsObjectLiteralExpression(element.Parent) || ast.IsJsxAttributes(element.Parent)) {
+		return element
+	}
+	return nil
+}
+
+func getContainingObjectLiteralElementWorker(node *ast.Node) *ast.Node {
+	switch node.Kind {
+	case ast.KindStringLiteral, ast.KindNoSubstitutionTemplateLiteral, ast.KindNumericLiteral:
+		if node.Parent.Kind == ast.KindComputedPropertyName {
+			if ast.IsObjectLiteralElement(node.Parent.Parent) {
+				return node.Parent.Parent
+			}
+			return nil
+		}
+		fallthrough
+	case ast.KindIdentifier:
+		if ast.IsObjectLiteralElement(node.Parent) && (node.Parent.Parent.Kind == ast.KindObjectLiteralExpression || node.Parent.Parent.Kind == ast.KindJsxAttributes) && node.Parent.Name() == node {
+			return node.Parent
+		}
+	}
+	return nil
+}
+
+// Return a function that returns true if the given node has not been seen
+func nodeSeenTracker() func(*ast.Node) bool {
+	var seen collections.Set[*ast.Node]
+	return func(node *ast.Node) bool {
+		return seen.AddIfAbsent(node)
+	}
 }

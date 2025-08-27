@@ -9,6 +9,11 @@
 // function blah() { return (1 + 2 + container.[|searchProp|]()) === 2;  };
 
 
+// === /redeclaration.ts ===
+
+// container = { "[|searchProp|]" : 18 };
+
+
 // === /stringIndexer.ts ===
 
 // function blah2() { container["[|searchProp|]"] };

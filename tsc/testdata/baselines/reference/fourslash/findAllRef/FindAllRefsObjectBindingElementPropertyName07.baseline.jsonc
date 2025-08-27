@@ -3,4 +3,4 @@
 
 // let p, b;
 // 
-// p, [{ /*FIND ALL REFS*/[|a|]: p, b }] = [{ a: 10, b: true }];
+// p, [{ /*FIND ALL REFS*/[|a|]: p, b }] = [{ [|a|]: 10, b: true }];

@@ -4,9 +4,20 @@
 // export var /*FIND ALL REFS*/[|x|] = 12;
 
 
+// === /main.ts ===
+
+// import { [|x|] } from "./m";
+// const y = [|x|];
+
+
 
 
 // === findAllReferences ===
+// === /m.ts ===
+
+// export var [|x|] = 12;
+
+
 // === /main.ts ===
 
 // import { /*FIND ALL REFS*/[|x|] } from "./m";

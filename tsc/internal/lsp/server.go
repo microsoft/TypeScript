@@ -458,6 +458,7 @@ var handlers = sync.OnceValue(func() handlerMap {
 	registerLanguageServiceDocumentRequestHandler(handlers, lsproto.TextDocumentRangeFormattingInfo, (*Server).handleDocumentRangeFormat)
 	registerLanguageServiceDocumentRequestHandler(handlers, lsproto.TextDocumentOnTypeFormattingInfo, (*Server).handleDocumentOnTypeFormat)
 	registerLanguageServiceDocumentRequestHandler(handlers, lsproto.TextDocumentDocumentSymbolInfo, (*Server).handleDocumentSymbol)
+	registerLanguageServiceDocumentRequestHandler(handlers, lsproto.TextDocumentRenameInfo, (*Server).handleRename)
 	registerRequestHandler(handlers, lsproto.WorkspaceSymbolInfo, (*Server).handleWorkspaceSymbol)
 	registerRequestHandler(handlers, lsproto.CompletionItemResolveInfo, (*Server).handleCompletionItemResolve)
 
@@ -615,6 +616,9 @@ func (s *Server) handleInitialize(ctx context.Context, params *lsproto.Initializ
 				Boolean: ptrTo(true),
 			},
 			DocumentSymbolProvider: &lsproto.BooleanOrDocumentSymbolOptions{
+				Boolean: ptrTo(true),
+			},
+			RenameProvider: &lsproto.BooleanOrRenameOptions{
 				Boolean: ptrTo(true),
 			},
 		},
@@ -790,6 +794,10 @@ func (s *Server) handleWorkspaceSymbol(ctx context.Context, params *lsproto.Work
 
 func (s *Server) handleDocumentSymbol(ctx context.Context, ls *ls.LanguageService, params *lsproto.DocumentSymbolParams) (lsproto.DocumentSymbolResponse, error) {
 	return ls.ProvideDocumentSymbols(ctx, params.TextDocument.Uri)
+}
+
+func (s *Server) handleRename(ctx context.Context, ls *ls.LanguageService, params *lsproto.RenameParams) (lsproto.RenameResponse, error) {
+	return ls.ProvideRename(ctx, params)
 }
 
 func (s *Server) Log(msg ...any) {

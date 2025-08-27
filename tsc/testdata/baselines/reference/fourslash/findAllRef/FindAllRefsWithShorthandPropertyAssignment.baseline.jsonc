@@ -28,7 +28,7 @@
 //  var name = "Foo";
 // 
 //  var obj = { /*FIND ALL REFS*/[|name|] };
-//  var obj1 = { name: name };
+//  var obj1 = { name: [|name|] };
 //  obj.[|name|];
 
 

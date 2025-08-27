@@ -10,7 +10,7 @@
 // }
 // 
 // var x: I = {
-//     ["42"]: function () { }
+//     ["[|42|]"]: function () { }
 // }
 
 
@@ -28,7 +28,7 @@
 // }
 // 
 // var x: I = {
-//     ["42"]: function () { }
+//     ["[|42|]"]: function () { }
 // }
 
 
@@ -37,7 +37,12 @@
 // === findAllReferences ===
 // === /findAllRefsForComputedProperties2.ts ===
 
-// --- (line: 6) skipped ---
+// interface I {
+//     [[|42|]](): void;
+// }
+// 
+// class C implements I {
+//     [[|42|]]: any;
 // }
 // 
 // var x: I = {

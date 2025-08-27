@@ -42,7 +42,10 @@
 // }
 // 
 // const ia: I = {
-// // --- (line: 12) skipped ---
+//     [|FA|]() { },
+//     FB() { },
+//     FC() { },
+//  };
 
 
 
@@ -87,7 +90,7 @@
 //     /*FIND ALL REFS*/[|FB|]();
 // }
 // 
-// const ib: I = { FB() {} };
+// const ib: I = { [|FB|]() {} };
 
 
 
@@ -132,4 +135,4 @@
 //     /*FIND ALL REFS*/[|FC|]();
 // }
 // 
-// const ic: I = { FC() {} };
+// const ic: I = { [|FC|]() {} };

@@ -27,7 +27,13 @@
 // === findAllReferences ===
 // === /home/src/workspaces/project/a/index.ts ===
 
-// --- (line: 7) skipped ---
+// import { NS } from "../b";
+// import { [|I|] } from "../c";
+// 
+// declare module "../b" {
+//     export namespace NS {
+//         export function FA();
+//     }
 // }
 // 
 // declare module "../c" {
@@ -35,7 +41,11 @@
 //         FA();
 //     }
 // }
-// // --- (line: 15) skipped ---
+// 
+// const ia: [|I|] = {
+//     FA: NS.FA,
+//     FC() { },
+// };
 
 
 // === /home/src/workspaces/project/c/index.ts ===
@@ -64,7 +74,10 @@
 //     }
 // }
 // 
-// // --- (line: 16) skipped ---
+// const ia: I = {
+//     [|FA|]: NS.FA,
+//     FC() { },
+// };
 
 
 
@@ -98,7 +111,13 @@
 // === findAllReferences ===
 // === /home/src/workspaces/project/a2/index.ts ===
 
-// --- (line: 7) skipped ---
+// import { NS } from "../b";
+// import { [|I|] } from "../c";
+// 
+// declare module "../b" {
+//     export namespace NS {
+//         export function FA();
+//     }
 // }
 // 
 // declare module "../c" {
@@ -106,7 +125,11 @@
 //         FA();
 //     }
 // }
-// // --- (line: 15) skipped ---
+// 
+// const ia: [|I|] = {
+//     FA: NS.FA,
+//     FC() { },
+// };
 
 
 // === /home/src/workspaces/project/c/index.ts ===
@@ -135,7 +158,10 @@
 //     }
 // }
 // 
-// // --- (line: 16) skipped ---
+// const ia: I = {
+//     [|FA|]: NS.FA,
+//     FC() { },
+// };
 
 
 
@@ -180,7 +206,7 @@
 //     /*FIND ALL REFS*/[|FB|]();
 // }
 // 
-// const ib: I = { FB() {} };
+// const ib: I = { [|FB|]() {} };
 
 
 
@@ -225,4 +251,4 @@
 //     /*FIND ALL REFS*/[|FC|]();
 // }
 // 
-// const ic: I = { FC() {} };
+// const ic: I = { [|FC|]() {} };

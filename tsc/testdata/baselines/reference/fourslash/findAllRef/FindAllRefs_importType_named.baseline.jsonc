@@ -14,6 +14,12 @@
 // export type U = string;
 
 
+// === /b.ts ===
+
+// const x: import("./a").[|T|] = 0;
+// const x: import("./a").U = 0;
+
+
 
 
 // === findAllReferences ===
@@ -32,6 +38,12 @@
 // export type /*FIND ALL REFS*/[|U|] = string;
 
 
+// === /b.ts ===
+
+// const x: import("./a").T = 0;
+// const x: import("./a").[|U|] = 0;
+
+
 
 
 // === findAllReferences ===
@@ -43,7 +55,7 @@
 
 // === /b.ts ===
 
-// const x: import("./a")./*FIND ALL REFS*/T = 0;
+// const x: import("./a")./*FIND ALL REFS*/[|T|] = 0;
 // const x: import("./a").U = 0;
 
 
@@ -59,4 +71,4 @@
 // === /b.ts ===
 
 // const x: import("./a").T = 0;
-// const x: import("./a")./*FIND ALL REFS*/U = 0;
+// const x: import("./a")./*FIND ALL REFS*/[|U|] = 0;

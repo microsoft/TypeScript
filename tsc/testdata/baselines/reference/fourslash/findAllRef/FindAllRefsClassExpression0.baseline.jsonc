@@ -6,6 +6,12 @@
 // };
 
 
+// === /b.ts ===
+
+// import [|A|] = require("./a");
+// [|A|];
+
+
 
 
 // === findAllReferences ===
@@ -16,9 +22,22 @@
 // };
 
 
+// === /b.ts ===
+
+// import [|A|] = require("./a");
+// [|A|];
+
+
 
 
 // === findAllReferences ===
+// === /a.ts ===
+
+// export = class [|A|] {
+//     m() { [|A|]; }
+// };
+
+
 // === /b.ts ===
 
 // import /*FIND ALL REFS*/[|A|] = require("./a");
@@ -28,6 +47,13 @@
 
 
 // === findAllReferences ===
+// === /a.ts ===
+
+// export = class [|A|] {
+//     m() { [|A|]; }
+// };
+
+
 // === /b.ts ===
 
 // import [|A|] = require("./a");

@@ -4,6 +4,12 @@
 // export default function /*FIND ALL REFS*/[|f|]() {}
 
 
+// === /b.ts ===
+
+// import [|g|] from "./a";
+// [|g|]();
+
+
 
 
 // === findAllReferences ===

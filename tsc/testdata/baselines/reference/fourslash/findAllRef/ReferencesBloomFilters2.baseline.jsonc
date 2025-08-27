@@ -9,6 +9,11 @@
 // function blah() { return (container[[|42|]]) === 2;  };
 
 
+// === /redeclaration.ts ===
+
+// container = { "[|42|]" : 18 };
+
+
 // === /stringIndexer.ts ===
 
 // function blah2() { container["[|42|]"] };

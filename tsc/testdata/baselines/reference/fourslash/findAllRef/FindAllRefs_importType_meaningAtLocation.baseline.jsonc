@@ -14,6 +14,12 @@
 // export const T = 0;
 
 
+// === /b.ts ===
+
+// const x: import("./a").[|T|] = 0;
+// const x: typeof import("./a").T = 0;
+
+
 
 
 // === findAllReferences ===
@@ -32,6 +38,12 @@
 // export const /*FIND ALL REFS*/[|T|] = 0;
 
 
+// === /b.ts ===
+
+// const x: import("./a").T = 0;
+// const x: typeof import("./a").[|T|] = 0;
+
+
 
 
 // === findAllReferences ===
@@ -43,7 +55,7 @@
 
 // === /b.ts ===
 
-// const x: import("./a")./*FIND ALL REFS*/T = 0;
+// const x: import("./a")./*FIND ALL REFS*/[|T|] = 0;
 // const x: typeof import("./a").T = 0;
 
 
@@ -59,4 +71,4 @@
 // === /b.ts ===
 
 // const x: import("./a").T = 0;
-// const x: typeof import("./a")./*FIND ALL REFS*/T = 0;
+// const x: typeof import("./a")./*FIND ALL REFS*/[|T|] = 0;

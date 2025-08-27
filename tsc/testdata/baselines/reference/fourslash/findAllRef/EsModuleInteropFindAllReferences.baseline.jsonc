@@ -16,6 +16,12 @@
 // }
 
 
+// === /b.ts ===
+
+// import a from "a";
+// a.[|x|];
+
+
 
 
 // === findAllReferences ===
@@ -29,4 +35,4 @@
 // === /b.ts ===
 
 // import a from "a";
-// a./*FIND ALL REFS*/x;
+// a./*FIND ALL REFS*/[|x|];

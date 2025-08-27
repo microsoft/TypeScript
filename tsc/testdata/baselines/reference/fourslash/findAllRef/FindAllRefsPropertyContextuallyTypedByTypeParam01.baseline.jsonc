@@ -7,10 +7,13 @@
 // class C<T extends IFoo> {
 //     method() {
 //         var x: T = {
-//             a: ""
+//             [|a|]: ""
 //         };
 //         x.[|a|];
 //     }
 // }
 // 
-// // --- (line: 13) skipped ---
+// 
+// var x: IFoo = {
+//     [|a|]: "ss"
+// };

@@ -5,6 +5,12 @@
 // export default [|a|];
 
 
+// === /b.ts ===
+
+// import [|a|] from "./a";
+// [|a|];
+
+
 
 
 // === findAllReferences ===
@@ -12,6 +18,12 @@
 
 // const [|a|] = 0;
 // export default /*FIND ALL REFS*/[|a|];
+
+
+// === /b.ts ===
+
+// import [|a|] from "./a";
+// [|a|];
 
 
 

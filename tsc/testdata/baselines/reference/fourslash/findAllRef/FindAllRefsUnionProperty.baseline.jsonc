@@ -5,7 +5,7 @@
 //     | { /*FIND ALL REFS*/[|type|]: "a", prop: number }
 //     | { [|type|]: "b", prop: string };
 // const tt: T = {
-//     type: "a",
+//     [|type|]: "a",
 //     prop: 0,
 // };
 // declare const t: T;
@@ -25,7 +25,7 @@
 //     | { [|type|]: "a", prop: number }
 //     | { /*FIND ALL REFS*/[|type|]: "b", prop: string };
 // const tt: T = {
-//     type: "a",
+//     [|type|]: "a",
 //     prop: 0,
 // };
 // declare const t: T;
@@ -45,7 +45,7 @@
 //     | { [|type|]: "a", prop: number }
 //     | { [|type|]: "b", prop: string };
 // const tt: T = {
-//     type: "a",
+//     [|type|]: "a",
 //     prop: 0,
 // };
 // declare const t: T;
@@ -65,7 +65,7 @@
 //     | { [|type|]: "a", prop: number }
 //     | { [|type|]: "b", prop: string };
 // const tt: T = {
-//     type: "a",
+//     [|type|]: "a",
 //     prop: 0,
 // };
 // declare const t: T;
@@ -85,7 +85,7 @@
 //     | { [|type|]: "a", prop: number }
 //     | { [|type|]: "b", prop: string };
 // const tt: T = {
-//     type: "a",
+//     [|type|]: "a",
 //     prop: 0,
 // };
 // declare const t: T;
@@ -102,14 +102,18 @@
 // === /findAllRefsUnionProperty.ts ===
 
 // type T =
-//     | { type: "a", prop: number }
+//     | { [|type|]: "a", prop: number }
 //     | { type: "b", prop: string };
 // const tt: T = {
 //     /*FIND ALL REFS*/[|type|]: "a",
 //     prop: 0,
 // };
 // declare const t: T;
-// // --- (line: 9) skipped ---
+// if (t.[|type|] === "a") {
+//     t.[|type|];
+// } else {
+//     t.type;
+// }
 
 
 
@@ -122,8 +126,11 @@
 //     | { type: "b", [|prop|]: string };
 // const tt: T = {
 //     type: "a",
-//     prop: 0,
-// // --- (line: 7) skipped ---
+//     [|prop|]: 0,
+// };
+// declare const t: T;
+// if (t.type === "a") {
+// // --- (line: 10) skipped ---
 
 
 
@@ -136,8 +143,11 @@
 //     | { type: "b", /*FIND ALL REFS*/[|prop|]: string };
 // const tt: T = {
 //     type: "a",
-//     prop: 0,
-// // --- (line: 7) skipped ---
+//     [|prop|]: 0,
+// };
+// declare const t: T;
+// if (t.type === "a") {
+// // --- (line: 10) skipped ---
 
 
 
@@ -146,7 +156,7 @@
 // === /findAllRefsUnionProperty.ts ===
 
 // type T =
-//     | { type: "a", prop: number }
+//     | { type: "a", [|prop|]: number }
 //     | { type: "b", prop: string };
 // const tt: T = {
 //     type: "a",

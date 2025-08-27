@@ -351,12 +351,6 @@ func Coalesce[T *U, U any](a T, b T) T {
 	}
 }
 
-// Returns the first element that is not `nil`; CoalesceList(a, b, c) is roughly analogous to `a ?? b ?? c` in JS, except that it
-// non-shortcutting, so it is advised to only use a constant or precomputed value for non-first values in the list
-func CoalesceList[T *U, U any](a ...T) T {
-	return FirstNonNil(a, func(t T) T { return t })
-}
-
 func ComputeLineStarts(text string) []TextPos {
 	result := make([]TextPos, 0, strings.Count(text, "\n")+1)
 	return slices.AppendSeq(result, ComputeLineStartsSeq(text))
@@ -624,4 +618,22 @@ func CopyMapInto[M1 ~map[K]V, M2 ~map[K]V, K comparable, V any](dst M1, src M2) 
 	}
 	maps.Copy(dst, src)
 	return dst
+}
+
+func Deduplicate[T comparable](slice []T) []T {
+	if len(slice) > 1 {
+		for i, value := range slice {
+			if slices.Contains(slice[:i], value) {
+				result := slices.Clone(slice[:i])
+				for i++; i < len(slice); i++ {
+					value = slice[i]
+					if !slices.Contains(result, value) {
+						result = append(result, value)
+					}
+				}
+				return result
+			}
+		}
+	}
+	return slice
 }

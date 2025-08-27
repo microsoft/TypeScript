@@ -10,7 +10,7 @@
 // }
 // 
 // var x: I = {
-//     ["prop1"]: function () { },
+//     ["[|prop1|]"]: function () { },
 // }
 
 
@@ -28,7 +28,7 @@
 // }
 // 
 // var x: I = {
-//     ["prop1"]: function () { },
+//     ["[|prop1|]"]: function () { },
 // }
 
 
@@ -37,7 +37,12 @@
 // === findAllReferences ===
 // === /findAllRefsForComputedProperties.ts ===
 
-// --- (line: 6) skipped ---
+// interface I {
+//     ["[|prop1|]"]: () => void;
+// }
+// 
+// class C implements I {
+//     ["[|prop1|]"]: any;
 // }
 // 
 // var x: I = {

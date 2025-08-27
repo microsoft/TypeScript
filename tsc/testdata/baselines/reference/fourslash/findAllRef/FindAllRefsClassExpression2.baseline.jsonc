@@ -4,9 +4,20 @@
 // exports./*FIND ALL REFS*/[|A|] = class {};
 
 
+// === /b.js ===
+
+// import { [|A|] } from "./a";
+// [|A|];
+
+
 
 
 // === findAllReferences ===
+// === /a.js ===
+
+// exports.[|A|] = class {};
+
+
 // === /b.js ===
 
 // import { /*FIND ALL REFS*/[|A|] } from "./a";
@@ -16,6 +27,11 @@
 
 
 // === findAllReferences ===
+// === /a.js ===
+
+// exports.[|A|] = class {};
+
+
 // === /b.js ===
 
 // import { [|A|] } from "./a";
