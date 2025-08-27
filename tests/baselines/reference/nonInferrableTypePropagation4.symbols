@@ -1,0 +1,154 @@
+//// [tests/cases/compiler/nonInferrableTypePropagation4.ts] ////
+
+=== nonInferrableTypePropagation4.ts ===
+// https://github.com/microsoft/TypeScript/issues/62345
+
+interface P<T> {
+>P : Symbol(P, Decl(nonInferrableTypePropagation4.ts, 0, 0), Decl(nonInferrableTypePropagation4.ts, 10, 11))
+>T : Symbol(T, Decl(nonInferrableTypePropagation4.ts, 2, 12))
+
+  then: (onfulfilled: (value: T) => unknown) => unknown;
+>then : Symbol(P.then, Decl(nonInferrableTypePropagation4.ts, 2, 16))
+>onfulfilled : Symbol(onfulfilled, Decl(nonInferrableTypePropagation4.ts, 3, 9))
+>value : Symbol(value, Decl(nonInferrableTypePropagation4.ts, 3, 23))
+>T : Symbol(T, Decl(nonInferrableTypePropagation4.ts, 2, 12))
+}
+
+interface PConstructor {
+>PConstructor : Symbol(PConstructor, Decl(nonInferrableTypePropagation4.ts, 4, 1))
+
+  new <T>(executor: (resolve: (value: T) => void) => void): P<T>;
+>T : Symbol(T, Decl(nonInferrableTypePropagation4.ts, 7, 7))
+>executor : Symbol(executor, Decl(nonInferrableTypePropagation4.ts, 7, 10))
+>resolve : Symbol(resolve, Decl(nonInferrableTypePropagation4.ts, 7, 21))
+>value : Symbol(value, Decl(nonInferrableTypePropagation4.ts, 7, 31))
+>T : Symbol(T, Decl(nonInferrableTypePropagation4.ts, 7, 7))
+>P : Symbol(P, Decl(nonInferrableTypePropagation4.ts, 0, 0), Decl(nonInferrableTypePropagation4.ts, 10, 11))
+>T : Symbol(T, Decl(nonInferrableTypePropagation4.ts, 7, 7))
+}
+
+declare var P: PConstructor;
+>P : Symbol(P, Decl(nonInferrableTypePropagation4.ts, 0, 0), Decl(nonInferrableTypePropagation4.ts, 10, 11))
+>PConstructor : Symbol(PConstructor, Decl(nonInferrableTypePropagation4.ts, 4, 1))
+
+declare function foo1<T>(x: () => P<{ default: T }>): T;
+>foo1 : Symbol(foo1, Decl(nonInferrableTypePropagation4.ts, 10, 28))
+>T : Symbol(T, Decl(nonInferrableTypePropagation4.ts, 12, 22))
+>x : Symbol(x, Decl(nonInferrableTypePropagation4.ts, 12, 25))
+>P : Symbol(P, Decl(nonInferrableTypePropagation4.ts, 0, 0), Decl(nonInferrableTypePropagation4.ts, 10, 11))
+>default : Symbol(default, Decl(nonInferrableTypePropagation4.ts, 12, 37))
+>T : Symbol(T, Decl(nonInferrableTypePropagation4.ts, 12, 22))
+>T : Symbol(T, Decl(nonInferrableTypePropagation4.ts, 12, 22))
+
+const result1 = foo1(() => {
+>result1 : Symbol(result1, Decl(nonInferrableTypePropagation4.ts, 14, 5))
+>foo1 : Symbol(foo1, Decl(nonInferrableTypePropagation4.ts, 10, 28))
+
+  return new P((resolve) => {
+>P : Symbol(P, Decl(nonInferrableTypePropagation4.ts, 0, 0), Decl(nonInferrableTypePropagation4.ts, 10, 11))
+>resolve : Symbol(resolve, Decl(nonInferrableTypePropagation4.ts, 15, 16))
+
+    resolve;
+>resolve : Symbol(resolve, Decl(nonInferrableTypePropagation4.ts, 15, 16))
+
+  });
+});
+
+type WithDefault<T> = { default: T };
+>WithDefault : Symbol(WithDefault, Decl(nonInferrableTypePropagation4.ts, 18, 3))
+>T : Symbol(T, Decl(nonInferrableTypePropagation4.ts, 20, 17))
+>default : Symbol(default, Decl(nonInferrableTypePropagation4.ts, 20, 23))
+>T : Symbol(T, Decl(nonInferrableTypePropagation4.ts, 20, 17))
+
+declare function foo2<T>(x: () => P<WithDefault<T>>): T;
+>foo2 : Symbol(foo2, Decl(nonInferrableTypePropagation4.ts, 20, 37))
+>T : Symbol(T, Decl(nonInferrableTypePropagation4.ts, 22, 22))
+>x : Symbol(x, Decl(nonInferrableTypePropagation4.ts, 22, 25))
+>P : Symbol(P, Decl(nonInferrableTypePropagation4.ts, 0, 0), Decl(nonInferrableTypePropagation4.ts, 10, 11))
+>WithDefault : Symbol(WithDefault, Decl(nonInferrableTypePropagation4.ts, 18, 3))
+>T : Symbol(T, Decl(nonInferrableTypePropagation4.ts, 22, 22))
+>T : Symbol(T, Decl(nonInferrableTypePropagation4.ts, 22, 22))
+
+const result2 = foo2(() => {
+>result2 : Symbol(result2, Decl(nonInferrableTypePropagation4.ts, 24, 5))
+>foo2 : Symbol(foo2, Decl(nonInferrableTypePropagation4.ts, 20, 37))
+
+  return new P((resolve) => {
+>P : Symbol(P, Decl(nonInferrableTypePropagation4.ts, 0, 0), Decl(nonInferrableTypePropagation4.ts, 10, 11))
+>resolve : Symbol(resolve, Decl(nonInferrableTypePropagation4.ts, 25, 16))
+
+    resolve;
+>resolve : Symbol(resolve, Decl(nonInferrableTypePropagation4.ts, 25, 16))
+
+  });
+});
+
+declare function foo3<T>(x: () => P<[T]>): T;
+>foo3 : Symbol(foo3, Decl(nonInferrableTypePropagation4.ts, 28, 3))
+>T : Symbol(T, Decl(nonInferrableTypePropagation4.ts, 30, 22))
+>x : Symbol(x, Decl(nonInferrableTypePropagation4.ts, 30, 25))
+>P : Symbol(P, Decl(nonInferrableTypePropagation4.ts, 0, 0), Decl(nonInferrableTypePropagation4.ts, 10, 11))
+>T : Symbol(T, Decl(nonInferrableTypePropagation4.ts, 30, 22))
+>T : Symbol(T, Decl(nonInferrableTypePropagation4.ts, 30, 22))
+
+const result3 = foo3(() => {
+>result3 : Symbol(result3, Decl(nonInferrableTypePropagation4.ts, 32, 5))
+>foo3 : Symbol(foo3, Decl(nonInferrableTypePropagation4.ts, 28, 3))
+
+  return new P((resolve) => {
+>P : Symbol(P, Decl(nonInferrableTypePropagation4.ts, 0, 0), Decl(nonInferrableTypePropagation4.ts, 10, 11))
+>resolve : Symbol(resolve, Decl(nonInferrableTypePropagation4.ts, 33, 16))
+
+    resolve;
+>resolve : Symbol(resolve, Decl(nonInferrableTypePropagation4.ts, 33, 16))
+
+  });
+});
+
+declare function foo4<T>(x: () => P<{ default: { prop: T } }>): T;
+>foo4 : Symbol(foo4, Decl(nonInferrableTypePropagation4.ts, 36, 3))
+>T : Symbol(T, Decl(nonInferrableTypePropagation4.ts, 38, 22))
+>x : Symbol(x, Decl(nonInferrableTypePropagation4.ts, 38, 25))
+>P : Symbol(P, Decl(nonInferrableTypePropagation4.ts, 0, 0), Decl(nonInferrableTypePropagation4.ts, 10, 11))
+>default : Symbol(default, Decl(nonInferrableTypePropagation4.ts, 38, 37))
+>prop : Symbol(prop, Decl(nonInferrableTypePropagation4.ts, 38, 48))
+>T : Symbol(T, Decl(nonInferrableTypePropagation4.ts, 38, 22))
+>T : Symbol(T, Decl(nonInferrableTypePropagation4.ts, 38, 22))
+
+const result4 = foo4(() => {
+>result4 : Symbol(result4, Decl(nonInferrableTypePropagation4.ts, 40, 5))
+>foo4 : Symbol(foo4, Decl(nonInferrableTypePropagation4.ts, 36, 3))
+
+  return new P((resolve) => {
+>P : Symbol(P, Decl(nonInferrableTypePropagation4.ts, 0, 0), Decl(nonInferrableTypePropagation4.ts, 10, 11))
+>resolve : Symbol(resolve, Decl(nonInferrableTypePropagation4.ts, 41, 16))
+
+    resolve;
+>resolve : Symbol(resolve, Decl(nonInferrableTypePropagation4.ts, 41, 16))
+
+  });
+});
+
+declare function foo5<T>(x: () => P<{ default: [T] }>): T;
+>foo5 : Symbol(foo5, Decl(nonInferrableTypePropagation4.ts, 44, 3))
+>T : Symbol(T, Decl(nonInferrableTypePropagation4.ts, 46, 22))
+>x : Symbol(x, Decl(nonInferrableTypePropagation4.ts, 46, 25))
+>P : Symbol(P, Decl(nonInferrableTypePropagation4.ts, 0, 0), Decl(nonInferrableTypePropagation4.ts, 10, 11))
+>default : Symbol(default, Decl(nonInferrableTypePropagation4.ts, 46, 37))
+>T : Symbol(T, Decl(nonInferrableTypePropagation4.ts, 46, 22))
+>T : Symbol(T, Decl(nonInferrableTypePropagation4.ts, 46, 22))
+
+const result5 = foo5(() => {
+>result5 : Symbol(result5, Decl(nonInferrableTypePropagation4.ts, 48, 5))
+>foo5 : Symbol(foo5, Decl(nonInferrableTypePropagation4.ts, 44, 3))
+
+  return new P((resolve) => {
+>P : Symbol(P, Decl(nonInferrableTypePropagation4.ts, 0, 0), Decl(nonInferrableTypePropagation4.ts, 10, 11))
+>resolve : Symbol(resolve, Decl(nonInferrableTypePropagation4.ts, 49, 16))
+
+    resolve;
+>resolve : Symbol(resolve, Decl(nonInferrableTypePropagation4.ts, 49, 16))
+
+  });
+});
+

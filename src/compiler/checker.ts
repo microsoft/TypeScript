@@ -20714,20 +20714,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     instantiateAnonymousType(target, newMapper, newAliasSymbol, newAliasTypeArguments);
                 target.instantiations.set(id, result); // Set cached result early in case we recursively invoke instantiation while eagerly computing type variable visibility below
                 const resultObjectFlags = getObjectFlags(result);
-                if (result.flags & TypeFlags.ObjectFlagsType && !(resultObjectFlags & ObjectFlags.CouldContainTypeVariablesComputed)) {
-                    const resultCouldContainTypeVariables = some(typeArguments, couldContainTypeVariables); // one of the input type arguments might be or contain the result
-                    if (!(getObjectFlags(result) & ObjectFlags.CouldContainTypeVariablesComputed)) {
-                        // if `result` is one of the object types we tried to make (it may not be, due to how `instantiateMappedType` works), we can carry forward the type variable containment check from the input type arguments
-                        if (resultObjectFlags & (ObjectFlags.Mapped | ObjectFlags.Anonymous | ObjectFlags.Reference)) {
-                            (result as ObjectFlagsType).objectFlags |= ObjectFlags.CouldContainTypeVariablesComputed | (resultCouldContainTypeVariables ? ObjectFlags.CouldContainTypeVariables : 0);
-                        }
-                        // If none of the type arguments for the outer type parameters contain type variables, it follows
-                        // that the instantiated type doesn't reference type variables.
-                        // Intrinsics have `CouldContainTypeVariablesComputed` pre-set, so this should only cover unions and intersections resulting from `instantiateMappedType`
-                        else {
-                            (result as ObjectFlagsType).objectFlags |= !resultCouldContainTypeVariables ? ObjectFlags.CouldContainTypeVariablesComputed : 0;
+                if (result.flags & TypeFlags.ObjectFlagsType) {
+                    let propagatingFlags = getPropagatingFlagsOfTypes(typeArguments);
+                    if (!(resultObjectFlags & ObjectFlags.CouldContainTypeVariablesComputed)) {
+                        const resultCouldContainTypeVariables = some(typeArguments, couldContainTypeVariables); // one of the input type arguments might be or contain the result
+                        if (!(getObjectFlags(result) & ObjectFlags.CouldContainTypeVariablesComputed)) {
+                            // if `result` is one of the object types we tried to make (it may not be, due to how `instantiateMappedType` works), we can carry forward the type variable containment check from the input type arguments
+                            if (resultObjectFlags & (ObjectFlags.Mapped | ObjectFlags.Anonymous | ObjectFlags.Reference)) {
+                                propagatingFlags |= ObjectFlags.CouldContainTypeVariablesComputed | (resultCouldContainTypeVariables ? ObjectFlags.CouldContainTypeVariables : 0);
+                            }
+                            // If none of the type arguments for the outer type parameters contain type variables, it follows
+                            // that the instantiated type doesn't reference type variables.
+                            // Intrinsics have `CouldContainTypeVariablesComputed` pre-set, so this should only cover unions and intersections resulting from `instantiateMappedType`
+                            else {
+                                propagatingFlags |= !resultCouldContainTypeVariables ? ObjectFlags.CouldContainTypeVariablesComputed : 0;
+                            }
                         }
                     }
+                    (result as ObjectFlagsType).objectFlags |= propagatingFlags;
                 }
             }
             return result;
