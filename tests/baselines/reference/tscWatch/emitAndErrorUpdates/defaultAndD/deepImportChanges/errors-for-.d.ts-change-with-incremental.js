@@ -143,8 +143,6 @@ PolledWatches::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject: *new*
-  {}
 /user/username/projects/myproject/a.ts: *new*
   {}
 /user/username/projects/myproject/b.d.ts: *new*
@@ -157,9 +155,6 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/myproject: *new*
   {}
-
-Timeout callback:: count: 1
-2: timerToInvalidateFailedLookupResolutions *new*
 
 Program root files: [
   "/user/username/projects/myproject/a.ts",
@@ -203,13 +198,11 @@ export class C
 }
 
 
-Timeout callback:: count: 2
-2: timerToInvalidateFailedLookupResolutions
-3: timerToUpdateProgram *new*
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
 
-Before running Timeout callback:: count: 2
-2: timerToInvalidateFailedLookupResolutions
-3: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -358,10 +351,10 @@ export class C
 
 
 Timeout callback:: count: 1
-4: timerToUpdateProgram *new*
+2: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-4: timerToUpdateProgram
+2: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -491,10 +484,10 @@ export class C
 
 
 Timeout callback:: count: 1
-5: timerToUpdateProgram *new*
+3: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-5: timerToUpdateProgram
+3: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0

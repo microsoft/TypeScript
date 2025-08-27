@@ -296,8 +296,6 @@ FsWatches::
 FsWatchesRecursive::
 /users/username/projects/project: *new*
   {}
-/users/username/projects/project/node_modules: *new*
-  {}
 
 Program root files: [
   "/users/username/projects/project/index.tsx"

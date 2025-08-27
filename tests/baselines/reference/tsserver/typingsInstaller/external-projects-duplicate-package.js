@@ -49,12 +49,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Creating ExternalProject: /home/src/projects/project/a/app/test.csproj, currentDirectory: /home/src/projects/project/a/app
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/app.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/a/app/test.csproj
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/app/node_modules 1 undefined Project: /home/src/projects/project/a/app/test.csproj WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/app/node_modules 1 undefined Project: /home/src/projects/project/a/app/test.csproj WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/node_modules 1 undefined Project: /home/src/projects/project/a/app/test.csproj WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/node_modules 1 undefined Project: /home/src/projects/project/a/app/test.csproj WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/a/app/test.csproj WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/a/app/test.csproj WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
@@ -94,11 +88,7 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/package.json: *new*
   {"pollingInterval":2000}
-/home/src/projects/project/a/app/node_modules: *new*
-  {"pollingInterval":500}
 /home/src/projects/project/a/app/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/a/node_modules: *new*
   {"pollingInterval":500}
 /home/src/projects/project/a/node_modules/@types: *new*
   {"pollingInterval":500}
@@ -323,15 +313,13 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/projects/project/a/app/bower_components: *new*
   {"pollingInterval":500}
-/home/src/projects/project/a/app/node_modules:
+/home/src/projects/project/a/app/node_modules: *new*
   {"pollingInterval":500}
 /home/src/projects/project/a/app/node_modules/@types:
   {"pollingInterval":500}
 /home/src/projects/project/a/b/bower_components: *new*
   {"pollingInterval":500}
 /home/src/projects/project/a/b/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/a/node_modules:
   {"pollingInterval":500}
 /home/src/projects/project/a/node_modules/@types:
   {"pollingInterval":500}

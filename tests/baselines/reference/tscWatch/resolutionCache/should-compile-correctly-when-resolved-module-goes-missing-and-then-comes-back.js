@@ -48,8 +48,6 @@ PolledWatches::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
-/users/username/projects/project: *new*
-  {}
 /users/username/projects/project/bar.d.ts: *new*
   {}
 /users/username/projects/project/foo.ts: *new*
@@ -84,13 +82,11 @@ Change:: Delete imported file
 Input::
 //// [/users/username/projects/project/bar.d.ts] deleted
 
-Timeout callback:: count: 2
+Timeout callback:: count: 1
 1: timerToUpdateProgram *new*
-2: timerToInvalidateFailedLookupResolutions *new*
 
-Before running Timeout callback:: count: 2
+Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
-2: timerToInvalidateFailedLookupResolutions
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -124,7 +120,7 @@ FsWatches::
   {}
 /users/username/projects: *new*
   {}
-/users/username/projects/project:
+/users/username/projects/project: *new*
   {}
 /users/username/projects/project/foo.ts:
   {}
@@ -132,9 +128,6 @@ FsWatches::
 FsWatches *deleted*::
 /users/username/projects/project/bar.d.ts:
   {}
-
-Timeout callback:: count: 0
-2: timerToInvalidateFailedLookupResolutions *deleted*
 
 
 Program root files: [
@@ -164,19 +157,19 @@ export const y = 1;export const x = 10;
 
 
 Timeout callback:: count: 1
-3: timerToInvalidateFailedLookupResolutions *new*
+2: timerToInvalidateFailedLookupResolutions *new*
 
 Before running Timeout callback:: count: 1
-3: timerToInvalidateFailedLookupResolutions
+2: timerToInvalidateFailedLookupResolutions
 
 Host is moving to new time
 After running Timeout callback:: count: 1
 
 Timeout callback:: count: 1
-4: timerToUpdateProgram *new*
+3: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-4: timerToUpdateProgram
+3: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -205,8 +198,6 @@ PolledWatches *deleted*::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {}
-/users/username/projects/project:
-  {}
 /users/username/projects/project/bar.d.ts: *new*
   {}
 /users/username/projects/project/foo.ts:
@@ -214,6 +205,8 @@ FsWatches::
 
 FsWatches *deleted*::
 /users/username/projects:
+  {}
+/users/username/projects/project:
   {}
 
 

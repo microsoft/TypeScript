@@ -121,8 +121,6 @@ FsWatches::
 FsWatchesRecursive::
 /Users/name/projects/lib-boilerplate: *new*
   {}
-/Users/name/projects/lib-boilerplate/test: *new*
-  {}
 
 Program root files: [
   "/Users/name/projects/lib-boilerplate/src/index.ts",

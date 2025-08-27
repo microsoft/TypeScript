@@ -305,10 +305,6 @@ FsWatches::
 /user/username/projects/transitiveReferences/tsconfig.c.json: *new*
   {}
 
-FsWatchesRecursive::
-/user/username/projects/transitiveReferences/refs: *new*
-  {}
-
 Program root files: [
   "/user/username/projects/transitiveReferences/c.ts"
 ]
@@ -645,14 +641,6 @@ FsWatches *deleted*::
 /user/username/projects/transitiveReferences/refs/a.d.ts:
   {}
 
-FsWatchesRecursive::
-/user/username/projects/transitiveReferences/nrefs: *new*
-  {}
-
-FsWatchesRecursive *deleted*::
-/user/username/projects/transitiveReferences/refs:
-  {}
-
 
 Program root files: [
   "/user/username/projects/transitiveReferences/c.ts"
@@ -811,14 +799,6 @@ FsWatches *deleted*::
 /user/username/projects/transitiveReferences/nrefs/a.d.ts:
   {}
 
-FsWatchesRecursive::
-/user/username/projects/transitiveReferences/refs: *new*
-  {}
-
-FsWatchesRecursive *deleted*::
-/user/username/projects/transitiveReferences/nrefs:
-  {}
-
 
 Program root files: [
   "/user/username/projects/transitiveReferences/c.ts"
@@ -960,12 +940,6 @@ FsWatches::
 
 FsWatches *deleted*::
 /user/username/projects/transitiveReferences/a.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/transitiveReferences/nrefs: *new*
-  {}
-/user/username/projects/transitiveReferences/refs:
   {}
 
 
@@ -1110,14 +1084,6 @@ FsWatches *deleted*::
 /user/username/projects/transitiveReferences/nrefs/a.d.ts:
   {}
 
-FsWatchesRecursive::
-/user/username/projects/transitiveReferences/refs:
-  {}
-
-FsWatchesRecursive *deleted*::
-/user/username/projects/transitiveReferences/nrefs:
-  {}
-
 
 Program root files: [
   "/user/username/projects/transitiveReferences/c.ts"
@@ -1246,10 +1212,6 @@ FsWatches *deleted*::
 /user/username/projects/transitiveReferences/b.d.ts:
   {}
 /user/username/projects/transitiveReferences/tsconfig.a.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/transitiveReferences/refs:
   {}
 
 
@@ -1392,10 +1354,6 @@ FsWatches *deleted*::
 /user/username/projects/transitiveReferences/b.ts:
   {}
 
-FsWatchesRecursive::
-/user/username/projects/transitiveReferences/refs:
-  {}
-
 
 Program root files: [
   "/user/username/projects/transitiveReferences/c.ts"
@@ -1528,10 +1486,6 @@ FsWatches *deleted*::
 /user/username/projects/transitiveReferences/a.d.ts:
   {}
 
-FsWatchesRecursive::
-/user/username/projects/transitiveReferences/refs:
-  {}
-
 
 Program root files: [
   "/user/username/projects/transitiveReferences/c.ts"
@@ -1662,10 +1616,6 @@ FsWatches::
 
 FsWatches *deleted*::
 /user/username/projects/transitiveReferences/a.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/transitiveReferences/refs:
   {}
 
 

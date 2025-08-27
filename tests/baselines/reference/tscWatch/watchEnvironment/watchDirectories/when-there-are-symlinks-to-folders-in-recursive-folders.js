@@ -75,12 +75,6 @@ File '/home/package.json' does not exist.
 File '/package.json' does not exist.
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/reala/index.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
-DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/a 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/a 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/reala/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/package.json 2000 undefined File location affecting resolution
@@ -122,8 +116,6 @@ FsWatches::
   {"inode":4}
 /home/user/projects/myproject/node_modules: *new*
   {"inode":8}
-/home/user/projects/myproject/node_modules/a: *new*
-  {"inode":9}
 /home/user/projects/myproject/node_modules/reala: *new*
   {"inode":9}
 /home/user/projects/myproject/node_modules/reala/index.d.ts: *new*
@@ -140,9 +132,6 @@ FsWatches::
   {"inode":6}
 /home/user/projects/myproject/tsconfig.json: *new*
   {"inode":7}
-
-Timeout callback:: count: 1
-1: timerToUpdateChildWatches *new*
 
 Program root files: [
   "/home/user/projects/myproject/src/file.ts"
@@ -206,8 +195,6 @@ FsWatches::
   {"inode":4}
 /home/user/projects/myproject/node_modules:
   {"inode":8}
-/home/user/projects/myproject/node_modules/a:
-  {"inode":9}
 /home/user/projects/myproject/node_modules/reala:
   {"inode":9}
 /home/user/projects/myproject/node_modules/reala/node_modules:
@@ -228,13 +215,12 @@ FsWatches *deleted*::
   {"inode":10}
 
 Timeout callback:: count: 2
-1: timerToUpdateChildWatches *deleted*
-2: timerToUpdateProgram *new*
-4: timerToUpdateChildWatches *new*
+1: timerToUpdateProgram *new*
+2: timerToUpdateChildWatches *new*
 
 Before running Timeout callback:: count: 2
-2: timerToUpdateProgram
-4: timerToUpdateChildWatches
+1: timerToUpdateProgram
+2: timerToUpdateChildWatches
 
 Host is moving to new time
 After running Timeout callback:: count: 2
@@ -283,6 +269,12 @@ Directory '/home/user/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'a' was not resolved. ========
+DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/a 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/a 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules 1 undefined Failed Lookup Locations
 FileWatcher:: Close:: WatchInfo: /home/user/projects/myproject/node_modules/reala/package.json 2000 undefined File location affecting resolution
@@ -296,10 +288,14 @@ FileWatcher:: Close:: WatchInfo: /home/user/projects/package.json 2000 undefined
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
-sysLog:: onTimerToUpdateChildWatches:: 3
+sysLog:: onTimerToUpdateChildWatches:: 1
 sysLog:: invokingWatchers:: Elapsed:: *ms:: 0
-DirectoryWatcher:: Triggered with /home/user/projects/myproject/src/file.js 0:: WatchInfo: /home/user/projects/myproject/src 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/src/file.js 0:: WatchInfo: /home/user/projects/myproject/src 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/reala/index.d.ts 0:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
+Scheduling update
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/reala/index.d.ts 0:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
+DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/a/index.d.ts 1:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
+Scheduling update
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/a/index.d.ts 1:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
 DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/a/index.d.ts 0:: WatchInfo: /home/user/projects/myproject/node_modules/a 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/a/index.d.ts 0:: WatchInfo: /home/user/projects/myproject/node_modules/a 1 undefined Failed Lookup Locations
@@ -309,15 +305,6 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/no
 DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/a/index.d.ts 1:: WatchInfo: /home/user/projects/myproject/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/a/index.d.ts 1:: WatchInfo: /home/user/projects/myproject/node_modules 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Triggered with /home/user/projects/myproject/src/file.js 0:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
-Project: /home/user/projects/myproject/tsconfig.json Detected file add/remove of non supported extension: /home/user/projects/myproject/src/file.js
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/src/file.js 0:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
-DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/reala/index.d.ts 1:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
-Scheduling update
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/reala/index.d.ts 1:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
-DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/a/index.d.ts 2:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
-Scheduling update
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/a/index.d.ts 2:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
 sysLog:: Elapsed:: *ms:: onTimerToUpdateChildWatches:: 0 undefined
 
 
@@ -350,7 +337,7 @@ FsWatches::
   {"inode":4}
 /home/user/projects/myproject/node_modules:
   {"inode":8}
-/home/user/projects/myproject/node_modules/a:
+/home/user/projects/myproject/node_modules/a: *new*
   {"inode":9}
 /home/user/projects/myproject/node_modules/reala:
   {"inode":9}
@@ -368,8 +355,8 @@ FsWatches::
   {"inode":7}
 
 Timeout callback:: count: 2
+4: timerToUpdateProgram *new*
 7: timerToInvalidateFailedLookupResolutions *new*
-9: timerToUpdateProgram *new*
 
 
 Program root files: [
@@ -399,29 +386,8 @@ Change:: timeouts if any
 Input::
 
 Before running Timeout callback:: count: 2
+4: timerToUpdateProgram
 7: timerToInvalidateFailedLookupResolutions
-9: timerToUpdateProgram
-
-Host is moving to new time
-After running Timeout callback:: count: 1
-Output::
-Scheduling update
-
-
-
-Timeout callback:: count: 1
-9: timerToUpdateProgram *deleted*
-10: timerToUpdateProgram *new*
-
-
-exitCode:: ExitStatus.undefined
-
-Change:: timeouts if any
-
-Input::
-
-Before running Timeout callback:: count: 1
-10: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -473,6 +439,9 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 
 
 
+Timeout callback:: count: 0
+7: timerToInvalidateFailedLookupResolutions *deleted*
+
 
 Program root files: [
   "/home/user/projects/myproject/src/file.ts"
@@ -491,5 +460,16 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined
+
+Change:: timeouts if any
+
+Input::
+
+Before running Timeout callback:: count: 0
+
+After running Timeout callback:: count: 0
+
 
 exitCode:: ExitStatus.undefined

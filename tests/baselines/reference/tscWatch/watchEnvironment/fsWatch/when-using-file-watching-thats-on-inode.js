@@ -45,15 +45,11 @@ CreatingProgramWith::
   options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main.ts 250 {"watchFile":4} Source file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 {"watchFile":4} Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFile":4} Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFile":4} Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"watchFile":4} Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"watchFile":4} Type roots
-DirectoryWatcher:: Triggered with /user/username/projects/myproject/main.js :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/main.js :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -75,8 +71,6 @@ PolledWatches::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {"inode":13}
-/user/username/projects/myproject: *new*
-  {"inode":4}
 /user/username/projects/myproject/foo.d.ts: *new*
   {"inode":6}
 /user/username/projects/myproject/main.ts: *new*
@@ -123,9 +117,6 @@ FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 2:: Watc
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 2:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
 sysLog:: /user/username/projects/myproject/foo.d.ts:: Changing watcher to MissingFileSystemEntryWatcher
-DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
-Scheduling invalidateFailedLookup
-Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
 FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 0:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 0:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
@@ -134,9 +125,6 @@ FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 0:: Watc
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 0:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
 sysLog:: /user/username/projects/myproject/foo.d.ts:: Changing watcher to PresentFileSystemEntryWatcher
-DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
-Scheduling invalidateFailedLookup, Cancelled earlier one
-Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
 
 
 PolledWatches::
@@ -148,8 +136,6 @@ PolledWatches::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {"inode":13}
-/user/username/projects/myproject:
-  {"inode":4}
 /user/username/projects/myproject/foo.d.ts:
   {"inode":114} *new*
 /user/username/projects/myproject/main.ts:
@@ -161,13 +147,11 @@ FsWatches *deleted*::
 /user/username/projects/myproject/foo.d.ts:
   {"inode":6}
 
-Timeout callback:: count: 2
-4: timerToUpdateProgram *new*
-5: timerToInvalidateFailedLookupResolutions *new*
+Timeout callback:: count: 1
+3: timerToUpdateProgram *new*
 
-Before running Timeout callback:: count: 2
-4: timerToUpdateProgram
-5: timerToInvalidateFailedLookupResolutions
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -193,9 +177,6 @@ CreatingProgramWith::
 
 
 //// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 113
-
-Timeout callback:: count: 0
-5: timerToInvalidateFailedLookupResolutions *deleted*
 
 
 Program root files: [
@@ -235,9 +216,6 @@ FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 2:: Watc
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 2:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
 sysLog:: /user/username/projects/myproject/foo.d.ts:: Changing watcher to MissingFileSystemEntryWatcher
-DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
-Scheduling invalidateFailedLookup
-Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
 FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 0:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 0:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
@@ -246,9 +224,6 @@ FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 0:: Watc
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 0:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
 sysLog:: /user/username/projects/myproject/foo.d.ts:: Changing watcher to PresentFileSystemEntryWatcher
-DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
-Scheduling invalidateFailedLookup, Cancelled earlier one
-Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
 
 
 PolledWatches::
@@ -260,8 +235,6 @@ PolledWatches::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {"inode":13}
-/user/username/projects/myproject:
-  {"inode":4}
 /user/username/projects/myproject/foo.d.ts:
   {"inode":115} *new*
 /user/username/projects/myproject/main.ts:
@@ -273,13 +246,11 @@ FsWatches *deleted*::
 /user/username/projects/myproject/foo.d.ts:
   {"inode":114}
 
-Timeout callback:: count: 2
-9: timerToUpdateProgram *new*
-10: timerToInvalidateFailedLookupResolutions *new*
+Timeout callback:: count: 1
+6: timerToUpdateProgram *new*
 
-Before running Timeout callback:: count: 2
-9: timerToUpdateProgram
-10: timerToInvalidateFailedLookupResolutions
+Before running Timeout callback:: count: 1
+6: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -295,9 +266,6 @@ CreatingProgramWith::
 
 
 //// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 113
-
-Timeout callback:: count: 0
-10: timerToInvalidateFailedLookupResolutions *deleted*
 
 
 Program root files: [
