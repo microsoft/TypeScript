@@ -1,6 +1,6 @@
-//// [tests/cases/compiler/contextuallyTypeParametersUsingInstantiantedRestReturnMapper1.ts] ////
+//// [tests/cases/compiler/contextuallyTypeParametersUsingInstantiatedRestReturnMapper1.ts] ////
 
-=== contextuallyTypeParametersUsingInstantiantedRestReturnMapper1.ts ===
+=== contextuallyTypeParametersUsingInstantiatedRestReturnMapper1.ts ===
 // https://github.com/microsoft/TypeScript/issues/62336
 
 declare function call<T>(fn: (a: string, b: T) => unknown): (b: T) => unknown;
