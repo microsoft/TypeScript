@@ -49,7 +49,7 @@ const indexFile: File = {
 
 const tsconfigFile: File = {
     path: "/home/src/project/project/tsconfig.json",
-    content: `{ "compilerOptions": { "module": "commonjs" } }`,
+    content: `{ "compilerOptions": { "module": "commonjs", "moduleResolution": "node10" } }`,
 };
 
 const packageJsonFile: File = {

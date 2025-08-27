@@ -1,7 +1,8 @@
 [
     "======== Resolving module './other' from '/index.ts'. ========",
-    "Module resolution kind is not specified, using 'Node10'.",
-    "Loading module as file / folder, candidate module location '/other', target file types: TypeScript, Declaration.",
+    "Module resolution kind is not specified, using 'Bundler'.",
+    "Resolving in CJS mode with conditions 'require', 'types'.",
+    "Loading module as file / folder, candidate module location '/other', target file types: TypeScript, JavaScript, Declaration, JSON.",
     "File '/other.ts' exists - use it as a name resolution result.",
     "======== Module name './other' was successfully resolved to '/other.ts'. ========",
     "======== Resolving module '@typescript/lib-es5' from '/.src/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========",

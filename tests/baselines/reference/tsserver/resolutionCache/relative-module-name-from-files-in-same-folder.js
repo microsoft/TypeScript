@@ -79,13 +79,15 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/module1.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] ======== Resolving module './module1' from '/user/username/projects/myproject/src/file1.ts'. ========
-Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
-Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/module1', target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Bundler'.
+Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'require', 'types'.
+Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/module1', target file types: TypeScript, JavaScript, Declaration, JSON.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/src/module1.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] ======== Module name './module1' was successfully resolved to '/user/username/projects/myproject/src/module1.ts'. ========
 Info seq  [hh:mm:ss:mss] ======== Resolving module '../module2' from '/user/username/projects/myproject/src/file1.ts'. ========
-Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
-Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module location '/user/username/projects/myproject/module2', target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Bundler'.
+Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'require', 'types'.
+Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module location '/user/username/projects/myproject/module2', target file types: TypeScript, JavaScript, Declaration, JSON.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/module2.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] ======== Module name '../module2' was successfully resolved to '/user/username/projects/myproject/module2.ts'. ========
 Info seq  [hh:mm:ss:mss] ======== Resolving module './module1' from '/user/username/projects/myproject/src/file2.ts'. ========

@@ -55,8 +55,14 @@ CreatingProgramWith::
   options: {"composite":true,"traceResolution":true,"outDir":"/users/username/projects/project/outDir","watch":true,"explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/fileWithImports.ts 250 undefined Source file
 ======== Resolving module 'pkg0' from '/users/username/projects/project/fileWithImports.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/users/username/projects/project/package.json' does not exist.
+File '/users/username/projects/package.json' does not exist.
+File '/users/username/package.json' does not exist.
+File '/users/package.json' does not exist.
+File '/package.json' does not exist.
+Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/users/username/projects/project/node_modules/pkg0/package.json' does not exist.
 File '/users/username/projects/project/node_modules/pkg0.ts' does not exist.
@@ -68,8 +74,14 @@ File '/users/username/projects/project/node_modules/pkg0/index.d.ts' exists - us
 Resolving real path for '/users/username/projects/project/node_modules/pkg0/index.d.ts', result '/users/username/projects/project/node_modules/pkg0/index.d.ts'.
 ======== Module name 'pkg0' was successfully resolved to '/users/username/projects/project/node_modules/pkg0/index.d.ts'. ========
 ======== Resolving module 'pkg1' from '/users/username/projects/project/fileWithImports.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
+File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
+File '/users/username/package.json' does not exist according to earlier cached lookups.
+File '/users/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/users/username/projects/project/node_modules/pkg1.ts' does not exist.
 File '/users/username/projects/project/node_modules/pkg1.tsx' does not exist.
@@ -79,8 +91,7 @@ Directory '/users/username/projects/node_modules' does not exist, skipping all l
 Directory '/users/username/node_modules' does not exist, skipping all lookups in it.
 Directory '/users/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Loading module 'pkg1' from 'node_modules' folder, target file types: JavaScript.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 File '/users/username/projects/project/node_modules/pkg1.js' does not exist.
 File '/users/username/projects/project/node_modules/pkg1.jsx' does not exist.
 Directory '/users/username/projects/node_modules' does not exist, skipping all lookups in it.
@@ -90,11 +101,11 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'pkg1' was not resolved. ========
 File '/users/username/projects/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
 File '/users/username/projects/project/node_modules/package.json' does not exist.
-File '/users/username/projects/project/package.json' does not exist.
-File '/users/username/projects/package.json' does not exist.
-File '/users/username/package.json' does not exist.
-File '/users/package.json' does not exist.
-File '/package.json' does not exist.
+File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
+File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
+File '/users/username/package.json' does not exist according to earlier cached lookups.
+File '/users/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/pkg0/index.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/fileWithTypeRefs.ts 250 undefined Source file
 ======== Resolving type reference directive 'pkg2', containing file '/users/username/projects/project/fileWithTypeRefs.ts', root directory '/users/username/projects/project/node_modules/@types,/users/username/projects/node_modules/@types,/users/username/node_modules/@types,/users/node_modules/@types,/node_modules/@types'. ========
@@ -140,6 +151,10 @@ File '/users/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/pkg2/index.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
+DirectoryWatcher:: Added:: WatchInfo: /users/username/projects 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects 0 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project 0 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/pkg0/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/package.json 2000 undefined File location affecting resolution
@@ -149,6 +164,8 @@ DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modu
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Type roots
+DirectoryWatcher:: Triggered with /users/username/projects/project/outDir :: WatchInfo: /users/username/projects/project 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/project/outDir :: WatchInfo: /users/username/projects/project 0 undefined Failed Lookup Locations
 [96mfileWithImports.ts[0m:[93m2[0m:[93m30[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
 
 [7m2[0m import type { Import1 } from "pkg1";
@@ -346,6 +363,10 @@ PolledWatches::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
+/users/username/projects: *new*
+  {}
+/users/username/projects/project: *new*
+  {}
 /users/username/projects/project/fileWithImports.ts: *new*
   {}
 /users/username/projects/project/fileWithTypeRefs.ts: *new*
@@ -470,8 +491,14 @@ File '/users/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Reusing resolution of module 'pkg0' from '/users/username/projects/project/fileWithImports.ts' of old program, it was successfully resolved to '/users/username/projects/project/node_modules/pkg0/index.d.ts'.
 ======== Resolving module 'pkg1' from '/users/username/projects/project/fileWithImports.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
+File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
+File '/users/username/package.json' does not exist according to earlier cached lookups.
+File '/users/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/users/username/projects/project/node_modules/pkg1/package.json' does not exist.
 File '/users/username/projects/project/node_modules/pkg1.ts' does not exist.
@@ -681,6 +708,10 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
+/users/username/projects:
+  {}
+/users/username/projects/project:
   {}
 /users/username/projects/project/fileWithImports.ts:
   {}
@@ -1041,6 +1072,10 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
+/users/username/projects:
+  {}
+/users/username/projects/project:
   {}
 /users/username/projects/project/fileWithImports.ts:
   {}

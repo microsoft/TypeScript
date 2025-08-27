@@ -122,6 +122,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/ro
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/package.json 2000 undefined Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/@types 1 undefined Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/@types 1 undefined Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/user/username/projects/project/a/node_modules/@types 1 undefined Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Type roots
@@ -268,6 +269,8 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {}
+/user/username/rootfolder/otherfolder/user/username/projects/project/a/b/package.json: *new*
   {}
 /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json: *new*
   {}
@@ -767,6 +770,8 @@ PolledWatches *deleted*::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
+/user/username/rootfolder/otherfolder/user/username/projects/project/a/b/package.json:
   {}
 /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json:
   {}
@@ -1382,6 +1387,8 @@ PolledWatches *deleted*::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {}
+/user/username/rootfolder/otherfolder/user/username/projects/project/a/b/package.json:
+  {}
 /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json:
   {}
 
@@ -1650,25 +1657,29 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/rootfo
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/symbolle/package.json :: WatchInfo: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/symbolle/package.json :: WatchInfo: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json Detected file add/remove of non supported extension: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/symbolle/package.json
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/symbolle/package.json :: WatchInfo: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/lodash/package.json :: WatchInfo: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/lodash/package.json :: WatchInfo: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/lodash/package.json :: WatchInfo: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json Detected file add/remove of non supported extension: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/lodash/package.json
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/lodash/package.json :: WatchInfo: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/rxjs/package.json :: WatchInfo: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/rxjs/package.json :: WatchInfo: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/rxjs/package.json :: WatchInfo: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json Detected file add/remove of non supported extension: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/rxjs/package.json
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/rxjs/package.json :: WatchInfo: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/typescript/package.json :: WatchInfo: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/typescript/package.json :: WatchInfo: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/typescript/package.json :: WatchInfo: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json Detected file add/remove of non supported extension: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/typescript/package.json
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/typescript/package.json :: WatchInfo: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/symbolle/index.js :: WatchInfo: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
@@ -1726,7 +1737,8 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/rootfo
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/@types/lodash/package.json :: WatchInfo: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/@types/lodash/package.json :: WatchInfo: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json Detected file add/remove of non supported extension: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/@types/lodash/package.json
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/@types/lodash/package.json :: WatchInfo: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/lodash/index.js :: WatchInfo: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
@@ -1817,9 +1829,9 @@ Info seq  [hh:mm:ss:mss] Scheduled: /user/username/rootfolder/otherfolder/user/u
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/rxjs/testing :: WatchInfo: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Wild card directory
 Before running Timeout callback:: count: 3
-104: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.jsonFailedLookupInvalidation
-105: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json
-106: *ensureProjectForOpenFiles*
+114: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.jsonFailedLookupInvalidation
+115: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json
+116: *ensureProjectForOpenFiles*
 //// [/user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/symbolle/package.json]
 {
   "name": "symbol-observable",
@@ -2239,9 +2251,9 @@ declare namespace _ {
 //// [/user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/.staging/@types/lodash-e56c4fe7/index.d.ts] deleted
 
 Timeout callback:: count: 3
-104: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.jsonFailedLookupInvalidation *new*
-105: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json *new*
-106: *ensureProjectForOpenFiles* *new*
+114: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.jsonFailedLookupInvalidation *new*
+115: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json *new*
+116: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json (Configured) *changed*
@@ -2255,14 +2267,14 @@ Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earli
 After running Timeout callback:: count: 2
 
 Timeout callback:: count: 2
-105: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json *deleted*
-106: *ensureProjectForOpenFiles* *deleted*
-107: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json *new*
-108: *ensureProjectForOpenFiles* *new*
+115: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json *deleted*
+116: *ensureProjectForOpenFiles* *deleted*
+117: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json *new*
+118: *ensureProjectForOpenFiles* *new*
 
 Before running Timeout callback:: count: 2
-107: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json
-108: *ensureProjectForOpenFiles*
+117: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json
+118: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json
@@ -2381,6 +2393,8 @@ FsWatches::
 /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/@types/lodash/package.json: *new*
   {}
 /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/lodash/package.json: *new*
+  {}
+/user/username/rootfolder/otherfolder/user/username/projects/project/a/b/package.json:
   {}
 /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json:
   {}

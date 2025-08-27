@@ -548,15 +548,15 @@ Info seq  [hh:mm:ss:mss] Same program as before
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] forEachExternalModuleToImportFrom autoImportProvider: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
-Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 1 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 1 module specifiers, plus 0 ambient and 0 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
-        "flags": 1,
+        "flags": 9,
         "isGlobalCompletion": true,
         "isMemberCompletion": false,
         "isNewIdentifierLocation": false,
@@ -984,11 +984,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "source": "/home/src/projects/project/src/a",
+            "source": "./a",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "./a",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "foo",
               "exportMapKey": "3 * foo ",
+              "moduleSpecifier": "./a",
               "fileName": "/home/src/projects/project/src/a.ts"
             }
           }
@@ -1017,6 +1024,17 @@ Projects::
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
 
 Info seq  [hh:mm:ss:mss] moduleSpecifierCache for {} (/home/src/projects/project/src/b.ts -> /home/src/projects/project/src/a.ts) {
+  "kind": "relative",
+  "modulePaths": [
+    {
+      "path": "/home/src/projects/project/src/a.ts",
+      "isRedirect": false,
+      "isInNodeModules": false
+    }
+  ],
+  "moduleSpecifiers": [
+    "./a"
+  ],
   "isBlockedByPackageJsonDependencies": false
 }
 Before request
@@ -1053,6 +1071,17 @@ Projects::
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
 
 Info seq  [hh:mm:ss:mss] moduleSpecifierCache for {} (/home/src/projects/project/src/b.ts -> /home/src/projects/project/src/a.ts) {
+  "kind": "relative",
+  "modulePaths": [
+    {
+      "path": "/home/src/projects/project/src/a.ts",
+      "isRedirect": false,
+      "isInNodeModules": false
+    }
+  ],
+  "moduleSpecifiers": [
+    "./a"
+  ],
   "isBlockedByPackageJsonDependencies": false
 }
 Info seq  [hh:mm:ss:mss] moduleSpecifierCache for {
@@ -1079,15 +1108,15 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImpo
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 3 projectProgramVersion: 1 structureChanged: false structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Same program as before
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit
-Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 1 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 1 module specifiers, plus 0 ambient and 0 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
-        "flags": 1,
+        "flags": 9,
         "isGlobalCompletion": true,
         "isMemberCompletion": false,
         "isNewIdentifierLocation": false,
@@ -1515,11 +1544,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "source": "/home/src/projects/project/src/a",
+            "source": "./a",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "./a",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "foo",
               "exportMapKey": "3 * foo ",
+              "moduleSpecifier": "./a",
               "fileName": "/home/src/projects/project/src/a.ts"
             }
           }
@@ -1551,6 +1587,17 @@ Info seq  [hh:mm:ss:mss] moduleSpecifierCache for {} (/home/src/projects/project
 Info seq  [hh:mm:ss:mss] moduleSpecifierCache for {
   "importModuleSpecifierPreference": "project-relative"
 } (/home/src/projects/project/src/b.ts -> /home/src/projects/project/src/a.ts) {
+  "kind": "relative",
+  "modulePaths": [
+    {
+      "path": "/home/src/projects/project/src/a.ts",
+      "isRedirect": false,
+      "isInNodeModules": false
+    }
+  ],
+  "moduleSpecifiers": [
+    "./a"
+  ],
   "isBlockedByPackageJsonDependencies": false
 }
 Before request
@@ -1607,15 +1654,15 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImpo
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 4 projectProgramVersion: 1 structureChanged: false structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Same program as before
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit
-Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 1 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 1 module specifiers, plus 0 ambient and 0 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
-        "flags": 1,
+        "flags": 9,
         "isGlobalCompletion": true,
         "isMemberCompletion": false,
         "isNewIdentifierLocation": false,
@@ -2043,11 +2090,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "source": "/home/src/projects/project/src/a",
+            "source": "./a.js",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "./a.js",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "foo",
               "exportMapKey": "3 * foo ",
+              "moduleSpecifier": "./a.js",
               "fileName": "/home/src/projects/project/src/a.ts"
             }
           }
