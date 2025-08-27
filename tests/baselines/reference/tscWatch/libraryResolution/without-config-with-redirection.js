@@ -235,6 +235,34 @@ File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.tsx' d
 File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts', result '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'.
 ======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
+======== Resolving module '@typescript/lib-es2015' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.es2015.d.ts__.ts'. ========
+Explicitly specified module resolution kind: 'Node10'.
+Loading module '@typescript/lib-es2015' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-es2015.ts' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-es2015.tsx' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-es2015.d.ts' does not exist.
+Directory '/home/src/workspace/projects/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es2015'
+Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es2015'
+Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es2015'
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es2015'
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es2015'
+Loading module '@typescript/lib-es2015' from 'node_modules' folder, target file types: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-es2015.js' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-es2015.jsx' does not exist.
+Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name '@typescript/lib-es2015' was not resolved. ========
+DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
 File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -244,6 +272,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2015.d.ts 250 undefined Source file
 ======== Resolving module '@typescript/lib-dom' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -257,6 +286,34 @@ File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.tsx' d
 File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts', result '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts'.
 ======== Module name '@typescript/lib-dom' was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts'. ========
+======== Resolving module '@typescript/lib-dom/iterable' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.dom.iterable.d.ts__.ts'. ========
+Explicitly specified module resolution kind: 'Node10'.
+Loading module '@typescript/lib-dom/iterable' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.ts' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.tsx' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.d.ts' does not exist.
+Directory '/home/src/workspace/projects/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Loading module '@typescript/lib-dom/iterable' from 'node_modules' folder, target file types: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.js' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.jsx' does not exist.
+Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name '@typescript/lib-dom/iterable' was not resolved. ========
 File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -266,6 +323,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/package.json 2000 undefined File location affecting resolution
@@ -278,6 +336,60 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules/@types 1 undefined Type roots
+[96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m11[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m11[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m13[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m13[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m13[0m:[93m15[0m
+    [7m13[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+
+[96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m11[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m11[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m13[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m13[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m13[0m:[93m15[0m
+    [7m13[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+  [96mnode_modules/@typescript/lib-es5/index.d.ts[0m:[93m13[0m:[93m15[0m
+    [7m13[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    and here.
+
+[96mnode_modules/@typescript/lib-es5/index.d.ts[0m:[93m11[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m11[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96mnode_modules/@typescript/lib-es5/index.d.ts[0m:[93m13[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m13[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m13[0m:[93m15[0m
+    [7m13[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+
+../../tslibs/TS/Lib/lib.es2015.d.ts
+  Library referenced via 'es5' from file 'project1/file2.ts'
+  Library 'lib.es5.d.ts' specified in compilerOptions
+../../tslibs/TS/Lib/lib.dom.iterable.d.ts
+  Library 'lib.dom.d.ts' specified in compilerOptions
 node_modules/@typescript/lib-webworker/index.d.ts
   Library referenced via 'webworker' from file 'project1/file2.ts'
 node_modules/@typescript/lib-scripthost/index.d.ts
@@ -297,9 +409,13 @@ project1/index.ts
   Root file specified for compilation
 project1/file2.ts
   Root file specified for compilation
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 6 errors. Watching for file changes.
 
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2015.d.ts] *Lib*
+
+//// [/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts] *Lib*
 
 //// [/home/src/workspace/projects/project1/file.js]
 "use strict";
@@ -323,6 +439,8 @@ exports.x = "type1";
 
 
 PolledWatches::
+/home/src/workspace/node_modules: *new*
+  {"pollingInterval":500}
 /home/src/workspace/node_modules/@types: *new*
   {"pollingInterval":500}
 /home/src/workspace/package.json: *new*
@@ -345,6 +463,10 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts: *new*
+  {}
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts: *new*
+  {}
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts: *new*
   {}
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts: *new*
@@ -387,6 +509,8 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
@@ -398,6 +522,8 @@ project1/index.ts
 project1/file2.ts
 
 Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
@@ -409,6 +535,7 @@ project1/index.ts
 project1/file2.ts
 
 Shape signatures in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.es2015.d.ts (used version)
 /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts (used version)
 /home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts (used version)
 /home/src/workspace/projects/project1/core.d.ts (used version)
@@ -416,6 +543,7 @@ Shape signatures in builder refreshed for::
 /home/src/workspace/projects/project1/file.ts (used version)
 /home/src/workspace/projects/project1/index.ts (used version)
 /home/src/workspace/projects/project1/file2.ts (used version)
+/home/src/tslibs/ts/lib/lib.dom.iterable.d.ts (used version)
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts (used version)
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts (used version)
 
@@ -504,6 +632,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Reusing resolution of module '@typescript/lib-es5' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'.
+Reusing resolution of module '@typescript/lib-es2015' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.es2015.d.ts__.ts' of old program, it was not resolved.
 File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -545,11 +674,91 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-dom' was not resolved. ========
-DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
+======== Resolving module '@typescript/lib-dom/iterable' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.dom.iterable.d.ts__.ts'. ========
+Explicitly specified module resolution kind: 'Node10'.
+Loading module '@typescript/lib-dom/iterable' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.ts' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.tsx' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.d.ts' does not exist.
+Directory '/home/src/workspace/projects/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Loading module '@typescript/lib-dom/iterable' from 'node_modules' folder, target file types: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.js' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.jsx' does not exist.
+Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name '@typescript/lib-dom/iterable' was not resolved. ========
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.dom.d.ts 250 undefined Source file
 FileWatcher:: Close:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json 2000 undefined File location affecting resolution
+[96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m11[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m11[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m13[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m13[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m13[0m:[93m15[0m
+    [7m13[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+
+[96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m11[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m11[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m13[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m13[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m13[0m:[93m15[0m
+    [7m13[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+  [96mnode_modules/@typescript/lib-es5/index.d.ts[0m:[93m13[0m:[93m15[0m
+    [7m13[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    and here.
+
+[96mnode_modules/@typescript/lib-es5/index.d.ts[0m:[93m11[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m11[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96mnode_modules/@typescript/lib-es5/index.d.ts[0m:[93m13[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m13[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m13[0m:[93m15[0m
+    [7m13[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+
+../../tslibs/TS/Lib/lib.es2015.d.ts
+  Library referenced via 'es5' from file 'project1/file2.ts'
+  Library 'lib.es5.d.ts' specified in compilerOptions
 ../../tslibs/TS/Lib/lib.dom.d.ts
+  Library 'lib.dom.d.ts' specified in compilerOptions
+../../tslibs/TS/Lib/lib.dom.iterable.d.ts
   Library 'lib.dom.d.ts' specified in compilerOptions
 node_modules/@typescript/lib-webworker/index.d.ts
   Library referenced via 'webworker' from file 'project1/file2.ts'
@@ -568,7 +777,7 @@ project1/index.ts
   Root file specified for compilation
 project1/file2.ts
   Root file specified for compilation
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 6 errors. Watching for file changes.
 
 
 
@@ -577,7 +786,7 @@ project1/file2.ts
 //// [/home/src/workspace/projects/project1/file2.js] file written with same contents
 
 PolledWatches::
-/home/src/workspace/node_modules: *new*
+/home/src/workspace/node_modules:
   {"pollingInterval":500}
 /home/src/workspace/node_modules/@types:
   {"pollingInterval":500}
@@ -604,6 +813,10 @@ PolledWatches *deleted*::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts: *new*
+  {}
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts:
+  {}
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts:
   {}
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts:
   {}
@@ -653,7 +866,9 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
 /home/src/tslibs/TS/Lib/lib.dom.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
@@ -664,7 +879,9 @@ project1/index.ts
 project1/file2.ts
 
 Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
 /home/src/tslibs/TS/Lib/lib.dom.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
@@ -741,8 +958,64 @@ File '/package.json' does not exist according to earlier cached lookups.
 Reusing resolution of module '@typescript/lib-webworker' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.webworker.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts'.
 Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts'.
 Reusing resolution of module '@typescript/lib-es5' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'.
+Reusing resolution of module '@typescript/lib-es2015' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.es2015.d.ts__.ts' of old program, it was not resolved.
 Reusing resolution of module '@typescript/lib-dom' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was not resolved.
+Reusing resolution of module '@typescript/lib-dom/iterable' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.dom.iterable.d.ts__.ts' of old program, it was not resolved.
+[96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m11[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m11[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m13[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m13[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m13[0m:[93m15[0m
+    [7m13[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+
+[96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m11[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m11[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m13[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m13[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.dom.iterable.d.ts[0m:[93m13[0m:[93m15[0m
+    [7m13[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+  [96mnode_modules/@typescript/lib-es5/index.d.ts[0m:[93m13[0m:[93m15[0m
+    [7m13[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    and here.
+
+[96mnode_modules/@typescript/lib-es5/index.d.ts[0m:[93m11[0m:[93m38[0m - [91merror[0m[90m TS2374: [0mDuplicate index signature for type 'number'.
+
+[7m11[0m interface Array<T> { length: number; [n: number]: T; }
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~[0m
+
+[96mnode_modules/@typescript/lib-es5/index.d.ts[0m:[93m13[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'console'.
+
+[7m13[0m declare const console: { log(msg: any): void; };
+[7m  [0m [91m              ~~~~~~~[0m
+
+  [96m../../tslibs/TS/Lib/lib.es2015.d.ts[0m:[93m13[0m:[93m15[0m
+    [7m13[0m declare const console: { log(msg: any): void; };
+    [7m  [0m [96m              ~~~~~~~[0m
+    'console' was also declared here.
+
+../../tslibs/TS/Lib/lib.es2015.d.ts
+  Library referenced via 'es5' from file 'project1/file2.ts'
+  Library 'lib.es5.d.ts' specified in compilerOptions
 ../../tslibs/TS/Lib/lib.dom.d.ts
+  Library 'lib.dom.d.ts' specified in compilerOptions
+../../tslibs/TS/Lib/lib.dom.iterable.d.ts
   Library 'lib.dom.d.ts' specified in compilerOptions
 node_modules/@typescript/lib-webworker/index.d.ts
   Library referenced via 'webworker' from file 'project1/file2.ts'
@@ -761,7 +1034,7 @@ project1/index.ts
   Root file specified for compilation
 project1/file2.ts
   Root file specified for compilation
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 6 errors. Watching for file changes.
 
 
 
@@ -794,7 +1067,9 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
 /home/src/tslibs/TS/Lib/lib.dom.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
@@ -882,6 +1157,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Reusing resolution of module '@typescript/lib-es5' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'.
+Reusing resolution of module '@typescript/lib-es2015' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.es2015.d.ts__.ts' of old program, it was not resolved.
 File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -891,12 +1167,18 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Reusing resolution of module '@typescript/lib-dom' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was not resolved.
+Reusing resolution of module '@typescript/lib-dom/iterable' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.dom.iterable.d.ts__.ts' of old program, it was not resolved.
 FileWatcher:: Added:: WatchInfo: project1/core.d.ts 500 undefined Missing file
 [91merror[0m[90m TS6053: [0mFile 'project1/core.d.ts' not found.
   The file is in the program because:
     Root file specified for compilation
 
+../../tslibs/TS/Lib/lib.es2015.d.ts
+  Library referenced via 'es5' from file 'project1/file2.ts'
+  Library 'lib.es5.d.ts' specified in compilerOptions
 ../../tslibs/TS/Lib/lib.dom.d.ts
+  Library 'lib.dom.d.ts' specified in compilerOptions
+../../tslibs/TS/Lib/lib.dom.iterable.d.ts
   Library 'lib.dom.d.ts' specified in compilerOptions
 node_modules/@typescript/lib-webworker/index.d.ts
   Library referenced via 'webworker' from file 'project1/file2.ts'
@@ -945,6 +1227,10 @@ PolledWatches::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts:
   {}
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts:
+  {}
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts:
+  {}
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts:
   {}
 /home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts:
@@ -988,7 +1274,9 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
 /home/src/tslibs/TS/Lib/lib.dom.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
@@ -1071,6 +1359,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Reusing resolution of module '@typescript/lib-webworker' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.webworker.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts'.
 Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts'.
 Reusing resolution of module '@typescript/lib-es5' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'.
+Reusing resolution of module '@typescript/lib-es2015' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.es2015.d.ts__.ts' of old program, it was not resolved.
 ======== Resolving module '@typescript/lib-dom' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -1108,6 +1397,34 @@ File '/home/src/workspace/package.json' does not exist according to earlier cach
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
+======== Resolving module '@typescript/lib-dom/iterable' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.dom.iterable.d.ts__.ts'. ========
+Explicitly specified module resolution kind: 'Node10'.
+Loading module '@typescript/lib-dom/iterable' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.ts' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.tsx' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.d.ts' does not exist.
+Directory '/home/src/workspace/projects/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-dom/iterable'
+Loading module '@typescript/lib-dom/iterable' from 'node_modules' folder, target file types: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.js' does not exist.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/iterable.jsx' does not exist.
+Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name '@typescript/lib-dom/iterable' was not resolved. ========
 File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -1119,12 +1436,15 @@ File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts 250 undefined Source file
 FileWatcher:: Close:: WatchInfo: /home/src/tslibs/TS/Lib/lib.dom.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json 2000 undefined File location affecting resolution
-DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
 [91merror[0m[90m TS6053: [0mFile 'project1/core.d.ts' not found.
   The file is in the program because:
     Root file specified for compilation
 
+../../tslibs/TS/Lib/lib.es2015.d.ts
+  Library referenced via 'es5' from file 'project1/file2.ts'
+  Library 'lib.es5.d.ts' specified in compilerOptions
+../../tslibs/TS/Lib/lib.dom.iterable.d.ts
+  Library 'lib.dom.d.ts' specified in compilerOptions
 node_modules/@typescript/lib-webworker/index.d.ts
   Library referenced via 'webworker' from file 'project1/file2.ts'
 node_modules/@typescript/lib-scripthost/index.d.ts
@@ -1151,6 +1471,8 @@ project1/file2.ts
 //// [/home/src/workspace/projects/project1/file2.js] file written with same contents
 
 PolledWatches::
+/home/src/workspace/node_modules:
+  {"pollingInterval":500}
 /home/src/workspace/node_modules/@types:
   {"pollingInterval":500}
 /home/src/workspace/package.json:
@@ -1174,11 +1496,11 @@ PolledWatches::
 /home/src/workspace/projects/project1/core.d.ts:
   {"pollingInterval":500}
 
-PolledWatches *deleted*::
-/home/src/workspace/node_modules:
-  {"pollingInterval":500}
-
 FsWatches::
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts:
+  {}
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts:
+  {}
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts: *new*
   {}
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts:
@@ -1224,6 +1546,8 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
@@ -1319,8 +1643,6 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-webworker' was not resolved. ========
-DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.webworker.d.ts 250 undefined Source file
 Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts'.
 File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/package.json' does not exist according to earlier cached lookups.
@@ -1332,6 +1654,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Reusing resolution of module '@typescript/lib-es5' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'.
+Reusing resolution of module '@typescript/lib-es2015' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.es2015.d.ts__.ts' of old program, it was not resolved.
 File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -1341,6 +1664,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Reusing resolution of module '@typescript/lib-dom' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts'.
+Reusing resolution of module '@typescript/lib-dom/iterable' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.dom.iterable.d.ts__.ts' of old program, it was not resolved.
 File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -1354,6 +1678,11 @@ FileWatcher:: Close:: WatchInfo: /home/src/workspace/projects/node_modules/@type
   The file is in the program because:
     Root file specified for compilation
 
+../../tslibs/TS/Lib/lib.es2015.d.ts
+  Library referenced via 'es5' from file 'project1/file2.ts'
+  Library 'lib.es5.d.ts' specified in compilerOptions
+../../tslibs/TS/Lib/lib.dom.iterable.d.ts
+  Library 'lib.dom.d.ts' specified in compilerOptions
 ../../tslibs/TS/Lib/lib.webworker.d.ts
   Library referenced via 'webworker' from file 'project1/file2.ts'
 node_modules/@typescript/lib-scripthost/index.d.ts
@@ -1380,7 +1709,7 @@ project1/file2.ts
 //// [/home/src/workspace/projects/project1/file2.js] file written with same contents
 
 PolledWatches::
-/home/src/workspace/node_modules: *new*
+/home/src/workspace/node_modules:
   {"pollingInterval":500}
 /home/src/workspace/node_modules/@types:
   {"pollingInterval":500}
@@ -1408,6 +1737,10 @@ PolledWatches *deleted*::
   {"pollingInterval":2000}
 
 FsWatches::
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts:
+  {}
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts:
+  {}
 /home/src/tslibs/TS/Lib/lib.webworker.d.ts: *new*
   {}
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts:
@@ -1456,6 +1789,8 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
 /home/src/tslibs/TS/Lib/lib.webworker.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
@@ -1574,6 +1909,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Reusing resolution of module '@typescript/lib-es5' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'.
+Reusing resolution of module '@typescript/lib-es2015' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.es2015.d.ts__.ts' of old program, it was not resolved.
 File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -1583,6 +1919,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Reusing resolution of module '@typescript/lib-dom' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts'.
+Reusing resolution of module '@typescript/lib-dom/iterable' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.dom.iterable.d.ts__.ts' of old program, it was not resolved.
 File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -1593,12 +1930,15 @@ File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Close:: WatchInfo: /home/src/tslibs/TS/Lib/lib.webworker.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json 2000 undefined File location affecting resolution
-DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
 [91merror[0m[90m TS6053: [0mFile 'project1/core.d.ts' not found.
   The file is in the program because:
     Root file specified for compilation
 
+../../tslibs/TS/Lib/lib.es2015.d.ts
+  Library referenced via 'es5' from file 'project1/file2.ts'
+  Library 'lib.es5.d.ts' specified in compilerOptions
+../../tslibs/TS/Lib/lib.dom.iterable.d.ts
+  Library 'lib.dom.d.ts' specified in compilerOptions
 node_modules/@typescript/lib-webworker/index.d.ts
   Library referenced via 'webworker' from file 'project1/file2.ts'
 node_modules/@typescript/lib-scripthost/index.d.ts
@@ -1625,6 +1965,8 @@ project1/file2.ts
 //// [/home/src/workspace/projects/project1/file2.js] file written with same contents
 
 PolledWatches::
+/home/src/workspace/node_modules:
+  {"pollingInterval":500}
 /home/src/workspace/node_modules/@types:
   {"pollingInterval":500}
 /home/src/workspace/package.json:
@@ -1648,11 +1990,11 @@ PolledWatches::
 /home/src/workspace/projects/project1/core.d.ts:
   {"pollingInterval":500}
 
-PolledWatches *deleted*::
-/home/src/workspace/node_modules:
-  {"pollingInterval":500}
-
 FsWatches::
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts:
+  {}
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts:
+  {}
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts:
   {}
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts:
@@ -1698,6 +2040,8 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.iterable.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
