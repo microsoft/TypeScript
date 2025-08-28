@@ -120,20 +120,20 @@ if (typeof d === 'undefined') {
 }
 
 interface Proxy<T extends object> {}
->Proxy : Symbol(Proxy, Decl(nonPrimitiveStrictNull.ts, 46, 1))
+>Proxy : Symbol(Proxy, Decl(lib.es2015.proxy.d.ts, --, --), Decl(nonPrimitiveStrictNull.ts, 46, 1))
 >T : Symbol(T, Decl(nonPrimitiveStrictNull.ts, 48, 16))
 
 var x: Proxy<number>; // error
 >x : Symbol(x, Decl(nonPrimitiveStrictNull.ts, 50, 3))
->Proxy : Symbol(Proxy, Decl(nonPrimitiveStrictNull.ts, 46, 1))
+>Proxy : Symbol(Proxy, Decl(lib.es2015.proxy.d.ts, --, --), Decl(nonPrimitiveStrictNull.ts, 46, 1))
 
 var y: Proxy<null>; // error
 >y : Symbol(y, Decl(nonPrimitiveStrictNull.ts, 51, 3))
->Proxy : Symbol(Proxy, Decl(nonPrimitiveStrictNull.ts, 46, 1))
+>Proxy : Symbol(Proxy, Decl(lib.es2015.proxy.d.ts, --, --), Decl(nonPrimitiveStrictNull.ts, 46, 1))
 
 var z: Proxy<undefined>; // error
 >z : Symbol(z, Decl(nonPrimitiveStrictNull.ts, 52, 3))
->Proxy : Symbol(Proxy, Decl(nonPrimitiveStrictNull.ts, 46, 1))
+>Proxy : Symbol(Proxy, Decl(lib.es2015.proxy.d.ts, --, --), Decl(nonPrimitiveStrictNull.ts, 46, 1))
 
 interface Blah {
 >Blah : Symbol(Blah, Decl(nonPrimitiveStrictNull.ts, 52, 24))
@@ -144,6 +144,6 @@ interface Blah {
 
 var u: Proxy<Blah>; // ok
 >u : Symbol(u, Decl(nonPrimitiveStrictNull.ts, 58, 3))
->Proxy : Symbol(Proxy, Decl(nonPrimitiveStrictNull.ts, 46, 1))
+>Proxy : Symbol(Proxy, Decl(lib.es2015.proxy.d.ts, --, --), Decl(nonPrimitiveStrictNull.ts, 46, 1))
 >Blah : Symbol(Blah, Decl(nonPrimitiveStrictNull.ts, 52, 24))
 

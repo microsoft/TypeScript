@@ -50,8 +50,8 @@ class Symbol {
 class InferenceSymbol extends Symbol {
 >InferenceSymbol : InferenceSymbol
 >                : ^^^^^^^^^^^^^^^
->Symbol : Symbol
->       : ^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 }
 
 class ParameterSymbol extends InferenceSymbol {

@@ -1,5 +1,5 @@
 /index.ts(4,16): error TS2300: Duplicate identifier 'a'.
-/index.ts(7,3): error TS2339: Property 'toFixed' does not exist on type 'string'.
+/index.ts(7,3): error TS2551: Property 'toFixed' does not exist on type 'string'. Did you mean 'fixed'?
 /test.js(2,3): error TS2300: Duplicate identifier 'a'.
 
 
@@ -23,5 +23,6 @@
     
     a.toFixed();
       ~~~~~~~
-!!! error TS2339: Property 'toFixed' does not exist on type 'string'.
+!!! error TS2551: Property 'toFixed' does not exist on type 'string'. Did you mean 'fixed'?
+!!! related TS2728 lib.es2015.core.d.ts:--:--: 'fixed' is declared here.
     
