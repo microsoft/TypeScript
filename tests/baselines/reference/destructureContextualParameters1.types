@@ -1,0 +1,253 @@
+//// [tests/cases/compiler/destructureContextualParameters1.ts] ////
+
+=== destructureContextualParameters1.ts ===
+declare function arrayFrom<T, U>(iterator: Iterable<T>, map: (t: T) => U): U[];
+>arrayFrom : { <T, U>(iterator: Iterable<T>, map: (t: T) => U): U[]; <T_1>(iterator: Iterable<T_1>): T_1[]; }
+>          : ^^^ ^^ ^^        ^^           ^^   ^^           ^^^   ^^^^^^^^        ^^             ^^^     ^^^
+>iterator : Iterable<T>
+>         : ^^^^^^^^^^^
+>map : (t: T) => U
+>    : ^ ^^ ^^^^^ 
+>t : T
+>  : ^
+
+declare function arrayFrom<T>(iterator: Iterable<T>): T[];
+>arrayFrom : { <T_1, U>(iterator: Iterable<T_1>, map: (t: T_1) => U): U[]; <T>(iterator: Iterable<T>): T[]; }
+>          : ^^^^^^^^ ^^        ^^             ^^   ^^             ^^^   ^^^ ^^        ^^           ^^^   ^^^
+>iterator : Iterable<T>
+>         : ^^^^^^^^^^^
+
+interface CommandLineOptionOfStringType {
+  type: "string";
+>type : "string"
+>     : ^^^^^^^^
+
+  defaultValueDescription?: string | undefined;
+>defaultValueDescription : string | undefined
+>                        : ^^^^^^^^^^^^^^^^^^
+}
+
+interface CommandLineOptionOfCustomType {
+  type: Map<string, number | string>;
+>type : Map<string, string | number>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  defaultValueDescription: number | string | undefined;
+>defaultValueDescription : string | number | undefined
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  deprecatedKeys?: Set<string>;
+>deprecatedKeys : Set<string> | undefined
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+type CommandLineOption =
+>CommandLineOption : CommandLineOption
+>                  : ^^^^^^^^^^^^^^^^^
+
+  | CommandLineOptionOfStringType
+  | CommandLineOptionOfCustomType;
+
+function formatDefaultValue1(
+>formatDefaultValue1 : (defaultValue: CommandLineOption["defaultValueDescription"], type: CommandLineOption["type"]) => string
+>                    : ^            ^^                                            ^^    ^^                         ^^^^^^^^^^^
+
+  defaultValue: CommandLineOption["defaultValueDescription"],
+>defaultValue : string | number | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  type: CommandLineOption["type"],
+>type : "string" | Map<string, string | number>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+) {
+  return defaultValue !== undefined && typeof type === "object"
+>defaultValue !== undefined && typeof type === "object"    ? arrayFrom(type.entries())        .filter(([, value]) => value === defaultValue)        .map(([name]) => name)        .join("/")    : String(defaultValue) : string
+>                                                                                                                                                                                                                      : ^^^^^^
+>defaultValue !== undefined && typeof type === "object" : boolean
+>                                                       : ^^^^^^^
+>defaultValue !== undefined : boolean
+>                           : ^^^^^^^
+>defaultValue : string | number | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+>typeof type === "object" : boolean
+>                         : ^^^^^^^
+>typeof type : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "string" | Map<string, string | number>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"object" : "object"
+>         : ^^^^^^^^
+
+    ? arrayFrom(type.entries())
+>arrayFrom(type.entries())        .filter(([, value]) => value === defaultValue)        .map(([name]) => name)        .join("/") : string
+>                                                                                                                                : ^^^^^^
+>arrayFrom(type.entries())        .filter(([, value]) => value === defaultValue)        .map(([name]) => name)        .join : (separator?: string) => string
+>                                                                                                                           : ^         ^^^      ^^^^^      
+>arrayFrom(type.entries())        .filter(([, value]) => value === defaultValue)        .map(([name]) => name) : string[]
+>                                                                                                              : ^^^^^^^^
+>arrayFrom(type.entries())        .filter(([, value]) => value === defaultValue)        .map : <U>(callbackfn: (value: [string, string | number], index: number, array: [string, string | number][]) => U, thisArg?: any) => U[]
+>                                                                                            : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>arrayFrom(type.entries())        .filter(([, value]) => value === defaultValue) : [string, string | number][]
+>                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arrayFrom(type.entries())        .filter : { <S extends [string, string | number]>(predicate: (value: [string, string | number], index: number, array: [string, string | number][]) => value is S, thisArg?: any): S[]; (predicate: (value: [string, string | number], index: number, array: [string, string | number][]) => unknown, thisArg?: any): [string, string | number][]; }
+>                                         : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arrayFrom(type.entries()) : [string, string | number][]
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arrayFrom : { <T, U>(iterator: Iterable<T>, map: (t: T) => U): U[]; <T>(iterator: Iterable<T>): T[]; }
+>          : ^^^ ^^ ^^        ^^           ^^   ^^           ^^^   ^^^ ^^        ^^           ^^^   ^^^
+>type.entries() : MapIterator<[string, string | number]>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type.entries : () => MapIterator<[string, string | number]>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : Map<string, string | number>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>entries : () => MapIterator<[string, string | number]>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        .filter(([, value]) => value === defaultValue)
+>filter : { <S extends [string, string | number]>(predicate: (value: [string, string | number], index: number, array: [string, string | number][]) => value is S, thisArg?: any): S[]; (predicate: (value: [string, string | number], index: number, array: [string, string | number][]) => unknown, thisArg?: any): [string, string | number][]; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>([, value]) => value === defaultValue : ([, value]: [string, string | number]) => boolean
+>                                      : ^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> : undefined
+> : ^^^^^^^^^
+>value : string | number
+>      : ^^^^^^^^^^^^^^^
+>value === defaultValue : boolean
+>                       : ^^^^^^^
+>value : string | number
+>      : ^^^^^^^^^^^^^^^
+>defaultValue : string | number
+>             : ^^^^^^^^^^^^^^^
+
+        .map(([name]) => name)
+>map : <U>(callbackfn: (value: [string, string | number], index: number, array: [string, string | number][]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>([name]) => name : ([name]: [string, string | number]) => string
+>                 : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>name : string
+>     : ^^^^^^
+>name : string
+>     : ^^^^^^
+
+        .join("/")
+>join : (separator?: string) => string
+>     : ^         ^^^      ^^^^^      
+>"/" : "/"
+>    : ^^^
+
+    : String(defaultValue);
+>String(defaultValue) : string
+>                     : ^^^^^^
+>String : StringConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>defaultValue : string | number | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+function formatDefaultValue2(
+>formatDefaultValue2 : (defaultValue: CommandLineOption["defaultValueDescription"], type: CommandLineOption["type"]) => string
+>                    : ^            ^^                                            ^^    ^^                         ^^^^^^^^^^^
+
+  defaultValue: CommandLineOption["defaultValueDescription"],
+>defaultValue : string | number | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  type: CommandLineOption["type"],
+>type : "string" | Map<string, string | number>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+) {
+  return defaultValue !== undefined && typeof type === "object"
+>defaultValue !== undefined && typeof type === "object"    ? arrayFrom(type.entries())        .filter(([, ...value]) => value[0] === defaultValue)        .map(([name]) => name)        .join("/")    : String(defaultValue) : string
+>                                                                                                                                                                                                                            : ^^^^^^
+>defaultValue !== undefined && typeof type === "object" : boolean
+>                                                       : ^^^^^^^
+>defaultValue !== undefined : boolean
+>                           : ^^^^^^^
+>defaultValue : string | number | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+>typeof type === "object" : boolean
+>                         : ^^^^^^^
+>typeof type : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "string" | Map<string, string | number>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"object" : "object"
+>         : ^^^^^^^^
+
+    ? arrayFrom(type.entries())
+>arrayFrom(type.entries())        .filter(([, ...value]) => value[0] === defaultValue)        .map(([name]) => name)        .join("/") : string
+>                                                                                                                                      : ^^^^^^
+>arrayFrom(type.entries())        .filter(([, ...value]) => value[0] === defaultValue)        .map(([name]) => name)        .join : (separator?: string) => string
+>                                                                                                                                 : ^         ^^^      ^^^^^      
+>arrayFrom(type.entries())        .filter(([, ...value]) => value[0] === defaultValue)        .map(([name]) => name) : string[]
+>                                                                                                                    : ^^^^^^^^
+>arrayFrom(type.entries())        .filter(([, ...value]) => value[0] === defaultValue)        .map : <U>(callbackfn: (value: [string, string | number], index: number, array: [string, string | number][]) => U, thisArg?: any) => U[]
+>                                                                                                  : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>arrayFrom(type.entries())        .filter(([, ...value]) => value[0] === defaultValue) : [string, string | number][]
+>                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arrayFrom(type.entries())        .filter : { <S extends [string, string | number]>(predicate: (value: [string, string | number], index: number, array: [string, string | number][]) => value is S, thisArg?: any): S[]; (predicate: (value: [string, string | number], index: number, array: [string, string | number][]) => unknown, thisArg?: any): [string, string | number][]; }
+>                                         : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arrayFrom(type.entries()) : [string, string | number][]
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arrayFrom : { <T, U>(iterator: Iterable<T>, map: (t: T) => U): U[]; <T>(iterator: Iterable<T>): T[]; }
+>          : ^^^ ^^ ^^        ^^           ^^   ^^           ^^^   ^^^ ^^        ^^           ^^^   ^^^
+>type.entries() : MapIterator<[string, string | number]>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type.entries : () => MapIterator<[string, string | number]>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : Map<string, string | number>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>entries : () => MapIterator<[string, string | number]>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        .filter(([, ...value]) => value[0] === defaultValue)
+>filter : { <S extends [string, string | number]>(predicate: (value: [string, string | number], index: number, array: [string, string | number][]) => value is S, thisArg?: any): S[]; (predicate: (value: [string, string | number], index: number, array: [string, string | number][]) => unknown, thisArg?: any): [string, string | number][]; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>([, ...value]) => value[0] === defaultValue : ([, ...value]: [string, string | number]) => boolean
+>                                            : ^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> : undefined
+> : ^^^^^^^^^
+>value : [string | number]
+>      : ^^^^^^^^^^^^^^^^^
+>value[0] === defaultValue : boolean
+>                          : ^^^^^^^
+>value[0] : string | number
+>         : ^^^^^^^^^^^^^^^
+>value : [string | number]
+>      : ^^^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+>defaultValue : string | number
+>             : ^^^^^^^^^^^^^^^
+
+        .map(([name]) => name)
+>map : <U>(callbackfn: (value: [string, string | number], index: number, array: [string, string | number][]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>([name]) => name : ([name]: [string, string | number]) => string
+>                 : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>name : string
+>     : ^^^^^^
+>name : string
+>     : ^^^^^^
+
+        .join("/")
+>join : (separator?: string) => string
+>     : ^         ^^^      ^^^^^      
+>"/" : "/"
+>    : ^^^
+
+    : String(defaultValue);
+>String(defaultValue) : string
+>                     : ^^^^^^
+>String : StringConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>defaultValue : string | number | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}

@@ -11529,9 +11529,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // Return the type of a binding element parent. We check SymbolLinks first to see if a type has been
     // assigned by contextual typing.
     function getTypeForBindingElementParent(node: BindingElementGrandparent, checkMode: CheckMode) {
-        if (checkMode !== CheckMode.Normal) {
-            return getTypeForVariableLikeDeclaration(node, /*includeOptionality*/ false, checkMode);
-        }
         const symbol = getSymbolOfDeclaration(node);
         return symbol && getSymbolLinks(symbol).type || getTypeForVariableLikeDeclaration(node, /*includeOptionality*/ false, checkMode);
     }
