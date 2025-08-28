@@ -1339,6 +1339,7 @@ export const enum CheckMode {
                                                     //   e.g. in `const { a, ...rest } = foo`, when checking the type of `foo` to determine the type of `rest`,
                                                     //   we need to preserve generic types instead of substituting them for constraints
     TypeOnly = 1 << 6,                              // Called from getTypeOfExpression, diagnostics may be omitted
+    SkipConstraintsSubstitution = 1 << 7,
 }
 
 /** @internal */
@@ -30365,10 +30366,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return contextualType && !isGenericType(contextualType);
     }
 
-    function getNarrowableTypeForReference(type: Type, reference: Node, checkMode?: CheckMode) {
-        if (isNoInferType(type)) {
-            type = (type as SubstitutionType).baseType;
-        }
+    function shouldSubstituteConstraints(type: Type, reference: Node, checkMode?: CheckMode) {
         // When the type of a reference is or contains an instantiable type with a union type constraint, and
         // when the reference is in a constraint position (where it is known we'll obtain the apparent type) or
         // has a contextual type containing no top-level instantiables (meaning constraints will determine
@@ -30376,10 +30374,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // control flow analysis an opportunity to narrow it further. For example, for a reference of a type
         // parameter type 'T extends string | undefined' with a contextual type 'string', we substitute
         // 'string | undefined' to give control flow analysis the opportunity to narrow to type 'string'.
-        const substituteConstraints = !(checkMode && checkMode & CheckMode.Inferential) &&
+        return !(checkMode && checkMode & CheckMode.Inferential) &&
             someType(type, isGenericTypeWithUnionConstraint) &&
             (isConstraintPosition(type, reference) || hasContextualTypeWithNoGenericTypes(reference, checkMode));
-        return substituteConstraints ? mapType(type, getBaseConstraintOrType) : type;
+    }
+
+    function getNarrowableTypeForReference(type: Type, reference: Node, checkMode = CheckMode.Normal) {
+        if (isNoInferType(type)) {
+            type = (type as SubstitutionType).baseType;
+        }
+        if (checkMode & CheckMode.SkipConstraintsSubstitution) {
+            return type;
+        }
+        return shouldSubstituteConstraints(type, reference, checkMode) ? mapType(type, getBaseConstraintOrType) : type;
     }
 
     function isExportOrExportExpression(location: Node) {
@@ -30811,7 +30818,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const type = getTypeOfSymbol(symbol);
         const declaration = symbol.valueDeclaration;
         if (declaration) {
-            // If we have a non-rest binding element with no initializer declared as a const variable or a const-like
+            // If we have a binding element with no initializer declared as a const variable or a const-like
             // parameter (a parameter for which there are no assignments in the function body), and if the parent type
             // for the destructuring is a union type, one or more of the binding elements may represent discriminant
             // properties, and we want the effects of conditional checks on such discriminants to affect the types of
@@ -30834,19 +30841,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // the binding pattern AST instance for '{ kind, payload }' as a pseudo-reference and narrow this reference
             // as if it occurred in the specified location. We then recompute the narrowed binding element type by
             // destructuring from the narrowed parent type.
-            if (isBindingElement(declaration) && !declaration.initializer && !declaration.dotDotDotToken && declaration.parent.elements.length >= 2) {
+            if (isBindingElement(declaration) && !declaration.initializer && declaration.parent.elements.length >= 2) {
                 const parent = declaration.parent.parent;
                 const rootDeclaration = getRootDeclaration(parent);
                 if (rootDeclaration.kind === SyntaxKind.VariableDeclaration && getCombinedNodeFlagsCached(rootDeclaration) & NodeFlags.Constant || rootDeclaration.kind === SyntaxKind.Parameter) {
                     const links = getNodeLinks(parent);
                     if (!(links.flags & NodeCheckFlags.InCheckIdentifier)) {
                         links.flags |= NodeCheckFlags.InCheckIdentifier;
-                        const parentType = getTypeForBindingElementParent(parent, CheckMode.Normal);
-                        const parentTypeConstraint = parentType && mapType(parentType, getBaseConstraintOrType);
+                        const parentType = getTypeForBindingElementParent(parent, shouldSubstituteConstraints(type, location) ? CheckMode.Normal : CheckMode.SkipConstraintsSubstitution);
+                        const parentNarrowableType = parentType && getNarrowableTypeForReference(parentType, location);
+                        
                         links.flags &= ~NodeCheckFlags.InCheckIdentifier;
-                        if (parentTypeConstraint && parentTypeConstraint.flags & TypeFlags.Union && !(rootDeclaration.kind === SyntaxKind.Parameter && isSomeSymbolAssigned(rootDeclaration))) {
+                        if (parentNarrowableType && parentNarrowableType.flags & TypeFlags.Union && !(rootDeclaration.kind === SyntaxKind.Parameter && isSomeSymbolAssigned(rootDeclaration))) {
                             const pattern = declaration.parent;
-                            const narrowedType = getFlowTypeOfReference(pattern, parentTypeConstraint, parentTypeConstraint, /*flowContainer*/ undefined, location.flowNode);
+                            const narrowedType = getFlowTypeOfReference(pattern, parentNarrowableType, parentNarrowableType, /*flowContainer*/ undefined, location.flowNode);
                             if (narrowedType.flags & TypeFlags.Never) {
                                 return neverType;
                             }
