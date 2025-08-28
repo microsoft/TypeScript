@@ -7,6 +7,7 @@ import { main as convertFourslash } from "./convertFourslash.mts";
 const failingTestsPath = path.join(import.meta.dirname, "failingTests.txt");
 
 function main() {
+    const oldFailingTests = fs.readFileSync(failingTestsPath, "utf-8");
     fs.writeFileSync(failingTestsPath, "", "utf-8");
     convertFourslash();
     const go = which.sync("go");
@@ -17,11 +18,16 @@ function main() {
     catch (error) {
         testOutput = (error as { stdout: string; }).stdout as string;
     }
-    const regex = /--- FAIL: ([\S]+)/gm;
+    const panicRegex = /^panic/m;
+    if (panicRegex.test(testOutput)) {
+        fs.writeFileSync(failingTestsPath, oldFailingTests, "utf-8");
+        throw new Error("Unrecovered panic detected in tests");
+    }
+    const failRegex = /--- FAIL: ([\S]+)/gm;
     const failingTests: string[] = [];
     let match;
 
-    while ((match = regex.exec(testOutput)) !== null) {
+    while ((match = failRegex.exec(testOutput)) !== null) {
         failingTests.push(match[1]);
     }
 
