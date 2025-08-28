@@ -382,6 +382,8 @@ func TestATA(t *testing.T) {
 			Type: lsproto.FileChangeTypeChanged,
 			Uri:  lsproto.DocumentUri("file:///user/username/projects/project/package.json"),
 		}})
+		// diagnostics refresh triggered - simulate by getting the language service
+		_, _ = session.GetLanguageService(context.Background(), uri)
 		session.WaitForBackgroundTasks()
 
 		calls = utils.NpmExecutor().NpmInstallCalls()

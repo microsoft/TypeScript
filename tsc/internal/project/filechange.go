@@ -38,8 +38,6 @@ type FileChangeSummary struct {
 	Created collections.Set[lsproto.DocumentUri]
 	// Only set when file watching is enabled
 	Deleted collections.Set[lsproto.DocumentUri]
-
-	IncludesWatchChangesOnly bool
 }
 
 func (f FileChangeSummary) IsEmpty() bool {

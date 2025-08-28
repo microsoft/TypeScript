@@ -445,6 +445,7 @@ var handlers = sync.OnceValue(func() handlerMap {
 	registerNotificationHandler(handlers, lsproto.TextDocumentDidSaveInfo, (*Server).handleDidSave)
 	registerNotificationHandler(handlers, lsproto.TextDocumentDidCloseInfo, (*Server).handleDidClose)
 	registerNotificationHandler(handlers, lsproto.WorkspaceDidChangeWatchedFilesInfo, (*Server).handleDidChangeWatchedFiles)
+	registerNotificationHandler(handlers, lsproto.SetTraceInfo, (*Server).handleSetTrace)
 
 	registerLanguageServiceDocumentRequestHandler(handlers, lsproto.TextDocumentDiagnosticInfo, (*Server).handleDocumentDiagnostic)
 	registerLanguageServiceDocumentRequestHandler(handlers, lsproto.TextDocumentHoverInfo, (*Server).handleHover)
@@ -556,6 +557,10 @@ func (s *Server) handleInitialize(ctx context.Context, params *lsproto.Initializ
 			return nil, err
 		}
 		s.locale = locale
+	}
+
+	if s.initializeParams.Trace != nil && *s.initializeParams.Trace == "verbose" {
+		s.logger.SetVerbose(true)
 	}
 
 	response := &lsproto.InitializeResult{
@@ -687,6 +692,21 @@ func (s *Server) handleDidClose(ctx context.Context, params *lsproto.DidCloseTex
 
 func (s *Server) handleDidChangeWatchedFiles(ctx context.Context, params *lsproto.DidChangeWatchedFilesParams) error {
 	s.session.DidChangeWatchedFiles(ctx, params.Changes)
+	return nil
+}
+
+func (s *Server) handleSetTrace(ctx context.Context, params *lsproto.SetTraceParams) error {
+	switch params.Value {
+	case "verbose":
+		s.logger.SetVerbose(true)
+	case "messages":
+		s.logger.SetVerbose(false)
+	case "off":
+		// !!! logging cannot be completely turned off for now
+		s.logger.SetVerbose(false)
+	default:
+		return fmt.Errorf("unknown trace value: %s", params.Value)
+	}
 	return nil
 }
 

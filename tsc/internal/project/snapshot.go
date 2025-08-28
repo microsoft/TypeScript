@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/project/ata"
+	"github.com/microsoft/typescript-go/internal/project/dirty"
 	"github.com/microsoft/typescript-go/internal/project/logging"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
@@ -95,6 +96,7 @@ type APISnapshotRequest struct {
 }
 
 type SnapshotChange struct {
+	reason UpdateReason
 	// fileChanges are the changes that have occurred since the last snapshot.
 	fileChanges FileChangeSummary
 	// requestedURIs are URIs that were requested by the client.
@@ -123,8 +125,31 @@ type ATAStateChange struct {
 
 func (s *Snapshot) Clone(ctx context.Context, change SnapshotChange, overlays map[tspath.Path]*overlay, session *Session) *Snapshot {
 	var logger *logging.LogTree
+
+	// Print in-progress logs immediately if cloning fails
+	if session.options.LoggingEnabled {
+		defer func() {
+			if r := recover(); r != nil {
+				session.logger.Write(logger.String())
+				panic(r)
+			}
+		}()
+	}
+
 	if session.options.LoggingEnabled {
 		logger = logging.NewLogTree(fmt.Sprintf("Cloning snapshot %d", s.id))
+		switch change.reason {
+		case UpdateReasonDidOpenFile:
+			logger.Logf("Reason: DidOpenFile - %s", change.fileChanges.Opened)
+		case UpdateReasonDidChangeCompilerOptionsForInferredProjects:
+			logger.Logf("Reason: DidChangeCompilerOptionsForInferredProjects")
+		case UpdateReasonRequestedLanguageServicePendingChanges:
+			logger.Logf("Reason: RequestedLanguageService (pending file changes) - %v", change.requestedURIs)
+		case UpdateReasonRequestedLanguageServiceProjectNotLoaded:
+			logger.Logf("Reason: RequestedLanguageService (project not loaded) - %v", change.requestedURIs)
+		case UpdateReasonRequestedLanguageServiceProjectDirty:
+			logger.Logf("Reason: RequestedLanguageService (project dirty) - %v", change.requestedURIs)
+		}
 	}
 
 	start := time.Now()
@@ -169,8 +194,38 @@ func (s *Snapshot) Clone(ctx context.Context, change SnapshotChange, overlays ma
 	}
 
 	projectCollection, configFileRegistry := projectCollectionBuilder.Finalize(logger)
-	snapshotFS, _ := fs.Finalize()
 
+	// Clean cached disk files not touched by any open project. It's not important that we do this on
+	// file open specifically, but we don't need to do it on every snapshot clone.
+	if len(change.fileChanges.Opened) != 0 {
+		var changedFiles bool
+		for _, project := range projectCollection.Projects() {
+			if project.ProgramLastUpdate == newSnapshotID && project.ProgramUpdateKind != ProgramUpdateKindCloned {
+				changedFiles = true
+				break
+			}
+		}
+		// The set of seen files can change only if a program was constructed (not cloned) during this snapshot.
+		if changedFiles {
+			cleanFilesStart := time.Now()
+			removedFiles := 0
+			fs.diskFiles.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) bool {
+				for _, project := range projectCollection.Projects() {
+					if project.host.seenFiles.Has(entry.Key()) {
+						return true
+					}
+				}
+				entry.Delete()
+				removedFiles++
+				return true
+			})
+			if session.options.LoggingEnabled {
+				logger.Logf("Removed %d cached files in %v", removedFiles, time.Since(cleanFilesStart))
+			}
+		}
+	}
+
+	snapshotFS, _ := fs.Finalize()
 	newSnapshot := NewSnapshot(
 		newSnapshotID,
 		snapshotFS,
@@ -181,7 +236,6 @@ func (s *Snapshot) Clone(ctx context.Context, change SnapshotChange, overlays ma
 		compilerOptionsForInferredProjects,
 		s.toPath,
 	)
-
 	newSnapshot.parentId = s.id
 	newSnapshot.ProjectCollection = projectCollection
 	newSnapshot.ConfigFileRegistry = configFileRegistry

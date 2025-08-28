@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/project/logging"
@@ -22,10 +23,26 @@ type compilerHost struct {
 	fs                 *snapshotFSBuilder
 	compilerFS         *compilerFS
 	configFileRegistry *ConfigFileRegistry
+	seenFiles          *collections.SyncSet[tspath.Path]
 
 	project *Project
 	builder *projectCollectionBuilder
 	logger  *logging.LogTree
+}
+
+type builderFileSource struct {
+	seenFiles         *collections.SyncSet[tspath.Path]
+	snapshotFSBuilder *snapshotFSBuilder
+}
+
+func (c *builderFileSource) GetFile(fileName string) FileHandle {
+	path := c.snapshotFSBuilder.toPath(fileName)
+	c.seenFiles.Add(path)
+	return c.snapshotFSBuilder.GetFileByPath(fileName, path)
+}
+
+func (c *builderFileSource) FS() vfs.FS {
+	return c.snapshotFSBuilder.FS()
 }
 
 func newCompilerHost(
@@ -34,12 +51,21 @@ func newCompilerHost(
 	builder *projectCollectionBuilder,
 	logger *logging.LogTree,
 ) *compilerHost {
+	seenFiles := &collections.SyncSet[tspath.Path]{}
+	compilerFS := &compilerFS{
+		source: &builderFileSource{
+			seenFiles:         seenFiles,
+			snapshotFSBuilder: builder.fs,
+		},
+	}
+
 	return &compilerHost{
 		configFilePath:   project.configFilePath,
 		currentDirectory: currentDirectory,
 		sessionOptions:   builder.sessionOptions,
 
-		compilerFS: &compilerFS{source: builder.fs},
+		compilerFS: compilerFS,
+		seenFiles:  seenFiles,
 
 		fs:      builder.fs,
 		project: project,
@@ -88,6 +114,7 @@ func (c *compilerHost) GetResolvedProjectReference(fileName string, path tspath.
 	if c.builder == nil {
 		return c.configFileRegistry.GetConfig(path)
 	} else {
+		c.seenFiles.Add(path)
 		return c.builder.configFileRegistryBuilder.acquireConfigForProject(fileName, path, c.project, c.logger)
 	}
 }
@@ -97,6 +124,7 @@ func (c *compilerHost) GetResolvedProjectReference(fileName string, path tspath.
 // be a corresponding release for each call made.
 func (c *compilerHost) GetSourceFile(opts ast.SourceFileParseOptions) *ast.SourceFile {
 	c.ensureAlive()
+	c.seenFiles.Add(opts.Path)
 	if fh := c.fs.GetFileByPath(opts.FileName, opts.Path); fh != nil {
 		return c.builder.parseCache.Acquire(fh, opts, fh.Kind())
 	}

@@ -69,4 +69,36 @@ func TestSnapshot(t *testing.T) {
 		// host for inferred project should not change
 		assert.Equal(t, snapshotAfter.ProjectCollection.InferredProject().host.compilerFS.source, snapshotBefore.fs)
 	})
+
+	t.Run("cached disk files are cleaned up", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/home/projects/TS/p1/tsconfig.json": "{}",
+			"/home/projects/TS/p1/index.ts":      "import { a } from './a'; console.log(a);",
+			"/home/projects/TS/p1/a.ts":          "export const a = 1;",
+			"/home/projects/TS/p2/tsconfig.json": "{}",
+			"/home/projects/TS/p2/index.ts":      "import { b } from './b'; console.log(b);",
+			"/home/projects/TS/p2/b.ts":          "export const b = 2;",
+		}
+		session := setup(files)
+		session.DidOpenFile(context.Background(), "file:///home/projects/TS/p1/index.ts", 1, files["/home/projects/TS/p1/index.ts"].(string), lsproto.LanguageKindTypeScript)
+		session.DidOpenFile(context.Background(), "file:///home/projects/TS/p2/index.ts", 1, files["/home/projects/TS/p2/index.ts"].(string), lsproto.LanguageKindTypeScript)
+		snapshotBefore, release := session.Snapshot()
+		defer release()
+
+		// a.ts and b.ts are cached
+		assert.Check(t, snapshotBefore.fs.diskFiles["/home/projects/ts/p1/a.ts"] != nil)
+		assert.Check(t, snapshotBefore.fs.diskFiles["/home/projects/ts/p2/b.ts"] != nil)
+
+		// Close p1's only open file
+		session.DidCloseFile(context.Background(), "file:///home/projects/TS/p1/index.ts")
+		// Next open file is unrelated to p1, triggers p1 closing and file cache cleanup
+		session.DidOpenFile(context.Background(), "untitled:Untitled-1", 1, "", lsproto.LanguageKindTypeScript)
+		snapshotAfter, release := session.Snapshot()
+		defer release()
+
+		// a.ts is cleaned up, b.ts is still cached
+		assert.Check(t, snapshotAfter.fs.diskFiles["/home/projects/ts/p1/a.ts"] == nil)
+		assert.Check(t, snapshotAfter.fs.diskFiles["/home/projects/ts/p2/b.ts"] != nil)
+	})
 }
