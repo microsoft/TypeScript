@@ -30850,7 +30850,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         links.flags |= NodeCheckFlags.InCheckIdentifier;
                         const parentType = getTypeForBindingElementParent(parent, shouldSubstituteConstraints(type, location) ? CheckMode.Normal : CheckMode.SkipConstraintsSubstitution);
                         const parentNarrowableType = parentType && getNarrowableTypeForReference(parentType, location);
-                        
+
                         links.flags &= ~NodeCheckFlags.InCheckIdentifier;
                         if (parentNarrowableType && parentNarrowableType.flags & TypeFlags.Union && !(rootDeclaration.kind === SyntaxKind.Parameter && isSomeSymbolAssigned(rootDeclaration))) {
                             const pattern = declaration.parent;
