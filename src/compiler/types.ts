@@ -1911,9 +1911,6 @@ export interface BindingElement extends NamedDeclaration, FlowContainer {
     readonly initializer?: Expression;           // Optional initializer
 }
 
-/** @internal */
-export type BindingElementGrandparent = BindingElement["parent"]["parent"];
-
 // dprint-ignore
 export interface PropertySignature extends TypeElement, JSDocContainer {
     readonly kind: SyntaxKind.PropertySignature;

@@ -41,7 +41,6 @@ import {
     BindableObjectDefinePropertyCall,
     BindableStaticNameExpression,
     BindingElement,
-    BindingElementGrandparent,
     BindingName,
     BindingPattern,
     bindSourceFile,
