@@ -146,22 +146,25 @@ func (p *Program) GetSemanticDiagnostics(ctx context.Context, file *ast.SourceFi
 
 	// Return result from cache
 	if file != nil {
-		cachedDiagnostics, ok := p.snapshot.semanticDiagnosticsPerFile.Load(file.Path())
-		if !ok {
-			panic("After handling all the affected files, there shouldnt be more changes")
-		}
-		return compiler.FilterNoEmitSemanticDiagnostics(cachedDiagnostics.getDiagnostics(p.program, file), p.snapshot.options)
+		return p.getSemanticDiagnosticsOfFile(file)
 	}
 
 	var diagnostics []*ast.Diagnostic
 	for _, file := range p.program.GetSourceFiles() {
-		cachedDiagnostics, ok := p.snapshot.semanticDiagnosticsPerFile.Load(file.Path())
-		if !ok {
-			panic("After handling all the affected files, there shouldnt be more changes")
-		}
-		diagnostics = append(diagnostics, compiler.FilterNoEmitSemanticDiagnostics(cachedDiagnostics.getDiagnostics(p.program, file), p.snapshot.options)...)
+		diagnostics = append(diagnostics, p.getSemanticDiagnosticsOfFile(file)...)
 	}
 	return diagnostics
+}
+
+func (p *Program) getSemanticDiagnosticsOfFile(file *ast.SourceFile) []*ast.Diagnostic {
+	cachedDiagnostics, ok := p.snapshot.semanticDiagnosticsPerFile.Load(file.Path())
+	if !ok {
+		panic("After handling all the affected files, there shouldnt be more changes")
+	}
+	return slices.Concat(
+		compiler.FilterNoEmitSemanticDiagnostics(cachedDiagnostics.getDiagnostics(p.program, file), p.snapshot.options),
+		p.program.GetIncludeProcessorDiagnostics(file),
+	)
 }
 
 // GetDeclarationDiagnostics implements compiler.AnyProgram interface.
@@ -298,10 +301,14 @@ func (p *Program) emitBuildInfo(ctx context.Context, options compiler.EmitOption
 }
 
 func (p *Program) ensureHasErrorsForState(ctx context.Context, program *compiler.Program) {
+	var hasIncludeProcessingDiagnostics bool
 	if slices.ContainsFunc(program.GetSourceFiles(), func(file *ast.SourceFile) bool {
 		if _, ok := p.snapshot.emitDiagnosticsPerFile.Load(file.Path()); ok {
 			// emit diagnostics will be encoded in buildInfo;
 			return true
+		}
+		if !hasIncludeProcessingDiagnostics && len(p.program.GetIncludeProcessorDiagnostics(file)) > 0 {
+			hasIncludeProcessingDiagnostics = true
 		}
 		return false
 	}) {
@@ -311,7 +318,8 @@ func (p *Program) ensureHasErrorsForState(ctx context.Context, program *compiler
 		p.snapshot.hasSemanticErrors = false
 		return
 	}
-	if len(program.GetConfigFileParsingDiagnostics()) > 0 ||
+	if hasIncludeProcessingDiagnostics ||
+		len(program.GetConfigFileParsingDiagnostics()) > 0 ||
 		len(program.GetSyntacticDiagnostics(ctx, nil)) > 0 ||
 		len(program.GetProgramDiagnostics()) > 0 ||
 		len(program.GetBindDiagnostics(ctx, nil)) > 0 ||

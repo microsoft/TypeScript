@@ -429,6 +429,13 @@ func (p *Program) GetProgramDiagnostics() []*ast.Diagnostic {
 		p.includeProcessor.getDiagnostics(p).GetGlobalDiagnostics()))
 }
 
+func (p *Program) GetIncludeProcessorDiagnostics(sourceFile *ast.SourceFile) []*ast.Diagnostic {
+	if checker.SkipTypeChecking(sourceFile, p.Options(), p, false) {
+		return nil
+	}
+	return p.includeProcessor.getDiagnostics(p).GetDiagnosticsForFile(sourceFile.FileName())
+}
+
 func (p *Program) getSourceFilesToEmit(targetSourceFile *ast.SourceFile, forceDtsEmit bool) []*ast.SourceFile {
 	if targetSourceFile == nil && !forceDtsEmit {
 		p.sourceFilesToEmitOnce.Do(func() {
@@ -1007,11 +1014,10 @@ func FilterNoEmitSemanticDiagnostics(diagnostics []*ast.Diagnostic, options *cor
 }
 
 func (p *Program) getSemanticDiagnosticsForFile(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
-	diagnostics := p.getSemanticDiagnosticsForFileNotFilter(ctx, sourceFile)
-	if diagnostics == nil {
-		return nil
-	}
-	return FilterNoEmitSemanticDiagnostics(diagnostics, p.Options())
+	return slices.Concat(
+		FilterNoEmitSemanticDiagnostics(p.getSemanticDiagnosticsForFileNotFilter(ctx, sourceFile), p.Options()),
+		p.GetIncludeProcessorDiagnostics(sourceFile),
+	)
 }
 
 func (p *Program) getSemanticDiagnosticsForFileNotFilter(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
@@ -1026,8 +1032,7 @@ func (p *Program) getSemanticDiagnosticsForFileNotFilter(ctx context.Context, so
 		fileChecker, done = p.checkerPool.GetCheckerForFile(ctx, sourceFile)
 		defer done()
 	}
-	diags := slices.Clip(p.includeProcessor.getDiagnostics(p).GetDiagnosticsForFile(sourceFile.FileName()))
-	diags = append(diags, sourceFile.BindDiagnostics()...)
+	diags := slices.Clip(sourceFile.BindDiagnostics())
 	checkers, closeCheckers := p.checkerPool.GetAllCheckers(ctx)
 	defer closeCheckers()
 
