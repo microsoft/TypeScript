@@ -58,13 +58,6 @@ func (c *Converters) ToLSPLocation(script Script, rng core.TextRange) lsproto.Lo
 	}
 }
 
-func (c *Converters) FromLSPLocation(script Script, rng lsproto.Range) Location {
-	return Location{
-		FileName: script.FileName(),
-		Range:    c.FromLSPRange(script, rng),
-	}
-}
-
 func LanguageKindToScriptKind(languageID lsproto.LanguageKind) core.ScriptKind {
 	switch languageID {
 	case "typescript":

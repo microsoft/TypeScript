@@ -118,6 +118,35 @@ func (c *Checker) GetExportsOfModule(symbol *ast.Symbol) []*ast.Symbol {
 	return symbolsToArray(c.getExportsOfModule(symbol))
 }
 
+func (c *Checker) ForEachExportAndPropertyOfModule(moduleSymbol *ast.Symbol, cb func(*ast.Symbol, string)) {
+	for key, exportedSymbol := range c.getExportsOfModule(moduleSymbol) {
+		if !isReservedMemberName(key) {
+			cb(exportedSymbol, key)
+		}
+	}
+
+	exportEquals := c.resolveExternalModuleSymbol(moduleSymbol, false /*dontResolveAlias*/)
+	if exportEquals == moduleSymbol {
+		return
+	}
+
+	typeOfSymbol := c.getTypeOfSymbol(exportEquals)
+	if !c.shouldTreatPropertiesOfExternalModuleAsExports(typeOfSymbol) {
+		return
+	}
+
+	// forEachPropertyOfType
+	reducedType := c.getReducedApparentType(typeOfSymbol)
+	if reducedType.flags&TypeFlagsStructuredType == 0 {
+		return
+	}
+	for name, symbol := range c.resolveStructuredTypeMembers(reducedType).members {
+		if c.isNamedMember(symbol, name) {
+			cb(symbol, name)
+		}
+	}
+}
+
 func (c *Checker) IsValidPropertyAccess(node *ast.Node, propertyName string) bool {
 	return c.isValidPropertyAccess(node, propertyName)
 }
@@ -343,6 +372,13 @@ func runWithoutResolvedSignatureCaching[T any](c *Checker, node *ast.Node, fn fu
 		return result
 	}
 	return fn()
+}
+
+func (c *Checker) SkipAlias(symbol *ast.Symbol) *ast.Symbol {
+	if symbol.Flags&ast.SymbolFlagsAlias != 0 {
+		return c.GetAliasedSymbol(symbol)
+	}
+	return symbol
 }
 
 func (c *Checker) GetRootSymbols(symbol *ast.Symbol) []*ast.Symbol {

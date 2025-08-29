@@ -176,6 +176,17 @@ func Every[T any](slice []T, f func(T) bool) bool {
 	return true
 }
 
+func Or[T any](funcs ...func(T) bool) func(T) bool {
+	return func(input T) bool {
+		for _, f := range funcs {
+			if f(input) {
+				return true
+			}
+		}
+		return false
+	}
+}
+
 func Find[T any](slice []T, f func(T) bool) T {
 	for _, value := range slice {
 		if f(value) {

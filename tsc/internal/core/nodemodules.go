@@ -70,7 +70,7 @@ var ExclusivelyPrefixedNodeCoreModules = map[string]bool{
 	"node:test/reporters": true,
 }
 
-var nodeCoreModules = sync.OnceValue(func() map[string]bool {
+var NodeCoreModules = sync.OnceValue(func() map[string]bool {
 	nodeCoreModules := make(map[string]bool, len(UnprefixedNodeCoreModules)*2+len(ExclusivelyPrefixedNodeCoreModules))
 	for unprefixed := range UnprefixedNodeCoreModules {
 		nodeCoreModules[unprefixed] = true
@@ -81,7 +81,7 @@ var nodeCoreModules = sync.OnceValue(func() map[string]bool {
 })
 
 func NonRelativeModuleNameForTypingCache(moduleName string) string {
-	if nodeCoreModules()[moduleName] {
+	if NodeCoreModules()[moduleName] {
 		return "node"
 	}
 	return moduleName

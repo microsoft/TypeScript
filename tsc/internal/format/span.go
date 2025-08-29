@@ -470,7 +470,7 @@ func (w *formatSpanWorker) processChildNodes(
 					indentationOnListStartToken = w.indentationOnLastIndentedLine
 				} else {
 					startLinePosition := GetLineStartPositionForPosition(tokenInfo.token.Loc.Pos(), w.sourceFile)
-					indentationOnListStartToken = findFirstNonWhitespaceColumn(startLinePosition, tokenInfo.token.Loc.Pos(), w.sourceFile, w.formattingContext.Options)
+					indentationOnListStartToken = FindFirstNonWhitespaceColumn(startLinePosition, tokenInfo.token.Loc.Pos(), w.sourceFile, w.formattingContext.Options)
 				}
 
 				listDynamicIndentation = w.getDynamicIndentation(parent, parentStartLine, indentationOnListStartToken, w.formattingContext.Options.IndentSize)
@@ -580,7 +580,7 @@ func (w *formatSpanWorker) tryComputeIndentationForListItem(startPos int, endPos
 	} else {
 		startLine, _ := scanner.GetLineAndCharacterOfPosition(w.sourceFile, startPos)
 		startLinePosition := GetLineStartPositionForPosition(startPos, w.sourceFile)
-		column := findFirstNonWhitespaceColumn(startLinePosition, startPos, w.sourceFile, w.formattingContext.Options)
+		column := FindFirstNonWhitespaceColumn(startLinePosition, startPos, w.sourceFile, w.formattingContext.Options)
 		if startLine != parentStartLine || startPos == column {
 			// Use the base indent size if it is greater than
 			// the indentation of the inherited predecessor.

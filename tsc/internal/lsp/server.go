@@ -757,7 +757,10 @@ func (s *Server) handleCompletion(ctx context.Context, languageService *ls.Langu
 		params.Position,
 		params.Context,
 		getCompletionClientCapabilities(s.initializeParams),
-		&ls.UserPreferences{})
+		&ls.UserPreferences{
+			IncludeCompletionsForModuleExports:    ptrTo(true),
+			IncludeCompletionsForImportStatements: ptrTo(true),
+		})
 }
 
 func (s *Server) handleCompletionItemResolve(ctx context.Context, params *lsproto.CompletionItem, reqMsg *lsproto.RequestMessage) (lsproto.CompletionResolveResponse, error) {
@@ -775,7 +778,10 @@ func (s *Server) handleCompletionItemResolve(ctx context.Context, params *lsprot
 		params,
 		data,
 		getCompletionClientCapabilities(s.initializeParams),
-		&ls.UserPreferences{},
+		&ls.UserPreferences{
+			IncludeCompletionsForModuleExports:    ptrTo(true),
+			IncludeCompletionsForImportStatements: ptrTo(true),
+		},
 	)
 }
 

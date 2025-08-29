@@ -30,7 +30,7 @@ func comparePathsByRedirectAndNumberOfDirectorySeparators(a ModulePath, b Module
 	return -1
 }
 
-func pathIsBareSpecifier(path string) bool {
+func PathIsBareSpecifier(path string) bool {
 	return !tspath.PathIsAbsolute(path) && !tspath.PathIsRelative(path)
 }
 
@@ -61,7 +61,7 @@ func isExcludedByRegex(moduleSpecifier string, excludes []string) bool {
  *
  */
 func ensurePathIsNonModuleName(path string) string {
-	if pathIsBareSpecifier(path) {
+	if PathIsBareSpecifier(path) {
 		return "./" + path
 	}
 	return path
@@ -234,7 +234,7 @@ const (
 	nodeModulesPathParseStatePackageContent
 )
 
-func getNodeModulePathParts(fullPath string) *NodeModulePathParts {
+func GetNodeModulePathParts(fullPath string) *NodeModulePathParts {
 	// If fullPath can't be valid module file within node_modules, returns undefined.
 	// Example of expected pattern: /base/path/node_modules/[@scope/otherpackage/@otherscope/node_modules/]package/[subdirectory/]file.js
 	// Returns indices:                       ^            ^                                                      ^             ^
@@ -287,7 +287,25 @@ func getNodeModulePathParts(fullPath string) *NodeModulePathParts {
 	return nil
 }
 
-func getPackageNameFromTypesPackageName(mangledName string) string {
+func GetNodeModulesPackageName(
+	compilerOptions *core.CompilerOptions,
+	importingSourceFile *ast.SourceFile, // !!! | FutureSourceFile
+	nodeModulesFileName string,
+	host ModuleSpecifierGenerationHost,
+	preferences UserPreferences,
+	options ModuleSpecifierOptions,
+) string {
+	info := getInfo(importingSourceFile.FileName(), host)
+	modulePaths := getAllModulePaths(info, nodeModulesFileName, host, compilerOptions, preferences, options)
+	for _, modulePath := range modulePaths {
+		if result := tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, preferences, true /*packageNameOnly*/, options.OverrideImportMode); len(result) > 0 {
+			return result
+		}
+	}
+	return ""
+}
+
+func GetPackageNameFromTypesPackageName(mangledName string) string {
 	withoutAtTypePrefix := strings.TrimPrefix(mangledName, "@types/")
 	if withoutAtTypePrefix != mangledName {
 		return module.UnmangleScopedPackageName(withoutAtTypePrefix)

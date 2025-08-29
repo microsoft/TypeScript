@@ -563,19 +563,23 @@ func (t *textWithContext) sliceOfContent(start *int, end *int) string {
 }
 
 func (t *textWithContext) getIndex(i interface{}) *int {
-	switch i.(type) {
+	switch i := i.(type) {
 	case *int:
-		return i.(*int)
+		return i
 	case int:
-		return ptrTo(i.(int))
+		return ptrTo(i)
 	case core.TextPos:
-		return ptrTo(int(i.(core.TextPos)))
+		return ptrTo(int(i))
 	case *core.TextPos:
-		return ptrTo(int(*i.(*core.TextPos)))
+		return ptrTo(int(*i))
 	case lsproto.Position:
-		return t.getIndex(t.converters.LineAndCharacterToPosition(t, i.(lsproto.Position)))
+		return t.getIndex(t.converters.LineAndCharacterToPosition(t, i))
 	case *lsproto.Position:
-		return t.getIndex(t.converters.LineAndCharacterToPosition(t, *i.(*lsproto.Position)))
+		return t.getIndex(t.converters.LineAndCharacterToPosition(t, *i))
 	}
 	panic(fmt.Sprintf("getIndex: unsupported type %T", i))
+}
+
+func codeFence(lang string, code string) string {
+	return "```" + lang + "\n" + code + "\n```"
 }

@@ -75,6 +75,25 @@ func FormatSpan(ctx context.Context, span core.TextRange, file *ast.SourceFile, 
 	)
 }
 
+func FormatNodeGivenIndentation(ctx context.Context, node *ast.Node, file *ast.SourceFile, languageVariant core.LanguageVariant, initialIndentation int, delta int) []core.TextChange {
+	textRange := core.NewTextRange(node.Pos(), node.End())
+	return newFormattingScanner(
+		file.Text(),
+		languageVariant,
+		textRange.Pos(),
+		textRange.End(),
+		newFormatSpanWorker(
+			ctx,
+			textRange,
+			node,
+			initialIndentation,
+			delta,
+			FormatRequestKindFormatSelection,
+			func(core.TextRange) bool { return false }, // assume that node does not have any errors
+			file,
+		))
+}
+
 func formatNodeLines(ctx context.Context, sourceFile *ast.SourceFile, node *ast.Node, requestKind FormatRequestKind) []core.TextChange {
 	if node == nil {
 		return nil

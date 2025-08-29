@@ -39,7 +39,7 @@ func (p *Parser) withJSDoc(node *ast.Node, hasJSDoc bool) []*ast.Node {
 	}
 	// Should only be called once per node
 	p.hasDeprecatedTag = false
-	ranges := getJSDocCommentRanges(&p.factory, p.jsdocCommentRangesSpace, node, p.sourceText)
+	ranges := GetJSDocCommentRanges(&p.factory, p.jsdocCommentRangesSpace, node, p.sourceText)
 	p.jsdocCommentRangesSpace = ranges[:0]
 	jsdoc := p.nodeSlicePool.NewSlice(len(ranges))[:0]
 	pos := node.Pos()

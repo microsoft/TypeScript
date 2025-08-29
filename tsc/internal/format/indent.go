@@ -46,7 +46,7 @@ func getIndentationForNodeWorker(
 		if useActualIndentation {
 			// check if current node is a list item - if yes, take indentation from it
 			var firstListChild *ast.Node
-			containerList := getContainingList(current, sourceFile)
+			containerList := GetContainingList(current, sourceFile)
 			if containerList != nil {
 				firstListChild = core.FirstOrNil(containerList.Nodes)
 			}
@@ -140,7 +140,7 @@ func getActualIndentationForListItem(node *ast.Node, sourceFile *ast.SourceFile,
 		// VariableDeclarationList has no wrapping tokens
 		return -1
 	}
-	containingList := getContainingList(node, sourceFile)
+	containingList := GetContainingList(node, sourceFile)
 	if containingList != nil {
 		index := core.FindIndex(containingList.Nodes, func(e *ast.Node) bool { return e == node })
 		if index != -1 {
@@ -197,10 +197,10 @@ func deriveActualIndentationFromList(list *ast.NodeList, index int, sourceFile *
 
 func findColumnForFirstNonWhitespaceCharacterInLine(line int, char int, sourceFile *ast.SourceFile, options *FormatCodeSettings) int {
 	lineStart := scanner.GetPositionOfLineAndCharacter(sourceFile, line, 0)
-	return findFirstNonWhitespaceColumn(lineStart, lineStart+char, sourceFile, options)
+	return FindFirstNonWhitespaceColumn(lineStart, lineStart+char, sourceFile, options)
 }
 
-func findFirstNonWhitespaceColumn(startPos int, endPos int, sourceFile *ast.SourceFile, options *FormatCodeSettings) int {
+func FindFirstNonWhitespaceColumn(startPos int, endPos int, sourceFile *ast.SourceFile, options *FormatCodeSettings) int {
 	_, col := findFirstNonWhitespaceCharacterAndColumn(startPos, endPos, sourceFile, options)
 	return col
 }
@@ -250,7 +250,7 @@ func getStartLineAndCharacterForNode(n *ast.Node, sourceFile *ast.SourceFile) (l
 	return scanner.GetLineAndCharacterOfPosition(sourceFile, scanner.GetTokenPosOfNode(n, sourceFile, false))
 }
 
-func getContainingList(node *ast.Node, sourceFile *ast.SourceFile) *ast.NodeList {
+func GetContainingList(node *ast.Node, sourceFile *ast.SourceFile) *ast.NodeList {
 	if node.Parent == nil {
 		return nil
 	}
@@ -349,7 +349,7 @@ func getVisualListRange(node *ast.Node, list core.TextRange, sourceFile *ast.Sou
 }
 
 func getContainingListOrParentStart(parent *ast.Node, child *ast.Node, sourceFile *ast.SourceFile) (line int, character int) {
-	containingList := getContainingList(child, sourceFile)
+	containingList := GetContainingList(child, sourceFile)
 	var startPos int
 	if containingList != nil {
 		startPos = containingList.Loc.Pos()

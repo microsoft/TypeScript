@@ -46,8 +46,8 @@ type PrinterOptions struct {
 	OnlyPrintJSDocStyle bool
 	NeverAsciiEscape    bool
 	// StripInternal                 bool
-	PreserveSourceNewlines bool
-	// TerminateUnterminatedLiterals bool
+	PreserveSourceNewlines        bool
+	TerminateUnterminatedLiterals bool // !!!
 }
 
 type PrintHandlers struct {
@@ -725,7 +725,7 @@ func (p *Printer) shouldEmitComments(node *ast.Node) bool {
 func (p *Printer) shouldWriteComment(comment ast.CommentRange) bool {
 	return !p.Options.OnlyPrintJSDocStyle ||
 		p.currentSourceFile != nil && isJSDocLikeText(p.currentSourceFile.Text(), comment) ||
-		p.currentSourceFile != nil && isPinnedComment(p.currentSourceFile.Text(), comment)
+		p.currentSourceFile != nil && IsPinnedComment(p.currentSourceFile.Text(), comment)
 }
 
 func (p *Printer) shouldEmitIndented(node *ast.Node) bool {
@@ -4107,7 +4107,7 @@ func (p *Printer) emitJsxAttributeLike(node *ast.JsxAttributeLike) {
 func (p *Printer) emitJsxExpression(node *ast.JsxExpression) {
 	state := p.enterNode(node.AsNode())
 	if node.Expression != nil || !p.commentsDisabled && !ast.NodeIsSynthesized(node.AsNode()) && p.hasCommentsAtPosition(node.Pos()) { // preserve empty expressions if they contain comments!
-		indented := p.currentSourceFile != nil && !ast.NodeIsSynthesized(node.AsNode()) && getLinesBetweenPositions(p.currentSourceFile, node.Pos(), node.End()) != 0
+		indented := p.currentSourceFile != nil && !ast.NodeIsSynthesized(node.AsNode()) && GetLinesBetweenPositions(p.currentSourceFile, node.Pos(), node.End()) != 0
 		p.increaseIndentIf(indented)
 		end := p.emitToken(ast.KindOpenBraceToken, node.Pos(), WriteKindPunctuation, node.AsNode())
 		p.emitTokenNode(node.DotDotDotToken)
@@ -5340,7 +5340,7 @@ func (p *Printer) emitDetachedComments(textRange core.TextRange) (result detache
 		//      var x = 10;
 		if textRange.Pos() == 0 {
 			for comment := range scanner.GetLeadingCommentRanges(p.emitContext.Factory.AsNodeFactory(), text, textRange.Pos()) {
-				if isPinnedComment(text, comment) {
+				if IsPinnedComment(text, comment) {
 					leadingComments = append(leadingComments, comment)
 				}
 			}
@@ -5443,7 +5443,7 @@ func (p *Printer) emitComment(comment ast.CommentRange) {
 
 func (p *Printer) isTripleSlashComment(comment ast.CommentRange) bool {
 	return p.currentSourceFile != nil &&
-		isRecognizedTripleSlashComment(p.currentSourceFile.Text(), comment)
+		IsRecognizedTripleSlashComment(p.currentSourceFile.Text(), comment)
 }
 
 //

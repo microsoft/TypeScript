@@ -477,6 +477,17 @@ const (
 	NewLineKindLF   NewLineKind = 2
 )
 
+func GetNewLineKind(s string) NewLineKind {
+	switch s {
+	case "\r\n":
+		return NewLineKindCRLF
+	case "\n":
+		return NewLineKindLF
+	default:
+		return NewLineKindNone
+	}
+}
+
 func (newLine NewLineKind) GetNewLineCharacter() string {
 	switch newLine {
 	case NewLineKindCRLF:

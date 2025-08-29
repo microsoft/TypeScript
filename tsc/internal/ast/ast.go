@@ -994,6 +994,8 @@ func (n *Node) ModuleSpecifier() *Expression {
 		return n.AsImportDeclaration().ModuleSpecifier
 	case KindExportDeclaration:
 		return n.AsExportDeclaration().ModuleSpecifier
+	case KindJSDocImportTag:
+		return n.AsJSDocImportTag().ModuleSpecifier
 	}
 	panic("Unhandled case in Node.ModuleSpecifier: " + n.Kind.String())
 }

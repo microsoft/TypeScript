@@ -795,15 +795,13 @@ func getReferencesForThisKeyword(thisOrSuperKeyword *ast.Node, sourceFiles []*as
 		}
 		staticFlag &= searchSpaceNode.ModifierFlags()
 		searchSpaceNode = searchSpaceNode.Parent // re-assign to be the owning class
-		break
 	case ast.KindSourceFile:
 		if ast.IsExternalModule(searchSpaceNode.AsSourceFile()) || isParameterName(thisOrSuperKeyword) {
 			return nil
 		}
 	case ast.KindFunctionDeclaration, ast.KindFunctionExpression:
-		break
-	// Computed properties in classes are not handled here because references to this are illegal,
-	// so there is no point finding references to them.
+		// Computed properties in classes are not handled here because references to this are illegal,
+		// so there is no point finding references to them.
 	default:
 		return nil
 	}

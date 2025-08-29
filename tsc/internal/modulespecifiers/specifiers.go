@@ -24,16 +24,42 @@ func GetModuleSpecifiers(
 	host ModuleSpecifierGenerationHost,
 	userPreferences UserPreferences,
 	options ModuleSpecifierOptions,
+	forAutoImports bool,
 ) []string {
+	result, _ := GetModuleSpecifiersWithInfo(
+		moduleSymbol,
+		checker,
+		compilerOptions,
+		importingSourceFile,
+		host,
+		userPreferences,
+		options,
+		forAutoImports,
+	)
+	return result
+}
+
+func GetModuleSpecifiersWithInfo(
+	moduleSymbol *ast.Symbol,
+	checker CheckerShape,
+	compilerOptions *core.CompilerOptions,
+	importingSourceFile SourceFileForSpecifierGeneration,
+	host ModuleSpecifierGenerationHost,
+	userPreferences UserPreferences,
+	options ModuleSpecifierOptions,
+	forAutoImports bool,
+) ([]string, ResultKind) {
 	ambient := tryGetModuleNameFromAmbientModule(moduleSymbol, checker)
 	if len(ambient) > 0 {
-		return []string{ambient}
+		// !!! todo forAutoImport
+		return []string{ambient}, ResultKindAmbient
 	}
 
 	moduleSourceFile := ast.GetSourceFileOfModule(moduleSymbol)
 	if moduleSourceFile == nil {
-		return nil
+		return nil, ResultKindNone
 	}
+
 	modulePaths := getAllModulePathsWorker(
 		getInfo(host.GetSourceOfProjectReferenceIfOutputIncluded(importingSourceFile), host),
 		moduleSourceFile.FileName(),
@@ -42,17 +68,15 @@ func GetModuleSpecifiers(
 		// options,
 	)
 
-	result := computeModuleSpecifiers(
+	return computeModuleSpecifiers(
 		modulePaths,
 		compilerOptions,
 		importingSourceFile,
 		host,
 		userPreferences,
 		options,
-		/*forAutoImport*/ false,
+		forAutoImports,
 	)
-
-	return result
 }
 
 func tryGetModuleNameFromAmbientModule(moduleSymbol *ast.Symbol, checker CheckerShape) string {
@@ -123,6 +147,29 @@ func getInfo(
 	}
 }
 
+func getAllModulePaths(
+	info Info,
+	importedFileName string,
+	host ModuleSpecifierGenerationHost,
+	compilerOptions *core.CompilerOptions,
+	preferences UserPreferences,
+	options ModuleSpecifierOptions,
+) []ModulePath {
+	// !!! use new cache model
+	// importingFilePath := tspath.ToPath(info.ImportingSourceFileName, host.GetCurrentDirectory(), host.UseCaseSensitiveFileNames());
+	// importedFilePath := tspath.ToPath(importedFileName, host.GetCurrentDirectory(), host.UseCaseSensitiveFileNames());
+	// cache := host.getModuleSpecifierCache();
+	// if (cache != nil) {
+	//     cached := cache.get(importingFilePath, importedFilePath, preferences, options);
+	//     if (cached.modulePaths) {return cached.modulePaths;}
+	// }
+	modulePaths := getAllModulePathsWorker(info, importedFileName, host) // , compilerOptions, options);
+	// if (cache != nil) {
+	//     cache.setModulePaths(importingFilePath, importedFilePath, preferences, options, modulePaths);
+	// }
+	return modulePaths
+}
+
 func getAllModulePathsWorker(
 	info Info,
 	importedFileName string,
@@ -150,7 +197,7 @@ func getAllModulePathsWorker(
 	// }
 
 	allFileNames := make(map[string]ModulePath)
-	paths := getEachFileNameOfModule(info.ImportingSourceFileName, importedFileName, host, true)
+	paths := GetEachFileNameOfModule(info.ImportingSourceFileName, importedFileName, host, true)
 	for _, p := range paths {
 		allFileNames[p.FileName] = p
 	}
@@ -190,11 +237,11 @@ func containsIgnoredPath(s string) bool {
 		strings.Contains(s, "/.#")
 }
 
-func containsNodeModules(s string) bool {
+func ContainsNodeModules(s string) bool {
 	return strings.Contains(s, "/node_modules/")
 }
 
-func getEachFileNameOfModule(
+func GetEachFileNameOfModule(
 	importingFileName string,
 	importedFileName string,
 	host ModuleSpecifierGenerationHost,
@@ -226,7 +273,7 @@ func getEachFileNameOfModule(
 			if !(shouldFilterIgnoredPaths && containsIgnoredPath(p)) {
 				results = append(results, ModulePath{
 					FileName:        p,
-					IsInNodeModules: containsNodeModules(p),
+					IsInNodeModules: ContainsNodeModules(p),
 					IsRedirect:      referenceRedirect == p,
 				})
 			}
@@ -269,7 +316,7 @@ func getEachFileNameOfModule(
 			if !(shouldFilterIgnoredPaths && containsIgnoredPath(p)) {
 				results = append(results, ModulePath{
 					FileName:        p,
-					IsInNodeModules: containsNodeModules(p),
+					IsInNodeModules: ContainsNodeModules(p),
 					IsRedirect:      referenceRedirect == p,
 				})
 			}
@@ -287,7 +334,7 @@ func computeModuleSpecifiers(
 	userPreferences UserPreferences,
 	options ModuleSpecifierOptions,
 	forAutoImport bool,
-) []string {
+) ([]string, ResultKind) {
 	info := getInfo(importingSourceFile.FileName(), host)
 	preferences := getModuleSpecifierPreferences(userPreferences, host, compilerOptions, importingSourceFile, "")
 
@@ -322,7 +369,7 @@ func computeModuleSpecifiers(
 	}
 
 	if existingSpecifier != "" {
-		return []string{existingSpecifier}
+		return []string{existingSpecifier}, ResultKindNone
 	}
 
 	importedFileIsInNodeModules := core.Some(modulePaths, func(p ModulePath) bool { return p.IsInNodeModules })
@@ -347,7 +394,7 @@ func computeModuleSpecifiers(
 			if modulePath.IsRedirect {
 				// If we got a specifier for a redirect, it was a bare package specifier (e.g. "@foo/bar",
 				// not "@foo/bar/path/to/file"). No other specifier will be this good, so stop looking.
-				return nodeModulesSpecifiers
+				return nodeModulesSpecifiers, ResultKindNodeModules
 			}
 		}
 
@@ -369,8 +416,8 @@ func computeModuleSpecifiers(
 		}
 		if modulePath.IsRedirect {
 			redirectPathsSpecifiers = append(redirectPathsSpecifiers, local)
-		} else if pathIsBareSpecifier(local) {
-			if containsNodeModules(local) {
+		} else if PathIsBareSpecifier(local) {
+			if ContainsNodeModules(local) {
 				// We could be in this branch due to inappropriate use of `baseUrl`, not intentional `paths`
 				// usage. It's impossible to reason about where to prioritize baseUrl-generated module
 				// specifiers, but if they contain `/node_modules/`, they're going to trigger a portability
@@ -394,15 +441,15 @@ func computeModuleSpecifiers(
 	}
 
 	if len(pathsSpecifiers) > 0 {
-		return pathsSpecifiers
+		return pathsSpecifiers, ResultKindPaths
 	}
 	if len(redirectPathsSpecifiers) > 0 {
-		return redirectPathsSpecifiers
+		return redirectPathsSpecifiers, ResultKindRedirect
 	}
 	if len(nodeModulesSpecifiers) > 0 {
-		return nodeModulesSpecifiers
+		return nodeModulesSpecifiers, ResultKindNodeModules
 	}
-	return relativeSpecifiers
+	return relativeSpecifiers, ResultKindRelative
 }
 
 func getLocalModuleSpecifier(
@@ -644,7 +691,7 @@ func tryGetModuleNameAsNodeModule(
 	packageNameOnly bool,
 	overrideMode core.ResolutionMode,
 ) string {
-	parts := getNodeModulePathParts(pathObj.FileName)
+	parts := GetNodeModulePathParts(pathObj.FileName)
 	if parts == nil {
 		return ""
 	}
@@ -713,7 +760,7 @@ func tryGetModuleNameAsNodeModule(
 
 	// If the module was found in @types, get the actual Node package name
 	nodeModulesDirectoryName := moduleSpecifier[parts.TopLevelPackageNameIndex+1:]
-	return getPackageNameFromTypesPackageName(nodeModulesDirectoryName)
+	return GetPackageNameFromTypesPackageName(nodeModulesDirectoryName)
 }
 
 type pkgJsonDirAttemptResult struct {
@@ -764,7 +811,7 @@ func tryDirectoryWithPackageJson(
 		// name in the package.json content via url/filepath dependency specifiers. We need to
 		// use the actual directory name, so don't look at `packageJsonContent.name` here.
 		nodeModulesDirectoryName := packageRootPath[parts.TopLevelPackageNameIndex+1:]
-		packageName := getPackageNameFromTypesPackageName(nodeModulesDirectoryName)
+		packageName := GetPackageNameFromTypesPackageName(nodeModulesDirectoryName)
 		conditions := module.GetConditions(options, importMode)
 
 		var fromExports string
@@ -1199,6 +1246,41 @@ func tryGetModuleNameFromExportsOrImports(
 		}
 	case packagejson.JSONValueTypeNull:
 		return ""
+	}
+	return ""
+}
+
+// `importingSourceFile` and `importingSourceFileName`? Why not just use `importingSourceFile.path`?
+// Because when this is called by the declaration emitter, `importingSourceFile` is the implementation
+// file, but `importingSourceFileName` and `toFileName` refer to declaration files (the former to the
+// one currently being produced; the latter to the one being imported). We need an implementation file
+// just to get its `impliedNodeFormat` and to detect certain preferences from existing import module
+// specifiers.
+func GetModuleSpecifier(
+	compilerOptions *core.CompilerOptions,
+	host ModuleSpecifierGenerationHost,
+	importingSourceFile *ast.SourceFile, // !!! | FutureSourceFile
+	importingSourceFileName string,
+	oldImportSpecifier string, // used only in updatingModuleSpecifier
+	toFileName string,
+	options ModuleSpecifierOptions,
+) string {
+	userPreferences := UserPreferences{}
+	info := getInfo(importingSourceFileName, host)
+	modulePaths := getAllModulePaths(info, toFileName, host, compilerOptions, userPreferences, options)
+	preferences := getModuleSpecifierPreferences(userPreferences, host, compilerOptions, importingSourceFile, oldImportSpecifier)
+
+	resolutionMode := options.OverrideImportMode
+	if resolutionMode == core.ResolutionModeNone {
+		resolutionMode = host.GetDefaultResolutionModeForFile(importingSourceFile)
+	}
+
+	for _, modulePath := range modulePaths {
+		if firstDefined := tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, userPreferences, false /*packageNameOnly*/, options.OverrideImportMode); len(firstDefined) > 0 {
+			return firstDefined
+		} else if firstDefined := getLocalModuleSpecifier(toFileName, info, compilerOptions, host, resolutionMode, preferences, false); len(firstDefined) > 0 {
+			return firstDefined
+		}
 	}
 	return ""
 }

@@ -362,10 +362,10 @@ func getStartPositionOfRange(r core.TextRange, sourceFile *ast.SourceFile, inclu
 }
 
 func positionsAreOnSameLine(pos1 int, pos2 int, sourceFile *ast.SourceFile) bool {
-	return getLinesBetweenPositions(sourceFile, pos1, pos2) == 0
+	return GetLinesBetweenPositions(sourceFile, pos1, pos2) == 0
 }
 
-func getLinesBetweenPositions(sourceFile *ast.SourceFile, pos1 int, pos2 int) int {
+func GetLinesBetweenPositions(sourceFile *ast.SourceFile, pos1 int, pos2 int) int {
 	if pos1 == pos2 {
 		return 0
 	}
@@ -384,18 +384,18 @@ func getLinesBetweenPositions(sourceFile *ast.SourceFile, pos1 int, pos2 int) in
 
 func getLinesBetweenRangeEndAndRangeStart(range1 core.TextRange, range2 core.TextRange, sourceFile *ast.SourceFile, includeSecondRangeComments bool) int {
 	range2Start := getStartPositionOfRange(range2, sourceFile, includeSecondRangeComments)
-	return getLinesBetweenPositions(sourceFile, range1.End(), range2Start)
+	return GetLinesBetweenPositions(sourceFile, range1.End(), range2Start)
 }
 
 func getLinesBetweenPositionAndPrecedingNonWhitespaceCharacter(pos int, stopPos int, sourceFile *ast.SourceFile, includeComments bool) int {
 	startPos := scanner.SkipTriviaEx(sourceFile.Text(), pos, &scanner.SkipTriviaOptions{StopAtComments: includeComments})
 	prevPos := getPreviousNonWhitespacePosition(startPos, stopPos, sourceFile)
-	return getLinesBetweenPositions(sourceFile, core.IfElse(prevPos >= 0, prevPos, stopPos), startPos)
+	return GetLinesBetweenPositions(sourceFile, core.IfElse(prevPos >= 0, prevPos, stopPos), startPos)
 }
 
 func getLinesBetweenPositionAndNextNonWhitespaceCharacter(pos int, stopPos int, sourceFile *ast.SourceFile, includeComments bool) int {
 	nextPos := scanner.SkipTriviaEx(sourceFile.Text(), pos, &scanner.SkipTriviaOptions{StopAtComments: includeComments})
-	return getLinesBetweenPositions(sourceFile, pos, core.IfElse(stopPos < nextPos, stopPos, nextPos))
+	return GetLinesBetweenPositions(sourceFile, pos, core.IfElse(stopPos < nextPos, stopPos, nextPos))
 }
 
 func getPreviousNonWhitespacePosition(pos int, stopPos int, sourceFile *ast.SourceFile) int {
@@ -817,7 +817,7 @@ func matchQuotedString(text string, pos *int) bool {
 // /// <reference no-default-lib="..." />
 // /// <amd-dependency path="..." />
 // /// <amd-module />
-func isRecognizedTripleSlashComment(text string, commentRange ast.CommentRange) bool {
+func IsRecognizedTripleSlashComment(text string, commentRange ast.CommentRange) bool {
 	if commentRange.Kind == ast.KindSingleLineCommentTrivia &&
 		commentRange.Len() > 2 &&
 		text[commentRange.Pos()+1] == '/' &&
@@ -881,7 +881,7 @@ func isJSDocLikeText(text string, comment ast.CommentRange) bool {
 		text[comment.Pos()+3] != '/'
 }
 
-func isPinnedComment(text string, comment ast.CommentRange) bool {
+func IsPinnedComment(text string, comment ast.CommentRange) bool {
 	return comment.Kind == ast.KindMultiLineCommentTrivia &&
 		comment.Len() > 5 &&
 		text[comment.Pos()+2] == '!'

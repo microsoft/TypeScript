@@ -12,8 +12,8 @@ import (
 	"github.com/microsoft/typescript-go/internal/scanner"
 )
 
-func toFormatCodeSettings(opt *lsproto.FormattingOptions) *format.FormatCodeSettings {
-	initial := format.GetDefaultFormatCodeSettings("\n")
+func toFormatCodeSettings(opt *lsproto.FormattingOptions, newLine string) *format.FormatCodeSettings {
+	initial := format.GetDefaultFormatCodeSettings(newLine)
 	initial.TabSize = int(opt.TabSize)
 	initial.IndentSize = int(opt.TabSize)
 	initial.ConvertTabsToSpaces = opt.InsertSpaces
@@ -46,7 +46,7 @@ func (l *LanguageService) ProvideFormatDocument(
 	edits := l.toLSProtoTextEdits(file, l.getFormattingEditsForDocument(
 		ctx,
 		file,
-		toFormatCodeSettings(options),
+		toFormatCodeSettings(options, l.GetProgram().Options().NewLine.GetNewLineCharacter()),
 	))
 	return lsproto.TextEditsOrNull{TextEdits: &edits}, nil
 }
@@ -61,7 +61,7 @@ func (l *LanguageService) ProvideFormatDocumentRange(
 	edits := l.toLSProtoTextEdits(file, l.getFormattingEditsForRange(
 		ctx,
 		file,
-		toFormatCodeSettings(options),
+		toFormatCodeSettings(options, l.GetProgram().Options().NewLine.GetNewLineCharacter()),
 		l.converters.FromLSPRange(file, r),
 	))
 	return lsproto.TextEditsOrNull{TextEdits: &edits}, nil
@@ -78,7 +78,7 @@ func (l *LanguageService) ProvideFormatDocumentOnType(
 	edits := l.toLSProtoTextEdits(file, l.getFormattingEditsAfterKeystroke(
 		ctx,
 		file,
-		toFormatCodeSettings(options),
+		toFormatCodeSettings(options, l.GetProgram().Options().NewLine.GetNewLineCharacter()),
 		int(l.converters.LineAndCharacterToPosition(file, position)),
 		character,
 	))

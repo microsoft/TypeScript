@@ -155,6 +155,10 @@ func (p *Program) UseCaseSensitiveFileNames() bool {
 	return p.Host().FS().UseCaseSensitiveFileNames()
 }
 
+func (p *Program) UsesUriStyleNodeCoreModules() bool {
+	return p.usesUriStyleNodeCoreModules.IsTrue()
+}
+
 var _ checker.Program = (*Program)(nil)
 
 /** This should have similar behavior to 'processSourceFile' without diagnostics or mutation. */

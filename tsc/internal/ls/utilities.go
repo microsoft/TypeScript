@@ -6,6 +6,7 @@ import (
 	"iter"
 	"slices"
 	"strings"
+	"unicode"
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/astnav"
@@ -18,6 +19,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/lsutil"
 	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/stringutil"
+	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
 // Implements a cmp.Compare like function for two lsproto.Position
@@ -116,6 +118,45 @@ func getNonModuleSymbolOfMergedModuleSymbol(symbol *ast.Symbol) *ast.Symbol {
 		return decl.Symbol()
 	}
 	return nil
+}
+
+func moduleSymbolToValidIdentifier(moduleSymbol *ast.Symbol, target core.ScriptTarget, forceCapitalize bool) string {
+	return moduleSpecifierToValidIdentifier(stringutil.StripQuotes(moduleSymbol.Name), target, forceCapitalize)
+}
+
+func moduleSpecifierToValidIdentifier(moduleSpecifier string, target core.ScriptTarget, forceCapitalize bool) string {
+	baseName := tspath.GetBaseFileName(strings.TrimSuffix(tspath.RemoveFileExtension(moduleSpecifier), "/index"))
+	res := []rune{}
+	lastCharWasValid := true
+	baseNameRunes := []rune(baseName)
+	if len(baseNameRunes) > 0 && scanner.IsIdentifierStart(baseNameRunes[0]) {
+		if forceCapitalize {
+			res = append(res, unicode.ToUpper(baseNameRunes[0]))
+		} else {
+			res = append(res, baseNameRunes[0])
+		}
+	} else {
+		lastCharWasValid = false
+	}
+
+	for i := 1; i < len(baseNameRunes); i++ {
+		isValid := scanner.IsIdentifierPart(baseNameRunes[i])
+		if isValid {
+			if !lastCharWasValid {
+				res = append(res, unicode.ToUpper(baseNameRunes[i]))
+			} else {
+				res = append(res, baseNameRunes[i])
+			}
+		}
+		lastCharWasValid = isValid
+	}
+
+	// Need `"_"` to ensure result isn't empty.
+	resString := string(res)
+	if resString != "" && !isNonContextualKeyword(scanner.StringToToken(resString)) {
+		return resString
+	}
+	return "_" + resString
 }
 
 func getLocalSymbolForExportSpecifier(referenceLocation *ast.Identifier, referenceSymbol *ast.Symbol, exportSpecifier *ast.ExportSpecifier, ch *checker.Checker) *ast.Symbol {
@@ -520,6 +561,10 @@ var typeKeywords *collections.Set[ast.Kind] = collections.NewSetFromItems(
 
 func isTypeKeyword(kind ast.Kind) bool {
 	return typeKeywords.Has(kind)
+}
+
+func isSeparator(node *ast.Node, candidate *ast.Node) bool {
+	return candidate != nil && node.Parent != nil && (candidate.Kind == ast.KindCommaToken || (candidate.Kind == ast.KindSemicolonToken && node.Parent.Kind == ast.KindObjectLiteralExpression))
 }
 
 // Returns a map of all names in the file to their positions.

@@ -146,7 +146,7 @@ func TestIsRecognizedTripleSlashComment(t *testing.T) {
 				commentRange.Kind = ast.KindSingleLineCommentTrivia
 				commentRange.TextRange = core.NewTextRange(0, len(rec.s))
 			}
-			actual := isRecognizedTripleSlashComment(rec.s, commentRange)
+			actual := IsRecognizedTripleSlashComment(rec.s, commentRange)
 			assert.Equal(t, actual, rec.expected)
 		})
 	}

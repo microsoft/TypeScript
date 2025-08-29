@@ -18,14 +18,6 @@ const (
 	ImpExpKindExport
 )
 
-type ExportKind int32
-
-const (
-	ExportKindDefault ExportKind = iota
-	ExportKindNamed
-	ExportKindExportEquals
-)
-
 type ImportExportSymbol struct {
 	kind       ImpExpKind
 	symbol     *ast.Symbol

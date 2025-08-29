@@ -46,7 +46,6 @@ func (l *LanguageService) getStringLiteralCompletions(
 	position int,
 	contextToken *ast.Node,
 	compilerOptions *core.CompilerOptions,
-	program *compiler.Program,
 	preferences *UserPreferences,
 	clientOptions *lsproto.CompletionClientCapabilities,
 ) *lsproto.CompletionList {
@@ -60,7 +59,6 @@ func (l *LanguageService) getStringLiteralCompletions(
 			file,
 			contextToken,
 			position,
-			program,
 			preferences)
 		return l.convertStringLiteralCompletions(
 			ctx,
@@ -68,7 +66,6 @@ func (l *LanguageService) getStringLiteralCompletions(
 			contextToken,
 			file,
 			position,
-			program,
 			compilerOptions,
 			preferences,
 			clientOptions,
@@ -83,7 +80,6 @@ func (l *LanguageService) convertStringLiteralCompletions(
 	contextToken *ast.StringLiteralLike,
 	file *ast.SourceFile,
 	position int,
-	program *compiler.Program,
 	options *core.CompilerOptions,
 	preferences *UserPreferences,
 	clientOptions *lsproto.CompletionClientCapabilities,
@@ -112,7 +108,6 @@ func (l *LanguageService) convertStringLiteralCompletions(
 			contextToken, /*replacementToken*/
 			position,
 			file,
-			program,
 			preferences,
 			options,
 			clientOptions,
@@ -161,6 +156,7 @@ func (l *LanguageService) convertStringLiteralCompletions(
 				false, /*hasAction*/
 				false, /*preselect*/
 				"",    /*source*/
+				nil,   /*autoImportEntryData*/
 			)
 		})
 		defaultCommitCharacters := getDefaultCommitCharacters(completion.isNewIdentifier)
@@ -210,6 +206,7 @@ func (l *LanguageService) convertPathCompletions(
 			false, /*hasAction*/
 			false, /*preselect*/
 			"",    /*source*/
+			nil,   /*autoImportEntryData*/
 		)
 	})
 	itemDefaults := l.setItemDefaults(
@@ -232,10 +229,9 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 	file *ast.SourceFile,
 	node *ast.StringLiteralLike,
 	position int,
-	program *compiler.Program,
 	preferences *UserPreferences,
 ) *stringLiteralCompletions {
-	typeChecker, done := program.GetTypeCheckerForFile(ctx, file)
+	typeChecker, done := l.GetProgram().GetTypeCheckerForFile(ctx, file)
 	defer done()
 	parent := walkUpParentheses(node.Parent)
 	switch parent.Kind {
@@ -245,7 +241,7 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 			return getStringLiteralCompletionsFromModuleNames(
 				file,
 				node,
-				program,
+				l.GetProgram(),
 				preferences,
 			)
 		}
@@ -327,7 +323,7 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 		//      import x = require("/*completion position*/");
 		//      var y = require("/*completion position*/");
 		//      export * from "/*completion position*/";
-		return getStringLiteralCompletionsFromModuleNames(file, node, program, preferences)
+		return getStringLiteralCompletionsFromModuleNames(file, node, l.GetProgram(), preferences)
 	case ast.KindCaseClause:
 		tracker := newCaseClauseTracker(typeChecker, parent.Parent.AsCaseBlock().Clauses.Nodes)
 		contextualTypes := fromContextualType(checker.ContextFlagsCompletions, node, typeChecker)
@@ -660,12 +656,12 @@ func getStringLiteralCompletionsFromSignature(
 
 func (l *LanguageService) getStringLiteralCompletionDetails(
 	ctx context.Context,
+	checker *checker.Checker,
 	item *lsproto.CompletionItem,
 	name string,
 	file *ast.SourceFile,
 	position int,
 	contextToken *ast.Node,
-	program *compiler.Program,
 	preferences *UserPreferences,
 ) *lsproto.CompletionItem {
 	if contextToken == nil || !ast.IsStringLiteralLike(contextToken) {
@@ -676,14 +672,11 @@ func (l *LanguageService) getStringLiteralCompletionDetails(
 		file,
 		contextToken,
 		position,
-		program,
 		preferences,
 	)
 	if completions == nil {
 		return item
 	}
-	checker, done := program.GetTypeCheckerForFile(ctx, file)
-	defer done()
 	return stringLiteralCompletionDetails(item, name, contextToken, completions, file, checker)
 }
 
