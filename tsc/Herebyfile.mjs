@@ -751,15 +751,16 @@ let signCount = 0;
 /**
  * @typedef {{
  *   SignFileRecordList: {
- *     SignFileList: { SrcPath: string; DstPath: string | null; }[];
+ *     SignFileList: { SrcPath: string; DstPath: string | null }[];
  *     Certs: Cert;
+ *     MacAppName: string | undefined
  *   }[]
  * }} DDSignFileList
  *
  * @param {DDSignFileList} filelist
  */
-async function sign(filelist) {
-    const data = JSON.stringify(filelist, undefined, 4);
+async function sign(filelist, unchangedOutputOkay = false) {
+    let data = JSON.stringify(filelist, undefined, 4);
     console.log("filelist:", data);
 
     if (!process.env.MBSIGN_APPFOLDER) {
@@ -802,6 +803,71 @@ async function sign(filelist) {
         return;
     }
 
+    const signingWorkaround = true;
+
+    /** @type {{ source: string; target: string }[]} */
+    const signingWorkaroundFiles = [];
+
+    if (signingWorkaround) {
+        // DstPath is currently broken in the signing tool.
+        // Copy all of the files to a new tempdir and then leave DstPath unset
+        // so that it's overwritten, then move the file to the destination.
+        console.log("Working around DstPath bug");
+
+        /** @type {DDSignFileList} */
+        const newFileList = {
+            SignFileRecordList: filelist.SignFileRecordList.map(list => {
+                return {
+                    Certs: list.Certs,
+                    SignFileList: list.SignFileList.map(file => {
+                        const dstPath = file.DstPath;
+                        if (dstPath === null) {
+                            return file;
+                        }
+
+                        const src = file.SrcPath;
+                        // File extensions must be preserved; use a prefix.
+                        const dstPathTemp = `${path.dirname(src)}/signing-temp-${path.basename(src)}`;
+
+                        console.log(`Copying: ${src} -> ${dstPathTemp}`);
+                        fs.cpSync(src, dstPathTemp);
+
+                        signingWorkaroundFiles.push({ source: dstPathTemp, target: dstPath });
+
+                        return {
+                            SrcPath: dstPathTemp,
+                            DstPath: null,
+                        };
+                    }),
+                    MacAppName: list.MacAppName,
+                };
+            }),
+        };
+
+        data = JSON.stringify(newFileList, undefined, 4);
+        console.log("new filelist:", data);
+    }
+
+    /** @type {Map<string, string>} */
+    const srcHashes = new Map();
+
+    for (const record of filelist.SignFileRecordList) {
+        for (const file of record.SignFileList) {
+            const src = file.SrcPath;
+            const dst = file.DstPath ?? src;
+
+            if (!fs.existsSync(src)) {
+                throw new Error(`Source file does not exist: ${src}`);
+            }
+
+            const hash = crypto.createHash("sha256").update(fs.readFileSync(src)).digest("hex");
+            srcHashes.set(src, hash);
+
+            console.log(`Will sign ${src} -> ${dst}`);
+            console.log(`  sha256: ${hash}`);
+        }
+    }
+
     const tmp = await getSignTempDir();
     const filelistPath = path.resolve(tmp, `signing-filelist-${signCount++}.json`);
     await fs.promises.writeFile(filelistPath, data);
@@ -813,6 +879,61 @@ async function sign(filelist) {
     }
     finally {
         await fs.promises.unlink(filelistPath);
+    }
+
+    if (signingWorkaround) {
+        // Now, copy the files back.
+        for (const { source, target } of signingWorkaroundFiles) {
+            console.log(`Moving signed file: ${source} -> ${target}`);
+            await fs.promises.rename(source, target);
+        }
+    }
+
+    /** @type {string[]} */
+    let failures = [];
+
+    for (const record of filelist.SignFileRecordList) {
+        for (const file of record.SignFileList) {
+            const src = file.SrcPath;
+            const dst = file.DstPath ?? src;
+
+            if (!fs.existsSync(dst)) {
+                failures.push(`Signed file does not exist: ${dst}`);
+                const newSrcHash = crypto.createHash("sha256").update(fs.readFileSync(src)).digest("hex");
+                const oldSrcHash = srcHashes.get(src);
+                assert(oldSrcHash);
+                if (oldSrcHash !== newSrcHash) {
+                    failures.push(`  Source file changed during signing: ${src}\n    before: ${oldSrcHash}\n    after:  ${newSrcHash}`);
+                }
+                continue;
+            }
+
+            const srcHash = srcHashes.get(src);
+            assert(srcHash);
+            const dstHash = crypto.createHash("sha256").update(fs.readFileSync(dst)).digest("hex");
+            if (srcHash === dstHash) {
+                const message = `Signed file is identical to source file (not signed?): ${src} -> ${dst}\n  sha256: ${dstHash}`;
+                if (unchangedOutputOkay) {
+                    console.log(message);
+                }
+                else {
+                    failures.push(message);
+                    continue;
+                }
+            }
+
+            if (src === dst) {
+                console.log(`Signed ${src}`);
+            }
+            else {
+                console.log(`Signed ${src} -> ${dst}`);
+            }
+            console.log(`  sha256: ${dstHash}`);
+        }
+    }
+
+    if (failures.length) {
+        throw new Error("Some files failed to sign:\n" + failures.map(f => " - " + f).join("\n"));
     }
 }
 
@@ -1065,12 +1186,14 @@ export const signNativePreviewPackages = task({
                     filelist.SignFileRecordList.push({
                         SignFileList: filelistPaths.map(p => ({ SrcPath: p.path, DstPath: null })),
                         Certs: cert,
+                        MacAppName: undefined,
                     });
                     break;
                 case "LinuxSign":
                     filelist.SignFileRecordList.push({
                         SignFileList: filelistPaths.map(p => ({ SrcPath: p.path, DstPath: p.path + ".sig" })),
                         Certs: cert,
+                        MacAppName: undefined,
                     });
                     break;
                 case "MacDeveloperHarden":
@@ -1095,6 +1218,7 @@ export const signNativePreviewPackages = task({
                     filelist.SignFileRecordList.push({
                         SignFileList: macZips.map(p => ({ SrcPath: p.unsignedZipPath, DstPath: p.signedZipPath })),
                         Certs: cert,
+                        MacAppName: undefined, // MacAppName is only for notarization
                     });
                     break;
                 default:
@@ -1115,11 +1239,14 @@ export const signNativePreviewPackages = task({
                     {
                         SignFileList: macZips.map(p => ({ SrcPath: p.signedZipPath, DstPath: p.notarizedZipPath })),
                         Certs: "8020", // "MacNotarize" (friendly name not supported by the tooling)
+                        MacAppName: "MicrosoftTypeScript",
                     },
                 ],
             };
 
-            await sign(notarizeFilelist);
+            // Notarizing does not change the file, it just sends it to Apple, so ignore the case
+            // where the input files are the same as the output files.
+            await sign(notarizeFilelist, /*unchangedOutputOkay*/ true);
 
             // Finally, unzip the notarized files and move them back to their original locations.
 
@@ -1234,6 +1361,7 @@ export const signNativePreviewExtensions = task({
                 {
                     SignFileList: extensions.map(({ vsixSignaturePath }) => ({ SrcPath: vsixSignaturePath, DstPath: null })),
                     Certs: "VSCodePublisher",
+                    MacAppName: undefined,
                 },
             ],
         });
