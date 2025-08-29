@@ -30369,7 +30369,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return contextualType && !isGenericType(contextualType);
     }
 
-    function getNarrowableTypeForReference(type: Type, reference: Node, checkMode = CheckMode.Normal) {
+    function getNarrowableTypeForReference(type: Type, reference: Node, checkMode?: CheckMode) {
         if (isNoInferType(type)) {
             type = (type as SubstitutionType).baseType;
         }
