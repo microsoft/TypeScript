@@ -1339,7 +1339,6 @@ export const enum CheckMode {
                                                     //   e.g. in `const { a, ...rest } = foo`, when checking the type of `foo` to determine the type of `rest`,
                                                     //   we need to preserve generic types instead of substituting them for constraints
     TypeOnly = 1 << 6,                              // Called from getTypeOfExpression, diagnostics may be omitted
-    SkipConstraintsSubstitution = 1 << 7,
 }
 
 /** @internal */
@@ -11528,9 +11527,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     // Return the type of a binding element parent. We check SymbolLinks first to see if a type has been
     // assigned by contextual typing.
-    function getTypeForBindingElementParent(node: BindingElementGrandparent, checkMode: CheckMode) {
-        const symbol = getSymbolOfDeclaration(node);
-        return symbol && getSymbolLinks(symbol).type || getTypeForVariableLikeDeclaration(node, /*includeOptionality*/ false, checkMode);
+    function getTypeForBindingElementParent(node: BindingElement) {
+        const grandparent = node.parent.parent;
+        const rootParameter = tryGetRootParameterDeclaration(node);
+        if (rootParameter) {
+            const symbol = getSymbolOfDeclaration(grandparent);
+            const contextualParameterType = symbol && getSymbolLinks(symbol).type;
+            if (contextualParameterType) {
+                return contextualParameterType;
+            }
+        }
+        return getTypeForVariableLikeDeclaration(grandparent, /*includeOptionality*/ false, node.dotDotDotToken ? CheckMode.RestBindingElement : CheckMode.Normal);
     }
 
     function getRestType(source: Type, properties: PropertyName[], symbol: Symbol | undefined): Type {
@@ -11663,8 +11670,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     /** Return the inferred type for a binding element */
     function getTypeForBindingElement(declaration: BindingElement): Type | undefined {
-        const checkMode = declaration.dotDotDotToken ? CheckMode.RestBindingElement : CheckMode.Normal;
-        const parentType = getTypeForBindingElementParent(declaration.parent.parent, checkMode);
+        const parentType = getTypeForBindingElementParent(declaration);
         return parentType && getBindingElementTypeFromParentType(declaration, parentType, /*noTupleBoundsCheck*/ false);
     }
 
@@ -30363,7 +30369,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return contextualType && !isGenericType(contextualType);
     }
 
-    function shouldSubstituteConstraints(type: Type, reference: Node, checkMode?: CheckMode) {
+    function getNarrowableTypeForReference(type: Type, reference: Node, checkMode = CheckMode.Normal) {
+        if (isNoInferType(type)) {
+            type = (type as SubstitutionType).baseType;
+        }
         // When the type of a reference is or contains an instantiable type with a union type constraint, and
         // when the reference is in a constraint position (where it is known we'll obtain the apparent type) or
         // has a contextual type containing no top-level instantiables (meaning constraints will determine
@@ -30371,19 +30380,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // control flow analysis an opportunity to narrow it further. For example, for a reference of a type
         // parameter type 'T extends string | undefined' with a contextual type 'string', we substitute
         // 'string | undefined' to give control flow analysis the opportunity to narrow to type 'string'.
-        return !(checkMode && checkMode & CheckMode.Inferential) &&
+        const substituteConstraints = !(checkMode && checkMode & CheckMode.Inferential) &&
             someType(type, isGenericTypeWithUnionConstraint) &&
             (isConstraintPosition(type, reference) || hasContextualTypeWithNoGenericTypes(reference, checkMode));
-    }
-
-    function getNarrowableTypeForReference(type: Type, reference: Node, checkMode = CheckMode.Normal) {
-        if (isNoInferType(type)) {
-            type = (type as SubstitutionType).baseType;
-        }
-        if (checkMode & CheckMode.SkipConstraintsSubstitution) {
-            return type;
-        }
-        return shouldSubstituteConstraints(type, reference, checkMode) ? mapType(type, getBaseConstraintOrType) : type;
+        return substituteConstraints ? mapType(type, getBaseConstraintOrType) : type;
     }
 
     function isExportOrExportExpression(location: Node) {
@@ -30845,7 +30845,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const links = getNodeLinks(parent);
                     if (!(links.flags & NodeCheckFlags.InCheckIdentifier)) {
                         links.flags |= NodeCheckFlags.InCheckIdentifier;
-                        const parentType = getTypeForBindingElementParent(parent, shouldSubstituteConstraints(type, location) ? CheckMode.Normal : CheckMode.SkipConstraintsSubstitution);
+                        const parentType = getTypeForBindingElementParent(declaration);
                         const parentNarrowableType = parentType && getNarrowableTypeForReference(parentType, location);
 
                         links.flags &= ~NodeCheckFlags.InCheckIdentifier;
@@ -44922,8 +44922,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             // check private/protected variable access
             const parent = node.parent.parent;
-            const parentCheckMode = node.dotDotDotToken ? CheckMode.RestBindingElement : CheckMode.Normal;
-            const parentType = getTypeForBindingElementParent(parent, parentCheckMode);
+            const parentType = getTypeForBindingElementParent(node);
             const name = node.propertyName || node.name;
             if (parentType && !isBindingPattern(name)) {
                 const exprType = getLiteralTypeFromPropertyName(name);

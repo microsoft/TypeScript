@@ -60,6 +60,15 @@ const fn1 = <P extends Params1>(params: P) => {
   return undefined;
 };
 
+const fn2 = <P extends Params1>({ foo, ...rest }: P) => {
+  if (rest.tag === "a") {
+    rest.type.toFixed(); // ok
+    return rest; // Omit<P, "foo">
+  }
+
+  return undefined;
+};
+
 // https://github.com/microsoft/TypeScript/issues/53947
 
 function ImageAvatar(props: { className?: string; src: string }) {

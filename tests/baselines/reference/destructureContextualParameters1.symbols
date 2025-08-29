@@ -146,3 +146,194 @@ function formatDefaultValue2(
 >String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 7 more)
 >defaultValue : Symbol(defaultValue, Decl(destructureContextualParameters1.ts, 30, 29))
 }
+
+function formatDefaultValue3(
+>formatDefaultValue3 : Symbol(formatDefaultValue3, Decl(destructureContextualParameters1.ts, 40, 1))
+
+  defaultValue: CommandLineOption["defaultValueDescription"],
+>defaultValue : Symbol(defaultValue, Decl(destructureContextualParameters1.ts, 42, 29))
+>CommandLineOption : Symbol(CommandLineOption, Decl(destructureContextualParameters1.ts, 12, 1))
+
+  type: CommandLineOption["type"],
+>type : Symbol(type, Decl(destructureContextualParameters1.ts, 43, 61))
+>CommandLineOption : Symbol(CommandLineOption, Decl(destructureContextualParameters1.ts, 12, 1))
+
+) {
+  return defaultValue !== undefined && typeof type === "object"
+>defaultValue : Symbol(defaultValue, Decl(destructureContextualParameters1.ts, 42, 29))
+>undefined : Symbol(undefined)
+>type : Symbol(type, Decl(destructureContextualParameters1.ts, 43, 61))
+
+    ? arrayFrom(type.entries())
+>arrayFrom(type.entries())        .filter((arg) => {            const [, value] = arg;            return value === defaultValue;        })        .map(([name]) => name)        .join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>arrayFrom(type.entries())        .filter((arg) => {            const [, value] = arg;            return value === defaultValue;        })        .map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>arrayFrom(type.entries())        .filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arrayFrom : Symbol(arrayFrom, Decl(destructureContextualParameters1.ts, 0, 0), Decl(destructureContextualParameters1.ts, 0, 79))
+>type.entries : Symbol(Map.entries, Decl(lib.es2015.iterable.d.ts, --, --))
+>type : Symbol(type, Decl(destructureContextualParameters1.ts, 43, 61))
+>entries : Symbol(Map.entries, Decl(lib.es2015.iterable.d.ts, --, --))
+
+        .filter((arg) => {
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(destructureContextualParameters1.ts, 48, 17))
+
+            const [, value] = arg;
+>value : Symbol(value, Decl(destructureContextualParameters1.ts, 49, 20))
+>arg : Symbol(arg, Decl(destructureContextualParameters1.ts, 48, 17))
+
+            return value === defaultValue;
+>value : Symbol(value, Decl(destructureContextualParameters1.ts, 49, 20))
+>defaultValue : Symbol(defaultValue, Decl(destructureContextualParameters1.ts, 42, 29))
+
+        })
+        .map(([name]) => name)
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>name : Symbol(name, Decl(destructureContextualParameters1.ts, 52, 15))
+>name : Symbol(name, Decl(destructureContextualParameters1.ts, 52, 15))
+
+        .join("/")
+>join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+
+    : String(defaultValue);
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 7 more)
+>defaultValue : Symbol(defaultValue, Decl(destructureContextualParameters1.ts, 42, 29))
+}
+
+function formatDefaultValue4(
+>formatDefaultValue4 : Symbol(formatDefaultValue4, Decl(destructureContextualParameters1.ts, 55, 1))
+
+  defaultValue: CommandLineOption["defaultValueDescription"],
+>defaultValue : Symbol(defaultValue, Decl(destructureContextualParameters1.ts, 57, 29))
+>CommandLineOption : Symbol(CommandLineOption, Decl(destructureContextualParameters1.ts, 12, 1))
+
+  type: CommandLineOption["type"],
+>type : Symbol(type, Decl(destructureContextualParameters1.ts, 58, 61))
+>CommandLineOption : Symbol(CommandLineOption, Decl(destructureContextualParameters1.ts, 12, 1))
+
+) {
+  return defaultValue !== undefined && typeof type === "object"
+>defaultValue : Symbol(defaultValue, Decl(destructureContextualParameters1.ts, 57, 29))
+>undefined : Symbol(undefined)
+>type : Symbol(type, Decl(destructureContextualParameters1.ts, 58, 61))
+
+    ? arrayFrom(type.entries())
+>arrayFrom(type.entries())        .filter((arg) => {            const [, ...value] = arg;            return value[0] === defaultValue;        })        .map(([name]) => name)        .join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>arrayFrom(type.entries())        .filter((arg) => {            const [, ...value] = arg;            return value[0] === defaultValue;        })        .map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>arrayFrom(type.entries())        .filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arrayFrom : Symbol(arrayFrom, Decl(destructureContextualParameters1.ts, 0, 0), Decl(destructureContextualParameters1.ts, 0, 79))
+>type.entries : Symbol(Map.entries, Decl(lib.es2015.iterable.d.ts, --, --))
+>type : Symbol(type, Decl(destructureContextualParameters1.ts, 58, 61))
+>entries : Symbol(Map.entries, Decl(lib.es2015.iterable.d.ts, --, --))
+
+        .filter((arg) => {
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(destructureContextualParameters1.ts, 63, 17))
+
+            const [, ...value] = arg;
+>value : Symbol(value, Decl(destructureContextualParameters1.ts, 64, 20))
+>arg : Symbol(arg, Decl(destructureContextualParameters1.ts, 63, 17))
+
+            return value[0] === defaultValue;
+>value : Symbol(value, Decl(destructureContextualParameters1.ts, 64, 20))
+>0 : Symbol(0)
+>defaultValue : Symbol(defaultValue, Decl(destructureContextualParameters1.ts, 57, 29))
+
+        })
+        .map(([name]) => name)
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>name : Symbol(name, Decl(destructureContextualParameters1.ts, 67, 15))
+>name : Symbol(name, Decl(destructureContextualParameters1.ts, 67, 15))
+
+        .join("/")
+>join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+
+    : String(defaultValue);
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 7 more)
+>defaultValue : Symbol(defaultValue, Decl(destructureContextualParameters1.ts, 57, 29))
+}
+
+declare function test1<T>(arg: T): {
+>test1 : Symbol(test1, Decl(destructureContextualParameters1.ts, 70, 1))
+>T : Symbol(T, Decl(destructureContextualParameters1.ts, 72, 23))
+>arg : Symbol(arg, Decl(destructureContextualParameters1.ts, 72, 26))
+>T : Symbol(T, Decl(destructureContextualParameters1.ts, 72, 23))
+
+  filter<S extends T>(cb: (arg: T) => arg is S): void;
+>filter : Symbol(filter, Decl(destructureContextualParameters1.ts, 72, 36), Decl(destructureContextualParameters1.ts, 73, 54))
+>S : Symbol(S, Decl(destructureContextualParameters1.ts, 73, 9))
+>T : Symbol(T, Decl(destructureContextualParameters1.ts, 72, 23))
+>cb : Symbol(cb, Decl(destructureContextualParameters1.ts, 73, 22))
+>arg : Symbol(arg, Decl(destructureContextualParameters1.ts, 73, 27))
+>T : Symbol(T, Decl(destructureContextualParameters1.ts, 72, 23))
+>arg : Symbol(arg, Decl(destructureContextualParameters1.ts, 73, 27))
+>S : Symbol(S, Decl(destructureContextualParameters1.ts, 73, 9))
+
+  filter(cb: (arg: T) => boolean): void;
+>filter : Symbol(filter, Decl(destructureContextualParameters1.ts, 72, 36), Decl(destructureContextualParameters1.ts, 73, 54))
+>cb : Symbol(cb, Decl(destructureContextualParameters1.ts, 74, 9))
+>arg : Symbol(arg, Decl(destructureContextualParameters1.ts, 74, 14))
+>T : Symbol(T, Decl(destructureContextualParameters1.ts, 72, 23))
+
+};
+
+declare const obj1: { foo: string; bar: number; baz: boolean };
+>obj1 : Symbol(obj1, Decl(destructureContextualParameters1.ts, 77, 13))
+>foo : Symbol(foo, Decl(destructureContextualParameters1.ts, 77, 21))
+>bar : Symbol(bar, Decl(destructureContextualParameters1.ts, 77, 34))
+>baz : Symbol(baz, Decl(destructureContextualParameters1.ts, 77, 47))
+
+test1(obj1).filter(({ foo, bar }) => foo === "");
+>test1(obj1).filter : Symbol(filter, Decl(destructureContextualParameters1.ts, 72, 36), Decl(destructureContextualParameters1.ts, 73, 54))
+>test1 : Symbol(test1, Decl(destructureContextualParameters1.ts, 70, 1))
+>obj1 : Symbol(obj1, Decl(destructureContextualParameters1.ts, 77, 13))
+>filter : Symbol(filter, Decl(destructureContextualParameters1.ts, 72, 36), Decl(destructureContextualParameters1.ts, 73, 54))
+>foo : Symbol(foo, Decl(destructureContextualParameters1.ts, 78, 21))
+>bar : Symbol(bar, Decl(destructureContextualParameters1.ts, 78, 26))
+>foo : Symbol(foo, Decl(destructureContextualParameters1.ts, 78, 21))
+
+test1(obj1).filter(({ bar, ...rest }) => rest.foo === "");
+>test1(obj1).filter : Symbol(filter, Decl(destructureContextualParameters1.ts, 72, 36), Decl(destructureContextualParameters1.ts, 73, 54))
+>test1 : Symbol(test1, Decl(destructureContextualParameters1.ts, 70, 1))
+>obj1 : Symbol(obj1, Decl(destructureContextualParameters1.ts, 77, 13))
+>filter : Symbol(filter, Decl(destructureContextualParameters1.ts, 72, 36), Decl(destructureContextualParameters1.ts, 73, 54))
+>bar : Symbol(bar, Decl(destructureContextualParameters1.ts, 79, 21))
+>rest : Symbol(rest, Decl(destructureContextualParameters1.ts, 79, 26))
+>rest.foo : Symbol(foo, Decl(destructureContextualParameters1.ts, 77, 21))
+>rest : Symbol(rest, Decl(destructureContextualParameters1.ts, 79, 26))
+>foo : Symbol(foo, Decl(destructureContextualParameters1.ts, 77, 21))
+
+test1(obj1).filter((arg) => {
+>test1(obj1).filter : Symbol(filter, Decl(destructureContextualParameters1.ts, 72, 36), Decl(destructureContextualParameters1.ts, 73, 54))
+>test1 : Symbol(test1, Decl(destructureContextualParameters1.ts, 70, 1))
+>obj1 : Symbol(obj1, Decl(destructureContextualParameters1.ts, 77, 13))
+>filter : Symbol(filter, Decl(destructureContextualParameters1.ts, 72, 36), Decl(destructureContextualParameters1.ts, 73, 54))
+>arg : Symbol(arg, Decl(destructureContextualParameters1.ts, 80, 20))
+
+    const { foo, bar } = arg;
+>foo : Symbol(foo, Decl(destructureContextualParameters1.ts, 81, 11))
+>bar : Symbol(bar, Decl(destructureContextualParameters1.ts, 81, 16))
+>arg : Symbol(arg, Decl(destructureContextualParameters1.ts, 80, 20))
+
+    return foo === "";
+>foo : Symbol(foo, Decl(destructureContextualParameters1.ts, 81, 11))
+
+});
+test1(obj1).filter((arg) => {
+>test1(obj1).filter : Symbol(filter, Decl(destructureContextualParameters1.ts, 72, 36), Decl(destructureContextualParameters1.ts, 73, 54))
+>test1 : Symbol(test1, Decl(destructureContextualParameters1.ts, 70, 1))
+>obj1 : Symbol(obj1, Decl(destructureContextualParameters1.ts, 77, 13))
+>filter : Symbol(filter, Decl(destructureContextualParameters1.ts, 72, 36), Decl(destructureContextualParameters1.ts, 73, 54))
+>arg : Symbol(arg, Decl(destructureContextualParameters1.ts, 84, 20))
+
+    const { bar, ...rest } = arg;
+>bar : Symbol(bar, Decl(destructureContextualParameters1.ts, 85, 11))
+>rest : Symbol(rest, Decl(destructureContextualParameters1.ts, 85, 16))
+>arg : Symbol(arg, Decl(destructureContextualParameters1.ts, 84, 20))
+
+    return rest.foo === "";
+>rest.foo : Symbol(foo, Decl(destructureContextualParameters1.ts, 77, 21))
+>rest : Symbol(rest, Decl(destructureContextualParameters1.ts, 85, 16))
+>foo : Symbol(foo, Decl(destructureContextualParameters1.ts, 77, 21))
+
+});
+

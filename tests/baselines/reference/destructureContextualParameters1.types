@@ -251,3 +251,391 @@ function formatDefaultValue2(
 >defaultValue : string | number | undefined
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
+
+function formatDefaultValue3(
+>formatDefaultValue3 : (defaultValue: CommandLineOption["defaultValueDescription"], type: CommandLineOption["type"]) => string
+>                    : ^            ^^                                            ^^    ^^                         ^^^^^^^^^^^
+
+  defaultValue: CommandLineOption["defaultValueDescription"],
+>defaultValue : string | number | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  type: CommandLineOption["type"],
+>type : "string" | Map<string, string | number>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+) {
+  return defaultValue !== undefined && typeof type === "object"
+>defaultValue !== undefined && typeof type === "object"    ? arrayFrom(type.entries())        .filter((arg) => {            const [, value] = arg;            return value === defaultValue;        })        .map(([name]) => name)        .join("/")    : String(defaultValue) : string
+>                                                                                                                                                                                                                                                                                : ^^^^^^
+>defaultValue !== undefined && typeof type === "object" : boolean
+>                                                       : ^^^^^^^
+>defaultValue !== undefined : boolean
+>                           : ^^^^^^^
+>defaultValue : string | number | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+>typeof type === "object" : boolean
+>                         : ^^^^^^^
+>typeof type : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "string" | Map<string, string | number>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"object" : "object"
+>         : ^^^^^^^^
+
+    ? arrayFrom(type.entries())
+>arrayFrom(type.entries())        .filter((arg) => {            const [, value] = arg;            return value === defaultValue;        })        .map(([name]) => name)        .join("/") : string
+>                                                                                                                                                                                          : ^^^^^^
+>arrayFrom(type.entries())        .filter((arg) => {            const [, value] = arg;            return value === defaultValue;        })        .map(([name]) => name)        .join : (separator?: string) => string
+>                                                                                                                                                                                     : ^         ^^^      ^^^^^      
+>arrayFrom(type.entries())        .filter((arg) => {            const [, value] = arg;            return value === defaultValue;        })        .map(([name]) => name) : string[]
+>                                                                                                                                                                        : ^^^^^^^^
+>arrayFrom(type.entries())        .filter((arg) => {            const [, value] = arg;            return value === defaultValue;        })        .map : <U>(callbackfn: (value: [string, string | number], index: number, array: [string, string | number][]) => U, thisArg?: any) => U[]
+>                                                                                                                                                      : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>arrayFrom(type.entries())        .filter((arg) => {            const [, value] = arg;            return value === defaultValue;        }) : [string, string | number][]
+>                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arrayFrom(type.entries())        .filter : { <S extends [string, string | number]>(predicate: (value: [string, string | number], index: number, array: [string, string | number][]) => value is S, thisArg?: any): S[]; (predicate: (value: [string, string | number], index: number, array: [string, string | number][]) => unknown, thisArg?: any): [string, string | number][]; }
+>                                         : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arrayFrom(type.entries()) : [string, string | number][]
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arrayFrom : { <T, U>(iterator: Iterable<T>, map: (t: T) => U): U[]; <T>(iterator: Iterable<T>): T[]; }
+>          : ^^^ ^^ ^^        ^^           ^^   ^^           ^^^   ^^^ ^^        ^^           ^^^   ^^^
+>type.entries() : MapIterator<[string, string | number]>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type.entries : () => MapIterator<[string, string | number]>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : Map<string, string | number>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>entries : () => MapIterator<[string, string | number]>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        .filter((arg) => {
+>filter : { <S extends [string, string | number]>(predicate: (value: [string, string | number], index: number, array: [string, string | number][]) => value is S, thisArg?: any): S[]; (predicate: (value: [string, string | number], index: number, array: [string, string | number][]) => unknown, thisArg?: any): [string, string | number][]; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(arg) => {            const [, value] = arg;            return value === defaultValue;        } : (arg: [string, string | number]) => boolean
+>                                                                                                : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arg : [string, string | number]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+            const [, value] = arg;
+> : undefined
+> : ^^^^^^^^^
+>value : string | number
+>      : ^^^^^^^^^^^^^^^
+>arg : [string, string | number]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+            return value === defaultValue;
+>value === defaultValue : boolean
+>                       : ^^^^^^^
+>value : string | number
+>      : ^^^^^^^^^^^^^^^
+>defaultValue : string | number
+>             : ^^^^^^^^^^^^^^^
+
+        })
+        .map(([name]) => name)
+>map : <U>(callbackfn: (value: [string, string | number], index: number, array: [string, string | number][]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>([name]) => name : ([name]: [string, string | number]) => string
+>                 : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>name : string
+>     : ^^^^^^
+>name : string
+>     : ^^^^^^
+
+        .join("/")
+>join : (separator?: string) => string
+>     : ^         ^^^      ^^^^^      
+>"/" : "/"
+>    : ^^^
+
+    : String(defaultValue);
+>String(defaultValue) : string
+>                     : ^^^^^^
+>String : StringConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>defaultValue : string | number | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+function formatDefaultValue4(
+>formatDefaultValue4 : (defaultValue: CommandLineOption["defaultValueDescription"], type: CommandLineOption["type"]) => string
+>                    : ^            ^^                                            ^^    ^^                         ^^^^^^^^^^^
+
+  defaultValue: CommandLineOption["defaultValueDescription"],
+>defaultValue : string | number | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  type: CommandLineOption["type"],
+>type : "string" | Map<string, string | number>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+) {
+  return defaultValue !== undefined && typeof type === "object"
+>defaultValue !== undefined && typeof type === "object"    ? arrayFrom(type.entries())        .filter((arg) => {            const [, ...value] = arg;            return value[0] === defaultValue;        })        .map(([name]) => name)        .join("/")    : String(defaultValue) : string
+>                                                                                                                                                                                                                                                                                      : ^^^^^^
+>defaultValue !== undefined && typeof type === "object" : boolean
+>                                                       : ^^^^^^^
+>defaultValue !== undefined : boolean
+>                           : ^^^^^^^
+>defaultValue : string | number | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+>typeof type === "object" : boolean
+>                         : ^^^^^^^
+>typeof type : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "string" | Map<string, string | number>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"object" : "object"
+>         : ^^^^^^^^
+
+    ? arrayFrom(type.entries())
+>arrayFrom(type.entries())        .filter((arg) => {            const [, ...value] = arg;            return value[0] === defaultValue;        })        .map(([name]) => name)        .join("/") : string
+>                                                                                                                                                                                                : ^^^^^^
+>arrayFrom(type.entries())        .filter((arg) => {            const [, ...value] = arg;            return value[0] === defaultValue;        })        .map(([name]) => name)        .join : (separator?: string) => string
+>                                                                                                                                                                                           : ^         ^^^      ^^^^^      
+>arrayFrom(type.entries())        .filter((arg) => {            const [, ...value] = arg;            return value[0] === defaultValue;        })        .map(([name]) => name) : string[]
+>                                                                                                                                                                              : ^^^^^^^^
+>arrayFrom(type.entries())        .filter((arg) => {            const [, ...value] = arg;            return value[0] === defaultValue;        })        .map : <U>(callbackfn: (value: [string, string | number], index: number, array: [string, string | number][]) => U, thisArg?: any) => U[]
+>                                                                                                                                                            : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>arrayFrom(type.entries())        .filter((arg) => {            const [, ...value] = arg;            return value[0] === defaultValue;        }) : [string, string | number][]
+>                                                                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arrayFrom(type.entries())        .filter : { <S extends [string, string | number]>(predicate: (value: [string, string | number], index: number, array: [string, string | number][]) => value is S, thisArg?: any): S[]; (predicate: (value: [string, string | number], index: number, array: [string, string | number][]) => unknown, thisArg?: any): [string, string | number][]; }
+>                                         : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arrayFrom(type.entries()) : [string, string | number][]
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arrayFrom : { <T, U>(iterator: Iterable<T>, map: (t: T) => U): U[]; <T>(iterator: Iterable<T>): T[]; }
+>          : ^^^ ^^ ^^        ^^           ^^   ^^           ^^^   ^^^ ^^        ^^           ^^^   ^^^
+>type.entries() : MapIterator<[string, string | number]>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type.entries : () => MapIterator<[string, string | number]>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : Map<string, string | number>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>entries : () => MapIterator<[string, string | number]>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        .filter((arg) => {
+>filter : { <S extends [string, string | number]>(predicate: (value: [string, string | number], index: number, array: [string, string | number][]) => value is S, thisArg?: any): S[]; (predicate: (value: [string, string | number], index: number, array: [string, string | number][]) => unknown, thisArg?: any): [string, string | number][]; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(arg) => {            const [, ...value] = arg;            return value[0] === defaultValue;        } : (arg: [string, string | number]) => boolean
+>                                                                                                      : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arg : [string, string | number]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+            const [, ...value] = arg;
+> : undefined
+> : ^^^^^^^^^
+>value : [string | number]
+>      : ^^^^^^^^^^^^^^^^^
+>arg : [string, string | number]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+            return value[0] === defaultValue;
+>value[0] === defaultValue : boolean
+>                          : ^^^^^^^
+>value[0] : string | number
+>         : ^^^^^^^^^^^^^^^
+>value : [string | number]
+>      : ^^^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+>defaultValue : string | number
+>             : ^^^^^^^^^^^^^^^
+
+        })
+        .map(([name]) => name)
+>map : <U>(callbackfn: (value: [string, string | number], index: number, array: [string, string | number][]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>([name]) => name : ([name]: [string, string | number]) => string
+>                 : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>name : string
+>     : ^^^^^^
+>name : string
+>     : ^^^^^^
+
+        .join("/")
+>join : (separator?: string) => string
+>     : ^         ^^^      ^^^^^      
+>"/" : "/"
+>    : ^^^
+
+    : String(defaultValue);
+>String(defaultValue) : string
+>                     : ^^^^^^
+>String : StringConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>defaultValue : string | number | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+declare function test1<T>(arg: T): {
+>test1 : <T>(arg: T) => { filter<S extends T>(cb: (arg: T) => arg is S): void; filter(cb: (arg: T) => boolean): void; }
+>      : ^ ^^   ^^ ^^^^^                                                                                               
+>arg : T
+>    : ^
+
+  filter<S extends T>(cb: (arg: T) => arg is S): void;
+>filter : { <S extends T>(cb: (arg: T) => arg is S): void; (cb: (arg: T) => boolean): void; }
+>       : ^^^ ^^^^^^^^^ ^^  ^^                    ^^^    ^^^  ^^                   ^^^    ^^^
+>cb : (arg: T) => arg is S
+>   : ^   ^^ ^^^^^        
+>arg : T
+>    : ^
+
+  filter(cb: (arg: T) => boolean): void;
+>filter : { <S extends T>(cb: (arg: T) => arg is S): void; (cb: (arg: T) => boolean): void; }
+>       : ^^^ ^^^^^^^^^ ^^  ^^                    ^^^    ^^^  ^^                   ^^^    ^^^
+>cb : (arg: T) => boolean
+>   : ^   ^^ ^^^^^       
+>arg : T
+>    : ^
+
+};
+
+declare const obj1: { foo: string; bar: number; baz: boolean };
+>obj1 : { foo: string; bar: number; baz: boolean; }
+>     : ^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^
+>foo : string
+>    : ^^^^^^
+>bar : number
+>    : ^^^^^^
+>baz : boolean
+>    : ^^^^^^^
+
+test1(obj1).filter(({ foo, bar }) => foo === "");
+>test1(obj1).filter(({ foo, bar }) => foo === "") : void
+>                                                 : ^^^^
+>test1(obj1).filter : { <S extends { foo: string; bar: number; baz: boolean; }>(cb: (arg: { foo: string; bar: number; baz: boolean; }) => arg is S): void; (cb: (arg: { foo: string; bar: number; baz: boolean; }) => boolean): void; }
+>                   : ^^^ ^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^  ^^^   ^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^^^^^^    ^^^  ^^^   ^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^^^^       ^^^    ^^^
+>test1(obj1) : { filter<S extends { foo: string; bar: number; baz: boolean; }>(cb: (arg: { foo: string; bar: number; baz: boolean; }) => arg is S): void; filter(cb: (arg: { foo: string; bar: number; baz: boolean; }) => boolean): void; }
+>            : ^^^^^^^^^ ^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^  ^^^   ^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^  ^^^   ^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^^^^       ^^^    ^^^
+>test1 : <T>(arg: T) => { filter<S extends T>(cb: (arg: T) => arg is S): void; filter(cb: (arg: T) => boolean): void; }
+>      : ^ ^^   ^^ ^^^^^                                                                                               
+>obj1 : { foo: string; bar: number; baz: boolean; }
+>     : ^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^
+>filter : { <S extends { foo: string; bar: number; baz: boolean; }>(cb: (arg: { foo: string; bar: number; baz: boolean; }) => arg is S): void; (cb: (arg: { foo: string; bar: number; baz: boolean; }) => boolean): void; }
+>       : ^^^ ^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^  ^^^   ^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^^^^^^    ^^^  ^^^   ^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^^^^       ^^^    ^^^
+>({ foo, bar }) => foo === "" : ({ foo, bar }: { foo: string; bar: number; baz: boolean; }) => boolean
+>                             : ^            ^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^^
+>foo : string
+>    : ^^^^^^
+>bar : number
+>    : ^^^^^^
+>foo === "" : boolean
+>           : ^^^^^^^
+>foo : string
+>    : ^^^^^^
+>"" : ""
+>   : ^^
+
+test1(obj1).filter(({ bar, ...rest }) => rest.foo === "");
+>test1(obj1).filter(({ bar, ...rest }) => rest.foo === "") : void
+>                                                          : ^^^^
+>test1(obj1).filter : { <S extends { foo: string; bar: number; baz: boolean; }>(cb: (arg: { foo: string; bar: number; baz: boolean; }) => arg is S): void; (cb: (arg: { foo: string; bar: number; baz: boolean; }) => boolean): void; }
+>                   : ^^^ ^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^  ^^^   ^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^^^^^^    ^^^  ^^^   ^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^^^^       ^^^    ^^^
+>test1(obj1) : { filter<S extends { foo: string; bar: number; baz: boolean; }>(cb: (arg: { foo: string; bar: number; baz: boolean; }) => arg is S): void; filter(cb: (arg: { foo: string; bar: number; baz: boolean; }) => boolean): void; }
+>            : ^^^^^^^^^ ^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^  ^^^   ^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^  ^^^   ^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^^^^       ^^^    ^^^
+>test1 : <T>(arg: T) => { filter<S extends T>(cb: (arg: T) => arg is S): void; filter(cb: (arg: T) => boolean): void; }
+>      : ^ ^^   ^^ ^^^^^                                                                                               
+>obj1 : { foo: string; bar: number; baz: boolean; }
+>     : ^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^
+>filter : { <S extends { foo: string; bar: number; baz: boolean; }>(cb: (arg: { foo: string; bar: number; baz: boolean; }) => arg is S): void; (cb: (arg: { foo: string; bar: number; baz: boolean; }) => boolean): void; }
+>       : ^^^ ^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^  ^^^   ^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^^^^^^    ^^^  ^^^   ^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^^^^       ^^^    ^^^
+>({ bar, ...rest }) => rest.foo === "" : ({ bar, ...rest }: { foo: string; bar: number; baz: boolean; }) => boolean
+>                                      : ^                ^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^^
+>bar : number
+>    : ^^^^^^
+>rest : { foo: string; baz: boolean; }
+>     : ^^^^^^^      ^^^^^^^       ^^^
+>rest.foo === "" : boolean
+>                : ^^^^^^^
+>rest.foo : string
+>         : ^^^^^^
+>rest : { foo: string; baz: boolean; }
+>     : ^^^^^^^      ^^^^^^^       ^^^
+>foo : string
+>    : ^^^^^^
+>"" : ""
+>   : ^^
+
+test1(obj1).filter((arg) => {
+>test1(obj1).filter((arg) => {    const { foo, bar } = arg;    return foo === "";}) : void
+>                                                                                   : ^^^^
+>test1(obj1).filter : { <S extends { foo: string; bar: number; baz: boolean; }>(cb: (arg: { foo: string; bar: number; baz: boolean; }) => arg is S): void; (cb: (arg: { foo: string; bar: number; baz: boolean; }) => boolean): void; }
+>                   : ^^^ ^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^  ^^^   ^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^^^^^^    ^^^  ^^^   ^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^^^^       ^^^    ^^^
+>test1(obj1) : { filter<S extends { foo: string; bar: number; baz: boolean; }>(cb: (arg: { foo: string; bar: number; baz: boolean; }) => arg is S): void; filter(cb: (arg: { foo: string; bar: number; baz: boolean; }) => boolean): void; }
+>            : ^^^^^^^^^ ^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^  ^^^   ^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^  ^^^   ^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^^^^       ^^^    ^^^
+>test1 : <T>(arg: T) => { filter<S extends T>(cb: (arg: T) => arg is S): void; filter(cb: (arg: T) => boolean): void; }
+>      : ^ ^^   ^^ ^^^^^                                                                                               
+>obj1 : { foo: string; bar: number; baz: boolean; }
+>     : ^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^
+>filter : { <S extends { foo: string; bar: number; baz: boolean; }>(cb: (arg: { foo: string; bar: number; baz: boolean; }) => arg is S): void; (cb: (arg: { foo: string; bar: number; baz: boolean; }) => boolean): void; }
+>       : ^^^ ^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^  ^^^   ^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^^^^^^    ^^^  ^^^   ^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^^^^       ^^^    ^^^
+>(arg) => {    const { foo, bar } = arg;    return foo === "";} : (arg: { foo: string; bar: number; baz: boolean; }) => boolean
+>                                                               : ^   ^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^^
+>arg : { foo: string; bar: number; baz: boolean; }
+>    : ^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^
+
+    const { foo, bar } = arg;
+>foo : string
+>    : ^^^^^^
+>bar : number
+>    : ^^^^^^
+>arg : { foo: string; bar: number; baz: boolean; }
+>    : ^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^
+
+    return foo === "";
+>foo === "" : boolean
+>           : ^^^^^^^
+>foo : string
+>    : ^^^^^^
+>"" : ""
+>   : ^^
+
+});
+test1(obj1).filter((arg) => {
+>test1(obj1).filter((arg) => {    const { bar, ...rest } = arg;    return rest.foo === "";}) : void
+>                                                                                            : ^^^^
+>test1(obj1).filter : { <S extends { foo: string; bar: number; baz: boolean; }>(cb: (arg: { foo: string; bar: number; baz: boolean; }) => arg is S): void; (cb: (arg: { foo: string; bar: number; baz: boolean; }) => boolean): void; }
+>                   : ^^^ ^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^  ^^^   ^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^^^^^^    ^^^  ^^^   ^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^^^^       ^^^    ^^^
+>test1(obj1) : { filter<S extends { foo: string; bar: number; baz: boolean; }>(cb: (arg: { foo: string; bar: number; baz: boolean; }) => arg is S): void; filter(cb: (arg: { foo: string; bar: number; baz: boolean; }) => boolean): void; }
+>            : ^^^^^^^^^ ^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^  ^^^   ^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^  ^^^   ^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^^^^       ^^^    ^^^
+>test1 : <T>(arg: T) => { filter<S extends T>(cb: (arg: T) => arg is S): void; filter(cb: (arg: T) => boolean): void; }
+>      : ^ ^^   ^^ ^^^^^                                                                                               
+>obj1 : { foo: string; bar: number; baz: boolean; }
+>     : ^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^
+>filter : { <S extends { foo: string; bar: number; baz: boolean; }>(cb: (arg: { foo: string; bar: number; baz: boolean; }) => arg is S): void; (cb: (arg: { foo: string; bar: number; baz: boolean; }) => boolean): void; }
+>       : ^^^ ^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^  ^^^   ^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^^^^^^    ^^^  ^^^   ^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^^^^       ^^^    ^^^
+>(arg) => {    const { bar, ...rest } = arg;    return rest.foo === "";} : (arg: { foo: string; bar: number; baz: boolean; }) => boolean
+>                                                                        : ^   ^^^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^^
+>arg : { foo: string; bar: number; baz: boolean; }
+>    : ^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^
+
+    const { bar, ...rest } = arg;
+>bar : number
+>    : ^^^^^^
+>rest : { foo: string; baz: boolean; }
+>     : ^^^^^^^      ^^^^^^^       ^^^
+>arg : { foo: string; bar: number; baz: boolean; }
+>    : ^^^^^^^      ^^^^^^^      ^^^^^^^       ^^^
+
+    return rest.foo === "";
+>rest.foo === "" : boolean
+>                : ^^^^^^^
+>rest.foo : string
+>         : ^^^^^^
+>rest : { foo: string; baz: boolean; }
+>     : ^^^^^^^      ^^^^^^^       ^^^
+>foo : string
+>    : ^^^^^^
+>"" : ""
+>   : ^^
+
+});
+

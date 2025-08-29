@@ -152,64 +152,93 @@ const fn1 = <P extends Params1>(params: P) => {
 
 };
 
+const fn2 = <P extends Params1>({ foo, ...rest }: P) => {
+>fn2 : Symbol(fn2, Decl(dependentDestructuredRestVariables1.tsx, 56, 5))
+>P : Symbol(P, Decl(dependentDestructuredRestVariables1.tsx, 56, 13))
+>Params1 : Symbol(Params1, Decl(dependentDestructuredRestVariables1.tsx, 39, 1))
+>foo : Symbol(foo, Decl(dependentDestructuredRestVariables1.tsx, 56, 33))
+>rest : Symbol(rest, Decl(dependentDestructuredRestVariables1.tsx, 56, 38))
+>P : Symbol(P, Decl(dependentDestructuredRestVariables1.tsx, 56, 13))
+
+  if (rest.tag === "a") {
+>rest.tag : Symbol(tag, Decl(dependentDestructuredRestVariables1.tsx, 43, 6), Decl(dependentDestructuredRestVariables1.tsx, 43, 35))
+>rest : Symbol(rest, Decl(dependentDestructuredRestVariables1.tsx, 56, 38))
+>tag : Symbol(tag, Decl(dependentDestructuredRestVariables1.tsx, 43, 6), Decl(dependentDestructuredRestVariables1.tsx, 43, 35))
+
+    rest.type.toFixed(); // ok
+>rest.type.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>rest.type : Symbol(type, Decl(dependentDestructuredRestVariables1.tsx, 43, 16))
+>rest : Symbol(rest, Decl(dependentDestructuredRestVariables1.tsx, 56, 38))
+>type : Symbol(type, Decl(dependentDestructuredRestVariables1.tsx, 43, 16))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+    return rest; // Omit<P, "foo">
+>rest : Symbol(rest, Decl(dependentDestructuredRestVariables1.tsx, 56, 38))
+  }
+
+  return undefined;
+>undefined : Symbol(undefined)
+
+};
+
 // https://github.com/microsoft/TypeScript/issues/53947
 
 function ImageAvatar(props: { className?: string; src: string }) {
->ImageAvatar : Symbol(ImageAvatar, Decl(dependentDestructuredRestVariables1.tsx, 54, 2))
->props : Symbol(props, Decl(dependentDestructuredRestVariables1.tsx, 58, 21))
->className : Symbol(className, Decl(dependentDestructuredRestVariables1.tsx, 58, 29))
->src : Symbol(src, Decl(dependentDestructuredRestVariables1.tsx, 58, 49))
+>ImageAvatar : Symbol(ImageAvatar, Decl(dependentDestructuredRestVariables1.tsx, 63, 2))
+>props : Symbol(props, Decl(dependentDestructuredRestVariables1.tsx, 67, 21))
+>className : Symbol(className, Decl(dependentDestructuredRestVariables1.tsx, 67, 29))
+>src : Symbol(src, Decl(dependentDestructuredRestVariables1.tsx, 67, 49))
 
   return null;
 }
 
 function InitialsAvatar(props: { className?: string; name: string }) {
->InitialsAvatar : Symbol(InitialsAvatar, Decl(dependentDestructuredRestVariables1.tsx, 60, 1))
->props : Symbol(props, Decl(dependentDestructuredRestVariables1.tsx, 62, 24))
->className : Symbol(className, Decl(dependentDestructuredRestVariables1.tsx, 62, 32))
->name : Symbol(name, Decl(dependentDestructuredRestVariables1.tsx, 62, 52))
+>InitialsAvatar : Symbol(InitialsAvatar, Decl(dependentDestructuredRestVariables1.tsx, 69, 1))
+>props : Symbol(props, Decl(dependentDestructuredRestVariables1.tsx, 71, 24))
+>className : Symbol(className, Decl(dependentDestructuredRestVariables1.tsx, 71, 32))
+>name : Symbol(name, Decl(dependentDestructuredRestVariables1.tsx, 71, 52))
 
   return null;
 }
 
 type AvatarProps =
->AvatarProps : Symbol(AvatarProps, Decl(dependentDestructuredRestVariables1.tsx, 64, 1))
+>AvatarProps : Symbol(AvatarProps, Decl(dependentDestructuredRestVariables1.tsx, 73, 1))
 
   | { type: "image"; src: string; className: string }
->type : Symbol(type, Decl(dependentDestructuredRestVariables1.tsx, 67, 5))
->src : Symbol(src, Decl(dependentDestructuredRestVariables1.tsx, 67, 20))
->className : Symbol(className, Decl(dependentDestructuredRestVariables1.tsx, 67, 33))
+>type : Symbol(type, Decl(dependentDestructuredRestVariables1.tsx, 76, 5))
+>src : Symbol(src, Decl(dependentDestructuredRestVariables1.tsx, 76, 20))
+>className : Symbol(className, Decl(dependentDestructuredRestVariables1.tsx, 76, 33))
 
   | { type: "initials"; name: string; className: string };
->type : Symbol(type, Decl(dependentDestructuredRestVariables1.tsx, 68, 5))
->name : Symbol(name, Decl(dependentDestructuredRestVariables1.tsx, 68, 23))
->className : Symbol(className, Decl(dependentDestructuredRestVariables1.tsx, 68, 37))
+>type : Symbol(type, Decl(dependentDestructuredRestVariables1.tsx, 77, 5))
+>name : Symbol(name, Decl(dependentDestructuredRestVariables1.tsx, 77, 23))
+>className : Symbol(className, Decl(dependentDestructuredRestVariables1.tsx, 77, 37))
 
 const Avatar = ({ type, className, ...rest }: AvatarProps) => {
->Avatar : Symbol(Avatar, Decl(dependentDestructuredRestVariables1.tsx, 70, 5))
->type : Symbol(type, Decl(dependentDestructuredRestVariables1.tsx, 70, 17))
->className : Symbol(className, Decl(dependentDestructuredRestVariables1.tsx, 70, 23))
->rest : Symbol(rest, Decl(dependentDestructuredRestVariables1.tsx, 70, 34))
->AvatarProps : Symbol(AvatarProps, Decl(dependentDestructuredRestVariables1.tsx, 64, 1))
+>Avatar : Symbol(Avatar, Decl(dependentDestructuredRestVariables1.tsx, 79, 5))
+>type : Symbol(type, Decl(dependentDestructuredRestVariables1.tsx, 79, 17))
+>className : Symbol(className, Decl(dependentDestructuredRestVariables1.tsx, 79, 23))
+>rest : Symbol(rest, Decl(dependentDestructuredRestVariables1.tsx, 79, 34))
+>AvatarProps : Symbol(AvatarProps, Decl(dependentDestructuredRestVariables1.tsx, 73, 1))
 
   if (type === "image") {
->type : Symbol(type, Decl(dependentDestructuredRestVariables1.tsx, 70, 17))
+>type : Symbol(type, Decl(dependentDestructuredRestVariables1.tsx, 79, 17))
 
     return <ImageAvatar className={className} {...rest} />;
->ImageAvatar : Symbol(ImageAvatar, Decl(dependentDestructuredRestVariables1.tsx, 54, 2))
->className : Symbol(className, Decl(dependentDestructuredRestVariables1.tsx, 72, 23))
->className : Symbol(className, Decl(dependentDestructuredRestVariables1.tsx, 70, 23))
->rest : Symbol(rest, Decl(dependentDestructuredRestVariables1.tsx, 70, 34))
+>ImageAvatar : Symbol(ImageAvatar, Decl(dependentDestructuredRestVariables1.tsx, 63, 2))
+>className : Symbol(className, Decl(dependentDestructuredRestVariables1.tsx, 81, 23))
+>className : Symbol(className, Decl(dependentDestructuredRestVariables1.tsx, 79, 23))
+>rest : Symbol(rest, Decl(dependentDestructuredRestVariables1.tsx, 79, 34))
   }
 
   if (type === "initials") {
->type : Symbol(type, Decl(dependentDestructuredRestVariables1.tsx, 70, 17))
+>type : Symbol(type, Decl(dependentDestructuredRestVariables1.tsx, 79, 17))
 
     return <InitialsAvatar className={className} {...rest} />;
->InitialsAvatar : Symbol(InitialsAvatar, Decl(dependentDestructuredRestVariables1.tsx, 60, 1))
->className : Symbol(className, Decl(dependentDestructuredRestVariables1.tsx, 76, 26))
->className : Symbol(className, Decl(dependentDestructuredRestVariables1.tsx, 70, 23))
->rest : Symbol(rest, Decl(dependentDestructuredRestVariables1.tsx, 70, 34))
+>InitialsAvatar : Symbol(InitialsAvatar, Decl(dependentDestructuredRestVariables1.tsx, 69, 1))
+>className : Symbol(className, Decl(dependentDestructuredRestVariables1.tsx, 85, 26))
+>className : Symbol(className, Decl(dependentDestructuredRestVariables1.tsx, 79, 23))
+>rest : Symbol(rest, Decl(dependentDestructuredRestVariables1.tsx, 79, 34))
   }
 
   throw new Error("");

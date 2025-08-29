@@ -268,6 +268,53 @@ const fn1 = <P extends Params1>(params: P) => {
 
 };
 
+const fn2 = <P extends Params1>({ foo, ...rest }: P) => {
+>fn2 : <P extends Params1>({ foo, ...rest }: P) => Omit<P, "foo"> | undefined
+>    : ^ ^^^^^^^^^       ^^                ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+><P extends Params1>({ foo, ...rest }: P) => {  if (rest.tag === "a") {    rest.type.toFixed(); // ok    return rest; // Omit<P, "foo">  }  return undefined;} : <P extends Params1>({ foo, ...rest }: P) => Omit<P, "foo"> | undefined
+>                                                                                                                                                              : ^ ^^^^^^^^^       ^^                ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : string
+>    : ^^^^^^
+>rest : Omit<P, "foo">
+>     : ^^^^^^^^^^^^^^
+
+  if (rest.tag === "a") {
+>rest.tag === "a" : boolean
+>                 : ^^^^^^^
+>rest.tag : "a" | "b"
+>         : ^^^^^^^^^
+>rest : { tag: "a"; type: number; } | { tag: "b"; type: string; }
+>     : ^^^^^^^   ^^^^^^^^      ^^^^^^^^^^^^^   ^^^^^^^^      ^^^
+>tag : "a" | "b"
+>    : ^^^^^^^^^
+>"a" : "a"
+>    : ^^^
+
+    rest.type.toFixed(); // ok
+>rest.type.toFixed() : string
+>                    : ^^^^^^
+>rest.type.toFixed : (fractionDigits?: number) => string
+>                  : ^              ^^^      ^^^^^      
+>rest.type : number
+>          : ^^^^^^
+>rest : { tag: "a"; type: number; }
+>     : ^^^^^^^   ^^^^^^^^      ^^^
+>type : number
+>     : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
+
+    return rest; // Omit<P, "foo">
+>rest : Omit<P, "foo">
+>     : ^^^^^^^^^^^^^^
+  }
+
+  return undefined;
+>undefined : undefined
+>          : ^^^^^^^^^
+
+};
+
 // https://github.com/microsoft/TypeScript/issues/53947
 
 function ImageAvatar(props: { className?: string; src: string }) {
