@@ -1,0 +1,25 @@
+/node_modules/foo/index.d.ts(1,23): error TS2688: Cannot find type definition file for 'cookie-session'.
+
+
+==== /tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "strict": true,
+        }
+    }
+==== /index.ts (0 errors) ====
+    import { foo } from 'foo';
+    const y = foo;
+    
+==== /node_modules/foo/index.d.ts (1 errors) ====
+    /// <reference types="cookie-session"/>
+                          ~~~~~~~~~~~~~~
+!!! error TS2688: Cannot find type definition file for 'cookie-session'.
+    export const foo = 1;
+    
+==== /node_modules/foo/package.json (0 errors) ====
+    {
+        "name": "foo",
+        "version": "1.0.0",
+        "types": "index.d.ts"
+    }

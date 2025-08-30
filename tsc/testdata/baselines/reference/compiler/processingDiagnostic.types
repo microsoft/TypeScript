@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/processingDiagnostic.ts] ////
+
+=== /index.ts ===
+import { foo } from 'foo';
+>foo : 1
+
+const y = foo;
+>y : 1
+>foo : 1
+
+=== /node_modules/foo/index.d.ts ===
+/// <reference types="cookie-session"/>
+export const foo = 1;
+>foo : 1
+>1 : 1
+
