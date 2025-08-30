@@ -1741,7 +1741,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!node) {
                 return undefined;
             }
-            if (contextFlags! & ContextFlags.Completions) {
+            if (contextFlags! & ContextFlags.IgnoreNodeInferences) {
                 return runWithInferenceBlockedFromSourceNode(node, () => getContextualType(node, contextFlags));
             }
             return getContextualType(node, contextFlags);
@@ -32827,7 +32827,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getContextualJsxElementAttributesType(node: JsxOpeningLikeElement, contextFlags: ContextFlags | undefined) {
-        if (isJsxOpeningElement(node) && contextFlags !== ContextFlags.Completions) {
+        if (isJsxOpeningElement(node) && contextFlags !== ContextFlags.IgnoreNodeInferences) {
             const index = findContextualNode(node.parent, /*includeCaches*/ !contextFlags);
             if (index >= 0) {
                 // Contextually applied type is moved from attributes up to the outer jsx attributes so when walking up from the children they get hit
