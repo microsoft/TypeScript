@@ -331,6 +331,11 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-es5' was not resolved. ========
+[96mtsconfig.json[0m:[93m8[0m:[93m25[0m - [91merror[0m[90m TS5107: [0mOption 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m8[0m     "moduleResolution": "node",
+[7m [0m [91m                        ~~~~~~[0m
+
 ../../../../tslibs/TS/Lib/lib.es5.d.ts
   Library 'lib.es5.d.ts' specified in compilerOptions
 ../../node_modules/.pnpm/@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button/src/index.ts
@@ -347,6 +352,9 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 src/app.tsx
   Matched by include pattern 'src' in 'tsconfig.json'
 
+Found 1 error in tsconfig.json[90m:8[0m
+
+
 
 //// [/home/src/tslibs/TS/Lib/lib.es5.d.ts] *Lib*
 
@@ -356,4 +364,4 @@ var button = createButton();
 
 
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

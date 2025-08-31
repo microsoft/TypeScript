@@ -177,6 +177,10 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspa
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces 0 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces 0 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 0 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 0 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/foo/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/foo/types/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
@@ -255,6 +259,12 @@ watchedFiles::
   {"pollingInterval":2000}
 /home/src/workspaces/project/tsconfig.json: *new*
   {"pollingInterval":2000}
+
+watchedDirectories::
+/home/src/workspaces: *new*
+  {}
+/home/src/workspaces/project: *new*
+  {}
 
 watchedDirectoriesRecursive::
 /home/src/workspaces/node_modules:
@@ -386,6 +396,12 @@ watchedFiles::
   {"pollingInterval":2000}
 /home/src/workspaces/project/tsconfig.json:
   {"pollingInterval":2000}
+
+watchedDirectories::
+/home/src/workspaces:
+  {}
+/home/src/workspaces/project:
+  {}
 
 watchedDirectoriesRecursive::
 /home/src/workspaces/node_modules:

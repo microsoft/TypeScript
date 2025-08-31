@@ -1,6 +1,6 @@
 // Test that importing a file from `node_modules` does not affect calculation of the common source directory.
 // @noImplicitReferences: true
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @fullEmitPaths: true
 
 // @filename: /app/lib/bar.d.ts

@@ -129,6 +129,14 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl 0 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl 0 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2 0 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2 0 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b 0 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b 0 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects 0 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects 0 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
@@ -141,6 +149,8 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/node_modules 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b 0 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b 0 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/package.json 2000 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/@types 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/@types 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Type roots
@@ -269,6 +279,8 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/home/src/projects: *new*
+  {"inode":3}
 /home/src/projects/a/1/a-impl/a: *new*
   {"inode":19}
 /home/src/projects/a/1/a-impl/a/node_modules: *new*
@@ -277,6 +289,14 @@ FsWatches::
   {"inode":24}
 /home/src/projects/a/1/a-impl/a/src: *new*
   {"inode":20}
+/home/src/projects/b: *new*
+  {"inode":30}
+/home/src/projects/b/2: *new*
+  {"inode":31}
+/home/src/projects/b/2/b-impl: *new*
+  {"inode":32}
+/home/src/projects/b/2/b-impl/b: *new*
+  {"inode":33}
 /home/src/projects/b/2/b-impl/b/node_modules: *new*
   {"inode":37}
 /home/src/projects/b/2/b-impl/b/node_modules/a: *new*
@@ -816,6 +836,8 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/home/src/projects:
+  {"inode":3}
 /home/src/projects/a/1/a-impl/a:
   {"inode":19}
 /home/src/projects/a/1/a-impl/a/lib: *new*
@@ -826,6 +848,14 @@ FsWatches::
   {"inode":24}
 /home/src/projects/a/1/a-impl/a/src:
   {"inode":20}
+/home/src/projects/b:
+  {"inode":30}
+/home/src/projects/b/2:
+  {"inode":31}
+/home/src/projects/b/2/b-impl:
+  {"inode":32}
+/home/src/projects/b/2/b-impl/b:
+  {"inode":33}
 /home/src/projects/b/2/b-impl/b/node_modules:
   {"inode":37}
 /home/src/projects/b/2/b-impl/b/node_modules/a:
@@ -969,6 +999,8 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
+/home/src/projects:
+  {"inode":3}
 /home/src/projects/a/1/a-impl/a/lib:
   {"inode":154}
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts: *new*
@@ -979,6 +1011,14 @@ FsWatches::
   {"inode":25}
 /home/src/projects/a/1/a-impl/a/package.json:
   {"inode":24}
+/home/src/projects/b:
+  {"inode":30}
+/home/src/projects/b/2:
+  {"inode":31}
+/home/src/projects/b/2/b-impl:
+  {"inode":32}
+/home/src/projects/b/2/b-impl/b:
+  {"inode":33}
 /home/src/projects/b/2/b-impl/b/node_modules:
   {"inode":37}
 /home/src/projects/b/2/b-impl/b/src:
@@ -1476,10 +1516,20 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/home/src/projects:
+  {"inode":3}
 /home/src/projects/a/1/a-impl/a/node_modules:
   {"inode":25}
 /home/src/projects/a/1/a-impl/a/package.json:
   {"inode":24}
+/home/src/projects/b:
+  {"inode":30}
+/home/src/projects/b/2:
+  {"inode":31}
+/home/src/projects/b/2/b-impl:
+  {"inode":32}
+/home/src/projects/b/2/b-impl/b:
+  {"inode":33}
 /home/src/projects/b/2/b-impl/b/node_modules:
   {"inode":37}
 /home/src/projects/b/2/b-impl/b/src:
@@ -1652,6 +1702,8 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
+/home/src/projects:
+  {"inode":3}
 /home/src/projects/a/1/a-impl/a: *new*
   {"inode":19}
 /home/src/projects/a/1/a-impl/a/node_modules:
@@ -1660,6 +1712,14 @@ FsWatches::
   {"inode":24}
 /home/src/projects/a/1/a-impl/a/src: *new*
   {"inode":20}
+/home/src/projects/b:
+  {"inode":30}
+/home/src/projects/b/2:
+  {"inode":31}
+/home/src/projects/b/2/b-impl:
+  {"inode":32}
+/home/src/projects/b/2/b-impl/b:
+  {"inode":33}
 /home/src/projects/b/2/b-impl/b/node_modules:
   {"inode":37}
 /home/src/projects/b/2/b-impl/b/node_modules/a: *new*
@@ -1959,6 +2019,8 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
+/home/src/projects:
+  {"inode":3}
 /home/src/projects/a/1/a-impl/a:
   {"inode":19}
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts: *new*
@@ -1971,6 +2033,14 @@ FsWatches::
   {"inode":24}
 /home/src/projects/a/1/a-impl/a/src:
   {"inode":20}
+/home/src/projects/b:
+  {"inode":30}
+/home/src/projects/b/2:
+  {"inode":31}
+/home/src/projects/b/2/b-impl:
+  {"inode":32}
+/home/src/projects/b/2/b-impl/b:
+  {"inode":33}
 /home/src/projects/b/2/b-impl/b/node_modules:
   {"inode":37}
 /home/src/projects/b/2/b-impl/b/node_modules/a:
@@ -2048,6 +2118,8 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/home/src/projects:
+  {"inode":3}
 /home/src/projects/a/1/a-impl/a:
   {"inode":19}
 /home/src/projects/a/1/a-impl/a/lib: *new*
@@ -2062,6 +2134,14 @@ FsWatches::
   {"inode":24}
 /home/src/projects/a/1/a-impl/a/src:
   {"inode":20}
+/home/src/projects/b:
+  {"inode":30}
+/home/src/projects/b/2:
+  {"inode":31}
+/home/src/projects/b/2/b-impl:
+  {"inode":32}
+/home/src/projects/b/2/b-impl/b:
+  {"inode":33}
 /home/src/projects/b/2/b-impl/b/node_modules:
   {"inode":37}
 /home/src/projects/b/2/b-impl/b/node_modules/a:
@@ -2204,6 +2284,8 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
+/home/src/projects:
+  {"inode":3}
 /home/src/projects/a/1/a-impl/a/lib:
   {"inode":170}
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts:
@@ -2214,6 +2296,14 @@ FsWatches::
   {"inode":25}
 /home/src/projects/a/1/a-impl/a/package.json:
   {"inode":24}
+/home/src/projects/b:
+  {"inode":30}
+/home/src/projects/b/2:
+  {"inode":31}
+/home/src/projects/b/2/b-impl:
+  {"inode":32}
+/home/src/projects/b/2/b-impl/b:
+  {"inode":33}
 /home/src/projects/b/2/b-impl/b/node_modules:
   {"inode":37}
 /home/src/projects/b/2/b-impl/b/src:

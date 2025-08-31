@@ -299,7 +299,22 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/home/src/workspaces/project/web/src/Helper.ts",
         "configFile": "/home/src/workspaces/project/web/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "start": {
+              "line": 4,
+              "offset": 25
+            },
+            "end": {
+              "line": 4,
+              "offset": 31
+            },
+            "text": "Option 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5107,
+            "category": "error",
+            "fileName": "/home/src/workspaces/project/web/tsconfig.json"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/common/tsconfig.json' (Configured)

@@ -338,6 +338,7 @@ import {
     getMembersOfDeclaration,
     getModifiers,
     getModuleInstanceState,
+    getModuleSpecifierOfBareOrAccessedRequire,
     getNameFromImportAttribute,
     getNameFromIndexInfo,
     getNameOfDeclaration,
@@ -4713,7 +4714,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             ? location
             : (isModuleDeclaration(location) ? location : location.parent && isModuleDeclaration(location.parent) && location.parent.name === location ? location.parent : undefined)?.name ||
                 (isLiteralImportTypeNode(location) ? location : undefined)?.argument.literal ||
-                (isVariableDeclaration(location) && location.initializer && isRequireCall(location.initializer, /*requireStringLiteralLikeArgument*/ true) ? location.initializer.arguments[0] : undefined) ||
+                isVariableDeclarationInitializedToBareOrAccessedRequire(location) && getModuleSpecifierOfBareOrAccessedRequire(location) ||
                 findAncestor(location, isImportCall)?.arguments[0] ||
                 findAncestor(location, or(isImportDeclaration, isJSDocImportTag, isExportDeclaration))?.moduleSpecifier ||
                 findAncestor(location, isExternalModuleImportEqualsDeclaration)?.moduleReference.expression;

@@ -2530,6 +2530,7 @@ declare namespace ts {
                 Node = "node",
                 /** @deprecated Renamed to `Node10` */
                 NodeJs = "node",
+                /** @deprecated */
                 Node10 = "node10",
                 Node16 = "node16",
                 NodeNext = "nodenext",
@@ -6958,6 +6959,9 @@ declare namespace ts {
          * Use the new name or consider switching to a modern module resolution target.
          */
         NodeJs = 2,
+        /**
+         * @deprecated
+         */
         Node10 = 2,
         Node16 = 3,
         NodeNext = 99,

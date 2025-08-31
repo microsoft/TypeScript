@@ -48,6 +48,7 @@ fooFrom
 {
   "compilerOptions": {
     "module": "commonjs"
+    "moduleResolution": "node10",
   }
 }
 
@@ -70,6 +71,7 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/tsconfig.json : {
  ],
  "options": {
   "module": 1,
+  "moduleResolution": 2,
   "configFilePath": "/home/src/workspaces/project/tsconfig.json"
  }
 }
@@ -134,7 +136,36 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/home/src/workspaces/project/tsconfig.json",
         "configFile": "/home/src/workspaces/project/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "start": {
+              "line": 4,
+              "offset": 25
+            },
+            "end": {
+              "line": 4,
+              "offset": 33
+            },
+            "text": "Option 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5107,
+            "category": "error",
+            "fileName": "/home/src/workspaces/project/tsconfig.json"
+          },
+          {
+            "start": {
+              "line": 4,
+              "offset": 5
+            },
+            "end": {
+              "line": 4,
+              "offset": 23
+            },
+            "text": "',' expected.",
+            "code": 1005,
+            "category": "error",
+            "fileName": "/home/src/workspaces/project/tsconfig.json"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/tsconfig.json ProjectRootPath: undefined:: Result: undefined
@@ -155,7 +186,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/home/src/workspaces/project/tsconfig.json SVC-1-0 "{\n  \"compilerOptions\": {\n    \"module\": \"commonjs\"\n  }\n}"
+	/home/src/workspaces/project/tsconfig.json SVC-1-0 "{\n  \"compilerOptions\": {\n    \"module\": \"commonjs\"\n    \"moduleResolution\": \"node10\",\n  }\n}"
 
 
 	../../tslibs/TS/Lib/lib.d.ts
@@ -169,19 +200,24 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/package.json 250 undefined WatchType: package.json file
-Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 2 root files in 1 dependencies 0 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] Creating AutoImportProviderProject: /dev/null/autoImportProviderProject1*, currentDirectory: /home/src/workspaces/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/dependency/lib/index.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/dependency/lib/lol.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/dependency/lib/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/dependency/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 	/home/src/workspaces/project/node_modules/dependency/lib/index.d.ts Text-1 "export function fooFromIndex(): void;"
+	/home/src/workspaces/project/node_modules/dependency/lib/lol.d.ts Text-1 "export function fooFromLol(): void;"
 
 
 	node_modules/dependency/lib/index.d.ts
+	  Root file specified for compilation
+	  File is ECMAScript module because 'node_modules/dependency/package.json' has field "type" with value "module"
+	node_modules/dependency/lib/lol.d.ts
 	  Root file specified for compilation
 	  File is ECMAScript module because 'node_modules/dependency/package.json' has field "type" with value "module"
 
@@ -195,7 +231,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -224,6 +260,8 @@ watchedFiles::
 /home/src/workspaces/project/jsconfig.json: *new*
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/dependency/lib/index.d.ts: *new*
+  {"pollingInterval":500}
+/home/src/workspaces/project/node_modules/dependency/lib/lol.d.ts: *new*
   {"pollingInterval":500}
 /home/src/workspaces/project/node_modules/dependency/lib/package.json: *new*
   {"pollingInterval":2000}
@@ -285,6 +323,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
+/home/src/workspaces/project/node_modules/dependency/lib/lol.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
 /home/src/workspaces/project/src/foo.ts *new*
     version: Text-1
     containingProjects: 1
@@ -314,7 +356,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -341,6 +383,8 @@ watchedFiles::
 /home/src/workspaces/project/jsconfig.json:
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/dependency/lib/index.d.ts:
+  {"pollingInterval":500}
+/home/src/workspaces/project/node_modules/dependency/lib/lol.d.ts:
   {"pollingInterval":500}
 /home/src/workspaces/project/node_modules/dependency/lib/package.json:
   {"pollingInterval":2000}
@@ -401,6 +445,10 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
 /home/src/workspaces/project/node_modules/dependency/lib/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/home/src/workspaces/project/node_modules/dependency/lib/lol.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
@@ -1212,6 +1260,8 @@ watchedFiles::
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/dependency/lib/index.d.ts:
   {"pollingInterval":500}
+/home/src/workspaces/project/node_modules/dependency/lib/lol.d.ts:
+  {"pollingInterval":500}
 /home/src/workspaces/project/node_modules/dependency/lib/package.json:
   {"pollingInterval":2000}
   {"pollingInterval":2000} *new*
@@ -1278,6 +1328,10 @@ ScriptInfos::
     containingProjects: 2 *changed*
         /dev/null/autoImportProviderProject1*
         /dev/null/autoImportProviderProject2* *new*
+/home/src/workspaces/project/node_modules/dependency/lib/lol.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
 /home/src/workspaces/project/src/foo.ts (Open)
     version: Text-1
     containingProjects: 1

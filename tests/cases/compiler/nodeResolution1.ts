@@ -1,6 +1,5 @@
 // @module: commonjs
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // @filename: a.ts
 export var x = 1;
 

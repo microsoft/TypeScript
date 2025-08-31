@@ -66,6 +66,8 @@ PolledWatches::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {"inode":16}
+/user/username/projects: *new*
+  {"inode":3}
 /user/username/projects/myproject: *new*
   {"inode":4}
 /user/username/projects/myproject/dist: *new*
@@ -187,6 +189,8 @@ PolledWatches::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {"inode":16}
+/user/username/projects:
+  {"inode":3}
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/dist:

@@ -1,9 +1,8 @@
 [
     "======== Resolving module './foo/' from '/a.ts'. ========",
-    "Explicitly specified module resolution kind: 'Node10'.",
-    "Loading module as file / folder, candidate module location '/foo/', target file types: TypeScript, Declaration.",
-    "Directory '/foo/' does not exist, skipping all lookups in it.",
-    "Loading module as file / folder, candidate module location '/foo/', target file types: JavaScript.",
+    "Explicitly specified module resolution kind: 'Bundler'.",
+    "Resolving in CJS mode with conditions 'require', 'types'.",
+    "Loading module as file / folder, candidate module location '/foo/', target file types: TypeScript, JavaScript, Declaration, JSON.",
     "Directory '/foo/' does not exist, skipping all lookups in it.",
     "======== Module name './foo/' was not resolved. ========",
     "======== Resolving module '@typescript/lib-es5' from '/.src/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========",

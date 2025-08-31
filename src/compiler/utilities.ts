@@ -3824,6 +3824,20 @@ export function isBindingElementOfBareOrAccessedRequire(node: Node): node is Bin
     return isBindingElement(node) && isVariableDeclarationInitializedToBareOrAccessedRequire(node.parent.parent);
 }
 
+/** @internal */
+export function getModuleSpecifierOfBareOrAccessedRequire(node: VariableDeclarationInitializedTo<RequireOrImportCall | AccessExpression>): StringLiteralLike | undefined {
+    if (isVariableDeclarationInitializedToRequire(node)) {
+        return node.initializer.arguments[0];
+    }
+    if (isVariableDeclarationInitializedToBareOrAccessedRequire(node)) {
+        const leftmost = getLeftmostAccessExpression(node.initializer);
+        if (isRequireCall(leftmost, /*requireStringLiteralLikeArgument*/ true)) {
+            return leftmost.arguments[0];
+        }
+    }
+    return undefined;
+}
+
 function isVariableDeclarationInitializedWithRequireHelper(node: Node, allowAccessedRequire: boolean) {
     return isVariableDeclaration(node) &&
         !!node.initializer &&
@@ -8992,9 +9006,6 @@ const _computedOptions = createComputedCompilerOptions({
             let moduleResolution = compilerOptions.moduleResolution;
             if (moduleResolution === undefined) {
                 switch (_computedOptions.module.computeValue(compilerOptions)) {
-                    case ModuleKind.CommonJS:
-                        moduleResolution = ModuleResolutionKind.Node10;
-                        break;
                     case ModuleKind.Node16:
                     case ModuleKind.Node18:
                     case ModuleKind.Node20:
@@ -9003,6 +9014,7 @@ const _computedOptions = createComputedCompilerOptions({
                     case ModuleKind.NodeNext:
                         moduleResolution = ModuleResolutionKind.NodeNext;
                         break;
+                    case ModuleKind.CommonJS:
                     case ModuleKind.Preserve:
                         moduleResolution = ModuleResolutionKind.Bundler;
                         break;
