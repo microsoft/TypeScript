@@ -355,7 +355,7 @@ func getJSDocOrTag(node *ast.Node) *ast.Node {
 		return getMatchingJSDocTag(node.Parent, node.Name().Text(), isMatchingParameterTag)
 	case ast.IsTypeParameterDeclaration(node):
 		return getMatchingJSDocTag(node.Parent, node.Name().Text(), isMatchingTemplateTag)
-	case ast.IsVariableDeclaration(node) && core.FirstOrNil(node.Parent.AsVariableDeclarationList().Declarations.Nodes) == node:
+	case ast.IsVariableDeclaration(node) && ast.IsVariableDeclarationList(node.Parent) && core.FirstOrNil(node.Parent.AsVariableDeclarationList().Declarations.Nodes) == node:
 		return getJSDocOrTag(node.Parent.Parent)
 	case (ast.IsFunctionExpressionOrArrowFunction(node) || ast.IsClassExpression(node)) &&
 		(ast.IsVariableDeclaration(node.Parent) || ast.IsPropertyDeclaration(node.Parent) || ast.IsPropertyAssignment(node.Parent)) && node.Parent.Initializer() == node:
