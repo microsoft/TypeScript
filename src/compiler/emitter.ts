@@ -423,11 +423,13 @@ import {
     WriteFileCallbackData,
     YieldExpression,
 } from "./_namespaces/ts.js";
-import { isTypeReferenceNode, TypeFlags, TypeChecker } from "./_namespaces/ts.js";
+import {
+    isTypeReferenceNode,
+    TypeChecker,
+    TypeFlags,
+} from "./_namespaces/ts.js";
 import * as performance from "./_namespaces/ts.performance.js";
 const brackets = createBracketsMap();
-
-
 
 /** @internal */
 export function isUniqueSymbolDeclaration(node: VariableDeclarationList, checker: TypeChecker): boolean {
@@ -457,7 +459,7 @@ export function isUniqueSymbolDeclaration(node: VariableDeclarationList, checker
 export function isBuildInfoFile(file: string): boolean {
     return fileExtensionIs(file, Extension.TsBuildInfo);
 }
- 
+
 /**
  * Iterates over the source files that are expected to have an emit output.
  *
@@ -3421,23 +3423,22 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             writeKeyword("await");
             writeSpace();
             writeKeyword("using");
-        } else {
+        }
+        else {
             // Check if unique symbol and use const instead of var
             const isUnique = typeChecker && isUniqueSymbolDeclaration(node, typeChecker);
-            const head =
-                isLet(node) ? "let" :
+            const head = isLet(node) ? "let" :
                 isVarConst(node) ? "const" :
                 isVarUsing(node) ? "using" :
                 isUnique ? "const" :
                 "var";
-            
+
             writeKeyword(head);
         }
-    
-            writeSpace();
+
+        writeSpace();
         emitList(node, node.declarations, ListFormat.VariableDeclarationList);
     }
-
 
     function emitFunctionDeclaration(node: FunctionDeclaration) {
         emitFunctionDeclarationOrExpression(node);

@@ -141,12 +141,12 @@ import {
     isStringLiteralLike,
     isTupleTypeNode,
     isTypeAliasDeclaration,
-    isTypeReferenceNode,
     isTypeElement,
     isTypeLiteralNode,
     isTypeNode,
     isTypeParameterDeclaration,
     isTypeQueryNode,
+    isTypeReferenceNode,
     isVarAwaitUsing,
     isVariableDeclaration,
     isVarUsing,
@@ -219,10 +219,9 @@ import {
     VisitResult,
 } from "../_namespaces/ts.js";
 
-
 function isUniqueSymbolByType(type: TypeNode | undefined): boolean {
     if (!type) return false;
-    
+
     if (type.kind === SyntaxKind.TypeOperator && (type as any).operator === SyntaxKind.UniqueKeyword) return true;
 
     if (isTypeReferenceNode(type) && isIdentifier(type.typeName)) {
@@ -1497,11 +1496,13 @@ export function transformDeclarations(context: TransformationContext): Transform
 
                         const declList = factory.createVariableDeclarationList(
                             [varDecl],
-                            shouldForceConst ? NodeFlags.Const : NodeFlags.None
+                            shouldForceConst ? NodeFlags.Const : NodeFlags.None,
                         );
-                        
+
                         return factory.createVariableStatement(
-                            isNonContextualKeywordName ? undefined : [factory.createToken(SyntaxKind.ExportKeyword)],declList);
+                            isNonContextualKeywordName ? undefined : [factory.createToken(SyntaxKind.ExportKeyword)],
+                            declList,
+                        );
                     });
                     if (!exportMappings.length) {
                         declarations = mapDefined(declarations, declaration => factory.replaceModifiers(declaration, ModifierFlags.None));
