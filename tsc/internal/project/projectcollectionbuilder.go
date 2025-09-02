@@ -473,6 +473,11 @@ type searchNode struct {
 	logger         *logging.LogTree
 }
 
+type searchNodeKey struct {
+	configFileName string
+	loadKind       projectLoadKind
+}
+
 type searchResult struct {
 	project *dirty.SyncMapEntry[tspath.Path, *Project]
 	retain  collections.Set[tspath.Path]
@@ -483,13 +488,13 @@ func (b *projectCollectionBuilder) findOrCreateDefaultConfiguredProjectWorker(
 	path tspath.Path,
 	configFileName string,
 	loadKind projectLoadKind,
-	visited *collections.SyncSet[searchNode],
+	visited *collections.SyncSet[searchNodeKey],
 	fallback *searchResult,
 	logger *logging.LogTree,
 ) searchResult {
 	var configs collections.SyncMap[tspath.Path, *tsoptions.ParsedCommandLine]
 	if visited == nil {
-		visited = &collections.SyncSet[searchNode]{}
+		visited = &collections.SyncSet[searchNodeKey]{}
 	}
 
 	search := core.BreadthFirstSearchParallelEx(
@@ -558,17 +563,20 @@ func (b *projectCollectionBuilder) findOrCreateDefaultConfiguredProjectWorker(
 			node.logger.Log("Project does not contain file")
 			return false, false
 		},
-		core.BreadthFirstSearchOptions[searchNode]{
+		core.BreadthFirstSearchOptions[searchNodeKey, searchNode]{
 			Visited: visited,
-			PreprocessLevel: func(level *core.BreadthFirstSearchLevel[searchNode]) {
+			PreprocessLevel: func(level *core.BreadthFirstSearchLevel[searchNodeKey, searchNode]) {
 				level.Range(func(node searchNode) bool {
-					if node.loadKind == projectLoadKindFind && level.Has(searchNode{configFileName: node.configFileName, loadKind: projectLoadKindCreate, logger: node.logger}) {
+					if node.loadKind == projectLoadKindFind && level.Has(searchNodeKey{configFileName: node.configFileName, loadKind: projectLoadKindCreate}) {
 						// Remove find requests when a create request for the same project is already present.
-						level.Delete(node)
+						level.Delete(searchNodeKey{configFileName: node.configFileName, loadKind: node.loadKind})
 					}
 					return true
 				})
 			},
+		},
+		func(node searchNode) searchNodeKey {
+			return searchNodeKey{configFileName: node.configFileName, loadKind: node.loadKind}
 		},
 	)
 
@@ -626,7 +634,7 @@ func (b *projectCollectionBuilder) findOrCreateDefaultConfiguredProjectWorker(
 	// If we didn't find anything, we can retain everything we visited,
 	// since the whole graph must have been traversed (i.e., the set of
 	// retained projects is guaranteed to be deterministic).
-	visited.Range(func(node searchNode) bool {
+	visited.Range(func(node searchNodeKey) bool {
 		retain.Add(b.toPath(node.configFileName))
 		return true
 	})

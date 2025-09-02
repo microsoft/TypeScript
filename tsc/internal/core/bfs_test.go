@@ -78,9 +78,10 @@ func TestBreadthFirstSearchParallel(t *testing.T) {
 		var visited collections.SyncSet[string]
 		core.BreadthFirstSearchParallelEx("Root", children, func(node string) (bool, bool) {
 			return node == "L2B", true // Stop at level 2
-		}, core.BreadthFirstSearchOptions[string]{
+		}, core.BreadthFirstSearchOptions[string, string]{
 			Visited: &visited,
-		})
+		},
+			core.Identity)
 
 		assert.Assert(t, visited.Has("Root"), "Expected to visit Root")
 		assert.Assert(t, visited.Has("L1A"), "Expected to visit L1A")
@@ -108,9 +109,10 @@ func TestBreadthFirstSearchParallel(t *testing.T) {
 		var visited collections.SyncSet[string]
 		result := core.BreadthFirstSearchParallelEx("A", children, func(node string) (bool, bool) {
 			return node == "A", false // Record A as a fallback, but do not stop
-		}, core.BreadthFirstSearchOptions[string]{
+		}, core.BreadthFirstSearchOptions[string, string]{
 			Visited: &visited,
-		})
+		},
+			core.Identity)
 
 		assert.Equal(t, result.Stopped, false, "Expected search to not stop early")
 		assert.DeepEqual(t, result.Path, []string{"A"})

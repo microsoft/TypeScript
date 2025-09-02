@@ -469,6 +469,49 @@ func TestProjectCollectionBuilder(t *testing.T) {
 			"/project/c.ts",
 		})
 	})
+
+	t.Run("project lookup terminates", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/tsconfig.json": `{
+				"files": [],
+				"references": [
+					{
+						"path": "./packages/pkg1"
+					},
+					{
+						"path": "./packages/pkg2"
+					},
+				]
+			}`,
+			"/packages/pkg1/tsconfig.json": `{
+				"include": ["src/**/*.ts"],
+				"compilerOptions": {
+					"composite": true,
+				},
+				"references": [
+					{
+						"path": "../pkg2"
+					},
+				]
+			}`,
+			"/packages/pkg2/tsconfig.json": `{
+				"include": ["src/**/*.ts"],
+				"compilerOptions": {
+					"composite": true,
+				},
+				"references": [
+					{
+						"path": "../pkg1"
+					},
+				]
+			}`,
+			"/script.ts": `export const a = 1;`,
+		}
+		session, _ := projecttestutil.Setup(files)
+		session.DidOpenFile(context.Background(), "file:///script.ts", 1, files["/script.ts"].(string), lsproto.LanguageKindTypeScript)
+		// Test should terminate
+	})
 }
 
 func filesForSolutionConfigFile(solutionRefs []string, compilerOptions string, ownFiles []string) map[string]any {
