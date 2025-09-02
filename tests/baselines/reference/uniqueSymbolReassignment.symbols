@@ -1,0 +1,90 @@
+//// [tests/cases/compiler/uniqueSymbolReassignment.ts] ////
+
+=== uniqueSymbolReassignment.ts ===
+// This is a unique symbol (const + Symbol())
+const mySymbol = Symbol('Symbols.mySymbol');
+>mySymbol : Symbol(mySymbol, Decl(uniqueSymbolReassignment.ts, 1, 5))
+
+const Symbols = {
+>Symbols : Symbol(Symbols, Decl(uniqueSymbolReassignment.ts, 2, 5))
+
+    mySymbol
+>mySymbol : Symbol(mySymbol, Decl(uniqueSymbolReassignment.ts, 2, 17))
+
+} as const;
+>const : Symbol(const)
+
+const anotherUnique = Symbol('symbols.anotherUnique');
+>anotherUnique : Symbol(anotherUnique, Decl(uniqueSymbolReassignment.ts, 6, 5))
+
+const Symbols2 = {
+>Symbols2 : Symbol(Symbols2, Decl(uniqueSymbolReassignment.ts, 7, 5))
+
+    anotherUnique
+>anotherUnique : Symbol(anotherUnique, Decl(uniqueSymbolReassignment.ts, 7, 18))
+
+} as const;
+>const : Symbol(const)
+
+function myFunction() {}
+>myFunction : Symbol(myFunction, Decl(uniqueSymbolReassignment.ts, 9, 11), Decl(uniqueSymbolReassignment.ts, 11, 24), Decl(uniqueSymbolReassignment.ts, 14, 39), Decl(uniqueSymbolReassignment.ts, 23, 57), Decl(uniqueSymbolReassignment.ts, 26, 41) ... and 2 more)
+
+// Attach the unique ones
+myFunction.mySymbol = Symbols.mySymbol;
+>myFunction.mySymbol : Symbol(myFunction.mySymbol, Decl(uniqueSymbolReassignment.ts, 11, 24))
+>myFunction : Symbol(myFunction, Decl(uniqueSymbolReassignment.ts, 9, 11), Decl(uniqueSymbolReassignment.ts, 11, 24), Decl(uniqueSymbolReassignment.ts, 14, 39), Decl(uniqueSymbolReassignment.ts, 23, 57), Decl(uniqueSymbolReassignment.ts, 26, 41) ... and 2 more)
+>mySymbol : Symbol(myFunction.mySymbol, Decl(uniqueSymbolReassignment.ts, 11, 24))
+>Symbols.mySymbol : Symbol(mySymbol, Decl(uniqueSymbolReassignment.ts, 2, 17))
+>Symbols : Symbol(Symbols, Decl(uniqueSymbolReassignment.ts, 2, 5))
+>mySymbol : Symbol(mySymbol, Decl(uniqueSymbolReassignment.ts, 2, 17))
+
+myFunction.anotherUnique = Symbols2.anotherUnique;
+>myFunction.anotherUnique : Symbol(myFunction.anotherUnique, Decl(uniqueSymbolReassignment.ts, 14, 39))
+>myFunction : Symbol(myFunction, Decl(uniqueSymbolReassignment.ts, 9, 11), Decl(uniqueSymbolReassignment.ts, 11, 24), Decl(uniqueSymbolReassignment.ts, 14, 39), Decl(uniqueSymbolReassignment.ts, 23, 57), Decl(uniqueSymbolReassignment.ts, 26, 41) ... and 2 more)
+>anotherUnique : Symbol(myFunction.anotherUnique, Decl(uniqueSymbolReassignment.ts, 14, 39))
+>Symbols2.anotherUnique : Symbol(anotherUnique, Decl(uniqueSymbolReassignment.ts, 7, 18))
+>Symbols2 : Symbol(Symbols2, Decl(uniqueSymbolReassignment.ts, 7, 5))
+>anotherUnique : Symbol(anotherUnique, Decl(uniqueSymbolReassignment.ts, 7, 18))
+
+// Non-unique symbols (regular Symbol() without const)
+const nonUniqueSymbol1 = Symbol('nonUnique1');
+>nonUniqueSymbol1 : Symbol(nonUniqueSymbol1, Decl(uniqueSymbolReassignment.ts, 18, 5))
+
+const nonUniqueSymbol2 = Symbol('nonUnique2');
+>nonUniqueSymbol2 : Symbol(nonUniqueSymbol2, Decl(uniqueSymbolReassignment.ts, 19, 5))
+
+// Plain text variables (not symbols at all)
+const normalVar = "not a symbol";
+>normalVar : Symbol(normalVar, Decl(uniqueSymbolReassignment.ts, 22, 5))
+
+const symbolName = "this contains symbol but is not one";
+>symbolName : Symbol(symbolName, Decl(uniqueSymbolReassignment.ts, 23, 5))
+
+// Attach those as well
+myFunction.nonUnique1 = nonUniqueSymbol1;
+>myFunction.nonUnique1 : Symbol(myFunction.nonUnique1, Decl(uniqueSymbolReassignment.ts, 23, 57))
+>myFunction : Symbol(myFunction, Decl(uniqueSymbolReassignment.ts, 9, 11), Decl(uniqueSymbolReassignment.ts, 11, 24), Decl(uniqueSymbolReassignment.ts, 14, 39), Decl(uniqueSymbolReassignment.ts, 23, 57), Decl(uniqueSymbolReassignment.ts, 26, 41) ... and 2 more)
+>nonUnique1 : Symbol(myFunction.nonUnique1, Decl(uniqueSymbolReassignment.ts, 23, 57))
+>nonUniqueSymbol1 : Symbol(nonUniqueSymbol1, Decl(uniqueSymbolReassignment.ts, 18, 5))
+
+myFunction.nonUnique2 = nonUniqueSymbol2;
+>myFunction.nonUnique2 : Symbol(myFunction.nonUnique2, Decl(uniqueSymbolReassignment.ts, 26, 41))
+>myFunction : Symbol(myFunction, Decl(uniqueSymbolReassignment.ts, 9, 11), Decl(uniqueSymbolReassignment.ts, 11, 24), Decl(uniqueSymbolReassignment.ts, 14, 39), Decl(uniqueSymbolReassignment.ts, 23, 57), Decl(uniqueSymbolReassignment.ts, 26, 41) ... and 2 more)
+>nonUnique2 : Symbol(myFunction.nonUnique2, Decl(uniqueSymbolReassignment.ts, 26, 41))
+>nonUniqueSymbol2 : Symbol(nonUniqueSymbol2, Decl(uniqueSymbolReassignment.ts, 19, 5))
+
+myFunction.normalVar = normalVar;
+>myFunction.normalVar : Symbol(myFunction.normalVar, Decl(uniqueSymbolReassignment.ts, 27, 41))
+>myFunction : Symbol(myFunction, Decl(uniqueSymbolReassignment.ts, 9, 11), Decl(uniqueSymbolReassignment.ts, 11, 24), Decl(uniqueSymbolReassignment.ts, 14, 39), Decl(uniqueSymbolReassignment.ts, 23, 57), Decl(uniqueSymbolReassignment.ts, 26, 41) ... and 2 more)
+>normalVar : Symbol(myFunction.normalVar, Decl(uniqueSymbolReassignment.ts, 27, 41))
+>normalVar : Symbol(normalVar, Decl(uniqueSymbolReassignment.ts, 22, 5))
+
+myFunction.symbolName = symbolName;
+>myFunction.symbolName : Symbol(myFunction.symbolName, Decl(uniqueSymbolReassignment.ts, 28, 33))
+>myFunction : Symbol(myFunction, Decl(uniqueSymbolReassignment.ts, 9, 11), Decl(uniqueSymbolReassignment.ts, 11, 24), Decl(uniqueSymbolReassignment.ts, 14, 39), Decl(uniqueSymbolReassignment.ts, 23, 57), Decl(uniqueSymbolReassignment.ts, 26, 41) ... and 2 more)
+>symbolName : Symbol(myFunction.symbolName, Decl(uniqueSymbolReassignment.ts, 28, 33))
+>symbolName : Symbol(symbolName, Decl(uniqueSymbolReassignment.ts, 23, 5))
+
+export { myFunction };
+>myFunction : Symbol(myFunction, Decl(uniqueSymbolReassignment.ts, 31, 8))
+

@@ -111,6 +111,7 @@ import {
     isFunctionDeclaration,
     isFunctionLike,
     isGlobalScopeAugmentation,
+    isIdentifier,
     isIdentifierText,
     isImportEqualsDeclaration,
     isIndexSignatureDeclaration,
@@ -140,6 +141,7 @@ import {
     isStringLiteralLike,
     isTupleTypeNode,
     isTypeAliasDeclaration,
+    isTypeReferenceNode,
     isTypeElement,
     isTypeLiteralNode,
     isTypeNode,
@@ -216,6 +218,18 @@ import {
     visitNodes,
     VisitResult,
 } from "../_namespaces/ts.js";
+
+
+function isUniqueSymbolByType(type: TypeNode | undefined): boolean {
+    if (!type) return false;
+    
+    if (type.kind === SyntaxKind.TypeOperator && (type as any).operator === SyntaxKind.UniqueKeyword) return true;
+
+    if (isTypeReferenceNode(type) && isIdentifier(type.typeName)) {
+        if (type.typeName.escapedText === "unique symbol") return true;
+    }
+    return false;
+}
 
 /** @internal */
 export function getDeclarationDiagnostics(
@@ -1479,7 +1493,15 @@ export function transformDeclarations(context: TransformationContext): Transform
                             exportMappings.push([name, nameStr]);
                         }
                         const varDecl = factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, type, /*initializer*/ undefined);
-                        return factory.createVariableStatement(isNonContextualKeywordName ? undefined : [factory.createToken(SyntaxKind.ExportKeyword)], factory.createVariableDeclarationList([varDecl]));
+                        const shouldForceConst = isUniqueSymbolByType(type);
+
+                        const declList = factory.createVariableDeclarationList(
+                            [varDecl],
+                            shouldForceConst ? NodeFlags.Const : NodeFlags.None
+                        );
+                        
+                        return factory.createVariableStatement(
+                            isNonContextualKeywordName ? undefined : [factory.createToken(SyntaxKind.ExportKeyword)],declList);
                     });
                     if (!exportMappings.length) {
                         declarations = mapDefined(declarations, declaration => factory.replaceModifiers(declaration, ModifierFlags.None));

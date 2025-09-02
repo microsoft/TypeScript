@@ -1,0 +1,48 @@
+uniqueSymbolReassignment.ts(2,18): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+uniqueSymbolReassignment.ts(7,23): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+uniqueSymbolReassignment.ts(19,26): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+uniqueSymbolReassignment.ts(20,26): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+
+
+==== uniqueSymbolReassignment.ts (4 errors) ====
+    // This is a unique symbol (const + Symbol())
+    const mySymbol = Symbol('Symbols.mySymbol');
+                     ~~~~~~
+!!! error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+    const Symbols = {
+        mySymbol
+    } as const;
+    
+    const anotherUnique = Symbol('symbols.anotherUnique');
+                          ~~~~~~
+!!! error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+    const Symbols2 = {
+        anotherUnique
+    } as const;
+    
+    function myFunction() {}
+    
+    // Attach the unique ones
+    myFunction.mySymbol = Symbols.mySymbol;
+    myFunction.anotherUnique = Symbols2.anotherUnique;
+    
+    // Non-unique symbols (regular Symbol() without const)
+    const nonUniqueSymbol1 = Symbol('nonUnique1');
+                             ~~~~~~
+!!! error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+    const nonUniqueSymbol2 = Symbol('nonUnique2');
+                             ~~~~~~
+!!! error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+    
+    // Plain text variables (not symbols at all)
+    const normalVar = "not a symbol";
+    const symbolName = "this contains symbol but is not one";
+    
+    // Attach those as well
+    myFunction.nonUnique1 = nonUniqueSymbol1;
+    myFunction.nonUnique2 = nonUniqueSymbol2;
+    myFunction.normalVar = normalVar;
+    myFunction.symbolName = symbolName;
+    
+    export { myFunction };
+    

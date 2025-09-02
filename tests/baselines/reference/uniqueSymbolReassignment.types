@@ -1,0 +1,176 @@
+//// [tests/cases/compiler/uniqueSymbolReassignment.ts] ////
+
+=== uniqueSymbolReassignment.ts ===
+// This is a unique symbol (const + Symbol())
+const mySymbol = Symbol('Symbols.mySymbol');
+>mySymbol : any
+>         : ^^^
+>Symbol('Symbols.mySymbol') : any
+>                           : ^^^
+>Symbol : any
+>       : ^^^
+>'Symbols.mySymbol' : "Symbols.mySymbol"
+>                   : ^^^^^^^^^^^^^^^^^^
+
+const Symbols = {
+>Symbols : { readonly mySymbol: any; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    mySymbol} as const : { readonly mySymbol: any; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    mySymbol} : { readonly mySymbol: any; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    mySymbol
+>mySymbol : any
+>         : ^^^
+
+} as const;
+
+const anotherUnique = Symbol('symbols.anotherUnique');
+>anotherUnique : any
+>              : ^^^
+>Symbol('symbols.anotherUnique') : any
+>                                : ^^^
+>Symbol : any
+>       : ^^^
+>'symbols.anotherUnique' : "symbols.anotherUnique"
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
+
+const Symbols2 = {
+>Symbols2 : { readonly anotherUnique: any; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    anotherUnique} as const : { readonly anotherUnique: any; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    anotherUnique} : { readonly anotherUnique: any; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    anotherUnique
+>anotherUnique : any
+>              : ^^^
+
+} as const;
+
+function myFunction() {}
+>myFunction : typeof myFunction
+>           : ^^^^^^^^^^^^^^^^^
+
+// Attach the unique ones
+myFunction.mySymbol = Symbols.mySymbol;
+>myFunction.mySymbol = Symbols.mySymbol : any
+>                                       : ^^^
+>myFunction.mySymbol : any
+>                    : ^^^
+>myFunction : typeof myFunction
+>           : ^^^^^^^^^^^^^^^^^
+>mySymbol : any
+>         : ^^^
+>Symbols.mySymbol : any
+>                 : ^^^
+>Symbols : { readonly mySymbol: any; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mySymbol : any
+>         : ^^^
+
+myFunction.anotherUnique = Symbols2.anotherUnique;
+>myFunction.anotherUnique = Symbols2.anotherUnique : any
+>                                                  : ^^^
+>myFunction.anotherUnique : any
+>                         : ^^^
+>myFunction : typeof myFunction
+>           : ^^^^^^^^^^^^^^^^^
+>anotherUnique : any
+>              : ^^^
+>Symbols2.anotherUnique : any
+>                       : ^^^
+>Symbols2 : { readonly anotherUnique: any; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>anotherUnique : any
+>              : ^^^
+
+// Non-unique symbols (regular Symbol() without const)
+const nonUniqueSymbol1 = Symbol('nonUnique1');
+>nonUniqueSymbol1 : any
+>                 : ^^^
+>Symbol('nonUnique1') : any
+>                     : ^^^
+>Symbol : any
+>       : ^^^
+>'nonUnique1' : "nonUnique1"
+>             : ^^^^^^^^^^^^
+
+const nonUniqueSymbol2 = Symbol('nonUnique2');
+>nonUniqueSymbol2 : any
+>                 : ^^^
+>Symbol('nonUnique2') : any
+>                     : ^^^
+>Symbol : any
+>       : ^^^
+>'nonUnique2' : "nonUnique2"
+>             : ^^^^^^^^^^^^
+
+// Plain text variables (not symbols at all)
+const normalVar = "not a symbol";
+>normalVar : "not a symbol"
+>          : ^^^^^^^^^^^^^^
+>"not a symbol" : "not a symbol"
+>               : ^^^^^^^^^^^^^^
+
+const symbolName = "this contains symbol but is not one";
+>symbolName : "this contains symbol but is not one"
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"this contains symbol but is not one" : "this contains symbol but is not one"
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+// Attach those as well
+myFunction.nonUnique1 = nonUniqueSymbol1;
+>myFunction.nonUnique1 = nonUniqueSymbol1 : any
+>                                         : ^^^
+>myFunction.nonUnique1 : any
+>                      : ^^^
+>myFunction : typeof myFunction
+>           : ^^^^^^^^^^^^^^^^^
+>nonUnique1 : any
+>           : ^^^
+>nonUniqueSymbol1 : any
+>                 : ^^^
+
+myFunction.nonUnique2 = nonUniqueSymbol2;
+>myFunction.nonUnique2 = nonUniqueSymbol2 : any
+>                                         : ^^^
+>myFunction.nonUnique2 : any
+>                      : ^^^
+>myFunction : typeof myFunction
+>           : ^^^^^^^^^^^^^^^^^
+>nonUnique2 : any
+>           : ^^^
+>nonUniqueSymbol2 : any
+>                 : ^^^
+
+myFunction.normalVar = normalVar;
+>myFunction.normalVar = normalVar : "not a symbol"
+>                                 : ^^^^^^^^^^^^^^
+>myFunction.normalVar : string
+>                     : ^^^^^^
+>myFunction : typeof myFunction
+>           : ^^^^^^^^^^^^^^^^^
+>normalVar : string
+>          : ^^^^^^
+>normalVar : "not a symbol"
+>          : ^^^^^^^^^^^^^^
+
+myFunction.symbolName = symbolName;
+>myFunction.symbolName = symbolName : "this contains symbol but is not one"
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>myFunction.symbolName : string
+>                      : ^^^^^^
+>myFunction : typeof myFunction
+>           : ^^^^^^^^^^^^^^^^^
+>symbolName : string
+>           : ^^^^^^
+>symbolName : "this contains symbol but is not one"
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+export { myFunction };
+>myFunction : typeof myFunction
+>           : ^^^^^^^^^^^^^^^^^
+

@@ -423,15 +423,41 @@ import {
     WriteFileCallbackData,
     YieldExpression,
 } from "./_namespaces/ts.js";
+import { isTypeReferenceNode, TypeFlags, TypeChecker } from "./_namespaces/ts.js";
 import * as performance from "./_namespaces/ts.performance.js";
-
 const brackets = createBracketsMap();
 
+
+
 /** @internal */
+export function isUniqueSymbolDeclaration(node: VariableDeclarationList, checker: TypeChecker): boolean {
+    return node.declarations.some((decl: VariableDeclaration) => {
+        // 1. If type is explicitly written, handle as before
+        const typeNode: TypeNode | undefined = decl.type;
+        if (typeNode) {
+            if (isTypeReferenceNode(typeNode) && isIdentifier(typeNode.typeName)) {
+                if (typeNode.typeName.escapedText.toString() === "unique symbol") {
+                    return true;
+                }
+            }
+            if ((typeNode.kind as SyntaxKind) === SyntaxKind.UniqueKeyword) {
+                return true;
+            }
+        }
+        // 2. Otherwise, check the inferred type
+        const type = checker.getTypeAtLocation(decl.name);
+        if (type.flags & TypeFlags.UniqueESSymbol) {
+            return true;
+        }
+
+        return false;
+    });
+}
+
 export function isBuildInfoFile(file: string): boolean {
     return fileExtensionIs(file, Extension.TsBuildInfo);
 }
-
+ 
 /**
  * Iterates over the source files that are expected to have an emit output.
  *
@@ -741,6 +767,7 @@ export function emitFiles(
     onlyBuildInfo: boolean,
     forceDtsEmit?: boolean,
     skipBuildInfo?: boolean,
+    emitTypeChecker?: TypeChecker,
 ): EmitResult {
     // Why var? It avoids TDZ checks in the runtime which can be costly.
     // See: https://github.com/microsoft/TypeScript/issues/52924
@@ -841,7 +868,7 @@ export function emitFiles(
             extendedDiagnostics: compilerOptions.extendedDiagnostics,
         };
 
-        // Create a printer to print the nodes
+        const typeChecker = emitTypeChecker;
         const printer = createPrinter(printerOptions, {
             // resolver hooks
             hasGlobalName: resolver.hasGlobalName,
@@ -850,12 +877,11 @@ export function emitFiles(
             onEmitNode: transform.emitNodeWithNotification,
             isEmitNotificationEnabled: transform.isEmitNotificationEnabled,
             substituteNode: transform.substituteNode,
-        });
+        }, typeChecker);
 
         Debug.assert(transform.transformed.length === 1, "Should only see one output from the transform");
         printSourceFileOrBundle(jsFilePath, sourceMapFilePath, transform, printer, compilerOptions);
 
-        // Clean up emit nodes on parse tree
         transform.dispose();
 
         if (emittedFilesList) {
@@ -899,6 +925,8 @@ export function emitFiles(
                 emitterDiagnostics.add(diagnostic);
             }
         }
+
+        // TypeChecker is already captured in the closure above
 
         const declBlocked = (!!declarationTransform.diagnostics && !!declarationTransform.diagnostics.length) || !!host.isEmitBlocked(declarationFilePath) || !!compilerOptions.noEmit;
         emitSkipped = emitSkipped || declBlocked;
@@ -1191,7 +1219,7 @@ export const createPrinterWithRemoveCommentsNeverAsciiEscape: () => Printer = /*
 /** @internal */
 export const createPrinterWithRemoveCommentsOmitTrailingSemicolon: () => Printer = /* @__PURE__ */ memoize(() => createPrinter({ removeComments: true, omitTrailingSemicolon: true }));
 
-export function createPrinter(printerOptions: PrinterOptions = {}, handlers: PrintHandlers = {}): Printer {
+export function createPrinter(printerOptions: PrinterOptions = {}, handlers: PrintHandlers = {}, typeChecker?: TypeChecker): Printer {
     // Why var? It avoids TDZ checks in the runtime which can be costly.
     // See: https://github.com/microsoft/TypeScript/issues/52924
     /* eslint-disable no-var */
@@ -3343,7 +3371,6 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         writeSpace();
         emit(node.caseBlock);
     }
-
     function emitLabeledStatement(node: LabeledStatement) {
         emit(node.label);
         emitTokenWithComment(SyntaxKind.ColonToken, node.label.end, writePunctuation, node);
@@ -3394,17 +3421,23 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             writeKeyword("await");
             writeSpace();
             writeKeyword("using");
-        }
-        else {
-            const head = isLet(node) ? "let" :
+        } else {
+            // Check if unique symbol and use const instead of var
+            const isUnique = typeChecker && isUniqueSymbolDeclaration(node, typeChecker);
+            const head =
+                isLet(node) ? "let" :
                 isVarConst(node) ? "const" :
                 isVarUsing(node) ? "using" :
+                isUnique ? "const" :
                 "var";
+            
             writeKeyword(head);
         }
-        writeSpace();
+    
+            writeSpace();
         emitList(node, node.declarations, ListFormat.VariableDeclarationList);
     }
+
 
     function emitFunctionDeclaration(node: FunctionDeclaration) {
         emitFunctionDeclarationOrExpression(node);
