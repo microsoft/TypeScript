@@ -9499,10 +9499,9 @@ declare namespace ts {
      * @param context A lexical environment context for the visitor.
      */
     function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext | undefined, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
-    function isBuildInfoFile(file: string): boolean;
     function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions): string | undefined;
     function getOutputFileNames(commandLine: ParsedCommandLine, inputFileName: string, ignoreCase: boolean): readonly string[];
-    function createPrinter(printerOptions?: PrinterOptions, handlers?: PrintHandlers, typeChecker?: TypeChecker): Printer;
+    function createPrinter(printerOptions?: PrinterOptions, handlers?: PrintHandlers): Printer;
     enum ProgramUpdateLevel {
         /** Program is updated with same root file names and options */
         Update = 0,

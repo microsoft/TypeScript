@@ -111,7 +111,6 @@ import {
     isFunctionDeclaration,
     isFunctionLike,
     isGlobalScopeAugmentation,
-    isIdentifier,
     isIdentifierText,
     isImportEqualsDeclaration,
     isIndexSignatureDeclaration,
@@ -146,7 +145,6 @@ import {
     isTypeNode,
     isTypeParameterDeclaration,
     isTypeQueryNode,
-    isTypeReferenceNode,
     isVarAwaitUsing,
     isVariableDeclaration,
     isVarUsing,
@@ -205,6 +203,7 @@ import {
     tryCast,
     TypeAliasDeclaration,
     TypeNode,
+    TypeOperatorNode,
     TypeParameterDeclaration,
     TypeReferenceNode,
     unescapeLeadingUnderscores,
@@ -218,17 +217,6 @@ import {
     visitNodes,
     VisitResult,
 } from "../_namespaces/ts.js";
-
-function isUniqueSymbolByType(type: TypeNode | undefined): boolean {
-    if (!type) return false;
-
-    if (type.kind === SyntaxKind.TypeOperator && (type as any).operator === SyntaxKind.UniqueKeyword) return true;
-
-    if (isTypeReferenceNode(type) && isIdentifier(type.typeName)) {
-        if (type.typeName.escapedText === "unique symbol") return true;
-    }
-    return false;
-}
 
 /** @internal */
 export function getDeclarationDiagnostics(
@@ -1492,17 +1480,10 @@ export function transformDeclarations(context: TransformationContext): Transform
                             exportMappings.push([name, nameStr]);
                         }
                         const varDecl = factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, type, /*initializer*/ undefined);
-                        const shouldForceConst = isUniqueSymbolByType(type);
-
-                        const declList = factory.createVariableDeclarationList(
-                            [varDecl],
-                            shouldForceConst ? NodeFlags.Const : NodeFlags.None,
-                        );
-
-                        return factory.createVariableStatement(
-                            isNonContextualKeywordName ? undefined : [factory.createToken(SyntaxKind.ExportKeyword)],
-                            declList,
-                        );
+                        const modifiers = isNonContextualKeywordName ? undefined : [factory.createToken(SyntaxKind.ExportKeyword)];
+                        const isConst = isUniqueSymbolType(type);
+                        const variableDeclarationList = factory.createVariableDeclarationList([varDecl], isConst ? NodeFlags.Const : NodeFlags.None);
+                        return factory.createVariableStatement(modifiers, variableDeclarationList);
                     });
                     if (!exportMappings.length) {
                         declarations = mapDefined(declarations, declaration => factory.replaceModifiers(declaration, ModifierFlags.None));
@@ -1838,6 +1819,13 @@ export function transformDeclarations(context: TransformationContext): Transform
 
     function isScopeMarker(node: Node) {
         return isExportAssignment(node) || isExportDeclaration(node);
+    }
+
+    function isUniqueSymbolType(type: TypeNode | undefined): boolean {
+        return !!type &&
+            type.kind === SyntaxKind.TypeOperator &&
+            (type as TypeOperatorNode).operator === SyntaxKind.UniqueKeyword &&
+            (type as TypeOperatorNode).type.kind === SyntaxKind.SymbolKeyword;
     }
 
     function hasScopeMarker(statements: readonly Statement[]) {
