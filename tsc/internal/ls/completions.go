@@ -5373,7 +5373,7 @@ func (l *LanguageService) getCompletionItemActions(ctx context.Context, ch *chec
 		symbol = symbol.ExportSymbol
 	}
 	targetSymbol := ch.GetMergedSymbol(ch.SkipAlias(symbol))
-	isJsxOpeningTagName := symbolDetails.contextToken.Kind == ast.KindLessThanToken && ast.IsJsxOpeningLikeElement(symbolDetails.contextToken.Parent)
+	isJsxOpeningTagName := symbolDetails.contextToken != nil && symbolDetails.contextToken.Kind == ast.KindLessThanToken && ast.IsJsxOpeningLikeElement(symbolDetails.contextToken.Parent)
 	if symbolDetails.previousToken != nil && ast.IsIdentifier(symbolDetails.previousToken) {
 		// If the previous token is an identifier, we can use its start position.
 		position = astnav.GetStartOfNode(symbolDetails.previousToken, file, false)
