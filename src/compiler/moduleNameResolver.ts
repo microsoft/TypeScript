@@ -327,6 +327,8 @@ export interface ModuleResolutionState {
     isConfigLookup: boolean;
     candidateIsFromPackageJsonField: boolean;
     resolvedPackageDirectory: boolean;
+    /** When beginning a fallback lookup in exports conditions, value is set to the object containing the conditions */
+    inFallbackConditionsLookup?: object;
 }
 
 /** Just the fields that we use for module resolution.
@@ -2787,6 +2789,7 @@ function getLoadModuleFromTargetExportOrImport(extensions: Extensions, state: Mo
         else if (typeof target === "object" && target !== null) { // eslint-disable-line no-restricted-syntax
             if (!Array.isArray(target)) {
                 traceIfEnabled(state, Diagnostics.Entering_conditional_exports);
+                const saveInFallbackConditionsLookup = state.inFallbackConditionsLookup;
                 for (const condition of getOwnKeys(target as MapLike<unknown>)) {
                     if (condition === "default" || state.conditions.includes(condition) || isApplicableVersionedTypesKey(state.conditions, condition)) {
                         traceIfEnabled(state, Diagnostics.Matched_0_condition_1, isImports ? "imports" : "exports", condition);
@@ -2795,11 +2798,25 @@ function getLoadModuleFromTargetExportOrImport(extensions: Extensions, state: Mo
                         if (result) {
                             traceIfEnabled(state, Diagnostics.Resolved_under_condition_0, condition);
                             traceIfEnabled(state, Diagnostics.Exiting_conditional_exports);
+                            if (state.inFallbackConditionsLookup === target) {
+                                const firstMatchingCondition = getOwnKeys(target as MapLike<unknown>).find(c => c === "default" || state.conditions.includes(c) || isApplicableVersionedTypesKey(state.conditions, c))!;
+                                const packageName = scope.contents.packageJsonContent.name || scope.packageDirectory;
+                                state.reportDiagnostic(createCompilerDiagnostic(
+                                    Diagnostics.This_import_could_not_be_resolved_using_the_0_exports_condition_in_its_package_json_Types_were_found_using_the_condition_1_but_this_lower_priority_condition_will_not_be_used_at_runtime_This_is_a_bug_in_the_2_library_s_typings_configuration,
+                                    firstMatchingCondition,
+                                    condition,
+                                    packageName,
+                                ));
+                            }
                             return result;
                         }
                         else {
                             traceIfEnabled(state, Diagnostics.Failed_to_resolve_under_condition_0, condition);
-                            return { value: undefined };
+                            if (isImports) {
+                                // Don't use fallback conditions for imports, since the user can fix their own package.json
+                                return { value: undefined };
+                            }
+                            state.inFallbackConditionsLookup = target;
                         }
                     }
                     else {
@@ -2807,6 +2824,7 @@ function getLoadModuleFromTargetExportOrImport(extensions: Extensions, state: Mo
                     }
                 }
                 traceIfEnabled(state, Diagnostics.Exiting_conditional_exports);
+                state.inFallbackConditionsLookup = saveInFallbackConditionsLookup;
                 return undefined;
             }
             else {

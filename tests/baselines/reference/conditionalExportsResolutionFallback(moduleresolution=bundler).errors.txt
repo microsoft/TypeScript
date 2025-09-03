@@ -1,8 +1,6 @@
-error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
 error TS18062: This import could not be resolved using the 'import' exports condition in its package.json. Types were found using the condition 'types', but this lower-priority condition will not be used at runtime. This is a bug in the 'dep' library's typings configuration.
 
 
-!!! error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
 !!! error TS18062: This import could not be resolved using the 'import' exports condition in its package.json. Types were found using the condition 'types', but this lower-priority condition will not be used at runtime. This is a bug in the 'dep' library's typings configuration.
 ==== /node_modules/dep/package.json (0 errors) ====
     {

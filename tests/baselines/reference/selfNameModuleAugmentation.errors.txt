@@ -1,0 +1,38 @@
+error TS18062: This import could not be resolved using the 'import' exports condition in its package.json. Types were found using the condition 'default', but this lower-priority condition will not be used at runtime. This is a bug in the 'acorn-walk' library's typings configuration.
+/index.ts(1,10): error TS2305: Module '"acorn-walk"' has no exported member 'simple'.
+
+
+!!! error TS18062: This import could not be resolved using the 'import' exports condition in its package.json. Types were found using the condition 'default', but this lower-priority condition will not be used at runtime. This is a bug in the 'acorn-walk' library's typings configuration.
+==== /node_modules/acorn-walk/package.json (0 errors) ====
+    {
+      "name": "acorn-walk",
+      "version": "8.2.0",
+      "main": "dist/walk.js",
+      "types": "dist/walk.d.ts",
+      "exports": {
+        ".": [
+          {
+              "import": "./dist/walk.mjs",
+              "require": "./dist/walk.js",
+              "default": "./dist/walk.js"
+          },
+          "./dist/walk.js"
+        ],
+        "./package.json": "./package.json"
+      }
+    }
+    
+==== /node_modules/acorn-walk/dist/walk.d.ts (0 errors) ====
+    export {};
+    declare module 'acorn-walk' {
+      export function simple(node: any, visitors: any, base?: any, state?: any): any;
+    }
+    
+==== /node_modules/acorn-walk/dist/walk.mjs (0 errors) ====
+    export {};
+    
+==== /index.ts (1 errors) ====
+    import { simple } from 'acorn-walk';
+             ~~~~~~
+!!! error TS2305: Module '"acorn-walk"' has no exported member 'simple'.
+    

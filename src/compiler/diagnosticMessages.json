@@ -8519,5 +8519,9 @@
     "'{0}' is not a valid meta-property for keyword 'import'. Did you mean 'meta' or 'defer'?": {
         "category": "Error",
         "code": 18061
+    },
+    "This import could not be resolved using the '{0}' exports condition in its package.json. Types were found using the condition '{1}', but this lower-priority condition will not be used at runtime. This is a bug in the '{2}' library's typings configuration.": {
+        "category": "Error",
+        "code": 18062
     }
 }
