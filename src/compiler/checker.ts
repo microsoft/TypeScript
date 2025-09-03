@@ -37002,7 +37002,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // use the resolvingSignature singleton to indicate that we deferred processing. This result will be
         // propagated out and eventually turned into silentNeverType (a type that is assignable to anything and
         // from which we never make inferences).
-        if (!node.typeArguments && (checkMode & CheckMode.SkipGenericFunctions && callSignatures.some(isGenericFunctionReturningFunction) || checkMode & CheckMode.SkipContextSensitive && isContextSensitive(node))) {
+        if (!node.typeArguments && (checkMode & CheckMode.SkipGenericFunctions && callSignatures.some(isGenericFunctionReturningFunction) || ((checkMode & (CheckMode.Inferential | CheckMode.SkipContextSensitive)) === (CheckMode.Inferential | CheckMode.SkipContextSensitive)) && isContextSensitive(node))) {
             skippedGenericFunction(node, checkMode);
             return resolvingSignature;
         }
@@ -37057,7 +37057,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return resolveUntypedCall(node);
         }
 
-        if (!node.typeArguments && checkMode & CheckMode.SkipContextSensitive && isContextSensitive(node)) {
+        if (!node.typeArguments && ((checkMode & (CheckMode.Inferential | CheckMode.SkipContextSensitive)) === (CheckMode.Inferential | CheckMode.SkipContextSensitive)) && isContextSensitive(node)) {
             skippedGenericFunction(node, checkMode);
             return resolvingSignature;
         }
