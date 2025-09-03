@@ -1945,7 +1945,7 @@ export function parseCommandLineWorker(
             const s = args[i];
             i++;
             if (s.charCodeAt(0) === CharacterCodes.at) {
-                parseResponseFile(s.slice(1));
+                parseResponseFile(s);
             }
             else if (s.charCodeAt(0) === CharacterCodes.minus) {
                 const inputOptionName = s.slice(s.charCodeAt(1) === CharacterCodes.minus ? 2 : 1);
