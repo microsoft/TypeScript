@@ -37,7 +37,6 @@ import {
     forEachAncestorDirectory,
     formatMessage,
     getAllowImportingTsExtensions,
-    getAllowJSCompilerOption,
     getAnyExtensionFromPath,
     getBaseFileName,
     GetCanonicalFileName,
