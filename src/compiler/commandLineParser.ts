@@ -873,7 +873,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsProgramStructure: true,
         category: Diagnostics.Language_and_Environment,
         description: Diagnostics.Enable_lib_replacement,
-        defaultValueDescription: true,
+        defaultValueDescription: false,
     },
 
     // Strict Type Checks
