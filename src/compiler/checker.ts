@@ -1134,6 +1134,8 @@ import {
     walkUpParenthesizedExpressions,
     walkUpParenthesizedTypes,
     walkUpParenthesizedTypesAndGetParentAndChild,
+    Version,
+    versionMajorMinor,
     WhileStatement,
     WideningContext,
     WithStatement,
@@ -47998,9 +48000,40 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const sourceFile = getSourceFileOfNode(node);
                     const pos = getNonModifierTokenPosOfNode(node);
                     const span = getSpanOfTokenAtPosition(sourceFile, pos);
-                    suggestionDiagnostics.add(
-                        createFileDiagnostic(sourceFile, span.start, span.length, Diagnostics.A_namespace_declaration_should_not_be_declared_using_the_module_keyword_Please_use_the_namespace_keyword_instead),
-                    );
+                    
+                    // Check if we should generate an error (TS 6.0+) or suggestion (older versions)
+                    const currentVersion = new Version(versionMajorMinor);
+                    const errorVersion = new Version("6.0");
+                    const shouldError = currentVersion.compareTo(errorVersion) >= Comparison.EqualTo;
+                    
+                    // Check if ignoreDeprecations should suppress this error
+                    let shouldSuppress = false;
+                    if (shouldError && compilerOptions.ignoreDeprecations) {
+                        // Only valid ignoreDeprecations values: "5.0" and "6.0"
+                        if (compilerOptions.ignoreDeprecations === "6.0") {
+                            shouldSuppress = true;
+                        }
+                    }
+                    
+                    if (shouldError && !shouldSuppress) {
+                        // In TypeScript 6.0+, this is an error unless suppressed by ignoreDeprecations
+                        const errorDiagnostic = createFileDiagnostic(
+                            sourceFile, 
+                            span.start, 
+                            span.length, 
+                            Diagnostics.The_module_keyword_is_not_allowed_for_namespace_declarations_Use_the_namespace_keyword_instead
+                        );
+                        diagnostics.add(errorDiagnostic);
+                    } else {
+                        // In older versions or when suppressed, keep as suggestion
+                        const suggestionDiagnostic = createFileDiagnostic(
+                            sourceFile, 
+                            span.start, 
+                            span.length, 
+                            Diagnostics.A_namespace_declaration_should_not_be_declared_using_the_module_keyword_Please_use_the_namespace_keyword_instead
+                        );
+                        suggestionDiagnostics.add(suggestionDiagnostic);
+                    }
                 }
             }
 

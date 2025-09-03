@@ -1,4 +1,5 @@
 ///<reference path="fourslash.ts" />
+
 // @ignoreDeprecations: 6.0
 // @Filename: a.ts
 ////[|module|] mod1 { export let x: number }
@@ -28,4 +29,3 @@ verify.getSuggestionDiagnostics(diagnostics)
 
 goTo.file("b.ts")
 verify.getSuggestionDiagnostics([])
-

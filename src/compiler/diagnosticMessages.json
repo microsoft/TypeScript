@@ -1825,6 +1825,10 @@
         "code": 1540,
         "reportsDeprecated": true
     },
+    "The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.": {
+        "category": "Error",
+        "code": 1547
+    },
     "Type-only import of an ECMAScript module from a CommonJS module must have a 'resolution-mode' attribute.": {
         "category": "Error",
         "code": 1541
