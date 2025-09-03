@@ -22,27 +22,18 @@ const b: types.B = {};
 
 
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+    a;
+}
+export {};
 //// [b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [c.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = void 0;
-var types = require("./b");
-exports.default = types;
+import * as types from './b';
+export { types as default };
 //// [d.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var c_1 = require("./c");
-new c_1.default.A();
-new c_1.default.B();
-var a = {};
-var b = {};
+import types from './c';
+new types.A();
+new types.B();
+const a = {};
+const b = {};

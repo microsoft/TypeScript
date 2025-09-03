@@ -17,10 +17,10 @@ class C {
 >  : ^
 
     b = x; // error, evaluated in scope of constructor, cannot reference x
->b : any
->  : ^^^
->x : any
->  : ^^^
+>b : number
+>  : ^^^^^^
+>x : number
+>  : ^^^^^^
 
     constructor(x: string) {
 >x : string
@@ -47,10 +47,10 @@ class D {
 >  : ^
 
     b = y; // error, evaluated in scope of constructor, cannot reference y
->b : any
->  : ^^^
->y : any
->  : ^^^
+>b : number
+>  : ^^^^^^
+>y : number
+>  : ^^^^^^
 
     constructor(x: string) {
 >x : string

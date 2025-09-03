@@ -54,7 +54,7 @@ var A;
 //// [module.js]
 var A;
 (function (A) {
-    var Point;
+    let Point;
     (function (Point) {
         Point.Origin = { x: 0, y: 0 };
     })(Point = A.Point || (A.Point = {}));

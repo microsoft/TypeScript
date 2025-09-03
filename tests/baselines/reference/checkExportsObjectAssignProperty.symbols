@@ -194,7 +194,7 @@ Object.defineProperty(exports, "setonlyAccessor", {
 
         this.rwAccessors = Number(str) 
 >rwAccessors : Symbol(rwAccessors, Decl(mod1.js, 6, 14))
->Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.number.d.ts, --, --))
 >str : Symbol(str, Decl(mod1.js, 6, 8))
     }
 });
@@ -260,29 +260,8 @@ Object.defineProperty(module.exports, "setonlyAccessor", {
 
         this.rwAccessors = Number(str) 
 >rwAccessors : Symbol(rwAccessors, Decl(mod2.js, 6, 14))
->Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.number.d.ts, --, --))
 >str : Symbol(str, Decl(mod2.js, 6, 8))
     }
 });
-
-=== index.js ===
-/**
- * @type {number}
- */
-const q = require("./mod1").thing;
->q : Symbol(q, Decl(index.js, 3, 5))
->require("./mod1").thing : Symbol(thing, Decl(mod1.js, 0, 0))
->require : Symbol(require)
->"./mod1" : Symbol("mod1", Decl(mod1.js, 0, 0))
->thing : Symbol(thing, Decl(mod1.js, 0, 0))
-
-/**
- * @type {string}
- */
-const u = require("./mod2").thing;
->u : Symbol(u, Decl(index.js, 8, 5))
->require("./mod2").thing : Symbol(thing, Decl(mod2.js, 0, 0))
->require : Symbol(require)
->"./mod2" : Symbol("mod2", Decl(mod2.js, 0, 0))
->thing : Symbol(thing, Decl(mod2.js, 0, 0))
 

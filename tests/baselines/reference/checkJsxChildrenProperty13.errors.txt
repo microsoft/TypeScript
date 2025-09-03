@@ -1,8 +1,11 @@
+file.tsx(1,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
 file.tsx(12,30): error TS2710: 'children' are specified twice. The attribute named 'children' will be overwritten.
 
 
-==== file.tsx (1 errors) ====
+==== file.tsx (2 errors) ====
     import React = require('react');
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
     
     interface ButtonProp {
         a: number,

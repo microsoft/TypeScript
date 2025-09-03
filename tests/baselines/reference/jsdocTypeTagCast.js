@@ -82,21 +82,6 @@ var asConst2 = /** @type {const} */({
 //// [a.js]
 var W;
 //// [b.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 // @ts-check
 var W = /** @type {string} */ ( /** @type {*} */(4));
 var W = /** @type {string} */ (4); // Error
@@ -106,27 +91,22 @@ var a;
 var s;
 var a = /** @type {*} */ ("" + 4);
 var s = "" + /** @type {*} */ (4);
-var SomeBase = /** @class */ (function () {
-    function SomeBase() {
+class SomeBase {
+    constructor() {
         this.p = 42;
     }
-    return SomeBase;
-}());
-var SomeDerived = /** @class */ (function (_super) {
-    __extends(SomeDerived, _super);
-    function SomeDerived() {
-        var _this = _super.call(this) || this;
-        _this.x = 42;
-        return _this;
+}
+class SomeDerived extends SomeBase {
+    constructor() {
+        super();
+        this.x = 42;
     }
-    return SomeDerived;
-}(SomeBase));
-var SomeOther = /** @class */ (function () {
-    function SomeOther() {
+}
+class SomeOther {
+    constructor() {
         this.q = 42;
     }
-    return SomeOther;
-}());
+}
 function SomeFakeClass() {
     /** @type {string|number} */
     this.p = "bar";

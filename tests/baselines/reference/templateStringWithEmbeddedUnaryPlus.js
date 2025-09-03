@@ -4,4 +4,4 @@
 var x = `abc${ +Infinity }def`;
 
 //// [templateStringWithEmbeddedUnaryPlus.js]
-var x = "abc".concat(+Infinity, "def");
+var x = `abc${+Infinity}def`;

@@ -57,7 +57,9 @@ import iAny = require('./expAny');
 
 var v6 = iAny;
 >v6 : any
+>   : ^^^
 >iAny : any
+>     : ^^^
 
 import iGeneric = require('./expGeneric');
 >iGeneric : <T>(a: T) => T
@@ -141,6 +143,7 @@ export = x;
 === expAny.ts ===
 var x;
 >x : any
+>  : ^^^
 
 export = x;
 >x : any

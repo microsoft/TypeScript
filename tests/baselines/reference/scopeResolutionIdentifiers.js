@@ -59,20 +59,18 @@ function fn() {
     var n = s;
     var n;
 }
-var C = /** @class */ (function () {
-    function C() {
-        this.n = this.s;
-    }
-    C.prototype.x = function () {
+class C {
+    s;
+    n = this.s;
+    x() {
         var p = this.n;
         var p;
-    };
-    return C;
-}());
+    }
+}
 var M3;
 (function (M3) {
     var s;
-    var M4;
+    let M4;
     (function (M4) {
         var n = s;
         var n;

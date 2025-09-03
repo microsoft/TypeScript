@@ -1,9 +1,14 @@
+/a.ts(2,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+/b.ts(2,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+/c.ts(2,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
 /c.ts(4,1): error TS1361: 'A' cannot be used as a value because it was imported using 'import type'.
 
 
-==== /c.ts (1 errors) ====
+==== /c.ts (2 errors) ====
     import type A = require('./a'); // Ok
     import type = require('./b');   // Ok
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
     
     A.prototype; // Error
     ~
@@ -13,11 +18,15 @@
     void type; // Ok
     export declare const AConstructor: typeof A; // Ok
     
-==== /a.ts (0 errors) ====
+==== /a.ts (1 errors) ====
     class A { a!: string }
     export = A;
+    ~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
     
-==== /b.ts (0 errors) ====
+==== /b.ts (1 errors) ====
     class SomeClass {}
     export = SomeClass;
+    ~~~~~~~~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
     

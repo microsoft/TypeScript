@@ -55,11 +55,9 @@ var num;
 var strOrNum;
 var strOrNumOrBool;
 var numOrBool;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+    p;
+}
 var c;
 var cOrBool;
 var strOrNumOrBoolOrC;

@@ -167,7 +167,7 @@ Object.defineProperty(Person.prototype, "setonlyAccessor", {
 >this.rwAccessors : Symbol(Person.rwAccessors, Decl(mod1.js, 11, 93))
 >this : Symbol(Person, Decl(mod1.js, 0, 0))
 >rwAccessors : Symbol(rwAccessors, Decl(mod1.js, 16, 14))
->Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.number.d.ts, --, --))
 >str : Symbol(str, Decl(mod1.js, 16, 8))
     }
 });

@@ -17,15 +17,13 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            C = /** @class */ (function () {
-                function C() {
+            C = class C {
+                static x;
+                static {
+                    C.x = 1;
                 }
-                return C;
-            }());
+            };
             exports_1("C", C);
-            (function () {
-                C.x = 1;
-            })();
         }
     };
 });

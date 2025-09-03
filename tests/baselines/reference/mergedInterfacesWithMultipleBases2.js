@@ -80,59 +80,49 @@ module M {
 //// [mergedInterfacesWithMultipleBases2.js]
 // merged interfaces behave as if all extends clauses from each declaration are merged together
 // no errors expected
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-var C2 = /** @class */ (function () {
-    function C2() {
-    }
-    return C2;
-}());
-var C3 = /** @class */ (function () {
-    function C3() {
-    }
-    return C3;
-}());
-var C4 = /** @class */ (function () {
-    function C4() {
-    }
-    return C4;
-}());
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
+class C {
+    a;
+}
+class C2 {
+    b;
+}
+class C3 {
+    c;
+}
+class C4 {
+    d;
+}
+class D {
+    a;
+    b;
+    c;
+    d;
+    y;
+    z;
+}
 var a;
 var r = a.a;
 // generic interfaces in a module
 var M;
 (function (M) {
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
-    var C2 = /** @class */ (function () {
-        function C2() {
-        }
-        return C2;
-    }());
-    var C3 = /** @class */ (function () {
-        function C3() {
-        }
-        return C3;
-    }());
-    var C4 = /** @class */ (function () {
-        function C4() {
-        }
-        return C4;
-    }());
-    var D = /** @class */ (function () {
-        function D() {
-        }
-        return D;
-    }());
+    class C {
+        a;
+    }
+    class C2 {
+        b;
+    }
+    class C3 {
+        c;
+    }
+    class C4 {
+        d;
+    }
+    class D {
+        a;
+        b;
+        c;
+        d;
+        y;
+        z;
+    }
 })(M || (M = {}));

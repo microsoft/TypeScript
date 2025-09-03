@@ -1,0 +1,30 @@
+consumer.ts(2,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+consumer.ts(6,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+
+
+==== consumer.ts (2 errors) ====
+    /// <reference path="decls.ts" />
+    import imp1 = require('equ');
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+    
+    
+    // Ambient external module members are always exported with or without export keyword when module lacks export assignment
+    import imp3 = require('equ2');
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+    var n = imp3.x;
+    var n: number;
+    
+==== decls.ts (0 errors) ====
+    // Ambient external module with export assignment
+    declare module 'equ' {
+        var x;
+        export = x;
+    }
+    
+    declare module 'equ2' {
+        var x: number;
+    }
+    
+    // Ambient external import declaration referencing ambient external module using top level module name

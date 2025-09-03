@@ -16,24 +16,13 @@ new a.A(); // Error
 
 
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.A = void 0;
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
-exports.A = A;
+export class A {
+}
 //// [b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-exports.a = require("./a");
+import * as a_1 from './a';
+export { a_1 as a };
 //// [c.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [d.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 new a.A(); // Error
+export {};

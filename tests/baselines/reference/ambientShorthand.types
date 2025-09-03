@@ -10,6 +10,7 @@ import foo, {bar} from "jquery";
 
 import * as baz from "fs";
 >baz : any
+>    : ^^^
 
 import boom = require("jquery");
 >boom : any
@@ -17,16 +18,23 @@ import boom = require("jquery");
 
 foo(bar, baz, boom);
 >foo(bar, baz, boom) : any
+>                    : ^^^
 >foo : any
+>    : ^^^
 >bar : any
+>    : ^^^
 >baz : any
+>    : ^^^
 >boom : any
+>     : ^^^
 
 === declarations.d.ts ===
 declare module "jquery"
 >"jquery" : any
+>         : ^^^
 
 // Semicolon is optional
 declare module "fs";
 >"fs" : any
+>     : ^^^
 

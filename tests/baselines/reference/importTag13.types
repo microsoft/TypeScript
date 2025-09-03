@@ -4,3 +4,10 @@
 
 /** @import x = require("types") */
 
+=== /types.ts ===
+export interface Foo {
+    a: number;
+>a : number
+>  : ^^^^^^
+}
+

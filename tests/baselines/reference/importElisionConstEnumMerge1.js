@@ -18,14 +18,9 @@ Enum.One;
 
 
 //// [enum.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [merge.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Enum = void 0;
+export { Enum };
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var merge_1 = require("./merge");
+import { Enum } from "./merge";
 1 /* Enum.One */;

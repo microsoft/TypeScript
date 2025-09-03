@@ -10,11 +10,8 @@ class C {
 
 
 //// [classStaticBlock19.js]
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    static {
+        // something
     }
-    return C;
-}());
-(function () {
-    // something
-})();
+}

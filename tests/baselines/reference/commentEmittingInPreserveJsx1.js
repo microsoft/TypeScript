@@ -33,9 +33,6 @@ import React = require('react');
 </div>;
 
 //// [file.jsx]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var React = require("react");
 <div>
     // Not Comment
 </div>;
@@ -59,3 +56,4 @@ var React = require("react");
     //Comment just Fine
     "Hi"}
 </div>;
+export {};

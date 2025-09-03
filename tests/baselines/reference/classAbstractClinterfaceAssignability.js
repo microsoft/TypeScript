@@ -27,11 +27,10 @@ AAA = A;
 
 //// [classAbstractClinterfaceAssignability.js]
 var I;
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+    x;
+    static y;
+}
 var AA;
 AA = I;
 var AAA;

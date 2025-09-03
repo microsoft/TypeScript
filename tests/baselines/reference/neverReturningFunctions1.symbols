@@ -6,7 +6,7 @@ function fail(message?: string): never {
 >message : Symbol(message, Decl(neverReturningFunctions1.ts, 0, 14))
 
     throw new Error(message);
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 >message : Symbol(message, Decl(neverReturningFunctions1.ts, 0, 14))
 }
 
@@ -186,7 +186,7 @@ class Test {
 >message : Symbol(message, Decl(neverReturningFunctions1.ts, 66, 9))
 
         throw new Error(message);
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 >message : Symbol(message, Decl(neverReturningFunctions1.ts, 66, 9))
     }
     f1(x: string | undefined) {
@@ -392,7 +392,7 @@ function f43() {
 
     const fail = (): never => { throw new Error(); };
 >fail : Symbol(fail, Decl(neverReturningFunctions1.ts, 156, 9))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 
     const f = [fail];
 >f : Symbol(f, Decl(neverReturningFunctions1.ts, 157, 9))
@@ -610,7 +610,7 @@ class MyThrowable {
 >throw : Symbol(MyThrowable.throw, Decl(neverReturningFunctions1.ts, 234, 19))
 
         throw new Error();
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
     }
 }
 

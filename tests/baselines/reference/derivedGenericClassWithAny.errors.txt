@@ -1,3 +1,5 @@
+derivedGenericClassWithAny.ts(10,5): error TS2612: Property 'x' will overwrite the base property in 'C<number>'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.
+derivedGenericClassWithAny.ts(29,5): error TS2612: Property 'x' will overwrite the base property in 'D'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.
 derivedGenericClassWithAny.ts(30,18): error TS2322: Type 'string' is not assignable to type 'T'.
   'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
 derivedGenericClassWithAny.ts(32,9): error TS2322: Type 'string' is not assignable to type 'T'.
@@ -7,7 +9,7 @@ derivedGenericClassWithAny.ts(41,1): error TS2322: Type 'E<string>' is not assig
     Type 'string' is not assignable to type 'number'.
 
 
-==== derivedGenericClassWithAny.ts (3 errors) ====
+==== derivedGenericClassWithAny.ts (5 errors) ====
     class C<T extends number> {
         x: T;
         get X(): T { return null; }
@@ -18,6 +20,8 @@ derivedGenericClassWithAny.ts(41,1): error TS2322: Type 'E<string>' is not assig
     
     class D extends C<number> {
         x: any;
+        ~
+!!! error TS2612: Property 'x' will overwrite the base property in 'C<number>'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.
         get X(): any {
             return null;
         }
@@ -37,6 +41,8 @@ derivedGenericClassWithAny.ts(41,1): error TS2322: Type 'E<string>' is not assig
     // if D is a valid class definition than E is now not safe tranisitively through C
     class E<T extends string> extends D {
         x: T;
+        ~
+!!! error TS2612: Property 'x' will overwrite the base property in 'D'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.
         get X(): T { return ''; } // error
                      ~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'T'.

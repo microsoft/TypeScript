@@ -1,12 +1,14 @@
-validate.ts(14,3): error TS2540: Cannot assign to 'lastName' because it is a read-only property.
-validate.ts(15,3): error TS2540: Cannot assign to 'houseNumber' because it is a read-only property.
-validate.ts(16,1): error TS2322: Type 'number' is not assignable to type 'string'.
-validate.ts(17,3): error TS2540: Cannot assign to 'middleInit' because it is a read-only property.
+validate.ts(2,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+validate.ts(2,20): error TS2792: Cannot find module './'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 
-==== validate.ts (4 errors) ====
+==== validate.ts (2 errors) ====
     // Validate in TS as simple validations would usually be interpreted as more special assignments
     import x = require("./");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+                       ~~~~
+!!! error TS2792: Cannot find module './'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     x.name;
     x.middleInit;
     x.lastName;
@@ -19,17 +21,9 @@ validate.ts(17,3): error TS2540: Cannot assign to 'middleInit' because it is a r
     x.zipStr = "OK";
     
     x.lastName = "should fail";
-      ~~~~~~~~
-!!! error TS2540: Cannot assign to 'lastName' because it is a read-only property.
     x.houseNumber = 12; // should also fail
-      ~~~~~~~~~~~
-!!! error TS2540: Cannot assign to 'houseNumber' because it is a read-only property.
     x.zipStr = 12; // should fail
-    ~~~~~~~~
-!!! error TS2322: Type 'number' is not assignable to type 'string'.
     x.middleInit = "R"; // should also fail
-      ~~~~~~~~~~
-!!! error TS2540: Cannot assign to 'middleInit' because it is a read-only property.
     
 ==== index.js (0 errors) ====
     const x = {};

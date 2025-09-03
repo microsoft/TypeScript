@@ -26,25 +26,16 @@ C.b = 1;
 C.foo();
 
 //// [classPropertyAsProtected.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    Object.defineProperty(C.prototype, "y", {
-        get: function () { return null; },
-        set: function (x) { },
-        enumerable: false,
-        configurable: true
-    });
-    C.prototype.foo = function () { };
-    Object.defineProperty(C, "b", {
-        get: function () { return null; },
-        set: function (x) { },
-        enumerable: false,
-        configurable: true
-    });
-    C.foo = function () { };
-    return C;
-}());
+class C {
+    x;
+    get y() { return null; }
+    set y(x) { }
+    foo() { }
+    static a;
+    static get b() { return null; }
+    static set b(x) { }
+    static foo() { }
+}
 var c;
 // all errors
 c.x;

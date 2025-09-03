@@ -53,6 +53,7 @@ function AnotherButton(p: any) {
 >AnotherButton : (p: any) => JSX.Element
 >              : ^ ^^   ^^^^^^^^^^^^^^^^
 >p : any
+>  : ^^^
 
     return <h1>Just Another Button</h1>;
 ><h1>Just Another Button</h1> : JSX.Element

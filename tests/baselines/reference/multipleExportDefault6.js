@@ -10,11 +10,9 @@ export default {
 }
 
 //// [multipleExportDefault6.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = {
+export default {
     lol: 1
 };
-exports.default = {
+export default {
     lol: 2
 };

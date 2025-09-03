@@ -17,23 +17,17 @@ var ooscope2 = s => s.length > 0
 
 
 //// [callbackOnConstructor.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Preferences = void 0;
-var Preferences = /** @class */ (function () {
+export class Preferences {
+    assignability = "no";
     /**
      * @callback ValueGetter_2
      * @param {string} name
      * @returns {boolean|number|string|undefined}
      */
-    function Preferences() {
-        this.assignability = "no";
-    }
-    return Preferences;
-}());
-exports.Preferences = Preferences;
+    constructor() { }
+}
 /** @type {ValueGetter_2} */
-var ooscope2 = function (s) { return s.length > 0; };
+var ooscope2 = s => s.length > 0;
 
 
 //// [callbackOnConstructor.d.ts]

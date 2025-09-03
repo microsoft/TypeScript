@@ -5,9 +5,10 @@ thisInInvalidContextsExternalModule.ts(31,13): error TS2526: A 'this' type is av
 thisInInvalidContextsExternalModule.ts(33,25): error TS2507: Type 'undefined' is not a constructor function type.
 thisInInvalidContextsExternalModule.ts(39,9): error TS2332: 'this' cannot be referenced in current location.
 thisInInvalidContextsExternalModule.ts(40,9): error TS2332: 'this' cannot be referenced in current location.
+thisInInvalidContextsExternalModule.ts(43,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 
 
-==== thisInInvalidContextsExternalModule.ts (7 errors) ====
+==== thisInInvalidContextsExternalModule.ts (8 errors) ====
     class BaseErrClass {
         constructor(t: any) { }
     }
@@ -65,3 +66,5 @@ thisInInvalidContextsExternalModule.ts(40,9): error TS2332: 'this' cannot be ref
     }
     
     export = this; // Should be an error
+    ~~~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.

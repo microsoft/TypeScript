@@ -27,6 +27,7 @@ class Derived extends Base {
 
         foo: any;
 >foo : any
+>    : ^^^
     }
 }
 
@@ -56,5 +57,6 @@ class Derived2 extends Base2 {
 
         foo: any;
 >foo : any
+>    : ^^^
     }
 }

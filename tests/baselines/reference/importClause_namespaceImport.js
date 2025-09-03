@@ -18,29 +18,19 @@ const d = { types };
 
 
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Value = exports.B = exports.A = void 0;
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
-exports.A = A;
-var B = /** @class */ (function () {
-    function B() {
-    }
-    return B;
-}());
-exports.B = B;
-exports.Value = {};
+export class A {
+    a;
+}
+export class B {
+    b;
+}
+export const Value = {};
 //// [b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 types;
 types.Value;
-var v;
-var a = {};
-var b = {};
-var c = "";
-var d = { types: types };
+let v;
+const a = {};
+const b = {};
+const c = "";
+const d = { types };
+export {};

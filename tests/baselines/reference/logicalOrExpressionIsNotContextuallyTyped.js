@@ -19,4 +19,4 @@ var r = a || ((a) => a.toLowerCase());
 // operand types.
 var a;
 // bug 786110
-var r = a || (function (a) { return a.toLowerCase(); });
+var r = a || ((a) => a.toLowerCase());

@@ -35,7 +35,7 @@ var c: Object;
 
 var d: Number;
 >d : Symbol(d, Decl(additionOperatorWithInvalidOperands.ts, 11, 3))
->Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.number.d.ts, --, --))
 
 // boolean + every type except any and string
 var r1 = a + a;

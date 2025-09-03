@@ -13,13 +13,9 @@ export function foo(a: string) {}
 
 
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo = foo;
 /**
  * @param {number} a - see {@link A}
  */
-function foo(a) { }
+export function foo(a) { }

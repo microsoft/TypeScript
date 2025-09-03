@@ -24,11 +24,8 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.MyClass = void 0;
-    var MyClass = /** @class */ (function () {
-        function MyClass() {
-        }
-        return MyClass;
-    }());
+    class MyClass {
+    }
     exports.MyClass = MyClass;
 });
 //// [file2.js]

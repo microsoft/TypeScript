@@ -71,7 +71,7 @@ function foo3(x) {
         return x.length; // string
     }
     else {
-        var f = function () { return x * x; };
+        var f = () => x * x;
     }
     x = "hello";
     f();

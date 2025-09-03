@@ -129,22 +129,17 @@ function f7() {
 
 
 //// [typeGuardsAsAssertions.js]
-"use strict";
 // Repro from #8513
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.none = void 0;
-exports.isSome = isSome;
-exports.fn = fn;
-var cond;
-exports.none = { none: '' };
-function isSome(value) {
+let cond;
+export const none = { none: '' };
+export function isSome(value) {
     return 'some' in value;
 }
 function someFrom(some) {
-    return { some: some };
+    return { some };
 }
-function fn(makeSome) {
-    var result = exports.none;
+export function fn(makeSome) {
+    let result = none;
     result; // None
     while (cond) {
         result; // Some<r> | None
@@ -153,7 +148,7 @@ function fn(makeSome) {
     }
 }
 function foo1() {
-    var x = 0;
+    let x = 0;
     x; // number
     while (cond) {
         x; // number, then string | number
@@ -163,7 +158,7 @@ function foo1() {
     x;
 }
 function foo2() {
-    var x = 0;
+    let x = 0;
     x; // number
     while (cond) {
         x; // number, then string | number
@@ -179,7 +174,7 @@ function foo2() {
 }
 // Type guards as assertions
 function f1() {
-    var x = undefined;
+    let x = undefined;
     x; // undefined
     if (x) {
         x; // string | number (guard as assertion)
@@ -187,7 +182,7 @@ function f1() {
     x; // string | number | undefined
 }
 function f2() {
-    var x = undefined;
+    let x = undefined;
     x; // undefined
     if (typeof x === "string") {
         x; // string (guard as assertion)
@@ -195,7 +190,7 @@ function f2() {
     x; // string | undefined
 }
 function f3() {
-    var x = undefined;
+    let x = undefined;
     x; // undefined
     if (!x) {
         return;
@@ -203,7 +198,7 @@ function f3() {
     x; // string | number (guard as assertion)
 }
 function f4() {
-    var x = undefined;
+    let x = undefined;
     x; // undefined
     if (typeof x === "boolean") {
         x; // nothing (boolean not in declared type)
@@ -220,7 +215,7 @@ function f5(x) {
     x; // string | number
 }
 function f6() {
-    var x;
+    let x;
     x.slice();
     x = "";
     x.slice();
@@ -236,6 +231,6 @@ function f6() {
     x.slice();
 }
 function f7() {
-    var x;
+    let x;
     x.slice();
 }

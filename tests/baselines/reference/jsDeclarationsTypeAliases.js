@@ -52,8 +52,7 @@ class LocalThing {
 
 
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 /**
  * @typedef {string | number | symbol} PropName
  */
@@ -87,22 +86,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 function doTheThing(x) {
     return { x: "" + x };
 }
-var ExportedThing = /** @class */ (function () {
-    function ExportedThing() {
-        this.z = "ok";
-    }
-    return ExportedThing;
-}());
+class ExportedThing {
+    z = "ok";
+}
 module.exports = {
-    doTheThing: doTheThing,
-    ExportedThing: ExportedThing,
+    doTheThing,
+    ExportedThing,
 };
-var LocalThing = /** @class */ (function () {
-    function LocalThing() {
-        this.y = "ok";
-    }
-    return LocalThing;
-}());
+class LocalThing {
+    y = "ok";
+}
 
 
 //// [index.d.ts]

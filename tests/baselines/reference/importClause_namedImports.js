@@ -15,19 +15,11 @@ const c = { A };
 
 
 //// [abc.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.C = exports.A = void 0;
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
-exports.A = A;
-exports.C = "";
+export class A {
+}
+export const C = "";
 //// [d.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 new A();
 b.b;
-var c = { A: A };
+const c = { A };
+export {};

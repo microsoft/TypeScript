@@ -1,8 +1,11 @@
+file.tsx(1,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
 file.tsx(42,11): error TS2746: This JSX tag's 'children' prop expects a single child of type 'Element', but multiple children were provided.
 
 
-==== file.tsx (1 errors) ====
+==== file.tsx (2 errors) ====
     import React = require('react');
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
     
     interface Prop {
         a: number,

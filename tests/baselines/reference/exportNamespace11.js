@@ -11,20 +11,10 @@ export type * from './ghost'
 export class Ghost {}
 
 //// [ghost.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Ghost = void 0;
-var Ghost = /** @class */ (function () {
-    function Ghost() {
-    }
-    return Ghost;
-}());
-exports.Ghost = Ghost;
+export class Ghost {
+}
 //// [intermediate.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var intermediate = require("./intermediate");
-var ghost = new intermediate.Ghost();
+import * as intermediate from './intermediate';
+const ghost = new intermediate.Ghost();

@@ -1,0 +1,26 @@
+file4.ts(1,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+
+
+==== file1.ts (0 errors) ====
+    var v1 = "sausages"; // Global scope
+    
+==== file2.ts (0 errors) ====
+    var v2 = 42; // Global scope
+    var v4 = () => 5;
+    
+==== file3.ts (0 errors) ====
+    export var v3 = true;
+    var v2 = [1,2,3]; // Module scope. Should not appear in global scope
+    
+==== file4.ts (1 errors) ====
+    import file3 = require('./file3');
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+    var t1 = v1;
+    var t2 = v2;
+    var t3 = file3.v3;
+    var v4 = {a: true, b: NaN};  // Should shadow global v2 in this module
+    
+==== file5.ts (0 errors) ====
+    var x = v2; // Should be global v2 of type number again
+    

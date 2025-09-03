@@ -18,9 +18,9 @@ let z = Foo;
 //// [a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Bar = require("./foo");
+const Bar = require("./foo");
 Bar.fn();
-var x;
-var y = x.n;
+let x;
+let y = x.n;
 // should error
-var z = Foo;
+let z = Foo;

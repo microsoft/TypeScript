@@ -1,6 +1,10 @@
 error TS5102: Option 'importsNotUsedAsValues' has been removed. Please remove it from your configuration.
   Use 'verbatimModuleSyntax' instead.
 /e.ts(1,1): error TS6192: All imports in import declaration are unused.
+/h.ts(2,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+/i.ts(1,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+/k.ts(2,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+/l.ts(1,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
 
 
 !!! error TS5102: Option 'importsNotUsedAsValues' has been removed. Please remove it from your configuration.
@@ -48,24 +52,32 @@ error TS5102: Option 'importsNotUsedAsValues' has been removed. Please remove it
     let d: C.Two;
     console.log(c, d);
     
-==== /h.ts (0 errors) ====
+==== /h.ts (1 errors) ====
     class H {}
     export = H;
+    ~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
     
-==== /i.ts (0 errors) ====
+==== /i.ts (1 errors) ====
     import H = require('./h'); // Error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
     let h: H = {};
     console.log(h);
     
 ==== /j.ts (0 errors) ====
     import H = require('./h'); // noUnusedLocals error only
     
-==== /k.ts (0 errors) ====
+==== /k.ts (1 errors) ====
     const enum K { One, Two }
     export = K;
+    ~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
     
-==== /l.ts (0 errors) ====
+==== /l.ts (1 errors) ====
     import K = require('./k');
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
     K.One;
     
 ==== /j.ts (0 errors) ====

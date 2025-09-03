@@ -1,31 +1,52 @@
+foo1.ts(2,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+foo2.ts(1,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+foo3.ts(1,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+foo4.ts(1,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+foo5.ts(1,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 foo6.ts(1,14): error TS1109: Expression expected.
+foo7.ts(1,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+foo8.ts(1,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 
 
-==== foo1.ts (0 errors) ====
+==== foo1.ts (1 errors) ====
     var x = 10;
     export = typeof x; // Ok
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
     
-==== foo2.ts (0 errors) ====
+==== foo2.ts (1 errors) ====
     export = "sausages"; // Ok
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
     
-==== foo3.ts (0 errors) ====
+==== foo3.ts (1 errors) ====
     export = class Foo3 {}; // Error, not an expression
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
     
-==== foo4.ts (0 errors) ====
+==== foo4.ts (1 errors) ====
     export = true; // Ok
+    ~~~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
     
-==== foo5.ts (0 errors) ====
+==== foo5.ts (1 errors) ====
     export = undefined; // Valid.  undefined is an identifier in JavaScript/TypeScript
+    ~~~~~~~~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
     
 ==== foo6.ts (1 errors) ====
     export = void; // Error, void operator requires an argument
                  ~
 !!! error TS1109: Expression expected.
     
-==== foo7.ts (0 errors) ====
+==== foo7.ts (1 errors) ====
     export = Date || String; // Ok
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
     
-==== foo8.ts (0 errors) ====
+==== foo8.ts (1 errors) ====
     export = null; // Ok
+    ~~~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
     
     

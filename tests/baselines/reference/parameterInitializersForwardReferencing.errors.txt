@@ -1,16 +1,15 @@
 parameterInitializersForwardReferencing.ts(6,20): error TS2373: Parameter 'a' cannot reference identifier 'b' declared after it.
 parameterInitializersForwardReferencing.ts(11,21): error TS2373: Parameter 'a' cannot reference identifier 'b' declared after it.
 parameterInitializersForwardReferencing.ts(11,28): error TS2373: Parameter 'b' cannot reference identifier 'c' declared after it.
-parameterInitializersForwardReferencing.ts(17,21): error TS2373: Parameter 'a' cannot reference identifier 'b' declared after it.
-parameterInitializersForwardReferencing.ts(23,25): error TS2373: Parameter 'a' cannot reference identifier 'b' declared after it.
+parameterInitializersForwardReferencing.ts(17,21): error TS2304: Cannot find name 'b'.
 parameterInitializersForwardReferencing.ts(32,21): error TS2373: Parameter 'a' cannot reference identifier 'b' declared after it.
 parameterInitializersForwardReferencing.ts(33,16): error TS2373: Parameter 'a' cannot reference identifier 'b' declared after it.
 parameterInitializersForwardReferencing.ts(37,14): error TS2373: Parameter 'a' cannot reference identifier 'b' declared after it.
 parameterInitializersForwardReferencing.ts(37,21): error TS2373: Parameter 'b' cannot reference identifier 'c' declared after it.
-parameterInitializersForwardReferencing.ts(37,28): error TS2373: Parameter 'c' cannot reference identifier 'd' declared after it.
+parameterInitializersForwardReferencing.ts(37,28): error TS2304: Cannot find name 'd'.
 
 
-==== parameterInitializersForwardReferencing.ts (10 errors) ====
+==== parameterInitializersForwardReferencing.ts (9 errors) ====
     function left(a, b = a, c = b) {
         a;
         b;
@@ -35,15 +34,13 @@ parameterInitializersForwardReferencing.ts(37,28): error TS2373: Parameter 'c' c
     
     function inside(a = b) {
                         ~
-!!! error TS2373: Parameter 'a' cannot reference identifier 'b' declared after it.
+!!! error TS2304: Cannot find name 'b'.
         var b;
     }
     
     function outside() {
         var b;
         function inside(a = b) { // Still an error because b is declared inside the function
-                            ~
-!!! error TS2373: Parameter 'a' cannot reference identifier 'b' declared after it.
             var b;
         }
     }
@@ -67,7 +64,7 @@ parameterInitializersForwardReferencing.ts(37,28): error TS2373: Parameter 'c' c
                         ~
 !!! error TS2373: Parameter 'b' cannot reference identifier 'c' declared after it.
                                ~
-!!! error TS2373: Parameter 'c' cannot reference identifier 'd' declared after it.
+!!! error TS2304: Cannot find name 'd'.
     
     // Should not produce errors - can reference later parameters if they occur within a function expression initializer.
     function f(a, b = function () { return c; }, c = b()) {

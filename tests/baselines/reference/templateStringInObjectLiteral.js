@@ -7,11 +7,7 @@ var x = {
 }
 
 //// [templateStringInObjectLiteral.js]
-var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
-    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
-    return cooked;
-};
 var x = {
-    a: "abc".concat(123, "def"),
-}(__makeTemplateObject(["b"], ["b"]));
+    a: `abc${123}def`,
+} `b`;
 321;

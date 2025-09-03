@@ -19,7 +19,7 @@ var c: void;
 
 var d: Number;
 >d : Symbol(d, Decl(additionOperatorWithNullValueAndInvalidOperator.ts, 7, 3))
->Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.number.d.ts, --, --))
 
 // null + boolean/Object
 var r1 = null + a;

@@ -24,24 +24,28 @@ var r4 = d.z; // error
 
 
 //// [constructorParameterProperties.js]
-var C = /** @class */ (function () {
-    function C(x, z) {
+class C {
+    x;
+    z;
+    y;
+    constructor(x, z) {
         this.x = x;
         this.z = z;
     }
-    return C;
-}());
+}
 var c;
 var r = c.y;
 var r2 = c.x; // error
 var r3 = c.z; // error
-var D = /** @class */ (function () {
-    function D(a, x, z) {
+class D {
+    x;
+    z;
+    y;
+    constructor(a, x, z) {
         this.x = x;
         this.z = z;
     }
-    return D;
-}());
+}
 var d;
 var r = d.y;
 var r2 = d.x; // error

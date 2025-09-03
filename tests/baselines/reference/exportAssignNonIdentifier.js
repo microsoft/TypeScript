@@ -28,31 +28,19 @@ export = null; // Ok
 
 
 //// [foo1.js]
-"use strict";
 var x = 10;
-module.exports = typeof x;
+export {};
 //// [foo2.js]
-"use strict";
-module.exports = "sausages";
+export {};
 //// [foo3.js]
-"use strict";
-module.exports = /** @class */ (function () {
-    function Foo3() {
-    }
-    return Foo3;
-}());
+export {};
 //// [foo4.js]
-"use strict";
-module.exports = true;
+export {};
 //// [foo5.js]
-"use strict";
-module.exports = undefined;
+export {};
 //// [foo6.js]
-"use strict";
-module.exports = void ;
+export {};
 //// [foo7.js]
-"use strict";
-module.exports = Date || String;
+export {};
 //// [foo8.js]
-"use strict";
-module.exports = null;
+export {};

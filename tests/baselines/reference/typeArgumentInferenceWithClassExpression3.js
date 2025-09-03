@@ -8,17 +8,11 @@ function foo<T>(x = class { prop: T }): T {
 foo(class { prop = "hello" }).length;
 
 //// [typeArgumentInferenceWithClassExpression3.js]
-function foo(x) {
-    if (x === void 0) { x = /** @class */ (function () {
-        function class_1() {
-        }
-        return class_1;
-    }()); }
+function foo(x = class {
+    prop;
+}) {
     return undefined;
 }
-foo(/** @class */ (function () {
-    function class_2() {
-        this.prop = "hello";
-    }
-    return class_2;
-}())).length;
+foo(class {
+    prop = "hello";
+}).length;

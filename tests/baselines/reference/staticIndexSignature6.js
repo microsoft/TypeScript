@@ -22,17 +22,14 @@ c.foo(1);
 //// [staticIndexSignature6.js]
 "use strict";
 function foo() {
-    return /** @class */ (function () {
-        function class_1() {
-        }
-        class_1.prototype.foo = function (v) { return v; };
-        return class_1;
-    }());
+    return class {
+        foo(v) { return v; }
+    };
 }
-var C = foo();
+const C = foo();
 C.a;
 C.a = 1;
 C[2];
 C[2] = 42;
-var c = new C();
+const c = new C();
 c.foo(1);

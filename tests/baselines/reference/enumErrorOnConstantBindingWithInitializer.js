@@ -15,7 +15,7 @@ enum E {
 
 //// [enumErrorOnConstantBindingWithInitializer.js]
 "use strict";
-var _a = thing.value, value = _a === void 0 ? "123" : _a;
+const { value = "123" } = thing;
 var E;
 (function (E) {
     E[E["test"] = value] = "test";

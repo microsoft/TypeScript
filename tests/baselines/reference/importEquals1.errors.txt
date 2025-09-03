@@ -1,4 +1,7 @@
+/b.ts(2,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+/c.ts(2,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 /d.ts(2,5): error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.
+/e.ts(1,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
 /e.ts(2,5): error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.
 /f.ts(2,5): error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.
 /g.ts(2,5): error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.
@@ -7,13 +10,17 @@
 ==== /a.ts (0 errors) ====
     export class A {}
     
-==== /b.ts (0 errors) ====
+==== /b.ts (1 errors) ====
     import type * as types from './a';
     export = types; // Error
+    ~~~~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
     
-==== /c.ts (0 errors) ====
+==== /c.ts (1 errors) ====
     import * as types from './a';
     export = types;
+    ~~~~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
     
 ==== /d.ts (1 errors) ====
     import types from './b';
@@ -22,8 +29,10 @@
 !!! error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.
 !!! related TS1376 /b.ts:1:18: 'types' was imported here.
     
-==== /e.ts (1 errors) ====
+==== /e.ts (2 errors) ====
     import types = require('./b');
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
     new types.A(); // Error
         ~~~~~
 !!! error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.

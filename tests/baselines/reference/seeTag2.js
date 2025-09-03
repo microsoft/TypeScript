@@ -25,19 +25,19 @@ const g = ""
 
 //// [seeTag2.js]
 /** @see {} empty*/
-var a = "";
+const a = "";
 /** @see {aaaaaa} unknown name*/
-var b = "";
+const b = "";
 /** @see {?????} invalid */
-var c = "";
+const c = "";
 /** @see c without brace */
-var d = "";
+const d = "";
 /** @see ?????? wowwwwww*/
-var e = "";
+const e = "";
 /** @see {}*/
-var f = "";
+const f = "";
 /** @see */
-var g = "";
+const g = "";
 
 
 //// [seeTag2.d.ts]

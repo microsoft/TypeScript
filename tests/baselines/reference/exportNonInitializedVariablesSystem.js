@@ -44,11 +44,8 @@ System.register([], function (exports_1, context_1) {
         setters: [],
         execute: function () {
             let;
-            A = /** @class */ (function () {
-                function A() {
-                }
-                return A;
-            }());
+            A = class A {
+            };
             (function (B) {
                 B.a = 1, B.c = 2;
             })(B || (B = {}));
@@ -60,11 +57,8 @@ System.register([], function (exports_1, context_1) {
             exports_1("b1", b1 = 1);
             exports_1("c1", c1 = 'a');
             exports_1("d1", d1 = 1);
-            D = /** @class */ (function () {
-                function D() {
-                }
-                return D;
-            }());
+            D = class D {
+            };
             exports_1("e1", e1 = new D);
             exports_1("f1", f1 = new D);
             exports_1("g1", g1 = new D);

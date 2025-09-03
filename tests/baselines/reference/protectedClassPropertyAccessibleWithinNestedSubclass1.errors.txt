@@ -6,6 +6,7 @@ protectedClassPropertyAccessibleWithinNestedSubclass1.ts(36,20): error TS2446: P
 protectedClassPropertyAccessibleWithinNestedSubclass1.ts(52,19): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived2'. This is an instance of class 'Base'.
 protectedClassPropertyAccessibleWithinNestedSubclass1.ts(53,20): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived2'. This is an instance of class 'Derived1'.
 protectedClassPropertyAccessibleWithinNestedSubclass1.ts(55,20): error TS2445: Property 'x' is protected and only accessible within class 'Derived3' and its subclasses.
+protectedClassPropertyAccessibleWithinNestedSubclass1.ts(63,15): error TS2612: Property 'x' will overwrite the base property in 'Derived1'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.
 protectedClassPropertyAccessibleWithinNestedSubclass1.ts(73,19): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived3'. This is an instance of class 'Base'.
 protectedClassPropertyAccessibleWithinNestedSubclass1.ts(74,20): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived3'. This is an instance of class 'Derived1'.
 protectedClassPropertyAccessibleWithinNestedSubclass1.ts(75,20): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived3'. This is an instance of class 'Derived2'.
@@ -21,7 +22,7 @@ protectedClassPropertyAccessibleWithinNestedSubclass1.ts(113,4): error TS2445: P
 protectedClassPropertyAccessibleWithinNestedSubclass1.ts(114,4): error TS2445: Property 'x' is protected and only accessible within class 'Base' and its subclasses.
 
 
-==== protectedClassPropertyAccessibleWithinNestedSubclass1.ts (21 errors) ====
+==== protectedClassPropertyAccessibleWithinNestedSubclass1.ts (22 errors) ====
     class Base {
         protected x: string;
         method() {
@@ -101,6 +102,8 @@ protectedClassPropertyAccessibleWithinNestedSubclass1.ts(114,4): error TS2445: P
     
     class Derived3 extends Derived1 {
         protected x: string;
+                  ~
+!!! error TS2612: Property 'x' will overwrite the base property in 'Derived1'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.
         method3() {
             class D {
                 method3d() {

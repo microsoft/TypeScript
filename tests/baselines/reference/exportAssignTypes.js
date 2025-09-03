@@ -54,49 +54,34 @@ var v7: {<x>(p1: x): x} = iGeneric;
 
 
 //// [expString.js]
-"use strict";
 var x = "test";
-module.exports = x;
+export {};
 //// [expNumber.js]
-"use strict";
 var x = 42;
-module.exports = x;
+export {};
 //// [expBoolean.js]
-"use strict";
 var x = true;
-module.exports = x;
+export {};
 //// [expArray.js]
-"use strict";
 var x = [1, 2];
-module.exports = x;
+export {};
 //// [expObject.js]
-"use strict";
 var x = { answer: 42, when: 1776 };
-module.exports = x;
+export {};
 //// [expAny.js]
-"use strict";
 var x;
-module.exports = x;
+export {};
 //// [expGeneric.js]
-"use strict";
 function x(a) {
     return a;
 }
-module.exports = x;
+export {};
 //// [consumer.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var iString = require("./expString");
 var v1 = iString;
-var iNumber = require("./expNumber");
 var v2 = iNumber;
-var iBoolean = require("./expBoolean");
 var v3 = iBoolean;
-var iArray = require("./expArray");
 var v4 = iArray;
-var iObject = require("./expObject");
 var v5 = iObject;
-var iAny = require("./expAny");
 var v6 = iAny;
-var iGeneric = require("./expGeneric");
 var v7 = iGeneric;
+export {};

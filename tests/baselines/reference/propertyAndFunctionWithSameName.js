@@ -14,17 +14,13 @@ class D {
 }
 
 //// [propertyAndFunctionWithSameName.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.x = function () {
+class C {
+    x;
+    x() {
         return 1;
-    };
-    return C;
-}());
-var D = /** @class */ (function () {
-    function D() {
     }
-    D.prototype.x = function (v) { }; // error
-    return D;
-}());
+}
+class D {
+    x;
+    x(v) { } // error
+}

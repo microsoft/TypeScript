@@ -1304,7 +1304,7 @@ function f20(o: Thing | undefined) {
 >o?.baz : Symbol(baz, Decl(controlFlowOptionalChain.ts, 161, 51))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 382, 13))
 >baz : Symbol(baz, Decl(controlFlowOptionalChain.ts, 161, 51))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 
         o.baz;
 >o.baz : Symbol(baz, Decl(controlFlowOptionalChain.ts, 161, 51))
@@ -1349,7 +1349,7 @@ function f21(o: Thing | null) {
 >o?.baz : Symbol(baz, Decl(controlFlowOptionalChain.ts, 161, 51))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 397, 13))
 >baz : Symbol(baz, Decl(controlFlowOptionalChain.ts, 161, 51))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 
         o.baz;
 >o.baz : Symbol(baz, Decl(controlFlowOptionalChain.ts, 161, 51))
@@ -1680,7 +1680,7 @@ function getArea(shape?: Shape) {
         case 'circle':
             return Math.PI * shape.radius ** 2
 >Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.float16.d.ts, --, --))
 >PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
 >shape.radius : Symbol(radius, Decl(controlFlowOptionalChain.ts, 526, 23))
 >shape : Symbol(shape, Decl(controlFlowOptionalChain.ts, 528, 17))

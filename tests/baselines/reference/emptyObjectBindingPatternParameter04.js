@@ -6,8 +6,7 @@ function f({} = {a: 1, b: "2", c: true}) {
 }
 
 //// [emptyObjectBindingPatternParameter04.js]
-function f(_a) {
-    _a = { a: 1, b: "2", c: true };
+function f({} = { a: 1, b: "2", c: true }) {
     var x, y, z;
 }
 

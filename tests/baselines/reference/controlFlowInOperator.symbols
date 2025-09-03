@@ -94,7 +94,7 @@ function uniqueID_54790(
 >i : Symbol(i, Decl(controlFlowInOperator.ts, 39, 10))
 >i : Symbol(i, Decl(controlFlowInOperator.ts, 39, 10))
 >Number.MAX_VALUE : Symbol(NumberConstructor.MAX_VALUE, Decl(lib.es5.d.ts, --, --))
->Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.number.d.ts, --, --))
 >MAX_VALUE : Symbol(NumberConstructor.MAX_VALUE, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(controlFlowInOperator.ts, 39, 10))
 
@@ -112,7 +112,7 @@ function uniqueID_54790(
     }
   }
   throw Error("heat death of the universe");
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 }
 
 function uniqueID_54790_2(id: string | number, seenIDs: object) {

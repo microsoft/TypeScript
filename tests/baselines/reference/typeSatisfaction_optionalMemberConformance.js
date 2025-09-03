@@ -12,8 +12,8 @@ let p = a.y;
 
 //// [typeSatisfaction_optionalMemberConformance.js]
 // Undesirable behavior today with type annotation
-var a = { x: 10 };
+const a = { x: 10 };
 // Should OK
 console.log(a.x.toFixed());
 // Should error
-var p = a.y;
+let p = a.y;

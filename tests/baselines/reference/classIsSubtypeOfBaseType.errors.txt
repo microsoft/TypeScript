@@ -1,15 +1,19 @@
+classIsSubtypeOfBaseType.ts(6,5): error TS2612: Property 'foo' will overwrite the base property in 'Base<{ bar: string; }>'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.
 classIsSubtypeOfBaseType.ts(12,5): error TS2416: Property 'foo' in type 'Derived2' is not assignable to the same property in base type 'Base<{ bar: string; }>'.
   Type '{ bar?: string; }' is not assignable to type '{ bar: string; }'.
     Property 'bar' is optional in type '{ bar?: string; }' but required in type '{ bar: string; }'.
+classIsSubtypeOfBaseType.ts(12,5): error TS2612: Property 'foo' will overwrite the base property in 'Base<{ bar: string; }>'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.
 
 
-==== classIsSubtypeOfBaseType.ts (1 errors) ====
+==== classIsSubtypeOfBaseType.ts (3 errors) ====
     class Base<T> {
         foo: T;
     }
     
     class Derived extends Base<{ bar: string; }> {
         foo: {
+        ~~~
+!!! error TS2612: Property 'foo' will overwrite the base property in 'Base<{ bar: string; }>'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.
             bar: string; baz: number; // ok
         }
     }
@@ -20,6 +24,8 @@ classIsSubtypeOfBaseType.ts(12,5): error TS2416: Property 'foo' in type 'Derived
 !!! error TS2416: Property 'foo' in type 'Derived2' is not assignable to the same property in base type 'Base<{ bar: string; }>'.
 !!! error TS2416:   Type '{ bar?: string; }' is not assignable to type '{ bar: string; }'.
 !!! error TS2416:     Property 'bar' is optional in type '{ bar?: string; }' but required in type '{ bar: string; }'.
+        ~~~
+!!! error TS2612: Property 'foo' will overwrite the base property in 'Base<{ bar: string; }>'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.
             bar?: string; // error
         }
     }

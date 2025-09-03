@@ -10,19 +10,12 @@ export class Preferences {
 
 
 //// [typedefOnSemicolonClassElement.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Preferences = void 0;
-var Preferences = /** @class */ (function () {
-    function Preferences() {
-        /** @type {A} */
-        this.a = 'ok';
-    }
+export class Preferences {
     /** @typedef {string} A */
     ;
-    return Preferences;
-}());
-exports.Preferences = Preferences;
+    /** @type {A} */
+    a = 'ok';
+}
 
 
 //// [typedefOnSemicolonClassElement.d.ts]

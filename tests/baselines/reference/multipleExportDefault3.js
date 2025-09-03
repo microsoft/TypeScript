@@ -10,14 +10,8 @@ export default class C { }
 
 
 //// [multipleExportDefault3.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = {
+export default {
     uhoh: "another default",
 };
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-exports.default = C;
+export default class C {
+}

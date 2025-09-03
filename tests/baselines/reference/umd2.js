@@ -13,5 +13,5 @@ let y: number = x.n;
 
 //// [a.js]
 Foo.fn();
-var x;
-var y = x.n;
+let x;
+let y = x.n;

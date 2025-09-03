@@ -1,9 +1,12 @@
+file.tsx(1,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
 file.tsx(13,11): error TS2739: Type '{}' is missing the following properties from type 'Prop': a, b
 file.tsx(19,18): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
-==== file.tsx (2 errors) ====
+==== file.tsx (3 errors) ====
     import React = require('react');
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
     
     interface Prop {
         a: number,

@@ -16,8 +16,5 @@ abstract class A {
 }
 
 //// [classAbstractProperties.js]
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}

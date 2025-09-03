@@ -20,18 +20,12 @@ A;
 
 
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.A = void 0;
-var A = {};
-exports.A = A;
+const A = {};
+export { A };
 //// [b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [c.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [d.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 A;
+export {};
