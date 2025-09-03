@@ -14476,13 +14476,11 @@ func (c *Checker) resolveExternalModule(location *ast.Node, moduleReference stri
 	} else if ast.IsVariableDeclaration(location) && location.AsVariableDeclaration().Initializer != nil && ast.IsRequireCall(location.AsVariableDeclaration().Initializer, true /*requireStringLiteralLikeArgument*/) {
 		contextSpecifier = location.AsVariableDeclaration().Initializer.AsCallExpression().Arguments.Nodes[0]
 	} else {
-		var ancestor *ast.Node
-		if ancestor == nil {
-			ancestor = ast.FindAncestor(location, ast.IsImportCall)
-			if ancestor != nil {
-				contextSpecifier = ancestor.AsCallExpression().Arguments.Nodes[0]
-			}
+		ancestor := ast.FindAncestor(location, ast.IsImportCall)
+		if ancestor != nil {
+			contextSpecifier = ancestor.AsCallExpression().Arguments.Nodes[0]
 		}
+
 		if ancestor == nil {
 			ancestor = ast.FindAncestor(location, ast.IsImportDeclarationOrJSImportDeclaration)
 			if ancestor != nil {

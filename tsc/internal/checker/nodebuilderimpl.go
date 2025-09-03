@@ -1024,7 +1024,7 @@ func (b *nodeBuilderImpl) getSymbolChain(symbol *ast.Symbol, meaning ast.SymbolF
 		// If a parent symbol is an anonymous type, don't write it.
 		(symbol.Flags&(ast.SymbolFlagsTypeLiteral|ast.SymbolFlagsObjectLiteral) == 0) {
 		// If a parent symbol is an external module, don't write it. (We prefer just `x` vs `"foo/bar".x`.)
-		if !endOfChain && !yieldModuleSymbol && !!core.Some(symbol.Declarations, hasNonGlobalAugmentationExternalModuleSymbol) {
+		if !endOfChain && !yieldModuleSymbol && core.Some(symbol.Declarations, hasNonGlobalAugmentationExternalModuleSymbol) {
 			return nil
 		}
 		return []*ast.Symbol{symbol}
@@ -1740,7 +1740,7 @@ func (b *nodeBuilderImpl) signatureToSignatureDeclarationHelper(signature *Signa
 		typeParamList = b.f.NewNodeList(typeParameters)
 	}
 	var modifierList *ast.ModifierList
-	if modifiers != nil && len(modifiers) > 0 {
+	if len(modifiers) > 0 {
 		modifierList = b.f.NewModifierList(modifiers)
 	}
 	var name *ast.Node

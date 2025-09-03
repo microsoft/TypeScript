@@ -1376,9 +1376,10 @@ func (l *LanguageService) getCompletionData(
 		}
 
 		var importAttributes *ast.ImportAttributesNode
-		if contextToken.Kind == ast.KindOpenBraceToken || contextToken.Kind == ast.KindCommaToken {
+		switch contextToken.Kind {
+		case ast.KindOpenBraceToken, ast.KindCommaToken:
 			importAttributes = core.IfElse(ast.IsImportAttributes(contextToken.Parent), contextToken.Parent, nil)
-		} else if contextToken.Kind == ast.KindColonToken {
+		case ast.KindColonToken:
 			importAttributes = core.IfElse(ast.IsImportAttributes(contextToken.Parent.Parent), contextToken.Parent.Parent, nil)
 		}
 

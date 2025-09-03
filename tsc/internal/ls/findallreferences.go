@@ -171,14 +171,12 @@ func getContextNodeForNodeEntry(node *ast.Node) *ast.Node {
 		}
 
 		// Jsx Tags
-		if node.Parent.Kind == ast.KindJsxOpeningElement || node.Parent.Kind == ast.KindJsxClosingElement {
+		switch node.Parent.Kind {
+		case ast.KindJsxOpeningElement, ast.KindJsxClosingElement:
 			return node.Parent.Parent
-		} else if node.Parent.Kind == ast.KindJsxSelfClosingElement ||
-			node.Parent.Kind == ast.KindLabeledStatement ||
-			node.Parent.Kind == ast.KindBreakStatement ||
-			node.Parent.Kind == ast.KindContinueStatement {
+		case ast.KindJsxSelfClosingElement, ast.KindLabeledStatement, ast.KindBreakStatement, ast.KindContinueStatement:
 			return node.Parent
-		} else if node.Parent.Kind == ast.KindStringLiteral || node.Parent.Kind == ast.KindNoSubstitutionTemplateLiteral {
+		case ast.KindStringLiteral, ast.KindNoSubstitutionTemplateLiteral:
 			if validImport := tryGetImportFromModuleSpecifier(node); validImport != nil {
 				declOrStatement := ast.FindAncestor(validImport, func(*ast.Node) bool {
 					return ast.IsDeclaration(node) || ast.IsStatement(node) || ast.IsJSDocTag(node)
@@ -865,7 +863,6 @@ func getReferencesForSuperKeyword(superKeyword *ast.Node) []*SymbolAndEntries {
 	case ast.KindPropertyDeclaration, ast.KindPropertySignature, ast.KindMethodDeclaration, ast.KindMethodSignature, ast.KindConstructor, ast.KindGetAccessor, ast.KindSetAccessor:
 		staticFlag &= searchSpaceNode.ModifierFlags()
 		searchSpaceNode = searchSpaceNode.Parent // re-assign to be the owning class
-		break
 	default:
 		return nil
 	}

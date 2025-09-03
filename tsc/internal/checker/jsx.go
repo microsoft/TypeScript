@@ -517,14 +517,13 @@ func (c *Checker) getJSXFragmentType(node *ast.Node) *Type {
 	if jsxFactorySymbol.Flags&ast.SymbolFlagsAlias != 0 {
 		resolvedAlias = c.resolveAlias(jsxFactorySymbol)
 	}
-	if jsxFactorySymbol != nil {
-		reactExports := c.getExportsOfSymbol(resolvedAlias)
-		typeSymbol := c.getSymbol(reactExports, ReactNames.Fragment, ast.SymbolFlagsBlockScopedVariable)
-		if typeSymbol != nil {
-			links.jsxFragmentType = c.getTypeOfSymbol(typeSymbol)
-		} else {
-			links.jsxFragmentType = c.errorType
-		}
+
+	reactExports := c.getExportsOfSymbol(resolvedAlias)
+	typeSymbol := c.getSymbol(reactExports, ReactNames.Fragment, ast.SymbolFlagsBlockScopedVariable)
+	if typeSymbol != nil {
+		links.jsxFragmentType = c.getTypeOfSymbol(typeSymbol)
+	} else {
+		links.jsxFragmentType = c.errorType
 	}
 	return links.jsxFragmentType
 }

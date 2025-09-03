@@ -1764,21 +1764,15 @@ func GetThisContainer(node *Node, includeArrowFunctions bool, includeClassComput
 }
 
 func GetSuperContainer(node *Node, stopOnFunctions bool) *Node {
-	for {
-		node = node.Parent
-		if node == nil {
-			return nil
-		}
+	for node = node.Parent; node != nil; node = node.Parent {
 		switch node.Kind {
 		case KindComputedPropertyName:
 			node = node.Parent
-			break
 		case KindFunctionDeclaration, KindFunctionExpression, KindArrowFunction:
 			if !stopOnFunctions {
 				continue
 			}
-			// falls through
-
+			return node
 		case KindPropertyDeclaration, KindPropertySignature, KindMethodDeclaration, KindMethodSignature, KindConstructor, KindGetAccessor, KindSetAccessor, KindClassStaticBlockDeclaration:
 			return node
 		case KindDecorator:
@@ -1792,9 +1786,9 @@ func GetSuperContainer(node *Node, stopOnFunctions bool) *Node {
 				// from the parent class declaration.
 				node = node.Parent
 			}
-			break
 		}
 	}
+	return nil
 }
 
 func GetImmediatelyInvokedFunctionExpression(fn *Node) *Node {
