@@ -357,7 +357,7 @@ func (p *Parser) reparseHosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Node)
 				}
 			}
 		case ast.KindVariableDeclaration,
-			ast.KindCommonJSExport, ast.KindExportAssignment, ast.KindJSExportAssignment,
+			ast.KindCommonJSExport,
 			ast.KindPropertyDeclaration, ast.KindPropertyAssignment, ast.KindShorthandPropertyAssignment:
 			if parent.Initializer() != nil && tag.AsJSDocSatisfiesTag().TypeExpression != nil {
 				parent.AsMutable().SetInitializer(p.makeNewCast(
@@ -366,7 +366,8 @@ func (p *Parser) reparseHosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Node)
 					false /*isAssertion*/))
 				p.finishMutatedNode(parent)
 			}
-		case ast.KindReturnStatement, ast.KindParenthesizedExpression:
+		case ast.KindReturnStatement, ast.KindParenthesizedExpression,
+			ast.KindExportAssignment, ast.KindJSExportAssignment:
 			if parent.Expression() != nil && tag.AsJSDocSatisfiesTag().TypeExpression != nil {
 				parent.AsMutable().SetExpression(p.makeNewCast(
 					p.factory.DeepCloneReparse(tag.AsJSDocSatisfiesTag().TypeExpression.Type()),
