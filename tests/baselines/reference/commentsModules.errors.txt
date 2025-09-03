@@ -1,0 +1,163 @@
+commentsModules.ts(2,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+commentsModules.ts(10,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+commentsModules.ts(41,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+commentsModules.ts(41,11): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+commentsModules.ts(48,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+commentsModules.ts(48,11): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+commentsModules.ts(48,14): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+commentsModules.ts(55,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+commentsModules.ts(55,11): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+commentsModules.ts(55,14): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+commentsModules.ts(56,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+commentsModules.ts(64,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+commentsModules.ts(64,11): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+commentsModules.ts(64,14): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+commentsModules.ts(66,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+commentsModules.ts(73,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+commentsModules.ts(73,11): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+commentsModules.ts(74,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+commentsModules.ts(81,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+commentsModules.ts(81,11): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+commentsModules.ts(83,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== commentsModules.ts (21 errors) ====
+    /** Module comment*/
+    module m1 {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        /** b's comment*/
+        export var b: number;
+        /** foo's comment*/
+        function foo() {
+            return b;
+        }
+        /** m2 comments*/
+        export module m2 {
+               ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            /** class comment;*/
+            export class c {
+            };
+            /** i*/
+            export var i = new c();
+        }
+        /** exported function*/
+        export function fooExport() {
+            return foo();
+        }
+    
+        // shouldn't appear
+        export function foo2Export(/**hm*/ a: string) {
+        }
+    
+        /** foo3Export
+         * comment
+         */
+        export function foo3Export() {
+        }
+    
+        /** foo4Export
+         * comment
+         */
+        function foo4Export() {
+        }
+    } // trailing comment module
+    m1.fooExport();
+    var myvar = new m1.m2.c();
+    /** module comment of m2.m3*/
+    module m2.m3 {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+              ~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        /** Exported class comment*/
+        export class c {
+        }
+    } /* trailing dotted module comment*/
+    new m2.m3.c();
+    /** module comment of m3.m4.m5*/
+    module m3.m4.m5 {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+              ~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+                 ~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        /** Exported class comment*/
+        export class c {
+        }
+    } // trailing dotted module 2
+    new m3.m4.m5.c();
+    /** module comment of m4.m5.m6*/
+    module m4.m5.m6 {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+              ~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+                 ~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export module m7 {
+               ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            /** Exported class comment*/
+            export class c {
+            }
+        } /* trailing inner module */ /* multiple comments*/
+    }
+    new m4.m5.m6.m7.c();
+    /** module comment of m5.m6.m7*/
+    module m5.m6.m7 {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+              ~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+                 ~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        /** module m8 comment*/
+        export module m8 {
+               ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            /** Exported class comment*/
+            export class c {
+            }
+        }
+    }
+    new m5.m6.m7.m8.c();
+    module m6.m7 {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+              ~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export module m8 {
+               ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            /** Exported class comment*/
+            export class c {
+            }
+        }
+    }
+    new m6.m7.m8.c();
+    module m7.m8 {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+              ~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        /** module m9 comment*/
+        export module m9 {
+               ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            /** Exported class comment*/
+            export class c {
+            }
+    
+            /** class d */
+            class d {
+            }
+    
+            // class e
+            export class e {
+            }
+        }
+    }
+    new m7.m8.m9.c();

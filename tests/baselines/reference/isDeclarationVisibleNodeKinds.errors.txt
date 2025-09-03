@@ -1,0 +1,98 @@
+isDeclarationVisibleNodeKinds.ts(2,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+isDeclarationVisibleNodeKinds.ts(9,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+isDeclarationVisibleNodeKinds.ts(16,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+isDeclarationVisibleNodeKinds.ts(23,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+isDeclarationVisibleNodeKinds.ts(31,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+isDeclarationVisibleNodeKinds.ts(38,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+isDeclarationVisibleNodeKinds.ts(45,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+isDeclarationVisibleNodeKinds.ts(52,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+isDeclarationVisibleNodeKinds.ts(59,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== isDeclarationVisibleNodeKinds.ts (9 errors) ====
+    // Function types
+    module schema {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export function createValidator1(schema: any): <T>(data: T) => T {
+            return undefined;
+        }
+    }
+    
+    // Constructor types
+    module schema {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export function createValidator2(schema: any): new <T>(data: T) => T {
+            return undefined;
+        }
+    }
+    
+    // union types
+    module schema {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+         export function createValidator3(schema: any): number | { new <T>(data: T): T; }  {
+            return undefined;
+        }
+    }
+    
+    // Array types
+    module schema {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+         export function createValidator4(schema: any): { new <T>(data: T): T; }[] {
+            return undefined;
+        }
+    }
+    
+    
+    // TypeLiterals
+    module schema {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export function createValidator5(schema: any): { new <T>(data: T): T } {
+            return undefined;
+        }
+    }
+    
+    // Tuple types
+    module schema {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export function createValidator6(schema: any): [ new <T>(data: T) => T, number] {
+            return undefined;
+        }
+    }
+    
+    // Paren Types
+    module schema {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export function createValidator7(schema: any): (new <T>(data: T)=>T )[] {
+            return undefined;
+        }
+    }
+    
+    // Type reference
+    module schema {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export function createValidator8(schema: any): Array<{ <T>(data: T) : T}> {
+            return undefined;
+        }
+    }
+    
+    
+    module schema {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export class T {
+            get createValidator9(): <T>(data: T) => T {
+                return undefined;
+            }
+            
+            set createValidator10(v: <T>(data: T) => T) {
+            }
+        }
+    }

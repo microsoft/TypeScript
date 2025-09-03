@@ -1,9 +1,12 @@
+tsxDynamicTagName3.tsx(1,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 tsxDynamicTagName3.tsx(9,1): error TS2339: Property 'h1' does not exist on type 'JSX.IntrinsicElements'.
 tsxDynamicTagName3.tsx(9,2): error TS2604: JSX element type 'CustomTag' does not have any construct or call signatures.
 
 
-==== tsxDynamicTagName3.tsx (2 errors) ====
+==== tsxDynamicTagName3.tsx (3 errors) ====
     declare module JSX {
+            ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
     	interface Element { }
     	interface IntrinsicElements {
     		div: any

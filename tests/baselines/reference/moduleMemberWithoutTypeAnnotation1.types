@@ -84,7 +84,9 @@ module TypeScript {
 
             var positionedToken = this.findTokenInternal(null, position, 0);
 >positionedToken : any
+>                : ^^^
 >this.findTokenInternal(null, position, 0) : any
+>                                          : ^^^
 >this.findTokenInternal : (x: any, y: any, z: any) => any
 >                       : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^
 >this : this
@@ -102,8 +104,11 @@ module TypeScript {
 >findTokenInternal : (x: any, y: any, z: any) => any
 >                  : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 
             return null;
         }

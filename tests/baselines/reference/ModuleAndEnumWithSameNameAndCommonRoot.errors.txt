@@ -1,0 +1,22 @@
+ModuleAndEnumWithSameNameAndCommonRoot.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== ModuleAndEnumWithSameNameAndCommonRoot.ts (1 errors) ====
+    module enumdule {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    
+        export class Point {
+            constructor(public x: number, public y: number) { }
+        }
+    }
+    
+    enum enumdule {
+        Red, Blue
+    }
+    
+    var x: enumdule;
+    var x = enumdule.Red;
+    
+    var y: { x: number; y: number };
+    var y = new enumdule.Point(0, 0);

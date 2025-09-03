@@ -1,19 +1,31 @@
 reachabilityChecks1.ts(2,1): error TS7027: Unreachable code detected.
+reachabilityChecks1.ts(4,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 reachabilityChecks1.ts(6,5): error TS7027: Unreachable code detected.
+reachabilityChecks1.ts(9,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+reachabilityChecks1.ts(11,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+reachabilityChecks1.ts(16,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+reachabilityChecks1.ts(18,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 reachabilityChecks1.ts(18,5): error TS7027: Unreachable code detected.
+reachabilityChecks1.ts(23,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+reachabilityChecks1.ts(28,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+reachabilityChecks1.ts(30,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 reachabilityChecks1.ts(30,5): error TS7027: Unreachable code detected.
 reachabilityChecks1.ts(47,5): error TS7027: Unreachable code detected.
+reachabilityChecks1.ts(51,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+reachabilityChecks1.ts(53,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 reachabilityChecks1.ts(60,5): error TS7027: Unreachable code detected.
 reachabilityChecks1.ts(69,5): error TS7027: Unreachable code detected.
 
 
-==== reachabilityChecks1.ts (7 errors) ====
+==== reachabilityChecks1.ts (17 errors) ====
     while (true);
     var x = 1;
     ~~~~~~~~~~
 !!! error TS7027: Unreachable code detected.
     
     module A {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
         while (true);
         let x;
         ~~~~~~
@@ -21,15 +33,23 @@ reachabilityChecks1.ts(69,5): error TS7027: Unreachable code detected.
     }
     
     module A1 {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
         do {} while(true);
         module A {
+        ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
             interface F {}
         }
     }
     
     module A2 {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
         while (true);
         module A {
+        ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
         ~~~~~~~~~~
             var x = 1;
     ~~~~~~~~~~~~~~~~~~
@@ -39,13 +59,19 @@ reachabilityChecks1.ts(69,5): error TS7027: Unreachable code detected.
     }
     
     module A3 {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
         while (true);
         type T = string;
     }
     
     module A4 {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
         while (true);
         module A {
+        ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
         ~~~~~~~~~~
             const enum E { X }
     ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -74,8 +100,12 @@ reachabilityChecks1.ts(69,5): error TS7027: Unreachable code detected.
     }
     
     module B {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
         for (; ;);
         module C {
+        ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
         }
     }
     

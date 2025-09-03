@@ -1,0 +1,38 @@
+moduleScopingBug.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+moduleScopingBug.ts(21,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== moduleScopingBug.ts (2 errors) ====
+    module M
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    
+    {
+    
+        var outer: number;
+    
+        function f() {
+    
+            var inner = outer;   // Ok
+    
+        }
+    
+        class C {
+    
+            constructor() {
+                var inner = outer;   // Ok
+            }
+    
+        }
+    
+        module X {
+        ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    
+            var inner = outer;   // Error: outer not visible
+    
+        }
+    
+    }
+    
+    

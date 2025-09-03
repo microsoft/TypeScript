@@ -1,0 +1,32 @@
+moduleMerge.ts(3,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+moduleMerge.ts(14,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== moduleMerge.ts (2 errors) ====
+    // This should not compile both B classes are in the same module this should be a collission
+    
+    module A
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    {
+        class B
+        {
+            public Hello(): string
+            {
+                return "from private B";
+            }
+        }
+    }
+    
+    module A
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    {
+        export class B
+        {
+            public Hello(): string
+            {
+                return "from export B";
+            }
+        }
+    }

@@ -1,0 +1,28 @@
+ambientModuleExports.ts(1,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+ambientModuleExports.ts(11,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== ambientModuleExports.ts (2 errors) ====
+    declare module Foo {
+            ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    	function a():void;
+    	var b:number;
+    	class C {}
+    }
+    
+    Foo.a();
+    Foo.b;
+    var c = new Foo.C();
+    
+    declare module Foo2 {
+            ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export function a(): void;
+        export var b: number;
+        export class C { }
+    }
+    
+    Foo2.a();
+    Foo2.b;
+    var c2 = new Foo2.C();

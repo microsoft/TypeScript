@@ -10,6 +10,7 @@ interface I {
 
     foo: any;
 >foo : any
+>    : ^^^
 }
 
 
@@ -144,6 +145,7 @@ interface I12 {
 >foo : (x: any) => number
 >    : ^ ^^^^^^^^^^      
 >x : any
+>  : ^^^
 }
 
 

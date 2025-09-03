@@ -1,0 +1,19 @@
+sourceMap-StringLiteralWithNewLine.ts(8,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== sourceMap-StringLiteralWithNewLine.ts (1 errors) ====
+    interface Document {
+    }
+    interface Window {
+        document: Document;
+    }
+    declare var window: Window;
+    
+    module Foo {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        var x = "test1";
+        var y = "test 2\
+    isn't this a lot of fun";
+        var z = window.document;
+    }

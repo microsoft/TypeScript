@@ -1,8 +1,11 @@
+switchStatements.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 switchStatements.ts(35,20): error TS2353: Object literal may only specify known properties, and 'name' does not exist in type 'C'.
 
 
-==== switchStatements.ts (1 errors) ====
+==== switchStatements.ts (2 errors) ====
     module M {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
         export function fn(x: number) {
             return '';
         }

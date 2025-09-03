@@ -1,0 +1,76 @@
+exportImportCanSubstituteConstEnumForValue.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+exportImportCanSubstituteConstEnumForValue.ts(1,19): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+exportImportCanSubstituteConstEnumForValue.ts(1,30): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+exportImportCanSubstituteConstEnumForValue.ts(31,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+exportImportCanSubstituteConstEnumForValue.ts(31,19): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== exportImportCanSubstituteConstEnumForValue.ts (5 errors) ====
+    module MsPortalFx.ViewModels.Dialogs {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+                      ~~~~~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+                                 ~~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    
+        export const enum DialogResult {
+            Abort,
+            Cancel,
+            Ignore,
+            No,
+            Ok,
+            Retry,
+            Yes,
+        }
+    
+        export interface DialogResultCallback {
+            (result: MsPortalFx.ViewModels.Dialogs.DialogResult): void;
+        }
+    
+        export function someExportedFunction() {
+        }
+    
+        export const enum MessageBoxButtons {
+            AbortRetryIgnore,
+            OK,
+            OKCancel,
+            RetryCancel,
+            YesNo,
+            YesNoCancel,
+        }
+    }
+    
+    
+    module MsPortalFx.ViewModels {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+                      ~~~~~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    
+        /**
+         * For some reason javascript code is emitted for this re-exported const enum.
+         */
+        export import ReExportedEnum = Dialogs.DialogResult;
+    
+        /**
+         * Not exported to show difference. No javascript is emmitted (as expected)
+         */
+        import DialogButtons = Dialogs.MessageBoxButtons;
+    
+        /**
+         * Re-exporting a function type to show difference. No javascript is emmitted (as expected)
+         */
+        export import Callback = Dialogs.DialogResultCallback;
+    
+        export class SomeUsagesOfTheseConsts {
+            constructor() {
+                // these do get replaced by the const value
+                const value1 = ReExportedEnum.Cancel;
+                console.log(value1);
+                const value2 = DialogButtons.OKCancel;
+                console.log(value2);
+            }
+        }
+    }
+    

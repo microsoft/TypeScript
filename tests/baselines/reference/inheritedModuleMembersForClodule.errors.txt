@@ -1,9 +1,10 @@
 inheritedModuleMembersForClodule.ts(7,7): error TS2417: Class static side 'typeof D' incorrectly extends base class static side 'typeof C'.
   The types returned by 'foo()' are incompatible between these types.
     Type 'number' is not assignable to type 'string'.
+inheritedModuleMembersForClodule.ts(10,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 
 
-==== inheritedModuleMembersForClodule.ts (1 errors) ====
+==== inheritedModuleMembersForClodule.ts (2 errors) ====
     class C {
         static foo(): string {
             return "123";
@@ -18,6 +19,8 @@ inheritedModuleMembersForClodule.ts(7,7): error TS2417: Class static side 'typeo
     }
     
     module D {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
         export function foo(): number {
             return 0;
         };

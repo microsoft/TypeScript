@@ -29,6 +29,11 @@ main.ts(103,15): error TS2498: Module '"function"' uses 'export =' and cannot be
 main.ts(104,15): error TS2498: Module '"function-module"' uses 'export =' and cannot be used with 'export *'.
 main.ts(105,15): error TS2498: Module '"class"' uses 'export =' and cannot be used with 'export *'.
 main.ts(106,15): error TS2498: Module '"class-module"' uses 'export =' and cannot be used with 'export *'.
+modules.d.ts(30,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+modules.d.ts(42,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+modules.d.ts(50,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+modules.d.ts(70,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+modules.d.ts(90,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 
 
 ==== main.ts (31 errors) ====
@@ -201,7 +206,7 @@ main.ts(106,15): error TS2498: Module '"class-module"' uses 'export =' and canno
                   ~~~~~~~~~~~~~~
 !!! error TS2498: Module '"class-module"' uses 'export =' and cannot be used with 'export *'.
     
-==== modules.d.ts (0 errors) ====
+==== modules.d.ts (5 errors) ====
     declare module "interface" {
         interface Foo {
             x: number;
@@ -232,6 +237,8 @@ main.ts(106,15): error TS2498: Module '"class-module"' uses 'export =' and canno
     
     declare module "module" {
         module Foo {
+        ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
             export var a: number;
             export var b: number;
         }
@@ -244,6 +251,8 @@ main.ts(106,15): error TS2498: Module '"class-module"' uses 'export =' and canno
             y: number;
         }
         module Foo {
+        ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
             export var a: number;
             export var b: number;
         }
@@ -252,6 +261,8 @@ main.ts(106,15): error TS2498: Module '"class-module"' uses 'export =' and canno
     
     declare module "variable-module" {
         module Foo {
+        ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
             interface Bar {
                 x: number;
                 y: number;
@@ -272,6 +283,8 @@ main.ts(106,15): error TS2498: Module '"class-module"' uses 'export =' and canno
     declare module "function-module" {
         function foo();
         module foo {
+        ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
             export var a: number;
             export var b: number;
         }
@@ -292,6 +305,8 @@ main.ts(106,15): error TS2498: Module '"class-module"' uses 'export =' and canno
             y: number;
         }
         module Foo {
+        ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
             export var a: number;
             export var b: number;
         }

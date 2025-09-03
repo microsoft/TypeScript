@@ -1,3 +1,4 @@
+interfaceAssignmentCompat.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 interfaceAssignmentCompat.ts(32,18): error TS2345: Argument of type '(a: IFrenchEye, b: IFrenchEye) => number' is not assignable to parameter of type '(a: IEye, b: IEye) => number'.
   Types of parameters 'a' and 'a' are incompatible.
     Property 'coleur' is missing in type 'IEye' but required in type 'IFrenchEye'.
@@ -7,8 +8,10 @@ interfaceAssignmentCompat.ts(44,9): error TS2322: Type 'IEye[]' is not assignabl
   Property 'coleur' is missing in type 'IEye' but required in type 'IFrenchEye'.
 
 
-==== interfaceAssignmentCompat.ts (4 errors) ====
+==== interfaceAssignmentCompat.ts (5 errors) ====
     module M {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
         export enum Color {
             Green,
             Blue,

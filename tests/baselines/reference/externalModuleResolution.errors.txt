@@ -1,0 +1,20 @@
+foo.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== consumer.ts (0 errors) ====
+    import x = require('./foo');
+    x.Y // .ts should be picked
+==== foo.d.ts (0 errors) ====
+    declare module M1 {
+        export var X:number;
+    }
+    export = M1
+    
+==== foo.ts (1 errors) ====
+    module M2 {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export var Y = 1;
+    }
+    export = M2
+    

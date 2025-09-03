@@ -1,0 +1,23 @@
+collisionExportsRequireAndUninstantiatedModule.ts(1,8): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+collisionExportsRequireAndUninstantiatedModule.ts(8,8): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== collisionExportsRequireAndUninstantiatedModule.ts (2 errors) ====
+    export module require { // no error 
+           ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export interface I {
+        }
+    }
+    export function foo(): require.I {
+        return null;
+    }
+    export module exports { // no error
+           ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export interface I {
+        }
+    }
+    export function foo2(): exports.I {
+        return null;
+    }

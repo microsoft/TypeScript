@@ -1,7 +1,8 @@
+typeofOperatorWithStringType.ts(11,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 typeofOperatorWithStringType.ts(44,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== typeofOperatorWithStringType.ts (1 errors) ====
+==== typeofOperatorWithStringType.ts (2 errors) ====
     // typeof  operator on string type
     var STRING: string;
     var STRING1: string[] = ["", "abc"];
@@ -13,6 +14,8 @@ typeofOperatorWithStringType.ts(44,1): error TS2695: Left side of comma operator
         static foo() { return ""; }
     }
     module M {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
         export var n: string;
     }
     

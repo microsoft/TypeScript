@@ -26,8 +26,10 @@ declare module M1 {
 module A {
      interface X {x}
 >x : any
+>  : ^^^
 
      export module X {}
      interface X {y}
 >y : any
+>  : ^^^
 }

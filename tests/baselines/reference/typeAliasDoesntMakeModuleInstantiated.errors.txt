@@ -1,0 +1,16 @@
+typeAliasDoesntMakeModuleInstantiated.ts(1,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== typeAliasDoesntMakeModuleInstantiated.ts (1 errors) ====
+    declare module m {
+            ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        // type alias declaration here shouldnt make the module declaration instantiated
+        type Selector = string| string[] |Function;
+    
+        export interface IStatic {
+            (selector: any /* Selector */): IInstance;
+        }
+        export interface IInstance { }
+    }
+    declare var m: m.IStatic; // Should be ok to have var 'm' as module is non instantiated

@@ -1,0 +1,30 @@
+ambientInsideNonAmbient.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+ambientInsideNonAmbient.ts(6,20): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+ambientInsideNonAmbient.ts(9,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+ambientInsideNonAmbient.ts(14,13): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== ambientInsideNonAmbient.ts (4 errors) ====
+    module M {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export declare var x;
+        export declare function f();
+        export declare class C { }
+        export declare enum E { }
+        export declare module M { }
+                       ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    }
+    
+    module M2 {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        declare var x;
+        declare function f();
+        declare class C { }
+        declare enum E { }
+        declare module M { }
+                ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    }

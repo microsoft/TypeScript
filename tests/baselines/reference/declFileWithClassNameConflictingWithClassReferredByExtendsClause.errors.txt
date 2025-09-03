@@ -1,0 +1,52 @@
+declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts(1,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts(1,18): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts(1,20): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts(6,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts(6,10): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts(6,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts(13,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts(13,10): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts(13,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts(13,17): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts (10 errors) ====
+    declare module A.B.Base {
+            ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+                     ~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+                       ~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export class W {
+            id: number;
+        }
+    }
+    module X.Y.base {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+             ~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+               ~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    
+        export class W extends A.B.Base.W {
+            name: string;
+        }
+    }
+    
+    module X.Y.base.Z {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+             ~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+               ~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+                    ~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    
+        export class W<TValue> extends X.Y.base.W {
+            value: boolean;
+        }
+    }
+    

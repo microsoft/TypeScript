@@ -1,9 +1,11 @@
 typeofAnExportedType.ts(20,12): error TS2323: Cannot redeclare exported variable 'r5'.
 typeofAnExportedType.ts(21,12): error TS2323: Cannot redeclare exported variable 'r5'.
+typeofAnExportedType.ts(23,8): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 typeofAnExportedType.ts(42,12): error TS2502: 'r12' is referenced directly or indirectly in its own type annotation.
+typeofAnExportedType.ts(45,8): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 
 
-==== typeofAnExportedType.ts (3 errors) ====
+==== typeofAnExportedType.ts (5 errors) ====
     export var x = 1;
     export var r1: typeof x;
     export var y = { foo: '' };
@@ -31,6 +33,8 @@ typeofAnExportedType.ts(42,12): error TS2502: 'r12' is referenced directly or in
 !!! error TS2323: Cannot redeclare exported variable 'r5'.
     
     export module M {
+           ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
         export var foo = '';
         export class C {
             foo: string;
@@ -55,6 +59,8 @@ typeofAnExportedType.ts(42,12): error TS2502: 'r12' is referenced directly or in
     
     export function foo() { }
     export module foo {
+           ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
         export var y = 1;
         export class C {
             foo: string;

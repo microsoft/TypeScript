@@ -26,6 +26,7 @@ declare global {
 >Cls : Cls
 >    : ^^^
 >x : any
+>  : ^^^
 
     let [a, b]: number[];
 >a : number
@@ -55,6 +56,7 @@ Symbol.observable;
 
 new Cls().x
 >new Cls().x : any
+>            : ^^^
 >new Cls() : Cls
 >          : ^^^
 >Cls : typeof Cls

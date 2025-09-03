@@ -1,0 +1,18 @@
+declarationEmitNameConflictsWithAlias.ts(1,8): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+declarationEmitNameConflictsWithAlias.ts(3,8): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+declarationEmitNameConflictsWithAlias.ts(4,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== declarationEmitNameConflictsWithAlias.ts (3 errors) ====
+    export module C { export interface I { } }
+           ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    export import v = C;
+    export module M {
+           ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export module C { export interface I { } }
+               ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export var w: v.I; // Gets emitted as C.I, which is the wrong interface
+    }

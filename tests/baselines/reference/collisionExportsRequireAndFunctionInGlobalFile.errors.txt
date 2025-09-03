@@ -1,0 +1,31 @@
+collisionExportsRequireAndFunctionInGlobalFile.ts(7,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+collisionExportsRequireAndFunctionInGlobalFile.ts(15,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== collisionExportsRequireAndFunctionInGlobalFile.ts (2 errors) ====
+    function exports() {
+        return 1;
+    }
+    function require() {
+        return "require";
+    }
+    module m3 {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        function exports() {
+            return 1;
+        }
+        function require() {
+            return "require";
+        }
+    }
+    module m4 {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export function exports() {
+            return 1;
+        }
+        export function require() {
+            return "require";
+        }
+    }

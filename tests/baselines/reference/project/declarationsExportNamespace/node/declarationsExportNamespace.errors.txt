@@ -1,0 +1,16 @@
+useModule.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== decl.d.ts (0 errors) ====
+    export interface A {
+        b: number;
+    }
+    export as namespace moduleA;
+==== useModule.ts (1 errors) ====
+    module moduleB {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export interface IUseModuleA {
+            a: moduleA.A;
+        }
+    }

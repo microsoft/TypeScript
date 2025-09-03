@@ -1,0 +1,32 @@
+function.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+module.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+module.ts(2,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== function.ts (1 errors) ====
+    module A {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export function Point() {
+            return { x: 0, y: 0 };
+        }
+    }
+    
+==== module.ts (2 errors) ====
+    module B {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export module Point {
+               ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            export var Origin = { x: 0, y: 0 };
+        }
+    }
+    
+==== test.ts (0 errors) ====
+    var fn: () => { x: number; y: number };
+    var fn = A.Point;
+    
+    var cl: { x: number; y: number; }
+    var cl = B.Point.Origin;
+    

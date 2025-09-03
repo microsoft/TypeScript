@@ -1,0 +1,143 @@
+collisionExportsRequireAndAmbientModule_externalmodule.ts(1,16): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+collisionExportsRequireAndAmbientModule_externalmodule.ts(10,16): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+collisionExportsRequireAndAmbientModule_externalmodule.ts(19,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+collisionExportsRequireAndAmbientModule_externalmodule.ts(20,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+collisionExportsRequireAndAmbientModule_externalmodule.ts(26,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+collisionExportsRequireAndAmbientModule_externalmodule.ts(33,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+collisionExportsRequireAndAmbientModule_externalmodule.ts(34,20): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+collisionExportsRequireAndAmbientModule_externalmodule.ts(40,20): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+collisionExportsRequireAndAmbientModule_globalFile.ts(1,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+collisionExportsRequireAndAmbientModule_globalFile.ts(7,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+collisionExportsRequireAndAmbientModule_globalFile.ts(13,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+collisionExportsRequireAndAmbientModule_globalFile.ts(14,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+collisionExportsRequireAndAmbientModule_globalFile.ts(20,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+collisionExportsRequireAndAmbientModule_globalFile.ts(27,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+collisionExportsRequireAndAmbientModule_globalFile.ts(28,20): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+collisionExportsRequireAndAmbientModule_globalFile.ts(34,20): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== collisionExportsRequireAndAmbientModule_externalmodule.ts (8 errors) ====
+    export declare module require {
+                   ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export interface I {
+        }
+        export class C {
+        }
+    }
+    export function foo(): require.I {
+        return null;
+    }
+    export declare module exports {
+                   ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export interface I {
+        }
+        export class C {
+        }
+    }
+    export function foo2(): exports.I {
+        return null;
+    }
+    declare module m1 {
+            ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        module require {
+        ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            export interface I {
+            }
+            export class C {
+            }
+        }
+        module exports {
+        ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            export interface I {
+            }
+            export class C {
+            }
+        }
+    }
+    module m2 {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export declare module require {
+                       ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            export interface I {
+            }
+            export class C {
+            }
+        }
+        export declare module exports {
+                       ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            export interface I {
+            }
+            export class C {
+            }
+        }
+        var a = 10;
+    }
+    
+==== collisionExportsRequireAndAmbientModule_globalFile.ts (8 errors) ====
+    declare module require {
+            ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export interface I {
+        }
+        export class C {
+        }
+    }
+    declare module exports {
+            ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export interface I {
+        }
+        export class C {
+        }
+    }
+    declare module m3 {
+            ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        module require {
+        ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            export interface I {
+            }
+            export class C {
+            }
+        }
+        module exports {
+        ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            export interface I {
+            }
+            export class C {
+            }
+        }
+    }
+    module m4 {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export declare module require {
+                       ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            export interface I {
+            }
+            export class C {
+            }
+        }
+        export declare module exports {
+                       ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            export interface I {
+            }
+            export class C {
+            }
+        }
+    
+        var a = 10;
+    }
+    

@@ -1,9 +1,12 @@
+file.tsx(1,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 file.tsx(16,7): error TS2322: Type '{ q: string; }' is not assignable to type '{ m: string; }'.
   Property 'q' does not exist on type '{ m: string; }'.
 
 
-==== file.tsx (1 errors) ====
+==== file.tsx (2 errors) ====
     declare module JSX {
+            ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
     	interface Element { }
     	interface IntrinsicElements {
     	    div: { n: string; };

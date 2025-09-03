@@ -1,0 +1,26 @@
+ambientModuleWithTemplateLiterals.ts(1,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== ambientModuleWithTemplateLiterals.ts (1 errors) ====
+    declare module Foo {
+            ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        enum Bar {
+            a = `1`,
+            b = '2',
+            c = '3'
+        }
+    
+        export const a = 'string';
+        export const b = `template`;
+    
+        export const c = Bar.a;
+        export const d = Bar['b'];
+        export const e = Bar[`c`];
+    }
+    
+    Foo.a;
+    Foo.b;
+    Foo.c;
+    Foo.d;
+    Foo.e;

@@ -1,0 +1,24 @@
+server.ts(5,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+server.ts(9,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== server.ts (2 errors) ====
+    class c {
+    }
+    interface i {
+    }
+    module m {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export var x = 10;
+    }
+    var x = 10;
+    module uninstantiated {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    }
+    export { c };
+    export { c as c2 };
+    export { i, m as instantiatedModule };
+    export { uninstantiated };
+    export { x };

@@ -1,10 +1,13 @@
+classTypeParametersInStatics.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 classTypeParametersInStatics.ts(12,40): error TS2302: Static members cannot reference class type parameters.
 classTypeParametersInStatics.ts(13,29): error TS2302: Static members cannot reference class type parameters.
 classTypeParametersInStatics.ts(13,43): error TS2302: Static members cannot reference class type parameters.
 
 
-==== classTypeParametersInStatics.ts (3 errors) ====
+==== classTypeParametersInStatics.ts (4 errors) ====
     module Editor {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
     
     
         export class List<T> {

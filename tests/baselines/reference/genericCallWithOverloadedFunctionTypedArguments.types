@@ -68,7 +68,9 @@ module NonGenericParameter {
 >x => x : (x: any) => any
 >       : ^ ^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >x : any
+>  : ^^^
 }
 
 module GenericParameter {
@@ -100,7 +102,9 @@ module GenericParameter {
 >x => x : (x: any) => any
 >       : ^ ^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >x : any
+>  : ^^^
 
     var a: { <T>(x: T): string; <T>(x: number): T; }
 >a : { <T>(x: T): string; <T>(x: number): T; }
@@ -147,7 +151,9 @@ module GenericParameter {
 >x => x : (x: any) => any
 >       : ^ ^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >x : any
+>  : ^^^
 
     var r9 = foo6(<T>(x: T) => ''); // any => string (+1 overload)
 >r9 : { (x: unknown): string; (x: unknown, y?: unknown): string; }
@@ -210,7 +216,9 @@ module GenericParameter {
 >(x) => x : (x: any) => any
 >         : ^ ^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >x : any
+>  : ^^^
 
     var r13 = foo7(1, <T>(x: T) => ''); // any => string (+1 overload) [inferences are made for T, but lambda not contextually typed]
 >r13 : { (x: unknown): string; (x: unknown, y?: unknown): string; }

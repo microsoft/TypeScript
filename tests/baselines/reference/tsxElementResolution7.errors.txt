@@ -1,14 +1,21 @@
+file.tsx(1,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+file.tsx(6,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 file.tsx(12,5): error TS2339: Property 'other' does not exist on type 'typeof my'.
+file.tsx(14,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 file.tsx(19,11): error TS2339: Property 'non' does not exist on type 'typeof my'.
 
 
-==== file.tsx (2 errors) ====
+==== file.tsx (5 errors) ====
     declare module JSX {
+            ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
     	interface Element { }
     	interface IntrinsicElements { }
     }
     
     module my {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
         export var div: any;
     }
     // OK
@@ -19,6 +26,8 @@ file.tsx(19,11): error TS2339: Property 'non' does not exist on type 'typeof my'
 !!! error TS2339: Property 'other' does not exist on type 'typeof my'.
     
     module q {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
         import mine = my;
         // OK
         <mine.div n='x' />;

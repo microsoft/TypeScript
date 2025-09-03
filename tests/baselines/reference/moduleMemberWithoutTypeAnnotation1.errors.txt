@@ -1,0 +1,67 @@
+moduleMemberWithoutTypeAnnotation1.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+moduleMemberWithoutTypeAnnotation1.ts(1,19): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+moduleMemberWithoutTypeAnnotation1.ts(9,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+moduleMemberWithoutTypeAnnotation1.ts(25,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+moduleMemberWithoutTypeAnnotation1.ts(37,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+moduleMemberWithoutTypeAnnotation1.ts(37,19): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== moduleMemberWithoutTypeAnnotation1.ts (6 errors) ====
+    module TypeScript.Parser {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+                      ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        class SyntaxCursor {
+            public currentNode(): SyntaxNode {
+                return null;
+            }
+        }
+    }
+    
+    module TypeScript {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export interface ISyntaxElement { };
+        export interface ISyntaxToken { };
+    
+        export class PositionedElement {
+            public childIndex(child: ISyntaxElement) {
+                return Syntax.childIndex();
+            }
+        }
+    
+        export class PositionedToken {
+            constructor(parent: PositionedElement, token: ISyntaxToken, fullStart: number) {
+            }
+        }
+    }
+    
+    module TypeScript {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export class SyntaxNode {
+            public findToken(position: number, includeSkippedTokens: boolean = false): PositionedToken {
+                var positionedToken = this.findTokenInternal(null, position, 0);
+                return null;
+            }
+            findTokenInternal(x, y, z) {
+                return null;
+            }
+        }
+    }
+    
+    module TypeScript.Syntax {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+                      ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export function childIndex() { }
+    
+        export class VariableWidthTokenWithTrailingTrivia implements ISyntaxToken {
+            private findTokenInternal(parent: PositionedElement, position: number, fullStart: number) {
+                return new PositionedToken(parent, this, fullStart);
+            }
+        }
+    }
+    

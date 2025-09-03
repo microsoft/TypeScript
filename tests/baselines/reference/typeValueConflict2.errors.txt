@@ -1,14 +1,21 @@
+typeValueConflict2.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+typeValueConflict2.ts(7,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 typeValueConflict2.ts(10,24): error TS2339: Property 'A' does not exist on type 'number'.
+typeValueConflict2.ts(13,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 
 
-==== typeValueConflict2.ts (1 errors) ====
+==== typeValueConflict2.ts (4 errors) ====
     module M1 {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
         export class A<T> {
             constructor(a: T) {
             }
         }
     }
     module M2 {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
         var M1 = 0;
         // Should error.  M1 should bind to the variable, not to the module.
         class B extends M1.A<string> {
@@ -17,6 +24,8 @@ typeValueConflict2.ts(10,24): error TS2339: Property 'A' does not exist on type 
         }
     }
     module M3 {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
         // Shouldn't error
         class B extends M1.A<string> {
         }

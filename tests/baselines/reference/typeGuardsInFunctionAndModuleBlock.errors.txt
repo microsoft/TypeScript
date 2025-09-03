@@ -1,0 +1,97 @@
+typeGuardsInFunctionAndModuleBlock.ts(52,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+typeGuardsInFunctionAndModuleBlock.ts(54,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+typeGuardsInFunctionAndModuleBlock.ts(66,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+typeGuardsInFunctionAndModuleBlock.ts(68,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+typeGuardsInFunctionAndModuleBlock.ts(68,15): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== typeGuardsInFunctionAndModuleBlock.ts (5 errors) ====
+    // typeguards are scoped in function/module block
+    
+    function foo(x: number | string | boolean) {
+        return typeof x === "string"
+            ? x
+            : function f() {
+                var b = x; // number | boolean
+                return typeof x === "boolean"
+                    ? x.toString() // boolean
+                    : x.toString(); // number
+            } ();
+    }
+    function foo2(x: number | string | boolean) {
+        return typeof x === "string"
+            ? x
+            : function f(a: number | boolean) {
+                var b = x; // new scope - number | boolean
+                return typeof x === "boolean"
+                    ? x.toString() // boolean
+                    : x.toString(); // number
+            } (x); // x here is narrowed to number | boolean
+    }
+    function foo3(x: number | string | boolean) {
+        return typeof x === "string"
+            ? x
+            : (() => {
+                var b = x; // new scope - number | boolean
+                return typeof x === "boolean"
+                    ? x.toString() // boolean
+                    : x.toString(); // number
+            })();
+    }
+    function foo4(x: number | string | boolean) {
+        return typeof x === "string"
+            ? x
+            : ((a: number | boolean) => {
+                var b = x; // new scope - number | boolean
+                return typeof x === "boolean"
+                    ? x.toString() // boolean
+                    : x.toString(); // number
+            })(x); // x here is narrowed to number | boolean
+    }
+    // Type guards do not affect nested function declarations
+    function foo5(x: number | string | boolean) {
+        if (typeof x === "string") {
+            var y = x; // string;
+            function foo() {
+                var z = x; // string
+            }
+        }
+    }
+    module m {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        var x: number | string | boolean;
+        module m2 {
+        ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            var b = x; // new scope - number | boolean | string
+            var y: string;
+            if (typeof x === "string") {
+                y = x // string;
+            } else {
+                y = typeof x === "boolean"
+                ? x.toString() // boolean
+                : x.toString(); // number
+            }
+        }
+    }
+    module m1 {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        var x: number | string | boolean;
+        module m2.m3 {
+        ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+                  ~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            var b = x; // new scope - number | boolean | string
+            var y: string;
+            if (typeof x === "string") {
+                y = x // string;
+            } else {
+                y = typeof x === "boolean"
+                ? x.toString() // boolean
+                : x.toString(); // number
+            }
+        }
+    }

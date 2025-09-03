@@ -57,6 +57,7 @@ declare module _ {
 
         context?: any): TResult[];
 >context : any
+>        : ^^^
 
     export function first<T>(array: List<T>): T;
 >first : <T>(array: List<T>) => T
@@ -71,6 +72,7 @@ declare class View {
 
     model: any;
 >model : any
+>      : ^^^
 }
 
 interface IData {
@@ -103,7 +105,9 @@ class MyView extends View {
 >data : IData[]
 >     : ^^^^^^^
 >this.model.get("data") : any
+>                       : ^^^
 >this.model.get : any
+>               : ^^^
 >this.model : any
 >           : ^^^
 >this : this

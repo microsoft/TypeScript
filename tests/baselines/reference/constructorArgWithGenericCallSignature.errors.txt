@@ -1,0 +1,20 @@
+constructorArgWithGenericCallSignature.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== constructorArgWithGenericCallSignature.ts (1 errors) ====
+    module Test {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export interface MyFunc {
+            <T>(value1: T): T;
+        }
+        export class MyClass {
+            constructor(func: MyFunc) { }
+        }
+     
+     export function F(func: MyFunc) { }
+    }
+    var func: Test.MyFunc;
+    Test.F(func); // OK
+    var test = new Test.MyClass(func); // Should be OK
+    

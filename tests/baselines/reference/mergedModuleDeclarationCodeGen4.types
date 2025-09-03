@@ -38,9 +38,13 @@ module superContain {
 >bar : (contain: any, my: any, buz: any, data: any) => void
 >    : ^       ^^^^^^^  ^^^^^^^   ^^^^^^^    ^^^^^^^^^^^^^^
 >contain : any
+>        : ^^^
 >my : any
+>   : ^^^
 >buz : any
+>    : ^^^
 >data : any
+>     : ^^^
 
                     foo();
 >foo() : void

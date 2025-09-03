@@ -1,13 +1,16 @@
 intrinsics.ts(1,21): error TS2749: 'hasOwnProperty' refers to a value, but is being used as a type here. Did you mean 'typeof hasOwnProperty'?
+intrinsics.ts(3,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 intrinsics.ts(10,1): error TS2304: Cannot find name '__proto__'.
 
 
-==== intrinsics.ts (2 errors) ====
+==== intrinsics.ts (3 errors) ====
     var hasOwnProperty: hasOwnProperty; // Error
                         ~~~~~~~~~~~~~~
 !!! error TS2749: 'hasOwnProperty' refers to a value, but is being used as a type here. Did you mean 'typeof hasOwnProperty'?
     
     module m1 {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
         export var __proto__;
         interface __proto__ {}
     

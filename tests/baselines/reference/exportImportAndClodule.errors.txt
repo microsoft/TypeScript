@@ -1,0 +1,31 @@
+exportImportAndClodule.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+exportImportAndClodule.ts(5,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+exportImportAndClodule.ts(13,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== exportImportAndClodule.ts (3 errors) ====
+    module K {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export class L {
+            constructor(public name: string) { }
+        }
+        export module L {
+               ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            export var y = 12;
+            export interface Point {
+                x: number;
+                y: number;
+            }
+        }
+    }
+    module M {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export import D = K.L;
+    }
+    var o: { name: string };
+    var o = new M.D('Hello');
+    var p: { x: number; y: number; }
+    var p: M.D.Point;

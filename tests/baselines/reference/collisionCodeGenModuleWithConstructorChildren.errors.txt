@@ -1,0 +1,35 @@
+collisionCodeGenModuleWithConstructorChildren.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+collisionCodeGenModuleWithConstructorChildren.ts(9,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+collisionCodeGenModuleWithConstructorChildren.ts(16,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== collisionCodeGenModuleWithConstructorChildren.ts (3 errors) ====
+    module M {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export var x = 3;
+        class c {
+            constructor(M, p = x) {
+            }
+        }
+    }
+    
+    module M {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        class d {
+            constructor(private M, p = x) {
+            }
+        }
+    }
+    
+    module M {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        class d2 {
+            constructor() {
+                var M = 10;
+                var p = x;
+            }
+        }
+    }

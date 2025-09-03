@@ -1,0 +1,15 @@
+funduleExportedClassIsUsedBeforeDeclaration.ts(5,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== funduleExportedClassIsUsedBeforeDeclaration.ts (1 errors) ====
+    interface A {   // interface before module declaration
+        (): B.C;    // uses defined below class in module
+    }
+    declare function B(): B.C;  // function merged with module
+    declare module B {
+            ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export class C {    // class defined in module 
+        }
+    }
+    new B.C(); 

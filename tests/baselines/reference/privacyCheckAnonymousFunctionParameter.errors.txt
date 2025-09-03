@@ -1,0 +1,22 @@
+privacyCheckAnonymousFunctionParameter.ts(5,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== privacyCheckAnonymousFunctionParameter.ts (1 errors) ====
+    export var x = 1;  // Makes this an external module
+    interface Iterator<T> {
+    }
+    
+    module Query {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export function fromDoWhile<T>(doWhile: (test: Iterator<T>) => boolean): Iterator<T> {
+            return null;
+        }
+    
+        function fromOrderBy() {
+            return fromDoWhile(test => {
+                return true;
+            });
+        }
+    }
+    

@@ -296,26 +296,33 @@ function f4<T extends Number>(x: T) {
 
     var u: typeof undefined;
 >u : any
+>  : ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
     var r0b = true ? u : x; // ok
 >r0b : any
+>    : ^^^
 >true ? u : x : any
+>             : ^^^
 >true : true
 >     : ^^^^
 >u : any
+>  : ^^^
 >x : T
 >  : ^
 
     var r0b = true ? x : u; // ok
 >r0b : any
+>    : ^^^
 >true ? x : u : any
+>             : ^^^
 >true : true
 >     : ^^^^
 >x : T
 >  : ^
 >u : any
+>  : ^^^
 }
 
 function f5<T extends Number>(x: T) {

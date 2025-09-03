@@ -1,0 +1,31 @@
+clinterfaces.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== clinterfaces.ts (1 errors) ====
+    module M {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        class C { }
+        interface C { }
+        interface D { }
+        class D { }
+    }
+    
+    interface Foo<T> {
+        a: string;
+    }
+    
+    class Foo<T>{
+        b: number;
+    }
+    
+    class Bar<T>{
+        b: number;
+    }
+    
+    interface Bar<T> {
+        a: string;
+    }
+    
+    export = Foo;
+    

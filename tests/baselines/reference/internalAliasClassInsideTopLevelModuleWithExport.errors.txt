@@ -1,0 +1,17 @@
+internalAliasClassInsideTopLevelModuleWithExport.ts(1,8): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== internalAliasClassInsideTopLevelModuleWithExport.ts (1 errors) ====
+    export module x {
+           ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export class c {
+            foo(a: number) {
+                return a;
+            }
+        }
+    }
+    
+    export import xc = x.c;
+    export var cProp = new xc();
+    var cReturnVal = cProp.foo(10);

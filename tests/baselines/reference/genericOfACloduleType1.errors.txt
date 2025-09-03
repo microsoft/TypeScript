@@ -1,0 +1,21 @@
+genericOfACloduleType1.ts(2,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+genericOfACloduleType1.ts(4,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== genericOfACloduleType1.ts (2 errors) ====
+    class G<T>{ bar(x: T) { return x; } }
+    module M {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export class C { foo() { } }
+        export module C {
+               ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            export class X {
+            }
+        }
+     
+        var g1 = new G<C>();
+        g1.bar(null).foo();
+    }
+    var g2 = new G<M.C>() // was: error Type reference cannot refer to container 'M.C'.

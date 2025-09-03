@@ -1,0 +1,26 @@
+moduleMemberWithoutTypeAnnotation2.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+moduleMemberWithoutTypeAnnotation2.ts(2,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== moduleMemberWithoutTypeAnnotation2.ts (2 errors) ====
+    module TypeScript {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export module CompilerDiagnostics {
+               ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    
+            export interface IDiagnosticWriter {
+                Alert(output: string): void;
+            }
+    
+            export var diagnosticWriter = null;
+    
+            export function Alert(output: string) {
+                if (diagnosticWriter) {
+                    diagnosticWriter.Alert(output);
+                }
+            }
+        }
+    }
+    

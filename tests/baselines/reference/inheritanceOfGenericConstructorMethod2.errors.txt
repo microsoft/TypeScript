@@ -1,0 +1,23 @@
+inheritanceOfGenericConstructorMethod2.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+inheritanceOfGenericConstructorMethod2.ts(5,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== inheritanceOfGenericConstructorMethod2.ts (2 errors) ====
+    module M {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+       export class C1 { }
+       export class C2<T> { }
+    }
+    module N {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+       export class D1 extends M.C1 { }
+       export class D2<T> extends M.C2<T> { }
+    }
+    
+    var c = new M.C2<number>(); // no error
+    var n = new N.D1(); // no error
+    var n2 = new N.D2<number>(); // error
+    var n3 = new N.D2(); // no error, D2<any>
+    

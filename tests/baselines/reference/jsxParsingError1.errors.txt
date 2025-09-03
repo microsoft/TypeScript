@@ -1,9 +1,12 @@
+file.tsx(1,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 file.tsx(11,30): error TS2695: Left side of comma operator is unused and has no side effects.
 file.tsx(11,30): error TS18007: JSX expressions may not use the comma operator. Did you mean to write an array?
 
 
-==== file.tsx (2 errors) ====
+==== file.tsx (3 errors) ====
     declare module JSX {
+            ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
     	interface Element { }
     	interface IntrinsicElements {
     		[s: string]: any;
