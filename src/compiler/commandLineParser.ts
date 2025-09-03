@@ -583,7 +583,7 @@ export const targetOptionDeclaration: CommandLineOptionOfCustomType = {
     showInSimplifiedHelpView: true,
     category: Diagnostics.Language_and_Environment,
     description: Diagnostics.Set_the_JavaScript_language_version_for_emitted_JavaScript_and_include_compatible_library_declarations,
-    defaultValueDescription: ScriptTarget.ES5,
+    defaultValueDescription: ScriptTarget.ESNext,
 };
 
 /** @internal */
