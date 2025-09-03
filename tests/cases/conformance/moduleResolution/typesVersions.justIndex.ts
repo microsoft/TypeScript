@@ -1,4 +1,5 @@
 // @baseUrl: /
+// @ignoreDeprecations: 6.0
 // @traceResolution: true
 // @target: esnext
 // @module: commonjs
