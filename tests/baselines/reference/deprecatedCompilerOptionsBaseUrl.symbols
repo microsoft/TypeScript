@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/deprecatedCompilerOptionsBaseUrl.ts] ////
+
+=== /foo/src/app/module.ts ===
+export const value = 42;
+>value : Symbol(value, Decl(module.ts, 0, 12))
+
+=== /foo/src/main.ts ===
+import { value } from "@app/module";
+>value : Symbol(value, Decl(main.ts, 0, 8))
+
+const result = value;
+>result : Symbol(result, Decl(main.ts, 1, 5))
+>value : Symbol(value, Decl(main.ts, 0, 8))
+
