@@ -90,3 +90,11 @@ func HasSuffix(s string, suffix string, caseSensitive bool) bool {
 	}
 	return strings.EqualFold(s[len(s)-len(suffix):], suffix)
 }
+
+func CompareStringsCaseInsensitiveThenSensitive(a, b string) Comparison {
+	cmp := CompareStringsCaseInsensitive(a, b)
+	if cmp != ComparisonEqual {
+		return cmp
+	}
+	return CompareStringsCaseSensitive(a, b)
+}

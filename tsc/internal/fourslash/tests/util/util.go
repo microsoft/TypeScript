@@ -8,8 +8,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/fourslash"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
-	"golang.org/x/text/collate"
-	"golang.org/x/text/language"
+	"github.com/microsoft/typescript-go/internal/stringutil"
 )
 
 func PtrTo[T any](v T) *T {
@@ -13265,10 +13264,8 @@ var CompletionGlobals = sortCompletionItems(append(
 	CompletionUndefinedVarItem,
 ))
 
-var defaultLanguage = language.AmericanEnglish
-
 func sortCompletionItems(items []fourslash.CompletionsExpectedItem) []fourslash.CompletionsExpectedItem {
-	compareStringsUI := collate.New(defaultLanguage).CompareString
+	compareStrings := stringutil.CompareStringsCaseInsensitiveThenSensitive
 	items = slices.Clone(items)
 	slices.SortStableFunc(items, func(a fourslash.CompletionsExpectedItem, b fourslash.CompletionsExpectedItem) int {
 		defaultSortText := string(ls.SortTextLocationPriority)
@@ -13287,7 +13284,7 @@ func sortCompletionItems(items []fourslash.CompletionsExpectedItem) []fourslash.
 		}
 		aSortText = core.OrElse(aSortText, defaultSortText)
 		bSortText = core.OrElse(bSortText, defaultSortText)
-		bySortText := compareStringsUI(aSortText, bSortText)
+		bySortText := compareStrings(aSortText, bSortText)
 		if bySortText != 0 {
 			return bySortText
 		}
@@ -13308,7 +13305,7 @@ func sortCompletionItems(items []fourslash.CompletionsExpectedItem) []fourslash.
 		default:
 			panic(fmt.Sprintf("unexpected completion item type: %T", b))
 		}
-		return compareStringsUI(aLabel, bLabel)
+		return compareStrings(aLabel, bLabel)
 	})
 	return items
 }
