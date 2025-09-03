@@ -3,7 +3,8 @@
 // @Filename: /other/tsconfig.base.json
 {
   "compilerOptions": {
-    "baseUrl": "."
+    "baseUrl": ".",
+        "ignoreDeprecations": "6.0"
   }
 }
 

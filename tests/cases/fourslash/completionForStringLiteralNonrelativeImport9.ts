@@ -6,6 +6,7 @@
 //// {
 ////     "compilerOptions": {
 ////         "baseUrl": "./modules",
+        "ignoreDeprecations": "6.0",
 ////         "paths": {
 ////             "module1": ["some/path/whatever.ts"],
 ////             "module2": ["some/other/path.ts"]

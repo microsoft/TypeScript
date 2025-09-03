@@ -2,6 +2,7 @@
 {
     "compilerOptions": {
         "baseUrl": ".",
+        "ignoreDeprecations": "6.0",
         "paths": {
             "*": [1]
         }

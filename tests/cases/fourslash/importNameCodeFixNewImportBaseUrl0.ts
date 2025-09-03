@@ -5,7 +5,8 @@
 // @Filename: tsconfig.json
 //// {
 ////     "compilerOptions": {
-////         "baseUrl": "./a"
+////         "baseUrl": "./a",
+        "ignoreDeprecations": "6.0"
 ////     }
 //// }
 

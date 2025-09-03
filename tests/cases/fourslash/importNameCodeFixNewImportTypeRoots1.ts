@@ -10,6 +10,7 @@
 //// {
 ////     "compilerOptions": {
 ////         "baseUrl": ".",
+        "ignoreDeprecations": "6.0",
 ////         "typeRoots": [
 ////             "./types"
 ////         ]

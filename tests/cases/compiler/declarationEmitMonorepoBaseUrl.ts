@@ -6,7 +6,8 @@
     "module": "nodenext",
     "declaration": true,
     "outDir": "temp",
-    "baseUrl": "."
+    "baseUrl": ".",
+        "ignoreDeprecations": "6.0"
   }
 }
 

@@ -3,6 +3,7 @@
 // Should handle nested files in folders discovered via the baseUrl compiler option
 
 // @baseUrl: tests/cases/fourslash/modules
+// @ignoreDeprecations: 6.0
 
 // @Filename: tests/test0.ts
 //// import * as foo1 from "subfolder//*import_as0*/

@@ -2,6 +2,7 @@
 
 // @module: commonjs
 // @baseUrl: /
+// @ignoreDeprecations: 6.0
 
 // @Filename: /proj/foo/a.ts
 //// export const A = 0;

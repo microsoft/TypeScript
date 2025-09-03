@@ -8,7 +8,8 @@
 ////       "package1/*": ["./*"],
 ////       "package2/*": ["../package2/*"]
 ////     },
-////     "baseUrl": "."
+////     "baseUrl": ".",
+        "ignoreDeprecations": "6.0"
 ////   },
 ////   "include": [
 ////     ".",

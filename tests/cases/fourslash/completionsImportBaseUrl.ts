@@ -4,6 +4,7 @@
 ////{
 ////    "compilerOptions": {
 ////        "baseUrl": ".",
+        "ignoreDeprecations": "6.0",
 ////        "module": "esnext"
 ////    }
 ////}

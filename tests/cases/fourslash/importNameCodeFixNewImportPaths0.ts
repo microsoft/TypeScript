@@ -9,6 +9,7 @@
 //// {
 ////     "compilerOptions": {
 ////         "baseUrl": ".",
+        "ignoreDeprecations": "6.0",
 ////         "paths": {
 ////             "a": [ "folder_a/f2" ]
 ////         }

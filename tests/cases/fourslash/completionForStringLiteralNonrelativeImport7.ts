@@ -3,6 +3,7 @@
 // Should give completions for files that are discovered via the baseUrl compiler option
 
 // @baseUrl: tests/cases/fourslash/modules
+// @ignoreDeprecations: 6.0
 
 // @Filename: tests/test0.ts
 //// import * as foo1 from "mod/*import_as0*/

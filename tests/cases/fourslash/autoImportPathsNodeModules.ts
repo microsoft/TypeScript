@@ -7,6 +7,7 @@
 ////         "moduleResolution": "node",
 ////         "rootDir": "ts",
 ////         "baseUrl": ".",
+        "ignoreDeprecations": "6.0",
 ////         "paths": {
 ////             "*": ["node_modules/@woltlab/wcf/ts/*"]
 ////         }
