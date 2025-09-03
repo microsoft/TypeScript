@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/baseUrlMigrationExample.ts] ////
+
+=== /before/src/app/module.ts ===
+export const value = 42;
+>value : 42
+>      : ^^
+>42 : 42
+>   : ^^
+
+=== /before/src/lib/utils.ts ===
+export function helper() { return "help"; }
+>helper : () => string
+>       : ^^^^^^^^^^^^
+>"help" : "help"
+>       : ^^^^^^
+
+=== /before/src/main.ts ===
+import { value } from "@app/module";
+>value : 42
+>      : ^^
+
+import { helper } from "@lib/utils";
+>helper : () => string
+>       : ^^^^^^^^^^^^
+
+// This would also resolve due to baseUrl:
+import * as something from "someModule"; // Resolves to ./src/someModule
+>something : typeof something
+>          : ^^^^^^^^^^^^^^^^
+
+=== /before/src/someModule.ts ===
+export const data = "from baseUrl resolution";
+>data : "from baseUrl resolution"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>"from baseUrl resolution" : "from baseUrl resolution"
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+

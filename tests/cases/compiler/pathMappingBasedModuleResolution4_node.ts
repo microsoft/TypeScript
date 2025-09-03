@@ -7,7 +7,8 @@
 // @filename: c:/root/tsconfig.json
 {
     "compilerOptions": {
-        "baseUrl": "."
+        "baseUrl": ".",
+        "ignoreDeprecations": "6.0"
     }
 }
 

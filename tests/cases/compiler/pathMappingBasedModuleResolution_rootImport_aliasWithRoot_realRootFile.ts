@@ -16,6 +16,7 @@ import { bar } from "/bar";
 {
     "compilerOptions": {
         "baseUrl": ".",
+        "ignoreDeprecations": "6.0",
         "paths": {
             "/*": ["./src/*"]
         },

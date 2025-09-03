@@ -16,6 +16,7 @@ import { bar } from "/client/bar";
 {
     "compilerOptions": {
         "baseUrl": ".",
+        "ignoreDeprecations": "6.0",
         "paths": {
             "/client/*": ["./client/*"],
             "/import/*": ["./import/*"]
