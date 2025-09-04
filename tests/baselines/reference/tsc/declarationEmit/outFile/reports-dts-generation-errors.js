@@ -63,7 +63,7 @@ Found 1 error in src/index.ts[90m:2[0m
 
 
 //// [/home/src/workspaces/project/outFile.js]
-define("index", ["require", "exports", "ky"], function (require, exports, ky_1) {
+define("src/index", ["require", "exports", "ky"], function (require, exports, ky_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.api = void 0;

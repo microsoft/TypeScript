@@ -56,8 +56,7 @@ Output::
 [7m3[0m     "moduleResolution": "node",
 [7m [0m [91m                        ~~~~~~[0m
 
-TSFILE: /home/src/workspaces/solution/project/dist/hello.json
-TSFILE: /home/src/workspaces/solution/project/dist/project/src/index.js
+TSFILE: /home/src/workspaces/solution/project/dist/src/index.js
 TSFILE: /home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo
 ../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
@@ -65,20 +64,12 @@ hello.json
   Imported via "../../hello.json" from file 'project/src/index.ts'
 project/src/index.ts
   Matched by include pattern 'src/**/*' in 'project/tsconfig.json'
-[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/home/src/workspaces/solution/project/tsconfig.json'...
-
 
 Found 1 error.
 
 
 
-//// [/home/src/workspaces/solution/project/dist/hello.json]
-{
-    "hello": "world"
-}
-
-
-//// [/home/src/workspaces/solution/project/dist/project/src/index.js]
+//// [/home/src/workspaces/solution/project/dist/src/index.js]
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };

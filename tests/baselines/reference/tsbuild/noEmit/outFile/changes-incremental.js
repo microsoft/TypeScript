@@ -72,7 +72,7 @@ Found 1 error.
 
 
 //// [/home/src/workspaces/outFile.js]
-define("class", ["require", "exports"], function (require, exports) {
+define("src/class", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.classC = void 0;
@@ -84,7 +84,7 @@ define("class", ["require", "exports"], function (require, exports) {
     }());
     exports.classC = classC;
 });
-define("indirectClass", ["require", "exports", "class"], function (require, exports, class_1) {
+define("src/indirectClass", ["require", "exports", "src/class"], function (require, exports, class_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.indirectClass = void 0;
@@ -96,17 +96,17 @@ define("indirectClass", ["require", "exports", "class"], function (require, expo
     }());
     exports.indirectClass = indirectClass;
 });
-define("directUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_1) {
+define("src/directUse", ["require", "exports", "src/indirectClass"], function (require, exports, indirectClass_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     new indirectClass_1.indirectClass().classC.prop;
 });
-define("indirectUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_2) {
+define("src/indirectUse", ["require", "exports", "src/indirectClass"], function (require, exports, indirectClass_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     new indirectClass_2.indirectClass().classC.prop;
 });
-define("noChangeFile", ["require", "exports"], function (require, exports) {
+define("src/noChangeFile", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.writeLog = writeLog;
@@ -609,7 +609,7 @@ Found 3 errors.
 
 
 //// [/home/src/workspaces/outFile.js]
-define("class", ["require", "exports"], function (require, exports) {
+define("src/class", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.classC = void 0;
@@ -621,7 +621,7 @@ define("class", ["require", "exports"], function (require, exports) {
     }());
     exports.classC = classC;
 });
-define("indirectClass", ["require", "exports", "class"], function (require, exports, class_1) {
+define("src/indirectClass", ["require", "exports", "src/class"], function (require, exports, class_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.indirectClass = void 0;
@@ -633,17 +633,17 @@ define("indirectClass", ["require", "exports", "class"], function (require, expo
     }());
     exports.indirectClass = indirectClass;
 });
-define("directUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_1) {
+define("src/directUse", ["require", "exports", "src/indirectClass"], function (require, exports, indirectClass_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     new indirectClass_1.indirectClass().classC.prop;
 });
-define("indirectUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_2) {
+define("src/indirectUse", ["require", "exports", "src/indirectClass"], function (require, exports, indirectClass_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     new indirectClass_2.indirectClass().classC.prop;
 });
-define("noChangeFile", ["require", "exports"], function (require, exports) {
+define("src/noChangeFile", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.writeLog = writeLog;
@@ -1054,7 +1054,7 @@ Found 1 error.
 
 
 //// [/home/src/workspaces/outFile.js]
-define("class", ["require", "exports"], function (require, exports) {
+define("src/class", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.classC = void 0;
@@ -1066,7 +1066,7 @@ define("class", ["require", "exports"], function (require, exports) {
     }());
     exports.classC = classC;
 });
-define("indirectClass", ["require", "exports", "class"], function (require, exports, class_1) {
+define("src/indirectClass", ["require", "exports", "src/class"], function (require, exports, class_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.indirectClass = void 0;
@@ -1078,17 +1078,17 @@ define("indirectClass", ["require", "exports", "class"], function (require, expo
     }());
     exports.indirectClass = indirectClass;
 });
-define("directUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_1) {
+define("src/directUse", ["require", "exports", "src/indirectClass"], function (require, exports, indirectClass_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     new indirectClass_1.indirectClass().classC.prop;
 });
-define("indirectUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_2) {
+define("src/indirectUse", ["require", "exports", "src/indirectClass"], function (require, exports, indirectClass_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     new indirectClass_2.indirectClass().classC.prop;
 });
-define("noChangeFile", ["require", "exports"], function (require, exports) {
+define("src/noChangeFile", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.writeLog = writeLog;

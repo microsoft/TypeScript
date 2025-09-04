@@ -16,11 +16,6 @@ import { bar } from "/bar";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = foo;
 function foo() { }
-//// [bar.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.bar = bar;
-function bar() { }
 //// [a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

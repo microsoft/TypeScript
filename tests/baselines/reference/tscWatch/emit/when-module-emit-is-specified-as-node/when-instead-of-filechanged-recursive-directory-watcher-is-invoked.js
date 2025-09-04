@@ -43,11 +43,11 @@ Output::
 
 
 
-//// [/home/src/projects/a/rootFolder/project/Static/scripts/Javascript.js]
+//// [/home/src/projects/a/rootFolder/project/Static/scripts/Scripts/Javascript.js]
 var zz = 10;
 
 
-//// [/home/src/projects/a/rootFolder/project/Static/scripts/TypeScript.js]
+//// [/home/src/projects/a/rootFolder/project/Static/scripts/Scripts/TypeScript.js]
 var z = 10;
 
 
@@ -128,8 +128,8 @@ Output::
 
 
 
-//// [/home/src/projects/a/rootFolder/project/Static/scripts/Javascript.js] file written with same contents
-//// [/home/src/projects/a/rootFolder/project/Static/scripts/TypeScript.js]
+//// [/home/src/projects/a/rootFolder/project/Static/scripts/Scripts/Javascript.js] file written with same contents
+//// [/home/src/projects/a/rootFolder/project/Static/scripts/Scripts/TypeScript.js]
 var zz30 = 100;
 
 

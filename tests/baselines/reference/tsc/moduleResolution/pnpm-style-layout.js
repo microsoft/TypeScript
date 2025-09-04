@@ -358,7 +358,7 @@ Found 1 error in tsconfig.json[90m:8[0m
 
 //// [/home/src/tslibs/TS/Lib/lib.es5.d.ts] *Lib*
 
-//// [/home/src/projects/component-type-checker/packages/app/dist/app.js]
+//// [/home/src/projects/component-type-checker/packages/app/dist/src/app.js]
 import { createButton } from "@component-type-checker/button";
 var button = createButton();
 
