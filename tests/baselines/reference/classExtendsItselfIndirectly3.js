@@ -30,7 +30,18 @@ var __extends = (this && this.__extends) || (function () {
         if (typeof b !== "function" && b !== null)
             throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
-        function __() { this.constructor = d; }
+        function __() {
+            if (Object.defineProperty) {
+                Object.defineProperty(this, "constructor", {
+                    value: d,
+                    writable: true,
+                    enumerable: false,
+                    configurable: true
+                });
+            } else {
+                this.constructor = d;
+            }
+        }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
@@ -53,7 +64,18 @@ var __extends = (this && this.__extends) || (function () {
         if (typeof b !== "function" && b !== null)
             throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
-        function __() { this.constructor = d; }
+        function __() {
+            if (Object.defineProperty) {
+                Object.defineProperty(this, "constructor", {
+                    value: d,
+                    writable: true,
+                    enumerable: false,
+                    configurable: true
+                });
+            } else {
+                this.constructor = d;
+            }
+        }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
@@ -76,7 +98,18 @@ var __extends = (this && this.__extends) || (function () {
         if (typeof b !== "function" && b !== null)
             throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
-        function __() { this.constructor = d; }
+        function __() {
+            if (Object.defineProperty) {
+                Object.defineProperty(this, "constructor", {
+                    value: d,
+                    writable: true,
+                    enumerable: false,
+                    configurable: true
+                });
+            } else {
+                this.constructor = d;
+            }
+        }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
@@ -99,7 +132,18 @@ var __extends = (this && this.__extends) || (function () {
         if (typeof b !== "function" && b !== null)
             throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
-        function __() { this.constructor = d; }
+        function __() {
+            if (Object.defineProperty) {
+                Object.defineProperty(this, "constructor", {
+                    value: d,
+                    writable: true,
+                    enumerable: false,
+                    configurable: true
+                });
+            } else {
+                this.constructor = d;
+            }
+        }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
@@ -122,7 +166,18 @@ var __extends = (this && this.__extends) || (function () {
         if (typeof b !== "function" && b !== null)
             throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
-        function __() { this.constructor = d; }
+        function __() {
+            if (Object.defineProperty) {
+                Object.defineProperty(this, "constructor", {
+                    value: d,
+                    writable: true,
+                    enumerable: false,
+                    configurable: true
+                });
+            } else {
+                this.constructor = d;
+            }
+        }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
@@ -145,7 +200,18 @@ var __extends = (this && this.__extends) || (function () {
         if (typeof b !== "function" && b !== null)
             throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
-        function __() { this.constructor = d; }
+        function __() {
+            if (Object.defineProperty) {
+                Object.defineProperty(this, "constructor", {
+                    value: d,
+                    writable: true,
+                    enumerable: false,
+                    configurable: true
+                });
+            } else {
+                this.constructor = d;
+            }
+        }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
