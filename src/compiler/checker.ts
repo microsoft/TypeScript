@@ -1123,8 +1123,6 @@ import {
     VariableLikeDeclaration,
     VariableStatement,
     VarianceFlags,
-    Version,
-    versionMajorMinor,
     visitEachChild as visitEachChildWorker,
     visitNode,
     visitNodes,
