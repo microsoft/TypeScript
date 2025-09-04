@@ -2,7 +2,7 @@
 
 //// [m1.ts]
 function foo() {}
-module foo {
+namespace foo {
     const enum E { X }
 }
 

@@ -55,7 +55,7 @@ ambientErrors.ts(57,5): error TS2309: An export assignment cannot be used in a m
     }
     
     // Ambient module with initializers for values, bodies for functions / classes
-    declare module M1 {
+    declare namespace M1 {
         var x = 3;
                 ~
 !!! error TS1039: Initializers are not allowed in ambient contexts.
@@ -82,7 +82,7 @@ ambientErrors.ts(57,5): error TS2309: An export assignment cannot be used in a m
     }
     
     // Ambient external module not in the global module
-    module M2 {
+    namespace M2 {
         declare module 'nope' { }
                        ~~~~~~
 !!! error TS2435: Ambient modules cannot be nested in other modules or namespaces.

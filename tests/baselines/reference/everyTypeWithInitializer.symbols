@@ -40,11 +40,11 @@ function F(x: string): number { return 42; }
 >F : Symbol(F, Decl(everyTypeWithInitializer.ts, 12, 1))
 >x : Symbol(x, Decl(everyTypeWithInitializer.ts, 14, 11))
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(everyTypeWithInitializer.ts, 14, 44))
 
     export class A {
->A : Symbol(A, Decl(everyTypeWithInitializer.ts, 16, 10))
+>A : Symbol(A, Decl(everyTypeWithInitializer.ts, 16, 13))
 
         name: string;
 >name : Symbol(A.name, Decl(everyTypeWithInitializer.ts, 17, 20))
@@ -110,9 +110,9 @@ var aModule = M;
 
 var aClassInModule = new M.A();
 >aClassInModule : Symbol(aClassInModule, Decl(everyTypeWithInitializer.ts, 42, 3))
->M.A : Symbol(M.A, Decl(everyTypeWithInitializer.ts, 16, 10))
+>M.A : Symbol(M.A, Decl(everyTypeWithInitializer.ts, 16, 13))
 >M : Symbol(M, Decl(everyTypeWithInitializer.ts, 14, 44))
->A : Symbol(M.A, Decl(everyTypeWithInitializer.ts, 16, 10))
+>A : Symbol(M.A, Decl(everyTypeWithInitializer.ts, 16, 13))
 
 var aFunctionInModule = M.F2;
 >aFunctionInModule : Symbol(aFunctionInModule, Decl(everyTypeWithInitializer.ts, 43, 3))

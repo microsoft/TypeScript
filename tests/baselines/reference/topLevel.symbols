@@ -61,7 +61,7 @@ result+=(new Point(3,4).move(2,2));
 >Point : Symbol(Point, Decl(topLevel.ts, 3, 1))
 >move : Symbol(Point.move, Decl(topLevel.ts, 6, 36))
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(topLevel.ts, 18, 35))
 
     export var origin=new Point(0,0);

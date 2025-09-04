@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-////module IncompleteCalls {
+////namespace IncompleteCalls {
 ////    class Foo {
 ////        public f1() { }
 ////        public f2(n: number): number { return 0; }

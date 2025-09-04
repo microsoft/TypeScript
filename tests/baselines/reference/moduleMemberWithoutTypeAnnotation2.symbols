@@ -1,14 +1,14 @@
 //// [tests/cases/compiler/moduleMemberWithoutTypeAnnotation2.ts] ////
 
 === moduleMemberWithoutTypeAnnotation2.ts ===
-module TypeScript {
+namespace TypeScript {
 >TypeScript : Symbol(TypeScript, Decl(moduleMemberWithoutTypeAnnotation2.ts, 0, 0))
 
-    export module CompilerDiagnostics {
->CompilerDiagnostics : Symbol(CompilerDiagnostics, Decl(moduleMemberWithoutTypeAnnotation2.ts, 0, 19))
+    export namespace CompilerDiagnostics {
+>CompilerDiagnostics : Symbol(CompilerDiagnostics, Decl(moduleMemberWithoutTypeAnnotation2.ts, 0, 22))
 
         export interface IDiagnosticWriter {
->IDiagnosticWriter : Symbol(IDiagnosticWriter, Decl(moduleMemberWithoutTypeAnnotation2.ts, 1, 39))
+>IDiagnosticWriter : Symbol(IDiagnosticWriter, Decl(moduleMemberWithoutTypeAnnotation2.ts, 1, 42))
 
             Alert(output: string): void;
 >Alert : Symbol(IDiagnosticWriter.Alert, Decl(moduleMemberWithoutTypeAnnotation2.ts, 3, 44))

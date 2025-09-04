@@ -1,12 +1,12 @@
 // checking assignment compatibility relations for function types.
 
-module Errors {
+namespace Errors {
     class Base { foo: string; }
     class Derived extends Base { bar: string; }
     class Derived2 extends Derived { baz: string; }
     class OtherDerived extends Base { bing: string; }
 
-    module WithNonGenericSignaturesInBaseType {
+    namespace WithNonGenericSignaturesInBaseType {
         // target type with non-generic call signatures
         var a2: new (x: number) => string[];
         var a7: new (x: (arg: Base) => Derived) => (r: Base) => Derived2;
@@ -82,7 +82,7 @@ module Errors {
         b17 = a17; // error
     }
 
-    module WithGenericSignaturesInBaseType {
+    namespace WithGenericSignaturesInBaseType {
         // target type has generic call signature
         var a2: new <T>(x: T) => T[];
         var b2: new <T>(x: T) => string[];

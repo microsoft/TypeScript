@@ -1,4 +1,4 @@
-declare module Foo {
+declare namespace Foo {
     enum Bar {
         a = `1`,
         b = '2',

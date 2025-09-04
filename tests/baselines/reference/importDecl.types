@@ -42,7 +42,7 @@ export var f4 = m4.foo();
 >foo : () => m4.d
 >    : ^^^^^^^^^^
 
-export module m1 {
+export namespace m1 {
 >m1 : typeof m1
 >   : ^^^^^^^^^
 
@@ -160,7 +160,7 @@ import private_m4 = require("./importDecl_require3");
 >private_m4 : typeof private_m4
 >           : ^^^^^^^^^^^^^^^^^
 
-export module usePrivate_m4_m1 {
+export namespace usePrivate_m4_m1 {
 >usePrivate_m4_m1 : typeof usePrivate_m4_m1
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^
 

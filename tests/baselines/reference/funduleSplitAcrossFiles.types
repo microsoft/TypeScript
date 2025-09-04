@@ -6,7 +6,7 @@ function D() { }
 >  : ^^^^^^^^
 
 === funduleSplitAcrossFiles_module.ts ===
-module D {
+namespace D {
 >D : typeof D
 >  : ^^^^^^^^
 

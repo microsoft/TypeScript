@@ -70,7 +70,7 @@ decrementOperatorWithAnyOtherTypeInvalidOperations.ts(72,12): error TS1109: Expr
             return a;
         }
     }
-    module M {
+    namespace M {
         export var n: any;
     }
     var objA = new A();

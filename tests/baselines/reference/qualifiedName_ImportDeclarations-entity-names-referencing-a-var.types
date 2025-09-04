@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/qualifiedName_ImportDeclarations-entity-names-referencing-a-var.ts] ////
 
 === qualifiedName_ImportDeclarations-entity-names-referencing-a-var.ts ===
-module Alpha {
+namespace Alpha {
 >Alpha : typeof Alpha
 >      : ^^^^^^^^^^^^
 
@@ -12,7 +12,7 @@ module Alpha {
 >    : ^^^
 }
 
-module Beta {
+namespace Beta {
     import p = Alpha.x;
 >p : number
 >  : ^^^^^^

@@ -20,7 +20,7 @@ class A {
     static foo() { return 1; }
 >foo : Symbol(A.foo, Decl(negateOperatorWithNumberType.ts, 7, 21))
 }
-module M {
+namespace M {
 >M : Symbol(M, Decl(negateOperatorWithNumberType.ts, 9, 1))
 
     export var n: number;

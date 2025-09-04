@@ -11,7 +11,7 @@ label: var a = 1;
 label: let b = 1;
 label: const c = 1;
 
-label: module M { }
+label: namespace M { }
 label: namespace N {}
 label: type T = {}
 

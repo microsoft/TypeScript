@@ -1,4 +1,4 @@
-declare module Foo {
+declare namespace Foo {
 	function a():void;
 	var b:number;
 	class C {}
@@ -8,7 +8,7 @@ Foo.a();
 Foo.b;
 var c = new Foo.C();
 
-declare module Foo2 {
+declare namespace Foo2 {
     export function a(): void;
     export var b: number;
     export class C { }

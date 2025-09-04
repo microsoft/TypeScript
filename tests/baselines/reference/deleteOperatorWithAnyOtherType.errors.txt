@@ -44,7 +44,7 @@ deleteOperatorWithAnyOtherType.ts(57,8): error TS2703: The operand of a 'delete'
             return a;
         }
     }
-    module M {
+    namespace M {
         export var n: any;
     }
     var objA = new A();

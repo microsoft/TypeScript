@@ -3,7 +3,7 @@ test1.ts(3,23): error TS2792: Cannot find module 'test2'. Did you mean to set th
 
 
 ==== test1.ts (2 errors) ====
-    module myModule {
+    namespace myModule {
      
      import foo = require("test2");
                           ~~~~~~~
