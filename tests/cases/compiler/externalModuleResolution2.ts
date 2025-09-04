@@ -6,7 +6,7 @@ namespace M2 {
 export = M2
 
 // @Filename: foo.d.ts
-declare module M1 {
+declare namespace M1 {
     export var Y:number;
 }
 export = M1

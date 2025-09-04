@@ -1,6 +1,6 @@
 namespace A {
     export function B<T>(x: T) { return x; }
-    export module B {
+    export namespace B {
         export var x = 1;
     }
 }

@@ -230,7 +230,7 @@ function privateFunctionWithPrivateModuleParameterTypes1() {
 }
 declare function privateAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; 
 
-export module publicModule {
+export namespace publicModule {
     class privateClass {
     }
 

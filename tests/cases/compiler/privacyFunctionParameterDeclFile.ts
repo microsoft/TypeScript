@@ -132,7 +132,7 @@ function privateFunctionWithPrivateModuleParameterTypes(param: privateModule.pub
 }
 declare function privateAmbientFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
 
-export module publicModule {
+export namespace publicModule {
     class privateClass {
     }
 

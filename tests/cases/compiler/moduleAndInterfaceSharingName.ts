@@ -1,5 +1,5 @@
 namespace X {
-    export module Y {
+    export namespace Y {
         export interface Z { }
     }
     export interface Y { }

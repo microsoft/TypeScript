@@ -6,7 +6,7 @@ namespace M {
 }
  
 namespace M {
-    export module f {
+    export namespace f {
         export var hello = 1;
     }
     f();

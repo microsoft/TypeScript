@@ -57,7 +57,7 @@ module M6.A {
     export enum Color { Red, Green, Blue }
 }
 namespace M6 {
-    export module A {
+    export namespace A {
         export enum Color { Yellow = 1 }
     }
     var t = A.Color.Yellow;

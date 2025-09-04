@@ -20,8 +20,8 @@ module X.Y.Z {
 }
 
 namespace X {
-    export module Y {
-        export module Z {
+    export namespace Y {
+        export namespace Z {
             // expected error
             export class Line {
                 name: string;

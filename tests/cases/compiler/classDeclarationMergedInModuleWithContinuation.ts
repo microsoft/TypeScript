@@ -1,6 +1,6 @@
 namespace M {
     export class N { }
-    export module N {
+    export namespace N {
         export var v = 0;
     }
 }

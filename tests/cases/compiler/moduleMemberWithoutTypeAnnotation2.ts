@@ -1,5 +1,5 @@
 namespace TypeScript {
-    export module CompilerDiagnostics {
+    export namespace CompilerDiagnostics {
 
         export interface IDiagnosticWriter {
             Alert(output: string): void;

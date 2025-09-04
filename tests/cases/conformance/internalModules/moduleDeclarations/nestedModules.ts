@@ -6,7 +6,7 @@ module A.B.C {
 }
 
 namespace A {
-    export module B {
+    export namespace B {
         var Point: C.Point = { x: 0, y: 0 }; // bug 832088: could not find module 'C'
     }
 }
@@ -18,7 +18,7 @@ module M2.X {
 }
 
 namespace M2 {
-    export module X {
+    export namespace X {
         export var Point: number;
     }
 }

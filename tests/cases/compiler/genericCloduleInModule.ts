@@ -3,7 +3,7 @@ namespace A {
         foo() { }
         static bar() { }
     }
-    export module B {
+    export namespace B {
         export var x = 1;
     }
 }

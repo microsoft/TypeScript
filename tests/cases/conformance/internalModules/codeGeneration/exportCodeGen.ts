@@ -36,7 +36,7 @@ namespace E {
     export function fn() { }
     export interface I { id: number }
     export class C { name: string }
-    export module M {
+    export namespace M {
         export var x = 42;
     }
 }

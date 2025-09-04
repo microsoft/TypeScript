@@ -3,7 +3,7 @@
 
 // @Filename: declFileExportImportChain2_a.ts
 namespace m1 {
-    export module m2 {
+    export namespace m2 {
         export class c1 {
         }
     }

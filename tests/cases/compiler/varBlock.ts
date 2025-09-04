@@ -3,7 +3,7 @@ namespace m2 {
     export var a, b2: number = 10, b;
 }
 
-declare module m3 {
+declare namespace m3 {
     var a, b, c;
     var a1, b1 = 10;
 
@@ -28,7 +28,7 @@ namespace m3 {
     export declare var d2E, d3E = 10, d4E = 10;
 }
 
-declare module m4 {
+declare namespace m4 {
     var d = 10;
     var d2, d3 = 10, d4 =10;
     export var dE = 10;

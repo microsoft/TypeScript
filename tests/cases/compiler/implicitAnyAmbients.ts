@@ -1,6 +1,6 @@
 // @noimplicitany: true
 
-declare module m {
+declare namespace m {
     var x; // error
     var y: any;
 

@@ -3,7 +3,7 @@ namespace M {
     export declare function f();
     export declare class C { }
     export declare enum E { }
-    export declare module M { }
+    export declare namespace M { }
 }
 
 namespace M2 {
@@ -11,5 +11,5 @@ namespace M2 {
     declare function f();
     declare class C { }
     declare enum E { }
-    declare module M { }
+    declare namespace M { }
 }

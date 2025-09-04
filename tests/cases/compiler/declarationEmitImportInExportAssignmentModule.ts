@@ -2,7 +2,7 @@
 // @module: commonjs 
 
 namespace m {
-    export module c {
+    export namespace c {
         export class c {
         }
     }

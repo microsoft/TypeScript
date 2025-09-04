@@ -14,7 +14,7 @@ namespace B {
 }
 
 namespace X {
-    export module Y {
+    export namespace Y {
         export interface Point{
             x: number;
             y: number
@@ -40,7 +40,7 @@ namespace a {
 
 namespace b {
   export import A = a.A;
-  export module A {}
+  export namespace A {}
 }
 
 namespace c {

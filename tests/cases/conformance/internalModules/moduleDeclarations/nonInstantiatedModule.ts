@@ -14,7 +14,7 @@ var a2: number;
 var a2 = m.a;
 
 namespace M2 {
-    export module Point {
+    export namespace Point {
         export function Origin(): Point {
             return { x: 0, y: 0 };
         }
@@ -33,7 +33,7 @@ var p2: { Origin() : { x: number; y: number; } };
 var p2: typeof M2.Point;
 
 namespace M3 {
-    export module Utils {
+    export namespace Utils {
         export interface Point {
             x: number; y: number;
         }

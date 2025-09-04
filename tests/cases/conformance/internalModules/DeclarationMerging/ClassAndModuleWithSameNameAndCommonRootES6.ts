@@ -13,7 +13,7 @@ module X.Y {
 
 // @filename: module.ts
 module X.Y {
-    export module Point {
+    export namespace Point {
         export var Origin = new Point(0, 0);
     }
 }

@@ -4,7 +4,7 @@ namespace A {
         y: number;
     }
 
-    export module inA {
+    export namespace inA {
         export interface Point3D extends Point {
             z: number;
         }

@@ -18,7 +18,7 @@ M = { y: 3 }; // Error
 (M) = { y: 3 }; // Error
 
 namespace M2 {
-    export module M3 {
+    export namespace M3 {
         export var x: number;
     }
 

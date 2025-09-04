@@ -7,7 +7,7 @@ namespace A {
 
 // @filename: module.ts
 namespace B {
-    export module Point {
+    export namespace Point {
         export var Origin = { x: 0, y: 0 };
     }
 }

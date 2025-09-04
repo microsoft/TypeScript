@@ -82,7 +82,7 @@ namespace m1 {
     }
 
     /// module m2
-    export module m2 {
+    export namespace m2 {
     }
 }
 

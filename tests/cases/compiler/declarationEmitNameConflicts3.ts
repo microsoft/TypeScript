@@ -2,13 +2,13 @@
 // @module: commonjs
 namespace M {
     export interface D { }
-    export module D {
+    export namespace D {
         export function f() { }
     }
-    export module C {
+    export namespace C {
         export function f() { }
     }
-    export module E {
+    export namespace E {
         export function f() { }
     }
 }

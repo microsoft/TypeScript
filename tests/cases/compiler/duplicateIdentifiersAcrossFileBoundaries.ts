@@ -12,7 +12,7 @@ class Foo {
 }
 
 namespace N {
-    export module F {
+    export namespace F {
         var t;
     }
 }
@@ -28,6 +28,6 @@ namespace Foo {
     export var x: number; // error for redeclaring var in a different parent
 }
 
-declare module N {
+declare namespace N {
     export function F(); // no error because function is ambient
 }

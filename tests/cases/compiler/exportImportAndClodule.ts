@@ -2,7 +2,7 @@ namespace K {
     export class L {
         constructor(public name: string) { }
     }
-    export module L {
+    export namespace L {
         export var y = 12;
         export interface Point {
             x: number;

@@ -48,8 +48,8 @@ const enum Comments {
 }
 
 namespace A {
-    export module B {
-        export module C {
+    export namespace B {
+        export namespace C {
             export const enum E {
                 V1 = 1,
                 V2 = A.B.C.E.V1 | 100
@@ -59,8 +59,8 @@ namespace A {
 }
 
 namespace A {
-    export module B {
-        export module C {
+    export namespace B {
+        export namespace C {
             export const enum E {
                 V3 = A.B.C.E["V2"] & 200,
                 V4 = A.B.C.E[`V1`] << 1,
@@ -70,8 +70,8 @@ namespace A {
 }
 
 namespace A1 {
-    export module B {
-        export module C {
+    export namespace B {
+        export namespace C {
             export const enum E {
                 V1 = 10,
                 V2 = 110,
@@ -81,15 +81,15 @@ namespace A1 {
 }
 
 namespace A2 {
-    export module B {
-        export module C {
+    export namespace B {
+        export namespace C {
             export const enum E {
                 V1 = 10,
                 V2 = 110,
             }
         }
         // module C will be classified as value
-        export module C {
+        export namespace C {
             var x = 1
         }
     }

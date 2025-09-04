@@ -1,12 +1,12 @@
 namespace M {
     export var m=0;
-    export module N {
+    export namespace N {
         export var n=1;
     }
 }
 
 namespace M {
-    export module N {
+    export namespace N {
         var y=m;
         var x=n+y;
     }
@@ -17,7 +17,7 @@ namespace T {
     export interface I {
         p;
     }
-    export module U {
+    export namespace U {
         var z:I=3;
         export interface I2 {
             q;
@@ -26,18 +26,18 @@ namespace T {
 }
 
 namespace Peer {
-    export module U2 {
+    export namespace U2 {
         var z:T.U.I2=3;
     }
 }
 
 namespace Everest {
-    export module K1 {
+    export namespace K1 {
         export interface I3 {
             zeep;
         }
     }
-    export module K2 {
+    export namespace K2 {
         export interface I4 {
             z;
         }

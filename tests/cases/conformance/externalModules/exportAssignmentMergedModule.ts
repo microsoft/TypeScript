@@ -10,7 +10,7 @@ namespace Foo {
 	export function c(a: number){
 		return a;
 	}
-	export module Test {
+	export namespace Test {
 		export var answer = 42;
 	}
 }

@@ -1,6 +1,6 @@
 declare function exports(): number;
 declare function require(): string;
-declare module m3 {
+declare namespace m3 {
     function exports(): string[];
     function require(): number[];
 }

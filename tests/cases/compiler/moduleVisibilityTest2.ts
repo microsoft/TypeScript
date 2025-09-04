@@ -3,7 +3,7 @@
 namespace OuterMod {
 	export function someExportedOuterFunc() { return -1; }
 
-	export module OuterInnerMod {
+	export namespace OuterInnerMod {
 		export function someExportedOuterInnerFunc() { return "foo"; }
 	}
 }

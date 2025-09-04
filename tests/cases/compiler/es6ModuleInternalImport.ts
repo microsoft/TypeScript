@@ -1,11 +1,11 @@
 // @target: ES6
-export module m {
+export namespace m {
     export var a = 10;
 }
 export import a1 = m.a;
 import a2 = m.a;
 var x = a1 + a2;
-export module m1 {
+export namespace m1 {
     export import a3 = m.a;
     import a4 = m.a;
     var x = a1 + a2;

@@ -2,7 +2,7 @@
 // @declaration: true
 
 // @Filename: privacyClassImplementsClauseDeclFile_externalModule.ts
-export module publicModule {
+export namespace publicModule {
     export interface publicInterfaceInPublicModule {
     }
 

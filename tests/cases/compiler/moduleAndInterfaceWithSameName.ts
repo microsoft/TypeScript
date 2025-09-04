@@ -1,5 +1,5 @@
 namespace Foo1 {
-    export module Bar {
+    export namespace Bar {
         export var x = 42;
     }
 
@@ -21,7 +21,7 @@ namespace Foo2 {
 var z2 = Foo2.Bar.y; // Error for using interface name as a value.
 
 namespace Foo3 {
-    export module Bar {
+    export namespace Bar {
         export var x = 42;
     }
 

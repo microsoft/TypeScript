@@ -3,7 +3,7 @@ export var x4 = m4.x;
 export var d4 = m4.d;
 export var f4 = m4.foo();
 
-export module m1 {
+export namespace m1 {
     export var x2 = m4.x;
     export var d2 = m4.d;
     export var f2 = m4.foo();

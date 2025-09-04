@@ -1,6 +1,6 @@
 // @filename: module.d.ts
-declare module A {
-    export module Point {
+declare namespace A {
+    export namespace Point {
         export var Origin: {
             x: number;
             y: number;

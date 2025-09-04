@@ -2,7 +2,7 @@
 module X.Y.base {
     export function f() { }
     export class C { }
-    export module M {
+    export namespace M {
         export var v;
     }
     export enum E { }

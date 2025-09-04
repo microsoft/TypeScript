@@ -11,7 +11,7 @@ namespace M {
 
     export type C = c;
 
-    export module m {
+    export namespace m {
         export class c {
         }
     }
@@ -27,7 +27,7 @@ interface Window {
 
 namespace M {
     export type W = Window | string;
-    export module N {
+    export namespace N {
         export class Window { }
         export var p: W;
     }

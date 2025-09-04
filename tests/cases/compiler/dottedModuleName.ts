@@ -1,5 +1,5 @@
 namespace M {
-    export module N {
+    export namespace N {
 	export function f(x:number)=>2*x;
 	export module X.Y.Z {
 	    export var v2=f(v);
@@ -10,7 +10,7 @@ namespace M {
 
 
 module M.N {
-    export module X {
+    export namespace X {
 	export module Y.Z {
 	    export var v=f(10);
 	}

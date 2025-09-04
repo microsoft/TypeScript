@@ -1,4 +1,4 @@
 namespace M {
-  declare module M1 {
+  declare namespace M1 {
   }
 }

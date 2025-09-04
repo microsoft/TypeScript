@@ -19,9 +19,9 @@ namespace B {
 
 namespace X {
     var X = 13;
-    export module Y {
+    export namespace Y {
         var Y = 13;
-        export module Z {
+        export namespace Z {
             var X = 12;
             var Y = 12;
             var Z = 12;

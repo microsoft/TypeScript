@@ -11,7 +11,7 @@ enum e2 {
 }
 var x = e1.a;
 var y = e2.x;
-export module m1 {
+export namespace m1 {
     export enum e3 {
         a,
         b,

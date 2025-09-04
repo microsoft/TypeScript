@@ -2,7 +2,7 @@
 //@filename: collisionExportsRequireAndAmbientVar_externalmodule.ts
 export declare var exports: number;
 export declare var require: string;
-declare module m1 {
+declare namespace m1 {
     var exports: string;
     var require: number;
 }
@@ -15,7 +15,7 @@ namespace m2 {
 //@filename: collisionExportsRequireAndAmbientVar_globalFile.ts
 declare var exports: number;
 declare var require: string;
-declare module m3 {
+declare namespace m3 {
     var exports: string;
     var require: number;
 }

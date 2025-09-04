@@ -1,6 +1,6 @@
 //@module: commonjs
 // @Filename: foo.d.ts
-declare module M1 {
+declare namespace M1 {
     export var X:number;
 }
 export = M1

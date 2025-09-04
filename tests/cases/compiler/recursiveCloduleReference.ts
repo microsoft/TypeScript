@@ -2,7 +2,7 @@ namespace M
 {
   export class C {
   }
-  export module C {
+  export namespace C {
     export var C = M.C
   };
 };

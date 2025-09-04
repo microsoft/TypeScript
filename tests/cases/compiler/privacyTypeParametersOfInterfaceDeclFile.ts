@@ -65,7 +65,7 @@ export interface publicInterfaceWithPrivateModuleTypeParameterConstraints<T exte
 interface privateInterfaceWithPrivateModuleTypeParameterConstraints<T extends privateModule.publicClassInPrivateModule> { // Error
 }
 
-export module publicModule {
+export namespace publicModule {
     class privateClassInPublicModule {
     }
 

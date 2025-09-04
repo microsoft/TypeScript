@@ -23,10 +23,10 @@ namespace M1 {
     }
 }
 
-export module M2 {
+export namespace M2 {
     export interface I1 { item:string; }
     export interface I2 { item:string; }
-    export module M3 {
+    export namespace M3 {
         export interface I1 { item:string; }
     }
     class C1 implements I1 {

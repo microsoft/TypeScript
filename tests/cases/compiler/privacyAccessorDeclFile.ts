@@ -205,7 +205,7 @@ class privateClassWithPrivateModuleSetAccessorTypes {
     }
 }
 
-export module publicModule {
+export namespace publicModule {
     class privateClass {
     }
 

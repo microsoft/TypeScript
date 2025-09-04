@@ -1,6 +1,6 @@
 // @Filename: file1.ts
 namespace App {
-    export module Services {
+    export namespace Services {
         export class UserServices {
             public getUserName(): string {
                 return "Bill Gates";

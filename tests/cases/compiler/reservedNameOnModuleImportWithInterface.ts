@@ -1,4 +1,4 @@
-declare module test {
+declare namespace test {
     interface mi_string { }
     namespace mi_string { }
 

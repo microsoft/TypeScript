@@ -1,6 +1,6 @@
 // @declaration: true
 
-declare module outer {
+declare namespace outer {
   interface Beta { }
   namespace inner {
     // .d.ts emit: should be 'extends outer.Beta'

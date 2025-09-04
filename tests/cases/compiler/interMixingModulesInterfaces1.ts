@@ -5,7 +5,7 @@ namespace A {
         value: number;
     }
 
-    export module B {
+    export namespace B {
         export function createB(): B {
             return null;
         }

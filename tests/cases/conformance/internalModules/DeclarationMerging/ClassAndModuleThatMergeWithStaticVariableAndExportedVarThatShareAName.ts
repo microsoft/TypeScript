@@ -16,7 +16,7 @@ namespace A {
         static Origin: Point = { x: 0, y: 0 };
     }
 
-    export module Point {
+    export namespace Point {
         export var Origin = ""; //expected duplicate identifier error
     }
 }

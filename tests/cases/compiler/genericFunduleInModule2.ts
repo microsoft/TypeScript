@@ -3,7 +3,7 @@ namespace A {
 }
 
 namespace A {
-    export module B {
+    export namespace B {
         export var x = 1;
     }
 }

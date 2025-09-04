@@ -1,6 +1,6 @@
 // @declaration: true
 namespace a {
-    export module b {
+    export namespace b {
         export class c {
         }
     }

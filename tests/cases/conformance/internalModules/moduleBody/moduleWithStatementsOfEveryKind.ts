@@ -37,7 +37,7 @@ namespace Y {
         id: number;
     }
 
-    export module Module {
+    export namespace Module {
         class A { s: string }
     }
     export enum Color { Blue, Red }

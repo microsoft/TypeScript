@@ -8,7 +8,7 @@ namespace M {
     }  
 }
 
-declare module A {
+declare namespace A {
     export export var x;
     export export function f()
 

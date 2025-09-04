@@ -1,5 +1,5 @@
 ﻿namespace Z {
-    export module M {
+    export namespace M {
         export function bar() {
             return "";
         }

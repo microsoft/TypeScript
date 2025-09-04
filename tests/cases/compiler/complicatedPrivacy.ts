@@ -1,6 +1,6 @@
 // @target: es5
 namespace m1 {
-    export module m2 {
+    export namespace m2 {
 
 
         export function f1(c1: C1) {
@@ -69,7 +69,7 @@ class C2 {
 }
 
 namespace m2 {
-    export module m3 {
+    export namespace m3 {
 
         export class c_pr  implements mglo5.i5, mglo5.i6 {
             f1() {
@@ -82,7 +82,7 @@ namespace m2 {
             }
             namespace m5 {
                 
-                export module m6 {
+                export namespace m6 {
                     function f1() {
                         return new C();
                     }

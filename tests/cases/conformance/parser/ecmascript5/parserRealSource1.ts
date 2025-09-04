@@ -4,7 +4,7 @@
 ///<reference path='typescript.ts' />
 
 namespace TypeScript {
-    export module CompilerDiagnostics {
+    export namespace CompilerDiagnostics {
         export var debug = false;
         export interface IDiagnosticWriter {
             Alert(output: string): void;

@@ -16,7 +16,7 @@ namespace A {
         static Origin: Point = { x: 0, y: 0 };
     }
 
-    export module Point {
+    export namespace Point {
         var Origin = ""; // not an error since not exported
     }
 }

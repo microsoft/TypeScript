@@ -1,6 +1,6 @@
 //@module: amd
 //@filename: collisionExportsRequireAndAmbientModule_externalmodule.ts
-export declare module require {
+export declare namespace require {
     export interface I {
     }
     export class C {
@@ -9,7 +9,7 @@ export declare module require {
 export function foo(): require.I {
     return null;
 }
-export declare module exports {
+export declare namespace exports {
     export interface I {
     }
     export class C {
@@ -18,7 +18,7 @@ export declare module exports {
 export function foo2(): exports.I {
     return null;
 }
-declare module m1 {
+declare namespace m1 {
     namespace require {
         export interface I {
         }
@@ -33,13 +33,13 @@ declare module m1 {
     }
 }
 namespace m2 {
-    export declare module require {
+    export declare namespace require {
         export interface I {
         }
         export class C {
         }
     }
-    export declare module exports {
+    export declare namespace exports {
         export interface I {
         }
         export class C {
@@ -49,19 +49,19 @@ namespace m2 {
 }
 
 //@filename: collisionExportsRequireAndAmbientModule_globalFile.ts
-declare module require {
+declare namespace require {
     export interface I {
     }
     export class C {
     }
 }
-declare module exports {
+declare namespace exports {
     export interface I {
     }
     export class C {
     }
 }
-declare module m3 {
+declare namespace m3 {
     namespace require {
         export interface I {
         }
@@ -76,13 +76,13 @@ declare module m3 {
     }
 }
 namespace m4 {
-    export declare module require {
+    export declare namespace require {
         export interface I {
         }
         export class C {
         }
     }
-    export declare module exports {
+    export declare namespace exports {
         export interface I {
         }
         export class C {

@@ -1,4 +1,4 @@
-export module m1 {
+export namespace m1 {
 }
 
 namespace m2 {

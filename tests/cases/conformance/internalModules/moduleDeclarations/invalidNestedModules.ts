@@ -6,7 +6,7 @@ module A.B.C {
 }
 
 namespace A {
-    export module B {
+    export namespace B {
         export class C { // Error
             name: string;
         }
@@ -20,7 +20,7 @@ module M2.X {
 }
 
 namespace M2 {
-    export module X {
+    export namespace X {
         export var Point: number; // Error
     }
 }

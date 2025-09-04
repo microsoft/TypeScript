@@ -42,10 +42,10 @@ namespace Foo {
 }
 
 namespace N {
-    export module F {
+    export namespace F {
         var t;
     }
 }
-declare module N {
+declare namespace N {
     export function F(); // no error because function is ambient
 }

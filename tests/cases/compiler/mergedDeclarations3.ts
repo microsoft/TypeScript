@@ -4,7 +4,7 @@ namespace M {
  }
 }
 namespace M {
- export module Color {
+ export namespace Color {
    export var Blue = 4;
   }
 }
@@ -22,7 +22,7 @@ namespace M {
 }
 
 namespace M {
-    export module foo {
+    export namespace foo {
         export var y = 2
     }
 }

@@ -6,7 +6,7 @@ namespace A {
     export class Point {
         constructor(public x: number, public y: number) { }
     }
-    export module B {
+    export namespace B {
         export interface Id {
             name: string;
         }
@@ -27,7 +27,7 @@ namespace X {
         return 42;
     }
 
-    export module Y {
+    export namespace Y {
         export class Point {
             constructor(public x: number, public y: number) { }
         }
@@ -48,7 +48,7 @@ namespace K {
         constructor(public name: string) { }
     }
 
-    export module L {
+    export namespace L {
         export var y = 12;
         export interface Point {
             x: number;

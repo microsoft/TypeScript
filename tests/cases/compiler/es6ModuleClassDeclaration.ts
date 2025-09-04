@@ -34,7 +34,7 @@ class c2 {
 new c();
 new c2();
 
-export module m1 {
+export namespace m1 {
     export class c3 {
         constructor() {
         }

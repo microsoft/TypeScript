@@ -10,6 +10,6 @@ module X.A.B.C {
 }
 
 module X.A.B.C {
-    export module A {
+    export namespace A {
     }
 }

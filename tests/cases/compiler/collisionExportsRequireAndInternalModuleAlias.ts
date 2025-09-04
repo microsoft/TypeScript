@@ -1,5 +1,5 @@
 //@module: amd
-export module m {
+export namespace m {
     export class c {
     }
 }

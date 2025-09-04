@@ -19,7 +19,7 @@ module X.Y.Z {
 }
 
 namespace X {
-    export module Y {
+    export namespace Y {
         namespace Z {
             export class Line {
                 name: string;

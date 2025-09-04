@@ -1,10 +1,10 @@
 namespace A {
-   export module M {
+   export namespace M {
         class C { }
     }
 }
 namespace B {
-    export module M {
+    export namespace M {
         export class D { }
     }
 }

@@ -1,6 +1,6 @@
 //@module: amd
 //@filename: collisionExportsRequireAndModule_externalmodule.ts
-export module require {
+export namespace require {
     export interface I {
     }
     export class C {
@@ -9,7 +9,7 @@ export module require {
 export function foo(): require.I {
     return null;
 }
-export module exports {
+export namespace exports {
     export interface I {
     }
     export class C {
@@ -33,13 +33,13 @@ namespace m1 {
     }
 }
 namespace m2 {
-    export module require {
+    export namespace require {
         export interface I {
         }
         export class C {
         }
     }
-    export module exports {
+    export namespace exports {
         export interface I {
         }
         export class C {
@@ -75,13 +75,13 @@ namespace m3 {
     }
 }
 namespace m4 {
-    export module require {
+    export namespace require {
         export interface I {
         }
         export class C {
         }
     }
-    export module exports {
+    export namespace exports {
         export interface I {
         }
         export class C {

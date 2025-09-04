@@ -1,12 +1,12 @@
 namespace A {
-    declare module My {
+    declare namespace My {
         export var x: number;
     }
     function My(s: string) { }
 }
 
 namespace B {
-    declare module My {
+    declare namespace My {
         export var x: number;
     }
     function My(s: boolean);
@@ -14,14 +14,14 @@ namespace B {
 }
 
 namespace C {
-    declare module My {
+    declare namespace My {
         export var x: number;
     }
     declare function My(s: boolean);
 }
 
 namespace D {
-    declare module My {
+    declare namespace My {
         export var x: number;
     }
     declare function My(s: boolean);
@@ -30,11 +30,11 @@ namespace D {
 
 
 namespace E {
-    declare module My {
+    declare namespace My {
         export var x: number;
     }
     declare function My(s: boolean);
-    declare module My {
+    declare namespace My {
         export var y: number;
     }
     declare function My(s: any);

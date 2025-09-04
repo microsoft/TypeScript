@@ -2,7 +2,7 @@
 // @declaration: true
 
 // @Filename: privacyClassExtendsClauseDeclFile_externalModule.ts
-export module publicModule {
+export namespace publicModule {
     export class publicClassInPublicModule {
         private f1() {
         }

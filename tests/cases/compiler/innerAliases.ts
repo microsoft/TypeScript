@@ -1,6 +1,6 @@
 namespace A {
-    export module B {
-        export module C {
+    export namespace B {
+        export namespace C {
             export class Class1 {}
         }
     }
@@ -11,7 +11,7 @@ namespace D {
    
     var c1 = new inner.Class1(); 
 
-    export module E { 
+    export namespace E { 
         export class Class2 {}
     }
 }

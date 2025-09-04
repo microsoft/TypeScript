@@ -4,7 +4,7 @@ export declare class require {
 }
 export declare class exports {
 }
-declare module m1 {
+declare namespace m1 {
     class require {
     }
     class exports {
@@ -22,7 +22,7 @@ declare class require {
 }
 declare class exports {
 }
-declare module m3 {
+declare namespace m3 {
     class require {
     }
     class exports {

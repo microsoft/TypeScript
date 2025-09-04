@@ -16,7 +16,7 @@ namespace A {
         static Origin(): Point { return { x: 0, y: 0 }; }
     }
 
-    export module Point {
+    export namespace Point {
         function Origin() { return ""; }// not an error since not exported
     }
 }

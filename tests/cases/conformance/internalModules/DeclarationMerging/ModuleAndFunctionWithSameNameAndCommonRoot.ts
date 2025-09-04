@@ -1,6 +1,6 @@
 // @filename: module.ts
 namespace A {
-    export module Point {
+    export namespace Point {
         export var Origin = { x: 0, y: 0 };
     }
 }
@@ -16,7 +16,7 @@ namespace A {
 // @filename: simple.ts
 namespace B {
 
-    export module Point {
+    export namespace Point {
         export var Origin = { x: 0, y: 0 };
     }
 

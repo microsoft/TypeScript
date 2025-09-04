@@ -8,7 +8,7 @@ export declare enum exports {
     _thisVal1,
     _thisVal2,
 }
-declare module m1 {
+declare namespace m1 {
     enum require {
         _thisVal1,
         _thisVal2,
@@ -38,7 +38,7 @@ declare enum exports {
     _thisVal1,
     _thisVal2,
 }
-declare module m3 {
+declare namespace m3 {
     enum require {
         _thisVal1,
         _thisVal2,

@@ -30,7 +30,7 @@ declare enum E2 {
 }
 
 // Ambient module with initializers for values, bodies for functions / classes
-declare module M1 {
+declare namespace M1 {
     var x = 3;
     function fn() { }
     class C {

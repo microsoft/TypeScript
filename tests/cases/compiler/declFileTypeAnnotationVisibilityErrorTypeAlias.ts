@@ -8,7 +8,7 @@ interface Window {
 
 namespace M {
     type W = Window | string;
-    export module N {
+    export namespace N {
         export class Window { }
         export var p: W; // Should report error that W is private
     }
@@ -16,7 +16,7 @@ namespace M {
 
 namespace M1 {
     export type W = Window | string;
-    export module N {
+    export namespace N {
         export class Window { }
         export var p: W; // No error
     }

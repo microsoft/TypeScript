@@ -1,7 +1,7 @@
 declare function _<T>(value: Array<T>): _<T>;
 declare function _<T>(value: T): _<T>;
 
-declare module _ {
+declare namespace _ {
     export function each<T>(
         //list: List<T>,
         //iterator: ListIterator<T, void>,

@@ -1,6 +1,6 @@
 namespace M1 {
-  declare module M2 {
-    declare module M3 {
+  declare namespace M2 {
+    declare namespace M3 {
     }
   }
 }

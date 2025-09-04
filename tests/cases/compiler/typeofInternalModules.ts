@@ -1,8 +1,8 @@
 namespace Outer {
-    export module instantiated {
+    export namespace instantiated {
         export class C { }
     }
-    export module uninstantiated {
+    export namespace uninstantiated {
         export interface P { }
     }
 }

@@ -28,7 +28,7 @@ namespace M2 {
 
 // same as above but with an additional level of nesting and third module declaration
 namespace M2 {
-    export module M3 {
+    export namespace M3 {
         export interface A {
             foo: string;
         }
@@ -40,7 +40,7 @@ namespace M2 {
 }
 
 namespace M2 {
-    export module M3 {
+    export namespace M3 {
         export interface A {
             bar: number;
         }
@@ -54,7 +54,7 @@ namespace M2 {
 }
 
 namespace M2 {
-    export module M3 {
+    export namespace M3 {
         export interface A {
             baz: boolean;
         }

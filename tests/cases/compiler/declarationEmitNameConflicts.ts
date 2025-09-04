@@ -6,10 +6,10 @@ export = f;
 
 // @Filename: declarationEmit_nameConflicts_0.ts
 import im = require('./declarationEmit_nameConflicts_1');
-export module M {
+export namespace M {
     export function f() { }
     export class C { }
-    export module N {
+    export namespace N {
         export function g() { };
         export interface I { }
     }
@@ -23,7 +23,7 @@ export module M {
 export module M.P {
     export function f() { }
     export class C { }
-    export module N {
+    export namespace N {
         export function g() { };
         export interface I { }
     }
@@ -38,13 +38,13 @@ export module M.P {
 export module M.Q {
     export function f() { }
     export class C { }
-    export module N {
+    export namespace N {
         export function g() { };
         export interface I { }
     }
     export interface b extends M.b { } // ok
     export interface I extends M.c.I { } // ok
-    export module c {
+    export namespace c {
         export interface I extends M.c.I { } // ok
     }
 }

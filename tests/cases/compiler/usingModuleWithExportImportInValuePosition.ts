@@ -3,7 +3,7 @@ export var x = 'hello world'
 export class Point {
         constructor(public x: number, public y: number) { }
     }
-    export module B {
+    export namespace B {
         export interface Id {
             name: string;
         }

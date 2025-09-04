@@ -33,7 +33,7 @@ namespace M {
     namespace inst {
         var t;
     }
-    export module inst { // one error
+    export namespace inst { // one error
         var t;
     }
 }
@@ -56,7 +56,7 @@ namespace M {
 namespace M {
     class C { }
     namespace C { }
-    export module C { // Two visibility errors (one for the clodule symbol, and one for the merged container symbol)
+    export namespace C { // Two visibility errors (one for the clodule symbol, and one for the merged container symbol)
         var t;
     }
 }

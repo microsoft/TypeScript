@@ -33,7 +33,7 @@ interface KnockoutObservableArrayStatic {
     <T>(value?: T[]): KnockoutObservableArray<T>;
 }
 
-declare module ko {
+declare namespace ko {
     export var observableArray: KnockoutObservableArrayStatic;
 }
 

@@ -5,7 +5,7 @@ namespace A {
         y: number;
     }
 
-    export module Utils {
+    export namespace Utils {
         export function mirror<T extends Point>(p: T) {
             return { x: p.y, y: p.x };
         }
@@ -18,7 +18,7 @@ namespace A {
     // not a collision, since we don't export
     var Origin: string = "0,0";
 
-    export module Utils {
+    export namespace Utils {
         export class Plane {
             constructor(public tl: Point, public br: Point) { }
         }

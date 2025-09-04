@@ -1,5 +1,5 @@
 //@module: commonjs
-export module m1 {
+export namespace m1 {
     export class C1_public {
         private f1() {
         }
@@ -193,7 +193,7 @@ interface C8_private {
 
 }
 
-export module m3 {
+export namespace m3 {
     export interface m3_i_public {
         f1(): number;
     }

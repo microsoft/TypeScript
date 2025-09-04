@@ -6,7 +6,7 @@ function foo2() {
 foo();
 foo2();
 
-export module m1 {
+export namespace m1 {
     export function foo3() {
     }
     function foo4() {

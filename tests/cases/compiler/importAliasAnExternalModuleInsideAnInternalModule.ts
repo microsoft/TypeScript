@@ -1,5 +1,5 @@
 // @Filename: importAliasAnExternalModuleInsideAnInternalModule_file0.ts
-export module m {
+export namespace m {
     export function foo() { }
 }
 

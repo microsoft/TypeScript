@@ -51,7 +51,7 @@ namespace m1 {
 
 namespace m2 {
 
-    export module m3 {
+    export namespace m3 {
         export class c extends b {
         }
         export class ib2 implements m1.ib {
