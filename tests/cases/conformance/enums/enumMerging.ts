@@ -1,6 +1,6 @@
 // Enum with only constant members across 2 declarations with the same root module
 // Enum with initializer in all declarations with constant members with the same root module
-module M1 {
+namespace M1 {
     enum EImpl1 {
         A, B, C
     }
@@ -21,7 +21,7 @@ module M1 {
 }
 
 // Enum with only computed members across 2 declarations with the same root module 
-module M2 {
+namespace M2 {
     export enum EComp2 {
         A = 'foo'.length, B = 'foo'.length, C = 'foo'.length
     }
@@ -34,7 +34,7 @@ module M2 {
 }
 
 // Enum with initializer in only one of two declarations with constant members with the same root module
-module M3 {
+namespace M3 {
     enum EInit {
         A,
         B
@@ -46,17 +46,17 @@ module M3 {
 }
 
 // Enums with same name but different root module
-module M4 {
+namespace M4 {
     export enum Color { Red, Green, Blue }
 }
-module M5 {
+namespace M5 {
     export enum Color { Red, Green, Blue }
 }
 
 module M6.A {
     export enum Color { Red, Green, Blue }
 }
-module M6 {
+namespace M6 {
     export module A {
         export enum Color { Yellow = 1 }
     }

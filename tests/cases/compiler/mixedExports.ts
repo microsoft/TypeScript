@@ -9,7 +9,7 @@ declare module M1 {
      interface Foo {}
 }
 
-module A {
+namespace A {
      interface X {x}
      export module X {}
      interface X {y}

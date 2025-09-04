@@ -6,7 +6,7 @@
     }
 }
 
-module TypeScript {
+namespace TypeScript {
     export interface ISyntaxElement { };
     export interface ISyntaxToken { };
 
@@ -22,7 +22,7 @@ module TypeScript {
     }
 }
 
-module TypeScript {
+namespace TypeScript {
     export class SyntaxNode {
         public findToken(position: number, includeSkippedTokens: boolean = false): PositionedToken {
             var positionedToken = this.findTokenInternal(null, position, 0);

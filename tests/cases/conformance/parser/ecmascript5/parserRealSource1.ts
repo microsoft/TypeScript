@@ -3,7 +3,7 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
     export module CompilerDiagnostics {
         export var debug = false;
         export interface IDiagnosticWriter {

@@ -43,7 +43,7 @@ declare module M1 {
 }
 
 // Ambient external module not in the global module
-module M2 {
+namespace M2 {
     declare module 'nope' { }
 }
 

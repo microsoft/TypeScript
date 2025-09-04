@@ -4,12 +4,12 @@ class Point {
     static Origin: Point = { x: 0, y: 0 };
 }
 
-module Point {
+namespace Point {
     export var Origin = ""; //expected duplicate identifier error
 }
 
 
-module A {
+namespace A {
     export class Point {
         constructor(public x: number, public y: number) { }
 

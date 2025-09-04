@@ -1,4 +1,4 @@
-module TypeScript {
+namespace TypeScript {
     export module CompilerDiagnostics {
 
         export interface IDiagnosticWriter {

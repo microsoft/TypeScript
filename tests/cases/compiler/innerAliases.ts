@@ -1,4 +1,4 @@
-module A {
+namespace A {
     export module B {
         export module C {
             export class Class1 {}
@@ -6,7 +6,7 @@ module A {
     }
 }
 
-module D {
+namespace D {
     import inner = A.B.C; 
    
     var c1 = new inner.Class1(); 

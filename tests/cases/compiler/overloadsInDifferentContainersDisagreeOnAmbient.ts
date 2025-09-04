@@ -3,6 +3,6 @@ declare module M {
     export function f();
 }
 
-module M {
+namespace M {
     export function f() { }
 }

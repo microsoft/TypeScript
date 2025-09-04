@@ -28,7 +28,7 @@ class A {
     id: string;
 }
 
-module A {
+namespace A {
     export var Instance = new A();
 }
 

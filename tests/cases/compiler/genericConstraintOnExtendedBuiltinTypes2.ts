@@ -1,4 +1,4 @@
-module EndGate {
+namespace EndGate {
     export interface ICloneable {
         Clone(): any;
     }

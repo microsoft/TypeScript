@@ -2,7 +2,7 @@
 //@declaration: true
 
 // private elements
-module m_private {
+namespace m_private {
     export class c_private {
     }
     export enum e_private {

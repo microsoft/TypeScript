@@ -1,15 +1,15 @@
-module A {
+namespace A {
     // these 2 statements force an underscore before the 'A' 
     // in the generated function call.
     var A = 12;
     var _A = '';
 }
 
-module B {
+namespace B {
     var A = 12;
 }
 
-module B {
+namespace B {
     // re-opened module with colliding name
     // this should add an underscore.
     class B {
@@ -17,7 +17,7 @@ module B {
     }
 }
 
-module X {
+namespace X {
     var X = 13;
     export module Y {
         var Y = 13;
@@ -37,7 +37,7 @@ module Y.Y {
 
 // no collision, since interface doesn't
 // generate code.
-module D {
+namespace D {
     export interface D {
         id: number;
     }

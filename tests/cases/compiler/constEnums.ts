@@ -47,7 +47,7 @@ const enum Comments {
     "-->",
 }
 
-module A {
+namespace A {
     export module B {
         export module C {
             export const enum E {
@@ -58,7 +58,7 @@ module A {
     }
 }
 
-module A {
+namespace A {
     export module B {
         export module C {
             export const enum E {
@@ -69,7 +69,7 @@ module A {
     }
 }
 
-module A1 {
+namespace A1 {
     export module B {
         export module C {
             export const enum E {
@@ -80,7 +80,7 @@ module A1 {
     }
 }
 
-module A2 {
+namespace A2 {
     export module B {
         export module C {
             export const enum E {

@@ -1,4 +1,4 @@
-module M {
+namespace M {
     export export var x = 1;
     export export function f() { }
 

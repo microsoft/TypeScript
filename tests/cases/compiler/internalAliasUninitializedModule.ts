@@ -1,5 +1,5 @@
 // @declaration: true
-module a {
+namespace a {
     export module b {
         export interface I {
             foo();
@@ -7,7 +7,7 @@ module a {
     }
 }
 
-module c {
+namespace c {
     import b = a.b;
     export var x: b.I;
     x.foo();

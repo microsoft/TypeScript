@@ -9,6 +9,6 @@ declare module bar {
 }
 
 import f = require('./reuseInnerModuleMember_0');
-module bar {
+namespace bar {
     var x: alpha;
 }

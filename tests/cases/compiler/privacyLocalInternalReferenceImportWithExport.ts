@@ -1,7 +1,7 @@
 //@module: commonjs
 //@declaration: true
 // private elements
-module m_private {
+namespace m_private {
     export class c_private {
     }
     export enum e_private {
@@ -101,7 +101,7 @@ export module import_public {
     export var publicUse_im_public_mu_public: im_public_mu_public.i;
 }
 
-module import_private {
+namespace import_private {
     // No Privacy errors - importing private elements
     export import im_private_c_private = m_private.c_private;
     export import im_private_e_private = m_private.e_private;

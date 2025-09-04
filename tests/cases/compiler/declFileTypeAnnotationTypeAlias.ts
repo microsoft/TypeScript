@@ -2,7 +2,7 @@
 // @module: commonjs
 // @declaration: true
 
-module M {
+namespace M {
     export type Value = string | number | boolean;
     export var x: Value;
 
@@ -25,7 +25,7 @@ interface Window {
     someMethod();
 }
 
-module M {
+namespace M {
     export type W = Window | string;
     export module N {
         export class Window { }

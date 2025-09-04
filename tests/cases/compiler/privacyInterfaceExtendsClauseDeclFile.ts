@@ -27,7 +27,7 @@ export module publicModule {
     }
 }
 
-module privateModule {
+namespace privateModule {
     export interface publicInterfaceInPrivateModule {
 
     }
@@ -72,7 +72,7 @@ export interface publicInterfaceImplementingFromPrivateModuleInterface extends p
 }
 
 // @Filename: privacyInterfaceExtendsClauseDeclFile_GlobalFile.ts
-module publicModuleInGlobal {
+namespace publicModuleInGlobal {
     export interface publicInterfaceInPublicModule {
     }
 

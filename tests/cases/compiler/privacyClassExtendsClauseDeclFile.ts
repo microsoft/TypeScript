@@ -26,7 +26,7 @@ export module publicModule {
     }
 }
 
-module privateModule {
+namespace privateModule {
     export class publicClassInPrivateModule {
         private f1() {
         }
@@ -73,7 +73,7 @@ export class publicClassExtendingFromPrivateModuleClass extends privateModule.pu
 }
 
 // @Filename: privacyClassExtendsClauseDeclFile_GlobalFile.ts
-module publicModuleInGlobal {
+namespace publicModuleInGlobal {
     export class publicClassInPublicModule {
         private f1() {
         }

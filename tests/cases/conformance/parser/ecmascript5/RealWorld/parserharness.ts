@@ -53,7 +53,7 @@ declare module process {
     export function on(event: string, listener: Function);
 }
 
-module Harness {
+namespace Harness {
     // Settings 
     export var userSpecifiedroot = "";
     var global = <any>Function("return this").call(null);

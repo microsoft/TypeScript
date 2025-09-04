@@ -1,4 +1,4 @@
-module m2 {
+namespace m2 {
 
     export var a, b2: number = 10, b;
 }
@@ -21,7 +21,7 @@ declare var a2, b2, c2;
 declare var da = 10;
 declare var d3, d4 = 10;
 
-module m3 {
+namespace m3 {
     declare var d = 10;
     declare var d2, d3 = 10, d4 = 10;
     export declare var dE = 10;

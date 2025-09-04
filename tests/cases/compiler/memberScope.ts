@@ -1,4 +1,4 @@
-module Salt {
+namespace Salt {
   export class Pepper {}
   export module Basil { }
   var z = Basil.Pepper;

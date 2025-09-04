@@ -9,7 +9,7 @@ export module m1 {
     const n = m1.k;
     const o: string = n, p = k;
 }
-module m2 {
+namespace m2 {
     export const k = a;
     export const l: string = b, m = k;
     const n = m1.k;

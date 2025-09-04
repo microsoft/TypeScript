@@ -1,4 +1,4 @@
-module M {
+namespace M {
     declare declare var x;
     declare declare function f();
 

@@ -1,6 +1,6 @@
-module M {
+namespace M {
   declare module M1 {
-    module M2 {
+    namespace M2 {
     }
   }
 }

@@ -9,7 +9,7 @@ export module m1 {
     var n = m1.k;
     var o: string = n, p = k;
 }
-module m2 {
+namespace m2 {
     export var k = a;
     export var l: string = b, m = k;
     var n = m1.k;

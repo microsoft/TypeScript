@@ -2,8 +2,8 @@ module A.B {
     export var x: number;
 }
 
-module A{ 
-    module B {
+namespace A{ 
+    namespace B {
         export var x: string;
     }
 }
@@ -18,9 +18,9 @@ module X.Y.Z {
     }
 }
 
-module X {
+namespace X {
     export module Y {
-        module Z {
+        namespace Z {
             export class Line {
                 name: string;
             }

@@ -29,7 +29,7 @@ export module m1 {
     var x2 = e3.a;
     var y2 = e4.x;
 }
-module m2 {
+namespace m2 {
     export const enum e5 {
         a,
         b,

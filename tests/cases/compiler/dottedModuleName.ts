@@ -1,4 +1,4 @@
-module M {
+namespace M {
     export module N {
 	export function f(x:number)=>2*x;
 	export module X.Y.Z {

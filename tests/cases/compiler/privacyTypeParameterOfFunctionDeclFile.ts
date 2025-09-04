@@ -312,7 +312,7 @@ export module publicModule {
 
 }
 
-module privateModule {
+namespace privateModule {
     class privateClass {
     }
 

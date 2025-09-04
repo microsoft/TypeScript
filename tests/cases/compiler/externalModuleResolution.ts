@@ -6,7 +6,7 @@ declare module M1 {
 export = M1
 
 // @Filename: foo.ts
-module M2 {
+namespace M2 {
     export var Y = 1;
 }
 export = M2

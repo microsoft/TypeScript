@@ -1,4 +1,4 @@
-module Outer {
+namespace Outer {
     export module instantiated {
         export class C { }
     }

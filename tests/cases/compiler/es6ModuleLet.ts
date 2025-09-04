@@ -9,7 +9,7 @@ export module m1 {
     let n = m1.k;
     let o: string = n, p = k;
 }
-module m2 {
+namespace m2 {
     export let k = a;
     export let l: string = b, m = k;
     let n = m1.k;

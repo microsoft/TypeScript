@@ -20,7 +20,7 @@ declare module m {
         foo3(x: any): any;
     }
 
-    module n {
+    namespace n {
         var y; // error
     }
 

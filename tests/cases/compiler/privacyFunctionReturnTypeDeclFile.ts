@@ -460,7 +460,7 @@ export module publicModule {
     declare function privateAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; 
 }
 
-module privateModule {
+namespace privateModule {
     class privateClass {
     }
 
@@ -733,14 +733,14 @@ function publicFunctionWithPublicParmeterTypesInGlobal1() {
 }
 declare function publicAmbientFunctionWithPublicParmeterTypesInGlobal(): publicClassInGlobal;
 
-module publicModuleInGlobal {
+namespace publicModuleInGlobal {
     class privateClass {
     }
 
     export class publicClass {
     }
 
-    module privateModule {
+    namespace privateModule {
         class privateClass {
         }
 

@@ -10,7 +10,7 @@ declare module m1 {
     class exports {
     }
 }
-module m2 {
+namespace m2 {
     export declare class require {
     }
     export declare class exports {
@@ -28,7 +28,7 @@ declare module m3 {
     class exports {
     }
 }
-module m4 {
+namespace m4 {
     export declare class require {
     }
     export declare class exports {

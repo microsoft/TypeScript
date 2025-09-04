@@ -1,7 +1,7 @@
 //@module: amd
 interface I1 { item:number; }
 
-module M1 {
+namespace M1 {
     interface I1 { item:string; }  
     interface I2 { item:number; }   
     class C1 implements I1 {

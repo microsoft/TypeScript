@@ -1,34 +1,34 @@
-module M {
+namespace M {
  export enum Color {
    Red, Green
  }
 }
-module M {
+namespace M {
  export module Color {
    export var Blue = 4;
   }
 }
 var p = M.Color.Blue; // ok
 
-module M {
+namespace M {
     export function foo() {
     }
 }
 
-module M {
-    module foo {
+namespace M {
+    namespace foo {
         export var x = 1;
     }
 }
 
-module M {
+namespace M {
     export module foo {
         export var y = 2
     }
 }
 
-module M {
-    module foo {
+namespace M {
+    namespace foo {
         export var z = 1;
     }
 }

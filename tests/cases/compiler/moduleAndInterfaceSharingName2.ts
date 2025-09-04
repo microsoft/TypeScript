@@ -1,4 +1,4 @@
-module X {
+namespace X {
     export module Y {
         export interface Z { }
     }

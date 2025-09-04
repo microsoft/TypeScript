@@ -1,5 +1,5 @@
 //@filename: part1.ts
-module Root {
+namespace Root {
     export module A {
         export interface Point {
             x: number;
@@ -15,7 +15,7 @@ module Root {
 }
 
 //@filename: part2.ts
-module otherRoot {
+namespace otherRoot {
     export module A {
         // have to be fully qualified since in different root
         export var Origin: Root.A.Point = { x: 0, y: 0 };

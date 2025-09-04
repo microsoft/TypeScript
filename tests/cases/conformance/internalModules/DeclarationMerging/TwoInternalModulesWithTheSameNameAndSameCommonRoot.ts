@@ -1,5 +1,5 @@
 //@filename: part1.ts
-module A {
+namespace A {
     export interface Point {
         x: number;
         y: number;
@@ -13,7 +13,7 @@ module A {
 }
 
 //@filename: part2.ts
-module A {
+namespace A {
     export var Origin: Point = { x: 0, y: 0 };
 
     export module Utils {

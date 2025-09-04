@@ -1,11 +1,11 @@
-module M {
+namespace M {
     export var m=0;
     export module N {
         export var n=1;
     }
 }
 
-module M {
+namespace M {
     export module N {
         var y=m;
         var x=n+y;
@@ -13,7 +13,7 @@ module M {
 }
 
 
-module T {
+namespace T {
     export interface I {
         p;
     }
@@ -25,13 +25,13 @@ module T {
     }
 }
 
-module Peer {
+namespace Peer {
     export module U2 {
         var z:T.U.I2=3;
     }
 }
 
-module Everest {
+namespace Everest {
     export module K1 {
         export interface I3 {
             zeep;

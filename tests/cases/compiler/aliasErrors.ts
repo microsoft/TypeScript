@@ -1,4 +1,4 @@
-module foo {    
+namespace foo {    
     export class Provide {
     }
     export module bar { export module baz {export class boo {}}}

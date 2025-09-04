@@ -1,4 +1,4 @@
-module A {
+namespace A {
     export class B<T> {
         foo() { }
         static bar() { }

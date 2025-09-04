@@ -1,9 +1,9 @@
-module A {
+namespace A {
    export module M {
         class C { }
     }
 }
-module B {
+namespace B {
     export module M {
         export class D { }
     }

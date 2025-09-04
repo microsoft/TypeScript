@@ -65,7 +65,7 @@ export module m1 {
 }
 
 
-module m2 {
+namespace m2 {
     export class C1_public {
         private f1() {
         }
@@ -218,7 +218,7 @@ export module m3 {
 }
 
 
-module m4 {
+namespace m4 {
     export interface m4_i_public {
         f1(): number;
     }

@@ -1,6 +1,6 @@
 // @module: commonjs
 
-module foo {    
+namespace foo {    
     export class Provide {
     }
 

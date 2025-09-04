@@ -1,4 +1,4 @@
-module A {
+namespace A {
 export var x = 'hello world'
 export class Point {
         constructor(public x: number, public y: number) { }
@@ -9,7 +9,7 @@ export class Point {
         }
     }
 }
-module C {
+namespace C {
     export import a = A;
 }
 

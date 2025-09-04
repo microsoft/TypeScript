@@ -1,6 +1,6 @@
 // expect no errors here
 
-module A {
+namespace A {
 
     export var x = 'hello world'
     export class Point {
@@ -13,7 +13,7 @@ module A {
     }
 }
 
-module C {
+namespace C {
     export import a = A;
 }
 
@@ -22,7 +22,7 @@ var b: { x: number; y: number; } = new C.a.Point(0, 0);
 var c: { name: string };
 var c: C.a.B.Id;
 
-module X {
+namespace X {
     export function Y() {
         return 42;
     }
@@ -34,7 +34,7 @@ module X {
     }
 }
 
-module Z {
+namespace Z {
 
     // 'y' should be a fundule here
     export import y = X.Y;
@@ -43,7 +43,7 @@ module Z {
 var m: number = Z.y();
 var n: { x: number; y: number; } = new Z.y.Point(0, 0);
 
-module K {
+namespace K {
     export class L {
         constructor(public name: string) { }
     }
@@ -57,7 +57,7 @@ module K {
     }
 }
 
-module M {
+namespace M {
     export import D = K.L;
 }
 

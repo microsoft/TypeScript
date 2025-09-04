@@ -1,6 +1,6 @@
 //@module: commonjs
 // @declaration: true
-module m3 {
+namespace m3 {
     export module m2 {
         export interface connectModule {
             (res, req, next): void;

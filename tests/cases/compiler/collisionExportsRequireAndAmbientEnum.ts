@@ -18,7 +18,7 @@ declare module m1 {
         _thisVal2,
     }
 }
-module m2 {
+namespace m2 {
     export declare enum require { 
         _thisVal1,
         _thisVal2,
@@ -48,7 +48,7 @@ declare module m3 {
         _thisVal2,
     }
 }
-module m4 {
+namespace m4 {
     export declare enum require {
         _thisVal1,
         _thisVal2,

@@ -1,5 +1,5 @@
 class G<T>{ bar(x: T) { return x; } }
-module M {
+namespace M {
     export class C { foo() { } }
     export module C {
         export class X {

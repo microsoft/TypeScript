@@ -1,4 +1,4 @@
-module K {
+namespace K {
     export class L {
         constructor(public name: string) { }
     }
@@ -10,7 +10,7 @@ module K {
         }
     }
 }
-module M {
+namespace M {
     export import D = K.L;
 }
 var o: { name: string };

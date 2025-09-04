@@ -11,7 +11,7 @@ export module m1 {
         var y = 10;
     }
 }
-module m2 {
+namespace m2 {
     export var a = 10;
     var b = 10;
     export module innerExportedModule {

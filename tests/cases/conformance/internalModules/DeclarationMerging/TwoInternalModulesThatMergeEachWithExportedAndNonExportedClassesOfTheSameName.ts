@@ -1,11 +1,11 @@
-module A {
+namespace A {
     export class Point {
         x: number;
         y: number;
     }
 }
 
-module A {
+namespace A {
     class Point {
         fromCarthesian(p: A.Point) {
             return { x: p.x, y: p.y };
@@ -23,7 +23,7 @@ module X.Y.Z {
     }
 }
 
-module X {
+namespace X {
     export module Y {
         export module Z {
             class Line {

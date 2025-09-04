@@ -96,12 +96,12 @@ export module TopLevelModule1 {
         YisIn1();
     }
     
-    module NotExportedModule {
+    namespace NotExportedModule {
         export class ClassA { }
     }
 }
 
-module TopLevelModule2 {
+namespace TopLevelModule2 {
     export module SubModule3 {
         export class ClassA {
             public AisIn2_3() { }

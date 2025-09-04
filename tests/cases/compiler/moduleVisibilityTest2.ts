@@ -1,6 +1,6 @@
 
 
-module OuterMod {
+namespace OuterMod {
 	export function someExportedOuterFunc() { return -1; }
 
 	export module OuterInnerMod {
@@ -10,9 +10,9 @@ module OuterMod {
 
 import OuterInnerAlias = OuterMod.OuterInnerMod;
 
-module M {
+namespace M {
 
-	module InnerMod {
+	namespace InnerMod {
 		export function someExportedInnerFunc() { return -2; }
 	}
 
@@ -53,7 +53,7 @@ module M {
 	function someModuleFunction() { return 5;}
 }
 
-module M {
+namespace M {
 	export var c = x;
 	export var meb = M.E.B;
 }

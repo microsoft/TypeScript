@@ -1,6 +1,6 @@
 // @declaration: true
 // @module: commonjs
-module m {
+namespace m {
     export module c {
         export class c {
         }

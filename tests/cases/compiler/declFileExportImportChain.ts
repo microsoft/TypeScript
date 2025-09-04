@@ -2,7 +2,7 @@
 //@declaration: true
 
 // @Filename: declFileExportImportChain_a.ts
-module m1 {
+namespace m1 {
     export module m2 {
         export class c1 {
         }

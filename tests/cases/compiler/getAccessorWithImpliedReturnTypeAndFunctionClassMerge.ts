@@ -16,7 +16,7 @@ declare class _<T> {
     each(iterator: _.ListIterator<T, void>, context?: any): void;
 }
 
-module MyModule { 
+namespace MyModule { 
     export class MyClass {
         public get myGetter() {
             var obj:any = {};

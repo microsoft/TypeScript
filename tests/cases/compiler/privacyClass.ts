@@ -43,7 +43,7 @@ export module m1 {
 }
 
 
-module m2 {
+namespace m2 {
     export interface m2_i_public {
     }
 

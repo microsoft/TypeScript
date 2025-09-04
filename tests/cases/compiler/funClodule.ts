@@ -13,7 +13,7 @@ declare function foo2(); // Should error
 
 
 function foo3() { }
-module foo3 {
+namespace foo3 {
      export function x(): any { }
 }
 class foo3 { } // Should error

@@ -1,4 +1,4 @@
-module A {
+namespace A {
     export module B {
         export class C { }
     }

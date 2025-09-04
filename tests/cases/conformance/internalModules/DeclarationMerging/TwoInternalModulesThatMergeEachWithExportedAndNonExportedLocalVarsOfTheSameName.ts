@@ -1,5 +1,5 @@
 //@filename: part1.ts
-module A {
+namespace A {
     export interface Point {
         x: number;
         y: number;
@@ -14,7 +14,7 @@ module A {
 }
 
 //@filename: part2.ts
-module A {
+namespace A {
     // not a collision, since we don't export
     var Origin: string = "0,0";
 

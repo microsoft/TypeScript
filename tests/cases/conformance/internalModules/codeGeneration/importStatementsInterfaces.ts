@@ -1,4 +1,4 @@
-module A {
+namespace A {
     export interface Point {
         x: number;
         y: number;
@@ -12,12 +12,12 @@ module A {
 }
 
 // no code gen expected
-module B {
+namespace B {
     import a = A;
 }
 
 // no code gen expected
-module C {
+namespace C {
     import a = A;
     import b = a.inA;
     var m: typeof a;
@@ -26,14 +26,14 @@ module C {
 }
 
 // no code gen expected
-module D {
+namespace D {
     import a = A;
 
     var p : a.Point;
 }
 
 // no code gen expected
-module E {
+namespace E {
     import a = A.inA;
     export function xDist(x: a.Point3D) {
         return 0 - x.x;

@@ -1,4 +1,4 @@
-module A {
+namespace A {
     export declare module BB {
         export var Elephant;
     }

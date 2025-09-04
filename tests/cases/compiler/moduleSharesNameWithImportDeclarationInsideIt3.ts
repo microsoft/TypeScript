@@ -1,4 +1,4 @@
-﻿module Z {
+﻿namespace Z {
     export module M {
         export function bar() {
             return "";

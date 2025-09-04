@@ -16,7 +16,7 @@ export module m1 {
     foo3();
     foo4();
 }
-module m2 {
+namespace m2 {
     export function foo3() {
     }
     function foo4() {

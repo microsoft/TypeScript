@@ -1,11 +1,11 @@
-module A {
+namespace A {
     export class Point {
         x: number;
         y: number;
     }
 }
 
-module A{
+namespace A{
     // expected error
     export class Point {
         origin: number;
@@ -19,7 +19,7 @@ module X.Y.Z {
     }
 }
 
-module X {
+namespace X {
     export module Y {
         export module Z {
             // expected error

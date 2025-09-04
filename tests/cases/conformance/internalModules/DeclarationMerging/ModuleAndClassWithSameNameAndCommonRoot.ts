@@ -19,7 +19,7 @@ module X.Y {
 }
 
 // @Filename: simple.ts
-module A {
+namespace A {
     export var Instance = new A();
 }
 

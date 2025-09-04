@@ -1,11 +1,11 @@
-module M {
+namespace M {
     export function f() { }
     f();
     M.f();    
     var r = f.hello;
 }
  
-module M {
+namespace M {
     export module f {
         export var hello = 1;
     }

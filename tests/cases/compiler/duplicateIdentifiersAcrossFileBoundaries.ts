@@ -11,7 +11,7 @@ class Foo {
     static x: number;
 }
 
-module N {
+namespace N {
     export module F {
         var t;
     }
@@ -24,7 +24,7 @@ function C2() { } // error -- cannot merge function with non-ambient class
 class f { } // error -- cannot merge function with non-ambient class
 var v = 3;
 
-module Foo {
+namespace Foo {
     export var x: number; // error for redeclaring var in a different parent
 }
 

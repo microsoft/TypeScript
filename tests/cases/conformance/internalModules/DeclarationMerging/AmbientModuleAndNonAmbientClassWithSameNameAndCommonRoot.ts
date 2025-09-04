@@ -9,7 +9,7 @@ declare module A {
 }
 
 // @filename: classPoint.ts
-module A {
+namespace A {
     export class Point {
         constructor(public x: number, public y: number) { }
     }

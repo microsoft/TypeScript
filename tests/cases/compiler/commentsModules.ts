@@ -2,7 +2,7 @@
 // @declaration: true
 // @removeComments: false
 /** Module comment*/
-module m1 {
+namespace m1 {
     /** b's comment*/
     export var b: number;
     /** foo's comment*/

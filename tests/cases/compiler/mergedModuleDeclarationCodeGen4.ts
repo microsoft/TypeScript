@@ -1,4 +1,4 @@
-module superContain {
+namespace superContain {
     export module contain {
         export module my.buz {
             export module data {

@@ -266,7 +266,7 @@ export module publicModule {
 
 }
 
-module privateModule {
+namespace privateModule {
     class privateClass {
     }
 
@@ -422,14 +422,14 @@ function publicFunctionWithPublicParmeterTypesInGlobal(param: publicClassInGloba
 }
 declare function publicAmbientFunctionWithPublicParmeterTypesInGlobal(param: publicClassInGlobal): void;
 
-module publicModuleInGlobal {
+namespace publicModuleInGlobal {
     class privateClass {
     }
 
     export class publicClass {
     }
 
-    module privateModule {
+    namespace privateModule {
         class privateClass {
         }
 

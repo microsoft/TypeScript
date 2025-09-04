@@ -177,7 +177,7 @@ export module m1 {
     }
 }
 
-module m2 {
+namespace m2 {
     export class m2_C1_public {
         private f() {
         }

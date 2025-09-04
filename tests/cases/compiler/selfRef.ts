@@ -1,5 +1,5 @@
 // @lib: es5
-module M
+namespace M
 {
     export class Test
     {

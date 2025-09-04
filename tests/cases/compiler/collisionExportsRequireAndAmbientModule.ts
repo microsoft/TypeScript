@@ -19,20 +19,20 @@ export function foo2(): exports.I {
     return null;
 }
 declare module m1 {
-    module require {
+    namespace require {
         export interface I {
         }
         export class C {
         }
     }
-    module exports {
+    namespace exports {
         export interface I {
         }
         export class C {
         }
     }
 }
-module m2 {
+namespace m2 {
     export declare module require {
         export interface I {
         }
@@ -62,20 +62,20 @@ declare module exports {
     }
 }
 declare module m3 {
-    module require {
+    namespace require {
         export interface I {
         }
         export class C {
         }
     }
-    module exports {
+    namespace exports {
         export interface I {
         }
         export class C {
         }
     }
 }
-module m4 {
+namespace m4 {
     export declare module require {
         export interface I {
         }

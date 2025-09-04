@@ -72,7 +72,7 @@ export module m1 {
     new c3();
     new c4();
 }
-module m2 {
+namespace m2 {
     export class c3 {
         constructor() {
         }

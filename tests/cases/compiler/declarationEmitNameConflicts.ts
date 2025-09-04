@@ -1,7 +1,7 @@
 // @declaration: true
 // @module: commonjs
 // @Filename: declarationEmit_nameConflicts_1.ts
-module f { export class c { } }
+namespace f { export class c { } }
 export = f;
 
 // @Filename: declarationEmit_nameConflicts_0.ts

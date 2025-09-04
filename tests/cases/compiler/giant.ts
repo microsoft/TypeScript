@@ -78,7 +78,7 @@ interface I {
     p7(pa1, pa2): void;
     p7? (pa1, pa2): void;
 }
-module M {
+namespace M {
     var V;
     function F() { };
     class C {
@@ -142,12 +142,12 @@ module M {
         p7(pa1, pa2): void;
         p7? (pa1, pa2): void;
     }
-    module M {
+    namespace M {
         var V;
         function F() { };
         class C { };
         interface I { };
-        module M { };
+        namespace M { };
         export var eV;
         export function eF() { };
         export class eC { };
@@ -226,7 +226,7 @@ module M {
         function F() { };
         class C { };
         interface I { };
-        module M { };
+        namespace M { };
         export var eV;
         export function eF() { };
         export class eC { };
@@ -265,7 +265,7 @@ module M {
         function F() { };
         class C { }
         interface I { }
-        module M { }
+        namespace M { }
         export var eV;
         export function eF() { };
         export class eC { }
@@ -400,12 +400,12 @@ export module eM {
         p7(pa1, pa2): void;
         p7? (pa1, pa2): void;
     }
-    module M {
+    namespace M {
         var V;
         function F() { };
         class C { };
         interface I { };
-        module M { };
+        namespace M { };
         export var eV;
         export function eF() { };
         export class eC { };
@@ -484,7 +484,7 @@ export module eM {
         function F() { };
         class C { };
         interface I { };
-        module M { };
+        namespace M { };
         export var eV;
         export function eF() { };
         export class eC { };
@@ -523,7 +523,7 @@ export module eM {
         function F() { };
         class C { }
         interface I { }
-        module M { }
+        namespace M { }
         export var eV;
         export function eF() { };
         export class eC { }
@@ -604,12 +604,12 @@ export declare module eaM {
         p7(pa1, pa2): void;
         p7? (pa1, pa2): void;
     }
-    module M {
+    namespace M {
         var V;
         function F() { };
         class C { }
         interface I { }
-        module M { }
+        namespace M { }
         export var eV;
         export function eF() { };
         export class eC { }
@@ -674,7 +674,7 @@ export declare module eaM {
         var V;
         function F() { };
         class C { }
-        module M { }
+        namespace M { }
         export var eV;
         export function eF() { };
         export class eC { }
