@@ -48001,22 +48001,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const pos = getNonModifierTokenPosOfNode(node);
                     const span = getSpanOfTokenAtPosition(sourceFile, pos);
 
-                    // Check if we should generate an error (TS 6.0+) or suggestion (older versions)
-                    const currentVersion = new Version(versionMajorMinor);
-                    const errorVersion = new Version("6.0");
-                    const shouldError = currentVersion.compareTo(errorVersion) >= Comparison.EqualTo;
-
                     // Check if ignoreDeprecations should suppress this error
-                    let shouldSuppress = false;
-                    if (shouldError && compilerOptions.ignoreDeprecations) {
-                        // Only valid ignoreDeprecations values: "5.0" and "6.0"
-                        if (compilerOptions.ignoreDeprecations === "6.0") {
-                            shouldSuppress = true;
-                        }
-                    }
+                    const shouldSuppress = compilerOptions.ignoreDeprecations === "6.0";
 
-                    if (shouldError && !shouldSuppress) {
-                        // In TypeScript 6.0+, this is an error unless suppressed by ignoreDeprecations
+                    if (!shouldSuppress) {
+                        // Generate error for module keyword usage in namespace declarations
                         const errorDiagnostic = createFileDiagnostic(
                             sourceFile,
                             span.start,
@@ -48026,7 +48015,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         diagnostics.add(errorDiagnostic);
                     }
                     else {
-                        // In older versions or when suppressed, keep as suggestion
+                        // When suppressed by ignoreDeprecations, keep as suggestion
                         const suggestionDiagnostic = createFileDiagnostic(
                             sourceFile,
                             span.start,
