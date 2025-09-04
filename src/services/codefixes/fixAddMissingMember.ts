@@ -564,11 +564,41 @@ function getActionsForMissingMethodDeclaration(context: CodeFixContext, info: Ty
     }
 
     const methodName = token.text;
+    const shouldBePrivateByDefault = methodName.startsWith('_');
     const addMethodDeclarationChanges = (modifierFlags: ModifierFlags) => textChanges.ChangeTracker.with(context, t => addMethodDeclaration(context, t, call, token, modifierFlags, parentDeclaration, declSourceFile));
-    const actions = [createCodeFixAction(fixMissingMember, addMethodDeclarationChanges(modifierFlags & ModifierFlags.Static), [modifierFlags & ModifierFlags.Static ? Diagnostics.Declare_static_method_0 : Diagnostics.Declare_method_0, methodName], fixMissingMember, Diagnostics.Add_all_missing_members)];
-    if (modifierFlags & ModifierFlags.Private) {
-        actions.unshift(createCodeFixActionWithoutFixAll(fixMissingMember, addMethodDeclarationChanges(ModifierFlags.Private), [Diagnostics.Declare_private_method_0, methodName]));
+    
+    // Create the main action - private by default for underscore methods
+    const defaultModifierFlags = shouldBePrivateByDefault ? (modifierFlags | ModifierFlags.Private) : modifierFlags;
+    
+    const actions = [createCodeFixAction(
+        fixMissingMember, 
+        addMethodDeclarationChanges(defaultModifierFlags), // Remove the & ModifierFlags.Static
+        [shouldBePrivateByDefault ? Diagnostics.Declare_private_method_0 : 
+         (modifierFlags & ModifierFlags.Static ? Diagnostics.Declare_static_method_0 : Diagnostics.Declare_method_0), 
+         methodName], 
+        fixMissingMember, 
+        Diagnostics.Add_all_missing_members
+    )];
+    
+    // Only add additional options if the default isn't already private
+    if ((modifierFlags & ModifierFlags.Private) || methodName.startsWith('_')) {
+        // For underscore methods, add a regular (non-private) option
+        if (shouldBePrivateByDefault) {
+            actions.push(createCodeFixActionWithoutFixAll(
+                fixMissingMember, 
+                addMethodDeclarationChanges(modifierFlags & ~ModifierFlags.Private), // Remove private flag
+                [modifierFlags & ModifierFlags.Static ? Diagnostics.Declare_static_method_0 : Diagnostics.Declare_method_0, methodName]
+            ));
+        } else {
+            // For non-underscore methods with private flag, add private option
+            actions.unshift(createCodeFixActionWithoutFixAll(
+                fixMissingMember, 
+                addMethodDeclarationChanges(ModifierFlags.Private), 
+                [Diagnostics.Declare_private_method_0, methodName]
+            ));
+        }
     }
+    
     return actions;
 }
 
