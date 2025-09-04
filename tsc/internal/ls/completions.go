@@ -4255,6 +4255,12 @@ func tryGetContainingJsxElement(contextToken *ast.Node, file *ast.SourceFile) *a
 				}
 			}
 			return parent
+		} else if parent != nil && parent.Kind == ast.KindJsxAttribute {
+			// Currently we parse JsxOpeningLikeElement as:
+			//      JsxOpeningLikeElement
+			//          attributes: JsxAttributes
+			//             properties: NodeArray<JsxAttributeLike>
+			return parent.Parent.Parent
 		}
 	// The context token is the closing } or " of an attribute, which means
 	// its parent is a JsxExpression, whose parent is a JsxAttribute,
