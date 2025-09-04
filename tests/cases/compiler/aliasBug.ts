@@ -4,7 +4,7 @@ namespace foo {
     export class Provide {
     }
 
-    export namespace bar { export module baz {export class boo {}}}
+    export namespace bar { export namespace baz {export class boo {}}}
 }
 
 import provide = foo;

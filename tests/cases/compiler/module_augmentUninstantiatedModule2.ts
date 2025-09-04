@@ -19,7 +19,7 @@ declare module "angular" {
 // @filename: node_modules/angular/index.d.ts
 declare var ng: ng.IAngularStatic;
 
-declare module ng {
+declare namespace ng {
    export interface IModule {
       name: string;
    }

@@ -3,8 +3,8 @@
 
 // @Filename: declFileAmbientExternalModuleWithSingleExportedModule_0.ts
 declare module "SubModule" {
-    export module m {
-        export module m3 {
+    export namespace m {
+        export namespace m3 {
             interface c {
             }
         }
