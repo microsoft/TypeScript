@@ -3867,7 +3867,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         const existing = resolvedLibProcessing?.get(libFileName);
         if (existing) return existing;
 
-        if (options.libReplacement === false) {
+        if (options.libReplacement) {
             const result: LibResolution = {
                 resolution: {
                     resolvedModule: undefined,

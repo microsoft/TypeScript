@@ -15,15 +15,10 @@ const a: ABC = { abc: "Hello" }
 // This should fail because libdom has been replaced
 // by the module above ^
 window.localStorage
->window.localStorage : any
->                    : ^^^
->window : any
->       : ^^^
->localStorage : any
->             : ^^^
-
-=== /somepath/node_modules/@typescript/lib-dom/index.d.ts ===
-interface ABC { abc: string }
->abc : string
->    : ^^^^^^
+>window.localStorage : Storage
+>                    : ^^^^^^^
+>window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>localStorage : Storage
+>             : ^^^^^^^
 
