@@ -34,7 +34,6 @@ class BugExhibition2<T> {
 
     private static get exhibitBug() {
 >exhibitBug : any
->           : ^^^
 
         function localFunction() { }
 >localFunction : () => void
@@ -114,7 +113,7 @@ class C {
     }
 }
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

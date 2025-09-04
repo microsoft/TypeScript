@@ -1,22 +1,16 @@
-moduleProperty1.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-moduleProperty1.ts(7,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 moduleProperty1.ts(9,5): error TS1128: Declaration or statement expected.
 moduleProperty1.ts(9,13): error TS2304: Cannot find name 'y'.
 moduleProperty1.ts(10,20): error TS2304: Cannot find name 'y'.
 
 
-==== moduleProperty1.ts (5 errors) ====
-    module M {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+==== moduleProperty1.ts (3 errors) ====
+    namespace M {
         var x=10;  // variable local to this module body
         var y=x;  // property visible only in module
         export var z=y;  // property visible to any code
     }
     
-    module M2 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace M2 {
         var x = 10;  // variable local to this module body
         private y = x;  // can't use private in modules
         ~~~~~~~

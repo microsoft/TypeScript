@@ -1,8 +1,7 @@
-typeofOperatorWithBooleanType.ts(10,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 typeofOperatorWithBooleanType.ts(36,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== typeofOperatorWithBooleanType.ts (2 errors) ====
+==== typeofOperatorWithBooleanType.ts (1 errors) ====
     // typeof  operator on boolean type
     var BOOLEAN: boolean;
     
@@ -12,9 +11,7 @@ typeofOperatorWithBooleanType.ts(36,1): error TS2695: Left side of comma operato
         public a: boolean;
         static foo() { return false; }
     }
-    module M {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace M {
         export var n: boolean;
     }
     

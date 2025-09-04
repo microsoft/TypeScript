@@ -4,7 +4,6 @@
 // Ambient variable without type annotation
 declare var n;
 >n : any
->  : ^^^
 
 // Ambient variable with type annotation
 declare var m: string;
@@ -43,23 +42,18 @@ declare function fn5(x, y?);
 >fn5 : (x: any, y?: any) => any
 >    : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >x : any
->  : ^^^
 >y : any
->  : ^^^
 
 declare function fn6(e?);
 >fn6 : (e?: any) => any
 >    : ^ ^^^^^^^^^^^^^^
 >e : any
->  : ^^^
 
 declare function fn7(x, y?, ...z);
 >fn7 : (x: any, y?: any, ...z: any[]) => any
 >    : ^ ^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^
 >x : any
->  : ^^^
 >y : any
->  : ^^^
 >z : any[]
 >  : ^^^^^
 
@@ -67,7 +61,6 @@ declare function fn8(y?, ...z: number[]);
 >fn8 : (y?: any, ...z: number[]) => any
 >    : ^ ^^^^^^^^^^^ ^^        ^^^^^^^^
 >y : any
->  : ^^^
 >z : number[]
 >  : ^^^^^^^^
 
@@ -97,11 +90,9 @@ declare class cls {
 >static : (p: any) => number
 >       : ^ ^^^^^^^^^^      
 >p : any
->  : ^^^
 
     static q;
 >q : any
->  : ^^^
 
     private fn();
 >fn : () => any
@@ -169,32 +160,28 @@ declare enum E3 {
 >A : E3.A
 >  : ^^^^
 }
-declare module E3 {
+declare namespace E3 {
 >E3 : typeof E3
 >   : ^^^^^^^^^
 
     var B;
 >B : any
->  : ^^^
 }
 var x = E3.B;
 >x : any
->  : ^^^
 >E3.B : any
->     : ^^^
 >E3 : typeof E3
 >   : ^^^^^^^^^
 >B : any
 >  : ^^^
 
 // Ambient module
-declare module M1 {
+declare namespace M1 {
 >M1 : typeof M1
 >   : ^^^^^^^^^
 
     var x;
 >x : any
->  : ^^^
 
     function fn(): number;
 >fn : () => number
@@ -204,9 +191,7 @@ declare module M1 {
 // Ambient module members are always exported with or without export keyword
 var p = M1.x;
 >p : any
->  : ^^^
 >M1.x : any
->     : ^^^
 >M1 : typeof M1
 >   : ^^^^^^^^^
 >x : any
@@ -232,7 +217,6 @@ declare module 'external1' {
 
     var q;
 >q : any
->  : ^^^
 }
 
 

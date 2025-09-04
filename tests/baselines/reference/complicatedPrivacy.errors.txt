@@ -1,24 +1,11 @@
-complicatedPrivacy.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-complicatedPrivacy.ts(2,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 complicatedPrivacy.ts(11,24): error TS1054: A 'get' accessor cannot have parameters.
 complicatedPrivacy.ts(35,6): error TS2693: 'number' only refers to a type, but is being used as a value here.
-complicatedPrivacy.ts(44,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-complicatedPrivacy.ts(70,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-complicatedPrivacy.ts(71,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 complicatedPrivacy.ts(73,55): error TS2694: Namespace 'mglo5' has no exported member 'i6'.
-complicatedPrivacy.ts(79,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-complicatedPrivacy.ts(82,13): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-complicatedPrivacy.ts(84,24): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-complicatedPrivacy.ts(95,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 
 
-==== complicatedPrivacy.ts (12 errors) ====
-    module m1 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-        export module m2 {
-               ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+==== complicatedPrivacy.ts (3 errors) ====
+    namespace m1 {
+        export namespace m2 {
     
     
             export function f1(c1: C1) {
@@ -64,9 +51,7 @@ complicatedPrivacy.ts(95,1): error TS1547: The 'module' keyword is not allowed f
             new (arg1: C1) : C1
         }) {
         }
-        module m3 {
-        ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        namespace m3 {
             function f2(f1: C1) {
             }
     
@@ -92,12 +77,8 @@ complicatedPrivacy.ts(95,1): error TS1547: The 'module' keyword is not allowed f
     class C2 {
     }
     
-    module m2 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-        export module m3 {
-               ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m2 {
+        export namespace m3 {
     
             export class c_pr  implements mglo5.i5, mglo5.i6 {
                                                           ~~
@@ -107,18 +88,12 @@ complicatedPrivacy.ts(95,1): error TS1547: The 'module' keyword is not allowed f
                 }
             }
             
-            module m4 {
-            ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            namespace m4 {
                 class C {
                 }
-                module m5 {
-                ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+                namespace m5 {
                     
-                    export module m6 {
-                           ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+                    export namespace m6 {
                         function f1() {
                             return new C();
                         }
@@ -129,9 +104,7 @@ complicatedPrivacy.ts(95,1): error TS1547: The 'module' keyword is not allowed f
         }
     }
     
-    module mglo5 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace mglo5 {
         export interface i5 {
             f1(): string;
         }

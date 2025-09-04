@@ -1,6 +1,4 @@
 parserRealSource13.ts(4,21): error TS6053: File 'typescript.ts' not found.
-parserRealSource13.ts(6,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-parserRealSource13.ts(6,19): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 parserRealSource13.ts(8,35): error TS2304: Cannot find name 'AST'.
 parserRealSource13.ts(9,39): error TS2304: Cannot find name 'AST'.
 parserRealSource13.ts(10,34): error TS2304: Cannot find name 'AST'.
@@ -118,7 +116,7 @@ parserRealSource13.ts(132,51): error TS2304: Cannot find name 'AST'.
 parserRealSource13.ts(135,36): error TS2304: Cannot find name 'NodeType'.
 
 
-==== parserRealSource13.ts (118 errors) ====
+==== parserRealSource13.ts (116 errors) ====
     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
     // See LICENSE.txt in the project root for complete license information.
     
@@ -126,11 +124,7 @@ parserRealSource13.ts(135,36): error TS2304: Cannot find name 'NodeType'.
                         ~~~~~~~~~~~~~
 !!! error TS6053: File 'typescript.ts' not found.
     
-    module TypeScript.AstWalkerWithDetailCallback {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace TypeScript.AstWalkerWithDetailCallback {
         export interface AstWalkerDetailCallback {
             EmptyCallback? (pre, ast: AST): boolean;
                                       ~~~

@@ -1,14 +1,9 @@
-collisionExportsRequireAndInternalModuleAlias.ts(1,8): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 collisionExportsRequireAndInternalModuleAlias.ts(5,8): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
 collisionExportsRequireAndInternalModuleAlias.ts(6,8): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
-collisionExportsRequireAndInternalModuleAlias.ts(10,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-collisionExportsRequireAndInternalModuleAlias.ts(17,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 
 
-==== collisionExportsRequireAndInternalModuleAlias.ts (5 errors) ====
-    export module m {
-           ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+==== collisionExportsRequireAndInternalModuleAlias.ts (2 errors) ====
+    export namespace m {
         export class c {
         }
     }
@@ -21,18 +16,14 @@ collisionExportsRequireAndInternalModuleAlias.ts(17,1): error TS1547: The 'modul
     new exports();
     new require();
     
-    module m1 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m1 {
         import exports = m.c;
         import require = m.c;
         new exports();
         new require();
     }
     
-    module m2 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m2 {
         export import exports = m.c;
         export import require = m.c;
         new exports();

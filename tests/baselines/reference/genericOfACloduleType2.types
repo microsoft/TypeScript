@@ -11,7 +11,7 @@ class G<T>{ bar(x: T) { return x; } }
 >x : T
 >  : ^
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -21,7 +21,7 @@ module M {
 >foo : () => void
 >    : ^^^^^^^^^^
 
-    export module C {
+    export namespace C {
 >C : typeof C
 >  : ^^^^^^^^
 
@@ -56,7 +56,7 @@ module M {
 >    : ^^^^^^^^^^
 }
 
-module N {
+namespace N {
 >N : typeof N
 >  : ^^^^^^^^
 

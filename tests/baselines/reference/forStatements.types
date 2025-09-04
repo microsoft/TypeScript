@@ -41,7 +41,7 @@ function F(x: string): number { return 42; }
 >42 : 42
 >   : ^^
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -101,11 +101,9 @@ for(var anObject: Object = new Object();;){}
 
 for(var anAny: any = null;;){}
 >anAny : any
->      : ^^^
 
 for(var aSecondAny: any = undefined;;){}
 >aSecondAny : any
->           : ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 

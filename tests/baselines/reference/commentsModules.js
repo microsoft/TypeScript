@@ -2,7 +2,7 @@
 
 //// [commentsModules.ts]
 /** Module comment*/
-module m1 {
+namespace m1 {
     /** b's comment*/
     export var b: number;
     /** foo's comment*/
@@ -10,7 +10,7 @@ module m1 {
         return b;
     }
     /** m2 comments*/
-    export module m2 {
+    export namespace m2 {
         /** class comment;*/
         export class c {
         };
@@ -56,7 +56,7 @@ module m3.m4.m5 {
 new m3.m4.m5.c();
 /** module comment of m4.m5.m6*/
 module m4.m5.m6 {
-    export module m7 {
+    export namespace m7 {
         /** Exported class comment*/
         export class c {
         }
@@ -66,7 +66,7 @@ new m4.m5.m6.m7.c();
 /** module comment of m5.m6.m7*/
 module m5.m6.m7 {
     /** module m8 comment*/
-    export module m8 {
+    export namespace m8 {
         /** Exported class comment*/
         export class c {
         }
@@ -74,7 +74,7 @@ module m5.m6.m7 {
 }
 new m5.m6.m7.m8.c();
 module m6.m7 {
-    export module m8 {
+    export namespace m8 {
         /** Exported class comment*/
         export class c {
         }
@@ -83,7 +83,7 @@ module m6.m7 {
 new m6.m7.m8.c();
 module m7.m8 {
     /** module m9 comment*/
-    export module m9 {
+    export namespace m9 {
         /** Exported class comment*/
         export class c {
         }

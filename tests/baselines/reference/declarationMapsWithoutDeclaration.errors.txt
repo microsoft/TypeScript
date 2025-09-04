@@ -1,12 +1,9 @@
 error TS5069: Option 'declarationMap' cannot be specified without specifying option 'declaration' or option 'composite'.
-declarationMapsWithoutDeclaration.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 
 
 !!! error TS5069: Option 'declarationMap' cannot be specified without specifying option 'declaration' or option 'composite'.
-==== declarationMapsWithoutDeclaration.ts (1 errors) ====
-    module m2 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+==== declarationMapsWithoutDeclaration.ts (0 errors) ====
+    namespace m2 {
         export interface connectModule {
             (res, req, next): void;
         }

@@ -29,7 +29,7 @@ mergedInterfacesWithInheritedPrivates3.ts(31,15): error TS2320: Interface 'A' ca
         z: string;
     }
     
-    module M {
+    namespace M {
         class C {
             private x: string;
         }

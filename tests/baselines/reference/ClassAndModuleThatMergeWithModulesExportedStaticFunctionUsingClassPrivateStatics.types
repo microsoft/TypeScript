@@ -22,7 +22,7 @@ class clodule<T> {
 >   : ^^
 }
 
-module clodule {
+namespace clodule {
 >clodule : typeof clodule
 >        : ^^^^^^^^^^^^^^
 

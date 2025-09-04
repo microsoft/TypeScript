@@ -1,8 +1,7 @@
 es6ClassTest.ts(25,44): error TS1015: Parameter cannot have question mark and initializer.
-es6ClassTest.ts(34,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 
 
-==== es6ClassTest.ts (2 errors) ====
+==== es6ClassTest.ts (1 errors) ====
     class Bar {
         public goo: number;
         public prop1(x) {
@@ -38,9 +37,7 @@ es6ClassTest.ts(34,9): error TS1547: The 'module' keyword is not allowed for nam
     
     var f = new Foo();
     
-    declare module AmbientMod {
-            ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    declare namespace AmbientMod {
     	export class Provide {
     		foo:number;
     		zoo:string;

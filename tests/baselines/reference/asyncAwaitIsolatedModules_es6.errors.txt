@@ -1,8 +1,7 @@
 asyncAwaitIsolatedModules_es6.ts(1,27): error TS2792: Cannot find module 'missing'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-asyncAwaitIsolatedModules_es6.ts(37,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 
 
-==== asyncAwaitIsolatedModules_es6.ts (2 errors) ====
+==== asyncAwaitIsolatedModules_es6.ts (1 errors) ====
     import { MyPromise } from "missing";
                               ~~~~~~~~~
 !!! error TS2792: Cannot find module 'missing'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
@@ -41,8 +40,6 @@ asyncAwaitIsolatedModules_es6.ts(37,1): error TS1547: The 'module' keyword is no
     	static async m6(): MyPromise<void> { }
     }
     
-    module M {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace M {
     	export async function f1() { }
     }

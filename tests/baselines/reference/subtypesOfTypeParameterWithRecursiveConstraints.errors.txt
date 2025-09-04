@@ -1,4 +1,3 @@
-subtypesOfTypeParameterWithRecursiveConstraints.ts(56,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 subtypesOfTypeParameterWithRecursiveConstraints.ts(68,9): error TS2411: Property 'foo' of type 'U' is not assignable to 'string' index type 'T'.
 subtypesOfTypeParameterWithRecursiveConstraints.ts(68,9): error TS2416: Property 'foo' in type 'D2<T, U, V>' is not assignable to the same property in base type 'Base<T>'.
   Type 'U' is not assignable to type 'T'.
@@ -23,7 +22,6 @@ subtypesOfTypeParameterWithRecursiveConstraints.ts(98,9): error TS2411: Property
 subtypesOfTypeParameterWithRecursiveConstraints.ts(98,9): error TS2416: Property 'foo' in type 'D8<T, U, V>' is not assignable to the same property in base type 'Base<V>'.
   Type 'U' is not assignable to type 'V'.
     'V' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-subtypesOfTypeParameterWithRecursiveConstraints.ts(108,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 subtypesOfTypeParameterWithRecursiveConstraints.ts(115,9): error TS2416: Property 'foo' in type 'D1<T, U, V>' is not assignable to the same property in base type 'Base2<T>'.
   Type 'T' is not assignable to type 'Foo<T>'.
     Type 'Foo<U>' is not assignable to type 'Foo<T>'.
@@ -62,7 +60,7 @@ subtypesOfTypeParameterWithRecursiveConstraints.ts(150,9): error TS2416: Propert
         'V' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 
 
-==== subtypesOfTypeParameterWithRecursiveConstraints.ts (26 errors) ====
+==== subtypesOfTypeParameterWithRecursiveConstraints.ts (24 errors) ====
     // checking whether other types are subtypes of type parameters with constraints
     
     class Foo<T> { foo: T; }
@@ -118,9 +116,7 @@ subtypesOfTypeParameterWithRecursiveConstraints.ts(150,9): error TS2416: Propert
         var r12 = true ? new Foo<V>() : v;
     }
     
-    module M1 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace M1 {
         class Base<T> {
             foo: T;
         }
@@ -208,9 +204,7 @@ subtypesOfTypeParameterWithRecursiveConstraints.ts(150,9): error TS2416: Propert
     }
     
     
-    module M2 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace M2 {
         class Base2<T> {
             foo: Foo<T>;
         }

@@ -1,10 +1,8 @@
-contextualTyping.ts(21,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-contextualTyping.ts(66,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 contextualTyping.ts(189,18): error TS2384: Overload signatures must all be ambient or non-ambient.
 contextualTyping.ts(223,5): error TS2741: Property 'x' is missing in type '{}' but required in type 'B'.
 
 
-==== contextualTyping.ts (4 errors) ====
+==== contextualTyping.ts (2 errors) ====
     // DEFAULT INTERFACES
     interface IFoo {
         n: number;
@@ -25,9 +23,7 @@ contextualTyping.ts(223,5): error TS2741: Property 'x' is missing in type '{}' b
     }
     
     // CONTEXT: Module property declaration
-    module C2T5 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace C2T5 {
         export var foo: (i: number, s: string) => number = function(i) {
             return i;
         }
@@ -72,9 +68,7 @@ contextualTyping.ts(223,5): error TS2741: Property 'x' is missing in type '{}' b
     }
     
     // CONTEXT: Module property assignment
-    module C5T5 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace C5T5 {
         export var foo: (i: number, s: string) => string;
         foo = function(i, s) {
             return s;

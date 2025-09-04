@@ -1,25 +1,15 @@
-declarationEmit_nameConflicts_0.ts(2,8): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-declarationEmit_nameConflicts_0.ts(5,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 declarationEmit_nameConflicts_0.ts(16,8): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 declarationEmit_nameConflicts_0.ts(16,17): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-declarationEmit_nameConflicts_0.ts(19,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 declarationEmit_nameConflicts_0.ts(31,8): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 declarationEmit_nameConflicts_0.ts(31,17): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-declarationEmit_nameConflicts_0.ts(34,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-declarationEmit_nameConflicts_0.ts(40,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-declarationEmit_nameConflicts_1.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 
 
-==== declarationEmit_nameConflicts_0.ts (9 errors) ====
+==== declarationEmit_nameConflicts_0.ts (4 errors) ====
     import im = require('./declarationEmit_nameConflicts_1');
-    export module M {
-           ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    export namespace M {
         export function f() { }
         export class C { }
-        export module N {
-               ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export namespace N {
             export function g() { };
             export interface I { }
         }
@@ -37,9 +27,7 @@ declarationEmit_nameConflicts_1.ts(1,1): error TS1547: The 'module' keyword is n
 !!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
         export function f() { }
         export class C { }
-        export module N {
-               ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export namespace N {
             export function g() { };
             export interface I { }
         }
@@ -58,23 +46,17 @@ declarationEmit_nameConflicts_1.ts(1,1): error TS1547: The 'module' keyword is n
 !!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
         export function f() { }
         export class C { }
-        export module N {
-               ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export namespace N {
             export function g() { };
             export interface I { }
         }
         export interface b extends M.b { } // ok
         export interface I extends M.c.I { } // ok
-        export module c {
-               ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export namespace c {
             export interface I extends M.c.I { } // ok
         }
     }
-==== declarationEmit_nameConflicts_1.ts (1 errors) ====
-    module f { export class c { } }
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+==== declarationEmit_nameConflicts_1.ts (0 errors) ====
+    namespace f { export class c { } }
     export = f;
     

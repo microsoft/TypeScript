@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/mergedModuleDeclarationCodeGen4.ts] ////
 
 === mergedModuleDeclarationCodeGen4.ts ===
-module superContain {
+namespace superContain {
 >superContain : typeof superContain
 >             : ^^^^^^^^^^^^^^^^^^^
 
-    export module contain {
+    export namespace contain {
 >contain : typeof contain
 >        : ^^^^^^^^^^^^^^
 
@@ -15,7 +15,7 @@ module superContain {
 >buz : typeof buz
 >    : ^^^^^^^^^^
 
-            export module data {
+            export namespace data {
 >data : typeof data
 >     : ^^^^^^^^^^^
 
@@ -30,7 +30,7 @@ module superContain {
 >buz : typeof buz
 >    : ^^^^^^^^^^
 
-            export module data {
+            export namespace data {
 >data : typeof data
 >     : ^^^^^^^^^^^
 

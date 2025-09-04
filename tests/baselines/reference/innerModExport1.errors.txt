@@ -1,12 +1,9 @@
-innerModExport1.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 innerModExport1.ts(5,5): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 innerModExport1.ts(5,12): error TS1437: Namespace must be given a name.
 
 
-==== innerModExport1.ts (3 errors) ====
-    module Outer {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+==== innerModExport1.ts (2 errors) ====
+    namespace Outer {
     
         // inner mod 1
         var non_export_var: number;

@@ -2,11 +2,11 @@
 
 === moduleElementsInWrongContext.ts ===
 {
-    module M { }
+    namespace M { }
 >M : Symbol(M, Decl(moduleElementsInWrongContext.ts, 0, 1))
 
     export namespace N {
->N : Symbol(N, Decl(moduleElementsInWrongContext.ts, 1, 16))
+>N : Symbol(N, Decl(moduleElementsInWrongContext.ts, 1, 19))
 
         export interface I { }
 >I : Symbol(I, Decl(moduleElementsInWrongContext.ts, 2, 24))

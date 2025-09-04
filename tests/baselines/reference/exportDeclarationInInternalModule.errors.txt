@@ -1,23 +1,17 @@
-exportDeclarationInInternalModule.ts(6,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-exportDeclarationInInternalModule.ts(10,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 exportDeclarationInInternalModule.ts(13,19): error TS1141: String literal expected.
 
 
-==== exportDeclarationInInternalModule.ts (3 errors) ====
+==== exportDeclarationInInternalModule.ts (1 errors) ====
     class Bbb {
     }
     
     class Aaa extends Bbb { }
     
-    module Aaa {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace Aaa {
         export class SomeType { }
     }
     
-    module Bbb {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace Bbb {
         export class SomeType { }
     
         export * from Aaa;      // this line causes the nullref

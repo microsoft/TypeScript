@@ -1,8 +1,7 @@
-escapedIdentifiers.ts(22,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 escapedIdentifiers.ts(25,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 
 
-==== escapedIdentifiers.ts (2 errors) ====
+==== escapedIdentifiers.ts (1 errors) ====
     /*
         0 .. \u0030
         9 .. \u0039
@@ -24,9 +23,7 @@ escapedIdentifiers.ts(25,1): error TS1547: The 'module' keyword is not allowed f
     \u0062 ++;
     
     // modules
-    module moduleType1 { 
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace moduleType1 { 
         export var baz1: number;
     }
     module moduleType\u0032 { 

@@ -1,11 +1,8 @@
-typeGuardsInFunctionAndModuleBlock.ts(52,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-typeGuardsInFunctionAndModuleBlock.ts(54,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-typeGuardsInFunctionAndModuleBlock.ts(66,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 typeGuardsInFunctionAndModuleBlock.ts(68,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 typeGuardsInFunctionAndModuleBlock.ts(68,15): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 
 
-==== typeGuardsInFunctionAndModuleBlock.ts (5 errors) ====
+==== typeGuardsInFunctionAndModuleBlock.ts (2 errors) ====
     // typeguards are scoped in function/module block
     
     function foo(x: number | string | boolean) {
@@ -57,13 +54,9 @@ typeGuardsInFunctionAndModuleBlock.ts(68,15): error TS1547: The 'module' keyword
             }
         }
     }
-    module m {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m {
         var x: number | string | boolean;
-        module m2 {
-        ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        namespace m2 {
             var b = x; // new scope - number | boolean | string
             var y: string;
             if (typeof x === "string") {
@@ -75,9 +68,7 @@ typeGuardsInFunctionAndModuleBlock.ts(68,15): error TS1547: The 'module' keyword
             }
         }
     }
-    module m1 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m1 {
         var x: number | string | boolean;
         module m2.m3 {
         ~~~~~~

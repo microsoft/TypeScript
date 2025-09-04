@@ -3,11 +3,10 @@ for-inStatements.ts(22,15): error TS2873: This kind of expression is always fals
 for-inStatements.ts(23,15): error TS2872: This kind of expression is always truthy.
 for-inStatements.ts(33,18): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'Extract<keyof this, string>'.
 for-inStatements.ts(50,18): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'Extract<keyof this, string>'.
-for-inStatements.ts(67,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 for-inStatements.ts(79,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'Color.Blue'.
 
 
-==== for-inStatements.ts (7 errors) ====
+==== for-inStatements.ts (6 errors) ====
     var aString: string;
     for (aString in {}) { }
     
@@ -86,9 +85,7 @@ for-inStatements.ts(79,15): error TS2407: The right-hand side of a 'for...in' st
     for (var x in i[42]) { } 
     
     
-    module M {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace M {
         export class X<T> {
             name:string
         }

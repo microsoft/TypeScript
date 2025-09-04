@@ -1,8 +1,7 @@
-privateStaticNotAccessibleInClodule.ts(8,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 privateStaticNotAccessibleInClodule.ts(9,22): error TS2341: Property 'bar' is private and only accessible within class 'C'.
 
 
-==== privateStaticNotAccessibleInClodule.ts (2 errors) ====
+==== privateStaticNotAccessibleInClodule.ts (1 errors) ====
     // Any attempt to access a private property member outside the class body that contains its declaration results in a compile-time error.
     
     class C {
@@ -10,9 +9,7 @@ privateStaticNotAccessibleInClodule.ts(9,22): error TS2341: Property 'bar' is pr
         private static bar: string;
     }
     
-    module C {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace C {
         export var y = C.bar; // error
                          ~~~
 !!! error TS2341: Property 'bar' is private and only accessible within class 'C'.

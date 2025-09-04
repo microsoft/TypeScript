@@ -1,4 +1,3 @@
-underscoreTest1_underscore.ts(31,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 underscoreTest1_underscoreTests.ts(26,3): error TS2769: No overload matches this call.
   Overload 1 of 2, '(list: (string | number | boolean)[], iterator?: Iterator_<string | number | boolean, boolean>, context?: any): boolean', gave the following error.
     Argument of type '<T>(value: T) => T' is not assignable to parameter of type 'Iterator_<string | number | boolean, boolean>'.
@@ -271,7 +270,7 @@ underscoreTest1_underscoreTests.ts(26,3): error TS2769: No overload matches this
     var template2 = _.template("Hello {{ name }}!");
     template2({ name: "Mustache" });
     _.template("Using 'with': <%= data.answer %>", { answer: 'no' }, { variable: 'data' });
-==== underscoreTest1_underscore.ts (1 errors) ====
+==== underscoreTest1_underscore.ts (0 errors) ====
     interface Dictionary<T> {
         [x: string]: T;
     }
@@ -302,9 +301,7 @@ underscoreTest1_underscoreTests.ts(26,3): error TS2769: No overload matches this
         3: T3;
     }
     
-    module Underscore {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace Underscore {
         export interface WrappedObject<T> {
             keys(): string[];
             values(): any[];

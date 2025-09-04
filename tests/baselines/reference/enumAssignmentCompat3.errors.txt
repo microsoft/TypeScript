@@ -1,4 +1,3 @@
-enumAssignmentCompat3.ts(52,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 enumAssignmentCompat3.ts(68,1): error TS2322: Type 'Abcd.E' is not assignable to type 'First.E'.
   Property 'd' is missing in type 'First.E'.
 enumAssignmentCompat3.ts(70,1): error TS2322: Type 'Cd.E' is not assignable to type 'First.E'.
@@ -21,7 +20,7 @@ enumAssignmentCompat3.ts(87,1): error TS2322: Type 'First.E' is not assignable t
   Each declaration of 'E.c' differs in its value, where '3' was expected but '2' was given.
 
 
-==== enumAssignmentCompat3.ts (13 errors) ====
+==== enumAssignmentCompat3.ts (12 errors) ====
     namespace First {
         export enum E {
             a, b, c,
@@ -73,9 +72,7 @@ enumAssignmentCompat3.ts(87,1): error TS2322: Type 'First.E' is not assignable t
         export enum E {
             a, b, c
         }
-        export module E {
-               ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export namespace E {
             export let d = 5;
         }
     }

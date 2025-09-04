@@ -1,8 +1,7 @@
 constDeclarations-scopes.ts(27,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
-constDeclarations-scopes.ts(102,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 
 
-==== constDeclarations-scopes.ts (2 errors) ====
+==== constDeclarations-scopes.ts (1 errors) ====
     // global
     const c = "string";
     
@@ -106,9 +105,7 @@ constDeclarations-scopes.ts(102,1): error TS1547: The 'module' keyword is not al
     };
     
     // modules
-    module m {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m {
         const c = 0;
         n = c;
     

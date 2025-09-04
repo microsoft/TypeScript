@@ -1,14 +1,10 @@
-invalidInstantiatedModule.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 invalidInstantiatedModule.ts(2,18): error TS2300: Duplicate identifier 'Point'.
 invalidInstantiatedModule.ts(3,16): error TS2300: Duplicate identifier 'Point'.
-invalidInstantiatedModule.ts(6,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 invalidInstantiatedModule.ts(12,8): error TS2833: Cannot find namespace 'm'. Did you mean 'M'?
 
 
-==== invalidInstantiatedModule.ts (5 errors) ====
-    module M {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+==== invalidInstantiatedModule.ts (3 errors) ====
+    namespace M {
         export class Point { x: number; y: number }
                      ~~~~~
 !!! error TS2300: Duplicate identifier 'Point'.
@@ -17,9 +13,7 @@ invalidInstantiatedModule.ts(12,8): error TS2833: Cannot find namespace 'm'. Did
 !!! error TS2300: Duplicate identifier 'Point'.
     }
     
-    module M2 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace M2 {
         export interface Point { x: number; y: number }
         export var Point = 1;
     }
@@ -28,7 +22,7 @@ invalidInstantiatedModule.ts(12,8): error TS2833: Cannot find namespace 'm'. Did
     var p: m.Point; // Error
            ~
 !!! error TS2833: Cannot find namespace 'm'. Did you mean 'M'?
-!!! related TS2728 invalidInstantiatedModule.ts:1:8: 'M' is declared here.
+!!! related TS2728 invalidInstantiatedModule.ts:1:11: 'M' is declared here.
     
     
      

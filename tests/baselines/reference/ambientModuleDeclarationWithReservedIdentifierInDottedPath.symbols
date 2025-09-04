@@ -23,5 +23,5 @@ declare module test.class {}
 >test : Symbol(test, Decl(ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts, 6, 43))
 >class : Symbol(class, Decl(ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts, 8, 20))
 
-declare module debugger {} // still an error
+declare namespace debugger {} // still an error
 

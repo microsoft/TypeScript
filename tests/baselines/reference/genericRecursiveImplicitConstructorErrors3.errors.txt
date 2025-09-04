@@ -1,6 +1,4 @@
-genericRecursiveImplicitConstructorErrors3.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 genericRecursiveImplicitConstructorErrors3.ts(3,66): error TS2314: Generic type 'MemberName<A, B, C>' requires 3 type argument(s).
-genericRecursiveImplicitConstructorErrors3.ts(8,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 genericRecursiveImplicitConstructorErrors3.ts(10,22): error TS2314: Generic type 'PullTypeSymbol<A, B, C>' requires 3 type argument(s).
 genericRecursiveImplicitConstructorErrors3.ts(12,48): error TS2314: Generic type 'PullSymbol<A, B, C>' requires 3 type argument(s).
 genericRecursiveImplicitConstructorErrors3.ts(13,31): error TS2314: Generic type 'PullTypeSymbol<A, B, C>' requires 3 type argument(s).
@@ -9,10 +7,8 @@ genericRecursiveImplicitConstructorErrors3.ts(18,53): error TS2314: Generic type
 genericRecursiveImplicitConstructorErrors3.ts(19,22): error TS2339: Property 'isArray' does not exist on type 'PullTypeSymbol<A, B, C>'.
 
 
-==== genericRecursiveImplicitConstructorErrors3.ts (9 errors) ====
-    module TypeScript {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+==== genericRecursiveImplicitConstructorErrors3.ts (7 errors) ====
+    namespace TypeScript {
         export class MemberName <A,B,C>{
             static create<A,B,C>(arg1: any, arg2?: any, arg3?: any): MemberName {
                                                                      ~~~~~~~~~~
@@ -21,9 +17,7 @@ genericRecursiveImplicitConstructorErrors3.ts(19,22): error TS2339: Property 'is
         }
     }
      
-    module TypeScript {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace TypeScript {
         export class PullSymbol <A,B,C>{
             public type: PullTypeSymbol = null;
                          ~~~~~~~~~~~~~~

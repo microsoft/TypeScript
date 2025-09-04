@@ -1,12 +1,9 @@
-selfRef.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 selfRef.ts(8,8): error TS2304: Cannot find name 'name'.
 selfRef.ts(12,18): error TS2304: Cannot find name 'name'.
 
 
-==== selfRef.ts (3 errors) ====
-    module M
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+==== selfRef.ts (2 errors) ====
+    namespace M
     {
         export class Test
         {

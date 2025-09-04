@@ -1,19 +1,13 @@
-assignmentCompatability27.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-assignmentCompatability27.ts(5,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 assignmentCompatability27.ts(9,1): error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '{ two: string; }'.
   Property 'two' is optional in type 'interfaceWithPublicAndOptional<number, string>' but required in type '{ two: string; }'.
 
 
-==== assignmentCompatability27.ts (3 errors) ====
-    module __test1__ {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+==== assignmentCompatability27.ts (1 errors) ====
+    namespace __test1__ {
         export interface interfaceWithPublicAndOptional<T,U> { one: T; two?: U; };  var obj4: interfaceWithPublicAndOptional<number,string> = { one: 1 };;
         export var __val__obj4 = obj4;
     }
-    module __test2__ {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace __test2__ {
         export var aa:{two:string;};;
         export var __val__aa = aa;
     }

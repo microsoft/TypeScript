@@ -12,11 +12,11 @@ module A.B {
 >  : ^^^^^^
 }
 
-module A{ 
+namespace A{ 
 >A : typeof A
 >  : ^^^^^^^^
 
-    module B {
+    namespace B {
 >B : typeof B
 >  : ^^^^^^^^
 
@@ -63,15 +63,15 @@ module X.Y.Z {
     }
 }
 
-module X {
+namespace X {
 >X : typeof X
 >  : ^^^^^^^^
 
-    export module Y {
+    export namespace Y {
 >Y : typeof Y
 >  : ^^^^^^^^
 
-        module Z {
+        namespace Z {
 >Z : typeof Z
 >  : ^^^^^^^^
 

@@ -1,79 +1,40 @@
-augmentedTypesModules.ts(2,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-augmentedTypesModules.ts(5,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-augmentedTypesModules.ts(5,8): error TS2300: Duplicate identifier 'm1a'.
+augmentedTypesModules.ts(5,11): error TS2300: Duplicate identifier 'm1a'.
 augmentedTypesModules.ts(6,5): error TS2300: Duplicate identifier 'm1a'.
-augmentedTypesModules.ts(8,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-augmentedTypesModules.ts(8,8): error TS2300: Duplicate identifier 'm1b'.
+augmentedTypesModules.ts(8,11): error TS2300: Duplicate identifier 'm1b'.
 augmentedTypesModules.ts(9,5): error TS2300: Duplicate identifier 'm1b'.
-augmentedTypesModules.ts(11,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-augmentedTypesModules.ts(16,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-augmentedTypesModules.ts(16,8): error TS2300: Duplicate identifier 'm1d'.
+augmentedTypesModules.ts(16,11): error TS2300: Duplicate identifier 'm1d'.
 augmentedTypesModules.ts(19,5): error TS2300: Duplicate identifier 'm1d'.
-augmentedTypesModules.ts(22,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-augmentedTypesModules.ts(25,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-augmentedTypesModules.ts(25,8): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
-augmentedTypesModules.ts(28,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-augmentedTypesModules.ts(28,8): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
-augmentedTypesModules.ts(33,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-augmentedTypesModules.ts(35,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-augmentedTypesModules.ts(39,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-augmentedTypesModules.ts(42,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-augmentedTypesModules.ts(45,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-augmentedTypesModules.ts(48,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-augmentedTypesModules.ts(51,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-augmentedTypesModules.ts(51,8): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
-augmentedTypesModules.ts(55,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-augmentedTypesModules.ts(58,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-augmentedTypesModules.ts(61,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-augmentedTypesModules.ts(63,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-augmentedTypesModules.ts(67,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-augmentedTypesModules.ts(70,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-augmentedTypesModules.ts(74,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-augmentedTypesModules.ts(77,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-augmentedTypesModules.ts(80,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-augmentedTypesModules.ts(83,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-augmentedTypesModules.ts(86,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-augmentedTypesModules.ts(91,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-augmentedTypesModules.ts(92,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-augmentedTypesModules.ts(95,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+augmentedTypesModules.ts(25,11): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
+augmentedTypesModules.ts(28,11): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
+augmentedTypesModules.ts(51,11): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
 
 
-==== augmentedTypesModules.ts (38 errors) ====
+==== augmentedTypesModules.ts (9 errors) ====
     // module then var
-    module m1 { }
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m1 { }
     var m1 = 1; // Should be allowed
     
-    module m1a { var y = 2; } // error
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-           ~~~
+    namespace m1a { var y = 2; } // error
+              ~~~
 !!! error TS2300: Duplicate identifier 'm1a'.
     var m1a = 1; // error
         ~~~
 !!! error TS2300: Duplicate identifier 'm1a'.
     
-    module m1b { export var y = 2; } // error
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-           ~~~
+    namespace m1b { export var y = 2; } // error
+              ~~~
 !!! error TS2300: Duplicate identifier 'm1b'.
     var m1b = 1; // error
         ~~~
 !!! error TS2300: Duplicate identifier 'm1b'.
     
-    module m1c {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m1c {
         export interface I { foo(): void; }
     }
     var m1c = 1; // Should be allowed
     
-    module m1d { // error
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-           ~~~
+    namespace m1d { // error
+              ~~~
 !!! error TS2300: Duplicate identifier 'm1d'.
         export class I { foo() { } }
     }
@@ -82,133 +43,85 @@ augmentedTypesModules.ts(95,1): error TS1547: The 'module' keyword is not allowe
 !!! error TS2300: Duplicate identifier 'm1d'.
     
     // module then function
-    module m2 { }
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m2 { }
     function m2() { }; // ok since the module is not instantiated
     
-    module m2a { var y = 2; }
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-           ~~~
+    namespace m2a { var y = 2; }
+              ~~~
 !!! error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
     function m2a() { }; // error since the module is instantiated
     
-    module m2b { export var y = 2; }
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-           ~~~
+    namespace m2b { export var y = 2; }
+              ~~~
 !!! error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
     function m2b() { };  // error since the module is instantiated
     
     // should be errors to have function first
     function m2c() { }; 
-    module m2c { export var y = 2; } 
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m2c { export var y = 2; } 
     
-    module m2d { }
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m2d { }
     declare function m2d(): void; 
     
     declare function m2e(): void; 
-    module m2e { }
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m2e { }
     
     function m2f() { };
-    module m2f { export interface I { foo(): void } } 
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m2f { export interface I { foo(): void } } 
     
     function m2g() { };
-    module m2g { export class C { foo() { } } } 
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m2g { export class C { foo() { } } } 
     
     // module then class
-    module m3 { }
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m3 { }
     class m3 { } // ok since the module is not instantiated
     
-    module m3a { var y = 2; }
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-           ~~~
+    namespace m3a { var y = 2; }
+              ~~~
 !!! error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
     class m3a { foo() { } } // error, class isn't ambient or declared before the module
     
     class m3b { foo() { } }
-    module m3b { var y = 2; }
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m3b { var y = 2; }
     
     class m3c { foo() { } }
-    module m3c { export var y = 2; } 
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m3c { export var y = 2; } 
     
     declare class m3d { foo(): void }
-    module m3d { export var y = 2; } 
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m3d { export var y = 2; } 
     
-    module m3e { export var y = 2; } 
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m3e { export var y = 2; } 
     declare class m3e { foo(): void } 
     
     declare class m3f { foo(): void }
-    module m3f { export interface I { foo(): void } }
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m3f { export interface I { foo(): void } }
     
     declare class m3g { foo(): void }
-    module m3g { export class C { foo() { } } }
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m3g { export class C { foo() { } } }
     
     // module then enum
     // should be errors
-    module m4 { }
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m4 { }
     enum m4 { }
     
-    module m4a { var y = 2; }
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m4a { var y = 2; }
     enum m4a { One }
     
-    module m4b { export var y = 2; }
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m4b { export var y = 2; }
     enum m4b { One }
     
-    module m4c { interface I { foo(): void } }
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m4c { interface I { foo(): void } }
     enum m4c { One }
     
-    module m4d { class C { foo() { } } }
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m4d { class C { foo() { } } }
     enum m4d { One }
     
     //// module then module
     
-    module m5 { export var y = 2; }
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-    module m5 { export interface I { foo(): void } } // should already be reasonably well covered
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m5 { export var y = 2; }
+    namespace m5 { export interface I { foo(): void } } // should already be reasonably well covered
     
     // module then import
-    module m6 { export var y = 2; }
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m6 { export var y = 2; }
     //import m6 = require('');
     

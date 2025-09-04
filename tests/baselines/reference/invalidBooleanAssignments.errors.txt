@@ -5,14 +5,13 @@ invalidBooleanAssignments.ts(9,5): error TS2322: Type 'true' is not assignable t
 invalidBooleanAssignments.ts(12,5): error TS2322: Type 'boolean' is not assignable to type 'C'.
 invalidBooleanAssignments.ts(15,5): error TS2322: Type 'boolean' is not assignable to type 'I'.
 invalidBooleanAssignments.ts(17,5): error TS2322: Type 'boolean' is not assignable to type '() => string'.
-invalidBooleanAssignments.ts(20,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 invalidBooleanAssignments.ts(21,1): error TS2631: Cannot assign to 'M' because it is a namespace.
 invalidBooleanAssignments.ts(24,5): error TS2322: Type 'boolean' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'boolean'.
 invalidBooleanAssignments.ts(26,1): error TS2630: Cannot assign to 'i' because it is a function.
 
 
-==== invalidBooleanAssignments.ts (11 errors) ====
+==== invalidBooleanAssignments.ts (10 errors) ====
     var x = true;
     
     var a: number = x;
@@ -46,9 +45,7 @@ invalidBooleanAssignments.ts(26,1): error TS2630: Cannot assign to 'i' because i
 !!! error TS2322: Type 'boolean' is not assignable to type '() => string'.
     var h2: { toString(): string } = x; // no error
     
-    module M { export var a = 1; }
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace M { export var a = 1; }
     M = x;
     ~
 !!! error TS2631: Cannot assign to 'M' because it is a namespace.

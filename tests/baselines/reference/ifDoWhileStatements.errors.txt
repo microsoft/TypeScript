@@ -1,5 +1,3 @@
-ifDoWhileStatements.ts(23,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-ifDoWhileStatements.ts(31,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 ifDoWhileStatements.ts(44,5): error TS2873: This kind of expression is always falsy.
 ifDoWhileStatements.ts(45,8): error TS2873: This kind of expression is always falsy.
 ifDoWhileStatements.ts(46,13): error TS2873: This kind of expression is always falsy.
@@ -32,7 +30,7 @@ ifDoWhileStatements.ts(85,8): error TS2872: This kind of expression is always tr
 ifDoWhileStatements.ts(86,13): error TS2872: This kind of expression is always truthy.
 
 
-==== ifDoWhileStatements.ts (32 errors) ====
+==== ifDoWhileStatements.ts (30 errors) ====
     interface I {
         id: number;
     }
@@ -55,9 +53,7 @@ ifDoWhileStatements.ts(86,13): error TS2872: This kind of expression is always t
     function F(x: string): number { return 42; }
     function F2(x: number): boolean { return x < 42; }
     
-    module M {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace M {
         export class A {
             name: string;
         }
@@ -65,9 +61,7 @@ ifDoWhileStatements.ts(86,13): error TS2872: This kind of expression is always t
         export function F2(x: number): string { return x.toString(); }
     }
     
-    module N {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace N {
         export class A {
             id: number;
         }

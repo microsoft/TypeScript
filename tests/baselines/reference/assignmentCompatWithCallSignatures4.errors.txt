@@ -1,5 +1,3 @@
-assignmentCompatWithCallSignatures4.ts(3,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-assignmentCompatWithCallSignatures4.ts(9,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 assignmentCompatWithCallSignatures4.ts(45,9): error TS2322: Type '(x: number) => string[]' is not assignable to type '<T, U>(x: T) => U[]'.
   Types of parameters 'x' and 'x' are incompatible.
     Type 'T' is not assignable to type 'number'.
@@ -49,7 +47,6 @@ assignmentCompatWithCallSignatures4.ts(74,9): error TS2322: Type '(x: { a: strin
       Types of property 'a' are incompatible.
         Type 'T' is not assignable to type 'string'.
           Type 'Base' is not assignable to type 'string'.
-assignmentCompatWithCallSignatures4.ts(85,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 assignmentCompatWithCallSignatures4.ts(89,9): error TS2322: Type '<T>(x: T) => string[]' is not assignable to type '<T>(x: T) => T[]'.
   Type 'string[]' is not assignable to type 'T[]'.
     Type 'string' is not assignable to type 'T'.
@@ -66,20 +63,16 @@ assignmentCompatWithCallSignatures4.ts(96,9): error TS2322: Type '<T>(x: T) => s
       'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
 
 
-==== assignmentCompatWithCallSignatures4.ts (18 errors) ====
+==== assignmentCompatWithCallSignatures4.ts (15 errors) ====
     // These are mostly permitted with the current loose rules. All ok unless otherwise noted.
     
-    module Errors {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace Errors {
         class Base { foo: string; }
         class Derived extends Base { bar: string; }
         class Derived2 extends Derived { baz: string; }
         class OtherDerived extends Base { bing: string; }
     
-        module WithNonGenericSignaturesInBaseType {
-        ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        namespace WithNonGenericSignaturesInBaseType {
             // target type with non-generic call signatures
             var a2: (x: number) => string[];
             var a7: (x: (arg: Base) => Derived) => (r: Base) => Derived2;
@@ -217,9 +210,7 @@ assignmentCompatWithCallSignatures4.ts(96,9): error TS2322: Type '<T>(x: T) => s
             b17 = a17;
         }
     
-        module WithGenericSignaturesInBaseType {
-        ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        namespace WithGenericSignaturesInBaseType {
             // target type has generic call signature
             var a2: <T>(x: T) => T[];
             var b2: <T>(x: T) => string[];

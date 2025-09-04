@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/declareDottedModuleName.ts] ////
 
 //// [declareDottedModuleName.ts]
-module M {
+namespace M {
     module P.Q { } // This shouldnt be emitted
 }
 
-module M {
+namespace M {
     export module R.S { }  //This should be emitted
 }
 

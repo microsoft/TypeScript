@@ -21,7 +21,7 @@ import ReferredTo = RT_ALIAS.elaborate.nested.mod.name.ReferredTo;
 >ReferredTo : ReferredTo
 >           : ^^^^^^^^^^
 
-export module ImportingModule {
+export namespace ImportingModule {
 >ImportingModule : typeof ImportingModule
 >                : ^^^^^^^^^^^^^^^^^^^^^^
 

@@ -1,11 +1,8 @@
-test.tsx(1,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 test.tsx(9,17): error TS2552: Cannot find name 'MyElement'. Did you mean 'Element'?
 
 
-==== test.tsx (2 errors) ====
-    declare module JSX {
-            ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+==== test.tsx (1 errors) ====
+    declare namespace JSX {
         interface IntrinsicElements {
             [s: string]: any;
         }

@@ -10,15 +10,13 @@ enumIsNotASubtypeOfAnythingButNumber.ts(66,5): error TS2411: Property 'foo' of t
 enumIsNotASubtypeOfAnythingButNumber.ts(72,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type '(x: any) => number'.
 enumIsNotASubtypeOfAnythingButNumber.ts(78,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type '<T>(x: T) => T'.
 enumIsNotASubtypeOfAnythingButNumber.ts(85,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'E2'.
-enumIsNotASubtypeOfAnythingButNumber.ts(90,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 enumIsNotASubtypeOfAnythingButNumber.ts(95,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'typeof f'.
-enumIsNotASubtypeOfAnythingButNumber.ts(100,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 enumIsNotASubtypeOfAnythingButNumber.ts(105,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'typeof c'.
 enumIsNotASubtypeOfAnythingButNumber.ts(111,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'T'.
 enumIsNotASubtypeOfAnythingButNumber.ts(117,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'U'.
 
 
-==== enumIsNotASubtypeOfAnythingButNumber.ts (18 errors) ====
+==== enumIsNotASubtypeOfAnythingButNumber.ts (16 errors) ====
     // enums are only subtypes of number, any and no other types
     
     enum E { A }
@@ -132,9 +130,7 @@ enumIsNotASubtypeOfAnythingButNumber.ts(117,5): error TS2411: Property 'foo' of 
     
     
     function f() { }
-    module f {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace f {
         export var bar = 1;
     }
     interface I15 {
@@ -146,9 +142,7 @@ enumIsNotASubtypeOfAnythingButNumber.ts(117,5): error TS2411: Property 'foo' of 
     
     
     class c { baz: string }
-    module c {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace c {
         export var bar = 1;
     }
     interface I16 {

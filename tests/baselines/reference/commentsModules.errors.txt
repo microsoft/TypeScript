@@ -1,5 +1,3 @@
-commentsModules.ts(2,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-commentsModules.ts(10,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 commentsModules.ts(41,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 commentsModules.ts(41,11): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 commentsModules.ts(48,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
@@ -8,24 +6,18 @@ commentsModules.ts(48,14): error TS1547: The 'module' keyword is not allowed for
 commentsModules.ts(55,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 commentsModules.ts(55,11): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 commentsModules.ts(55,14): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-commentsModules.ts(56,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 commentsModules.ts(64,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 commentsModules.ts(64,11): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 commentsModules.ts(64,14): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-commentsModules.ts(66,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 commentsModules.ts(73,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 commentsModules.ts(73,11): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-commentsModules.ts(74,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 commentsModules.ts(81,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 commentsModules.ts(81,11): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-commentsModules.ts(83,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 
 
-==== commentsModules.ts (21 errors) ====
+==== commentsModules.ts (15 errors) ====
     /** Module comment*/
-    module m1 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m1 {
         /** b's comment*/
         export var b: number;
         /** foo's comment*/
@@ -33,9 +25,7 @@ commentsModules.ts(83,12): error TS1547: The 'module' keyword is not allowed for
             return b;
         }
         /** m2 comments*/
-        export module m2 {
-               ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export namespace m2 {
             /** class comment;*/
             export class c {
             };
@@ -97,9 +87,7 @@ commentsModules.ts(83,12): error TS1547: The 'module' keyword is not allowed for
 !!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
                  ~~
 !!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-        export module m7 {
-               ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export namespace m7 {
             /** Exported class comment*/
             export class c {
             }
@@ -115,9 +103,7 @@ commentsModules.ts(83,12): error TS1547: The 'module' keyword is not allowed for
                  ~~
 !!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
         /** module m8 comment*/
-        export module m8 {
-               ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export namespace m8 {
             /** Exported class comment*/
             export class c {
             }
@@ -129,9 +115,7 @@ commentsModules.ts(83,12): error TS1547: The 'module' keyword is not allowed for
 !!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
               ~~
 !!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-        export module m8 {
-               ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export namespace m8 {
             /** Exported class comment*/
             export class c {
             }
@@ -144,9 +128,7 @@ commentsModules.ts(83,12): error TS1547: The 'module' keyword is not allowed for
               ~~
 !!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
         /** module m9 comment*/
-        export module m9 {
-               ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export namespace m9 {
             /** Exported class comment*/
             export class c {
             }

@@ -1,13 +1,10 @@
-recursiveTypeComparison2.ts(3,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 recursiveTypeComparison2.ts(13,80): error TS2304: Cannot find name 'StateValue'.
 
 
-==== recursiveTypeComparison2.ts (2 errors) ====
+==== recursiveTypeComparison2.ts (1 errors) ====
     // Before fix this would cause compiler to hang (#1170)
     
-    declare module Bacon {
-            ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    declare namespace Bacon {
         interface Event<T> {
         }
         interface Error<T> extends Event<T> {

@@ -1,4 +1,3 @@
-incrementOperatorWithUnsupportedBooleanType.ts(10,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 incrementOperatorWithUnsupportedBooleanType.ts(17,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 incrementOperatorWithUnsupportedBooleanType.ts(19,23): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 incrementOperatorWithUnsupportedBooleanType.ts(22,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
@@ -30,7 +29,7 @@ incrementOperatorWithUnsupportedBooleanType.ts(54,1): error TS2356: An arithmeti
 incrementOperatorWithUnsupportedBooleanType.ts(54,11): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 
 
-==== incrementOperatorWithUnsupportedBooleanType.ts (30 errors) ====
+==== incrementOperatorWithUnsupportedBooleanType.ts (29 errors) ====
     // ++ operator on boolean type
     var BOOLEAN: boolean;
     
@@ -40,9 +39,7 @@ incrementOperatorWithUnsupportedBooleanType.ts(54,11): error TS2356: An arithmet
         public a: boolean;
         static foo() { return true; }
     }
-    module M {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace M {
         export var n: boolean;
     }
     

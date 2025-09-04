@@ -3,7 +3,6 @@ assignmentLHSIsValue.ts(7,13): error TS2364: The left-hand side of an assignment
 assignmentLHSIsValue.ts(8,21): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
 assignmentLHSIsValue.ts(11,18): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
 assignmentLHSIsValue.ts(13,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-assignmentLHSIsValue.ts(16,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 assignmentLHSIsValue.ts(17,1): error TS2631: Cannot assign to 'M' because it is a namespace.
 assignmentLHSIsValue.ts(19,1): error TS2629: Cannot assign to 'C' because it is a class.
 assignmentLHSIsValue.ts(22,1): error TS2628: Cannot assign to 'E' because it is an enum.
@@ -40,7 +39,7 @@ assignmentLHSIsValue.ts(69,1): error TS2364: The left-hand side of an assignment
 assignmentLHSIsValue.ts(70,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
 
 
-==== assignmentLHSIsValue.ts (40 errors) ====
+==== assignmentLHSIsValue.ts (39 errors) ====
     // expected error for all the LHS of assignments
     var value: any;
     
@@ -66,9 +65,7 @@ assignmentLHSIsValue.ts(70,1): error TS2364: The left-hand side of an assignment
 !!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
     
     // identifiers: module, class, enum, function
-    module M { export var a; }
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace M { export var a; }
     M = value;
     ~
 !!! error TS2631: Cannot assign to 'M' because it is a namespace.

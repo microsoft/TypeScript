@@ -2,7 +2,7 @@
 
 //// [module.ts]
 module X.Y {
-    export module Point {
+    export namespace Point {
         export var Origin = new Point(0, 0);
     }
 }
@@ -21,7 +21,7 @@ module X.Y {
 }
 
 //// [simple.ts]
-module A {
+namespace A {
     export var Instance = new A();
 }
 

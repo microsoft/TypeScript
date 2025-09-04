@@ -4,7 +4,6 @@ assignmentCompatWithNumericIndexer.ts(14,1): error TS2322: Type 'A' is not assig
 assignmentCompatWithNumericIndexer.ts(18,1): error TS2322: Type 'A' is not assignable to type '{ [x: number]: Derived2; }'.
   'number' index signatures are incompatible.
     Type 'Base' is missing the following properties from type 'Derived2': baz, bar
-assignmentCompatWithNumericIndexer.ts(20,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 assignmentCompatWithNumericIndexer.ts(32,9): error TS2322: Type '{ [x: number]: Derived; }' is not assignable to type 'A<T>'.
   'number' index signatures are incompatible.
     Type 'Derived' is not assignable to type 'T'.
@@ -23,7 +22,7 @@ assignmentCompatWithNumericIndexer.ts(37,9): error TS2322: Type 'A<T>' is not as
       Type 'Base' is missing the following properties from type 'Derived2': baz, bar
 
 
-==== assignmentCompatWithNumericIndexer.ts (7 errors) ====
+==== assignmentCompatWithNumericIndexer.ts (6 errors) ====
     // Derived type indexer must be subtype of base type indexer
     
     interface Base { foo: string; }
@@ -52,9 +51,7 @@ assignmentCompatWithNumericIndexer.ts(37,9): error TS2322: Type 'A<T>' is not as
 !!! error TS2322:   'number' index signatures are incompatible.
 !!! error TS2322:     Type 'Base' is missing the following properties from type 'Derived2': baz, bar
     
-    module Generics {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace Generics {
         class A<T extends Base> {
             [x: number]: T;
         }

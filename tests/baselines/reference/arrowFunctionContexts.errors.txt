@@ -1,15 +1,12 @@
 arrowFunctionContexts.ts(2,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 arrowFunctionContexts.ts(30,9): error TS18033: Type '() => number' is not assignable to type 'number' as required for computed enum member values.
 arrowFunctionContexts.ts(31,16): error TS2332: 'this' cannot be referenced in current location.
-arrowFunctionContexts.ts(35,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-arrowFunctionContexts.ts(41,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 arrowFunctionContexts.ts(43,5): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 arrowFunctionContexts.ts(71,13): error TS18033: Type '() => number' is not assignable to type 'number' as required for computed enum member values.
 arrowFunctionContexts.ts(72,20): error TS2332: 'this' cannot be referenced in current location.
-arrowFunctionContexts.ts(76,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 
 
-==== arrowFunctionContexts.ts (9 errors) ====
+==== arrowFunctionContexts.ts (6 errors) ====
     // Arrow function used in with statement
     with (window) {
     ~~~~~~~~~~~~~
@@ -50,17 +47,13 @@ arrowFunctionContexts.ts(76,5): error TS1547: The 'module' keyword is not allowe
     }
     
     // Arrow function as module variable initializer
-    module M {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace M {
         export var a = (s) => '';
         var b = (s) => s;
     }
     
     // Repeat above for module members that are functions? (necessary to redo all of them?)
-    module M2 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace M2 {
         // Arrow function used in with statement
         with (window) {
         ~~~~~~~~~~~~~
@@ -101,9 +94,7 @@ arrowFunctionContexts.ts(76,5): error TS1547: The 'module' keyword is not allowe
         }
     
         // Arrow function as module variable initializer
-        module M {
-        ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        namespace M {
             export var a = (s) => '';
             var b = (s) => s;
         }

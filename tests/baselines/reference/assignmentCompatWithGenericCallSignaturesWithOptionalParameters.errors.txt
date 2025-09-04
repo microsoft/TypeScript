@@ -1,9 +1,7 @@
-assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts(3,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts(14,13): error TS2322: Type '(x: T) => any' is not assignable to type '() => T'.
   Target signature provides too few arguments. Expected 1 or more, but got 0.
 assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts(23,13): error TS2322: Type '(x: T, y: T) => any' is not assignable to type '(x: T) => T'.
   Target signature provides too few arguments. Expected 2 or more, but got 1.
-assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts(39,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts(63,9): error TS2322: Type '() => T' is not assignable to type '<T>() => T'.
   Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
     'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
@@ -93,19 +91,16 @@ assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts(91,9): error 
   Types of parameters 'x' and 'x' are incompatible.
     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts(95,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts(107,13): error TS2322: Type '<T>(x: T) => any' is not assignable to type '<T>() => T'.
   Target signature provides too few arguments. Expected 1 or more, but got 0.
 assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts(116,13): error TS2322: Type '<T>(x: T, y: T) => any' is not assignable to type '<T>(x: T) => T'.
   Target signature provides too few arguments. Expected 2 or more, but got 1.
 
 
-==== assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts (32 errors) ====
+==== assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts (29 errors) ====
     // call signatures in derived types must have the same or fewer optional parameters as the target for assignment
     
-    module ClassTypeParam {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace ClassTypeParam {
         class Base<T> {
             a: () => T;
             a2: (x?: T) => T;
@@ -147,9 +142,7 @@ assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts(116,13): erro
         }
     }
     
-    module GenericSignaturesInvalid {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace GenericSignaturesInvalid {
     
         class Base2 {
             a: <T>() => T;
@@ -342,9 +335,7 @@ assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts(116,13): erro
         }
     }
     
-    module GenericSignaturesValid {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace GenericSignaturesValid {
     
         class Base2 {
             a: <T>() => T;

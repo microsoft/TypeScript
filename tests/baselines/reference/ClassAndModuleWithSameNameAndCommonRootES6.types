@@ -58,7 +58,7 @@ module X.Y {
 >Y : typeof Y
 >  : ^^^^^^^^
 
-    export module Point {
+    export namespace Point {
 >Point : typeof Point
 >      : ^^^^^^^^^^^^
 
@@ -127,7 +127,7 @@ class A {
 >   : ^^^^^^
 }
 
-module A {
+namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 

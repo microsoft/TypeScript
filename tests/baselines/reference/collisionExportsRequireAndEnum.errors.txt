@@ -1,12 +1,8 @@
 collisionExportsRequireAndEnum_externalmodule.ts(1,13): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
 collisionExportsRequireAndEnum_externalmodule.ts(5,13): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
-collisionExportsRequireAndEnum_externalmodule.ts(9,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-collisionExportsRequireAndEnum_externalmodule.ts(19,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-collisionExportsRequireAndEnum_globalFile.ts(9,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-collisionExportsRequireAndEnum_globalFile.ts(19,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 
 
-==== collisionExportsRequireAndEnum_externalmodule.ts (4 errors) ====
+==== collisionExportsRequireAndEnum_externalmodule.ts (2 errors) ====
     export enum require { // Error
                 ~~~~~~~
 !!! error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
@@ -19,9 +15,7 @@ collisionExportsRequireAndEnum_globalFile.ts(19,1): error TS1547: The 'module' k
         _thisVal1,
         _thisVal2,
     }
-    module m1 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m1 {
         enum require {
             _thisVal1,
             _thisVal2,
@@ -31,9 +25,7 @@ collisionExportsRequireAndEnum_globalFile.ts(19,1): error TS1547: The 'module' k
             _thisVal2,
         }
     }
-    module m2 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m2 {
         export enum require { 
             _thisVal1,
             _thisVal2,
@@ -44,7 +36,7 @@ collisionExportsRequireAndEnum_globalFile.ts(19,1): error TS1547: The 'module' k
         }
     }
     
-==== collisionExportsRequireAndEnum_globalFile.ts (2 errors) ====
+==== collisionExportsRequireAndEnum_globalFile.ts (0 errors) ====
     enum require {
         _thisVal1,
         _thisVal2,
@@ -53,9 +45,7 @@ collisionExportsRequireAndEnum_globalFile.ts(19,1): error TS1547: The 'module' k
         _thisVal1,
         _thisVal2,
     }
-    module m3 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m3 {
         enum require {
             _thisVal1,
             _thisVal2,
@@ -65,9 +55,7 @@ collisionExportsRequireAndEnum_globalFile.ts(19,1): error TS1547: The 'module' k
             _thisVal2,
         }
     }
-    module m4 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m4 {
         export enum require {
             _thisVal1,
             _thisVal2,

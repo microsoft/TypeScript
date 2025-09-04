@@ -1,12 +1,9 @@
-constructorOverloads4.ts(1,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 constructorOverloads4.ts(10,1): error TS2349: This expression is not callable.
   Type 'Function' has no call signatures.
 
 
-==== constructorOverloads4.ts (2 errors) ====
-    declare module M {    
-            ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+==== constructorOverloads4.ts (1 errors) ====
+    declare namespace M {    
         export class Function {
             constructor(...args: string[]);
         }

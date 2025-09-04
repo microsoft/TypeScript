@@ -1,8 +1,11 @@
+file.tsx(1,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 file.tsx(12,1): error TS2339: Property 'span' does not exist on type 'JSX.IntrinsicElements'.
 
 
-==== file.tsx (1 errors) ====
+==== file.tsx (2 errors) ====
     declare module JSX {
+            ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
     	interface Element { }
     	interface IntrinsicElements {
     		div: any

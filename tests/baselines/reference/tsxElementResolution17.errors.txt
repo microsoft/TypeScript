@@ -1,0 +1,30 @@
+file.tsx(1,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== consumer.tsx (0 errors) ====
+    ///<reference path="file.tsx" />
+    // Should keep s1 and elide s2
+    import s1 = require('elements1');
+    import s2 = require('elements2');
+    <s1.MyElement />;
+    
+==== file.tsx (1 errors) ====
+    declare module JSX {
+            ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    	interface Element { }
+    	interface IntrinsicElements { }
+    }
+    
+    declare module 'elements1' {
+    	class MyElement {
+    
+    	}
+    }
+    
+    declare module 'elements2' {
+    	class MyElement {
+    
+    	}
+    }
+    

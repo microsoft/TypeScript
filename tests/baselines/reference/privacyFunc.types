@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/privacyFunc.ts] ////
 
 === privacyFunc.ts ===
-module m1 {
+namespace m1 {
 >m1 : typeof m1
 >   : ^^^^^^^^^
 
@@ -34,7 +34,6 @@ module m1 {
 
         constructor (m1_c3_c1_2: any) {
 >m1_c3_c1_2 : any
->           : ^^^
         }
 
         private f1_private(m1_c3_f1_arg: C1_public) {
@@ -168,7 +167,6 @@ module m1 {
 
         constructor (m1_c4_c1_2: any) {
 >m1_c4_c1_2 : any
->           : ^^^
         }
         private f1_private(m1_c4_f1_arg: C1_public) {
 >f1_private : (m1_c4_f1_arg: C1_public) => void
@@ -462,7 +460,6 @@ class C7_public {
 
     constructor (c7_c1_2: any) {
 >c7_c1_2 : any
->        : ^^^
     }
     private f1_private(c7_f1_arg: C6_public) {
 >f1_private : (c7_f1_arg: C6_public) => void

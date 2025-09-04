@@ -9,7 +9,7 @@ module A.B {
  
  
  
-module AA { export module B {
+namespace AA { export namespace B {
  
   export var x = 1;
  
@@ -32,7 +32,7 @@ module A.B.C
  
  
  
-module M
+namespace M
  
 {
  

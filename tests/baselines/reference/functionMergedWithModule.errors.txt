@@ -1,0 +1,29 @@
+functionMergedWithModule.ts(5,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+functionMergedWithModule.ts(5,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+functionMergedWithModule.ts(10,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+functionMergedWithModule.ts(10,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== functionMergedWithModule.ts (4 errors) ====
+    function foo(title: string) {
+        var x = 10;
+    }
+    
+    module foo.Bar {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+               ~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export function f() {
+        }
+    }
+    
+    module foo.Baz {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+               ~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export function g() {
+            Bar.f();
+        }
+    }

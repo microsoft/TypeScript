@@ -1,12 +1,8 @@
 moduleMemberWithoutTypeAnnotation1.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 moduleMemberWithoutTypeAnnotation1.ts(1,19): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-moduleMemberWithoutTypeAnnotation1.ts(9,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-moduleMemberWithoutTypeAnnotation1.ts(25,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-moduleMemberWithoutTypeAnnotation1.ts(37,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-moduleMemberWithoutTypeAnnotation1.ts(37,19): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 
 
-==== moduleMemberWithoutTypeAnnotation1.ts (6 errors) ====
+==== moduleMemberWithoutTypeAnnotation1.ts (2 errors) ====
     module TypeScript.Parser {
     ~~~~~~
 !!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
@@ -19,9 +15,7 @@ moduleMemberWithoutTypeAnnotation1.ts(37,19): error TS1547: The 'module' keyword
         }
     }
     
-    module TypeScript {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace TypeScript {
         export interface ISyntaxElement { };
         export interface ISyntaxToken { };
     
@@ -37,9 +31,7 @@ moduleMemberWithoutTypeAnnotation1.ts(37,19): error TS1547: The 'module' keyword
         }
     }
     
-    module TypeScript {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace TypeScript {
         export class SyntaxNode {
             public findToken(position: number, includeSkippedTokens: boolean = false): PositionedToken {
                 var positionedToken = this.findTokenInternal(null, position, 0);
@@ -51,11 +43,7 @@ moduleMemberWithoutTypeAnnotation1.ts(37,19): error TS1547: The 'module' keyword
         }
     }
     
-    module TypeScript.Syntax {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-                      ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace TypeScript.Syntax {
         export function childIndex() { }
     
         export class VariableWidthTokenWithTrailingTrivia implements ISyntaxToken {

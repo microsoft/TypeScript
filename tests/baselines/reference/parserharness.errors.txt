@@ -7,19 +7,11 @@ parserharness.ts(25,17): error TS2304: Cannot find name 'IIO'.
 parserharness.ts(41,12): error TS2304: Cannot find name 'ActiveXObject'.
 parserharness.ts(43,19): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 parserharness.ts(44,14): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-parserharness.ts(50,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-parserharness.ts(55,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-parserharness.ts(81,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 parserharness.ts(341,13): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
 parserharness.ts(347,13): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
 parserharness.ts(351,17): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
 parserharness.ts(354,17): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
 parserharness.ts(354,35): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
-parserharness.ts(499,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-parserharness.ts(500,16): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-parserharness.ts(504,21): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-parserharness.ts(508,21): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-parserharness.ts(687,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 parserharness.ts(691,50): error TS2304: Cannot find name 'ITextWriter'.
 parserharness.ts(716,47): error TS2503: Cannot find namespace 'TypeScript'.
 parserharness.ts(721,62): error TS2304: Cannot find name 'ITextWriter'.
@@ -85,7 +77,6 @@ parserharness.ts(1321,21): error TS2304: Cannot find name 'TypeScript'.
 parserharness.ts(1340,38): error TS2503: Cannot find namespace 'TypeScript'.
 parserharness.ts(1344,165): error TS2503: Cannot find namespace 'TypeScript'.
 parserharness.ts(1345,26): error TS2503: Cannot find namespace 'TypeScript'.
-parserharness.ts(1414,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 parserharness.ts(1426,25): error TS2503: Cannot find namespace 'TypeScript'.
 parserharness.ts(1430,9): error TS1128: Declaration or statement expected.
 parserharness.ts(1430,17): error TS2304: Cannot find name 'optionRegex'.
@@ -116,12 +107,10 @@ parserharness.ts(1784,61): error TS2503: Cannot find namespace 'Services'.
 parserharness.ts(1785,25): error TS2503: Cannot find namespace 'Services'.
 parserharness.ts(1787,38): error TS2503: Cannot find namespace 'Services'.
 parserharness.ts(1787,68): error TS2503: Cannot find namespace 'Services'.
-parserharness.ts(1869,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-parserharness.ts(1910,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
 
 
-==== parserharness.ts (121 errors) ====
+==== parserharness.ts (110 errors) ====
     //﻿
     // Copyright (c) Microsoft Corporation.  All rights reserved.
     // 
@@ -189,16 +178,12 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
         throw new Error('Unknown context');
     }
     
-    declare module process {
-            ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    declare namespace process {
         export function nextTick(callback: () => any): void;
         export function on(event: string, listener: Function);
     }
     
-    module Harness {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace Harness {
         // Settings 
         export var userSpecifiedroot = "";
         var global = <any>Function("return this").call(null);
@@ -224,9 +209,7 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
         }
     
         // Assert functions
-        export module Assert {
-               ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export namespace Assert {
             export var bugIds: string[] = [];
             export var throwAssertError = (error: Error) => {
                 throw error;
@@ -654,24 +637,16 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
         }
     
         // Performance test
-        export module Perf {
-               ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-            export module Clock {
-                   ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export namespace Perf {
+            export namespace Clock {
                 export var now: () => number;
                 export var resolution: number;
     
-                declare module WScript {
-                        ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+                declare namespace WScript {
                     export function InitializeProjection();
                 }
     
-                declare module TestUtilities {
-                        ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+                declare namespace TestUtilities {
                     export function QueryPerformanceCounter(): number;
                     export function QueryPerformanceFrequency(): number;
                 }
@@ -850,9 +825,7 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
         }
     
         /** Functionality for compiling TypeScript code */
-        export module Compiler {
-               ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export namespace Compiler {
             /** Aggregate various writes into a single array of lines. Useful for passing to the
              *  TypeScript compiler to fill with source code or errors.
              */
@@ -1709,9 +1682,7 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
         /** Parses the test cases files 
          *  extracts options and individual files in a multifile test
          */
-        export module TestCaseParser {
-               ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export namespace TestCaseParser {
             /** all the necesarry information to set the right compiler settings */
             export interface CompilerSetting {
                 flag: string;
@@ -2226,9 +2197,7 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
         }
     
         /** Runs TypeScript or Javascript code. */
-        export module Runner {
-               ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export namespace Runner {
             export function runCollateral(path: string, callback: (error: Error, result: any) => void ) {
                 path = switchToForwardSlashes(path);
                 runString(readFile(path), path.match(/[^\/]*$/)[0], callback);
@@ -2269,9 +2238,7 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
         }
     
         /** Support class for baseline files */
-        export module Baseline {
-               ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export namespace Baseline {
             var reportFilename = 'baseline-report.html';
     
             var firstRun = true;

@@ -1,8 +1,7 @@
-ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts(8,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts(11,24): error TS2341: Property 'sfn' is private and only accessible within class 'clodule<T>'.
 
 
-==== ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts (2 errors) ====
+==== ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts (1 errors) ====
     class clodule<T> {
         id: string;
         value: T;
@@ -10,9 +9,7 @@ ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics
         private static sfn(id: string) { return 42; }
     }
     
-    module clodule {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace clodule {
         // error: duplicate identifier expected
         export function fn<T>(x: T, y: T): number {
             return clodule.sfn('a');

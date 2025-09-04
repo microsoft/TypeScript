@@ -56,13 +56,13 @@ declare module templa.mvc.composite {
 >IModel : Symbol(IModel, Decl(declFileGenericType2.ts, 0, 27))
     }
 }
-module templa.dom.mvc {
+namespace templa.dom.mvc {
 >templa : Symbol(templa, Decl(declFileGenericType2.ts, 0, 0), Decl(declFileGenericType2.ts, 3, 1), Decl(declFileGenericType2.ts, 7, 1), Decl(declFileGenericType2.ts, 11, 1), Decl(declFileGenericType2.ts, 16, 1) ... and 2 more)
->dom : Symbol(dom, Decl(declFileGenericType2.ts, 17, 14), Decl(declFileGenericType2.ts, 22, 14), Decl(declFileGenericType2.ts, 31, 14))
->mvc : Symbol(mvc, Decl(declFileGenericType2.ts, 17, 18), Decl(declFileGenericType2.ts, 22, 18), Decl(declFileGenericType2.ts, 31, 18))
+>dom : Symbol(dom, Decl(declFileGenericType2.ts, 17, 17), Decl(declFileGenericType2.ts, 22, 17), Decl(declFileGenericType2.ts, 31, 17))
+>mvc : Symbol(mvc, Decl(declFileGenericType2.ts, 17, 21), Decl(declFileGenericType2.ts, 22, 21), Decl(declFileGenericType2.ts, 31, 21))
 
     export interface IElementController<ModelType extends templa.mvc.IModel> extends templa.mvc.IController<ModelType> {
->IElementController : Symbol(IElementController, Decl(declFileGenericType2.ts, 17, 23))
+>IElementController : Symbol(IElementController, Decl(declFileGenericType2.ts, 17, 26))
 >ModelType : Symbol(ModelType, Decl(declFileGenericType2.ts, 18, 40))
 >templa : Symbol(templa, Decl(declFileGenericType2.ts, 0, 0), Decl(declFileGenericType2.ts, 3, 1), Decl(declFileGenericType2.ts, 7, 1), Decl(declFileGenericType2.ts, 11, 1), Decl(declFileGenericType2.ts, 16, 1) ... and 2 more)
 >mvc : Symbol(mvc, Decl(declFileGenericType2.ts, 0, 22), Decl(declFileGenericType2.ts, 4, 22), Decl(declFileGenericType2.ts, 8, 22), Decl(declFileGenericType2.ts, 12, 22))
@@ -76,13 +76,13 @@ module templa.dom.mvc {
     }
 }
 // Module
-module templa.dom.mvc {
+namespace templa.dom.mvc {
 >templa : Symbol(templa, Decl(declFileGenericType2.ts, 0, 0), Decl(declFileGenericType2.ts, 3, 1), Decl(declFileGenericType2.ts, 7, 1), Decl(declFileGenericType2.ts, 11, 1), Decl(declFileGenericType2.ts, 16, 1) ... and 2 more)
->dom : Symbol(dom, Decl(declFileGenericType2.ts, 17, 14), Decl(declFileGenericType2.ts, 22, 14), Decl(declFileGenericType2.ts, 31, 14))
->mvc : Symbol(mvc, Decl(declFileGenericType2.ts, 17, 18), Decl(declFileGenericType2.ts, 22, 18), Decl(declFileGenericType2.ts, 31, 18))
+>dom : Symbol(dom, Decl(declFileGenericType2.ts, 17, 17), Decl(declFileGenericType2.ts, 22, 17), Decl(declFileGenericType2.ts, 31, 17))
+>mvc : Symbol(mvc, Decl(declFileGenericType2.ts, 17, 21), Decl(declFileGenericType2.ts, 22, 21), Decl(declFileGenericType2.ts, 31, 21))
 
     export class AbstractElementController<ModelType extends templa.mvc.IModel> extends templa.mvc.AbstractController<ModelType> implements IElementController<ModelType> {
->AbstractElementController : Symbol(AbstractElementController, Decl(declFileGenericType2.ts, 22, 23))
+>AbstractElementController : Symbol(AbstractElementController, Decl(declFileGenericType2.ts, 22, 26))
 >ModelType : Symbol(ModelType, Decl(declFileGenericType2.ts, 24, 43))
 >templa : Symbol(templa, Decl(declFileGenericType2.ts, 0, 0), Decl(declFileGenericType2.ts, 3, 1), Decl(declFileGenericType2.ts, 7, 1), Decl(declFileGenericType2.ts, 11, 1), Decl(declFileGenericType2.ts, 16, 1) ... and 2 more)
 >mvc : Symbol(mvc, Decl(declFileGenericType2.ts, 0, 22), Decl(declFileGenericType2.ts, 4, 22), Decl(declFileGenericType2.ts, 8, 22), Decl(declFileGenericType2.ts, 12, 22))
@@ -93,7 +93,7 @@ module templa.dom.mvc {
 >mvc : Symbol(mvc, Decl(declFileGenericType2.ts, 0, 22), Decl(declFileGenericType2.ts, 4, 22), Decl(declFileGenericType2.ts, 8, 22), Decl(declFileGenericType2.ts, 12, 22))
 >AbstractController : Symbol(templa.mvc.AbstractController, Decl(declFileGenericType2.ts, 8, 27))
 >ModelType : Symbol(ModelType, Decl(declFileGenericType2.ts, 24, 43))
->IElementController : Symbol(IElementController, Decl(declFileGenericType2.ts, 17, 23))
+>IElementController : Symbol(IElementController, Decl(declFileGenericType2.ts, 17, 26))
 >ModelType : Symbol(ModelType, Decl(declFileGenericType2.ts, 24, 43))
 
         constructor() {
@@ -103,26 +103,26 @@ module templa.dom.mvc {
     }
 }
 // Module
-module templa.dom.mvc.composite {
+namespace templa.dom.mvc.composite {
 >templa : Symbol(templa, Decl(declFileGenericType2.ts, 0, 0), Decl(declFileGenericType2.ts, 3, 1), Decl(declFileGenericType2.ts, 7, 1), Decl(declFileGenericType2.ts, 11, 1), Decl(declFileGenericType2.ts, 16, 1) ... and 2 more)
->dom : Symbol(dom, Decl(declFileGenericType2.ts, 17, 14), Decl(declFileGenericType2.ts, 22, 14), Decl(declFileGenericType2.ts, 31, 14))
->mvc : Symbol(mvc, Decl(declFileGenericType2.ts, 17, 18), Decl(declFileGenericType2.ts, 22, 18), Decl(declFileGenericType2.ts, 31, 18))
->composite : Symbol(composite, Decl(declFileGenericType2.ts, 31, 22))
+>dom : Symbol(dom, Decl(declFileGenericType2.ts, 17, 17), Decl(declFileGenericType2.ts, 22, 17), Decl(declFileGenericType2.ts, 31, 17))
+>mvc : Symbol(mvc, Decl(declFileGenericType2.ts, 17, 21), Decl(declFileGenericType2.ts, 22, 21), Decl(declFileGenericType2.ts, 31, 21))
+>composite : Symbol(composite, Decl(declFileGenericType2.ts, 31, 25))
 
     export class AbstractCompositeElementController<ModelType extends templa.mvc.composite.ICompositeControllerModel> extends templa.dom.mvc.AbstractElementController<ModelType> {
->AbstractCompositeElementController : Symbol(AbstractCompositeElementController, Decl(declFileGenericType2.ts, 31, 33))
+>AbstractCompositeElementController : Symbol(AbstractCompositeElementController, Decl(declFileGenericType2.ts, 31, 36))
 >ModelType : Symbol(ModelType, Decl(declFileGenericType2.ts, 32, 52))
 >templa : Symbol(templa, Decl(declFileGenericType2.ts, 0, 0), Decl(declFileGenericType2.ts, 3, 1), Decl(declFileGenericType2.ts, 7, 1), Decl(declFileGenericType2.ts, 11, 1), Decl(declFileGenericType2.ts, 16, 1) ... and 2 more)
 >mvc : Symbol(mvc, Decl(declFileGenericType2.ts, 0, 22), Decl(declFileGenericType2.ts, 4, 22), Decl(declFileGenericType2.ts, 8, 22), Decl(declFileGenericType2.ts, 12, 22))
 >composite : Symbol(templa.mvc.composite, Decl(declFileGenericType2.ts, 12, 26))
 >ICompositeControllerModel : Symbol(templa.mvc.composite.ICompositeControllerModel, Decl(declFileGenericType2.ts, 12, 37))
->templa.dom.mvc.AbstractElementController : Symbol(AbstractElementController, Decl(declFileGenericType2.ts, 22, 23))
->templa.dom.mvc : Symbol(mvc, Decl(declFileGenericType2.ts, 17, 18), Decl(declFileGenericType2.ts, 22, 18), Decl(declFileGenericType2.ts, 31, 18))
->templa.dom : Symbol(dom, Decl(declFileGenericType2.ts, 17, 14), Decl(declFileGenericType2.ts, 22, 14), Decl(declFileGenericType2.ts, 31, 14))
+>templa.dom.mvc.AbstractElementController : Symbol(AbstractElementController, Decl(declFileGenericType2.ts, 22, 26))
+>templa.dom.mvc : Symbol(mvc, Decl(declFileGenericType2.ts, 17, 21), Decl(declFileGenericType2.ts, 22, 21), Decl(declFileGenericType2.ts, 31, 21))
+>templa.dom : Symbol(dom, Decl(declFileGenericType2.ts, 17, 17), Decl(declFileGenericType2.ts, 22, 17), Decl(declFileGenericType2.ts, 31, 17))
 >templa : Symbol(templa, Decl(declFileGenericType2.ts, 0, 0), Decl(declFileGenericType2.ts, 3, 1), Decl(declFileGenericType2.ts, 7, 1), Decl(declFileGenericType2.ts, 11, 1), Decl(declFileGenericType2.ts, 16, 1) ... and 2 more)
->dom : Symbol(dom, Decl(declFileGenericType2.ts, 17, 14), Decl(declFileGenericType2.ts, 22, 14), Decl(declFileGenericType2.ts, 31, 14))
->mvc : Symbol(mvc, Decl(declFileGenericType2.ts, 17, 18), Decl(declFileGenericType2.ts, 22, 18), Decl(declFileGenericType2.ts, 31, 18))
->AbstractElementController : Symbol(AbstractElementController, Decl(declFileGenericType2.ts, 22, 23))
+>dom : Symbol(dom, Decl(declFileGenericType2.ts, 17, 17), Decl(declFileGenericType2.ts, 22, 17), Decl(declFileGenericType2.ts, 31, 17))
+>mvc : Symbol(mvc, Decl(declFileGenericType2.ts, 17, 21), Decl(declFileGenericType2.ts, 22, 21), Decl(declFileGenericType2.ts, 31, 21))
+>AbstractElementController : Symbol(AbstractElementController, Decl(declFileGenericType2.ts, 22, 26))
 >ModelType : Symbol(ModelType, Decl(declFileGenericType2.ts, 32, 52))
 
         public _controllers: templa.mvc.IController<templa.mvc.IModel>[];
@@ -136,11 +136,11 @@ module templa.dom.mvc.composite {
 
         constructor() {
             super();
->super : Symbol(AbstractElementController, Decl(declFileGenericType2.ts, 22, 23))
+>super : Symbol(AbstractElementController, Decl(declFileGenericType2.ts, 22, 26))
 
             this._controllers = [];
 >this._controllers : Symbol(AbstractCompositeElementController._controllers, Decl(declFileGenericType2.ts, 32, 179))
->this : Symbol(AbstractCompositeElementController, Decl(declFileGenericType2.ts, 31, 33))
+>this : Symbol(AbstractCompositeElementController, Decl(declFileGenericType2.ts, 31, 36))
 >_controllers : Symbol(AbstractCompositeElementController._controllers, Decl(declFileGenericType2.ts, 32, 179))
         }
     }

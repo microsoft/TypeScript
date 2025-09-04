@@ -1,8 +1,5 @@
-interfaceDeclaration3.ts(3,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 interfaceDeclaration3.ts(7,16): error TS2416: Property 'item' in type 'C1' is not assignable to the same property in base type 'I1'.
   Type 'number' is not assignable to type 'string'.
-interfaceDeclaration3.ts(25,8): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-interfaceDeclaration3.ts(28,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 interfaceDeclaration3.ts(32,16): error TS2416: Property 'item' in type 'C1' is not assignable to the same property in base type 'I1'.
   Type 'number' is not assignable to type 'string'.
 interfaceDeclaration3.ts(54,11): error TS2430: Interface 'I2' incorrectly extends interface 'I1'.
@@ -10,12 +7,10 @@ interfaceDeclaration3.ts(54,11): error TS2430: Interface 'I2' incorrectly extend
     Type 'string' is not assignable to type 'number'.
 
 
-==== interfaceDeclaration3.ts (6 errors) ====
+==== interfaceDeclaration3.ts (3 errors) ====
     interface I1 { item:number; }
     
-    module M1 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace M1 {
         interface I1 { item:string; }  
         interface I2 { item:number; }   
         class C1 implements I1 {
@@ -40,14 +35,10 @@ interfaceDeclaration3.ts(54,11): error TS2430: Interface 'I2' incorrectly extend
         }
     }
     
-    export module M2 {
-           ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    export namespace M2 {
         export interface I1 { item:string; }
         export interface I2 { item:string; }
-        export module M3 {
-               ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export namespace M3 {
             export interface I1 { item:string; }
         }
         class C1 implements I1 {

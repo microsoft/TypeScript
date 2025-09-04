@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/constDeclarations-access4.ts] ////
 
 //// [constDeclarations-access4.ts]
-declare module M {
+declare namespace M {
     const x: number;
 }
 

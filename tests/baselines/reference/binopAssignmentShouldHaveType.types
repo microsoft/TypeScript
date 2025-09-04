@@ -3,13 +3,12 @@
 === binopAssignmentShouldHaveType.ts ===
 declare var console;
 >console : any
->        : ^^^
 
 "use strict";
 >"use strict" : "use strict"
 >             : ^^^^^^^^^^^^
 
-module Test {
+namespace Test {
 >Test : typeof Test
 >     : ^^^^^^^^^^^
 
@@ -59,9 +58,7 @@ module Test {
 
     console.log(name);
 >console.log(name) : any
->                  : ^^^
 >console.log : any
->            : ^^^
 >console : any
 >        : ^^^
 >log : any

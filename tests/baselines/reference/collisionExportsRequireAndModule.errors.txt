@@ -1,28 +1,10 @@
-collisionExportsRequireAndModule_externalmodule.ts(1,8): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-collisionExportsRequireAndModule_externalmodule.ts(1,15): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
-collisionExportsRequireAndModule_externalmodule.ts(10,8): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-collisionExportsRequireAndModule_externalmodule.ts(10,15): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
-collisionExportsRequireAndModule_externalmodule.ts(19,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-collisionExportsRequireAndModule_externalmodule.ts(20,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-collisionExportsRequireAndModule_externalmodule.ts(26,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-collisionExportsRequireAndModule_externalmodule.ts(33,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-collisionExportsRequireAndModule_externalmodule.ts(34,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-collisionExportsRequireAndModule_externalmodule.ts(40,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-collisionExportsRequireAndModule_globalFile.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-collisionExportsRequireAndModule_globalFile.ts(7,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-collisionExportsRequireAndModule_globalFile.ts(13,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-collisionExportsRequireAndModule_globalFile.ts(14,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-collisionExportsRequireAndModule_globalFile.ts(20,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-collisionExportsRequireAndModule_globalFile.ts(27,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-collisionExportsRequireAndModule_globalFile.ts(28,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-collisionExportsRequireAndModule_globalFile.ts(34,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+collisionExportsRequireAndModule_externalmodule.ts(1,18): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
+collisionExportsRequireAndModule_externalmodule.ts(10,18): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
 
 
-==== collisionExportsRequireAndModule_externalmodule.ts (10 errors) ====
-    export module require {
-           ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-                  ~~~~~~~
+==== collisionExportsRequireAndModule_externalmodule.ts (2 errors) ====
+    export namespace require {
+                     ~~~~~~~
 !!! error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
         export interface I {
         }
@@ -32,10 +14,8 @@ collisionExportsRequireAndModule_globalFile.ts(34,12): error TS1547: The 'module
     export function foo(): require.I {
         return null;
     }
-    export module exports {
-           ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-                  ~~~~~~~
+    export namespace exports {
+                     ~~~~~~~
 !!! error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
         export interface I {
         }
@@ -45,40 +25,28 @@ collisionExportsRequireAndModule_globalFile.ts(34,12): error TS1547: The 'module
     export function foo2(): exports.I {
         return null;
     }
-    module m1 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-        module require {
-        ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m1 {
+        namespace require {
             export interface I {
             }
             export class C {
             }
         }
-        module exports {
-        ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        namespace exports {
             export interface I {
             }
             export class C {
             }
         }
     }
-    module m2 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-        export module require {
-               ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m2 {
+        export namespace require {
             export interface I {
             }
             export class C {
             }
         }
-        export module exports {
-               ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export namespace exports {
             export interface I {
             }
             export class C {
@@ -86,57 +54,41 @@ collisionExportsRequireAndModule_globalFile.ts(34,12): error TS1547: The 'module
         }
     }
     
-==== collisionExportsRequireAndModule_globalFile.ts (8 errors) ====
-    module require {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+==== collisionExportsRequireAndModule_globalFile.ts (0 errors) ====
+    namespace require {
         export interface I {
         }
         export class C {
         }
     }
-    module exports {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace exports {
         export interface I {
         }
         export class C {
         }
     }
-    module m3 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-        module require {
-        ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m3 {
+        namespace require {
             export interface I {
             }
             export class C {
             }
         }
-        module exports {
-        ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        namespace exports {
             export interface I {
             }
             export class C {
             }
         }
     }
-    module m4 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-        export module require {
-               ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m4 {
+        export namespace require {
             export interface I {
             }
             export class C {
             }
         }
-        export module exports {
-               ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export namespace exports {
             export interface I {
             }
             export class C {

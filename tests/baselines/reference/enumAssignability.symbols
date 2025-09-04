@@ -45,7 +45,7 @@ x = f; // ok
 >x : Symbol(x, Decl(enumAssignability.ts, 12, 3))
 >f : Symbol(f, Decl(enumAssignability.ts, 6, 3))
 
-module Others {
+namespace Others {
 >Others : Symbol(Others, Decl(enumAssignability.ts, 13, 6))
 
     var a: any = e; // ok

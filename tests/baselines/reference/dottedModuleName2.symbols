@@ -12,9 +12,9 @@ module A.B {
  
  
  
-module AA { export module B {
+namespace AA { export namespace B {
 >AA : Symbol(AA, Decl(dottedModuleName2.ts, 4, 1))
->B : Symbol(B, Decl(dottedModuleName2.ts, 8, 11))
+>B : Symbol(B, Decl(dottedModuleName2.ts, 8, 14))
  
   export var x = 1;
 >x : Symbol(x, Decl(dottedModuleName2.ts, 10, 12))
@@ -26,9 +26,9 @@ module AA { export module B {
 var tmpOK = AA.B.x;
 >tmpOK : Symbol(tmpOK, Decl(dottedModuleName2.ts, 16, 3))
 >AA.B.x : Symbol(AA.B.x, Decl(dottedModuleName2.ts, 10, 12))
->AA.B : Symbol(AA.B, Decl(dottedModuleName2.ts, 8, 11))
+>AA.B : Symbol(AA.B, Decl(dottedModuleName2.ts, 8, 14))
 >AA : Symbol(AA, Decl(dottedModuleName2.ts, 4, 1))
->B : Symbol(AA.B, Decl(dottedModuleName2.ts, 8, 11))
+>B : Symbol(AA.B, Decl(dottedModuleName2.ts, 8, 14))
 >x : Symbol(AA.B.x, Decl(dottedModuleName2.ts, 10, 12))
  
 var tmpError = A.B.x;
@@ -54,7 +54,7 @@ module A.B.C
  
  
  
-module M
+namespace M
 >M : Symbol(M, Decl(dottedModuleName2.ts, 27, 1))
  
 {

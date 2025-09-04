@@ -10,13 +10,9 @@ augmentedTypesFunction.ts(16,10): error TS2814: Function with bodies can only me
 augmentedTypesFunction.ts(17,7): error TS2813: Class declaration cannot implement overload list for 'y3a'.
 augmentedTypesFunction.ts(20,10): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 augmentedTypesFunction.ts(21,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-augmentedTypesFunction.ts(25,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-augmentedTypesFunction.ts(28,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-augmentedTypesFunction.ts(31,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-augmentedTypesFunction.ts(34,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 
 
-==== augmentedTypesFunction.ts (16 errors) ====
+==== augmentedTypesFunction.ts (12 errors) ====
     // function then var
     function y1() { } // error
              ~~
@@ -69,24 +65,16 @@ augmentedTypesFunction.ts(34,1): error TS1547: The 'module' keyword is not allow
     
     // function then internal module
     function y5() { }
-    module y5 { } // ok since module is not instantiated
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace y5 { } // ok since module is not instantiated
     
     function y5a() { }
-    module y5a { var y = 2; } // should be an error
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace y5a { var y = 2; } // should be an error
     
     function y5b() { }
-    module y5b { export var y = 3; } // should be an error
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace y5b { export var y = 3; } // should be an error
     
     function y5c() { }
-    module y5c { export interface I { foo(): void } } // should be an error
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace y5c { export interface I { foo(): void } } // should be an error
     
     // function then import, messes with other errors
     //function y6() { }

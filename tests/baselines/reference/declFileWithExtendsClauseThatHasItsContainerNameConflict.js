@@ -6,14 +6,14 @@ declare module A.B.C {
     }
 }
 
-module A.B {
+namespace A.B {
     export class EventManager {
         id: number;
 
     }
 }
 
-module A.B.C {
+namespace A.B.C {
     export class ContextMenu extends EventManager {
         name: string;
     }

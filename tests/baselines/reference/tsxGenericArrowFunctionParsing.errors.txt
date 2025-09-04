@@ -1,10 +1,13 @@
+file.tsx(1,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 file.tsx(8,17): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
 file.tsx(20,32): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
 file.tsx(24,25): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
 
 
-==== file.tsx (3 errors) ====
+==== file.tsx (4 errors) ====
     declare module JSX {
+            ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
     	interface Element { isElement; }
     }
     

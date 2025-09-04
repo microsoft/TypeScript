@@ -17,6 +17,7 @@ namespace M {
 
 	export var React: any;
 >React : any
+>      : ^^^
 }
 
 namespace M {
@@ -27,6 +28,7 @@ namespace M {
 	//  and M.React.__spread
 	var foo: any;
 >foo : any
+>    : ^^^
 
 	var spread1 = <div x='' {...foo} y='' />;
 >spread1 : JSX.Element
@@ -38,6 +40,7 @@ namespace M {
 >x : string
 >  : ^^^^^^
 >foo : any
+>    : ^^^
 >y : string
 >  : ^^^^^^
 

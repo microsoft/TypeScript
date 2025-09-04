@@ -3,9 +3,9 @@ ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts(3,23): error TS154
 ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts(9,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts(9,21): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts(11,1): error TS2304: Cannot find name 'declare'.
-ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts(11,9): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts(11,16): error TS2819: Namespace name cannot be 'debugger'.
-ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts(11,25): error TS1005: ';' expected.
+ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts(11,9): error TS2304: Cannot find name 'namespace'.
+ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts(11,19): error TS2819: Namespace name cannot be 'debugger'.
+ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts(11,28): error TS1005: ';' expected.
 
 
 ==== ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts (8 errors) ====
@@ -27,13 +27,13 @@ ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts(11,25): error TS10
                         ~~~~~
 !!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
     
-    declare module debugger {} // still an error
+    declare namespace debugger {} // still an error
     ~~~~~~~
 !!! error TS2304: Cannot find name 'declare'.
-            ~~~~~~
-!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-                   ~~~~~~~~
+            ~~~~~~~~~
+!!! error TS2304: Cannot find name 'namespace'.
+                      ~~~~~~~~
 !!! error TS2819: Namespace name cannot be 'debugger'.
-                            ~
+                               ~
 !!! error TS1005: ';' expected.
     

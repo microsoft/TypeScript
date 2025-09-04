@@ -22,17 +22,15 @@ unionSubtypeIfEveryConstituentTypeIsSubtype.ts(85,5): error TS2411: Property 'fo
 unionSubtypeIfEveryConstituentTypeIsSubtype.ts(91,5): error TS2411: Property 'foo' of type 'string | number' is not assignable to 'string' index type '<T>(x: T) => T'.
 unionSubtypeIfEveryConstituentTypeIsSubtype.ts(92,5): error TS2411: Property 'foo2' of type 'number' is not assignable to 'string' index type '<T>(x: T) => T'.
 unionSubtypeIfEveryConstituentTypeIsSubtype.ts(99,5): error TS2411: Property 'foo' of type 'string | number' is not assignable to 'string' index type 'E2'.
-unionSubtypeIfEveryConstituentTypeIsSubtype.ts(105,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 unionSubtypeIfEveryConstituentTypeIsSubtype.ts(110,5): error TS2411: Property 'foo' of type 'string | number' is not assignable to 'string' index type 'typeof f'.
 unionSubtypeIfEveryConstituentTypeIsSubtype.ts(111,5): error TS2411: Property 'foo2' of type 'number' is not assignable to 'string' index type 'typeof f'.
-unionSubtypeIfEveryConstituentTypeIsSubtype.ts(116,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 unionSubtypeIfEveryConstituentTypeIsSubtype.ts(121,5): error TS2411: Property 'foo' of type 'string | number' is not assignable to 'string' index type 'typeof c'.
 unionSubtypeIfEveryConstituentTypeIsSubtype.ts(122,5): error TS2411: Property 'foo2' of type 'number' is not assignable to 'string' index type 'typeof c'.
 unionSubtypeIfEveryConstituentTypeIsSubtype.ts(128,5): error TS2411: Property 'foo' of type 'string | number' is not assignable to 'string' index type 'T'.
 unionSubtypeIfEveryConstituentTypeIsSubtype.ts(129,5): error TS2411: Property 'foo2' of type 'number' is not assignable to 'string' index type 'T'.
 
 
-==== unionSubtypeIfEveryConstituentTypeIsSubtype.ts (32 errors) ====
+==== unionSubtypeIfEveryConstituentTypeIsSubtype.ts (30 errors) ====
     enum e {
         e1,
         e2
@@ -185,9 +183,7 @@ unionSubtypeIfEveryConstituentTypeIsSubtype.ts(129,5): error TS2411: Property 'f
     
     
     function f() { }
-    module f {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace f {
         export var bar = 1;
     }
     interface I15 {
@@ -202,9 +198,7 @@ unionSubtypeIfEveryConstituentTypeIsSubtype.ts(129,5): error TS2411: Property 'f
     
     
     class c { baz: string }
-    module c {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace c {
         export var bar = 1;
     }
     interface I16 {

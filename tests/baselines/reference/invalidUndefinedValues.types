@@ -3,7 +3,6 @@
 === invalidUndefinedValues.ts ===
 var x: typeof undefined;
 >x : any
->  : ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -11,7 +10,6 @@ x = 1;
 >x = 1 : 1
 >      : ^
 >x : any
->  : ^^^
 >1 : 1
 >  : ^
 
@@ -19,7 +17,6 @@ x = '';
 >x = '' : ""
 >       : ^^
 >x : any
->  : ^^^
 >'' : ""
 >   : ^^
 
@@ -27,7 +24,6 @@ x = true;
 >x = true : true
 >         : ^^^^
 >x : any
->  : ^^^
 >true : true
 >     : ^^^^
 
@@ -39,7 +35,6 @@ x = a;
 >x = a : void
 >      : ^^^^
 >x : any
->  : ^^^
 >a : void
 >  : ^^^^
 
@@ -47,7 +42,6 @@ x = null;
 >x = null : null
 >         : ^^^^
 >x : any
->  : ^^^
 
 class C { foo: string }
 >C : C
@@ -63,7 +57,6 @@ x = C;
 >x = C : typeof C
 >      : ^^^^^^^^
 >x : any
->  : ^^^
 >C : typeof C
 >  : ^^^^^^^^
 
@@ -71,7 +64,6 @@ x = b;
 >x = b : C
 >      : ^
 >x : any
->  : ^^^
 >b : C
 >  : ^
 
@@ -87,11 +79,10 @@ x = c;
 >x = c : I
 >      : ^
 >x : any
->  : ^^^
 >c : I
 >  : ^
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 >M : typeof M
 >  : ^^^^^^^^
 >x : number
@@ -103,7 +94,6 @@ x = M;
 >x = M : typeof M
 >      : ^^^^^^^^
 >x : any
->  : ^^^
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -111,7 +101,6 @@ x = { f() { } }
 >x = { f() { } } : { f(): void; }
 >                : ^^^^^^^^^^^^^^
 >x : any
->  : ^^^
 >{ f() { } } : { f(): void; }
 >            : ^^^^^^^^^^^^^^
 >f : () => void
@@ -127,7 +116,6 @@ function f<T>(a: T) {
 >x = a : T
 >      : ^
 >x : any
->  : ^^^
 >a : T
 >  : ^
 }
@@ -135,7 +123,6 @@ x = f;
 >x = f : <T>(a: T) => void
 >      : ^ ^^ ^^ ^^^^^^^^^
 >x : any
->  : ^^^
 >f : <T>(a: T) => void
 >  : ^ ^^ ^^ ^^^^^^^^^
 
@@ -149,7 +136,6 @@ x = E;
 >x = E : typeof E
 >      : ^^^^^^^^
 >x : any
->  : ^^^
 >E : typeof E
 >  : ^^^^^^^^
 
@@ -157,7 +143,6 @@ x = E.A;
 >x = E.A : E
 >        : ^
 >x : any
->  : ^^^
 >E.A : E
 >    : ^
 >E : typeof E

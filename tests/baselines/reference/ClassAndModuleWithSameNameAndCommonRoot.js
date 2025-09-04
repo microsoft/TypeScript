@@ -14,7 +14,7 @@ module X.Y {
 
 //// [module.ts]
 module X.Y {
-    export module Point {
+    export namespace Point {
         export var Origin = new Point(0, 0);
     }
 }
@@ -30,7 +30,7 @@ class A {
     id: string;
 }
 
-module A {
+namespace A {
     export var Instance = new A();
 }
 

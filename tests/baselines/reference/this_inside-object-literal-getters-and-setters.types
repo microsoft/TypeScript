@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/this_inside-object-literal-getters-and-setters.ts] ////
 
 === this_inside-object-literal-getters-and-setters.ts ===
-module ObjectLiteral {
+namespace ObjectLiteral {
 >ObjectLiteral : typeof ObjectLiteral
 >              : ^^^^^^^^^^^^^^^^^^^^
 
@@ -23,7 +23,6 @@ module ObjectLiteral {
 
             return this._foo;
 >this._foo : any
->          : ^^^
 >this : any
 >     : ^^^
 >_foo : any
@@ -40,7 +39,6 @@ module ObjectLiteral {
 >this._foo = value : string
 >                  : ^^^^^^
 >this._foo : any
->          : ^^^
 >this : any
 >     : ^^^
 >_foo : any
@@ -57,7 +55,6 @@ module ObjectLiteral {
 
             return this._foo;
 >this._foo : any
->          : ^^^
 >this : any
 >     : ^^^
 >_foo : any

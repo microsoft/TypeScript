@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/arrayBestCommonTypes.ts] ////
 
 === arrayBestCommonTypes.ts ===
-module EmptyTypes {
+namespace EmptyTypes {
 >EmptyTypes : typeof EmptyTypes
 >           : ^^^^^^^^^^^^^^^^^
 
@@ -53,7 +53,6 @@ module EmptyTypes {
 >voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >          : ^^^ ^^       ^^ ^^^       ^^^      ^^^ ^^      ^^ ^^^       ^^^      ^^^ ^^      ^^ ^^^       ^^^      ^^^
 >x : any
->  : ^^^
 >y : boolean
 >  : ^^^^^^^
 >false : false
@@ -496,7 +495,6 @@ module EmptyTypes {
 
             var anyObj: any = null;
 >anyObj : any
->       : ^^^
 
             // Order matters here so test all the variants
             var a1 = [{ x: 0, y: 'a' }, { x: 'a', y: 'a' }, { x: anyObj, y: 'a' }];
@@ -527,9 +525,7 @@ module EmptyTypes {
 >{ x: anyObj, y: 'a' } : { x: any; y: string; }
 >                      : ^^^^^^^^^^^^^^^^^^^^^^
 >x : any
->  : ^^^
 >anyObj : any
->       : ^^^
 >y : string
 >  : ^^^^^^
 >'a' : "a"
@@ -543,9 +539,7 @@ module EmptyTypes {
 >{ x: anyObj, y: 'a' } : { x: any; y: string; }
 >                      : ^^^^^^^^^^^^^^^^^^^^^^
 >x : any
->  : ^^^
 >anyObj : any
->       : ^^^
 >y : string
 >  : ^^^^^^
 >'a' : "a"
@@ -589,9 +583,7 @@ module EmptyTypes {
 >{ x: anyObj, y: 'a' } : { x: any; y: string; }
 >                      : ^^^^^^^^^^^^^^^^^^^^^^
 >x : any
->  : ^^^
 >anyObj : any
->       : ^^^
 >y : string
 >  : ^^^^^^
 >'a' : "a"
@@ -678,7 +670,7 @@ module EmptyTypes {
     }
 }
 
-module NonEmptyTypes {
+namespace NonEmptyTypes {
 >NonEmptyTypes : typeof NonEmptyTypes
 >              : ^^^^^^^^^^^^^^^^^^^^
 
@@ -743,7 +735,6 @@ module NonEmptyTypes {
 >voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >          : ^^^ ^^       ^^ ^^^       ^^^      ^^^ ^^      ^^ ^^^       ^^^      ^^^ ^^      ^^ ^^^       ^^^      ^^^
 >x : any
->  : ^^^
 >y : boolean
 >  : ^^^^^^^
 >false : false
@@ -1186,7 +1177,6 @@ module NonEmptyTypes {
 
             var anyObj: any = null;
 >anyObj : any
->       : ^^^
 
             // Order matters here so test all the variants
             var a1 = [{ x: 0, y: 'a' }, { x: 'a', y: 'a' }, { x: anyObj, y: 'a' }];
@@ -1217,9 +1207,7 @@ module NonEmptyTypes {
 >{ x: anyObj, y: 'a' } : { x: any; y: string; }
 >                      : ^^^^^^^^^^^^^^^^^^^^^^
 >x : any
->  : ^^^
 >anyObj : any
->       : ^^^
 >y : string
 >  : ^^^^^^
 >'a' : "a"
@@ -1233,9 +1221,7 @@ module NonEmptyTypes {
 >{ x: anyObj, y: 'a' } : { x: any; y: string; }
 >                      : ^^^^^^^^^^^^^^^^^^^^^^
 >x : any
->  : ^^^
 >anyObj : any
->       : ^^^
 >y : string
 >  : ^^^^^^
 >'a' : "a"
@@ -1279,9 +1265,7 @@ module NonEmptyTypes {
 >{ x: anyObj, y: 'a' } : { x: any; y: string; }
 >                      : ^^^^^^^^^^^^^^^^^^^^^^
 >x : any
->  : ^^^
 >anyObj : any
->       : ^^^
 >y : string
 >  : ^^^^^^
 >'a' : "a"

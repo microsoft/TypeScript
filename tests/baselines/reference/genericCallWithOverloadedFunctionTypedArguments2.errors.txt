@@ -1,16 +1,12 @@
-genericCallWithOverloadedFunctionTypedArguments2.ts(4,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-genericCallWithOverloadedFunctionTypedArguments2.ts(17,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 genericCallWithOverloadedFunctionTypedArguments2.ts(28,20): error TS2345: Argument of type '<T>(x: T, y: T) => string' is not assignable to parameter of type '{ (x: unknown): string; (x: unknown, y?: unknown): string; }'.
   Target signature provides too few arguments. Expected 2 or more, but got 1.
 
 
-==== genericCallWithOverloadedFunctionTypedArguments2.ts (3 errors) ====
+==== genericCallWithOverloadedFunctionTypedArguments2.ts (1 errors) ====
     // Function typed arguments with multiple signatures must be passed an implementation that matches all of them
     // Inferences are made quadratic-pairwise to and from these overload sets
     
-    module NonGenericParameter {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace NonGenericParameter {
         var a: {
             (x: boolean): boolean;
             (x: string): string;
@@ -23,9 +19,7 @@ genericCallWithOverloadedFunctionTypedArguments2.ts(28,20): error TS2345: Argume
         var r3 = foo4(<T, U>(x: T) => { var r: U; return r }); // ok
     }
     
-    module GenericParameter {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace GenericParameter {
         function foo5<T>(cb: { (x: T): string; (x: number): T }) {
             return cb;
         }

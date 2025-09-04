@@ -2,7 +2,7 @@
 
 === commentsModules.ts ===
 /** Module comment*/
-module m1 {
+namespace m1 {
 >m1 : typeof m1
 >   : ^^^^^^^^^
 
@@ -21,7 +21,7 @@ module m1 {
 >  : ^^^^^^
     }
     /** m2 comments*/
-    export module m2 {
+    export namespace m2 {
 >m2 : typeof m2
 >   : ^^^^^^^^^
 
@@ -171,7 +171,7 @@ module m4.m5.m6 {
 >m6 : typeof m6
 >   : ^^^^^^^^^
 
-    export module m7 {
+    export namespace m7 {
 >m7 : typeof m7
 >   : ^^^^^^^^^
 
@@ -214,7 +214,7 @@ module m5.m6.m7 {
 >   : ^^^^^^^^^
 
     /** module m8 comment*/
-    export module m8 {
+    export namespace m8 {
 >m8 : typeof m8
 >   : ^^^^^^^^^
 
@@ -253,7 +253,7 @@ module m6.m7 {
 >m7 : typeof m7
 >   : ^^^^^^^^^
 
-    export module m8 {
+    export namespace m8 {
 >m8 : typeof m8
 >   : ^^^^^^^^^
 
@@ -289,7 +289,7 @@ module m7.m8 {
 >   : ^^^^^^^^^
 
     /** module m9 comment*/
-    export module m9 {
+    export namespace m9 {
 >m9 : typeof m9
 >   : ^^^^^^^^^
 

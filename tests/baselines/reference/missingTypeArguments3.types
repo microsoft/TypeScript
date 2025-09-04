@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/missingTypeArguments3.ts] ////
 
 === missingTypeArguments3.ts ===
-declare module linq {
+declare namespace linq {
 
     interface Enumerable<T> {
         OrderByDescending(keySelector?: string): OrderedEnumerable<T>;
@@ -64,13 +64,11 @@ declare module linq {
 >Get : (key: any) => Enumerable<any>
 >    : ^   ^^^^^^^^^^               
 >key : any
->    : ^^^
 
         Contains(key): boolean;
 >Contains : (key: any) => boolean
 >         : ^   ^^^^^^^^^^       
 >key : any
->    : ^^^
 
         ToEnumerable(): Enumerable<Grouping<TKey, any>>;
 >ToEnumerable : () => Enumerable<Grouping<TKey, any>>

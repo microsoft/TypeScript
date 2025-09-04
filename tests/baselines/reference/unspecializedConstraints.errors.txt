@@ -1,11 +1,8 @@
-unspecializedConstraints.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 unspecializedConstraints.ts(84,44): error TS2552: Cannot find name 'TypeParameter'. Did you mean 'Parameter'?
 
 
-==== unspecializedConstraints.ts (2 errors) ====
-    module ts {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+==== unspecializedConstraints.ts (1 errors) ====
+    namespace ts {
         interface Map<T> {
             [index: string]: T;
         }

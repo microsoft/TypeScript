@@ -11,7 +11,7 @@ parserSuperExpression1.ts(10,13): error TS2335: 'super' can only be referenced i
         }
     }
     
-    module M1.M2 {
+    namespace M1.M2 {
         class C {
             private foo() {
                 super.foo();

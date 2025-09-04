@@ -12,14 +12,13 @@ disallowLineTerminatorBeforeArrow.ts(23,8): error TS1200: Line terminator not pe
 disallowLineTerminatorBeforeArrow.ts(26,8): error TS1200: Line terminator not permitted before arrow.
 disallowLineTerminatorBeforeArrow.ts(52,5): error TS1200: Line terminator not permitted before arrow.
 disallowLineTerminatorBeforeArrow.ts(54,5): error TS1200: Line terminator not permitted before arrow.
-disallowLineTerminatorBeforeArrow.ts(56,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 disallowLineTerminatorBeforeArrow.ts(59,13): error TS1200: Line terminator not permitted before arrow.
 disallowLineTerminatorBeforeArrow.ts(63,13): error TS1200: Line terminator not permitted before arrow.
 disallowLineTerminatorBeforeArrow.ts(68,13): error TS1200: Line terminator not permitted before arrow.
 disallowLineTerminatorBeforeArrow.ts(72,9): error TS1200: Line terminator not permitted before arrow.
 
 
-==== disallowLineTerminatorBeforeArrow.ts (19 errors) ====
+==== disallowLineTerminatorBeforeArrow.ts (18 errors) ====
     var f1 = ()
         => { }
         ~~
@@ -103,9 +102,7 @@ disallowLineTerminatorBeforeArrow.ts(72,9): error TS1200: Line terminator not pe
         ~~
 !!! error TS1200: Line terminator not permitted before arrow.
     
-    module m {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m {
         class City {
             constructor(x: number, thing = ()
                 => 100) {

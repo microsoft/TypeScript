@@ -124,7 +124,7 @@ enum E {
 }
 
 // Arrow function as module variable initializer
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -150,7 +150,7 @@ module M {
 }
 
 // Repeat above for module members that are functions? (necessary to redo all of them?)
-module M2 {
+namespace M2 {
 >M2 : typeof M2
 >   : ^^^^^^^^^
 
@@ -277,7 +277,7 @@ module M2 {
     }
 
     // Arrow function as module variable initializer
-    module M {
+    namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

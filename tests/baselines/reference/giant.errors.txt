@@ -19,7 +19,6 @@ giant.ts(36,20): error TS1005: '{' expected.
 giant.ts(62,5): error TS1021: An index signature must have a type annotation.
 giant.ts(63,6): error TS1096: An index signature must have exactly one parameter.
 giant.ts(76,5): error TS2386: Overload signatures must all be optional or required.
-giant.ts(78,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 giant.ts(87,16): error TS2300: Duplicate identifier 'pgF'.
 giant.ts(88,20): error TS2300: Duplicate identifier 'pgF'.
 giant.ts(88,24): error TS1005: '{' expected.
@@ -41,11 +40,7 @@ giant.ts(100,24): error TS1005: '{' expected.
 giant.ts(126,9): error TS1021: An index signature must have a type annotation.
 giant.ts(127,10): error TS1096: An index signature must have exactly one parameter.
 giant.ts(140,9): error TS2386: Overload signatures must all be optional or required.
-giant.ts(142,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-giant.ts(147,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-giant.ts(152,16): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 giant.ts(154,39): error TS1183: An implementation cannot be declared in ambient contexts.
-giant.ts(156,24): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 giant.ts(166,16): error TS2300: Duplicate identifier 'pgF'.
 giant.ts(167,20): error TS2300: Duplicate identifier 'pgF'.
 giant.ts(167,24): error TS1005: '{' expected.
@@ -67,11 +62,7 @@ giant.ts(179,24): error TS1005: '{' expected.
 giant.ts(205,9): error TS1021: An index signature must have a type annotation.
 giant.ts(206,10): error TS1096: An index signature must have exactly one parameter.
 giant.ts(219,9): error TS2386: Overload signatures must all be optional or required.
-giant.ts(221,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-giant.ts(226,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-giant.ts(231,16): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 giant.ts(233,39): error TS1183: An implementation cannot be declared in ambient contexts.
-giant.ts(235,24): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 giant.ts(238,35): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(240,24): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(243,21): error TS1183: An implementation cannot be declared in ambient contexts.
@@ -95,12 +86,9 @@ giant.ts(256,20): error TS2300: Duplicate identifier 'tsF'.
 giant.ts(257,16): error TS2300: Duplicate identifier 'tgF'.
 giant.ts(257,22): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(258,20): error TS2300: Duplicate identifier 'tgF'.
-giant.ts(260,20): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 giant.ts(262,22): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(262,25): error TS1036: Statements are not allowed in ambient contexts.
-giant.ts(265,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 giant.ts(267,30): error TS1183: An implementation cannot be declared in ambient contexts.
-giant.ts(270,16): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 giant.ts(281,12): error TS2300: Duplicate identifier 'pgF'.
 giant.ts(282,16): error TS2300: Duplicate identifier 'pgF'.
 giant.ts(282,20): error TS1005: '{' expected.
@@ -122,7 +110,6 @@ giant.ts(294,20): error TS1005: '{' expected.
 giant.ts(320,5): error TS1021: An index signature must have a type annotation.
 giant.ts(321,6): error TS1096: An index signature must have exactly one parameter.
 giant.ts(334,5): error TS2386: Overload signatures must all be optional or required.
-giant.ts(336,8): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 giant.ts(345,16): error TS2300: Duplicate identifier 'pgF'.
 giant.ts(346,20): error TS2300: Duplicate identifier 'pgF'.
 giant.ts(346,24): error TS1005: '{' expected.
@@ -144,11 +131,7 @@ giant.ts(358,24): error TS1005: '{' expected.
 giant.ts(384,9): error TS1021: An index signature must have a type annotation.
 giant.ts(385,10): error TS1096: An index signature must have exactly one parameter.
 giant.ts(398,9): error TS2386: Overload signatures must all be optional or required.
-giant.ts(400,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-giant.ts(405,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-giant.ts(410,16): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 giant.ts(412,39): error TS1183: An implementation cannot be declared in ambient contexts.
-giant.ts(414,24): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 giant.ts(424,16): error TS2300: Duplicate identifier 'pgF'.
 giant.ts(425,20): error TS2300: Duplicate identifier 'pgF'.
 giant.ts(425,24): error TS1005: '{' expected.
@@ -170,11 +153,7 @@ giant.ts(437,24): error TS1005: '{' expected.
 giant.ts(463,9): error TS1021: An index signature must have a type annotation.
 giant.ts(464,10): error TS1096: An index signature must have exactly one parameter.
 giant.ts(477,9): error TS2386: Overload signatures must all be optional or required.
-giant.ts(479,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-giant.ts(484,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-giant.ts(489,16): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 giant.ts(491,39): error TS1183: An implementation cannot be declared in ambient contexts.
-giant.ts(493,24): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 giant.ts(496,35): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(498,24): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(501,21): error TS1183: An implementation cannot be declared in ambient contexts.
@@ -198,12 +177,9 @@ giant.ts(514,20): error TS2300: Duplicate identifier 'tsF'.
 giant.ts(515,16): error TS2300: Duplicate identifier 'tgF'.
 giant.ts(515,22): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(516,20): error TS2300: Duplicate identifier 'tgF'.
-giant.ts(518,20): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 giant.ts(520,22): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(520,25): error TS1036: Statements are not allowed in ambient contexts.
-giant.ts(523,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 giant.ts(525,30): error TS1183: An implementation cannot be declared in ambient contexts.
-giant.ts(528,16): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 giant.ts(532,31): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(534,20): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(537,17): error TS1183: An implementation cannot be declared in ambient contexts.
@@ -227,7 +203,6 @@ giant.ts(550,16): error TS2300: Duplicate identifier 'tsF'.
 giant.ts(551,12): error TS2300: Duplicate identifier 'tgF'.
 giant.ts(551,18): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(552,16): error TS2300: Duplicate identifier 'tgF'.
-giant.ts(554,16): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 giant.ts(556,18): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(556,21): error TS1036: Statements are not allowed in ambient contexts.
 giant.ts(558,24): error TS1183: An implementation cannot be declared in ambient contexts.
@@ -236,18 +211,14 @@ giant.ts(563,21): error TS1183: An implementation cannot be declared in ambient 
 giant.ts(588,9): error TS1021: An index signature must have a type annotation.
 giant.ts(589,10): error TS1096: An index signature must have exactly one parameter.
 giant.ts(602,9): error TS2386: Overload signatures must all be optional or required.
-giant.ts(604,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 giant.ts(606,22): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(606,25): error TS1036: Statements are not allowed in ambient contexts.
-giant.ts(609,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 giant.ts(611,30): error TS1183: An implementation cannot be declared in ambient contexts.
-giant.ts(614,16): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 giant.ts(615,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
 giant.ts(616,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
 giant.ts(616,39): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(617,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
 giant.ts(618,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
-giant.ts(618,24): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 giant.ts(621,26): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(623,24): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(626,21): error TS1183: An implementation cannot be declared in ambient contexts.
@@ -255,15 +226,12 @@ giant.ts(628,21): error TS1183: An implementation cannot be declared in ambient 
 giant.ts(654,9): error TS1021: An index signature must have a type annotation.
 giant.ts(655,10): error TS1096: An index signature must have exactly one parameter.
 giant.ts(668,9): error TS2386: Overload signatures must all be optional or required.
-giant.ts(670,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 giant.ts(672,22): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(672,25): error TS1036: Statements are not allowed in ambient contexts.
-giant.ts(674,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 giant.ts(676,30): error TS1183: An implementation cannot be declared in ambient contexts.
-giant.ts(679,16): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 
 
-==== giant.ts (263 errors) ====
+==== giant.ts (231 errors) ====
     /*
         Prefixes
         p -> public
@@ -383,9 +351,7 @@ giant.ts(679,16): error TS1547: The 'module' keyword is not allowed for namespac
         ~~
 !!! error TS2386: Overload signatures must all be optional or required.
     }
-    module M {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace M {
         var V;
         function F() { };
         class C {
@@ -491,31 +457,23 @@ giant.ts(679,16): error TS1547: The 'module' keyword is not allowed for namespac
             ~~
 !!! error TS2386: Overload signatures must all be optional or required.
         }
-        module M {
-        ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        namespace M {
             var V;
             function F() { };
             class C { };
             interface I { };
-            module M { };
-            ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            namespace M { };
             export var eV;
             export function eF() { };
             export class eC { };
             export interface eI { };
-            export module eM { };
-                   ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            export namespace eM { };
             export declare var eaV;
             export declare function eaF() { };
                                           ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             export declare class eaC { };
-            export declare module eaM { };
-                           ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            export declare namespace eaM { };
         }
         export var eV;
         export function eF() { };
@@ -622,31 +580,23 @@ giant.ts(679,16): error TS1547: The 'module' keyword is not allowed for namespac
             ~~
 !!! error TS2386: Overload signatures must all be optional or required.
         }
-        export module eM {
-               ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export namespace eM {
             var V;
             function F() { };
             class C { };
             interface I { };
-            module M { };
-            ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            namespace M { };
             export var eV;
             export function eF() { };
             export class eC { };
             export interface eI { };
-            export module eM { };
-                   ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            export namespace eM { };
             export declare var eaV;
             export declare function eaF() { };
                                           ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             export declare class eaC { };
-            export declare module eaM { };
-                           ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            export declare namespace eaM { };
         }
         export declare var eaV;
         export declare function eaF() { };
@@ -717,9 +667,7 @@ giant.ts(679,16): error TS1547: The 'module' keyword is not allowed for namespac
                        ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
         }
-        export declare module eaM {
-                       ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export declare namespace eaM {
             var V;
             function F() { };
                          ~
@@ -728,18 +676,14 @@ giant.ts(679,16): error TS1547: The 'module' keyword is not allowed for namespac
 !!! error TS1036: Statements are not allowed in ambient contexts.
             class C { }
             interface I { }
-            module M { }
-            ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            namespace M { }
             export var eV;
             export function eF() { };
                                  ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             export class eC { }
             export interface eI { }
-            export module eM { }
-                   ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            export namespace eM { }
         }
     }
     export var eV;
@@ -847,9 +791,7 @@ giant.ts(679,16): error TS1547: The 'module' keyword is not allowed for namespac
         ~~
 !!! error TS2386: Overload signatures must all be optional or required.
     }
-    export module eM {
-           ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    export namespace eM {
         var V;
         function F() { };
         class C {
@@ -955,31 +897,23 @@ giant.ts(679,16): error TS1547: The 'module' keyword is not allowed for namespac
             ~~
 !!! error TS2386: Overload signatures must all be optional or required.
         }
-        module M {
-        ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        namespace M {
             var V;
             function F() { };
             class C { };
             interface I { };
-            module M { };
-            ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            namespace M { };
             export var eV;
             export function eF() { };
             export class eC { };
             export interface eI { };
-            export module eM { };
-                   ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            export namespace eM { };
             export declare var eaV;
             export declare function eaF() { };
                                           ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             export declare class eaC { };
-            export declare module eaM { };
-                           ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            export declare namespace eaM { };
         }
         export var eV;
         export function eF() { };
@@ -1086,31 +1020,23 @@ giant.ts(679,16): error TS1547: The 'module' keyword is not allowed for namespac
             ~~
 !!! error TS2386: Overload signatures must all be optional or required.
         }
-        export module eM {
-               ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export namespace eM {
             var V;
             function F() { };
             class C { };
             interface I { };
-            module M { };
-            ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            namespace M { };
             export var eV;
             export function eF() { };
             export class eC { };
             export interface eI { };
-            export module eM { };
-                   ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            export namespace eM { };
             export declare var eaV;
             export declare function eaF() { };
                                           ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             export declare class eaC { };
-            export declare module eaM { };
-                           ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            export declare namespace eaM { };
         }
         export declare var eaV;
         export declare function eaF() { };
@@ -1181,9 +1107,7 @@ giant.ts(679,16): error TS1547: The 'module' keyword is not allowed for namespac
                        ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
         }
-        export declare module eaM {
-                       ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export declare namespace eaM {
             var V;
             function F() { };
                          ~
@@ -1192,18 +1116,14 @@ giant.ts(679,16): error TS1547: The 'module' keyword is not allowed for namespac
 !!! error TS1036: Statements are not allowed in ambient contexts.
             class C { }
             interface I { }
-            module M { }
-            ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            namespace M { }
             export var eV;
             export function eF() { };
                                  ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             export class eC { }
             export interface eI { }
-            export module eM { }
-                   ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            export namespace eM { }
         }
     }
     export declare var eaV;
@@ -1275,9 +1195,7 @@ giant.ts(679,16): error TS1547: The 'module' keyword is not allowed for namespac
                    ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
     }
-    export declare module eaM {
-                   ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    export declare namespace eaM {
         var V;
         function F() { };
                      ~
@@ -1343,9 +1261,7 @@ giant.ts(679,16): error TS1547: The 'module' keyword is not allowed for namespac
             ~~
 !!! error TS2386: Overload signatures must all be optional or required.
         }
-        module M {
-        ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        namespace M {
             var V;
             function F() { };
                          ~
@@ -1354,18 +1270,14 @@ giant.ts(679,16): error TS1547: The 'module' keyword is not allowed for namespac
 !!! error TS1036: Statements are not allowed in ambient contexts.
             class C { }
             interface I { }
-            module M { }
-            ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            namespace M { }
             export var eV;
             export function eF() { };
                                  ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             export class eC { }
             export interface eI { }
-            export module eM { }
-                   ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            export namespace eM { }
             export declare var eaV
                    ~~~~~~~
 !!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
@@ -1377,11 +1289,9 @@ giant.ts(679,16): error TS1547: The 'module' keyword is not allowed for namespac
             export declare class eaC { }
                    ~~~~~~~
 !!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
-            export declare module eaM { }
+            export declare namespace eaM { }
                    ~~~~~~~
 !!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
-                           ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
         }
         export var eV;
         export function eF() { };
@@ -1447,9 +1357,7 @@ giant.ts(679,16): error TS1547: The 'module' keyword is not allowed for namespac
             ~~
 !!! error TS2386: Overload signatures must all be optional or required.
         }
-        export module eM {
-               ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export namespace eM {
             var V;
             function F() { };
                          ~
@@ -1457,17 +1365,13 @@ giant.ts(679,16): error TS1547: The 'module' keyword is not allowed for namespac
                             ~
 !!! error TS1036: Statements are not allowed in ambient contexts.
             class C { }
-            module M { }
-            ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            namespace M { }
             export var eV;
             export function eF() { };
                                  ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             export class eC { }
             export interface eI { }
-            export module eM { }
-                   ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            export namespace eM { }
         }
     }

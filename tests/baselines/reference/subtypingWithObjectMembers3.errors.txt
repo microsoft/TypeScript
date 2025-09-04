@@ -1,4 +1,3 @@
-subtypingWithObjectMembers3.ts(11,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 subtypingWithObjectMembers3.ts(17,15): error TS2430: Interface 'B' incorrectly extends interface 'A'.
   Types of property 'bar' are incompatible.
     Property 'bar' is missing in type 'Base' but required in type 'Derived'.
@@ -8,7 +7,6 @@ subtypingWithObjectMembers3.ts(27,15): error TS2430: Interface 'B2' incorrectly 
 subtypingWithObjectMembers3.ts(37,15): error TS2430: Interface 'B3' incorrectly extends interface 'A3'.
   Types of property ''2.0'' are incompatible.
     Property 'bar' is missing in type 'Base' but required in type 'Derived'.
-subtypingWithObjectMembers3.ts(43,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 subtypingWithObjectMembers3.ts(49,15): error TS2430: Interface 'B' incorrectly extends interface 'A'.
   Types of property 'bar' are incompatible.
     Property 'bar' is missing in type 'Base' but required in type 'Derived'.
@@ -20,7 +18,7 @@ subtypingWithObjectMembers3.ts(69,15): error TS2430: Interface 'B3' incorrectly 
     Property 'bar' is missing in type 'Base' but required in type 'Derived'.
 
 
-==== subtypingWithObjectMembers3.ts (8 errors) ====
+==== subtypingWithObjectMembers3.ts (6 errors) ====
     interface Base {
         foo: string;
     }
@@ -31,9 +29,7 @@ subtypingWithObjectMembers3.ts(69,15): error TS2430: Interface 'B3' incorrectly 
     
     // N and M have the same name, same accessibility, same optionality, and N is a subtype of M
     // foo properties are valid, bar properties cause errors in the derived class declarations
-    module NotOptional {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace NotOptional {
         interface A {
             foo: Base;
             bar: Derived;
@@ -80,9 +76,7 @@ subtypingWithObjectMembers3.ts(69,15): error TS2430: Interface 'B3' incorrectly 
         }
     }
     
-    module Optional {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace Optional {
         interface A {
             foo?: Base;
             bar?: Derived;

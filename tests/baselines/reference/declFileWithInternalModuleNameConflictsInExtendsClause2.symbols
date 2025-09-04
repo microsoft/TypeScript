@@ -32,7 +32,7 @@ module X.A.B.C {
 >B : Symbol(B, Decl(declFileWithInternalModuleNameConflictsInExtendsClause2.ts, 4, 11), Decl(declFileWithInternalModuleNameConflictsInExtendsClause2.ts, 9, 11))
 >C : Symbol(C, Decl(declFileWithInternalModuleNameConflictsInExtendsClause2.ts, 4, 13), Decl(declFileWithInternalModuleNameConflictsInExtendsClause2.ts, 9, 13))
 
-    module A {
+    namespace A {
 >A : Symbol(A, Decl(declFileWithInternalModuleNameConflictsInExtendsClause2.ts, 9, 16))
     }
 }

@@ -80,7 +80,7 @@ class D extends C {
 
 interface I extends C {}
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

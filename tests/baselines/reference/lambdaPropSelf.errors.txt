@@ -1,8 +1,7 @@
-lambdaPropSelf.ts(20,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 lambdaPropSelf.ts(21,13): error TS2331: 'this' cannot be referenced in a module or namespace body.
 
 
-==== lambdaPropSelf.ts (2 errors) ====
+==== lambdaPropSelf.ts (1 errors) ====
     declare var ko: any;
     
     class Person {
@@ -22,9 +21,7 @@ lambdaPropSelf.ts(21,13): error TS2331: 'this' cannot be referenced in a module 
         }
     }
     
-    module M {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace M {
         var x = this;
                 ~~~~
 !!! error TS2331: 'this' cannot be referenced in a module or namespace body.

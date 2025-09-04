@@ -1,12 +1,9 @@
-symbolDeclarationEmit12.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 symbolDeclarationEmit12.ts(9,13): error TS2300: Duplicate identifier '[Symbol.toPrimitive]'.
 symbolDeclarationEmit12.ts(10,13): error TS2300: Duplicate identifier '[Symbol.toPrimitive]'.
 
 
-==== symbolDeclarationEmit12.ts (3 errors) ====
-    module M {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+==== symbolDeclarationEmit12.ts (2 errors) ====
+    namespace M {
         interface I { }
         export class C {
             [Symbol.iterator]: I;

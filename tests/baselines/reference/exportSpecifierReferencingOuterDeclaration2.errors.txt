@@ -1,11 +1,8 @@
-exportSpecifierReferencingOuterDeclaration2_A.ts(1,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 exportSpecifierReferencingOuterDeclaration2_B.ts(1,10): error TS2661: Cannot export 'X'. Only local declarations can be exported from a module.
 
 
-==== exportSpecifierReferencingOuterDeclaration2_A.ts (1 errors) ====
-    declare module X { export interface bar { } }
-            ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+==== exportSpecifierReferencingOuterDeclaration2_A.ts (0 errors) ====
+    declare namespace X { export interface bar { } }
     
 ==== exportSpecifierReferencingOuterDeclaration2_B.ts (1 errors) ====
     export { X };

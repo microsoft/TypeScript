@@ -1,0 +1,20 @@
+declareDottedExtend.ts(1,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+declareDottedExtend.ts(1,18): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== declareDottedExtend.ts (2 errors) ====
+    declare module A.B
+            ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+                     ~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    {
+        export class C{ }
+    }
+    
+    import ab = A.B;
+    
+    class D extends ab.C{ }
+    
+    class E extends A.B.C{ }
+    

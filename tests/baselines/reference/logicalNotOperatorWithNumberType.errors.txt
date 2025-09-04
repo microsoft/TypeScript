@@ -1,10 +1,9 @@
-logicalNotOperatorWithNumberType.ts(11,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 logicalNotOperatorWithNumberType.ts(23,25): error TS2872: This kind of expression is always truthy.
 logicalNotOperatorWithNumberType.ts(24,25): error TS2872: This kind of expression is always truthy.
 logicalNotOperatorWithNumberType.ts(45,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== logicalNotOperatorWithNumberType.ts (4 errors) ====
+==== logicalNotOperatorWithNumberType.ts (3 errors) ====
     // ! operator on number type
     var NUMBER: number;
     var NUMBER1: number[] = [1, 2];
@@ -15,9 +14,7 @@ logicalNotOperatorWithNumberType.ts(45,1): error TS2695: Left side of comma oper
         public a: number;
         static foo() { return 1; }
     }
-    module M {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace M {
         export var n: number;
     }
     

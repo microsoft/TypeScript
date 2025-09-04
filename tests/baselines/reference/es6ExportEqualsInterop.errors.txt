@@ -29,11 +29,6 @@ main.ts(103,15): error TS2498: Module '"function"' uses 'export =' and cannot be
 main.ts(104,15): error TS2498: Module '"function-module"' uses 'export =' and cannot be used with 'export *'.
 main.ts(105,15): error TS2498: Module '"class"' uses 'export =' and cannot be used with 'export *'.
 main.ts(106,15): error TS2498: Module '"class-module"' uses 'export =' and cannot be used with 'export *'.
-modules.d.ts(30,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-modules.d.ts(42,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-modules.d.ts(50,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-modules.d.ts(70,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-modules.d.ts(90,5): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 
 
 ==== main.ts (31 errors) ====
@@ -206,7 +201,7 @@ modules.d.ts(90,5): error TS1547: The 'module' keyword is not allowed for namesp
                   ~~~~~~~~~~~~~~
 !!! error TS2498: Module '"class-module"' uses 'export =' and cannot be used with 'export *'.
     
-==== modules.d.ts (5 errors) ====
+==== modules.d.ts (0 errors) ====
     declare module "interface" {
         interface Foo {
             x: number;
@@ -236,9 +231,7 @@ modules.d.ts(90,5): error TS1547: The 'module' keyword is not allowed for namesp
     }
     
     declare module "module" {
-        module Foo {
-        ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        namespace Foo {
             export var a: number;
             export var b: number;
         }
@@ -250,9 +243,7 @@ modules.d.ts(90,5): error TS1547: The 'module' keyword is not allowed for namesp
             x: number;
             y: number;
         }
-        module Foo {
-        ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        namespace Foo {
             export var a: number;
             export var b: number;
         }
@@ -260,9 +251,7 @@ modules.d.ts(90,5): error TS1547: The 'module' keyword is not allowed for namesp
     }
     
     declare module "variable-module" {
-        module Foo {
-        ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        namespace Foo {
             interface Bar {
                 x: number;
                 y: number;
@@ -282,9 +271,7 @@ modules.d.ts(90,5): error TS1547: The 'module' keyword is not allowed for namesp
     
     declare module "function-module" {
         function foo();
-        module foo {
-        ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        namespace foo {
             export var a: number;
             export var b: number;
         }
@@ -304,9 +291,7 @@ modules.d.ts(90,5): error TS1547: The 'module' keyword is not allowed for namesp
             x: number;
             y: number;
         }
-        module Foo {
-        ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        namespace Foo {
             export var a: number;
             export var b: number;
         }

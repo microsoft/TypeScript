@@ -2,8 +2,8 @@
 
 //// [strictModeReservedWordInModuleDeclaration.ts]
 "use strict"
-module public { }
-module private { }
+namespace public { }
+namespace private { }
 module public.whatever {
 }
 module private.public.foo { }

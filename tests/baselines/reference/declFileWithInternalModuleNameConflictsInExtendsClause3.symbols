@@ -34,7 +34,7 @@ module X.A.B.C {
 >B : Symbol(B, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 4, 11), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 9, 11))
 >C : Symbol(C, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 4, 13), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 9, 13))
 
-    export module A {
+    export namespace A {
 >A : Symbol(A, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 9, 16))
     }
 }

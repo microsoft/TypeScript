@@ -11,12 +11,12 @@ module Z.M {
         return "";
     }
 }
-module A.M {
+namespace A.M {
 >A : Symbol(A, Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts, 4, 1))
->M : Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts, 5, 9))
+>M : Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts, 5, 12))
 
     import M = Z.M;
->M : Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts, 5, 12))
+>M : Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts, 5, 15))
 >Z : Symbol(Z, Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts, 0, 0))
 >M : Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts, 0, 9))
 

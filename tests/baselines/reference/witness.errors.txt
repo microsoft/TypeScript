@@ -17,12 +17,11 @@ witness.ts(57,5): error TS2403: Subsequent variable declarations must have the s
 witness.ts(58,12): error TS2873: This kind of expression is always falsy.
 witness.ts(68,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'fnCallResult' must be of type 'never', but here has type 'any'.
 witness.ts(110,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'propAcc1' must be of type 'any', but here has type '{ m: any; }'.
-witness.ts(113,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 witness.ts(121,14): error TS2729: Property 'n' is used before its initialization.
 witness.ts(128,19): error TS2729: Property 'q' is used before its initialization.
 
 
-==== witness.ts (22 errors) ====
+==== witness.ts (21 errors) ====
     // Initializers
     var varInit = varInit; // any
     var pInit: any;
@@ -183,9 +182,7 @@ witness.ts(128,19): error TS2729: Property 'q' is used before its initialization
 !!! related TS6203 witness.ts:107:5: 'propAcc1' was also declared here.
     
     // Property access of module member
-    module M2 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace M2 {
         export var x = M2.x;
         var y = x;
         var y: any;

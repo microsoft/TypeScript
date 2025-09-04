@@ -11,6 +11,7 @@ declare module JSX {
 }
 declare var React: any;
 >React : any
+>      : ^^^
 
 <div>Dot goes here: &middot; &notAnEntity; </div>;
 ><div>Dot goes here: &middot; &notAnEntity; </div> : JSX.Element

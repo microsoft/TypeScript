@@ -1,14 +1,9 @@
-privacyClassExtendsClauseDeclFile_GlobalFile.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-privacyClassExtendsClauseDeclFile_externalModule.ts(1,8): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 privacyClassExtendsClauseDeclFile_externalModule.ts(19,77): error TS2449: Class 'publicClassInPrivateModule' used before its declaration.
 privacyClassExtendsClauseDeclFile_externalModule.ts(21,83): error TS2449: Class 'publicClassInPrivateModule' used before its declaration.
-privacyClassExtendsClauseDeclFile_externalModule.ts(25,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 
 
-==== privacyClassExtendsClauseDeclFile_externalModule.ts (4 errors) ====
-    export module publicModule {
-           ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+==== privacyClassExtendsClauseDeclFile_externalModule.ts (2 errors) ====
+    export namespace publicModule {
         export class publicClassInPublicModule {
             private f1() {
             }
@@ -38,9 +33,7 @@ privacyClassExtendsClauseDeclFile_externalModule.ts(25,1): error TS1547: The 'mo
         }
     }
     
-    module privateModule {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace privateModule {
         export class publicClassInPrivateModule {
             private f1() {
             }
@@ -86,10 +79,8 @@ privacyClassExtendsClauseDeclFile_externalModule.ts(25,1): error TS1547: The 'mo
     export class publicClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule { // Should error
     }
     
-==== privacyClassExtendsClauseDeclFile_GlobalFile.ts (1 errors) ====
-    module publicModuleInGlobal {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+==== privacyClassExtendsClauseDeclFile_GlobalFile.ts (0 errors) ====
+    namespace publicModuleInGlobal {
         export class publicClassInPublicModule {
             private f1() {
             }

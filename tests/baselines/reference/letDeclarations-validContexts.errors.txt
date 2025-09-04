@@ -1,9 +1,7 @@
 letDeclarations-validContexts.ts(18,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
-letDeclarations-validContexts.ts(85,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-letDeclarations-validContexts.ts(136,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 
 
-==== letDeclarations-validContexts.ts (3 errors) ====
+==== letDeclarations-validContexts.ts (1 errors) ====
     // Control flow statements with blocks
     if (true) { 
         let l1 = 0;
@@ -90,9 +88,7 @@ letDeclarations-validContexts.ts(136,1): error TS1547: The 'module' keyword is n
     };
     
     // modules
-    module m {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m {
         let l22 = 0;
     
         {
@@ -143,9 +139,7 @@ letDeclarations-validContexts.ts(136,1): error TS1547: The 'module' keyword is n
         }
     }
     
-    module m3 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m3 {
         label: let l34 = 0;
         {
             label2: let l35 = 0;

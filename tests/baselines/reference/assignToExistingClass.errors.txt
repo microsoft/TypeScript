@@ -1,11 +1,8 @@
-assignToExistingClass.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 assignToExistingClass.ts(8,13): error TS2629: Cannot assign to 'Mocked' because it is a class.
 
 
-==== assignToExistingClass.ts (2 errors) ====
-    module Test {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+==== assignToExistingClass.ts (1 errors) ====
+    namespace Test {
         class Mocked {
             myProp: string;
         }

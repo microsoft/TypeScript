@@ -1,14 +1,10 @@
-circularImportAlias.ts(3,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 circularImportAlias.ts(5,30): error TS2449: Class 'C' used before its declaration.
-circularImportAlias.ts(10,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 
 
-==== circularImportAlias.ts (3 errors) ====
+==== circularImportAlias.ts (1 errors) ====
     // expected no error
     
-    module B {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace B {
         export import a = A;
         export class D extends a.C {
                                  ~
@@ -18,9 +14,7 @@ circularImportAlias.ts(10,1): error TS1547: The 'module' keyword is not allowed 
         }
     }
     
-    module A {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace A {
         export class C { name: string }
         export import b = B;
     }

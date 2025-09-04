@@ -1,10 +1,6 @@
-genericCallToOverloadedMethodWithOverloadedArguments.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-genericCallToOverloadedMethodWithOverloadedArguments.ts(14,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 genericCallToOverloadedMethodWithOverloadedArguments.ts(23,38): error TS2345: Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
   Type 'Promise<number>' is not assignable to type 'Promise<string>'.
     Type 'number' is not assignable to type 'string'.
-genericCallToOverloadedMethodWithOverloadedArguments.ts(28,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-genericCallToOverloadedMethodWithOverloadedArguments.ts(42,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 genericCallToOverloadedMethodWithOverloadedArguments.ts(52,38): error TS2769: No overload matches this call.
   Overload 1 of 2, '(cb: (x: number) => Promise<string>): Promise<string>', gave the following error.
     Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
@@ -14,7 +10,6 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(52,38): error TS2769: No
     Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
       Type 'Promise<number>' is not assignable to type 'Promise<string>'.
         Type 'number' is not assignable to type 'string'.
-genericCallToOverloadedMethodWithOverloadedArguments.ts(57,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 genericCallToOverloadedMethodWithOverloadedArguments.ts(68,38): error TS2769: No overload matches this call.
   Overload 1 of 3, '(cb: (x: number) => Promise<string>): Promise<string>', gave the following error.
     Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
@@ -28,7 +23,6 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(68,38): error TS2769: No
     Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
       Type 'Promise<number>' is not assignable to type 'Promise<string>'.
         Type 'number' is not assignable to type 'string'.
-genericCallToOverloadedMethodWithOverloadedArguments.ts(73,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No overload matches this call.
   Overload 1 of 2, '(cb: (x: number) => Promise<boolean>): Promise<boolean>', gave the following error.
     Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; (b: boolean): Promise<boolean>; }' is not assignable to parameter of type '(x: number) => Promise<boolean>'.
@@ -40,10 +34,8 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
         Type 'number' is not assignable to type 'boolean'.
 
 
-==== genericCallToOverloadedMethodWithOverloadedArguments.ts (10 errors) ====
-    module m1 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+==== genericCallToOverloadedMethodWithOverloadedArguments.ts (4 errors) ====
+    namespace m1 {
         interface Promise<T> {
             then<U>(cb: (x: T) => Promise<U>): Promise<U>;
         }
@@ -56,9 +48,7 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
     
     //////////////////////////////////////
     
-    module m2 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m2 {
         interface Promise<T> {
             then<U>(cb: (x: T) => Promise<U>): Promise<U>;
         }
@@ -76,9 +66,7 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
     
     //////////////////////////////////////
     
-    module m3 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m3 {
         interface Promise<T> {
             then<U>(cb: (x: T) => Promise<U>): Promise<U>;
             then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
@@ -92,9 +80,7 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
     
     //////////////////////////////////////
     
-    module m4 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m4 {
         interface Promise<T> {
             then<U>(cb: (x: T) => Promise<U>): Promise<U>;
             then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
@@ -119,9 +105,7 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
     
     //////////////////////////////////////
     
-    module m5 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m5 {
         interface Promise<T> {
             then<U>(cb: (x: T) => Promise<U>): Promise<U>;
             then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
@@ -151,9 +135,7 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
     
     //////////////////////////////////////
     
-    module m6 {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace m6 {
         interface Promise<T> {
             then<U>(cb: (x: T) => Promise<U>): Promise<U>;
             then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;

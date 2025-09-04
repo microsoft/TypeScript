@@ -1,5 +1,3 @@
-genericClassWithFunctionTypedMemberArguments.ts(4,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-genericClassWithFunctionTypedMemberArguments.ts(27,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 genericClassWithFunctionTypedMemberArguments.ts(57,29): error TS2345: Argument of type '(x: T) => string' is not assignable to parameter of type '(a: 1) => string'.
   Types of parameters 'x' and 'a' are incompatible.
     Type 'number' is not assignable to type 'T'.
@@ -16,13 +14,11 @@ genericClassWithFunctionTypedMemberArguments.ts(62,30): error TS2345: Argument o
   Type 'string' is not assignable to type '1'.
 
 
-==== genericClassWithFunctionTypedMemberArguments.ts (6 errors) ====
+==== genericClassWithFunctionTypedMemberArguments.ts (4 errors) ====
     // Generic functions used as arguments for function typed parameters are not used to make inferences from
     // Using function arguments, no errors expected
     
-    module ImmediatelyFix {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace ImmediatelyFix {
         class C<T> {
             foo<T>(x: (a: T) => T) {
                 return x(null);
@@ -45,9 +41,7 @@ genericClassWithFunctionTypedMemberArguments.ts(62,30): error TS2345: Argument o
         var r3a = c2.foo(x => 1); // number
     }
     
-    module WithCandidates {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace WithCandidates {
         class C<T> {
             foo2<T, U>(x: T, cb: (a: T) => U) {
                 return cb(x);

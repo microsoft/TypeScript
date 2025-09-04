@@ -13,11 +13,11 @@ import ReferredTo = RT_ALIAS.elaborate.nested.mod.name.ReferredTo;
 >name : Symbol(RT_ALIAS.elaborate.nested.mod.name, Decl(file1.ts, 0, 35))
 >ReferredTo : Symbol(ReferredTo, Decl(file1.ts, 0, 41))
 
-export module ImportingModule {
+export namespace ImportingModule {
 >ImportingModule : Symbol(ImportingModule, Decl(file2.ts, 1, 66))
 
     class UsesReferredType {
->UsesReferredType : Symbol(UsesReferredType, Decl(file2.ts, 3, 31))
+>UsesReferredType : Symbol(UsesReferredType, Decl(file2.ts, 3, 34))
 
         constructor(private referred: ReferredTo) { }
 >referred : Symbol(UsesReferredType.referred, Decl(file2.ts, 5, 20))

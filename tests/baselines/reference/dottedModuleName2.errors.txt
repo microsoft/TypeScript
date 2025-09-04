@@ -1,14 +1,11 @@
 dottedModuleName2.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 dottedModuleName2.ts(1,10): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-dottedModuleName2.ts(9,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-dottedModuleName2.ts(9,20): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 dottedModuleName2.ts(22,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 dottedModuleName2.ts(22,10): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 dottedModuleName2.ts(22,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-dottedModuleName2.ts(32,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 
 
-==== dottedModuleName2.ts (8 errors) ====
+==== dottedModuleName2.ts (5 errors) ====
     module A.B {
     ~~~~~~
 !!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
@@ -21,11 +18,7 @@ dottedModuleName2.ts(32,1): error TS1547: The 'module' keyword is not allowed fo
      
      
      
-    module AA { export module B {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-                       ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace AA { export namespace B {
      
       export var x = 1;
      
@@ -54,9 +47,7 @@ dottedModuleName2.ts(32,1): error TS1547: The 'module' keyword is not allowed fo
      
      
      
-    module M
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace M
      
     {
      

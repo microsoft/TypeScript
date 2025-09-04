@@ -1,37 +1,22 @@
-innerAliases.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-innerAliases.ts(2,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-innerAliases.ts(3,16): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-innerAliases.ts(9,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-innerAliases.ts(14,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 innerAliases.ts(19,10): error TS2694: Namespace 'D' has no exported member 'inner'.
 innerAliases.ts(21,11): error TS2339: Property 'inner' does not exist on type 'typeof D'.
 
 
-==== innerAliases.ts (7 errors) ====
-    module A {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-        export module B {
-               ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-            export module C {
-                   ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+==== innerAliases.ts (2 errors) ====
+    namespace A {
+        export namespace B {
+            export namespace C {
                 export class Class1 {}
             }
         }
     }
     
-    module D {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace D {
         import inner = A.B.C; 
        
         var c1 = new inner.Class1(); 
     
-        export module E { 
-               ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export namespace E { 
             export class Class2 {}
         }
     }

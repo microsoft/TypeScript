@@ -7,7 +7,7 @@ declare function Q<T>(value: T): string;
 >value : T
 >      : ^
 
-declare module Q {
+declare namespace Q {
 >Q : typeof Q
 >  : ^^^^^^^^
 

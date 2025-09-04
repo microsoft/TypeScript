@@ -1,0 +1,20 @@
+moduleSharesNameWithImportDeclarationInsideIt.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+moduleSharesNameWithImportDeclarationInsideIt.ts(1,10): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== moduleSharesNameWithImportDeclarationInsideIt.ts (2 errors) ====
+    module Z.M {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+             ~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export function bar() {
+            return "";
+        }
+    }
+    namespace A.M {
+        import M = Z.M;
+        export function bar() {
+        }
+        M.bar(); // Should call Z.M.bar
+    }

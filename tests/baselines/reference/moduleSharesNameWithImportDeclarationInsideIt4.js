@@ -6,7 +6,7 @@ module Z.M {
         return "";
     }
 }
-module A.M {
+namespace A.M {
     interface M { }
     import M = Z.M;
     export function bar() {

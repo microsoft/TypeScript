@@ -118,13 +118,10 @@ class c {
 >foo1 : { (a: number): string; (b: string): string; }
 >     : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >aOrb : any
->     : ^^^
 
         return aOrb.toString();
 >aOrb.toString() : any
->                : ^^^
 >aOrb.toString : any
->              : ^^^
 >aOrb : any
 >     : ^^^
 >toString : any
@@ -177,7 +174,7 @@ var i1_i: i1;
 >     : ^^
 
 /** this is module comment*/
-module m1 {
+namespace m1 {
 >m1 : typeof m1
 >   : ^^^^^^^^^
 
@@ -194,12 +191,11 @@ module m1 {
     }
 
     /// module m2
-    export module m2 {
+    export namespace m2 {
     }
 }
 
 /// this is x
 declare var x;
 >x : any
->  : ^^^
 

@@ -1,24 +1,39 @@
-strictModeReservedWordInModuleDeclaration.ts(2,8): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
-strictModeReservedWordInModuleDeclaration.ts(3,8): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+strictModeReservedWordInModuleDeclaration.ts(2,11): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+strictModeReservedWordInModuleDeclaration.ts(3,11): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+strictModeReservedWordInModuleDeclaration.ts(4,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 strictModeReservedWordInModuleDeclaration.ts(4,8): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+strictModeReservedWordInModuleDeclaration.ts(4,15): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+strictModeReservedWordInModuleDeclaration.ts(6,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 strictModeReservedWordInModuleDeclaration.ts(6,8): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
 strictModeReservedWordInModuleDeclaration.ts(6,16): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+strictModeReservedWordInModuleDeclaration.ts(6,16): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+strictModeReservedWordInModuleDeclaration.ts(6,23): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 
 
-==== strictModeReservedWordInModuleDeclaration.ts (5 errors) ====
+==== strictModeReservedWordInModuleDeclaration.ts (10 errors) ====
     "use strict"
-    module public { }
-           ~~~~~~
+    namespace public { }
+              ~~~~~~
 !!! error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
-    module private { }
-           ~~~~~~~
+    namespace private { }
+              ~~~~~~~
 !!! error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
     module public.whatever {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
            ~~~~~~
 !!! error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+                  ~~~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
     }
     module private.public.foo { }
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
            ~~~~~~~
 !!! error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
                    ~~~~~~
 !!! error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+                   ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+                          ~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
