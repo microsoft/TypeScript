@@ -48002,17 +48002,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // Check if ignoreDeprecations should suppress this error
                     const shouldSuppress = compilerOptions.ignoreDeprecations === "6.0";
 
-                    if (!shouldSuppress) {
-                        // Generate error for module keyword usage in namespace declarations
-                        const errorDiagnostic = createFileDiagnostic(
-                            sourceFile,
-                            span.start,
-                            span.length,
-                            Diagnostics.The_module_keyword_is_not_allowed_for_namespace_declarations_Use_the_namespace_keyword_instead,
-                        );
-                        diagnostics.add(errorDiagnostic);
-                    }
-                    else {
+                    if (shouldSuppress) {
                         // When suppressed by ignoreDeprecations, keep as suggestion
                         const suggestionDiagnostic = createFileDiagnostic(
                             sourceFile,
@@ -48021,6 +48011,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             Diagnostics.A_namespace_declaration_should_not_be_declared_using_the_module_keyword_Please_use_the_namespace_keyword_instead,
                         );
                         suggestionDiagnostics.add(suggestionDiagnostic);
+                    }
+                    else {
+                        // Generate error for module keyword usage in namespace declarations
+                        const errorDiagnostic = createFileDiagnostic(
+                            sourceFile,
+                            span.start,
+                            span.length,
+                            Diagnostics.The_module_keyword_is_not_allowed_for_namespace_declarations_Use_the_namespace_keyword_instead,
+                        );
+                        diagnostics.add(errorDiagnostic);
                     }
                 }
             }

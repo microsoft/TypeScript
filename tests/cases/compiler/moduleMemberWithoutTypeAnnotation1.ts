@@ -34,7 +34,7 @@ namespace TypeScript {
     }
 }
 
-module TypeScript.Syntax {
+namespace TypeScript.Syntax {
     export function childIndex() { }
 
     export class VariableWidthTokenWithTrailingTrivia implements ISyntaxToken {

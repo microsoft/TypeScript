@@ -1,4 +1,4 @@
-module c.a.b {
+namespace c.a.b {
     import ma = a;
 }
 

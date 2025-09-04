@@ -4,10 +4,10 @@
 namespace a {
 }
 
-module b.a {
+namespace b.a {
 }
 
-module c.a.b {
+namespace c.a.b {
     import ma = a;
 }
 

@@ -3,7 +3,7 @@
         return "";
     }
 }
-module A.M {
+namespace A.M {
     export import M = Z.M;
     export function bar() {
     }

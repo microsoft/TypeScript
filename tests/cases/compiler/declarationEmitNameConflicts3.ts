@@ -13,7 +13,7 @@ namespace M {
     }
 }
 
-module M.P {
+namespace M.P {
     export class C {
         static f() { }
     }

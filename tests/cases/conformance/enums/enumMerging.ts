@@ -53,7 +53,7 @@ namespace M5 {
     export enum Color { Red, Green, Blue }
 }
 
-module M6.A {
+namespace M6.A {
     export enum Color { Red, Green, Blue }
 }
 namespace M6 {
