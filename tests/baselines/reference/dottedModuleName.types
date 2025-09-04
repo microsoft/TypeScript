@@ -44,7 +44,7 @@ namespace M {
 
 
 
-module M.N {
+namespace M.N {
 >M : typeof M
 >  : ^^^^^^^^
 >N : typeof N
@@ -54,7 +54,7 @@ module M.N {
 >X : typeof X
 >  : ^^^^^^^^
 
-	export module Y.Z {
+	export namespace Y.Z {
 >Y : typeof Y
 >  : ^^^^^^^^
 >Z : typeof Z

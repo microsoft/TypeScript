@@ -3,13 +3,9 @@ dottedModuleName.ts(3,33): error TS2552: Cannot find name 'x'. Did you mean 'X'?
 dottedModuleName.ts(4,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 dottedModuleName.ts(4,18): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 dottedModuleName.ts(4,20): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-dottedModuleName.ts(12,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-dottedModuleName.ts(12,10): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-dottedModuleName.ts(14,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-dottedModuleName.ts(14,18): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 
 
-==== dottedModuleName.ts (9 errors) ====
+==== dottedModuleName.ts (5 errors) ====
     namespace M {
         export namespace N {
     	export function f(x:number)=>2*x;
@@ -31,17 +27,9 @@ dottedModuleName.ts(14,18): error TS1547: The 'module' keyword is not allowed fo
     
     
     
-    module M.N {
-    ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-             ~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    namespace M.N {
         export namespace X {
-    	export module Y.Z {
-    	       ~~~~~~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
-    	                ~
-!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    	export namespace Y.Z {
     	    export var v=f(10);
     	}
         }

@@ -1,6 +1,6 @@
 // @module:amd
 // @Filename: file1.ts
-export module elaborate.nested.mod.name {
+export namespace elaborate.nested.mod.name {
     export class ReferredTo {
         doSomething(): void {
         }

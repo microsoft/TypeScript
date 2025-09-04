@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/dottedModuleName2.ts] ////
 
 === dottedModuleName2.ts ===
-module A.B {
+namespace A.B {
 >A : typeof A
 >  : ^^^^^^^^
 >B : typeof B
@@ -62,7 +62,7 @@ var tmpError = A.B.x;
 >  : ^^^^^^
 
 
-module A.B.C
+namespace A.B.C
 >A : typeof A
 >  : ^^^^^^^^
 >B : typeof B

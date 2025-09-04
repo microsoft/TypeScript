@@ -20,7 +20,7 @@ export namespace M {
     export import d = im;
 }
 
-export module M.P {
+export namespace M.P {
     export function f() { }
     export class C { }
     export namespace N {
@@ -35,7 +35,7 @@ export module M.P {
     export var d = M.d; // emitted incorrectly as typeof im
 }
 
-export module M.Q {
+export namespace M.Q {
     export function f() { }
     export class C { }
     export namespace N {

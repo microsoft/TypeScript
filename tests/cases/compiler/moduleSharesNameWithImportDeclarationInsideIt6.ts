@@ -1,4 +1,4 @@
-﻿module Z.M {
+namespace Z.M {
     export function bar() {
         return "";
     }
