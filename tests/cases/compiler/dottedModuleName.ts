@@ -9,9 +9,9 @@ namespace M {
 
 
 
-module M.N {
+namespace M.N {
     export namespace X {
-	export module Y.Z {
+	export namespace Y.Z {
 	    export var v=f(10);
 	}
     }
