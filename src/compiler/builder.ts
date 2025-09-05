@@ -1229,7 +1229,7 @@ function ensureHasErrorsForState(state: BuilderProgramStateWithDefinedProgram) {
 
 function ensurePackageJsonsForState(state: BuilderProgramStateWithDefinedProgram, host: BuilderProgramHost) {
     if (state.packageJsons !== undefined) return;
-    let packageJsons: string[] = [];
+    const packageJsons: string[] = [];
     if (state.program.getCompilerOptions().configFilePath) {
         const internalMap = state.program.getModuleResolutionCache()?.getPackageJsonInfoCache().getInternalMap();
         if (internalMap) {
