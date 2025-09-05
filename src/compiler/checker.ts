@@ -42626,7 +42626,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return undefined;
     }
 
-    function getSignaturesFromCallLike(node: CallLikeExpression): readonly Signature[] {
+    /**
+     * Gets generic signatures from the function's/constructor's type.
+     */
+    function getUninstantiatedSignatures(node: CallLikeExpression): readonly Signature[] {
         switch (node.kind) {
             case SyntaxKind.CallExpression:
             case SyntaxKind.Decorator:
@@ -42717,14 +42720,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (isCallLikeExpression(node.parent)) {
                 return getTypeParameterConstraintForPositionAcrossSignatures(
-                    getSignaturesFromCallLike(node.parent),
+                    getUninstantiatedSignatures(node.parent),
                     typeArgumentPosition,
                 );
             }
 
             if (isDecorator(node.parent.parent)) {
                 return getTypeParameterConstraintForPositionAcrossSignatures(
-                    getSignaturesFromCallLike(node.parent.parent),
+                    getUninstantiatedSignatures(node.parent.parent),
                     typeArgumentPosition,
                 );
             }
