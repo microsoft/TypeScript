@@ -83,6 +83,7 @@ import {
     isSolutionConfig,
     loadWithModeAwareCache,
     maybeBind,
+    memoize,
     missingFileModifiedTime,
     ModuleResolutionCache,
     mutateMap,
@@ -1758,12 +1759,13 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
     if (extendedConfigStatus) return extendedConfigStatus;
 
     // Check package file time
+    const getBuildInfoDirectory = memoize(() => getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, host.getCurrentDirectory())));
     const packageJsonStatus = forEach(
         (buildInfo as IncrementalBuildInfo | NonIncrementalBuildInfo).packageJsons,
         packageJson =>
             checkConfigFileUpToDateStatus(
                 state,
-                getNormalizedAbsolutePath(packageJson, getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, host.getCurrentDirectory()))),
+                getNormalizedAbsolutePath(packageJson, getBuildInfoDirectory()),
                 oldestOutputFileTime,
                 oldestOutputFileName,
             ),
@@ -2195,12 +2197,13 @@ function watchPackageJsonFiles<T extends BuilderProgram>(state: SolutionBuilderS
     if (!state.watch) return;
     const buildInfoPath = getTsBuildInfoEmitOutputFilePath(parsed.options)!;
     const buildInfoCacheEntry = getBuildInfoCacheEntry(state, buildInfoPath, resolvedPath);
+    const getBuildInfoDirectory = memoize(() => getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, state.host.getCurrentDirectory())));
     mutateMap(
         getOrCreateValueMapFromConfigFileMap(state.allWatchedPackageJsonFiles, resolvedPath),
         new Set(
             buildInfoCacheEntry?.buildInfo ?
                 (buildInfoCacheEntry.buildInfo as IncrementalBuildInfo | NonIncrementalBuildInfo).packageJsons?.map(
-                    f => getNormalizedAbsolutePath(f, getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, state.host.getCurrentDirectory()))),
+                    f => getNormalizedAbsolutePath(f, getBuildInfoDirectory()),
                 ) :
                 undefined,
         ),
