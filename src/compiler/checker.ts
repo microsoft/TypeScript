@@ -2611,10 +2611,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return addDeprecatedSuggestionWorker(declarations, diagnostic);
     }
 
-    function addDeprecatedSuggestionWithSignature(location: Node, declaration: Node, deprecatedEntity: string | undefined, signatureString: string) {
-        const diagnostic = deprecatedEntity
-            ? createDiagnosticForNode(location, Diagnostics.The_signature_0_of_1_is_deprecated, signatureString, deprecatedEntity)
-            : createDiagnosticForNode(location, Diagnostics._0_is_deprecated, signatureString);
+    function addDeprecatedSuggestionWithSignature(location: Node, declaration: Node, deprecatedEntity: string) {
+        const diagnostic = createDiagnosticForNode(location, Diagnostics._0_is_deprecated, deprecatedEntity);
         return addDeprecatedSuggestionWorker(declaration, diagnostic);
     }
 
@@ -37782,8 +37780,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (signature.flags & SignatureFlags.IsSignatureCandidateForOverloadFailure) return;
         if (signature.declaration && signature.declaration.flags & NodeFlags.Deprecated) {
             const suggestionNode = getDeprecatedSuggestionNode(node);
-            const name = tryGetPropertyAccessOrIdentifierToString(getInvokedExpression(node));
-            addDeprecatedSuggestionWithSignature(suggestionNode, signature.declaration, name, signatureToString(signature));
+            const invoked = getInvokedExpression(node);
+            let name = tryGetPropertyAccessOrIdentifierToString(invoked);
+
+            if (!name && invoked.kind === SyntaxKind.PropertyAccessExpression) {
+                const propAccess = invoked as PropertyAccessExpression;
+                name = (propAccess.name as any).getText() + "()";
+            }
+            name = name ?? "<unknown>";
+
+            addDeprecatedSuggestionWithSignature(suggestionNode, signature.declaration, name);
         }
     }
 
