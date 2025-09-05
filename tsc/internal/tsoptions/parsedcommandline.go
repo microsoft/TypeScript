@@ -37,6 +37,7 @@ type ParsedCommandLine struct {
 	resolvedProjectReferencePaths     []string
 	resolvedProjectReferencePathsOnce sync.Once
 
+	literalFileNamesLen int
 	fileNamesByPath     map[tspath.Path]string // maps file names to their paths, used for quick lookups
 	fileNamesByPathOnce sync.Once
 }
@@ -217,7 +218,7 @@ func (p *ParsedCommandLine) WildcardDirectories() map[string]bool {
 // Normalized file names explicitly specified in `files`
 func (p *ParsedCommandLine) LiteralFileNames() []string {
 	if p != nil && p.ConfigFile != nil {
-		return p.FileNames()[0:len(p.ConfigFile.configFileSpecs.validatedFilesSpec)]
+		return p.FileNames()[0:p.literalFileNamesLen]
 	}
 	return nil
 }
@@ -349,13 +350,14 @@ func (p *ParsedCommandLine) GetMatchedIncludeSpec(fileName string) (string, bool
 
 func (p *ParsedCommandLine) ReloadFileNamesOfParsedCommandLine(fs vfs.FS) *ParsedCommandLine {
 	parsedConfig := *p.ParsedConfig
-	parsedConfig.FileNames = getFileNamesFromConfigSpecs(
+	fileNames, literalFileNamesLen := getFileNamesFromConfigSpecs(
 		*p.ConfigFile.configFileSpecs,
 		p.GetCurrentDirectory(),
 		p.CompilerOptions(),
 		fs,
 		p.extraFileExtensions,
 	)
+	parsedConfig.FileNames = fileNames
 	parsedCommandLine := ParsedCommandLine{
 		ParsedConfig:        &parsedConfig,
 		ConfigFile:          p.ConfigFile,
@@ -365,6 +367,7 @@ func (p *ParsedCommandLine) ReloadFileNamesOfParsedCommandLine(fs vfs.FS) *Parse
 		comparePathsOptions: p.comparePathsOptions,
 		wildcardDirectories: p.wildcardDirectories,
 		extraFileExtensions: p.extraFileExtensions,
+		literalFileNamesLen: literalFileNamesLen,
 	}
 	return &parsedCommandLine
 }

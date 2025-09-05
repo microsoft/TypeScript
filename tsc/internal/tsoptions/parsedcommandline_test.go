@@ -111,6 +111,28 @@ func TestParsedCommandLine(t *testing.T) {
 					"/dev/b.ts",
 				})
 			})
+
+			t.Run("duplicates", func(t *testing.T) {
+				t.Parallel()
+				parsedCommandLine := tsoptionstest.GetParsedCommandLine(
+					t,
+					`{
+						"files": [
+							"a.ts",
+							"a.ts",
+							"b.ts",
+						]
+					}`,
+					files,
+					"/dev",
+					/*useCaseSensitiveFileNames*/ true,
+				)
+
+				assert.DeepEqual(t, parsedCommandLine.LiteralFileNames(), []string{
+					"/dev/a.ts",
+					"/dev/b.ts",
+				})
+			})
 		})
 
 		t.Run("with literal include list", func(t *testing.T) {
