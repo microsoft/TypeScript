@@ -349,7 +349,7 @@ function updateImportsInTargetFile(
 
             forEachAliasDeclarationInImportOrRequire(importNode, decl => {
                 if (!decl.name || !isIdentifier(decl.name)) return;
-                
+
                 const symbol = isBindingElement(decl)
                     ? getPropertySymbolFromBindingElement(checker, decl as ObjectBindingElementWithoutPropertyName)
                     : checker.getSymbolAtLocation(decl.name);
