@@ -6,6 +6,8 @@ import (
 )
 
 type SyncMap[K comparable, V any] struct {
+	_ [0]K
+	_ [0]V
 	m sync.Map
 }
 
