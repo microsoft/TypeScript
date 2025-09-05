@@ -257,7 +257,10 @@ export function getNewStatementsAndRemoveFromOldFile(
     deleteUnusedOldImports(oldFile, toMove.all, usage.unusedImportsFromOldFile, importAdderForOldFile);
     importAdderForOldFile.writeFixes(changes, quotePreference);
     deleteMovedStatements(oldFile, toMove.ranges, changes);
-    updateImportsInOtherFiles(changes, program, host, oldFile, usage.movedSymbols, targetFile.fileName, quotePreference);
+    if (isFullSourceFile(targetFile)) {
+        updateImportsInTargetFile(program, oldFile, targetFile, usage.movedSymbols, importAdderForNewFile);
+    }
+    updateImportsInOtherFiles(changes, program, host, oldFile, usage.movedSymbols, targetFile.fileName, quotePreference, isFullSourceFile(targetFile) ? targetFile : undefined);
     addExportsInOldFile(oldFile, usage.targetFileImportsFromOldFile, changes, useEsModuleSyntax);
     addTargetFileImports(oldFile, usage.oldImportsNeededByTargetFile, usage.targetFileImportsFromOldFile, checker, program, importAdderForNewFile);
     if (!isFullSourceFile(targetFile) && prologueDirectives.length) {
@@ -331,6 +334,37 @@ export function addExportsInOldFile(oldFile: SourceFile, targetFileImportsFromOl
     });
 }
 
+function updateImportsInTargetFile(
+    program: Program,
+    oldFile: SourceFile,
+    targetFile: SourceFile,
+    movedSymbols: Set<Symbol>,
+    importAdder: codefix.ImportAdder,
+): void {
+    const checker = program.getTypeChecker();
+    for (const statement of targetFile.statements) {
+        forEachImportInStatement(statement, importNode => {
+            const moduleSymbol = checker.getSymbolAtLocation(moduleSpecifierFromImport(importNode));
+            if (moduleSymbol !== oldFile.symbol) return;
+
+            forEachAliasDeclarationInImportOrRequire(importNode, decl => {
+                if (!decl.name || !isIdentifier(decl.name)) return;
+                
+                const symbol = isBindingElement(decl)
+                    ? getPropertySymbolFromBindingElement(checker, decl as ObjectBindingElementWithoutPropertyName)
+                    : checker.getSymbolAtLocation(decl.name);
+
+                if (symbol) {
+                    const resolvedSymbol = skipAlias(symbol, checker);
+                    if (movedSymbols.has(resolvedSymbol)) {
+                        importAdder.removeExistingImport(decl);
+                    }
+                }
+            });
+        });
+    }
+}
+
 function updateImportsInOtherFiles(
     changes: textChanges.ChangeTracker,
     program: Program,
@@ -339,10 +373,11 @@ function updateImportsInOtherFiles(
     movedSymbols: Set<Symbol>,
     targetFileName: string,
     quotePreference: QuotePreference,
+    targetSourceFile?: SourceFile,
 ): void {
     const checker = program.getTypeChecker();
     for (const sourceFile of program.getSourceFiles()) {
-        if (sourceFile === oldFile) continue;
+        if (sourceFile === oldFile || (targetSourceFile && sourceFile.fileName === targetSourceFile.fileName)) continue;
         for (const statement of sourceFile.statements) {
             forEachImportInStatement(statement, importNode => {
                 if (checker.getSymbolAtLocation(moduleSpecifierFromImport(importNode)) !== oldFile.symbol) return;
@@ -736,6 +771,8 @@ export interface UsageInfo {
     readonly oldImportsNeededByTargetFile: Map<Symbol, [boolean, codefix.ImportOrRequireAliasDeclaration | undefined]>;
     /** Subset of oldImportsNeededByTargetFile that are will no longer be used in the old file. */
     readonly unusedImportsFromOldFile: Set<Symbol>;
+    /** Imports in the target file that should be deleted */
+    readonly importsToDeleteFromTargetFile: Set<SupportedImport>;
 }
 
 /** @internal */
@@ -870,6 +907,7 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
     const movedSymbols = new Set<Symbol>();
     const oldImportsNeededByTargetFile = new Map<Symbol, [/*isValidTypeOnlyUseSite*/ boolean, codefix.ImportOrRequireAliasDeclaration | undefined]>();
     const targetFileImportsFromOldFile = new Map<Symbol, /*isValidTypeOnlyUseSite*/ boolean>();
+    const importsToDeleteFromTargetFile = new Set<SupportedImport>();
 
     const jsxNamespaceSymbol = getJsxNamespaceSymbol(containsJsx(toMove));
 
@@ -921,12 +959,18 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
         }
 
         forEachReference(statement, checker, enclosingRange, (symbol, isValidTypeOnlyUseSite) => {
-            if (movedSymbols.has(symbol)) oldFileImportsFromTargetFile.set(symbol, isValidTypeOnlyUseSite);
+            if (movedSymbols.has(symbol)) {
+                oldFileImportsFromTargetFile.set(symbol, isValidTypeOnlyUseSite);
+                const importStatement = find(symbol.declarations, d => isTopLevelDeclaration(d) && getSourceFileOfNode(d) === oldFile && isPureImport(d.parent));
+                if (importStatement) {
+                    importsToDeleteFromTargetFile.add(importStatement.parent as SupportedImport);
+                }
+            }
             unusedImportsFromOldFile.delete(symbol);
         });
     }
 
-    return { movedSymbols, targetFileImportsFromOldFile, oldFileImportsFromTargetFile, oldImportsNeededByTargetFile, unusedImportsFromOldFile };
+    return { movedSymbols, targetFileImportsFromOldFile, oldFileImportsFromTargetFile, oldImportsNeededByTargetFile, unusedImportsFromOldFile, importsToDeleteFromTargetFile };
 
     function getJsxNamespaceSymbol(containsJsx: Node | undefined) {
         if (containsJsx === undefined) {
