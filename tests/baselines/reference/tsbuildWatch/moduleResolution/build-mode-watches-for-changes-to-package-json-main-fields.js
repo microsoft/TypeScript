@@ -240,15 +240,19 @@ exports.theNum = 42;
 
 
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo]
-{"root":["../index.ts"],"version":"FakeTSVersion"}
+{"root":["../index.ts"],"packageJsons":["../package.json","../../pkg2/package.json"],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "root": [
     "../index.ts"
   ],
+  "packageJsons": [
+    "../package.json",
+    "../../pkg2/package.json"
+  ],
   "version": "FakeTSVersion",
-  "size": 50
+  "size": 111
 }
 
 
@@ -401,7 +405,7 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/bui
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js] file written with same contents
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo]
-{"root":["../index.ts"],"errors":true,"version":"FakeTSVersion"}
+{"root":["../index.ts"],"errors":true,"packageJsons":["../package.json","../../pkg2/package.json"],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -409,8 +413,12 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/bui
     "../index.ts"
   ],
   "errors": true,
+  "packageJsons": [
+    "../package.json",
+    "../../pkg2/package.json"
+  ],
   "version": "FakeTSVersion",
-  "size": 64
+  "size": 125
 }
 
 
@@ -507,15 +515,19 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exists -
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js] file written with same contents
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo]
-{"root":["../index.ts"],"version":"FakeTSVersion"}
+{"root":["../index.ts"],"packageJsons":["../package.json","../../pkg2/package.json"],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "root": [
     "../index.ts"
   ],
+  "packageJsons": [
+    "../package.json",
+    "../../pkg2/package.json"
+  ],
   "version": "FakeTSVersion",
-  "size": 50
+  "size": 111
 }
 
 

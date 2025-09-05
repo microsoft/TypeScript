@@ -143,7 +143,7 @@ foo;
 
 
 //// [/user/username/projects/myproject/app/bld/program/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../../../home/src/tslibs/ts/lib/lib.d.ts","../../../shared/bld/library/index.d.ts","../../src/program/bar.ts","../../src/program/index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-5677608893-export declare function foo(): void;\n",{"version":"-9677035610-import {foo} from \"shared\";","signature":"-3531856636-export {};\n"},{"version":"193491849-foo","signature":"5381-","affectsGlobalScope":true}],"root":[3,4],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[4,[{"start":0,"length":3,"messageText":"Cannot find name 'foo'.","category":1,"code":2304}]]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../../home/src/tslibs/ts/lib/lib.d.ts","../../../shared/bld/library/index.d.ts","../../src/program/bar.ts","../../src/program/index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-5677608893-export declare function foo(): void;\n",{"version":"-9677035610-import {foo} from \"shared\";","signature":"-3531856636-export {};\n"},{"version":"193491849-foo","signature":"5381-","affectsGlobalScope":true}],"root":[3,4],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[4,[{"start":0,"length":3,"messageText":"Cannot find name 'foo'.","category":1,"code":2304}]]],"latestChangedDtsFile":"./index.d.ts","packageJsons":["../../../shared/package.json"],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/app/bld/program/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -225,8 +225,11 @@ foo;
     ]
   ],
   "latestChangedDtsFile": "./index.d.ts",
+  "packageJsons": [
+    "../../../shared/package.json"
+  ],
   "version": "FakeTSVersion",
-  "size": 1171
+  "size": 1219
 }
 
 

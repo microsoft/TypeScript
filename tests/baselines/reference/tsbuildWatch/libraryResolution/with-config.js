@@ -404,11 +404,6 @@ FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/file2.ts 
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/index.ts 250 undefined Source file /home/src/workspace/projects/project1/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/utils.d.ts 250 undefined Source file /home/src/workspace/projects/project1/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts 250 undefined Source file /home/src/workspace/projects/project1/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-scripthost/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/typeroot1/sometype/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project2/tsconfig.json 2000 undefined Config file /home/src/workspace/projects/project2/tsconfig.json
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project2 1 undefined Wild card directory /home/src/workspace/projects/project2/tsconfig.json
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project2 1 undefined Wild card directory /home/src/workspace/projects/project2/tsconfig.json
@@ -424,7 +419,6 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project4 1 un
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project4 1 undefined Wild card directory /home/src/workspace/projects/project4/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project4/index.ts 250 undefined Source file /home/src/workspace/projects/project4/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project4/utils.d.ts 250 undefined Source file /home/src/workspace/projects/project4/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-esnext/package.json 2000 undefined package.json file /home/src/workspace/projects/project4/tsconfig.json
 
 
 //// [/home/src/tslibs/TS/Lib/lib.es5.d.ts] *Lib*
@@ -803,20 +797,6 @@ export declare const z = 10;
   "size": 1069
 }
 
-
-PolledWatches::
-/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/workspace/projects/node_modules/@typescript/lib-esnext/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/workspace/projects/project1/typeroot1/sometype/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/workspace/projects/project1/core.d.ts: *new*

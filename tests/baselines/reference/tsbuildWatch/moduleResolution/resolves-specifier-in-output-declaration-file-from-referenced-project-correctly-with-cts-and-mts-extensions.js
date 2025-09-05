@@ -159,7 +159,7 @@ export type { TheNum } from './const.cjs';
 
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../../../home/src/tslibs/ts/lib/lib.es2022.full.d.ts","../const.cts","../index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11202312776-export type TheNum = 42;","signature":"-13194036030-export type TheNum = 42;\n","impliedFormat":1},{"version":"-9668872159-export type { TheNum } from './const.cjs';","signature":"-9835135925-export type { TheNum } from './const.cjs';\n","impliedFormat":99}],"root":[2,3],"options":{"composite":true,"module":100,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../../home/src/tslibs/ts/lib/lib.es2022.full.d.ts","../const.cts","../index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11202312776-export type TheNum = 42;","signature":"-13194036030-export type TheNum = 42;\n","impliedFormat":1},{"version":"-9668872159-export type { TheNum } from './const.cjs';","signature":"-9835135925-export type { TheNum } from './const.cjs';\n","impliedFormat":99}],"root":[2,3],"options":{"composite":true,"module":100,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts","packageJsons":["../package.json"],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -227,8 +227,11 @@ export type { TheNum } from './const.cjs';
     ]
   },
   "latestChangedDtsFile": "./index.d.ts",
+  "packageJsons": [
+    "../package.json"
+  ],
   "version": "FakeTSVersion",
-  "size": 1082
+  "size": 1117
 }
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js]
@@ -236,33 +239,21 @@ export const theNum = 42;
 
 
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo]
-{"root":["../index.ts"],"version":"FakeTSVersion"}
+{"root":["../index.ts"],"packageJsons":["../package.json","../../pkg2/package.json"],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "root": [
     "../index.ts"
   ],
+  "packageJsons": [
+    "../package.json",
+    "../../pkg2/package.json"
+  ],
   "version": "FakeTSVersion",
-  "size": 50
+  "size": 111
 }
 
-
-PolledWatches::
-/home/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/tslibs/TS/Lib/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/tslibs/TS/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/tslibs/package.json: *new*
-  {"pollingInterval":2000}
-/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/packages/pkg2/build/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /user/username/projects/myproject/packages/pkg1/index.ts: *new*
@@ -434,7 +425,7 @@ exports.theNum = 42;
 
 
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo]
-{"root":["../index.ts"],"errors":true,"version":"FakeTSVersion"}
+{"root":["../index.ts"],"errors":true,"packageJsons":["../package.json","../../pkg2/package.json"],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -442,8 +433,12 @@ exports.theNum = 42;
     "../index.ts"
   ],
   "errors": true,
+  "packageJsons": [
+    "../package.json",
+    "../../pkg2/package.json"
+  ],
   "version": "FakeTSVersion",
-  "size": 64
+  "size": 125
 }
 
 
@@ -549,15 +544,19 @@ export const theNum = 42;
 
 
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo]
-{"root":["../index.ts"],"version":"FakeTSVersion"}
+{"root":["../index.ts"],"packageJsons":["../package.json","../../pkg2/package.json"],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "root": [
     "../index.ts"
   ],
+  "packageJsons": [
+    "../package.json",
+    "../../pkg2/package.json"
+  ],
   "version": "FakeTSVersion",
-  "size": 50
+  "size": 111
 }
 
 
@@ -675,7 +674,7 @@ exports.theNum = 42;
 
 
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo]
-{"root":["../index.ts"],"errors":true,"version":"FakeTSVersion"}
+{"root":["../index.ts"],"errors":true,"packageJsons":["../package.json","../../pkg2/package.json"],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -683,8 +682,12 @@ exports.theNum = 42;
     "../index.ts"
   ],
   "errors": true,
+  "packageJsons": [
+    "../package.json",
+    "../../pkg2/package.json"
+  ],
   "version": "FakeTSVersion",
-  "size": 64
+  "size": 125
 }
 
 
@@ -845,22 +848,6 @@ export type { TheNum } from './const.cjs';
 
 
 
-PolledWatches::
-/home/package.json:
-  {"pollingInterval":2000}
-/home/src/package.json:
-  {"pollingInterval":2000}
-/home/src/tslibs/TS/Lib/package.json:
-  {"pollingInterval":2000}
-/home/src/tslibs/TS/package.json:
-  {"pollingInterval":2000}
-/home/src/tslibs/package.json:
-  {"pollingInterval":2000}
-/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/packages/pkg2/build/package.json:
-  {"pollingInterval":2000}
-
 FsWatches::
 /user/username/projects/myproject/packages/pkg1/index.ts:
   {}
@@ -944,15 +931,19 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js] file written with same contents
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo]
-{"root":["../index.ts"],"version":"FakeTSVersion"}
+{"root":["../index.ts"],"packageJsons":["../package.json","../../pkg2/package.json"],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "root": [
     "../index.ts"
   ],
+  "packageJsons": [
+    "../package.json",
+    "../../pkg2/package.json"
+  ],
   "version": "FakeTSVersion",
-  "size": 50
+  "size": 111
 }
 
 

@@ -161,13 +161,6 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src 1 {"exclu
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Wild card directory /home/src/projects/myproject/tsconfig.json
 ExcludeWatcher:: Added:: WatchInfo: /home/src/projects/myproject/main.ts 250 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Source file /home/src/projects/myproject/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src/secondary.ts 250 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Source file /home/src/projects/myproject/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src/package.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} package.json file /home/src/projects/myproject/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/package.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} package.json file /home/src/projects/myproject/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /home/src/projects/package.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} package.json file /home/src/projects/myproject/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /home/src/package.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} package.json file /home/src/projects/myproject/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /home/package.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} package.json file /home/src/projects/myproject/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /package.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} package.json file /home/src/projects/myproject/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2/other/sometype2/package.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} package.json file /home/src/projects/myproject/tsconfig.json
 
 
 //// [/home/src/projects/myproject/outDir/types/sometype.js]
@@ -218,22 +211,6 @@ export declare const z = 10;
   "size": 71
 }
 
-
-PolledWatches::
-/home/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/myproject/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/myproject/root2/other/sometype2/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/myproject/src/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/package.json: *new*
-  {"pollingInterval":2000}
-/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/projects/configs/first/tsconfig.json: *new*

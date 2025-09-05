@@ -808,7 +808,7 @@ export * from 'c';
 
 
 //// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo] Inode:: 159
-{"root":["../src/a.ts","../src/index.ts"],"version":"FakeTSVersion"}
+{"root":["../src/a.ts","../src/index.ts"],"packageJsons":["../package.json","../../../../../c/3/c-impl/c/package.json"],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 160
 {
@@ -816,8 +816,12 @@ export * from 'c';
     "../src/a.ts",
     "../src/index.ts"
   ],
+  "packageJsons": [
+    "../package.json",
+    "../../../../../c/3/c-impl/c/package.json"
+  ],
   "version": "FakeTSVersion",
-  "size": 68
+  "size": 146
 }
 
 
@@ -1963,7 +1967,7 @@ export * from 'c';
 
 
 //// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo] Inode:: 175
-{"root":["../src/a.ts","../src/index.ts"],"version":"FakeTSVersion"}
+{"root":["../src/a.ts","../src/index.ts"],"packageJsons":["../package.json","../../../../../c/3/c-impl/c/package.json"],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 176
 {
@@ -1971,8 +1975,12 @@ export * from 'c';
     "../src/a.ts",
     "../src/index.ts"
   ],
+  "packageJsons": [
+    "../package.json",
+    "../../../../../c/3/c-impl/c/package.json"
+  ],
   "version": "FakeTSVersion",
-  "size": 68
+  "size": 146
 }
 
 

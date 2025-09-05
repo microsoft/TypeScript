@@ -219,10 +219,6 @@ exports.session = {
 }
 
 
-PolledWatches::
-/user/username/projects/reexport/src/pure/package.json: *new*
-  {"pollingInterval":2000}
-
 FsWatches::
 /user/username/projects/reexport/src/main/index.ts: *new*
   {}

@@ -29,6 +29,7 @@ export interface BuilderProgramHost {
      * this callback if present would be used to write files
      */
     writeFile?: WriteFileCallback;
+    realpath?(path: string): string;
     /**
      * Store information about the signature
      *

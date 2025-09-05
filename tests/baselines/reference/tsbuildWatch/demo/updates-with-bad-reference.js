@@ -664,10 +664,6 @@ export declare function createZoo(): Array<Dog>;
 }
 
 
-PolledWatches::
-/user/username/projects/demo/animals/package.json: *new*
-  {"pollingInterval":2000}
-
 FsWatches::
 /user/username/projects/demo/animals/animal.ts: *new*
   {}

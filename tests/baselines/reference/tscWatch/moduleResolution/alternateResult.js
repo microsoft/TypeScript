@@ -387,7 +387,7 @@ export {};
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileIdsList":[[2,3]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","impliedFormat":99}],"root":[4],"options":{"strict":true},"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[1,2,3,4],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileIdsList":[[2,3]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","impliedFormat":99}],"root":[4],"options":{"strict":true},"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[1,2,3,4],"packageJsons":["./node_modules/@types/bar/package.json","./node_modules/@types/bar2/package.json","./node_modules/bar/package.json","./node_modules/bar2/package.json","./node_modules/foo/package.json","./node_modules/foo2/package.json"],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -476,8 +476,16 @@ export {};
       "not cached or not changed"
     ]
   ],
+  "packageJsons": [
+    "./node_modules/@types/bar/package.json",
+    "./node_modules/@types/bar2/package.json",
+    "./node_modules/bar/package.json",
+    "./node_modules/bar2/package.json",
+    "./node_modules/foo/package.json",
+    "./node_modules/foo2/package.json"
+  ],
   "version": "FakeTSVersion",
-  "size": 1120
+  "size": 1358
 }
 
 
@@ -1317,7 +1325,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileIdsList":[[2,3,4]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"strict":true},"referencedMap":[[5,1]],"semanticDiagnosticsPerFile":[1,2,3,4,5],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileIdsList":[[2,3,4]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"strict":true},"referencedMap":[[5,1]],"semanticDiagnosticsPerFile":[1,2,3,4,5],"packageJsons":["./node_modules/@types/bar/package.json","./node_modules/@types/bar2/package.json","./node_modules/bar/package.json","./node_modules/bar2/package.json","./node_modules/foo/package.json","./node_modules/foo2/package.json"],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1423,8 +1431,16 @@ File '/package.json' does not exist according to earlier cached lookups.
       "not cached or not changed"
     ]
   ],
+  "packageJsons": [
+    "./node_modules/@types/bar/package.json",
+    "./node_modules/@types/bar2/package.json",
+    "./node_modules/bar/package.json",
+    "./node_modules/bar2/package.json",
+    "./node_modules/foo/package.json",
+    "./node_modules/foo2/package.json"
+  ],
   "version": "FakeTSVersion",
-  "size": 1280
+  "size": 1518
 }
 
 
@@ -1611,7 +1627,7 @@ Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modu
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileIdsList":[[2,3,4,5]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[6],"options":{"strict":true},"referencedMap":[[6,1]],"semanticDiagnosticsPerFile":[1,2,3,4,5,6],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileIdsList":[[2,3,4,5]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[6],"options":{"strict":true},"referencedMap":[[6,1]],"semanticDiagnosticsPerFile":[1,2,3,4,5,6],"packageJsons":["./node_modules/@types/bar/package.json","./node_modules/@types/bar2/package.json","./node_modules/bar/package.json","./node_modules/bar2/package.json","./node_modules/foo/package.json","./node_modules/foo2/package.json"],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1733,8 +1749,16 @@ Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modu
       "not cached or not changed"
     ]
   ],
+  "packageJsons": [
+    "./node_modules/@types/bar/package.json",
+    "./node_modules/@types/bar2/package.json",
+    "./node_modules/bar/package.json",
+    "./node_modules/bar2/package.json",
+    "./node_modules/foo/package.json",
+    "./node_modules/foo2/package.json"
+  ],
   "version": "FakeTSVersion",
-  "size": 1394
+  "size": 1632
 }
 
 
@@ -1975,7 +1999,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modu
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./index.mts"],"fileIdsList":[[2,3,4]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"strict":true},"referencedMap":[[5,1]],"semanticDiagnosticsPerFile":[1,2,3,4,5],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./index.mts"],"fileIdsList":[[2,3,4]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"strict":true},"referencedMap":[[5,1]],"semanticDiagnosticsPerFile":[1,2,3,4,5],"packageJsons":["./node_modules/@types/bar/package.json","./node_modules/@types/bar2/package.json","./node_modules/bar/package.json","./node_modules/bar2/package.json","./node_modules/foo/package.json","./node_modules/foo2/package.json"],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -2081,8 +2105,16 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modu
       "not cached or not changed"
     ]
   ],
+  "packageJsons": [
+    "./node_modules/@types/bar/package.json",
+    "./node_modules/@types/bar2/package.json",
+    "./node_modules/bar/package.json",
+    "./node_modules/bar2/package.json",
+    "./node_modules/foo/package.json",
+    "./node_modules/foo2/package.json"
+  ],
   "version": "FakeTSVersion",
-  "size": 1271
+  "size": 1509
 }
 
 
@@ -2296,7 +2328,7 @@ FileWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/foo2/in
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./index.mts"],"fileIdsList":[[2,3]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[4],"options":{"strict":true},"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[1,2,3,4],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./index.mts"],"fileIdsList":[[2,3]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[4],"options":{"strict":true},"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[1,2,3,4],"packageJsons":["./node_modules/@types/bar/package.json","./node_modules/@types/bar2/package.json","./node_modules/bar/package.json","./node_modules/bar2/package.json","./node_modules/foo/package.json","./node_modules/foo2/package.json"],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -2386,8 +2418,16 @@ FileWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/foo2/in
       "not cached or not changed"
     ]
   ],
+  "packageJsons": [
+    "./node_modules/@types/bar/package.json",
+    "./node_modules/@types/bar2/package.json",
+    "./node_modules/bar/package.json",
+    "./node_modules/bar2/package.json",
+    "./node_modules/foo/package.json",
+    "./node_modules/foo2/package.json"
+  ],
   "version": "FakeTSVersion",
-  "size": 1155
+  "size": 1393
 }
 
 

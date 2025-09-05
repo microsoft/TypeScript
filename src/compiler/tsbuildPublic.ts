@@ -415,11 +415,11 @@ interface SolutionBuilderState<T extends BuilderProgram> extends WatchFactory<Wa
     readonly allWatchedInputFiles: Map<ResolvedConfigFilePath, Map<string, FileWatcher>>;
     readonly allWatchedConfigFiles: Map<ResolvedConfigFilePath, FileWatcher>;
     readonly allWatchedExtendedConfigFiles: Map<Path, SharedExtendedConfigFileWatcher<ResolvedConfigFilePath>>;
-    readonly allWatchedPackageJsonFiles: Map<ResolvedConfigFilePath, Map<Path, FileWatcher>>;
+    readonly allWatchedPackageJsonFiles: Map<ResolvedConfigFilePath, Map<string, FileWatcher>>;
     readonly filesWatched: Map<Path, FileWatcherWithModifiedTime | Date>;
     readonly outputTimeStamps: Map<ResolvedConfigFilePath, Map<Path, Date>>;
 
-    readonly lastCachedPackageJsonLookups: Map<ResolvedConfigFilePath, Set<string> | undefined>;
+    readonly allWatchedPackageJsons: Map<ResolvedConfigFilePath, Set<string> | undefined>;
 
     timerToBuildInvalidatedProject: any;
     reportFileChangeDetected: boolean;
@@ -539,8 +539,7 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
         allWatchedExtendedConfigFiles: new Map(),
         allWatchedPackageJsonFiles: new Map(),
         filesWatched: new Map(),
-
-        lastCachedPackageJsonLookups: new Map(),
+        allWatchedPackageJsons: new Map(),
 
         timerToBuildInvalidatedProject: undefined,
         reportFileChangeDetected: false,
@@ -679,7 +678,7 @@ function createStateBuildOrder<T extends BuilderProgram>(state: SolutionBuilderS
     mutateMapSkippingNewValues(state.projectErrorsReported, currentProjects, noopOnDelete);
     mutateMapSkippingNewValues(state.buildInfoCache, currentProjects, noopOnDelete);
     mutateMapSkippingNewValues(state.outputTimeStamps, currentProjects, noopOnDelete);
-    mutateMapSkippingNewValues(state.lastCachedPackageJsonLookups, currentProjects, noopOnDelete);
+    mutateMapSkippingNewValues(state.allWatchedPackageJsons, currentProjects, noopOnDelete);
 
     // Remove watches for the program no longer in the solution
     if (state.watch) {
@@ -1055,17 +1054,6 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
             config.projectReferences,
         );
         if (state.watch) {
-            const internalMap = state.moduleResolutionCache?.getPackageJsonInfoCache().getInternalMap();
-            state.lastCachedPackageJsonLookups.set(
-                projectPath,
-                internalMap && new Set(arrayFrom(
-                    internalMap.values(),
-                    data =>
-                        state.host.realpath && (isPackageJsonInfo(data) || data.directoryExists) ?
-                            state.host.realpath(combinePaths(data.packageDirectory, "package.json")) :
-                            combinePaths(data.packageDirectory, "package.json"),
-                )),
-            );
             state.builderPrograms.set(projectPath, program);
         }
         step++;
@@ -1770,12 +1758,17 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
     if (extendedConfigStatus) return extendedConfigStatus;
 
     // Check package file time
-    const packageJsonLookups = state.lastCachedPackageJsonLookups.get(resolvedPath);
-    const dependentPackageFileStatus = packageJsonLookups && forEachKey(
-        packageJsonLookups,
-        path => checkConfigFileUpToDateStatus(state, path, oldestOutputFileTime, oldestOutputFileName),
+    const packageJsonStatus = forEach(
+        (buildInfo as IncrementalBuildInfo | NonIncrementalBuildInfo).packageJsons,
+        packageJson =>
+            checkConfigFileUpToDateStatus(
+                state,
+                getNormalizedAbsolutePath(packageJson, getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, host.getCurrentDirectory()))),
+                oldestOutputFileTime,
+                oldestOutputFileName,
+            ),
     );
-    if (dependentPackageFileStatus) return dependentPackageFileStatus;
+    if (packageJsonStatus) return packageJsonStatus;
 
     // Up to date
     return {
@@ -2199,10 +2192,18 @@ function watchInputFiles<T extends BuilderProgram>(state: SolutionBuilderState<T
 }
 
 function watchPackageJsonFiles<T extends BuilderProgram>(state: SolutionBuilderState<T>, resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine) {
-    if (!state.watch || !state.lastCachedPackageJsonLookups) return;
+    if (!state.watch) return;
+    const buildInfoPath = getTsBuildInfoEmitOutputFilePath(parsed.options)!;
+    const buildInfoCacheEntry = getBuildInfoCacheEntry(state, buildInfoPath, resolvedPath);
     mutateMap(
         getOrCreateValueMapFromConfigFileMap(state.allWatchedPackageJsonFiles, resolvedPath),
-        state.lastCachedPackageJsonLookups.get(resolvedPath),
+        new Set(
+            buildInfoCacheEntry?.buildInfo ?
+                (buildInfoCacheEntry.buildInfo as IncrementalBuildInfo | NonIncrementalBuildInfo).packageJsons?.map(
+                    f => getNormalizedAbsolutePath(f, getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, state.host.getCurrentDirectory()))),
+                ) :
+                undefined,
+        ),
         {
             createNewValue: input =>
                 watchFile(

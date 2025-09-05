@@ -136,15 +136,18 @@ b/src/index.ts
 
 
 //// [/home/src/workspaces/project/a/tsconfig.tsbuildinfo]
-{"root":["./src/index.ts"],"version":"FakeTSVersion"}
+{"root":["./src/index.ts"],"packageJsons":["../node_modules/@types/pg/package.json"],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/a/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "root": [
     "./src/index.ts"
   ],
+  "packageJsons": [
+    "../node_modules/@types/pg/package.json"
+  ],
   "version": "FakeTSVersion",
-  "size": 53
+  "size": 111
 }
 
 //// [/home/src/workspaces/project/b/src/index.js]
@@ -153,15 +156,19 @@ pg.foo();
 
 
 //// [/home/src/workspaces/project/b/tsconfig.tsbuildinfo]
-{"root":["./src/index.ts"],"version":"FakeTSVersion"}
+{"root":["./src/index.ts"],"packageJsons":["./package.json","../node_modules/@types/pg/package.json"],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/b/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "root": [
     "./src/index.ts"
   ],
+  "packageJsons": [
+    "./package.json",
+    "../node_modules/@types/pg/package.json"
+  ],
   "version": "FakeTSVersion",
-  "size": 53
+  "size": 128
 }
 
 
