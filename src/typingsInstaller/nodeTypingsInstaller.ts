@@ -13,6 +13,7 @@ import {
     normalizeSlashes,
     sys,
     toPath,
+    version,
 } from "../typescript/typescript.js";
 import * as ts from "../typescript/typescript.js";
 
