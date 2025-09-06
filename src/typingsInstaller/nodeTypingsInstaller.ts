@@ -414,7 +414,7 @@ class TypingsRegistry {
     }
 
     getPackageInfo(packageName: string): MapLike<string> | undefined {
-        return this.registry.get(packageName) || undefined;
+        return this.registry.get(packageName);
     }
 }
 
