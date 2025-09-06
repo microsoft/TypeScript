@@ -762,7 +762,7 @@ class NodeTypingsInstaller extends ts.server.typingsInstaller.TypingsInstaller {
 
     override installWorker(
         requestId: number,
-        packageNames: string[],
+        packageNames: readonly string[],
         cwd: string,
         onRequestCompleted: ts.server.typingsInstaller.RequestCompletedAction,
     ): void {
