@@ -197,9 +197,9 @@ class NpmClient {
 
     private sanitizePackageName(name: string): string {
         // Allow scoped packages (@scope/name) and regular packages
+        // See: https://docs.npmjs.com/cli/v10/configuring-npm/package-json#name
         const validPattern =
-            /^(?:@[\w\-*~][\w\-*.~]*\/)?[\w\-~][\w\-.~]*(?:@[\w\-~.]*)?$/;
-
+            /^(?:@([a-z0-9-]+)\/)?[a-z0-9][a-z0-9\-\.]{0,213}$/;
         if (!validPattern.test(name)) {
             throw new Error(`Invalid package name: ${name}`);
         }
