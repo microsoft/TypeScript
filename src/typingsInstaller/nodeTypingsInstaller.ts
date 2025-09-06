@@ -2,6 +2,7 @@ import { spawn } from "child_process";
 import * as fs from "fs/promises";
 import * as fsSync from "fs";
 import * as path from "path";
+import { setTimeout as nodeSetTimeout } from "timers";
 
 import {
     combinePaths,
@@ -690,8 +691,7 @@ class NodeTypingsInstaller extends ts.server.typingsInstaller.TypingsInstaller {
                 // Exponential backoff
                 const backoffDelay = delay * Math.pow(2, attempt - 1);
                 await new Promise<void>((resolve) => {
-                    // eslint-disable-next-line no-restricted-globals
-                    const timeoutId = setTimeout(() => {
+                    const timeoutId = nodeSetTimeout(() => {
                         resolve();
                     }, backoffDelay);
                     timeoutId.unref?.();
