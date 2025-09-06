@@ -152,7 +152,7 @@ class NpmClient {
         validate: boolean,
         host: ts.server.InstallTypingHost,
     ): string {
-        if (path.basename(processName).startsWith("node")) {
+        if (path.basename(processName).indexOf("node") === 0) {
             const npmPath = path.join(path.dirname(process.argv[0]), "npm");
             if (!validate || host.fileExists(npmPath)) {
                 return npmPath;
@@ -690,10 +690,10 @@ class NodeTypingsInstaller extends ts.server.typingsInstaller.TypingsInstaller {
                 // Exponential backoff
                 const backoffDelay = delay * Math.pow(2, attempt - 1);
                 await new Promise<void>((resolve) => {
-                    const timeoutId = global.setTimeout(() => {
+                    // eslint-disable-next-line no-restricted-globals
+                    const timeoutId = setTimeout(() => {
                         resolve();
                     }, backoffDelay);
-                    // Ensure we can cleanup if needed
                     timeoutId.unref?.();
                 });
 
