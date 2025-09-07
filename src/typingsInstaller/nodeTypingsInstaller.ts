@@ -693,7 +693,6 @@ class NodeTypingsInstaller extends ts.server.typingsInstaller.TypingsInstaller {
                     const timeoutId = nodeSetTimeout(() => {
                         resolve();
                     }, backoffDelay);
-                    timeoutId.unref();
                 });
 
                 if (this.log.isEnabled()) {
