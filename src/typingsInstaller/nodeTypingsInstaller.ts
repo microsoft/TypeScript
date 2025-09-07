@@ -3,7 +3,7 @@ import * as fs from "fs/promises";
 import * as fsSync from "fs";
 import * as path from "path";
 import { setTimeout as nodeSetTimeout } from "timers";
-import * as validate from "validate-npm-package-name";
+import validate from "validate-npm-package-name";
 import {
     combinePaths,
     createGetCanonicalFileName,
@@ -499,7 +499,7 @@ class NodeTypingsInstaller extends ts.server.typingsInstaller.TypingsInstaller {
     private readonly metrics: InstallationMetrics;
     private delayedInitializationError:
         | ts.server.InitializationFailedResponse
-        | undefined = undefined;
+        | undefined;
 
     // Implement the abstract typesRegistry property from base class
     readonly typesRegistry: Map<string, MapLike<string>> = new Map();
@@ -792,7 +792,7 @@ class NodeTypingsInstaller extends ts.server.typingsInstaller.TypingsInstaller {
 
     private async installWorkerAsync(
         requestId: number,
-        packageNames: string[],
+        packageNames: readonly string[],
         cwd: string,
         onRequestCompleted: ts.server.typingsInstaller.RequestCompletedAction,
     ): Promise<void> {
