@@ -499,7 +499,7 @@ class NodeTypingsInstaller extends ts.server.typingsInstaller.TypingsInstaller {
     private readonly metrics: InstallationMetrics;
     private delayedInitializationError:
         | ts.server.InitializationFailedResponse
-        | undefined = undefined;
+        | undefined;
 
     // Implement the abstract typesRegistry property from base class
     readonly typesRegistry: Map<string, MapLike<string>> = new Map();
