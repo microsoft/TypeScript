@@ -944,7 +944,6 @@ function createInstaller(
     );
 }
 
-// Initialize from command line arguments
 const logFilePath = ts.server.findArgument(ts.server.Arguments.LogFile);
 const globalCache = ts.server.findArgument(
     ts.server.Arguments.GlobalCacheLocation,
@@ -962,14 +961,31 @@ const validateNpm = ts.server.hasArgument(
 
 const log = new StructuredFileLog(logFilePath);
 
+let installer: NodeTypingsInstaller | undefined;
+
+function shutdown(exitCode: number, reason: string, logData?: any): void {
+    if (installer) {
+        installer.cleanup();
+    }
+
+    if (log.isEnabled()) {
+        log.logStructured(exitCode === 0 ? "INFO" : "FATAL", "shutdown", {
+            reason,
+            exitCode,
+            ...logData,
+        });
+    }
+
+    process.exit(exitCode);
+}
+
 // Handle uncaught exceptions
 if (log.isEnabled()) {
     process.on("uncaughtException", (error: Error) => {
-        log.logStructured("FATAL", "uncaught_exception", {
+        shutdown(1, "uncaught_exception", {
             error: error.message,
             stack: error.stack,
         });
-        process.exit(1);
     });
 
     process.on("unhandledRejection", (reason: unknown) => {
@@ -977,36 +993,32 @@ if (log.isEnabled()) {
             reason instanceof Error ? reason.message : String(reason);
         const errorStack = reason instanceof Error ? reason.stack : undefined;
 
-        log.logStructured("FATAL", "unhandled_rejection", {
+        shutdown(1, "unhandled_rejection", {
             error: errorMessage,
             stack: errorStack,
         });
-        process.exit(1);
     });
 }
 
 // Handle parent process disconnect
 process.on("disconnect", () => {
-    if (log.isEnabled()) {
-        log.logStructured("INFO", "parent_disconnect", {
-            message: "Parent process disconnected, shutting down",
-        });
-    }
-    process.exit(0);
+    shutdown(0, "parent_disconnect", {
+        message: "Parent process disconnected, shutting down",
+    });
 });
 
 // Handle process termination signals
 process.on("SIGTERM", () => {
-    if (log.isEnabled()) {
-        log.logStructured("INFO", "sigterm_received", {
-            message: "SIGTERM received, shutting down gracefully",
-        });
-    }
-    process.exit(0);
+    shutdown(0, "sigterm_received", {
+        message: "SIGTERM received, shutting down gracefully",
+    });
 });
 
-// Main message handler
-let installer: NodeTypingsInstaller | undefined;
+process.on("SIGINT", () => {
+    shutdown(0, "sigint_received", {
+        message: "SIGINT received, shutting down gracefully",
+    });
+});
 
 process.on("message", (req: ts.server.TypingInstallerRequestUnion) => {
     try {
