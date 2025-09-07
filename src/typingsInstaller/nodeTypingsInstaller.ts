@@ -3,7 +3,7 @@ import * as fs from "fs/promises";
 import * as fsSync from "fs";
 import * as path from "path";
 import { setTimeout as nodeSetTimeout } from "timers";
-
+import validate = require("validate-npm-package-name");
 import {
     combinePaths,
     createGetCanonicalFileName,
@@ -198,10 +198,9 @@ class NpmClient {
     }
 
     private sanitizePackageName(name: string): string {
-        // Allow scoped packages (@scope/name) and regular packages
-        // See: https://docs.npmjs.com/cli/v10/configuring-npm/package-json#name
-        const validPattern = /^(?:@([a-z0-9-]+)\/)?[a-z0-9][a-z0-9.-]{0,213}$/;
-        if (!validPattern.test(name)) {
+        const result = validate(name);
+
+        if (!result.validForNewPackages && !result.validForOldPackages) {
             throw new Error(`Invalid package name: ${name}`);
         }
 
@@ -815,14 +814,14 @@ class NodeTypingsInstaller extends ts.server.typingsInstaller.TypingsInstaller {
 
         try {
             // Filter packages that are already successfully installed
-            const packagesToInstall = packageNames.filter((pkg) => {
-                const isCached =
-                    this.installationCache.isRecentlyInstalled(pkg);
-                if (isCached) {
+            const packagesToInstall: string[] = [];
+            for (const pkg of packageNames) {
+                if (this.installationCache.isRecentlyInstalled(pkg)) {
                     this.metrics.cacheHits++;
+                } else {
+                    packagesToInstall.push(pkg);
                 }
-                return !isCached;
-            });
+            }
 
             if (packagesToInstall.length === 0) {
                 if (this.log.isEnabled()) {
