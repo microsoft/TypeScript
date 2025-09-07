@@ -1,6 +1,6 @@
 import { spawn } from "child_process";
-import * as fs from "fs/promises";
 import * as fsSync from "fs";
+import * as fs from "fs/promises";
 import * as path from "path";
 import { setTimeout as nodeSetTimeout } from "timers";
 import validate from "validate-npm-package-name";
@@ -79,7 +79,8 @@ class StructuredFileLog implements ts.server.typingsInstaller.Log {
             const timestamp = ts.server.nowString();
             const logEntry = `[${timestamp}] ${text}${sys.newLine}`;
             fsSync.appendFileSync(this.logFile, logEntry);
-        } catch (error) {
+        }
+        catch (error) {
             // Disable logging on error to prevent infinite loops
             this.logFile = undefined;
             console.error("Failed to write to log file:", error);
@@ -107,10 +108,9 @@ class StructuredFileLog implements ts.server.typingsInstaller.Log {
     logMetrics(metrics: InstallationMetrics): void {
         this.logStructured("INFO", "metrics", {
             ...metrics,
-            averageInstallTime:
-                metrics.installationsAttempted > 0
-                    ? metrics.totalInstallTime / metrics.installationsAttempted
-                    : 0,
+            averageInstallTime: metrics.installationsAttempted > 0
+                ? metrics.totalInstallTime / metrics.installationsAttempted
+                : 0,
         });
     }
 }
@@ -137,13 +137,11 @@ class NpmClient {
         config: InstallerConfig,
         log: StructuredFileLog,
     ): NpmClient {
-        const npmPath =
-            npmLocation ||
+        const npmPath = npmLocation ||
             NpmClient.getDefaultNPMLocation(processName, validateDefault, host);
-        const quotedPath =
-            npmPath.includes(" ") && !npmPath.startsWith('"')
-                ? `"${npmPath}"`
-                : npmPath;
+        const quotedPath = npmPath.includes(" ") && !npmPath.startsWith('"')
+            ? `"${npmPath}"`
+            : npmPath;
 
         return new NpmClient(quotedPath, config, log);
     }
@@ -163,9 +161,7 @@ class NpmClient {
     }
 
     async install(packages: readonly string[], cwd: string): Promise<boolean> {
-        const sanitizedPackages = packages.map((pkg) =>
-            this.sanitizePackageName(pkg),
-        );
+        const sanitizedPackages = packages.map(pkg => this.sanitizePackageName(pkg));
         const command = [
             this.npmPath,
             "install",
@@ -208,7 +204,7 @@ class NpmClient {
 
     private async executeCommand(
         command: readonly string[],
-        options: { cwd: string },
+        options: { cwd: string; },
     ): Promise<CommandResult> {
         const startTime = Date.now();
         const commandString = command.join(" ");
@@ -218,7 +214,7 @@ class NpmClient {
             cwd: options.cwd,
         });
 
-        return new Promise<CommandResult>((resolve) => {
+        return new Promise<CommandResult>(resolve => {
             const child = spawn(command[0], command.slice(1), {
                 cwd: options.cwd,
                 stdio: ["ignore", "pipe", "pipe"],
@@ -325,9 +321,9 @@ class TypingsRegistry {
             });
 
             return this.registry;
-        } catch (error) {
-            const errorMessage =
-                error instanceof Error ? error.message : "Unknown error";
+        }
+        catch (error) {
+            const errorMessage = error instanceof Error ? error.message : "Unknown error";
 
             this.log.logStructured("ERROR", "registry_load_failed", {
                 filePath,
@@ -369,15 +365,15 @@ class TypingsRegistry {
             }
 
             return new Map(Object.entries(parsed.entries));
-        } catch (error) {
+        }
+        catch (error) {
             if (error instanceof RegistryError) {
                 throw error;
             }
 
-            const message =
-                error instanceof Error
-                    ? error.message
-                    : "Unknown parsing error";
+            const message = error instanceof Error
+                ? error.message
+                : "Unknown parsing error";
             throw new RegistryError(
                 `Failed to parse registry file: ${message}`,
                 filePath,
@@ -431,8 +427,7 @@ class InstallationCache {
             return false;
         }
 
-        const isExpired =
-            Date.now() - entry.timestamp > this.config.cacheTimeoutMs;
+        const isExpired = Date.now() - entry.timestamp > this.config.cacheTimeoutMs;
 
         if (isExpired) {
             this.cache.delete(packageName);
@@ -476,7 +471,7 @@ class InstallationCache {
         }
     }
 
-    getCacheStats(): { size: number; maxSize: number } {
+    getCacheStats(): { size: number; maxSize: number; } {
         return {
             size: this.cache.size,
             maxSize: this.config.maxCacheSize,
@@ -575,11 +570,10 @@ class NodeTypingsInstaller extends ts.server.typingsInstaller.TypingsInstaller {
         }
 
         // Initialize asynchronously
-        this.initializeAsync(globalTypingsCache, log).catch((error) => {
-            const errorMessage =
-                error instanceof Error
-                    ? error.message
-                    : "Unknown initialization error";
+        this.initializeAsync(globalTypingsCache, log).catch(error => {
+            const errorMessage = error instanceof Error
+                ? error.message
+                : "Unknown initialization error";
             const errorStack = error instanceof Error ? error.stack : undefined;
 
             log.logStructured("ERROR", "initialization_failed", {
@@ -603,8 +597,7 @@ class NodeTypingsInstaller extends ts.server.typingsInstaller.TypingsInstaller {
                 1,
                 Math.min(20, partial.throttleLimit ?? 5),
             ),
-            registryPackageName:
-                partial.registryPackageName ?? "types-registry",
+            registryPackageName: partial.registryPackageName ?? "types-registry",
             cacheTimeoutMs: Math.max(
                 60000,
                 partial.cacheTimeoutMs ?? 24 * 60 * 60 * 1000,
@@ -642,8 +635,7 @@ class NodeTypingsInstaller extends ts.server.typingsInstaller.TypingsInstaller {
         this.metrics.registryUpdates++;
 
         // Load registry
-        const registryPath =
-            this.getTypesRegistryFileLocation(globalTypingsCache);
+        const registryPath = this.getTypesRegistryFileLocation(globalTypingsCache);
         const loadedRegistry = await this.typingsRegistryManager.load(
             registryPath,
             this.installTypingHost,
@@ -663,7 +655,8 @@ class NodeTypingsInstaller extends ts.server.typingsInstaller.TypingsInstaller {
     private async createDirectoryIfNotExists(dirPath: string): Promise<void> {
         try {
             await fs.access(dirPath);
-        } catch {
+        }
+        catch {
             await fs.mkdir(dirPath, { recursive: true });
         }
     }
@@ -678,9 +671,9 @@ class NodeTypingsInstaller extends ts.server.typingsInstaller.TypingsInstaller {
         for (let attempt = 1; attempt <= maxRetries; attempt++) {
             try {
                 return await operation();
-            } catch (error) {
-                lastError =
-                    error instanceof Error ? error : new Error("Unknown error");
+            }
+            catch (error) {
+                lastError = error instanceof Error ? error : new Error("Unknown error");
 
                 if (attempt === maxRetries) {
                     break;
@@ -688,7 +681,7 @@ class NodeTypingsInstaller extends ts.server.typingsInstaller.TypingsInstaller {
 
                 // Exponential backoff
                 const backoffDelay = delay * Math.pow(2, attempt - 1);
-                await new Promise<void>((resolve) => {
+                await new Promise<void>(resolve => {
                     const timeoutId = nodeSetTimeout(() => {
                         resolve();
                     }, backoffDelay);
@@ -768,11 +761,10 @@ class NodeTypingsInstaller extends ts.server.typingsInstaller.TypingsInstaller {
             packageNames,
             cwd,
             onRequestCompleted,
-        ).catch((error) => {
-            const errorMessage =
-                error instanceof Error
-                    ? error.message
-                    : "Unknown installation error";
+        ).catch(error => {
+            const errorMessage = error instanceof Error
+                ? error.message
+                : "Unknown installation error";
 
             if (this.log.isEnabled()) {
                 (this.log as StructuredFileLog).logStructured(
@@ -817,7 +809,8 @@ class NodeTypingsInstaller extends ts.server.typingsInstaller.TypingsInstaller {
             for (const pkg of packageNames) {
                 if (this.installationCache.isRecentlyInstalled(pkg)) {
                     this.metrics.cacheHits++;
-                } else {
+                }
+                else {
                     packagesToInstall.push(pkg);
                 }
             }
@@ -870,10 +863,10 @@ class NodeTypingsInstaller extends ts.server.typingsInstaller.TypingsInstaller {
             }
 
             onRequestCompleted(/*success*/ success);
-        } catch (error) {
+        }
+        catch (error) {
             const duration = Date.now() - startTime;
-            const errorMessage =
-                error instanceof Error ? error.message : "Unknown error";
+            const errorMessage = error instanceof Error ? error.message : "Unknown error";
 
             // Record failure in cache
             for (const pkg of packageNames) {
@@ -988,8 +981,7 @@ if (log.isEnabled()) {
     });
 
     process.on("unhandledRejection", (reason: unknown) => {
-        const errorMessage =
-            reason instanceof Error ? reason.message : String(reason);
+        const errorMessage = reason instanceof Error ? reason.message : String(reason);
         const errorStack = reason instanceof Error ? reason.stack : undefined;
 
         shutdown(1, "unhandled_rejection", {
@@ -1037,11 +1029,11 @@ process.on("message", (req: ts.server.TypingInstallerRequestUnion) => {
         }
 
         installer.handleRequest(req);
-    } catch (error) {
-        const errorMessage =
-            error instanceof Error
-                ? error.message
-                : "Unknown message handling error";
+    }
+    catch (error) {
+        const errorMessage = error instanceof Error
+            ? error.message
+            : "Unknown message handling error";
 
         if (log.isEnabled()) {
             log.logStructured("ERROR", "message_handler_error", {
