@@ -13,7 +13,6 @@ import {
     normalizeSlashes,
     sys,
     toPath,
-    version,
 } from "../typescript/typescript.js";
 import * as ts from "../typescript/typescript.js";
 
@@ -693,6 +692,7 @@ class NodeTypingsInstaller extends ts.server.typingsInstaller.TypingsInstaller {
                     const timeoutId = nodeSetTimeout(() => {
                         resolve();
                     }, backoffDelay);
+                    timeoutId.unref();
                 });
 
                 if (this.log.isEnabled()) {
