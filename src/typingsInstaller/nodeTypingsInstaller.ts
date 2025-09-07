@@ -3,7 +3,7 @@ import * as fs from "fs/promises";
 import * as fsSync from "fs";
 import * as path from "path";
 import { setTimeout as nodeSetTimeout } from "timers";
-import validate = require("validate-npm-package-name");
+import * as validate from "validate-npm-package-name";
 import {
     combinePaths,
     createGetCanonicalFileName,
