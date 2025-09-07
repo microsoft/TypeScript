@@ -793,7 +793,7 @@ class NodeTypingsInstaller extends ts.server.typingsInstaller.TypingsInstaller {
 
     private async installWorkerAsync(
         requestId: number,
-        packageNames: string[],
+        packageNames: readonly string[],
         cwd: string,
         onRequestCompleted: ts.server.typingsInstaller.RequestCompletedAction,
     ): Promise<void> {
