@@ -2611,8 +2611,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return addDeprecatedSuggestionWorker(declarations, diagnostic);
     }
 
-    function addDeprecatedSuggestionWithSignature(location: Node, declaration: Node, deprecatedEntity: string) {
-        const diagnostic = createDiagnosticForNode(location, Diagnostics._0_is_deprecated, deprecatedEntity);
+    function addDeprecatedSuggestionWithSignature(location: Node, declaration: Node, deprecatedEntity: string | undefined, signatureString: string, invoked?: Expression) {
+        let nameFromInvoked = "<unknown>";
+        if (invoked && invoked.kind === SyntaxKind.PropertyAccessExpression) {
+            const propAccess = invoked as PropertyAccessExpression;
+            nameFromInvoked = (propAccess.name as any).getText() + "()";
+        }
+        const diagnostic = deprecatedEntity
+            ? createDiagnosticForNode(location, Diagnostics.The_signature_0_of_1_is_deprecated, signatureString, deprecatedEntity)
+            : createDiagnosticForNode(location, Diagnostics._0_is_deprecated, nameFromInvoked);
         return addDeprecatedSuggestionWorker(declaration, diagnostic);
     }
 
@@ -37781,15 +37788,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (signature.declaration && signature.declaration.flags & NodeFlags.Deprecated) {
             const suggestionNode = getDeprecatedSuggestionNode(node);
             const invoked = getInvokedExpression(node);
-            let name = tryGetPropertyAccessOrIdentifierToString(invoked);
-
-            if (!name && invoked.kind === SyntaxKind.PropertyAccessExpression) {
-                const propAccess = invoked as PropertyAccessExpression;
-                name = (propAccess.name as any).getText() + "()";
-            }
-            name = name ?? "<unknown>";
-
-            addDeprecatedSuggestionWithSignature(suggestionNode, signature.declaration, name);
+            const invokedExpr = invoked &&
+                    invoked.kind !== SyntaxKind.JsxElement &&
+                    invoked.kind !== SyntaxKind.JsxSelfClosingElement
+                ? (invoked as Expression)
+                : undefined;
+            const name = tryGetPropertyAccessOrIdentifierToString(invoked);
+            addDeprecatedSuggestionWithSignature(suggestionNode, signature.declaration, name, signatureToString(signature), invokedExpr);
         }
     }
 
