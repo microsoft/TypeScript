@@ -1,5 +1,5 @@
 // @filename: uniqueSymbolReassignment.ts
-
+// @declaration: true
 // This is a unique symbol (const + Symbol())
 const mySymbol = Symbol('Symbols.mySymbol');
 const Symbols = {

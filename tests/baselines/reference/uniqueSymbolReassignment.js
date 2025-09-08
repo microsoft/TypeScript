@@ -63,3 +63,16 @@ myFunction.nonUnique1 = nonUniqueSymbol1;
 myFunction.nonUnique2 = nonUniqueSymbol2;
 myFunction.normalVar = normalVar;
 myFunction.symbolName = symbolName;
+
+
+//// [uniqueSymbolReassignment.d.ts]
+declare function myFunction(): void;
+declare namespace myFunction {
+    var mySymbol: any;
+    var anotherUnique: any;
+    var nonUnique1: any;
+    var nonUnique2: any;
+    var normalVar: string;
+    var symbolName: string;
+}
+export { myFunction };

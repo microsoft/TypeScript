@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/uniqueSymbolReassignment.d.ts] ////
+
+=== uniqueSymbolReassignment.d.ts ===
+declare function myFunction(): void;
+>myFunction : typeof myFunction
+>           : ^^^^^^^^^^^^^^^^^
+
+declare namespace myFunction {
+>myFunction : typeof myFunction
+>           : ^^^^^^^^^^^^^^^^^
+
+    const mySymbol: unique symbol;
+>mySymbol : unique symbol
+>         : ^^^^^^^^^^^^^
+
+    const anotherUnique: unique symbol;
+>anotherUnique : unique symbol
+>              : ^^^^^^^^^^^^^
+
+    var nonUnique1: typeof nonUniqueSymbol1;
+>nonUnique1 : unique symbol
+>           : ^^^^^^^^^^^^^
+>nonUniqueSymbol1 : unique symbol
+>                 : ^^^^^^^^^^^^^
+
+    var nonUnique2: typeof nonUniqueSymbol2;
+>nonUnique2 : unique symbol
+>           : ^^^^^^^^^^^^^
+>nonUniqueSymbol2 : unique symbol
+>                 : ^^^^^^^^^^^^^
+
+    var normalVar: string;
+>normalVar : string
+>          : ^^^^^^
+
+    var symbolName: string;
+>symbolName : string
+>           : ^^^^^^
+}
+declare const nonUniqueSymbol1: unique symbol;
+>nonUniqueSymbol1 : unique symbol
+>                 : ^^^^^^^^^^^^^
+
+declare const nonUniqueSymbol2: unique symbol;
+>nonUniqueSymbol2 : unique symbol
+>                 : ^^^^^^^^^^^^^
+
+export { myFunction };
+>myFunction : typeof myFunction
+>           : ^^^^^^^^^^^^^^^^^
+
