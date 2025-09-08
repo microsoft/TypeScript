@@ -8989,7 +8989,7 @@ const _computedOptions = createComputedCompilerOptions({
                     (compilerOptions.module === ModuleKind.Node18 && ScriptTarget.ES2022) ||
                     (compilerOptions.module === ModuleKind.Node20 && ScriptTarget.ES2023) ||
                     (compilerOptions.module === ModuleKind.NodeNext && ScriptTarget.ESNext) ||
-                    ScriptTarget.ES5);
+                    ScriptTarget.ESNext);
         },
     },
     module: {

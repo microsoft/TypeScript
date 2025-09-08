@@ -1,0 +1,17 @@
+user.ts(4,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+
+
+==== user.ts (1 errors) ====
+    ///<reference path="declarations.d.ts"/>
+    import foo, {bar} from "jquery";
+    import * as baz from "fs";
+    import boom = require("jquery");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+    foo(bar, baz, boom);
+    
+==== declarations.d.ts (0 errors) ====
+    declare module "jquery"
+    // Semicolon is optional
+    declare module "fs";
+    

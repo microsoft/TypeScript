@@ -61,19 +61,16 @@ var t2 = function f() {
     var x = this;
     var x;
 };
-var C = /** @class */ (function () {
-    function C() {
-        this.x = function () {
-            var q;
-            var q = this;
-        };
-        this.y = function ff() {
-            var q;
-            var q = this;
-        };
-    }
-    return C;
-}());
+class C {
+    x = function () {
+        var q;
+        var q = this;
+    };
+    y = function ff() {
+        var q;
+        var q = this;
+    };
+}
 var M;
 (function (M) {
     function fn() {

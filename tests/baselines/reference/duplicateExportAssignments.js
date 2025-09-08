@@ -42,44 +42,34 @@ export = z;
 
 
 //// [foo1.js]
-"use strict";
 var x = 10;
 var y = 20;
-module.exports = x;
+export {};
 //// [foo2.js]
-"use strict";
 var x = 10;
-var y = /** @class */ (function () {
-    function y() {
-    }
-    return y;
-}());
+class y {
+}
 ;
-module.exports = x;
+export {};
 //// [foo3.js]
-"use strict";
 var x;
 (function (x_1) {
     x_1.x = 10;
 })(x || (x = {}));
-var y = /** @class */ (function () {
-    function y() {
-    }
-    return y;
-}());
-module.exports = x;
+class y {
+    y;
+}
+export {};
 //// [foo4.js]
-"use strict";
 function x() {
     return 42;
 }
 function y() {
     return 42;
 }
-module.exports = x;
+export {};
 //// [foo5.js]
-"use strict";
 var x = 5;
 var y = "test";
 var z = {};
-module.exports = x;
+export {};

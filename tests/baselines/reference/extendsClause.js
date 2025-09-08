@@ -22,47 +22,13 @@ class V extends types.C {} // Error
 
 
 //// [types.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.C = void 0;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-exports.C = C;
+export class C {
+}
 //// [ns.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [index.js]
-"use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var U = /** @class */ (function (_super) {
-    __extends(U, _super);
-    function U() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return U;
-}(C)); // Error
-var V = /** @class */ (function (_super) {
-    __extends(V, _super);
-    function V() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return V;
-}(types.C)); // Error
+class U extends C {
+} // Error
+class V extends types.C {
+} // Error
+export {};

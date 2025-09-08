@@ -20,7 +20,7 @@ enum E5 {
 
     C = new Number(30)
 >C : Symbol(E5.C, Decl(enumErrors.ts, 7, 9))
->Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.number.d.ts, --, --))
 }
 
 enum E9 {
@@ -61,7 +61,7 @@ enum E11 {
 
     B = new Date(),
 >B : Symbol(E11.B, Decl(enumErrors.ts, 25, 13))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
 
     C = window,
 >C : Symbol(E11.C, Decl(enumErrors.ts, 26, 19))
@@ -83,7 +83,7 @@ enum E12 {
 
     B = new Date(),
 >B : Symbol(E12.B, Decl(enumErrors.ts, 34, 11))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
 
     C = window,
 >C : Symbol(E12.C, Decl(enumErrors.ts, 35, 19))

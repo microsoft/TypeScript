@@ -106,7 +106,7 @@ function foo2(x) {
 function foo3(x) {
     return typeof x === "string"
         ? x
-        : (function () {
+        : (() => {
             var b = x; // new scope - number | boolean
             return typeof x === "boolean"
                 ? x.toString() // boolean
@@ -116,7 +116,7 @@ function foo3(x) {
 function foo4(x) {
     return typeof x === "string"
         ? x
-        : (function (a) {
+        : ((a) => {
             var b = x; // new scope - number | boolean
             return typeof x === "boolean"
                 ? x.toString() // boolean
@@ -135,7 +135,7 @@ function foo5(x) {
 var m;
 (function (m) {
     var x;
-    var m2;
+    let m2;
     (function (m2) {
         var b = x; // new scope - number | boolean | string
         var y;
@@ -152,9 +152,9 @@ var m;
 var m1;
 (function (m1) {
     var x;
-    var m2;
+    let m2;
     (function (m2) {
-        var m3;
+        let m3;
         (function (m3) {
             var b = x; // new scope - number | boolean | string
             var y;

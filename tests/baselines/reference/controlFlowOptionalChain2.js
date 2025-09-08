@@ -109,23 +109,23 @@ function f8(x: X | N | null) {
 
 //// [controlFlowOptionalChain2.js]
 function funcTwo(arg) {
-    if ((arg === null || arg === void 0 ? void 0 : arg.type) === 'B') {
+    if (arg?.type === 'B') {
         arg; // `B`
         return;
     }
     arg;
-    arg === null || arg === void 0 ? void 0 : arg.name;
+    arg?.name;
 }
 function funcThree(arg) {
-    if ((arg === null || arg === void 0 ? void 0 : arg.type) === 'B') {
+    if (arg?.type === 'B') {
         arg; // `B`
         return;
     }
     arg;
-    arg === null || arg === void 0 ? void 0 : arg.name;
+    arg?.name;
 }
 function f1(x) {
-    if ((x === null || x === void 0 ? void 0 : x.kind) === undefined) {
+    if (x?.kind === undefined) {
         x; // U | undefined
     }
     else {
@@ -133,7 +133,7 @@ function f1(x) {
     }
 }
 function f2(x) {
-    if ((x === null || x === void 0 ? void 0 : x.kind) === undefined) {
+    if (x?.kind === undefined) {
         x; // undefined
     }
     else {
@@ -141,7 +141,7 @@ function f2(x) {
     }
 }
 function f3(x) {
-    if ((x === null || x === void 0 ? void 0 : x.kind) === undefined) {
+    if (x?.kind === undefined) {
         x; // U | null
     }
     else {
@@ -149,7 +149,7 @@ function f3(x) {
     }
 }
 function f4(x) {
-    if ((x === null || x === void 0 ? void 0 : x.kind) === undefined) {
+    if (x?.kind === undefined) {
         x; // null
     }
     else {
@@ -157,7 +157,7 @@ function f4(x) {
     }
 }
 function f5(x) {
-    if ((x === null || x === void 0 ? void 0 : x.kind) === null) {
+    if (x?.kind === null) {
         x; // never
     }
     else {
@@ -165,7 +165,7 @@ function f5(x) {
     }
 }
 function f6(x) {
-    if ((x === null || x === void 0 ? void 0 : x.kind) === null) {
+    if (x?.kind === null) {
         x; // N
     }
     else {
@@ -173,7 +173,7 @@ function f6(x) {
     }
 }
 function f7(x) {
-    if ((x === null || x === void 0 ? void 0 : x.kind) === null) {
+    if (x?.kind === null) {
         x; // never
     }
     else {
@@ -181,7 +181,7 @@ function f7(x) {
     }
 }
 function f8(x) {
-    if ((x === null || x === void 0 ? void 0 : x.kind) === null) {
+    if (x?.kind === null) {
         x; // N
     }
     else {

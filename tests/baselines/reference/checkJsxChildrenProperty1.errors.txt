@@ -1,0 +1,28 @@
+file.tsx(1,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+
+
+==== file.tsx (1 errors) ====
+    import React = require('react');
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+    
+    interface Prop {
+        a: number,
+        b: string,
+        children: string | JSX.Element
+    }
+    
+    function Comp(p: Prop) {
+        return <div>{p.b}</div>;
+    }
+    
+    // OK
+    let k = <Comp a={10} b="hi" children ="lol" />;
+    let k1 =
+        <Comp a={10} b="hi">
+            hi hi hi!
+        </Comp>;
+    let k2 =
+        <Comp a={10} b="hi">
+            <div>hi hi hi!</div>
+        </Comp>;

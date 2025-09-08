@@ -38,7 +38,7 @@ export function overloaded(a,b) {
 >b : Symbol(b, Decl(overloadTag1.js, 15, 29))
   }
   throw new Error("Invalid arguments");
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 }
 var o1 = overloaded(1,2)
 >o1 : Symbol(o1, Decl(overloadTag1.js, 23, 3))

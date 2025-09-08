@@ -43,7 +43,7 @@ module M {
 // two interfaces with different root modules should not merge
 var M;
 (function (M) {
-    var M2;
+    let M2;
     (function (M2) {
         var a;
         var r1 = a.foo; // error

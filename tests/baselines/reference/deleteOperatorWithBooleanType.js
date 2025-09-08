@@ -44,12 +44,10 @@ delete M.n;
 // delete  operator on boolean type
 var BOOLEAN;
 function foo() { return true; }
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.foo = function () { return false; };
-    return A;
-}());
+class A {
+    a;
+    static foo() { return false; }
+}
 var M;
 (function (M) {
 })(M || (M = {}));

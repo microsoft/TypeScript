@@ -29,31 +29,32 @@ class F<T> {
 
 //// [initializerReferencingConstructorParameters.js]
 // Initializer expressions for instance member variables are evaluated in the scope of the class constructor body but are not permitted to reference parameters or local variables of the constructor. 
-var C = /** @class */ (function () {
-    function C(x) {
-        this.a = x; // error
-    }
-    return C;
-}());
-var D = /** @class */ (function () {
-    function D(x) {
+class C {
+    a = x; // error
+    b; // error
+    constructor(x) { }
+}
+class D {
+    x;
+    a = x; // error
+    b; // error
+    constructor(x) {
         this.x = x;
-        this.a = x; // error
     }
-    return D;
-}());
-var E = /** @class */ (function () {
-    function E(x) {
+}
+class E {
+    x;
+    a = this.x; // ok
+    b; // ok
+    constructor(x) {
         this.x = x;
-        this.a = this.x; // ok
     }
-    return E;
-}());
-var F = /** @class */ (function () {
-    function F(x) {
+}
+class F {
+    x;
+    a = this.x; // ok
+    b = x; // error
+    constructor(x) {
         this.x = x;
-        this.a = this.x; // ok
-        this.b = x; // error
     }
-    return F;
-}());
+}

@@ -1,11 +1,11 @@
-/a.ts(1,24): error TS2307: Cannot find module './z' or its corresponding type declarations.
+/a.ts(1,24): error TS2792: Cannot find module './z'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 /b.ts(3,3): error TS2353: Object literal may only specify known properties, and 'A' does not exist in type 'typeof import("/a")'.
 
 
 ==== /a.ts (1 errors) ====
     import type { A } from './z'; // unresolved
                            ~~~~~
-!!! error TS2307: Cannot find module './z' or its corresponding type declarations.
+!!! error TS2792: Cannot find module './z'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     type A = 0;
     export { A };
     export class B {};

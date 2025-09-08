@@ -20,20 +20,18 @@ else {
 
 
 //// [typeGuardInClass.js]
-var x;
+let x;
 if (typeof x === "string") {
-    var n = /** @class */ (function () {
-        function class_1() {
-            var y = x;
+    let n = class {
+        constructor() {
+            let y = x;
         }
-        return class_1;
-    }());
+    };
 }
 else {
-    var m = /** @class */ (function () {
-        function class_2() {
-            var y = x;
+    let m = class {
+        constructor() {
+            let y = x;
         }
-        return class_2;
-    }());
+    };
 }

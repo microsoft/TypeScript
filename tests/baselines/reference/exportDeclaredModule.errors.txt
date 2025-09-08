@@ -1,0 +1,18 @@
+foo1.ts(5,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+foo2.ts(1,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+
+
+==== foo2.ts (1 errors) ====
+    import foo1 = require('./foo1');
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+    var x: number = foo1.b();
+==== foo1.ts (1 errors) ====
+    declare module M1 {
+    	export var a: string; 
+    	export function b(): number;
+    }
+    export = M1;
+    ~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+    

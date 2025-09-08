@@ -22,23 +22,19 @@ class C {
 //// [privateNameBadDeclaration.js]
 function A() { }
 A.prototype = {
-    : 1, // Error
-    : function () { }, // Error
-    get () { return ""; } // Error
+    #x: 1, // Error
+    #m() { }, // Error
+    get #p() { return ""; } // Error
 };
-var B = /** @class */ (function () {
-    function B() {
-    }
-    return B;
-}());
+class B {
+}
 B.prototype = {
-    : 2, // Error
-    : function () { }, // Error
-    get () { return ""; } // Error
+    #y: 2, // Error
+    #m() { }, // Error
+    get #p() { return ""; } // Error
 };
-var C = /** @class */ (function () {
-    function C() {
-        this. = 3;
+class C {
+    constructor() {
+        this.#z = 3;
     }
-    return C;
-}());
+}

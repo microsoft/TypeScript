@@ -1,8 +1,10 @@
+validator.ts(3,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
 validator.ts(17,4): error TS2540: Cannot assign to 'readonlyProp' because it is a read-only property.
 validator.ts(18,4): error TS2540: Cannot assign to 'readonlyAccessor' because it is a read-only property.
 validator.ts(19,1): error TS2322: Type 'string' is not assignable to type 'number'.
 validator.ts(20,1): error TS2322: Type 'string' is not assignable to type 'number'.
 validator.ts(21,1): error TS2322: Type 'number' is not assignable to type 'string'.
+validator.ts(23,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
 validator.ts(37,4): error TS2540: Cannot assign to 'readonlyProp' because it is a read-only property.
 validator.ts(38,4): error TS2540: Cannot assign to 'readonlyAccessor' because it is a read-only property.
 validator.ts(39,1): error TS2322: Type 'number' is not assignable to type 'string'.
@@ -10,10 +12,12 @@ validator.ts(40,1): error TS2322: Type 'string' is not assignable to type 'numbe
 validator.ts(41,1): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== validator.ts (10 errors) ====
+==== validator.ts (12 errors) ====
     import "./";
     
     import m1 = require("./mod1");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
     
     m1.thing;
     m1.readonlyProp;
@@ -44,6 +48,8 @@ validator.ts(41,1): error TS2322: Type 'number' is not assignable to type 'strin
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
     
     import m2 = require("./mod2");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
     
     m2.thing;
     m2.readonlyProp;

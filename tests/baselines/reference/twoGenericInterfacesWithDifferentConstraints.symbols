@@ -4,7 +4,7 @@
 interface A<T extends Date> {
 >A : Symbol(A, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 0, 0), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 2, 1))
 >T : Symbol(T, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 0, 12), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 4, 12))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
 
     x: T;
 >x : Symbol(A.x, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 0, 29))
@@ -14,7 +14,7 @@ interface A<T extends Date> {
 interface A<T extends Number> { // error
 >A : Symbol(A, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 0, 0), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 2, 1))
 >T : Symbol(T, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 0, 12), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 4, 12))
->Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.number.d.ts, --, --))
 
     y: T;
 >y : Symbol(A.y, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 4, 31))
@@ -28,7 +28,7 @@ module M {
 >B : Symbol(B, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 8, 10), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 11, 5))
 >T : Symbol(T, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 9, 16), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 13, 16))
 >A : Symbol(A, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 0, 0), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 2, 1))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
 
         x: T;
 >x : Symbol(B.x, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 9, 36))
@@ -52,7 +52,7 @@ module M2 {
     interface A<T extends Date> {
 >A : Symbol(A, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 18, 11))
 >T : Symbol(T, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 19, 16))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
 
         x: T;
 >x : Symbol(A.x, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 19, 33))
@@ -66,7 +66,7 @@ module M2 {
     interface A<T extends Number> { // ok, different declaration space from other M2.A
 >A : Symbol(A, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 24, 11))
 >T : Symbol(T, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 25, 16))
->Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.number.d.ts, --, --))
 
         y: T;
 >y : Symbol(A.y, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 25, 35))
@@ -80,7 +80,7 @@ module M3 {
     export interface A<T extends Date> {
 >A : Symbol(A, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 30, 11), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 36, 11))
 >T : Symbol(T, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 31, 23), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 37, 23))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
 
         x: T;
 >x : Symbol(A.x, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 31, 40))
@@ -94,7 +94,7 @@ module M3 {
     export interface A<T extends Number> { // error
 >A : Symbol(A, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 30, 11), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 36, 11))
 >T : Symbol(T, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 31, 23), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 37, 23))
->Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.number.d.ts, --, --))
 
         y: T;
 >y : Symbol(A.y, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 37, 42))

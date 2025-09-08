@@ -82,7 +82,7 @@ var prop1 = o.prop1;
 
 if (typeof prop1 === "string" && prop1.toLocaleLowerCase()) { }
 >prop1 : Symbol(prop1, Decl(typeGuardsOnClassProperty.ts, 26, 3))
->prop1.toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
+>prop1.toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.string.d.ts, --, --))
 >prop1 : Symbol(prop1, Decl(typeGuardsOnClassProperty.ts, 26, 3))
->toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
+>toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.string.d.ts, --, --))
 

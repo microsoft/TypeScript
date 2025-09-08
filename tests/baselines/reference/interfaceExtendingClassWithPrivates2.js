@@ -30,21 +30,15 @@ var r2 = i.x; // error
 var r3 = i.y; // error
 
 //// [interfaceExtendingClassWithPrivates2.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
-var Bar = /** @class */ (function () {
-    function Bar() {
-    }
-    return Bar;
-}());
-var Baz = /** @class */ (function () {
-    function Baz() {
-    }
-    return Baz;
-}());
+class Foo {
+    x;
+}
+class Bar {
+    x;
+}
+class Baz {
+    y;
+}
 var i;
 var r = i.z;
 var r2 = i.x; // error

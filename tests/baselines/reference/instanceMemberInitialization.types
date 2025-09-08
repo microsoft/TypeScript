@@ -72,7 +72,9 @@ class MyMap<K, V> {
 
     private readonly store = new this.Map_<K, V>();
 >store : any
+>      : ^^^
 >new this.Map_<K, V>() : any
+>                      : ^^^
 >this.Map_ : new <K_1, V_1>() => any
 >          : ^^^^^^^^^^^^^^^^^^^^   
 >this : this

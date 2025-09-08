@@ -54,7 +54,7 @@ function f01(x: unknown) {
         assert(x instanceof Error);
 >assert : Symbol(assert, Decl(assertionTypePredicates1.ts, 3, 5))
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 
         x.message;
 >x.message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
@@ -68,9 +68,9 @@ function f01(x: unknown) {
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
 
         x.toLocaleString;
->x.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.number.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
->toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.number.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
     }
     if (!!true) {
         assert(isArrayOfStrings(x));
@@ -272,7 +272,7 @@ class Test {
 >value : Symbol(value, Decl(assertionTypePredicates1.ts, 95, 11))
 
         throw new Error();
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
     }
     isTest2(): this is Test2 {
 >isTest2 : Symbol(Test.isTest2, Decl(assertionTypePredicates1.ts, 98, 5))
@@ -291,7 +291,7 @@ class Test {
 >Test2 : Symbol(Test2, Decl(assertionTypePredicates1.ts, 127, 1))
 
         throw new Error();
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
     }
     assertThis(): asserts this {
 >assertThis : Symbol(Test.assertThis, Decl(assertionTypePredicates1.ts, 105, 5))
@@ -300,7 +300,7 @@ class Test {
 >this : Symbol(Test, Decl(assertionTypePredicates1.ts, 92, 1))
 
         throw new Error();
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
     }
     bar() {
 >bar : Symbol(Test.bar, Decl(assertionTypePredicates1.ts, 109, 5))

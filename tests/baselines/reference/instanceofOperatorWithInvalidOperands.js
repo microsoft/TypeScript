@@ -49,12 +49,9 @@ var rb10 = x instanceof o3;
 var rc1 = '' instanceof {};
 
 //// [instanceofOperatorWithInvalidOperands.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.foo = function () { };
-    return C;
-}());
+class C {
+    foo() { }
+}
 var x;
 // invalid left operand
 // the left operand is required to be of type Any, an object type, or a type parameter type

@@ -17,16 +17,10 @@ export type Something<A> = S.Something<A>
 
 
 //// [Something.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [prelude.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Something = void 0;
-exports.Something = require("./Something");
+import * as Something_1 from "./Something";
+export { Something_1 as Something };
 //// [usage.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.myValue = void 0;
-var prelude_1 = require("./prelude");
-exports.myValue = prelude_1.Something.of("abc");
+import { Something } from "./prelude";
+export const myValue = Something.of("abc");

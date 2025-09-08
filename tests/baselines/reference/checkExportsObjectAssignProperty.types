@@ -575,38 +575,3 @@ Object.defineProperty(module.exports, "setonlyAccessor", {
     }
 });
 
-=== index.js ===
-/**
- * @type {number}
- */
-const q = require("./mod1").thing;
->q : number
->  : ^^^^^^
->require("./mod1").thing : number
->                        : ^^^^^^
->require("./mod1") : typeof import("mod1")
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->require : any
->        : ^^^
->"./mod1" : "./mod1"
->         : ^^^^^^^^
->thing : number
->      : ^^^^^^
-
-/**
- * @type {string}
- */
-const u = require("./mod2").thing;
->u : string
->  : ^^^^^^
->require("./mod2").thing : string
->                        : ^^^^^^
->require("./mod2") : typeof import("mod2")
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->require : any
->        : ^^^
->"./mod2" : "./mod2"
->         : ^^^^^^^^
->thing : string
->      : ^^^^^^
-

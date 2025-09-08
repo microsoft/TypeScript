@@ -65,75 +65,50 @@ K.One;
 // Sad face https://github.com/microsoft/TypeScript/blob/6b04f5039429b9d412696fe2febe39ecc69ad365/src/testRunner/compilerRunner.ts#L207
 
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.A = void 0;
-var default_1 = /** @class */ (function () {
-    function default_1() {
-    }
-    return default_1;
-}());
-exports.default = default_1;
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
-exports.A = A;
+export default class {
+}
+export class A {
+}
 //// [b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var a;
-var b;
+let a;
+let b;
 console.log(a, b);
+export {};
 //// [c.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var a;
-var b;
+let a;
+let b;
 console.log(a, b);
+export {};
 //// [d.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var a_1 = require("./a");
-var a = a_1.A;
-var b;
+import { A } from './a';
+const a = A;
+let b;
 console.log(a, b);
 //// [e.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [f.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 0 /* C.One */;
-var c = 1 /* C.Two */;
-var d = 1 /* C.Two */;
+let c = 1 /* C.Two */;
+let d = 1 /* C.Two */;
 console.log(c, d);
+export {};
 //// [g.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var c;
-var d;
+let c;
+let d;
 console.log(c, d);
+export {};
 //// [h.js]
-"use strict";
-var H = /** @class */ (function () {
-    function H() {
-    }
-    return H;
-}());
-module.exports = H;
+class H {
+}
+export {};
 //// [i.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var h = {};
+let h = {};
 console.log(h);
+export {};
 //// [j.js]
 // Sad face https://github.com/microsoft/TypeScript/blob/6b04f5039429b9d412696fe2febe39ecc69ad365/src/testRunner/compilerRunner.ts#L207
 //// [k.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [l.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 0 /* K.One */;
+export {};

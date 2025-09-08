@@ -1,10 +1,13 @@
+file.tsx(1,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
 file.tsx(24,28): error TS2551: Property 'NAme' does not exist on type 'IUser'. Did you mean 'Name'?
 file.tsx(36,15): error TS2322: Type '(user: IUser) => Element' is not assignable to type 'boolean | any[] | ReactChild'.
 file.tsx(39,15): error TS2322: Type '(user: IUser) => Element' is not assignable to type 'boolean | any[] | ReactChild'.
 
 
-==== file.tsx (3 errors) ====
+==== file.tsx (4 errors) ====
     import React = require('react');
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
     
     interface IUser {
         Name: string;

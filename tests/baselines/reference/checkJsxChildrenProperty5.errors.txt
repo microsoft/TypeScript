@@ -1,10 +1,13 @@
+file.tsx(1,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
 file.tsx(20,10): error TS2741: Property 'children' is missing in type '{ a: number; b: string; }' but required in type 'Prop'.
 file.tsx(25,9): error TS2740: Type 'ReactElement<any>' is missing the following properties from type 'Button': render, setState, forceUpdate, state, and 2 more.
 file.tsx(29,10): error TS2740: Type 'typeof Button' is missing the following properties from type 'Button': render, setState, forceUpdate, props, and 3 more.
 
 
-==== file.tsx (3 errors) ====
+==== file.tsx (4 errors) ====
     import React = require('react');
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
     
     interface Prop {
         a: number,

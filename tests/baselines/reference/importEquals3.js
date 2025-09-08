@@ -21,26 +21,13 @@ console.log(x);
 
 
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.A = void 0;
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
-exports.A = A;
+export class A {
+}
 //// [b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = exports.A = void 0;
 var A = a.A; // Error
-exports.A = A;
-var x = 0;
-exports.x = x;
+const x = 0;
+export { A, x };
 //// [c.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var b = require("./b");
+import * as b from './b';
 var x = b.x;
 console.log(x);

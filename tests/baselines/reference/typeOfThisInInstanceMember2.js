@@ -38,27 +38,23 @@ rs.forEach(x => {
 });
 
 //// [typeOfThisInInstanceMember2.js]
-var C = /** @class */ (function () {
-    function C(x) {
-        this.x = this;
+class C {
+    x = this;
+    foo() {
+        return this;
+    }
+    constructor(x) {
         var t = this;
         t.x;
         t.y;
         t.z;
         var r = t.foo();
     }
-    C.prototype.foo = function () {
+    get y() {
         return this;
-    };
-    Object.defineProperty(C.prototype, "y", {
-        get: function () {
-            return this;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return C;
-}());
+    }
+    z;
+}
 var c;
 // all ok
 var r = c.x;
@@ -67,7 +63,7 @@ var r2 = c.y;
 var r3 = c.foo();
 var r4 = c.z;
 var rs = [r, r2, r3];
-rs.forEach(function (x) {
+rs.forEach(x => {
     x.foo;
     x.x;
     x.y;

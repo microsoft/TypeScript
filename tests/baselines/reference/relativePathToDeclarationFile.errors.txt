@@ -1,0 +1,36 @@
+test/file1.ts(1,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+test/file1.ts(2,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+test/file1.ts(3,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+
+
+==== test/file1.ts (3 errors) ====
+    import foo = require('foo');
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+    import other = require('./other');
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+    import relMod = require('./sub/relMod');
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+    
+    if(foo.M2.x){
+    	var x = new relMod(other.M2.x.charCodeAt(0));
+    }
+    
+==== test/foo.d.ts (0 errors) ====
+    export declare module M2 {
+    	export var x: boolean;
+    }
+    
+==== test/other.d.ts (0 errors) ====
+    export declare module M2 {
+    	export var x: string;
+    }
+    
+==== test/sub/relMod.d.ts (0 errors) ====
+    declare class Test {
+    	constructor(x: number);
+    }
+    export = Test;
+    

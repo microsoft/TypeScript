@@ -1,5 +1,9 @@
 //// [tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts] ////
 
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 2,500
+
 === taggedTemplateStringsWithOverloadResolution1.ts ===
 function foo(strs: TemplateStringsArray): number;
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }

@@ -6,6 +6,7 @@ protectedClassPropertyAccessibleWithinSubclass2.ts(30,12): error TS2446: Propert
 protectedClassPropertyAccessibleWithinSubclass2.ts(42,11): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived2'. This is an instance of class 'Base'.
 protectedClassPropertyAccessibleWithinSubclass2.ts(43,12): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived2'. This is an instance of class 'Derived1'.
 protectedClassPropertyAccessibleWithinSubclass2.ts(45,12): error TS2445: Property 'x' is protected and only accessible within class 'Derived3' and its subclasses.
+protectedClassPropertyAccessibleWithinSubclass2.ts(51,15): error TS2612: Property 'x' will overwrite the base property in 'Derived1'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.
 protectedClassPropertyAccessibleWithinSubclass2.ts(59,11): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived3'. This is an instance of class 'Base'.
 protectedClassPropertyAccessibleWithinSubclass2.ts(60,12): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived3'. This is an instance of class 'Derived1'.
 protectedClassPropertyAccessibleWithinSubclass2.ts(61,12): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived3'. This is an instance of class 'Derived2'.
@@ -21,7 +22,7 @@ protectedClassPropertyAccessibleWithinSubclass2.ts(93,4): error TS2445: Property
 protectedClassPropertyAccessibleWithinSubclass2.ts(94,4): error TS2445: Property 'x' is protected and only accessible within class 'Base' and its subclasses.
 
 
-==== protectedClassPropertyAccessibleWithinSubclass2.ts (21 errors) ====
+==== protectedClassPropertyAccessibleWithinSubclass2.ts (22 errors) ====
     class Base {
         protected x: string;
         method() {
@@ -89,6 +90,8 @@ protectedClassPropertyAccessibleWithinSubclass2.ts(94,4): error TS2445: Property
     
     class Derived3 extends Derived1 {
         protected x: string;
+                  ~
+!!! error TS2612: Property 'x' will overwrite the base property in 'Derived1'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.
         method3() {
             var b: Base;
             var d1: Derived1;

@@ -52,24 +52,18 @@ var r3 = C.foo(1); // error
 var r4 = D.bar(''); // error
 
 //// [memberFunctionsWithPrivateOverloads.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.foo = function (x, y) { };
-    C.prototype.bar = function (x, y) { };
-    C.foo = function (x, y) { };
-    C.bar = function (x, y) { };
-    return C;
-}());
-var D = /** @class */ (function () {
-    function D() {
-    }
-    D.prototype.foo = function (x, y) { };
-    D.prototype.bar = function (x, y) { };
-    D.foo = function (x, y) { };
-    D.bar = function (x, y) { };
-    return D;
-}());
+class C {
+    foo(x, y) { }
+    bar(x, y) { }
+    static foo(x, y) { }
+    static bar(x, y) { }
+}
+class D {
+    foo(x, y) { }
+    bar(x, y) { }
+    static foo(x, y) { }
+    static bar(x, y) { }
+}
 var c;
 var r = c.foo(1); // error
 var d;

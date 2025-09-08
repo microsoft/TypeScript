@@ -10,9 +10,10 @@ implementingAnInterfaceExtendingClassWithProtecteds.ts(26,7): error TS2420: Clas
   Property 'y' is missing in type 'Foo' but required in type 'I'.
 implementingAnInterfaceExtendingClassWithProtecteds.ts(29,7): error TS2420: Class 'Bar6' incorrectly implements interface 'I'.
   Property 'y' is protected in type 'Bar6' but public in type 'I'.
+implementingAnInterfaceExtendingClassWithProtecteds.ts(38,5): error TS2612: Property 'x' will overwrite the base property in 'Foo'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.
 
 
-==== implementingAnInterfaceExtendingClassWithProtecteds.ts (6 errors) ====
+==== implementingAnInterfaceExtendingClassWithProtecteds.ts (7 errors) ====
     class Foo {
         protected x: string;
     }
@@ -71,6 +72,8 @@ implementingAnInterfaceExtendingClassWithProtecteds.ts(29,7): error TS2420: Clas
     
     class Bar8 extends Foo implements I {
         x: string;
+        ~
+!!! error TS2612: Property 'x' will overwrite the base property in 'Foo'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.
         y: number;
     }
     

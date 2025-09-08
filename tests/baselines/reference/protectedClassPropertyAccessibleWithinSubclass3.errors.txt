@@ -1,4 +1,4 @@
-protectedClassPropertyAccessibleWithinSubclass3.ts(11,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+protectedClassPropertyAccessibleWithinSubclass3.ts(11,15): error TS2855: Class field 'x' defined by the parent class is not accessible in the child class via super.
 
 
 ==== protectedClassPropertyAccessibleWithinSubclass3.ts (1 errors) ====
@@ -14,6 +14,6 @@ protectedClassPropertyAccessibleWithinSubclass3.ts(11,15): error TS2340: Only pu
             this.x;            // OK, accessed within a subclass of the declaring class
             super.x;           // Error, x is not public
                   ~
-!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+!!! error TS2855: Class field 'x' defined by the parent class is not accessible in the child class via super.
         }
     }

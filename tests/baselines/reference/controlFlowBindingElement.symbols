@@ -9,7 +9,7 @@
     const {
         param = (() => { throw new Error('param is not defined') })(),
 >param : Symbol(param, Decl(controlFlowBindingElement.ts, 3, 11))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 
     } = data;
 >data : Symbol(data, Decl(controlFlowBindingElement.ts, 1, 9))
@@ -33,7 +33,7 @@
     const {
         param = (() => { throw new Error('param is not defined') })(),
 >param : Symbol(param, Decl(controlFlowBindingElement.ts, 15, 11))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 
     } = data;
 >data : Symbol(data, Decl(controlFlowBindingElement.ts, 12, 9))

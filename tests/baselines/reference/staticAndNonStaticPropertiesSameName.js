@@ -10,10 +10,9 @@ class C {
 }
 
 //// [staticAndNonStaticPropertiesSameName.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.f = function () { };
-    C.f = function () { };
-    return C;
-}());
+class C {
+    x;
+    static x;
+    f() { }
+    static f() { }
+}

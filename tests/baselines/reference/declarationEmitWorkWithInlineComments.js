@@ -37,11 +37,18 @@ export class Baz {
 }
 
 //// [declarationEmitWorkWithInlineComments.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Baz = exports.Bar = exports.Foo = void 0;
-var Foo = /** @class */ (function () {
-    function Foo(
+export class Foo {
+    isInternal1;
+    isInternal2;
+    isInternal3;
+    isInternal4;
+    isInternal5;
+    isInternal6;
+    isInternal7;
+    notInternal1;
+    notInternal2;
+    notInternal3;
+    constructor(
     /** @internal */
     isInternal1, 
     /** @internal */ isInternal2, /** @internal */ isInternal3, 
@@ -72,23 +79,19 @@ var Foo = /** @class */ (function () {
         this.notInternal2 = notInternal2;
         this.notInternal3 = notInternal3;
     }
-    return Foo;
-}());
-exports.Foo = Foo;
-var Bar = /** @class */ (function () {
-    function Bar(/* @internal */ isInternal1) {
+}
+export class Bar {
+    isInternal1;
+    constructor(/* @internal */ isInternal1) {
         this.isInternal1 = isInternal1;
     }
-    return Bar;
-}());
-exports.Bar = Bar;
-var Baz = /** @class */ (function () {
-    function Baz(/* @internal */ isInternal) {
+}
+export class Baz {
+    isInternal;
+    constructor(/* @internal */ isInternal) {
         this.isInternal = isInternal;
     }
-    return Baz;
-}());
-exports.Baz = Baz;
+}
 
 
 //// [declarationEmitWorkWithInlineComments.d.ts]

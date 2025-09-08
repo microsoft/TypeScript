@@ -1,0 +1,29 @@
+derivedClassOverridesWithoutSubtype.ts(8,5): error TS2612: Property 'x' will overwrite the base property in 'Base'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.
+
+
+==== derivedClassOverridesWithoutSubtype.ts (1 errors) ====
+    class Base {
+        x: {
+            foo: string;
+        }
+    }
+    
+    class Derived extends Base {
+        x: {
+        ~
+!!! error TS2612: Property 'x' will overwrite the base property in 'Base'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.
+            foo: any;
+        }
+    }
+    
+    class Base2 {
+        static y: {
+            foo: string;
+        }
+    }
+    
+    class Derived2 extends Base2 {
+        static y: {
+            foo: any;
+        }
+    }

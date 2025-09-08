@@ -16,12 +16,15 @@ interfaceExtendsObjectIntersectionErrors.ts(11,11): error TS2430: Interface 'I5'
     Type 'number' is not assignable to type 'string'.
 interfaceExtendsObjectIntersectionErrors.ts(16,38): error TS2416: Property 'a' in type 'C1' is not assignable to the same property in base type 'T1'.
   Type 'string' is not assignable to type 'number'.
+interfaceExtendsObjectIntersectionErrors.ts(16,38): error TS2612: Property 'a' will overwrite the base property in 'T1'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.
 interfaceExtendsObjectIntersectionErrors.ts(17,38): error TS2416: Property 'b' in type 'C2' is not assignable to the same property in base type 'T2'.
   Type 'string' is not assignable to type 'number'.
+interfaceExtendsObjectIntersectionErrors.ts(17,38): error TS2612: Property 'b' will overwrite the base property in 'T2'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.
 interfaceExtendsObjectIntersectionErrors.ts(18,38): error TS2416: Property 'length' in type 'C3' is not assignable to the same property in base type 'number[]'.
   Type 'string' is not assignable to type 'number'.
 interfaceExtendsObjectIntersectionErrors.ts(19,38): error TS2416: Property '0' in type 'C4' is not assignable to the same property in base type '[string, number]'.
   Type 'number' is not assignable to type 'string'.
+interfaceExtendsObjectIntersectionErrors.ts(19,38): error TS2612: Property '0' will overwrite the base property in 'T4'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.
 interfaceExtendsObjectIntersectionErrors.ts(20,38): error TS2416: Property 'c' in type 'C5' is not assignable to the same property in base type 'T5'.
   Type 'number' is not assignable to type 'string'.
 interfaceExtendsObjectIntersectionErrors.ts(30,11): error TS2430: Interface 'I10' incorrectly extends interface 'typeof CX'.
@@ -55,7 +58,7 @@ interfaceExtendsObjectIntersectionErrors.ts(46,23): error TS2312: An interface c
 interfaceExtendsObjectIntersectionErrors.ts(47,26): error TS2312: An interface can only extend an object type or intersection of object types with statically known members.
 
 
-==== interfaceExtendsObjectIntersectionErrors.ts (23 errors) ====
+==== interfaceExtendsObjectIntersectionErrors.ts (26 errors) ====
     type T1 = { a: number };
     type T2 = T1 & { b: number };
     type T3 = number[];
@@ -96,10 +99,14 @@ interfaceExtendsObjectIntersectionErrors.ts(47,26): error TS2312: An interface c
                                          ~
 !!! error TS2416: Property 'a' in type 'C1' is not assignable to the same property in base type 'T1'.
 !!! error TS2416:   Type 'string' is not assignable to type 'number'.
+                                         ~
+!!! error TS2612: Property 'a' will overwrite the base property in 'T1'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.
     class C2 extends Constructor<T2>() { b: string }
                                          ~
 !!! error TS2416: Property 'b' in type 'C2' is not assignable to the same property in base type 'T2'.
 !!! error TS2416:   Type 'string' is not assignable to type 'number'.
+                                         ~
+!!! error TS2612: Property 'b' will overwrite the base property in 'T2'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.
     class C3 extends Constructor<T3>() { length: string }
                                          ~~~~~~
 !!! error TS2416: Property 'length' in type 'C3' is not assignable to the same property in base type 'number[]'.
@@ -108,6 +115,8 @@ interfaceExtendsObjectIntersectionErrors.ts(47,26): error TS2312: An interface c
                                          ~
 !!! error TS2416: Property '0' in type 'C4' is not assignable to the same property in base type '[string, number]'.
 !!! error TS2416:   Type 'number' is not assignable to type 'string'.
+                                         ~
+!!! error TS2612: Property '0' will overwrite the base property in 'T4'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.
     class C5 extends Constructor<T5>() { c: number }
                                          ~
 !!! error TS2416: Property 'c' in type 'C5' is not assignable to the same property in base type 'T5'.

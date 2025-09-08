@@ -50,11 +50,8 @@ var rb10 = x in undefined;
 var rc1 = {} in '';
 
 //// [inOperatorWithInvalidOperands.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";

@@ -1,0 +1,19 @@
+file.tsx(1,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+
+
+==== file.tsx (1 errors) ====
+    import React = require('react');
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+    
+    export function makeP<P>(Ctor: React.ComponentClass<P>) {
+    	return class extends React.PureComponent<P, void> {
+    		public render(): JSX.Element {
+    			return (
+    				<Ctor {...this.props } />
+    			);
+    		}
+    	};
+    }
+    
+    

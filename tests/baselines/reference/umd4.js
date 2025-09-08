@@ -16,7 +16,7 @@ let y: number = x.n;
 //// [a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Bar = require("./foo");
+const Bar = require("./foo");
 Bar.fn();
-var x;
-var y = x.n;
+let x;
+let y = x.n;

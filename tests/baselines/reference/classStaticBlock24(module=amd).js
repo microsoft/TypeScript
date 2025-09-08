@@ -14,13 +14,11 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.C = void 0;
-    var C = /** @class */ (function () {
-        function C() {
+    class C {
+        static x;
+        static {
+            C.x = 1;
         }
-        return C;
-    }());
+    }
     exports.C = C;
-    (function () {
-        C.x = 1;
-    })();
 });

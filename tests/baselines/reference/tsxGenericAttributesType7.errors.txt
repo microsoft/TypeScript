@@ -1,0 +1,16 @@
+file.tsx(1,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+
+
+==== file.tsx (1 errors) ====
+    import React = require('react');
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+    
+    declare function Component<T>(props: T) : JSX.Element;
+    const decorator = function <U>(props: U) {
+        return <Component {...props} />;
+    }
+    
+    const decorator1 = function <U extends {x: string}>(props: U) {
+        return <Component {...props} x="hi"/>;
+    }

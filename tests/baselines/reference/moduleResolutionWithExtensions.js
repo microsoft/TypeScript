@@ -25,17 +25,12 @@ import j from "./jquery.js"
 
 
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = 0;
+export default 0;
 // No extension: '.ts' added
 //// [b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 // '.js' extension: stripped and replaced with '.ts'
 //// [d.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [jquery_user_1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

@@ -95,7 +95,7 @@ const re = /./g
 
 let match: RegExpExecArray | null
 >match : Symbol(match, Decl(typeGuardsNestedAssignments.ts, 40, 3))
->RegExpExecArray : Symbol(RegExpExecArray, Decl(lib.es5.d.ts, --, --))
+>RegExpExecArray : Symbol(RegExpExecArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.regexp.d.ts, --, --), Decl(lib.es2022.regexp.d.ts, --, --))
 
 while ((match = re.exec("xxx")) != null) {
 >match : Symbol(match, Decl(typeGuardsNestedAssignments.ts, 40, 3))

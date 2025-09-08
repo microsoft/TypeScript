@@ -10,7 +10,7 @@ const assert = check => {
 
     if (!check) throw new Error();
 >check : Symbol(check, Decl(assertionsAndNonReturningFunctions.js, 3, 14))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 }
 
 /** @type {(x: unknown) => asserts x is string } */
@@ -20,7 +20,7 @@ function assertIsString(x) {
 
     if (!(typeof x === "string")) throw new Error();
 >x : Symbol(x, Decl(assertionsAndNonReturningFunctions.js, 8, 24))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 }
 
 /**
@@ -33,7 +33,7 @@ function assert2(check) {
 
     if (!check) throw new Error();
 >check : Symbol(check, Decl(assertionsAndNonReturningFunctions.js, 16, 17))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 }
 
 /**
@@ -43,7 +43,7 @@ function fail() {
 >fail : Symbol(fail, Decl(assertionsAndNonReturningFunctions.js, 18, 1))
 
     throw new Error();
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 }
 
 /**

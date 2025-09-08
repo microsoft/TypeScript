@@ -81,28 +81,20 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.esnext.full.d.ts] *Lib*
+
 //// [/user/username/projects/myproject/shared/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.e = exports.c = void 0;
-exports.f1 = f1;
-exports.f2 = f2;
 /*@before/user/username/projects/myproject/shared/tsconfig.json*/
-function f1() { }
+export function f1() { }
+export class c {
+}
 //@after/user/username/projects/myproject/shared/tsconfig.json
-var c = /** @class */ (function () {
-    function c() {
-    }
-    return c;
-}());
-exports.c = c;
-//@after/user/username/projects/myproject/shared/tsconfig.json
-var e;
+export var e;
 (function (e) {
-})(e || (exports.e = e = {}));
+})(e || (e = {}));
 // leading
 /*@before/user/username/projects/myproject/shared/tsconfig.json*/
-function f2() { } // trailing
+export function f2() { } // trailing
 
 
 //// [/user/username/projects/myproject/shared/index.d.ts]
@@ -115,16 +107,16 @@ export declare function f2(): void;
 
 
 //// [/user/username/projects/myproject/shared/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"8649344783-export function f1() { }\nexport class c { }\nexport enum e { }\n// leading\nexport function f2() { } // trailing"],"root":[2],"options":{"composite":true},"emitSignatures":[[2,"-9393727241-export declare function f1(): void;\nexport declare class c {\n}\nexport declare enum e {\n}\nexport declare function f2(): void;\n"]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.esnext.full.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"8649344783-export function f1() { }\nexport class c { }\nexport enum e { }\n// leading\nexport function f2() { } // trailing"],"root":[2],"options":{"composite":true},"emitSignatures":[[2,"-9393727241-export declare function f1(): void;\nexport declare class c {\n}\nexport declare enum e {\n}\nexport declare function f2(): void;\n"]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/shared/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../../../../home/src/tslibs/ts/lib/lib.esnext.full.d.ts",
     "./index.ts"
   ],
   "fileInfos": {
-    "../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../../../../home/src/tslibs/ts/lib/lib.esnext.full.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -155,31 +147,21 @@ export declare function f2(): void;
   ],
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 970
+  "size": 982
 }
 
 //// [/user/username/projects/myproject/webpack/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.e2 = exports.c2 = void 0;
-exports.f2 = f2;
-exports.f22 = f22;
 /*@before/user/username/projects/myproject/webpack/tsconfig.json*/
-function f2() { }
+export function f2() { }
+export class c2 {
+}
 //@after/user/username/projects/myproject/webpack/tsconfig.json
-var c2 = /** @class */ (function () {
-    function c2() {
-    }
-    return c2;
-}());
-exports.c2 = c2;
-//@after/user/username/projects/myproject/webpack/tsconfig.json
-var e2;
+export var e2;
 (function (e2) {
-})(e2 || (exports.e2 = e2 = {}));
+})(e2 || (e2 = {}));
 // leading
 /*@before/user/username/projects/myproject/webpack/tsconfig.json*/
-function f22() { } // trailing
+export function f22() { } // trailing
 
 
 //// [/user/username/projects/myproject/webpack/index.d.ts]
@@ -192,16 +174,16 @@ export declare function f22(): void;
 
 
 //// [/user/username/projects/myproject/webpack/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"20140662566-export function f2() { }\nexport class c2 { }\nexport enum e2 { }\n// leading\nexport function f22() { } // trailing"],"root":[2],"options":{"composite":true},"emitSignatures":[[2,"-2037002130-export declare function f2(): void;\nexport declare class c2 {\n}\nexport declare enum e2 {\n}\nexport declare function f22(): void;\n"]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.esnext.full.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"20140662566-export function f2() { }\nexport class c2 { }\nexport enum e2 { }\n// leading\nexport function f22() { } // trailing"],"root":[2],"options":{"composite":true},"emitSignatures":[[2,"-2037002130-export declare function f2(): void;\nexport declare class c2 {\n}\nexport declare enum e2 {\n}\nexport declare function f22(): void;\n"]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/webpack/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../../../../home/src/tslibs/ts/lib/lib.esnext.full.d.ts",
     "./index.ts"
   ],
   "fileInfos": {
-    "../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../../../../home/src/tslibs/ts/lib/lib.esnext.full.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -232,7 +214,7 @@ export declare function f22(): void;
   ],
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 977
+  "size": 989
 }
 
 
@@ -264,15 +246,15 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.esnext.full.d.ts
 /user/username/projects/myproject/shared/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.esnext.full.d.ts
 /user/username/projects/myproject/shared/index.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.esnext.full.d.ts (used version)
 /user/username/projects/myproject/shared/index.ts (used version)
 
 Program root files: [
@@ -285,15 +267,15 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.esnext.full.d.ts
 /user/username/projects/myproject/webpack/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.esnext.full.d.ts
 /user/username/projects/myproject/webpack/index.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.esnext.full.d.ts (used version)
 /user/username/projects/myproject/webpack/index.ts (used version)
 
 exitCode:: ExitStatus.undefined
@@ -328,30 +310,19 @@ Output::
 
 
 //// [/user/username/projects/myproject/shared/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.e = exports.c = void 0;
-exports.fooBar = fooBar;
-exports.f1 = f1;
-exports.f2 = f2;
 /*@before/user/username/projects/myproject/shared/tsconfig.json*/
-function fooBar() { }
+export function fooBar() { }
 /*@before/user/username/projects/myproject/shared/tsconfig.json*/
-function f1() { }
+export function f1() { }
+export class c {
+}
 //@after/user/username/projects/myproject/shared/tsconfig.json
-var c = /** @class */ (function () {
-    function c() {
-    }
-    return c;
-}());
-exports.c = c;
-//@after/user/username/projects/myproject/shared/tsconfig.json
-var e;
+export var e;
 (function (e) {
-})(e || (exports.e = e = {}));
+})(e || (e = {}));
 // leading
 /*@before/user/username/projects/myproject/shared/tsconfig.json*/
-function f2() { } // trailing
+export function f2() { } // trailing
 
 
 //// [/user/username/projects/myproject/shared/index.d.ts]
@@ -365,16 +336,16 @@ export declare function f2(): void;
 
 
 //// [/user/username/projects/myproject/shared/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"14127205977-export function fooBar() {}export function f1() { }\nexport class c { }\nexport enum e { }\n// leading\nexport function f2() { } // trailing","signature":"1966424426-export declare function fooBar(): void;\nexport declare function f1(): void;\nexport declare class c {\n}\nexport declare enum e {\n}\nexport declare function f2(): void;\n"}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.esnext.full.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"14127205977-export function fooBar() {}export function f1() { }\nexport class c { }\nexport enum e { }\n// leading\nexport function f2() { } // trailing","signature":"1966424426-export declare function fooBar(): void;\nexport declare function f1(): void;\nexport declare class c {\n}\nexport declare enum e {\n}\nexport declare function f2(): void;\n"}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/shared/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../../../../home/src/tslibs/ts/lib/lib.esnext.full.d.ts",
     "./index.ts"
   ],
   "fileInfos": {
-    "../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../../../../home/src/tslibs/ts/lib/lib.esnext.full.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -403,7 +374,7 @@ export declare function f2(): void;
   },
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 1039
+  "size": 1051
 }
 
 
@@ -439,7 +410,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.esnext.full.d.ts
 /user/username/projects/myproject/shared/index.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -458,7 +429,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.esnext.full.d.ts
 /user/username/projects/myproject/webpack/index.ts
 
 Semantic diagnostics in builder refreshed for::

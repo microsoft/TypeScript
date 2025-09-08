@@ -16,20 +16,13 @@ export class Main {
 
 
 //// [services.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Services = void 0;
-var Services;
+export var Services;
 (function (Services) {
-    var Service = /** @class */ (function () {
-        function Service() {
-        }
-        return Service;
-    }());
+    class Service {
+    }
     Services.Service = Service;
-})(Services || (exports.Services = Services = {}));
+})(Services || (Services = {}));
 //// [index.js]
-"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -39,15 +32,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Main = void 0;
-var Main = /** @class */ (function () {
-    function Main() {
-    }
-    __decorate([
-        decorator(),
-        __metadata("design:type", Function)
-    ], Main.prototype, "field", void 0);
-    return Main;
-}());
-exports.Main = Main;
+export class Main {
+    field;
+}
+__decorate([
+    decorator(),
+    __metadata("design:type", Function)
+], Main.prototype, "field", void 0);

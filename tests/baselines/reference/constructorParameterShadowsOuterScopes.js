@@ -28,18 +28,16 @@ class D {
 // This effectively means that entities from outer scopes by the same name as a constructor parameter or 
 // local variable are inaccessible in initializer expressions for instance member variables
 var x = 1;
-var C = /** @class */ (function () {
-    function C(x) {
-        this.b = x; // error, evaluated in scope of constructor, cannot reference x
+class C {
+    b = x; // error, evaluated in scope of constructor, cannot reference x
+    constructor(x) {
         x = 2; // error, x is string
     }
-    return C;
-}());
+}
 var y = 1;
-var D = /** @class */ (function () {
-    function D(x) {
-        this.b = y; // error, evaluated in scope of constructor, cannot reference y
+class D {
+    b = y; // error, evaluated in scope of constructor, cannot reference y
+    constructor(x) {
         var y = "";
     }
-    return D;
-}());
+}

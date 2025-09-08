@@ -154,36 +154,36 @@ new someGenerics1(3, 4);
 new someGenerics1(3, 4); // Error
 new someGenerics1(3, 4);
 var someGenerics2a;
-new someGenerics2a(function (n) { return n; });
-new someGenerics2a(function (n) { return n; });
-new someGenerics2a(function (n) { return n.substr(0); });
+new someGenerics2a((n) => n);
+new someGenerics2a((n) => n);
+new someGenerics2a((n) => n.substr(0));
 var someGenerics2b;
-new someGenerics2b(function (n, x) { return n; });
-new someGenerics2b(function (n, t) { return n; });
-new someGenerics2b(function (n, t) { return n.substr(t * t); });
+new someGenerics2b((n, x) => n);
+new someGenerics2b((n, t) => n);
+new someGenerics2b((n, t) => n.substr(t * t));
 var someGenerics3;
-new someGenerics3(function () { return ''; });
-new someGenerics3(function () { return undefined; });
-new someGenerics3(function () { return 3; });
+new someGenerics3(() => '');
+new someGenerics3(() => undefined);
+new someGenerics3(() => 3);
 var someGenerics4;
-new someGenerics4(4, function () { return null; });
-new someGenerics4('', function () { return 3; });
-new someGenerics4('', function (x) { return ''; }); // Error
+new someGenerics4(4, () => null);
+new someGenerics4('', () => 3);
+new someGenerics4('', (x) => ''); // Error
 new someGenerics4(null, null);
 var someGenerics5;
-new someGenerics5(4, function () { return null; });
-new someGenerics5('', function () { return 3; });
-new someGenerics5('', function (x) { return ''; }); // Error
+new someGenerics5(4, () => null);
+new someGenerics5('', () => 3);
+new someGenerics5('', (x) => ''); // Error
 new someGenerics5(null, null);
 var someGenerics6;
-new someGenerics6(function (n) { return n; }, function (n) { return n; }, function (n) { return n; });
-new someGenerics6(function (n) { return n; }, function (n) { return n; }, function (n) { return n; });
-new someGenerics6(function (n) { return n; }, function (n) { return n; }, function (n) { return n; }); // Error
-new someGenerics6(function (n) { return n; }, function (n) { return n; }, function (n) { return n; });
+new someGenerics6(n => n, n => n, n => n);
+new someGenerics6(n => n, n => n, n => n);
+new someGenerics6((n) => n, (n) => n, (n) => n); // Error
+new someGenerics6((n) => n, (n) => n, (n) => n);
 var someGenerics7;
-new someGenerics7(function (n) { return n; }, function (n) { return n; }, function (n) { return n; });
-new someGenerics7(function (n) { return n; }, function (n) { return n; }, function (n) { return n; });
-new someGenerics7(function (n) { return n; }, function (n) { return n; }, function (n) { return n; });
+new someGenerics7(n => n, n => n, n => n);
+new someGenerics7(n => n, n => n, n => n);
+new someGenerics7((n) => n, (n) => n, (n) => n);
 var someGenerics8;
 var x = new someGenerics8(someGenerics7);
 new x(null, null, null);

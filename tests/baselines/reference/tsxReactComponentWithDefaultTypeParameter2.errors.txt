@@ -1,0 +1,19 @@
+file.tsx(1,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+
+
+==== file.tsx (1 errors) ====
+    import React = require('react');
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+    
+    interface Prop {
+        a: number,
+        b: string
+    }
+    
+    declare class MyComp<P = Prop> extends React.Component<P, {}> {
+        internalProp: P;
+    }
+    
+    let x = <MyComp />
+    let x1 = <MyComp a="hi"/>

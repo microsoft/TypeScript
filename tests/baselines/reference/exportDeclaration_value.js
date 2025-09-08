@@ -10,11 +10,7 @@ export type { AA } from './a';
 
 
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AA = void 0;
-var A = {};
-exports.AA = {};
+const A = {};
+export const AA = {};
 //// [b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

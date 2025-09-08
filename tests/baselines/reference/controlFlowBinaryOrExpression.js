@@ -39,10 +39,8 @@ if (isNodeList(sourceObj) || isHTMLCollection(sourceObj)) {
 
 
 //// [controlFlowBinaryOrExpression.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var x;
-var cond;
+let x;
+let cond;
 (x = "") || (x = 0);
 x; // string | number
 x = "";
@@ -58,3 +56,4 @@ if (isHTMLCollection(sourceObj)) {
 if (isNodeList(sourceObj) || isHTMLCollection(sourceObj)) {
     sourceObj.length;
 }
+export {};
