@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/augmentExportEquals5.ts] ////
 
 === express.d.ts ===
-declare module Express {
+declare namespace Express {
 >Express : Symbol(Express, Decl(express.d.ts, 0, 0))
 
     export interface Request { }
->Request : Symbol(Request, Decl(express.d.ts, 0, 24))
+>Request : Symbol(Request, Decl(express.d.ts, 0, 27))
 
     export interface Response { }
 >Response : Symbol(Response, Decl(express.d.ts, 1, 32))
@@ -75,9 +75,9 @@ declare module "express" {
 
         interface Request extends Express.Request {
 >Request : Symbol(Request, Decl(express.d.ts, 25, 49), Decl(augmentation.ts, 2, 26))
->Express.Request : Symbol(Express.Request, Decl(express.d.ts, 0, 24))
+>Express.Request : Symbol(Express.Request, Decl(express.d.ts, 0, 27))
 >Express : Symbol(Express, Decl(express.d.ts, 0, 0))
->Request : Symbol(Express.Request, Decl(express.d.ts, 0, 24))
+>Request : Symbol(Express.Request, Decl(express.d.ts, 0, 27))
 
             get (name: string): string;
 >get : Symbol(Request.get, Decl(express.d.ts, 27, 51))

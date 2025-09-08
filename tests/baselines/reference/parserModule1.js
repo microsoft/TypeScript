@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModule1.ts] ////
 
 //// [parserModule1.ts]
-    export module CompilerDiagnostics {
+    export namespace CompilerDiagnostics {
         export var debug = false;
         export interface IDiagnosticWriter {
             Alert(output: string): void;

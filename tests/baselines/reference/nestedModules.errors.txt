@@ -1,0 +1,50 @@
+nestedModules.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+nestedModules.ts(1,10): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+nestedModules.ts(1,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+nestedModules.ts(14,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+nestedModules.ts(14,11): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== nestedModules.ts (5 errors) ====
+    module A.B.C {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+             ~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+               ~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export interface Point {
+            x: number;
+            y: number;
+        }
+    }
+    
+    namespace A {
+        export namespace B {
+            var Point: C.Point = { x: 0, y: 0 }; // bug 832088: could not find module 'C'
+        }
+    }
+    
+    module M2.X {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+              ~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export interface Point {
+            x: number; y: number;
+        }
+    }
+    
+    namespace M2 {
+        export namespace X {
+            export var Point: number;
+        }
+    }
+    
+    var m = M2.X;
+    var point: number;
+    var point = m.Point;
+    
+    var p: { x: number; y: number; }
+    var p: M2.X.Point;
+    

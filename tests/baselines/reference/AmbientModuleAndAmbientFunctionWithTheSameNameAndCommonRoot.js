@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/DeclarationMerging/AmbientModuleAndAmbientFunctionWithTheSameNameAndCommonRoot.ts] ////
 
 //// [module.d.ts]
-declare module Point {
+declare namespace Point {
     export var Origin: { x: number; y: number; }
 }
 

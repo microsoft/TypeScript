@@ -57,7 +57,7 @@ super1.ts(62,20): error TS2335: 'super' can only be referenced in a derived clas
     }
     
     // Case 4
-    module Base4 {
+    namespace Base4 {
         class Sub4 {
             public x(){
                 return "hello";

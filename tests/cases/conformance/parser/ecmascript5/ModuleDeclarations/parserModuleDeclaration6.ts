@@ -1,2 +1,2 @@
-module number {
+namespace number {
 }

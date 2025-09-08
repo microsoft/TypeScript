@@ -20,8 +20,8 @@ var f4: (a: number) => void = function (a = "") { };
 var f5: (a: (s: string) => any) => void = function (a = s => <number>s) { };
 
 // Instantiated module
-module T { }
-module U {
+namespace T { }
+namespace U {
     export var x;
 }
 

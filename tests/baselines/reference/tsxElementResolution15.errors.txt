@@ -1,9 +1,12 @@
+file.tsx(1,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 file.tsx(3,12): error TS2608: The global type 'JSX.ElementAttributesProperty' may not have more than one property.
 file.tsx(11,2): error TS2322: Type '{ x: number; }' is not assignable to type 'string'.
 
 
-==== file.tsx (2 errors) ====
+==== file.tsx (3 errors) ====
     declare module JSX {
+            ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
     	interface Element { }
     	interface ElementAttributesProperty { pr1: any; pr2: any; }
     	          ~~~~~~~~~~~~~~~~~~~~~~~~~

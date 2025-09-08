@@ -12,7 +12,7 @@ negateOperatorWithStringType.ts(40,1): error TS2695: Left side of comma operator
         public a: string;
         static foo() { return ""; }
     }
-    module M {
+    namespace M {
         export var n: string;
     }
     

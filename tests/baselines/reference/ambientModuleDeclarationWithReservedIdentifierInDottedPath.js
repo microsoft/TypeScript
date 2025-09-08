@@ -11,7 +11,7 @@ export const tabId = chrome.debugger.tabId;
 
 declare module test.class {}
 
-declare module debugger {} // still an error
+declare namespace debugger {} // still an error
 
 
 //// [ambientModuleDeclarationWithReservedIdentifierInDottedPath.js]
@@ -21,7 +21,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.tabId = void 0;
 exports.tabId = chrome.debugger.tabId;
 declare;
-module;
+namespace;
 debugger;
 { } // still an error
 

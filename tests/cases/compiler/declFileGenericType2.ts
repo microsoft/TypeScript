@@ -17,12 +17,12 @@ declare module templa.mvc.composite {
         getControllers(): mvc.IController<mvc.IModel>[];
     }
 }
-module templa.dom.mvc {
+namespace templa.dom.mvc {
     export interface IElementController<ModelType extends templa.mvc.IModel> extends templa.mvc.IController<ModelType> {
     }
 }
 // Module
-module templa.dom.mvc {
+namespace templa.dom.mvc {
 
     export class AbstractElementController<ModelType extends templa.mvc.IModel> extends templa.mvc.AbstractController<ModelType> implements IElementController<ModelType> {
         constructor() {
@@ -31,7 +31,7 @@ module templa.dom.mvc {
     }
 }
 // Module
-module templa.dom.mvc.composite {
+namespace templa.dom.mvc.composite {
     export class AbstractCompositeElementController<ModelType extends templa.mvc.composite.ICompositeControllerModel> extends templa.dom.mvc.AbstractElementController<ModelType> {
         public _controllers: templa.mvc.IController<templa.mvc.IModel>[];
         constructor() {

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/implicitAnyAmbients.ts] ////
 
 === implicitAnyAmbients.ts ===
-declare module m {
+declare namespace m {
 >m : typeof m
 >  : ^^^^^^^^
 
@@ -70,7 +70,7 @@ declare module m {
 >  : ^^^
     }
 
-    module n {
+    namespace n {
 >n : typeof n
 >  : ^^^^^^^^
 

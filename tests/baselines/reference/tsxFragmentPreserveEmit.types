@@ -11,6 +11,7 @@ declare module JSX {
 }
 declare var React: any;
 >React : any
+>      : ^^^
 
 <></>; // no whitespace
 ><></> : JSX.Element

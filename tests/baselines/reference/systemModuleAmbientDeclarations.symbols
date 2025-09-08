@@ -48,7 +48,7 @@ export declare enum E {X = 1}
 >X : Symbol(E.X, Decl(file5.ts, 0, 23))
 
 === file6.ts ===
-export declare module M { var v: number; }
+export declare namespace M { var v: number; }
 >M : Symbol(M, Decl(file6.ts, 0, 0))
->v : Symbol(v, Decl(file6.ts, 0, 29))
+>v : Symbol(v, Decl(file6.ts, 0, 32))
 

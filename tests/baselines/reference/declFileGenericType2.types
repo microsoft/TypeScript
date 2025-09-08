@@ -44,7 +44,7 @@ declare module templa.mvc.composite {
 >    : ^^^
     }
 }
-module templa.dom.mvc {
+namespace templa.dom.mvc {
     export interface IElementController<ModelType extends templa.mvc.IModel> extends templa.mvc.IController<ModelType> {
 >templa : any
 >       : ^^^
@@ -59,7 +59,7 @@ module templa.dom.mvc {
     }
 }
 // Module
-module templa.dom.mvc {
+namespace templa.dom.mvc {
 >templa : typeof templa
 >       : ^^^^^^^^^^^^^
 >dom : typeof dom
@@ -95,7 +95,7 @@ module templa.dom.mvc {
     }
 }
 // Module
-module templa.dom.mvc.composite {
+namespace templa.dom.mvc.composite {
 >templa : typeof templa
 >       : ^^^^^^^^^^^^^
 >dom : typeof dom

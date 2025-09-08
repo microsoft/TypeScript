@@ -48,12 +48,12 @@ if (typeof ActiveXObject === "function") {
     throw new Error('Unknown context');
 }
 
-declare module process {
+declare namespace process {
     export function nextTick(callback: () => any): void;
     export function on(event: string, listener: Function);
 }
 
-module Harness {
+namespace Harness {
     // Settings 
     export var userSpecifiedroot = "";
     var global = <any>Function("return this").call(null);
@@ -79,7 +79,7 @@ module Harness {
     }
 
     // Assert functions
-    export module Assert {
+    export namespace Assert {
         export var bugIds: string[] = [];
         export var throwAssertError = (error: Error) => {
             throw error;
@@ -497,16 +497,16 @@ module Harness {
     }
 
     // Performance test
-    export module Perf {
-        export module Clock {
+    export namespace Perf {
+        export namespace Clock {
             export var now: () => number;
             export var resolution: number;
 
-            declare module WScript {
+            declare namespace WScript {
                 export function InitializeProjection();
             }
 
-            declare module TestUtilities {
+            declare namespace TestUtilities {
                 export function QueryPerformanceCounter(): number;
                 export function QueryPerformanceFrequency(): number;
             }
@@ -685,7 +685,7 @@ module Harness {
     }
 
     /** Functionality for compiling TypeScript code */
-    export module Compiler {
+    export namespace Compiler {
         /** Aggregate various writes into a single array of lines. Useful for passing to the
          *  TypeScript compiler to fill with source code or errors.
          */
@@ -1412,7 +1412,7 @@ module Harness {
     /** Parses the test cases files 
      *  extracts options and individual files in a multifile test
      */
-    export module TestCaseParser {
+    export namespace TestCaseParser {
         /** all the necesarry information to set the right compiler settings */
         export interface CompilerSetting {
             flag: string;
@@ -1867,7 +1867,7 @@ module Harness {
     }
 
     /** Runs TypeScript or Javascript code. */
-    export module Runner {
+    export namespace Runner {
         export function runCollateral(path: string, callback: (error: Error, result: any) => void ) {
             path = switchToForwardSlashes(path);
             runString(readFile(path), path.match(/[^\/]*$/)[0], callback);
@@ -1908,7 +1908,7 @@ module Harness {
     }
 
     /** Support class for baseline files */
-    export module Baseline {
+    export namespace Baseline {
         var reportFilename = 'baseline-report.html';
 
         var firstRun = true;

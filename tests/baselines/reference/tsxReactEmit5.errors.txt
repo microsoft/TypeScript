@@ -1,0 +1,23 @@
+file.tsx(1,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== file.tsx (1 errors) ====
+    declare module JSX {
+            ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    	interface Element { }
+    	interface IntrinsicElements {
+    		[s: string]: any;
+    	}
+    }
+    
+==== test.d.ts (0 errors) ====
+    export var React;
+    
+==== react-consumer.tsx (0 errors) ====
+    import {React} from "./test";
+    // Should emit test_1.React.createElement
+    //  and React.__spread
+    var foo: any;
+    var spread1 = <div x='' {...foo} y='' />;
+    

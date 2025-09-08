@@ -42,7 +42,7 @@ declare var ng: ng.IAngularStatic;
 >ng : any
 >   : ^^^
 
-declare module ng {
+declare namespace ng {
    export interface IModule {
       name: string;
 >name : string

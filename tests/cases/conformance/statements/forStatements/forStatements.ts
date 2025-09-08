@@ -16,7 +16,7 @@ class D<T>{
 
 function F(x: string): number { return 42; }
 
-module M {
+namespace M {
     export class A {
         name: string;
     }

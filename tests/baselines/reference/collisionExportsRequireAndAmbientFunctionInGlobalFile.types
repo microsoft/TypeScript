@@ -9,7 +9,7 @@ declare function require(): string;
 >require : () => string
 >        : ^^^^^^      
 
-declare module m3 {
+declare namespace m3 {
 >m3 : typeof m3
 >   : ^^^^^^^^^
 
@@ -21,7 +21,7 @@ declare module m3 {
 >require : () => number[]
 >        : ^^^^^^        
 }
-module m4 {
+namespace m4 {
 >m4 : typeof m4
 >   : ^^^^^^^^^
 

@@ -1,7 +1,7 @@
-module M {
-    export module N {
+namespace M {
+    export namespace N {
 	export function f(x:number)=>2*x;
-	export module X.Y.Z {
+	export namespace X.Y.Z {
 	    export var v2=f(v);
 	}
     }
@@ -9,9 +9,9 @@ module M {
 
 
 
-module M.N {
-    export module X {
-	export module Y.Z {
+namespace M.N {
+    export namespace X {
+	export namespace Y.Z {
 	    export var v=f(10);
 	}
     }

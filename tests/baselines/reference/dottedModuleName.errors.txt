@@ -1,16 +1,25 @@
 dottedModuleName.ts(3,29): error TS1144: '{' or ';' expected.
 dottedModuleName.ts(3,33): error TS2552: Cannot find name 'x'. Did you mean 'X'?
+dottedModuleName.ts(4,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+dottedModuleName.ts(4,18): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+dottedModuleName.ts(4,20): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 
 
-==== dottedModuleName.ts (2 errors) ====
-    module M {
-        export module N {
+==== dottedModuleName.ts (5 errors) ====
+    namespace M {
+        export namespace N {
     	export function f(x:number)=>2*x;
     	                           ~~
 !!! error TS1144: '{' or ';' expected.
     	                               ~
 !!! error TS2552: Cannot find name 'x'. Did you mean 'X'?
     	export module X.Y.Z {
+    	       ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    	                ~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    	                  ~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
     	    export var v2=f(v);
     	}
         }
@@ -18,9 +27,9 @@ dottedModuleName.ts(3,33): error TS2552: Cannot find name 'x'. Did you mean 'X'?
     
     
     
-    module M.N {
-        export module X {
-    	export module Y.Z {
+    namespace M.N {
+        export namespace X {
+    	export namespace Y.Z {
     	    export var v=f(10);
     	}
         }

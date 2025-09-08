@@ -1,12 +1,12 @@
-module E {
+namespace E {
     var t;
 }
 enum E { }
 
 enum F { }
-module F { var t; }
+namespace F { var t; }
 
-module A {
+namespace A {
     var o;
 }
 enum A {
@@ -15,6 +15,6 @@ enum A {
 enum A {
     c
 }
-module A {
+namespace A {
     var p;
 }

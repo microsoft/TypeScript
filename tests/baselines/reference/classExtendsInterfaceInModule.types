@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/classExtendsInterfaceInModule.ts] ////
 
 === classExtendsInterfaceInModule.ts ===
-module M {
+namespace M {
   export interface I1 {}
   export interface I2<T> {}
 }
@@ -25,7 +25,7 @@ class C2<T> extends M.I2<T> {}
 >I2 : any
 >   : ^^^
 
-module Mod {
+namespace Mod {
 	export namespace Nested {
 		export interface I {}
 	}

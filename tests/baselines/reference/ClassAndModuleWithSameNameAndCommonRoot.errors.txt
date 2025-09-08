@@ -1,8 +1,16 @@
-module.ts(2,19): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
+class.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+class.ts(1,10): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+module.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+module.ts(1,10): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+module.ts(2,22): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
 
 
-==== class.ts (0 errors) ====
+==== class.ts (2 errors) ====
     module X.Y {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+             ~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
         export class Point {
             constructor(x: number, y: number) {
                 this.x = x;
@@ -13,10 +21,14 @@ module.ts(2,19): error TS2433: A namespace declaration cannot be in a different 
         }
     }
     
-==== module.ts (1 errors) ====
+==== module.ts (3 errors) ====
     module X.Y {
-        export module Point {
-                      ~~~~~
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+             ~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export namespace Point {
+                         ~~~~~
 !!! error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
             export var Origin = new Point(0, 0);
         }
@@ -33,7 +45,7 @@ module.ts(2,19): error TS2433: A namespace declaration cannot be in a different 
         id: string;
     }
     
-    module A {
+    namespace A {
         export var Instance = new A();
     }
     

@@ -3,7 +3,7 @@
 === assignmentToReferenceTypes.ts ===
 // Should all be allowed
 
-module M {
+namespace M {
 }
 M = null;
 >M = null : null

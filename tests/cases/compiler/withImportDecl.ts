@@ -32,7 +32,7 @@ function simpleFunction() {
     };
 }
 
-module m1 {
+namespace m1 {
     export function foo() {
         return "Hello";
     }

@@ -202,7 +202,7 @@ interface I14 {
 function f() { }
 >f : Symbol(f, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 85, 1), Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 88, 16))
 
-module f {
+namespace f {
 >f : Symbol(f, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 85, 1), Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 88, 16))
 
     export var bar = 1;
@@ -225,7 +225,7 @@ class c { baz: string }
 >c : Symbol(c, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 95, 1), Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 98, 23))
 >baz : Symbol(c.baz, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 98, 9))
 
-module c {
+namespace c {
 >c : Symbol(c, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 95, 1), Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 98, 23))
 
     export var bar = 1;

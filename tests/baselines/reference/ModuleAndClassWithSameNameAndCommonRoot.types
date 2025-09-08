@@ -7,7 +7,7 @@ module X.Y {
 >Y : typeof Y
 >  : ^^^^^^^^
 
-    export module Point {
+    export namespace Point {
 >Point : typeof Point
 >      : ^^^^^^^^^^^^
 
@@ -78,7 +78,7 @@ module X.Y {
 }
 
 === simple.ts ===
-module A {
+namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 

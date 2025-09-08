@@ -5,7 +5,7 @@ export class TopLevelClass {}
 >TopLevelClass : TopLevelClass
 >              : ^^^^^^^^^^^^^
 
-export module TopLevelModule {var v;}
+export namespace TopLevelModule {var v;}
 >TopLevelModule : typeof TopLevelModule
 >               : ^^^^^^^^^^^^^^^^^^^^^
 >v : any
@@ -20,7 +20,7 @@ export enum TopLevelEnum {E}
 >E : TopLevelEnum.E
 >  : ^^^^^^^^^^^^^^
 
-export module TopLevelModule2 {
+export namespace TopLevelModule2 {
 >TopLevelModule2 : typeof TopLevelModule2
 >                : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -28,7 +28,7 @@ export module TopLevelModule2 {
 >NonTopLevelClass : NonTopLevelClass
 >                 : ^^^^^^^^^^^^^^^^
 
-    export module NonTopLevelModule {var v;}
+    export namespace NonTopLevelModule {var v;}
 >NonTopLevelModule : typeof NonTopLevelModule
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >v : any

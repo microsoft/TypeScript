@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/exportImportAndClodule.ts] ////
 
 === exportImportAndClodule.ts ===
-module K {
+namespace K {
 >K : typeof K
 >  : ^^^^^^^^
 
@@ -13,7 +13,7 @@ module K {
 >name : string
 >     : ^^^^^^
     }
-    export module L {
+    export namespace L {
 >L : typeof L
 >  : ^^^^^^^^
 
@@ -34,7 +34,7 @@ module K {
         }
     }
 }
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

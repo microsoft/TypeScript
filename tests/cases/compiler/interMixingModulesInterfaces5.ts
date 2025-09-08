@@ -1,11 +1,11 @@
-module A {
+namespace A {
 
     interface B {
         name: string;
         value: number;
     }
 
-    export module B {
+    export namespace B {
         export function createB(): number {
             return null;
         }

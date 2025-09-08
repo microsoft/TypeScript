@@ -3,7 +3,7 @@
 === assignmentCompatWithObjectMembers4.ts ===
 // members N and M of types S and T have the same name, same accessibility, same optionality, and N is not assignable M
 
-module OnlyDerived {
+namespace OnlyDerived {
 >OnlyDerived : typeof OnlyDerived
 >            : ^^^^^^^^^^^^^^^^^^
 
@@ -254,7 +254,7 @@ module OnlyDerived {
 >  : ^
 }
 
-module WithBase {
+namespace WithBase {
 >WithBase : typeof WithBase
 >         : ^^^^^^^^^^^^^^^
 

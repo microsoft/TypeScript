@@ -1,4 +1,4 @@
-module M {
+namespace M {
     export enum Color {
         Green,
         Blue,

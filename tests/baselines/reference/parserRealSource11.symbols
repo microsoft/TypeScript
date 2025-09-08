@@ -6,11 +6,11 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource11.ts, 0, 0))
 
     export class ASTSpan {
->ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 19))
+>ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 22))
 
         public minChar: number = -1;  // -1 = "undefined" or "compiler generated"
 >minChar : Symbol(ASTSpan.minChar, Decl(parserRealSource11.ts, 6, 26))
@@ -21,7 +21,7 @@ module TypeScript {
 
     export class AST extends ASTSpan {
 >AST : Symbol(AST, Decl(parserRealSource11.ts, 9, 5))
->ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 19))
+>ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 22))
 
         public type: Type = null;
 >type : Symbol(AST.type, Decl(parserRealSource11.ts, 11, 38))
@@ -50,7 +50,7 @@ module TypeScript {
 >NodeType : Symbol(NodeType)
 
             super();
->super : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 19))
+>super : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 22))
         }
 
         public isExpression() { return false; }
@@ -2820,7 +2820,7 @@ module TypeScript {
 
         public endingToken: ASTSpan = null;
 >endingToken : Symbol(FuncDecl.endingToken, Decl(parserRealSource11.ts, 980, 38))
->ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 19))
+>ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 22))
 
         constructor (public name: Identifier, public bod: ASTList, public isConstructor: boolean,
 >name : Symbol(FuncDecl.name, Decl(parserRealSource11.ts, 983, 21))
@@ -3585,7 +3585,7 @@ module TypeScript {
 >scopes : Symbol(scopes, Decl(parserRealSource11.ts, 1204, 71))
 >ASTList : Symbol(ASTList, Decl(parserRealSource11.ts, 188, 5))
 >endingToken : Symbol(ModuleDeclaration.endingToken, Decl(parserRealSource11.ts, 1204, 88))
->ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 19))
+>ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 22))
 
             super(NodeType.ModuleDeclaration, name, members);
 >super : Symbol(NamedDeclaration, Decl(parserRealSource11.ts, 1180, 5))
@@ -3757,7 +3757,7 @@ module TypeScript {
 
         public endingToken: ASTSpan = null;
 >endingToken : Symbol(ClassDeclaration.endingToken, Decl(parserRealSource11.ts, 1258, 43))
->ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 19))
+>ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 22))
 
         constructor (name: Identifier,
 >name : Symbol(name, Decl(parserRealSource11.ts, 1261, 21))
@@ -4742,8 +4742,8 @@ module TypeScript {
 
         public statement: ASTSpan = new ASTSpan();
 >statement : Symbol(IfStatement.statement, Decl(parserRealSource11.ts, 1567, 35))
->ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 19))
->ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 19))
+>ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 22))
+>ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 22))
 
         constructor (public cond: AST) {
 >cond : Symbol(IfStatement.cond, Decl(parserRealSource11.ts, 1570, 21))
@@ -5109,8 +5109,8 @@ module TypeScript {
         }
         public statement: ASTSpan = new ASTSpan();
 >statement : Symbol(ForInStatement.statement, Decl(parserRealSource11.ts, 1691, 9))
->ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 19))
->ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 19))
+>ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 22))
+>ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 22))
 
         public body: AST;
 >body : Symbol(ForInStatement.body, Decl(parserRealSource11.ts, 1692, 50))
@@ -5934,8 +5934,8 @@ module TypeScript {
 
         public statement: ASTSpan = new ASTSpan();
 >statement : Symbol(SwitchStatement.statement, Decl(parserRealSource11.ts, 1934, 49))
->ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 19))
->ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 19))
+>ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 22))
+>ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 22))
 
         constructor (public val: AST) {
 >val : Symbol(SwitchStatement.val, Decl(parserRealSource11.ts, 1937, 21))
@@ -6908,8 +6908,8 @@ module TypeScript {
         }
         public statement: ASTSpan = new ASTSpan();
 >statement : Symbol(Catch.statement, Decl(parserRealSource11.ts, 2226, 9))
->ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 19))
->ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 19))
+>ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 22))
+>ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 22))
 
         public containedScope: SymbolScope = null;
 >containedScope : Symbol(Catch.containedScope, Decl(parserRealSource11.ts, 2227, 50))

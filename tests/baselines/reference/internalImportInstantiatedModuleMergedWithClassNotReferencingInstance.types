@@ -9,7 +9,7 @@ class A {
 >aProp : string
 >      : ^^^^^^
 }
-module A {
+namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 
@@ -24,7 +24,7 @@ module A {
 >   : ^^
 }
 
-module B {
+namespace B {
 >B : typeof B
 >  : ^^^^^^^^
 

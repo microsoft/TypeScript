@@ -173,7 +173,7 @@ namespace Merged2 {
 >c : E.c
 >  : ^^^
     }
-    export module E {
+    export namespace E {
 >E : typeof E
 >  : ^^^^^^^^
 

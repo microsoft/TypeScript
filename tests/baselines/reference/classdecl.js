@@ -39,7 +39,7 @@ class a {
 class b extends a {
 }
 
-module m1 {
+namespace m1 {
     export class b {
     }
     class d {
@@ -50,9 +50,9 @@ module m1 {
     }
 }
 
-module m2 {
+namespace m2 {
 
-    export module m3 {
+    export namespace m3 {
         export class c extends b {
         }
         export class ib2 implements m1.ib {

@@ -1,13 +1,13 @@
 //// [tests/cases/compiler/exportImportCanSubstituteConstEnumForValue.ts] ////
 
 === exportImportCanSubstituteConstEnumForValue.ts ===
-module MsPortalFx.ViewModels.Dialogs {
+namespace MsPortalFx.ViewModels.Dialogs {
 >MsPortalFx : Symbol(MsPortalFx, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 0), Decl(exportImportCanSubstituteConstEnumForValue.ts, 27, 1))
->ViewModels : Symbol(ViewModels, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 18), Decl(exportImportCanSubstituteConstEnumForValue.ts, 30, 18))
->Dialogs : Symbol(Dialogs, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 29))
+>ViewModels : Symbol(ViewModels, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 21), Decl(exportImportCanSubstituteConstEnumForValue.ts, 30, 21))
+>Dialogs : Symbol(Dialogs, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 32))
 
     export const enum DialogResult {
->DialogResult : Symbol(DialogResult, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 38))
+>DialogResult : Symbol(DialogResult, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 41))
 
         Abort,
 >Abort : Symbol(ReExportedEnum.Abort, Decl(exportImportCanSubstituteConstEnumForValue.ts, 2, 36))
@@ -37,9 +37,9 @@ module MsPortalFx.ViewModels.Dialogs {
         (result: MsPortalFx.ViewModels.Dialogs.DialogResult): void;
 >result : Symbol(result, Decl(exportImportCanSubstituteConstEnumForValue.ts, 13, 9))
 >MsPortalFx : Symbol(MsPortalFx, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 0), Decl(exportImportCanSubstituteConstEnumForValue.ts, 27, 1))
->ViewModels : Symbol(ViewModels, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 18), Decl(exportImportCanSubstituteConstEnumForValue.ts, 30, 18))
->Dialogs : Symbol(Dialogs, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 29))
->DialogResult : Symbol(DialogResult, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 38))
+>ViewModels : Symbol(ViewModels, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 21), Decl(exportImportCanSubstituteConstEnumForValue.ts, 30, 21))
+>Dialogs : Symbol(Dialogs, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 32))
+>DialogResult : Symbol(DialogResult, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 41))
     }
 
     export function someExportedFunction() {
@@ -70,24 +70,24 @@ module MsPortalFx.ViewModels.Dialogs {
 }
 
 
-module MsPortalFx.ViewModels {
+namespace MsPortalFx.ViewModels {
 >MsPortalFx : Symbol(MsPortalFx, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 0), Decl(exportImportCanSubstituteConstEnumForValue.ts, 27, 1))
->ViewModels : Symbol(ViewModels, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 18), Decl(exportImportCanSubstituteConstEnumForValue.ts, 30, 18))
+>ViewModels : Symbol(ViewModels, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 21), Decl(exportImportCanSubstituteConstEnumForValue.ts, 30, 21))
 
     /**
      * For some reason javascript code is emitted for this re-exported const enum.
      */
     export import ReExportedEnum = Dialogs.DialogResult;
->ReExportedEnum : Symbol(ReExportedEnum, Decl(exportImportCanSubstituteConstEnumForValue.ts, 30, 30))
->Dialogs : Symbol(Dialogs, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 29))
->DialogResult : Symbol(ReExportedEnum, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 38))
+>ReExportedEnum : Symbol(ReExportedEnum, Decl(exportImportCanSubstituteConstEnumForValue.ts, 30, 33))
+>Dialogs : Symbol(Dialogs, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 32))
+>DialogResult : Symbol(ReExportedEnum, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 41))
 
     /**
      * Not exported to show difference. No javascript is emmitted (as expected)
      */
     import DialogButtons = Dialogs.MessageBoxButtons;
 >DialogButtons : Symbol(DialogButtons, Decl(exportImportCanSubstituteConstEnumForValue.ts, 35, 56))
->Dialogs : Symbol(Dialogs, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 29))
+>Dialogs : Symbol(Dialogs, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 32))
 >MessageBoxButtons : Symbol(DialogButtons, Decl(exportImportCanSubstituteConstEnumForValue.ts, 17, 5))
 
     /**
@@ -95,7 +95,7 @@ module MsPortalFx.ViewModels {
      */
     export import Callback = Dialogs.DialogResultCallback;
 >Callback : Symbol(Callback, Decl(exportImportCanSubstituteConstEnumForValue.ts, 40, 53))
->Dialogs : Symbol(Dialogs, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 29))
+>Dialogs : Symbol(Dialogs, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 32))
 >DialogResultCallback : Symbol(Callback, Decl(exportImportCanSubstituteConstEnumForValue.ts, 10, 5))
 
     export class SomeUsagesOfTheseConsts {
@@ -106,7 +106,7 @@ module MsPortalFx.ViewModels {
             const value1 = ReExportedEnum.Cancel;
 >value1 : Symbol(value1, Decl(exportImportCanSubstituteConstEnumForValue.ts, 50, 17))
 >ReExportedEnum.Cancel : Symbol(ReExportedEnum.Cancel, Decl(exportImportCanSubstituteConstEnumForValue.ts, 3, 14))
->ReExportedEnum : Symbol(ReExportedEnum, Decl(exportImportCanSubstituteConstEnumForValue.ts, 30, 30))
+>ReExportedEnum : Symbol(ReExportedEnum, Decl(exportImportCanSubstituteConstEnumForValue.ts, 30, 33))
 >Cancel : Symbol(ReExportedEnum.Cancel, Decl(exportImportCanSubstituteConstEnumForValue.ts, 3, 14))
 
             console.log(value1);

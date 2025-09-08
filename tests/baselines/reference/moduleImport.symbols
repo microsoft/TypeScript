@@ -21,11 +21,11 @@ module A.B.C {
 	}
 }
 
-module X {
+namespace X {
 >X : Symbol(X, Decl(moduleImport.ts, 5, 1))
 
 	import ABC = A.B.C;
->ABC : Symbol(ABC, Decl(moduleImport.ts, 7, 10))
+>ABC : Symbol(ABC, Decl(moduleImport.ts, 7, 13))
 >A : Symbol(A, Decl(moduleImport.ts, 0, 0))
 >B : Symbol(A.B, Decl(moduleImport.ts, 0, 9))
 >C : Symbol(ABC, Decl(moduleImport.ts, 0, 11))
@@ -37,7 +37,7 @@ module X {
 		if (x > 0) ABC.ping(x-1);
 >x : Symbol(x, Decl(moduleImport.ts, 9, 22))
 >ABC.ping : Symbol(ABC.ping, Decl(moduleImport.ts, 1, 20))
->ABC : Symbol(ABC, Decl(moduleImport.ts, 7, 10))
+>ABC : Symbol(ABC, Decl(moduleImport.ts, 7, 13))
 >ping : Symbol(ABC.ping, Decl(moduleImport.ts, 1, 20))
 >x : Symbol(x, Decl(moduleImport.ts, 9, 22))
 	}

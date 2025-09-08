@@ -10,4 +10,4 @@ export const tabId = chrome.debugger.tabId;
 
 declare module test.class {}
 
-declare module debugger {} // still an error
+declare namespace debugger {} // still an error

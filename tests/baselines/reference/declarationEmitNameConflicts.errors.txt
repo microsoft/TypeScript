@@ -1,0 +1,62 @@
+declarationEmit_nameConflicts_0.ts(16,8): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+declarationEmit_nameConflicts_0.ts(16,17): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+declarationEmit_nameConflicts_0.ts(31,8): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+declarationEmit_nameConflicts_0.ts(31,17): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== declarationEmit_nameConflicts_0.ts (4 errors) ====
+    import im = require('./declarationEmit_nameConflicts_1');
+    export namespace M {
+        export function f() { }
+        export class C { }
+        export namespace N {
+            export function g() { };
+            export interface I { }
+        }
+    
+        export import a = M.f;
+        export import b = M.C;
+        export import c = N;
+        export import d = im;
+    }
+    
+    export module M.P {
+           ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+                    ~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export function f() { }
+        export class C { }
+        export namespace N {
+            export function g() { };
+            export interface I { }
+        }
+        export import im = M.P.f;
+        export var a = M.a; // emitted incorrectly as typeof f
+        export var b = M.b; // ok
+        export var c = M.c; // ok
+        export var g = M.c.g; // ok
+        export var d = M.d; // emitted incorrectly as typeof im
+    }
+    
+    export module M.Q {
+           ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+                    ~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export function f() { }
+        export class C { }
+        export namespace N {
+            export function g() { };
+            export interface I { }
+        }
+        export interface b extends M.b { } // ok
+        export interface I extends M.c.I { } // ok
+        export namespace c {
+            export interface I extends M.c.I { } // ok
+        }
+    }
+==== declarationEmit_nameConflicts_1.ts (0 errors) ====
+    namespace f { export class c { } }
+    export = f;
+    

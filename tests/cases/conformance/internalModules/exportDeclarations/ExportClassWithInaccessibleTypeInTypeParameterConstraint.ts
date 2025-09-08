@@ -1,4 +1,4 @@
-module A {
+namespace A {
 
     class Point {
         x: number;

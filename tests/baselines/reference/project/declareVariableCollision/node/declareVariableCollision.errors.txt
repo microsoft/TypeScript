@@ -5,12 +5,12 @@ in2.d.ts(1,8): error TS2300: Duplicate identifier 'a'.
 ==== decl.d.ts (0 errors) ====
     // bug 535531: duplicate identifier error reported for "import" declarations in separate files
     
-    declare module A
+    declare namespace A
     {
     
         class MyRoot { }
     
-        export module B
+        export namespace B
         {
             class MyClass{ }
         }

@@ -10,7 +10,7 @@ subtypingWithCallSignaturesWithSpecializedSignatures.ts(76,15): error TS2430: In
 ==== subtypingWithCallSignaturesWithSpecializedSignatures.ts (2 errors) ====
     // same as subtypingWithCallSignatures but with additional specialized signatures that should not affect the results
     
-    module CallSignature {
+    namespace CallSignature {
         interface Base { // T
             // M's
             (x: 'a'): void;
@@ -45,7 +45,7 @@ subtypingWithCallSignaturesWithSpecializedSignatures.ts(76,15): error TS2430: In
         }
     }
     
-    module MemberWithCallSignature {
+    namespace MemberWithCallSignature {
         interface Base { // T
             // M's
             a: {

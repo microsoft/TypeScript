@@ -19,7 +19,7 @@ interface B2 extends A {
     [x: string]: Derived2; // ok
 }
 
-module Generics {
+namespace Generics {
     interface A<T extends Derived> {
         [x: string]: T;
     }

@@ -136,7 +136,7 @@ format.setFormatOptions(copy);
 format.document();
 
 verify.currentFileContentIs(`
-          module classes {
+          namespace classes {
               class Bar {
 
                   constructor() {
@@ -156,7 +156,7 @@ verify.currentFileContentIs(`
           }
 
 
-          module interfaces {
+          namespace interfaces {
               interface Foo {
 
                   x: number;
@@ -166,8 +166,8 @@ verify.currentFileContentIs(`
           }
 
 
-          module nestedModules {
-              module Foo2 {
+          namespace nestedModules {
+              namespace Foo2 {
                   function f() {
                   }
                   var x: number;
@@ -175,7 +175,7 @@ verify.currentFileContentIs(`
           }
 
 
-          module Enums {
+          namespace Enums {
               enum Foo3 {
                   val1,
                   val2,

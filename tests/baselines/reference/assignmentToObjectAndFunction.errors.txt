@@ -20,21 +20,21 @@ assignmentToObjectAndFunction.ts(29,5): error TS2322: Type 'typeof bad' is not a
 !!! error TS2740: Type '{}' is missing the following properties from type 'Function': apply, call, bind, prototype, and 3 more.
     
     function foo() { }
-    module foo {
+    namespace foo {
         export var boom = 0;
     }
     
     var goodFundule: Function = foo; // ok
     
     function bar() { }
-    module bar {
+    namespace bar {
         export function apply(thisArg: string, argArray?: string) { }
     }
     
     var goodFundule2: Function = bar; // ok
     
     function bad() { }
-    module bad {
+    namespace bad {
         export var apply = 0;
     }
     

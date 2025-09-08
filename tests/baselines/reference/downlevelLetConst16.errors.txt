@@ -107,7 +107,7 @@ downlevelLetConst16.ts(223,17): error TS2339: Property 'a' does not exist on typ
         use(x);
     }
     
-    module M1 {
+    namespace M1 {
         let x = 1;
         use(x);
         let [y] = [1];
@@ -116,7 +116,7 @@ downlevelLetConst16.ts(223,17): error TS2339: Property 'a' does not exist on typ
         use(z);
     }
     
-    module M2 {
+    namespace M2 {
         {
             let x = 1;
             use(x);
@@ -128,7 +128,7 @@ downlevelLetConst16.ts(223,17): error TS2339: Property 'a' does not exist on typ
         use(x);
     }
     
-    module M3 {
+    namespace M3 {
         const x = 1;
         use(x);
         const [y] = [1];
@@ -138,7 +138,7 @@ downlevelLetConst16.ts(223,17): error TS2339: Property 'a' does not exist on typ
     
     }
     
-    module M4 {
+    namespace M4 {
         {
             const x = 1;
             use(x);

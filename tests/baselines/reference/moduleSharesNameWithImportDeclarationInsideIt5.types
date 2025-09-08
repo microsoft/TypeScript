@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/moduleSharesNameWithImportDeclarationInsideIt5.ts] ////
 
 === moduleSharesNameWithImportDeclarationInsideIt5.ts ===
-module Z {
+namespace Z {
 >Z : typeof Z
 >  : ^^^^^^^^
 
-    export module M {
+    export namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -20,7 +20,7 @@ module Z {
     }
     export interface I { }
 }
-module A.M {
+namespace A.M {
 >A : typeof A
 >  : ^^^^^^^^
 >M : typeof M

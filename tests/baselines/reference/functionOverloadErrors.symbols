@@ -185,18 +185,18 @@ class cls {
 }
 
 //Function overloads with differing export
-module M {
+namespace M {
 >M : Symbol(M, Decl(functionOverloadErrors.ts, 70, 1))
 
     export function fn1();
->fn1 : Symbol(fn1, Decl(functionOverloadErrors.ts, 73, 10))
+>fn1 : Symbol(fn1, Decl(functionOverloadErrors.ts, 73, 13))
 
     function fn1(n: string);
->fn1 : Symbol(fn1, Decl(functionOverloadErrors.ts, 73, 10), Decl(functionOverloadErrors.ts, 74, 26), Decl(functionOverloadErrors.ts, 75, 28))
+>fn1 : Symbol(fn1, Decl(functionOverloadErrors.ts, 73, 13), Decl(functionOverloadErrors.ts, 74, 26), Decl(functionOverloadErrors.ts, 75, 28))
 >n : Symbol(n, Decl(functionOverloadErrors.ts, 75, 17))
 
     function fn1() { } 
->fn1 : Symbol(fn1, Decl(functionOverloadErrors.ts, 73, 10), Decl(functionOverloadErrors.ts, 74, 26), Decl(functionOverloadErrors.ts, 75, 28))
+>fn1 : Symbol(fn1, Decl(functionOverloadErrors.ts, 73, 13), Decl(functionOverloadErrors.ts, 74, 26), Decl(functionOverloadErrors.ts, 75, 28))
 
     function fn2(n: string);
 >fn2 : Symbol(fn2, Decl(functionOverloadErrors.ts, 76, 22), Decl(functionOverloadErrors.ts, 78, 28), Decl(functionOverloadErrors.ts, 79, 26))

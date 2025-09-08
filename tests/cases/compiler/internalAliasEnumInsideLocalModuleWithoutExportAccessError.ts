@@ -1,5 +1,5 @@
 //@module: commonjs
-export module a {
+export namespace a {
     export enum weekend {
         Friday,
         Saturday,
@@ -7,7 +7,7 @@ export module a {
     }
 }
 
-export module c {
+export namespace c {
     import b = a.weekend;
     export var bVal: b = b.Sunday;
 }

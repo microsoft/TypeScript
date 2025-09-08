@@ -1,11 +1,11 @@
 //// [tests/cases/conformance/decorators/class/method/decoratorOnClassMethod11.ts] ////
 
 === decoratorOnClassMethod11.ts ===
-module M {
+namespace M {
 >M : Symbol(M, Decl(decoratorOnClassMethod11.ts, 0, 0))
 
     class C {
->C : Symbol(C, Decl(decoratorOnClassMethod11.ts, 0, 10))
+>C : Symbol(C, Decl(decoratorOnClassMethod11.ts, 0, 13))
 
         decorator(target: Object, key: string): void { }
 >decorator : Symbol(C.decorator, Decl(decoratorOnClassMethod11.ts, 1, 13))

@@ -43,7 +43,7 @@ export function foo() {
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 }
 
-module M {
+namespace M {
     export const enum NonTopLevelConstEnum { X }
 >NonTopLevelConstEnum : NonTopLevelConstEnum
 >                     : ^^^^^^^^^^^^^^^^^^^^

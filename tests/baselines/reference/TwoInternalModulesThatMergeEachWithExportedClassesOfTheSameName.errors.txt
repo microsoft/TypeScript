@@ -1,11 +1,14 @@
 TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(2,18): error TS2300: Duplicate identifier 'Point'.
 TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(10,18): error TS2300: Duplicate identifier 'Point'.
+TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(16,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(16,10): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(16,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(17,18): error TS2300: Duplicate identifier 'Line'.
 TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(26,26): error TS2300: Duplicate identifier 'Line'.
 
 
-==== TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts (4 errors) ====
-    module A {
+==== TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts (7 errors) ====
+    namespace A {
         export class Point {
                      ~~~~~
 !!! error TS2300: Duplicate identifier 'Point'.
@@ -14,7 +17,7 @@ TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(26,26): error
         }
     }
     
-    module A{
+    namespace A{
         // expected error
         export class Point {
                      ~~~~~
@@ -25,6 +28,12 @@ TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(26,26): error
     }
     
     module X.Y.Z {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+             ~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+               ~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
         export class Line {
                      ~~~~
 !!! error TS2300: Duplicate identifier 'Line'.
@@ -32,9 +41,9 @@ TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(26,26): error
         }
     }
     
-    module X {
-        export module Y {
-            export module Z {
+    namespace X {
+        export namespace Y {
+            export namespace Z {
                 // expected error
                 export class Line {
                              ~~~~

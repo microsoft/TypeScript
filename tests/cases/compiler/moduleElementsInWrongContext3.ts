@@ -1,6 +1,6 @@
-module P {
+namespace P {
     {
-        module M { }
+        namespace M { }
         export namespace N {
             export interface I { }
         }

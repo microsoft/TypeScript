@@ -534,7 +534,7 @@ declare module "module" {
 >"module" : typeof import("module")
 >         : ^^^^^^^^^^^^^^^^^^^^^^^
 
-    module Foo {
+    namespace Foo {
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 
@@ -564,7 +564,7 @@ declare module "interface-module" {
 >y : number
 >  : ^^^^^^
     }
-    module Foo {
+    namespace Foo {
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 
@@ -585,7 +585,7 @@ declare module "variable-module" {
 >"variable-module" : typeof import("variable-module")
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    module Foo {
+    namespace Foo {
         interface Bar {
             x: number;
 >x : number
@@ -634,7 +634,7 @@ declare module "function-module" {
 >foo : typeof foo
 >    : ^^^^^^^^^^
 
-    module foo {
+    namespace foo {
 >foo : typeof foo
 >    : ^^^^^^^^^^
 
@@ -688,7 +688,7 @@ declare module "class-module" {
 >y : number
 >  : ^^^^^^
     }
-    module Foo {
+    namespace Foo {
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 

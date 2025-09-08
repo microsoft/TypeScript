@@ -31,7 +31,7 @@ file1.d.ts(17,18): error TS1039: Initializers are not allowed in ambient context
                     ~~
 !!! error TS1039: Initializers are not allowed in ambient contexts.
     
-    declare module M1 {
+    declare namespace M1 {
     	while(true);
     	~~~~~
 !!! error TS1036: Statements are not allowed in ambient contexts.

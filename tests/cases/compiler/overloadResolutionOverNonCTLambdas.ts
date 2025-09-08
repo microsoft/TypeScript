@@ -1,4 +1,4 @@
-module Bugs {
+namespace Bugs {
   class A {
   }
   

@@ -1,0 +1,29 @@
+declFileWithExtendsClauseThatHasItsContainerNameConflict.ts(1,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+declFileWithExtendsClauseThatHasItsContainerNameConflict.ts(1,18): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+declFileWithExtendsClauseThatHasItsContainerNameConflict.ts(1,20): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== declFileWithExtendsClauseThatHasItsContainerNameConflict.ts (3 errors) ====
+    declare module A.B.C {
+            ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+                     ~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+                       ~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        class B {
+        }
+    }
+    
+    namespace A.B {
+        export class EventManager {
+            id: number;
+    
+        }
+    }
+    
+    namespace A.B.C {
+        export class ContextMenu extends EventManager {
+            name: string;
+        }
+    }

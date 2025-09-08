@@ -835,11 +835,11 @@ enum bigEnum {
 >with : Symbol(bigEnum.with, Decl(convertKeywordsYes.ts, 285, 10))
 }
 
-module bigModule {
+namespace bigModule {
 >bigModule : Symbol(bigModule, Decl(convertKeywordsYes.ts, 287, 1))
 
     class constructor { }
->constructor : Symbol(constructor, Decl(convertKeywordsYes.ts, 289, 18))
+>constructor : Symbol(constructor, Decl(convertKeywordsYes.ts, 289, 21))
 
     class implements { }
 >implements : Symbol(implements, Decl(convertKeywordsYes.ts, 290, 25))

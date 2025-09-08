@@ -1,11 +1,11 @@
 // @allowUnreachableCode: true
 // @module: commonjs
 
-export module Foo {
+export namespace Foo {
 	export class C {}
 }
 
-export module Foo {
+export namespace Foo {
 
 	function Bar() : C {
 		if (true) { return Bar();}

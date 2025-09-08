@@ -1,13 +1,13 @@
 //// [tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedLocalVarsOfTheSameName.ts] ////
 
 //// [part1.ts]
-export module A {
+export namespace A {
     export interface Point {
         x: number;
         y: number;
     }
 
-    export module Utils {
+    export namespace Utils {
         export function mirror<T extends Point>(p: T) {
             return { x: p.y, y: p.x };
         }
@@ -17,11 +17,11 @@ export module A {
 }
 
 //// [part2.ts]
-export module A {
+export namespace A {
     // collision with 'Origin' var in other part of merged module
     export var Origin: Point = { x: 0, y: 0 };
 
-    export module Utils {
+    export namespace Utils {
         export class Plane {
             constructor(public tl: Point, public br: Point) { }
         }

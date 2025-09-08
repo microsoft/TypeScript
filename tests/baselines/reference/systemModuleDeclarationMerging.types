@@ -5,7 +5,7 @@ export function F() {}
 >F : typeof F
 >  : ^^^^^^^^
 
-export module F { var x; }
+export namespace F { var x; }
 >F : typeof F
 >  : ^^^^^^^^
 >x : any
@@ -14,7 +14,7 @@ export class C {}
 >C : C
 >  : ^
 
-export module C { var x; }
+export namespace C { var x; }
 >C : typeof C
 >  : ^^^^^^^^
 >x : any
@@ -23,7 +23,7 @@ export enum E {}
 >E : E
 >  : ^
 
-export module E { var x; }
+export namespace E { var x; }
 >E : typeof E
 >  : ^^^^^^^^
 >x : any

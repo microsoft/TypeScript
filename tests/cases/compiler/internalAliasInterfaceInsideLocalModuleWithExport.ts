@@ -1,11 +1,11 @@
 //@module: amd
 // @declaration: true
-export module a {
+export namespace a {
     export interface I {
     }
 }
 
-export module c {
+export namespace c {
     export import b = a.I;
     export var x: b;
 }

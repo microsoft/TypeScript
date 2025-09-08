@@ -1,10 +1,21 @@
+invalidNestedModules.ts(1,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+invalidNestedModules.ts(1,10): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+invalidNestedModules.ts(1,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 invalidNestedModules.ts(1,12): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
+invalidNestedModules.ts(16,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+invalidNestedModules.ts(16,11): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 invalidNestedModules.ts(17,18): error TS2300: Duplicate identifier 'Point'.
 invalidNestedModules.ts(24,20): error TS2300: Duplicate identifier 'Point'.
 
 
-==== invalidNestedModules.ts (3 errors) ====
+==== invalidNestedModules.ts (8 errors) ====
     module A.B.C {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+             ~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+               ~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
                ~
 !!! error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
         export class Point {
@@ -13,8 +24,8 @@ invalidNestedModules.ts(24,20): error TS2300: Duplicate identifier 'Point'.
         }
     }
     
-    module A {
-        export module B {
+    namespace A {
+        export namespace B {
             export class C { // Error
                 name: string;
             }
@@ -22,6 +33,10 @@ invalidNestedModules.ts(24,20): error TS2300: Duplicate identifier 'Point'.
     }
     
     module M2.X {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+              ~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
         export class Point {
                      ~~~~~
 !!! error TS2300: Duplicate identifier 'Point'.
@@ -29,8 +44,8 @@ invalidNestedModules.ts(24,20): error TS2300: Duplicate identifier 'Point'.
         }
     }
     
-    module M2 {
-        export module X {
+    namespace M2 {
+        export namespace X {
             export var Point: number; // Error
                        ~~~~~
 !!! error TS2300: Duplicate identifier 'Point'.

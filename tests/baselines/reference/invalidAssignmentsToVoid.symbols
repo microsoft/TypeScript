@@ -44,9 +44,9 @@ x = i;
 >x : Symbol(x, Decl(invalidAssignmentsToVoid.ts, 0, 3))
 >i : Symbol(i, Decl(invalidAssignmentsToVoid.ts, 12, 3))
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 >M : Symbol(M, Decl(invalidAssignmentsToVoid.ts, 13, 6))
->x : Symbol(x, Decl(invalidAssignmentsToVoid.ts, 15, 21))
+>x : Symbol(x, Decl(invalidAssignmentsToVoid.ts, 15, 24))
 
 x = M;
 >x : Symbol(x, Decl(invalidAssignmentsToVoid.ts, 0, 3))

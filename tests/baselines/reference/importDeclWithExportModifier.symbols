@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/importDeclWithExportModifier.ts] ////
 
 === importDeclWithExportModifier.ts ===
-module x {
+namespace x {
 >x : Symbol(x, Decl(importDeclWithExportModifier.ts, 0, 0))
 
     interface c {
->c : Symbol(c, Decl(importDeclWithExportModifier.ts, 0, 10))
+>c : Symbol(c, Decl(importDeclWithExportModifier.ts, 0, 13))
     }
 }
 export import a = x.c;

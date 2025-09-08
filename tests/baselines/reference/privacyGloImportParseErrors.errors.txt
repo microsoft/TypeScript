@@ -17,8 +17,8 @@ privacyGloImportParseErrors.ts(149,29): error TS1147: Import declarations in a n
 
 
 ==== privacyGloImportParseErrors.ts (16 errors) ====
-    module m1 {
-        export module m1_M1_public {
+    namespace m1 {
+        export namespace m1_M1_public {
             export class c1 {
             }
             export function f1() {
@@ -28,7 +28,7 @@ privacyGloImportParseErrors.ts(149,29): error TS1147: Import declarations in a n
             export var v2: c1;
         }
     
-        module m1_M2_private {
+        namespace m1_M2_private {
             export class c1 {
             }
             export function f1() {
@@ -119,7 +119,7 @@ privacyGloImportParseErrors.ts(149,29): error TS1147: Import declarations in a n
 !!! error TS1147: Import declarations in a namespace cannot reference a module.
     }
     
-    module glo_M1_public {
+    namespace glo_M1_public {
         export class c1 {
         }
         export function f1() {
@@ -154,13 +154,13 @@ privacyGloImportParseErrors.ts(149,29): error TS1147: Import declarations in a n
         var use_glo_M2_public_v2_private: typeof use_glo_M2_public;
         var use_glo_M2_public_v3_private: () => use_glo_M2_public.c1;
     
-        module m2 {
+        namespace m2 {
             import errorImport = require("glo_M2_public");
                                          ~~~~~~~~~~~~~~~
 !!! error TS1147: Import declarations in a namespace cannot reference a module.
             import nonerrorImport = glo_M1_public;
     
-            module m5 {
+            namespace m5 {
                 import m5_errorImport = require("glo_M2_public");
                                                 ~~~~~~~~~~~~~~~
 !!! error TS1147: Import declarations in a namespace cannot reference a module.
@@ -170,7 +170,7 @@ privacyGloImportParseErrors.ts(149,29): error TS1147: Import declarations in a n
     }
     
     declare module "anotherParseError" {
-        module m2 {
+        namespace m2 {
             declare module "abc" {
             ~~~~~~~
 !!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
@@ -179,7 +179,7 @@ privacyGloImportParseErrors.ts(149,29): error TS1147: Import declarations in a n
             }
         }
     
-        module m2 {
+        namespace m2 {
             module "abc2" {
                    ~~~~~~
 !!! error TS2435: Ambient modules cannot be nested in other modules or namespaces.
@@ -189,11 +189,11 @@ privacyGloImportParseErrors.ts(149,29): error TS1147: Import declarations in a n
         }
     }
     
-    module m2 {
+    namespace m2 {
         import m3 = require("use_glo_M1_public");
                             ~~~~~~~~~~~~~~~~~~~
 !!! error TS1147: Import declarations in a namespace cannot reference a module.
-        module m4 {
+        namespace m4 {
             var a = 10;
             import m2 = require("use_glo_M1_public");
                                 ~~~~~~~~~~~~~~~~~~~

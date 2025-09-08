@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/overload1.ts] ////
 
 //// [overload1.ts]
-module O {
+namespace O {
     export class A {
         
     }

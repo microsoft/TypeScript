@@ -1,4 +1,4 @@
-module MsPortal.Controls.Base.ItemList {
+namespace MsPortal.Controls.Base.ItemList {
 
     export interface Interface<TValue> {
         // Removing this line fixes the constructor of ItemValue

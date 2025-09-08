@@ -18,7 +18,7 @@ var b2: { [x: string]: Derived2; }
 a = b2; // ok
 b2 = a; // error
 
-module Generics {
+namespace Generics {
     class A<T extends Base> {
         [x: string]: T;
     }

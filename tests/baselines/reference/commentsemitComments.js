@@ -72,7 +72,7 @@ interface i1 {
 var i1_i: i1;
 
 /** this is module comment*/
-module m1 {
+namespace m1 {
     /** class b */
     export class b {
         constructor(public x: number) {
@@ -81,7 +81,7 @@ module m1 {
     }
 
     /// module m2
-    export module m2 {
+    export namespace m2 {
     }
 }
 

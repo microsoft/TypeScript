@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/arrowFunctionsMissingTokens.ts] ////
 
 === arrowFunctionsMissingTokens.ts ===
-module missingArrowsWithCurly {
+namespace missingArrowsWithCurly {
 >missingArrowsWithCurly : Symbol(missingArrowsWithCurly, Decl(arrowFunctionsMissingTokens.ts, 0, 0))
 
     var a = () { };
@@ -25,11 +25,11 @@ module missingArrowsWithCurly {
 >y : Symbol(y, Decl(arrowFunctionsMissingTokens.ts, 9, 23))
 }
 
-module missingCurliesWithArrow {
+namespace missingCurliesWithArrow {
 >missingCurliesWithArrow : Symbol(missingCurliesWithArrow, Decl(arrowFunctionsMissingTokens.ts, 10, 1))
 
-    module withStatement {
->withStatement : Symbol(withStatement, Decl(arrowFunctionsMissingTokens.ts, 12, 32))
+    namespace withStatement {
+>withStatement : Symbol(withStatement, Decl(arrowFunctionsMissingTokens.ts, 12, 35))
 
         var a = () => var k = 10;};
 >a : Symbol(a, Decl(arrowFunctionsMissingTokens.ts, 14, 11))
@@ -61,7 +61,7 @@ module missingCurliesWithArrow {
 >k : Symbol(k, Decl(arrowFunctionsMissingTokens.ts, 24, 25))
     }
 
-    module withoutStatement {
+    namespace withoutStatement {
 >withoutStatement : Symbol(withoutStatement, Decl(arrowFunctionsMissingTokens.ts, 25, 5))
 
         var a = () => };
@@ -89,7 +89,7 @@ module missingCurliesWithArrow {
     }
 }
 
-module ce_nEst_pas_une_arrow_function {
+namespace ce_nEst_pas_une_arrow_function {
 >ce_nEst_pas_une_arrow_function : Symbol(ce_nEst_pas_une_arrow_function, Decl(arrowFunctionsMissingTokens.ts, 40, 1))
 
     var a = ();
@@ -112,7 +112,7 @@ module ce_nEst_pas_une_arrow_function {
 >y : Symbol(y, Decl(arrowFunctionsMissingTokens.ts, 51, 23))
 }
 
-module okay {
+namespace okay {
 >okay : Symbol(okay, Decl(arrowFunctionsMissingTokens.ts, 52, 1))
 
     var a = () => { };

@@ -194,7 +194,7 @@ var F3 = function () {
 };
 
 // modules
-module m {
+namespace m {
 >m : Symbol(m, Decl(constDeclarations-scopes.ts, 98, 2))
 
     const c = 0;

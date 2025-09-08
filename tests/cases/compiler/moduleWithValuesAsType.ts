@@ -1,4 +1,4 @@
-module A {
+namespace A {
     var b = 1;
 }
 

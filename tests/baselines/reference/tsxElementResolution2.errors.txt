@@ -1,0 +1,18 @@
+file.tsx(1,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== file.tsx (1 errors) ====
+    declare module JSX {
+            ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    	interface Element { }
+    	interface IntrinsicElements {
+    	    [x: string]: any;
+    	}
+    }
+    
+    // OK
+    <div />;
+    
+    // OK
+    <span />;

@@ -1,11 +1,14 @@
+file.tsx(1,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 file.tsx(23,1): error TS2607: JSX element class does not support attributes because it does not have a 'pr' property.
 file.tsx(25,1): error TS2607: JSX element class does not support attributes because it does not have a 'pr' property.
 file.tsx(26,1): error TS2607: JSX element class does not support attributes because it does not have a 'pr' property.
 file.tsx(33,7): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
-==== file.tsx (4 errors) ====
+==== file.tsx (5 errors) ====
     declare module JSX {
+            ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
     	interface Element { }
     	interface ElementAttributesProperty { pr: any; }
     	interface IntrinsicElements { }

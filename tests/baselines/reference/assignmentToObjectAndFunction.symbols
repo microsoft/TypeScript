@@ -25,7 +25,7 @@ var errFun: Function = {}; // Error for no call signature
 function foo() { }
 >foo : Symbol(foo, Decl(assignmentToObjectAndFunction.ts, 7, 26), Decl(assignmentToObjectAndFunction.ts, 9, 18))
 
-module foo {
+namespace foo {
 >foo : Symbol(foo, Decl(assignmentToObjectAndFunction.ts, 7, 26), Decl(assignmentToObjectAndFunction.ts, 9, 18))
 
     export var boom = 0;
@@ -40,11 +40,11 @@ var goodFundule: Function = foo; // ok
 function bar() { }
 >bar : Symbol(bar, Decl(assignmentToObjectAndFunction.ts, 14, 32), Decl(assignmentToObjectAndFunction.ts, 16, 18))
 
-module bar {
+namespace bar {
 >bar : Symbol(bar, Decl(assignmentToObjectAndFunction.ts, 14, 32), Decl(assignmentToObjectAndFunction.ts, 16, 18))
 
     export function apply(thisArg: string, argArray?: string) { }
->apply : Symbol(apply, Decl(assignmentToObjectAndFunction.ts, 17, 12))
+>apply : Symbol(apply, Decl(assignmentToObjectAndFunction.ts, 17, 15))
 >thisArg : Symbol(thisArg, Decl(assignmentToObjectAndFunction.ts, 18, 26))
 >argArray : Symbol(argArray, Decl(assignmentToObjectAndFunction.ts, 18, 42))
 }
@@ -57,7 +57,7 @@ var goodFundule2: Function = bar; // ok
 function bad() { }
 >bad : Symbol(bad, Decl(assignmentToObjectAndFunction.ts, 21, 33), Decl(assignmentToObjectAndFunction.ts, 23, 18))
 
-module bad {
+namespace bad {
 >bad : Symbol(bad, Decl(assignmentToObjectAndFunction.ts, 21, 33), Decl(assignmentToObjectAndFunction.ts, 23, 18))
 
     export var apply = 0;

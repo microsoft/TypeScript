@@ -6,11 +6,11 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource7.ts, 0, 0))
 
     export class Continuation {
->Continuation : Symbol(Continuation, Decl(parserRealSource7.ts, 5, 19))
+>Continuation : Symbol(Continuation, Decl(parserRealSource7.ts, 5, 22))
 
         public exceptionBlock = -1;
 >exceptionBlock : Symbol(Continuation.exceptionBlock, Decl(parserRealSource7.ts, 6, 31))

@@ -1,5 +1,5 @@
 //@module: amd
-module x {
+namespace x {
     interface c {
     }
 }

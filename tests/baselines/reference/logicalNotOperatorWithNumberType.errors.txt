@@ -14,7 +14,7 @@ logicalNotOperatorWithNumberType.ts(45,1): error TS2695: Left side of comma oper
         public a: number;
         static foo() { return 1; }
     }
-    module M {
+    namespace M {
         export var n: number;
     }
     

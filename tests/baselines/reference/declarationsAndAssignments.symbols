@@ -341,7 +341,7 @@ f14([2, ["abc", { y: false }]]);  // Error, no x
 >f14 : Symbol(f14, Decl(declarationsAndAssignments.ts, 96, 1))
 >y : Symbol(y, Decl(declarationsAndAssignments.ts, 105, 17))
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(declarationsAndAssignments.ts, 105, 32))
 
     export var [a, b] = [1, 2];

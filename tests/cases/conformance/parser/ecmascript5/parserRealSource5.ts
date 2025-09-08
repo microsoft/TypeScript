@@ -3,7 +3,7 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
     // TODO: refactor indent logic for use in emit
     export class PrintContext {
         public builder = "";

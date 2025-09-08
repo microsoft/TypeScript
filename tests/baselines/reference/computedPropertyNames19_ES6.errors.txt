@@ -2,7 +2,7 @@ computedPropertyNames19_ES6.ts(3,10): error TS2331: 'this' cannot be referenced 
 
 
 ==== computedPropertyNames19_ES6.ts (1 errors) ====
-    module M {
+    namespace M {
         var obj = {
             [this.bar]: 0
              ~~~~

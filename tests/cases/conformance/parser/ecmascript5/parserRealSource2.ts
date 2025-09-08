@@ -3,7 +3,7 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
 
     export function hasFlag(val: number, flag: number) {
         return (val & flag) != 0;

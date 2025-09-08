@@ -2,9 +2,9 @@
 
 //// [genericOfACloduleType1.ts]
 class G<T>{ bar(x: T) { return x; } }
-module M {
+namespace M {
     export class C { foo() { } }
-    export module C {
+    export namespace C {
         export class X {
         }
     }

@@ -3,7 +3,7 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
     // Note: Any addition to the NodeType should also be supported with addition to AstWalkerDetailCallback
     export enum NodeType {
         None,

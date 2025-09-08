@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/externalModules/importNonExternalModule.ts] ////
 
 //// [foo_0.ts]
-module foo {
+namespace foo {
 	export var answer = 42;
 }
 

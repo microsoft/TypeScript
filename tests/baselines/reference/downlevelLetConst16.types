@@ -533,7 +533,7 @@ function bar2() {
 >  : ^^^^^^
 }
 
-module M1 {
+namespace M1 {
 >M1 : typeof M1
 >   : ^^^^^^^^^
 
@@ -588,7 +588,7 @@ module M1 {
 >  : ^^^^^^
 }
 
-module M2 {
+namespace M2 {
 >M2 : typeof M2
 >   : ^^^^^^^^^
     {
@@ -651,7 +651,7 @@ module M2 {
 >  : ^^^^^^
 }
 
-module M3 {
+namespace M3 {
 >M3 : typeof M3
 >   : ^^^^^^^^^
 
@@ -707,7 +707,7 @@ module M3 {
 
 }
 
-module M4 {
+namespace M4 {
 >M4 : typeof M4
 >   : ^^^^^^^^^
     {

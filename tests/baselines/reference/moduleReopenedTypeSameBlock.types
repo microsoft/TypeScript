@@ -1,13 +1,13 @@
 //// [tests/cases/compiler/moduleReopenedTypeSameBlock.ts] ////
 
 === moduleReopenedTypeSameBlock.ts ===
-module M { export class C1 { } }
+namespace M { export class C1 { } }
 >M : typeof M
 >  : ^^^^^^^^
 >C1 : C1
 >   : ^^
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

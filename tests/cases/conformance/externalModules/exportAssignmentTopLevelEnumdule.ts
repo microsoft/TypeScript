@@ -3,7 +3,7 @@
 enum foo {
 	red, green, blue
 }
-module foo {
+namespace foo {
 	export var answer = 42;
 }
 export = foo;

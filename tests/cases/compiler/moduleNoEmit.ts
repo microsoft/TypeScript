@@ -1,3 +1,3 @@
-module Foo {
+namespace Foo {
 	1+1;
 }

@@ -4,7 +4,7 @@ parameterPropertyInConstructor2.ts(4,24): error TS2300: Duplicate identifier 'na
 
 
 ==== parameterPropertyInConstructor2.ts (3 errors) ====
-    module mod {
+    namespace mod {
       class Customers {
         constructor(public names: string);
         ~~~~~~~~~~~

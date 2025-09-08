@@ -39,7 +39,7 @@ decrementOperatorWithUnsupportedBooleanType.ts(54,11): error TS2356: An arithmet
         public a: boolean;
         static foo() { return true; }
     }
-    module M {
+    namespace M {
         export var n: boolean;
     }
     

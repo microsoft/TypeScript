@@ -6,7 +6,7 @@ class Foo<T extends Foo.Bar> {
   }
 }
 
-module Foo {
+namespace Foo {
   export interface Bar {
     bar(): void;
   }

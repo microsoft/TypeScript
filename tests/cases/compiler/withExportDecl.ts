@@ -37,18 +37,18 @@ export function exportedFunction() {
     return simpleFunction();
 }
 
-module m1 {
+namespace m1 {
     export function foo() {
         return "Hello";
     }
 }
-export declare module m2 {
+export declare namespace m2 {
 
     export var a: number;
 }
 
 
-export module m3 {
+export namespace m3 {
 
     export function foo() {
         return m1.foo();

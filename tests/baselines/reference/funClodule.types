@@ -5,7 +5,7 @@ declare function foo();
 >foo : typeof foo
 >    : ^^^^^^^^^^
 
-declare module foo {
+declare namespace foo {
 >foo : typeof foo
 >    : ^^^^^^^^^^
 
@@ -22,7 +22,7 @@ declare class foo2 { }
 >foo2 : foo2
 >     : ^^^^
 
-declare module foo2 {
+declare namespace foo2 {
 >foo2 : typeof foo2
 >     : ^^^^^^^^^^^
 
@@ -39,7 +39,7 @@ function foo3() { }
 >foo3 : typeof foo3
 >     : ^^^^^^^^^^^
 
-module foo3 {
+namespace foo3 {
 >foo3 : typeof foo3
 >     : ^^^^^^^^^^^
 

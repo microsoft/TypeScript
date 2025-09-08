@@ -59,7 +59,7 @@ export const {a: bar4} = { a: 1 };
 >1 : 1
 >  : ^
 
-export module M {
+export namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

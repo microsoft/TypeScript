@@ -2,7 +2,7 @@
 //@filename: m1.ts
 //@preserveConstEnums: true
 
-module foo {
+namespace foo {
     const enum E { X }
 }
 

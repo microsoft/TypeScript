@@ -3,11 +3,11 @@
 //// [objectLiteralShorthandPropertiesWithModule.ts]
 // module export
 
-module m {
+namespace m {
     export var x;
 }
 
-module m {
+namespace m {
     var z = x;
     var y = {
         a: x,

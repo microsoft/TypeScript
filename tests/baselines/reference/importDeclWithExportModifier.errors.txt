@@ -3,7 +3,7 @@ importDeclWithExportModifier.ts(5,21): error TS2694: Namespace 'x' has no export
 
 
 ==== importDeclWithExportModifier.ts (2 errors) ====
-    module x {
+    namespace x {
         interface c {
         }
     }

@@ -4,7 +4,7 @@ implicitAnyInAmbientDeclaration.ts(6,31): error TS7006: Parameter 'x' implicitly
 
 
 ==== implicitAnyInAmbientDeclaration.ts (3 errors) ====
-    module Test {
+    namespace Test {
         declare class C {
             public publicMember;  // this should be an error
                    ~~~~~~~~~~~~

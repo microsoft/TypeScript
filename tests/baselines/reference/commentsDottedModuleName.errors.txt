@@ -1,0 +1,15 @@
+commentsDottedModuleName.ts(2,8): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+commentsDottedModuleName.ts(2,27): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== commentsDottedModuleName.ts (2 errors) ====
+    /** this is multi declare module*/
+    export module outerModule.InnerModule {
+           ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+                              ~~~~~~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        /// class b comment
+        export class b {
+        }
+    }

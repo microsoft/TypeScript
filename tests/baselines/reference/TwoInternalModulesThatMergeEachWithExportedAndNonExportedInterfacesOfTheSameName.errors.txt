@@ -1,0 +1,55 @@
+TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts(19,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts(19,10): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts(19,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts(26,12): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts(26,21): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts (5 errors) ====
+    namespace A {
+        export interface Point {
+            x: number;
+            y: number;
+            toCarth(): Point;
+        }
+    }
+    
+    namespace A {
+        interface Point {
+            fromCarth(): Point;
+        }
+    }
+    
+    // ensure merges as expected
+    var p: { x: number; y: number; toCarth(): A.Point; };
+    var p: A.Point;
+    
+    module X.Y.Z {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+             ~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+               ~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        export interface Line {
+            new (start: A.Point, end: A.Point);
+        }
+    }
+    
+    namespace X {
+        export module Y.Z {
+               ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+                        ~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+            interface Line {
+                start: A.Point;
+                end: A.Point;
+            }
+        }
+    }
+    
+    // ensure merges as expected
+    var l: { new (s: A.Point, e: A.Point); }
+    var l: X.Y.Z.Line;
+    

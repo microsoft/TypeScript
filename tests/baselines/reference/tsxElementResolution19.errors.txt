@@ -1,0 +1,23 @@
+file1.tsx(1,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== react.d.ts (0 errors) ====
+    declare module "react" {
+    
+    }
+    
+==== file1.tsx (1 errors) ====
+    declare module JSX {
+            ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+        interface Element { }
+    }
+    export class MyClass { }
+    
+==== file2.tsx (0 errors) ====
+    // Should not elide React import
+    import * as React from 'react';
+    import {MyClass} from './file1';
+    
+    <MyClass />;
+    

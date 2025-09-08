@@ -15,7 +15,7 @@ var y = {
     }
 }
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(classExpression.ts, 6, 1))
 
     var z = class C4 {

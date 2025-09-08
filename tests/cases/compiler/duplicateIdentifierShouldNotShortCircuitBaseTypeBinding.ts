@@ -2,7 +2,7 @@
 // @FileName: duplicateIdentifierShouldNotShortCircuitBaseTypeBinding_0.ts
 export interface IPoint {}
 
-export module Shapes {
+export namespace Shapes {
 
     export class Point implements IPoint {}
 

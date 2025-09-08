@@ -12,7 +12,7 @@ declare var window: Window;
 >window : Window
 >       : ^^^^^^
 
-module Foo {
+namespace Foo {
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 

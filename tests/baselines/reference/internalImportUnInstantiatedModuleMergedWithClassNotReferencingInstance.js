@@ -4,11 +4,11 @@
 class A {
     aProp: string;
 }
-module A {
+namespace A {
     export interface X { s: string }
 }
 
-module B {
+namespace B {
     var A = 1;
     import Y = A;
 }

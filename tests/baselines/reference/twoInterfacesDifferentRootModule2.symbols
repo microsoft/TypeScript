@@ -3,11 +3,11 @@
 === twoInterfacesDifferentRootModule2.ts ===
 // two interfaces with different root modules should not merge
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(twoInterfacesDifferentRootModule2.ts, 0, 0))
 
     export interface A {
->A : Symbol(A, Decl(twoInterfacesDifferentRootModule2.ts, 2, 10))
+>A : Symbol(A, Decl(twoInterfacesDifferentRootModule2.ts, 2, 13))
 
         foo: string;
 >foo : Symbol(A.foo, Decl(twoInterfacesDifferentRootModule2.ts, 3, 24))
@@ -22,11 +22,11 @@ module M {
 >T : Symbol(T, Decl(twoInterfacesDifferentRootModule2.ts, 7, 23))
     }
 
-    module M2 {
+    namespace M2 {
 >M2 : Symbol(M2, Decl(twoInterfacesDifferentRootModule2.ts, 9, 5))
 
         export interface A {
->A : Symbol(A, Decl(twoInterfacesDifferentRootModule2.ts, 11, 15))
+>A : Symbol(A, Decl(twoInterfacesDifferentRootModule2.ts, 11, 18))
 
             bar: number;
 >bar : Symbol(A.bar, Decl(twoInterfacesDifferentRootModule2.ts, 12, 28))
@@ -34,7 +34,7 @@ module M {
 
         var a: A;
 >a : Symbol(a, Decl(twoInterfacesDifferentRootModule2.ts, 16, 11))
->A : Symbol(A, Decl(twoInterfacesDifferentRootModule2.ts, 11, 15))
+>A : Symbol(A, Decl(twoInterfacesDifferentRootModule2.ts, 11, 18))
 
         var r1 = a.foo; // error
 >r1 : Symbol(r1, Decl(twoInterfacesDifferentRootModule2.ts, 17, 11))
@@ -72,7 +72,7 @@ module M {
 
     var a: A;
 >a : Symbol(a, Decl(twoInterfacesDifferentRootModule2.ts, 29, 7))
->A : Symbol(A, Decl(twoInterfacesDifferentRootModule2.ts, 2, 10))
+>A : Symbol(A, Decl(twoInterfacesDifferentRootModule2.ts, 2, 13))
 
     var r1 = a.foo; 
 >r1 : Symbol(r1, Decl(twoInterfacesDifferentRootModule2.ts, 30, 7))

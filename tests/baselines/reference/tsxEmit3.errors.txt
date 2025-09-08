@@ -1,18 +1,31 @@
+file.tsx(1,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+file.tsx(6,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+file.tsx(8,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+file.tsx(16,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 file.tsx(18,2): error TS2695: Left side of comma operator is unused and has no side effects.
+file.tsx(20,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 file.tsx(22,3): error TS2695: Left side of comma operator is unused and has no side effects.
 file.tsx(25,3): error TS2695: Left side of comma operator is unused and has no side effects.
+file.tsx(30,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+file.tsx(35,1): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 file.tsx(38,2): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== file.tsx (4 errors) ====
+==== file.tsx (11 errors) ====
     declare module JSX {
+            ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
     	interface Element { }
     	interface IntrinsicElements { }
     }
     
     module M {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
     	export class Foo { constructor() { } }
     	export module S {
+    	       ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
     		export class Bar { }
     
     		// Emit Foo
@@ -21,12 +34,16 @@ file.tsx(38,2): error TS2695: Left side of comma operator is unused and has no s
     }
     
     module M {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
     	// Emit M.Foo
     	Foo, <Foo />;
     	~~~
 !!! error TS2695: Left side of comma operator is unused and has no side effects.
     
     	export module S {
+    	       ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
     		// Emit M.Foo
     		Foo, <Foo />;
     		~~~
@@ -41,11 +58,15 @@ file.tsx(38,2): error TS2695: Left side of comma operator is unused and has no s
     }
     
     module M {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
     	// Emit M.S.Bar
     	S.Bar, <S.Bar />;
     }
     
     module M {
+    ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
     	var M = 100;
     	// Emit M_1.Foo
     	Foo, <Foo />;

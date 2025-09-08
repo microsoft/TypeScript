@@ -5,7 +5,7 @@ arraySigChecking.ts(22,16): error TS2322: Type 'number' is not assignable to typ
 
 
 ==== arraySigChecking.ts (4 errors) ====
-    declare module M {
+    declare namespace M {
         interface iBar { t: any; }
         interface iFoo extends iBar {
             s: any;

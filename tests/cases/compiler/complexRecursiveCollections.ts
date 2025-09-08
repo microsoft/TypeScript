@@ -25,7 +25,7 @@ interface N2<T> extends N1<T> {
 // Test that complex recursive collections can pass the `extends` assignability check without
 // running out of memory. This bug was exposed in Typescript 2.4 when more generic signatures
 // started being checked.
-declare module Immutable {
+declare namespace Immutable {
   export function fromJS(jsValue: any, reviver?: (key: string | number, sequence: Collection.Keyed<string, any> | Collection.Indexed<any>, path?: Array<string | number>) => any): any;
   export function is(first: any, second: any): boolean;
   export function hash(value: any): number;
@@ -40,7 +40,7 @@ declare module Immutable {
     equals(other: any): boolean;
     hashCode(): number;
   }
-  export module List {
+  export namespace List {
     function isList(maybeList: any): maybeList is List<any>;
     function of<T>(...values: Array<T>): List<T>;
   }
@@ -85,7 +85,7 @@ declare module Immutable {
     filter<F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): List<F>;
     filter(predicate: (value: T, index: number, iter: this) => any, context?: any): this;
   }
-  export module Map {
+  export namespace Map {
     function isMap(maybeMap: any): maybeMap is Map<any, any>;
     function of(...keyValues: Array<any>): Map<any, any>;
   }
@@ -131,7 +131,7 @@ declare module Immutable {
     filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Map<K, F>;
     filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
   }
-  export module OrderedMap {
+  export namespace OrderedMap {
     function isOrderedMap(maybeOrderedMap: any): maybeOrderedMap is OrderedMap<any, any>;
   }
   export function OrderedMap<K, V>(collection: Iterable<[K, V]>): OrderedMap<K, V>;
@@ -150,7 +150,7 @@ declare module Immutable {
     filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): OrderedMap<K, F>;
     filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
   }
-  export module Set {
+  export namespace Set {
     function isSet(maybeSet: any): maybeSet is Set<any>;
     function of<T>(...values: Array<T>): Set<T>;
     function fromKeys<T>(iter: Collection<T, any>): Set<T>;
@@ -182,7 +182,7 @@ declare module Immutable {
     filter<F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Set<F>;
     filter(predicate: (value: T, key: never, iter: this) => any, context?: any): this;
   }
-  export module OrderedSet {
+  export namespace OrderedSet {
     function isOrderedSet(maybeOrderedSet: any): boolean;
     function of<T>(...values: Array<T>): OrderedSet<T>;
     function fromKeys<T>(iter: Collection<T, any>): OrderedSet<T>;
@@ -203,7 +203,7 @@ declare module Immutable {
     zipWith<U, V, Z>(zipper: (value: T, otherValue: U, thirdValue: V) => Z, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): OrderedSet<Z>;
     zipWith<Z>(zipper: (...any: Array<any>) => Z, ...collections: Array<Collection<any, any>>): OrderedSet<Z>;
   }
-  export module Stack {
+  export namespace Stack {
     function isStack(maybeStack: any): maybeStack is Stack<any>;
     function of<T>(...values: Array<T>): Stack<T>;
   }
@@ -234,7 +234,7 @@ declare module Immutable {
   }
   export function Range(start?: number, end?: number, step?: number): Seq.Indexed<number>;
   export function Repeat<T>(value: T, times?: number): Seq.Indexed<T>;
-  export module Record {
+  export namespace Record {
     export function isRecord(maybeRecord: any): maybeRecord is Record.Instance<any>;
     export function getDescriptiveName(record: Instance<any>): string;
     export interface Class<T extends Object> {
@@ -283,10 +283,10 @@ declare module Immutable {
     }
   }
   export function Record<T>(defaultValues: T, name?: string): Record.Class<T>;
-  export module Seq {
+  export namespace Seq {
     function isSeq(maybeSeq: any): maybeSeq is Seq.Indexed<any> | Seq.Keyed<any, any>;
     function of<T>(...values: Array<T>): Seq.Indexed<T>;
-    export module Keyed {}
+    export namespace Keyed {}
     export function Keyed<K, V>(collection: Iterable<[K, V]>): Seq.Keyed<K, V>;
     export function Keyed<V>(obj: {[key: string]: V}): Seq.Keyed<string, V>;
     export function Keyed<K, V>(): Seq.Keyed<K, V>;
@@ -304,7 +304,7 @@ declare module Immutable {
       filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Seq.Keyed<K, F>;
       filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
     }
-    module Indexed {
+    namespace Indexed {
       function of<T>(...values: Array<T>): Seq.Indexed<T>;
     }
     export function Indexed(): Seq.Indexed<any>;
@@ -320,7 +320,7 @@ declare module Immutable {
       filter<F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Seq.Indexed<F>;
       filter(predicate: (value: T, index: number, iter: this) => any, context?: any): this;
     }
-    export module Set {
+    export namespace Set {
       function of<T>(...values: Array<T>): Seq.Set<T>;
     }
     export function Set(): Seq.Set<any>;
@@ -354,12 +354,12 @@ declare module Immutable {
     filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Seq<K, F>;
     filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
   }
-  export module Collection {
+  export namespace Collection {
     function isKeyed(maybeKeyed: any): maybeKeyed is Collection.Keyed<any, any>;
     function isIndexed(maybeIndexed: any): maybeIndexed is Collection.Indexed<any>;
     function isAssociative(maybeAssociative: any): maybeAssociative is Collection.Keyed<any, any> | Collection.Indexed<any>;
     function isOrdered(maybeOrdered: any): boolean;
-    export module Keyed {}
+    export namespace Keyed {}
     export function Keyed<K, V>(collection: Iterable<[K, V]>): Collection.Keyed<K, V>;
     export function Keyed<V>(obj: {[key: string]: V}): Collection.Keyed<string, V>;
     export interface Keyed<K, V> extends Collection<K, V> {
@@ -378,7 +378,7 @@ declare module Immutable {
       filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
       [Symbol.iterator](): IterableIterator<[K, V]>;
     }
-    export module Indexed {}
+    export namespace Indexed {}
     export function Indexed<T>(collection: Iterable<T>): Collection.Indexed<T>;
     export interface Indexed<T> extends Collection<number, T> {
       toJS(): Array<any>;
@@ -410,7 +410,7 @@ declare module Immutable {
       filter(predicate: (value: T, index: number, iter: this) => any, context?: any): this;
       [Symbol.iterator](): IterableIterator<T>;
     }
-    export module Set {}
+    export namespace Set {}
     export function Set<T>(collection: Iterable<T>): Collection.Set<T>;
     export interface Set<T> extends Collection<never, T> {
       toJS(): Array<any>;

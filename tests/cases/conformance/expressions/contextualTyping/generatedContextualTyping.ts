@@ -185,30 +185,30 @@ var x177: () => { [n: number]: Base; } = function() { return [d1, d2]; };
 var x178: () => {n: Base[]; }  = function() { return { n: [d1, d2] }; };
 var x179: () => (s: Base[]) => any = function() { return n => { var n: Base[]; return null; }; };
 var x180: () => Genric<Base> = function() { return { func: n => { return [d1, d2]; } }; };
-module x181 { var t: () => Base[] = () => [d1, d2]; }
-module x182 { var t: () => Base[] = function() { return [d1, d2] }; }
-module x183 { var t: () => Base[] = function named() { return [d1, d2] }; }
-module x184 { var t: { (): Base[]; } = () => [d1, d2]; }
-module x185 { var t: { (): Base[]; } = function() { return [d1, d2] }; }
-module x186 { var t: { (): Base[]; } = function named() { return [d1, d2] }; }
-module x187 { var t: Base[] = [d1, d2]; }
-module x188 { var t: Array<Base> = [d1, d2]; }
-module x189 { var t: { [n: number]: Base; } = [d1, d2]; }
-module x190 { var t: {n: Base[]; }  = { n: [d1, d2] }; }
-module x191 { var t: (s: Base[]) => any = n => { var n: Base[]; return null; }; }
-module x192 { var t: Genric<Base> = { func: n => { return [d1, d2]; } }; }
-module x193 { export var t: () => Base[] = () => [d1, d2]; }
-module x194 { export var t: () => Base[] = function() { return [d1, d2] }; }
-module x195 { export var t: () => Base[] = function named() { return [d1, d2] }; }
-module x196 { export var t: { (): Base[]; } = () => [d1, d2]; }
-module x197 { export var t: { (): Base[]; } = function() { return [d1, d2] }; }
-module x198 { export var t: { (): Base[]; } = function named() { return [d1, d2] }; }
-module x199 { export var t: Base[] = [d1, d2]; }
-module x200 { export var t: Array<Base> = [d1, d2]; }
-module x201 { export var t: { [n: number]: Base; } = [d1, d2]; }
-module x202 { export var t: {n: Base[]; }  = { n: [d1, d2] }; }
-module x203 { export var t: (s: Base[]) => any = n => { var n: Base[]; return null; }; }
-module x204 { export var t: Genric<Base> = { func: n => { return [d1, d2]; } }; }
+namespace x181 { var t: () => Base[] = () => [d1, d2]; }
+namespace x182 { var t: () => Base[] = function() { return [d1, d2] }; }
+namespace x183 { var t: () => Base[] = function named() { return [d1, d2] }; }
+namespace x184 { var t: { (): Base[]; } = () => [d1, d2]; }
+namespace x185 { var t: { (): Base[]; } = function() { return [d1, d2] }; }
+namespace x186 { var t: { (): Base[]; } = function named() { return [d1, d2] }; }
+namespace x187 { var t: Base[] = [d1, d2]; }
+namespace x188 { var t: Array<Base> = [d1, d2]; }
+namespace x189 { var t: { [n: number]: Base; } = [d1, d2]; }
+namespace x190 { var t: {n: Base[]; }  = { n: [d1, d2] }; }
+namespace x191 { var t: (s: Base[]) => any = n => { var n: Base[]; return null; }; }
+namespace x192 { var t: Genric<Base> = { func: n => { return [d1, d2]; } }; }
+namespace x193 { export var t: () => Base[] = () => [d1, d2]; }
+namespace x194 { export var t: () => Base[] = function() { return [d1, d2] }; }
+namespace x195 { export var t: () => Base[] = function named() { return [d1, d2] }; }
+namespace x196 { export var t: { (): Base[]; } = () => [d1, d2]; }
+namespace x197 { export var t: { (): Base[]; } = function() { return [d1, d2] }; }
+namespace x198 { export var t: { (): Base[]; } = function named() { return [d1, d2] }; }
+namespace x199 { export var t: Base[] = [d1, d2]; }
+namespace x200 { export var t: Array<Base> = [d1, d2]; }
+namespace x201 { export var t: { [n: number]: Base; } = [d1, d2]; }
+namespace x202 { export var t: {n: Base[]; }  = { n: [d1, d2] }; }
+namespace x203 { export var t: (s: Base[]) => any = n => { var n: Base[]; return null; }; }
+namespace x204 { export var t: Genric<Base> = { func: n => { return [d1, d2]; } }; }
 var x206 = <() => Base[]>function() { return [d1, d2] };
 var x207 = <() => Base[]>function named() { return [d1, d2] };
 var x209 = <{ (): Base[]; }>function() { return [d1, d2] };

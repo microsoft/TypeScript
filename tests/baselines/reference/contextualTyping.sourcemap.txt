@@ -142,7 +142,7 @@ sourceFile:contextualTyping.ts
 5 >         ^^^^^^^^^^->
 1 >
   >
-2 >module 
+2 >namespace 
 3 >    C2T5
 4 >         {
   >            export var foo: (i: number, s: string) => number = function(i) {
@@ -150,8 +150,8 @@ sourceFile:contextualTyping.ts
   >            }
   >        }
 1 >Emitted(11, 1) Source(21, 1) + SourceIndex(0)
-2 >Emitted(11, 5) Source(21, 8) + SourceIndex(0)
-3 >Emitted(11, 9) Source(21, 12) + SourceIndex(0)
+2 >Emitted(11, 5) Source(21, 11) + SourceIndex(0)
+3 >Emitted(11, 9) Source(21, 15) + SourceIndex(0)
 4 >Emitted(11, 10) Source(25, 2) + SourceIndex(0)
 ---
 >>>(function (C2T5) {
@@ -160,11 +160,11 @@ sourceFile:contextualTyping.ts
 3 >           ^^^^
 4 >               ^^^^^^^^^^^^^^^->
 1->
-2 >module 
+2 >namespace 
 3 >           C2T5
 1->Emitted(12, 1) Source(21, 1) + SourceIndex(0)
-2 >Emitted(12, 12) Source(21, 8) + SourceIndex(0)
-3 >Emitted(12, 16) Source(21, 12) + SourceIndex(0)
+2 >Emitted(12, 12) Source(21, 11) + SourceIndex(0)
+3 >Emitted(12, 16) Source(21, 15) + SourceIndex(0)
 ---
 >>>    C2T5.foo = function (i) {
 1->^^^^
@@ -235,10 +235,10 @@ sourceFile:contextualTyping.ts
   >                }
 1->Emitted(16, 1) Source(25, 1) + SourceIndex(0)
 2 >Emitted(16, 2) Source(25, 2) + SourceIndex(0)
-3 >Emitted(16, 4) Source(21, 8) + SourceIndex(0)
-4 >Emitted(16, 8) Source(21, 12) + SourceIndex(0)
-5 >Emitted(16, 13) Source(21, 8) + SourceIndex(0)
-6 >Emitted(16, 17) Source(21, 12) + SourceIndex(0)
+3 >Emitted(16, 4) Source(21, 11) + SourceIndex(0)
+4 >Emitted(16, 8) Source(21, 15) + SourceIndex(0)
+5 >Emitted(16, 13) Source(21, 11) + SourceIndex(0)
+6 >Emitted(16, 17) Source(21, 15) + SourceIndex(0)
 7 >Emitted(16, 25) Source(25, 2) + SourceIndex(0)
 ---
 >>>// CONTEXT: Variable declaration
@@ -1046,7 +1046,7 @@ sourceFile:contextualTyping.ts
 5 >         ^^^^^^^^^^->
 1 >
   >
-2 >module 
+2 >namespace 
 3 >    C5T5
 4 >         {
   >            export var foo: (i: number, s: string) => string;
@@ -1055,8 +1055,8 @@ sourceFile:contextualTyping.ts
   >            }
   >        }
 1 >Emitted(50, 1) Source(66, 1) + SourceIndex(0)
-2 >Emitted(50, 5) Source(66, 8) + SourceIndex(0)
-3 >Emitted(50, 9) Source(66, 12) + SourceIndex(0)
+2 >Emitted(50, 5) Source(66, 11) + SourceIndex(0)
+3 >Emitted(50, 9) Source(66, 15) + SourceIndex(0)
 4 >Emitted(50, 10) Source(71, 2) + SourceIndex(0)
 ---
 >>>(function (C5T5) {
@@ -1065,11 +1065,11 @@ sourceFile:contextualTyping.ts
 3 >           ^^^^
 4 >               ^^^^^^^^^^^^^^^^^^->
 1->
-2 >module 
+2 >namespace 
 3 >           C5T5
 1->Emitted(51, 1) Source(66, 1) + SourceIndex(0)
-2 >Emitted(51, 12) Source(66, 8) + SourceIndex(0)
-3 >Emitted(51, 16) Source(66, 12) + SourceIndex(0)
+2 >Emitted(51, 12) Source(66, 11) + SourceIndex(0)
+3 >Emitted(51, 16) Source(66, 15) + SourceIndex(0)
 ---
 >>>    C5T5.foo = function (i, s) {
 1->^^^^
@@ -1151,10 +1151,10 @@ sourceFile:contextualTyping.ts
   >                }
 1->Emitted(55, 1) Source(71, 1) + SourceIndex(0)
 2 >Emitted(55, 2) Source(71, 2) + SourceIndex(0)
-3 >Emitted(55, 4) Source(66, 8) + SourceIndex(0)
-4 >Emitted(55, 8) Source(66, 12) + SourceIndex(0)
-5 >Emitted(55, 13) Source(66, 8) + SourceIndex(0)
-6 >Emitted(55, 17) Source(66, 12) + SourceIndex(0)
+3 >Emitted(55, 4) Source(66, 11) + SourceIndex(0)
+4 >Emitted(55, 8) Source(66, 15) + SourceIndex(0)
+5 >Emitted(55, 13) Source(66, 11) + SourceIndex(0)
+6 >Emitted(55, 17) Source(66, 15) + SourceIndex(0)
 7 >Emitted(55, 25) Source(71, 2) + SourceIndex(0)
 ---
 >>>// CONTEXT: Variable assignment

@@ -122,7 +122,7 @@ namespace Merged2 {
 >b : Symbol(E.b, Decl(enumAssignmentCompat3.ts, 49, 10))
 >c : Symbol(E.c, Decl(enumAssignmentCompat3.ts, 49, 13))
     }
-    export module E {
+    export namespace E {
 >E : Symbol(E, Decl(enumAssignmentCompat3.ts, 47, 19), Decl(enumAssignmentCompat3.ts, 50, 5))
 
         export let d = 5;

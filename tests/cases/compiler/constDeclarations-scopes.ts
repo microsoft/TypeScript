@@ -101,7 +101,7 @@ var F3 = function () {
 };
 
 // modules
-module m {
+namespace m {
     const c = 0;
     n = c;
 

@@ -13,7 +13,7 @@ collisionExportsRequireAndFunction.ts(4,17): error TS2441: Duplicate identifier 
 !!! error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
         return "require";
     }
-    module m1 {
+    namespace m1 {
         function exports() {
             return 1;
         }
@@ -21,7 +21,7 @@ collisionExportsRequireAndFunction.ts(4,17): error TS2441: Duplicate identifier 
             return "require";
         }
     }
-    module m2 {
+    namespace m2 {
         export function exports() {
             return 1;
         }

@@ -5,10 +5,10 @@ test.ts(24,35): error TS2792: Cannot find module 'mNonExported'. Did you mean to
 
 
 ==== test.ts (4 errors) ====
-    export module m1 {
+    export namespace m1 {
     }
     
-    module m2 {
+    namespace m2 {
         export import mExported = require("mExported");
                                           ~~~~~~~~~~~
 !!! error TS1147: Import declarations in a namespace cannot reference a module.

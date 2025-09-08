@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/recursiveMods.ts] ////
 
 === recursiveMods.ts ===
-export module Foo {
+export namespace Foo {
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 
@@ -10,7 +10,7 @@ export module Foo {
 >  : ^
 }
 
-export module Foo {
+export namespace Foo {
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 

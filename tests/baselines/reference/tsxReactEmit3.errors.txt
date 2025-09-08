@@ -1,0 +1,12 @@
+test.tsx(1,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+
+
+==== test.tsx (1 errors) ====
+    declare module JSX { interface Element { } }
+            ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
+    declare var React: any;
+    
+    declare var Foo, Bar, baz;
+    
+    <Foo> <Bar> q </Bar> <Bar/>   s <Bar/><Bar/></Foo>;

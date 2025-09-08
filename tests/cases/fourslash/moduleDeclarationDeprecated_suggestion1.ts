@@ -1,4 +1,5 @@
 ///<reference path="fourslash.ts" />
+// @ignoreDeprecations: 6.0
 // @Filename: a.ts
 ////[|module|] mod1 { export let x: number }
 ////declare [|module|] mod2 { export let x: number }
@@ -20,7 +21,7 @@ goTo.file("a.ts")
 const diagnostics = test.ranges().map(range => ({
     code: 1540,
     message: "A 'namespace' declaration should not be declared using the 'module' keyword. Please use the 'namespace' keyword instead.",
-    reportsDeprecated: true,
+    reportsDeprecated: true as true,
     range,
 }));
 verify.getSuggestionDiagnostics(diagnostics)

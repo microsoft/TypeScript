@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/exportDeclarations/NonInitializedExportInInternalModule.ts] ////
 
 === NonInitializedExportInInternalModule.ts ===
-module Inner {
+namespace Inner {
 >Inner : Symbol(Inner, Decl(NonInitializedExportInInternalModule.ts, 0, 0))
 
     var;
@@ -45,7 +45,7 @@ module Inner {
 >z : Symbol(z, Decl(NonInitializedExportInInternalModule.ts, 15, 24))
     }
     
-    module C {
+    namespace C {
 >C : Symbol(C, Decl(NonInitializedExportInInternalModule.ts, 16, 5))
 
         export var a = 1, b, c = 2;

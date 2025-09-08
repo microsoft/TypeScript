@@ -7,7 +7,7 @@ class Base { foo: string; }
 class Derived extends Base { bar: string; }
 class Derived2 extends Derived { baz: string; }
 
-module TargetHasOptional {
+namespace TargetHasOptional {
     // targets
     interface C {
         opt?: Base
@@ -49,7 +49,7 @@ module TargetHasOptional {
     b = c;
 }
 
-module SourceHasOptional {
+namespace SourceHasOptional {
     // targets
     interface C {
         opt: Base

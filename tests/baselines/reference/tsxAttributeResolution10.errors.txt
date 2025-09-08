@@ -1,8 +1,11 @@
 file.tsx(11,14): error TS2322: Type 'string' is not assignable to type 'boolean'.
+react.d.ts(1,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 
 
-==== react.d.ts (0 errors) ====
+==== react.d.ts (1 errors) ====
     declare module JSX {
+            ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
     	interface Element { }
     	interface IntrinsicElements {
     	}

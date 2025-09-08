@@ -3,7 +3,7 @@ const enum E {
     A
 }
 
-module E {
+namespace E {
     var x = 1;
 }
 

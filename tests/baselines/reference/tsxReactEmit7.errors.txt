@@ -1,3 +1,4 @@
+file.tsx(1,9): error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
 file.tsx(8,10): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
 file.tsx(9,10): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
 file.tsx(10,10): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
@@ -9,8 +10,10 @@ file.tsx(17,10): error TS2874: This JSX tag requires 'React' to be in scope, but
 file.tsx(18,10): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
 
 
-==== file.tsx (9 errors) ====
+==== file.tsx (10 errors) ====
     declare module JSX {
+            ~~~~~~
+!!! error TS1547: The 'module' keyword is not allowed for namespace declarations. Use the 'namespace' keyword instead.
     	interface Element { }
     	interface IntrinsicElements {
     		[s: string]: any;
