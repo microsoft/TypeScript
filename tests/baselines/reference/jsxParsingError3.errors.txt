@@ -7,7 +7,7 @@ Error6.tsx(1,15): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`
 
 
 ==== file.tsx (0 errors) ====
-    declare module JSX {
+    declare namespace JSX {
       interface Element {}
       interface IntrinsicElements {
         [s: string]: any;

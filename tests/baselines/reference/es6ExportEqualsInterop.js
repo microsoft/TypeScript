@@ -30,7 +30,7 @@ declare module "interface-variable" {
 }
 
 declare module "module" {
-    module Foo {
+    namespace Foo {
         export var a: number;
         export var b: number;
     }
@@ -42,7 +42,7 @@ declare module "interface-module" {
         x: number;
         y: number;
     }
-    module Foo {
+    namespace Foo {
         export var a: number;
         export var b: number;
     }
@@ -50,7 +50,7 @@ declare module "interface-module" {
 }
 
 declare module "variable-module" {
-    module Foo {
+    namespace Foo {
         interface Bar {
             x: number;
             y: number;
@@ -70,7 +70,7 @@ declare module "function" {
 
 declare module "function-module" {
     function foo();
-    module foo {
+    namespace foo {
         export var a: number;
         export var b: number;
     }
@@ -90,7 +90,7 @@ declare module "class-module" {
         x: number;
         y: number;
     }
-    module Foo {
+    namespace Foo {
         export var a: number;
         export var b: number;
     }

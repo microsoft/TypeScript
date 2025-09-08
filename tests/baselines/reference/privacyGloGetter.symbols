@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/privacyGloGetter.ts] ////
 
 === privacyGloGetter.ts ===
-module m1 {
+namespace m1 {
 >m1 : Symbol(m1, Decl(privacyGloGetter.ts, 0, 0))
 
     export class C1_public {
->C1_public : Symbol(C1_public, Decl(privacyGloGetter.ts, 0, 11))
+>C1_public : Symbol(C1_public, Decl(privacyGloGetter.ts, 0, 14))
 
         private f1() {
 >f1 : Symbol(C1_public.f1, Decl(privacyGloGetter.ts, 1, 28))
@@ -23,26 +23,26 @@ module m1 {
 >p1_private : Symbol(C3_public.p1_private, Decl(privacyGloGetter.ts, 9, 28), Decl(privacyGloGetter.ts, 12, 9))
 
             return new C1_public();
->C1_public : Symbol(C1_public, Decl(privacyGloGetter.ts, 0, 11))
+>C1_public : Symbol(C1_public, Decl(privacyGloGetter.ts, 0, 14))
         }
 
         private set p1_private(m1_c3_p1_arg: C1_public) {
 >p1_private : Symbol(C3_public.p1_private, Decl(privacyGloGetter.ts, 9, 28), Decl(privacyGloGetter.ts, 12, 9))
 >m1_c3_p1_arg : Symbol(m1_c3_p1_arg, Decl(privacyGloGetter.ts, 14, 31))
->C1_public : Symbol(C1_public, Decl(privacyGloGetter.ts, 0, 11))
+>C1_public : Symbol(C1_public, Decl(privacyGloGetter.ts, 0, 14))
         }
 
         private get p2_private() {
 >p2_private : Symbol(C3_public.p2_private, Decl(privacyGloGetter.ts, 15, 9), Decl(privacyGloGetter.ts, 19, 9))
 
             return new C1_public();
->C1_public : Symbol(C1_public, Decl(privacyGloGetter.ts, 0, 11))
+>C1_public : Symbol(C1_public, Decl(privacyGloGetter.ts, 0, 14))
         }
 
         private set p2_private(m1_c3_p2_arg: C1_public) {
 >p2_private : Symbol(C3_public.p2_private, Decl(privacyGloGetter.ts, 15, 9), Decl(privacyGloGetter.ts, 19, 9))
 >m1_c3_p2_arg : Symbol(m1_c3_p2_arg, Decl(privacyGloGetter.ts, 21, 31))
->C1_public : Symbol(C1_public, Decl(privacyGloGetter.ts, 0, 11))
+>C1_public : Symbol(C1_public, Decl(privacyGloGetter.ts, 0, 14))
         }
 
         private get p3_private() {
@@ -80,26 +80,26 @@ module m1 {
 >p1_private : Symbol(C4_private.p1_private, Decl(privacyGloGetter.ts, 39, 22), Decl(privacyGloGetter.ts, 42, 9))
 
             return new C1_public();
->C1_public : Symbol(C1_public, Decl(privacyGloGetter.ts, 0, 11))
+>C1_public : Symbol(C1_public, Decl(privacyGloGetter.ts, 0, 14))
         }
 
         private set p1_private(m1_c3_p1_arg: C1_public) {
 >p1_private : Symbol(C4_private.p1_private, Decl(privacyGloGetter.ts, 39, 22), Decl(privacyGloGetter.ts, 42, 9))
 >m1_c3_p1_arg : Symbol(m1_c3_p1_arg, Decl(privacyGloGetter.ts, 44, 31))
->C1_public : Symbol(C1_public, Decl(privacyGloGetter.ts, 0, 11))
+>C1_public : Symbol(C1_public, Decl(privacyGloGetter.ts, 0, 14))
         }
 
         private get p2_private() {
 >p2_private : Symbol(C4_private.p2_private, Decl(privacyGloGetter.ts, 45, 9), Decl(privacyGloGetter.ts, 49, 9))
 
             return new C1_public();
->C1_public : Symbol(C1_public, Decl(privacyGloGetter.ts, 0, 11))
+>C1_public : Symbol(C1_public, Decl(privacyGloGetter.ts, 0, 14))
         }
 
         private set p2_private(m1_c3_p2_arg: C1_public) {
 >p2_private : Symbol(C4_private.p2_private, Decl(privacyGloGetter.ts, 45, 9), Decl(privacyGloGetter.ts, 49, 9))
 >m1_c3_p2_arg : Symbol(m1_c3_p2_arg, Decl(privacyGloGetter.ts, 51, 31))
->C1_public : Symbol(C1_public, Decl(privacyGloGetter.ts, 0, 11))
+>C1_public : Symbol(C1_public, Decl(privacyGloGetter.ts, 0, 14))
         }
 
         private get p3_private() {

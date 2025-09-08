@@ -23,7 +23,7 @@ class Derived extends Base {
 >    : ^^^^^^
 }
 
-module ExplicitPublic {
+namespace ExplicitPublic {
 >ExplicitPublic : typeof ExplicitPublic
 >               : ^^^^^^^^^^^^^^^^^^^^^
 
@@ -88,7 +88,7 @@ module ExplicitPublic {
     }
 }
 
-module ImplicitPublic {
+namespace ImplicitPublic {
 >ImplicitPublic : typeof ImplicitPublic
 >               : ^^^^^^^^^^^^^^^^^^^^^
 

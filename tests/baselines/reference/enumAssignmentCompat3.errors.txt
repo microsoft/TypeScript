@@ -72,7 +72,7 @@ enumAssignmentCompat3.ts(87,1): error TS2322: Type 'First.E' is not assignable t
         export enum E {
             a, b, c
         }
-        export module E {
+        export namespace E {
             export let d = 5;
         }
     }

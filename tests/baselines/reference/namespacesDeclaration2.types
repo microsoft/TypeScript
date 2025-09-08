@@ -9,7 +9,7 @@ namespace N {
 >S : () => void
 >  : ^^^^^^^^^^
 }
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

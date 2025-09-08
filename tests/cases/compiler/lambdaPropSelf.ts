@@ -17,6 +17,6 @@ class T {
     }
 }
 
-module M {
+namespace M {
     var x = this;
 }

@@ -2,11 +2,11 @@
 
 === privacyTopLevelInternalReferenceImportWithoutExport.ts ===
 // private elements
-module m_private {
+namespace m_private {
 >m_private : Symbol(m_private, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 0, 0))
 
     export class c_private {
->c_private : Symbol(c_private, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 1, 18))
+>c_private : Symbol(c_private, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 1, 21))
     }
     export enum e_private {
 >e_private : Symbol(e_private, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 3, 5))
@@ -21,37 +21,37 @@ module m_private {
 >f_private : Symbol(f_private, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 7, 5))
 
         return new c_private();
->c_private : Symbol(c_private, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 1, 18))
+>c_private : Symbol(c_private, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 1, 21))
     }
     export var v_private = new c_private();
 >v_private : Symbol(v_private, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 11, 14))
->c_private : Symbol(c_private, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 1, 18))
+>c_private : Symbol(c_private, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 1, 21))
 
     export interface i_private {
 >i_private : Symbol(i_private, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 11, 43))
     }
-    export module mi_private {
+    export namespace mi_private {
 >mi_private : Symbol(mi_private, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 13, 5))
 
         export class c {
->c : Symbol(c, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 14, 30))
+>c : Symbol(c, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 14, 33))
         }
     }
-    export module mu_private {
+    export namespace mu_private {
 >mu_private : Symbol(mu_private, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 17, 5))
 
         export interface i {
->i : Symbol(i, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 18, 30))
+>i : Symbol(i, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 18, 33))
         }
     }
 }
 
 // Public elements
-export module m_public {
+export namespace m_public {
 >m_public : Symbol(m_public, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 22, 1))
 
     export class c_public {
->c_public : Symbol(c_public, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 25, 24))
+>c_public : Symbol(c_public, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 25, 27))
     }
     export enum e_public {
 >e_public : Symbol(e_public, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 27, 5))
@@ -66,7 +66,7 @@ export module m_public {
 >f_public : Symbol(f_public, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 31, 5))
 
         return new c_public();
->c_public : Symbol(c_public, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 25, 24))
+>c_public : Symbol(c_public, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 25, 27))
     }
     export var v_public = 10;
 >v_public : Symbol(v_public, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 35, 14))
@@ -74,18 +74,18 @@ export module m_public {
     export interface i_public {
 >i_public : Symbol(i_public, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 35, 29))
     }
-    export module mi_public {
+    export namespace mi_public {
 >mi_public : Symbol(mi_public, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 37, 5))
 
         export class c {
->c : Symbol(c, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 38, 29))
+>c : Symbol(c, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 38, 32))
         }
     }
-    export module mu_public {
+    export namespace mu_public {
 >mu_public : Symbol(mu_public, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 41, 5))
 
         export interface i {
->i : Symbol(i, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 42, 29))
+>i : Symbol(i, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 42, 32))
         }
     }
 }
@@ -94,7 +94,7 @@ export module m_public {
 import im_private_c_private = m_private.c_private;
 >im_private_c_private : Symbol(im_private_c_private, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 46, 1))
 >m_private : Symbol(m_private, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 0, 0))
->c_private : Symbol(im_private_c_private, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 1, 18))
+>c_private : Symbol(im_private_c_private, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 1, 21))
 
 import im_private_e_private = m_private.e_private;
 >im_private_e_private : Symbol(im_private_e_private, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 49, 50))
@@ -173,32 +173,32 @@ export var publicUse_im_private_i_private: im_private_i_private;
 
 var privateUse_im_private_mi_private = new im_private_mi_private.c();
 >privateUse_im_private_mi_private : Symbol(privateUse_im_private_mi_private, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 68, 3))
->im_private_mi_private.c : Symbol(im_private_mi_private.c, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 14, 30))
+>im_private_mi_private.c : Symbol(im_private_mi_private.c, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 14, 33))
 >im_private_mi_private : Symbol(im_private_mi_private, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 53, 50))
->c : Symbol(im_private_mi_private.c, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 14, 30))
+>c : Symbol(im_private_mi_private.c, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 14, 33))
 
 export var publicUse_im_private_mi_private = new im_private_mi_private.c();
 >publicUse_im_private_mi_private : Symbol(publicUse_im_private_mi_private, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 69, 10))
->im_private_mi_private.c : Symbol(im_private_mi_private.c, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 14, 30))
+>im_private_mi_private.c : Symbol(im_private_mi_private.c, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 14, 33))
 >im_private_mi_private : Symbol(im_private_mi_private, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 53, 50))
->c : Symbol(im_private_mi_private.c, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 14, 30))
+>c : Symbol(im_private_mi_private.c, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 14, 33))
 
 var privateUse_im_private_mu_private: im_private_mu_private.i;
 >privateUse_im_private_mu_private : Symbol(privateUse_im_private_mu_private, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 70, 3))
 >im_private_mu_private : Symbol(im_private_mu_private, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 54, 52))
->i : Symbol(im_private_mu_private.i, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 18, 30))
+>i : Symbol(im_private_mu_private.i, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 18, 33))
 
 export var publicUse_im_private_mu_private: im_private_mu_private.i;
 >publicUse_im_private_mu_private : Symbol(publicUse_im_private_mu_private, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 71, 10))
 >im_private_mu_private : Symbol(im_private_mu_private, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 54, 52))
->i : Symbol(im_private_mu_private.i, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 18, 30))
+>i : Symbol(im_private_mu_private.i, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 18, 33))
 
 
 // No Privacy errors - importing public elements
 import im_private_c_public = m_public.c_public;
 >im_private_c_public : Symbol(im_private_c_public, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 71, 68))
 >m_public : Symbol(m_public, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 22, 1))
->c_public : Symbol(im_private_c_public, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 25, 24))
+>c_public : Symbol(im_private_c_public, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 25, 27))
 
 import im_private_e_public = m_public.e_public;
 >im_private_e_public : Symbol(im_private_e_public, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 75, 47))
@@ -277,23 +277,23 @@ export var publicUse_im_private_i_public: im_private_i_public;
 
 var privateUse_im_private_mi_public = new im_private_mi_public.c();
 >privateUse_im_private_mi_public : Symbol(privateUse_im_private_mi_public, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 94, 3))
->im_private_mi_public.c : Symbol(im_private_mi_public.c, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 38, 29))
+>im_private_mi_public.c : Symbol(im_private_mi_public.c, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 38, 32))
 >im_private_mi_public : Symbol(im_private_mi_public, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 79, 47))
->c : Symbol(im_private_mi_public.c, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 38, 29))
+>c : Symbol(im_private_mi_public.c, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 38, 32))
 
 export var publicUse_im_private_mi_public = new im_private_mi_public.c();
 >publicUse_im_private_mi_public : Symbol(publicUse_im_private_mi_public, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 95, 10))
->im_private_mi_public.c : Symbol(im_private_mi_public.c, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 38, 29))
+>im_private_mi_public.c : Symbol(im_private_mi_public.c, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 38, 32))
 >im_private_mi_public : Symbol(im_private_mi_public, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 79, 47))
->c : Symbol(im_private_mi_public.c, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 38, 29))
+>c : Symbol(im_private_mi_public.c, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 38, 32))
 
 var privateUse_im_private_mu_public: im_private_mu_public.i;
 >privateUse_im_private_mu_public : Symbol(privateUse_im_private_mu_public, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 96, 3))
 >im_private_mu_public : Symbol(im_private_mu_public, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 80, 49))
->i : Symbol(im_private_mu_public.i, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 42, 29))
+>i : Symbol(im_private_mu_public.i, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 42, 32))
 
 export var publicUse_im_private_mu_public: im_private_mu_public.i;
 >publicUse_im_private_mu_public : Symbol(publicUse_im_private_mu_public, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 97, 10))
 >im_private_mu_public : Symbol(im_private_mu_public, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 80, 49))
->i : Symbol(im_private_mu_public.i, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 42, 29))
+>i : Symbol(im_private_mu_public.i, Decl(privacyTopLevelInternalReferenceImportWithoutExport.ts, 42, 32))
 

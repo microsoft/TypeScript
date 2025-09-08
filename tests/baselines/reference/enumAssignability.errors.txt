@@ -51,7 +51,7 @@ enumAssignability.ts(52,13): error TS2322: Type 'E' is not assignable to type 'B
     var x: number = e; // ok
     x = f; // ok
     
-    module Others {
+    namespace Others {
         var a: any = e; // ok
     
         class C {

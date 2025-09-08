@@ -2,7 +2,7 @@ ES5SymbolProperty2.ts(10,11): error TS2585: 'Symbol' only refers to a type, but 
 
 
 ==== ES5SymbolProperty2.ts (1 errors) ====
-    module M {
+    namespace M {
         var Symbol: any;
     
         export class C {

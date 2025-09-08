@@ -5,7 +5,7 @@ declare module "test" {
 >"test" : typeof import("test")
 >       : ^^^^^^^^^^^^^^^^^^^^^
 
-    module A {
+    namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 

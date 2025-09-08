@@ -6,7 +6,7 @@ export interface Person {
 	age: number;
 }
 
-export module M2 {
+export namespace M2 {
 	export interface I2 {
 		x: Person;
 	}

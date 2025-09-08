@@ -3854,7 +3854,7 @@ declare var Float64Array: Float64ArrayConstructor;
 /// ECMAScript Internationalization API
 /////////////////////////////
 
-declare module Intl {
+declare namespace Intl {
     interface CollatorOptions {
         usage?: string;
         localeMatcher?: string;

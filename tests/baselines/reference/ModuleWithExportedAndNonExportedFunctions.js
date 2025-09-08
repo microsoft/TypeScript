@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedFunctions.ts] ////
 
 //// [ModuleWithExportedAndNonExportedFunctions.ts]
-module A {
+namespace A {
 
     export function fn(s: string) {
         return true;
