@@ -135,6 +135,7 @@ import {
     isIdentifier,
     isIdentifierPart,
     isImportMeta,
+    isImportDeclaration,
     isImportOrExportSpecifier,
     isImportSpecifier,
     isImportTypeNode,
@@ -1012,7 +1013,18 @@ export namespace Core {
 
         const checker = program.getTypeChecker();
         // constructors should use the class symbol, detected by name, if present
-        const symbol = checker.getSymbolAtLocation(isConstructorDeclaration(node) && node.parent.name || node);
+        let symbol = checker.getSymbolAtLocation(isConstructorDeclaration(node) && node.parent.name || node);
+
+        // Handle export = namespace case where ES6 import cannot resolve the symbol
+        if (!symbol && isIdentifier(node) && isImportSpecifier(node.parent)) {
+            const importDeclaration = findAncestor(node, isImportDeclaration);
+            if (importDeclaration && isImportDeclaration(importDeclaration) && importDeclaration.moduleSpecifier) {
+                const moduleSymbol = checker.getSymbolAtLocation(importDeclaration.moduleSpecifier);
+                if (moduleSymbol && moduleSymbol.exports) {
+                    symbol = moduleSymbol.exports.get(node.escapedText);
+                }
+            }
+        }
 
         // Could not find a symbol e.g. unknown identifier
         if (!symbol) {
