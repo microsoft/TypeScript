@@ -22,7 +22,7 @@ import (
 )
 
 //go:generate go tool golang.org/x/tools/cmd/stringer -type=MessageType -output=stringer_generated.go
-//go:generate go tool mvdan.cc/gofumpt -lang=go1.25 -w stringer_generated.go
+//go:generate go tool mvdan.cc/gofumpt -w stringer_generated.go
 
 type MessageType uint8
 

@@ -51,7 +51,7 @@ func (tx *CommonJSModuleTransformer) pushNode(node *ast.Node) (grandparentNode *
 	grandparentNode = tx.parentNode
 	tx.parentNode = tx.currentNode
 	tx.currentNode = node
-	return
+	return grandparentNode
 }
 
 // Pops the last child node off the ancestor tracking stack, restoring the grandparent node.

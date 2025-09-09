@@ -19,10 +19,10 @@ import (
 )
 
 //go:generate go tool github.com/matryer/moq -stub -fmt goimports -pkg projecttestutil -out clientmock_generated.go ../../project Client
-//go:generate go tool mvdan.cc/gofumpt -lang=go1.25 -w clientmock_generated.go
+//go:generate go tool mvdan.cc/gofumpt -w clientmock_generated.go
 
 //go:generate go tool github.com/matryer/moq -stub -fmt goimports -pkg projecttestutil -out npmexecutormock_generated.go ../../project/ata NpmExecutor
-//go:generate go tool mvdan.cc/gofumpt -lang=go1.24 -w npmexecutormock_generated.go
+//go:generate go tool mvdan.cc/gofumpt -w npmexecutormock_generated.go
 
 const (
 	TestTypingsLocation = "/home/src/Library/Caches/typescript"

@@ -2432,7 +2432,7 @@ func GetLineAndCharacterOfPosition(sourceFile ast.SourceFileLike, pos int) (line
 	lineMap := GetLineStarts(sourceFile)
 	line = ComputeLineOfPosition(lineMap, pos)
 	character = utf8.RuneCountInString(sourceFile.Text()[lineMap[line]:pos])
-	return
+	return line, character
 }
 
 func GetEndLinePosition(sourceFile *ast.SourceFile, line int) int {
