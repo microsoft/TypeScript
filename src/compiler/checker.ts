@@ -41896,6 +41896,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
+    function checkParameterPropertySelfReference(parameter: ParameterDeclaration, initializer: Expression) {
+        if (!isIdentifier(parameter.name)) return;
+        const parameterName = parameter.name.escapedText;
+
+        function visitNode(node: Node): void {
+            if (isIdentifier(node) && node.escapedText === parameterName) {
+                // Ignore occurrences like `this.f` (property access name), which are not self-references
+                if (isPropertyAccessExpression(node.parent) && node.parent.name === node) {
+                    // skip
+                }
+                else {
+                    error(node, Diagnostics.Parameter_0_cannot_reference_itself, declarationNameToString(parameter.name));
+                    return;
+                }
+            }
+            forEachChild(node, visitNode);
+        }
+
+        visitNode(initializer);
+    }
+
     function checkParameter(node: ParameterDeclaration) {
         // Grammar checking
         // It is a SyntaxError if the Identifier "eval" or the Identifier "arguments" occurs as the
@@ -41904,6 +41925,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkGrammarModifiers(node);
 
         checkVariableLikeDeclaration(node);
+
+        // Check for parameter property self-reference in initializer
+        if (node.initializer && isIdentifier(node.name) && hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier)) {
+            checkParameterPropertySelfReference(node, node.initializer);
+        }
+
         const func = getContainingFunction(node)!;
         if (hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier)) {
             if (compilerOptions.erasableSyntaxOnly) {
