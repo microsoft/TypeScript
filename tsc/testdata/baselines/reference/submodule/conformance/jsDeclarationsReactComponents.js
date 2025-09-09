@@ -125,7 +125,7 @@ const react_1 = __importDefault(require("react"));
  * @type {React.SFC}
  */
 const TabbedShowLayout = () => {
-    return (react_1.default.createElement("div", { className: "", key: "" }, "o"));
+    return (react_1.default.createElement("div", { className: "", key: "" }, "ok"));
 };
 TabbedShowLayout.defaultProps = {
     tabs: "default value"
@@ -142,7 +142,7 @@ const react_1 = __importDefault(require("react"));
  * @type {{defaultProps: {tabs: string}} & ((props?: {elem: string}) => JSX.Element)}
  */
 const TabbedShowLayout = () => {
-    return (react_1.default.createElement("div", { className: "", key: "" }, "o"));
+    return (react_1.default.createElement("div", { className: "", key: "" }, "ok"));
 };
 TabbedShowLayout.defaultProps = {
     tabs: "default value"
@@ -156,7 +156,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = __importDefault(require("react"));
 const TabbedShowLayout = (/** @type {{className: string}}*/ prop) => {
-    return (react_1.default.createElement("div", { className: prop.className, key: "" }, "o"));
+    return (react_1.default.createElement("div", { className: prop.className, key: "" }, "ok"));
 };
 TabbedShowLayout.defaultProps = {
     tabs: "default value"

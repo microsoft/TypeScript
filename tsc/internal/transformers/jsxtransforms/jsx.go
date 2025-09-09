@@ -794,7 +794,7 @@ func fixupWhitespaceAndDecodeEntities(text string) string {
 	// Last non-whitespace character on this line.
 	lastNonWhitespace := -1
 	// These initial values are special because the first line is:
-	// firstNonWhitespace = 0 to indicate that we want leading whitsepace,
+	// firstNonWhitespace = 0 to indicate that we want leading whitespace,
 	// but lastNonWhitespace = -1 as a special flag to indicate that we *don't* include the line if it's all whitespace.
 	for i := 0; i < len(text); i++ {
 		c, size := utf8.DecodeRuneInString(text[i:])
@@ -802,7 +802,7 @@ func fixupWhitespaceAndDecodeEntities(text string) string {
 			// If we've seen any non-whitespace characters on this line, add the 'trim' of the line.
 			// (lastNonWhitespace === -1 is a special flag to detect whether the first line is all whitespace.)
 			if firstNonWhitespace != -1 && lastNonWhitespace != -1 {
-				addLineOfJsxText(acc, text[firstNonWhitespace:lastNonWhitespace], initial)
+				addLineOfJsxText(acc, text[firstNonWhitespace:lastNonWhitespace+1], initial)
 				initial = false
 			}
 

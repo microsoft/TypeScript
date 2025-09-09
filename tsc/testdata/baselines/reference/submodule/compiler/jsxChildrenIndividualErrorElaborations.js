@@ -92,7 +92,7 @@ function Blah(props) {
 // Incompatible child.
 var a = React.createElement(Blah, null, x => x);
 // Blah components don't accept text as child elements
-var a = React.createElement(Blah, null, "Hello unexpected text");
+var a = React.createElement(Blah, null, "Hello unexpected text!");
 // Blah components don't accept multiple children.
 var a = React.createElement(Blah, null, x => "" + x, x => "" + x);
 function Blah2(props) {
@@ -101,7 +101,7 @@ function Blah2(props) {
 // Incompatible child.
 var a = React.createElement(Blah2, null, x => x);
 // Blah2 components don't accept text as child elements
-var a = React.createElement(Blah2, null, "Hello unexpected text");
+var a = React.createElement(Blah2, null, "Hello unexpected text!");
 // Blah2 components don't accept multiple children of the wrong type.
 var a = React.createElement(Blah2, null, x => x, x => x);
 function Blah3(props) {
@@ -110,6 +110,6 @@ function Blah3(props) {
 // Incompatible child.
 var a = React.createElement(Blah3, null, x => x);
 // Blah3 components don't accept text as child elements
-var a = React.createElement(Blah3, null, "Hello unexpected text");
+var a = React.createElement(Blah3, null, "Hello unexpected text!");
 // Blah3 components don't accept multiple children of the wrong type.
 var a = React.createElement(Blah3, null, x => x, x => x);
