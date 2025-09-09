@@ -2062,6 +2062,65 @@ func TestBuildProgramUpdates(t *testing.T) {
 			cwd:             "/user/username/projects/project",
 			commandLineArgs: []string{"--b", "-i", "-w"},
 		},
+		{
+			subScenario: "when root is source from project reference",
+			files: FileMap{
+				"/home/src/workspaces/project/lib/tsconfig.json": stringtestutil.Dedent(`
+					{
+						"compilerOptions": {
+							"composite": true,
+							"outDir": "./dist"
+						}
+					}`),
+				"/home/src/workspaces/project/lib/foo.ts": `export const FOO: string = 'THEFOOEXPORT';`,
+				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
+					{
+						"references": [ { "path": "./lib" } ]
+					}`),
+				"/home/src/workspaces/project/index.ts": `import { FOO } from "./lib/foo";`,
+			},
+			commandLineArgs: []string{"--b"},
+			edits: []*tscEdit{
+				{
+					caption: "dts doesnt change",
+					edit: func(sys *testSys) {
+						sys.appendFile("/home/src/workspaces/project/lib/foo.ts", "const Bar = 10;")
+					},
+				},
+			},
+			cwd: "/home/src/workspaces/project",
+		},
+		{
+			subScenario: "when root is source from project reference with composite",
+			files: FileMap{
+				"/home/src/workspaces/project/lib/tsconfig.json": stringtestutil.Dedent(`
+					{
+						"compilerOptions": {
+							"composite": true,
+							"outDir": "./dist"
+						}
+					}`),
+				"/home/src/workspaces/project/lib/foo.ts": `export const FOO: string = 'THEFOOEXPORT';`,
+				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
+					{
+						"compilerOptions": {
+							"composite": true,
+						},
+						"references": [ { "path": "./lib" } ]
+					}`),
+				"/home/src/workspaces/project/index.ts": `import { FOO } from "./lib/foo";`,
+			},
+			commandLineArgs: []string{"--b"},
+			edits: []*tscEdit{
+				{
+					caption: "dts doesnt change",
+					edit: func(sys *testSys) {
+						sys.appendFile("/home/src/workspaces/project/lib/foo.ts", "const Bar = 10;")
+					},
+				},
+			},
+			cwd: "/home/src/workspaces/project",
+		},
 	}
 	for _, test := range testCases {
 		test.run(t, "programUpdates")

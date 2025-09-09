@@ -661,16 +661,16 @@ func (t *buildTask) updateTimeStamps(orchestrator *Orchestrator, emittedFiles []
 			verboseMessageReported = true
 		}
 		err := orchestrator.host.SetMTime(file, now)
-		if err != nil {
-			t.reportDiagnostic(ast.NewCompilerDiagnostic(diagnostics.Failed_to_update_timestamp_of_file_0, file))
-		} else if file == buildInfoName {
-			t.buildInfoEntryMu.Lock()
-			if t.buildInfoEntry != nil {
-				t.buildInfoEntry.mTime = now
+		if err == nil {
+			if file == buildInfoName {
+				t.buildInfoEntryMu.Lock()
+				if t.buildInfoEntry != nil {
+					t.buildInfoEntry.mTime = now
+				}
+				t.buildInfoEntryMu.Unlock()
+			} else if t.storeOutputTimeStamp(orchestrator) {
+				orchestrator.host.storeMTime(file, now)
 			}
-			t.buildInfoEntryMu.Unlock()
-		} else if t.storeOutputTimeStamp(orchestrator) {
-			orchestrator.host.storeMTime(file, now)
 		}
 	}
 

@@ -45,7 +45,6 @@ project/src/index.ts
    Matched by include pattern 'src/**/*' in 'project/tsconfig.json'
 [[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'project/tsconfig.json'...
 
-[94mmessage[0m[90m TS5074: [0mFailed to update timestamp of file '/home/src/workspaces/solution/project/dist/index.js'.
 //// [/home/src/tslibs/TS/Lib/lib.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
