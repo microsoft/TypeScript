@@ -2,17 +2,17 @@
 
 ////var x = 1;
 ////var r1, r2, r3, r4;
-////module M {
+////namespace M {
 ////    r1 = x; // undefined
 ////}
-////module M {
+////namespace M {
 ////    export var x = 2;
 ////    r2 = x; // 2
 ////}
-////module M {
+////namespace M {
 ////    r3 = x; // 2
 ////}
-////module M {
+////namespace M {
 ////    var x = 3;
 ////    r4 = x; // 3
 ////}

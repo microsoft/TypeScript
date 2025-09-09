@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/modFunctionCrash.ts] ////
 
 === modFunctionCrash.ts ===
-declare module Q {
+declare namespace Q {
 >Q : typeof Q
 >  : ^^^^^^^^
 

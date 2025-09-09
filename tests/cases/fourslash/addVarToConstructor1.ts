@@ -3,7 +3,7 @@
 //// 
 //// //_modes. // produces an internal error - please implement in derived class
 //// 
-//// module editor {
+//// namespace editor {
 ////  import modes = _modes;
 ////  
 ////  var i : modes.IMode;

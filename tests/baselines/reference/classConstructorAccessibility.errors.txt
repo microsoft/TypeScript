@@ -25,7 +25,7 @@ classConstructorAccessibility.ts(32,13): error TS2674: Constructor of class 'E<T
             ~~~~~~~~
 !!! error TS2674: Constructor of class 'E' is protected and only accessible within the class declaration.
     
-    module Generic {
+    namespace Generic {
         class C<T> {
             public constructor(public x: T) { }
         }

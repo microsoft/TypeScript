@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/moduleNewExportBug.ts] ////
 
 === moduleNewExportBug.ts ===
-module mod1 {
+namespace mod1 {
 >mod1 : typeof mod1
 >     : ^^^^^^^^^^^
 

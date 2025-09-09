@@ -7,7 +7,7 @@
 ////const c3 = 0, c4 :string = "", c5 = null;
 ////for(const c4 = 0; c4 < 9; ) { break; }
 ////for(const c5 = 0, c6 = 0; c5 < c6; ) { break; }
-////module M {
+////namespace M {
 ////    export const cc1 = false;
 ////    export const cc2: number = 23;
 ////    export const cc3 = 0, cc4 :string = "", cc5 = null;

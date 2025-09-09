@@ -22,7 +22,7 @@ interface IPoint {
 }
 
 /// Module
-module Shapes {
+namespace Shapes {
     // Class
     export class Point implements IPoint {
         constructor (public x: number, public y: number) { }
@@ -82,7 +82,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/tests/cases/fourslash/server/navbar01.ts SVC-1-0 "// Interface\ninterface IPoint {\n    getDist(): number;\n    new(): IPoint;\n    (): any;\n    [x:string]: number;\n    prop: string;\n}\n\n/// Module\nmodule Shapes {\n    // Class\n    export class Point implements IPoint {\n        constructor (public x: number, public y: number) { }\n\n        // Instance member\n        getDist() { return Math.sqrt(this.x * this.x + this.y * this.y); }\n\n        // Getter\n        get value(): number { return 0; }\n\n        // Setter\n        set value(newValue: number) { return; }\n\n        // Static member\n        static origin = new Point(0, 0);\n\n        // Static method\n        private static getOrigin() { return Point.origin;}\n    }\n\n    enum Values { value1, value2, value3 }\n}\n\n// Local variables\nvar p: IPoint = new Shapes.Point(3, 4);\nvar dist = p.getDist();"
+	/tests/cases/fourslash/server/navbar01.ts SVC-1-0 "// Interface\ninterface IPoint {\n    getDist(): number;\n    new(): IPoint;\n    (): any;\n    [x:string]: number;\n    prop: string;\n}\n\n/// Module\nnamespace Shapes {\n    // Class\n    export class Point implements IPoint {\n        constructor (public x: number, public y: number) { }\n\n        // Instance member\n        getDist() { return Math.sqrt(this.x * this.x + this.y * this.y); }\n\n        // Getter\n        get value(): number { return 0; }\n\n        // Setter\n        set value(newValue: number) { return; }\n\n        // Static member\n        static origin = new Point(0, 0);\n\n        // Static method\n        private static getOrigin() { return Point.origin;}\n    }\n\n    enum Values { value1, value2, value3 }\n}\n\n// Local variables\nvar p: IPoint = new Shapes.Point(3, 4);\nvar dist = p.getDist();"
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.d.ts
@@ -400,11 +400,11 @@ Info seq  [hh:mm:ss:mss] response:
             "nameSpan": {
               "start": {
                 "line": 11,
-                "offset": 8
+                "offset": 11
               },
               "end": {
                 "line": 11,
-                "offset": 14
+                "offset": 17
               }
             },
             "childItems": [

@@ -65,7 +65,7 @@ enum E {
 }
 
 // Arrow function as module variable initializer
-module M {
+namespace M {
 >M : Symbol(M, Decl(arrowFunctionContexts.ts, 31, 1))
 
     export var a = (s) => '';
@@ -79,7 +79,7 @@ module M {
 }
 
 // Repeat above for module members that are functions? (necessary to redo all of them?)
-module M2 {
+namespace M2 {
 >M2 : Symbol(M2, Decl(arrowFunctionContexts.ts, 37, 1))
 
     // Arrow function used in with statement
@@ -146,7 +146,7 @@ module M2 {
     }
 
     // Arrow function as module variable initializer
-    module M {
+    namespace M {
 >M : Symbol(M, Decl(arrowFunctionContexts.ts, 72, 5))
 
         export var a = (s) => '';

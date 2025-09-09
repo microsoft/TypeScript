@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignatures.ts] ////
 
 === subtypingWithConstructSignatures.ts ===
-module ConstructSignature {
+namespace ConstructSignature {
 >ConstructSignature : typeof ConstructSignature
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 

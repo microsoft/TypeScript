@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/ambientWithStatements.ts] ////
 
 //// [ambientWithStatements.ts]
-declare module M {
+declare namespace M {
     break;
     continue;
     debugger;

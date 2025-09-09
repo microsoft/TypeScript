@@ -2,7 +2,7 @@ importAndVariableDeclarationConflict4.ts(6,1): error TS2440: Import declaration 
 
 
 ==== importAndVariableDeclarationConflict4.ts (1 errors) ====
-    module m {
+    namespace m {
       export var m = '';
     }
     

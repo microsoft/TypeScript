@@ -16,7 +16,7 @@ class clodule1<T>{
 >      : ^
 }
 
-module clodule1 {
+namespace clodule1 {
 >clodule1 : typeof clodule1
 >         : ^^^^^^^^^^^^^^^
 
@@ -40,7 +40,7 @@ class clodule2<T>{
 >      : ^
 }
 
-module clodule2 {
+namespace clodule2 {
 >clodule2 : typeof clodule2
 >         : ^^^^^^^^^^^^^^^
 
@@ -75,7 +75,7 @@ class clodule3<T>{
 >      : ^
 }
 
-module clodule3 {
+namespace clodule3 {
 >clodule3 : typeof clodule3
 >         : ^^^^^^^^^^^^^^^
 
@@ -103,7 +103,7 @@ class clodule4<T>{
 >      : ^
 }
 
-module clodule4 {
+namespace clodule4 {
 >clodule4 : typeof clodule4
 >         : ^^^^^^^^^^^^^^^
 

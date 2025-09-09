@@ -6,7 +6,7 @@ declare module "react" {
 }
 
 //// [file1.tsx]
-declare module JSX {
+declare namespace JSX {
     interface Element { }
 }
 export class MyClass { }

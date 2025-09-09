@@ -13,7 +13,7 @@
 ////    public k = new /*4*/foo();
 ////}
 ////
-////module mod {
+////namespace mod {
 ////    var k: /*5*/foo = null;
 ////}
 

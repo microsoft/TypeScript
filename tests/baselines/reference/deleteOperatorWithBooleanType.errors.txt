@@ -21,7 +21,7 @@ deleteOperatorWithBooleanType.ts(36,8): error TS2703: The operand of a 'delete' 
         public a: boolean;
         static foo() { return false; }
     }
-    module M {
+    namespace M {
         export var n: boolean;
     }
     

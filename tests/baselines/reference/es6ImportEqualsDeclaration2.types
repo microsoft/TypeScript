@@ -18,7 +18,7 @@ declare module "server" {
 >events : typeof events
 >       : ^^^^^^^^^^^^^
 
-    module S {
+    namespace S {
 >S : typeof S
 >  : ^^^^^^^^
 
