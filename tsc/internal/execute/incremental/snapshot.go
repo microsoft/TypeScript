@@ -226,6 +226,7 @@ type snapshot struct {
 	allFilesExcludingDefaultLibraryFileOnce sync.Once
 	//  Cache of all files excluding default library file for the current program
 	allFilesExcludingDefaultLibraryFile []*ast.SourceFile
+	hasChangedDtsFile                   bool
 
 	// Used with testing to add text of hash for better comparison
 	hashWithText bool

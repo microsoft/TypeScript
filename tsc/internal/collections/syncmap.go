@@ -73,3 +73,12 @@ func (s *SyncMap[K, V]) Keys() iter.Seq[K] {
 		})
 	}
 }
+
+func (s *SyncMap[K, V]) Clone() *SyncMap[K, V] {
+	clone := &SyncMap[K, V]{}
+	s.m.Range(func(key, value any) bool {
+		clone.m.Store(key, value)
+		return true
+	})
+	return clone
+}

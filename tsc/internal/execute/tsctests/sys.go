@@ -218,13 +218,28 @@ func (s *testSys) GetEnvironmentVariable(name string) string {
 	return s.env[name]
 }
 
-func (s *testSys) OnEmittedFiles(result *compiler.EmitResult) {
+func (s *testSys) OnEmittedFiles(result *compiler.EmitResult, mTimesCache *collections.SyncMap[tspath.Path, time.Time]) {
 	if result != nil {
 		for _, file := range result.EmittedFiles {
+			modTime := s.mapFs().GetModTime(file)
+			if s.serializedDiff != nil {
+				if diff, ok := s.serializedDiff.snap[file]; ok && diff.mTime.Equal(modTime) {
+					// Even though written, timestamp was reverted
+					continue
+				}
+			}
+
 			// Ensure that the timestamp for emitted files is in the order
 			now := s.Now()
 			if err := s.fsFromFileMap().Chtimes(file, time.Time{}, now); err != nil {
 				panic("Failed to change time for emitted file: " + file + ": " + err.Error())
+			}
+			// Update the mTime cache in --b mode to store the updated timestamp so tests will behave deteministically when finding newest output
+			if mTimesCache != nil {
+				path := tspath.ToPath(file, s.GetCurrentDirectory(), s.FS().UseCaseSensitiveFileNames())
+				if _, found := mTimesCache.Load(path); found {
+					mTimesCache.Store(path, now)
+				}
 			}
 		}
 	}
@@ -252,6 +267,14 @@ func (s *testSys) OnBuildStatusReportStart(w io.Writer) {
 
 func (s *testSys) OnBuildStatusReportEnd(w io.Writer) {
 	fmt.Fprintln(w, buildStatusReportEnd)
+}
+
+func (s *testSys) OnWatchStatusReportStart() {
+	fmt.Fprintln(s.Writer(), watchStatusReportStart)
+}
+
+func (s *testSys) OnWatchStatusReportEnd() {
+	fmt.Fprintln(s.Writer(), watchStatusReportEnd)
 }
 
 func (s *testSys) GetTrace(w io.Writer) func(str string) {
@@ -308,9 +331,6 @@ func (s *testSys) baselinePrograms(baseline *strings.Builder) {
 	s.programBaselines.Reset()
 }
 
-func (s *testSys) baselineProgram(program *incremental.Program) {
-}
-
 func (s *testSys) serializeState(baseline *strings.Builder) {
 	s.baselineOutput(baseline)
 	s.baselineFSwithDiff(baseline)
@@ -334,6 +354,8 @@ var (
 	statisticsEnd          = "!!! Statistics end"
 	buildStatusReportStart = "!!! Build Status Report Start"
 	buildStatusReportEnd   = "!!! Build Status Report End"
+	watchStatusReportStart = "!!! Watch Status Report Start"
+	watchStatusReportEnd   = "!!! Watch Status Report End"
 	traceStart             = "!!! Trace start"
 	traceEnd               = "!!! Trace end"
 )
@@ -388,7 +410,8 @@ func (o *outputSanitizer) transformLines() string {
 		if !o.addOrSkipLinesForComparing(listFileStart, listFileEnd, false, nil) &&
 			!o.addOrSkipLinesForComparing(statisticsStart, statisticsEnd, true, nil) &&
 			!o.addOrSkipLinesForComparing(traceStart, traceEnd, false, nil) &&
-			!o.addOrSkipLinesForComparing(buildStatusReportStart, buildStatusReportEnd, false, o.sanitizeBuildStatusTimeStamp) {
+			!o.addOrSkipLinesForComparing(buildStatusReportStart, buildStatusReportEnd, false, o.sanitizeBuildStatusTimeStamp) &&
+			!o.addOrSkipLinesForComparing(watchStatusReportStart, watchStatusReportEnd, false, o.sanitizeBuildStatusTimeStamp) {
 			o.addOutputLine(line)
 		}
 	}
@@ -461,8 +484,7 @@ func (s *testSys) baselineFSwithDiff(baseline io.Writer) {
 	}
 	if s.serializedDiff != nil {
 		for path := range s.serializedDiff.snap {
-			_, ok := s.fsFromFileMap().ReadFile(path)
-			if !ok {
+			if fileInfo := s.mapFs().GetFileInfo(path); fileInfo == nil {
 				// report deleted
 				s.addFsEntryDiff(diffs, nil, path)
 			}
@@ -530,27 +552,37 @@ func (s *testSys) removeNoError(path string) {
 	}
 }
 
-func (s *testSys) replaceFileText(path string, oldText string, newText string) {
+func (s *testSys) readFileNoError(path string) string {
 	content, ok := s.fsFromFileMap().ReadFile(path)
 	if !ok {
 		panic("File not found: " + path)
 	}
+	return content
+}
+
+func (s *testSys) renameFileNoError(oldPath string, newPath string) {
+	s.writeFileNoError(newPath, s.readFileNoError(oldPath), false)
+	s.removeNoError(oldPath)
+}
+
+func (s *testSys) replaceFileText(path string, oldText string, newText string) {
+	content := s.readFileNoError(path)
 	content = strings.Replace(content, oldText, newText, 1)
 	s.writeFileNoError(path, content, false)
 }
 
+func (s *testSys) replaceFileTextAll(path string, oldText string, newText string) {
+	content := s.readFileNoError(path)
+	content = strings.ReplaceAll(content, oldText, newText)
+	s.writeFileNoError(path, content, false)
+}
+
 func (s *testSys) appendFile(path string, text string) {
-	content, ok := s.fsFromFileMap().ReadFile(path)
-	if !ok {
-		panic("File not found: " + path)
-	}
+	content := s.readFileNoError(path)
 	s.writeFileNoError(path, content+text, false)
 }
 
 func (s *testSys) prependFile(path string, text string) {
-	content, ok := s.fsFromFileMap().ReadFile(path)
-	if !ok {
-		panic("File not found: " + path)
-	}
+	content := s.readFileNoError(path)
 	s.writeFileNoError(path, text+content, false)
 }

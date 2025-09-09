@@ -197,7 +197,6 @@ interface Symbol {
     readonly [Symbol.toStringTag]: string;
 }
 declare const console: { log(msg: any): void; };
-//// [/temp/yarn/data/link/plugin-two] *deleted*
 //// [/user/username/projects/myproject/plugin-one/index.d.ts] *new* 
 export declare const actions: {
     featureOne: import("typescript-fsa").ActionCreator<{
@@ -214,5 +213,4 @@ const action = (0, typescript_fsa_1.actionCreatorFactory)("somekey");
 const featureOne = action("feature-one");
 exports.actions = { featureOne };
 
-//// [/user/username/projects/myproject/plugin-one/node_modules/plugin-two] *deleted*
 

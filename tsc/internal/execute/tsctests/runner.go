@@ -96,7 +96,7 @@ func (test *tscInput) run(t *testing.T, scenario string) {
 				sys.baselineFSwithDiff(baselineBuilder)
 
 				if result.Watcher == nil {
-					result = test.executeCommand(sys, baselineBuilder, commandLineArgs)
+					test.executeCommand(sys, baselineBuilder, commandLineArgs)
 				} else {
 					result.Watcher.DoCycle()
 				}

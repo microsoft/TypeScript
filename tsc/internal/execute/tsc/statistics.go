@@ -67,17 +67,17 @@ type Statistics struct {
 	compileTimes     *CompileTimes
 }
 
-func statisticsFromProgram(program *compiler.Program, compileTimes *CompileTimes, memStats *runtime.MemStats) *Statistics {
+func statisticsFromProgram(input EmitInput, memStats *runtime.MemStats) *Statistics {
 	return &Statistics{
-		files:          len(program.SourceFiles()),
-		lines:          program.LineCount(),
-		identifiers:    program.IdentifierCount(),
-		symbols:        program.SymbolCount(),
-		types:          program.TypeCount(),
-		instantiations: program.InstantiationCount(),
+		files:          len(input.Program.SourceFiles()),
+		lines:          input.Program.LineCount(),
+		identifiers:    input.Program.IdentifierCount(),
+		symbols:        input.Program.SymbolCount(),
+		types:          input.Program.TypeCount(),
+		instantiations: input.Program.InstantiationCount(),
 		memoryUsed:     memStats.Alloc,
 		memoryAllocs:   memStats.Mallocs,
-		compileTimes:   compileTimes,
+		compileTimes:   input.CompileTimes,
 	}
 }
 

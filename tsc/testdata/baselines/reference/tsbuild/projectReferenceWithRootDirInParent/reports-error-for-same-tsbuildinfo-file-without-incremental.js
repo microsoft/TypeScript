@@ -51,6 +51,8 @@ Output::
 [7m3[0m     "references": [{ "path": "../other" }]
 [7m [0m [91m                   ~~~~~~~~~~~~~~~~~~~~~~[0m
 
+[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'src/main/tsconfig.json'...
+
 
 Found 1 error in src/main/tsconfig.json[90m:3[0m
 

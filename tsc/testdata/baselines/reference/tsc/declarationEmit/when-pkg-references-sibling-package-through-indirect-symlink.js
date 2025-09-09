@@ -96,7 +96,6 @@ interface Symbol {
     readonly [Symbol.toStringTag]: string;
 }
 declare const console: { log(msg: any): void; };
-//// [/user/username/projects/myproject/pkg2/node_modules/@raymondfeng/pkg1] *deleted*
 //// [/user/username/projects/myproject/pkg3/dist/index.d.ts] *new* 
 export * from './keys';
 
@@ -130,5 +129,4 @@ exports.ADMIN = void 0;
 const pkg2_1 = require("@raymondfeng/pkg2");
 exports.ADMIN = pkg2_1.MetadataAccessor.create('1');
 
-//// [/user/username/projects/myproject/pkg3/node_modules/@raymondfeng/pkg2] *deleted*
 

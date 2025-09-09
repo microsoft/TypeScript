@@ -16,7 +16,7 @@ import (
 type Watcher struct {
 	sys                tsc.System
 	configFileName     string
-	options            *tsoptions.ParsedCommandLine
+	config             *tsoptions.ParsedCommandLine
 	reportDiagnostic   tsc.DiagnosticReporter
 	reportErrorSummary tsc.DiagnosticsReporter
 	testing            tsc.CommandLineTesting
@@ -32,7 +32,7 @@ var _ tsc.Watcher = (*Watcher)(nil)
 func createWatcher(sys tsc.System, configParseResult *tsoptions.ParsedCommandLine, reportDiagnostic tsc.DiagnosticReporter, reportErrorSummary tsc.DiagnosticsReporter, testing tsc.CommandLineTesting) *Watcher {
 	w := &Watcher{
 		sys:                sys,
-		options:            configParseResult,
+		config:             configParseResult,
 		reportDiagnostic:   reportDiagnostic,
 		reportErrorSummary: reportErrorSummary,
 		testing:            testing,
@@ -46,13 +46,10 @@ func createWatcher(sys tsc.System, configParseResult *tsoptions.ParsedCommandLin
 
 func (w *Watcher) start() {
 	w.host = compiler.NewCompilerHost(w.sys.GetCurrentDirectory(), w.sys.FS(), w.sys.DefaultLibraryPath(), nil, getTraceFromSys(w.sys, w.testing))
-	w.program = incremental.ReadBuildInfoProgram(w.options, incremental.NewBuildInfoReader(w.host), w.host)
+	w.program = incremental.ReadBuildInfoProgram(w.config, incremental.NewBuildInfoReader(w.host), w.host)
 
 	if w.testing == nil {
-		watchInterval := 1000 * time.Millisecond
-		if w.options.ParsedConfig.WatchOptions != nil {
-			watchInterval = time.Duration(*w.options.ParsedConfig.WatchOptions.Interval) * time.Millisecond
-		}
+		watchInterval := w.config.ParsedConfig.WatchOptions.WatchInterval()
 		for {
 			w.DoCycle()
 			time.Sleep(watchInterval)
@@ -72,7 +69,7 @@ func (w *Watcher) DoCycle() {
 	}
 	// updateProgram()
 	w.program = incremental.NewProgram(compiler.NewProgram(compiler.ProgramOptions{
-		Config:           w.options,
+		Config:           w.config,
 		Host:             w.host,
 		JSDocParsingMode: ast.JSDocParsingModeParseForTypeErrors,
 	}), w.program, nil, w.testing != nil)
@@ -94,7 +91,16 @@ func (w *Watcher) DoCycle() {
 func (w *Watcher) compileAndEmit() {
 	// !!! output/error reporting is currently the same as non-watch mode
 	// diagnostics, emitResult, exitStatus :=
-	tsc.EmitFilesAndReportErrors(w.sys, w.program, w.program.GetProgram(), w.reportDiagnostic, w.reportErrorSummary, w.sys.Writer(), &tsc.CompileTimes{}, w.testing)
+	tsc.EmitFilesAndReportErrors(tsc.EmitInput{
+		Sys:                w.sys,
+		ProgramLike:        w.program,
+		Program:            w.program.GetProgram(),
+		ReportDiagnostic:   w.reportDiagnostic,
+		ReportErrorSummary: w.reportErrorSummary,
+		Writer:             w.sys.Writer(),
+		CompileTimes:       &tsc.CompileTimes{},
+		Testing:            w.testing,
+	})
 }
 
 func (w *Watcher) hasErrorsInTsConfig() bool {
@@ -110,11 +116,11 @@ func (w *Watcher) hasErrorsInTsConfig() bool {
 			return true
 		}
 		// CompilerOptions contain fields which should not be compared; clone to get a copy without those set.
-		if !reflect.DeepEqual(w.options.CompilerOptions().Clone(), configParseResult.CompilerOptions().Clone()) {
+		if !reflect.DeepEqual(w.config.CompilerOptions().Clone(), configParseResult.CompilerOptions().Clone()) {
 			// fmt.Fprintln(w.sys.Writer(), "build triggered due to config change")
 			w.configModified = true
 		}
-		w.options = configParseResult
+		w.config = configParseResult
 	}
 	w.host = compiler.NewCompilerHost(w.sys.GetCurrentDirectory(), w.sys.FS(), w.sys.DefaultLibraryPath(), extendedConfigCache, getTraceFromSys(w.sys, w.testing))
 	return false
@@ -151,8 +157,4 @@ func (w *Watcher) hasBeenModified(program *compiler.Program) bool {
 	// reset state for next cycle
 	w.configModified = false
 	return filesModified
-}
-
-func (w *Watcher) GetProgram() *incremental.Program {
-	return w.program
 }

@@ -2980,6 +2980,8 @@ var Project_0_is_out_of_date_because_input_1_does_not_exist = &Message{code: 642
 
 var Rewrite_ts_tsx_mts_and_cts_file_extensions_in_relative_import_paths_to_their_JavaScript_equivalent_in_output_files = &Message{code: 6421, category: CategoryMessage, key: "Rewrite_ts_tsx_mts_and_cts_file_extensions_in_relative_import_paths_to_their_JavaScript_equivalent_i_6421", text: "Rewrite '.ts', '.tsx', '.mts', and '.cts' file extensions in relative import paths to their JavaScript equivalent in output files."}
 
+var Project_0_is_out_of_date_because_it_has_errors = &Message{code: 6423, category: CategoryMessage, key: "Project_0_is_out_of_date_because_it_has_errors_6423", text: "Project '{0}' is out of date because it has errors."}
+
 var The_expected_type_comes_from_property_0_which_is_declared_here_on_type_1 = &Message{code: 6500, category: CategoryMessage, key: "The_expected_type_comes_from_property_0_which_is_declared_here_on_type_1_6500", text: "The expected type comes from property '{0}' which is declared here on type '{1}'"}
 
 var The_expected_type_comes_from_this_index_signature = &Message{code: 6501, category: CategoryMessage, key: "The_expected_type_comes_from_this_index_signature_6501", text: "The expected type comes from this index signature."}

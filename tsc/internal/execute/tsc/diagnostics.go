@@ -145,3 +145,18 @@ func CreateBuilderStatusReporter(sys System, w io.Writer, options *core.Compiler
 		fmt.Fprint(w, formatOpts.NewLine, formatOpts.NewLine)
 	}
 }
+
+func CreateWatchStatusReporter(sys System, options *core.CompilerOptions, testing CommandLineTesting) DiagnosticReporter {
+	formatOpts := getFormatOptsOfSys(sys)
+	writeStatus := core.IfElse(shouldBePretty(sys, options), diagnosticwriter.FormatDiagnosticsStatusWithColorAndTime, diagnosticwriter.FormatDiagnosticsStatusAndTime)
+	return func(diagnostic *ast.Diagnostic) {
+		writer := sys.Writer()
+		if testing != nil {
+			testing.OnWatchStatusReportStart()
+			defer testing.OnWatchStatusReportEnd()
+		}
+		diagnosticwriter.TryClearScreen(writer, diagnostic, options)
+		writeStatus(writer, sys.Now().Format("03:04:05 PM"), diagnostic, formatOpts)
+		fmt.Fprint(writer, formatOpts.NewLine, formatOpts.NewLine)
+	}
+}

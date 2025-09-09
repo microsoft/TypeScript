@@ -7,7 +7,7 @@ import (
 )
 
 type BuildInfoReader interface {
-	ReadBuildInfo(buildInfoFileName string) *BuildInfo
+	ReadBuildInfo(config *tsoptions.ParsedCommandLine) *BuildInfo
 }
 
 var _ BuildInfoReader = (*buildInfoReader)(nil)
@@ -16,7 +16,12 @@ type buildInfoReader struct {
 	host compiler.CompilerHost
 }
 
-func (r *buildInfoReader) ReadBuildInfo(buildInfoFileName string) *BuildInfo {
+func (r *buildInfoReader) ReadBuildInfo(config *tsoptions.ParsedCommandLine) *BuildInfo {
+	buildInfoFileName := config.GetBuildInfoFileName()
+	if buildInfoFileName == "" {
+		return nil
+	}
+
 	// Read build info file
 	data, ok := r.host.FS().ReadFile(buildInfoFileName)
 	if !ok {
@@ -37,20 +42,15 @@ func NewBuildInfoReader(
 }
 
 func ReadBuildInfoProgram(config *tsoptions.ParsedCommandLine, reader BuildInfoReader, host compiler.CompilerHost) *Program {
-	buildInfoFileName := config.GetBuildInfoFileName()
-	if buildInfoFileName == "" {
-		return nil
-	}
-
-	// Read buildinFo file
-	buildInfo := reader.ReadBuildInfo(buildInfoFileName)
+	// Read buildInfo file
+	buildInfo := reader.ReadBuildInfo(config)
 	if buildInfo == nil || !buildInfo.IsValidVersion() || !buildInfo.IsIncremental() {
 		return nil
 	}
 
 	// Convert to information that can be used to create incremental program
 	incrementalProgram := &Program{
-		snapshot: buildInfoToSnapshot(buildInfo, buildInfoFileName, config, host),
+		snapshot: buildInfoToSnapshot(buildInfo, config, host),
 	}
 	return incrementalProgram
 }

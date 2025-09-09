@@ -207,7 +207,6 @@ Output::
 [7m2[0m export const api = ky.extend({});
 [7m [0m [91m             ~~~[0m
 
-TSFILE:  /home/src/workspaces/project/tsconfig.tsbuildinfo
 ../../tslibs/TS/Lib/lib.esnext.full.d.ts
    Default library for target 'ESNext'
 node_modules/ky/distribution/index.d.ts
@@ -219,8 +218,6 @@ index.ts
 
 Found 1 error in index.ts[90m:2[0m
 
-//// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *rewrite with same content*
-//// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
 tsconfig.json::
 SemanticDiagnostics::

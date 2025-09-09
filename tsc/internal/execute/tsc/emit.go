@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"io"
 	"runtime"
+	"time"
 
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -22,34 +24,38 @@ func GetTraceWithWriterFromSys(w io.Writer, testing CommandLineTesting) func(msg
 	}
 }
 
-func EmitAndReportStatistics(
-	sys System,
-	programLike compiler.ProgramLike,
-	program *compiler.Program,
-	config *tsoptions.ParsedCommandLine,
-	reportDiagnostic DiagnosticReporter,
-	reportErrorSummary DiagnosticsReporter,
-	w io.Writer,
-	compileTimes *CompileTimes,
-	testing CommandLineTesting,
-) (CompileAndEmitResult, *Statistics) {
+type EmitInput struct {
+	Sys                System
+	ProgramLike        compiler.ProgramLike
+	Program            *compiler.Program
+	Config             *tsoptions.ParsedCommandLine
+	ReportDiagnostic   DiagnosticReporter
+	ReportErrorSummary DiagnosticsReporter
+	Writer             io.Writer
+	WriteFile          compiler.WriteFile
+	CompileTimes       *CompileTimes
+	Testing            CommandLineTesting
+	TestingMTimesCache *collections.SyncMap[tspath.Path, time.Time]
+}
+
+func EmitAndReportStatistics(input EmitInput) (CompileAndEmitResult, *Statistics) {
 	var statistics *Statistics
-	result := EmitFilesAndReportErrors(sys, programLike, program, reportDiagnostic, reportErrorSummary, w, compileTimes, testing)
+	result := EmitFilesAndReportErrors(input)
 	if result.Status != ExitStatusSuccess {
 		// compile exited early
 		return result, nil
 	}
-	result.times.totalTime = sys.SinceStart()
+	result.times.totalTime = input.Sys.SinceStart()
 
-	if config.CompilerOptions().Diagnostics.IsTrue() || config.CompilerOptions().ExtendedDiagnostics.IsTrue() {
+	if input.Config.CompilerOptions().Diagnostics.IsTrue() || input.Config.CompilerOptions().ExtendedDiagnostics.IsTrue() {
 		var memStats runtime.MemStats
 		// GC must be called twice to allow things to settle.
 		runtime.GC()
 		runtime.GC()
 		runtime.ReadMemStats(&memStats)
 
-		statistics = statisticsFromProgram(program, compileTimes, &memStats)
-		statistics.Report(w, testing)
+		statistics = statisticsFromProgram(input, &memStats)
+		statistics.Report(input.Writer, input.Testing)
 	}
 
 	if result.EmitResult.EmitSkipped && len(result.Diagnostics) > 0 {
@@ -60,84 +66,77 @@ func EmitAndReportStatistics(
 	return result, statistics
 }
 
-func EmitFilesAndReportErrors(
-	sys System,
-	programLike compiler.ProgramLike,
-	program *compiler.Program,
-	reportDiagnostic DiagnosticReporter,
-	reportErrorSummary DiagnosticsReporter,
-	w io.Writer,
-	compileTimes *CompileTimes,
-	testing CommandLineTesting,
-) (result CompileAndEmitResult) {
-	result.times = compileTimes
+func EmitFilesAndReportErrors(input EmitInput) (result CompileAndEmitResult) {
+	result.times = input.CompileTimes
 	ctx := context.Background()
 
 	allDiagnostics := compiler.GetDiagnosticsOfAnyProgram(
 		ctx,
-		programLike,
+		input.ProgramLike,
 		nil,
 		false,
 		func(ctx context.Context, file *ast.SourceFile) []*ast.Diagnostic {
 			// Options diagnostics include global diagnostics (even though we collect them separately),
 			// and global diagnostics create checkers, which then bind all of the files. Do this binding
 			// early so we can track the time.
-			bindStart := sys.Now()
-			diags := programLike.GetBindDiagnostics(ctx, file)
-			result.times.bindTime = sys.Now().Sub(bindStart)
+			bindStart := input.Sys.Now()
+			diags := input.ProgramLike.GetBindDiagnostics(ctx, file)
+			result.times.bindTime = input.Sys.Now().Sub(bindStart)
 			return diags
 		},
 		func(ctx context.Context, file *ast.SourceFile) []*ast.Diagnostic {
-			checkStart := sys.Now()
-			diags := programLike.GetSemanticDiagnostics(ctx, file)
-			result.times.checkTime = sys.Now().Sub(checkStart)
+			checkStart := input.Sys.Now()
+			diags := input.ProgramLike.GetSemanticDiagnostics(ctx, file)
+			result.times.checkTime = input.Sys.Now().Sub(checkStart)
 			return diags
 		},
 	)
 
 	emitResult := &compiler.EmitResult{EmitSkipped: true, Diagnostics: []*ast.Diagnostic{}}
-	if !programLike.Options().ListFilesOnly.IsTrue() {
-		emitStart := sys.Now()
-		emitResult = programLike.Emit(ctx, compiler.EmitOptions{})
-		result.times.emitTime = sys.Now().Sub(emitStart)
+	if !input.ProgramLike.Options().ListFilesOnly.IsTrue() {
+		emitStart := input.Sys.Now()
+		emitResult = input.ProgramLike.Emit(ctx, compiler.EmitOptions{
+			WriteFile: input.WriteFile,
+		})
+		result.times.emitTime = input.Sys.Now().Sub(emitStart)
 	}
 	if emitResult != nil {
 		allDiagnostics = append(allDiagnostics, emitResult.Diagnostics...)
 	}
-	if testing != nil {
-		testing.OnEmittedFiles(emitResult)
+	if input.Testing != nil {
+		input.Testing.OnEmittedFiles(emitResult, input.TestingMTimesCache)
 	}
 
 	allDiagnostics = compiler.SortAndDeduplicateDiagnostics(allDiagnostics)
 	for _, diagnostic := range allDiagnostics {
-		reportDiagnostic(diagnostic)
+		input.ReportDiagnostic(diagnostic)
 	}
 
-	listFiles(w, program, emitResult, testing)
+	listFiles(input, emitResult)
 
-	reportErrorSummary(allDiagnostics)
+	input.ReportErrorSummary(allDiagnostics)
 	result.Diagnostics = allDiagnostics
 	result.EmitResult = emitResult
 	result.Status = ExitStatusSuccess
 	return result
 }
 
-func listFiles(w io.Writer, program *compiler.Program, emitResult *compiler.EmitResult, testing CommandLineTesting) {
-	if testing != nil {
-		testing.OnListFilesStart(w)
-		defer testing.OnListFilesEnd(w)
+func listFiles(input EmitInput, emitResult *compiler.EmitResult) {
+	if input.Testing != nil {
+		input.Testing.OnListFilesStart(input.Writer)
+		defer input.Testing.OnListFilesEnd(input.Writer)
 	}
-	options := program.Options()
+	options := input.Program.Options()
 	if options.ListEmittedFiles.IsTrue() {
 		for _, file := range emitResult.EmittedFiles {
-			fmt.Fprintln(w, "TSFILE: ", tspath.GetNormalizedAbsolutePath(file, program.GetCurrentDirectory()))
+			fmt.Fprintln(input.Writer, "TSFILE: ", tspath.GetNormalizedAbsolutePath(file, input.Program.GetCurrentDirectory()))
 		}
 	}
 	if options.ExplainFiles.IsTrue() {
-		program.ExplainFiles(w)
+		input.Program.ExplainFiles(input.Writer)
 	} else if options.ListFiles.IsTrue() || options.ListFilesOnly.IsTrue() {
-		for _, file := range program.GetSourceFiles() {
-			fmt.Fprintln(w, file.FileName())
+		for _, file := range input.Program.GetSourceFiles() {
+			fmt.Fprintln(input.Writer, file.FileName())
 		}
 	}
 }

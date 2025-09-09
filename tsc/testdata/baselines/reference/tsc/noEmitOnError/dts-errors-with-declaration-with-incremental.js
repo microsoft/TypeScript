@@ -208,8 +208,6 @@ Output::
 
 Found 1 error in src/main.ts[90m:2[0m
 
-//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *rewrite with same content*
-//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
 tsconfig.json::
 SemanticDiagnostics::

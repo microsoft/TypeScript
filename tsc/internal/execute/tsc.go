@@ -86,7 +86,6 @@ func tscBuildCompilation(sys tsc.System, buildCommand *tsoptions.ParsedBuildComm
 		return tsc.CommandLineResult{Status: tsc.ExitStatusSuccess}
 	}
 
-	// !!! sheetal watch mode
 	orchestrator := build.NewOrchestrator(build.Options{
 		Sys:     sys,
 		Command: buildCommand,
@@ -259,19 +258,19 @@ func performIncrementalCompilation(
 	})
 	compileTimes.ParseTime = sys.Now().Sub(parseStart)
 	changesComputeStart := sys.Now()
-	incrementalProgram := incremental.NewProgram(program, oldProgram, nil, testing != nil)
+	incrementalProgram := incremental.NewProgram(program, oldProgram, incremental.CreateHost(host), testing != nil)
 	compileTimes.ChangesComputeTime = sys.Now().Sub(changesComputeStart)
-	result, _ := tsc.EmitAndReportStatistics(
-		sys,
-		incrementalProgram,
-		incrementalProgram.GetProgram(),
-		config,
-		reportDiagnostic,
-		reportErrorSummary,
-		sys.Writer(),
-		compileTimes,
-		testing,
-	)
+	result, _ := tsc.EmitAndReportStatistics(tsc.EmitInput{
+		Sys:                sys,
+		ProgramLike:        incrementalProgram,
+		Program:            incrementalProgram.GetProgram(),
+		Config:             config,
+		ReportDiagnostic:   reportDiagnostic,
+		ReportErrorSummary: reportErrorSummary,
+		Writer:             sys.Writer(),
+		CompileTimes:       compileTimes,
+		Testing:            testing,
+	})
 	if testing != nil {
 		testing.OnProgram(incrementalProgram)
 	}
@@ -298,17 +297,17 @@ func performCompilation(
 		JSDocParsingMode: ast.JSDocParsingModeParseForTypeErrors,
 	})
 	compileTimes.ParseTime = sys.Now().Sub(parseStart)
-	result, _ := tsc.EmitAndReportStatistics(
-		sys,
-		program,
-		program,
-		config,
-		reportDiagnostic,
-		reportErrorSummary,
-		sys.Writer(),
-		compileTimes,
-		testing,
-	)
+	result, _ := tsc.EmitAndReportStatistics(tsc.EmitInput{
+		Sys:                sys,
+		ProgramLike:        program,
+		Program:            program,
+		Config:             config,
+		ReportDiagnostic:   reportDiagnostic,
+		ReportErrorSummary: reportErrorSummary,
+		Writer:             sys.Writer(),
+		CompileTimes:       compileTimes,
+		Testing:            testing,
+	})
 	return tsc.CommandLineResult{
 		Status: result.Status,
 	}

@@ -111,7 +111,6 @@ interface Symbol {
     readonly [Symbol.toStringTag]: string;
 }
 declare const console: { log(msg: any): void; };
-//// [/home/src/workspaces/project/node_modules/a] *deleted*
 //// [/home/src/workspaces/project/packages/a/types/index.d.ts] *new* 
 export declare const a = "a";
 
@@ -209,7 +208,6 @@ Signatures::
 
 
 Edit [0]:: build b
-//// [/home/src/workspaces/project/node_modules/a] *deleted*
 
 tsgo -b packages/b --verbose --traceResolution --explainFiles
 ExitStatus:: Success
@@ -252,7 +250,6 @@ packages/a/types/index.d.ts
 packages/b/index.js
    Matched by default include pattern '**/*'
    File is ECMAScript module because 'packages/b/package.json' has field "type" with value "module"
-//// [/home/src/workspaces/project/node_modules/a] *deleted*
 //// [/home/src/workspaces/project/packages/b/tsconfig.tsbuildinfo] *new* 
 {"version":"FakeTSVersion","root":["./index.js"]}
 //// [/home/src/workspaces/project/packages/b/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 

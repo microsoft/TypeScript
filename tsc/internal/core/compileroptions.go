@@ -292,6 +292,13 @@ func (options *CompilerOptions) GetJSXTransformEnabled() bool {
 	return jsx == JsxEmitReact || jsx == JsxEmitReactJSX || jsx == JsxEmitReactJSXDev
 }
 
+func (options *CompilerOptions) GetStrictOptionValue(value Tristate) bool {
+	if value != TSUnknown {
+		return value == TSTrue
+	}
+	return options.Strict == TSTrue
+}
+
 func (options *CompilerOptions) GetEffectiveTypeRoots(currentDirectory string) (result []string, fromConfig bool) {
 	if options.TypeRoots != nil {
 		return options.TypeRoots, true

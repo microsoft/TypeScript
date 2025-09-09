@@ -390,6 +390,59 @@ func TestBuildConfigFileErrors(t *testing.T) {
 			files:           FileMap{},
 			commandLineArgs: []string{"--b", "bogus.json"},
 		},
+		{
+			subScenario: "reports syntax errors in config file",
+			files: FileMap{
+				"/home/src/workspaces/project/a.ts": "export function foo() { }",
+				"/home/src/workspaces/project/b.ts": "export function bar() { }",
+				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
+					{
+						"compilerOptions": {
+							"composite": true,
+						},
+						"files": [
+							"a.ts"
+							"b.ts"
+						]
+					}`),
+			},
+			commandLineArgs: []string{"--b", "-w"},
+			edits: []*tscEdit{
+				{
+					caption: "reports syntax errors after change to config file",
+					edit: func(sys *testSys) {
+						sys.replaceFileText("/home/src/workspaces/project/tsconfig.json", ",", `, "declaration": true`)
+					},
+				},
+				{
+					caption: "reports syntax errors after change to ts file",
+					edit: func(sys *testSys) {
+						sys.appendFile("/home/src/workspaces/project/a.ts", "export function fooBar() { }")
+					},
+				},
+				{
+					caption: "reports error when there is no change to tsconfig file",
+					edit: func(sys *testSys) {
+						sys.replaceFileText("/home/src/workspaces/project/tsconfig.json", "", "")
+					},
+				},
+				{
+					caption: "builds after fixing config file errors",
+					edit: func(sys *testSys) {
+						sys.writeFileNoError("/home/src/workspaces/project/tsconfig.json", stringtestutil.Dedent(`
+							{
+								"compilerOptions": {
+									"composite": true, "declaration": true
+								},
+								"files": [
+									"a.ts",
+									"b.ts"
+								]
+							}`), false)
+					},
+				},
+			},
+		},
 	}
 
 	for _, test := range testCases {
@@ -621,6 +674,61 @@ func TestBuildDemoProject(t *testing.T) {
 			}),
 			cwd:             "/user/username/projects/demo",
 			commandLineArgs: []string{"--b", "--verbose"},
+		},
+		{
+			subScenario: "updates with circular reference",
+			files: getBuildDemoFileMap(func(files FileMap) {
+				files["/user/username/projects/demo/core/tsconfig.json"] = stringtestutil.Dedent(`
+					{
+						"extends": "../tsconfig-base.json",
+						"compilerOptions": {
+							"outDir": "../lib/core",
+							"rootDir": "."
+						},
+						"references": [
+							{
+								"path": "../zoo",
+							}
+						]
+					}
+				`)
+			}),
+			cwd:             "/user/username/projects/demo",
+			commandLineArgs: []string{"--b", "-w", "--verbose"},
+			edits: []*tscEdit{
+				{
+					caption: "Fix error",
+					edit: func(sys *testSys) {
+						sys.writeFileNoError("/user/username/projects/demo/core/tsconfig.json", stringtestutil.Dedent(`
+							{
+								"extends": "../tsconfig-base.json",
+								"compilerOptions": {
+									"outDir": "../lib/core",
+									"rootDir": "."
+								},
+							}
+						`), false)
+					},
+				},
+			},
+		},
+		{
+			// !!! sheetal - this has missing errors from strada about files not in rootDir (3)
+			subScenario: "updates with bad reference",
+			files: getBuildDemoFileMap(func(files FileMap) {
+				files["/user/username/projects/demo/core/utilities.ts"] = `import * as A from '../animals'
+` + files["/user/username/projects/demo/core/utilities.ts"].(string)
+			}),
+			cwd:             "/user/username/projects/demo",
+			commandLineArgs: []string{"--b", "-w", "--verbose"},
+			edits: []*tscEdit{
+				{
+					caption: "Prepend a line",
+					edit: func(sys *testSys) {
+						sys.prependFile("/user/username/projects/demo/core/utilities.ts", "\n")
+					},
+				},
+			},
 		},
 	}
 
@@ -1527,6 +1635,439 @@ func TestBuildOutputPaths(t *testing.T) {
 	}
 }
 
+func TestBuildProgramUpdates(t *testing.T) {
+	t.Parallel()
+	testCases := []*tscInput{
+		{
+			subScenario: "when referenced project change introduces error in the down stream project and then fixes it",
+			files: FileMap{
+				"/user/username/projects/sample1/Library/tsconfig.json": stringtestutil.Dedent(`
+				{ 
+					"compilerOptions": {
+						"composite": true
+					}
+				}`),
+				"/user/username/projects/sample1/Library/library.ts": stringtestutil.Dedent(`
+					interface SomeObject
+					{
+						message: string;
+					}
+
+					export function createSomeObject(): SomeObject
+					{
+						return {
+							message: "new Object"
+						};
+					}
+				`),
+				"/user/username/projects/sample1/App/tsconfig.json": stringtestutil.Dedent(`
+				{ 
+					"references": [{ "path": "../Library" }]
+				}`),
+				"/user/username/projects/sample1/App/app.ts": stringtestutil.Dedent(`
+					import { createSomeObject } from "../Library/library";
+					createSomeObject().message;
+				`),
+			},
+			cwd:             "/user/username/projects/sample1",
+			commandLineArgs: []string{"-b", "-w", "App"},
+			edits: []*tscEdit{
+				{
+					caption: "Introduce error",
+					// Change message in library to message2
+					edit: func(sys *testSys) {
+						sys.replaceFileTextAll("/user/username/projects/sample1/Library/library.ts", "message", "message2")
+					},
+				},
+				{
+					caption: "Fix error",
+					// Revert library changes
+					edit: func(sys *testSys) {
+						sys.replaceFileTextAll("/user/username/projects/sample1/Library/library.ts", "message2", "message")
+					},
+				},
+			},
+		},
+		{
+			subScenario: "declarationEmitErrors when fixing error files all files are emitted",
+			files: FileMap{
+				"/user/username/projects/solution/app/fileWithError.ts": stringtestutil.Dedent(`
+					export var myClassWithError = class {
+						tags() { }
+						private p = 12
+					};
+				`),
+				"/user/username/projects/solution/app/fileWithoutError.ts": "export class myClass { }",
+				"/user/username/projects/solution/app/tsconfig.json": stringtestutil.Dedent(`
+				{
+					"compilerOptions": {
+						"composite": true
+					}
+				}`),
+			},
+			cwd:             "/user/username/projects/solution",
+			commandLineArgs: []string{"-b", "-w", "app"},
+			edits: []*tscEdit{
+				{
+					caption: "Fix error",
+					edit: func(sys *testSys) {
+						sys.replaceFileText("/user/username/projects/solution/app/fileWithError.ts", "private p = 12", "")
+					},
+				},
+			},
+		},
+		{
+			subScenario: "declarationEmitErrors when file with no error changes",
+			files: FileMap{
+				"/user/username/projects/solution/app/fileWithError.ts": stringtestutil.Dedent(`
+					export var myClassWithError = class {
+						tags() { }
+						private p = 12
+					};
+				`),
+				"/user/username/projects/solution/app/fileWithoutError.ts": "export class myClass { }",
+				"/user/username/projects/solution/app/tsconfig.json": stringtestutil.Dedent(`
+				{
+					"compilerOptions": {
+						"composite": true
+					}
+				}`),
+			},
+			cwd:             "/user/username/projects/solution",
+			commandLineArgs: []string{"-b", "-w", "app"},
+			edits: []*tscEdit{
+				{
+					caption: "Change fileWithoutError",
+					edit: func(sys *testSys) {
+						sys.replaceFileTextAll("/user/username/projects/solution/app/fileWithoutError.ts", "myClass", "myClass2")
+					},
+				},
+			},
+		},
+		{
+			subScenario: "declarationEmitErrors introduceError when fixing errors only changed file is emitted",
+			files: FileMap{
+				"/user/username/projects/solution/app/fileWithError.ts": stringtestutil.Dedent(`
+					export var myClassWithError = class {
+						tags() { }
+						
+					};
+				`),
+				"/user/username/projects/solution/app/fileWithoutError.ts": "export class myClass { }",
+				"/user/username/projects/solution/app/tsconfig.json": stringtestutil.Dedent(`
+				{
+					"compilerOptions": {
+						"composite": true
+					}
+				}`),
+			},
+			cwd:             "/user/username/projects/solution",
+			commandLineArgs: []string{"-b", "-w", "app"},
+			edits: []*tscEdit{
+				{
+					caption: "Introduce error",
+					edit: func(sys *testSys) {
+						sys.writeFileNoError("/user/username/projects/solution/app/fileWithError.ts", stringtestutil.Dedent(`
+							export var myClassWithError = class {
+								tags() { }
+								private p = 12
+							};
+						`), false)
+					},
+				},
+				{
+					caption: "Fix error",
+					edit: func(sys *testSys) {
+						sys.replaceFileText("/user/username/projects/solution/app/fileWithError.ts", "private p = 12", "")
+					},
+				},
+			},
+		},
+		{
+			subScenario: "declarationEmitErrors introduceError when file with no error changes",
+			files: FileMap{
+				"/user/username/projects/solution/app/fileWithError.ts": stringtestutil.Dedent(`
+					export var myClassWithError = class {
+						tags() { }
+						
+					};
+				`),
+				"/user/username/projects/solution/app/fileWithoutError.ts": "export class myClass { }",
+				"/user/username/projects/solution/app/tsconfig.json": stringtestutil.Dedent(`
+				{
+					"compilerOptions": {
+						"composite": true
+					}
+				}`),
+			},
+			cwd:             "/user/username/projects/solution",
+			commandLineArgs: []string{"-b", "-w", "app"},
+			edits: []*tscEdit{
+				{
+					caption: "Introduce error",
+					edit: func(sys *testSys) {
+						sys.writeFileNoError("/user/username/projects/solution/app/fileWithError.ts", stringtestutil.Dedent(`
+							export var myClassWithError = class {
+								tags() { }
+								private p = 12
+							};
+						`), false)
+					},
+				},
+				{
+					caption: "Change fileWithoutError",
+					edit: func(sys *testSys) {
+						sys.replaceFileTextAll("/user/username/projects/solution/app/fileWithoutError.ts", "myClass", "myClass2")
+					},
+				},
+			},
+		},
+		{
+			subScenario: "works when noUnusedParameters changes to false",
+			files: FileMap{
+				"/user/username/projects/myproject/index.ts": `const fn = (a: string, b: string) => b;`,
+				"/user/username/projects/myproject/tsconfig.json": stringtestutil.Dedent(`
+				{
+					"compilerOptions": {
+						"noUnusedParameters": true,
+					},
+				}`),
+			},
+			cwd:             "/user/username/projects/myproject",
+			commandLineArgs: []string{"-b", "-w"},
+
+			edits: []*tscEdit{
+				{
+					caption: "Change tsconfig to set noUnusedParameters to false",
+					edit: func(sys *testSys) {
+						sys.writeFileNoError(
+							`/user/username/projects/myproject/tsconfig.json`,
+							stringtestutil.Dedent(`
+							{
+								"compilerOptions": {
+									"noUnusedParameters": false,
+								},
+							}`),
+							false,
+						)
+					},
+				},
+			},
+		},
+		{
+			subScenario: "works with extended source files",
+			cwd:         "/user/username/projects/project",
+			files: FileMap{
+				"/user/username/projects/project/commonFile1.ts":      "let x = 1",
+				"/user/username/projects/project/commonFile2.ts":      "let y = 1",
+				"/user/username/projects/project/alpha.tsconfig.json": "{}",
+				"/user/username/projects/project/project1.tsconfig.json": stringtestutil.Dedent(`
+					{
+						"extends": "./alpha.tsconfig.json",
+						"compilerOptions": {
+							"composite": true,
+						},
+						"files": ["commonFile1.ts", "commonFile2.ts"],
+					}
+				`),
+				"/user/username/projects/project/bravo.tsconfig.json": stringtestutil.Dedent(`
+					{
+						"extends": "./alpha.tsconfig.json",
+					}
+				`),
+				"/user/username/projects/project/other.ts": "let z = 0;",
+				"/user/username/projects/project/project2.tsconfig.json": stringtestutil.Dedent(`
+					{
+						"extends": "./bravo.tsconfig.json",
+						"compilerOptions": {
+							"composite": true,
+						},
+						"files": ["other.ts"],
+					}
+				`),
+				"/user/username/projects/project/other2.ts": "let k = 0;",
+				"/user/username/projects/project/extendsConfig1.tsconfig.json": stringtestutil.Dedent(`
+					{
+						"compilerOptions": {
+							"composite": true,
+						},
+					}
+				`),
+				"/user/username/projects/project/extendsConfig2.tsconfig.json": stringtestutil.Dedent(`
+					{
+						"compilerOptions": {
+							"strictNullChecks": false,
+						},
+					}
+				`),
+				"/user/username/projects/project/extendsConfig3.tsconfig.json": stringtestutil.Dedent(`
+					{
+						"compilerOptions": {
+							"noImplicitAny": true,
+						},
+					}
+				`),
+				"/user/username/projects/project/project3.tsconfig.json": stringtestutil.Dedent(`
+				{
+                    "extends": [
+                        "./extendsConfig1.tsconfig.json",
+                        "./extendsConfig2.tsconfig.json",
+                        "./extendsConfig3.tsconfig.json",
+                    ],
+                    "compilerOptions": {
+                        "composite": false,
+                    },
+                    "files": ["other2.ts"],
+                }`),
+			},
+			commandLineArgs: []string{"-b", "-w", "-v", "project1.tsconfig.json", "project2.tsconfig.json", "project3.tsconfig.json"},
+			edits: []*tscEdit{
+				{
+					caption: "Modify alpha config",
+					edit: func(sys *testSys) {
+						sys.writeFileNoError("/user/username/projects/project/alpha.tsconfig.json", stringtestutil.Dedent(`
+						{
+                            "compilerOptions": {
+								"strict": true
+							}
+                        }`), false)
+					},
+				},
+				{
+					caption: "change bravo config",
+					edit: func(sys *testSys) {
+						sys.writeFileNoError("/user/username/projects/project/bravo.tsconfig.json", stringtestutil.Dedent(`
+						{
+                            "extends": "./alpha.tsconfig.json",
+                            "compilerOptions": { "strict": false }
+                        }`), false)
+					},
+				},
+				{
+					caption: "project 2 extends alpha",
+					edit: func(sys *testSys) {
+						sys.writeFileNoError("/user/username/projects/project/project2.tsconfig.json", stringtestutil.Dedent(`
+						{
+                            "extends": "./alpha.tsconfig.json",
+                        }`), false)
+					},
+				},
+				{
+					caption: "update aplha config",
+					edit: func(sys *testSys) {
+						sys.writeFileNoError("/user/username/projects/project/alpha.tsconfig.json", "{}", false)
+					},
+				},
+				{
+					caption: "Modify extendsConfigFile2",
+					edit: func(sys *testSys) {
+						sys.writeFileNoError("/user/username/projects/project/extendsConfig2.tsconfig.json", stringtestutil.Dedent(`
+						{
+                            "compilerOptions": { "strictNullChecks": true }
+                        }`), false)
+					},
+				},
+				{
+					caption: "Modify project 3",
+					edit: func(sys *testSys) {
+						sys.writeFileNoError("/user/username/projects/project/project3.tsconfig.json", stringtestutil.Dedent(`
+						{
+                            "extends": ["./extendsConfig1.tsconfig.json", "./extendsConfig2.tsconfig.json"],
+                            "compilerOptions": { "composite": false },
+                            "files": ["other2.ts"],
+                        }`), false)
+					},
+				},
+				{
+					caption: "Delete extendedConfigFile2 and report error",
+					edit: func(sys *testSys) {
+						sys.removeNoError("/user/username/projects/project/extendsConfig2.tsconfig.json")
+					},
+				},
+			},
+		},
+		{
+			subScenario: "works correctly when project with extended config is removed",
+			files: FileMap{
+				"/user/username/projects/project/commonFile1.ts": "let x = 1",
+				"/user/username/projects/project/commonFile2.ts": "let y = 1",
+				"/user/username/projects/project/alpha.tsconfig.json": stringtestutil.Dedent(`
+				{
+                    "compilerOptions": {
+                        "strict": true,
+                    },
+                }`),
+				"/user/username/projects/project/project1.tsconfig.json": stringtestutil.Dedent(`
+				{
+                    "extends": "./alpha.tsconfig.json",
+                    "compilerOptions": {
+                        "composite": true,
+                    },
+                    "files": ["commonFile1.ts", "commonFile2.ts"],
+                }`),
+				"/user/username/projects/project/bravo.tsconfig.json": stringtestutil.Dedent(`
+				{
+                    "compilerOptions": {
+                        "strict": true,
+                    },
+                }`),
+				"/user/username/projects/project/other.ts": "let z = 0;",
+				"/user/username/projects/project/project2.tsconfig.json": stringtestutil.Dedent(`
+				{
+                    "extends": "./bravo.tsconfig.json",
+                    "compilerOptions": {
+                        "composite": true,
+                    },
+                    "files": ["other.ts"],
+                }`),
+				"/user/username/projects/project/tsconfig.json": stringtestutil.Dedent(`
+				{
+                    "references": [
+                        {
+                            "path": "./project1.tsconfig.json",
+                        },
+                        {
+                            "path": "./project2.tsconfig.json",
+                        },
+                    ],
+                    "files": [],
+                }`),
+			},
+			cwd:             "/user/username/projects/project",
+			commandLineArgs: []string{"-b", "-w", "-v"},
+			edits: []*tscEdit{
+				{
+					caption: "Remove project2 from base config",
+					edit: func(sys *testSys) {
+						sys.writeFileNoError("/user/username/projects/project/tsconfig.json", stringtestutil.Dedent(`
+						{
+                            "references": [
+                                {
+                                    "path": "./project1.tsconfig.json",
+                                },
+                            ],
+                            "files": [],
+                        }`), false)
+					},
+				},
+			},
+		},
+		{
+			subScenario: "tsbuildinfo has error",
+			files: FileMap{
+				"/user/username/projects/project/main.ts":              "export const x = 10;",
+				"/user/username/projects/project/tsconfig.json":        "{}",
+				"/user/username/projects/project/tsconfig.tsbuildinfo": "Some random string",
+			},
+			cwd:             "/user/username/projects/project",
+			commandLineArgs: []string{"--b", "-i", "-w"},
+		},
+	}
+	for _, test := range testCases {
+		test.run(t, "programUpdates")
+	}
+}
+
 func TestBuildProjectReferenceWithRootDirInParent(t *testing.T) {
 	t.Parallel()
 	getBuildProjectReferenceWithRootDirInParentFileMap := func(modify func(files FileMap)) FileMap {
@@ -1676,6 +2217,75 @@ func TestBuildProjectReferenceWithRootDirInParent(t *testing.T) {
 
 	for _, test := range testCases {
 		test.run(t, "projectReferenceWithRootDirInParent")
+	}
+}
+
+func TestBuildReexport(t *testing.T) {
+	t.Parallel()
+	testCases := []*tscInput{
+		{
+			subScenario: "Reports errors correctly",
+			files: FileMap{
+				"/user/username/projects/reexport/src/tsconfig.json": stringtestutil.Dedent(`
+				{
+                    "files": [],
+                    "include": [],
+                    "references": [{ "path": "./pure" }, { "path": "./main" }],
+                }`),
+				"/user/username/projects/reexport/src/main/tsconfig.json": stringtestutil.Dedent(`
+				{
+                    "compilerOptions": {
+                        "outDir": "../../out",
+                        "rootDir": "../",
+                    },
+                    "include": ["**/*.ts"],
+                    "references": [{ "path": "../pure" }],
+                }`),
+				"/user/username/projects/reexport/src/main/index.ts": stringtestutil.Dedent(`
+                    import { Session } from "../pure";
+
+                    export const session: Session = {
+                        foo: 1
+                    };
+                `),
+				"/user/username/projects/reexport/src/pure/tsconfig.json": stringtestutil.Dedent(`
+				{
+                    "compilerOptions": {
+                        "composite": true,
+                        "outDir": "../../out",
+                        "rootDir": "../",
+                    },
+                    "include": ["**/*.ts"],
+                }`),
+				"/user/username/projects/reexport/src/pure/index.ts": `export * from "./session";`,
+				"/user/username/projects/reexport/src/pure/session.ts": stringtestutil.Dedent(`
+                    export interface Session {
+                        foo: number;
+                        // bar: number;
+                    }
+                `),
+			},
+			cwd:             `/user/username/projects/reexport`,
+			commandLineArgs: []string{"-b", "-w", "-verbose", "src"},
+			edits: []*tscEdit{
+				{
+					caption: "Introduce error",
+					edit: func(sys *testSys) {
+						sys.replaceFileText(`/user/username/projects/reexport/src/pure/session.ts`, "// ", "")
+					},
+				},
+				{
+					caption: "Fix error",
+					edit: func(sys *testSys) {
+						sys.replaceFileText(`/user/username/projects/reexport/src/pure/session.ts`, "bar: ", "// bar: ")
+					},
+				},
+			},
+		},
+	}
+
+	for _, test := range testCases {
+		test.run(t, "reexport")
 	}
 }
 
@@ -2084,6 +2694,20 @@ func TestBuildRoots(t *testing.T) {
 			commandLineArgs: []string{"--b", "projects/server", "-v", "--traceResolution", "--explainFiles"},
 			edits:           getBuildRootsFromProjectReferencedProjectTestEdits(),
 		},
+		{
+			subScenario:     "when root file is from referenced project",
+			files:           getBuildRootsFromProjectReferencedProjectFileMap(true),
+			cwd:             "/home/src/workspaces/solution",
+			commandLineArgs: []string{"--b", "-w", "projects/server", "-v", "--traceResolution", "--explainFiles"},
+			edits:           getBuildRootsFromProjectReferencedProjectTestEdits(),
+		},
+		{
+			subScenario:     "when root file is from referenced project and shared is first",
+			files:           getBuildRootsFromProjectReferencedProjectFileMap(false),
+			cwd:             "/home/src/workspaces/solution",
+			commandLineArgs: []string{"--b", "-w", "projects/server", "-v", "--traceResolution", "--explainFiles"},
+			edits:           getBuildRootsFromProjectReferencedProjectTestEdits(),
+		},
 	}
 
 	for _, test := range testCases {
@@ -2093,6 +2717,21 @@ func TestBuildRoots(t *testing.T) {
 
 func TestBuildSample(t *testing.T) {
 	t.Parallel()
+
+	getLogicConfig := func() string {
+		return stringtestutil.Dedent(`
+			{
+				"compilerOptions": {
+					"composite": true,
+					"declaration": true,
+					"sourceMap": true,
+					"skipDefaultLibCheck": true,
+				},
+				"references": [
+					{ "path": "../core" },
+				],
+			}`)
+	}
 
 	getBuildSampleFileMap := func(modify func(files FileMap)) FileMap {
 		files := FileMap{
@@ -2112,18 +2751,7 @@ func TestBuildSample(t *testing.T) {
 			`),
 			"/user/username/projects/sample1/core/some_decl.d.ts":   `declare const dts: any;`,
 			"/user/username/projects/sample1/core/anotherModule.ts": `export const World = "hello";`,
-			"/user/username/projects/sample1/logic/tsconfig.json": stringtestutil.Dedent(`
-			{
-				"compilerOptions": {
-					"composite": true,
-					"declaration": true,
-					"sourceMap": true,
-					"skipDefaultLibCheck": true,
-				},
-				"references": [
-					{ "path": "../core" },
-				],
-			}`),
+			"/user/username/projects/sample1/logic/tsconfig.json":   getLogicConfig(),
 			"/user/username/projects/sample1/logic/index.ts": stringtestutil.Dedent(`
 				import * as c from '../core/index';
 				export function getSecondsInDay() {
@@ -2161,6 +2789,63 @@ func TestBuildSample(t *testing.T) {
 		}
 		return files
 	}
+	getStopBuildOnErrorTests := func(options []string) []*tscInput {
+		noChange := core.IfElse(options == nil, noChangeOnlyEdit, nil)
+		return []*tscInput{
+			{
+				subScenario: "skips builds downstream projects if upstream projects have errors with stopBuildOnErrors",
+				files: getBuildSampleFileMap(func(files FileMap) {
+					text, _ := files["/user/username/projects/sample1/core/index.ts"]
+					files["/user/username/projects/sample1/core/index.ts"] = text.(string) + `multiply();`
+				}),
+				cwd:             "/user/username/projects/sample1",
+				commandLineArgs: slices.Concat([]string{"--b", "tests", "--verbose", "--stopBuildOnErrors"}, options),
+				edits: slices.Concat(
+					noChange,
+					[]*tscEdit{
+						{
+							caption: "fix error",
+							edit: func(sys *testSys) {
+								sys.replaceFileText("/user/username/projects/sample1/core/index.ts", "multiply();", "")
+							},
+						},
+					},
+				),
+			},
+			{
+				subScenario: "skips builds downstream projects if upstream projects have errors with stopBuildOnErrors when test does not reference core",
+				files: getBuildSampleFileMap(func(files FileMap) {
+					files["/user/username/projects/sample1/tests/tsconfig.json"] = stringtestutil.Dedent(`
+					{
+						"references": [
+							{ "path": "../logic" },
+						],
+						"files": ["index.ts"],
+						"compilerOptions": {
+							"composite": true,
+							"declaration": true,
+							"skipDefaultLibCheck": true,
+						},
+					}`)
+					text, _ := files["/user/username/projects/sample1/core/index.ts"]
+					files["/user/username/projects/sample1/core/index.ts"] = text.(string) + `multiply();`
+				}),
+				cwd:             "/user/username/projects/sample1",
+				commandLineArgs: slices.Concat([]string{"--b", "tests", "--verbose", "--stopBuildOnErrors"}, options),
+				edits: slices.Concat(
+					noChange,
+					[]*tscEdit{
+						{
+							caption: "fix error",
+							edit: func(sys *testSys) {
+								sys.replaceFileText("/user/username/projects/sample1/core/index.ts", "multiply();", "")
+							},
+						},
+					},
+				),
+			},
+		}
+	}
 	getBuildSampleCoreChangeEdits := func() []*tscEdit {
 		return []*tscEdit{
 			{
@@ -2186,7 +2871,104 @@ class someClass2 { }`,
 			noChange,
 		}
 	}
-	testCases := []*tscInput{
+	getBuildSampleWatchDtsChangingEdits := func() []*tscEdit {
+		return []*tscEdit{
+			{
+				caption: "Make change to core",
+				edit: func(sys *testSys) {
+					sys.appendFile("/user/username/projects/sample1/core/index.ts", "\nexport class someClass { }")
+				},
+			},
+			{
+				caption: "Revert core file",
+				edit: func(sys *testSys) {
+					sys.replaceFileText("/user/username/projects/sample1/core/index.ts", "\nexport class someClass { }", "")
+				},
+			},
+			{
+				caption: "Make two changes",
+				edit: func(sys *testSys) {
+					sys.appendFile("/user/username/projects/sample1/core/index.ts", "\nexport class someClass { }")
+					sys.appendFile("/user/username/projects/sample1/core/index.ts", "\nexport class someClass2 { }")
+				},
+			},
+		}
+	}
+	getBuildSampleWatchNonDtsChangingEdits := func() []*tscEdit {
+		return []*tscEdit{
+			{
+				caption: "Make local change to core",
+				edit: func(sys *testSys) {
+					sys.appendFile("/user/username/projects/sample1/core/index.ts", "\nfunction foo() { }")
+				},
+			},
+		}
+	}
+	getBuildSampleWatchNewFileEdits := func() []*tscEdit {
+		return []*tscEdit{
+			{
+				caption: "Change to new File and build core",
+				edit: func(sys *testSys) {
+					sys.writeFileNoError("/user/username/projects/sample1/core/newfile.ts", `export const newFileConst = 30;`, false)
+				},
+			},
+			{
+				caption: "Change to new File and build core",
+				edit: func(sys *testSys) {
+					sys.writeFileNoError("/user/username/projects/sample1/core/newfile.ts", "\nexport class someClass2 { }", false)
+				},
+			},
+		}
+	}
+	makeCircularReferences := func(files FileMap) {
+		files["/user/username/projects/sample1/core/tsconfig.json"] = stringtestutil.Dedent(`
+		{
+			"compilerOptions": {
+				"composite": true,
+				"declaration": true
+			},
+			"references": [
+				{ "path": "../tests", "circular": true }
+			],
+		}`)
+	}
+	getIncrementalErrorTest := func(subScenario string, options []string) *tscInput {
+		var expectedDiffWithLogicError string
+		if slices.Contains(options, "--stopBuildOnErrors") {
+			expectedDiffWithLogicError = stringtestutil.Dedent(`
+				Clean build will stop on error in core and will not report error in logic
+				Watch build will retain previous errors from logic and report it
+			`)
+		}
+		return &tscInput{
+			subScenario:     "reportErrors " + subScenario,
+			files:           getBuildSampleFileMap(nil),
+			cwd:             "/user/username/projects/sample1",
+			commandLineArgs: slices.Concat([]string{"-b", "-w", "tests"}, options),
+			edits: []*tscEdit{
+				{
+					caption: "change logic",
+					edit: func(sys *testSys) {
+						sys.appendFile("/user/username/projects/sample1/logic/index.ts", "\nlet y: string = 10;")
+					},
+				},
+				{
+					caption: "change core",
+					edit: func(sys *testSys) {
+						sys.appendFile("/user/username/projects/sample1/core/index.ts", "\nlet x: string = 10;")
+					},
+					expectedDiff: expectedDiffWithLogicError,
+				},
+				{
+					caption: "fix error in logic",
+					edit: func(sys *testSys) {
+						sys.replaceFileText("/user/username/projects/sample1/logic/index.ts", "\nlet y: string = 10;", "")
+					},
+				},
+			},
+		}
+	}
+	testCases := slices.Concat([]*tscInput{
 		{
 			subScenario: "builds correctly when outDir is specified",
 			files: getBuildSampleFileMap(func(files FileMap) {
@@ -2442,54 +3224,6 @@ class someClass2 { }`,
 			edits:           noChangeOnlyEdit,
 		},
 		{
-			subScenario: "skips builds downstream projects if upstream projects have errors with stopBuildOnErrors",
-			files: getBuildSampleFileMap(func(files FileMap) {
-				text, _ := files["/user/username/projects/sample1/core/index.ts"]
-				files["/user/username/projects/sample1/core/index.ts"] = text.(string) + `multiply();`
-			}),
-			cwd:             "/user/username/projects/sample1",
-			commandLineArgs: []string{"--b", "tests", "--verbose", "--stopBuildOnErrors"},
-			edits: []*tscEdit{
-				noChange,
-				{
-					caption: "fix error",
-					edit: func(sys *testSys) {
-						sys.replaceFileText("/user/username/projects/sample1/core/index.ts", "multiply();", "")
-					},
-				},
-			},
-		},
-		{
-			subScenario: "skips builds downstream projects if upstream projects have errors with stopBuildOnErrors when test does not reference core",
-			files: getBuildSampleFileMap(func(files FileMap) {
-				files["/user/username/projects/sample1/tests/tsconfig.json"] = stringtestutil.Dedent(`
-					{
-						"references": [
-							{ "path": "../logic" },
-						],
-						"files": ["index.ts"],
-						"compilerOptions": {
-							"composite": true,
-							"declaration": true,
-							"skipDefaultLibCheck": true,
-						},
-					}`)
-				text, _ := files["/user/username/projects/sample1/core/index.ts"]
-				files["/user/username/projects/sample1/core/index.ts"] = text.(string) + `multiply();`
-			}),
-			cwd:             "/user/username/projects/sample1",
-			commandLineArgs: []string{"--b", "tests", "--verbose", "--stopBuildOnErrors"},
-			edits: []*tscEdit{
-				noChange,
-				{
-					caption: "fix error",
-					edit: func(sys *testSys) {
-						sys.replaceFileText("/user/username/projects/sample1/core/index.ts", "multiply();", "")
-					},
-				},
-			},
-		},
-		{
 			subScenario:     "listFiles",
 			files:           getBuildSampleFileMap(nil),
 			cwd:             "/user/username/projects/sample1",
@@ -2677,7 +3411,128 @@ class someClass2 { }`,
 			cwd:             "/user/username/projects/sample1",
 			commandLineArgs: []string{"--b", "tests", "--verbose", "--force"},
 		},
-	}
+		{
+			subScenario:     "change builds changes and reports found errors message",
+			files:           getBuildSampleFileMap(nil),
+			cwd:             "/user/username/projects/sample1",
+			commandLineArgs: []string{"--b", "-w", "tests"},
+			edits:           getBuildSampleWatchDtsChangingEdits(),
+		},
+		{
+			subScenario:     "non local change does not start build of referencing projects",
+			files:           getBuildSampleFileMap(nil),
+			cwd:             "/user/username/projects/sample1",
+			commandLineArgs: []string{"--b", "-w", "tests"},
+			edits:           getBuildSampleWatchNonDtsChangingEdits(),
+		},
+		{
+			subScenario:     "builds when new file is added, and its subsequent updates",
+			files:           getBuildSampleFileMap(nil),
+			cwd:             "/user/username/projects/sample1",
+			commandLineArgs: []string{"--b", "-w", "tests"},
+			edits:           getBuildSampleWatchNewFileEdits(),
+		},
+		{
+			subScenario:     "change builds changes and reports found errors message with circular references",
+			files:           getBuildSampleFileMap(makeCircularReferences),
+			cwd:             "/user/username/projects/sample1",
+			commandLineArgs: []string{"--b", "-w", "tests"},
+			edits:           getBuildSampleWatchDtsChangingEdits(),
+		},
+		{
+			subScenario:     "non local change does not start build of referencing projects with circular references",
+			files:           getBuildSampleFileMap(makeCircularReferences),
+			cwd:             "/user/username/projects/sample1",
+			commandLineArgs: []string{"--b", "-w", "tests"},
+			edits:           getBuildSampleWatchNonDtsChangingEdits(),
+		},
+		{
+			subScenario:     "builds when new file is added, and its subsequent updates with circular references",
+			files:           getBuildSampleFileMap(makeCircularReferences),
+			cwd:             "/user/username/projects/sample1",
+			commandLineArgs: []string{"--b", "-w", "tests"},
+			edits:           getBuildSampleWatchNewFileEdits(),
+		},
+		{
+			subScenario: "watches config files that are not present",
+			files: getBuildSampleFileMap(func(files FileMap) {
+				delete(files, "/user/username/projects/sample1/logic/tsconfig.json")
+			}),
+			cwd:             "/user/username/projects/sample1",
+			commandLineArgs: []string{"--b", "-w", "tests"},
+			edits: []*tscEdit{
+				{
+					caption: "Write logic",
+					edit: func(sys *testSys) {
+						sys.writeFileNoError("/user/username/projects/sample1/logic/tsconfig.json", getLogicConfig(), false)
+					},
+				},
+			},
+		},
+		getIncrementalErrorTest("when preserveWatchOutput is not used", nil),
+		getIncrementalErrorTest("when preserveWatchOutput is passed on command line", []string{"--preserveWatchOutput"}),
+		getIncrementalErrorTest("when stopBuildOnErrors is passed on command line", []string{"--stopBuildOnErrors"}),
+		{
+			subScenario:     "incremental updates in verbose mode",
+			files:           getBuildSampleFileMap(nil),
+			cwd:             "/user/username/projects/sample1",
+			commandLineArgs: []string{"--b", "-w", "tests", "--verbose"},
+			edits: []*tscEdit{
+				{
+					caption: "Make non dts change",
+					edit: func(sys *testSys) {
+						sys.appendFile("/user/username/projects/sample1/logic/index.ts", "\nfunction someFn() { }")
+					},
+				},
+				{
+					caption: "Make dts change",
+					edit: func(sys *testSys) {
+						sys.replaceFileText("/user/username/projects/sample1/logic/index.ts", "\nfunction someFn() { }", "\nexport function someFn() { }")
+					},
+				},
+			},
+		},
+		{
+			subScenario:     "should not trigger recompilation because of program emit",
+			files:           getBuildSampleFileMap(nil),
+			cwd:             "/user/username/projects/sample1",
+			commandLineArgs: []string{"--b", "-w", "core", "--verbose"},
+			edits: []*tscEdit{
+				noChange,
+				{
+					caption: "Add new file",
+					edit: func(sys *testSys) {
+						sys.writeFileNoError("/user/username/projects/sample1/core/file3.ts", `export const y = 10;`, false)
+					},
+				},
+				noChange,
+			},
+		},
+		{
+			subScenario: "should not trigger recompilation because of program emit with outDir specified",
+			files: getBuildSampleFileMap(func(files FileMap) {
+				files["/user/username/projects/sample1/core/tsconfig.json"] = stringtestutil.Dedent(`
+				{
+					"compilerOptions": {
+						"composite": true,
+						"outDir": "outDir"
+					}
+                }`)
+			}),
+			cwd:             "/user/username/projects/sample1",
+			commandLineArgs: []string{"--b", "-w", "core", "--verbose"},
+			edits: []*tscEdit{
+				noChange,
+				{
+					caption: "Add new file",
+					edit: func(sys *testSys) {
+						sys.writeFileNoError("/user/username/projects/sample1/core/file3.ts", `export const y = 10;`, false)
+					},
+				},
+				noChange,
+			},
+		},
+	}, getStopBuildOnErrorTests(nil), getStopBuildOnErrorTests([]string{"--watch"}))
 
 	for _, test := range testCases {
 		test.run(t, "sample")

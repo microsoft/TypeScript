@@ -278,17 +278,10 @@ Resolving real path for '/home/src/projects/component-type-checker/node_modules/
    Imported via "@component-type-checker/components" from file 'src/app.tsx' with packageId '@component-type-checker/components@0.0.1+@component-type-checker/button@0.0.2'
 src/app.tsx
    Matched by include pattern 'src' in 'tsconfig.json'
-//// [/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button] *deleted*
-//// [/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button] *deleted*
 //// [/home/src/projects/component-type-checker/packages/app/dist/app.js] *new* 
 import { createButton } from "@component-type-checker/button";
 const button = createButton();
 
-//// [/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/button] *deleted*
-//// [/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/components] *deleted*
-//// [/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/sdk] *deleted*
-//// [/home/src/projects/component-type-checker/packages/sdk/node_modules/@component-type-checker/button] *deleted*
-//// [/home/src/projects/component-type-checker/packages/sdk/node_modules/@component-type-checker/components] *deleted*
 //// [/home/src/tslibs/TS/Lib/lib.es5.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}

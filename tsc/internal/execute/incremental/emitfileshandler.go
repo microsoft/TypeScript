@@ -12,8 +12,9 @@ import (
 )
 
 type emitUpdate struct {
-	pendingKind FileEmitKind
-	result      *compiler.EmitResult
+	pendingKind        FileEmitKind
+	result             *compiler.EmitResult
+	dtsErrorsFromCache bool
 }
 
 type emitFilesHandler struct {
@@ -107,10 +108,14 @@ func (h *emitFilesHandler) emitAllAffectedFiles(options compiler.EmitOptions) *c
 				return true
 			}
 			pendingKind, _ := h.program.snapshot.affectedFilesPendingEmit.Load(path)
-			h.emitUpdates.Store(path, &emitUpdate{pendingKind: pendingKind, result: &compiler.EmitResult{
-				EmitSkipped: true,
-				Diagnostics: diagnostics.getDiagnostics(h.program.program, affectedFile),
-			}})
+			h.emitUpdates.Store(path, &emitUpdate{
+				pendingKind: pendingKind,
+				result: &compiler.EmitResult{
+					EmitSkipped: true,
+					Diagnostics: diagnostics.getDiagnostics(h.program.program, affectedFile),
+				},
+				dtsErrorsFromCache: true,
+			})
 		}
 		return true
 	})
@@ -180,7 +185,7 @@ func (h *emitFilesHandler) getEmitOptions(options compiler.EmitOptions) compiler
 			} else {
 				err = h.program.program.Host().FS().WriteFile(fileName, text, writeByteOrderMark)
 			}
-			if err != nil && differsOnlyInMap {
+			if err == nil && differsOnlyInMap {
 				// Revert the time to original one
 				err = h.program.host.SetMTime(fileName, aTime)
 			}
@@ -250,12 +255,16 @@ func (h *emitFilesHandler) updateSnapshot() []*compiler.EmitResult {
 		if latestChangedDtsFile, ok := h.latestChangedDtsFiles.Load(file.Path()); ok {
 			h.program.snapshot.latestChangedDtsFile = latestChangedDtsFile
 			h.program.snapshot.buildInfoEmitPending.Store(true)
+			h.program.snapshot.hasChangedDtsFile = true
 		}
 		if update, ok := h.emitUpdates.Load(file.Path()); ok {
-			if update.pendingKind == 0 {
-				h.program.snapshot.affectedFilesPendingEmit.Delete(file.Path())
-			} else {
-				h.program.snapshot.affectedFilesPendingEmit.Store(file.Path(), update.pendingKind)
+			if !update.dtsErrorsFromCache {
+				if update.pendingKind == 0 {
+					h.program.snapshot.affectedFilesPendingEmit.Delete(file.Path())
+				} else {
+					h.program.snapshot.affectedFilesPendingEmit.Store(file.Path(), update.pendingKind)
+				}
+				h.program.snapshot.buildInfoEmitPending.Store(true)
 			}
 			if update.result != nil {
 				results = append(results, update.result)
@@ -263,7 +272,6 @@ func (h *emitFilesHandler) updateSnapshot() []*compiler.EmitResult {
 					h.program.snapshot.emitDiagnosticsPerFile.Store(file.Path(), &diagnosticsOrBuildInfoDiagnosticsWithFileName{diagnostics: update.result.Diagnostics})
 				}
 			}
-			h.program.snapshot.buildInfoEmitPending.Store(true)
 		}
 	}
 	return results

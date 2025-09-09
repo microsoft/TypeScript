@@ -62,6 +62,37 @@ func (b *buildOrderTestCase) run(t *testing.T) {
 			"I": {"J"},
 			"J": {"H", "E"},
 		}
+		reverseDeps := map[string][]string{}
+		for project, deps := range deps {
+			for _, dep := range deps {
+				reverseDeps[dep] = append(reverseDeps[dep], project)
+			}
+		}
+		verifyDeps := func(orchestrator *build.Orchestrator, buildOrder []string, hasDownStream bool) {
+			for index, project := range buildOrder {
+				upstream := core.Map(orchestrator.Upstream(b.configName(project)), b.projectName)
+				expectedUpstream := deps[project]
+				assert.Assert(t, len(upstream) <= len(expectedUpstream), fmt.Sprintf("Expected upstream for %s to be at most %d, got %d", project, len(expectedUpstream), len(upstream)))
+				for _, expected := range expectedUpstream {
+					if slices.Contains(buildOrder[:index], expected) {
+						assert.Assert(t, slices.Contains(upstream, expected), fmt.Sprintf("Expected upstream for %s to contain %s", project, expected))
+					} else {
+						assert.Assert(t, !slices.Contains(upstream, expected), fmt.Sprintf("Expected upstream for %s to not contain %s", project, expected))
+					}
+				}
+
+				downstream := core.Map(orchestrator.Downstream(b.configName(project)), b.projectName)
+				expectedDownstream := core.IfElse(hasDownStream, reverseDeps[project], nil)
+				assert.Assert(t, len(downstream) <= len(expectedDownstream), fmt.Sprintf("Expected downstream for %s to be at most %d, got %d", project, len(expectedDownstream), len(downstream)))
+				for _, expected := range expectedDownstream {
+					if slices.Contains(buildOrder[index+1:], expected) {
+						assert.Assert(t, slices.Contains(downstream, expected), fmt.Sprintf("Expected downstream for %s to contain %s", project, expected))
+					} else {
+						assert.Assert(t, !slices.Contains(downstream, expected), fmt.Sprintf("Expected downstream for %s to not contain %s", project, expected))
+					}
+				}
+			}
+		}
 		for _, project := range []string{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"} {
 			files[fmt.Sprintf("/home/src/workspaces/project/%s/%s.ts", project, project)] = "export {}"
 			referencesStr := ""
@@ -84,22 +115,10 @@ func (b *buildOrderTestCase) run(t *testing.T) {
 			Sys:     sys,
 			Command: buildCommand,
 		})
-		orchestrator.GenerateGraph()
+		orchestrator.GenerateGraph(nil)
 		buildOrder := core.Map(orchestrator.Order(), b.projectName)
 		assert.DeepEqual(t, buildOrder, b.expected)
-
-		for index, project := range buildOrder {
-			upstream := core.Map(orchestrator.Upstream(b.configName(project)), b.projectName)
-			expectedUpstream := deps[project]
-			assert.Assert(t, len(upstream) <= len(expectedUpstream), fmt.Sprintf("Expected upstream for %s to be at most %d, got %d", project, len(expectedUpstream), len(upstream)))
-			for _, expected := range expectedUpstream {
-				if slices.Contains(buildOrder[:index], expected) {
-					assert.Assert(t, slices.Contains(upstream, expected), fmt.Sprintf("Expected upstream for %s to contain %s", project, expected))
-				} else {
-					assert.Assert(t, !slices.Contains(upstream, expected), fmt.Sprintf("Expected upstream for %s to not contain %s", project, expected))
-				}
-			}
-		}
+		verifyDeps(orchestrator, buildOrder, false)
 
 		if !b.circular {
 			for project, projectDeps := range deps {
@@ -116,5 +135,19 @@ func (b *buildOrderTestCase) run(t *testing.T) {
 				}
 			}
 		}
+
+		orchestrator.GenerateGraphReusingOldTasks()
+		buildOrder2 := core.Map(orchestrator.Order(), b.projectName)
+		assert.DeepEqual(t, buildOrder2, b.expected)
+
+		argsWatch := append([]string{"--build", "--watch"}, b.projects...)
+		buildCommandWatch := tsoptions.ParseBuildCommandLine(argsWatch, sys)
+		orchestrator = build.NewOrchestrator(build.Options{
+			Sys:     sys,
+			Command: buildCommandWatch,
+		})
+		orchestrator.GenerateGraph(nil)
+		buildOrder3 := core.Map(orchestrator.Order(), b.projectName)
+		verifyDeps(orchestrator, buildOrder3, true)
 	})
 }

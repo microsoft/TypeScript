@@ -360,8 +360,6 @@ Errors  Files
      1  MessageablePerson.ts[90m:6[0m
      1  main.ts[90m:3[0m
 
-//// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *rewrite with same content*
-//// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
 tsconfig.json::
 SemanticDiagnostics::

@@ -122,7 +122,6 @@ interface Symbol {
     readonly [Symbol.toStringTag]: string;
 }
 declare const console: { log(msg: any): void; };
-//// [/user/username/projects/myproject/node_modules/pkg2] *deleted*
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js] *new* 
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

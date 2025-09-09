@@ -1,5 +1,7 @@
 package core
 
+import "time"
+
 type WatchOptions struct {
 	Interval        *int               `json:"watchInterval"`
 	FileKind        WatchFileKind      `json:"watchFile"`
@@ -41,3 +43,11 @@ const (
 	PollingKindDynamicPriority  PollingKind = 3
 	PollingKindFixedChunkSize   PollingKind = 4
 )
+
+func (w *WatchOptions) WatchInterval() time.Duration {
+	watchInterval := 1000 * time.Millisecond
+	if w != nil && w.Interval != nil {
+		watchInterval = time.Duration(*w.Interval) * time.Millisecond
+	}
+	return watchInterval
+}

@@ -144,7 +144,6 @@ interface Symbol {
     readonly [Symbol.toStringTag]: string;
 }
 declare const console: { log(msg: any): void; };
-//// [/home/src/workspaces/project/node_modules/a] *deleted*
 //// [/home/src/workspaces/project/packages/a/types/index.d.ts] *new* 
 export declare const a = "a";
 

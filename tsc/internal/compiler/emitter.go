@@ -262,7 +262,7 @@ func (e *emitter) printSourceFile(jsFilePath string, sourceMapFilePath string, s
 		// Write the source map
 		if len(sourceMapFilePath) > 0 {
 			sourceMap := sourceMapGenerator.String()
-			err := e.host.WriteFile(sourceMapFilePath, sourceMap, false /*writeByteOrderMark*/)
+			err := e.writeText(sourceMapFilePath, sourceMap, false /*writeByteOrderMark*/, nil)
 			if err != nil {
 				e.emitterDiagnostics.Add(ast.NewCompilerDiagnostic(diagnostics.Could_not_write_file_0_Colon_1, jsFilePath, err.Error()))
 			} else {
@@ -275,18 +275,12 @@ func (e *emitter) printSourceFile(jsFilePath string, sourceMapFilePath string, s
 
 	// Write the output file
 	text := e.writer.String()
-	var err error
-	var skippedDtsWrite bool
-	if e.writeFile == nil {
-		err = e.host.WriteFile(jsFilePath, text, e.host.Options().EmitBOM.IsTrue())
-	} else {
-		data := &WriteFileData{
-			SourceMapUrlPos: sourceMapUrlPos,
-			Diagnostics:     e.emitterDiagnostics.GetDiagnostics(),
-		}
-		err = e.writeFile(jsFilePath, text, e.host.Options().EmitBOM.IsTrue(), data)
-		skippedDtsWrite = data.SkippedDtsWrite
+	data := &WriteFileData{
+		SourceMapUrlPos: sourceMapUrlPos,
+		Diagnostics:     e.emitterDiagnostics.GetDiagnostics(),
 	}
+	err := e.writeText(jsFilePath, text, options.EmitBOM.IsTrue(), data)
+	skippedDtsWrite := data.SkippedDtsWrite
 	if err != nil {
 		e.emitterDiagnostics.Add(ast.NewCompilerDiagnostic(diagnostics.Could_not_write_file_0_Colon_1, jsFilePath, err.Error()))
 	} else if !skippedDtsWrite {
@@ -295,6 +289,13 @@ func (e *emitter) printSourceFile(jsFilePath string, sourceMapFilePath string, s
 
 	// Reset state
 	e.writer.Clear()
+}
+
+func (e *emitter) writeText(fileName string, text string, writeByteOrderMark bool, data *WriteFileData) error {
+	if e.writeFile != nil {
+		return e.writeFile(fileName, text, writeByteOrderMark, data)
+	}
+	return e.host.WriteFile(fileName, text, writeByteOrderMark)
 }
 
 func shouldEmitSourceMaps(mapOptions *core.CompilerOptions, sourceFile *ast.SourceFile) bool {

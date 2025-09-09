@@ -972,11 +972,6 @@ func getExtendedConfig(
 				result.extendedSourceFiles.Add(extendedSourceFile)
 			}
 		}
-
-		if len(cacheEntry.extendedResult.SourceFile.Diagnostics()) != 0 {
-			errors = append(errors, cacheEntry.extendedResult.SourceFile.Diagnostics()...)
-			return nil, errors
-		}
 	}
 	return cacheEntry.extendedConfig, errors
 }

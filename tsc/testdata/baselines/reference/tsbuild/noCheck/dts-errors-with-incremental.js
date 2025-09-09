@@ -210,8 +210,6 @@ Output::
 
 Found 1 error in a.ts[90m:1[0m
 
-//// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *rewrite with same content*
-//// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
 tsconfig.json::
 SemanticDiagnostics::
@@ -610,8 +608,6 @@ Output::
 
 Found 1 error in a.ts[90m:1[0m
 
-//// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *rewrite with same content*
-//// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
 tsconfig.json::
 SemanticDiagnostics::

@@ -47,7 +47,6 @@ interface Symbol {
     readonly [Symbol.toStringTag]: string;
 }
 declare const console: { log(msg: any): void; };
-//// [/users/user/projects/myproject/node_modules/@something/tsconfig-node] *deleted*
 //// [/users/user/projects/myproject/src/index.d.ts] *new* 
 export declare const x = 10;
 

@@ -824,7 +824,7 @@ func TestTscExtends(t *testing.T) {
 			commandLineArgs: []string{builtType, "src", "--extendedDiagnostics"},
 		}
 	}
-	getTscExtendsConfigDirTestCase := func(subScenarioSufix string, commandLineArgs []string) *tscInput {
+	getTscExtendsConfigDirTestCase := func(subScenarioSufix string, commandLineArgs []string, edits []*tscEdit) *tscInput {
 		return &tscInput{
 			subScenario: "configDir template" + subScenarioSufix,
 			files: FileMap{
@@ -870,6 +870,7 @@ func TestTscExtends(t *testing.T) {
 			},
 			cwd:             "/home/src/projects/myproject",
 			commandLineArgs: commandLineArgs,
+			edits:           edits,
 		}
 	}
 	testCases := []*tscInput{
@@ -887,10 +888,30 @@ func TestTscExtends(t *testing.T) {
 		},
 		getTscExtendsWithSymlinkTestCase("-p"),
 		getTscExtendsWithSymlinkTestCase("-b"),
-		getTscExtendsConfigDirTestCase("", []string{"--explainFiles"}),
-		getTscExtendsConfigDirTestCase(" showConfig", []string{"--showConfig"}),
-		getTscExtendsConfigDirTestCase(" with commandline", []string{"--explainFiles", "--outDir", "${configDir}/outDir"}),
-		getTscExtendsConfigDirTestCase("", []string{"--b", "--explainFiles", "--v"}),
+		getTscExtendsConfigDirTestCase("", []string{"--explainFiles"}, nil),
+		getTscExtendsConfigDirTestCase(" showConfig", []string{"--showConfig"}, nil),
+		getTscExtendsConfigDirTestCase(" with commandline", []string{"--explainFiles", "--outDir", "${configDir}/outDir"}, nil),
+		getTscExtendsConfigDirTestCase("", []string{"--b", "--explainFiles", "--v"}, nil),
+		getTscExtendsConfigDirTestCase("", []string{"--b", "-w", "--explainFiles", "--v"}, []*tscEdit{
+			{
+				caption: "edit extended config file",
+				edit: func(sys *testSys) {
+					sys.writeFileNoError(
+						"/home/src/projects/configs/first/tsconfig.json",
+						stringtestutil.Dedent(`
+						{
+							"extends": "../second/tsconfig.json",
+							"include": ["${configDir}/src"],
+							"compilerOptions": {
+								"typeRoots": ["${configDir}/root2"],
+								"types": [],
+							},
+						}`),
+						false,
+					)
+				},
+			},
+		}),
 	}
 
 	for _, test := range testCases {
@@ -1705,6 +1726,7 @@ func TestTscLibraryResolution(t *testing.T) {
 	testCases := slices.Concat(
 		getTscLibResolutionTestCases([]string{"-b", "project1", "project2", "project3", "project4", "--verbose", "--explainFiles"}),
 		getTscLibResolutionTestCases([]string{"-p", "project1", "--explainFiles"}),
+		getTscLibResolutionTestCases([]string{"-b", "-w", "project1", "project2", "project3", "project4", "--verbose", "--explainFiles"}),
 		[]*tscInput{
 			{
 				subScenario:     "unknown lib",
@@ -2325,6 +2347,181 @@ func TestTscModuleResolution(t *testing.T) {
 				},
 			},
 		},
+		{
+			subScenario: "handles the cache correctly when two projects use different module resolution settings",
+			files: FileMap{
+				`/user/username/projects/myproject/project1/index.ts`:                     `import { foo } from "file";`,
+				`/user/username/projects/myproject/project1/node_modules/file/index.d.ts`: "export const foo = 10;",
+				`/user/username/projects/myproject/project1/tsconfig.json`: stringtestutil.Dedent(`
+				   {
+                       "compilerOptions": {
+						   "composite": true,
+						   "types": ["foo", "bar"]
+					   },
+                       "files": ["index.ts"],
+                   }`),
+				`/user/username/projects/myproject/project2/index.ts`:                     `import { foo } from "file";`,
+				`/user/username/projects/myproject/project2/node_modules/file/index.d.ts`: "export const foo = 10;",
+				`/user/username/projects/myproject/project2/tsconfig.json`: stringtestutil.Dedent(`
+				   {
+                       "compilerOptions": {
+						   "composite": true,
+						   "types": ["foo"],
+						   "module": "nodenext",
+						   "moduleResolution": "nodenext"
+					   },
+                       "files": ["index.ts"],
+                   }`),
+				`/user/username/projects/myproject/node_modules/@types/foo/index.d.ts`: "export const foo = 10;",
+				`/user/username/projects/myproject/node_modules/@types/bar/index.d.ts`: "export const bar = 10;",
+				`/user/username/projects/myproject/tsconfig.json`: stringtestutil.Dedent(`
+				   {
+						"files": [],
+						"references": [
+							{ "path": "./project1" },
+							{ "path": "./project2" },
+						],
+                   }`),
+			},
+			cwd:             "/user/username/projects/myproject",
+			commandLineArgs: []string{"--b", "-w", "-v"},
+			edits: []*tscEdit{
+				{
+					caption: "Append text",
+					edit: func(sys *testSys) {
+						sys.appendFile(`/user/username/projects/myproject/project1/index.ts`, "const bar = 10;")
+					},
+				},
+			},
+		},
+		{
+			// !!! sheetal package.json watches not yet implemented
+			subScenario: `resolves specifier in output declaration file from referenced project correctly with cts and mts extensions`,
+			files: FileMap{
+				`/user/username/projects/myproject/packages/pkg1/package.json`: stringtestutil.Dedent(`
+					{
+						"name": "pkg1",
+						"version": "1.0.0",
+						"main": "build/index.js",
+						"type": "module"
+					}`),
+				`/user/username/projects/myproject/packages/pkg1/index.ts`: stringtestutil.Dedent(`
+					import type { TheNum } from 'pkg2'
+					export const theNum: TheNum = 42;`),
+				`/user/username/projects/myproject/packages/pkg1/tsconfig.json`: stringtestutil.Dedent(`
+					{
+						"compilerOptions": {
+							"outDir": "build",
+							"module": "node16",
+						},
+						"references": [{ "path": "../pkg2" }],
+					}`),
+				`/user/username/projects/myproject/packages/pkg2/const.cts`: `export type TheNum = 42;`,
+				`/user/username/projects/myproject/packages/pkg2/index.ts`:  `export type { TheNum } from './const.cjs';`,
+				`/user/username/projects/myproject/packages/pkg2/tsconfig.json`: stringtestutil.Dedent(`
+					{
+						"compilerOptions": {
+							"composite": true,
+							"outDir": "build",
+							"module": "node16",
+						},
+					}`),
+				`/user/username/projects/myproject/packages/pkg2/package.json`: stringtestutil.Dedent(`
+					{
+						"name": "pkg2",
+						"version": "1.0.0",
+						"main": "build/index.js",
+						"type": "module"
+					}`),
+				`/user/username/projects/myproject/node_modules/pkg2`: vfstest.Symlink(`/user/username/projects/myproject/packages/pkg2`),
+			},
+			cwd:             "/user/username/projects/myproject",
+			commandLineArgs: []string{"-b", "packages/pkg1", "-w", "--verbose", "--traceResolution"},
+			edits: []*tscEdit{
+				{
+					caption: "reports import errors after change to package file",
+					edit: func(sys *testSys) {
+						sys.replaceFileText(`/user/username/projects/myproject/packages/pkg1/package.json`, `"module"`, `"commonjs"`)
+					},
+					expectedDiff: "Package.json watch pending, so no change detected yet",
+				},
+				{
+					caption: "removes those errors when a package file is changed back",
+					edit: func(sys *testSys) {
+						sys.replaceFileText(`/user/username/projects/myproject/packages/pkg1/package.json`, `"commonjs"`, `"module"`)
+					},
+				},
+				{
+					caption: "reports import errors after change to package file",
+					edit: func(sys *testSys) {
+						sys.replaceFileText(`/user/username/projects/myproject/packages/pkg1/package.json`, `"module"`, `"commonjs"`)
+					},
+					expectedDiff: "Package.json watch pending, so no change detected yet",
+				},
+				{
+					caption: "removes those errors when a package file is changed to cjs extensions",
+					edit: func(sys *testSys) {
+						sys.replaceFileText(`/user/username/projects/myproject/packages/pkg2/package.json`, `"build/index.js"`, `"build/index.cjs"`)
+						sys.renameFileNoError(`/user/username/projects/myproject/packages/pkg2/index.ts`, `/user/username/projects/myproject/packages/pkg2/index.cts`)
+					},
+				},
+			},
+		},
+		{
+			subScenario: `build mode watches for changes to package-json main fields`,
+			files: FileMap{
+				`/user/username/projects/myproject/packages/pkg1/package.json`: stringtestutil.Dedent(`
+					{
+                        "name": "pkg1",
+                        "version": "1.0.0",
+                        "main": "build/index.js"
+                    }`),
+				`/user/username/projects/myproject/packages/pkg1/index.ts`: stringtestutil.Dedent(`
+                    import type { TheNum } from 'pkg2'
+                    export const theNum: TheNum = 42;`),
+				`/user/username/projects/myproject/packages/pkg1/tsconfig.json`: stringtestutil.Dedent(`
+					{
+                        "compilerOptions": {
+                            "outDir": "build",
+                        },
+                        "references": [{ "path": "../pkg2" }],
+                    }`),
+				`/user/username/projects/myproject/packages/pkg2/tsconfig.json`: stringtestutil.Dedent(`
+					{
+                        "compilerOptions": {
+                            "composite": true,
+                            "outDir": "build",
+                        },
+                    }`),
+				`/user/username/projects/myproject/packages/pkg2/const.ts`: `export type TheNum = 42;`,
+				`/user/username/projects/myproject/packages/pkg2/index.ts`: `export type { TheNum } from './const.js';`,
+				`/user/username/projects/myproject/packages/pkg2/other.ts`: `export type TheStr = string;`,
+				`/user/username/projects/myproject/packages/pkg2/package.json`: stringtestutil.Dedent(`
+					{
+						"name": "pkg2",
+                        "version": "1.0.0",
+                        "main": "build/index.js"
+                    }`),
+				`/user/username/projects/myproject/node_modules/pkg2`: vfstest.Symlink(`/user/username/projects/myproject/packages/pkg2`),
+			},
+			cwd:             "/user/username/projects/myproject",
+			commandLineArgs: []string{"-b", "packages/pkg1", "--verbose", "-w", "--traceResolution"},
+			edits: []*tscEdit{
+				{
+					caption: "reports import errors after change to package file",
+					edit: func(sys *testSys) {
+						sys.replaceFileText(`/user/username/projects/myproject/packages/pkg2/package.json`, `index.js`, `other.js`)
+					},
+					expectedDiff: "Package.json watch pending, so no change detected yet",
+				},
+				{
+					caption: "removes those errors when a package file is changed back",
+					edit: func(sys *testSys) {
+						sys.replaceFileText(`/user/username/projects/myproject/packages/pkg2/package.json`, `other.js`, `index.js`)
+					},
+				},
+			},
+		},
 	}
 
 	for _, test := range testCases {
@@ -2441,7 +2638,7 @@ func TestTscNoEmit(t *testing.T) {
 			aText:       `const a = class { private p = 10; };`,
 		},
 	}
-	getTscNoEmitAndErrorsFileMap := func(scenario *tscNoEmitScenario, incremental bool, asModules bool) FileMap {
+	getTscNoEmitAndErrorsFileMap := func(scenario *tscNoEmitScenario, incremental bool, asModules bool, modify func(FileMap)) FileMap {
 		files := FileMap{
 			"/home/src/projects/project/a.ts": core.IfElse(asModules, `export `, "") + scenario.aText,
 			"/home/src/projects/project/tsconfig.json": stringtestutil.Dedent(fmt.Sprintf(`
@@ -2456,66 +2653,130 @@ func TestTscNoEmit(t *testing.T) {
 		if asModules {
 			files["/home/src/projects/project/b.ts"] = `export const b = 10;`
 		}
+		if modify != nil {
+			modify(files)
+		}
 		return files
 	}
-	getTscNoEmitAndErrorsEdits := func(scenario *tscNoEmitScenario, commandLineArgs []string, asModules bool) []*tscEdit {
-		fixedATsContent := core.IfElse(asModules, "export ", "") + `const a = "hello";`
-		return []*tscEdit{
-			noChange,
-			{
-				caption: "Fix error",
-				edit: func(sys *testSys) {
-					sys.writeFileNoError("/home/src/projects/project/a.ts", fixedATsContent, false)
-				},
-			},
-			noChange,
-			{
-				caption:         "Emit after fixing error",
-				commandLineArgs: commandLineArgs,
-			},
-			noChange,
-			{
-				caption: "Introduce error",
-				edit: func(sys *testSys) {
-					sys.writeFileNoError("/home/src/projects/project/a.ts", scenario.aText, false)
-				},
-			},
-			{
-				caption:         "Emit when error",
-				commandLineArgs: commandLineArgs,
-			},
-			noChange,
+	getTscNoEmitAndErrorsTestCasesWorker := func(commandLineArgs []string, addNoEmitOnCommandLine bool, modify func(FileMap), edits func(scenario *tscNoEmitScenario, commandLineArgs []string, asModules bool) []*tscEdit) []*tscInput {
+		testingCases := make([]*tscInput, 0, len(noEmitScenarios)*3)
+		commandLineArgsForInput := commandLineArgs
+		if addNoEmitOnCommandLine {
+			commandLineArgsForInput = slices.Concat(commandLineArgs, []string{"--noEmit"})
 		}
-	}
-	getTscNoEmitAndErrorsTestCases := func(scenarios []*tscNoEmitScenario, commandLineArgs []string) []*tscInput {
-		testingCases := make([]*tscInput, 0, len(scenarios)*3)
-		for _, scenario := range scenarios {
+		for _, scenario := range noEmitScenarios {
 			testingCases = append(
 				testingCases,
 				&tscInput{
 					subScenario:     scenario.subScenario,
-					commandLineArgs: slices.Concat(commandLineArgs, []string{"--noEmit"}),
-					files:           getTscNoEmitAndErrorsFileMap(scenario, false, false),
+					commandLineArgs: commandLineArgsForInput,
+					files:           getTscNoEmitAndErrorsFileMap(scenario, false, false, modify),
 					cwd:             "/home/src/projects/project",
-					edits:           getTscNoEmitAndErrorsEdits(scenario, commandLineArgs, false),
+					edits:           edits(scenario, commandLineArgs, false),
 				},
 				&tscInput{
 					subScenario:     scenario.subScenario + " with incremental",
-					commandLineArgs: slices.Concat(commandLineArgs, []string{"--noEmit"}),
-					files:           getTscNoEmitAndErrorsFileMap(scenario, true, false),
+					commandLineArgs: commandLineArgsForInput,
+					files:           getTscNoEmitAndErrorsFileMap(scenario, true, false, modify),
 					cwd:             "/home/src/projects/project",
-					edits:           getTscNoEmitAndErrorsEdits(scenario, commandLineArgs, false),
+					edits:           edits(scenario, commandLineArgs, false),
 				},
 				&tscInput{
 					subScenario:     scenario.subScenario + " with incremental as modules",
-					commandLineArgs: slices.Concat(commandLineArgs, []string{"--noEmit"}),
-					files:           getTscNoEmitAndErrorsFileMap(scenario, true, true),
+					commandLineArgs: commandLineArgsForInput,
+					files:           getTscNoEmitAndErrorsFileMap(scenario, true, true, modify),
 					cwd:             "/home/src/projects/project",
-					edits:           getTscNoEmitAndErrorsEdits(scenario, commandLineArgs, true),
+					edits:           edits(scenario, commandLineArgs, true),
 				},
 			)
 		}
 		return testingCases
+	}
+	getTscNoEmitAndErrorsTestCases := func(commandLineArgs []string) []*tscInput {
+		return getTscNoEmitAndErrorsTestCasesWorker(
+			commandLineArgs,
+			true,
+			nil,
+			func(scenario *tscNoEmitScenario, commandLineArgs []string, asModules bool) []*tscEdit {
+				fixedATsContent := core.IfElse(asModules, "export ", "") + `const a = "hello";`
+				return []*tscEdit{
+					noChange,
+					{
+						caption: "Fix error",
+						edit: func(sys *testSys) {
+							sys.writeFileNoError("/home/src/projects/project/a.ts", fixedATsContent, false)
+						},
+					},
+					noChange,
+					{
+						caption:         "Emit after fixing error",
+						commandLineArgs: commandLineArgs,
+					},
+					noChange,
+					{
+						caption: "Introduce error",
+						edit: func(sys *testSys) {
+							sys.writeFileNoError("/home/src/projects/project/a.ts", scenario.aText, false)
+						},
+					},
+					{
+						caption:         "Emit when error",
+						commandLineArgs: commandLineArgs,
+					},
+					noChange,
+				}
+			},
+		)
+	}
+	getTscNoEmitAndErrorsWatchTestCases := func(commandLineArgs []string) []*tscInput {
+		return getTscNoEmitAndErrorsTestCasesWorker(
+			commandLineArgs,
+			false,
+			func(files FileMap) {
+				files["/home/src/projects/project/tsconfig.json"] = strings.Replace(files["/home/src/projects/project/tsconfig.json"].(string), "}", `, "noEmit": true }`, 1)
+			},
+			func(scenario *tscNoEmitScenario, commandLineArgs []string, asModules bool) []*tscEdit {
+				fixedATsContent := core.IfElse(asModules, "export ", "") + `const a = "hello";`
+				return []*tscEdit{
+					{
+						caption: "Fix error",
+						edit: func(sys *testSys) {
+							sys.writeFileNoError("/home/src/projects/project/a.ts", fixedATsContent, false)
+						},
+					},
+					{
+						caption: "Emit after fixing error",
+						edit: func(sys *testSys) {
+							sys.replaceFileText("/home/src/projects/project/tsconfig.json", `"noEmit": true`, `"noEmit": false`)
+						},
+					},
+					{
+						caption: "no Emit run after fixing error",
+						edit: func(sys *testSys) {
+							sys.replaceFileText("/home/src/projects/project/tsconfig.json", `"noEmit": false`, `"noEmit": true`)
+						},
+					},
+					{
+						caption: "Introduce error",
+						edit: func(sys *testSys) {
+							sys.writeFileNoError("/home/src/projects/project/a.ts", scenario.aText, false)
+						},
+					},
+					{
+						caption: "Emit when error",
+						edit: func(sys *testSys) {
+							sys.replaceFileText("/home/src/projects/project/tsconfig.json", `"noEmit": true`, `"noEmit": false`)
+						},
+					},
+					{
+						caption: "no Emit run when error",
+						edit: func(sys *testSys) {
+							sys.replaceFileText("/home/src/projects/project/tsconfig.json", `"noEmit": false`, `"noEmit": true`)
+						},
+					},
+				}
+			},
+		)
 	}
 	getTscNoEmitChangesFileMap := func(optionsStr string) FileMap {
 		return FileMap{
@@ -2566,7 +2827,7 @@ func TestTscNoEmit(t *testing.T) {
 			optionsString: `"incremental": true`,
 		},
 	}
-	getTscNoEmitChangesTestCases := func(scenarios []*tscNoEmitChangesScenario, commandLineArgs []string) []*tscInput {
+	getTscNoEmitChangesTestCases := func(commandLineArgs []string) []*tscInput {
 		noChangeWithNoEmit := &tscEdit{
 			caption:         "No Change run with noEmit",
 			commandLineArgs: slices.Concat(commandLineArgs, []string{"--noEmit"}),
@@ -2581,8 +2842,8 @@ func TestTscNoEmit(t *testing.T) {
 		fixError := func(sys *testSys) {
 			sys.replaceFileText("/home/src/workspaces/project/src/class.ts", "prop1", "prop")
 		}
-		testCases := make([]*tscInput, 0, len(scenarios))
-		for _, scenario := range scenarios {
+		testCases := make([]*tscInput, 0, len(noEmitChangesScenarios))
+		for _, scenario := range noEmitChangesScenarios {
 			testCases = append(
 				testCases,
 				&tscInput{
@@ -2754,7 +3015,38 @@ func TestTscNoEmit(t *testing.T) {
 			},
 		}
 	}
-
+	getTscNoEmitLoopTestCase := func(suffix string, commandLineArgs []string) *tscInput {
+		return &tscInput{
+			subScenario: "does not go in loop when watching when no files are emitted" + suffix,
+			files: FileMap{
+				"/user/username/projects/myproject/a.js": "",
+				"/user/username/projects/myproject/b.ts": "",
+				"/user/username/projects/myproject/tsconfig.json": stringtestutil.Dedent(`
+					{
+                        "compilerOptions": {
+                            "allowJs": true,
+                            "noEmit": true,
+                        },
+                    }`),
+			},
+			cwd:             "/user/username/projects/myproject",
+			commandLineArgs: commandLineArgs,
+			edits: []*tscEdit{
+				{
+					caption: "No change",
+					edit: func(sys *testSys) {
+						sys.writeFileNoError(`/user/username/projects/myproject/a.js`, sys.readFileNoError(`/user/username/projects/myproject/a.js`), false)
+					},
+				},
+				{
+					caption: "change",
+					edit: func(sys *testSys) {
+						sys.writeFileNoError(`/user/username/projects/myproject/a.js`, "const x = 10;", false)
+					},
+				},
+			},
+		}
+	}
 	testCases := slices.Concat(
 		[]*tscInput{
 			{
@@ -2772,14 +3064,17 @@ func TestTscNoEmit(t *testing.T) {
 				commandLineArgs: []string{"--noEmit"},
 				edits:           noChangeOnlyEdit,
 			},
+			getTscNoEmitLoopTestCase("", []string{"-b", "-w", "-verbose"}),
+			getTscNoEmitLoopTestCase(" with incremental", []string{"-b", "-w", "-verbose", "--incremental"}),
 		},
-		getTscNoEmitAndErrorsTestCases(noEmitScenarios, []string{}),
-		getTscNoEmitAndErrorsTestCases(noEmitScenarios, []string{"-b", "-v"}),
-		getTscNoEmitChangesTestCases(noEmitChangesScenarios, []string{}),
-		getTscNoEmitChangesTestCases(noEmitChangesScenarios, []string{"-b", "-v"}),
+		getTscNoEmitAndErrorsTestCases([]string{}),
+		getTscNoEmitAndErrorsTestCases([]string{"-b", "-v"}),
+		getTscNoEmitChangesTestCases([]string{}),
+		getTscNoEmitChangesTestCases([]string{"-b", "-v"}),
 		getTscNoEmitDtsChangesTestCases(),
 		getTscNoEmitDtsChangesMultiFileErrorsTestCases([]string{}),
 		getTscNoEmitDtsChangesMultiFileErrorsTestCases([]string{"-b", "-v"}),
+		getTscNoEmitAndErrorsWatchTestCases([]string{"-b", "-verbose", "-w"}),
 	)
 
 	for _, test := range testCases {
@@ -2863,6 +3158,69 @@ func TestTscNoEmitOnError(t *testing.T) {
 			)
 		}
 		return testCases
+	}
+	getTscWatchNoEmitOnErrorTestCases := func(scenarios []*tscNoEmitOnErrorScenario, commandLineArgs []string) []*tscInput {
+		var edits []*tscEdit
+		for _, scenario := range scenarios {
+			if edits != nil {
+				edits = append(edits, &tscEdit{
+					caption: scenario.subScenario,
+					edit: func(sys *testSys) {
+						sys.writeFileNoError(`/user/username/projects/noEmitOnError/src/main.ts`, scenario.mainErrorContent, false)
+					},
+				})
+			}
+			edits = append(edits,
+				&tscEdit{
+					caption: "No Change",
+					edit: func(sys *testSys) {
+						sys.writeFileNoError(`/user/username/projects/noEmitOnError/src/main.ts`, sys.readFileNoError(`/user/username/projects/noEmitOnError/src/main.ts`), false)
+					},
+				},
+				&tscEdit{
+					caption: "Fix " + scenario.subScenario,
+					edit: func(sys *testSys) {
+						sys.writeFileNoError("/user/username/projects/noEmitOnError/src/main.ts", scenario.fixedErrorContent, false)
+					},
+				},
+				&tscEdit{
+					caption: "No Change",
+					edit: func(sys *testSys) {
+						sys.writeFileNoError(`/user/username/projects/noEmitOnError/src/main.ts`, sys.readFileNoError(`/user/username/projects/noEmitOnError/src/main.ts`), false)
+					},
+				},
+			)
+		}
+		return []*tscInput{
+			{
+				subScenario:     "noEmitOnError",
+				files:           getTscNoEmitOnErrorFileMap(scenarios[0], false, false),
+				cwd:             "/user/username/projects/noEmitOnError",
+				commandLineArgs: commandLineArgs,
+				edits:           edits,
+			},
+			{
+				subScenario:     "noEmitOnError with declaration",
+				files:           getTscNoEmitOnErrorFileMap(scenarios[0], true, false),
+				cwd:             "/user/username/projects/noEmitOnError",
+				commandLineArgs: commandLineArgs,
+				edits:           edits,
+			},
+			{
+				subScenario:     "noEmitOnError with incremental",
+				files:           getTscNoEmitOnErrorFileMap(scenarios[0], false, true),
+				cwd:             "/user/username/projects/noEmitOnError",
+				commandLineArgs: commandLineArgs,
+				edits:           edits,
+			},
+			{
+				subScenario:     "noEmitOnError with declaration with incremental",
+				files:           getTscNoEmitOnErrorFileMap(scenarios[0], true, true),
+				cwd:             "/user/username/projects/noEmitOnError",
+				commandLineArgs: commandLineArgs,
+				edits:           edits,
+			},
+		}
 	}
 	scenarios := []*tscNoEmitOnErrorScenario{
 		{
@@ -2959,6 +3317,7 @@ func TestTscNoEmitOnError(t *testing.T) {
 				},
 			},
 		},
+		getTscWatchNoEmitOnErrorTestCases(scenarios, []string{"-b", "-w", "-v"}),
 	)
 
 	for _, test := range testCases {

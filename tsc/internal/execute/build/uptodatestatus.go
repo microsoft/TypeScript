@@ -36,7 +36,7 @@ const (
 	upToDateStatusTypeInputFileNewer
 	// build info is out of date as we need to emit some files
 	upToDateStatusTypeOutOfDateBuildInfoWithPendingEmit
-	// build info indiscates that project has errors and they need to be reported
+	// build info indicates that project has errors and they need to be reported
 	upToDateStatusTypeOutOfDateBuildInfoWithErrors
 	// build info options indicate there is work to do based on changes in options
 	upToDateStatusTypeOutOfDateOptions
@@ -104,4 +104,30 @@ func (s *upToDateStatus) inputOutputFileAndTime() *inputOutputFileAndTime {
 		return nil
 	}
 	return data
+}
+
+func (s *upToDateStatus) inputOutputName() *inputOutputName {
+	data, ok := s.data.(*inputOutputName)
+	if !ok {
+		return nil
+	}
+	return data
+}
+
+func (s *upToDateStatus) oldestOutputFileName() string {
+	if !s.isPseudoBuild() && s.kind != upToDateStatusTypeUpToDate {
+		panic("only valid for up to date status of pseudo-build or up to date")
+	}
+
+	if inputOutputFileAndTime := s.inputOutputFileAndTime(); inputOutputFileAndTime != nil {
+		return inputOutputFileAndTime.output.file
+	}
+	if inputOutputName := s.inputOutputName(); inputOutputName != nil {
+		return inputOutputName.output
+	}
+	return s.data.(string)
+}
+
+func (s *upToDateStatus) upstreamErrors() *upstreamErrors {
+	return s.data.(*upstreamErrors)
 }

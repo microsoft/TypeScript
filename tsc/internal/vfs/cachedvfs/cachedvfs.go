@@ -146,6 +146,5 @@ func (fsys *FS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
 }
 
 func (fsys *FS) WriteFile(path string, data string, writeByteOrderMark bool) error {
-	// !!! sheetal this needs update to caches or not?
 	return fsys.fs.WriteFile(path, data, writeByteOrderMark)
 }
