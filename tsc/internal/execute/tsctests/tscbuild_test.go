@@ -2068,6 +2068,89 @@ func TestBuildProgramUpdates(t *testing.T) {
 	}
 }
 
+func TestBuildProjectsBuilding(t *testing.T) {
+	t.Parallel()
+	addPackageFiles := func(files FileMap, index int) {
+		files[fmt.Sprintf(`/user/username/projects/myproject/pkg%d/index.ts`, index)] = fmt.Sprintf(`export const pkg%d = %d;`, index, index)
+		var references string
+		if index > 0 {
+			references = `"references": [{ "path": "../pkg0" }],`
+		}
+		files[fmt.Sprintf(`/user/username/projects/myproject/pkg%d/tsconfig.json`, index)] = stringtestutil.Dedent(fmt.Sprintf(`
+		{
+			"compilerOptions": { "composite": true },
+			%s
+		}`, references))
+	}
+	addSolution := func(files FileMap, count int) {
+		var pkgReferences []string
+		for i := range count {
+			pkgReferences = append(pkgReferences, fmt.Sprintf(`{ "path": "./pkg%d" }`, i))
+		}
+		files[`/user/username/projects/myproject/tsconfig.json`] = stringtestutil.Dedent(fmt.Sprintf(`
+		{
+			"compilerOptions": { "composite": true },
+			"references": [
+				%s
+			]
+		}`, strings.Join(pkgReferences, ",\n\t\t\t\t")))
+	}
+	files := func(count int) FileMap {
+		files := FileMap{}
+		for i := range count {
+			addPackageFiles(files, i)
+		}
+		addSolution(files, count)
+		return files
+	}
+
+	getTestCases := func(pkgCount int) []*tscInput {
+		edits := []*tscEdit{
+			{
+				caption: "dts doesn't change",
+				edit: func(sys *testSys) {
+					sys.appendFile(`/user/username/projects/myproject/pkg0/index.ts`, `const someConst2 = 10;`)
+				},
+			},
+			noChange,
+			{
+				caption: "dts change",
+				edit: func(sys *testSys) {
+					sys.appendFile(`/user/username/projects/myproject/pkg0/index.ts`, `export const someConst = 10;`)
+				},
+			},
+			noChange,
+		}
+		return []*tscInput{
+			{
+				subScenario:     fmt.Sprintf(`when there are %d projects in a solution`, pkgCount),
+				files:           files(pkgCount),
+				cwd:             "/user/username/projects/myproject",
+				commandLineArgs: []string{"-b", "-v"},
+				edits:           edits,
+			},
+			{
+				subScenario:     fmt.Sprintf(`when there are %d projects in a solution`, pkgCount),
+				files:           files(pkgCount),
+				cwd:             "/user/username/projects/myproject",
+				commandLineArgs: []string{"-b", "-w", "-v"},
+				edits:           edits,
+			},
+		}
+	}
+
+	testCases := slices.Concat(
+		getTestCases(3),
+		getTestCases(5),
+		getTestCases(8),
+		getTestCases(23),
+	)
+
+	for _, test := range testCases {
+		test.run(t, "projectsBuilding")
+	}
+}
+
 func TestBuildProjectReferenceWithRootDirInParent(t *testing.T) {
 	t.Parallel()
 	getBuildProjectReferenceWithRootDirInParentFileMap := func(modify func(files FileMap)) FileMap {

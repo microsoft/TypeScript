@@ -18,11 +18,7 @@ func (t *projectReferenceParseTask) parse(projectReferenceParser *projectReferen
 	if t.resolved == nil {
 		return
 	}
-	if t.resolved.SourceToProjectReference() == nil {
-		projectReferenceParser.wg.Queue(func() {
-			t.resolved.ParseInputOutputNames()
-		})
-	}
+	t.resolved.ParseInputOutputNames()
 	if subReferences := t.resolved.ResolvedProjectReferencePaths(); len(subReferences) > 0 {
 		t.subTasks = createProjectReferenceParseTasks(subReferences)
 	}
