@@ -808,7 +808,7 @@ export * from 'c';
 
 
 //// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo]
-{"root":["../src/a.ts","../src/index.ts"],"version":"FakeTSVersion"}
+{"root":["../src/a.ts","../src/index.ts"],"packageJsons":["../package.json","../../../../../c/3/c-impl/c/package.json"],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -816,8 +816,12 @@ export * from 'c';
     "../src/a.ts",
     "../src/index.ts"
   ],
+  "packageJsons": [
+    "../package.json",
+    "../../../../../c/3/c-impl/c/package.json"
+  ],
   "version": "FakeTSVersion",
-  "size": 68
+  "size": 146
 }
 
 
@@ -1891,7 +1895,7 @@ export * from 'c';
 
 
 //// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo]
-{"root":["../src/a.ts","../src/index.ts"],"version":"FakeTSVersion"}
+{"root":["../src/a.ts","../src/index.ts"],"packageJsons":["../package.json","../../../../../c/3/c-impl/c/package.json"],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1899,8 +1903,12 @@ export * from 'c';
     "../src/a.ts",
     "../src/index.ts"
   ],
+  "packageJsons": [
+    "../package.json",
+    "../../../../../c/3/c-impl/c/package.json"
+  ],
   "version": "FakeTSVersion",
-  "size": 68
+  "size": 146
 }
 
 

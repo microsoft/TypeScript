@@ -149,7 +149,7 @@ Found 1 error.
 
 //// [/home/src/workspaces/project/index.js] file written with same contents
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
-{"root":["./index.ts"],"errors":true,"version":"FakeTSVersion"}
+{"root":["./index.ts"],"errors":true,"packageJsons":["./node_modules/ky/package.json","./package.json"],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -157,8 +157,12 @@ Found 1 error.
     "./index.ts"
   ],
   "errors": true,
+  "packageJsons": [
+    "./node_modules/ky/package.json",
+    "./package.json"
+  ],
   "version": "FakeTSVersion",
-  "size": 63
+  "size": 130
 }
 
 

@@ -85,7 +85,7 @@ export declare function thing(): void;
 
 
 //// [/Users/name/projects/web/dist/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.esnext.full.d.ts","../index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"14361483761-import * as me from \"@this/package\";\nme.thing();\nexport function thing(): void {}\n","signature":"-2724770439-export declare function thing(): void;\n","impliedFormat":99}],"root":[2],"options":{"composite":true,"declarationDir":"../types","module":199,"outDir":"./"},"referencedMap":[[2,1]],"latestChangedDtsFile":"../types/index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.esnext.full.d.ts","../index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"14361483761-import * as me from \"@this/package\";\nme.thing();\nexport function thing(): void {}\n","signature":"-2724770439-export declare function thing(): void;\n","impliedFormat":99}],"root":[2],"options":{"composite":true,"declarationDir":"../types","module":199,"outDir":"./"},"referencedMap":[[2,1]],"latestChangedDtsFile":"../types/index.d.ts","packageJsons":["../package.json"],"version":"FakeTSVersion"}
 
 //// [/Users/name/projects/web/dist/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -139,8 +139,11 @@ export declare function thing(): void;
     ]
   },
   "latestChangedDtsFile": "../types/index.d.ts",
+  "packageJsons": [
+    "../package.json"
+  ],
   "version": "FakeTSVersion",
-  "size": 1011
+  "size": 1046
 }
 
 

@@ -265,32 +265,6 @@ export {};
 }
 
 
-PolledWatches::
-/package.json: *new*
-  {"pollingInterval":2000}
-/user/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types/bar/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types/foo/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/project1/node_modules/file/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/project1/node_modules/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/project1/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/package.json: *new*
-  {"pollingInterval":2000}
-
 FsWatches::
 /user/username/projects/myproject/project1/index.ts: *new*
   {}

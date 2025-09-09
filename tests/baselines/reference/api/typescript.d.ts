@@ -9672,6 +9672,7 @@ declare namespace ts {
          * this callback if present would be used to write files
          */
         writeFile?: WriteFileCallback;
+        realpath?(path: string): string;
     }
     /**
      * Builder to manage the program state changes

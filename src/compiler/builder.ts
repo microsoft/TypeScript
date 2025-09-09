@@ -3,6 +3,7 @@ import {
     AffectedFileResult,
     append,
     arrayFrom,
+    arrayIsEqualTo,
     arrayToMap,
     BuilderProgram,
     BuilderProgramHost,
@@ -10,6 +11,7 @@ import {
     BuildInfo,
     BuildInfoFileVersionMap,
     CancellationToken,
+    combinePaths,
     CommandLineOption,
     compareStringsCaseSensitive,
     compareValues,
@@ -60,6 +62,7 @@ import {
     isIncrementalCompilation,
     isJsonSourceFile,
     isNumber,
+    isPackageJsonInfo,
     isString,
     map,
     mapDefinedIterator,
@@ -80,6 +83,8 @@ import {
     skipAlias,
     skipTypeCheckingIgnoringNoCheck,
     some,
+    sortAndDeduplicate,
+    SortedReadonlyArray,
     SourceFile,
     sourceFileMayBeEmitted,
     SourceMapEmitResult,
@@ -180,6 +185,7 @@ export interface ReusableBuilderProgramState extends BuilderState {
     latestChangedDtsFile: string | undefined;
     /** Recorded if program had errors */
     hasErrors?: boolean;
+    packageJsons?: SortedReadonlyArray<string>;
 }
 
 // dprint-ignore
@@ -260,6 +266,7 @@ export interface BuilderProgramState extends BuilderState, ReusableBuilderProgra
     /** Already seen program emit */
     seenProgramEmit: BuilderFileEmit | undefined;
     hasErrorsFromOldState?: boolean;
+    packageJsonsFromOldState?: SortedReadonlyArray<string>;
 }
 
 interface BuilderProgramStateWithDefinedProgram extends BuilderProgramState {
@@ -365,6 +372,7 @@ function createBuilderProgramState(
             canCopyEmitDiagnostics = false;
         }
         state.hasErrorsFromOldState = oldState!.hasErrors;
+        state.packageJsonsFromOldState = oldState!.packageJsons;
     }
     else {
         // We arent using old state, so atleast emit buildInfo with current information
@@ -1139,6 +1147,7 @@ export interface IncrementalBuildInfoBase extends BuildInfo {
     latestChangedDtsFile?: string | undefined;
     errors: true | undefined;
     checkPending: true | undefined;
+    packageJsons: string[] | undefined;
 }
 
 /** @internal */
@@ -1187,6 +1196,7 @@ export interface NonIncrementalBuildInfo extends BuildInfo {
     root: readonly string[];
     errors: true | undefined;
     checkPending: true | undefined;
+    packageJsons: string[] | undefined;
 }
 
 function isNonIncrementalBuildInfo(info: BuildInfo): info is NonIncrementalBuildInfo {
@@ -1217,6 +1227,26 @@ function ensureHasErrorsForState(state: BuilderProgramStateWithDefinedProgram) {
     }
 }
 
+function ensurePackageJsonsForState(state: BuilderProgramStateWithDefinedProgram, host: BuilderProgramHost) {
+    if (state.packageJsons !== undefined) return;
+    const packageJsons: string[] = [];
+    if (state.program.getCompilerOptions().configFilePath) {
+        const internalMap = state.program.getModuleResolutionCache()?.getPackageJsonInfoCache().getInternalMap();
+        if (internalMap) {
+            internalMap.forEach(value => {
+                if (isPackageJsonInfo(value)) {
+                    let path = combinePaths(value.packageDirectory, "package.json");
+                    if (host.realpath) {
+                        path = host.realpath(path);
+                    }
+                    packageJsons.push(path);
+                }
+            });
+        }
+    }
+    state.packageJsons = sortAndDeduplicate(packageJsons);
+}
+
 function hasSyntaxOrGlobalErrors(state: BuilderProgramStateWithDefinedProgram) {
     return !!state.program.getConfigFileParsingDiagnostics().length ||
         !!state.program.getSyntacticDiagnostics().length ||
@@ -1224,15 +1254,17 @@ function hasSyntaxOrGlobalErrors(state: BuilderProgramStateWithDefinedProgram) {
         !!state.program.getGlobalDiagnostics().length;
 }
 
-function getBuildInfoEmitPending(state: BuilderProgramStateWithDefinedProgram) {
+function getBuildInfoEmitPending(state: BuilderProgramStateWithDefinedProgram, host: BuilderProgramHost) {
     ensureHasErrorsForState(state);
-    return state.buildInfoEmitPending ??= !!state.hasErrorsFromOldState !== !!state.hasErrors;
+    ensurePackageJsonsForState(state, host);
+    return state.buildInfoEmitPending ??= !!state.hasErrorsFromOldState !== !!state.hasErrors ||
+        !arrayIsEqualTo(state.packageJsons, state.packageJsonsFromOldState);
 }
 
 /**
  * Gets the program information to be emitted in buildInfo so that we can use it to create new program
  */
-function getBuildInfo(state: BuilderProgramStateWithDefinedProgram): BuildInfo {
+function getBuildInfo(state: BuilderProgramStateWithDefinedProgram, host: BuilderProgramHost): BuildInfo {
     const currentDirectory = state.program.getCurrentDirectory();
     const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory));
     // Convert the file name to Path here if we set the fileName instead to optimize multiple d.ts file emits and having to compute Canonical path
@@ -1241,11 +1273,13 @@ function getBuildInfo(state: BuilderProgramStateWithDefinedProgram): BuildInfo {
     const fileNameToFileId = new Map<string, IncrementalBuildInfoFileId>();
     const rootFileNames = new Set(state.program.getRootFileNames().map(f => toPath(f, currentDirectory, state.program.getCanonicalFileName)));
     ensureHasErrorsForState(state);
+    ensurePackageJsonsForState(state, host);
     if (!isIncrementalCompilation(state.compilerOptions)) {
         const buildInfo: NonIncrementalBuildInfo = {
             root: arrayFrom(rootFileNames, r => relativeToBuildInfo(r)),
             errors: state.hasErrors ? true : undefined,
             checkPending: state.checkPending,
+            packageJsons: toPackageJsons(),
             version,
         };
         return buildInfo;
@@ -1281,6 +1315,7 @@ function getBuildInfo(state: BuilderProgramStateWithDefinedProgram): BuildInfo {
                 state.programEmitPending, // Actual value
             errors: state.hasErrors ? true : undefined,
             checkPending: state.checkPending,
+            packageJsons: toPackageJsons(),
             version,
         };
         return buildInfo;
@@ -1373,6 +1408,7 @@ function getBuildInfo(state: BuilderProgramStateWithDefinedProgram): BuildInfo {
         latestChangedDtsFile,
         errors: state.hasErrors ? true : undefined,
         checkPending: state.checkPending,
+        packageJsons: toPackageJsons(),
         version,
     };
     return buildInfo;
@@ -1564,6 +1600,10 @@ function getBuildInfo(state: BuilderProgramStateWithDefinedProgram): BuildInfo {
         }
         return changeFileSet;
     }
+
+    function toPackageJsons() {
+        return state.packageJsons?.length ? state.packageJsons.map(relativeToBuildInfo) : undefined;
+    }
 }
 
 /** @internal */
@@ -1683,7 +1723,7 @@ export function createBuilderProgram(
     }
 
     const state = createBuilderProgramState(newProgram, oldState);
-    newProgram.getBuildInfo = () => getBuildInfo(toBuilderProgramStateWithDefinedProgram(state));
+    newProgram.getBuildInfo = () => getBuildInfo(toBuilderProgramStateWithDefinedProgram(state), host);
 
     // To ensure that we arent storing any references to old program or new program without state
     newProgram = undefined!;
@@ -1722,7 +1762,7 @@ export function createBuilderProgram(
         cancellationToken: CancellationToken | undefined,
     ): EmitResult {
         Debug.assert(isBuilderProgramStateWithDefinedProgram(state));
-        if (getBuildInfoEmitPending(state)) {
+        if (getBuildInfoEmitPending(state, host)) {
             const result = state.program.emitBuildInfo(
                 writeFile || maybeBind(host, host.writeFile),
                 cancellationToken,
@@ -1809,7 +1849,7 @@ export function createBuilderProgram(
 
             if (!affected) {
                 // Emit buildinfo if pending
-                if (isForDtsErrors || !getBuildInfoEmitPending(state)) return undefined;
+                if (isForDtsErrors || !getBuildInfoEmitPending(state, host)) return undefined;
                 const affected = state.program;
                 const result = affected.emitBuildInfo(
                     writeFile || maybeBind(host, host.writeFile),
@@ -2282,6 +2322,7 @@ export function createBuilderProgramUsingIncrementalBuildInfo(
             programEmitPending: buildInfo.pendingEmit === undefined ? undefined : toProgramEmitPending(buildInfo.pendingEmit, buildInfo.options),
             hasErrors: buildInfo.errors,
             checkPending: buildInfo.checkPending,
+            packageJsons: toPackageJsons(),
         };
     }
     else {
@@ -2320,6 +2361,7 @@ export function createBuilderProgramUsingIncrementalBuildInfo(
             emitSignatures: emitSignatures?.size ? emitSignatures : undefined,
             hasErrors: buildInfo.errors,
             checkPending: buildInfo.checkPending,
+            packageJsons: toPackageJsons(),
         };
     }
 
@@ -2388,6 +2430,10 @@ export function createBuilderProgramUsingIncrementalBuildInfo(
 
     function toPerFileEmitDiagnostics(diagnostics: readonly IncrementalBuildInfoEmitDiagnostic[] | undefined): Map<Path, readonly ReusableDiagnostic[]> | undefined {
         return diagnostics && arrayToMap(diagnostics, value => toFilePath(value[0]), value => value[1]);
+    }
+
+    function toPackageJsons() {
+        return buildInfo.packageJsons?.map(toAbsolutePath) as unknown as SortedReadonlyArray<string> ?? emptyArray;
     }
 }
 

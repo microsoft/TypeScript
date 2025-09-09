@@ -210,15 +210,18 @@ exports.theNum = 42;
 
 
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo]
-{"root":["../index.ts"],"version":"FakeTSVersion"}
+{"root":["../index.ts"],"packageJsons":["../../pkg2/package.json"],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "root": [
     "../index.ts"
   ],
+  "packageJsons": [
+    "../../pkg2/package.json"
+  ],
   "version": "FakeTSVersion",
-  "size": 50
+  "size": 93
 }
 
 
