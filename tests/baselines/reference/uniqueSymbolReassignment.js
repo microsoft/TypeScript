@@ -19,8 +19,8 @@ myFunction.mySymbol = Symbols.mySymbol;
 myFunction.anotherUnique = Symbols2.anotherUnique;
 
 // Non-unique symbols (regular Symbol() without const)
-const nonUniqueSymbol1 = Symbol('nonUnique1');
-const nonUniqueSymbol2 = Symbol('nonUnique2');
+let nonUniqueSymbol1 = Symbol('nonUnique1');
+let nonUniqueSymbol2 = Symbol('nonUnique2');
 
 // Plain text variables (not symbols at all)
 const normalVar = "not a symbol";
@@ -33,7 +33,6 @@ myFunction.normalVar = normalVar;
 myFunction.symbolName = symbolName;
 
 export { myFunction };
-
 
 //// [uniqueSymbolReassignment.js]
 "use strict";
@@ -68,10 +67,10 @@ myFunction.symbolName = symbolName;
 //// [uniqueSymbolReassignment.d.ts]
 declare function myFunction(): void;
 declare namespace myFunction {
-    var mySymbol: any;
-    var anotherUnique: any;
-    var nonUnique1: any;
-    var nonUnique2: any;
+    const mySymbol: unique symbol;
+    const anotherUnique: unique symbol;
+    var nonUnique1: symbol;
+    var nonUnique2: symbol;
     var normalVar: string;
     var symbolName: string;
 }

@@ -1,5 +1,6 @@
 // @filename: uniqueSymbolReassignment.ts
 // @declaration: true
+// @lib: esnext
 // This is a unique symbol (const + Symbol())
 const mySymbol = Symbol('Symbols.mySymbol');
 const Symbols = {
@@ -18,8 +19,8 @@ myFunction.mySymbol = Symbols.mySymbol;
 myFunction.anotherUnique = Symbols2.anotherUnique;
 
 // Non-unique symbols (regular Symbol() without const)
-const nonUniqueSymbol1 = Symbol('nonUnique1');
-const nonUniqueSymbol2 = Symbol('nonUnique2');
+let nonUniqueSymbol1 = Symbol('nonUnique1');
+let nonUniqueSymbol2 = Symbol('nonUnique2');
 
 // Plain text variables (not symbols at all)
 const normalVar = "not a symbol";
