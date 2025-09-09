@@ -1017,11 +1017,20 @@ export namespace Core {
 
         // Handle export = namespace case where ES6 import cannot resolve the symbol
         if (!symbol && isIdentifier(node) && isImportSpecifier(node.parent)) {
-            const importDeclaration = findAncestor(node, isImportDeclaration);
-            if (importDeclaration && isImportDeclaration(importDeclaration) && importDeclaration.moduleSpecifier) {
-                const moduleSymbol = checker.getSymbolAtLocation(importDeclaration.moduleSpecifier);
-                if (moduleSymbol && moduleSymbol.exports) {
-                    symbol = moduleSymbol.exports.get(node.escapedText);
+            const spec = node.parent;
+            // Get the imported name: for 'import { foo as bar }', use 'foo'; for 'import { foo }', use 'foo'
+            const importedName = spec.propertyName && isIdentifier(spec.propertyName) 
+                ? spec.propertyName.escapedText 
+                : spec.name.escapedText;
+            const importDecl = findAncestor(spec, isImportDeclaration);
+            const moduleSymbol = importDecl?.moduleSpecifier ? checker.getSymbolAtLocation(importDecl.moduleSpecifier) : undefined;
+            if (moduleSymbol) {
+                // Use TypeScript's official getExportsOfModule API for robust symbol resolution
+                // This handles complex export= namespace cases and internal resolution rules
+                const moduleExports = checker.getExportsOfModule(moduleSymbol);
+                const exportedSymbol = find(moduleExports, s => s.escapedName === importedName);
+                if (exportedSymbol) {
+                    symbol = exportedSymbol;
                 }
             }
         }
