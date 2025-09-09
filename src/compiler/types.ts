@@ -4288,7 +4288,6 @@ export interface SourceFileLike {
     lineMap?: readonly number[];
     /** @internal */
     getPositionOfLineAndCharacter?(line: number, character: number, allowEdits?: true): number;
-    languageVariant?: LanguageVariant;
 }
 
 /** @internal */
