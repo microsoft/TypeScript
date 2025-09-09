@@ -1,4 +1,4 @@
-module A {
+namespace A {
     export class Point {
         constructor(public x: number, public y: number) { }
     }
@@ -7,12 +7,12 @@ module A {
 }
 
 // no code gen expected
-module B {
+namespace B {
     import a = A; //Error generates 'var <Alias> = <EntityName>;'
 }
 
 // no code gen expected
-module C {
+namespace C {
     import a = A; //Error generates 'var <Alias> = <EntityName>;'
     var m: typeof a;
     var p: a.Point;
@@ -20,13 +20,13 @@ module C {
 }
 
 // code gen expected
-module D {
+namespace D {
     import a = A;
 
     var p = new a.Point(1, 1);
 }
 
-module E {
+namespace E {
     import a = A;
     export function xDist(x: a.Point) {
         return (a.Origin.x - x.x);

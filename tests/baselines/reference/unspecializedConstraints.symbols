@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/unspecializedConstraints.ts] ////
 
 === unspecializedConstraints.ts ===
-module ts {
+namespace ts {
 >ts : Symbol(ts, Decl(unspecializedConstraints.ts, 0, 0))
 
     interface Map<T> {
->Map : Symbol(Map, Decl(unspecializedConstraints.ts, 0, 11))
+>Map : Symbol(Map, Decl(unspecializedConstraints.ts, 0, 14))
 >T : Symbol(T, Decl(unspecializedConstraints.ts, 1, 18))
 
         [index: string]: T;
@@ -409,7 +409,7 @@ module ts {
 >getProperty : Symbol(getProperty, Decl(unspecializedConstraints.ts, 115, 57))
 >T : Symbol(T, Decl(unspecializedConstraints.ts, 117, 25))
 >map : Symbol(map, Decl(unspecializedConstraints.ts, 117, 28))
->Map : Symbol(Map, Decl(unspecializedConstraints.ts, 0, 11))
+>Map : Symbol(Map, Decl(unspecializedConstraints.ts, 0, 14))
 >T : Symbol(T, Decl(unspecializedConstraints.ts, 117, 25))
 >key : Symbol(key, Decl(unspecializedConstraints.ts, 117, 40))
 >T : Symbol(T, Decl(unspecializedConstraints.ts, 117, 25))
@@ -431,7 +431,7 @@ module ts {
 >hasProperty : Symbol(hasProperty, Decl(unspecializedConstraints.ts, 120, 5))
 >T : Symbol(T, Decl(unspecializedConstraints.ts, 122, 25))
 >map : Symbol(map, Decl(unspecializedConstraints.ts, 122, 28))
->Map : Symbol(Map, Decl(unspecializedConstraints.ts, 0, 11))
+>Map : Symbol(Map, Decl(unspecializedConstraints.ts, 0, 14))
 >T : Symbol(T, Decl(unspecializedConstraints.ts, 122, 25))
 >key : Symbol(key, Decl(unspecializedConstraints.ts, 122, 40))
 

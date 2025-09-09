@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/qualify.ts] ////
 
 === qualify.ts ===
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -11,7 +11,7 @@ module M {
 >0 : 0
 >  : ^
 
-    export module N {
+    export namespace N {
 >N : typeof N
 >  : ^^^^^^^^
 
@@ -23,11 +23,11 @@ module M {
     }
 }
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
-    export module N {
+    export namespace N {
 >N : typeof N
 >  : ^^^^^^^^
 
@@ -50,7 +50,7 @@ module M {
 }
 
 
-module T {
+namespace T {
 >T : typeof T
 >  : ^^^^^^^^
 
@@ -59,7 +59,7 @@ module T {
 >p : any
 >  : ^^^
     }
-    export module U {
+    export namespace U {
 >U : typeof U
 >  : ^^^^^^^^
 
@@ -77,11 +77,11 @@ module T {
     }
 }
 
-module Peer {
+namespace Peer {
 >Peer : typeof Peer
 >     : ^^^^^^^^^^^
 
-    export module U2 {
+    export namespace U2 {
 >U2 : typeof U2
 >   : ^^^^^^^^^
 
@@ -97,18 +97,18 @@ module Peer {
     }
 }
 
-module Everest {
+namespace Everest {
 >Everest : typeof Everest
 >        : ^^^^^^^^^^^^^^
 
-    export module K1 {
+    export namespace K1 {
         export interface I3 {
             zeep;
 >zeep : any
 >     : ^^^
         }
     }
-    export module K2 {
+    export namespace K2 {
 >K2 : typeof K2
 >   : ^^^^^^^^^
 

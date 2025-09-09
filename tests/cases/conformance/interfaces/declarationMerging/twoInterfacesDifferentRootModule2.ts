@@ -1,6 +1,6 @@
 // two interfaces with different root modules should not merge
 
-module M {
+namespace M {
     export interface A {
         foo: string;
     }
@@ -9,7 +9,7 @@ module M {
         foo: T;
     }
 
-    module M2 {
+    namespace M2 {
         export interface A {
             bar: number;
         }

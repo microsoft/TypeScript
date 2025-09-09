@@ -15,7 +15,7 @@ sourceFile:sourcemapValidationDuplicateNames.ts
 4 >      ^
 5 >       ^^^^^^^^^^->
 1 >
-2 >module 
+2 >namespace 
 3 >    m1
 4 >       {
   >          var x = 10;
@@ -23,8 +23,8 @@ sourceFile:sourcemapValidationDuplicateNames.ts
   >          }
   >      }
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(1, 5) Source(1, 8) + SourceIndex(0)
-3 >Emitted(1, 7) Source(1, 10) + SourceIndex(0)
+2 >Emitted(1, 5) Source(1, 11) + SourceIndex(0)
+3 >Emitted(1, 7) Source(1, 13) + SourceIndex(0)
 4 >Emitted(1, 8) Source(5, 2) + SourceIndex(0)
 ---
 >>>(function (m1) {
@@ -33,11 +33,11 @@ sourceFile:sourcemapValidationDuplicateNames.ts
 3 >           ^^
 4 >             ^^^->
 1->
-2 >module 
+2 >namespace 
 3 >           m1
 1->Emitted(2, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(2, 12) Source(1, 8) + SourceIndex(0)
-3 >Emitted(2, 14) Source(1, 10) + SourceIndex(0)
+2 >Emitted(2, 12) Source(1, 11) + SourceIndex(0)
+3 >Emitted(2, 14) Source(1, 13) + SourceIndex(0)
 ---
 >>>    var x = 10;
 1->^^^^
@@ -146,10 +146,10 @@ sourceFile:sourcemapValidationDuplicateNames.ts
   >            }
 1->Emitted(10, 1) Source(5, 1) + SourceIndex(0)
 2 >Emitted(10, 2) Source(5, 2) + SourceIndex(0)
-3 >Emitted(10, 4) Source(1, 8) + SourceIndex(0)
-4 >Emitted(10, 6) Source(1, 10) + SourceIndex(0)
-5 >Emitted(10, 11) Source(1, 8) + SourceIndex(0)
-6 >Emitted(10, 13) Source(1, 10) + SourceIndex(0)
+3 >Emitted(10, 4) Source(1, 11) + SourceIndex(0)
+4 >Emitted(10, 6) Source(1, 13) + SourceIndex(0)
+5 >Emitted(10, 11) Source(1, 11) + SourceIndex(0)
+6 >Emitted(10, 13) Source(1, 13) + SourceIndex(0)
 7 >Emitted(10, 21) Source(5, 2) + SourceIndex(0)
 ---
 >>>(function (m1) {
@@ -159,11 +159,11 @@ sourceFile:sourcemapValidationDuplicateNames.ts
 4 >             ^^^^^^^^^^^->
 1 >
   >
-2 >module 
+2 >namespace 
 3 >           m1
 1 >Emitted(11, 1) Source(6, 1) + SourceIndex(0)
-2 >Emitted(11, 12) Source(6, 8) + SourceIndex(0)
-3 >Emitted(11, 14) Source(6, 10) + SourceIndex(0)
+2 >Emitted(11, 12) Source(6, 11) + SourceIndex(0)
+3 >Emitted(11, 14) Source(6, 13) + SourceIndex(0)
 ---
 >>>    var b = new m1.c();
 1->^^^^
@@ -219,10 +219,10 @@ sourceFile:sourcemapValidationDuplicateNames.ts
   >            }
 1 >Emitted(13, 1) Source(8, 1) + SourceIndex(0)
 2 >Emitted(13, 2) Source(8, 2) + SourceIndex(0)
-3 >Emitted(13, 4) Source(6, 8) + SourceIndex(0)
-4 >Emitted(13, 6) Source(6, 10) + SourceIndex(0)
-5 >Emitted(13, 11) Source(6, 8) + SourceIndex(0)
-6 >Emitted(13, 13) Source(6, 10) + SourceIndex(0)
+3 >Emitted(13, 4) Source(6, 11) + SourceIndex(0)
+4 >Emitted(13, 6) Source(6, 13) + SourceIndex(0)
+5 >Emitted(13, 11) Source(6, 11) + SourceIndex(0)
+6 >Emitted(13, 13) Source(6, 13) + SourceIndex(0)
 7 >Emitted(13, 21) Source(8, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourcemapValidationDuplicateNames.js.map

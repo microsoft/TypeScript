@@ -19,7 +19,7 @@ assignmentCompatWithObjectMembersOptionality.ts(84,5): error TS2322: Type 'E' is
     class Derived extends Base { bar: string; }
     class Derived2 extends Derived { baz: string; }
     
-    module TargetHasOptional {
+    namespace TargetHasOptional {
         // targets
         interface C {
             opt?: Base
@@ -61,7 +61,7 @@ assignmentCompatWithObjectMembersOptionality.ts(84,5): error TS2322: Type 'E' is
         b = c;
     }
     
-    module SourceHasOptional {
+    namespace SourceHasOptional {
         // targets
         interface C {
             opt: Base

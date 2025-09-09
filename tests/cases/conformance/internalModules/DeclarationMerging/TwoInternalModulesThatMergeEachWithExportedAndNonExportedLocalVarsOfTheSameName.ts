@@ -1,11 +1,11 @@
 //@filename: part1.ts
-module A {
+namespace A {
     export interface Point {
         x: number;
         y: number;
     }
 
-    export module Utils {
+    export namespace Utils {
         export function mirror<T extends Point>(p: T) {
             return { x: p.y, y: p.x };
         }
@@ -14,11 +14,11 @@ module A {
 }
 
 //@filename: part2.ts
-module A {
+namespace A {
     // not a collision, since we don't export
     var Origin: string = "0,0";
 
-    export module Utils {
+    export namespace Utils {
         export class Plane {
             constructor(public tl: Point, public br: Point) { }
         }

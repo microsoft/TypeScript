@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/importDeclarations/importAliasIdentifiers.ts] ////
 
 === importAliasIdentifiers.ts ===
-module moduleA {
+namespace moduleA {
 >moduleA : typeof moduleA
 >        : ^^^^^^^^^^^^^^
 
@@ -52,7 +52,7 @@ class clodule {
 >     : ^^^^^^
 }
 
-module clodule {
+namespace clodule {
 >clodule : typeof clodule
 >        : ^^^^^^^^^^^^^^
 
@@ -122,7 +122,7 @@ function fundule() {
 >  : ^
 }
 
-module fundule {
+namespace fundule {
 >fundule : typeof fundule
 >        : ^^^^^^^^^^^^^^
 

@@ -1140,7 +1140,7 @@ export declare class Promise<R> implements Promise.Thenable<R> {
 >            : ^^^^^^
 }
 
-export declare module Promise {
+export declare namespace Promise {
 	export interface Thenable<R> {
 		then<U>(onFulfilled: (value: R) => Thenable<U>, onRejected: (error: any) => Thenable<U>): Thenable<U>;
 >then : { <U>(onFulfilled: (value: R) => Thenable<U>, onRejected: (error: any) => Thenable<U>): Thenable<U>; <U_1>(onFulfilled: (value: R) => Thenable<U_1>, onRejected?: (error: any) => U_1): Thenable<U_1>; <U_1>(onFulfilled: (value: R) => U_1, onRejected: (error: any) => Thenable<U_1>): Thenable<U_1>; <U_1>(onFulfilled?: (value: R) => U_1, onRejected?: (error: any) => U_1): Thenable<U_1>; }

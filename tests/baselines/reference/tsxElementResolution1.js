@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxElementResolution1.tsx] ////
 
 //// [file.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		div: any

@@ -1,20 +1,20 @@
 //// [tests/cases/compiler/declarationEmitNameConflicts3.ts] ////
 
 //// [declarationEmitNameConflicts3.ts]
-module M {
+namespace M {
     export interface D { }
-    export module D {
+    export namespace D {
         export function f() { }
     }
-    export module C {
+    export namespace C {
         export function f() { }
     }
-    export module E {
+    export namespace E {
         export function f() { }
     }
 }
 
-module M.P {
+namespace M.P {
     export class C {
         static f() { }
     }
