@@ -138,7 +138,7 @@
 // var assignmentRightHandSide2 = 1 + [|x|];
 // 
 // [|x|] = 1;
-// x = /*FIND ALL REFS*/[|x|] = [|x|] + [|x|];
+// [|x|] = /*FIND ALL REFS*/[|x|] + [|x|];
 // 
 // [|x|] == 1;
 // [|x|] <= 1;
@@ -162,7 +162,7 @@
 // var assignmentRightHandSide2 = 1 + [|x|];
 // 
 // [|x|] = 1;
-// x = x + /*FIND ALL REFS*/[|x|] = [|x|] + [|x|];
+// [|x|] = [|x|] + /*FIND ALL REFS*/[|x|];
 // 
 // [|x|] == 1;
 // [|x|] <= 1;

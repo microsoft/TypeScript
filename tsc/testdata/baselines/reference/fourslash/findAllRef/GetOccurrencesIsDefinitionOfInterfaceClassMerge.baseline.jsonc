@@ -135,5 +135,5 @@
 //         return this.p + this.m + n;
 //     }
 // }
-// let i: Numbers = new /*FIND ALL REFS*/[|Numbers|] = new [|Numbers|]();
+// let i: [|Numbers|] = new /*FIND ALL REFS*/[|Numbers|]();
 // let x = i.f(i.p + i.m);

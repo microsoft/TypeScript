@@ -2,5 +2,5 @@
 // === /goToDefinitionYield4.ts ===
 
 // function* gen() {
-//     class C { [/*GO TO DEFINITION*/[|[yield 10]|]() {} }
+//     class C { [|[/*GO TO DEFINITION*/yield 10]|]() {} }
 // }

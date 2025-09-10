@@ -34,5 +34,5 @@
 // }
 // class C {
 //     constructor() { return this; }
-//     get self(this: number) { return /*GO TO DEFINITION*/[|this|]: number) { return this; }
+//     get self([|this|]: number) { return /*GO TO DEFINITION*/this; }
 // }

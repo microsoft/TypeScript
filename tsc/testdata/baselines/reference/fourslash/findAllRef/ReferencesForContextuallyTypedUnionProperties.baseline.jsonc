@@ -300,7 +300,7 @@
 // var c = <A | B> { [|common|]: 0, b: 0 };
 // 
 // // Array literal
-// var ar: Array<A|B> = [{ a: 0, common: "" }, { b: 0, /*FIND ALL REFS*/[|common|]: "" }, { b: 0, [|common|]: 0 }];
+// var ar: Array<A|B> = [{ a: 0, [|common|]: "" }, { b: 0, /*FIND ALL REFS*/[|common|]: 0 }];
 // 
 // // Nested object literal
 // var ob: { aorb: A|B } = { aorb: { b: 0, [|common|]: 0 } };

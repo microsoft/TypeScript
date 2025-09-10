@@ -13,7 +13,7 @@
 // === goToDefinition ===
 // === /a.ts ===
 
-//  export class A/*GO TO DEFINITION*/[|A|] {
+//  export class [|A|]/*GO TO DEFINITION*/ {
 //  
 //      private z: string;
 // 
@@ -41,7 +41,7 @@
 
 //  export class A {
 //  
-//      private z/*GO TO DEFINITION*/[|z|]: string;
+//      private [|z|]/*GO TO DEFINITION*/: string;
 // 
 //      readonly x: string;
 //  
@@ -73,7 +73,7 @@
 //  
 //      private z: string;
 // 
-//      readonly x/*GO TO DEFINITION*/[|x|]: string;
+//      readonly [|x|]/*GO TO DEFINITION*/: string;
 //  
 //      async a() {  }
 //  
@@ -105,7 +105,7 @@
 // 
 //      readonly x: string;
 //  
-//      async a/*GO TO DEFINITION*/[|a|]() {  }
+//      async [|a|]/*GO TO DEFINITION*/() {  }
 //  
 //      override b() {}
 //  
@@ -138,7 +138,7 @@
 //  
 //      async a() {  }
 //  
-//      override b/*GO TO DEFINITION*/[|b|]() {}
+//      override [|b|]/*GO TO DEFINITION*/() {}
 //  
 //      public async c() { }
 //  }
@@ -200,7 +200,7 @@
 //  
 //      override b() {}
 //  
-//      public async c/*GO TO DEFINITION*/[|c|]() { }
+//      public async [|c|]/*GO TO DEFINITION*/() { }
 //  }
 // 
 //  export function foo() { }
@@ -227,4 +227,4 @@
 //      public async c() { }
 //  }
 // 
-//  export function foo/*GO TO DEFINITION*/[|foo|]() { }
+//  export function [|foo|]/*GO TO DEFINITION*/() { }

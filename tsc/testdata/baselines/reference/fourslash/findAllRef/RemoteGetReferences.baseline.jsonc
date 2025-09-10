@@ -536,7 +536,7 @@
 // //Increments
 // remotefooCls.remoteclsSVar++;
 // remotemodTest.remotemodVar++;
-// remoteglobalVar = /*FIND ALL REFS*/[|remoteglobalVar|] = [|remoteglobalVar|] + [|remoteglobalVar|];
+// [|remoteglobalVar|] = /*FIND ALL REFS*/[|remoteglobalVar|] + [|remoteglobalVar|];
 // 
 // //ETC - Other cases
 // [|remoteglobalVar|] = 3;
@@ -612,7 +612,7 @@
 // //Increments
 // remotefooCls.remoteclsSVar++;
 // remotemodTest.remotemodVar++;
-// remoteglobalVar = remoteglobalVar + /*FIND ALL REFS*/[|remoteglobalVar|] = [|remoteglobalVar|] + [|remoteglobalVar|];
+// [|remoteglobalVar|] = [|remoteglobalVar|] + /*FIND ALL REFS*/[|remoteglobalVar|];
 // 
 // //ETC - Other cases
 // [|remoteglobalVar|] = 3;

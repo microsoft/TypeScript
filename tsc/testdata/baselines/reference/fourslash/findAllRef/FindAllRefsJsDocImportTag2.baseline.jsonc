@@ -13,7 +13,7 @@
 // import [|Component|] from './component.js';
 // 
 // /**
-//  * @extends Component/*FIND ALL REFS*/[|Component|]
+//  * @extends [|Component|]/*FIND ALL REFS*/
 //  */
 // export class Player extends [|Component|] {}
 

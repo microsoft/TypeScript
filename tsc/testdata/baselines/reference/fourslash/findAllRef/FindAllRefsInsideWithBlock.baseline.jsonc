@@ -50,4 +50,4 @@
 //     y++;        // also reference for y should be ignored
 // }
 // 
-// x = /*FIND ALL REFS*/[|x|] = [|x|] + 1;
+// [|x|] = /*FIND ALL REFS*/[|x|] + 1;

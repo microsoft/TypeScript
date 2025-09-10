@@ -1,7 +1,7 @@
 // === goToDefinition ===
 // === /gotoDefinitionInObjectBindingPattern2.ts ===
 
-// var p0 = ({a/*GO TO DEFINITION*/[|aa|]}) => {console.log(aa)};
+// var p0 = ({[|a/*GO TO DEFINITION*/a|]}) => {console.log(aa)};
 // function f2({ a1, b1 }: { a1: number, b1: number } = { a1: 0, b1: 0 }) {}
 
 
@@ -11,7 +11,7 @@
 // === /gotoDefinitionInObjectBindingPattern2.ts ===
 
 // var p0 = ({aa}) => {console.log(aa)};
-// function f2({ a/*GO TO DEFINITION*/[|a1|], b1 }: { a1: number, b1: number } = { a1: 0, b1: 0 }) {}
+// function f2({ [|a/*GO TO DEFINITION*/1|], b1 }: { a1: number, b1: number } = { a1: 0, b1: 0 }) {}
 
 
 
@@ -20,4 +20,4 @@
 // === /gotoDefinitionInObjectBindingPattern2.ts ===
 
 // var p0 = ({aa}) => {console.log(aa)};
-// function f2({ a1, b/*GO TO DEFINITION*/[|b1|] }: { a1: number, b1: number } = { a1: 0, b1: 0 }) {}
+// function f2({ a1, [|b/*GO TO DEFINITION*/1|] }: { a1: number, b1: number } = { a1: 0, b1: 0 }) {}

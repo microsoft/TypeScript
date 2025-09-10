@@ -9,4 +9,4 @@
 // === /home/src/workspaces/project/b/b.ts ===
 
 // /// <reference path="../a/index.d.ts" />
-// new A/*FIND ALL REFS*/[|A|]();
+// new [|A|]/*FIND ALL REFS*/();

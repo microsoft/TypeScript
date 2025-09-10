@@ -2,4 +2,4 @@
 // === /foo.ts ===
 
 // export function bar() { return "bar"; }
-// import('./foo').then(({ ba/*GO TO DEFINITION*/[|bar|] }) => undefined);
+// import('./foo').then(({ [|ba/*GO TO DEFINITION*/r|] }) => undefined);

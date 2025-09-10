@@ -41,4 +41,4 @@
 //  * @param {[|number|]} n
 //  * @returns {[|number|]}
 //  */
-// function f(n: number): /*FIND ALL REFS*/[|number|]): [|number|] {}
+// function f(n: [|number|]): /*FIND ALL REFS*/[|number|] {}

@@ -59,7 +59,7 @@
 // this;
 // function f(this) {
 //     return this;
-//     function g(this) { return /*FIND ALL REFS*/[|this|]) { return [|this|]; }
+//     function g([|this|]) { return /*FIND ALL REFS*/[|this|]; }
 // }
 // class C {
 //     static x() {

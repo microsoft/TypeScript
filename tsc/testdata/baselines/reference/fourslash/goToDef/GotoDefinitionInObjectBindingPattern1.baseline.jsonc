@@ -5,4 +5,4 @@
 // interface Test {
 //   prop2: number
 // }
-// bar<Test>(({pr/*GO TO DEFINITION*/[|prop2|]})=>{});
+// bar<Test>(({[|pr/*GO TO DEFINITION*/op2|]})=>{});

@@ -9,7 +9,7 @@
 // === findAllReferences ===
 // === /file1.ts ===
 
-// this; /*FIND ALL REFS*/[|this|]; [|this|];
+// [|this|]; /*FIND ALL REFS*/[|this|];
 
 
 
@@ -45,7 +45,7 @@
 // === findAllReferences ===
 // === /file3.ts ===
 
-//  ((x = this, y) => /*FIND ALL REFS*/[|this|], y) => [|this|])([|this|], [|this|]);
+//  ((x = [|this|], y) => /*FIND ALL REFS*/[|this|])([|this|], [|this|]);
 //  // different 'this'
 //  function f(this) { return this; }
 
@@ -55,7 +55,7 @@
 // === findAllReferences ===
 // === /file3.ts ===
 
-//  ((x = this, y) => this)(/*FIND ALL REFS*/[|this|], y) => [|this|])([|this|], [|this|]);
+//  ((x = [|this|], y) => [|this|])(/*FIND ALL REFS*/[|this|], [|this|]);
 //  // different 'this'
 //  function f(this) { return this; }
 
@@ -65,6 +65,6 @@
 // === findAllReferences ===
 // === /file3.ts ===
 
-//  ((x = this, y) => this)(this, /*FIND ALL REFS*/[|this|], y) => [|this|])([|this|], [|this|]);
+//  ((x = [|this|], y) => [|this|])([|this|], /*FIND ALL REFS*/[|this|]);
 //  // different 'this'
 //  function f(this) { return this; }

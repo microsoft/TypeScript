@@ -29,7 +29,7 @@
 // === /a.ts ===
 
 // import.meta;
-// function f() { new.t/*GO TO DEFINITION*/[|f|]() { new.target; }
+// function [|f|]() { new.t/*GO TO DEFINITION*/arget; }
 
 
 
@@ -56,4 +56,4 @@
 // === /b.ts ===
 
 // import.m;
-// class c { constructor() { new.t/*GO TO DEFINITION*/[|c|] { constructor() { new.target; } }
+// class [|c|] { constructor() { new.t/*GO TO DEFINITION*/arget; } }

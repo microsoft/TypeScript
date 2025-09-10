@@ -2,5 +2,5 @@
 // === /a.ts ===
 
 // class A {
-//     private z/*GO TO DEFINITION*/[|z|]: string;
+//     private [|z|]/*GO TO DEFINITION*/: string;
 // }

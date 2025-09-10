@@ -28,7 +28,7 @@ func ComparePositions(pos, other lsproto.Position) int {
 	if lineComp := cmp.Compare(pos.Line, other.Line); lineComp != 0 {
 		return lineComp
 	}
-	return cmp.Compare(pos.Line, other.Line)
+	return cmp.Compare(pos.Character, other.Character)
 }
 
 // Implements a cmp.Compare like function for two *lsproto.Range

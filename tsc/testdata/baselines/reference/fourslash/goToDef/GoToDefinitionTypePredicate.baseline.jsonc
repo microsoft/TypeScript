@@ -2,7 +2,7 @@
 // === /goToDefinitionTypePredicate.ts ===
 
 // class A {}
-// function f(parameter: any): /*GO TO DEFINITION*/[|parameter|]: any): parameter is A {
+// function f([|parameter|]: any): /*GO TO DEFINITION*/parameter is A {
 //     return typeof parameter === "string";
 // }
 

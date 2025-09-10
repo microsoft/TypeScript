@@ -80,7 +80,7 @@
 
 // === /b.ts ===
 
-// @decorator @/*FIND ALL REFS*/[|decorator|] @[|decorator|]("again")
+// @[|decorator|] @/*FIND ALL REFS*/[|decorator|]("again")
 // class C {
 //     @[|decorator|]
 //     method() {}

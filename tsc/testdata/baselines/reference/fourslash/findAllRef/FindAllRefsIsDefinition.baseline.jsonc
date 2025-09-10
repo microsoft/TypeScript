@@ -3,7 +3,7 @@
 
 // declare function [|foo|](a: number): number;
 // declare function [|foo|](a: string): string;
-// declare function foo/*FIND ALL REFS*/[|foo|](a: string | number): string | number;
+// declare function [|foo|]/*FIND ALL REFS*/(a: string | number): string | number;
 // 
 // function foon(a: number): number;
 // function foon(a: string): string;
@@ -29,7 +29,7 @@
 // 
 // function [|foon|](a: number): number;
 // function [|foon|](a: string): string;
-// function foon/*FIND ALL REFS*/[|foon|](a: string | number): string | number {
+// function [|foon|]/*FIND ALL REFS*/(a: string | number): string | number {
 //     return a
 // }
 // 
@@ -49,7 +49,7 @@
 // 
 // foo; foon;
 // 
-// export const bar/*FIND ALL REFS*/[|bar|] = 123;
+// export const [|bar|]/*FIND ALL REFS*/ = 123;
 // console.log({ [|bar|] });
 // 
 // interface IFoo {
@@ -66,7 +66,7 @@
 // console.log({ bar });
 // 
 // interface IFoo {
-//     foo/*FIND ALL REFS*/[|foo|](): void;
+//     [|foo|]/*FIND ALL REFS*/(): void;
 // }
 // class Foo implements IFoo {
 //     constructor(n: number)
@@ -110,6 +110,6 @@
 //     constructor(n: number)
 //     constructor()
 //     constructor(n: number?) { }
-//     foo/*FIND ALL REFS*/[|foo|](): void { }
+//     [|foo|]/*FIND ALL REFS*/(): void { }
 //     static init() { return new this() }
 // }

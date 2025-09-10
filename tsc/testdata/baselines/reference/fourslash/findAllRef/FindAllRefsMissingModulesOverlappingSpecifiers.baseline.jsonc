@@ -13,4 +13,4 @@
 
 // // https://github.com/microsoft/TypeScript/issues/5551
 // import { resolve as resolveUrl } from "idontcare";
-// import { resolve/*FIND ALL REFS*/[|resolve|] } from "whatever";
+// import { [|resolve|]/*FIND ALL REFS*/ } from "whatever";

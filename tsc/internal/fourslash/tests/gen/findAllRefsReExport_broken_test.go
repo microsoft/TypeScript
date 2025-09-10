@@ -9,7 +9,7 @@ import (
 
 func TestFindAllRefsReExport_broken(t *testing.T) {
 	t.Parallel()
-	t.Skip()
+
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /a.ts
 /*1*/export { /*2*/x };`

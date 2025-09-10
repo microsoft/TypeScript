@@ -78,4 +78,4 @@
 //  }
 // 
 // 
-//  var x = <MyClass name='hello'><//*FIND ALL REFS*/[|MyClass|] name='hello'></[|MyClass|]>;
+//  var x = <[|MyClass|] name='hello'><//*FIND ALL REFS*/[|MyClass|]>;
