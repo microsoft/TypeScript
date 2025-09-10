@@ -5460,7 +5460,7 @@ export interface TypeChecker {
      *
      * @internal
      */
-    resolveExternalModuleSymbol(symbol: Symbol): Symbol;
+    resolveExternalModuleSymbol(symbol: Symbol, dontResolveAlias?: boolean): Symbol;
     /**
      * @param node A location where we might consider accessing `this`. Not necessarily a ThisExpression.
      *
