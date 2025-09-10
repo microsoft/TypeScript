@@ -88,7 +88,7 @@ constDeclarations-validContexts.ts(18,1): error TS2410: The 'with' statement is 
     };
     
     // modules
-    module m {
+    namespace m {
         const c22 = 0;
     
         {

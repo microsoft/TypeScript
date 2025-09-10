@@ -1,7 +1,7 @@
-module A {
+namespace A {
     export class C { }
 }
-module B {
+namespace B {
     export class C { }
     export class D { }
 }

@@ -3,7 +3,7 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
     export interface IAstWalker {
         walk(ast: AST, parent: AST): AST;
         options: AstWalkOptions;
@@ -217,7 +217,7 @@ module TypeScript {
         return globalAstWalkerFactory;
     }
 
-    module ChildrenWalkers {
+    namespace ChildrenWalkers {
         export function walkNone(preAst: ASTList, parent: AST, walker: IAstWalker): void {
             // Nothing to do
         }

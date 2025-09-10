@@ -231,7 +231,7 @@ main.ts(106,15): error TS2498: Module '"class-module"' uses 'export =' and canno
     }
     
     declare module "module" {
-        module Foo {
+        namespace Foo {
             export var a: number;
             export var b: number;
         }
@@ -243,7 +243,7 @@ main.ts(106,15): error TS2498: Module '"class-module"' uses 'export =' and canno
             x: number;
             y: number;
         }
-        module Foo {
+        namespace Foo {
             export var a: number;
             export var b: number;
         }
@@ -251,7 +251,7 @@ main.ts(106,15): error TS2498: Module '"class-module"' uses 'export =' and canno
     }
     
     declare module "variable-module" {
-        module Foo {
+        namespace Foo {
             interface Bar {
                 x: number;
                 y: number;
@@ -271,7 +271,7 @@ main.ts(106,15): error TS2498: Module '"class-module"' uses 'export =' and canno
     
     declare module "function-module" {
         function foo();
-        module foo {
+        namespace foo {
             export var a: number;
             export var b: number;
         }
@@ -291,7 +291,7 @@ main.ts(106,15): error TS2498: Module '"class-module"' uses 'export =' and canno
             x: number;
             y: number;
         }
-        module Foo {
+        namespace Foo {
             export var a: number;
             export var b: number;
         }

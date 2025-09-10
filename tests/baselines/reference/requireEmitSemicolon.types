@@ -6,7 +6,7 @@ import P = require("requireEmitSemicolon_0"); // bug was we were not emitting a 
 >P : typeof P
 >  : ^^^^^^^^
 
-export module Database {
+export namespace Database {
 >Database : typeof Database
 >         : ^^^^^^^^^^^^^^^
 
@@ -43,7 +43,7 @@ export module Database {
 	}
 } 
 === requireEmitSemicolon_0.ts ===
-export module Models {
+export namespace Models {
 >Models : typeof Models
 >       : ^^^^^^^^^^^^^
 

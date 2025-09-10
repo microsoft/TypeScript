@@ -13,9 +13,9 @@ interface 100 {}
 >100 : 100
 >    : ^^^
 
-module 100 {}
->module : any
->       : ^^^
+namespace 100 {}
+>namespace : any
+>          : ^^^
 >100 : 100
 >    : ^^^
 
@@ -37,9 +37,9 @@ export interface 100 {}
 >100 : 100
 >    : ^^^
 
-export module 100 {}
->module : any
->       : ^^^
+export namespace 100 {}
+>namespace : any
+>          : ^^^
 >100 : 100
 >    : ^^^
 

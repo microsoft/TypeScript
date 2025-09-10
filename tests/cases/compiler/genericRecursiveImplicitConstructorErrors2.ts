@@ -1,4 +1,4 @@
-module TypeScript2 {
+namespace TypeScript2 {
   export interface DeclKind { };
   export interface PullTypesymbol { };
   export interface SymbolLinkKind { };

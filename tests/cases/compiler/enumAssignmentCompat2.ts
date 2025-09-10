@@ -4,7 +4,7 @@ enum W {
 
 }
 
-module W {
+namespace W {
     export class D { }
 }
 

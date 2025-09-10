@@ -14,7 +14,7 @@ lib.decorators.legacy.d.ts-Text
 //// [/tests/cases/fourslash/server/completions02.ts]
 class Foo {
 }
-module Foo {
+namespace Foo {
     export var x: number;
 }
 Foo.
@@ -51,7 +51,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/tests/cases/fourslash/server/completions02.ts SVC-1-0 "class Foo {\n}\nmodule Foo {\n    export var x: number;\n}\nFoo."
+	/tests/cases/fourslash/server/completions02.ts SVC-1-0 "class Foo {\n}\nnamespace Foo {\n    export var x: number;\n}\nFoo."
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.d.ts
@@ -576,7 +576,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/tests/cases/fourslash/server/completions02.ts SVC-1-3 "class Foo {\n}\nmodule Foo {\n    export var x: number;\n}\nFoo."
+	/tests/cases/fourslash/server/completions02.ts SVC-1-3 "class Foo {\n}\nnamespace Foo {\n    export var x: number;\n}\nFoo."
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *

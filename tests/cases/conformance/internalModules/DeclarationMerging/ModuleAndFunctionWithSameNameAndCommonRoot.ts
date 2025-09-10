@@ -1,12 +1,12 @@
 // @filename: module.ts
-module A {
-    export module Point {
+namespace A {
+    export namespace Point {
         export var Origin = { x: 0, y: 0 };
     }
 }
 
 // @filename: function.ts
-module A {
+namespace A {
     // duplicate identifier error
     export function Point() {
         return { x: 0, y: 0 };
@@ -14,9 +14,9 @@ module A {
 }
 
 // @filename: simple.ts
-module B {
+namespace B {
 
-    export module Point {
+    export namespace Point {
         export var Origin = { x: 0, y: 0 };
     }
 

@@ -1,20 +1,20 @@
 // === breakpoints ===
 
-1  >declare module Bar {
+1  >declare namespace Bar {
 
-    ~~~~~~~~~~~~~~~~~~~~~                         => Pos: (0 to 20)  SpanInfo: undefined
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (0 to 23)  SpanInfo: undefined
 --------------------------------
 2  >}
 
-    ~~                                            => Pos: (21 to 22)  SpanInfo: undefined
+    ~~                                            => Pos: (24 to 25)  SpanInfo: undefined
 --------------------------------
-3  >declare module Foo {
+3  >declare namespace Foo {
 
-    ~~~~~~~~~~~~~~~~~~~~~                         => Pos: (23 to 43)  SpanInfo: undefined
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (26 to 49)  SpanInfo: undefined
 --------------------------------
 4  >    var x;
 
-    ~~~~~~~~~~~                                   => Pos: (44 to 54)  SpanInfo: undefined
+    ~~~~~~~~~~~                                   => Pos: (50 to 60)  SpanInfo: undefined
 --------------------------------
 5  >}
-    ~                                             => Pos: (55 to 55)  SpanInfo: undefined
+    ~                                             => Pos: (61 to 61)  SpanInfo: undefined

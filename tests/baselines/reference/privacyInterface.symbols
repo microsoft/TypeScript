@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/privacyInterface.ts] ////
 
 === privacyInterface.ts ===
-export module m1 {
+export namespace m1 {
 >m1 : Symbol(m1, Decl(privacyInterface.ts, 0, 0))
 
     export class C1_public {
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 21))
 
         private f1() {
 >f1 : Symbol(C1_public.f1, Decl(privacyInterface.ts, 1, 28))
@@ -22,14 +22,14 @@ export module m1 {
 
         (c1: C1_public);
 >c1 : Symbol(c1, Decl(privacyInterface.ts, 11, 9))
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 21))
 
         (c1: C2_private);
 >c1 : Symbol(c1, Decl(privacyInterface.ts, 12, 9))
 >C2_private : Symbol(C2_private, Decl(privacyInterface.ts, 4, 5))
 
         (): C1_public;
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 21))
 
         (c2: number): C2_private;
 >c2 : Symbol(c2, Decl(privacyInterface.ts, 14, 9))
@@ -37,14 +37,14 @@ export module m1 {
 
         new (c1: C1_public);
 >c1 : Symbol(c1, Decl(privacyInterface.ts, 16, 13))
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 21))
 
         new (c1: C2_private);
 >c1 : Symbol(c1, Decl(privacyInterface.ts, 17, 13))
 >C2_private : Symbol(C2_private, Decl(privacyInterface.ts, 4, 5))
 
         new (): C1_public;
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 21))
 
         new (c2: number): C2_private;
 >c2 : Symbol(c2, Decl(privacyInterface.ts, 19, 13))
@@ -52,7 +52,7 @@ export module m1 {
 
         [c: number]: C1_public;
 >c : Symbol(c, Decl(privacyInterface.ts, 21, 9))
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 21))
 
         [c: string]: C2_private;
 >c : Symbol(c, Decl(privacyInterface.ts, 22, 9))
@@ -60,7 +60,7 @@ export module m1 {
 
         x: C1_public;
 >x : Symbol(C3_public.x, Decl(privacyInterface.ts, 22, 32))
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 21))
 
         y: C2_private;
 >y : Symbol(C3_public.y, Decl(privacyInterface.ts, 24, 21))
@@ -68,7 +68,7 @@ export module m1 {
 
         a?: C1_public;
 >a : Symbol(C3_public.a, Decl(privacyInterface.ts, 25, 22))
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 21))
 
         b?: C2_private;
 >b : Symbol(C3_public.b, Decl(privacyInterface.ts, 27, 22))
@@ -77,7 +77,7 @@ export module m1 {
         f1(a1: C1_public);
 >f1 : Symbol(C3_public.f1, Decl(privacyInterface.ts, 28, 23))
 >a1 : Symbol(a1, Decl(privacyInterface.ts, 30, 11))
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 21))
 
         f2(a1: C2_private);
 >f2 : Symbol(C3_public.f2, Decl(privacyInterface.ts, 30, 26))
@@ -86,7 +86,7 @@ export module m1 {
 
         f3(): C1_public;
 >f3 : Symbol(C3_public.f3, Decl(privacyInterface.ts, 31, 27))
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 21))
 
         f4(): C2_private;
 >f4 : Symbol(C3_public.f4, Decl(privacyInterface.ts, 32, 24))
@@ -99,14 +99,14 @@ export module m1 {
 
         (c1: C1_public);
 >c1 : Symbol(c1, Decl(privacyInterface.ts, 38, 9))
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 21))
 
         (c1: C2_private);
 >c1 : Symbol(c1, Decl(privacyInterface.ts, 39, 9))
 >C2_private : Symbol(C2_private, Decl(privacyInterface.ts, 4, 5))
 
         (): C1_public;
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 21))
 
         (c2: number): C2_private;
 >c2 : Symbol(c2, Decl(privacyInterface.ts, 41, 9))
@@ -114,14 +114,14 @@ export module m1 {
 
         new (c1: C1_public);
 >c1 : Symbol(c1, Decl(privacyInterface.ts, 43, 13))
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 21))
 
         new (c1: C2_private);
 >c1 : Symbol(c1, Decl(privacyInterface.ts, 44, 13))
 >C2_private : Symbol(C2_private, Decl(privacyInterface.ts, 4, 5))
 
         new (): C1_public;
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 21))
 
         new (c2: number): C2_private;
 >c2 : Symbol(c2, Decl(privacyInterface.ts, 46, 13))
@@ -129,7 +129,7 @@ export module m1 {
 
         [c: number]: C1_public;
 >c : Symbol(c, Decl(privacyInterface.ts, 48, 9))
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 21))
 
         [c: string]: C2_private;
 >c : Symbol(c, Decl(privacyInterface.ts, 49, 9))
@@ -137,7 +137,7 @@ export module m1 {
 
         x: C1_public;
 >x : Symbol(C4_private.x, Decl(privacyInterface.ts, 49, 32))
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 21))
 
         y: C2_private;
 >y : Symbol(C4_private.y, Decl(privacyInterface.ts, 51, 21))
@@ -145,7 +145,7 @@ export module m1 {
 
         a?: C1_public;
 >a : Symbol(C4_private.a, Decl(privacyInterface.ts, 52, 22))
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 21))
 
         b?: C2_private;
 >b : Symbol(C4_private.b, Decl(privacyInterface.ts, 54, 22))
@@ -154,7 +154,7 @@ export module m1 {
         f1(a1: C1_public);
 >f1 : Symbol(C4_private.f1, Decl(privacyInterface.ts, 55, 23))
 >a1 : Symbol(a1, Decl(privacyInterface.ts, 57, 11))
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 21))
 
         f2(a1: C2_private);
 >f2 : Symbol(C4_private.f2, Decl(privacyInterface.ts, 57, 26))
@@ -163,7 +163,7 @@ export module m1 {
 
         f3(): C1_public;
 >f3 : Symbol(C4_private.f3, Decl(privacyInterface.ts, 58, 27))
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 0, 21))
 
         f4(): C2_private;
 >f4 : Symbol(C4_private.f4, Decl(privacyInterface.ts, 59, 24))
@@ -173,11 +173,11 @@ export module m1 {
 }
 
 
-module m2 {
+namespace m2 {
 >m2 : Symbol(m2, Decl(privacyInterface.ts, 63, 1))
 
     export class C1_public {
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 11))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 14))
 
         private f1() {
 >f1 : Symbol(C1_public.f1, Decl(privacyInterface.ts, 67, 28))
@@ -194,14 +194,14 @@ module m2 {
 
         (c1: C1_public);
 >c1 : Symbol(c1, Decl(privacyInterface.ts, 77, 9))
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 11))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 14))
 
         (c1: C2_private);
 >c1 : Symbol(c1, Decl(privacyInterface.ts, 78, 9))
 >C2_private : Symbol(C2_private, Decl(privacyInterface.ts, 70, 5))
 
         (): C1_public;
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 11))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 14))
 
         (c2: number): C2_private;
 >c2 : Symbol(c2, Decl(privacyInterface.ts, 80, 9))
@@ -209,14 +209,14 @@ module m2 {
 
         new (c1: C1_public);
 >c1 : Symbol(c1, Decl(privacyInterface.ts, 82, 13))
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 11))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 14))
 
         new (c1: C2_private);
 >c1 : Symbol(c1, Decl(privacyInterface.ts, 83, 13))
 >C2_private : Symbol(C2_private, Decl(privacyInterface.ts, 70, 5))
 
         new (): C1_public;
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 11))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 14))
 
         new (c2: number): C2_private;
 >c2 : Symbol(c2, Decl(privacyInterface.ts, 85, 13))
@@ -224,7 +224,7 @@ module m2 {
 
         [c: number]: C1_public;
 >c : Symbol(c, Decl(privacyInterface.ts, 87, 9))
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 11))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 14))
 
         [c: string]: C2_private;
 >c : Symbol(c, Decl(privacyInterface.ts, 88, 9))
@@ -232,7 +232,7 @@ module m2 {
 
         x: C1_public;
 >x : Symbol(C3_public.x, Decl(privacyInterface.ts, 88, 32))
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 11))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 14))
 
         y: C2_private;
 >y : Symbol(C3_public.y, Decl(privacyInterface.ts, 90, 21))
@@ -240,7 +240,7 @@ module m2 {
 
         a?: C1_public;
 >a : Symbol(C3_public.a, Decl(privacyInterface.ts, 91, 22))
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 11))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 14))
 
         b?: C2_private;
 >b : Symbol(C3_public.b, Decl(privacyInterface.ts, 93, 22))
@@ -249,7 +249,7 @@ module m2 {
         f1(a1: C1_public);
 >f1 : Symbol(C3_public.f1, Decl(privacyInterface.ts, 94, 23))
 >a1 : Symbol(a1, Decl(privacyInterface.ts, 96, 11))
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 11))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 14))
 
         f2(a1: C2_private);
 >f2 : Symbol(C3_public.f2, Decl(privacyInterface.ts, 96, 26))
@@ -258,7 +258,7 @@ module m2 {
 
         f3(): C1_public;
 >f3 : Symbol(C3_public.f3, Decl(privacyInterface.ts, 97, 27))
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 11))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 14))
 
         f4(): C2_private;
 >f4 : Symbol(C3_public.f4, Decl(privacyInterface.ts, 98, 24))
@@ -271,14 +271,14 @@ module m2 {
 
         (c1: C1_public);
 >c1 : Symbol(c1, Decl(privacyInterface.ts, 104, 9))
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 11))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 14))
 
         (c1: C2_private);
 >c1 : Symbol(c1, Decl(privacyInterface.ts, 105, 9))
 >C2_private : Symbol(C2_private, Decl(privacyInterface.ts, 70, 5))
 
         (): C1_public;
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 11))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 14))
 
         (c2: number): C2_private;
 >c2 : Symbol(c2, Decl(privacyInterface.ts, 107, 9))
@@ -286,14 +286,14 @@ module m2 {
 
         new (c1: C1_public);
 >c1 : Symbol(c1, Decl(privacyInterface.ts, 109, 13))
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 11))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 14))
 
         new (c1: C2_private);
 >c1 : Symbol(c1, Decl(privacyInterface.ts, 110, 13))
 >C2_private : Symbol(C2_private, Decl(privacyInterface.ts, 70, 5))
 
         new (): C1_public;
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 11))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 14))
 
         new (c2: number): C2_private;
 >c2 : Symbol(c2, Decl(privacyInterface.ts, 112, 13))
@@ -301,7 +301,7 @@ module m2 {
 
         [c: number]: C1_public;
 >c : Symbol(c, Decl(privacyInterface.ts, 114, 9))
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 11))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 14))
 
         [c: string]: C2_private;
 >c : Symbol(c, Decl(privacyInterface.ts, 115, 9))
@@ -309,7 +309,7 @@ module m2 {
 
         x: C1_public;
 >x : Symbol(C4_private.x, Decl(privacyInterface.ts, 115, 32))
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 11))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 14))
 
         y: C2_private;
 >y : Symbol(C4_private.y, Decl(privacyInterface.ts, 117, 21))
@@ -317,7 +317,7 @@ module m2 {
 
         a?: C1_public;
 >a : Symbol(C4_private.a, Decl(privacyInterface.ts, 118, 22))
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 11))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 14))
 
         b?: C2_private;
 >b : Symbol(C4_private.b, Decl(privacyInterface.ts, 120, 22))
@@ -326,7 +326,7 @@ module m2 {
         f1(a1: C1_public);
 >f1 : Symbol(C4_private.f1, Decl(privacyInterface.ts, 121, 23))
 >a1 : Symbol(a1, Decl(privacyInterface.ts, 123, 11))
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 11))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 14))
 
         f2(a1: C2_private);
 >f2 : Symbol(C4_private.f2, Decl(privacyInterface.ts, 123, 26))
@@ -335,7 +335,7 @@ module m2 {
 
         f3(): C1_public;
 >f3 : Symbol(C4_private.f3, Decl(privacyInterface.ts, 124, 27))
->C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 11))
+>C1_public : Symbol(C1_public, Decl(privacyInterface.ts, 66, 14))
 
         f4(): C2_private;
 >f4 : Symbol(C4_private.f4, Decl(privacyInterface.ts, 125, 24))
@@ -511,11 +511,11 @@ interface C8_private {
 
 }
 
-export module m3 {
+export namespace m3 {
 >m3 : Symbol(m3, Decl(privacyInterface.ts, 192, 1))
 
     export interface m3_i_public {
->m3_i_public : Symbol(m3_i_public, Decl(privacyInterface.ts, 194, 18))
+>m3_i_public : Symbol(m3_i_public, Decl(privacyInterface.ts, 194, 21))
 
         f1(): number;
 >f1 : Symbol(m3_i_public.f1, Decl(privacyInterface.ts, 195, 34))
@@ -530,7 +530,7 @@ export module m3 {
 
     interface m3_C1_private extends m3_i_public {
 >m3_C1_private : Symbol(m3_C1_private, Decl(privacyInterface.ts, 201, 5))
->m3_i_public : Symbol(m3_i_public, Decl(privacyInterface.ts, 194, 18))
+>m3_i_public : Symbol(m3_i_public, Decl(privacyInterface.ts, 194, 21))
     }
     interface m3_C2_private extends m3_i_private {
 >m3_C2_private : Symbol(m3_C2_private, Decl(privacyInterface.ts, 204, 5))
@@ -538,7 +538,7 @@ export module m3 {
     }
     export interface m3_C3_public extends m3_i_public {
 >m3_C3_public : Symbol(m3_C3_public, Decl(privacyInterface.ts, 206, 5))
->m3_i_public : Symbol(m3_i_public, Decl(privacyInterface.ts, 194, 18))
+>m3_i_public : Symbol(m3_i_public, Decl(privacyInterface.ts, 194, 21))
     }
     export interface m3_C4_public extends m3_i_private {
 >m3_C4_public : Symbol(m3_C4_public, Decl(privacyInterface.ts, 208, 5))
@@ -548,21 +548,21 @@ export module m3 {
     interface m3_C5_private extends m3_i_private, m3_i_public {
 >m3_C5_private : Symbol(m3_C5_private, Decl(privacyInterface.ts, 210, 5))
 >m3_i_private : Symbol(m3_i_private, Decl(privacyInterface.ts, 197, 5))
->m3_i_public : Symbol(m3_i_public, Decl(privacyInterface.ts, 194, 18))
+>m3_i_public : Symbol(m3_i_public, Decl(privacyInterface.ts, 194, 21))
     }
     export interface m3_C6_public extends  m3_i_private, m3_i_public {
 >m3_C6_public : Symbol(m3_C6_public, Decl(privacyInterface.ts, 213, 5))
 >m3_i_private : Symbol(m3_i_private, Decl(privacyInterface.ts, 197, 5))
->m3_i_public : Symbol(m3_i_public, Decl(privacyInterface.ts, 194, 18))
+>m3_i_public : Symbol(m3_i_public, Decl(privacyInterface.ts, 194, 21))
     }
 }
 
 
-module m4 {
+namespace m4 {
 >m4 : Symbol(m4, Decl(privacyInterface.ts, 216, 1))
 
     export interface m4_i_public {
->m4_i_public : Symbol(m4_i_public, Decl(privacyInterface.ts, 219, 11))
+>m4_i_public : Symbol(m4_i_public, Decl(privacyInterface.ts, 219, 14))
 
         f1(): number;
 >f1 : Symbol(m4_i_public.f1, Decl(privacyInterface.ts, 220, 34))
@@ -577,7 +577,7 @@ module m4 {
 
     interface m4_C1_private extends m4_i_public {
 >m4_C1_private : Symbol(m4_C1_private, Decl(privacyInterface.ts, 226, 5))
->m4_i_public : Symbol(m4_i_public, Decl(privacyInterface.ts, 219, 11))
+>m4_i_public : Symbol(m4_i_public, Decl(privacyInterface.ts, 219, 14))
     }
     interface m4_C2_private extends m4_i_private {
 >m4_C2_private : Symbol(m4_C2_private, Decl(privacyInterface.ts, 229, 5))
@@ -585,7 +585,7 @@ module m4 {
     }
     export interface m4_C3_public extends m4_i_public {
 >m4_C3_public : Symbol(m4_C3_public, Decl(privacyInterface.ts, 231, 5))
->m4_i_public : Symbol(m4_i_public, Decl(privacyInterface.ts, 219, 11))
+>m4_i_public : Symbol(m4_i_public, Decl(privacyInterface.ts, 219, 14))
     }
     export interface m4_C4_public extends m4_i_private {
 >m4_C4_public : Symbol(m4_C4_public, Decl(privacyInterface.ts, 233, 5))
@@ -595,12 +595,12 @@ module m4 {
     interface m4_C5_private extends m4_i_private, m4_i_public {
 >m4_C5_private : Symbol(m4_C5_private, Decl(privacyInterface.ts, 235, 5))
 >m4_i_private : Symbol(m4_i_private, Decl(privacyInterface.ts, 222, 5))
->m4_i_public : Symbol(m4_i_public, Decl(privacyInterface.ts, 219, 11))
+>m4_i_public : Symbol(m4_i_public, Decl(privacyInterface.ts, 219, 14))
     }
     export interface m4_C6_public extends  m4_i_private, m4_i_public {
 >m4_C6_public : Symbol(m4_C6_public, Decl(privacyInterface.ts, 238, 5))
 >m4_i_private : Symbol(m4_i_private, Decl(privacyInterface.ts, 222, 5))
->m4_i_public : Symbol(m4_i_public, Decl(privacyInterface.ts, 219, 11))
+>m4_i_public : Symbol(m4_i_public, Decl(privacyInterface.ts, 219, 14))
     }
 }
 

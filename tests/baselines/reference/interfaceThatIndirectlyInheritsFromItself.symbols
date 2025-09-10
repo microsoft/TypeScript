@@ -25,11 +25,11 @@ interface Derived2 extends Derived {
 >z : Symbol(Derived2.z, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 8, 36))
 }
 
-module Generic {
+namespace Generic {
 >Generic : Symbol(Generic, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 10, 1))
 
     interface Base<T> extends Derived2<T> { // error
->Base : Symbol(Base, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 12, 16))
+>Base : Symbol(Base, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 12, 19))
 >T : Symbol(T, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 13, 19))
 >Derived2 : Symbol(Derived2, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 19, 5))
 >T : Symbol(T, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 13, 19))
@@ -41,7 +41,7 @@ module Generic {
     interface Derived<T> extends Base<T> {
 >Derived : Symbol(Derived, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 15, 5))
 >T : Symbol(T, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 17, 22))
->Base : Symbol(Base, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 12, 16))
+>Base : Symbol(Base, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 12, 19))
 >T : Symbol(T, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 17, 22))
 
         y: string;

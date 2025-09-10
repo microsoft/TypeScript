@@ -3,7 +3,7 @@ file.tsx(11,2): error TS2322: Type '{ x: number; }' is not assignable to type 's
 
 
 ==== file.tsx (2 errors) ====
-    declare module JSX {
+    declare namespace JSX {
     	interface Element { }
     	interface ElementAttributesProperty { pr1: any; pr2: any; }
     	          ~~~~~~~~~~~~~~~~~~~~~~~~~

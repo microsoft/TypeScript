@@ -214,11 +214,11 @@ interface privateInterfaceWithPrivateModuleTypeParameterConstraints<T extends pr
 >publicClassInPrivateModule : Symbol(privateModule.publicClassInPrivateModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 133, 5))
 }
 
-export module publicModule {
+export namespace publicModule {
 >publicModule : Symbol(publicModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 63, 1))
 
     class privateClassInPublicModule {
->privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 65, 28))
+>privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 65, 31))
     }
 
     export class publicClassInPublicModule {
@@ -238,7 +238,7 @@ export module publicModule {
     export interface publicInterfaceWithPrivateTypeParameters<T extends privateClassInPublicModule> { // Error
 >publicInterfaceWithPrivateTypeParameters : Symbol(publicInterfaceWithPrivateTypeParameters, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 76, 5))
 >T : Symbol(T, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 78, 62))
->privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 65, 28))
+>privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 65, 31))
 
         myMethod(val: T): T;
 >myMethod : Symbol(publicInterfaceWithPrivateTypeParameters.myMethod, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 78, 101))
@@ -254,7 +254,7 @@ export module publicModule {
         myMethod1(): privateClassInPublicModuleT<privateClassInPublicModule>;
 >myMethod1 : Symbol(publicInterfaceWithPrivateTypeParameters.myMethod1, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 80, 51))
 >privateClassInPublicModuleT : Symbol(privateClassInPublicModuleT, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 70, 5))
->privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 65, 28))
+>privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 65, 31))
 
         myMethod2(): privateClassInPublicModuleT<publicClassInPublicModule>;
 >myMethod2 : Symbol(publicInterfaceWithPrivateTypeParameters.myMethod2, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 81, 77))
@@ -264,7 +264,7 @@ export module publicModule {
         myMethod3(): publicClassInPublicModuleT<privateClassInPublicModule>;
 >myMethod3 : Symbol(publicInterfaceWithPrivateTypeParameters.myMethod3, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 82, 76))
 >publicClassInPublicModuleT : Symbol(publicClassInPublicModuleT, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 73, 5))
->privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 65, 28))
+>privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 65, 31))
 
         myMethod4(): publicClassInPublicModuleT<publicClassInPublicModule>;
 >myMethod4 : Symbol(publicInterfaceWithPrivateTypeParameters.myMethod4, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 83, 76))
@@ -291,7 +291,7 @@ export module publicModule {
         myMethod1(): privateClassInPublicModuleT<privateClassInPublicModule>;
 >myMethod1 : Symbol(publicInterfaceWithPublicTypeParameters.myMethod1, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 89, 50))
 >privateClassInPublicModuleT : Symbol(privateClassInPublicModuleT, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 70, 5))
->privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 65, 28))
+>privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 65, 31))
 
         myMethod2(): privateClassInPublicModuleT<publicClassInPublicModule>;
 >myMethod2 : Symbol(publicInterfaceWithPublicTypeParameters.myMethod2, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 90, 77))
@@ -301,7 +301,7 @@ export module publicModule {
         myMethod3(): publicClassInPublicModuleT<privateClassInPublicModule>;
 >myMethod3 : Symbol(publicInterfaceWithPublicTypeParameters.myMethod3, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 91, 76))
 >publicClassInPublicModuleT : Symbol(publicClassInPublicModuleT, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 73, 5))
->privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 65, 28))
+>privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 65, 31))
 
         myMethod4(): publicClassInPublicModuleT<publicClassInPublicModule>;
 >myMethod4 : Symbol(publicInterfaceWithPublicTypeParameters.myMethod4, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 92, 76))
@@ -312,7 +312,7 @@ export module publicModule {
     interface privateInterfaceWithPrivateTypeParameters<T extends privateClassInPublicModule> {
 >privateInterfaceWithPrivateTypeParameters : Symbol(privateInterfaceWithPrivateTypeParameters, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 94, 5))
 >T : Symbol(T, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 96, 56))
->privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 65, 28))
+>privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 65, 31))
 
         myMethod(val: T): T;
 >myMethod : Symbol(privateInterfaceWithPrivateTypeParameters.myMethod, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 96, 95))
@@ -328,7 +328,7 @@ export module publicModule {
         myMethod1(): privateClassInPublicModuleT<privateClassInPublicModule>;
 >myMethod1 : Symbol(privateInterfaceWithPrivateTypeParameters.myMethod1, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 98, 51))
 >privateClassInPublicModuleT : Symbol(privateClassInPublicModuleT, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 70, 5))
->privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 65, 28))
+>privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 65, 31))
 
         myMethod2(): privateClassInPublicModuleT<publicClassInPublicModule>;
 >myMethod2 : Symbol(privateInterfaceWithPrivateTypeParameters.myMethod2, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 99, 77))
@@ -338,7 +338,7 @@ export module publicModule {
         myMethod3(): publicClassInPublicModuleT<privateClassInPublicModule>;
 >myMethod3 : Symbol(privateInterfaceWithPrivateTypeParameters.myMethod3, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 100, 76))
 >publicClassInPublicModuleT : Symbol(publicClassInPublicModuleT, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 73, 5))
->privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 65, 28))
+>privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 65, 31))
 
         myMethod4(): publicClassInPublicModuleT<publicClassInPublicModule>;
 >myMethod4 : Symbol(privateInterfaceWithPrivateTypeParameters.myMethod4, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 101, 76))
@@ -365,7 +365,7 @@ export module publicModule {
         myMethod1(): privateClassInPublicModuleT<privateClassInPublicModule>;
 >myMethod1 : Symbol(privateInterfaceWithPublicTypeParameters.myMethod1, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 107, 51))
 >privateClassInPublicModuleT : Symbol(privateClassInPublicModuleT, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 70, 5))
->privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 65, 28))
+>privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 65, 31))
 
         myMethod2(): privateClassInPublicModuleT<publicClassInPublicModule>;
 >myMethod2 : Symbol(privateInterfaceWithPublicTypeParameters.myMethod2, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 108, 77))
@@ -375,7 +375,7 @@ export module publicModule {
         myMethod3(): publicClassInPublicModuleT<privateClassInPublicModule>;
 >myMethod3 : Symbol(privateInterfaceWithPublicTypeParameters.myMethod3, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 109, 76))
 >publicClassInPublicModuleT : Symbol(publicClassInPublicModuleT, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 73, 5))
->privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 65, 28))
+>privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 65, 31))
 
         myMethod4(): publicClassInPublicModuleT<publicClassInPublicModule>;
 >myMethod4 : Symbol(privateInterfaceWithPublicTypeParameters.myMethod4, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 110, 76))
@@ -430,11 +430,11 @@ export module publicModule {
     }
 }
 
-module privateModule {
+namespace privateModule {
 >privateModule : Symbol(privateModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 129, 1))
 
     class privateClassInPrivateModule {
->privateClassInPrivateModule : Symbol(privateClassInPrivateModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 131, 22))
+>privateClassInPrivateModule : Symbol(privateClassInPrivateModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 131, 25))
     }
 
     export class publicClassInPrivateModule {
@@ -454,7 +454,7 @@ module privateModule {
     export interface publicInterfaceWithPrivateTypeParameters<T extends privateClassInPrivateModule> {
 >publicInterfaceWithPrivateTypeParameters : Symbol(publicInterfaceWithPrivateTypeParameters, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 142, 5))
 >T : Symbol(T, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 144, 62))
->privateClassInPrivateModule : Symbol(privateClassInPrivateModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 131, 22))
+>privateClassInPrivateModule : Symbol(privateClassInPrivateModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 131, 25))
 
         myMethod(val: T): T;
 >myMethod : Symbol(publicInterfaceWithPrivateTypeParameters.myMethod, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 144, 102))
@@ -470,7 +470,7 @@ module privateModule {
         myMethod1(): privateClassInPrivateModuleT<privateClassInPrivateModule>;
 >myMethod1 : Symbol(publicInterfaceWithPrivateTypeParameters.myMethod1, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 146, 52))
 >privateClassInPrivateModuleT : Symbol(privateClassInPrivateModuleT, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 136, 5))
->privateClassInPrivateModule : Symbol(privateClassInPrivateModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 131, 22))
+>privateClassInPrivateModule : Symbol(privateClassInPrivateModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 131, 25))
 
         myMethod2(): privateClassInPrivateModuleT<publicClassInPrivateModule>;
 >myMethod2 : Symbol(publicInterfaceWithPrivateTypeParameters.myMethod2, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 147, 79))
@@ -480,7 +480,7 @@ module privateModule {
         myMethod3(): publicClassInPrivateModuleT<privateClassInPrivateModule>;
 >myMethod3 : Symbol(publicInterfaceWithPrivateTypeParameters.myMethod3, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 148, 78))
 >publicClassInPrivateModuleT : Symbol(publicClassInPrivateModuleT, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 139, 5))
->privateClassInPrivateModule : Symbol(privateClassInPrivateModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 131, 22))
+>privateClassInPrivateModule : Symbol(privateClassInPrivateModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 131, 25))
 
         myMethod4(): publicClassInPrivateModuleT<publicClassInPrivateModule>;
 >myMethod4 : Symbol(publicInterfaceWithPrivateTypeParameters.myMethod4, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 149, 78))
@@ -507,7 +507,7 @@ module privateModule {
         myMethod1(): privateClassInPrivateModuleT<privateClassInPrivateModule>;
 >myMethod1 : Symbol(publicInterfaceWithPublicTypeParameters.myMethod1, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 155, 51))
 >privateClassInPrivateModuleT : Symbol(privateClassInPrivateModuleT, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 136, 5))
->privateClassInPrivateModule : Symbol(privateClassInPrivateModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 131, 22))
+>privateClassInPrivateModule : Symbol(privateClassInPrivateModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 131, 25))
 
         myMethod2(): privateClassInPrivateModuleT<publicClassInPrivateModule>;
 >myMethod2 : Symbol(publicInterfaceWithPublicTypeParameters.myMethod2, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 156, 79))
@@ -517,7 +517,7 @@ module privateModule {
         myMethod3(): publicClassInPrivateModuleT<privateClassInPrivateModule>;
 >myMethod3 : Symbol(publicInterfaceWithPublicTypeParameters.myMethod3, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 157, 78))
 >publicClassInPrivateModuleT : Symbol(publicClassInPrivateModuleT, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 139, 5))
->privateClassInPrivateModule : Symbol(privateClassInPrivateModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 131, 22))
+>privateClassInPrivateModule : Symbol(privateClassInPrivateModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 131, 25))
 
         myMethod4(): publicClassInPrivateModuleT<publicClassInPrivateModule>;
 >myMethod4 : Symbol(publicInterfaceWithPublicTypeParameters.myMethod4, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 158, 78))
@@ -528,7 +528,7 @@ module privateModule {
     interface privateInterfaceWithPrivateTypeParameters<T extends privateClassInPrivateModule> {
 >privateInterfaceWithPrivateTypeParameters : Symbol(privateInterfaceWithPrivateTypeParameters, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 160, 5))
 >T : Symbol(T, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 162, 56))
->privateClassInPrivateModule : Symbol(privateClassInPrivateModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 131, 22))
+>privateClassInPrivateModule : Symbol(privateClassInPrivateModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 131, 25))
 
         myMethod(val: T): T;
 >myMethod : Symbol(privateInterfaceWithPrivateTypeParameters.myMethod, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 162, 96))
@@ -544,7 +544,7 @@ module privateModule {
         myMethod1(): privateClassInPrivateModuleT<privateClassInPrivateModule>;
 >myMethod1 : Symbol(privateInterfaceWithPrivateTypeParameters.myMethod1, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 164, 52))
 >privateClassInPrivateModuleT : Symbol(privateClassInPrivateModuleT, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 136, 5))
->privateClassInPrivateModule : Symbol(privateClassInPrivateModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 131, 22))
+>privateClassInPrivateModule : Symbol(privateClassInPrivateModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 131, 25))
 
         myMethod2(): privateClassInPrivateModuleT<publicClassInPrivateModule>;
 >myMethod2 : Symbol(privateInterfaceWithPrivateTypeParameters.myMethod2, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 165, 79))
@@ -554,7 +554,7 @@ module privateModule {
         myMethod3(): publicClassInPrivateModuleT<privateClassInPrivateModule>;
 >myMethod3 : Symbol(privateInterfaceWithPrivateTypeParameters.myMethod3, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 166, 78))
 >publicClassInPrivateModuleT : Symbol(publicClassInPrivateModuleT, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 139, 5))
->privateClassInPrivateModule : Symbol(privateClassInPrivateModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 131, 22))
+>privateClassInPrivateModule : Symbol(privateClassInPrivateModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 131, 25))
 
         myMethod4(): publicClassInPrivateModuleT<publicClassInPrivateModule>;
 >myMethod4 : Symbol(privateInterfaceWithPrivateTypeParameters.myMethod4, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 167, 78))
@@ -581,7 +581,7 @@ module privateModule {
         myMethod1(): privateClassInPrivateModuleT<privateClassInPrivateModule>;
 >myMethod1 : Symbol(privateInterfaceWithPublicTypeParameters.myMethod1, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 173, 52))
 >privateClassInPrivateModuleT : Symbol(privateClassInPrivateModuleT, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 136, 5))
->privateClassInPrivateModule : Symbol(privateClassInPrivateModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 131, 22))
+>privateClassInPrivateModule : Symbol(privateClassInPrivateModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 131, 25))
 
         myMethod2(): privateClassInPrivateModuleT<publicClassInPrivateModule>;
 >myMethod2 : Symbol(privateInterfaceWithPublicTypeParameters.myMethod2, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 174, 79))
@@ -591,7 +591,7 @@ module privateModule {
         myMethod3(): publicClassInPrivateModuleT<privateClassInPrivateModule>;
 >myMethod3 : Symbol(privateInterfaceWithPublicTypeParameters.myMethod3, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 175, 78))
 >publicClassInPrivateModuleT : Symbol(publicClassInPrivateModuleT, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 139, 5))
->privateClassInPrivateModule : Symbol(privateClassInPrivateModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 131, 22))
+>privateClassInPrivateModule : Symbol(privateClassInPrivateModule, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 131, 25))
 
         myMethod4(): publicClassInPrivateModuleT<publicClassInPrivateModule>;
 >myMethod4 : Symbol(privateInterfaceWithPublicTypeParameters.myMethod4, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 176, 78))

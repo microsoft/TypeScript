@@ -1,24 +1,24 @@
 // @declaration: true
 // @target: es5
 
-module a {
+namespace a {
 }
 
-module b.a {
+namespace b.a {
 }
 
-module c.a.b {
+namespace c.a.b {
     import ma = a;
 }
 
-module mImport {
+namespace mImport {
     import d = a;
     import e = b.a;
     import d1 = a;
     import e1 = b.a;
 }
 
-module m0 {
+namespace m0 {
     function f1() {
     }
 
@@ -47,7 +47,7 @@ module m0 {
     import m7 = c.a.b;
 }
 
-module m1 {
+namespace m1 {
     export function f1() {
     }
 
@@ -84,30 +84,30 @@ module m1 {
     import m7 = c.a.b;
 }
 
-module m {
-    export module m2 {
+namespace m {
+    export namespace m2 {
         var a = 10;
         export var b: number;
     }
 
-    export module m3 {
+    export namespace m3 {
         export var c: number;
     }
 }
 
-module m {
+namespace m {
 
-    export module m25 {
-        export module m5 {
+    export namespace m25 {
+        export namespace m5 {
             export var c: number;
         }
     }
 }
 
-module m13 {
-    export module m4 {
-        export module m2 {
-            export module m3 {
+namespace m13 {
+    export namespace m4 {
+        export namespace m2 {
+            export namespace m3 {
                 export var c: number;
             }
         }
@@ -118,19 +118,19 @@ module m13 {
     }
 }
 
-declare module m4 {
+declare namespace m4 {
     export var b;
 }
 
-declare module m5 {
+declare namespace m5 {
     export var c;
 }
 
-declare module m43 {
+declare namespace m43 {
     export var b;
 }
 
-declare module m55 {
+declare namespace m55 {
     export var c;
 }
 
@@ -138,7 +138,7 @@ declare module "m3" {
     export var b: number;
 }
 
-module exportTests {
+namespace exportTests {
     export class C1_public {
         private f2() {
             return 30;
@@ -178,7 +178,7 @@ module exportTests {
     }
 }
 
-declare module mAmbient {
+declare namespace mAmbient {
     class C {
         public myProp: number;
     }
@@ -195,7 +195,7 @@ declare module mAmbient {
         z
     }
 
-    module m3 {
+    namespace m3 {
         class C {
             public myProp: number;
         }

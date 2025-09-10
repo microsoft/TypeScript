@@ -11,7 +11,7 @@ recursiveClassReferenceTest.ts(95,21): error TS2345: Argument of type 'Window' i
     
     
     
-    declare module Sample.Thing {
+    declare namespace Sample.Thing {
     
     	export interface IWidget {
     		getDomNode(): any;
@@ -39,7 +39,7 @@ recursiveClassReferenceTest.ts(95,21): error TS2345: Argument of type 'Window' i
     	}	
     }
     
-    module Sample.Actions.Thing.Find {
+    namespace Sample.Actions.Thing.Find {
     	export class StartFindAction implements Sample.Thing.IAction {
     		
     		public getId() { return "yo"; }
@@ -51,7 +51,7 @@ recursiveClassReferenceTest.ts(95,21): error TS2345: Argument of type 'Window' i
     	}
     }
     
-    module Sample.Thing.Widgets {
+    namespace Sample.Thing.Widgets {
     	export class FindWidget implements Sample.Thing.IWidget {
     
     		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
@@ -85,7 +85,7 @@ recursiveClassReferenceTest.ts(95,21): error TS2345: Argument of type 'Window' i
     }
     declare var self: Window;
     
-    module Sample.Thing.Languages.PlainText {
+    namespace Sample.Thing.Languages.PlainText {
     	
     	export class State implements IState {		
             constructor(private mode: IMode) { }

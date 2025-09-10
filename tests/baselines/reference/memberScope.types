@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/memberScope.ts] ////
 
 === memberScope.ts ===
-module Salt {
+namespace Salt {
 >Salt : typeof Salt
 >     : ^^^^^^^^^^^
 
@@ -9,7 +9,7 @@ module Salt {
 >Pepper : Pepper
 >       : ^^^^^^
 
-  export module Basil { }
+  export namespace Basil { }
   var z = Basil.Pepper;
 >z : any
 >  : ^^^

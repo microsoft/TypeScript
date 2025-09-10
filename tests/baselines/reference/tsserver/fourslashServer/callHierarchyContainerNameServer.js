@@ -44,7 +44,7 @@ namespace Foo {
   }
 }
 
-module Foo.Bar {
+namespace Foo.Bar {
   const sameName = () => new Foo.C();
 }
 
@@ -80,7 +80,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/tests/cases/fourslash/server/callHierarchyContainerNameServer.ts SVC-1-0 "function f() {}\n\nclass A {\n  static sameName() {\n    f();\n  }\n}\n\nclass B {\n  sameName() {\n    A.sameName();\n  }\n}\n\nconst Obj = {\n  get sameName() {\n    return new B().sameName;\n  }\n};\n\nnamespace Foo {\n  function sameName() {\n    return Obj.sameName;\n  }\n\n  export class C {\n    constructor() {\n      sameName();\n    }\n  }\n}\n\nmodule Foo.Bar {\n  const sameName = () => new Foo.C();\n}"
+	/tests/cases/fourslash/server/callHierarchyContainerNameServer.ts SVC-1-0 "function f() {}\n\nclass A {\n  static sameName() {\n    f();\n  }\n}\n\nclass B {\n  sameName() {\n    A.sameName();\n  }\n}\n\nconst Obj = {\n  get sameName() {\n    return new B().sameName;\n  }\n};\n\nnamespace Foo {\n  function sameName() {\n    return Obj.sameName;\n  }\n\n  export class C {\n    constructor() {\n      sameName();\n    }\n  }\n}\n\nnamespace Foo.Bar {\n  const sameName = () => new Foo.C();\n}"
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.d.ts

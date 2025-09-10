@@ -2,7 +2,7 @@
 
 // @noLib: true
 
-////[|{| "name": "Shapes", "kind": "module" |}module Shapes {
+////[|{| "name": "Shapes", "kind": "module" |}namespace Shapes {
 ////    [|{| "name": "Point", "kind": "class", "kindModifiers": "export", "containerName": "Shapes", "containerKind": "module" |}export class Point {
 ////        [|{| "name": "origin", "kind": "property", "kindModifiers": "private", "containerName": "Point", "containerKind": "class" |}private origin = 0.0;|]
 ////

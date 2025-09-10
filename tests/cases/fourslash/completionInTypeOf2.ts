@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-////module m1c {
+////namespace m1c {
 ////    export class C { foo(): void; }
 ////}
 ////var x: typeof m1c./*1*/;

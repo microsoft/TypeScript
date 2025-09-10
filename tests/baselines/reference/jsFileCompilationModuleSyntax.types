@@ -2,4 +2,4 @@
 
 === a.js ===
 
-module M { }
+namespace M { }

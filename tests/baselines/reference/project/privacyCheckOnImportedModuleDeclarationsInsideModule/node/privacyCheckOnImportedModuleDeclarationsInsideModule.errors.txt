@@ -5,7 +5,7 @@ testGlo.ts(21,35): error TS2792: Cannot find module 'mNonExported'. Did you mean
 
 
 ==== testGlo.ts (4 errors) ====
-    module m2 {
+    namespace m2 {
         export import mExported = require("mExported");
                                           ~~~~~~~~~~~
 !!! error TS1147: Import declarations in a namespace cannot reference a module.
