@@ -1474,7 +1474,15 @@ export namespace Core {
             } = searchOptions;
             const escapedText = escapeLeadingUnderscores(text);
             const parents = this.options.implementations && location ? getParentSymbolsOfPropertyAccess(location, symbol, this.checker) : undefined;
-            return { symbol, comingFrom, text, escapedText, parents, allSearchSymbols, includes: sym => contains(allSearchSymbols, sym) };
+            return {
+                symbol,
+                comingFrom,
+                text,
+                escapedText,
+                parents,
+                allSearchSymbols,
+                includes: sym => contains(allSearchSymbols, sym, (s1, s2) => this.checker.getMergedSymbol(s1) === this.checker.getMergedSymbol(s2)),
+            };
         }
 
         private readonly symbolIdToReferences: Entry[][] = [];
